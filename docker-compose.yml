@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+    mongodb:
+        container_name: mongodb
+        image: mongodb
+        restart: always
+        build:
+            context: .
+            dockerfile: Dockerfile
+            target: base
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: ${DATABASE_USERNAME}
+            MONGO_INITDB_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+        ports:
+            - ${DATABASE_PORT}:${DATABASE_PORT}
+        expose:
+            - "${DATABASE_PORT}"
+        networks:
+            - docker
+
+networks:
+    docker:
+        external: true
