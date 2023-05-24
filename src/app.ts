@@ -6,14 +6,14 @@ import { requestLogger, unknownEndpointHandler } from "@/src/middleware/middlewa
 import { apiRouter } from "@/src/routes/api";
 //import { testRouter } from "@/src/routes/test";
 import { cacheRouter } from "@/src/routes/cache";
-import { dynamicController } from "./routes/dynamic";
 import { customRouter } from "./routes/custom";
+import { dynamicController } from "./routes/dynamic";
 
 import bodyParser from "body-parser";
 
-import { connectDatabase } from "./services/mongoService";
 import morgan from "morgan";
 import { steamPacksController } from "./controllers/misc/steamPacksController";
+import { connectDatabase } from "./services/mongoService";
 
 void connectDatabase();
 

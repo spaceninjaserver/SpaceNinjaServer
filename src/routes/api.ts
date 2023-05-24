@@ -1,25 +1,23 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-import express from "express";
-
-import purchaseController from "@/src/controllers/api/purchaseController";
 import getFriendsController from "@/src/controllers/api/getFriendsController";
 import inventoryController from "@/src/controllers/api/inventoryController";
-import { marketRecommendationsController } from "../controllers/api/marketRecommendationsController";
-import { loginController } from "../controllers/api/loginController";
-import { surveysController } from "../controllers/api/surveysController";
-import { getIgnoredUsersController } from "../controllers/api/getIgnoredUsersController";
-import { dronesController } from "../controllers/api/dronesController";
-import { updateChallengeProgressController } from "../controllers/api/updateChallengeProgressController";
-import { findSessionsController } from "../controllers/api/findSessionsController";
-import { viewController } from "../controllers/api/viewController";
-import { getAllianceController } from "../controllers/api/getAllianceController";
-import { loginRewardsController } from "../controllers/api/loginRewardsController";
+import purchaseController from "@/src/controllers/api/purchaseController";
+import express from "express";
 import { checkDailyMissionBonusController } from "../controllers/api/checkDailyMissionBonusController";
-import { getShipController } from "../controllers/api/getShipController";
-import { inboxController } from "../controllers/api/inboxController";
-import { hostSessionController } from "../controllers/api/hostSessionController";
+import { dronesController } from "../controllers/api/dronesController";
+import { findSessionsController } from "../controllers/api/findSessionsController";
+import { getAllianceController } from "../controllers/api/getAllianceController";
+import { getIgnoredUsersController } from "../controllers/api/getIgnoredUsersController";
 import { getNewRewardSeedController } from "../controllers/api/getNewRewardSeedController";
+import { getShipController } from "../controllers/api/getShipController";
+import { hostSessionController } from "../controllers/api/hostSessionController";
+import { inboxController } from "../controllers/api/inboxController";
+import { loginController } from "../controllers/api/loginController";
+import { loginRewardsController } from "../controllers/api/loginRewardsController";
+import { marketRecommendationsController } from "../controllers/api/marketRecommendationsController";
 import { setActiveQuestController } from "../controllers/api/setActiveQuestController";
+import { surveysController } from "../controllers/api/surveysController";
+import { updateChallengeProgressController } from "../controllers/api/updateChallengeProgressController";
+import { viewController } from "../controllers/api/viewController";
 
 const apiRouter = express.Router();
 

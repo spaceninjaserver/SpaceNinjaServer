@@ -1,6 +1,5 @@
-import { Request, Response, RequestHandler } from "express";
-
 import inventory from "@/static/fixed_responses/inventory.json";
+import { Request, RequestHandler, Response } from "express";
 
 const inventorController: RequestHandler = (request: Request, response: Response) => {
     console.log(request.query);
