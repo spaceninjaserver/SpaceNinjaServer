@@ -6,9 +6,9 @@ import { app } from "./app";
 //const bodyParser = require("body-parser");
 
 const options = {
-  key: fs.readFileSync("static/certs/key.pem"),
-  cert: fs.readFileSync("static/certs/cert.pem"),
-  passphrase: "123456"
+    key: fs.readFileSync("static/certs/key.pem"),
+    cert: fs.readFileSync("static/certs/cert.pem"),
+    passphrase: "123456"
 };
 
 // const server = http.createServer(app).listen(80);

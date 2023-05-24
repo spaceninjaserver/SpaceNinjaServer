@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 
 const aggregateSessionsController: RequestHandler = (_req, res) => {
-  res.json({});
+    res.json({});
 };
 
 export { aggregateSessionsController };
