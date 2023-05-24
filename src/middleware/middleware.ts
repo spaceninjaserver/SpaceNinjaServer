@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 
 const unknownEndpointHandler = (request: Request, response: Response) => {
     console.error("[ERROR] Unknown Endpoint", request.url);

@@ -1,5 +1,3 @@
-import { Document } from "mongoose";
-
 export interface ILoginResponse extends Omit<IDatabaseAccountDocument, "email" | "password"> {
     Groups: IGroup[];
     Nonce: number;

@@ -1,4 +1,4 @@
-import { RequestHandler } from "express-serve-static-core";
+import { RequestHandler } from "express";
 
 const getAllianceController: RequestHandler = (_req, res) => {
     res.sendStatus(200);

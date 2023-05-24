@@ -2,7 +2,7 @@ import { toLoginRequest } from "@/src/helpers/loginHelpers";
 import { Account } from "@/src/models/loginModel";
 import { createAccount, isCorrectPassword } from "@/src/services/loginService";
 import { ILoginResponse } from "@/src/types/loginTypes";
-import { DTLS, HUB, IRC, NRS, Nonce, groups, platformCDNs } from "@/static/fixed_responses/login_static";
+import { DTLS, groups, HUB, IRC, Nonce, NRS, platformCDNs } from "@/static/fixed_responses/login_static";
 import { RequestHandler } from "express";
 import config from "../../../config.json";
 

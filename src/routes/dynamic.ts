@@ -1,6 +1,6 @@
 import express from "express";
-import { worldStateController } from "../controllers/dynamic/worldStateController";
 import { aggregateSessionsController } from "../controllers/dynamic/aggregateSessionsController";
+import { worldStateController } from "../controllers/dynamic/worldStateController";
 
 const dynamicController = express.Router();
 
