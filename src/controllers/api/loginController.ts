@@ -1,13 +1,17 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { RequestHandler } from "express";
+
+import config from "@/config.json";
+
 import { toLoginRequest } from "@/src/helpers/loginHelpers";
 import { Account } from "@/src/models/loginModel";
 import { createAccount, isCorrectPassword } from "@/src/services/loginService";
 import { ILoginResponse } from "@/src/types/loginTypes";
 import { DTLS, groups, HUB, IRC, Nonce, NRS, platformCDNs } from "@/static/fixed_responses/login_static";
-import { RequestHandler } from "express";
-import config from "../../../config.json";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 const loginController: RequestHandler = async (request, response) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument
     const body = JSON.parse(request.body); // parse octet stream of json data to json object
     const loginRequest = toLoginRequest(body);
     // console.log(body);

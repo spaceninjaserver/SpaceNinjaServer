@@ -1,4 +1,5 @@
 import express from "express";
+import config from "@/config.json";
 
 const cacheRouter = express.Router();
 
@@ -15,7 +16,7 @@ cacheRouter.get("/B.Cache.Windows_en.bin*", (_req, res) => {
 cacheRouter.get(/^\/origin\/([a-zA-Z0-9]+)\/H\.Cache\.bin.*$/, (_req, res) => {
     // console.log("asd", path.join(__dirname, "../data"));
     // console.log("asd", __dirname);
-    res.sendFile("static/data/H.Cache_33.0.12.bin", { root: "./" });
+    res.sendFile(`static/data/H.Cache_${config.version}.bin`, { root: "./" });
 });
 
 export { cacheRouter };
