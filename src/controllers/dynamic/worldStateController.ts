@@ -3,7 +3,8 @@ import config from "@/config.json";
 import worldState from "@/static/fixed_responses/worldState.json";
 
 const worldStateController: RequestHandler = (_req, res) => {
-    worldState.WorldSeed = config.WorldSeed;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    worldState.WorldSeed = config.worldSeed;
     worldState.BuildLabel = config.buildLabel;
     res.json(worldState);
 };
