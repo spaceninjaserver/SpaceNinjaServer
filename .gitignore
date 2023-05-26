@@ -3,3 +3,4 @@
 
 /.env
 /static/data/*
+package-lock.json
