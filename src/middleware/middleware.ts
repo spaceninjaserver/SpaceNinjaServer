@@ -8,7 +8,17 @@ const unknownEndpointHandler = (request: Request, response: Response) => {
 const requestLogger = (request: Request, _response: Response, next: NextFunction) => {
     console.log("Method:", request.method);
     console.log("Path:  ", request.path);
-    console.log("Body:  ", request.body);
+    if (Buffer.isBuffer(request.body)) {
+        const str = request.body.toString();
+        const index = str.lastIndexOf("}");
+        const jsonSubstring = str.substring(0, index + 1);
+        console.log("Body:  ", jsonSubstring);
+        request.body = jsonSubstring;
+        if (str.length > jsonSubstring.length) {
+            const token = str.substring(index + 1, str.length).trim();
+            console.log("Token:  ", token);
+        }
+    }
     console.log("---");
     next();
 };
