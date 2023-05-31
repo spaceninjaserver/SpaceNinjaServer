@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 
 const hostSessionController: RequestHandler = (_req, res) => {
-    res.json({ sessionId: { $oid: "123123123" }, rewardSeed: 123123123123 });
+    res.json({ sessionId: { $oid: "64777916e794cfc5abdd69ea" }, rewardSeed: -1492798783199571432 });
 };
 
 export { hostSessionController };
