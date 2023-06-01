@@ -28,6 +28,6 @@ export const NRS = ["104.237.145.11", "139.144.69.73", "170.187.231.80", "45.33.
 
 export const DTLS = 99;
 
-export const IRC = ["localhost"];
+export const IRC = ["localhost:6699"];
 
 export const HUB = "https://arbiter.warframe.com/api/";
