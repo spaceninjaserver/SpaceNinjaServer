@@ -1,4 +1,4 @@
-#!/usr/bin/env python3#
+#!/usr/bin/env python3
 # Copyright (C) 2003-2023 Joel Rosdahl
 #
 # This program is free software; you can redistribute it and/or modify
