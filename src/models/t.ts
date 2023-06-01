@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const accountSchema = new mongoose.Schema({
-    data: JSON
+  data: JSON
 });
 
 // personSchema.set("toJSON", {

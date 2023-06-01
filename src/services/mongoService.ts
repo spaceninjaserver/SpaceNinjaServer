@@ -10,14 +10,14 @@ if (!url) throw new Error("MONGODB_URL not found");
 console.log("connecting to MongoDB URL:", url);
 
 const connectDatabase = async () => {
-    try {
-        await mongoose.connect(url);
-        console.log("connected to MongoDB");
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            console.error("error connecting to MongoDB", error.message);
-        }
+  try {
+    await mongoose.connect(url);
+    console.log("connected to MongoDB");
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("error connecting to MongoDB", error.message);
     }
+  }
 };
 
 export { connectDatabase };
