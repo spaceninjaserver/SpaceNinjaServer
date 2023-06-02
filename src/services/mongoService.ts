@@ -5,9 +5,9 @@ dotenv.config();
 
 const url = process.env.MONGODB_URL;
 
-if (!url) throw new Error("MONGODB_URL not found");
-
-console.log("connecting to MongoDB URL:", url);
+if (url === undefined) {
+    throw new Error("MONGODB_URL not found. Make sure you have a .env file in the root of the project!");
+}
 
 const connectDatabase = async () => {
     try {
