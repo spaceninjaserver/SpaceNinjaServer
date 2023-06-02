@@ -14,5 +14,14 @@
     "singleQuote": false,
     "vueIndentScriptAndStyle": true,
     "arrowParens": "avoid",
-    "bracketSpacing": true
+    "bracketSpacing": true,
+    "overrides": [
+        {
+            "files": "*.json",
+            "options": {
+                "tabWidth": 2,
+                "printWidth": 200
+            }
+        }
+    ]
 }

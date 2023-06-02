@@ -1,5 +1,5 @@
-import { Account } from "../models/loginModel";
-import { IDatabaseAccount } from "../types/loginTypes";
+import { Account } from "@/src/models/loginModel";
+import { IDatabaseAccount } from "@/src/types/loginTypes";
 
 const isCorrectPassword = (requestPassword: string, databasePassword: string): boolean => {
     return requestPassword === databasePassword;
