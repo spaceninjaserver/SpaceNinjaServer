@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import { toCreateAccount, toDatabaseAccount } from "@/src/helpers/customHelpers";
 import { createAccount } from "@/src/services/loginService";
 import { RequestHandler } from "express";

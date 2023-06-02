@@ -6,14 +6,14 @@ import { requestLogger, unknownEndpointHandler } from "@/src/middleware/middlewa
 import { apiRouter } from "@/src/routes/api";
 //import { testRouter } from "@/src/routes/test";
 import { cacheRouter } from "@/src/routes/cache";
-import { customRouter } from "./routes/custom";
-import { dynamicController } from "./routes/dynamic";
-
 import bodyParser from "body-parser";
 
 import morgan from "morgan";
-import { steamPacksController } from "./controllers/misc/steamPacksController";
-import { connectDatabase } from "./services/mongoService";
+import { steamPacksController } from "@/src/controllers/misc/steamPacksController";
+import { customRouter } from "@/src/routes/custom";
+import { dynamicController } from "@/src/routes/dynamic";
+import { statsRouter } from "@/src/routes/stats";
+import { connectDatabase } from "@/src/services/mongoService";
 
 void connectDatabase();
 
@@ -32,6 +32,7 @@ app.use("/custom", customRouter);
 app.use("/:id/dynamic", dynamicController);
 
 app.post("/pay/steamPacks.php", steamPacksController);
+app.use("/stats", statsRouter);
 
 app.use(unknownEndpointHandler);
 

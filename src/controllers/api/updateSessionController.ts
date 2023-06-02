@@ -6,6 +6,6 @@ const updateSessionGetController: RequestHandler = (_req, res) => {
 const updateSessionPostController: RequestHandler = (_req, res) => {
     console.log("UpdateSessions POST Request:", JSON.parse(_req.body));
 
-    res.json({ "hasStarted": true });
+    res.json({ hasStarted: true });
 };
 export { updateSessionGetController, updateSessionPostController };
