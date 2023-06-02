@@ -8,7 +8,7 @@ import { apiRouter } from "@/src/routes/api";
 import { cacheRouter } from "@/src/routes/cache";
 import { customRouter } from "./routes/custom";
 import { dynamicController } from "./routes/dynamic";
-
+import { statsRouter } from "./routes/stats";
 import bodyParser from "body-parser";
 
 import morgan from "morgan";
@@ -32,6 +32,7 @@ app.use("/custom", customRouter);
 app.use("/:id/dynamic", dynamicController);
 
 app.post("/pay/steamPacks.php", steamPacksController);
+app.use("/stats", statsRouter);
 
 app.use(unknownEndpointHandler);
 

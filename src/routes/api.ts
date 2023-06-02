@@ -28,6 +28,7 @@ import { deleteSessionController } from "../controllers/api/deleteSessionControl
 import { logoutController } from "../controllers/api/logoutController";
 import { missionInventoryUpdateController } from "../controllers/api/missionInventoryUpdateController";
 import { genericUpdateController } from "../controllers/api/genericUpdateController";
+import { rerollRandomModController } from "../controllers/api/rerollRandomModController";
 
 
 const apiRouter = express.Router();
@@ -65,5 +66,5 @@ apiRouter.post("/hostSession.php", hostSessionController);
 apiRouter.post("/updateSession.php", updateSessionPostController); 
 apiRouter.post("/missionInventoryUpdate.php", missionInventoryUpdateController); 
 apiRouter.post("/genericUpdate.php", genericUpdateController); 
-
+apiRouter.post("/rerollRandomMod.php", rerollRandomModController)
 export { apiRouter };
