@@ -11,6 +11,7 @@
         "node": true
     },
     "rules": {
+        "@typescript-eslint/no-misused-promises": "off",
         "prettier/prettier": "error",
         "@typescript-eslint/semi": ["error"],
         "@typescript-eslint/explicit-function-return-type": "off",

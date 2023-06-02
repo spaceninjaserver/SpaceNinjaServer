@@ -1,6 +1,6 @@
+import { aggregateSessionsController } from "@/src/controllers/dynamic/aggregateSessionsController";
+import { worldStateController } from "@/src/controllers/dynamic/worldStateController";
 import express from "express";
-import { aggregateSessionsController } from "../controllers/dynamic/aggregateSessionsController";
-import { worldStateController } from "../controllers/dynamic/worldStateController";
 
 const dynamicController = express.Router();
 

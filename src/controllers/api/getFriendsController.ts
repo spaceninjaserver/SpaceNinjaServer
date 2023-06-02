@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-export default (_request: Request, response: Response) => {
+const getFriendsController = (_request: Request, response: Response) => {
     response.writeHead(200, {
         //Connection: "keep-alive",
         //"Content-Encoding": "gzip",
@@ -10,3 +10,5 @@ export default (_request: Request, response: Response) => {
     });
     response.end(Buffer.from([0x7b, 0x7d, 0x0a]));
 };
+
+export { getFriendsController };

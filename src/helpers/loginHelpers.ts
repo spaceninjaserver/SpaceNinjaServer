@@ -1,4 +1,4 @@
-import { ILoginRequest } from "../types/loginTypes";
+import { ILoginRequest } from "@/src/types/loginTypes";
 import { parseEmail, parseNumber, parseString } from "./general";
 
 const toLoginRequest = (loginRequest: unknown): ILoginRequest => {

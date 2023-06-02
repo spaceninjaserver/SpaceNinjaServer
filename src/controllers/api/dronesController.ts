@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 
 const dronesController: RequestHandler = (_req, res) => {
-    res.json({})
+    res.json({});
 };
 
 export { dronesController };

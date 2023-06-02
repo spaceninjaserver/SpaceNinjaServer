@@ -1,5 +1,5 @@
+import { IDatabaseAccountDocument } from "@/src/types/loginTypes";
 import { model, Schema, SchemaOptions } from "mongoose";
-import { IDatabaseAccountDocument } from "../types/loginTypes";
 
 const opts = {
     toJSON: { virtuals: true },
