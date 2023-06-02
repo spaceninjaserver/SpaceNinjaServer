@@ -2,8 +2,8 @@ import { model, Schema, SchemaOptions } from "mongoose";
 import { IDatabaseAccountDocument } from "../types/loginTypes";
 
 const opts = {
-  toJSON: { virtuals: true },
-  toObject: { virtuals: true }
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
 } satisfies SchemaOptions;
 
 // {
@@ -21,29 +21,29 @@ const opts = {
 // }
 
 const databaseAccountSchema = new Schema<IDatabaseAccountDocument>(
-  {
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    DisplayName: { type: String, required: true },
-    CountryCode: { type: String, required: true },
-    ClientType: { type: String },
-    CrossPlatformAllowed: { type: Boolean, required: true },
-    ForceLogoutVersion: { type: Number, required: true },
-    AmazonAuthToken: { type: String },
-    AmazonRefreshToken: { type: String },
-    ConsentNeeded: { type: Boolean, required: true },
-    TrackedSettings: { type: [String], default: [] }
-  },
-  opts
+    {
+        email: { type: String, required: true, unique: true },
+        password: { type: String, required: true },
+        DisplayName: { type: String, required: true },
+        CountryCode: { type: String, required: true },
+        ClientType: { type: String },
+        CrossPlatformAllowed: { type: Boolean, required: true },
+        ForceLogoutVersion: { type: Number, required: true },
+        AmazonAuthToken: { type: String },
+        AmazonRefreshToken: { type: String },
+        ConsentNeeded: { type: Boolean, required: true },
+        TrackedSettings: { type: [String], default: [] }
+    },
+    opts
 );
 
 databaseAccountSchema.set("toJSON", {
-  transform(_document, returnedObject) {
-    //returnedObject.id = returnedObject._id.toString();
-    delete returnedObject._id;
-    delete returnedObject.__v;
-  },
-  virtuals: true
+    transform(_document, returnedObject) {
+        //returnedObject.id = returnedObject._id.toString();
+        delete returnedObject._id;
+        delete returnedObject.__v;
+    },
+    virtuals: true
 });
 
 //databaseAccountSchema.set("");

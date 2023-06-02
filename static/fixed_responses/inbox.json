@@ -1,24 +1,24 @@
 {
-  "Inbox": [
-    {
-      "sndr": "/Lotus/Language/Bosses/Ordis",
-      "msg": "/Lotus/Language/Inbox/ThankYouFreeMultipleContent",
-      "countedAtt": [
+    "Inbox": [
         {
-          "ItemType": "/Lotus/Upgrades/Skins/Promo/Twitch/OgrisTwitchSkin",
-          "ItemCount": 1
-        },
-        {
-          "ItemType": "/Lotus/Weapons/ClanTech/Chemical/RocketLauncher",
-          "ItemCount": 1
+            "sndr": "/Lotus/Language/Bosses/Ordis",
+            "msg": "/Lotus/Language/Inbox/ThankYouFreeMultipleContent",
+            "countedAtt": [
+                {
+                    "ItemType": "/Lotus/Upgrades/Skins/Promo/Twitch/OgrisTwitchSkin",
+                    "ItemCount": 1
+                },
+                {
+                    "ItemType": "/Lotus/Weapons/ClanTech/Chemical/RocketLauncher",
+                    "ItemCount": 1
+                }
+            ],
+            "sub": "/Lotus/Language/Inbox/ThankYouFreeMultipleSubject",
+            "icon": "/Lotus/Interface/Icons/Npcs/Ordis.png",
+            "highPriority": true,
+            "messageId": "removed",
+            "date": { "$date": { "$numberLong": "removed" } },
+            "r": true
         }
-      ],
-      "sub": "/Lotus/Language/Inbox/ThankYouFreeMultipleSubject",
-      "icon": "/Lotus/Interface/Icons/Npcs/Ordis.png",
-      "highPriority": true,
-      "messageId": "removed",
-      "date": { "$date": { "$numberLong": "removed" } },
-      "r": true
-    }
-  ]
+    ]
 }
