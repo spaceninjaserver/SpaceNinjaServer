@@ -18,6 +18,17 @@ import { setActiveQuestController } from "../controllers/api/setActiveQuestContr
 import { surveysController } from "../controllers/api/surveysController";
 import { updateChallengeProgressController } from "../controllers/api/updateChallengeProgressController";
 import { viewController } from "../controllers/api/viewController";
+import { updateSessionPostController } from "../controllers/api/updateSessionController";
+import { updateSessionGetController } from "../controllers/api/updateSessionController";
+import { getCreditsController } from "../controllers/api/getCreditsController";
+import { hubInstancesController } from "../controllers/api/hubInstancesController";
+import { hubController } from "../controllers/api/hubController";
+import { modularWeaponSaleController } from "../controllers/api/modularWeaponSaleController";
+import { deleteSessionController } from "../controllers/api/deleteSessionController";
+import { logoutController } from "../controllers/api/logoutController";
+import { missionInventoryUpdateController } from "../controllers/api/missionInventoryUpdateController";
+import { genericUpdateController } from "../controllers/api/genericUpdateController";
+
 
 const apiRouter = express.Router();
 
@@ -32,10 +43,17 @@ apiRouter.get("/checkDailyMissionBonus.php", checkDailyMissionBonusController);
 apiRouter.get("/inbox.php", inboxController);
 apiRouter.get("/getShip.php", getShipController);
 apiRouter.get("/view.php", viewController);
-apiRouter.get("/drones.php", dronesController);
+apiRouter.get("/drones.php", dronesController); 
 apiRouter.get("/getIgnoredUsers.php", getIgnoredUsersController);
 apiRouter.get("/getNewRewardSeed.php", getNewRewardSeedController);
 apiRouter.get("/setActiveQuest.php", setActiveQuestController);
+apiRouter.get("/updateSession.php", updateSessionGetController);
+apiRouter.get("/credits.php", getCreditsController);
+apiRouter.get("/hubInstances", hubInstancesController);
+apiRouter.get("/hub", hubController);
+apiRouter.get("/modularWeaponSale.php", modularWeaponSaleController);
+apiRouter.get("/deleteSession.php", deleteSessionController); 
+apiRouter.get("/logout.php", logoutController);
 
 // post
 apiRouter.post("/findSessions.php", findSessionsController);
@@ -44,5 +62,8 @@ apiRouter.post("/login.php", loginController);
 apiRouter.post("/getAlliance.php", getAllianceController);
 apiRouter.post("/updateChallengeProgress.php", updateChallengeProgressController);
 apiRouter.post("/hostSession.php", hostSessionController);
+apiRouter.post("/updateSession.php", updateSessionPostController); 
+apiRouter.post("/missionInventoryUpdate.php", missionInventoryUpdateController); 
+apiRouter.post("/genericUpdate.php", genericUpdateController); 
 
 export { apiRouter };
