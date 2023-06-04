@@ -1,5 +1,6 @@
-import { Document, Schema, model } from "mongoose";
-import { IInventoryDatabase, IInventoryResponse, ISuitDatabase, ISuitDocument, Oid } from "../types/inventoryTypes";
+import { Schema, model } from "mongoose";
+import { IInventoryDatabase, ISuitDatabase } from "../types/inventoryTypes";
+import { Oid } from "../types/commonTypes";
 
 const polaritySchema = new Schema({
     Slot: Number,
@@ -65,7 +66,7 @@ const suitSchema = new Schema({
 });
 
 suitSchema.set("toJSON", {
-    transform(_document, returnedObject: ISuitDocument) {
+    transform(_document, returnedObject) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
         returnedObject.ItemId = { $oid: returnedObject._id.toString() } satisfies Oid;
         delete returnedObject._id;
@@ -246,7 +247,7 @@ const inventorySchema = new Schema({
 });
 
 inventorySchema.set("toJSON", {
-    transform(_document, returnedObject: ISuitDocument) {
+    transform(_document, returnedObject) {
         delete returnedObject._id;
         delete returnedObject.__v;
     }
