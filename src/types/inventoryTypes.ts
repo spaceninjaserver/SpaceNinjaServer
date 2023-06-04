@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { Document, Types } from "mongoose";
+import { Oid } from "./commonTypes";
 
 export interface IInventoryDatabase extends IInventoryResponse {
     accountOwnerId: Types.ObjectId;
@@ -185,10 +186,6 @@ export interface AdultOperatorLoadOut {
     pricol: Color;
     Upgrades?: string[];
     ItemId: Oid;
-}
-
-export interface Oid {
-    $oid: string;
 }
 
 export interface Color {
@@ -995,9 +992,9 @@ export interface PlayerSkills {
 }
 
 export interface QuestKey {
-    Progress: Progress[];
-    unlock: boolean;
-    Completed: boolean;
+    Progress?: Progress[];
+    unlock?: boolean;
+    Completed?: boolean;
     ItemType: string;
     CompletionDate?: Date;
 }
