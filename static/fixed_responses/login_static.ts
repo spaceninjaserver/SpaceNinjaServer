@@ -24,7 +24,7 @@ export const platformCDNs = [
 
 export const Nonce = 1231231233;
 
-export const NRS = ["104.237.145.11", "139.144.69.73", "170.187.231.80", "45.33.58.33", "85.159.214.213"];
+export const NRS = ["localhost"];
 
 export const DTLS = 99;
 

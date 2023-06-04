@@ -27,6 +27,8 @@ import { surveysController } from "@/src/controllers/api/surveysController";
 import { updateChallengeProgressController } from "@/src/controllers/api/updateChallengeProgressController";
 import { updateSessionGetController, updateSessionPostController } from "@/src/controllers/api/updateSessionController";
 import { viewController } from "@/src/controllers/api/viewController";
+import { joinSessionController } from "@/src/controllers/api/joinSessionController";
+
 import express from "express";
 
 const apiRouter = express.Router();
@@ -65,4 +67,5 @@ apiRouter.post("/updateSession.php", updateSessionPostController);
 apiRouter.post("/missionInventoryUpdate.php", missionInventoryUpdateController);
 apiRouter.post("/genericUpdate.php", genericUpdateController);
 apiRouter.post("/rerollRandomMod.php", rerollRandomModController);
+apiRouter.post("/joinSession.php", joinSessionController);
 export { apiRouter };
