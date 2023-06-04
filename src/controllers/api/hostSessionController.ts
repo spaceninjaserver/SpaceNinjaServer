@@ -1,10 +1,9 @@
 import { RequestHandler } from "express";
 import { createNewSession } from "@/src/managers/sessionManager";
+import { Session } from "@/src/types/session";
 
 const hostSessionController: RequestHandler = (_req, res) => {
-    console.log("HostSession Request:", JSON.parse(_req.body));
-    let session = createNewSession(JSON.parse(_req.body), _req.query.accountId as string);
-    console.log("New Session Created: ", session);
+    const session = createNewSession(JSON.parse(String(_req.body)) as Session, _req.query.accountId as string);
 
     res.json({ sessionId: { $oid: session.sessionId }, rewardSeed: 99999999 });
 };

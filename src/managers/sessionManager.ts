@@ -24,7 +24,7 @@ function createNewSession(sessionData: Session, Creator: string): Session {
         customSettings: sessionData.customSettings || "",
         rewardSeed: sessionData.rewardSeed || -1,
         guildId: sessionData.guildId || "",
-        buildId: sessionData.buildId || 4920386201513015989,
+        buildId: sessionData.buildId || 4920386201513015989n,
         platform: sessionData.platform || 0,
         xplatform: sessionData.xplatform || true,
         freePublic: sessionData.freePublic || 3,
@@ -43,7 +43,10 @@ function getSessionByID(sessionId: string): Session | undefined {
     return sessions.find(session => session.sessionId === sessionId);
 }
 
-function getSession(sessionIdOrRequest: string | FindSessionRequest): any[] {
+function getSession(sessionIdOrRequest: string | FindSessionRequest): {
+    createdBy: string;
+    id: string;
+}[] {
     if (typeof sessionIdOrRequest === "string") {
         const session = sessions.find(session => session.sessionId === sessionIdOrRequest);
         if (session) {
@@ -58,7 +61,7 @@ function getSession(sessionIdOrRequest: string | FindSessionRequest): any[] {
         return [];
     }
 
-    const request = sessionIdOrRequest as FindSessionRequest;
+    const request = sessionIdOrRequest;
     const matchingSessions = sessions.filter(session => {
         for (const key in request) {
             if (key !== "eloRating" && key !== "queryId" && request[key] !== session[key as keyof Session]) {
@@ -100,9 +103,12 @@ function getNewSessionID(): string {
 
 function updateSession(sessionId: string, sessionData: string): boolean {
     const session = sessions.find(session => session.sessionId === sessionId);
-    if (!session) return false;
+    if (!session) {
+        return false;
+    }
+
     try {
-        const updatedData = JSON.parse(sessionData);
+        const updatedData: unknown = JSON.parse(sessionData);
         Object.assign(session, updatedData);
         return true;
     } catch (error) {

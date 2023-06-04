@@ -1,28 +1,29 @@
 import { RequestHandler } from "express";
 import { getSession } from "@/src/managers/sessionManager";
+import { FindSessionRequest } from "@/src/types/session";
 
 const findSessionsController: RequestHandler = (_req, res) => {
-    console.log("FindSession Request:", JSON.parse(_req.body));
-    let req = JSON.parse(_req.body);
-    if (req.id != undefined) {
-        console.log("Found ID");
-        let session = getSession(req.id);
+    const sessionRequest = JSON.parse(String(_req.body)) as FindSessionRequest;
+    if (sessionRequest.id != undefined) {
+        const session = getSession(sessionRequest.id);
 
-        if (session) res.json({ queryId: req.queryId, Sessions: session });
-        else res.json({});
-    } else if (req.originalSessionId != undefined) {
-        console.log("Found OriginalSessionID");
-
-        let session = getSession(req.originalSessionId);
-        if (session) res.json({ queryId: req.queryId, Sessions: session });
-        else res.json({});
-    } else {
-        console.log("Found SessionRequest");
-
-        let session = getSession(_req.body);
-        if (session) res.json({ queryId: req.queryId, Sessions: session });
-        else res.json({});
+        if (session) {
+            return res.json({ queryId: sessionRequest.queryId, Sessions: session });
+        }
+        return res.json({});
+    } else if (sessionRequest.originalSessionId != undefined) {
+        const session = getSession(sessionRequest.originalSessionId);
+        if (session) {
+            return res.json({ queryId: sessionRequest.queryId, Sessions: session });
+        }
+        return res.json({});
     }
+
+    const session = getSession(sessionRequest);
+    if (session) {
+        return res.json({ queryId: sessionRequest.queryId, Sessions: session });
+    }
+    return res.json({});
 };
 
 export { findSessionsController };

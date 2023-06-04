@@ -18,7 +18,7 @@ export interface Session {
     customSettings: string;
     rewardSeed: number;
     guildId: string;
-    buildId: number;
+    buildId: number | bigint;
     platform: number;
     xplatform: boolean;
     freePublic: number;
@@ -27,5 +27,15 @@ export interface Session {
 }
 
 export interface FindSessionRequest {
-    [key: string]: any;
+    id?: string;
+    originalSessionId?: string;
+    buildId: number;
+    gameModeId: number;
+    regionId: number;
+    maxEloDifference: number;
+    eloRating: number;
+    enforceElo: boolean;
+    platform: number;
+    xplatform: boolean;
+    queryId: number;
 }
