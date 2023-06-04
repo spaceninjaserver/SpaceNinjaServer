@@ -15,8 +15,7 @@ const PurchaseItem = (item: Item, quantity: number, usePremium: boolean, price: 
             }
         ];
         newInventoryChanges.Suits = newSuits;
-    }
-    if ((item as Weapon).productCategory == "LongGuns") {
+    } else if ((item as Weapon).productCategory == "LongGuns") {
         const newLongGuns: StoreItem[] = [
             {
                 ItemType: item.uniqueName,
@@ -25,8 +24,7 @@ const PurchaseItem = (item: Item, quantity: number, usePremium: boolean, price: 
             }
         ];
         newInventoryChanges.LongGuns = newLongGuns;
-    }
-    if ((item as Weapon).productCategory == "Pistols") {
+    } else if ((item as Weapon).productCategory == "Pistols") {
         const newPistols: StoreItem[] = [
             {
                 ItemType: item.uniqueName,
@@ -35,8 +33,7 @@ const PurchaseItem = (item: Item, quantity: number, usePremium: boolean, price: 
             }
         ];
         newInventoryChanges.Pistols = newPistols;
-    }
-    if ((item as Weapon).productCategory == "Melee") {
+    } else if ((item as Weapon).productCategory == "Melee") {
         const newMelee: StoreItem[] = [
             {
                 ItemType: item.uniqueName,
@@ -45,8 +42,7 @@ const PurchaseItem = (item: Item, quantity: number, usePremium: boolean, price: 
             }
         ];
         newInventoryChanges.Melee = newMelee;
-    }
-    if (item as Misc) {
+    } else if (item as Misc) {
         const newMisc: StoreItem[] = [
             {
                 ItemType: item.uniqueName,
@@ -54,8 +50,7 @@ const PurchaseItem = (item: Item, quantity: number, usePremium: boolean, price: 
             }
         ];
         newInventoryChanges.MiscItems = newMisc;
-    }
-    if (item as Skin) {
+    } else if (item as Skin) {
         newInventoryChanges.WishlistChanges = [];
         newInventoryChanges.WishlistChanges.push(parseString(item.uniqueName));
         const newFlavourItem: StoreItem[] = [
