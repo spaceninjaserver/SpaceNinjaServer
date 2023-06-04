@@ -1,4 +1,4 @@
-export interface ILoginResponse extends Omit<Partial<IDatabaseAccountDocument>, "email" | "password"> {
+export interface ILoginResponse extends Omit<IDatabaseAccountDocument, "email" | "password"> {
     Groups: IGroup[];
     Nonce: number;
     BuildLabel: string;

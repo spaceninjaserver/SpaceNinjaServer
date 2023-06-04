@@ -1,15 +1,18 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { RequestHandler } from "express";
+
 import config from "@/config.json";
-import { removeKeysFromObject } from "@/src/helpers/general";
+
 import { toLoginRequest } from "@/src/helpers/loginHelpers";
 import { Account } from "@/src/models/loginModel";
 import { createAccount, isCorrectPassword } from "@/src/services/loginService";
 import { ILoginResponse } from "@/src/types/loginTypes";
-import { DTLS, HUB, IRC, NRS, Nonce, groups, platformCDNs } from "@/static/fixed_responses/login_static";
-import { RequestHandler } from "express";
+import { DTLS, groups, HUB, IRC, Nonce, NRS, platformCDNs } from "@/static/fixed_responses/login_static";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 const loginController: RequestHandler = async (request, response) => {
-    const body: unknown = JSON.parse(String(request.body));
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument
+    const body = JSON.parse(request.body); // parse octet stream of json data to json object
     const loginRequest = toLoginRequest(body);
 
     const account = await Account.findOne({ email: loginRequest.email }); //{ _id: 0, __v: 0 }
@@ -27,8 +30,9 @@ const loginController: RequestHandler = async (request, response) => {
                 ConsentNeeded: false,
                 TrackedSettings: []
             });
-
-            const databaseAccount = removeKeysFromObject(newAccount, ["email", "password"]);
+            console.log("creating new account");
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const { email, password, ...databaseAccount } = newAccount;
             const newLoginResponse: ILoginResponse = {
                 ...databaseAccount,
                 Groups: groups,
@@ -57,7 +61,7 @@ const loginController: RequestHandler = async (request, response) => {
         return;
     }
 
-    const databaseAccount = removeKeysFromObject(account.toJSON(), ["email", "password"]);
+    const { email, password, ...databaseAccount } = account.toJSON();
     const newLoginResponse: ILoginResponse = {
         ...databaseAccount,
         Groups: groups,
