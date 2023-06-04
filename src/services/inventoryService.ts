@@ -1,4 +1,4 @@
-import { Inventory } from "../models/inventoryModel";
+import { Inventory } from "@/src/models/inventoryModel";
 import new_inventory from "@/static/fixed_responses/postTutorialInventory.json";
 import config from "@/config.json";
 import { Types } from "mongoose";
