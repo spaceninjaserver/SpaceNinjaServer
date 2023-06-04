@@ -25,3 +25,7 @@ export interface Session {
     freePrivate: number;
     fullReset: number;
 }
+
+export interface FindSessionRequest {
+    [key: string]: any;
+}
