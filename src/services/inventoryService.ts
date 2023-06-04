@@ -1,5 +1,5 @@
 import { Inventory } from "../models/inventoryModel";
-import new_inventory from "@/static/fixed_responses/new_inventory.json";
+import new_inventory from "@/static/fixed_responses/postTutorialInventory.json";
 import config from "@/config.json";
 import { Types } from "mongoose";
 
