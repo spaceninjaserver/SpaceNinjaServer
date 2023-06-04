@@ -12,7 +12,7 @@ const inventoryController: RequestHandler = async (request: Request, response: R
     }
     console.log(accountId);
 
-    const inventory = await Inventory.findOne({ accountOwnerId: accountId }); // has the accountOwnerId field to find a corresponding inventory
+    const inventory = await Inventory.findOne({ accountOwnerId: accountId });
 
     if (!inventory) {
         response.status(400).json({ error: "inventory was undefined" });
@@ -21,7 +21,7 @@ const inventoryController: RequestHandler = async (request: Request, response: R
 
     const inventoryJSON = inventory.toJSON();
 
-    const inventoreResponse = toInventoryResponse(inventoryJSON); // remove the accountOwnerId for the response
+    const inventoreResponse = toInventoryResponse(inventoryJSON);
 
     response.json(inventoreResponse);
 };
