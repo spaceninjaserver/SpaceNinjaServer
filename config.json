@@ -1,7 +1,9 @@
 {
-    "autoCreateAccount": true,
-    "buildLabel": "2023.05.25.13.39/oZkc-RIme5c1CCltUfg2gQ",
-    "matchmakingBuildId": "4920386201513015989",
-    "version": "33.0.14",
-    "worldSeed": "GWvLyHiw7/Qr/60056xmAmDrn0Y9et2S3BYlLSkLDNBMtumSr3KxWV8He5Jz72yYq3tsY+cd53QeTf+bb54+llGTbYiQF+64BtiLWMVhWP1IUaP4SxWHXojlpQC13op/udHI1whc+8zrxEzzZmv/QlpvigAAbjBDtwu97Df0vgn+YrOKi4G3OhgIkTRocAAzD1P/BGbT8gaKE01H8rXl3+Gq6jCA1O1v800SL6DwKOgMsXVvWp7g2n/tPxJe/j9bmu4XFG0bSa5y5hikLKxvntA/5ut+iogv4MyMBe+TydVxjPqNbkKnby5l4KAL+3inpuPraeg4jcNMt0AwKG8NIQ=="
+  "autoCreateAccount": true,
+  "buildLabel": "2023.05.25.13.39/oZkc-RIme5c1CCltUfg2gQ",
+  "matchmakingBuildId": "4920386201513015989",
+  "version": "33.0.14",
+  "worldSeed": "GWvLyHiw7/Qr/60056xmAmDrn0Y9et2S3BYlLSkLDNBMtumSr3KxWV8He5Jz72yYq3tsY+cd53QeTf+bb54+llGTbYiQF+64BtiLWMVhWP1IUaP4SxWHXojlpQC13op/udHI1whc+8zrxEzzZmv/QlpvigAAbjBDtwu97Df0vgn+YrOKi4G3OhgIkTRocAAzD1P/BGbT8gaKE01H8rXl3+Gq6jCA1O1v800SL6DwKOgMsXVvWp7g2n/tPxJe/j9bmu4XFG0bSa5y5hikLKxvntA/5ut+iogv4MyMBe+TydVxjPqNbkKnby5l4KAL+3inpuPraeg4jcNMt0AwKG8NIQ==",
+  "skipStoryModeChoice": true,
+  "skipTutorial": true
 }
