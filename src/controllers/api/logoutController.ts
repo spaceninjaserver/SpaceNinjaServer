@@ -5,7 +5,7 @@ const logoutController: RequestHandler = (_req, res) => {
         "Content-Type": "text/html",
         "Content-Length": 1
     });
-    res.end("1"); 
+    res.end("1");
 };
 
 export { logoutController };
