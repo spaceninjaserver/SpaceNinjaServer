@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 
 const getNewRewardSeedController: RequestHandler = (_req, res) => {
-    res.sendStatus(200);
+    res.json({ rewardSeed: 5867309943877621023 });
 };
 
 export { getNewRewardSeedController };
