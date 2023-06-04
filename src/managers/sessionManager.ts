@@ -63,8 +63,12 @@ function getSession(sessionIdOrRequest: string | FindSessionRequest): {
 
     const request = sessionIdOrRequest;
     const matchingSessions = sessions.filter(session => {
-        for (const key in request) {
-            if (key !== "eloRating" && key !== "queryId" && request[key] !== session[key as keyof Session]) {
+        for (const key of Object.keys(request)) {
+            if (
+                key !== "eloRating" &&
+                key !== "queryId" &&
+                request[key as keyof FindSessionRequest] !== session[key as keyof Session]
+            ) {
                 return false;
             }
         }

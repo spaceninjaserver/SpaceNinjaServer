@@ -1,6 +1,5 @@
+import { IShipDatabase, IShipResponse } from "@/src/types/shipTypes";
 import { Schema, model } from "mongoose";
-import { IShipDatabase } from "../types/shipTypes";
-import { Oid } from "../types/commonTypes";
 
 const roomSchema = new Schema({
     Name: String,
@@ -31,9 +30,10 @@ const shipDatabaseSchema = new Schema({
 });
 
 shipDatabaseSchema.set("toJSON", {
-    transform(_document, returnedObject) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-        returnedObject.Ship.ShipId = { $oid: returnedObject._id.toString() } satisfies Oid;
+    transform(_document, returnedObject: IShipResponse) {
+        if (returnedObject._id) {
+            returnedObject.Ship.ShipId = { $oid: returnedObject._id.toString() };
+        }
         delete returnedObject._id;
         delete returnedObject.Ship._id;
         delete returnedObject.Apartment._id;

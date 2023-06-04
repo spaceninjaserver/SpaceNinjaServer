@@ -1,6 +1,5 @@
 import { Schema, model } from "mongoose";
 import { IInventoryDatabase, ISuitDatabase } from "../types/inventoryTypes";
-import { Oid } from "../types/commonTypes";
 
 const polaritySchema = new Schema({
     Slot: Number,
@@ -66,9 +65,10 @@ const suitSchema = new Schema({
 });
 
 suitSchema.set("toJSON", {
-    transform(_document, returnedObject) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-        returnedObject.ItemId = { $oid: returnedObject._id.toString() } satisfies Oid;
+    transform(_document, returnedObject: ISuitDatabase) {
+        if (returnedObject._id) {
+            returnedObject.ItemId = { $oid: returnedObject._id.toString() };
+        }
         delete returnedObject._id;
         delete returnedObject.__v;
     }

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Document, Types } from "mongoose";
+import { Types } from "mongoose";
 import { Oid } from "./commonTypes";
 
 export interface IInventoryDatabase extends IInventoryResponse {
@@ -1159,12 +1159,6 @@ export interface NotePacks {
     PERCUSSION: string;
 }
 
-export interface ISuitDocument extends ISuitDatabase, Document {}
-
-export interface ISuitResponse extends ISuitDatabase {
-    ItemId: Oid;
-}
-
 export interface ISuitDatabase {
     ItemType: string;
     Configs: SuitConfig[];
@@ -1178,6 +1172,8 @@ export interface ISuitDatabase {
     ItemId: Oid;
     FocusLens?: string;
     UnlockLevel?: number;
+    _id?: Oid;
+    __v?: number;
 }
 
 export interface SuitConfig {
