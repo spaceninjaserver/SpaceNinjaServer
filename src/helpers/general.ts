@@ -55,4 +55,21 @@ const parseBoolean = (booleanCandidate: unknown): boolean => {
     return booleanCandidate;
 };
 
-export { isString, isNumber, parseString, parseNumber, parseDateNumber, parseBoolean, parseEmail };
+function removeKeysFromObject<T>(object: T, keys: Array<keyof T>): Partial<T> {
+    const newObject: Partial<T> = object;
+    for (const key of keys) {
+        delete newObject[key];
+    }
+    return newObject;
+}
+
+export {
+    isString,
+    isNumber,
+    parseString,
+    parseNumber,
+    parseDateNumber,
+    parseBoolean,
+    parseEmail,
+    removeKeysFromObject
+};

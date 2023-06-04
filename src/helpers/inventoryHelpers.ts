@@ -1,9 +1,8 @@
-import { IInventoryDatabase, IInventoryResponse } from "@/src/types/inventoryTypes";
+import { removeKeysFromObject } from "@/src/helpers/general";
+import { IInventoryDatabase } from "@/src/types/inventoryTypes";
 
-const toInventoryResponse = (inventoryDatabase: IInventoryDatabase): IInventoryResponse => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { accountOwnerId, ...inventoreResponse } = inventoryDatabase;
-    return inventoreResponse;
+const toInventoryResponse = (inventoryDatabase: IInventoryDatabase) => {
+    return removeKeysFromObject(inventoryDatabase, ["accountOwnerId"]);
 };
 
 export { toInventoryResponse };
