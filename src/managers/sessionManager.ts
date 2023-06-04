@@ -56,22 +56,22 @@ function getSession(sessionIdOrRequest: string | FindSessionRequest): any[] {
             ];
         }
         return [];
-    } else {
-        const request = sessionIdOrRequest as FindSessionRequest;
-        const matchingSessions = sessions.filter(session => {
-            for (const key in request) {
-                if (key !== "eloRating" && key !== "queryId" && request[key] !== session[key as keyof Session]) {
-                    return false;
-                }
-            }
-            console.log("Found Matching Sessions:", matchingSessions);
-            return true;
-        });
-        return matchingSessions.map(session => ({
-            createdBy: session.creatorId,
-            id: session.sessionId
-        }));
     }
+
+    const request = sessionIdOrRequest as FindSessionRequest;
+    const matchingSessions = sessions.filter(session => {
+        for (const key in request) {
+            if (key !== "eloRating" && key !== "queryId" && request[key] !== session[key as keyof Session]) {
+                return false;
+            }
+        }
+        console.log("Found Matching Sessions:", matchingSessions);
+        return true;
+    });
+    return matchingSessions.map(session => ({
+        createdBy: session.creatorId,
+        id: session.sessionId
+    }));
 }
 
 function getSessionByCreatorID(creatorId: string): Session | undefined {
@@ -101,14 +101,14 @@ function getNewSessionID(): string {
 function updateSession(sessionId: string, sessionData: string): boolean {
     const session = sessions.find(session => session.sessionId === sessionId);
     if (!session) return false;
-        try {
-            const updatedData = JSON.parse(sessionData);
-            Object.assign(session, updatedData);
-            return true;
-        } catch (error) {
-            console.error("Invalid JSON string for session update.");
-            return false;
-        }
+    try {
+        const updatedData = JSON.parse(sessionData);
+        Object.assign(session, updatedData);
+        return true;
+    } catch (error) {
+        console.error("Invalid JSON string for session update.");
+        return false;
+    }
 }
 
 function deleteSession(sessionId: string): boolean {
