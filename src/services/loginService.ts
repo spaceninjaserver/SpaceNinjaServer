@@ -1,6 +1,7 @@
 import { Account } from "@/src/models/loginModel";
 import { createInventory } from "@/src/services/inventoryService";
 import { IDatabaseAccount } from "@/src/types/loginTypes";
+import { createShip } from "./shipService";
 
 const isCorrectPassword = (requestPassword: string, databasePassword: string): boolean => {
     return requestPassword === databasePassword;
@@ -11,6 +12,7 @@ const createAccount = async (accountData: IDatabaseAccount) => {
     try {
         await account.save();
         await createInventory(account._id);
+        await createShip(account._id);
         return account.toJSON();
     } catch (error) {
         if (error instanceof Error) {
