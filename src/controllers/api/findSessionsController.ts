@@ -3,24 +3,24 @@ import { getSession } from "@/src/managers/sessionManager";
 
 const findSessionsController: RequestHandler = (_req, res) => {
     console.log("FindSession Request:", JSON.parse(_req.body));
-    let r = JSON.parse(_req.body);
-    if (r.id != undefined) {
+    let req = JSON.parse(_req.body);
+    if (req.id != undefined) {
         console.log("Found ID");
-        let s = getSession(r.id);
+        let session = getSession(req.id);
 
-        if (s) res.json({ queryId: r.queryId, Sessions: s });
+        if (session) res.json({ queryId: req.queryId, Sessions: session });
         else res.json({});
-    } else if (r.originalSessionId != undefined) {
+    } else if (req.originalSessionId != undefined) {
         console.log("Found OriginalSessionID");
 
-        let s = getSession(r.originalSessionId);
-        if (s) res.json({ queryId: r.queryId, Sessions: [s] });
+        let session = getSession(req.originalSessionId);
+        if (session) res.json({ queryId: req.queryId, Sessions: session });
         else res.json({});
     } else {
         console.log("Found SessionRequest");
 
-        let s = getSession(_req.body);
-        if (s) res.json({ queryId: r.queryId, Sessions: [s] });
+        let session = getSession(_req.body);
+        if (session) res.json({ queryId: req.queryId, Sessions: session });
         else res.json({});
     }
 };
