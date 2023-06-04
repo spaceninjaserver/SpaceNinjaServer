@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 
 const getNewRewardSeedController: RequestHandler = (_req, res) => {
-    res.json({ rewardSeed: 1111111111 });
+    res.json({ rewardSeed: generateRewardSeed() });
 };
 
 function generateRewardSeed(): number {

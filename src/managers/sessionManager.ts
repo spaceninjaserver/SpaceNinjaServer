@@ -1,30 +1,4 @@
-interface Session {
-    sessionId: string;
-    creatorId: string;
-    maxPlayers: number;
-    minPlayers: number;
-    privateSlots: number;
-    scoreLimit: number;
-    timeLimit: number;
-    gameModeId: number;
-    eloRating: number;
-    regionId: number;
-    difficulty: number;
-    hasStarted: boolean;
-    enableVoice: boolean;
-    matchType: string;
-    maps: string[];
-    originalSessionId: string;
-    customSettings: string;
-    rewardSeed: number;
-    guildId: string;
-    buildId: number;
-    platform: number;
-    xplatform: boolean;
-    freePublic: number;
-    freePrivate: number;
-    fullReset: number;
-}
+import { Session, FindSessionRequest } from "@/src/types/session";
 
 const sessions: Session[] = [];
 
@@ -67,10 +41,6 @@ function getAllSessions(): Session[] {
 
 function getSessionByID(sessionId: string): Session | undefined {
     return sessions.find(session => session.sessionId === sessionId);
-}
-
-interface FindSessionRequest {
-    [key: string]: any;
 }
 
 function getSession(sessionIdOrRequest: string | FindSessionRequest): any[] {
@@ -130,7 +100,7 @@ function getNewSessionID(): string {
 
 function updateSession(sessionId: string, sessionData: string): boolean {
     const session = sessions.find(session => session.sessionId === sessionId);
-    if (session) {
+    if (!session) return false;
         try {
             const updatedData = JSON.parse(sessionData);
             Object.assign(session, updatedData);
@@ -139,8 +109,6 @@ function updateSession(sessionId: string, sessionData: string): boolean {
             console.error("Invalid JSON string for session update.");
             return false;
         }
-    }
-    return false;
 }
 
 function deleteSession(sessionId: string): boolean {
