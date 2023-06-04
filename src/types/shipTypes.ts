@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { Types } from "mongoose";
-import { Oid } from "./inventoryTypes";
+import { Oid } from "@/src/types/commonTypes";
 
-export type IShipDatabase = IShipResponse;
-
-export interface IShipResponse {
+export interface IShip {
     ShipOwnerId: Types.ObjectId;
-    Ship: IShipClass;
+    Ship: IShipClassResponse;
     Apartment: IApartmentClass;
 }
 
-export interface IShipClass {
-    Rooms: IRoomsClass[];
+export interface IShipClassResponse extends IShipClassDatabase {
     ShipId: Oid;
+}
+export interface IShipClassDatabase {
+    Rooms: IRoomsClass[];
     Features: string[];
     ContentUrlSignature: string;
 }
