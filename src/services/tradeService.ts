@@ -1,10 +1,18 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Item, Misc, Skin, Warframe, Weapon } from "warframe-items";
 import { InventoryChanges, StoreItem } from "../types/commonTypes";
 import { generateOid, parseString } from "../helpers/general";
+import { UpdateInventory } from "./inventoryService";
 
-const PurchaseItem = (item: Item, quantity: number, usePremium: boolean, price: number): InventoryChanges => {
+const PurchaseItem = async (
+    accountId: string,
+    item: Item,
+    quantity: number,
+    usePremium: boolean,
+    price: number
+): Promise<InventoryChanges> => {
     // {"InventoryChanges":{"WishlistChanges":["/Lotus/Types/StoreItems/SuitCustomizations/ColourPickerItem"],"FlavourItems":[{"ItemType":"/Lotus/Types/StoreItems/SuitCustomizations/ColourPickerItem"}],"PremiumCredits":-75}}
-
     const newInventoryChanges: InventoryChanges = {};
     if ((item as Warframe).productCategory == "Suits") {
         const newSuits: StoreItem[] = [
@@ -66,6 +74,8 @@ const PurchaseItem = (item: Item, quantity: number, usePremium: boolean, price: 
     if (!usePremium) {
         newInventoryChanges.RegularCredits = -price;
     }
+    await UpdateInventory(accountId, newInventoryChanges);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return newInventoryChanges;
 };
 
