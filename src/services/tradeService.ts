@@ -42,14 +42,6 @@ const PurchaseItem = (item: Item, quantity: number, usePremium: boolean, price: 
             }
         ];
         newInventoryChanges.Melee = newMelee;
-    } else if (item as Misc) {
-        const newMisc: StoreItem[] = [
-            {
-                ItemType: item.uniqueName,
-                ItemCount: quantity
-            }
-        ];
-        newInventoryChanges.MiscItems = newMisc;
     } else if (item as Skin) {
         newInventoryChanges.WishlistChanges = [];
         newInventoryChanges.WishlistChanges.push(parseString(item.uniqueName));
@@ -59,6 +51,14 @@ const PurchaseItem = (item: Item, quantity: number, usePremium: boolean, price: 
             }
         ];
         newInventoryChanges.FlavourItems = newFlavourItem;
+    } else if (item as Misc) {
+        const newMisc: StoreItem[] = [
+            {
+                ItemType: item.uniqueName,
+                ItemCount: quantity
+            }
+        ];
+        newInventoryChanges.MiscItems = newMisc;
     }
     if (usePremium) {
         newInventoryChanges.PremiumCredits = -price;
