@@ -1,3 +1,6 @@
+import mongoose from "mongoose";
+import { Oid } from "../types/commonTypes";
+
 const isString = (text: unknown): text is string => {
     return typeof text === "string" || text instanceof String;
 };
@@ -55,4 +58,15 @@ const parseBoolean = (booleanCandidate: unknown): boolean => {
     return booleanCandidate;
 };
 
-export { isString, isNumber, parseString, parseNumber, parseDateNumber, parseBoolean, parseEmail };
+const generateOid = (str?: string): Oid => {
+    const objectId: Oid = {
+        $oid: new mongoose.Types.ObjectId().toString()
+    };
+    if (str) {
+        objectId.$oid = str;
+    }
+    //console.log(objectId);
+    return objectId;
+};
+
+export { isString, isNumber, parseString, parseNumber, parseDateNumber, parseBoolean, parseEmail, generateOid };

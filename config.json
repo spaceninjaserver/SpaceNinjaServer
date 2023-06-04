@@ -7,5 +7,6 @@
   "skipStoryModeChoice": true,
   "skipTutorial": true,
   "testMission": true,
-  "testQuestKey": true
+  "testQuestKey": true,
+  "testShipFeature": true
 }

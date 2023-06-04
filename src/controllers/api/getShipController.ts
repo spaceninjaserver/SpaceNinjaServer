@@ -1,7 +1,12 @@
+import { RequestHandler } from "express";
+
 import { Account } from "@/src/models/loginModel";
 import { Ship } from "@/src/models/shipModel";
+
 import { createShip } from "@/src/services/shipService";
-import { RequestHandler } from "express";
+
+import config from "@/config.json";
+import testShipFeature from "@/static/fixed_responses/testShipFeature.json";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 const getShipController: RequestHandler = async (_req, res) => {
@@ -15,6 +20,13 @@ const getShipController: RequestHandler = async (_req, res) => {
             res.json(new_ship);
             return;
         }
+    }
+
+    if (ship) {
+        const new_ship = ship;
+        if (config.testMission) new_ship.Ship.Features = testShipFeature;
+        res.json(new_ship);
+        return;
     }
     res.json(ship);
 };
