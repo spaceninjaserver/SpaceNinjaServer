@@ -2,6 +2,9 @@
 import { toInventoryResponse } from "@/src/helpers/inventoryHelpers";
 import { Inventory } from "@/src/models/inventoryModel";
 import { Request, RequestHandler, Response } from "express";
+import config from "@/config.json";
+import testMissions from "@/static/fixed_responses/testMissions.json";
+import testQuestKeys from "@/static/fixed_responses/testQuestKeys.json";
 
 const inventoryController: RequestHandler = async (request: Request, response: Response) => {
     const accountId = request.query.accountId;
@@ -22,6 +25,9 @@ const inventoryController: RequestHandler = async (request: Request, response: R
     const inventoryJSON = inventory.toJSON();
 
     const inventoreResponse = toInventoryResponse(inventoryJSON);
+
+    if (config.testMission) inventoreResponse.Missions = testMissions;
+    if (config.testQuestKey) inventoreResponse.QuestKeys = testQuestKeys;
 
     response.json(inventoreResponse);
 };

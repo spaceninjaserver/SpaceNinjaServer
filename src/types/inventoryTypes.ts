@@ -992,9 +992,9 @@ export interface PlayerSkills {
 }
 
 export interface QuestKey {
-    Progress: Progress[];
-    unlock: boolean;
-    Completed: boolean;
+    Progress?: Progress[];
+    unlock?: boolean;
+    Completed?: boolean;
     ItemType: string;
     CompletionDate?: Date;
 }
