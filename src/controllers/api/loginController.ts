@@ -13,11 +13,8 @@ const loginController: RequestHandler = async (request, response) => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument
     const body = JSON.parse(request.body); // parse octet stream of json data to json object
     const loginRequest = toLoginRequest(body);
-    // console.log(body);
-    //console.log(String.fromCharCode.apiRouterly(null, req.body));
 
     const account = await Account.findOne({ email: loginRequest.email }); //{ _id: 0, __v: 0 }
-    console.log("findone", account);
 
     if (!account && config.autoCreateAccount) {
         try {
@@ -32,7 +29,8 @@ const loginController: RequestHandler = async (request, response) => {
                 ConsentNeeded: false,
                 TrackedSettings: []
             });
-            console.log("CREATED ACCOUNT", newAccount);
+            console.log("creating new account");
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { email, password, ...databaseAccount } = newAccount;
             const newLoginResponse: ILoginResponse = {
                 ...databaseAccount,
@@ -47,7 +45,6 @@ const loginController: RequestHandler = async (request, response) => {
                 MatchmakingBuildId: config.matchmakingBuildId
             };
 
-            console.log(newLoginResponse);
             response.json(newLoginResponse);
             return;
         } catch (error: unknown) {
@@ -77,7 +74,6 @@ const loginController: RequestHandler = async (request, response) => {
         MatchmakingBuildId: config.matchmakingBuildId
     };
 
-    console.log("login response", newLoginResponse);
     response.json(newLoginResponse);
 };
 
