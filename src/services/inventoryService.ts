@@ -3,7 +3,6 @@ import new_inventory from "@/static/fixed_responses/postTutorialInventory.json";
 import config from "@/config.json";
 import { Types } from "mongoose";
 import { InventoryChanges } from "../types/commonTypes";
-import { parseString } from "../helpers/general";
 
 const createInventory = async (accountOwnerId: Types.ObjectId) => {
     try {

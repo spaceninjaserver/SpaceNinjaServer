@@ -1,11 +1,11 @@
 [
-    {
-        "ItemType": "/Lotus/Types/Keys/InfestedIntroQuest/InfestedIntroQuestKeyChain"
-    },
-    {
-        "ItemType": "/Lotus/Types/Keys/KubrowQuest/KubrowQuestKeyChain"
-    },
-    {
-        "ItemType": "/Lotus/Types/Keys/DuviriQuest/DuviriQuestKeyChain"
-    }
+  {
+    "ItemType": "/Lotus/Types/Keys/InfestedIntroQuest/InfestedIntroQuestKeyChain"
+  },
+  {
+    "ItemType": "/Lotus/Types/Keys/KubrowQuest/KubrowQuestKeyChain"
+  },
+  {
+    "ItemType": "/Lotus/Types/Keys/DuviriQuest/DuviriQuestKeyChain"
+  }
 ]
