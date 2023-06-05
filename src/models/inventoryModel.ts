@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
 import { IInventoryDatabase, ISuitDatabase } from "../types/inventoryTypes";
 import { Oid } from "../types/commonTypes";
+import { generateOid } from "../helpers/general";
 
 const polaritySchema = new Schema({
     Slot: Number,

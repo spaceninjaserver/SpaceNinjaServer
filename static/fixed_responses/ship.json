@@ -1,0 +1,32 @@
+{
+  "Ship": {
+    "Features": [
+      "/Lotus/Types/Items/ShipFeatureItems/EarthNavigationFeatureItem",
+      "/Lotus/Types/Items/ShipFeatureItems/ArsenalFeatureItem",
+      "/Lotus/Types/Items/ShipFeatureItems/SocialMenuFeatureItem",
+      "/Lotus/Types/Items/ShipFeatureItems/ModsFeatureItem",
+      "/Lotus/Types/Items/ShipFeatureItems/FoundryFeatureItem",
+      "/Lotus/Types/Items/ShipFeatureItems/MercuryNavigationFeatureItem"
+    ],
+    "ShipId": { "$oid": "removed" },
+    "Rooms": [
+      { "Name": "AlchemyRoom", "MaxCapacity": 1600 },
+      { "Name": "BridgeRoom", "MaxCapacity": 1600 },
+      { "Name": "LisetRoom", "MaxCapacity": 1000 },
+      { "Name": "OperatorChamberRoom", "MaxCapacity": 1600 },
+      { "Name": "OutsideRoom", "MaxCapacity": 1600 },
+      { "Name": "PersonalQuartersRoom", "MaxCapacity": 1600 }
+    ],
+    "ContentUrlSignature": "removed"
+  },
+  "Apartment": {
+    "Rooms": [
+      { "Name": "ElevatorLanding", "MaxCapacity": 1600 },
+      { "Name": "ApartmentRoomA", "MaxCapacity": 1000 },
+      { "Name": "ApartmentRoomB", "MaxCapacity": 1600 },
+      { "Name": "ApartmentRoomC", "MaxCapacity": 1600 },
+      { "Name": "DuviriHallway", "MaxCapacity": 1600 }
+    ],
+    "FavouriteLoadouts": []
+  }
+}
