@@ -1,22 +1,27 @@
 import { Schema, model } from "mongoose";
-import { IShipDatabase } from "../types/shipTypes";
+import { IShip } from "../types/shipTypes";
 import { Oid } from "../types/commonTypes";
 
-const roomSchema = new Schema({
-    Name: String,
-    MaxCapacity: Number
-});
-
-roomSchema.set("toJSON", {
-    transform(_document, returnedObject) {
-        delete returnedObject._id;
-    }
-});
+const roomSchema = new Schema(
+    {
+        Name: String,
+        MaxCapacity: Number
+    },
+    { _id: false }
+);
 
 const shipSchema = new Schema({
     Rooms: [roomSchema],
-    Features: [Schema.Types.Mixed],
+    Features: [String],
     ContentUrlSignature: String
+});
+
+shipSchema.set("toJSON", {
+    transform(_document, returnedObject) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+        returnedObject.ShipId = { $oid: returnedObject._id.toString() } satisfies Oid;
+        delete returnedObject._id;
+    }
 });
 
 const apartmentSchema = new Schema({
@@ -24,23 +29,25 @@ const apartmentSchema = new Schema({
     FavouriteLoadouts: [Schema.Types.Mixed]
 });
 
+apartmentSchema.set("toJSON", {
+    transform(_document, returnedObject) {
+        delete returnedObject._id;
+    }
+});
+
 const shipDatabaseSchema = new Schema({
-    ShipOwnerId: String,
+    ShipOwnerId: Schema.Types.ObjectId,
     Ship: shipSchema,
     Apartment: apartmentSchema
 });
 
 shipDatabaseSchema.set("toJSON", {
     transform(_document, returnedObject) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-        returnedObject.Ship.ShipId = { $oid: returnedObject._id.toString() } satisfies Oid;
         delete returnedObject._id;
-        delete returnedObject.Ship._id;
-        delete returnedObject.Apartment._id;
         delete returnedObject.__v;
     }
 });
 
-const Ship = model<IShipDatabase>("Ship", shipDatabaseSchema);
+const Ship = model<IShip>("Ship", shipDatabaseSchema);
 
 export { Ship };

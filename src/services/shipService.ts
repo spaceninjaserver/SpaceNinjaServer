@@ -1,5 +1,5 @@
 import { Ship } from "@/src/models/shipModel";
-import new_ship from "@/static/fixed_responses/postShip.json";
+import new_ship from "@/static/fixed_responses/ship.json";
 import { Types } from "mongoose";
 
 const createShip = async (accountOwnerId: Types.ObjectId) => {
