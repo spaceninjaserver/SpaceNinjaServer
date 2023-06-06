@@ -30,6 +30,16 @@ const purchaseController = async (req: Request, res: Response): Promise<void> =>
         res.json({ InventoryChanges: response });
         return;
     }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    const item_name = storeItem.replace("StoreItems/", "");
+    const new_item = items.find(i => {
+        return i.uniqueName == item_name;
+    });
+    if (new_item) {
+        const response = await PurchaseItem(parseString(accountId), new_item, quantity, usePremium, price);
+        res.json({ InventoryChanges: response });
+        return;
+    }
     res.json(purchase);
 };
 
