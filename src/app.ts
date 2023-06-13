@@ -23,7 +23,7 @@ app.use(bodyParser.raw());
 app.use(express.json());
 app.use(bodyParser.text());
 app.use(morgan("dev"));
-app.use(requestLogger);
+//app.use(requestLogger);
 
 app.use("/api", apiRouter);
 //app.use("/test", testRouter);

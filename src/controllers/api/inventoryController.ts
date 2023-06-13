@@ -13,7 +13,6 @@ const inventoryController: RequestHandler = async (request: Request, response: R
         response.status(400).json({ error: "accountId was not provided" });
         return;
     }
-    console.log(accountId);
 
     const inventory = await Inventory.findOne({ accountOwnerId: accountId });
 
