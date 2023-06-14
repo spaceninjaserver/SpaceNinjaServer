@@ -2,5 +2,5 @@
 /build
 
 /.env
-/static/data/*
+/static/data/*.bin
 yarn.lock

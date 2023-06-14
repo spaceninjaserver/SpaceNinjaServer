@@ -1,7 +1,13 @@
 import { getWeaponType } from "@/src/helpers/purchaseHelpers";
 import { getSubstringFromKeyword } from "@/src/helpers/stringHelpers";
-import { addCustomization, addPowerSuit, addWeapon, updateSlots } from "@/src/services/inventoryService";
-import { IPurchaseRequest, SlotType } from "@/src/types/purchaseTypes";
+import {
+    addCustomization,
+    addPowerSuit,
+    addWeapon,
+    updateCurrency,
+    updateSlots
+} from "@/src/services/inventoryService";
+import { IPurchaseRequest, IPurchaseResponse, SlotType } from "@/src/types/purchaseTypes";
 
 export const getStoreItemCategory = (storeItem: string) => {
     const storeItemString = getSubstringFromKeyword(storeItem, "StoreItems/");
