@@ -59,6 +59,7 @@ apiRouter.get("/logout.php", logoutController);
 
 // post
 apiRouter.post("/findSessions.php", findSessionsController);
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 apiRouter.post("/purchase.php", purchaseController);
 apiRouter.post("/login.php", loginController);
 apiRouter.post("/getAlliance.php", getAllianceController);

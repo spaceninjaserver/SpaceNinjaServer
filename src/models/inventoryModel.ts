@@ -1,4 +1,4 @@
-import { Model, Schema, SchemaType, Types, model } from "mongoose";
+import { Model, Schema, Types, model } from "mongoose";
 import { FlavourItem, IInventoryDatabase } from "../types/inventoryTypes/inventoryTypes";
 import { Oid } from "../types/commonTypes";
 import { ISuitDatabase, ISuitDocument } from "@/src/types/inventoryTypes/SuitTypes";
