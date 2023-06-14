@@ -5,6 +5,7 @@ import { Types } from "mongoose";
 import { ISuitResponse } from "@/src/types/inventoryTypes/SuitTypes";
 import { SlotType } from "@/src/types/purchaseTypes";
 import { IWeaponResponse } from "@/src/types/inventoryTypes/weaponTypes";
+import { FlavourItem } from "@/src/types/inventoryTypes/inventoryTypes";
 
 const createInventory = async (accountOwnerId: Types.ObjectId) => {
     try {
@@ -97,12 +98,12 @@ export const addWeapon = async (
     return changedInventory[weaponType][weaponIndex - 1].toJSON();
 };
 
-export const addCustomization = async (customizatonName: string, accountId: string) => {
+export const addCustomization = async (customizatonName: string, accountId: string): Promise<FlavourItem> => {
     const inventory = await getInventory(accountId);
 
     const flavourItemIndex = inventory.FlavourItems.push({ ItemType: customizatonName }) - 1;
     const changedInventory = await inventory.save();
-    return changedInventory.FlavourItems[flavourItemIndex].toJSON();
+    return changedInventory.FlavourItems[flavourItemIndex].toJSON(); //mongoose bug forces as FlavourItem
 };
 
 export { createInventory, addPowerSuit };

@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { ISuitDatabase } from "@/src/types/inventoryTypes/SuitTypes";
+import { FlavourItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IWeaponResponse } from "@/src/types/inventoryTypes/weaponTypes";
 
 export interface IPurchaseRequest {
@@ -28,6 +29,7 @@ export interface IPurchaseResponse {
         Melee?: IWeaponResponse[];
         PremiumCredits?: number;
         RegularCredits?: number;
+        FlavourItems?: FlavourItem[];
     };
 }
 
