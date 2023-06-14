@@ -1,11 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { Document, Types } from "mongoose";
-import { Oid } from "./commonTypes";
+import { Oid } from "../commonTypes";
+import { AbilityOverride, Color, FocusSchool, Polarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { ISuitDatabase } from "@/src/types/inventoryTypes/SuitTypes";
+import { OperatorLoadOutSigcol, IWeaponDatabase } from "@/src/types/inventoryTypes/weaponTypes";
 
 export interface IInventoryDatabase extends IInventoryResponse {
     accountOwnerId: Types.ObjectId;
 }
+
+export interface IInventoryDatabaseDocument extends IInventoryDatabase, Document {}
 
 export interface IInventoryResponse {
     SubscribedToEmails: number;
@@ -36,9 +41,9 @@ export interface IInventoryResponse {
     RawUpgrades: RawUpgrade[];
     ReceivedStartingGear: boolean;
     Suits: ISuitDatabase[];
-    LongGuns: LongGun[];
-    Pistols: LongGun[];
-    Melee: Melee[];
+    LongGuns: IWeaponDatabase[];
+    Pistols: IWeaponDatabase[];
+    Melee: IWeaponDatabase[];
     Ships: Ship[];
     QuestKeys: QuestKey[];
     FlavourItems: FlavourItem[];
@@ -188,17 +193,6 @@ export interface AdultOperatorLoadOut {
     ItemId: Oid;
 }
 
-export interface Color {
-    t0?: number;
-    t1?: number;
-    t2?: number;
-    t3?: number;
-    en?: number;
-    e1?: number;
-    m0?: number;
-    m1?: number;
-}
-
 export interface Affiliation {
     Initiated?: boolean;
     Standing: number;
@@ -319,23 +313,6 @@ export interface CrewShipHarnessConfig {
     Upgrades?: string[];
 }
 
-export interface Polarity {
-    Slot: number;
-    Value: FocusSchool;
-}
-
-export enum FocusSchool {
-    ApAny = "AP_ANY",
-    ApAttack = "AP_ATTACK",
-    ApDefense = "AP_DEFENSE",
-    ApPower = "AP_POWER",
-    ApPrecept = "AP_PRECEPT",
-    ApTactic = "AP_TACTIC",
-    ApUmbra = "AP_UMBRA",
-    ApUniversal = "AP_UNIVERSAL",
-    ApWard = "AP_WARD"
-}
-
 export interface CrewShipSalvageBinClass {
     Extra: number;
     Slots: number;
@@ -359,7 +336,7 @@ export interface CrewShipWeapon {
 export interface CrewShip {
     ItemType: string;
     Configs: CrewShipConfig[];
-    Weapon: Weapon;
+    Weapon: CrewshipWeapon;
     Customization: Customization;
     ItemName: string;
     RailjackImage: FlavourItem;
@@ -400,7 +377,7 @@ export interface FlavourItem {
     ItemType: string;
 }
 
-export interface Weapon {
+export interface CrewshipWeapon {
     PILOT: Pilot;
     PORT_GUNS: PortGuns;
 }
@@ -713,33 +690,6 @@ export interface Normal {
     ItemId: Oid;
 }
 
-export interface LongGun {
-    ItemType: string;
-    Configs: LongGunConfig[];
-    UpgradeVer?: number;
-    XP?: number;
-    Features?: number;
-    ItemId: Oid;
-    Polarized?: number;
-    Polarity?: Polarity[];
-    FocusLens?: string;
-    ModSlotPurchases?: number;
-    UpgradeType?: UpgradeType;
-    UpgradeFingerprint?: string;
-    ItemName?: string;
-    ModularParts?: string[];
-    UnlockLevel?: number;
-}
-
-export interface LongGunConfig {
-    Upgrades?: string[];
-    Skins?: string[];
-    pricol?: Color;
-    attcol?: Color;
-    PvpUpgrades?: string[];
-    Name?: string;
-}
-
 export enum UpgradeType {
     LotusWeaponsGrineerKuvaLichUpgradesInnateDamageRandomMod = "/Lotus/Weapons/Grineer/KuvaLich/Upgrades/InnateDamageRandomMod"
 }
@@ -772,40 +722,6 @@ export interface MechSuit {
     Polarity: Polarity[];
     Polarized: number;
     ItemId: Oid;
-}
-
-export interface Melee {
-    ItemType: string;
-    Configs: MeleeConfig[];
-    UpgradeVer?: number;
-    XP?: number;
-    Features?: number;
-    Polarity?: Polarity[];
-    Polarized?: number;
-    ModSlotPurchases?: number;
-    ItemId: Oid;
-    FocusLens?: string;
-    ModularParts?: string[];
-    ItemName?: string;
-    UpgradeType?: UpgradeType;
-    UpgradeFingerprint?: string;
-    UnlockLevel?: number;
-}
-
-export interface MeleeConfig {
-    Skins?: string[];
-    pricol?: Color;
-    Upgrades?: string[];
-    attcol?: Color;
-    eyecol?: OperatorLoadOutSigcol;
-    Name?: string;
-    PvpUpgrades?: string[];
-}
-
-export interface OperatorLoadOutSigcol {
-    t0?: number;
-    t1?: number;
-    en?: number;
 }
 
 export interface Mission {
@@ -883,11 +799,6 @@ export interface OperatorLoadOut {
     Upgrades?: string[];
     AbilityOverride: AbilityOverride;
     ItemId: Oid;
-}
-
-export interface AbilityOverride {
-    Ability: string;
-    Index: number;
 }
 
 export interface PendingCoupon {
@@ -1157,48 +1068,6 @@ export interface NotePacks {
     MELODY: string;
     BASS: string;
     PERCUSSION: string;
-}
-
-export interface ISuitDocument extends ISuitDatabase, Document {}
-
-export interface ISuitResponse extends ISuitDatabase {
-    ItemId: Oid;
-}
-
-export interface ISuitDatabase {
-    ItemType: string;
-    Configs: SuitConfig[];
-    UpgradeVer?: number;
-    XP?: number;
-    InfestationDate?: Date;
-    Features?: number;
-    Polarity?: Polarity[];
-    Polarized?: number;
-    ModSlotPurchases?: number;
-    ItemId: Oid;
-    FocusLens?: string;
-    UnlockLevel?: number;
-}
-
-export interface SuitConfig {
-    Skins?: string[];
-    pricol?: Color;
-    attcol?: Color;
-    eyecol?: Color;
-    sigcol?: Color;
-    Upgrades?: string[];
-    Songs?: Song[];
-    Name?: string;
-    AbilityOverride?: AbilityOverride;
-    PvpUpgrades?: string[];
-    ugly?: boolean;
-}
-
-export interface Song {
-    m?: string;
-    b?: string;
-    p?: string;
-    s: string;
 }
 
 export interface TauntHistory {

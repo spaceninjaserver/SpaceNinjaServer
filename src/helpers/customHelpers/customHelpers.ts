@@ -1,7 +1,7 @@
 import { IAccountCreation } from "@/src/types/customTypes";
 import { IDatabaseAccount } from "@/src/types/loginTypes";
 import crypto from "crypto";
-import { isString, parseEmail, parseString } from "./general";
+import { isString, parseEmail, parseString } from "../general";
 
 const getWhirlpoolHash = (rawPassword: string): string => {
     const whirlpool = crypto.createHash("whirlpool");
@@ -30,7 +30,6 @@ const toAccountCreation = (accountCreation: unknown): IAccountCreation => {
         "CountryCode" in accountCreation
     ) {
         const rawPassword = parsePassword(accountCreation.password);
-        console.log("email", accountCreation.email);
         return {
             email: parseEmail(accountCreation.email),
             password: getWhirlpoolHash(rawPassword),

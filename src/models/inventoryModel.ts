@@ -1,17 +1,13 @@
-import { Schema, model } from "mongoose";
-import { IInventoryDatabase, ISuitDatabase } from "../types/inventoryTypes";
+import { Model, Schema, Types, model } from "mongoose";
+import { FlavourItem, IInventoryDatabase } from "../types/inventoryTypes/inventoryTypes";
 import { Oid } from "../types/commonTypes";
-
-const polaritySchema = new Schema({
-    Slot: Number,
-    Value: String
-});
+import { ISuitDatabase, ISuitDocument } from "@/src/types/inventoryTypes/SuitTypes";
+import { IWeaponDatabase } from "@/src/types/inventoryTypes/weaponTypes";
 
 const abilityOverrideSchema = new Schema({
     Ability: String,
     Index: Number
 });
-
 const colorSchema = new Schema({
     t0: Number,
     t1: Number,
@@ -21,6 +17,67 @@ const colorSchema = new Schema({
     e1: Number,
     m0: Number,
     m1: Number
+});
+
+const longGunConfigSchema = new Schema({
+    Skins: [String],
+    pricol: colorSchema,
+    attcol: colorSchema,
+    eyecol: colorSchema,
+    sigcol: colorSchema,
+    Upgrades: [String],
+    Songs: [
+        {
+            m: String,
+            b: String,
+            p: String,
+            s: String
+        }
+    ],
+    Name: String,
+    AbilityOverride: abilityOverrideSchema,
+    PvpUpgrades: [String],
+    ugly: Boolean
+});
+
+// longGunConfigSchema.set("toJSON", {
+//     transform(_document, returnedObject: ISuitDocument) {
+//         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+//         returnedObject.ItemId = { $oid: returnedObject._id.toString() } satisfies Oid;
+//         delete returnedObject._id;
+//         delete returnedObject.__v;
+//     }
+// });
+
+const WeaponSchema = new Schema({
+    ItemType: String,
+    Configs: [longGunConfigSchema],
+    UpgradeVer: Number,
+    XP: Number,
+    Features: Number,
+    Polarized: Number,
+    Polarity: Schema.Types.Mixed, //todo
+    FocusLens: String,
+    ModSlotPurchases: Number,
+    UpgradeType: Schema.Types.Mixed, //todo
+    UpgradeFingerprint: String,
+    ItemName: String,
+    ModularParts: [String],
+    UnlockLevel: Number
+});
+
+WeaponSchema.set("toJSON", {
+    transform(_document, returnedObject: ISuitDocument) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+        returnedObject.ItemId = { $oid: returnedObject._id.toString() } satisfies Oid;
+        delete returnedObject._id;
+        delete returnedObject.__v;
+    }
+});
+
+const polaritySchema = new Schema({
+    Slot: Number,
+    Value: String
 });
 
 const suitConfigSchema = new Schema({
@@ -51,7 +108,7 @@ suitConfigSchema.set("toJSON", {
     }
 });
 
-const suitSchema = new Schema({
+const suitSchema = new Schema<ISuitDatabase>({
     ItemType: String,
     Configs: [suitConfigSchema],
     UpgradeVer: Number,
@@ -66,7 +123,7 @@ const suitSchema = new Schema({
 });
 
 suitSchema.set("toJSON", {
-    transform(_document, returnedObject) {
+    transform(_document, returnedObject: ISuitDocument) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
         returnedObject.ItemId = { $oid: returnedObject._id.toString() } satisfies Oid;
         delete returnedObject._id;
@@ -74,7 +131,25 @@ suitSchema.set("toJSON", {
     }
 });
 
-const inventorySchema = new Schema({
+const slotsBinSchema = new Schema(
+    {
+        Slots: Number
+    },
+    { _id: false }
+);
+
+const FlavourItemSchema = new Schema({
+    ItemType: String
+});
+
+FlavourItemSchema.set("toJSON", {
+    transform(_document, returnedObject: ISuitDocument) {
+        delete returnedObject._id;
+        delete returnedObject.__v;
+    }
+});
+
+const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
     accountOwnerId: Schema.Types.ObjectId,
     SubscribedToEmails: Number,
     Created: Schema.Types.Mixed,
@@ -83,9 +158,9 @@ const inventorySchema = new Schema({
     PremiumCredits: Number,
     PremiumCreditsFree: Number,
     FusionPoints: Number,
-    SuitBin: Schema.Types.Mixed,
-    WeaponBin: Schema.Types.Mixed,
-    SentinelBin: Schema.Types.Mixed,
+    SuitBin: slotsBinSchema,
+    WeaponBin: slotsBinSchema,
+    SentinelBin: slotsBinSchema,
     SpaceSuitBin: Schema.Types.Mixed,
     SpaceWeaponBin: Schema.Types.Mixed,
     PvpBonusLoadoutBin: Schema.Types.Mixed,
@@ -104,12 +179,12 @@ const inventorySchema = new Schema({
     RawUpgrades: [Schema.Types.Mixed],
     ReceivedStartingGear: Boolean,
     Suits: [suitSchema],
-    LongGuns: [Schema.Types.Mixed],
-    Pistols: [Schema.Types.Mixed],
-    Melee: [Schema.Types.Mixed],
+    LongGuns: [WeaponSchema],
+    Pistols: [WeaponSchema],
+    Melee: [WeaponSchema],
     Ships: [Schema.Types.Mixed],
     QuestKeys: [Schema.Types.Mixed],
-    FlavourItems: [Schema.Types.Mixed],
+    FlavourItems: [FlavourItemSchema],
     Scoops: [Schema.Types.Mixed],
     TrainingRetriesLeft: Number,
     LoadOutPresets: Schema.Types.Mixed,
@@ -253,7 +328,16 @@ inventorySchema.set("toJSON", {
     }
 });
 
-const Suit = model<ISuitDatabase>("Suit", suitSchema);
-const Inventory = model<IInventoryDatabase>("Inventory", inventorySchema);
+type InventoryDocumentProps = {
+    Suits: Types.DocumentArray<ISuitDatabase>;
+    LongGuns: Types.DocumentArray<IWeaponDatabase>;
+    Pistols: Types.DocumentArray<IWeaponDatabase>;
+    Melee: Types.DocumentArray<IWeaponDatabase>;
+    FlavourItems: Types.DocumentArray<FlavourItem>;
+};
 
-export { Inventory, Suit };
+type InventoryModelType = Model<IInventoryDatabase, {}, InventoryDocumentProps>;
+
+const Inventory = model<IInventoryDatabase, InventoryModelType>("Inventory", inventorySchema);
+
+export { Inventory };
