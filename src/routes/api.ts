@@ -28,6 +28,7 @@ import { updateChallengeProgressController } from "@/src/controllers/api/updateC
 import { updateSessionGetController, updateSessionPostController } from "@/src/controllers/api/updateSessionController";
 import { viewController } from "@/src/controllers/api/viewController";
 import { joinSessionController } from "@/src/controllers/api/joinSessionController";
+import { saveLoadoutController } from "@/src/controllers/api/saveLoadout";
 
 import express from "express";
 
@@ -58,6 +59,7 @@ apiRouter.get("/logout.php", logoutController);
 
 // post
 apiRouter.post("/findSessions.php", findSessionsController);
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 apiRouter.post("/purchase.php", purchaseController);
 apiRouter.post("/login.php", loginController);
 apiRouter.post("/getAlliance.php", getAllianceController);
@@ -68,4 +70,5 @@ apiRouter.post("/missionInventoryUpdate.php", missionInventoryUpdateController);
 apiRouter.post("/genericUpdate.php", genericUpdateController);
 apiRouter.post("/rerollRandomMod.php", rerollRandomModController);
 apiRouter.post("/joinSession.php", joinSessionController);
+apiRouter.post("/saveLoadout.php", saveLoadoutController);
 export { apiRouter };
