@@ -144,7 +144,6 @@ const FlavourItemSchema = new Schema({
 
 FlavourItemSchema.set("toJSON", {
     transform(_document, returnedObject) {
-        returnedObject.ItemType;
         delete returnedObject._id;
         delete returnedObject.__v;
     }
