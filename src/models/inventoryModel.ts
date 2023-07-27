@@ -67,7 +67,7 @@ const WeaponSchema = new Schema({
 });
 
 WeaponSchema.set("toJSON", {
-    transform(_document, returnedObject: ISuitDocument) {
+    transform(_document, returnedObject) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
         returnedObject.ItemId = { $oid: returnedObject._id.toString() } satisfies Oid;
         delete returnedObject._id;
@@ -123,7 +123,7 @@ const suitSchema = new Schema<ISuitDatabase>({
 });
 
 suitSchema.set("toJSON", {
-    transform(_document, returnedObject: ISuitDocument) {
+    transform(_document, returnedObject) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
         returnedObject.ItemId = { $oid: returnedObject._id.toString() } satisfies Oid;
         delete returnedObject._id;
@@ -143,7 +143,7 @@ const FlavourItemSchema = new Schema({
 });
 
 FlavourItemSchema.set("toJSON", {
-    transform(_document, returnedObject: ISuitDocument) {
+    transform(_document, returnedObject) {
         delete returnedObject._id;
         delete returnedObject.__v;
     }
