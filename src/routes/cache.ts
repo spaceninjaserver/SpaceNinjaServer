@@ -11,7 +11,7 @@ cacheRouter.get("/B.Cache.Windows_en.bin*", (_req, res) => {
     res.sendFile("static/data/B.Cache.Windows_en_33.0.10.bin", { root: "./" });
 });
 
-cacheRouter.get(/^\/origin\/([a-zA-Z0-9]+)\/H\.Cache\.bin.*$/, (_req, res) => {
+cacheRouter.get(/^\/origin\/[a-zA-Z0-9]+\/[0-9]+\/H\.Cache\.bin.*$/, (_req, res) => {
     res.sendFile(`static/data/H.Cache_${config.version}.bin`, { root: "./" });
 });
 
