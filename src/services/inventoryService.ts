@@ -164,17 +164,21 @@ const addChallenges = (inventory: IInventoryDatabaseDocument, itemsArray: Challe
     });
 };
 
+const gearKeys = ["Suits", "Pistols", "LongGuns", "Melee"] as const;
+type GearKeysType = (typeof gearKeys)[number];
+
 export const missionInventoryUpdate = async (data: MissionInventoryUpdate, accountId: string): Promise<void> => {
-    const { RawUpgrades, MiscItems, Suits, Pistols, LongGuns, Melee, RegularCredits, ChallengeProgress } = data;
+    const { RawUpgrades, MiscItems, RegularCredits, ChallengeProgress } = data;
     const inventory = await getInventory(accountId);
 
     // TODO - multipliers logic
-
+    // credits
     inventory.RegularCredits += RegularCredits || 0;
-    addGearExpByCategory(inventory, Pistols, "Pistols");
-    addGearExpByCategory(inventory, LongGuns, "LongGuns");
-    addGearExpByCategory(inventory, Melee, "Melee");
-    addGearExpByCategory(inventory, Suits, "Suits");
+
+    // gear exp
+    gearKeys.forEach((key: GearKeysType) => addGearExpByCategory(inventory, data[key], key));
+
+    // other
     addItemsByCategory(inventory, RawUpgrades, "RawUpgrades"); // TODO - check mods fusion level
     addItemsByCategory(inventory, MiscItems, "MiscItems");
     addChallenges(inventory, ChallengeProgress);

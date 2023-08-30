@@ -23,7 +23,7 @@ import { MissionInventoryUpdate } from "@/src/types/missionInventoryUpdateType";
 - [ ]  LastRegionPlayed
 - [ ]  GameModeId
 - [ ]  hosts
-- [+]  ChallengeProgress
+- [x]  ChallengeProgress
 - [ ]  SeasonChallengeHistory
 - [ ]  PS
 - [ ]  ActiveDojoColorResearch
