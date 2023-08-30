@@ -186,4 +186,30 @@ export const missionInventoryUpdate = async (data: MissionInventoryUpdate, accou
     await inventory.save();
 };
 
+export const addBooster = async (boosterName: string, accountId: string): Promise<void> => {
+    const match = boosterName.match(/(\d+)Day/);
+    if (!match) return;
+
+    const extractedDigit = Number(match[1]);
+    const ItemType = boosterName.replace(`${extractedDigit}Day`, "");
+    const plusTime = 86400 * extractedDigit;
+    const currentTime = Math.floor(Date.now() / 1000);
+
+    const inventory = await getInventory(accountId);
+    const { Boosters } = inventory;
+
+    let itemIndex = Boosters.findIndex(i => i.ItemType === ItemType);
+
+    if (itemIndex !== -1) {
+        const existingBooster = Boosters[itemIndex];
+        existingBooster.ExpiryDate = Math.max(existingBooster.ExpiryDate, currentTime) + plusTime;
+        inventory.markModified(`Boosters.${itemIndex}.ExpiryDate`);
+    } else {
+        itemIndex = Boosters.push({ ItemType, ExpiryDate: currentTime + plusTime }) - 1;
+    }
+
+    const changedInventory = await inventory.save();
+    return changedInventory.Boosters[itemIndex].toJSON();
+};
+
 export { createInventory, addPowerSuit };

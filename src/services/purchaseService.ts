@@ -1,13 +1,7 @@
 import { getWeaponType } from "@/src/helpers/purchaseHelpers";
 import { getSubstringFromKeyword } from "@/src/helpers/stringHelpers";
-import {
-    addCustomization,
-    addPowerSuit,
-    addWeapon,
-    updateCurrency,
-    updateSlots
-} from "@/src/services/inventoryService";
-import { IPurchaseRequest, IPurchaseResponse, SlotType } from "@/src/types/purchaseTypes";
+import { addBooster, addCustomization, addPowerSuit, addWeapon, updateSlots } from "@/src/services/inventoryService";
+import { IPurchaseRequest, SlotType } from "@/src/types/purchaseTypes";
 
 export const getStoreItemCategory = (storeItem: string) => {
     const storeItemString = getSubstringFromKeyword(storeItem, "StoreItems/");
@@ -40,6 +34,9 @@ export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountI
             break;
         case "Types":
             purchaseResponse = await handleTypesPurchase(internalName, accountId);
+            break;
+        case "Boosters":
+            purchaseResponse = await handleBoostersPurchase(internalName, accountId);
             break;
 
         default:
@@ -111,6 +108,16 @@ const handleSuitCustomizationsPurchase = async (customizationName: string, accou
     return {
         InventoryChanges: {
             FlavourItems: [customization]
+        }
+    };
+};
+
+const handleBoostersPurchase = async (boosterName: string, accountId: string) => {
+    const addedBooster = await addBooster(boosterName, accountId);
+
+    return {
+        InventoryChanges: {
+            Boosters: [addedBooster]
         }
     };
 };
