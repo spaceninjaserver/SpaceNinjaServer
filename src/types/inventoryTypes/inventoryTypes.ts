@@ -377,6 +377,16 @@ export interface FlavourItem {
     ItemType: string;
 }
 
+export interface RawUpgrade {
+    ItemCount: number;
+    ItemType: string;
+}
+
+export interface MiscItem {
+    ItemCount: number;
+    ItemType: string;
+}
+
 export interface CrewshipWeapon {
     PILOT: Pilot;
     PORT_GUNS: PortGuns;

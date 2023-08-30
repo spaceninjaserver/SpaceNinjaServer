@@ -1,5 +1,5 @@
 import { Model, Schema, Types, model } from "mongoose";
-import { FlavourItem, IInventoryDatabase } from "../types/inventoryTypes/inventoryTypes";
+import { FlavourItem, RawUpgrade, MiscItem, IInventoryDatabase } from "../types/inventoryTypes/inventoryTypes";
 import { Oid } from "../types/commonTypes";
 import { ISuitDatabase, ISuitDocument } from "@/src/types/inventoryTypes/SuitTypes";
 import { IWeaponDatabase } from "@/src/types/inventoryTypes/weaponTypes";
@@ -334,6 +334,8 @@ type InventoryDocumentProps = {
     Pistols: Types.DocumentArray<IWeaponDatabase>;
     Melee: Types.DocumentArray<IWeaponDatabase>;
     FlavourItems: Types.DocumentArray<FlavourItem>;
+    RawUpgrades: Types.DocumentArray<RawUpgrade>;
+    MiscItems: Types.DocumentArray<MiscItem>;
 };
 
 type InventoryModelType = Model<IInventoryDatabase, {}, InventoryDocumentProps>;

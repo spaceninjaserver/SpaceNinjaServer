@@ -5,7 +5,7 @@ import { Types } from "mongoose";
 import { ISuitResponse } from "@/src/types/inventoryTypes/SuitTypes";
 import { SlotType } from "@/src/types/purchaseTypes";
 import { IWeaponResponse } from "@/src/types/inventoryTypes/weaponTypes";
-import { FlavourItem } from "@/src/types/inventoryTypes/inventoryTypes";
+import { FlavourItem, RawUpgrade, MiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 
 const createInventory = async (accountOwnerId: Types.ObjectId) => {
     try {
@@ -104,6 +104,38 @@ export const addCustomization = async (customizatonName: string, accountId: stri
     const flavourItemIndex = inventory.FlavourItems.push({ ItemType: customizatonName }) - 1;
     const changedInventory = await inventory.save();
     return changedInventory.FlavourItems[flavourItemIndex].toJSON(); //mongoose bug forces as FlavourItem
+};
+
+export const addRawUpgrades = async (rawUpgrades: RawUpgrade[], accountId: string): Promise<void> => {
+    const inventory = await getInventory(accountId);
+    rawUpgrades?.forEach(item => {
+        const { ItemCount, ItemType } = item;
+        const existingItemIndex = inventory.RawUpgrades.findIndex(i => i.ItemType === ItemType);
+
+        if (existingItemIndex !== -1) {
+            inventory.RawUpgrades[existingItemIndex].ItemCount += ItemCount;
+            inventory.markModified('RawUpgrades.' + existingItemIndex + '.ItemCount');
+        } else {
+            inventory.RawUpgrades.push({ ItemCount, ItemType });
+        }
+    });
+    await inventory.save();
+};
+
+export const addMiscItems = async (miscItems: MiscItem[], accountId: string): Promise<void> => {
+    const inventory = await getInventory(accountId);
+    miscItems?.forEach(item => {
+        const { ItemCount, ItemType } = item;
+        const existingItemIndex = inventory.MiscItems.findIndex(i => i.ItemType === ItemType);
+
+        if (existingItemIndex !== -1) {
+            inventory.MiscItems[existingItemIndex].ItemCount += ItemCount;
+            inventory.markModified('MiscItems.' + existingItemIndex + '.ItemCount');
+        } else {
+            inventory.MiscItems.push({ ItemCount, ItemType });
+        }
+    });
+    await inventory.save();
 };
 
 export { createInventory, addPowerSuit };
