@@ -111,6 +111,8 @@ export const missionInventoryUpdate = async (data: MissionInventoryUpdate, accou
     const { RawUpgrades, MiscItems, Suits, Pistols, LongGuns, Melee, RegularCredits } = data;
     const inventory = await getInventory(accountId);
 
+    // TODO - multipliers logic
+
     const addGearExpByCategory = (gearArray: MissionInventoryUpdateGear[] | undefined, categoryName: 'Pistols'|'LongGuns'|'Melee'|'Suits') => {
         const category = inventory[categoryName];
 
@@ -127,7 +129,7 @@ export const missionInventoryUpdate = async (data: MissionInventoryUpdate, accou
 
     const addItemsByCategory = (itemsArray: (MissionInventoryUpdateItem | MissionInventoryUpdateCard)[] | undefined, categoryName: 'RawUpgrades'|'MiscItems') => {
         const category = inventory[categoryName];
-        
+
         itemsArray?.forEach(({ ItemCount, ItemType }) => {
             const itemIndex = category.findIndex(i => i.ItemType === ItemType);
 

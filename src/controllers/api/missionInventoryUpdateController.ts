@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import { missionInventoryUpdate } from "@/src/services/inventoryService";
+import fs from 'fs';
 /*
 - [ ]  crossPlaySetting
 - [ ]  rewardsMultiplier
@@ -39,11 +40,27 @@ import { missionInventoryUpdate } from "@/src/services/inventoryService";
 - [ ]  FpsSamples
 */
 const missionInventoryUpdateController: RequestHandler = async (req, res) => {
+    fs.writeFile("./tmp/missionInventoryUpdate", req.body,(err)=>{
+        if(err)
+            return console.log(err);
+    });  // temp log, !!! tmp folder need on main dir
+
     const [data, _secondIGuessIsSalt] = String(req.body).split("\n");
     const id = req.query.accountId as string;
-    
-    await missionInventoryUpdate(JSON.parse(data), id);
 
+    // TODO - salt check
+
+    try {
+        const parsedData = JSON.parse(data);
+        if (typeof parsedData !== 'object' || parsedData === null)
+            throw new Error('Invalid data format');
+    
+        await missionInventoryUpdate(parsedData, id);
+    } catch (err) {
+        console.error('Error parsing JSON data:', err);
+    }
+
+    // TODO - get original response
     res.json({});
 };
 
