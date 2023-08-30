@@ -6,7 +6,12 @@ import { ISuitResponse } from "@/src/types/inventoryTypes/SuitTypes";
 import { SlotType } from "@/src/types/purchaseTypes";
 import { IWeaponResponse } from "@/src/types/inventoryTypes/weaponTypes";
 import { FlavourItem } from "@/src/types/inventoryTypes/inventoryTypes";
-import { MissionInventoryUpdate, MissionInventoryUpdateCard, MissionInventoryUpdateGear, MissionInventoryUpdateItem } from "../types/missionInventoryUpdateType";
+import {
+    MissionInventoryUpdate,
+    MissionInventoryUpdateCard,
+    MissionInventoryUpdateGear,
+    MissionInventoryUpdateItem
+} from "../types/missionInventoryUpdateType";
 
 const createInventory = async (accountOwnerId: Types.ObjectId) => {
     try {
@@ -113,21 +118,27 @@ export const missionInventoryUpdate = async (data: MissionInventoryUpdate, accou
 
     // TODO - multipliers logic
 
-    const addGearExpByCategory = (gearArray: MissionInventoryUpdateGear[] | undefined, categoryName: 'Pistols'|'LongGuns'|'Melee'|'Suits') => {
+    const addGearExpByCategory = (
+        gearArray: MissionInventoryUpdateGear[] | undefined,
+        categoryName: "Pistols" | "LongGuns" | "Melee" | "Suits"
+    ) => {
         const category = inventory[categoryName];
 
         gearArray?.forEach(({ ItemId, XP }) => {
             const itemIndex = category.findIndex(i => i._id?.equals(ItemId.$oid));
             const item = category[itemIndex];
 
-            if (itemIndex !== -1 && item.XP!=undefined) {
+            if (itemIndex !== -1 && item.XP != undefined) {
                 item.XP += XP;
                 inventory.markModified(`${categoryName}.${itemIndex}.XP`);
             }
         });
     };
 
-    const addItemsByCategory = (itemsArray: (MissionInventoryUpdateItem | MissionInventoryUpdateCard)[] | undefined, categoryName: 'RawUpgrades'|'MiscItems') => {
+    const addItemsByCategory = (
+        itemsArray: (MissionInventoryUpdateItem | MissionInventoryUpdateCard)[] | undefined,
+        categoryName: "RawUpgrades" | "MiscItems"
+    ) => {
         const category = inventory[categoryName];
 
         itemsArray?.forEach(({ ItemCount, ItemType }) => {
@@ -142,13 +153,13 @@ export const missionInventoryUpdate = async (data: MissionInventoryUpdate, accou
         });
     };
 
-    inventory.RegularCredits += RegularCredits||0;
-    addGearExpByCategory(Pistols, 'Pistols');
-    addGearExpByCategory(LongGuns, 'LongGuns');
-    addGearExpByCategory(Melee, 'Melee');
-    addGearExpByCategory(Suits, 'Suits');
-    addItemsByCategory(RawUpgrades, 'RawUpgrades'); // TODO - check mods fusion level
-    addItemsByCategory(MiscItems, 'MiscItems');
+    inventory.RegularCredits += RegularCredits || 0;
+    addGearExpByCategory(Pistols, "Pistols");
+    addGearExpByCategory(LongGuns, "LongGuns");
+    addGearExpByCategory(Melee, "Melee");
+    addGearExpByCategory(Suits, "Suits");
+    addItemsByCategory(RawUpgrades, "RawUpgrades"); // TODO - check mods fusion level
+    addItemsByCategory(MiscItems, "MiscItems");
 
     // TODO - save ChallengeProgress (idk where to save)
 
