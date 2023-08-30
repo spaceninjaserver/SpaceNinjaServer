@@ -1,6 +1,5 @@
 import { RequestHandler } from "express";
 import { missionInventoryUpdate } from "@/src/services/inventoryService";
-import fs from 'fs';
 /*
 - [ ]  crossPlaySetting
 - [ ]  rewardsMultiplier
@@ -40,12 +39,6 @@ import fs from 'fs';
 - [ ]  FpsSamples
 */
 const missionInventoryUpdateController: RequestHandler = async (req, res) => {
-    // fs.writeFile("./tmp/test", req.body, function(err) {
-    //     if(err) {
-    //         return console.log(err);
-    //     }
-    // });
-    
     const [data, _secondIGuessIsSalt] = String(req.body).split("\n");
     const id = req.query.accountId as string;
     
