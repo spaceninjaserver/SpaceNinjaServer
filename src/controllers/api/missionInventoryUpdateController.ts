@@ -11,7 +11,7 @@ import fs from 'fs';
 - [x]  Melee
 - [x]  RawUpgrades
 - [x]  MiscItems
-- [ ]  RegularCredits
+- [x]  RegularCredits
 - [ ]  RandomUpgradesIdentified
 - [ ]  MissionFailed
 - [ ]  MissionStatus
@@ -23,7 +23,7 @@ import fs from 'fs';
 - [ ]  LastRegionPlayed
 - [ ]  GameModeId
 - [ ]  hosts
-- [ ]  ChallengeProgress
+- [+]  ChallengeProgress
 - [ ]  SeasonChallengeHistory
 - [ ]  PS
 - [ ]  ActiveDojoColorResearch

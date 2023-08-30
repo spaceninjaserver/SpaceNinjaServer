@@ -5,8 +5,7 @@ import { Types } from "mongoose";
 import { ISuitDatabase, ISuitResponse } from "@/src/types/inventoryTypes/SuitTypes";
 import { SlotType } from "@/src/types/purchaseTypes";
 import { IWeaponDatabase, IWeaponResponse } from "@/src/types/inventoryTypes/weaponTypes";
-import { FlavourItem, RawUpgrade, MiscItem, IInventoryDatabase } from "@/src/types/inventoryTypes/inventoryTypes";
-import { items } from "@/static/data/items";
+import { FlavourItem, RawUpgrade, MiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 
 const createInventory = async (accountOwnerId: Types.ObjectId) => {
     try {
@@ -107,12 +106,12 @@ export const addCustomization = async (customizatonName: string, accountId: stri
     return changedInventory.FlavourItems[flavourItemIndex].toJSON(); //mongoose bug forces as FlavourItem
 };
 
-export const missionInventoryUpdate = async (data: any, accountId: string): Promise<void> => {
-    const { RawUpgrades, MiscItems, Suits, Pistols, LongGuns, Melee } = data;
+export const missionInventoryUpdate = async (data: any, accountId: string): Promise<void> => { // TODO - add data type
+    const { RawUpgrades, MiscItems, Suits, Pistols, LongGuns, Melee, RegularCredits } = data;
     const inventory = await getInventory(accountId);
 
     const addGearExpByCategory = (gearArray: (ISuitDatabase|IWeaponDatabase)[], category: 'Pistols'|'LongGuns'|'Melee'|'Suits') => {
-        gearArray.forEach(({ ItemId, XP }: any) => {
+        gearArray?.forEach(({ ItemId, XP }: any) => {
             const itemIndex = inventory[category].findIndex(i => i._id?.equals(ItemId.$oid));
             if (itemIndex !== -1) {
                 inventory[category][itemIndex].XP += XP;
@@ -134,7 +133,8 @@ export const missionInventoryUpdate = async (data: any, accountId: string): Prom
             }
         });
     };
-    
+
+    inventory.RegularCredits += RegularCredits||0;
     addGearExpByCategory(Pistols, 'Pistols');
     addGearExpByCategory(LongGuns, 'LongGuns');
     addGearExpByCategory(Melee, 'Melee');
