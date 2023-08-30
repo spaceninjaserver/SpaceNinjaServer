@@ -2,10 +2,11 @@ import { Inventory } from "@/src/models/inventoryModel";
 import new_inventory from "@/static/fixed_responses/postTutorialInventory.json";
 import config from "@/config.json";
 import { Types } from "mongoose";
-import { ISuitResponse } from "@/src/types/inventoryTypes/SuitTypes";
+import { ISuitDatabase, ISuitResponse } from "@/src/types/inventoryTypes/SuitTypes";
 import { SlotType } from "@/src/types/purchaseTypes";
-import { IWeaponResponse } from "@/src/types/inventoryTypes/weaponTypes";
-import { FlavourItem, RawUpgrade, MiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IWeaponDatabase, IWeaponResponse } from "@/src/types/inventoryTypes/weaponTypes";
+import { FlavourItem, RawUpgrade, MiscItem, IInventoryDatabase } from "@/src/types/inventoryTypes/inventoryTypes";
+import { items } from "@/static/data/items";
 
 const createInventory = async (accountOwnerId: Types.ObjectId) => {
     try {
@@ -106,35 +107,41 @@ export const addCustomization = async (customizatonName: string, accountId: stri
     return changedInventory.FlavourItems[flavourItemIndex].toJSON(); //mongoose bug forces as FlavourItem
 };
 
-export const addRawUpgrades = async (rawUpgrades: RawUpgrade[], accountId: string): Promise<void> => {
+export const missionInventoryUpdate = async (data: any, accountId: string): Promise<void> => {
+    const { RawUpgrades, MiscItems, Suits, Pistols, LongGuns, Melee } = data;
     const inventory = await getInventory(accountId);
-    rawUpgrades?.forEach(item => {
-        const { ItemCount, ItemType } = item;
-        const existingItemIndex = inventory.RawUpgrades.findIndex(i => i.ItemType === ItemType);
 
-        if (existingItemIndex !== -1) {
-            inventory.RawUpgrades[existingItemIndex].ItemCount += ItemCount;
-            inventory.markModified('RawUpgrades.' + existingItemIndex + '.ItemCount');
-        } else {
-            inventory.RawUpgrades.push({ ItemCount, ItemType });
-        }
-    });
-    await inventory.save();
-};
+    const addGearExpByCategory = (gearArray: (ISuitDatabase|IWeaponDatabase)[], category: 'Pistols'|'LongGuns'|'Melee'|'Suits') => {
+        gearArray.forEach(({ ItemId, XP }: any) => {
+            const itemIndex = inventory[category].findIndex(i => i._id?.equals(ItemId.$oid));
+            if (itemIndex !== -1) {
+                inventory[category][itemIndex].XP += XP;
+                inventory.markModified(`${category}.${itemIndex}.XP`);
+            }
+        });
+    };
 
-export const addMiscItems = async (miscItems: MiscItem[], accountId: string): Promise<void> => {
-    const inventory = await getInventory(accountId);
-    miscItems?.forEach(item => {
-        const { ItemCount, ItemType } = item;
-        const existingItemIndex = inventory.MiscItems.findIndex(i => i.ItemType === ItemType);
+    const addItemsByCategory = (itemsArray: (RawUpgrade | MiscItem)[], category: 'RawUpgrades'|'MiscItems') => {
+        itemsArray?.forEach(item => {
+            const { ItemCount, ItemType } = item;
+            const existingItemIndex = inventory[category].findIndex(i => i.ItemType === ItemType);
 
-        if (existingItemIndex !== -1) {
-            inventory.MiscItems[existingItemIndex].ItemCount += ItemCount;
-            inventory.markModified('MiscItems.' + existingItemIndex + '.ItemCount');
-        } else {
-            inventory.MiscItems.push({ ItemCount, ItemType });
-        }
-    });
+            if (existingItemIndex !== -1) {
+                inventory[category][existingItemIndex].ItemCount += ItemCount;
+                inventory.markModified(category + '.' + existingItemIndex + '.ItemCount');
+            } else {
+                inventory[category].push({ ItemCount, ItemType });
+            }
+        });
+    };
+    
+    addGearExpByCategory(Pistols, 'Pistols');
+    addGearExpByCategory(LongGuns, 'LongGuns');
+    addGearExpByCategory(Melee, 'Melee');
+    addGearExpByCategory(Suits, 'Suits');
+    addItemsByCategory(RawUpgrades, 'RawUpgrades'); // TODO - check mods fusion level
+    addItemsByCategory(MiscItems, 'MiscItems');
+
     await inventory.save();
 };
 

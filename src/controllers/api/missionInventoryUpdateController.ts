@@ -1,14 +1,14 @@
 import { RequestHandler } from "express";
-import { addRawUpgrades, addMiscItems } from "@/src/services/inventoryService";
+import { missionInventoryUpdate } from "@/src/services/inventoryService";
 import fs from 'fs';
 /*
 - [ ]  crossPlaySetting
 - [ ]  rewardsMultiplier
 - [ ]  ActiveBoosters
-- [ ]  LongGuns
-- [ ]  Pistols
-- [ ]  Suits
-- [ ]  Melee
+- [x]  LongGuns
+- [x]  Pistols
+- [x]  Suits
+- [x]  Melee
 - [x]  RawUpgrades
 - [x]  MiscItems
 - [ ]  RegularCredits
@@ -47,10 +47,9 @@ const missionInventoryUpdateController: RequestHandler = async (req, res) => {
     });
     
     const [data, _secondIGuessIsSalt] = String(req.body).split("\n");
-    const {RawUpgrades, MiscItems} = JSON.parse(data);
     const id = req.query.accountId as string;
-    addRawUpgrades(RawUpgrades, id);
-    addMiscItems(MiscItems, id);
+    
+    await missionInventoryUpdate(JSON.parse(data), id);
 
     res.json({});
 };
