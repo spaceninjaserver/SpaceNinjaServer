@@ -929,7 +929,7 @@ export interface Progress {
 
 export interface RawUpgrade {
     ItemCount: number;
-    LastAdded: Oid;
+    LastAdded?: Oid;
     ItemType: string;
 }
 

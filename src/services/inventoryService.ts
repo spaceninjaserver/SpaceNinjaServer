@@ -5,7 +5,7 @@ import { Types } from "mongoose";
 import { ISuitResponse } from "@/src/types/inventoryTypes/SuitTypes";
 import { SlotType } from "@/src/types/purchaseTypes";
 import { IWeaponResponse } from "@/src/types/inventoryTypes/weaponTypes";
-import { FlavourItem } from "@/src/types/inventoryTypes/inventoryTypes";
+import { FlavourItem, IInventoryDatabaseDocument } from "@/src/types/inventoryTypes/inventoryTypes";
 import {
     MissionInventoryUpdate,
     MissionInventoryUpdateCard,
@@ -112,54 +112,56 @@ export const addCustomization = async (customizatonName: string, accountId: stri
     return changedInventory.FlavourItems[flavourItemIndex].toJSON(); //mongoose bug forces as FlavourItem
 };
 
+const addGearExpByCategory = (
+    inventory: IInventoryDatabaseDocument,
+    gearArray: MissionInventoryUpdateGear[] | undefined,
+    categoryName: "Pistols" | "LongGuns" | "Melee" | "Suits"
+) => {
+    const category = inventory[categoryName];
+
+    gearArray?.forEach(({ ItemId, XP }) => {
+        const itemIndex = category.findIndex(i => i._id?.equals(ItemId.$oid));
+        const item = category[itemIndex];
+
+        if (itemIndex !== -1 && item.XP != undefined) {
+            item.XP += XP;
+            inventory.markModified(`${categoryName}.${itemIndex}.XP`);
+        }
+    });
+};
+
+const addItemsByCategory = (
+    inventory: IInventoryDatabaseDocument,
+    itemsArray: (MissionInventoryUpdateItem | MissionInventoryUpdateCard)[] | undefined,
+    categoryName: "RawUpgrades" | "MiscItems"
+) => {
+    const category = inventory[categoryName];
+
+    itemsArray?.forEach(({ ItemCount, ItemType }) => {
+        const itemIndex = category.findIndex(i => i.ItemType === ItemType);
+
+        if (itemIndex !== -1) {
+            category[itemIndex].ItemCount += ItemCount;
+            inventory.markModified(`${categoryName}.${itemIndex}.ItemCount`);
+        } else {
+            category.push({ ItemCount, ItemType });
+        }
+    });
+};
+
 export const missionInventoryUpdate = async (data: MissionInventoryUpdate, accountId: string): Promise<void> => {
     const { RawUpgrades, MiscItems, Suits, Pistols, LongGuns, Melee, RegularCredits } = data;
     const inventory = await getInventory(accountId);
 
     // TODO - multipliers logic
 
-    const addGearExpByCategory = (
-        gearArray: MissionInventoryUpdateGear[] | undefined,
-        categoryName: "Pistols" | "LongGuns" | "Melee" | "Suits"
-    ) => {
-        const category = inventory[categoryName];
-
-        gearArray?.forEach(({ ItemId, XP }) => {
-            const itemIndex = category.findIndex(i => i._id?.equals(ItemId.$oid));
-            const item = category[itemIndex];
-
-            if (itemIndex !== -1 && item.XP != undefined) {
-                item.XP += XP;
-                inventory.markModified(`${categoryName}.${itemIndex}.XP`);
-            }
-        });
-    };
-
-    const addItemsByCategory = (
-        itemsArray: (MissionInventoryUpdateItem | MissionInventoryUpdateCard)[] | undefined,
-        categoryName: "RawUpgrades" | "MiscItems"
-    ) => {
-        const category = inventory[categoryName];
-
-        itemsArray?.forEach(({ ItemCount, ItemType }) => {
-            const itemIndex = category.findIndex(i => i.ItemType === ItemType);
-
-            if (itemIndex !== -1) {
-                category[itemIndex].ItemCount += ItemCount;
-                inventory.markModified(`${categoryName}.${itemIndex}.ItemCount`);
-            } else {
-                category.push({ ItemCount, ItemType });
-            }
-        });
-    };
-
     inventory.RegularCredits += RegularCredits || 0;
-    addGearExpByCategory(Pistols, "Pistols");
-    addGearExpByCategory(LongGuns, "LongGuns");
-    addGearExpByCategory(Melee, "Melee");
-    addGearExpByCategory(Suits, "Suits");
-    addItemsByCategory(RawUpgrades, "RawUpgrades"); // TODO - check mods fusion level
-    addItemsByCategory(MiscItems, "MiscItems");
+    addGearExpByCategory(inventory, Pistols, "Pistols");
+    addGearExpByCategory(inventory, LongGuns, "LongGuns");
+    addGearExpByCategory(inventory, Melee, "Melee");
+    addGearExpByCategory(inventory, Suits, "Suits");
+    addItemsByCategory(inventory, RawUpgrades, "RawUpgrades"); // TODO - check mods fusion level
+    addItemsByCategory(inventory, MiscItems, "MiscItems");
 
     // TODO - save ChallengeProgress (idk where to save)
 
