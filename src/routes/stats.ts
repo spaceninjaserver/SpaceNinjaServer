@@ -5,10 +5,7 @@ import express from "express";
 
 const statsRouter = express.Router();
 
-// get
 statsRouter.get("/view.php", viewController);
-
-// post
 statsRouter.post("/upload.php", uploadController);
 
 export { statsRouter };
