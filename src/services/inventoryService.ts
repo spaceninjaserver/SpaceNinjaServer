@@ -5,7 +5,7 @@ import { Types } from "mongoose";
 import { ISuitResponse } from "@/src/types/inventoryTypes/SuitTypes";
 import { SlotType } from "@/src/types/purchaseTypes";
 import { IWeaponResponse } from "@/src/types/inventoryTypes/weaponTypes";
-import { FlavourItem, IInventoryDatabaseDocument } from "@/src/types/inventoryTypes/inventoryTypes";
+import { ChallengeProgress, FlavourItem, IInventoryDatabaseDocument } from "@/src/types/inventoryTypes/inventoryTypes";
 import {
     MissionInventoryUpdate,
     MissionInventoryUpdateCard,
@@ -149,8 +149,23 @@ const addItemsByCategory = (
     });
 };
 
+const addChallenges = (inventory: IInventoryDatabaseDocument, itemsArray: ChallengeProgress[] | undefined) => {
+    const category = inventory.ChallengeProgress;
+
+    itemsArray?.forEach(({ Name, Progress }) => {
+        const itemIndex = category.findIndex(i => i.Name === Name);
+
+        if (itemIndex !== -1) {
+            category[itemIndex].Progress += Progress;
+            inventory.markModified(`ChallengeProgress.${itemIndex}.ItemCount`);
+        } else {
+            category.push({ Name, Progress });
+        }
+    });
+};
+
 export const missionInventoryUpdate = async (data: MissionInventoryUpdate, accountId: string): Promise<void> => {
-    const { RawUpgrades, MiscItems, Suits, Pistols, LongGuns, Melee, RegularCredits } = data;
+    const { RawUpgrades, MiscItems, Suits, Pistols, LongGuns, Melee, RegularCredits, ChallengeProgress } = data;
     const inventory = await getInventory(accountId);
 
     // TODO - multipliers logic
@@ -162,8 +177,7 @@ export const missionInventoryUpdate = async (data: MissionInventoryUpdate, accou
     addGearExpByCategory(inventory, Suits, "Suits");
     addItemsByCategory(inventory, RawUpgrades, "RawUpgrades"); // TODO - check mods fusion level
     addItemsByCategory(inventory, MiscItems, "MiscItems");
-
-    // TODO - save ChallengeProgress (idk where to save)
+    addChallenges(inventory, ChallengeProgress);
 
     await inventory.save();
 };

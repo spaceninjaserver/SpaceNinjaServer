@@ -1,6 +1,5 @@
-import { Request, Response } from "express";
+import { RequestHandler } from "express";
 import { missionInventoryUpdate } from "@/src/services/inventoryService";
-import fs from "fs";
 import { MissionInventoryUpdate } from "@/src/types/missionInventoryUpdateType";
 /*
 - [ ]  crossPlaySetting
@@ -40,11 +39,9 @@ import { MissionInventoryUpdate } from "@/src/types/missionInventoryUpdateType";
 - [ ]  FpsMax
 - [ ]  FpsSamples
 */
-const missionInventoryUpdateController = async (req: Request, res: Response) => {
-    fs.writeFile("./tmp/missionInventoryUpdate", req.body as string, err => {
-        if (err) return console.log(err);
-    }); // temp log, !!! tmp folder need on main dir
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+const missionInventoryUpdateController: RequestHandler = async (req, res) => {
     const [data] = String(req.body).split("\n");
     const id = req.query.accountId as string;
 
