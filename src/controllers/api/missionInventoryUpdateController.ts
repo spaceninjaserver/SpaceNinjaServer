@@ -83,6 +83,7 @@ const missionInventoryUpdateController: RequestHandler = async (req, res) => {
 - [x]  CreditsBonus
 - [x]  MissionCredits
 - [ ]  InventoryChanges
+- [ ]  FusionPoints int
 */
 
 export { missionInventoryUpdateController };

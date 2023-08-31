@@ -1,14 +1,14 @@
-interface MongooseId{
+interface MongooseId {
     $oid: string;
 }
 
-interface ExpireDate{
+interface ExpireDate {
     $date: {
         $numberLong: string;
-    }
+    };
 }
 
-export interface MissionInventoryUpdateGear{
+export interface MissionInventoryUpdateGear {
     ItemType: string;
     ItemName: string;
     ItemId: MongooseId;
@@ -32,25 +32,25 @@ export interface MissionInventoryUpdateGear{
     ArchonCrystalUpgrades: any[];
 }
 
-export interface MissionInventoryUpdateItem{
+export interface MissionInventoryUpdateItem {
     ItemCount: number;
     ItemType: string;
 }
 
-export interface MissionInventoryUpdateCard extends MissionInventoryUpdateItem{
+export interface MissionInventoryUpdateCard extends MissionInventoryUpdateItem {
     ItemId: MongooseId;
     UpgradeFingerprint: string;
     PendingRerollFingerprint: string;
     LastAdded: MongooseId;
 }
 
-interface MissionInventoryUpdateChallange{
+interface MissionInventoryUpdateChallange {
     Name: string;
     Progress: number;
     Completed: any[];
 }
 
-export interface MissionInventoryUpdate{
+export interface MissionInventoryUpdate {
     rewardsMultiplier?: number;
     ActiveBoosters?: any[];
     LongGuns?: MissionInventoryUpdateGear[];

@@ -1,7 +1,7 @@
 import { Model, Schema, Types, model } from "mongoose";
 import { FlavourItem, RawUpgrade, MiscItem, IInventoryDatabase, Booster } from "../types/inventoryTypes/inventoryTypes";
 import { Oid } from "../types/commonTypes";
-import { ISuitDatabase, ISuitDocument } from "@/src/types/inventoryTypes/SuitTypes";
+import { ISuitDatabase } from "@/src/types/inventoryTypes/SuitTypes";
 import { IWeaponDatabase } from "@/src/types/inventoryTypes/weaponTypes";
 
 const abilityOverrideSchema = new Schema({
@@ -69,6 +69,24 @@ const WeaponSchema = new Schema({
 const BoosterSchema = new Schema({
     ExpiryDate: Number,
     ItemType: String
+});
+
+const RawUpgrades = new Schema({
+    ItemType: String,
+    UpgradeFingerprint: String,
+    PendingRerollFingerprint: String,
+    ItemCount: Number
+});
+
+RawUpgrades.set("toJSON", {
+    transform(_document, returnedObject) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+        returnedObject.ItemId = { $oid: returnedObject._id.toString() } satisfies Oid;
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+        returnedObject.LastAdded = { $oid: returnedObject.__v.toString() } satisfies Oid;
+        delete returnedObject._id;
+        delete returnedObject.__v;
+    }
 });
 
 WeaponSchema.set("toJSON", {
@@ -181,7 +199,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
     MiscItems: [Schema.Types.Mixed],
     ChallengesFixVersion: Number,
     ChallengeProgress: [Schema.Types.Mixed],
-    RawUpgrades: [Schema.Types.Mixed],
+    RawUpgrades: [RawUpgrades],
     ReceivedStartingGear: Boolean,
     Suits: [suitSchema],
     LongGuns: [WeaponSchema],
@@ -344,7 +362,7 @@ type InventoryDocumentProps = {
     Boosters: Types.DocumentArray<Booster>;
 };
 
-type InventoryModelType = Model<IInventoryDatabase, {}, InventoryDocumentProps>;
+type InventoryModelType = Model<IInventoryDatabase, object, InventoryDocumentProps>;
 
 const Inventory = model<IInventoryDatabase, InventoryModelType>("Inventory", inventorySchema);
 

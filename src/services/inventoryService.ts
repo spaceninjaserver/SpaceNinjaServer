@@ -5,13 +5,14 @@ import { Types } from "mongoose";
 import { ISuitResponse } from "@/src/types/inventoryTypes/SuitTypes";
 import { SlotType } from "@/src/types/purchaseTypes";
 import { IWeaponResponse } from "@/src/types/inventoryTypes/weaponTypes";
-import { ChallengeProgress, FlavourItem, IInventoryDatabaseDocument } from "@/src/types/inventoryTypes/inventoryTypes";
 import {
-    MissionInventoryUpdate,
-    MissionInventoryUpdateCard,
-    MissionInventoryUpdateGear,
-    MissionInventoryUpdateItem
-} from "../types/missionInventoryUpdateType";
+    ChallengeProgress,
+    FlavourItem,
+    IInventoryDatabaseDocument,
+    MiscItem,
+    RawUpgrade
+} from "@/src/types/inventoryTypes/inventoryTypes";
+import { MissionInventoryUpdate, MissionInventoryUpdateGear } from "../types/missionInventoryUpdateType";
 
 const createInventory = async (accountOwnerId: Types.ObjectId) => {
     try {
@@ -130,21 +131,33 @@ const addGearExpByCategory = (
     });
 };
 
-const addItemsByCategory = (
-    inventory: IInventoryDatabaseDocument,
-    itemsArray: (MissionInventoryUpdateItem | MissionInventoryUpdateCard)[] | undefined,
-    categoryName: "RawUpgrades" | "MiscItems"
-) => {
-    const category = inventory[categoryName];
+const addMiscItems = (inventory: IInventoryDatabaseDocument, itemsArray: MiscItem[] | undefined) => {
+    const { MiscItems } = inventory;
 
     itemsArray?.forEach(({ ItemCount, ItemType }) => {
-        const itemIndex = category.findIndex(i => i.ItemType === ItemType);
+        const itemIndex = MiscItems.findIndex(i => i.ItemType === ItemType);
 
         if (itemIndex !== -1) {
-            category[itemIndex].ItemCount += ItemCount;
-            inventory.markModified(`${categoryName}.${itemIndex}.ItemCount`);
+            MiscItems[itemIndex].ItemCount += ItemCount;
+            inventory.markModified(`MiscItems.${itemIndex}.ItemCount`);
         } else {
-            category.push({ ItemCount, ItemType });
+            MiscItems.push({ ItemCount, ItemType });
+        }
+    });
+};
+
+const addMods = (inventory: IInventoryDatabaseDocument, itemsArray: RawUpgrade[] | undefined) => {
+    const { RawUpgrades } = inventory;
+    itemsArray?.forEach(({ ItemType, ItemCount, UpgradeFingerprint }) => {
+        const itemIndex = RawUpgrades.findIndex(
+            i => i.ItemType === ItemType && i.UpgradeFingerprint === UpgradeFingerprint
+        );
+
+        if (itemIndex !== -1) {
+            RawUpgrades[itemIndex].ItemCount += ItemCount;
+            inventory.markModified(`RawUpgrades.${itemIndex}.ItemCount`);
+        } else {
+            RawUpgrades.push({ ItemCount, ItemType });
         }
     });
 };
@@ -171,7 +184,8 @@ export const missionInventoryUpdate = async (data: MissionInventoryUpdate, accou
     const { RawUpgrades, MiscItems, RegularCredits, ChallengeProgress } = data;
     const inventory = await getInventory(accountId);
 
-    // TODO - multipliers logic
+    // TODO - multipliers logic for mission reward (looted comes multiplied)
+
     // credits
     inventory.RegularCredits += RegularCredits || 0;
 
@@ -179,8 +193,8 @@ export const missionInventoryUpdate = async (data: MissionInventoryUpdate, accou
     gearKeys.forEach((key: GearKeysType) => addGearExpByCategory(inventory, data[key], key));
 
     // other
-    addItemsByCategory(inventory, RawUpgrades, "RawUpgrades"); // TODO - check mods fusion level
-    addItemsByCategory(inventory, MiscItems, "MiscItems");
+    addMods(inventory, RawUpgrades);
+    addMiscItems(inventory, MiscItems);
     addChallenges(inventory, ChallengeProgress);
 
     const changedInventory = await inventory.save();
@@ -204,6 +218,64 @@ export const addBooster = async (ItemType: string, time: number, accountId: stri
     }
 
     await inventory.save();
+};
+
+export const upgradeMod = async (
+    {
+        Upgrade,
+        LevelDiff,
+        Cost,
+        FusionPointCost
+    }: { Upgrade: RawUpgrade; LevelDiff: number; Cost: number; FusionPointCost: number },
+    accountId: string
+): Promise<void> => {
+    const inventory = await getInventory(accountId);
+    const { RawUpgrades } = inventory;
+    const { ItemCount, ItemType, UpgradeFingerprint } = Upgrade;
+    const itemIndex = RawUpgrades.findIndex(
+        i => i.ItemType === ItemType && i.UpgradeFingerprint === UpgradeFingerprint
+    );
+
+    const safeUpgradeFingerprint = UpgradeFingerprint || '{"lvl":0}';
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const parsedUpgradeFingerprint = JSON.parse(safeUpgradeFingerprint);
+    parsedUpgradeFingerprint.lvl += LevelDiff;
+
+    if (!ItemCount) return;
+
+    RawUpgrades[itemIndex].ItemCount--;
+
+    if (RawUpgrades[itemIndex].ItemCount > 0) {
+        inventory.markModified(`RawUpgrades.${itemIndex}.ItemCount`);
+    } else {
+        RawUpgrades.splice(itemIndex, 1);
+        inventory.markModified(`RawUpgrades`);
+    }
+
+    addMods(inventory, [{ ItemType, ItemCount: 1, UpgradeFingerprint: JSON.stringify(parsedUpgradeFingerprint) }]);
+
+    inventory.RegularCredits -= Cost;
+    inventory.FusionPoints -= FusionPointCost;
+
+    await inventory.save();
+    // {
+    //     "Upgrade": {
+    //         ItemType: "/Lotus/Upgrades/Mods/Warframe/Beginner/AvatarShieldMaxModBeginner",
+    //         ItemId: {
+    //             $oid: ""
+    //         },
+    //         UpgradeFingerprint: '{"lvl":1}',
+    //         PendingRerollFingerprint: "",
+    //         ItemCount: 2,
+    //         LastAdded: {
+    //             $oid: "64f01ab0c4dfa3a8ef090043"
+    //         }
+    //     }
+    //     "LevelDiff": 1,
+    //     "Consumed": [],
+    //     "Cost": 483,
+    //     "FusionPointCost": 10
+    // }
 };
 
 export { createInventory, addPowerSuit };

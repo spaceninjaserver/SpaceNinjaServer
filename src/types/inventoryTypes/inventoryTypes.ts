@@ -377,11 +377,6 @@ export interface FlavourItem {
     ItemType: string;
 }
 
-export interface RawUpgrade {
-    ItemCount: number;
-    ItemType: string;
-}
-
 export interface MiscItem {
     ItemCount: number;
     ItemType: string;
@@ -928,9 +923,11 @@ export interface Progress {
 }
 
 export interface RawUpgrade {
-    ItemCount: number;
-    LastAdded?: Oid;
     ItemType: string;
+    ItemCount: number;
+    UpgradeFingerprint?: string;
+    PendingRerollFingerprint?: string;
+    LastAdded?: Oid;
 }
 
 export interface Scoop {
