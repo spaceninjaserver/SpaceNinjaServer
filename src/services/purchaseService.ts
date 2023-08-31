@@ -112,12 +112,28 @@ const handleSuitCustomizationsPurchase = async (customizationName: string, accou
     };
 };
 
-const handleBoostersPurchase = async (boosterName: string, accountId: string) => {
-    const addedBooster = await addBooster(boosterName, accountId);
+const boosterCollection = [
+    "/Lotus/Types/Boosters/ResourceAmountBooster",
+    "/Lotus/Types/Boosters/AffinityBooster",
+    "/Lotus/Types/Boosters/ResourceDropChanceBooster",
+    "/Lotus/Types/Boosters/CreditBooster"
+];
+
+const handleBoostersPurchase = async (boosterStoreName: string, accountId: string) => {
+    const match = boosterStoreName.match(/(\d+)Day/);
+    if (!match) return;
+
+    const extractedDigit = Number(match[1]);
+    const ItemType = boosterCollection.find(i =>
+        boosterStoreName.includes(i.split("/").pop()!.replace("Booster", ""))
+    )!;
+    const ExpiryDate = extractedDigit * 86400;
+
+    await addBooster(ItemType, ExpiryDate, accountId);
 
     return {
         InventoryChanges: {
-            Boosters: [addedBooster]
+            Boosters: [{ ItemType, ExpiryDate }]
         }
     };
 };
