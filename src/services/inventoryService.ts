@@ -167,7 +167,7 @@ const addChallenges = (inventory: IInventoryDatabaseDocument, itemsArray: Challe
 const gearKeys = ["Suits", "Pistols", "LongGuns", "Melee"] as const;
 type GearKeysType = (typeof gearKeys)[number];
 
-export const missionInventoryUpdate = async (data: MissionInventoryUpdate, accountId: string): Promise<void> => {
+export const missionInventoryUpdate = async (data: MissionInventoryUpdate, accountId: string) => {
     const { RawUpgrades, MiscItems, RegularCredits, ChallengeProgress } = data;
     const inventory = await getInventory(accountId);
 
@@ -183,7 +183,8 @@ export const missionInventoryUpdate = async (data: MissionInventoryUpdate, accou
     addItemsByCategory(inventory, MiscItems, "MiscItems");
     addChallenges(inventory, ChallengeProgress);
 
-    await inventory.save();
+    const changedInventory = await inventory.save();
+    return changedInventory.toJSON();
 };
 
 export const addBooster = async (ItemType: string, time: number, accountId: string): Promise<void> => {

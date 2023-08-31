@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import { missionInventoryUpdate } from "@/src/services/inventoryService";
 import { MissionInventoryUpdate } from "@/src/types/missionInventoryUpdateType";
 /*
+**** INPUT ****
 - [ ]  crossPlaySetting
 - [ ]  rewardsMultiplier
 - [ ]  ActiveBoosters
@@ -50,13 +51,38 @@ const missionInventoryUpdateController: RequestHandler = async (req, res) => {
     try {
         const parsedData = JSON.parse(data) as MissionInventoryUpdate;
         if (typeof parsedData !== "object" || parsedData === null) throw new Error("Invalid data format");
-        await missionInventoryUpdate(parsedData, id);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const InventoryJson = JSON.stringify(await missionInventoryUpdate(parsedData, id));
+
+        const missionCredits = parsedData.RegularCredits || 0;
+        const creditsBonus = 0;
+        const totalCredits = missionCredits + creditsBonus;
+
+        const MissionCredits = [missionCredits, missionCredits]; // collected credits
+        const CreditsBonus = [creditsBonus, creditsBonus]; // mission reward
+        const TotalCredits = [totalCredits, totalCredits];
+
+        // TODO - get missions reward table
+
+        res.json({
+            // InventoryJson, // this part will reset game data and missions will be locked
+            TotalCredits,
+            CreditsBonus,
+            MissionCredits
+        });
     } catch (err) {
         console.error("Error parsing JSON data:", err);
     }
-
-    // TODO - get original response
-    res.json({});
 };
+
+/*
+**** OUTPUT ****
+- [x]  InventoryJson
+- [ ]  MissionRewards
+- [x]  TotalCredits
+- [x]  CreditsBonus
+- [x]  MissionCredits
+- [ ]  InventoryChanges
+*/
 
 export { missionInventoryUpdateController };
