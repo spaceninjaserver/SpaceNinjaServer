@@ -1,5 +1,6 @@
 import { Oid } from "@/src/types/commonTypes";
 import { Color, Polarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { Types } from "mongoose";
 
 export interface IWeaponResponse extends IWeaponDatabase {
     ItemId: Oid;
@@ -20,6 +21,7 @@ export interface IWeaponDatabase {
     ItemName?: string;
     ModularParts?: string[];
     UnlockLevel?: number;
+    _id?: Types.ObjectId;
 }
 
 export interface WeaponConfig {
