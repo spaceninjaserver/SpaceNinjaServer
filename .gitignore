@@ -4,3 +4,4 @@
 /.env
 /static/data/*.bin
 yarn.lock
+/tmp

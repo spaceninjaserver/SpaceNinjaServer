@@ -1,13 +1,7 @@
 import { getWeaponType } from "@/src/helpers/purchaseHelpers";
 import { getSubstringFromKeyword } from "@/src/helpers/stringHelpers";
-import {
-    addCustomization,
-    addPowerSuit,
-    addWeapon,
-    updateCurrency,
-    updateSlots
-} from "@/src/services/inventoryService";
-import { IPurchaseRequest, IPurchaseResponse, SlotType } from "@/src/types/purchaseTypes";
+import { addBooster, addCustomization, addPowerSuit, addWeapon, updateSlots } from "@/src/services/inventoryService";
+import { IPurchaseRequest, SlotType } from "@/src/types/purchaseTypes";
 
 export const getStoreItemCategory = (storeItem: string) => {
     const storeItemString = getSubstringFromKeyword(storeItem, "StoreItems/");
@@ -40,6 +34,9 @@ export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountI
             break;
         case "Types":
             purchaseResponse = await handleTypesPurchase(internalName, accountId);
+            break;
+        case "Boosters":
+            purchaseResponse = await handleBoostersPurchase(internalName, accountId);
             break;
 
         default:
@@ -111,6 +108,32 @@ const handleSuitCustomizationsPurchase = async (customizationName: string, accou
     return {
         InventoryChanges: {
             FlavourItems: [customization]
+        }
+    };
+};
+
+const boosterCollection = [
+    "/Lotus/Types/Boosters/ResourceAmountBooster",
+    "/Lotus/Types/Boosters/AffinityBooster",
+    "/Lotus/Types/Boosters/ResourceDropChanceBooster",
+    "/Lotus/Types/Boosters/CreditBooster"
+];
+
+const handleBoostersPurchase = async (boosterStoreName: string, accountId: string) => {
+    const match = boosterStoreName.match(/(\d+)Day/);
+    if (!match) return;
+
+    const extractedDigit = Number(match[1]);
+    const ItemType = boosterCollection.find(i =>
+        boosterStoreName.includes(i.split("/").pop()!.replace("Booster", ""))
+    )!;
+    const ExpiryDate = extractedDigit * 86400;
+
+    await addBooster(ItemType, ExpiryDate, accountId);
+
+    return {
+        InventoryChanges: {
+            Boosters: [{ ItemType, ExpiryDate }]
         }
     };
 };

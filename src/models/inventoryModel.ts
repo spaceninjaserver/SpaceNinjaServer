@@ -1,5 +1,5 @@
 import { Model, Schema, Types, model } from "mongoose";
-import { FlavourItem, IInventoryDatabase } from "../types/inventoryTypes/inventoryTypes";
+import { FlavourItem, RawUpgrade, MiscItem, IInventoryDatabase, Booster } from "../types/inventoryTypes/inventoryTypes";
 import { Oid } from "../types/commonTypes";
 import { ISuitDatabase, ISuitDocument } from "@/src/types/inventoryTypes/SuitTypes";
 import { IWeaponDatabase } from "@/src/types/inventoryTypes/weaponTypes";
@@ -64,6 +64,11 @@ const WeaponSchema = new Schema({
     ItemName: String,
     ModularParts: [String],
     UnlockLevel: Number
+});
+
+const BoosterSchema = new Schema({
+    ExpiryDate: Number,
+    ItemType: String
 });
 
 WeaponSchema.set("toJSON", {
@@ -213,7 +218,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
     LoreFragmentScans: [Schema.Types.Mixed],
     EquippedEmotes: [String],
     PendingTrades: [Schema.Types.Mixed],
-    Boosters: [Schema.Types.Mixed],
+    Boosters: [BoosterSchema],
     ActiveDojoColorResearch: String,
     SentientSpawnChanceBoosters: Schema.Types.Mixed,
     Affiliations: [Schema.Types.Mixed],
@@ -334,6 +339,9 @@ type InventoryDocumentProps = {
     Pistols: Types.DocumentArray<IWeaponDatabase>;
     Melee: Types.DocumentArray<IWeaponDatabase>;
     FlavourItems: Types.DocumentArray<FlavourItem>;
+    RawUpgrades: Types.DocumentArray<RawUpgrade>;
+    MiscItems: Types.DocumentArray<MiscItem>;
+    Boosters: Types.DocumentArray<Booster>;
 };
 
 type InventoryModelType = Model<IInventoryDatabase, {}, InventoryDocumentProps>;
