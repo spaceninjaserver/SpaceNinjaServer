@@ -83,7 +83,7 @@ RawUpgrades.set("toJSON", {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
         returnedObject.ItemId = { $oid: returnedObject._id.toString() } satisfies Oid;
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-        returnedObject.LastAdded = { $oid: returnedObject.__v.toString() } satisfies Oid;
+        returnedObject.LastAdded = { $oid: returnedObject._id.toString() } satisfies Oid;
         delete returnedObject._id;
         delete returnedObject.__v;
     }

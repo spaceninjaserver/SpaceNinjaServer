@@ -15,14 +15,14 @@
                 const formatedMission = mission.substring(0, mission.indexOf(' ('))
                 lastItem.mission = formatedMission;
             } else{
-                rotation = element.children[0].textContent.replace('Rotation ');
+                rotation = element.children[0].textContent.replace('Rotation ', '');
             }
         } else {
             if (!lastItem.rewards)
                 lastItem.rewards = [];
             const name = element.children[0].textContent;
             const chance = parseFloat(element.children[1].textContent.match(/(\d+\.\d+)/)[0]);
-
+            
             lastItem.rewards.push({ chance, name, ...(rotation !== undefined && { rotation }) });
         }
     });

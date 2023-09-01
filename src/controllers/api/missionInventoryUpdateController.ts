@@ -1,8 +1,17 @@
 import { RequestHandler } from "express";
 import { missionInventoryUpdate } from "@/src/services/inventoryService";
 import { MissionInventoryUpdate, MissionInventoryUpdateRewardInfo } from "@/src/types/missionInventoryUpdateType";
-import missionNames from "@/static/data/mission-names.json";
-import missionReward from "@/static/data/mission-rewards.json";
+
+import missionsDropTable from "@/static/json/missions-drop-table.json";
+import missionNames from "@/static/json/mission-names.json";
+import modNames from "@/static/json/mod-names.json";
+import relicNames from "@/static/json/relic-names.json";
+import skinNames from "@/static/json/skin-names.json";
+import miscNames from "@/static/json/misc-names.json";
+import resourceNames from "@/static/json/resource-names.json";
+import gearNames from "@/static/json/gear-names.json";
+import arcaneNames from "@/static/json/arcane-names.json";
+import craftNames from "@/static/json/craft-names.json";
 
 /*
 **** INPUT ****
@@ -89,14 +98,14 @@ const missionInventoryUpdateController: RequestHandler = async (req, res) => {
 - [ ]  FusionPoints int
 */
 
-interface MissionNames {
+interface StringDictionary {
     [key: string]: string;
 }
-const getRewards = (rewardInfo: MissionInventoryUpdateRewardInfo | undefined): Reward[] | undefined => {
+const getRewards = (rewardInfo: MissionInventoryUpdateRewardInfo | undefined) => {
     if (!rewardInfo) return;
 
-    const missionName = (missionNames as MissionNames)[rewardInfo.node];
-    const rewards = missionReward.find(i => i.mission === missionName)?.rewards;
+    const missionName = (missionNames as StringDictionary)[rewardInfo.node];
+    const rewards = missionsDropTable.find(i => i.mission === missionName)?.rewards;
 
     if (!rewards) return [];
 
@@ -113,7 +122,7 @@ const getRewards = (rewardInfo: MissionInventoryUpdateRewardInfo | undefined): R
     const randomDrop = getRandomRewardByChance(chanceDrops);
     if (randomDrop) guaranteedDrops.push(randomDrop);
 
-    return guaranteedDrops;
+    return formatRewardsToInventoryType(guaranteedDrops);
 };
 
 interface Reward {
@@ -136,6 +145,50 @@ const getRandomRewardByChance = (data: Reward[] | undefined): Reward | undefined
     }
 
     return;
+};
+
+const formatRewardsToInventoryType = (rewards: Reward[]) => {
+    return rewards.map(i => {
+        const mod = (modNames as StringDictionary)[i.name];
+        const skin = (skinNames as StringDictionary)[i.name];
+        const gear = (gearNames as StringDictionary)[i.name];
+        const arcane = (arcaneNames as StringDictionary)[i.name];
+        const craft = (craftNames as StringDictionary)[i.name];
+        const misc =
+            (miscNames as StringDictionary)[i.name] || (miscNames as StringDictionary)[i.name.replace(/\d+X\s*/, "")];
+        const resource =
+            (resourceNames as StringDictionary)[i.name] ||
+            (resourceNames as StringDictionary)[i.name.replace(/\d+X\s*/, "")];
+        const relic =
+            (relicNames as StringDictionary)[i.name.replace("Relic", "Exceptional")] ||
+            (relicNames as StringDictionary)[i.name.replace("Relic (Radiant)", "Radiant")];
+
+        let ItemType: string = mod;
+        const ItemCount = 1;
+
+        if (mod) {
+            ItemType = mod;
+        } else if (skin) {
+            ItemType = skin;
+        } else if (gear) {
+            ItemType = gear;
+        } else if (arcane) {
+            ItemType = arcane;
+        } else if (craft) {
+            ItemType = craft;
+        } else if (misc) {
+            ItemType = misc;
+        } else if (resource) {
+            ItemType = resource;
+        } else if (relic) {
+            ItemType = relic;
+        } else if (i.name.includes(" Endo")) {
+            /* endo */
+        } else if (i.name.includes(" Credits Cache") || i.name.includes("Return: ")) {
+            /* credits */
+        }
+        return { ItemType, ItemCount };
+    });
 };
 
 export { missionInventoryUpdateController };
