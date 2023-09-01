@@ -50,6 +50,21 @@ interface MissionInventoryUpdateChallange {
     Completed: any[];
 }
 
+export interface MissionInventoryUpdateRewardInfo {
+    node: string;
+    rewardTier?: number;
+    nightmareMode?: boolean;
+    useVaultManifest?: boolean;
+    EnemyCachesFound?: number;
+    toxinOk?: boolean;
+    lostTargetWave?: number;
+    defenseTargetCount?: number;
+    EOM_AFK?: number;
+    rewardQualifications?: string;
+    PurgatoryRewardQualifications?: string;
+    rewardSeed?: number;
+}
+
 export interface MissionInventoryUpdate {
     rewardsMultiplier?: number;
     ActiveBoosters?: any[];
@@ -61,4 +76,5 @@ export interface MissionInventoryUpdate {
     MiscItems?: MissionInventoryUpdateItem[];
     RegularCredits?: number;
     ChallengeProgress?: MissionInventoryUpdateChallange[];
+    RewardInfo?: MissionInventoryUpdateRewardInfo;
 }

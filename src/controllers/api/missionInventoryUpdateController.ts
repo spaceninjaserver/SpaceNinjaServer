@@ -1,6 +1,9 @@
 import { RequestHandler } from "express";
 import { missionInventoryUpdate } from "@/src/services/inventoryService";
-import { MissionInventoryUpdate } from "@/src/types/missionInventoryUpdateType";
+import { MissionInventoryUpdate, MissionInventoryUpdateRewardInfo } from "@/src/types/missionInventoryUpdateType";
+import missionNames from "@/static/data/mission-names.json";
+import missionReward from "@/static/data/mission-rewards.json";
+
 /*
 **** INPUT ****
 - [ ]  crossPlaySetting
@@ -62,7 +65,7 @@ const missionInventoryUpdateController: RequestHandler = async (req, res) => {
         const CreditsBonus = [creditsBonus, creditsBonus]; // mission reward
         const TotalCredits = [totalCredits, totalCredits];
 
-        // TODO - get missions reward table
+        console.log(getRewards(parsedData.RewardInfo));
 
         res.json({
             // InventoryJson, // this part will reset game data and missions will be locked
@@ -85,5 +88,54 @@ const missionInventoryUpdateController: RequestHandler = async (req, res) => {
 - [ ]  InventoryChanges
 - [ ]  FusionPoints int
 */
+
+interface MissionNames {
+    [key: string]: string;
+}
+const getRewards = (rewardInfo: MissionInventoryUpdateRewardInfo | undefined): Reward[] | undefined => {
+    if (!rewardInfo) return;
+
+    const missionName = (missionNames as MissionNames)[rewardInfo.node];
+    const rewards = missionReward.find(i => i.mission === missionName)?.rewards;
+
+    if (!rewards) return [];
+
+    // TODO - add Rotation logic
+
+    // Separate guaranteed and chance drops
+    const guaranteedDrops: Reward[] = [];
+    const chanceDrops: Reward[] = [];
+    for (const reward of rewards) {
+        if (reward.chance === 100) guaranteedDrops.push(reward);
+        else chanceDrops.push(reward);
+    }
+
+    const randomDrop = getRandomRewardByChance(chanceDrops);
+    if (randomDrop) guaranteedDrops.push(randomDrop);
+
+    return guaranteedDrops;
+};
+
+interface Reward {
+    name: string;
+    chance: number;
+    rotation?: string;
+}
+const getRandomRewardByChance = (data: Reward[] | undefined): Reward | undefined => {
+    if (!data || data.length == 0) return;
+
+    const totalChance = data.reduce((sum, item) => sum + item.chance, 0);
+    const randomValue = Math.random() * totalChance;
+
+    let cumulativeChance = 0;
+    for (const item of data) {
+        cumulativeChance += item.chance;
+        if (randomValue <= cumulativeChance) {
+            return item;
+        }
+    }
+
+    return;
+};
 
 export { missionInventoryUpdateController };
