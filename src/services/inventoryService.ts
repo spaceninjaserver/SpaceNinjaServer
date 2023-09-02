@@ -150,14 +150,16 @@ const addMods = (inventory: IInventoryDatabaseDocument, itemsArray: RawUpgrade[]
     const { RawUpgrades } = inventory;
     itemsArray?.forEach(({ ItemType, ItemCount, UpgradeFingerprint }) => {
         const itemIndex = RawUpgrades.findIndex(
-            i => i.ItemType === ItemType && i.UpgradeFingerprint === UpgradeFingerprint
+            i =>
+                i.ItemType === ItemType &&
+                (i.UpgradeFingerprint === UpgradeFingerprint || (!i.UpgradeFingerprint && !UpgradeFingerprint))
         );
 
         if (itemIndex !== -1) {
             RawUpgrades[itemIndex].ItemCount += ItemCount;
             inventory.markModified(`RawUpgrades.${itemIndex}.ItemCount`);
         } else {
-            RawUpgrades.push({ ItemCount, ItemType });
+            RawUpgrades.push({ ItemCount, ItemType, UpgradeFingerprint });
         }
     });
 };
@@ -228,36 +230,46 @@ export const upgradeMod = async (
         FusionPointCost
     }: { Upgrade: RawUpgrade; LevelDiff: number; Cost: number; FusionPointCost: number },
     accountId: string
-): Promise<void> => {
+): Promise<string | undefined> => {
     const inventory = await getInventory(accountId);
     const { RawUpgrades } = inventory;
     const { ItemCount, ItemType, UpgradeFingerprint } = Upgrade;
     const itemIndex = RawUpgrades.findIndex(
-        i => i.ItemType === ItemType && i.UpgradeFingerprint === UpgradeFingerprint
+        i =>
+            i.ItemType === ItemType &&
+            (i.UpgradeFingerprint === UpgradeFingerprint || (!i.UpgradeFingerprint && !UpgradeFingerprint))
     );
+
+    console.log(itemIndex, ItemType, UpgradeFingerprint);
 
     const safeUpgradeFingerprint = UpgradeFingerprint || '{"lvl":0}';
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const parsedUpgradeFingerprint = JSON.parse(safeUpgradeFingerprint);
     parsedUpgradeFingerprint.lvl += LevelDiff;
 
-    if (!ItemCount) return;
+    if (!ItemCount || itemIndex === -1) return;
 
-    RawUpgrades[itemIndex].ItemCount--;
+    RawUpgrades[itemIndex].UpgradeFingerprint = JSON.stringify(parsedUpgradeFingerprint);
 
-    if (RawUpgrades[itemIndex].ItemCount > 0) {
-        inventory.markModified(`RawUpgrades.${itemIndex}.ItemCount`);
-    } else {
-        RawUpgrades.splice(itemIndex, 1);
-        inventory.markModified(`RawUpgrades`);
-    }
+    // RawUpgrades[itemIndex].ItemCount--;
 
-    addMods(inventory, [{ ItemType, ItemCount: 1, UpgradeFingerprint: JSON.stringify(parsedUpgradeFingerprint) }]);
+    // if (RawUpgrades[itemIndex].ItemCount > 0) {
+    //     inventory.markModified(`RawUpgrades.${itemIndex}.ItemCount`);
+    // } else {
+    //     RawUpgrades.splice(itemIndex, 1);
+    //     inventory.markModified(`RawUpgrades`);
+    // }
+
+    // addMods(inventory, [{ ItemType, ItemCount: 1, UpgradeFingerprint: JSON.stringify(parsedUpgradeFingerprint) }]);
 
     inventory.RegularCredits -= Cost;
     inventory.FusionPoints -= FusionPointCost;
 
-    await inventory.save();
+    const changedInventory = await inventory.save();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return changedInventory.RawUpgrades[itemIndex]?.toJSON().ItemId.$oid;
+
+    // await inventory.save();
     // {
     //     "Upgrade": {
     //         ItemType: "/Lotus/Upgrades/Mods/Warframe/Beginner/AvatarShieldMaxModBeginner",

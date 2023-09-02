@@ -925,9 +925,10 @@ export interface Progress {
 export interface RawUpgrade {
     ItemType: string;
     ItemCount: number;
+    ItemId?: Oid;
+    LastAdded?: Oid;
     UpgradeFingerprint?: string;
     PendingRerollFingerprint?: string;
-    LastAdded?: Oid;
 }
 
 export interface Scoop {

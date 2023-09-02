@@ -13,8 +13,8 @@ const artifactsController: RequestHandler = async (req, res) => {
         const parsedData = JSON.parse(data);
 
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        await upgradeMod(parsedData, id);
-        res.json({});
+        const upgradeModId = await upgradeMod(parsedData, id);
+        res.send(upgradeModId);
     } catch (err) {
         console.error("Error parsing JSON data:", err);
     }

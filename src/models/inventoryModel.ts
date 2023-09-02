@@ -1,4 +1,4 @@
-import { Model, Schema, Types, model } from "mongoose";
+import mongoose, { Model, Schema, Types, model } from "mongoose";
 import { FlavourItem, RawUpgrade, MiscItem, IInventoryDatabase, Booster } from "../types/inventoryTypes/inventoryTypes";
 import { Oid } from "../types/commonTypes";
 import { ISuitDatabase } from "@/src/types/inventoryTypes/SuitTypes";
@@ -75,7 +75,13 @@ const RawUpgrades = new Schema({
     ItemType: String,
     UpgradeFingerprint: String,
     PendingRerollFingerprint: String,
-    ItemCount: Number
+    ItemCount: Number,
+    ItemId: {
+        $oid: mongoose.Schema.Types.ObjectId
+    },
+    LastAdded: {
+        $oid: mongoose.Schema.Types.ObjectId
+    }
 });
 
 RawUpgrades.set("toJSON", {
