@@ -64,7 +64,6 @@ const missionInventoryUpdateController: RequestHandler = async (req, res) => {
         const parsedData = JSON.parse(data) as MissionInventoryUpdate;
         if (typeof parsedData !== "object" || parsedData === null) throw new Error("Invalid data format");
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const InventoryJson = JSON.stringify(await missionInventoryUpdate(parsedData, id));
 
         const missionCredits = parsedData.RegularCredits || 0;
         const creditsBonus = 0;
@@ -76,6 +75,8 @@ const missionInventoryUpdateController: RequestHandler = async (req, res) => {
 
         console.log(getRewards(parsedData.RewardInfo));
 
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const InventoryJson = JSON.stringify(await missionInventoryUpdate(parsedData, id));
         res.json({
             // InventoryJson, // this part will reset game data and missions will be locked
             TotalCredits,

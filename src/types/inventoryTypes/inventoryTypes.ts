@@ -321,7 +321,8 @@ export interface CrewShipSalvageBinClass {
 export interface CrewShipSalvagedWeaponSkin {
     ItemType: string;
     UpgradeFingerprint?: string;
-    ItemId: Oid;
+    ItemId?: Oid;
+    _id?: Types.ObjectId;
 }
 
 export interface CrewShipWeapon {
@@ -925,10 +926,7 @@ export interface Progress {
 export interface RawUpgrade {
     ItemType: string;
     ItemCount: number;
-    ItemId?: Oid;
     LastAdded?: Oid;
-    UpgradeFingerprint?: string;
-    PendingRerollFingerprint?: string;
 }
 
 export interface Scoop {

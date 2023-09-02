@@ -7,6 +7,7 @@ import { SlotType } from "@/src/types/purchaseTypes";
 import { IWeaponResponse } from "@/src/types/inventoryTypes/weaponTypes";
 import {
     ChallengeProgress,
+    CrewShipSalvagedWeaponSkin,
     FlavourItem,
     IInventoryDatabaseDocument,
     MiscItem,
@@ -148,18 +149,14 @@ const addMiscItems = (inventory: IInventoryDatabaseDocument, itemsArray: MiscIte
 
 const addMods = (inventory: IInventoryDatabaseDocument, itemsArray: RawUpgrade[] | undefined) => {
     const { RawUpgrades } = inventory;
-    itemsArray?.forEach(({ ItemType, ItemCount, UpgradeFingerprint }) => {
-        const itemIndex = RawUpgrades.findIndex(
-            i =>
-                i.ItemType === ItemType &&
-                (i.UpgradeFingerprint === UpgradeFingerprint || (!i.UpgradeFingerprint && !UpgradeFingerprint))
-        );
+    itemsArray?.forEach(({ ItemType, ItemCount }) => {
+        const itemIndex = RawUpgrades.findIndex(i => i.ItemType === ItemType);
 
         if (itemIndex !== -1) {
             RawUpgrades[itemIndex].ItemCount += ItemCount;
             inventory.markModified(`RawUpgrades.${itemIndex}.ItemCount`);
         } else {
-            RawUpgrades.push({ ItemCount, ItemType, UpgradeFingerprint });
+            RawUpgrades.push({ ItemCount, ItemType });
         }
     });
 };
@@ -228,66 +225,56 @@ export const upgradeMod = async (
         LevelDiff,
         Cost,
         FusionPointCost
-    }: { Upgrade: RawUpgrade; LevelDiff: number; Cost: number; FusionPointCost: number },
+    }: { Upgrade: CrewShipSalvagedWeaponSkin; LevelDiff: number; Cost: number; FusionPointCost: number },
     accountId: string
 ): Promise<string | undefined> => {
-    const inventory = await getInventory(accountId);
-    const { RawUpgrades } = inventory;
-    const { ItemCount, ItemType, UpgradeFingerprint } = Upgrade;
-    const itemIndex = RawUpgrades.findIndex(
-        i =>
-            i.ItemType === ItemType &&
-            (i.UpgradeFingerprint === UpgradeFingerprint || (!i.UpgradeFingerprint && !UpgradeFingerprint))
-    );
+    try {
+        const inventory = await getInventory(accountId);
+        const { Upgrades, RawUpgrades } = inventory;
+        const { ItemType, UpgradeFingerprint, ItemId } = Upgrade;
 
-    console.log(itemIndex, ItemType, UpgradeFingerprint);
+        const safeUpgradeFingerprint = UpgradeFingerprint || '{"lvl":0}';
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const parsedUpgradeFingerprint = JSON.parse(safeUpgradeFingerprint);
+        parsedUpgradeFingerprint.lvl += LevelDiff;
+        const stringifiedUpgradeFingerprint = JSON.stringify(parsedUpgradeFingerprint);
 
-    const safeUpgradeFingerprint = UpgradeFingerprint || '{"lvl":0}';
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const parsedUpgradeFingerprint = JSON.parse(safeUpgradeFingerprint);
-    parsedUpgradeFingerprint.lvl += LevelDiff;
+        let itemIndex = Upgrades.findIndex(i => i._id?.equals(ItemId!.$oid));
 
-    if (!ItemCount || itemIndex === -1) return;
+        if (itemIndex !== -1) {
+            Upgrades[itemIndex].UpgradeFingerprint = stringifiedUpgradeFingerprint;
+            inventory.markModified(`Upgrades.${itemIndex}.UpgradeFingerprint`);
+        } else {
+            itemIndex =
+                Upgrades.push({
+                    UpgradeFingerprint: stringifiedUpgradeFingerprint,
+                    ItemType
+                }) - 1;
 
-    RawUpgrades[itemIndex].UpgradeFingerprint = JSON.stringify(parsedUpgradeFingerprint);
+            const rawItemIndex = RawUpgrades.findIndex(i => i.ItemType === ItemType);
+            RawUpgrades[rawItemIndex].ItemCount--;
+            if (RawUpgrades[rawItemIndex].ItemCount > 0) {
+                inventory.markModified(`RawUpgrades.${rawItemIndex}.UpgradeFingerprint`);
+            } else {
+                RawUpgrades.splice(rawItemIndex, 1);
+            }
+        }
 
-    // RawUpgrades[itemIndex].ItemCount--;
+        inventory.RegularCredits -= Cost;
+        inventory.FusionPoints -= FusionPointCost;
 
-    // if (RawUpgrades[itemIndex].ItemCount > 0) {
-    //     inventory.markModified(`RawUpgrades.${itemIndex}.ItemCount`);
-    // } else {
-    //     RawUpgrades.splice(itemIndex, 1);
-    //     inventory.markModified(`RawUpgrades`);
-    // }
+        const changedInventory = await inventory.save();
+        const itemId = changedInventory.toJSON().Upgrades[itemIndex]?.ItemId?.$oid;
 
-    // addMods(inventory, [{ ItemType, ItemCount: 1, UpgradeFingerprint: JSON.stringify(parsedUpgradeFingerprint) }]);
+        if (!itemId) {
+            throw new Error("Item Id not found in upgradeMod");
+        }
 
-    inventory.RegularCredits -= Cost;
-    inventory.FusionPoints -= FusionPointCost;
-
-    const changedInventory = await inventory.save();
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return changedInventory.RawUpgrades[itemIndex]?.toJSON().ItemId.$oid;
-
-    // await inventory.save();
-    // {
-    //     "Upgrade": {
-    //         ItemType: "/Lotus/Upgrades/Mods/Warframe/Beginner/AvatarShieldMaxModBeginner",
-    //         ItemId: {
-    //             $oid: ""
-    //         },
-    //         UpgradeFingerprint: '{"lvl":1}',
-    //         PendingRerollFingerprint: "",
-    //         ItemCount: 2,
-    //         LastAdded: {
-    //             $oid: "64f01ab0c4dfa3a8ef090043"
-    //         }
-    //     }
-    //     "LevelDiff": 1,
-    //     "Consumed": [],
-    //     "Cost": 483,
-    //     "FusionPointCost": 10
-    // }
+        return itemId;
+    } catch (error) {
+        console.error("Error in upgradeMod:", error);
+        throw error;
+    }
 };
 
 export { createInventory, addPowerSuit };

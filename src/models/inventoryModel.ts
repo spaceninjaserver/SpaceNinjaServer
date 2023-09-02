@@ -1,4 +1,4 @@
-import mongoose, { Model, Schema, Types, model } from "mongoose";
+import { Model, Schema, Types, model } from "mongoose";
 import { FlavourItem, RawUpgrade, MiscItem, IInventoryDatabase, Booster } from "../types/inventoryTypes/inventoryTypes";
 import { Oid } from "../types/commonTypes";
 import { ISuitDatabase } from "@/src/types/inventoryTypes/SuitTypes";
@@ -73,23 +73,27 @@ const BoosterSchema = new Schema({
 
 const RawUpgrades = new Schema({
     ItemType: String,
-    UpgradeFingerprint: String,
-    PendingRerollFingerprint: String,
-    ItemCount: Number,
-    ItemId: {
-        $oid: mongoose.Schema.Types.ObjectId
-    },
-    LastAdded: {
-        $oid: mongoose.Schema.Types.ObjectId
-    }
+    ItemCount: Number
 });
 
 RawUpgrades.set("toJSON", {
     transform(_document, returnedObject) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-        returnedObject.ItemId = { $oid: returnedObject._id.toString() } satisfies Oid;
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
         returnedObject.LastAdded = { $oid: returnedObject._id.toString() } satisfies Oid;
+        delete returnedObject._id;
+        delete returnedObject.__v;
+    }
+});
+
+const Upgrade = new Schema({
+    UpgradeFingerprint: String,
+    ItemType: String
+});
+
+Upgrade.set("toJSON", {
+    transform(_document, returnedObject) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+        returnedObject.ItemId = { $oid: returnedObject._id.toString() } satisfies Oid;
         delete returnedObject._id;
         delete returnedObject.__v;
     }
@@ -227,7 +231,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
     PendingRecipes: [Schema.Types.Mixed],
     TrainingDate: Schema.Types.Mixed,
     PlayerLevel: Number,
-    Upgrades: [Schema.Types.Mixed],
+    Upgrades: [Upgrade],
     EquippedGear: [String],
     DeathMarks: [String],
     FusionTreasures: [Schema.Types.Mixed],
