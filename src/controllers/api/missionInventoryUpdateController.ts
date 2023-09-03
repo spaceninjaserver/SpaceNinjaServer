@@ -44,7 +44,6 @@ import { IMissionInventoryUpdate } from "@/src/types/missionInventoryUpdateType"
 const missionInventoryUpdateController: RequestHandler = async (req, res) => {
     const id = req.query.accountId as string;
 
-    // Remove the hash, which is added directly below the JSON data.
     const [data] = String(req.body).split("\n");
 
     try {
@@ -55,7 +54,7 @@ const missionInventoryUpdateController: RequestHandler = async (req, res) => {
         console.error("Error parsing JSON data:", err);
     }
 
-    // TODO - get original response
+    // TODO - Return the updated inventory the way the game does it.
     res.json({});
 };
 

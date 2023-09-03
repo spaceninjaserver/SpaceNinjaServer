@@ -81,10 +81,24 @@ export const updateCurrency = async (price: number, usePremium: boolean, account
     return { [currencyName]: -price };
 };
 
+// TODO: AffiliationMods support (Nightwave).
 export const updateGeneric = async (data: IGenericUpdate, accountId: string) => {
     const inventory = await getInventory(accountId);
-    data.NodeIntrosCompleted = data.NodeIntrosCompleted.concat(inventory.NodeIntrosCompleted);
+
+    // Make it an array for easier parsing.
+    if (typeof data.NodeIntrosCompleted === "string") {
+        data.NodeIntrosCompleted = [ data.NodeIntrosCompleted ];
+    }
+
+    // Combine the two arrays into one.
+    data.NodeIntrosCompleted = inventory.NodeIntrosCompleted.concat(data.NodeIntrosCompleted);
+
+    // Remove duplicate entries.
+    const nodes = [ ...new Set(data.NodeIntrosCompleted) ];
+
+    inventory.NodeIntrosCompleted = nodes;
     await inventory.save();
+
     return data;
 };
 
@@ -184,7 +198,7 @@ export const missionInventoryUpdate = async (data: IMissionInventoryUpdate, acco
     const inventory = await getInventory(accountId);
 
     // Currency
-    // !!! TODO: Make a helper specifically for adding currencies with negative/positive checks shared between them.
+    // TODO: Make a helper specifically for adding currencies with negative/positive checks shared between them.
     // TODO - Multipliers (from Boosters or otherwise).
     const credits = RegularCredits as number;
     inventory.RegularCredits += credits < 0 ? Math.abs(credits) : credits; // If credits are negative, flip them.
