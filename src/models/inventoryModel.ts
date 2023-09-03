@@ -1,6 +1,12 @@
 import { Model, Schema, Types, model } from "mongoose";
-import { FlavourItem, RawUpgrade, MiscItem, IInventoryDatabase, Booster } from "../types/inventoryTypes/inventoryTypes";
-import { Oid } from "../types/commonTypes";
+import {
+    IFlavourItem,
+    IRawUpgrade,
+    IMiscItem,
+    IInventoryDatabase,
+    IBooster
+} from "../types/inventoryTypes/inventoryTypes";
+import { IOid } from "../types/commonTypes";
 import { ISuitDatabase, ISuitDocument } from "@/src/types/inventoryTypes/SuitTypes";
 import { IWeaponDatabase } from "@/src/types/inventoryTypes/weaponTypes";
 
@@ -74,7 +80,7 @@ const BoosterSchema = new Schema({
 WeaponSchema.set("toJSON", {
     transform(_document, returnedObject) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-        returnedObject.ItemId = { $oid: returnedObject._id.toString() } satisfies Oid;
+        returnedObject.ItemId = { $oid: returnedObject._id.toString() } satisfies IOid;
         delete returnedObject._id;
         delete returnedObject.__v;
     }
@@ -130,7 +136,7 @@ const suitSchema = new Schema<ISuitDatabase>({
 suitSchema.set("toJSON", {
     transform(_document, returnedObject) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-        returnedObject.ItemId = { $oid: returnedObject._id.toString() } satisfies Oid;
+        returnedObject.ItemId = { $oid: returnedObject._id.toString() } satisfies IOid;
         delete returnedObject._id;
         delete returnedObject.__v;
     }
@@ -338,10 +344,10 @@ type InventoryDocumentProps = {
     LongGuns: Types.DocumentArray<IWeaponDatabase>;
     Pistols: Types.DocumentArray<IWeaponDatabase>;
     Melee: Types.DocumentArray<IWeaponDatabase>;
-    FlavourItems: Types.DocumentArray<FlavourItem>;
-    RawUpgrades: Types.DocumentArray<RawUpgrade>;
-    MiscItems: Types.DocumentArray<MiscItem>;
-    Boosters: Types.DocumentArray<Booster>;
+    FlavourItems: Types.DocumentArray<IFlavourItem>;
+    RawUpgrades: Types.DocumentArray<IRawUpgrade>;
+    MiscItems: Types.DocumentArray<IMiscItem>;
+    Boosters: Types.DocumentArray<IBooster>;
 };
 
 type InventoryModelType = Model<IInventoryDatabase, {}, InventoryDocumentProps>;

@@ -1,4 +1,4 @@
-export interface Session {
+export interface ISession {
     sessionId: string;
     creatorId: string;
     maxPlayers: number;
@@ -26,6 +26,6 @@ export interface Session {
     fullReset: number;
 }
 
-export interface FindSessionRequest {
+export interface IFindSessionRequest {
     [key: string]: any;
 }

@@ -1,17 +1,10 @@
-interface MongooseId{
-    $oid: string;
-}
+import { IOid } from "./commonTypes";
+import { IDate } from "./inventoryTypes/inventoryTypes";
 
-interface ExpireDate{
-    $date: {
-        $numberLong: string;
-    }
-}
-
-export interface MissionInventoryUpdateGear{
+export interface IMissionInventoryUpdateGear {
     ItemType: string;
     ItemName: string;
-    ItemId: MongooseId;
+    ItemId: IOid;
     XP: number;
     UpgradeVer: number;
     Features: number;
@@ -19,7 +12,7 @@ export interface MissionInventoryUpdateGear{
     CustomizationSlotPurchases: number;
     ModSlotPurchases: number;
     FocusLens: string;
-    Expiry: ExpireDate;
+    Expiry: IDate;
     Polarity: any[];
     Configs: any[];
     ModularParts: any[];
@@ -28,37 +21,37 @@ export interface MissionInventoryUpdateGear{
     UpgradeFingerprint: string;
     OffensiveUpgrade: string;
     DefensiveUpgrade: string;
-    UpgradesExpiry: ExpireDate;
+    UpgradesExpiry: IDate;
     ArchonCrystalUpgrades: any[];
 }
 
-export interface MissionInventoryUpdateItem{
+export interface IMissionInventoryUpdateItem {
     ItemCount: number;
     ItemType: string;
 }
 
-export interface MissionInventoryUpdateCard extends MissionInventoryUpdateItem{
-    ItemId: MongooseId;
+export interface IMissionInventoryUpdateCard extends IMissionInventoryUpdateItem {
+    ItemId: IOid;
     UpgradeFingerprint: string;
     PendingRerollFingerprint: string;
-    LastAdded: MongooseId;
+    LastAdded: IOid;
 }
 
-interface MissionInventoryUpdateChallange{
+export interface IMissionInventoryUpdateChallange {
     Name: string;
     Progress: number;
     Completed: any[];
 }
 
-export interface MissionInventoryUpdate{
+export interface IMissionInventoryUpdate {
     rewardsMultiplier?: number;
     ActiveBoosters?: any[];
-    LongGuns?: MissionInventoryUpdateGear[];
-    Pistols?: MissionInventoryUpdateGear[];
-    Suits?: MissionInventoryUpdateGear[];
-    Melee?: MissionInventoryUpdateGear[];
-    RawUpgrades?: MissionInventoryUpdateCard[];
-    MiscItems?: MissionInventoryUpdateItem[];
+    LongGuns?: IMissionInventoryUpdateGear[];
+    Pistols?: IMissionInventoryUpdateGear[];
+    Suits?: IMissionInventoryUpdateGear[];
+    Melee?: IMissionInventoryUpdateGear[];
+    RawUpgrades?: IMissionInventoryUpdateCard[];
+    MiscItems?: IMissionInventoryUpdateItem[];
     RegularCredits?: number;
-    ChallengeProgress?: MissionInventoryUpdateChallange[];
+    ChallengeProgress?: IMissionInventoryUpdateChallange[];
 }
