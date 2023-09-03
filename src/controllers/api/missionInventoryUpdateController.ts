@@ -1,10 +1,10 @@
 import { RequestHandler } from "express";
 import { missionInventoryUpdate } from "@/src/services/inventoryService";
 import {
-    MissionInventoryUpdate,
-    MissionInventoryUpdateRewardInfo,
-    MissionRewardResponse,
-    Reward
+    IMissionInventoryUpdate,
+    IMissionInventoryUpdateRewardInfo,
+    IMissionRewardResponse,
+    IReward
 } from "@/src/types/missionInventoryUpdateType";
 import { RawUpgrade } from "@/src/types/inventoryTypes/inventoryTypes";
 
@@ -68,7 +68,7 @@ const missionInventoryUpdateController: RequestHandler = async (req, res) => {
     // TODO - salt check
 
     try {
-        const parsedData = JSON.parse(data) as MissionInventoryUpdate;
+        const parsedData = JSON.parse(data) as IMissionInventoryUpdate;
         if (typeof parsedData !== "object" || parsedData === null) throw new Error("Invalid data format");
 
         const { InventoryChanges, MissionRewards } = getRewards(parsedData.RewardInfo);
@@ -125,8 +125,8 @@ const missionInventoryUpdateController: RequestHandler = async (req, res) => {
 */
 
 const getRewards = (
-    rewardInfo: MissionInventoryUpdateRewardInfo | undefined
-): { InventoryChanges: MissionInventoryUpdate; MissionRewards: MissionRewardResponse[] } => {
+    rewardInfo: IMissionInventoryUpdateRewardInfo | undefined
+): { InventoryChanges: IMissionInventoryUpdate; MissionRewards: IMissionRewardResponse[] } => {
     if (!rewardInfo) return { InventoryChanges: {}, MissionRewards: [] };
 
     // TODO - add Rotation logic
@@ -147,13 +147,13 @@ const getRewards = (
     //     "rewardSeed": -5604904486637266000
     // },
 
-    const rewards = (missionsDropTable as { [key: string]: Reward[] })[rewardInfo.node];
+    const rewards = (missionsDropTable as { [key: string]: IReward[] })[rewardInfo.node];
 
     if (!rewards) return { InventoryChanges: {}, MissionRewards: [] };
 
     // Separate guaranteed and chance drops
-    const guaranteedDrops: Reward[] = [];
-    const chanceDrops: Reward[] = [];
+    const guaranteedDrops: IReward[] = [];
+    const chanceDrops: IReward[] = [];
     for (const reward of rewards) {
         if (reward.chance === 100) guaranteedDrops.push(reward);
         else chanceDrops.push(reward);
@@ -167,7 +167,7 @@ const getRewards = (
     return formatRewardsToInventoryType(guaranteedDrops);
 };
 
-const getRandomRewardByChance = (data: Reward[] | undefined): Reward | undefined => {
+const getRandomRewardByChance = (data: IReward[] | undefined): IReward | undefined => {
     if (!data || data.length == 0) return;
 
     const totalChance = data.reduce((sum, item) => sum + item.chance, 0);
@@ -185,10 +185,10 @@ const getRandomRewardByChance = (data: Reward[] | undefined): Reward | undefined
 };
 
 const formatRewardsToInventoryType = (
-    rewards: Reward[]
-): { InventoryChanges: MissionInventoryUpdate; MissionRewards: MissionRewardResponse[] } => {
-    const InventoryChanges: MissionInventoryUpdate = {};
-    const MissionRewards: MissionRewardResponse[] = [];
+    rewards: IReward[]
+): { InventoryChanges: IMissionInventoryUpdate; MissionRewards: IMissionRewardResponse[] } => {
+    const InventoryChanges: IMissionInventoryUpdate = {};
+    const MissionRewards: IMissionRewardResponse[] = [];
     rewards.forEach(i => {
         const mod = modNames[i.name];
         const skin = skinNames[i.name];
@@ -238,8 +238,8 @@ const formatRewardsToInventoryType = (
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const _missionRewardsCheckAllNamings = () => {
-    let tempRewards: Reward[] = [];
-    Object.values(missionsDropTable as { [key: string]: Reward[] }).forEach(i => {
+    let tempRewards: IReward[] = [];
+    Object.values(missionsDropTable as { [key: string]: IReward[] }).forEach(i => {
         i.forEach(j => {
             tempRewards.push(j);
         });

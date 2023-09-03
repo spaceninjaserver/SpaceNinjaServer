@@ -13,7 +13,7 @@ import {
     MiscItem,
     RawUpgrade
 } from "@/src/types/inventoryTypes/inventoryTypes";
-import { MissionInventoryUpdate, MissionInventoryUpdateGear } from "../types/missionInventoryUpdateType";
+import { IMissionInventoryUpdate, IMissionInventoryUpdateGear } from "../types/missionInventoryUpdateType";
 
 const createInventory = async (accountOwnerId: Types.ObjectId) => {
     try {
@@ -116,7 +116,7 @@ export const addCustomization = async (customizatonName: string, accountId: stri
 
 const addGearExpByCategory = (
     inventory: IInventoryDatabaseDocument,
-    gearArray: MissionInventoryUpdateGear[] | undefined,
+    gearArray: IMissionInventoryUpdateGear[] | undefined,
     categoryName: "Pistols" | "LongGuns" | "Melee" | "Suits"
 ) => {
     const category = inventory[categoryName];
@@ -179,7 +179,7 @@ const addChallenges = (inventory: IInventoryDatabaseDocument, itemsArray: Challe
 const gearKeys = ["Suits", "Pistols", "LongGuns", "Melee"] as const;
 type GearKeysType = (typeof gearKeys)[number];
 
-export const missionInventoryUpdate = async (data: MissionInventoryUpdate, accountId: string) => {
+export const missionInventoryUpdate = async (data: IMissionInventoryUpdate, accountId: string) => {
     const { RawUpgrades, MiscItems, RegularCredits, ChallengeProgress } = data;
     const inventory = await getInventory(accountId);
 

@@ -1,18 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-interface MongooseId {
-    $oid: string;
-}
+import { Oid } from "./commonTypes";
+import { Date } from "./inventoryTypes/inventoryTypes";
 
-interface ExpireDate {
-    $date: {
-        $numberLong: string;
-    };
-}
-
-export interface MissionInventoryUpdateGear {
+export interface IMissionInventoryUpdateGear {
     ItemType: string;
     ItemName: string;
-    ItemId: MongooseId;
+    ItemId: Oid;
     XP: number;
     UpgradeVer: number;
     Features: number;
@@ -20,7 +13,7 @@ export interface MissionInventoryUpdateGear {
     CustomizationSlotPurchases: number;
     ModSlotPurchases: number;
     FocusLens: string;
-    Expiry: ExpireDate;
+    Expiry: Date;
     Polarity: any[];
     Configs: any[];
     ModularParts: any[];
@@ -29,22 +22,29 @@ export interface MissionInventoryUpdateGear {
     UpgradeFingerprint: string;
     OffensiveUpgrade: string;
     DefensiveUpgrade: string;
-    UpgradesExpiry: ExpireDate;
+    UpgradesExpiry: Date;
     ArchonCrystalUpgrades: any[];
 }
 
-export interface MissionInventoryUpdateItem {
+export interface IMissionInventoryUpdateItem {
     ItemCount: number;
     ItemType: string;
 }
 
-interface MissionInventoryUpdateChallange {
+export interface IMissionInventoryUpdateCard extends IMissionInventoryUpdateItem {
+    ItemId: Oid;
+    UpgradeFingerprint: string;
+    PendingRerollFingerprint: string;
+    LastAdded: Oid;
+}
+
+export interface IMissionInventoryUpdateChallange {
     Name: string;
     Progress: number;
     Completed: any[];
 }
 
-export interface MissionInventoryUpdateRewardInfo {
+export interface IMissionInventoryUpdateRewardInfo {
     node: string;
     rewardTier?: number;
     nightmareMode?: boolean;
@@ -59,22 +59,22 @@ export interface MissionInventoryUpdateRewardInfo {
     rewardSeed?: number;
 }
 
-export interface MissionInventoryUpdate {
+export interface IMissionInventoryUpdate {
     rewardsMultiplier?: number;
     ActiveBoosters?: any[];
-    LongGuns?: MissionInventoryUpdateGear[];
-    Pistols?: MissionInventoryUpdateGear[];
-    Suits?: MissionInventoryUpdateGear[];
-    Melee?: MissionInventoryUpdateGear[];
-    RawUpgrades?: MissionInventoryUpdateItem[];
-    MiscItems?: MissionInventoryUpdateItem[];
+    LongGuns?: IMissionInventoryUpdateGear[];
+    Pistols?: IMissionInventoryUpdateGear[];
+    Suits?: IMissionInventoryUpdateGear[];
+    Melee?: IMissionInventoryUpdateGear[];
+    RawUpgrades?: IMissionInventoryUpdateItem[];
+    MiscItems?: IMissionInventoryUpdateItem[];
     RegularCredits?: number;
-    ChallengeProgress?: MissionInventoryUpdateChallange[];
-    RewardInfo?: MissionInventoryUpdateRewardInfo;
+    ChallengeProgress?: IMissionInventoryUpdateChallange[];
+    RewardInfo?: IMissionInventoryUpdateRewardInfo;
     FusionPoints?: number;
 }
 
-export interface MissionRewardResponse {
+export interface IMissionRewardResponse {
     StoreItem?: string;
     TypeName: string;
     UpgradeLevel: number;
@@ -83,7 +83,7 @@ export interface MissionRewardResponse {
     ProductCategory: string;
 }
 
-export interface Reward {
+export interface IReward {
     name: string;
     chance: number;
     rotation?: string;
