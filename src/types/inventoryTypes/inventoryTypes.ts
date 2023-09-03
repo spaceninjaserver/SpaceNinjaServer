@@ -866,6 +866,7 @@ export enum GettingSlotOrderInfo {
 }
 
 export interface Giving {
+    // Probably isn't a consumable but it's also not my problem.
     RawUpgrades: Consumable[];
     _SlotOrderInfo: GivingSlotOrderInfo[];
 }
@@ -905,11 +906,17 @@ export interface PersonalTechProject {
 
 export interface PlayerSkills {
     LPP_SPACE: number;
-    LPS_GUNNERY: number;
+    LPP_DRIFTER: number;
+    LPS_NONE: number;
     LPS_PILOTING: number;
-    LPS_ENGINEERING: number;
+    LPS_GUNNERY: number;
     LPS_TACTICAL: number;
+    LPS_ENGINEERING: number;
     LPS_COMMAND: number;
+    LPS_DRIFT_COMBAT: number;
+    LPS_DRIFT_RIDING: number;
+    LPS_DRIFT_OPPORTUNITY: number;
+    LPS_DRIFT_ENDURANCE: number;
 }
 
 export interface QuestKey {
