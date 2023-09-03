@@ -34,7 +34,7 @@ const createInventory = async (accountOwnerId: Types.ObjectId) => {
 
 //const updateInventory = async (accountOwnerId: Types.ObjectId, inventoryChanges: any) => {};
 
-const getInventory = async (accountOwnerId: string) => {
+export const getInventory = async (accountOwnerId: string) => {
     const inventory = await Inventory.findOne({ accountOwnerId: accountOwnerId });
 
     if (!inventory) {

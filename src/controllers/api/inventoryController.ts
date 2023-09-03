@@ -5,6 +5,7 @@ import { Request, RequestHandler, Response } from "express";
 import config from "@/config.json";
 import testMissions from "@/static/fixed_responses/testMissions.json";
 import testQuestKeys from "@/static/fixed_responses/testQuestKeys.json";
+import testInventory from "../../../static/testInventory.json";
 
 const inventoryController: RequestHandler = async (request: Request, response: Response) => {
     const accountId = request.query.accountId;
@@ -23,12 +24,16 @@ const inventoryController: RequestHandler = async (request: Request, response: R
 
     const inventoryJSON = inventory.toJSON();
 
-    const inventoreResponse = toInventoryResponse(inventoryJSON);
+    const inventoryResponse = toInventoryResponse(inventoryJSON);
 
-    if (config.testMission) inventoreResponse.Missions = testMissions;
-    if (config.testQuestKey) inventoreResponse.QuestKeys = testQuestKeys;
+    if (config.testMission) inventoryResponse.Missions = testMissions;
+    if (config.testQuestKey) inventoryResponse.QuestKeys = testQuestKeys;
 
-    response.json(inventoreResponse);
+    const now = Math.floor(Date.now()) - 129600;
+    const date: string = (now + 24 * 60 * 60 * 1000).toString();
+    inventoryResponse.TrainingDate = { $date: { $numberLong: "1693769173000" } };
+    console.log(inventoryResponse.TrainingDate);
+    response.json(inventoryResponse);
 };
 
 export { inventoryController };

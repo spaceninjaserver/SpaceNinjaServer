@@ -1,5 +1,14 @@
 import { Model, Schema, Types, model } from "mongoose";
-import { FlavourItem, RawUpgrade, MiscItem, IInventoryDatabase, Booster } from "../types/inventoryTypes/inventoryTypes";
+import {
+    FlavourItem,
+    RawUpgrade,
+    MiscItem,
+    IInventoryDatabase,
+    Booster,
+    IInventoryResponse,
+    IInventoryDatabaseDocument,
+    IInventoryResponseDocument
+} from "../types/inventoryTypes/inventoryTypes";
 import { Oid } from "../types/commonTypes";
 import { ISuitDatabase, ISuitDocument } from "@/src/types/inventoryTypes/SuitTypes";
 import { IWeaponDatabase } from "@/src/types/inventoryTypes/weaponTypes";
@@ -19,7 +28,7 @@ const colorSchema = new Schema({
     m1: Number
 });
 
-const longGunConfigSchema = new Schema({
+const weaponConfigSchema = new Schema({
     Skins: [String],
     pricol: colorSchema,
     attcol: colorSchema,
@@ -51,7 +60,7 @@ const longGunConfigSchema = new Schema({
 
 const WeaponSchema = new Schema({
     ItemType: String,
-    Configs: [longGunConfigSchema],
+    Configs: [weaponConfigSchema],
     UpgradeVer: Number,
     XP: Number,
     Features: Number,
@@ -201,7 +210,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
     Recipes: [Schema.Types.Mixed],
     WeaponSkins: [Schema.Types.Mixed],
     PendingRecipes: [Schema.Types.Mixed],
-    TrainingDate: Schema.Types.Mixed,
+    TrainingDate: Date,
     PlayerLevel: Number,
     Upgrades: [Schema.Types.Mixed],
     EquippedGear: [String],
@@ -327,9 +336,17 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
 });
 
 inventorySchema.set("toJSON", {
-    transform(_document, returnedObject) {
+    transform(_document, returnedObject: IInventoryDatabaseDocument) {
         delete returnedObject._id;
         delete returnedObject.__v;
+
+        const trainingDate = returnedObject.TrainingDate;
+
+        (returnedObject as unknown as IInventoryResponse).TrainingDate = {
+            $date: {
+                $numberLong: trainingDate.getTime().toString()
+            }
+        };
     }
 });
 
