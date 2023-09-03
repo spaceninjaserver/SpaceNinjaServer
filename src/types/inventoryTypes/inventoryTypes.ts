@@ -866,7 +866,6 @@ export enum GettingSlotOrderInfo {
 }
 
 export interface Giving {
-    // Probably isn't a consumable but it's also not my problem.
     RawUpgrades: Consumable[];
     _SlotOrderInfo: GivingSlotOrderInfo[];
 }
