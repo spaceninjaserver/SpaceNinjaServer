@@ -1,4 +1,4 @@
 export interface IGenericUpdate {
-    NodeIntrosCompleted: string[];
+    NodeIntrosCompleted: string | string[];
     // AffiliationMods: any[];
 }
