@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 interface MongooseId {
     $oid: string;
 }
@@ -37,13 +38,6 @@ export interface MissionInventoryUpdateItem {
     ItemType: string;
 }
 
-export interface MissionInventoryUpdateCard extends MissionInventoryUpdateItem {
-    ItemId: MongooseId;
-    UpgradeFingerprint: string;
-    PendingRerollFingerprint: string;
-    LastAdded: MongooseId;
-}
-
 interface MissionInventoryUpdateChallange {
     Name: string;
     Progress: number;
@@ -72,9 +66,10 @@ export interface MissionInventoryUpdate {
     Pistols?: MissionInventoryUpdateGear[];
     Suits?: MissionInventoryUpdateGear[];
     Melee?: MissionInventoryUpdateGear[];
-    RawUpgrades?: MissionInventoryUpdateCard[];
+    RawUpgrades?: MissionInventoryUpdateItem[];
     MiscItems?: MissionInventoryUpdateItem[];
     RegularCredits?: number;
     ChallengeProgress?: MissionInventoryUpdateChallange[];
     RewardInfo?: MissionInventoryUpdateRewardInfo;
+    FusionPoints?: number;
 }
