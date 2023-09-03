@@ -1,18 +1,24 @@
 import { RequestHandler } from "express";
 import { missionInventoryUpdate } from "@/src/services/inventoryService";
-import { MissionInventoryUpdate, MissionInventoryUpdateRewardInfo } from "@/src/types/missionInventoryUpdateType";
+import {
+    MissionInventoryUpdate,
+    MissionInventoryUpdateRewardInfo,
+    MissionRewardResponse,
+    Reward
+} from "@/src/types/missionInventoryUpdateType";
+import { RawUpgrade } from "@/src/types/inventoryTypes/inventoryTypes";
 
 import missionsDropTable from "@/static/json/missions-drop-table.json";
-import missionNames from "@/static/json/mission-names.json";
-import modNames from "@/static/json/mod-names.json";
-import relicNames from "@/static/json/relic-names.json";
-import skinNames from "@/static/json/skin-names.json";
-import miscNames from "@/static/json/misc-names.json";
-import resourceNames from "@/static/json/resource-names.json";
-import gearNames from "@/static/json/gear-names.json";
-import arcaneNames from "@/static/json/arcane-names.json";
-import craftNames from "@/static/json/craft-names.json";
-import { RawUpgrade } from "@/src/types/inventoryTypes/inventoryTypes";
+import {
+    modNames,
+    relicNames,
+    skinNames,
+    miscNames,
+    resourceNames,
+    gearNames,
+    arcaneNames,
+    craftNames
+} from "@/static/data/items";
 
 /*
 **** INPUT ****
@@ -118,9 +124,6 @@ const missionInventoryUpdateController: RequestHandler = async (req, res) => {
 - [x]  FusionPoints
 */
 
-interface StringDictionary {
-    [key: string]: string;
-}
 const getRewards = (
     rewardInfo: MissionInventoryUpdateRewardInfo | undefined
 ): { InventoryChanges: MissionInventoryUpdate; MissionRewards: MissionRewardResponse[] } => {
@@ -144,8 +147,7 @@ const getRewards = (
     //     "rewardSeed": -5604904486637266000
     // },
 
-    const missionName = (missionNames as StringDictionary)[rewardInfo.node];
-    const rewards = missionsDropTable.find(i => i.mission === missionName)?.rewards;
+    const rewards = (missionsDropTable as { [key: string]: Reward[] })[rewardInfo.node];
 
     if (!rewards) return { InventoryChanges: {}, MissionRewards: [] };
 
@@ -165,11 +167,6 @@ const getRewards = (
     return formatRewardsToInventoryType(guaranteedDrops);
 };
 
-interface Reward {
-    name: string;
-    chance: number;
-    rotation?: string;
-}
 const getRandomRewardByChance = (data: Reward[] | undefined): Reward | undefined => {
     if (!data || data.length == 0) return;
 
@@ -187,33 +184,22 @@ const getRandomRewardByChance = (data: Reward[] | undefined): Reward | undefined
     return;
 };
 
-interface MissionRewardResponse {
-    StoreItem?: string;
-    TypeName: string;
-    UpgradeLevel: number;
-    ItemCount: number;
-    TweetText: string;
-    ProductCategory: string;
-}
 const formatRewardsToInventoryType = (
     rewards: Reward[]
 ): { InventoryChanges: MissionInventoryUpdate; MissionRewards: MissionRewardResponse[] } => {
     const InventoryChanges: MissionInventoryUpdate = {};
     const MissionRewards: MissionRewardResponse[] = [];
     rewards.forEach(i => {
-        const mod = (modNames as StringDictionary)[i.name];
-        const skin = (skinNames as StringDictionary)[i.name];
-        const gear = (gearNames as StringDictionary)[i.name];
-        const arcane = (arcaneNames as StringDictionary)[i.name];
-        const craft = (craftNames as StringDictionary)[i.name];
-        const misc =
-            (miscNames as StringDictionary)[i.name] || (miscNames as StringDictionary)[i.name.replace(/\d+X\s*/, "")];
-        const resource =
-            (resourceNames as StringDictionary)[i.name] ||
-            (resourceNames as StringDictionary)[i.name.replace(/\d+X\s*/, "")];
+        const mod = modNames[i.name];
+        const skin = skinNames[i.name];
+        const gear = gearNames[i.name];
+        const arcane = arcaneNames[i.name];
+        const craft = craftNames[i.name];
+        const misc = miscNames[i.name] || miscNames[i.name.replace(/\d+X\s*/, "")];
+        const resource = resourceNames[i.name] || resourceNames[i.name.replace(/\d+X\s*/, "")];
         const relic =
-            (relicNames as StringDictionary)[i.name.replace("Relic", "Exceptional")] ||
-            (relicNames as StringDictionary)[i.name.replace("Relic (Radiant)", "Radiant")];
+            relicNames[i.name.replace("Relic", "Exceptional")] ||
+            relicNames[i.name.replace("Relic (Radiant)", "Radiant")];
 
         if (mod) {
             if (!InventoryChanges.RawUpgrades) InventoryChanges.RawUpgrades = [];
@@ -249,5 +235,39 @@ const formatRewardsToInventoryType = (
     });
     return { InventoryChanges, MissionRewards };
 };
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const _missionRewardsCheckAllNamings = () => {
+    let tempRewards: Reward[] = [];
+    Object.values(missionsDropTable as { [key: string]: Reward[] }).forEach(i => {
+        i.forEach(j => {
+            tempRewards.push(j);
+        });
+    });
+    tempRewards = tempRewards
+        .filter(i => !modNames[i.name])
+
+        .filter(i => !skinNames[i.name])
+        .filter(i => !miscNames[i.name])
+        .filter(i => !miscNames[i.name.replace(/\d+X\s*/, "")])
+        .filter(i => !resourceNames[i.name])
+        .filter(i => !resourceNames[i.name.replace(/\d+X\s*/, "")])
+        .filter(i => !gearNames[i.name])
+        .filter(i => !arcaneNames[i.name])
+        .filter(i => !craftNames[i.name])
+        .filter(i => {
+            // return true;
+            // return !relicNames[i.name.replace("Relic", "Exceptional")];
+            // console.log(i.name.replace("Relic", "Exceptional"));
+            return (
+                !relicNames[i.name.replace("Relic", "Exceptional")] &&
+                !relicNames[i.name.replace("Relic (Radiant)", "Radiant")]
+            );
+        })
+        .filter(i => !i.name.includes(" Endo"))
+        .filter(i => !i.name.includes(" Credits Cache") && !i.name.includes("Return: "));
+    console.log(tempRewards);
+};
+// _missionRewardsCheckAllNamings();
 
 export { missionInventoryUpdateController };

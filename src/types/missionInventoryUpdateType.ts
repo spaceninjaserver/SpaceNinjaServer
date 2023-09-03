@@ -73,3 +73,18 @@ export interface MissionInventoryUpdate {
     RewardInfo?: MissionInventoryUpdateRewardInfo;
     FusionPoints?: number;
 }
+
+export interface MissionRewardResponse {
+    StoreItem?: string;
+    TypeName: string;
+    UpgradeLevel: number;
+    ItemCount: number;
+    TweetText: string;
+    ProductCategory: string;
+}
+
+export interface Reward {
+    name: string;
+    chance: number;
+    rotation?: string;
+}
