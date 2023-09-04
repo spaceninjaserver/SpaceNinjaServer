@@ -147,7 +147,7 @@ const getRewards = (
     //     { chance: 7.69, name: "Lith W3 Relic", rotation: "B" },
     //     { chance: 10.82, name: "2X Orokin Cell", rotation: "C" },
     //     { chance: 10.82, name: "Link Armor", rotation: "C" },
-    //     // { chance: 10.82, name: "200 Endo", rotation: "C" },
+    //     { chance: 10.82, name: "200 Endo", rotation: "C" },
     //     { chance: 10.82, name: "2,000,000 Credits Cache", rotation: "C" },
     //     { chance: 7.69, name: "Health Restore (Large)", rotation: "C" },
     //     { chance: 7.69, name: "Vapor Specter Blueprint", rotation: "C" }
@@ -196,34 +196,44 @@ const formatRewardsToInventoryType = (
 ): { InventoryChanges: IMissionInventoryUpdate; MissionRewards: IMissionRewardResponse[] } => {
     const InventoryChanges: IMissionInventoryUpdate = {};
     const MissionRewards: IMissionRewardResponse[] = [];
-    rewards.forEach(i => {
-        const mod = modNames[i.name];
-        const gear = gearNames[i.name];
-        const blueprint = blueprintNames[i.name];
-        const misc = miscNames[i.name] || miscNames[i.name.replace(/\d+X\s*/, "")];
-        const resource = resourceNames[i.name] || resourceNames[i.name.replace(/\d+X\s*/, "")];
-        const relic =
-            relicNames[i.name.replace("Relic", "Intact")] || relicNames[i.name.replace("Relic (Radiant)", "Radiant")];
+    for (const reward of rewards) {
+        if (itemCheck(InventoryChanges, MissionRewards, reward.name)) continue;
 
-        if (mod) {
-            addRewardResponse(InventoryChanges, MissionRewards, i.name, mod, "RawUpgrades");
-        } else if (gear) {
-            addRewardResponse(InventoryChanges, MissionRewards, i.name, gear, "Consumables");
-        } else if (misc || resource) {
-            addRewardResponse(InventoryChanges, MissionRewards, i.name, misc || resource, "MiscItems");
-        } else if (relic) {
-            addRewardResponse(InventoryChanges, MissionRewards, i.name, relic, "MiscItems");
-        } else if (blueprint) {
-            addRewardResponse(InventoryChanges, MissionRewards, i.name, blueprint, "Recipes");
-        } else if (i.name.includes(" Endo")) {
+        if (reward.name.includes(" Endo")) {
             if (!InventoryChanges.FusionPoints) InventoryChanges.FusionPoints = 0;
-            InventoryChanges.FusionPoints += getCountFromName(i.name);
-        } else if (i.name.includes(" Credits Cache") || i.name.includes("Return: ")) {
+            InventoryChanges.FusionPoints += getCountFromName(reward.name);
+        } else if (reward.name.includes(" Credits Cache") || reward.name.includes("Return: ")) {
             if (!InventoryChanges.RegularCredits) InventoryChanges.RegularCredits = 0;
-            InventoryChanges.RegularCredits += getCountFromName(i.name);
+            InventoryChanges.RegularCredits += getCountFromName(reward.name);
         }
-    });
+    }
     return { InventoryChanges, MissionRewards };
+};
+
+const itemCheck = (
+    InventoryChanges: IMissionInventoryUpdate,
+    MissionRewards: IMissionRewardResponse[],
+    name: string
+) => {
+    const rewardCheck = {
+        RawUpgrades: modNames[name],
+        Consumables: gearNames[name],
+        MiscItems:
+            miscNames[name] ||
+            miscNames[name.replace(/\d+X\s*/, "")] ||
+            resourceNames[name] ||
+            resourceNames[name.replace(/\d+X\s*/, "")] ||
+            relicNames[name.replace("Relic", "Intact")] ||
+            relicNames[name.replace("Relic (Radiant)", "Radiant")],
+        Recipes: blueprintNames[name]
+    };
+    for (const key of Object.keys(rewardCheck) as InventoryFieldType[]) {
+        if (rewardCheck[key]) {
+            addRewardResponse(InventoryChanges, MissionRewards, name, rewardCheck[key]!, key);
+            return true;
+        }
+    }
+    return false;
 };
 
 const getCountFromName = (name: string) => {
