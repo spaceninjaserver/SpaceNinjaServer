@@ -69,6 +69,7 @@ export interface IMissionInventoryUpdate {
     RawUpgrades?: IMissionInventoryUpdateItem[];
     MiscItems?: IMissionInventoryUpdateItem[];
     Consumables?: IMissionInventoryUpdateItem[];
+    Recipes?: IMissionInventoryUpdateItem[];
     RegularCredits?: number;
     ChallengeProgress?: IMissionInventoryUpdateChallange[];
     RewardInfo?: IMissionInventoryUpdateRewardInfo;

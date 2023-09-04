@@ -163,6 +163,21 @@ const addConsumables = (inventory: IInventoryDatabaseDocument, itemsArray: Consu
     });
 };
 
+const addRecipes = (inventory: IInventoryDatabaseDocument, itemsArray: Consumable[] | undefined) => {
+    const { Recipes } = inventory;
+
+    itemsArray?.forEach(({ ItemCount, ItemType }) => {
+        const itemIndex = Recipes.findIndex(i => i.ItemType === ItemType);
+
+        if (itemIndex !== -1) {
+            Recipes[itemIndex].ItemCount += ItemCount;
+            inventory.markModified(`Recipes.${itemIndex}.ItemCount`);
+        } else {
+            Recipes.push({ ItemCount, ItemType });
+        }
+    });
+};
+
 const addMods = (inventory: IInventoryDatabaseDocument, itemsArray: RawUpgrade[] | undefined) => {
     const { RawUpgrades } = inventory;
     itemsArray?.forEach(({ ItemType, ItemCount }) => {
@@ -196,7 +211,7 @@ const gearKeys = ["Suits", "Pistols", "LongGuns", "Melee"] as const;
 type GearKeysType = (typeof gearKeys)[number];
 
 export const missionInventoryUpdate = async (data: IMissionInventoryUpdate, accountId: string) => {
-    const { RawUpgrades, MiscItems, RegularCredits, ChallengeProgress, FusionPoints, Consumables } = data;
+    const { RawUpgrades, MiscItems, RegularCredits, ChallengeProgress, FusionPoints, Consumables, Recipes } = data;
     const inventory = await getInventory(accountId);
 
     // credits
@@ -212,6 +227,7 @@ export const missionInventoryUpdate = async (data: IMissionInventoryUpdate, acco
     addMods(inventory, RawUpgrades);
     addMiscItems(inventory, MiscItems);
     addConsumables(inventory, Consumables);
+    addRecipes(inventory, Recipes);
     addChallenges(inventory, ChallengeProgress);
 
     const changedInventory = await inventory.save();

@@ -9,7 +9,7 @@ import {
 import { RawUpgrade } from "@/src/types/inventoryTypes/inventoryTypes";
 
 import missionsDropTable from "@/static/json/missions-drop-table.json";
-import { modNames, relicNames, miscNames, resourceNames, gearNames, craftNames } from "@/static/data/items";
+import { modNames, relicNames, miscNames, resourceNames, gearNames, blueprintNames } from "@/static/data/items";
 
 /*
 **** INPUT ****
@@ -69,20 +69,15 @@ const missionInventoryUpdateController: RequestHandler = async (req, res) => {
         const MissionCredits = [missionCredits, missionCredits];
         const CreditsBonus = [creditsBonus, creditsBonus];
         const TotalCredits = [totalCredits, totalCredits];
-        const FusionPoints =
-            parsedData.FusionPoints || InventoryChanges.FusionPoints
-                ? (parsedData.FusionPoints || 0) + (InventoryChanges.FusionPoints || 0)
-                : undefined;
+        const FusionPoints = (parsedData.FusionPoints || 0) + (InventoryChanges.FusionPoints || 0) || undefined;
 
         // combine reward and loot
         parsedData.RegularCredits = totalCredits;
         if (FusionPoints) parsedData.FusionPoints = FusionPoints;
-        if (InventoryChanges.RawUpgrades && !parsedData.RawUpgrades) parsedData.RawUpgrades = [];
-        InventoryChanges.RawUpgrades?.forEach(i => parsedData.RawUpgrades!.push(i));
-        if (InventoryChanges.MiscItems && !parsedData.MiscItems) parsedData.MiscItems = [];
-        InventoryChanges.MiscItems?.forEach(i => parsedData.MiscItems!.push(i));
-        if (InventoryChanges.Consumables && !parsedData.Consumables) parsedData.Consumables = [];
-        InventoryChanges.Consumables?.forEach(i => parsedData.Consumables!.push(i));
+        inventoryFields.forEach((field: InventoryFieldType) => {
+            if (InventoryChanges[field] && !parsedData[field]) parsedData[field] = [];
+            InventoryChanges[field]?.forEach(i => parsedData[field]!.push(i));
+        });
 
         const Inventory = await missionInventoryUpdate(parsedData, id);
         InventoryChanges.RawUpgrades?.forEach(
@@ -114,6 +109,9 @@ const missionInventoryUpdateController: RequestHandler = async (req, res) => {
 - [x]  InventoryChanges
 - [x]  FusionPoints
 */
+
+const inventoryFields = ["RawUpgrades", "MiscItems", "Consumables", "Recipes"] as const;
+type InventoryFieldType = (typeof inventoryFields)[number];
 
 // need reverse engineer rewardSeed, otherwise ingame displayed rotation loot will be different than added to db
 const getRewards = (
@@ -151,7 +149,8 @@ const getRewards = (
     //     { chance: 10.82, name: "Link Armor", rotation: "C" },
     //     // { chance: 10.82, name: "200 Endo", rotation: "C" },
     //     { chance: 10.82, name: "2,000,000 Credits Cache", rotation: "C" },
-    //     { chance: 7.69, name: "Health Restore (Large)", rotation: "C" }
+    //     { chance: 7.69, name: "Health Restore (Large)", rotation: "C" },
+    //     { chance: 7.69, name: "Vapor Specter Blueprint", rotation: "C" }
     // ];
     // console.log("Mission rewards:", testDrops);
     // return formatRewardsToInventoryType(testDrops);
@@ -200,20 +199,11 @@ const formatRewardsToInventoryType = (
     rewards.forEach(i => {
         const mod = modNames[i.name];
         const gear = gearNames[i.name];
-        const craft = craftNames[i.name];
+        const blueprint = blueprintNames[i.name];
         const misc = miscNames[i.name] || miscNames[i.name.replace(/\d+X\s*/, "")];
         const resource = resourceNames[i.name] || resourceNames[i.name.replace(/\d+X\s*/, "")];
         const relic =
             relicNames[i.name.replace("Relic", "Intact")] || relicNames[i.name.replace("Relic (Radiant)", "Radiant")];
-
-        // console.log({
-        //     mod,
-        //     gear,
-        //     misc,
-        //     resource,
-        //     relic,
-        //     craft
-        // });
 
         if (mod) {
             addRewardResponse(InventoryChanges, MissionRewards, i.name, mod, "RawUpgrades");
@@ -223,8 +213,8 @@ const formatRewardsToInventoryType = (
             addRewardResponse(InventoryChanges, MissionRewards, i.name, misc || resource, "MiscItems");
         } else if (relic) {
             addRewardResponse(InventoryChanges, MissionRewards, i.name, relic, "MiscItems");
-        } else if (craft) {
-            /* craft */
+        } else if (blueprint) {
+            addRewardResponse(InventoryChanges, MissionRewards, i.name, blueprint, "Recipes");
         } else if (i.name.includes(" Endo")) {
             if (!InventoryChanges.FusionPoints) InventoryChanges.FusionPoints = 0;
             InventoryChanges.FusionPoints += getCountFromName(i.name);
@@ -247,7 +237,7 @@ const addRewardResponse = (
     MissionRewards: IMissionRewardResponse[],
     ItemName: string,
     ItemType: string,
-    InventoryCategory: "MiscItems" | "RawUpgrades" | "Consumables"
+    InventoryCategory: InventoryFieldType
 ) => {
     if (!ItemType) return;
     if (!InventoryChanges[InventoryCategory]) InventoryChanges[InventoryCategory] = [];
@@ -292,7 +282,7 @@ const _missionRewardsCheckAllNamings = () => {
                 !relicNames[i.name.replace("Relic (Radiant)", "Radiant")]
             );
         })
-        .filter(i => !craftNames[i.name])
+        .filter(i => !blueprintNames[i.name])
         .filter(i => !i.name.includes(" Endo"))
         .filter(i => !i.name.includes(" Credits Cache") && !i.name.includes("Return: "));
     console.log(tempRewards);

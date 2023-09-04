@@ -19,7 +19,7 @@ export const items: MinItem[] = new Items({ category: ["All"] }).map(item => {
 
 const getNamesObj = (category: Category) =>
     new Items({ category: [category] }).reduce((acc, i) => {
-        acc[i.name!] = category !== "Mods" ? i.uniqueName! : i.uniqueName!.replace("'S", "'s");
+        acc[i.name!.replace("'S", "'s")] = i.uniqueName!;
         return acc;
     }, {} as ImportAssertions);
 
@@ -52,3 +52,9 @@ export const craftNames: ImportAssertions = Object.fromEntries(
         .map(i => [i.drops![0].type, i.uniqueName])
 );
 craftNames["Forma Blueprint"] = "/Lotus/StoreItems/Types/Items/MiscItems/Forma";
+
+export const blueprintNames: ImportAssertions = Object.fromEntries(
+    Object.keys(craftNames)
+        .filter(i => i.includes("Blueprint"))
+        .map(i => [i, craftNames[i]])
+);
