@@ -9,16 +9,7 @@ import {
 import { RawUpgrade } from "@/src/types/inventoryTypes/inventoryTypes";
 
 import missionsDropTable from "@/static/json/missions-drop-table.json";
-import {
-    modNames,
-    relicNames,
-    skinNames,
-    miscNames,
-    resourceNames,
-    gearNames,
-    arcaneNames,
-    craftNames
-} from "@/static/data/items";
+import { modNames, relicNames, miscNames, resourceNames, gearNames, craftNames } from "@/static/data/items";
 
 /*
 **** INPUT ****
@@ -88,8 +79,10 @@ const missionInventoryUpdateController: RequestHandler = async (req, res) => {
         if (FusionPoints) parsedData.FusionPoints = FusionPoints;
         if (InventoryChanges.RawUpgrades && !parsedData.RawUpgrades) parsedData.RawUpgrades = [];
         InventoryChanges.RawUpgrades?.forEach(i => parsedData.RawUpgrades!.push(i));
-        if (InventoryChanges.MiscItems && !parsedData.MiscItems) parsedData.RawUpgrades = [];
+        if (InventoryChanges.MiscItems && !parsedData.MiscItems) parsedData.MiscItems = [];
         InventoryChanges.MiscItems?.forEach(i => parsedData.MiscItems!.push(i));
+        if (InventoryChanges.Consumables && !parsedData.Consumables) parsedData.Consumables = [];
+        InventoryChanges.Consumables?.forEach(i => parsedData.Consumables!.push(i));
 
         const Inventory = await missionInventoryUpdate(parsedData, id);
         InventoryChanges.RawUpgrades?.forEach(
@@ -151,8 +144,19 @@ const getRewards = (
         drops.push(...guaranteedDrops);
     }
 
-    console.log("Mission rewards:", drops);
+    // const testDrops = [
+    //     { chance: 7.69, name: "Lith W3 Relic", rotation: "B" },
+    //     { chance: 7.69, name: "Lith W3 Relic", rotation: "B" },
+    //     { chance: 10.82, name: "2X Orokin Cell", rotation: "C" },
+    //     { chance: 10.82, name: "Link Armor", rotation: "C" },
+    //     // { chance: 10.82, name: "200 Endo", rotation: "C" },
+    //     { chance: 10.82, name: "2,000,000 Credits Cache", rotation: "C" },
+    //     { chance: 7.69, name: "Health Restore (Large)", rotation: "C" }
+    // ];
+    // console.log("Mission rewards:", testDrops);
+    // return formatRewardsToInventoryType(testDrops);
 
+    console.log("Mission rewards:", drops);
     return formatRewardsToInventoryType(drops);
 };
 
@@ -195,49 +199,76 @@ const formatRewardsToInventoryType = (
     const MissionRewards: IMissionRewardResponse[] = [];
     rewards.forEach(i => {
         const mod = modNames[i.name];
-        const skin = skinNames[i.name];
         const gear = gearNames[i.name];
-        const arcane = arcaneNames[i.name];
         const craft = craftNames[i.name];
         const misc = miscNames[i.name] || miscNames[i.name.replace(/\d+X\s*/, "")];
         const resource = resourceNames[i.name] || resourceNames[i.name.replace(/\d+X\s*/, "")];
         const relic =
-            relicNames[i.name.replace("Relic", "Exceptional")] ||
-            relicNames[i.name.replace("Relic (Radiant)", "Radiant")];
+            relicNames[i.name.replace("Relic", "Intact")] || relicNames[i.name.replace("Relic (Radiant)", "Radiant")];
+
+        // console.log({
+        //     mod,
+        //     gear,
+        //     misc,
+        //     resource,
+        //     relic,
+        //     craft
+        // });
 
         if (mod) {
-            if (!InventoryChanges.RawUpgrades) InventoryChanges.RawUpgrades = [];
-            InventoryChanges.RawUpgrades.push({ ItemType: mod, ItemCount: 1 });
-            MissionRewards.push({
-                StoreItem: mod.replace("/Lotus/", "/Lotus/StoreItems/"),
-                TypeName: mod,
-                UpgradeLevel: 0,
-                ItemCount: 1,
-                TweetText: `${i.name} (Mod)`,
-                ProductCategory: "Upgrades"
-            });
-        } else if (skin) {
-            /* skin */
+            addRewardResponse(InventoryChanges, MissionRewards, i.name, mod, "RawUpgrades");
         } else if (gear) {
-            /* gear */
-        } else if (arcane) {
-            /* arcane */
+            addRewardResponse(InventoryChanges, MissionRewards, i.name, gear, "Consumables");
+        } else if (misc || resource) {
+            addRewardResponse(InventoryChanges, MissionRewards, i.name, misc || resource, "MiscItems");
+        } else if (relic) {
+            addRewardResponse(InventoryChanges, MissionRewards, i.name, relic, "MiscItems");
         } else if (craft) {
             /* craft */
-        } else if (misc || resource) {
-            if (!InventoryChanges.MiscItems) InventoryChanges.MiscItems = [];
-            const ItemType = misc || resource;
-            const ItemCount = parseInt(i.name) || 1;
-            InventoryChanges.MiscItems.push({ ItemType, ItemCount });
-        } else if (relic) {
-            /* relic */
         } else if (i.name.includes(" Endo")) {
-            InventoryChanges.FusionPoints = parseInt(i.name);
+            if (!InventoryChanges.FusionPoints) InventoryChanges.FusionPoints = 0;
+            InventoryChanges.FusionPoints += getCountFromName(i.name);
         } else if (i.name.includes(" Credits Cache") || i.name.includes("Return: ")) {
-            InventoryChanges.RegularCredits = parseInt(i.name.replace(/ Credits Cache|Return: |,/g, ""));
+            if (!InventoryChanges.RegularCredits) InventoryChanges.RegularCredits = 0;
+            InventoryChanges.RegularCredits += getCountFromName(i.name);
         }
     });
     return { InventoryChanges, MissionRewards };
+};
+
+const getCountFromName = (name: string) => {
+    const regex = /(^(?:\d{1,3}(?:,\d{3})*(?:\.\d+)?)(\s|X))|(\s(?:\d{1,3}(?:,\d{3})*(?:\.\d+)?)$)/;
+    const countMatches = name.match(regex);
+    return countMatches ? parseInt(countMatches[0].replace(/,/g, ""), 10) : 1;
+};
+
+const addRewardResponse = (
+    InventoryChanges: IMissionInventoryUpdate,
+    MissionRewards: IMissionRewardResponse[],
+    ItemName: string,
+    ItemType: string,
+    InventoryCategory: "MiscItems" | "RawUpgrades" | "Consumables"
+) => {
+    if (!ItemType) return;
+    if (!InventoryChanges[InventoryCategory]) InventoryChanges[InventoryCategory] = [];
+    const ItemCount = getCountFromName(ItemName);
+    const TweetText = `${ItemName}`;
+
+    const existReward = InventoryChanges[InventoryCategory]!.find(j => j.ItemType === ItemType);
+    if (existReward) {
+        existReward.ItemCount += ItemCount;
+        const missionReward = MissionRewards.find(j => j.TypeName === ItemType);
+        if (missionReward) missionReward.ItemCount += ItemCount;
+    } else {
+        InventoryChanges[InventoryCategory]!.push({ ItemType, ItemCount });
+        MissionRewards.push({
+            ItemCount,
+            TweetText,
+            ProductCategory: InventoryCategory,
+            StoreItem: ItemType.replace("/Lotus/", "/Lotus/StoreItems/"),
+            TypeName: ItemType
+        });
+    }
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -250,24 +281,18 @@ const _missionRewardsCheckAllNamings = () => {
     });
     tempRewards = tempRewards
         .filter(i => !modNames[i.name])
-
-        .filter(i => !skinNames[i.name])
         .filter(i => !miscNames[i.name])
         .filter(i => !miscNames[i.name.replace(/\d+X\s*/, "")])
         .filter(i => !resourceNames[i.name])
         .filter(i => !resourceNames[i.name.replace(/\d+X\s*/, "")])
         .filter(i => !gearNames[i.name])
-        .filter(i => !arcaneNames[i.name])
-        .filter(i => !craftNames[i.name])
         .filter(i => {
-            // return true;
-            // return !relicNames[i.name.replace("Relic", "Exceptional")];
-            // console.log(i.name.replace("Relic", "Exceptional"));
             return (
-                !relicNames[i.name.replace("Relic", "Exceptional")] &&
+                !relicNames[i.name.replace("Relic", "Intact")] &&
                 !relicNames[i.name.replace("Relic (Radiant)", "Radiant")]
             );
         })
+        .filter(i => !craftNames[i.name])
         .filter(i => !i.name.includes(" Endo"))
         .filter(i => !i.name.includes(" Credits Cache") && !i.name.includes("Return: "));
     console.log(tempRewards);

@@ -68,6 +68,7 @@ export interface IMissionInventoryUpdate {
     Melee?: IMissionInventoryUpdateGear[];
     RawUpgrades?: IMissionInventoryUpdateItem[];
     MiscItems?: IMissionInventoryUpdateItem[];
+    Consumables?: IMissionInventoryUpdateItem[];
     RegularCredits?: number;
     ChallengeProgress?: IMissionInventoryUpdateChallange[];
     RewardInfo?: IMissionInventoryUpdateRewardInfo;
@@ -77,7 +78,7 @@ export interface IMissionInventoryUpdate {
 export interface IMissionRewardResponse {
     StoreItem?: string;
     TypeName: string;
-    UpgradeLevel: number;
+    UpgradeLevel?: number;
     ItemCount: number;
     TweetText: string;
     ProductCategory: string;

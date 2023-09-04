@@ -7,6 +7,7 @@ import { SlotType } from "@/src/types/purchaseTypes";
 import { IWeaponResponse } from "@/src/types/inventoryTypes/weaponTypes";
 import {
     ChallengeProgress,
+    Consumable,
     CrewShipSalvagedWeaponSkin,
     FlavourItem,
     IInventoryDatabaseDocument,
@@ -147,6 +148,21 @@ const addMiscItems = (inventory: IInventoryDatabaseDocument, itemsArray: MiscIte
     });
 };
 
+const addConsumables = (inventory: IInventoryDatabaseDocument, itemsArray: Consumable[] | undefined) => {
+    const { Consumables } = inventory;
+
+    itemsArray?.forEach(({ ItemCount, ItemType }) => {
+        const itemIndex = Consumables.findIndex(i => i.ItemType === ItemType);
+
+        if (itemIndex !== -1) {
+            Consumables[itemIndex].ItemCount += ItemCount;
+            inventory.markModified(`Consumables.${itemIndex}.ItemCount`);
+        } else {
+            Consumables.push({ ItemCount, ItemType });
+        }
+    });
+};
+
 const addMods = (inventory: IInventoryDatabaseDocument, itemsArray: RawUpgrade[] | undefined) => {
     const { RawUpgrades } = inventory;
     itemsArray?.forEach(({ ItemType, ItemCount }) => {
@@ -180,13 +196,14 @@ const gearKeys = ["Suits", "Pistols", "LongGuns", "Melee"] as const;
 type GearKeysType = (typeof gearKeys)[number];
 
 export const missionInventoryUpdate = async (data: IMissionInventoryUpdate, accountId: string) => {
-    const { RawUpgrades, MiscItems, RegularCredits, ChallengeProgress } = data;
+    const { RawUpgrades, MiscItems, RegularCredits, ChallengeProgress, FusionPoints, Consumables } = data;
     const inventory = await getInventory(accountId);
-
-    // TODO - multipliers logic for mission reward (looted comes multiplied)
 
     // credits
     inventory.RegularCredits += RegularCredits || 0;
+
+    // endo
+    inventory.FusionPoints += FusionPoints || 0;
 
     // gear exp
     gearKeys.forEach((key: GearKeysType) => addGearExpByCategory(inventory, data[key], key));
@@ -194,6 +211,7 @@ export const missionInventoryUpdate = async (data: IMissionInventoryUpdate, acco
     // other
     addMods(inventory, RawUpgrades);
     addMiscItems(inventory, MiscItems);
+    addConsumables(inventory, Consumables);
     addChallenges(inventory, ChallengeProgress);
 
     const changedInventory = await inventory.save();
