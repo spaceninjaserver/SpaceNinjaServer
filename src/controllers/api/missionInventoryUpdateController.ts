@@ -65,8 +65,6 @@ const missionInventoryUpdateController: RequestHandler = async (req, res) => {
     const [data] = String(req.body).split("\n");
     const id = req.query.accountId as string;
 
-    // TODO - salt check
-
     try {
         const parsedData = JSON.parse(data) as IMissionInventoryUpdate;
         if (typeof parsedData !== "object" || parsedData === null) throw new Error("Invalid data format");
@@ -124,47 +122,53 @@ const missionInventoryUpdateController: RequestHandler = async (req, res) => {
 - [x]  FusionPoints
 */
 
+// need reverse engineer rewardSeed, otherwise ingame displayed rotation loot will be different than added to db
 const getRewards = (
     rewardInfo: IMissionInventoryUpdateRewardInfo | undefined
 ): { InventoryChanges: IMissionInventoryUpdate; MissionRewards: IMissionRewardResponse[] } => {
     if (!rewardInfo) return { InventoryChanges: {}, MissionRewards: [] };
 
-    // TODO - add Rotation logic
-    // no data for rotation, need reverse engineer rewardSeed, otherwise ingame displayed rotation loot will be different than added to db
-
-    // "RewardInfo": {
-    //     "node": "SolNode39",
-    //     "rewardTier": 1,
-    //     "nightmareMode": false,
-    //     "useVaultManifest": false,
-    //     "EnemyCachesFound": 0,
-    //     "toxinOk": true,
-    //     "lostTargetWave": 0,
-    //     "defenseTargetCount": 1,
-    //     "EOM_AFK": 0,
-    //     "rewardQualifications": "11",
-    //     "PurgatoryRewardQualifications": "",
-    //     "rewardSeed": -5604904486637266000
-    // },
-
     const rewards = (missionsDropTable as { [key: string]: IReward[] })[rewardInfo.node];
-
     if (!rewards) return { InventoryChanges: {}, MissionRewards: [] };
 
-    // Separate guaranteed and chance drops
-    const guaranteedDrops: IReward[] = [];
-    const chanceDrops: IReward[] = [];
-    for (const reward of rewards) {
-        if (reward.chance === 100) guaranteedDrops.push(reward);
-        else chanceDrops.push(reward);
+    const rotationCount = rewardInfo.rewardQualifications?.length || 0;
+    const rotations = getRotations(rotationCount);
+    const drops: IReward[] = [];
+    for (const rotation of rotations) {
+        const rotationRewards = rewards.filter(i => i.rotation === rotation);
+
+        // Separate guaranteed and chance drops
+        const guaranteedDrops: IReward[] = [];
+        const chanceDrops: IReward[] = [];
+        for (const reward of rotationRewards) {
+            if (reward.chance === 100) guaranteedDrops.push(reward);
+            else chanceDrops.push(reward);
+        }
+
+        const randomDrop = getRandomRewardByChance(chanceDrops);
+        if (randomDrop) guaranteedDrops.push(randomDrop);
+
+        drops.push(...guaranteedDrops);
     }
 
-    const randomDrop = getRandomRewardByChance(chanceDrops);
-    if (randomDrop) guaranteedDrops.push(randomDrop);
+    console.log("Mission rewards:", drops);
 
-    console.log("Mission rewards:", guaranteedDrops);
+    return formatRewardsToInventoryType(drops);
+};
 
-    return formatRewardsToInventoryType(guaranteedDrops);
+const getRotations = (rotationCount: number): (string | undefined)[] => {
+    if (rotationCount === 0) return [undefined];
+
+    const rotations = ["A", "B", "C"];
+    let rotationIndex = 0;
+    const rotatedValues = [];
+
+    for (let i = 1; i <= rotationCount; i++) {
+        rotatedValues.push(rotations[rotationIndex]);
+        rotationIndex = (rotationIndex + 1) % 3;
+    }
+
+    return rotatedValues;
 };
 
 const getRandomRewardByChance = (data: IReward[] | undefined): IReward | undefined => {
