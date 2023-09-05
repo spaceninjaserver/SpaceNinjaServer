@@ -6,11 +6,10 @@ import {
     IMissionRewardResponse,
     IReward
 } from "@/src/types/missionInventoryUpdateType";
-import { RawUpgrade } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IRawUpgrade } from "@/src/types/inventoryTypes/inventoryTypes";
 
 import missionsDropTable from "@/static/json/missions-drop-table.json";
 import { modNames, relicNames, miscNames, resourceNames, gearNames, blueprintNames } from "@/static/data/items";
-
 /*
 **** INPUT ****
 - [ ]  crossPlaySetting
@@ -36,13 +35,13 @@ import { modNames, relicNames, miscNames, resourceNames, gearNames, blueprintNam
 - [ ]  hosts
 - [x]  ChallengeProgress
 - [ ]  SeasonChallengeHistory
-- [ ]  PS
+- [ ]  PS (Passive anti-cheat data which includes your username, module list, process list, and system name.)
 - [ ]  ActiveDojoColorResearch
 - [ ]  RewardInfo
 - [ ]  ReceivedCeremonyMsg
 - [ ]  LastCeremonyResetDate
-- [ ]  MissionPTS
-- [ ]  RepHash
+- [ ]  MissionPTS (Used to validate the mission/alive time above.)
+- [ ]  RepHash (A hash from the replication manager/RepMgr Unknown what it does.)
 - [ ]  EndOfMatchUpload
 - [ ]  ObjectiveReached
 - [ ]  FpsAvg
@@ -53,7 +52,6 @@ import { modNames, relicNames, miscNames, resourceNames, gearNames, blueprintNam
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 const missionInventoryUpdateController: RequestHandler = async (req, res) => {
-    const [data] = String(req.body).split("\n");
     const id = req.query.accountId as string;
 
     try {
@@ -81,7 +79,7 @@ const missionInventoryUpdateController: RequestHandler = async (req, res) => {
 
         const Inventory = await missionInventoryUpdate(parsedData, id);
         InventoryChanges.RawUpgrades?.forEach(
-            (i: RawUpgrade) => (i.LastAdded = Inventory.RawUpgrades.find(j => j.ItemType === i.ItemType)?.LastAdded)
+            (i: IRawUpgrade) => (i.LastAdded = Inventory.RawUpgrades.find(j => j.ItemType === i.ItemType)?.LastAdded)
         );
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const InventoryJson = JSON.stringify(Inventory);

@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { Types } from "mongoose";
-import { Oid } from "@/src/types/commonTypes";
+import { IOid } from "@/src/types/commonTypes";
 
 export interface IShip {
     ShipOwnerId: Types.ObjectId;
@@ -10,8 +8,9 @@ export interface IShip {
 }
 
 export interface IShipClassResponse extends IShipClassDatabase {
-    ShipId: Oid;
+    ShipId: IOid;
 }
+
 export interface IShipClassDatabase {
     Rooms: IRoomsClass[];
     Features: string[];

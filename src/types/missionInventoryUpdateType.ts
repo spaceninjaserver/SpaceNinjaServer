@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Oid } from "./commonTypes";
-import { Date } from "./inventoryTypes/inventoryTypes";
+import { IOid } from "./commonTypes";
+import { IDate } from "./inventoryTypes/inventoryTypes";
 
 export interface IMissionInventoryUpdateGear {
     ItemType: string;
     ItemName: string;
-    ItemId: Oid;
+    ItemId: IOid;
     XP: number;
     UpgradeVer: number;
     Features: number;
@@ -13,7 +13,7 @@ export interface IMissionInventoryUpdateGear {
     CustomizationSlotPurchases: number;
     ModSlotPurchases: number;
     FocusLens: string;
-    Expiry: Date;
+    Expiry: IDate;
     Polarity: any[];
     Configs: any[];
     ModularParts: any[];
@@ -22,7 +22,7 @@ export interface IMissionInventoryUpdateGear {
     UpgradeFingerprint: string;
     OffensiveUpgrade: string;
     DefensiveUpgrade: string;
-    UpgradesExpiry: Date;
+    UpgradesExpiry: IDate;
     ArchonCrystalUpgrades: any[];
 }
 
@@ -32,10 +32,10 @@ export interface IMissionInventoryUpdateItem {
 }
 
 export interface IMissionInventoryUpdateCard extends IMissionInventoryUpdateItem {
-    ItemId: Oid;
+    ItemId: IOid;
     UpgradeFingerprint: string;
     PendingRerollFingerprint: string;
-    LastAdded: Oid;
+    LastAdded: IOid;
 }
 
 export interface IMissionInventoryUpdateChallange {

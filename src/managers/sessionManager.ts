@@ -1,10 +1,10 @@
-import { Session, FindSessionRequest } from "@/src/types/session";
+import { ISession, IFindSessionRequest } from "@/src/types/session";
 
-const sessions: Session[] = [];
+const sessions: ISession[] = [];
 
-function createNewSession(sessionData: Session, Creator: string): Session {
+function createNewSession(sessionData: ISession, Creator: string): ISession {
     const sessionId = getNewSessionID();
-    const newSession: Session = {
+    const newSession: ISession = {
         sessionId,
         creatorId: Creator,
         maxPlayers: sessionData.maxPlayers || 4,
@@ -35,15 +35,15 @@ function createNewSession(sessionData: Session, Creator: string): Session {
     return newSession;
 }
 
-function getAllSessions(): Session[] {
+function getAllSessions(): ISession[] {
     return sessions;
 }
 
-function getSessionByID(sessionId: string): Session | undefined {
+function getSessionByID(sessionId: string): ISession | undefined {
     return sessions.find(session => session.sessionId === sessionId);
 }
 
-function getSession(sessionIdOrRequest: string | FindSessionRequest): any[] {
+function getSession(sessionIdOrRequest: string | IFindSessionRequest): any[] {
     if (typeof sessionIdOrRequest === "string") {
         const session = sessions.find(session => session.sessionId === sessionIdOrRequest);
         if (session) {
@@ -58,10 +58,10 @@ function getSession(sessionIdOrRequest: string | FindSessionRequest): any[] {
         return [];
     }
 
-    const request = sessionIdOrRequest as FindSessionRequest;
+    const request = sessionIdOrRequest as IFindSessionRequest;
     const matchingSessions = sessions.filter(session => {
         for (const key in request) {
-            if (key !== "eloRating" && key !== "queryId" && request[key] !== session[key as keyof Session]) {
+            if (key !== "eloRating" && key !== "queryId" && request[key] !== session[key as keyof ISession]) {
                 return false;
             }
         }
@@ -74,7 +74,7 @@ function getSession(sessionIdOrRequest: string | FindSessionRequest): any[] {
     }));
 }
 
-function getSessionByCreatorID(creatorId: string): Session | undefined {
+function getSessionByCreatorID(creatorId: string): ISession | undefined {
     return sessions.find(session => session.creatorId === creatorId);
 }
 
