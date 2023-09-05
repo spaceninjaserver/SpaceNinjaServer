@@ -15,6 +15,7 @@ import {
     IRawUpgrade
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IMissionInventoryUpdate, IMissionInventoryUpdateGear } from "../types/missionInventoryUpdateType";
+import { IGenericUpdate } from "../types/genericUpdate";
 
 const createInventory = async (accountOwnerId: Types.ObjectId) => {
     try {

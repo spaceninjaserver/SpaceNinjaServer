@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Document, Types } from "mongoose";
 import { IOid } from "../commonTypes";
 import { IAbilityOverride, IColor, FocusSchool, IPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
@@ -33,7 +34,7 @@ export interface IInventoryResponse {
     DailyFocus: number;
     GiftsRemaining: number;
     HandlerPoints: number;
-    MiscItems: IConsumable[];
+    MiscItems: IMiscItem[];
     ChallengesFixVersion: number;
     ChallengeProgress: IChallengeProgress[];
     RawUpgrades: IRawUpgrade[];
@@ -319,7 +320,7 @@ export interface ICrewShipSalvageBinClass {
 export interface ICrewShipSalvagedWeaponSkin {
     ItemType: string;
     UpgradeFingerprint?: string;
-    ItemId?: Oid;
+    ItemId?: IOid;
     _id?: Types.ObjectId;
 }
 
@@ -931,7 +932,7 @@ export interface IProgress {
 export interface IRawUpgrade {
     ItemType: string;
     ItemCount: number;
-    LastAdded?: Oid;
+    LastAdded?: IOid;
 }
 
 export interface IScoop {

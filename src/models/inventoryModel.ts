@@ -7,7 +7,7 @@ import {
     IBooster
 } from "../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../types/commonTypes";
-import { ISuitDatabase, ISuitDocument } from "@/src/types/inventoryTypes/SuitTypes";
+import { ISuitDatabase } from "@/src/types/inventoryTypes/SuitTypes";
 import { IWeaponDatabase } from "@/src/types/inventoryTypes/weaponTypes";
 
 const abilityOverrideSchema = new Schema({
@@ -85,7 +85,7 @@ const RawUpgrades = new Schema({
 RawUpgrades.set("toJSON", {
     transform(_document, returnedObject) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-        returnedObject.LastAdded = { $oid: returnedObject._id.toString() } satisfies Oid;
+        returnedObject.LastAdded = { $oid: returnedObject._id.toString() } satisfies IOid;
         delete returnedObject._id;
         delete returnedObject.__v;
     }
@@ -99,7 +99,7 @@ const Upgrade = new Schema({
 Upgrade.set("toJSON", {
     transform(_document, returnedObject) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-        returnedObject.ItemId = { $oid: returnedObject._id.toString() } satisfies Oid;
+        returnedObject.ItemId = { $oid: returnedObject._id.toString() } satisfies IOid;
         delete returnedObject._id;
         delete returnedObject.__v;
     }

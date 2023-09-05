@@ -52,6 +52,7 @@ import { modNames, relicNames, miscNames, resourceNames, gearNames, blueprintNam
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 const missionInventoryUpdateController: RequestHandler = async (req, res) => {
+    const [data] = String(req.body).split("\n");
     const id = req.query.accountId as string;
 
     try {
