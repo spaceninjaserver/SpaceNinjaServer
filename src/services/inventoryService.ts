@@ -145,7 +145,7 @@ const addGearExpByCategory = (
     const category = inventory[categoryName];
 
     gearArray?.forEach(({ ItemId, XP }) => {
-        const itemIndex = category.findIndex(i => i._id?.equals(ItemId.$oid));
+        const itemIndex = category.findIndex(item => item._id?.equals(ItemId.$oid));
         const item = category[itemIndex];
 
         if (itemIndex !== -1 && item.XP != undefined) {
@@ -159,7 +159,7 @@ const addMiscItems = (inventory: IInventoryDatabaseDocument, itemsArray: IMiscIt
     const { MiscItems } = inventory;
 
     itemsArray?.forEach(({ ItemCount, ItemType }) => {
-        const itemIndex = MiscItems.findIndex(i => i.ItemType === ItemType);
+        const itemIndex = MiscItems.findIndex(miscItem => miscItem.ItemType === ItemType);
 
         if (itemIndex !== -1) {
             MiscItems[itemIndex].ItemCount += ItemCount;
@@ -262,7 +262,7 @@ export const addBooster = async (ItemType: string, time: number, accountId: stri
     const inventory = await getInventory(accountId);
     const { Boosters } = inventory;
 
-    const itemIndex = Boosters.findIndex(i => i.ItemType === ItemType);
+    const itemIndex = Boosters.findIndex(booster => booster.ItemType === ItemType);
 
     if (itemIndex !== -1) {
         const existingBooster = Boosters[itemIndex];
@@ -295,7 +295,7 @@ export const upgradeMod = async (
         parsedUpgradeFingerprint.lvl += LevelDiff;
         const stringifiedUpgradeFingerprint = JSON.stringify(parsedUpgradeFingerprint);
 
-        let itemIndex = Upgrades.findIndex(i => i._id?.equals(ItemId!.$oid));
+        let itemIndex = Upgrades.findIndex(upgrade => upgrade._id?.equals(ItemId!.$oid));
 
         if (itemIndex !== -1) {
             Upgrades[itemIndex].UpgradeFingerprint = stringifiedUpgradeFingerprint;
@@ -307,7 +307,7 @@ export const upgradeMod = async (
                     ItemType
                 }) - 1;
 
-            const rawItemIndex = RawUpgrades.findIndex(i => i.ItemType === ItemType);
+            const rawItemIndex = RawUpgrades.findIndex(rawUpgrade => rawUpgrade.ItemType === ItemType);
             RawUpgrades[rawItemIndex].ItemCount--;
             if (RawUpgrades[rawItemIndex].ItemCount > 0) {
                 inventory.markModified(`RawUpgrades.${rawItemIndex}.UpgradeFingerprint`);

@@ -2,6 +2,8 @@
 import { IOid } from "./commonTypes";
 import { IDate } from "./inventoryTypes/inventoryTypes";
 
+export const inventoryFields = ["RawUpgrades", "MiscItems", "Consumables", "Recipes"] as const;
+export type IInventoryFieldType = (typeof inventoryFields)[number];
 export interface IMissionInventoryUpdateGear {
     ItemType: string;
     ItemName: string;
