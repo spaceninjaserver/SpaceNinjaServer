@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { Document, Types } from "mongoose";
-import { Oid } from "../commonTypes";
-import { AbilityOverride, Color, FocusSchool, Polarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { IOid } from "../commonTypes";
+import { IAbilityOverride, IColor, FocusSchool, IPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { ISuitDatabase } from "@/src/types/inventoryTypes/SuitTypes";
-import { OperatorLoadOutSigcol, IWeaponDatabase } from "@/src/types/inventoryTypes/weaponTypes";
+import { IOperatorLoadOutSigcol, IWeaponDatabase } from "@/src/types/inventoryTypes/weaponTypes";
 
 export interface IInventoryDatabase extends IInventoryResponse {
     accountOwnerId: Types.ObjectId;
@@ -20,14 +18,14 @@ export interface IInventoryResponse {
     PremiumCredits: number;
     PremiumCreditsFree: number;
     FusionPoints: number;
-    SuitBin: CrewShipSalvageBinClass;
-    WeaponBin: CrewShipSalvageBinClass;
-    SentinelBin: CrewShipSalvageBinClass;
-    SpaceSuitBin: CrewShipSalvageBinClass;
-    SpaceWeaponBin: CrewShipSalvageBinClass;
-    PvpBonusLoadoutBin: CrewMemberBinClass;
-    PveBonusLoadoutBin: CrewShipSalvageBinClass;
-    RandomModBin: CrewShipSalvageBinClass;
+    SuitBin: ICrewShipSalvageBinClass;
+    WeaponBin: ICrewShipSalvageBinClass;
+    SentinelBin: ICrewShipSalvageBinClass;
+    SpaceSuitBin: ICrewShipSalvageBinClass;
+    SpaceWeaponBin: ICrewShipSalvageBinClass;
+    PvpBonusLoadoutBin: ICrewMemberBinClass;
+    PveBonusLoadoutBin: ICrewShipSalvageBinClass;
+    RandomModBin: ICrewShipSalvageBinClass;
     TradesRemaining: number;
     DailyAffiliation: number;
     DailyAffiliationPvp: number;
@@ -35,137 +33,137 @@ export interface IInventoryResponse {
     DailyFocus: number;
     GiftsRemaining: number;
     HandlerPoints: number;
-    MiscItems: Consumable[];
+    MiscItems: IConsumable[];
     ChallengesFixVersion: number;
-    ChallengeProgress: ChallengeProgress[];
-    RawUpgrades: RawUpgrade[];
+    ChallengeProgress: IChallengeProgress[];
+    RawUpgrades: IRawUpgrade[];
     ReceivedStartingGear: boolean;
     Suits: ISuitDatabase[];
     LongGuns: IWeaponDatabase[];
     Pistols: IWeaponDatabase[];
     Melee: IWeaponDatabase[];
-    Ships: Ship[];
-    QuestKeys: QuestKey[];
-    FlavourItems: FlavourItem[];
-    Scoops: Scoop[];
+    Ships: IShip[];
+    QuestKeys: IQuestKey[];
+    FlavourItems: IFlavourItem[];
+    Scoops: IScoop[];
     TrainingRetriesLeft: number;
-    LoadOutPresets: LoadOutPresets;
-    CurrentLoadOutIds: Array<any[] | Oid>;
-    Missions: Mission[];
+    LoadOutPresets: ILoadOutPresets;
+    CurrentLoadOutIds: Array<any[] | IOid>;
+    Missions: IMission[];
     RandomUpgradesIdentified: number;
     LastRegionPlayed: string;
-    XPInfo: EmailItem[];
-    Recipes: Consumable[];
-    WeaponSkins: WeaponSkin[];
-    PendingRecipes: PendingRecipe[];
+    XPInfo: IEmailItem[];
+    Recipes: IConsumable[];
+    WeaponSkins: IWeaponSkin[];
+    PendingRecipes: IPendingRecipe[];
     TrainingDate: Date;
     PlayerLevel: number;
-    Upgrades: CrewShipSalvagedWeaponSkin[];
+    Upgrades: ICrewShipSalvagedWeaponSkin[];
     EquippedGear: string[];
     DeathMarks: string[];
-    FusionTreasures: FusionTreasure[];
-    WebFlags: WebFlags;
+    FusionTreasures: IFusionTreasure[];
+    WebFlags: IWebFlags;
     CompletedAlerts: string[];
-    Consumables: Consumable[];
-    LevelKeys: Consumable[];
-    TauntHistory: TauntHistory[];
+    Consumables: IConsumable[];
+    LevelKeys: IConsumable[];
+    TauntHistory: ITauntHistory[];
     StoryModeChoice: string;
-    PeriodicMissionCompletions: PeriodicMissionCompletion[];
-    KubrowPetEggs: KubrowPetEgg[];
-    LoreFragmentScans: LoreFragmentScan[];
+    PeriodicMissionCompletions: IPeriodicMissionCompletion[];
+    KubrowPetEggs: IKubrowPetEgg[];
+    LoreFragmentScans: ILoreFragmentScan[];
     EquippedEmotes: string[];
-    PendingTrades: PendingTrade[];
-    Boosters: Booster[];
+    PendingTrades: IPendingTrade[];
+    Boosters: IBooster[];
     ActiveDojoColorResearch: string;
-    SentientSpawnChanceBoosters: SentientSpawnChanceBoosters;
-    Affiliations: Affiliation[];
+    SentientSpawnChanceBoosters: ISentientSpawnChanceBoosters;
+    Affiliations: IAffiliation[];
     QualifyingInvasions: any[];
     FactionScores: number[];
-    SpaceSuits: Space[];
-    SpaceMelee: Space[];
-    SpaceGuns: SpaceGun[];
+    SpaceSuits: ISpace[];
+    SpaceMelee: ISpace[];
+    SpaceGuns: ISpaceGun[];
     ArchwingEnabled: boolean;
     PendingSpectreLoadouts: any[];
-    SpectreLoadouts: SpectreLoadout[];
-    SentinelWeapons: SentinelWeapon[];
-    Sentinels: Sentinel[];
-    EmailItems: EmailItem[];
+    SpectreLoadouts: ISpectreLoadout[];
+    SentinelWeapons: ISentinelWeapon[];
+    Sentinels: ISentinel[];
+    EmailItems: IEmailItem[];
     CompletedSyndicates: string[];
-    FocusXP: FocusXP;
+    FocusXP: IFocusXP;
     Wishlist: string[];
-    Alignment: Alignment;
+    Alignment: IAlignment;
     CompletedSorties: string[];
-    LastSortieReward: LastSortieReward[];
-    Drones: Drone[];
-    StepSequencers: StepSequencer[];
+    LastSortieReward: ILastSortieReward[];
+    Drones: IDrone[];
+    StepSequencers: IStepSequencer[];
     ActiveAvatarImageType: string;
-    KubrowPets: KubrowPet[];
-    ShipDecorations: Consumable[];
-    OperatorAmpBin: CrewShipSalvageBinClass;
+    KubrowPets: IKubrowPet[];
+    ShipDecorations: IConsumable[];
+    OperatorAmpBin: ICrewShipSalvageBinClass;
     DailyAffiliationCetus: number;
     DailyAffiliationQuills: number;
-    DiscoveredMarkers: DiscoveredMarker[];
-    CompletedJobs: CompletedJob[];
+    DiscoveredMarkers: IDiscoveredMarker[];
+    CompletedJobs: ICompletedJob[];
     FocusAbility: string;
-    FocusUpgrades: FocusUpgrade[];
-    OperatorAmps: OperatorAmp[];
+    FocusUpgrades: IFocusUpgrade[];
+    OperatorAmps: IOperatorAmp[];
     HasContributedToDojo: boolean;
     HWIDProtectEnabled: boolean;
-    KubrowPetPrints: KubrowPetPrint[];
-    AlignmentReplay: Alignment;
-    PersonalGoalProgress: PersonalGoalProgress[];
+    KubrowPetPrints: IKubrowPetPrint[];
+    AlignmentReplay: IAlignment;
+    PersonalGoalProgress: IPersonalGoalProgress[];
     DailyAffiliationSolaris: number;
-    SpecialItems: SpecialItem[];
+    SpecialItems: ISpecialItem[];
     ThemeStyle: string;
     ThemeBackground: string;
     ThemeSounds: string;
     BountyScore: number;
-    ChallengeInstanceStates: ChallengeInstanceState[];
+    ChallengeInstanceStates: IChallengeInstanceState[];
     LoginMilestoneRewards: string[];
-    OperatorLoadOuts: OperatorLoadOut[];
+    OperatorLoadOuts: IOperatorLoadOut[];
     DailyAffiliationVentkids: number;
     DailyAffiliationVox: number;
     RecentVendorPurchases: Array<number | string>;
-    Hoverboards: Hoverboard[];
+    Hoverboards: IHoverboard[];
     NodeIntrosCompleted: string[];
-    CompletedJobChains: CompletedJobChain[];
-    SeasonChallengeHistory: SeasonChallengeHistory[];
-    MoaPets: MoaPet[];
+    CompletedJobChains: ICompletedJobChain[];
+    SeasonChallengeHistory: ISeasonChallengeHistory[];
+    MoaPets: IMoaPet[];
     EquippedInstrument: string;
-    InvasionChainProgress: InvasionChainProgress[];
-    DataKnives: DataKnife[];
-    NemesisHistory: NemesisHistory[];
+    InvasionChainProgress: IInvasionChainProgress[];
+    DataKnives: IDataKnife[];
+    NemesisHistory: INemesisHistory[];
     LastNemesisAllySpawnTime: Date;
-    Settings: Settings;
-    PersonalTechProjects: PersonalTechProject[];
-    CrewShips: CrewShip[];
-    CrewShipSalvageBin: CrewShipSalvageBinClass;
-    PlayerSkills: PlayerSkills;
-    CrewShipAmmo: Consumable[];
-    CrewShipSalvagedWeaponSkins: CrewShipSalvagedWeaponSkin[];
-    CrewShipWeapons: CrewShipWeapon[];
-    CrewShipSalvagedWeapons: CrewShipWeapon[];
-    CrewShipWeaponSkins: CrewShipSalvagedWeaponSkin[];
+    Settings: ISettings;
+    PersonalTechProjects: IPersonalTechProject[];
+    CrewShips: ICrewShip[];
+    CrewShipSalvageBin: ICrewShipSalvageBinClass;
+    PlayerSkills: IPlayerSkills;
+    CrewShipAmmo: IConsumable[];
+    CrewShipSalvagedWeaponSkins: ICrewShipSalvagedWeaponSkin[];
+    CrewShipWeapons: ICrewShipWeapon[];
+    CrewShipSalvagedWeapons: ICrewShipWeapon[];
+    CrewShipWeaponSkins: ICrewShipSalvagedWeaponSkin[];
     TradeBannedUntil: Date;
     PlayedParkourTutorial: boolean;
     SubscribedToEmailsPersonalized: number;
-    MechBin: CrewMemberBinClass;
+    MechBin: ICrewMemberBinClass;
     DailyAffiliationEntrati: number;
     DailyAffiliationNecraloid: number;
-    MechSuits: MechSuit[];
-    InfestedFoundry: InfestedFoundry;
+    MechSuits: IMechSuit[];
+    InfestedFoundry: IInfestedFoundry;
     BlessingCooldown: Date;
-    CrewMemberBin: CrewMemberBinClass;
-    CrewShipHarnesses: CrewShipHarness[];
-    CrewShipRawSalvage: Consumable[];
-    CrewMembers: CrewMember[];
-    AdultOperatorLoadOuts: AdultOperatorLoadOut[];
-    LotusCustomization: LotusCustomization;
+    CrewMemberBin: ICrewMemberBinClass;
+    CrewShipHarnesses: ICrewShipHarness[];
+    CrewShipRawSalvage: IConsumable[];
+    CrewMembers: ICrewMember[];
+    AdultOperatorLoadOuts: IAdultOperatorLoadOut[];
+    LotusCustomization: ILotusCustomization;
     UseAdultOperatorLoadout: boolean;
     DailyAffiliationZariman: number;
     NemesisAbandonedRewards: string[];
     DailyAffiliationKahl: number;
-    LastInventorySync: Oid;
+    LastInventorySync: IOid;
     NextRefill: Date;
     ActiveLandscapeTraps: any[];
     EvolutionProgress: any[];
@@ -174,26 +172,26 @@ export interface IInventoryResponse {
     Quests: any[];
     Robotics: any[];
     UsedDailyDeals: any[];
-    LibraryPersonalProgress: LibraryPersonalProgress[];
-    CollectibleSeries: CollectibleSery[];
-    LibraryAvailableDailyTaskInfo: LibraryAvailableDailyTaskInfo;
+    LibraryPersonalProgress: ILibraryPersonalProgress[];
+    CollectibleSeries: ICollectibleSery[];
+    LibraryAvailableDailyTaskInfo: ILibraryAvailableDailyTaskInfo;
     HasResetAccount: boolean;
-    PendingCoupon: PendingCoupon;
+    PendingCoupon: IPendingCoupon;
     Harvestable: boolean;
     DeathSquadable: boolean;
 }
 
-export interface AdultOperatorLoadOut {
+export interface IAdultOperatorLoadOut {
     Skins: string[];
-    attcol: Color;
-    eyecol: Color;
-    facial: Color;
-    pricol: Color;
+    attcol: IColor;
+    eyecol: IColor;
+    facial: IColor;
+    pricol: IColor;
     Upgrades?: string[];
-    ItemId: Oid;
+    ItemId: IOid;
 }
 
-export interface Affiliation {
+export interface IAffiliation {
     Initiated?: boolean;
     Standing: number;
     Title?: number;
@@ -202,253 +200,254 @@ export interface Affiliation {
     Tag: string;
 }
 
-export interface Alignment {
+export interface IAlignment {
     Wisdom: number;
     Alignment: number;
 }
 
-export interface Date {
+export interface IDate {
     $date: { $numberLong: string };
 }
 
-export interface Booster {
+export interface IBooster {
     ExpiryDate: number;
     ItemType: string;
 }
 
-export interface ChallengeInstanceState {
-    id: Oid;
+export interface IChallengeInstanceState {
+    id: IOid;
     Progress: number;
-    params: Param[];
+    params: IParam[];
     IsRewardCollected: boolean;
 }
 
-export interface Param {
+export interface IParam {
     n: string;
     v: string;
 }
 
-export interface ChallengeProgress {
+export interface IChallengeProgress {
     Progress: number;
     Name: string;
     Completed?: string[];
 }
 
-export interface CollectibleSery {
+export interface ICollectibleSery {
     CollectibleType: string;
     Count: number;
     Tracking: string;
     ReqScans: number;
-    IncentiveStates: IncentiveState[];
+    IncentiveStates: IIncentiveState[];
 }
 
-export interface IncentiveState {
+export interface IIncentiveState {
     threshold: number;
     complete: boolean;
     sent: boolean;
 }
 
-export interface CompletedJobChain {
+export interface ICompletedJobChain {
     LocationTag: string;
     Jobs: string[];
 }
 
-export interface CompletedJob {
+export interface ICompletedJob {
     JobId: string;
     StageCompletions: number[];
 }
 
-export interface Consumable {
+export interface IConsumable {
     ItemCount: number;
     ItemType: string;
 }
 
-export interface CrewMemberBinClass {
+export interface ICrewMemberBinClass {
     Slots: number;
 }
 
-export interface CrewMember {
+export interface ICrewMember {
     ItemType: string;
     NemesisFingerprint: number;
     Seed: number;
     HireDate: Date;
     AssignedRole: number;
-    SkillEfficiency: SkillEfficiency;
+    SkillEfficiency: ISkillEfficiency;
     WeaponConfigIdx: number;
-    WeaponId: Oid;
+    WeaponId: IOid;
     XP: number;
     PowersuitType: string;
-    Configs: CrewMemberConfig[];
+    Configs: ICrewMemberConfig[];
     SecondInCommand: boolean;
-    ItemId: Oid;
+    ItemId: IOid;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface CrewMemberConfig {}
+export interface ICrewMemberConfig {}
 
-export interface SkillEfficiency {
-    PILOTING: Combat;
-    GUNNERY: Combat;
-    ENGINEERING: Combat;
-    COMBAT: Combat;
-    SURVIVABILITY: Combat;
+export interface ISkillEfficiency {
+    PILOTING: ICombat;
+    GUNNERY: ICombat;
+    ENGINEERING: ICombat;
+    COMBAT: ICombat;
+    SURVIVABILITY: ICombat;
 }
 
-export interface Combat {
+export interface ICombat {
     Assigned: number;
 }
 
-export interface CrewShipHarness {
+export interface ICrewShipHarness {
     ItemType: string;
-    Configs: CrewShipHarnessConfig[];
+    Configs: ICrewShipHarnessConfig[];
     Features: number;
     UpgradeVer: number;
     XP: number;
-    Polarity: Polarity[];
+    Polarity: IPolarity[];
     Polarized: number;
-    ItemId: Oid;
+    ItemId: IOid;
 }
 
-export interface CrewShipHarnessConfig {
+export interface ICrewShipHarnessConfig {
     Upgrades?: string[];
 }
 
-export interface CrewShipSalvageBinClass {
+export interface ICrewShipSalvageBinClass {
     Extra: number;
     Slots: number;
 }
 
-export interface CrewShipSalvagedWeaponSkin {
+export interface ICrewShipSalvagedWeaponSkin {
     ItemType: string;
     UpgradeFingerprint?: string;
-    ItemId: Oid;
+    ItemId: IOid;
 }
 
-export interface CrewShipWeapon {
+export interface ICrewShipWeapon {
     ItemType: string;
     UpgradeType?: string;
     UpgradeFingerprint?: string;
-    Configs?: CrewShipHarnessConfig[];
+    Configs?: ICrewShipHarnessConfig[];
     UpgradeVer?: number;
-    ItemId: Oid;
+    ItemId: IOid;
 }
 
-export interface CrewShip {
+export interface ICrewShip {
     ItemType: string;
-    Configs: CrewShipConfig[];
-    Weapon: CrewshipWeapon;
-    Customization: Customization;
+    Configs: ICrewShipConfig[];
+    Weapon: ICrewshipWeapon;
+    Customization: ICustomization;
     ItemName: string;
-    RailjackImage: FlavourItem;
-    CrewMembers: CrewMembers;
-    ItemId: Oid;
+    RailjackImage: IFlavourItem;
+    CrewMembers: ICrewMembers;
+    ItemId: IOid;
 }
 
-export interface CrewShipConfig {
+export interface ICrewShipConfig {
     Skins?: string[];
-    pricol?: Color;
+    pricol?: IColor;
 }
 
-export interface CrewMembers {
-    SLOT_A: Slot;
-    SLOT_B: Slot;
-    SLOT_C: Slot;
+export interface ICrewMembers {
+    SLOT_A: ISlot;
+    SLOT_B: ISlot;
+    SLOT_C: ISlot;
 }
 
-export interface Slot {
-    ItemId: Oid;
+export interface ISlot {
+    ItemId: IOid;
 }
 
-export interface Customization {
-    CrewshipInterior: Terior;
+export interface ICustomization {
+    CrewshipInterior: ITerior;
 }
 
-export interface Terior {
+export interface ITerior {
     SkinFlavourItem: string;
-    Colors: Color;
-    ShipAttachments?: ShipAttachments;
+    Colors: IColor;
+    ShipAttachments?: IShipAttachments;
 }
 
-export interface ShipAttachments {
+export interface IShipAttachments {
     HOOD_ORNAMENT: string;
 }
 
-export interface FlavourItem {
+export interface IFlavourItem {
     ItemType: string;
 }
 
-export interface RawUpgrade {
+export interface IRawUpgrade {
     ItemCount: number;
     ItemType: string;
 }
 
-export interface MiscItem {
+export interface IMiscItem {
     ItemCount: number;
     ItemType: string;
 }
 
-export interface CrewshipWeapon {
-    PILOT: Pilot;
-    PORT_GUNS: PortGuns;
+export interface ICrewshipWeapon {
+    PILOT: IPilot;
+    PORT_GUNS: IPortGuns;
 }
 
-export interface Pilot {
-    PRIMARY_A: L;
-    SECONDARY_A: L;
+export interface IPilot {
+    PRIMARY_A: IL;
+    SECONDARY_A: IL;
 }
 
-export interface L {
-    ItemId?: Oid;
+// L? Bozo.
+export interface IL {
+    ItemId?: IOid;
     mod?: number;
     cus?: number;
     ItemType?: string;
     hide?: boolean;
 }
 
-export interface PortGuns {
-    PRIMARY_A: L;
+export interface IPortGuns {
+    PRIMARY_A: IL;
 }
 
-export interface DataKnife {
+export interface IDataKnife {
     ItemType: string;
     XP: number;
-    Configs: DataKnifeConfig[];
+    Configs: IDataKnifeConfig[];
     UpgradeVer: number;
-    ItemId: Oid;
+    ItemId: IOid;
 }
 
-export interface DataKnifeConfig {
+export interface IDataKnifeConfig {
     Upgrades?: string[];
-    pricol?: Color;
+    pricol?: IColor;
     Skins: string[];
-    attcol?: Color;
-    sigcol?: Color;
+    attcol?: IColor;
+    sigcol?: IColor;
 }
 
-export interface DiscoveredMarker {
+export interface IDiscoveredMarker {
     tag: string;
     discoveryState: number[];
 }
 
-export interface Drone {
+export interface IDrone {
     ItemType: string;
     CurrentHP: number;
-    ItemId: Oid;
+    ItemId: IOid;
     RepairStart?: Date;
 }
 
-export interface EmailItem {
+export interface IEmailItem {
     ItemType: string;
     XP: number;
 }
 
-export interface FocusUpgrade {
+export interface IFocusUpgrade {
     ItemType: string;
     Level?: number;
     IsUniversal?: boolean;
 }
 
-export interface FocusXP {
+export interface IFocusXP {
     AP_POWER: number;
     AP_TACTIC: number;
     AP_DEFENSE: number;
@@ -456,33 +455,33 @@ export interface FocusXP {
     AP_WARD: number;
 }
 
-export interface FusionTreasure {
+export interface IFusionTreasure {
     ItemCount: number;
     ItemType: string;
     Sockets: number;
 }
 
-export interface Hoverboard {
+export interface IHoverboard {
     ItemType: string;
-    Configs: HoverboardConfig[];
+    Configs: IHoverboardConfig[];
     ModularParts: string[];
     ItemName?: string;
-    Polarity?: Polarity[];
+    Polarity?: IPolarity[];
     UpgradeVer: number;
     XP: number;
     Features: number;
-    ItemId: Oid;
+    ItemId: IOid;
 }
 
-export interface HoverboardConfig {
+export interface IHoverboardConfig {
     Upgrades?: string[];
-    Skins?: PurpleSkin[];
-    pricol?: Color;
-    sigcol?: Sigcol;
-    attcol?: Color;
+    Skins?: IPurpleSkin[];
+    pricol?: IColor;
+    sigcol?: ISigcol;
+    attcol?: IColor;
 }
 
-export enum PurpleSkin {
+export enum IPurpleSkin {
     Empty = "",
     The5Be4Af71A38E4A9306040E15 = "5be4af71a38e4a9306040e15",
     The5C930Ac3A38E4A24Bc3Ad5De = "5c930ac3a38e4a24bc3ad5de",
@@ -490,58 +489,58 @@ export enum PurpleSkin {
     The5Dd8A8E3A38E4A321A45E6A0 = "5dd8a8e3a38e4a321a45e6a0"
 }
 
-export interface Sigcol {
+export interface ISigcol {
     t3: number;
 }
 
-export interface InfestedFoundry {
+export interface IInfestedFoundry {
     Name: string;
-    Resources: Resource[];
+    Resources: IResource[];
     Slots: number;
     XP: number;
-    ConsumedSuits: ConsumedSuit[];
+    ConsumedSuits: IConsumedSuit[];
     InvigorationIndex: number;
     InvigorationSuitOfferings: string[];
     InvigorationsApplied: number;
 }
 
-export interface ConsumedSuit {
+export interface IConsumedSuit {
     s: string;
-    c?: Color;
+    c?: IColor;
 }
 
-export interface Resource {
+export interface IResource {
     ItemType: string;
     Count: number;
 }
 
-export interface InvasionChainProgress {
-    id: Oid;
+export interface IInvasionChainProgress {
+    id: IOid;
     count: number;
 }
 
-export interface KubrowPetEgg {
+export interface IKubrowPetEgg {
     ItemType: KubrowPetEggItemType;
     ExpirationDate: Date;
-    ItemId: Oid;
+    ItemId: IOid;
 }
 
 export enum KubrowPetEggItemType {
     LotusTypesGameKubrowPetEggsKubrowEgg = "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg"
 }
 
-export interface KubrowPetPrint {
+export interface IKubrowPetPrint {
     ItemType: KubrowPetPrintItemType;
     Name: string;
     IsMale: boolean;
     Size: number;
-    DominantTraits: Traits;
-    RecessiveTraits: Traits;
-    ItemId: Oid;
+    DominantTraits: ITraits;
+    RecessiveTraits: ITraits;
+    ItemId: IOid;
     InheritedModularParts?: any[];
 }
 
-export interface Traits {
+export interface ITraits {
     BaseColor: string;
     SecondaryColor: string;
     TertiaryColor: string;
@@ -566,38 +565,38 @@ export enum KubrowPetPrintItemType {
     LotusTypesGameKubrowPetImprintedTraitPrint = "/Lotus/Types/Game/KubrowPet/ImprintedTraitPrint"
 }
 
-export interface KubrowPet {
+export interface IKubrowPet {
     ItemType: string;
-    Configs: KubrowPetConfig[];
+    Configs: IKubrowPetConfig[];
     UpgradeVer: number;
-    Details: Details;
+    Details: IDetails;
     XP?: number;
     Polarized?: number;
-    Polarity?: Polarity[];
+    Polarity?: IPolarity[];
     Features?: number;
     InfestationDate?: Date;
     InfestationDays?: number;
     InfestationType?: string;
-    ItemId: Oid;
+    ItemId: IOid;
     ModularParts?: string[];
 }
 
-export interface KubrowPetConfig {
+export interface IKubrowPetConfig {
     Skins?: string[];
-    pricol?: Color;
-    attcol?: Color;
+    pricol?: IColor;
+    attcol?: IColor;
     Upgrades?: string[];
 }
 
-export interface Details {
+export interface IDetails {
     Name: string;
     IsPuppy: boolean;
     HasCollar: boolean;
     PrintsRemaining: number;
     Status: Status;
     HatchDate: Date;
-    DominantTraits: Traits;
-    RecessiveTraits: Traits;
+    DominantTraits: ITraits;
+    RecessiveTraits: ITraits;
     IsMale: boolean;
     Size: number;
 }
@@ -607,13 +606,13 @@ export enum Status {
     StatusStasis = "STATUS_STASIS"
 }
 
-export interface LastSortieReward {
-    SortieId: Oid;
+export interface ILastSortieReward {
+    SortieId: IOid;
     StoreItem: string;
     Manifest: string;
 }
 
-export interface LibraryAvailableDailyTaskInfo {
+export interface ILibraryAvailableDailyTaskInfo {
     EnemyTypes: string[];
     EnemyLocTag: string;
     EnemyIcon: string;
@@ -623,98 +622,98 @@ export interface LibraryAvailableDailyTaskInfo {
     RewardStanding: number;
 }
 
-export interface LibraryPersonalProgress {
+export interface ILibraryPersonalProgress {
     TargetType: string;
     Scans: number;
     Completed: boolean;
 }
 
-export interface LoadOutPresets {
-    NORMAL: Normal[];
-    NORMAL_PVP: Archwing[];
-    LUNARO: Lunaro[];
-    ARCHWING: Archwing[];
-    SENTINEL: Archwing[];
-    OPERATOR: Archwing[];
-    GEAR: Gear[];
-    KDRIVE: Kdrive[];
-    DATAKNIFE: Archwing[];
-    MECH: Mech[];
-    OPERATOR_ADULT: Archwing[];
+export interface ILoadOutPresets {
+    NORMAL: INormal[];
+    NORMAL_PVP: IArchwing[];
+    LUNARO: ILunaro[];
+    ARCHWING: IArchwing[];
+    SENTINEL: IArchwing[];
+    OPERATOR: IArchwing[];
+    GEAR: IGear[];
+    KDRIVE: IKdrive[];
+    DATAKNIFE: IArchwing[];
+    MECH: IMech[];
+    OPERATOR_ADULT: IArchwing[];
 }
 
-export interface Archwing {
+export interface IArchwing {
     PresetIcon: string;
     Favorite: boolean;
     n?: string;
-    s: L;
-    l?: L;
-    m?: L;
-    ItemId: Oid;
-    p?: L;
+    s: IL;
+    l?: IL;
+    m?: IL;
+    ItemId: IOid;
+    p?: IL;
 }
 
-export interface Gear {
+export interface IGear {
     n: string;
-    s: L;
-    p: L;
-    l: L;
-    m: L;
-    ItemId: Oid;
+    s: IL;
+    p: IL;
+    l: IL;
+    m: IL;
+    ItemId: IOid;
 }
 
-export interface Kdrive {
+export interface IKdrive {
     PresetIcon: string;
     Favorite: boolean;
-    s: L;
-    ItemId: Oid;
+    s: IL;
+    ItemId: IOid;
 }
 
-export interface Lunaro {
+export interface ILunaro {
     n: string;
-    s: L;
-    m: L;
-    ItemId: Oid;
+    s: IL;
+    m: IL;
+    ItemId: IOid;
 }
 
-export interface Mech {
+export interface IMech {
     PresetIcon: string;
     Favorite: boolean;
-    s: L;
-    h: L;
-    a: L;
-    ItemId: Oid;
+    s: IL;
+    h: IL;
+    a: IL;
+    ItemId: IOid;
 }
 
-export interface Normal {
+export interface INormal {
     FocusSchool: FocusSchool;
     PresetIcon: string;
     Favorite: boolean;
     n: string;
-    s: L;
-    p: L;
-    l: L;
-    m: L;
-    h: L;
-    a?: L;
-    ItemId: Oid;
+    s: IL;
+    p: IL;
+    l: IL;
+    m: IL;
+    h: IL;
+    a?: IL;
+    ItemId: IOid;
 }
 
 export enum UpgradeType {
     LotusWeaponsGrineerKuvaLichUpgradesInnateDamageRandomMod = "/Lotus/Weapons/Grineer/KuvaLich/Upgrades/InnateDamageRandomMod"
 }
 
-export interface LoreFragmentScan {
+export interface ILoreFragmentScan {
     Progress: number;
     Region?: string;
     ItemType: string;
 }
 
-export interface LotusCustomization {
+export interface ILotusCustomization {
     Upgrades: any[];
     PvpUpgrades: any[];
     Skins: string[];
-    pricol: Color;
+    pricol: IColor;
     attcol: any[];
     sigcol: any[];
     eyecol: any[];
@@ -723,37 +722,37 @@ export interface LotusCustomization {
     Persona: string;
 }
 
-export interface MechSuit {
+export interface IMechSuit {
     ItemType: string;
-    Configs: DataKnifeConfig[];
+    Configs: IDataKnifeConfig[];
     Features: number;
     UpgradeVer: number;
     XP: number;
-    Polarity: Polarity[];
+    Polarity: IPolarity[];
     Polarized: number;
-    ItemId: Oid;
+    ItemId: IOid;
 }
 
-export interface Mission {
+export interface IMission {
     Completes: number;
     Tier?: number;
     Tag: string;
     RewardsCooldownTime?: Date;
 }
 
-export interface MoaPet {
+export interface IMoaPet {
     ItemType: string;
-    Configs: KubrowPetConfig[];
+    Configs: IKubrowPetConfig[];
     UpgradeVer: number;
     ModularParts: string[];
     XP?: number;
     Features?: number;
     ItemName: string;
-    Polarity?: Polarity[];
-    ItemId: Oid;
+    Polarity?: IPolarity[];
+    ItemId: IOid;
 }
 
-export interface NemesisHistory {
+export interface INemesisHistory {
     fp: number;
     manifest: Manifest;
     KillingSuit: string;
@@ -787,74 +786,74 @@ export enum Manifest {
     LotusTypesGameNemesisKuvaLichKuvaLichManifestVersionTwo = "/Lotus/Types/Game/Nemesis/KuvaLich/KuvaLichManifestVersionTwo"
 }
 
-export interface OperatorAmp {
+export interface IOperatorAmp {
     ItemType: string;
-    Configs: KubrowPetConfig[];
+    Configs: IKubrowPetConfig[];
     ModularParts?: string[];
     XP?: number;
     UpgradeVer?: number;
     ItemName?: string;
     Features?: number;
-    ItemId: Oid;
+    ItemId: IOid;
 }
 
-export interface OperatorLoadOut {
+export interface IOperatorLoadOut {
     Skins: string[];
-    pricol?: Color;
-    attcol?: Color;
-    eyecol: Color;
-    facial?: Color;
-    sigcol?: OperatorLoadOutSigcol;
-    OperatorAmp?: Oid;
+    pricol?: IColor;
+    attcol?: IColor;
+    eyecol: IColor;
+    facial?: IColor;
+    sigcol?: IOperatorLoadOutSigcol;
+    OperatorAmp?: IOid;
     Upgrades?: string[];
-    AbilityOverride: AbilityOverride;
-    ItemId: Oid;
+    AbilityOverride: IAbilityOverride;
+    ItemId: IOid;
 }
 
-export interface PendingCoupon {
+export interface IPendingCoupon {
     Expiry: Date;
     Discount: number;
 }
 
-export interface PendingRecipe {
+export interface IPendingRecipe {
     ItemType: string;
     CompletionDate: Date;
-    ItemId: Oid;
+    ItemId: IOid;
 }
 
-export interface PendingTrade {
+export interface IPendingTrade {
     State: number;
     SelfReady: boolean;
     BuddyReady: boolean;
-    Giving?: Giving;
+    Giving?: IGiving;
     Revision: number;
-    Getting: Getting;
-    ItemId: Oid;
+    Getting: IGetting;
+    ItemId: IOid;
     ClanTax?: number;
 }
 
-export interface Getting {
-    RandomUpgrades?: RandomUpgrade[];
+export interface IGetting {
+    RandomUpgrades?: IRandomUpgrade[];
     _SlotOrderInfo: GettingSlotOrderInfo[];
     PremiumCredits?: number;
 }
 
-export interface RandomUpgrade {
-    UpgradeFingerprint: UpgradeFingerprint;
+export interface IRandomUpgrade {
+    UpgradeFingerprint: IUpgradeFingerprint;
     ItemType: string;
-    ItemId: Oid;
+    ItemId: IOid;
 }
 
-export interface UpgradeFingerprint {
+export interface IUpgradeFingerprint {
     compat: string;
     lim: number;
     lvlReq: number;
     pol: FocusSchool;
-    buffs: Buff[];
-    curses: Buff[];
+    buffs: IBuff[];
+    curses: IBuff[];
 }
 
-export interface Buff {
+export interface IBuff {
     Tag: string;
     Value: number;
 }
@@ -865,8 +864,8 @@ export enum GettingSlotOrderInfo {
     P = "P"
 }
 
-export interface Giving {
-    RawUpgrades: Consumable[];
+export interface IGiving {
+    RawUpgrades: IConsumable[];
     _SlotOrderInfo: GivingSlotOrderInfo[];
 }
 
@@ -876,34 +875,34 @@ export enum GivingSlotOrderInfo {
     LotusUpgradesModsPistolDualStatElectEventPistolMod = "/Lotus/Upgrades/Mods/Pistol/DualStat/ElectEventPistolMod"
 }
 
-export interface PeriodicMissionCompletion {
+export interface IPeriodicMissionCompletion {
     date: Date;
     tag: string;
     count?: number;
 }
 
-export interface PersonalGoalProgress {
+export interface IPersonalGoalProgress {
     Count: number;
     Tag: string;
     Best?: number;
-    _id: Oid;
+    _id: IOid;
     ReceivedClanReward0?: boolean;
     ReceivedClanReward1?: boolean;
 }
 
-export interface PersonalTechProject {
+export interface IPersonalTechProject {
     State: number;
     ReqCredits: number;
     ItemType: string;
-    ReqItems: Consumable[];
+    ReqItems: IConsumable[];
     CompletionDate?: Date;
-    ItemId: Oid;
+    ItemId: IOid;
     ProductCategory?: string;
-    CategoryItemId?: Oid;
+    CategoryItemId?: IOid;
     HasContributions?: boolean;
 }
 
-export interface PlayerSkills {
+export interface IPlayerSkills {
     LPP_SPACE: number;
     LPP_DRIFTER: number;
     LPS_NONE: number;
@@ -918,59 +917,59 @@ export interface PlayerSkills {
     LPS_DRIFT_ENDURANCE: number;
 }
 
-export interface QuestKey {
-    Progress?: Progress[];
+export interface IQuestKey {
+    Progress?: IProgress[];
     unlock?: boolean;
     Completed?: boolean;
     ItemType: string;
     CompletionDate?: Date;
 }
 
-export interface Progress {
+export interface IProgress {
     c: number;
     i: boolean;
     m: boolean;
     b?: any[];
 }
 
-export interface RawUpgrade {
+export interface IRawUpgrade {
     ItemCount: number;
-    LastAdded?: Oid;
+    LastAdded?: IOid;
     ItemType: string;
 }
 
-export interface Scoop {
+export interface IScoop {
     ItemType: string;
-    Configs: ScoopConfig[];
+    Configs: IScoopConfig[];
     UpgradeVer: number;
-    ItemId: Oid;
+    ItemId: IOid;
 }
 
-export interface ScoopConfig {
-    pricol?: Color;
+export interface IScoopConfig {
+    pricol?: IColor;
 }
 
-export interface SeasonChallengeHistory {
+export interface ISeasonChallengeHistory {
     challenge: string;
     id: string;
 }
 
-export interface SentientSpawnChanceBoosters {
+export interface ISentientSpawnChanceBoosters {
     numOceanMissionsCompleted: number;
 }
 
-export interface SentinelWeapon {
+export interface ISentinelWeapon {
     ItemType: string;
-    Configs: SentinelWeaponConfig[];
+    Configs: ISentinelWeaponConfig[];
     UpgradeVer?: number;
     XP?: number;
-    ItemId: Oid;
+    ItemId: IOid;
     Features?: number;
-    Polarity?: Polarity[];
+    Polarity?: IPolarity[];
     Polarized?: number;
 }
 
-export interface SentinelWeaponConfig {
+export interface ISentinelWeaponConfig {
     Skins?: FluffySkin[];
     Upgrades?: string[];
 }
@@ -982,18 +981,18 @@ export enum FluffySkin {
     LotusUpgradesSkinsHolsterCustomizationsRifleUpperBack = "/Lotus/Upgrades/Skins/HolsterCustomizations/RifleUpperBack"
 }
 
-export interface Sentinel {
+export interface ISentinel {
     ItemType: string;
-    Configs: KubrowPetConfig[];
+    Configs: IKubrowPetConfig[];
     UpgradeVer: number;
     XP: number;
     Features?: number;
-    Polarity?: Polarity[];
+    Polarity?: IPolarity[];
     Polarized?: number;
-    ItemId: Oid;
+    ItemId: IOid;
 }
 
-export interface Settings {
+export interface ISettings {
     FriendInvRestriction: string;
     GiftMode: string;
     GuildInvRestriction: string;
@@ -1001,69 +1000,69 @@ export interface Settings {
     TradingRulesConfirmed: boolean;
 }
 
-export interface Ship {
+export interface IShip {
     ItemType: string;
-    ShipExterior: Terior;
+    ShipExterior: ITerior;
     AirSupportPower: string;
-    ItemId: Oid;
+    ItemId: IOid;
 }
 
-export interface SpaceGun {
+export interface ISpaceGun {
     ItemType: string;
-    Configs: SpaceGunConfig[];
+    Configs: ISpaceGunConfig[];
     XP?: number;
     UpgradeVer?: number;
-    ItemId: Oid;
+    ItemId: IOid;
     Features?: number;
     Polarized?: number;
-    Polarity?: Polarity[];
+    Polarity?: IPolarity[];
     UpgradeType?: UpgradeType;
     UpgradeFingerprint?: string;
     ItemName?: string;
 }
 
-export interface SpaceGunConfig {
+export interface ISpaceGunConfig {
     Skins?: string[];
-    pricol?: Color;
+    pricol?: IColor;
     Upgrades?: string[];
 }
 
-export interface Space {
+export interface ISpace {
     ItemType: string;
-    Configs: KubrowPetConfig[];
+    Configs: IKubrowPetConfig[];
     XP: number;
     UpgradeVer: number;
-    ItemId: Oid;
+    ItemId: IOid;
     Features?: number;
 }
 
-export interface SpecialItem {
+export interface ISpecialItem {
     ItemType: string;
-    Configs: SpecialItemConfig[];
+    Configs: ISpecialItemConfig[];
     XP?: number;
     UpgradeVer?: number;
     Features: number;
-    ItemId: Oid;
+    ItemId: IOid;
     Polarized?: number;
-    Polarity?: Polarity[];
+    Polarity?: IPolarity[];
     ModSlotPurchases?: number;
 }
 
-export interface SpecialItemConfig {
+export interface ISpecialItemConfig {
     Upgrades?: string[];
-    pricol?: Color;
+    pricol?: IColor;
     Skins?: string[];
-    attcol?: Color;
-    eyecol?: PurpleCol;
-    sigcol?: PurpleCol;
+    attcol?: IColor;
+    eyecol?: IPurpleCol;
+    sigcol?: IPurpleCol;
     Name?: string;
 }
 
-export interface PurpleCol {
+export interface IPurpleCol {
     en: number;
 }
 
-export interface SpectreLoadout {
+export interface ISpectreLoadout {
     LongGuns: string;
     Melee: string;
     Pistols: string;
@@ -1073,30 +1072,30 @@ export interface SpectreLoadout {
     ItemType: string;
 }
 
-export interface StepSequencer {
-    NotePacks: NotePacks;
+export interface IStepSequencer {
+    NotePacks: INotePacks;
     FingerPrint: string;
     Name: string;
-    ItemId: Oid;
+    ItemId: IOid;
 }
 
-export interface NotePacks {
+export interface INotePacks {
     MELODY: string;
     BASS: string;
     PERCUSSION: string;
 }
 
-export interface TauntHistory {
+export interface ITauntHistory {
     node: string;
     state: string;
 }
 
-export interface WeaponSkin {
+export interface IWeaponSkin {
     ItemType: string;
-    ItemId: Oid;
+    ItemId: IOid;
 }
 
-export interface WebFlags {
+export interface IWebFlags {
     activeBuyPlat: number;
     noShow2FA: boolean;
     Tennocon2018Digital: boolean;

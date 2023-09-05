@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import { missionInventoryUpdate } from "@/src/services/inventoryService";
-import { MissionInventoryUpdate } from "@/src/types/missionInventoryUpdateType";
+import { IMissionInventoryUpdate } from "@/src/types/missionInventoryUpdateType";
 /*
 - [ ]  crossPlaySetting
 - [ ]  rewardsMultiplier
@@ -25,13 +25,13 @@ import { MissionInventoryUpdate } from "@/src/types/missionInventoryUpdateType";
 - [ ]  hosts
 - [x]  ChallengeProgress
 - [ ]  SeasonChallengeHistory
-- [ ]  PS
+- [ ]  PS (Passive anti-cheat data which includes your username, module list, process list, and system name.)
 - [ ]  ActiveDojoColorResearch
 - [ ]  RewardInfo
 - [ ]  ReceivedCeremonyMsg
 - [ ]  LastCeremonyResetDate
-- [ ]  MissionPTS
-- [ ]  RepHash
+- [ ]  MissionPTS (Used to validate the mission/alive time above.)
+- [ ]  RepHash (A hash from the replication manager/RepMgr Unknown what it does.)
 - [ ]  EndOfMatchUpload
 - [ ]  ObjectiveReached
 - [ ]  FpsAvg
@@ -42,20 +42,19 @@ import { MissionInventoryUpdate } from "@/src/types/missionInventoryUpdateType";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 const missionInventoryUpdateController: RequestHandler = async (req, res) => {
-    const [data] = String(req.body).split("\n");
     const id = req.query.accountId as string;
 
-    // TODO - salt check
+    const [data] = String(req.body).split("\n");
 
     try {
-        const parsedData = JSON.parse(data) as MissionInventoryUpdate;
-        if (typeof parsedData !== "object" || parsedData === null) throw new Error("Invalid data format");
+        const parsedData = JSON.parse(data) as IMissionInventoryUpdate;
+        if (typeof parsedData !== "object") throw new Error("Invalid data format");
         await missionInventoryUpdate(parsedData, id);
     } catch (err) {
         console.error("Error parsing JSON data:", err);
     }
 
-    // TODO - get original response
+    // TODO - Return the updated inventory the way the game does it.
     res.json({});
 };
 

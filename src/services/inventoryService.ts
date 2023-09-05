@@ -5,13 +5,18 @@ import { Types } from "mongoose";
 import { ISuitResponse } from "@/src/types/inventoryTypes/SuitTypes";
 import { SlotType } from "@/src/types/purchaseTypes";
 import { IWeaponResponse } from "@/src/types/inventoryTypes/weaponTypes";
-import { ChallengeProgress, FlavourItem, IInventoryDatabaseDocument } from "@/src/types/inventoryTypes/inventoryTypes";
 import {
-    MissionInventoryUpdate,
-    MissionInventoryUpdateCard,
-    MissionInventoryUpdateGear,
-    MissionInventoryUpdateItem
+    IChallengeProgress,
+    IFlavourItem,
+    IInventoryDatabaseDocument
+} from "@/src/types/inventoryTypes/inventoryTypes";
+import {
+    IMissionInventoryUpdate,
+    IMissionInventoryUpdateCard,
+    IMissionInventoryUpdateGear,
+    IMissionInventoryUpdateItem
 } from "../types/missionInventoryUpdateType";
+import { IGenericUpdate } from "../types/genericUpdate";
 
 const createInventory = async (accountOwnerId: Types.ObjectId) => {
     try {
@@ -76,6 +81,27 @@ export const updateCurrency = async (price: number, usePremium: boolean, account
     return { [currencyName]: -price };
 };
 
+// TODO: AffiliationMods support (Nightwave).
+export const updateGeneric = async (data: IGenericUpdate, accountId: string) => {
+    const inventory = await getInventory(accountId);
+
+    // Make it an array for easier parsing.
+    if (typeof data.NodeIntrosCompleted === "string") {
+        data.NodeIntrosCompleted = [data.NodeIntrosCompleted];
+    }
+
+    // Combine the two arrays into one.
+    data.NodeIntrosCompleted = inventory.NodeIntrosCompleted.concat(data.NodeIntrosCompleted);
+
+    // Remove duplicate entries.
+    const nodes = [...new Set(data.NodeIntrosCompleted)];
+
+    inventory.NodeIntrosCompleted = nodes;
+    await inventory.save();
+
+    return data;
+};
+
 export type WeaponTypeInternal = "LongGuns" | "Pistols" | "Melee";
 
 export const addWeapon = async (
@@ -104,7 +130,7 @@ export const addWeapon = async (
     return changedInventory[weaponType][weaponIndex - 1].toJSON();
 };
 
-export const addCustomization = async (customizatonName: string, accountId: string): Promise<FlavourItem> => {
+export const addCustomization = async (customizatonName: string, accountId: string): Promise<IFlavourItem> => {
     const inventory = await getInventory(accountId);
 
     const flavourItemIndex = inventory.FlavourItems.push({ ItemType: customizatonName }) - 1;
@@ -114,7 +140,7 @@ export const addCustomization = async (customizatonName: string, accountId: stri
 
 const addGearExpByCategory = (
     inventory: IInventoryDatabaseDocument,
-    gearArray: MissionInventoryUpdateGear[] | undefined,
+    gearArray: IMissionInventoryUpdateGear[] | undefined,
     categoryName: "Pistols" | "LongGuns" | "Melee" | "Suits"
 ) => {
     const category = inventory[categoryName];
@@ -132,7 +158,7 @@ const addGearExpByCategory = (
 
 const addItemsByCategory = (
     inventory: IInventoryDatabaseDocument,
-    itemsArray: (MissionInventoryUpdateItem | MissionInventoryUpdateCard)[] | undefined,
+    itemsArray: (IMissionInventoryUpdateItem | IMissionInventoryUpdateCard)[] | undefined,
     categoryName: "RawUpgrades" | "MiscItems"
 ) => {
     const category = inventory[categoryName];
@@ -149,7 +175,7 @@ const addItemsByCategory = (
     });
 };
 
-const addChallenges = (inventory: IInventoryDatabaseDocument, itemsArray: ChallengeProgress[] | undefined) => {
+const addChallenges = (inventory: IInventoryDatabaseDocument, itemsArray: IChallengeProgress[] | undefined) => {
     const category = inventory.ChallengeProgress;
 
     itemsArray?.forEach(({ Name, Progress }) => {
@@ -167,19 +193,16 @@ const addChallenges = (inventory: IInventoryDatabaseDocument, itemsArray: Challe
 const gearKeys = ["Suits", "Pistols", "LongGuns", "Melee"] as const;
 type GearKeysType = (typeof gearKeys)[number];
 
-export const missionInventoryUpdate = async (data: MissionInventoryUpdate, accountId: string): Promise<void> => {
+export const missionInventoryUpdate = async (data: IMissionInventoryUpdate, accountId: string): Promise<void> => {
     const { RawUpgrades, MiscItems, RegularCredits, ChallengeProgress } = data;
     const inventory = await getInventory(accountId);
 
-    // TODO - multipliers logic
-    // credits
-    inventory.RegularCredits += RegularCredits || 0;
-
-    // gear exp
+    // Gear XP
     gearKeys.forEach((key: GearKeysType) => addGearExpByCategory(inventory, data[key], key));
 
-    // other
-    addItemsByCategory(inventory, RawUpgrades, "RawUpgrades"); // TODO - check mods fusion level
+    // Other
+    // TODO: Ensure mods have a valid fusion level and items have a valid quantity, preferably inside of the functions themselves.
+    addItemsByCategory(inventory, RawUpgrades, "RawUpgrades");
     addItemsByCategory(inventory, MiscItems, "MiscItems");
     addChallenges(inventory, ChallengeProgress);
 
@@ -187,7 +210,7 @@ export const missionInventoryUpdate = async (data: MissionInventoryUpdate, accou
 };
 
 export const addBooster = async (ItemType: string, time: number, accountId: string): Promise<void> => {
-    const currentTime = Math.floor(Date.now() / 1000) - 129600; // booster time getting more without 129600, probably defence logic, idk
+    const currentTime = Math.floor(Date.now() / 1000) - 129600; // Value is wrong without 129600. Figure out why, please. :)
 
     const inventory = await getInventory(accountId);
     const { Boosters } = inventory;
