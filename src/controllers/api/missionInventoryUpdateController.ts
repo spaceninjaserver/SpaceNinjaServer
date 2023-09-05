@@ -25,13 +25,13 @@ import { IMissionInventoryUpdate } from "@/src/types/missionInventoryUpdateType"
 - [ ]  hosts
 - [x]  ChallengeProgress
 - [ ]  SeasonChallengeHistory
-- [ ]  PS (Passive anti-cheat data which includes your username, module list, process list, and system name. @nk for more info.)
+- [ ]  PS (Passive anti-cheat data which includes your username, module list, process list, and system name.)
 - [ ]  ActiveDojoColorResearch
 - [ ]  RewardInfo
 - [ ]  ReceivedCeremonyMsg
 - [ ]  LastCeremonyResetDate
-- [ ]  MissionPTS (Used to validate the mission/alive time above. @nk for more info.)
-- [ ]  RepHash (A hash from the replication manager/RepMgr (IDA search it). Unknown what it does.)
+- [ ]  MissionPTS (Used to validate the mission/alive time above.)
+- [ ]  RepHash (A hash from the replication manager/RepMgr Unknown what it does.)
 - [ ]  EndOfMatchUpload
 - [ ]  ObjectiveReached
 - [ ]  FpsAvg

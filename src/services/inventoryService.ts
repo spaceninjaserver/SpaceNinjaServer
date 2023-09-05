@@ -87,14 +87,14 @@ export const updateGeneric = async (data: IGenericUpdate, accountId: string) => 
 
     // Make it an array for easier parsing.
     if (typeof data.NodeIntrosCompleted === "string") {
-        data.NodeIntrosCompleted = [ data.NodeIntrosCompleted ];
+        data.NodeIntrosCompleted = [data.NodeIntrosCompleted];
     }
 
     // Combine the two arrays into one.
     data.NodeIntrosCompleted = inventory.NodeIntrosCompleted.concat(data.NodeIntrosCompleted);
 
     // Remove duplicate entries.
-    const nodes = [ ...new Set(data.NodeIntrosCompleted) ];
+    const nodes = [...new Set(data.NodeIntrosCompleted)];
 
     inventory.NodeIntrosCompleted = nodes;
     await inventory.save();
@@ -196,17 +196,6 @@ type GearKeysType = (typeof gearKeys)[number];
 export const missionInventoryUpdate = async (data: IMissionInventoryUpdate, accountId: string): Promise<void> => {
     const { RawUpgrades, MiscItems, RegularCredits, ChallengeProgress } = data;
     const inventory = await getInventory(accountId);
-
-    // Currency
-    // TODO: Make a helper specifically for adding currencies with negative/positive checks shared between them.
-    // TODO - Multipliers (from Boosters or otherwise).
-    const credits = RegularCredits as number;
-    inventory.RegularCredits += credits < 0 ? Math.abs(credits) : credits; // If credits are negative, flip them.
-
-    // If we added credits and the value flipped, flip it (again). Eg. -10000 turns into 10000.
-    if (inventory.RegularCredits < 0 && credits > 0) {
-        inventory.RegularCredits = Math.abs(inventory.RegularCredits);
-    }
 
     // Gear XP
     gearKeys.forEach((key: GearKeysType) => addGearExpByCategory(inventory, data[key], key));
