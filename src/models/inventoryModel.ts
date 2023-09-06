@@ -7,7 +7,7 @@ import {
     IBooster
 } from "../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../types/commonTypes";
-import { ISuitDatabase, ISuitDocument } from "@/src/types/inventoryTypes/SuitTypes";
+import { ISuitDatabase } from "@/src/types/inventoryTypes/SuitTypes";
 import { IWeaponDatabase } from "@/src/types/inventoryTypes/weaponTypes";
 
 const abilityOverrideSchema = new Schema({
@@ -75,6 +75,34 @@ const WeaponSchema = new Schema({
 const BoosterSchema = new Schema({
     ExpiryDate: Number,
     ItemType: String
+});
+
+const RawUpgrades = new Schema({
+    ItemType: String,
+    ItemCount: Number
+});
+
+RawUpgrades.set("toJSON", {
+    transform(_document, returnedObject) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+        returnedObject.LastAdded = { $oid: returnedObject._id.toString() } satisfies IOid;
+        delete returnedObject._id;
+        delete returnedObject.__v;
+    }
+});
+
+const Upgrade = new Schema({
+    UpgradeFingerprint: String,
+    ItemType: String
+});
+
+Upgrade.set("toJSON", {
+    transform(_document, returnedObject) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+        returnedObject.ItemId = { $oid: returnedObject._id.toString() } satisfies IOid;
+        delete returnedObject._id;
+        delete returnedObject.__v;
+    }
 });
 
 WeaponSchema.set("toJSON", {
@@ -187,7 +215,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
     MiscItems: [Schema.Types.Mixed],
     ChallengesFixVersion: Number,
     ChallengeProgress: [Schema.Types.Mixed],
-    RawUpgrades: [Schema.Types.Mixed],
+    RawUpgrades: [RawUpgrades],
     ReceivedStartingGear: Boolean,
     Suits: [suitSchema],
     LongGuns: [WeaponSchema],
@@ -209,7 +237,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
     PendingRecipes: [Schema.Types.Mixed],
     TrainingDate: Schema.Types.Mixed,
     PlayerLevel: Number,
-    Upgrades: [Schema.Types.Mixed],
+    Upgrades: [Upgrade],
     EquippedGear: [String],
     DeathMarks: [String],
     FusionTreasures: [Schema.Types.Mixed],
@@ -350,7 +378,7 @@ type InventoryDocumentProps = {
     Boosters: Types.DocumentArray<IBooster>;
 };
 
-type InventoryModelType = Model<IInventoryDatabase, {}, InventoryDocumentProps>;
+type InventoryModelType = Model<IInventoryDatabase, object, InventoryDocumentProps>;
 
 const Inventory = model<IInventoryDatabase, InventoryModelType>("Inventory", inventorySchema);
 

@@ -29,6 +29,7 @@ import { updateSessionGetController, updateSessionPostController } from "@/src/c
 import { viewController } from "@/src/controllers/api/viewController";
 import { joinSessionController } from "@/src/controllers/api/joinSessionController";
 import { saveLoadoutController } from "@/src/controllers/api/saveLoadout";
+import { artifactsController } from "../controllers/api/artifactsController";
 
 import express from "express";
 
@@ -58,6 +59,7 @@ apiRouter.get("/deleteSession.php", deleteSessionController);
 apiRouter.get("/logout.php", logoutController);
 
 // post
+apiRouter.post("/artifacts.php", artifactsController);
 apiRouter.post("/findSessions.php", findSessionsController);
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 apiRouter.post("/purchase.php", purchaseController);
