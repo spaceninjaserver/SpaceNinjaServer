@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 import { IShip } from "../types/shipTypes";
-import { Oid } from "../types/commonTypes";
+import { IOid } from "../types/commonTypes";
 
 const roomSchema = new Schema(
     {
@@ -19,7 +19,7 @@ const shipSchema = new Schema({
 shipSchema.set("toJSON", {
     transform(_document, returnedObject) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-        returnedObject.ShipId = { $oid: returnedObject._id.toString() } satisfies Oid;
+        returnedObject.ShipId = { $oid: returnedObject._id.toString() } satisfies IOid;
         delete returnedObject._id;
     }
 });

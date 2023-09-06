@@ -5,13 +5,17 @@ import { Types } from "mongoose";
 import { ISuitResponse } from "@/src/types/inventoryTypes/SuitTypes";
 import { SlotType } from "@/src/types/purchaseTypes";
 import { IWeaponResponse } from "@/src/types/inventoryTypes/weaponTypes";
-import { ChallengeProgress, FlavourItem, IInventoryDatabaseDocument } from "@/src/types/inventoryTypes/inventoryTypes";
 import {
-    MissionInventoryUpdate,
-    MissionInventoryUpdateCard,
-    MissionInventoryUpdateGear,
-    MissionInventoryUpdateItem
-} from "../types/missionInventoryUpdateType";
+    IChallengeProgress,
+    IConsumable,
+    ICrewShipSalvagedWeaponSkin,
+    IFlavourItem,
+    IInventoryDatabaseDocument,
+    IMiscItem,
+    IRawUpgrade
+} from "@/src/types/inventoryTypes/inventoryTypes";
+import { IMissionInventoryUpdate, IMissionInventoryUpdateGear } from "../types/missionInventoryUpdateType";
+import { IGenericUpdate } from "../types/genericUpdate";
 
 const createInventory = async (accountOwnerId: Types.ObjectId) => {
     try {
@@ -76,6 +80,27 @@ export const updateCurrency = async (price: number, usePremium: boolean, account
     return { [currencyName]: -price };
 };
 
+// TODO: AffiliationMods support (Nightwave).
+export const updateGeneric = async (data: IGenericUpdate, accountId: string) => {
+    const inventory = await getInventory(accountId);
+
+    // Make it an array for easier parsing.
+    if (typeof data.NodeIntrosCompleted === "string") {
+        data.NodeIntrosCompleted = [data.NodeIntrosCompleted];
+    }
+
+    // Combine the two arrays into one.
+    data.NodeIntrosCompleted = inventory.NodeIntrosCompleted.concat(data.NodeIntrosCompleted);
+
+    // Remove duplicate entries.
+    const nodes = [...new Set(data.NodeIntrosCompleted)];
+
+    inventory.NodeIntrosCompleted = nodes;
+    await inventory.save();
+
+    return data;
+};
+
 export type WeaponTypeInternal = "LongGuns" | "Pistols" | "Melee";
 
 export const addWeapon = async (
@@ -104,7 +129,7 @@ export const addWeapon = async (
     return changedInventory[weaponType][weaponIndex - 1].toJSON();
 };
 
-export const addCustomization = async (customizatonName: string, accountId: string): Promise<FlavourItem> => {
+export const addCustomization = async (customizatonName: string, accountId: string): Promise<IFlavourItem> => {
     const inventory = await getInventory(accountId);
 
     const flavourItemIndex = inventory.FlavourItems.push({ ItemType: customizatonName }) - 1;
@@ -114,13 +139,13 @@ export const addCustomization = async (customizatonName: string, accountId: stri
 
 const addGearExpByCategory = (
     inventory: IInventoryDatabaseDocument,
-    gearArray: MissionInventoryUpdateGear[] | undefined,
+    gearArray: IMissionInventoryUpdateGear[] | undefined,
     categoryName: "Pistols" | "LongGuns" | "Melee" | "Suits"
 ) => {
     const category = inventory[categoryName];
 
     gearArray?.forEach(({ ItemId, XP }) => {
-        const itemIndex = category.findIndex(i => i._id?.equals(ItemId.$oid));
+        const itemIndex = category.findIndex(item => item._id?.equals(ItemId.$oid));
         const item = category[itemIndex];
 
         if (itemIndex !== -1 && item.XP != undefined) {
@@ -130,26 +155,66 @@ const addGearExpByCategory = (
     });
 };
 
-const addItemsByCategory = (
-    inventory: IInventoryDatabaseDocument,
-    itemsArray: (MissionInventoryUpdateItem | MissionInventoryUpdateCard)[] | undefined,
-    categoryName: "RawUpgrades" | "MiscItems"
-) => {
-    const category = inventory[categoryName];
+const addMiscItems = (inventory: IInventoryDatabaseDocument, itemsArray: IMiscItem[] | undefined) => {
+    const { MiscItems } = inventory;
 
     itemsArray?.forEach(({ ItemCount, ItemType }) => {
-        const itemIndex = category.findIndex(i => i.ItemType === ItemType);
+        const itemIndex = MiscItems.findIndex(miscItem => miscItem.ItemType === ItemType);
 
         if (itemIndex !== -1) {
-            category[itemIndex].ItemCount += ItemCount;
-            inventory.markModified(`${categoryName}.${itemIndex}.ItemCount`);
+            MiscItems[itemIndex].ItemCount += ItemCount;
+            inventory.markModified(`MiscItems.${itemIndex}.ItemCount`);
         } else {
-            category.push({ ItemCount, ItemType });
+            MiscItems.push({ ItemCount, ItemType });
         }
     });
 };
 
-const addChallenges = (inventory: IInventoryDatabaseDocument, itemsArray: ChallengeProgress[] | undefined) => {
+const addConsumables = (inventory: IInventoryDatabaseDocument, itemsArray: IConsumable[] | undefined) => {
+    const { Consumables } = inventory;
+
+    itemsArray?.forEach(({ ItemCount, ItemType }) => {
+        const itemIndex = Consumables.findIndex(i => i.ItemType === ItemType);
+
+        if (itemIndex !== -1) {
+            Consumables[itemIndex].ItemCount += ItemCount;
+            inventory.markModified(`Consumables.${itemIndex}.ItemCount`);
+        } else {
+            Consumables.push({ ItemCount, ItemType });
+        }
+    });
+};
+
+const addRecipes = (inventory: IInventoryDatabaseDocument, itemsArray: IConsumable[] | undefined) => {
+    const { Recipes } = inventory;
+
+    itemsArray?.forEach(({ ItemCount, ItemType }) => {
+        const itemIndex = Recipes.findIndex(i => i.ItemType === ItemType);
+
+        if (itemIndex !== -1) {
+            Recipes[itemIndex].ItemCount += ItemCount;
+            inventory.markModified(`Recipes.${itemIndex}.ItemCount`);
+        } else {
+            Recipes.push({ ItemCount, ItemType });
+        }
+    });
+};
+
+const addMods = (inventory: IInventoryDatabaseDocument, itemsArray: IRawUpgrade[] | undefined) => {
+    const { RawUpgrades } = inventory;
+    itemsArray?.forEach(({ ItemType, ItemCount }) => {
+        const itemIndex = RawUpgrades.findIndex(i => i.ItemType === ItemType);
+
+        if (itemIndex !== -1) {
+            RawUpgrades[itemIndex].ItemCount += ItemCount;
+            inventory.markModified(`RawUpgrades.${itemIndex}.ItemCount`);
+        } else {
+            RawUpgrades.push({ ItemCount, ItemType });
+        }
+    });
+};
+
+const addChallenges = (inventory: IInventoryDatabaseDocument, itemsArray: IChallengeProgress[] | undefined) => {
     const category = inventory.ChallengeProgress;
 
     itemsArray?.forEach(({ Name, Progress }) => {
@@ -167,32 +232,37 @@ const addChallenges = (inventory: IInventoryDatabaseDocument, itemsArray: Challe
 const gearKeys = ["Suits", "Pistols", "LongGuns", "Melee"] as const;
 type GearKeysType = (typeof gearKeys)[number];
 
-export const missionInventoryUpdate = async (data: MissionInventoryUpdate, accountId: string): Promise<void> => {
-    const { RawUpgrades, MiscItems, RegularCredits, ChallengeProgress } = data;
+export const missionInventoryUpdate = async (data: IMissionInventoryUpdate, accountId: string) => {
+    const { RawUpgrades, MiscItems, RegularCredits, ChallengeProgress, FusionPoints, Consumables, Recipes } = data;
     const inventory = await getInventory(accountId);
 
-    // TODO - multipliers logic
     // credits
     inventory.RegularCredits += RegularCredits || 0;
 
-    // gear exp
+    // endo
+    inventory.FusionPoints += FusionPoints || 0;
+
+    // Gear XP
     gearKeys.forEach((key: GearKeysType) => addGearExpByCategory(inventory, data[key], key));
 
     // other
-    addItemsByCategory(inventory, RawUpgrades, "RawUpgrades"); // TODO - check mods fusion level
-    addItemsByCategory(inventory, MiscItems, "MiscItems");
+    addMods(inventory, RawUpgrades);
+    addMiscItems(inventory, MiscItems);
+    addConsumables(inventory, Consumables);
+    addRecipes(inventory, Recipes);
     addChallenges(inventory, ChallengeProgress);
 
-    await inventory.save();
+    const changedInventory = await inventory.save();
+    return changedInventory.toJSON();
 };
 
 export const addBooster = async (ItemType: string, time: number, accountId: string): Promise<void> => {
-    const currentTime = Math.floor(Date.now() / 1000) - 129600; // booster time getting more without 129600, probably defence logic, idk
+    const currentTime = Math.floor(Date.now() / 1000) - 129600; // Value is wrong without 129600. Figure out why, please. :)
 
     const inventory = await getInventory(accountId);
     const { Boosters } = inventory;
 
-    const itemIndex = Boosters.findIndex(i => i.ItemType === ItemType);
+    const itemIndex = Boosters.findIndex(booster => booster.ItemType === ItemType);
 
     if (itemIndex !== -1) {
         const existingBooster = Boosters[itemIndex];
@@ -203,6 +273,64 @@ export const addBooster = async (ItemType: string, time: number, accountId: stri
     }
 
     await inventory.save();
+};
+
+export const upgradeMod = async (
+    {
+        Upgrade,
+        LevelDiff,
+        Cost,
+        FusionPointCost
+    }: { Upgrade: ICrewShipSalvagedWeaponSkin; LevelDiff: number; Cost: number; FusionPointCost: number },
+    accountId: string
+): Promise<string | undefined> => {
+    try {
+        const inventory = await getInventory(accountId);
+        const { Upgrades, RawUpgrades } = inventory;
+        const { ItemType, UpgradeFingerprint, ItemId } = Upgrade;
+
+        const safeUpgradeFingerprint = UpgradeFingerprint || '{"lvl":0}';
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const parsedUpgradeFingerprint = JSON.parse(safeUpgradeFingerprint);
+        parsedUpgradeFingerprint.lvl += LevelDiff;
+        const stringifiedUpgradeFingerprint = JSON.stringify(parsedUpgradeFingerprint);
+
+        let itemIndex = Upgrades.findIndex(upgrade => upgrade._id?.equals(ItemId!.$oid));
+
+        if (itemIndex !== -1) {
+            Upgrades[itemIndex].UpgradeFingerprint = stringifiedUpgradeFingerprint;
+            inventory.markModified(`Upgrades.${itemIndex}.UpgradeFingerprint`);
+        } else {
+            itemIndex =
+                Upgrades.push({
+                    UpgradeFingerprint: stringifiedUpgradeFingerprint,
+                    ItemType
+                }) - 1;
+
+            const rawItemIndex = RawUpgrades.findIndex(rawUpgrade => rawUpgrade.ItemType === ItemType);
+            RawUpgrades[rawItemIndex].ItemCount--;
+            if (RawUpgrades[rawItemIndex].ItemCount > 0) {
+                inventory.markModified(`RawUpgrades.${rawItemIndex}.UpgradeFingerprint`);
+            } else {
+                RawUpgrades.splice(rawItemIndex, 1);
+            }
+        }
+
+        inventory.RegularCredits -= Cost;
+        inventory.FusionPoints -= FusionPointCost;
+
+        const changedInventory = await inventory.save();
+        const itemId = changedInventory.toJSON().Upgrades[itemIndex]?.ItemId?.$oid;
+
+        if (!itemId) {
+            throw new Error("Item Id not found in upgradeMod");
+        }
+
+        return itemId;
+    } catch (error) {
+        console.error("Error in upgradeMod:", error);
+        throw error;
+    }
 };
 
 export { createInventory, addPowerSuit };
