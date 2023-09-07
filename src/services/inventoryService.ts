@@ -229,7 +229,7 @@ const addChallenges = (inventory: IInventoryDatabaseDocument, itemsArray: IChall
     });
 };
 
-const addMissionComplate = (inventory: IInventoryDatabaseDocument, { Tag, Completes }: IMission) => {
+const addMissionComplete = (inventory: IInventoryDatabaseDocument, { Tag, Completes }: IMission) => {
     const { Missions } = inventory;
     const itemIndex = Missions.findIndex(item => item.Tag === Tag);
 
@@ -264,7 +264,7 @@ export const missionInventoryUpdate = async (data: IMissionInventoryUpdateReques
     addConsumables(inventory, Consumables);
     addRecipes(inventory, Recipes);
     addChallenges(inventory, ChallengeProgress);
-    addMissionComplate(inventory, Missions!);
+    addMissionComplete(inventory, Missions!);
 
     const changedInventory = await inventory.save();
     return changedInventory.toJSON();
