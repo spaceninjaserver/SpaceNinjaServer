@@ -22,6 +22,7 @@ export interface IWeaponDatabase {
     ModularParts?: string[];
     UnlockLevel?: number;
     _id?: Types.ObjectId;
+    ItemId?: IOid;
 }
 
 export interface WeaponConfig {

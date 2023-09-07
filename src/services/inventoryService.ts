@@ -2,20 +2,19 @@ import { Inventory } from "@/src/models/inventoryModel";
 import new_inventory from "@/static/fixed_responses/postTutorialInventory.json";
 import config from "@/config.json";
 import { Types } from "mongoose";
-import { ISuitResponse } from "@/src/types/inventoryTypes/SuitTypes";
+import { ISuitDatabase, ISuitResponse } from "@/src/types/inventoryTypes/SuitTypes";
 import { SlotType } from "@/src/types/purchaseTypes";
-import { IWeaponResponse } from "@/src/types/inventoryTypes/weaponTypes";
+import { IWeaponDatabase, IWeaponResponse } from "@/src/types/inventoryTypes/weaponTypes";
 import {
     IChallengeProgress,
     IConsumable,
-    ICrewShipSalvagedWeaponSkin,
     IFlavourItem,
     IInventoryDatabaseDocument,
     IMiscItem,
     IRawUpgrade
 } from "@/src/types/inventoryTypes/inventoryTypes";
-import { IMissionInventoryUpdate, IMissionInventoryUpdateGear } from "../types/missionInventoryUpdateType";
 import { IGenericUpdate } from "../types/genericUpdate";
+import { IArtifactsRequest, IMissionInventoryUpdateRequest } from "../types/requestTypes";
 
 const createInventory = async (accountOwnerId: Types.ObjectId) => {
     try {
@@ -139,17 +138,17 @@ export const addCustomization = async (customizatonName: string, accountId: stri
 
 const addGearExpByCategory = (
     inventory: IInventoryDatabaseDocument,
-    gearArray: IMissionInventoryUpdateGear[] | undefined,
+    gearArray: ISuitDatabase[] | IWeaponDatabase[] | undefined,
     categoryName: "Pistols" | "LongGuns" | "Melee" | "Suits"
 ) => {
     const category = inventory[categoryName];
 
     gearArray?.forEach(({ ItemId, XP }) => {
-        const itemIndex = category.findIndex(item => item._id?.equals(ItemId.$oid));
+        const itemIndex = ItemId ? category.findIndex(item => item._id?.equals(ItemId.$oid)) : -1;
         const item = category[itemIndex];
 
         if (itemIndex !== -1 && item.XP != undefined) {
-            item.XP += XP;
+            item.XP += XP || 0;
             inventory.markModified(`${categoryName}.${itemIndex}.XP`);
         }
     });
@@ -232,7 +231,7 @@ const addChallenges = (inventory: IInventoryDatabaseDocument, itemsArray: IChall
 const gearKeys = ["Suits", "Pistols", "LongGuns", "Melee"] as const;
 type GearKeysType = (typeof gearKeys)[number];
 
-export const missionInventoryUpdate = async (data: IMissionInventoryUpdate, accountId: string) => {
+export const missionInventoryUpdate = async (data: IMissionInventoryUpdateRequest, accountId: string) => {
     const { RawUpgrades, MiscItems, RegularCredits, ChallengeProgress, FusionPoints, Consumables, Recipes } = data;
     const inventory = await getInventory(accountId);
 
@@ -275,15 +274,8 @@ export const addBooster = async (ItemType: string, time: number, accountId: stri
     await inventory.save();
 };
 
-export const upgradeMod = async (
-    {
-        Upgrade,
-        LevelDiff,
-        Cost,
-        FusionPointCost
-    }: { Upgrade: ICrewShipSalvagedWeaponSkin; LevelDiff: number; Cost: number; FusionPointCost: number },
-    accountId: string
-): Promise<string | undefined> => {
+export const upgradeMod = async (artifactsData: IArtifactsRequest, accountId: string): Promise<string | undefined> => {
+    const { Upgrade, LevelDiff, Cost, FusionPointCost } = artifactsData;
     try {
         const inventory = await getInventory(accountId);
         const { Upgrades, RawUpgrades } = inventory;

@@ -24,6 +24,7 @@ export interface ISuitDatabase {
     FocusLens?: string;
     UnlockLevel?: number;
     _id: Types.ObjectId;
+    ItemId?: IOid;
 }
 
 export interface SuitConfig {

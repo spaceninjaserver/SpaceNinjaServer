@@ -1,29 +1,26 @@
-import {
-    IMissionInventoryUpdate,
-    IMissionInventoryUpdateRewardInfo,
-    IMissionRewardResponse,
-    IReward,
-    IInventoryFieldType,
-    inventoryFields
-} from "@/src/types/missionInventoryUpdateType";
+import { IMissionRewardResponse, IReward, IInventoryFieldType, inventoryFields } from "@/src/types/missionTypes";
 
 import missionsDropTable from "@/static/json/missions-drop-table.json";
 import { modNames, relicNames, miscNames, resourceNames, gearNames, blueprintNames } from "@/static/data/items";
+import { IMissionInventoryUpdateRequest } from "../types/requestTypes";
 
 // need reverse engineer rewardSeed, otherwise ingame displayed rotation reward will be different than added to db or displayed on mission end
-const getRewards = (
-    rewardInfo: IMissionInventoryUpdateRewardInfo | undefined
-): { InventoryChanges: IMissionInventoryUpdate; MissionRewards: IMissionRewardResponse[] } => {
-    if (!rewardInfo) {
+const getRewards = ({
+    RewardInfo
+}: IMissionInventoryUpdateRequest): {
+    InventoryChanges: IMissionInventoryUpdateRequest;
+    MissionRewards: IMissionRewardResponse[];
+} => {
+    if (!RewardInfo) {
         return { InventoryChanges: {}, MissionRewards: [] };
     }
 
-    const rewards = (missionsDropTable as { [key: string]: IReward[] })[rewardInfo.node];
+    const rewards = (missionsDropTable as { [key: string]: IReward[] })[RewardInfo.node];
     if (!rewards) {
         return { InventoryChanges: {}, MissionRewards: [] };
     }
 
-    const rotationCount = rewardInfo.rewardQualifications?.length || 0;
+    const rotationCount = RewardInfo.rewardQualifications?.length || 0;
     const rotations = getRotations(rotationCount);
     const drops: IReward[] = [];
     for (const rotation of rotations) {
@@ -48,26 +45,27 @@ const getRewards = (
         drops.push(...guaranteedDrops);
     }
 
-    // const testDrops = [
-    //     { chance: 7.69, name: "Lith W3 Relic", rotation: "B" },
-    //     { chance: 7.69, name: "Lith W3 Relic", rotation: "B" },
-    //     { chance: 10.82, name: "2X Orokin Cell", rotation: "C" },
-    //     { chance: 10.82, name: "Arrow Mutation", rotation: "C" },
-    //     { chance: 10.82, name: "200 Endo", rotation: "C" },
-    //     { chance: 10.82, name: "2,000,000 Credits Cache", rotation: "C" },
-    //     { chance: 7.69, name: "Health Restore (Large)", rotation: "C" },
-    //     { chance: 7.69, name: "Vapor Specter Blueprint", rotation: "C" }
-    // ];
-    // console.log("Mission rewards:", testDrops);
-    // return formatRewardsToInventoryType(testDrops);
+    const testDrops = [
+        { chance: 7.69, name: "Lith W3 Relic", rotation: "B" },
+        { chance: 7.69, name: "Lith W3 Relic", rotation: "B" },
+        { chance: 10.82, name: "2X Orokin Cell", rotation: "C" },
+        { chance: 10.82, name: "Arrow Mutation", rotation: "C" },
+        { chance: 10.82, name: "200 Endo", rotation: "C" },
+        { chance: 10.82, name: "200 Endo", rotation: "C" },
+        { chance: 10.82, name: "2,000,000 Credits Cache", rotation: "C" },
+        { chance: 7.69, name: "Health Restore (Large)", rotation: "C" },
+        { chance: 7.69, name: "Vapor Specter Blueprint", rotation: "C" }
+    ];
+    console.log("Mission rewards:", testDrops);
+    return formatRewardsToInventoryType(testDrops);
 
     console.log("Mission rewards:", drops);
     return formatRewardsToInventoryType(drops);
 };
 
 const combineRewardAndLootInventory = (
-    rewardInventory: IMissionInventoryUpdate,
-    lootInventory: IMissionInventoryUpdate
+    rewardInventory: IMissionInventoryUpdateRequest,
+    lootInventory: IMissionInventoryUpdateRequest
 ) => {
     const missionCredits = lootInventory.RegularCredits || 0;
     const creditsBonus = rewardInventory.RegularCredits || 0;
@@ -98,12 +96,10 @@ const getRotations = (rotationCount: number): (string | undefined)[] => {
     if (rotationCount === 0) return [undefined];
 
     const rotationPattern = ["A", "A", "B", "C"];
-    let rotationIndex = 0;
     const rotatedValues = [];
 
-    for (let i = 1; i <= rotationCount; i++) {
-        rotatedValues.push(rotationPattern[rotationIndex]);
-        rotationIndex = (rotationIndex + 1) % 3;
+    for (let i = 0; i < rotationCount; i++) {
+        rotatedValues.push(rotationPattern[i % rotationPattern.length]);
     }
 
     return rotatedValues;
@@ -128,8 +124,8 @@ const getRandomRewardByChance = (data: IReward[] | undefined): IReward | undefin
 
 const formatRewardsToInventoryType = (
     rewards: IReward[]
-): { InventoryChanges: IMissionInventoryUpdate; MissionRewards: IMissionRewardResponse[] } => {
-    const InventoryChanges: IMissionInventoryUpdate = {};
+): { InventoryChanges: IMissionInventoryUpdateRequest; MissionRewards: IMissionRewardResponse[] } => {
+    const InventoryChanges: IMissionInventoryUpdateRequest = {};
     const MissionRewards: IMissionRewardResponse[] = [];
     for (const reward of rewards) {
         if (itemCheck(InventoryChanges, MissionRewards, reward.name)) {
@@ -152,7 +148,7 @@ const formatRewardsToInventoryType = (
 };
 
 const itemCheck = (
-    InventoryChanges: IMissionInventoryUpdate,
+    InventoryChanges: IMissionInventoryUpdateRequest,
     MissionRewards: IMissionRewardResponse[],
     name: string
 ) => {
@@ -184,7 +180,7 @@ const getCountFromName = (name: string) => {
 };
 
 const addRewardResponse = (
-    InventoryChanges: IMissionInventoryUpdate,
+    InventoryChanges: IMissionInventoryUpdateRequest,
     MissionRewards: IMissionRewardResponse[],
     ItemName: string,
     ItemType: string,
