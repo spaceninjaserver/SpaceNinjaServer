@@ -22,7 +22,7 @@ import { IMissionInventoryUpdateRequest } from "@/src/types/requestTypes";
 - [ ]  CurrentLoadOutIds
 - [ ]  AliveTime
 - [ ]  MissionTime
-- [ ]  Missions
+- [x]  Missions
 - [ ]  CompletedAlerts
 - [ ]  LastRegionPlayed
 - [ ]  GameModeId

@@ -4,6 +4,7 @@ import {
     IConsumable,
     ICrewShipSalvagedWeaponSkin,
     IMiscItem,
+    IMission,
     IRawUpgrade
 } from "./inventoryTypes/inventoryTypes";
 import { IWeaponDatabase } from "./inventoryTypes/weaponTypes";
@@ -31,6 +32,7 @@ interface IMissionInventoryUpdateRequest {
     ChallengeProgress?: IChallengeProgress[];
     RewardInfo?: IMissionInventoryUpdateRequestRewardInfo;
     FusionPoints?: number;
+    Missions?: IMission;
 }
 
 interface IMissionInventoryUpdateRequestRewardInfo {

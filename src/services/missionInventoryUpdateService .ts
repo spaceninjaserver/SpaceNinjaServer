@@ -45,19 +45,19 @@ const getRewards = ({
         drops.push(...guaranteedDrops);
     }
 
-    const testDrops = [
-        { chance: 7.69, name: "Lith W3 Relic", rotation: "B" },
-        { chance: 7.69, name: "Lith W3 Relic", rotation: "B" },
-        { chance: 10.82, name: "2X Orokin Cell", rotation: "C" },
-        { chance: 10.82, name: "Arrow Mutation", rotation: "C" },
-        { chance: 10.82, name: "200 Endo", rotation: "C" },
-        { chance: 10.82, name: "200 Endo", rotation: "C" },
-        { chance: 10.82, name: "2,000,000 Credits Cache", rotation: "C" },
-        { chance: 7.69, name: "Health Restore (Large)", rotation: "C" },
-        { chance: 7.69, name: "Vapor Specter Blueprint", rotation: "C" }
-    ];
-    console.log("Mission rewards:", testDrops);
-    return formatRewardsToInventoryType(testDrops);
+    // const testDrops = [
+    //     { chance: 7.69, name: "Lith W3 Relic", rotation: "B" },
+    //     { chance: 7.69, name: "Lith W3 Relic", rotation: "B" },
+    //     { chance: 10.82, name: "2X Orokin Cell", rotation: "C" },
+    //     { chance: 10.82, name: "Arrow Mutation", rotation: "C" },
+    //     { chance: 10.82, name: "200 Endo", rotation: "C" },
+    //     { chance: 10.82, name: "200 Endo", rotation: "C" },
+    //     { chance: 10.82, name: "2,000,000 Credits Cache", rotation: "C" },
+    //     { chance: 7.69, name: "Health Restore (Large)", rotation: "C" },
+    //     { chance: 7.69, name: "Vapor Specter Blueprint", rotation: "C" }
+    // ];
+    // console.log("Mission rewards:", testDrops);
+    // return formatRewardsToInventoryType(testDrops);
 
     console.log("Mission rewards:", drops);
     return formatRewardsToInventoryType(drops);

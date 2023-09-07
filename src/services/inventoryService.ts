@@ -11,6 +11,7 @@ import {
     IFlavourItem,
     IInventoryDatabaseDocument,
     IMiscItem,
+    IMission,
     IRawUpgrade
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate } from "../types/genericUpdate";
@@ -228,11 +229,24 @@ const addChallenges = (inventory: IInventoryDatabaseDocument, itemsArray: IChall
     });
 };
 
+const addMissionComplate = (inventory: IInventoryDatabaseDocument, { Tag, Completes }: IMission) => {
+    const { Missions } = inventory;
+    const itemIndex = Missions.findIndex(item => item.Tag === Tag);
+
+    if (itemIndex !== -1) {
+        Missions[itemIndex].Completes += Completes;
+        inventory.markModified(`Missions.${itemIndex}.Completes`);
+    } else {
+        Missions.push({ Tag, Completes });
+    }
+};
+
 const gearKeys = ["Suits", "Pistols", "LongGuns", "Melee"] as const;
 type GearKeysType = (typeof gearKeys)[number];
 
 export const missionInventoryUpdate = async (data: IMissionInventoryUpdateRequest, accountId: string) => {
-    const { RawUpgrades, MiscItems, RegularCredits, ChallengeProgress, FusionPoints, Consumables, Recipes } = data;
+    const { RawUpgrades, MiscItems, RegularCredits, ChallengeProgress, FusionPoints, Consumables, Recipes, Missions } =
+        data;
     const inventory = await getInventory(accountId);
 
     // credits
@@ -250,6 +264,7 @@ export const missionInventoryUpdate = async (data: IMissionInventoryUpdateReques
     addConsumables(inventory, Consumables);
     addRecipes(inventory, Recipes);
     addChallenges(inventory, ChallengeProgress);
+    addMissionComplate(inventory, Missions!);
 
     const changedInventory = await inventory.save();
     return changedInventory.toJSON();
