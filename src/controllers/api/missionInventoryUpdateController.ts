@@ -1,7 +1,9 @@
 import { RequestHandler } from "express";
 import { missionInventoryUpdate } from "@/src/services/inventoryService";
 import { combineRewardAndLootInventory, getRewards } from "@/src/services/missionInventoryUpdateService ";
-import { IMissionInventoryUpdate } from "@/src/types/missionInventoryUpdateType";
+import { getJSONfromString } from "@/src/helpers/stringHelpers";
+import { parseString } from "@/src/helpers/general";
+import { IMissionInventoryUpdateRequest } from "@/src/types/requestTypes";
 /*
 **** INPUT ****
 - [ ]  crossPlaySetting
@@ -20,7 +22,7 @@ import { IMissionInventoryUpdate } from "@/src/types/missionInventoryUpdateType"
 - [ ]  CurrentLoadOutIds
 - [ ]  AliveTime
 - [ ]  MissionTime
-- [ ]  Missions
+- [x]  Missions
 - [ ]  CompletedAlerts
 - [ ]  LastRegionPlayed
 - [ ]  GameModeId
@@ -43,23 +45,20 @@ import { IMissionInventoryUpdate } from "@/src/types/missionInventoryUpdateType"
 */
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
-const missionInventoryUpdateController: RequestHandler = async (req, res) => {
-    const [data] = String(req.body).split("\n");
-    const id = req.query.accountId as string;
+const missionInventoryUpdateController: RequestHandler = async (req, res): Promise<void> => {
+    const accountId = parseString(req.query.accountId);
 
     try {
-        const lootInventory = JSON.parse(data) as IMissionInventoryUpdate;
-        if (typeof lootInventory !== "object" || lootInventory === null) {
-            throw new Error("Invalid data format");
-        }
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call
+        const lootInventory = getJSONfromString(req.body.toString()) as IMissionInventoryUpdateRequest;
 
-        const { InventoryChanges, MissionRewards } = getRewards(lootInventory.RewardInfo);
+        const { InventoryChanges, MissionRewards } = getRewards(lootInventory);
 
         const { combinedInventoryChanges, TotalCredits, CreditsBonus, MissionCredits, FusionPoints } =
             combineRewardAndLootInventory(InventoryChanges, lootInventory);
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const InventoryJson = JSON.stringify(await missionInventoryUpdate(combinedInventoryChanges, id));
+        const InventoryJson = JSON.stringify(await missionInventoryUpdate(combinedInventoryChanges, accountId));
         res.json({
             // InventoryJson, // this part will reset game data and missions will be locked
             MissionRewards,
