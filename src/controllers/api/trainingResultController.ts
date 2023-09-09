@@ -2,50 +2,43 @@ import { parseString } from "@/src/helpers/general";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { Inventory } from "@/src/models/inventoryModel";
 import { getInventory } from "@/src/services/inventoryService";
+import { IMongoDate } from "@/src/types/commonTypes";
 import { RequestHandler } from "express";
+import { unixTimesInMs } from "@/src/constants/timeConstants";
 
 interface ITrainingResultsRequest {
     numLevelsGained: number;
 }
 
-const epochDay = 86400 * 1000; // in ms
-const timeNow = Date.now() + epochDay;
+interface ITrainingResultsResponse {
+    NewTrainingDate: IMongoDate;
+    NewLevel: number;
+    InventoryChanges: any[];
+}
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 const trainingResultController: RequestHandler = async (req, res): Promise<void> => {
-    console.log(req.body.toString());
     const accountId = parseString(req.query.accountId);
 
     const trainingResults = getJSONfromString(req.body.toString()) as ITrainingResultsRequest;
 
-    const nextTrainingDate = Date.now().toString;
-
-    if (trainingResults.numLevelsGained == 0) {
-        res.json({
-            NewTrainingDate: {
-                $date: { $numberLong: nextTrainingDate }
-            },
-            NewLevel: 0,
-            InventoryChanges: []
-        });
-    }
-
     const inventory = await getInventory(accountId);
 
-    console.log("inventory", inventory.TrainingDate);
-    inventory.TrainingDate = new Date(Date.now() + epochDay * 500);
-    console.log("inventory after", inventory.TrainingDate);
-    await inventory.save();
+    inventory.TrainingDate = new Date(Date.now() + unixTimesInMs.day);
 
     if (trainingResults.numLevelsGained == 1) {
-        res.json({
-            NewTrainingDate: {
-                $date: { $numberLong: nextTrainingDate }
-            },
-            NewLevel: 1,
-            InventoryChanges: []
-        });
+        inventory.PlayerLevel += 1;
     }
+
+    const changedinventory = await inventory.save();
+
+    res.json({
+        NewTrainingDate: {
+            $date: { $numberLong: changedinventory.TrainingDate.getTime().toString() }
+        },
+        NewLevel: trainingResults.numLevelsGained == 1 ? changedinventory.PlayerLevel : inventory.PlayerLevel,
+        InventoryChanges: []
+    } satisfies ITrainingResultsResponse);
 };
 
 export { trainingResultController };

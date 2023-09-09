@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { Document, Types } from "mongoose";
-import { Oid, BSONDate } from "../commonTypes";
+import { Oid, IMongoDate } from "../commonTypes";
 import { AbilityOverride, Color, FocusSchool, Polarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { ISuitDatabase } from "@/src/types/inventoryTypes/SuitTypes";
 import { OperatorLoadOutSigcol, IWeaponDatabase } from "@/src/types/inventoryTypes/weaponTypes";
@@ -13,9 +13,10 @@ export interface IInventoryDatabase extends Omit<IInventoryResponse, "TrainingDa
 }
 
 export interface IInventoryResponseDocument extends IInventoryResponse, Document {}
+
 export interface IInventoryResponse {
     SubscribedToEmails: number;
-    Created: BSONDate;
+    Created: IMongoDate;
     RewardSeed: number;
     RegularCredits: number;
     PremiumCredits: number;
@@ -59,7 +60,7 @@ export interface IInventoryResponse {
     Recipes: Consumable[];
     WeaponSkins: WeaponSkin[];
     PendingRecipes: PendingRecipe[];
-    TrainingDate: BSONDate;
+    TrainingDate: IMongoDate;
     PlayerLevel: number;
     Upgrades: CrewShipSalvagedWeaponSkin[];
     EquippedGear: string[];
@@ -136,7 +137,7 @@ export interface IInventoryResponse {
     InvasionChainProgress: InvasionChainProgress[];
     DataKnives: DataKnife[];
     NemesisHistory: NemesisHistory[];
-    LastNemesisAllySpawnTime: BSONDate;
+    LastNemesisAllySpawnTime: IMongoDate;
     Settings: Settings;
     PersonalTechProjects: PersonalTechProject[];
     CrewShips: CrewShip[];
@@ -147,7 +148,7 @@ export interface IInventoryResponse {
     CrewShipWeapons: CrewShipWeapon[];
     CrewShipSalvagedWeapons: CrewShipWeapon[];
     CrewShipWeaponSkins: CrewShipSalvagedWeaponSkin[];
-    TradeBannedUntil: BSONDate;
+    TradeBannedUntil: IMongoDate;
     PlayedParkourTutorial: boolean;
     SubscribedToEmailsPersonalized: number;
     MechBin: CrewMemberBinClass;
@@ -155,7 +156,7 @@ export interface IInventoryResponse {
     DailyAffiliationNecraloid: number;
     MechSuits: MechSuit[];
     InfestedFoundry: InfestedFoundry;
-    BlessingCooldown: BSONDate;
+    BlessingCooldown: IMongoDate;
     CrewMemberBin: CrewMemberBinClass;
     CrewShipHarnesses: CrewShipHarness[];
     CrewShipRawSalvage: Consumable[];
@@ -167,7 +168,7 @@ export interface IInventoryResponse {
     NemesisAbandonedRewards: string[];
     DailyAffiliationKahl: number;
     LastInventorySync: Oid;
-    NextRefill: BSONDate;
+    NextRefill: IMongoDate;
     ActiveLandscapeTraps: any[];
     EvolutionProgress: any[];
     RepVotes: any[];
@@ -268,7 +269,7 @@ export interface CrewMember {
     ItemType: string;
     NemesisFingerprint: number;
     Seed: number;
-    HireDate: BSONDate;
+    HireDate: IMongoDate;
     AssignedRole: number;
     SkillEfficiency: SkillEfficiency;
     WeaponConfigIdx: number;
@@ -431,7 +432,7 @@ export interface Drone {
     ItemType: string;
     CurrentHP: number;
     ItemId: Oid;
-    RepairStart?: BSONDate;
+    RepairStart?: IMongoDate;
 }
 
 export interface EmailItem {
@@ -519,7 +520,7 @@ export interface InvasionChainProgress {
 
 export interface KubrowPetEgg {
     ItemType: KubrowPetEggItemType;
-    ExpirationDate: BSONDate;
+    ExpirationDate: IMongoDate;
     ItemId: Oid;
 }
 
@@ -572,7 +573,7 @@ export interface KubrowPet {
     Polarized?: number;
     Polarity?: Polarity[];
     Features?: number;
-    InfestationDate?: BSONDate;
+    InfestationDate?: IMongoDate;
     InfestationDays?: number;
     InfestationType?: string;
     ItemId: Oid;
@@ -592,7 +593,7 @@ export interface Details {
     HasCollar: boolean;
     PrintsRemaining: number;
     Status: Status;
-    HatchDate: BSONDate;
+    HatchDate: IMongoDate;
     DominantTraits: Traits;
     RecessiveTraits: Traits;
     IsMale: boolean;
@@ -735,7 +736,7 @@ export interface Mission {
     Completes: number;
     Tier?: number;
     Tag: string;
-    RewardsCooldownTime?: BSONDate;
+    RewardsCooldownTime?: IMongoDate;
 }
 
 export interface MoaPet {
@@ -760,7 +761,7 @@ export interface NemesisHistory {
     BirthNode: BirthNode;
     Rank: number;
     k: boolean;
-    d: BSONDate;
+    d: IMongoDate;
     GuessHistory?: number[];
     currentGuess?: number;
     Traded?: boolean;
@@ -809,13 +810,13 @@ export interface OperatorLoadOut {
 }
 
 export interface PendingCoupon {
-    Expiry: BSONDate;
+    Expiry: IMongoDate;
     Discount: number;
 }
 
 export interface PendingRecipe {
     ItemType: string;
-    CompletionDate: BSONDate;
+    CompletionDate: IMongoDate;
     ItemId: Oid;
 }
 
@@ -874,7 +875,7 @@ export enum GivingSlotOrderInfo {
 }
 
 export interface PeriodicMissionCompletion {
-    date: BSONDate;
+    date: IMongoDate;
     tag: string;
     count?: number;
 }
@@ -893,7 +894,7 @@ export interface PersonalTechProject {
     ReqCredits: number;
     ItemType: string;
     ReqItems: Consumable[];
-    CompletionDate?: BSONDate;
+    CompletionDate?: IMongoDate;
     ItemId: Oid;
     ProductCategory?: string;
     CategoryItemId?: Oid;
@@ -914,7 +915,7 @@ export interface QuestKey {
     unlock?: boolean;
     Completed?: boolean;
     ItemType: string;
-    CompletionDate?: BSONDate;
+    CompletionDate?: IMongoDate;
 }
 
 export interface Progress {
@@ -1091,15 +1092,15 @@ export interface WebFlags {
     activeBuyPlat: number;
     noShow2FA: boolean;
     Tennocon2018Digital: boolean;
-    VisitPrimeAccess: BSONDate;
-    VisitTennocon2019: BSONDate;
-    enteredSC2019: BSONDate;
-    VisitPrimeVault: BSONDate;
-    VisitBuyPlatinum: BSONDate;
-    ClickedSku_640_Page__en_buyplatinum: BSONDate;
-    ClickedSku_640_Page__buyplatinum: BSONDate;
-    VisitStarterPack: BSONDate;
+    VisitPrimeAccess: IMongoDate;
+    VisitTennocon2019: IMongoDate;
+    enteredSC2019: IMongoDate;
+    VisitPrimeVault: IMongoDate;
+    VisitBuyPlatinum: IMongoDate;
+    ClickedSku_640_Page__en_buyplatinum: IMongoDate;
+    ClickedSku_640_Page__buyplatinum: IMongoDate;
+    VisitStarterPack: IMongoDate;
     Tennocon2020Digital: boolean;
     Anniversary2021: boolean;
-    HitDownloadBtn: BSONDate;
+    HitDownloadBtn: IMongoDate;
 }

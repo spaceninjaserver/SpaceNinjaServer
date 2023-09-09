@@ -9,7 +9,7 @@ import {
     IInventoryDatabaseDocument,
     IInventoryResponseDocument
 } from "../types/inventoryTypes/inventoryTypes";
-import { Oid } from "../types/commonTypes";
+import { IMongoDate, Oid } from "../types/commonTypes";
 import { ISuitDatabase, ISuitDocument } from "@/src/types/inventoryTypes/SuitTypes";
 import { IWeaponDatabase } from "@/src/types/inventoryTypes/weaponTypes";
 
@@ -163,7 +163,7 @@ FlavourItemSchema.set("toJSON", {
     }
 });
 
-const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
+const inventorySchema = new Schema<IInventoryDatabaseDocument, InventoryDocumentProps>({
     accountOwnerId: Schema.Types.ObjectId,
     SubscribedToEmails: Number,
     Created: Schema.Types.Mixed,
@@ -336,17 +336,17 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
 });
 
 inventorySchema.set("toJSON", {
-    transform(_document, returnedObject: IInventoryDatabaseDocument) {
+    transform(_document, returnedObject) {
         delete returnedObject._id;
         delete returnedObject.__v;
 
-        const trainingDate = returnedObject.TrainingDate;
+        const trainingDate = (returnedObject as IInventoryDatabaseDocument).TrainingDate;
 
-        (returnedObject as unknown as IInventoryResponse).TrainingDate = {
+        (returnedObject as IInventoryResponse).TrainingDate = {
             $date: {
                 $numberLong: trainingDate.getTime().toString()
             }
-        };
+        } satisfies IMongoDate;
     }
 });
 

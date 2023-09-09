@@ -2,7 +2,7 @@ export interface Oid {
     $oid: string;
 }
 
-export interface BSONDate {
+export interface IMongoDate {
     $date: {
         $numberLong: string;
     };
