@@ -1,4 +1,4 @@
-export interface Oid {
+export interface IOid {
     $oid: string;
 }
 

@@ -10,7 +10,7 @@ export interface ILoginResponse extends Omit<IDatabaseAccountDocument, "email" |
     HUB: string;
 }
 
-//includes virtual id
+// Includes virtual ID
 export interface IDatabaseAccountDocument extends IDatabaseAccount {
     id: string;
 }

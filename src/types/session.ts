@@ -1,4 +1,5 @@
-export interface Session {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export interface ISession {
     sessionId: string;
     creatorId: string;
     maxPlayers: number;
@@ -26,6 +27,6 @@ export interface Session {
     fullReset: number;
 }
 
-export interface FindSessionRequest {
+export interface IFindSessionRequest {
     [key: string]: any;
 }

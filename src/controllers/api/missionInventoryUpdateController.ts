@@ -1,7 +1,11 @@
 import { RequestHandler } from "express";
 import { missionInventoryUpdate } from "@/src/services/inventoryService";
-import { MissionInventoryUpdate } from "@/src/types/missionInventoryUpdateType";
+import { combineRewardAndLootInventory, getRewards } from "@/src/services/missionInventoryUpdateService ";
+import { getJSONfromString } from "@/src/helpers/stringHelpers";
+import { parseString } from "@/src/helpers/general";
+import { IMissionInventoryUpdateRequest } from "@/src/types/requestTypes";
 /*
+**** INPUT ****
 - [ ]  crossPlaySetting
 - [ ]  rewardsMultiplier
 - [ ]  ActiveBoosters
@@ -18,20 +22,20 @@ import { MissionInventoryUpdate } from "@/src/types/missionInventoryUpdateType";
 - [ ]  CurrentLoadOutIds
 - [ ]  AliveTime
 - [ ]  MissionTime
-- [ ]  Missions
+- [x]  Missions
 - [ ]  CompletedAlerts
 - [ ]  LastRegionPlayed
 - [ ]  GameModeId
 - [ ]  hosts
 - [x]  ChallengeProgress
 - [ ]  SeasonChallengeHistory
-- [ ]  PS
+- [ ]  PS (Passive anti-cheat data which includes your username, module list, process list, and system name.)
 - [ ]  ActiveDojoColorResearch
-- [ ]  RewardInfo
+- [x]  RewardInfo
 - [ ]  ReceivedCeremonyMsg
 - [ ]  LastCeremonyResetDate
-- [ ]  MissionPTS
-- [ ]  RepHash
+- [ ]  MissionPTS (Used to validate the mission/alive time above.)
+- [ ]  RepHash (A hash from the replication manager/RepMgr Unknown what it does.)
 - [ ]  EndOfMatchUpload
 - [ ]  ObjectiveReached
 - [ ]  FpsAvg
@@ -41,22 +45,43 @@ import { MissionInventoryUpdate } from "@/src/types/missionInventoryUpdateType";
 */
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
-const missionInventoryUpdateController: RequestHandler = async (req, res) => {
-    const [data] = String(req.body).split("\n");
-    const id = req.query.accountId as string;
-
-    // TODO - salt check
+const missionInventoryUpdateController: RequestHandler = async (req, res): Promise<void> => {
+    const accountId = parseString(req.query.accountId);
 
     try {
-        const parsedData = JSON.parse(data) as MissionInventoryUpdate;
-        if (typeof parsedData !== "object" || parsedData === null) throw new Error("Invalid data format");
-        await missionInventoryUpdate(parsedData, id);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call
+        const lootInventory = getJSONfromString(req.body.toString()) as IMissionInventoryUpdateRequest;
+
+        const { InventoryChanges, MissionRewards } = getRewards(lootInventory);
+
+        const { combinedInventoryChanges, TotalCredits, CreditsBonus, MissionCredits, FusionPoints } =
+            combineRewardAndLootInventory(InventoryChanges, lootInventory);
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const InventoryJson = JSON.stringify(await missionInventoryUpdate(combinedInventoryChanges, accountId));
+        res.json({
+            // InventoryJson, // this part will reset game data and missions will be locked
+            MissionRewards,
+            InventoryChanges,
+            TotalCredits,
+            CreditsBonus,
+            MissionCredits,
+            ...(FusionPoints !== undefined && { FusionPoints })
+        });
     } catch (err) {
         console.error("Error parsing JSON data:", err);
     }
-
-    // TODO - get original response
-    res.json({});
 };
+
+/*
+**** OUTPUT ****
+- [x]  InventoryJson
+- [x]  MissionRewards
+- [x]  TotalCredits
+- [x]  CreditsBonus
+- [x]  MissionCredits
+- [x]  InventoryChanges
+- [x]  FusionPoints
+*/
 
 export { missionInventoryUpdateController };

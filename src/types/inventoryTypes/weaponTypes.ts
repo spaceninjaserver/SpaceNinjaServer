@@ -1,9 +1,9 @@
-import { Oid } from "@/src/types/commonTypes";
-import { Color, Polarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { IOid } from "@/src/types/commonTypes";
+import { IColor, IPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { Types } from "mongoose";
 
 export interface IWeaponResponse extends IWeaponDatabase {
-    ItemId: Oid;
+    ItemId: IOid;
 }
 
 export interface IWeaponDatabase {
@@ -13,7 +13,7 @@ export interface IWeaponDatabase {
     XP?: number;
     Features?: number;
     Polarized?: number;
-    Polarity?: Polarity[];
+    Polarity?: IPolarity[];
     FocusLens?: string;
     ModSlotPurchases?: number;
     UpgradeType?: string;
@@ -22,19 +22,20 @@ export interface IWeaponDatabase {
     ModularParts?: string[];
     UnlockLevel?: number;
     _id?: Types.ObjectId;
+    ItemId?: IOid;
 }
 
 export interface WeaponConfig {
     Skins?: string[];
-    pricol?: Color;
+    pricol?: IColor;
     Upgrades?: string[];
-    attcol?: Color;
-    eyecol?: OperatorLoadOutSigcol;
+    attcol?: IColor;
+    eyecol?: IOperatorLoadOutSigcol;
     Name?: string;
     PvpUpgrades?: string[];
 }
 
-export interface OperatorLoadOutSigcol {
+export interface IOperatorLoadOutSigcol {
     t0?: number;
     t1?: number;
     en?: number;

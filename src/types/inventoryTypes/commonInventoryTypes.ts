@@ -1,4 +1,4 @@
-export interface Polarity {
+export interface IPolarity {
     Slot: number;
     Value: FocusSchool;
 }
@@ -15,7 +15,7 @@ export enum FocusSchool {
     ApWard = "AP_WARD"
 }
 
-export interface Color {
+export interface IColor {
     t0?: number;
     t1?: number;
     t2?: number;
@@ -26,16 +26,17 @@ export interface Color {
     m1?: number;
 }
 
-export interface AbilityOverride {
+export interface IAbilityOverride {
     Ability: string;
     Index: number;
 }
 
-export interface SlotsBin {
+export interface ISlotsBin {
     Slots: number;
 }
 
-export interface sigcol {
+// ISigCol? IsIgCoL? ISIGCOL!
+export interface Isigcol {
     t0: number;
     t1: number;
     en: number;
