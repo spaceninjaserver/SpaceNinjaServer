@@ -4,10 +4,13 @@ import {
     IRawUpgrade,
     IMiscItem,
     IInventoryDatabase,
-    IBooster
+    IBooster,
+    IInventoryResponse,
+    IInventoryDatabaseDocument,
+    IInventoryResponseDocument
 } from "../types/inventoryTypes/inventoryTypes";
-import { IOid } from "../types/commonTypes";
-import { ISuitDatabase } from "@/src/types/inventoryTypes/SuitTypes";
+import { IMongoDate, IOid } from "../types/commonTypes";
+import { ISuitDatabase, ISuitDocument } from "@/src/types/inventoryTypes/SuitTypes";
 import { IWeaponDatabase } from "@/src/types/inventoryTypes/weaponTypes";
 
 const abilityOverrideSchema = new Schema({
@@ -25,7 +28,7 @@ const colorSchema = new Schema({
     m1: Number
 });
 
-const longGunConfigSchema = new Schema({
+const weaponConfigSchema = new Schema({
     Skins: [String],
     pricol: colorSchema,
     attcol: colorSchema,
@@ -57,7 +60,7 @@ const longGunConfigSchema = new Schema({
 
 const WeaponSchema = new Schema({
     ItemType: String,
-    Configs: [longGunConfigSchema],
+    Configs: [weaponConfigSchema],
     UpgradeVer: Number,
     XP: Number,
     Features: Number,
@@ -188,7 +191,7 @@ FlavourItemSchema.set("toJSON", {
     }
 });
 
-const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
+const inventorySchema = new Schema<IInventoryDatabaseDocument, InventoryDocumentProps>({
     accountOwnerId: Schema.Types.ObjectId,
     SubscribedToEmails: Number,
     Created: Schema.Types.Mixed,
@@ -235,7 +238,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
     Recipes: [Schema.Types.Mixed],
     WeaponSkins: [Schema.Types.Mixed],
     PendingRecipes: [Schema.Types.Mixed],
-    TrainingDate: Schema.Types.Mixed,
+    TrainingDate: Date,
     PlayerLevel: Number,
     Upgrades: [Upgrade],
     EquippedGear: [String],
@@ -364,6 +367,14 @@ inventorySchema.set("toJSON", {
     transform(_document, returnedObject) {
         delete returnedObject._id;
         delete returnedObject.__v;
+
+        const trainingDate = (returnedObject as IInventoryDatabaseDocument).TrainingDate;
+
+        (returnedObject as IInventoryResponse).TrainingDate = {
+            $date: {
+                $numberLong: trainingDate.getTime().toString()
+            }
+        } satisfies IMongoDate;
     }
 });
 

@@ -1,19 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Document, Types } from "mongoose";
-import { IOid } from "../commonTypes";
+import { IOid, IMongoDate } from "../commonTypes";
 import { IAbilityOverride, IColor, FocusSchool, IPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { ISuitDatabase } from "@/src/types/inventoryTypes/SuitTypes";
 import { IOperatorLoadOutSigcol, IWeaponDatabase } from "@/src/types/inventoryTypes/weaponTypes";
 
-export interface IInventoryDatabase extends IInventoryResponse {
+export interface IInventoryDatabaseDocument extends IInventoryDatabase, Document {}
+export interface IInventoryDatabase extends Omit<IInventoryResponse, "TrainingDate"> {
     accountOwnerId: Types.ObjectId;
+    TrainingDate: Date;
 }
 
-export interface IInventoryDatabaseDocument extends IInventoryDatabase, Document {}
+export interface IInventoryResponseDocument extends IInventoryResponse, Document {}
 
 export interface IInventoryResponse {
     SubscribedToEmails: number;
-    Created: Date;
+    Created: IMongoDate;
     RewardSeed: number;
     RegularCredits: number;
     PremiumCredits: number;
@@ -57,7 +59,7 @@ export interface IInventoryResponse {
     Recipes: IConsumable[];
     WeaponSkins: IWeaponSkin[];
     PendingRecipes: IPendingRecipe[];
-    TrainingDate: Date;
+    TrainingDate: IMongoDate;
     PlayerLevel: number;
     Upgrades: ICrewShipSalvagedWeaponSkin[];
     EquippedGear: string[];
@@ -134,7 +136,7 @@ export interface IInventoryResponse {
     InvasionChainProgress: IInvasionChainProgress[];
     DataKnives: IDataKnife[];
     NemesisHistory: INemesisHistory[];
-    LastNemesisAllySpawnTime: Date;
+    LastNemesisAllySpawnTime: IMongoDate;
     Settings: ISettings;
     PersonalTechProjects: IPersonalTechProject[];
     CrewShips: ICrewShip[];
@@ -145,7 +147,7 @@ export interface IInventoryResponse {
     CrewShipWeapons: ICrewShipWeapon[];
     CrewShipSalvagedWeapons: ICrewShipWeapon[];
     CrewShipWeaponSkins: ICrewShipSalvagedWeaponSkin[];
-    TradeBannedUntil: Date;
+    TradeBannedUntil: IMongoDate;
     PlayedParkourTutorial: boolean;
     SubscribedToEmailsPersonalized: number;
     MechBin: ICrewMemberBinClass;
@@ -153,7 +155,7 @@ export interface IInventoryResponse {
     DailyAffiliationNecraloid: number;
     MechSuits: IMechSuit[];
     InfestedFoundry: IInfestedFoundry;
-    BlessingCooldown: Date;
+    BlessingCooldown: IMongoDate;
     CrewMemberBin: ICrewMemberBinClass;
     CrewShipHarnesses: ICrewShipHarness[];
     CrewShipRawSalvage: IConsumable[];
@@ -165,7 +167,7 @@ export interface IInventoryResponse {
     NemesisAbandonedRewards: string[];
     DailyAffiliationKahl: number;
     LastInventorySync: IOid;
-    NextRefill: Date;
+    NextRefill: IMongoDate;
     ActiveLandscapeTraps: any[];
     EvolutionProgress: any[];
     RepVotes: any[];
@@ -204,10 +206,6 @@ export interface IAffiliation {
 export interface IAlignment {
     Wisdom: number;
     Alignment: number;
-}
-
-export interface IDate {
-    $date: { $numberLong: string };
 }
 
 export interface IBooster {
@@ -270,7 +268,7 @@ export interface ICrewMember {
     ItemType: string;
     NemesisFingerprint: number;
     Seed: number;
-    HireDate: Date;
+    HireDate: IMongoDate;
     AssignedRole: number;
     SkillEfficiency: ISkillEfficiency;
     WeaponConfigIdx: number;
@@ -430,7 +428,7 @@ export interface IDrone {
     ItemType: string;
     CurrentHP: number;
     ItemId: IOid;
-    RepairStart?: Date;
+    RepairStart?: IMongoDate;
 }
 
 export interface IEmailItem {
@@ -518,7 +516,7 @@ export interface IInvasionChainProgress {
 
 export interface IKubrowPetEgg {
     ItemType: KubrowPetEggItemType;
-    ExpirationDate: Date;
+    ExpirationDate: IMongoDate;
     ItemId: IOid;
 }
 
@@ -571,7 +569,7 @@ export interface IKubrowPet {
     Polarized?: number;
     Polarity?: IPolarity[];
     Features?: number;
-    InfestationDate?: Date;
+    InfestationDate?: IMongoDate;
     InfestationDays?: number;
     InfestationType?: string;
     ItemId: IOid;
@@ -591,7 +589,7 @@ export interface IDetails {
     HasCollar: boolean;
     PrintsRemaining: number;
     Status: Status;
-    HatchDate: Date;
+    HatchDate: IMongoDate;
     DominantTraits: ITraits;
     RecessiveTraits: ITraits;
     IsMale: boolean;
@@ -734,7 +732,7 @@ export interface IMission {
     Completes: number;
     Tier?: number;
     Tag: string;
-    RewardsCooldownTime?: Date;
+    RewardsCooldownTime?: IMongoDate;
 }
 
 export interface IMoaPet {
@@ -759,7 +757,7 @@ export interface INemesisHistory {
     BirthNode: BirthNode;
     Rank: number;
     k: boolean;
-    d: Date;
+    d: IMongoDate;
     GuessHistory?: number[];
     currentGuess?: number;
     Traded?: boolean;
@@ -808,13 +806,13 @@ export interface IOperatorLoadOut {
 }
 
 export interface IPendingCoupon {
-    Expiry: Date;
+    Expiry: IMongoDate;
     Discount: number;
 }
 
 export interface IPendingRecipe {
     ItemType: string;
-    CompletionDate: Date;
+    CompletionDate: IMongoDate;
     ItemId: IOid;
 }
 
@@ -872,8 +870,8 @@ export enum GivingSlotOrderInfo {
     LotusUpgradesModsPistolDualStatElectEventPistolMod = "/Lotus/Upgrades/Mods/Pistol/DualStat/ElectEventPistolMod"
 }
 
-export interface IPeriodicMissionCompletion {
-    date: Date;
+export interface PeriodicMissionCompletion {
+    date: IMongoDate;
     tag: string;
     count?: number;
 }
@@ -892,7 +890,7 @@ export interface IPersonalTechProject {
     ReqCredits: number;
     ItemType: string;
     ReqItems: IConsumable[];
-    CompletionDate?: Date;
+    CompletionDate?: IMongoDate;
     ItemId: IOid;
     ProductCategory?: string;
     CategoryItemId?: IOid;
@@ -919,7 +917,7 @@ export interface IQuestKey {
     unlock?: boolean;
     Completed?: boolean;
     ItemType: string;
-    CompletionDate?: Date;
+    CompletionDate?: IMongoDate;
 }
 
 export interface IProgress {
@@ -1096,15 +1094,15 @@ export interface IWebFlags {
     activeBuyPlat: number;
     noShow2FA: boolean;
     Tennocon2018Digital: boolean;
-    VisitPrimeAccess: Date;
-    VisitTennocon2019: Date;
-    enteredSC2019: Date;
-    VisitPrimeVault: Date;
-    VisitBuyPlatinum: Date;
-    ClickedSku_640_Page__en_buyplatinum: Date;
-    ClickedSku_640_Page__buyplatinum: Date;
-    VisitStarterPack: Date;
+    VisitPrimeAccess: IMongoDate;
+    VisitTennocon2019: IMongoDate;
+    enteredSC2019: IMongoDate;
+    VisitPrimeVault: IMongoDate;
+    VisitBuyPlatinum: IMongoDate;
+    ClickedSku_640_Page__en_buyplatinum: IMongoDate;
+    ClickedSku_640_Page__buyplatinum: IMongoDate;
+    VisitStarterPack: IMongoDate;
     Tennocon2020Digital: boolean;
     Anniversary2021: boolean;
-    HitDownloadBtn: Date;
+    HitDownloadBtn: IMongoDate;
 }

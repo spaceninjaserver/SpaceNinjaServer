@@ -23,12 +23,12 @@ const inventoryController: RequestHandler = async (request: Request, response: R
 
     const inventoryJSON = inventory.toJSON();
 
-    const inventoreResponse = toInventoryResponse(inventoryJSON);
+    const inventoryResponse = toInventoryResponse(inventoryJSON);
 
-    if (config.testMission) inventoreResponse.Missions = testMissions;
-    if (config.testQuestKey) inventoreResponse.QuestKeys = testQuestKeys;
+    if (config.testMission) inventoryResponse.Missions = testMissions;
+    if (config.testQuestKey) inventoryResponse.QuestKeys = testQuestKeys;
 
-    response.json(inventoreResponse);
+    response.json(inventoryResponse);
 };
 
 export { inventoryController };

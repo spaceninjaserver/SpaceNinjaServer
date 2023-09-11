@@ -29,6 +29,7 @@ import { updateSessionGetController, updateSessionPostController } from "@/src/c
 import { viewController } from "@/src/controllers/api/viewController";
 import { joinSessionController } from "@/src/controllers/api/joinSessionController";
 import { saveLoadoutController } from "@/src/controllers/api/saveLoadout";
+import { trainingResultController } from "@/src/controllers/api/trainingResultController";
 import { artifactsController } from "../controllers/api/artifactsController";
 
 import express from "express";
@@ -73,4 +74,6 @@ apiRouter.post("/genericUpdate.php", genericUpdateController);
 apiRouter.post("/rerollRandomMod.php", rerollRandomModController);
 apiRouter.post("/joinSession.php", joinSessionController);
 apiRouter.post("/saveLoadout.php", saveLoadoutController);
+apiRouter.post("/trainingResult.php", trainingResultController);
+
 export { apiRouter };
