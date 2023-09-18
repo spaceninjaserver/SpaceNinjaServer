@@ -4,7 +4,7 @@ import missionsDropTable from "@/static/json/missions-drop-table.json";
 import { modNames, relicNames, miscNames, resourceNames, gearNames, blueprintNames } from "@/static/data/items";
 import { IMissionInventoryUpdateRequest } from "../types/requestTypes";
 
-// need reverse engineer rewardSeed, otherwise ingame displayed rotation reward will be different than added to db or displayed on mission end
+// need to reverse engineer rewardSeed, otherwise ingame displayed rotation reward will be different than added to db or displayed on mission end
 const getRewards = ({
     RewardInfo
 }: IMissionInventoryUpdateRequest): {
