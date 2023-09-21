@@ -4,6 +4,7 @@ const webpack = require("webpack");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const Dotenv = require("dotenv-webpack");
+const config = require("./config.json");
 
 module.exports = {
     target: "node",
@@ -18,7 +19,7 @@ module.exports = {
             ejs: "ejs"
         }),
         new CopyPlugin({
-            patterns: [{ from: "static/certs/", to: "certs/" }]
+            patterns: [{ from: "static/certs/", to: "certs/" }, `static/data/H.Cache_${config.version}.bin`]
         })
     ],
     module: {
@@ -27,6 +28,15 @@ module.exports = {
                 test: /\.tsx?$/,
                 use: "ts-loader",
                 exclude: /node_modules/
+            },
+            {
+                test: /cache\.ts$/,
+                loader: "string-replace-loader",
+                options: {
+                    search: "../../static/data/",
+                    replace: "./",
+                    flags: "g"
+                }
             },
             {
                 test: /index\.ts$/,
