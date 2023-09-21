@@ -372,7 +372,7 @@ inventorySchema.set("toJSON", {
 
         (returnedObject as IInventoryResponse).TrainingDate = {
             $date: {
-                $numberLong: trainingDate.getTime().toString()
+                $numberLong: trainingDate?.getTime().toString()
             }
         } satisfies IMongoDate;
     }

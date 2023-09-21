@@ -2,12 +2,13 @@ import http from "http";
 import https from "https";
 import fs from "node:fs";
 import { app } from "./app";
+import { join } from "path";
 //const morgan = require("morgan");
 //const bodyParser = require("body-parser");
 
 const options = {
-    key: fs.readFileSync("static/certs/key.pem"),
-    cert: fs.readFileSync("static/certs/cert.pem"),
+    key: fs.readFileSync(join(__dirname, "../static/certs/key.pem")),
+    cert: fs.readFileSync(join(__dirname, "../static/certs/cert.pem")),
     passphrase: "123456"
 };
 

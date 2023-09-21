@@ -870,7 +870,7 @@ export enum GivingSlotOrderInfo {
     LotusUpgradesModsPistolDualStatElectEventPistolMod = "/Lotus/Upgrades/Mods/Pistol/DualStat/ElectEventPistolMod"
 }
 
-export interface PeriodicMissionCompletion {
+export interface IPeriodicMissionCompletion {
     date: IMongoDate;
     tag: string;
     count?: number;
