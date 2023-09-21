@@ -8,7 +8,8 @@
     "dev": "ts-node-dev --openssl-legacy-provider -r tsconfig-paths/register src/index.ts",
     "build": "webpack",
     "lint": "eslint --ext .ts .",
-    "prettier": "prettier --write ."
+    "prettier": "prettier --write .",
+    "postinstall": "node static/json/scripts/update-items.js"
   },
   "license": "GNU",
   "dependencies": {

@@ -1,7 +1,12 @@
 import { IMissionRewardResponse, IReward, IInventoryFieldType, inventoryFields } from "@/src/types/missionTypes";
 
 import missionsDropTable from "@/static/json/missions-drop-table.json";
-import { modNames, relicNames, miscNames, resourceNames, gearNames, blueprintNames } from "@/static/data/items";
+import modNames from "@/static/json/mod-names.json";
+import relicNames from "@/static/json/relic-names.json";
+import miscNames from "@/static/json/misc-names.json";
+import resourceNames from "@/static/json/resource-names.json";
+import gearNames from "@/static/json/gear-names.json";
+import blueprintNames from "@/static/json/blueprint-names.json";
 import { IMissionInventoryUpdateRequest } from "../types/requestTypes";
 
 // need reverse engineer rewardSeed, otherwise ingame displayed rotation reward will be different than added to db or displayed on mission end
@@ -153,16 +158,16 @@ const itemCheck = (
     name: string
 ) => {
     const rewardCheck = {
-        RawUpgrades: modNames[name],
-        Consumables: gearNames[name],
+        RawUpgrades: (modNames as ImportAssertions)[name],
+        Consumables: (gearNames as ImportAssertions)[name],
         MiscItems:
-            miscNames[name] ||
-            miscNames[name.replace(/\d+X\s*/, "")] ||
-            resourceNames[name] ||
-            resourceNames[name.replace(/\d+X\s*/, "")] ||
-            relicNames[name.replace("Relic", "Intact")] ||
-            relicNames[name.replace("Relic (Radiant)", "Radiant")],
-        Recipes: blueprintNames[name]
+            (miscNames as ImportAssertions)[name] ||
+            (miscNames as ImportAssertions)[name.replace(/\d+X\s*/, "")] ||
+            (resourceNames as ImportAssertions)[name] ||
+            (resourceNames as ImportAssertions)[name.replace(/\d+X\s*/, "")] ||
+            (relicNames as ImportAssertions)[name.replace("Relic", "Intact")] ||
+            (relicNames as ImportAssertions)[name.replace("Relic (Radiant)", "Radiant")],
+        Recipes: (blueprintNames as ImportAssertions)[name]
     };
     for (const key of Object.keys(rewardCheck) as IInventoryFieldType[]) {
         if (rewardCheck[key]) {
@@ -223,19 +228,19 @@ const _missionRewardsCheckAllNamings = () => {
         });
     });
     tempRewards = tempRewards
-        .filter(reward => !modNames[reward.name])
-        .filter(reward => !miscNames[reward.name])
-        .filter(reward => !miscNames[reward.name.replace(/\d+X\s*/, "")])
-        .filter(reward => !resourceNames[reward.name])
-        .filter(reward => !resourceNames[reward.name.replace(/\d+X\s*/, "")])
-        .filter(reward => !gearNames[reward.name])
+        .filter(reward => !(modNames as ImportAssertions)[reward.name])
+        .filter(reward => !(miscNames as ImportAssertions)[reward.name])
+        .filter(reward => !(miscNames as ImportAssertions)[reward.name.replace(/\d+X\s*/, "")])
+        .filter(reward => !(resourceNames as ImportAssertions)[reward.name])
+        .filter(reward => !(resourceNames as ImportAssertions)[reward.name.replace(/\d+X\s*/, "")])
+        .filter(reward => !(gearNames as ImportAssertions)[reward.name])
         .filter(reward => {
             return (
-                !relicNames[reward.name.replace("Relic", "Intact")] &&
-                !relicNames[reward.name.replace("Relic (Radiant)", "Radiant")]
+                !(relicNames as ImportAssertions)[reward.name.replace("Relic", "Intact")] &&
+                !(relicNames as ImportAssertions)[reward.name.replace("Relic (Radiant)", "Radiant")]
             );
         })
-        .filter(reward => !blueprintNames[reward.name])
+        .filter(reward => !(blueprintNames as ImportAssertions)[reward.name])
         .filter(reward => !reward.name.includes(" Endo"))
         .filter(reward => !reward.name.includes(" Credits Cache") && !reward.name.includes("Return: "));
     console.log(tempRewards);

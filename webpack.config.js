@@ -1,3 +1,4 @@
+/* eslint-disable */
 const resolve = require("path").resolve;
 const webpack = require("webpack");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
@@ -17,10 +18,7 @@ module.exports = {
             ejs: "ejs"
         }),
         new CopyPlugin({
-            patterns: [
-                { from: "static/certs/", to: "certs/" },
-                { from: "node_modules/warframe-items/data/json/", to: "data/json/" }
-            ]
+            patterns: [{ from: "static/certs/", to: "certs/" }]
         })
     ],
     module: {
@@ -42,11 +40,7 @@ module.exports = {
         ]
     },
     resolve: {
-        plugins: [
-            new TsconfigPathsPlugin({
-                /* options: see below */
-            })
-        ],
+        plugins: [new TsconfigPathsPlugin()],
         fallback: {
             "mongodb-client-encryption": false,
             aws4: false,
@@ -55,10 +49,7 @@ module.exports = {
             "@mongodb-js/zstd": false,
             kerberos: false
         },
-        extensions: [".tsx", ".ts", ".js"],
-        alias: {
-            "static/certs/*": resolve(__dirname, "certs") // Assuming 'certs' is in the root directory
-        }
+        extensions: [".tsx", ".ts", ".js"]
     },
     entry: ["./src/index.ts"],
     output: {

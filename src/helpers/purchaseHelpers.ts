@@ -1,7 +1,7 @@
 import { parseBoolean, parseNumber, parseString } from "@/src/helpers/general";
 import { WeaponTypeInternal } from "@/src/services/inventoryService";
 import { IPurchaseRequest } from "@/src/types/purchaseTypes";
-import { weapons } from "@/static/data/items";
+import weaponCategories from "@/static/json/weapon-categories.json";
 
 const toPurchaseRequest = (purchaseRequest: unknown): IPurchaseRequest => {
     if (!purchaseRequest || typeof purchaseRequest !== "object") {
@@ -41,13 +41,7 @@ const toPurchaseRequest = (purchaseRequest: unknown): IPurchaseRequest => {
 };
 
 const getWeaponType = (weaponName: string) => {
-    const weaponInfo = weapons.find(i => i.uniqueName === weaponName);
-
-    if (!weaponInfo) {
-        throw new Error(`unknown weapon ${weaponName}`);
-    }
-
-    const weaponType = weaponInfo.productCategory as WeaponTypeInternal;
+    const weaponType = (weaponCategories as ImportAssertions)[weaponName] as WeaponTypeInternal;
 
     if (!weaponType) {
         throw new Error(`unknown weapon category for item ${weaponName}`);

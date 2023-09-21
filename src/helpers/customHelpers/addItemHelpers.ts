@@ -1,5 +1,5 @@
 import { isString, parseString } from "@/src/helpers/general";
-import { items } from "@/static/data/items";
+import allUniqNames from "@/static/json/all-uniq-names.json";
 
 export enum ItemType {
     Powersuit = "Powersuit",
@@ -24,8 +24,7 @@ interface IAddItemRequest {
     accountId: string;
 }
 export const isInternalName = (internalName: string): boolean => {
-    const item = items.find(i => i.uniqueName === internalName);
-    return Boolean(item);
+    return allUniqNames.includes(internalName);
 };
 
 const parseInternalName = (internalName: unknown): string => {
