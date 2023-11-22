@@ -1,30 +1,37 @@
 export interface ISaveLoadoutRequest {
-    LoadOuts: { [key: string]: LoadOut };
-    LongGuns: { [key: string]: Config };
-    OperatorAmps: { [key: string]: Config };
-    Pistols: { [key: string]: Config };
-    Suits: { [key: string]: Config };
-    Melee: {};
-    Sentinels: {};
-    SentinelWeapons: {};
-    KubrowPets: {};
-    SpaceSuits: {};
-    SpaceGuns: {};
-    SpaceMelee: {};
-    Scoops: {};
-    SpecialItems: {};
-    MoaPets: {};
-    Hoverboards: {};
-    DataKnives: {};
-    MechSuits: {};
-    CrewShipHarnesses: {};
-    Horses: {};
-    DrifterMelee: {};
+    LoadOuts: ISaveLoadoutLoadoutEntry;
+    LongGuns: ISaveLoadoutEntry;
+    OperatorAmps: ISaveLoadoutEntry;
+    Pistols: ISaveLoadoutEntry;
+    Suits: ISaveLoadoutEntry;
+    Melee: ISaveLoadoutEntry;
+    Sentinels: ISaveLoadoutEntry;
+    SentinelWeapons: ISaveLoadoutEntry;
+    KubrowPets: ISaveLoadoutEntry;
+    SpaceSuits: ISaveLoadoutEntry;
+    SpaceGuns: ISaveLoadoutEntry;
+    SpaceMelee: ISaveLoadoutEntry;
+    Scoops: ISaveLoadoutEntry;
+    SpecialItems: ISaveLoadoutEntry;
+    MoaPets: ISaveLoadoutEntry;
+    Hoverboards: ISaveLoadoutEntry;
+    DataKnives: ISaveLoadoutEntry;
+    MechSuits: ISaveLoadoutEntry;
+    CrewShipHarnesses: ISaveLoadoutEntry;
+    Horses: ISaveLoadoutEntry;
+    DrifterMelee: ISaveLoadoutEntry;
     UpgradeVer: number;
-    OperatorLoadOuts: {};
-    AdultOperatorLoadOuts: {};
-    KahlLoadOuts: {};
-    CrewShips: {};
+    OperatorLoadOuts: ISaveLoadoutEntry;
+    AdultOperatorLoadOuts: ISaveLoadoutEntry;
+    KahlLoadOuts: ISaveLoadoutEntry;
+    CrewShips: ISaveLoadoutEntry;
+}
+
+export interface ISaveLoadoutEntry {
+    [key: string]: Config;
+}
+export interface ISaveLoadoutLoadoutEntry {
+    [key: string]: LoadOut;
 }
 
 export interface Config {

@@ -5,3 +5,6 @@
 /static/data/*.bin
 yarn.lock
 /tmp
+
+# JetBrains/webstorm configs
+.idea/

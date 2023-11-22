@@ -1,7 +1,12 @@
 import { Inventory } from "@/src/models/inventoryModel";
 import { RequestHandler } from "express";
 import util from "util";
-import { EquipmentCategories, ISaveLoadoutRequest } from "@/src/types/saveLoadoutTypes";
+import {
+    EquipmentCategories,
+    ISaveLoadoutEntry,
+    ISaveLoadoutLoadoutEntry,
+    ISaveLoadoutRequest
+} from "@/src/types/saveLoadoutTypes";
 import { isObject } from "@/src/helpers/general";
 import { ISuitResponse } from "@/src/types/inventoryTypes/SuitTypes";
 
@@ -9,8 +14,11 @@ export const isObjectEmpty = (obj: Record<string, unknown>) => {
     return obj && Object.keys(obj).length === 0 && obj.constructor === Object;
 };
 
+type EquipmentChangeEntry = number | ISaveLoadoutEntry | ISaveLoadoutLoadoutEntry;
+
 export const handleInventoryItemConfigChange = (equipmentChanges: ISaveLoadoutRequest) => {
-    for (const [equipmentName, equipment] of Object.entries(equipmentChanges)) {
+    for (const [equipmentName, eqp] of Object.entries(equipmentChanges)) {
+        const equipment = eqp as EquipmentChangeEntry;
         //console.log(equipmentName);
         if (!isObjectEmpty(equipment)) {
             // non-empty is a change in loadout(or suit...)
