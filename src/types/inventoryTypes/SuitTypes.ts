@@ -9,6 +9,7 @@ export interface ISuitDocument extends Document, ISuitResponse {
 
 export interface ISuitResponse extends ISuitDatabase {
     ItemId: IOid;
+    //should omit _id which is not present in response
 }
 
 export interface ISuitDatabase {

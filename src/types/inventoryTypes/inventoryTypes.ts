@@ -14,6 +14,7 @@ export interface IInventoryDatabase extends Omit<IInventoryResponse, "TrainingDa
 export interface IInventoryResponseDocument extends IInventoryResponse, Document {}
 
 export interface IInventoryResponse {
+    DuviriInfo: { Seed: number; NumCompletions: number };
     SubscribedToEmails: number;
     Created: IMongoDate;
     RewardSeed: number;
