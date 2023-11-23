@@ -1,37 +1,72 @@
+import { IOid } from "@/src/types/commonTypes";
+
 export interface ISaveLoadoutRequest {
-    LoadOuts: ISaveLoadoutLoadoutEntry;
-    LongGuns: ISaveLoadoutEntry;
-    OperatorAmps: ISaveLoadoutEntry;
-    Pistols: ISaveLoadoutEntry;
-    Suits: ISaveLoadoutEntry;
-    Melee: ISaveLoadoutEntry;
-    Sentinels: ISaveLoadoutEntry;
-    SentinelWeapons: ISaveLoadoutEntry;
-    KubrowPets: ISaveLoadoutEntry;
-    SpaceSuits: ISaveLoadoutEntry;
-    SpaceGuns: ISaveLoadoutEntry;
-    SpaceMelee: ISaveLoadoutEntry;
-    Scoops: ISaveLoadoutEntry;
-    SpecialItems: ISaveLoadoutEntry;
-    MoaPets: ISaveLoadoutEntry;
-    Hoverboards: ISaveLoadoutEntry;
-    DataKnives: ISaveLoadoutEntry;
-    MechSuits: ISaveLoadoutEntry;
-    CrewShipHarnesses: ISaveLoadoutEntry;
-    Horses: ISaveLoadoutEntry;
-    DrifterMelee: ISaveLoadoutEntry;
+    LoadOuts: ILoadout;
+    LongGuns: IConfigEntry;
+    OperatorAmps: IConfigEntry;
+    Pistols: IConfigEntry;
+    Suits: IConfigEntry;
+    Melee: IConfigEntry;
+    Sentinels: IConfigEntry;
+    SentinelWeapons: IConfigEntry;
+    KubrowPets: IConfigEntry;
+    SpaceSuits: IConfigEntry;
+    SpaceGuns: IConfigEntry;
+    SpaceMelee: IConfigEntry;
+    Scoops: IConfigEntry;
+    SpecialItems: IConfigEntry;
+    MoaPets: IConfigEntry;
+    Hoverboards: IConfigEntry;
+    DataKnives: IConfigEntry;
+    MechSuits: IConfigEntry;
+    CrewShipHarnesses: IConfigEntry;
+    Horses: IConfigEntry;
+    DrifterMelee: IConfigEntry;
     UpgradeVer: number;
-    OperatorLoadOuts: ISaveLoadoutEntry;
-    AdultOperatorLoadOuts: ISaveLoadoutEntry;
-    KahlLoadOuts: ISaveLoadoutEntry;
-    CrewShips: ISaveLoadoutEntry;
+    OperatorLoadOuts: IConfigEntry;
+    AdultOperatorLoadOuts: IConfigEntry;
+    KahlLoadOuts: IConfigEntry;
+    CrewShips: IConfigEntry;
 }
 
-export interface ISaveLoadoutEntry {
+export interface ISaveLoadoutRequestNoUpgradeVer extends Omit<ISaveLoadoutRequest, "UpgradeVer"> {}
+
+export interface IConfigEntry {
     [key: string]: Config;
 }
-export interface ISaveLoadoutLoadoutEntry {
-    [key: string]: LoadOut;
+
+export interface ILoadout {
+    NORMAL: ILoadoutKey;
+    SENTINEL: ILoadoutKey;
+    ARCHWING: ILoadoutKey;
+    NORMAL_PVP: ILoadoutKey;
+    LUNARO: ILoadoutKey;
+    OPERATOR: ILoadoutKey;
+    KDRIVE: ILoadoutKey;
+    DATAKNIFE: ILoadoutKey;
+    MECH: ILoadoutKey;
+    OPERATOR_ADULT: ILoadoutKey;
+    DRIFTER: ILoadoutKey;
+}
+
+export interface ILoadoutKey {
+    [key: string]: ItemConfig;
+}
+
+export interface ItemConfig {
+    ItemId: IOid;
+    PresetIcon: string;
+    Favorite: boolean;
+    s: M;
+    p: M;
+    l: M;
+    m: M;
+}
+
+export interface M {
+    ItemId: IOid;
+    mod: number;
+    cus: number;
 }
 
 export interface Config {
@@ -76,36 +111,8 @@ export interface Col {
     e1?: number;
 }
 
-export interface LoadOuts {
-    NORMAL: LoadOut;
-    SENTINEL: LoadOut;
-    ARCHWING: LoadOut;
-    NORMAL_PVP: LoadOut;
-    LUNARO: LoadOut;
-    OPERATOR: LoadOut;
-    KDRIVE: LoadOut;
-    DATAKNIFE: LoadOut;
-    MECH: LoadOut;
-    OPERATOR_ADULT: LoadOut;
-    DRIFTER: LoadOut;
-}
-
-type LoadOut = {
-    Upgrades: Config[];
-    PvpUpgrades: Config[];
-    Skins: string[];
-    pricol: { [key: string]: number };
-    attcol: Config;
-    sigcol: Config;
-    eyecol: Config;
-    facial: Config;
-    cloth: Config;
-    syancol: Config;
-    Songs: Config[];
-};
-
 export type EquipmentCategories =
-    | { LoadOuts: { [key in keyof LoadOuts]: LoadOut } }
+    | { LoadOuts: { [key in keyof ILoadout]: LoadOut } }
     | { LongGuns: Config }
     | { OperatorAmps: Config } // Replace 'any' with the actual type
     | { Pistols: Config } // Replace 'any' with the actual type
