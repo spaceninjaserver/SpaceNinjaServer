@@ -1,26 +1,25 @@
-import { Inventory } from "@/src/models/inventoryModel";
+import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { RequestHandler } from "express";
 import util from "util";
 import {
     EquipmentCategories,
     IConfigEntry,
     ILoadout,
+    ILoadoutKey,
     ISaveLoadoutRequest,
     ISaveLoadoutRequestNoUpgradeVer
 } from "@/src/types/saveLoadoutTypes";
 
-export const isObjectEmpty = (obj: Record<string, unknown>) => {
-    return obj && Object.keys(obj).length === 0 && obj.constructor === Object;
+export const isEmptyObject = (obj: unknown): boolean => {
+    return Boolean(obj && Object.keys(obj).length === 0 && obj.constructor === Object);
 };
-
-type EquipmentChangeEntry = IConfigEntry | ILoadout;
 
 export const handleInventoryItemConfigChange = (equipmentChanges: ISaveLoadoutRequestNoUpgradeVer) => {
     for (const [_equipmentName, _equipment] of Object.entries(equipmentChanges)) {
         const equipment = _equipment as ISaveLoadoutRequestNoUpgradeVer[keyof ISaveLoadoutRequestNoUpgradeVer];
         const equipmentName = _equipmentName as keyof ISaveLoadoutRequestNoUpgradeVer;
 
-        if (isObjectEmpty(equipment)) {
+        if (isEmptyObject(equipment)) {
             continue;
         }
         // non-empty is a change in loadout(or suit...)
@@ -28,16 +27,20 @@ export const handleInventoryItemConfigChange = (equipmentChanges: ISaveLoadoutRe
         switch (equipmentName) {
             case "LoadOuts": {
                 console.log("loadout received");
-                const _loadout = equipment as unknown as ILoadout;
 
-                for (const [loadoutName, loadout] of Object.entries(_loadout)) {
-                    console.log(loadoutName, loadout);
-                    //const loadout = _loadout as ILoadoutEntry;
+                for (const [_loadoutName, _loadout] of Object.entries(equipment)) {
+                    const loadout = _loadout as ILoadoutKey;
+                    const loadoutName = _loadoutName as keyof ILoadout;
 
-                    // console.log(loadoutName, loadout);
-                    // if (isObjectEmpty(loadout)) {
-                    //     continue;
-                    // }
+                    console.log(_loadoutName, loadout);
+
+                    if (isEmptyObject(loadout)) {
+                        continue;
+                    }
+                    // all non-empty entries are one loadout slot
+                    for (const [_loadoutId, _loadoutConfig] of Object.entries(loadout)) {
+                        console.log(loadout[_loadoutId].s);
+                    }
                 }
                 break;
             }

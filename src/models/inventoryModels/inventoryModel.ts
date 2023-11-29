@@ -8,8 +8,8 @@ import {
     IInventoryResponse,
     IInventoryDatabaseDocument,
     IInventoryResponseDocument
-} from "../types/inventoryTypes/inventoryTypes";
-import { IMongoDate, IOid } from "../types/commonTypes";
+} from "../../types/inventoryTypes/inventoryTypes";
+import { IMongoDate, IOid } from "../../types/commonTypes";
 import { ISuitDatabase, ISuitDocument } from "@/src/types/inventoryTypes/SuitTypes";
 import { IWeaponDatabase } from "@/src/types/inventoryTypes/weaponTypes";
 
@@ -191,7 +191,7 @@ FlavourItemSchema.set("toJSON", {
     }
 });
 
-const inventorySchema = new Schema<IInventoryDatabaseDocument, InventoryDocumentProps>({
+const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
     accountOwnerId: Schema.Types.ObjectId,
     SubscribedToEmails: Number,
     Created: Schema.Types.Mixed,
@@ -229,7 +229,7 @@ const inventorySchema = new Schema<IInventoryDatabaseDocument, InventoryDocument
     FlavourItems: [FlavourItemSchema],
     Scoops: [Schema.Types.Mixed],
     TrainingRetriesLeft: Number,
-    LoadOutPresets: Schema.Types.Mixed,
+    LoadOutPresets: { type: Schema.Types.ObjectId, ref: "Loadout" },
     CurrentLoadOutIds: [Schema.Types.Mixed],
     Missions: [Schema.Types.Mixed],
     RandomUpgradesIdentified: Number,

@@ -1,4 +1,5 @@
 import { IOid } from "@/src/types/commonTypes";
+import { Document, Mongoose } from "mongoose";
 
 export interface ISaveLoadoutRequest {
     LoadOuts: ILoadout;
@@ -49,11 +50,27 @@ export interface ILoadout {
     DRIFTER: ILoadoutKey;
 }
 
-export interface ILoadoutKey {
-    [key: string]: ItemConfig;
+export interface ILoadoutDatabase {
+    NORMAL: ILoadoutConfig;
+    SENTINEL: ILoadoutConfig;
+    ARCHWING: ILoadoutConfig;
+    NORMAL_PVP: ILoadoutConfig;
+    LUNARO: ILoadoutConfig;
+    OPERATOR: ILoadoutConfig;
+    KDRIVE: ILoadoutConfig;
+    DATAKNIFE: ILoadoutConfig;
+    MECH: ILoadoutConfig;
+    OPERATOR_ADULT: ILoadoutConfig;
+    DRIFTER: ILoadoutConfig;
 }
 
-export interface ItemConfig {
+export interface ILoadoutKey {
+    [key: string]: ILoadoutConfig;
+}
+
+export type ILoadoutConfigDocument = ILoadoutConfig & Document;
+
+export interface ILoadoutConfig {
     ItemId: IOid;
     PresetIcon: string;
     Favorite: boolean;

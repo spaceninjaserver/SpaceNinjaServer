@@ -1,6 +1,6 @@
 import { parseString } from "@/src/helpers/general";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { Inventory } from "@/src/models/inventoryModel";
+import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { getInventory } from "@/src/services/inventoryService";
 import { IMongoDate } from "@/src/types/commonTypes";
 import { RequestHandler } from "express";

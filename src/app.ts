@@ -14,6 +14,7 @@ import { customRouter } from "@/src/routes/custom";
 import { dynamicController } from "@/src/routes/dynamic";
 import { statsRouter } from "@/src/routes/stats";
 import { connectDatabase } from "@/src/services/mongoService";
+import { LoadoutModel as Loadout } from "@/src/models/inventoryModels/loadoutModel";
 
 void connectDatabase();
 
@@ -33,6 +34,14 @@ app.use("/:id/dynamic", dynamicController);
 
 app.post("/pay/steamPacks.php", steamPacksController);
 app.use("/stats", statsRouter);
+
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+app.post("/test", async (req, _res) => {
+    console.log("test hit", req.body);
+    const newLoadout = new Loadout({});
+    await newLoadout.save();
+    _res.end();
+});
 
 app.use(unknownEndpointHandler);
 
