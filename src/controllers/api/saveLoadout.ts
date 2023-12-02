@@ -4,17 +4,24 @@ import util from "util";
 import {
     EquipmentCategories,
     IConfigEntry,
-    ILoadout,
+    ILoadoutRequest,
     ILoadoutKey,
     ISaveLoadoutRequest,
-    ISaveLoadoutRequestNoUpgradeVer
+    ISaveLoadoutRequestNoUpgradeVer,
+    ILoadoutConfigDatabase
 } from "@/src/types/saveLoadoutTypes";
+import { LoadoutModel } from "@/src/models/inventoryModels/loadoutModel";
+import { Types } from "mongoose";
 
 export const isEmptyObject = (obj: unknown): boolean => {
     return Boolean(obj && Object.keys(obj).length === 0 && obj.constructor === Object);
 };
 
-export const handleInventoryItemConfigChange = (equipmentChanges: ISaveLoadoutRequestNoUpgradeVer) => {
+//setup default items on account creation or like originally in giveStartingItems.php
+
+//export const updateLoadout = (loadout: ISaveLoadoutRequest, accountId: string) => {};
+
+export const handleInventoryItemConfigChange = async (equipmentChanges: ISaveLoadoutRequestNoUpgradeVer) => {
     for (const [_equipmentName, _equipment] of Object.entries(equipmentChanges)) {
         const equipment = _equipment as ISaveLoadoutRequestNoUpgradeVer[keyof ISaveLoadoutRequestNoUpgradeVer];
         const equipmentName = _equipmentName as keyof ISaveLoadoutRequestNoUpgradeVer;
@@ -28,23 +35,59 @@ export const handleInventoryItemConfigChange = (equipmentChanges: ISaveLoadoutRe
             case "LoadOuts": {
                 console.log("loadout received");
 
-                for (const [_loadoutName, _loadout] of Object.entries(equipment)) {
+                for (const [_loadoutSlot, _loadout] of Object.entries(equipment)) {
+                    const loadoutSlot = _loadoutSlot as keyof ILoadoutRequest;
                     const loadout = _loadout as ILoadoutKey;
-                    const loadoutName = _loadoutName as keyof ILoadout;
 
-                    console.log(_loadoutName, loadout);
+                    //console.log("key", loadoutSlot, "value", loadout);
 
                     if (isEmptyObject(loadout)) {
                         continue;
                     }
                     // all non-empty entries are one loadout slot
-                    for (const [_loadoutId, _loadoutConfig] of Object.entries(loadout)) {
-                        console.log(loadout[_loadoutId].s);
+                    for (const [loadoutId, loadoutConfig] of Object.entries(loadout)) {
+                        // console.log("loadoutId", loadoutId, "loadoutconfig", loadoutConfig);
+                        const loadout = await LoadoutModel.findById("656a184a9cefa0e5627689af");
+                        if (!loadout) {
+                            throw new Error("loadout not found");
+                        }
+
+                        const oldLoadoutConfig = loadout[loadoutSlot].find(
+                            loadout => loadout._id.toString() === loadoutId
+                        );
+
+                        // if no config with this id exists, create a new one
+                        if (!oldLoadoutConfig) {
+                            const { ItemId, ...loadoutConfigItemIdRemoved } = loadoutConfig;
+                            loadout[loadoutSlot].push({
+                                _id: ItemId.$oid,
+                                ...loadoutConfigItemIdRemoved
+                            });
+                            await loadout.save();
+                            continue;
+                        }
+
+                        const loadoutIndex = loadout[loadoutSlot].indexOf(oldLoadoutConfig);
+
+                        if (loadoutIndex === undefined || loadoutIndex === -1) {
+                            throw new Error("loadout index not found");
+                        }
+
+                        //console.log("parent id", oldLoadoutConfig.ownerDocument()._id);
+                        loadout[loadoutSlot][loadoutIndex].set(loadoutConfig);
+                        //loadout.NORMAL[loadoutIndex].overwrite(loadoutConfig);
+                        //console.log("db", loadout[loadoutSlot][loadoutIndex].schema);
+
+                        await loadout.save();
+                        //({ _id: loadoutId }, loadoutConfig);
                     }
                 }
                 break;
             }
             case "LongGuns": {
+                console.log("longgun received");
+                console.log(equipmentName, equipment);
+
                 const longGun = equipment as IConfigEntry;
                 //   longGun["key"].PvpUpgrades;
                 break;

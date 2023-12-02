@@ -1,67 +1,43 @@
 import { IOid } from "@/src/types/commonTypes";
-import { ILoadout, ILoadoutConfig, ILoadoutConfigDocument, ILoadoutDatabase, M } from "@/src/types/saveLoadoutTypes";
+import { ILoadoutConfigDatabase, ILoadoutDatabase, IEquipmentSelection } from "@/src/types/saveLoadoutTypes";
 import { Model, Schema, Types, model } from "mongoose";
 
-//create a schema for the $oid type
-const oidSchema = new Schema<IOid>({
-    $oid: String
-});
+const oidSchema = new Schema<IOid>(
+    {
+        $oid: String
+    },
+    {
+        _id: false
+    }
+);
 
 //create a mongoose schema based on interface M
-const modSchema = new Schema<M>({
-    ItemId: {
-        type: oidSchema,
-        default: { $oid: "000000000000000000000000" }
+const EquipmentSelectionSchema = new Schema<IEquipmentSelection>(
+    {
+        ItemId: {
+            type: oidSchema,
+            default: { $oid: "000000000000000000000000" }
+        },
+        mod: Number,
+        cus: Number
     },
-    mod: Number,
-    cus: Number
+    {
+        _id: false
+    }
+);
+
+const loadoutConfigSchema = new Schema<ILoadoutConfigDatabase>({
+    PresetIcon: String,
+    Favorite: Boolean,
+    s: EquipmentSelectionSchema,
+    p: EquipmentSelectionSchema,
+    l: EquipmentSelectionSchema,
+    m: EquipmentSelectionSchema
 });
 
-//default initialization for
-const loadoutConfigSchema = new Schema<ILoadoutConfig>(
-    {
-        PresetIcon: String,
-        Favorite: Boolean,
-        s: {},
-        p: {},
-        l: {},
-        m: {}
-    },
-    {
-        virtuals: {
-            ItemId: {
-                get() {
-                    return this._id.toString();
-                }
-            }
-        }
-    }
-);
-
-interface User {
-    firstName: string;
-    lastName: string;
-}
-
-const UserSchema = new Schema(
-    {
-        firstName: String,
-        lastName: String
-    },
-    {
-        virtuals: {
-            fullname: {
-                get() {
-                    return `${this.firstName} ${this.lastName}`;
-                }
-            }
-        }
-    }
-);
-
-// loadoutConfigSchema.virtual("ItemId").get(function (): string {
-//     return this._id
-// });
+loadoutConfigSchema.virtual("ItemId").get(function (): string {
+    return this._id.toString();
+});
 
 loadoutConfigSchema.set("toJSON", {
     virtuals: true,
@@ -85,19 +61,31 @@ const loadoutSchema = new Schema<ILoadoutDatabase, loadoutModelType>({
     DRIFTER: [loadoutConfigSchema]
 });
 
+loadoutSchema.virtual("ItemId").get(function (): string {
+    return this._id.toString();
+});
+
+loadoutSchema.set("toJSON", {
+    virtuals: true,
+    transform(_doc, ret, _options) {
+        delete ret._id;
+        delete ret.__v;
+    }
+});
+
 //create database typefor ILoadoutConfig
 type loadoutDocumentProps = {
-    NORMAL: Types.DocumentArray<ILoadoutConfig>;
-    SENTINEL: Types.DocumentArray<ILoadoutConfig>;
-    ARCHWING: Types.DocumentArray<ILoadoutConfig>;
-    NORMAL_PVP: Types.DocumentArray<ILoadoutConfig>;
-    LUNARO: Types.DocumentArray<ILoadoutConfig>;
-    OPERATOR: Types.DocumentArray<ILoadoutConfig>;
-    KDRIVE: Types.DocumentArray<ILoadoutConfig>;
-    DATAKNIFE: Types.DocumentArray<ILoadoutConfig>;
-    MECH: Types.DocumentArray<ILoadoutConfig>;
-    OPERATOR_ADULT: Types.DocumentArray<ILoadoutConfig>;
-    DRIFTER: Types.DocumentArray<ILoadoutConfig>;
+    NORMAL: Types.DocumentArray<ILoadoutConfigDatabase>;
+    SENTINEL: Types.DocumentArray<ILoadoutConfigDatabase>;
+    ARCHWING: Types.DocumentArray<ILoadoutConfigDatabase>;
+    NORMAL_PVP: Types.DocumentArray<ILoadoutConfigDatabase>;
+    LUNARO: Types.DocumentArray<ILoadoutConfigDatabase>;
+    OPERATOR: Types.DocumentArray<ILoadoutConfigDatabase>;
+    KDRIVE: Types.DocumentArray<ILoadoutConfigDatabase>;
+    DATAKNIFE: Types.DocumentArray<ILoadoutConfigDatabase>;
+    MECH: Types.DocumentArray<ILoadoutConfigDatabase>;
+    OPERATOR_ADULT: Types.DocumentArray<ILoadoutConfigDatabase>;
+    DRIFTER: Types.DocumentArray<ILoadoutConfigDatabase>;
 };
 
 type loadoutModelType = Model<ILoadoutDatabase, {}, loadoutDocumentProps>;

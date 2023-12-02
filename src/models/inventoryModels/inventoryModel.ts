@@ -152,7 +152,10 @@ suitConfigSchema.set("toJSON", {
 
 const suitSchema = new Schema<ISuitDatabase>({
     ItemType: String,
-    Configs: [suitConfigSchema],
+    Configs: {
+        type: [suitConfigSchema],
+        default: [{}, {}, {}]
+    },
     UpgradeVer: Number,
     XP: Number,
     InfestationDate: Date,

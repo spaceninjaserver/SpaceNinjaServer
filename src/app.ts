@@ -39,6 +39,15 @@ app.use("/stats", statsRouter);
 app.post("/test", async (req, _res) => {
     console.log("test hit", req.body);
     const newLoadout = new Loadout({});
+    newLoadout.NORMAL.push({
+        _id: "000000000000000000000000",
+        Favorite: false,
+        PresetIcon: "",
+        s: { ItemId: { $oid: "000000000000000000000000" }, mod: 0, cus: 0 },
+        p: { ItemId: { $oid: "000000000000000000000000" }, mod: 0, cus: 0 },
+        l: { ItemId: { $oid: "000000000000000000000000" }, mod: 0, cus: 0 },
+        m: { ItemId: { $oid: "000000000000000000000000" }, mod: 0, cus: 0 }
+    });
     await newLoadout.save();
     _res.end();
 });

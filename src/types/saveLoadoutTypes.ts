@@ -1,8 +1,8 @@
 import { IOid } from "@/src/types/commonTypes";
-import { Document, Mongoose } from "mongoose";
+import { Document, Mongoose, Types } from "mongoose";
 
 export interface ISaveLoadoutRequest {
-    LoadOuts: ILoadout;
+    LoadOuts: ILoadoutRequest;
     LongGuns: IConfigEntry;
     OperatorAmps: IConfigEntry;
     Pistols: IConfigEntry;
@@ -36,51 +36,46 @@ export interface IConfigEntry {
     [key: string]: Config;
 }
 
-export interface ILoadout {
-    NORMAL: ILoadoutKey;
-    SENTINEL: ILoadoutKey;
-    ARCHWING: ILoadoutKey;
-    NORMAL_PVP: ILoadoutKey;
-    LUNARO: ILoadoutKey;
-    OPERATOR: ILoadoutKey;
-    KDRIVE: ILoadoutKey;
-    DATAKNIFE: ILoadoutKey;
-    MECH: ILoadoutKey;
-    OPERATOR_ADULT: ILoadoutKey;
-    DRIFTER: ILoadoutKey;
+export interface ILoadoutRequest extends Omit<ILoadoutDatabase, "_id"> {}
+
+export interface ILoadoutResponse extends ILoadoutDatabase {
+    ItemId: IOid;
 }
 
 export interface ILoadoutDatabase {
-    NORMAL: ILoadoutConfig;
-    SENTINEL: ILoadoutConfig;
-    ARCHWING: ILoadoutConfig;
-    NORMAL_PVP: ILoadoutConfig;
-    LUNARO: ILoadoutConfig;
-    OPERATOR: ILoadoutConfig;
-    KDRIVE: ILoadoutConfig;
-    DATAKNIFE: ILoadoutConfig;
-    MECH: ILoadoutConfig;
-    OPERATOR_ADULT: ILoadoutConfig;
-    DRIFTER: ILoadoutConfig;
+    NORMAL: ILoadoutConfigDatabase;
+    SENTINEL: ILoadoutConfigDatabase;
+    ARCHWING: ILoadoutConfigDatabase;
+    NORMAL_PVP: ILoadoutConfigDatabase;
+    LUNARO: ILoadoutConfigDatabase;
+    OPERATOR: ILoadoutConfigDatabase;
+    KDRIVE: ILoadoutConfigDatabase;
+    DATAKNIFE: ILoadoutConfigDatabase;
+    MECH: ILoadoutConfigDatabase;
+    OPERATOR_ADULT: ILoadoutConfigDatabase;
+    DRIFTER: ILoadoutConfigDatabase;
 }
 
 export interface ILoadoutKey {
-    [key: string]: ILoadoutConfig;
+    [key: string]: ILoadoutConfigClient;
 }
 
-export type ILoadoutConfigDocument = ILoadoutConfig & Document;
-
-export interface ILoadoutConfig {
+// for request and response from and to client
+export interface ILoadoutConfigClient {
     ItemId: IOid;
     PresetIcon: string;
     Favorite: boolean;
-    s: M;
-    p: M;
-    l: M;
-    m: M;
+    s: IEquipmentSelection;
+    p: IEquipmentSelection;
+    l: IEquipmentSelection;
+    m: IEquipmentSelection;
 }
 
-export interface M {
+export interface ILoadoutConfigDatabase extends Omit<ILoadoutConfigClient, "ItemId"> {
+    _id: Types.ObjectId;
+}
+
+export interface IEquipmentSelection {
     ItemId: IOid;
     mod: number;
     cus: number;
@@ -129,7 +124,7 @@ export interface Col {
 }
 
 export type EquipmentCategories =
-    | { LoadOuts: { [key in keyof ILoadout]: LoadOut } }
+    | { LoadOuts: { [key in keyof ILoadoutRequest]: LoadOut } }
     | { LongGuns: Config }
     | { OperatorAmps: Config } // Replace 'any' with the actual type
     | { Pistols: Config } // Replace 'any' with the actual type
