@@ -63,6 +63,7 @@ export interface ILoadoutKey {
 // for request and response from and to client
 export interface ILoadoutConfigClient {
     ItemId: IOid;
+    n: string;
     PresetIcon: string;
     Favorite: boolean;
     s: IEquipmentSelection;

@@ -26,17 +26,23 @@ const EquipmentSelectionSchema = new Schema<IEquipmentSelection>(
     }
 );
 
-const loadoutConfigSchema = new Schema<ILoadoutConfigDatabase>({
-    PresetIcon: String,
-    Favorite: Boolean,
-    s: EquipmentSelectionSchema,
-    p: EquipmentSelectionSchema,
-    l: EquipmentSelectionSchema,
-    m: EquipmentSelectionSchema
-});
+const loadoutConfigSchema = new Schema<ILoadoutConfigDatabase>(
+    {
+        PresetIcon: String,
+        Favorite: Boolean,
+        n: String,
+        s: EquipmentSelectionSchema,
+        p: EquipmentSelectionSchema,
+        l: EquipmentSelectionSchema,
+        m: EquipmentSelectionSchema
+    },
+    {
+        id: false
+    }
+);
 
-loadoutConfigSchema.virtual("ItemId").get(function (): string {
-    return this._id.toString();
+loadoutConfigSchema.virtual("ItemId").get(function () {
+    return { $oid: this._id.toString() } satisfies IOid;
 });
 
 loadoutConfigSchema.set("toJSON", {
