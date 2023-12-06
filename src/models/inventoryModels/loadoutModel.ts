@@ -53,7 +53,7 @@ loadoutConfigSchema.set("toJSON", {
     }
 });
 
-const loadoutSchema = new Schema<ILoadoutDatabase, loadoutModelType>({
+export const loadoutSchema = new Schema<ILoadoutDatabase, loadoutModelType>({
     NORMAL: [loadoutConfigSchema],
     SENTINEL: [loadoutConfigSchema],
     ARCHWING: [loadoutConfigSchema],
@@ -64,18 +64,15 @@ const loadoutSchema = new Schema<ILoadoutDatabase, loadoutModelType>({
     DATAKNIFE: [loadoutConfigSchema],
     MECH: [loadoutConfigSchema],
     OPERATOR_ADULT: [loadoutConfigSchema],
-    DRIFTER: [loadoutConfigSchema]
-});
-
-loadoutSchema.virtual("ItemId").get(function (): string {
-    return this._id.toString();
+    DRIFTER: [loadoutConfigSchema],
+    loadoutOwnerId: Schema.Types.ObjectId
 });
 
 loadoutSchema.set("toJSON", {
-    virtuals: true,
     transform(_doc, ret, _options) {
         delete ret._id;
         delete ret.__v;
+        delete ret.loadoutOwnerId;
     }
 });
 

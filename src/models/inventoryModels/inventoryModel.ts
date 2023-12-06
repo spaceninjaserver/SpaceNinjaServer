@@ -7,176 +7,206 @@ import {
     IBooster,
     IInventoryResponse,
     IInventoryDatabaseDocument,
-    IInventoryResponseDocument
+    ISlots
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IMongoDate, IOid } from "../../types/commonTypes";
-import { ISuitDatabase, ISuitDocument } from "@/src/types/inventoryTypes/SuitTypes";
+import {
+    IItemConfig,
+    ISuitDatabase,
+    IOperatorConfigClient,
+    IOperatorConfigDatabase
+} from "@/src/types/inventoryTypes/SuitTypes";
 import { IWeaponDatabase } from "@/src/types/inventoryTypes/weaponTypes";
+import { IAbilityOverride, IColor, IPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
 
-const abilityOverrideSchema = new Schema({
+const polaritySchema = new Schema<IPolarity>({
+    Slot: Number,
+    Value: String
+});
+
+const abilityOverrideSchema = new Schema<IAbilityOverride>({
     Ability: String,
     Index: Number
 });
-const colorSchema = new Schema({
-    t0: Number,
-    t1: Number,
-    t2: Number,
-    t3: Number,
-    en: Number,
-    e1: Number,
-    m0: Number,
-    m1: Number
+const colorSchema = new Schema<IColor>(
+    {
+        t0: Number,
+        t1: Number,
+        t2: Number,
+        t3: Number,
+        en: Number,
+        e1: Number,
+        m0: Number,
+        m1: Number
+    },
+    { _id: false }
+);
+
+const operatorConfigSchema = new Schema<IOperatorConfigDatabase>(
+    {
+        Skins: [String],
+        pricol: colorSchema,
+        attcol: colorSchema,
+        sigcol: colorSchema,
+        eyecol: colorSchema,
+        facial: colorSchema,
+        syancol: colorSchema,
+        Upgrades: [String],
+        Name: String, // not sure if possible in operator
+        ugly: Boolean // not sure if possible in operator
+    },
+    { id: false }
+);
+
+operatorConfigSchema.virtual("ItemId").get(function () {
+    return { $oid: this._id.toString() } satisfies IOid;
 });
 
-const weaponConfigSchema = new Schema({
-    Skins: [String],
-    pricol: colorSchema,
-    attcol: colorSchema,
-    eyecol: colorSchema,
-    sigcol: colorSchema,
-    Upgrades: [String],
-    Songs: [
-        {
-            m: String,
-            b: String,
-            p: String,
-            s: String
-        }
-    ],
-    Name: String,
-    AbilityOverride: abilityOverrideSchema,
-    PvpUpgrades: [String],
-    ugly: Boolean
-});
-
-// longGunConfigSchema.set("toJSON", {
-//     transform(_document, returnedObject: ISuitDocument) {
-//         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-//         returnedObject.ItemId = { $oid: returnedObject._id.toString() } satisfies Oid;
-//         delete returnedObject._id;
-//         delete returnedObject.__v;
-//     }
-// });
-
-const WeaponSchema = new Schema({
-    ItemType: String,
-    Configs: [weaponConfigSchema],
-    UpgradeVer: Number,
-    XP: Number,
-    Features: Number,
-    Polarized: Number,
-    Polarity: Schema.Types.Mixed, //todo
-    FocusLens: String,
-    ModSlotPurchases: Number,
-    UpgradeType: Schema.Types.Mixed, //todo
-    UpgradeFingerprint: String,
-    ItemName: String,
-    ModularParts: [String],
-    UnlockLevel: Number
-});
-
-const BoosterSchema = new Schema({
-    ExpiryDate: Number,
-    ItemType: String
-});
-
-const RawUpgrades = new Schema({
-    ItemType: String,
-    ItemCount: Number
-});
-
-RawUpgrades.set("toJSON", {
+operatorConfigSchema.set("toJSON", {
+    virtuals: true,
     transform(_document, returnedObject) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-        returnedObject.LastAdded = { $oid: returnedObject._id.toString() } satisfies IOid;
         delete returnedObject._id;
         delete returnedObject.__v;
     }
 });
 
+///TODO: clearly seperate the different config schemas. (suit and weapon and so on)
+const ItemConfigSchema = new Schema<IItemConfig>(
+    {
+        Skins: [String],
+        pricol: colorSchema,
+        attcol: colorSchema,
+        sigcol: colorSchema,
+        eyecol: colorSchema,
+        facial: colorSchema,
+        syancol: colorSchema,
+        Upgrades: [String],
+        Songs: [
+            {
+                m: String,
+                b: String,
+                p: String,
+                s: String
+            }
+        ],
+        Name: String,
+        AbilityOverride: abilityOverrideSchema,
+        PvpUpgrades: [String],
+        ugly: Boolean
+    },
+    { _id: false }
+);
+
+ItemConfigSchema.set("toJSON", {
+    transform(_document, returnedObject) {
+        delete returnedObject.__v;
+    }
+});
+
+//TODO: migrate to one schema for weapons and suits.. and possibly others
+const WeaponSchema = new Schema<IWeaponDatabase>(
+    {
+        ItemType: String,
+        Configs: [ItemConfigSchema],
+        UpgradeVer: Number,
+        XP: Number,
+        Features: Number,
+        Polarized: Number,
+        Polarity: [polaritySchema],
+        FocusLens: String,
+        ModSlotPurchases: Number,
+        UpgradeType: Schema.Types.Mixed, //todo
+        UpgradeFingerprint: String,
+        ItemName: String,
+        ModularParts: [String],
+        UnlockLevel: Number
+    },
+    { id: false }
+);
+
+WeaponSchema.virtual("ItemId").get(function () {
+    return { $oid: this._id.toString() } satisfies IOid;
+});
+
+WeaponSchema.set("toJSON", {
+    virtuals: true,
+    transform(_document, returnedObject) {
+        delete returnedObject._id;
+        delete returnedObject.__v;
+    }
+});
+
+const BoosterSchema = new Schema<IBooster>({
+    ExpiryDate: Number,
+    ItemType: String
+});
+
+const RawUpgrades = new Schema<IRawUpgrade>({
+    ItemType: String,
+    ItemCount: Number
+});
+
+RawUpgrades.virtual("LastAdded").get(function () {
+    return { $oid: this._id.toString() } satisfies IOid;
+});
+
+RawUpgrades.set("toJSON", {
+    virtuals: true,
+    transform(_document, returnedObject) {
+        delete returnedObject._id;
+        delete returnedObject.__v;
+    }
+});
+
+//TODO: validate what this is
 const Upgrade = new Schema({
     UpgradeFingerprint: String,
     ItemType: String
 });
 
+Upgrade.virtual("ItemId").get(function () {
+    return { $oid: this._id.toString() } satisfies IOid;
+});
+
 Upgrade.set("toJSON", {
-    transform(_document, returnedObject) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-        returnedObject.ItemId = { $oid: returnedObject._id.toString() } satisfies IOid;
-        delete returnedObject._id;
-        delete returnedObject.__v;
-    }
-});
-
-WeaponSchema.set("toJSON", {
-    transform(_document, returnedObject) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-        returnedObject.ItemId = { $oid: returnedObject._id.toString() } satisfies IOid;
-        delete returnedObject._id;
-        delete returnedObject.__v;
-    }
-});
-
-const polaritySchema = new Schema({
-    Slot: Number,
-    Value: String
-});
-
-const suitConfigSchema = new Schema({
-    Skins: [String],
-    pricol: colorSchema,
-    attcol: colorSchema,
-    eyecol: colorSchema,
-    sigcol: colorSchema,
-    Upgrades: [String],
-    Songs: [
-        {
-            m: String,
-            b: String,
-            p: String,
-            s: String
-        }
-    ],
-    Name: String,
-    AbilityOverride: abilityOverrideSchema,
-    PvpUpgrades: [String],
-    ugly: Boolean
-});
-
-suitConfigSchema.set("toJSON", {
+    virtuals: true,
     transform(_document, returnedObject) {
         delete returnedObject._id;
         delete returnedObject.__v;
     }
 });
 
-const suitSchema = new Schema<ISuitDatabase>({
-    ItemType: String,
-    Configs: {
-        type: [suitConfigSchema],
-        default: [{}, {}, {}]
+//TODO: reduce weapon and suit schemas to one schema if reasonable
+const suitSchema = new Schema<ISuitDatabase>(
+    {
+        ItemType: String,
+        Configs: [ItemConfigSchema],
+        UpgradeVer: Number,
+        XP: Number,
+        InfestationDate: Date,
+        Features: Number,
+        Polarity: [polaritySchema],
+        Polarized: Number,
+        ModSlotPurchases: Number,
+        FocusLens: String,
+        UnlockLevel: Number
     },
-    UpgradeVer: Number,
-    XP: Number,
-    InfestationDate: Date,
-    Features: Number,
-    Polarity: [polaritySchema],
-    Polarized: Number,
-    ModSlotPurchases: Number,
-    FocusLens: String,
-    UnlockLevel: Number
+    { id: false }
+);
+
+suitSchema.virtual("ItemId").get(function () {
+    return { $oid: this._id.toString() } satisfies IOid;
 });
 
 suitSchema.set("toJSON", {
+    virtuals: true,
     transform(_document, returnedObject) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-        returnedObject.ItemId = { $oid: returnedObject._id.toString() } satisfies IOid;
         delete returnedObject._id;
         delete returnedObject.__v;
     }
 });
 
-const slotsBinSchema = new Schema(
+const slotsBinSchema = new Schema<ISlots>(
     {
         Slots: Number
     },
@@ -305,7 +335,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
     BountyScore: Number,
     ChallengeInstanceStates: [Schema.Types.Mixed],
     LoginMilestoneRewards: [String],
-    OperatorLoadOuts: [Schema.Types.Mixed],
+    OperatorLoadOuts: [operatorConfigSchema],
     DailyAffiliationVentkids: Number,
     DailyAffiliationVox: Number,
     RecentVendorPurchases: [Schema.Types.Mixed],
@@ -342,7 +372,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
     CrewShipHarnesses: [Schema.Types.Mixed],
     CrewShipRawSalvage: [Schema.Types.Mixed],
     CrewMembers: [Schema.Types.Mixed],
-    AdultOperatorLoadOuts: [Schema.Types.Mixed],
+    AdultOperatorLoadOuts: [operatorConfigSchema],
     LotusCustomization: Schema.Types.Mixed,
     UseAdultOperatorLoadout: Boolean,
     DailyAffiliationZariman: Number,
@@ -363,7 +393,10 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
     HasResetAccount: Boolean,
     PendingCoupon: Schema.Types.Mixed,
     Harvestable: Boolean,
-    DeathSquadable: Boolean
+    DeathSquadable: Boolean,
+    Horses: [Schema.Types.Mixed],
+    DrifterMelee: [Schema.Types.Mixed],
+    KahlLoadOuts: [Schema.Types.Mixed]
 });
 
 inventorySchema.set("toJSON", {
@@ -390,9 +423,11 @@ type InventoryDocumentProps = {
     RawUpgrades: Types.DocumentArray<IRawUpgrade>;
     MiscItems: Types.DocumentArray<IMiscItem>;
     Boosters: Types.DocumentArray<IBooster>;
+    OperatorLoadOuts: Types.DocumentArray<IOperatorConfigClient>;
+    AdultOperatorLoadOuts: Types.DocumentArray<IOperatorConfigClient>;
 };
 
-type InventoryModelType = Model<IInventoryDatabase, object, InventoryDocumentProps>;
+type InventoryModelType = Model<IInventoryDatabase, {}, InventoryDocumentProps>;
 
 const Inventory = model<IInventoryDatabase, InventoryModelType>("Inventory", inventorySchema);
 

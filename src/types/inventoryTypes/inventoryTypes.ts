@@ -2,19 +2,33 @@
 import { Document, Types } from "mongoose";
 import { IOid, IMongoDate } from "../commonTypes";
 import { IAbilityOverride, IColor, FocusSchool, IPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
-import { ISuitDatabase } from "@/src/types/inventoryTypes/SuitTypes";
+import { IOperatorConfigClient, ISuitDatabase } from "@/src/types/inventoryTypes/SuitTypes";
 import { IOperatorLoadOutSigcol, IWeaponDatabase } from "@/src/types/inventoryTypes/weaponTypes";
+import { IItemConfig } from "@/src/types/saveLoadoutTypes";
 
+//Document extends will be deleted soon. TODO: delete and migrate uses to ...
 export interface IInventoryDatabaseDocument extends IInventoryDatabase, Document {}
-export interface IInventoryDatabase extends Omit<IInventoryResponse, "TrainingDate"> {
+export interface IInventoryDatabase extends Omit<IInventoryResponse, "TrainingDate" | "LoadOutPresets"> {
     accountOwnerId: Types.ObjectId;
-    TrainingDate: Date;
+    TrainingDate: Date; // TrainingDate changed from IMongoDate to Date
+    LoadOutPresets: Types.ObjectId; // LoadOutPresets changed from ILoadOutPresets to Types.ObjectId for population
 }
 
 export interface IInventoryResponseDocument extends IInventoryResponse, Document {}
 
+export interface IGenericItem {
+    ItemType: string;
+    XP?: number;
+    Configs: IItemConfig[];
+    UpgradeVer: number;
+    ItemId: IOid;
+}
+
 export interface IInventoryResponse {
-    DuviriInfo: { Seed: number; NumCompletions: number };
+    KahlLoadOuts: IGenericItem[];
+    DrifterMelee: IGenericItem[];
+    Horses: IGenericItem[];
+    DuviriInfo: { Seed: number; NumCompletions: number }; // TODO: add to schema
     SubscribedToEmails: number;
     Created: IMongoDate;
     RewardSeed: number;
@@ -22,14 +36,14 @@ export interface IInventoryResponse {
     PremiumCredits: number;
     PremiumCreditsFree: number;
     FusionPoints: number;
-    SuitBin: ICrewShipSalvageBinClass;
-    WeaponBin: ICrewShipSalvageBinClass;
-    SentinelBin: ICrewShipSalvageBinClass;
-    SpaceSuitBin: ICrewShipSalvageBinClass;
-    SpaceWeaponBin: ICrewShipSalvageBinClass;
+    SuitBin: ISlots;
+    WeaponBin: ISlots;
+    SentinelBin: ISlots;
+    SpaceSuitBin: ISlots;
+    SpaceWeaponBin: ISlots;
     PvpBonusLoadoutBin: ICrewMemberBinClass;
-    PveBonusLoadoutBin: ICrewShipSalvageBinClass;
-    RandomModBin: ICrewShipSalvageBinClass;
+    PveBonusLoadoutBin: ISlots;
+    RandomModBin: ISlots;
     TradesRemaining: number;
     DailyAffiliation: number;
     DailyAffiliationPvp: number;
@@ -103,7 +117,7 @@ export interface IInventoryResponse {
     ActiveAvatarImageType: string;
     KubrowPets: IKubrowPet[];
     ShipDecorations: IConsumable[];
-    OperatorAmpBin: ICrewShipSalvageBinClass;
+    OperatorAmpBin: ISlots;
     DailyAffiliationCetus: number;
     DailyAffiliationQuills: number;
     DiscoveredMarkers: IDiscoveredMarker[];
@@ -124,7 +138,7 @@ export interface IInventoryResponse {
     BountyScore: number;
     ChallengeInstanceStates: IChallengeInstanceState[];
     LoginMilestoneRewards: string[];
-    OperatorLoadOuts: IOperatorLoadOut[];
+    OperatorLoadOuts: IOperatorConfigClient[];
     DailyAffiliationVentkids: number;
     DailyAffiliationVox: number;
     RecentVendorPurchases: Array<number | string>;
@@ -141,7 +155,7 @@ export interface IInventoryResponse {
     Settings: ISettings;
     PersonalTechProjects: IPersonalTechProject[];
     CrewShips: ICrewShip[];
-    CrewShipSalvageBin: ICrewShipSalvageBinClass;
+    CrewShipSalvageBin: ISlots;
     PlayerSkills: IPlayerSkills;
     CrewShipAmmo: IConsumable[];
     CrewShipSalvagedWeaponSkins: ICrewShipSalvagedWeaponSkin[];
@@ -161,7 +175,7 @@ export interface IInventoryResponse {
     CrewShipHarnesses: ICrewShipHarness[];
     CrewShipRawSalvage: IConsumable[];
     CrewMembers: ICrewMember[];
-    AdultOperatorLoadOuts: IAdultOperatorLoadOut[];
+    AdultOperatorLoadOuts: IOperatorConfigClient[];
     LotusCustomization: ILotusCustomization;
     UseAdultOperatorLoadout: boolean;
     DailyAffiliationZariman: number;
@@ -311,8 +325,8 @@ export interface ICrewShipHarnessConfig {
     Upgrades?: string[];
 }
 
-export interface ICrewShipSalvageBinClass {
-    Extra: number;
+export interface ISlots {
+    Extra?: number;
     Slots: number;
 }
 
@@ -624,6 +638,7 @@ export interface ILibraryPersonalProgress {
     Completed: boolean;
 }
 
+//this needs to be checked against ILoadoutDatabase
 export interface ILoadOutPresets {
     NORMAL: INormal[];
     NORMAL_PVP: IArchwing[];
@@ -871,7 +886,7 @@ export enum GivingSlotOrderInfo {
     LotusUpgradesModsPistolDualStatElectEventPistolMod = "/Lotus/Upgrades/Mods/Pistol/DualStat/ElectEventPistolMod"
 }
 
-export interface PeriodicMissionCompletion {
+export interface IPeriodicMissionCompletion {
     date: IMongoDate;
     tag: string;
     count?: number;

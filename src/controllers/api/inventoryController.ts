@@ -31,7 +31,7 @@ const inventoryController: RequestHandler = async (request: Request, response: R
     if (config.testMission) inventoryResponse.Missions = testMissions;
     if (config.testQuestKey) inventoryResponse.QuestKeys = testQuestKeys;
 
-    inventoryResponse.DuviriInfo = { Seed: -5049874987509758080, NumCompletions: 0 };
+    inventoryResponse.DuviriInfo = { Seed: -123123123123123123, NumCompletions: 0 };
     response.json(inventoryResponse);
 };
 

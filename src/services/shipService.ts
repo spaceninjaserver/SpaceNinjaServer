@@ -2,9 +2,13 @@ import { Ship } from "@/src/models/shipModel";
 import new_ship from "@/static/fixed_responses/ship.json";
 import { Types } from "mongoose";
 
-const createShip = async (accountOwnerId: Types.ObjectId) => {
+const createShip = async (accountOwnerId: Types.ObjectId, loadoutId: Types.ObjectId) => {
     try {
-        const ship = new Ship({ ...new_ship, ShipOwnerId: accountOwnerId });
+        const ship = new Ship({
+            ...new_ship,
+            ShipOwnerId: accountOwnerId,
+            LoadOutInventory: { LoadOutPresets: loadoutId }
+        });
         await ship.save();
     } catch (error) {
         if (error instanceof Error) {

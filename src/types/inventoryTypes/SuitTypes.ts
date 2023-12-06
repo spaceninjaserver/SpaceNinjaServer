@@ -1,20 +1,14 @@
 import { IOid } from "@/src/types/commonTypes";
 import { IAbilityOverride, IColor, IPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
-import { Document, Types } from "mongoose";
+import { Types } from "mongoose";
 
-// export interface ISuitDocument extends ISuitResponse, Document {}
-export interface ISuitDocument extends Document, ISuitResponse {
-    _id: Types.ObjectId;
-}
-
-export interface ISuitResponse extends ISuitDatabase {
+export interface ISuitClient extends ISuitDatabase {
     ItemId: IOid;
-    //should omit _id which is not present in response
 }
 
 export interface ISuitDatabase {
     ItemType: string;
-    Configs: SuitConfig[];
+    Configs: IItemConfig[];
     UpgradeVer?: number;
     XP?: number;
     InfestationDate?: Date;
@@ -25,26 +19,43 @@ export interface ISuitDatabase {
     FocusLens?: string;
     UnlockLevel?: number;
     _id: Types.ObjectId;
-    ItemId?: IOid;
 }
 
-export interface SuitConfig {
-    Skins?: string[];
+interface IItemConfigBase {
+    Skins: string[];
     pricol?: IColor;
     attcol?: IColor;
-    eyecol?: IColor;
     sigcol?: IColor;
+    eyecol?: IColor;
+    facial?: IColor;
+    syancol?: IColor;
+    cloth?: IColor;
     Upgrades?: string[];
-    Songs?: Song[];
     Name?: string;
+    ugly?: boolean;
+}
+
+export interface IItemConfig extends IItemConfigBase {
+    Songs?: ISong[];
     AbilityOverride?: IAbilityOverride;
     PvpUpgrades?: string[];
     ugly?: boolean;
 }
 
-export interface Song {
+export interface ISong {
     m?: string;
     b?: string;
     p?: string;
     s: string;
+}
+
+//TODO: Consider renaming it to loadout instead of config
+export interface IOperatorConfigDatabase extends IItemConfigBase {
+    _id: Types.ObjectId;
+    AbilityOverride?: IAbilityOverride; // not present in adultOperator
+    OperatorAmp?: IOid; // not present in adultOperator
+}
+
+export interface IOperatorConfigClient extends Omit<IOperatorConfigDatabase, "_id"> {
+    ItemId: IOid;
 }

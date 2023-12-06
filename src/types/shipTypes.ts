@@ -3,26 +3,28 @@ import { IOid } from "@/src/types/commonTypes";
 
 export interface IShip {
     ShipOwnerId: Types.ObjectId;
-    Ship: IShipClassResponse;
-    Apartment: IApartmentClass;
+    Ship: IShipResponse;
+    Apartment: IApartment;
+    LoadOutInventory: { LoadOutPresets: Types.ObjectId };
 }
 
-export interface IShipClassResponse extends IShipClassDatabase {
+export interface IShipResponse extends IShipDatabase {
     ShipId: IOid;
 }
 
-export interface IShipClassDatabase {
-    Rooms: IRoomsClass[];
+export interface IShipDatabase {
+    Rooms: IRooms[];
     Features: string[];
     ContentUrlSignature: string;
 }
 
-export interface IRoomsClass {
+// TODO: add Apartment.Gardening
+export interface IRooms {
     Name: string;
     MaxCapacity: number;
 }
 
-export interface IApartmentClass {
-    Rooms: IRoomsClass[];
+export interface IApartment {
+    Rooms: IRooms[];
     FavouriteLoadouts: string[];
 }
