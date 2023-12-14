@@ -16,6 +16,7 @@ const saveLoadoutController: RequestHandler = async (req, res) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { UpgradeVer, ...equipmentChanges } = body;
         await handleInventoryItemConfigChange(equipmentChanges, accountId);
+        res.status(200).end();
     } catch (error: unknown) {
         if (error instanceof Error) {
             res.status(400).json({ error: error.message });
