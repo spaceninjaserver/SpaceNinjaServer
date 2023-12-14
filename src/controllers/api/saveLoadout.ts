@@ -17,7 +17,7 @@ const saveLoadoutController: RequestHandler = async (req, res) => {
         const { UpgradeVer, ...equipmentChanges } = body;
         await handleInventoryItemConfigChange(equipmentChanges, accountId);
     } catch (error) {
-        res.status(200).end();
+        res.status(400).json({ error: error.message });
     }
 };
 
