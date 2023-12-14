@@ -1,6 +1,6 @@
 import { ISuitDatabase } from "@/src/types/inventoryTypes/SuitTypes";
 import { IFlavourItem } from "@/src/types/inventoryTypes/inventoryTypes";
-import { IWeaponResponse } from "@/src/types/inventoryTypes/weaponTypes";
+import { IWeaponClient } from "@/src/types/inventoryTypes/weaponTypes";
 
 export interface IPurchaseRequest {
     PurchaseParams: IPurchaseParams;
@@ -23,9 +23,9 @@ export interface IPurchaseResponse {
         SuitBin?: IBinChanges;
         WeaponBin?: IBinChanges;
         Suits?: ISuitDatabase[];
-        LongGuns?: IWeaponResponse[];
-        Pistols?: IWeaponResponse[];
-        Melee?: IWeaponResponse[];
+        LongGuns?: IWeaponClient[];
+        Pistols?: IWeaponClient[];
+        Melee?: IWeaponClient[];
         PremiumCredits?: number;
         RegularCredits?: number;
         FlavourItems?: IFlavourItem[];
@@ -40,5 +40,6 @@ export type IBinChanges = {
 
 export enum SlotType {
     SUIT = "SuitBin",
-    WEAPON = "WeaponBin"
+    WEAPON = "WeaponBin",
+    MECHSUIT = "MechBin"
 }

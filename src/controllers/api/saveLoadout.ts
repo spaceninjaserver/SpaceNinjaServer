@@ -1,13 +1,27 @@
-import { Inventory } from "@/src/models/inventoryModel";
 import { RequestHandler } from "express";
 import util from "util";
+import { ISaveLoadoutRequest } from "@/src/types/saveLoadoutTypes";
+import { handleInventoryItemConfigChange } from "@/src/services/saveLoadoutService";
+import { parseString } from "@/src/helpers/general";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 const saveLoadoutController: RequestHandler = async (req, res) => {
-    const body = JSON.parse(req.body);
-    console.log(util.inspect(body, { showHidden: false, depth: null, colors: true }));
+    //validate here
+    const accountId = parseString(req.query.accountId);
 
-    res.sendStatus(200);
+    try {
+        const body: ISaveLoadoutRequest = JSON.parse(req.body as string) as ISaveLoadoutRequest;
+        // console.log(util.inspect(body, { showHidden: false, depth: null, colors: true }));
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { UpgradeVer, ...equipmentChanges } = body;
+        await handleInventoryItemConfigChange(equipmentChanges, accountId);
+        res.status(200).end();
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            res.status(400).json({ error: error.message });
+        }
+    }
 };
 
 export { saveLoadoutController };

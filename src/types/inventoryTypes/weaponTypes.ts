@@ -1,14 +1,15 @@
 import { IOid } from "@/src/types/commonTypes";
-import { IColor, IPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { IItemConfig } from "./commonInventoryTypes";
+import { IPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { Types } from "mongoose";
 
-export interface IWeaponResponse extends IWeaponDatabase {
+export interface IWeaponClient extends Omit<IWeaponDatabase, "_id"> {
     ItemId: IOid;
 }
 
 export interface IWeaponDatabase {
     ItemType: string;
-    Configs: WeaponConfig[];
+    Configs: IItemConfig[];
     UpgradeVer?: number;
     XP?: number;
     Features?: number;
@@ -21,18 +22,7 @@ export interface IWeaponDatabase {
     ItemName?: string;
     ModularParts?: string[];
     UnlockLevel?: number;
-    _id?: Types.ObjectId;
-    ItemId?: IOid;
-}
-
-export interface WeaponConfig {
-    Skins?: string[];
-    pricol?: IColor;
-    Upgrades?: string[];
-    attcol?: IColor;
-    eyecol?: IOperatorLoadOutSigcol;
-    Name?: string;
-    PvpUpgrades?: string[];
+    _id: Types.ObjectId;
 }
 
 export interface IOperatorLoadOutSigcol {

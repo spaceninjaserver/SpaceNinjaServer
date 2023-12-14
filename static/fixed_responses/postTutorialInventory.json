@@ -5,7 +5,7 @@
   "RewardSeed": -5604904486637265640,
   "CrewMemberBin": { "Slots": 3 },
   "CrewShipSalvageBin": { "Slots": 8 },
-  "DrifterMelee": [{ "ItemType": "/Lotus/Types/Friendly/PlayerControllable/Weapons/DuviriDualSwords", "ItemId": { "$oid": "647bd268c547fe5b2909e715" } }],
+  "DrifterMelee": [{ "ItemType": "/Lotus/Types/Friendly/PlayerControllable/Weapons/DuviriDualSwords", "ItemId": { "$oid": "647bd27cf856530b4f3bf343" } }],
   "FusionPoints": 0,
   "MechBin": { "Slots": 4 },
   "OperatorAmpBin": { "Slots": 8 },
@@ -84,7 +84,24 @@
   "CrewShipWeaponSkins": [],
   "DrifterGuns": [],
   "Drones": [],
-  "Horses": [],
+  "Horses": [
+    {
+      "ItemType": "/Lotus/Types/NeutralCreatures/ErsatzHorse/ErsatzHorsePowerSuit",
+      "Configs": [
+        {
+          "Skins": ["", "", "/Lotus/Upgrades/Skins/Horse/ErsatzHorseTailDefault"]
+        },
+        {
+          "Skins": ["", "", "/Lotus/Upgrades/Skins/Horse/ErsatzHorseTailDefault"]
+        },
+        {
+          "Skins": ["", "", "/Lotus/Upgrades/Skins/Horse/ErsatzHorseTailDefault"]
+        }
+      ],
+      "UpgradeVer": 101,
+      "ItemId": { "$oid": "647bd27cf856530b4f3bf343" }
+    }
+  ],
   "Hoverboards": [],
   "KubrowPets": [],
   "KubrowPetEggs": [],

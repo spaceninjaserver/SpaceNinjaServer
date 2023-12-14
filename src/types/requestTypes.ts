@@ -7,8 +7,8 @@ import {
     IMission,
     IRawUpgrade
 } from "./inventoryTypes/inventoryTypes";
-import { IWeaponDatabase } from "./inventoryTypes/weaponTypes";
-import { ISuitDatabase } from "./inventoryTypes/SuitTypes";
+import { IWeaponClient } from "./inventoryTypes/weaponTypes";
+import { ISuitClient } from "./inventoryTypes/SuitTypes";
 
 interface IArtifactsRequest {
     Upgrade: ICrewShipSalvagedWeaponSkin;
@@ -20,10 +20,10 @@ interface IArtifactsRequest {
 interface IMissionInventoryUpdateRequest {
     rewardsMultiplier?: number;
     ActiveBoosters?: IBooster[];
-    LongGuns?: IWeaponDatabase[];
-    Pistols?: IWeaponDatabase[];
-    Suits?: ISuitDatabase[];
-    Melee?: IWeaponDatabase[];
+    LongGuns?: IWeaponClient[];
+    Pistols?: IWeaponClient[];
+    Suits?: ISuitClient[];
+    Melee?: IWeaponClient[];
     RawUpgrades?: IRawUpgrade[];
     MiscItems?: IMiscItem[];
     Consumables?: IConsumable[];

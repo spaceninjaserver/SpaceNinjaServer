@@ -55,4 +55,12 @@ const parseBoolean = (booleanCandidate: unknown): boolean => {
     return booleanCandidate;
 };
 
+export const isObject = (objectCandidate: unknown): objectCandidate is Record<string, unknown> => {
+    return (
+        (typeof objectCandidate === "object" || objectCandidate instanceof Object) &&
+        objectCandidate !== null &&
+        !Array.isArray(objectCandidate)
+    );
+};
+
 export { isString, isNumber, parseString, parseNumber, parseDateNumber, parseBoolean, parseEmail };

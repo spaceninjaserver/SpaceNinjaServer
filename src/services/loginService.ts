@@ -2,6 +2,8 @@ import { Account } from "@/src/models/loginModel";
 import { createInventory } from "@/src/services/inventoryService";
 import { IDatabaseAccount } from "@/src/types/loginTypes";
 import { createShip } from "./shipService";
+import { Types } from "mongoose";
+import { LoadoutModel } from "@/src/models/inventoryModels/loadoutModel";
 
 const isCorrectPassword = (requestPassword: string, databasePassword: string): boolean => {
     return requestPassword === databasePassword;
@@ -11,8 +13,9 @@ const createAccount = async (accountData: IDatabaseAccount) => {
     const account = new Account(accountData);
     try {
         await account.save();
-        await createInventory(account._id);
-        await createShip(account._id);
+        const loadoutId = await createLoadout(account._id);
+        await createInventory(account._id, loadoutId);
+        await createShip(account._id, loadoutId);
         return account.toJSON();
     } catch (error) {
         if (error instanceof Error) {
@@ -23,3 +26,9 @@ const createAccount = async (accountData: IDatabaseAccount) => {
 };
 
 export { isCorrectPassword, createAccount };
+
+export const createLoadout = async (accountId: Types.ObjectId) => {
+    const loadout = new LoadoutModel({ loadoutOwnerId: accountId });
+    const savedLoadout = await loadout.save();
+    return savedLoadout._id;
+};

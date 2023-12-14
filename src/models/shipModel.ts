@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
 import { IShip } from "../types/shipTypes";
 import { IOid } from "../types/commonTypes";
+import { loadoutSchema } from "@/src/models/inventoryModels/loadoutModel";
 
 const roomSchema = new Schema(
     {
@@ -10,16 +11,22 @@ const roomSchema = new Schema(
     { _id: false }
 );
 
-const shipSchema = new Schema({
-    Rooms: [roomSchema],
-    Features: [String],
-    ContentUrlSignature: String
+const shipSchema = new Schema(
+    {
+        Rooms: [roomSchema],
+        Features: [String],
+        ContentUrlSignature: String
+    },
+    { id: false }
+);
+
+shipSchema.virtual("ShipId").get(function () {
+    return { $oid: this._id.toString() } satisfies IOid;
 });
 
 shipSchema.set("toJSON", {
+    virtuals: true,
     transform(_document, returnedObject) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-        returnedObject.ShipId = { $oid: returnedObject._id.toString() } satisfies IOid;
         delete returnedObject._id;
     }
 });
@@ -35,10 +42,16 @@ apartmentSchema.set("toJSON", {
     }
 });
 
-const shipDatabaseSchema = new Schema({
+const shipDatabaseSchema = new Schema<IShip>({
     ShipOwnerId: Schema.Types.ObjectId,
     Ship: shipSchema,
-    Apartment: apartmentSchema
+    Apartment: apartmentSchema,
+    LoadOutInventory: {
+        LoadOutPresets: {
+            type: Schema.Types.ObjectId,
+            ref: "Loadout"
+        }
+    }
 });
 
 shipDatabaseSchema.set("toJSON", {

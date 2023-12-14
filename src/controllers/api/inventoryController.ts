@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { toInventoryResponse } from "@/src/helpers/inventoryHelpers";
-import { Inventory } from "@/src/models/inventoryModel";
+import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { Request, RequestHandler, Response } from "express";
 import config from "@/config.json";
 import testMissions from "@/static/fixed_responses/testMissions.json";
 import testQuestKeys from "@/static/fixed_responses/testQuestKeys.json";
+import { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
 
 const inventoryController: RequestHandler = async (request: Request, response: Response) => {
     const accountId = request.query.accountId;
@@ -14,7 +15,9 @@ const inventoryController: RequestHandler = async (request: Request, response: R
         return;
     }
 
-    const inventory = await Inventory.findOne({ accountOwnerId: accountId });
+    const inventory = await Inventory.findOne({ accountOwnerId: accountId }).populate<{
+        LoadOutPresets: ILoadoutDatabase;
+    }>("LoadOutPresets");
 
     if (!inventory) {
         response.status(400).json({ error: "inventory was undefined" });

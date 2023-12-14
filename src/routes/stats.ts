@@ -1,4 +1,4 @@
-import { viewController } from "../controllers/api/viewController";
+import { viewController } from "../controllers/stats/viewController";
 import { uploadController } from "@/src/controllers/stats/uploadController";
 
 import express from "express";

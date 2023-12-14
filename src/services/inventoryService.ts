@@ -1,10 +1,10 @@
-import { Inventory } from "@/src/models/inventoryModel";
+import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import new_inventory from "@/static/fixed_responses/postTutorialInventory.json";
 import config from "@/config.json";
 import { Types } from "mongoose";
-import { ISuitDatabase, ISuitResponse } from "@/src/types/inventoryTypes/SuitTypes";
+import { ISuitDatabase, ISuitClient } from "@/src/types/inventoryTypes/SuitTypes";
 import { SlotType } from "@/src/types/purchaseTypes";
-import { IWeaponDatabase, IWeaponResponse } from "@/src/types/inventoryTypes/weaponTypes";
+import { IWeaponDatabase, IWeaponClient } from "@/src/types/inventoryTypes/weaponTypes";
 import {
     IChallengeProgress,
     IConsumable,
@@ -17,9 +17,13 @@ import {
 import { IGenericUpdate } from "../types/genericUpdate";
 import { IArtifactsRequest, IMissionInventoryUpdateRequest } from "../types/requestTypes";
 
-const createInventory = async (accountOwnerId: Types.ObjectId) => {
+export const createInventory = async (accountOwnerId: Types.ObjectId, loadOutPresetId: Types.ObjectId) => {
     try {
-        const inventory = new Inventory({ ...new_inventory, accountOwnerId: accountOwnerId });
+        const inventory = new Inventory({
+            ...new_inventory,
+            accountOwnerId: accountOwnerId,
+            LoadOutPresets: loadOutPresetId
+        });
         if (config.skipStoryModeChoice) {
             inventory.StoryModeChoice = "WARFRAME";
         }
@@ -27,6 +31,7 @@ const createInventory = async (accountOwnerId: Types.ObjectId) => {
             inventory.PlayedParkourTutorial = true;
             inventory.ReceivedStartingGear = true;
         }
+
         await inventory.save();
     } catch (error) {
         if (error instanceof Error) {
@@ -48,11 +53,26 @@ export const getInventory = async (accountOwnerId: string) => {
     return inventory;
 };
 
-const addPowerSuit = async (powersuitName: string, accountId: string): Promise<ISuitResponse> => {
+//TODO: genericMethod for all the add methods, they share a lot of logic
+export const addSentinel = async (sentinelName: string, accountId: string) => {
+    const inventory = await getInventory(accountId);
+    const sentinelIndex = inventory.Sentinels.push({ ItemType: sentinelName, Configs: [], XP: 0 });
+    const changedInventory = await inventory.save();
+    return changedInventory.Sentinels[sentinelIndex - 1].toJSON();
+};
+
+export const addPowerSuit = async (powersuitName: string, accountId: string): Promise<ISuitClient> => {
     const inventory = await getInventory(accountId);
     const suitIndex = inventory.Suits.push({ ItemType: powersuitName, Configs: [], UpgradeVer: 101, XP: 0 });
     const changedInventory = await inventory.save();
     return changedInventory.Suits[suitIndex - 1].toJSON();
+};
+
+export const addMechSuit = async (mechsuitName: string, accountId: string) => {
+    const inventory = await getInventory(accountId);
+    const suitIndex = inventory.MechSuits.push({ ItemType: mechsuitName, Configs: [], UpgradeVer: 101, XP: 0 });
+    const changedInventory = await inventory.save();
+    return changedInventory.MechSuits[suitIndex - 1].toJSON();
 };
 
 export const updateSlots = async (slotType: SlotType, accountId: string, slots: number) => {
@@ -64,6 +84,9 @@ export const updateSlots = async (slotType: SlotType, accountId: string, slots: 
             break;
         case SlotType.WEAPON:
             inventory.WeaponBin.Slots += slots;
+            break;
+        case SlotType.MECHSUIT:
+            inventory.MechBin.Slots += slots;
             break;
         default:
             throw new Error("invalid slot type");
@@ -107,7 +130,7 @@ export const addWeapon = async (
     weaponType: WeaponTypeInternal,
     weaponName: string,
     accountId: string
-): Promise<IWeaponResponse> => {
+): Promise<IWeaponClient> => {
     const inventory = await getInventory(accountId);
 
     let weaponIndex;
@@ -139,7 +162,7 @@ export const addCustomization = async (customizatonName: string, accountId: stri
 
 const addGearExpByCategory = (
     inventory: IInventoryDatabaseDocument,
-    gearArray: ISuitDatabase[] | IWeaponDatabase[] | undefined,
+    gearArray: ISuitClient[] | IWeaponClient[] | undefined,
     categoryName: "Pistols" | "LongGuns" | "Melee" | "Suits"
 ) => {
     const category = inventory[categoryName];
@@ -242,7 +265,6 @@ const addMissionComplete = (inventory: IInventoryDatabaseDocument, { Tag, Comple
 };
 
 const gearKeys = ["Suits", "Pistols", "LongGuns", "Melee"] as const;
-type GearKeysType = (typeof gearKeys)[number];
 
 export const missionInventoryUpdate = async (data: IMissionInventoryUpdateRequest, accountId: string) => {
     const { RawUpgrades, MiscItems, RegularCredits, ChallengeProgress, FusionPoints, Consumables, Recipes, Missions } =
@@ -256,7 +278,7 @@ export const missionInventoryUpdate = async (data: IMissionInventoryUpdateReques
     inventory.FusionPoints += FusionPoints || 0;
 
     // Gear XP
-    gearKeys.forEach((key: GearKeysType) => addGearExpByCategory(inventory, data[key], key));
+    gearKeys.forEach(key => addGearExpByCategory(inventory, data[key], key));
 
     // other
     addMods(inventory, RawUpgrades);
@@ -339,5 +361,3 @@ export const upgradeMod = async (artifactsData: IArtifactsRequest, accountId: st
         throw error;
     }
 };
-
-export { createInventory, addPowerSuit };

@@ -50,7 +50,7 @@ const loginController: RequestHandler = async (request, response) => {
             return;
         } catch (error: unknown) {
             if (error instanceof Error) {
-                throw new Error("error creating account");
+                throw new Error("error creating account", error);
             }
         }
     }

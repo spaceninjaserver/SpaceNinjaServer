@@ -1,19 +1,15 @@
 import { IOid } from "@/src/types/commonTypes";
-import { IAbilityOverride, IColor, IPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
-import { Document, Types } from "mongoose";
+import { IPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { Types } from "mongoose";
+import { IItemConfig } from "./commonInventoryTypes";
 
-// export interface ISuitDocument extends ISuitResponse, Document {}
-export interface ISuitDocument extends Document, ISuitResponse {
-    _id: Types.ObjectId;
-}
-
-export interface ISuitResponse extends ISuitDatabase {
+export interface ISuitClient extends ISuitDatabase {
     ItemId: IOid;
 }
 
 export interface ISuitDatabase {
     ItemType: string;
-    Configs: SuitConfig[];
+    Configs: IItemConfig[];
     UpgradeVer?: number;
     XP?: number;
     InfestationDate?: Date;
@@ -24,26 +20,5 @@ export interface ISuitDatabase {
     FocusLens?: string;
     UnlockLevel?: number;
     _id: Types.ObjectId;
-    ItemId?: IOid;
-}
-
-export interface SuitConfig {
-    Skins?: string[];
-    pricol?: IColor;
-    attcol?: IColor;
-    eyecol?: IColor;
-    sigcol?: IColor;
-    Upgrades?: string[];
-    Songs?: Song[];
-    Name?: string;
-    AbilityOverride?: IAbilityOverride;
-    PvpUpgrades?: string[];
-    ugly?: boolean;
-}
-
-export interface Song {
-    m?: string;
-    b?: string;
-    p?: string;
-    s: string;
+    ItemId?: IOid; // only in response
 }
