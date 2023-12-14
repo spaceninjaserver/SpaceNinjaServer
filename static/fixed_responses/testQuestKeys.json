@@ -7,5 +7,35 @@
   },
   {
     "ItemType": "/Lotus/Types/Keys/DuviriQuest/DuviriQuestKeyChain"
+  },
+  {
+    "ItemType": "/Lotus/Types/Keys/WarWithinQuest/WarWithinQuestKeyChain"
+  },
+  {
+    "ItemType": "/Lotus/Types/Keys/SacrificeQuest/SacrificeQuestKeyChain"
+  },
+  {
+    "ItemType": "/Lotus/Types/Keys/NewWarIntroQuest/NewWarIntroKeyChain"
+  },
+  {
+    "ItemType": "/Lotus/Types/Keys/NewWarQuest/NewWarQuestKeyChain"
+  },
+  {
+    "ItemType": "/Lotus/Types/Keys/ApostasyQuest/ApostasyKeyChain"
+  },
+  {
+    "ItemType": "/Lotus/Types/Keys/WarWithinQuest/WarWithinQuestKeyChain"
+  },
+  {
+    "ItemType": "/Lotus/Types/Keys/OrokinMoonQuest/OrokinMoonQuestKeyChain"
+  },
+  {
+    "ItemType": "/Lotus/Types/Keys/ZarimanQuest/ZarimanQuestKeyChain"
+  },
+  {
+    "ItemType": "/Lotus/Types/Keys/DuviriQuest/DuviriQuestKeyChain"
+  },
+  {
+    "ItemType": "/Lotus/Types/Keys/ArchwingQuest/ArchwingQuestKeyChain"
   }
 ]

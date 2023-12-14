@@ -7,17 +7,23 @@ import {
     IBooster,
     IInventoryResponse,
     IInventoryDatabaseDocument,
-    ISlots
+    ISlots,
+    IGenericItem,
+    IMailbox,
+    IDuviriInfo
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IMongoDate, IOid } from "../../types/commonTypes";
-import {
-    IItemConfig,
-    ISuitDatabase,
-    IOperatorConfigClient,
-    IOperatorConfigDatabase
-} from "@/src/types/inventoryTypes/SuitTypes";
+import { ISuitDatabase } from "@/src/types/inventoryTypes/SuitTypes";
 import { IWeaponDatabase } from "@/src/types/inventoryTypes/weaponTypes";
-import { IAbilityOverride, IColor, IPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import {
+    IAbilityOverride,
+    IColor,
+    IItemConfig,
+    IOperatorConfigClient,
+    IOperatorConfigDatabase,
+    IPolarity
+} from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { toOid } from "@/src/helpers/inventoryHelpers";
 
 const polaritySchema = new Schema<IPolarity>({
     Slot: Number,
@@ -51,6 +57,7 @@ const operatorConfigSchema = new Schema<IOperatorConfigDatabase>(
         eyecol: colorSchema,
         facial: colorSchema,
         syancol: colorSchema,
+        cloth: colorSchema,
         Upgrades: [String],
         Name: String, // not sure if possible in operator
         ugly: Boolean // not sure if possible in operator
@@ -141,10 +148,13 @@ const BoosterSchema = new Schema<IBooster>({
     ItemType: String
 });
 
-const RawUpgrades = new Schema<IRawUpgrade>({
-    ItemType: String,
-    ItemCount: Number
-});
+const RawUpgrades = new Schema<IRawUpgrade>(
+    {
+        ItemType: String,
+        ItemCount: Number
+    },
+    { id: false }
+);
 
 RawUpgrades.virtual("LastAdded").get(function () {
     return { $oid: this._id.toString() } satisfies IOid;
@@ -158,7 +168,7 @@ RawUpgrades.set("toJSON", {
     }
 });
 
-//TODO: validate what this is
+//TODO: find out what this is
 const Upgrade = new Schema({
     UpgradeFingerprint: String,
     ItemType: String
@@ -208,14 +218,18 @@ suitSchema.set("toJSON", {
 
 const slotsBinSchema = new Schema<ISlots>(
     {
-        Slots: Number
+        Slots: Number,
+        Extra: Number
     },
     { _id: false }
 );
 
-const FlavourItemSchema = new Schema({
-    ItemType: String
-});
+const FlavourItemSchema = new Schema(
+    {
+        ItemType: String
+    },
+    { _id: false }
+);
 
 FlavourItemSchema.set("toJSON", {
     transform(_document, returnedObject) {
@@ -224,7 +238,70 @@ FlavourItemSchema.set("toJSON", {
     }
 });
 
+const GenericItemSchema = new Schema<IGenericItem>(
+    {
+        ItemType: String,
+        Configs: [ItemConfigSchema],
+        UpgradeVer: Number //this is probably just __v
+    },
+    { id: false }
+);
+
+GenericItemSchema.virtual("ItemId").get(function () {
+    return { $oid: this._id.toString() } satisfies IOid;
+});
+
+GenericItemSchema.set("toJSON", {
+    virtuals: true,
+    transform(_document, returnedObject) {
+        delete returnedObject._id;
+        delete returnedObject.__v;
+    }
+});
+
+//  "Mailbox": { "LastInboxId": { "$oid": "123456780000000000000000" } }
+const MailboxSchema = new Schema<IMailbox>(
+    {
+        LastInboxId: {
+            type: Schema.Types.ObjectId,
+            set: (v: IMailbox["LastInboxId"]) => v.$oid.toString()
+        }
+    },
+    { id: false, _id: false }
+);
+
+MailboxSchema.set("toJSON", {
+    transform(_document, returnedObject) {
+        delete returnedObject.__v;
+        //TODO: there is a lot of any here
+        returnedObject.LastInboxId = toOid(returnedObject.LastInboxId as Types.ObjectId);
+    }
+});
+
+const DuviriInfoSchema = new Schema<IDuviriInfo>(
+    {
+        Seed: Number,
+        NumCompletions: Number
+    },
+    {
+        _id: false,
+        id: false
+    }
+);
+
+DuviriInfoSchema.set("toJSON", {
+    transform(_document, returnedObject) {
+        delete returnedObject.__v;
+    }
+});
+
 const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
+    Horses: [GenericItemSchema],
+    DrifterMelee: [GenericItemSchema],
+    DrifterGuns: [GenericItemSchema],
+    DuviriInfo: DuviriInfoSchema,
+    Mailbox: MailboxSchema,
+    KahlLoadOuts: [Schema.Types.Mixed],
     accountOwnerId: Schema.Types.ObjectId,
     SubscribedToEmails: Number,
     Created: Schema.Types.Mixed,
@@ -236,11 +313,15 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
     SuitBin: slotsBinSchema,
     WeaponBin: slotsBinSchema,
     SentinelBin: slotsBinSchema,
-    SpaceSuitBin: Schema.Types.Mixed,
-    SpaceWeaponBin: Schema.Types.Mixed,
-    PvpBonusLoadoutBin: Schema.Types.Mixed,
-    PveBonusLoadoutBin: Schema.Types.Mixed,
-    RandomModBin: Schema.Types.Mixed,
+    SpaceSuitBin: slotsBinSchema,
+    SpaceWeaponBin: slotsBinSchema,
+    PvpBonusLoadoutBin: slotsBinSchema,
+    PveBonusLoadoutBin: slotsBinSchema,
+    RandomModBin: slotsBinSchema,
+    OperatorAmpBin: slotsBinSchema,
+    CrewShipSalvageBin: slotsBinSchema,
+    MechBin: slotsBinSchema,
+    CrewMemberBin: slotsBinSchema,
     TradesRemaining: Number,
     DailyAffiliation: Number,
     DailyAffiliationPvp: Number,
@@ -260,7 +341,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
     Ships: [Schema.Types.Mixed],
     QuestKeys: [Schema.Types.Mixed],
     FlavourItems: [FlavourItemSchema],
-    Scoops: [Schema.Types.Mixed],
+    Scoops: [GenericItemSchema],
     TrainingRetriesLeft: Number,
     LoadOutPresets: { type: Schema.Types.ObjectId, ref: "Loadout" },
     CurrentLoadOutIds: [Schema.Types.Mixed],
@@ -294,14 +375,14 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
     Affiliations: [Schema.Types.Mixed],
     QualifyingInvasions: [Schema.Types.Mixed],
     FactionScores: [Number],
-    SpaceSuits: [Schema.Types.Mixed],
-    SpaceMelee: [Schema.Types.Mixed],
+    SpaceSuits: [GenericItemSchema],
+    SpaceMelee: [GenericItemSchema],
     SpaceGuns: [Schema.Types.Mixed],
     ArchwingEnabled: Boolean,
     PendingSpectreLoadouts: [Schema.Types.Mixed],
     SpectreLoadouts: [Schema.Types.Mixed],
-    SentinelWeapons: [Schema.Types.Mixed],
-    Sentinels: [Schema.Types.Mixed],
+    Sentinels: [WeaponSchema],
+    SentinelWeapons: [WeaponSchema],
     EmailItems: [Schema.Types.Mixed],
     CompletedSyndicates: [String],
     FocusXP: Schema.Types.Mixed,
@@ -314,7 +395,6 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
     ActiveAvatarImageType: String,
     KubrowPets: [Schema.Types.Mixed],
     ShipDecorations: [Schema.Types.Mixed],
-    OperatorAmpBin: Schema.Types.Mixed,
     DailyAffiliationCetus: Number,
     DailyAffiliationQuills: Number,
     DiscoveredMarkers: [Schema.Types.Mixed],
@@ -346,13 +426,12 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
     MoaPets: [Schema.Types.Mixed],
     EquippedInstrument: String,
     InvasionChainProgress: [Schema.Types.Mixed],
-    DataKnives: [Schema.Types.Mixed],
+    DataKnives: [GenericItemSchema],
     NemesisHistory: [Schema.Types.Mixed],
     LastNemesisAllySpawnTime: Schema.Types.Mixed,
     Settings: Schema.Types.Mixed,
     PersonalTechProjects: [Schema.Types.Mixed],
     CrewShips: [Schema.Types.Mixed],
-    CrewShipSalvageBin: Schema.Types.Mixed,
     PlayerSkills: Schema.Types.Mixed,
     CrewShipAmmo: [Schema.Types.Mixed],
     CrewShipSalvagedWeaponSkins: [Schema.Types.Mixed],
@@ -362,13 +441,11 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
     TradeBannedUntil: Schema.Types.Mixed,
     PlayedParkourTutorial: Boolean,
     SubscribedToEmailsPersonalized: Number,
-    MechBin: Schema.Types.Mixed,
     DailyAffiliationEntrati: Number,
     DailyAffiliationNecraloid: Number,
-    MechSuits: [Schema.Types.Mixed],
+    MechSuits: [suitSchema],
     InfestedFoundry: Schema.Types.Mixed,
     BlessingCooldown: Schema.Types.Mixed,
-    CrewMemberBin: Schema.Types.Mixed,
     CrewShipHarnesses: [Schema.Types.Mixed],
     CrewShipRawSalvage: [Schema.Types.Mixed],
     CrewMembers: [Schema.Types.Mixed],
@@ -393,10 +470,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
     HasResetAccount: Boolean,
     PendingCoupon: Schema.Types.Mixed,
     Harvestable: Boolean,
-    DeathSquadable: Boolean,
-    Horses: [Schema.Types.Mixed],
-    DrifterMelee: [Schema.Types.Mixed],
-    KahlLoadOuts: [Schema.Types.Mixed]
+    DeathSquadable: Boolean
 });
 
 inventorySchema.set("toJSON", {
@@ -425,6 +499,12 @@ type InventoryDocumentProps = {
     Boosters: Types.DocumentArray<IBooster>;
     OperatorLoadOuts: Types.DocumentArray<IOperatorConfigClient>;
     AdultOperatorLoadOuts: Types.DocumentArray<IOperatorConfigClient>;
+    MechSuits: Types.DocumentArray<ISuitDatabase>;
+    Scoops: Types.DocumentArray<IGenericItem>;
+    DataKnives: Types.DocumentArray<IGenericItem>;
+    DrifterMelee: Types.DocumentArray<IGenericItem>;
+    Sentinels: Types.DocumentArray<IWeaponDatabase>;
+    Horses: Types.DocumentArray<IGenericItem>;
 };
 
 type InventoryModelType = Model<IInventoryDatabase, {}, InventoryDocumentProps>;

@@ -8,14 +8,17 @@ import { parseString } from "@/src/helpers/general";
 const saveLoadoutController: RequestHandler = async (req, res) => {
     //validate here
     const accountId = parseString(req.query.accountId);
-    const body: ISaveLoadoutRequest = JSON.parse(req.body as string) as ISaveLoadoutRequest;
-    // console.log(util.inspect(body, { showHidden: false, depth: null, colors: true }));
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { UpgradeVer, ...equipmentChanges } = body;
-    await handleInventoryItemConfigChange(equipmentChanges, accountId);
+    try {
+        const body: ISaveLoadoutRequest = JSON.parse(req.body as string) as ISaveLoadoutRequest;
+        // console.log(util.inspect(body, { showHidden: false, depth: null, colors: true }));
 
-    res.status(200).end();
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { UpgradeVer, ...equipmentChanges } = body;
+        await handleInventoryItemConfigChange(equipmentChanges, accountId);
+    } catch (error) {
+        res.status(200).end();
+    }
 };
 
 export { saveLoadoutController };

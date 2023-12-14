@@ -1,5 +1,5 @@
 import { IOid } from "@/src/types/commonTypes";
-import { IItemConfig, IOperatorConfigClient } from "@/src/types/inventoryTypes/SuitTypes";
+import { IItemConfig, IOperatorConfigClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { Types } from "mongoose";
 
 export interface ISaveLoadoutRequest {
@@ -31,6 +31,7 @@ export interface ISaveLoadoutRequest {
     CrewShips: IItemEntry;
     CurrentLoadOutIds: IOid[];
     ValidNewLoadoutId: string;
+    EquippedGear: string[];
 }
 
 export interface ISaveLoadoutRequestNoUpgradeVer extends Omit<ISaveLoadoutRequest, "UpgradeVer"> {}
@@ -89,4 +90,3 @@ export interface IEquipmentSelection {
     mod: number;
     cus: number;
 }
-export { IItemConfig };

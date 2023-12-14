@@ -40,5 +40,6 @@ export type IBinChanges = {
 
 export enum SlotType {
     SUIT = "SuitBin",
-    WEAPON = "WeaponBin"
+    WEAPON = "WeaponBin",
+    MECHSUIT = "MechBin"
 }

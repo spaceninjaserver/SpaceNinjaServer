@@ -26,13 +26,14 @@ import { setActiveQuestController } from "@/src/controllers/api/setActiveQuestCo
 import { surveysController } from "@/src/controllers/api/surveysController";
 import { updateChallengeProgressController } from "@/src/controllers/api/updateChallengeProgressController";
 import { updateSessionGetController, updateSessionPostController } from "@/src/controllers/api/updateSessionController";
-import { viewController } from "@/src/controllers/api/viewController";
 import { joinSessionController } from "@/src/controllers/api/joinSessionController";
 import { saveLoadoutController } from "@/src/controllers/api/saveLoadout";
 import { trainingResultController } from "@/src/controllers/api/trainingResultController";
 import { artifactsController } from "../controllers/api/artifactsController";
 
 import express from "express";
+import { setBootLocationController } from "@/src/controllers/api/setBootLocationController";
+import { focusController } from "@/src/controllers/api/focusController";
 
 const apiRouter = express.Router();
 
@@ -46,7 +47,6 @@ apiRouter.get("/loginRewards.php", loginRewardsController);
 apiRouter.get("/checkDailyMissionBonus.php", checkDailyMissionBonusController);
 apiRouter.get("/inbox.php", inboxController);
 apiRouter.get("/getShip.php", getShipController);
-apiRouter.get("/view.php", viewController);
 apiRouter.get("/drones.php", dronesController);
 apiRouter.get("/getIgnoredUsers.php", getIgnoredUsersController);
 apiRouter.get("/getNewRewardSeed.php", getNewRewardSeedController);
@@ -58,8 +58,10 @@ apiRouter.get("/hub", hubController);
 apiRouter.get("/modularWeaponSale.php", modularWeaponSaleController);
 apiRouter.get("/deleteSession.php", deleteSessionController);
 apiRouter.get("/logout.php", logoutController);
+apiRouter.get("/setBootLocation.php", setBootLocationController);
 
 // post
+apiRouter.post("/focus.php", focusController);
 apiRouter.post("/artifacts.php", artifactsController);
 apiRouter.post("/findSessions.php", findSessionsController);
 // eslint-disable-next-line @typescript-eslint/no-misused-promises

@@ -15,13 +15,20 @@ export const isEmptyObject = (obj: unknown): boolean => {
 
 //setup default items on account creation or like originally in giveStartingItems.php
 
-//export const updateLoadout = (loadout: ISaveLoadoutRequest, accountId: string) => {};
+//TODO: avoid multiple saves for less db calls
+//TODO: change update functions to only add and not save
 
-//support multiple loadouts and multiple items and multiple configs per item
+/* loadouts has loadoutconfigs
+operatorloadouts has itemconfig, but no multiple config ids
+itemconfig has multiple config ids
+*/
+
 export const handleInventoryItemConfigChange = async (
     equipmentChanges: ISaveLoadoutRequestNoUpgradeVer,
     accountId: string
 ) => {
+    const inventory = await getInventory(accountId);
+
     for (const [_equipmentName, _equipment] of Object.entries(equipmentChanges)) {
         const equipment = _equipment as ISaveLoadoutRequestNoUpgradeVer[keyof ISaveLoadoutRequestNoUpgradeVer];
         const equipmentName = _equipmentName as keyof ISaveLoadoutRequestNoUpgradeVer;
@@ -34,12 +41,10 @@ export const handleInventoryItemConfigChange = async (
         switch (equipmentName) {
             case "OperatorLoadOuts":
             case "AdultOperatorLoadOuts": {
-                console.log("loadout received", equipmentName);
-
                 const inventory = await getInventory(accountId);
                 const operatorConfig = equipment as IOperatorConfigEntry;
                 const operatorLoadout = inventory[equipmentName];
-
+                console.log("loadout received", equipmentName, operatorConfig);
                 // all non-empty entries are one loadout slot
                 for (const [loadoutId, loadoutConfig] of Object.entries(operatorConfig)) {
                     // console.log("loadoutId", loadoutId, "loadoutconfig", loadoutConfig);
@@ -123,20 +128,25 @@ export const handleInventoryItemConfigChange = async (
             case "LongGuns":
             case "Pistols":
             case "Suits":
-            case "Melee": {
+            case "Melee":
+            case "Scoops":
+            case "DataKnives":
+            case "DrifterMelee":
+            case "Sentinels":
+            case "Horses": {
                 console.log("? ???? ?", equipmentName, equipment);
 
-                const itemEntry = equipment as IItemEntry;
+                const itemEntries = equipment as IItemEntry;
                 const inventory = await getInventory(accountId);
-                for (const [itemId, itemConfig] of Object.entries(itemEntry)) {
-                    const inventoryItem = inventory[equipmentName].find(item => item._id.toString() === itemId);
+                for (const [itemId, itemConfigEntries] of Object.entries(itemEntries)) {
+                    const inventoryItem = inventory[equipmentName].find(item => item._id?.toString() === itemId);
 
                     if (!inventoryItem) {
                         throw new Error(`inventory item ${equipmentName} not found with id ${itemId}`);
                     }
 
                     //config ids are 0,1,2 can there be a 3?
-                    for (const [configId, config] of Object.entries(itemConfig)) {
+                    for (const [configId, config] of Object.entries(itemConfigEntries)) {
                         inventoryItem.Configs[parseInt(configId)] = config;
                     }
                 }
@@ -145,35 +155,40 @@ export const handleInventoryItemConfigChange = async (
             }
             case "CurrentLoadOutIds": {
                 //TODO: remove duplicate getInventory after finding out when currentloadOutId is sent
-                const loadoutIds = equipment as IOid[];
+                const loadoutIds = equipment as IOid[]; // TODO: Check for more than just an array of oids, I think i remember one instance
                 const inventory = await getInventory(accountId);
                 inventory.CurrentLoadOutIds = loadoutIds;
                 await inventory.save();
                 break;
             }
+            case "EquippedGear": {
+                inventory.EquippedGear = equipment as string[];
+                break;
+            }
             default: {
-                console.log("category not implemented", equipmentName);
+                console.log("category not implemented", equipmentName, equipment);
             }
         }
 
         //case "OperatorAmps":
-        // case "Sentinels":
+
         // case "SentinelWeapons":
         // case "KubrowPets":
         // case "SpaceSuits":
         // case "SpaceGuns":
         // case "SpaceMelee":
-        // case "Scoops":
+
         // case "SpecialItems":
         // case "MoaPets":
         // case "Hoverboards":
-        // case "DataKnives":
+
         // case "MechSuits":
         // case "CrewShipHarnesses":
-        // case "Horses":
-        // case "DrifterMelee":
+
+        //
 
         // case "CrewShips":
         //case "KahlLoadOuts": not sure yet how to handle kahl: it is not sent in inventory
     }
+    await inventory.save();
 };

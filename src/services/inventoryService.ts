@@ -17,7 +17,7 @@ import {
 import { IGenericUpdate } from "../types/genericUpdate";
 import { IArtifactsRequest, IMissionInventoryUpdateRequest } from "../types/requestTypes";
 
-const createInventory = async (accountOwnerId: Types.ObjectId, loadOutPresetId: Types.ObjectId) => {
+export const createInventory = async (accountOwnerId: Types.ObjectId, loadOutPresetId: Types.ObjectId) => {
     try {
         const inventory = new Inventory({
             ...new_inventory,
@@ -53,11 +53,26 @@ export const getInventory = async (accountOwnerId: string) => {
     return inventory;
 };
 
-const addPowerSuit = async (powersuitName: string, accountId: string): Promise<ISuitClient> => {
+//TODO: genericMethod for all the add methods, they share a lot of logic
+export const addSentinel = async (sentinelName: string, accountId: string) => {
+    const inventory = await getInventory(accountId);
+    const sentinelIndex = inventory.Sentinels.push({ ItemType: sentinelName, Configs: [], XP: 0 });
+    const changedInventory = await inventory.save();
+    return changedInventory.Sentinels[sentinelIndex - 1].toJSON();
+};
+
+export const addPowerSuit = async (powersuitName: string, accountId: string): Promise<ISuitClient> => {
     const inventory = await getInventory(accountId);
     const suitIndex = inventory.Suits.push({ ItemType: powersuitName, Configs: [], UpgradeVer: 101, XP: 0 });
     const changedInventory = await inventory.save();
     return changedInventory.Suits[suitIndex - 1].toJSON();
+};
+
+export const addMechSuit = async (mechsuitName: string, accountId: string) => {
+    const inventory = await getInventory(accountId);
+    const suitIndex = inventory.MechSuits.push({ ItemType: mechsuitName, Configs: [], UpgradeVer: 101, XP: 0 });
+    const changedInventory = await inventory.save();
+    return changedInventory.MechSuits[suitIndex - 1].toJSON();
 };
 
 export const updateSlots = async (slotType: SlotType, accountId: string, slots: number) => {
@@ -69,6 +84,9 @@ export const updateSlots = async (slotType: SlotType, accountId: string, slots: 
             break;
         case SlotType.WEAPON:
             inventory.WeaponBin.Slots += slots;
+            break;
+        case SlotType.MECHSUIT:
+            inventory.MechBin.Slots += slots;
             break;
         default:
             throw new Error("invalid slot type");
@@ -343,5 +361,3 @@ export const upgradeMod = async (artifactsData: IArtifactsRequest, accountId: st
         throw error;
     }
 };
-
-export { createInventory, addPowerSuit };

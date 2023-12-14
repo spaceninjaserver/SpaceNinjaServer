@@ -1,5 +1,5 @@
 import { IOid } from "@/src/types/commonTypes";
-import { IItemConfig } from "@/src/types/inventoryTypes/SuitTypes";
+import { IItemConfig } from "./commonInventoryTypes";
 import { IPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { Types } from "mongoose";
 

@@ -1,6 +1,14 @@
 import { getWeaponType } from "@/src/helpers/purchaseHelpers";
 import { getSubstringFromKeyword } from "@/src/helpers/stringHelpers";
-import { addBooster, addCustomization, addPowerSuit, addWeapon, updateSlots } from "@/src/services/inventoryService";
+import {
+    addBooster,
+    addCustomization,
+    addMechSuit,
+    addPowerSuit,
+    addSentinel,
+    addWeapon,
+    updateSlots
+} from "@/src/services/inventoryService";
 import { IPurchaseRequest, SlotType } from "@/src/types/purchaseTypes";
 
 export const getStoreItemCategory = (storeItem: string) => {
@@ -72,8 +80,25 @@ const handleWeaponsPurchase = async (weaponName: string, accountId: string) => {
 };
 
 const handlePowersuitPurchase = async (powersuitName: string, accountId: string) => {
+    if (powersuitName.includes("EntratiMech")) {
+        const mechSuit = await addMechSuit(powersuitName, accountId);
+        await updateSlots(SlotType.MECHSUIT, accountId, -1);
+        console.log("mech suit", mechSuit);
+
+        return {
+            InventoryChanges: {
+                MechBin: {
+                    count: 1,
+                    platinum: 0,
+                    Slots: -1
+                },
+                MechSuits: [mechSuit]
+            }
+        };
+    }
+
     const suit = await addPowerSuit(powersuitName, accountId);
-    await updateSlots(SlotType.WEAPON, accountId, -1);
+    await updateSlots(SlotType.SUIT, accountId, -1);
 
     return {
         InventoryChanges: {
@@ -95,11 +120,22 @@ const handleTypesPurchase = async (typesName: string, accountId: string) => {
             return await handleSuitCustomizationsPurchase(typesName, accountId);
         // case "Recipes":
         //     break;
-        // case "Sentinels":
-        //     break;
+        case "Sentinels":
+            return await handleSentinelPurchase(typesName, accountId);
         default:
             throw new Error(`unknown Types category: ${typeCategory} not implemented or new`);
     }
+};
+
+const handleSentinelPurchase = async (sentinelName: string, accountId: string) => {
+    const sentinel = await addSentinel(sentinelName, accountId);
+
+    return {
+        InventoryChanges: {
+            SentinelBin: { count: 1, platinum: 0, Slots: -1 },
+            Sentinels: [sentinel]
+        }
+    };
 };
 
 const handleSuitCustomizationsPurchase = async (customizationName: string, accountId: string) => {
