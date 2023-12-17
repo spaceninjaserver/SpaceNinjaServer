@@ -5,7 +5,7 @@ import { handleInventoryItemConfigChange } from "@/src/services/saveLoadoutServi
 import { parseString } from "@/src/helpers/general";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
-const saveLoadoutController: RequestHandler = async (req, res) => {
+export const saveLoadoutController: RequestHandler = async (req, res) => {
     //validate here
     const accountId = parseString(req.query.accountId);
 
@@ -15,13 +15,19 @@ const saveLoadoutController: RequestHandler = async (req, res) => {
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { UpgradeVer, ...equipmentChanges } = body;
-        await handleInventoryItemConfigChange(equipmentChanges, accountId);
+        const newLoadoutId = await handleInventoryItemConfigChange(equipmentChanges, accountId);
+
+        //send back new loadout id, if new loadout was added
+        if (newLoadoutId) {
+            res.send(newLoadoutId);
+        }
         res.status(200).end();
     } catch (error: unknown) {
         if (error instanceof Error) {
+            console.log("error in saveLoadoutController", error.message);
             res.status(400).json({ error: error.message });
+        } else {
+            res.status(400).json({ error: "unknown error" });
         }
     }
 };
-
-export { saveLoadoutController };

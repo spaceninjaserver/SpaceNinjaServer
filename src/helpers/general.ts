@@ -1,3 +1,7 @@
+export const isEmptyObject = (obj: unknown): boolean => {
+    return Boolean(obj && Object.keys(obj).length === 0 && obj.constructor === Object);
+};
+
 const isString = (text: unknown): text is string => {
     return typeof text === "string" || text instanceof String;
 };

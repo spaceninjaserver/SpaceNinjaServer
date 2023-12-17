@@ -1,7 +1,27 @@
 import { RequestHandler } from "express";
+import config from "@/config.json";
+import { getInventory } from "@/src/services/inventoryService";
+import { parseString } from "@/src/helpers/general";
 
-const getCreditsController: RequestHandler = (_req, res) => {
-    res.json({ RegularCredits: 42069, TradesRemaining: 1, PremiumCreditsFree: 42069, PremiumCredits: 42069 });
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+export const getCreditsController: RequestHandler = async (req, res) => {
+    if (config.infinitePlatinum) {
+        res.json({
+            RegularCredits: 999999999,
+            TradesRemaining: 999999999,
+            PremiumCreditsFree: 999999999,
+            PremiumCredits: 999999999
+        });
+        return;
+    }
+
+    const accountId = parseString(req.query.accountId);
+
+    const inventory = await getInventory(accountId);
+    res.json({
+        RegularCredits: inventory.RegularCredits,
+        TradesRemaining: inventory.TradesRemaining,
+        PremiumCreditsFree: inventory.PremiumCreditsFree,
+        PremiumCredits: inventory.PremiumCredits
+    });
 };
-
-export { getCreditsController };

@@ -8,10 +8,8 @@ import {
 import { LoadoutModel } from "@/src/models/inventoryModels/loadoutModel";
 import { getInventory } from "@/src/services/inventoryService";
 import { IOid } from "@/src/types/commonTypes";
-
-export const isEmptyObject = (obj: unknown): boolean => {
-    return Boolean(obj && Object.keys(obj).length === 0 && obj.constructor === Object);
-};
+import { Types } from "mongoose";
+import { isEmptyObject } from "@/src/helpers/general";
 
 //TODO: setup default items on account creation or like originally in giveStartingItems.php
 
@@ -24,7 +22,7 @@ itemconfig has multiple config ids
 export const handleInventoryItemConfigChange = async (
     equipmentChanges: ISaveLoadoutRequestNoUpgradeVer,
     accountId: string
-) => {
+): Promise<string | void> => {
     const inventory = await getInventory(accountId);
 
     for (const [_equipmentName, _equipment] of Object.entries(equipmentChanges)) {
@@ -40,7 +38,7 @@ export const handleInventoryItemConfigChange = async (
             case "AdultOperatorLoadOuts": {
                 const operatorConfig = equipment as IOperatorConfigEntry;
                 const operatorLoadout = inventory[equipmentName];
-                //console.log("loadout received", equipmentName, operatorConfig);
+                console.log("operator loadout received", equipmentName, operatorConfig);
                 // all non-empty entries are one loadout slot
                 for (const [loadoutId, loadoutConfig] of Object.entries(operatorConfig)) {
                     // console.log("loadoutId", loadoutId, "loadoutconfig", loadoutConfig);
@@ -60,12 +58,13 @@ export const handleInventoryItemConfigChange = async (
                 break;
             }
             case "LoadOuts": {
-                //console.log("loadout received");
+                console.log("loadout received");
                 const loadout = await LoadoutModel.findOne({ loadoutOwnerId: accountId });
                 if (!loadout) {
                     throw new Error("loadout not found");
                 }
 
+                let newLoadoutId: Types.ObjectId | undefined;
                 for (const [_loadoutSlot, _loadout] of Object.entries(equipment)) {
                     const loadoutSlot = _loadoutSlot as keyof ILoadoutClient;
                     const newLoadout = _loadout as ILoadoutEntry;
@@ -84,6 +83,16 @@ export const handleInventoryItemConfigChange = async (
                         // if no config with this id exists, create a new one
                         if (!oldLoadoutConfig) {
                             const { ItemId, ...loadoutConfigItemIdRemoved } = loadoutConfig;
+
+                            //save the new object id and assign it for every ffff return at the end
+                            if (ItemId.$oid === "ffffffffffffffffffffffff") {
+                                if (!newLoadoutId) {
+                                    newLoadoutId = new Types.ObjectId();
+                                }
+                                loadout[loadoutSlot].push({ _id: newLoadoutId, ...loadoutConfigItemIdRemoved });
+                                continue;
+                            }
+
                             loadout[loadoutSlot].push({
                                 _id: ItemId.$oid,
                                 ...loadoutConfigItemIdRemoved
@@ -101,6 +110,11 @@ export const handleInventoryItemConfigChange = async (
                     }
                 }
                 await loadout.save();
+
+                //only return an id if a new loadout was added
+                if (newLoadoutId) {
+                    return newLoadoutId.toString();
+                }
                 break;
             }
             case "LongGuns":
@@ -112,7 +126,7 @@ export const handleInventoryItemConfigChange = async (
             case "DrifterMelee":
             case "Sentinels":
             case "Horses": {
-                //console.log("general Item config saved", equipmentName, equipment);
+                console.log("general Item config saved", equipmentName, equipment);
 
                 const itemEntries = equipment as IItemEntry;
                 for (const [itemId, itemConfigEntries] of Object.entries(itemEntries)) {
