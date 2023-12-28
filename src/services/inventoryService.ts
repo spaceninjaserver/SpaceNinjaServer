@@ -2,9 +2,9 @@ import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import new_inventory from "@/static/fixed_responses/postTutorialInventory.json";
 import config from "@/config.json";
 import { Types } from "mongoose";
-import { ISuitDatabase, ISuitClient } from "@/src/types/inventoryTypes/SuitTypes";
-import { SlotType } from "@/src/types/purchaseTypes";
-import { IWeaponDatabase, IWeaponClient } from "@/src/types/inventoryTypes/weaponTypes";
+import { ISuitClient } from "@/src/types/inventoryTypes/SuitTypes";
+import { SlotNames } from "@/src/types/purchaseTypes";
+import { IWeaponClient } from "@/src/types/inventoryTypes/weaponTypes";
 import {
     IChallengeProgress,
     IConsumable,
@@ -41,8 +41,6 @@ export const createInventory = async (accountOwnerId: Types.ObjectId, loadOutPre
     }
 };
 
-//const updateInventory = async (accountOwnerId: Types.ObjectId, inventoryChanges: any) => {};
-
 export const getInventory = async (accountOwnerId: string) => {
     const inventory = await Inventory.findOne({ accountOwnerId: accountOwnerId });
 
@@ -53,7 +51,7 @@ export const getInventory = async (accountOwnerId: string) => {
     return inventory;
 };
 
-//TODO: genericMethod for all the add methods, they share a lot of logic
+//TODO: maybe genericMethod for all the add methods, they share a lot of logic
 export const addSentinel = async (sentinelName: string, accountId: string) => {
     const inventory = await getInventory(accountId);
     const sentinelIndex = inventory.Sentinels.push({ ItemType: sentinelName, Configs: [], XP: 0 });
@@ -75,32 +73,54 @@ export const addMechSuit = async (mechsuitName: string, accountId: string) => {
     return changedInventory.MechSuits[suitIndex - 1].toJSON();
 };
 
-export const updateSlots = async (slotType: SlotType, accountId: string, slots: number) => {
+export const updateSlots = async (accountId: string, slotName: SlotNames, slotAmount: number, extraAmount: number) => {
     const inventory = await getInventory(accountId);
 
-    switch (slotType) {
-        case SlotType.SUIT:
-            inventory.SuitBin.Slots += slots;
-            break;
-        case SlotType.WEAPON:
-            inventory.WeaponBin.Slots += slots;
-            break;
-        case SlotType.MECHSUIT:
-            inventory.MechBin.Slots += slots;
-            break;
-        default:
-            throw new Error("invalid slot type");
+    inventory[slotName].Slots += slotAmount;
+    if (inventory[slotName].Extra === undefined) {
+        inventory[slotName].Extra = extraAmount;
+    } else {
+        inventory[slotName].Extra += extraAmount;
     }
+
     await inventory.save();
 };
 
 export const updateCurrency = async (price: number, usePremium: boolean, accountId: string) => {
-    const currencyName = usePremium ? "PremiumCredits" : "RegularCredits";
-
     const inventory = await getInventory(accountId);
-    inventory[currencyName] = inventory[currencyName] - price;
+
+    if (usePremium) {
+        if (inventory.PremiumCreditsFree > 0) {
+            inventory.PremiumCreditsFree += price;
+        }
+        inventory.PremiumCredits += price;
+    } else {
+        inventory.RegularCredits += price;
+    }
+
+    const modifiedPaths = inventory.modifiedPaths();
+
+    type currencyKeys = "RegularCredits" | "PremiumCredits" | "PremiumCreditsFree";
+
+    const currencyChanges = {} as Record<currencyKeys, number>;
+    modifiedPaths.forEach(path => {
+        currencyChanges[path as currencyKeys] = -price;
+    });
+
+    console.log(currencyChanges, "changes");
+
+    //let changes = {} as keyof currencyKeys;
+
+    // const obj2 = modifiedPaths.reduce(
+    //     (obj, key) => {
+    //         obj[key as keyof currencyKeys] = price;
+    //         return obj;
+    //     },
+    //     {} as Record<keyof currencyKeys, number>
+    // );
+
     await inventory.save();
-    return { [currencyName]: -price };
+    return currencyChanges;
 };
 
 // TODO: AffiliationMods support (Nightwave).
@@ -157,7 +177,7 @@ export const addCustomization = async (customizatonName: string, accountId: stri
 
     const flavourItemIndex = inventory.FlavourItems.push({ ItemType: customizatonName }) - 1;
     const changedInventory = await inventory.save();
-    return changedInventory.FlavourItems[flavourItemIndex].toJSON(); //mongoose bug forces as FlavourItem
+    return changedInventory.FlavourItems[flavourItemIndex].toJSON();
 };
 
 const addGearExpByCategory = (

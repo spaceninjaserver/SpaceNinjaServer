@@ -1,9 +1,10 @@
 import { parseBoolean, parseNumber, parseString } from "@/src/helpers/general";
 import { WeaponTypeInternal } from "@/src/services/inventoryService";
-import { IPurchaseRequest } from "@/src/types/purchaseTypes";
+import { slotPurchaseNameToSlotName } from "@/src/services/purchaseService";
+import { IPurchaseRequest, SlotPurchaseName } from "@/src/types/purchaseTypes";
 import { weapons } from "@/static/data/items";
 
-const toPurchaseRequest = (purchaseRequest: unknown): IPurchaseRequest => {
+export const toPurchaseRequest = (purchaseRequest: unknown): IPurchaseRequest => {
     if (!purchaseRequest || typeof purchaseRequest !== "object") {
         throw new Error("incorrect or missing purchase request data");
     }
@@ -40,7 +41,7 @@ const toPurchaseRequest = (purchaseRequest: unknown): IPurchaseRequest => {
     throw new Error("invalid purchaseRequest");
 };
 
-const getWeaponType = (weaponName: string) => {
+export const getWeaponType = (weaponName: string) => {
     const weaponInfo = weapons.find(i => i.uniqueName === weaponName);
 
     if (!weaponInfo) {
@@ -56,4 +57,11 @@ const getWeaponType = (weaponName: string) => {
     return weaponType;
 };
 
-export { toPurchaseRequest, getWeaponType };
+export const isSlotPurchaseName = (slotPurchaseName: string): slotPurchaseName is SlotPurchaseName => {
+    return slotPurchaseName in slotPurchaseNameToSlotName;
+};
+
+export const parseSlotPurchaseName = (slotPurchaseName: string) => {
+    if (!isSlotPurchaseName(slotPurchaseName)) throw new Error(`invalid slot name ${slotPurchaseName}`);
+    return slotPurchaseName;
+};
