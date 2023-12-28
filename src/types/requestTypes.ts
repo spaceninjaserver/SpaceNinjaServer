@@ -10,14 +10,14 @@ import {
 import { IWeaponClient } from "./inventoryTypes/weaponTypes";
 import { ISuitClient } from "./inventoryTypes/SuitTypes";
 
-interface IArtifactsRequest {
+export interface IArtifactsRequest {
     Upgrade: ICrewShipSalvagedWeaponSkin;
     LevelDiff: number;
     Cost: number;
     FusionPointCost: number;
 }
 
-interface IMissionInventoryUpdateRequest {
+export interface IMissionInventoryUpdateRequest {
     rewardsMultiplier?: number;
     ActiveBoosters?: IBooster[];
     LongGuns?: IWeaponClient[];
@@ -35,7 +35,7 @@ interface IMissionInventoryUpdateRequest {
     Missions?: IMission;
 }
 
-interface IMissionInventoryUpdateRequestRewardInfo {
+export interface IMissionInventoryUpdateRequestRewardInfo {
     node: string;
     rewardTier?: number;
     nightmareMode?: boolean;
@@ -50,4 +50,6 @@ interface IMissionInventoryUpdateRequestRewardInfo {
     rewardSeed?: number;
 }
 
-export { IArtifactsRequest, IMissionInventoryUpdateRequest };
+export interface IInventorySlotsRequest {
+    Bin: "PveBonusLoadoutBin";
+}

@@ -3,7 +3,7 @@ import { IPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { Types } from "mongoose";
 import { IItemConfig } from "./commonInventoryTypes";
 
-export interface ISuitClient extends ISuitDatabase {
+export interface ISuitClient extends Omit<ISuitDatabase, "_id"> {
     ItemId: IOid;
 }
 

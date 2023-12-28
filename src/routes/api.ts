@@ -34,6 +34,7 @@ import { artifactsController } from "../controllers/api/artifactsController";
 import express from "express";
 import { setBootLocationController } from "@/src/controllers/api/setBootLocationController";
 import { focusController } from "@/src/controllers/api/focusController";
+import { inventorySlotsController } from "@/src/controllers/api/inventorySlotsController";
 
 const apiRouter = express.Router();
 
@@ -61,6 +62,7 @@ apiRouter.get("/logout.php", logoutController);
 apiRouter.get("/setBootLocation.php", setBootLocationController);
 
 // post
+apiRouter.post("/inventorySlots.php", inventorySlotsController);
 apiRouter.post("/focus.php", focusController);
 apiRouter.post("/artifacts.php", artifactsController);
 apiRouter.post("/findSessions.php", findSessionsController);

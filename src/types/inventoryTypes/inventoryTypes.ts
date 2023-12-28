@@ -341,7 +341,7 @@ export interface ICrewShipHarnessConfig {
 }
 
 export interface ISlots {
-    Extra?: number;
+    Extra: number; // can be undefined, but not if used via mongoose
     Slots: number;
 }
 

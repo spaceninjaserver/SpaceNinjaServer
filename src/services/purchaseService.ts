@@ -1,4 +1,4 @@
-import { getWeaponType } from "@/src/helpers/purchaseHelpers";
+import { getWeaponType, parseSlotPurchaseName } from "@/src/helpers/purchaseHelpers";
 import { getSubstringFromKeyword } from "@/src/helpers/stringHelpers";
 import {
     addBooster,
@@ -7,9 +7,10 @@ import {
     addPowerSuit,
     addSentinel,
     addWeapon,
+    updateCurrency,
     updateSlots
 } from "@/src/services/inventoryService";
-import { IPurchaseRequest, SlotType } from "@/src/types/purchaseTypes";
+import { IPurchaseRequest, IPurchaseResponse, SlotNameToInventoryName, SlotPurchase } from "@/src/types/purchaseTypes";
 
 export const getStoreItemCategory = (storeItem: string) => {
     const storeItemString = getSubstringFromKeyword(storeItem, "StoreItems/");
@@ -32,57 +33,109 @@ export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountI
     const internalName = purchaseRequest.PurchaseParams.StoreItem.replace("/StoreItems", "");
     console.log("Store category", storeCategory);
 
-    let purchaseResponse;
+    let inventoryChanges;
     switch (storeCategory) {
         case "Powersuits":
-            purchaseResponse = await handlePowersuitPurchase(internalName, accountId);
+            inventoryChanges = await handlePowersuitPurchase(internalName, accountId);
             break;
         case "Weapons":
-            purchaseResponse = await handleWeaponsPurchase(internalName, accountId);
+            inventoryChanges = await handleWeaponsPurchase(internalName, accountId);
             break;
         case "Types":
-            purchaseResponse = await handleTypesPurchase(internalName, accountId);
+            inventoryChanges = await handleTypesPurchase(internalName, accountId);
             break;
         case "Boosters":
-            purchaseResponse = await handleBoostersPurchase(internalName, accountId);
+            inventoryChanges = await handleBoostersPurchase(internalName, accountId);
             break;
 
         default:
             throw new Error(`unknown store category: ${storeCategory} not implemented or new`);
     }
 
-    // const currencyResponse = await updateCurrency(
-    //     purchaseRequest.PurchaseParams.ExpectedPrice,
-    //     purchaseRequest.PurchaseParams.UsePremium,
-    //     accountId
-    // );
+    if (!inventoryChanges) throw new Error("purchase response was undefined");
 
-    // (purchaseResponse as IPurchaseResponse).InventoryChanges = {
-    //     ...purchaseResponse.InventoryChanges,
-    //     ...currencyResponse
-    // };
+    const currencyChanges = await updateCurrency(
+        purchaseRequest.PurchaseParams.ExpectedPrice,
+        purchaseRequest.PurchaseParams.UsePremium,
+        accountId
+    );
 
-    return purchaseResponse;
+    inventoryChanges.InventoryChanges = {
+        ...currencyChanges,
+        ...inventoryChanges.InventoryChanges
+    };
+
+    return inventoryChanges;
+};
+
+export const slotPurchaseNameToSlotName: SlotPurchase = {
+    SuitSlotItem: { name: "SuitBin", slotsPerPurchase: 1 },
+    TwoSentinelSlotItem: { name: "SentinelBin", slotsPerPurchase: 2 },
+    TwoWeaponSlotItem: { name: "WeaponBin", slotsPerPurchase: 2 },
+    SpaceSuitSlotItem: { name: "SpaceSuitBin", slotsPerPurchase: 1 },
+    TwoSpaceWeaponSlotItem: { name: "SpaceWeaponBin", slotsPerPurchase: 2 },
+    MechSlotItem: { name: "MechBin", slotsPerPurchase: 1 },
+    TwoOperatorWeaponSlotItem: { name: "OperatorAmpBin", slotsPerPurchase: 2 },
+    RandomModSlotItem: { name: "RandomModBin", slotsPerPurchase: 3 },
+    TwoCrewShipSalvageSlotItem: { name: "CrewShipSalvageBin", slotsPerPurchase: 2 },
+    CrewMemberSlotItem: { name: "CrewMemberBin", slotsPerPurchase: 1 }
+};
+
+// // extra = everything above the base +2 slots (depending on slot type)
+// // new slot above base = extra + 1 and slots +1
+// // new frame = slots -1
+// // number of frames = extra - slots + 2
+const handleSlotPurchase = async (slotPurchaseNameFull: string, accountId: string) => {
+    console.log("slot name", slotPurchaseNameFull);
+    const slotPurchaseName = parseSlotPurchaseName(
+        slotPurchaseNameFull.substring(slotPurchaseNameFull.lastIndexOf("/") + 1)
+    );
+    console.log(slotPurchaseName, "slot purchase name");
+
+    await updateSlots(
+        accountId,
+        slotPurchaseNameToSlotName[slotPurchaseName].name,
+        slotPurchaseNameToSlotName[slotPurchaseName].slotsPerPurchase,
+        slotPurchaseNameToSlotName[slotPurchaseName].slotsPerPurchase
+    );
+
+    console.log(
+        slotPurchaseNameToSlotName[slotPurchaseName].name,
+        slotPurchaseNameToSlotName[slotPurchaseName].slotsPerPurchase,
+        "slots added"
+    );
+
+    return {
+        InventoryChanges: {
+            [slotPurchaseNameToSlotName[slotPurchaseName].name]: {
+                count: 0,
+                platinum: 1,
+                Slots: slotPurchaseNameToSlotName[slotPurchaseName].slotsPerPurchase,
+                Extra: slotPurchaseNameToSlotName[slotPurchaseName].slotsPerPurchase
+            }
+        }
+    };
 };
 
 const handleWeaponsPurchase = async (weaponName: string, accountId: string) => {
     const weaponType = getWeaponType(weaponName);
     const addedWeapon = await addWeapon(weaponType, weaponName, accountId);
 
-    await updateSlots(SlotType.WEAPON, accountId, -1);
+    await updateSlots(accountId, SlotNameToInventoryName.WEAPON, 0, 1);
 
     return {
         InventoryChanges: {
             WeaponBin: { count: 1, platinum: 0, Slots: -1 },
             [weaponType]: [addedWeapon]
         }
-    };
+    } as IPurchaseResponse;
 };
 
 const handlePowersuitPurchase = async (powersuitName: string, accountId: string) => {
     if (powersuitName.includes("EntratiMech")) {
         const mechSuit = await addMechSuit(powersuitName, accountId);
-        await updateSlots(SlotType.MECHSUIT, accountId, -1);
+
+        await updateSlots(accountId, SlotNameToInventoryName.MECHSUIT, 0, 1);
         console.log("mech suit", mechSuit);
 
         return {
@@ -94,11 +147,11 @@ const handlePowersuitPurchase = async (powersuitName: string, accountId: string)
                 },
                 MechSuits: [mechSuit]
             }
-        };
+        } as IPurchaseResponse;
     }
 
     const suit = await addPowerSuit(powersuitName, accountId);
-    await updateSlots(SlotType.SUIT, accountId, -1);
+    await updateSlots(accountId, SlotNameToInventoryName.SUIT, 0, 1);
 
     return {
         InventoryChanges: {
@@ -112,6 +165,7 @@ const handlePowersuitPurchase = async (powersuitName: string, accountId: string)
     };
 };
 
+//TODO: change to getInventory, apply changes then save at the end
 const handleTypesPurchase = async (typesName: string, accountId: string) => {
     const typeCategory = getStoreItemTypesCategory(typesName);
     console.log("type category", typeCategory);
@@ -122,6 +176,8 @@ const handleTypesPurchase = async (typesName: string, accountId: string) => {
         //     break;
         case "Sentinels":
             return await handleSentinelPurchase(typesName, accountId);
+        case "SlotItems":
+            return await handleSlotPurchase(typesName, accountId);
         default:
             throw new Error(`unknown Types category: ${typeCategory} not implemented or new`);
     }
@@ -129,6 +185,8 @@ const handleTypesPurchase = async (typesName: string, accountId: string) => {
 
 const handleSentinelPurchase = async (sentinelName: string, accountId: string) => {
     const sentinel = await addSentinel(sentinelName, accountId);
+
+    await updateSlots(accountId, SlotNameToInventoryName.SENTINEL, 0, 1);
 
     return {
         InventoryChanges: {
