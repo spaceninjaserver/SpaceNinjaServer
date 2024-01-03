@@ -6,11 +6,8 @@ import { isEmptyObject } from "@/src/helpers/general";
 
 dotenv.config();
 
-const consolelogFormat = format.printf(({ level, message, version, timestamp }) => {
-    return `${timestamp} [${version}] ${level}: ${message}`;
-});
-
-const consolelogFormat2 = format.printf(info => {
+//TODO: in production utils.inspect might be slowing down requests
+const consolelogFormat = format.printf(info => {
     if (!isEmptyObject(info.metadata)) {
         return `${info.timestamp} [${info.version}] ${info.level}: ${info.message} ${inspect(info.metadata, {
             showHidden: false,
@@ -42,7 +39,7 @@ const consoleLog = new transports.Console({
         format.errors({ stack: true }),
         format.align(),
         format.metadata({ fillExcept: ["message", "level", "timestamp", "version"] }),
-        consolelogFormat2
+        consolelogFormat
     )
 });
 
