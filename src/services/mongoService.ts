@@ -1,3 +1,4 @@
+import { logger } from "@/src/utils/logger";
 import * as dotenv from "dotenv";
 import mongoose from "mongoose";
 
@@ -12,10 +13,10 @@ if (url === undefined) {
 const connectDatabase = async () => {
     try {
         await mongoose.connect(url);
-        console.log("connected to MongoDB");
+        logger.info("connected to MongoDB");
     } catch (error: unknown) {
         if (error instanceof Error) {
-            console.error("error connecting to MongoDB", error.message);
+            logger.error("error connecting to MongoDB", error.message);
         }
     }
 };

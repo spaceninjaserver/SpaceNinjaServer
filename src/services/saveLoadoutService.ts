@@ -10,6 +10,7 @@ import { getInventory } from "@/src/services/inventoryService";
 import { IOid } from "@/src/types/commonTypes";
 import { Types } from "mongoose";
 import { isEmptyObject } from "@/src/helpers/general";
+import { logger } from "@/src/utils/logger";
 
 //TODO: setup default items on account creation or like originally in giveStartingItems.php
 
@@ -38,10 +39,10 @@ export const handleInventoryItemConfigChange = async (
             case "AdultOperatorLoadOuts": {
                 const operatorConfig = equipment as IOperatorConfigEntry;
                 const operatorLoadout = inventory[equipmentName];
-                console.log("operator loadout received", equipmentName, operatorConfig);
+                logger.debug("operator loadout received", equipmentName, operatorConfig);
                 // all non-empty entries are one loadout slot
                 for (const [loadoutId, loadoutConfig] of Object.entries(operatorConfig)) {
-                    // console.log("loadoutId", loadoutId, "loadoutconfig", loadoutConfig);
+                    // logger.debug("loadoutId", loadoutId, "loadoutconfig", loadoutConfig);
                     const loadout = operatorLoadout.find(loadout => loadout._id?.toString() === loadoutId);
 
                     // if no config with this id exists, create a new one
@@ -58,7 +59,7 @@ export const handleInventoryItemConfigChange = async (
                 break;
             }
             case "LoadOuts": {
-                console.log("loadout received");
+                logger.debug("loadout received");
                 const loadout = await LoadoutModel.findOne({ loadoutOwnerId: accountId });
                 if (!loadout) {
                     throw new Error("loadout not found");
@@ -126,7 +127,7 @@ export const handleInventoryItemConfigChange = async (
             case "DrifterMelee":
             case "Sentinels":
             case "Horses": {
-                console.log("general Item config saved", equipmentName, equipment);
+                logger.debug("general Item config saved", equipmentName, equipment);
 
                 const itemEntries = equipment as IItemEntry;
                 for (const [itemId, itemConfigEntries] of Object.entries(itemEntries)) {
@@ -153,7 +154,7 @@ export const handleInventoryItemConfigChange = async (
                 break;
             }
             default: {
-                console.log("category not implemented", equipmentName, equipment);
+                logger.error("category not implemented", equipmentName, equipment);
             }
             //case "OperatorAmps":
             // case "SentinelWeapons":

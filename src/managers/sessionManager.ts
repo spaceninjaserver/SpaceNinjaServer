@@ -1,4 +1,5 @@
 import { ISession, IFindSessionRequest } from "@/src/types/session";
+import { logger } from "@/src/utils/logger";
 
 const sessions: ISession[] = [];
 
@@ -43,11 +44,12 @@ function getSessionByID(sessionId: string): ISession | undefined {
     return sessions.find(session => session.sessionId === sessionId);
 }
 
+//TODO: proper typings
 function getSession(sessionIdOrRequest: string | IFindSessionRequest): any[] {
     if (typeof sessionIdOrRequest === "string") {
         const session = sessions.find(session => session.sessionId === sessionIdOrRequest);
         if (session) {
-            console.log("Found Sessions:", session);
+            logger.debug("Found Sessions:", session);
             return [
                 {
                     createdBy: session.creatorId,
@@ -65,7 +67,7 @@ function getSession(sessionIdOrRequest: string | IFindSessionRequest): any[] {
                 return false;
             }
         }
-        console.log("Found Matching Sessions:", matchingSessions);
+        logger.debug("Found Matching Sessions:", matchingSessions);
         return true;
     });
     return matchingSessions.map(session => ({

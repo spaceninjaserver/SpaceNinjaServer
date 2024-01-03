@@ -11,6 +11,7 @@ import {
     updateSlots
 } from "@/src/services/inventoryService";
 import { IPurchaseRequest, IPurchaseResponse, SlotNameToInventoryName, SlotPurchase } from "@/src/types/purchaseTypes";
+import { logger } from "@/src/utils/logger";
 
 export const getStoreItemCategory = (storeItem: string) => {
     const storeItemString = getSubstringFromKeyword(storeItem, "StoreItems/");
@@ -28,10 +29,10 @@ export const getStoreItemTypesCategory = (typesItem: string) => {
 };
 
 export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountId: string) => {
-    console.log(purchaseRequest);
+    logger.debug("purchase request", purchaseRequest);
     const storeCategory = getStoreItemCategory(purchaseRequest.PurchaseParams.StoreItem);
     const internalName = purchaseRequest.PurchaseParams.StoreItem.replace("/StoreItems", "");
-    console.log("Store category", storeCategory);
+    logger.debug("Store category", storeCategory);
 
     let inventoryChanges;
     switch (storeCategory) {
@@ -47,9 +48,10 @@ export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountI
         case "Boosters":
             inventoryChanges = await handleBoostersPurchase(internalName, accountId);
             break;
-
         default:
-            throw new Error(`unknown store category: ${storeCategory} not implemented or new`);
+            const errorMessage = `unknown store category: ${storeCategory} not implemented or new`;
+            logger.error(errorMessage);
+            throw new Error(errorMessage);
     }
 
     if (!inventoryChanges) throw new Error("purchase response was undefined");
@@ -86,11 +88,11 @@ export const slotPurchaseNameToSlotName: SlotPurchase = {
 // // new frame = slots -1
 // // number of frames = extra - slots + 2
 const handleSlotPurchase = async (slotPurchaseNameFull: string, accountId: string) => {
-    console.log("slot name", slotPurchaseNameFull);
+    logger.debug("slot name", slotPurchaseNameFull);
     const slotPurchaseName = parseSlotPurchaseName(
         slotPurchaseNameFull.substring(slotPurchaseNameFull.lastIndexOf("/") + 1)
     );
-    console.log(slotPurchaseName, "slot purchase name");
+    logger.debug(slotPurchaseName, "slot purchase name");
 
     await updateSlots(
         accountId,
@@ -99,7 +101,7 @@ const handleSlotPurchase = async (slotPurchaseNameFull: string, accountId: strin
         slotPurchaseNameToSlotName[slotPurchaseName].slotsPerPurchase
     );
 
-    console.log(
+    logger.debug(
         slotPurchaseNameToSlotName[slotPurchaseName].name,
         slotPurchaseNameToSlotName[slotPurchaseName].slotsPerPurchase,
         "slots added"
@@ -136,7 +138,7 @@ const handlePowersuitPurchase = async (powersuitName: string, accountId: string)
         const mechSuit = await addMechSuit(powersuitName, accountId);
 
         await updateSlots(accountId, SlotNameToInventoryName.MECHSUIT, 0, 1);
-        console.log("mech suit", mechSuit);
+        logger.debug("mech suit", mechSuit);
 
         return {
             InventoryChanges: {
@@ -168,7 +170,7 @@ const handlePowersuitPurchase = async (powersuitName: string, accountId: string)
 //TODO: change to getInventory, apply changes then save at the end
 const handleTypesPurchase = async (typesName: string, accountId: string) => {
     const typeCategory = getStoreItemTypesCategory(typesName);
-    console.log("type category", typeCategory);
+    logger.debug("type category", typeCategory);
     switch (typeCategory) {
         case "SuitCustomizations":
             return await handleSuitCustomizationsPurchase(typesName, accountId);

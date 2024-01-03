@@ -8,6 +8,7 @@ import { Account } from "@/src/models/loginModel";
 import { createAccount, isCorrectPassword } from "@/src/services/loginService";
 import { ILoginResponse } from "@/src/types/loginTypes";
 import { DTLS, groups, HUB, IRC, Nonce, NRS, platformCDNs } from "@/static/fixed_responses/login_static";
+import { logger } from "@/src/utils/logger";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 const loginController: RequestHandler = async (request, response) => {
@@ -30,7 +31,7 @@ const loginController: RequestHandler = async (request, response) => {
                 ConsentNeeded: false,
                 TrackedSettings: []
             });
-            console.log("creating new account");
+            logger.debug("created new account");
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { email, password, ...databaseAccount } = newAccount;
             const newLoginResponse: ILoginResponse = {

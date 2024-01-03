@@ -3,6 +3,7 @@ import { IMissionRewardResponse, IReward, IInventoryFieldType, inventoryFields }
 import missionsDropTable from "@/static/json/missions-drop-table.json";
 import { modNames, relicNames, miscNames, resourceNames, gearNames, blueprintNames } from "@/static/data/items";
 import { IMissionInventoryUpdateRequest } from "../types/requestTypes";
+import { logger } from "@/src/utils/logger";
 
 // need reverse engineer rewardSeed, otherwise ingame displayed rotation reward will be different than added to db or displayed on mission end
 const getRewards = ({
@@ -56,10 +57,10 @@ const getRewards = ({
     //     { chance: 7.69, name: "Health Restore (Large)", rotation: "C" },
     //     { chance: 7.69, name: "Vapor Specter Blueprint", rotation: "C" }
     // ];
-    // console.log("Mission rewards:", testDrops);
+    // logger.debug("Mission rewards:", testDrops);
     // return formatRewardsToInventoryType(testDrops);
 
-    console.log("Mission rewards:", drops);
+    logger.debug("Mission rewards:", drops);
     return formatRewardsToInventoryType(drops);
 };
 
@@ -238,7 +239,7 @@ const _missionRewardsCheckAllNamings = () => {
         .filter(reward => !blueprintNames[reward.name])
         .filter(reward => !reward.name.includes(" Endo"))
         .filter(reward => !reward.name.includes(" Credits Cache") && !reward.name.includes("Return: "));
-    console.log(tempRewards);
+    logger.debug(tempRewards);
 };
 // _missionRewardsCheckAllNamings();
 

@@ -8,5 +8,5 @@
   "skipTutorial": true,
   "testMission": true,
   "testQuestKey": true,
-  "infinitePlatinum": false
+  "infiniteResources": true
 }
