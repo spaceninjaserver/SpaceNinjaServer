@@ -1,0 +1,39 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.231.6/containers/docker-existing-dockerfile
+{
+  "name": "wf.emulator.dev",
+
+  // Sets the run context to one level up instead of the .devcontainer folder.
+  "context": "..",
+
+  // Update the 'dockerFile' property if you aren't using the standard 'Dockerfile' filename.
+  "dockerFile": "./Dockerfile",
+
+  // Set *default* container specific settings.json values on container create.
+  "settings": {},
+
+  // Add the IDs of extensions you want installed when the container is created.
+  "extensions": [
+    "aaron-bond.better-comments",
+    "ms-vscode-remote.vscode-remote-extensionpack",
+    "streetsidesoftware.code-spell-checker",
+    "ms-azuretools.vscode-docker",
+    "dbaeumer.vscode-eslint",
+    "waderyan.gitblame",
+    "wix.vscode-import-cost",
+    "VisualStudioExptTeam.vscodeintellicode",
+    "VisualStudioExptTeam.intellicode-api-usage-examples",
+    "ms-vscode.vscode-typescript-next",
+    "mongodb.mongodb-vscode",
+    "esbenp.prettier-vscode",
+    "yoavbls.pretty-ts-errors",
+    "syler.sass-indented",
+    "redhat.vscode-yaml"
+  ],
+
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  "forwardPorts": [3000, 27017],
+
+  "postCreateCommand": "mongod --fork --logpath /var/log/mongodb.log --dbpath /data/db",
+  "postStartCommand": "echo 'MongoDB@27017 started, modules installed, and ready to go! <3 Sincerely, Smultar'"
+}
