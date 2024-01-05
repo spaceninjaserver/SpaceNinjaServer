@@ -8,3 +8,4 @@ yarn.lock
 
 # JetBrains/webstorm configs
 .idea/
+.pnpm-store
