@@ -5,7 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "start": "node build/index.js",
-    "dev": "ts-node-dev --openssl-legacy-provider -r tsconfig-paths/register src/index.ts",
+    "dev": "ts-node-dev --openssl-legacy-provider -r tsconfig-paths/register src/index.ts ",
     "build": "tsc",
     "lint": "eslint --ext .ts .",
     "prettier": "prettier --write ."
@@ -15,7 +15,9 @@
     "dotenv": "^16.1.3",
     "express": "^5.0.0-beta.1",
     "mongoose": "^8.0.2",
-    "warframe-items": "1.1260.121"
+    "warframe-items": "1.1260.121",
+    "winston": "^3.11.0",
+    "winston-daily-rotate-file": "^4.7.1"
   },
   "devDependencies": {
     "@tsconfig/node20": "^1.0.0",
