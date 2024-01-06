@@ -11,3 +11,5 @@ yarn.lock
 
 # logs
 /logs
+
+.pnpm-store
