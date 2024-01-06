@@ -1,12 +1,12 @@
 {
   "autoCreateAccount": true,
-  "buildLabel": "2023.11.06.13.39/1TcsxlckBF8b8jiE4E3eQg",
+  "buildLabel": "2023.12.19.15.34/ccslDhWoFeu8lZi6eT+HXg",
   "matchmakingBuildId": "9186822613720189878",
-  "version": "34.0.8",
-  "worldSeed": "LPilWYzp4Sgk9VoUjNUeQ0St81TzYSKmtjx/yZRdT26a6C/Rd8/5q9QrTbLPD08iv1z+Byulw+0fVagfp7JB0b3uUi8G03Bq37HHFtqARTmukBuW3FYmrr5pyLhSz5woWo/HR63oUSaX6lGvnjmWLf6/5AW/QNkjgD2lDqaYIh/IumYtBon+RtlKn/np62ljsK+vlnorw2zfXA95gdvQAMeBNk/G2SMTPjlQJdlRTjVhfRuJTlywsIv+Qy4ammWGEcms3uzRnbS8KzQohiD7wpd5GW6nbjim6BOkbgaTGjz0HOix8oVoqrJJNLgwH6rcFWWvh2MuOo+ehbNfW3Z5Bg==",
+  "version": "35.0.4",
+  "worldSeed": "t8Bnmc5fxNpCmCM+xPwf/HB4EVWUN9ErRdDro1yMiEkFmzHL74Khle/apjMMYvli5MS9nu1ZAi83e2wCAa4o9uSMhgVAocPQbWIYHX/AgHPpb0kFszqpcWF20QaCRW6ebAXduGBBOvsU3h5zDCBgRPdqzd64BIYG8cD+nmpnHKPfq7HlTFQCOsq3ipHgGSZypji5oGxXdMKwDVP/uMFmiosjr8XCVnw4aTPq1MDjSBBbNlc4KIJpAokdOUokrbo+7jvbfSQvKCZiNxSEyDjxxCqwdJn3GyIk/yjpXPWmtS5GS1/R9+0DrjLs+ra3bKWeUlwRFKl4zjeyFivy/1nZkw==",
   "skipStoryModeChoice": true,
   "skipTutorial": true,
   "testMission": true,
   "testQuestKey": true,
-  "infinitePlatinum": false
+  "infiniteResources": true
 }

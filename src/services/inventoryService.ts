@@ -16,6 +16,7 @@ import {
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate } from "../types/genericUpdate";
 import { IArtifactsRequest, IMissionInventoryUpdateRequest } from "../types/requestTypes";
+import { logger } from "@/src/utils/logger";
 
 export const createInventory = async (accountOwnerId: Types.ObjectId, loadOutPresetId: Types.ObjectId) => {
     try {
@@ -107,7 +108,7 @@ export const updateCurrency = async (price: number, usePremium: boolean, account
         currencyChanges[path as currencyKeys] = -price;
     });
 
-    console.log(currencyChanges, "changes");
+    logger.debug(`currency changes `, { currencyChanges });
 
     //let changes = {} as keyof currencyKeys;
 

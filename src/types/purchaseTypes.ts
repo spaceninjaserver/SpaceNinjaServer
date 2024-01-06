@@ -1,4 +1,3 @@
-import { slotPurchaseNameToSlotName } from "@/src/services/purchaseService";
 import { ISuitClient } from "@/src/types/inventoryTypes/SuitTypes";
 import { IFlavourItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IWeaponClient } from "@/src/types/inventoryTypes/weaponTypes";
