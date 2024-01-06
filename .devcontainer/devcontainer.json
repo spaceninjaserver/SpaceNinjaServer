@@ -13,7 +13,23 @@
     // Configure properties specific to VS Code.
     "vscode": {
       // Add the IDs of extensions you want installed when the container is created.
-      "extensions": ["mongodb.mongodb-vscode"]
+      "extensions": [
+        "mongodb.mongodb-vscode",
+        "aaron-bond.better-comments",
+        "streetsidesoftware.code-spell-checker",
+        "ms-vscode-remote.remote-containers",
+        "ms-azuretools.vscode-docker",
+        "dbaeumer.vscode-eslint",
+        "waderyan.gitblame",
+        "github.vscode-github-actions",
+        "VisualStudioExptTeam.vscodeintellicode",
+        "VisualStudioExptTeam.intellicode-api-usage-examples",
+        "ms-vscode.vscode-typescript-next",
+        "esbenp.prettier-vscode",
+        "yoavbls.pretty-ts-errors",
+        "syler.sass-indented",
+        "redhat.vscode-yaml"
+      ]
     }
   },
   "features": {
