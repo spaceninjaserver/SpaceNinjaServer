@@ -1,24 +1,51 @@
 import { createLogger, format, transports, Logger, LeveledLogMethod, addColors } from "winston";
 import "winston-daily-rotate-file";
 import * as dotenv from "dotenv";
-import { inspect } from "util";
+import * as util from "util";
 import { isEmptyObject } from "@/src/helpers/general";
 
 dotenv.config();
 
-//TODO: in production utils.inspect might be slowing down requests
+// const combineMessageAndSplat = () => {
+//     return {
+//         transform: (info: any, _opts: any) => {
+//             //combine message and args if any
+//             info.message = util.format(info.message, ...(info[Symbol.for("splat")] || []));
+//             return info;
+//         }
+//     };
+// };
+
+// const alwaysAddMetadata = () => {
+//     return {
+//         transform(info: any) {
+//             if (info[Symbol.for("splat")] === undefined) return info;
+//             info.meta = info[Symbol.for("splat")]; //[0].meta;
+//             return info;
+//         }
+//     };
+// };
+
+//TODO: in production utils.inspect might be slowing down requests see utils.inspect
 const consolelogFormat = format.printf(info => {
     if (!isEmptyObject(info.metadata)) {
-        return `${info.timestamp} [${info.version}] ${info.level}: ${info.message} ${inspect(info.metadata, {
+        const metadataString = util.inspect(info.metadata, {
             showHidden: false,
             depth: null,
             colors: true
-        })}`;
+        });
+
+        return `${info.timestamp} [${info.version}] ${info.level}: ${info.message} ${metadataString}`;
     }
     return `${info.timestamp} [${info.version}] ${info.level}: ${info.message}`;
 });
 
-const fileFormat = format.combine(format.uncolorize(), format.timestamp(), format.json());
+const fileFormat = format.combine(
+    format.uncolorize(),
+    //combineMessageAndSplat(),
+    format.timestamp(),
+    format.json()
+);
 
 const errorLog = new transports.DailyRotateFile({
     filename: "logs/error.log",
@@ -36,6 +63,8 @@ const consoleLog = new transports.Console({
     format: format.combine(
         format.colorize(),
         format.timestamp({ format: "YYYY-MM-DDTHH:mm:ss:SSS" }), // uses local timezone
+        //combineMessageAndSplat(),
+        //alwaysAddMetadata(),
         format.errors({ stack: true }),
         format.align(),
         format.metadata({ fillExcept: ["message", "level", "timestamp", "version"] }),

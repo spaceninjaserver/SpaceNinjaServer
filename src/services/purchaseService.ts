@@ -32,7 +32,7 @@ export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountI
     logger.debug("purchase request", purchaseRequest);
     const storeCategory = getStoreItemCategory(purchaseRequest.PurchaseParams.StoreItem);
     const internalName = purchaseRequest.PurchaseParams.StoreItem.replace("/StoreItems", "");
-    logger.debug("Store category", storeCategory);
+    logger.debug(`store category ${storeCategory}`);
 
     let inventoryChanges;
     switch (storeCategory) {
@@ -88,32 +88,26 @@ export const slotPurchaseNameToSlotName: SlotPurchase = {
 // // new frame = slots -1
 // // number of frames = extra - slots + 2
 const handleSlotPurchase = async (slotPurchaseNameFull: string, accountId: string) => {
-    logger.debug("slot name", slotPurchaseNameFull);
+    logger.debug(`slot name ${slotPurchaseNameFull}`);
     const slotPurchaseName = parseSlotPurchaseName(
         slotPurchaseNameFull.substring(slotPurchaseNameFull.lastIndexOf("/") + 1)
     );
-    logger.debug(slotPurchaseName, "slot purchase name");
+    logger.debug(`slot purchase name ${slotPurchaseName}`);
 
-    await updateSlots(
-        accountId,
-        slotPurchaseNameToSlotName[slotPurchaseName].name,
-        slotPurchaseNameToSlotName[slotPurchaseName].slotsPerPurchase,
-        slotPurchaseNameToSlotName[slotPurchaseName].slotsPerPurchase
-    );
+    const slotName = slotPurchaseNameToSlotName[slotPurchaseName].name;
+    const slotsPerPurchase = slotPurchaseNameToSlotName[slotPurchaseName].slotsPerPurchase;
 
-    logger.debug(
-        slotPurchaseNameToSlotName[slotPurchaseName].name,
-        slotPurchaseNameToSlotName[slotPurchaseName].slotsPerPurchase,
-        "slots added"
-    );
+    await updateSlots(accountId, slotName, slotsPerPurchase, slotsPerPurchase);
+
+    logger.debug(`added ${slotsPerPurchase} slot ${slotName}`);
 
     return {
         InventoryChanges: {
-            [slotPurchaseNameToSlotName[slotPurchaseName].name]: {
+            [slotName]: {
                 count: 0,
                 platinum: 1,
-                Slots: slotPurchaseNameToSlotName[slotPurchaseName].slotsPerPurchase,
-                Extra: slotPurchaseNameToSlotName[slotPurchaseName].slotsPerPurchase
+                Slots: slotsPerPurchase,
+                Extra: slotsPerPurchase
             }
         }
     };
@@ -170,7 +164,7 @@ const handlePowersuitPurchase = async (powersuitName: string, accountId: string)
 //TODO: change to getInventory, apply changes then save at the end
 const handleTypesPurchase = async (typesName: string, accountId: string) => {
     const typeCategory = getStoreItemTypesCategory(typesName);
-    logger.debug("type category", typeCategory);
+    logger.debug(`type category ${typeCategory}`);
     switch (typeCategory) {
         case "SuitCustomizations":
             return await handleSuitCustomizationsPurchase(typesName, accountId);

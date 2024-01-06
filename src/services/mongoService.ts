@@ -12,11 +12,11 @@ if (url === undefined) {
 
 const connectDatabase = async () => {
     try {
-        await mongoose.connect(url);
+        await mongoose.connect(`${url}`);
         logger.info("connected to MongoDB");
     } catch (error: unknown) {
         if (error instanceof Error) {
-            logger.error("error connecting to MongoDB", error.message);
+            logger.error(`error connecting to MongoDB ${error.message}`);
         }
     }
 };

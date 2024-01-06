@@ -13,8 +13,8 @@ const options = {
 };
 
 // const server = http.createServer(app).listen(80);
-http.createServer(app).listen(80, () => logger.info("server started on port 80"));
-const server = https.createServer(options, app).listen(443, () => logger.info("server started on port 443"));
+http.createServer(app).listen(80, () => logger.info("cache server started on port 80"));
+const server = https.createServer(options, app).listen(443, () => logger.info("game server started on port 443"));
 
 // server.keepAliveTimeout = 60 * 1000 + 1000;
 // server.headersTimeout = 60 * 1000 + 2000;

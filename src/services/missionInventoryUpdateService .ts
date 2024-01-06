@@ -239,7 +239,7 @@ const _missionRewardsCheckAllNamings = () => {
         .filter(reward => !blueprintNames[reward.name])
         .filter(reward => !reward.name.includes(" Endo"))
         .filter(reward => !reward.name.includes(" Credits Cache") && !reward.name.includes("Return: "));
-    logger.debug(tempRewards);
+    logger.debug(`temp rewards`, { tempRewards });
 };
 // _missionRewardsCheckAllNamings();
 

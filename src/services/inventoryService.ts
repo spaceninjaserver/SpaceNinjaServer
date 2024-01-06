@@ -108,7 +108,7 @@ export const updateCurrency = async (price: number, usePremium: boolean, account
         currencyChanges[path as currencyKeys] = -price;
     });
 
-    logger.debug(`currency changes ${JSON.stringify(currencyChanges)}`);
+    logger.debug(`currency changes `, { currencyChanges });
 
     //let changes = {} as keyof currencyKeys;
 

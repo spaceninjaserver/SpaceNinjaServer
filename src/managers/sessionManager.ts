@@ -49,7 +49,7 @@ function getSession(sessionIdOrRequest: string | IFindSessionRequest): any[] {
     if (typeof sessionIdOrRequest === "string") {
         const session = sessions.find(session => session.sessionId === sessionIdOrRequest);
         if (session) {
-            logger.debug("Found Sessions:", session);
+            logger.debug("Found Sessions:", { session });
             return [
                 {
                     createdBy: session.creatorId,
@@ -67,7 +67,7 @@ function getSession(sessionIdOrRequest: string | IFindSessionRequest): any[] {
                 return false;
             }
         }
-        logger.debug("Found Matching Sessions:", matchingSessions);
+        logger.debug("Found Matching Sessions:", { matchingSessions });
         return true;
     });
     return matchingSessions.map(session => ({

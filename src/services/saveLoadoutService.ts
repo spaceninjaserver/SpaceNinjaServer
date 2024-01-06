@@ -39,10 +39,10 @@ export const handleInventoryItemConfigChange = async (
             case "AdultOperatorLoadOuts": {
                 const operatorConfig = equipment as IOperatorConfigEntry;
                 const operatorLoadout = inventory[equipmentName];
-                logger.debug("operator loadout received", equipmentName, operatorConfig);
+                logger.debug(`operator loadout received ${equipmentName} `, operatorConfig);
                 // all non-empty entries are one loadout slot
                 for (const [loadoutId, loadoutConfig] of Object.entries(operatorConfig)) {
-                    // logger.debug("loadoutId", loadoutId, "loadoutconfig", loadoutConfig);
+                    logger.debug(`loadoutId ${loadoutId} loadoutConfig`, { config: loadoutConfig });
                     const loadout = operatorLoadout.find(loadout => loadout._id?.toString() === loadoutId);
 
                     // if no config with this id exists, create a new one
@@ -127,7 +127,7 @@ export const handleInventoryItemConfigChange = async (
             case "DrifterMelee":
             case "Sentinels":
             case "Horses": {
-                logger.debug("general Item config saved", equipmentName, equipment);
+                logger.debug(`general Item config saved of type ${equipmentName}`, { config: equipment });
 
                 const itemEntries = equipment as IItemEntry;
                 for (const [itemId, itemConfigEntries] of Object.entries(itemEntries)) {
@@ -154,7 +154,7 @@ export const handleInventoryItemConfigChange = async (
                 break;
             }
             default: {
-                logger.error("category not implemented", equipmentName, equipment);
+                logger.error(`category not implemented: ${equipmentName}`, { config: equipment });
             }
             //case "OperatorAmps":
             // case "SentinelWeapons":
