@@ -15,7 +15,7 @@
     "dotenv": "^16.1.3",
     "express": "^5.0.0-beta.1",
     "mongoose": "^8.0.2",
-    "warframe-items": "1.1260.121",
+    "warframe-items": "1.1260.191",
     "winston": "^3.11.0",
     "winston-daily-rotate-file": "^4.7.1"
   },
