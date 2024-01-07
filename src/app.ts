@@ -1,20 +1,21 @@
 import express from "express";
-//import { loginRouter } from "./routes/login";
 
-import { requestLogger, unknownEndpointHandler } from "@/src/middleware/middleware";
+import { unknownEndpointHandler } from "@/src/middleware/middleware";
+import { requestLogger } from "@/src/middleware/morgenMiddleware";
 
 import { apiRouter } from "@/src/routes/api";
 //import { testRouter } from "@/src/routes/test";
 import { cacheRouter } from "@/src/routes/cache";
 import bodyParser from "body-parser";
 
-import morgan from "morgan";
 import { steamPacksController } from "@/src/controllers/misc/steamPacksController";
 import { customRouter } from "@/src/routes/custom";
 import { dynamicController } from "@/src/routes/dynamic";
 import { statsRouter } from "@/src/routes/stats";
 import { connectDatabase } from "@/src/services/mongoService";
+import { registerLogFileCreationListener } from "@/src/utils/logger";
 
+void registerLogFileCreationListener();
 void connectDatabase();
 
 const app = express();
@@ -22,7 +23,7 @@ const app = express();
 app.use(bodyParser.raw());
 app.use(express.json());
 app.use(bodyParser.text());
-app.use(morgan("dev"));
+app.use(requestLogger);
 //app.use(requestLogger);
 
 app.use("/api", apiRouter);

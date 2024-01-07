@@ -2,6 +2,13 @@ export const isEmptyObject = (obj: unknown): boolean => {
     return Boolean(obj && Object.keys(obj).length === 0 && obj.constructor === Object);
 };
 
+/*
+alternative to isEmptyObject
+export const isEmptyObject = (obj: object): boolean => {
+    return Object.keys(obj).length === 0;
+};
+*/
+
 const isString = (text: unknown): text is string => {
     return typeof text === "string" || text instanceof String;
 };

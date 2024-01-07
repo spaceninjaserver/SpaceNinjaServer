@@ -3,6 +3,7 @@ import util from "util";
 import { ISaveLoadoutRequest } from "@/src/types/saveLoadoutTypes";
 import { handleInventoryItemConfigChange } from "@/src/services/saveLoadoutService";
 import { parseString } from "@/src/helpers/general";
+import { logger } from "@/src/utils/logger";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const saveLoadoutController: RequestHandler = async (req, res) => {
@@ -24,7 +25,7 @@ export const saveLoadoutController: RequestHandler = async (req, res) => {
         res.status(200).end();
     } catch (error: unknown) {
         if (error instanceof Error) {
-            console.log("error in saveLoadoutController", error.message);
+            logger.error(`error in saveLoadoutController: ${error.message}`);
             res.status(400).json({ error: error.message });
         } else {
             res.status(400).json({ error: "unknown error" });
