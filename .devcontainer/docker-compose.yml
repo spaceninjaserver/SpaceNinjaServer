@@ -19,10 +19,10 @@ services:
         network_mode: service:wf.database
 
         environment:
-            MONGODB_USERNAME: ${MONDODB_USERNAME}
-            MONGODB_PASSWORD: ${MONDODB_PASSWORD}
-            MONGODB_DATABASE: ${MONDODB_DATABASE}
-            MONGODB_PORT: ${MONGODB_PORT}
+            MONGODB_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+            MONGODB_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+            MONGODB_DATABASE: ${MONGO_INITDB_DATABASE}
+            MONGODB_PORT: ${MONGO_INITDB_PORT}
             MONGODB_URL: ${MONGODB_URL}
             LOG_LEVEL: ${LOG_LEVEL}
             LOG_FILES: ${LOG_FILES}
@@ -39,10 +39,10 @@ services:
 
         # Uncomment to change startup options
         environment:
-            MONGO_INITDB_ROOT_USERNAME: ${MONDODB_USERNAME}
-            MONGO_INITDB_ROOT_PASSWORD: ${MONDODB_PASSWORD}
-            MONGO_INITDB_DATABASE: ${MONGODB_DATABASE}
-            MONGO_INITDB_PORT: ${MONGODB_PORT}
+            MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+            MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+            MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+            MONGO_INITDB_PORT: ${MONGO_INITDB_PORT}
         env_file:
             - .env
 
