@@ -4,8 +4,6 @@ import mongoose from "mongoose";
 
 const { MONGODB_USERNAME, MONGODB_PASSWORD, MONGODB_URL, MONGODB_DATABASE, MONGODB_PORT } = env;
 
-console.log(process.env);
-
 if (MONGODB_USERNAME === undefined) {
     throw new Error("MONGODB_USERNAME not found. Make sure you have a .env file in the root of the project!");
 }
