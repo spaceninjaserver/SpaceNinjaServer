@@ -1,60 +1,19 @@
-import Items, { Category, Item, Warframe, Weapon } from "warframe-items";
+import modNamesData from "@/static/json/mod-names.json";
+import relicNamesData from "@/static/json/relic-names.json";
+import miscNamesData from "@/static/json/misc-names.json";
+import resourceNamesData from "@/static/json/resource-names.json";
+import gearNamesData from "@/static/json/gear-names.json";
+import blueprintNamesData from "@/static/json/blueprint-names.json";
+import weaponCategoriesData from "@/static/json/weapon-categories.json";
+import allUniqNames from "@/static/json/all-uniq-names.json";
 
-type MinWeapon = Omit<Weapon, "patchlogs">;
-type MinItem = Omit<Item, "patchlogs">;
+const modNames = modNamesData as ImportAssertions;
+const relicNames = relicNamesData as ImportAssertions;
+const miscNames = miscNamesData as ImportAssertions;
+const resourceNames = resourceNamesData as ImportAssertions;
+const gearNames = gearNamesData as ImportAssertions;
+const blueprintNames = blueprintNamesData as ImportAssertions;
+const weaponCategories = weaponCategoriesData as ImportAssertions;
+const items = new Set(allUniqNames);
 
-export const weapons: MinWeapon[] = (new Items({ category: ["Primary", "Secondary", "Melee"] }) as Weapon[]).map(
-    item => {
-        const next = { ...item };
-        delete next.patchlogs;
-        return next;
-    }
-);
-
-export const items: MinItem[] = new Items({ category: ["All"] }).map(item => {
-    const next = { ...item };
-    delete next.patchlogs;
-    return next;
-});
-
-const getNamesObj = (category: Category) =>
-    new Items({ category: [category] }).reduce((acc, item) => {
-        acc[item.name!.replace("'S", "'s")] = item.uniqueName!;
-        return acc;
-    }, {} as ImportAssertions);
-
-export const modNames = getNamesObj("Mods");
-export const resourceNames = getNamesObj("Resources");
-export const miscNames = getNamesObj("Misc");
-export const relicNames = getNamesObj("Relics");
-export const skinNames = getNamesObj("Skins");
-export const arcaneNames = getNamesObj("Arcanes");
-export const gearNames = getNamesObj("Gear");
-
-export const craftNames: ImportAssertions = Object.fromEntries(
-    (
-        new Items({
-            category: [
-                "Warframes",
-                "Gear",
-                "Melee",
-                "Primary",
-                "Secondary",
-                "Sentinels",
-                "Misc",
-                "Arch-Gun",
-                "Arch-Melee"
-            ]
-        }) as Warframe[]
-    )
-        .flatMap(item => item.components || [])
-        .filter(item => item.drops && item.drops[0])
-        .map(item => [item.drops![0].type, item.uniqueName])
-);
-craftNames["Forma Blueprint"] = "/Lotus/Types/Recipes/Components/FormaBlueprint";
-
-export const blueprintNames: ImportAssertions = Object.fromEntries(
-    Object.keys(craftNames)
-        .filter(name => name.includes("Blueprint"))
-        .map(name => [name, craftNames[name]])
-);
+export { modNames, relicNames, miscNames, resourceNames, gearNames, blueprintNames, weaponCategories, items };

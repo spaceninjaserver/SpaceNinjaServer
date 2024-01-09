@@ -1,0 +1,5 @@
+*
+!.gitignore
+!missions-drop-table.json
+!scripts
+!scripts/*

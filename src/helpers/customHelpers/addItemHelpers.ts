@@ -24,8 +24,7 @@ interface IAddItemRequest {
     accountId: string;
 }
 export const isInternalName = (internalName: string): boolean => {
-    const item = items.find(i => i.uniqueName === internalName);
-    return Boolean(item);
+    return items.has(internalName);
 };
 
 const parseInternalName = (internalName: unknown): string => {
