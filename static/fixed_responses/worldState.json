@@ -1,9 +1,9 @@
 {
-  "WorldSeed": "C68DAWyMirl4eiEwSnd1fq9YbHMz3t8V2MiNVmv6rcvhbdOSyazMb1Nsyp1YiJzHGIG62BQ7RQYIb1VXLKfISlx6znDKRyODorvXX9E1GCTh8HOm2eUa5BBpRoYLzAMhOLA85vRV0ixqzuywiqVluPPGh2masknWekkmLzH/KkdvRf0HWZwNRB7HAlE+t0G3UtecddhZI8F2BATft0xLityIqTuOCIb7zUjuY07vwGUzS6OX5D4FjdIe7i6ncptjOMysVXU9z7VCeyPe6/0HDWAL07PfbEUI+pUSMV3A9Z6eSiCRInoqXv5J5Aq3jJzEmW4kJJZcubPcQSqJxrJDCg==",
+  "WorldSeed": "tulS3NEyXcLBvAM4JnJF7udXygp8YKQyAM1SANa0/DXLTvPmqvpeV/4J0cPs7AqlpvuLbuMwCfDloSENRNN7RO8eL9vqjya+k0fi6ACbKUdAV2L8Ugu6JXBTavHuLtxe2X+Z5uxariP3GbXoAArRia4Hi6eYnJP+sinlzK2vN4Z2fy32cGMJ6AMAbHDZeBSU/26onmyrs9T++PbRRYUgfgVdf5XVRfoWAiktTOipz3BDcdjImdFrlSWfHVdxYaDXgIArVObpRMWKPMeixgOaZ2zzcRWxIsaQ4z1j1fLjbz5kwh4jAJMh/12l/8djPM9mQhPIRwOp2HOSPNwjyLEsFA==",
   "Version": 10,
   "MobileVersion": "4.15.19.0",
-  "BuildLabel": "2024.01.02.16.59/1p++4hB4KasHyIc5r4atqw",
-  "Time": 1704985362,
+  "BuildLabel": "2024.01.10.17.09/nhtkV2+-Ko5jCzUxhAEUIw",
+  "Time": 1705017602,
   "Events": [
     {
       "_id": { "$oid": "62d31b87106360aa5703954d" },
@@ -312,15 +312,6 @@
       "MobileOnly": false
     },
     {
-      "_id": { "$oid": "659d9b7a9f619ea5d5033c26" },
-      "Messages": [{ "LanguageCode": "en", "Message": "Whispers in the Walls: Hotfix 35.0.7" }],
-      "Prop": "https://www.warframe.com/updates/pc/35-0-7",
-      "Date": { "$date": { "$numberLong": "1704827700000" } },
-      "Priority": false,
-      "MobileOnly": false,
-      "Community": true
-    },
-    {
       "_id": { "$oid": "659ec513b761b7f0b3100a77" },
       "Messages": [{ "LanguageCode": "fr", "Message": "Notes de màj - 35.0.7" }],
       "Prop": "https://forums.warframe.com/topic/1380237-murmures-dans-les-murs%C2%A0-correctif-3507/",
@@ -419,6 +410,14 @@
       "ImageUrl": "https://content.invisioncic.com/Mwarframe/monthly_2024_01/image.png.d71181e729a8e0dd260b74aadc136e2c.png",
       "Priority": false,
       "MobileOnly": false
+    },
+    {
+      "_id": { "$oid": "65a01c9fb68add02bf0642e7" },
+      "Messages": [{ "LanguageCode": "en", "Message": "Whispers in the Walls: Hotfix 35.0.8" }],
+      "Prop": "https://www.warframe.com/updates/pc/35-0-8",
+      "Date": { "$date": { "$numberLong": "1704991860000" } },
+      "Priority": false,
+      "MobileOnly": false
     }
   ],
   "Goals": [
@@ -429,8 +428,8 @@
       "Node": "SolNode129",
       "ScoreVar": "FissuresClosed",
       "ScoreLocTag": "/Lotus/Language/G1Quests/HeatFissuresEventScore",
-      "Count": 4,
-      "HealthPct": 0.04,
+      "Count": 5,
+      "HealthPct": 0.05,
       "Regions": [1],
       "Desc": "/Lotus/Language/G1Quests/HeatFissuresEventName",
       "ToolTip": "/Lotus/Language/G1Quests/HeatFissuresEventDesc",
@@ -479,17 +478,17 @@
   "Alerts": [],
   "Sorties": [
     {
-      "_id": { "$oid": "659ec98e001cf399fb7a025f" },
-      "Activation": { "$date": { "$numberLong": "1704906000000" } },
-      "Expiry": { "$date": { "$numberLong": "1704992400000" } },
+      "_id": { "$oid": "65a01b0e91cf44fa728fa9ac" },
+      "Activation": { "$date": { "$numberLong": "1704992400000" } },
+      "Expiry": { "$date": { "$numberLong": "1705078800000" } },
       "Reward": "/Lotus/Types/Game/MissionDecks/SortieRewards",
-      "Seed": 61527,
-      "Boss": "SORTIE_BOSS_RUK",
+      "Seed": 1696,
+      "Boss": "SORTIE_BOSS_AMBULAS",
       "ExtraDrops": [],
       "Variants": [
-        { "missionType": "MT_EXTERMINATION", "modifierType": "SORTIE_MODIFIER_HAZARD_RADIATION", "node": "SolNode301", "tileset": "OrokinMoonTilesetGrineer" },
-        { "missionType": "MT_SURVIVAL", "modifierType": "SORTIE_MODIFIER_FIRE", "node": "SolNode122", "tileset": "GrineerOceanTileset" },
-        { "missionType": "MT_ASSASSINATION", "modifierType": "SORTIE_MODIFIER_RIFLE_ONLY", "node": "SolNode32", "tileset": "GrineerGalleonTileset" }
+        { "missionType": "MT_MOBILE_DEFENSE", "modifierType": "SORTIE_MODIFIER_SNIPER_ONLY", "node": "SolNode43", "tileset": "CorpusOutpostTileset" },
+        { "missionType": "MT_TERRITORY", "modifierType": "SORTIE_MODIFIER_MELEE_ONLY", "node": "SolNode10", "tileset": "CorpusGasCityTileset" },
+        { "missionType": "MT_INTEL", "modifierType": "SORTIE_MODIFIER_LOW_ENERGY", "node": "SolNode215", "tileset": "CorpusShipTileset" }
       ],
       "Twitter": true
     }
@@ -511,297 +510,223 @@
   ],
   "SyndicateMissions": [
     {
-      "_id": { "$oid": "659eccd5f1fa6a8d586c4d35" },
-      "Activation": { "$date": { "$numberLong": "1704905941214" } },
-      "Expiry": { "$date": { "$numberLong": "1704992340000" } },
+      "_id": { "$oid": "65a01e556c7ede78154b9f74" },
+      "Activation": { "$date": { "$numberLong": "1704992341970" } },
+      "Expiry": { "$date": { "$numberLong": "1705078740000" } },
       "Tag": "ArbitersSyndicate",
-      "Seed": 61527,
-      "Nodes": ["SolNode41", "SolNode63", "SolNode706", "SolNode93", "SolNode21", "SolNode121", "SolNode128"]
+      "Seed": 1696,
+      "Nodes": ["SolNode30", "SolNode61", "SolNode27", "SolNode70", "SolNode84", "SolNode412", "SolNode76"]
     },
     {
-      "_id": { "$oid": "659eccd5f1fa6a8d586c4d37" },
-      "Activation": { "$date": { "$numberLong": "1704905941214" } },
-      "Expiry": { "$date": { "$numberLong": "1704992340000" } },
-      "Tag": "NecraloidSyndicate",
-      "Seed": 81833,
-      "Nodes": []
-    },
-    {
-      "_id": { "$oid": "659eccd5f1fa6a8d586c4d36" },
-      "Activation": { "$date": { "$numberLong": "1704905941214" } },
-      "Expiry": { "$date": { "$numberLong": "1704992340000" } },
-      "Tag": "CephalonSudaSyndicate",
-      "Seed": 6518,
-      "Nodes": ["SolNode22", "SolNode26", "SolNode209", "SolNode138", "SolNode50", "SolNode153", "SolNode49"]
-    },
-    {
-      "_id": { "$oid": "659eccd5f1fa6a8d586c4d38" },
-      "Activation": { "$date": { "$numberLong": "1704905941214" } },
-      "Expiry": { "$date": { "$numberLong": "1704992340000" } },
+      "_id": { "$oid": "65a01e566c7ede78154b9f77" },
+      "Activation": { "$date": { "$numberLong": "1704992341970" } },
+      "Expiry": { "$date": { "$numberLong": "1705078740000" } },
       "Tag": "EventSyndicate",
-      "Seed": 49776,
+      "Seed": 21478,
       "Nodes": []
     },
     {
-      "_id": { "$oid": "659eccd5f1fa6a8d586c4d39" },
-      "Activation": { "$date": { "$numberLong": "1704905941214" } },
-      "Expiry": { "$date": { "$numberLong": "1704992340000" } },
+      "_id": { "$oid": "65a01e566c7ede78154b9f75" },
+      "Activation": { "$date": { "$numberLong": "1704992341970" } },
+      "Expiry": { "$date": { "$numberLong": "1705078740000" } },
+      "Tag": "CephalonSudaSyndicate",
+      "Seed": 20607,
+      "Nodes": ["SolNode36", "SolNode2", "SolNode709", "SolNode89", "SolNode166", "SolNode20", "SolNode4"]
+    },
+    {
+      "_id": { "$oid": "65a01e566c7ede78154b9f76" },
+      "Activation": { "$date": { "$numberLong": "1704992341970" } },
+      "Expiry": { "$date": { "$numberLong": "1705078740000" } },
+      "Tag": "NecraloidSyndicate",
+      "Seed": 8731,
+      "Nodes": []
+    },
+    {
+      "_id": { "$oid": "65a01e566c7ede78154b9f78" },
+      "Activation": { "$date": { "$numberLong": "1704992341970" } },
+      "Expiry": { "$date": { "$numberLong": "1705078740000" } },
       "Tag": "KahlSyndicate",
-      "Seed": 85902,
+      "Seed": 84508,
       "Nodes": []
     },
     {
-      "_id": { "$oid": "659eccd5f1fa6a8d586c4d3b" },
-      "Activation": { "$date": { "$numberLong": "1704905941214" } },
-      "Expiry": { "$date": { "$numberLong": "1704992340000" } },
+      "_id": { "$oid": "65a01e566c7ede78154b9f7a" },
+      "Activation": { "$date": { "$numberLong": "1704992341970" } },
+      "Expiry": { "$date": { "$numberLong": "1705078740000" } },
       "Tag": "QuillsSyndicate",
-      "Seed": 29572,
+      "Seed": 35173,
       "Nodes": []
     },
     {
-      "_id": { "$oid": "659eccd5f1fa6a8d586c4d3a" },
-      "Activation": { "$date": { "$numberLong": "1704905941214" } },
-      "Expiry": { "$date": { "$numberLong": "1704992340000" } },
+      "_id": { "$oid": "65a01e566c7ede78154b9f79" },
+      "Activation": { "$date": { "$numberLong": "1704992341970" } },
+      "Expiry": { "$date": { "$numberLong": "1705078740000" } },
       "Tag": "NewLokaSyndicate",
-      "Seed": 2869,
-      "Nodes": ["SolNode16", "SolNode66", "SolNode59", "SolNode19", "SolNode223", "SolNode74", "SolNode205"]
+      "Seed": 28994,
+      "Nodes": ["SolNode41", "SolNode79", "SolNode88", "SolNode707", "SolNode103", "SolNode172", "SolNode42"]
     },
     {
-      "_id": { "$oid": "659eccd5f1fa6a8d586c4d3d" },
-      "Activation": { "$date": { "$numberLong": "1704905941214" } },
-      "Expiry": { "$date": { "$numberLong": "1704992340000" } },
-      "Tag": "RadioLegion2Syndicate",
-      "Seed": 48139,
-      "Nodes": []
-    },
-    {
-      "_id": { "$oid": "659eccd5f1fa6a8d586c4d3e" },
-      "Activation": { "$date": { "$numberLong": "1704905941214" } },
-      "Expiry": { "$date": { "$numberLong": "1704992340000" } },
-      "Tag": "RadioLegion3Syndicate",
-      "Seed": 59343,
-      "Nodes": []
-    },
-    {
-      "_id": { "$oid": "659eccd5f1fa6a8d586c4d3f" },
-      "Activation": { "$date": { "$numberLong": "1704905941214" } },
-      "Expiry": { "$date": { "$numberLong": "1704992340000" } },
-      "Tag": "RadioLegionIntermission2Syndicate",
-      "Seed": 68978,
-      "Nodes": []
-    },
-    {
-      "_id": { "$oid": "659eccd5f1fa6a8d586c4d3c" },
-      "Activation": { "$date": { "$numberLong": "1704905941214" } },
-      "Expiry": { "$date": { "$numberLong": "1704992340000" } },
+      "_id": { "$oid": "65a01e566c7ede78154b9f7b" },
+      "Activation": { "$date": { "$numberLong": "1704992341970" } },
+      "Expiry": { "$date": { "$numberLong": "1705078740000" } },
       "Tag": "PerrinSyndicate",
-      "Seed": 72052,
-      "Nodes": ["SolNode45", "SolNode107", "SolNode79", "SolNode137", "SolNode167", "SolNode88", "SolNode216"]
+      "Seed": 66902,
+      "Nodes": ["SolNode16", "SolNode26", "SolNode711", "SolNode82", "SolNode17", "SolNode125", "SettlementNode14"]
     },
     {
-      "_id": { "$oid": "659eccd5f1fa6a8d586c4d44" },
-      "Activation": { "$date": { "$numberLong": "1704905941214" } },
-      "Expiry": { "$date": { "$numberLong": "1704992340000" } },
-      "Tag": "RadioLegionIntermission7Syndicate",
-      "Seed": 66151,
+      "_id": { "$oid": "65a01e566c7ede78154b9f7c" },
+      "Activation": { "$date": { "$numberLong": "1704992341970" } },
+      "Expiry": { "$date": { "$numberLong": "1705078740000" } },
+      "Tag": "RadioLegion2Syndicate",
+      "Seed": 48390,
       "Nodes": []
     },
     {
-      "_id": { "$oid": "659eccd5f1fa6a8d586c4d46" },
-      "Activation": { "$date": { "$numberLong": "1704905941214" } },
-      "Expiry": { "$date": { "$numberLong": "1704992340000" } },
-      "Tag": "RadioLegionIntermission9Syndicate",
-      "Seed": 77679,
+      "_id": { "$oid": "65a01e566c7ede78154b9f7d" },
+      "Activation": { "$date": { "$numberLong": "1704992341970" } },
+      "Expiry": { "$date": { "$numberLong": "1705078740000" } },
+      "Tag": "RadioLegion3Syndicate",
+      "Seed": 95756,
       "Nodes": []
     },
     {
-      "_id": { "$oid": "659eccd5f1fa6a8d586c4d42" },
-      "Activation": { "$date": { "$numberLong": "1704905941214" } },
-      "Expiry": { "$date": { "$numberLong": "1704992340000" } },
-      "Tag": "RadioLegionIntermission5Syndicate",
-      "Seed": 70569,
+      "_id": { "$oid": "65a01e566c7ede78154b9f7e" },
+      "Activation": { "$date": { "$numberLong": "1704992341970" } },
+      "Expiry": { "$date": { "$numberLong": "1705078740000" } },
+      "Tag": "RadioLegionIntermission2Syndicate",
+      "Seed": 53283,
       "Nodes": []
     },
     {
-      "_id": { "$oid": "659eccd5f1fa6a8d586c4d41" },
-      "Activation": { "$date": { "$numberLong": "1704905941214" } },
-      "Expiry": { "$date": { "$numberLong": "1704992340000" } },
+      "_id": { "$oid": "65a01e566c7ede78154b9f80" },
+      "Activation": { "$date": { "$numberLong": "1704992341970" } },
+      "Expiry": { "$date": { "$numberLong": "1705078740000" } },
       "Tag": "RadioLegionIntermission4Syndicate",
-      "Seed": 60085,
+      "Seed": 60542,
       "Nodes": []
     },
     {
-      "_id": { "$oid": "659eccd5f1fa6a8d586c4d43" },
-      "Activation": { "$date": { "$numberLong": "1704905941214" } },
-      "Expiry": { "$date": { "$numberLong": "1704992340000" } },
+      "_id": { "$oid": "65a01e566c7ede78154b9f82" },
+      "Activation": { "$date": { "$numberLong": "1704992341970" } },
+      "Expiry": { "$date": { "$numberLong": "1705078740000" } },
       "Tag": "RadioLegionIntermission6Syndicate",
-      "Seed": 81953,
+      "Seed": 89920,
       "Nodes": []
     },
     {
-      "_id": { "$oid": "659eccd5f1fa6a8d586c4d40" },
-      "Activation": { "$date": { "$numberLong": "1704905941214" } },
-      "Expiry": { "$date": { "$numberLong": "1704992340000" } },
-      "Tag": "RadioLegionIntermission3Syndicate",
-      "Seed": 85995,
+      "_id": { "$oid": "65a01e566c7ede78154b9f85" },
+      "Activation": { "$date": { "$numberLong": "1704992341970" } },
+      "Expiry": { "$date": { "$numberLong": "1705078740000" } },
+      "Tag": "RadioLegionIntermission9Syndicate",
+      "Seed": 47838,
       "Nodes": []
     },
     {
-      "_id": { "$oid": "659eccd5f1fa6a8d586c4d45" },
-      "Activation": { "$date": { "$numberLong": "1704905941214" } },
-      "Expiry": { "$date": { "$numberLong": "1704992340000" } },
+      "_id": { "$oid": "65a01e566c7ede78154b9f83" },
+      "Activation": { "$date": { "$numberLong": "1704992341970" } },
+      "Expiry": { "$date": { "$numberLong": "1705078740000" } },
+      "Tag": "RadioLegionIntermission7Syndicate",
+      "Seed": 69540,
+      "Nodes": []
+    },
+    {
+      "_id": { "$oid": "65a01e566c7ede78154b9f81" },
+      "Activation": { "$date": { "$numberLong": "1704992341970" } },
+      "Expiry": { "$date": { "$numberLong": "1705078740000" } },
+      "Tag": "RadioLegionIntermission5Syndicate",
+      "Seed": 20769,
+      "Nodes": []
+    },
+    {
+      "_id": { "$oid": "65a01e566c7ede78154b9f84" },
+      "Activation": { "$date": { "$numberLong": "1704992341970" } },
+      "Expiry": { "$date": { "$numberLong": "1705078740000" } },
       "Tag": "RadioLegionIntermission8Syndicate",
-      "Seed": 91372,
+      "Seed": 13023,
       "Nodes": []
     },
     {
-      "_id": { "$oid": "659eccd5f1fa6a8d586c4d47" },
-      "Activation": { "$date": { "$numberLong": "1704905941214" } },
-      "Expiry": { "$date": { "$numberLong": "1704992340000" } },
+      "_id": { "$oid": "65a01e566c7ede78154b9f7f" },
+      "Activation": { "$date": { "$numberLong": "1704992341970" } },
+      "Expiry": { "$date": { "$numberLong": "1705078740000" } },
+      "Tag": "RadioLegionIntermission3Syndicate",
+      "Seed": 3994,
+      "Nodes": []
+    },
+    {
+      "_id": { "$oid": "65a01e566c7ede78154b9f86" },
+      "Activation": { "$date": { "$numberLong": "1704992341970" } },
+      "Expiry": { "$date": { "$numberLong": "1705078740000" } },
       "Tag": "RadioLegionIntermissionSyndicate",
-      "Seed": 19208,
+      "Seed": 64418,
       "Nodes": []
     },
     {
-      "_id": { "$oid": "659eccd5f1fa6a8d586c4d48" },
-      "Activation": { "$date": { "$numberLong": "1704905941214" } },
-      "Expiry": { "$date": { "$numberLong": "1704992340000" } },
+      "_id": { "$oid": "65a01e566c7ede78154b9f87" },
+      "Activation": { "$date": { "$numberLong": "1704992341970" } },
+      "Expiry": { "$date": { "$numberLong": "1705078740000" } },
       "Tag": "RadioLegionSyndicate",
-      "Seed": 73056,
+      "Seed": 71712,
       "Nodes": []
     },
     {
-      "_id": { "$oid": "659eccd5f1fa6a8d586c4d49" },
-      "Activation": { "$date": { "$numberLong": "1704905941214" } },
-      "Expiry": { "$date": { "$numberLong": "1704992340000" } },
-      "Tag": "RedVeilSyndicate",
-      "Seed": 14842,
-      "Nodes": ["SolNode27", "SolNode23", "SolNode146", "SettlementNode12", "SolNode412", "SolNode204", "SolNode149"]
-    },
-    {
-      "_id": { "$oid": "659eccd5f1fa6a8d586c4d4b" },
-      "Activation": { "$date": { "$numberLong": "1704905941214" } },
-      "Expiry": { "$date": { "$numberLong": "1704992340000" } },
-      "Tag": "VoxSyndicate",
-      "Seed": 57688,
-      "Nodes": []
-    },
-    {
-      "_id": { "$oid": "659eccd5f1fa6a8d586c4d4a" },
-      "Activation": { "$date": { "$numberLong": "1704905941214" } },
-      "Expiry": { "$date": { "$numberLong": "1704992340000" } },
+      "_id": { "$oid": "65a01e566c7ede78154b9f89" },
+      "Activation": { "$date": { "$numberLong": "1704992341970" } },
+      "Expiry": { "$date": { "$numberLong": "1705078740000" } },
       "Tag": "VentKidsSyndicate",
-      "Seed": 80511,
+      "Seed": 40485,
       "Nodes": []
     },
     {
-      "_id": { "$oid": "659eccd5f1fa6a8d586c4d4c" },
-      "Activation": { "$date": { "$numberLong": "1704905941214" } },
-      "Expiry": { "$date": { "$numberLong": "1704992340000" } },
+      "_id": { "$oid": "65a01e566c7ede78154b9f8a" },
+      "Activation": { "$date": { "$numberLong": "1704992341970" } },
+      "Expiry": { "$date": { "$numberLong": "1705078740000" } },
+      "Tag": "VoxSyndicate",
+      "Seed": 70490,
+      "Nodes": []
+    },
+    {
+      "_id": { "$oid": "65a01e566c7ede78154b9f88" },
+      "Activation": { "$date": { "$numberLong": "1704992341970" } },
+      "Expiry": { "$date": { "$numberLong": "1705078740000" } },
+      "Tag": "RedVeilSyndicate",
+      "Seed": 19414,
+      "Nodes": ["SolNode46", "SolNode109", "SolNode212", "SolNode137", "SolNode67", "SolNode223", "SolNode181"]
+    },
+    {
+      "_id": { "$oid": "65a01e566c7ede78154b9f8b" },
+      "Activation": { "$date": { "$numberLong": "1704992341970" } },
+      "Expiry": { "$date": { "$numberLong": "1705078740000" } },
       "Tag": "SteelMeridianSyndicate",
-      "Seed": 74962,
-      "Nodes": ["SolNode101", "SolNode75", "SolNode100", "SolNode12", "SolNode220", "SolNode68", "SolNode132"]
+      "Seed": 52322,
+      "Nodes": ["SolNode39", "SolNode66", "SolNode58", "SolNode139", "SolNode102", "SolNode119", "SolNode64"]
     },
     {
-      "_id": { "$oid": "659ff7f20000000000000004" },
-      "Activation": { "$date": { "$numberLong": "1704982514249" } },
-      "Expiry": { "$date": { "$numberLong": "1704991513123" } },
-      "Tag": "EntratiLabSyndicate",
-      "Seed": 17949,
-      "Nodes": []
-    },
-    {
-      "_id": { "$oid": "659ff7f20000000000000008" },
-      "Activation": { "$date": { "$numberLong": "1704982514249" } },
-      "Expiry": { "$date": { "$numberLong": "1704991513123" } },
-      "Tag": "CetusSyndicate",
-      "Seed": 17949,
-      "Nodes": [],
-      "Jobs": [
-        {
-          "jobType": "/Lotus/Types/Gameplay/Eidolon/Jobs/ReclamationBountyCap",
-          "rewards": "/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierATableARewards",
-          "masteryReq": 0,
-          "minEnemyLevel": 5,
-          "maxEnemyLevel": 15,
-          "xpAmounts": [360, 360, 360]
-        },
-        {
-          "jobType": "/Lotus/Types/Gameplay/Eidolon/Jobs/CaptureBountyCapOne",
-          "rewards": "/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierBTableARewards",
-          "masteryReq": 1,
-          "minEnemyLevel": 10,
-          "maxEnemyLevel": 30,
-          "xpAmounts": [620, 620, 620]
-        },
-        {
-          "jobType": "/Lotus/Types/Gameplay/Eidolon/Jobs/ReclamationBountyCache",
-          "rewards": "/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierCTableARewards",
-          "masteryReq": 2,
-          "minEnemyLevel": 20,
-          "maxEnemyLevel": 40,
-          "xpAmounts": [570, 570, 570, 840]
-        },
-        {
-          "jobType": "/Lotus/Types/Gameplay/Eidolon/Jobs/AttritionBountyCap",
-          "rewards": "/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierDTableARewards",
-          "masteryReq": 3,
-          "minEnemyLevel": 30,
-          "maxEnemyLevel": 50,
-          "xpAmounts": [580, 580, 580, 580, 1130]
-        },
-        {
-          "jobType": "/Lotus/Types/Gameplay/Eidolon/Jobs/AttritionBountySab",
-          "rewards": "/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierETableARewards",
-          "masteryReq": 5,
-          "minEnemyLevel": 40,
-          "maxEnemyLevel": 60,
-          "xpAmounts": [690, 690, 690, 690, 1360]
-        },
-        {
-          "jobType": "/Lotus/Types/Gameplay/Eidolon/Jobs/RescueBountyResc",
-          "rewards": "/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierETableARewards",
-          "masteryReq": 10,
-          "minEnemyLevel": 100,
-          "maxEnemyLevel": 100,
-          "xpAmounts": [840, 840, 840, 840, 1660]
-        },
-        {
-          "jobType": "/Lotus/Types/Gameplay/Eidolon/Jobs/Narmer/AttritionBountyLib",
-          "rewards": "/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/NarmerTableARewards",
-          "masteryReq": 0,
-          "minEnemyLevel": 50,
-          "maxEnemyLevel": 70,
-          "xpAmounts": [770, 770, 770, 770, 1520]
-        }
-      ]
-    },
-    {
-      "_id": { "$oid": "659ff7f20000000000000002" },
-      "Activation": { "$date": { "$numberLong": "1704982514249" } },
-      "Expiry": { "$date": { "$numberLong": "1704991513123" } },
+      "_id": { "$oid": "65a061660000000000000002" },
+      "Activation": { "$date": { "$numberLong": "1705009510873" } },
+      "Expiry": { "$date": { "$numberLong": "1705018509747" } },
       "Tag": "EntratiSyndicate",
-      "Seed": 17949,
+      "Seed": 2861,
       "Nodes": [],
       "Jobs": [
         {
-          "jobType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosAssassinateBounty",
+          "jobType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosPurifyBounty",
           "rewards": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierATableARewards",
           "masteryReq": 0,
           "minEnemyLevel": 5,
           "maxEnemyLevel": 15,
-          "xpAmounts": [6, 6, 6]
+          "xpAmounts": [4, 4, 4]
         },
         {
-          "jobType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosCrpSurvivorBounty",
+          "jobType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosKeyPiecesBounty",
           "rewards": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierCTableARewards",
           "masteryReq": 1,
           "minEnemyLevel": 15,
           "maxEnemyLevel": 25,
-          "xpAmounts": [8, 8, 8]
+          "xpAmounts": [11, 11, 11]
         },
         {
-          "jobType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosEndlessPurifyBounty",
+          "jobType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosEndlessExcavateBounty",
           "rewards": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierBTableARewards",
           "masteryReq": 5,
           "minEnemyLevel": 25,
@@ -811,23 +736,23 @@
           "xpAmounts": [14, 14, 14]
         },
         {
-          "jobType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosPurifyBounty",
-          "rewards": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierDTableARewards",
+          "jobType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosAreaDefenseBounty",
+          "rewards": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierDTableBRewards",
           "masteryReq": 2,
           "minEnemyLevel": 30,
           "maxEnemyLevel": 40,
-          "xpAmounts": [17, 17, 17, 26]
+          "xpAmounts": [18, 18, 18, 27]
         },
         {
-          "jobType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosKeyPiecesBounty",
+          "jobType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosExcavateBounty",
           "rewards": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierETableARewards",
           "masteryReq": 3,
           "minEnemyLevel": 40,
           "maxEnemyLevel": 60,
-          "xpAmounts": [20, 20, 20, 20, 38]
+          "xpAmounts": [21, 21, 21, 21, 41]
         },
         {
-          "jobType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosExcavateBounty",
+          "jobType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosGrnSurvivorBounty",
           "rewards": "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierETableARewards",
           "masteryReq": 10,
           "minEnemyLevel": 100,
@@ -864,55 +789,129 @@
       ]
     },
     {
-      "_id": { "$oid": "659ff7f20000000000000024" },
-      "Activation": { "$date": { "$numberLong": "1704982514249" } },
-      "Expiry": { "$date": { "$numberLong": "1704991513123" } },
-      "Tag": "SolarisSyndicate",
-      "Seed": 17949,
+      "_id": { "$oid": "65a061660000000000000004" },
+      "Activation": { "$date": { "$numberLong": "1705009510873" } },
+      "Expiry": { "$date": { "$numberLong": "1705018509747" } },
+      "Tag": "EntratiLabSyndicate",
+      "Seed": 2862,
+      "Nodes": []
+    },
+    {
+      "_id": { "$oid": "65a061660000000000000008" },
+      "Activation": { "$date": { "$numberLong": "1705009510873" } },
+      "Expiry": { "$date": { "$numberLong": "1705018509747" } },
+      "Tag": "CetusSyndicate",
+      "Seed": 2861,
       "Nodes": [],
       "Jobs": [
         {
-          "jobType": "/Lotus/Types/Gameplay/Venus/Jobs/VenusIntelJobResource",
+          "jobType": "/Lotus/Types/Gameplay/Eidolon/Jobs/AttritionBountyCap",
+          "rewards": "/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierATableARewards",
+          "masteryReq": 0,
+          "minEnemyLevel": 5,
+          "maxEnemyLevel": 15,
+          "xpAmounts": [430, 430, 430]
+        },
+        {
+          "jobType": "/Lotus/Types/Gameplay/Eidolon/Jobs/SabotageBountySab",
+          "rewards": "/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierBTableARewards",
+          "masteryReq": 1,
+          "minEnemyLevel": 10,
+          "maxEnemyLevel": 30,
+          "xpAmounts": [620, 620, 620]
+        },
+        {
+          "jobType": "/Lotus/Types/Gameplay/Eidolon/Jobs/ReclamationBountyCache",
+          "rewards": "/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierCTableARewards",
+          "masteryReq": 2,
+          "minEnemyLevel": 20,
+          "maxEnemyLevel": 40,
+          "xpAmounts": [600, 600, 600, 890]
+        },
+        {
+          "jobType": "/Lotus/Types/Gameplay/Eidolon/Jobs/AssassinateBountyCap",
+          "rewards": "/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierDTableARewards",
+          "masteryReq": 3,
+          "minEnemyLevel": 30,
+          "maxEnemyLevel": 50,
+          "xpAmounts": [590, 590, 590, 590, 1160]
+        },
+        {
+          "jobType": "/Lotus/Types/Gameplay/Eidolon/Jobs/AttritionBountyExt",
+          "rewards": "/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierETableARewards",
+          "masteryReq": 5,
+          "minEnemyLevel": 40,
+          "maxEnemyLevel": 60,
+          "xpAmounts": [750, 750, 750, 750, 1470]
+        },
+        {
+          "jobType": "/Lotus/Types/Gameplay/Eidolon/Jobs/RescueBountyResc",
+          "rewards": "/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierETableARewards",
+          "masteryReq": 10,
+          "minEnemyLevel": 100,
+          "maxEnemyLevel": 100,
+          "xpAmounts": [840, 840, 840, 840, 1660]
+        },
+        {
+          "jobType": "/Lotus/Types/Gameplay/Eidolon/Jobs/Narmer/AttritionBountyLib",
+          "rewards": "/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/NarmerTableARewards",
+          "masteryReq": 0,
+          "minEnemyLevel": 50,
+          "maxEnemyLevel": 70,
+          "xpAmounts": [810, 810, 810, 810, 1580]
+        }
+      ]
+    },
+    {
+      "_id": { "$oid": "65a061660000000000000024" },
+      "Activation": { "$date": { "$numberLong": "1705009510873" } },
+      "Expiry": { "$date": { "$numberLong": "1705018509747" } },
+      "Tag": "SolarisSyndicate",
+      "Seed": 2861,
+      "Nodes": [],
+      "Jobs": [
+        {
+          "jobType": "/Lotus/Types/Gameplay/Venus/Jobs/VenusTheftJobResource",
           "rewards": "/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierATableARewards",
           "masteryReq": 0,
           "minEnemyLevel": 5,
           "maxEnemyLevel": 15,
-          "xpAmounts": [460, 460, 460]
+          "xpAmounts": [400, 400, 400]
         },
         {
-          "jobType": "/Lotus/Types/Gameplay/Venus/Jobs/VenusPreservationJobDefense",
+          "jobType": "/Lotus/Types/Gameplay/Venus/Jobs/VenusArtifactJobAmbush",
           "rewards": "/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierBTableARewards",
           "masteryReq": 1,
           "minEnemyLevel": 10,
           "maxEnemyLevel": 30,
-          "xpAmounts": [710, 710, 710]
+          "xpAmounts": [720, 720, 720]
         },
         {
-          "jobType": "/Lotus/Types/Gameplay/Venus/Jobs/VenusChaosJobExcavation",
+          "jobType": "/Lotus/Types/Gameplay/Venus/Jobs/VenusIntelJobResource",
           "rewards": "/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierCTableARewards",
           "masteryReq": 2,
           "minEnemyLevel": 20,
           "maxEnemyLevel": 40,
-          "xpAmounts": [590, 590, 590, 880]
+          "xpAmounts": [650, 650, 650, 960]
         },
         {
-          "jobType": "/Lotus/Types/Gameplay/Venus/Jobs/VenusCullJobAssassinate",
+          "jobType": "/Lotus/Types/Gameplay/Venus/Jobs/VenusArtifactJobRecovery",
           "rewards": "/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierDTableARewards",
           "masteryReq": 3,
           "minEnemyLevel": 30,
           "maxEnemyLevel": 50,
-          "xpAmounts": [570, 570, 570, 570, 1110]
+          "xpAmounts": [560, 560, 560, 560, 1100]
         },
         {
-          "jobType": "/Lotus/Types/Gameplay/Venus/Jobs/VenusCullJobExterminate",
+          "jobType": "/Lotus/Types/Gameplay/Venus/Jobs/VenusTheftJobExcavation",
           "rewards": "/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierETableARewards",
           "masteryReq": 5,
           "minEnemyLevel": 40,
           "maxEnemyLevel": 60,
-          "xpAmounts": [690, 690, 690, 690, 1360]
+          "xpAmounts": [760, 760, 760, 760, 1480]
         },
         {
-          "jobType": "/Lotus/Types/Gameplay/Venus/Jobs/VenusCullJobResource",
+          "jobType": "/Lotus/Types/Gameplay/Venus/Jobs/VenusHelpingJobResource",
           "rewards": "/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierETableARewards",
           "masteryReq": 10,
           "minEnemyLevel": 100,
@@ -920,7 +919,7 @@
           "xpAmounts": [840, 840, 840, 840, 1660]
         },
         {
-          "jobType": "/Lotus/Types/Gameplay/Venus/Jobs/Narmer/NarmerVenusCullJobAssassinate",
+          "jobType": "/Lotus/Types/Gameplay/Venus/Jobs/Narmer/NarmerVenusCullJobExterminate",
           "rewards": "/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/NarmerTableARewards",
           "masteryReq": 0,
           "minEnemyLevel": 50,
@@ -930,223 +929,254 @@
       ]
     },
     {
-      "_id": { "$oid": "659ff7f20000000000000028" },
-      "Activation": { "$date": { "$numberLong": "1704982514249" } },
-      "Expiry": { "$date": { "$numberLong": "1704991513123" } },
+      "_id": { "$oid": "65a061660000000000000028" },
+      "Activation": { "$date": { "$numberLong": "1705009510873" } },
+      "Expiry": { "$date": { "$numberLong": "1705018509747" } },
       "Tag": "ZarimanSyndicate",
-      "Seed": 17949,
+      "Seed": 2862,
       "Nodes": []
     }
   ],
   "ActiveMissions": [
     {
-      "_id": { "$oid": "659fe9d56e2c9befba7720b4" },
-      "Region": 8,
-      "Seed": 43676,
-      "Activation": { "$date": { "$numberLong": "1704978901538" } },
-      "Expiry": { "$date": { "$numberLong": "1704985475132" } },
-      "Node": "SolNode49",
+      "_id": { "$oid": "65a07023f58b4c9a94eb83c1" },
+      "Region": 13,
+      "Seed": 39232,
+      "Activation": { "$date": { "$numberLong": "1705013281535" } },
+      "Expiry": { "$date": { "$numberLong": "1705018594074" } },
+      "Node": "SolNode209",
       "MissionType": "MT_MOBILE_DEFENSE",
-      "Modifier": "VoidT3"
+      "Modifier": "VoidT3",
+      "Hard": true
     },
     {
-      "_id": { "$oid": "659fed1d8e0cb630a838012e" },
-      "Region": 11,
-      "Seed": 21053,
-      "Activation": { "$date": { "$numberLong": "1704979741163" } },
-      "Expiry": { "$date": { "$numberLong": "1704986673497" } },
-      "Node": "SolNode175",
-      "MissionType": "MT_HIVE",
+      "_id": { "$oid": "65a07024f58b4c9a94eb83c2" },
+      "Region": 7,
+      "Seed": 59922,
+      "Activation": { "$date": { "$numberLong": "1705013281535" } },
+      "Expiry": { "$date": { "$numberLong": "1705018667988" } },
+      "Node": "SolNode122",
+      "MissionType": "MT_DEFENSE",
+      "Modifier": "VoidT3",
+      "Hard": true
+    },
+    {
+      "_id": { "$oid": "65a0714d7cdf1943353a0592" },
+      "Region": 12,
+      "Seed": 73278,
+      "Activation": { "$date": { "$numberLong": "1705013581791" } },
+      "Expiry": { "$date": { "$numberLong": "1705020707853" } },
+      "Node": "SolNode181",
+      "MissionType": "MT_EXTERMINATION",
       "Modifier": "VoidT4",
       "Hard": true
     },
     {
-      "_id": { "$oid": "659fefeda142a1535da95382" },
-      "Region": 6,
-      "Seed": 10814,
-      "Activation": { "$date": { "$numberLong": "1704980461383" } },
-      "Expiry": { "$date": { "$numberLong": "1704986446392" } },
-      "Node": "SolNode93",
+      "_id": { "$oid": "65a0727922c78e8f5fb60b47" },
+      "Region": 19,
+      "Seed": 40682,
+      "Activation": { "$date": { "$numberLong": "1705013881965" } },
+      "Expiry": { "$date": { "$numberLong": "1705020618878" } },
+      "Node": "SolNode741",
+      "MissionType": "MT_ASSAULT",
+      "Modifier": "VoidT5"
+    },
+    {
+      "_id": { "$oid": "65a0727922c78e8f5fb60b48" },
+      "Region": 19,
+      "Seed": 83784,
+      "Activation": { "$date": { "$numberLong": "1705013881965" } },
+      "Expiry": { "$date": { "$numberLong": "1705018576588" } },
+      "Node": "SolNode748",
+      "MissionType": "MT_RESCUE",
+      "Modifier": "VoidT5"
+    },
+    {
+      "_id": { "$oid": "65a0727a22c78e8f5fb60b49" },
+      "Region": 19,
+      "Seed": 7212,
+      "Activation": { "$date": { "$numberLong": "1705013881965" } },
+      "Expiry": { "$date": { "$numberLong": "1705018398825" } },
+      "Node": "SolNode743",
       "MissionType": "MT_MOBILE_DEFENSE",
-      "Modifier": "VoidT2",
-      "Hard": true
+      "Modifier": "VoidT5"
     },
     {
-      "_id": { "$oid": "659fefeda142a1535da95383" },
-      "Region": 10,
-      "Seed": 17102,
-      "Activation": { "$date": { "$numberLong": "1704980461383" } },
-      "Expiry": { "$date": { "$numberLong": "1704987117929" } },
-      "Node": "SolNode132",
-      "MissionType": "MT_INTEL",
-      "Modifier": "VoidT2",
-      "Hard": true
-    },
-    {
-      "_id": { "$oid": "659ff065f2908f2b6e2a577e" },
+      "_id": { "$oid": "65a073a6483fc3545eb47738" },
       "Region": 4,
-      "Seed": 50946,
-      "Activation": { "$date": { "$numberLong": "1704980581811" } },
-      "Expiry": { "$date": { "$numberLong": "1704985438288" } },
-      "Node": "SolNode41",
-      "MissionType": "MT_INTEL",
+      "Seed": 45953,
+      "Activation": { "$date": { "$numberLong": "1705014182081" } },
+      "Expiry": { "$date": { "$numberLong": "1705019580012" } },
+      "Node": "SolNode58",
+      "MissionType": "MT_EXTERMINATION",
       "Modifier": "VoidT1",
       "Hard": true
     },
     {
-      "_id": { "$oid": "659ff1cde89e42bba64f696f" },
-      "Region": 3,
-      "Seed": 86117,
-      "Activation": { "$date": { "$numberLong": "1704980941626" } },
-      "Expiry": { "$date": { "$numberLong": "1704985801573" } },
-      "Node": "SolNode89",
-      "MissionType": "MT_EXTERMINATION",
-      "Modifier": "VoidT1"
-    },
-    {
-      "_id": { "$oid": "659ff1cde89e42bba64f6970" },
-      "Region": 4,
-      "Seed": 15862,
-      "Activation": { "$date": { "$numberLong": "1704980941626" } },
-      "Expiry": { "$date": { "$numberLong": "1704986020529" } },
-      "Node": "SolNode68",
-      "MissionType": "MT_MOBILE_DEFENSE",
-      "Modifier": "VoidT1"
-    },
-    {
-      "_id": { "$oid": "659ff5c9706e200cb112ae29" },
-      "Region": 15,
-      "Seed": 905,
-      "Activation": { "$date": { "$numberLong": "1704981961434" } },
-      "Expiry": { "$date": { "$numberLong": "1704988167156" } },
-      "Node": "SolNode400",
-      "MissionType": "MT_EXTERMINATION",
-      "Modifier": "VoidT3",
+      "_id": { "$oid": "65a073a6483fc3545eb47739" },
+      "Region": 2,
+      "Seed": 18908,
+      "Activation": { "$date": { "$numberLong": "1705014182081" } },
+      "Expiry": { "$date": { "$numberLong": "1705020837721" } },
+      "Node": "SolNode101",
+      "MissionType": "MT_EXCAVATE",
+      "Modifier": "VoidT1",
       "Hard": true
     },
     {
-      "_id": { "$oid": "659ff5c9706e200cb112ae2a" },
-      "Region": 13,
-      "Seed": 65629,
-      "Activation": { "$date": { "$numberLong": "1704981961434" } },
-      "Expiry": { "$date": { "$numberLong": "1704987508176" } },
-      "Node": "SolNode204",
-      "MissionType": "MT_EXTERMINATION",
-      "Modifier": "VoidT3",
-      "Hard": true
-    },
-    {
-      "_id": { "$oid": "659ff5c9706e200cb112ae2b" },
-      "Region": 8,
-      "Seed": 83027,
-      "Activation": { "$date": { "$numberLong": "1704981961434" } },
-      "Expiry": { "$date": { "$numberLong": "1704986649209" } },
-      "Node": "SolNode78",
-      "MissionType": "MT_RESCUE",
-      "Modifier": "VoidT3",
-      "Hard": true
-    },
-    {
-      "_id": { "$oid": "659ff91280caad29a04e1fa1" },
-      "Region": 10,
-      "Seed": 32620,
-      "Activation": { "$date": { "$numberLong": "1704982802085" } },
-      "Expiry": { "$date": { "$numberLong": "1704989788357" } },
-      "Node": "SolNode135",
-      "MissionType": "MT_SABOTAGE",
-      "Modifier": "VoidT2"
-    },
-    {
-      "_id": { "$oid": "659ff91280caad29a04e1fa2" },
-      "Region": 5,
-      "Seed": 5574,
-      "Activation": { "$date": { "$numberLong": "1704982802085" } },
-      "Expiry": { "$date": { "$numberLong": "1704986767849" } },
-      "Node": "SolNode100",
-      "MissionType": "MT_SURVIVAL",
-      "Modifier": "VoidT2"
-    },
-    {
-      "_id": { "$oid": "659ffa7a7a6d5ead5b45afd5" },
+      "_id": { "$oid": "65a073e1d9c07556623537ee" },
       "Region": 19,
-      "Seed": 69461,
-      "Activation": { "$date": { "$numberLong": "1704983162089" } },
-      "Expiry": { "$date": { "$numberLong": "1704988715465" } },
+      "Seed": 31683,
+      "Activation": { "$date": { "$numberLong": "1705014241266" } },
+      "Expiry": { "$date": { "$numberLong": "1705020703541" } },
+      "Node": "SolNode742",
+      "MissionType": "MT_DEFENSE",
+      "Modifier": "VoidT5",
+      "Hard": true
+    },
+    {
+      "_id": { "$oid": "65a073e1d9c07556623537ef" },
+      "Region": 19,
+      "Seed": 9354,
+      "Activation": { "$date": { "$numberLong": "1705014241266" } },
+      "Expiry": { "$date": { "$numberLong": "1705021040431" } },
+      "Node": "SolNode744",
+      "MissionType": "MT_SURVIVAL",
+      "Modifier": "VoidT5",
+      "Hard": true
+    },
+    {
+      "_id": { "$oid": "65a073e1d9c07556623537f0" },
+      "Region": 19,
+      "Seed": 78460,
+      "Activation": { "$date": { "$numberLong": "1705014241266" } },
+      "Expiry": { "$date": { "$numberLong": "1705019928415" } },
       "Node": "SolNode746",
       "MissionType": "MT_EXTERMINATION",
       "Modifier": "VoidT5",
       "Hard": true
     },
     {
-      "_id": { "$oid": "659ffe75fbcd00d9fa0a3570" },
-      "Region": 19,
-      "Seed": 46745,
-      "Activation": { "$date": { "$numberLong": "1704984181336" } },
-      "Expiry": { "$date": { "$numberLong": "1704991280580" } },
-      "Node": "SolNode743",
-      "MissionType": "MT_MOBILE_DEFENSE",
-      "Modifier": "VoidT5"
-    },
-    {
-      "_id": { "$oid": "659ffe75fbcd00d9fa0a3571" },
-      "Region": 19,
-      "Seed": 34000,
-      "Activation": { "$date": { "$numberLong": "1704984181336" } },
-      "Expiry": { "$date": { "$numberLong": "1704991218507" } },
-      "Node": "SolNode747",
-      "MissionType": "MT_INTEL",
-      "Modifier": "VoidT5"
-    },
-    {
-      "_id": { "$oid": "659ffeedbeba91bd0ce10aef" },
-      "Region": 12,
-      "Seed": 30370,
-      "Activation": { "$date": { "$numberLong": "1704984301693" } },
-      "Expiry": { "$date": { "$numberLong": "1704990583237" } },
-      "Node": "SolNode195",
-      "MissionType": "MT_DEFENSE",
-      "Modifier": "VoidT4"
-    },
-    {
-      "_id": { "$oid": "659ffeedbeba91bd0ce10af0" },
-      "Region": 9,
-      "Seed": 73247,
-      "Activation": { "$date": { "$numberLong": "1704984301693" } },
-      "Expiry": { "$date": { "$numberLong": "1704989913699" } },
-      "Node": "SolNode72",
-      "MissionType": "MT_DEFENSE",
-      "Modifier": "VoidT4"
-    },
-    {
-      "_id": { "$oid": "65a00235587574c3f5545c4d" },
+      "_id": { "$oid": "65a077dd6cad60ba004377cc" },
       "Region": 3,
-      "Seed": 46392,
-      "Activation": { "$date": { "$numberLong": "1704985141786" } },
-      "Expiry": { "$date": { "$numberLong": "1704992089615" } },
-      "Node": "SolNode27",
-      "MissionType": "MT_EXTERMINATION",
-      "Modifier": "VoidT1",
-      "Hard": true
+      "Seed": 64334,
+      "Activation": { "$date": { "$numberLong": "1705015261138" } },
+      "Expiry": { "$date": { "$numberLong": "1705019468913" } },
+      "Node": "SolNode75",
+      "MissionType": "MT_SABOTAGE",
+      "Modifier": "VoidT1"
     },
     {
-      "_id": { "$oid": "65a00235587574c3f5545c4e" },
-      "Region": 2,
-      "Seed": 37453,
-      "Activation": { "$date": { "$numberLong": "1704985141786" } },
-      "Expiry": { "$date": { "$numberLong": "1704989098968" } },
-      "Node": "SolNode109",
+      "_id": { "$oid": "65a077dd6cad60ba004377cd" },
+      "Region": 4,
+      "Seed": 94454,
+      "Activation": { "$date": { "$numberLong": "1705015261138" } },
+      "Expiry": { "$date": { "$numberLong": "1705020848756" } },
+      "Node": "SolNode41",
+      "MissionType": "MT_INTEL",
+      "Modifier": "VoidT1"
+    },
+    {
+      "_id": { "$oid": "65a0781921502a71702de848" },
+      "Region": 12,
+      "Seed": 7407,
+      "Activation": { "$date": { "$numberLong": "1705015321320" } },
+      "Expiry": { "$date": { "$numberLong": "1705019438510" } },
+      "Node": "SolNode185",
+      "MissionType": "MT_TERRITORY",
+      "Modifier": "VoidT4"
+    },
+    {
+      "_id": { "$oid": "65a0781921502a71702de849" },
+      "Region": 9,
+      "Seed": 15341,
+      "Activation": { "$date": { "$numberLong": "1705015321320" } },
+      "Expiry": { "$date": { "$numberLong": "1705020187407" } },
+      "Node": "SolNode102",
+      "MissionType": "MT_INTEL",
+      "Modifier": "VoidT4"
+    },
+    {
+      "_id": { "$oid": "65a0781921502a71702de84a" },
+      "Region": 11,
+      "Seed": 83357,
+      "Activation": { "$date": { "$numberLong": "1705015321320" } },
+      "Expiry": { "$date": { "$numberLong": "1705020716978" } },
+      "Node": "SolNode153",
       "MissionType": "MT_RESCUE",
-      "Modifier": "VoidT1",
+      "Modifier": "VoidT4"
+    },
+    {
+      "_id": { "$oid": "65a079bd6df460ead44edec4" },
+      "Region": 6,
+      "Seed": 2140,
+      "Activation": { "$date": { "$numberLong": "1705015741404" } },
+      "Expiry": { "$date": { "$numberLong": "1705020616786" } },
+      "Node": "SolNode82",
+      "MissionType": "MT_SABOTAGE",
+      "Modifier": "VoidT2"
+    },
+    {
+      "_id": { "$oid": "65a079bd6df460ead44edec5" },
+      "Region": 16,
+      "Seed": 92789,
+      "Activation": { "$date": { "$numberLong": "1705015741404" } },
+      "Expiry": { "$date": { "$numberLong": "1705021351863" } },
+      "Node": "SettlementNode1",
+      "MissionType": "MT_EXTERMINATION",
+      "Modifier": "VoidT2"
+    },
+    {
+      "_id": { "$oid": "65a07a35778570f065d3af99" },
+      "Region": 16,
+      "Seed": 48093,
+      "Activation": { "$date": { "$numberLong": "1705015861827" } },
+      "Expiry": { "$date": { "$numberLong": "1705019577074" } },
+      "Node": "SettlementNode15",
+      "MissionType": "MT_MOBILE_DEFENSE",
+      "Modifier": "VoidT2",
       "Hard": true
     },
     {
-      "_id": { "$oid": "65a00272097e9728e509e810" },
-      "Region": 8,
-      "Seed": 21920,
-      "Activation": { "$date": { "$numberLong": "1704985202002" } },
-      "Expiry": { "$date": { "$numberLong": "1704992077252" } },
-      "Node": "SolNode118",
-      "MissionType": "MT_ARTIFACT",
+      "_id": { "$oid": "65a07a35778570f065d3af9a" },
+      "Region": 5,
+      "Seed": 59319,
+      "Activation": { "$date": { "$numberLong": "1705015861827" } },
+      "Expiry": { "$date": { "$numberLong": "1705020121287" } },
+      "Node": "SolNode74",
+      "MissionType": "MT_MOBILE_DEFENSE",
+      "Modifier": "VoidT2",
+      "Hard": true
+    },
+    {
+      "_id": { "$oid": "65a07a35778570f065d3af9b" },
+      "Region": 6,
+      "Seed": 66429,
+      "Activation": { "$date": { "$numberLong": "1705015861827" } },
+      "Expiry": { "$date": { "$numberLong": "1705021256994" } },
+      "Node": "SolNode42",
+      "MissionType": "MT_DEFENSE",
+      "Modifier": "VoidT2",
+      "Hard": true
+    },
+    {
+      "_id": { "$oid": "65a07cc9ef03e3080839e257" },
+      "Region": 15,
+      "Seed": 82496,
+      "Activation": { "$date": { "$numberLong": "1705016521897" } },
+      "Expiry": { "$date": { "$numberLong": "1705022742145" } },
+      "Node": "SolNode409",
+      "MissionType": "MT_SURVIVAL",
+      "Modifier": "VoidT3"
+    },
+    {
+      "_id": { "$oid": "65a07cc9ef03e3080839e258" },
+      "Region": 13,
+      "Seed": 62858,
+      "Activation": { "$date": { "$numberLong": "1705016521897" } },
+      "Expiry": { "$date": { "$numberLong": "1705023590153" } },
+      "Node": "SolNode216",
+      "MissionType": "MT_EXCAVATE",
       "Modifier": "VoidT3"
     }
   ],
@@ -1367,10 +1397,10 @@
       "Faction": "FC_CORPUS",
       "DefenderFaction": "FC_GRINEER",
       "Node": "SolNode189",
-      "Count": 28050,
+      "Count": 36066,
       "Goal": 36000,
       "LocTag": "/Lotus/Language/Menu/CorpusInvasionGeneric",
-      "Completed": false,
+      "Completed": true,
       "ChainID": { "$oid": "659348a1828ed5fd1886eeb5" },
       "AttackerReward": { "countedItems": [{ "ItemType": "/Lotus/Types/Items/Research/EnergyComponent", "ItemCount": 3 }] },
       "AttackerMissionInfo": { "seed": 119225, "faction": "FC_GRINEER" },
@@ -1379,11 +1409,27 @@
       "Activation": { "$date": { "$numberLong": "1704869025650" } }
     },
     {
+      "_id": { "$oid": "65a06f6d2ad7c660a79bd8fc" },
+      "Faction": "FC_CORPUS",
+      "DefenderFaction": "FC_GRINEER",
+      "Node": "SolNode184",
+      "Count": 396,
+      "Goal": 33000,
+      "LocTag": "/Lotus/Language/Menu/CorpusInvasionGeneric",
+      "Completed": false,
+      "ChainID": { "$oid": "659348a1828ed5fd1886eeb5" },
+      "AttackerReward": { "countedItems": [{ "ItemType": "/Lotus/Types/Items/Research/EnergyComponent", "ItemCount": 3 }] },
+      "AttackerMissionInfo": { "seed": 632908, "faction": "FC_GRINEER" },
+      "DefenderReward": { "countedItems": [{ "ItemType": "/Lotus/Types/Items/Research/ChemComponent", "ItemCount": 3 }] },
+      "DefenderMissionInfo": { "seed": 897470, "faction": "FC_CORPUS" },
+      "Activation": { "$date": { "$numberLong": "1705013931100" } }
+    },
+    {
       "_id": { "$oid": "65979c0df1c7a9161bfd0868" },
       "Faction": "FC_CORPUS",
       "DefenderFaction": "FC_GRINEER",
       "Node": "SolNode187",
-      "Count": 25540,
+      "Count": 30404,
       "Goal": 47000,
       "LocTag": "/Lotus/Language/Menu/CorpusInvasionGeneric",
       "Completed": false,
@@ -1395,27 +1441,11 @@
       "Activation": { "$date": { "$numberLong": "1704509479191" } }
     },
     {
-      "_id": { "$oid": "659d83c5b97c1f1178dda0d0" },
-      "Faction": "FC_INFESTATION",
-      "DefenderFaction": "FC_CORPUS",
-      "Node": "SolNode51",
-      "Count": -30021,
-      "Goal": 30000,
-      "LocTag": "/Lotus/Language/Menu/InfestedInvasionBoss",
-      "Completed": true,
-      "ChainID": { "$oid": "659d5995eb968f149c878010" },
-      "AttackerReward": [],
-      "AttackerMissionInfo": { "seed": 755264, "faction": "FC_CORPUS" },
-      "DefenderReward": { "countedItems": [{ "ItemType": "/Lotus/Types/Items/MiscItems/InfestedAladCoordinate", "ItemCount": 1 }] },
-      "DefenderMissionInfo": { "seed": 922346, "faction": "FC_INFESTATION", "missionReward": [] },
-      "Activation": { "$date": { "$numberLong": "1704821701584" } }
-    },
-    {
       "_id": { "$oid": "659e545e083da62ea00d3166" },
       "Faction": "FC_GRINEER",
       "DefenderFaction": "FC_CORPUS",
       "Node": "SolNode97",
-      "Count": -12518,
+      "Count": -21391,
       "Goal": 37000,
       "LocTag": "/Lotus/Language/Menu/GrineerInvasionGeneric",
       "Completed": false,
@@ -1427,43 +1457,11 @@
       "Activation": { "$date": { "$numberLong": "1704924874857" } }
     },
     {
-      "_id": { "$oid": "659f01ce83dbcc7fed11455a" },
-      "Faction": "FC_INFESTATION",
-      "DefenderFaction": "FC_GRINEER",
-      "Node": "SolNode36",
-      "Count": -39106,
-      "Goal": 39000,
-      "LocTag": "/Lotus/Language/Menu/InfestedInvasionGeneric",
-      "Completed": true,
-      "ChainID": { "$oid": "659f01ce83dbcc7fed11455a" },
-      "AttackerReward": [],
-      "AttackerMissionInfo": { "seed": 733766, "faction": "FC_GRINEER" },
-      "DefenderReward": { "countedItems": [{ "ItemType": "/Lotus/Types/Items/Research/ChemComponent", "ItemCount": 3 }] },
-      "DefenderMissionInfo": { "seed": 971579, "faction": "FC_INFESTATION" },
-      "Activation": { "$date": { "$numberLong": "1704924594114" } }
-    },
-    {
-      "_id": { "$oid": "659f29a58d69717e879621ae" },
-      "Faction": "FC_INFESTATION",
-      "DefenderFaction": "FC_GRINEER",
-      "Node": "SolNode113",
-      "Count": -50655,
-      "Goal": 50000,
-      "LocTag": "/Lotus/Language/Menu/InfestedInvasionGeneric",
-      "Completed": true,
-      "ChainID": { "$oid": "659f01ce83dbcc7fed11455a" },
-      "AttackerReward": [],
-      "AttackerMissionInfo": { "seed": 541576, "faction": "FC_GRINEER" },
-      "DefenderReward": { "countedItems": [{ "ItemType": "/Lotus/Types/Items/Research/ChemComponent", "ItemCount": 3 }] },
-      "DefenderMissionInfo": { "seed": 415706, "faction": "FC_INFESTATION" },
-      "Activation": { "$date": { "$numberLong": "1704929701945" } }
-    },
-    {
       "_id": { "$oid": "659f29a58d69717e879621ad" },
       "Faction": "FC_INFESTATION",
       "DefenderFaction": "FC_GRINEER",
       "Node": "SolNode99",
-      "Count": -16074,
+      "Count": -25525,
       "Goal": 30000,
       "LocTag": "/Lotus/Language/Menu/InfestedInvasionBoss",
       "Completed": false,
@@ -1473,54 +1471,6 @@
       "DefenderReward": { "countedItems": [{ "ItemType": "/Lotus/Types/Items/Research/ChemComponent", "ItemCount": 3 }] },
       "DefenderMissionInfo": { "seed": 437547, "faction": "FC_INFESTATION", "missionReward": [] },
       "Activation": { "$date": { "$numberLong": "1704929701945" } }
-    },
-    {
-      "_id": { "$oid": "659f4df9d5b9190e2b032bde" },
-      "Faction": "FC_INFESTATION",
-      "DefenderFaction": "FC_GRINEER",
-      "Node": "SolNode46",
-      "Count": -33270,
-      "Goal": 33000,
-      "LocTag": "/Lotus/Language/Menu/InfestedInvasionGeneric",
-      "Completed": true,
-      "ChainID": { "$oid": "659f01ce83dbcc7fed11455a" },
-      "AttackerReward": [],
-      "AttackerMissionInfo": { "seed": 129393, "faction": "FC_GRINEER" },
-      "DefenderReward": { "countedItems": [{ "ItemType": "/Lotus/Types/Items/Research/ChemComponent", "ItemCount": 3 }] },
-      "DefenderMissionInfo": { "seed": 703626, "faction": "FC_INFESTATION" },
-      "Activation": { "$date": { "$numberLong": "1704939001699" } }
-    },
-    {
-      "_id": { "$oid": "659f643d9753f6cb7390b21f" },
-      "Faction": "FC_INFESTATION",
-      "DefenderFaction": "FC_GRINEER",
-      "Node": "SolNode58",
-      "Count": -39343,
-      "Goal": 39000,
-      "LocTag": "/Lotus/Language/Menu/InfestedInvasionGeneric",
-      "Completed": true,
-      "ChainID": { "$oid": "659f01ce83dbcc7fed11455a" },
-      "AttackerReward": [],
-      "AttackerMissionInfo": { "seed": 218064, "faction": "FC_GRINEER" },
-      "DefenderReward": { "countedItems": [{ "ItemType": "/Lotus/Types/Items/Research/ChemComponent", "ItemCount": 3 }] },
-      "DefenderMissionInfo": { "seed": 425784, "faction": "FC_INFESTATION" },
-      "Activation": { "$date": { "$numberLong": "1704944701144" } }
-    },
-    {
-      "_id": { "$oid": "659f74a522dd9dfca1a3705a" },
-      "Faction": "FC_INFESTATION",
-      "DefenderFaction": "FC_GRINEER",
-      "Node": "SolNode11",
-      "Count": -36548,
-      "Goal": 36000,
-      "LocTag": "/Lotus/Language/Menu/InfestedInvasionGeneric",
-      "Completed": true,
-      "ChainID": { "$oid": "659f01ce83dbcc7fed11455a" },
-      "AttackerReward": [],
-      "AttackerMissionInfo": { "seed": 180169, "faction": "FC_GRINEER" },
-      "DefenderReward": { "countedItems": [{ "ItemType": "/Lotus/Types/Items/Research/ChemComponent", "ItemCount": 3 }] },
-      "DefenderMissionInfo": { "seed": 970194, "faction": "FC_INFESTATION" },
-      "Activation": { "$date": { "$numberLong": "1704948901674" } }
     },
     {
       "_id": { "$oid": "659f89bd578c5d60d376d09c" },
@@ -1555,27 +1505,11 @@
       "Activation": { "$date": { "$numberLong": "1704958263294" } }
     },
     {
-      "_id": { "$oid": "659fbaf5a4105b8315e6d9a3" },
-      "Faction": "FC_INFESTATION",
-      "DefenderFaction": "FC_CORPUS",
-      "Node": "SolNode43",
-      "Count": -27507,
-      "Goal": 46000,
-      "LocTag": "/Lotus/Language/Menu/InfestedInvasionGeneric",
-      "Completed": false,
-      "ChainID": { "$oid": "659f8639bf11e67818631e24" },
-      "AttackerReward": [],
-      "AttackerMissionInfo": { "seed": 584657, "faction": "FC_CORPUS" },
-      "DefenderReward": { "countedItems": [{ "ItemType": "/Lotus/Types/Items/MiscItems/InfestedAladCoordinate", "ItemCount": 1 }] },
-      "DefenderMissionInfo": { "seed": 114651, "faction": "FC_INFESTATION" },
-      "Activation": { "$date": { "$numberLong": "1704966901888" } }
-    },
-    {
       "_id": { "$oid": "659fbaf5a4105b8315e6d9a2" },
       "Faction": "FC_INFESTATION",
       "DefenderFaction": "FC_CORPUS",
       "Node": "SolNode51",
-      "Count": -4304,
+      "Count": -11477,
       "Goal": 30000,
       "LocTag": "/Lotus/Language/Menu/InfestedInvasionBoss",
       "Completed": false,
@@ -1587,14 +1521,30 @@
       "Activation": { "$date": { "$numberLong": "1704966901888" } }
     },
     {
+      "_id": { "$oid": "659fbaf5a4105b8315e6d9a3" },
+      "Faction": "FC_INFESTATION",
+      "DefenderFaction": "FC_CORPUS",
+      "Node": "SolNode43",
+      "Count": -46148,
+      "Goal": 46000,
+      "LocTag": "/Lotus/Language/Menu/InfestedInvasionGeneric",
+      "Completed": true,
+      "ChainID": { "$oid": "659f8639bf11e67818631e24" },
+      "AttackerReward": [],
+      "AttackerMissionInfo": { "seed": 584657, "faction": "FC_CORPUS" },
+      "DefenderReward": { "countedItems": [{ "ItemType": "/Lotus/Types/Items/MiscItems/InfestedAladCoordinate", "ItemCount": 1 }] },
+      "DefenderMissionInfo": { "seed": 114651, "faction": "FC_INFESTATION" },
+      "Activation": { "$date": { "$numberLong": "1704966901888" } }
+    },
+    {
       "_id": { "$oid": "659fe075276afd63081413b3" },
       "Faction": "FC_INFESTATION",
       "DefenderFaction": "FC_CORPUS",
       "Node": "SolNode56",
-      "Count": -12534,
+      "Count": -37399,
       "Goal": 37000,
       "LocTag": "/Lotus/Language/Menu/InfestedInvasionGeneric",
-      "Completed": false,
+      "Completed": true,
       "ChainID": { "$oid": "659f8639bf11e67818631e24" },
       "AttackerReward": [],
       "AttackerMissionInfo": { "seed": 963884, "faction": "FC_CORPUS" },
@@ -1630,6 +1580,14 @@
       "Node": "SolNode129",
       "Faction": "FC_CORPUS",
       "CustomNpcEncounters": ["/Lotus/Types/Gameplay/Venus/Encounters/Heists/ExploiterHeistFissure"]
+    },
+    {
+      "_id": { "$oid": "65a06f6d2ad7c660a79bd8fb" },
+      "Node": "SolNode189",
+      "Faction": "FC_CORPUS",
+      "EnemySpec": "/Lotus/Types/Game/EnemySpecs/CorpusSquadD",
+      "ExtraEnemySpec": "/Lotus/Types/Game/EnemySpecs/GamemodeExtraEnemySpecs/RescueCorrupted",
+      "Expiry": { "$date": { "$numberLong": "1705061533890" } }
     }
   ],
   "VoidTraders": [
@@ -1776,52 +1734,53 @@
         },
         { "Expiry": { "$date": { "$numberLong": "1705604400000" } }, "FeaturedItem": "/Lotus/StoreItems/Types/StoreItems/Packages/MegaPrimeVault/LastChanceItemC" },
         { "Expiry": { "$date": { "$numberLong": "1706814000000" } }, "FeaturedItem": "/Lotus/StoreItems/Types/StoreItems/Packages/MegaPrimeVault/LastChanceItemC" },
-        { "Expiry": { "$date": { "$numberLong": "1708023600000" } }, "FeaturedItem": "/Lotus/StoreItems/Types/StoreItems/Packages/MegaPrimeVault/LastChanceItemC" }
+        { "Expiry": { "$date": { "$numberLong": "1708023600000" } }, "FeaturedItem": "/Lotus/StoreItems/Types/StoreItems/Packages/MegaPrimeVault/LastChanceItemC" },
+        { "Expiry": { "$date": { "$numberLong": "1710442800000" } }, "PreviewHiddenUntil": { "$date": { "$numberLong": "1706814000000" } } }
       ]
     }
   ],
   "VoidStorms": [
     {
-      "_id": { "$oid": "659fefb1a99c137f17b49ef0" },
-      "Node": "CrewBattleNode509",
-      "Activation": { "$date": { "$numberLong": "1704982801821" } },
-      "Expiry": { "$date": { "$numberLong": "1704988201821" } },
+      "_id": { "$oid": "65a06992eb3e823212dda837" },
+      "Node": "CrewBattleNode518",
+      "Activation": { "$date": { "$numberLong": "1705015201821" } },
+      "Expiry": { "$date": { "$numberLong": "1705020601821" } },
       "ActiveMissionTier": "VoidT1"
     },
     {
-      "_id": { "$oid": "659fefb1a99c137f17b49ef1" },
-      "Node": "CrewBattleNode511",
-      "Activation": { "$date": { "$numberLong": "1704982801825" } },
-      "Expiry": { "$date": { "$numberLong": "1704988201825" } },
+      "_id": { "$oid": "65a06992eb3e823212dda838" },
+      "Node": "CrewBattleNode503",
+      "Activation": { "$date": { "$numberLong": "1705015201825" } },
+      "Expiry": { "$date": { "$numberLong": "1705020601825" } },
       "ActiveMissionTier": "VoidT1"
     },
     {
-      "_id": { "$oid": "659fefb1a99c137f17b49ef3" },
+      "_id": { "$oid": "65a06992eb3e823212dda839" },
+      "Node": "CrewBattleNode535",
+      "Activation": { "$date": { "$numberLong": "1705015201827" } },
+      "Expiry": { "$date": { "$numberLong": "1705020601827" } },
+      "ActiveMissionTier": "VoidT2"
+    },
+    {
+      "_id": { "$oid": "65a06992eb3e823212dda83b" },
+      "Node": "CrewBattleNode531",
+      "Activation": { "$date": { "$numberLong": "1705015201832" } },
+      "Expiry": { "$date": { "$numberLong": "1705020601832" } },
+      "ActiveMissionTier": "VoidT4"
+    },
+    {
+      "_id": { "$oid": "65a06992eb3e823212dda83a" },
       "Node": "CrewBattleNode516",
-      "Activation": { "$date": { "$numberLong": "1704982801829" } },
-      "Expiry": { "$date": { "$numberLong": "1704988201829" } },
+      "Activation": { "$date": { "$numberLong": "1705015201829" } },
+      "Expiry": { "$date": { "$numberLong": "1705020601829" } },
       "ActiveMissionTier": "VoidT3"
     },
     {
-      "_id": { "$oid": "659fefb1a99c137f17b49ef5" },
-      "Node": "CrewBattleNode553",
-      "Activation": { "$date": { "$numberLong": "1704982801834" } },
-      "Expiry": { "$date": { "$numberLong": "1704988201834" } },
+      "_id": { "$oid": "65a06992eb3e823212dda83c" },
+      "Node": "CrewBattleNode550",
+      "Activation": { "$date": { "$numberLong": "1705015201834" } },
+      "Expiry": { "$date": { "$numberLong": "1705020601834" } },
       "ActiveMissionTier": "VoidT4"
-    },
-    {
-      "_id": { "$oid": "659fefb1a99c137f17b49ef4" },
-      "Node": "CrewBattleNode536",
-      "Activation": { "$date": { "$numberLong": "1704982801832" } },
-      "Expiry": { "$date": { "$numberLong": "1704988201832" } },
-      "ActiveMissionTier": "VoidT4"
-    },
-    {
-      "_id": { "$oid": "659fefb1a99c137f17b49ef2" },
-      "Node": "CrewBattleNode533",
-      "Activation": { "$date": { "$numberLong": "1704982801827" } },
-      "Expiry": { "$date": { "$numberLong": "1704988201827" } },
-      "ActiveMissionTier": "VoidT2"
     }
   ],
   "PrimeAccessAvailability": { "State": "PRIME1" },
@@ -1836,7 +1795,7 @@
       "OriginalPrice": 190,
       "SalePrice": 152,
       "AmountTotal": 300,
-      "AmountSold": 7
+      "AmountSold": 18
     }
   ],
   "LibraryInfo": { "LastCompletedTargetType": "/Lotus/Types/Game/Library/Targets/Research7Target" },
@@ -1847,28 +1806,6 @@
       "startDate": { "$date": { "$numberLong": "1704489901970" } },
       "endDate": { "$date": { "$numberLong": "1705094701970" } },
       "params": [{ "n": "ScriptParamValue", "v": 6 }],
-      "isGenerated": true,
-      "PVPMode": "PVPMODE_ALL",
-      "subChallenges": [],
-      "Category": "PVPChallengeTypeCategory_WEEKLY"
-    },
-    {
-      "_id": { "$oid": "659873ad24ae204a62fa071c" },
-      "challengeTypeRefID": "/Lotus/PVPChallengeTypes/PVPTimedChallengeGameModeComplete",
-      "startDate": { "$date": { "$numberLong": "1704489901970" } },
-      "endDate": { "$date": { "$numberLong": "1705094701970" } },
-      "params": [{ "n": "ScriptParamValue", "v": 20 }],
-      "isGenerated": true,
-      "PVPMode": "PVPMODE_ALL",
-      "subChallenges": [],
-      "Category": "PVPChallengeTypeCategory_WEEKLY"
-    },
-    {
-      "_id": { "$oid": "659873ad24ae204a62fa071d" },
-      "challengeTypeRefID": "/Lotus/PVPChallengeTypes/PVPTimedChallengeOtherChallengeCompleteANY",
-      "startDate": { "$date": { "$numberLong": "1704489901970" } },
-      "endDate": { "$date": { "$numberLong": "1705094701970" } },
-      "params": [{ "n": "ScriptParamValue", "v": 10 }],
       "isGenerated": true,
       "PVPMode": "PVPMODE_ALL",
       "subChallenges": [],
@@ -1886,15 +1823,26 @@
       "Category": "PVPChallengeTypeCategory_WEEKLY_ROOT"
     },
     {
-      "_id": { "$oid": "659f4a75024bb3482052a872" },
-      "challengeTypeRefID": "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsMeleeHARD",
-      "startDate": { "$date": { "$numberLong": "1704938101479" } },
-      "endDate": { "$date": { "$numberLong": "1705024501479" } },
-      "params": [{ "n": "ScriptParamValue", "v": 3 }],
+      "_id": { "$oid": "659873ad24ae204a62fa071d" },
+      "challengeTypeRefID": "/Lotus/PVPChallengeTypes/PVPTimedChallengeOtherChallengeCompleteANY",
+      "startDate": { "$date": { "$numberLong": "1704489901970" } },
+      "endDate": { "$date": { "$numberLong": "1705094701970" } },
+      "params": [{ "n": "ScriptParamValue", "v": 10 }],
       "isGenerated": true,
-      "PVPMode": "PVPMODE_TEAMDEATHMATCH",
+      "PVPMode": "PVPMODE_ALL",
       "subChallenges": [],
-      "Category": "PVPChallengeTypeCategory_DAILY"
+      "Category": "PVPChallengeTypeCategory_WEEKLY"
+    },
+    {
+      "_id": { "$oid": "659873ad24ae204a62fa071c" },
+      "challengeTypeRefID": "/Lotus/PVPChallengeTypes/PVPTimedChallengeGameModeComplete",
+      "startDate": { "$date": { "$numberLong": "1704489901970" } },
+      "endDate": { "$date": { "$numberLong": "1705094701970" } },
+      "params": [{ "n": "ScriptParamValue", "v": 20 }],
+      "isGenerated": true,
+      "PVPMode": "PVPMODE_ALL",
+      "subChallenges": [],
+      "Category": "PVPChallengeTypeCategory_WEEKLY"
     },
     {
       "_id": { "$oid": "659f4a75024bb3482052a870" },
@@ -1919,6 +1867,17 @@
       "Category": "PVPChallengeTypeCategory_DAILY"
     },
     {
+      "_id": { "$oid": "659f4a75024bb3482052a872" },
+      "challengeTypeRefID": "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsMeleeHARD",
+      "startDate": { "$date": { "$numberLong": "1704938101479" } },
+      "endDate": { "$date": { "$numberLong": "1705024501479" } },
+      "params": [{ "n": "ScriptParamValue", "v": 3 }],
+      "isGenerated": true,
+      "PVPMode": "PVPMODE_TEAMDEATHMATCH",
+      "subChallenges": [],
+      "Category": "PVPChallengeTypeCategory_DAILY"
+    },
+    {
       "_id": { "$oid": "659f4a75024bb3482052a873" },
       "challengeTypeRefID": "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsStreakStoppedEASY",
       "startDate": { "$date": { "$numberLong": "1704938101479" } },
@@ -1930,13 +1889,13 @@
       "Category": "PVPChallengeTypeCategory_DAILY"
     },
     {
-      "_id": { "$oid": "659f4a75024bb3482052a876" },
-      "challengeTypeRefID": "/Lotus/PVPChallengeTypes/PVPTimedChallengeSpeedballCatchesEASY",
+      "_id": { "$oid": "659f4a75024bb3482052a874" },
+      "challengeTypeRefID": "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsPayback_MEDIUM",
       "startDate": { "$date": { "$numberLong": "1704938101479" } },
       "endDate": { "$date": { "$numberLong": "1705024501479" } },
       "params": [{ "n": "ScriptParamValue", "v": 3 }],
       "isGenerated": true,
-      "PVPMode": "PVPMODE_SPEEDBALL",
+      "PVPMode": "PVPMODE_DEATHMATCH",
       "subChallenges": [],
       "Category": "PVPChallengeTypeCategory_DAILY"
     },
@@ -1952,13 +1911,13 @@
       "Category": "PVPChallengeTypeCategory_DAILY"
     },
     {
-      "_id": { "$oid": "659f4a75024bb3482052a874" },
-      "challengeTypeRefID": "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsPayback_MEDIUM",
+      "_id": { "$oid": "659f4a75024bb3482052a876" },
+      "challengeTypeRefID": "/Lotus/PVPChallengeTypes/PVPTimedChallengeSpeedballCatchesEASY",
       "startDate": { "$date": { "$numberLong": "1704938101479" } },
       "endDate": { "$date": { "$numberLong": "1705024501479" } },
       "params": [{ "n": "ScriptParamValue", "v": 3 }],
       "isGenerated": true,
-      "PVPMode": "PVPMODE_DEATHMATCH",
+      "PVPMode": "PVPMODE_SPEEDBALL",
       "subChallenges": [],
       "Category": "PVPChallengeTypeCategory_DAILY"
     },
@@ -1977,7 +1936,7 @@
   "PersistentEnemies": [],
   "PVPAlternativeModes": [],
   "PVPActiveTournaments": [],
-  "ProjectPct": [43.495465414416174, 32.07680614944131, 0],
+  "ProjectPct": [43.75829263950812, 32.356342260671504, 0],
   "ConstructionProjects": [],
   "TwitchPromos": [],
   "ExperimentRecommended": [],
@@ -2003,13 +1962,6 @@
     "Params": "",
     "ActiveChallenges": [
       {
-        "_id": { "$oid": "001200070000000000000096" },
-        "Daily": true,
-        "Activation": { "$date": { "$numberLong": "1704758400000" } },
-        "Expiry": { "$date": { "$numberLong": "1705017600000" } },
-        "Challenge": "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyDeploySpecter"
-      },
-      {
         "_id": { "$oid": "001200070000000000000097" },
         "Daily": true,
         "Activation": { "$date": { "$numberLong": "1704844800000" } },
@@ -2022,6 +1974,13 @@
         "Activation": { "$date": { "$numberLong": "1704931200000" } },
         "Expiry": { "$date": { "$numberLong": "1705190400000" } },
         "Challenge": "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyPickUpMods"
+      },
+      {
+        "_id": { "$oid": "001200070000000000000099" },
+        "Daily": true,
+        "Activation": { "$date": { "$numberLong": "1705017600000" } },
+        "Expiry": { "$date": { "$numberLong": "1705276800000" } },
+        "Challenge": "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithMelee"
       },
       {
         "_id": { "$oid": "001200070000000000000088" },
@@ -2067,5 +2026,5 @@
       }
     ]
   },
-  "Tmp": "{\"prisbegin\":\"1687363200\",\"prisend\":\"1688572800\",\"cavabegin\":\"1690761600\",\"PurchasePlatformLockEnabled\":true,\"sfn\":550}"
+  "Tmp": "{\"prisbegin\":\"1687363200\",\"prisend\":\"1688572800\",\"cavabegin\":\"1690761600\",\"PurchasePlatformLockEnabled\":true,\"sfn\":554}"
 }
