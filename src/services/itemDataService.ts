@@ -84,10 +84,11 @@ const items2 = new Items({
     category: ["Warframes", "Gear", "Melee", "Primary", "Secondary", "Sentinels", "Misc", "Arch-Gun", "Arch-Melee"]
 });
 
-items2.flatMap(item => item.components || []);
-// for (const item of items2) {
-//     console.log(item.category === "Warframes");
-//     if (item.category === "Warframes") {
-//         console.log(item);
-//     }
-// }
+const buildables = items2.filter(item => !!(item as Buildable).components);
+for (const item of buildables as Array<MinItem & Buildable>) {
+    console.log(item.category === "Warframes");
+    if (item.category === "Warframes") {
+        console.log(item);
+        item.components;
+    }
+}
