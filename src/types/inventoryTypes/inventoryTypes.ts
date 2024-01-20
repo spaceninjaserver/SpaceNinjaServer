@@ -14,11 +14,13 @@ import { IOperatorLoadOutSigcol, IWeaponDatabase } from "@/src/types/inventoryTy
 
 //Document extends will be deleted soon. TODO: delete and migrate uses to ...
 export interface IInventoryDatabaseDocument extends IInventoryDatabase, Document {}
-export interface IInventoryDatabase extends Omit<IInventoryResponse, "TrainingDate" | "LoadOutPresets" | "Mailbox"> {
+export interface IInventoryDatabase
+    extends Omit<IInventoryResponse, "TrainingDate" | "LoadOutPresets" | "Mailbox" | "PendingRecipes"> {
     accountOwnerId: Types.ObjectId;
     TrainingDate: Date; // TrainingDate changed from IMongoDate to Date
     LoadOutPresets: Types.ObjectId; // LoadOutPresets changed from ILoadOutPresets to Types.ObjectId for population
     Mailbox: Types.ObjectId; // Mailbox changed from IMailbox to Types.ObjectId
+    PendingRecipes: IPendingRecipe[];
 }
 
 export interface IInventoryResponseDocument extends IInventoryResponse, Document {}
@@ -41,6 +43,11 @@ export interface IMailbox {
     LastInboxId: IOid;
 }
 
+//TODO: perhaps split response and database into their own files
+
+export interface IPendingRecipeResponse extends Omit<IPendingRecipe, "CompletionDate"> {
+    CompletionDate: IMongoDate;
+}
 export interface IInventoryResponse {
     Horses: IGenericItem[];
     DrifterMelee: IGenericItem[];
@@ -96,7 +103,7 @@ export interface IInventoryResponse {
     XPInfo: IEmailItem[];
     Recipes: IConsumable[];
     WeaponSkins: IWeaponSkin[];
-    PendingRecipes: IPendingRecipe[];
+    PendingRecipes: IPendingRecipeResponse[];
     TrainingDate: IMongoDate;
     PlayerLevel: number;
     Upgrades: ICrewShipSalvagedWeaponSkin[];
@@ -816,7 +823,7 @@ export interface IPendingCoupon {
 
 export interface IPendingRecipe {
     ItemType: string;
-    CompletionDate: IMongoDate;
+    CompletionDate: Date;
     ItemId: IOid;
 }
 

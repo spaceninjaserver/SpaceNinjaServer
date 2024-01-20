@@ -1,5 +1,5 @@
 import { isString, parseString } from "@/src/helpers/general";
-import { items } from "@/static/data/items";
+import { items } from "@/src/services/itemDataService";
 
 export enum ItemType {
     Powersuit = "Powersuit",

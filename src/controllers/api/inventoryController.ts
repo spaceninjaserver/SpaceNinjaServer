@@ -24,6 +24,7 @@ const inventoryController: RequestHandler = async (request: Request, response: R
         return;
     }
 
+    //TODO: make a function that converts from database representation to client
     const inventoryJSON = inventory.toJSON();
 
     const inventoryResponse = toInventoryResponse(inventoryJSON);

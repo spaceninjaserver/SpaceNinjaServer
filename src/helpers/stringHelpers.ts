@@ -1,4 +1,4 @@
-export const getJSONfromString = (str: string): any => {
+export const getJSONfromString = (str: string) => {
     const jsonSubstring = str.substring(0, str.lastIndexOf("}") + 1);
     return JSON.parse(jsonSubstring);
 };
