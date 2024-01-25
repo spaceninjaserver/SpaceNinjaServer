@@ -1,3 +1,4 @@
+import { getIndexAfter } from "@/src/helpers/stringHelpers";
 import { logger } from "@/src/utils/logger";
 import Items, { Buildable, Category, Item, Warframe, Weapon } from "warframe-items";
 
@@ -103,14 +104,6 @@ export const getItemCategoryByUniqueName = (uniqueName: string) => {
     }
     const category = uniqueName.substring(index).split("/")[0];
     return category;
-};
-
-export const getIndexAfter = (str: string, searchWord: string) => {
-    const index = str.indexOf(searchWord);
-    if (index === -1) {
-        return -1;
-    }
-    return index + searchWord.length;
 };
 
 export const getItemByUniqueName = (uniqueName: string) => {

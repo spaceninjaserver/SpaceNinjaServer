@@ -16,3 +16,11 @@ export const getSubstringFromKeywordToKeyword = (str: string, keywordBegin: stri
     const endIndex = str.indexOf(keywordEnd);
     return str.substring(beginIndex, endIndex + 1);
 };
+
+export const getIndexAfter = (str: string, searchWord: string) => {
+    const index = str.indexOf(searchWord);
+    if (index === -1) {
+        return -1;
+    }
+    return index + searchWord.length;
+};
