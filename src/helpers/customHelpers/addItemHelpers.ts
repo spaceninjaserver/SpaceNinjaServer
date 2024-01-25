@@ -1,5 +1,5 @@
 import { isString, parseString } from "@/src/helpers/general";
-import { items } from "@/static/data/items";
+import { items } from "@/src/services/itemDataService";
 
 export enum ItemType {
     Powersuit = "Powersuit",
@@ -23,20 +23,20 @@ interface IAddItemRequest {
     InternalName: string;
     accountId: string;
 }
-export const isInternalName = (internalName: string): boolean => {
+export const isInternalItemName = (internalName: string): boolean => {
     const item = items.find(i => i.uniqueName === internalName);
     return Boolean(item);
 };
 
-const parseInternalName = (internalName: unknown): string => {
-    if (!isString(internalName) || !isInternalName(internalName)) {
+const parseInternalItemName = (internalName: unknown): string => {
+    if (!isString(internalName) || !isInternalItemName(internalName)) {
         throw new Error("incorrect internal name");
     }
 
     return internalName;
 };
 
-const toAddItemRequest = (body: unknown): IAddItemRequest => {
+export const toAddItemRequest = (body: unknown): IAddItemRequest => {
     if (!body || typeof body !== "object") {
         throw new Error("incorrect or missing add item request data");
     }
@@ -44,12 +44,10 @@ const toAddItemRequest = (body: unknown): IAddItemRequest => {
     if ("type" in body && "internalName" in body && "accountId" in body) {
         return {
             type: parseItemType(body.type),
-            InternalName: parseInternalName(body.internalName),
+            InternalName: parseInternalItemName(body.internalName),
             accountId: parseString(body.accountId)
         };
     }
 
     throw new Error("malformed add item request");
 };
-
-export { toAddItemRequest };

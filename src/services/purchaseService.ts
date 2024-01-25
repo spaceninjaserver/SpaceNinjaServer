@@ -1,4 +1,5 @@
-import { getWeaponType, parseSlotPurchaseName } from "@/src/helpers/purchaseHelpers";
+import { parseSlotPurchaseName } from "@/src/helpers/purchaseHelpers";
+import { getWeaponType } from "@/src/services/itemDataService";
 import { getSubstringFromKeyword } from "@/src/helpers/stringHelpers";
 import {
     addBooster,

@@ -1,7 +1,14 @@
 import { IMissionRewardResponse, IReward, IInventoryFieldType, inventoryFields } from "@/src/types/missionTypes";
 
 import missionsDropTable from "@/static/json/missions-drop-table.json";
-import { modNames, relicNames, miscNames, resourceNames, gearNames, blueprintNames } from "@/static/data/items";
+import {
+    modNames,
+    relicNames,
+    miscNames,
+    resourceNames,
+    gearNames,
+    blueprintNames
+} from "@/src/services/itemDataService";
 import { IMissionInventoryUpdateRequest } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
 

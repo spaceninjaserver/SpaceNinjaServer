@@ -1,4 +1,4 @@
-export const getJSONfromString = (str: string): any => {
+export const getJSONfromString = (str: string) => {
     const jsonSubstring = str.substring(0, str.lastIndexOf("}") + 1);
     return JSON.parse(jsonSubstring);
 };
@@ -15,4 +15,12 @@ export const getSubstringFromKeywordToKeyword = (str: string, keywordBegin: stri
     const beginIndex = str.lastIndexOf(keywordBegin) + 1;
     const endIndex = str.indexOf(keywordEnd);
     return str.substring(beginIndex, endIndex + 1);
+};
+
+export const getIndexAfter = (str: string, searchWord: string) => {
+    const index = str.indexOf(searchWord);
+    if (index === -1) {
+        return -1;
+    }
+    return index + searchWord.length;
 };

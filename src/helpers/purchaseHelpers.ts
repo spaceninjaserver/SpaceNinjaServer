@@ -1,8 +1,7 @@
 import { parseBoolean, parseNumber, parseString } from "@/src/helpers/general";
-import { WeaponTypeInternal } from "@/src/services/inventoryService";
+import { weapons } from "@/src/services/itemDataService";
 import { slotPurchaseNameToSlotName } from "@/src/services/purchaseService";
 import { IPurchaseRequest, SlotPurchaseName } from "@/src/types/purchaseTypes";
-import { weapons } from "@/static/data/items";
 
 export const toPurchaseRequest = (purchaseRequest: unknown): IPurchaseRequest => {
     if (!purchaseRequest || typeof purchaseRequest !== "object") {
@@ -39,22 +38,6 @@ export const toPurchaseRequest = (purchaseRequest: unknown): IPurchaseRequest =>
     }
 
     throw new Error("invalid purchaseRequest");
-};
-
-export const getWeaponType = (weaponName: string) => {
-    const weaponInfo = weapons.find(i => i.uniqueName === weaponName);
-
-    if (!weaponInfo) {
-        throw new Error(`unknown weapon ${weaponName}`);
-    }
-
-    const weaponType = weaponInfo.productCategory as WeaponTypeInternal;
-
-    if (!weaponType) {
-        throw new Error(`unknown weapon category for item ${weaponName}`);
-    }
-
-    return weaponType;
 };
 
 export const isSlotPurchaseName = (slotPurchaseName: string): slotPurchaseName is SlotPurchaseName => {

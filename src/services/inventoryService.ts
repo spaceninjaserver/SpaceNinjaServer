@@ -17,6 +17,7 @@ import {
 import { IGenericUpdate } from "../types/genericUpdate";
 import { IArtifactsRequest, IMissionInventoryUpdateRequest } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
+import { WeaponTypeInternal } from "@/src/services/itemDataService";
 
 export const createInventory = async (accountOwnerId: Types.ObjectId, loadOutPresetId: Types.ObjectId) => {
     try {
@@ -144,8 +145,6 @@ export const updateGeneric = async (data: IGenericUpdate, accountId: string) => 
 
     return data;
 };
-
-export type WeaponTypeInternal = "LongGuns" | "Pistols" | "Melee";
 
 export const addWeapon = async (
     weaponType: WeaponTypeInternal,

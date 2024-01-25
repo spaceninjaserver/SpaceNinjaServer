@@ -1,5 +1,5 @@
 import { ItemType, toAddItemRequest } from "@/src/helpers/customHelpers/addItemHelpers";
-import { getWeaponType } from "@/src/helpers/purchaseHelpers";
+import { getWeaponType } from "@/src/services/itemDataService";
 import { addPowerSuit, addWeapon } from "@/src/services/inventoryService";
 import { RequestHandler } from "express";
 

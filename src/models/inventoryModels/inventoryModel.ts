@@ -1,4 +1,4 @@
-import { Model, Schema, Types, model } from "mongoose";
+import { HydratedDocument, Model, Schema, Types, model } from "mongoose";
 import {
     IFlavourItem,
     IRawUpgrade,
@@ -10,7 +10,9 @@ import {
     ISlots,
     IGenericItem,
     IMailbox,
-    IDuviriInfo
+    IDuviriInfo,
+    IPendingRecipe as IPendingRecipeDatabase,
+    IPendingRecipeResponse
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IMongoDate, IOid } from "../../types/commonTypes";
 import { ISuitDatabase } from "@/src/types/inventoryTypes/SuitTypes";
@@ -24,6 +26,29 @@ import {
     IPolarity
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { toOid } from "@/src/helpers/inventoryHelpers";
+
+const pendingRecipeSchema = new Schema<IPendingRecipeDatabase>(
+    {
+        ItemType: String,
+        CompletionDate: Date
+    },
+    { id: false }
+);
+
+pendingRecipeSchema.virtual("ItemId").get(function () {
+    return { $oid: this._id.toString() };
+});
+
+pendingRecipeSchema.set("toJSON", {
+    virtuals: true,
+    transform(_document, returnedObject) {
+        delete returnedObject._id;
+        delete returnedObject.__v;
+        (returnedObject as IPendingRecipeResponse).CompletionDate = {
+            $date: { $numberLong: (returnedObject as IPendingRecipeDatabase).CompletionDate.getTime().toString() }
+        };
+    }
+});
 
 const polaritySchema = new Schema<IPolarity>({
     Slot: Number,
@@ -296,7 +321,6 @@ DuviriInfoSchema.set("toJSON", {
 });
 
 const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
-
     accountOwnerId: Schema.Types.ObjectId,
     SubscribedToEmails: Number,
     Created: Schema.Types.Mixed,
@@ -325,7 +349,6 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
     MechBin: slotsBinSchema,
     CrewMemberBin: slotsBinSchema,
 
-
     //How many trades do you have left
     TradesRemaining: Number,
     //How many Gift do you have left*(gift spends the trade)
@@ -351,10 +374,9 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
     DailyAffiliationZariman: Number,
     DailyAffiliationKahl: Number,
 
-
     //Daily Focus limit
     DailyFocus: Number,
-    //you not used Focus 
+    //you not used Focus
     FocusXP: Schema.Types.Mixed,
     //Curent active like Active school focuses is = "Zenurik"
     FocusAbility: String,
@@ -441,24 +463,21 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
     //Railjack/Components(https://warframe.fandom.com/wiki/Railjack/Components)
     CrewShipRawSalvage: [Schema.Types.Mixed],
 
-
     //Default RailJack
     CrewShips: [Schema.Types.Mixed],
     CrewShipAmmo: [Schema.Types.Mixed],
     CrewShipWeapons: [Schema.Types.Mixed],
     CrewShipWeaponSkins: [Schema.Types.Mixed],
 
-
     //NPC Crew and weapon
     CrewMembers: [Schema.Types.Mixed],
     CrewShipSalvagedWeaponSkins: [Schema.Types.Mixed],
     CrewShipSalvagedWeapons: [Schema.Types.Mixed],
 
-
     //Complete Mission\Quests
     Missions: [Schema.Types.Mixed],
     QuestKeys: [Schema.Types.Mixed],
-    //item like DojoKey or Boss missions key 
+    //item like DojoKey or Boss missions key
     LevelKeys: [Schema.Types.Mixed],
     //Active quests
     Quests: [Schema.Types.Mixed],
@@ -478,24 +497,21 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
     //Retries rank up(3 time)
     TrainingRetriesLeft: Number,
 
-
     //you saw last played Region when you opened the star map
     LastRegionPlayed: String,
 
     //Blueprint
     Recipes: [Schema.Types.Mixed],
     //Crafting Blueprint(Item Name + CompletionDate)
-    PendingRecipes: [Schema.Types.Mixed],
+    PendingRecipes: [pendingRecipeSchema],
 
     //warframe\Weapon skins
     WeaponSkins: [Schema.Types.Mixed],
 
-    
     //Ayatan Item
     FusionTreasures: [Schema.Types.Mixed],
     //"node": "TreasureTutorial", "state": "TS_COMPLETED"
     TauntHistory: [Schema.Types.Mixed],
-
 
     //noShow2FA,VisitPrimeVault etc
     WebFlags: Schema.Types.Mixed,
@@ -508,7 +524,6 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
     //Alert->Kuva Siphon
     PeriodicMissionCompletions: [Schema.Types.Mixed],
 
-
     //Codex->LoreFragment
     LoreFragmentScans: [Schema.Types.Mixed],
 
@@ -520,7 +535,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
     ActiveDojoColorResearch: String,
 
     SentientSpawnChanceBoosters: Schema.Types.Mixed,
-    
+
     QualifyingInvasions: [Schema.Types.Mixed],
     FactionScores: [Number],
 
@@ -530,11 +545,9 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
     //If you want change Spectre Gear id
     PendingSpectreLoadouts: [Schema.Types.Mixed],
 
-
     //New quest Email spam
     //example:"ItemType": "/Lotus/Types/Keys/RailJackBuildQuest/RailjackBuildQuestEmailItem",
     EmailItems: [Schema.Types.Mixed],
-    
 
     //Profile->Wishlist
     Wishlist: [String],
@@ -561,7 +574,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
 
     //Game mission\ivent score example  "Tag": "WaterFight", "Best": 170, "Count": 1258,
     PersonalGoalProgress: [Schema.Types.Mixed],
-    
+
     //Setting interface Style
     ThemeStyle: String,
     ThemeBackground: String,
@@ -579,7 +592,6 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
     //Night Wave Challenge
     SeasonChallengeHistory: [Schema.Types.Mixed],
 
-
     //Cephalon Simaris Entries Example:"TargetType"+"Scans"(1-10)+"Completed": true|false
     LibraryPersonalProgress: [Schema.Types.Mixed],
     //Cephalon Simaris Daily Task
@@ -587,30 +599,29 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
 
     //https://warframe.fandom.com/wiki/Invasion
     InvasionChainProgress: [Schema.Types.Mixed],
-    
+
     //https://warframe.fandom.com/wiki/Parazon
     DataKnives: [GenericItemSchema],
-    
+
     //CorpusLich or GrineerLich
     NemesisAbandonedRewards: [String],
-    //CorpusLich\KuvaLich 
+    //CorpusLich\KuvaLich
     NemesisHistory: [Schema.Types.Mixed],
     LastNemesisAllySpawnTime: Schema.Types.Mixed,
-    
+
     //TradingRulesConfirmed,ShowFriendInvNotifications(Option->Social)
     Settings: Schema.Types.Mixed,
 
-    //Railjack craft 
+    //Railjack craft
     //https://warframe.fandom.com/wiki/Rising_Tide
     PersonalTechProjects: [Schema.Types.Mixed],
-    
+
     //Modulars lvl and exp(Railjack|Duviri)
     //https://warframe.fandom.com/wiki/Intrinsics
     PlayerSkills: Schema.Types.Mixed,
 
     //TradeBannedUntil data
     TradeBannedUntil: Schema.Types.Mixed,
-
 
     //https://warframe.fandom.com/wiki/Helminth
     InfestedFoundry: Schema.Types.Mixed,
@@ -623,7 +634,6 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
     //Progress+Rank+ItemType(ZarimanPumpShotgun)
     //https://warframe.fandom.com/wiki/Incarnon
     EvolutionProgress: [Schema.Types.Mixed],
-
 
     //Unknown and system
     DuviriInfo: DuviriInfoSchema,
@@ -650,7 +660,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>({
     CollectibleSeries: [Schema.Types.Mixed],
     HasResetAccount: Boolean,
 
-    //Discount Coupon 
+    //Discount Coupon
     PendingCoupon: Schema.Types.Mixed,
     //Like BossAladV,BossCaptainVor come for you on missions % chance
     DeathMarks: [String],
@@ -685,13 +695,14 @@ type InventoryDocumentProps = {
     MiscItems: Types.DocumentArray<IMiscItem>;
     Boosters: Types.DocumentArray<IBooster>;
     OperatorLoadOuts: Types.DocumentArray<IOperatorConfigClient>;
-    AdultOperatorLoadOuts: Types.DocumentArray<IOperatorConfigClient>;
+    AdultOperatorLoadOuts: Types.DocumentArray<IOperatorConfigClient>; //TODO: this should still contain _id
     MechSuits: Types.DocumentArray<ISuitDatabase>;
     Scoops: Types.DocumentArray<IGenericItem>;
     DataKnives: Types.DocumentArray<IGenericItem>;
     DrifterMelee: Types.DocumentArray<IGenericItem>;
     Sentinels: Types.DocumentArray<IWeaponDatabase>;
     Horses: Types.DocumentArray<IGenericItem>;
+    PendingRecipes: Types.DocumentArray<IPendingRecipeDatabase>;
 };
 
 type InventoryModelType = Model<IInventoryDatabase, {}, InventoryDocumentProps>;
