@@ -1,6 +1,5 @@
 import { logger } from "@/src/utils/logger";
 import Items, { Buildable, Category, Item, Warframe, Weapon } from "warframe-items";
-import { log } from "winston";
 
 type MinWeapon = Omit<Weapon, "patchlogs">;
 type MinItem = Omit<Item, "patchlogs">;
@@ -80,14 +79,46 @@ export const blueprintNames = Object.fromEntries(
         .map(name => [name, craftNames[name]])
 );
 
-const items2 = new Items({
-    category: ["Warframes", "Gear", "Melee", "Primary", "Secondary", "Sentinels", "Misc", "Arch-Gun", "Arch-Melee"]
-});
+const buildables = items.filter(item => !!(item as Buildable).components);
 
-items2.flatMap(item => item.components || []);
-// for (const item of items2) {
-//     console.log(item.category === "Warframes");
-//     if (item.category === "Warframes") {
-//         console.log(item);
-//     }
-// }
+export const getItemByBlueprint = (uniqueName: string): (MinItem & Buildable) | undefined => {
+    const item = buildables.find(
+        item => (item as Buildable).components?.find(component => component.uniqueName === uniqueName)
+    );
+    return item;
+};
+
+export const getItemCategoryByUniqueName = (uniqueName: string) => {
+    //Lotus/Types/Items/MiscItems/PolymerBundle
+
+    let splitWord = "Items/";
+    if (!uniqueName.includes("/Items/")) {
+        splitWord = "/Types/";
+    }
+
+    const index = getIndexAfter(uniqueName, splitWord);
+    if (index === -1) {
+        logger.error(`error parsing item category ${uniqueName}`);
+        throw new Error(`error parsing item category ${uniqueName}`);
+    }
+    const category = uniqueName.substring(index).split("/")[0];
+    return category;
+};
+
+export const getIndexAfter = (str: string, searchWord: string) => {
+    const index = str.indexOf(searchWord);
+    if (index === -1) {
+        return -1;
+    }
+    return index + searchWord.length;
+};
+
+export const getItemByUniqueName = (uniqueName: string) => {
+    const item = items.find(item => item.uniqueName === uniqueName);
+    return item;
+};
+
+export const getItemByName = (name: string) => {
+    const item = items.find(item => item.name === name);
+    return item;
+};
