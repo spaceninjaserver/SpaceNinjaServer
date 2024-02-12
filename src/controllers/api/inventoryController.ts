@@ -3,8 +3,8 @@ import { toInventoryResponse } from "@/src/helpers/inventoryHelpers";
 import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { Request, RequestHandler, Response } from "express";
 import config from "@/config.json";
-import testMissions from "@/static/fixed_responses/testMissions.json";
-import testQuestKeys from "@/static/fixed_responses/testQuestKeys.json";
+import allMissions from "@/static/fixed_responses/allMissions.json";
+import allQuestKeys from "@/static/fixed_responses/allQuestKeys.json";
 import { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
 
 const inventoryController: RequestHandler = async (request: Request, response: Response) => {
@@ -29,8 +29,8 @@ const inventoryController: RequestHandler = async (request: Request, response: R
 
     const inventoryResponse = toInventoryResponse(inventoryJSON);
 
-    if (config.testMission) inventoryResponse.Missions = testMissions;
-    if (config.testQuestKey) inventoryResponse.QuestKeys = testQuestKeys;
+    if (config.unlockAllMissions) inventoryResponse.Missions = allMissions;
+    if (config.unlockAllQuests) inventoryResponse.QuestKeys = allQuestKeys;
 
     response.json(inventoryResponse);
 };
