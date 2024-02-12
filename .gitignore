@@ -11,3 +11,6 @@ yarn.lock
 
 # logs
 /logs
+
+# MongoDB VSCode extension playground scripts
+/database_scripts

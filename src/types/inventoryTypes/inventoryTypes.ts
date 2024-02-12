@@ -15,15 +15,65 @@ import { IOperatorLoadOutSigcol, IWeaponDatabase } from "@/src/types/inventoryTy
 //Document extends will be deleted soon. TODO: delete and migrate uses to ...
 export interface IInventoryDatabaseDocument extends IInventoryDatabase, Document {}
 export interface IInventoryDatabase
-    extends Omit<IInventoryResponse, "TrainingDate" | "LoadOutPresets" | "Mailbox" | "PendingRecipes"> {
+    extends Omit<
+        IInventoryResponse,
+        "TrainingDate" | "LoadOutPresets" | "Mailbox" | "PendingRecipes" | "Created" | "QuestKeys" | "BlessingCooldown"
+    > {
     accountOwnerId: Types.ObjectId;
+    Created: Date;
     TrainingDate: Date; // TrainingDate changed from IMongoDate to Date
     LoadOutPresets: Types.ObjectId; // LoadOutPresets changed from ILoadOutPresets to Types.ObjectId for population
     Mailbox: Types.ObjectId; // Mailbox changed from IMailbox to Types.ObjectId
     PendingRecipes: IPendingRecipe[];
+    QuestKeys: IQuestKeyDatabase[];
+    BlessingCooldown: Date;
 }
 
 export interface IInventoryResponseDocument extends IInventoryResponse, Document {}
+
+export interface IQuestKeyDatabase {
+    Progress?: IQuestProgress[];
+    unlock?: boolean;
+    Completed?: boolean;
+    CustomData?: string; //TODO: check whether this actually exists
+    ItemType: string;
+    CompletionDate?: Date;
+}
+
+export interface IFocusUpgrades {
+    ItemType: string;
+    Level: number;
+    IsUniversal: boolean;
+}
+
+export interface ITypeCount {
+    ItemType: string;
+    ItemCount: number;
+}
+
+export interface IGenericItem2 {
+    ItemType: string;
+    ItemName: string;
+    ItemId: IOid;
+    XP: number;
+    UpgradeVer: number;
+    Features: number;
+    Polarized: number;
+    CustomizationSlotPurchases: number;
+    ModSlotPurchases: number;
+    FocusLens: string;
+    Expiry: IMongoDate;
+    Polarity: IPolarity[];
+    Configs: IItemConfig[];
+    ModularParts: string[];
+    SkillTree: string;
+    UpgradeType: string;
+    UpgradeFingerprint: string;
+    OffensiveUpgrade: string;
+    DefensiveUpgrade: string;
+    UpgradesExpiry: IMongoDate;
+    ArchonCrystalUpgrades: [];
+}
 
 export interface IGenericItem {
     ItemType: string;
@@ -91,7 +141,7 @@ export interface IInventoryResponse {
     Pistols: IWeaponDatabase[];
     Melee: IWeaponDatabase[];
     Ships: IShip[];
-    QuestKeys: IQuestKey[];
+    QuestKeys: IQuestKeyResponse[];
     FlavourItems: IFlavourItem[];
     Scoops: IGenericItem[];
     TrainingRetriesLeft: number;
@@ -100,8 +150,8 @@ export interface IInventoryResponse {
     Missions: IMission[];
     RandomUpgradesIdentified: number;
     LastRegionPlayed: string;
-    XPInfo: IEmailItem[];
-    Recipes: IConsumable[];
+    XPInfo: ITypeXPItem[];
+    Recipes: ITypeCount[];
     WeaponSkins: IWeaponSkin[];
     PendingRecipes: IPendingRecipeResponse[];
     TrainingDate: IMongoDate;
@@ -116,7 +166,7 @@ export interface IInventoryResponse {
     LevelKeys: IConsumable[];
     TauntHistory: ITauntHistory[];
     StoryModeChoice: string;
-    PeriodicMissionCompletions: IPeriodicMissionCompletion[];
+    PeriodicMissionCompletions: IPeriodicMissionCompletionDatabase[];
     KubrowPetEggs: IKubrowPetEgg[];
     LoreFragmentScans: ILoreFragmentScan[];
     EquippedEmotes: string[];
@@ -135,7 +185,7 @@ export interface IInventoryResponse {
     SpectreLoadouts: ISpectreLoadout[];
     SentinelWeapons: IWeaponDatabase[];
     Sentinels: IWeaponDatabase[];
-    EmailItems: IEmailItem[];
+    EmailItems: ITypeXPItem[];
     CompletedSyndicates: string[];
     FocusXP: IFocusXP;
     Wishlist: string[];
@@ -160,7 +210,7 @@ export interface IInventoryResponse {
     AlignmentReplay: IAlignment;
     PersonalGoalProgress: IPersonalGoalProgress[];
     DailyAffiliationSolaris: number;
-    SpecialItems: ISpecialItem[];
+    SpecialItems: IGenericItem2[];
     ThemeStyle: string;
     ThemeBackground: string;
     ThemeSounds: string;
@@ -395,17 +445,27 @@ export interface ISlot {
 }
 
 export interface ICustomization {
-    CrewshipInterior: ITerior;
+    CrewshipInterior: IShipExterior;
 }
 
-export interface ITerior {
+export interface IShipExterior {
     SkinFlavourItem: string;
-    Colors: IColor;
+    Colors: IShipExteriorColors;
     ShipAttachments?: IShipAttachments;
 }
 
+//TODO: check whether it makes sense to use this specifity of color.
+export interface IShipExteriorColors {
+    t0: number;
+    t1: number;
+    t2: number;
+    t3: number;
+    m0: number;
+    en: number;
+}
+
 export interface IShipAttachments {
-    HOOD_ORNAMENT: string;
+    HOOD_ORNAMENT: string; //TODO: Others are probably possible
 }
 
 export interface IFlavourItem {
@@ -452,7 +512,7 @@ export interface IDrone {
     RepairStart?: IMongoDate;
 }
 
-export interface IEmailItem {
+export interface ITypeXPItem {
     ItemType: string;
     XP: number;
 }
@@ -511,7 +571,7 @@ export interface ISigcol {
 
 export interface IInfestedFoundry {
     Name: string;
-    Resources: IResource[];
+    Resources: ITypeCount[];
     Slots: number;
     XP: number;
     ConsumedSuits: IConsumedSuit[];
@@ -523,11 +583,6 @@ export interface IInfestedFoundry {
 export interface IConsumedSuit {
     s: string;
     c?: IColor;
-}
-
-export interface IResource {
-    ItemType: string;
-    Count: number;
 }
 
 export interface IInvasionChainProgress {
@@ -881,10 +936,14 @@ export enum GivingSlotOrderInfo {
     LotusUpgradesModsPistolDualStatElectEventPistolMod = "/Lotus/Upgrades/Mods/Pistol/DualStat/ElectEventPistolMod"
 }
 
-export interface IPeriodicMissionCompletion {
-    date: IMongoDate;
+export interface IPeriodicMissionCompletionDatabase {
+    date: Date;
     tag: string;
     count?: number;
+}
+
+export interface IPeriodicMissionCompletionResponse extends Omit<IPeriodicMissionCompletionDatabase, "date"> {
+    date: IMongoDate;
 }
 
 export interface IPersonalGoalProgress {
@@ -923,16 +982,11 @@ export interface IPlayerSkills {
     LPS_DRIFT_ENDURANCE: number;
 }
 
-export interface IQuestKey {
-    Progress?: IProgress[];
-    unlock?: boolean;
-    Completed?: boolean;
-    CustomData?: string;
-    ItemType: string;
+export interface IQuestKeyResponse extends Omit<IQuestKeyDatabase, "CompletionDate"> {
     CompletionDate?: IMongoDate;
 }
 
-export interface IProgress {
+export interface IQuestProgress {
     c: number;
     i: boolean;
     m: boolean;
@@ -964,7 +1018,7 @@ export interface ISettings {
 
 export interface IShip {
     ItemType: string;
-    ShipExterior: ITerior;
+    ShipExterior: IShipExterior;
     AirSupportPower: string;
     ItemId: IOid;
 }
@@ -987,28 +1041,6 @@ export interface ISpaceGunConfig {
     Skins?: string[];
     pricol?: IColor;
     Upgrades?: string[];
-}
-
-export interface ISpecialItem {
-    ItemType: string;
-    Configs: ISpecialItemConfig[];
-    XP?: number;
-    UpgradeVer?: number;
-    Features: number;
-    ItemId: IOid;
-    Polarized?: number;
-    Polarity?: IPolarity[];
-    ModSlotPurchases?: number;
-}
-
-export interface ISpecialItemConfig {
-    Upgrades?: string[];
-    pricol?: IColor;
-    Skins?: string[];
-    attcol?: IColor;
-    eyecol?: IPurpleCol;
-    sigcol?: IPurpleCol;
-    Name?: string;
 }
 
 export interface IPurpleCol {

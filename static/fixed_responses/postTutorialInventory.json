@@ -1,6 +1,5 @@
 {
   "SubscribedToEmails": 0,
-  "Created": { "$date": { "$numberLong": "1685829131" } },
   "SubscribedToEmailsPersonalized": 0,
   "RewardSeed": -5604904486637265640,
   "CrewMemberBin": { "Slots": 3 },

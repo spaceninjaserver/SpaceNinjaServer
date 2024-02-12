@@ -6,7 +6,7 @@
   "worldSeed": "qihVmIIyYXz0E4+01UjY+ROEiAB7x3k40ZaCUtVLEF17u9TXVita+jHZRuMLB6OT8GOfX8C+kqkyrT26AJEHFV0IDUkoZ1bntDSBL6wN36tq+ttsN/8NIcy1eGIyLzHn1Cosbtp8ykPhIaFKWlWP6v0QUBObIT11xLXF8fd+7cAEUcPygnS6WK048KEjMldK5bXIkkg9NV7ZXWLhNfTVG0mN0VluNUKDlc/JCiYRkxvparpn7xKwFpxqZJIeYhOz/zaktlEcVFxxB6ewd/X+XNq7+SkPUw5btQKQeYax1AxBZHzCk0XF1ihRQKPdMeVzXIRq43Yf/8emu8siIC4dFA==",
   "skipStoryModeChoice": true,
   "skipTutorial": true,
-  "testMission": true,
-  "testQuestKey": true,
+  "unlockAllMissions": true,
+  "unlockAllQuests": false,
   "infiniteResources": true
 }
