@@ -5,7 +5,7 @@ import {
     IOperatorConfigEntry,
     ISaveLoadoutRequestNoUpgradeVer
 } from "@/src/types/saveLoadoutTypes";
-import { LoadoutModel } from "@/src/models/inventoryModels/loadoutModel";
+import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
 import { getInventory } from "@/src/services/inventoryService";
 import { IOid } from "@/src/types/commonTypes";
 import { Types } from "mongoose";
@@ -60,7 +60,7 @@ export const handleInventoryItemConfigChange = async (
             }
             case "LoadOuts": {
                 logger.debug("loadout received");
-                const loadout = await LoadoutModel.findOne({ loadoutOwnerId: accountId });
+                const loadout = await Loadout.findOne({ loadoutOwnerId: accountId });
                 if (!loadout) {
                     throw new Error("loadout not found");
                 }

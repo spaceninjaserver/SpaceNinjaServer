@@ -93,4 +93,4 @@ type loadoutDocumentProps = {
 
 type loadoutModelType = Model<ILoadoutDatabase, {}, loadoutDocumentProps>;
 
-export const LoadoutModel = model<ILoadoutDatabase, loadoutModelType>("Loadout", loadoutSchema);
+export const Loadout = model<ILoadoutDatabase, loadoutModelType>("Loadout", loadoutSchema);

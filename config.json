@@ -8,5 +8,6 @@
   "skipTutorial": true,
   "unlockAllMissions": true,
   "unlockAllQuests": false,
-  "infiniteResources": true
+  "infiniteResources": true,
+  "unlockallShipFeatures": true
 }
