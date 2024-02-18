@@ -1,66 +1,50 @@
-import { Schema, model } from "mongoose";
-import { IShip } from "../types/shipTypes";
-import { IOid } from "../types/commonTypes";
-import { loadoutSchema } from "@/src/models/inventoryModels/loadoutModel";
+import { Model, Schema, StringSchemaDefinition, Types, model } from "mongoose";
+import { IApartment, IPlacedDecosDatabase, IRooms, IShipDatabase } from "../types/shipTypes";
+import { toOid } from "@/src/helpers/inventoryHelpers";
+import { colorSchema } from "@/src/models/inventoryModels/inventoryModel";
+import { IShipInventory } from "@/src/types/inventoryTypes/inventoryTypes";
 
-const roomSchema = new Schema(
+const shipSchema = new Schema<IShipDatabase>(
     {
-        Name: String,
-        MaxCapacity: Number
-    },
-    { _id: false }
-);
-
-const shipSchema = new Schema(
-    {
-        Rooms: [roomSchema],
-        Features: [String],
-        ContentUrlSignature: String
+        ItemType: String,
+        ShipOwnerId: Schema.Types.ObjectId,
+        ShipInteriorColors: colorSchema,
+        ShipExteriorColors: colorSchema,
+        AirSupportPower: String,
+        ShipAttachments: { HOOD_ORNAMENT: String },
+        SkinFlavourItem: String
     },
     { id: false }
 );
 
-shipSchema.virtual("ShipId").get(function () {
-    return { $oid: this._id.toString() } satisfies IOid;
+shipSchema.virtual("ItemId").get(function () {
+    return toOid(this._id);
 });
 
 shipSchema.set("toJSON", {
     virtuals: true,
     transform(_document, returnedObject) {
+        const shipResponse = returnedObject as IShipInventory;
+        const shipDatabase = returnedObject as IShipDatabase;
         delete returnedObject._id;
-    }
-});
+        delete returnedObject.__v;
+        delete returnedObject.ShipOwnerId;
+        if (shipDatabase.ShipExteriorColors) {
+            shipResponse.ShipExterior = {
+                Colors: shipDatabase.ShipExteriorColors,
+                ShipAttachments: shipDatabase.ShipAttachments,
+                SkinFlavourItem: shipDatabase.SkinFlavourItem
+            };
 
-const apartmentSchema = new Schema({
-    Rooms: [roomSchema],
-    FavouriteLoadouts: [Schema.Types.Mixed]
-});
-
-apartmentSchema.set("toJSON", {
-    transform(_document, returnedObject) {
-        delete returnedObject._id;
-    }
-});
-
-const shipDatabaseSchema = new Schema<IShip>({
-    ShipOwnerId: Schema.Types.ObjectId,
-    Ship: shipSchema,
-    Apartment: apartmentSchema,
-    LoadOutInventory: {
-        LoadOutPresets: {
-            type: Schema.Types.ObjectId,
-            ref: "Loadout"
+            delete shipDatabase.ShipExteriorColors;
+            delete shipDatabase.ShipAttachments;
+            delete shipDatabase.SkinFlavourItem;
         }
     }
 });
 
-shipDatabaseSchema.set("toJSON", {
-    transform(_document, returnedObject) {
-        delete returnedObject._id;
-        delete returnedObject.__v;
-    }
+shipSchema.set("toObject", {
+    virtuals: true
 });
 
-const Ship = model<IShip>("Ship", shipDatabaseSchema);
-
-export { Ship };
+export const Ship = model("Ships", shipSchema);

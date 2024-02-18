@@ -1,0 +1,28 @@
+import { IApartment, IRooms } from "@/src/types/shipTypes";
+import { Model, Types } from "mongoose";
+
+export interface IOrbiter {
+    Features: string[];
+    Rooms: IRooms[];
+    ContentUrlSignature: string;
+}
+
+export interface IPersonalRooms {
+    personalRoomsOwnerId: Types.ObjectId;
+    activeShipId: Types.ObjectId;
+    Ship: IOrbiter;
+    Apartment: IApartment;
+}
+
+export type RoomsType = { Name: string; MaxCapacity: number; PlacedDecos: Types.DocumentArray<IPlacedDecosDatabase> };
+
+export type PersonalRoomsDocumentProps = {
+    Ship: Omit<IOrbiter, "Rooms"> & {
+        Rooms: RoomsType[];
+    };
+    Apartment: Omit<IApartment, "Rooms"> & {
+        Rooms: RoomsType[];
+    };
+};
+
+export type PersonalRoomsModelType = Model<IPersonalRooms, {}, PersonalRoomsDocumentProps>;

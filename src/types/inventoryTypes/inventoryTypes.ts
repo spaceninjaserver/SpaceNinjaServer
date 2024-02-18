@@ -11,13 +11,21 @@ import {
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { ISuitDatabase } from "@/src/types/inventoryTypes/SuitTypes";
 import { IOperatorLoadOutSigcol, IWeaponDatabase } from "@/src/types/inventoryTypes/weaponTypes";
+import { Colour } from "warframe-items";
 
 //Document extends will be deleted soon. TODO: delete and migrate uses to ...
 export interface IInventoryDatabaseDocument extends IInventoryDatabase, Document {}
 export interface IInventoryDatabase
     extends Omit<
         IInventoryResponse,
-        "TrainingDate" | "LoadOutPresets" | "Mailbox" | "PendingRecipes" | "Created" | "QuestKeys" | "BlessingCooldown"
+        | "TrainingDate"
+        | "LoadOutPresets"
+        | "Mailbox"
+        | "PendingRecipes"
+        | "Created"
+        | "QuestKeys"
+        | "BlessingCooldown"
+        | "Ships"
     > {
     accountOwnerId: Types.ObjectId;
     Created: Date;
@@ -27,6 +35,7 @@ export interface IInventoryDatabase
     PendingRecipes: IPendingRecipe[];
     QuestKeys: IQuestKeyDatabase[];
     BlessingCooldown: Date;
+    Ships: Types.ObjectId[];
 }
 
 export interface IInventoryResponseDocument extends IInventoryResponse, Document {}
@@ -140,7 +149,7 @@ export interface IInventoryResponse {
     LongGuns: IWeaponDatabase[];
     Pistols: IWeaponDatabase[];
     Melee: IWeaponDatabase[];
-    Ships: IShip[];
+    Ships: IShipInventory[];
     QuestKeys: IQuestKeyResponse[];
     FlavourItems: IFlavourItem[];
     Scoops: IGenericItem[];
@@ -449,8 +458,8 @@ export interface ICustomization {
 }
 
 export interface IShipExterior {
-    SkinFlavourItem: string;
-    Colors: IShipExteriorColors;
+    SkinFlavourItem?: string;
+    Colors: IColor;
     ShipAttachments?: IShipAttachments;
 }
 
@@ -1016,7 +1025,7 @@ export interface ISettings {
     TradingRulesConfirmed: boolean;
 }
 
-export interface IShip {
+export interface IShipInventory {
     ItemType: string;
     ShipExterior: IShipExterior;
     AirSupportPower: string;

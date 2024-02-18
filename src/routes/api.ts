@@ -37,6 +37,9 @@ import { focusController } from "@/src/controllers/api/focusController";
 import { inventorySlotsController } from "@/src/controllers/api/inventorySlotsController";
 import { startRecipeController } from "@/src/controllers/api/startRecipeController";
 import { claimCompletedRecipeController } from "@/src/controllers/api/claimCompletedRecipeController";
+import { shipDecorationsController } from "@/src/controllers/api/shipDecorationsController";
+import { setShipCustomizationsController } from "@/src/controllers/api/setShipCustomizationsController";
+import { setActiveShipController } from "@/src/controllers/api/setActiveShipController";
 
 const apiRouter = express.Router();
 
@@ -62,9 +65,12 @@ apiRouter.get("/modularWeaponSale.php", modularWeaponSaleController);
 apiRouter.get("/deleteSession.php", deleteSessionController);
 apiRouter.get("/logout.php", logoutController);
 apiRouter.get("/setBootLocation.php", setBootLocationController);
+apiRouter.get("/setActiveShip.php", setActiveShipController);
 
 // post
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
+apiRouter.post("/shipDecorations.php", shipDecorationsController);
+apiRouter.post("/setShipCustomizations.php", setShipCustomizationsController);
 apiRouter.post("/claimCompletedRecipe.php", claimCompletedRecipeController);
 apiRouter.post("/startRecipe.php", startRecipeController);
 apiRouter.post("/inventorySlots.php", inventorySlotsController);

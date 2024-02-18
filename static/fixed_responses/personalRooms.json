@@ -8,7 +8,6 @@
       "/Lotus/Types/Items/ShipFeatureItems/FoundryFeatureItem",
       "/Lotus/Types/Items/ShipFeatureItems/MercuryNavigationFeatureItem"
     ],
-    "ShipId": { "$oid": "removed" },
     "Rooms": [
       { "Name": "AlchemyRoom", "MaxCapacity": 1600 },
       { "Name": "BridgeRoom", "MaxCapacity": 1600 },
@@ -27,6 +26,7 @@
       { "Name": "ApartmentRoomC", "MaxCapacity": 1600 },
       { "Name": "DuviriHallway", "MaxCapacity": 1600 }
     ],
-    "FavouriteLoadouts": []
+    "FavouriteLoadouts": [],
+    "Gardening": []
   }
 }

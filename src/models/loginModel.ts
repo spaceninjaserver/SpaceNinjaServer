@@ -46,14 +46,4 @@ databaseAccountSchema.set("toJSON", {
     virtuals: true
 });
 
-//databaseAccountSchema.set("");
-
-// Create a virtual property `domain` that's computed from `email`.
-// databaseAccountSchema.virtual("id").get(function () {
-//   //console.log(this);
-//   return this._id;
-// });
-
-const Account = model<IDatabaseAccountDocument>("Account", databaseAccountSchema);
-
-export { Account };
+export const Account = model<IDatabaseAccountDocument>("Account", databaseAccountSchema);

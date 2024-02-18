@@ -6,7 +6,6 @@ import {
     IInventoryDatabase,
     IBooster,
     IInventoryResponse,
-    IInventoryDatabaseDocument,
     ISlots,
     IGenericItem,
     IMailbox,
@@ -21,9 +20,7 @@ import {
     IChallengeProgress,
     IStepSequencer,
     IAffiliation,
-    IShip,
     INotePacks,
-    IShipExterior,
     ICompletedJobChain,
     ISeasonChallengeHistory,
     IPlayerSkills,
@@ -108,7 +105,7 @@ const abilityOverrideSchema = new Schema<IAbilityOverride>({
     Ability: String,
     Index: Number
 });
-const colorSchema = new Schema<IColor>(
+export const colorSchema = new Schema<IColor>(
     {
         t0: Number,
         t1: Number,
@@ -457,33 +454,6 @@ const affiliationsSchema = new Schema<IAffiliation>(
     { _id: false }
 );
 
-const shipExteriorSchema = new Schema<IShipExterior>(
-    {
-        SkinFlavourItem: String,
-        Colors: colorSchema, //TODO: perhaps too many colors here
-        ShipAttachments: { HOOD_ORNAMENT: String }
-    },
-    { _id: false }
-);
-
-const shipSchema = new Schema<IShip>({
-    ItemType: String,
-    ShipExterior: shipExteriorSchema,
-    AirSupportPower: String
-});
-
-shipSchema.virtual("ItemId").get(function () {
-    return { $oid: this._id.toString() };
-});
-
-shipSchema.set("toJSON", {
-    virtuals: true,
-    transform(_document, returnedObject) {
-        delete returnedObject._id;
-        delete returnedObject.__v;
-    }
-});
-
 const completedJobChainsSchema = new Schema<ICompletedJobChain>(
     {
         LocationTag: String,
@@ -773,7 +743,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         Horses: [GenericItemSchema],
 
         //LandingCraft like Liset
-        Ships: [shipSchema],
+        Ships: { type: [Schema.Types.ObjectId], ref: "Ships" },
         // /Lotus/Types/Items/ShipDecos/
         ShipDecorations: [typeCountSchema],
 

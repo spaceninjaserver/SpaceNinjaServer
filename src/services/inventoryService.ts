@@ -19,12 +19,16 @@ import { IArtifactsRequest, IMissionInventoryUpdateRequest } from "../types/requ
 import { logger } from "@/src/utils/logger";
 import { WeaponTypeInternal } from "@/src/services/itemDataService";
 
-export const createInventory = async (accountOwnerId: Types.ObjectId, loadOutPresetId: Types.ObjectId) => {
+export const createInventory = async (
+    accountOwnerId: Types.ObjectId,
+    defaultItemReferences: { loadOutPresetId: Types.ObjectId; ship: Types.ObjectId }
+) => {
     try {
         const inventory = new Inventory({
             ...new_inventory,
             accountOwnerId: accountOwnerId,
-            LoadOutPresets: loadOutPresetId
+            LoadOutPresets: defaultItemReferences.loadOutPresetId,
+            Ships: [defaultItemReferences.ship]
         });
         if (config.skipStoryModeChoice) {
             inventory.StoryModeChoice = "WARFRAME";
