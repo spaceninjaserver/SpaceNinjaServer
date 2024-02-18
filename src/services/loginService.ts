@@ -4,7 +4,7 @@ import { IDatabaseAccount } from "@/src/types/loginTypes";
 import { createShip } from "./shipService";
 import { Types } from "mongoose";
 import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
-import { PersonalRooms } from "@/src/models/shipModel";
+import { PersonalRooms } from "@/src/models/personalRoomsModel";
 import new_personal_rooms from "@/static/fixed_responses/personalRooms.json";
 
 const isCorrectPassword = (requestPassword: string, databasePassword: string): boolean => {

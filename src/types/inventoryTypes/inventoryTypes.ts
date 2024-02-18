@@ -458,7 +458,7 @@ export interface ICustomization {
 }
 
 export interface IShipExterior {
-    SkinFlavourItem: string;
+    SkinFlavourItem?: string;
     Colors: IColor;
     ShipAttachments?: IShipAttachments;
 }

@@ -7,7 +7,8 @@
   "skipStoryModeChoice": true,
   "skipTutorial": true,
   "unlockAllMissions": true,
-  "unlockAllQuests": false,
+  "unlockAllQuests": true,
   "infiniteResources": true,
-  "unlockallShipFeatures": true
+  "unlockallShipFeatures": true,
+  "unlockAllShipDecorations": true
 }

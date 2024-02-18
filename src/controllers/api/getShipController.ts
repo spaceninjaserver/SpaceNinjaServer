@@ -3,7 +3,7 @@ import config from "@/config.json";
 import allShipFeatures from "@/static/fixed_responses/allShipFeatures.json";
 import { parseString } from "@/src/helpers/general";
 import { getShip } from "@/src/services/shipService";
-import { PersonalRooms } from "@/src/models/shipModel";
+import { PersonalRooms } from "@/src/models/personalRoomsModel";
 import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
 import { logger } from "@/src/utils/logger";
 import { toOid } from "@/src/helpers/inventoryHelpers";
@@ -14,7 +14,7 @@ export const getShipController: RequestHandler = async (req, res) => {
     const accountId = parseString(req.query.accountId);
     const personalRooms = await getPersonalRooms(accountId);
     const loadout = await getLoadout(accountId);
-    const ship = await getShip(accountId, "ShipInteriorColors ShipAttachments SkinFlavourItem");
+    const ship = await getShip(personalRooms.activeShipId, "ShipInteriorColors ShipAttachments SkinFlavourItem");
 
     const getShipResponse: IGetShipResponse = {
         ShipOwnerId: accountId,
