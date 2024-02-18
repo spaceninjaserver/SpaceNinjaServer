@@ -7,13 +7,7 @@ export const createShip = async (accountOwnerId: Types.ObjectId) => {
     try {
         const ship = new Ship({
             ItemType: "/Lotus/Types/Items/Ships/DefaultShip",
-            ShipOwnerId: accountOwnerId,
-            ShipInteriorColors: {
-                t0: 3828063,
-                t1: 2502747
-            },
-            ShipAttachments: { HOOD_ORNAMENT: "" },
-            SkinFlavourItem: "/Lotus/Upgrades/Skins/Liset/LisetSkinFlavourItemDefault"
+            ShipOwnerId: accountOwnerId
         });
         const newShip = await ship.save();
         return newShip._id;
