@@ -27,6 +27,6 @@
       { "Name": "DuviriHallway", "MaxCapacity": 1600 }
     ],
     "FavouriteLoadouts": [],
-    "Gardening": []
+    "Gardening": {}
   }
 }
