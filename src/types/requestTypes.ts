@@ -17,6 +17,12 @@ export interface IArtifactsRequest {
     FusionPointCost: number;
 }
 
+export interface IThemeUpdateRequest {
+    Style?: string;
+    Background?: string;
+    Sounds?: string;
+}
+
 export interface IMissionInventoryUpdateRequest {
     rewardsMultiplier?: number;
     ActiveBoosters?: IBooster[];
