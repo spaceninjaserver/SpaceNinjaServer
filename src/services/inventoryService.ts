@@ -15,7 +15,7 @@ import {
     IRawUpgrade
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate } from "../types/genericUpdate";
-import { IArtifactsRequest, IMissionInventoryUpdateRequest } from "../types/requestTypes";
+import { IArtifactsRequest, IMissionInventoryUpdateRequest, IThemeUpdateRequest } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
 import { WeaponTypeInternal } from "@/src/services/itemDataService";
 
@@ -148,6 +148,15 @@ export const updateGeneric = async (data: IGenericUpdate, accountId: string) => 
     await inventory.save();
 
     return data;
+};
+
+export const updateTheme = async (data: IThemeUpdateRequest, accountId: string) => {
+    const inventory = await getInventory(accountId);
+    if (data.Style) inventory.ThemeStyle = data.Style;
+    if (data.Background) inventory.ThemeBackground = data.Background;
+    if (data.Sounds) inventory.ThemeSounds = data.Sounds;
+
+    await inventory.save();
 };
 
 export const addWeapon = async (

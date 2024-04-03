@@ -40,6 +40,7 @@ import { claimCompletedRecipeController } from "@/src/controllers/api/claimCompl
 import { shipDecorationsController } from "@/src/controllers/api/shipDecorationsController";
 import { setShipCustomizationsController } from "@/src/controllers/api/setShipCustomizationsController";
 import { setActiveShipController } from "@/src/controllers/api/setActiveShipController";
+import { updateThemeController } from "../controllers/api/updateThemeController";
 
 const apiRouter = express.Router();
 
@@ -90,5 +91,6 @@ apiRouter.post("/rerollRandomMod.php", rerollRandomModController);
 apiRouter.post("/joinSession.php", joinSessionController);
 apiRouter.post("/saveLoadout.php", saveLoadoutController);
 apiRouter.post("/trainingResult.php", trainingResultController);
+apiRouter.post("/updateTheme.php", updateThemeController);
 
 export { apiRouter };
