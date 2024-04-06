@@ -3,7 +3,9 @@ import config from "@/config.json";
 import worldState from "@/static/fixed_responses/worldState.json";
 
 const worldStateController: RequestHandler = (_req, res) => {
-    res.json(worldState);
+    const state = worldState;
+    state.Time = Math.round(Date.now() / 1000);
+    res.json(state);
 };
 
 export { worldStateController };
