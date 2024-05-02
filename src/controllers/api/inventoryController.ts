@@ -34,6 +34,13 @@ const inventoryController: RequestHandler = async (request: Request, response: R
 
     const inventoryResponse = toInventoryResponse(inventoryJSON);
 
+    if (config.infiniteResources) {
+        inventoryResponse.RegularCredits = 999999999;
+        inventoryResponse.TradesRemaining = 999999999;
+        inventoryResponse.PremiumCreditsFree = 999999999;
+        inventoryResponse.PremiumCredits = 999999999;
+    }
+
     if (config.unlockAllMissions) inventoryResponse.Missions = allMissions;
     if (config.unlockAllQuests) inventoryResponse.QuestKeys = allQuestKeys;
 
