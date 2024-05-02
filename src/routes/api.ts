@@ -41,6 +41,7 @@ import { shipDecorationsController } from "@/src/controllers/api/shipDecorations
 import { setShipCustomizationsController } from "@/src/controllers/api/setShipCustomizationsController";
 import { setActiveShipController } from "@/src/controllers/api/setActiveShipController";
 import { updateThemeController } from "../controllers/api/updateThemeController";
+import { getGuildController } from "@/src/controllers/api/getGuildController";
 
 const apiRouter = express.Router();
 
@@ -67,6 +68,7 @@ apiRouter.get("/deleteSession.php", deleteSessionController);
 apiRouter.get("/logout.php", logoutController);
 apiRouter.get("/setBootLocation.php", setBootLocationController);
 apiRouter.get("/setActiveShip.php", setActiveShipController);
+apiRouter.get("/getGuild.php", getGuildController);
 
 // post
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
