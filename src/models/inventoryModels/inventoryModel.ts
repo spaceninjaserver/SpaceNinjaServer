@@ -874,6 +874,9 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //You first Dialog with NPC or use new Item
         NodeIntrosCompleted: [String],
 
+        //Current guild id, if applicable.
+        GuildId: { type: Schema.Types.ObjectId, ref: "Guild" },
+
         //https://warframe.fandom.com/wiki/Heist
         //ProfitTaker(1-4) Example:"LocationTag": "EudicoHeists", "Jobs":Mission name
         CompletedJobChains: [completedJobChainsSchema],

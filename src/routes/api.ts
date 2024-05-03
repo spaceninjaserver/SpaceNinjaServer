@@ -43,6 +43,7 @@ import { setActiveShipController } from "@/src/controllers/api/setActiveShipCont
 import { updateThemeController } from "../controllers/api/updateThemeController";
 import { getGuildController } from "@/src/controllers/api/getGuildController";
 import { addFriendImageController } from "@/src/controllers/api/addFriendImageController";
+import { createGuildController } from "@/src/controllers/api/createGuildController";
 
 const apiRouter = express.Router();
 
@@ -96,5 +97,6 @@ apiRouter.post("/saveLoadout.php", saveLoadoutController);
 apiRouter.post("/trainingResult.php", trainingResultController);
 apiRouter.post("/updateTheme.php", updateThemeController);
 apiRouter.post("/addFriendImage.php", addFriendImageController);
+apiRouter.post("/createGuild.php", createGuildController);
 
 export { apiRouter };
