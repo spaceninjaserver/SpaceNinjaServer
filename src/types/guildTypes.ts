@@ -18,3 +18,7 @@ export function guildDbToResponse(guild: IDatabaseGuild): IGuildResponse {
     (guild as IGuild as IGuildResponse)._id = toOid(guild._id);
     return guild as IGuild as IGuildResponse;
 }
+
+export interface ICreateGuildRequest {
+    guildName: string;
+}
