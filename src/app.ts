@@ -1,6 +1,6 @@
 import express from "express";
 
-import { unknownEndpointHandler } from "@/src/middleware/middleware";
+import { unknownEndpointHandler, addCorsHeaders } from "@/src/middleware/middleware";
 import { requestLogger } from "@/src/middleware/morgenMiddleware";
 
 import { apiRouter } from "@/src/routes/api";
@@ -24,7 +24,7 @@ app.use(bodyParser.raw());
 app.use(express.json());
 app.use(bodyParser.text());
 app.use(requestLogger);
-//app.use(requestLogger);
+app.use(addCorsHeaders);
 
 app.use("/api", apiRouter);
 //app.use("/test", testRouter);

@@ -14,4 +14,10 @@ const unknownEndpointHandler = (request: Request, response: Response) => {
 //     next();
 // };
 
-export { unknownEndpointHandler };
+const addCorsHeaders = (_request: Request, response: Response, next: NextFunction) => {
+    response.header("Access-Control-Allow-Origin", "*");
+    response.header("Access-Control-Allow-Headers", "Content-Type");
+    next();
+};
+
+export { unknownEndpointHandler, addCorsHeaders };
