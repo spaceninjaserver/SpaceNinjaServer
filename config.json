@@ -5,6 +5,7 @@
   "version": "35.5.10",
   "skipStoryModeChoice": true,
   "skipTutorial": true,
+  "unlockAllScans": true,
   "unlockAllMissions": true,
   "unlockAllQuests": true,
   "infiniteResources": true,
