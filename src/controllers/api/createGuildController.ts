@@ -18,10 +18,19 @@ const createGuildController: RequestHandler = async (req, res) => {
     } satisfies IGuild);
     await guild.save();
 
-    // Update account's guild
+    // Update inventory
     let inventory = await Inventory.findOne({ accountOwnerId: req.query.accountId });
     if (inventory) {
+        // Set GuildId
         inventory.GuildId = guild._id;
+
+        // Give clan key
+        inventory.LevelKeys ??= [];
+        inventory.LevelKeys.push({
+            ItemType: "/Lotus/Types/Keys/DojoKey",
+            ItemCount: 1
+        });
+
         await inventory.save();
     }
 
