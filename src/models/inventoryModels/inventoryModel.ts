@@ -974,6 +974,9 @@ inventorySchema.set("toJSON", {
 
         inventoryResponse.TrainingDate = toMongoDate(inventoryDatabase.TrainingDate);
         inventoryResponse.Created = toMongoDate(inventoryDatabase.Created);
+        if (inventoryDatabase.GuildId) {
+            inventoryResponse.GuildId = toOid(inventoryDatabase.GuildId);
+        }
         if (inventoryResponse.BlessingCooldown) {
             inventoryResponse.BlessingCooldown = toMongoDate(inventoryDatabase.BlessingCooldown);
         }
