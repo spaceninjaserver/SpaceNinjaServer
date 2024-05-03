@@ -5,9 +5,10 @@ import { Request, RequestHandler, Response } from "express";
 import config from "@/config.json";
 import allMissions from "@/static/fixed_responses/allMissions.json";
 import allQuestKeys from "@/static/fixed_responses/allQuestKeys.json";
-import allShipDecorations from "@/static/fixed_responses/shipDecorations.json";
+import allShipDecorations from "@/static/fixed_responses/allShipDecorations.json";
+import allFlavourItems from "@/static/fixed_responses/allFlavourItems.json";
 import { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
-import { IShipInventory } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IShipInventory, IFlavourItem } from "@/src/types/inventoryTypes/inventoryTypes";
 
 const inventoryController: RequestHandler = async (request: Request, response: Response) => {
     const accountId = request.query.accountId;
@@ -43,10 +44,8 @@ const inventoryController: RequestHandler = async (request: Request, response: R
 
     if (config.unlockAllMissions) inventoryResponse.Missions = allMissions;
     if (config.unlockAllQuests) inventoryResponse.QuestKeys = allQuestKeys;
-
-    if (config.unlockAllShipDecorations) {
-        inventoryResponse.ShipDecorations = allShipDecorations;
-    }
+    if (config.unlockAllShipDecorations) inventoryResponse.ShipDecorations = allShipDecorations;
+    if (config.unlockAllFlavourItems) inventoryResponse.FlavourItems = allFlavourItems satisfies IFlavourItem[];
 
     response.json(inventoryResponse);
 };
