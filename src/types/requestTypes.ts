@@ -59,3 +59,8 @@ export interface IMissionInventoryUpdateRequestRewardInfo {
 export interface IInventorySlotsRequest {
     Bin: "PveBonusLoadoutBin";
 }
+
+export interface IUpdateGlyphRequest {
+    AvatarImageType: string;
+    AvatarImage: string;
+}
