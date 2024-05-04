@@ -97,7 +97,7 @@ export const updateCurrency = async (price: number, usePremium: boolean, account
 
     if (usePremium) {
         if (inventory.PremiumCreditsFree > 0) {
-            inventory.PremiumCreditsFree -= price;
+            inventory.PremiumCreditsFree -= Math.min(price, inventory.PremiumCreditsFree);
         }
         inventory.PremiumCredits -= price;
     } else {
