@@ -19,13 +19,15 @@ export interface IShipInterior {
     SkinFlavourItem?: string;
 }
 
+export type TBootLocation = "LISET" | "DRIFTER_CAMP" | "APARTMENT";
+
 export interface IShip {
     Features: string[];
     ShipId: IOid;
     ShipInterior: IShipInterior;
     Rooms: IRooms[];
     ContentUrlSignature: string;
-    BootLocation?: "LISET" | "DRIFTER_CAMP" | "APARTMENT";
+    BootLocation?: TBootLocation;
 }
 
 export interface IShipDatabase {
