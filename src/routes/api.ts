@@ -44,6 +44,7 @@ import { updateThemeController } from "../controllers/api/updateThemeController"
 import { getGuildController } from "@/src/controllers/api/getGuildController";
 import { addFriendImageController } from "@/src/controllers/api/addFriendImageController";
 import { createGuildController } from "@/src/controllers/api/createGuildController";
+import { sellController } from "@/src/controllers/api/sellController";
 
 const apiRouter = express.Router();
 
@@ -98,5 +99,6 @@ apiRouter.post("/trainingResult.php", trainingResultController);
 apiRouter.post("/updateTheme.php", updateThemeController);
 apiRouter.post("/addFriendImage.php", addFriendImageController);
 apiRouter.post("/createGuild.php", createGuildController);
+apiRouter.post("/sell.php", sellController);
 
 export { apiRouter };
