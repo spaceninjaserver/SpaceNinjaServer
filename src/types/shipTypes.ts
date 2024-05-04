@@ -25,6 +25,7 @@ export interface IShip {
     ShipInterior: IShipInterior;
     Rooms: IRooms[];
     ContentUrlSignature: string;
+    BootLocation?: "LISET" | "DRIFTER_CAMP" | "APARTMENT";
 }
 
 export interface IShipDatabase {
