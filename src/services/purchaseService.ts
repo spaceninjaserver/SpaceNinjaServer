@@ -49,6 +49,9 @@ export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountI
         case "Boosters":
             inventoryChanges = await handleBoostersPurchase(internalName, accountId);
             break;
+        case "Interface":
+            inventoryChanges = await handleCustomizationPurchase(internalName, accountId);
+            break;
         default:
             const errorMessage = `unknown store category: ${storeCategory} not implemented or new`;
             logger.error(errorMessage);
@@ -167,8 +170,9 @@ const handleTypesPurchase = async (typesName: string, accountId: string) => {
     const typeCategory = getStoreItemTypesCategory(typesName);
     logger.debug(`type category ${typeCategory}`);
     switch (typeCategory) {
+        case "AvatarImages":
         case "SuitCustomizations":
-            return await handleSuitCustomizationsPurchase(typesName, accountId);
+            return await handleCustomizationPurchase(typesName, accountId);
         // case "Recipes":
         //     break;
         case "Sentinels":
@@ -193,7 +197,7 @@ const handleSentinelPurchase = async (sentinelName: string, accountId: string) =
     };
 };
 
-const handleSuitCustomizationsPurchase = async (customizationName: string, accountId: string) => {
+const handleCustomizationPurchase = async (customizationName: string, accountId: string) => {
     const customization = await addCustomization(customizationName, accountId);
 
     return {
