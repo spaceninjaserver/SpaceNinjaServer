@@ -1,7 +1,6 @@
 import { RequestHandler } from "express";
 import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { Guild } from "@/src/models/guildModel";
-import { guildDbToResponse } from "@/src/types/guildTypes";
 
 const getGuildController: RequestHandler = async (req, res) => {
     if (!req.query.accountId) {
@@ -16,7 +15,7 @@ const getGuildController: RequestHandler = async (req, res) => {
     if (inventory.GuildId) {
         const guild = await Guild.findOne({ _id: inventory.GuildId });
         if (guild) {
-            res.json(guildDbToResponse(guild));
+            res.json(guild);
             return;
         }
     }

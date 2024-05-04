@@ -2,7 +2,7 @@ import { RequestHandler } from "express";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { Guild } from "@/src/models/guildModel";
-import { IGuild, guildDbToResponse, ICreateGuildRequest } from "@/src/types/guildTypes";
+import { IGuild, ICreateGuildRequest } from "@/src/types/guildTypes";
 
 const createGuildController: RequestHandler = async (req, res) => {
     let payload: ICreateGuildRequest = getJSONfromString(req.body.toString());
@@ -29,7 +29,7 @@ const createGuildController: RequestHandler = async (req, res) => {
         await inventory.save();
     }
 
-    res.json(guildDbToResponse(guild));
+    res.json(guild);
 };
 
 export { createGuildController };
