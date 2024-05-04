@@ -76,17 +76,19 @@ export interface ILoadoutConfigDatabase extends Omit<ILoadoutConfigClient, "Item
 // for request and response from and to client
 export interface ILoadoutConfigClient {
     ItemId: IOid;
-    n: string;
-    PresetIcon: string;
-    Favorite: boolean;
-    s: IEquipmentSelection;
-    p: IEquipmentSelection;
-    l: IEquipmentSelection;
-    m: IEquipmentSelection;
+    n?: string;
+    PresetIcon?: string;
+    Favorite?: boolean;
+    s?: IEquipmentSelection;
+    p?: IEquipmentSelection;
+    l?: IEquipmentSelection;
+    m?: IEquipmentSelection;
+    Remove?: boolean;
 }
 
 export interface IEquipmentSelection {
-    ItemId: IOid;
-    mod: number;
-    cus: number;
+    ItemId?: IOid;
+    mod?: number;
+    cus?: number;
+    hide?: boolean;
 }

@@ -106,8 +106,7 @@ export const handleInventoryItemConfigChange = async (
                             throw new Error("loadout index not found");
                         }
 
-                        //perhaps .overwrite() is better
-                        loadout[loadoutSlot][loadoutIndex].set(loadoutConfig);
+                        loadout[loadoutSlot][loadoutIndex].overwrite(loadoutConfig);
                     }
                 }
                 await loadout.save();
