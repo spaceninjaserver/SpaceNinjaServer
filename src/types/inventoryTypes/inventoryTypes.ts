@@ -21,6 +21,7 @@ export interface IInventoryDatabase
         | "TrainingDate"
         | "LoadOutPresets"
         | "Mailbox"
+        | "GuildId"
         | "PendingRecipes"
         | "Created"
         | "QuestKeys"
@@ -32,6 +33,7 @@ export interface IInventoryDatabase
     TrainingDate: Date; // TrainingDate changed from IMongoDate to Date
     LoadOutPresets: Types.ObjectId; // LoadOutPresets changed from ILoadOutPresets to Types.ObjectId for population
     Mailbox: Types.ObjectId; // Mailbox changed from IMailbox to Types.ObjectId
+    GuildId?: Types.ObjectId; // GuildId changed from ?IOid to ?Types.ObjectId
     PendingRecipes: IPendingRecipe[];
     QuestKeys: IQuestKeyDatabase[];
     BlessingCooldown: Date;
@@ -232,6 +234,7 @@ export interface IInventoryResponse {
     RecentVendorPurchases: Array<number | string>;
     Hoverboards: IHoverboard[];
     NodeIntrosCompleted: string[];
+    GuildId?: IOid;
     CompletedJobChains: ICompletedJobChain[];
     SeasonChallengeHistory: ISeasonChallengeHistory[];
     MoaPets: IMoaPet[];
