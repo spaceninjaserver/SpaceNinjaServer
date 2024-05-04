@@ -19,7 +19,8 @@ const EquipmentSelectionSchema = new Schema<IEquipmentSelection>(
             default: { $oid: "000000000000000000000000" }
         },
         mod: Number,
-        cus: Number
+        cus: Number,
+        hide: Boolean
     },
     {
         _id: false

@@ -77,6 +77,11 @@ export const handleInventoryItemConfigChange = async (
 
                     // all non-empty entries are one loadout slot
                     for (const [loadoutId, loadoutConfig] of Object.entries(newLoadout)) {
+                        if (loadoutConfig.Remove) {
+                            loadout[loadoutSlot].pull({ _id: loadoutId });
+                            continue;
+                        }
+
                         const oldLoadoutConfig = loadout[loadoutSlot].find(
                             loadout => loadout._id.toString() === loadoutId
                         );
@@ -106,8 +111,7 @@ export const handleInventoryItemConfigChange = async (
                             throw new Error("loadout index not found");
                         }
 
-                        //perhaps .overwrite() is better
-                        loadout[loadoutSlot][loadoutIndex].set(loadoutConfig);
+                        loadout[loadoutSlot][loadoutIndex].overwrite(loadoutConfig);
                     }
                 }
                 await loadout.save();
