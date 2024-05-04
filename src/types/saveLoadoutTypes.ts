@@ -76,6 +76,7 @@ export interface ILoadoutConfigDatabase extends Omit<ILoadoutConfigClient, "Item
 // for request and response from and to client
 export interface ILoadoutConfigClient {
     ItemId: IOid;
+    Remove?: boolean; // when client wants to remove a config, it only includes ItemId & Remove.
     n?: string;
     PresetIcon?: string;
     Favorite?: boolean;
@@ -83,7 +84,6 @@ export interface ILoadoutConfigClient {
     p?: IEquipmentSelection;
     l?: IEquipmentSelection;
     m?: IEquipmentSelection;
-    Remove?: boolean;
 }
 
 export interface IEquipmentSelection {
