@@ -1,21 +1,32 @@
 import { getIndexAfter } from "@/src/helpers/stringHelpers";
 import { logger } from "@/src/utils/logger";
-import Items, { Buildable, Category, Item, Warframe, Weapon } from "warframe-items";
+import Items, { Buildable, Category, MinimalItem, Warframe, Weapon } from "warframe-items";
 
-type MinWeapon = Omit<Weapon, "patchlogs">;
-type MinItem = Omit<Item, "patchlogs">;
+export type MinWarframe = Omit<Warframe, "patchlogs">;
+export type MinWeapon = Omit<Weapon, "patchlogs">;
+export type MinItem = Omit<MinimalItem, "patchlogs">;
 
-export const weapons: MinWeapon[] = (new Items({ category: ["Primary", "Secondary", "Melee"] }) as Weapon[]).map(
-    item => {
+export const warframes: MinWarframe[] = Array.from(new Items({ category: ["Warframes"] }) as Warframe[])
+    .filter(item => {
+        return item.uniqueName.substring(0, 30) != "/Lotus/Powersuits/EntratiMech/";
+    })
+    .map(item => {
         const next = { ...item };
         delete next.patchlogs;
         return next;
-    }
-);
+    });
+
+export const weapons: MinWeapon[] = Array.from(
+    new Items({ category: ["Primary", "Secondary", "Melee"] }) as Weapon[]
+).map(item => {
+    const next = { ...item };
+    delete next.patchlogs;
+    return next;
+});
 
 export type WeaponTypeInternal = "LongGuns" | "Pistols" | "Melee";
 
-export const items: MinItem[] = new Items({ category: ["All"] }).map(item => {
+export const items: MinItem[] = Array.from(new Items({ category: ["All"] }) as MinimalItem[]).map(item => {
     const next = { ...item };
     delete next.patchlogs;
     return next;
