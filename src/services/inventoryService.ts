@@ -97,11 +97,11 @@ export const updateCurrency = async (price: number, usePremium: boolean, account
 
     if (usePremium) {
         if (inventory.PremiumCreditsFree > 0) {
-            inventory.PremiumCreditsFree += price;
+            inventory.PremiumCreditsFree -= price;
         }
-        inventory.PremiumCredits += price;
+        inventory.PremiumCredits -= price;
     } else {
-        inventory.RegularCredits += price;
+        inventory.RegularCredits -= price;
     }
 
     const modifiedPaths = inventory.modifiedPaths();
