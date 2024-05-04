@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import config from "@/config.json";
 import allShipFeatures from "@/static/fixed_responses/allShipFeatures.json";
 import { parseString } from "@/src/helpers/general";
+import { getPersonalRooms } from "@/src/services/personalRoomsService";
 import { getShip } from "@/src/services/shipService";
 import { PersonalRooms } from "@/src/models/personalRoomsModel";
 import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
@@ -47,14 +48,4 @@ export const getLoadout = async (accountId: string) => {
     }
 
     return loadout;
-};
-
-export const getPersonalRooms = async (accountId: string) => {
-    const personalRooms = await PersonalRooms.findOne({ personalRoomsOwnerId: accountId });
-
-    if (!personalRooms) {
-        logger.error(`personal rooms not found for account ${accountId}`);
-        throw new Error("personal rooms not found");
-    }
-    return personalRooms;
 };

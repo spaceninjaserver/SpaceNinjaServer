@@ -1,4 +1,4 @@
-import { getPersonalRooms } from "@/src/controllers/api/getShipController";
+import { getPersonalRooms } from "@/src/services/personalRoomsService";
 import { parseString } from "@/src/helpers/general";
 import { RequestHandler } from "express";
 import { Types } from "mongoose";
