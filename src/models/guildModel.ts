@@ -1,4 +1,4 @@
-import { IGuild, IDatabaseGuild } from "@/src/types/guildTypes";
+import { IGuild } from "@/src/types/guildTypes";
 import { model, Schema } from "mongoose";
 import { toOid } from "@/src/helpers/inventoryHelpers";
 
