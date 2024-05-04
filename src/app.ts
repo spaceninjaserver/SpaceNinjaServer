@@ -12,6 +12,7 @@ import { steamPacksController } from "@/src/controllers/misc/steamPacksControlle
 import { customRouter } from "@/src/routes/custom";
 import { dynamicController } from "@/src/routes/dynamic";
 import { statsRouter } from "@/src/routes/stats";
+import { webuiRouter } from "@/src/routes/webui";
 import { connectDatabase } from "@/src/services/mongoService";
 import { registerLogFileCreationListener } from "@/src/utils/logger";
 
@@ -34,6 +35,8 @@ app.use("/:id/dynamic", dynamicController);
 
 app.post("/pay/steamPacks.php", steamPacksController);
 app.use("/stats", statsRouter);
+
+app.use("/", webuiRouter);
 
 app.use(unknownEndpointHandler);
 
