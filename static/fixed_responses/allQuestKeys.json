@@ -1,41 +1,38 @@
 [
-  {
-    "ItemType": "/Lotus/Types/Keys/InfestedIntroQuest/InfestedIntroQuestKeyChain"
-  },
-  {
-    "ItemType": "/Lotus/Types/Keys/KubrowQuest/KubrowQuestKeyChain"
-  },
-  {
-    "ItemType": "/Lotus/Types/Keys/DuviriQuest/DuviriQuestKeyChain"
-  },
-  {
-    "ItemType": "/Lotus/Types/Keys/WarWithinQuest/WarWithinQuestKeyChain"
-  },
-  {
-    "ItemType": "/Lotus/Types/Keys/SacrificeQuest/SacrificeQuestKeyChain"
-  },
-  {
-    "ItemType": "/Lotus/Types/Keys/NewWarIntroQuest/NewWarIntroKeyChain"
-  },
-  {
-    "ItemType": "/Lotus/Types/Keys/NewWarQuest/NewWarQuestKeyChain"
-  },
-  {
-    "ItemType": "/Lotus/Types/Keys/ApostasyQuest/ApostasyKeyChain"
-  },
-  {
-    "ItemType": "/Lotus/Types/Keys/WarWithinQuest/WarWithinQuestKeyChain"
-  },
-  {
-    "ItemType": "/Lotus/Types/Keys/OrokinMoonQuest/OrokinMoonQuestKeyChain"
-  },
-  {
-    "ItemType": "/Lotus/Types/Keys/ZarimanQuest/ZarimanQuestKeyChain"
-  },
-  {
-    "ItemType": "/Lotus/Types/Keys/DuviriQuest/DuviriQuestKeyChain"
-  },
-  {
-    "ItemType": "/Lotus/Types/Keys/ArchwingQuest/ArchwingQuestKeyChain"
-  }
+  { "ItemType": "/Lotus/Types/Keys/VorsPrize/VorsPrizeQuestKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/GlassQuest/GlassQuestKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/SolarisQuest/SolarisQuestKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/InfestedIntroQuest/InfestedIntroQuestKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/KubrowQuest/KubrowQuestKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/ArchwingQuest/ArchwingQuestKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/GetClemQuest/GetClemQuestKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/SpyQuestKeyChain/SpyQuestKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/DragonQuest/DragonQuestKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/LimboQuest/LimboQuestKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/SentientQuest/SentientQuestKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/OrokinMoonQuest/OrokinMoonQuestKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/MirageQuest/MirageQuestKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/WarWithinQuest/WarWithinQuestKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/InfestedAladVQuest/InfestedAladVQuestKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/GolemQuest/GolemQuestKeyChainItem" },
+  { "ItemType": "/Lotus/Types/Keys/BardQuest/BardQuestKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/FairyQuest/FairyQuestKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/IndexQuest/IndexQuestKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/PriestFrameQuest/PriestQuestKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/ApostasyQuest/ApostasyKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/SacrificeQuest/SacrificeQuestKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/ChimeraQuest/ChimeraKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/MummyQuest/MummyQuestKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/RailJackBuildQuest/RailjackBuildQuestKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/NewWarIntroQuest/NewWarIntroKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/ProteaQuest/ProteaQuestKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/RevenantQuest/RevenantQuestKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/InfestedMicroplanetQuest/InfestedMicroplanetQuestKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/WraithQuest/WraithQuestKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/YareliQuest/YareliQuestKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/NewWarQuest/NewWarQuestKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/ZarimanQuest/ZarimanQuestKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/KahlQuest/KahlQuestKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/DuviriQuest/DuviriQuestKeyChain" },
+  { "ItemType": "/Lotus/Types/Keys/EntratiLab/EntratiQuestKeyChain" }
 ]
