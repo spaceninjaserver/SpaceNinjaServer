@@ -5,12 +5,15 @@ import {
     addBooster,
     addCustomization,
     addMechSuit,
+    addMiscItems,
     addPowerSuit,
     addSentinel,
     addWeapon,
+    getInventory,
     updateCurrency,
     updateSlots
 } from "@/src/services/inventoryService";
+import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IPurchaseRequest, IPurchaseResponse, SlotNameToInventoryName, SlotPurchase } from "@/src/types/purchaseTypes";
 import { logger } from "@/src/utils/logger";
 
@@ -179,6 +182,8 @@ const handleTypesPurchase = async (typesName: string, accountId: string) => {
             return await handleSentinelPurchase(typesName, accountId);
         case "SlotItems":
             return await handleSlotPurchase(typesName, accountId);
+        case "Items":
+            return await handleMiscItemPurchase(typesName, accountId);
         default:
             throw new Error(`unknown Types category: ${typeCategory} not implemented or new`);
     }
@@ -229,6 +234,23 @@ const handleBoostersPurchase = async (boosterStoreName: string, accountId: strin
     return {
         InventoryChanges: {
             Boosters: [{ ItemType, ExpiryDate }]
+        }
+    };
+};
+
+const handleMiscItemPurchase = async (uniqueName: string, accountId: string) => {
+    const inventory = await getInventory(accountId);
+    const miscItemChanges = [
+        {
+            ItemType: uniqueName,
+            ItemCount: 1
+        } satisfies IMiscItem
+    ];
+    addMiscItems(inventory, miscItemChanges);
+    await inventory.save();
+    return {
+        InventoryChanges: {
+            MiscItems: miscItemChanges
         }
     };
 };
