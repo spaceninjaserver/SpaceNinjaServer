@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import { IUpgradesRequest } from "@/src/types/requestTypes";
-import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IGenericItemDatabase, IMiscItem, TGenericItemKey } from "@/src/types/inventoryTypes/inventoryTypes";
 import { addMiscItems, getInventory } from "@/src/services/inventoryService";
 
 export const upgradesController: RequestHandler = async (req, res) => {
@@ -14,14 +14,19 @@ export const upgradesController: RequestHandler = async (req, res) => {
                 ItemCount: -1
             } satisfies IMiscItem
         ]);
-        if (operation.UpgradeRequirement == "/Lotus/Types/Items/MiscItems/OrokinReactor") {
-            for (const suit of inventory.Suits) {
-                if (suit._id.toString() == payload.ItemId.$oid) {
-                    suit.Features ??= 0;
-                    suit.Features |= 1;
-                    break;
+        switch (operation.UpgradeRequirement) {
+            case "/Lotus/Types/Items/MiscItems/OrokinReactor":
+            case "/Lotus/Types/Items/MiscItems/OrokinCatalyst":
+                for (const item of inventory[payload.ItemCategory as TGenericItemKey] as IGenericItemDatabase[]) {
+                    if (item._id.toString() == payload.ItemId.$oid) {
+                        item.Features ??= 0;
+                        item.Features |= 1;
+                        break;
+                    }
                 }
-            }
+                break;
+            default:
+                throw new Error("Unsupported upgrade: " + operation.UpgradeRequirement);
         }
     }
     await inventory.save();
