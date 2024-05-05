@@ -319,7 +319,9 @@ export const missionInventoryUpdate = async (data: IMissionInventoryUpdateReques
     addConsumables(inventory, Consumables);
     addRecipes(inventory, Recipes);
     addChallenges(inventory, ChallengeProgress);
-    addMissionComplete(inventory, Missions!);
+    if (Missions) {
+        addMissionComplete(inventory, Missions);
+    }
 
     const changedInventory = await inventory.save();
     return changedInventory.toJSON();
