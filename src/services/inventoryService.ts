@@ -93,6 +93,10 @@ export const updateSlots = async (accountId: string, slotName: SlotNames, slotAm
 };
 
 export const updateCurrency = async (price: number, usePremium: boolean, accountId: string) => {
+    if (config.infiniteResources) {
+        return {};
+    }
+
     const inventory = await getInventory(accountId);
 
     if (usePremium) {
