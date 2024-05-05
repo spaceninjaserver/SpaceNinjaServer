@@ -4,7 +4,7 @@
   "description": "WF Emulator",
   "main": "index.ts",
   "scripts": {
-    "start": "node build/index.js",
+    "start": "node --import ./build/src/pathman.js build/src/index.js",
     "dev": "ts-node-dev --openssl-legacy-provider -r tsconfig-paths/register src/index.ts ",
     "build": "tsc",
     "lint": "eslint --ext .ts .",
