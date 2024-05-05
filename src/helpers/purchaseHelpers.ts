@@ -1,5 +1,4 @@
 import { parseBoolean, parseNumber, parseString } from "@/src/helpers/general";
-import { weapons } from "@/src/services/itemDataService";
 import { slotPurchaseNameToSlotName } from "@/src/services/purchaseService";
 import { IPurchaseRequest, SlotPurchaseName } from "@/src/types/purchaseTypes";
 

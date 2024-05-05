@@ -73,7 +73,6 @@ apiRouter.get("/setActiveShip.php", setActiveShipController);
 apiRouter.get("/getGuild.php", getGuildController);
 
 // post
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 apiRouter.post("/shipDecorations.php", shipDecorationsController);
 apiRouter.post("/setShipCustomizations.php", setShipCustomizationsController);
 apiRouter.post("/claimCompletedRecipe.php", claimCompletedRecipeController);
@@ -82,7 +81,6 @@ apiRouter.post("/inventorySlots.php", inventorySlotsController);
 apiRouter.post("/focus.php", focusController);
 apiRouter.post("/artifacts.php", artifactsController);
 apiRouter.post("/findSessions.php", findSessionsController);
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 apiRouter.post("/purchase.php", purchaseController);
 apiRouter.post("/login.php", loginController);
 apiRouter.post("/getAlliance.php", getAllianceController);

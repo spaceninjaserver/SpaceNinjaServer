@@ -60,7 +60,7 @@ function getSession(sessionIdOrRequest: string | IFindSessionRequest): any[] {
         return [];
     }
 
-    const request = sessionIdOrRequest as IFindSessionRequest;
+    const request = sessionIdOrRequest;
     const matchingSessions = sessions.filter(session => {
         for (const key in request) {
             if (key !== "eloRating" && key !== "queryId" && request[key] !== session[key as keyof ISession]) {

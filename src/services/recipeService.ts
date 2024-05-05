@@ -1,6 +1,6 @@
 import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { getInventory } from "@/src/services/inventoryService";
-import { getItemByBlueprint, getItemCategoryByUniqueName } from "@/src/services/itemDataService";
+import { getItemByBlueprint } from "@/src/services/itemDataService";
 import { logger } from "@/src/utils/logger";
 import { Types } from "mongoose";
 

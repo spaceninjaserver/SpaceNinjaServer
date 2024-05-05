@@ -3,7 +3,6 @@ import { getWeaponType } from "@/src/services/itemDataService";
 import { addPowerSuit, addWeapon } from "@/src/services/inventoryService";
 import { RequestHandler } from "express";
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 const addItemController: RequestHandler = async (req, res) => {
     const request = toAddItemRequest(req.body);
 

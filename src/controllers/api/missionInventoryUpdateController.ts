@@ -44,7 +44,6 @@ import { IMissionInventoryUpdateRequest } from "@/src/types/requestTypes";
 - [ ]  FpsSamples
 */
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 const missionInventoryUpdateController: RequestHandler = async (req, res): Promise<void> => {
     const accountId = parseString(req.query.accountId);
 

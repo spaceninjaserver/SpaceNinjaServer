@@ -8,6 +8,7 @@
     "dev": "ts-node-dev --openssl-legacy-provider -r tsconfig-paths/register src/index.ts ",
     "build": "tsc",
     "lint": "eslint --ext .ts .",
+    "lint:fix": "eslint --fix --ext .ts .",
     "prettier": "prettier --write ."
   },
   "license": "GNU",

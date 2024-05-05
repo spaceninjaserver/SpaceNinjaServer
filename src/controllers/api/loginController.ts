@@ -10,7 +10,6 @@ import { ILoginResponse } from "@/src/types/loginTypes";
 import { DTLS, groups, HUB, IRC, Nonce, NRS, platformCDNs } from "@/static/fixed_responses/login_static";
 import { logger } from "@/src/utils/logger";
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 const loginController: RequestHandler = async (request, response) => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument
     const body = JSON.parse(request.body); // parse octet stream of json data to json object

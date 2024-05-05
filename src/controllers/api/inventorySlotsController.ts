@@ -1,5 +1,5 @@
 import { parseString } from "@/src/helpers/general";
-import { getInventory, updateCurrency } from "@/src/services/inventoryService";
+import { updateCurrency } from "@/src/services/inventoryService";
 import { RequestHandler } from "express";
 import { updateSlots } from "@/src/services/inventoryService";
 import { SlotNameToInventoryName } from "@/src/types/purchaseTypes";
@@ -18,7 +18,6 @@ import { SlotNameToInventoryName } from "@/src/types/purchaseTypes";
     number of frames = extra - slots + 2
 */
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const inventorySlotsController: RequestHandler = async (req, res) => {
     const accountId = parseString(req.query.accountId);
     //const body = JSON.parse(req.body as string) as IInventorySlotsRequest;

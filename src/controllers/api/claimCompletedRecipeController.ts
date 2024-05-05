@@ -1,7 +1,7 @@
 //this is a controller for the claimCompletedRecipe route
 //it will claim a recipe for the user
 
-import { Request, RequestHandler, Response } from "express";
+import { RequestHandler } from "express";
 import { logger } from "@/src/utils/logger";
 import { getItemByBlueprint, getItemCategoryByUniqueName } from "@/src/services/itemDataService";
 import { IOid } from "@/src/types/commonTypes";
@@ -13,7 +13,6 @@ export interface IClaimCompletedRecipeRequest {
     RecipeIds: IOid[];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const claimCompletedRecipeController: RequestHandler = async (req, res) => {
     const claimCompletedRecipeRequest = getJSONfromString(req.body.toString()) as IClaimCompletedRecipeRequest;
     const accountId = req.query.accountId as string;
