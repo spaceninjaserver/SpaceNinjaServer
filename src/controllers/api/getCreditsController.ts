@@ -3,6 +3,7 @@ import config from "@/config.json";
 import { getInventory } from "@/src/services/inventoryService";
 import { parseString } from "@/src/helpers/general";
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const getCreditsController: RequestHandler = async (req, res) => {
     if (config.infiniteResources) {
         res.json({
