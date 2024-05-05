@@ -94,8 +94,8 @@ export const blueprintNames = Object.fromEntries(
 const buildables = items.filter(item => !!(item as Buildable).components);
 
 export const getItemByBlueprint = (uniqueName: string): (MinItem & Buildable) | undefined => {
-    const item = buildables.find(
-        item => (item as Buildable).components?.find(component => component.uniqueName === uniqueName)
+    const item = buildables.find(item =>
+        (item as Buildable).components?.find(component => component.uniqueName === uniqueName)
     );
     return item;
 };
