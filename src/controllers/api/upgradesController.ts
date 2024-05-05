@@ -25,6 +25,16 @@ export const upgradesController: RequestHandler = async (req, res) => {
                     }
                 }
                 break;
+            case "/Lotus/Types/Items/MiscItems/UtilityUnlocker":
+            case "/Lotus/Types/Items/MiscItems/WeaponUtilityUnlocker":
+                for (const item of inventory[payload.ItemCategory as TGenericItemKey] as IGenericItemDatabase[]) {
+                    if (item._id.toString() == payload.ItemId.$oid) {
+                        item.Features ??= 0;
+                        item.Features |= 2;
+                        break;
+                    }
+                }
+                break;
             default:
                 throw new Error("Unsupported upgrade: " + operation.UpgradeRequirement);
         }
