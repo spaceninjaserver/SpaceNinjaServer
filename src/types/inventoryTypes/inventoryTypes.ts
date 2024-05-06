@@ -95,6 +95,12 @@ export interface IGenericItem {
     Features?: number; //space suit has this
 }
 
+export interface IGenericItemDatabase extends Omit<IGenericItem, "ItemId"> {
+    _id: Types.ItemId;
+}
+
+export type TGenericItemKey = "Suits" | "LongGuns" | "Pistols" | "Melee";
+
 export interface IDuviriInfo {
     Seed: number;
     NumCompletions: number;

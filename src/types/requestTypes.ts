@@ -1,3 +1,4 @@
+import { IOid } from "./commonTypes";
 import {
     IBooster,
     IChallengeProgress,
@@ -63,4 +64,20 @@ export interface IInventorySlotsRequest {
 export interface IUpdateGlyphRequest {
     AvatarImageType: string;
     AvatarImage: string;
+}
+
+export interface IUpgradesRequest {
+    ItemCategory: string;
+    ItemId: IOid;
+    ItemFeatures: number;
+    UpgradeVersion: number;
+    Operations: IUpgradeOperation[];
+}
+
+export interface IUpgradeOperation {
+    OperationType: string;
+    UpgradeRequirement: string; // uniqueName of item being consumed
+    PolarizeSlot: number;
+    PolarizeValue: string; // polarity
+    PolarityRemap: {}[];
 }
