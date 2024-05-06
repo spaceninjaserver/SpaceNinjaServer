@@ -83,6 +83,16 @@ function updateInventory() {
                         };
                         a.textContent = "Make Rank 30";
                         td.appendChild(a);
+                        td.innerHTML += " &middot; ";
+                    }
+                    {
+                        const a = document.createElement("a");
+                        a.href = "#";
+                        a.onclick = function () {
+                            disposeOfGear("Suits", item.ItemId.$oid);
+                        };
+                        a.textContent = "Remove";
+                        td.appendChild(a);
                     }
                     tr.appendChild(td);
                 }
@@ -108,6 +118,16 @@ function updateInventory() {
                                 addGearExp(category, item.ItemId.$oid, 800_000 - item.XP);
                             };
                             a.textContent = "Make Rank 30";
+                            td.appendChild(a);
+                            td.innerHTML += " &middot; ";
+                        }
+                        {
+                            const a = document.createElement("a");
+                            a.href = "#";
+                            a.onclick = function () {
+                                disposeOfGear(category, item.ItemId.$oid);
+                            };
+                            a.textContent = "Remove";
                             td.appendChild(a);
                         }
                         tr.appendChild(td);
@@ -191,6 +211,26 @@ function addGearExp(category, oid, xp) {
     ];
     $.post({
         url: "/api/missionInventoryUpdate.php?accountId=" + window.accountId,
+        contentType: "text/plain",
+        data: JSON.stringify(data)
+    }).done(function () {
+        updateInventory();
+    });
+}
+
+function disposeOfGear(category, oid) {
+    const data = {
+        SellCurrency: "SC_RegularCredits",
+        SellPrice: 0,
+        Items: {}
+    };
+    data.Items[category] = [
+        {
+            String: oid
+        }
+    ];
+    $.post({
+        url: "/api/sell.php?accountId=" + window.accountId,
         contentType: "text/plain",
         data: JSON.stringify(data)
     }).done(function () {
