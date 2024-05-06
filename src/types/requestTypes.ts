@@ -1,4 +1,5 @@
 import { IOid } from "./commonTypes";
+import { FocusSchool } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import {
     IBooster,
     IChallengeProgress,
@@ -78,6 +79,6 @@ export interface IUpgradeOperation {
     OperationType: string;
     UpgradeRequirement: string; // uniqueName of item being consumed
     PolarizeSlot: number;
-    PolarizeValue: string; // polarity
+    PolarizeValue: FocusSchool;
     PolarityRemap: {}[];
 }
