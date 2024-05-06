@@ -95,7 +95,7 @@ export interface IGenericItem {
 }
 
 export interface IGenericItemDatabase extends Omit<IGenericItem, "ItemId"> {
-    _id: Types.ItemId;
+    _id: Types.ObjectId;
 }
 
 export type TGenericItemKey = "Suits" | "LongGuns" | "Pistols" | "Melee";
