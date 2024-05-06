@@ -83,7 +83,10 @@ function updateInventory() {
                         };
                         a.textContent = "Make Rank 30";
                         td.appendChild(a);
-                        td.innerHTML += " &middot; ";
+
+                        const span = document.createElement("span");
+                        span.innerHTML = " &middot; ";
+                        td.appendChild(span);
                     }
                     {
                         const a = document.createElement("a");
@@ -119,7 +122,10 @@ function updateInventory() {
                             };
                             a.textContent = "Make Rank 30";
                             td.appendChild(a);
-                            td.innerHTML += " &middot; ";
+
+                            const span = document.createElement("span");
+                            span.innerHTML = " &middot; ";
+                            td.appendChild(span);
                         }
                         {
                             const a = document.createElement("a");
