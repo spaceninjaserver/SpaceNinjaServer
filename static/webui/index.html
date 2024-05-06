@@ -26,28 +26,34 @@
             </div>
             <div id="main-view" class="d-none">
                 <p>Hello, <b class="displayname"></b>! <a href="#" onclick="logout();">Logout</a></p>
-                <div class="d-flex">
-                    <div class="card m-1 w-50">
-                        <h5 class="card-header">Acquire Warframe</h5>
-                        <form class="card-body row" onsubmit="doAcquireWarframe();return false;">
-                            <div class="col-xxl-10">
-                                <input class="form-control" id="warframe-to-acquire" list="datalist-warframes" />
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card mb-3">
+                            <h5 class="card-header">Warframes</h5>
+                            <div class="card-body">
+                                <table class="table table-striped w-100">
+                                    <tbody id="warframe-list"></tbody>
+                                </table>
+                                <form class="input-group" onsubmit="doAcquireWarframe();return false;">
+                                    <button class="btn btn-primary" type="submit">Add</button>
+                                    <input class="form-control" id="warframe-to-acquire" list="datalist-warframes" />
+                                </form>
                             </div>
-                            <div class="col-xxl-2">
-                                <button class="btn btn-primary" type="submit">Acquire</button>
-                            </div>
-                        </form>
+                        </div>
                     </div>
-                    <div class="card m-1 w-50">
-                        <h5 class="card-header">Acquire Weapon</h5>
-                        <form class="card-body row" onsubmit="doAcquireWeapon();return false;">
-                            <div class="col-xxl-10">
-                                <input class="form-control" id="weapon-to-acquire" list="datalist-weapons" />
+                    <div class="col-lg-6">
+                        <div class="card mb-3">
+                            <h5 class="card-header">Weapons</h5>
+                            <div class="card-body">
+                                <table class="table table-striped w-100">
+                                    <tbody id="weapon-list"></tbody>
+                                </table>
+                                <form class="input-group" onsubmit="doAcquireWeapon();return false;">
+                                    <button class="btn btn-primary" type="submit">Add</button>
+                                    <input class="form-control" id="weapon-to-acquire" list="datalist-warframes" />
+                                </form>
                             </div>
-                            <div class="col-xxl-2">
-                                <button class="btn btn-primary" type="submit">Acquire</button>
-                            </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>

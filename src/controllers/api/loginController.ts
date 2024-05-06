@@ -18,7 +18,7 @@ const loginController: RequestHandler = async (request, response) => {
 
     const account = await Account.findOne({ email: loginRequest.email }); //{ _id: 0, __v: 0 }
 
-    if (!account && config.autoCreateAccount) {
+    if (!account && config.autoCreateAccount && loginRequest.ClientType != "webui") {
         try {
             const newAccount = await createAccount({
                 email: loginRequest.email,
