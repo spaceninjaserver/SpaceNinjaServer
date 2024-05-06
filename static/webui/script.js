@@ -78,6 +78,7 @@ function doAcquireWarframe() {
     });
     req.done(() => {
         alert("Warframe added to your inventory! Visit navigation to force an inventory update.");
+        document.getElementById("warframe-to-acquire").value = "";
     });
 }
 
@@ -102,6 +103,7 @@ function doAcquireWeapon() {
     });
     req.done(() => {
         alert("Weapon added to your inventory! Visit navigation to force an inventory update.");
+        document.getElementById("weapon-to-acquire").value = "";
     });
 }
 
