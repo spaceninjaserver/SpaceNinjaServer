@@ -190,6 +190,7 @@ export interface IInventoryResponse {
     Boosters: IBooster[];
     ActiveDojoColorResearch: string;
     SentientSpawnChanceBoosters: ISentientSpawnChanceBoosters;
+    SupportedSyndicate?: string;
     Affiliations: IAffiliation[];
     QualifyingInvasions: any[];
     FactionScores: number[];

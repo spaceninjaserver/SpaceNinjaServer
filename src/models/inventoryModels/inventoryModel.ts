@@ -645,6 +645,8 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Curent trade info Giving or Getting items
         PendingTrades: [Schema.Types.Mixed],
 
+        //Syndicate currently being pledged to.
+        SupportedSyndicate: String,
         //Curent Syndicates rank\exp
         Affiliations: [affiliationsSchema],
         //Syndicates Missions complate(Navigation->Syndicate)

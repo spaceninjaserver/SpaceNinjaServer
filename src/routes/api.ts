@@ -46,6 +46,7 @@ import { addFriendImageController } from "@/src/controllers/api/addFriendImageCo
 import { createGuildController } from "@/src/controllers/api/createGuildController";
 import { sellController } from "@/src/controllers/api/sellController";
 import { upgradesController } from "@/src/controllers/api/upgradesController";
+import { setSupportedSyndicateController } from "@/src/controllers/api/setSupportedSyndicateController";
 
 const apiRouter = express.Router();
 
@@ -73,6 +74,7 @@ apiRouter.get("/logout.php", logoutController);
 apiRouter.get("/setBootLocation.php", setBootLocationController);
 apiRouter.get("/setActiveShip.php", setActiveShipController);
 apiRouter.get("/getGuild.php", getGuildController);
+apiRouter.get("/setSupportedSyndicate.php", setSupportedSyndicateController);
 
 // post
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
