@@ -15,7 +15,7 @@ function loginFromLocalStorage() {
             s: "W0RFXVN0ZXZlIGxpa2VzIGJpZyBidXR0cw==", // signature of some kind
             lang: "en",
             date: 1501230947855458660, // ???
-            ClientType: "",
+            ClientType: "webui",
             PS: "W0RFXVN0ZXZlIGxpa2VzIGJpZyBidXR0cw==" // anti-cheat data
         })
     });
