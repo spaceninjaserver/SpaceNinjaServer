@@ -46,7 +46,12 @@ const apartmentSchema = new Schema<IApartment>(
 );
 
 const orbiterSchema = new Schema<IOrbiter>(
-    { Features: [String], Rooms: [roomSchema], ContentUrlSignature: String },
+    {
+        Features: [String],
+        Rooms: [roomSchema],
+        ContentUrlSignature: String,
+        BootLocation: String
+    },
     { _id: false }
 );
 

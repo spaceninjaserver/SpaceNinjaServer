@@ -1,6 +1,10 @@
-import { logger } from "@/src/utils/logger";
-import { Request, Response } from "express";
+import { RequestHandler } from "express";
+import { getPersonalRooms } from "@/src/services/personalRoomsService";
+import { TBootLocation } from "@/src/types/shipTypes";
 
-export const setBootLocationController = (_req: Request, res: Response) => {
+export const setBootLocationController: RequestHandler = async (req, res) => {
+    const personalRooms = await getPersonalRooms(req.query.accountId as string);
+    personalRooms.Ship.BootLocation = req.query.bootLocation as string as TBootLocation;
+    await personalRooms.save();
     res.end();
 };

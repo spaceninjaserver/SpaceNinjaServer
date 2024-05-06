@@ -1,10 +1,11 @@
-import { IApartment, IRooms, IPlacedDecosDatabase } from "@/src/types/shipTypes";
+import { IApartment, IRooms, IPlacedDecosDatabase, TBootLocation } from "@/src/types/shipTypes";
 import { Model, Types } from "mongoose";
 
 export interface IOrbiter {
     Features: string[];
     Rooms: IRooms[];
     ContentUrlSignature: string;
+    BootLocation?: TBootLocation;
 }
 
 export interface IPersonalRooms {
