@@ -14,7 +14,7 @@
   "license": "GNU",
   "dependencies": {
     "dotenv": "^16.1.3",
-    "express": "^5.0.0-beta.1",
+    "express": "^5.0.0-beta.3",
     "mongoose": "^8.1.1",
     "warframe-items": "^1.1261.19",
     "winston": "^3.11.0",
