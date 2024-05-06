@@ -64,7 +64,7 @@ function getKey(input) {
 function doAcquireWarframe() {
     const uniqueName = getKey(document.getElementById("warframe-to-acquire"));
     if (!uniqueName) {
-        $("#warframe-to-acquire").addClass("is-invalid");
+        $("#warframe-to-acquire").addClass("is-invalid").focus();
         return;
     }
     const req = $.post({
@@ -89,7 +89,7 @@ $("#warframe-to-acquire").on("input", () => {
 function doAcquireWeapon() {
     const uniqueName = getKey(document.getElementById("weapon-to-acquire"));
     if (!uniqueName) {
-        $("#weapon-to-acquire").addClass("is-invalid");
+        $("#weapon-to-acquire").addClass("is-invalid").focus();
         return;
     }
     const req = $.post({
