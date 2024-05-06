@@ -78,7 +78,8 @@ function updateInventory() {
                     if (item.XP < 1_600_000) {
                         const a = document.createElement("a");
                         a.href = "#";
-                        a.onclick = function () {
+                        a.onclick = function (event) {
+                            event.preventDefault();
                             addGearExp("Suits", item.ItemId.$oid, 1_600_000 - item.XP);
                         };
                         a.textContent = "Make Rank 30";
@@ -91,7 +92,8 @@ function updateInventory() {
                     {
                         const a = document.createElement("a");
                         a.href = "#";
-                        a.onclick = function () {
+                        a.onclick = function (event) {
+                            event.preventDefault();
                             disposeOfGear("Suits", item.ItemId.$oid);
                         };
                         a.textContent = "Remove";
@@ -117,7 +119,8 @@ function updateInventory() {
                         if (item.XP < 800_000) {
                             const a = document.createElement("a");
                             a.href = "#";
-                            a.onclick = function () {
+                            a.onclick = function (event) {
+                                event.preventDefault();
                                 addGearExp(category, item.ItemId.$oid, 800_000 - item.XP);
                             };
                             a.textContent = "Make Rank 30";
@@ -130,7 +133,8 @@ function updateInventory() {
                         {
                             const a = document.createElement("a");
                             a.href = "#";
-                            a.onclick = function () {
+                            a.onclick = function (event) {
+                                event.preventDefault();
                                 disposeOfGear(category, item.ItemId.$oid);
                             };
                             a.textContent = "Remove";
