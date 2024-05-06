@@ -69,7 +69,7 @@ function updateInventory() {
                 const tr = document.createElement("tr");
                 {
                     const td = document.createElement("td");
-                    td.textContent = itemMap[item.ItemType].name;
+                    td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
                     tr.appendChild(td);
                 }
                 {
@@ -105,7 +105,7 @@ function updateInventory() {
                     const tr = document.createElement("tr");
                     {
                         const td = document.createElement("td");
-                        td.textContent = itemMap[item.ItemType].name;
+                        td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
                         tr.appendChild(td);
                     }
                     {
