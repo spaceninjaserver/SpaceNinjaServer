@@ -5,16 +5,16 @@ import { Guild } from "@/src/models/guildModel";
 import { IGuild, ICreateGuildRequest } from "@/src/types/guildTypes";
 
 const createGuildController: RequestHandler = async (req, res) => {
-    let payload: ICreateGuildRequest = getJSONfromString(req.body.toString());
+    const payload: ICreateGuildRequest = getJSONfromString(req.body.toString());
 
     // Create guild on database
-    let guild = new Guild({
+    const guild = new Guild({
         Name: payload.guildName
     } satisfies IGuild);
     await guild.save();
 
     // Update inventory
-    let inventory = await Inventory.findOne({ accountOwnerId: req.query.accountId });
+    const inventory = await Inventory.findOne({ accountOwnerId: req.query.accountId });
     if (inventory) {
         // Set GuildId
         inventory.GuildId = guild._id;

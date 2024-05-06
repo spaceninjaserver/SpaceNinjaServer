@@ -1,5 +1,5 @@
-import { Model, Schema, StringSchemaDefinition, Types, model } from "mongoose";
-import { IApartment, IPlacedDecosDatabase, IRooms, IShipDatabase } from "../types/shipTypes";
+import { Schema, model } from "mongoose";
+import { IShipDatabase } from "../types/shipTypes";
 import { toOid } from "@/src/helpers/inventoryHelpers";
 import { colorSchema } from "@/src/models/inventoryModels/inventoryModel";
 import { IShipInventory } from "@/src/types/inventoryTypes/inventoryTypes";

@@ -5,7 +5,7 @@ import view from "@/static/fixed_responses/view.json";
 import allScans from "@/static/fixed_responses/allScans.json";
 
 const viewController: RequestHandler = (_req, res) => {
-    let responseJson: IStatsView = view;
+    const responseJson: IStatsView = view;
     if (config.unlockAllScans) {
         responseJson.Scans = allScans;
     }

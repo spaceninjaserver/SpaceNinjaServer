@@ -38,7 +38,7 @@ import {
     IPeriodicMissionCompletionResponse,
     ILoreFragmentScan
 } from "../../types/inventoryTypes/inventoryTypes";
-import { IMongoDate, IOid } from "../../types/commonTypes";
+import { IOid } from "../../types/commonTypes";
 import { ISuitDatabase } from "@/src/types/inventoryTypes/SuitTypes";
 import { IWeaponDatabase } from "@/src/types/inventoryTypes/weaponTypes";
 import {

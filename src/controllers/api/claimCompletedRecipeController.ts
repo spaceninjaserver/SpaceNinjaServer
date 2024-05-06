@@ -1,7 +1,7 @@
 //this is a controller for the claimCompletedRecipe route
 //it will claim a recipe for the user
 
-import { Request, RequestHandler, Response } from "express";
+import { RequestHandler } from "express";
 import { logger } from "@/src/utils/logger";
 import { getItemByBlueprint, getItemCategoryByUniqueName } from "@/src/services/itemDataService";
 import { IOid } from "@/src/types/commonTypes";

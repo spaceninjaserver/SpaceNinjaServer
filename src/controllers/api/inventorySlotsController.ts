@@ -1,5 +1,5 @@
 import { parseString } from "@/src/helpers/general";
-import { getInventory, updateCurrency } from "@/src/services/inventoryService";
+import { updateCurrency } from "@/src/services/inventoryService";
 import { RequestHandler } from "express";
 import { updateSlots } from "@/src/services/inventoryService";
 import { SlotNameToInventoryName } from "@/src/types/purchaseTypes";

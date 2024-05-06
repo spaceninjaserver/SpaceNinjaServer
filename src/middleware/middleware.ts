@@ -1,5 +1,5 @@
 import { logger } from "@/src/utils/logger";
-import { NextFunction, Request, Response } from "express";
+import { /*NextFunction,*/ Request, Response } from "express";
 
 const unknownEndpointHandler = (request: Request, response: Response) => {
     logger.error(`unknown endpoint ${request.method} ${request.path}`);

@@ -1,5 +1,4 @@
 import { RequestHandler } from "express";
-import util from "util";
 import { ISaveLoadoutRequest } from "@/src/types/saveLoadoutTypes";
 import { handleInventoryItemConfigChange } from "@/src/services/saveLoadoutService";
 import { parseString } from "@/src/helpers/general";
