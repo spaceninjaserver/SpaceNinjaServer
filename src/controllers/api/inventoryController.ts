@@ -42,7 +42,11 @@ const inventoryController: RequestHandler = async (request: Request, response: R
         inventoryResponse.PremiumCredits = 999999999;
     }
 
-    if (config.unlockAllMissions) inventoryResponse.Missions = allMissions;
+    if (config.unlockAllMissions) {
+        inventoryResponse.Missions = allMissions;
+        inventoryResponse.NodeIntrosCompleted.push("TeshinHardModeUnlocked");
+    }
+
     if (config.unlockAllQuests) inventoryResponse.QuestKeys = allQuestKeys;
     if (config.unlockAllShipDecorations) inventoryResponse.ShipDecorations = allShipDecorations;
     if (config.unlockAllFlavourItems) inventoryResponse.FlavourItems = allFlavourItems satisfies IFlavourItem[];
