@@ -47,7 +47,7 @@ export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountI
             inventoryChanges = await handleWeaponsPurchase(internalName, accountId);
             break;
         case "Types":
-            inventoryChanges = await handleTypesPurchase(internalName, accountId);
+            inventoryChanges = await handleTypesPurchase(internalName, accountId, purchaseRequest.PurchaseParams.Quantity);
             break;
         case "Boosters":
             inventoryChanges = await handleBoostersPurchase(internalName, accountId);
@@ -169,7 +169,7 @@ const handlePowersuitPurchase = async (powersuitName: string, accountId: string)
 };
 
 //TODO: change to getInventory, apply changes then save at the end
-const handleTypesPurchase = async (typesName: string, accountId: string) => {
+const handleTypesPurchase = async (typesName: string, accountId: string, quantity: number) => {
     const typeCategory = getStoreItemTypesCategory(typesName);
     logger.debug(`type category ${typeCategory}`);
     switch (typeCategory) {
@@ -183,7 +183,7 @@ const handleTypesPurchase = async (typesName: string, accountId: string) => {
         case "SlotItems":
             return await handleSlotPurchase(typesName, accountId);
         case "Items":
-            return await handleMiscItemPurchase(typesName, accountId);
+            return await handleMiscItemPurchase(typesName, accountId, quantity);
         default:
             throw new Error(`unknown Types category: ${typeCategory} not implemented or new`);
     }
@@ -238,12 +238,12 @@ const handleBoostersPurchase = async (boosterStoreName: string, accountId: strin
     };
 };
 
-const handleMiscItemPurchase = async (uniqueName: string, accountId: string) => {
+const handleMiscItemPurchase = async (uniqueName: string, accountId: string, quantity: number) => {
     const inventory = await getInventory(accountId);
     const miscItemChanges = [
         {
             ItemType: uniqueName,
-            ItemCount: 1
+            ItemCount: quantity
         } satisfies IMiscItem
     ];
     addMiscItems(inventory, miscItemChanges);
