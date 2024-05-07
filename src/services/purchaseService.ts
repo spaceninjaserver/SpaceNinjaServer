@@ -47,7 +47,11 @@ export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountI
             inventoryChanges = await handleWeaponsPurchase(internalName, accountId);
             break;
         case "Types":
-            inventoryChanges = await handleTypesPurchase(internalName, accountId, purchaseRequest.PurchaseParams.Quantity);
+            inventoryChanges = await handleTypesPurchase(
+                internalName,
+                accountId,
+                purchaseRequest.PurchaseParams.Quantity
+            );
             break;
         case "Boosters":
             inventoryChanges = await handleBoostersPurchase(internalName, accountId);
