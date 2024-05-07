@@ -2,6 +2,7 @@ import {
     IItemEntry,
     ILoadoutClient,
     ILoadoutEntry,
+    ILoadoutConfigDatabase,
     IOperatorConfigEntry,
     ISaveLoadoutRequestNoUpgradeVer
 } from "@/src/types/saveLoadoutTypes";
@@ -86,10 +87,14 @@ export const handleInventoryItemConfigChange = async (
                             loadout => loadout._id.toString() === loadoutId
                         );
 
+                        const { ItemId, ...loadoutConfigItemIdRemoved } = loadoutConfig;
+                        const loadoutConfigDatabase: ILoadoutConfigDatabase = {
+                            _id: new Types.ObjectId(ItemId.$oid),
+                            ...loadoutConfigItemIdRemoved
+                        };
+
                         // if no config with this id exists, create a new one
                         if (!oldLoadoutConfig) {
-                            const { ItemId, ...loadoutConfigItemIdRemoved } = loadoutConfig;
-
                             //save the new object id and assign it for every ffff return at the end
                             if (ItemId.$oid === "ffffffffffffffffffffffff") {
                                 if (!newLoadoutId) {
@@ -99,10 +104,7 @@ export const handleInventoryItemConfigChange = async (
                                 continue;
                             }
 
-                            loadout[loadoutSlot].push({
-                                _id: ItemId.$oid,
-                                ...loadoutConfigItemIdRemoved
-                            });
+                            loadout[loadoutSlot].push(loadoutConfigDatabase);
                             continue;
                         }
 
@@ -111,7 +113,7 @@ export const handleInventoryItemConfigChange = async (
                             throw new Error("loadout index not found");
                         }
 
-                        loadout[loadoutSlot][loadoutIndex].overwrite(loadoutConfig);
+                        loadout[loadoutSlot][loadoutIndex].overwrite(loadoutConfigDatabase);
                     }
                 }
                 await loadout.save();
