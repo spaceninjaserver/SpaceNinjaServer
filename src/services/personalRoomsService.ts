@@ -10,3 +10,9 @@ export const getPersonalRooms = async (accountId: string) => {
     }
     return personalRooms;
 };
+
+export const updateShipFeature = async (accountId: string, shipFeature: string) => {
+    const personalRooms = await getPersonalRooms(accountId);
+    personalRooms.Ship.Features.push(shipFeature);
+    await personalRooms.save();
+};

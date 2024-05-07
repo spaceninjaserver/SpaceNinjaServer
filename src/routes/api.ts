@@ -62,6 +62,9 @@ import { tauntHistoryController } from "@/src/controllers/api/tauntHistoryContro
 import { trainingResultController } from "@/src/controllers/api/trainingResultController";
 import { updateChallengeProgressController } from "@/src/controllers/api/updateChallengeProgressController";
 import { updateSessionGetController, updateSessionPostController } from "@/src/controllers/api/updateSessionController";
+import { updateQuestcontroller } from "@/src/controllers/api/updateQuestController";
+import { giveKeyChainTriggeredItemsController } from "@/src/controllers/api/giveKeyChainTriggeredItemsController";
+import { unlockShipFeatureController } from "@/src/controllers/api/unlockShipFeatureController";
 import { updateThemeController } from "../controllers/api/updateThemeController";
 import { upgradesController } from "@/src/controllers/api/upgradesController";
 
@@ -100,6 +103,9 @@ apiRouter.get("/surveys.php", surveysController);
 apiRouter.get("/updateSession.php", updateSessionGetController);
 
 // post
+apiRouter.post("/unlockShipFeature.php", unlockShipFeatureController);
+apiRouter.post("/giveKeyChainTriggeredItems.php", giveKeyChainTriggeredItemsController);
+apiRouter.post("/updateQuest.php", updateQuestcontroller);
 apiRouter.post("/addFriendImage.php", addFriendImageController);
 apiRouter.post("/artifacts.php", artifactsController);
 apiRouter.post("/claimCompletedRecipe.php", claimCompletedRecipeController);

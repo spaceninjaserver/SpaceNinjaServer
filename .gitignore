@@ -16,3 +16,6 @@ yarn.lock
 
 # MongoDB VSCode extension playground scripts
 /database_scripts
+
+# Game data
+/static/game_data

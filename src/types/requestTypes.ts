@@ -99,6 +99,12 @@ export interface IUpdateGlyphRequest {
     AvatarImage: string;
 }
 
+export interface IUnlockShipFeatureRequest {
+    Feature: string;
+    KeyChain: string;
+    ChainStage: number;
+}
+
 export interface IUpgradesRequest {
     ItemCategory: TEquipmentKey;
     ItemId: IOid;

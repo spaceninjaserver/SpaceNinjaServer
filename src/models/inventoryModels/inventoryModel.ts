@@ -468,19 +468,22 @@ const infestedFoundrySchema = new Schema<IInfestedFoundry>(
     { _id: false }
 );
 
-const questProgressSchema = new Schema<IQuestProgress>({
-    c: Number,
-    i: Boolean,
-    m: Boolean,
-    b: []
-});
+const questProgressSchema = new Schema<IQuestProgress>(
+    {
+        c: Number,
+        i: Boolean,
+        m: Boolean,
+        b: []
+    },
+    { _id: false }
+);
 
 const questKeysSchema = new Schema<IQuestKeyDatabase>(
     {
         Progress: [questProgressSchema],
         unlock: Boolean,
         Completed: Boolean,
-        //CustomData: Schema.Types.Mixed,
+        CustomData: String,
         CompletionDate: Date,
         ItemType: String
     },
@@ -739,6 +742,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Complete Mission\Quests
         Missions: [Schema.Types.Mixed],
         QuestKeys: [questKeysSchema],
+        ActiveQuest: String,
         //item like DojoKey or Boss missions key
         LevelKeys: [Schema.Types.Mixed],
         //Active quests
