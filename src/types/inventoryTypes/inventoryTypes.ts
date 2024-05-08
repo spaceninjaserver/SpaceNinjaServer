@@ -91,7 +91,9 @@ export interface IGenericItem {
     Configs: IItemConfig[];
     UpgradeVer: number;
     ItemId: IOid;
-    Features?: number; //space suit has this
+    Features?: number;
+    Polarity?: IPolarity[];
+    Polarized?: number;
 }
 
 export interface IGenericItemDatabase extends Omit<IGenericItem, "ItemId"> {
