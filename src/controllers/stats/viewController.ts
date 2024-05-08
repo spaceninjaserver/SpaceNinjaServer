@@ -1,11 +1,29 @@
 import { RequestHandler } from "express";
+import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { IStatsView } from "@/src/types/statTypes";
 import config from "@/config.json";
 import view from "@/static/fixed_responses/view.json";
 import allScans from "@/static/fixed_responses/allScans.json";
 
-const viewController: RequestHandler = (_req, res) => {
+const viewController: RequestHandler = async (req, res) => {
+    if (!req.query.accountId) {
+        res.status(400).json({ error: "accountId was not provided" });
+        return;
+    }
+    const inventory = await Inventory.findOne({ accountOwnerId: req.query.accountId });
+    if (!inventory) {
+        res.status(400).json({ error: "inventory was undefined" });
+        return;
+    }
+
     const responseJson: IStatsView = view;
+    responseJson.Weapons = [];
+    for (const item of inventory.XPInfo) {
+        responseJson.Weapons.push({
+            type: item.ItemType,
+            xp: item.XP
+        });
+    }
     if (config.unlockAllScans) {
         responseJson.Scans = allScans;
     }
