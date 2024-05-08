@@ -201,12 +201,27 @@ const addGearExpByCategory = (
     const category = inventory[categoryName];
 
     gearArray?.forEach(({ ItemId, XP }) => {
-        const itemIndex = ItemId ? category.findIndex(item => item._id?.equals(ItemId.$oid)) : -1;
-        const item = category[itemIndex];
+        if (!XP) {
+            return;
+        }
 
-        if (itemIndex !== -1 && item.XP != undefined) {
-            item.XP += XP || 0;
+        const itemIndex = ItemId ? category.findIndex(item => item._id?.equals(ItemId.$oid)) : -1;
+        if (itemIndex !== -1) {
+            const item = category[itemIndex];
+            item.XP ??= 0;
+            item.XP += XP;
             inventory.markModified(`${categoryName}.${itemIndex}.XP`);
+
+            const xpinfoIndex = inventory.XPInfo.findIndex(x => x.ItemType == item.ItemType);
+            if (xpinfoIndex !== -1) {
+                const xpinfo = inventory.XPInfo[xpinfoIndex];
+                xpinfo.XP += XP;
+            } else {
+                inventory.XPInfo.push({
+                    ItemType: item.ItemType,
+                    XP: XP
+                });
+            }
         }
     });
 };
