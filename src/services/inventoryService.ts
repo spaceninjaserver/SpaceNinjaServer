@@ -178,7 +178,7 @@ export const addWeapon = async (
             weaponIndex = inventory.Melee.push({ ItemType: weaponName, Configs: [], XP: 0 });
             break;
         default:
-            throw new Error("unknown weapon type");
+            throw new Error("unknown weapon type: " + weaponType);
     }
 
     const changedInventory = await inventory.save();

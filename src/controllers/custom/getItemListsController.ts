@@ -18,7 +18,7 @@ function reduceItems(items: MinItem[]): ListedItem[] {
 const getItemListsController: RequestHandler = (_req, res) => {
     res.json({
         warframes: reduceItems(warframes),
-        weapons: reduceItems(weapons)
+        weapons: reduceItems(weapons.filter(item => item.productCategory != "OperatorAmps"))
     });
 };
 

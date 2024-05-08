@@ -69,7 +69,7 @@ function updateInventory() {
                 const tr = document.createElement("tr");
                 {
                     const td = document.createElement("td");
-                    td.textContent = itemMap[item.ItemType].name;
+                    td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
                     tr.appendChild(td);
                 }
                 {
@@ -78,17 +78,22 @@ function updateInventory() {
                     if (item.XP < 1_600_000) {
                         const a = document.createElement("a");
                         a.href = "#";
-                        a.onclick = function () {
+                        a.onclick = function (event) {
+                            event.preventDefault();
                             addGearExp("Suits", item.ItemId.$oid, 1_600_000 - item.XP);
                         };
                         a.textContent = "Make Rank 30";
                         td.appendChild(a);
-                        td.innerHTML += " &middot; ";
+
+                        const span = document.createElement("span");
+                        span.innerHTML = " &middot; ";
+                        td.appendChild(span);
                     }
                     {
                         const a = document.createElement("a");
                         a.href = "#";
-                        a.onclick = function () {
+                        a.onclick = function (event) {
+                            event.preventDefault();
                             disposeOfGear("Suits", item.ItemId.$oid);
                         };
                         a.textContent = "Remove";
@@ -105,7 +110,7 @@ function updateInventory() {
                     const tr = document.createElement("tr");
                     {
                         const td = document.createElement("td");
-                        td.textContent = itemMap[item.ItemType].name;
+                        td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
                         tr.appendChild(td);
                     }
                     {
@@ -114,17 +119,22 @@ function updateInventory() {
                         if (item.XP < 800_000) {
                             const a = document.createElement("a");
                             a.href = "#";
-                            a.onclick = function () {
+                            a.onclick = function (event) {
+                                event.preventDefault();
                                 addGearExp(category, item.ItemId.$oid, 800_000 - item.XP);
                             };
                             a.textContent = "Make Rank 30";
                             td.appendChild(a);
-                            td.innerHTML += " &middot; ";
+
+                            const span = document.createElement("span");
+                            span.innerHTML = " &middot; ";
+                            td.appendChild(span);
                         }
                         {
                             const a = document.createElement("a");
                             a.href = "#";
-                            a.onclick = function () {
+                            a.onclick = function (event) {
+                                event.preventDefault();
                                 disposeOfGear(category, item.ItemId.$oid);
                             };
                             a.textContent = "Remove";
