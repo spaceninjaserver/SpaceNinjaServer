@@ -3,6 +3,7 @@ import { getWeaponType } from "@/src/services/itemDataService";
 import { getSubstringFromKeyword } from "@/src/helpers/stringHelpers";
 import {
     addBooster,
+    addConsumables,
     addCustomization,
     addMechSuit,
     addMiscItems,
@@ -14,7 +15,7 @@ import {
     updateCurrency,
     updateSlots
 } from "@/src/services/inventoryService";
-import { IMiscItem, ITypeCount } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IConsumable, IMiscItem, ITypeCount } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IPurchaseRequest, IPurchaseResponse, SlotNameToInventoryName, SlotPurchase } from "@/src/types/purchaseTypes";
 import { logger } from "@/src/utils/logger";
 
@@ -190,6 +191,9 @@ const handleTypesPurchase = async (typesName: string, accountId: string, quantit
         case "Recipes":
         case "Consumables": // Blueprints for Ciphers, Antitoxins
             return await handleRecipesPurchase(typesName, accountId, quantity);
+        case "Restoratives": // Codex Scanner, Remote Observer, Starburst
+            return await handleRestorativesPurchase(typesName, accountId, quantity);
+            break;
         default:
             throw new Error(`unknown Types category: ${typeCategory} not implemented or new`);
     }
@@ -274,6 +278,23 @@ const handleRecipesPurchase = async (uniqueName: string, accountId: string, quan
     return {
         InventoryChanges: {
             Recipes: recipeChanges
+        }
+    };
+};
+
+const handleRestorativesPurchase = async (uniqueName: string, accountId: string, quantity: number) => {
+    const inventory = await getInventory(accountId);
+    const consumablesChanges = [
+        {
+            ItemType: uniqueName,
+            ItemCount: quantity
+        } satisfies IConsumable
+    ];
+    addConsumables(inventory, consumablesChanges);
+    await inventory.save();
+    return {
+        InventoryChanges: {
+            Consumables: consumablesChanges
         }
     };
 };

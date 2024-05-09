@@ -246,7 +246,7 @@ export const addMiscItems = (inventory: IInventoryDatabaseDocument, itemsArray: 
     });
 };
 
-const addConsumables = (inventory: IInventoryDatabaseDocument, itemsArray: IConsumable[] | undefined) => {
+export const addConsumables = (inventory: IInventoryDatabaseDocument, itemsArray: IConsumable[] | undefined) => {
     const { Consumables } = inventory;
 
     itemsArray?.forEach(({ ItemCount, ItemType }) => {
