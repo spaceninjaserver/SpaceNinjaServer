@@ -260,7 +260,7 @@ function doAcquireMiscItems() {
                 }
             ]
         })
-    }).done(function() {
+    }).done(function () {
         alert("Successfully added.");
     });
 }
