@@ -43,6 +43,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
                     if (item._id.toString() == payload.ItemId.$oid) {
                         item.Features ??= 0;
                         item.Features |= 32;
+                        break;
                     }
                 }
                 break;
