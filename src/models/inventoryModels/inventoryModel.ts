@@ -193,6 +193,7 @@ const WeaponSchema = new Schema<IWeaponDatabase>(
         Polarity: [polaritySchema],
         FocusLens: String,
         ModSlotPurchases: Number,
+        CustomizationSlotPurchases: Number,
         UpgradeType: Schema.Types.Mixed, //todo
         UpgradeFingerprint: String,
         ItemName: String,
@@ -275,6 +276,7 @@ const suitSchema = new Schema<ISuitDatabase>(
         Polarity: [polaritySchema],
         Polarized: Number,
         ModSlotPurchases: Number,
+        CustomizationSlotPurchases: Number,
         FocusLens: String,
         UnlockLevel: Number
     },
