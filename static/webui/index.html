@@ -26,35 +26,43 @@
             </div>
             <div id="main-view" class="d-none">
                 <p>Hello, <b class="displayname"></b>! <a href="#" onclick="logout();">Logout</a></p>
-                <p>
+                <p class="mb-4">
                     Note: Changes made here will only be reflected in-game when the game re-downloads your inventory.
                     Visiting the navigation should be the easiest way to trigger that.
                 </p>
+                <div class="card mb-4">
+                    <h5 class="card-header">Add Items</h5>
+                    <form class="card-body input-group" onsubmit="doAcquireMiscItems();return false;">
+                        <input class="form-control" id="miscitem-count" type="number" min="1" value="1" />
+                        <input class="form-control" id="miscitem-type" list="datalist-miscitems" />
+                        <button class="btn btn-primary" type="submit">Add</button>
+                    </form>
+                </div>
                 <div class="row">
                     <div class="col-lg-6">
-                        <div class="card mb-3">
+                        <div class="card mb-4">
                             <h5 class="card-header">Warframes</h5>
                             <div class="card-body">
                                 <table class="table table-striped w-100">
                                     <tbody id="warframe-list"></tbody>
                                 </table>
                                 <form class="input-group" onsubmit="doAcquireWarframe();return false;">
-                                    <button class="btn btn-primary" type="submit">Add</button>
                                     <input class="form-control" id="warframe-to-acquire" list="datalist-warframes" />
+                                    <button class="btn btn-primary" type="submit">Add</button>
                                 </form>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <div class="card mb-3">
+                        <div class="card mb-4">
                             <h5 class="card-header">Weapons</h5>
                             <div class="card-body">
                                 <table class="table table-striped w-100">
                                     <tbody id="weapon-list"></tbody>
                                 </table>
                                 <form class="input-group" onsubmit="doAcquireWeapon();return false;">
-                                    <button class="btn btn-primary" type="submit">Add</button>
                                     <input class="form-control" id="weapon-to-acquire" list="datalist-weapons" />
+                                    <button class="btn btn-primary" type="submit">Add</button>
                                 </form>
                             </div>
                         </div>
@@ -64,6 +72,7 @@
         </div>
         <datalist id="datalist-warframes"></datalist>
         <datalist id="datalist-weapons"></datalist>
+        <datalist id="datalist-miscitems"></datalist>
         <script
             src="https://code.jquery.com/jquery-3.6.0.min.js"
             integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="

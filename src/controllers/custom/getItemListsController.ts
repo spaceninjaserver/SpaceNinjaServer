@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { MinItem, warframes, weapons } from "@/src/services/itemDataService";
+import { MinItem, warframes, weapons, items } from "@/src/services/itemDataService";
 
 interface ListedItem {
     uniqueName: string;
@@ -18,7 +18,8 @@ function reduceItems(items: MinItem[]): ListedItem[] {
 const getItemListsController: RequestHandler = (_req, res) => {
     res.json({
         warframes: reduceItems(warframes),
-        weapons: reduceItems(weapons.filter(item => item.productCategory != "OperatorAmps"))
+        weapons: reduceItems(weapons.filter(item => item.productCategory != "OperatorAmps")),
+        miscitems: reduceItems(items.filter(item => item.category == "Misc" || item.category == "Resources"))
     });
 };
 

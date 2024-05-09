@@ -207,12 +207,7 @@ $("#weapon-to-acquire").on("input", () => {
 });
 
 function addGearExp(category, oid, xp) {
-    const data = {
-        Missions: {
-            Tag: "SolNode0",
-            Completes: 0
-        }
-    };
+    const data = {};
     data[category] = [
         {
             ItemId: { $oid: oid },
@@ -247,3 +242,29 @@ function disposeOfGear(category, oid) {
         updateInventory();
     });
 }
+
+function doAcquireMiscItems() {
+    const uniqueName = getKey(document.getElementById("miscitem-type"));
+    if (!uniqueName) {
+        $("#miscitem-type").addClass("is-invalid").focus();
+        return;
+    }
+    $.post({
+        url: "/api/missionInventoryUpdate.php?accountId=" + window.accountId,
+        contentType: "text/plain",
+        data: JSON.stringify({
+            MiscItems: [
+                {
+                    ItemType: uniqueName,
+                    ItemCount: $("#miscitem-count").val()
+                }
+            ]
+        })
+    }).done(function() {
+        alert("Successfully added.");
+    });
+}
+
+$("#miscitem-name").on("input", () => {
+    $("#miscitem-name").removeClass("is-invalid");
+});
