@@ -12,7 +12,8 @@ import {
     IInventoryDatabaseDocument,
     IMiscItem,
     IMission,
-    IRawUpgrade
+    IRawUpgrade,
+    ITypeCount
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate } from "../types/genericUpdate";
 import { IArtifactsRequest, IMissionInventoryUpdateRequest, IThemeUpdateRequest } from "../types/requestTypes";
@@ -260,7 +261,7 @@ const addConsumables = (inventory: IInventoryDatabaseDocument, itemsArray: ICons
     });
 };
 
-const addRecipes = (inventory: IInventoryDatabaseDocument, itemsArray: IConsumable[] | undefined) => {
+export const addRecipes = (inventory: IInventoryDatabaseDocument, itemsArray: ITypeCount[] | undefined) => {
     const { Recipes } = inventory;
 
     itemsArray?.forEach(({ ItemCount, ItemType }) => {
