@@ -95,6 +95,7 @@ export interface IGenericItem {
     Polarity?: IPolarity[];
     Polarized?: number;
     ModSlotPurchases?: number;
+    CustomizationSlotPurchases?: number;
 }
 
 export interface IGenericItemDatabase extends Omit<IGenericItem, "ItemId"> {

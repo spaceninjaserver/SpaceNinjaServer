@@ -10,7 +10,10 @@ export const upgradesController: RequestHandler = async (req, res) => {
     const inventory = await getInventory(accountId);
     const InventoryChanges: any = {};
     for (const operation of payload.Operations) {
-        if (operation.UpgradeRequirement == "/Lotus/Types/Items/MiscItems/ModSlotUnlocker") {
+        if (
+            operation.UpgradeRequirement == "/Lotus/Types/Items/MiscItems/ModSlotUnlocker" ||
+            operation.UpgradeRequirement == "/Lotus/Types/Items/MiscItems/CustomizationSlotUnlocker"
+        ) {
             updateCurrency(10, true, accountId);
         } else {
             addMiscItems(inventory, [
@@ -78,6 +81,21 @@ export const upgradesController: RequestHandler = async (req, res) => {
                                 $oid: payload.ItemId.$oid
                             },
                             ModSlotPurchases: item.ModSlotPurchases
+                        };
+                        break;
+                    }
+                }
+                break;
+            case "/Lotus/Types/Items/MiscItems/CustomizationSlotUnlocker":
+                for (const item of inventory[payload.ItemCategory as TGenericItemKey] as IGenericItemDatabase[]) {
+                    if (item._id.toString() == payload.ItemId.$oid) {
+                        item.CustomizationSlotPurchases ??= 0;
+                        item.CustomizationSlotPurchases += 1;
+                        InventoryChanges[payload.ItemCategory] = {
+                            ItemId: {
+                                $oid: payload.ItemId.$oid
+                            },
+                            CustomizationSlotPurchases: item.CustomizationSlotPurchases
                         };
                         break;
                     }

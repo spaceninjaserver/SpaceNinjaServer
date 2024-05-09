@@ -17,6 +17,7 @@ export interface ISuitDatabase {
     Polarity?: IPolarity[];
     Polarized?: number;
     ModSlotPurchases?: number;
+    CustomizationSlotPurchases?: number;
     FocusLens?: string;
     UnlockLevel?: number;
     _id: Types.ObjectId;

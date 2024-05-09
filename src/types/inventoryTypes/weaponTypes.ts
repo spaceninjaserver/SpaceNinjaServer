@@ -17,6 +17,7 @@ export interface IWeaponDatabase {
     Polarity?: IPolarity[];
     FocusLens?: string;
     ModSlotPurchases?: number;
+    CustomizationSlotPurchases?: number;
     UpgradeType?: string;
     UpgradeFingerprint?: string;
     ItemName?: string;
