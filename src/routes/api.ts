@@ -48,6 +48,11 @@ import { sellController } from "@/src/controllers/api/sellController";
 import { upgradesController } from "@/src/controllers/api/upgradesController";
 import { setSupportedSyndicateController } from "@/src/controllers/api/setSupportedSyndicateController";
 import { getDailyDealStockLevelsController } from "@/src/controllers/api/getDailyDealStockLevelsController";
+import { getGuildLogController } from "../controllers/api/getGuildLogController";
+import { guildTechController } from "../controllers/api/guildTechController";
+import { dojoController } from "@/src/controllers/api/dojoController";
+import { getGuildDojoController } from "@/src/controllers/api/getGuildDojoController";
+import { createGuildDojoController } from "@/src/controllers/api/createGuildDojoController";
 
 const apiRouter = express.Router();
 
@@ -77,6 +82,9 @@ apiRouter.get("/setActiveShip.php", setActiveShipController);
 apiRouter.get("/getGuild.php", getGuildController);
 apiRouter.get("/setSupportedSyndicate.php", setSupportedSyndicateController);
 apiRouter.get("/getDailyDealStockLevels.php", getDailyDealStockLevelsController);
+apiRouter.get("/getGuildLog.php", getGuildLogController);
+apiRouter.get("/dojo", dojoController);
+apiRouter.get("/getGuildDojo.php", getGuildDojoController);
 
 // post
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -106,5 +114,7 @@ apiRouter.post("/addFriendImage.php", addFriendImageController);
 apiRouter.post("/createGuild.php", createGuildController);
 apiRouter.post("/sell.php", sellController);
 apiRouter.post("/upgrades.php", upgradesController);
+apiRouter.post("/guildTech.php", guildTechController);
+apiRouter.post("/createGuildDojo.php", createGuildDojoController);
 
 export { apiRouter };
