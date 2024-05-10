@@ -6,8 +6,6 @@ export const createGuildDojoController: RequestHandler = (_req, res) => {
     // I'm guessing the response is same as getGuildDojo.php, but I have yet to log one of those for a fresh clan.
     // This works to make the client load in, but can't build new rooms.
     res.json({
-        DojoComponents: [
-            {"pf":"/Lotus/Levels/ClanDojo/DojoHall.level","ppf":""}
-        ]
+        DojoComponents: [{ pf: "/Lotus/Levels/ClanDojo/DojoHall.level", ppf: "" }]
     });
 };
