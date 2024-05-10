@@ -1092,13 +1092,6 @@
     { "Category": "EXC_HARD", "Choices": ["Zylok", "Sibear", "Dread", "Despair", "Hate"] }
   ],
   "ForceLogoutVersion": 0,
-  "FeaturedGuilds": [
-    { "_id": { "$oid": "5d6e8383a38e4ab3d87910b4" }, "Name": "KHAO SAN ROAD#515", "Tier": 1, "AllianceId": { "$oid": "62ca246ada801e95e10faef5" }, "Emblem": true, "OriginalPlatform": 0 },
-    { "_id": { "$oid": "57bd5ec906c56f84436a999c" }, "Name": "Survival School#325", "Tier": 2, "Emblem": true, "AllianceId": { "$oid": "628184e496531170b94f5bc2" }, "OriginalPlatform": 0 },
-    { "_id": { "$oid": "528baf0608c56fb24a001715" }, "Name": "Fallen Legion GC#476", "Tier": 3, "AllianceId": { "$oid": "5c617675a38e4a601a657a04" }, "Emblem": true, "OriginalPlatform": 0 },
-    { "_id": { "$oid": "570f9bda08c56f0887fb6db5" }, "Name": "GentleManz#996", "Tier": 4, "Emblem": true, "OriginalPlatform": 0 },
-    { "_id": { "$oid": "63399bb7249b38a885073742" }, "Name": "Star field#756", "Tier": 3, "Emblem": true, "OriginalPlatform": 0 }
-  ],
   "SeasonInfo": {
     "Activation": { "$date": { "$numberLong": "1701284400000" } },
     "Expiry": { "$date": { "$numberLong": "1715785200000" } },
