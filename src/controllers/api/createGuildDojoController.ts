@@ -1,4 +1,5 @@
 import { RequestHandler } from "express";
+import { IDojoClient } from "@/src/types/guildTypes";
 
 export const createGuildDojoController: RequestHandler = (req, res) => {
     // req.body.toString() -> {"SpawnComponent":{"id":{"$oid":"000000000000000000000000"},"pf":"/Lotus/Levels/ClanDojo/DojoHall.level","ppf":""}}
@@ -23,5 +24,5 @@ export const createGuildDojoController: RequestHandler = (req, res) => {
                 DecoCapacity: 600
             }
         ]
-    });
+    } satisfies IDojoClient);
 };
