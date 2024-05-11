@@ -14,10 +14,7 @@ const oidSchema = new Schema<IOid>(
 //create a mongoose schema based on interface M
 const EquipmentSelectionSchema = new Schema<IEquipmentSelection>(
     {
-        ItemId: {
-            type: oidSchema,
-            default: { $oid: "000000000000000000000000" }
-        },
+        ItemId: oidSchema,
         mod: Number,
         cus: Number,
         hide: Boolean
