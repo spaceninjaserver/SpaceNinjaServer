@@ -1,7 +1,13 @@
+import { Types } from "mongoose";
 import { IOid, IMongoDate } from "@/src/types/commonTypes";
 
 export interface IGuild {
     Name: string;
+}
+
+export interface IGuildDatabase extends IGuild {
+    _id: Types.ObjectId;
+    DojoComponents?: IDojoComponentDatabase[];
 }
 
 export interface ICreateGuildRequest {
@@ -22,9 +28,16 @@ export interface IDojoClient {
 }
 
 export interface IDojoComponentClient {
+    id: IOid;
     pf: string;
     ppf: string;
-    id: IOid;
     CompletionTime: IMongoDate;
     DecoCapacity: number;
+}
+
+export interface IDojoComponentDatabase {
+    _id: Types.ObjectId;
+    pf: string;
+    ppf: string;
+    CompletionTime: Date;
 }

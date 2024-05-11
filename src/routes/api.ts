@@ -52,7 +52,6 @@ import { getGuildLogController } from "../controllers/api/getGuildLogController"
 import { guildTechController } from "../controllers/api/guildTechController";
 import { dojoController } from "@/src/controllers/api/dojoController";
 import { getGuildDojoController } from "@/src/controllers/api/getGuildDojoController";
-import { createGuildDojoController } from "@/src/controllers/api/createGuildDojoController";
 
 const apiRouter = express.Router();
 
@@ -115,6 +114,5 @@ apiRouter.post("/createGuild.php", createGuildController);
 apiRouter.post("/sell.php", sellController);
 apiRouter.post("/upgrades.php", upgradesController);
 apiRouter.post("/guildTech.php", guildTechController);
-apiRouter.post("/createGuildDojo.php", createGuildDojoController);
 
 export { apiRouter };
