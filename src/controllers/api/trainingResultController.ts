@@ -1,4 +1,4 @@
-import { parseString } from "@/src/helpers/general";
+import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getInventory } from "@/src/services/inventoryService";
 import { IMongoDate } from "@/src/types/commonTypes";
@@ -17,7 +17,7 @@ interface ITrainingResultsResponse {
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 const trainingResultController: RequestHandler = async (req, res): Promise<void> => {
-    const accountId = parseString(req.query.accountId);
+    const accountId = await getAccountIdForRequest(req);
 
     const trainingResults = getJSONfromString(req.body.toString()) as ITrainingResultsRequest;
 

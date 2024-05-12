@@ -1,4 +1,4 @@
-import { parseString } from "@/src/helpers/general";
+import { getAccountIdForRequest } from "@/src/services/loginService";
 import { updateCurrency } from "@/src/services/inventoryService";
 import { RequestHandler } from "express";
 import { updateSlots } from "@/src/services/inventoryService";
@@ -20,7 +20,7 @@ import { SlotNameToInventoryName } from "@/src/types/purchaseTypes";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const inventorySlotsController: RequestHandler = async (req, res) => {
-    const accountId = parseString(req.query.accountId);
+    const accountId = await getAccountIdForRequest(req);
     //const body = JSON.parse(req.body as string) as IInventorySlotsRequest;
 
     //console.log(body);

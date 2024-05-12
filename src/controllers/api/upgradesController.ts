@@ -2,10 +2,11 @@ import { RequestHandler } from "express";
 import { IUpgradesRequest } from "@/src/types/requestTypes";
 import { IPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { IGenericItemDatabase, IMiscItem, TGenericItemKey } from "@/src/types/inventoryTypes/inventoryTypes";
+import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addMiscItems, getInventory, updateCurrency } from "@/src/services/inventoryService";
 
 export const upgradesController: RequestHandler = async (req, res) => {
-    const accountId = req.query.accountId as string;
+    const accountId = await getAccountIdForRequest(req);
     const payload = JSON.parse(req.body.toString()) as IUpgradesRequest;
     const inventory = await getInventory(accountId);
     const InventoryChanges: any = {};

@@ -1,12 +1,13 @@
 import { parseString } from "@/src/helpers/general";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
+import { getAccountIdForRequest } from "@/src/services/loginService";
 import { upgradeMod } from "@/src/services/inventoryService";
 import { IArtifactsRequest } from "@/src/types/requestTypes";
 import { RequestHandler } from "express";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 const artifactsController: RequestHandler = async (req, res) => {
-    const accountId = parseString(req.query.accountId);
+    const accountId = await getAccountIdForRequest(req);
 
     try {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call

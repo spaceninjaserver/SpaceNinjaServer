@@ -1,11 +1,12 @@
 import { getPersonalRooms } from "@/src/services/personalRoomsService";
+import { getAccountIdForRequest } from "@/src/services/loginService";
 import { parseString } from "@/src/helpers/general";
 import { RequestHandler } from "express";
 import { Types } from "mongoose";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const setActiveShipController: RequestHandler = async (req, res) => {
-    const accountId = parseString(req.query.accountId);
+    const accountId = await getAccountIdForRequest(req);
     const shipId = parseString(req.query.shipId);
 
     const personalRooms = await getPersonalRooms(accountId);

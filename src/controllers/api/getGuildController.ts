@@ -1,14 +1,12 @@
 import { RequestHandler } from "express";
 import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { Guild } from "@/src/models/guildModel";
+import { getAccountIdForRequest } from "@/src/services/loginService";
 import { toOid } from "@/src/helpers/inventoryHelpers";
 
 const getGuildController: RequestHandler = async (req, res) => {
-    if (!req.query.accountId) {
-        res.status(400).json({ error: "accountId was not provided" });
-        return;
-    }
-    const inventory = await Inventory.findOne({ accountOwnerId: req.query.accountId });
+    const accountId = await getAccountIdForRequest(req);
+    const inventory = await Inventory.findOne({ accountOwnerId: accountId });
     if (!inventory) {
         res.status(400).json({ error: "inventory was undefined" });
         return;

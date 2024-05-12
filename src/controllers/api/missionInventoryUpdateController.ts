@@ -2,7 +2,7 @@ import { RequestHandler } from "express";
 import { missionInventoryUpdate } from "@/src/services/inventoryService";
 import { combineRewardAndLootInventory, getRewards } from "@/src/services/missionInventoryUpdateService ";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { parseString } from "@/src/helpers/general";
+import { getAccountIdForRequest } from "@/src/services/loginService";
 import { IMissionInventoryUpdateRequest } from "@/src/types/requestTypes";
 /*
 **** INPUT ****
@@ -46,7 +46,7 @@ import { IMissionInventoryUpdateRequest } from "@/src/types/requestTypes";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 const missionInventoryUpdateController: RequestHandler = async (req, res): Promise<void> => {
-    const accountId = parseString(req.query.accountId);
+    const accountId = await getAccountIdForRequest(req);
 
     try {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call

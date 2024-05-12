@@ -1,6 +1,5 @@
 export interface ILoginResponse extends Omit<IDatabaseAccountDocument, "email" | "password"> {
     Groups: IGroup[];
-    Nonce: number;
     BuildLabel: string;
     MatchmakingBuildId: string;
     platformCDNs: string[];
@@ -32,6 +31,7 @@ export interface IDatabaseAccount {
     AmazonRefreshToken?: string;
     ConsentNeeded: boolean;
     TrackedSettings: string[];
+    Nonce: number;
 }
 
 export interface ILoginRequest {

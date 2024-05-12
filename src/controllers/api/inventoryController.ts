@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
+import { getAccountIdForRequest } from "@/src/services/loginService";
 import { toInventoryResponse } from "@/src/helpers/inventoryHelpers";
 import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { Request, RequestHandler, Response } from "express";
@@ -11,10 +12,17 @@ import { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
 import { IShipInventory, IFlavourItem } from "@/src/types/inventoryTypes/inventoryTypes";
 
 const inventoryController: RequestHandler = async (request: Request, response: Response) => {
-    const accountId = request.query.accountId;
-
-    if (!accountId) {
-        response.status(400).json({ error: "accountId was not provided" });
+    let accountId;
+    try {
+        accountId = await getAccountIdForRequest(request);
+    } catch (e) {
+        if ((e as Error).message == "Invalid accountId-nonce pair") {
+            // TODO: Figure out some way to tell the game to stop trying with this nonce.
+            // For now, we'll have to be a little nasty.
+            response.destroy();
+            return;
+        }
+        response.status(400).json({ error: (e as Error).message });
         return;
     }
 

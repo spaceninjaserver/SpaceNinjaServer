@@ -6,6 +6,7 @@ import { logger } from "@/src/utils/logger";
 import { getItemByBlueprint, getItemCategoryByUniqueName } from "@/src/services/itemDataService";
 import { IOid } from "@/src/types/commonTypes";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
+import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getInventory } from "@/src/services/inventoryService";
 import { IInventoryDatabase } from "@/src/types/inventoryTypes/inventoryTypes";
 
@@ -16,7 +17,7 @@ export interface IClaimCompletedRecipeRequest {
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const claimCompletedRecipeController: RequestHandler = async (req, res) => {
     const claimCompletedRecipeRequest = getJSONfromString(req.body.toString()) as IClaimCompletedRecipeRequest;
-    const accountId = req.query.accountId as string;
+    const accountId = await getAccountIdForRequest(req);
     if (!accountId) throw new Error("no account id");
 
     console.log(claimCompletedRecipeRequest);

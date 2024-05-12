@@ -1,4 +1,4 @@
-import { parseString } from "@/src/helpers/general";
+import { getAccountIdForRequest } from "@/src/services/loginService";
 import { IShipDecorationsRequest } from "@/src/types/shipTypes";
 import { logger } from "@/src/utils/logger";
 import { RequestHandler } from "express";
@@ -6,7 +6,7 @@ import { handleSetShipDecorations } from "@/src/services/shipCustomizationsServi
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const shipDecorationsController: RequestHandler = async (req, res) => {
-    const accountId = parseString(req.query.accountId);
+    const accountId = await getAccountIdForRequest(req);
     const shipDecorationsRequest = JSON.parse(req.body as string) as IShipDecorationsRequest;
 
     try {
