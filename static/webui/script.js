@@ -24,6 +24,7 @@ function loginFromLocalStorage() {
         $("#main-view").removeClass("d-none");
         $(".displayname").text(data.DisplayName);
         window.accountId = data.id;
+        window.authz = "accountId=" + data.id + "&nonce=" + data.Nonce;
         updateInventory();
     });
     req.fail(() => {
@@ -61,7 +62,7 @@ window.itemListPromise = new Promise(resolve => {
 });
 
 function updateInventory() {
-    const req = $.get("/api/inventory.php?accountId=" + window.accountId);
+    const req = $.get("/api/inventory.php?" + window.authz);
     req.done(data => {
         window.itemListPromise.then(itemMap => {
             document.getElementById("warframe-list").innerHTML = "";
@@ -215,7 +216,7 @@ function addGearExp(category, oid, xp) {
         }
     ];
     $.post({
-        url: "/api/missionInventoryUpdate.php?accountId=" + window.accountId,
+        url: "/api/missionInventoryUpdate.php?" + window.authz,
         contentType: "text/plain",
         data: JSON.stringify(data)
     }).done(function () {
@@ -235,7 +236,7 @@ function disposeOfGear(category, oid) {
         }
     ];
     $.post({
-        url: "/api/sell.php?accountId=" + window.accountId,
+        url: "/api/sell.php?" + window.authz,
         contentType: "text/plain",
         data: JSON.stringify(data)
     }).done(function () {
@@ -250,7 +251,7 @@ function doAcquireMiscItems() {
         return;
     }
     $.post({
-        url: "/api/missionInventoryUpdate.php?accountId=" + window.accountId,
+        url: "/api/missionInventoryUpdate.php?" + window.authz,
         contentType: "text/plain",
         data: JSON.stringify({
             MiscItems: [
