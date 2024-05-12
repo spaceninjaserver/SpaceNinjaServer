@@ -2,6 +2,7 @@
 /build
 
 /.env
+/config.json
 /static/data/*.bin
 yarn.lock
 /tmp
