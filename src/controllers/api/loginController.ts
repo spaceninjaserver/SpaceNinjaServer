@@ -2,6 +2,7 @@
 import { RequestHandler } from "express";
 
 import config from "@/config.json";
+import buildConfig from "@/static/data/buildConfig.json";
 
 import { toLoginRequest } from "@/src/helpers/loginHelpers";
 import { Account } from "@/src/models/loginModel";
@@ -43,8 +44,8 @@ const loginController: RequestHandler = async (request, response) => {
                 DTLS: DTLS,
                 IRC: [config.myAddress],
                 HUB: HUB,
-                BuildLabel: config.buildLabel,
-                MatchmakingBuildId: config.matchmakingBuildId
+                BuildLabel: buildConfig.buildLabel,
+                MatchmakingBuildId: buildConfig.matchmakingBuildId
             };
 
             response.json(newLoginResponse);
@@ -72,8 +73,8 @@ const loginController: RequestHandler = async (request, response) => {
         DTLS: DTLS,
         IRC: [config.myAddress],
         HUB: HUB,
-        BuildLabel: config.buildLabel,
-        MatchmakingBuildId: config.matchmakingBuildId
+        BuildLabel: buildConfig.buildLabel,
+        MatchmakingBuildId: buildConfig.matchmakingBuildId
     };
 
     response.json(newLoginResponse);
