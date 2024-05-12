@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import config from "@/config.json";
+import { config } from "@/src/services/configService";
 import allShipFeatures from "@/static/fixed_responses/allShipFeatures.json";
 import { parseString } from "@/src/helpers/general";
 import { getPersonalRooms } from "@/src/services/personalRoomsService";

@@ -2,7 +2,7 @@
 import { toInventoryResponse } from "@/src/helpers/inventoryHelpers";
 import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { Request, RequestHandler, Response } from "express";
-import config from "@/config.json";
+import { config } from "@/src/services/configService";
 import allMissions from "@/static/fixed_responses/allMissions.json";
 import allQuestKeys from "@/static/fixed_responses/allQuestKeys.json";
 import allShipDecorations from "@/static/fixed_responses/allShipDecorations.json";

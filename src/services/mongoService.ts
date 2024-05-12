@@ -1,5 +1,5 @@
 import { logger } from "@/src/utils/logger";
-import config from "@/config.json";
+import { config } from "@/src/services/configService";
 import mongoose from "mongoose";
 
 const url = config.mongodbUrl;

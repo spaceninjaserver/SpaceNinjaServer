@@ -1,6 +1,6 @@
 import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import new_inventory from "@/static/fixed_responses/postTutorialInventory.json";
-import config from "@/config.json";
+import { config } from "@/src/services/configService";
 import { Types } from "mongoose";
 import { ISuitClient } from "@/src/types/inventoryTypes/SuitTypes";
 import { SlotNames } from "@/src/types/purchaseTypes";

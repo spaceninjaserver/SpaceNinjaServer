@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { RequestHandler } from "express";
 
-import config from "@/config.json";
+import { config } from "@/src/services/configService";
 import buildConfig from "@/static/data/buildConfig.json";
 
 import { toLoginRequest } from "@/src/helpers/loginHelpers";
