@@ -7,7 +7,7 @@ import { toLoginRequest } from "@/src/helpers/loginHelpers";
 import { Account } from "@/src/models/loginModel";
 import { createAccount, isCorrectPassword } from "@/src/services/loginService";
 import { ILoginResponse } from "@/src/types/loginTypes";
-import { DTLS, groups, HUB, IRC, Nonce, NRS, platformCDNs } from "@/static/fixed_responses/login_static";
+import { DTLS, groups, HUB, Nonce, platformCDNs } from "@/static/fixed_responses/login_static";
 import { logger } from "@/src/utils/logger";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -39,9 +39,9 @@ const loginController: RequestHandler = async (request, response) => {
                 Groups: groups,
                 platformCDNs: platformCDNs,
                 Nonce: Nonce,
-                NRS: NRS,
+                NRS: [config.myAddress],
                 DTLS: DTLS,
-                IRC: IRC,
+                IRC: [config.myAddress],
                 HUB: HUB,
                 BuildLabel: config.buildLabel,
                 MatchmakingBuildId: config.matchmakingBuildId
@@ -68,9 +68,9 @@ const loginController: RequestHandler = async (request, response) => {
         Groups: groups,
         platformCDNs: platformCDNs,
         Nonce: Nonce,
-        NRS: NRS,
+        NRS: [config.myAddress],
         DTLS: DTLS,
-        IRC: IRC,
+        IRC: [config.myAddress],
         HUB: HUB,
         BuildLabel: config.buildLabel,
         MatchmakingBuildId: config.matchmakingBuildId
