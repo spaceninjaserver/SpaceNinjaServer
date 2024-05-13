@@ -942,7 +942,7 @@
       "OriginalPrice": 40,
       "SalePrice": 20,
       "AmountTotal": 50,
-      "AmountSold": 50
+      "AmountSold": 0
     }
   ],
   "LibraryInfo": { "LastCompletedTargetType": "/Lotus/Types/Game/Library/Targets/Research7Target" },
