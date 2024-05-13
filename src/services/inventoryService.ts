@@ -290,7 +290,7 @@ const addMods = (inventory: IInventoryDatabaseDocument, itemsArray: IRawUpgrade[
     });
 };
 
-const addChallenges = (inventory: IInventoryDatabaseDocument, itemsArray: IChallengeProgress[] | undefined) => {
+export const addChallenges = (inventory: IInventoryDatabaseDocument, itemsArray: IChallengeProgress[] | undefined) => {
     const category = inventory.ChallengeProgress;
 
     itemsArray?.forEach(({ Name, Progress }) => {
