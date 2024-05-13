@@ -47,6 +47,7 @@ import { createGuildController } from "@/src/controllers/api/createGuildControll
 import { sellController } from "@/src/controllers/api/sellController";
 import { upgradesController } from "@/src/controllers/api/upgradesController";
 import { setSupportedSyndicateController } from "@/src/controllers/api/setSupportedSyndicateController";
+import { getDailyDealStockLevelsController } from "@/src/controllers/api/getDailyDealStockLevelsController";
 
 const apiRouter = express.Router();
 
@@ -75,6 +76,7 @@ apiRouter.get("/setBootLocation.php", setBootLocationController);
 apiRouter.get("/setActiveShip.php", setActiveShipController);
 apiRouter.get("/getGuild.php", getGuildController);
 apiRouter.get("/setSupportedSyndicate.php", setSupportedSyndicateController);
+apiRouter.get("/getDailyDealStockLevels.php", getDailyDealStockLevelsController);
 
 // post
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
