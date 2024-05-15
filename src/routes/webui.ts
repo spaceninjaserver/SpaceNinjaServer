@@ -3,22 +3,20 @@ import path from "path";
 
 const webuiRouter = express.Router();
 
+// Redirect / to /webui/
 webuiRouter.get("/", (_req, res) => {
     res.redirect("/webui/");
 });
 
-const rootDir = path.join(__dirname, "../..");
-
-webuiRouter.get("/webui/", (req, res) => {
-    if (req.path != "/webui/") {
-        res.redirect("/webui/");
-    } else {
-        res.sendFile(path.join(rootDir, "static/webui/index.html"));
+// Redirect /webui to /webui/
+webuiRouter.use("/webui", (req, res, next) => {
+    if (req.originalUrl === "/") {
+        return res.redirect("/webui/");
     }
+    next();
 });
 
-webuiRouter.get("/webui/script.js", (_req, res) => {
-    res.sendFile(path.join(rootDir, "static/webui/script.js"));
-});
+// Serve static files from the webui directory
+webuiRouter.use("/webui", express.static(path.join(__dirname, "../..", "static/webui")));
 
 export { webuiRouter };
