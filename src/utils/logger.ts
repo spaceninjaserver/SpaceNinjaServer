@@ -1,10 +1,8 @@
 import { createLogger, format, transports, Logger, LeveledLogMethod, addColors } from "winston";
 import "winston-daily-rotate-file";
-import * as dotenv from "dotenv";
+import { config } from "@/src/services/configService";
 import * as util from "util";
 import { isEmptyObject } from "@/src/helpers/general";
-
-dotenv.config();
 
 // const combineMessageAndSplat = () => {
 //     return {
@@ -72,7 +70,7 @@ const consoleLog = new transports.Console({
     )
 });
 
-const transportOptions = process.env.LOG_FILES === "true" ? [consoleLog, errorLog, combinedLog] : [consoleLog];
+const transportOptions = config.logger.files ? [consoleLog, errorLog, combinedLog] : [consoleLog];
 
 //possible log levels: { fatal: 0, error: 1, warn: 2, info: 3, http: 4, debug: 5, trace: 6 },
 const logLevels = {
@@ -98,7 +96,7 @@ const logLevels = {
 
 export const logger = createLogger({
     levels: logLevels.levels,
-    level: process.env.LOG_LEVEL,
+    level: config.logger.level,
     defaultMeta: { version: process.env.npm_package_version },
     transports: transportOptions
 }) as Logger & Record<keyof typeof logLevels.levels, LeveledLogMethod>;

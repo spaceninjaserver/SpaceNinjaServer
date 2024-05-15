@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import config from "@/config.json";
+import { config } from "@/src/services/configService";
 import { getInventory } from "@/src/services/inventoryService";
 import { parseString } from "@/src/helpers/general";
 

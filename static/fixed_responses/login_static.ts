@@ -24,10 +24,6 @@ export const platformCDNs = [
 
 export const Nonce = 1231231233;
 
-export const NRS = ["localhost"];
-
 export const DTLS = 99;
-
-export const IRC = ["localhost"];
 
 export const HUB = "https://arbiter.warframe.com/api/";

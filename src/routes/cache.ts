@@ -1,5 +1,5 @@
 import express from "express";
-import config from "@/config.json";
+import buildConfig from "@/static/data/buildConfig.json";
 
 const cacheRouter = express.Router();
 
@@ -12,7 +12,7 @@ cacheRouter.get("/B.Cache.Windows_en.bin*", (_req, res) => {
 });
 
 cacheRouter.get(/^\/origin\/[a-zA-Z0-9]+\/[0-9]+\/H\.Cache\.bin.*$/, (_req, res) => {
-    res.sendFile(`static/data/H.Cache_${config.version}.bin`, { root: "./" });
+    res.sendFile(`static/data/H.Cache_${buildConfig.version}.bin`, { root: "./" });
 });
 
 export { cacheRouter };

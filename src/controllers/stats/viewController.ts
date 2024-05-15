@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { IStatsView } from "@/src/types/statTypes";
-import config from "@/config.json";
+import { config } from "@/src/services/configService";
 import view from "@/static/fixed_responses/view.json";
 import allScans from "@/static/fixed_responses/allScans.json";
 

@@ -1,8 +1,12 @@
 {
+  "mongodbUrl": "mongodb://127.0.0.1:27017/openWF",
+  "logger": {
+    "files": true,
+    "level": "trace",
+    "__valid_levels": "fatal, error, warn, info, http, debug, trace"
+  },
+  "myAddress": "localhost",
   "autoCreateAccount": true,
-  "buildLabel": "2024.05.03.11.35/g98E42og3EdWxS0UueO+PQ",
-  "matchmakingBuildId": "6945333874579955227",
-  "version": "35.5.11",
   "skipStoryModeChoice": true,
   "skipTutorial": true,
   "unlockAllScans": true,

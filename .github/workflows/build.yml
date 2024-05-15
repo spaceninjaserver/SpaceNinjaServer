@@ -15,4 +15,5 @@ jobs:
               with:
                   node-version: "20.x"
             - run: npm ci
+            - run: cp config.json.example config.json
             - run: npm run build
