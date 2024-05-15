@@ -2,7 +2,7 @@ import { RequestHandler } from "express";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { Guild } from "@/src/models/guildModel";
-import { IGuild, ICreateGuildRequest } from "@/src/types/guildTypes";
+import { ICreateGuildRequest } from "@/src/types/guildTypes";
 
 const createGuildController: RequestHandler = async (req, res) => {
     const payload: ICreateGuildRequest = getJSONfromString(req.body.toString());
@@ -10,7 +10,7 @@ const createGuildController: RequestHandler = async (req, res) => {
     // Create guild on database
     const guild = new Guild({
         Name: payload.guildName
-    } satisfies IGuild);
+    });
     await guild.save();
 
     // Update inventory
@@ -19,7 +19,7 @@ const createGuildController: RequestHandler = async (req, res) => {
         // Set GuildId
         inventory.GuildId = guild._id;
 
-        // Give clan key
+        // Give clan key (TODO: This should only be a blueprint)
         inventory.LevelKeys ??= [];
         inventory.LevelKeys.push({
             ItemType: "/Lotus/Types/Keys/DojoKey",
