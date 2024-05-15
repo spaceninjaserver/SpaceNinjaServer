@@ -737,27 +737,30 @@
       "InitialStartDate": { "$date": { "$numberLong": "9999999999999" } },
       "Node": "TradeHUB1",
       "Manifest": [
-        { "ItemType": "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVInarosPrimeSinglePack", "PrimePrice": 6 },
-        { "ItemType": "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVInarosAshPrimeDualPack", "PrimePrice": 10 },
-        { "ItemType": "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVAshPrimeSinglePack", "PrimePrice": 6 },
-        { "ItemType": "/Lotus/StoreItems/Powersuits/Sandman/InarosPrime", "PrimePrice": 3 },
-        { "ItemType": "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVMittahkPrimeArmorSet", "PrimePrice": 2 },
-        { "ItemType": "/Lotus/StoreItems/Upgrades/Skins/Scarves/PrimeInarosSyandana", "PrimePrice": 2 },
-        { "ItemType": "/Lotus/StoreItems/Weapons/Tenno/LongGuns/PrimePanthera/PrimePanthera", "PrimePrice": 2 },
-        { "ItemType": "/Lotus/StoreItems/Weapons/Tenno/Melee/Swords/PrimeKaryst/PrimeKrisDagger", "PrimePrice": 2 },
-        { "ItemType": "/Lotus/StoreItems/Powersuits/Ninja/AshPrime", "PrimePrice": 3 },
-        { "ItemType": "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVUndaPrimeSentAccessories", "PrimePrice": 1 },
-        { "ItemType": "/Lotus/StoreItems/Upgrades/Skins/Scarves/YamakoPrimeScarf", "PrimePrice": 2 },
-        { "ItemType": "/Lotus/StoreItems/Types/Sentinels/SentinelPowersuits/PrimeCarrierPowerSuit", "PrimePrice": 2 },
-        { "ItemType": "/Lotus/StoreItems/Weapons/Tenno/LongGuns/PrimeVectis/PrimeVectisRifle", "PrimePrice": 2 },
-        { "ItemType": "/Lotus/StoreItems/Types/Items/ShipDecos/InarosPrimeBobbleHead", "PrimePrice": 1 },
-        { "ItemType": "/Lotus/StoreItems/Types/Items/ShipDecos/AshPrimeBobbleHead", "PrimePrice": 1 },
-        { "ItemType": "/Lotus/StoreItems/Types/Game/Projections/T1VoidProjectionInarosAshVaultABronze", "RegularPrice": 1 },
-        { "ItemType": "/Lotus/StoreItems/Types/Game/Projections/T2VoidProjectionInarosAshVaultABronze", "RegularPrice": 1 },
-        { "ItemType": "/Lotus/StoreItems/Types/Game/Projections/T2VoidProjectionInarosAshVaultBBronze", "RegularPrice": 1 },
-        { "ItemType": "/Lotus/StoreItems/Types/Game/Projections/T3VoidProjectionInarosAshVaultABronze", "RegularPrice": 1 },
-        { "ItemType": "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionInarosAshVaultABronze", "RegularPrice": 1 },
-        { "ItemType": "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionInarosAshVaultBBronze", "RegularPrice": 1 }
+        { "ItemType": "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVEquinoxPrimeSinglePack", "PrimePrice": 6 },
+        { "ItemType": "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVEquinoxWukongPrimeDualPack", "PrimePrice": 10 },
+        { "ItemType": "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVWukongPrimeSinglePack", "PrimePrice": 6 },
+        { "ItemType": "/Lotus/StoreItems/Powersuits/YinYang/EquinoxPrime", "PrimePrice": 3 },
+        { "ItemType": "/Lotus/StoreItems/Upgrades/Skins/Scarves/PrimeCapeEquinox", "PrimePrice": 2 },
+        { "ItemType": "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVNarvarrPrimeArmorSet", "PrimePrice": 2 },
+        { "ItemType": "/Lotus/StoreItems/Weapons/Tenno/LongGuns/PrimeStradavar/PrimeStradavarGun", "PrimePrice": 2 },
+        { "ItemType": "/Lotus/StoreItems/Weapons/Tenno/Melee/Staff/TipedoPrime/TipedoPrimeWeapon", "PrimePrice": 2 },
+        { "ItemType": "/Lotus/StoreItems/Powersuits/MonkeyKing/WukongPrime", "PrimePrice": 3 },
+        { "ItemType": "/Lotus/StoreItems/Upgrades/Skins/Scarves/PrimeWukongSyandana", "PrimePrice": 2 },
+        { "ItemType": "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVWukongPrimeKubrowArmor", "PrimePrice": 2 },
+        { "ItemType": "/Lotus/StoreItems/Upgrades/Skins/Effects/EphemeraPrimeA", "PrimePrice": 2 },
+        { "ItemType": "/Lotus/StoreItems/Weapons/Tenno/LongGuns/PrimeZhuge/PrimeZhugeCrossbow", "PrimePrice": 2 },
+        { "ItemType": "/Lotus/StoreItems/Weapons/Tenno/Melee/PrimeNinkondi/PrimeNikondi", "PrimePrice": 2 },
+        { "ItemType": "/Lotus/StoreItems/Types/Items/ShipDecos/EquinoxPrimeBobbleHead", "PrimePrice": 1 },
+        { "ItemType": "/Lotus/StoreItems/Types/Items/ShipDecos/EquinoxPrimeNightBobbleHead", "PrimePrice": 1 },
+        { "ItemType": "/Lotus/StoreItems/Types/Items/ShipDecos/EquinoxPrimeDayBobbleHead", "PrimePrice": 1 },
+        { "ItemType": "/Lotus/StoreItems/Types/Items/ShipDecos/WukongPrimeBobbleHead", "PrimePrice": 1 },
+        { "ItemType": "/Lotus/StoreItems/Types/Game/Projections/T1VoidProjectionWukongEquinoxVaultABronze", "RegularPrice": 1 },
+        { "ItemType": "/Lotus/StoreItems/Types/Game/Projections/T1VoidProjectionWukongEquinoxVaultBBronze", "RegularPrice": 1 },
+        { "ItemType": "/Lotus/StoreItems/Types/Game/Projections/T2VoidProjectionWukongEquinoxVaultABronze", "RegularPrice": 1 },
+        { "ItemType": "/Lotus/StoreItems/Types/Game/Projections/T3VoidProjectionWukongEquinoxVaultABronze", "RegularPrice": 1 },
+        { "ItemType": "/Lotus/StoreItems/Types/Game/Projections/T3VoidProjectionWukongEquinoxVaultBBronze", "RegularPrice": 1 },
+        { "ItemType": "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionWukongEquinoxVaultABronze", "RegularPrice": 1 }
       ],
       "Expiry": { "$date": { "$numberLong": "1715277600000" } },
       "EvergreenManifest": [
@@ -788,6 +791,7 @@
         { "ItemType": "/Lotus/StoreItems/Types/Items/SongItems/OctaviaPrimeSongItem", "RegularPrice": 5 },
         { "ItemType": "/Lotus/StoreItems/Types/Items/SongItems/RevenantPrimeSongItem", "RegularPrice": 5 },
         { "ItemType": "/Lotus/StoreItems/Types/Items/SongItems/VaubanPrimeSongItem", "RegularPrice": 5 },
+        { "ItemType": "/Lotus/StoreItems/Types/Items/SongItems/ProteaPrimeSongItem", "RegularPrice": 5 },
         { "ItemType": "/Lotus/StoreItems/Types/Items/MiscItems/PrimeBucks", "RegularPrice": 1 },
         { "ItemType": "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVVoidTraceBundle", "RegularPrice": 1 }
       ],
@@ -1093,77 +1097,77 @@
   ],
   "ForceLogoutVersion": 0,
   "SeasonInfo": {
-    "Activation": { "$date": { "$numberLong": "1701284400000" } },
-    "Expiry": { "$date": { "$numberLong": "1715785200000" } },
-    "AffiliationTag": "RadioLegionIntermission9Syndicate",
-    "Season": 11,
+    "Activation": { "$date": { "$numberLong": "1715796000000" } },
+    "Expiry": { "$date": { "$numberLong": "9999999999999" } },
+    "AffiliationTag": "RadioLegionIntermission10Syndicate",
+    "Season": 12,
     "Phase": 0,
     "Params": "",
     "ActiveChallenges": [
       {
-        "_id": { "$oid": "001200230000000000000325" },
+        "_id": { "$oid": "001300010000000000000008" },
         "Daily": true,
-        "Activation": { "$date": { "$numberLong": "1714867200000" } },
-        "Expiry": { "$date": { "$numberLong": "9999999999999" } },
-        "Challenge": "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithSecondary"
-      },
-      {
-        "_id": { "$oid": "001200240000000000000333" },
-        "Daily": true,
-        "Activation": { "$date": { "$numberLong": "1714953600000" } },
-        "Expiry": { "$date": { "$numberLong": "9999999999999" } },
-        "Challenge": "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithFreeze"
-      },
-      {
-        "_id": { "$oid": "001200240000000000000334" },
-        "Daily": true,
-        "Activation": { "$date": { "$numberLong": "1715040000000" } },
+        "Activation": { "$date": { "$numberLong": "1715558400000" } },
         "Expiry": { "$date": { "$numberLong": "9999999999999" } },
         "Challenge": "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyFeedMeMore"
       },
       {
-        "_id": { "$oid": "001200240000000000000326" },
-        "Activation": { "$date": { "$numberLong": "1714953600000" } },
+        "_id": { "$oid": "001300010000000000000009" },
+        "Daily": true,
+        "Activation": { "$date": { "$numberLong": "1715644800000" } },
         "Expiry": { "$date": { "$numberLong": "9999999999999" } },
-        "Challenge": "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentCompleteMissions24"
+        "Challenge": "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyTwoForOne"
       },
       {
-        "_id": { "$oid": "001200240000000000000327" },
-        "Activation": { "$date": { "$numberLong": "1714953600000" } },
+        "_id": { "$oid": "001300010000000000000010" },
+        "Daily": true,
+        "Activation": { "$date": { "$numberLong": "1715731200000" } },
         "Expiry": { "$date": { "$numberLong": "9999999999999" } },
-        "Challenge": "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentKillEximus24"
+        "Challenge": "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithFinishers"
       },
       {
-        "_id": { "$oid": "001200240000000000000328" },
-        "Activation": { "$date": { "$numberLong": "1714953600000" } },
+        "_id": { "$oid": "001300010000000000000001" },
+        "Activation": { "$date": { "$numberLong": "1715558400000" } },
         "Expiry": { "$date": { "$numberLong": "9999999999999" } },
-        "Challenge": "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentKillEnemies24"
+        "Challenge": "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentCompleteMissions"
       },
       {
-        "_id": { "$oid": "001200240000000000000329" },
-        "Activation": { "$date": { "$numberLong": "1714953600000" } },
+        "_id": { "$oid": "001300010000000000000002" },
+        "Activation": { "$date": { "$numberLong": "1715558400000" } },
         "Expiry": { "$date": { "$numberLong": "9999999999999" } },
-        "Challenge": "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyHorsingAround"
+        "Challenge": "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentKillEximus"
       },
       {
-        "_id": { "$oid": "001200240000000000000330" },
-        "Activation": { "$date": { "$numberLong": "1714953600000" } },
+        "_id": { "$oid": "001300010000000000000003" },
+        "Activation": { "$date": { "$numberLong": "1715558400000" } },
         "Expiry": { "$date": { "$numberLong": "9999999999999" } },
-        "Challenge": "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyCompleteSortie"
+        "Challenge": "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentKillEnemies"
       },
       {
-        "_id": { "$oid": "001200240000000000000331" },
-        "Activation": { "$date": { "$numberLong": "1714953600000" } },
+        "_id": { "$oid": "001300010000000000000004" },
+        "Activation": { "$date": { "$numberLong": "1715558400000" } },
         "Expiry": { "$date": { "$numberLong": "9999999999999" } },
-        "Challenge": "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardKillEximus"
+        "Challenge": "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyOpenLockers"
       },
       {
-        "_id": { "$oid": "001200240000000000000332" },
-        "Activation": { "$date": { "$numberLong": "1714953600000" } },
+        "_id": { "$oid": "001300010000000000000005" },
+        "Activation": { "$date": { "$numberLong": "1715558400000" } },
         "Expiry": { "$date": { "$numberLong": "9999999999999" } },
-        "Challenge": "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardIndexWinStreak"
+        "Challenge": "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyBloodthirsty"
+      },
+      {
+        "_id": { "$oid": "001300010000000000000006" },
+        "Activation": { "$date": { "$numberLong": "1715558400000" } },
+        "Expiry": { "$date": { "$numberLong": "9999999999999" } },
+        "Challenge": "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardEliteSanctuaryOnslaught"
+      },
+      {
+        "_id": { "$oid": "001300010000000000000007" },
+        "Activation": { "$date": { "$numberLong": "1715558400000" } },
+        "Expiry": { "$date": { "$numberLong": "9999999999999" } },
+        "Challenge": "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardCompleteSortie"
       }
     ]
   },
-  "Tmp": "{\"prisbegin\":\"1687363200\",\"prisend\":\"1688572800\",\"cavabegin\":\"1690761600\",\"PurchasePlatformLockEnabled\":true,\"lqo4\":{\"mt\":[\"Survival\",\"Defense\",\"Assassination\"],\"mv\":[\"NecramechLockout\",\"LostInTranslation\",\"InfiniteTide\"],\"c\":[[\"RegeneratingEnemies\",\"VoidAberration\"],[\"ShieldedFoes\",\"Deflectors\"],[\"PointBlank\",\"Voidburst\"]],\"fv\":[\"Armorless\",\"TimeDilation\",\"OperatorLockout\",\"Starvation\"]},\"lqo5\":{\"mt\":[\"Extermination\",\"Disruption\",\"Alchemy\"],\"mv\":[\"GrowingIncursion\",\"FragileNodes\",\"VolatileGrenades\"],\"c\":[[\"AcceleratedEnemies\",\"EMPBlackHole\"],[\"ExplosiveCrawlers\",\"ShieldedFoes\"],[\"AntiMaterialWeapons\",\"RegeneratingEnemies\"]],\"fv\":[\"ContactDamage\",\"Knifestep\",\"AbilityLockout\",\"Exhaustion\"]},\"lqo6\":{\"mt\":[\"Disruption\",\"Survival\",\"Assassination\"],\"mv\":[\"DoubleTrouble\",\"UnpoweredCapsules\",\"Reinforcements\"],\"c\":[[\"VoidAberration\",\"AntiMaterialWeapons\"],[\"Deflectors\",\"Voidburst\"],[\"ExplosiveCrawlers\",\"AcceleratedEnemies\"]],\"fv\":[\"Starvation\",\"ShieldDelay\",\"Gearless\",\"Framecurse\"]},\"sfn\":555}"
+  "Tmp": "{\"prisbegin\":\"1687363200\",\"prisend\":\"1688572800\",\"cavabegin\":\"1690761600\",\"PurchasePlatformLockEnabled\":true,\"lqo4\":{\"mt\":[\"Survival\",\"Defense\",\"Assassination\"],\"mv\":[\"NecramechLockout\",\"LostInTranslation\",\"InfiniteTide\"],\"c\":[[\"RegeneratingEnemies\",\"VoidAberration\"],[\"ShieldedFoes\",\"Deflectors\"],[\"PointBlank\",\"Voidburst\"]],\"fv\":[\"Armorless\",\"TimeDilation\",\"OperatorLockout\",\"Starvation\"]},\"lqo5\":{\"mt\":[\"Extermination\",\"Disruption\",\"Alchemy\"],\"mv\":[\"GrowingIncursion\",\"FragileNodes\",\"VolatileGrenades\"],\"c\":[[\"AcceleratedEnemies\",\"EMPBlackHole\"],[\"ExplosiveCrawlers\",\"ShieldedFoes\"],[\"AntiMaterialWeapons\",\"RegeneratingEnemies\"]],\"fv\":[\"ContactDamage\",\"Knifestep\",\"AbilityLockout\",\"Exhaustion\"]},\"lqo6\":{\"mt\":[\"Disruption\",\"Survival\",\"Assassination\"],\"mv\":[\"DoubleTrouble\",\"UnpoweredCapsules\",\"Reinforcements\"],\"c\":[[\"VoidAberration\",\"AntiMaterialWeapons\"],[\"Deflectors\",\"Voidburst\"],[\"ExplosiveCrawlers\",\"AcceleratedEnemies\"]],\"fv\":[\"Starvation\",\"ShieldDelay\",\"Gearless\",\"Framecurse\"]},\"sfn\":554}"
 }
