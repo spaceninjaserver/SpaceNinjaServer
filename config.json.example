@@ -6,6 +6,8 @@
     "__valid_levels": "fatal, error, warn, info, http, debug, trace"
   },
   "myAddress": "localhost",
+  "httpPort": 80,
+  "httpsPort": 443,
   "autoCreateAccount": true,
   "skipStoryModeChoice": true,
   "skipTutorial": true,
