@@ -16,4 +16,5 @@ jobs:
                   node-version: "20.x"
             - run: npm ci
             - run: cp config.json.example config.json
+            - run: echo '{"version":"","buildLabel":"","matchmakingBuildId":""}' > static/data/buildConfig.json
             - run: npm run build

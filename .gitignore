@@ -3,7 +3,8 @@
 
 /.env
 /config.json
-/static/data/*.bin
+/static/data/**
+!/static/data/.gitkeep
 yarn.lock
 /tmp
 
