@@ -51,7 +51,26 @@ const inventoryController: RequestHandler = async (request: Request, response: R
     if (config.unlockAllShipDecorations) inventoryResponse.ShipDecorations = allShipDecorations;
     if (config.unlockAllFlavourItems) inventoryResponse.FlavourItems = allFlavourItems satisfies IFlavourItem[];
 
+    if (typeof config.spoofMasteryRank === "number" && config.spoofMasteryRank >= 0 && config.spoofMasteryRank <= 5030) {
+        inventoryResponse.PlayerLevel = config.spoofMasteryRank;
+        inventoryResponse.XPInfo = [];
+        let numFrames = getExpRequiredForMr(config.spoofMasteryRank) / 6000;
+        while (numFrames-- > 0) {
+            inventoryResponse.XPInfo.push({
+                ItemType: "/Lotus/Powersuits/Mag/Mag",
+                XP: 1_600_000
+            });
+        }
+    }
+
     response.json(inventoryResponse);
+};
+
+const getExpRequiredForMr = (rank: number): number => {
+    if (rank <= 30) {
+        return 2500 * rank * rank;
+    }
+    return 2_250_000 + (147_500 * (rank - 30));
 };
 
 export { inventoryController };
