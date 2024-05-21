@@ -18,5 +18,6 @@
   "unlockallShipFeatures": true,
   "unlockAllShipDecorations": true,
   "unlockAllFlavourItems": true,
+  "unlockAllSkins": true,
   "spoofMasteryRank": -1
 }
