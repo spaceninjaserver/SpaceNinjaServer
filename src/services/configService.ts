@@ -4,6 +4,8 @@ interface IConfig {
     mongodbUrl: string;
     logger: ILoggerConfig;
     myAddress: string;
+    httpPort?: number;
+    httpsPort?: number;
     autoCreateAccount?: boolean;
     skipStoryModeChoice?: boolean;
     skipTutorial?: boolean;
