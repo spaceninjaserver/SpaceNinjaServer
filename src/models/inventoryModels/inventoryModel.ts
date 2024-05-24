@@ -321,7 +321,13 @@ const GenericItemSchema = new Schema<IGenericItem>(
     {
         ItemType: String,
         Configs: [ItemConfigSchema],
-        UpgradeVer: Number //this is probably just __v
+        UpgradeVer: Number,
+        XP: Number,
+        Features: Number,
+        Polarity: [polaritySchema],
+        Polarized: Number,
+        ModSlotPurchases: Number,
+        CustomizationSlotPurchases: Number
     },
     { id: false }
 );
