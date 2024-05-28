@@ -1,10 +1,12 @@
 import { RequestHandler } from "express";
 import { ISellRequest } from "@/src/types/sellTypes";
+import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getInventory } from "@/src/services/inventoryService";
 
 export const sellController: RequestHandler = async (req, res) => {
     const payload: ISellRequest = JSON.parse(req.body.toString());
-    const inventory = await getInventory(req.query.accountId as string);
+    const accountId = await getAccountIdForRequest(req);
+    const inventory = await getInventory(accountId);
 
     // Give currency
     if (payload.SellCurrency == "SC_RegularCredits") {

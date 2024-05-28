@@ -1,4 +1,5 @@
 import { RequestHandler } from "express";
+import { getAccountIdForRequest } from "@/src/services/loginService";
 import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { IStatsView } from "@/src/types/statTypes";
 import { config } from "@/src/services/configService";
@@ -6,10 +7,7 @@ import view from "@/static/fixed_responses/view.json";
 import allScans from "@/static/fixed_responses/allScans.json";
 
 const viewController: RequestHandler = async (req, res) => {
-    if (!req.query.accountId) {
-        res.status(400).json({ error: "accountId was not provided" });
-        return;
-    }
+    const accountId = await getAccountIdForRequest(req);
     const inventory = await Inventory.findOne({ accountOwnerId: req.query.accountId });
     if (!inventory) {
         res.status(400).json({ error: "inventory was undefined" });

@@ -8,7 +8,7 @@ import { toLoginRequest } from "@/src/helpers/loginHelpers";
 import { Account } from "@/src/models/loginModel";
 import { createAccount, isCorrectPassword } from "@/src/services/loginService";
 import { ILoginResponse } from "@/src/types/loginTypes";
-import { DTLS, groups, HUB, Nonce, platformCDNs } from "@/static/fixed_responses/login_static";
+import { DTLS, groups, HUB, platformCDNs } from "@/static/fixed_responses/login_static";
 import { logger } from "@/src/utils/logger";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -18,6 +18,7 @@ const loginController: RequestHandler = async (request, response) => {
     const loginRequest = toLoginRequest(body);
 
     const account = await Account.findOne({ email: loginRequest.email }); //{ _id: 0, __v: 0 }
+    const nonce = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
 
     if (!account && config.autoCreateAccount && loginRequest.ClientType != "webui") {
         try {
@@ -30,7 +31,8 @@ const loginController: RequestHandler = async (request, response) => {
                 CrossPlatformAllowed: true,
                 ForceLogoutVersion: 0,
                 ConsentNeeded: false,
-                TrackedSettings: []
+                TrackedSettings: [],
+                Nonce: nonce
             });
             logger.debug("created new account");
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -39,7 +41,6 @@ const loginController: RequestHandler = async (request, response) => {
                 ...databaseAccount,
                 Groups: groups,
                 platformCDNs: platformCDNs,
-                Nonce: Nonce,
                 NRS: [config.myAddress],
                 DTLS: DTLS,
                 IRC: [config.myAddress],
@@ -63,12 +64,16 @@ const loginController: RequestHandler = async (request, response) => {
         return;
     }
 
+    if (account.Nonce == 0 || loginRequest.ClientType != "webui") {
+        account.Nonce = nonce;
+        account.save();
+    }
+
     const { email, password, ...databaseAccount } = account.toJSON();
     const newLoginResponse: ILoginResponse = {
         ...databaseAccount,
         Groups: groups,
         platformCDNs: platformCDNs,
-        Nonce: Nonce,
         NRS: [config.myAddress],
         DTLS: DTLS,
         IRC: [config.myAddress],

@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import { config } from "@/src/services/configService";
 import allShipFeatures from "@/static/fixed_responses/allShipFeatures.json";
-import { parseString } from "@/src/helpers/general";
+import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getPersonalRooms } from "@/src/services/personalRoomsService";
 import { getShip } from "@/src/services/shipService";
 import { PersonalRooms } from "@/src/models/personalRoomsModel";
@@ -12,7 +12,7 @@ import { IGetShipResponse } from "@/src/types/shipTypes";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const getShipController: RequestHandler = async (req, res) => {
-    const accountId = parseString(req.query.accountId);
+    const accountId = await getAccountIdForRequest(req);
     const personalRooms = await getPersonalRooms(accountId);
     const loadout = await getLoadout(accountId);
     const ship = await getShip(personalRooms.activeShipId, "ShipInteriorColors ShipAttachments SkinFlavourItem");

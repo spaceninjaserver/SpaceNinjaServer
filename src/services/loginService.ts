@@ -6,12 +6,13 @@ import { Types } from "mongoose";
 import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
 import { PersonalRooms } from "@/src/models/personalRoomsModel";
 import new_personal_rooms from "@/static/fixed_responses/personalRooms.json";
+import { Request } from "express";
 
-const isCorrectPassword = (requestPassword: string, databasePassword: string): boolean => {
+export const isCorrectPassword = (requestPassword: string, databasePassword: string): boolean => {
     return requestPassword === databasePassword;
 };
 
-const createAccount = async (accountData: IDatabaseAccount) => {
+export const createAccount = async (accountData: IDatabaseAccount) => {
     const account = new Account(accountData);
     try {
         await account.save();
@@ -28,8 +29,6 @@ const createAccount = async (accountData: IDatabaseAccount) => {
     }
 };
 
-export { isCorrectPassword, createAccount };
-
 export const createLoadout = async (accountId: Types.ObjectId) => {
     const loadout = new Loadout({ loadoutOwnerId: accountId });
     const savedLoadout = await loadout.save();
@@ -43,4 +42,24 @@ export const createPersonalRooms = async (accountId: Types.ObjectId, shipId: Typ
         activeShipId: shipId
     });
     await personalRooms.save();
+};
+
+export const getAccountIdForRequest = async (req: Request): Promise<string> => {
+    if (!req.query.accountId) {
+        throw new Error("Request is missing accountId parameter");
+    }
+    if (!req.query.nonce || parseInt(req.query.nonce as string) === 0) {
+        throw new Error("Request is missing nonce parameter");
+    }
+    const account = await Account.findOne(
+        {
+            _id: req.query.accountId,
+            Nonce: req.query.nonce
+        },
+        "_id"
+    );
+    if (!account) {
+        throw new Error("Invalid accountId-nonce pair");
+    }
+    return account._id.toString();
 };

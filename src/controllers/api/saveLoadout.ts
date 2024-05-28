@@ -1,13 +1,13 @@
 import { RequestHandler } from "express";
 import { ISaveLoadoutRequest } from "@/src/types/saveLoadoutTypes";
 import { handleInventoryItemConfigChange } from "@/src/services/saveLoadoutService";
-import { parseString } from "@/src/helpers/general";
+import { getAccountIdForRequest } from "@/src/services/loginService";
 import { logger } from "@/src/utils/logger";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const saveLoadoutController: RequestHandler = async (req, res) => {
     //validate here
-    const accountId = parseString(req.query.accountId);
+    const accountId = await getAccountIdForRequest(req);
 
     try {
         const body: ISaveLoadoutRequest = JSON.parse(req.body as string) as ISaveLoadoutRequest;
