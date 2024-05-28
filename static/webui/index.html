@@ -52,6 +52,7 @@
                 <div class="offcanvas-body">
                     <ul>
                         <li><a href="/webui/inventory">Inventory</a></li>
+                        <li><a href="/webui/mods">Mods</a></li>
                     </ul>
                 </div>
             </div>
@@ -114,6 +115,29 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div data-route="/webui/mods">
+                    <div class="card mb-4">
+                        <h5 class="card-header">Add Riven</h5>
+                        <form class="card-body" onsubmit="doAcquireRiven();return false;">
+                            <select class="form-control mb-3" id="addriven-type">
+                                <option value="LotusArchgunRandomModRare">LotusArchgunRandomModRare</option>
+                                <option value="LotusModularMeleeRandomModRare">LotusModularMeleeRandomModRare</option>
+                                <option value="LotusModularPistolRandomModRare">LotusModularPistolRandomModRare</option>
+                                <option value="LotusPistolRandomModRare">LotusPistolRandomModRare</option>
+                                <option value="LotusRifleRandomModRare" selected>LotusRifleRandomModRare</option>
+                                <option value="LotusShotgunRandomModRare">LotusShotgunRandomModRare</option>
+                                <option value="PlayerMeleeWeaponRandomModRare">PlayerMeleeWeaponRandomModRare</option>
+                            </select>
+                            <textarea
+                                id="addriven-fingerprint"
+                                class="form-control mb-3"
+                                placeholder="Fingerprint"
+                            ></textarea>
+                            <button class="btn btn-primary" style="margin-right: 5px" type="submit">Add</button>
+                            <a href="https://riven.builds.wf/" target="_blank">Need help with the fingerprint?</a>
+                        </form>
                     </div>
                 </div>
             </div>

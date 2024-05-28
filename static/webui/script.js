@@ -282,3 +282,66 @@ function doAcquireMiscItems() {
 $("#miscitem-name").on("input", () => {
     $("#miscitem-name").removeClass("is-invalid");
 });
+
+function doAcquireRiven() {
+    let fingerprint;
+    try {
+        fingerprint = JSON.parse($("#addriven-fingerprint").val());
+        if (typeof fingerprint !== "object") {
+            fingerprint = JSON.parse(fingerprint);
+        }
+    } catch (e) {}
+    if (
+        typeof fingerprint !== "object" ||
+        !("compat" in fingerprint) ||
+        !("pol" in fingerprint) ||
+        !("buffs" in fingerprint)
+    ) {
+        $("#addriven-fingerprint").addClass("is-invalid").focus();
+        return;
+    }
+    const uniqueName = "/Lotus/Upgrades/Mods/Randomized/" + $("#addriven-type").val();
+    // Add riven type to inventory
+    $.post({
+        url: "/api/missionInventoryUpdate.php?" + window.authz,
+        contentType: "text/plain",
+        data: JSON.stringify({
+            RawUpgrades: [
+                {
+                    ItemType: uniqueName,
+                    ItemCount: 1
+                }
+            ]
+        })
+    }).done(function () {
+        // Get riven's assigned id
+        $.get("/api/inventory.php?" + window.authz).done(data => {
+            for (const rawUpgrade of data.RawUpgrades) {
+                if (rawUpgrade.ItemType === uniqueName) {
+                    // Add fingerprint to riven
+                    $.post({
+                        url: "/api/artifacts.php?" + window.authz,
+                        contentType: "text/plain",
+                        data: JSON.stringify({
+                            Upgrade: {
+                                ItemType: uniqueName,
+                                UpgradeFingerprint: JSON.stringify(fingerprint),
+                                ItemId: rawUpgrade.LastAdded
+                            },
+                            LevelDiff: 0,
+                            Cost: 0,
+                            FusionPointCost: 0
+                        })
+                    }).done(function () {
+                        alert("Successfully added.");
+                    });
+                    break;
+                }
+            }
+        });
+    });
+}
+
+$("#addriven-fingerprint").on("input", () => {
+    $("#addriven-fingerprint").removeClass("is-invalid");
+});
