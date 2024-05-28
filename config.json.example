@@ -17,5 +17,6 @@
   "infiniteResources": true,
   "unlockallShipFeatures": true,
   "unlockAllShipDecorations": true,
-  "unlockAllFlavourItems": true
+  "unlockAllFlavourItems": true,
+  "spoofMasteryRank": -1
 }

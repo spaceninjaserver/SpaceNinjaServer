@@ -16,6 +16,7 @@ interface IConfig {
     unlockallShipFeatures?: boolean;
     unlockAllShipDecorations?: boolean;
     unlockAllFlavourItems?: boolean;
+    spoofMasteryRank?: number;
 }
 
 interface ILoggerConfig {
