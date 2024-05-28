@@ -2,70 +2,142 @@
 <html lang="en" data-bs-theme="dark">
     <head>
         <title>OpenWF WebUI</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
             rel="stylesheet"
             integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
             crossorigin="anonymous"
         />
+        <link rel="stylesheet" href="style.css" />
     </head>
     <body>
-        <div class="container pt-3 pb-3">
-            <h1>OpenWF WebUI</h1>
-            <div id="login-view">
-                <p>Login using your OpenWF account credentials.</p>
-                <form onsubmit="doLogin();return false;">
-                    <label for="email">Email address</label>
-                    <input class="form-control" type="email" id="email" required />
-                    <br />
-                    <label for="password">Password</label>
-                    <input class="form-control" type="password" id="password" required />
-                    <br />
-                    <button class="btn btn-primary" type="submit">Login</button>
-                </form>
+        <nav class="navbar sticky-top bg-body-tertiary">
+            <div class="container">
+                <button
+                    class="navbar-toggler d-lg-none"
+                    type="button"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#sidebar"
+                    aria-controls="sidebar"
+                    aria-label="Toggle sidebar"
+                >
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <a class="navbar-brand">OpenWF WebUI</a>
+                <div class="nav-item dropdown">
+                    <button
+                        class="nav-link dropdown-toggle displayname"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                    ></button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="/webui/" onclick="logout();">Logout</a></li>
+                    </ul>
+                </div>
             </div>
-            <div id="main-view" class="d-none">
-                <p>Hello, <b class="displayname"></b>! <a href="#" onclick="logout();">Logout</a></p>
-                <p class="mb-4">
+        </nav>
+        <div class="container pt-3 pb-3" id="main-view">
+            <div class="offcanvas-lg offcanvas-start" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="sidebarLabel">Sidebar</h5>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="offcanvas"
+                        data-bs-target="#sidebar"
+                        aria-label="Close"
+                    ></button>
+                </div>
+                <div class="offcanvas-body">
+                    <ul>
+                        <li><a href="/webui/inventory">Inventory</a></li>
+                        <li><a href="/webui/mods">Mods</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <p id="refresh-note" class="mb-4">
                     Note: Changes made here will only be reflected in-game when the game re-downloads your inventory.
                     Visiting the navigation should be the easiest way to trigger that.
                 </p>
-                <div class="card mb-4">
-                    <h5 class="card-header">Add Items</h5>
-                    <form class="card-body input-group" onsubmit="doAcquireMiscItems();return false;">
-                        <input class="form-control" id="miscitem-count" type="number" min="1" value="1" />
-                        <input class="form-control" id="miscitem-type" list="datalist-miscitems" />
-                        <button class="btn btn-primary" type="submit">Add</button>
+                <div data-route="/webui/">
+                    <p>Login using your OpenWF account credentials.</p>
+                    <form onsubmit="doLogin();return false;">
+                        <label for="email">Email address</label>
+                        <input class="form-control" type="email" id="email" required />
+                        <br />
+                        <label for="password">Password</label>
+                        <input class="form-control" type="password" id="password" required />
+                        <br />
+                        <button class="btn btn-primary" type="submit">Login</button>
                     </form>
                 </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="card mb-4">
-                            <h5 class="card-header">Warframes</h5>
-                            <div class="card-body">
-                                <table class="table table-striped w-100">
-                                    <tbody id="warframe-list"></tbody>
-                                </table>
-                                <form class="input-group" onsubmit="doAcquireWarframe();return false;">
-                                    <input class="form-control" id="warframe-to-acquire" list="datalist-warframes" />
-                                    <button class="btn btn-primary" type="submit">Add</button>
-                                </form>
+                <div data-route="/webui/inventory">
+                    <div class="card mb-4">
+                        <h5 class="card-header">Add Items</h5>
+                        <form class="card-body input-group" onsubmit="doAcquireMiscItems();return false;">
+                            <input class="form-control" id="miscitem-count" type="number" min="1" value="1" />
+                            <input class="form-control" id="miscitem-type" list="datalist-miscitems" />
+                            <button class="btn btn-primary" type="submit">Add</button>
+                        </form>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="card mb-4">
+                                <h5 class="card-header">Warframes</h5>
+                                <div class="card-body">
+                                    <table class="table table-striped w-100">
+                                        <tbody id="warframe-list"></tbody>
+                                    </table>
+                                    <form class="input-group" onsubmit="doAcquireWarframe();return false;">
+                                        <input
+                                            class="form-control"
+                                            id="warframe-to-acquire"
+                                            list="datalist-warframes"
+                                        />
+                                        <button class="btn btn-primary" type="submit">Add</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="card mb-4">
+                                <h5 class="card-header">Weapons</h5>
+                                <div class="card-body">
+                                    <table class="table table-striped w-100">
+                                        <tbody id="weapon-list"></tbody>
+                                    </table>
+                                    <form class="input-group" onsubmit="doAcquireWeapon();return false;">
+                                        <input class="form-control" id="weapon-to-acquire" list="datalist-weapons" />
+                                        <button class="btn btn-primary" type="submit">Add</button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="card mb-4">
-                            <h5 class="card-header">Weapons</h5>
-                            <div class="card-body">
-                                <table class="table table-striped w-100">
-                                    <tbody id="weapon-list"></tbody>
-                                </table>
-                                <form class="input-group" onsubmit="doAcquireWeapon();return false;">
-                                    <input class="form-control" id="weapon-to-acquire" list="datalist-weapons" />
-                                    <button class="btn btn-primary" type="submit">Add</button>
-                                </form>
-                            </div>
-                        </div>
+                </div>
+                <div data-route="/webui/mods">
+                    <div class="card mb-4">
+                        <h5 class="card-header">Add Riven</h5>
+                        <form class="card-body" onsubmit="doAcquireRiven();return false;">
+                            <select class="form-control mb-3" id="addriven-type">
+                                <option value="LotusArchgunRandomModRare">LotusArchgunRandomModRare</option>
+                                <option value="LotusModularMeleeRandomModRare">LotusModularMeleeRandomModRare</option>
+                                <option value="LotusModularPistolRandomModRare">LotusModularPistolRandomModRare</option>
+                                <option value="LotusPistolRandomModRare">LotusPistolRandomModRare</option>
+                                <option value="LotusRifleRandomModRare" selected>LotusRifleRandomModRare</option>
+                                <option value="LotusShotgunRandomModRare">LotusShotgunRandomModRare</option>
+                                <option value="PlayerMeleeWeaponRandomModRare">PlayerMeleeWeaponRandomModRare</option>
+                            </select>
+                            <textarea
+                                id="addriven-fingerprint"
+                                class="form-control mb-3"
+                                placeholder="Fingerprint"
+                            ></textarea>
+                            <button class="btn btn-primary" style="margin-right: 5px" type="submit">Add</button>
+                            <a href="https://riven.builds.wf/" target="_blank">Need help with the fingerprint?</a>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -79,6 +151,12 @@
             crossorigin="anonymous"
         ></script>
         <script src="https://cdn.jsdelivr.net/gh/angeal185/whirlpool-js/dist/whirlpool-js.min.js"></script>
+        <script src="single.js"></script>
         <script src="script.js"></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"
+        ></script>
     </body>
 </html>

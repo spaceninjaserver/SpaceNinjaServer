@@ -2,6 +2,7 @@ import express from "express";
 import path from "path";
 
 const webuiRouter = express.Router();
+const rootDir = path.join(__dirname, "../..");
 
 // Redirect / to /webui/
 webuiRouter.get("/", (_req, res) => {
@@ -16,7 +17,15 @@ webuiRouter.use("/webui", (req, res, next) => {
     next();
 });
 
-// Serve static files from the webui directory
-webuiRouter.use("/webui", express.static(path.join(__dirname, "../..", "static/webui")));
+// Serve virtual routes
+webuiRouter.get("/webui/inventory", (_req, res) => {
+    res.sendFile(path.join(rootDir, "static/webui/index.html"));
+});
+webuiRouter.get("/webui/mods", (_req, res) => {
+    res.sendFile(path.join(rootDir, "static/webui/index.html"));
+});
+
+// Serve static files
+webuiRouter.use("/webui", express.static(path.join(rootDir, "static/webui")));
 
 export { webuiRouter };

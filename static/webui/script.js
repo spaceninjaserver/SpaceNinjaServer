@@ -1,6 +1,7 @@
 function doLogin() {
     localStorage.setItem("email", $("#email").val());
     localStorage.setItem("password", $("#password").val());
+    $("#email, #password").val("");
     loginFromLocalStorage();
 }
 
@@ -20,10 +21,12 @@ function loginFromLocalStorage() {
         })
     });
     req.done(data => {
-        $("#login-view").addClass("d-none");
-        $("#main-view").removeClass("d-none");
+        if (single.getCurrentPath() == "/webui/") {
+            single.loadRoute("/webui/inventory");
+        }
         $(".displayname").text(data.DisplayName);
         window.accountId = data.id;
+        window.authz = "accountId=" + data.id + "&nonce=" + data.Nonce;
         updateInventory();
     });
     req.fail(() => {
@@ -35,13 +38,24 @@ function loginFromLocalStorage() {
 function logout() {
     localStorage.removeItem("email");
     localStorage.removeItem("password");
-    $("#login-view").removeClass("d-none");
-    $("#main-view").addClass("d-none");
 }
 
 if (localStorage.getItem("email") && localStorage.getItem("password")) {
     loginFromLocalStorage();
 }
+
+single.on("route_load", function (event) {
+    if (event.route.paths[0] != "/webui/") {
+        // Authorised route?
+        if (!localStorage.getItem("email")) {
+            // Not logged in?
+            return single.loadRoute("/webui/"); // Show login screen
+        }
+        $("body").addClass("logged-in");
+    } else {
+        $("body").removeClass("logged-in");
+    }
+});
 
 window.itemListPromise = new Promise(resolve => {
     const req = $.get("/custom/getItemLists");
@@ -61,7 +75,7 @@ window.itemListPromise = new Promise(resolve => {
 });
 
 function updateInventory() {
-    const req = $.get("/api/inventory.php?accountId=" + window.accountId);
+    const req = $.get("/api/inventory.php?" + window.authz);
     req.done(data => {
         window.itemListPromise.then(itemMap => {
             document.getElementById("warframe-list").innerHTML = "";
@@ -215,7 +229,7 @@ function addGearExp(category, oid, xp) {
         }
     ];
     $.post({
-        url: "/api/missionInventoryUpdate.php?accountId=" + window.accountId,
+        url: "/api/missionInventoryUpdate.php?" + window.authz,
         contentType: "text/plain",
         data: JSON.stringify(data)
     }).done(function () {
@@ -235,7 +249,7 @@ function disposeOfGear(category, oid) {
         }
     ];
     $.post({
-        url: "/api/sell.php?accountId=" + window.accountId,
+        url: "/api/sell.php?" + window.authz,
         contentType: "text/plain",
         data: JSON.stringify(data)
     }).done(function () {
@@ -250,7 +264,7 @@ function doAcquireMiscItems() {
         return;
     }
     $.post({
-        url: "/api/missionInventoryUpdate.php?accountId=" + window.accountId,
+        url: "/api/missionInventoryUpdate.php?" + window.authz,
         contentType: "text/plain",
         data: JSON.stringify({
             MiscItems: [
@@ -267,4 +281,67 @@ function doAcquireMiscItems() {
 
 $("#miscitem-name").on("input", () => {
     $("#miscitem-name").removeClass("is-invalid");
+});
+
+function doAcquireRiven() {
+    let fingerprint;
+    try {
+        fingerprint = JSON.parse($("#addriven-fingerprint").val());
+        if (typeof fingerprint !== "object") {
+            fingerprint = JSON.parse(fingerprint);
+        }
+    } catch (e) {}
+    if (
+        typeof fingerprint !== "object" ||
+        !("compat" in fingerprint) ||
+        !("pol" in fingerprint) ||
+        !("buffs" in fingerprint)
+    ) {
+        $("#addriven-fingerprint").addClass("is-invalid").focus();
+        return;
+    }
+    const uniqueName = "/Lotus/Upgrades/Mods/Randomized/" + $("#addriven-type").val();
+    // Add riven type to inventory
+    $.post({
+        url: "/api/missionInventoryUpdate.php?" + window.authz,
+        contentType: "text/plain",
+        data: JSON.stringify({
+            RawUpgrades: [
+                {
+                    ItemType: uniqueName,
+                    ItemCount: 1
+                }
+            ]
+        })
+    }).done(function () {
+        // Get riven's assigned id
+        $.get("/api/inventory.php?" + window.authz).done(data => {
+            for (const rawUpgrade of data.RawUpgrades) {
+                if (rawUpgrade.ItemType === uniqueName) {
+                    // Add fingerprint to riven
+                    $.post({
+                        url: "/api/artifacts.php?" + window.authz,
+                        contentType: "text/plain",
+                        data: JSON.stringify({
+                            Upgrade: {
+                                ItemType: uniqueName,
+                                UpgradeFingerprint: JSON.stringify(fingerprint),
+                                ItemId: rawUpgrade.LastAdded
+                            },
+                            LevelDiff: 0,
+                            Cost: 0,
+                            FusionPointCost: 0
+                        })
+                    }).done(function () {
+                        alert("Successfully added.");
+                    });
+                    break;
+                }
+            }
+        });
+    });
+}
+
+$("#addriven-fingerprint").on("input", () => {
+    $("#addriven-fingerprint").removeClass("is-invalid");
 });
