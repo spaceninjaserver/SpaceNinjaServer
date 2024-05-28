@@ -1,0 +1,17 @@
+@media (min-width: 992px) {
+    body.logged-in #main-view {
+        display: grid;
+        grid-template-columns: 1fr 8fr;
+        gap: 1.5rem;
+    }
+
+    body:not(.logged-in) #sidebar {
+        display: none;
+    }
+}
+
+body:not(.logged-in) .navbar-toggler,
+body:not(.logged-in) .nav-item.dropdown,
+body:not(.logged-in) #refresh-note {
+    display: none;
+}

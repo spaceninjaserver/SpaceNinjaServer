@@ -1,6 +1,7 @@
 function doLogin() {
     localStorage.setItem("email", $("#email").val());
     localStorage.setItem("password", $("#password").val());
+    $("#email, #password").val("");
     loginFromLocalStorage();
 }
 
@@ -20,8 +21,9 @@ function loginFromLocalStorage() {
         })
     });
     req.done(data => {
-        $("#login-view").addClass("d-none");
-        $("#main-view").removeClass("d-none");
+        if (single.getCurrentPath() == "/webui/") {
+            single.loadRoute("/webui/inventory");
+        }
         $(".displayname").text(data.DisplayName);
         window.accountId = data.id;
         window.authz = "accountId=" + data.id + "&nonce=" + data.Nonce;
@@ -36,13 +38,24 @@ function loginFromLocalStorage() {
 function logout() {
     localStorage.removeItem("email");
     localStorage.removeItem("password");
-    $("#login-view").removeClass("d-none");
-    $("#main-view").addClass("d-none");
 }
 
 if (localStorage.getItem("email") && localStorage.getItem("password")) {
     loginFromLocalStorage();
 }
+
+single.on("route_load", function (event) {
+    if (event.route.paths[0] != "/webui/") {
+        // Authorised route?
+        if (!localStorage.getItem("email")) {
+            // Not logged in?
+            return single.loadRoute("/webui/"); // Show login screen
+        }
+        $("body").addClass("logged-in");
+    } else {
+        $("body").removeClass("logged-in");
+    }
+});
 
 window.itemListPromise = new Promise(resolve => {
     const req = $.get("/custom/getItemLists");
