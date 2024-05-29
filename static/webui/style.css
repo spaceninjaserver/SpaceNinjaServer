@@ -5,6 +5,12 @@
         gap: 1.5rem;
     }
 
+    body.logged-in #sidebar {
+        position: sticky;
+        top: 5rem;
+        height: 100px;
+    }
+
     body:not(.logged-in) #sidebar {
         display: none;
     }
