@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import { ISellRequest } from "@/src/types/sellTypes";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getInventory } from "@/src/services/inventoryService";
+import { getInventory, addMods } from "@/src/services/inventoryService";
 
 export const sellController: RequestHandler = async (req, res) => {
     const payload: ISellRequest = JSON.parse(req.body.toString());
@@ -43,7 +43,18 @@ export const sellController: RequestHandler = async (req, res) => {
         // Note: sellItem.String is a uniqueName in this case
     }
     if (payload.Items.Upgrades) {
-        // TODO
+        payload.Items.Upgrades.forEach(sellItem => {
+            if (sellItem.Count == 0) {
+                inventory.Upgrades.pull({ _id: sellItem.String });
+            } else {
+                addMods(inventory, [
+                    {
+                        ItemType: sellItem.String,
+                        ItemCount: sellItem.Count * -1
+                    }
+                ]);
+            }
+        });
     }
 
     await inventory.save();
