@@ -1,6 +1,6 @@
 import express from "express";
 import buildConfig from "@/static/data/buildConfig.json";
-import fs from "fs";
+import fs from "fs/promises";
 
 const cacheRouter = express.Router();
 
@@ -17,17 +17,19 @@ cacheRouter.get(/^\/origin\/[a-zA-Z0-9]+\/[0-9]+\/H\.Cache\.bin.*$/, (_req, res)
 });
 
 cacheRouter.get(/\.bk2!/, async (req, res) => {
-    const dir = req.path.substr(0, req.path.lastIndexOf("/"));
-    const file = req.path.substr(dir.length + 1);
+    try {
+        const dir = req.path.substr(0, req.path.lastIndexOf("/"));
+        const file = req.path.substr(dir.length + 1);
+        const filePath = `static/data${dir}/${file}`;
 
-    // Return file if we have it
-    if (fs.existsSync(`static/data${dir}/${file}`)) {
-        res.send(fs.readFileSync(`static/data${dir}/${file}`, null));
-        return;
+        // Return file if we have it
+        await fs.access(filePath);
+        const data = await fs.readFile(filePath, null);
+        res.send(data);
+    } catch (err) {
+        // 404 if we don't
+        res.status(404).end();
     }
-
-    // 404 if we don't
-    res.status(404).end();
 });
 
 export { cacheRouter };
