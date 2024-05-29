@@ -2,6 +2,7 @@ import { Model, Schema, Types, model } from "mongoose";
 import {
     IFlavourItem,
     IRawUpgrade,
+    ICrewShipSalvagedWeaponSkin,
     IMiscItem,
     IInventoryDatabase,
     IBooster,
@@ -1001,6 +1002,7 @@ type InventoryDocumentProps = {
     Melee: Types.DocumentArray<IWeaponDatabase>;
     FlavourItems: Types.DocumentArray<IFlavourItem>;
     RawUpgrades: Types.DocumentArray<IRawUpgrade>;
+    Upgrades: Types.DocumentArray<ICrewShipSalvagedWeaponSkin>;
     MiscItems: Types.DocumentArray<IMiscItem>;
     Boosters: Types.DocumentArray<IBooster>;
     OperatorLoadOuts: Types.DocumentArray<IOperatorConfigClient>;
