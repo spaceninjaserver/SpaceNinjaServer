@@ -205,7 +205,7 @@ function updateInventory() {
                         td.textContent += " " + RivenParser.parseRiven(rivenType, fingerprint, 1).name;
                         td.innerHTML += " <span title='Number of buffs'>▲ " + fingerprint.buffs.length + "</span>";
                         td.innerHTML += " <span title='Number of curses'>▼ " + fingerprint.curses.length + "</span>";
-                        td.innerHTML += " <span title='Number of rerolls'>⟳ " + fingerprint.rerolls + "</span>";
+                        td.innerHTML += " <span title='Number of rerolls'>⟳ " + parseInt(fingerprint.rerolls) + "</span>";
                         tr.appendChild(td);
                     }
                     {
