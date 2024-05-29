@@ -6,6 +6,24 @@ function doLogin() {
 }
 
 function loginFromLocalStorage() {
+    doLoginRequest(
+        data => {
+            if (single.getCurrentPath() == "/webui/") {
+                single.loadRoute("/webui/inventory");
+            }
+            $(".displayname").text(data.DisplayName);
+            window.accountId = data.id;
+            window.authz = "accountId=" + data.id + "&nonce=" + data.Nonce;
+            updateInventory();
+        },
+        () => {
+            logout();
+            alert("Login failed");
+        }
+    );
+}
+
+function doLoginRequest(succ_cb, fail_cb) {
     const req = $.post({
         url: "/api/login.php",
         contentType: "text/plain",
@@ -20,19 +38,22 @@ function loginFromLocalStorage() {
             PS: "W0RFXVN0ZXZlIGxpa2VzIGJpZyBidXR0cw==" // anti-cheat data
         })
     });
-    req.done(data => {
-        if (single.getCurrentPath() == "/webui/") {
-            single.loadRoute("/webui/inventory");
+    req.done(succ_cb);
+    req.fail(fail_cb);
+}
+
+function revalidateAuthz(succ_cb) {
+    return doLoginRequest(
+        data => {
+            window.authz = "accountId=" + data.id + "&nonce=" + data.Nonce;
+            succ_cb();
+        },
+        () => {
+            logout();
+            alert("Your credentials are no longer valid.");
+            single.loadRoute("/webui/"); // Show login screen
         }
-        $(".displayname").text(data.DisplayName);
-        window.accountId = data.id;
-        window.authz = "accountId=" + data.id + "&nonce=" + data.Nonce;
-        updateInventory();
-    });
-    req.fail(() => {
-        logout();
-        alert("Login failed");
-    });
+    );
 }
 
 function logout() {
@@ -176,18 +197,20 @@ function doAcquireWarframe() {
         $("#warframe-to-acquire").addClass("is-invalid").focus();
         return;
     }
-    const req = $.post({
-        url: "/custom/addItem",
-        contentType: "application/json",
-        data: JSON.stringify({
-            type: "Powersuit",
-            internalName: uniqueName,
-            accountId: window.accountId
-        })
-    });
-    req.done(() => {
-        document.getElementById("warframe-to-acquire").value = "";
-        updateInventory();
+    revalidateAuthz(() => {
+        const req = $.post({
+            url: "/custom/addItem",
+            contentType: "application/json",
+            data: JSON.stringify({
+                type: "Powersuit",
+                internalName: uniqueName,
+                accountId: window.accountId
+            })
+        });
+        req.done(() => {
+            document.getElementById("warframe-to-acquire").value = "";
+            updateInventory();
+        });
     });
 }
 
@@ -201,18 +224,20 @@ function doAcquireWeapon() {
         $("#weapon-to-acquire").addClass("is-invalid").focus();
         return;
     }
-    const req = $.post({
-        url: "/custom/addItem",
-        contentType: "application/json",
-        data: JSON.stringify({
-            type: "Weapon",
-            internalName: uniqueName,
-            accountId: window.accountId
-        })
-    });
-    req.done(() => {
-        document.getElementById("weapon-to-acquire").value = "";
-        updateInventory();
+    revalidateAuthz(() => {
+        const req = $.post({
+            url: "/custom/addItem",
+            contentType: "application/json",
+            data: JSON.stringify({
+                type: "Weapon",
+                internalName: uniqueName,
+                accountId: window.accountId
+            })
+        });
+        req.done(() => {
+            document.getElementById("weapon-to-acquire").value = "";
+            updateInventory();
+        });
     });
 }
 
@@ -228,12 +253,14 @@ function addGearExp(category, oid, xp) {
             XP: xp
         }
     ];
-    $.post({
-        url: "/api/missionInventoryUpdate.php?" + window.authz,
-        contentType: "text/plain",
-        data: JSON.stringify(data)
-    }).done(function () {
-        updateInventory();
+    revalidateAuthz(() => {
+        $.post({
+            url: "/api/missionInventoryUpdate.php?" + window.authz,
+            contentType: "text/plain",
+            data: JSON.stringify(data)
+        }).done(function () {
+            updateInventory();
+        });
     });
 }
 
@@ -248,12 +275,14 @@ function disposeOfGear(category, oid) {
             String: oid
         }
     ];
-    $.post({
-        url: "/api/sell.php?" + window.authz,
-        contentType: "text/plain",
-        data: JSON.stringify(data)
-    }).done(function () {
-        updateInventory();
+    revalidateAuthz(() => {
+        $.post({
+            url: "/api/sell.php?" + window.authz,
+            contentType: "text/plain",
+            data: JSON.stringify(data)
+        }).done(function () {
+            updateInventory();
+        });
     });
 }
 
@@ -263,19 +292,21 @@ function doAcquireMiscItems() {
         $("#miscitem-type").addClass("is-invalid").focus();
         return;
     }
-    $.post({
-        url: "/api/missionInventoryUpdate.php?" + window.authz,
-        contentType: "text/plain",
-        data: JSON.stringify({
-            MiscItems: [
-                {
-                    ItemType: uniqueName,
-                    ItemCount: $("#miscitem-count").val()
-                }
-            ]
-        })
-    }).done(function () {
-        alert("Successfully added.");
+    revalidateAuthz(() => {
+        $.post({
+            url: "/api/missionInventoryUpdate.php?" + window.authz,
+            contentType: "text/plain",
+            data: JSON.stringify({
+                MiscItems: [
+                    {
+                        ItemType: uniqueName,
+                        ItemCount: $("#miscitem-count").val()
+                    }
+                ]
+            })
+        }).done(function () {
+            alert("Successfully added.");
+        });
     });
 }
 
@@ -301,43 +332,45 @@ function doAcquireRiven() {
         return;
     }
     const uniqueName = "/Lotus/Upgrades/Mods/Randomized/" + $("#addriven-type").val();
-    // Add riven type to inventory
-    $.post({
-        url: "/api/missionInventoryUpdate.php?" + window.authz,
-        contentType: "text/plain",
-        data: JSON.stringify({
-            RawUpgrades: [
-                {
-                    ItemType: uniqueName,
-                    ItemCount: 1
+    revalidateAuthz(() => {
+        // Add riven type to inventory
+        $.post({
+            url: "/api/missionInventoryUpdate.php?" + window.authz,
+            contentType: "text/plain",
+            data: JSON.stringify({
+                RawUpgrades: [
+                    {
+                        ItemType: uniqueName,
+                        ItemCount: 1
+                    }
+                ]
+            })
+        }).done(function () {
+            // Get riven's assigned id
+            $.get("/api/inventory.php?" + window.authz).done(data => {
+                for (const rawUpgrade of data.RawUpgrades) {
+                    if (rawUpgrade.ItemType === uniqueName) {
+                        // Add fingerprint to riven
+                        $.post({
+                            url: "/api/artifacts.php?" + window.authz,
+                            contentType: "text/plain",
+                            data: JSON.stringify({
+                                Upgrade: {
+                                    ItemType: uniqueName,
+                                    UpgradeFingerprint: JSON.stringify(fingerprint),
+                                    ItemId: rawUpgrade.LastAdded
+                                },
+                                LevelDiff: 0,
+                                Cost: 0,
+                                FusionPointCost: 0
+                            })
+                        }).done(function () {
+                            alert("Successfully added.");
+                        });
+                        break;
+                    }
                 }
-            ]
-        })
-    }).done(function () {
-        // Get riven's assigned id
-        $.get("/api/inventory.php?" + window.authz).done(data => {
-            for (const rawUpgrade of data.RawUpgrades) {
-                if (rawUpgrade.ItemType === uniqueName) {
-                    // Add fingerprint to riven
-                    $.post({
-                        url: "/api/artifacts.php?" + window.authz,
-                        contentType: "text/plain",
-                        data: JSON.stringify({
-                            Upgrade: {
-                                ItemType: uniqueName,
-                                UpgradeFingerprint: JSON.stringify(fingerprint),
-                                ItemId: rawUpgrade.LastAdded
-                            },
-                            LevelDiff: 0,
-                            Cost: 0,
-                            FusionPointCost: 0
-                        })
-                    }).done(function () {
-                        alert("Successfully added.");
-                    });
-                    break;
-                }
-            }
+            });
         });
     });
 }
