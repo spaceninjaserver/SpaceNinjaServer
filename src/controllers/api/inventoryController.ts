@@ -8,6 +8,7 @@ import allMissions from "@/static/fixed_responses/allMissions.json";
 import allQuestKeys from "@/static/fixed_responses/allQuestKeys.json";
 import allShipDecorations from "@/static/fixed_responses/allShipDecorations.json";
 import allFlavourItems from "@/static/fixed_responses/allFlavourItems.json";
+import allSkins from "@/static/fixed_responses/allSkins.json";
 import { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
 import { IShipInventory, IFlavourItem } from "@/src/types/inventoryTypes/inventoryTypes";
 
@@ -58,6 +59,18 @@ const inventoryController: RequestHandler = async (request: Request, response: R
     if (config.unlockAllQuests) inventoryResponse.QuestKeys = allQuestKeys;
     if (config.unlockAllShipDecorations) inventoryResponse.ShipDecorations = allShipDecorations;
     if (config.unlockAllFlavourItems) inventoryResponse.FlavourItems = allFlavourItems satisfies IFlavourItem[];
+
+    if (config.unlockAllSkins) {
+        inventoryResponse.WeaponSkins = [];
+        for (let skin of allSkins) {
+            inventoryResponse.WeaponSkins.push({
+                ItemId: {
+                    $oid: "000000000000000000000000"
+                },
+                ItemType: skin
+            });
+        }
+    }
 
     if (
         typeof config.spoofMasteryRank === "number" &&
