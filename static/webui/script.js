@@ -95,6 +95,14 @@ window.itemListPromise = new Promise(resolve => {
     });
 });
 
+const rivenGenericCompatNames = {
+    "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun": "Archgun",
+    "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon": "Melee",
+    "/Lotus/Weapons/Tenno/Pistol/LotusPistol": "Pistol",
+    "/Lotus/Weapons/Tenno/Rifle/LotusRifle": "Rifle",
+    "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun": "Shotgun"
+};
+
 function updateInventory() {
     const req = $.get("/api/inventory.php?" + window.authz);
     req.done(data => {
@@ -179,6 +187,65 @@ function updateInventory() {
                     }
                     document.getElementById("weapon-list").appendChild(tr);
                 });
+            });
+
+            document.getElementById("riven-list").innerHTML = "";
+            data.Upgrades.forEach(item => {
+                if (item.ItemType.substr(0, 32) == "/Lotus/Upgrades/Mods/Randomized/") {
+                    const rivenType = item.ItemType.substr(32);
+                    const fingerprint = JSON.parse(item.UpgradeFingerprint);
+
+                    const tr = document.createElement("tr");
+                    {
+                        const td = document.createElement("td");
+                        td.textContent =
+                            itemMap[fingerprint.compat]?.name ??
+                            rivenGenericCompatNames[fingerprint.compat] ??
+                            fingerprint.compat;
+                        td.textContent += " " + RivenParser.parseRiven(rivenType, fingerprint, 1).name;
+                        td.innerHTML += " <span title='Number of buffs'>▲ " + fingerprint.buffs.length + "</span>";
+                        td.innerHTML += " <span title='Number of curses'>▼ " + fingerprint.curses.length + "</span>";
+                        td.innerHTML +=
+                            " <span title='Number of rerolls'>⟳ " + parseInt(fingerprint.rerolls) + "</span>";
+                        tr.appendChild(td);
+                    }
+                    {
+                        const td = document.createElement("td");
+                        td.classList = "text-end";
+                        {
+                            const a = document.createElement("a");
+                            a.href =
+                                "https://riven.builds.wf/#" +
+                                encodeURIComponent(
+                                    JSON.stringify({
+                                        rivenType: rivenType,
+                                        omegaAttenuation: 1,
+                                        fingerprint: fingerprint
+                                    })
+                                );
+                            a.target = "_blank";
+                            a.textContent = "View Stats";
+                            td.appendChild(a);
+                        }
+                        {
+                            const span = document.createElement("span");
+                            span.innerHTML = " &middot; ";
+                            td.appendChild(span);
+                        }
+                        {
+                            const a = document.createElement("a");
+                            a.href = "#";
+                            a.onclick = function (event) {
+                                event.preventDefault();
+                                disposeOfGear("Upgrades", item.ItemId.$oid);
+                            };
+                            a.textContent = "Remove";
+                            td.appendChild(a);
+                        }
+                        tr.appendChild(td);
+                    }
+                    document.getElementById("riven-list").appendChild(tr);
+                }
             });
         });
     });
@@ -272,7 +339,8 @@ function disposeOfGear(category, oid) {
     };
     data.Items[category] = [
         {
-            String: oid
+            String: oid,
+            Count: 0
         }
     ];
     revalidateAuthz(() => {
@@ -365,7 +433,8 @@ function doAcquireRiven() {
                                 FusionPointCost: 0
                             })
                         }).done(function () {
-                            alert("Successfully added.");
+                            $("#addriven-fingerprint").val("");
+                            updateInventory();
                         });
                         break;
                     }

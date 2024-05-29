@@ -51,8 +51,12 @@
                 </div>
                 <div class="offcanvas-body">
                     <ul>
-                        <li><a href="/webui/inventory">Inventory</a></li>
-                        <li><a href="/webui/mods">Mods</a></li>
+                        <li>
+                            <a href="/webui/inventory" data-bs-dismiss="offcanvas" data-bs-target="#sidebar"
+                                >Inventory</a
+                            >
+                        </li>
+                        <li><a href="/webui/mods" data-bs-dismiss="offcanvas" data-bs-target="#sidebar">Mods</a></li>
                     </ul>
                 </div>
             </div>
@@ -87,7 +91,7 @@
                             <div class="card mb-4">
                                 <h5 class="card-header">Warframes</h5>
                                 <div class="card-body">
-                                    <table class="table table-striped w-100">
+                                    <table class="table table-hover w-100">
                                         <tbody id="warframe-list"></tbody>
                                     </table>
                                     <form class="input-group" onsubmit="doAcquireWarframe();return false;">
@@ -105,7 +109,7 @@
                             <div class="card mb-4">
                                 <h5 class="card-header">Weapons</h5>
                                 <div class="card-body">
-                                    <table class="table table-striped w-100">
+                                    <table class="table table-hover w-100">
                                         <tbody id="weapon-list"></tbody>
                                     </table>
                                     <form class="input-group" onsubmit="doAcquireWeapon();return false;">
@@ -139,6 +143,14 @@
                             <a href="https://riven.builds.wf/" target="_blank">Need help with the fingerprint?</a>
                         </form>
                     </div>
+                    <div class="card mb-4 col-xxl-6">
+                        <h5 class="card-header">Rivens</h5>
+                        <div class="card-body">
+                            <table class="table table-hover w-100">
+                                <tbody id="riven-list"></tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -152,6 +164,7 @@
         ></script>
         <script src="https://cdn.jsdelivr.net/gh/angeal185/whirlpool-js/dist/whirlpool-js.min.js"></script>
         <script src="single.js"></script>
+        <script src="RivenParser.js"></script>
         <script src="script.js"></script>
         <script
             src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
