@@ -100,7 +100,7 @@ const rivenGenericCompatNames = {
     "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon": "Melee",
     "/Lotus/Weapons/Tenno/Pistol/LotusPistol": "Pistol",
     "/Lotus/Weapons/Tenno/Rifle/LotusRifle": "Rifle",
-    "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun": "Shotgun",
+    "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun": "Shotgun"
 };
 
 function updateInventory() {
@@ -198,7 +198,10 @@ function updateInventory() {
                     const tr = document.createElement("tr");
                     {
                         const td = document.createElement("td");
-                        td.textContent = itemMap[fingerprint.compat]?.name ?? rivenGenericCompatNames[fingerprint.compat] ?? fingerprint.compat;
+                        td.textContent =
+                            itemMap[fingerprint.compat]?.name ??
+                            rivenGenericCompatNames[fingerprint.compat] ??
+                            fingerprint.compat;
                         td.textContent += " " + RivenParser.parseRiven(rivenType, fingerprint, 1).name;
                         td.innerHTML += " <span title='Number of buffs'>▲ " + fingerprint.buffs.length + "</span>";
                         td.innerHTML += " <span title='Number of curses'>▼ " + fingerprint.curses.length + "</span>";
@@ -210,11 +213,15 @@ function updateInventory() {
                         td.classList = "text-end";
                         {
                             const a = document.createElement("a");
-                            a.href = "https://riven.builds.wf/#" + encodeURIComponent(JSON.stringify({
-                                rivenType: rivenType,
-                                omegaAttenuation: 1,
-                                fingerprint: fingerprint
-                            }));
+                            a.href =
+                                "https://riven.builds.wf/#" +
+                                encodeURIComponent(
+                                    JSON.stringify({
+                                        rivenType: rivenType,
+                                        omegaAttenuation: 1,
+                                        fingerprint: fingerprint
+                                    })
+                                );
                             a.target = "_blank";
                             a.textContent = "View Stats";
                             td.appendChild(a);

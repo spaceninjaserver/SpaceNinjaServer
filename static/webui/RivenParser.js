@@ -1,1009 +1,1009 @@
 // Use the collapse feature in your editor :)
 const riven_tags = {
-    "LotusArchgunRandomModRare": [
+    LotusArchgunRandomModRare: [
         {
-            "tag": "WeaponArmorPiercingDamageMod",
-            "value": 0.01,
-            "prefix": "insi",
-            "suffix": "cak"
+            tag: "WeaponArmorPiercingDamageMod",
+            value: 0.01,
+            prefix: "insi",
+            suffix: "cak"
         },
         {
-            "tag": "WeaponCritChanceMod",
-            "value": 0.0111,
-            "prefix": "crita",
-            "suffix": "cron"
+            tag: "WeaponCritChanceMod",
+            value: 0.0111,
+            prefix: "crita",
+            suffix: "cron"
         },
         {
-            "tag": "WeaponCritDamageMod",
-            "value": 0.0089,
-            "prefix": "acri",
-            "suffix": "tis"
+            tag: "WeaponCritDamageMod",
+            value: 0.0089,
+            prefix: "acri",
+            suffix: "tis"
         },
         {
-            "tag": "WeaponElectricityDamageMod",
-            "value": 0.0133,
-            "prefix": "vexi",
-            "suffix": "tio"
+            tag: "WeaponElectricityDamageMod",
+            value: 0.0133,
+            prefix: "vexi",
+            suffix: "tio"
         },
         {
-            "tag": "WeaponFireDamageMod",
-            "value": 0.0133,
-            "prefix": "igni",
-            "suffix": "pha"
+            tag: "WeaponFireDamageMod",
+            value: 0.0133,
+            prefix: "igni",
+            suffix: "pha"
         },
         {
-            "tag": "WeaponFireRateMod",
-            "value": 0.00667,
-            "prefix": "croni",
-            "suffix": "dra"
+            tag: "WeaponFireRateMod",
+            value: 0.00667,
+            prefix: "croni",
+            suffix: "dra"
         },
         {
-            "tag": "WeaponFreezeDamageMod",
-            "value": 0.0133,
-            "prefix": "geli",
-            "suffix": "do"
+            tag: "WeaponFreezeDamageMod",
+            value: 0.0133,
+            prefix: "geli",
+            suffix: "do"
         },
         {
-            "tag": "WeaponImpactDamageMod",
-            "value": 0.01,
-            "prefix": "magna",
-            "suffix": "ton"
+            tag: "WeaponImpactDamageMod",
+            value: 0.01,
+            prefix: "magna",
+            suffix: "ton"
         },
         {
-            "tag": "WeaponProcTimeMod",
-            "value": 0.01111,
-            "prefix": "deci",
-            "suffix": "des"
+            tag: "WeaponProcTimeMod",
+            value: 0.01111,
+            prefix: "deci",
+            suffix: "des"
         },
         {
-            "tag": "WeaponSlashDamageMod",
-            "value": 0.01,
-            "prefix": "sci",
-            "suffix": "sus"
+            tag: "WeaponSlashDamageMod",
+            value: 0.01,
+            prefix: "sci",
+            suffix: "sus"
         },
         {
-            "tag": "WeaponStunChanceMod",
-            "value": 0.0067,
-            "prefix": "hexa",
-            "suffix": "dex"
+            tag: "WeaponStunChanceMod",
+            value: 0.0067,
+            prefix: "hexa",
+            suffix: "dex"
         },
         {
-            "tag": "WeaponToxinDamageMod",
-            "value": 0.0133,
-            "prefix": "toxi",
-            "suffix": "tox"
+            tag: "WeaponToxinDamageMod",
+            value: 0.0133,
+            prefix: "toxi",
+            suffix: "tox"
         },
         {
-            "tag": "WeaponAmmoMaxMod",
-            "value": 0.0111,
-            "prefix": "ampi",
-            "suffix": "bin"
+            tag: "WeaponAmmoMaxMod",
+            value: 0.0111,
+            prefix: "ampi",
+            suffix: "bin"
         },
         {
-            "tag": "WeaponClipMaxMod",
-            "value": 0.0067,
-            "prefix": "arma",
-            "suffix": "tin"
+            tag: "WeaponClipMaxMod",
+            value: 0.0067,
+            prefix: "arma",
+            suffix: "tin"
         },
         {
-            "tag": "WeaponDamageAmountMod",
-            "value": 0.0111,
-            "prefix": "visi",
-            "suffix": "ata"
+            tag: "WeaponDamageAmountMod",
+            value: 0.0111,
+            prefix: "visi",
+            suffix: "ata"
         },
         {
-            "tag": "WeaponFireIterationsMod",
-            "value": 0.0067,
-            "prefix": "sati",
-            "suffix": "can"
+            tag: "WeaponFireIterationsMod",
+            value: 0.0067,
+            prefix: "sati",
+            suffix: "can"
         },
         {
-            "tag": "WeaponPunctureDepthMod",
-            "value": 0.03,
-            "prefix": "lexi",
-            "suffix": "nok"
+            tag: "WeaponPunctureDepthMod",
+            value: 0.03,
+            prefix: "lexi",
+            suffix: "nok"
         },
         {
-            "tag": "WeaponRecoilReductionMod",
-            "value": -0.01,
-            "prefix": "zeti",
-            "suffix": "mag"
+            tag: "WeaponRecoilReductionMod",
+            value: -0.01,
+            prefix: "zeti",
+            suffix: "mag"
         },
         {
-            "tag": "WeaponReloadSpeedMod",
-            "value": 0.0111,
-            "prefix": "feva",
-            "suffix": "tak"
+            tag: "WeaponReloadSpeedMod",
+            value: 0.0111,
+            prefix: "feva",
+            suffix: "tak"
         },
         {
-            "tag": "WeaponFactionDamageCorpus",
-            "value": 0.005,
-            "prefix": "manti",
-            "suffix": "tron"
+            tag: "WeaponFactionDamageCorpus",
+            value: 0.005,
+            prefix: "manti",
+            suffix: "tron"
         },
         {
-            "tag": "WeaponFactionDamageGrineer",
-            "value": 0.005,
-            "prefix": "argi",
-            "suffix": "con"
+            tag: "WeaponFactionDamageGrineer",
+            value: 0.005,
+            prefix: "argi",
+            suffix: "con"
         },
         {
-            "tag": "WeaponZoomFovMod",
-            "value": 0.006666,
-            "prefix": "hera",
-            "suffix": "lis"
+            tag: "WeaponZoomFovMod",
+            value: 0.006666,
+            prefix: "hera",
+            suffix: "lis"
         }
     ],
-    "LotusModularMeleeRandomModRare": [
+    LotusModularMeleeRandomModRare: [
         {
-            "tag": "WeaponMeleeDamageMod",
-            "value": 0.0183,
-            "prefix": "visi",
-            "suffix": "ata"
+            tag: "WeaponMeleeDamageMod",
+            value: 0.0183,
+            prefix: "visi",
+            suffix: "ata"
         },
         {
-            "tag": "WeaponArmorPiercingDamageMod",
-            "value": 0.0133,
-            "prefix": "insi",
-            "suffix": "cak"
+            tag: "WeaponArmorPiercingDamageMod",
+            value: 0.0133,
+            prefix: "insi",
+            suffix: "cak"
         },
         {
-            "tag": "WeaponImpactDamageMod",
-            "value": 0.0133,
-            "prefix": "magna",
-            "suffix": "ton"
+            tag: "WeaponImpactDamageMod",
+            value: 0.0133,
+            prefix: "magna",
+            suffix: "ton"
         },
         {
-            "tag": "WeaponSlashDamageMod",
-            "value": 0.0133,
-            "prefix": "sci",
-            "suffix": "sus"
+            tag: "WeaponSlashDamageMod",
+            value: 0.0133,
+            prefix: "sci",
+            suffix: "sus"
         },
         {
-            "tag": "WeaponCritChanceMod",
-            "value": 0.02,
-            "prefix": "crita",
-            "suffix": "cron"
+            tag: "WeaponCritChanceMod",
+            value: 0.02,
+            prefix: "crita",
+            suffix: "cron"
         },
         {
-            "tag": "WeaponCritDamageMod",
-            "value": 0.01,
-            "prefix": "acri",
-            "suffix": "tis"
+            tag: "WeaponCritDamageMod",
+            value: 0.01,
+            prefix: "acri",
+            suffix: "tis"
         },
         {
-            "tag": "WeaponElectricityDamageMod",
-            "value": 0.01,
-            "prefix": "vexi",
-            "suffix": "tio"
+            tag: "WeaponElectricityDamageMod",
+            value: 0.01,
+            prefix: "vexi",
+            suffix: "tio"
         },
         {
-            "tag": "WeaponFireDamageMod",
-            "value": 0.01,
-            "prefix": "igni",
-            "suffix": "pha"
+            tag: "WeaponFireDamageMod",
+            value: 0.01,
+            prefix: "igni",
+            suffix: "pha"
         },
         {
-            "tag": "WeaponFreezeDamageMod",
-            "value": 0.01,
-            "prefix": "geli",
-            "suffix": "do"
+            tag: "WeaponFreezeDamageMod",
+            value: 0.01,
+            prefix: "geli",
+            suffix: "do"
         },
         {
-            "tag": "WeaponToxinDamageMod",
-            "value": 0.01,
-            "prefix": "toxi",
-            "suffix": "tox"
+            tag: "WeaponToxinDamageMod",
+            value: 0.01,
+            prefix: "toxi",
+            suffix: "tox"
         },
         {
-            "tag": "WeaponProcTimeMod",
-            "value": 0.01111,
-            "prefix": "deci",
-            "suffix": "des"
+            tag: "WeaponProcTimeMod",
+            value: 0.01111,
+            prefix: "deci",
+            suffix: "des"
         },
         {
-            "tag": "WeaponMeleeFactionDamageCorpus",
-            "value": 0.005,
-            "prefix": "manti",
-            "suffix": "tron"
+            tag: "WeaponMeleeFactionDamageCorpus",
+            value: 0.005,
+            prefix: "manti",
+            suffix: "tron"
         },
         {
-            "tag": "WeaponMeleeFactionDamageGrineer",
-            "value": 0.005,
-            "prefix": "argi",
-            "suffix": "con"
+            tag: "WeaponMeleeFactionDamageGrineer",
+            value: 0.005,
+            prefix: "argi",
+            suffix: "con"
         },
         {
-            "tag": "WeaponMeleeFactionDamageInfested",
-            "value": 0.005,
-            "prefix": "pura",
-            "suffix": "ada"
+            tag: "WeaponMeleeFactionDamageInfested",
+            value: 0.005,
+            prefix: "pura",
+            suffix: "ada"
         },
         {
-            "tag": "WeaponFireRateMod",
-            "value": 0.0061,
-            "prefix": "croni",
-            "suffix": "dra"
+            tag: "WeaponFireRateMod",
+            value: 0.0061,
+            prefix: "croni",
+            suffix: "dra"
         },
         {
-            "tag": "WeaponStunChanceMod",
-            "value": 0.01,
-            "prefix": "hexa",
-            "suffix": "dex"
+            tag: "WeaponStunChanceMod",
+            value: 0.01,
+            prefix: "hexa",
+            suffix: "dex"
         },
         {
-            "tag": "ComboDurationMod",
-            "value": 0.09,
-            "prefix": "tempi",
-            "suffix": "nem"
+            tag: "ComboDurationMod",
+            value: 0.09,
+            prefix: "tempi",
+            suffix: "nem"
         },
         {
-            "tag": "SlideAttackCritChanceMod",
-            "value": 0.013334,
-            "prefix": "pleci",
-            "suffix": "nent"
+            tag: "SlideAttackCritChanceMod",
+            value: 0.013334,
+            prefix: "pleci",
+            suffix: "nent"
         },
         {
-            "tag": "WeaponMeleeRangeIncMod",
-            "value": 0.02158,
-            "prefix": "locti",
-            "suffix": "tor"
+            tag: "WeaponMeleeRangeIncMod",
+            value: 0.02158,
+            prefix: "locti",
+            suffix: "tor"
         },
         {
-            "tag": "WeaponMeleeFinisherDamageMod",
-            "value": 0.0133,
-            "prefix": "exi",
-            "suffix": "cta"
+            tag: "WeaponMeleeFinisherDamageMod",
+            value: 0.0133,
+            prefix: "exi",
+            suffix: "cta"
         },
         {
-            "tag": "WeaponMeleeComboEfficiencyMod",
-            "value": 0.00816,
-            "prefix": "forti",
-            "suffix": "us"
+            tag: "WeaponMeleeComboEfficiencyMod",
+            value: 0.00816,
+            prefix: "forti",
+            suffix: "us"
         },
         {
-            "tag": "WeaponMeleeComboInitialBonusMod",
-            "value": 0.27224,
-            "prefix": "para",
-            "suffix": "um"
+            tag: "WeaponMeleeComboInitialBonusMod",
+            value: 0.27224,
+            prefix: "para",
+            suffix: "um"
         },
         {
-            "tag": "WeaponMeleeComboPointsOnHitMod",
-            "value": -0.01165
+            tag: "WeaponMeleeComboPointsOnHitMod",
+            value: -0.01165
         },
         {
-            "tag": "WeaponMeleeComboBonusOnHitMod",
-            "value": 0.00653,
-            "prefix": "laci",
-            "suffix": "nus"
+            tag: "WeaponMeleeComboBonusOnHitMod",
+            value: 0.00653,
+            prefix: "laci",
+            suffix: "nus"
         }
     ],
-    "LotusModularPistolRandomModRare": [
+    LotusModularPistolRandomModRare: [
         {
-            "tag": "WeaponArmorPiercingDamageMod",
-            "value": 0.01333,
-            "prefix": "insi",
-            "suffix": "cak"
+            tag: "WeaponArmorPiercingDamageMod",
+            value: 0.01333,
+            prefix: "insi",
+            suffix: "cak"
         },
         {
-            "tag": "WeaponCritChanceMod",
-            "value": 0.016666,
-            "prefix": "crita",
-            "suffix": "cron"
+            tag: "WeaponCritChanceMod",
+            value: 0.016666,
+            prefix: "crita",
+            suffix: "cron"
         },
         {
-            "tag": "WeaponCritDamageMod",
-            "value": 0.01,
-            "prefix": "acri",
-            "suffix": "tis"
+            tag: "WeaponCritDamageMod",
+            value: 0.01,
+            prefix: "acri",
+            suffix: "tis"
         },
         {
-            "tag": "WeaponElectricityDamageMod",
-            "value": 0.01,
-            "prefix": "vexi",
-            "suffix": "tio"
+            tag: "WeaponElectricityDamageMod",
+            value: 0.01,
+            prefix: "vexi",
+            suffix: "tio"
         },
         {
-            "tag": "WeaponFireDamageMod",
-            "value": 0.01,
-            "prefix": "igni",
-            "suffix": "pha"
+            tag: "WeaponFireDamageMod",
+            value: 0.01,
+            prefix: "igni",
+            suffix: "pha"
         },
         {
-            "tag": "WeaponFireRateMod",
-            "value": 0.0083,
-            "prefix": "croni",
-            "suffix": "dra"
+            tag: "WeaponFireRateMod",
+            value: 0.0083,
+            prefix: "croni",
+            suffix: "dra"
         },
         {
-            "tag": "WeaponFreezeDamageMod",
-            "value": 0.01,
-            "prefix": "geli",
-            "suffix": "do"
+            tag: "WeaponFreezeDamageMod",
+            value: 0.01,
+            prefix: "geli",
+            suffix: "do"
         },
         {
-            "tag": "WeaponImpactDamageMod",
-            "value": 0.013333,
-            "prefix": "magna",
-            "suffix": "ton"
+            tag: "WeaponImpactDamageMod",
+            value: 0.013333,
+            prefix: "magna",
+            suffix: "ton"
         },
         {
-            "tag": "WeaponProcTimeMod",
-            "value": 0.01111,
-            "prefix": "deci",
-            "suffix": "des"
+            tag: "WeaponProcTimeMod",
+            value: 0.01111,
+            prefix: "deci",
+            suffix: "des"
         },
         {
-            "tag": "WeaponSlashDamageMod",
-            "value": 0.013333,
-            "prefix": "sci",
-            "suffix": "sus"
+            tag: "WeaponSlashDamageMod",
+            value: 0.013333,
+            prefix: "sci",
+            suffix: "sus"
         },
         {
-            "tag": "WeaponStunChanceMod",
-            "value": 0.01,
-            "prefix": "hexa",
-            "suffix": "dex"
+            tag: "WeaponStunChanceMod",
+            value: 0.01,
+            prefix: "hexa",
+            suffix: "dex"
         },
         {
-            "tag": "WeaponToxinDamageMod",
-            "value": 0.01,
-            "prefix": "toxi",
-            "suffix": "tox"
+            tag: "WeaponToxinDamageMod",
+            value: 0.01,
+            prefix: "toxi",
+            suffix: "tox"
         },
         {
-            "tag": "WeaponAmmoMaxMod",
-            "value": 0.01,
-            "prefix": "ampi",
-            "suffix": "bin"
+            tag: "WeaponAmmoMaxMod",
+            value: 0.01,
+            prefix: "ampi",
+            suffix: "bin"
         },
         {
-            "tag": "WeaponClipMaxMod",
-            "value": 0.005555,
-            "prefix": "arma",
-            "suffix": "tin"
+            tag: "WeaponClipMaxMod",
+            value: 0.005555,
+            prefix: "arma",
+            suffix: "tin"
         },
         {
-            "tag": "WeaponDamageAmountMod",
-            "value": 0.0244,
-            "prefix": "visi",
-            "suffix": "ata"
+            tag: "WeaponDamageAmountMod",
+            value: 0.0244,
+            prefix: "visi",
+            suffix: "ata"
         },
         {
-            "tag": "WeaponFireIterationsMod",
-            "value": 0.0133,
-            "prefix": "sati",
-            "suffix": "can"
+            tag: "WeaponFireIterationsMod",
+            value: 0.0133,
+            prefix: "sati",
+            suffix: "can"
         },
         {
-            "tag": "WeaponProjectileSpeedMod",
-            "value": 0.01,
-            "prefix": "conci",
-            "suffix": "nak"
+            tag: "WeaponProjectileSpeedMod",
+            value: 0.01,
+            prefix: "conci",
+            suffix: "nak"
         },
         {
-            "tag": "WeaponPunctureDepthMod",
-            "value": 0.03,
-            "prefix": "lexi",
-            "suffix": "nok"
+            tag: "WeaponPunctureDepthMod",
+            value: 0.03,
+            prefix: "lexi",
+            suffix: "nok"
         },
         {
-            "tag": "WeaponRecoilReductionMod",
-            "value": -0.01,
-            "prefix": "zeti",
-            "suffix": "mag"
+            tag: "WeaponRecoilReductionMod",
+            value: -0.01,
+            prefix: "zeti",
+            suffix: "mag"
         },
         {
-            "tag": "WeaponReloadSpeedMod",
-            "value": 0.005555,
-            "prefix": "feva",
-            "suffix": "tak"
+            tag: "WeaponReloadSpeedMod",
+            value: 0.005555,
+            prefix: "feva",
+            suffix: "tak"
         },
         {
-            "tag": "WeaponFactionDamageCorpus",
-            "value": 0.005,
-            "prefix": "manti",
-            "suffix": "tron"
+            tag: "WeaponFactionDamageCorpus",
+            value: 0.005,
+            prefix: "manti",
+            suffix: "tron"
         },
         {
-            "tag": "WeaponFactionDamageGrineer",
-            "value": 0.005,
-            "prefix": "argi",
-            "suffix": "con"
+            tag: "WeaponFactionDamageGrineer",
+            value: 0.005,
+            prefix: "argi",
+            suffix: "con"
         },
         {
-            "tag": "WeaponFactionDamageInfested",
-            "value": 0.005,
-            "prefix": "pura",
-            "suffix": "ada"
+            tag: "WeaponFactionDamageInfested",
+            value: 0.005,
+            prefix: "pura",
+            suffix: "ada"
         },
         {
-            "tag": "WeaponZoomFovMod",
-            "value": 0.0089,
-            "prefix": "hera",
-            "suffix": "lis"
+            tag: "WeaponZoomFovMod",
+            value: 0.0089,
+            prefix: "hera",
+            suffix: "lis"
         }
     ],
-    "LotusPistolRandomModRare": [
+    LotusPistolRandomModRare: [
         {
-            "tag": "WeaponArmorPiercingDamageMod",
-            "value": 0.01333,
-            "prefix": "insi",
-            "suffix": "cak"
+            tag: "WeaponArmorPiercingDamageMod",
+            value: 0.01333,
+            prefix: "insi",
+            suffix: "cak"
         },
         {
-            "tag": "WeaponCritChanceMod",
-            "value": 0.016666,
-            "prefix": "crita",
-            "suffix": "cron"
+            tag: "WeaponCritChanceMod",
+            value: 0.016666,
+            prefix: "crita",
+            suffix: "cron"
         },
         {
-            "tag": "WeaponCritDamageMod",
-            "value": 0.01,
-            "prefix": "acri",
-            "suffix": "tis"
+            tag: "WeaponCritDamageMod",
+            value: 0.01,
+            prefix: "acri",
+            suffix: "tis"
         },
         {
-            "tag": "WeaponElectricityDamageMod",
-            "value": 0.01,
-            "prefix": "vexi",
-            "suffix": "tio"
+            tag: "WeaponElectricityDamageMod",
+            value: 0.01,
+            prefix: "vexi",
+            suffix: "tio"
         },
         {
-            "tag": "WeaponFireDamageMod",
-            "value": 0.01,
-            "prefix": "igni",
-            "suffix": "pha"
+            tag: "WeaponFireDamageMod",
+            value: 0.01,
+            prefix: "igni",
+            suffix: "pha"
         },
         {
-            "tag": "WeaponFireRateMod",
-            "value": 0.0083,
-            "prefix": "croni",
-            "suffix": "dra"
+            tag: "WeaponFireRateMod",
+            value: 0.0083,
+            prefix: "croni",
+            suffix: "dra"
         },
         {
-            "tag": "WeaponFreezeDamageMod",
-            "value": 0.01,
-            "prefix": "geli",
-            "suffix": "do"
+            tag: "WeaponFreezeDamageMod",
+            value: 0.01,
+            prefix: "geli",
+            suffix: "do"
         },
         {
-            "tag": "WeaponImpactDamageMod",
-            "value": 0.013333,
-            "prefix": "magna",
-            "suffix": "ton"
+            tag: "WeaponImpactDamageMod",
+            value: 0.013333,
+            prefix: "magna",
+            suffix: "ton"
         },
         {
-            "tag": "WeaponProcTimeMod",
-            "value": 0.01111,
-            "prefix": "deci",
-            "suffix": "des"
+            tag: "WeaponProcTimeMod",
+            value: 0.01111,
+            prefix: "deci",
+            suffix: "des"
         },
         {
-            "tag": "WeaponSlashDamageMod",
-            "value": 0.013333,
-            "prefix": "sci",
-            "suffix": "sus"
+            tag: "WeaponSlashDamageMod",
+            value: 0.013333,
+            prefix: "sci",
+            suffix: "sus"
         },
         {
-            "tag": "WeaponStunChanceMod",
-            "value": 0.01,
-            "prefix": "hexa",
-            "suffix": "dex"
+            tag: "WeaponStunChanceMod",
+            value: 0.01,
+            prefix: "hexa",
+            suffix: "dex"
         },
         {
-            "tag": "WeaponToxinDamageMod",
-            "value": 0.01,
-            "prefix": "toxi",
-            "suffix": "tox"
+            tag: "WeaponToxinDamageMod",
+            value: 0.01,
+            prefix: "toxi",
+            suffix: "tox"
         },
         {
-            "tag": "WeaponAmmoMaxMod",
-            "value": 0.01,
-            "prefix": "ampi",
-            "suffix": "bin"
+            tag: "WeaponAmmoMaxMod",
+            value: 0.01,
+            prefix: "ampi",
+            suffix: "bin"
         },
         {
-            "tag": "WeaponClipMaxMod",
-            "value": 0.005555,
-            "prefix": "arma",
-            "suffix": "tin"
+            tag: "WeaponClipMaxMod",
+            value: 0.005555,
+            prefix: "arma",
+            suffix: "tin"
         },
         {
-            "tag": "WeaponDamageAmountMod",
-            "value": 0.0244,
-            "prefix": "visi",
-            "suffix": "ata"
+            tag: "WeaponDamageAmountMod",
+            value: 0.0244,
+            prefix: "visi",
+            suffix: "ata"
         },
         {
-            "tag": "WeaponFireIterationsMod",
-            "value": 0.0133,
-            "prefix": "sati",
-            "suffix": "can"
+            tag: "WeaponFireIterationsMod",
+            value: 0.0133,
+            prefix: "sati",
+            suffix: "can"
         },
         {
-            "tag": "WeaponProjectileSpeedMod",
-            "value": 0.01,
-            "prefix": "conci",
-            "suffix": "nak"
+            tag: "WeaponProjectileSpeedMod",
+            value: 0.01,
+            prefix: "conci",
+            suffix: "nak"
         },
         {
-            "tag": "WeaponPunctureDepthMod",
-            "value": 0.03,
-            "prefix": "lexi",
-            "suffix": "nok"
+            tag: "WeaponPunctureDepthMod",
+            value: 0.03,
+            prefix: "lexi",
+            suffix: "nok"
         },
         {
-            "tag": "WeaponRecoilReductionMod",
-            "value": -0.01,
-            "prefix": "zeti",
-            "suffix": "mag"
+            tag: "WeaponRecoilReductionMod",
+            value: -0.01,
+            prefix: "zeti",
+            suffix: "mag"
         },
         {
-            "tag": "WeaponReloadSpeedMod",
-            "value": 0.005555,
-            "prefix": "feva",
-            "suffix": "tak"
+            tag: "WeaponReloadSpeedMod",
+            value: 0.005555,
+            prefix: "feva",
+            suffix: "tak"
         },
         {
-            "tag": "WeaponFactionDamageCorpus",
-            "value": 0.005,
-            "prefix": "manti",
-            "suffix": "tron"
+            tag: "WeaponFactionDamageCorpus",
+            value: 0.005,
+            prefix: "manti",
+            suffix: "tron"
         },
         {
-            "tag": "WeaponFactionDamageGrineer",
-            "value": 0.005,
-            "prefix": "argi",
-            "suffix": "con"
+            tag: "WeaponFactionDamageGrineer",
+            value: 0.005,
+            prefix: "argi",
+            suffix: "con"
         },
         {
-            "tag": "WeaponFactionDamageInfested",
-            "value": 0.005,
-            "prefix": "pura",
-            "suffix": "ada"
+            tag: "WeaponFactionDamageInfested",
+            value: 0.005,
+            prefix: "pura",
+            suffix: "ada"
         },
         {
-            "tag": "WeaponZoomFovMod",
-            "value": 0.0089,
-            "prefix": "hera",
-            "suffix": "lis"
+            tag: "WeaponZoomFovMod",
+            value: 0.0089,
+            prefix: "hera",
+            suffix: "lis"
         }
     ],
-    "LotusRifleRandomModRare": [
+    LotusRifleRandomModRare: [
         {
-            "tag": "WeaponArmorPiercingDamageMod",
-            "value": 0.01333,
-            "prefix": "insi",
-            "suffix": "cak"
+            tag: "WeaponArmorPiercingDamageMod",
+            value: 0.01333,
+            prefix: "insi",
+            suffix: "cak"
         },
         {
-            "tag": "WeaponCritChanceMod",
-            "value": 0.016666,
-            "prefix": "crita",
-            "suffix": "cron"
+            tag: "WeaponCritChanceMod",
+            value: 0.016666,
+            prefix: "crita",
+            suffix: "cron"
         },
         {
-            "tag": "WeaponCritDamageMod",
-            "value": 0.013333,
-            "prefix": "acri",
-            "suffix": "tis"
+            tag: "WeaponCritDamageMod",
+            value: 0.013333,
+            prefix: "acri",
+            suffix: "tis"
         },
         {
-            "tag": "WeaponElectricityDamageMod",
-            "value": 0.01,
-            "prefix": "vexi",
-            "suffix": "tio"
+            tag: "WeaponElectricityDamageMod",
+            value: 0.01,
+            prefix: "vexi",
+            suffix: "tio"
         },
         {
-            "tag": "WeaponFireDamageMod",
-            "value": 0.01,
-            "prefix": "igni",
-            "suffix": "pha"
+            tag: "WeaponFireDamageMod",
+            value: 0.01,
+            prefix: "igni",
+            suffix: "pha"
         },
         {
-            "tag": "WeaponFireRateMod",
-            "value": 0.00667,
-            "prefix": "croni",
-            "suffix": "dra"
+            tag: "WeaponFireRateMod",
+            value: 0.00667,
+            prefix: "croni",
+            suffix: "dra"
         },
         {
-            "tag": "WeaponFreezeDamageMod",
-            "value": 0.01,
-            "prefix": "geli",
-            "suffix": "do"
+            tag: "WeaponFreezeDamageMod",
+            value: 0.01,
+            prefix: "geli",
+            suffix: "do"
         },
         {
-            "tag": "WeaponImpactDamageMod",
-            "value": 0.013333,
-            "prefix": "magna",
-            "suffix": "ton"
+            tag: "WeaponImpactDamageMod",
+            value: 0.013333,
+            prefix: "magna",
+            suffix: "ton"
         },
         {
-            "tag": "WeaponProcTimeMod",
-            "value": 0.01111,
-            "prefix": "deci",
-            "suffix": "des"
+            tag: "WeaponProcTimeMod",
+            value: 0.01111,
+            prefix: "deci",
+            suffix: "des"
         },
         {
-            "tag": "WeaponSlashDamageMod",
-            "value": 0.013333,
-            "prefix": "sci",
-            "suffix": "sus"
+            tag: "WeaponSlashDamageMod",
+            value: 0.013333,
+            prefix: "sci",
+            suffix: "sus"
         },
         {
-            "tag": "WeaponStunChanceMod",
-            "value": 0.01,
-            "prefix": "hexa",
-            "suffix": "dex"
+            tag: "WeaponStunChanceMod",
+            value: 0.01,
+            prefix: "hexa",
+            suffix: "dex"
         },
         {
-            "tag": "WeaponToxinDamageMod",
-            "value": 0.01,
-            "prefix": "toxi",
-            "suffix": "tox"
+            tag: "WeaponToxinDamageMod",
+            value: 0.01,
+            prefix: "toxi",
+            suffix: "tox"
         },
         {
-            "tag": "WeaponAmmoMaxMod",
-            "value": 0.00555,
-            "prefix": "ampi",
-            "suffix": "bin"
+            tag: "WeaponAmmoMaxMod",
+            value: 0.00555,
+            prefix: "ampi",
+            suffix: "bin"
         },
         {
-            "tag": "WeaponClipMaxMod",
-            "value": 0.005555,
-            "prefix": "arma",
-            "suffix": "tin"
+            tag: "WeaponClipMaxMod",
+            value: 0.005555,
+            prefix: "arma",
+            suffix: "tin"
         },
         {
-            "tag": "WeaponDamageAmountMod",
-            "value": 0.018333,
-            "prefix": "visi",
-            "suffix": "ata"
+            tag: "WeaponDamageAmountMod",
+            value: 0.018333,
+            prefix: "visi",
+            suffix: "ata"
         },
         {
-            "tag": "WeaponFireIterationsMod",
-            "value": 0.01,
-            "prefix": "sati",
-            "suffix": "can"
+            tag: "WeaponFireIterationsMod",
+            value: 0.01,
+            prefix: "sati",
+            suffix: "can"
         },
         {
-            "tag": "WeaponProjectileSpeedMod",
-            "value": 0.01,
-            "prefix": "conci",
-            "suffix": "nak"
+            tag: "WeaponProjectileSpeedMod",
+            value: 0.01,
+            prefix: "conci",
+            suffix: "nak"
         },
         {
-            "tag": "WeaponPunctureDepthMod",
-            "value": 0.03,
-            "prefix": "lexi",
-            "suffix": "nok"
+            tag: "WeaponPunctureDepthMod",
+            value: 0.03,
+            prefix: "lexi",
+            suffix: "nok"
         },
         {
-            "tag": "WeaponRecoilReductionMod",
-            "value": -0.01,
-            "prefix": "zeti",
-            "suffix": "mag"
+            tag: "WeaponRecoilReductionMod",
+            value: -0.01,
+            prefix: "zeti",
+            suffix: "mag"
         },
         {
-            "tag": "WeaponReloadSpeedMod",
-            "value": 0.005555,
-            "prefix": "feva",
-            "suffix": "tak"
+            tag: "WeaponReloadSpeedMod",
+            value: 0.005555,
+            prefix: "feva",
+            suffix: "tak"
         },
         {
-            "tag": "WeaponFactionDamageCorpus",
-            "value": 0.005,
-            "prefix": "manti",
-            "suffix": "tron"
+            tag: "WeaponFactionDamageCorpus",
+            value: 0.005,
+            prefix: "manti",
+            suffix: "tron"
         },
         {
-            "tag": "WeaponFactionDamageGrineer",
-            "value": 0.005,
-            "prefix": "argi",
-            "suffix": "con"
+            tag: "WeaponFactionDamageGrineer",
+            value: 0.005,
+            prefix: "argi",
+            suffix: "con"
         },
         {
-            "tag": "WeaponFactionDamageInfested",
-            "value": 0.005,
-            "prefix": "pura",
-            "suffix": "ada"
+            tag: "WeaponFactionDamageInfested",
+            value: 0.005,
+            prefix: "pura",
+            suffix: "ada"
         },
         {
-            "tag": "WeaponZoomFovMod",
-            "value": 0.006666,
-            "prefix": "hera",
-            "suffix": "lis"
+            tag: "WeaponZoomFovMod",
+            value: 0.006666,
+            prefix: "hera",
+            suffix: "lis"
         }
     ],
-    "LotusShotgunRandomModRare": [
+    LotusShotgunRandomModRare: [
         {
-            "tag": "WeaponArmorPiercingDamageMod",
-            "value": 0.01333,
-            "prefix": "insi",
-            "suffix": "cak"
+            tag: "WeaponArmorPiercingDamageMod",
+            value: 0.01333,
+            prefix: "insi",
+            suffix: "cak"
         },
         {
-            "tag": "WeaponCritChanceMod",
-            "value": 0.01,
-            "prefix": "crita",
-            "suffix": "cron"
+            tag: "WeaponCritChanceMod",
+            value: 0.01,
+            prefix: "crita",
+            suffix: "cron"
         },
         {
-            "tag": "WeaponCritDamageMod",
-            "value": 0.01,
-            "prefix": "acri",
-            "suffix": "tis"
+            tag: "WeaponCritDamageMod",
+            value: 0.01,
+            prefix: "acri",
+            suffix: "tis"
         },
         {
-            "tag": "WeaponElectricityDamageMod",
-            "value": 0.01,
-            "prefix": "vexi",
-            "suffix": "tio"
+            tag: "WeaponElectricityDamageMod",
+            value: 0.01,
+            prefix: "vexi",
+            suffix: "tio"
         },
         {
-            "tag": "WeaponFireDamageMod",
-            "value": 0.01,
-            "prefix": "igni",
-            "suffix": "pha"
+            tag: "WeaponFireDamageMod",
+            value: 0.01,
+            prefix: "igni",
+            suffix: "pha"
         },
         {
-            "tag": "WeaponFireRateMod",
-            "value": 0.01,
-            "prefix": "croni",
-            "suffix": "dra"
+            tag: "WeaponFireRateMod",
+            value: 0.01,
+            prefix: "croni",
+            suffix: "dra"
         },
         {
-            "tag": "WeaponFreezeDamageMod",
-            "value": 0.01,
-            "prefix": "geli",
-            "suffix": "do"
+            tag: "WeaponFreezeDamageMod",
+            value: 0.01,
+            prefix: "geli",
+            suffix: "do"
         },
         {
-            "tag": "WeaponImpactDamageMod",
-            "value": 0.013333,
-            "prefix": "magna",
-            "suffix": "ton"
+            tag: "WeaponImpactDamageMod",
+            value: 0.013333,
+            prefix: "magna",
+            suffix: "ton"
         },
         {
-            "tag": "WeaponProcTimeMod",
-            "value": 0.01111,
-            "prefix": "deci",
-            "suffix": "des"
+            tag: "WeaponProcTimeMod",
+            value: 0.01111,
+            prefix: "deci",
+            suffix: "des"
         },
         {
-            "tag": "WeaponSlashDamageMod",
-            "value": 0.013333,
-            "prefix": "sci",
-            "suffix": "sus"
+            tag: "WeaponSlashDamageMod",
+            value: 0.013333,
+            prefix: "sci",
+            suffix: "sus"
         },
         {
-            "tag": "WeaponStunChanceMod",
-            "value": 0.01,
-            "prefix": "hexa",
-            "suffix": "dex"
+            tag: "WeaponStunChanceMod",
+            value: 0.01,
+            prefix: "hexa",
+            suffix: "dex"
         },
         {
-            "tag": "WeaponToxinDamageMod",
-            "value": 0.01,
-            "prefix": "toxi",
-            "suffix": "tox"
+            tag: "WeaponToxinDamageMod",
+            value: 0.01,
+            prefix: "toxi",
+            suffix: "tox"
         },
         {
-            "tag": "WeaponAmmoMaxMod",
-            "value": 0.01,
-            "prefix": "ampi",
-            "suffix": "bin"
+            tag: "WeaponAmmoMaxMod",
+            value: 0.01,
+            prefix: "ampi",
+            suffix: "bin"
         },
         {
-            "tag": "WeaponClipMaxMod",
-            "value": 0.005555,
-            "prefix": "arma",
-            "suffix": "tin"
+            tag: "WeaponClipMaxMod",
+            value: 0.005555,
+            prefix: "arma",
+            suffix: "tin"
         },
         {
-            "tag": "WeaponDamageAmountMod",
-            "value": 0.0183,
-            "prefix": "visi",
-            "suffix": "ata"
+            tag: "WeaponDamageAmountMod",
+            value: 0.0183,
+            prefix: "visi",
+            suffix: "ata"
         },
         {
-            "tag": "WeaponFireIterationsMod",
-            "value": 0.0133,
-            "prefix": "sati",
-            "suffix": "can"
+            tag: "WeaponFireIterationsMod",
+            value: 0.0133,
+            prefix: "sati",
+            suffix: "can"
         },
         {
-            "tag": "WeaponProjectileSpeedMod",
-            "value": 0.01,
-            "prefix": "conci",
-            "suffix": "nak"
+            tag: "WeaponProjectileSpeedMod",
+            value: 0.01,
+            prefix: "conci",
+            suffix: "nak"
         },
         {
-            "tag": "WeaponPunctureDepthMod",
-            "value": 0.03,
-            "prefix": "lexi",
-            "suffix": "nok"
+            tag: "WeaponPunctureDepthMod",
+            value: 0.03,
+            prefix: "lexi",
+            suffix: "nok"
         },
         {
-            "tag": "WeaponRecoilReductionMod",
-            "value": -0.01,
-            "prefix": "zeti",
-            "suffix": "mag"
+            tag: "WeaponRecoilReductionMod",
+            value: -0.01,
+            prefix: "zeti",
+            suffix: "mag"
         },
         {
-            "tag": "WeaponReloadSpeedMod",
-            "value": 0.005555,
-            "prefix": "feva",
-            "suffix": "tak"
+            tag: "WeaponReloadSpeedMod",
+            value: 0.005555,
+            prefix: "feva",
+            suffix: "tak"
         },
         {
-            "tag": "WeaponFactionDamageCorpus",
-            "value": 0.005,
-            "prefix": "manti",
-            "suffix": "tron"
+            tag: "WeaponFactionDamageCorpus",
+            value: 0.005,
+            prefix: "manti",
+            suffix: "tron"
         },
         {
-            "tag": "WeaponFactionDamageGrineer",
-            "value": 0.005,
-            "prefix": "argi",
-            "suffix": "con"
+            tag: "WeaponFactionDamageGrineer",
+            value: 0.005,
+            prefix: "argi",
+            suffix: "con"
         },
         {
-            "tag": "WeaponFactionDamageInfested",
-            "value": 0.005,
-            "prefix": "pura",
-            "suffix": "ada"
+            tag: "WeaponFactionDamageInfested",
+            value: 0.005,
+            prefix: "pura",
+            suffix: "ada"
         }
     ],
-    "PlayerMeleeWeaponRandomModRare": [
+    PlayerMeleeWeaponRandomModRare: [
         {
-            "tag": "WeaponMeleeDamageMod",
-            "value": 0.0183,
-            "prefix": "visi",
-            "suffix": "ata"
+            tag: "WeaponMeleeDamageMod",
+            value: 0.0183,
+            prefix: "visi",
+            suffix: "ata"
         },
         {
-            "tag": "WeaponArmorPiercingDamageMod",
-            "value": 0.0133,
-            "prefix": "insi",
-            "suffix": "cak"
+            tag: "WeaponArmorPiercingDamageMod",
+            value: 0.0133,
+            prefix: "insi",
+            suffix: "cak"
         },
         {
-            "tag": "WeaponImpactDamageMod",
-            "value": 0.0133,
-            "prefix": "magna",
-            "suffix": "ton"
+            tag: "WeaponImpactDamageMod",
+            value: 0.0133,
+            prefix: "magna",
+            suffix: "ton"
         },
         {
-            "tag": "WeaponSlashDamageMod",
-            "value": 0.0133,
-            "prefix": "sci",
-            "suffix": "sus"
+            tag: "WeaponSlashDamageMod",
+            value: 0.0133,
+            prefix: "sci",
+            suffix: "sus"
         },
         {
-            "tag": "WeaponCritChanceMod",
-            "value": 0.02,
-            "prefix": "crita",
-            "suffix": "cron"
+            tag: "WeaponCritChanceMod",
+            value: 0.02,
+            prefix: "crita",
+            suffix: "cron"
         },
         {
-            "tag": "WeaponCritDamageMod",
-            "value": 0.01,
-            "prefix": "acri",
-            "suffix": "tis"
+            tag: "WeaponCritDamageMod",
+            value: 0.01,
+            prefix: "acri",
+            suffix: "tis"
         },
         {
-            "tag": "WeaponElectricityDamageMod",
-            "value": 0.01,
-            "prefix": "vexi",
-            "suffix": "tio"
+            tag: "WeaponElectricityDamageMod",
+            value: 0.01,
+            prefix: "vexi",
+            suffix: "tio"
         },
         {
-            "tag": "WeaponFireDamageMod",
-            "value": 0.01,
-            "prefix": "igni",
-            "suffix": "pha"
+            tag: "WeaponFireDamageMod",
+            value: 0.01,
+            prefix: "igni",
+            suffix: "pha"
         },
         {
-            "tag": "WeaponFreezeDamageMod",
-            "value": 0.01,
-            "prefix": "geli",
-            "suffix": "do"
+            tag: "WeaponFreezeDamageMod",
+            value: 0.01,
+            prefix: "geli",
+            suffix: "do"
         },
         {
-            "tag": "WeaponToxinDamageMod",
-            "value": 0.01,
-            "prefix": "toxi",
-            "suffix": "tox"
+            tag: "WeaponToxinDamageMod",
+            value: 0.01,
+            prefix: "toxi",
+            suffix: "tox"
         },
         {
-            "tag": "WeaponProcTimeMod",
-            "value": 0.01111,
-            "prefix": "deci",
-            "suffix": "des"
+            tag: "WeaponProcTimeMod",
+            value: 0.01111,
+            prefix: "deci",
+            suffix: "des"
         },
         {
-            "tag": "WeaponMeleeFactionDamageCorpus",
-            "value": 0.005,
-            "prefix": "manti",
-            "suffix": "tron"
+            tag: "WeaponMeleeFactionDamageCorpus",
+            value: 0.005,
+            prefix: "manti",
+            suffix: "tron"
         },
         {
-            "tag": "WeaponMeleeFactionDamageGrineer",
-            "value": 0.005,
-            "prefix": "argi",
-            "suffix": "con"
+            tag: "WeaponMeleeFactionDamageGrineer",
+            value: 0.005,
+            prefix: "argi",
+            suffix: "con"
         },
         {
-            "tag": "WeaponMeleeFactionDamageInfested",
-            "value": 0.005,
-            "prefix": "pura",
-            "suffix": "ada"
+            tag: "WeaponMeleeFactionDamageInfested",
+            value: 0.005,
+            prefix: "pura",
+            suffix: "ada"
         },
         {
-            "tag": "WeaponFireRateMod",
-            "value": 0.0061,
-            "prefix": "croni",
-            "suffix": "dra"
+            tag: "WeaponFireRateMod",
+            value: 0.0061,
+            prefix: "croni",
+            suffix: "dra"
         },
         {
-            "tag": "WeaponStunChanceMod",
-            "value": 0.01,
-            "prefix": "hexa",
-            "suffix": "dex"
+            tag: "WeaponStunChanceMod",
+            value: 0.01,
+            prefix: "hexa",
+            suffix: "dex"
         },
         {
-            "tag": "ComboDurationMod",
-            "value": 0.09,
-            "prefix": "tempi",
-            "suffix": "nem"
+            tag: "ComboDurationMod",
+            value: 0.09,
+            prefix: "tempi",
+            suffix: "nem"
         },
         {
-            "tag": "SlideAttackCritChanceMod",
-            "value": 0.013334,
-            "prefix": "pleci",
-            "suffix": "nent"
+            tag: "SlideAttackCritChanceMod",
+            value: 0.013334,
+            prefix: "pleci",
+            suffix: "nent"
         },
         {
-            "tag": "WeaponMeleeRangeIncMod",
-            "value": 0.02158,
-            "prefix": "locti",
-            "suffix": "tor"
+            tag: "WeaponMeleeRangeIncMod",
+            value: 0.02158,
+            prefix: "locti",
+            suffix: "tor"
         },
         {
-            "tag": "WeaponMeleeFinisherDamageMod",
-            "value": 0.0133,
-            "prefix": "exi",
-            "suffix": "cta"
+            tag: "WeaponMeleeFinisherDamageMod",
+            value: 0.0133,
+            prefix: "exi",
+            suffix: "cta"
         },
         {
-            "tag": "WeaponMeleeComboEfficiencyMod",
-            "value": 0.00816,
-            "prefix": "forti",
-            "suffix": "us"
+            tag: "WeaponMeleeComboEfficiencyMod",
+            value: 0.00816,
+            prefix: "forti",
+            suffix: "us"
         },
         {
-            "tag": "WeaponMeleeComboInitialBonusMod",
-            "value": 0.27224,
-            "prefix": "para",
-            "suffix": "um"
+            tag: "WeaponMeleeComboInitialBonusMod",
+            value: 0.27224,
+            prefix: "para",
+            suffix: "um"
         },
         {
-            "tag": "WeaponMeleeComboPointsOnHitMod",
-            "value": -0.01165
+            tag: "WeaponMeleeComboPointsOnHitMod",
+            value: -0.01165
         },
         {
-            "tag": "WeaponMeleeComboBonusOnHitMod",
-            "value": 0.00653,
-            "prefix": "laci",
-            "suffix": "nus"
+            tag: "WeaponMeleeComboBonusOnHitMod",
+            value: 0.00653,
+            prefix: "laci",
+            suffix: "nus"
         }
     ]
 };
 
 function rivenIntToFloat(i) {
-    const f = i / 0x3FFFFFFF; // 1073741823
+    const f = i / 0x3fffffff; // 1073741823
     if (f >= 0.0 && f <= 1.0) {
         return f;
     }
@@ -1011,15 +1011,15 @@ function rivenIntToFloat(i) {
 }
 
 function floatToRivenInt(f) {
-    return Math.round(f * 0x3FFFFFFF);
+    return Math.round(f * 0x3fffffff);
 }
 
 function lerp(a, b, t) {
-    return (a + (b - a) * t);
+    return a + (b - a) * t;
 }
 
-const numBuffsAtten = [0, 1, .66000003, .5, .40000001, .34999999];
-const numBuffsCurseAtten = [0, 1, .33000001, .5, 1.25, 1.5];
+const numBuffsAtten = [0, 1, 0.66000003, 0.5, 0.40000001, 0.34999999];
+const numBuffsCurseAtten = [0, 1, 0.33000001, 0.5, 1.25, 1.5];
 
 function valueToDisplayValue(tag, value) {
     if (tag == "WeaponMeleeComboInitialBonusMod") {
@@ -1084,18 +1084,19 @@ function parseRiven(
     let name = "";
     const sortedBuffs = structuredClone(fingerprint.buffs).sort((a, b) => {
         if (a.Value == b.Value) {
-            return riven_tags[rivenType].find(x => x.tag == b.Tag).value - riven_tags[rivenType].find(x => x.tag == a.Tag).value;
+            return (
+                riven_tags[rivenType].find(x => x.tag == b.Tag).value -
+                riven_tags[rivenType].find(x => x.tag == a.Tag).value
+            );
         }
         return b.Value - a.Value;
     });
     for (const buff of sortedBuffs) {
         if (buff.Tag == sortedBuffs[sortedBuffs.length - 1].Tag) {
             name += riven_tags[rivenType].find(x => x.tag == buff.Tag).suffix;
-        }
-        else if (buff.Tag == sortedBuffs[0].Tag) {
+        } else if (buff.Tag == sortedBuffs[0].Tag) {
             name += toTitleCase(riven_tags[rivenType].find(x => x.tag == buff.Tag).prefix);
-        }
-        else {
+        } else {
             name += "-";
             name += riven_tags[rivenType].find(x => x.tag == buff.Tag).prefix;
         }
@@ -1167,7 +1168,7 @@ const RivenParser = {
     parseRiven,
     unparseBuff,
     unparseCurse,
-    floatToGrade,
+    floatToGrade
 };
 if (typeof module != "undefined") {
     module.exports = RivenParser;
