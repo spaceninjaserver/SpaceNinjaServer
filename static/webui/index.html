@@ -117,33 +117,61 @@
                     </div>
                 </div>
                 <div data-route="/webui/mods" data-title="Mods | OpenWF WebUI">
-                    <div class="card mb-4">
-                        <h5 class="card-header">Add Riven</h5>
-                        <form class="card-body" onsubmit="doAcquireRiven();return false;">
-                            <select class="form-control mb-3" id="addriven-type">
-                                <option value="LotusArchgunRandomModRare">LotusArchgunRandomModRare</option>
-                                <option value="LotusModularMeleeRandomModRare">LotusModularMeleeRandomModRare</option>
-                                <option value="LotusModularPistolRandomModRare">LotusModularPistolRandomModRare</option>
-                                <option value="LotusPistolRandomModRare">LotusPistolRandomModRare</option>
-                                <option value="LotusRifleRandomModRare" selected>LotusRifleRandomModRare</option>
-                                <option value="LotusShotgunRandomModRare">LotusShotgunRandomModRare</option>
-                                <option value="PlayerMeleeWeaponRandomModRare">PlayerMeleeWeaponRandomModRare</option>
-                            </select>
-                            <textarea
-                                id="addriven-fingerprint"
-                                class="form-control mb-3"
-                                placeholder="Fingerprint"
-                            ></textarea>
-                            <button class="btn btn-primary" style="margin-right: 5px" type="submit">Add</button>
-                            <a href="https://riven.builds.wf/" target="_blank">Need help with the fingerprint?</a>
-                        </form>
-                    </div>
-                    <div class="card mb-4 col-xxl-6">
-                        <h5 class="card-header">Rivens</h5>
-                        <div class="card-body">
-                            <table class="table table-hover w-100">
-                                <tbody id="riven-list"></tbody>
-                            </table>
+                    <div class="row">
+                        <div class="col-xxl-6">
+                            <div class="card mb-4">
+                                <h5 class="card-header">Add Riven</h5>
+                                <form class="card-body" onsubmit="doAcquireRiven();return false;">
+                                    <select class="form-control mb-3" id="addriven-type">
+                                        <option value="LotusArchgunRandomModRare">LotusArchgunRandomModRare</option>
+                                        <option value="LotusModularMeleeRandomModRare">
+                                            LotusModularMeleeRandomModRare
+                                        </option>
+                                        <option value="LotusModularPistolRandomModRare">
+                                            LotusModularPistolRandomModRare
+                                        </option>
+                                        <option value="LotusPistolRandomModRare">LotusPistolRandomModRare</option>
+                                        <option value="LotusRifleRandomModRare" selected>
+                                            LotusRifleRandomModRare
+                                        </option>
+                                        <option value="LotusShotgunRandomModRare">LotusShotgunRandomModRare</option>
+                                        <option value="PlayerMeleeWeaponRandomModRare">
+                                            PlayerMeleeWeaponRandomModRare
+                                        </option>
+                                    </select>
+                                    <textarea
+                                        id="addriven-fingerprint"
+                                        class="form-control mb-3"
+                                        placeholder="Fingerprint"
+                                    ></textarea>
+                                    <button class="btn btn-primary" style="margin-right: 5px" type="submit">Add</button>
+                                    <a href="https://riven.builds.wf/" target="_blank">
+                                        Need help with the fingerprint?
+                                    </a>
+                                </form>
+                            </div>
+                            <div class="card mb-4">
+                                <h5 class="card-header">Rivens</h5>
+                                <div class="card-body">
+                                    <table class="table table-hover w-100">
+                                        <tbody id="riven-list"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-6">
+                            <div class="card mb-4">
+                                <h5 class="card-header">Mods</h5>
+                                <div class="card-body">
+                                    <table class="table table-hover w-100">
+                                        <tbody id="mods-list"></tbody>
+                                    </table>
+                                    <form class="input-group" onsubmit="doAcquireMod();return false;">
+                                        <input class="form-control" id="mod-to-acquire" list="datalist-mods" />
+                                        <button class="btn btn-primary" type="submit">Add</button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -152,6 +180,7 @@
         <datalist id="datalist-warframes"></datalist>
         <datalist id="datalist-weapons"></datalist>
         <datalist id="datalist-miscitems"></datalist>
+        <datalist id="datalist-mods"></datalist>
         <script src="libs/jquery-3.6.0.min.js"></script>
         <script src="libs/whirlpool-js.min.js"></script>
         <script src="libs/single.js"></script>
