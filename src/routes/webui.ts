@@ -28,4 +28,9 @@ webuiRouter.get("/webui/mods", (_req, res) => {
 // Serve static files
 webuiRouter.use("/webui", express.static(path.join(rootDir, "static/webui")));
 
+// Serve favicon
+webuiRouter.get("/favicon.ico", (_req, res) => {
+    res.sendFile(path.join(rootDir, "static/fixed_responses/favicon.ico"));
+});
+
 export { webuiRouter };
