@@ -65,7 +65,7 @@
                     Note: Changes made here will only be reflected in-game when the game re-downloads your inventory.
                     Visiting the navigation should be the easiest way to trigger that.
                 </p>
-                <div data-route="/webui/">
+                <div data-route="/webui/" data-title="Login | OpenWF WebUI">
                     <p>Login using your OpenWF account credentials.</p>
                     <form onsubmit="doLogin();return false;">
                         <label for="email">Email address</label>
@@ -77,7 +77,7 @@
                         <button class="btn btn-primary" type="submit">Login</button>
                     </form>
                 </div>
-                <div data-route="/webui/inventory">
+                <div data-route="/webui/inventory" data-title="Inventory | OpenWF WebUI">
                     <div class="card mb-4">
                         <h5 class="card-header">Add Items</h5>
                         <form class="card-body input-group" onsubmit="doAcquireMiscItems();return false;">
@@ -121,7 +121,7 @@
                         </div>
                     </div>
                 </div>
-                <div data-route="/webui/mods">
+                <div data-route="/webui/mods" data-title="Mods | OpenWF WebUI">
                     <div class="card mb-4">
                         <h5 class="card-header">Add Riven</h5>
                         <form class="card-body" onsubmit="doAcquireRiven();return false;">
