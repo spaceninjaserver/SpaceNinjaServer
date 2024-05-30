@@ -12,8 +12,7 @@ import { config } from "./services/configService";
 
 const options = {
     key: fs.readFileSync("static/certs/key.pem"),
-    cert: fs.readFileSync("static/certs/cert.pem"),
-    passphrase: "123456"
+    cert: fs.readFileSync("static/certs/cert.pem")
 };
 
 const httpPort = config.httpPort || 80;
