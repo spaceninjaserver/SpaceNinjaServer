@@ -81,7 +81,16 @@ single.on("route_load", function (event) {
 window.itemListPromise = new Promise(resolve => {
     const req = $.get("/custom/getItemLists");
     req.done(data => {
-        const itemMap = {};
+        const itemMap = {
+            // Generics for rivens
+            "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun": { name: "Archgun" },
+            "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon": { name: "Melee" },
+            "/Lotus/Weapons/Tenno/Pistol/LotusPistol": { name: "Pistol" },
+            "/Lotus/Weapons/Tenno/Rifle/LotusRifle": { name: "Rifle" },
+            "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun": { name: "Shotgun" },
+            // Missing in data sources
+            "/Lotus/Weapons/Tenno/Grimoire/TnGrimoire": { name: "Grimoire" }
+        };
         for (const [type, items] of Object.entries(data)) {
             items.forEach(item => {
                 const option = document.createElement("option");
@@ -94,14 +103,6 @@ window.itemListPromise = new Promise(resolve => {
         resolve(itemMap);
     });
 });
-
-const rivenGenericCompatNames = {
-    "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun": "Archgun",
-    "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon": "Melee",
-    "/Lotus/Weapons/Tenno/Pistol/LotusPistol": "Pistol",
-    "/Lotus/Weapons/Tenno/Rifle/LotusRifle": "Rifle",
-    "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun": "Shotgun"
-};
 
 function updateInventory() {
     const req = $.get("/api/inventory.php?" + window.authz);
@@ -198,10 +199,7 @@ function updateInventory() {
                     const tr = document.createElement("tr");
                     {
                         const td = document.createElement("td");
-                        td.textContent =
-                            itemMap[fingerprint.compat]?.name ??
-                            rivenGenericCompatNames[fingerprint.compat] ??
-                            fingerprint.compat;
+                        td.textContent = itemMap[fingerprint.compat]?.name ?? fingerprint.compat;
                         td.textContent += " " + RivenParser.parseRiven(rivenType, fingerprint, 1).name;
                         td.innerHTML += " <span title='Number of buffs'>▲ " + fingerprint.buffs.length + "</span>";
                         td.innerHTML += " <span title='Number of curses'>▼ " + fingerprint.curses.length + "</span>";
