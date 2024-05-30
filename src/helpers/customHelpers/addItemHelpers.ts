@@ -21,7 +21,6 @@ const parseItemType = (itemType: unknown): ItemType => {
 interface IAddItemRequest {
     type: ItemType;
     InternalName: string;
-    accountId: string;
 }
 export const isInternalItemName = (internalName: string): boolean => {
     const item = items.find(i => i.uniqueName === internalName);
@@ -41,11 +40,10 @@ export const toAddItemRequest = (body: unknown): IAddItemRequest => {
         throw new Error("incorrect or missing add item request data");
     }
 
-    if ("type" in body && "internalName" in body && "accountId" in body) {
+    if ("type" in body && "internalName" in body) {
         return {
             type: parseItemType(body.type),
-            InternalName: parseInternalItemName(body.internalName),
-            accountId: parseString(body.accountId)
+            InternalName: parseInternalItemName(body.internalName)
         };
     }
 

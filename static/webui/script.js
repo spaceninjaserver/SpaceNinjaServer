@@ -266,12 +266,11 @@ function doAcquireWarframe() {
     }
     revalidateAuthz(() => {
         const req = $.post({
-            url: "/custom/addItem",
+            url: "/custom/addItem?" + window.authz,
             contentType: "application/json",
             data: JSON.stringify({
                 type: "Powersuit",
-                internalName: uniqueName,
-                accountId: window.accountId
+                internalName: uniqueName
             })
         });
         req.done(() => {
@@ -293,12 +292,11 @@ function doAcquireWeapon() {
     }
     revalidateAuthz(() => {
         const req = $.post({
-            url: "/custom/addItem",
+            url: "/custom/addItem?" + window.authz,
             contentType: "application/json",
             data: JSON.stringify({
                 type: "Weapon",
-                internalName: uniqueName,
-                accountId: window.accountId
+                internalName: uniqueName
             })
         });
         req.done(() => {
