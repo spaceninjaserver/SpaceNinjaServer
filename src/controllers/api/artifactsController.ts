@@ -1,4 +1,3 @@
-import { parseString } from "@/src/helpers/general";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { upgradeMod } from "@/src/services/inventoryService";

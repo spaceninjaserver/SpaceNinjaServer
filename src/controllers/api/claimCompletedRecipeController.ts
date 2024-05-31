@@ -8,7 +8,6 @@ import { IOid } from "@/src/types/commonTypes";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getInventory } from "@/src/services/inventoryService";
-import { IInventoryDatabase } from "@/src/types/inventoryTypes/inventoryTypes";
 
 export interface IClaimCompletedRecipeRequest {
     RecipeIds: IOid[];

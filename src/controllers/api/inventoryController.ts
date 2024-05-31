@@ -55,7 +55,7 @@ const inventoryController: RequestHandler = async (request: Request, response: R
 
     if (config.unlockAllSkins) {
         inventoryResponse.WeaponSkins = [];
-        for (let skin of allSkins) {
+        for (const skin of allSkins) {
             inventoryResponse.WeaponSkins.push({
                 ItemId: {
                     $oid: "000000000000000000000000"

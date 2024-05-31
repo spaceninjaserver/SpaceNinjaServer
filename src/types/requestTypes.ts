@@ -80,5 +80,5 @@ export interface IUpgradeOperation {
     UpgradeRequirement: string; // uniqueName of item being consumed
     PolarizeSlot: number;
     PolarizeValue: FocusSchool;
-    PolarityRemap: {}[];
+    PolarityRemap: object[];
 }

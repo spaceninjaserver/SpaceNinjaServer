@@ -23,7 +23,7 @@ export const getGuildDojoController: RequestHandler = async (req, res) => {
                 CompletionTime: new Date(Date.now())
             }
         ];
-        guild.save();
+        await guild.save();
     }
 
     const dojo: IDojoClient = {
