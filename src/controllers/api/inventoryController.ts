@@ -17,13 +17,7 @@ const inventoryController: RequestHandler = async (request: Request, response: R
     try {
         accountId = await getAccountIdForRequest(request);
     } catch (e) {
-        if ((e as Error).message == "Invalid accountId-nonce pair") {
-            // TODO: Figure out some way to tell the game to stop trying with this nonce.
-            // For now, we'll have to be a little nasty.
-            response.destroy();
-            return;
-        }
-        response.status(400).json({ error: (e as Error).message });
+        response.status(400).send("Log-in expired");
         return;
     }
 
