@@ -24,7 +24,7 @@ import {
     IUpdateChallengeProgressRequest
 } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
-import { WeaponTypeInternal, getExalted } from "@/src/services/itemDataService";
+import { WeaponTypeInternal, getWeaponType, getExalted } from "@/src/services/itemDataService";
 import { ISyndicateSacrifice, ISyndicateSacrificeResponse } from "../types/syndicateTypes";
 
 export const createInventory = async (
@@ -63,6 +63,131 @@ export const getInventory = async (accountOwnerId: string) => {
     }
 
     return inventory;
+};
+
+export const addItem = async (
+    accountId: string,
+    typeName: string,
+    quantity: number = 1
+): Promise<{ InventoryChanges: object }> => {
+    switch (typeName.substr(1).split("/")[1]) {
+        case "Powersuits":
+            if (typeName.includes("EntratiMech")) {
+                const mechSuit = await addMechSuit(typeName, accountId);
+                await updateSlots(accountId, "MechBin", 0, 1);
+                logger.debug("mech suit", mechSuit);
+                return {
+                    InventoryChanges: {
+                        MechBin: {
+                            count: 1,
+                            platinum: 0,
+                            Slots: -1
+                        },
+                        MechSuits: [mechSuit]
+                    }
+                };
+            }
+            const suit = await addPowerSuit(typeName, accountId);
+            await updateSlots(accountId, "SuitBin", 0, 1);
+            return {
+                InventoryChanges: {
+                    SuitBin: {
+                        count: 1,
+                        platinum: 0,
+                        Slots: -1
+                    },
+                    Suits: [suit]
+                }
+            };
+        case "Weapons":
+            const weaponType = getWeaponType(typeName);
+            const weapon = await addWeapon(weaponType, typeName, accountId);
+            await updateSlots(accountId, "WeaponBin", 0, 1);
+            return {
+                InventoryChanges: {
+                    WeaponBin: { count: 1, platinum: 0, Slots: -1 },
+                    [weaponType]: [weapon]
+                }
+            };
+        case "Interface":
+            return {
+                InventoryChanges: {
+                    FlavourItems: [await addCustomization(typeName, accountId)]
+                }
+            };
+        case "Types":
+            switch (typeName.substr(1).split("/")[2]) {
+                case "AvatarImages":
+                case "SuitCustomizations":
+                    return {
+                        InventoryChanges: {
+                            FlavourItems: [await addCustomization(typeName, accountId)]
+                        }
+                    };
+                case "Sentinels":
+                    const sentinel = await addSentinel(typeName, accountId);
+                    await updateSlots(accountId, "SentinelBin", 0, 1);
+                    return {
+                        InventoryChanges: {
+                            SentinelBin: { count: 1, platinum: 0, Slots: -1 },
+                            Sentinels: [sentinel]
+                        }
+                    };
+                case "Items": {
+                    const inventory = await getInventory(accountId);
+                    const miscItemChanges = [
+                        {
+                            ItemType: typeName,
+                            ItemCount: quantity
+                        } satisfies IMiscItem
+                    ];
+                    addMiscItems(inventory, miscItemChanges);
+                    await inventory.save();
+                    return {
+                        InventoryChanges: {
+                            MiscItems: miscItemChanges
+                        }
+                    };
+                }
+                case "Recipes":
+                case "Consumables": {
+                    // Blueprints for Ciphers, Antitoxins
+                    const inventory = await getInventory(accountId);
+                    const recipeChanges = [
+                        {
+                            ItemType: typeName,
+                            ItemCount: quantity
+                        } satisfies ITypeCount
+                    ];
+                    addRecipes(inventory, recipeChanges);
+                    await inventory.save();
+                    return {
+                        InventoryChanges: {
+                            Recipes: recipeChanges
+                        }
+                    };
+                }
+                case "Restoratives": // Codex Scanner, Remote Observer, Starburst
+                    const inventory = await getInventory(accountId);
+                    const consumablesChanges = [
+                        {
+                            ItemType: typeName,
+                            ItemCount: quantity
+                        } satisfies IConsumable
+                    ];
+                    addConsumables(inventory, consumablesChanges);
+                    await inventory.save();
+                    return {
+                        InventoryChanges: {
+                            Consumables: consumablesChanges
+                        }
+                    };
+            }
+            break;
+    }
+    const errorMessage = `unable to add item: ${typeName}`;
+    logger.error(errorMessage);
+    throw new Error(errorMessage);
 };
 
 //TODO: maybe genericMethod for all the add methods, they share a lot of logic
