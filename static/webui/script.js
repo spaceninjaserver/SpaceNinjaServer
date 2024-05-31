@@ -76,6 +76,12 @@ single.on("route_load", function (event) {
     } else {
         $("body").removeClass("logged-in");
     }
+
+    $(".nav-link").removeClass("active");
+    const navLink = document.querySelector(".nav-link[href='" + event.route.paths[0] + "']");
+    if (navLink) {
+        navLink.classList.add("active");
+    }
 });
 
 window.itemListPromise = new Promise(resolve => {
