@@ -4,7 +4,6 @@ import { logger } from "@/src/utils/logger";
 import { RequestHandler } from "express";
 import { handleSetShipDecorations } from "@/src/services/shipCustomizationsService";
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const shipDecorationsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const shipDecorationsRequest = JSON.parse(req.body as string) as IShipDecorationsRequest;

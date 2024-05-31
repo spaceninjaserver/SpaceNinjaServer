@@ -9,7 +9,6 @@ interface IStartRecipeRequest {
     Ids: string[];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const startRecipeController: RequestHandler = async (req, res) => {
     const startRecipeRequest = getJSONfromString(req.body.toString()) as IStartRecipeRequest;
     logger.debug("StartRecipe Request", { startRecipeRequest });

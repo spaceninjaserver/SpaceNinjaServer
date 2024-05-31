@@ -4,7 +4,6 @@ import { handleInventoryItemConfigChange } from "@/src/services/saveLoadoutServi
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { logger } from "@/src/utils/logger";
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const saveLoadoutController: RequestHandler = async (req, res) => {
     //validate here
     const accountId = await getAccountIdForRequest(req);

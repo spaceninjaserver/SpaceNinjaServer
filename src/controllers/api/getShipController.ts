@@ -10,7 +10,6 @@ import { logger } from "@/src/utils/logger";
 import { toOid } from "@/src/helpers/inventoryHelpers";
 import { IGetShipResponse } from "@/src/types/shipTypes";
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const getShipController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const personalRooms = await getPersonalRooms(accountId);

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { toInventoryResponse } from "@/src/helpers/inventoryHelpers";
 import { Inventory } from "@/src/models/inventoryModels/inventoryModel";

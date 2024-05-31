@@ -4,7 +4,6 @@ import { parseString } from "@/src/helpers/general";
 import { RequestHandler } from "express";
 import { Types } from "mongoose";
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const setActiveShipController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const shipId = parseString(req.query.shipId);
