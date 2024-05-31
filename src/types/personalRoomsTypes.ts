@@ -26,4 +26,5 @@ export type PersonalRoomsDocumentProps = {
     };
 };
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export type PersonalRoomsModelType = Model<IPersonalRooms, {}, PersonalRoomsDocumentProps>;

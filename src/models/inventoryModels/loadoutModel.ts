@@ -89,6 +89,7 @@ type loadoutDocumentProps = {
     DRIFTER: Types.DocumentArray<ILoadoutConfigDatabase>;
 };
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 type loadoutModelType = Model<ILoadoutDatabase, {}, loadoutDocumentProps>;
 
 export const Loadout = model<ILoadoutDatabase, loadoutModelType>("Loadout", loadoutSchema);
