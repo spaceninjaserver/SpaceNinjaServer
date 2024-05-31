@@ -25,7 +25,6 @@ function createNewSession(sessionData: ISession, Creator: string): ISession {
         customSettings: sessionData.customSettings || "",
         rewardSeed: sessionData.rewardSeed || -1,
         guildId: sessionData.guildId || "",
-        // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
         buildId: sessionData.buildId || 4920386201513015989,
         platform: sessionData.platform || 0,
         xplatform: sessionData.xplatform || true,
