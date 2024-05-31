@@ -1,6 +1,7 @@
 import { getIndexAfter } from "@/src/helpers/stringHelpers";
 import { logger } from "@/src/utils/logger";
 import Items, { Buildable, Category, MinimalItem, Warframe, Weapon } from "warframe-items";
+import badItems from "@/static/json/exclude-mods.json";
 
 export type MinWarframe = Omit<Warframe, "patchlogs">;
 export type MinWeapon = Omit<Weapon, "patchlogs">;
@@ -51,7 +52,9 @@ export const getWeaponType = (weaponName: string) => {
 
 const getNamesObj = (category: Category) =>
     new Items({ category: [category] }).reduce<{ [index: string]: string }>((acc, item) => {
-        acc[item.name!.replace("'S", "'s")] = item.uniqueName!;
+        if (!(item.uniqueName! in badItems)) {
+            acc[item.name!.replace("'S", "'s")] = item.uniqueName!;
+        }
         return acc;
     }, {});
 
