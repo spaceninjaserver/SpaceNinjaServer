@@ -125,6 +125,7 @@ export const addItem = async (
                         }
                     };
                 case "Sentinels":
+                    // TOOD: Sentinels should also grant their DefaultUpgrades & SentinelWeapon.
                     const sentinel = await addSentinel(typeName, accountId);
                     await updateSlots(accountId, "SentinelBin", 0, 1);
                     return {
