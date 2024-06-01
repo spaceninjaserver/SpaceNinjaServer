@@ -4,7 +4,6 @@ import allShipFeatures from "@/static/fixed_responses/allShipFeatures.json";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getPersonalRooms } from "@/src/services/personalRoomsService";
 import { getShip } from "@/src/services/shipService";
-import { PersonalRooms } from "@/src/models/personalRoomsModel";
 import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
 import { logger } from "@/src/utils/logger";
 import { toOid } from "@/src/helpers/inventoryHelpers";

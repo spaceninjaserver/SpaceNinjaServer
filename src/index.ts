@@ -20,9 +20,8 @@ const httpsPort = config.httpsPort || 443;
 
 // const server = http.createServer(app).listen(80);
 http.createServer(app).listen(httpPort, () => logger.info("HTTP server started on port " + httpPort));
-const server = https
-    .createServer(options, app)
-    .listen(httpsPort, () => logger.info("HTTPS server started on port " + httpsPort));
+const server = https.createServer(options, app);
+server.listen(httpsPort, () => logger.info("HTTPS server started on port " + httpsPort));
 
 // server.keepAliveTimeout = 60 * 1000 + 1000;
 // server.headersTimeout = 60 * 1000 + 2000;

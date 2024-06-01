@@ -66,7 +66,7 @@ const loginController: RequestHandler = async (request, response) => {
 
     if (account.Nonce == 0 || loginRequest.ClientType != "webui") {
         account.Nonce = nonce;
-        account.save();
+        await account.save();
     }
 
     const { email, password, ...databaseAccount } = account.toJSON();

@@ -1,4 +1,4 @@
-import { isString, parseString } from "@/src/helpers/general";
+import { isString } from "@/src/helpers/general";
 import { items } from "@/src/services/itemDataService";
 
 export enum ItemType {

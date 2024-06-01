@@ -1016,6 +1016,7 @@ type InventoryDocumentProps = {
     PendingRecipes: Types.DocumentArray<IPendingRecipeDatabase>;
 };
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 type InventoryModelType = Model<IInventoryDatabase, {}, InventoryDocumentProps>;
 
 export const Inventory = model<IInventoryDatabase, InventoryModelType>("Inventory", inventorySchema);

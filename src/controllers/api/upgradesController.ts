@@ -15,7 +15,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
             operation.UpgradeRequirement == "/Lotus/Types/Items/MiscItems/ModSlotUnlocker" ||
             operation.UpgradeRequirement == "/Lotus/Types/Items/MiscItems/CustomizationSlotUnlocker"
         ) {
-            updateCurrency(10, true, accountId);
+            await updateCurrency(10, true, accountId);
         } else {
             addMiscItems(inventory, [
                 {

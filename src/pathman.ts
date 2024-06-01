@@ -1,6 +1,7 @@
 // Hooks node to support require from "@/" paths for `npm run build && npm run start`.
 // Based on https://github.com/dividab/tsconfig-paths
 
+/* eslint-disable */
 const Module = require("module");
 const originalResolveFilename = Module._resolveFilename;
 Module._resolveFilename = function (request: string, _parent: any): string {

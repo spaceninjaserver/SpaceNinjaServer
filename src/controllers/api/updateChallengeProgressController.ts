@@ -13,7 +13,7 @@ const updateChallengeProgressController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId);
     addChallenges(inventory, payload.ChallengeProgress);
-    inventory.save();
+    await inventory.save();
     res.status(200).end();
 };
 
