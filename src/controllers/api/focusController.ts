@@ -5,43 +5,6 @@ import { IMiscItem, TFocusPolarity } from "@/src/types/inventoryTypes/inventoryT
 import { logger } from "@/src/utils/logger";
 import baseFocusPointCosts from "@/static/json/baseFocusPointCosts.json";
 
-enum FocusOperation {
-    UnlockWay = "2",
-    UnlockUpgrade = "3",
-    LevelUpUpgrade = "4",
-    ActivateWay = "5",
-    ConvertShard = "9"
-}
-
-// For UnlockWay & ActivateWay
-interface IWayRequest {
-    FocusType: string;
-}
-
-interface IUnlockUpgradeRequest {
-    FocusTypes: string[];
-}
-
-interface ILevelUpUpgradeRequest {
-    FocusInfos: {
-        ItemType: string;
-        FocusXpCost: number;
-        IsUniversal: boolean;
-        Level: number;
-        IsActiveAbility: boolean;
-    }[];
-}
-
-interface IConvertShardRequest {
-    Shards: IMiscItem[];
-    Polarity: TFocusPolarity;
-}
-
-// Works for ways & upgrades
-const focusTypeToPolarity = (type: string): TFocusPolarity => {
-    return ("AP_" + type.substr(1).split("/")[3].toUpperCase()) as TFocusPolarity;
-};
-
 export const focusController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     switch (req.query.op) {
@@ -139,6 +102,43 @@ export const focusController: RequestHandler = async (req, res) => {
             break;
         }
     }
+};
+
+enum FocusOperation {
+    UnlockWay = "2",
+    UnlockUpgrade = "3",
+    LevelUpUpgrade = "4",
+    ActivateWay = "5",
+    ConvertShard = "9"
+}
+
+// For UnlockWay & ActivateWay
+interface IWayRequest {
+    FocusType: string;
+}
+
+interface IUnlockUpgradeRequest {
+    FocusTypes: string[];
+}
+
+interface ILevelUpUpgradeRequest {
+    FocusInfos: {
+        ItemType: string;
+        FocusXpCost: number;
+        IsUniversal: boolean;
+        Level: number;
+        IsActiveAbility: boolean;
+    }[];
+}
+
+interface IConvertShardRequest {
+    Shards: IMiscItem[];
+    Polarity: TFocusPolarity;
+}
+
+// Works for ways & upgrades
+const focusTypeToPolarity = (type: string): TFocusPolarity => {
+    return ("AP_" + type.substr(1).split("/")[3].toUpperCase()) as TFocusPolarity;
 };
 
 const shardValues = {
