@@ -1,14 +1,13 @@
 @media (min-width: 992px) {
     body.logged-in #main-view {
-        display: grid;
-        grid-template-columns: 1fr 8fr;
-        gap: 1.5rem;
+        display: flex;
     }
 
     body.logged-in #sidebar {
         position: sticky;
         top: 5rem;
         height: 100px;
+        margin-right: 3rem;
     }
 
     body:not(.logged-in) #sidebar {

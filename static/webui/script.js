@@ -76,32 +76,46 @@ single.on("route_load", function (event) {
     } else {
         $("body").removeClass("logged-in");
     }
+
+    $(".nav-link").removeClass("active");
+    const navLink = document.querySelector(".nav-link[href='" + event.route.paths[0] + "']");
+    if (navLink) {
+        navLink.classList.add("active");
+    }
 });
 
 window.itemListPromise = new Promise(resolve => {
     const req = $.get("/custom/getItemLists");
     req.done(data => {
-        const itemMap = {};
+        const itemMap = {
+            // Generics for rivens
+            "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun": { name: "Archgun" },
+            "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon": { name: "Melee" },
+            "/Lotus/Weapons/Tenno/Pistol/LotusPistol": { name: "Pistol" },
+            "/Lotus/Weapons/Tenno/Rifle/LotusRifle": { name: "Rifle" },
+            "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun": { name: "Shotgun" },
+            // Missing in data sources
+            "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/CyoteMod": { name: "Traumatic Peculiar" },
+            "/Lotus/Weapons/Tenno/Grimoire/TnGrimoire": { name: "Grimoire" }
+        };
         for (const [type, items] of Object.entries(data)) {
-            items.forEach(item => {
-                const option = document.createElement("option");
-                option.setAttribute("data-key", item.uniqueName);
-                option.value = item.name;
-                document.getElementById("datalist-" + type).appendChild(option);
-                itemMap[item.uniqueName] = { ...item, type };
-            });
+            if (type != "badItems") {
+                items.forEach(item => {
+                    if (item.uniqueName in data.badItems) {
+                        item.name += " (Imposter)";
+                    } else if (item.uniqueName.substr(0, 18) != "/Lotus/Types/Game/") {
+                        const option = document.createElement("option");
+                        option.setAttribute("data-key", item.uniqueName);
+                        option.value = item.name;
+                        document.getElementById("datalist-" + type).appendChild(option);
+                    }
+                    itemMap[item.uniqueName] = { ...item, type };
+                });
+            }
         }
         resolve(itemMap);
     });
 });
-
-const rivenGenericCompatNames = {
-    "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun": "Archgun",
-    "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon": "Melee",
-    "/Lotus/Weapons/Tenno/Pistol/LotusPistol": "Pistol",
-    "/Lotus/Weapons/Tenno/Rifle/LotusRifle": "Rifle",
-    "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun": "Shotgun"
-};
 
 function updateInventory() {
     const req = $.get("/api/inventory.php?" + window.authz);
@@ -190,6 +204,7 @@ function updateInventory() {
             });
 
             document.getElementById("riven-list").innerHTML = "";
+            document.getElementById("mods-list").innerHTML = "";
             data.Upgrades.forEach(item => {
                 if (item.ItemType.substr(0, 32) == "/Lotus/Upgrades/Mods/Randomized/") {
                     const rivenType = item.ItemType.substr(32);
@@ -198,10 +213,7 @@ function updateInventory() {
                     const tr = document.createElement("tr");
                     {
                         const td = document.createElement("td");
-                        td.textContent =
-                            itemMap[fingerprint.compat]?.name ??
-                            rivenGenericCompatNames[fingerprint.compat] ??
-                            fingerprint.compat;
+                        td.textContent = itemMap[fingerprint.compat]?.name ?? fingerprint.compat;
                         td.textContent += " " + RivenParser.parseRiven(rivenType, fingerprint, 1).name;
                         td.innerHTML += " <span title='Number of buffs'>▲ " + fingerprint.buffs.length + "</span>";
                         td.innerHTML += " <span title='Number of curses'>▼ " + fingerprint.curses.length + "</span>";
@@ -245,6 +257,92 @@ function updateInventory() {
                         tr.appendChild(td);
                     }
                     document.getElementById("riven-list").appendChild(tr);
+                } else {
+                    const tr = document.createElement("tr");
+                    const rank = parseInt(JSON.parse(item.UpgradeFingerprint).lvl);
+                    const maxRank = itemMap[item.ItemType]?.fusionLimit ?? 5;
+                    {
+                        const td = document.createElement("td");
+                        td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
+                        td.innerHTML += " <span title='Rank'>★ " + rank + "/" + maxRank + "</span>";
+                        tr.appendChild(td);
+                    }
+                    {
+                        const td = document.createElement("td");
+                        td.classList = "text-end";
+                        if (rank < maxRank) {
+                            const a = document.createElement("a");
+                            a.href = "#";
+                            a.onclick = function (event) {
+                                event.preventDefault();
+                                setFingerprint(item.ItemType, item.ItemId, { lvl: maxRank });
+                            };
+                            a.textContent = "Max Rank";
+                            td.appendChild(a);
+
+                            const span = document.createElement("span");
+                            span.innerHTML = " &middot; ";
+                            td.appendChild(span);
+                        }
+                        {
+                            const a = document.createElement("a");
+                            a.href = "#";
+                            a.onclick = function (event) {
+                                event.preventDefault();
+                                disposeOfGear("Upgrades", item.ItemId.$oid);
+                            };
+                            a.textContent = "Remove";
+                            td.appendChild(a);
+                        }
+                        tr.appendChild(td);
+                    }
+                    document.getElementById("mods-list").appendChild(tr);
+                }
+            });
+            data.RawUpgrades.forEach(item => {
+                if (item.ItemCount > 0) {
+                    const maxRank = itemMap[item.ItemType]?.fusionLimit ?? 5;
+                    const tr = document.createElement("tr");
+                    {
+                        const td = document.createElement("td");
+                        td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
+                        td.innerHTML += " <span title='Rank'>★ 0/" + maxRank + "</span>";
+                        if (item.ItemCount > 1) {
+                            td.innerHTML += " <span title='Count'>🗍 " + parseInt(item.ItemCount) + "</span>";
+                        }
+                        tr.appendChild(td);
+                    }
+                    {
+                        const td = document.createElement("td");
+                        td.classList = "text-end";
+                        {
+                            const a = document.createElement("a");
+                            a.href = "#";
+                            a.onclick = function (event) {
+                                event.preventDefault();
+                                setFingerprint(item.ItemType, item.LastAdded, { lvl: maxRank });
+                            };
+                            a.textContent = "Max Rank";
+                            td.appendChild(a);
+                        }
+                        {
+                            const span = document.createElement("span");
+                            span.innerHTML = " &middot; ";
+                            td.appendChild(span);
+                        }
+                        {
+                            const a = document.createElement("a");
+                            a.href = "#";
+                            a.onclick = function (event) {
+                                event.preventDefault();
+                                disposeOfItems("Upgrades", item.ItemType, item.ItemCount);
+                            };
+                            a.textContent = "Remove";
+                            td.appendChild(a);
+                        }
+                        tr.appendChild(td);
+                    }
+                    document.getElementById("mods-list").appendChild(tr);
                 }
             });
         });
@@ -352,6 +450,29 @@ function disposeOfGear(category, oid) {
     });
 }
 
+function disposeOfItems(category, type, count) {
+    const data = {
+        SellCurrency: "SC_RegularCredits",
+        SellPrice: 0,
+        Items: {}
+    };
+    data.Items[category] = [
+        {
+            String: type,
+            Count: count
+        }
+    ];
+    revalidateAuthz(() => {
+        $.post({
+            url: "/api/sell.php?" + window.authz,
+            contentType: "text/plain",
+            data: JSON.stringify(data)
+        }).done(function () {
+            updateInventory();
+        });
+    });
+}
+
 function doAcquireMiscItems() {
     const uniqueName = getKey(document.getElementById("miscitem-type"));
     if (!uniqueName) {
@@ -444,4 +565,54 @@ function doAcquireRiven() {
 
 $("#addriven-fingerprint").on("input", () => {
     $("#addriven-fingerprint").removeClass("is-invalid");
+});
+
+function setFingerprint(ItemType, ItemId, fingerprint) {
+    revalidateAuthz(() => {
+        $.post({
+            url: "/api/artifacts.php?" + window.authz,
+            contentType: "text/plain",
+            data: JSON.stringify({
+                Upgrade: {
+                    ItemType,
+                    ItemId,
+                    UpgradeFingerprint: JSON.stringify(fingerprint)
+                },
+                LevelDiff: 0,
+                Cost: 0,
+                FusionPointCost: 0
+            })
+        }).done(function () {
+            updateInventory();
+        });
+    });
+}
+
+function doAcquireMod() {
+    const uniqueName = getKey(document.getElementById("mod-to-acquire"));
+    if (!uniqueName) {
+        $("#mod-to-acquire").addClass("is-invalid").focus();
+        return;
+    }
+    revalidateAuthz(() => {
+        $.post({
+            url: "/api/missionInventoryUpdate.php?" + window.authz,
+            contentType: "text/plain",
+            data: JSON.stringify({
+                RawUpgrades: [
+                    {
+                        ItemType: uniqueName,
+                        ItemCount: 1
+                    }
+                ]
+            })
+        }).done(function () {
+            document.getElementById("mod-to-acquire").value = "";
+            updateInventory();
+        });
+    });
+}
+
+$("#mod-to-acquire").on("input", () => {
+    $("#mod-to-acquire").removeClass("is-invalid");
 });
