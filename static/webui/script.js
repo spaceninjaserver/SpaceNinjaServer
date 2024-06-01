@@ -227,7 +227,7 @@ function updateInventory() {
                         {
                             const a = document.createElement("a");
                             a.href =
-                                "https://riven.builds.wf/#" +
+                                "riven-tool/#" +
                                 encodeURIComponent(
                                     JSON.stringify({
                                         rivenType: rivenType,

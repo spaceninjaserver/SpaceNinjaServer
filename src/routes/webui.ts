@@ -33,4 +33,12 @@ webuiRouter.get("/favicon.ico", (_req, res) => {
     res.sendFile(path.join(rootDir, "static/fixed_responses/favicon.ico"));
 });
 
+// Serve warframe-riven-info
+webuiRouter.get("/webui/riven-tool/", (_req, res) => {
+    res.sendFile(path.join(rootDir, "node_modules/warframe-riven-info/index.html"));
+});
+webuiRouter.get("/webui/riven-tool/RivenParser.js", (_req, res) => {
+    res.sendFile(path.join(rootDir, "node_modules/warframe-riven-info/RivenParser.js"));
+});
+
 export { webuiRouter };
