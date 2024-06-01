@@ -553,6 +553,8 @@ export interface IFocusXP {
     AP_WARD: number;
 }
 
+export type TFocusPolarity = keyof IFocusXP;
+
 export interface IFusionTreasure {
     ItemCount: number;
     ItemType: string;
