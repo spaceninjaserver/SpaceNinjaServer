@@ -19,7 +19,9 @@ const getItemListsController: RequestHandler = (_req, res) => {
     res.json({
         warframes: reduceItems(warframes),
         weapons: reduceItems(weapons.filter(item => item.productCategory != "OperatorAmps")),
-        miscitems: reduceItems(items.filter(item => item.category == "Misc" || item.category == "Resources" || item.category == "Fish")),
+        miscitems: reduceItems(
+            items.filter(item => item.category == "Misc" || item.category == "Resources" || item.category == "Fish")
+        )
     });
 };
 
