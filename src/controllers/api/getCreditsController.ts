@@ -3,6 +3,7 @@ import { config } from "@/src/services/configService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getInventory } from "@/src/services/inventoryService";
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const getCreditsController: RequestHandler = async (req, res) => {
     let accountId;
     try {
