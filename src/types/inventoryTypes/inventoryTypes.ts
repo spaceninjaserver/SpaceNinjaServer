@@ -1028,6 +1028,11 @@ export interface ISeasonChallengeHistory {
     id: string;
 }
 
+export interface ISeasonChallengeCompletions {
+    challenge: string;
+    id: string;
+}
+
 export interface ISentientSpawnChanceBoosters {
     numOceanMissionsCompleted: number;
 }
