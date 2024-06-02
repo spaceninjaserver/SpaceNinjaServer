@@ -17,6 +17,7 @@
     "express": "^5.0.0-beta.3",
     "mongoose": "^8.1.1",
     "warframe-items": "^1.1261.19",
+    "warframe-public-export-plus": "^0.1.0",
     "warframe-riven-info": "^0.1.0",
     "winston": "^3.11.0",
     "winston-daily-rotate-file": "^4.7.1"
