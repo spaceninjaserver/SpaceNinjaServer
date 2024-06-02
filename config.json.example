@@ -14,6 +14,7 @@
   "unlockAllScans": true,
   "unlockAllMissions": true,
   "unlockAllQuests": true,
+  "completeAllQuests": false,
   "infiniteResources": true,
   "unlockallShipFeatures": true,
   "unlockAllShipDecorations": true,

@@ -12,6 +12,7 @@ interface IConfig {
     unlockAllScans?: boolean;
     unlockAllMissions?: boolean;
     unlockAllQuests?: boolean;
+    completeAllQuests?: boolean;
     infiniteResources?: boolean;
     unlockallShipFeatures?: boolean;
     unlockAllShipDecorations?: boolean;
