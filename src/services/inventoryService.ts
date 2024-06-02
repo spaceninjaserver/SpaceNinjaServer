@@ -185,13 +185,6 @@ export const syndicateSacrifice = async (data: ISyndicateSacrifice, accountId: s
     return res;
 };
 
-export const updateSyndicate = async (syndicate: string, accountId: string) => {
-    const inventory = await getInventory(accountId);
-
-    inventory.SupportedSyndicate = syndicate;
-    await inventory.save();
-};
-
 export const addWeapon = async (
     weaponType: WeaponTypeInternal,
     weaponName: string,

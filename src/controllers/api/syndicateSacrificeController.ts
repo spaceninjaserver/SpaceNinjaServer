@@ -2,11 +2,11 @@ import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { syndicateSacrifice } from "@/src/services/inventoryService";
 import { ISyndicateSacrifice } from "@/src/types/syndicateTypes";
 import { RequestHandler } from "express";
-
+import { getAccountIdForRequest } from "@/src/services/loginService";
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 const syndicateSacrificeController: RequestHandler = async (request, response) => {
 
-    const accountId = request.query.accountId as string;
+    const accountId = await getAccountIdForRequest(request);
     const body = getJSONfromString(request.body);
     let reply = {};
     try {
