@@ -68,7 +68,7 @@ const loginController: RequestHandler = async (request, response) => {
         account.Nonce = nonce;
     }
     if (loginRequest.ClientType != "webui") {
-        account.CountryCode = loginRequest.lang.toUpperCase();        
+        account.CountryCode = loginRequest.lang.toUpperCase();
     }
     await account.save();
 
