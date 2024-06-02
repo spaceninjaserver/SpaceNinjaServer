@@ -11,7 +11,7 @@
         "node": true
     },
     "rules": {
-        "@typescript-eslint/semi": ["error"],
+        "@typescript-eslint/semi": "warn",
         "@typescript-eslint/explicit-function-return-type": "warn",
         "@typescript-eslint/explicit-module-boundary-types": "warn",
         "@typescript-eslint/restrict-template-expressions": "warn",
