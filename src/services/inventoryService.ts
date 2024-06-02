@@ -17,7 +17,12 @@ import {
     ITypeCount
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate } from "../types/genericUpdate";
-import { IArtifactsRequest, IMissionInventoryUpdateRequest, IThemeUpdateRequest, IUpdateChallengeProgressRequest } from "../types/requestTypes";
+import {
+    IArtifactsRequest,
+    IMissionInventoryUpdateRequest,
+    IThemeUpdateRequest,
+    IUpdateChallengeProgressRequest
+} from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
 import { WeaponTypeInternal } from "@/src/services/itemDataService";
 import { ISyndicateSacrifice, ISyndicateSacrificeResponse } from "../types/syndicateTypes";
@@ -166,7 +171,10 @@ export const updateTheme = async (data: IThemeUpdateRequest, accountId: string) 
     await inventory.save();
 };
 
-export const syndicateSacrifice = async (data: ISyndicateSacrifice, accountId: string): Promise<ISyndicateSacrificeResponse> => {
+export const syndicateSacrifice = async (
+    data: ISyndicateSacrifice,
+    accountId: string
+): Promise<ISyndicateSacrificeResponse> => {
     const inventory = await getInventory(accountId);
     const syndicate = inventory.Affiliations.find(x => x.Tag == data.AffiliationTag);
     const level = data.SacrificeLevel - (syndicate?.Title ?? 0);
@@ -176,8 +184,8 @@ export const syndicateSacrifice = async (data: ISyndicateSacrifice, accountId: s
         Level: data.SacrificeLevel,
         LevelIncrease: level <= 0 ? 1 : level,
         NewEpisodeReward: syndicate?.Tag == "RadioLegionIntermission9Syndicate"
-    }
-    
+    };
+
     if (syndicate?.Title !== undefined) syndicate.Title += 1;
 
     await inventory.save();
@@ -327,7 +335,10 @@ export const updateChallengeProgress = async (challenges: IUpdateChallengeProgre
     await inventory.save();
 };
 
-export const addSeasonalChallengeHistory = (inventory: IInventoryDatabaseDocument, itemsArray: ISeasonChallengeHistory[] | undefined) => {
+export const addSeasonalChallengeHistory = (
+    inventory: IInventoryDatabaseDocument,
+    itemsArray: ISeasonChallengeHistory[] | undefined
+) => {
     const category = inventory.SeasonChallengeHistory;
 
     itemsArray?.forEach(({ challenge, id }) => {
@@ -383,9 +394,10 @@ export const missionInventoryUpdate = async (data: IMissionInventoryUpdateReques
 
     // syndicate
     data.AffiliationChanges?.forEach(affiliation => {
-        const  syndicate = inventory.Affiliations.find(x => x.Tag == affiliation.Tag);
+        const syndicate = inventory.Affiliations.find(x => x.Tag == affiliation.Tag);
         if (syndicate !== undefined) {
-            syndicate.Standing = syndicate.Standing === undefined ? affiliation.Standing : syndicate.Standing + affiliation.Standing;
+            syndicate.Standing =
+                syndicate.Standing === undefined ? affiliation.Standing : syndicate.Standing + affiliation.Standing;
             syndicate.Title = syndicate.Title === undefined ? affiliation.Title : syndicate.Title + affiliation.Title;
         } else {
             inventory.Affiliations.push({
@@ -396,7 +408,7 @@ export const missionInventoryUpdate = async (data: IMissionInventoryUpdateReques
                 FreeFavorsUsed: []
             });
         }
-    })
+    });
 
     // Gear XP
     gearKeys.forEach(key => addGearExpByCategory(inventory, data[key], key));

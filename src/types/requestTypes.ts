@@ -27,11 +27,10 @@ export interface IThemeUpdateRequest {
     Sounds?: string;
 }
 
-export interface IAffiliationChange
-{
-    Tag: string,
-    Standing: number,
-    Title: number
+export interface IAffiliationChange {
+    Tag: string;
+    Standing: number;
+    Title: number;
 }
 
 export interface IUpdateChallengeProgressRequest {

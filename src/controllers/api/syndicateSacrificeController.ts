@@ -5,7 +5,6 @@ import { RequestHandler } from "express";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 const syndicateSacrificeController: RequestHandler = async (request, response) => {
-
     const accountId = request.query.accountId as string;
     const body = getJSONfromString(request.body);
     let reply = {};
