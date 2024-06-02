@@ -58,6 +58,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
                 }
                 break;
             case "/Lotus/Types/Items/MiscItems/Forma":
+            case "/Lotus/Types/Items/MiscItems/FormaAura":
                 for (const item of inventory[payload.ItemCategory as TGenericItemKey] as IGenericItemDatabase[]) {
                     if (item._id.toString() == payload.ItemId.$oid) {
                         item.XP = 0;
