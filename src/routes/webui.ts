@@ -3,6 +3,7 @@ import path from "path";
 
 const webuiRouter = express.Router();
 const rootDir = path.join(__dirname, "../..");
+const repoDir = path.basename(rootDir) == "build" ? path.join(rootDir, "..") : rootDir;
 
 // Redirect / to /webui/
 webuiRouter.get("/", (_req, res) => {
@@ -35,10 +36,10 @@ webuiRouter.get("/favicon.ico", (_req, res) => {
 
 // Serve warframe-riven-info
 webuiRouter.get("/webui/riven-tool/", (_req, res) => {
-    res.sendFile(path.join(rootDir, "node_modules/warframe-riven-info/index.html"));
+    res.sendFile(path.join(repoDir, "node_modules/warframe-riven-info/index.html"));
 });
 webuiRouter.get("/webui/riven-tool/RivenParser.js", (_req, res) => {
-    res.sendFile(path.join(rootDir, "node_modules/warframe-riven-info/RivenParser.js"));
+    res.sendFile(path.join(repoDir, "node_modules/warframe-riven-info/RivenParser.js"));
 });
 
 export { webuiRouter };
