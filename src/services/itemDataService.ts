@@ -2,6 +2,7 @@ import { getIndexAfter } from "@/src/helpers/stringHelpers";
 import { logger } from "@/src/utils/logger";
 import Items, { Buildable, Category, MinimalItem, Warframe, Weapon } from "warframe-items";
 import badItems from "@/static/json/exclude-mods.json";
+import dict_en from "@/node_modules/warframe-public-export-plus/dict.en.json";
 
 export type MinWarframe = Omit<Warframe, "patchlogs">;
 export type MinWeapon = Omit<Weapon, "patchlogs">;
@@ -128,4 +129,8 @@ export const getItemByUniqueName = (uniqueName: string) => {
 export const getItemByName = (name: string) => {
     const item = items.find(item => item.name === name);
     return item;
+};
+
+export const getEnglishString = (key: string) => {
+    return dict_en[key as keyof typeof dict_en] ?? key;
 };
