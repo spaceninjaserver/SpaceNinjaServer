@@ -39,7 +39,7 @@ export const getGuildDojoController: RequestHandler = async (req, res) => {
         DojoComponents: []
     };
     guild.DojoComponents.forEach(dojoComponent => {
-        let clientComponent: IDojoComponentClient = {
+        const clientComponent: IDojoComponentClient = {
             id: toOid(dojoComponent._id),
             pf: dojoComponent.pf,
             ppf: dojoComponent.ppf,
