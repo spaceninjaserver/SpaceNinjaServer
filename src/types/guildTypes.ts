@@ -41,7 +41,8 @@ export interface IDojoComponentClient {
     DecoCapacity?: number;
 }
 
-export interface IDojoComponentDatabase extends Omit<IDojoComponentClient, "id" | "pi" | "CompletionTime" | "DecoCapacity"> {
+export interface IDojoComponentDatabase
+    extends Omit<IDojoComponentClient, "id" | "pi" | "CompletionTime" | "DecoCapacity"> {
     _id: Types.ObjectId;
     pi?: Types.ObjectId;
     CompletionTime?: Date;
