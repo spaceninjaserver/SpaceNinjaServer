@@ -3,6 +3,8 @@ import { logger } from "@/src/utils/logger";
 import Items, { Buildable, Category, MinimalItem, Warframe, Weapon } from "warframe-items";
 import badItems from "@/static/json/exclude-mods.json";
 import dict_en from "@/node_modules/warframe-public-export-plus/dict.en.json";
+import exportSuits from "@/node_modules/warframe-public-export-plus/ExportWarframes.json";
+
 
 export type MinWarframe = Omit<Warframe, "patchlogs">;
 export type MinWeapon = Omit<Weapon, "patchlogs">;
@@ -104,6 +106,15 @@ export const getItemByBlueprint = (uniqueName: string): (MinItem & Buildable) | 
     return item;
 };
 
+export const getExalted = (uniqueName: string) => {
+    const suit = getSuitByUniqueName(uniqueName);
+    if(suit?.exalted !== undefined){
+        return suit.exalted;
+    } else {
+        return false
+    }
+}
+
 export const getItemCategoryByUniqueName = (uniqueName: string) => {
     //Lotus/Types/Items/MiscItems/PolymerBundle
 
@@ -119,6 +130,11 @@ export const getItemCategoryByUniqueName = (uniqueName: string) => {
     }
     const category = uniqueName.substring(index).split("/")[0];
     return category;
+};
+
+export const getSuitByUniqueName = (uniqueName: string) => {
+    const suit = exportSuits.find(suit => suit.uniqueName === uniqueName);
+    return suit;
 };
 
 export const getItemByUniqueName = (uniqueName: string) => {
