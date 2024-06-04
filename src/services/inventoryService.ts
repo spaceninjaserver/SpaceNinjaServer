@@ -74,7 +74,7 @@ export const addSentinel = async (sentinelName: string, accountId: string) => {
 };
 
 export const addPowerSuit = async (powersuitName: string, accountId: string): Promise<ISuitClient> => {
-    const specialItems = await getExalted(powersuitName);
+    const specialItems = getExalted(powersuitName);
     if(specialItems != false){
         for await (const specialItem of specialItems) {
             await addSpecialItem(specialItem, accountId)
@@ -87,7 +87,7 @@ export const addPowerSuit = async (powersuitName: string, accountId: string): Pr
 };
 
 export const addMechSuit = async (mechsuitName: string, accountId: string) => {
-    const specialItems = await getExalted(mechsuitName);
+    const specialItems = getExalted(mechsuitName);
     if(specialItems != false){
         for await (const specialItem of specialItems) {
             await addSpecialItem(specialItem, accountId)

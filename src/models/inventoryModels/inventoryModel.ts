@@ -16,7 +16,6 @@ import {
     ITypeCount,
     IFocusXP,
     IFocusUpgrades,
-    IGenericItem2,
     ITypeXPItem,
     IChallengeProgress,
     IStepSequencer,
