@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { MinItem, warframes, weapons, items, getEnglishString } from "@/src/services/itemDataService";
+import { MinItem, MinWeapon, warframes, weapons, items, getEnglishString } from "@/src/services/itemDataService";
 import badItems from "@/static/json/exclude-mods.json";
 import ExportArcanes from "@/node_modules/warframe-public-export-plus/ExportArcanes.json";
 
@@ -29,9 +29,15 @@ const getItemListsController: RequestHandler = (_req, res) => {
     }
     res.json({
         warframes: reduceItems(warframes),
-        weapons: reduceItems(weapons.filter(item => item.productCategory != "OperatorAmps")),
+        weapons: reduceItems(weapons.filter(item => item.productCategory != "OperatorAmps" && item.totalDamage != 0)),
         miscitems: reduceItems(
-            items.filter(item => item.category == "Misc" || item.category == "Resources" || item.category == "Fish")
+            items.filter(
+                item =>
+                    item.category == "Misc" ||
+                    item.category == "Resources" ||
+                    item.category == "Fish" ||
+                    ((item as any).productCategory == "Pistols" && (item as MinWeapon).totalDamage == 0)
+            )
         ),
         mods,
         badItems
