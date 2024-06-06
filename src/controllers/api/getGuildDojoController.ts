@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import { Types } from "mongoose";
 import { Guild } from "@/src/models/guildModel";
-import { IDojoClient } from "@/src/types/guildTypes";
+import { IDojoClient, IDojoComponentClient } from "@/src/types/guildTypes";
 import { toOid, toMongoDate } from "@/src/helpers/inventoryHelpers";
 
 export const getGuildDojoController: RequestHandler = async (req, res) => {
@@ -39,13 +39,21 @@ export const getGuildDojoController: RequestHandler = async (req, res) => {
         DojoComponents: []
     };
     guild.DojoComponents.forEach(dojoComponent => {
-        dojo.DojoComponents.push({
+        const clientComponent: IDojoComponentClient = {
             id: toOid(dojoComponent._id),
             pf: dojoComponent.pf,
             ppf: dojoComponent.ppf,
-            CompletionTime: toMongoDate(dojoComponent.CompletionTime),
             DecoCapacity: 600
-        });
+        };
+        if (dojoComponent.pi) {
+            clientComponent.pi = toOid(dojoComponent.pi);
+            clientComponent.op = dojoComponent.op!;
+            clientComponent.pp = dojoComponent.pp!;
+        }
+        if (dojoComponent.CompletionTime) {
+            clientComponent.CompletionTime = toMongoDate(dojoComponent.CompletionTime);
+        }
+        dojo.DojoComponents.push(clientComponent);
     });
     res.json(dojo);
 };

@@ -4,6 +4,9 @@ import { model, Schema } from "mongoose";
 const dojoComponentSchema = new Schema<IDojoComponentDatabase>({
     pf: { type: String, required: true },
     ppf: String,
+    pi: Schema.Types.ObjectId,
+    op: String,
+    pp: String,
     CompletionTime: Date
 });
 

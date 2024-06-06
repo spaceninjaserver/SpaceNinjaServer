@@ -1,5 +1,6 @@
 import { Types } from "mongoose";
 import { IOid, IMongoDate } from "@/src/types/commonTypes";
+import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 
 export interface IGuild {
     Name: string;
@@ -31,13 +32,18 @@ export interface IDojoComponentClient {
     id: IOid;
     pf: string;
     ppf: string;
-    CompletionTime: IMongoDate;
-    DecoCapacity: number;
+    pi?: IOid; // Parent ID. N/A to root.
+    op?: string; // "Open Portal"? N/A to root.
+    pp?: string; // "Parent Portal"? N/A to root.
+    RegularCredits?: number; // "Collecting Materials" state: Number of credits that were donated.
+    MiscItems?: IMiscItem[]; // "Collecting Materials" state: Resources that were donated.
+    CompletionTime?: IMongoDate;
+    DecoCapacity?: number;
 }
 
-export interface IDojoComponentDatabase {
+export interface IDojoComponentDatabase
+    extends Omit<IDojoComponentClient, "id" | "pi" | "CompletionTime" | "DecoCapacity"> {
     _id: Types.ObjectId;
-    pf: string;
-    ppf: string;
-    CompletionTime: Date;
+    pi?: Types.ObjectId;
+    CompletionTime?: Date;
 }
