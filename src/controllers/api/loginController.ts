@@ -66,8 +66,11 @@ const loginController: RequestHandler = async (request, response) => {
 
     if (account.Nonce == 0 || loginRequest.ClientType != "webui") {
         account.Nonce = nonce;
-        await account.save();
     }
+    if (loginRequest.ClientType != "webui") {
+        account.CountryCode = loginRequest.lang.toUpperCase();
+    }
+    await account.save();
 
     const { email, password, ...databaseAccount } = account.toJSON();
     const newLoginResponse: ILoginResponse = {
