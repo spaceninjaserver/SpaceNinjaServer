@@ -18,7 +18,15 @@ export const warframes: MinWarframe[] = Array.from(new Items({ category: ["Warfr
         return next;
     });
 
-export type WeaponTypeInternal = "LongGuns" | "Pistols" | "Melee" | "SpaceMelee" | "SpaceGuns" | "SentinelWeapons" | "OperatorAmps" | "SpecialItems";
+export type WeaponTypeInternal =
+    | "LongGuns"
+    | "Pistols"
+    | "Melee"
+    | "SpaceMelee"
+    | "SpaceGuns"
+    | "SentinelWeapons"
+    | "OperatorAmps"
+    | "SpecialItems";
 
 export const items: MinItem[] = Array.from(new Items({ category: ["All"] }) as MinimalItem[]).map(item => {
     const next = { ...item };
