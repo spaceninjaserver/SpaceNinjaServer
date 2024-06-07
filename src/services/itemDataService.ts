@@ -18,7 +18,7 @@ export const warframes: MinWarframe[] = Array.from(new Items({ category: ["Warfr
         return next;
     });
 
-export type WeaponTypeInternal = "LongGuns" | "Pistols" | "Melee";
+export type WeaponTypeInternal = "LongGuns" | "Pistols" | "Melee" | "SpaceMelee" | "SpaceGuns" | "SentinelWeapons" | "OperatorAmps" | "SpecialItems";
 
 export const items: MinItem[] = Array.from(new Items({ category: ["All"] }) as MinimalItem[]).map(item => {
     const next = { ...item };
@@ -38,7 +38,7 @@ export const getWeaponType = (weaponName: string): WeaponTypeInternal => {
         throw new Error(`${weaponName} doesn't quack like a weapon`);
     }
 
-    const weaponType = weaponInfo.productCategory as WeaponTypeInternal;
+    const weaponType = weaponInfo.productCategory;
 
     if (!weaponType) {
         logger.error(`unknown weapon category for item ${weaponName}`);
