@@ -16,6 +16,7 @@ import {
     ITypeCount,
     IFocusXP,
     IFocusUpgrades,
+    IGenericItem2,
     ITypeXPItem,
     IChallengeProgress,
     IStepSequencer,
@@ -378,6 +379,29 @@ DuviriInfoSchema.set("toJSON", {
     transform(_document, returnedObject) {
         delete returnedObject.__v;
     }
+});
+
+const GenericItemSchema2 = new Schema<IGenericItem2>({
+    ItemType: String,
+    ItemName: String,
+    XP: Number,
+    UpgradeVer: Number, //this is probably __v
+    Features: Number,
+    Polarized: Number,
+    CustomizationSlotPurchases: Number,
+    ModSlotPurchases: Number,
+    FocusLens: String,
+    Expiry: Date, //TODO: needs conversion
+    Polarity: [polaritySchema],
+    Configs: [ItemConfigSchema],
+    ModularParts: [String],
+    SkillTree: String,
+    UpgradeType: String,
+    UpgradeFingerprint: String,
+    OffensiveUpgrade: String,
+    DefensiveUpgrade: String,
+    UpgradesExpiry: Date, //TODO: needs conversion
+    ArchonCrystalUpgrades: []
 });
 
 const TypeXPItemSchema = new Schema<ITypeXPItem>(
