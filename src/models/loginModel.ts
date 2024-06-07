@@ -33,7 +33,7 @@ const databaseAccountSchema = new Schema<IDatabaseAccountDocument>(
         AmazonRefreshToken: { type: String },
         ConsentNeeded: { type: Boolean, required: true },
         TrackedSettings: { type: [String], default: [] },
-        Nonce: { type: Number, required: true }
+        Nonce: { type: Number, default: 0 }
     },
     opts
 );
