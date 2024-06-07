@@ -30,10 +30,7 @@ const getItemListsController: RequestHandler = (_req, res) => {
     res.json({
         warframes: reduceItems(warframes),
         weapons: Object.entries(ExportWeapons)
-            .filter(
-                ([_uniqueName, weapon]) =>
-                    weapon.productCategory !== "OperatorAmps" && weapon.totalDamage !== 0
-            )
+            .filter(([_uniqueName, weapon]) => weapon.productCategory !== "OperatorAmps" && weapon.totalDamage !== 0)
             .map(([uniqueName, weapon]) => {
                 return {
                     uniqueName,
