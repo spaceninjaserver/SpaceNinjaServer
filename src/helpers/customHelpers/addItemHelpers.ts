@@ -1,5 +1,4 @@
 import { isString } from "@/src/helpers/general";
-import { items } from "@/src/services/itemDataService";
 
 export enum ItemType {
     Powersuit = "Powersuit",
@@ -22,13 +21,9 @@ interface IAddItemRequest {
     type: ItemType;
     InternalName: string;
 }
-export const isInternalItemName = (internalName: string): boolean => {
-    const item = items.find(i => i.uniqueName === internalName);
-    return Boolean(item);
-};
 
 const parseInternalItemName = (internalName: unknown): string => {
-    if (!isString(internalName) || !isInternalItemName(internalName)) {
+    if (!isString(internalName)) {
         throw new Error("incorrect internal name");
     }
 

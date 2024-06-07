@@ -4,6 +4,7 @@ import Items, { Buildable, Category, MinimalItem, Warframe, Weapon } from "warfr
 import badItems from "@/static/json/exclude-mods.json";
 import dict_en from "@/node_modules/warframe-public-export-plus/dict.en.json";
 import ExportWarframes from "@/node_modules/warframe-public-export-plus/ExportWarframes.json";
+import ExportWeapons from "@/node_modules/warframe-public-export-plus/ExportWeapons.json";
 
 export type MinWarframe = Omit<Warframe, "patchlogs">;
 export type MinWeapon = Omit<Weapon, "patchlogs">;
@@ -19,13 +20,13 @@ export const warframes: MinWarframe[] = Array.from(new Items({ category: ["Warfr
         return next;
     });
 
-export const weapons: MinWeapon[] = Array.from(
-    new Items({ category: ["Primary", "Secondary", "Melee"] }) as Weapon[]
-).map(item => {
-    const next = { ...item };
-    delete next.patchlogs;
-    return next;
-});
+const weapons: MinWeapon[] = Array.from(new Items({ category: ["Primary", "Secondary", "Melee"] }) as Weapon[]).map(
+    item => {
+        const next = { ...item };
+        delete next.patchlogs;
+        return next;
+    }
+);
 
 export type WeaponTypeInternal = "LongGuns" | "Pistols" | "Melee";
 
@@ -36,7 +37,7 @@ export const items: MinItem[] = Array.from(new Items({ category: ["All"] }) as M
 });
 
 export const getWeaponType = (weaponName: string) => {
-    const weaponInfo = weapons.find(i => i.uniqueName === weaponName);
+    const weaponInfo = (ExportWeapons as PublicExportPlus.IGenericExport)[weaponName];
 
     if (!weaponInfo) {
         throw new Error(`unknown weapon ${weaponName}`);

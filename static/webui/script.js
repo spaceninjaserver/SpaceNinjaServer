@@ -95,8 +95,7 @@ window.itemListPromise = new Promise(resolve => {
             "/Lotus/Weapons/Tenno/Rifle/LotusRifle": { name: "Rifle" },
             "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun": { name: "Shotgun" },
             // Missing in data sources
-            "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/CyoteMod": { name: "Traumatic Peculiar" },
-            "/Lotus/Weapons/Tenno/Grimoire/TnGrimoire": { name: "Grimoire" }
+            "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/CyoteMod": { name: "Traumatic Peculiar" }
         };
         for (const [type, items] of Object.entries(data)) {
             if (type != "badItems") {
