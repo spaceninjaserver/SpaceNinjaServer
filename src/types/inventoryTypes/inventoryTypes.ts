@@ -61,6 +61,30 @@ export interface ITypeCount {
     ItemCount: number;
 }
 
+export interface IGenericItem2 {
+    ItemType: string;
+    ItemName: string;
+    ItemId: IOid;
+    XP: number;
+    UpgradeVer: number;
+    Features: number;
+    Polarized: number;
+    CustomizationSlotPurchases: number;
+    ModSlotPurchases: number;
+    FocusLens: string;
+    Expiry: IMongoDate;
+    Polarity: IPolarity[];
+    Configs: IItemConfig[];
+    ModularParts: string[];
+    SkillTree: string;
+    UpgradeType: string;
+    UpgradeFingerprint: string;
+    OffensiveUpgrade: string;
+    DefensiveUpgrade: string;
+    UpgradesExpiry: IMongoDate;
+    ArchonCrystalUpgrades: [];
+}
+
 export interface IGenericItem {
     ItemType: string;
     XP?: number;
