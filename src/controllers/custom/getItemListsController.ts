@@ -21,9 +21,9 @@ function reduceItems(items: MinItem[]): ListedItem[] {
 
 const getItemListsController: RequestHandler = (_req, res) => {
     const mods = reduceItems(items.filter(item => item.category == "Mods"));
-    for (const arcane of ExportArcanes) {
+    for (const [uniqueName, arcane] of Object.entries(ExportArcanes)) {
         mods.push({
-            uniqueName: arcane.uniqueName,
+            uniqueName: uniqueName,
             name: getEnglishString(arcane.name)
         });
     }

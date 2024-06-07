@@ -3,7 +3,7 @@ import { logger } from "@/src/utils/logger";
 import Items, { Buildable, Category, MinimalItem, Warframe, Weapon } from "warframe-items";
 import badItems from "@/static/json/exclude-mods.json";
 import dict_en from "@/node_modules/warframe-public-export-plus/dict.en.json";
-import exportSuits from "@/node_modules/warframe-public-export-plus/ExportWarframes.json";
+import ExportWarframes from "@/node_modules/warframe-public-export-plus/ExportWarframes.json";
 
 export type MinWarframe = Omit<Warframe, "patchlogs">;
 export type MinWeapon = Omit<Weapon, "patchlogs">;
@@ -136,9 +136,18 @@ export const getItemCategoryByUniqueName = (uniqueName: string) => {
     return category;
 };
 
+namespace PublicExportPlus {
+    export interface IGenericExport {
+        [key: string]: any;
+    }
+
+    export interface IDict {
+        [key: string]: string | undefined;
+    }
+}
+
 export const getSuitByUniqueName = (uniqueName: string) => {
-    const suit = exportSuits.find(suit => suit.uniqueName === uniqueName);
-    return suit;
+    return (ExportWarframes as PublicExportPlus.IGenericExport)[uniqueName];
 };
 
 export const getItemByUniqueName = (uniqueName: string) => {
@@ -151,6 +160,6 @@ export const getItemByName = (name: string) => {
     return item;
 };
 
-export const getEnglishString = (key: string) => {
-    return dict_en[key as keyof typeof dict_en] ?? key;
+export const getEnglishString = (key: string): string => {
+    return (dict_en as PublicExportPlus.IDict)[key] ?? key;
 };
