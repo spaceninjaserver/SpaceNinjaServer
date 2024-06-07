@@ -381,6 +381,7 @@ DuviriInfoSchema.set("toJSON", {
     }
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const GenericItemSchema2 = new Schema<IGenericItem2>({
     ItemType: String,
     ItemName: String,
@@ -703,7 +704,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Melee      Weapon
         Melee: [WeaponSchema],
         //Ability Weapon like Ultimate Mech\Excalibur\Ivara etc
-        SpecialItems: [GenericItemSchema2],
+        SpecialItems: [GenericItemSchema],
         //The Mandachord(Octavia) is a step sequencer
         StepSequencers: [StepSequencersSchema],
 
@@ -1006,6 +1007,7 @@ type InventoryDocumentProps = {
     MiscItems: Types.DocumentArray<IMiscItem>;
     Boosters: Types.DocumentArray<IBooster>;
     OperatorLoadOuts: Types.DocumentArray<IOperatorConfigClient>;
+    SpecialItems: Types.DocumentArray<IGenericItem>;
     AdultOperatorLoadOuts: Types.DocumentArray<IOperatorConfigClient>; //TODO: this should still contain _id
     MechSuits: Types.DocumentArray<ISuitDatabase>;
     Scoops: Types.DocumentArray<IGenericItem>;

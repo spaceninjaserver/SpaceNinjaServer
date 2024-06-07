@@ -24,7 +24,7 @@ import {
     IUpdateChallengeProgressRequest
 } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
-import { WeaponTypeInternal } from "@/src/services/itemDataService";
+import { WeaponTypeInternal, getExalted } from "@/src/services/itemDataService";
 import { ISyndicateSacrifice, ISyndicateSacrificeResponse } from "../types/syndicateTypes";
 
 export const createInventory = async (
@@ -74,6 +74,12 @@ export const addSentinel = async (sentinelName: string, accountId: string) => {
 };
 
 export const addPowerSuit = async (powersuitName: string, accountId: string): Promise<ISuitClient> => {
+    const specialItems = getExalted(powersuitName);
+    if (specialItems != false) {
+        for await (const specialItem of specialItems) {
+            await addSpecialItem(specialItem, accountId);
+        }
+    }
     const inventory = await getInventory(accountId);
     const suitIndex = inventory.Suits.push({ ItemType: powersuitName, Configs: [], UpgradeVer: 101, XP: 0 });
     const changedInventory = await inventory.save();
@@ -81,10 +87,29 @@ export const addPowerSuit = async (powersuitName: string, accountId: string): Pr
 };
 
 export const addMechSuit = async (mechsuitName: string, accountId: string) => {
+    const specialItems = getExalted(mechsuitName);
+    if (specialItems != false) {
+        for await (const specialItem of specialItems) {
+            await addSpecialItem(specialItem, accountId);
+        }
+    }
     const inventory = await getInventory(accountId);
     const suitIndex = inventory.MechSuits.push({ ItemType: mechsuitName, Configs: [], UpgradeVer: 101, XP: 0 });
     const changedInventory = await inventory.save();
     return changedInventory.MechSuits[suitIndex - 1].toJSON();
+};
+
+export const addSpecialItem = async (itemName: string, accountId: string) => {
+    const inventory = await getInventory(accountId);
+    const specialItemIndex = inventory.SpecialItems.push({
+        ItemType: itemName,
+        Configs: [],
+        Features: 1,
+        UpgradeVer: 101,
+        XP: 0
+    });
+    const changedInventory = await inventory.save();
+    return changedInventory.SpecialItems[specialItemIndex - 1].toJSON();
 };
 
 export const updateSlots = async (accountId: string, slotName: SlotNames, slotAmount: number, extraAmount: number) => {
