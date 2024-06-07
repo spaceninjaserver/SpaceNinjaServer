@@ -97,10 +97,13 @@ pendingRecipeSchema.set("toJSON", {
     }
 });
 
-const polaritySchema = new Schema<IPolarity>({
-    Slot: Number,
-    Value: String
-});
+const polaritySchema = new Schema<IPolarity>(
+    {
+        Slot: Number,
+        Value: String
+    },
+    { _id: false }
+);
 
 const abilityOverrideSchema = new Schema<IAbilityOverride>({
     Ability: String,
