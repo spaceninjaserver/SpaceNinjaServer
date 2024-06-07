@@ -381,6 +381,7 @@ DuviriInfoSchema.set("toJSON", {
     }
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const GenericItemSchema2 = new Schema<IGenericItem2>({
     ItemType: String,
     ItemName: String,
