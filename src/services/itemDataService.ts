@@ -2,9 +2,7 @@ import { getIndexAfter } from "@/src/helpers/stringHelpers";
 import { logger } from "@/src/utils/logger";
 import Items, { Buildable, Category, MinimalItem, Warframe, Weapon } from "warframe-items";
 import badItems from "@/static/json/exclude-mods.json";
-import dict_en from "@/node_modules/warframe-public-export-plus/dict.en.json";
-import ExportWarframes from "@/node_modules/warframe-public-export-plus/ExportWarframes.json";
-import ExportWeapons from "@/node_modules/warframe-public-export-plus/ExportWeapons.json";
+import { dict_en, ExportWarframes, ExportWeapons, IPowersuit } from "warframe-public-export-plus";
 
 export type MinWarframe = Omit<Warframe, "patchlogs">;
 export type MinWeapon = Omit<Weapon, "patchlogs">;
@@ -36,8 +34,8 @@ export const items: MinItem[] = Array.from(new Items({ category: ["All"] }) as M
     return next;
 });
 
-export const getWeaponType = (weaponName: string) => {
-    const weaponInfo = (ExportWeapons as PublicExportPlus.IGenericExport)[weaponName];
+export const getWeaponType = (weaponName: string): WeaponTypeInternal => {
+    const weaponInfo = ExportWeapons[weaponName];
 
     if (!weaponInfo) {
         throw new Error(`unknown weapon ${weaponName}`);
@@ -137,18 +135,8 @@ export const getItemCategoryByUniqueName = (uniqueName: string) => {
     return category;
 };
 
-namespace PublicExportPlus {
-    export interface IGenericExport {
-        [key: string]: any;
-    }
-
-    export interface IDict {
-        [key: string]: string | undefined;
-    }
-}
-
-export const getSuitByUniqueName = (uniqueName: string) => {
-    return (ExportWarframes as PublicExportPlus.IGenericExport)[uniqueName];
+export const getSuitByUniqueName = (uniqueName: string): IPowersuit | undefined => {
+    return ExportWarframes[uniqueName];
 };
 
 export const getItemByUniqueName = (uniqueName: string) => {
@@ -162,5 +150,5 @@ export const getItemByName = (name: string) => {
 };
 
 export const getEnglishString = (key: string): string => {
-    return (dict_en as PublicExportPlus.IDict)[key] ?? key;
+    return dict_en[key] ?? key;
 };
