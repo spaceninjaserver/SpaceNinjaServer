@@ -2,8 +2,7 @@ import { getIndexAfter } from "@/src/helpers/stringHelpers";
 import { logger } from "@/src/utils/logger";
 import Items, { Buildable, Category, MinimalItem, Warframe, Weapon } from "warframe-items";
 import badItems from "@/static/json/exclude-mods.json";
-import dict_en from "@/node_modules/warframe-public-export-plus/dict.en.json";
-import exportSuits from "@/node_modules/warframe-public-export-plus/ExportWarframes.json";
+import { dict_en, ExportWarframes, ExportWeapons, IPowersuit } from "warframe-public-export-plus";
 
 export type MinWarframe = Omit<Warframe, "patchlogs">;
 export type MinWeapon = Omit<Weapon, "patchlogs">;
@@ -19,15 +18,15 @@ export const warframes: MinWarframe[] = Array.from(new Items({ category: ["Warfr
         return next;
     });
 
-export const weapons: MinWeapon[] = Array.from(
-    new Items({ category: ["Primary", "Secondary", "Melee"] }) as Weapon[]
-).map(item => {
-    const next = { ...item };
-    delete next.patchlogs;
-    return next;
-});
-
-export type WeaponTypeInternal = "LongGuns" | "Pistols" | "Melee";
+export type WeaponTypeInternal =
+    | "LongGuns"
+    | "Pistols"
+    | "Melee"
+    | "SpaceMelee"
+    | "SpaceGuns"
+    | "SentinelWeapons"
+    | "OperatorAmps"
+    | "SpecialItems";
 
 export const items: MinItem[] = Array.from(new Items({ category: ["All"] }) as MinimalItem[]).map(item => {
     const next = { ...item };
@@ -35,8 +34,8 @@ export const items: MinItem[] = Array.from(new Items({ category: ["All"] }) as M
     return next;
 });
 
-export const getWeaponType = (weaponName: string) => {
-    const weaponInfo = weapons.find(i => i.uniqueName === weaponName);
+export const getWeaponType = (weaponName: string): WeaponTypeInternal => {
+    const weaponInfo = ExportWeapons[weaponName];
 
     if (!weaponInfo) {
         throw new Error(`unknown weapon ${weaponName}`);
@@ -47,7 +46,7 @@ export const getWeaponType = (weaponName: string) => {
         throw new Error(`${weaponName} doesn't quack like a weapon`);
     }
 
-    const weaponType = weaponInfo.productCategory as WeaponTypeInternal;
+    const weaponType = weaponInfo.productCategory;
 
     if (!weaponType) {
         logger.error(`unknown weapon category for item ${weaponName}`);
@@ -136,9 +135,8 @@ export const getItemCategoryByUniqueName = (uniqueName: string) => {
     return category;
 };
 
-export const getSuitByUniqueName = (uniqueName: string) => {
-    const suit = exportSuits.find(suit => suit.uniqueName === uniqueName);
-    return suit;
+export const getSuitByUniqueName = (uniqueName: string): IPowersuit | undefined => {
+    return ExportWarframes[uniqueName];
 };
 
 export const getItemByUniqueName = (uniqueName: string) => {
@@ -151,6 +149,6 @@ export const getItemByName = (name: string) => {
     return item;
 };
 
-export const getEnglishString = (key: string) => {
-    return dict_en[key as keyof typeof dict_en] ?? key;
+export const getEnglishString = (key: string): string => {
+    return dict_en[key] ?? key;
 };

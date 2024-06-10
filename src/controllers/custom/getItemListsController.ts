@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
-import { MinItem, MinWeapon, warframes, weapons, items, getEnglishString } from "@/src/services/itemDataService";
+import { MinItem, MinWeapon, warframes, items, getEnglishString } from "@/src/services/itemDataService";
 import badItems from "@/static/json/exclude-mods.json";
-import ExportArcanes from "@/node_modules/warframe-public-export-plus/ExportArcanes.json";
+import { ExportArcanes, ExportWeapons } from "warframe-public-export-plus";
 
 interface ListedItem {
     uniqueName: string;
@@ -21,15 +21,22 @@ function reduceItems(items: MinItem[]): ListedItem[] {
 
 const getItemListsController: RequestHandler = (_req, res) => {
     const mods = reduceItems(items.filter(item => item.category == "Mods"));
-    for (const arcane of ExportArcanes) {
+    for (const [uniqueName, arcane] of Object.entries(ExportArcanes)) {
         mods.push({
-            uniqueName: arcane.uniqueName,
+            uniqueName: uniqueName,
             name: getEnglishString(arcane.name)
         });
     }
     res.json({
         warframes: reduceItems(warframes),
-        weapons: reduceItems(weapons.filter(item => item.productCategory != "OperatorAmps" && item.totalDamage != 0)),
+        weapons: Object.entries(ExportWeapons)
+            .filter(([_uniqueName, weapon]) => weapon.productCategory !== "OperatorAmps" && weapon.totalDamage !== 0)
+            .map(([uniqueName, weapon]) => {
+                return {
+                    uniqueName,
+                    name: getEnglishString(weapon.name)
+                };
+            }),
         miscitems: reduceItems(
             items.filter(
                 item =>
