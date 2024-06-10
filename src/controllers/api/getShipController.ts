@@ -31,7 +31,7 @@ export const getShipController: RequestHandler = async (req, res) => {
         Apartment: personalRooms.Apartment
     };
 
-    if (config.unlockallShipFeatures) {
+    if (config.unlockAllShipFeatures) {
         getShipResponse.Ship.Features = allShipFeatures;
     }
 
