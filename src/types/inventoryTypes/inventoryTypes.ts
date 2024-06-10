@@ -60,7 +60,7 @@ export interface ITypeCount {
     ItemCount: number;
 }
 
-export type IEquipmenItemKey =
+export type IEquipmentKey =
     | "Suits"
     | "LongGuns"
     | "Pistols"
