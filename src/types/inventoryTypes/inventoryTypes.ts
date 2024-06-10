@@ -2,15 +2,14 @@
 import { Document, Types } from "mongoose";
 import { IOid, IMongoDate } from "../commonTypes";
 import {
-    IAbilityOverride,
     IColor,
     FocusSchool,
     IPolarity,
     IItemConfig,
-    IOperatorConfigClient
+    IOperatorConfigClient,
+    IEquipmentSelection,
+    IEquipmentDatabase
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
-import { ISuitDatabase } from "@/src/types/inventoryTypes/SuitTypes";
-import { IOperatorLoadOutSigcol, IWeaponDatabase } from "@/src/types/inventoryTypes/weaponTypes";
 
 //Document extends will be deleted soon. TODO: delete and migrate uses to ...
 export interface IInventoryDatabaseDocument extends IInventoryDatabase, Document {}
@@ -61,48 +60,7 @@ export interface ITypeCount {
     ItemCount: number;
 }
 
-export interface IGenericItem2 {
-    ItemType: string;
-    ItemName: string;
-    ItemId: IOid;
-    XP: number;
-    UpgradeVer: number;
-    Features: number;
-    Polarized: number;
-    CustomizationSlotPurchases: number;
-    ModSlotPurchases: number;
-    FocusLens: string;
-    Expiry: IMongoDate;
-    Polarity: IPolarity[];
-    Configs: IItemConfig[];
-    ModularParts: string[];
-    SkillTree: string;
-    UpgradeType: string;
-    UpgradeFingerprint: string;
-    OffensiveUpgrade: string;
-    DefensiveUpgrade: string;
-    UpgradesExpiry: IMongoDate;
-    ArchonCrystalUpgrades: [];
-}
-
-export interface IGenericItem {
-    ItemType: string;
-    XP?: number;
-    Configs: IItemConfig[];
-    UpgradeVer: number;
-    ItemId: IOid;
-    Features?: number;
-    Polarity?: IPolarity[];
-    Polarized?: number;
-    ModSlotPurchases?: number;
-    CustomizationSlotPurchases?: number;
-}
-
-export interface IGenericItemDatabase extends Omit<IGenericItem, "ItemId"> {
-    _id: Types.ObjectId;
-}
-
-export type TGenericItemKey = "Suits" | "LongGuns" | "Pistols" | "Melee";
+export type IEquipmenItemKey = "Suits" | "LongGuns" | "Pistols" | "Melee" | "SpecialItems" | "Sentinels" | "SentinelWeapons";
 
 export interface IDuviriInfo {
     Seed: number;
@@ -119,12 +77,12 @@ export interface IPendingRecipeResponse extends Omit<IPendingRecipe, "Completion
     CompletionDate: IMongoDate;
 }
 export interface IInventoryResponse {
-    Horses: IGenericItem[];
-    DrifterMelee: IGenericItem[];
-    DrifterGuns: IGenericItem[];
+    Horses: IEquipmentDatabase[];
+    DrifterMelee: IEquipmentDatabase[];
+    DrifterGuns: IEquipmentDatabase[];
     DuviriInfo: IDuviriInfo;
     Mailbox: IMailbox;
-    KahlLoadOuts: IGenericItem[];
+    KahlLoadOuts: IEquipmentDatabase[];
     SubscribedToEmails: number;
     Created: IMongoDate;
     RewardSeed: number;
@@ -156,19 +114,19 @@ export interface IInventoryResponse {
     ChallengeProgress: IChallengeProgress[];
     RawUpgrades: IRawUpgrade[];
     ReceivedStartingGear: boolean;
-    Suits: ISuitDatabase[];
-    LongGuns: IWeaponDatabase[];
-    Pistols: IWeaponDatabase[];
-    Melee: IWeaponDatabase[];
+    Suits: IEquipmentDatabase[];
+    LongGuns: IEquipmentDatabase[];
+    Pistols: IEquipmentDatabase[];
+    Melee: IEquipmentDatabase[];
     Ships: IShipInventory[];
     QuestKeys: IQuestKeyResponse[];
     FlavourItems: IFlavourItem[];
-    Scoops: IGenericItem[];
+    Scoops: IEquipmentDatabase[];
     TrainingRetriesLeft: number;
     LoadOutPresets: ILoadOutPresets;
     CurrentLoadOutIds: Array<any[] | IOid>;
     Missions: IMission[];
-    RandomUpgradesIdentified: number;
+    RandomUpgradesIdentified?: number;
     LastRegionPlayed: string;
     XPInfo: ITypeXPItem[];
     Recipes: ITypeCount[];
@@ -198,14 +156,14 @@ export interface IInventoryResponse {
     Affiliations: IAffiliation[];
     QualifyingInvasions: any[];
     FactionScores: number[];
-    SpaceSuits: IGenericItem[];
-    SpaceMelee: IGenericItem[];
+    SpaceSuits: IEquipmentDatabase[];
+    SpaceMelee: IEquipmentDatabase[];
     SpaceGuns: ISpaceGun[];
     ArchwingEnabled: boolean;
     PendingSpectreLoadouts: any[];
     SpectreLoadouts: ISpectreLoadout[];
-    SentinelWeapons: IWeaponDatabase[];
-    Sentinels: IWeaponDatabase[];
+    SentinelWeapons: IEquipmentDatabase[];
+    Sentinels: IEquipmentDatabase[];
     EmailItems: ITypeXPItem[];
     CompletedSyndicates: string[];
     FocusXP: IFocusXP;
@@ -224,14 +182,14 @@ export interface IInventoryResponse {
     CompletedJobs: ICompletedJob[];
     FocusAbility: string;
     FocusUpgrades: IFocusUpgrade[];
-    OperatorAmps: IOperatorAmp[];
-    HasContributedToDojo: boolean;
+    OperatorAmps: IEquipmentDatabase[];
+    HasContributedToDojo?: boolean;
     HWIDProtectEnabled: boolean;
     KubrowPetPrints: IKubrowPetPrint[];
     AlignmentReplay: IAlignment;
     PersonalGoalProgress: IPersonalGoalProgress[];
     DailyAffiliationSolaris: number;
-    SpecialItems: IGenericItem[];
+    SpecialItems: IEquipmentDatabase[];
     ThemeStyle: string;
     ThemeBackground: string;
     ThemeSounds: string;
@@ -246,13 +204,13 @@ export interface IInventoryResponse {
     NodeIntrosCompleted: string[];
     GuildId?: IOid;
     CompletedJobChains: ICompletedJobChain[];
-    SeasonChallengeHistory: ISeasonChallengeHistory[];
-    MoaPets: IMoaPet[];
+    SeasonChallengeHistory: ISeasonChallenge[];
+    MoaPets: IEquipmentDatabase[];
     EquippedInstrument: string;
     InvasionChainProgress: IInvasionChainProgress[];
-    DataKnives: IGenericItem[];
+    DataKnives: IEquipmentDatabase[];
     NemesisHistory: INemesisHistory[];
-    LastNemesisAllySpawnTime: IMongoDate;
+    LastNemesisAllySpawnTime?: IMongoDate;
     Settings: ISettings;
     PersonalTechProjects: IPersonalTechProject[];
     CrewShips: ICrewShip[];
@@ -262,12 +220,12 @@ export interface IInventoryResponse {
     CrewShipWeapons: ICrewShipWeapon[];
     CrewShipSalvagedWeapons: ICrewShipWeapon[];
     CrewShipWeaponSkins: ICrewShipSalvagedWeaponSkin[];
-    TradeBannedUntil: IMongoDate;
+    TradeBannedUntil?: IMongoDate;
     PlayedParkourTutorial: boolean;
     SubscribedToEmailsPersonalized: number;
     DailyAffiliationEntrati: number;
     DailyAffiliationNecraloid: number;
-    MechSuits: ISuitDatabase[];
+    MechSuits: IEquipmentDatabase[];
     InfestedFoundry: IInfestedFoundry;
     BlessingCooldown: IMongoDate;
     CrewShipHarnesses: ICrewShipHarness[];
@@ -295,16 +253,6 @@ export interface IInventoryResponse {
     PendingCoupon: IPendingCoupon;
     Harvestable: boolean;
     DeathSquadable: boolean;
-}
-
-export interface IAdultOperatorLoadOut {
-    Skins: string[];
-    attcol: IColor;
-    eyecol: IColor;
-    facial: IColor;
-    pricol: IColor;
-    Upgrades?: string[];
-    ItemId: IOid;
 }
 
 export interface IAffiliation {
@@ -384,13 +332,10 @@ export interface ICrewMember {
     WeaponId: IOid;
     XP: number;
     PowersuitType: string;
-    Configs: ICrewMemberConfig[];
+    Configs: IItemConfig[];
     SecondInCommand: boolean;
     ItemId: IOid;
 }
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface ICrewMemberConfig {}
 
 export interface ISkillEfficiency {
     PILOTING: ICombat;
@@ -406,17 +351,13 @@ export interface ICombat {
 
 export interface ICrewShipHarness {
     ItemType: string;
-    Configs: ICrewShipHarnessConfig[];
+    Configs: IItemConfig[];
     Features: number;
     UpgradeVer: number;
     XP: number;
     Polarity: IPolarity[];
     Polarized: number;
     ItemId: IOid;
-}
-
-export interface ICrewShipHarnessConfig {
-    Upgrades?: string[];
 }
 
 export interface ISlots {
@@ -435,25 +376,20 @@ export interface ICrewShipWeapon {
     ItemType: string;
     UpgradeType?: string;
     UpgradeFingerprint?: string;
-    Configs?: ICrewShipHarnessConfig[];
+    Configs?: IItemConfig[];
     UpgradeVer?: number;
     ItemId: IOid;
 }
 
 export interface ICrewShip {
     ItemType: string;
-    Configs: ICrewShipConfig[];
+    Configs: IItemConfig[];
     Weapon: ICrewshipWeapon;
     Customization: ICustomization;
     ItemName: string;
     RailjackImage: IFlavourItem;
     CrewMembers: ICrewMembers;
     ItemId: IOid;
-}
-
-export interface ICrewShipConfig {
-    Skins?: string[];
-    pricol?: IColor;
 }
 
 export interface ICrewMembers {
@@ -476,16 +412,6 @@ export interface IShipExterior {
     ShipAttachments?: IShipAttachments;
 }
 
-//TODO: check whether it makes sense to use this specifity of color.
-export interface IShipExteriorColors {
-    t0: number;
-    t1: number;
-    t2: number;
-    t3: number;
-    m0: number;
-    en: number;
-}
-
 export interface IShipAttachments {
     HOOD_ORNAMENT: string; //TODO: Others are probably possible
 }
@@ -504,22 +430,12 @@ export interface ICrewshipWeapon {
     PORT_GUNS: IPortGuns;
 }
 
-export interface IPilot {
-    PRIMARY_A: IL;
-    SECONDARY_A: IL;
-}
-
-// L? Bozo.
-export interface IL {
-    ItemId?: IOid;
-    mod?: number;
-    cus?: number;
-    ItemType?: string;
-    hide?: boolean;
-}
-
 export interface IPortGuns {
-    PRIMARY_A: IL;
+    PRIMARY_A: IEquipmentSelection
+}
+
+export interface IPilot extends IPortGuns {
+    SECONDARY_A: IEquipmentSelection
 }
 
 export interface IDiscoveredMarker {
@@ -563,7 +479,7 @@ export interface IFusionTreasure {
 
 export interface IHoverboard {
     ItemType: string;
-    Configs: IHoverboardConfig[];
+    Configs: IItemConfig[];
     ModularParts: string[];
     ItemName?: string;
     Polarity?: IPolarity[];
@@ -571,26 +487,6 @@ export interface IHoverboard {
     XP: number;
     Features: number;
     ItemId: IOid;
-}
-
-export interface IHoverboardConfig {
-    Upgrades?: string[];
-    Skins?: IPurpleSkin[];
-    pricol?: IColor;
-    sigcol?: ISigcol;
-    attcol?: IColor;
-}
-
-export enum IPurpleSkin {
-    Empty = "",
-    The5Be4Af71A38E4A9306040E15 = "5be4af71a38e4a9306040e15",
-    The5C930Ac3A38E4A24Bc3Ad5De = "5c930ac3a38e4a24bc3ad5de",
-    The5C9C6F9857904A7A3B25656B = "5c9c6f9857904a7a3b25656b",
-    The5Dd8A8E3A38E4A321A45E6A0 = "5dd8a8e3a38e4a321a45e6a0"
-}
-
-export interface ISigcol {
-    t3: number;
 }
 
 export interface IInfestedFoundry {
@@ -645,15 +541,7 @@ export interface ITraits {
     Personality: string;
     BodyType: string;
     Head?: string;
-    Tail?: Tail;
-}
-
-export enum Tail {
-    Empty = "",
-    LotusTypesGameCatbrowPetTailsCatbrowTailA = "/Lotus/Types/Game/CatbrowPet/Tails/CatbrowTailA",
-    LotusTypesGameCatbrowPetTailsCatbrowTailB = "/Lotus/Types/Game/CatbrowPet/Tails/CatbrowTailB",
-    LotusTypesGameCatbrowPetTailsCatbrowTailC = "/Lotus/Types/Game/CatbrowPet/Tails/CatbrowTailC",
-    LotusTypesGameCatbrowPetTailsCatbrowTailD = "/Lotus/Types/Game/CatbrowPet/Tails/CatbrowTailD"
+    Tail?: string;
 }
 
 export enum KubrowPetPrintItemType {
@@ -662,7 +550,7 @@ export enum KubrowPetPrintItemType {
 
 export interface IKubrowPet {
     ItemType: string;
-    Configs: IKubrowPetConfig[];
+    Configs: IItemConfig[];
     UpgradeVer: number;
     Details: IDetails;
     XP?: number;
@@ -674,13 +562,6 @@ export interface IKubrowPet {
     InfestationType?: string;
     ItemId: IOid;
     ModularParts?: string[];
-}
-
-export interface IKubrowPetConfig {
-    Skins?: string[];
-    pricol?: IColor;
-    attcol?: IColor;
-    Upgrades?: string[];
 }
 
 export interface IDetails {
@@ -725,74 +606,32 @@ export interface ILibraryPersonalProgress {
 
 //this needs to be checked against ILoadoutDatabase
 export interface ILoadOutPresets {
-    NORMAL: INormal[];
-    NORMAL_PVP: IArchwing[];
-    LUNARO: ILunaro[];
-    ARCHWING: IArchwing[];
-    SENTINEL: IArchwing[];
-    OPERATOR: IArchwing[];
-    GEAR: IGear[];
-    KDRIVE: IKdrive[];
-    DATAKNIFE: IArchwing[];
-    MECH: IMech[];
-    OPERATOR_ADULT: IArchwing[];
+    NORMAL: ILoadoutConfig[];
+    NORMAL_PVP: ILoadoutConfig[];
+    LUNARO: ILoadoutConfig[];
+    ARCHWING: ILoadoutConfig[];
+    SENTINEL: ILoadoutConfig[];
+    OPERATOR: ILoadoutConfig[];
+    GEAR: ILoadoutConfig[];
+    KDRIVE: ILoadoutConfig[];
+    DATAKNIFE: ILoadoutConfig[];
+    MECH: ILoadoutConfig[];
+    OPERATOR_ADULT: ILoadoutConfig[];
 }
 
-export interface IArchwing {
-    PresetIcon: string;
-    Favorite: boolean;
-    n?: string;
-    s: IL;
-    l?: IL;
-    m?: IL;
+export interface ILoadoutConfig {
+    FocusSchool?: FocusSchool;
+    PresetIcon?: string;
+    Favorite?: boolean;
+    n?: string; // Loadout name
+    s?: IEquipmentSelection // Suit
+    p?: IEquipmentSelection
+    l?: IEquipmentSelection // Primary weapon
+    m?: IEquipmentSelection // Melee weapon
+    h?: IEquipmentSelection // Gravimag weapon
+    a?: IEquipmentSelection
     ItemId: IOid;
-    p?: IL;
-}
-
-export interface IGear {
-    n: string;
-    s: IL;
-    p: IL;
-    l: IL;
-    m: IL;
-    ItemId: IOid;
-}
-
-export interface IKdrive {
-    PresetIcon: string;
-    Favorite: boolean;
-    s: IL;
-    ItemId: IOid;
-}
-
-export interface ILunaro {
-    n: string;
-    s: IL;
-    m: IL;
-    ItemId: IOid;
-}
-
-export interface IMech {
-    PresetIcon: string;
-    Favorite: boolean;
-    s: IL;
-    h: IL;
-    a: IL;
-    ItemId: IOid;
-}
-
-export interface INormal {
-    FocusSchool: FocusSchool;
-    PresetIcon: string;
-    Favorite: boolean;
-    n: string;
-    s: IL;
-    p: IL;
-    l: IL;
-    m: IL;
-    h: IL;
-    a?: IL;
-    ItemId: IOid;
+    Remove?: boolean; // when client wants to remove a config, it only includes ItemId & Remove.
 }
 
 export enum UpgradeType {
@@ -805,16 +644,7 @@ export interface ILoreFragmentScan {
     ItemType: string;
 }
 
-export interface ILotusCustomization {
-    Upgrades: any[];
-    PvpUpgrades: any[];
-    Skins: string[];
-    pricol: IColor;
-    attcol: any[];
-    sigcol: any[];
-    eyecol: any[];
-    facial: any[];
-    Songs: any[];
+export interface ILotusCustomization extends IItemConfig {
     Persona: string;
 }
 
@@ -825,17 +655,6 @@ export interface IMission {
     RewardsCooldownTime?: IMongoDate;
 }
 
-export interface IMoaPet {
-    ItemType: string;
-    Configs: IKubrowPetConfig[];
-    UpgradeVer: number;
-    ModularParts: string[];
-    XP?: number;
-    Features?: number;
-    ItemName: string;
-    Polarity?: IPolarity[];
-    ItemId: IOid;
-}
 
 export interface INemesisHistory {
     fp: number;
@@ -869,30 +688,6 @@ export enum Manifest {
     LotusTypesGameNemesisKuvaLichKuvaLichManifest = "/Lotus/Types/Game/Nemesis/KuvaLich/KuvaLichManifest",
     LotusTypesGameNemesisKuvaLichKuvaLichManifestVersionThree = "/Lotus/Types/Game/Nemesis/KuvaLich/KuvaLichManifestVersionThree",
     LotusTypesGameNemesisKuvaLichKuvaLichManifestVersionTwo = "/Lotus/Types/Game/Nemesis/KuvaLich/KuvaLichManifestVersionTwo"
-}
-
-export interface IOperatorAmp {
-    ItemType: string;
-    Configs: IKubrowPetConfig[];
-    ModularParts?: string[];
-    XP?: number;
-    UpgradeVer?: number;
-    ItemName?: string;
-    Features?: number;
-    ItemId: IOid;
-}
-
-export interface IOperatorLoadOut {
-    Skins: string[];
-    pricol?: IColor;
-    attcol?: IColor;
-    eyecol: IColor;
-    facial?: IColor;
-    sigcol?: IOperatorLoadOutSigcol;
-    OperatorAmp?: IOid;
-    Upgrades?: string[];
-    AbilityOverride: IAbilityOverride;
-    ItemId: IOid;
 }
 
 export interface IPendingCoupon {
@@ -1023,12 +818,7 @@ export interface IRawUpgrade {
     LastAdded?: IOid;
 }
 
-export interface ISeasonChallengeHistory {
-    challenge: string;
-    id: string;
-}
-
-export interface ISeasonChallengeCompletions {
+export interface ISeasonChallenge {
     challenge: string;
     id: string;
 }
@@ -1054,7 +844,7 @@ export interface IShipInventory {
 
 export interface ISpaceGun {
     ItemType: string;
-    Configs: ISpaceGunConfig[];
+    Configs: IItemConfig[];
     XP?: number;
     UpgradeVer?: number;
     ItemId: IOid;
@@ -1064,16 +854,6 @@ export interface ISpaceGun {
     UpgradeType?: UpgradeType;
     UpgradeFingerprint?: string;
     ItemName?: string;
-}
-
-export interface ISpaceGunConfig {
-    Skins?: string[];
-    pricol?: IColor;
-    Upgrades?: string[];
-}
-
-export interface IPurpleCol {
-    en: number;
 }
 
 export interface ISpectreLoadout {
