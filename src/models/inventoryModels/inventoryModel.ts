@@ -45,7 +45,7 @@ import {
     IOperatorConfigDatabase,
     IPolarity,
     IEquipmentDatabase,
-    IOperatorConfigClient,
+    IOperatorConfigClient
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
 
@@ -202,7 +202,7 @@ const EquipmentSchema = new Schema<IEquipmentDatabase>(
         UnlockLevel: Number,
         Expiry: Date,
         SkillTree: String,
-        ArchonCrystalUpgrades: [Schema.Types.Mixed], //TODO
+        ArchonCrystalUpgrades: [Schema.Types.Mixed] //TODO
     },
     { id: false }
 );

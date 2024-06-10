@@ -60,7 +60,14 @@ export interface ITypeCount {
     ItemCount: number;
 }
 
-export type IEquipmenItemKey = "Suits" | "LongGuns" | "Pistols" | "Melee" | "SpecialItems" | "Sentinels" | "SentinelWeapons";
+export type IEquipmenItemKey =
+    | "Suits"
+    | "LongGuns"
+    | "Pistols"
+    | "Melee"
+    | "SpecialItems"
+    | "Sentinels"
+    | "SentinelWeapons";
 
 export interface IDuviriInfo {
     Seed: number;
@@ -431,11 +438,11 @@ export interface ICrewshipWeapon {
 }
 
 export interface IPortGuns {
-    PRIMARY_A: IEquipmentSelection
+    PRIMARY_A: IEquipmentSelection;
 }
 
 export interface IPilot extends IPortGuns {
-    SECONDARY_A: IEquipmentSelection
+    SECONDARY_A: IEquipmentSelection;
 }
 
 export interface IDiscoveredMarker {
@@ -624,12 +631,12 @@ export interface ILoadoutConfig {
     PresetIcon?: string;
     Favorite?: boolean;
     n?: string; // Loadout name
-    s?: IEquipmentSelection // Suit
-    p?: IEquipmentSelection
-    l?: IEquipmentSelection // Primary weapon
-    m?: IEquipmentSelection // Melee weapon
-    h?: IEquipmentSelection // Gravimag weapon
-    a?: IEquipmentSelection
+    s?: IEquipmentSelection; // Suit
+    p?: IEquipmentSelection;
+    l?: IEquipmentSelection; // Primary weapon
+    m?: IEquipmentSelection; // Melee weapon
+    h?: IEquipmentSelection; // Gravimag weapon
+    a?: IEquipmentSelection;
     ItemId: IOid;
     Remove?: boolean; // when client wants to remove a config, it only includes ItemId & Remove.
 }
@@ -654,7 +661,6 @@ export interface IMission {
     Tag: string;
     RewardsCooldownTime?: IMongoDate;
 }
-
 
 export interface INemesisHistory {
     fp: number;

@@ -8,7 +8,7 @@ import {
     IMiscItem,
     IMission,
     IRawUpgrade,
-    ISeasonChallenge,
+    ISeasonChallenge
 } from "./inventoryTypes/inventoryTypes";
 
 export interface IArtifactsRequest {

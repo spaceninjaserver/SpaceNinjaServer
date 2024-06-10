@@ -83,7 +83,6 @@ export interface IEquipmentClient extends Omit<IEquipmentDatabase, "_id"> {
 }
 
 export interface IEquipmentDatabase {
-
     ItemType: string;
     ItemName?: string;
     Configs: IItemConfig[];
