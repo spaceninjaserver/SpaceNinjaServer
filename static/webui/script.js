@@ -102,7 +102,10 @@ window.itemListPromise = new Promise(resolve => {
                 items.forEach(item => {
                     if (item.uniqueName in data.badItems) {
                         item.name += " (Imposter)";
-                    } else if (item.uniqueName.substr(0, 18) != "/Lotus/Types/Game/" && item.uniqueName.substr(0, 18) != "/Lotus/StoreItems/") {
+                    } else if (
+                        item.uniqueName.substr(0, 18) != "/Lotus/Types/Game/" &&
+                        item.uniqueName.substr(0, 18) != "/Lotus/StoreItems/"
+                    ) {
                         const option = document.createElement("option");
                         option.setAttribute("data-key", item.uniqueName);
                         option.value = item.name;
