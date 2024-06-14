@@ -1,16 +1,9 @@
 import { RequestHandler } from "express";
-import path from "path";
-import fs from "fs";
-const rootDir = path.join(__dirname, "../../..");
+import { updateConfig } from "@/src/services/configService";
 
-const updateConfigDataController: RequestHandler = req => {
-    const updateSettingsData = req.body;
-
-    fs.writeFile(path.join(rootDir, "config.json"), updateSettingsData, function (err: any) {
-        if (err) {
-            return console.log(err);
-        }
-    });
+const updateConfigDataController: RequestHandler = async (req, res) => {
+    await updateConfig(req.body.toString());
+    res.end();
 };
 
 export { updateConfigDataController };
