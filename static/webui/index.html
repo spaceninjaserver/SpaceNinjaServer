@@ -204,81 +204,63 @@
                     </div>
                 </div>
                 <div data-route="/webui/settings" data-title="Settings | OpenWF WebUI">
-                    <div class="card mb-4">
-                        <h5 class="card-header">Change Settings</h5>
-                        <form class="card-body" onsubmit="doChangeSettings();return false;">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="skipStoryModeChoice" />
-                                <label label class="form-check-label" for="skipStoryModeChoice"
-                                    >Skip Story Mode Choice?</label
-                                >
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="skipTutorial" />
-                                <label label class="form-check-label" for="skipTutorial">Skip Tutorial?</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="unlockAllScans" />
-                                <label label class="form-check-label" for="unlockAllScans">Unlock All Scans?</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="unlockAllMissions" />
-                                <label label class="form-check-label" for="unlockAllMissions"
-                                    >Unlock All Missions?</label
-                                >
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="unlockAllQuests" />
-                                <label label class="form-check-label" for="unlockAllQuests">Unlock All Quests?</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="completeAllQuests" />
-                                <label label class="form-check-label" for="completeAllQuests"
-                                    >Complete All Quests?</label
-                                >
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="infiniteResources" />
-                                <label label class="form-check-label" for="infiniteResources"
-                                    >Infinite Credits and Platinum?</label
-                                >
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="unlockallShipFeatures" />
-                                <label label class="form-check-label" for="unlockallShipFeatures"
-                                    >Unlock All Ship Features?</label
-                                >
-                            </div>
-                            <div class="form-check">
-                                <input
-                                    class="form-check-input"
-                                    type="checkbox"
-                                    value=""
-                                    id="unlockAllShipDecorations"
-                                />
-                                <label label class="form-check-label" for="unlockAllShipDecorations"
-                                    >Unlock All Ship Decorations?</label
-                                >
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="unlockAllFlavourItems" />
-                                <label label class="form-check-label" for="unlockAllFlavourItems"
-                                    >Unlock All Accessories?</label
-                                >
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="unlockAllSkins" />
-                                <label label class="form-check-label" for="unlockAllSkins">Unlock All Skins?</label>
-                            </div>
-                            <div class="form-check">
-                                <label label class="form-check-label" for="spoofMasteryRank"
-                                    >Spoofed Mastery Rank (-1 to disable)</label
-                                >
-                                <input class="form-control" id="spoofMasteryRank" type="number" min="-1" value="" />
-                            </div>
-                            <button class="btn btn-primary" type="submit">Save Settings</button>
-                        </form>
-                    </div>
+                    <form onsubmit="doChangeSettings();return false;">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="skipStoryModeChoice" />
+                            <label class="form-check-label" for="skipStoryModeChoice">Skip Story Mode Choice</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="skipTutorial" />
+                            <label class="form-check-label" for="skipTutorial">Skip Tutorial</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="unlockAllScans" />
+                            <label class="form-check-label" for="unlockAllScans">Unlock All Scans</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="unlockAllMissions" />
+                            <label class="form-check-label" for="unlockAllMissions">Unlock All Missions</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="unlockAllQuests" />
+                            <label class="form-check-label" for="unlockAllQuests">Unlock All Quests</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="completeAllQuests" />
+                            <label class="form-check-label" for="completeAllQuests">Complete All Quests</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="infiniteResources" />
+                            <label class="form-check-label" for="infiniteResources"
+                                >Infinite Credits and Platinum</label
+                            >
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="unlockAllShipFeatures" />
+                            <label class="form-check-label" for="unlockAllShipFeatures">Unlock All Ship Features</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="unlockAllShipDecorations" />
+                            <label class="form-check-label" for="unlockAllShipDecorations"
+                                >Unlock All Ship Decorations</label
+                            >
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="unlockAllFlavourItems" />
+                            <label class="form-check-label" for="unlockAllFlavourItems">Unlock All Accessories</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="unlockAllSkins" />
+                            <label class="form-check-label" for="unlockAllSkins">Unlock All Skins</label>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="spoofMasteryRank"
+                                >Spoofed Mastery Rank (-1 to disable)</label
+                            >
+                            <input class="form-control" id="spoofMasteryRank" type="number" min="-1" />
+                        </div>
+                        <button class="btn btn-primary mt-3" type="submit">Save Settings</button>
+                    </form>
                 </div>
             </div>
         </div>
