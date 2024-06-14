@@ -96,8 +96,8 @@
                 </div>
                 <div data-route="/webui/inventory" data-title="Inventory | OpenWF WebUI">
                     <p id="refresh-note" class="mb-4">
-                        Note: Changes made here will only be reflected in-game when the game re-downloads your inventory.
-                        Visiting the navigation should be the easiest way to trigger that.
+                        Note: Changes made here will only be reflected in-game when the game re-downloads your
+                        inventory. Visiting the navigation should be the easiest way to trigger that.
                     </p>
                     <div class="card mb-4">
                         <h5 class="card-header">Add Items</h5>
@@ -144,8 +144,8 @@
                 </div>
                 <div data-route="/webui/mods" data-title="Mods | OpenWF WebUI">
                     <p id="refresh-note" class="mb-4">
-                        Note: Changes made here will only be reflected in-game when the game re-downloads your inventory.
-                        Visiting the navigation should be the easiest way to trigger that.
+                        Note: Changes made here will only be reflected in-game when the game re-downloads your
+                        inventory. Visiting the navigation should be the easiest way to trigger that.
                     </p>
                     <div class="row">
                         <div class="col-xxl-6">
@@ -208,51 +208,72 @@
                         <h5 class="card-header">Change Settings</h5>
                         <form class="card-body" onsubmit="doChangeSettings();return false;">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="skipStoryModeChoice"  />
-                                <label label class="form-check-label" for="skipStoryModeChoice">Skip Story Mode Choice?</label>
+                                <input class="form-check-input" type="checkbox" value="" id="skipStoryModeChoice" />
+                                <label label class="form-check-label" for="skipStoryModeChoice"
+                                    >Skip Story Mode Choice?</label
+                                >
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="skipTutorial"  />
+                                <input class="form-check-input" type="checkbox" value="" id="skipTutorial" />
                                 <label label class="form-check-label" for="skipTutorial">Skip Tutorial?</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="unlockAllScans"  />
+                                <input class="form-check-input" type="checkbox" value="" id="unlockAllScans" />
                                 <label label class="form-check-label" for="unlockAllScans">Unlock All Scans?</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="unlockAllMissions"  />
-                                <label label class="form-check-label" for="unlockAllMissions">Unlock All Missions?</label>
+                                <input class="form-check-input" type="checkbox" value="" id="unlockAllMissions" />
+                                <label label class="form-check-label" for="unlockAllMissions"
+                                    >Unlock All Missions?</label
+                                >
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="unlockAllQuests"  />
+                                <input class="form-check-input" type="checkbox" value="" id="unlockAllQuests" />
                                 <label label class="form-check-label" for="unlockAllQuests">Unlock All Quests?</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="completeAllQuests"  />
-                                <label label class="form-check-label" for="completeAllQuests">Complete All Quests?</label>
+                                <input class="form-check-input" type="checkbox" value="" id="completeAllQuests" />
+                                <label label class="form-check-label" for="completeAllQuests"
+                                    >Complete All Quests?</label
+                                >
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="infiniteResources"  />
-                                <label label class="form-check-label" for="infiniteResources">Infinite Credits and Platinum?</label>
+                                <input class="form-check-input" type="checkbox" value="" id="infiniteResources" />
+                                <label label class="form-check-label" for="infiniteResources"
+                                    >Infinite Credits and Platinum?</label
+                                >
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="unlockallShipFeatures"  />
-                                <label label class="form-check-label" for="unlockallShipFeatures">Unlock All Ship Features?</label>
+                                <input class="form-check-input" type="checkbox" value="" id="unlockallShipFeatures" />
+                                <label label class="form-check-label" for="unlockallShipFeatures"
+                                    >Unlock All Ship Features?</label
+                                >
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="unlockAllShipDecorations"  />
-                                <label label class="form-check-label" for="unlockAllShipDecorations">Unlock All Ship Decorations?</label>
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    value=""
+                                    id="unlockAllShipDecorations"
+                                />
+                                <label label class="form-check-label" for="unlockAllShipDecorations"
+                                    >Unlock All Ship Decorations?</label
+                                >
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="unlockAllFlavourItems"  />
-                                <label label class="form-check-label" for="unlockAllFlavourItems">Unlock All Accessories?</label>
+                                <input class="form-check-input" type="checkbox" value="" id="unlockAllFlavourItems" />
+                                <label label class="form-check-label" for="unlockAllFlavourItems"
+                                    >Unlock All Accessories?</label
+                                >
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="unlockAllSkins"  />
+                                <input class="form-check-input" type="checkbox" value="" id="unlockAllSkins" />
                                 <label label class="form-check-label" for="unlockAllSkins">Unlock All Skins?</label>
                             </div>
                             <div class="form-check">
-                                <label label class="form-check-label" for="spoofMasteryRank">Spoofed Mastery Rank (-1 to disable)</label>
+                                <label label class="form-check-label" for="spoofMasteryRank"
+                                    >Spoofed Mastery Rank (-1 to disable)</label
+                                >
                                 <input class="form-control" id="spoofMasteryRank" type="number" min="-1" value="" />
                             </div>
                             <button class="btn btn-primary" type="submit">Save Settings</button>
