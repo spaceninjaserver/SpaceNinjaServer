@@ -14,7 +14,8 @@ import {
     IMission,
     IRawUpgrade,
     ISeasonChallengeHistory,
-    ITypeCount
+    ITypeCount,
+    InventorySlot
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate } from "../types/genericUpdate";
 import {
@@ -74,7 +75,7 @@ export const addItem = async (
         case "Powersuits":
             if (typeName.includes("EntratiMech")) {
                 const mechSuit = await addMechSuit(typeName, accountId);
-                await updateSlots(accountId, "MechBin", 0, 1);
+                await updateSlots(accountId, InventorySlot.MECHSUITS, 0, 1);
                 logger.debug("mech suit", mechSuit);
                 return {
                     InventoryChanges: {
@@ -88,7 +89,7 @@ export const addItem = async (
                 };
             }
             const suit = await addPowerSuit(typeName, accountId);
-            await updateSlots(accountId, "SuitBin", 0, 1);
+            await updateSlots(accountId, InventorySlot.SUITS, 0, 1);
             return {
                 InventoryChanges: {
                     SuitBin: {
@@ -102,7 +103,7 @@ export const addItem = async (
         case "Weapons":
             const weaponType = getWeaponType(typeName);
             const weapon = await addWeapon(weaponType, typeName, accountId);
-            await updateSlots(accountId, "WeaponBin", 0, 1);
+            await updateSlots(accountId, InventorySlot.WEAPONS, 0, 1);
             return {
                 InventoryChanges: {
                     WeaponBin: { count: 1, platinum: 0, Slots: -1 },
@@ -127,7 +128,7 @@ export const addItem = async (
                 case "Sentinels":
                     // TOOD: Sentinels should also grant their DefaultUpgrades & SentinelWeapon.
                     const sentinel = await addSentinel(typeName, accountId);
-                    await updateSlots(accountId, "SentinelBin", 0, 1);
+                    await updateSlots(accountId, InventorySlot.SENTINELS, 0, 1);
                     return {
                         InventoryChanges: {
                             SentinelBin: { count: 1, platinum: 0, Slots: -1 },
