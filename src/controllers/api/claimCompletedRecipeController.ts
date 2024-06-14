@@ -47,6 +47,7 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
         // TODO: Refund items
         res.json({});
     } else {
+        logger.debug("Claiming Recipe", { buildable, pendingRecipe });
         let currencyChanges = {};
         if (req.query.rush && buildable.skipBuildTimePrice) {
             currencyChanges = await updateCurrency(buildable.skipBuildTimePrice, true, accountId);
