@@ -3,7 +3,7 @@ import path from "path";
 import fs from "fs";
 const rootDir = path.join(__dirname, "../../..");
 
-const updateConfigData: RequestHandler = (req) => {
+const updateConfigDataController: RequestHandler = (req) => {
     const updateSettingsData = req.body;
     
     fs.writeFile(path.join(rootDir, "config.json"), updateSettingsData, function(err:any) {
@@ -13,4 +13,4 @@ const updateConfigData: RequestHandler = (req) => {
     });
 };
 
-export { updateConfigData };
+export { updateConfigDataController };

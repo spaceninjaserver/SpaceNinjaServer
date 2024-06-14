@@ -15,6 +15,7 @@ function loginFromLocalStorage() {
             window.accountId = data.id;
             window.authz = "accountId=" + data.id + "&nonce=" + data.Nonce;
             updateInventory();
+            fetchSettings();
         },
         () => {
             logout();
@@ -95,15 +96,17 @@ window.itemListPromise = new Promise(resolve => {
             "/Lotus/Weapons/Tenno/Rifle/LotusRifle": { name: "Rifle" },
             "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun": { name: "Shotgun" },
             // Missing in data sources
-            "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/CyoteMod": { name: "Traumatic Peculiar" },
-            "/Lotus/Weapons/Tenno/Grimoire/TnGrimoire": { name: "Grimoire" }
+            "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/CyoteMod": { name: "Traumatic Peculiar" }
         };
         for (const [type, items] of Object.entries(data)) {
             if (type != "badItems") {
                 items.forEach(item => {
                     if (item.uniqueName in data.badItems) {
                         item.name += " (Imposter)";
-                    } else if (item.uniqueName.substr(0, 18) != "/Lotus/Types/Game/") {
+                    } else if (
+                        item.uniqueName.substr(0, 18) != "/Lotus/Types/Game/" &&
+                        item.uniqueName.substr(0, 18) != "/Lotus/StoreItems/"
+                    ) {
                         const option = document.createElement("option");
                         option.setAttribute("data-key", item.uniqueName);
                         option.value = item.name;
