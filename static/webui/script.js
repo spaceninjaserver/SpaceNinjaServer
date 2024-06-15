@@ -15,6 +15,7 @@ function loginFromLocalStorage() {
             window.accountId = data.id;
             window.authz = "accountId=" + data.id + "&nonce=" + data.Nonce;
             updateInventory();
+            fetchSettings();
         },
         () => {
             logout();
@@ -102,7 +103,10 @@ window.itemListPromise = new Promise(resolve => {
                 items.forEach(item => {
                     if (item.uniqueName in data.badItems) {
                         item.name += " (Imposter)";
-                    } else if (item.uniqueName.substr(0, 18) != "/Lotus/Types/Game/") {
+                    } else if (
+                        item.uniqueName.substr(0, 18) != "/Lotus/Types/Game/" &&
+                        item.uniqueName.substr(0, 18) != "/Lotus/StoreItems/"
+                    ) {
                         const option = document.createElement("option");
                         option.setAttribute("data-key", item.uniqueName);
                         option.value = item.name;
@@ -615,3 +619,49 @@ function doAcquireMod() {
 $("#mod-to-acquire").on("input", () => {
     $("#mod-to-acquire").removeClass("is-invalid");
 });
+
+function fetchSettings() {
+    fetch("/custom/config")
+        .then(response => response.json())
+        .then(json =>
+            Object.entries(json).forEach(entry => {
+                const [key, value] = entry;
+                var x = document.getElementById(`${key}`);
+                if (x != null) {
+                    if (x.type == "checkbox") {
+                        if (value === true) {
+                            x.setAttribute("checked", "checked");
+                        }
+                    } else if (x.type == "number") {
+                        x.setAttribute("value", `${value}`);
+                    }
+                }
+            })
+        );
+}
+
+function doChangeSettings() {
+    fetch("/custom/config")
+        .then(response => response.json())
+        .then(json => {
+            for (var i in json) {
+                var x = document.getElementById(`${i}`);
+                if (x != null) {
+                    if (x.type == "checkbox") {
+                        if (x.checked === true) {
+                            json[i] = true;
+                        } else {
+                            json[i] = false;
+                        }
+                    } else if (x.type == "number") {
+                        json[i] = parseInt(x.value);
+                    }
+                }
+            }
+            $.post({
+                url: "/custom/config",
+                contentType: "text/plain",
+                data: JSON.stringify(json, null, 2)
+            });
+        });
+}

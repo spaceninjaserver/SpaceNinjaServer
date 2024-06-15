@@ -67,15 +67,21 @@
                                     Mods
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a
+                                    class="nav-link"
+                                    href="/webui/settings"
+                                    data-bs-dismiss="offcanvas"
+                                    data-bs-target="#sidebar"
+                                >
+                                    Settings
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
             </div>
             <div>
-                <p id="refresh-note" class="mb-4">
-                    Note: Changes made here will only be reflected in-game when the game re-downloads your inventory.
-                    Visiting the navigation should be the easiest way to trigger that.
-                </p>
                 <div data-route="/webui/" data-title="Login | OpenWF WebUI">
                     <p>Login using your OpenWF account credentials.</p>
                     <form onsubmit="doLogin();return false;">
@@ -89,6 +95,10 @@
                     </form>
                 </div>
                 <div data-route="/webui/inventory" data-title="Inventory | OpenWF WebUI">
+                    <p id="refresh-note" class="mb-4">
+                        Note: Changes made here will only be reflected in-game when the game re-downloads your
+                        inventory. Visiting the navigation should be the easiest way to trigger that.
+                    </p>
                     <div class="card mb-4">
                         <h5 class="card-header">Add Items</h5>
                         <form class="card-body input-group" onsubmit="doAcquireMiscItems();return false;">
@@ -133,6 +143,10 @@
                     </div>
                 </div>
                 <div data-route="/webui/mods" data-title="Mods | OpenWF WebUI">
+                    <p id="refresh-note" class="mb-4">
+                        Note: Changes made here will only be reflected in-game when the game re-downloads your
+                        inventory. Visiting the navigation should be the easiest way to trigger that.
+                    </p>
                     <div class="row">
                         <div class="col-xxl-6">
                             <div class="card mb-4">
@@ -188,6 +202,65 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div data-route="/webui/settings" data-title="Settings | OpenWF WebUI">
+                    <form onsubmit="doChangeSettings();return false;">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="skipStoryModeChoice" />
+                            <label class="form-check-label" for="skipStoryModeChoice">Skip Story Mode Choice</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="skipTutorial" />
+                            <label class="form-check-label" for="skipTutorial">Skip Tutorial</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="unlockAllScans" />
+                            <label class="form-check-label" for="unlockAllScans">Unlock All Scans</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="unlockAllMissions" />
+                            <label class="form-check-label" for="unlockAllMissions">Unlock All Missions</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="unlockAllQuests" />
+                            <label class="form-check-label" for="unlockAllQuests">Unlock All Quests</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="completeAllQuests" />
+                            <label class="form-check-label" for="completeAllQuests">Complete All Quests</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="infiniteResources" />
+                            <label class="form-check-label" for="infiniteResources"
+                                >Infinite Credits and Platinum</label
+                            >
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="unlockAllShipFeatures" />
+                            <label class="form-check-label" for="unlockAllShipFeatures">Unlock All Ship Features</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="unlockAllShipDecorations" />
+                            <label class="form-check-label" for="unlockAllShipDecorations"
+                                >Unlock All Ship Decorations</label
+                            >
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="unlockAllFlavourItems" />
+                            <label class="form-check-label" for="unlockAllFlavourItems">Unlock All Accessories</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="unlockAllSkins" />
+                            <label class="form-check-label" for="unlockAllSkins">Unlock All Skins</label>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="spoofMasteryRank"
+                                >Spoofed Mastery Rank (-1 to disable)</label
+                            >
+                            <input class="form-control" id="spoofMasteryRank" type="number" min="-1" />
+                        </div>
+                        <button class="btn btn-primary mt-3" type="submit">Save Settings</button>
+                    </form>
                 </div>
             </div>
         </div>

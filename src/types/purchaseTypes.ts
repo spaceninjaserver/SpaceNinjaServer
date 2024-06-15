@@ -41,14 +41,6 @@ export type IBinChanges = {
     Extra?: number;
 };
 
-export enum SlotNameToInventoryName {
-    SUIT = "SuitBin",
-    WEAPON = "WeaponBin",
-    MECHSUIT = "MechBin",
-    LOADOUT = "PveBonusLoadoutBin",
-    SENTINEL = "SentinelBin"
-}
-
 export type SlotPurchaseName =
     | "SuitSlotItem"
     | "TwoSentinelSlotItem"

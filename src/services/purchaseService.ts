@@ -1,22 +1,7 @@
 import { parseSlotPurchaseName } from "@/src/helpers/purchaseHelpers";
-import { getWeaponType } from "@/src/services/itemDataService";
 import { getSubstringFromKeyword } from "@/src/helpers/stringHelpers";
-import {
-    addBooster,
-    addConsumables,
-    addCustomization,
-    addMechSuit,
-    addMiscItems,
-    addPowerSuit,
-    addRecipes,
-    addSentinel,
-    addWeapon,
-    getInventory,
-    updateCurrency,
-    updateSlots
-} from "@/src/services/inventoryService";
-import { IConsumable, IMiscItem, ITypeCount } from "@/src/types/inventoryTypes/inventoryTypes";
-import { IPurchaseRequest, IPurchaseResponse, SlotNameToInventoryName, SlotPurchase } from "@/src/types/purchaseTypes";
+import { addItem, addBooster, updateCurrency, updateSlots } from "@/src/services/inventoryService";
+import { IPurchaseRequest, SlotPurchase } from "@/src/types/purchaseTypes";
 import { logger } from "@/src/utils/logger";
 
 export const getStoreItemCategory = (storeItem: string) => {
@@ -40,34 +25,24 @@ export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountI
     const internalName = purchaseRequest.PurchaseParams.StoreItem.replace("/StoreItems", "");
     logger.debug(`store category ${storeCategory}`);
 
-    let inventoryChanges;
+    let purchaseResponse;
     switch (storeCategory) {
-        case "Powersuits":
-            inventoryChanges = await handlePowersuitPurchase(internalName, accountId);
-            break;
-        case "Weapons":
-            inventoryChanges = await handleWeaponsPurchase(internalName, accountId);
+        default:
+            purchaseResponse = await addItem(accountId, internalName);
             break;
         case "Types":
-            inventoryChanges = await handleTypesPurchase(
+            purchaseResponse = await handleTypesPurchase(
                 internalName,
                 accountId,
                 purchaseRequest.PurchaseParams.Quantity
             );
             break;
         case "Boosters":
-            inventoryChanges = await handleBoostersPurchase(internalName, accountId);
+            purchaseResponse = await handleBoostersPurchase(internalName, accountId);
             break;
-        case "Interface":
-            inventoryChanges = await handleCustomizationPurchase(internalName, accountId);
-            break;
-        default:
-            const errorMessage = `unknown store category: ${storeCategory} not implemented or new`;
-            logger.error(errorMessage);
-            throw new Error(errorMessage);
     }
 
-    if (!inventoryChanges) throw new Error("purchase response was undefined");
+    if (!purchaseResponse) throw new Error("purchase response was undefined");
 
     const currencyChanges = await updateCurrency(
         purchaseRequest.PurchaseParams.ExpectedPrice,
@@ -75,12 +50,12 @@ export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountI
         accountId
     );
 
-    inventoryChanges.InventoryChanges = {
+    purchaseResponse.InventoryChanges = {
         ...currencyChanges,
-        ...inventoryChanges.InventoryChanges
+        ...purchaseResponse.InventoryChanges
     };
 
-    return inventoryChanges;
+    return purchaseResponse;
 };
 
 export const slotPurchaseNameToSlotName: SlotPurchase = {
@@ -126,100 +101,16 @@ const handleSlotPurchase = async (slotPurchaseNameFull: string, accountId: strin
     };
 };
 
-const handleWeaponsPurchase = async (weaponName: string, accountId: string) => {
-    const weaponType = getWeaponType(weaponName);
-    const addedWeapon = await addWeapon(weaponType, weaponName, accountId);
-
-    await updateSlots(accountId, SlotNameToInventoryName.WEAPON, 0, 1);
-
-    return {
-        InventoryChanges: {
-            WeaponBin: { count: 1, platinum: 0, Slots: -1 },
-            [weaponType]: [addedWeapon]
-        }
-    } as IPurchaseResponse;
-};
-
-const handlePowersuitPurchase = async (powersuitName: string, accountId: string) => {
-    if (powersuitName.includes("EntratiMech")) {
-        const mechSuit = await addMechSuit(powersuitName, accountId);
-
-        await updateSlots(accountId, SlotNameToInventoryName.MECHSUIT, 0, 1);
-        logger.debug("mech suit", mechSuit);
-
-        return {
-            InventoryChanges: {
-                MechBin: {
-                    count: 1,
-                    platinum: 0,
-                    Slots: -1
-                },
-                MechSuits: [mechSuit]
-            }
-        } as IPurchaseResponse;
-    }
-
-    const suit = await addPowerSuit(powersuitName, accountId);
-    await updateSlots(accountId, SlotNameToInventoryName.SUIT, 0, 1);
-
-    return {
-        InventoryChanges: {
-            SuitBin: {
-                count: 1,
-                platinum: 0,
-                Slots: -1
-            },
-            Suits: [suit]
-        }
-    };
-};
-
 //TODO: change to getInventory, apply changes then save at the end
 const handleTypesPurchase = async (typesName: string, accountId: string, quantity: number) => {
     const typeCategory = getStoreItemTypesCategory(typesName);
     logger.debug(`type category ${typeCategory}`);
     switch (typeCategory) {
-        case "AvatarImages":
-        case "SuitCustomizations":
-            return await handleCustomizationPurchase(typesName, accountId);
-        case "Sentinels":
-            return await handleSentinelPurchase(typesName, accountId);
+        default:
+            return await addItem(accountId, typesName, quantity);
         case "SlotItems":
             return await handleSlotPurchase(typesName, accountId);
-        case "Items":
-            return await handleMiscItemPurchase(typesName, accountId, quantity);
-        case "Recipes":
-        case "Consumables": // Blueprints for Ciphers, Antitoxins
-            return await handleRecipesPurchase(typesName, accountId, quantity);
-        case "Restoratives": // Codex Scanner, Remote Observer, Starburst
-            return await handleRestorativesPurchase(typesName, accountId, quantity);
-            break;
-        default:
-            throw new Error(`unknown Types category: ${typeCategory} not implemented or new`);
     }
-};
-
-const handleSentinelPurchase = async (sentinelName: string, accountId: string) => {
-    const sentinel = await addSentinel(sentinelName, accountId);
-
-    await updateSlots(accountId, SlotNameToInventoryName.SENTINEL, 0, 1);
-
-    return {
-        InventoryChanges: {
-            SentinelBin: { count: 1, platinum: 0, Slots: -1 },
-            Sentinels: [sentinel]
-        }
-    };
-};
-
-const handleCustomizationPurchase = async (customizationName: string, accountId: string) => {
-    const customization = await addCustomization(customizationName, accountId);
-
-    return {
-        InventoryChanges: {
-            FlavourItems: [customization]
-        }
-    };
 };
 
 const boosterCollection = [
@@ -244,57 +135,6 @@ const handleBoostersPurchase = async (boosterStoreName: string, accountId: strin
     return {
         InventoryChanges: {
             Boosters: [{ ItemType, ExpiryDate }]
-        }
-    };
-};
-
-const handleMiscItemPurchase = async (uniqueName: string, accountId: string, quantity: number) => {
-    const inventory = await getInventory(accountId);
-    const miscItemChanges = [
-        {
-            ItemType: uniqueName,
-            ItemCount: quantity
-        } satisfies IMiscItem
-    ];
-    addMiscItems(inventory, miscItemChanges);
-    await inventory.save();
-    return {
-        InventoryChanges: {
-            MiscItems: miscItemChanges
-        }
-    };
-};
-
-const handleRecipesPurchase = async (uniqueName: string, accountId: string, quantity: number) => {
-    const inventory = await getInventory(accountId);
-    const recipeChanges = [
-        {
-            ItemType: uniqueName,
-            ItemCount: quantity
-        } satisfies ITypeCount
-    ];
-    addRecipes(inventory, recipeChanges);
-    await inventory.save();
-    return {
-        InventoryChanges: {
-            Recipes: recipeChanges
-        }
-    };
-};
-
-const handleRestorativesPurchase = async (uniqueName: string, accountId: string, quantity: number) => {
-    const inventory = await getInventory(accountId);
-    const consumablesChanges = [
-        {
-            ItemType: uniqueName,
-            ItemCount: quantity
-        } satisfies IConsumable
-    ];
-    addConsumables(inventory, consumablesChanges);
-    await inventory.save();
-    return {
-        InventoryChanges: {
-            Consumables: consumablesChanges
         }
     };
 };

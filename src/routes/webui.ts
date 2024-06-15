@@ -19,6 +19,9 @@ webuiRouter.use("/webui", (req, res, next) => {
 });
 
 // Serve virtual routes
+webuiRouter.get("/webui/settings", (_req, res) => {
+    res.sendFile(path.join(rootDir, "static/webui/index.html"));
+});
 webuiRouter.get("/webui/inventory", (_req, res) => {
     res.sendFile(path.join(rootDir, "static/webui/index.html"));
 });
