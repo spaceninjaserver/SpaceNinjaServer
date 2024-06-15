@@ -116,6 +116,23 @@ export const addItem = async (
                     FlavourItems: [await addCustomization(typeName, accountId)]
                 }
             };
+        case "Objects": {
+            // /Lotus/Objects/Tenno/Props/TnoLisetTextProjector (Note Beacon)
+            const inventory = await getInventory(accountId);
+            const changes = [
+                {
+                    ItemType: typeName,
+                    ItemCount: quantity
+                } satisfies IMiscItem
+            ];
+            addShipDecorations(inventory, changes);
+            await inventory.save();
+            return {
+                InventoryChanges: {
+                    ShipDecorations: changes
+                }
+            };
+        }
         case "Types":
             switch (typeName.substr(1).split("/")[2]) {
                 case "AvatarImages":
@@ -136,20 +153,40 @@ export const addItem = async (
                         }
                     };
                 case "Items": {
-                    const inventory = await getInventory(accountId);
-                    const miscItemChanges = [
-                        {
-                            ItemType: typeName,
-                            ItemCount: quantity
-                        } satisfies IMiscItem
-                    ];
-                    addMiscItems(inventory, miscItemChanges);
-                    await inventory.save();
-                    return {
-                        InventoryChanges: {
-                            MiscItems: miscItemChanges
+                    switch (typeName.substr(1).split("/")[3]) {
+                        case "ShipDecos": {
+                            const inventory = await getInventory(accountId);
+                            const changes = [
+                                {
+                                    ItemType: typeName,
+                                    ItemCount: quantity
+                                } satisfies IMiscItem
+                            ];
+                            addShipDecorations(inventory, changes);
+                            await inventory.save();
+                            return {
+                                InventoryChanges: {
+                                    ShipDecorations: changes
+                                }
+                            };
                         }
-                    };
+                        default: {
+                            const inventory = await getInventory(accountId);
+                            const miscItemChanges = [
+                                {
+                                    ItemType: typeName,
+                                    ItemCount: quantity
+                                } satisfies IMiscItem
+                            ];
+                            addMiscItems(inventory, miscItemChanges);
+                            await inventory.save();
+                            return {
+                                InventoryChanges: {
+                                    MiscItems: miscItemChanges
+                                }
+                            };
+                        }
+                    }
                 }
                 case "Recipes":
                 case "Consumables": {
@@ -423,6 +460,21 @@ export const addMiscItems = (inventory: IInventoryDatabaseDocument, itemsArray: 
             inventory.markModified(`MiscItems.${itemIndex}.ItemCount`);
         } else {
             MiscItems.push({ ItemCount, ItemType });
+        }
+    });
+};
+
+export const addShipDecorations = (inventory: IInventoryDatabaseDocument, itemsArray: IConsumable[] | undefined) => {
+    const { ShipDecorations } = inventory;
+
+    itemsArray?.forEach(({ ItemCount, ItemType }) => {
+        const itemIndex = ShipDecorations.findIndex(miscItem => miscItem.ItemType === ItemType);
+
+        if (itemIndex !== -1) {
+            ShipDecorations[itemIndex].ItemCount += ItemCount;
+            inventory.markModified(`ShipDecorations.${itemIndex}.ItemCount`);
+        } else {
+            ShipDecorations.push({ ItemCount, ItemType });
         }
     });
 };
