@@ -419,6 +419,14 @@ export interface ICrewShipHarnessConfig {
     Upgrades?: string[];
 }
 
+export enum InventorySlot {
+    SUITS = "SuitBin",
+    WEAPONS = "WeaponBin",
+    MECHSUITS = "MechBin",
+    PVE_LOADOUTS = "PveBonusLoadoutBin",
+    SENTINELS = "SentinelBin"
+}
+
 export interface ISlots {
     Extra: number; // can be undefined, but not if used via mongoose
     Slots: number;
