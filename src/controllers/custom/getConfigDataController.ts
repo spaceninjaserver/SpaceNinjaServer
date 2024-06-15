@@ -1,8 +1,8 @@
 import { RequestHandler } from "express";
-import configFile from "@/config.json";
+import { config } from "@/src/services/configService";
 
 const getConfigDataController: RequestHandler = (_req, res) => {
-    res.json(configFile);
+    res.json(config);
 };
 
 export { getConfigDataController };
