@@ -78,19 +78,18 @@ const inventoryController: RequestHandler = async (request: Request, response: R
         }
     }
 
-    if (
-        typeof config.spoofMasteryRank === "number" &&
-        config.spoofMasteryRank >= 0 &&
-        config.spoofMasteryRank <= 5030
-    ) {
+    if (typeof config.spoofMasteryRank === "number" && config.spoofMasteryRank >= 0) {
         inventoryResponse.PlayerLevel = config.spoofMasteryRank;
-        inventoryResponse.XPInfo = [];
-        let numFrames = getExpRequiredForMr(config.spoofMasteryRank) / 6000;
-        while (numFrames-- > 0) {
-            inventoryResponse.XPInfo.push({
-                ItemType: "/Lotus/Powersuits/Mag/Mag",
-                XP: 1_600_000
-            });
+        if (!("xpBasedLevelCapDisabled" in request.query)) {
+            // This client has not been patched to accept any mastery rank, need to fake the XP.
+            inventoryResponse.XPInfo = [];
+            let numFrames = getExpRequiredForMr(Math.min(config.spoofMasteryRank, 5030)) / 6000;
+            while (numFrames-- > 0) {
+                inventoryResponse.XPInfo.push({
+                    ItemType: "/Lotus/Powersuits/Mag/Mag",
+                    XP: 1_600_000
+                });
+            }
         }
     }
 
