@@ -182,31 +182,29 @@ ItemConfigSchema.set("toJSON", {
     }
 });
 
-const EquipmentSchema = new Schema<IEquipmentDatabase>(
-    {
-        ItemType: String,
-        Configs: [ItemConfigSchema],
-        UpgradeVer: Number,
-        XP: Number,
-        Features: Number,
-        Polarized: Number,
-        Polarity: [polaritySchema],
-        FocusLens: String,
-        ModSlotPurchases: Number,
-        CustomizationSlotPurchases: Number,
-        UpgradeType: Schema.Types.Mixed, //todo
-        UpgradeFingerprint: String,
-        ItemName: String,
-        InfestationDate: Date,
-        InfestationDays: Number,
-        InfestationType: String,
-        ModularParts: [String],
-        UnlockLevel: Number,
-        Expiry: Date,
-        SkillTree: String,
-        ArchonCrystalUpgrades: [Schema.Types.Mixed] //TODO
-    }
-);
+const EquipmentSchema = new Schema<IEquipmentDatabase>({
+    ItemType: String,
+    Configs: [ItemConfigSchema],
+    UpgradeVer: Number,
+    XP: Number,
+    Features: Number,
+    Polarized: Number,
+    Polarity: [polaritySchema],
+    FocusLens: String,
+    ModSlotPurchases: Number,
+    CustomizationSlotPurchases: Number,
+    UpgradeType: Schema.Types.Mixed, //todo
+    UpgradeFingerprint: String,
+    ItemName: String,
+    InfestationDate: Date,
+    InfestationDays: Number,
+    InfestationType: String,
+    ModularParts: [String],
+    UnlockLevel: Number,
+    Expiry: Date,
+    SkillTree: String,
+    ArchonCrystalUpgrades: [Schema.Types.Mixed] //TODO
+});
 
 EquipmentSchema.virtual("ItemId").get(function () {
     return { $oid: this._id.toString() } satisfies IOid;
