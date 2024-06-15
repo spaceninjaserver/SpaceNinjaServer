@@ -46,5 +46,6 @@ interface ILoggerConfig {
 
 export const updateConfig = async (data: string) => {
     amnesia = true;
-    return await fsPromises.writeFile(configPath, data);
+    await fsPromises.writeFile(configPath, data);
+    Object.assign(config, JSON.parse(data));
 };
