@@ -188,7 +188,6 @@ const EquipmentSchema = new Schema<IEquipmentDatabase>(
         Configs: [ItemConfigSchema],
         UpgradeVer: Number,
         XP: Number,
-        InfestationDate: Date,
         Features: Number,
         Polarized: Number,
         Polarity: [polaritySchema],
@@ -198,13 +197,15 @@ const EquipmentSchema = new Schema<IEquipmentDatabase>(
         UpgradeType: Schema.Types.Mixed, //todo
         UpgradeFingerprint: String,
         ItemName: String,
+        InfestationDate: Date,
+        InfestationDays: Number,
+        InfestationType: String,
         ModularParts: [String],
         UnlockLevel: Number,
         Expiry: Date,
         SkillTree: String,
         ArchonCrystalUpgrades: [Schema.Types.Mixed] //TODO
-    },
-    { id: false }
+    }
 );
 
 EquipmentSchema.virtual("ItemId").get(function () {
@@ -248,7 +249,7 @@ RawUpgrades.set("toJSON", {
 });
 
 //TODO: find out what this is
-const upgrqadesSchema = new Schema(
+const upgradesSchema = new Schema(
     {
         UpgradeFingerprint: String,
         ItemType: String
@@ -256,11 +257,11 @@ const upgrqadesSchema = new Schema(
     { id: false }
 );
 
-upgrqadesSchema.virtual("ItemId").get(function () {
+upgradesSchema.virtual("ItemId").get(function () {
     return toOid(this._id);
 });
 
-upgrqadesSchema.set("toJSON", {
+upgradesSchema.set("toJSON", {
     virtuals: true,
     transform(_document, returnedObject) {
         delete returnedObject._id;
@@ -614,7 +615,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Non Upgrade Mods Example:I have 999 item WeaponElectricityDamageMod (only "ItemCount"+"ItemType")
         RawUpgrades: [RawUpgrades],
         //Upgrade Mods\Riven\Arcane Example:"UpgradeFingerprint"+"ItemType"+""
-        Upgrades: [upgrqadesSchema],
+        Upgrades: [upgradesSchema],
 
         //Warframe
         Suits: [EquipmentSchema],
@@ -634,11 +635,11 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Any /Sentinels/SentinelWeapons/ (like warframe weapon)
         SentinelWeapons: [EquipmentSchema],
         //Modular Pets
-        MoaPets: [Schema.Types.Mixed],
+        MoaPets: [EquipmentSchema],
 
         KubrowPetEggs: [Schema.Types.Mixed],
         //Like PowerSuit Cat\Kubrow or etc Pets
-        KubrowPets: [Schema.Types.Mixed],
+        KubrowPets: [EquipmentSchema],
         //Prints   Cat(3 Prints)\Kubrow(2 Prints) Pets
         KubrowPetPrints: [Schema.Types.Mixed],
 
@@ -660,12 +661,12 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Mech need Suits+SpaceGuns+SpecialItem
         MechSuits: [EquipmentSchema],
         ///Restoratives/HoverboardSummon (like Suit)
-        Hoverboards: [Schema.Types.Mixed],
+        Hoverboards: [EquipmentSchema],
 
         //Use Operator\Drifter
         UseAdultOperatorLoadout: Boolean,
         //Operator\Drifter Weapon
-        OperatorAmps: [Schema.Types.Mixed],
+        OperatorAmps: [EquipmentSchema],
         //Operator
         OperatorLoadOuts: [operatorConfigSchema],
         //Drifter
@@ -681,7 +682,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         ShipDecorations: [typeCountSchema],
 
         //RailJack Setting(Mods,Skin,Weapon,etc)
-        CrewShipHarnesses: [Schema.Types.Mixed],
+        CrewShipHarnesses: [EquipmentSchema],
         //Railjack/Components(https://warframe.fandom.com/wiki/Railjack/Components)
         CrewShipRawSalvage: [Schema.Types.Mixed],
 

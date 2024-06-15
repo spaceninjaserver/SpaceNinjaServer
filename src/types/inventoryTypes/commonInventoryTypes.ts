@@ -50,7 +50,7 @@ export interface IItemConfig {
     Upgrades?: string[];
     Name?: string;
     OperatorAmp?: IOid;
-    Songs: ISong[];
+    Songs?: ISong[];
     AbilityOverride?: IAbilityOverride;
     PvpUpgrades?: string[];
     ugly?: boolean;
@@ -88,7 +88,6 @@ export interface IEquipmentDatabase {
     Configs: IItemConfig[];
     UpgradeVer?: number;
     XP?: number;
-    InfestationDate?: Date;
     Features?: number;
     Polarized?: number;
     Polarity?: IPolarity[];
@@ -97,6 +96,9 @@ export interface IEquipmentDatabase {
     CustomizationSlotPurchases?: number;
     UpgradeType?: string;
     UpgradeFingerprint?: string;
+    InfestationDate?: IMongoDate;
+    InfestationDays?: number;
+    InfestationType?: string;
     ModularParts?: string[];
     UnlockLevel?: number;
     Expiry?: IMongoDate;

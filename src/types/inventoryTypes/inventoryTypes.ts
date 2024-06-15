@@ -4,7 +4,6 @@ import { IOid, IMongoDate } from "../commonTypes";
 import {
     IColor,
     FocusSchool,
-    IPolarity,
     IItemConfig,
     IOperatorConfigClient,
     IEquipmentSelection,
@@ -165,7 +164,7 @@ export interface IInventoryResponse {
     FactionScores: number[];
     SpaceSuits: IEquipmentDatabase[];
     SpaceMelee: IEquipmentDatabase[];
-    SpaceGuns: ISpaceGun[];
+    SpaceGuns: IEquipmentDatabase[];
     ArchwingEnabled: boolean;
     PendingSpectreLoadouts: any[];
     SpectreLoadouts: ISpectreLoadout[];
@@ -181,7 +180,7 @@ export interface IInventoryResponse {
     Drones: IDrone[];
     StepSequencers: IStepSequencer[];
     ActiveAvatarImageType: string;
-    KubrowPets: IKubrowPet[];
+    KubrowPets: IEquipmentDatabase[];
     ShipDecorations: IConsumable[];
     DailyAffiliationCetus: number;
     DailyAffiliationQuills: number;
@@ -207,7 +206,7 @@ export interface IInventoryResponse {
     DailyAffiliationVentkids: number;
     DailyAffiliationVox: number;
     RecentVendorPurchases: Array<number | string>;
-    Hoverboards: IHoverboard[];
+    Hoverboards: IEquipmentDatabase[];
     NodeIntrosCompleted: string[];
     GuildId?: IOid;
     CompletedJobChains: ICompletedJobChain[];
@@ -235,7 +234,7 @@ export interface IInventoryResponse {
     MechSuits: IEquipmentDatabase[];
     InfestedFoundry: IInfestedFoundry;
     BlessingCooldown: IMongoDate;
-    CrewShipHarnesses: ICrewShipHarness[];
+    CrewShipHarnesses: IEquipmentDatabase[];
     CrewShipRawSalvage: IConsumable[];
     CrewMembers: ICrewMember[];
     AdultOperatorLoadOuts: IOperatorConfigClient[];
@@ -356,17 +355,6 @@ export interface ICombat {
     Assigned: number;
 }
 
-export interface ICrewShipHarness {
-    ItemType: string;
-    Configs: IItemConfig[];
-    Features: number;
-    UpgradeVer: number;
-    XP: number;
-    Polarity: IPolarity[];
-    Polarized: number;
-    ItemId: IOid;
-}
-
 export enum InventorySlot {
     SUITS = "SuitBin",
     WEAPONS = "WeaponBin",
@@ -405,6 +393,7 @@ export interface ICrewShip {
     RailjackImage: IFlavourItem;
     CrewMembers: ICrewMembers;
     ItemId: IOid;
+    _id: Types.ObjectId;
 }
 
 export interface ICrewMembers {
@@ -492,18 +481,6 @@ export interface IFusionTreasure {
     Sockets: number;
 }
 
-export interface IHoverboard {
-    ItemType: string;
-    Configs: IItemConfig[];
-    ModularParts: string[];
-    ItemName?: string;
-    Polarity?: IPolarity[];
-    UpgradeVer: number;
-    XP: number;
-    Features: number;
-    ItemId: IOid;
-}
-
 export interface IInfestedFoundry {
     Name: string;
     Resources: ITypeCount[];
@@ -561,22 +538,6 @@ export interface ITraits {
 
 export enum KubrowPetPrintItemType {
     LotusTypesGameKubrowPetImprintedTraitPrint = "/Lotus/Types/Game/KubrowPet/ImprintedTraitPrint"
-}
-
-export interface IKubrowPet {
-    ItemType: string;
-    Configs: IItemConfig[];
-    UpgradeVer: number;
-    Details: IDetails;
-    XP?: number;
-    Polarized?: number;
-    Polarity?: IPolarity[];
-    Features?: number;
-    InfestationDate?: IMongoDate;
-    InfestationDays?: number;
-    InfestationType?: string;
-    ItemId: IOid;
-    ModularParts?: string[];
 }
 
 export interface IDetails {
@@ -854,20 +815,6 @@ export interface IShipInventory {
     ShipExterior: IShipExterior;
     AirSupportPower: string;
     ItemId: IOid;
-}
-
-export interface ISpaceGun {
-    ItemType: string;
-    Configs: IItemConfig[];
-    XP?: number;
-    UpgradeVer?: number;
-    ItemId: IOid;
-    Features?: number;
-    Polarized?: number;
-    Polarity?: IPolarity[];
-    UpgradeType?: UpgradeType;
-    UpgradeFingerprint?: string;
-    ItemName?: string;
 }
 
 export interface ISpectreLoadout {
