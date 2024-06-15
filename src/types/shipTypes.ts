@@ -69,6 +69,7 @@ export interface IPlacedDecosDatabase {
     Type: string;
     Pos: [number, number, number];
     Rot: [number, number, number];
+    Scale: number;
     _id: Types.ObjectId;
 }
 
@@ -100,12 +101,17 @@ export interface IShipDecorationsRequest {
     Rot: [number, number, number];
     Room: string;
     IsApartment: boolean;
-    RemoveId: string;
+    RemoveId?: string;
+    MoveId?: string;
+    OldRoom?: string;
+    Scale?: number;
 }
 
 export interface IShipDecorationsResponse {
-    DecoId: string;
-    Room: string;
+    DecoId?: string;
+    Room?: string;
     IsApartment: boolean;
     MaxCapacityIncrease?: number;
+    OldRoom?: string;
+    NewRoom?: string;
 }
