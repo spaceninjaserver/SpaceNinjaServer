@@ -147,12 +147,9 @@ function updateInventory() {
                             event.preventDefault();
                             addGearExp("Suits", item.ItemId.$oid, 1_600_000 - item.XP);
                         };
-                        a.textContent = "Make Rank 30";
+                        a.title = "Make Rank 30";
+                        a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"/></svg>`;
                         td.appendChild(a);
-
-                        const span = document.createElement("span");
-                        span.innerHTML = " &middot; ";
-                        td.appendChild(span);
                     }
                     {
                         const a = document.createElement("a");
@@ -161,7 +158,8 @@ function updateInventory() {
                             event.preventDefault();
                             disposeOfGear("Suits", item.ItemId.$oid);
                         };
-                        a.textContent = "Remove";
+                        a.title = "Remove";
+                        a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
                         td.appendChild(a);
                     }
                     tr.appendChild(td);
@@ -191,12 +189,9 @@ function updateInventory() {
                                 event.preventDefault();
                                 addGearExp(category, item.ItemId.$oid, 800_000 - item.XP);
                             };
-                            a.textContent = "Make Rank 30";
+                            a.title = "Make Rank 30";
+                            a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"/></svg>`;
                             td.appendChild(a);
-
-                            const span = document.createElement("span");
-                            span.innerHTML = " &middot; ";
-                            td.appendChild(span);
                         }
                         {
                             const a = document.createElement("a");
@@ -205,7 +200,8 @@ function updateInventory() {
                                 event.preventDefault();
                                 disposeOfGear(category, item.ItemId.$oid);
                             };
-                            a.textContent = "Remove";
+                            a.title = "Remove";
+                            a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
                             td.appendChild(a);
                         }
                         tr.appendChild(td);
@@ -247,13 +243,9 @@ function updateInventory() {
                                     })
                                 );
                             a.target = "_blank";
-                            a.textContent = "View Stats";
+                            a.title = "View Stats";
+                            a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H208c-26.5 0-48-21.5-48-48V80zM0 272c0-26.5 21.5-48 48-48H80c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V272zM368 96h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H368c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48z"/></svg>`;
                             td.appendChild(a);
-                        }
-                        {
-                            const span = document.createElement("span");
-                            span.innerHTML = " &middot; ";
-                            td.appendChild(span);
                         }
                         {
                             const a = document.createElement("a");
@@ -262,7 +254,8 @@ function updateInventory() {
                                 event.preventDefault();
                                 disposeOfGear("Upgrades", item.ItemId.$oid);
                             };
-                            a.textContent = "Remove";
+                            a.title = "Remove";
+                            a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
                             td.appendChild(a);
                         }
                         tr.appendChild(td);
@@ -288,12 +281,9 @@ function updateInventory() {
                                 event.preventDefault();
                                 setFingerprint(item.ItemType, item.ItemId, { lvl: maxRank });
                             };
-                            a.textContent = "Max Rank";
+                            a.title = "Max Rank";
+                            a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"/></svg>`;
                             td.appendChild(a);
-
-                            const span = document.createElement("span");
-                            span.innerHTML = " &middot; ";
-                            td.appendChild(span);
                         }
                         {
                             const a = document.createElement("a");
@@ -302,7 +292,8 @@ function updateInventory() {
                                 event.preventDefault();
                                 disposeOfGear("Upgrades", item.ItemId.$oid);
                             };
-                            a.textContent = "Remove";
+                            a.title = "Remove";
+                            a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
                             td.appendChild(a);
                         }
                         tr.appendChild(td);
@@ -333,13 +324,9 @@ function updateInventory() {
                                 event.preventDefault();
                                 setFingerprint(item.ItemType, item.LastAdded, { lvl: maxRank });
                             };
-                            a.textContent = "Max Rank";
+                            a.title = "Max Rank";
+                            a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"/></svg>`;
                             td.appendChild(a);
-                        }
-                        {
-                            const span = document.createElement("span");
-                            span.innerHTML = " &middot; ";
-                            td.appendChild(span);
                         }
                         {
                             const a = document.createElement("a");
@@ -348,7 +335,8 @@ function updateInventory() {
                                 event.preventDefault();
                                 disposeOfItems("Upgrades", item.ItemType, item.ItemCount);
                             };
-                            a.textContent = "Remove";
+                            a.title = "Remove";
+                            a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
                             td.appendChild(a);
                         }
                         tr.appendChild(td);

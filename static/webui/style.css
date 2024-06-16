@@ -20,3 +20,10 @@ body:not(.logged-in) .nav-item.dropdown,
 body:not(.logged-in) #refresh-note {
     display: none;
 }
+
+td.text-end > a > svg {
+    fill: currentColor;
+    height: 1em;
+    margin-left: 0.5em;
+    margin-bottom: 4px; /* to centre the icon */
+}
