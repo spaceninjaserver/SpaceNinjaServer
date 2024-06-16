@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import { IUpgradesRequest } from "@/src/types/requestTypes";
 import { FocusSchool, IEquipmentDatabase } from "@/src/types/inventoryTypes/commonInventoryTypes";
-import { IMiscItem, IEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IMiscItem, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addMiscItems, getInventory, updateCurrency } from "@/src/services/inventoryService";
 
@@ -28,7 +28,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
         switch (operation.UpgradeRequirement) {
             case "/Lotus/Types/Items/MiscItems/OrokinReactor":
             case "/Lotus/Types/Items/MiscItems/OrokinCatalyst":
-                for (const item of inventory[payload.ItemCategory as IEquipmentKey] as IEquipmentDatabase[]) {
+                for (const item of inventory[payload.ItemCategory as TEquipmentKey] as IEquipmentDatabase[]) {
                     if (item._id.toString() == payload.ItemId.$oid) {
                         item.Features ??= 0;
                         item.Features |= 1;
@@ -38,7 +38,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
                 break;
             case "/Lotus/Types/Items/MiscItems/UtilityUnlocker":
             case "/Lotus/Types/Items/MiscItems/WeaponUtilityUnlocker":
-                for (const item of inventory[payload.ItemCategory as IEquipmentKey] as IEquipmentDatabase[]) {
+                for (const item of inventory[payload.ItemCategory as TEquipmentKey] as IEquipmentDatabase[]) {
                     if (item._id.toString() == payload.ItemId.$oid) {
                         item.Features ??= 0;
                         item.Features |= 2;
@@ -49,7 +49,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
             case "/Lotus/Types/Items/MiscItems/WeaponPrimaryArcaneUnlocker":
             case "/Lotus/Types/Items/MiscItems/WeaponSecondaryArcaneUnlocker":
             case "/Lotus/Types/Items/MiscItems/WeaponMeleeArcaneUnlocker":
-                for (const item of inventory[payload.ItemCategory as IEquipmentKey] as IEquipmentDatabase[]) {
+                for (const item of inventory[payload.ItemCategory as TEquipmentKey] as IEquipmentDatabase[]) {
                     if (item._id.toString() == payload.ItemId.$oid) {
                         item.Features ??= 0;
                         item.Features |= 32;
@@ -61,7 +61,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
             case "/Lotus/Types/Items/MiscItems/FormaUmbra":
             case "/Lotus/Types/Items/MiscItems/FormaAura":
             case "/Lotus/Types/Items/MiscItems/FormaStance":
-                for (const item of inventory[payload.ItemCategory as IEquipmentKey] as IEquipmentDatabase[]) {
+                for (const item of inventory[payload.ItemCategory as TEquipmentKey] as IEquipmentDatabase[]) {
                     if (item._id.toString() == payload.ItemId.$oid) {
                         item.XP = 0;
                         setSlotPolarity(item, operation.PolarizeSlot, operation.PolarizeValue);
@@ -72,7 +72,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
                 }
                 break;
             case "/Lotus/Types/Items/MiscItems/ModSlotUnlocker":
-                for (const item of inventory[payload.ItemCategory as IEquipmentKey] as IEquipmentDatabase[]) {
+                for (const item of inventory[payload.ItemCategory as TEquipmentKey] as IEquipmentDatabase[]) {
                     if (item._id.toString() == payload.ItemId.$oid) {
                         item.ModSlotPurchases ??= 0;
                         item.ModSlotPurchases += 1;
@@ -87,7 +87,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
                 }
                 break;
             case "/Lotus/Types/Items/MiscItems/CustomizationSlotUnlocker":
-                for (const item of inventory[payload.ItemCategory as IEquipmentKey] as IEquipmentDatabase[]) {
+                for (const item of inventory[payload.ItemCategory as TEquipmentKey] as IEquipmentDatabase[]) {
                     if (item._id.toString() == payload.ItemId.$oid) {
                         item.CustomizationSlotPurchases ??= 0;
                         item.CustomizationSlotPurchases += 1;
@@ -103,7 +103,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
                 break;
             case "":
                 console.assert(operation.OperationType == "UOT_SWAP_POLARITY");
-                for (const item of inventory[payload.ItemCategory as IEquipmentKey] as IEquipmentDatabase[]) {
+                for (const item of inventory[payload.ItemCategory as TEquipmentKey] as IEquipmentDatabase[]) {
                     if (item._id.toString() == payload.ItemId.$oid) {
                         for (let i = 0; i != operation.PolarityRemap.length; ++i) {
                             if (operation.PolarityRemap[i].Slot != i) {
