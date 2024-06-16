@@ -58,8 +58,6 @@ const inventoryController: RequestHandler = async (request: Request, response: R
         }
     }
     if (config.completeAllQuests) {
-        inventoryResponse.NodeIntrosCompleted.push("/Lotus/Levels/Cinematics/NewWarIntro/NewWarStageTwo.level");
-        inventoryResponse.ArchwingEnabled = true;
         for (const quest of inventoryResponse.QuestKeys) {
             quest.Completed = true;
             quest.Progress = [
@@ -71,6 +69,11 @@ const inventoryController: RequestHandler = async (request: Request, response: R
                 }
             ];
         }
+
+        inventoryResponse.ArchwingEnabled = true;
+
+        // Skip "Watch The Maker"
+        inventoryResponse.NodeIntrosCompleted.push("/Lotus/Levels/Cinematics/NewWarIntro/NewWarStageTwo.level");
     }
 
     if (config.unlockAllShipDecorations) inventoryResponse.ShipDecorations = allShipDecorations;
