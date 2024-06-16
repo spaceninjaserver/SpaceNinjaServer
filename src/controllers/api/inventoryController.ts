@@ -69,6 +69,11 @@ const inventoryController: RequestHandler = async (request: Request, response: R
                 }
             ];
         }
+
+        inventoryResponse.ArchwingEnabled = true;
+
+        // Skip "Watch The Maker"
+        inventoryResponse.NodeIntrosCompleted.push("/Lotus/Levels/Cinematics/NewWarIntro/NewWarStageTwo.level");
     }
 
     if (config.unlockAllShipDecorations) inventoryResponse.ShipDecorations = allShipDecorations;
