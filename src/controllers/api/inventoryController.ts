@@ -60,6 +60,14 @@ const inventoryController: RequestHandler = async (request: Request, response: R
     if (config.completeAllQuests) {
         for (const quest of inventoryResponse.QuestKeys) {
             quest.Completed = true;
+            quest.Progress = [
+                {
+                    c: 0,
+                    i: false,
+                    m: false,
+                    b: []
+                }
+            ];
         }
     }
 
