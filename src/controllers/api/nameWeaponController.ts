@@ -15,9 +15,13 @@ export const nameWeaponController: RequestHandler = async (req, res) => {
     const item = inventory[req.query.Category as string as TEquipmentKey].find(
         item => item._id.toString() == (req.query.ItemId as string)
     )!;
-    item.ItemName = body.ItemName;
+    if (body.ItemName != "") {
+        item.ItemName = body.ItemName;
+    } else {
+        item.ItemName = undefined;
+    }
     await inventory.save();
     res.json({
-        InventoryChanges: await updateCurrency(15, true, accountId)
+        InventoryChanges: await updateCurrency("webui" in req.query ? 0 : 15, true, accountId)
     });
 };
