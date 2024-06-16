@@ -58,6 +58,7 @@ const inventoryController: RequestHandler = async (request: Request, response: R
         }
     }
     if (config.completeAllQuests) {
+        inventoryResponse.NodeIntrosCompleted.push("/Lotus/Levels/Cinematics/NewWarIntro/NewWarStageTwo.level");
         for (const quest of inventoryResponse.QuestKeys) {
             quest.Completed = true;
             quest.Progress = [
