@@ -7,7 +7,8 @@ const placedDecosSchema = new Schema<IPlacedDecosDatabase>(
     {
         Type: String,
         Pos: [Number],
-        Rot: [Number]
+        Rot: [Number],
+        Scale: Number
     },
     { id: false }
 );

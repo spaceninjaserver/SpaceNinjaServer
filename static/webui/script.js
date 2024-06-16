@@ -95,6 +95,8 @@ window.itemListPromise = new Promise(resolve => {
             "/Lotus/Weapons/Tenno/Pistol/LotusPistol": { name: "Pistol" },
             "/Lotus/Weapons/Tenno/Rifle/LotusRifle": { name: "Rifle" },
             "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun": { name: "Shotgun" },
+            // Modular weapons
+            "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon": { name: "Zaw" },
             // Missing in data sources
             "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/CyoteMod": { name: "Traumatic Peculiar" }
         };
@@ -121,7 +123,7 @@ window.itemListPromise = new Promise(resolve => {
 });
 
 function updateInventory() {
-    const req = $.get("/api/inventory.php?" + window.authz);
+    const req = $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1");
     req.done(data => {
         window.itemListPromise.then(itemMap => {
             document.getElementById("warframe-list").innerHTML = "";
@@ -537,7 +539,7 @@ function doAcquireRiven() {
             })
         }).done(function () {
             // Get riven's assigned id
-            $.get("/api/inventory.php?" + window.authz).done(data => {
+            $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1").done(data => {
                 for (const rawUpgrade of data.RawUpgrades) {
                     if (rawUpgrade.ItemType === uniqueName) {
                         // Add fingerprint to riven

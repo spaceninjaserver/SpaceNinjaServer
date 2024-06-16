@@ -3,6 +3,7 @@ import { getSubstringFromKeyword } from "@/src/helpers/stringHelpers";
 import { addItem, addBooster, updateCurrency, updateSlots } from "@/src/services/inventoryService";
 import { IPurchaseRequest, SlotPurchase } from "@/src/types/purchaseTypes";
 import { logger } from "@/src/utils/logger";
+import { ExportBundles } from "warframe-public-export-plus";
 
 export const getStoreItemCategory = (storeItem: string) => {
     const storeItemString = getSubstringFromKeyword(storeItem, "StoreItems/");
@@ -21,26 +22,12 @@ export const getStoreItemTypesCategory = (typesItem: string) => {
 
 export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountId: string) => {
     logger.debug("purchase request", purchaseRequest);
-    const storeCategory = getStoreItemCategory(purchaseRequest.PurchaseParams.StoreItem);
-    const internalName = purchaseRequest.PurchaseParams.StoreItem.replace("/StoreItems", "");
-    logger.debug(`store category ${storeCategory}`);
 
-    let purchaseResponse;
-    switch (storeCategory) {
-        default:
-            purchaseResponse = await addItem(accountId, internalName);
-            break;
-        case "Types":
-            purchaseResponse = await handleTypesPurchase(
-                internalName,
-                accountId,
-                purchaseRequest.PurchaseParams.Quantity
-            );
-            break;
-        case "Boosters":
-            purchaseResponse = await handleBoostersPurchase(internalName, accountId);
-            break;
-    }
+    const purchaseResponse = await handleStoreItemAcquisition(
+        purchaseRequest.PurchaseParams.StoreItem,
+        accountId,
+        purchaseRequest.PurchaseParams.Quantity
+    );
 
     if (!purchaseResponse) throw new Error("purchase response was undefined");
 
@@ -55,6 +42,43 @@ export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountI
         ...purchaseResponse.InventoryChanges
     };
 
+    return purchaseResponse;
+};
+
+const handleStoreItemAcquisition = async (
+    storeItemName: string,
+    accountId: string,
+    quantity: number
+): Promise<{ InventoryChanges: object }> => {
+    let purchaseResponse = {
+        InventoryChanges: {}
+    };
+    logger.debug(`handling acquision of ${storeItemName}`);
+    if (storeItemName in ExportBundles) {
+        const bundle = ExportBundles[storeItemName];
+        logger.debug("acquiring bundle", bundle);
+        for (const component of bundle.components) {
+            purchaseResponse = {
+                ...purchaseResponse,
+                ...(await handleStoreItemAcquisition(component.typeName, accountId, component.purchaseQuantity))
+            };
+        }
+    } else {
+        const storeCategory = getStoreItemCategory(storeItemName);
+        const internalName = storeItemName.replace("/StoreItems", "");
+        logger.debug(`store category ${storeCategory}`);
+        switch (storeCategory) {
+            default:
+                purchaseResponse = await addItem(accountId, internalName);
+                break;
+            case "Types":
+                purchaseResponse = await handleTypesPurchase(internalName, accountId, quantity);
+                break;
+            case "Boosters":
+                purchaseResponse = await handleBoostersPurchase(internalName, accountId);
+                break;
+        }
+    }
     return purchaseResponse;
 };
 
@@ -122,7 +146,9 @@ const boosterCollection = [
 
 const handleBoostersPurchase = async (boosterStoreName: string, accountId: string) => {
     const match = boosterStoreName.match(/(\d+)Day/);
-    if (!match) return;
+    if (!match) {
+        return { InventoryChanges: {} };
+    }
 
     const extractedDigit = Number(match[1]);
     const ItemType = boosterCollection.find(i =>
