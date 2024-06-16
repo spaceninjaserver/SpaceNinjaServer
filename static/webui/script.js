@@ -96,7 +96,7 @@ window.itemListPromise = new Promise(resolve => {
             "/Lotus/Weapons/Tenno/Rifle/LotusRifle": { name: "Rifle" },
             "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun": { name: "Shotgun" },
             // Modular weapons
-            "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon": {name: "Zaw"},
+            "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon": { name: "Zaw" },
             // Missing in data sources
             "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/CyoteMod": { name: "Traumatic Peculiar" }
         };
