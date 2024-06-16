@@ -1,5 +1,6 @@
 import { IOid } from "@/src/types/commonTypes";
-import { ILoadoutConfigDatabase, ILoadoutDatabase, IEquipmentSelection } from "@/src/types/saveLoadoutTypes";
+import { IEquipmentSelection } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { ILoadoutConfigDatabase, ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
 import { Model, Schema, Types, model } from "mongoose";
 
 const oidSchema = new Schema<IOid>(

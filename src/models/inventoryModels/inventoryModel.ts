@@ -8,7 +8,6 @@ import {
     IBooster,
     IInventoryResponse,
     ISlots,
-    IGenericItem,
     IMailbox,
     IDuviriInfo,
     IPendingRecipe as IPendingRecipeDatabase,
@@ -16,14 +15,13 @@ import {
     ITypeCount,
     IFocusXP,
     IFocusUpgrades,
-    IGenericItem2,
     ITypeXPItem,
     IChallengeProgress,
     IStepSequencer,
     IAffiliation,
     INotePacks,
     ICompletedJobChain,
-    ISeasonChallengeHistory,
+    ISeasonChallenge,
     IPlayerSkills,
     ISettings,
     IInfestedFoundry,
@@ -40,15 +38,14 @@ import {
     ILoreFragmentScan
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
-import { ISuitDatabase } from "@/src/types/inventoryTypes/SuitTypes";
-import { IWeaponDatabase } from "@/src/types/inventoryTypes/weaponTypes";
 import {
     IAbilityOverride,
     IColor,
     IItemConfig,
-    IOperatorConfigClient,
     IOperatorConfigDatabase,
-    IPolarity
+    IPolarity,
+    IEquipmentDatabase,
+    IOperatorConfigClient
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
 
@@ -185,33 +182,35 @@ ItemConfigSchema.set("toJSON", {
     }
 });
 
-//TODO: migrate to one schema for weapons and suits.. and possibly others
-const WeaponSchema = new Schema<IWeaponDatabase>(
-    {
-        ItemType: String,
-        Configs: [ItemConfigSchema],
-        UpgradeVer: Number,
-        XP: Number,
-        Features: Number,
-        Polarized: Number,
-        Polarity: [polaritySchema],
-        FocusLens: String,
-        ModSlotPurchases: Number,
-        CustomizationSlotPurchases: Number,
-        UpgradeType: Schema.Types.Mixed, //todo
-        UpgradeFingerprint: String,
-        ItemName: String,
-        ModularParts: [String],
-        UnlockLevel: Number
-    },
-    { id: false }
-);
+const EquipmentSchema = new Schema<IEquipmentDatabase>({
+    ItemType: String,
+    Configs: [ItemConfigSchema],
+    UpgradeVer: Number,
+    XP: Number,
+    Features: Number,
+    Polarized: Number,
+    Polarity: [polaritySchema],
+    FocusLens: String,
+    ModSlotPurchases: Number,
+    CustomizationSlotPurchases: Number,
+    UpgradeType: Schema.Types.Mixed, //todo
+    UpgradeFingerprint: String,
+    ItemName: String,
+    InfestationDate: Date,
+    InfestationDays: Number,
+    InfestationType: String,
+    ModularParts: [String],
+    UnlockLevel: Number,
+    Expiry: Date,
+    SkillTree: String,
+    ArchonCrystalUpgrades: [Schema.Types.Mixed] //TODO
+});
 
-WeaponSchema.virtual("ItemId").get(function () {
+EquipmentSchema.virtual("ItemId").get(function () {
     return { $oid: this._id.toString() } satisfies IOid;
 });
 
-WeaponSchema.set("toJSON", {
+EquipmentSchema.set("toJSON", {
     virtuals: true,
     transform(_document, returnedObject) {
         delete returnedObject._id;
@@ -248,7 +247,7 @@ RawUpgrades.set("toJSON", {
 });
 
 //TODO: find out what this is
-const upgrqadesSchema = new Schema(
+const upgradesSchema = new Schema(
     {
         UpgradeFingerprint: String,
         ItemType: String
@@ -256,42 +255,11 @@ const upgrqadesSchema = new Schema(
     { id: false }
 );
 
-upgrqadesSchema.virtual("ItemId").get(function () {
+upgradesSchema.virtual("ItemId").get(function () {
     return toOid(this._id);
 });
 
-upgrqadesSchema.set("toJSON", {
-    virtuals: true,
-    transform(_document, returnedObject) {
-        delete returnedObject._id;
-        delete returnedObject.__v;
-    }
-});
-
-//TODO: reduce weapon and suit schemas to one schema if reasonable
-const suitSchema = new Schema<ISuitDatabase>(
-    {
-        ItemType: String,
-        Configs: [ItemConfigSchema],
-        UpgradeVer: Number,
-        XP: Number,
-        InfestationDate: Date,
-        Features: Number,
-        Polarity: [polaritySchema],
-        Polarized: Number,
-        ModSlotPurchases: Number,
-        CustomizationSlotPurchases: Number,
-        FocusLens: String,
-        UnlockLevel: Number
-    },
-    { id: false }
-);
-
-suitSchema.virtual("ItemId").get(function () {
-    return { $oid: this._id.toString() } satisfies IOid;
-});
-
-suitSchema.set("toJSON", {
+upgradesSchema.set("toJSON", {
     virtuals: true,
     transform(_document, returnedObject) {
         delete returnedObject._id;
@@ -315,33 +283,6 @@ const FlavourItemSchema = new Schema(
 );
 
 FlavourItemSchema.set("toJSON", {
-    transform(_document, returnedObject) {
-        delete returnedObject._id;
-        delete returnedObject.__v;
-    }
-});
-
-const GenericItemSchema = new Schema<IGenericItem>(
-    {
-        ItemType: String,
-        Configs: [ItemConfigSchema],
-        UpgradeVer: Number,
-        XP: Number,
-        Features: Number,
-        Polarity: [polaritySchema],
-        Polarized: Number,
-        ModSlotPurchases: Number,
-        CustomizationSlotPurchases: Number
-    },
-    { id: false }
-);
-
-GenericItemSchema.virtual("ItemId").get(function () {
-    return { $oid: this._id.toString() } satisfies IOid;
-});
-
-GenericItemSchema.set("toJSON", {
-    virtuals: true,
     transform(_document, returnedObject) {
         delete returnedObject._id;
         delete returnedObject.__v;
@@ -382,30 +323,6 @@ DuviriInfoSchema.set("toJSON", {
     transform(_document, returnedObject) {
         delete returnedObject.__v;
     }
-});
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const GenericItemSchema2 = new Schema<IGenericItem2>({
-    ItemType: String,
-    ItemName: String,
-    XP: Number,
-    UpgradeVer: Number, //this is probably __v
-    Features: Number,
-    Polarized: Number,
-    CustomizationSlotPurchases: Number,
-    ModSlotPurchases: Number,
-    FocusLens: String,
-    Expiry: Date, //TODO: needs conversion
-    Polarity: [polaritySchema],
-    Configs: [ItemConfigSchema],
-    ModularParts: [String],
-    SkillTree: String,
-    UpgradeType: String,
-    UpgradeFingerprint: String,
-    OffensiveUpgrade: String,
-    DefensiveUpgrade: String,
-    UpgradesExpiry: Date, //TODO: needs conversion
-    ArchonCrystalUpgrades: []
 });
 
 const TypeXPItemSchema = new Schema<ITypeXPItem>(
@@ -475,7 +392,7 @@ const completedJobChainsSchema = new Schema<ICompletedJobChain>(
     { _id: false }
 );
 
-const seasonChallengeHistorySchema = new Schema<ISeasonChallengeHistory>(
+const seasonChallengeHistorySchema = new Schema<ISeasonChallenge>(
     {
         challenge: String,
         id: String
@@ -696,31 +613,31 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Non Upgrade Mods Example:I have 999 item WeaponElectricityDamageMod (only "ItemCount"+"ItemType")
         RawUpgrades: [RawUpgrades],
         //Upgrade Mods\Riven\Arcane Example:"UpgradeFingerprint"+"ItemType"+""
-        Upgrades: [upgrqadesSchema],
+        Upgrades: [upgradesSchema],
 
         //Warframe
-        Suits: [suitSchema],
+        Suits: [EquipmentSchema],
         //Primary    Weapon
-        LongGuns: [WeaponSchema],
+        LongGuns: [EquipmentSchema],
         //Secondary  Weapon
-        Pistols: [WeaponSchema],
+        Pistols: [EquipmentSchema],
         //Melee      Weapon
-        Melee: [WeaponSchema],
+        Melee: [EquipmentSchema],
         //Ability Weapon like Ultimate Mech\Excalibur\Ivara etc
-        SpecialItems: [GenericItemSchema],
+        SpecialItems: [EquipmentSchema],
         //The Mandachord(Octavia) is a step sequencer
         StepSequencers: [StepSequencersSchema],
 
         //Sentinel(like Helios or modular)
-        Sentinels: [Schema.Types.Mixed],
+        Sentinels: [EquipmentSchema],
         //Any /Sentinels/SentinelWeapons/ (like warframe weapon)
-        SentinelWeapons: [Schema.Types.Mixed],
+        SentinelWeapons: [EquipmentSchema],
         //Modular Pets
-        MoaPets: [Schema.Types.Mixed],
+        MoaPets: [EquipmentSchema],
 
         KubrowPetEggs: [Schema.Types.Mixed],
         //Like PowerSuit Cat\Kubrow or etc Pets
-        KubrowPets: [Schema.Types.Mixed],
+        KubrowPets: [EquipmentSchema],
         //Prints   Cat(3 Prints)\Kubrow(2 Prints) Pets
         KubrowPetPrints: [Schema.Types.Mixed],
 
@@ -735,27 +652,27 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         //to use add SummonItem to Consumables+EquippedGear
         //Archwing need Suits+Melee+Guns
-        SpaceSuits: [GenericItemSchema],
-        SpaceMelee: [GenericItemSchema],
-        SpaceGuns: [Schema.Types.Mixed],
+        SpaceSuits: [EquipmentSchema],
+        SpaceMelee: [EquipmentSchema],
+        SpaceGuns: [EquipmentSchema],
         ArchwingEnabled: Boolean,
         //Mech need Suits+SpaceGuns+SpecialItem
-        MechSuits: [suitSchema],
+        MechSuits: [EquipmentSchema],
         ///Restoratives/HoverboardSummon (like Suit)
-        Hoverboards: [Schema.Types.Mixed],
+        Hoverboards: [EquipmentSchema],
 
         //Use Operator\Drifter
         UseAdultOperatorLoadout: Boolean,
         //Operator\Drifter Weapon
-        OperatorAmps: [Schema.Types.Mixed],
+        OperatorAmps: [EquipmentSchema],
         //Operator
         OperatorLoadOuts: [operatorConfigSchema],
         //Drifter
         AdultOperatorLoadOuts: [operatorConfigSchema],
-        DrifterMelee: [GenericItemSchema],
-        DrifterGuns: [GenericItemSchema],
+        DrifterMelee: [EquipmentSchema],
+        DrifterGuns: [EquipmentSchema],
         //ErsatzHorsePowerSuit
-        Horses: [GenericItemSchema],
+        Horses: [EquipmentSchema],
 
         //LandingCraft like Liset
         Ships: { type: [Schema.Types.ObjectId], ref: "Ships" },
@@ -763,7 +680,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         ShipDecorations: [typeCountSchema],
 
         //RailJack Setting(Mods,Skin,Weapon,etc)
-        CrewShipHarnesses: [Schema.Types.Mixed],
+        CrewShipHarnesses: [EquipmentSchema],
         //Railjack/Components(https://warframe.fandom.com/wiki/Railjack/Components)
         CrewShipRawSalvage: [Schema.Types.Mixed],
 
@@ -790,7 +707,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         FlavourItems: [FlavourItemSchema],
 
         //Lunaro Weapon
-        Scoops: [GenericItemSchema],
+        Scoops: [EquipmentSchema],
 
         //Mastery Rank*(Need item XPInfo to rank up)
         PlayerLevel: Number,
@@ -907,7 +824,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         InvasionChainProgress: [Schema.Types.Mixed],
 
         //https://warframe.fandom.com/wiki/Parazon
-        DataKnives: [GenericItemSchema],
+        DataKnives: [EquipmentSchema],
 
         //CorpusLich or GrineerLich
         NemesisAbandonedRewards: [String],
@@ -1000,24 +917,24 @@ inventorySchema.set("toJSON", {
 
 // type overwrites for subdocuments/subdocument arrays
 type InventoryDocumentProps = {
-    Suits: Types.DocumentArray<ISuitDatabase>;
-    LongGuns: Types.DocumentArray<IWeaponDatabase>;
-    Pistols: Types.DocumentArray<IWeaponDatabase>;
-    Melee: Types.DocumentArray<IWeaponDatabase>;
+    Suits: Types.DocumentArray<IEquipmentDatabase>;
+    LongGuns: Types.DocumentArray<IEquipmentDatabase>;
+    Pistols: Types.DocumentArray<IEquipmentDatabase>;
+    Melee: Types.DocumentArray<IEquipmentDatabase>;
     FlavourItems: Types.DocumentArray<IFlavourItem>;
     RawUpgrades: Types.DocumentArray<IRawUpgrade>;
     Upgrades: Types.DocumentArray<ICrewShipSalvagedWeaponSkin>;
     MiscItems: Types.DocumentArray<IMiscItem>;
     Boosters: Types.DocumentArray<IBooster>;
     OperatorLoadOuts: Types.DocumentArray<IOperatorConfigClient>;
-    SpecialItems: Types.DocumentArray<IGenericItem>;
+    SpecialItems: Types.DocumentArray<IEquipmentDatabase>;
     AdultOperatorLoadOuts: Types.DocumentArray<IOperatorConfigClient>; //TODO: this should still contain _id
-    MechSuits: Types.DocumentArray<ISuitDatabase>;
-    Scoops: Types.DocumentArray<IGenericItem>;
-    DataKnives: Types.DocumentArray<IGenericItem>;
-    DrifterMelee: Types.DocumentArray<IGenericItem>;
-    Sentinels: Types.DocumentArray<IWeaponDatabase>;
-    Horses: Types.DocumentArray<IGenericItem>;
+    MechSuits: Types.DocumentArray<IEquipmentDatabase>;
+    Scoops: Types.DocumentArray<IEquipmentDatabase>;
+    DataKnives: Types.DocumentArray<IEquipmentDatabase>;
+    DrifterMelee: Types.DocumentArray<IEquipmentDatabase>;
+    Sentinels: Types.DocumentArray<IEquipmentDatabase>;
+    Horses: Types.DocumentArray<IEquipmentDatabase>;
     PendingRecipes: Types.DocumentArray<IPendingRecipeDatabase>;
 };
 

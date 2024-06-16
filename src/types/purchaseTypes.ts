@@ -1,6 +1,5 @@
-import { ISuitClient } from "@/src/types/inventoryTypes/SuitTypes";
 import { IFlavourItem } from "@/src/types/inventoryTypes/inventoryTypes";
-import { IWeaponClient } from "@/src/types/inventoryTypes/weaponTypes";
+import { IEquipmentClient } from "./inventoryTypes/commonInventoryTypes";
 
 export interface IPurchaseRequest {
     PurchaseParams: IPurchaseParams;
@@ -23,11 +22,11 @@ export interface IPurchaseResponse {
         SuitBin?: IBinChanges;
         WeaponBin?: IBinChanges;
         MechBin?: IBinChanges;
-        MechSuits?: ISuitClient[];
-        Suits?: ISuitClient[];
-        LongGuns?: IWeaponClient[];
-        Pistols?: IWeaponClient[];
-        Melee?: IWeaponClient[];
+        MechSuits?: IEquipmentClient[];
+        Suits?: IEquipmentClient[];
+        LongGuns?: IEquipmentClient[];
+        Pistols?: IEquipmentClient[];
+        Melee?: IEquipmentClient[];
         PremiumCredits?: number;
         PremiumCreditsFree?: number;
         RegularCredits?: number;

@@ -2,9 +2,7 @@ import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import new_inventory from "@/static/fixed_responses/postTutorialInventory.json";
 import { config } from "@/src/services/configService";
 import { Types } from "mongoose";
-import { ISuitClient } from "@/src/types/inventoryTypes/SuitTypes";
 import { SlotNames } from "@/src/types/purchaseTypes";
-import { IWeaponClient } from "@/src/types/inventoryTypes/weaponTypes";
 import {
     IChallengeProgress,
     IConsumable,
@@ -13,7 +11,7 @@ import {
     IMiscItem,
     IMission,
     IRawUpgrade,
-    ISeasonChallengeHistory,
+    ISeasonChallenge,
     ITypeCount,
     InventorySlot
 } from "@/src/types/inventoryTypes/inventoryTypes";
@@ -27,6 +25,7 @@ import {
 import { logger } from "@/src/utils/logger";
 import { WeaponTypeInternal, getWeaponType, getExalted } from "@/src/services/itemDataService";
 import { ISyndicateSacrifice, ISyndicateSacrificeResponse } from "../types/syndicateTypes";
+import { IEquipmentClient } from "../types/inventoryTypes/commonInventoryTypes";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
@@ -237,7 +236,7 @@ export const addSentinel = async (sentinelName: string, accountId: string) => {
     return changedInventory.Sentinels[sentinelIndex - 1].toJSON();
 };
 
-export const addPowerSuit = async (powersuitName: string, accountId: string): Promise<ISuitClient> => {
+export const addPowerSuit = async (powersuitName: string, accountId: string): Promise<IEquipmentClient> => {
     const specialItems = getExalted(powersuitName);
     if (specialItems != false) {
         for await (const specialItem of specialItems) {
@@ -386,7 +385,7 @@ export const addWeapon = async (
     weaponType: WeaponTypeInternal,
     weaponName: string,
     accountId: string
-): Promise<IWeaponClient> => {
+): Promise<IEquipmentClient> => {
     const inventory = await getInventory(accountId);
 
     let weaponIndex;
@@ -418,7 +417,7 @@ export const addCustomization = async (customizatonName: string, accountId: stri
 
 const addGearExpByCategory = (
     inventory: IInventoryDatabaseDocument,
-    gearArray: ISuitClient[] | IWeaponClient[] | undefined,
+    gearArray: IEquipmentClient[] | undefined,
     categoryName: "Pistols" | "LongGuns" | "Melee" | "Suits"
 ) => {
     const category = inventory[categoryName];
@@ -534,7 +533,7 @@ export const updateChallengeProgress = async (challenges: IUpdateChallengeProgre
 
 export const addSeasonalChallengeHistory = (
     inventory: IInventoryDatabaseDocument,
-    itemsArray: ISeasonChallengeHistory[] | undefined
+    itemsArray: ISeasonChallenge[] | undefined
 ) => {
     const category = inventory.SeasonChallengeHistory;
 
