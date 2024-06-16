@@ -1,7 +1,7 @@
 import { IOid } from "@/src/types/commonTypes";
 import { IItemConfig, IOperatorConfigClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { Types } from "mongoose";
-import { ILoadoutConfig } from "./inventoryTypes/inventoryTypes";
+import { ILoadoutConfigClient } from "./inventoryTypes/inventoryTypes";
 
 export interface ISaveLoadoutRequest {
     LoadOuts: ILoadoutClient;
@@ -68,8 +68,8 @@ export interface ILoadoutDatabase {
 }
 
 export interface ILoadoutEntry {
-    [key: string]: ILoadoutConfig;
+    [key: string]: ILoadoutConfigClient;
 }
-export interface ILoadoutConfigDatabase extends Omit<ILoadoutConfig, "ItemId"> {
+export interface ILoadoutConfigDatabase extends Omit<ILoadoutConfigClient, "ItemId"> {
     _id: Types.ObjectId;
 }

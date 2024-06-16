@@ -582,20 +582,20 @@ export interface ILibraryPersonalProgress {
 
 //this needs to be checked against ILoadoutDatabase
 export interface ILoadOutPresets {
-    NORMAL: ILoadoutConfig[];
-    NORMAL_PVP: ILoadoutConfig[];
-    LUNARO: ILoadoutConfig[];
-    ARCHWING: ILoadoutConfig[];
-    SENTINEL: ILoadoutConfig[];
-    OPERATOR: ILoadoutConfig[];
-    GEAR: ILoadoutConfig[];
-    KDRIVE: ILoadoutConfig[];
-    DATAKNIFE: ILoadoutConfig[];
-    MECH: ILoadoutConfig[];
-    OPERATOR_ADULT: ILoadoutConfig[];
+    NORMAL: ILoadoutConfigClient[];
+    NORMAL_PVP: ILoadoutConfigClient[];
+    LUNARO: ILoadoutConfigClient[];
+    ARCHWING: ILoadoutConfigClient[];
+    SENTINEL: ILoadoutConfigClient[];
+    OPERATOR: ILoadoutConfigClient[];
+    GEAR: ILoadoutConfigClient[];
+    KDRIVE: ILoadoutConfigClient[];
+    DATAKNIFE: ILoadoutConfigClient[];
+    MECH: ILoadoutConfigClient[];
+    OPERATOR_ADULT: ILoadoutConfigClient[];
 }
 
-export interface ILoadoutConfig {
+export interface ILoadoutConfigClient {
     FocusSchool?: FocusSchool;
     PresetIcon?: string;
     Favorite?: boolean;
