@@ -524,7 +524,7 @@ function doAcquireMiscItems() {
                 MiscItems: [
                     {
                         ItemType: uniqueName,
-                        ItemCount: $("#miscitem-count").val()
+                        ItemCount: parseInt($("#miscitem-count").val())
                     }
                 ]
             })
