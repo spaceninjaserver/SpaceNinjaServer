@@ -37,6 +37,7 @@ interface IConfig {
     unlockAllFlavourItems?: boolean;
     unlockAllSkins?: boolean;
     spoofMasteryRank?: number;
+    useStaticWorldState?: boolean;
 }
 
 interface ILoggerConfig {
