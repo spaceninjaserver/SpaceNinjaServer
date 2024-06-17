@@ -112,7 +112,7 @@ export interface ILiteSortie extends IBaseWorldStateObject {
     Reward: string;
     Seed: number;
     Boss: string;
-    Missions: ISortieMission[]
+    Missions: ISortieMission[];
 }
 
 export interface IJob {
