@@ -889,8 +889,7 @@
           "Expiry": { "$date": { "$numberLong": "1717696800000" } },
           "PreviewHiddenUntil": { "$date": { "$numberLong": "1714068000000" } },
           "FeaturedItem": "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVEquinoxWukongPrimeDualPack"
-        },
-        { "Expiry": { "$date": { "$numberLong": "1720116000000" } }, "PreviewHiddenUntil": { "$date": { "$numberLong": "1716487200000" } } }
+        }
       ]
     }
   ],

@@ -22,5 +22,6 @@
   "unlockAllFlavourItems": true,
   "unlockAllSkins": true,
   "universalPolarityEverywhere": true,
+  "useStaticWorldState": true,
   "spoofMasteryRank": -1
 }
