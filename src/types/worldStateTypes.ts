@@ -3,17 +3,17 @@ import { IMongoDate, IOid } from "@/src/types/commonTypes";
 export interface IMessage {
     LanguageCode?: string;
     Message: string;
-};
+}
 
 export interface ILink {
     LanguageCode?: string;
     Link: string;
-};
+}
 
 export interface IBaseWorldStateObject {
     Activation: IMongoDate;
     Expiry: IMongoDate;
-    _id?: IOid
+    _id?: IOid;
 }
 
 export interface IReward {
@@ -67,7 +67,7 @@ export interface IEvent {
     HideEndDateModifier?: boolean;
     Date?: IMongoDate;
     _id?: IOid;
-};
+}
 
 export interface IGoal extends IBaseWorldStateObject {
     Node: string;
@@ -87,7 +87,7 @@ export interface IGoal extends IBaseWorldStateObject {
     Reward: IReward;
     InterimGoals: number[];
     InterimRewards: IReward[];
-};
+}
 
 export interface IAlert extends IBaseWorldStateObject {
     MissionInfo: IMission;
@@ -99,7 +99,7 @@ export interface ISortieMission {
     missionType: string;
     modifierType?: string;
     node: string;
-    tileset?: string
+    tileset?: string;
 }
 
 export interface ISortie extends Omit<ILiteSortie, "Missions"> {
@@ -112,7 +112,7 @@ export interface ILiteSortie extends IBaseWorldStateObject {
     Reward: string;
     Seed: number;
     Boss: String;
-    Missions: ISortieMission[]
+    Missions: ISortieMission[];
 }
 
 export interface IJob {
@@ -163,7 +163,6 @@ export interface IFlashSale {
     BogoGet: number;
 }
 
-
 export interface IInGameMarket {
     LandingPage: ILandingPage;
 }
@@ -203,8 +202,8 @@ export interface IInvasionMissionInfo {
 export interface INodeOverride {
     Activation?: IMongoDate;
     Expiry?: IMongoDate;
-    Node: string,
-    Faction?: string,
+    Node: string;
+    Faction?: string;
     CustomNpcEncounters?: string[];
     LevelOverride?: string;
 }
@@ -228,7 +227,6 @@ export interface IVoidTraderScheduleInfo extends Omit<IBaseWorldStateObject, "Ac
     PreviewHiddenUntil?: IMongoDate;
     FeaturedItem?: string;
 }
-
 
 export interface IVoidStorm extends IBaseWorldStateObject {
     Node: string;
@@ -267,7 +265,6 @@ export interface IPVPChallengeInstanceParam {
     n: string;
     v: number;
 }
-
 
 export interface IEndlessXpChoice {
     Category: string;
@@ -327,7 +324,7 @@ export interface IWorldState {
     FeaturedGuilds?: IFeaturedGuild[];
     SeasonInfo?: ISeasonInfo;
     Tmp?: string;
-    
+
     // Unkown
     // HubEvent?: [];
     // PersistentEnemies?: [];
