@@ -111,7 +111,7 @@ export interface ISortie extends Omit<ILiteSortie, "Missions"> {
 export interface ILiteSortie extends IBaseWorldStateObject {
     Reward: string;
     Seed: number;
-    Boss: String;
+    Boss: string;
     Missions: ISortieMission[]
 }
 
