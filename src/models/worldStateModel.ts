@@ -1,5 +1,42 @@
 import { model, Schema } from "mongoose";
-import { IEvent, IFlashSale, IJob, ILink, IMessage, IPVPChallengeInstance, ICategory, IPVPChallengeInstanceParam, IWorldState, IMission, IAlert, ICountedItems, IReward, IBaseWorldStateObject, ISortie, ILiteSortie, ISortieMission, ISyndicateMission, IActiveMission, IGlobalUpgrade, IInGameMarket, ILandingPage, IInvasion, IInvasionMissionInfo, INodeOverride, IVoidTrader, IVoidTraderItem, IVoidTraderScheduleInfo, IVoidStorm, IPrimeAccessAvailability, IDailyDeal, ILibraryInfo, IEndlessXpChoice, IFeaturedGuild, IActiveChallenge, ISeasonInfo } from "@/src/types/worldStateTypes";
+import {
+    IEvent,
+    IFlashSale,
+    IJob,
+    ILink,
+    IMessage,
+    IPVPChallengeInstance,
+    ICategory,
+    IPVPChallengeInstanceParam,
+    IWorldState,
+    IMission,
+    IAlert,
+    ICountedItems,
+    IReward,
+    IBaseWorldStateObject,
+    ISortie,
+    ILiteSortie,
+    ISortieMission,
+    ISyndicateMission,
+    IActiveMission,
+    IGlobalUpgrade,
+    IInGameMarket,
+    ILandingPage,
+    IInvasion,
+    IInvasionMissionInfo,
+    INodeOverride,
+    IVoidTrader,
+    IVoidTraderItem,
+    IVoidTraderScheduleInfo,
+    IVoidStorm,
+    IPrimeAccessAvailability,
+    IDailyDeal,
+    ILibraryInfo,
+    IEndlessXpChoice,
+    IFeaturedGuild,
+    IActiveChallenge,
+    ISeasonInfo
+} from "@/src/types/worldStateTypes";
 
 const messageSchema = new Schema<IMessage>(
     {
@@ -17,27 +54,24 @@ const linkSchema = new Schema<ILink>(
     { _id: false }
 );
 
-const EventSchema = new Schema<IEvent>(
-    {
-        Messages: [messageSchema],
-        Prop: String,
-        Links: [linkSchema],
-        Date: Date,
-        Icon: String,
-        EventStartDate: Date,
-        EventEndDate:  Date,
-        ImageUrl: String,
-        Priority: Boolean,
-        MobileOnly: Boolean,
-        HideEndDateModifier: Boolean,
-        Community: Boolean
-    }
-);
-
+const EventSchema = new Schema<IEvent>({
+    Messages: [messageSchema],
+    Prop: String,
+    Links: [linkSchema],
+    Date: Date,
+    Icon: String,
+    EventStartDate: Date,
+    EventEndDate: Date,
+    ImageUrl: String,
+    Priority: Boolean,
+    MobileOnly: Boolean,
+    HideEndDateModifier: Boolean,
+    Community: Boolean
+});
 
 EventSchema.set("toJSON", {
     transform(_document, returnedObject) {
-        returnedObject._id = { $oid: returnedObject._id.toString()};
+        returnedObject._id = { $oid: returnedObject._id.toString() };
     }
 });
 
@@ -54,10 +88,10 @@ const RewardSchema = new Schema<IReward>(
         credits: Number,
         xp: Number,
         items: [String],
-        countedItems: [CountedItemsSchema],
+        countedItems: [CountedItemsSchema]
     },
     { _id: false }
-)
+);
 
 const MissionSchema = new Schema<IMission>(
     {
@@ -82,7 +116,7 @@ const MissionSchema = new Schema<IMission>(
         vipAgent: Boolean,
         leadersAlwaysAllowed: Boolean,
         goalTag: String,
-        levelAuras: [String],
+        levelAuras: [String]
     },
     { _id: false }
 );
@@ -97,7 +131,7 @@ const AlertSchema = new Schema<IAlert>({
 
 AlertSchema.set("toJSON", {
     transform(_document, returnedObject) {
-        returnedObject._id = { $oid: returnedObject._id.toString()};
+        returnedObject._id = { $oid: returnedObject._id.toString() };
     }
 });
 
@@ -110,7 +144,7 @@ const SortieMissionSchema = new Schema<ISortieMission>({
 
 SortieMissionSchema.set("toJSON", {
     transform(_document, returnedObject) {
-        returnedObject._id = { $oid: returnedObject._id.toString()};
+        returnedObject._id = { $oid: returnedObject._id.toString() };
     }
 });
 
@@ -125,7 +159,7 @@ const LiteSortieSchema = new Schema<ILiteSortie>({
 
 LiteSortieSchema.set("toJSON", {
     transform(_document, returnedObject) {
-        returnedObject._id = { $oid: returnedObject._id.toString()};
+        returnedObject._id = { $oid: returnedObject._id.toString() };
     }
 });
 
@@ -141,7 +175,7 @@ const SortieSchema = new Schema<ISortie>({
 
 SortieSchema.set("toJSON", {
     transform(_document, returnedObject) {
-        returnedObject._id = { $oid: returnedObject._id.toString()};
+        returnedObject._id = { $oid: returnedObject._id.toString() };
     }
 });
 
@@ -172,10 +206,9 @@ const SyndicateMissionSchema = new Schema<ISyndicateMission>({
 
 SyndicateMissionSchema.set("toJSON", {
     transform(_document, returnedObject) {
-        returnedObject._id = { $oid: returnedObject._id.toString()};
+        returnedObject._id = { $oid: returnedObject._id.toString() };
     }
 });
-
 
 const ActiveMissionSchema = new Schema<IActiveMission>({
     Activation: Date,
@@ -190,7 +223,7 @@ const ActiveMissionSchema = new Schema<IActiveMission>({
 
 ActiveMissionSchema.set("toJSON", {
     transform(_document, returnedObject) {
-        returnedObject._id = { $oid: returnedObject._id.toString()};
+        returnedObject._id = { $oid: returnedObject._id.toString() };
     }
 });
 
@@ -204,7 +237,7 @@ const GlobalUpgradeSchema = new Schema<IGlobalUpgrade>({
 
 GlobalUpgradeSchema.set("toJSON", {
     transform(_document, returnedObject) {
-        returnedObject._id = { $oid: returnedObject._id.toString()};
+        returnedObject._id = { $oid: returnedObject._id.toString() };
     }
 });
 
@@ -248,7 +281,7 @@ const InGameMarketSchema = new Schema<IInGameMarket>(
         LandingPage: LandingPageSchema
     },
     { _id: false }
-)
+);
 
 const InvasionMissionInfoSchema = new Schema<IInvasionMissionInfo>(
     {
@@ -256,7 +289,7 @@ const InvasionMissionInfoSchema = new Schema<IInvasionMissionInfo>(
         faction: String
     },
     { _id: false }
-)
+);
 
 const InvasionSchema = new Schema<IInvasion>({
     Activation: Date,
@@ -271,12 +304,12 @@ const InvasionSchema = new Schema<IInvasion>({
     AttackerReward: RewardSchema,
     AttackerMissionInfo: InvasionMissionInfoSchema,
     DefenderReward: RewardSchema,
-    DefenderMissionInfo: InvasionMissionInfoSchema,
+    DefenderMissionInfo: InvasionMissionInfoSchema
 });
 
 InvasionSchema.set("toJSON", {
     transform(_document, returnedObject) {
-        returnedObject._id = { $oid: returnedObject._id.toString()};
+        returnedObject._id = { $oid: returnedObject._id.toString() };
     }
 });
 
@@ -286,12 +319,12 @@ const NodeOverrideSchema = new Schema<INodeOverride>({
     Node: String,
     Faction: String,
     CustomNpcEncounters: [String],
-    LevelOverride: String,
+    LevelOverride: String
 });
 
 NodeOverrideSchema.set("toJSON", {
     transform(_document, returnedObject) {
-        returnedObject._id = { $oid: returnedObject._id.toString()};
+        returnedObject._id = { $oid: returnedObject._id.toString() };
     }
 });
 
@@ -313,22 +346,20 @@ const VoidTraderScheduleInfoSchema = new Schema<IVoidTraderScheduleInfo>(
     { _id: false }
 );
 
-const VoidTraderSchema = new Schema<IVoidTrader>(
-    {
-        Activation: Date,
-        Expiry: Date,
-        Character: String,
-        Node: String,
-        Completed: Boolean,
-        Manifest: [VoidTraderItemSchema],
-        EvergreenManifest: [VoidTraderItemSchema],
-        ScheduleInfo: [VoidTraderScheduleInfoSchema],
-    }
-);
+const VoidTraderSchema = new Schema<IVoidTrader>({
+    Activation: Date,
+    Expiry: Date,
+    Character: String,
+    Node: String,
+    Completed: Boolean,
+    Manifest: [VoidTraderItemSchema],
+    EvergreenManifest: [VoidTraderItemSchema],
+    ScheduleInfo: [VoidTraderScheduleInfoSchema]
+});
 
 VoidTraderSchema.set("toJSON", {
     transform(_document, returnedObject) {
-        returnedObject._id = { $oid: returnedObject._id.toString()};
+        returnedObject._id = { $oid: returnedObject._id.toString() };
     }
 });
 
@@ -341,7 +372,7 @@ const VoidStormSchema = new Schema<IVoidStorm>({
 
 VoidStormSchema.set("toJSON", {
     transform(_document, returnedObject) {
-        returnedObject._id = { $oid: returnedObject._id.toString()};
+        returnedObject._id = { $oid: returnedObject._id.toString() };
     }
 });
 
@@ -381,22 +412,20 @@ const PVPChallengeInstanceParam = new Schema<IPVPChallengeInstanceParam>(
     { _id: false }
 );
 
-const PVPChallengeInstanceSchema = new Schema<IPVPChallengeInstance>(
-    {
-        challengeTypeRefID: String,
-        startDate: Date,
-        endDate: Date,
-        params: [PVPChallengeInstanceParam],
-        isGenerated: Boolean,
-        PVPMode: String,
-        subChallenges: [Schema.Types.ObjectId],
-        Category: String
-    }
-);
+const PVPChallengeInstanceSchema = new Schema<IPVPChallengeInstance>({
+    challengeTypeRefID: String,
+    startDate: Date,
+    endDate: Date,
+    params: [PVPChallengeInstanceParam],
+    isGenerated: Boolean,
+    PVPMode: String,
+    subChallenges: [Schema.Types.ObjectId],
+    Category: String
+});
 
 PVPChallengeInstanceSchema.set("toJSON", {
     transform(_document, returnedObject) {
-        returnedObject._id = { $oid: returnedObject._id.toString()};
+        returnedObject._id = { $oid: returnedObject._id.toString() };
     }
 });
 
@@ -418,7 +447,7 @@ const FeaturedGuildShema = new Schema<IFeaturedGuild>({
 
 FeaturedGuildShema.set("toJSON", {
     transform(_document, returnedObject) {
-        returnedObject._id = { $oid: returnedObject._id.toString()};
+        returnedObject._id = { $oid: returnedObject._id.toString() };
     }
 });
 
@@ -431,7 +460,7 @@ const ActiveChallengeSchema = new Schema<IActiveChallenge>({
 
 FeaturedGuildShema.set("toJSON", {
     transform(_document, returnedObject) {
-        returnedObject._id = { $oid: returnedObject._id.toString()};
+        returnedObject._id = { $oid: returnedObject._id.toString() };
     }
 });
 
@@ -442,37 +471,36 @@ const SeasonInfoSchema = new Schema<ISeasonInfo>(
         Phase: Number,
         Params: String,
         ActiveChallenges: [ActiveChallengeSchema]
-    }, { _id: false }
+    },
+    { _id: false }
 );
 
-const WorldStateSchema = new Schema<IWorldState>(
-    {
-        Events: [EventSchema],
-        // Goals: [GoalSchema],
-        Alerts: [AlertSchema],
-        Sorties: [SortieSchema],
-        LiteSorties: [LiteSortieSchema],
-        SyndicateMissions: [SyndicateMissionSchema],
-        ActiveMissions: [ActiveMissionSchema],
-        GlobalUpgrades: [GlobalUpgradeSchema],
-        FlashSales: [FlashSaleSchema],
-        InGameMarket: InGameMarketSchema,
-        Invasions: [InvasionSchema],
-        NodeOverrides: [NodeOverrideSchema],
-        VoidTraders: [VoidTraderSchema],
-        PrimeVaultTraders: [VoidTraderSchema],
-        VoidStorms: [VoidStormSchema],
-        PrimeAccessAvailability: PrimeAccessAvailabilitySchema,
-        DailyDeals: [DailyDealSchema],
-        LibraryInfo: LibraryInfoSchema,
-        PVPChallengeInstances: [PVPChallengeInstanceSchema],
-        ProjectPct: [Number],
-        EndlessXpChoices: [EndlessXpChoiceSchema],
-        FeaturedGuilds: [FeaturedGuildShema],
-        SeasonInfo: SeasonInfoSchema,
-        Tmp: String
-    }
-);
+const WorldStateSchema = new Schema<IWorldState>({
+    Events: [EventSchema],
+    // Goals: [GoalSchema],
+    Alerts: [AlertSchema],
+    Sorties: [SortieSchema],
+    LiteSorties: [LiteSortieSchema],
+    SyndicateMissions: [SyndicateMissionSchema],
+    ActiveMissions: [ActiveMissionSchema],
+    GlobalUpgrades: [GlobalUpgradeSchema],
+    FlashSales: [FlashSaleSchema],
+    InGameMarket: InGameMarketSchema,
+    Invasions: [InvasionSchema],
+    NodeOverrides: [NodeOverrideSchema],
+    VoidTraders: [VoidTraderSchema],
+    PrimeVaultTraders: [VoidTraderSchema],
+    VoidStorms: [VoidStormSchema],
+    PrimeAccessAvailability: PrimeAccessAvailabilitySchema,
+    DailyDeals: [DailyDealSchema],
+    LibraryInfo: LibraryInfoSchema,
+    PVPChallengeInstances: [PVPChallengeInstanceSchema],
+    ProjectPct: [Number],
+    EndlessXpChoices: [EndlessXpChoiceSchema],
+    FeaturedGuilds: [FeaturedGuildShema],
+    SeasonInfo: SeasonInfoSchema,
+    Tmp: String
+});
 
 WorldStateSchema.set("toJSON", {
     transform(_document, returnedObject) {
