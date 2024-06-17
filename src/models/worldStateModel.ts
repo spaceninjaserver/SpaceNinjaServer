@@ -13,7 +13,6 @@ import {
     IAlert,
     ICountedItems,
     IReward,
-    IBaseWorldStateObject,
     ISortie,
     ILiteSortie,
     ISortieMission,
