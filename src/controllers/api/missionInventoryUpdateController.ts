@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import { missionInventoryUpdate } from "@/src/services/inventoryService";
-import { combineRewardAndLootInventory, getRewards } from "@/src/services/missionInventoryUpdateService ";
+import { combineRewardAndLootInventory, getRewards } from "@/src/services/missionInventoryUpdateService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { IMissionInventoryUpdateRequest } from "@/src/types/requestTypes";
