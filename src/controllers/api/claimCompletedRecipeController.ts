@@ -48,6 +48,9 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
         res.json({});
     } else {
         logger.debug("Claiming Recipe", { buildable, pendingRecipe });
+        if (buildable.consumeOnUse) {
+            // TODO: Remove one instance of this recipe, and include that in InventoryChanges.
+        }
         let currencyChanges = {};
         if (req.query.rush && buildable.skipBuildTimePrice) {
             currencyChanges = await updateCurrency(buildable.skipBuildTimePrice, true, accountId);
@@ -55,7 +58,7 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
         res.json({
             InventoryChanges: {
                 ...currencyChanges,
-                ...(await addItem(accountId, buildable.uniqueName, buildable.buildQuantity)).InventoryChanges
+                ...(await addItem(accountId, buildable.resultType, buildable.num)).InventoryChanges
             }
         });
     }

@@ -1,8 +1,15 @@
 import { getIndexAfter } from "@/src/helpers/stringHelpers";
 import { logger } from "@/src/utils/logger";
-import Items, { Buildable, Category, MinimalItem, Warframe, Weapon } from "warframe-items";
+import Items, { Category, MinimalItem, Warframe, Weapon } from "warframe-items";
 import badItems from "@/static/json/exclude-mods.json";
-import { dict_en, ExportWarframes, ExportWeapons, IPowersuit } from "warframe-public-export-plus";
+import {
+    dict_en,
+    ExportRecipes,
+    ExportWarframes,
+    ExportWeapons,
+    IPowersuit,
+    IRecipe
+} from "warframe-public-export-plus";
 
 export type MinWarframe = Omit<Warframe, "patchlogs">;
 export type MinWeapon = Omit<Weapon, "patchlogs">;
@@ -100,13 +107,9 @@ export const blueprintNames = Object.fromEntries(
         .map(name => [name, craftNames[name]])
 );
 
-const buildables = items.filter(item => !!(item as Buildable).components);
-
-export const getItemByBlueprint = (uniqueName: string): (MinItem & Buildable) | undefined => {
-    const item = buildables.find(item =>
-        (item as Buildable).components?.find(component => component.uniqueName === uniqueName)
-    );
-    return item;
+// Gets a recipe by its uniqueName
+export const getItemByBlueprint = (uniqueName: string): IRecipe | undefined => {
+    return ExportRecipes[uniqueName];
 };
 
 export const getExalted = (uniqueName: string) => {
