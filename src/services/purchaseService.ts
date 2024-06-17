@@ -3,7 +3,7 @@ import { getSubstringFromKeyword } from "@/src/helpers/stringHelpers";
 import { addItem, addBooster, updateCurrency, updateSlots } from "@/src/services/inventoryService";
 import { IPurchaseRequest, SlotPurchase } from "@/src/types/purchaseTypes";
 import { logger } from "@/src/utils/logger";
-import { ExportBundles } from "warframe-public-export-plus";
+import { ExportBundles, TRarity } from "warframe-public-export-plus";
 
 export const getStoreItemCategory = (storeItem: string) => {
     const storeItemString = getSubstringFromKeyword(storeItem, "StoreItems/");
@@ -26,7 +26,8 @@ export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountI
     const purchaseResponse = await handleStoreItemAcquisition(
         purchaseRequest.PurchaseParams.StoreItem,
         accountId,
-        purchaseRequest.PurchaseParams.Quantity
+        purchaseRequest.PurchaseParams.Quantity,
+        "COMMON"
     );
 
     if (!purchaseResponse) throw new Error("purchase response was undefined");
@@ -48,7 +49,8 @@ export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountI
 const handleStoreItemAcquisition = async (
     storeItemName: string,
     accountId: string,
-    quantity: number
+    quantity: number,
+    durability: TRarity
 ): Promise<{ InventoryChanges: object }> => {
     let purchaseResponse = {
         InventoryChanges: {}
@@ -60,7 +62,12 @@ const handleStoreItemAcquisition = async (
         for (const component of bundle.components) {
             purchaseResponse = {
                 ...purchaseResponse,
-                ...(await handleStoreItemAcquisition(component.typeName, accountId, component.purchaseQuantity))
+                ...(await handleStoreItemAcquisition(
+                    component.typeName,
+                    accountId,
+                    component.purchaseQuantity,
+                    component.durability
+                ))
             };
         }
     } else {
@@ -75,7 +82,7 @@ const handleStoreItemAcquisition = async (
                 purchaseResponse = await handleTypesPurchase(internalName, accountId, quantity);
                 break;
             case "Boosters":
-                purchaseResponse = await handleBoostersPurchase(internalName, accountId);
+                purchaseResponse = await handleBoostersPurchase(internalName, accountId, durability);
                 break;
         }
     }
@@ -144,17 +151,21 @@ const boosterCollection = [
     "/Lotus/Types/Boosters/CreditBooster"
 ];
 
-const handleBoostersPurchase = async (boosterStoreName: string, accountId: string) => {
-    const match = boosterStoreName.match(/(\d+)Day/);
-    if (!match) {
+const boosterDuration: Record<TRarity, number> = {
+    COMMON: 3 * 86400,
+    UNCOMMON: 7 * 86400,
+    RARE: 30 * 86400,
+    LEGENDARY: 90 * 86400
+};
+
+const handleBoostersPurchase = async (boosterStoreName: string, accountId: string, durability: TRarity) => {
+    const ItemType = boosterStoreName.replace("StoreItem", "");
+    if (!boosterCollection.find(x => x == ItemType)) {
+        logger.error(`unknown booster type: ${ItemType}`);
         return { InventoryChanges: {} };
     }
 
-    const extractedDigit = Number(match[1]);
-    const ItemType = boosterCollection.find(i =>
-        boosterStoreName.includes(i.split("/").pop()!.replace("Booster", ""))
-    )!;
-    const ExpiryDate = extractedDigit * 86400;
+    const ExpiryDate = boosterDuration[durability];
 
     await addBooster(ItemType, ExpiryDate, accountId);
 
