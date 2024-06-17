@@ -34,9 +34,9 @@ export const startRecipe = async (recipeName: string, accountId: string) => {
         throw new Error(`unknown recipe ${recipeName}`);
     }
 
-    const componentsNeeded = recipe.components?.map(component => ({
-        uniqueName: component.uniqueName,
-        count: component.itemCount
+    const componentsNeeded = recipe.ingredients.map(component => ({
+        uniqueName: component.ItemType,
+        count: component.ItemCount
     }));
 
     if (!componentsNeeded) {
@@ -46,11 +46,6 @@ export const startRecipe = async (recipeName: string, accountId: string) => {
 
     //TODO: consume components used
     //await updateResources(accountId, componentsNeeded);
-
-    //might be redundant
-    if (recipe.consumeOnBuild) {
-        //consume
-    }
 
     if (!recipe.buildTime) {
         logger.error(`recipe ${recipeName} has no build time`);
