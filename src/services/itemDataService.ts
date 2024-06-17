@@ -1,6 +1,6 @@
 import { getIndexAfter } from "@/src/helpers/stringHelpers";
 import { logger } from "@/src/utils/logger";
-import Items, { Buildable, Category, MinimalItem, Warframe, Weapon } from "warframe-items";
+import Items, { Category, MinimalItem, Warframe, Weapon } from "warframe-items";
 import badItems from "@/static/json/exclude-mods.json";
 import {
     dict_en,
@@ -106,8 +106,6 @@ export const blueprintNames = Object.fromEntries(
         .filter(name => name.includes("Blueprint"))
         .map(name => [name, craftNames[name]])
 );
-
-const buildables = items.filter(item => !!(item as Buildable).components);
 
 // Gets a recipe by its uniqueName
 export const getItemByBlueprint = (uniqueName: string): IRecipe | undefined => {
