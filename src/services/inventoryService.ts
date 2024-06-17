@@ -26,6 +26,7 @@ import { logger } from "@/src/utils/logger";
 import { WeaponTypeInternal, getWeaponType, getExalted } from "@/src/services/itemDataService";
 import { ISyndicateSacrifice, ISyndicateSacrificeResponse } from "../types/syndicateTypes";
 import { IEquipmentClient } from "../types/inventoryTypes/commonInventoryTypes";
+import { ExportRecipes } from "warframe-public-export-plus";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
@@ -70,6 +71,25 @@ export const addItem = async (
     typeName: string,
     quantity: number = 1
 ): Promise<{ InventoryChanges: object }> => {
+    // Strict typing
+    if (typeName in ExportRecipes) {
+        const inventory = await getInventory(accountId);
+        const recipeChanges = [
+            {
+                ItemType: typeName,
+                ItemCount: quantity
+            } satisfies ITypeCount
+        ];
+        addRecipes(inventory, recipeChanges);
+        await inventory.save();
+        return {
+            InventoryChanges: {
+                Recipes: recipeChanges
+            }
+        };
+    }
+
+    // Path-based duck typing
     switch (typeName.substr(1).split("/")[1]) {
         case "Powersuits":
             if (typeName.includes("EntratiMech")) {
@@ -186,24 +206,6 @@ export const addItem = async (
                             };
                         }
                     }
-                }
-                case "Recipes":
-                case "Consumables": {
-                    // Blueprints for Ciphers, Antitoxins
-                    const inventory = await getInventory(accountId);
-                    const recipeChanges = [
-                        {
-                            ItemType: typeName,
-                            ItemCount: quantity
-                        } satisfies ITypeCount
-                    ];
-                    addRecipes(inventory, recipeChanges);
-                    await inventory.save();
-                    return {
-                        InventoryChanges: {
-                            Recipes: recipeChanges
-                        }
-                    };
                 }
                 case "Restoratives": // Codex Scanner, Remote Observer, Starburst
                     const inventory = await getInventory(accountId);
