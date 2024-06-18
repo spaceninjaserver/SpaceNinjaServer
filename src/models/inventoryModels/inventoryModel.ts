@@ -921,6 +921,7 @@ type InventoryDocumentProps = {
     LongGuns: Types.DocumentArray<IEquipmentDatabase>;
     Pistols: Types.DocumentArray<IEquipmentDatabase>;
     Melee: Types.DocumentArray<IEquipmentDatabase>;
+    OperatorAmps: Types.DocumentArray<IEquipmentDatabase>;
     FlavourItems: Types.DocumentArray<IFlavourItem>;
     RawUpgrades: Types.DocumentArray<IRawUpgrade>;
     Upgrades: Types.DocumentArray<ICrewShipSalvagedWeaponSkin>;

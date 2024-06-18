@@ -43,7 +43,9 @@ const getItemListsController: RequestHandler = (_req, res) => {
                     item.category == "Misc" ||
                     item.category == "Resources" ||
                     item.category == "Fish" ||
-                    ((item as any).productCategory == "Pistols" && (item as MinWeapon).totalDamage == 0)
+                    ((item as any).productCategory == "Pistols" &&
+                        (item as MinWeapon).totalDamage == 0 &&
+                        !item.excludeFromCodex) // exclude Zaw Strike PvP variant
             )
         ),
         mods,

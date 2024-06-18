@@ -386,20 +386,23 @@ export const syndicateSacrifice = async (
 export const addWeapon = async (
     weaponType: WeaponTypeInternal,
     weaponName: string,
-    accountId: string
+    accountId: string,
+    modularParts: string[] | undefined = undefined
 ): Promise<IEquipmentClient> => {
     const inventory = await getInventory(accountId);
 
     let weaponIndex;
     switch (weaponType) {
         case "LongGuns":
-            weaponIndex = inventory.LongGuns.push({ ItemType: weaponName, Configs: [], XP: 0 });
-            break;
         case "Pistols":
-            weaponIndex = inventory.Pistols.push({ ItemType: weaponName, Configs: [], XP: 0 });
-            break;
         case "Melee":
-            weaponIndex = inventory.Melee.push({ ItemType: weaponName, Configs: [], XP: 0 });
+        case "OperatorAmps":
+            weaponIndex = inventory[weaponType].push({
+                ItemType: weaponName,
+                Configs: [],
+                XP: 0,
+                ModularParts: modularParts
+            });
             break;
         default:
             throw new Error("unknown weapon type: " + weaponType);

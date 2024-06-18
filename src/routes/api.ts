@@ -56,6 +56,7 @@ import { syndicateSacrificeController } from "../controllers/api/syndicateSacrif
 import { startDojoRecipeController } from "@/src/controllers/api/startDojoRecipeController";
 import { queueDojoComponentDestructionController } from "@/src/controllers/api/queueDojoComponentDestructionController";
 import { nameWeaponController } from "@/src/controllers/api/nameWeaponController";
+import { modularWeaponCraftingController } from "@/src/controllers/api/modularWeaponCraftingController";
 
 const apiRouter = express.Router();
 
@@ -122,5 +123,6 @@ apiRouter.post("/guildTech.php", guildTechController);
 apiRouter.post("/syndicateSacrifice.php", syndicateSacrificeController);
 apiRouter.post("/startDojoRecipe.php", startDojoRecipeController);
 apiRouter.post("/nameWeapon.php", nameWeaponController);
+apiRouter.post("/modularWeaponCrafting.php", modularWeaponCraftingController);
 
 export { apiRouter };
