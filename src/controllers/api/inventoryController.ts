@@ -6,10 +6,9 @@ import { Request, RequestHandler, Response } from "express";
 import { config } from "@/src/services/configService";
 import allMissions from "@/static/fixed_responses/allMissions.json";
 import allShipDecorations from "@/static/fixed_responses/allShipDecorations.json";
-import allSkins from "@/static/fixed_responses/allSkins.json";
 import { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
 import { IShipInventory } from "@/src/types/inventoryTypes/inventoryTypes";
-import { ExportFlavour, ExportKeys } from "warframe-public-export-plus";
+import { ExportCustoms, ExportFlavour, ExportKeys } from "warframe-public-export-plus";
 
 const inventoryController: RequestHandler = async (request: Request, response: Response) => {
     let accountId;
@@ -88,12 +87,12 @@ const inventoryController: RequestHandler = async (request: Request, response: R
 
     if (config.unlockAllSkins) {
         inventoryResponse.WeaponSkins = [];
-        for (const skin of allSkins) {
+        for (const uniqueName in ExportCustoms) {
             inventoryResponse.WeaponSkins.push({
                 ItemId: {
                     $oid: "000000000000000000000000"
                 },
-                ItemType: skin
+                ItemType: uniqueName
             });
         }
     }
