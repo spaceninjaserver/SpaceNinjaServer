@@ -5,12 +5,11 @@ import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { Request, RequestHandler, Response } from "express";
 import { config } from "@/src/services/configService";
 import allMissions from "@/static/fixed_responses/allMissions.json";
-import allQuestKeys from "@/static/fixed_responses/allQuestKeys.json";
 import allShipDecorations from "@/static/fixed_responses/allShipDecorations.json";
 import allSkins from "@/static/fixed_responses/allSkins.json";
 import { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
 import { IShipInventory } from "@/src/types/inventoryTypes/inventoryTypes";
-import { ExportFlavour } from "warframe-public-export-plus";
+import { ExportFlavour, ExportKeys } from "warframe-public-export-plus";
 
 const inventoryController: RequestHandler = async (request: Request, response: Response) => {
     let accountId;
@@ -51,9 +50,11 @@ const inventoryController: RequestHandler = async (request: Request, response: R
     }
 
     if (config.unlockAllQuests) {
-        for (const questKey of allQuestKeys) {
-            if (!inventoryResponse.QuestKeys.find(quest => quest.ItemType == questKey)) {
-                inventoryResponse.QuestKeys.push({ ItemType: questKey });
+        for (const [k, v] of Object.entries(ExportKeys)) {
+            if ("chainStages" in v) {
+                if (!inventoryResponse.QuestKeys.find(quest => quest.ItemType == k)) {
+                    inventoryResponse.QuestKeys.push({ ItemType: k });
+                }
             }
         }
     }
