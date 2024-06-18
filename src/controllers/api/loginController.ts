@@ -43,7 +43,7 @@ const loginController: RequestHandler = async (request, response) => {
                 platformCDNs: platformCDNs,
                 NRS: [config.myAddress],
                 DTLS: DTLS,
-                IRC: [config.myAddress],
+                IRC: config.myIrcAddresses ?? [config.myAddress],
                 HUB: HUB,
                 BuildLabel: buildConfig.buildLabel,
                 MatchmakingBuildId: buildConfig.matchmakingBuildId
@@ -79,7 +79,7 @@ const loginController: RequestHandler = async (request, response) => {
         platformCDNs: platformCDNs,
         NRS: [config.myAddress],
         DTLS: DTLS,
-        IRC: [config.myAddress],
+        IRC: config.myIrcAddresses ?? [config.myAddress],
         HUB: HUB,
         BuildLabel: buildConfig.buildLabel,
         MatchmakingBuildId: buildConfig.matchmakingBuildId
