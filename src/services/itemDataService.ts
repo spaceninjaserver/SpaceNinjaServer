@@ -15,16 +15,6 @@ export type MinWarframe = Omit<Warframe, "patchlogs">;
 export type MinWeapon = Omit<Weapon, "patchlogs">;
 export type MinItem = Omit<MinimalItem, "patchlogs">;
 
-export const warframes: MinWarframe[] = Array.from(new Items({ category: ["Warframes"] }) as Warframe[])
-    .filter(item => {
-        return item.uniqueName.substring(0, 30) != "/Lotus/Powersuits/EntratiMech/";
-    })
-    .map(item => {
-        const next = { ...item };
-        delete next.patchlogs;
-        return next;
-    });
-
 export type WeaponTypeInternal =
     | "LongGuns"
     | "Pistols"
