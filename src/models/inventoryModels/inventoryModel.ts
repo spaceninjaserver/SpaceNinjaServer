@@ -183,10 +183,13 @@ ItemConfigSchema.set("toJSON", {
     }
 });
 
-const ArchonCrystalUpgradeSchema = new Schema<IArchonCrystalUpgrade>({
-    UpgradeType: String,
-    Color: String
-}, { _id: false });
+const ArchonCrystalUpgradeSchema = new Schema<IArchonCrystalUpgrade>(
+    {
+        UpgradeType: String,
+        Color: String
+    },
+    { _id: false }
+);
 
 ArchonCrystalUpgradeSchema.set("toJSON", {
     transform(_document, returnedObject) {
@@ -444,16 +447,19 @@ const consumedSchuitsSchema = new Schema<IConsumedSuit>({
     c: colorSchema
 });
 
-const infestedFoundrySchema = new Schema<IInfestedFoundry>({
-    Name: String,
-    Resources: { type: [typeCountSchema], default: undefined },
-    Slots: Number,
-    XP: Number,
-    ConsumedSuits: { type: [consumedSchuitsSchema], default: undefined },
-    InvigorationIndex: Number,
-    InvigorationSuitOfferings: { type: [String], default: undefined },
-    InvigorationsApplied: Number
-}, { _id: false });
+const infestedFoundrySchema = new Schema<IInfestedFoundry>(
+    {
+        Name: String,
+        Resources: { type: [typeCountSchema], default: undefined },
+        Slots: Number,
+        XP: Number,
+        ConsumedSuits: { type: [consumedSchuitsSchema], default: undefined },
+        InvigorationIndex: Number,
+        InvigorationSuitOfferings: { type: [String], default: undefined },
+        InvigorationsApplied: Number
+    },
+    { _id: false }
+);
 
 const questProgressSchema = new Schema<IQuestProgress>({
     c: Number,
