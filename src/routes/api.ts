@@ -25,6 +25,7 @@ import { hostSessionController } from "@/src/controllers/api/hostSessionControll
 import { hubController } from "@/src/controllers/api/hubController";
 import { hubInstancesController } from "@/src/controllers/api/hubInstancesController";
 import { inboxController } from "@/src/controllers/api/inboxController";
+import { infestedFoundryController } from "@/src/controllers/api/infestedFoundryController";
 import { inventoryController } from "@/src/controllers/api/inventoryController";
 import { inventorySlotsController } from "@/src/controllers/api/inventorySlotsController";
 import { joinSessionController } from "@/src/controllers/api/joinSessionController";
@@ -101,6 +102,7 @@ apiRouter.post("/genericUpdate.php", genericUpdateController);
 apiRouter.post("/getAlliance.php", getAllianceController);
 apiRouter.post("/guildTech.php", guildTechController);
 apiRouter.post("/hostSession.php", hostSessionController);
+apiRouter.post("/infestedFoundry.php", infestedFoundryController);
 apiRouter.post("/inventorySlots.php", inventorySlotsController);
 apiRouter.post("/joinSession.php", joinSessionController);
 apiRouter.post("/login.php", loginController);
