@@ -34,5 +34,6 @@
   "/Lotus/Types/Keys/ZarimanQuest/ZarimanQuestKeyChain",
   "/Lotus/Types/Keys/KahlQuest/KahlQuestKeyChain",
   "/Lotus/Types/Keys/DuviriQuest/DuviriQuestKeyChain",
-  "/Lotus/Types/Keys/EntratiLab/EntratiQuestKeyChain"
+  "/Lotus/Types/Keys/EntratiLab/EntratiQuestKeyChain",
+  "/Lotus/Types/Keys/JadeShadows/JadeShadowQuestKeyChain"
 ]
