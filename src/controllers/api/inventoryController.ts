@@ -5,10 +5,9 @@ import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { Request, RequestHandler, Response } from "express";
 import { config } from "@/src/services/configService";
 import allMissions from "@/static/fixed_responses/allMissions.json";
-import allShipDecorations from "@/static/fixed_responses/allShipDecorations.json";
 import { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
 import { IShipInventory } from "@/src/types/inventoryTypes/inventoryTypes";
-import { ExportCustoms, ExportFlavour, ExportKeys } from "warframe-public-export-plus";
+import { ExportCustoms, ExportFlavour, ExportKeys, ExportResources } from "warframe-public-export-plus";
 
 const inventoryController: RequestHandler = async (request: Request, response: Response) => {
     let accountId;
@@ -76,7 +75,14 @@ const inventoryController: RequestHandler = async (request: Request, response: R
         inventoryResponse.NodeIntrosCompleted.push("/Lotus/Levels/Cinematics/NewWarIntro/NewWarStageTwo.level");
     }
 
-    if (config.unlockAllShipDecorations) inventoryResponse.ShipDecorations = allShipDecorations;
+    if (config.unlockAllShipDecorations) {
+        inventoryResponse.ShipDecorations = [];
+        for (const [uniqueName, item] of Object.entries(ExportResources)) {
+            if (item.productCategory == "ShipDecorations") {
+                inventoryResponse.ShipDecorations.push({ ItemType: uniqueName, ItemCount: 1 });
+            }
+        }
+    }
 
     if (config.unlockAllFlavourItems) {
         inventoryResponse.FlavourItems = [];
