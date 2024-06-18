@@ -103,6 +103,11 @@ export interface IEquipmentDatabase {
     UnlockLevel?: number;
     Expiry?: IMongoDate;
     SkillTree?: string;
-    ArchonCrystalUpgrades?: []; //TODO
+    ArchonCrystalUpgrades?: IArchonCrystalUpgrade[];
     _id: Types.ObjectId;
+}
+
+export interface IArchonCrystalUpgrade {
+    UpgradeType?: string;
+    Color?: string;
 }

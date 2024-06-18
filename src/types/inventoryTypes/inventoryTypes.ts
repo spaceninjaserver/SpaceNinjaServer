@@ -232,7 +232,7 @@ export interface IInventoryResponse {
     DailyAffiliationEntrati: number;
     DailyAffiliationNecraloid: number;
     MechSuits: IEquipmentDatabase[];
-    InfestedFoundry: IInfestedFoundry;
+    InfestedFoundry?: IInfestedFoundry;
     BlessingCooldown: IMongoDate;
     CrewShipHarnesses: IEquipmentDatabase[];
     CrewShipRawSalvage: IConsumable[];
@@ -482,14 +482,14 @@ export interface IFusionTreasure {
 }
 
 export interface IInfestedFoundry {
-    Name: string;
-    Resources: ITypeCount[];
-    Slots: number;
-    XP: number;
-    ConsumedSuits: IConsumedSuit[];
-    InvigorationIndex: number;
-    InvigorationSuitOfferings: string[];
-    InvigorationsApplied: number;
+    Name?: string;
+    Resources?: ITypeCount[];
+    Slots?: number;
+    XP?: number;
+    ConsumedSuits?: IConsumedSuit[];
+    InvigorationIndex?: number;
+    InvigorationSuitOfferings?: string[];
+    InvigorationsApplied?: number;
 }
 
 export interface IConsumedSuit {

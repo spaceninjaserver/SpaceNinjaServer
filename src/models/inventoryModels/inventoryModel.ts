@@ -45,7 +45,8 @@ import {
     IOperatorConfigDatabase,
     IPolarity,
     IEquipmentDatabase,
-    IOperatorConfigClient
+    IOperatorConfigClient,
+    IArchonCrystalUpgrade
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
 
@@ -182,6 +183,20 @@ ItemConfigSchema.set("toJSON", {
     }
 });
 
+const ArchonCrystalUpgradeSchema = new Schema<IArchonCrystalUpgrade>(
+    {
+        UpgradeType: String,
+        Color: String
+    },
+    { _id: false }
+);
+
+ArchonCrystalUpgradeSchema.set("toJSON", {
+    transform(_document, returnedObject) {
+        delete returnedObject.__v;
+    }
+});
+
 const EquipmentSchema = new Schema<IEquipmentDatabase>({
     ItemType: String,
     Configs: [ItemConfigSchema],
@@ -193,7 +208,7 @@ const EquipmentSchema = new Schema<IEquipmentDatabase>({
     FocusLens: String,
     ModSlotPurchases: Number,
     CustomizationSlotPurchases: Number,
-    UpgradeType: Schema.Types.Mixed, //todo
+    UpgradeType: String,
     UpgradeFingerprint: String,
     ItemName: String,
     InfestationDate: Date,
@@ -203,7 +218,7 @@ const EquipmentSchema = new Schema<IEquipmentDatabase>({
     UnlockLevel: Number,
     Expiry: Date,
     SkillTree: String,
-    ArchonCrystalUpgrades: [Schema.Types.Mixed] //TODO
+    ArchonCrystalUpgrades: { type: [ArchonCrystalUpgradeSchema], default: undefined }
 });
 
 EquipmentSchema.virtual("ItemId").get(function () {
@@ -432,16 +447,19 @@ const consumedSchuitsSchema = new Schema<IConsumedSuit>({
     c: colorSchema
 });
 
-const infestedFoundrySchema = new Schema<IInfestedFoundry>({
-    Name: String,
-    Resources: [typeCountSchema],
-    Slots: Number,
-    XP: Number,
-    ConsumedSuits: [consumedSchuitsSchema],
-    InvigorationIndex: Number,
-    InvigorationSuitOfferings: [String],
-    InvigorationsApplied: Number
-});
+const infestedFoundrySchema = new Schema<IInfestedFoundry>(
+    {
+        Name: String,
+        Resources: { type: [typeCountSchema], default: undefined },
+        Slots: Number,
+        XP: Number,
+        ConsumedSuits: { type: [consumedSchuitsSchema], default: undefined },
+        InvigorationIndex: Number,
+        InvigorationSuitOfferings: { type: [String], default: undefined },
+        InvigorationsApplied: Number
+    },
+    { _id: false }
+);
 
 const questProgressSchema = new Schema<IQuestProgress>({
     c: Number,
