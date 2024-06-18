@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
-import { MinItem, MinWeapon, warframes, items, getEnglishString } from "@/src/services/itemDataService";
+import { MinItem, MinWeapon, items, getEnglishString } from "@/src/services/itemDataService";
 import badItems from "@/static/json/exclude-mods.json";
-import { ExportArcanes, ExportWeapons } from "warframe-public-export-plus";
+import { ExportArcanes, ExportWarframes, ExportWeapons } from "warframe-public-export-plus";
 
 interface ListedItem {
     uniqueName: string;
@@ -28,7 +28,14 @@ const getItemListsController: RequestHandler = (_req, res) => {
         });
     }
     res.json({
-        warframes: reduceItems(warframes),
+        warframes: Object.entries(ExportWarframes)
+            .filter(([_uniqueName, warframe]) => warframe.productCategory == "Suits")
+            .map(([uniqueName, warframe]) => {
+                return {
+                    uniqueName,
+                    name: getEnglishString(warframe.name)
+                };
+            }),
         weapons: Object.entries(ExportWeapons)
             .filter(([_uniqueName, weapon]) => weapon.productCategory !== "OperatorAmps" && weapon.totalDamage !== 0)
             .map(([uniqueName, weapon]) => {
