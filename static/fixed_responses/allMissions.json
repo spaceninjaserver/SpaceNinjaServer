@@ -1252,6 +1252,11 @@
   {
     "Completes": 1,
     "Tier": 1,
+    "Tag": "SolNode723"
+  },
+  {
+    "Completes": 1,
+    "Tier": 1,
     "Tag": "ClanNode11"
   },
   {
@@ -1516,6 +1521,7 @@
   },
   {
     "Completes": 1,
+    "Tier": 1,
     "Tag": "UranusToNeptuneJunction"
   },
   {

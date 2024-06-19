@@ -3,11 +3,11 @@
 
 import { RequestHandler } from "express";
 import { logger } from "@/src/utils/logger";
-import { getItemByBlueprint } from "@/src/services/itemDataService";
+import { getRecipe } from "@/src/services/itemDataService";
 import { IOid } from "@/src/types/commonTypes";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getInventory, updateCurrency, addItem } from "@/src/services/inventoryService";
+import { getInventory, updateCurrency, addItem, addMiscItems, addRecipes } from "@/src/services/inventoryService";
 
 export interface IClaimCompletedRecipeRequest {
     RecipeIds: IOid[];
@@ -37,25 +37,51 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
     inventory.PendingRecipes.pull(pendingRecipe._id);
     await inventory.save();
 
-    const buildable = getItemByBlueprint(pendingRecipe.ItemType);
-    if (!buildable) {
+    const recipe = getRecipe(pendingRecipe.ItemType);
+    if (!recipe) {
         logger.error(`no completed item found for recipe ${pendingRecipe._id}`);
         throw new Error(`no completed item found for recipe ${pendingRecipe._id}`);
     }
 
     if (req.query.cancel) {
-        // TODO: Refund items
-        res.json({});
+        const currencyChanges = await updateCurrency(recipe.buildPrice * -1, false, accountId);
+
+        const inventory = await getInventory(accountId);
+        addMiscItems(inventory, recipe.ingredients);
+        await inventory.save();
+
+        // Not a bug: In the specific case of cancelling a recipe, InventoryChanges are expected to be the root.
+        res.json({
+            ...currencyChanges,
+            MiscItems: recipe.ingredients
+        });
     } else {
-        logger.debug("Claiming Recipe", { buildable, pendingRecipe });
-        let currencyChanges = {};
-        if (req.query.rush && buildable.skipBuildTimePrice) {
-            currencyChanges = await updateCurrency(buildable.skipBuildTimePrice, true, accountId);
+        logger.debug("Claiming Recipe", { recipe, pendingRecipe });
+        let InventoryChanges = {};
+        if (recipe.consumeOnUse) {
+            const recipeChanges = [
+                {
+                    ItemType: pendingRecipe.ItemType,
+                    ItemCount: -1
+                }
+            ];
+
+            InventoryChanges = { ...InventoryChanges, Recipes: recipeChanges };
+
+            const inventory = await getInventory(accountId);
+            addRecipes(inventory, recipeChanges);
+            await inventory.save();
+        }
+        if (req.query.rush) {
+            InventoryChanges = {
+                ...InventoryChanges,
+                ...(await updateCurrency(recipe.skipBuildTimePrice, true, accountId))
+            };
         }
         res.json({
             InventoryChanges: {
-                ...currencyChanges,
-                ...(await addItem(accountId, buildable.uniqueName, buildable.buildQuantity)).InventoryChanges
+                ...InventoryChanges,
+                ...(await addItem(accountId, recipe.resultType, recipe.num)).InventoryChanges
             }
         });
     }

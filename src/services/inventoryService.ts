@@ -26,6 +26,7 @@ import { logger } from "@/src/utils/logger";
 import { WeaponTypeInternal, getWeaponType, getExalted } from "@/src/services/itemDataService";
 import { ISyndicateSacrifice, ISyndicateSacrificeResponse } from "../types/syndicateTypes";
 import { IEquipmentClient } from "../types/inventoryTypes/commonInventoryTypes";
+import { ExportRecipes } from "warframe-public-export-plus";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
@@ -70,6 +71,25 @@ export const addItem = async (
     typeName: string,
     quantity: number = 1
 ): Promise<{ InventoryChanges: object }> => {
+    // Strict typing
+    if (typeName in ExportRecipes) {
+        const inventory = await getInventory(accountId);
+        const recipeChanges = [
+            {
+                ItemType: typeName,
+                ItemCount: quantity
+            } satisfies ITypeCount
+        ];
+        addRecipes(inventory, recipeChanges);
+        await inventory.save();
+        return {
+            InventoryChanges: {
+                Recipes: recipeChanges
+            }
+        };
+    }
+
+    // Path-based duck typing
     switch (typeName.substr(1).split("/")[1]) {
         case "Powersuits":
             if (typeName.includes("EntratiMech")) {
@@ -186,24 +206,6 @@ export const addItem = async (
                             };
                         }
                     }
-                }
-                case "Recipes":
-                case "Consumables": {
-                    // Blueprints for Ciphers, Antitoxins
-                    const inventory = await getInventory(accountId);
-                    const recipeChanges = [
-                        {
-                            ItemType: typeName,
-                            ItemCount: quantity
-                        } satisfies ITypeCount
-                    ];
-                    addRecipes(inventory, recipeChanges);
-                    await inventory.save();
-                    return {
-                        InventoryChanges: {
-                            Recipes: recipeChanges
-                        }
-                    };
                 }
                 case "Restoratives": // Codex Scanner, Remote Observer, Starburst
                     const inventory = await getInventory(accountId);
@@ -384,20 +386,23 @@ export const syndicateSacrifice = async (
 export const addWeapon = async (
     weaponType: WeaponTypeInternal,
     weaponName: string,
-    accountId: string
+    accountId: string,
+    modularParts: string[] | undefined = undefined
 ): Promise<IEquipmentClient> => {
     const inventory = await getInventory(accountId);
 
     let weaponIndex;
     switch (weaponType) {
         case "LongGuns":
-            weaponIndex = inventory.LongGuns.push({ ItemType: weaponName, Configs: [], XP: 0 });
-            break;
         case "Pistols":
-            weaponIndex = inventory.Pistols.push({ ItemType: weaponName, Configs: [], XP: 0 });
-            break;
         case "Melee":
-            weaponIndex = inventory.Melee.push({ ItemType: weaponName, Configs: [], XP: 0 });
+        case "OperatorAmps":
+            weaponIndex = inventory[weaponType].push({
+                ItemType: weaponName,
+                Configs: [],
+                XP: 0,
+                ModularParts: modularParts
+            });
             break;
         default:
             throw new Error("unknown weapon type: " + weaponType);
