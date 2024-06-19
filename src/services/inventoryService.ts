@@ -416,24 +416,12 @@ export const addWeapon = async (
 ): Promise<IEquipmentClient> => {
     const inventory = await getInventory(accountId);
 
-    let weaponIndex;
-    switch (weaponType) {
-        case "LongGuns":
-        case "Pistols":
-        case "Melee":
-        case "OperatorAmps":
-        case "SpaceGuns":
-        case "SpaceMelee":
-            weaponIndex = inventory[weaponType].push({
-                ItemType: weaponName,
-                Configs: [],
-                XP: 0,
-                ModularParts: modularParts
-            });
-            break;
-        default:
-            throw new Error("unknown weapon type: " + weaponType);
-    }
+    const weaponIndex = inventory[weaponType].push({
+        ItemType: weaponName,
+        Configs: [],
+        XP: 0,
+        ModularParts: modularParts
+    });
 
     const changedInventory = await inventory.save();
     return changedInventory[weaponType][weaponIndex - 1].toJSON();
