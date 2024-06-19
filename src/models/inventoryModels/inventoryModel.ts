@@ -197,29 +197,32 @@ ArchonCrystalUpgradeSchema.set("toJSON", {
     }
 });
 
-const EquipmentSchema = new Schema<IEquipmentDatabase>({
-    ItemType: String,
-    Configs: [ItemConfigSchema],
-    UpgradeVer: Number,
-    XP: Number,
-    Features: Number,
-    Polarized: Number,
-    Polarity: [polaritySchema],
-    FocusLens: String,
-    ModSlotPurchases: Number,
-    CustomizationSlotPurchases: Number,
-    UpgradeType: String,
-    UpgradeFingerprint: String,
-    ItemName: String,
-    InfestationDate: Date,
-    InfestationDays: Number,
-    InfestationType: String,
-    ModularParts: [String],
-    UnlockLevel: Number,
-    Expiry: Date,
-    SkillTree: String,
-    ArchonCrystalUpgrades: { type: [ArchonCrystalUpgradeSchema], default: undefined }
-});
+const EquipmentSchema = new Schema<IEquipmentDatabase>(
+    {
+        ItemType: String,
+        Configs: [ItemConfigSchema],
+        UpgradeVer: Number,
+        XP: Number,
+        Features: Number,
+        Polarized: Number,
+        Polarity: [polaritySchema],
+        FocusLens: String,
+        ModSlotPurchases: Number,
+        CustomizationSlotPurchases: Number,
+        UpgradeType: String,
+        UpgradeFingerprint: String,
+        ItemName: String,
+        InfestationDate: Date,
+        InfestationDays: Number,
+        InfestationType: String,
+        ModularParts: { type: [String], default: undefined },
+        UnlockLevel: Number,
+        Expiry: Date,
+        SkillTree: String,
+        ArchonCrystalUpgrades: { type: [ArchonCrystalUpgradeSchema], default: undefined }
+    },
+    { id: false }
+);
 
 EquipmentSchema.virtual("ItemId").get(function () {
     return { $oid: this._id.toString() } satisfies IOid;
@@ -955,6 +958,9 @@ type InventoryDocumentProps = {
     Sentinels: Types.DocumentArray<IEquipmentDatabase>;
     Horses: Types.DocumentArray<IEquipmentDatabase>;
     PendingRecipes: Types.DocumentArray<IPendingRecipeDatabase>;
+    SpaceSuits: Types.DocumentArray<IEquipmentDatabase>;
+    SpaceGuns: Types.DocumentArray<IEquipmentDatabase>;
+    SpaceMelee: Types.DocumentArray<IEquipmentDatabase>;
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-types

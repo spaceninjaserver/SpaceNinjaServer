@@ -92,33 +92,51 @@ export const addItem = async (
     // Path-based duck typing
     switch (typeName.substr(1).split("/")[1]) {
         case "Powersuits":
-            if (typeName.includes("EntratiMech")) {
-                const mechSuit = await addMechSuit(typeName, accountId);
-                await updateSlots(accountId, InventorySlot.MECHSUITS, 0, 1);
-                logger.debug("mech suit", mechSuit);
-                return {
-                    InventoryChanges: {
-                        MechBin: {
-                            count: 1,
-                            platinum: 0,
-                            Slots: -1
-                        },
-                        MechSuits: [mechSuit]
-                    }
-                };
-            }
-            const suit = await addPowerSuit(typeName, accountId);
-            await updateSlots(accountId, InventorySlot.SUITS, 0, 1);
-            return {
-                InventoryChanges: {
-                    SuitBin: {
-                        count: 1,
-                        platinum: 0,
-                        Slots: -1
-                    },
-                    Suits: [suit]
+            switch (typeName.substr(1).split("/")[2]) {
+                default: {
+                    const suit = await addPowerSuit(typeName, accountId);
+                    await updateSlots(accountId, InventorySlot.SUITS, 0, 1);
+                    return {
+                        InventoryChanges: {
+                            SuitBin: {
+                                count: 1,
+                                platinum: 0,
+                                Slots: -1
+                            },
+                            Suits: [suit]
+                        }
+                    };
                 }
-            };
+                case "Archwing": {
+                    const spaceSuit = await addSpaceSuit(typeName, accountId);
+                    await updateSlots(accountId, InventorySlot.SPACESUITS, 0, 1);
+                    return {
+                        InventoryChanges: {
+                            SpaceSuitBin: {
+                                count: 1,
+                                platinum: 0,
+                                Slots: -1
+                            },
+                            SpaceSuits: [spaceSuit]
+                        }
+                    };
+                }
+                case "EntratiMech": {
+                    const mechSuit = await addMechSuit(typeName, accountId);
+                    await updateSlots(accountId, InventorySlot.MECHSUITS, 0, 1);
+                    return {
+                        InventoryChanges: {
+                            MechBin: {
+                                count: 1,
+                                platinum: 0,
+                                Slots: -1
+                            },
+                            MechSuits: [mechSuit]
+                        }
+                    };
+                }
+            }
+            break;
         case "Weapons":
             const weaponType = getWeaponType(typeName);
             const weapon = await addWeapon(weaponType, typeName, accountId);
@@ -277,6 +295,13 @@ export const addSpecialItem = async (itemName: string, accountId: string) => {
     return changedInventory.SpecialItems[specialItemIndex - 1].toJSON();
 };
 
+export const addSpaceSuit = async (spacesuitName: string, accountId: string) => {
+    const inventory = await getInventory(accountId);
+    const suitIndex = inventory.SpaceSuits.push({ ItemType: spacesuitName, Configs: [], UpgradeVer: 101, XP: 0 });
+    const changedInventory = await inventory.save();
+    return changedInventory.SpaceSuits[suitIndex - 1].toJSON();
+};
+
 export const updateSlots = async (accountId: string, slotName: SlotNames, slotAmount: number, extraAmount: number) => {
     const inventory = await getInventory(accountId);
 
@@ -397,6 +422,8 @@ export const addWeapon = async (
         case "Pistols":
         case "Melee":
         case "OperatorAmps":
+        case "SpaceGuns":
+        case "SpaceMelee":
             weaponIndex = inventory[weaponType].push({
                 ItemType: weaponName,
                 Configs: [],

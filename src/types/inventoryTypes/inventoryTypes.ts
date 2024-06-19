@@ -358,6 +358,7 @@ export interface ICombat {
 export enum InventorySlot {
     SUITS = "SuitBin",
     WEAPONS = "WeaponBin",
+    SPACESUITS = "SpaceSuitBin",
     MECHSUITS = "MechBin",
     PVE_LOADOUTS = "PveBonusLoadoutBin",
     SENTINELS = "SentinelBin"
