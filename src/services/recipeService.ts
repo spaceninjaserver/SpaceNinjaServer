@@ -1,30 +1,8 @@
 import { unixTimesInMs } from "@/src/constants/timeConstants";
-import { getInventory } from "@/src/services/inventoryService";
+import { addMiscItems, getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { getRecipe } from "@/src/services/itemDataService";
 import { logger } from "@/src/utils/logger";
 import { Types } from "mongoose";
-
-export interface IResource {
-    uniqueName: string;
-    count: number;
-}
-
-// export const updateResources = async (accountId: string, components: IResource[]) => {
-//     const inventory = await getInventory(accountId);
-
-//     for (const component of components) {
-//         const category = getItemCategoryByUniqueName(component.uniqueName) as keyof typeof inventory;
-//         //validate category
-
-//         console.log(component.uniqueName);
-//         console.log("cate", category);
-
-//         const invItem = inventory[category];
-//         console.log("invItem", invItem);
-
-//         inventory["MiscItems"];
-//     }
-// };
 
 export const startRecipe = async (recipeName: string, accountId: string) => {
     const recipe = getRecipe(recipeName);
@@ -34,27 +12,19 @@ export const startRecipe = async (recipeName: string, accountId: string) => {
         throw new Error(`unknown recipe ${recipeName}`);
     }
 
-    const componentsNeeded = recipe.ingredients.map(component => ({
-        uniqueName: component.ItemType,
-        count: component.ItemCount
+    await updateCurrency(recipe.buildPrice, false, accountId);
+
+    const ingredientsInverse = recipe.ingredients.map(component => ({
+        ItemType: component.ItemType,
+        ItemCount: component.ItemCount * -1
     }));
 
-    if (!componentsNeeded) {
-        logger.error(`recipe ${recipeName} has no components`);
-        throw new Error(`recipe ${recipeName} has no components`);
-    }
+    const inventory = await getInventory(accountId);
+    addMiscItems(inventory, ingredientsInverse);
 
-    //TODO: consume components used
-    //await updateResources(accountId, componentsNeeded);
-
-    if (!recipe.buildTime) {
-        logger.error(`recipe ${recipeName} has no build time`);
-        throw new Error(`recipe ${recipeName} has no build time`);
-    }
     //buildtime is in seconds
     const completionDate = new Date(Date.now() + recipe.buildTime * unixTimesInMs.second);
 
-    const inventory = await getInventory(accountId);
     inventory.PendingRecipes.push({
         ItemType: recipeName,
         CompletionDate: completionDate,
