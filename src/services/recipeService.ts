@@ -1,6 +1,6 @@
 import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { getInventory } from "@/src/services/inventoryService";
-import { getItemByBlueprint } from "@/src/services/itemDataService";
+import { getRecipe } from "@/src/services/itemDataService";
 import { logger } from "@/src/utils/logger";
 import { Types } from "mongoose";
 
@@ -27,7 +27,7 @@ export interface IResource {
 // };
 
 export const startRecipe = async (recipeName: string, accountId: string) => {
-    const recipe = getItemByBlueprint(recipeName);
+    const recipe = getRecipe(recipeName);
 
     if (!recipe) {
         logger.error(`unknown recipe ${recipeName}`);

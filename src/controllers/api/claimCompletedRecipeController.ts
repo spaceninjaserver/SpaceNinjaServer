@@ -3,7 +3,7 @@
 
 import { RequestHandler } from "express";
 import { logger } from "@/src/utils/logger";
-import { getItemByBlueprint } from "@/src/services/itemDataService";
+import { getRecipe } from "@/src/services/itemDataService";
 import { IOid } from "@/src/types/commonTypes";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getAccountIdForRequest } from "@/src/services/loginService";
@@ -37,8 +37,8 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
     inventory.PendingRecipes.pull(pendingRecipe._id);
     await inventory.save();
 
-    const buildable = getItemByBlueprint(pendingRecipe.ItemType);
-    if (!buildable) {
+    const recipe = getRecipe(pendingRecipe.ItemType);
+    if (!recipe) {
         logger.error(`no completed item found for recipe ${pendingRecipe._id}`);
         throw new Error(`no completed item found for recipe ${pendingRecipe._id}`);
     }
@@ -47,18 +47,18 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
         // TODO: Refund items
         res.json({});
     } else {
-        logger.debug("Claiming Recipe", { buildable, pendingRecipe });
-        if (buildable.consumeOnUse) {
+        logger.debug("Claiming Recipe", { recipe, pendingRecipe });
+        if (recipe.consumeOnUse) {
             // TODO: Remove one instance of this recipe, and include that in InventoryChanges.
         }
         let currencyChanges = {};
-        if (req.query.rush && buildable.skipBuildTimePrice) {
-            currencyChanges = await updateCurrency(buildable.skipBuildTimePrice, true, accountId);
+        if (req.query.rush && recipe.skipBuildTimePrice) {
+            currencyChanges = await updateCurrency(recipe.skipBuildTimePrice, true, accountId);
         }
         res.json({
             InventoryChanges: {
                 ...currencyChanges,
-                ...(await addItem(accountId, buildable.resultType, buildable.num)).InventoryChanges
+                ...(await addItem(accountId, recipe.resultType, recipe.num)).InventoryChanges
             }
         });
     }

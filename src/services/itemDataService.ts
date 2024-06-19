@@ -97,8 +97,7 @@ export const blueprintNames = Object.fromEntries(
         .map(name => [name, craftNames[name]])
 );
 
-// Gets a recipe by its uniqueName
-export const getItemByBlueprint = (uniqueName: string): IRecipe | undefined => {
+export const getRecipe = (uniqueName: string): IRecipe | undefined => {
     return ExportRecipes[uniqueName];
 };
 
