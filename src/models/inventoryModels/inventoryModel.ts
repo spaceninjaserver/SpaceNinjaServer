@@ -888,7 +888,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         ChallengesFixVersion: Number,
         PlayedParkourTutorial: Boolean,
         SubscribedToEmailsPersonalized: Number,
-        LastInventorySync: Schema.Types.Mixed,
+        LastInventorySync: Schema.Types.ObjectId,
         ActiveLandscapeTraps: [Schema.Types.Mixed],
         RepVotes: [Schema.Types.Mixed],
         LeagueTickets: [Schema.Types.Mixed],
@@ -914,7 +914,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Grustag three
         DeathSquadable: Boolean
     },
-    { timestamps: { createdAt: "Created", updatedAt: "LastInventorySync" } }
+    { timestamps: { createdAt: "Created" } }
 );
 
 inventorySchema.set("toJSON", {
