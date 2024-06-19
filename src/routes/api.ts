@@ -50,6 +50,7 @@ import { setSupportedSyndicateController } from "@/src/controllers/api/setSuppor
 import { shipDecorationsController } from "@/src/controllers/api/shipDecorationsController";
 import { startDojoRecipeController } from "@/src/controllers/api/startDojoRecipeController";
 import { startRecipeController } from "@/src/controllers/api/startRecipeController";
+import { stepSequencersController } from "@/src/controllers/api/stepSequencersController";
 import { surveysController } from "@/src/controllers/api/surveysController";
 import { syndicateSacrificeController } from "../controllers/api/syndicateSacrificeController";
 import { trainingResultController } from "@/src/controllers/api/trainingResultController";
@@ -117,6 +118,7 @@ apiRouter.post("/setShipCustomizations.php", setShipCustomizationsController);
 apiRouter.post("/shipDecorations.php", shipDecorationsController);
 apiRouter.post("/startDojoRecipe.php", startDojoRecipeController);
 apiRouter.post("/startRecipe.php", startRecipeController);
+apiRouter.post("/stepSequencers.php", stepSequencersController);
 apiRouter.post("/syndicateSacrifice.php", syndicateSacrificeController);
 apiRouter.post("/trainingResult.php", trainingResultController);
 apiRouter.post("/updateChallengeProgress.php", updateChallengeProgressController);

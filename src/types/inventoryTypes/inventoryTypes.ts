@@ -831,7 +831,7 @@ export interface IStepSequencer {
     NotePacks: INotePacks;
     FingerPrint: string;
     Name: string;
-    ItemId: IOid;
+    ItemId?: IOid;
 }
 
 export interface INotePacks {
