@@ -2,7 +2,7 @@ import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import new_inventory from "@/static/fixed_responses/postTutorialInventory.json";
 import { config } from "@/src/services/configService";
 import { Types } from "mongoose";
-import { SlotNames } from "@/src/types/purchaseTypes";
+import { SlotNames, IInventoryChanges } from "@/src/types/purchaseTypes";
 import {
     IChallengeProgress,
     IConsumable,
@@ -26,7 +26,7 @@ import { logger } from "@/src/utils/logger";
 import { WeaponTypeInternal, getWeaponType, getExalted } from "@/src/services/itemDataService";
 import { ISyndicateSacrifice, ISyndicateSacrificeResponse } from "../types/syndicateTypes";
 import { IEquipmentClient } from "../types/inventoryTypes/commonInventoryTypes";
-import { ExportRecipes } from "warframe-public-export-plus";
+import { ExportRecipes, ExportResources } from "warframe-public-export-plus";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
@@ -70,7 +70,7 @@ export const addItem = async (
     accountId: string,
     typeName: string,
     quantity: number = 1
-): Promise<{ InventoryChanges: object }> => {
+): Promise<{ InventoryChanges: IInventoryChanges }> => {
     // Strict typing
     if (typeName in ExportRecipes) {
         const inventory = await getInventory(accountId);
@@ -85,6 +85,22 @@ export const addItem = async (
         return {
             InventoryChanges: {
                 Recipes: recipeChanges
+            }
+        };
+    }
+    if (typeName in ExportResources) {
+        const inventory = await getInventory(accountId);
+        const miscItemChanges = [
+            {
+                ItemType: typeName,
+                ItemCount: quantity
+            } satisfies IMiscItem
+        ];
+        addMiscItems(inventory, miscItemChanges);
+        await inventory.save();
+        return {
+            InventoryChanges: {
+                MiscItems: miscItemChanges
             }
         };
     }
