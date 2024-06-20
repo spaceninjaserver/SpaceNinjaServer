@@ -21,11 +21,13 @@ export const evolveWeaponController: RequestHandler = async (req, res) => {
     item.SkillTree = "0";
 
     inventory.EvolutionProgress ??= [];
-    inventory.EvolutionProgress.push({
-        Progress: 0,
-        Rank: 1,
-        ItemType: payload.EvoType
-    });
+    if (!inventory.EvolutionProgress.find(entry => entry.ItemType == payload.EvoType)) {
+        inventory.EvolutionProgress.push({
+            Progress: 0,
+            Rank: 1,
+            ItemType: payload.EvoType
+        });
+    }
 
     await inventory.save();
     res.end();
