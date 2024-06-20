@@ -161,14 +161,14 @@ const ItemConfigSchema = new Schema<IItemConfig>(
         facial: colorSchema,
         syancol: colorSchema,
         Upgrades: [String],
-        Songs: [
+        Songs: { type: [
             {
                 m: String,
                 b: String,
                 p: String,
                 s: String
             }
-        ],
+        ], default: undefined },
         Name: String,
         AbilityOverride: abilityOverrideSchema,
         PvpUpgrades: [String],
