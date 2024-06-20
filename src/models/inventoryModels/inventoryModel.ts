@@ -161,14 +161,17 @@ const ItemConfigSchema = new Schema<IItemConfig>(
         facial: colorSchema,
         syancol: colorSchema,
         Upgrades: [String],
-        Songs: [
-            {
-                m: String,
-                b: String,
-                p: String,
-                s: String
-            }
-        ],
+        Songs: {
+            type: [
+                {
+                    m: String,
+                    b: String,
+                    p: String,
+                    s: String
+                }
+            ],
+            default: undefined
+        },
         Name: String,
         AbilityOverride: abilityOverrideSchema,
         PvpUpgrades: [String],
@@ -888,7 +891,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         ChallengesFixVersion: Number,
         PlayedParkourTutorial: Boolean,
         SubscribedToEmailsPersonalized: Number,
-        LastInventorySync: Schema.Types.Mixed,
+        LastInventorySync: Schema.Types.Mixed, // this should be Schema.Types.ObjectId, but older inventories may break with that.
         ActiveLandscapeTraps: [Schema.Types.Mixed],
         RepVotes: [Schema.Types.Mixed],
         LeagueTickets: [Schema.Types.Mixed],
@@ -914,7 +917,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Grustag three
         DeathSquadable: Boolean
     },
-    { timestamps: { createdAt: "Created", updatedAt: "LastInventorySync" } }
+    { timestamps: { createdAt: "Created" } }
 );
 
 inventorySchema.set("toJSON", {
