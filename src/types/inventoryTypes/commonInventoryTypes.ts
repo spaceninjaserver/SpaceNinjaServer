@@ -82,6 +82,12 @@ export interface IEquipmentClient extends Omit<IEquipmentDatabase, "_id"> {
     ItemId: IOid;
 }
 
+export enum EquipmentFeatures {
+    DOUBLE_CAPACITY = 1,
+    UTILITY_SLOT = 2,
+    ARCANE_SLOT = 32,
+}
+
 export interface IEquipmentDatabase {
     ItemType: string;
     ItemName?: string;
