@@ -425,7 +425,7 @@ export const syndicateSacrifice = async (
 };
 
 export const addWeapon = async (
-    weaponType: WeaponTypeInternal,
+    weaponType: WeaponTypeInternal | "Hoverboards",
     weaponName: string,
     accountId: string,
     modularParts: string[] | undefined = undefined
