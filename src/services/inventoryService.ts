@@ -629,6 +629,22 @@ export const missionInventoryUpdate = async (data: IMissionInventoryUpdateReques
     // Gear XP
     gearKeys.forEach(key => addGearExpByCategory(inventory, data[key], key));
 
+    // Incarnon Challenges
+    if (data.EvolutionProgress) {
+        for (const evoProgress of data.EvolutionProgress) {
+            const entry = inventory.EvolutionProgress
+                ? inventory.EvolutionProgress.find(entry => entry.ItemType == evoProgress.ItemType)
+                : undefined;
+            if (entry) {
+                entry.Progress = evoProgress.Progress;
+                entry.Rank = evoProgress.Rank;
+            } else {
+                inventory.EvolutionProgress ??= [];
+                inventory.EvolutionProgress.push(evoProgress);
+            }
+        }
+    }
+
     // other
     addMods(inventory, RawUpgrades);
     addMiscItems(inventory, MiscItems);
