@@ -1,0 +1,301 @@
+{
+  "VendorInfo": {
+    "_id": {
+      "$oid": "598a090d9a4a313746fd1f24"
+    },
+    "TypeName": "/Lotus/Types/Game/VendorManifests/Ostron/MaskSalesmanManifest",
+    "ItemManifest": [
+      {
+        "StoreItem": "/Lotus/StoreItems/Upgrades/Skins/Ostron/RevenantMask",
+        "ItemPrices": [
+          {
+            "ItemCount": 1,
+            "ItemType": "/Lotus/Types/Gameplay/Eidolon/Resources/CetusWispItem",
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "63ed01ef4c37f93d0b797674"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/PlushyThumper",
+        "ItemPrices": [
+          {
+            "ItemCount": 2,
+            "ItemType": "/Lotus/Types/Gameplay/Eidolon/Resources/CetusWispItem",
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Eidolon/FishParts/BothUncommonFishBPartItem",
+            "ItemCount": 10,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Gameplay/Eidolon/Resources/NistlebrushItem",
+            "ItemCount": 10,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Eidolon/CommonOreAAlloyAItem",
+            "ItemCount": 32,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "63ed01ef4c37f93d0b797675"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/PlushyThumperMedium",
+        "ItemPrices": [
+          {
+            "ItemCount": 4,
+            "ItemType": "/Lotus/Types/Gameplay/Eidolon/Resources/CetusWispItem",
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Eidolon/CommonGemBCutAItem",
+            "ItemCount": 24,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Eidolon/FishParts/BothUncommonFishAPartItem",
+            "ItemCount": 18,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Eidolon/FishParts/BothUncommonFishBPartItem",
+            "ItemCount": 27,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "63ed01ef4c37f93d0b797676"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/PlushyThumperLarge",
+        "ItemPrices": [
+          {
+            "ItemCount": 6,
+            "ItemType": "/Lotus/Types/Gameplay/Eidolon/Resources/CetusWispItem",
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Eidolon/CommonGemACutAItem",
+            "ItemCount": 35,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Eidolon/FishParts/BothCommonFishAPartItem",
+            "ItemCount": 95,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Gameplay/Eidolon/Resources/NistlebrushItem",
+            "ItemCount": 60,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "63ed01ef4c37f93d0b797677"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Recipes/SynthicatorRecipes/FlareBlueBlueprint",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Eidolon/FishParts/BothUncommonFishBPartItem",
+            "ItemCount": 10,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Eidolon/FishParts/DayCommonFishCPartItem",
+            "ItemCount": 10,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "6651291214e90115b91b50a1"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Recipes/SynthicatorRecipes/FlareRedBlueprint",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Eidolon/CommonOreAAlloyAItem",
+            "ItemCount": 37,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Eidolon/FishParts/BothUncommonFishAPartItem",
+            "ItemCount": 7,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "6651291214e90115b91b50a2"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Upgrades/Skins/Ostron/VoltMask",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Eidolon/CommonOreBAlloyBItem",
+            "ItemCount": 34,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Gameplay/Eidolon/Resources/GrokdrulItem",
+            "ItemCount": 17,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "6651291214e90115b91b50a3"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Upgrades/Skins/Ostron/MagMask",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Eidolon/FishParts/DayCommonFishBPartItem",
+            "ItemCount": 16,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Gameplay/Eidolon/Resources/ForestRodentPartItem",
+            "ItemCount": 5,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "6651291214e90115b91b50a4"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Upgrades/Skins/Ostron/ExcaliburMask",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/Eidolon/Resources/BirdOfPreyPartItem",
+            "ItemCount": 5,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Gameplay/Eidolon/Resources/GrokdrulItem",
+            "ItemCount": 20,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "6651291214e90115b91b50a5"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Upgrades/Skins/Ostron/GrineerMask",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Eidolon/FishParts/DayCommonFishBPartItem",
+            "ItemCount": 20,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Eidolon/CommonOreAAlloyAItem",
+            "ItemCount": 31,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "6651291214e90115b91b50a6"
+        }
+      }
+    ],
+    "PropertyTextHash": "6AACA376DA34B35B5C16F1B40DBC017D",
+    "Expiry": {
+      "$date": {
+        "$numberLong": "9999999000000"
+      }
+    }
+  }
+}

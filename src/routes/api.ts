@@ -21,6 +21,7 @@ import { getGuildLogController } from "../controllers/api/getGuildLogController"
 import { getIgnoredUsersController } from "@/src/controllers/api/getIgnoredUsersController";
 import { getNewRewardSeedController } from "@/src/controllers/api/getNewRewardSeedController";
 import { getShipController } from "@/src/controllers/api/getShipController";
+import { getVendorInfoController } from "@/src/controllers/api/getVendorInfoController";
 import { guildTechController } from "../controllers/api/guildTechController";
 import { hostSessionController } from "@/src/controllers/api/hostSessionController";
 import { hubController } from "@/src/controllers/api/hubController";
@@ -77,6 +78,7 @@ apiRouter.get("/getGuildLog.php", getGuildLogController);
 apiRouter.get("/getIgnoredUsers.php", getIgnoredUsersController);
 apiRouter.get("/getNewRewardSeed.php", getNewRewardSeedController);
 apiRouter.get("/getShip.php", getShipController);
+apiRouter.get("/getVendorInfo.php", getVendorInfoController);
 apiRouter.get("/hub", hubController);
 apiRouter.get("/hubInstances", hubInstancesController);
 apiRouter.get("/inbox.php", inboxController);
