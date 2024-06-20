@@ -975,6 +975,7 @@ type InventoryDocumentProps = {
     SpaceGuns: Types.DocumentArray<IEquipmentDatabase>;
     SpaceMelee: Types.DocumentArray<IEquipmentDatabase>;
     SentinelWeapons: Types.DocumentArray<IEquipmentDatabase>;
+    Hoverboards: Types.DocumentArray<IEquipmentDatabase>;
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-types

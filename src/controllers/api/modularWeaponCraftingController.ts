@@ -4,13 +4,14 @@ import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { WeaponTypeInternal } from "@/src/services/itemDataService";
 import { getInventory, updateCurrency, addWeapon, addMiscItems } from "@/src/services/inventoryService";
 
-const modularWeaponTypes: Record<string, WeaponTypeInternal> = {
+const modularWeaponTypes: Record<string, WeaponTypeInternal | "Hoverboards"> = {
     "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryBeam": "LongGuns",
     "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary": "Pistols",
     "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryBeam": "Pistols",
     "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryShotgun": "Pistols",
     "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon": "Melee",
-    "/Lotus/Weapons/Sentients/OperatorAmplifiers/OperatorAmpWeapon": "OperatorAmps"
+    "/Lotus/Weapons/Sentients/OperatorAmplifiers/OperatorAmpWeapon": "OperatorAmps",
+    "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit": "Hoverboards"
 };
 
 interface IModularCraftRequest {
@@ -30,8 +31,8 @@ export const modularWeaponCraftingController: RequestHandler = async (req, res) 
     // Give weapon
     const weapon = await addWeapon(category, data.WeaponType, accountId, data.Parts);
 
-    // Remove 4000 credits
-    const currencyChanges = await updateCurrency(4000, false, accountId);
+    // Remove credits
+    const currencyChanges = await updateCurrency(category == "Hoverboards" ? 5000 : 4000, false, accountId);
 
     // Remove parts
     const miscItemChanges = [];
