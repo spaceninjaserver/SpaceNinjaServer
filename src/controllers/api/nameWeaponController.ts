@@ -8,6 +8,7 @@ interface INameWeaponRequest {
     ItemName: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const nameWeaponController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId);

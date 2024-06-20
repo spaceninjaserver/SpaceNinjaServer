@@ -4,6 +4,7 @@ import { createNewSession } from "@/src/managers/sessionManager";
 import { logger } from "@/src/utils/logger";
 import { ISession } from "@/src/types/session";
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 const hostSessionController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const hostSessionRequest = JSON.parse(req.body as string) as ISession;

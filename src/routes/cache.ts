@@ -16,6 +16,7 @@ cacheRouter.get(/^\/origin\/[a-zA-Z0-9]+\/[0-9]+\/H\.Cache\.bin.*$/, (_req, res)
     res.sendFile(`static/data/H.Cache_${buildConfig.version}.bin`, { root: "./" });
 });
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 cacheRouter.get(/\.bk2!/, async (req, res) => {
     try {
         const dir = req.path.substr(0, req.path.lastIndexOf("/"));

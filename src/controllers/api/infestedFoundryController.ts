@@ -4,6 +4,7 @@ import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getInventory, addMiscItems } from "@/src/services/inventoryService";
 import { IOid } from "@/src/types/commonTypes";
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const infestedFoundryController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const payload = getJSONfromString(req.body.toString());
