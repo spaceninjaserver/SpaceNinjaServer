@@ -18,6 +18,7 @@ interface IModularCraftRequest {
     Parts: string[];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const modularWeaponCraftingController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const data: IModularCraftRequest = getJSONfromString(req.body.toString());

@@ -5,6 +5,7 @@ import { IMiscItem, TFocusPolarity } from "@/src/types/inventoryTypes/inventoryT
 import { logger } from "@/src/utils/logger";
 import baseFocusPointCosts from "@/static/json/baseFocusPointCosts.json";
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const focusController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     switch (req.query.op) {

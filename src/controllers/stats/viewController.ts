@@ -6,6 +6,7 @@ import { config } from "@/src/services/configService";
 import view from "@/static/fixed_responses/view.json";
 import allScans from "@/static/fixed_responses/allScans.json";
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 const viewController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await Inventory.findOne({ accountOwnerId: accountId });

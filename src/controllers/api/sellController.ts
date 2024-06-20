@@ -3,6 +3,7 @@ import { ISellRequest } from "@/src/types/sellTypes";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getInventory, addMods, addRecipes } from "@/src/services/inventoryService";
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const sellController: RequestHandler = async (req, res) => {
     const payload: ISellRequest = JSON.parse(req.body.toString());
     const accountId = await getAccountIdForRequest(req);

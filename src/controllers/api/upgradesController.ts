@@ -5,6 +5,7 @@ import { IMiscItem, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTy
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addMiscItems, getInventory, updateCurrency } from "@/src/services/inventoryService";
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const upgradesController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const payload = JSON.parse(req.body.toString()) as IUpgradesRequest;
