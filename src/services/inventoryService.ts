@@ -2,7 +2,7 @@ import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import new_inventory from "@/static/fixed_responses/postTutorialInventory.json";
 import { config } from "@/src/services/configService";
 import { Types } from "mongoose";
-import { SlotNames } from "@/src/types/purchaseTypes";
+import { SlotNames, IInventoryChanges } from "@/src/types/purchaseTypes";
 import {
     IChallengeProgress,
     IConsumable,
@@ -70,7 +70,7 @@ export const addItem = async (
     accountId: string,
     typeName: string,
     quantity: number = 1
-): Promise<{ InventoryChanges: object }> => {
+): Promise<{ InventoryChanges: IInventoryChanges }> => {
     // Strict typing
     if (typeName in ExportRecipes) {
         const inventory = await getInventory(accountId);
