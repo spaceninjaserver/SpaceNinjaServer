@@ -5,6 +5,7 @@ import {
     IChallengeProgress,
     IConsumable,
     ICrewShipSalvagedWeaponSkin,
+    IEvolutionProgress,
     IMiscItem,
     IMission,
     IRawUpgrade,
@@ -53,6 +54,7 @@ export interface IMissionInventoryUpdateRequest {
     RewardInfo?: IMissionInventoryUpdateRequestRewardInfo;
     FusionPoints?: number;
     Missions?: IMission;
+    EvolutionProgress?: IEvolutionProgress[];
 }
 
 export interface IMissionInventoryUpdateRequestRewardInfo {

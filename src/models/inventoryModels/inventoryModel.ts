@@ -35,7 +35,8 @@ import {
     ITauntHistory,
     IPeriodicMissionCompletionDatabase,
     IPeriodicMissionCompletionResponse,
-    ILoreFragmentScan
+    ILoreFragmentScan,
+    IEvolutionProgress
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -559,6 +560,15 @@ const loreFragmentScansSchema = new Schema<ILoreFragmentScan>(
     { _id: false }
 );
 
+const evolutionProgressSchema = new Schema<IEvolutionProgress>(
+    {
+        Progress: Number,
+        Rank: Number,
+        ItemType: String
+    },
+    { _id: false }
+);
+
 const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
     {
         accountOwnerId: Schema.Types.ObjectId,
@@ -878,7 +888,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         //Progress+Rank+ItemType(ZarimanPumpShotgun)
         //https://warframe.fandom.com/wiki/Incarnon
-        EvolutionProgress: [Schema.Types.Mixed],
+        EvolutionProgress: { type: [evolutionProgressSchema], default: undefined },
 
         //Unknown and system
         DuviriInfo: DuviriInfoSchema,

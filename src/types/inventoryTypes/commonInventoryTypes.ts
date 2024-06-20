@@ -86,6 +86,7 @@ export enum EquipmentFeatures {
     DOUBLE_CAPACITY = 1,
     UTILITY_SLOT = 2,
     ARCANE_SLOT = 32,
+    INCARNON_GENESIS = 512
 }
 
 export interface IEquipmentDatabase {

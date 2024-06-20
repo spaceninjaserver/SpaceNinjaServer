@@ -246,7 +246,7 @@ export interface IInventoryResponse {
     LastInventorySync: IOid;
     NextRefill: IMongoDate;
     ActiveLandscapeTraps: any[];
-    EvolutionProgress: any[];
+    EvolutionProgress?: IEvolutionProgress[];
     RepVotes: any[];
     LeagueTickets: any[];
     Quests: any[];
@@ -866,4 +866,10 @@ export interface IWebFlags {
     Tennocon2020Digital: boolean;
     Anniversary2021: boolean;
     HitDownloadBtn: IMongoDate;
+}
+
+export interface IEvolutionProgress {
+    Progress: number;
+    Rank: number;
+    ItemType: string;
 }
