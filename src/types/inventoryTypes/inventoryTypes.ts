@@ -170,7 +170,7 @@ export interface IInventoryResponse {
     SpectreLoadouts: ISpectreLoadout[];
     SentinelWeapons: IEquipmentDatabase[];
     Sentinels: IEquipmentDatabase[];
-    EmailItems: ITypeXPItem[];
+    EmailItems: ITypeCount[];
     CompletedSyndicates: string[];
     FocusXP: IFocusXP;
     Wishlist: string[];
