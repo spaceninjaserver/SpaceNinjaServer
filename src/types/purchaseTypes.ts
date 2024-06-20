@@ -1,6 +1,3 @@
-import { IFlavourItem } from "@/src/types/inventoryTypes/inventoryTypes";
-import { IEquipmentClient } from "./inventoryTypes/commonInventoryTypes";
-
 export interface IPurchaseRequest {
     PurchaseParams: IPurchaseParams;
     buildLabel: string;
@@ -17,22 +14,7 @@ export interface IPurchaseParams {
     ExpectedPrice: number;
 }
 
-export interface IPurchaseResponse {
-    InventoryChanges: {
-        SuitBin?: IBinChanges;
-        WeaponBin?: IBinChanges;
-        MechBin?: IBinChanges;
-        MechSuits?: IEquipmentClient[];
-        Suits?: IEquipmentClient[];
-        LongGuns?: IEquipmentClient[];
-        Pistols?: IEquipmentClient[];
-        Melee?: IEquipmentClient[];
-        PremiumCredits?: number;
-        PremiumCreditsFree?: number;
-        RegularCredits?: number;
-        FlavourItems?: IFlavourItem[];
-    };
-}
+export type IInventoryChanges = Record<string, IBinChanges | object[]>;
 
 export type IBinChanges = {
     count: number;

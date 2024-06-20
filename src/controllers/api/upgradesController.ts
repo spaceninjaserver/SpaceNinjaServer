@@ -1,10 +1,11 @@
 import { RequestHandler } from "express";
 import { IUpgradesRequest } from "@/src/types/requestTypes";
-import { FocusSchool, IEquipmentDatabase } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { FocusSchool, IEquipmentDatabase, EquipmentFeatures } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { IMiscItem, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addMiscItems, getInventory, updateCurrency } from "@/src/services/inventoryService";
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const upgradesController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const payload = JSON.parse(req.body.toString()) as IUpgradesRequest;
@@ -31,7 +32,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
                 for (const item of inventory[payload.ItemCategory as TEquipmentKey] as IEquipmentDatabase[]) {
                     if (item._id.toString() == payload.ItemId.$oid) {
                         item.Features ??= 0;
-                        item.Features |= 1;
+                        item.Features |= EquipmentFeatures.DOUBLE_CAPACITY;
                         break;
                     }
                 }
@@ -41,7 +42,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
                 for (const item of inventory[payload.ItemCategory as TEquipmentKey] as IEquipmentDatabase[]) {
                     if (item._id.toString() == payload.ItemId.$oid) {
                         item.Features ??= 0;
-                        item.Features |= 2;
+                        item.Features |= EquipmentFeatures.UTILITY_SLOT;
                         break;
                     }
                 }
@@ -52,7 +53,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
                 for (const item of inventory[payload.ItemCategory as TEquipmentKey] as IEquipmentDatabase[]) {
                     if (item._id.toString() == payload.ItemId.$oid) {
                         item.Features ??= 0;
-                        item.Features |= 32;
+                        item.Features |= EquipmentFeatures.ARCANE_SLOT;
                         break;
                     }
                 }

@@ -1,7 +1,7 @@
 import { parseSlotPurchaseName } from "@/src/helpers/purchaseHelpers";
 import { getSubstringFromKeyword } from "@/src/helpers/stringHelpers";
 import { addItem, addBooster, updateCurrency, updateSlots } from "@/src/services/inventoryService";
-import { IPurchaseRequest, SlotPurchase } from "@/src/types/purchaseTypes";
+import { IPurchaseRequest, SlotPurchase, IInventoryChanges, IBinChanges } from "@/src/types/purchaseTypes";
 import { logger } from "@/src/utils/logger";
 import { ExportBundles, TRarity } from "warframe-public-export-plus";
 
@@ -46,12 +46,37 @@ export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountI
     return purchaseResponse;
 };
 
+const addInventoryChanges = (InventoryChanges: IInventoryChanges, delta: IInventoryChanges): void => {
+    for (const key in delta) {
+        if (!(key in InventoryChanges)) {
+            InventoryChanges[key] = delta[key];
+        } else if (Array.isArray(delta[key])) {
+            const left = InventoryChanges[key] as object[];
+            const right = delta[key] as object[];
+            for (const item of right) {
+                left.push(item);
+            }
+        } else {
+            console.assert(key.substring(-3) == "Bin");
+            const left = InventoryChanges[key] as IBinChanges;
+            const right = delta[key] as IBinChanges;
+            left.count += right.count;
+            left.platinum += right.platinum;
+            left.Slots += right.Slots;
+            if (right.Extra) {
+                left.Extra ??= 0;
+                left.Extra += right.Extra;
+            }
+        }
+    }
+};
+
 const handleStoreItemAcquisition = async (
     storeItemName: string,
     accountId: string,
     quantity: number,
     durability: TRarity
-): Promise<{ InventoryChanges: object }> => {
+): Promise<{ InventoryChanges: IInventoryChanges }> => {
     let purchaseResponse = {
         InventoryChanges: {}
     };
@@ -60,15 +85,17 @@ const handleStoreItemAcquisition = async (
         const bundle = ExportBundles[storeItemName];
         logger.debug("acquiring bundle", bundle);
         for (const component of bundle.components) {
-            purchaseResponse = {
-                ...purchaseResponse,
-                ...(await handleStoreItemAcquisition(
-                    component.typeName,
-                    accountId,
-                    component.purchaseQuantity,
-                    component.durability
-                ))
-            };
+            addInventoryChanges(
+                purchaseResponse.InventoryChanges,
+                (
+                    await handleStoreItemAcquisition(
+                        component.typeName,
+                        accountId,
+                        component.purchaseQuantity,
+                        component.durability
+                    )
+                ).InventoryChanges
+            );
         }
     } else {
         const storeCategory = getStoreItemCategory(storeItemName);
@@ -106,7 +133,10 @@ export const slotPurchaseNameToSlotName: SlotPurchase = {
 // // new slot above base = extra + 1 and slots +1
 // // new frame = slots -1
 // // number of frames = extra - slots + 2
-const handleSlotPurchase = async (slotPurchaseNameFull: string, accountId: string) => {
+const handleSlotPurchase = async (
+    slotPurchaseNameFull: string,
+    accountId: string
+): Promise<{ InventoryChanges: IInventoryChanges }> => {
     logger.debug(`slot name ${slotPurchaseNameFull}`);
     const slotPurchaseName = parseSlotPurchaseName(
         slotPurchaseNameFull.substring(slotPurchaseNameFull.lastIndexOf("/") + 1)
@@ -133,7 +163,11 @@ const handleSlotPurchase = async (slotPurchaseNameFull: string, accountId: strin
 };
 
 //TODO: change to getInventory, apply changes then save at the end
-const handleTypesPurchase = async (typesName: string, accountId: string, quantity: number) => {
+const handleTypesPurchase = async (
+    typesName: string,
+    accountId: string,
+    quantity: number
+): Promise<{ InventoryChanges: IInventoryChanges }> => {
     const typeCategory = getStoreItemTypesCategory(typesName);
     logger.debug(`type category ${typeCategory}`);
     switch (typeCategory) {
@@ -158,7 +192,11 @@ const boosterDuration: Record<TRarity, number> = {
     LEGENDARY: 90 * 86400
 };
 
-const handleBoostersPurchase = async (boosterStoreName: string, accountId: string, durability: TRarity) => {
+const handleBoostersPurchase = async (
+    boosterStoreName: string,
+    accountId: string,
+    durability: TRarity
+): Promise<{ InventoryChanges: IInventoryChanges }> => {
     const ItemType = boosterStoreName.replace("StoreItem", "");
     if (!boosterCollection.find(x => x == ItemType)) {
         logger.error(`unknown booster type: ${ItemType}`);

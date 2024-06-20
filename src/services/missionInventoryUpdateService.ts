@@ -174,7 +174,7 @@ const itemCheck = (
     };
     for (const key of Object.keys(rewardCheck) as IInventoryFieldType[]) {
         if (rewardCheck[key]) {
-            addRewardResponse(InventoryChanges, MissionRewards, name, rewardCheck[key]!, key);
+            addRewardResponse(InventoryChanges, MissionRewards, name, rewardCheck[key], key);
             return true;
         }
     }

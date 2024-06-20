@@ -4,6 +4,7 @@ import { Guild } from "@/src/models/guildModel";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { toOid } from "@/src/helpers/inventoryHelpers";
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 const getGuildController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await Inventory.findOne({ accountOwnerId: accountId });

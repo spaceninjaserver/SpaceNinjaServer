@@ -1,15 +1,15 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
+import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { toInventoryResponse } from "@/src/helpers/inventoryHelpers";
 import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
-import { Request, RequestHandler, Response } from "express";
 import { config } from "@/src/services/configService";
 import allMissions from "@/static/fixed_responses/allMissions.json";
 import { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
 import { IShipInventory } from "@/src/types/inventoryTypes/inventoryTypes";
 import { ExportCustoms, ExportFlavour, ExportKeys, ExportResources } from "warframe-public-export-plus";
 
-const inventoryController: RequestHandler = async (request: Request, response: Response) => {
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+const inventoryController: RequestHandler = async (request, response) => {
     let accountId;
     try {
         accountId = await getAccountIdForRequest(request);

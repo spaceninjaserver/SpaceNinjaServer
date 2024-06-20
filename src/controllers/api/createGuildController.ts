@@ -5,6 +5,7 @@ import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { Guild } from "@/src/models/guildModel";
 import { ICreateGuildRequest } from "@/src/types/guildTypes";
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 const createGuildController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const payload: ICreateGuildRequest = getJSONfromString(req.body.toString());

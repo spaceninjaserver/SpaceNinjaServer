@@ -170,7 +170,7 @@ export interface IInventoryResponse {
     SpectreLoadouts: ISpectreLoadout[];
     SentinelWeapons: IEquipmentDatabase[];
     Sentinels: IEquipmentDatabase[];
-    EmailItems: ITypeXPItem[];
+    EmailItems: ITypeCount[];
     CompletedSyndicates: string[];
     FocusXP: IFocusXP;
     Wishlist: string[];
@@ -239,14 +239,14 @@ export interface IInventoryResponse {
     CrewMembers: ICrewMember[];
     AdultOperatorLoadOuts: IOperatorConfigClient[];
     LotusCustomization: ILotusCustomization;
-    UseAdultOperatorLoadout: boolean;
+    UseAdultOperatorLoadout?: boolean;
     DailyAffiliationZariman: number;
     NemesisAbandonedRewards: string[];
     DailyAffiliationKahl: number;
     LastInventorySync: IOid;
     NextRefill: IMongoDate;
     ActiveLandscapeTraps: any[];
-    EvolutionProgress: any[];
+    EvolutionProgress?: IEvolutionProgress[];
     RepVotes: any[];
     LeagueTickets: any[];
     Quests: any[];
@@ -358,6 +358,7 @@ export interface ICombat {
 export enum InventorySlot {
     SUITS = "SuitBin",
     WEAPONS = "WeaponBin",
+    SPACESUITS = "SpaceSuitBin",
     MECHSUITS = "MechBin",
     PVE_LOADOUTS = "PveBonusLoadoutBin",
     SENTINELS = "SentinelBin"
@@ -865,4 +866,10 @@ export interface IWebFlags {
     Tennocon2020Digital: boolean;
     Anniversary2021: boolean;
     HitDownloadBtn: IMongoDate;
+}
+
+export interface IEvolutionProgress {
+    Progress: number;
+    Rank: number;
+    ItemType: string;
 }
