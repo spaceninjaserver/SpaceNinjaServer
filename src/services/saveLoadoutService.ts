@@ -171,6 +171,10 @@ export const handleInventoryItemConfigChange = async (
                 inventory.EquippedGear = equipment as string[];
                 break;
             }
+            case "UseAdultOperatorLoadout": {
+                inventory.UseAdultOperatorLoadout = equipment as boolean;
+                break;
+            }
             default: {
                 logger.error(`category not implemented: ${equipmentName}`, { config: equipment });
             }

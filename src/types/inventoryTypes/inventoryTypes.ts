@@ -239,7 +239,7 @@ export interface IInventoryResponse {
     CrewMembers: ICrewMember[];
     AdultOperatorLoadOuts: IOperatorConfigClient[];
     LotusCustomization: ILotusCustomization;
-    UseAdultOperatorLoadout: boolean;
+    UseAdultOperatorLoadout?: boolean;
     DailyAffiliationZariman: number;
     NemesisAbandonedRewards: string[];
     DailyAffiliationKahl: number;
