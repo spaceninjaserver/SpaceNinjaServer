@@ -1,7 +1,13 @@
 import { RequestHandler } from "express";
 import { MinItem, items, getEnglishString } from "@/src/services/itemDataService";
 import badItems from "@/static/json/exclude-mods.json";
-import { ExportArcanes, ExportResources, ExportWarframes, ExportWeapons } from "warframe-public-export-plus";
+import {
+    ExportArcanes,
+    ExportGear,
+    ExportResources,
+    ExportWarframes,
+    ExportWeapons
+} from "warframe-public-export-plus";
 
 interface ListedItem {
     uniqueName: string;
@@ -31,7 +37,7 @@ const getItemListsController: RequestHandler = (_req, res) => {
                 });
             } else if (!item.excludeFromCodex) {
                 miscitems.push({
-                    uniqueName,
+                    uniqueName: "MiscItems:" + uniqueName,
                     name: getEnglishString(item.name)
                 });
             }
@@ -39,7 +45,13 @@ const getItemListsController: RequestHandler = (_req, res) => {
     }
     for (const [uniqueName, item] of Object.entries(ExportResources)) {
         miscitems.push({
-            uniqueName,
+            uniqueName: "MiscItems:" + uniqueName,
+            name: getEnglishString(item.name)
+        });
+    }
+    for (const [uniqueName, item] of Object.entries(ExportGear)) {
+        miscitems.push({
+            uniqueName: "Consumables:" + uniqueName,
             name: getEnglishString(item.name)
         });
     }

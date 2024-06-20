@@ -512,17 +512,18 @@ function disposeOfItems(category, type, count) {
 }
 
 function doAcquireMiscItems() {
-    const uniqueName = getKey(document.getElementById("miscitem-type"));
-    if (!uniqueName) {
+    const data = getKey(document.getElementById("miscitem-type"));
+    if (!data) {
         $("#miscitem-type").addClass("is-invalid").focus();
         return;
     }
+    const [category, uniqueName] = data.split(":");
     revalidateAuthz(() => {
         $.post({
             url: "/api/missionInventoryUpdate.php?" + window.authz,
             contentType: "text/plain",
             data: JSON.stringify({
-                MiscItems: [
+                [category]: [
                     {
                         ItemType: uniqueName,
                         ItemCount: parseInt($("#miscitem-count").val())
@@ -535,8 +536,8 @@ function doAcquireMiscItems() {
     });
 }
 
-$("#miscitem-name").on("input", () => {
-    $("#miscitem-name").removeClass("is-invalid");
+$("#miscitem-type").on("input", () => {
+    $("#miscitem-type").removeClass("is-invalid");
 });
 
 function doAcquireRiven() {
