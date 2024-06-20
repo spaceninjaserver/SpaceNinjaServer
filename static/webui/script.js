@@ -535,8 +535,8 @@ function doAcquireMiscItems() {
     });
 }
 
-$("#miscitem-name").on("input", () => {
-    $("#miscitem-name").removeClass("is-invalid");
+$("#miscitem-type").on("input", () => {
+    $("#miscitem-type").removeClass("is-invalid");
 });
 
 function doAcquireRiven() {
