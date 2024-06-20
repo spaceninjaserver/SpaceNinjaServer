@@ -33,6 +33,7 @@ export interface ISaveLoadoutRequest {
     CurrentLoadOutIds: IOid[];
     ValidNewLoadoutId: string;
     EquippedGear: string[];
+    UseAdultOperatorLoadout: boolean;
 }
 
 export interface ISaveLoadoutRequestNoUpgradeVer extends Omit<ISaveLoadoutRequest, "UpgradeVer"> {}
