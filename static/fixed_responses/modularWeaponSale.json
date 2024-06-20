@@ -2,66 +2,82 @@
   "SaleInfos": [
     {
       "Name": "Ostron",
-      "Expiry": { "$date": { "$numberLong": "1683586800000" } },
-      "Revision": 3045,
+      "Expiry": {
+        "$date": {
+          "$numberLong": "9999999900000"
+        }
+      },
+      "Revision": 3453,
       "Weapons": [
         {
           "ItemType": "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
-          "PremiumPrice": 171,
+          "PremiumPrice": 162,
           "ModularParts": [
             "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFive",
-            "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipSix",
-            "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceDamageICritII"
+            "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipFour",
+            "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedICritII"
           ]
         }
       ]
     },
     {
       "Name": "SolarisUnitedHoverboard",
-      "Expiry": { "$date": { "$numberLong": "1683586800000" } },
-      "Revision": 1650,
+      "Expiry": {
+        "$date": {
+          "$numberLong": "9999999900000"
+        }
+      },
+      "Revision": 2058,
       "Weapons": [
         {
           "ItemType": "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit",
           "PremiumPrice": 51,
           "ModularParts": [
-            "/Lotus/Types/Vehicles/Hoverboard/HoverboardParts/PartComponents/HoverboardCorpusC/HoverboardCorpusCDeck",
-            "/Lotus/Types/Vehicles/Hoverboard/HoverboardParts/PartComponents/HoverboardCorpusC/HoverboardCorpusCEngine",
-            "/Lotus/Types/Vehicles/Hoverboard/HoverboardParts/PartComponents/HoverboardCorpusB/HoverboardCorpusBFront",
-            "/Lotus/Types/Vehicles/Hoverboard/HoverboardParts/PartComponents/HoverboardCorpusC/HoverboardCorpusCJet"
+            "/Lotus/Types/Vehicles/Hoverboard/HoverboardParts/PartComponents/HoverboardSolarisA/HoverboardSolarisADeck",
+            "/Lotus/Types/Vehicles/Hoverboard/HoverboardParts/PartComponents/HoverboardCorpusA/HoverboardCorpusAEngine",
+            "/Lotus/Types/Vehicles/Hoverboard/HoverboardParts/PartComponents/HoverboardSolarisA/HoverboardSolarisAFront",
+            "/Lotus/Types/Vehicles/Hoverboard/HoverboardParts/PartComponents/HoverboardCorpusB/HoverboardCorpusBJet"
           ]
         }
       ]
     },
     {
       "Name": "SolarisUnitedMoaPet",
-      "Expiry": { "$date": { "$numberLong": "1683586800000" } },
-      "Revision": 1650,
+      "Expiry": {
+        "$date": {
+          "$numberLong": "9999999900000"
+        }
+      },
+      "Revision": 2058,
       "Weapons": [
         {
           "ItemType": "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetPowerSuit",
-          "PremiumPrice": 175,
+          "PremiumPrice": 180,
           "ModularParts": [
-            "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetParts/MoaPetLegC",
-            "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetParts/MoaPetHeadOloro",
-            "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetParts/MoaPetEngineKrisys",
-            "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetParts/MoaPetPayloadThermocor"
+            "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetParts/MoaPetLegB",
+            "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetParts/MoaPetHeadPara",
+            "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetParts/MoaPetEngineArcotek",
+            "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetParts/MoaPetPayloadMunitron"
           ]
         }
       ]
     },
     {
       "Name": "SolarisUnitedKitGun",
-      "Expiry": { "$date": { "$numberLong": "1683586800000" } },
-      "Revision": 1650,
+      "Expiry": {
+        "$date": {
+          "$numberLong": "9999999900000"
+        }
+      },
+      "Revision": 2058,
       "Weapons": [
         {
-          "ItemType": "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryBeam",
-          "PremiumPrice": 157,
+          "ItemType": "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary",
+          "PremiumPrice": 184,
           "ModularParts": [
-            "/Lotus/Weapons/SolarisUnited/Primary/SUModularPrimarySet1/Handles/SUModularPrimaryHandleAPart",
-            "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelDPart",
-            "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritIReloadIIClipPart"
+            "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Handle/SUModularSecondaryHandleCPart",
+            "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelBPart",
+            "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularStatIReloadIIClipPart"
           ]
         }
       ]
