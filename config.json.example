@@ -16,6 +16,7 @@
   "unlockAllQuests": true,
   "completeAllQuests": false,
   "infiniteResources": true,
+  "infinitePlatinum": true,
   "unlockAllShipFeatures": true,
   "unlockAllShipDecorations": true,
   "unlockAllFlavourItems": true,
