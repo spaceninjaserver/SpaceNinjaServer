@@ -23,6 +23,7 @@ export const getCreditsController: RequestHandler = async (req, res) => {
         return;
     }
 	
+	const inventory = await getInventory(accountId);
 	if (config.infinitePlatinum) {
         res.json({
             RegularCredits: inventory.RegularCredits,
@@ -32,8 +33,7 @@ export const getCreditsController: RequestHandler = async (req, res) => {
         });
         return;
     }
-
-    const inventory = await getInventory(accountId);
+	
     res.json({
         RegularCredits: inventory.RegularCredits,
         TradesRemaining: inventory.TradesRemaining,
