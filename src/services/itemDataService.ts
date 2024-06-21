@@ -1,22 +1,19 @@
 import { getIndexAfter } from "@/src/helpers/stringHelpers";
 import { logger } from "@/src/utils/logger";
-import Items, { Buildable, Category, MinimalItem, Warframe, Weapon } from "warframe-items";
+import Items, { Category, MinimalItem, Warframe, Weapon } from "warframe-items";
 import badItems from "@/static/json/exclude-mods.json";
-import { dict_en, ExportWarframes, ExportWeapons, IPowersuit } from "warframe-public-export-plus";
+import {
+    dict_en,
+    ExportRecipes,
+    ExportWarframes,
+    ExportWeapons,
+    IPowersuit,
+    IRecipe
+} from "warframe-public-export-plus";
 
 export type MinWarframe = Omit<Warframe, "patchlogs">;
 export type MinWeapon = Omit<Weapon, "patchlogs">;
 export type MinItem = Omit<MinimalItem, "patchlogs">;
-
-export const warframes: MinWarframe[] = Array.from(new Items({ category: ["Warframes"] }) as Warframe[])
-    .filter(item => {
-        return item.uniqueName.substring(0, 30) != "/Lotus/Powersuits/EntratiMech/";
-    })
-    .map(item => {
-        const next = { ...item };
-        delete next.patchlogs;
-        return next;
-    });
 
 export type WeaponTypeInternal =
     | "LongGuns"
@@ -100,13 +97,8 @@ export const blueprintNames = Object.fromEntries(
         .map(name => [name, craftNames[name]])
 );
 
-const buildables = items.filter(item => !!(item as Buildable).components);
-
-export const getItemByBlueprint = (uniqueName: string): (MinItem & Buildable) | undefined => {
-    const item = buildables.find(item =>
-        (item as Buildable).components?.find(component => component.uniqueName === uniqueName)
-    );
-    return item;
+export const getRecipe = (uniqueName: string): IRecipe | undefined => {
+    return ExportRecipes[uniqueName];
 };
 
 export const getExalted = (uniqueName: string) => {

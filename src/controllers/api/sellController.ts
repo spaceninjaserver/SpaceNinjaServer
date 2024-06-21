@@ -1,8 +1,9 @@
 import { RequestHandler } from "express";
 import { ISellRequest } from "@/src/types/sellTypes";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getInventory, addMods } from "@/src/services/inventoryService";
+import { getInventory, addMods, addRecipes } from "@/src/services/inventoryService";
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const sellController: RequestHandler = async (req, res) => {
     const payload: ISellRequest = JSON.parse(req.body.toString());
     const accountId = await getAccountIdForRequest(req);
@@ -39,8 +40,14 @@ export const sellController: RequestHandler = async (req, res) => {
         });
     }
     if (payload.Items.Recipes) {
-        // TODO
-        // Note: sellItem.String is a uniqueName in this case
+        const recipeChanges = [];
+        for (const sellItem of payload.Items.Recipes) {
+            recipeChanges.push({
+                ItemType: sellItem.String,
+                ItemCount: sellItem.Count * -1
+            });
+        }
+        addRecipes(inventory, recipeChanges);
     }
     if (payload.Items.Upgrades) {
         payload.Items.Upgrades.forEach(sellItem => {

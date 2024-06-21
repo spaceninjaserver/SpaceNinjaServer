@@ -1,4 +1,4 @@
-import { IOid } from "@/src/types/commonTypes";
+import { IMongoDate, IOid } from "@/src/types/commonTypes";
 import { Types } from "mongoose";
 
 export interface IPolarity {
@@ -38,15 +38,8 @@ export interface ISlotsBin {
     Slots: number;
 }
 
-// ISigCol? IsIgCoL? ISIGCOL!
-export interface Isigcol {
-    t0: number;
-    t1: number;
-    en: number;
-}
-
-interface IItemConfigBase {
-    Skins: string[];
+export interface IItemConfig {
+    Skins?: string[];
     pricol?: IColor;
     attcol?: IColor;
     sigcol?: IColor;
@@ -56,12 +49,7 @@ interface IItemConfigBase {
     cloth?: IColor;
     Upgrades?: string[];
     Name?: string;
-    ugly?: boolean;
-}
-
-//TODO: Proper names for the different config types, this should be something like
-//IItemConfigPlayable
-export interface IItemConfig extends IItemConfigBase {
+    OperatorAmp?: IOid;
     Songs?: ISong[];
     AbilityOverride?: IAbilityOverride;
     PvpUpgrades?: string[];
@@ -74,14 +62,59 @@ export interface ISong {
     p?: string;
     s: string;
 }
-
-//TODO: Consider renaming it to loadout instead of config
-export interface IOperatorConfigDatabase extends IItemConfigBase {
+export interface IOperatorConfigDatabase extends IItemConfig {
     _id: Types.ObjectId;
-    AbilityOverride?: IAbilityOverride; // not present in adultOperator
-    OperatorAmp?: IOid; // not present in adultOperator
 }
 
 export interface IOperatorConfigClient extends Omit<IOperatorConfigDatabase, "_id"> {
     ItemId: IOid;
+}
+
+export interface IEquipmentSelection {
+    ItemId: IOid;
+    mod?: number;
+    cus?: number;
+    ItemType?: string;
+    hide?: boolean;
+}
+
+export interface IEquipmentClient extends Omit<IEquipmentDatabase, "_id"> {
+    ItemId: IOid;
+}
+
+export enum EquipmentFeatures {
+    DOUBLE_CAPACITY = 1,
+    UTILITY_SLOT = 2,
+    ARCANE_SLOT = 32,
+    INCARNON_GENESIS = 512
+}
+
+export interface IEquipmentDatabase {
+    ItemType: string;
+    ItemName?: string;
+    Configs: IItemConfig[];
+    UpgradeVer?: number;
+    XP?: number;
+    Features?: number;
+    Polarized?: number;
+    Polarity?: IPolarity[];
+    FocusLens?: string;
+    ModSlotPurchases?: number;
+    CustomizationSlotPurchases?: number;
+    UpgradeType?: string;
+    UpgradeFingerprint?: string;
+    InfestationDate?: IMongoDate;
+    InfestationDays?: number;
+    InfestationType?: string;
+    ModularParts?: string[];
+    UnlockLevel?: number;
+    Expiry?: IMongoDate;
+    SkillTree?: string;
+    ArchonCrystalUpgrades?: IArchonCrystalUpgrade[];
+    _id: Types.ObjectId;
+}
+
+export interface IArchonCrystalUpgrade {
+    UpgradeType?: string;
+    Color?: string;
 }

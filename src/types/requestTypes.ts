@@ -1,18 +1,16 @@
 import { IOid } from "./commonTypes";
-import { IPolarity, FocusSchool } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { IPolarity, FocusSchool, IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import {
     IBooster,
     IChallengeProgress,
     IConsumable,
     ICrewShipSalvagedWeaponSkin,
+    IEvolutionProgress,
     IMiscItem,
     IMission,
     IRawUpgrade,
-    ISeasonChallengeCompletions,
-    ISeasonChallengeHistory
+    ISeasonChallenge
 } from "./inventoryTypes/inventoryTypes";
-import { IWeaponClient } from "./inventoryTypes/weaponTypes";
-import { ISuitClient } from "./inventoryTypes/SuitTypes";
 
 export interface IArtifactsRequest {
     Upgrade: ICrewShipSalvagedWeaponSkin;
@@ -35,18 +33,18 @@ export interface IAffiliationChange {
 
 export interface IUpdateChallengeProgressRequest {
     ChallengeProgress: IChallengeProgress[];
-    SeasonChallengeHistory: ISeasonChallengeHistory[];
-    SeasonChallengeCompletions: ISeasonChallengeCompletions[];
+    SeasonChallengeHistory: ISeasonChallenge[];
+    SeasonChallengeCompletions: ISeasonChallenge[];
 }
 
 export interface IMissionInventoryUpdateRequest {
     rewardsMultiplier?: number;
     ActiveBoosters?: IBooster[];
     AffiliationChanges?: IAffiliationChange[];
-    LongGuns?: IWeaponClient[];
-    Pistols?: IWeaponClient[];
-    Suits?: ISuitClient[];
-    Melee?: IWeaponClient[];
+    LongGuns?: IEquipmentClient[];
+    Pistols?: IEquipmentClient[];
+    Suits?: IEquipmentClient[];
+    Melee?: IEquipmentClient[];
     RawUpgrades?: IRawUpgrade[];
     MiscItems?: IMiscItem[];
     Consumables?: IConsumable[];
@@ -56,6 +54,7 @@ export interface IMissionInventoryUpdateRequest {
     RewardInfo?: IMissionInventoryUpdateRequestRewardInfo;
     FusionPoints?: number;
     Missions?: IMission;
+    EvolutionProgress?: IEvolutionProgress[];
 }
 
 export interface IMissionInventoryUpdateRequestRewardInfo {

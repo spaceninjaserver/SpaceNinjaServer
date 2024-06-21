@@ -1,7 +1,3 @@
-import { ISuitClient } from "@/src/types/inventoryTypes/SuitTypes";
-import { IFlavourItem } from "@/src/types/inventoryTypes/inventoryTypes";
-import { IWeaponClient } from "@/src/types/inventoryTypes/weaponTypes";
-
 export interface IPurchaseRequest {
     PurchaseParams: IPurchaseParams;
     buildLabel: string;
@@ -18,22 +14,7 @@ export interface IPurchaseParams {
     ExpectedPrice: number;
 }
 
-export interface IPurchaseResponse {
-    InventoryChanges: {
-        SuitBin?: IBinChanges;
-        WeaponBin?: IBinChanges;
-        MechBin?: IBinChanges;
-        MechSuits?: ISuitClient[];
-        Suits?: ISuitClient[];
-        LongGuns?: IWeaponClient[];
-        Pistols?: IWeaponClient[];
-        Melee?: IWeaponClient[];
-        PremiumCredits?: number;
-        PremiumCreditsFree?: number;
-        RegularCredits?: number;
-        FlavourItems?: IFlavourItem[];
-    };
-}
+export type IInventoryChanges = Record<string, IBinChanges | object[]>;
 
 export type IBinChanges = {
     count: number;
@@ -41,14 +22,6 @@ export type IBinChanges = {
     Slots: number;
     Extra?: number;
 };
-
-export enum SlotNameToInventoryName {
-    SUIT = "SuitBin",
-    WEAPON = "WeaponBin",
-    MECHSUIT = "MechBin",
-    LOADOUT = "PveBonusLoadoutBin",
-    SENTINEL = "SentinelBin"
-}
 
 export type SlotPurchaseName =
     | "SuitSlotItem"

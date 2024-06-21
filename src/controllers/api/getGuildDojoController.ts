@@ -4,6 +4,7 @@ import { Guild } from "@/src/models/guildModel";
 import { IDojoClient, IDojoComponentClient } from "@/src/types/guildTypes";
 import { toOid, toMongoDate } from "@/src/helpers/inventoryHelpers";
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const getGuildDojoController: RequestHandler = async (req, res) => {
     const guildId = req.query.guildId as string;
 

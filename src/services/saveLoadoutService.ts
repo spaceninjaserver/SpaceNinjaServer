@@ -132,7 +132,19 @@ export const handleInventoryItemConfigChange = async (
             case "DataKnives":
             case "DrifterMelee":
             case "Sentinels":
-            case "Horses": {
+            case "Horses":
+            case "OperatorAmps":
+            case "SentinelWeapons":
+            case "KubrowPets":
+            case "SpaceSuits":
+            case "SpaceGuns":
+            case "SpaceMelee":
+            case "SpecialItems":
+            case "MoaPets":
+            case "Hoverboards":
+            case "MechSuits":
+            case "CrewShipHarnesses":
+            case "CrewShips": {
                 logger.debug(`general Item config saved of type ${equipmentName}`, { config: equipment });
 
                 const itemEntries = equipment as IItemEntry;
@@ -159,21 +171,13 @@ export const handleInventoryItemConfigChange = async (
                 inventory.EquippedGear = equipment as string[];
                 break;
             }
+            case "UseAdultOperatorLoadout": {
+                inventory.UseAdultOperatorLoadout = equipment as boolean;
+                break;
+            }
             default: {
                 logger.error(`category not implemented: ${equipmentName}`, { config: equipment });
             }
-            //case "OperatorAmps":
-            // case "SentinelWeapons":
-            // case "KubrowPets":
-            // case "SpaceSuits":
-            // case "SpaceGuns":
-            // case "SpaceMelee":
-            // case "SpecialItems":
-            // case "MoaPets":
-            // case "Hoverboards":
-            // case "MechSuits":
-            // case "CrewShipHarnesses":
-            // case "CrewShips":
             //case "KahlLoadOuts": not sure yet how to handle kahl: it is not sent in inventory
         }
     }

@@ -1,6 +1,7 @@
 import { IOid } from "@/src/types/commonTypes";
 import { IItemConfig, IOperatorConfigClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { Types } from "mongoose";
+import { ILoadoutConfigClient } from "./inventoryTypes/inventoryTypes";
 
 export interface ISaveLoadoutRequest {
     LoadOuts: ILoadoutClient;
@@ -32,6 +33,7 @@ export interface ISaveLoadoutRequest {
     CurrentLoadOutIds: IOid[];
     ValidNewLoadoutId: string;
     EquippedGear: string[];
+    UseAdultOperatorLoadout: boolean;
 }
 
 export interface ISaveLoadoutRequestNoUpgradeVer extends Omit<ISaveLoadoutRequest, "UpgradeVer"> {}
@@ -71,24 +73,4 @@ export interface ILoadoutEntry {
 }
 export interface ILoadoutConfigDatabase extends Omit<ILoadoutConfigClient, "ItemId"> {
     _id: Types.ObjectId;
-}
-
-// for request and response from and to client
-export interface ILoadoutConfigClient {
-    ItemId: IOid;
-    Remove?: boolean; // when client wants to remove a config, it only includes ItemId & Remove.
-    n?: string;
-    PresetIcon?: string;
-    Favorite?: boolean;
-    s?: IEquipmentSelection;
-    p?: IEquipmentSelection;
-    l?: IEquipmentSelection;
-    m?: IEquipmentSelection;
-}
-
-export interface IEquipmentSelection {
-    ItemId?: IOid;
-    mod?: number;
-    cus?: number;
-    hide?: boolean;
 }

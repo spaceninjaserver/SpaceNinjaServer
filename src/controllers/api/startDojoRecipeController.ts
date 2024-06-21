@@ -8,6 +8,7 @@ interface IStartDojoRecipeRequest {
     Revision: number;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const startDojoRecipeController: RequestHandler = async (req, res) => {
     const guild = await getGuildForRequest(req);
     // At this point, we know that a member of the guild is making this request. Assuming they are allowed to start a build.

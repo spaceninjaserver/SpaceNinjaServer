@@ -1,18 +1,15 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
+import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { toInventoryResponse } from "@/src/helpers/inventoryHelpers";
 import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
-import { Request, RequestHandler, Response } from "express";
 import { config } from "@/src/services/configService";
 import allMissions from "@/static/fixed_responses/allMissions.json";
-import allQuestKeys from "@/static/fixed_responses/allQuestKeys.json";
-import allShipDecorations from "@/static/fixed_responses/allShipDecorations.json";
-import allFlavourItems from "@/static/fixed_responses/allFlavourItems.json";
-import allSkins from "@/static/fixed_responses/allSkins.json";
 import { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
-import { IShipInventory, IFlavourItem } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IShipInventory } from "@/src/types/inventoryTypes/inventoryTypes";
+import { ExportCustoms, ExportFlavour, ExportKeys, ExportResources } from "warframe-public-export-plus";
 
-const inventoryController: RequestHandler = async (request: Request, response: Response) => {
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+const inventoryController: RequestHandler = async (request, response) => {
     let accountId;
     try {
         accountId = await getAccountIdForRequest(request);
@@ -51,46 +48,73 @@ const inventoryController: RequestHandler = async (request: Request, response: R
     }
 
     if (config.unlockAllQuests) {
-        for (const questKey of allQuestKeys) {
-            if (!inventoryResponse.QuestKeys.find(quest => quest.ItemType == questKey)) {
-                inventoryResponse.QuestKeys.push({ ItemType: questKey });
+        for (const [k, v] of Object.entries(ExportKeys)) {
+            if ("chainStages" in v) {
+                if (!inventoryResponse.QuestKeys.find(quest => quest.ItemType == k)) {
+                    inventoryResponse.QuestKeys.push({ ItemType: k });
+                }
             }
         }
     }
     if (config.completeAllQuests) {
         for (const quest of inventoryResponse.QuestKeys) {
             quest.Completed = true;
+            quest.Progress = [
+                {
+                    c: 0,
+                    i: false,
+                    m: false,
+                    b: []
+                }
+            ];
+        }
+
+        inventoryResponse.ArchwingEnabled = true;
+
+        // Skip "Watch The Maker"
+        inventoryResponse.NodeIntrosCompleted.push("/Lotus/Levels/Cinematics/NewWarIntro/NewWarStageTwo.level");
+    }
+
+    if (config.unlockAllShipDecorations) {
+        inventoryResponse.ShipDecorations = [];
+        for (const [uniqueName, item] of Object.entries(ExportResources)) {
+            if (item.productCategory == "ShipDecorations") {
+                inventoryResponse.ShipDecorations.push({ ItemType: uniqueName, ItemCount: 1 });
+            }
         }
     }
 
-    if (config.unlockAllShipDecorations) inventoryResponse.ShipDecorations = allShipDecorations;
-    if (config.unlockAllFlavourItems) inventoryResponse.FlavourItems = allFlavourItems satisfies IFlavourItem[];
+    if (config.unlockAllFlavourItems) {
+        inventoryResponse.FlavourItems = [];
+        for (const uniqueName in ExportFlavour) {
+            inventoryResponse.FlavourItems.push({ ItemType: uniqueName });
+        }
+    }
 
     if (config.unlockAllSkins) {
         inventoryResponse.WeaponSkins = [];
-        for (const skin of allSkins) {
+        for (const uniqueName in ExportCustoms) {
             inventoryResponse.WeaponSkins.push({
                 ItemId: {
                     $oid: "000000000000000000000000"
                 },
-                ItemType: skin
+                ItemType: uniqueName
             });
         }
     }
 
-    if (
-        typeof config.spoofMasteryRank === "number" &&
-        config.spoofMasteryRank >= 0 &&
-        config.spoofMasteryRank <= 5030
-    ) {
+    if (typeof config.spoofMasteryRank === "number" && config.spoofMasteryRank >= 0) {
         inventoryResponse.PlayerLevel = config.spoofMasteryRank;
-        inventoryResponse.XPInfo = [];
-        let numFrames = getExpRequiredForMr(config.spoofMasteryRank) / 6000;
-        while (numFrames-- > 0) {
-            inventoryResponse.XPInfo.push({
-                ItemType: "/Lotus/Powersuits/Mag/Mag",
-                XP: 1_600_000
-            });
+        if (!("xpBasedLevelCapDisabled" in request.query)) {
+            // This client has not been patched to accept any mastery rank, need to fake the XP.
+            inventoryResponse.XPInfo = [];
+            let numFrames = getExpRequiredForMr(Math.min(config.spoofMasteryRank, 5030)) / 6000;
+            while (numFrames-- > 0) {
+                inventoryResponse.XPInfo.push({
+                    ItemType: "/Lotus/Powersuits/Mag/Mag",
+                    XP: 1_600_000
+                });
+            }
         }
     }
 
