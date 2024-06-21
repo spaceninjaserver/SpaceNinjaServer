@@ -42,6 +42,11 @@ const inventoryController: RequestHandler = async (request, response) => {
         inventoryResponse.PremiumCredits = 999999999;
     }
 
+    if (config.infinitePlatinum) {
+        inventoryResponse.PremiumCreditsFree = 999999999;
+        inventoryResponse.PremiumCredits = 999999999;
+    }
+
     if (config.unlockAllMissions) {
         inventoryResponse.Missions = allMissions;
         inventoryResponse.NodeIntrosCompleted.push("TeshinHardModeUnlocked");
