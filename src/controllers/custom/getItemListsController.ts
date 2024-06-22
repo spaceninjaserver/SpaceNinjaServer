@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { MinItem, items, getEnglishString } from "@/src/services/itemDataService";
+import { getEnglishString } from "@/src/services/itemDataService";
 import {
     ExportArcanes,
     ExportGear,
@@ -13,16 +13,6 @@ interface ListedItem {
     uniqueName: string;
     name: string;
     fusionLimit?: number;
-}
-
-function reduceItems(items: MinItem[]): ListedItem[] {
-    return items.map((item: MinItem): ListedItem => {
-        return {
-            uniqueName: item.uniqueName,
-            name: item.name,
-            fusionLimit: (item as any).fusionLimit
-        };
-    });
 }
 
 const getItemListsController: RequestHandler = (_req, res) => {
@@ -56,19 +46,23 @@ const getItemListsController: RequestHandler = (_req, res) => {
         });
     }
 
-    const mods = reduceItems(items.filter(item => item.category == "Mods"));
-    for (const [uniqueName, arcane] of Object.entries(ExportArcanes)) {
-        mods.push({
-            uniqueName: uniqueName,
-            name: getEnglishString(arcane.name)
-        });
-    }
-
+    const mods: ListedItem[] = [];
     const badItems: Record<string, boolean> = {};
     for (const [uniqueName, upgrade] of Object.entries(ExportUpgrades)) {
+        mods.push({
+            uniqueName,
+            name: getEnglishString(upgrade.name),
+            fusionLimit: upgrade.fusionLimit
+        });
         if (upgrade.isStarter || upgrade.isFrivolous || upgrade.upgradeEntries) {
             badItems[uniqueName] = true;
         }
+    }
+    for (const [uniqueName, arcane] of Object.entries(ExportArcanes)) {
+        mods.push({
+            uniqueName,
+            name: getEnglishString(arcane.name)
+        });
     }
 
     res.json({
