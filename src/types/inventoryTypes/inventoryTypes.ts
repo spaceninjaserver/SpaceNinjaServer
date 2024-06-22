@@ -59,15 +59,21 @@ export interface ITypeCount {
     ItemCount: number;
 }
 
-export type TEquipmentKey =
-    | "Suits"
-    | "LongGuns"
-    | "Pistols"
-    | "Melee"
-    | "SpecialItems"
-    | "Sentinels"
-    | "SentinelWeapons"
-    | "SpaceGuns";
+export const equipmentKeys = [
+    "Suits",
+    "LongGuns",
+    "Pistols",
+    "Melee",
+    "SpecialItems",
+    "Sentinels",
+    "SentinelWeapons",
+    "SpaceSuits",
+    "SpaceGuns",
+    "SpaceMelee",
+    "Hoverboards"
+] as const;
+
+export type TEquipmentKey = (typeof equipmentKeys)[number];
 
 export interface IDuviriInfo {
     Seed: number;
