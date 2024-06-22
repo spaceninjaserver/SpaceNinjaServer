@@ -1,10 +1,10 @@
 import { RequestHandler } from "express";
 import { MinItem, items, getEnglishString } from "@/src/services/itemDataService";
-import badItems from "@/static/json/exclude-mods.json";
 import {
     ExportArcanes,
     ExportGear,
     ExportResources,
+    ExportUpgrades,
     ExportWarframes,
     ExportWeapons
 } from "warframe-public-export-plus";
@@ -62,6 +62,13 @@ const getItemListsController: RequestHandler = (_req, res) => {
             uniqueName: uniqueName,
             name: getEnglishString(arcane.name)
         });
+    }
+
+    const badItems: Record<string, boolean> = {};
+    for (const [uniqueName, upgrade] of Object.entries(ExportUpgrades)) {
+        if (upgrade.isStarter || upgrade.isFrivolous || upgrade.upgradeEntries) {
+            badItems[uniqueName] = true;
+        }
     }
 
     res.json({
