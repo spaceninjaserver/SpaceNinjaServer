@@ -66,7 +66,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
                 for (const item of inventory[payload.ItemCategory as TEquipmentKey] as IEquipmentDatabase[]) {
                     if (item._id.toString() == payload.ItemId.$oid) {
                         if (!config.NoResetPolarize) {
-                        item.XP = 0;
+                            item.XP = 0;
                         }
                         setSlotPolarity(item, operation.PolarizeSlot, operation.PolarizeValue);
                         item.Polarized ??= 0;
