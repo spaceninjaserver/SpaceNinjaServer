@@ -3,7 +3,7 @@ import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getInventory, addMiscItems } from "@/src/services/inventoryService";
 import { IMiscItem, TFocusPolarity } from "@/src/types/inventoryTypes/inventoryTypes";
 import { logger } from "@/src/utils/logger";
-import baseFocusPointCosts from "@/static/json/baseFocusPointCosts.json";
+import { ExportFocusUpgrades } from "warframe-public-export-plus";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const focusController: RequestHandler = async (req, res) => {
@@ -45,7 +45,7 @@ export const focusController: RequestHandler = async (req, res) => {
             const inventory = await getInventory(accountId);
             let cost = 0;
             for (const focusType of request.FocusTypes) {
-                cost += baseFocusPointCosts[focusType as keyof typeof baseFocusPointCosts];
+                cost += ExportFocusUpgrades[focusType].baseFocusPointCost;
                 inventory.FocusUpgrades.push({ ItemType: focusType, Level: 0 });
             }
             inventory.FocusXP[focusPolarity] -= cost;
