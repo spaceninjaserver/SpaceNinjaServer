@@ -65,15 +65,42 @@ export const focusController: RequestHandler = async (req, res) => {
                 cost += focusUpgrade.FocusXpCost;
                 const focusUpgradeDb = inventory.FocusUpgrades.find(entry => entry.ItemType == focusUpgrade.ItemType)!;
                 focusUpgradeDb.Level = focusUpgrade.Level;
-                if (focusUpgrade.IsUniversal) {
-                    focusUpgradeDb.IsUniversal = true;
-                }
             }
             inventory.FocusXP[focusPolarity] -= cost;
             await inventory.save();
             res.json({
                 FocusInfos: request.FocusInfos,
                 FocusPointCosts: { [focusPolarity]: cost }
+            });
+            break;
+        }
+        case FocusOperation.UnbindUpgrade: {
+            const request = JSON.parse(req.body.toString()) as IUnbindUpgradeRequest;
+            const focusPolarity = focusTypeToPolarity(request.FocusTypes[0]);
+            const inventory = await getInventory(accountId);
+            inventory.FocusXP[focusPolarity] -= 750_000 * request.FocusTypes.length;
+            addMiscItems(inventory, [
+                {
+                    ItemType: "/Lotus/Types/Gameplay/Eidolon/Resources/SentientShards/SentientShardBrilliantItem",
+                    ItemCount: request.FocusTypes.length * -1
+                }
+            ]);
+            request.FocusTypes.forEach(type => {
+                const focusUpgradeDb = inventory.FocusUpgrades.find(entry => entry.ItemType == type)!;
+                focusUpgradeDb.IsUniversal = true;
+            });
+            await inventory.save();
+            res.json({
+                FocusTypes: request.FocusTypes,
+                FocusPointCosts: {
+                    [focusPolarity]: 750_000 * request.FocusTypes.length
+                },
+                MiscItemCosts: [
+                    {
+                        ItemType: "/Lotus/Types/Gameplay/Eidolon/Resources/SentientShards/SentientShardBrilliantItem",
+                        ItemCount: request.FocusTypes.length
+                    }
+                ]
             });
             break;
         }
@@ -110,6 +137,7 @@ enum FocusOperation {
     UnlockUpgrade = "3",
     LevelUpUpgrade = "4",
     ActivateWay = "5",
+    UnbindUpgrade = "8",
     ConvertShard = "9"
 }
 
@@ -130,6 +158,11 @@ interface ILevelUpUpgradeRequest {
         Level: number;
         IsActiveAbility: boolean;
     }[];
+}
+
+interface IUnbindUpgradeRequest {
+    ShardTypes: string[];
+    FocusTypes: string[];
 }
 
 interface IConvertShardRequest {

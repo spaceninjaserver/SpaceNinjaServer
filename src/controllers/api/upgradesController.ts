@@ -1,7 +1,11 @@
 import { RequestHandler } from "express";
 import { IUpgradesRequest } from "@/src/types/requestTypes";
-import { FocusSchool, IEquipmentDatabase, EquipmentFeatures } from "@/src/types/inventoryTypes/commonInventoryTypes";
-import { IMiscItem, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
+import {
+    ArtifactPolarity,
+    IEquipmentDatabase,
+    EquipmentFeatures
+} from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addMiscItems, getInventory, updateCurrency } from "@/src/services/inventoryService";
 
@@ -29,7 +33,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
         switch (operation.UpgradeRequirement) {
             case "/Lotus/Types/Items/MiscItems/OrokinReactor":
             case "/Lotus/Types/Items/MiscItems/OrokinCatalyst":
-                for (const item of inventory[payload.ItemCategory as TEquipmentKey] as IEquipmentDatabase[]) {
+                for (const item of inventory[payload.ItemCategory]) {
                     if (item._id.toString() == payload.ItemId.$oid) {
                         item.Features ??= 0;
                         item.Features |= EquipmentFeatures.DOUBLE_CAPACITY;
@@ -39,7 +43,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
                 break;
             case "/Lotus/Types/Items/MiscItems/UtilityUnlocker":
             case "/Lotus/Types/Items/MiscItems/WeaponUtilityUnlocker":
-                for (const item of inventory[payload.ItemCategory as TEquipmentKey] as IEquipmentDatabase[]) {
+                for (const item of inventory[payload.ItemCategory]) {
                     if (item._id.toString() == payload.ItemId.$oid) {
                         item.Features ??= 0;
                         item.Features |= EquipmentFeatures.UTILITY_SLOT;
@@ -47,10 +51,20 @@ export const upgradesController: RequestHandler = async (req, res) => {
                     }
                 }
                 break;
+            case "/Lotus/Types/Items/MiscItems/HeavyWeaponCatalyst":
+                console.assert(payload.ItemCategory == "SpaceGuns");
+                for (const item of inventory[payload.ItemCategory]) {
+                    if (item._id.toString() == payload.ItemId.$oid) {
+                        item.Features ??= 0;
+                        item.Features |= EquipmentFeatures.GRAVIMAG_INSTALLED;
+                        break;
+                    }
+                }
+                break;
             case "/Lotus/Types/Items/MiscItems/WeaponPrimaryArcaneUnlocker":
             case "/Lotus/Types/Items/MiscItems/WeaponSecondaryArcaneUnlocker":
             case "/Lotus/Types/Items/MiscItems/WeaponMeleeArcaneUnlocker":
-                for (const item of inventory[payload.ItemCategory as TEquipmentKey] as IEquipmentDatabase[]) {
+                for (const item of inventory[payload.ItemCategory]) {
                     if (item._id.toString() == payload.ItemId.$oid) {
                         item.Features ??= 0;
                         item.Features |= EquipmentFeatures.ARCANE_SLOT;
@@ -62,7 +76,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
             case "/Lotus/Types/Items/MiscItems/FormaUmbra":
             case "/Lotus/Types/Items/MiscItems/FormaAura":
             case "/Lotus/Types/Items/MiscItems/FormaStance":
-                for (const item of inventory[payload.ItemCategory as TEquipmentKey] as IEquipmentDatabase[]) {
+                for (const item of inventory[payload.ItemCategory]) {
                     if (item._id.toString() == payload.ItemId.$oid) {
                         item.XP = 0;
                         setSlotPolarity(item, operation.PolarizeSlot, operation.PolarizeValue);
@@ -73,7 +87,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
                 }
                 break;
             case "/Lotus/Types/Items/MiscItems/ModSlotUnlocker":
-                for (const item of inventory[payload.ItemCategory as TEquipmentKey] as IEquipmentDatabase[]) {
+                for (const item of inventory[payload.ItemCategory]) {
                     if (item._id.toString() == payload.ItemId.$oid) {
                         item.ModSlotPurchases ??= 0;
                         item.ModSlotPurchases += 1;
@@ -88,7 +102,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
                 }
                 break;
             case "/Lotus/Types/Items/MiscItems/CustomizationSlotUnlocker":
-                for (const item of inventory[payload.ItemCategory as TEquipmentKey] as IEquipmentDatabase[]) {
+                for (const item of inventory[payload.ItemCategory]) {
                     if (item._id.toString() == payload.ItemId.$oid) {
                         item.CustomizationSlotPurchases ??= 0;
                         item.CustomizationSlotPurchases += 1;
@@ -104,7 +118,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
                 break;
             case "":
                 console.assert(operation.OperationType == "UOT_SWAP_POLARITY");
-                for (const item of inventory[payload.ItemCategory as TEquipmentKey] as IEquipmentDatabase[]) {
+                for (const item of inventory[payload.ItemCategory]) {
                     if (item._id.toString() == payload.ItemId.$oid) {
                         for (let i = 0; i != operation.PolarityRemap.length; ++i) {
                             if (operation.PolarityRemap[i].Slot != i) {
@@ -123,7 +137,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
     res.json({ InventoryChanges });
 };
 
-const setSlotPolarity = (item: IEquipmentDatabase, slot: number, polarity: FocusSchool): void => {
+const setSlotPolarity = (item: IEquipmentDatabase, slot: number, polarity: ArtifactPolarity): void => {
     item.Polarity ??= [];
     const entry = item.Polarity.find(entry => entry.Slot == slot);
     if (entry) {

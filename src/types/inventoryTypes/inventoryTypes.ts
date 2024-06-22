@@ -2,8 +2,8 @@
 import { Document, Types } from "mongoose";
 import { IOid, IMongoDate } from "../commonTypes";
 import {
+    ArtifactPolarity,
     IColor,
-    FocusSchool,
     IItemConfig,
     IOperatorConfigClient,
     IEquipmentSelection,
@@ -24,6 +24,7 @@ export interface IInventoryDatabase
         | "QuestKeys"
         | "BlessingCooldown"
         | "Ships"
+        | "WeaponSkins"
     > {
     accountOwnerId: Types.ObjectId;
     Created: Date;
@@ -35,6 +36,7 @@ export interface IInventoryDatabase
     QuestKeys: IQuestKeyDatabase[];
     BlessingCooldown: Date;
     Ships: Types.ObjectId[];
+    WeaponSkins: IWeaponSkinDatabase[];
 }
 
 export interface IInventoryResponseDocument extends IInventoryResponse, Document {}
@@ -59,14 +61,21 @@ export interface ITypeCount {
     ItemCount: number;
 }
 
-export type TEquipmentKey =
-    | "Suits"
-    | "LongGuns"
-    | "Pistols"
-    | "Melee"
-    | "SpecialItems"
-    | "Sentinels"
-    | "SentinelWeapons";
+export const equipmentKeys = [
+    "Suits",
+    "LongGuns",
+    "Pistols",
+    "Melee",
+    "SpecialItems",
+    "Sentinels",
+    "SentinelWeapons",
+    "SpaceSuits",
+    "SpaceGuns",
+    "SpaceMelee",
+    "Hoverboards"
+] as const;
+
+export type TEquipmentKey = (typeof equipmentKeys)[number];
 
 export interface IDuviriInfo {
     Seed: number;
@@ -136,7 +145,7 @@ export interface IInventoryResponse {
     LastRegionPlayed: string;
     XPInfo: ITypeXPItem[];
     Recipes: ITypeCount[];
-    WeaponSkins: IWeaponSkin[];
+    WeaponSkins: IWeaponSkinClient[];
     PendingRecipes: IPendingRecipeResponse[];
     TrainingDate: IMongoDate;
     PlayerLevel: number;
@@ -596,6 +605,14 @@ export interface ILoadOutPresets {
     OPERATOR_ADULT: ILoadoutConfigClient[];
 }
 
+export enum FocusSchool {
+    Attack = "AP_ATTACK",
+    Defense = "AP_DEFENSE",
+    Power = "AP_POWER",
+    Tactic = "AP_TACTIC",
+    Ward = "AP_WARD"
+}
+
 export interface ILoadoutConfigClient {
     FocusSchool?: FocusSchool;
     PresetIcon?: string;
@@ -704,7 +721,7 @@ export interface IUpgradeFingerprint {
     compat: string;
     lim: number;
     lvlReq: number;
-    pol: FocusSchool;
+    pol: ArtifactPolarity;
     buffs: IBuff[];
     curses: IBuff[];
 }
@@ -846,8 +863,11 @@ export interface ITauntHistory {
     state: string;
 }
 
-export interface IWeaponSkin {
+export interface IWeaponSkinDatabase {
     ItemType: string;
+}
+
+export interface IWeaponSkinClient extends IWeaponSkinDatabase {
     ItemId: IOid;
 }
 

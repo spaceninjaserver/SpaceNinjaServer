@@ -3,19 +3,19 @@ import { Types } from "mongoose";
 
 export interface IPolarity {
     Slot: number;
-    Value: FocusSchool;
+    Value: ArtifactPolarity;
 }
 
-export enum FocusSchool {
-    ApAny = "AP_ANY",
-    ApAttack = "AP_ATTACK",
-    ApDefense = "AP_DEFENSE",
-    ApPower = "AP_POWER",
-    ApPrecept = "AP_PRECEPT",
-    ApTactic = "AP_TACTIC",
-    ApUmbra = "AP_UMBRA",
-    ApUniversal = "AP_UNIVERSAL",
-    ApWard = "AP_WARD"
+export enum ArtifactPolarity {
+    Any = "AP_ANY",
+    Attack = "AP_ATTACK",
+    Defense = "AP_DEFENSE",
+    Power = "AP_POWER",
+    Precept = "AP_PRECEPT",
+    Tactic = "AP_TACTIC",
+    Umbra = "AP_UMBRA",
+    Universal = "AP_UNIVERSAL",
+    Ward = "AP_WARD"
 }
 
 export interface IColor {
@@ -85,6 +85,7 @@ export interface IEquipmentClient extends Omit<IEquipmentDatabase, "_id"> {
 export enum EquipmentFeatures {
     DOUBLE_CAPACITY = 1,
     UTILITY_SLOT = 2,
+    GRAVIMAG_INSTALLED = 4,
     ARCANE_SLOT = 32,
     INCARNON_GENESIS = 512
 }

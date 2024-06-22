@@ -13,7 +13,8 @@ import {
     IRawUpgrade,
     ISeasonChallenge,
     ITypeCount,
-    InventorySlot
+    InventorySlot,
+    IWeaponSkinClient
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate } from "../types/genericUpdate";
 import {
@@ -26,7 +27,7 @@ import { logger } from "@/src/utils/logger";
 import { WeaponTypeInternal, getWeaponType, getExalted } from "@/src/services/itemDataService";
 import { ISyndicateSacrifice, ISyndicateSacrificeResponse } from "../types/syndicateTypes";
 import { IEquipmentClient } from "../types/inventoryTypes/commonInventoryTypes";
-import { ExportRecipes, ExportResources } from "warframe-public-export-plus";
+import { ExportCustoms, ExportRecipes, ExportResources } from "warframe-public-export-plus";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
@@ -101,6 +102,13 @@ export const addItem = async (
         return {
             InventoryChanges: {
                 MiscItems: miscItemChanges
+            }
+        };
+    }
+    if (typeName in ExportCustoms) {
+        return {
+            InventoryChanges: {
+                WeaponSkins: [await addSkin(typeName, accountId)]
             }
         };
     }
@@ -445,10 +453,16 @@ export const addWeapon = async (
 
 export const addCustomization = async (customizatonName: string, accountId: string): Promise<IFlavourItem> => {
     const inventory = await getInventory(accountId);
-
     const flavourItemIndex = inventory.FlavourItems.push({ ItemType: customizatonName }) - 1;
     const changedInventory = await inventory.save();
     return changedInventory.FlavourItems[flavourItemIndex].toJSON();
+};
+
+export const addSkin = async (typeName: string, accountId: string): Promise<IWeaponSkinClient> => {
+    const inventory = await getInventory(accountId);
+    const index = inventory.WeaponSkins.push({ ItemType: typeName }) - 1;
+    const changedInventory = await inventory.save();
+    return changedInventory.WeaponSkins[index].toJSON();
 };
 
 const addGearExpByCategory = (

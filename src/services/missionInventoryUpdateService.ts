@@ -28,8 +28,16 @@ const getRewards = ({
         return { InventoryChanges: {}, MissionRewards: [] };
     }
 
-    const rotationCount = RewardInfo.rewardQualifications?.length || 0;
-    const rotations = getRotations(rotationCount);
+    let rotations: number[] = [];
+    if (RewardInfo.VaultsCracked) {
+        // For Spy missions, e.g. 3 vaults cracked = A, B, C
+        for (let i = 0; i != RewardInfo.VaultsCracked; ++i) {
+            rotations.push(i);
+        }
+    } else {
+        const rotationCount = RewardInfo.rewardQualifications?.length || 0;
+        rotations = getRotations(rotationCount);
+    }
     const drops: IReward[] = [];
     rewardManifests
         .map(name => ExportRewards[name])
@@ -54,12 +62,22 @@ const combineRewardAndLootInventory = (
     const missionCredits = lootInventory.RegularCredits || 0;
     const creditsBonus = rewardInventory.RegularCredits || 0;
     const totalCredits = missionCredits + creditsBonus;
-    const FusionPoints = (lootInventory.FusionPoints || 0) + (rewardInventory.FusionPoints || 0) || undefined;
+    let FusionPoints = rewardInventory.FusionPoints || 0;
+
+    // Discharge Endo picked up during the mission
+    if (lootInventory.FusionBundles) {
+        for (const fusionBundle of lootInventory.FusionBundles) {
+            if (fusionBundle.ItemType in fusionBundles) {
+                FusionPoints += fusionBundles[fusionBundle.ItemType] * fusionBundle.ItemCount;
+            } else {
+                logger.error(`unknown fusion bundle: ${fusionBundle.ItemType}`);
+            }
+        }
+        lootInventory.FusionBundles = undefined;
+    }
 
     lootInventory.RegularCredits = totalCredits;
-    if (FusionPoints) {
-        lootInventory.FusionPoints = FusionPoints;
-    }
+    lootInventory.FusionPoints = FusionPoints;
     inventoryFields.forEach((field: IInventoryFieldType) => {
         if (rewardInventory[field] && !lootInventory[field]) {
             lootInventory[field] = [];
@@ -72,7 +90,7 @@ const combineRewardAndLootInventory = (
         TotalCredits: [totalCredits, totalCredits],
         CreditsBonus: [creditsBonus, creditsBonus],
         MissionCredits: [missionCredits, missionCredits],
-        ...(FusionPoints !== undefined && { FusionPoints })
+        FusionPoints: FusionPoints
     };
 };
 
@@ -123,8 +141,9 @@ const creditBundles: Record<string, number> = {
 };
 
 const fusionBundles: Record<string, number> = {
-    "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/UncommonFusionBundle": 50,
-    "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/RareFusionBundle": 80
+    "/Lotus/Upgrades/Mods/FusionBundles/CommonFusionBundle": 15,
+    "/Lotus/Upgrades/Mods/FusionBundles/UncommonFusionBundle": 50,
+    "/Lotus/Upgrades/Mods/FusionBundles/RareFusionBundle": 80
 };
 
 const formatRewardsToInventoryType = (
@@ -136,12 +155,12 @@ const formatRewardsToInventoryType = (
         if (reward.type in creditBundles) {
             InventoryChanges.RegularCredits ??= 0;
             InventoryChanges.RegularCredits += creditBundles[reward.type] * reward.itemCount;
-        } else if (reward.type in fusionBundles) {
-            InventoryChanges.FusionPoints ??= 0;
-            InventoryChanges.FusionPoints += fusionBundles[reward.type] * reward.itemCount;
         } else {
             const type = reward.type.replace("/Lotus/StoreItems/", "/Lotus/");
-            if (type in ExportUpgrades) {
+            if (type in fusionBundles) {
+                InventoryChanges.FusionPoints ??= 0;
+                InventoryChanges.FusionPoints += fusionBundles[type] * reward.itemCount;
+            } else if (type in ExportUpgrades) {
                 addRewardResponse(InventoryChanges, MissionRewards, type, reward.itemCount, "RawUpgrades");
             } else if (type in ExportGear) {
                 addRewardResponse(InventoryChanges, MissionRewards, type, reward.itemCount, "Consumables");

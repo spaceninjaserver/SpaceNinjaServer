@@ -1,5 +1,5 @@
 import { IOid } from "./commonTypes";
-import { IPolarity, FocusSchool, IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { ArtifactPolarity, IPolarity, IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import {
     IBooster,
     IChallengeProgress,
@@ -7,9 +7,11 @@ import {
     ICrewShipSalvagedWeaponSkin,
     IEvolutionProgress,
     IMiscItem,
+    ITypeCount,
     IMission,
     IRawUpgrade,
-    ISeasonChallenge
+    ISeasonChallenge,
+    TEquipmentKey
 } from "./inventoryTypes/inventoryTypes";
 
 export interface IArtifactsRequest {
@@ -45,6 +47,7 @@ export interface IMissionInventoryUpdateRequest {
     Pistols?: IEquipmentClient[];
     Suits?: IEquipmentClient[];
     Melee?: IEquipmentClient[];
+    FusionBundles?: ITypeCount[];
     RawUpgrades?: IRawUpgrade[];
     MiscItems?: IMiscItem[];
     Consumables?: IConsumable[];
@@ -52,13 +55,15 @@ export interface IMissionInventoryUpdateRequest {
     RegularCredits?: number;
     ChallengeProgress?: IChallengeProgress[];
     RewardInfo?: IMissionInventoryUpdateRequestRewardInfo;
-    FusionPoints?: number;
     Missions?: IMission;
     EvolutionProgress?: IEvolutionProgress[];
+
+    FusionPoints?: number; // Not a part of the request, but we put it in this struct as an intermediate storage.
 }
 
 export interface IMissionInventoryUpdateRequestRewardInfo {
     node: string;
+    VaultsCracked?: number; // for Spy missions
     rewardTier?: number;
     nightmareMode?: boolean;
     useVaultManifest?: boolean;
@@ -82,7 +87,7 @@ export interface IUpdateGlyphRequest {
 }
 
 export interface IUpgradesRequest {
-    ItemCategory: string;
+    ItemCategory: TEquipmentKey;
     ItemId: IOid;
     ItemFeatures: number;
     UpgradeVersion: number;
@@ -93,6 +98,6 @@ export interface IUpgradeOperation {
     OperationType: string;
     UpgradeRequirement: string; // uniqueName of item being consumed
     PolarizeSlot: number;
-    PolarizeValue: FocusSchool;
+    PolarizeValue: ArtifactPolarity;
     PolarityRemap: IPolarity[];
 }
