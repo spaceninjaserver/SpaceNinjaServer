@@ -67,7 +67,7 @@ export interface IMissionInventoryUpdateRequestRewardInfo {
     lostTargetWave?: number;
     defenseTargetCount?: number;
     EOM_AFK?: number;
-    rewardQualifications?: string;
+    rewardQualifications?: string; // did a Survival for 5 minutes and this was "1"
     PurgatoryRewardQualifications?: string;
     rewardSeed?: number;
 }

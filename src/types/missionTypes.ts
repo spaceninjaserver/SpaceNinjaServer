@@ -9,9 +9,3 @@ export interface IMissionRewardResponse {
     TweetText: string;
     ProductCategory: string;
 }
-
-export interface IReward {
-    name: string;
-    chance: number;
-    rotation?: string;
-}
