@@ -20,7 +20,7 @@
   "unlockAllShipDecorations": true,
   "unlockAllFlavourItems": true,
   "unlockAllSkins": true,
-  "useStaticWorldState": true,
   "universalPolarityEverywhere": true,
+  "useStaticWorldState": true,
   "spoofMasteryRank": -1
 }

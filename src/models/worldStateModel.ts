@@ -57,10 +57,10 @@ const EventSchema = new Schema<IEvent>({
     Messages: [messageSchema],
     Prop: String,
     Links: [linkSchema],
-    Date: Date,
+    Date: Number,
     Icon: String,
-    EventStartDate: Date,
-    EventEndDate: Date,
+    EventStartDate: Number,
+    EventEndDate: Number,
     ImageUrl: String,
     Priority: Boolean,
     MobileOnly: Boolean,
@@ -71,6 +71,9 @@ const EventSchema = new Schema<IEvent>({
 EventSchema.set("toJSON", {
     transform(_document, returnedObject) {
         returnedObject._id = { $oid: returnedObject._id.toString() };
+        returnedObject.Date = { $date: { $numberLong: returnedObject.Date.toString() } };
+        returnedObject.EventStartDate = { $date: { $numberLong: returnedObject.EventStartDate.toString() } };
+        returnedObject.EventEndDate = { $date: { $numberLong: returnedObject.EventEndDate.toString() } };
     }
 });
 
@@ -121,8 +124,8 @@ const MissionSchema = new Schema<IMission>(
 );
 
 const AlertSchema = new Schema<IAlert>({
-    Activation: Date,
-    Expiry: Date,
+    Activation: Number,
+    Expiry: Number,
     MissionInfo: MissionSchema,
     ForceUnlock: Boolean,
     Tag: String
@@ -131,27 +134,26 @@ const AlertSchema = new Schema<IAlert>({
 AlertSchema.set("toJSON", {
     transform(_document, returnedObject) {
         returnedObject._id = { $oid: returnedObject._id.toString() };
+        returnedObject.Activation = { $date: { $numberLong: returnedObject.Activation.toString() } };
+        returnedObject.Expiry = { $date: { $numberLong: returnedObject.Expiry.toString() } };
     }
 });
 
-const SortieMissionSchema = new Schema<ISortieMission>({
-    missionType: String,
-    modifierType: String,
-    node: String,
-    tileset: String
-});
-
-SortieMissionSchema.set("toJSON", {
-    transform(_document, returnedObject) {
-        returnedObject._id = { $oid: returnedObject._id.toString() };
-    }
-});
+const SortieMissionSchema = new Schema<ISortieMission>(
+    {
+        missionType: String,
+        modifierType: String,
+        node: String,
+        tileset: String
+    },
+    { _id: false }
+);
 
 const LiteSortieSchema = new Schema<ILiteSortie>({
-    Activation: Date,
-    Expiry: Date,
+    Activation: Number,
+    Expiry: Number,
     Reward: String,
-    Seed: String,
+    Seed: Number,
     Boss: String,
     Missions: [SortieMissionSchema]
 });
@@ -159,15 +161,18 @@ const LiteSortieSchema = new Schema<ILiteSortie>({
 LiteSortieSchema.set("toJSON", {
     transform(_document, returnedObject) {
         returnedObject._id = { $oid: returnedObject._id.toString() };
+        returnedObject.Activation = { $date: { $numberLong: returnedObject.Activation.toString() } };
+        returnedObject.Expiry = { $date: { $numberLong: returnedObject.Expiry.toString() } };
     }
 });
 
 const SortieSchema = new Schema<ISortie>({
-    Activation: Date,
-    Expiry: Date,
+    Activation: Number,
+    Expiry: Number,
     Reward: String,
-    Seed: String,
+    Seed: Number,
     Boss: String,
+    ExtraDrops: [String],
     Variants: [SortieMissionSchema],
     Twitter: Boolean
 });
@@ -175,6 +180,8 @@ const SortieSchema = new Schema<ISortie>({
 SortieSchema.set("toJSON", {
     transform(_document, returnedObject) {
         returnedObject._id = { $oid: returnedObject._id.toString() };
+        returnedObject.Activation = { $date: { $numberLong: returnedObject.Activation.toString() } };
+        returnedObject.Expiry = { $date: { $numberLong: returnedObject.Expiry.toString() } };
     }
 });
 
@@ -195,10 +202,10 @@ const JobSchema = new Schema<IJob>(
 );
 
 const SyndicateMissionSchema = new Schema<ISyndicateMission>({
-    Activation: Date,
-    Expiry: Date,
+    Activation: Number,
+    Expiry: Number,
     Tag: String,
-    Seed: String,
+    Seed: Number,
     Nodes: [String],
     Jobs: [JobSchema]
 });
@@ -206,14 +213,16 @@ const SyndicateMissionSchema = new Schema<ISyndicateMission>({
 SyndicateMissionSchema.set("toJSON", {
     transform(_document, returnedObject) {
         returnedObject._id = { $oid: returnedObject._id.toString() };
+        returnedObject.Activation = { $date: { $numberLong: returnedObject.Activation.toString() } };
+        returnedObject.Expiry = { $date: { $numberLong: returnedObject.Expiry.toString() } };
     }
 });
 
 const ActiveMissionSchema = new Schema<IActiveMission>({
-    Activation: Date,
-    Expiry: Date,
-    Region: String,
-    Seed: String,
+    Activation: Number,
+    Expiry: Number,
+    Region: Number,
+    Seed: Number,
     Node: String,
     MissionType: String,
     Modifier: String,
@@ -223,12 +232,14 @@ const ActiveMissionSchema = new Schema<IActiveMission>({
 ActiveMissionSchema.set("toJSON", {
     transform(_document, returnedObject) {
         returnedObject._id = { $oid: returnedObject._id.toString() };
+        returnedObject.Activation = { $date: { $numberLong: returnedObject.Activation.toString() } };
+        returnedObject.Expiry = { $date: { $numberLong: returnedObject.Expiry.toString() } };
     }
 });
 
 const GlobalUpgradeSchema = new Schema<IGlobalUpgrade>({
-    Activation: Date,
-    Expiry: Date,
+    Activation: Number,
+    Expiry: Number,
     UpgradeType: String,
     OperationType: String,
     Value: String
@@ -237,14 +248,16 @@ const GlobalUpgradeSchema = new Schema<IGlobalUpgrade>({
 GlobalUpgradeSchema.set("toJSON", {
     transform(_document, returnedObject) {
         returnedObject._id = { $oid: returnedObject._id.toString() };
+        returnedObject.Activation = { $date: { $numberLong: returnedObject.Activation.toString() } };
+        returnedObject.Expiry = { $date: { $numberLong: returnedObject.Expiry.toString() } };
     }
 });
 
 const FlashSaleSchema = new Schema<IFlashSale>(
     {
         TypeName: String,
-        StartDate: Date,
-        EndDate: Date,
+        StartDate: Number,
+        EndDate: Number,
         ShowInMarket: Boolean,
         HideFromMarket: Boolean,
         SupporterPack: Boolean,
@@ -256,6 +269,13 @@ const FlashSaleSchema = new Schema<IFlashSale>(
     },
     { _id: false }
 );
+
+FlashSaleSchema.set("toJSON", {
+    transform(_document, returnedObject) {
+        returnedObject.StartDate = { $date: { $numberLong: returnedObject.StartDate.toString() } };
+        returnedObject.EndDate = { $date: { $numberLong: returnedObject.EndDate.toString() } };
+    }
+});
 
 const ShopCategorySchema = new Schema<ICategory>(
     {
@@ -291,7 +311,7 @@ const InvasionMissionInfoSchema = new Schema<IInvasionMissionInfo>(
 );
 
 const InvasionSchema = new Schema<IInvasion>({
-    Activation: Date,
+    Activation: Number,
     Faction: String,
     DefenderFaction: String,
     Node: String,
@@ -309,12 +329,13 @@ const InvasionSchema = new Schema<IInvasion>({
 InvasionSchema.set("toJSON", {
     transform(_document, returnedObject) {
         returnedObject._id = { $oid: returnedObject._id.toString() };
+        returnedObject.Activation = { $date: { $numberLong: returnedObject.Activation.toString() } };
     }
 });
 
 const NodeOverrideSchema = new Schema<INodeOverride>({
-    Activation: Date,
-    Expiry: Date,
+    Activation: Number,
+    Expiry: Number,
     Node: String,
     Faction: String,
     CustomNpcEncounters: [String],
@@ -324,6 +345,8 @@ const NodeOverrideSchema = new Schema<INodeOverride>({
 NodeOverrideSchema.set("toJSON", {
     transform(_document, returnedObject) {
         returnedObject._id = { $oid: returnedObject._id.toString() };
+        returnedObject.Activation = { $date: { $numberLong: returnedObject.Activation.toString() } };
+        returnedObject.Expiry = { $date: { $numberLong: returnedObject.Expiry.toString() } };
     }
 });
 
@@ -338,16 +361,23 @@ const VoidTraderItemSchema = new Schema<IVoidTraderItem>(
 
 const VoidTraderScheduleInfoSchema = new Schema<IVoidTraderScheduleInfo>(
     {
-        Expiry: Date,
-        PreviewHiddenUntil: Date,
+        Expiry: Number,
+        PreviewHiddenUntil: Number,
         FeaturedItem: String
     },
     { _id: false }
 );
 
+VoidTraderScheduleInfoSchema.set("toJSON", {
+    transform(_document, returnedObject) {
+        returnedObject.Expiry = { $date: { $numberLong: returnedObject.Expiry.toString() } };
+        returnedObject.PreviewHiddenUntil = { $date: { $numberLong: returnedObject.PreviewHiddenUntil.toString() } };
+    }
+});
+
 const VoidTraderSchema = new Schema<IVoidTrader>({
-    Activation: Date,
-    Expiry: Date,
+    Activation: Number,
+    Expiry: Number,
     Character: String,
     Node: String,
     Completed: Boolean,
@@ -359,12 +389,14 @@ const VoidTraderSchema = new Schema<IVoidTrader>({
 VoidTraderSchema.set("toJSON", {
     transform(_document, returnedObject) {
         returnedObject._id = { $oid: returnedObject._id.toString() };
+        returnedObject.Activation = { $date: { $numberLong: returnedObject.Activation.toString() } };
+        returnedObject.Expiry = { $date: { $numberLong: returnedObject.Expiry.toString() } };
     }
 });
 
 const VoidStormSchema = new Schema<IVoidStorm>({
-    Activation: Date,
-    Expiry: Date,
+    Activation: Number,
+    Expiry: Number,
     Node: String,
     ActiveMissionTier: String
 });
@@ -372,6 +404,8 @@ const VoidStormSchema = new Schema<IVoidStorm>({
 VoidStormSchema.set("toJSON", {
     transform(_document, returnedObject) {
         returnedObject._id = { $oid: returnedObject._id.toString() };
+        returnedObject.Activation = { $date: { $numberLong: returnedObject.Activation.toString() } };
+        returnedObject.Expiry = { $date: { $numberLong: returnedObject.Expiry.toString() } };
     }
 });
 
@@ -384,8 +418,8 @@ const PrimeAccessAvailabilitySchema = new Schema<IPrimeAccessAvailability>(
 
 const DailyDealSchema = new Schema<IDailyDeal>(
     {
-        Activation: Date,
-        Expiry: Date,
+        Activation: Number,
+        Expiry: Number,
         StoreItem: String,
         Discount: Number,
         OriginalPrice: Number,
@@ -395,6 +429,13 @@ const DailyDealSchema = new Schema<IDailyDeal>(
     },
     { _id: false }
 );
+
+DailyDealSchema.set("toJSON", {
+    transform(_document, returnedObject) {
+        returnedObject.Activation = { $date: { $numberLong: returnedObject.Activation.toString() } };
+        returnedObject.Expiry = { $date: { $numberLong: returnedObject.Expiry.toString() } };
+    }
+});
 
 const LibraryInfoSchema = new Schema<ILibraryInfo>(
     {
@@ -413,8 +454,8 @@ const PVPChallengeInstanceParam = new Schema<IPVPChallengeInstanceParam>(
 
 const PVPChallengeInstanceSchema = new Schema<IPVPChallengeInstance>({
     challengeTypeRefID: String,
-    startDate: Date,
-    endDate: Date,
+    startDate: Number,
+    endDate: Number,
     params: [PVPChallengeInstanceParam],
     isGenerated: Boolean,
     PVPMode: String,
@@ -425,6 +466,8 @@ const PVPChallengeInstanceSchema = new Schema<IPVPChallengeInstance>({
 PVPChallengeInstanceSchema.set("toJSON", {
     transform(_document, returnedObject) {
         returnedObject._id = { $oid: returnedObject._id.toString() };
+        returnedObject.startDate = { $date: { $numberLong: returnedObject.startDate.toString() } };
+        returnedObject.endDate = { $date: { $numberLong: returnedObject.endDate.toString() } };
     }
 });
 
@@ -451,8 +494,8 @@ FeaturedGuildShema.set("toJSON", {
 });
 
 const ActiveChallengeSchema = new Schema<IActiveChallenge>({
-    Activation: Date,
-    Expiry: Date,
+    Activation: Number,
+    Expiry: Number,
     Daily: Boolean,
     Challenge: String
 });
@@ -460,6 +503,8 @@ const ActiveChallengeSchema = new Schema<IActiveChallenge>({
 FeaturedGuildShema.set("toJSON", {
     transform(_document, returnedObject) {
         returnedObject._id = { $oid: returnedObject._id.toString() };
+        returnedObject.Activation = { $date: { $numberLong: returnedObject.Activation.toString() } };
+        returnedObject.Expiry = { $date: { $numberLong: returnedObject.Expiry.toString() } };
     }
 });
 
