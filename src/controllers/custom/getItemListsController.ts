@@ -53,7 +53,7 @@ const getItemListsController: RequestHandler = (_req, res) => {
             uniqueName,
             name: getEnglishString(upgrade.name),
             fusionLimit: upgrade.fusionLimit
-        })
+        });
         if (upgrade.isStarter || upgrade.isFrivolous || upgrade.upgradeEntries) {
             badItems[uniqueName] = true;
         }
