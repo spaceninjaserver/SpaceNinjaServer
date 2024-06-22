@@ -2,8 +2,8 @@
 import { Document, Types } from "mongoose";
 import { IOid, IMongoDate } from "../commonTypes";
 import {
+    ArtifactPolarity,
     IColor,
-    FocusSchool,
     IItemConfig,
     IOperatorConfigClient,
     IEquipmentSelection,
@@ -61,15 +61,21 @@ export interface ITypeCount {
     ItemCount: number;
 }
 
-export type TEquipmentKey =
-    | "Suits"
-    | "LongGuns"
-    | "Pistols"
-    | "Melee"
-    | "SpecialItems"
-    | "Sentinels"
-    | "SentinelWeapons"
-    | "SpaceGuns";
+export const equipmentKeys = [
+    "Suits",
+    "LongGuns",
+    "Pistols",
+    "Melee",
+    "SpecialItems",
+    "Sentinels",
+    "SentinelWeapons",
+    "SpaceSuits",
+    "SpaceGuns",
+    "SpaceMelee",
+    "Hoverboards"
+] as const;
+
+export type TEquipmentKey = (typeof equipmentKeys)[number];
 
 export interface IDuviriInfo {
     Seed: number;
@@ -599,6 +605,14 @@ export interface ILoadOutPresets {
     OPERATOR_ADULT: ILoadoutConfigClient[];
 }
 
+export enum FocusSchool {
+    Attack = "AP_ATTACK",
+    Defense = "AP_DEFENSE",
+    Power = "AP_POWER",
+    Tactic = "AP_TACTIC",
+    Ward = "AP_WARD"
+}
+
 export interface ILoadoutConfigClient {
     FocusSchool?: FocusSchool;
     PresetIcon?: string;
@@ -707,7 +721,7 @@ export interface IUpgradeFingerprint {
     compat: string;
     lim: number;
     lvlReq: number;
-    pol: FocusSchool;
+    pol: ArtifactPolarity;
     buffs: IBuff[];
     curses: IBuff[];
 }

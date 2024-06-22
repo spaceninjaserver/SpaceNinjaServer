@@ -5,7 +5,8 @@ import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { config } from "@/src/services/configService";
 import allMissions from "@/static/fixed_responses/allMissions.json";
 import { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
-import { IShipInventory } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IShipInventory, equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IPolarity, ArtifactPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { ExportCustoms, ExportFlavour, ExportKeys, ExportResources } from "warframe-public-export-plus";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -114,6 +115,23 @@ const inventoryController: RequestHandler = async (request, response) => {
                     ItemType: "/Lotus/Powersuits/Mag/Mag",
                     XP: 1_600_000
                 });
+            }
+        }
+    }
+
+    if (config.universalPolarityEverywhere) {
+        const Polarity: IPolarity[] = [];
+        for (let i = 0; i != 10; ++i) {
+            Polarity.push({
+                Slot: i,
+                Value: ArtifactPolarity.Any
+            });
+        }
+        for (const key of equipmentKeys) {
+            if (key in inventoryResponse) {
+                for (const equipment of inventoryResponse[key]) {
+                    equipment.Polarity = Polarity;
+                }
             }
         }
     }
