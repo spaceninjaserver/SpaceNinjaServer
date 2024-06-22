@@ -1,7 +1,6 @@
 import { getIndexAfter } from "@/src/helpers/stringHelpers";
 import { logger } from "@/src/utils/logger";
-import Items, { Category, MinimalItem, Warframe, Weapon } from "warframe-items";
-import badItems from "@/static/json/exclude-mods.json";
+import Items, { MinimalItem, Warframe, Weapon } from "warframe-items";
 import {
     dict_en,
     ExportRecipes,
@@ -52,23 +51,6 @@ export const getWeaponType = (weaponName: string): WeaponTypeInternal => {
 
     return weaponType;
 };
-
-const getNamesObj = (category: Category) =>
-    new Items({ category: [category] }).reduce<{ [index: string]: string }>((acc, item) => {
-        if (!(item.uniqueName! in badItems)) {
-            acc[item.name!.replace("'S", "'s")] = item.uniqueName!;
-        }
-        return acc;
-    }, {});
-
-export const modNames = getNamesObj("Mods");
-export const resourceNames = getNamesObj("Resources");
-export const miscNames = getNamesObj("Misc");
-export const relicNames = getNamesObj("Relics");
-export const skinNames = getNamesObj("Skins");
-export const arcaneNames = getNamesObj("Arcanes");
-export const gearNames = getNamesObj("Gear");
-//logger.debug(`gear names`, { gearNames });
 
 export const craftNames = Object.fromEntries(
     (
