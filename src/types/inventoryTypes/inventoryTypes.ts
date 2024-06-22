@@ -24,6 +24,7 @@ export interface IInventoryDatabase
         | "QuestKeys"
         | "BlessingCooldown"
         | "Ships"
+        | "WeaponSkins"
     > {
     accountOwnerId: Types.ObjectId;
     Created: Date;
@@ -35,6 +36,7 @@ export interface IInventoryDatabase
     QuestKeys: IQuestKeyDatabase[];
     BlessingCooldown: Date;
     Ships: Types.ObjectId[];
+    WeaponSkins: IWeaponSkinDatabase[];
 }
 
 export interface IInventoryResponseDocument extends IInventoryResponse, Document {}
@@ -846,8 +848,11 @@ export interface ITauntHistory {
     state: string;
 }
 
-export interface IWeaponSkin {
-    ItemType: string;
+export interface IWeaponSkinDatabase {
+    ItemType: string;    
+}
+
+export interface IWeaponSkin extends IWeaponSkinDatabase {
     ItemId: IOid;
 }
 

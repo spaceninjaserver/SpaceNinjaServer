@@ -31,7 +31,7 @@ import {
     IQuestKeyResponse,
     IFusionTreasure,
     ISpectreLoadout,
-    IWeaponSkin,
+    IWeaponSkinDatabase,
     ITauntHistory,
     IPeriodicMissionCompletionDatabase,
     IPeriodicMissionCompletionResponse,
@@ -514,7 +514,7 @@ const spectreLoadoutsSchema = new Schema<ISpectreLoadout>(
     { _id: false }
 );
 
-const weaponSkinsSchema = new Schema<IWeaponSkin>(
+const weaponSkinsSchema = new Schema<IWeaponSkinDatabase>(
     {
         ItemType: String
     },
@@ -976,6 +976,7 @@ type InventoryDocumentProps = {
     SpaceMelee: Types.DocumentArray<IEquipmentDatabase>;
     SentinelWeapons: Types.DocumentArray<IEquipmentDatabase>;
     Hoverboards: Types.DocumentArray<IEquipmentDatabase>;
+    WeaponSkins: Types.DocumentArray<IWeaponSkinDatabase>;
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-types
