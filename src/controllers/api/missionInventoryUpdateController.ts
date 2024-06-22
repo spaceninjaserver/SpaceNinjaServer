@@ -4,6 +4,7 @@ import { combineRewardAndLootInventory, getRewards } from "@/src/services/missio
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { IMissionInventoryUpdateRequest } from "@/src/types/requestTypes";
+import { logger } from "@/src/utils/logger";
 /*
 **** INPUT ****
 - [ ]  crossPlaySetting
@@ -52,6 +53,8 @@ const missionInventoryUpdateController: RequestHandler = async (req, res): Promi
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call
         const lootInventory = getJSONfromString(req.body.toString()) as IMissionInventoryUpdateRequest;
 
+        logger.debug("missionInventoryUpdate with lootInventory =", lootInventory);
+
         const { InventoryChanges, MissionRewards } = getRewards(lootInventory);
 
         const { combinedInventoryChanges, TotalCredits, CreditsBonus, MissionCredits, FusionPoints } =
@@ -66,7 +69,7 @@ const missionInventoryUpdateController: RequestHandler = async (req, res): Promi
             TotalCredits,
             CreditsBonus,
             MissionCredits,
-            ...(FusionPoints !== undefined && { FusionPoints })
+            FusionPoints
         });
     } catch (err) {
         console.error("Error parsing JSON data:", err);

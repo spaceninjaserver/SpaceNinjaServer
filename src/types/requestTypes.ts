@@ -7,6 +7,7 @@ import {
     ICrewShipSalvagedWeaponSkin,
     IEvolutionProgress,
     IMiscItem,
+    ITypeCount,
     IMission,
     IRawUpgrade,
     ISeasonChallenge
@@ -45,6 +46,7 @@ export interface IMissionInventoryUpdateRequest {
     Pistols?: IEquipmentClient[];
     Suits?: IEquipmentClient[];
     Melee?: IEquipmentClient[];
+    FusionBundles?: ITypeCount[];
     RawUpgrades?: IRawUpgrade[];
     MiscItems?: IMiscItem[];
     Consumables?: IConsumable[];
@@ -52,9 +54,10 @@ export interface IMissionInventoryUpdateRequest {
     RegularCredits?: number;
     ChallengeProgress?: IChallengeProgress[];
     RewardInfo?: IMissionInventoryUpdateRequestRewardInfo;
-    FusionPoints?: number;
     Missions?: IMission;
     EvolutionProgress?: IEvolutionProgress[];
+
+    FusionPoints?: number; // Not a part of the request, but we put it in this struct as an intermediate storage.
 }
 
 export interface IMissionInventoryUpdateRequestRewardInfo {
