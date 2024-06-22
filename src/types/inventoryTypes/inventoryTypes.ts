@@ -138,7 +138,7 @@ export interface IInventoryResponse {
     LastRegionPlayed: string;
     XPInfo: ITypeXPItem[];
     Recipes: ITypeCount[];
-    WeaponSkins: IWeaponSkin[];
+    WeaponSkins: IWeaponSkinClient[];
     PendingRecipes: IPendingRecipeResponse[];
     TrainingDate: IMongoDate;
     PlayerLevel: number;
@@ -852,7 +852,7 @@ export interface IWeaponSkinDatabase {
     ItemType: string;
 }
 
-export interface IWeaponSkin extends IWeaponSkinDatabase {
+export interface IWeaponSkinClient extends IWeaponSkinDatabase {
     ItemId: IOid;
 }
 

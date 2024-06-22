@@ -14,7 +14,7 @@ import {
     ISeasonChallenge,
     ITypeCount,
     InventorySlot,
-    IWeaponSkin
+    IWeaponSkinClient
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate } from "../types/genericUpdate";
 import {
@@ -458,7 +458,7 @@ export const addCustomization = async (customizatonName: string, accountId: stri
     return changedInventory.FlavourItems[flavourItemIndex].toJSON();
 };
 
-export const addSkin = async (typeName: string, accountId: string): Promise<IWeaponSkin> => {
+export const addSkin = async (typeName: string, accountId: string): Promise<IWeaponSkinClient> => {
     const inventory = await getInventory(accountId);
     const index = inventory.WeaponSkins.push({ ItemType: typeName }) - 1;
     const changedInventory = await inventory.save();
