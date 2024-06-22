@@ -24,6 +24,7 @@ export interface IInventoryDatabase
         | "QuestKeys"
         | "BlessingCooldown"
         | "Ships"
+        | "WeaponSkins"
     > {
     accountOwnerId: Types.ObjectId;
     Created: Date;
@@ -35,6 +36,7 @@ export interface IInventoryDatabase
     QuestKeys: IQuestKeyDatabase[];
     BlessingCooldown: Date;
     Ships: Types.ObjectId[];
+    WeaponSkins: IWeaponSkinDatabase[];
 }
 
 export interface IInventoryResponseDocument extends IInventoryResponse, Document {}
@@ -137,7 +139,7 @@ export interface IInventoryResponse {
     LastRegionPlayed: string;
     XPInfo: ITypeXPItem[];
     Recipes: ITypeCount[];
-    WeaponSkins: IWeaponSkin[];
+    WeaponSkins: IWeaponSkinClient[];
     PendingRecipes: IPendingRecipeResponse[];
     TrainingDate: IMongoDate;
     PlayerLevel: number;
@@ -847,8 +849,11 @@ export interface ITauntHistory {
     state: string;
 }
 
-export interface IWeaponSkin {
+export interface IWeaponSkinDatabase {
     ItemType: string;
+}
+
+export interface IWeaponSkinClient extends IWeaponSkinDatabase {
     ItemId: IOid;
 }
 
