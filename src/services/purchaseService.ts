@@ -91,7 +91,7 @@ const handleStoreItemAcquisition = async (
                     await handleStoreItemAcquisition(
                         component.typeName,
                         accountId,
-                        component.purchaseQuantity,
+                        component.purchaseQuantity * quantity,
                         component.durability
                     )
                 ).InventoryChanges
