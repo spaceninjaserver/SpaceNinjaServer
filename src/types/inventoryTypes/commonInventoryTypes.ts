@@ -85,6 +85,7 @@ export interface IEquipmentClient extends Omit<IEquipmentDatabase, "_id"> {
 export enum EquipmentFeatures {
     DOUBLE_CAPACITY = 1,
     UTILITY_SLOT = 2,
+    GRAVIMAG_INSTALLED = 4,
     ARCANE_SLOT = 32,
     INCARNON_GENESIS = 512
 }

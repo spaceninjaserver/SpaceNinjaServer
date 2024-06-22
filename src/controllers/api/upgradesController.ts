@@ -47,6 +47,16 @@ export const upgradesController: RequestHandler = async (req, res) => {
                     }
                 }
                 break;
+            case "/Lotus/Types/Items/MiscItems/HeavyWeaponCatalyst":
+                console.assert(payload.ItemCategory == "SpaceGuns");
+                for (const item of inventory[payload.ItemCategory as TEquipmentKey] as IEquipmentDatabase[]) {
+                    if (item._id.toString() == payload.ItemId.$oid) {
+                        item.Features ??= 0;
+                        item.Features |= EquipmentFeatures.GRAVIMAG_INSTALLED;
+                        break;
+                    }
+                }
+                break;
             case "/Lotus/Types/Items/MiscItems/WeaponPrimaryArcaneUnlocker":
             case "/Lotus/Types/Items/MiscItems/WeaponSecondaryArcaneUnlocker":
             case "/Lotus/Types/Items/MiscItems/WeaponMeleeArcaneUnlocker":
