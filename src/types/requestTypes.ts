@@ -63,6 +63,7 @@ export interface IMissionInventoryUpdateRequest {
 
 export interface IMissionInventoryUpdateRequestRewardInfo {
     node: string;
+    VaultsCracked?: number; // for Spy missions
     rewardTier?: number;
     nightmareMode?: boolean;
     useVaultManifest?: boolean;

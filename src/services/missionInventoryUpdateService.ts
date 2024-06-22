@@ -28,8 +28,16 @@ const getRewards = ({
         return { InventoryChanges: {}, MissionRewards: [] };
     }
 
-    const rotationCount = RewardInfo.rewardQualifications?.length || 0;
-    const rotations = getRotations(rotationCount);
+    let rotations: number[] = [];
+    if (RewardInfo.VaultsCracked) {
+        // For Spy missions, e.g. 3 vaults cracked = A, B, C
+        for (let i = 0; i != RewardInfo.VaultsCracked; ++i) {
+            rotations.push(i);
+        }
+    } else {
+        const rotationCount = RewardInfo.rewardQualifications?.length || 0;
+        rotations = getRotations(rotationCount);
+    }
     const drops: IReward[] = [];
     rewardManifests
         .map(name => ExportRewards[name])
