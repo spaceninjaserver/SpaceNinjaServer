@@ -78,7 +78,7 @@ export const focusController: RequestHandler = async (req, res) => {
             const request = JSON.parse(req.body.toString()) as IUnbindUpgradeRequest;
             const focusPolarity = focusTypeToPolarity(request.FocusTypes[0]);
             const inventory = await getInventory(accountId);
-            inventory.FocusXP[focusPolarity] -= 750_000;
+            inventory.FocusXP[focusPolarity] -= 750_000 * request.FocusTypes.length;
             addMiscItems(inventory, [
                 {
                     ItemType: "/Lotus/Types/Gameplay/Eidolon/Resources/SentientShards/SentientShardBrilliantItem",
@@ -93,7 +93,7 @@ export const focusController: RequestHandler = async (req, res) => {
             res.json({
                 FocusTypes: request.FocusTypes,
                 FocusPointCosts: {
-                    [focusPolarity]: 750_000
+                    [focusPolarity]: 750_000 * request.FocusTypes.length
                 },
                 MiscItemCosts: [
                     {
