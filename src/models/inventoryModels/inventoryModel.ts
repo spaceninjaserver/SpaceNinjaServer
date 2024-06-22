@@ -525,7 +525,13 @@ weaponSkinsSchema.virtual("ItemId").get(function () {
     return { $oid: this._id.toString() };
 });
 
-weaponSkinsSchema.set("toJSON", { virtuals: true });
+weaponSkinsSchema.set("toJSON", {
+    virtuals: true,
+    transform(_doc, ret, _options) {
+        delete ret._id;
+        delete ret.__v;
+    }
+});
 
 const tauntHistorySchema = new Schema<ITauntHistory>(
     {
