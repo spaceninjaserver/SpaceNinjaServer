@@ -108,7 +108,7 @@ export const addItem = async (
     if (typeName in ExportCustoms) {
         return {
             InventoryChanges: {
-                WeaponSkins: [ await addSkin(typeName, accountId) ]
+                WeaponSkins: [await addSkin(typeName, accountId)]
             }
         };
     }

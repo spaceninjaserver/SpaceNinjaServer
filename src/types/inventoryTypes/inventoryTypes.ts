@@ -849,7 +849,7 @@ export interface ITauntHistory {
 }
 
 export interface IWeaponSkinDatabase {
-    ItemType: string;    
+    ItemType: string;
 }
 
 export interface IWeaponSkin extends IWeaponSkinDatabase {
