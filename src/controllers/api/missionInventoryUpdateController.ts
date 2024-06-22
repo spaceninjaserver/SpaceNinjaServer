@@ -66,7 +66,7 @@ const missionInventoryUpdateController: RequestHandler = async (req, res): Promi
             TotalCredits,
             CreditsBonus,
             MissionCredits,
-            ...(FusionPoints !== undefined && { FusionPoints })
+            FusionPoints
         });
     } catch (err) {
         console.error("Error parsing JSON data:", err);

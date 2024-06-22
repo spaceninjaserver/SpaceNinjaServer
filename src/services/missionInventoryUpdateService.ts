@@ -54,12 +54,10 @@ const combineRewardAndLootInventory = (
     const missionCredits = lootInventory.RegularCredits || 0;
     const creditsBonus = rewardInventory.RegularCredits || 0;
     const totalCredits = missionCredits + creditsBonus;
-    const FusionPoints = (lootInventory.FusionPoints || 0) + (rewardInventory.FusionPoints || 0) || undefined;
+    const FusionPoints = (lootInventory.FusionPoints || 0) + (rewardInventory.FusionPoints || 0);
 
     lootInventory.RegularCredits = totalCredits;
-    if (FusionPoints) {
-        lootInventory.FusionPoints = FusionPoints;
-    }
+    lootInventory.FusionPoints = FusionPoints;
     inventoryFields.forEach((field: IInventoryFieldType) => {
         if (rewardInventory[field] && !lootInventory[field]) {
             lootInventory[field] = [];
@@ -72,7 +70,7 @@ const combineRewardAndLootInventory = (
         TotalCredits: [totalCredits, totalCredits],
         CreditsBonus: [creditsBonus, creditsBonus],
         MissionCredits: [missionCredits, missionCredits],
-        ...(FusionPoints !== undefined && { FusionPoints })
+        FusionPoints: FusionPoints
     };
 };
 
