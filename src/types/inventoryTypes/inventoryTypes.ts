@@ -66,7 +66,8 @@ export type TEquipmentKey =
     | "Melee"
     | "SpecialItems"
     | "Sentinels"
-    | "SentinelWeapons";
+    | "SentinelWeapons"
+    | "SpaceGuns";
 
 export interface IDuviriInfo {
     Seed: number;

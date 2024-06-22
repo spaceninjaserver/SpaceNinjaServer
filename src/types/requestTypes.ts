@@ -10,7 +10,8 @@ import {
     ITypeCount,
     IMission,
     IRawUpgrade,
-    ISeasonChallenge
+    ISeasonChallenge,
+    TEquipmentKey
 } from "./inventoryTypes/inventoryTypes";
 
 export interface IArtifactsRequest {
@@ -85,7 +86,7 @@ export interface IUpdateGlyphRequest {
 }
 
 export interface IUpgradesRequest {
-    ItemCategory: string;
+    ItemCategory: TEquipmentKey;
     ItemId: IOid;
     ItemFeatures: number;
     UpgradeVersion: number;
