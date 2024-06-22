@@ -1,6 +1,10 @@
 import { RequestHandler } from "express";
 import { IUpgradesRequest } from "@/src/types/requestTypes";
-import { FocusSchool, IEquipmentDatabase, EquipmentFeatures } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import {
+    ArtifactPolarity,
+    IEquipmentDatabase,
+    EquipmentFeatures
+} from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addMiscItems, getInventory, updateCurrency } from "@/src/services/inventoryService";
@@ -133,7 +137,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
     res.json({ InventoryChanges });
 };
 
-const setSlotPolarity = (item: IEquipmentDatabase, slot: number, polarity: FocusSchool): void => {
+const setSlotPolarity = (item: IEquipmentDatabase, slot: number, polarity: ArtifactPolarity): void => {
     item.Polarity ??= [];
     const entry = item.Polarity.find(entry => entry.Slot == slot);
     if (entry) {
