@@ -1,4 +1,4 @@
-import { IMongoDate, IOid } from "@/src/types/commonTypes";
+import { IOid } from "@/src/types/commonTypes";
 
 export interface IMessage {
     LanguageCode?: string;
@@ -11,8 +11,8 @@ export interface ILink {
 }
 
 export interface IBaseWorldStateObject {
-    Activation: IMongoDate;
-    Expiry: IMongoDate;
+    Activation: number;
+    Expiry: number;
     _id?: IOid;
 }
 
@@ -61,12 +61,11 @@ export interface IEvent {
     Icon?: string;
     Community?: boolean;
     Priority?: boolean;
-    EventStartDate?: IMongoDate;
-    EventEndDate?: IMongoDate;
+    EventStartDate?: number;
+    EventEndDate?: number;
     MobileOnly?: boolean;
     HideEndDateModifier?: boolean;
-    Date?: IMongoDate;
-    _id?: IOid;
+    Date?: number;
 }
 
 export interface IGoal extends IBaseWorldStateObject {
@@ -103,7 +102,7 @@ export interface ISortieMission {
 }
 
 export interface ISortie extends Omit<ILiteSortie, "Missions"> {
-    // ExtraDrops: []; Unknown
+    ExtraDrops: string[]; //Unknown
     Variants: ISortieMission[];
     Twitter: boolean;
 }
@@ -150,8 +149,8 @@ export interface IGlobalUpgrade extends IBaseWorldStateObject {
 }
 
 export interface IFlashSale {
-    StartDate: IMongoDate;
-    EndDate: IMongoDate;
+    StartDate: number;
+    EndDate: number;
     TypeName: string;
     ShowInMarket: boolean;
     HideFromMarket: boolean;
@@ -200,8 +199,8 @@ export interface IInvasionMissionInfo {
 }
 
 export interface INodeOverride {
-    Activation?: IMongoDate;
-    Expiry?: IMongoDate;
+    Activation?: number;
+    Expiry?: number;
     Node: string;
     Faction?: string;
     CustomNpcEncounters?: string[];
@@ -224,7 +223,7 @@ export interface IVoidTraderItem {
 }
 
 export interface IVoidTraderScheduleInfo extends Omit<IBaseWorldStateObject, "Activation" | "_id"> {
-    PreviewHiddenUntil?: IMongoDate;
+    PreviewHiddenUntil?: number;
     FeaturedItem?: string;
 }
 
@@ -252,8 +251,8 @@ export interface ILibraryInfo {
 
 export interface IPVPChallengeInstance {
     challengeTypeRefID: string;
-    startDate: IMongoDate;
-    endDate: IMongoDate;
+    startDate: number;
+    endDate: number;
     params: IPVPChallengeInstanceParam[];
     isGenerated: boolean;
     PVPMode: string;
@@ -302,8 +301,8 @@ export interface IWorldState {
     Events?: IEvent[];
     Goals?: IGoal[];
     Alerts?: IAlert[];
-    Sorties?: ISortie[];
-    LiteSorties?: ILiteSortie[];
+    Sorties: ISortie[];
+    LiteSorties: ILiteSortie[];
     SyndicateMissions?: ISyndicateMission[];
     ActiveMissions?: IActiveMission[];
     GlobalUpgrades?: IGlobalUpgrade[];
