@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import { IUpgradesRequest } from "@/src/types/requestTypes";
+import { config } from "@/src/services/configService";
 import { FocusSchool, IEquipmentDatabase, EquipmentFeatures } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { IMiscItem, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
 import { getAccountIdForRequest } from "@/src/services/loginService";
@@ -64,7 +65,9 @@ export const upgradesController: RequestHandler = async (req, res) => {
             case "/Lotus/Types/Items/MiscItems/FormaStance":
                 for (const item of inventory[payload.ItemCategory as TEquipmentKey] as IEquipmentDatabase[]) {
                     if (item._id.toString() == payload.ItemId.$oid) {
+                        if (!config.NoResetPolarize) {
                         item.XP = 0;
+                        }
                         setSlotPolarity(item, operation.PolarizeSlot, operation.PolarizeValue);
                         item.Polarized ??= 0;
                         item.Polarized += 1;
