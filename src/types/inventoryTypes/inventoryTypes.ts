@@ -268,6 +268,7 @@ export interface IInventoryResponse {
     PendingCoupon: IPendingCoupon;
     Harvestable: boolean;
     DeathSquadable: boolean;
+    ActiveQuest: string;
 }
 
 export interface IAffiliation {
