@@ -15,7 +15,7 @@ export const focusController: RequestHandler = async (req, res) => {
             res.end();
             break;
         case FocusOperation.UnlockWay: {
-            const focusType = (JSON.parse(req.body.toString()) as IWayRequest).FocusType;
+            const focusType = (JSON.parse(String(req.body)) as IWayRequest).FocusType;
             const focusPolarity = focusTypeToPolarity(focusType);
             const inventory = await getInventory(accountId);
             const cost = inventory.FocusAbility ? 50_000 : 0;
@@ -32,7 +32,7 @@ export const focusController: RequestHandler = async (req, res) => {
             break;
         }
         case FocusOperation.ActivateWay: {
-            const focusType = (JSON.parse(req.body.toString()) as IWayRequest).FocusType;
+            const focusType = (JSON.parse(String(req.body)) as IWayRequest).FocusType;
             const inventory = await getInventory(accountId);
             inventory.FocusAbility = focusType;
             await inventory.save();
@@ -40,7 +40,7 @@ export const focusController: RequestHandler = async (req, res) => {
             break;
         }
         case FocusOperation.UnlockUpgrade: {
-            const request = JSON.parse(req.body.toString()) as IUnlockUpgradeRequest;
+            const request = JSON.parse(String(req.body)) as IUnlockUpgradeRequest;
             const focusPolarity = focusTypeToPolarity(request.FocusTypes[0]);
             const inventory = await getInventory(accountId);
             let cost = 0;
@@ -57,7 +57,7 @@ export const focusController: RequestHandler = async (req, res) => {
             break;
         }
         case FocusOperation.LevelUpUpgrade: {
-            const request = JSON.parse(req.body.toString()) as ILevelUpUpgradeRequest;
+            const request = JSON.parse(String(req.body)) as ILevelUpUpgradeRequest;
             const focusPolarity = focusTypeToPolarity(request.FocusInfos[0].ItemType);
             const inventory = await getInventory(accountId);
             let cost = 0;
@@ -75,7 +75,7 @@ export const focusController: RequestHandler = async (req, res) => {
             break;
         }
         case FocusOperation.UnbindUpgrade: {
-            const request = JSON.parse(req.body.toString()) as IUnbindUpgradeRequest;
+            const request = JSON.parse(String(req.body)) as IUnbindUpgradeRequest;
             const focusPolarity = focusTypeToPolarity(request.FocusTypes[0]);
             const inventory = await getInventory(accountId);
             inventory.FocusXP[focusPolarity] -= 750_000 * request.FocusTypes.length;
@@ -105,7 +105,7 @@ export const focusController: RequestHandler = async (req, res) => {
             break;
         }
         case FocusOperation.ConvertShard: {
-            const request = JSON.parse(req.body.toString()) as IConvertShardRequest;
+            const request = JSON.parse(String(req.body)) as IConvertShardRequest;
             // Tally XP
             let xp = 0;
             for (const shard of request.Shards) {

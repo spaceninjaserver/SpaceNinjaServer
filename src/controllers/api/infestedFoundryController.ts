@@ -7,11 +7,10 @@ import { IOid } from "@/src/types/commonTypes";
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const infestedFoundryController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const payload = getJSONfromString(req.body.toString());
     switch (req.query.mode) {
         case "s": {
             // shard installation
-            const request = payload as IShardInstallRequest;
+            const request = getJSONfromString(String(req.body)) as IShardInstallRequest;
             const inventory = await getInventory(accountId);
             const suit = inventory.Suits.find(suit => suit._id.toString() == request.SuitId.$oid)!;
             if (
@@ -42,9 +41,10 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
 
         case "n": {
             // name the beast
+            const request = getJSONfromString(String(req.body)) as IHelminthNameRequest;
             const inventory = await getInventory(accountId);
             inventory.InfestedFoundry ??= {};
-            inventory.InfestedFoundry.Name = payload.newName as string;
+            inventory.InfestedFoundry.Name = request.newName;
             await inventory.save();
             res.json({
                 InventoryChanges: {
@@ -71,6 +71,10 @@ interface IShardInstallRequest {
     Slot: number;
     UpgradeType: string;
     Color: string;
+}
+
+interface IHelminthNameRequest {
+    newName: string;
 }
 
 const colorToShard: Record<string, string> = {

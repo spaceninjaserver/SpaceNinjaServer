@@ -7,7 +7,7 @@ import { IStepSequencer } from "@/src/types/inventoryTypes/inventoryTypes";
 export const stepSequencersController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId);
-    const stepSequencer = JSON.parse(req.body.toString()) as IStepSequencer;
+    const stepSequencer = JSON.parse(String(req.body)) as IStepSequencer;
     delete stepSequencer.ItemId;
     const stepSequencerIndex = inventory.StepSequencers.push(stepSequencer);
     const changedInventory = await inventory.save();
