@@ -23,33 +23,46 @@ const getRewards = ({
         return { InventoryChanges: {}, MissionRewards: [] };
     }
 
-    const rewardManifests = ExportRegions[RewardInfo.node]?.rewardManifests ?? [];
-    if (rewardManifests.length == 0) {
-        return { InventoryChanges: {}, MissionRewards: [] };
-    }
-
-    let rotations: number[] = [];
-    if (RewardInfo.VaultsCracked) {
-        // For Spy missions, e.g. 3 vaults cracked = A, B, C
-        for (let i = 0; i != RewardInfo.VaultsCracked; ++i) {
-            rotations.push(i);
-        }
-    } else {
-        const rotationCount = RewardInfo.rewardQualifications?.length || 0;
-        rotations = getRotations(rotationCount);
-    }
     const drops: IReward[] = [];
-    rewardManifests
-        .map(name => ExportRewards[name])
-        .forEach(table => {
-            for (const rotation of rotations) {
-                const rotationRewards = table[rotation];
-                const drop = getRandomRewardByChance(rotationRewards);
+    if (RewardInfo.node in ExportRegions) {
+        const region = ExportRegions[RewardInfo.node];
+        const rewardManifests = region.rewardManifests ?? [];
+        if (rewardManifests.length == 0) {
+            return { InventoryChanges: {}, MissionRewards: [] };
+        }
+
+        let rotations: number[] = [];
+        if (RewardInfo.VaultsCracked) {
+            // For Spy missions, e.g. 3 vaults cracked = A, B, C
+            for (let i = 0; i != RewardInfo.VaultsCracked; ++i) {
+                rotations.push(i);
+            }
+        } else {
+            const rotationCount = RewardInfo.rewardQualifications?.length || 0;
+            rotations = getRotations(rotationCount);
+        }
+        rewardManifests
+            .map(name => ExportRewards[name])
+            .forEach(table => {
+                for (const rotation of rotations) {
+                    const rotationRewards = table[rotation];
+                    const drop = getRandomRewardByChance(rotationRewards);
+                    if (drop) {
+                        drops.push(drop);
+                    }
+                }
+            });
+
+        if (region.cacheRewardManifest && RewardInfo.EnemyCachesFound) {
+            const deck = ExportRewards[region.cacheRewardManifest];
+            for (let rotation = 0; rotation != RewardInfo.EnemyCachesFound; ++rotation) {
+                const drop = getRandomRewardByChance(deck[rotation]);
                 if (drop) {
                     drops.push(drop);
                 }
             }
-        });
+        }
+    }
 
     logger.debug("Mission rewards:", drops);
     return formatRewardsToInventoryType(drops);
