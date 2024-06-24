@@ -105,7 +105,7 @@ const handleStoreItemAcquisition = async (
         logger.debug(`store category ${storeCategory}`);
         if (!ignorePurchaseQuantity) {
             if (internalName in ExportGear) {
-                quantity *= (ExportGear[internalName].purchaseQuantity || 1);
+                quantity *= ExportGear[internalName].purchaseQuantity || 1;
             }
         }
         switch (storeCategory) {
