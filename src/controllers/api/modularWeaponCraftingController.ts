@@ -22,7 +22,7 @@ interface IModularCraftRequest {
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const modularWeaponCraftingController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const data: IModularCraftRequest = getJSONfromString(req.body.toString());
+    const data = getJSONfromString(String(req.body)) as IModularCraftRequest;
     if (!(data.WeaponType in modularWeaponTypes)) {
         throw new Error(`unknown modular weapon type: ${data.WeaponType}`);
     }
