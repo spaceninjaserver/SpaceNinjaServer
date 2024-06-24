@@ -6,7 +6,7 @@ import { IUpdateChallengeProgressRequest } from "@/src/types/requestTypes";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 const updateChallengeProgressController: RequestHandler = async (req, res) => {
-    const payload: IUpdateChallengeProgressRequest = getJSONfromString(req.body.toString());
+    const payload = getJSONfromString(String(req.body)) as IUpdateChallengeProgressRequest;
     const accountId = await getAccountIdForRequest(req);
 
     await updateChallengeProgress(payload, accountId);

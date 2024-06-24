@@ -19,7 +19,7 @@ interface ITrainingResultsResponse {
 const trainingResultController: RequestHandler = async (req, res): Promise<void> => {
     const accountId = await getAccountIdForRequest(req);
 
-    const trainingResults = getJSONfromString(req.body.toString()) as ITrainingResultsRequest;
+    const trainingResults = getJSONfromString(String(req.body)) as ITrainingResultsRequest;
 
     const inventory = await getInventory(accountId);
 

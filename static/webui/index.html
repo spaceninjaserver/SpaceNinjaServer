@@ -112,9 +112,6 @@
                             <div class="card mb-4">
                                 <h5 class="card-header">Warframes</h5>
                                 <div class="card-body">
-                                    <table class="table table-hover w-100">
-                                        <tbody id="warframe-list"></tbody>
-                                    </table>
                                     <form class="input-group" onsubmit="doAcquireWarframe();return false;">
                                         <input
                                             class="form-control"
@@ -123,6 +120,9 @@
                                         />
                                         <button class="btn btn-primary" type="submit">Add</button>
                                     </form>
+                                    <table class="table table-hover w-100">
+                                        <tbody id="warframe-list"></tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -130,13 +130,13 @@
                             <div class="card mb-4">
                                 <h5 class="card-header">Weapons</h5>
                                 <div class="card-body">
-                                    <table class="table table-hover w-100">
-                                        <tbody id="weapon-list"></tbody>
-                                    </table>
                                     <form class="input-group" onsubmit="doAcquireWeapon();return false;">
                                         <input class="form-control" id="weapon-to-acquire" list="datalist-weapons" />
                                         <button class="btn btn-primary" type="submit">Add</button>
                                     </form>
+                                    <table class="table table-hover w-100">
+                                        <tbody id="weapon-list"></tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -191,13 +191,13 @@
                             <div class="card mb-4">
                                 <h5 class="card-header">Mods</h5>
                                 <div class="card-body">
-                                    <table class="table table-hover w-100">
-                                        <tbody id="mods-list"></tbody>
-                                    </table>
                                     <form class="input-group" onsubmit="doAcquireMod();return false;">
                                         <input class="form-control" id="mod-to-acquire" list="datalist-mods" />
                                         <button class="btn btn-primary" type="submit">Add</button>
                                     </form>
+                                    <table class="table table-hover w-100">
+                                        <tbody id="mods-list"></tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -248,7 +248,7 @@
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="unlockAllFlavourItems" />
                             <label class="form-check-label" for="unlockAllFlavourItems">
-                                Unlock All Flavor Items (Glyphs & co.)
+                                Unlock All <abbr title="Animation Sets, Glyphs, Plattes, etc.">Flavor Items</abbr>
                             </label>
                         </div>
                         <div class="form-check">

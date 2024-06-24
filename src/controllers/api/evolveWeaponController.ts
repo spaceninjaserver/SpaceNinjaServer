@@ -9,7 +9,7 @@ import { EquipmentFeatures } from "@/src/types/inventoryTypes/commonInventoryTyp
 export const evolveWeaponController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId);
-    const payload = getJSONfromString(req.body.toString()) as IEvolveWeaponRequest;
+    const payload = getJSONfromString(String(req.body)) as IEvolveWeaponRequest;
     console.assert(payload.Action == "EWA_INSTALL");
 
     // TODO: We should remove the Genesis item & its resources, but currently we don't know these "recipes".

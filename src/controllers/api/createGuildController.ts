@@ -8,7 +8,7 @@ import { ICreateGuildRequest } from "@/src/types/guildTypes";
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 const createGuildController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const payload: ICreateGuildRequest = getJSONfromString(req.body.toString());
+    const payload = getJSONfromString(String(req.body)) as ICreateGuildRequest;
 
     // Create guild on database
     const guild = new Guild({

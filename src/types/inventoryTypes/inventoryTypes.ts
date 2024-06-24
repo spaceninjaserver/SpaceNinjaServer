@@ -253,7 +253,8 @@ export interface IInventoryResponse {
     NemesisAbandonedRewards: string[];
     DailyAffiliationKahl: number;
     LastInventorySync: IOid;
-    NextRefill: IMongoDate;
+    NextRefill: IMongoDate; // Next time argon crystals will have a decay tick
+    FoundToday?: IMiscItem[]; // for Argon Crystals
     ActiveLandscapeTraps: any[];
     EvolutionProgress?: IEvolutionProgress[];
     RepVotes: any[];

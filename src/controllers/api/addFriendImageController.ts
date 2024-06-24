@@ -7,7 +7,7 @@ import { getInventory } from "@/src/services/inventoryService";
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 const addFriendImageController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const json = getJSONfromString(req.body.toString()) as IUpdateGlyphRequest;
+    const json = getJSONfromString(String(req.body)) as IUpdateGlyphRequest;
     const inventory = await getInventory(accountId);
     inventory.ActiveAvatarImageType = json.AvatarImageType;
     await inventory.save();
