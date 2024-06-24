@@ -27,7 +27,7 @@ import { logger } from "@/src/utils/logger";
 import { WeaponTypeInternal, getWeaponType, getExalted } from "@/src/services/itemDataService";
 import { ISyndicateSacrifice, ISyndicateSacrificeResponse } from "../types/syndicateTypes";
 import { IEquipmentClient } from "../types/inventoryTypes/commonInventoryTypes";
-import { ExportCustoms, ExportRecipes, ExportResources } from "warframe-public-export-plus";
+import { ExportCustoms, ExportFlavour, ExportRecipes, ExportResources } from "warframe-public-export-plus";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
@@ -112,6 +112,13 @@ export const addItem = async (
             }
         };
     }
+    if (typeName in ExportFlavour) {
+        return {
+            InventoryChanges: {
+                FlavourItems: [await addCustomization(typeName, accountId)]
+            }
+        };
+    }
 
     // Path-based duck typing
     switch (typeName.substr(1).split("/")[1]) {
@@ -171,12 +178,6 @@ export const addItem = async (
                     [weaponType]: [weapon]
                 }
             };
-        case "Interface":
-            return {
-                InventoryChanges: {
-                    FlavourItems: [await addCustomization(typeName, accountId)]
-                }
-            };
         case "Objects": {
             // /Lotus/Objects/Tenno/Props/TnoLisetTextProjector (Note Beacon)
             const inventory = await getInventory(accountId);
@@ -196,13 +197,6 @@ export const addItem = async (
         }
         case "Types":
             switch (typeName.substr(1).split("/")[2]) {
-                case "AvatarImages":
-                case "SuitCustomizations":
-                    return {
-                        InventoryChanges: {
-                            FlavourItems: [await addCustomization(typeName, accountId)]
-                        }
-                    };
                 case "Sentinels":
                     // TOOD: Sentinels should also grant their DefaultUpgrades & SentinelWeapon.
                     const sentinel = await addSentinel(typeName, accountId);

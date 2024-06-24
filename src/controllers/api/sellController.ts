@@ -5,7 +5,7 @@ import { getInventory, addMods, addRecipes } from "@/src/services/inventoryServi
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const sellController: RequestHandler = async (req, res) => {
-    const payload: ISellRequest = JSON.parse(req.body.toString());
+    const payload = JSON.parse(String(req.body)) as ISellRequest;
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId);
 

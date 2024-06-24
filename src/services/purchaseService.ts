@@ -3,7 +3,7 @@ import { getSubstringFromKeyword } from "@/src/helpers/stringHelpers";
 import { addItem, addBooster, updateCurrency, updateSlots } from "@/src/services/inventoryService";
 import { IPurchaseRequest, SlotPurchase, IInventoryChanges, IBinChanges } from "@/src/types/purchaseTypes";
 import { logger } from "@/src/utils/logger";
-import { ExportBundles, TRarity } from "warframe-public-export-plus";
+import { ExportBundles, ExportGear, TRarity } from "warframe-public-export-plus";
 
 export const getStoreItemCategory = (storeItem: string) => {
     const storeItemString = getSubstringFromKeyword(storeItem, "StoreItems/");
@@ -75,7 +75,8 @@ const handleStoreItemAcquisition = async (
     storeItemName: string,
     accountId: string,
     quantity: number,
-    durability: TRarity
+    durability: TRarity,
+    ignorePurchaseQuantity: boolean = false
 ): Promise<{ InventoryChanges: IInventoryChanges }> => {
     let purchaseResponse = {
         InventoryChanges: {}
@@ -91,8 +92,9 @@ const handleStoreItemAcquisition = async (
                     await handleStoreItemAcquisition(
                         component.typeName,
                         accountId,
-                        component.purchaseQuantity,
-                        component.durability
+                        component.purchaseQuantity * quantity,
+                        component.durability,
+                        true
                     )
                 ).InventoryChanges
             );
@@ -101,9 +103,14 @@ const handleStoreItemAcquisition = async (
         const storeCategory = getStoreItemCategory(storeItemName);
         const internalName = storeItemName.replace("/StoreItems", "");
         logger.debug(`store category ${storeCategory}`);
+        if (!ignorePurchaseQuantity) {
+            if (internalName in ExportGear) {
+                quantity *= ExportGear[internalName].purchaseQuantity || 1;
+            }
+        }
         switch (storeCategory) {
             default:
-                purchaseResponse = await addItem(accountId, internalName);
+                purchaseResponse = await addItem(accountId, internalName, quantity);
                 break;
             case "Types":
                 purchaseResponse = await handleTypesPurchase(internalName, accountId, quantity);

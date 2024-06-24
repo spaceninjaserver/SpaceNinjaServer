@@ -136,6 +136,9 @@ const inventoryController: RequestHandler = async (request, response) => {
         }
     }
 
+    // Fix for #380
+    inventoryResponse.NextRefill = { $date: { $numberLong: "9999999999999" } };
+
     response.json(inventoryResponse);
 };
 
