@@ -3,7 +3,6 @@ import { IUpdateQuestRequest, IUpdateQuestResponse } from "@/src/types/questType
 import { addItem, getInventory } from "@/src/services/inventoryService";
 import { logger } from "@/src/utils/logger";
 import { ExportKeys, ExportRecipes, ExportResources } from "warframe-public-export-plus";
-import { ItemType } from "../helpers/customHelpers/addItemHelpers";
 
 export const setActiveQuest = async (accountId: string, quest: string) => {
     const inventory = await getInventory(accountId);
