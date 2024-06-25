@@ -339,14 +339,20 @@ const NodeOverrideSchema = new Schema<INodeOverride>({
     Node: String,
     Faction: String,
     CustomNpcEncounters: [String],
-    LevelOverride: String
+    LevelOverride: String,
+    Seed: Number,
+    Hide: Boolean
 });
 
 NodeOverrideSchema.set("toJSON", {
     transform(_document, returnedObject) {
         returnedObject._id = { $oid: returnedObject._id.toString() };
-        returnedObject.Activation = { $date: { $numberLong: returnedObject.Activation.toString() } };
-        returnedObject.Expiry = { $date: { $numberLong: returnedObject.Expiry.toString() } };
+        if (returnedObject.Activation !== undefined) {
+            returnedObject.Activation = { $date: { $numberLong: returnedObject.Activation.toString() } };
+        }
+        if (returnedObject.Expiry !== undefined) {
+            returnedObject.Expiry = { $date: { $numberLong: returnedObject.Expiry.toString() } };
+        }
     }
 });
 
@@ -500,7 +506,7 @@ const ActiveChallengeSchema = new Schema<IActiveChallenge>({
     Challenge: String
 });
 
-FeaturedGuildShema.set("toJSON", {
+ActiveChallengeSchema.set("toJSON", {
     transform(_document, returnedObject) {
         returnedObject._id = { $oid: returnedObject._id.toString() };
         returnedObject.Activation = { $date: { $numberLong: returnedObject.Activation.toString() } };
@@ -511,13 +517,24 @@ FeaturedGuildShema.set("toJSON", {
 const SeasonInfoSchema = new Schema<ISeasonInfo>(
     {
         AffiliationTag: String,
+        Activation: Number,
+        Expiry: Number,
         Season: Number,
         Phase: Number,
         Params: String,
-        ActiveChallenges: [ActiveChallengeSchema]
+        ActiveChallenges: [ActiveChallengeSchema],
+        UsedChallenges: [String]
     },
     { _id: false }
 );
+
+SeasonInfoSchema.set("toJSON", {
+    transform(_document, returnedObject) {
+        delete returnedObject.UsedChallenges;
+        returnedObject.Activation = { $date: { $numberLong: returnedObject.Activation.toString() } };
+        returnedObject.Expiry = { $date: { $numberLong: returnedObject.Expiry.toString() } };
+    }
+});
 
 const WorldStateSchema = new Schema<IWorldState>({
     Events: [EventSchema],

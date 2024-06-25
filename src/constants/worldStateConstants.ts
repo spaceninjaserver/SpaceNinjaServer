@@ -1,24 +1,3 @@
-export const SortiesMissionTypes = [
-    "MT_ARTIFACT",
-    "MT_ASSAULT",
-    "MT_ASSASSINATION",
-    "MT_DEFENSE",
-    "MT_DISRUPTION",
-    "MT_EVACUATION",
-    "MT_EXCAVATE",
-    "MT_EXTERMINATION",
-    "MT_HIVE",
-    "MT_INTEL",
-    "MT_LANDSCAPE",
-    "MT_MOBILE_DEFENSE",
-    "MT_RESCUE",
-    "MT_RETRIEVAL",
-    "MT_SABOTAGE",
-    "MT_SECTOR",
-    "MT_SURVIVAL",
-    "MT_TERRITORY"
-];
-
 export const voidTiers = ["VoidT1", "VoidT2", "VoidT3", "VoidT4", "VoidT5", "VoidT6"];
 
 export const modifierTypes = [
@@ -54,7 +33,32 @@ export const modifierTypes = [
     "SORTIE_MODIFIER_BOW_ONLY"
 ];
 
-export const liteSortiesBoss = ["SORTIE_BOSS_AMAR", "SORTIE_BOSS_NIRA", "SORTIE_BOSS_PAAZUL"];
+export const liteSortiesBosses = [
+    "SORTIE_BOSS_AMAR", // SytemIndex 3
+    "SORTIE_BOSS_NIRA", // SytemIndex 4
+    "SORTIE_BOSS_PAAZUL" // SytemIndex 0
+];
+
+export const liteSortiesMissionIndex = [
+    [
+        1, // Exterminate
+        3, // Rescue
+        4, // Sabotage
+        5, // Capture
+        7, // Spy
+        9 // Mobile Defense
+    ],
+    [
+        2, // Survival
+        8, // Defense
+        13, // Interception
+        17, // Excavation
+        33, // Disruption
+    ],
+    [
+        0 // Assasination
+    ]
+];
 
 /* data from wfcd worldstate-data sucks,
      missing bosses: 
@@ -63,3455 +67,3710 @@ export const liteSortiesBoss = ["SORTIE_BOSS_AMAR", "SORTIE_BOSS_NIRA", "SORTIE_
  */
 export const endStates = [
     {
-        bossName: "SORTIE_BOSS_VOR",
-        regions: [
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_TERRITORY",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_EXCAVATE",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_RETRIEVAL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_RETRIEVAL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_ASSASSINATION"
-                ]
-            }
-        ]
+      "bossName": "SORTIE_BOSS_VOR",
+      "regions": [
+        {
+          "systemIndex": 0,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 1,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            8,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 2,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 3,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            13,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 4,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 5,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 6,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 7,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            17,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 8,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 9,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            14,
+            0
+          ]
+        },
+        {
+          "systemIndex": 10,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 11,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 12,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            14,
+            0
+          ]
+        },
+        {
+          "systemIndex": 15,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 16,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 17,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+
+        {
+          "systemIndex": 18,
+          "missionIndex": [
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            0
+          ]
+        }
+      ]
     },
     {
-        bossName: "SORTIE_BOSS_HEK",
-        regions: [
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_TERRITORY",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_EXCAVATE",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_RETRIEVAL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_RETRIEVAL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_ASSASSINATION"
-                ]
-            }
-        ]
+      "bossName": "SORTIE_BOSS_HEK",
+      "regions": [
+        {
+          "systemIndex": 0,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 1,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            8,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 2,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 3,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            13,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 4,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 5,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 6,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 7,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            17,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 8,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 9,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            14,
+            0
+          ]
+        },
+        {
+          "systemIndex": 10,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 11,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 12,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            14,
+            0
+          ]
+        },
+        {
+          "systemIndex": 15,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 17,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+
+        {
+          "systemIndex": 18,
+          "missionIndex": [
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            0
+          ]
+        }
+      ]
     },
     {
-        bossName: "SORTIE_BOSS_RUK",
-        regions: [
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_TERRITORY",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_EXCAVATE",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_DEFENSE",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_RETRIEVAL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_ASSASSINATION"
-                ]
-            }
-        ]
+      "bossName": "SORTIE_BOSS_RUK",
+      "regions": [
+        {
+          "systemIndex": 0,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 1,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            8,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 2,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 3,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            13,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 4,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 5,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 6,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 7,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            17,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 8,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 9,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            8,
+            0
+          ]
+        },
+        {
+          "systemIndex": 10,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 11,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 12,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            14,
+            0
+          ]
+        },
+        {
+          "systemIndex": 15,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            8,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 17,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+
+        {
+          "systemIndex": 18,
+          "missionIndex": [
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            0
+          ]
+        }
+      ]
     },
     {
-        bossName: "SORTIE_BOSS_KELA",
-        regions: [
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_SURVIVAL",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_TERRITORY",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_EXCAVATE",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_RETRIEVAL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_RETRIEVAL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_ASSASSINATION"
-                ]
-            }
-        ]
+      "bossName": "SORTIE_BOSS_KELA",
+      "regions": [
+        {
+          "systemIndex": 0,
+          "missionIndex": [
+            1,
+            2,
+            2,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 1,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            8,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 2,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 3,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            13,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 4,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 5,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 6,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 7,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            17,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 8,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 9,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            14,
+            0
+          ]
+        },
+        {
+          "systemIndex": 10,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 11,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 12,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            14,
+            0
+          ]
+        },
+        {
+          "systemIndex": 15,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 17,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+
+        {
+          "systemIndex": 18,
+          "missionIndex": [
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            0
+          ]
+        }
+      ]
     },
     {
-        bossName: "SORTIE_BOSS_KRIL",
-        regions: [
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_TERRITORY",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_EXCAVATE",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_RETRIEVAL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_RETRIEVAL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_ASSASSINATION"
-                ]
-            }
-        ]
+      "bossName": "SORTIE_BOSS_KRIL",
+      "regions": [
+        {
+          "systemIndex": 0,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 1,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            8,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 2,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 3,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            13,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 4,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 5,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 6,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 7,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            17,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 8,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 9,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            14,
+            0
+          ]
+        },
+        {
+          "systemIndex": 10,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 11,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 12,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            14,
+            0
+          ]
+        },
+        {
+          "systemIndex": 15,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 17,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+
+        {
+          "systemIndex": 18,
+          "missionIndex": [
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            0
+          ]
+        }
+      ]
     },
     {
-        bossName: "SORTIE_BOSS_TYL",
-        regions: [
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_TERRITORY",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_EXCAVATE",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_RETRIEVAL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_RETRIEVAL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_EXTERMINATION",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_ASSASSINATION"
-                ]
-            }
-        ]
+      "bossName": "SORTIE_BOSS_TYL",
+      "regions": [
+        {
+          "systemIndex": 0,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 1,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            8,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 2,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 3,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            13,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 4,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 5,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 6,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 7,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            17,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 8,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 9,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            14,
+            0
+          ]
+        },
+        {
+          "systemIndex": 10,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 11,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 12,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            14,
+            0
+          ]
+        },
+        {
+          "systemIndex": 15,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 17,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+
+        {
+          "systemIndex": 18,
+          "missionIndex": [
+            8,
+            8,
+            8,
+            1,
+            8,
+            8,
+            8,
+            8,
+            8,
+            0
+          ]
+        }
+      ]
     },
     {
-        bossName: "SORTIE_BOSS_JACKAL",
-        regions: [
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_TERRITORY",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_EXCAVATE",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_RETRIEVAL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_RETRIEVAL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_ASSASSINATION"
-                ]
-            }
-        ]
+      "bossName": "SORTIE_BOSS_JACKAL",
+      "regions": [
+        {
+          "systemIndex": 0,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 1,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            8,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 2,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 3,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            13,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 4,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 5,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 6,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 7,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            17,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 8,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 9,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            14,
+            0
+          ]
+        },
+        {
+          "systemIndex": 10,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 11,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 12,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            14,
+            0
+          ]
+        },
+        {
+          "systemIndex": 15,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 17,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+
+        {
+          "systemIndex": 18,
+          "missionIndex": [
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            0
+          ]
+        }
+      ]
     },
     {
-        bossName: "SORTIE_BOSS_ALAD",
-        regions: [
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_TERRITORY",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_EXCAVATE",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_RETRIEVAL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_RETRIEVAL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_EXTERMINATION",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_ASSASSINATION"
-                ]
-            }
-        ]
+      "bossName": "SORTIE_BOSS_ALAD",
+      "regions": [
+        {
+          "systemIndex": 0,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 1,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            8,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 2,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 3,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            13,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 4,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 5,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 6,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 7,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            17,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 8,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 9,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            14,
+            0
+          ]
+        },
+        {
+          "systemIndex": 10,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 11,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 12,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            14,
+            0
+          ]
+        },
+        {
+          "systemIndex": 15,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 17,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+
+        {
+          "systemIndex": 18,
+          "missionIndex": [
+            8,
+            8,
+            8,
+            1,
+            8,
+            8,
+            8,
+            8,
+            8,
+            0
+          ]
+        }
+      ]
     },
     {
-        bossName: "SORTIE_BOSS_AMBULAS",
-        regions: [
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXTERMINATION",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_TERRITORY",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_EXCAVATE",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_RETRIEVAL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_RETRIEVAL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_EXTERMINATION",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_ASSASSINATION"
-                ]
-            }
-        ]
+      "bossName": "SORTIE_BOSS_AMBULAS",
+      "regions": [
+        {
+          "systemIndex": 0,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 1,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            8,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 2,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 3,
+          "missionIndex": [
+            1,
+            1,
+            3,
+            4,
+            7,
+            13,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 4,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 5,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 6,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 7,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            17,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 8,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 9,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            14,
+            0
+          ]
+        },
+        {
+          "systemIndex": 10,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 11,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 12,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            14,
+            0
+          ]
+        },
+        {
+          "systemIndex": 15,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 17,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+
+        {
+          "systemIndex": 18,
+          "missionIndex": [
+            8,
+            8,
+            8,
+            1,
+            8,
+            8,
+            8,
+            8,
+            8,
+            0
+          ]
+        }
+      ]
     },
     {
-        bossName: "SORTIE_BOSS_HYENA",
-        regions: [
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_RESCUE",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_SABOTAGE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_INTEL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_RETRIEVAL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_RETRIEVAL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_EXTERMINATION",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_ASSASSINATION"
-                ]
-            }
-        ]
+      "bossName":  "SORTIE_BOSS_HYENA",
+      "regions": [
+        {
+          "systemIndex": 0,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 1,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            3,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 2,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 3,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            4,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 4,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 5,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 6,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 7,
+          "missionIndex": [
+            1,
+            7,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 8,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 9,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            14,
+            0
+          ]
+        },
+        {
+          "systemIndex": 10,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 11,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 12,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            14,
+            0
+          ]
+        },
+        {
+          "systemIndex": 15,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 17,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+
+        {
+          "systemIndex": 18,
+          "missionIndex": [
+            8,
+            8,
+            8,
+            1,
+            8,
+            8,
+            8,
+            8,
+            8,
+            0
+          ]
+        }
+      ]
     },
     {
-        bossName: "SORTIE_BOSS_NEF",
-        regions: [
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_TERRITORY",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_EXCAVATE",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_RETRIEVAL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_RETRIEVAL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_EXTERMINATION",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_ASSASSINATION"
-                ]
-            }
-        ]
+      "bossName": "SORTIE_BOSS_NEF",
+      "regions": [
+        {
+          "systemIndex": 0,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 1,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 2,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 3,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            13,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 4,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 5,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 6,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 7,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            17,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 8,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 9,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            14,
+            0
+          ]
+        },
+        {
+          "systemIndex": 10,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 11,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 12,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            14,
+            0
+          ]
+        },
+        {
+          "systemIndex": 15,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 17,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+
+        {
+          "systemIndex": 18,
+          "missionIndex": [
+            8,
+            8,
+            8,
+            1,
+            8,
+            8,
+            8,
+            8,
+            8,
+            0
+          ]
+        }
+      ]
     },
     {
-        bossName: "SORTIE_BOSS_RAPTOR",
-        regions: [
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_TERRITORY",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_RETRIEVAL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_RETRIEVAL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_EXTERMINATION",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_ASSASSINATION"
-                ]
-            }
-        ]
+      "bossName":  "SORTIE_BOSS_RAPTOR",
+      "regions": [
+        {
+          "systemIndex": 0,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 1,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            8,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 2,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 3,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            13,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 4,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 5,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 6,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 7,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 8,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 9,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            14,
+            0
+          ]
+        },
+        {
+          "systemIndex": 10,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 11,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 12,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            14,
+            0
+          ]
+        },
+        {
+          "systemIndex": 15,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 17,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 18,
+          "missionIndex": [
+            8,
+            8,
+            8,
+            1,
+            8,
+            8,
+            8,
+            8,
+            8,
+            0
+          ]
+        }
+      ]
     },
     {
-        bossName: "SORTIE_BOSS_PHORID",
-        regions: [
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_TERRITORY",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_EXCAVATE",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_RETRIEVAL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "Hive",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_RETRIEVAL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_EXTERMINATION",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_ASSASSINATION"
-                ]
-            }
-        ]
+      "bossName": "SORTIE_BOSS_PHORID",
+      "regions": [
+        {
+          "systemIndex": 0,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 1,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            8,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 2,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 3,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            13,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 4,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 5,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 6,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 7,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            17,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 8,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 9,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            14,
+            0
+          ]
+        },
+        {
+          "systemIndex": 10,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            15,
+            0
+          ]
+        },
+        {
+          "systemIndex": 11,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 12,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            14,
+            0
+          ]
+        },
+        {
+          "systemIndex": 15,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 17,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+
+        {
+          "systemIndex": 18,
+          "missionIndex": [
+            8,
+            8,
+            8,
+            1,
+            8,
+            8,
+            8,
+            8,
+            8,
+            0
+          ]
+        }
+      ]
     },
     {
-        bossName: "SORTIE_BOSS_LEPHANTIS",
-        regions: [
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_INTEL",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_RETRIEVAL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_INTEL",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "Hive",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_RETRIEVAL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_EXTERMINATION",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_ASSASSINATION"
-                ]
-            }
-        ]
+      "bossName": "SORTIE_BOSS_LEPHANTIS",
+      "regions": [
+        {
+          "systemIndex": 0,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 1,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            8,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 2,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 3,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 4,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 5,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 6,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 7,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            7,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 8,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 9,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            14,
+            0
+          ]
+        },
+        {
+          "systemIndex": 10,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            7,
+            9,
+            0
+          ]
+        },
+        {
+          "systemIndex": 11,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            15,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 12,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            14,
+            0
+          ]
+        },
+        {
+          "systemIndex": 15,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 17,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+
+        {
+          "systemIndex": 18,
+          "missionIndex": [
+            8,
+            8,
+            8,
+            1,
+            8,
+            8,
+            8,
+            8,
+            8,
+            0
+          ]
+        }
+      ]
     },
     {
-        bossName: "SORTIE_BOSS_INFALAD",
-        regions: [
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_TERRITORY",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_EXCAVATE",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_RETRIEVAL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_SURVIVAL",
-                    "Hive",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_SURVIVAL",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_INTEL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_RETRIEVAL",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_EXTERMINATION",
-                    "MT_EXCAVATE",
-                    "MT_RESCUE",
-                    "MT_SABOTAGE",
-                    "MT_INTEL",
-                    "MT_DEFENSE",
-                    "MT_MOBILE_DEFENSE",
-                    "MT_TERRITORY",
-                    "MT_EXTERMINATION",
-                    "MT_ASSASSINATION"
-                ]
-            },
-            {
-                missions: [
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_EXTERMINATION",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_DEFENSE",
-                    "MT_ASSASSINATION"
-                ]
-            }
-        ]
+      "bossName": "SORTIE_BOSS_INFALAD",
+      "regions": [
+        {
+          "systemIndex": 0,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 1,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            8,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 2,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 3,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            13,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 4,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 5,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 6,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 7,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            17,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 8,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 9,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            14,
+            0
+          ]
+        },
+        {
+          "systemIndex": 10,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            2,
+            15,
+            0
+          ]
+        },
+        {
+          "systemIndex": 11,
+          "missionIndex": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            7,
+            0
+          ]
+        },
+        {
+          "systemIndex": 12,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            14,
+            0
+          ]
+        },
+        {
+          "systemIndex": 15,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+        {
+          "systemIndex": 17,
+          "missionIndex": [
+            1,
+            17,
+            3,
+            4,
+            7,
+            8,
+            9,
+            13,
+            1,
+            0
+          ]
+        },
+
+        {
+          "systemIndex": 18,
+          "missionIndex": [
+            8,
+            8,
+            8,
+            1,
+            8,
+            8,
+            8,
+            8,
+            8,
+            0
+          ]
+        }
+      ]
     }
-];
+  ]
 
 export const validFisureMissionIndex = [
     1, // Exterminate
@@ -3534,7 +3793,8 @@ export const validFisureMissionIndex = [
 
 export const omniaNodes = ["SolNode309", "SolNode310", "SolNode230", "SolNode718", "SolNode232", "SolNode717"];
 
-export const voidFisuresMissionTypes: { [key: number]: string } = {
+export const missionIndexToMissionTypes: { [key: number]: string } = {
+    0: "MT_ASSASSINATION",
     1: "MT_EXTERMINATION",
     2: "MT_SURVIVAL",
     3: "MT_RESCUE",
@@ -3553,16 +3813,19 @@ export const voidFisuresMissionTypes: { [key: number]: string } = {
     38: "MT_ALCHEMY" // Maybe
 };
 
-export const ZarimanNormalJobs = [
+export const EntratiNormalJobs = [
     "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosAreaDefenseBounty",
     "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosAssassinateBounty",
     "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosCrpSurvivorBounty",
-    "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosEndessExcavateBounty",
-    "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosEndesspurifyBounty",
     "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosExcavateBounty",
     "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosGrnSurvivorBounty",
     "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosKeypiecesBounty",
     "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosPurifyBounty"
+];
+
+export const EntratiEndlessJobs = [
+    "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosEndessExcavateBounty",
+    "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosEndessPurifyBounty"
 ];
 
 export const CertusNarmerJobs = [
@@ -3657,3 +3920,64 @@ export const FortunaNormalJobs = [
     "/Lotus/Types/Gameplay/Venus/Jobs/VenusWetworkJobAssassinate",
     "/Lotus/Types/Gameplay/Venus/Jobs/VenusWetworkJobSpy"
 ];
+
+
+export const normalCircutRotations = [
+    [
+        "Excalibur", "Trinity", "Ember"
+    ],
+    [
+        "Loki", "Mag", "Rhino"
+    ],
+    [
+        "Ash", "Frost", "Nyx"
+    ],
+    [
+        "Saryn", "Vauban", "Nova"
+    ],
+    [
+        "Nekros", "Valkyr", "Oberon"
+    ],
+    [
+        "Hydroid", "Mirage", "Limbo"
+    ],
+    [
+        "Mesa", "Chroma", "Atlas"
+    ],
+    [
+        "Ivara", "Inaros", "Titania"
+    ],
+    [
+        "Nidus", "Octavia", "Harrow"
+    ],
+    [
+        "Gara", "Khora", "Revenant"
+    ],
+    [
+        "Garuda", "Baruuk", "Hildryn"
+    ]
+];
+
+export const hardCircutRotations = [
+    [
+        "Braton", "Lato", "Skana", "Paris", "Kunai"
+    ],
+    [
+        "Boar", "Grammacor", "Angstrum", "Gorgon", "Anku"
+    ],
+    [
+        "Bo", "Latron", "Furis", "Furax", "Strun"
+    ],
+    [
+        "Lex", "Magistar", "Boltor", "Bronko", "Ceramic Dagger"
+    ],
+    [
+        "Torid", "Dual Toxocyst", "Dual Ichor", "Milter", "Atomos"
+    ],
+    [
+        "Ack & Brunt", "Soma", "Vasto", "Nami Solo", "Burston"
+    ],
+    [
+        "Zylok", "Sibear", "Dread", "Despair", "Hate"
+    ]
+]
