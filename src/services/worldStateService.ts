@@ -36,7 +36,6 @@ import {
     normalCircutRotations,
     hardCircutRotations
 } from "@/src/constants/worldStateConstants";
-import { config } from "./configService";
 
 export const createWorldState = async () => {
     const worldState = new WorldState();
@@ -661,7 +660,7 @@ const updateNigthWave = async () => {
             else if (challenge.Challenge.startsWith("/Lotus/Types/Challenges/Seasons/WeeklyHard/")) weeklyHardCount++;
         });
 
-        const addChallenges = async (count: number, limit: number, intervalStart: number, intervalEnd: number, challengesArray: string[], isDaily = false) => {
+        const addChallenges = (count: number, limit: number, intervalStart: number, intervalEnd: number, challengesArray: string[], isDaily = false) => {
             while (count < limit) {
                 challengesArray = challengesArray.filter(challenge => !usedChallenges.includes(challenge))
                 const uniqueName = challengesArray[Math.floor(Math.random() * challengesArray.length)]
@@ -680,9 +679,9 @@ const updateNigthWave = async () => {
             }
         };
 
-        await addChallenges(dailyCount, 3, oneDayIntervalStart, oneDayIntervalEnd, dailyChallenges, true);
-        await addChallenges(weeklyCount, 5, oneWeekIntervalStart, oneWeekIntervalEnd, weeklyChallenges);
-        await addChallenges(weeklyHardCount, 2, oneWeekIntervalStart, oneWeekIntervalEnd, weeklyHardChallenges);
+        addChallenges(dailyCount, 3, oneDayIntervalStart, oneDayIntervalEnd, dailyChallenges, true);
+        addChallenges(weeklyCount, 5, oneWeekIntervalStart, oneWeekIntervalEnd, weeklyChallenges);
+        addChallenges(weeklyHardCount, 2, oneWeekIntervalStart, oneWeekIntervalEnd, weeklyHardChallenges);
 
         season = {
             Activation: season.Activation || 1715796000000,
