@@ -1,4 +1,4 @@
-import { IQuestKeyDatabase } from "./inventoryTypes/inventoryTypes";
+import { IQuestKeyDatabase } from "@/src/types/inventoryTypes/inventoryTypes";
 
 export interface IUpdateQuestRequest {
     QuestKeys: IQuestKeyDatabase[];

@@ -1,7 +1,7 @@
 import { IInventoryDatabaseDocument, IQuestKeyDatabase } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IUpdateQuestRequest, IUpdateQuestResponse } from "@/src/types/questTypes";
-import { addItem, getInventory } from "./inventoryService";
-import { logger } from "../utils/logger";
+import { addItem, getInventory } from "@/src/services/inventoryService";
+import { logger } from "@/src/utils/logger";
 import { ExportKeys } from "warframe-public-export-plus";
 
 export const setActiveQuest = async (accountId: string, quest: string) => {
@@ -89,7 +89,7 @@ export const giveKeyChainTriggeredItems = async (accountId: string, keyChain: st
             }
         }
     }
-    
+
     return null;
 };
 
