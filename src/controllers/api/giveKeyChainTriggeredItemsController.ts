@@ -10,7 +10,7 @@ const giveKeyChainTriggeredItemsController: RequestHandler = async (req, res) =>
     const payload = getJSONfromString(req.body as string) as IGiveKeyChainTriggeredItemsRequest;
     const result = await giveKeyChainTriggeredItems(accountId, payload.KeyChain, payload.ChainStage);
     if (result) res.json(result);
-    else res.json([]);
+    else res.json({});
 };
 
 export { giveKeyChainTriggeredItemsController };

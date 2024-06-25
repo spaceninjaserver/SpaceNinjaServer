@@ -2,7 +2,7 @@ import { IInventoryDatabaseDocument, IQuestKeyDatabase } from "@/src/types/inven
 import { IUpdateQuestRequest, IUpdateQuestResponse } from "@/src/types/questTypes";
 import { addItem, getInventory } from "@/src/services/inventoryService";
 import { logger } from "@/src/utils/logger";
-import { ExportKeys, ExportRecipes } from "warframe-public-export-plus";
+import { ExportKeys, ExportRecipes, ExportResources } from "warframe-public-export-plus";
 import { ItemType } from "../helpers/customHelpers/addItemHelpers";
 
 export const setActiveQuest = async (accountId: string, quest: string) => {
@@ -91,6 +91,16 @@ export const giveKeyChainTriggeredItems = async (accountId: string, keyChain: st
             if (itemType in ExportRecipes) {
                 return {
                     Recipes: [{
+                        ItemType: itemType,
+                        ItemCount: 1
+                    }]
+                };
+            }
+
+            if (itemType in ExportResources) {
+                return {
+                    WishlistChanges: [itemType],
+                    MiscItems: [{
                         ItemType: itemType,
                         ItemCount: 1
                     }]
