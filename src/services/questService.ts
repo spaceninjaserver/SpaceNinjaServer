@@ -73,16 +73,34 @@ export const updateQuest = async (accountId: string, updateQuest: IUpdateQuestRe
 };
 
 export const giveKeyChainTriggeredItems = async (accountId: string, keyChain: string, chainStage: number) => {
-    logger.debug("keyChain: " + keyChain + " chainStage: " + chainStage);
+    const inventory = await getInventory(accountId);
 
     // TODO:rewards
     const quest = ExportKeys[keyChain];
 
     if (quest.chainStages) {
         const stage = quest.chainStages[chainStage];
+
+        if (stage.key && stage.key in ExportKeys) {
+            const stageQuest = ExportKeys[stage.key];
+            if (stageQuest.rewards) {
+                for (const item of stageQuest.rewards) {
+                    switch (item.rewardType) {
+                        case "RT_STORE_ITEM":
+                            await addItem(accountId, item.itemType.replace("/Lotus/StoreItems/", "/Lotus/"), 1);
+                            break;
+                        case "RT_CREDITS":
+                            inventory.RegularCredits += item.amount;
+                            await inventory.save();
+                            break;
+                    }
+                }
+            }
+        }
+        
         if (stage.itemsToGiveWhenTriggered.length > 0) {
             const itemType = stage.itemsToGiveWhenTriggered[0];
-            
+
             await addItem(accountId, itemType.replace("/Lotus/StoreItems/", "/Lotus/"), 1);
 
             if (itemType in ExportRecipes) {
