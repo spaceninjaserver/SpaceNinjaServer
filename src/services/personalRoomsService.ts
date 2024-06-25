@@ -10,3 +10,10 @@ export const getPersonalRooms = async (accountId: string) => {
     }
     return personalRooms;
 };
+
+export const unlockShipFeature = async (accountId: string, shipFeature: string) => {
+    const personalRooms = await getPersonalRooms(accountId);
+    if (!personalRooms.Ship.Features.includes(shipFeature)) personalRooms.Ship.Features.push(shipFeature);
+    await personalRooms.save();
+};
+
