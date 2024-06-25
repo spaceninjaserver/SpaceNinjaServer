@@ -398,9 +398,9 @@ const affiliationsSchema = new Schema<IAffiliation>(
     {
         Initiated: Boolean,
         Standing: Number,
-        Title: String,
-        FreeFavorsEarned: [Number],
-        FreeFavorsUsed: [Number],
+        Title: Number,
+        FreeFavorsEarned: { type: [Number], default: undefined },
+        FreeFavorsUsed: { type: [Number], default: undefined },
         Tag: String
     },
     { _id: false }
