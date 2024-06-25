@@ -7,7 +7,9 @@ import {
     ExportGear,
     ExportRecipes,
     ExportRelics,
-    IReward
+    IReward,
+    ExportKeys,
+    ExportResources
 } from "warframe-public-export-plus";
 import { IMissionInventoryUpdateRequest } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
@@ -61,6 +63,14 @@ const getRewards = ({
                     drops.push(drop);
                 }
             }
+        }
+    }
+
+    if (RewardInfo.node in ExportKeys) {
+        const quest = ExportKeys[RewardInfo.node];
+        const rewards = quest.rewards ?? [];
+        if (rewards.length == 0) {
+            return { InventoryChanges: {}, MissionRewards: [] };
         }
     }
 
@@ -180,6 +190,8 @@ const formatRewardsToInventoryType = (
             } else if (type in ExportRecipes) {
                 addRewardResponse(InventoryChanges, MissionRewards, type, reward.itemCount, "Recipes");
             } else if (type in ExportRelics) {
+                addRewardResponse(InventoryChanges, MissionRewards, type, reward.itemCount, "MiscItems");
+            } else if (type in ExportResources) {
                 addRewardResponse(InventoryChanges, MissionRewards, type, reward.itemCount, "MiscItems");
             } else {
                 logger.error(`rolled reward ${reward.itemCount}X ${reward.type} but unsure how to give it`);

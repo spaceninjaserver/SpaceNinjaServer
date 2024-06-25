@@ -28,6 +28,7 @@ import { WeaponTypeInternal, getWeaponType, getExalted } from "@/src/services/it
 import { ISyndicateSacrifice, ISyndicateSacrificeResponse } from "../types/syndicateTypes";
 import { IEquipmentClient } from "../types/inventoryTypes/commonInventoryTypes";
 import { ExportCustoms, ExportFlavour, ExportRecipes, ExportResources } from "warframe-public-export-plus";
+import { updateQuestKeys } from "./questService";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
@@ -121,9 +122,9 @@ export const addItem = async (
     }
 
     // Path-based duck typing
-    switch (typeName.substr(1).split("/")[1]) {
+    switch (typeName.substring(1).split("/")[1]) {
         case "Powersuits":
-            switch (typeName.substr(1).split("/")[2]) {
+            switch (typeName.substring(1).split("/")[2]) {
                 default: {
                     const suit = await addPowerSuit(typeName, accountId);
                     await updateSlots(accountId, InventorySlot.SUITS, 0, 1);
@@ -196,7 +197,7 @@ export const addItem = async (
             };
         }
         case "Types":
-            switch (typeName.substr(1).split("/")[2]) {
+            switch (typeName.substring(1).split("/")[2]) {
                 case "Sentinels":
                     // TOOD: Sentinels should also grant their DefaultUpgrades & SentinelWeapon.
                     const sentinel = await addSentinel(typeName, accountId);
@@ -208,7 +209,7 @@ export const addItem = async (
                         }
                     };
                 case "Items": {
-                    switch (typeName.substr(1).split("/")[3]) {
+                    switch (typeName.substring(1).split("/")[3]) {
                         case "ShipDecos": {
                             const inventory = await getInventory(accountId);
                             const changes = [
@@ -622,7 +623,7 @@ const addMissionComplete = (inventory: IInventoryDatabaseDocument, { Tag, Comple
 const gearKeys = ["Suits", "Pistols", "LongGuns", "Melee"] as const;
 
 export const missionInventoryUpdate = async (data: IMissionInventoryUpdateRequest, accountId: string) => {
-    const { RawUpgrades, MiscItems, RegularCredits, ChallengeProgress, FusionPoints, Consumables, Recipes, Missions } =
+    const { RawUpgrades, MiscItems, RegularCredits, ChallengeProgress, FusionPoints, Consumables, Recipes, Missions, QuestKeys } =
         data;
     const inventory = await getInventory(accountId);
 
@@ -677,6 +678,9 @@ export const missionInventoryUpdate = async (data: IMissionInventoryUpdateReques
     addChallenges(inventory, ChallengeProgress);
     if (Missions) {
         addMissionComplete(inventory, Missions);
+    }
+    if(QuestKeys) {
+        await updateQuestKeys(inventory, QuestKeys);
     }
 
     const changedInventory = await inventory.save();
