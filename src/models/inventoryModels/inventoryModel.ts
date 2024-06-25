@@ -634,6 +634,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         DailyAffiliationNecraloid: Number,
         DailyAffiliationZariman: Number,
         DailyAffiliationKahl: Number,
+        DailyAffiliationCavia: Number,
 
         //Daily Focus limit
         DailyFocus: Number,
