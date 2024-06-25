@@ -81,11 +81,9 @@ export const giveKeyChainTriggeredItems = async (accountId: string, keyChain: st
     if (quest.chainStages) {
         const stage = quest.chainStages[chainStage];
         if (stage.itemsToGiveWhenTriggered.length > 0) {
-            let itemType = stage.itemsToGiveWhenTriggered[0];
-            if (itemType.indexOf("") > 0) {
-                itemType = itemType.replace("/Lotus/StoreItems/", "/Lotus/");
-            }
-            await addItem(accountId, itemType, 1);
+            const itemType = stage.itemsToGiveWhenTriggered[0];
+            
+            await addItem(accountId, itemType.replace("/Lotus/StoreItems/", "/Lotus/"), 1);
 
             if (itemType in ExportRecipes) {
                 return {
