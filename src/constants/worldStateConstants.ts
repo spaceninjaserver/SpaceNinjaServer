@@ -53,7 +53,7 @@ export const liteSortiesMissionIndex = [
         8, // Defense
         13, // Interception
         17, // Excavation
-        33, // Disruption
+        33 // Disruption
     ],
     [
         0 // Assasination
@@ -67,3710 +67,1059 @@ export const liteSortiesMissionIndex = [
  */
 export const endStates = [
     {
-      "bossName": "SORTIE_BOSS_VOR",
-      "regions": [
-        {
-          "systemIndex": 0,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 1,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            8,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 2,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 3,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            13,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 4,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 5,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 6,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 7,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            17,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 8,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 9,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            14,
-            0
-          ]
-        },
-        {
-          "systemIndex": 10,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 11,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 12,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            14,
-            0
-          ]
-        },
-        {
-          "systemIndex": 15,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 16,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 17,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
+        bossName: "SORTIE_BOSS_VOR",
+        regions: [
+            {
+                systemIndex: 0,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 1,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 8, 7, 0]
+            },
+            {
+                systemIndex: 2,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 3,
+                missionIndex: [1, 2, 3, 4, 7, 13, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 4,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 5,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 6,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 7,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 17, 7, 0]
+            },
+            {
+                systemIndex: 8,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 9,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 14, 0]
+            },
+            {
+                systemIndex: 10,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 11,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 12,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 14, 0]
+            },
+            {
+                systemIndex: 15,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 16,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 17,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
 
-        {
-          "systemIndex": 18,
-          "missionIndex": [
-            8,
-            8,
-            8,
-            8,
-            8,
-            8,
-            8,
-            8,
-            8,
-            0
-          ]
-        }
-      ]
+            {
+                systemIndex: 18,
+                missionIndex: [8, 8, 8, 8, 8, 8, 8, 8, 8, 0]
+            }
+        ]
     },
     {
-      "bossName": "SORTIE_BOSS_HEK",
-      "regions": [
-        {
-          "systemIndex": 0,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 1,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            8,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 2,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 3,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            13,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 4,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 5,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 6,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 7,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            17,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 8,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 9,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            14,
-            0
-          ]
-        },
-        {
-          "systemIndex": 10,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 11,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 12,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            14,
-            0
-          ]
-        },
-        {
-          "systemIndex": 15,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 17,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
+        bossName: "SORTIE_BOSS_HEK",
+        regions: [
+            {
+                systemIndex: 0,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 1,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 8, 7, 0]
+            },
+            {
+                systemIndex: 2,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 3,
+                missionIndex: [1, 2, 3, 4, 7, 13, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 4,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 5,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 6,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 7,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 17, 7, 0]
+            },
+            {
+                systemIndex: 8,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 9,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 14, 0]
+            },
+            {
+                systemIndex: 10,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 11,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 12,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 14, 0]
+            },
+            {
+                systemIndex: 15,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 17,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
 
-        {
-          "systemIndex": 18,
-          "missionIndex": [
-            8,
-            8,
-            8,
-            8,
-            8,
-            8,
-            8,
-            8,
-            8,
-            0
-          ]
-        }
-      ]
+            {
+                systemIndex: 18,
+                missionIndex: [8, 8, 8, 8, 8, 8, 8, 8, 8, 0]
+            }
+        ]
     },
     {
-      "bossName": "SORTIE_BOSS_RUK",
-      "regions": [
-        {
-          "systemIndex": 0,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 1,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            8,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 2,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 3,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            13,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 4,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 5,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 6,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 7,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            17,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 8,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 9,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            8,
-            0
-          ]
-        },
-        {
-          "systemIndex": 10,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 11,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 12,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            14,
-            0
-          ]
-        },
-        {
-          "systemIndex": 15,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            8,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 17,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
+        bossName: "SORTIE_BOSS_RUK",
+        regions: [
+            {
+                systemIndex: 0,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 1,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 8, 7, 0]
+            },
+            {
+                systemIndex: 2,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 3,
+                missionIndex: [1, 2, 3, 4, 7, 13, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 4,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 5,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 6,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 7,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 17, 7, 0]
+            },
+            {
+                systemIndex: 8,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 9,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 8, 0]
+            },
+            {
+                systemIndex: 10,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 11,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 12,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 14, 0]
+            },
+            {
+                systemIndex: 15,
+                missionIndex: [1, 17, 3, 4, 8, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 17,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
 
-        {
-          "systemIndex": 18,
-          "missionIndex": [
-            8,
-            8,
-            8,
-            8,
-            8,
-            8,
-            8,
-            8,
-            8,
-            0
-          ]
-        }
-      ]
+            {
+                systemIndex: 18,
+                missionIndex: [8, 8, 8, 8, 8, 8, 8, 8, 8, 0]
+            }
+        ]
     },
     {
-      "bossName": "SORTIE_BOSS_KELA",
-      "regions": [
-        {
-          "systemIndex": 0,
-          "missionIndex": [
-            1,
-            2,
-            2,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 1,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            8,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 2,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 3,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            13,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 4,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 5,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 6,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 7,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            17,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 8,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 9,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            14,
-            0
-          ]
-        },
-        {
-          "systemIndex": 10,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 11,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 12,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            14,
-            0
-          ]
-        },
-        {
-          "systemIndex": 15,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 17,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
+        bossName: "SORTIE_BOSS_KELA",
+        regions: [
+            {
+                systemIndex: 0,
+                missionIndex: [1, 2, 2, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 1,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 8, 7, 0]
+            },
+            {
+                systemIndex: 2,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 3,
+                missionIndex: [1, 2, 3, 4, 7, 13, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 4,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 5,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 6,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 7,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 17, 7, 0]
+            },
+            {
+                systemIndex: 8,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 9,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 14, 0]
+            },
+            {
+                systemIndex: 10,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 11,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 12,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 14, 0]
+            },
+            {
+                systemIndex: 15,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 17,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
 
-        {
-          "systemIndex": 18,
-          "missionIndex": [
-            8,
-            8,
-            8,
-            8,
-            8,
-            8,
-            8,
-            8,
-            8,
-            0
-          ]
-        }
-      ]
+            {
+                systemIndex: 18,
+                missionIndex: [8, 8, 8, 8, 8, 8, 8, 8, 8, 0]
+            }
+        ]
     },
     {
-      "bossName": "SORTIE_BOSS_KRIL",
-      "regions": [
-        {
-          "systemIndex": 0,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 1,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            8,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 2,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 3,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            13,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 4,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 5,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 6,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 7,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            17,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 8,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 9,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            14,
-            0
-          ]
-        },
-        {
-          "systemIndex": 10,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 11,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 12,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            14,
-            0
-          ]
-        },
-        {
-          "systemIndex": 15,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 17,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
+        bossName: "SORTIE_BOSS_KRIL",
+        regions: [
+            {
+                systemIndex: 0,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 1,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 8, 7, 0]
+            },
+            {
+                systemIndex: 2,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 3,
+                missionIndex: [1, 2, 3, 4, 7, 13, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 4,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 5,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 6,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 7,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 17, 7, 0]
+            },
+            {
+                systemIndex: 8,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 9,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 14, 0]
+            },
+            {
+                systemIndex: 10,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 11,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 12,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 14, 0]
+            },
+            {
+                systemIndex: 15,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 17,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
 
-        {
-          "systemIndex": 18,
-          "missionIndex": [
-            8,
-            8,
-            8,
-            8,
-            8,
-            8,
-            8,
-            8,
-            8,
-            0
-          ]
-        }
-      ]
+            {
+                systemIndex: 18,
+                missionIndex: [8, 8, 8, 8, 8, 8, 8, 8, 8, 0]
+            }
+        ]
     },
     {
-      "bossName": "SORTIE_BOSS_TYL",
-      "regions": [
-        {
-          "systemIndex": 0,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 1,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            8,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 2,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 3,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            13,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 4,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 5,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 6,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 7,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            17,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 8,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 9,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            14,
-            0
-          ]
-        },
-        {
-          "systemIndex": 10,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 11,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 12,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            14,
-            0
-          ]
-        },
-        {
-          "systemIndex": 15,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 17,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
+        bossName: "SORTIE_BOSS_TYL",
+        regions: [
+            {
+                systemIndex: 0,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 1,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 8, 7, 0]
+            },
+            {
+                systemIndex: 2,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 3,
+                missionIndex: [1, 2, 3, 4, 7, 13, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 4,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 5,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 6,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 7,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 17, 7, 0]
+            },
+            {
+                systemIndex: 8,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 9,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 14, 0]
+            },
+            {
+                systemIndex: 10,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 11,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 12,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 14, 0]
+            },
+            {
+                systemIndex: 15,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 17,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
 
-        {
-          "systemIndex": 18,
-          "missionIndex": [
-            8,
-            8,
-            8,
-            1,
-            8,
-            8,
-            8,
-            8,
-            8,
-            0
-          ]
-        }
-      ]
+            {
+                systemIndex: 18,
+                missionIndex: [8, 8, 8, 1, 8, 8, 8, 8, 8, 0]
+            }
+        ]
     },
     {
-      "bossName": "SORTIE_BOSS_JACKAL",
-      "regions": [
-        {
-          "systemIndex": 0,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 1,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            8,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 2,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 3,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            13,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 4,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 5,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 6,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 7,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            17,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 8,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 9,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            14,
-            0
-          ]
-        },
-        {
-          "systemIndex": 10,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 11,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 12,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            14,
-            0
-          ]
-        },
-        {
-          "systemIndex": 15,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 17,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
+        bossName: "SORTIE_BOSS_JACKAL",
+        regions: [
+            {
+                systemIndex: 0,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 1,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 8, 7, 0]
+            },
+            {
+                systemIndex: 2,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 3,
+                missionIndex: [1, 17, 3, 4, 7, 13, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 4,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 5,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 6,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 7,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 17, 7, 0]
+            },
+            {
+                systemIndex: 8,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 9,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 14, 0]
+            },
+            {
+                systemIndex: 10,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 11,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 12,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 14, 0]
+            },
+            {
+                systemIndex: 15,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 17,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
 
-        {
-          "systemIndex": 18,
-          "missionIndex": [
-            8,
-            8,
-            8,
-            8,
-            8,
-            8,
-            8,
-            8,
-            8,
-            0
-          ]
-        }
-      ]
+            {
+                systemIndex: 18,
+                missionIndex: [8, 8, 8, 8, 8, 8, 8, 8, 8, 0]
+            }
+        ]
     },
     {
-      "bossName": "SORTIE_BOSS_ALAD",
-      "regions": [
-        {
-          "systemIndex": 0,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 1,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            8,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 2,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 3,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            13,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 4,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 5,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 6,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 7,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            17,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 8,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 9,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            14,
-            0
-          ]
-        },
-        {
-          "systemIndex": 10,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 11,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 12,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            14,
-            0
-          ]
-        },
-        {
-          "systemIndex": 15,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 17,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
+        bossName: "SORTIE_BOSS_ALAD",
+        regions: [
+            {
+                systemIndex: 0,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 1,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 8, 7, 0]
+            },
+            {
+                systemIndex: 2,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 3,
+                missionIndex: [1, 2, 3, 4, 7, 13, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 4,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 5,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 6,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 7,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 17, 7, 0]
+            },
+            {
+                systemIndex: 8,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 9,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 14, 0]
+            },
+            {
+                systemIndex: 10,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 11,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 12,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 14, 0]
+            },
+            {
+                systemIndex: 15,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 17,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
 
-        {
-          "systemIndex": 18,
-          "missionIndex": [
-            8,
-            8,
-            8,
-            1,
-            8,
-            8,
-            8,
-            8,
-            8,
-            0
-          ]
-        }
-      ]
+            {
+                systemIndex: 18,
+                missionIndex: [8, 8, 8, 1, 8, 8, 8, 8, 8, 0]
+            }
+        ]
     },
     {
-      "bossName": "SORTIE_BOSS_AMBULAS",
-      "regions": [
-        {
-          "systemIndex": 0,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 1,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            8,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 2,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 3,
-          "missionIndex": [
-            1,
-            1,
-            3,
-            4,
-            7,
-            13,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 4,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 5,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 6,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 7,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            17,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 8,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 9,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            14,
-            0
-          ]
-        },
-        {
-          "systemIndex": 10,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 11,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 12,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            14,
-            0
-          ]
-        },
-        {
-          "systemIndex": 15,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 17,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
+        bossName: "SORTIE_BOSS_AMBULAS",
+        regions: [
+            {
+                systemIndex: 0,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 1,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 8, 7, 0]
+            },
+            {
+                systemIndex: 2,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 3,
+                missionIndex: [1, 1, 3, 4, 7, 13, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 4,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 5,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 6,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 7,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 17, 7, 0]
+            },
+            {
+                systemIndex: 8,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 9,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 14, 0]
+            },
+            {
+                systemIndex: 10,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 11,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 12,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 14, 0]
+            },
+            {
+                systemIndex: 15,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 17,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
 
-        {
-          "systemIndex": 18,
-          "missionIndex": [
-            8,
-            8,
-            8,
-            1,
-            8,
-            8,
-            8,
-            8,
-            8,
-            0
-          ]
-        }
-      ]
+            {
+                systemIndex: 18,
+                missionIndex: [8, 8, 8, 1, 8, 8, 8, 8, 8, 0]
+            }
+        ]
     },
     {
-      "bossName":  "SORTIE_BOSS_HYENA",
-      "regions": [
-        {
-          "systemIndex": 0,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 1,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            3,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 2,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 3,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            4,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 4,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 5,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 6,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 7,
-          "missionIndex": [
-            1,
-            7,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 8,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 9,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            14,
-            0
-          ]
-        },
-        {
-          "systemIndex": 10,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 11,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 12,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            14,
-            0
-          ]
-        },
-        {
-          "systemIndex": 15,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 17,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
+        bossName: "SORTIE_BOSS_HYENA",
+        regions: [
+            {
+                systemIndex: 0,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 1,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 3, 7, 0]
+            },
+            {
+                systemIndex: 2,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 3,
+                missionIndex: [1, 2, 3, 4, 7, 4, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 4,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 5,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 6,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 7,
+                missionIndex: [1, 7, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 8,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 9,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 14, 0]
+            },
+            {
+                systemIndex: 10,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 11,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 12,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 14, 0]
+            },
+            {
+                systemIndex: 15,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 17,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
 
-        {
-          "systemIndex": 18,
-          "missionIndex": [
-            8,
-            8,
-            8,
-            1,
-            8,
-            8,
-            8,
-            8,
-            8,
-            0
-          ]
-        }
-      ]
+            {
+                systemIndex: 18,
+                missionIndex: [8, 8, 8, 1, 8, 8, 8, 8, 8, 0]
+            }
+        ]
     },
     {
-      "bossName": "SORTIE_BOSS_NEF",
-      "regions": [
-        {
-          "systemIndex": 0,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 1,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 2,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 3,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            13,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 4,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 5,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 6,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 7,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            17,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 8,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 9,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            14,
-            0
-          ]
-        },
-        {
-          "systemIndex": 10,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 11,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 12,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            14,
-            0
-          ]
-        },
-        {
-          "systemIndex": 15,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 17,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
+        bossName: "SORTIE_BOSS_NEF",
+        regions: [
+            {
+                systemIndex: 0,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 1,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 2,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 3,
+                missionIndex: [1, 2, 3, 4, 7, 13, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 4,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 5,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 6,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 7,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 17, 7, 0]
+            },
+            {
+                systemIndex: 8,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 9,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 14, 0]
+            },
+            {
+                systemIndex: 10,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 11,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 12,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 14, 0]
+            },
+            {
+                systemIndex: 15,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 17,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
 
-        {
-          "systemIndex": 18,
-          "missionIndex": [
-            8,
-            8,
-            8,
-            1,
-            8,
-            8,
-            8,
-            8,
-            8,
-            0
-          ]
-        }
-      ]
+            {
+                systemIndex: 18,
+                missionIndex: [8, 8, 8, 1, 8, 8, 8, 8, 8, 0]
+            }
+        ]
     },
     {
-      "bossName":  "SORTIE_BOSS_RAPTOR",
-      "regions": [
-        {
-          "systemIndex": 0,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 1,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            8,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 2,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 3,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            13,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 4,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 5,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 6,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 7,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 8,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 9,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            14,
-            0
-          ]
-        },
-        {
-          "systemIndex": 10,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 11,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 12,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            14,
-            0
-          ]
-        },
-        {
-          "systemIndex": 15,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 17,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 18,
-          "missionIndex": [
-            8,
-            8,
-            8,
-            1,
-            8,
-            8,
-            8,
-            8,
-            8,
-            0
-          ]
-        }
-      ]
+        bossName: "SORTIE_BOSS_RAPTOR",
+        regions: [
+            {
+                systemIndex: 0,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 1,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 8, 7, 0]
+            },
+            {
+                systemIndex: 2,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 3,
+                missionIndex: [1, 2, 3, 4, 7, 13, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 4,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 5,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 6,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 7,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 8,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 9,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 14, 0]
+            },
+            {
+                systemIndex: 10,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 11,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 12,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 14, 0]
+            },
+            {
+                systemIndex: 15,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 17,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 18,
+                missionIndex: [8, 8, 8, 1, 8, 8, 8, 8, 8, 0]
+            }
+        ]
     },
     {
-      "bossName": "SORTIE_BOSS_PHORID",
-      "regions": [
-        {
-          "systemIndex": 0,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 1,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            8,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 2,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 3,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            13,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 4,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 5,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 6,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 7,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            17,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 8,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 9,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            14,
-            0
-          ]
-        },
-        {
-          "systemIndex": 10,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            15,
-            0
-          ]
-        },
-        {
-          "systemIndex": 11,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 12,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            14,
-            0
-          ]
-        },
-        {
-          "systemIndex": 15,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 17,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
+        bossName: "SORTIE_BOSS_PHORID",
+        regions: [
+            {
+                systemIndex: 0,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 1,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 8, 7, 0]
+            },
+            {
+                systemIndex: 2,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 3,
+                missionIndex: [1, 2, 3, 4, 7, 13, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 4,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 5,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 6,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 7,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 17, 7, 0]
+            },
+            {
+                systemIndex: 8,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 9,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 14, 0]
+            },
+            {
+                systemIndex: 10,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 15, 0]
+            },
+            {
+                systemIndex: 11,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 12,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 14, 0]
+            },
+            {
+                systemIndex: 15,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 17,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
 
-        {
-          "systemIndex": 18,
-          "missionIndex": [
-            8,
-            8,
-            8,
-            1,
-            8,
-            8,
-            8,
-            8,
-            8,
-            0
-          ]
-        }
-      ]
+            {
+                systemIndex: 18,
+                missionIndex: [8, 8, 8, 1, 8, 8, 8, 8, 8, 0]
+            }
+        ]
     },
     {
-      "bossName": "SORTIE_BOSS_LEPHANTIS",
-      "regions": [
-        {
-          "systemIndex": 0,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 1,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            8,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 2,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 3,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 4,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 5,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 6,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 7,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            7,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 8,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 9,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            14,
-            0
-          ]
-        },
-        {
-          "systemIndex": 10,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            7,
-            9,
-            0
-          ]
-        },
-        {
-          "systemIndex": 11,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            15,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 12,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            14,
-            0
-          ]
-        },
-        {
-          "systemIndex": 15,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 17,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
+        bossName: "SORTIE_BOSS_LEPHANTIS",
+        regions: [
+            {
+                systemIndex: 0,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 1,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 8, 7, 0]
+            },
+            {
+                systemIndex: 2,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 3,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 4,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 5,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 6,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 7,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 7, 7, 0]
+            },
+            {
+                systemIndex: 8,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 9,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 14, 0]
+            },
+            {
+                systemIndex: 10,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 7, 9, 0]
+            },
+            {
+                systemIndex: 11,
+                missionIndex: [1, 2, 3, 4, 7, 8, 15, 13, 7, 0]
+            },
+            {
+                systemIndex: 12,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 14, 0]
+            },
+            {
+                systemIndex: 15,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 17,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
 
-        {
-          "systemIndex": 18,
-          "missionIndex": [
-            8,
-            8,
-            8,
-            1,
-            8,
-            8,
-            8,
-            8,
-            8,
-            0
-          ]
-        }
-      ]
+            {
+                systemIndex: 18,
+                missionIndex: [8, 8, 8, 1, 8, 8, 8, 8, 8, 0]
+            }
+        ]
     },
     {
-      "bossName": "SORTIE_BOSS_INFALAD",
-      "regions": [
-        {
-          "systemIndex": 0,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 1,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            8,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 2,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 3,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            13,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 4,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 5,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 6,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 7,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            17,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 8,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 9,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            14,
-            0
-          ]
-        },
-        {
-          "systemIndex": 10,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            2,
-            15,
-            0
-          ]
-        },
-        {
-          "systemIndex": 11,
-          "missionIndex": [
-            1,
-            2,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            7,
-            0
-          ]
-        },
-        {
-          "systemIndex": 12,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            14,
-            0
-          ]
-        },
-        {
-          "systemIndex": 15,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
-        {
-          "systemIndex": 17,
-          "missionIndex": [
-            1,
-            17,
-            3,
-            4,
-            7,
-            8,
-            9,
-            13,
-            1,
-            0
-          ]
-        },
+        bossName: "SORTIE_BOSS_INFALAD",
+        regions: [
+            {
+                systemIndex: 0,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 1,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 8, 7, 0]
+            },
+            {
+                systemIndex: 2,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 3,
+                missionIndex: [1, 2, 3, 4, 7, 13, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 4,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 5,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 6,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 7,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 17, 7, 0]
+            },
+            {
+                systemIndex: 8,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 9,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 14, 0]
+            },
+            {
+                systemIndex: 10,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 2, 15, 0]
+            },
+            {
+                systemIndex: 11,
+                missionIndex: [1, 2, 3, 4, 7, 8, 9, 13, 7, 0]
+            },
+            {
+                systemIndex: 12,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 14, 0]
+            },
+            {
+                systemIndex: 15,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
+            {
+                systemIndex: 17,
+                missionIndex: [1, 17, 3, 4, 7, 8, 9, 13, 1, 0]
+            },
 
-        {
-          "systemIndex": 18,
-          "missionIndex": [
-            8,
-            8,
-            8,
-            1,
-            8,
-            8,
-            8,
-            8,
-            8,
-            0
-          ]
-        }
-      ]
+            {
+                systemIndex: 18,
+                missionIndex: [8, 8, 8, 1, 8, 8, 8, 8, 8, 0]
+            }
+        ]
     }
-  ]
+];
 
 export const validFisureMissionIndex = [
     1, // Exterminate
@@ -3921,63 +1270,26 @@ export const FortunaNormalJobs = [
     "/Lotus/Types/Gameplay/Venus/Jobs/VenusWetworkJobSpy"
 ];
 
-
 export const normalCircutRotations = [
-    [
-        "Excalibur", "Trinity", "Ember"
-    ],
-    [
-        "Loki", "Mag", "Rhino"
-    ],
-    [
-        "Ash", "Frost", "Nyx"
-    ],
-    [
-        "Saryn", "Vauban", "Nova"
-    ],
-    [
-        "Nekros", "Valkyr", "Oberon"
-    ],
-    [
-        "Hydroid", "Mirage", "Limbo"
-    ],
-    [
-        "Mesa", "Chroma", "Atlas"
-    ],
-    [
-        "Ivara", "Inaros", "Titania"
-    ],
-    [
-        "Nidus", "Octavia", "Harrow"
-    ],
-    [
-        "Gara", "Khora", "Revenant"
-    ],
-    [
-        "Garuda", "Baruuk", "Hildryn"
-    ]
+    ["Excalibur", "Trinity", "Ember"],
+    ["Loki", "Mag", "Rhino"],
+    ["Ash", "Frost", "Nyx"],
+    ["Saryn", "Vauban", "Nova"],
+    ["Nekros", "Valkyr", "Oberon"],
+    ["Hydroid", "Mirage", "Limbo"],
+    ["Mesa", "Chroma", "Atlas"],
+    ["Ivara", "Inaros", "Titania"],
+    ["Nidus", "Octavia", "Harrow"],
+    ["Gara", "Khora", "Revenant"],
+    ["Garuda", "Baruuk", "Hildryn"]
 ];
 
 export const hardCircutRotations = [
-    [
-        "Braton", "Lato", "Skana", "Paris", "Kunai"
-    ],
-    [
-        "Boar", "Grammacor", "Angstrum", "Gorgon", "Anku"
-    ],
-    [
-        "Bo", "Latron", "Furis", "Furax", "Strun"
-    ],
-    [
-        "Lex", "Magistar", "Boltor", "Bronko", "Ceramic Dagger"
-    ],
-    [
-        "Torid", "Dual Toxocyst", "Dual Ichor", "Milter", "Atomos"
-    ],
-    [
-        "Ack & Brunt", "Soma", "Vasto", "Nami Solo", "Burston"
-    ],
-    [
-        "Zylok", "Sibear", "Dread", "Despair", "Hate"
-    ]
-]
+    ["Braton", "Lato", "Skana", "Paris", "Kunai"],
+    ["Boar", "Grammacor", "Angstrum", "Gorgon", "Anku"],
+    ["Bo", "Latron", "Furis", "Furax", "Strun"],
+    ["Lex", "Magistar", "Boltor", "Bronko", "Ceramic Dagger"],
+    ["Torid", "Dual Toxocyst", "Dual Ichor", "Milter", "Atomos"],
+    ["Ack & Brunt", "Soma", "Vasto", "Nami Solo", "Burston"],
+    ["Zylok", "Sibear", "Dread", "Despair", "Hate"]
+];

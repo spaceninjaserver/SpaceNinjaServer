@@ -470,10 +470,7 @@ const updateVoidFisures = async () => {
 const getRandomFisureNode = (isRailJack: boolean, isOmnia: boolean) => {
     const validNodes = Object.entries(ExportRegions)
         .map(([key, node]) => ({ ...node, nodeKey: key }))
-        .filter(node =>
-            validFisureMissionIndex.includes(node.missionIndex) &&
-            !node.missionName.includes("Archwing")
-        );
+        .filter(node => validFisureMissionIndex.includes(node.missionIndex) && !node.missionName.includes("Archwing"));
 
     if (isRailJack) {
         const railJackNodes = Object.keys(ExportRailjack.nodes);
@@ -540,17 +537,15 @@ const updateSorties = async () => {
                         throw new Error(`Unknown liteSortiesBoss: ${liteSortiesBoss}`);
                 }
             });
-            
+
             const filteredLiteSortiesNodes = liteSortiesMissionIndex.map(missionIndexArray =>
-                liteSortiesSystemIndex.filter(node =>
-                    missionIndexArray.includes(node.missionIndex)
-                )
+                liteSortiesSystemIndex.filter(node => missionIndexArray.includes(node.missionIndex))
             );
-            
-            const selectedLiteSortiesNodes = filteredLiteSortiesNodes.map(filteredNodes =>
-                filteredNodes[Math.floor(Math.random() * filteredNodes.length)]
+
+            const selectedLiteSortiesNodes = filteredLiteSortiesNodes.map(
+                filteredNodes => filteredNodes[Math.floor(Math.random() * filteredNodes.length)]
             );
-            
+
             const sortie = {
                 Activation: oneWeekIntervalStart,
                 Expiry: oneWeekIntervalEnd,
@@ -560,9 +555,9 @@ const updateSorties = async () => {
                 Missions: selectedLiteSortiesNodes.map(node => ({
                     missionType: missionIndexToMissionTypes[node.missionIndex],
                     node: node.nodeKey
-                }))    
+                }))
             };
-            
+
             liteSorties.push(sortie);
         }
 
@@ -570,13 +565,14 @@ const updateSorties = async () => {
             const randomState = endStates[Math.floor(Math.random() * endStates.length)];
             const selectedSortieNodes = Array.from({ length: 3 }, () => {
                 const randomIndex = Math.floor(Math.random() * randomState.regions.length);
-                const filteredNodes = nodes.filter(node =>
-                    randomState.regions[randomIndex].systemIndex === node.systemIndex &&
-                    randomState.regions[randomIndex].missionIndex.includes(node.missionIndex)
+                const filteredNodes = nodes.filter(
+                    node =>
+                        randomState.regions[randomIndex].systemIndex === node.systemIndex &&
+                        randomState.regions[randomIndex].missionIndex.includes(node.missionIndex)
                 );
                 return filteredNodes[Math.floor(Math.random() * filteredNodes.length)];
             });
-            
+
             const sortie: ISortie = {
                 Activation: oneDayIntervalStart,
                 Expiry: oneDayIntervalEnd,
@@ -592,7 +588,7 @@ const updateSorties = async () => {
                 })),
                 Twitter: true
             };
-            sorties.push(sortie);            
+            sorties.push(sortie);
         }
 
         await ws.save();
@@ -606,12 +602,12 @@ const updateCircuit = async () => {
     try {
         const ws = await WorldState.findOne();
         if (!ws) throw new Error("Missing worldState");
-        const curWeek = Math.floor(Date.now()/(7*unixTimesInMs.day));
+        const curWeek = Math.floor(Date.now() / (7 * unixTimesInMs.day));
         const normalIndex = curWeek % 11;
         const hardIndex = curWeek % 7;
         ws.EndlessXpChoices = [
-            { "Category": "EXC_NORMAL", "Choices": normalCircutRotations[normalIndex] },
-            { "Category": "EXC_HARD", "Choices": hardCircutRotations[hardIndex] }
+            { Category: "EXC_NORMAL", Choices: normalCircutRotations[normalIndex] },
+            { Category: "EXC_HARD", Choices: hardCircutRotations[hardIndex] }
         ];
         await ws.save();
         return ws;
@@ -631,19 +627,20 @@ const updateNigthWave = async () => {
     try {
         const ws = await WorldState.findOne();
         if (!ws) throw new Error("Missing worldState");
-        let season = ws.SeasonInfo
-        if(!season) season = {
-            Activation: 1715796000000,
-            Expiry: 9999999999999,
-            AffiliationTag: "RadioLegionIntermission10Syndicate",
-            Season:  12,
-            Phase: 0,
-            Params:  "",
-            ActiveChallenges: [],
-            UsedChallenges: []
-        }
-        const activeChallenges = season.ActiveChallenges.filter(challenge => currentDate < challenge.Expiry)
-        const usedChallenges = season.UsedChallenges
+        let season = ws.SeasonInfo;
+        if (!season)
+            season = {
+                Activation: 1715796000000,
+                Expiry: 9999999999999,
+                AffiliationTag: "RadioLegionIntermission10Syndicate",
+                Season: 12,
+                Phase: 0,
+                Params: "",
+                ActiveChallenges: [],
+                UsedChallenges: []
+            };
+        const activeChallenges = season.ActiveChallenges.filter(challenge => currentDate < challenge.Expiry);
+        const usedChallenges = season.UsedChallenges;
 
         const exportChallenges = Object.keys(ExportNightwave.challenges);
         const filterChallenges = (prefix: string) => exportChallenges.filter(challenge => challenge.startsWith(prefix));
@@ -652,7 +649,9 @@ const updateNigthWave = async () => {
         const weeklyChallenges = filterChallenges("/Lotus/Types/Challenges/Seasons/Weekly/");
         const weeklyHardChallenges = filterChallenges("/Lotus/Types/Challenges/Seasons/WeeklyHard/");
 
-        let dailyCount = 0, weeklyCount = 0, weeklyHardCount = 0;
+        let dailyCount = 0,
+            weeklyCount = 0,
+            weeklyHardCount = 0;
 
         activeChallenges.forEach(challenge => {
             if (challenge.Challenge.startsWith("/Lotus/Types/Challenges/Seasons/Daily/")) dailyCount++;
@@ -660,19 +659,26 @@ const updateNigthWave = async () => {
             else if (challenge.Challenge.startsWith("/Lotus/Types/Challenges/Seasons/WeeklyHard/")) weeklyHardCount++;
         });
 
-        const addChallenges = (count: number, limit: number, intervalStart: number, intervalEnd: number, challengesArray: string[], isDaily = false) => {
+        const addChallenges = (
+            count: number,
+            limit: number,
+            intervalStart: number,
+            intervalEnd: number,
+            challengesArray: string[],
+            isDaily = false
+        ) => {
             while (count < limit) {
-                challengesArray = challengesArray.filter(challenge => !usedChallenges.includes(challenge))
-                const uniqueName = challengesArray[Math.floor(Math.random() * challengesArray.length)]
+                challengesArray = challengesArray.filter(challenge => !usedChallenges.includes(challenge));
+                const uniqueName = challengesArray[Math.floor(Math.random() * challengesArray.length)];
                 const challenge: IActiveChallenge = {
                     Activation: intervalStart,
                     Expiry: intervalEnd,
                     Challenge: uniqueName
                 };
-                if (isDaily){
+                if (isDaily) {
                     challenge.Daily = true;
                 } else {
-                    usedChallenges.push(uniqueName)
+                    usedChallenges.push(uniqueName);
                 }
                 activeChallenges.push(challenge);
                 count++;
@@ -692,11 +698,11 @@ const updateNigthWave = async () => {
             Params: season.Params || "",
             ActiveChallenges: activeChallenges,
             UsedChallenges: usedChallenges
-        }
+        };
 
-        ws.SeasonInfo = season
+        ws.SeasonInfo = season;
         await ws.save();
-        return ws
+        return ws;
     } catch (error) {
         throw new Error(`Error while updating NigthWave ${error}`);
     }
@@ -706,23 +712,23 @@ const updateNodeOverrides = async () => {
     try {
         const ws = await WorldState.findOne();
         if (!ws) throw new Error("Missing worldState");
-        const curWeek = Math.floor(Date.now()/(7*unixTimesInMs.day));
-        let overrides = ws.NodeOverrides
-        if(overrides == undefined || overrides.length<1 ){
+        const curWeek = Math.floor(Date.now() / (7 * unixTimesInMs.day));
+        let overrides = ws.NodeOverrides;
+        if (overrides == undefined || overrides.length < 1) {
             overrides = [
-                { "Node": "EuropaHUB", "Hide": true },
-                { "Node": "ErisHUB", "Hide": true },
-                { "Node": "VenusHUB", "Hide": true },
-                { "Node": "SolNode802", "Seed": curWeek }, // Elite santuary onnslaught
+                { Node: "EuropaHUB", Hide: true },
+                { Node: "ErisHUB", Hide: true },
+                { Node: "VenusHUB", Hide: true },
+                { Node: "SolNode802", Seed: curWeek }, // Elite santuary onnslaught
                 {
-                  "Node": "EarthHUB",
-                  "Hide": false,
-                  "LevelOverride": "/Lotus/Levels/Proc/Hub/RelayStationHubTwoB",
+                    Node: "EarthHUB",
+                    Hide: false,
+                    LevelOverride: "/Lotus/Levels/Proc/Hub/RelayStationHubTwoB"
                 },
                 {
-                  "Node": "MercuryHUB",
-                  "Hide": true,
-                  "LevelOverride": "/Lotus/Levels/Proc/Hub/RelayStationHubHydroid",
+                    Node: "MercuryHUB",
+                    Hide: true,
+                    LevelOverride: "/Lotus/Levels/Proc/Hub/RelayStationHubHydroid"
                 }
             ];
         } else {
@@ -731,13 +737,13 @@ const updateNodeOverrides = async () => {
             if (solNodeIndex !== -1) {
                 if (overrides[solNodeIndex].Seed !== curWeek) overrides[solNodeIndex].Seed = curWeek;
             } else {
-                overrides.push({ "Node": "SolNode802", "Seed": curWeek });
+                overrides.push({ Node: "SolNode802", Seed: curWeek });
             }
         }
-        ws.NodeOverrides = overrides
+        ws.NodeOverrides = overrides;
         await ws.save();
         return ws;
     } catch (error) {
         throw new Error(`Error while updating NodeOverrides ${error}`);
     }
-}
+};
