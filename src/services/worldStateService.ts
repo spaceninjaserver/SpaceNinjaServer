@@ -1,7 +1,9 @@
 import { WorldState } from "@/src/models/worldStateModel";
 import { unixTimesInMs } from "@/src/constants/timeConstants";
 import {
+    IActiveChallenge,
     IActiveMission,
+    IJob,
     ILiteSortie,
     ISortie,
     ISyndicateMission,
@@ -10,7 +12,7 @@ import {
 } from "@/src/types/worldStateTypes";
 import { getRandomNumber, getRandomKey } from "@/src/helpers/general";
 import { getRandomNodes, getCurrentRotation } from "@/src/helpers/worldstateHelpers";
-import { ExportRailjack, ExportRegions } from "warframe-public-export-plus";
+import { ExportRailjack, ExportRegions, ExportNightwave } from "warframe-public-export-plus";
 import { logger } from "@/src/utils/logger";
 import {
     factionSyndicates,
@@ -19,18 +21,22 @@ import {
     restSyndicates,
     CertusNormalJobs,
     CertusNarmerJobs,
-    ZarimanNormalJobs,
-    voidFisuresMissionTypes,
+    EntratiNormalJobs,
+    missionIndexToMissionTypes,
     validFisureMissionIndex,
     omniaNodes,
-    liteSortiesBoss,
+    liteSortiesBosses,
     endStates,
     modifierTypes,
-    SortiesMissionTypes,
     voidTiers,
     FortunaNarmerJobs,
-    FortunaNormalJobs
+    FortunaNormalJobs,
+    liteSortiesMissionIndex,
+    EntratiEndlessJobs,
+    normalCircutRotations,
+    hardCircutRotations
 } from "@/src/constants/worldStateConstants";
+import { config } from "./configService";
 
 export const createWorldState = async () => {
     const worldState = new WorldState();
@@ -38,6 +44,9 @@ export const createWorldState = async () => {
     await updateSyndicateMissions();
     await updateVoidFisures();
     await updateSorties();
+    await updateCircuit();
+    await updateNigthWave();
+    await updateNodeOverrides();
     return worldState;
 };
 
@@ -56,6 +65,9 @@ export const worldStateRunner = async () => {
         await updateSyndicateMissions();
         await updateVoidFisures();
         await updateSorties();
+        await updateCircuit();
+        await updateNigthWave();
+        await updateNodeOverrides();
     }, unixTimesInMs.minute);
 };
 
@@ -164,7 +176,7 @@ const getJobs = (tag: string) => {
     const rotration = getCurrentRotation();
     switch (tag) {
         case "CetusSyndicate":
-            const Certusjobs = [
+            const CertusJobs: IJob[] = [
                 {
                     jobType: CertusNormalJobs[Math.floor(Math.random() * CertusNormalJobs.length)],
                     rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierATable${rotration}Rewards`,
@@ -222,10 +234,10 @@ const getJobs = (tag: string) => {
                     xpAmounts: [820, 820, 820, 820, 1610]
                 }
             ];
-            return Certusjobs;
+            return CertusJobs;
 
         case "SolarisSyndicate":
-            const FortunaJobs = [
+            const FortunaJobs: IJob[] = [
                 {
                     jobType: FortunaNormalJobs[Math.floor(Math.random() * FortunaNormalJobs.length)],
                     rewards: `/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierATable${rotration}Rewards`,
@@ -286,9 +298,9 @@ const getJobs = (tag: string) => {
             return FortunaJobs;
 
         case "EntratiSyndicate":
-            const ZarimanJobs = [
+            const EntratiJobs: IJob[] = [
                 {
-                    jobType: ZarimanNormalJobs[Math.floor(Math.random() * ZarimanNormalJobs.length)],
+                    jobType: EntratiNormalJobs[Math.floor(Math.random() * EntratiNormalJobs.length)],
                     rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierATable${getRandomKey(["A", "B", "C"])}Rewards`,
                     masteryReq: 0,
                     minEnemyLevel: 5,
@@ -296,7 +308,7 @@ const getJobs = (tag: string) => {
                     xpAmounts: [5, 5, 5]
                 },
                 {
-                    jobType: ZarimanNormalJobs[Math.floor(Math.random() * ZarimanNormalJobs.length)],
+                    jobType: EntratiNormalJobs[Math.floor(Math.random() * EntratiNormalJobs.length)],
                     rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierCTable${getRandomKey(["A", "B", "C"])}Rewards`,
                     masteryReq: 1,
                     minEnemyLevel: 15,
@@ -304,7 +316,7 @@ const getJobs = (tag: string) => {
                     xpAmounts: [9, 9, 9]
                 },
                 {
-                    jobType: ZarimanNormalJobs[Math.floor(Math.random() * ZarimanNormalJobs.length)],
+                    jobType: EntratiEndlessJobs[Math.floor(Math.random() * EntratiEndlessJobs.length)],
                     rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierBTable${getRandomKey(["A", "B", "C"])}Rewards`,
                     masteryReq: 5,
                     minEnemyLevel: 25,
@@ -313,7 +325,7 @@ const getJobs = (tag: string) => {
                     xpAmounts: [14, 14, 14]
                 },
                 {
-                    jobType: ZarimanNormalJobs[Math.floor(Math.random() * ZarimanNormalJobs.length)],
+                    jobType: EntratiNormalJobs[Math.floor(Math.random() * EntratiNormalJobs.length)],
                     rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierDTable${getRandomKey(["A", "B", "C"])}Rewards`,
                     masteryReq: 2,
                     minEnemyLevel: 30,
@@ -321,7 +333,7 @@ const getJobs = (tag: string) => {
                     xpAmounts: [19, 19, 19, 29]
                 },
                 {
-                    jobType: ZarimanNormalJobs[Math.floor(Math.random() * ZarimanNormalJobs.length)],
+                    jobType: EntratiNormalJobs[Math.floor(Math.random() * EntratiNormalJobs.length)],
                     rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierETable${getRandomKey(["A", "B", "C"])}Rewards`,
                     masteryReq: 3,
                     minEnemyLevel: 40,
@@ -329,7 +341,7 @@ const getJobs = (tag: string) => {
                     xpAmounts: [21, 21, 21, 21, 41]
                 },
                 {
-                    jobType: ZarimanNormalJobs[Math.floor(Math.random() * ZarimanNormalJobs.length)],
+                    jobType: EntratiNormalJobs[Math.floor(Math.random() * EntratiNormalJobs.length)],
                     rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierETable${getRandomKey(["A", "B", "C"])}Rewards`,
                     masteryReq: 10,
                     minEnemyLevel: 100,
@@ -364,7 +376,7 @@ const getJobs = (tag: string) => {
                     isVault: true
                 }
             ];
-            return ZarimanJobs;
+            return EntratiJobs;
 
         default:
             throw new Error(`Error while updating Syndicates: Unknown Jobs syndicate ${tag}`);
@@ -430,7 +442,7 @@ const updateVoidFisures = async () => {
                     Activation: curDate,
                     Expiry: curDate + Math.floor(Math.random() * unixTimesInMs.hour),
                     Node: nodeData.nodeKey,
-                    MissionType: voidFisuresMissionTypes[nodeData.missionIndex],
+                    MissionType: missionIndexToMissionTypes[nodeData.missionIndex],
                     Modifier: voidTier,
                     Hard: Math.random() < 0.1
                 } as IActiveMission;
@@ -458,40 +470,34 @@ const updateVoidFisures = async () => {
 
 const getRandomFisureNode = (isRailJack: boolean, isOmnia: boolean) => {
     const validNodes = Object.entries(ExportRegions)
-        .map(([key, node]) => {
-            return {
-                ...node,
-                nodeKey: key
-            };
-        })
-        .filter(node => {
-            return validFisureMissionIndex.includes(node.missionIndex) && !node.missionName.includes("Archwing");
-        });
+        .map(([key, node]) => ({ ...node, nodeKey: key }))
+        .filter(node =>
+            validFisureMissionIndex.includes(node.missionIndex) &&
+            !node.missionName.includes("Archwing")
+        );
 
     if (isRailJack) {
         const railJackNodes = Object.keys(ExportRailjack.nodes);
         const randomKey = railJackNodes[Math.floor(Math.random() * railJackNodes.length)];
-        return {
-            nodeKey: randomKey
-        };
-    } else if (isOmnia) {
-        const validOmniaNodes = validNodes.filter(node => {
-            return omniaNodes.includes(node.nodeKey);
-        });
+        return { nodeKey: randomKey };
+    }
+
+    if (isOmnia) {
+        const validOmniaNodes = validNodes.filter(node => omniaNodes.includes(node.nodeKey));
         const randomNode = validOmniaNodes[Math.floor(Math.random() * validOmniaNodes.length)];
         return {
             nodeKey: randomNode.nodeKey,
             systemIndex: randomNode.systemIndex,
             missionIndex: randomNode.missionIndex
         };
-    } else {
-        const randomNode = validNodes[Math.floor(Math.random() * validNodes.length)];
-        return {
-            nodeKey: randomNode.nodeKey,
-            systemIndex: randomNode.systemIndex,
-            missionIndex: randomNode.missionIndex
-        };
     }
+
+    const randomNode = validNodes[Math.floor(Math.random() * validNodes.length)];
+    return {
+        nodeKey: randomNode.nodeKey,
+        systemIndex: randomNode.systemIndex,
+        missionIndex: randomNode.missionIndex
+    };
 };
 
 const updateSorties = async () => {
@@ -501,10 +507,11 @@ const updateSorties = async () => {
     const oneDayIntervalEnd = oneDayIntervalStart + unixTimesInMs.day;
     const oneWeekIntervalStart =
         Math.floor(currentDate / (unixTimesInMs.day * 7)) * unixTimesInMs.day * 7 + 16 * unixTimesInMs.hour;
-    const oneWeekIntervalEnd = oneDayIntervalStart + unixTimesInMs.day * 7;
+    const oneWeekIntervalEnd = oneWeekIntervalStart + unixTimesInMs.day * 7;
     const nodes = Object.entries(ExportRegions).map(([key, node]) => {
         return {
-            nodeSystemIndex: node.systemIndex,
+            systemIndex: node.systemIndex,
+            missionIndex: node.missionIndex,
             nodeKey: key
         };
     });
@@ -520,95 +527,73 @@ const updateSorties = async () => {
         });
 
         if (liteSorties.length < 1) {
-            const sortie: ILiteSortie = {
+            const liteSortiesBoss = liteSortiesBosses[Math.floor(Math.random() * liteSortiesBosses.length)];
+
+            const liteSortiesSystemIndex = nodes.filter(node => {
+                switch (liteSortiesBoss) {
+                    case "SORTIE_BOSS_AMAR":
+                        return node.systemIndex === 3;
+                    case "SORTIE_BOSS_NIRA":
+                        return node.systemIndex === 4;
+                    case "SORTIE_BOSS_PAAZUL":
+                        return node.systemIndex === 0;
+                    default:
+                        throw new Error(`Unknown liteSortiesBoss: ${liteSortiesBoss}`);
+                }
+            });
+            
+            const filteredLiteSortiesNodes = liteSortiesMissionIndex.map(missionIndexArray =>
+                liteSortiesSystemIndex.filter(node =>
+                    missionIndexArray.includes(node.missionIndex)
+                )
+            );
+            
+            const selectedLiteSortiesNodes = filteredLiteSortiesNodes.map(filteredNodes =>
+                filteredNodes[Math.floor(Math.random() * filteredNodes.length)]
+            );
+            
+            const sortie = {
                 Activation: oneWeekIntervalStart,
                 Expiry: oneWeekIntervalEnd,
                 Reward: "/Lotus/Types/Game/MissionDecks/ArchonSortieRewards",
                 Seed: getRandomNumber(1, 99999),
-                Boss: liteSortiesBoss[Math.floor(Math.random() * liteSortiesBoss.length)],
-                Missions: [
-                    {
-                        missionType: SortiesMissionTypes[Math.floor(Math.random() * SortiesMissionTypes.length)],
-                        node: nodes[Math.floor(Math.random() * nodes.length)].nodeKey
-                    },
-                    {
-                        missionType: SortiesMissionTypes[Math.floor(Math.random() * SortiesMissionTypes.length)],
-                        node: nodes[Math.floor(Math.random() * nodes.length)].nodeKey
-                    },
-                    {
-                        missionType: SortiesMissionTypes[Math.floor(Math.random() * SortiesMissionTypes.length)],
-                        node: nodes[Math.floor(Math.random() * nodes.length)].nodeKey
-                    }
-                ]
+                Boss: liteSortiesBoss,
+                Missions: selectedLiteSortiesNodes.map(node => ({
+                    missionType: missionIndexToMissionTypes[node.missionIndex],
+                    node: node.nodeKey
+                }))    
             };
+            
             liteSorties.push(sortie);
         }
 
         if (sorties.length < 1) {
-            const randomBoss = endStates[Math.floor(Math.random() * endStates.length)];
-            const randomRegionIndex = [
-                Math.floor(Math.random() * randomBoss.regions.length),
-                Math.floor(Math.random() * randomBoss.regions.length),
-                Math.floor(Math.random() * randomBoss.regions.length)
-            ];
-            const randomRegionIndexFake = randomRegionIndex;
-            randomRegionIndexFake.forEach((element, index, array) => {
-                if (element == 13) {
-                    array[index] = element + 2;
-                } else if (element == 14) {
-                    array[index] = element + 1;
-                }
+            const randomState = endStates[Math.floor(Math.random() * endStates.length)];
+            const selectedSortieNodes = Array.from({ length: 3 }, () => {
+                const randomIndex = Math.floor(Math.random() * randomState.regions.length);
+                const filteredNodes = nodes.filter(node =>
+                    randomState.regions[randomIndex].systemIndex === node.systemIndex &&
+                    randomState.regions[randomIndex].missionIndex.includes(node.missionIndex)
+                );
+                return filteredNodes[Math.floor(Math.random() * filteredNodes.length)];
             });
-            const filteredNodes = [
-                nodes.filter(node => {
-                    return randomRegionIndexFake[0] === node.nodeSystemIndex;
-                }),
-                nodes.filter(node => {
-                    return randomRegionIndexFake[1] === node.nodeSystemIndex;
-                }),
-                nodes.filter(node => {
-                    return randomRegionIndexFake[2] === node.nodeSystemIndex;
-                })
-            ];
+            
             const sortie: ISortie = {
                 Activation: oneDayIntervalStart,
                 Expiry: oneDayIntervalEnd,
                 ExtraDrops: [],
                 Reward: "/Lotus/Types/Game/MissionDecks/SortieRewards",
                 Seed: getRandomNumber(1, 99999),
-                Boss: randomBoss.bossName,
-                Variants: [
-                    {
-                        missionType:
-                            randomBoss.regions[randomRegionIndex[0]].missions[
-                                Math.floor(Math.random() * randomBoss.regions[randomRegionIndex[0]].missions.length)
-                            ],
-                        modifierType: modifierTypes[Math.floor(Math.random() * modifierTypes.length)],
-                        node: filteredNodes[0][Math.floor(Math.random() * filteredNodes[0].length)].nodeKey,
-                        tileset: "CorpusShipTileset"
-                    },
-                    {
-                        missionType:
-                            randomBoss.regions[randomRegionIndex[1]].missions[
-                                Math.floor(Math.random() * randomBoss.regions[randomRegionIndex[1]].missions.length)
-                            ],
-                        modifierType: modifierTypes[Math.floor(Math.random() * modifierTypes.length)],
-                        node: filteredNodes[1][Math.floor(Math.random() * filteredNodes[1].length)].nodeKey,
-                        tileset: "OrokinMoonTilesetCorpus"
-                    },
-                    {
-                        missionType:
-                            randomBoss.regions[randomRegionIndex[2]].missions[
-                                Math.floor(Math.random() * randomBoss.regions[randomRegionIndex[2]].missions.length)
-                            ],
-                        modifierType: modifierTypes[Math.floor(Math.random() * modifierTypes.length)],
-                        node: filteredNodes[2][Math.floor(Math.random() * filteredNodes[2].length)].nodeKey,
-                        tileset: "CorpusShipTileset"
-                    }
-                ],
+                Boss: randomState.bossName,
+                Variants: selectedSortieNodes.map(node => ({
+                    missionType: missionIndexToMissionTypes[node.missionIndex],
+                    modifierType: modifierTypes[Math.floor(Math.random() * modifierTypes.length)],
+                    node: node.nodeKey,
+                    tileset: "CorpusShipTileset" // needs more info about tilesets used in nodes
+                })),
                 Twitter: true
             };
-            sorties.push(sortie);
+            sorties.push(sortie);            
         }
 
         await ws.save();
@@ -617,3 +602,143 @@ const updateSorties = async () => {
         throw new Error(`Error while updating Sorties ${error}`);
     }
 };
+
+const updateCircuit = async () => {
+    try {
+        const ws = await WorldState.findOne();
+        if (!ws) throw new Error("Missing worldState");
+        const curWeek = Math.floor(Date.now()/(7*unixTimesInMs.day));
+        const normalIndex = curWeek % 11;
+        const hardIndex = curWeek % 7;
+        ws.EndlessXpChoices = [
+            { "Category": "EXC_NORMAL", "Choices": normalCircutRotations[normalIndex] },
+            { "Category": "EXC_HARD", "Choices": hardCircutRotations[hardIndex] }
+        ];
+        await ws.save();
+        return ws;
+    } catch (error) {
+        throw new Error(`Error while updating Circuit ${error}`);
+    }
+};
+
+const updateNigthWave = async () => {
+    const currentDate = Date.now();
+    const oneDayIntervalStart =
+        Math.floor(currentDate / unixTimesInMs.day) * unixTimesInMs.day + 16 * unixTimesInMs.hour;
+    const oneDayIntervalEnd = oneDayIntervalStart + unixTimesInMs.day;
+    const oneWeekIntervalStart =
+        Math.floor(currentDate / (unixTimesInMs.day * 7)) * unixTimesInMs.day * 7 + 16 * unixTimesInMs.hour;
+    const oneWeekIntervalEnd = oneWeekIntervalStart + unixTimesInMs.day * 7;
+    try {
+        const ws = await WorldState.findOne();
+        if (!ws) throw new Error("Missing worldState");
+        let season = ws.SeasonInfo
+        if(!season) season = {
+            Activation: 1715796000000,
+            Expiry: 9999999999999,
+            AffiliationTag: "RadioLegionIntermission10Syndicate",
+            Season:  12,
+            Phase: 0,
+            Params:  "",
+            ActiveChallenges: [],
+            UsedChallenges: []
+        }
+        const activeChallenges = season.ActiveChallenges.filter(challenge => currentDate < challenge.Expiry)
+        const usedChallenges = season.UsedChallenges
+
+        const exportChallenges = Object.keys(ExportNightwave.challenges);
+        const filterChallenges = (prefix: string) => exportChallenges.filter(challenge => challenge.startsWith(prefix));
+
+        const dailyChallenges = filterChallenges("/Lotus/Types/Challenges/Seasons/Daily/");
+        const weeklyChallenges = filterChallenges("/Lotus/Types/Challenges/Seasons/Weekly/");
+        const weeklyHardChallenges = filterChallenges("/Lotus/Types/Challenges/Seasons/WeeklyHard/");
+
+        let dailyCount = 0, weeklyCount = 0, weeklyHardCount = 0;
+
+        activeChallenges.forEach(challenge => {
+            if (challenge.Challenge.startsWith("/Lotus/Types/Challenges/Seasons/Daily/")) dailyCount++;
+            else if (challenge.Challenge.startsWith("/Lotus/Types/Challenges/Seasons/Weekly/")) weeklyCount++;
+            else if (challenge.Challenge.startsWith("/Lotus/Types/Challenges/Seasons/WeeklyHard/")) weeklyHardCount++;
+        });
+
+        const addChallenges = async (count: number, limit: number, intervalStart: number, intervalEnd: number, challengesArray: string[], isDaily = false) => {
+            while (count < limit) {
+                challengesArray = challengesArray.filter(challenge => !usedChallenges.includes(challenge))
+                const uniqueName = challengesArray[Math.floor(Math.random() * challengesArray.length)]
+                const challenge: IActiveChallenge = {
+                    Activation: intervalStart,
+                    Expiry: intervalEnd,
+                    Challenge: uniqueName
+                };
+                if (isDaily){
+                    challenge.Daily = true;
+                } else {
+                    usedChallenges.push(uniqueName)
+                }
+                activeChallenges.push(challenge);
+                count++;
+            }
+        };
+
+        await addChallenges(dailyCount, 3, oneDayIntervalStart, oneDayIntervalEnd, dailyChallenges, true);
+        await addChallenges(weeklyCount, 5, oneWeekIntervalStart, oneWeekIntervalEnd, weeklyChallenges);
+        await addChallenges(weeklyHardCount, 2, oneWeekIntervalStart, oneWeekIntervalEnd, weeklyHardChallenges);
+
+        season = {
+            Activation: season.Activation || 1715796000000,
+            Expiry: season.Expiry || 9999999999999,
+            AffiliationTag: season.AffiliationTag || "RadioLegionIntermission10Syndicate",
+            Season: season.Season || 12,
+            Phase: season.Phase || 0,
+            Params: season.Params || "",
+            ActiveChallenges: activeChallenges,
+            UsedChallenges: usedChallenges
+        }
+
+        ws.SeasonInfo = season
+        await ws.save();
+        return ws
+    } catch (error) {
+        throw new Error(`Error while updating NigthWave ${error}`);
+    }
+};
+
+const updateNodeOverrides = async () => {
+    try {
+        const ws = await WorldState.findOne();
+        if (!ws) throw new Error("Missing worldState");
+        const curWeek = Math.floor(Date.now()/(7*unixTimesInMs.day));
+        let overrides = ws.NodeOverrides
+        if(overrides == undefined || overrides.length<1 ){
+            overrides = [
+                { "Node": "EuropaHUB", "Hide": true },
+                { "Node": "ErisHUB", "Hide": true },
+                { "Node": "VenusHUB", "Hide": true },
+                { "Node": "SolNode802", "Seed": curWeek }, // Elite santuary onnslaught
+                {
+                  "Node": "EarthHUB",
+                  "Hide": false,
+                  "LevelOverride": "/Lotus/Levels/Proc/Hub/RelayStationHubTwoB",
+                },
+                {
+                  "Node": "MercuryHUB",
+                  "Hide": true,
+                  "LevelOverride": "/Lotus/Levels/Proc/Hub/RelayStationHubHydroid",
+                }
+            ];
+        } else {
+            const solNodeIndex = overrides.findIndex(node => node.Node === "SolNode802");
+
+            if (solNodeIndex !== -1) {
+                if (overrides[solNodeIndex].Seed !== curWeek) overrides[solNodeIndex].Seed = curWeek;
+            } else {
+                overrides.push({ "Node": "SolNode802", "Seed": curWeek });
+            }
+        }
+        ws.NodeOverrides = overrides
+        await ws.save();
+        return ws;
+    } catch (error) {
+        throw new Error(`Error while updating NodeOverrides ${error}`);
+    }
+}
