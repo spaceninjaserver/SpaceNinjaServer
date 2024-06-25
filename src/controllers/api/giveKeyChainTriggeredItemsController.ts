@@ -9,8 +9,8 @@ const giveKeyChainTriggeredItemsController: RequestHandler = async (req, res) =>
     const accountId = await getAccountIdForRequest(req);
     const payload = getJSONfromString(req.body as string) as IGiveKeyChainTriggeredItemsRequest;
     const result = await giveKeyChainTriggeredItems(accountId, payload.KeyChain, payload.ChainStage);
-    if (result != null) res.json(result);
-    else res.status(200).end();
+    if (result) res.json(result);
+    else res.json([]);
 };
 
 export { giveKeyChainTriggeredItemsController };

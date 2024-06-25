@@ -2,7 +2,8 @@ import { IInventoryDatabaseDocument, IQuestKeyDatabase } from "@/src/types/inven
 import { IUpdateQuestRequest, IUpdateQuestResponse } from "@/src/types/questTypes";
 import { addItem, getInventory } from "@/src/services/inventoryService";
 import { logger } from "@/src/utils/logger";
-import { ExportKeys } from "warframe-public-export-plus";
+import { ExportKeys, ExportRecipes } from "warframe-public-export-plus";
+import { ItemType } from "../helpers/customHelpers/addItemHelpers";
 
 export const setActiveQuest = async (accountId: string, quest: string) => {
     const inventory = await getInventory(accountId);
@@ -79,14 +80,24 @@ export const giveKeyChainTriggeredItems = async (accountId: string, keyChain: st
     const quest = ExportKeys[keyChain];
 
     if (quest.chainStages) {
-        for (const chainStage of quest.chainStages) {
-            if (chainStage.itemsToGiveWhenTriggered.length > 0) {
-                let itemType = chainStage.itemsToGiveWhenTriggered[0];
-                if (itemType.indexOf("") > 0) {
-                    itemType = itemType.replace("/Lotus/StoreItems/", "/Lotus/");
-                }
-                await addItem(accountId, itemType, 1);
+        const stage = quest.chainStages[chainStage];
+        if (stage.itemsToGiveWhenTriggered.length > 0) {
+            let itemType = stage.itemsToGiveWhenTriggered[0];
+            if (itemType.indexOf("") > 0) {
+                itemType = itemType.replace("/Lotus/StoreItems/", "/Lotus/");
             }
+            await addItem(accountId, itemType, 1);
+
+            if (itemType in ExportRecipes) {
+                return {
+                    Recipes: [{
+                        ItemType: itemType,
+                        ItemCount: 1
+                    }]
+                };
+            }
+
+            // more
         }
     }
 
