@@ -93,9 +93,8 @@ export const giveKeyChainTriggeredItems = async (accountId: string, keyChain: st
     return null;
 };
 
-export const giveKeyChainTriggeredMessage = async (accountId: string, keyChain: string, chainStage: number) => {
+export const giveKeyChainTriggeredMessage = (accountId: string, keyChain: string, chainStage: number) => {
     logger.debug("accountId:" + accountId + "keyChain: " + keyChain + " chainStage: " + chainStage);
-
     // TODO:message
 
     return null;

@@ -8,7 +8,7 @@ import { IGiveKeyChainTriggeredMessageRequest } from "@/src/types/questTypes";
 const giveKeyChainTriggeredMessageController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const payload = getJSONfromString(req.body as string) as IGiveKeyChainTriggeredMessageRequest;
-    const result = await giveKeyChainTriggeredMessage(accountId, payload.KeyChain, payload.ChainStage);
+    const result = giveKeyChainTriggeredMessage(accountId, payload.KeyChain, payload.ChainStage);
     if (result != null) res.json(result);
     else res.status(200).end();
 };
