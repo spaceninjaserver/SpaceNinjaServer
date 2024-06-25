@@ -205,6 +205,8 @@ export interface INodeOverride {
     Faction?: string;
     CustomNpcEncounters?: string[];
     LevelOverride?: string;
+    Seed?: number;
+    Hide?: boolean;
 }
 
 export interface IVoidTrader extends IBaseWorldStateObject {
@@ -285,6 +287,7 @@ export interface ISeasonInfo extends Omit<IBaseWorldStateObject, "_id"> {
     Phase: number;
     Params: string;
     ActiveChallenges: IActiveChallenge[];
+    UsedChallenges: string[];
 }
 
 export interface IActiveChallenge extends IBaseWorldStateObject {
@@ -321,7 +324,7 @@ export interface IWorldState {
     EndlessXpChoices?: IEndlessXpChoice[];
     ForceLogoutVersion?: number;
     FeaturedGuilds?: IFeaturedGuild[];
-    SeasonInfo?: ISeasonInfo;
+    SeasonInfo: ISeasonInfo;
     Tmp?: string;
 
     // Unkown
