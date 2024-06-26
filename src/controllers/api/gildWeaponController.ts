@@ -35,25 +35,27 @@ export const gildWeaponController: RequestHandler = async (req, res) => {
     data.Caterogy = req.query.Category as WeaponTypeInternal | "Hoverboards";
 
     const inventory = await getInventory(accountId);
-    if(!inventory[data.Caterogy]){
+    if (!inventory[data.Caterogy]) {
         throw new Error(`Category ${req.query.Category} dont foudn in inventory`);
     }
     const weaponIndex = inventory[data.Caterogy].findIndex(x => String(x._id) === data.ItemId);
-    if(weaponIndex === -1){
+    if (weaponIndex === -1) {
         throw new Error(`Weapon with ${data.ItemId} not found in category ${req.query.Category}`);
     }
 
     const weapon = inventory[data.Caterogy][weaponIndex];
     weapon.Features = EquipmentFeatures.GILDING; // maybe 9 idk if DOUBLE_CAPACITY is also given
-    weapon.ItemName = data.ItemName
+    weapon.ItemName = data.ItemName;
     weapon.XP = 0;
-    if(data.Caterogy != "OperatorAmps" && (data.PolarizeSlot && data.PolarizeValue)){
-        weapon.Polarity= [{
-            Slot: data.PolarizeSlot,
-            Value: data.PolarizeValue
-        }]
+    if (data.Caterogy != "OperatorAmps" && data.PolarizeSlot && data.PolarizeValue) {
+        weapon.Polarity = [
+            {
+                Slot: data.PolarizeSlot,
+                Value: data.PolarizeValue
+            }
+        ];
     }
-    inventory[data.Caterogy][weaponIndex] = weapon
+    inventory[data.Caterogy][weaponIndex] = weapon;
     await inventory.save();
 
     res.json({
