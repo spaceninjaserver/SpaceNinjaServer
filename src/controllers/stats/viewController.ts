@@ -3,7 +3,6 @@ import { getAccountIdForRequest } from "@/src/services/loginService";
 import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { IStatsView } from "@/src/types/statTypes";
 import { config } from "@/src/services/configService";
-import view from "@/static/fixed_responses/view.json";
 import allScans from "@/static/fixed_responses/allScans.json";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -15,7 +14,7 @@ const viewController: RequestHandler = async (req, res) => {
         return;
     }
 
-    const responseJson: IStatsView = view;
+    const responseJson: IStatsView = {};
     responseJson.Weapons = [];
     for (const item of inventory.XPInfo) {
         responseJson.Weapons.push({
