@@ -35,7 +35,7 @@ export const gildWeaponController: RequestHandler = async (req, res) => {
     data.Category = req.query.Category as WeaponTypeInternal | "Hoverboards";
 
     const inventory = await getInventory(accountId);
-    if(!inventory[data.Category]) {
+    if (!inventory[data.Category]) {
         throw new Error(`Category ${req.query.Category} not found in inventory`);
     }
     const weaponIndex = inventory[data.Category].findIndex(x => String(x._id) === data.ItemId);
