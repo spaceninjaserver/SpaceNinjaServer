@@ -89,70 +89,56 @@ export const getSuitByUniqueName = (uniqueName: string): IPowersuit | undefined 
     return ExportWarframes[uniqueName];
 };
 
-export const getString = (key: string, lang: string | undefined): string => {
-    let dict;
-    switch (lang) {
-        case "de":
-            dict = dict_de;
-            break;
-
-        case "es":
-            dict = dict_es;
-            break;
-
-        case "fr":
-            dict = dict_fr;
-            break;
-
-        case "it":
-            dict = dict_it;
-            break;
-
-        case "ja":
-            dict = dict_ja;
-            break;
-
-        case "ko":
-            dict = dict_ko;
-            break;
-
-        case "pl":
-            dict = dict_pl;
-            break;
-
-        case "pt":
-            dict = dict_pt;
-            break;
-
-        case "ru":
-            dict = dict_ru;
-            break;
-
-        case "tc":
-            dict = dict_tc;
-            break;
-
-        case "th":
-            dict = dict_th;
-            break;
-
-        case "tr":
-            dict = dict_tr;
-            break;
-
-        case "uk":
-            dict = dict_uk;
-            break;
-
-        case "zh":
-            dict = dict_zh;
-            break;
-
-        case "en":
-        default:
-            dict = dict_en;
-            break;
-    }
-
+export const getString = (key: string, dict: Record<string, string>): string => {
     return dict[key] ?? key;
 };
+
+export const getDict = (lang: string | undefined) =>{
+    switch (lang) {
+        case "de":
+            return dict_de;
+
+        case "es":
+            return dict_es;
+            
+        case "fr":
+            return dict_fr;
+            
+        case "it":
+            return dict_it;
+            
+        case "ja":
+            return dict_ja;
+            
+        case "ko":
+            return dict_ko;
+            
+        case "pl":
+            return dict_pl;
+            
+        case "pt":
+            return dict_pt;
+            
+        case "ru":
+            return dict_ru;          
+
+        case "tc":
+            return dict_tc;
+            
+        case "th":
+            return dict_th;
+            
+        case "tr":
+            return dict_tr;
+            
+        case "uk":
+            return dict_uk;
+            
+        case "zh":
+            return dict_zh;
+            
+        case "en":
+        default:
+            return dict_en;           
+    }
+}
