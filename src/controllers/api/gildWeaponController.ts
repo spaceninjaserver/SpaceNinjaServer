@@ -19,7 +19,7 @@ interface IGildWeaponRequest {
     PolarizeSlot?: number;
     PolarizeValue?: ArtifactPolarity;
     ItemId: string;
-    Caterogy: WeaponTypeInternal | "Hoverboards";
+    Category: WeaponTypeInternal | "Hoverboards";
 }
 
 // In export there no recipes for gild action, so reputation and ressources only consumed visually
@@ -30,24 +30,24 @@ export const gildWeaponController: RequestHandler = async (req, res) => {
     const data: IGildWeaponRequest = getJSONfromString(String(req.body));
     data.ItemId = String(req.query.ItemId);
     if (!modularWeaponCategory.includes(req.query.Category as WeaponTypeInternal | "Hoverboards")) {
-        throw new Error(`unknown modular weapon Category: ${req.query.Category}`);
+        throw new Error(`Unknown modular weapon Category: ${req.query.Category}`);
     }
-    data.Caterogy = req.query.Category as WeaponTypeInternal | "Hoverboards";
+    data.Category = req.query.Category as WeaponTypeInternal | "Hoverboards";
 
     const inventory = await getInventory(accountId);
-    if (!inventory[data.Caterogy]) {
-        throw new Error(`Category ${req.query.Category} dont foudn in inventory`);
+    if(!inventory[data.Category]) {
+        throw new Error(`Category ${req.query.Category} not found in inventory`);
     }
-    const weaponIndex = inventory[data.Caterogy].findIndex(x => String(x._id) === data.ItemId);
+    const weaponIndex = inventory[data.Category].findIndex(x => String(x._id) === data.ItemId);
     if (weaponIndex === -1) {
         throw new Error(`Weapon with ${data.ItemId} not found in category ${req.query.Category}`);
     }
 
-    const weapon = inventory[data.Caterogy][weaponIndex];
-    weapon.Features = EquipmentFeatures.GILDING; // maybe 9 idk if DOUBLE_CAPACITY is also given
+    const weapon = inventory[data.Category][weaponIndex];
+    weapon.Features = EquipmentFeatures.GILDED; // maybe 9 idk if DOUBLE_CAPACITY is also given
     weapon.ItemName = data.ItemName;
     weapon.XP = 0;
-    if (data.Caterogy != "OperatorAmps" && data.PolarizeSlot && data.PolarizeValue) {
+    if (data.Category != "OperatorAmps" && data.PolarizeSlot && data.PolarizeValue) {
         weapon.Polarity = [
             {
                 Slot: data.PolarizeSlot,
@@ -55,12 +55,12 @@ export const gildWeaponController: RequestHandler = async (req, res) => {
             }
         ];
     }
-    inventory[data.Caterogy][weaponIndex] = weapon;
+    inventory[data.Category][weaponIndex] = weapon;
     await inventory.save();
 
     res.json({
         InventoryChanges: {
-            [data.Caterogy]: [weapon]
+            [data.Category]: [weapon]
         }
     });
 };
