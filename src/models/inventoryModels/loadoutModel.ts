@@ -27,13 +27,16 @@ const EquipmentSelectionSchema = new Schema<IEquipmentSelection>(
 
 const loadoutConfigSchema = new Schema<ILoadoutConfigDatabase>(
     {
+        FocusSchool: String,
         PresetIcon: String,
         Favorite: Boolean,
-        n: String,
-        s: EquipmentSelectionSchema,
-        p: EquipmentSelectionSchema,
-        l: EquipmentSelectionSchema,
-        m: EquipmentSelectionSchema
+        n: String, // Loadout name
+        s: EquipmentSelectionSchema, // Suit
+        l: EquipmentSelectionSchema, // Primary weapon
+        p: EquipmentSelectionSchema, // Secondary weapon
+        m: EquipmentSelectionSchema, // Melee weapon
+        h: EquipmentSelectionSchema, // Gravimag weapon
+        a: EquipmentSelectionSchema // Necromech exalted weapon
     },
     {
         id: false
