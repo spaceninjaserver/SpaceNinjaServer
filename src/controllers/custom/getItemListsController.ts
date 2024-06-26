@@ -19,7 +19,7 @@ interface ListedItem {
 const getItemListsController: RequestHandler = (req, res) => {
     const weapons = [];
     const miscitems = [];
-    const lang = req.query.lang?.toString()
+    const lang = req.query.lang?.toString();
     for (const [uniqueName, item] of Object.entries(ExportWeapons)) {
         if (item.productCategory !== "OperatorAmps") {
             if (item.totalDamage !== 0) {

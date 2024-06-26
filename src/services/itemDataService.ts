@@ -93,64 +93,64 @@ export const getString = (key: string, lang: string | undefined): string => {
     let dict;
     switch (lang) {
         case "de":
-            dict = dict_de
-        break;
+            dict = dict_de;
+            break;
 
         case "es":
-            dict = dict_es
-        break;
+            dict = dict_es;
+            break;
 
         case "fr":
-            dict = dict_fr
-        break;
-            
+            dict = dict_fr;
+            break;
+
         case "it":
-            dict = dict_it
-        break;
+            dict = dict_it;
+            break;
 
         case "ja":
-            dict = dict_ja
-        break;
+            dict = dict_ja;
+            break;
 
         case "ko":
-            dict = dict_ko
-        break;
+            dict = dict_ko;
+            break;
 
         case "pl":
-            dict = dict_pl
-        break;
+            dict = dict_pl;
+            break;
 
         case "pt":
-            dict = dict_pt
-        break;
+            dict = dict_pt;
+            break;
 
         case "ru":
-            dict = dict_ru
-        break;
+            dict = dict_ru;
+            break;
 
         case "tc":
-            dict = dict_tc
-        break;
+            dict = dict_tc;
+            break;
 
         case "th":
-            dict = dict_th
-        break;
+            dict = dict_th;
+            break;
 
         case "tr":
-            dict = dict_tr
-        break;
+            dict = dict_tr;
+            break;
 
         case "uk":
-            dict = dict_uk
-        break;
+            dict = dict_uk;
+            break;
 
         case "zh":
-            dict = dict_zh
-        break;
-        
+            dict = dict_zh;
+            break;
+
         case "en":
         default:
-            dict = dict_en
+            dict = dict_en;
             break;
     }
 

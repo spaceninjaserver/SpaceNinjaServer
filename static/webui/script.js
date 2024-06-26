@@ -929,21 +929,21 @@ function doPopArchonCrystalUpgrade(type) {
 
 function handleLangClick(lang) {
     const languages = {
-        "de": "German",
-        "en": "English",
-        "es": "Spanish",
-        "fr": "French",
-        "it": "Italian",
-        "ja": "Japanese",
-        "ko": "Korean",
-        "pl": "Polish",
-        "pt": "Portuguese",
-        "ru": "Russian",
-        "tc": "Traditional Chinese",
-        "th": "Thai",
-        "tr": "Turkish",
-        "uk": "Ukrainian",
-        "zh": "Simplified Chinese"
+        de: "German",
+        en: "English",
+        es: "Spanish",
+        fr: "French",
+        it: "Italian",
+        ja: "Japanese",
+        ko: "Korean",
+        pl: "Polish",
+        pt: "Portuguese",
+        ru: "Russian",
+        tc: "Traditional Chinese",
+        th: "Thai",
+        tr: "Turkish",
+        uk: "Ukrainian",
+        zh: "Simplified Chinese"
     };
     const selectedLangText = languages[lang] || "English";
 
@@ -953,31 +953,31 @@ function handleLangClick(lang) {
     window.location.reload();
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
     const languages = {
-        "de": "German",
-        "en": "English",
-        "es": "Spanish",
-        "fr": "French",
-        "it": "Italian",
-        "ja": "Japanese",
-        "ko": "Korean",
-        "pl": "Polish",
-        "pt": "Portuguese",
-        "ru": "Russian",
-        "tc": "Traditional Chinese",
-        "th": "Thai",
-        "tr": "Turkish",
-        "uk": "Ukrainian",
-        "zh": "Simplified Chinese"
+        de: "German",
+        en: "English",
+        es: "Spanish",
+        fr: "French",
+        it: "Italian",
+        ja: "Japanese",
+        ko: "Korean",
+        pl: "Polish",
+        pt: "Portuguese",
+        ru: "Russian",
+        tc: "Traditional Chinese",
+        th: "Thai",
+        tr: "Turkish",
+        uk: "Ukrainian",
+        zh: "Simplified Chinese"
     };
-    const languageMenu = document.getElementById('languageMenu');
+    const languageMenu = document.getElementById("languageMenu");
 
     Object.keys(languages).forEach(lang => {
-        const listItem = document.createElement('li');
-        const linkItem = document.createElement('a');
-        linkItem.className = 'dropdown-item';
-        linkItem.href = '#';
+        const listItem = document.createElement("li");
+        const linkItem = document.createElement("a");
+        linkItem.className = "dropdown-item";
+        linkItem.href = "#";
         linkItem.dataset.lang = lang;
         linkItem.textContent = languages[lang];
         linkItem.onclick = () => handleLangClick(lang);
