@@ -729,13 +729,13 @@ fetch("http://localhost:61558/ping", { mode: "no-cors" }).then(() => {
 
 function doUnlockAllFocusSchools() {
     revalidateAuthz(() => {
-        $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1").done(async (data) => {
+        $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1").done(async data => {
             const missingFocusUpgrades = {
                 "/Lotus/Upgrades/Focus/Attack/AttackFocusAbility": true,
                 "/Lotus/Upgrades/Focus/Tactic/TacticFocusAbility": true,
                 "/Lotus/Upgrades/Focus/Ward/WardFocusAbility": true,
                 "/Lotus/Upgrades/Focus/Defense/DefenseFocusAbility": true,
-                "/Lotus/Upgrades/Focus/Power/PowerFocusAbility": true,
+                "/Lotus/Upgrades/Focus/Power/PowerFocusAbility": true
             };
             if (data.FocusUpgrades) {
                 for (const focusUpgrade of data.FocusUpgrades) {
@@ -750,7 +750,11 @@ function doUnlockAllFocusSchools() {
             if (Object.keys(missingFocusUpgrades).length == 0) {
                 alert("All focus schools are already unlocked.");
             } else {
-                alert("Unlocked " + Object.keys(missingFocusUpgrades).length + " new focus schools! An inventory update will be needed for the changes to be reflected in-game. Visiting the navigation should be the easiest way to trigger that.");
+                alert(
+                    "Unlocked " +
+                        Object.keys(missingFocusUpgrades).length +
+                        " new focus schools! An inventory update will be needed for the changes to be reflected in-game. Visiting the navigation should be the easiest way to trigger that."
+                );
             }
         });
     });
@@ -771,7 +775,7 @@ function unlockFocusSchool(upgradeType) {
                 data: JSON.stringify({
                     FocusType: upgradeType
                 })
-            }).done(function() {
+            }).done(function () {
                 resolve();
             });
         });
