@@ -86,6 +86,7 @@ export enum EquipmentFeatures {
     DOUBLE_CAPACITY = 1,
     UTILITY_SLOT = 2,
     GRAVIMAG_INSTALLED = 4,
+    GILDING = 8,
     ARCANE_SLOT = 32,
     INCARNON_GENESIS = 512
 }
@@ -112,6 +113,7 @@ export interface IEquipmentDatabase {
     Expiry?: IMongoDate;
     SkillTree?: string;
     ArchonCrystalUpgrades?: IArchonCrystalUpgrade[];
+    ItemId: IOid;
     _id: Types.ObjectId;
 }
 
