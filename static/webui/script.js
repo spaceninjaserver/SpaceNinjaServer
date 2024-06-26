@@ -726,3 +726,54 @@ fetch("http://localhost:61558/ping", { mode: "no-cors" }).then(() => {
         fetch("http://localhost:61558/fov_override?" + this.value);
     };
 });
+
+function doUnlockAllFocusSchools() {
+    revalidateAuthz(() => {
+        $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1").done(async (data) => {
+            const missingFocusUpgrades = {
+                "/Lotus/Upgrades/Focus/Attack/AttackFocusAbility": true,
+                "/Lotus/Upgrades/Focus/Tactic/TacticFocusAbility": true,
+                "/Lotus/Upgrades/Focus/Ward/WardFocusAbility": true,
+                "/Lotus/Upgrades/Focus/Defense/DefenseFocusAbility": true,
+                "/Lotus/Upgrades/Focus/Power/PowerFocusAbility": true,
+            };
+            if (data.FocusUpgrades) {
+                for (const focusUpgrade of data.FocusUpgrades) {
+                    if (focusUpgrade.ItemType in missingFocusUpgrades) {
+                        delete missingFocusUpgrades[focusUpgrade.ItemType];
+                    }
+                }
+            }
+            for (const upgradeType of Object.keys(missingFocusUpgrades)) {
+                await unlockFocusSchool(upgradeType);
+            }
+            if (Object.keys(missingFocusUpgrades).length == 0) {
+                alert("All focus schools are already unlocked.");
+            } else {
+                alert("Unlocked " + Object.keys(missingFocusUpgrades).length + " new focus schools! An inventory update will be needed for the changes to be reflected in-game. Visiting the navigation should be the easiest way to trigger that.");
+            }
+        });
+    });
+}
+
+function unlockFocusSchool(upgradeType) {
+    return new Promise(resolve => {
+        // Deselect current FocusAbility so we will be able to unlock the way for free
+        $.post({
+            url: "/api/focus.php?" + window.authz + "&op=5",
+            contentType: "text/plain",
+            data: "{}"
+        }).done(function () {
+            // Unlock the way now
+            $.post({
+                url: "/api/focus.php?" + window.authz + "&op=2",
+                contentType: "text/plain",
+                data: JSON.stringify({
+                    FocusType: upgradeType
+                })
+            }).done(function() {
+                resolve();
+            });
+        });
+    });
+}

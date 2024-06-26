@@ -157,7 +157,7 @@
             </div>
             <div data-route="/webui/cheats, /webui/settings" data-title="Cheats | OpenWF WebUI">
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-4">
                         <div class="card mb-4">
                             <h5 class="card-header">Server</h5>
                             <form class="card-body" onsubmit="doChangeSettings();return false;">
@@ -223,7 +223,15 @@
                             </form>
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-4">
+                        <div class="card mb-4">
+                            <h5 class="card-header">Account</h5>
+                            <div class="card-body">
+                                <button class="btn btn-primary" onclick="doUnlockAllFocusSchools();">Unlock All Focus Schools</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
                         <div class="card mb-4">
                             <h5 class="card-header">Client</h5>
                             <div id="client-cheats-nok" class="card-body">
