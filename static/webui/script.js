@@ -701,3 +701,28 @@ function doChangeSettings() {
             });
         });
 }
+
+// Cheats route
+
+fetch("http://localhost:61558/ping", { mode: "no-cors" }).then(() => {
+    $("#client-cheats-nok").addClass("d-none");
+    $("#client-cheats-ok").removeClass("d-none");
+
+    fetch("http://localhost:61558/skip_mission_start_timer")
+        .then(res => res.text())
+        .then(res => {
+            document.getElementById("skip_mission_start_timer").checked = res == "1";
+        });
+    document.getElementById("skip_mission_start_timer").onchange = function () {
+        fetch("http://localhost:61558/skip_mission_start_timer?" + this.checked);
+    };
+
+    fetch("http://localhost:61558/fov_override")
+        .then(res => res.text())
+        .then(res => {
+            document.getElementById("fov_override").value = parseFloat(res) * 10000;
+        });
+    document.getElementById("fov_override").oninput = function () {
+        fetch("http://localhost:61558/fov_override?" + this.value);
+    };
+});
