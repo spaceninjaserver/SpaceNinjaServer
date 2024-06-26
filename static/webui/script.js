@@ -85,7 +85,7 @@ single.on("route_load", function (event) {
 });
 
 window.itemListPromise = new Promise(resolve => {
-    const req = $.get("/custom/getItemLists");
+    const req = $.get(`/custom/getItemLists?lang=${localStorage.getItem("lang")}`);
     req.done(data => {
         window.archonCrystalUpgrades = data.archonCrystalUpgrades;
 
@@ -926,3 +926,66 @@ function doPopArchonCrystalUpgrade(type) {
         });
     });
 }
+
+function handleLangClick(lang) {
+    const languages = {
+        "de": "German",
+        "en": "English",
+        "es": "Spanish",
+        "fr": "French",
+        "it": "Italian",
+        "ja": "Japanese",
+        "ko": "Korean",
+        "pl": "Polish",
+        "pt": "Portuguese",
+        "ru": "Russian",
+        "tc": "Traditional Chinese",
+        "th": "Thai",
+        "tr": "Turkish",
+        "uk": "Ukrainian",
+        "zh": "Simplified Chinese"
+    };
+    const selectedLangText = languages[lang] || "English";
+
+    $(".currentLanguage").text(selectedLangText);
+
+    localStorage.setItem("lang", lang);
+    window.location.reload();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const languages = {
+        "de": "German",
+        "en": "English",
+        "es": "Spanish",
+        "fr": "French",
+        "it": "Italian",
+        "ja": "Japanese",
+        "ko": "Korean",
+        "pl": "Polish",
+        "pt": "Portuguese",
+        "ru": "Russian",
+        "tc": "Traditional Chinese",
+        "th": "Thai",
+        "tr": "Turkish",
+        "uk": "Ukrainian",
+        "zh": "Simplified Chinese"
+    };
+    const languageMenu = document.getElementById('languageMenu');
+
+    Object.keys(languages).forEach(lang => {
+        const listItem = document.createElement('li');
+        const linkItem = document.createElement('a');
+        linkItem.className = 'dropdown-item';
+        linkItem.href = '#';
+        linkItem.dataset.lang = lang;
+        linkItem.textContent = languages[lang];
+        linkItem.onclick = () => handleLangClick(lang);
+        listItem.appendChild(linkItem);
+        languageMenu.appendChild(listItem);
+    });
+
+    const savedLang = localStorage.getItem("lang") || "en";
+    const savedLangText = languages[savedLang];
+    $(".currentLanguage").text(savedLangText);
+});
