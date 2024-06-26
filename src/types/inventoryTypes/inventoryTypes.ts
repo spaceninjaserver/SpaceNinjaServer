@@ -621,11 +621,11 @@ export interface ILoadoutConfigClient {
     Favorite?: boolean;
     n?: string; // Loadout name
     s?: IEquipmentSelection; // Suit
-    p?: IEquipmentSelection;
+    p?: IEquipmentSelection; // Secondary weapon
     l?: IEquipmentSelection; // Primary weapon
     m?: IEquipmentSelection; // Melee weapon
     h?: IEquipmentSelection; // Gravimag weapon
-    a?: IEquipmentSelection;
+    a?: IEquipmentSelection; // Necromech exalted weapon
     ItemId: IOid;
     Remove?: boolean; // when client wants to remove a config, it only includes ItemId & Remove.
 }
