@@ -86,6 +86,8 @@ export interface IMailbox {
     LastInboxId: IOid;
 }
 
+export type TSolarMapRegion = "Earth" | "Ceres" | "Eris" | "Europa" | "Jupiter" | "Mars" | "Mercury" | "Neptune" | "Phobos" | "Pluto" | "Saturn" | "Sedna" | "Uranus" | "Venus" | "Void" | "SolarMapDeimosName";
+
 //TODO: perhaps split response and database into their own files
 
 export interface IPendingRecipeResponse extends Omit<IPendingRecipe, "CompletionDate"> {
@@ -142,7 +144,7 @@ export interface IInventoryResponse {
     CurrentLoadOutIds: Array<any[] | IOid>;
     Missions: IMission[];
     RandomUpgradesIdentified?: number;
-    LastRegionPlayed: string;
+    LastRegionPlayed: TSolarMapRegion;
     XPInfo: ITypeXPItem[];
     Recipes: ITypeCount[];
     WeaponSkins: IWeaponSkinClient[];

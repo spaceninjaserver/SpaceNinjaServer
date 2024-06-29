@@ -669,6 +669,11 @@ export const missionInventoryUpdate = async (data: IMissionInventoryUpdateReques
         }
     }
 
+    // LastRegionPlayed
+    if (data.LastRegionPlayed) {
+        inventory.LastRegionPlayed = data.LastRegionPlayed;
+    }
+
     // other
     addMods(inventory, RawUpgrades);
     addMiscItems(inventory, MiscItems);
