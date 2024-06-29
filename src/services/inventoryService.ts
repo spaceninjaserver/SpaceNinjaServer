@@ -178,6 +178,22 @@ export const addItem = async (
                     [weaponType]: [weapon]
                 }
             };
+        case "Upgrades": {
+            const inventory = await getInventory(accountId);
+            const changes = [
+                {
+                    ItemType: typeName,
+                    ItemCount: quantity
+                }
+            ];
+            addMods(inventory, changes);
+            await inventory.save();
+            return {
+                InventoryChanges: {
+                    ShipDecorations: changes
+                }
+            };
+        }
         case "Objects": {
             // /Lotus/Objects/Tenno/Props/TnoLisetTextProjector (Note Beacon)
             const inventory = await getInventory(accountId);
