@@ -30,7 +30,16 @@ import { logger } from "@/src/utils/logger";
 import { WeaponTypeInternal, getWeaponType, getExalted } from "@/src/services/itemDataService";
 import { ISyndicateSacrifice, ISyndicateSacrificeResponse } from "../types/syndicateTypes";
 import { IEquipmentClient, IEquipmentDatabase } from "../types/inventoryTypes/commonInventoryTypes";
-import { ExportArcanes, ExportCustoms, ExportFlavour, ExportFusionBundles, ExportRecipes, ExportResources, ExportSentinels, ExportUpgrades } from "warframe-public-export-plus";
+import {
+    ExportArcanes,
+    ExportCustoms,
+    ExportFlavour,
+    ExportFusionBundles,
+    ExportRecipes,
+    ExportResources,
+    ExportSentinels,
+    ExportUpgrades
+} from "warframe-public-export-plus";
 import { updateQuestKeys } from "./questService";
 import { toOid } from "../helpers/inventoryHelpers";
 
@@ -71,6 +80,8 @@ export const getInventory = async (accountOwnerId: string) => {
 
     return inventory;
 };
+
+export const miscItems = ["/Lotus/Types/Recipes/Components/VorBoltRemoverFakeItem"];
 
 export const addItem = async (
     accountId: string,
@@ -175,7 +186,7 @@ export const addItem = async (
             }
         };
     }
-    
+
     if (typeName in ExportFusionBundles) {
         const inventory = await getInventory(accountId);
         inventory.FusionPoints += ExportFusionBundles[typeName].fusionPoints;
@@ -339,7 +350,8 @@ export const addItem = async (
                         }
                     }
                 }
-                case "Restoratives": // Codex Scanner, Remote Observer, Starburst
+                case "Restoratives": {
+                    // Codex Scanner, Remote Observer, Starburst
                     const inventory = await getInventory(accountId);
                     const consumablesChanges = [
                         {
@@ -354,8 +366,25 @@ export const addItem = async (
                             Consumables: consumablesChanges
                         }
                     };
+                }
             }
             break;
+    }
+    if (typeName in miscItems) {
+        const miscItemChanges = [
+            {
+                ItemType: typeName,
+                ItemCount: quantity
+            } satisfies IMiscItem
+        ];
+        const inventory = await getInventory(accountId);
+        addMiscItems(inventory, miscItemChanges);
+        await inventory.save();
+        return {
+            InventoryChanges: {
+                MiscItems: miscItemChanges
+            }
+        };
     }
     const errorMessage = `unable to add item: ${typeName}`;
     logger.error(errorMessage);
@@ -725,8 +754,17 @@ const addMissionComplete = (inventory: IInventoryDatabaseDocument, { Tag, Comple
 const gearKeys = ["Suits", "Pistols", "LongGuns", "Melee"] as const;
 
 export const missionInventoryUpdate = async (data: IMissionInventoryUpdateRequest, accountId: string) => {
-    const { RawUpgrades, MiscItems, RegularCredits, ChallengeProgress, FusionPoints, Consumables, Recipes, Missions, QuestKeys } =
-        data;
+    const {
+        RawUpgrades,
+        MiscItems,
+        RegularCredits,
+        ChallengeProgress,
+        FusionPoints,
+        Consumables,
+        Recipes,
+        Missions,
+        QuestKeys
+    } = data;
     const inventory = await getInventory(accountId);
 
     // credits
@@ -781,7 +819,7 @@ export const missionInventoryUpdate = async (data: IMissionInventoryUpdateReques
     if (Missions) {
         addMissionComplete(inventory, Missions);
     }
-    if(QuestKeys) {
+    if (QuestKeys) {
         await updateQuestKeys(inventory, QuestKeys);
     }
 
