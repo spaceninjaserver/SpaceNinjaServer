@@ -86,7 +86,23 @@ export interface IMailbox {
     LastInboxId: IOid;
 }
 
-export type TSolarMapRegion = "Earth" | "Ceres" | "Eris" | "Europa" | "Jupiter" | "Mars" | "Mercury" | "Neptune" | "Phobos" | "Pluto" | "Saturn" | "Sedna" | "Uranus" | "Venus" | "Void" | "SolarMapDeimosName";
+export type TSolarMapRegion =
+    | "Earth"
+    | "Ceres"
+    | "Eris"
+    | "Europa"
+    | "Jupiter"
+    | "Mars"
+    | "Mercury"
+    | "Neptune"
+    | "Phobos"
+    | "Pluto"
+    | "Saturn"
+    | "Sedna"
+    | "Uranus"
+    | "Venus"
+    | "Void"
+    | "SolarMapDeimosName";
 
 //TODO: perhaps split response and database into their own files
 
