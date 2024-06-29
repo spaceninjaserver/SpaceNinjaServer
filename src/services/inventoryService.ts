@@ -14,7 +14,9 @@ import {
     ISeasonChallenge,
     ITypeCount,
     InventorySlot,
-    IWeaponSkinClient
+    IWeaponSkinClient,
+    TEquipmentKey,
+    equipmentKeys
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate } from "../types/genericUpdate";
 import {
@@ -462,7 +464,7 @@ export const addSkin = async (typeName: string, accountId: string): Promise<IWea
 const addGearExpByCategory = (
     inventory: IInventoryDatabaseDocument,
     gearArray: IEquipmentClient[] | undefined,
-    categoryName: "Pistols" | "LongGuns" | "Melee" | "Suits"
+    categoryName: TEquipmentKey
 ) => {
     const category = inventory[categoryName];
 
@@ -619,8 +621,6 @@ const addMissionComplete = (inventory: IInventoryDatabaseDocument, { Tag, Comple
     }
 };
 
-const gearKeys = ["Suits", "Pistols", "LongGuns", "Melee"] as const;
-
 export const missionInventoryUpdate = async (data: IMissionInventoryUpdateRequest, accountId: string) => {
     const { RawUpgrades, MiscItems, RegularCredits, ChallengeProgress, FusionPoints, Consumables, Recipes, Missions } =
         data;
@@ -651,7 +651,7 @@ export const missionInventoryUpdate = async (data: IMissionInventoryUpdateReques
     });
 
     // Gear XP
-    gearKeys.forEach(key => addGearExpByCategory(inventory, data[key], key));
+    equipmentKeys.forEach(key => addGearExpByCategory(inventory, data[key], key));
 
     // Incarnon Challenges
     if (data.EvolutionProgress) {
