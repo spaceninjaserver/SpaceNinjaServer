@@ -10,7 +10,7 @@ export const saveLoadoutController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
 
     try {
-        const body: ISaveLoadoutRequest = JSON.parse(req.body as string) as ISaveLoadoutRequest;
+        const body: ISaveLoadoutRequest = JSON.parse(String(req.body)) as ISaveLoadoutRequest;
         // console.log(util.inspect(body, { showHidden: false, depth: null, colors: true }));
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -6,7 +6,7 @@ import { RequestHandler } from "express";
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const setShipCustomizationsController: RequestHandler = async (req, res) => {
     try {
-        const setShipCustomizationsRequest = JSON.parse(req.body as string) as ISetShipCustomizationsRequest;
+        const setShipCustomizationsRequest = JSON.parse(String(req.body)) as ISetShipCustomizationsRequest;
 
         const setShipCustomizationsResponse = await setShipCustomizations(setShipCustomizationsRequest);
         res.json(setShipCustomizationsResponse);

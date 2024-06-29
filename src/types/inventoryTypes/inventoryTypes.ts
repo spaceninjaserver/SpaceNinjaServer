@@ -252,6 +252,7 @@ export interface IInventoryResponse {
     DailyAffiliationZariman: number;
     NemesisAbandonedRewards: string[];
     DailyAffiliationKahl: number;
+    DailyAffiliationCavia: number;
     LastInventorySync: IOid;
     NextRefill: IMongoDate; // Next time argon crystals will have a decay tick
     FoundToday?: IMiscItem[]; // for Argon Crystals
@@ -621,11 +622,11 @@ export interface ILoadoutConfigClient {
     Favorite?: boolean;
     n?: string; // Loadout name
     s?: IEquipmentSelection; // Suit
-    p?: IEquipmentSelection;
+    p?: IEquipmentSelection; // Secondary weapon
     l?: IEquipmentSelection; // Primary weapon
     m?: IEquipmentSelection; // Melee weapon
     h?: IEquipmentSelection; // Gravimag weapon
-    a?: IEquipmentSelection;
+    a?: IEquipmentSelection; // Necromech exalted weapon
     ItemId: IOid;
     Remove?: boolean; // when client wants to remove a config, it only includes ItemId & Remove.
 }
@@ -805,6 +806,13 @@ export interface IQuestProgress {
     i: boolean;
     m: boolean;
     b?: any[];
+}
+
+export interface IDefaultUpgrade {
+    ItemType: string;
+    UpgradeFingerprint?: string;
+    ItemId?: IOid;
+    _id?: Types.ObjectId;
 }
 
 export interface IRawUpgrade {

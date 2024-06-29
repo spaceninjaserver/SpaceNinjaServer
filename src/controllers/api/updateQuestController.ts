@@ -7,7 +7,7 @@ import { updateQuest } from "@/src/services/questService";
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 const updateQuestController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const payload = getJSONfromString(req.body as string) as IUpdateQuestRequest;
+    const payload = getJSONfromString(String(req.body)) as IUpdateQuestRequest;
     const result = await updateQuest(accountId, payload);
     res.json(result);
 };

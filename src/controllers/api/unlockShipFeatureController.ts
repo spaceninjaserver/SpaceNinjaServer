@@ -12,7 +12,7 @@ export interface IUnlockShipFeatureRequest {
 export const unlockShipFeatureController: RequestHandler = async (req, res) => {
     const accountId = parseString(req.query.accountId);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call
-    const shipFeatureRequest = JSON.parse(req.body as string) as IUnlockShipFeatureRequest;
+    const shipFeatureRequest = JSON.parse(String(req.body)) as IUnlockShipFeatureRequest;
     await unlockShipFeature(accountId, shipFeatureRequest.Feature);
     res.send([]);
 };

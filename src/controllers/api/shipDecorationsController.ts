@@ -7,7 +7,7 @@ import { handleSetShipDecorations } from "@/src/services/shipCustomizationsServi
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const shipDecorationsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const shipDecorationsRequest = JSON.parse(req.body as string) as IShipDecorationsRequest;
+    const shipDecorationsRequest = JSON.parse(String(req.body)) as IShipDecorationsRequest;
 
     try {
         const placedDecoration = await handleSetShipDecorations(accountId, shipDecorationsRequest);

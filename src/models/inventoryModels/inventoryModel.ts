@@ -36,9 +36,10 @@ import {
     IPeriodicMissionCompletionDatabase,
     IPeriodicMissionCompletionResponse,
     ILoreFragmentScan,
-    IEvolutionProgress
-} from "../../types/inventoryTypes/inventoryTypes";
-import { IOid } from "../../types/commonTypes";
+    IEvolutionProgress,
+    IDefaultUpgrade
+} from "@/src/types/inventoryTypes/inventoryTypes";
+import { IOid } from "@/src/types/commonTypes";
 import {
     IAbilityOverride,
     IColor,
@@ -634,6 +635,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         DailyAffiliationNecraloid: Number,
         DailyAffiliationZariman: Number,
         DailyAffiliationKahl: Number,
+        DailyAffiliationCavia: Number,
 
         //Daily Focus limit
         DailyFocus: Number,
@@ -966,7 +968,7 @@ type InventoryDocumentProps = {
     OperatorAmps: Types.DocumentArray<IEquipmentDatabase>;
     FlavourItems: Types.DocumentArray<IFlavourItem>;
     RawUpgrades: Types.DocumentArray<IRawUpgrade>;
-    Upgrades: Types.DocumentArray<ICrewShipSalvagedWeaponSkin>;
+    Upgrades: Types.DocumentArray<IDefaultUpgrade>;
     MiscItems: Types.DocumentArray<IMiscItem>;
     Boosters: Types.DocumentArray<IBooster>;
     OperatorLoadOuts: Types.DocumentArray<IOperatorConfigClient>;

@@ -21,7 +21,7 @@ import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const inventorySlotsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    //const body = JSON.parse(req.body as string) as IInventorySlotsRequest;
+    //const body = JSON.parse(String(req.body)) as IInventorySlotsRequest;
 
     //console.log(body);
 

@@ -14,7 +14,7 @@ export interface IPurchaseParams {
     ExpectedPrice: number;
 }
 
-export type IInventoryChanges = Record<string, IBinChanges | object[]>;
+export type IInventoryChanges = Record<string, IBinChanges | number | object[]>;
 
 export type IBinChanges = {
     count: number;
