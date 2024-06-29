@@ -72,7 +72,8 @@ export const equipmentKeys = [
     "SpaceSuits",
     "SpaceGuns",
     "SpaceMelee",
-    "Hoverboards"
+    "Hoverboards",
+    "OperatorAmps"
 ] as const;
 
 export type TEquipmentKey = (typeof equipmentKeys)[number];
