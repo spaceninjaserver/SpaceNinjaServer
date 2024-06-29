@@ -676,12 +676,29 @@ function fetchSettings() {
         );
 }
 
+const uiConfigs = [
+    "autoCreateAccount",
+    "skipStoryModeChoice",
+    "skipTutorial",
+    "unlockAllScans",
+    "unlockAllMissions",
+    "unlockAllQuests",
+    "completeAllQuests",
+    "infiniteResources",
+    "unlockAllShipFeatures",
+    "unlockAllShipDecorations",
+    "unlockAllFlavourItems",
+    "unlockAllSkins",
+    "universalPolarityEverywhere",
+    "spoofMasteryRank"
+];
+
 function doChangeSettings() {
     fetch("/custom/config")
         .then(response => response.json())
         .then(json => {
-            for (var i in json) {
-                var x = document.getElementById(`${i}`);
+            for (const i of uiConfigs) {
+                var x = document.getElementById(i);
                 if (x != null) {
                     if (x.type == "checkbox") {
                         if (x.checked === true) {
