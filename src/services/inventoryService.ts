@@ -26,7 +26,7 @@ import {
     IUpdateChallengeProgressRequest
 } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
-import { WeaponTypeInternal, getWeaponType, getExalted } from "@/src/services/itemDataService";
+import { getWeaponType, getExalted } from "@/src/services/itemDataService";
 import { ISyndicateSacrifice, ISyndicateSacrificeResponse } from "../types/syndicateTypes";
 import { IEquipmentClient } from "../types/inventoryTypes/commonInventoryTypes";
 import { ExportCustoms, ExportFlavour, ExportRecipes, ExportResources } from "warframe-public-export-plus";
@@ -172,7 +172,7 @@ export const addItem = async (
             break;
         case "Weapons":
             const weaponType = getWeaponType(typeName);
-            const weapon = await addWeapon(weaponType, typeName, accountId);
+            const weapon = await addEquipment(weaponType, typeName, accountId);
             await updateSlots(accountId, InventorySlot.WEAPONS, 0, 1);
             return {
                 InventoryChanges: {
@@ -444,23 +444,23 @@ export const syndicateSacrifice = async (
     return res;
 };
 
-export const addWeapon = async (
-    weaponType: WeaponTypeInternal | "Hoverboards",
-    weaponName: string,
+export const addEquipment = async (
+    category: TEquipmentKey,
+    type: string,
     accountId: string,
     modularParts: string[] | undefined = undefined
 ): Promise<IEquipmentClient> => {
     const inventory = await getInventory(accountId);
 
-    const weaponIndex = inventory[weaponType].push({
-        ItemType: weaponName,
+    const index = inventory[category].push({
+        ItemType: type,
         Configs: [],
         XP: 0,
         ModularParts: modularParts
     });
 
     const changedInventory = await inventory.save();
-    return changedInventory[weaponType][weaponIndex - 1].toJSON();
+    return changedInventory[category][index - 1].toJSON();
 };
 
 export const addCustomization = async (customizatonName: string, accountId: string): Promise<IFlavourItem> => {

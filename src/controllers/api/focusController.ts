@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getInventory, addMiscItems, addWeapon } from "@/src/services/inventoryService";
+import { getInventory, addMiscItems, addEquipment } from "@/src/services/inventoryService";
 import { IMiscItem, TFocusPolarity } from "@/src/types/inventoryTypes/inventoryTypes";
 import { logger } from "@/src/utils/logger";
 import { ExportFocusUpgrades } from "warframe-public-export-plus";
@@ -81,7 +81,7 @@ export const focusController: RequestHandler = async (req, res) => {
                 "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/SentAmpTrainingChassis",
                 "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/SentAmpTrainingBarrel"
             ];
-            const result = await addWeapon("OperatorAmps", request.StartingWeaponType, accountId, parts);
+            const result = await addEquipment("OperatorAmps", request.StartingWeaponType, accountId, parts);
             res.json(result);
             break;
         }
