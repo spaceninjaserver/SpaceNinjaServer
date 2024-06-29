@@ -149,7 +149,7 @@ export interface IInventoryResponse {
     PendingRecipes: IPendingRecipeResponse[];
     TrainingDate: IMongoDate;
     PlayerLevel: number;
-    Upgrades: ICrewShipSalvagedWeaponSkin[];
+    Upgrades: IDefaultUpgrade[];
     EquippedGear: string[];
     DeathMarks: string[];
     FusionTreasures: IFusionTreasure[];

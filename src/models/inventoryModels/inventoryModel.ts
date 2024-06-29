@@ -2,7 +2,6 @@ import { Model, Schema, Types, model } from "mongoose";
 import {
     IFlavourItem,
     IRawUpgrade,
-    ICrewShipSalvagedWeaponSkin,
     IMiscItem,
     IInventoryDatabase,
     IBooster,
