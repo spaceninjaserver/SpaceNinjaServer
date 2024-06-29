@@ -983,6 +983,7 @@ type InventoryDocumentProps = {
     SpaceMelee: Types.DocumentArray<IEquipmentDatabase>;
     SentinelWeapons: Types.DocumentArray<IEquipmentDatabase>;
     Hoverboards: Types.DocumentArray<IEquipmentDatabase>;
+    MoaPets: Types.DocumentArray<IEquipmentDatabase>;
     WeaponSkins: Types.DocumentArray<IWeaponSkinDatabase>;
 };
 

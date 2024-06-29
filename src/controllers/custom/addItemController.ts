@@ -1,7 +1,7 @@
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { ItemType, toAddItemRequest } from "@/src/helpers/customHelpers/addItemHelpers";
 import { getWeaponType } from "@/src/services/itemDataService";
-import { addPowerSuit, addWeapon } from "@/src/services/inventoryService";
+import { addPowerSuit, addEquipment } from "@/src/services/inventoryService";
 import { RequestHandler } from "express";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -16,7 +16,7 @@ const addItemController: RequestHandler = async (req, res) => {
             return;
         case ItemType.Weapon:
             const weaponType = getWeaponType(request.InternalName);
-            const weapon = await addWeapon(weaponType, request.InternalName, accountId);
+            const weapon = await addEquipment(weaponType, request.InternalName, accountId);
             res.json(weapon);
             break;
         default:
