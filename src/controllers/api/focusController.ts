@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getInventory, addMiscItems } from "@/src/services/inventoryService";
+import { getInventory, addMiscItems, addEquipment } from "@/src/services/inventoryService";
 import { IMiscItem, TFocusPolarity } from "@/src/types/inventoryTypes/inventoryTypes";
 import { logger } from "@/src/utils/logger";
 import { ExportFocusUpgrades } from "warframe-public-export-plus";
@@ -74,6 +74,17 @@ export const focusController: RequestHandler = async (req, res) => {
             });
             break;
         }
+        case FocusOperation.SentTrainingAmplifier: {
+            const request = JSON.parse(String(req.body)) as ISentTrainingAmplifierRequest;
+            const parts: string[] = [
+                "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/SentAmpTrainingGrip",
+                "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/SentAmpTrainingChassis",
+                "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/SentAmpTrainingBarrel"
+            ];
+            const result = await addEquipment("OperatorAmps", request.StartingWeaponType, accountId, parts);
+            res.json(result);
+            break;
+        }
         case FocusOperation.UnbindUpgrade: {
             const request = JSON.parse(String(req.body)) as IUnbindUpgradeRequest;
             const focusPolarity = focusTypeToPolarity(request.FocusTypes[0]);
@@ -137,6 +148,7 @@ enum FocusOperation {
     UnlockUpgrade = "3",
     LevelUpUpgrade = "4",
     ActivateWay = "5",
+    SentTrainingAmplifier = "7",
     UnbindUpgrade = "8",
     ConvertShard = "9"
 }
@@ -168,6 +180,10 @@ interface IUnbindUpgradeRequest {
 interface IConvertShardRequest {
     Shards: IMiscItem[];
     Polarity: TFocusPolarity;
+}
+
+interface ISentTrainingAmplifierRequest {
+    StartingWeaponType: string;
 }
 
 // Works for ways & upgrades

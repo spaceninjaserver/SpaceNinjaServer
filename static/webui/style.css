@@ -27,3 +27,8 @@ td.text-end > a > svg {
     margin-left: 0.5em;
     margin-bottom: 4px; /* to centre the icon */
 }
+
+/* if an item name is super long, ensure it doesn't prevent the user from using actions */
+.card-body {
+    overflow: auto;
+}

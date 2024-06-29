@@ -12,7 +12,8 @@ import {
     IRawUpgrade,
     ISeasonChallenge,
     TEquipmentKey,
-    IQuestKeyDatabase
+    IQuestKeyDatabase,
+    TSolarMapRegion
 } from "./inventoryTypes/inventoryTypes";
 
 export interface IArtifactsRequest {
@@ -44,10 +45,19 @@ export interface IMissionInventoryUpdateRequest {
     rewardsMultiplier?: number;
     ActiveBoosters?: IBooster[];
     AffiliationChanges?: IAffiliationChange[];
+    Suits?: IEquipmentClient[];
     LongGuns?: IEquipmentClient[];
     Pistols?: IEquipmentClient[];
-    Suits?: IEquipmentClient[];
     Melee?: IEquipmentClient[];
+    SpecialItems?: IEquipmentClient[];
+    Sentinels?: IEquipmentClient[];
+    SentinelWeapons?: IEquipmentClient[];
+    SpaceSuits?: IEquipmentClient[];
+    SpaceGuns?: IEquipmentClient[];
+    SpaceMelee?: IEquipmentClient[];
+    Hoverboards?: IEquipmentClient[];
+    OperatorAmps?: IEquipmentClient[];
+    MoaPets?: IEquipmentClient[];
     FusionBundles?: ITypeCount[];
     RawUpgrades?: IRawUpgrade[];
     MiscItems?: IMiscItem[];
@@ -59,6 +69,7 @@ export interface IMissionInventoryUpdateRequest {
     Missions?: IMission;
     EvolutionProgress?: IEvolutionProgress[];
     QuestKeys?: IQuestKeyDatabase[];
+    LastRegionPlayed?: TSolarMapRegion;
 
     FusionPoints?: number; // Not a part of the request, but we put it in this struct as an intermediate storage.
 }
