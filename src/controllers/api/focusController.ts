@@ -3,8 +3,7 @@ import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getInventory, addMiscItems, addWeapon } from "@/src/services/inventoryService";
 import { IMiscItem, TFocusPolarity } from "@/src/types/inventoryTypes/inventoryTypes";
 import { logger } from "@/src/utils/logger";
-import { ExportFocusUpgrades, ExportWeapons } from "warframe-public-export-plus";
-import { getWeaponType } from "@/src/services/itemDataService";
+import { ExportFocusUpgrades } from "warframe-public-export-plus";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const focusController: RequestHandler = async (req, res) => {
