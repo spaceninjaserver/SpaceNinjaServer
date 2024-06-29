@@ -370,7 +370,7 @@ export const addItem = async (
             }
             break;
     }
-    if (typeName in miscItems) {
+    if (miscItems.includes(typeName)) {
         const miscItemChanges = [
             {
                 ItemType: typeName,
