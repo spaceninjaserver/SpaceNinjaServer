@@ -59,12 +59,13 @@ import { stepSequencersController } from "@/src/controllers/api/stepSequencersCo
 import { surveysController } from "@/src/controllers/api/surveysController";
 import { syndicateSacrificeController } from "@/src/controllers/api/syndicateSacrificeController";
 import { trainingResultController } from "@/src/controllers/api/trainingResultController";
+import { unlockShipFeatureController } from "@/src/controllers/api/unlockShipFeatureController";
 import { updateChallengeProgressController } from "@/src/controllers/api/updateChallengeProgressController";
 import { updateQuestController } from "@/src/controllers/api/updateQuestController";
 import { updateSessionGetController, updateSessionPostController } from "@/src/controllers/api/updateSessionController";
 import { updateThemeController } from "@/src/controllers/api/updateThemeController";
 import { upgradesController } from "@/src/controllers/api/upgradesController";
-import { gildWeaponController } from "../controllers/api/gildWeaponController";
+import { gildWeaponController } from "@/src/controllers/api/gildWeaponController";
 
 const apiRouter = express.Router();
 
@@ -134,6 +135,7 @@ apiRouter.post("/startRecipe.php", startRecipeController);
 apiRouter.post("/stepSequencers.php", stepSequencersController);
 apiRouter.post("/syndicateSacrifice.php", syndicateSacrificeController);
 apiRouter.post("/trainingResult.php", trainingResultController);
+apiRouter.post("/unlockShipFeature.php", unlockShipFeatureController);
 apiRouter.post("/updateChallengeProgress.php", updateChallengeProgressController);
 apiRouter.post("/updateQuest.php", updateQuestController);
 apiRouter.post("/updateSession.php", updateSessionPostController);
