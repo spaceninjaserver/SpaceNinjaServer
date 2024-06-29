@@ -81,8 +81,8 @@ export const focusController: RequestHandler = async (req, res) => {
                 "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/SentAmpTrainingChassis",
                 "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/SentAmpTrainingBarrel"
             ];
-            const result = await addWeapon("OperatorAmps", request.StartingWeaponType, accountId, parts)
-            res.json(result)
+            const result = await addWeapon("OperatorAmps", request.StartingWeaponType, accountId, parts);
+            res.json(result);
             break;
         }
         case FocusOperation.UnbindUpgrade: {
