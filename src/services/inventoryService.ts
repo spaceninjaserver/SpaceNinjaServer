@@ -339,7 +339,9 @@ export const updateCurrency = async (price: number, usePremium: boolean, account
     const inventory = await getInventory(accountId);
 
     if (usePremium) {
-        if (inventory.PremiumCreditsFree > 0) {
+        if (config.infinitePlatinum) {
+            return {};
+        } else if (inventory.PremiumCreditsFree > 0) {
             inventory.PremiumCreditsFree -= Math.min(price, inventory.PremiumCreditsFree);
         }
         inventory.PremiumCredits -= price;
