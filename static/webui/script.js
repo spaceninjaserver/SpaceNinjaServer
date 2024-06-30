@@ -87,6 +87,8 @@ single.on("route_load", function (event) {
 window.itemListPromise = new Promise(resolve => {
     const req = $.get("/custom/getItemLists");
     req.done(data => {
+        window.archonCrystalUpgrades = data.archonCrystalUpgrades;
+
         const itemMap = {
             // Generics for rivens
             "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun": { name: "Archgun" },
@@ -104,7 +106,14 @@ window.itemListPromise = new Promise(resolve => {
             "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/CyoteMod": { name: "Traumatic Peculiar" }
         };
         for (const [type, items] of Object.entries(data)) {
-            if (type != "badItems") {
+            if (type == "archonCrystalUpgrades") {
+                Object.entries(items).forEach(([uniqueName, name]) => {
+                    const option = document.createElement("option");
+                    option.setAttribute("data-key", uniqueName);
+                    option.value = name;
+                    document.getElementById("datalist-" + type).appendChild(option);
+                });
+            } else if (type != "badItems") {
                 items.forEach(item => {
                     if (item.uniqueName in data.badItems) {
                         item.name += " (Imposter)";
@@ -126,6 +135,9 @@ function updateInventory() {
     const req = $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1");
     req.done(data => {
         window.itemListPromise.then(itemMap => {
+            window.didInitialInventoryUpdate = true;
+
+            // Populate inventory route
             document.getElementById("warframe-list").innerHTML = "";
             data.Suits.forEach(item => {
                 const tr = document.createElement("tr");
@@ -149,6 +161,12 @@ function updateInventory() {
                         };
                         a.title = "Make Rank 30";
                         a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"/></svg>`;
+                        td.appendChild(a);
+                    }
+                    {
+                        const a = document.createElement("a");
+                        a.href = "/webui/powersuit/" + item.ItemId.$oid;
+                        a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M278.5 215.6L23 471c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l57-57h68c49.7 0 97.9-14.4 139-41c11.1-7.2 5.5-23-7.8-23c-5.1 0-9.2-4.1-9.2-9.2c0-4.1 2.7-7.6 6.5-8.8l81-24.3c2.5-.8 4.8-2.1 6.7-4l22.4-22.4c10.1-10.1 2.9-27.3-11.3-27.3l-32.2 0c-5.1 0-9.2-4.1-9.2-9.2c0-4.1 2.7-7.6 6.5-8.8l112-33.6c4-1.2 7.4-3.9 9.3-7.7C506.4 207.6 512 184.1 512 160c0-41-16.3-80.3-45.3-109.3l-5.5-5.5C432.3 16.3 393 0 352 0s-80.3 16.3-109.3 45.3L139 149C91 197 64 262.1 64 330v55.3L253.6 195.8c6.2-6.2 16.4-6.2 22.6 0c5.4 5.4 6.1 13.6 2.2 19.8z"/></svg>`;
                         td.appendChild(a);
                     }
                     {
@@ -180,7 +198,6 @@ function updateInventory() {
                 }
                 document.getElementById("warframe-list").appendChild(tr);
             });
-
             document.getElementById("weapon-list").innerHTML = "";
             ["LongGuns", "Pistols", "Melee"].forEach(category => {
                 data[category].forEach(item => {
@@ -238,6 +255,7 @@ function updateInventory() {
                 });
             });
 
+            // Populate mods route
             document.getElementById("riven-list").innerHTML = "";
             document.getElementById("mods-list").innerHTML = "";
             data.Upgrades.forEach(item => {
@@ -372,6 +390,56 @@ function updateInventory() {
                     document.getElementById("mods-list").appendChild(tr);
                 }
             });
+
+            // Populate powersuit route
+            if (single.getCurrentPath().substr(0, 17) == "/webui/powersuit/") {
+                const oid = single.getCurrentPath().substr(17);
+                const item = data.Suits.find(x => x.ItemId.$oid == oid);
+                if (item) {
+                    if (item.ItemName) {
+                        $("#powersuit-route h3").text(item.ItemName);
+                        $("#powersuit-route .text-body-secondary").text(itemMap[item.ItemType]?.name ?? item.ItemType);
+                    } else {
+                        $("#powersuit-route h3").text(itemMap[item.ItemType]?.name ?? item.ItemType);
+                        $("#powersuit-route .text-body-secondary").text("");
+                    }
+
+                    const uniqueUpgrades = {};
+                    (item.ArchonCrystalUpgrades ?? []).forEach(upgrade => {
+                        uniqueUpgrades[upgrade.UpgradeType] ??= 0;
+                        uniqueUpgrades[upgrade.UpgradeType] += 1;
+                    });
+
+                    document.getElementById("crystals-list").innerHTML = "";
+                    Object.entries(uniqueUpgrades).forEach(([upgradeType, count]) => {
+                        const tr = document.createElement("tr");
+                        {
+                            const td = document.createElement("td");
+                            td.textContent = count + "x " + (archonCrystalUpgrades[upgradeType] ?? upgradeType);
+                            tr.appendChild(td);
+                        }
+                        {
+                            const td = document.createElement("td");
+                            td.classList = "text-end";
+                            {
+                                const a = document.createElement("a");
+                                a.href = "#";
+                                a.onclick = function (event) {
+                                    event.preventDefault();
+                                    doPopArchonCrystalUpgrade(upgradeType);
+                                };
+                                a.title = "Remove";
+                                a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
+                                td.appendChild(a);
+                            }
+                            tr.appendChild(td);
+                        }
+                        document.getElementById("crystals-list").appendChild(tr);
+                    });
+                } else {
+                    single.loadRoute("/webui/inventory");
+                }
+            }
         });
     });
 }
@@ -803,6 +871,57 @@ function unlockFocusSchool(upgradeType) {
             }).done(function () {
                 resolve();
             });
+        });
+    });
+}
+
+// Powersuit Route
+
+single.getRoute("#powersuit-route").on("beforeload", function () {
+    this.element.querySelector("h3").textContent = "Loading...";
+    if (window.didInitialInventoryUpdate) {
+        updateInventory();
+    }
+});
+
+function doPushArchonCrystalUpgrade() {
+    const uniqueName = getKey(document.querySelector("[list='datalist-archonCrystalUpgrades']"));
+    if (!uniqueName) {
+        $("[list='datalist-archonCrystalUpgrades']").addClass("is-invalid").focus();
+        return;
+    }
+    revalidateAuthz(() => {
+        $.get(
+            "/custom/pushArchonCrystalUpgrade?" +
+                window.authz +
+                "&oid=" +
+                single.getCurrentPath().substr(17) +
+                "&type=" +
+                uniqueName +
+                "&count=" +
+                $("#archon-crystal-add-count").val()
+        ).done(function () {
+            $("[list='datalist-archonCrystalUpgrades']").val("");
+            updateInventory();
+        });
+    });
+}
+
+$("[list='datalist-archonCrystalUpgrades']").on("input", () => {
+    $("[list='datalist-archonCrystalUpgrades']").removeClass("is-invalid");
+});
+
+function doPopArchonCrystalUpgrade(type) {
+    revalidateAuthz(() => {
+        $.get(
+            "/custom/popArchonCrystalUpgrade?" +
+                window.authz +
+                "&oid=" +
+                single.getCurrentPath().substr(17) +
+                "&type=" +
+                type
+        ).done(function () {
+            updateInventory();
         });
     });
 }

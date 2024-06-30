@@ -3,8 +3,8 @@
 <head>
     <title>OpenWF WebUI</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="libs/bootstrap.min.css" />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="/webui/libs/bootstrap.min.css" />
+    <link rel="stylesheet" href="/webui/style.css" />
 </head>
 <body>
     <nav class="navbar sticky-top bg-body-tertiary">
@@ -63,7 +63,7 @@
                 </form>
             </div>
             <div data-route="/webui/inventory" data-title="Inventory | OpenWF WebUI">
-                <p id="refresh-note" class="mb-4">
+                <p class="mb-4">
                     Note: Changes made here will only be reflected in-game when the game re-downloads your
                     inventory. Visiting the navigation should be the easiest way to trigger that.
                 </p>
@@ -106,8 +106,27 @@
                     </div>
                 </div>
             </div>
+            <div id="powersuit-route" data-route="~ /webui/powersuit/(.+)" data-title="Inventory | OpenWF WebUI">
+                <h3 class="mb-0"></h3>
+                <p class="text-body-secondary"></p>
+                <div class="card mb-4">
+                    <h5 class="card-header">Archon Shard Slots</h5>
+                    <div class="card-body">
+                        <p>You can use these unlimited slots to apply a wide range of upgrades.</p>
+                        <form class="input-group mb-3" onsubmit="doPushArchonCrystalUpgrade();return false;">
+                            <input type="number" id="archon-crystal-add-count" min="1" value="1" class="form-control" style="max-width:100px" />
+                            <span class="input-group-text">x</span>
+                            <input class="form-control" list="datalist-archonCrystalUpgrades" />
+                            <button class="btn btn-primary" type="submit">Add</button>
+                        </form>
+                        <table class="table table-hover w-100">
+                            <tbody id="crystals-list"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
             <div data-route="/webui/mods" data-title="Mods | OpenWF WebUI">
-                <p id="refresh-note" class="mb-4">
+                <p class="mb-4">
                     Note: Changes made here will only be reflected in-game when the game re-downloads your
                     inventory. Visiting the navigation should be the easiest way to trigger that.
                 </p>
@@ -259,11 +278,12 @@
     <datalist id="datalist-weapons"></datalist>
     <datalist id="datalist-miscitems"></datalist>
     <datalist id="datalist-mods"></datalist>
-    <script src="libs/jquery-3.6.0.min.js"></script>
-    <script src="libs/whirlpool-js.min.js"></script>
-    <script src="libs/single.js"></script>
-    <script src="riven-tool/RivenParser.js"></script>
-    <script src="script.js"></script>
-    <script src="libs/bootstrap.bundle.min.js"></script>
+    <datalist id="datalist-archonCrystalUpgrades"></datalist>
+    <script src="/webui/libs/jquery-3.6.0.min.js"></script>
+    <script src="/webui/libs/whirlpool-js.min.js"></script>
+    <script src="/webui/libs/single.js"></script>
+    <script src="/webui/riven-tool/RivenParser.js"></script>
+    <script src="/webui/script.js"></script>
+    <script src="/webui/libs/bootstrap.bundle.min.js"></script>
 </body>
 </html>

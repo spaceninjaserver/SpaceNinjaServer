@@ -6,7 +6,6 @@
     body.logged-in #sidebar {
         position: sticky;
         top: 5rem;
-        height: 100px;
         margin-right: 3rem;
     }
 

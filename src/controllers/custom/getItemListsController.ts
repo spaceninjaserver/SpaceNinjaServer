@@ -8,6 +8,7 @@ import {
     ExportWarframes,
     ExportWeapons
 } from "warframe-public-export-plus";
+import archonCrystalUpgrades from "@/static/fixed_responses/webuiArchonCrystalUpgrades.json";
 
 interface ListedItem {
     uniqueName: string;
@@ -77,7 +78,8 @@ const getItemListsController: RequestHandler = (_req, res) => {
         weapons,
         miscitems,
         mods,
-        badItems
+        badItems,
+        archonCrystalUpgrades
     });
 };
 
