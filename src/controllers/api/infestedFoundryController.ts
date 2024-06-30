@@ -13,10 +13,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             const request = getJSONfromString(String(req.body)) as IShardInstallRequest;
             const inventory = await getInventory(accountId);
             const suit = inventory.Suits.find(suit => suit._id.toString() == request.SuitId.$oid)!;
-            if (
-                !suit.ArchonCrystalUpgrades ||
-                suit.ArchonCrystalUpgrades.length != 5 // we shouldn't have an array like this, but older inventories may disagree...
-            ) {
+            if (!suit.ArchonCrystalUpgrades || suit.ArchonCrystalUpgrades.length != 5) {
                 suit.ArchonCrystalUpgrades = [{}, {}, {}, {}, {}];
             }
             suit.ArchonCrystalUpgrades[request.Slot] = {

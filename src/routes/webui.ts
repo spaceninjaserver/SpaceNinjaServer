@@ -22,6 +22,9 @@ webuiRouter.use("/webui", (req, res, next) => {
 webuiRouter.get("/webui/inventory", (_req, res) => {
     res.sendFile(path.join(rootDir, "static/webui/index.html"));
 });
+webuiRouter.get(/webui\/powersuit\/(.+)/, (_req, res) => {
+    res.sendFile(path.join(rootDir, "static/webui/index.html"));
+});
 webuiRouter.get("/webui/mods", (_req, res) => {
     res.sendFile(path.join(rootDir, "static/webui/index.html"));
 });
