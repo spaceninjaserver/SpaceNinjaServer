@@ -72,7 +72,9 @@ export const equipmentKeys = [
     "SpaceSuits",
     "SpaceGuns",
     "SpaceMelee",
-    "Hoverboards"
+    "Hoverboards",
+    "OperatorAmps",
+    "MoaPets"
 ] as const;
 
 export type TEquipmentKey = (typeof equipmentKeys)[number];
@@ -85,6 +87,24 @@ export interface IDuviriInfo {
 export interface IMailbox {
     LastInboxId: IOid;
 }
+
+export type TSolarMapRegion =
+    | "Earth"
+    | "Ceres"
+    | "Eris"
+    | "Europa"
+    | "Jupiter"
+    | "Mars"
+    | "Mercury"
+    | "Neptune"
+    | "Phobos"
+    | "Pluto"
+    | "Saturn"
+    | "Sedna"
+    | "Uranus"
+    | "Venus"
+    | "Void"
+    | "SolarMapDeimosName";
 
 //TODO: perhaps split response and database into their own files
 
@@ -142,7 +162,7 @@ export interface IInventoryResponse {
     CurrentLoadOutIds: Array<any[] | IOid>;
     Missions: IMission[];
     RandomUpgradesIdentified?: number;
-    LastRegionPlayed: string;
+    LastRegionPlayed: TSolarMapRegion;
     XPInfo: ITypeXPItem[];
     Recipes: ITypeCount[];
     WeaponSkins: IWeaponSkinClient[];
@@ -621,11 +641,11 @@ export interface ILoadoutConfigClient {
     Favorite?: boolean;
     n?: string; // Loadout name
     s?: IEquipmentSelection; // Suit
-    p?: IEquipmentSelection;
+    p?: IEquipmentSelection; // Secondary weapon
     l?: IEquipmentSelection; // Primary weapon
     m?: IEquipmentSelection; // Melee weapon
     h?: IEquipmentSelection; // Gravimag weapon
-    a?: IEquipmentSelection;
+    a?: IEquipmentSelection; // Necromech exalted weapon
     ItemId: IOid;
     Remove?: boolean; // when client wants to remove a config, it only includes ItemId & Remove.
 }

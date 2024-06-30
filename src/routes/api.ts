@@ -61,6 +61,7 @@ import { updateChallengeProgressController } from "@/src/controllers/api/updateC
 import { updateSessionGetController, updateSessionPostController } from "@/src/controllers/api/updateSessionController";
 import { updateThemeController } from "../controllers/api/updateThemeController";
 import { upgradesController } from "@/src/controllers/api/upgradesController";
+import { gildWeaponController } from "../controllers/api/gildWeaponController";
 
 const apiRouter = express.Router();
 
@@ -106,6 +107,7 @@ apiRouter.post("/findSessions.php", findSessionsController);
 apiRouter.post("/focus.php", focusController);
 apiRouter.post("/genericUpdate.php", genericUpdateController);
 apiRouter.post("/getAlliance.php", getAllianceController);
+apiRouter.post("/gildWeapon.php", gildWeaponController);
 apiRouter.post("/guildTech.php", guildTechController);
 apiRouter.post("/hostSession.php", hostSessionController);
 apiRouter.post("/infestedFoundry.php", infestedFoundryController);

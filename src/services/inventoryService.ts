@@ -14,7 +14,9 @@ import {
     ISeasonChallenge,
     ITypeCount,
     InventorySlot,
-    IWeaponSkinClient
+    IWeaponSkinClient,
+    TEquipmentKey,
+    equipmentKeys
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate } from "../types/genericUpdate";
 import {
@@ -24,7 +26,7 @@ import {
     IUpdateChallengeProgressRequest
 } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
-import { WeaponTypeInternal, getWeaponType, getExalted } from "@/src/services/itemDataService";
+import { getWeaponType, getExalted } from "@/src/services/itemDataService";
 import { ISyndicateSacrifice, ISyndicateSacrificeResponse } from "../types/syndicateTypes";
 import { IEquipmentClient } from "../types/inventoryTypes/commonInventoryTypes";
 import { ExportCustoms, ExportFlavour, ExportRecipes, ExportResources } from "warframe-public-export-plus";
@@ -170,7 +172,7 @@ export const addItem = async (
             break;
         case "Weapons":
             const weaponType = getWeaponType(typeName);
-            const weapon = await addWeapon(weaponType, typeName, accountId);
+            const weapon = await addEquipment(weaponType, typeName, accountId);
             await updateSlots(accountId, InventorySlot.WEAPONS, 0, 1);
             return {
                 InventoryChanges: {
@@ -178,6 +180,22 @@ export const addItem = async (
                     [weaponType]: [weapon]
                 }
             };
+        case "Upgrades": {
+            const inventory = await getInventory(accountId);
+            const changes = [
+                {
+                    ItemType: typeName,
+                    ItemCount: quantity
+                }
+            ];
+            addMods(inventory, changes);
+            await inventory.save();
+            return {
+                InventoryChanges: {
+                    ShipDecorations: changes
+                }
+            };
+        }
         case "Objects": {
             // /Lotus/Objects/Tenno/Props/TnoLisetTextProjector (Note Beacon)
             const inventory = await getInventory(accountId);
@@ -426,23 +444,23 @@ export const syndicateSacrifice = async (
     return res;
 };
 
-export const addWeapon = async (
-    weaponType: WeaponTypeInternal | "Hoverboards",
-    weaponName: string,
+export const addEquipment = async (
+    category: TEquipmentKey,
+    type: string,
     accountId: string,
     modularParts: string[] | undefined = undefined
 ): Promise<IEquipmentClient> => {
     const inventory = await getInventory(accountId);
 
-    const weaponIndex = inventory[weaponType].push({
-        ItemType: weaponName,
+    const index = inventory[category].push({
+        ItemType: type,
         Configs: [],
         XP: 0,
         ModularParts: modularParts
     });
 
     const changedInventory = await inventory.save();
-    return changedInventory[weaponType][weaponIndex - 1].toJSON();
+    return changedInventory[category][index - 1].toJSON();
 };
 
 export const addCustomization = async (customizatonName: string, accountId: string): Promise<IFlavourItem> => {
@@ -462,7 +480,7 @@ export const addSkin = async (typeName: string, accountId: string): Promise<IWea
 const addGearExpByCategory = (
     inventory: IInventoryDatabaseDocument,
     gearArray: IEquipmentClient[] | undefined,
-    categoryName: "Pistols" | "LongGuns" | "Melee" | "Suits"
+    categoryName: TEquipmentKey
 ) => {
     const category = inventory[categoryName];
 
@@ -619,8 +637,6 @@ const addMissionComplete = (inventory: IInventoryDatabaseDocument, { Tag, Comple
     }
 };
 
-const gearKeys = ["Suits", "Pistols", "LongGuns", "Melee"] as const;
-
 export const missionInventoryUpdate = async (data: IMissionInventoryUpdateRequest, accountId: string) => {
     const { RawUpgrades, MiscItems, RegularCredits, ChallengeProgress, FusionPoints, Consumables, Recipes, Missions } =
         data;
@@ -651,7 +667,7 @@ export const missionInventoryUpdate = async (data: IMissionInventoryUpdateReques
     });
 
     // Gear XP
-    gearKeys.forEach(key => addGearExpByCategory(inventory, data[key], key));
+    equipmentKeys.forEach(key => addGearExpByCategory(inventory, data[key], key));
 
     // Incarnon Challenges
     if (data.EvolutionProgress) {
@@ -667,6 +683,11 @@ export const missionInventoryUpdate = async (data: IMissionInventoryUpdateReques
                 inventory.EvolutionProgress.push(evoProgress);
             }
         }
+    }
+
+    // LastRegionPlayed
+    if (data.LastRegionPlayed) {
+        inventory.LastRegionPlayed = data.LastRegionPlayed;
     }
 
     // other
