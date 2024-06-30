@@ -15,7 +15,6 @@ function loginFromLocalStorage() {
             window.accountId = data.id;
             window.authz = "accountId=" + data.id + "&nonce=" + data.Nonce;
             updateInventory();
-            fetchSettings();
         },
         () => {
             logout();
@@ -656,26 +655,6 @@ $("#mod-to-acquire").on("input", () => {
     $("#mod-to-acquire").removeClass("is-invalid");
 });
 
-function fetchSettings() {
-    fetch("/custom/config")
-        .then(response => response.json())
-        .then(json =>
-            Object.entries(json).forEach(entry => {
-                const [key, value] = entry;
-                var x = document.getElementById(`${key}`);
-                if (x != null) {
-                    if (x.type == "checkbox") {
-                        if (value === true) {
-                            x.setAttribute("checked", "checked");
-                        }
-                    } else if (x.type == "number") {
-                        x.setAttribute("value", `${value}`);
-                    }
-                }
-            })
-        );
-}
-
 const uiConfigs = [
     "autoCreateAccount",
     "skipStoryModeChoice",
@@ -721,27 +700,52 @@ function doChangeSettings() {
 
 // Cheats route
 
-fetch("http://localhost:61558/ping", { mode: "no-cors" }).then(() => {
-    $("#client-cheats-nok").addClass("d-none");
-    $("#client-cheats-ok").removeClass("d-none");
+single.getRoute("/webui/cheats").on("beforeload", function () {
+    fetch("/custom/config")
+        .then(response => response.json())
+        .then(json =>
+            Object.entries(json).forEach(entry => {
+                const [key, value] = entry;
+                var x = document.getElementById(`${key}`);
+                if (x != null) {
+                    if (x.type == "checkbox") {
+                        if (value === true) {
+                            x.setAttribute("checked", "checked");
+                        }
+                    } else if (x.type == "number") {
+                        x.setAttribute("value", `${value}`);
+                    }
+                }
+            })
+        );
 
-    fetch("http://localhost:61558/skip_mission_start_timer")
-        .then(res => res.text())
-        .then(res => {
-            document.getElementById("skip_mission_start_timer").checked = res == "1";
-        });
-    document.getElementById("skip_mission_start_timer").onchange = function () {
-        fetch("http://localhost:61558/skip_mission_start_timer?" + this.checked);
-    };
+    fetch("http://localhost:61558/ping", { mode: "no-cors" })
+        .then(() => {
+            $("#client-cheats-ok").removeClass("d-none");
+            $("#client-cheats-nok").addClass("d-none");
 
-    fetch("http://localhost:61558/fov_override")
-        .then(res => res.text())
-        .then(res => {
-            document.getElementById("fov_override").value = parseFloat(res) * 10000;
+            fetch("http://localhost:61558/skip_mission_start_timer")
+                .then(res => res.text())
+                .then(res => {
+                    document.getElementById("skip_mission_start_timer").checked = res == "1";
+                });
+            document.getElementById("skip_mission_start_timer").onchange = function () {
+                fetch("http://localhost:61558/skip_mission_start_timer?" + this.checked);
+            };
+
+            fetch("http://localhost:61558/fov_override")
+                .then(res => res.text())
+                .then(res => {
+                    document.getElementById("fov_override").value = parseFloat(res) * 10000;
+                });
+            document.getElementById("fov_override").oninput = function () {
+                fetch("http://localhost:61558/fov_override?" + this.value);
+            };
+        })
+        .catch(function () {
+            $("#client-cheats-nok").removeClass("d-none");
+            $("#client-cheats-ok").addClass("d-none");
         });
-    document.getElementById("fov_override").oninput = function () {
-        fetch("http://localhost:61558/fov_override?" + this.value);
-    };
 });
 
 function doUnlockAllFocusSchools() {
