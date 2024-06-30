@@ -10,7 +10,7 @@ const modularWeaponCategory: (WeaponTypeInternal | "Hoverboards")[] = [
     "Pistols",
     "Melee",
     "OperatorAmps",
-    "Hoverboards" // Not sure about hoverboards just coppied from modual crafting
+    "Hoverboards" // Not sure about hoverboards, just copied from modular crafting
 ];
 
 interface IGildWeaponRequest {
@@ -22,7 +22,7 @@ interface IGildWeaponRequest {
     Category: WeaponTypeInternal | "Hoverboards";
 }
 
-// In export there no recipes for gild action, so reputation and ressources only consumed visually
+// In export there are no recipes for gild action, so reputation and resources are only consumed visually
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const gildWeaponController: RequestHandler = async (req, res) => {
@@ -44,7 +44,7 @@ export const gildWeaponController: RequestHandler = async (req, res) => {
     }
 
     const weapon = inventory[data.Category][weaponIndex];
-    weapon.Features = EquipmentFeatures.GILDED; // maybe 9 idk if DOUBLE_CAPACITY is also given
+    weapon.Features = EquipmentFeatures.GILDED; // Maybe 9, idk if DOUBLE_CAPACITY is also given
     weapon.ItemName = data.ItemName;
     weapon.XP = 0;
     if (data.Category != "OperatorAmps" && data.PolarizeSlot && data.PolarizeValue) {
