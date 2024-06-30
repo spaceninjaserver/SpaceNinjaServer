@@ -27,9 +27,6 @@ const getRewards = ({
     if (RewardInfo.node in ExportRegions) {
         const region = ExportRegions[RewardInfo.node];
         const rewardManifests = region.rewardManifests ?? [];
-        if (rewardManifests.length == 0) {
-            return { InventoryChanges: {}, MissionRewards: [] };
-        }
 
         let rotations: number[] = [];
         if (RewardInfo.VaultsCracked) {
