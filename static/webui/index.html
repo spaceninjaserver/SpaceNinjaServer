@@ -114,7 +114,7 @@
                     <div class="card-body">
                         <p>You can use these unlimited slots to apply a wide range of upgrades.</p>
                         <form class="input-group mb-3" onsubmit="doPushArchonCrystalUpgrade();return false;">
-                            <input type="number" id="archon-crystal-add-count" min="1" value="1" class="form-control" style="max-width:100px" />
+                            <input type="number" id="archon-crystal-add-count" min="1" max="10000" value="1" class="form-control" style="max-width:100px" />
                             <span class="input-group-text">x</span>
                             <input class="form-control" list="datalist-archonCrystalUpgrades" />
                             <button class="btn btn-primary" type="submit">Add</button>

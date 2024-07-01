@@ -10,11 +10,13 @@ export const pushArchonCrystalUpgradeController: RequestHandler = async (req, re
     if (suit) {
         suit.ArchonCrystalUpgrades ??= [];
         const count = (req.query.count as number | undefined) ?? 1;
-        for (let i = 0; i != count; ++i) {
-            suit.ArchonCrystalUpgrades.push({ UpgradeType: req.query.type as string });
+        if (count >= 1 && count <= 10000) {
+            for (let i = 0; i != count; ++i) {
+                suit.ArchonCrystalUpgrades.push({ UpgradeType: req.query.type as string });
+            }
+            await inventory.save();
+            res.end();
         }
-        await inventory.save();
-        res.end();
     }
     res.status(400).end();
 };
