@@ -64,6 +64,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
             case "/Lotus/Types/Items/MiscItems/WeaponPrimaryArcaneUnlocker":
             case "/Lotus/Types/Items/MiscItems/WeaponSecondaryArcaneUnlocker":
             case "/Lotus/Types/Items/MiscItems/WeaponMeleeArcaneUnlocker":
+            case "/Lotus/Types/Items/MiscItems/WeaponAmpArcaneUnlocker":
                 for (const item of inventory[payload.ItemCategory]) {
                     if (item._id.toString() == payload.ItemId.$oid) {
                         item.Features ??= 0;
