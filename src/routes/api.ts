@@ -24,7 +24,8 @@ import { getShipController } from "@/src/controllers/api/getShipController";
 import { getVendorInfoController } from "@/src/controllers/api/getVendorInfoController";
 import { giveKeyChainTriggeredItemsController } from "@/src/controllers/api/giveKeyChainTriggeredItemsController";
 import { giveKeyChainTriggeredMessageController } from "@/src/controllers/api/giveKeyChainTriggeredMessageController";
-import { guildTechController } from "@/src/controllers/api/guildTechController";
+import { gildWeaponController } from "@/src/controllers/api/gildWeaponController";
+import { guildTechController } from "../controllers/api/guildTechController";
 import { hostSessionController } from "@/src/controllers/api/hostSessionController";
 import { hubController } from "@/src/controllers/api/hubController";
 import { hubInstancesController } from "@/src/controllers/api/hubInstancesController";
@@ -58,6 +59,7 @@ import { startRecipeController } from "@/src/controllers/api/startRecipeControll
 import { stepSequencersController } from "@/src/controllers/api/stepSequencersController";
 import { surveysController } from "@/src/controllers/api/surveysController";
 import { syndicateSacrificeController } from "@/src/controllers/api/syndicateSacrificeController";
+import { tauntHistoryController } from "@/src/controllers/api/tauntHistoryController";
 import { trainingResultController } from "@/src/controllers/api/trainingResultController";
 import { unlockShipFeatureController } from "@/src/controllers/api/unlockShipFeatureController";
 import { updateChallengeProgressController } from "@/src/controllers/api/updateChallengeProgressController";
@@ -65,7 +67,6 @@ import { updateQuestController } from "@/src/controllers/api/updateQuestControll
 import { updateSessionGetController, updateSessionPostController } from "@/src/controllers/api/updateSessionController";
 import { updateThemeController } from "@/src/controllers/api/updateThemeController";
 import { upgradesController } from "@/src/controllers/api/upgradesController";
-import { gildWeaponController } from "@/src/controllers/api/gildWeaponController";
 
 const apiRouter = express.Router();
 
@@ -134,6 +135,7 @@ apiRouter.post("/startDojoRecipe.php", startDojoRecipeController);
 apiRouter.post("/startRecipe.php", startRecipeController);
 apiRouter.post("/stepSequencers.php", stepSequencersController);
 apiRouter.post("/syndicateSacrifice.php", syndicateSacrificeController);
+apiRouter.post("/tauntHistory.php", tauntHistoryController);
 apiRouter.post("/trainingResult.php", trainingResultController);
 apiRouter.post("/unlockShipFeature.php", unlockShipFeatureController);
 apiRouter.post("/updateChallengeProgress.php", updateChallengeProgressController);
