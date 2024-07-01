@@ -32,7 +32,7 @@ import {
     IFusionTreasure,
     ISpectreLoadout,
     IWeaponSkinDatabase,
-    ITauntHistory,
+    ITaunt,
     IPeriodicMissionCompletionDatabase,
     IPeriodicMissionCompletionResponse,
     ILoreFragmentScan,
@@ -533,7 +533,7 @@ weaponSkinsSchema.set("toJSON", {
     }
 });
 
-const tauntHistorySchema = new Schema<ITauntHistory>(
+const tauntSchema = new Schema<ITaunt>(
     {
         node: String,
         state: String
@@ -772,8 +772,8 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         //Ayatan Item
         FusionTreasures: [fusionTreasuresSchema],
-        //"node": "TreasureTutorial", "state": "TS_COMPLETED"
-        TauntHistory: [tauntHistorySchema],
+        //only used for Maroo apparently - { "node": "TreasureTutorial", "state": "TS_COMPLETED" }
+        TauntHistory: { type: [tauntSchema], default: undefined },
 
         //noShow2FA,VisitPrimeVault etc
         WebFlags: Schema.Types.Mixed,
