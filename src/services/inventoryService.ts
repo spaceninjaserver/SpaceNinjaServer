@@ -286,6 +286,25 @@ export const addItem = async (
                         }
                     }
                 }
+                case "Game":
+                    if (typeName.substr(1).split("/")[3] == "Projections") {
+                        // Void Relics, e.g. /Lotus/Types/Game/Projections/T2VoidProjectionGaussPrimeDBronze
+                        const inventory = await getInventory(accountId);
+                        const miscItemChanges = [
+                            {
+                                ItemType: typeName,
+                                ItemCount: quantity
+                            } satisfies IMiscItem
+                        ];
+                        addMiscItems(inventory, miscItemChanges);
+                        await inventory.save();
+                        return {
+                            InventoryChanges: {
+                                MiscItems: miscItemChanges
+                            }
+                        };
+                    }
+                    break;
                 case "Restoratives": // Codex Scanner, Remote Observer, Starburst
                     const inventory = await getInventory(accountId);
                     const consumablesChanges = [
