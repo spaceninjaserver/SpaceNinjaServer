@@ -11,6 +11,7 @@ import {
 } from "warframe-public-export-plus";
 import { IMissionInventoryUpdateRequest } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
+import { IRngResult, getRandomReward } from "@/src/services/rngService";
 
 // need reverse engineer rewardSeed, otherwise ingame displayed rotation reward will be different than added to db or displayed on mission end
 const getRewards = ({
@@ -23,7 +24,7 @@ const getRewards = ({
         return { InventoryChanges: {}, MissionRewards: [] };
     }
 
-    const drops: IReward[] = [];
+    const drops: IRngResult[] = [];
     if (RewardInfo.node in ExportRegions) {
         const region = ExportRegions[RewardInfo.node];
         const rewardManifests = region.rewardManifests ?? [];
@@ -117,21 +118,8 @@ const getRotations = (rotationCount: number): number[] => {
     return rotatedValues;
 };
 
-const getRandomRewardByChance = (data: IReward[]): IReward | undefined => {
-    if (data.length == 0) return;
-
-    const totalChance = data.reduce((sum, item) => sum + item.probability!, 0);
-    const randomValue = Math.random() * totalChance;
-
-    let cumulativeChance = 0;
-    for (const item of data) {
-        cumulativeChance += item.probability!;
-        if (randomValue <= cumulativeChance) {
-            return item;
-        }
-    }
-
-    return;
+const getRandomRewardByChance = (pool: IReward[]): IRngResult | undefined => {
+    return getRandomReward(pool as IRngResult[]); // As of TS 5.5, we will be able to handle this with .filter instead of 'as'.
 };
 
 const creditBundles: Record<string, number> = {
@@ -157,7 +145,7 @@ const fusionBundles: Record<string, number> = {
 };
 
 const formatRewardsToInventoryType = (
-    rewards: IReward[]
+    rewards: IRngResult[]
 ): { InventoryChanges: IMissionInventoryUpdateRequest; MissionRewards: IMissionRewardResponse[] } => {
     const InventoryChanges: IMissionInventoryUpdateRequest = {};
     const MissionRewards: IMissionRewardResponse[] = [];
