@@ -1,7 +1,13 @@
 import { parseSlotPurchaseName } from "@/src/helpers/purchaseHelpers";
 import { getSubstringFromKeyword } from "@/src/helpers/stringHelpers";
-import { addItem, addBooster, updateCurrency, updateSlots } from "@/src/services/inventoryService";
-import { IPurchaseRequest, SlotPurchase, IInventoryChanges, IBinChanges } from "@/src/types/purchaseTypes";
+import {
+    addItem,
+    addBooster,
+    combineInventoryChanges,
+    updateCurrency,
+    updateSlots
+} from "@/src/services/inventoryService";
+import { IPurchaseRequest, SlotPurchase, IInventoryChanges } from "@/src/types/purchaseTypes";
 import { logger } from "@/src/utils/logger";
 import { ExportBundles, ExportGear, TRarity } from "warframe-public-export-plus";
 
@@ -46,31 +52,6 @@ export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountI
     return purchaseResponse;
 };
 
-const addInventoryChanges = (InventoryChanges: IInventoryChanges, delta: IInventoryChanges): void => {
-    for (const key in delta) {
-        if (!(key in InventoryChanges)) {
-            InventoryChanges[key] = delta[key];
-        } else if (Array.isArray(delta[key])) {
-            const left = InventoryChanges[key] as object[];
-            const right = delta[key] as object[];
-            for (const item of right) {
-                left.push(item);
-            }
-        } else {
-            console.assert(key.substring(-3) == "Bin");
-            const left = InventoryChanges[key] as IBinChanges;
-            const right = delta[key] as IBinChanges;
-            left.count += right.count;
-            left.platinum += right.platinum;
-            left.Slots += right.Slots;
-            if (right.Extra) {
-                left.Extra ??= 0;
-                left.Extra += right.Extra;
-            }
-        }
-    }
-};
-
 const handleStoreItemAcquisition = async (
     storeItemName: string,
     accountId: string,
@@ -86,7 +67,7 @@ const handleStoreItemAcquisition = async (
         const bundle = ExportBundles[storeItemName];
         logger.debug("acquiring bundle", bundle);
         for (const component of bundle.components) {
-            addInventoryChanges(
+            combineInventoryChanges(
                 purchaseResponse.InventoryChanges,
                 (
                     await handleStoreItemAcquisition(

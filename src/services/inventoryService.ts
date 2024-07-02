@@ -2,7 +2,7 @@ import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import new_inventory from "@/static/fixed_responses/postTutorialInventory.json";
 import { config } from "@/src/services/configService";
 import { Types } from "mongoose";
-import { SlotNames, IInventoryChanges } from "@/src/types/purchaseTypes";
+import { SlotNames, IInventoryChanges, IBinChanges } from "@/src/types/purchaseTypes";
 import {
     IChallengeProgress,
     IConsumable,
@@ -56,6 +56,31 @@ export const createInventory = async (
             throw new Error(`error creating inventory" ${error.message}`);
         }
         throw new Error("error creating inventory that is not of instance Error");
+    }
+};
+
+export const combineInventoryChanges = (InventoryChanges: IInventoryChanges, delta: IInventoryChanges): void => {
+    for (const key in delta) {
+        if (!(key in InventoryChanges)) {
+            InventoryChanges[key] = delta[key];
+        } else if (Array.isArray(delta[key])) {
+            const left = InventoryChanges[key] as object[];
+            const right = delta[key] as object[];
+            for (const item of right) {
+                left.push(item);
+            }
+        } else {
+            console.assert(key.substring(-3) == "Bin");
+            const left = InventoryChanges[key] as IBinChanges;
+            const right = delta[key] as IBinChanges;
+            left.count += right.count;
+            left.platinum += right.platinum;
+            left.Slots += right.Slots;
+            if (right.Extra) {
+                left.Extra ??= 0;
+                left.Extra += right.Extra;
+            }
+        }
     }
 };
 
