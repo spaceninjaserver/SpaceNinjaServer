@@ -731,6 +731,7 @@ const uiConfigs = [
     "autoCreateAccount",
     "skipStoryModeChoice",
     "skipTutorial",
+    "skipAllDialogue",
     "unlockAllScans",
     "unlockAllMissions",
     "unlockAllQuests",

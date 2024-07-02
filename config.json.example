@@ -11,6 +11,7 @@
   "autoCreateAccount": true,
   "skipStoryModeChoice": true,
   "skipTutorial": true,
+  "skipAllDialogue": true,
   "unlockAllScans": true,
   "unlockAllMissions": true,
   "unlockAllQuests": true,
