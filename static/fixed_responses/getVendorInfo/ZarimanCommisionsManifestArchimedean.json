@@ -1,0 +1,75 @@
+{
+  "VendorInfo": {
+    "_id": { "$oid": "62a20ba667e5d3797540d831" },
+    "TypeName": "/Lotus/Types/Game/VendorManifests/Zariman/ZarimanCommisionsManifestArchimedean",
+    "ItemManifest": [
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Zariman/AchimedeanTaskE",
+        "ItemPrices": [
+          { "ItemType": "/Lotus/Types/Gameplay/Zariman/Resources/ZarimanMiscItemB", "ItemCount": 4, "ProductCategory": "MiscItems" },
+          { "ItemType": "/Lotus/Types/Gameplay/Zariman/Resources/ZarimanMiscItemA", "ItemCount": 6, "ProductCategory": "MiscItems" }
+        ],
+        "Bin": "BIN_4",
+        "QuantityMultiplier": 1,
+        "Expiry": { "$date": { "$numberLong": "9999999000000" } },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "Id": { "$oid": "6678b612aa3d8ee5c2597299" }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Zariman/AchimedeanTaskD",
+        "ItemPrices": [
+          { "ItemType": "/Lotus/Types/Gameplay/Zariman/Resources/ZarimanMiscItemA", "ItemCount": 5, "ProductCategory": "MiscItems" },
+          { "ItemType": "/Lotus/Types/Gameplay/Zariman/Resources/ZarimanMiscItemB", "ItemCount": 3, "ProductCategory": "MiscItems" }
+        ],
+        "Bin": "BIN_3",
+        "QuantityMultiplier": 1,
+        "Expiry": { "$date": { "$numberLong": "9999999000000" } },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "Id": { "$oid": "6678b612aa3d8ee5c259729a" }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Zariman/AchimedeanTaskC",
+        "ItemPrices": [
+          { "ItemType": "/Lotus/Types/Gameplay/Zariman/Resources/VoidWraithItem", "ItemCount": 15, "ProductCategory": "MiscItems" },
+          { "ItemType": "/Lotus/Types/Gameplay/Zariman/Resources/ZarimanDogTagUncommon", "ItemCount": 1, "ProductCategory": "MiscItems" }
+        ],
+        "Bin": "BIN_2",
+        "QuantityMultiplier": 1,
+        "Expiry": { "$date": { "$numberLong": "9999999000000" } },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "Id": { "$oid": "6678b612aa3d8ee5c259729b" }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Zariman/AchimedeanTaskB",
+        "ItemPrices": [
+          { "ItemType": "/Lotus/Types/Gameplay/Zariman/Resources/VoidWraithItem", "ItemCount": 4, "ProductCategory": "MiscItems" },
+          { "ItemType": "/Lotus/Types/Gameplay/Zariman/Resources/ZarimanMiscItemB", "ItemCount": 1, "ProductCategory": "MiscItems" }
+        ],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": { "$date": { "$numberLong": "9999999000000" } },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "Id": { "$oid": "6678b612aa3d8ee5c259729c" }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Zariman/AchimedeanTaskA",
+        "ItemPrices": [
+          { "ItemType": "/Lotus/Types/Gameplay/Zariman/Resources/ZarimanMiscItemB", "ItemCount": 1, "ProductCategory": "MiscItems" },
+          { "ItemType": "/Lotus/Types/Gameplay/Zariman/Resources/ZarimanMiscItemA", "ItemCount": 2, "ProductCategory": "MiscItems" }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": { "$date": { "$numberLong": "9999999000000" } },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "Id": { "$oid": "6678b612aa3d8ee5c259729d" }
+      }
+    ],
+    "PropertyTextHash": "F43F0ED811985EEF856970A8342EF322",
+    "Expiry": { "$date": { "$numberLong": "9999999000000" } }
+  }
+}
