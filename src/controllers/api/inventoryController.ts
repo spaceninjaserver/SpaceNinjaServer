@@ -47,8 +47,8 @@ const inventoryController: RequestHandler = async (request, response) => {
     if (config.skipAllDialogue) {
         inventoryResponse.TauntHistory = [
             {
-                "node": "TreasureTutorial",
-                "state": "TS_COMPLETED"
+                node: "TreasureTutorial",
+                state: "TS_COMPLETED"
             }
         ];
         for (const str of allDialogue) {
