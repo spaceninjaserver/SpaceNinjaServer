@@ -27,9 +27,16 @@ import {
 } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
 import { getWeaponType, getExalted } from "@/src/services/itemDataService";
+import { getRandomWeightedReward } from "@/src/services/rngService";
 import { ISyndicateSacrifice, ISyndicateSacrificeResponse } from "../types/syndicateTypes";
 import { IEquipmentClient } from "../types/inventoryTypes/commonInventoryTypes";
-import { ExportCustoms, ExportFlavour, ExportRecipes, ExportResources } from "warframe-public-export-plus";
+import {
+    ExportBoosterPacks,
+    ExportCustoms,
+    ExportFlavour,
+    ExportRecipes,
+    ExportResources
+} from "warframe-public-export-plus";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
@@ -145,6 +152,21 @@ export const addItem = async (
                 FlavourItems: [await addCustomization(typeName, accountId)]
             }
         };
+    }
+    if (typeName in ExportBoosterPacks) {
+        const pack = ExportBoosterPacks[typeName];
+        const InventoryChanges = {};
+        for (const weights of pack.rarityWeightsPerRoll) {
+            const result = getRandomWeightedReward(pack.components, weights);
+            if (result) {
+                logger.debug(`booster pack rolled`, result);
+                combineInventoryChanges(
+                    InventoryChanges,
+                    (await addItem(accountId, result.type, result.itemCount)).InventoryChanges
+                );
+            }
+        }
+        return { InventoryChanges };
     }
 
     // Path-based duck typing
