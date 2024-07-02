@@ -33,6 +33,7 @@ export interface ISaveLoadoutRequest {
     CurrentLoadOutIds: IOid[];
     ValidNewLoadoutId: string;
     EquippedGear: string[];
+    EquippedEmotes: string[];
     UseAdultOperatorLoadout: boolean;
 }
 

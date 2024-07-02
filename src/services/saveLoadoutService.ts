@@ -167,8 +167,9 @@ export const handleInventoryItemConfigChange = async (
                 inventory.CurrentLoadOutIds = loadoutIds;
                 break;
             }
-            case "EquippedGear": {
-                inventory.EquippedGear = equipment as string[];
+            case "EquippedGear":
+            case "EquippedEmotes": {
+                inventory[equipmentName] = equipment as string[];
                 break;
             }
             case "UseAdultOperatorLoadout": {
