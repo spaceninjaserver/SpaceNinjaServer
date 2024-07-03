@@ -187,7 +187,7 @@ const addRewardResponse = (
         InventoryChanges[InventoryCategory] = [];
     }
 
-    const existReward = InventoryChanges[InventoryCategory]!.find(item => item.ItemType === ItemType);
+    const existReward = InventoryChanges[InventoryCategory].find(item => item.ItemType === ItemType);
     if (existReward) {
         existReward.ItemCount += ItemCount;
         const missionReward = MissionRewards.find(missionReward => missionReward.TypeName === ItemType);
@@ -195,7 +195,7 @@ const addRewardResponse = (
             missionReward.ItemCount += ItemCount;
         }
     } else {
-        InventoryChanges[InventoryCategory]!.push({ ItemType, ItemCount });
+        InventoryChanges[InventoryCategory].push({ ItemType, ItemCount });
         MissionRewards.push({
             ItemCount,
             TweetText: ItemType, // ensure if/how this even still used, or if it's needed at all
