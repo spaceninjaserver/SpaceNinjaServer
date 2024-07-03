@@ -135,7 +135,7 @@ const creditBundles: Record<string, number> = {
     "/Lotus/StoreItems/Types/StoreItems/CreditBundles/Zariman/TableACreditsUncommon": 30000,
     "/Lotus/StoreItems/Types/PickUps/Credits/CorpusArenaCreditRewards/CorpusArenaRewardOneHard": 105000,
     "/Lotus/StoreItems/Types/PickUps/Credits/CorpusArenaCreditRewards/CorpusArenaRewardTwoHard": 175000,
-    "/Lotus/StoreItems/Types/PickUps/Credits/CorpusArenaCreditRewards/CorpusArenaRewardThreeHard": 25000
+    "/Lotus/StoreItems/Types/PickUps/Credits/CorpusArenaCreditRewards/CorpusArenaRewardThreeHard": 250000
 };
 
 const fusionBundles: Record<string, number> = {
