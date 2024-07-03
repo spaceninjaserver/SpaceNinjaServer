@@ -4,14 +4,13 @@
         "plugin:@typescript-eslint/recommended",
         "plugin:@typescript-eslint/recommended-requiring-type-checking"
     ],
-    "plugins": ["@typescript-eslint"],
+    "plugins": ["@typescript-eslint", "prettier"],
     "env": {
         "browser": true,
         "es6": true,
         "node": true
     },
     "rules": {
-        "@typescript-eslint/semi": "warn",
         "@typescript-eslint/explicit-function-return-type": "warn",
         "@typescript-eslint/explicit-module-boundary-types": "warn",
         "@typescript-eslint/restrict-template-expressions": "warn",
@@ -25,7 +24,9 @@
         "@typescript-eslint/no-explicit-any": "warn",
         "@typescript-eslint/no-loss-of-precision": "warn",
         "no-case-declarations": "warn",
-        "no-mixed-spaces-and-tabs": "warn"
+        "prettier/prettier": "error",
+        "@typescript-eslint/semi": "error",
+        "no-mixed-spaces-and-tabs": "error"
     },
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
