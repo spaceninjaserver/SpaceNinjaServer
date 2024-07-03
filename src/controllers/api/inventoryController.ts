@@ -6,7 +6,7 @@ import { config } from "@/src/services/configService";
 import allDialogue from "@/static/fixed_responses/allDialogue.json";
 import allMissions from "@/static/fixed_responses/allMissions.json";
 import { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
-import { IShipInventory, equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IInventoryDatabase, IShipInventory, equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IPolarity, ArtifactPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { ExportCustoms, ExportFlavour, ExportKeys, ExportResources } from "warframe-public-export-plus";
 
@@ -32,7 +32,7 @@ const inventoryController: RequestHandler = async (request, response) => {
     }
 
     //TODO: make a function that converts from database representation to client
-    const inventoryJSON = inventory.toJSON();
+    const inventoryJSON: IInventoryDatabase = inventory.toJSON();
     console.log(inventoryJSON.Ships);
 
     const inventoryResponse = toInventoryResponse(inventoryJSON);
