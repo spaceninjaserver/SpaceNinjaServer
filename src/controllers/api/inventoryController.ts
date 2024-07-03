@@ -21,9 +21,7 @@ const inventoryController: RequestHandler = async (request, response) => {
     }
 
     const inventory = await Inventory.findOne({ accountOwnerId: accountId })
-        .populate<{
-            LoadOutPresets: ILoadoutDatabase;
-        }>("LoadOutPresets")
+        .populate<{ LoadOutPresets: ILoadoutDatabase }>("LoadOutPresets")
         .populate<{ Ships: IShipInventory }>("Ships", "-ShipInteriorColors");
 
     if (!inventory) {
