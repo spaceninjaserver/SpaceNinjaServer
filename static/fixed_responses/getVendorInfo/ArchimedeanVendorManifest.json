@@ -1,0 +1,38 @@
+{
+  "VendorInfo": {
+    "_id": { "$oid": "62695b0467e5d379750f9f75" },
+    "TypeName": "/Lotus/Types/Game/VendorManifests/Zariman/ArchimedeanVendorManifest",
+    "ItemManifest": [
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/ShipDecos/VoidPlumeAOrnament",
+        "ItemPrices": [{ "ItemCount": 1, "ItemType": "/Lotus/Types/Gameplay/Zariman/Resources/VoidAngelItem", "ProductCategory": "MiscItems" }],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": { "$date": { "$numberLong": "9999999000000" } },
+        "AllowMultipurchase": true,
+        "Id": { "$oid": "63ed01ef4c37f93d0b797826" }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/ShipDecos/VoidPlumeBOrnament",
+        "ItemPrices": [{ "ItemCount": 1, "ItemType": "/Lotus/Types/Gameplay/Zariman/Resources/VoidAngelItem", "ProductCategory": "MiscItems" }],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": { "$date": { "$numberLong": "9999999000000" } },
+        "AllowMultipurchase": true,
+        "Id": { "$oid": "63ed01ef4c37f93d0b797827" }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/MiscItems/Kuva",
+        "ItemPrices": [{ "ItemCount": 5, "ItemType": "/Lotus/Types/Gameplay/Zariman/Resources/VoidAngelItem", "ProductCategory": "MiscItems" }],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 35000,
+        "Expiry": { "$date": { "$numberLong": "9999999000000" } },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "Id": { "$oid": "66664112af1177b5070ab882" }
+      }
+    ],
+    "PropertyTextHash": "DB7BF03C3FE6D0036A4DC30066A9A17E",
+    "Expiry": { "$date": { "$numberLong": "9999999000000" } }
+  }
+}
