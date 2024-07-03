@@ -16,7 +16,8 @@ import {
     InventorySlot,
     IWeaponSkinClient,
     TEquipmentKey,
-    equipmentKeys
+    equipmentKeys,
+    IFusionTreasure
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate } from "../types/genericUpdate";
 import {
@@ -650,6 +651,26 @@ export const addMods = (inventory: IInventoryDatabaseDocument, itemsArray: IRawU
     });
 };
 
+export const addFusionTreasures = (
+    inventory: IInventoryDatabaseDocument,
+    itemsArray: IFusionTreasure[] | undefined
+) => {
+    const { FusionTreasures } = inventory;
+    itemsArray?.forEach(({ ItemType, ItemCount, Sockets }) => {
+        const itemIndex = FusionTreasures.findIndex(i => {
+            i.ItemType === ItemType;
+            i.Sockets === Sockets;
+        });
+
+        if (itemIndex !== -1) {
+            FusionTreasures[itemIndex].ItemCount += ItemCount;
+            inventory.markModified(`FusionTreasures.${itemIndex}.ItemCount`);
+        } else {
+            FusionTreasures.push({ ItemCount, ItemType, Sockets });
+        }
+    });
+};
+
 export const updateChallengeProgress = async (challenges: IUpdateChallengeProgressRequest, accountId: string) => {
     const inventory = await getInventory(accountId);
 
@@ -704,8 +725,17 @@ const addMissionComplete = (inventory: IInventoryDatabaseDocument, { Tag, Comple
 };
 
 export const missionInventoryUpdate = async (data: IMissionInventoryUpdateRequest, accountId: string) => {
-    const { RawUpgrades, MiscItems, RegularCredits, ChallengeProgress, FusionPoints, Consumables, Recipes, Missions } =
-        data;
+    const {
+        RawUpgrades,
+        MiscItems,
+        RegularCredits,
+        ChallengeProgress,
+        FusionPoints,
+        Consumables,
+        Recipes,
+        Missions,
+        FusionTreasures
+    } = data;
     const inventory = await getInventory(accountId);
 
     // credits
@@ -762,6 +792,7 @@ export const missionInventoryUpdate = async (data: IMissionInventoryUpdateReques
     addConsumables(inventory, Consumables);
     addRecipes(inventory, Recipes);
     addChallenges(inventory, ChallengeProgress);
+    addFusionTreasures(inventory, FusionTreasures);
     if (Missions) {
         addMissionComplete(inventory, Missions);
     }
