@@ -12,7 +12,8 @@ import {
     IRawUpgrade,
     ISeasonChallenge,
     TSolarMapRegion,
-    TEquipmentKey
+    TEquipmentKey,
+    IFusionTreasure
 } from "./inventoryTypes/inventoryTypes";
 
 export interface IArtifactsRequest {
@@ -61,6 +62,7 @@ export interface IMissionInventoryUpdateRequest {
     RawUpgrades?: IRawUpgrade[];
     MiscItems?: IMiscItem[];
     Consumables?: IConsumable[];
+    FusionTreasures?: IFusionTreasure[];
     Recipes?: IConsumable[];
     RegularCredits?: number;
     ChallengeProgress?: IChallengeProgress[];
