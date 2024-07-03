@@ -2,7 +2,7 @@ import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import new_inventory from "@/static/fixed_responses/postTutorialInventory.json";
 import { config } from "@/src/services/configService";
 import { Types } from "mongoose";
-import { SlotNames, IInventoryChanges } from "@/src/types/purchaseTypes";
+import { SlotNames, IInventoryChanges, IBinChanges } from "@/src/types/purchaseTypes";
 import {
     IChallengeProgress,
     IConsumable,
@@ -27,9 +27,16 @@ import {
 } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
 import { getWeaponType, getExalted } from "@/src/services/itemDataService";
+import { getRandomWeightedReward } from "@/src/services/rngService";
 import { ISyndicateSacrifice, ISyndicateSacrificeResponse } from "../types/syndicateTypes";
 import { IEquipmentClient } from "../types/inventoryTypes/commonInventoryTypes";
-import { ExportCustoms, ExportFlavour, ExportRecipes, ExportResources } from "warframe-public-export-plus";
+import {
+    ExportBoosterPacks,
+    ExportCustoms,
+    ExportFlavour,
+    ExportRecipes,
+    ExportResources
+} from "warframe-public-export-plus";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
@@ -56,6 +63,31 @@ export const createInventory = async (
             throw new Error(`error creating inventory" ${error.message}`);
         }
         throw new Error("error creating inventory that is not of instance Error");
+    }
+};
+
+export const combineInventoryChanges = (InventoryChanges: IInventoryChanges, delta: IInventoryChanges): void => {
+    for (const key in delta) {
+        if (!(key in InventoryChanges)) {
+            InventoryChanges[key] = delta[key];
+        } else if (Array.isArray(delta[key])) {
+            const left = InventoryChanges[key] as object[];
+            const right = delta[key] as object[];
+            for (const item of right) {
+                left.push(item);
+            }
+        } else {
+            console.assert(key.substring(-3) == "Bin");
+            const left = InventoryChanges[key] as IBinChanges;
+            const right = delta[key] as IBinChanges;
+            left.count += right.count;
+            left.platinum += right.platinum;
+            left.Slots += right.Slots;
+            if (right.Extra) {
+                left.Extra ??= 0;
+                left.Extra += right.Extra;
+            }
+        }
     }
 };
 
@@ -120,6 +152,21 @@ export const addItem = async (
                 FlavourItems: [await addCustomization(typeName, accountId)]
             }
         };
+    }
+    if (typeName in ExportBoosterPacks) {
+        const pack = ExportBoosterPacks[typeName];
+        const InventoryChanges = {};
+        for (const weights of pack.rarityWeightsPerRoll) {
+            const result = getRandomWeightedReward(pack.components, weights);
+            if (result) {
+                logger.debug(`booster pack rolled`, result);
+                combineInventoryChanges(
+                    InventoryChanges,
+                    (await addItem(accountId, result.type, result.itemCount)).InventoryChanges
+                );
+            }
+        }
+        return { InventoryChanges };
     }
 
     // Path-based duck typing
@@ -261,6 +308,25 @@ export const addItem = async (
                         }
                     }
                 }
+                case "Game":
+                    if (typeName.substr(1).split("/")[3] == "Projections") {
+                        // Void Relics, e.g. /Lotus/Types/Game/Projections/T2VoidProjectionGaussPrimeDBronze
+                        const inventory = await getInventory(accountId);
+                        const miscItemChanges = [
+                            {
+                                ItemType: typeName,
+                                ItemCount: quantity
+                            } satisfies IMiscItem
+                        ];
+                        addMiscItems(inventory, miscItemChanges);
+                        await inventory.save();
+                        return {
+                            InventoryChanges: {
+                                MiscItems: miscItemChanges
+                            }
+                        };
+                    }
+                    break;
                 case "Restoratives": // Codex Scanner, Remote Observer, Starburst
                     const inventory = await getInventory(accountId);
                     const consumablesChanges = [
