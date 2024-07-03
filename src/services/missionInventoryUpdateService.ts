@@ -119,7 +119,7 @@ const getRotations = (rotationCount: number): number[] => {
 };
 
 const getRandomRewardByChance = (pool: IReward[]): IRngResult | undefined => {
-    return getRandomReward(pool as IRngResult[]); // As of TS 5.5, we will be able to handle this with .filter instead of 'as'.
+    return getRandomReward(pool as IRngResult[]);
 };
 
 const creditBundles: Record<string, number> = {
