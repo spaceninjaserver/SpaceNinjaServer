@@ -177,7 +177,7 @@ export interface IInventoryResponse {
     CompletedAlerts: string[];
     Consumables: IConsumable[];
     LevelKeys: IConsumable[];
-    TauntHistory: ITauntHistory[];
+    TauntHistory?: ITaunt[];
     StoryModeChoice: string;
     PeriodicMissionCompletions: IPeriodicMissionCompletionDatabase[];
     KubrowPetEggs: IKubrowPetEgg[];
@@ -888,9 +888,9 @@ export interface INotePacks {
     PERCUSSION: string;
 }
 
-export interface ITauntHistory {
+export interface ITaunt {
     node: string;
-    state: string;
+    state: "TS_UNLOCKED" | "TS_COMPLETED";
 }
 
 export interface IWeaponSkinDatabase {

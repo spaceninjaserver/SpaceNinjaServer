@@ -3,9 +3,10 @@ import { getAccountIdForRequest } from "@/src/services/loginService";
 import { toInventoryResponse } from "@/src/helpers/inventoryHelpers";
 import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { config } from "@/src/services/configService";
+import allDialogue from "@/static/fixed_responses/allDialogue.json";
 import allMissions from "@/static/fixed_responses/allMissions.json";
 import { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
-import { IShipInventory, equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IInventoryDatabase, IShipInventory, equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IPolarity, ArtifactPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { ExportCustoms, ExportFlavour, ExportKeys, ExportResources } from "warframe-public-export-plus";
 
@@ -20,9 +21,7 @@ const inventoryController: RequestHandler = async (request, response) => {
     }
 
     const inventory = await Inventory.findOne({ accountOwnerId: accountId })
-        .populate<{
-            LoadOutPresets: ILoadoutDatabase;
-        }>("LoadOutPresets")
+        .populate<{ LoadOutPresets: ILoadoutDatabase }>("LoadOutPresets")
         .populate<{ Ships: IShipInventory }>("Ships", "-ShipInteriorColors");
 
     if (!inventory) {
@@ -31,7 +30,7 @@ const inventoryController: RequestHandler = async (request, response) => {
     }
 
     //TODO: make a function that converts from database representation to client
-    const inventoryJSON = inventory.toJSON();
+    const inventoryJSON: IInventoryDatabase = inventory.toJSON();
     console.log(inventoryJSON.Ships);
 
     const inventoryResponse = toInventoryResponse(inventoryJSON);
@@ -43,9 +42,21 @@ const inventoryController: RequestHandler = async (request, response) => {
         inventoryResponse.PremiumCredits = 999999999;
     }
 
+    if (config.skipAllDialogue) {
+        inventoryResponse.TauntHistory = [
+            {
+                node: "TreasureTutorial",
+                state: "TS_COMPLETED"
+            }
+        ];
+        for (const str of allDialogue) {
+            addString(inventoryResponse.NodeIntrosCompleted, str);
+        }
+    }
+
     if (config.unlockAllMissions) {
         inventoryResponse.Missions = allMissions;
-        inventoryResponse.NodeIntrosCompleted.push("TeshinHardModeUnlocked");
+        addString(inventoryResponse.NodeIntrosCompleted, "TeshinHardModeUnlocked");
     }
 
     if (config.unlockAllQuests) {
@@ -73,7 +84,7 @@ const inventoryController: RequestHandler = async (request, response) => {
         inventoryResponse.ArchwingEnabled = true;
 
         // Skip "Watch The Maker"
-        inventoryResponse.NodeIntrosCompleted.push("/Lotus/Levels/Cinematics/NewWarIntro/NewWarStageTwo.level");
+        addString(inventoryResponse.NodeIntrosCompleted, "/Lotus/Levels/Cinematics/NewWarIntro/NewWarStageTwo.level");
     }
 
     if (config.unlockAllShipDecorations) {
@@ -140,6 +151,12 @@ const inventoryController: RequestHandler = async (request, response) => {
     inventoryResponse.NextRefill = { $date: { $numberLong: "9999999999999" } };
 
     response.json(inventoryResponse);
+};
+
+const addString = (arr: string[], str: string): void => {
+    if (!arr.find(x => x == str)) {
+        arr.push(str);
+    }
 };
 
 const getExpRequiredForMr = (rank: number): number => {

@@ -13,6 +13,7 @@ import {
 } from "warframe-public-export-plus";
 import { IMissionInventoryUpdateRequest } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
+import { IRngResult, getRandomReward } from "@/src/services/rngService";
 
 // need reverse engineer rewardSeed, otherwise ingame displayed rotation reward will be different than added to db or displayed on mission end
 const getRewards = ({
@@ -25,7 +26,7 @@ const getRewards = ({
         return { InventoryChanges: {}, MissionRewards: [] };
     }
 
-    const drops: IReward[] = [];
+    const drops: IRngResult[] = [];
     if (RewardInfo.node in ExportRegions) {
         const region = ExportRegions[RewardInfo.node];
         const rewardManifests = region.rewardManifests ?? [];
@@ -127,21 +128,8 @@ const getRotations = (rotationCount: number): number[] => {
     return rotatedValues;
 };
 
-const getRandomRewardByChance = (data: IReward[]): IReward | undefined => {
-    if (data.length == 0) return;
-
-    const totalChance = data.reduce((sum, item) => sum + item.probability!, 0);
-    const randomValue = Math.random() * totalChance;
-
-    let cumulativeChance = 0;
-    for (const item of data) {
-        cumulativeChance += item.probability!;
-        if (randomValue <= cumulativeChance) {
-            return item;
-        }
-    }
-
-    return;
+const getRandomRewardByChance = (pool: IReward[]): IRngResult | undefined => {
+    return getRandomReward(pool as IRngResult[]);
 };
 
 const creditBundles: Record<string, number> = {
@@ -157,7 +145,7 @@ const creditBundles: Record<string, number> = {
     "/Lotus/StoreItems/Types/StoreItems/CreditBundles/Zariman/TableACreditsUncommon": 30000,
     "/Lotus/StoreItems/Types/PickUps/Credits/CorpusArenaCreditRewards/CorpusArenaRewardOneHard": 105000,
     "/Lotus/StoreItems/Types/PickUps/Credits/CorpusArenaCreditRewards/CorpusArenaRewardTwoHard": 175000,
-    "/Lotus/StoreItems/Types/PickUps/Credits/CorpusArenaCreditRewards/CorpusArenaRewardThreeHard": 25000
+    "/Lotus/StoreItems/Types/PickUps/Credits/CorpusArenaCreditRewards/CorpusArenaRewardThreeHard": 250000
 };
 
 const fusionBundles: Record<string, number> = {
@@ -167,7 +155,7 @@ const fusionBundles: Record<string, number> = {
 };
 
 const formatRewardsToInventoryType = (
-    rewards: IReward[]
+    rewards: IRngResult[]
 ): { InventoryChanges: IMissionInventoryUpdateRequest; MissionRewards: IMissionRewardResponse[] } => {
     const InventoryChanges: IMissionInventoryUpdateRequest = {};
     const MissionRewards: IMissionRewardResponse[] = [];
@@ -211,7 +199,7 @@ const addRewardResponse = (
         InventoryChanges[InventoryCategory] = [];
     }
 
-    const existReward = InventoryChanges[InventoryCategory]!.find(item => item.ItemType === ItemType);
+    const existReward = InventoryChanges[InventoryCategory].find(item => item.ItemType === ItemType);
     if (existReward) {
         existReward.ItemCount += ItemCount;
         const missionReward = MissionRewards.find(missionReward => missionReward.TypeName === ItemType);
@@ -219,7 +207,7 @@ const addRewardResponse = (
             missionReward.ItemCount += ItemCount;
         }
     } else {
-        InventoryChanges[InventoryCategory]!.push({ ItemType, ItemCount });
+        InventoryChanges[InventoryCategory].push({ ItemType, ItemCount });
         MissionRewards.push({
             ItemCount,
             TweetText: ItemType, // ensure if/how this even still used, or if it's needed at all

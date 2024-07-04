@@ -1,21 +1,21 @@
 {
   "Events": [
     {
+      "Msg": "Join the OpenWF Discord!",
       "Messages": [
-        { "LanguageCode": "en", "Message": "Join the OpenWF Discord!" },
-        { "LanguageCode": "fr", "Message": "Join the OpenWF Discord!" },
-        { "LanguageCode": "it", "Message": "Join the OpenWF Discord!" },
-        { "LanguageCode": "de", "Message": "Join the OpenWF Discord!" },
-        { "LanguageCode": "es", "Message": "Join the OpenWF Discord!" },
-        { "LanguageCode": "pt", "Message": "Join the OpenWF Discord!" },
-        { "LanguageCode": "ru", "Message": "Join the OpenWF Discord!" },
-        { "LanguageCode": "pl", "Message": "Join the OpenWF Discord!" },
-        { "LanguageCode": "uk", "Message": "Join the OpenWF Discord!" },
-        { "LanguageCode": "tr", "Message": "Join the OpenWF Discord!" },
-        { "LanguageCode": "ja", "Message": "Join the OpenWF Discord!" },
-        { "LanguageCode": "zh", "Message": "Join the OpenWF Discord!" },
-        { "LanguageCode": "ko", "Message": "Join the OpenWF Discord!" },
-        { "LanguageCode": "tc", "Message": "Join the OpenWF Discord!" }
+        { "LanguageCode": "fr", "Message": "Rejoignez le Discord OpenWF!" },
+        { "LanguageCode": "it", "Message": "Unisciti al Discord di OpenWF!" },
+        { "LanguageCode": "de", "Message": "Tritt dem OpenWF Discord bei!" },
+        { "LanguageCode": "es", "Message": "Únete al Discord de OpenWF!" },
+        { "LanguageCode": "pt", "Message": "Junte-se ao Discord do OpenWF!" },
+        { "LanguageCode": "ru", "Message": "Присоединяйтесь к OpenWF Discord!" },
+        { "LanguageCode": "pl", "Message": "Dołącz do Discord OpenWF!" },
+        { "LanguageCode": "uk", "Message": "Приєднуйтесь до OpenWF Discord!" },
+        { "LanguageCode": "tr", "Message": "OpenWF Discord'a katıl!" },
+        { "LanguageCode": "ja", "Message": "OpenWFのDiscordに参加しよう！" },
+        { "LanguageCode": "zh", "Message": "加入OpenWF Discord!" },
+        { "LanguageCode": "ko", "Message": "OpenWF Discord에 가입하세요!" },
+        { "LanguageCode": "tc", "Message": "加入OpenWF Discord!" }
       ],
       "Prop": "https://discord.gg/PNNZ3asUuY",
       "Icon": "/Lotus/Interface/Icons/DiscordIconNoBacker.png"

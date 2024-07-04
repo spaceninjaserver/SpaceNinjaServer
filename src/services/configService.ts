@@ -28,6 +28,7 @@ interface IConfig {
     autoCreateAccount?: boolean;
     skipStoryModeChoice?: boolean;
     skipTutorial?: boolean;
+    skipAllDialogue?: boolean;
     unlockAllScans?: boolean;
     unlockAllMissions?: boolean;
     unlockAllQuests?: boolean;
