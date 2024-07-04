@@ -240,7 +240,7 @@ export const addItem = async (
             await inventory.save();
             return {
                 InventoryChanges: {
-                    ShipDecorations: changes
+                    RawUpgrades: changes
                 }
             };
         }
