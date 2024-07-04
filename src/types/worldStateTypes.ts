@@ -1,4 +1,5 @@
 import { IOid } from "@/src/types/commonTypes";
+import { Document, ObjectId } from "mongoose";
 
 export interface IMessage {
     LanguageCode?: string;
@@ -55,6 +56,7 @@ export interface IMission {
 
 export interface IEvent {
     Messages: IMessage[];
+    Msg?: string;
     Prop?: string;
     ImageUrl?: string;
     Links?: ILink[];
@@ -327,7 +329,7 @@ export interface IWorldState {
     SeasonInfo: ISeasonInfo;
     Tmp?: string;
 
-    // Unkown
+    // Unknown
     // HubEvent?: [];
     // PersistentEnemies?: [];
     // PVPAlternativeModes?: [];
@@ -335,4 +337,8 @@ export interface IWorldState {
     // ConstructionProjects?: [];
     // TwitchPromos?: [];
     // ExperimentRecommended?: [];
+}
+
+export interface IWorldStateDocument extends IWorldState, Document {
+    _id: ObjectId;
 }
