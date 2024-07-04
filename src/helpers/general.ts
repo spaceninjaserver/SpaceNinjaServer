@@ -33,7 +33,7 @@ const parseNumber = (data: unknown): number => {
     return Number(data);
 };
 
-const isDate = (date: string) => {
+const isDate = (date: string): string => {
     if (!Date.parse(date)) {
         throw new Error("invalid date");
     }
@@ -72,15 +72,6 @@ export const isObject = (objectCandidate: unknown): objectCandidate is Record<st
         objectCandidate !== null &&
         !Array.isArray(objectCandidate)
     );
-};
-
-export const getRandomNumber = (min: number, max: number) => {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-};
-
-export const getRandomKey = (keys: string[]) => {
-    const randomIndex = Math.floor(Math.random() * keys.length);
-    return keys[randomIndex];
 };
 
 export { isString, isNumber, parseString, parseNumber, parseDateNumber, parseBoolean, parseEmail };

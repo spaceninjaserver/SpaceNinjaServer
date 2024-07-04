@@ -4,6 +4,7 @@ import buildConfig from "@/static/data/buildConfig.json";
 import { config } from "@/src/services/configService";
 import { getWorldState } from "@/src/services/worldStateService";
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 const worldStateController: RequestHandler = async (_req, res) => {
     let ws: { [k: string]: any } = {};
     if (config.useStaticWorldState) {
@@ -11,7 +12,7 @@ const worldStateController: RequestHandler = async (_req, res) => {
         ws.BuildLabel = buildConfig.buildLabel;
         ws.Time = Math.round(Date.now() / 1000);
     } else {
-        ws = await getWorldState();
+        ws = (await getWorldState()).toJSON();
         ws.BuildLabel = buildConfig.buildLabel;
         ws.Time = Math.round(Date.now() / 1000);
     }

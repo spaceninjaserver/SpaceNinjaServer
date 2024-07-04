@@ -8,7 +8,6 @@ import {
     IPVPChallengeInstance,
     ICategory,
     IPVPChallengeInstanceParam,
-    IWorldState,
     IMission,
     IAlert,
     ICountedItems,
@@ -34,7 +33,8 @@ import {
     IEndlessXpChoice,
     IFeaturedGuild,
     IActiveChallenge,
-    ISeasonInfo
+    ISeasonInfo,
+    IWorldStateDocument
 } from "@/src/types/worldStateTypes";
 
 const messageSchema = new Schema<IMessage>(
@@ -55,6 +55,7 @@ const linkSchema = new Schema<ILink>(
 
 const EventSchema = new Schema<IEvent>({
     Messages: [messageSchema],
+    Msg: String,
     Prop: String,
     Links: [linkSchema],
     Date: Number,
@@ -485,7 +486,7 @@ const EndlessXpChoiceSchema = new Schema<IEndlessXpChoice>(
     { _id: false }
 );
 
-const FeaturedGuildShema = new Schema<IFeaturedGuild>({
+const FeaturedGuildSchema = new Schema<IFeaturedGuild>({
     Name: String,
     Tier: Number,
     Emblem: Boolean,
@@ -493,7 +494,7 @@ const FeaturedGuildShema = new Schema<IFeaturedGuild>({
     AllianceId: Schema.Types.ObjectId
 });
 
-FeaturedGuildShema.set("toJSON", {
+FeaturedGuildSchema.set("toJSON", {
     transform(_document, returnedObject) {
         returnedObject._id = { $oid: returnedObject._id.toString() };
     }
@@ -536,7 +537,7 @@ SeasonInfoSchema.set("toJSON", {
     }
 });
 
-const WorldStateSchema = new Schema<IWorldState>({
+const WorldStateSchema = new Schema<IWorldStateDocument>({
     Events: [EventSchema],
     // Goals: [GoalSchema],
     Alerts: [AlertSchema],
@@ -558,7 +559,7 @@ const WorldStateSchema = new Schema<IWorldState>({
     PVPChallengeInstances: [PVPChallengeInstanceSchema],
     ProjectPct: [Number],
     EndlessXpChoices: [EndlessXpChoiceSchema],
-    FeaturedGuilds: [FeaturedGuildShema],
+    FeaturedGuilds: [FeaturedGuildSchema],
     SeasonInfo: SeasonInfoSchema,
     Tmp: String
 });
@@ -570,4 +571,4 @@ WorldStateSchema.set("toJSON", {
     }
 });
 
-export const WorldState = model<IWorldState>("WorldState", WorldStateSchema);
+export const WorldState = model<IWorldStateDocument>("WorldState", WorldStateSchema);

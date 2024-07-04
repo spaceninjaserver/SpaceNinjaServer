@@ -8,11 +8,10 @@ import {
     ISortie,
     ISyndicateMission,
     IVoidStorm,
-    IWorldState
+    IWorldStateDocument
 } from "@/src/types/worldStateTypes";
-import { getRandomNumber, getRandomKey } from "@/src/helpers/general";
-import { getRandomNodes, getCurrentRotation } from "@/src/helpers/worldstateHelpers";
-import { ExportRailjack, ExportRegions, ExportNightwave } from "warframe-public-export-plus";
+import { getRandomNodes, getCurrentRotation, getRandomRotation } from "@/src/helpers/worldstateHelpers";
+import { ExportRegions, ExportNightwave } from "warframe-public-export-plus";
 import { logger } from "@/src/utils/logger";
 import {
     factionSyndicates,
@@ -23,9 +22,8 @@ import {
     CertusNarmerJobs,
     EntratiNormalJobs,
     missionIndexToMissionTypes,
-    validFisureMissionIndex,
+    validFissureMissionIndex,
     omniaNodes,
-    liteSortiesBosses,
     endStates,
     modifierTypes,
     voidTiers,
@@ -33,44 +31,50 @@ import {
     FortunaNormalJobs,
     liteSortiesMissionIndex,
     EntratiEndlessJobs,
-    normalCircutRotations,
-    hardCircutRotations
+    normalCircuitRotations,
+    hardCircuitRotations,
+    liteSortiesBosses
 } from "@/src/constants/worldStateConstants";
 
-export const createWorldState = async () => {
-    const worldState = new WorldState();
-    await worldState.save();
-    await updateSyndicateMissions();
-    await updateVoidFisures();
-    await updateSorties();
-    await updateCircuit();
-    await updateNigthWave();
-    await updateNodeOverrides();
-    return worldState;
+export const createWorldState = () => {
+    let ws = new WorldState() as IWorldStateDocument;
+    ws = updateSyndicateMissions(ws);
+    ws = updateVoidFissures(ws);
+    ws = updateSorties(ws);
+    ws = updateCircuit(ws);
+    ws = updateNightWave(ws);
+    ws = updateNodeOverrides(ws);
+    return ws;
 };
 
 export const getWorldState = async () => {
     let ws = await WorldState.findOne();
     if (!ws) {
-        ws = await createWorldState();
+        ws = createWorldState();
     }
-    return ws.toJSON();
+    return ws as IWorldStateDocument;
 };
 
 export const worldStateRunner = async () => {
     await getWorldState();
     setInterval(async () => {
-        logger.info("Update worldState");
-        await updateSyndicateMissions();
-        await updateVoidFisures();
-        await updateSorties();
-        await updateCircuit();
-        await updateNigthWave();
-        await updateNodeOverrides();
+        try {
+            logger.info("Update worldState");
+            let ws = await getWorldState();
+            ws = updateSyndicateMissions(ws);
+            ws = updateVoidFissures(ws);
+            ws = updateSorties(ws);
+            ws = updateCircuit(ws);
+            ws = updateNightWave(ws);
+            ws = updateNodeOverrides(ws);
+            await ws.save();
+        } catch (error) {
+            logger.error("Failed to update worldState:", error);
+        }
     }, unixTimesInMs.minute);
 };
 
-const updateSyndicateMissions = async (): Promise<IWorldState> => {
+const updateSyndicateMissions = (ws: IWorldStateDocument) => {
     const currentDate = Date.now();
     const oneDayIntervalStart =
         Math.floor(currentDate / unixTimesInMs.day) * unixTimesInMs.day + 16 * unixTimesInMs.hour;
@@ -79,12 +83,9 @@ const updateSyndicateMissions = async (): Promise<IWorldState> => {
     const neutralJobsIntervalStart = Math.floor(currentDate / (2.5 * unixTimesInMs.hour)) * (2.5 * unixTimesInMs.hour);
     const neutralJobsIntervalEnd = neutralJobsIntervalStart + 2.5 * unixTimesInMs.hour;
 
-    const neutralSeed = getRandomNumber(1, 99999);
+    const neutralSeed = Math.floor(Math.random() * 99999 + 1);
 
     try {
-        const ws = await WorldState.findOne();
-        if (!ws) throw new Error("Missing worldState");
-
         const syndicateArray = ws.SyndicateMissions || [];
 
         const existingTags = syndicateArray.map(syndicate => syndicate.Tag);
@@ -94,7 +95,7 @@ const updateSyndicateMissions = async (): Promise<IWorldState> => {
                 case factionSyndicates.includes(tag):
                     return {
                         Tag: tag,
-                        Seed: getRandomNumber(1, 99999),
+                        Seed: Math.floor(Math.random() * 99999 + 1),
                         Nodes: getRandomNodes(7),
                         Activation: oneDayIntervalStart,
                         Expiry: oneDayIntervalEnd
@@ -119,7 +120,7 @@ const updateSyndicateMissions = async (): Promise<IWorldState> => {
                 case restSyndicates.includes(tag):
                     return {
                         Tag: tag,
-                        Seed: getRandomNumber(1, 99999),
+                        Seed: Math.floor(Math.random() * 99999 + 1),
                         Nodes: [],
                         Activation: oneDayIntervalStart,
                         Expiry: oneDayIntervalEnd
@@ -143,7 +144,7 @@ const updateSyndicateMissions = async (): Promise<IWorldState> => {
                         Seed:
                             neutralJobsSyndicates.includes(tag) || neutralSyndicates.includes(tag)
                                 ? neutralSeed
-                                : getRandomNumber(1, 99999),
+                                : Math.floor(Math.random() * 99999 + 1),
                         Nodes:
                             neutralJobsSyndicates.includes(tag) || neutralSyndicates.includes(tag)
                                 ? []
@@ -164,21 +165,20 @@ const updateSyndicateMissions = async (): Promise<IWorldState> => {
 
         ws.SyndicateMissions = syndicateArray;
 
-        await ws.save();
         return ws;
     } catch (error) {
         throw new Error(`Error while updating Syndicates ${error}`);
     }
 };
 
-const getJobs = (tag: string) => {
-    const rotration = getCurrentRotation();
+const getJobs = (tag: string): IJob[] => {
+    const rotation = getCurrentRotation();
     switch (tag) {
         case "CetusSyndicate":
-            const CertusJobs: IJob[] = [
+            return [
                 {
                     jobType: CertusNormalJobs[Math.floor(Math.random() * CertusNormalJobs.length)],
-                    rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierATable${rotration}Rewards`,
+                    rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierATable${rotation}Rewards`,
                     masteryReq: 0,
                     minEnemyLevel: 5,
                     maxEnemyLevel: 15,
@@ -186,7 +186,7 @@ const getJobs = (tag: string) => {
                 },
                 {
                     jobType: CertusNormalJobs[Math.floor(Math.random() * CertusNormalJobs.length)],
-                    rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierBTable${rotration}Rewards`,
+                    rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierBTable${rotation}Rewards`,
                     masteryReq: 1,
                     minEnemyLevel: 10,
                     maxEnemyLevel: 30,
@@ -194,7 +194,7 @@ const getJobs = (tag: string) => {
                 },
                 {
                     jobType: CertusNormalJobs[Math.floor(Math.random() * CertusNormalJobs.length)],
-                    rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierCTable${rotration}Rewards`,
+                    rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierCTable${rotation}Rewards`,
                     masteryReq: 2,
                     minEnemyLevel: 20,
                     maxEnemyLevel: 40,
@@ -202,7 +202,7 @@ const getJobs = (tag: string) => {
                 },
                 {
                     jobType: CertusNormalJobs[Math.floor(Math.random() * CertusNormalJobs.length)],
-                    rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierDTable${rotration}Rewards`,
+                    rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierDTable${rotation}Rewards`,
                     masteryReq: 3,
                     minEnemyLevel: 30,
                     maxEnemyLevel: 50,
@@ -210,7 +210,7 @@ const getJobs = (tag: string) => {
                 },
                 {
                     jobType: CertusNormalJobs[Math.floor(Math.random() * CertusNormalJobs.length)],
-                    rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierETable${rotration}Rewards`,
+                    rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierETable${rotation}Rewards`,
                     masteryReq: 5,
                     minEnemyLevel: 40,
                     maxEnemyLevel: 60,
@@ -218,7 +218,7 @@ const getJobs = (tag: string) => {
                 },
                 {
                     jobType: CertusNormalJobs[Math.floor(Math.random() * CertusNormalJobs.length)],
-                    rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierETable${rotration}Rewards`,
+                    rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierETable${rotation}Rewards`,
                     masteryReq: 10,
                     minEnemyLevel: 100,
                     maxEnemyLevel: 100,
@@ -226,20 +226,19 @@ const getJobs = (tag: string) => {
                 },
                 {
                     jobType: CertusNarmerJobs[Math.floor(Math.random() * CertusNarmerJobs.length)],
-                    rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/NarmerTable${rotration}Rewards`,
+                    rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/NarmerTable${rotation}Rewards`,
                     masteryReq: 0,
                     minEnemyLevel: 50,
                     maxEnemyLevel: 70,
                     xpAmounts: [820, 820, 820, 820, 1610]
                 }
             ];
-            return CertusJobs;
 
         case "SolarisSyndicate":
-            const FortunaJobs: IJob[] = [
+            return [
                 {
                     jobType: FortunaNormalJobs[Math.floor(Math.random() * FortunaNormalJobs.length)],
-                    rewards: `/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierATable${rotration}Rewards`,
+                    rewards: `/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierATable${rotation}Rewards`,
                     masteryReq: 0,
                     minEnemyLevel: 5,
                     maxEnemyLevel: 15,
@@ -247,7 +246,7 @@ const getJobs = (tag: string) => {
                 },
                 {
                     jobType: FortunaNormalJobs[Math.floor(Math.random() * FortunaNormalJobs.length)],
-                    rewards: `/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierBTable${rotration}Rewards`,
+                    rewards: `/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierBTable${rotation}Rewards`,
                     masteryReq: 1,
                     minEnemyLevel: 10,
                     maxEnemyLevel: 30,
@@ -255,7 +254,7 @@ const getJobs = (tag: string) => {
                 },
                 {
                     jobType: FortunaNormalJobs[Math.floor(Math.random() * FortunaNormalJobs.length)],
-                    rewards: `/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierCTable${rotration}Rewards`,
+                    rewards: `/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierCTable${rotation}Rewards`,
                     masteryReq: 2,
                     minEnemyLevel: 20,
                     maxEnemyLevel: 40,
@@ -263,7 +262,7 @@ const getJobs = (tag: string) => {
                 },
                 {
                     jobType: FortunaNormalJobs[Math.floor(Math.random() * FortunaNormalJobs.length)],
-                    rewards: `/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierDTable${rotration}Rewards`,
+                    rewards: `/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierDTable${rotation}Rewards`,
                     masteryReq: 3,
                     minEnemyLevel: 30,
                     maxEnemyLevel: 50,
@@ -271,7 +270,7 @@ const getJobs = (tag: string) => {
                 },
                 {
                     jobType: FortunaNormalJobs[Math.floor(Math.random() * FortunaNormalJobs.length)],
-                    rewards: `/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierETable${rotration}Rewards`,
+                    rewards: `/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierETable${rotation}Rewards`,
                     masteryReq: 5,
                     minEnemyLevel: 40,
                     maxEnemyLevel: 60,
@@ -279,7 +278,7 @@ const getJobs = (tag: string) => {
                 },
                 {
                     jobType: FortunaNormalJobs[Math.floor(Math.random() * FortunaNormalJobs.length)],
-                    rewards: `/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierETable${rotration}Rewards`,
+                    rewards: `/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierETable${rotation}Rewards`,
                     masteryReq: 10,
                     minEnemyLevel: 100,
                     maxEnemyLevel: 100,
@@ -287,20 +286,19 @@ const getJobs = (tag: string) => {
                 },
                 {
                     jobType: FortunaNarmerJobs[Math.floor(Math.random() * FortunaNarmerJobs.length)],
-                    rewards: `/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusNarmerTable${rotration}Rewards`,
+                    rewards: `/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusNarmerTable${rotation}Rewards`,
                     masteryReq: 0,
                     minEnemyLevel: 50,
                     maxEnemyLevel: 70,
                     xpAmounts: [820, 820, 820, 820, 1610]
                 }
             ];
-            return FortunaJobs;
 
         case "EntratiSyndicate":
-            const EntratiJobs: IJob[] = [
+            return [
                 {
                     jobType: EntratiNormalJobs[Math.floor(Math.random() * EntratiNormalJobs.length)],
-                    rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierATable${getRandomKey(["A", "B", "C"])}Rewards`,
+                    rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierATable${getRandomRotation()}Rewards`,
                     masteryReq: 0,
                     minEnemyLevel: 5,
                     maxEnemyLevel: 15,
@@ -308,7 +306,7 @@ const getJobs = (tag: string) => {
                 },
                 {
                     jobType: EntratiNormalJobs[Math.floor(Math.random() * EntratiNormalJobs.length)],
-                    rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierCTable${getRandomKey(["A", "B", "C"])}Rewards`,
+                    rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierCTable${getRandomRotation()}Rewards`,
                     masteryReq: 1,
                     minEnemyLevel: 15,
                     maxEnemyLevel: 25,
@@ -316,7 +314,7 @@ const getJobs = (tag: string) => {
                 },
                 {
                     jobType: EntratiEndlessJobs[Math.floor(Math.random() * EntratiEndlessJobs.length)],
-                    rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierBTable${getRandomKey(["A", "B", "C"])}Rewards`,
+                    rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierBTable${getRandomRotation()}Rewards`,
                     masteryReq: 5,
                     minEnemyLevel: 25,
                     maxEnemyLevel: 30,
@@ -325,7 +323,7 @@ const getJobs = (tag: string) => {
                 },
                 {
                     jobType: EntratiNormalJobs[Math.floor(Math.random() * EntratiNormalJobs.length)],
-                    rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierDTable${getRandomKey(["A", "B", "C"])}Rewards`,
+                    rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierDTable${getRandomRotation()}Rewards`,
                     masteryReq: 2,
                     minEnemyLevel: 30,
                     maxEnemyLevel: 40,
@@ -333,7 +331,7 @@ const getJobs = (tag: string) => {
                 },
                 {
                     jobType: EntratiNormalJobs[Math.floor(Math.random() * EntratiNormalJobs.length)],
-                    rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierETable${getRandomKey(["A", "B", "C"])}Rewards`,
+                    rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierETable${getRandomRotation()}Rewards`,
                     masteryReq: 3,
                     minEnemyLevel: 40,
                     maxEnemyLevel: 60,
@@ -341,7 +339,7 @@ const getJobs = (tag: string) => {
                 },
                 {
                     jobType: EntratiNormalJobs[Math.floor(Math.random() * EntratiNormalJobs.length)],
-                    rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierETable${getRandomKey(["A", "B", "C"])}Rewards`,
+                    rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierETable${getRandomRotation()}Rewards`,
                     masteryReq: 10,
                     minEnemyLevel: 100,
                     maxEnemyLevel: 100,
@@ -375,21 +373,18 @@ const getJobs = (tag: string) => {
                     isVault: true
                 }
             ];
-            return EntratiJobs;
 
         default:
             throw new Error(`Error while updating Syndicates: Unknown Jobs syndicate ${tag}`);
     }
 };
 
-const updateVoidFisures = async () => {
+const updateVoidFissures = (ws: IWorldStateDocument) => {
     const curDate = Date.now();
     try {
-        const ws = await WorldState.findOne();
-        if (!ws) throw new Error("Missing worldState");
-        const voidFisures = ws.ActiveMissions;
+        const voidFissures = ws.ActiveMissions;
         const voidStorms = ws.VoidStorms;
-        const voidFisuresByTier: { [key: string]: IActiveMission[] } = {
+        const voidFissuresByTier: { [key: string]: IActiveMission[] } = {
             VoidT1: [],
             VoidT2: [],
             VoidT3: [],
@@ -406,14 +401,14 @@ const updateVoidFisures = async () => {
             VoidT6: []
         };
 
-        if (voidFisures) {
-            voidFisures.forEach(mission => {
+        if (voidFissures) {
+            voidFissures.forEach(mission => {
                 const tier = mission.Modifier;
                 if (tier) {
-                    if (!voidFisuresByTier[tier]) {
-                        voidFisuresByTier[tier] = [];
+                    if (!voidFissuresByTier[tier]) {
+                        voidFissuresByTier[tier] = [];
                     }
-                    voidFisuresByTier[tier].push(mission);
+                    voidFissuresByTier[tier].push(mission);
                 }
             });
         }
@@ -431,13 +426,12 @@ const updateVoidFisures = async () => {
         }
 
         voidTiers.forEach(voidTier => {
-            if (voidFisuresByTier[voidTier].length < 3) {
-                const nodeData = getRandomFisureNode(false, voidTier == "VoidT6");
-                logger.debug(voidTier);
+            if (voidFissuresByTier[voidTier].length < 3) {
+                const nodeData = getRandomFissureNode(false, voidTier == "VoidT6");
                 if (!nodeData.missionIndex) nodeData.missionIndex = 1;
                 const node = {
                     Region: nodeData.systemIndex,
-                    Seed: getRandomNumber(1, 99999),
+                    Seed: Math.floor(Math.random() * 99999 + 1),
                     Activation: curDate,
                     Expiry: curDate + Math.floor(Math.random() * unixTimesInMs.hour),
                     Node: nodeData.nodeKey,
@@ -445,12 +439,11 @@ const updateVoidFisures = async () => {
                     Modifier: voidTier,
                     Hard: Math.random() < 0.1
                 } as IActiveMission;
-                voidFisures?.push(node);
+                voidFissures?.push(node);
             }
 
             if (voidStormsByTier[voidTier].length < 2) {
-                const nodeData = getRandomFisureNode(true, voidTier == "VoidT6");
-                logger.debug(voidTier);
+                const nodeData = getRandomFissureNode(true, voidTier == "VoidT6");
                 const node = {
                     Activation: curDate,
                     Expiry: curDate + Math.floor(Math.random() * unixTimesInMs.hour),
@@ -460,20 +453,26 @@ const updateVoidFisures = async () => {
                 voidStorms?.push(node);
             }
         });
-        await ws.save();
         return ws;
     } catch (error) {
-        throw new Error(`Error while updating VoidFisures: ${error}`);
+        throw new Error(`Error while updating VoidFissures: ${error}`);
     }
 };
 
-const getRandomFisureNode = (isRailJack: boolean, isOmnia: boolean) => {
+const getRandomFissureNode = (isRailJack: boolean, isOmnia: boolean) => {
     const validNodes = Object.entries(ExportRegions)
         .map(([key, node]) => ({ ...node, nodeKey: key }))
-        .filter(node => validFisureMissionIndex.includes(node.missionIndex) && !node.missionName.includes("Archwing"));
+        .filter(node => {
+            if (node.missionIndex && node.missionName) {
+                return (
+                    validFissureMissionIndex.includes(node.missionIndex) &&
+                    (!node.missionName.includes("Archwing") || !node.missionName.includes("Railjack"))
+                );
+            } else return false;
+        });
 
     if (isRailJack) {
-        const railJackNodes = Object.keys(ExportRailjack.nodes);
+        const railJackNodes = Object.keys(ExportRegions).filter(key => key.includes("CrewBattleNode"));
         const randomKey = railJackNodes[Math.floor(Math.random() * railJackNodes.length)];
         return { nodeKey: randomKey };
     }
@@ -496,25 +495,30 @@ const getRandomFisureNode = (isRailJack: boolean, isOmnia: boolean) => {
     };
 };
 
-const updateSorties = async () => {
+const updateSorties = (ws: IWorldStateDocument) => {
     const currentDate = Date.now();
     const oneDayIntervalStart =
         Math.floor(currentDate / unixTimesInMs.day) * unixTimesInMs.day + 16 * unixTimesInMs.hour;
     const oneDayIntervalEnd = oneDayIntervalStart + unixTimesInMs.day;
     const oneWeekIntervalStart =
-        Math.floor(currentDate / (unixTimesInMs.day * 7)) * unixTimesInMs.day * 7 + 16 * unixTimesInMs.hour;
-    const oneWeekIntervalEnd = oneWeekIntervalStart + unixTimesInMs.day * 7;
+        Math.floor(currentDate / unixTimesInMs.week) * unixTimesInMs.week + 16 * unixTimesInMs.hour;
+    const oneWeekIntervalEnd = oneWeekIntervalStart + unixTimesInMs.week;
+
+    type node = {
+        systemIndex: number;
+        missionIndex: number;
+        nodeKey: string;
+    };
+
     const nodes = Object.entries(ExportRegions).map(([key, node]) => {
         return {
             systemIndex: node.systemIndex,
             missionIndex: node.missionIndex,
             nodeKey: key
-        };
+        } as node;
     });
 
     try {
-        const ws = await WorldState.findOne();
-        if (!ws) throw new Error("Missing worldState");
         const liteSorties: ILiteSortie[] = ws?.LiteSorties;
         const sorties: ISortie[] = ws?.Sorties;
 
@@ -550,7 +554,7 @@ const updateSorties = async () => {
                 Activation: oneWeekIntervalStart,
                 Expiry: oneWeekIntervalEnd,
                 Reward: "/Lotus/Types/Game/MissionDecks/ArchonSortieRewards",
-                Seed: getRandomNumber(1, 99999),
+                Seed: Math.floor(Math.random() * 99999 + 1),
                 Boss: liteSortiesBoss,
                 Missions: selectedLiteSortiesNodes.map(node => ({
                     missionType: missionIndexToMissionTypes[node.missionIndex],
@@ -578,7 +582,7 @@ const updateSorties = async () => {
                 Expiry: oneDayIntervalEnd,
                 ExtraDrops: [],
                 Reward: "/Lotus/Types/Game/MissionDecks/SortieRewards",
-                Seed: getRandomNumber(1, 99999),
+                Seed: Math.floor(Math.random() * 99999 + 1),
                 Boss: randomState.bossName,
                 Variants: selectedSortieNodes.map(node => ({
                     missionType: missionIndexToMissionTypes[node.missionIndex],
@@ -591,42 +595,37 @@ const updateSorties = async () => {
             sorties.push(sortie);
         }
 
-        await ws.save();
         return ws;
     } catch (error) {
         throw new Error(`Error while updating Sorties ${error}`);
     }
 };
 
-const updateCircuit = async () => {
+const updateCircuit = (ws: IWorldStateDocument) => {
     try {
-        const ws = await WorldState.findOne();
-        if (!ws) throw new Error("Missing worldState");
-        const curWeek = Math.floor(Date.now() / (7 * unixTimesInMs.day));
-        const normalIndex = curWeek % 11;
-        const hardIndex = curWeek % 7;
+        const curWeek = Math.floor(Date.now() / unixTimesInMs.week);
+        const normalIndex = curWeek % normalCircuitRotations.length;
+        const hardIndex = curWeek % hardCircuitRotations.length;
         ws.EndlessXpChoices = [
-            { Category: "EXC_NORMAL", Choices: normalCircutRotations[normalIndex] },
-            { Category: "EXC_HARD", Choices: hardCircutRotations[hardIndex] }
+            { Category: "EXC_NORMAL", Choices: normalCircuitRotations[normalIndex] },
+            { Category: "EXC_HARD", Choices: hardCircuitRotations[hardIndex] }
         ];
-        await ws.save();
         return ws;
     } catch (error) {
         throw new Error(`Error while updating Circuit ${error}`);
     }
 };
 
-const updateNigthWave = async () => {
+const updateNightWave = (ws: IWorldStateDocument) => {
     const currentDate = Date.now();
     const oneDayIntervalStart =
         Math.floor(currentDate / unixTimesInMs.day) * unixTimesInMs.day + 16 * unixTimesInMs.hour;
     const oneDayIntervalEnd = oneDayIntervalStart + unixTimesInMs.day;
     const oneWeekIntervalStart =
-        Math.floor(currentDate / (unixTimesInMs.day * 7)) * unixTimesInMs.day * 7 + 16 * unixTimesInMs.hour;
-    const oneWeekIntervalEnd = oneWeekIntervalStart + unixTimesInMs.day * 7;
+        Math.floor(currentDate / unixTimesInMs.week) * unixTimesInMs.week + 16 * unixTimesInMs.hour;
+    const oneWeekIntervalEnd = oneWeekIntervalStart + unixTimesInMs.week;
+
     try {
-        const ws = await WorldState.findOne();
-        if (!ws) throw new Error("Missing worldState");
         let season = ws.SeasonInfo;
         if (!season)
             season = {
@@ -643,7 +642,8 @@ const updateNigthWave = async () => {
         const usedChallenges = season.UsedChallenges;
 
         const exportChallenges = Object.keys(ExportNightwave.challenges);
-        const filterChallenges = (prefix: string) => exportChallenges.filter(challenge => challenge.startsWith(prefix));
+        const filterChallenges = (prefix: string): string[] =>
+            exportChallenges.filter(challenge => challenge.startsWith(prefix));
 
         const dailyChallenges = filterChallenges("/Lotus/Types/Challenges/Seasons/Daily/");
         const weeklyChallenges = filterChallenges("/Lotus/Types/Challenges/Seasons/Weekly/");
@@ -659,7 +659,7 @@ const updateNigthWave = async () => {
             else if (challenge.Challenge.startsWith("/Lotus/Types/Challenges/Seasons/WeeklyHard/")) weeklyHardCount++;
         });
 
-        const addChallenges = async (
+        const addChallenges = (
             count: number,
             limit: number,
             intervalStart: number,
@@ -701,25 +701,22 @@ const updateNigthWave = async () => {
         };
 
         ws.SeasonInfo = season;
-        await ws.save();
         return ws;
     } catch (error) {
-        throw new Error(`Error while updating NigthWave ${error}`);
+        throw new Error(`Error while updating NightWave ${error}`);
     }
 };
 
-const updateNodeOverrides = async () => {
+const updateNodeOverrides = (ws: IWorldStateDocument) => {
     try {
-        const ws = await WorldState.findOne();
-        if (!ws) throw new Error("Missing worldState");
-        const curWeek = Math.floor(Date.now() / (7 * unixTimesInMs.day));
+        const curWeek = Math.floor(Date.now() / unixTimesInMs.week);
         let overrides = ws.NodeOverrides;
         if (overrides == undefined || overrides.length < 1) {
             overrides = [
                 { Node: "EuropaHUB", Hide: true },
                 { Node: "ErisHUB", Hide: true },
                 { Node: "VenusHUB", Hide: true },
-                { Node: "SolNode802", Seed: curWeek }, // Elite santuary onnslaught
+                { Node: "SolNode802", Seed: curWeek }, // Elite sanctuary onslaught
                 {
                     Node: "EarthHUB",
                     Hide: false,
@@ -741,7 +738,6 @@ const updateNodeOverrides = async () => {
             }
         }
         ws.NodeOverrides = overrides;
-        await ws.save();
         return ws;
     } catch (error) {
         throw new Error(`Error while updating NodeOverrides ${error}`);

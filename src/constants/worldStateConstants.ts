@@ -1121,7 +1121,7 @@ export const endStates = [
     }
 ];
 
-export const validFisureMissionIndex = [
+export const validFissureMissionIndex = [
     1, // Exterminate
     2, // Survival
     3, // Rescue
@@ -1168,13 +1168,13 @@ export const EntratiNormalJobs = [
     "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosCrpSurvivorBounty",
     "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosExcavateBounty",
     "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosGrnSurvivorBounty",
-    "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosKeypiecesBounty",
+    "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosKeyPiecesBounty",
     "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosPurifyBounty"
 ];
 
 export const EntratiEndlessJobs = [
-    "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosEndessExcavateBounty",
-    "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosEndessPurifyBounty"
+    "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosEndlessExcavateBounty",
+    "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosEndlessPurifyBounty"
 ];
 
 export const CertusNarmerJobs = [
@@ -1183,7 +1183,7 @@ export const CertusNarmerJobs = [
     "/Lotus/Types/Gameplay/Eidolon/Jobs/Narmer/AttritionBountyLib"
 ];
 /*
-export const CertusGhoulalertJobs = [
+export const CertusGhoulAlertJobs = [
     "/Lotus/Types/Gameplay/Eidolon/Jobs/Events/GhoulAlertBountyAss",
     "/Lotus/Types/Gameplay/Eidolon/Jobs/Events/GhoulAlertBountyExt",
     "/Lotus/Types/Gameplay/Eidolon/Jobs/Events/GhoulAlertBountyBunt",
@@ -1253,7 +1253,7 @@ export const FortunaNormalJobs = [
     "/Lotus/Types/Gameplay/Venus/Jobs/VenusCullJobAssassinate",
     "/Lotus/Types/Gameplay/Venus/Jobs/VenusCullJobExterminate",
     "/Lotus/Types/Gameplay/Venus/Jobs/VenusCullJobResource",
-    "/Lotus/Types/Gameplay/Venus/Jobs/VenusHelpingJobcaches",
+    "/Lotus/Types/Gameplay/Venus/Jobs/VenusHelpingJobCaches",
     "/Lotus/Types/Gameplay/Venus/Jobs/VenusHelpingJobResource",
     "/Lotus/Types/Gameplay/Venus/Jobs/VenusHelpingJobSpy",
     "/Lotus/Types/Gameplay/Venus/Jobs/VenusIntelJobRecovery",
@@ -1270,7 +1270,7 @@ export const FortunaNormalJobs = [
     "/Lotus/Types/Gameplay/Venus/Jobs/VenusWetworkJobSpy"
 ];
 
-export const normalCircutRotations = [
+export const normalCircuitRotations = [
     ["Excalibur", "Trinity", "Ember"],
     ["Loki", "Mag", "Rhino"],
     ["Ash", "Frost", "Nyx"],
@@ -1284,12 +1284,12 @@ export const normalCircutRotations = [
     ["Garuda", "Baruuk", "Hildryn"]
 ];
 
-export const hardCircutRotations = [
+export const hardCircuitRotations = [
     ["Braton", "Lato", "Skana", "Paris", "Kunai"],
-    ["Boar", "Grammacor", "Angstrum", "Gorgon", "Anku"],
+    ["Boar", "Gammacor", "Angstrum", "Gorgon", "Anku"],
     ["Bo", "Latron", "Furis", "Furax", "Strun"],
-    ["Lex", "Magistar", "Boltor", "Bronko", "Ceramic Dagger"],
-    ["Torid", "Dual Toxocyst", "Dual Ichor", "Milter", "Atomos"],
+    ["Lex", "Magistar", "Boltor", "Bronco", "Ceramic Dagger"],
+    ["Torid", "Dual Toxocyst", "Dual Ichor", "Miter", "Atomos"],
     ["Ack & Brunt", "Soma", "Vasto", "Nami Solo", "Burston"],
     ["Zylok", "Sibear", "Dread", "Despair", "Hate"]
 ];
