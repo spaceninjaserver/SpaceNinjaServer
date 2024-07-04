@@ -97,7 +97,7 @@ export const giveKeyChainTriggeredItems = async (accountId: string, keyChain: st
                 }
             }
         }
-        
+
         if (stage.itemsToGiveWhenTriggered.length > 0) {
             const itemType = stage.itemsToGiveWhenTriggered[0];
 
@@ -105,20 +105,24 @@ export const giveKeyChainTriggeredItems = async (accountId: string, keyChain: st
 
             if (itemType in ExportRecipes) {
                 return {
-                    Recipes: [{
-                        ItemType: itemType,
-                        ItemCount: 1
-                    }]
+                    Recipes: [
+                        {
+                            ItemType: itemType,
+                            ItemCount: 1
+                        }
+                    ]
                 };
             }
 
             if (itemType in ExportResources) {
                 return {
                     WishlistChanges: [itemType],
-                    MiscItems: [{
-                        ItemType: itemType,
-                        ItemCount: 1
-                    }]
+                    MiscItems: [
+                        {
+                            ItemType: itemType,
+                            ItemCount: 1
+                        }
+                    ]
                 };
             }
 

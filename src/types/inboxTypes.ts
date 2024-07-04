@@ -47,7 +47,7 @@ export interface IInboxReponseClient {
     url?: string;
     highPriority: boolean;
     lowPrioNewPlayers?: boolean;
-    CrossPlatform?: boolean
+    CrossPlatform?: boolean;
     date: IMongoDate;
     r: boolean;
     countedAtt?: ICountedAttDatabase[];
