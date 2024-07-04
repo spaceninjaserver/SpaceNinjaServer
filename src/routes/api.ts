@@ -25,7 +25,11 @@ import { getVendorInfoController } from "@/src/controllers/api/getVendorInfoCont
 import { giveKeyChainTriggeredItemsController } from "@/src/controllers/api/giveKeyChainTriggeredItemsController";
 import { giveKeyChainTriggeredMessageController } from "@/src/controllers/api/giveKeyChainTriggeredMessageController";
 import { gildWeaponController } from "@/src/controllers/api/gildWeaponController";
+<<<<<<< HEAD
 import { guildTechController } from "@/src/controllers/api/guildTechController";
+=======
+import { guildTechController } from "../controllers/api/guildTechController";
+>>>>>>> 11fd4c060f0c0db7a9eb43d42cb3e58e384be332
 import { hostSessionController } from "@/src/controllers/api/hostSessionController";
 import { hubController } from "@/src/controllers/api/hubController";
 import { hubInstancesController } from "@/src/controllers/api/hubInstancesController";
@@ -59,7 +63,7 @@ import { startDojoRecipeController } from "@/src/controllers/api/startDojoRecipe
 import { startRecipeController } from "@/src/controllers/api/startRecipeController";
 import { stepSequencersController } from "@/src/controllers/api/stepSequencersController";
 import { surveysController } from "@/src/controllers/api/surveysController";
-import { syndicateSacrificeController } from "../controllers/api/syndicateSacrificeController";
+import { syndicateSacrificeController } from "@/src/controllers/api/syndicateSacrificeController";
 import { tauntHistoryController } from "@/src/controllers/api/tauntHistoryController";
 import { trainingResultController } from "@/src/controllers/api/trainingResultController";
 import { unlockShipFeatureController } from "@/src/controllers/api/unlockShipFeatureController";
