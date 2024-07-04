@@ -82,14 +82,14 @@ export const combineInventoryChanges = (InventoryChanges: IInventoryChanges, del
             InventoryChanges[key] = delta[key];
         } else if (Array.isArray(delta[key])) {
             const left = InventoryChanges[key] as object[];
-            const right: object[] = delta[key] as object[];
+            const right = delta[key] as object[];
             for (const item of right) {
                 left.push(item);
             }
         } else {
             console.assert(key.substring(-3) == "Bin");
             const left = InventoryChanges[key] as IBinChanges;
-            const right: IBinChanges = delta[key] as IBinChanges;
+            const right = delta[key] as IBinChanges;
             left.count += right.count;
             left.platinum += right.platinum;
             left.Slots += right.Slots;

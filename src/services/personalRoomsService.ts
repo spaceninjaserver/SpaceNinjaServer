@@ -16,4 +16,3 @@ export const unlockShipFeature = async (accountId: string, shipFeature: string) 
     if (!personalRooms.Ship.Features.includes(shipFeature)) personalRooms.Ship.Features.push(shipFeature);
     await personalRooms.save();
 };
-
