@@ -82,6 +82,7 @@ export const combineInventoryChanges = (InventoryChanges: IInventoryChanges, del
             InventoryChanges[key] = delta[key];
         } else if (Array.isArray(delta[key])) {
             const left = InventoryChanges[key] as object[];
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
             const right = delta[key] as object[];
             for (const item of right) {
                 left.push(item);
