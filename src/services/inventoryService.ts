@@ -19,18 +19,18 @@ import {
     equipmentKeys,
     IFusionTreasure
 } from "@/src/types/inventoryTypes/inventoryTypes";
-import { IGenericUpdate } from "../types/genericUpdate";
+import { IGenericUpdate } from "@/src/types/genericUpdate";
 import {
     IArtifactsRequest,
     IMissionInventoryUpdateRequest,
     IThemeUpdateRequest,
     IUpdateChallengeProgressRequest
-} from "../types/requestTypes";
+} from "@/src/types/requestTypes";
 import { logger } from "@/src/utils/logger";
 import { getWeaponType, getExalted } from "@/src/services/itemDataService";
 import { getRandomWeightedReward } from "@/src/services/rngService";
-import { ISyndicateSacrifice, ISyndicateSacrificeResponse } from "../types/syndicateTypes";
-import { IEquipmentClient } from "../types/inventoryTypes/commonInventoryTypes";
+import { ISyndicateSacrifice, ISyndicateSacrificeResponse } from "@/src/types/syndicateTypes";
+import { IEquipmentClient, IEquipmentDatabase } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import {
     ExportBoosterPacks,
     ExportCustoms,
@@ -869,4 +869,11 @@ export const upgradeMod = async (artifactsData: IArtifactsRequest, accountId: st
         console.error("Error in upgradeMod:", error);
         throw error;
     }
+};
+
+export const addHerse = async (ItemType: string, accountId: string): Promise<IEquipmentDatabase> => {
+    const inventory = await getInventory(accountId);
+    const herseIndex = inventory.Horses.push({ ItemType: ItemType, Configs: [], UpgradeVer: 101 });
+    const changedInventory = await inventory.save();
+    return changedInventory.Horses[herseIndex - 1].toJSON();
 };
