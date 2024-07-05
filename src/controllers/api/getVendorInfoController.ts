@@ -1,4 +1,6 @@
 import { RequestHandler } from "express";
+import GuildAdvertisementVendorManifest from "@/static/fixed_responses/getVendorInfo/GuildAdvertisementVendorManifest.json";
+import ZarimanCommisionsManifestArchimedean from "@/static/fixed_responses/getVendorInfo/ZarimanCommisionsManifestArchimedean.json";
 import { ExportVendors } from "warframe-public-export-plus";
 import { IMongoDate, IOid } from "@/src/types/commonTypes";
 import { Types } from "mongoose";
@@ -55,6 +57,15 @@ export const getVendorInfoController: RequestHandler = (req, res) => {
         });
         res.json({ VendorInfo: result });
     } else {
-        throw new Error(`Unknown vendor: ${vendor}`);
+        switch (req.query.vendor as string) {
+            case "/Lotus/Types/Game/VendorManifests/Hubs/GuildAdvertisementVendorManifest":
+                res.json(GuildAdvertisementVendorManifest);
+                break;
+            case "/Lotus/Types/Game/VendorManifests/Zariman/ZarimanCommisionsManifestArchimedean":
+                res.json(ZarimanCommisionsManifestArchimedean);
+                break;
+            default:
+                throw new Error(`Unknown vendor: ${vendor}`);
+        }
     }
 };
