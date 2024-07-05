@@ -13,4 +13,3 @@ const updateQuestController: RequestHandler = async (req, res) => {
 };
 
 export { updateQuestController };
-
