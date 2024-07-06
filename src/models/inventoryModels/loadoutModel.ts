@@ -3,7 +3,7 @@ import { IEquipmentSelection } from "@/src/types/inventoryTypes/commonInventoryT
 import { ILoadoutConfigDatabase, ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
 import { Model, Schema, Types, model } from "mongoose";
 
-const oidSchema = new Schema<IOid>(
+export const oidSchema = new Schema<IOid>(
     {
         $oid: String
     },

@@ -10,7 +10,6 @@ import {
     IPVPChallengeInstanceParam,
     IMission,
     IAlert,
-    ICountedItems,
     IReward,
     ISortie,
     ILiteSortie,
@@ -34,8 +33,11 @@ import {
     IFeaturedGuild,
     IActiveChallenge,
     ISeasonInfo,
-    IWorldStateDocument
+    IWorldStateDocument,
+    IGoal
 } from "@/src/types/worldStateTypes";
+import { oidSchema } from "@/src/models/inventoryModels/loadoutModel";
+import { typeCountSchema } from "@/src/models/inventoryModels/inventoryModel";
 
 const messageSchema = new Schema<IMessage>(
     {
@@ -78,20 +80,12 @@ EventSchema.set("toJSON", {
     }
 });
 
-const CountedItemsSchema = new Schema<ICountedItems>(
-    {
-        ItemType: String,
-        ItemCount: Number
-    },
-    { _id: false }
-);
-
 const RewardSchema = new Schema<IReward>(
     {
         credits: Number,
         xp: Number,
         items: [String],
-        countedItems: [CountedItemsSchema]
+        countedItems: [typeCountSchema]
     },
     { _id: false }
 );
@@ -105,6 +99,7 @@ const MissionSchema = new Schema<IMission>(
         missionReward: RewardSchema,
         levelOverride: String,
         enemySpec: String,
+        extraEnemySpec: String,
         minEnemyLevel: Number,
         maxEnemyLevel: Number,
         descText: String,
@@ -119,15 +114,59 @@ const MissionSchema = new Schema<IMission>(
         vipAgent: Boolean,
         leadersAlwaysAllowed: Boolean,
         goalTag: String,
+        questReq: String,
         levelAuras: [String]
     },
     { _id: false }
 );
 
+const GoalSchema = new Schema<IGoal>({
+    Activation: Number,
+    Expiry: Number,
+
+    Regions: [Number],
+    OptionalInMission: Boolean,
+    UpgradeIds: [oidSchema],
+
+    Node: String,
+    MissionKeyName: String,
+    Faction: String,
+
+    Icon: String,
+    ToolTip: String,
+    Desc: String,
+
+    Tag: String,
+    ScoreLocTag: String,
+    ScoreVar: String,
+
+    Reward: RewardSchema,
+    InterimRewards: [RewardSchema],
+
+    Goal: Number,
+    InterimGoals: [Number],
+    ClanGoal: [Number],
+    HealthPct: Number,
+    Count: Number,
+    ItemType: String,
+
+    Personal: Boolean,
+    Community: Boolean
+});
+
+GoalSchema.set("toJSON", {
+    transform(_document, returnedObject) {
+        returnedObject._id = { $oid: returnedObject._id.toString() };
+        returnedObject.Activation = { $date: { $numberLong: returnedObject.Activation.toString() } };
+        returnedObject.Expiry = { $date: { $numberLong: returnedObject.Expiry.toString() } };
+    }
+});
+
 const AlertSchema = new Schema<IAlert>({
     Activation: Number,
     Expiry: Number,
     MissionInfo: MissionSchema,
+    Icon: String,
     ForceUnlock: Boolean,
     Tag: String
 });
@@ -539,7 +578,7 @@ SeasonInfoSchema.set("toJSON", {
 
 const WorldStateSchema = new Schema<IWorldStateDocument>({
     Events: [EventSchema],
-    // Goals: [GoalSchema],
+    Goals: [GoalSchema],
     Alerts: [AlertSchema],
     Sorties: [SortieSchema],
     LiteSorties: [LiteSortieSchema],

@@ -1,5 +1,6 @@
 import { IOid } from "@/src/types/commonTypes";
 import { Document, ObjectId } from "mongoose";
+import { ITypeCount } from "./inventoryTypes/inventoryTypes";
 
 export interface IMessage {
     LanguageCode?: string;
@@ -21,12 +22,7 @@ export interface IReward {
     credits?: number;
     xp?: number;
     items?: string[];
-    countedItems?: ICountedItems[];
-}
-
-export interface ICountedItems {
-    ItemType: string;
-    ItemCount: number;
+    countedItems?: ITypeCount[];
 }
 
 export interface IMission {
@@ -37,6 +33,7 @@ export interface IMission {
     missionReward: IReward;
     levelOverride: string;
     enemySpec: string;
+    extraEnemySpec?: string;
     minEnemyLevel: number;
     maxEnemyLevel: number;
     descText: string;
@@ -51,11 +48,12 @@ export interface IMission {
     vipAgent?: boolean;
     leadersAlwaysAllowed?: boolean;
     goalTag?: string;
+    questReq?: string;
     levelAuras?: string[];
 }
 
 export interface IEvent {
-    Messages: IMessage[];
+    Messages?: IMessage[];
     Msg?: string;
     Prop?: string;
     ImageUrl?: string;
@@ -71,28 +69,40 @@ export interface IEvent {
 }
 
 export interface IGoal extends IBaseWorldStateObject {
+    Regions?: number[];
+    OptionalInMission?: boolean;
+    UpgradeIds?: IOid[];
+
     Node: string;
-    ScoreVar: string;
-    ScoreLocTag: string;
-    Count: number;
-    HealthPct: number;
-    Regions: number[];
-    Desc: string;
+    MissionKeyName?: string;
+    Faction?: string;
+
+    Icon: string;
     ToolTip: string;
-    OptionalInMission: boolean;
-    Tag: string;
-    UpgradeIds: IOid[];
+    Desc: string;
+
+    Tag?: string;
+    ScoreLocTag: string;
+    ScoreVar?: string;
+
+    Reward: IReward;
+    InterimRewards?: IReward[];
+
+    Goal: number;
+    InterimGoals?: number[];
+    ClanGoal?: number[];
+    HealthPct: number;
+    Count: number;
+    ItemType?: string;
+
     Personal: boolean;
     Community: boolean;
-    Goal: number;
-    Reward: IReward;
-    InterimGoals: number[];
-    InterimRewards: IReward[];
 }
 
 export interface IAlert extends IBaseWorldStateObject {
     MissionInfo: IMission;
-    ForceUnlock: boolean;
+    ForceUnlock?: boolean;
+    Icon?: string;
     Tag: string;
 }
 
