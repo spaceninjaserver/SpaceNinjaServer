@@ -64,6 +64,9 @@ const getItemListsController: RequestHandler = (_req, res) => {
             uniqueName,
             name: getEnglishString(arcane.name)
         });
+        if (arcane.isFrivolous) {
+            badItems[uniqueName] = true;
+        }
     }
 
     res.json({
