@@ -13,7 +13,8 @@ import {
     ISeasonChallenge,
     TSolarMapRegion,
     TEquipmentKey,
-    IFusionTreasure
+    IFusionTreasure,
+    ICustomMarkers
 } from "./inventoryTypes/inventoryTypes";
 
 export interface IArtifactsRequest {
@@ -70,6 +71,7 @@ export interface IMissionInventoryUpdateRequest {
     Missions?: IMission;
     EvolutionProgress?: IEvolutionProgress[];
     LastRegionPlayed?: TSolarMapRegion;
+    CustomMarkers?: ICustomMarkers[];
 
     FusionPoints?: number; // Not a part of the request, but we put it in this struct as an intermediate storage.
 }
