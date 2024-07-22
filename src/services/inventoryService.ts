@@ -731,7 +731,11 @@ export const missionInventoryUpdate = async (data: IMissionInventoryUpdateReques
         Consumables,
         Recipes,
         Missions,
-        FusionTreasures
+        FusionTreasures,
+        AffiliationChanges,
+        EvolutionProgress,
+        LastRegionPlayed,
+        CustomMarkers
     } = data;
     const inventory = await getInventory(accountId);
 
@@ -742,7 +746,7 @@ export const missionInventoryUpdate = async (data: IMissionInventoryUpdateReques
     inventory.FusionPoints += FusionPoints || 0;
 
     // syndicate
-    data.AffiliationChanges?.forEach(affiliation => {
+    AffiliationChanges?.forEach(affiliation => {
         const syndicate = inventory.Affiliations.find(x => x.Tag == affiliation.Tag);
         if (syndicate !== undefined) {
             syndicate.Standing =
@@ -763,8 +767,8 @@ export const missionInventoryUpdate = async (data: IMissionInventoryUpdateReques
     equipmentKeys.forEach(key => addGearExpByCategory(inventory, data[key], key));
 
     // Incarnon Challenges
-    if (data.EvolutionProgress) {
-        for (const evoProgress of data.EvolutionProgress) {
+    if (EvolutionProgress) {
+        for (const evoProgress of EvolutionProgress) {
             const entry = inventory.EvolutionProgress
                 ? inventory.EvolutionProgress.find(entry => entry.ItemType == evoProgress.ItemType)
                 : undefined;
@@ -779,8 +783,22 @@ export const missionInventoryUpdate = async (data: IMissionInventoryUpdateReques
     }
 
     // LastRegionPlayed
-    if (data.LastRegionPlayed) {
-        inventory.LastRegionPlayed = data.LastRegionPlayed;
+    if (LastRegionPlayed) {
+        inventory.LastRegionPlayed = LastRegionPlayed;
+    }
+
+    if (CustomMarkers) {
+        CustomMarkers.forEach(markers => {
+            const map = inventory.CustomMarkers
+                ? inventory.CustomMarkers.find(entry => entry.tag == markers.tag)
+                : undefined;
+            if (map) {
+                map.markerInfos = markers.markerInfos;
+            } else {
+                inventory.CustomMarkers ??= [];
+                inventory.CustomMarkers.push(markers);
+            }
+        });
     }
 
     // other
