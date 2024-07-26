@@ -703,7 +703,7 @@
       "_id": { "$oid": "5d1e07a0a38e4a4fdd7cefca" },
       "Activation": { "$date": { "$numberLong": "0" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
-      "Character": "Baro'Ki Teel",
+      "Character": "Baro Ki'Teer",
       "Node": "PlutoHUB",
       "Manifest": [
         { "ItemType": "/Lotus/StoreItems/Upgrades/Skins/Sentinels/Skins/GaussSentinelSkin", "PrimePrice": 500, "RegularPrice": 425000 },
