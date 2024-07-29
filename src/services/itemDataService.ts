@@ -3,10 +3,12 @@ import { logger } from "@/src/utils/logger";
 import {
     dict_en,
     ExportRecipes,
+    ExportSentinels,
     ExportWarframes,
     ExportWeapons,
     IPowersuit,
-    IRecipe
+    IRecipe,
+    ISentinel
 } from "warframe-public-export-plus";
 
 export type WeaponTypeInternal =
@@ -47,10 +49,22 @@ export const getRecipe = (uniqueName: string): IRecipe | undefined => {
 
 export const getExalted = (uniqueName: string) => {
     const suit = getSuitByUniqueName(uniqueName);
-    if (suit?.exalted !== undefined) {
-        return suit.exalted;
+    if (suit) {
+        return suit.exalted || undefined;
     } else {
-        return false;
+        return undefined;
+    }
+};
+
+export const getSentinelDefaultEquipment = (uniqueName: string) => {
+    const sentinel = getSentinelByUniqueName(uniqueName);
+    if (sentinel) {
+        return {
+            defaultWeapon: sentinel.defaultWeapon || undefined,
+            defaultUpgrades: sentinel.defaultUpgrades || undefined
+        };
+    } else {
+        return undefined;
     }
 };
 
@@ -73,6 +87,10 @@ export const getItemCategoryByUniqueName = (uniqueName: string) => {
 
 export const getSuitByUniqueName = (uniqueName: string): IPowersuit | undefined => {
     return ExportWarframes[uniqueName];
+};
+
+export const getSentinelByUniqueName = (uniqueName: string): ISentinel | undefined => {
+    return ExportSentinels[uniqueName];
 };
 
 export const getEnglishString = (key: string): string => {

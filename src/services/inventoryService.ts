@@ -27,7 +27,7 @@ import {
     IUpdateChallengeProgressRequest
 } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
-import { getWeaponType, getExalted } from "@/src/services/itemDataService";
+import { getWeaponType, getExalted, getSentinelDefaultEquipment } from "@/src/services/itemDataService";
 import { getRandomWeightedReward } from "@/src/services/rngService";
 import { ISyndicateSacrifice, ISyndicateSacrificeResponse } from "../types/syndicateTypes";
 import { IEquipmentClient } from "../types/inventoryTypes/commonInventoryTypes";
@@ -264,15 +264,8 @@ export const addItem = async (
         case "Types":
             switch (typeName.substr(1).split("/")[2]) {
                 case "Sentinels":
-                    // TOOD: Sentinels should also grant their DefaultUpgrades & SentinelWeapon.
-                    const sentinel = await addSentinel(typeName, accountId);
-                    await updateSlots(accountId, InventorySlot.SENTINELS, 0, 1);
-                    return {
-                        InventoryChanges: {
-                            SentinelBin: { count: 1, platinum: 0, Slots: -1 },
-                            Sentinels: [sentinel]
-                        }
-                    };
+                    const changes = await addSentinel(typeName, accountId);
+                    return { InventoryChanges: changes };
                 case "Items": {
                     switch (typeName.substr(1).split("/")[3]) {
                         case "ShipDecos": {
@@ -353,15 +346,61 @@ export const addItem = async (
 
 //TODO: maybe genericMethod for all the add methods, they share a lot of logic
 export const addSentinel = async (sentinelName: string, accountId: string) => {
+    const defaultEquipment = getSentinelDefaultEquipment(sentinelName) || {
+        defaultWeapon: undefined,
+        defaultUpgrades: []
+    };
+    const sentinelWeapon = defaultEquipment.defaultWeapon
+        ? await addEquipment("SentinelWeapons", defaultEquipment.defaultWeapon, accountId)
+        : undefined;
     const inventory = await getInventory(accountId);
-    const sentinelIndex = inventory.Sentinels.push({ ItemType: sentinelName, Configs: [], XP: 0 });
+
+    const mods = (defaultEquipment.defaultUpgrades || []).map(upgrade => {
+        const itemIndex = inventory.RawUpgrades.findIndex(i => i.ItemType === upgrade.ItemType);
+        if (itemIndex !== -1) {
+            inventory.RawUpgrades[itemIndex].ItemCount += 1;
+        } else {
+            inventory.RawUpgrades.push({ ItemCount: 1, ItemType: upgrade.ItemType });
+        }
+        return { ItemType: upgrade.ItemType, ItemCount: 1 };
+    });
+
+    const configs = [{ Upgrades: new Array(10).fill("") }];
+    const defaultSlots = [0, 4, 5, 9];
+    const usedSlots = new Set<number>();
+
+    (defaultEquipment.defaultUpgrades || []).forEach(upgrade => {
+        const slotIndex = upgrade.Slot !== -1 ? upgrade.Slot : defaultSlots.find(slot => !usedSlots.has(slot));
+        if (slotIndex !== undefined && slotIndex < 10) {
+            configs[0].Upgrades[slotIndex] = upgrade.ItemType;
+            usedSlots.add(slotIndex);
+        }
+    });
+
+    inventory.Sentinels.push({
+        ItemType: sentinelName,
+        Configs: configs,
+        XP: 0
+    });
+
     const changedInventory = await inventory.save();
-    return changedInventory.Sentinels[sentinelIndex - 1].toJSON();
+    await updateSlots(accountId, InventorySlot.SENTINELS, 0, sentinelWeapon ? 2 : 1);
+
+    return {
+        SentinelBin: {
+            count: sentinelWeapon ? 2 : 1,
+            platinum: 0,
+            Slots: sentinelWeapon ? -2 : -1
+        },
+        RawUpgrades: mods,
+        SentinelWeapons: sentinelWeapon ? [sentinelWeapon] : [],
+        Sentinels: [changedInventory.Sentinels[changedInventory.Sentinels.length - 1].toJSON()]
+    };
 };
 
 export const addPowerSuit = async (powersuitName: string, accountId: string): Promise<IEquipmentClient> => {
     const specialItems = getExalted(powersuitName);
-    if (specialItems != false) {
+    if (specialItems) {
         for await (const specialItem of specialItems) {
             await addSpecialItem(specialItem, accountId);
         }
@@ -374,7 +413,7 @@ export const addPowerSuit = async (powersuitName: string, accountId: string): Pr
 
 export const addMechSuit = async (mechsuitName: string, accountId: string) => {
     const specialItems = getExalted(mechsuitName);
-    if (specialItems != false) {
+    if (specialItems) {
         for await (const specialItem of specialItems) {
             await addSpecialItem(specialItem, accountId);
         }
@@ -647,6 +686,7 @@ export const addMods = (inventory: IInventoryDatabaseDocument, itemsArray: IRawU
             inventory.markModified(`RawUpgrades.${itemIndex}.ItemCount`);
         } else {
             RawUpgrades.push({ ItemCount, ItemType });
+            inventory.markModified("RawUpgrades");
         }
     });
 };
