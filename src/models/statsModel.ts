@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { IEnemy, IMission, IScan, ITutorial, IAbility, IWeapon, IStatsView } from "@/src/types/statTypes";
+import { IEnemy, IMission, IScan, ITutorial, IAbility, IWeapon, IStatsDatabase } from "@/src/types/statTypes";
 
 const abilitySchema = new Schema<IAbility>(
     {
@@ -58,7 +58,7 @@ const weaponSchema = new Schema<IWeapon>(
     { _id: false }
 );
 
-const statsSchema = new Schema<IStatsView>({
+const statsSchema = new Schema<IStatsDatabase>({
     accountOwnerId: Schema.Types.ObjectId,
     CiphersSolved: Number,
     CiphersFailed: Number,
@@ -84,6 +84,6 @@ const statsSchema = new Schema<IStatsView>({
     ReviveCount: Number
 });
 
-const Stats = model<IStatsView>("Stats", statsSchema);
+const Stats = model<IStatsDatabase>("Stats", statsSchema);
 
 export default Stats;
