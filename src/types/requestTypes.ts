@@ -70,6 +70,7 @@ export interface IMissionInventoryUpdateRequest {
     Missions?: IMission;
     EvolutionProgress?: IEvolutionProgress[];
     LastRegionPlayed?: TSolarMapRegion;
+    DeathMarks?: string[];
 
     FusionPoints?: number; // Not a part of the request, but we put it in this struct as an intermediate storage.
 }
@@ -113,4 +114,9 @@ export interface IUpgradeOperation {
     PolarizeSlot: number;
     PolarizeValue: ArtifactPolarity;
     PolarityRemap: IPolarity[];
+}
+
+export interface IUpdateNodeIntro {
+    NodeIntrosCompleted: string;
+    crossPlaySetting?: string;
 }

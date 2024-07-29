@@ -1,6 +1,6 @@
 import express from "express";
 import { addFriendImageController } from "@/src/controllers/api/addFriendImageController";
-import { artifactsController } from "../controllers/api/artifactsController";
+import { artifactsController } from "@/src/controllers/api/artifactsController";
 import { checkDailyMissionBonusController } from "@/src/controllers/api/checkDailyMissionBonusController";
 import { claimCompletedRecipeController } from "@/src/controllers/api/claimCompletedRecipeController";
 import { createGuildController } from "@/src/controllers/api/createGuildController";
@@ -17,13 +17,13 @@ import { getDailyDealStockLevelsController } from "@/src/controllers/api/getDail
 import { getFriendsController } from "@/src/controllers/api/getFriendsController";
 import { getGuildController } from "@/src/controllers/api/getGuildController";
 import { getGuildDojoController } from "@/src/controllers/api/getGuildDojoController";
-import { getGuildLogController } from "../controllers/api/getGuildLogController";
+import { getGuildLogController } from "@/src/controllers/api/getGuildLogController";
 import { getIgnoredUsersController } from "@/src/controllers/api/getIgnoredUsersController";
 import { getNewRewardSeedController } from "@/src/controllers/api/getNewRewardSeedController";
 import { getShipController } from "@/src/controllers/api/getShipController";
 import { getVendorInfoController } from "@/src/controllers/api/getVendorInfoController";
 import { gildWeaponController } from "@/src/controllers/api/gildWeaponController";
-import { guildTechController } from "../controllers/api/guildTechController";
+import { guildTechController } from "@/src/controllers/api/guildTechController";
 import { hostSessionController } from "@/src/controllers/api/hostSessionController";
 import { hubController } from "@/src/controllers/api/hubController";
 import { hubInstancesController } from "@/src/controllers/api/hubInstancesController";
@@ -40,7 +40,7 @@ import { missionInventoryUpdateController } from "@/src/controllers/api/missionI
 import { modularWeaponCraftingController } from "@/src/controllers/api/modularWeaponCraftingController";
 import { modularWeaponSaleController } from "@/src/controllers/api/modularWeaponSaleController";
 import { nameWeaponController } from "@/src/controllers/api/nameWeaponController";
-import { projectionManagerController } from "../controllers/api/projectionManagerController";
+import { projectionManagerController } from "@/src/controllers/api/projectionManagerController";
 import { purchaseController } from "@/src/controllers/api/purchaseController";
 import { queueDojoComponentDestructionController } from "@/src/controllers/api/queueDojoComponentDestructionController";
 import { rerollRandomModController } from "@/src/controllers/api/rerollRandomModController";
@@ -51,19 +51,20 @@ import { setActiveShipController } from "@/src/controllers/api/setActiveShipCont
 import { setBootLocationController } from "@/src/controllers/api/setBootLocationController";
 import { setShipCustomizationsController } from "@/src/controllers/api/setShipCustomizationsController";
 import { setSupportedSyndicateController } from "@/src/controllers/api/setSupportedSyndicateController";
-import { setWeaponSkillTreeController } from "../controllers/api/setWeaponSkillTreeController";
+import { setWeaponSkillTreeController } from "@/src/controllers/api/setWeaponSkillTreeController";
 import { shipDecorationsController } from "@/src/controllers/api/shipDecorationsController";
 import { startDojoRecipeController } from "@/src/controllers/api/startDojoRecipeController";
 import { startRecipeController } from "@/src/controllers/api/startRecipeController";
 import { stepSequencersController } from "@/src/controllers/api/stepSequencersController";
 import { surveysController } from "@/src/controllers/api/surveysController";
-import { syndicateSacrificeController } from "../controllers/api/syndicateSacrificeController";
+import { syndicateSacrificeController } from "@/src/controllers/api/syndicateSacrificeController";
 import { tauntHistoryController } from "@/src/controllers/api/tauntHistoryController";
 import { trainingResultController } from "@/src/controllers/api/trainingResultController";
 import { updateChallengeProgressController } from "@/src/controllers/api/updateChallengeProgressController";
 import { updateSessionGetController, updateSessionPostController } from "@/src/controllers/api/updateSessionController";
-import { updateThemeController } from "../controllers/api/updateThemeController";
+import { updateThemeController } from "@/src/controllers/api/updateThemeController";
 import { upgradesController } from "@/src/controllers/api/upgradesController";
+import { updateNodeIntrosController } from "@/src/controllers/api/updateNodeIntrosController";
 
 const apiRouter = express.Router();
 
@@ -137,5 +138,6 @@ apiRouter.post("/updateChallengeProgress.php", updateChallengeProgressController
 apiRouter.post("/updateSession.php", updateSessionPostController);
 apiRouter.post("/updateTheme.php", updateThemeController);
 apiRouter.post("/upgrades.php", upgradesController);
+apiRouter.post("/updateNodeIntros.php", updateNodeIntrosController);
 
 export { apiRouter };

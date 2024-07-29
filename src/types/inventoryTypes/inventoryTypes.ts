@@ -284,7 +284,7 @@ export interface IInventoryResponse {
     Robotics: any[];
     UsedDailyDeals: any[];
     LibraryPersonalProgress: ILibraryPersonalProgress[];
-    CollectibleSeries: ICollectibleSery[];
+    CollectibleSeries: ICollectibleSeries[];
     LibraryAvailableDailyTaskInfo: ILibraryAvailableDailyTaskInfo;
     HasResetAccount: boolean;
     PendingCoupon: IPendingCoupon;
@@ -326,10 +326,10 @@ export interface IParam {
 export interface IChallengeProgress {
     Progress: number;
     Name: string;
-    Completed?: string[];
+    Completed: string[];
 }
 
-export interface ICollectibleSery {
+export interface ICollectibleSeries {
     CollectibleType: string;
     Count: number;
     Tracking: string;

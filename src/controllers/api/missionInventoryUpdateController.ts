@@ -25,11 +25,11 @@ import { logger } from "@/src/utils/logger";
 - [ ]  MissionTime
 - [x]  Missions
 - [ ]  CompletedAlerts
-- [ ]  LastRegionPlayed
+- [x]  LastRegionPlayed
 - [ ]  GameModeId
 - [ ]  hosts
 - [x]  ChallengeProgress
-- [ ]  SeasonChallengeHistory
+- [x]  SeasonChallengeHistory
 - [ ]  PS (Passive anti-cheat data which includes your username, module list, process list, and system name.)
 - [ ]  ActiveDojoColorResearch
 - [x]  RewardInfo

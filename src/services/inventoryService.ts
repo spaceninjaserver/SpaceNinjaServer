@@ -675,7 +675,7 @@ export const updateChallengeProgress = async (challenges: IUpdateChallengeProgre
     const inventory = await getInventory(accountId);
 
     addChallenges(inventory, challenges.ChallengeProgress);
-    addSeasonalChallengeHistory(inventory, challenges.SeasonChallengeHistory);
+    addSeasonalChallengeHistory(inventory, challenges.SeasonChallengeCompletions);
 
     await inventory.save();
 };
@@ -700,14 +700,15 @@ export const addSeasonalChallengeHistory = (
 export const addChallenges = (inventory: IInventoryDatabaseDocument, itemsArray: IChallengeProgress[] | undefined) => {
     const category = inventory.ChallengeProgress;
 
-    itemsArray?.forEach(({ Name, Progress }) => {
+    itemsArray?.forEach(({ Name, Progress, Completed }) => {
         const itemIndex = category.findIndex(i => i.Name === Name);
 
         if (itemIndex !== -1) {
-            category[itemIndex].Progress += Progress;
-            inventory.markModified(`ChallengeProgress.${itemIndex}.ItemCount`);
+            category[itemIndex].Progress = Progress;
+            category[itemIndex].Completed = Completed;
+            inventory.markModified(`ChallengeProgress.${itemIndex}.Progress`);
         } else {
-            category.push({ Name, Progress });
+            category.push({ Name, Progress, Completed });
         }
     });
 };
@@ -724,6 +725,13 @@ const addMissionComplete = (inventory: IInventoryDatabaseDocument, { Tag, Comple
     }
 };
 
+const addDeathMarks = (inventory: IInventoryDatabaseDocument, marks: string[] | undefined) => {
+    const { DeathMarks } = inventory;
+    marks?.forEach(mark => {
+        if (!DeathMarks.find(element => element === mark)) DeathMarks.push(mark);
+    });
+};
+
 export const missionInventoryUpdate = async (data: IMissionInventoryUpdateRequest, accountId: string) => {
     const {
         RawUpgrades,
@@ -734,7 +742,8 @@ export const missionInventoryUpdate = async (data: IMissionInventoryUpdateReques
         Consumables,
         Recipes,
         Missions,
-        FusionTreasures
+        FusionTreasures,
+        DeathMarks
     } = data;
     const inventory = await getInventory(accountId);
 
@@ -796,6 +805,7 @@ export const missionInventoryUpdate = async (data: IMissionInventoryUpdateReques
     if (Missions) {
         addMissionComplete(inventory, Missions);
     }
+    addDeathMarks(inventory, DeathMarks);
 
     const changedInventory = await inventory.save();
     return changedInventory.toJSON();
