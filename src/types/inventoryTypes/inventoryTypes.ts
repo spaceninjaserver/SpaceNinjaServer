@@ -45,7 +45,7 @@ export interface IQuestKeyDatabase {
     Progress?: IQuestProgress[];
     unlock?: boolean;
     Completed?: boolean;
-    CustomData?: string; //TODO: check whether this actually exists
+    CustomData?: string;
     ItemType: string;
     CompletionDate?: Date;
 }
@@ -155,6 +155,7 @@ export interface IInventoryResponse {
     Melee: IEquipmentDatabase[];
     Ships: IShipInventory[];
     QuestKeys: IQuestKeyResponse[];
+    ActiveQuest: string;
     FlavourItems: IFlavourItem[];
     Scoops: IEquipmentDatabase[];
     TrainingRetriesLeft: number;
