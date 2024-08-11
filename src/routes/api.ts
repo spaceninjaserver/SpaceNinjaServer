@@ -134,6 +134,7 @@ apiRouter.post("/syndicateSacrifice.php", syndicateSacrificeController);
 apiRouter.post("/tauntHistory.php", tauntHistoryController);
 apiRouter.post("/trainingResult.php", trainingResultController);
 apiRouter.post("/updateChallengeProgress.php", updateChallengeProgressController);
+apiRouter.post("/updateNodeIntros.php", genericUpdateController);
 apiRouter.post("/updateSession.php", updateSessionPostController);
 apiRouter.post("/updateTheme.php", updateThemeController);
 apiRouter.post("/upgrades.php", upgradesController);
