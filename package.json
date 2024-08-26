@@ -15,7 +15,7 @@
   "dependencies": {
     "copyfiles": "^2.4.1",
     "express": "^5.0.0-beta.3",
-    "mongoose": "^8.4.5",
+    "mongoose": "^8.5.4",
     "warframe-public-export-plus": "^0.4.4",
     "warframe-riven-info": "^0.1.1",
     "winston": "^3.13.0",
