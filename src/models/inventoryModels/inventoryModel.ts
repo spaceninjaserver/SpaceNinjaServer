@@ -13,30 +13,18 @@ import {
     IPendingRecipe as IPendingRecipeDatabase,
     IPendingRecipeResponse,
     ITypeCount,
-    IFocusXP,
-    IFocusUpgrades,
     ITypeXPItem,
     IChallengeProgress,
     IStepSequencer,
-    IAffiliation,
     INotePacks,
-    ICompletedJobChain,
-    ISeasonChallenge,
     IPlayerSkills,
     ISettings,
-    IInfestedFoundry,
-    IConsumedSuit,
     IQuestProgress,
     IQuestKeyDatabase,
     IQuestKeyResponse,
-    IFusionTreasure,
-    ISpectreLoadout,
     IWeaponSkinDatabase,
-    ITaunt,
     IPeriodicMissionCompletionDatabase,
-    IPeriodicMissionCompletionResponse,
-    ILoreFragmentScan,
-    IEvolutionProgress
+    IPeriodicMissionCompletionResponse
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -52,26 +40,6 @@ import {
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
 
 const typeCountSchema = new Schema<ITypeCount>({ ItemType: String, ItemCount: Number }, { _id: false });
-
-const focusXPSchema = new Schema<IFocusXP>(
-    {
-        AP_POWER: Number,
-        AP_TACTIC: Number,
-        AP_DEFENSE: Number,
-        AP_ATTACK: Number,
-        AP_WARD: Number
-    },
-    { _id: false }
-);
-
-const focusUpgradesSchema = new Schema<IFocusUpgrades>(
-    {
-        ItemType: String,
-        Level: Number,
-        IsUniversal: Boolean
-    },
-    { _id: false }
-);
 
 const pendingRecipeSchema = new Schema<IPendingRecipeDatabase>(
     {
@@ -394,34 +362,6 @@ StepSequencersSchema.set("toJSON", {
     }
 });
 
-const affiliationsSchema = new Schema<IAffiliation>(
-    {
-        Initiated: Boolean,
-        Standing: Number,
-        Title: Number,
-        FreeFavorsEarned: { type: [Number], default: undefined },
-        FreeFavorsUsed: { type: [Number], default: undefined },
-        Tag: String
-    },
-    { _id: false }
-);
-
-const completedJobChainsSchema = new Schema<ICompletedJobChain>(
-    {
-        LocationTag: String,
-        Jobs: [String]
-    },
-    { _id: false }
-);
-
-const seasonChallengeHistorySchema = new Schema<ISeasonChallenge>(
-    {
-        challenge: String,
-        id: String
-    },
-    { _id: false }
-);
-
 //TODO: check whether this is complete
 const playerSkillsSchema = new Schema<IPlayerSkills>(
     {
@@ -448,25 +388,6 @@ const settingsSchema = new Schema<ISettings>({
     ShowFriendInvNotifications: Boolean,
     TradingRulesConfirmed: Boolean
 });
-
-const consumedSchuitsSchema = new Schema<IConsumedSuit>({
-    s: String,
-    c: colorSchema
-});
-
-const infestedFoundrySchema = new Schema<IInfestedFoundry>(
-    {
-        Name: String,
-        Resources: { type: [typeCountSchema], default: undefined },
-        Slots: Number,
-        XP: Number,
-        ConsumedSuits: { type: [consumedSchuitsSchema], default: undefined },
-        InvigorationIndex: Number,
-        InvigorationSuitOfferings: { type: [String], default: undefined },
-        InvigorationsApplied: Number
-    },
-    { _id: false }
-);
 
 const questProgressSchema = new Schema<IQuestProgress>({
     c: Number,
@@ -499,21 +420,6 @@ questKeysSchema.set("toJSON", {
     }
 });
 
-const fusionTreasuresSchema = new Schema<IFusionTreasure>().add(typeCountSchema).add({ Sockets: Number });
-
-const spectreLoadoutsSchema = new Schema<ISpectreLoadout>(
-    {
-        LongGuns: String,
-        Melee: String,
-        Pistols: String,
-        PistolsFeatures: Number,
-        PistolsModularParts: [String],
-        Suits: String,
-        ItemType: String
-    },
-    { _id: false }
-);
-
 const weaponSkinsSchema = new Schema<IWeaponSkinDatabase>(
     {
         ItemType: String
@@ -533,14 +439,6 @@ weaponSkinsSchema.set("toJSON", {
     }
 });
 
-const tauntSchema = new Schema<ITaunt>(
-    {
-        node: String,
-        state: String
-    },
-    { _id: false }
-);
-
 const periodicMissionCompletionsSchema = new Schema<IPeriodicMissionCompletionDatabase>(
     {
         date: Date,
@@ -559,24 +457,6 @@ periodicMissionCompletionsSchema.set("toJSON", {
         );
     }
 });
-
-const loreFragmentScansSchema = new Schema<ILoreFragmentScan>(
-    {
-        Progress: Number,
-        Region: String,
-        ItemType: String
-    },
-    { _id: false }
-);
-
-const evolutionProgressSchema = new Schema<IEvolutionProgress>(
-    {
-        Progress: Number,
-        Rank: Number,
-        ItemType: String
-    },
-    { _id: false }
-);
 
 const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
     {
@@ -656,7 +536,6 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Id CompletedAlerts
         CompletedAlerts: [String],
 
-
         //Resource,Credit,Affinity etc or Bless any boosters
         Boosters: [boosterSchema],
 
@@ -686,7 +565,6 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         //TradeBannedUntil data
         TradeBannedUntil: Schema.Types.Mixed,
-
 
         //Unknown and system
         Mailbox: MailboxSchema,

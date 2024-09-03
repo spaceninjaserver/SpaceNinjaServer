@@ -15,7 +15,7 @@ import { statsRouter } from "@/src/routes/stats";
 import { webuiRouter } from "@/src/routes/webui";
 import { connectDatabase } from "@/src/services/mongoService";
 import { registerLogFileCreationListener } from "@/src/utils/logger";
-import * as zlib from 'zlib';
+import * as zlib from "zlib";
 
 void registerLogFileCreationListener();
 void connectDatabase();
@@ -23,17 +23,17 @@ void connectDatabase();
 const app = express();
 
 app.use(function (req, _res, next) {
-    var buffer: Buffer[] = []
-    req.on('data', function (chunk: Buffer) {
+    const buffer: Buffer[] = [];
+    req.on("data", function (chunk: Buffer) {
         if (chunk !== undefined && chunk.length > 2 && chunk[0] == 0x1f && chunk[1] == 0x8b) {
             buffer.push(Buffer.from(chunk));
         }
     });
 
-    req.on('end', function () {
+    req.on("end", function () {
         zlib.gunzip(Buffer.concat(buffer), function (_err, dezipped) {
-            if (typeof dezipped != 'undefined') {
-                req.body = dezipped.toString('utf-8');
+            if (typeof dezipped != "undefined") {
+                req.body = dezipped.toString("utf-8");
             }
 
             next();

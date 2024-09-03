@@ -3,13 +3,8 @@ import { getAccountIdForRequest } from "@/src/services/loginService";
 import { toInventoryResponse } from "@/src/helpers/inventoryHelpers";
 import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { config } from "@/src/services/configService";
-import allDialogue from "@/static/fixed_responses/allDialogue.json";
-import allMissions from "@/static/fixed_responses/allMissions.json";
-import { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
-import { IInventoryDatabase, IShipInventory, equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
-import { IPolarity, ArtifactPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
-import { ExportCustoms, ExportFlavour, ExportKeys, ExportResources } from "warframe-public-export-plus";
-import { IFlavourItem } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IInventoryDatabase } from "@/src/types/inventoryTypes/inventoryTypes";
+import { ExportCustoms, ExportFlavour } from "warframe-public-export-plus";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 const inventoryController: RequestHandler = async (request, response) => {
@@ -90,11 +85,12 @@ const inventoryController: RequestHandler = async (request, response) => {
     response.json(inventoryResponse);
 };
 
+/*
 const addString = (arr: string[], str: string): void => {
     if (!arr.find(x => x == str)) {
         arr.push(str);
     }
-};
+};*/
 
 const getExpRequiredForMr = (rank: number): number => {
     if (rank <= 30) {

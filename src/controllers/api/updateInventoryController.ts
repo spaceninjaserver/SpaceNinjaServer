@@ -1,24 +1,19 @@
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { startRecipe } from "@/src/services/recipeService";
-import { logger } from "@/src/utils/logger";
 import { RequestHandler } from "express";
 import { getInventory } from "@/src/services/inventoryService";
-
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const updateInventoryController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const body = JSON.parse(req.body);
+    const body: any = JSON.parse(req.body as string);
 
     const inventory = await getInventory(accountId);
-    inventory.Missions.push({Tag: body.Missions.Tag, Completes: body.Missions.Completes, BestRating: 0.2 })
+    inventory.Missions.push({ Tag: body.Missions.Tag, Completes: body.Missions.Completes, BestRating: 0.2 });
 
     await inventory.save();
     console.log(body);
-    res.json({})
+    res.json({});
 };
-
 
 /*
 {

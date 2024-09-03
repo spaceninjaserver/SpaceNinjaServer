@@ -101,16 +101,16 @@ apiRouter.get("/setSupportedSyndicate.php", setSupportedSyndicateController);
 apiRouter.get("/surveys.php", surveysController);
 apiRouter.get("/updateSession.php", updateSessionGetController);
 
-apiRouter.get('/getMessages.php', (_, response) => {
+apiRouter.get("/getMessages.php", (_, response) => {
     response.json({});
-})
-apiRouter.get('/trainingResult.php', (_, response) => {
+});
+apiRouter.get("/trainingResult.php", (_, response) => {
     response.status(200);
-})
-apiRouter.get('/giveStartingGear.php', (_, response) => {
+});
+apiRouter.get("/giveStartingGear.php", (_, response) => {
     response.status(200);
-})
-apiRouter.get('/worldState.php', worldStateController);
+});
+apiRouter.get("/worldState.php", worldStateController);
 // post
 apiRouter.post("/addFriendImage.php", addFriendImageController);
 apiRouter.post("/artifacts.php", artifactsController);

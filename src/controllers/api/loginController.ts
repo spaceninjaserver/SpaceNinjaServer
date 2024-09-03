@@ -25,7 +25,7 @@ const loginController: RequestHandler = async (request, response) => {
                 email: loginRequest.email,
                 password: loginRequest.password,
                 DisplayName: loginRequest.email.substring(0, loginRequest.email.indexOf("@")),
-                Nonce: nonce,
+                Nonce: nonce
             });
             logger.debug("created new account");
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -55,7 +55,7 @@ const loginController: RequestHandler = async (request, response) => {
     if (account.Nonce == 0 || loginRequest.ClientType != "webui") {
         account.Nonce = nonce;
     }
-    
+
     await account.save();
 
     const { email, password, ...databaseAccount } = account.toJSON();
