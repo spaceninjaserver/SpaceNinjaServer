@@ -666,9 +666,8 @@ export interface ILotusCustomization extends IItemConfig {
 
 export interface IMission {
     Completes: number;
-    Tier?: number;
     Tag: string;
-    RewardsCooldownTime?: IMongoDate;
+    BestRating?: number;
 }
 
 export interface INemesisHistory {

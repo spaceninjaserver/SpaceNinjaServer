@@ -1,12 +1,7 @@
 export interface ILoginResponse extends Omit<IDatabaseAccountDocument, "email" | "password"> {
-    Groups: IGroup[];
-    BuildLabel: string;
-    MatchmakingBuildId: string;
-    platformCDNs: string[];
-    NRS: string[];
-    DTLS: number;
-    IRC: string[];
-    HUB: string;
+    BuildLabel?: string;
+    NatHash?: string;
+    SteamId?: string;
 }
 
 // Includes virtual ID
@@ -20,27 +15,14 @@ export interface IGroup {
 }
 
 export interface IDatabaseAccount {
-    email: string;
+    email?: string;
     password: string;
-    DisplayName: string;
-    CountryCode: string;
-    ClientType: string;
-    CrossPlatformAllowed: boolean;
-    ForceLogoutVersion: number;
-    AmazonAuthToken?: string;
-    AmazonRefreshToken?: string;
-    ConsentNeeded: boolean;
-    TrackedSettings: string[];
-    Nonce: number;
+    DisplayName?: string;
+    Nonce?: number;
 }
 
 export interface ILoginRequest {
     email: string;
     password: string;
-    time: number;
-    s: string;
-    lang: string;
-    date: number;
-    ClientType: string;
-    PS: string;
+    ClientType?: string;
 }

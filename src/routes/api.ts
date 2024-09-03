@@ -64,6 +64,8 @@ import { updateChallengeProgressController } from "@/src/controllers/api/updateC
 import { updateSessionGetController, updateSessionPostController } from "@/src/controllers/api/updateSessionController";
 import { updateThemeController } from "../controllers/api/updateThemeController";
 import { upgradesController } from "@/src/controllers/api/upgradesController";
+import { worldStateController } from "../controllers/dynamic/worldStateController";
+import { updateInventoryController } from "../controllers/api/updateInventoryController";
 
 const apiRouter = express.Router();
 
@@ -99,6 +101,16 @@ apiRouter.get("/setSupportedSyndicate.php", setSupportedSyndicateController);
 apiRouter.get("/surveys.php", surveysController);
 apiRouter.get("/updateSession.php", updateSessionGetController);
 
+apiRouter.get('/getMessages.php', (_, response) => {
+    response.json({});
+})
+apiRouter.get('/trainingResult.php', (_, response) => {
+    response.status(200);
+})
+apiRouter.get('/giveStartingGear.php', (_, response) => {
+    response.status(200);
+})
+apiRouter.get('/worldState.php', worldStateController);
 // post
 apiRouter.post("/addFriendImage.php", addFriendImageController);
 apiRouter.post("/artifacts.php", artifactsController);
@@ -138,5 +150,6 @@ apiRouter.post("/updateNodeIntros.php", genericUpdateController);
 apiRouter.post("/updateSession.php", updateSessionPostController);
 apiRouter.post("/updateTheme.php", updateThemeController);
 apiRouter.post("/upgrades.php", upgradesController);
+apiRouter.post("/updateInventory.php", updateInventoryController);
 
 export { apiRouter };

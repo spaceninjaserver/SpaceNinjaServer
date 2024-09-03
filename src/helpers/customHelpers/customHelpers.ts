@@ -43,11 +43,6 @@ const toAccountCreation = (accountCreation: unknown): IAccountCreation => {
 const toDatabaseAccount = (createAccount: IAccountCreation): IDatabaseAccount => {
     return {
         ...createAccount,
-        ClientType: "",
-        ConsentNeeded: false,
-        CrossPlatformAllowed: true,
-        ForceLogoutVersion: 0,
-        TrackedSettings: [],
         Nonce: 0
     } satisfies IDatabaseAccount;
 };

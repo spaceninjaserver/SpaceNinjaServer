@@ -8,15 +8,21 @@ import { logger } from "@/src/utils/logger";
 export const tauntHistoryController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId);
-    const clientTaunt = JSON.parse(String(req.body)) as ITaunt;
-    logger.debug(`updating taunt ${clientTaunt.node} to state ${clientTaunt.state}`);
-    inventory.TauntHistory ??= [];
-    const taunt = inventory.TauntHistory.find(x => x.node == clientTaunt.node);
-    if (taunt) {
-        taunt.state = clientTaunt.state;
-    } else {
-        inventory.TauntHistory.push(clientTaunt);
+    if(req.body !== undefined)
+    {
+        const clientTaunt = JSON.parse(String(req.body)) as ITaunt;
+        logger.debug(`updating taunt ${clientTaunt.node} to state ${clientTaunt.state}`);
+        inventory.TauntHistory ??= [];
+        const taunt = inventory.TauntHistory.find(x => x.node == clientTaunt.node);
+        if (taunt) {
+            taunt.state = clientTaunt.state;
+        } else {
+            inventory.TauntHistory.push(clientTaunt);
+        }
+        await inventory.save();
+        res.end();
+    }else
+    {
+        res.json({});
     }
-    await inventory.save();
-    res.end();
 };

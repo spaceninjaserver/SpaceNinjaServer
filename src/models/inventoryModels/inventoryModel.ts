@@ -589,61 +589,13 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         RegularCredits: Number,
         //Platinum
         PremiumCredits: Number,
-        //Gift Platinum(Non trade)
-        PremiumCreditsFree: Number,
-        //Endo
-        FusionPoints: Number,
 
         //Slots
         SuitBin: slotsBinSchema,
         WeaponBin: slotsBinSchema,
         SentinelBin: slotsBinSchema,
-        SpaceSuitBin: slotsBinSchema,
-        SpaceWeaponBin: slotsBinSchema,
-        PvpBonusLoadoutBin: slotsBinSchema,
-        PveBonusLoadoutBin: slotsBinSchema,
         RandomModBin: slotsBinSchema,
-        OperatorAmpBin: slotsBinSchema,
-        CrewShipSalvageBin: slotsBinSchema,
         MechBin: slotsBinSchema,
-        CrewMemberBin: slotsBinSchema,
-
-        //How many trades do you have left
-        TradesRemaining: Number,
-        //How many Gift do you have left*(gift spends the trade)
-        GiftsRemaining: Number,
-        //Curent trade info Giving or Getting items
-        PendingTrades: [Schema.Types.Mixed],
-
-        //Syndicate currently being pledged to.
-        SupportedSyndicate: String,
-        //Curent Syndicates rank\exp
-        Affiliations: [affiliationsSchema],
-        //Syndicates Missions complate(Navigation->Syndicate)
-        CompletedSyndicates: [String],
-        //Daily Syndicates Exp
-        DailyAffiliation: Number,
-        DailyAffiliationPvp: Number,
-        DailyAffiliationLibrary: Number,
-        DailyAffiliationCetus: Number,
-        DailyAffiliationQuills: Number,
-        DailyAffiliationSolaris: Number,
-        DailyAffiliationVentkids: Number,
-        DailyAffiliationVox: Number,
-        DailyAffiliationEntrati: Number,
-        DailyAffiliationNecraloid: Number,
-        DailyAffiliationZariman: Number,
-        DailyAffiliationKahl: Number,
-        DailyAffiliationCavia: Number,
-
-        //Daily Focus limit
-        DailyFocus: Number,
-        //Focus XP per School
-        FocusXP: focusXPSchema,
-        //Curent active like Active school focuses is = "Zenurik"
-        FocusAbility: String,
-        //The treeways of the Focus school.(Active and passive Ability)
-        FocusUpgrades: [focusUpgradesSchema],
 
         //Achievement
         ChallengeProgress: [challengeProgressSchema],
@@ -651,8 +603,6 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Account Item like Ferrite,Form,Kuva etc
         MiscItems: [typeCountSchema],
 
-        //Non Upgrade Mods Example:I have 999 item WeaponElectricityDamageMod (only "ItemCount"+"ItemType")
-        RawUpgrades: [RawUpgrades],
         //Upgrade Mods\Riven\Arcane Example:"UpgradeFingerprint"+"ItemType"+""
         Upgrades: [upgradesSchema],
 
@@ -672,83 +622,19 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Sentinel(like Helios or modular)
         Sentinels: [EquipmentSchema],
         //Any /Sentinels/SentinelWeapons/ (like warframe weapon)
-        SentinelWeapons: [EquipmentSchema],
-        //Modular Pets
-        MoaPets: [EquipmentSchema],
-
-        KubrowPetEggs: [Schema.Types.Mixed],
-        //Like PowerSuit Cat\Kubrow or etc Pets
-        KubrowPets: [EquipmentSchema],
-        //Prints   Cat(3 Prints)\Kubrow(2 Prints) Pets
-        KubrowPetPrints: [Schema.Types.Mixed],
+        SentinelWeapons: [Schema.Types.Mixed],
 
         //Item for EquippedGear example:Scaner,LoadoutTechSummon etc
         Consumables: [typeCountSchema],
         //Weel Emotes+Gear
-        EquippedEmotes: [String],
-        EquippedGear: [String],
         //Equipped Shawzin
-        EquippedInstrument: String,
         ReceivedStartingGear: Boolean,
 
-        //to use add SummonItem to Consumables+EquippedGear
-        //Archwing need Suits+Melee+Guns
-        SpaceSuits: [EquipmentSchema],
-        SpaceMelee: [EquipmentSchema],
-        SpaceGuns: [EquipmentSchema],
-        ArchwingEnabled: Boolean,
-        //Mech need Suits+SpaceGuns+SpecialItem
-        MechSuits: [EquipmentSchema],
-        ///Restoratives/HoverboardSummon (like Suit)
-        Hoverboards: [EquipmentSchema],
-
-        //Use Operator\Drifter
-        UseAdultOperatorLoadout: Boolean,
-        //Operator\Drifter Weapon
-        OperatorAmps: [EquipmentSchema],
-        //Operator
-        OperatorLoadOuts: [operatorConfigSchema],
-        //Drifter
-        AdultOperatorLoadOuts: [operatorConfigSchema],
-        DrifterMelee: [EquipmentSchema],
-        DrifterGuns: [EquipmentSchema],
-        //ErsatzHorsePowerSuit
-        Horses: [EquipmentSchema],
-
-        //LandingCraft like Liset
-        Ships: { type: [Schema.Types.ObjectId], ref: "Ships" },
-        // /Lotus/Types/Items/ShipDecos/
-        ShipDecorations: [typeCountSchema],
-
-        //RailJack Setting(Mods,Skin,Weapon,etc)
-        CrewShipHarnesses: [EquipmentSchema],
-        //Railjack/Components(https://warframe.fandom.com/wiki/Railjack/Components)
-        CrewShipRawSalvage: [Schema.Types.Mixed],
-
-        //Default RailJack
-        CrewShips: [Schema.Types.Mixed],
-        CrewShipAmmo: [typeCountSchema],
-        CrewShipWeapons: [Schema.Types.Mixed],
-        CrewShipWeaponSkins: [Schema.Types.Mixed],
-
-        //NPC Crew and weapon
-        CrewMembers: [Schema.Types.Mixed],
-        CrewShipSalvagedWeaponSkins: [Schema.Types.Mixed],
-        CrewShipSalvagedWeapons: [Schema.Types.Mixed],
-
-        //Complete Mission\Quests
+        //Complete Mission
         Missions: [Schema.Types.Mixed],
-        QuestKeys: [questKeysSchema],
-        //item like DojoKey or Boss missions key
-        LevelKeys: [Schema.Types.Mixed],
-        //Active quests
-        Quests: [Schema.Types.Mixed],
 
         //Cosmetics like profile glyphs\Kavasa Prime Kubrow Collar\Game Theme etc
         FlavourItems: [FlavourItemSchema],
-
-        //Lunaro Weapon
-        Scoops: [EquipmentSchema],
 
         //Mastery Rank*(Need item XPInfo to rank up)
         PlayerLevel: Number,
@@ -756,11 +642,6 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         XPInfo: [TypeXPItemSchema],
         //Mastery Rank next availability
         TrainingDate: Date,
-        //Retries rank up(3 time)
-        TrainingRetriesLeft: Number,
-
-        //you saw last played Region when you opened the star map
-        LastRegionPlayed: String,
 
         //Blueprints for Foundry
         Recipes: [typeCountSchema],
@@ -770,79 +651,25 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Skins for Suits, Weapons etc.
         WeaponSkins: [weaponSkinsSchema],
 
-        //Ayatan Item
-        FusionTreasures: [fusionTreasuresSchema],
-        //only used for Maroo apparently - { "node": "TreasureTutorial", "state": "TS_COMPLETED" }
-        TauntHistory: { type: [tauntSchema], default: undefined },
-
         //noShow2FA,VisitPrimeVault etc
         WebFlags: Schema.Types.Mixed,
         //Id CompletedAlerts
         CompletedAlerts: [String],
 
-        //Warframe\Duviri
-        StoryModeChoice: String,
-
-        //Alert->Kuva Siphon
-        PeriodicMissionCompletions: [periodicMissionCompletionsSchema],
-
-        //Codex->LoreFragment
-        LoreFragmentScans: [loreFragmentScansSchema],
 
         //Resource,Credit,Affinity etc or Bless any boosters
         Boosters: [boosterSchema],
-        BlessingCooldown: Date, // Date convert to IMongoDate
-
-        //the color your clan requests like Items/Research/DojoColors/DojoColorPlainsB
-        ActiveDojoColorResearch: String,
-
-        SentientSpawnChanceBoosters: Schema.Types.Mixed,
-
-        QualifyingInvasions: [Schema.Types.Mixed],
-        FactionScores: [Number],
-
-        //Have only Suit+Pistols+LongGuns+Melee+ItemType(BronzeSpectre,GoldSpectre,PlatinumSpectreArmy,SilverSpectreArmy)
-        //"/Lotus/Types/Game/SpectreArmies/BronzeSpectreArmy": "Vapor Specter Regiment",
-        SpectreLoadouts: [spectreLoadoutsSchema],
-        //If you want change Spectre Gear id
-        PendingSpectreLoadouts: [Schema.Types.Mixed],
 
         //New Quest Email
         EmailItems: [TypeXPItemSchema],
-
-        //Profile->Wishlist
-        Wishlist: [String],
 
         //https://warframe.fandom.com/wiki/Alignment
         //like "Alignment": { "Wisdom": 9, "Alignment": 1 },
         Alignment: Schema.Types.Mixed,
         AlignmentReplay: Schema.Types.Mixed,
 
-        //https://warframe.fandom.com/wiki/Sortie
-        CompletedSorties: [String],
-        LastSortieReward: [Schema.Types.Mixed],
-
-        //Resource_Drone[Uselees stuff]
-        Drones: [Schema.Types.Mixed],
-
         //Active profile ico
         ActiveAvatarImageType: String,
-
-        // open location store like EidolonPlainsDiscoverable or OrbVallisCaveDiscoverable
-        DiscoveredMarkers: [Schema.Types.Mixed],
-        //Open location mission like "JobId" + "StageCompletions"
-        CompletedJobs: [Schema.Types.Mixed],
-
-        //Game mission\ivent score example  "Tag": "WaterFight", "Best": 170, "Count": 1258,
-        PersonalGoalProgress: [Schema.Types.Mixed],
-
-        //Setting interface Style
-        ThemeStyle: String,
-        ThemeBackground: String,
-        ThemeSounds: String,
-
-        //Daily LoginRewards
-        LoginMilestoneRewards: [String],
 
         //You first Dialog with NPC or use new Item
         NodeIntrosCompleted: [String],
@@ -850,35 +677,8 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Current guild id, if applicable.
         GuildId: { type: Schema.Types.ObjectId, ref: "Guild" },
 
-        //https://warframe.fandom.com/wiki/Heist
-        //ProfitTaker(1-4) Example:"LocationTag": "EudicoHeists", "Jobs":Mission name
-        CompletedJobChains: [completedJobChainsSchema],
-        //Night Wave Challenge
-        SeasonChallengeHistory: [seasonChallengeHistorySchema],
-
-        //Cephalon Simaris Entries Example:"TargetType"+"Scans"(1-10)+"Completed": true|false
-        LibraryPersonalProgress: [Schema.Types.Mixed],
-        //Cephalon Simaris Daily Task
-        LibraryAvailableDailyTaskInfo: Schema.Types.Mixed,
-
-        //https://warframe.fandom.com/wiki/Invasion
-        InvasionChainProgress: [Schema.Types.Mixed],
-
-        //https://warframe.fandom.com/wiki/Parazon
-        DataKnives: [EquipmentSchema],
-
-        //CorpusLich or GrineerLich
-        NemesisAbandonedRewards: [String],
-        //CorpusLich\KuvaLich
-        NemesisHistory: [Schema.Types.Mixed],
-        LastNemesisAllySpawnTime: Schema.Types.Mixed,
-
         //TradingRulesConfirmed,ShowFriendInvNotifications(Option->Social)
         Settings: settingsSchema,
-
-        //Railjack craft
-        //https://warframe.fandom.com/wiki/Rising_Tide
-        PersonalTechProjects: [Schema.Types.Mixed],
 
         //Modulars lvl and exp(Railjack|Duviri)
         //https://warframe.fandom.com/wiki/Intrinsics
@@ -887,42 +687,15 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //TradeBannedUntil data
         TradeBannedUntil: Schema.Types.Mixed,
 
-        //https://warframe.fandom.com/wiki/Helminth
-        InfestedFoundry: infestedFoundrySchema,
-
-        NextRefill: Schema.Types.Mixed, // Date, convert to IMongoDate
-
-        //Purchase this new permanent skin from the Lotus customization options in Personal Quarters located in your Orbiter.
-        //https://warframe.fandom.com/wiki/Lotus#The_New_War
-        LotusCustomization: Schema.Types.Mixed,
-
-        //Progress+Rank+ItemType(ZarimanPumpShotgun)
-        //https://warframe.fandom.com/wiki/Incarnon
-        EvolutionProgress: { type: [evolutionProgressSchema], default: undefined },
 
         //Unknown and system
-        DuviriInfo: DuviriInfoSchema,
         Mailbox: MailboxSchema,
-        KahlLoadOuts: [Schema.Types.Mixed],
         HandlerPoints: Number,
         ChallengesFixVersion: Number,
         PlayedParkourTutorial: Boolean,
         SubscribedToEmailsPersonalized: Number,
-        LastInventorySync: Schema.Types.Mixed, // this should be Schema.Types.ObjectId, but older inventories may break with that.
-        ActiveLandscapeTraps: [Schema.Types.Mixed],
-        RepVotes: [Schema.Types.Mixed],
-        LeagueTickets: [Schema.Types.Mixed],
-        HasContributedToDojo: Boolean,
-        HWIDProtectEnabled: Boolean,
-        LoadOutPresets: { type: Schema.Types.ObjectId, ref: "Loadout" },
-        CurrentLoadOutIds: [Schema.Types.Mixed],
-        RandomUpgradesIdentified: Number,
-        BountyScore: Number,
-        ChallengeInstanceStates: [Schema.Types.Mixed],
-        RecentVendorPurchases: [Schema.Types.Mixed],
+        LastInventorySync: Schema.Types.Mixed,
         Robotics: [Schema.Types.Mixed],
-        UsedDailyDeals: [Schema.Types.Mixed],
-        CollectibleSeries: [Schema.Types.Mixed],
         HasResetAccount: Boolean,
 
         //Discount Coupon

@@ -25,15 +25,7 @@ const databaseAccountSchema = new Schema<IDatabaseAccountDocument>(
         email: { type: String, required: true, unique: true },
         password: { type: String, required: true },
         DisplayName: { type: String, required: true },
-        CountryCode: { type: String, required: true },
-        ClientType: { type: String },
-        CrossPlatformAllowed: { type: Boolean, required: true },
-        ForceLogoutVersion: { type: Number, required: true },
-        AmazonAuthToken: { type: String },
-        AmazonRefreshToken: { type: String },
-        ConsentNeeded: { type: Boolean, required: true },
-        TrackedSettings: { type: [String], default: [] },
-        Nonce: { type: Number, default: 0 }
+        Nonce: { type: Number, required: true }
     },
     opts
 );
