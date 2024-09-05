@@ -18,14 +18,12 @@ interface ITrainingResultsResponse {
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 const trainingResultController: RequestHandler = async (req, res): Promise<void> => {
     const accountId = await getAccountIdForRequest(req);
-
-    const trainingResults = getJSONfromString(String(req.body)) as ITrainingResultsRequest;
-
+    const numLevelsGained = parseInt(req.query.numLevelsGained as string);
     const inventory = await getInventory(accountId);
-
+    console.log(req.query);
     inventory.TrainingDate = new Date(Date.now() + unixTimesInMs.day);
 
-    if (trainingResults.numLevelsGained == 1) {
+    if (numLevelsGained == 1) {
         inventory.PlayerLevel += 1;
     }
 
@@ -35,7 +33,7 @@ const trainingResultController: RequestHandler = async (req, res): Promise<void>
         NewTrainingDate: {
             $date: { $numberLong: changedinventory.TrainingDate.getTime().toString() }
         },
-        NewLevel: trainingResults.numLevelsGained == 1 ? changedinventory.PlayerLevel : inventory.PlayerLevel,
+        NewLevel: numLevelsGained == 1 ? changedinventory.PlayerLevel : inventory.PlayerLevel,
         InventoryChanges: []
     } satisfies ITrainingResultsResponse);
 };

@@ -123,7 +123,6 @@ export interface IInventoryResponse {
     RewardSeed: number;
     RegularCredits: number;
     PremiumCredits: number;
-    PremiumCreditsFree: number;
     FusionPoints: number;
     SuitBin: ISlots;
     WeaponBin: ISlots;
@@ -134,14 +133,6 @@ export interface IInventoryResponse {
     PveBonusLoadoutBin: ISlots;
     RandomModBin: ISlots;
     MechBin: ISlots;
-    CrewMemberBin: ISlots;
-    OperatorAmpBin: ISlots;
-    CrewShipSalvageBin: ISlots;
-    TradesRemaining: number;
-    DailyAffiliation: number;
-    DailyAffiliationPvp: number;
-    DailyAffiliationLibrary: number;
-    DailyFocus: number;
     GiftsRemaining: number;
     HandlerPoints: number;
     MiscItems: IMiscItem[];

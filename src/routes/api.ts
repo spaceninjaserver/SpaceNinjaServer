@@ -66,6 +66,7 @@ import { updateThemeController } from "../controllers/api/updateThemeController"
 import { upgradesController } from "@/src/controllers/api/upgradesController";
 import { worldStateController } from "../controllers/dynamic/worldStateController";
 import { updateInventoryController } from "../controllers/api/updateInventoryController";
+import { giveStartingGearController } from "../controllers/api/giveStartingGearController";
 
 const apiRouter = express.Router();
 
@@ -104,12 +105,8 @@ apiRouter.get("/updateSession.php", updateSessionGetController);
 apiRouter.get("/getMessages.php", (_, response) => {
     response.json({});
 });
-apiRouter.get("/trainingResult.php", (_, response) => {
-    response.status(200);
-});
-apiRouter.get("/giveStartingGear.php", (_, response) => {
-    response.status(200);
-});
+apiRouter.get("/trainingResult.php", trainingResultController);
+apiRouter.get("/giveStartingGear.php", giveStartingGearController);
 apiRouter.get("/worldState.php", worldStateController);
 // post
 apiRouter.post("/addFriendImage.php", addFriendImageController);

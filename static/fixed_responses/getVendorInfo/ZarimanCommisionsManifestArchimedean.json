@@ -1,6 +1,6 @@
 {
   "VendorInfo": {
-    "_id": { "$oid": "62a20ba667e5d3797540d831" },
+    "_id": { "$id": "62a20ba667e5d3797540d831" },
     "TypeName": "/Lotus/Types/Game/VendorManifests/Zariman/ZarimanCommisionsManifestArchimedean",
     "ItemManifest": [
       {
@@ -14,7 +14,7 @@
         "Expiry": { "$date": { "$numberLong": "9999999000000" } },
         "PurchaseQuantityLimit": 1,
         "AllowMultipurchase": false,
-        "Id": { "$oid": "6678b612aa3d8ee5c2597299" }
+        "Id": { "$id": "6678b612aa3d8ee5c2597299" }
       },
       {
         "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Zariman/AchimedeanTaskD",
@@ -27,7 +27,7 @@
         "Expiry": { "$date": { "$numberLong": "9999999000000" } },
         "PurchaseQuantityLimit": 1,
         "AllowMultipurchase": false,
-        "Id": { "$oid": "6678b612aa3d8ee5c259729a" }
+        "Id": { "$id": "6678b612aa3d8ee5c259729a" }
       },
       {
         "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Zariman/AchimedeanTaskC",
@@ -40,7 +40,7 @@
         "Expiry": { "$date": { "$numberLong": "9999999000000" } },
         "PurchaseQuantityLimit": 1,
         "AllowMultipurchase": false,
-        "Id": { "$oid": "6678b612aa3d8ee5c259729b" }
+        "Id": { "$id": "6678b612aa3d8ee5c259729b" }
       },
       {
         "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Zariman/AchimedeanTaskB",
@@ -53,7 +53,7 @@
         "Expiry": { "$date": { "$numberLong": "9999999000000" } },
         "PurchaseQuantityLimit": 1,
         "AllowMultipurchase": false,
-        "Id": { "$oid": "6678b612aa3d8ee5c259729c" }
+        "Id": { "$id": "6678b612aa3d8ee5c259729c" }
       },
       {
         "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Zariman/AchimedeanTaskA",
@@ -66,7 +66,7 @@
         "Expiry": { "$date": { "$numberLong": "9999999000000" } },
         "PurchaseQuantityLimit": 1,
         "AllowMultipurchase": false,
-        "Id": { "$oid": "6678b612aa3d8ee5c259729d" }
+        "Id": { "$id": "6678b612aa3d8ee5c259729d" }
       }
     ],
     "PropertyTextHash": "F43F0ED811985EEF856970A8342EF322",

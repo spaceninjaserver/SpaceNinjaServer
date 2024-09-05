@@ -157,7 +157,7 @@ function updateInventory() {
                         a.href = "#";
                         a.onclick = function (event) {
                             event.preventDefault();
-                            addGearExp("Suits", item.ItemId.$oid, 1_600_000 - item.XP);
+                            addGearExp("Suits", item.ItemId.$id, 1_600_000 - item.XP);
                         };
                         a.title = "Make Rank 30";
                         a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"/></svg>`;
@@ -165,7 +165,7 @@ function updateInventory() {
                     }
                     {
                         const a = document.createElement("a");
-                        a.href = "/webui/powersuit/" + item.ItemId.$oid;
+                        a.href = "/webui/powersuit/" + item.ItemId.$id;
                         a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M278.5 215.6L23 471c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l57-57h68c49.7 0 97.9-14.4 139-41c11.1-7.2 5.5-23-7.8-23c-5.1 0-9.2-4.1-9.2-9.2c0-4.1 2.7-7.6 6.5-8.8l81-24.3c2.5-.8 4.8-2.1 6.7-4l22.4-22.4c10.1-10.1 2.9-27.3-11.3-27.3l-32.2 0c-5.1 0-9.2-4.1-9.2-9.2c0-4.1 2.7-7.6 6.5-8.8l112-33.6c4-1.2 7.4-3.9 9.3-7.7C506.4 207.6 512 184.1 512 160c0-41-16.3-80.3-45.3-109.3l-5.5-5.5C432.3 16.3 393 0 352 0s-80.3 16.3-109.3 45.3L139 149C91 197 64 262.1 64 330v55.3L253.6 195.8c6.2-6.2 16.4-6.2 22.6 0c5.4 5.4 6.1 13.6 2.2 19.8z"/></svg>`;
                         td.appendChild(a);
                     }
@@ -176,7 +176,7 @@ function updateInventory() {
                             event.preventDefault();
                             const name = prompt("Enter new custom name:");
                             if (name !== null) {
-                                renameGear("Suits", item.ItemId.$oid, name);
+                                renameGear("Suits", item.ItemId.$id, name);
                             }
                         };
                         a.title = "Rename";
@@ -188,7 +188,7 @@ function updateInventory() {
                         a.href = "#";
                         a.onclick = function (event) {
                             event.preventDefault();
-                            disposeOfGear("Suits", item.ItemId.$oid);
+                            disposeOfGear("Suits", item.ItemId.$id);
                         };
                         a.title = "Remove";
                         a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
@@ -218,7 +218,7 @@ function updateInventory() {
                             a.href = "#";
                             a.onclick = function (event) {
                                 event.preventDefault();
-                                addGearExp(category, item.ItemId.$oid, 800_000 - item.XP);
+                                addGearExp(category, item.ItemId.$id, 800_000 - item.XP);
                             };
                             a.title = "Make Rank 30";
                             a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"/></svg>`;
@@ -231,7 +231,7 @@ function updateInventory() {
                                 event.preventDefault();
                                 const name = prompt("Enter new custom name:");
                                 if (name !== null) {
-                                    renameGear(category, item.ItemId.$oid, name);
+                                    renameGear(category, item.ItemId.$id, name);
                                 }
                             };
                             a.title = "Rename";
@@ -243,7 +243,7 @@ function updateInventory() {
                             a.href = "#";
                             a.onclick = function (event) {
                                 event.preventDefault();
-                                disposeOfGear(category, item.ItemId.$oid);
+                                disposeOfGear(category, item.ItemId.$id);
                             };
                             a.title = "Remove";
                             a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
@@ -298,7 +298,7 @@ function updateInventory() {
                             a.href = "#";
                             a.onclick = function (event) {
                                 event.preventDefault();
-                                disposeOfGear("Upgrades", item.ItemId.$oid);
+                                disposeOfGear("Upgrades", item.ItemId.$id);
                             };
                             a.title = "Remove";
                             a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
@@ -336,7 +336,7 @@ function updateInventory() {
                             a.href = "#";
                             a.onclick = function (event) {
                                 event.preventDefault();
-                                disposeOfGear("Upgrades", item.ItemId.$oid);
+                                disposeOfGear("Upgrades", item.ItemId.$id);
                             };
                             a.title = "Remove";
                             a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
@@ -394,7 +394,7 @@ function updateInventory() {
             // Populate powersuit route
             if (single.getCurrentPath().substr(0, 17) == "/webui/powersuit/") {
                 const oid = single.getCurrentPath().substr(17);
-                const item = data.Suits.find(x => x.ItemId.$oid == oid);
+                const item = data.Suits.find(x => x.ItemId.$id == oid);
                 if (item) {
                     if (item.ItemName) {
                         $("#powersuit-route h3").text(item.ItemName);
@@ -507,7 +507,7 @@ function addGearExp(category, oid, xp) {
     const data = {};
     data[category] = [
         {
-            ItemId: { $oid: oid },
+            ItemId: { $id: oid },
             XP: xp
         }
     ];

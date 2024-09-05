@@ -1,5 +1,5 @@
 export interface IOid {
-    $oid: string;
+    $id: string;
 }
 
 export interface IMongoDate {

@@ -73,22 +73,8 @@ const combineRewardAndLootInventory = (
     const missionCredits = lootInventory.RegularCredits || 0;
     const creditsBonus = rewardInventory.RegularCredits || 0;
     const totalCredits = missionCredits + creditsBonus;
-    let FusionPoints = rewardInventory.FusionPoints || 0;
-
-    // Discharge Endo picked up during the mission
-    if (lootInventory.FusionBundles) {
-        for (const fusionBundle of lootInventory.FusionBundles) {
-            if (fusionBundle.ItemType in fusionBundles) {
-                FusionPoints += fusionBundles[fusionBundle.ItemType] * fusionBundle.ItemCount;
-            } else {
-                logger.error(`unknown fusion bundle: ${fusionBundle.ItemType}`);
-            }
-        }
-        lootInventory.FusionBundles = undefined;
-    }
 
     lootInventory.RegularCredits = totalCredits;
-    lootInventory.FusionPoints = FusionPoints;
     inventoryFields.forEach((field: IInventoryFieldType) => {
         if (rewardInventory[field] && !lootInventory[field]) {
             lootInventory[field] = [];
@@ -101,7 +87,6 @@ const combineRewardAndLootInventory = (
         TotalCredits: [totalCredits, totalCredits],
         CreditsBonus: [creditsBonus, creditsBonus],
         MissionCredits: [missionCredits, missionCredits],
-        FusionPoints: FusionPoints
     };
 };
 

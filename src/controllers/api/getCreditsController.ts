@@ -16,8 +16,6 @@ export const getCreditsController: RequestHandler = async (req, res) => {
     if (config.infiniteResources) {
         res.json({
             RegularCredits: 999999999,
-            TradesRemaining: 999999999,
-            PremiumCreditsFree: 999999999,
             PremiumCredits: 999999999
         });
         return;
@@ -26,8 +24,6 @@ export const getCreditsController: RequestHandler = async (req, res) => {
     const inventory = await getInventory(accountId);
     res.json({
         RegularCredits: inventory.RegularCredits,
-        TradesRemaining: inventory.TradesRemaining,
-        PremiumCreditsFree: inventory.PremiumCreditsFree,
         PremiumCredits: inventory.PremiumCredits
     });
 };

@@ -31,38 +31,37 @@ const inventoryController: RequestHandler = async (request, response) => {
 
     if (config.infiniteResources) {
         inventoryResponse.RegularCredits = 999999999;
-        inventoryResponse.TradesRemaining = 999999999;
         inventoryResponse.PremiumCredits = 999999999;
     }
 
-    if (config.unlockAllMissions) {
-        //inventoryResponse.Missions = allMissions;
-        //inventoryResponse.NodeIntrosCompleted.push("TeshinHardModeUnlocked");
-    }
+    // if (config.unlockAllMissions) {
+    //     //inventoryResponse.Missions = allMissions;
+    //     //inventoryResponse.NodeIntrosCompleted.push("TeshinHardModeUnlocked");
+    // }
 
-    if (config.unlockAllMissions) {
-        //inventoryResponse.Missions = allMissions;
-        //addString(inventoryResponse.NodeIntrosCompleted, "TeshinHardModeUnlocked");
-    }
+    // if (config.unlockAllMissions) {
+    //     //inventoryResponse.Missions = allMissions;
+    //     //addString(inventoryResponse.NodeIntrosCompleted, "TeshinHardModeUnlocked");
+    // }
 
-    if (config.unlockAllFlavourItems) {
-        inventoryResponse.FlavourItems = [];
-        for (const uniqueName in ExportFlavour) {
-            inventoryResponse.FlavourItems.push({ ItemType: uniqueName });
-        }
-    }
+    // if (config.unlockAllFlavourItems) {
+    //     inventoryResponse.FlavourItems = [];
+    //     for (const uniqueName in ExportFlavour) {
+    //         inventoryResponse.FlavourItems.push({ ItemType: uniqueName });
+    //     }
+    // }
 
-    if (config.unlockAllSkins) {
-        inventoryResponse.WeaponSkins = [];
-        for (const uniqueName in ExportCustoms) {
-            inventoryResponse.WeaponSkins.push({
-                ItemId: {
-                    $oid: "000000000000000000000000"
-                },
-                ItemType: uniqueName
-            });
-        }
-    }
+    // if (config.unlockAllSkins) {
+    //     inventoryResponse.WeaponSkins = [];
+    //     for (const uniqueName in ExportCustoms) {
+    //         inventoryResponse.WeaponSkins.push({
+    //             ItemId: {
+    //                 $id: "000000000000000000000000"
+    //             },
+    //             ItemType: uniqueName
+    //         });
+    //     }
+    // }
 
     if (typeof config.spoofMasteryRank === "number" && config.spoofMasteryRank >= 0) {
         inventoryResponse.PlayerLevel = config.spoofMasteryRank;

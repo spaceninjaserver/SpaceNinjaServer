@@ -107,14 +107,7 @@ const handleStoreItemAcquisition = async (
 export const slotPurchaseNameToSlotName: SlotPurchase = {
     SuitSlotItem: { name: "SuitBin", slotsPerPurchase: 1 },
     TwoSentinelSlotItem: { name: "SentinelBin", slotsPerPurchase: 2 },
-    TwoWeaponSlotItem: { name: "WeaponBin", slotsPerPurchase: 2 },
-    SpaceSuitSlotItem: { name: "SpaceSuitBin", slotsPerPurchase: 1 },
-    TwoSpaceWeaponSlotItem: { name: "SpaceWeaponBin", slotsPerPurchase: 2 },
-    MechSlotItem: { name: "MechBin", slotsPerPurchase: 1 },
-    TwoOperatorWeaponSlotItem: { name: "OperatorAmpBin", slotsPerPurchase: 2 },
-    RandomModSlotItem: { name: "RandomModBin", slotsPerPurchase: 3 },
-    TwoCrewShipSalvageSlotItem: { name: "CrewShipSalvageBin", slotsPerPurchase: 2 },
-    CrewMemberSlotItem: { name: "CrewMemberBin", slotsPerPurchase: 1 }
+    TwoWeaponSlotItem: { name: "WeaponBin", slotsPerPurchase: 2 }
 };
 
 // // extra = everything above the base +2 slots (depending on slot type)

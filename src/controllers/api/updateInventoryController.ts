@@ -1,18 +1,26 @@
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { RequestHandler } from "express";
-import { getInventory } from "@/src/services/inventoryService";
+import { getInventory, missionInventoryUpdate } from "@/src/services/inventoryService";
+import { combineRewardAndLootInventory } from "@/src/services/missionInventoryUpdateService";
+import { getJSONfromString } from "@/src/helpers/stringHelpers";
+import { IMissionInventoryUpdateRequest } from "@/src/types/requestTypes";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const updateInventoryController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const body: any = JSON.parse(req.body as string);
+    const lootInventory = getJSONfromString(req.body.toString()) as IMissionInventoryUpdateRequest;
+    const { combinedInventoryChanges, TotalCredits, CreditsBonus, MissionCredits } =
+    combineRewardAndLootInventory(lootInventory, lootInventory);
 
-    const inventory = await getInventory(accountId);
-    inventory.Missions.push({ Tag: body.Missions.Tag, Completes: body.Missions.Completes, BestRating: 0.2 });
+    await missionInventoryUpdate(combinedInventoryChanges, accountId);
 
-    await inventory.save();
-    console.log(body);
-    res.json({});
+    res.json({
+        // InventoryJson, // this part will reset game data and missions will be locked
+        combinedInventoryChanges,
+        TotalCredits,
+        CreditsBonus,
+        MissionCredits
+    });
 };
 
 /*

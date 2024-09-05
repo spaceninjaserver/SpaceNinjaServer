@@ -34,6 +34,6 @@ export const startRecipe = async (recipeName: string, accountId: string) => {
     const newInventory = await inventory.save();
 
     return {
-        RecipeId: { $oid: newInventory.PendingRecipes[newInventory.PendingRecipes.length - 1]._id?.toString() }
+        RecipeId: { $id: newInventory.PendingRecipes[newInventory.PendingRecipes.length - 1]._id?.toString() }
     };
 };

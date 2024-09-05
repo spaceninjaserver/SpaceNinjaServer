@@ -21,11 +21,11 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
 
     const inventory = await getInventory(accountId);
     const pendingRecipe = inventory.PendingRecipes.find(
-        recipe => recipe._id?.toString() === claimCompletedRecipeRequest.RecipeIds[0].$oid
+        recipe => recipe._id?.toString() === claimCompletedRecipeRequest.RecipeIds[0].$id
     );
     if (!pendingRecipe) {
-        logger.error(`no pending recipe found with id ${claimCompletedRecipeRequest.RecipeIds[0].$oid}`);
-        throw new Error(`no pending recipe found with id ${claimCompletedRecipeRequest.RecipeIds[0].$oid}`);
+        logger.error(`no pending recipe found with id ${claimCompletedRecipeRequest.RecipeIds[0].$id}`);
+        throw new Error(`no pending recipe found with id ${claimCompletedRecipeRequest.RecipeIds[0].$id}`);
     }
 
     //check recipe is indeed ready to be completed

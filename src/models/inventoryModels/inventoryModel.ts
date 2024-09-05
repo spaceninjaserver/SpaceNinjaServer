@@ -50,7 +50,7 @@ const pendingRecipeSchema = new Schema<IPendingRecipeDatabase>(
 );
 
 pendingRecipeSchema.virtual("ItemId").get(function () {
-    return { $oid: this._id.toString() };
+    return { $id: this._id.toString() };
 });
 
 pendingRecipeSchema.set("toJSON", {
@@ -108,7 +108,7 @@ const operatorConfigSchema = new Schema<IOperatorConfigDatabase>(
 );
 
 operatorConfigSchema.virtual("ItemId").get(function () {
-    return { $oid: this._id.toString() } satisfies IOid;
+    return { $id: this._id.toString() } satisfies IOid;
 });
 
 operatorConfigSchema.set("toJSON", {
@@ -197,7 +197,7 @@ const EquipmentSchema = new Schema<IEquipmentDatabase>(
 );
 
 EquipmentSchema.virtual("ItemId").get(function () {
-    return { $oid: this._id.toString() } satisfies IOid;
+    return { $id: this._id.toString() } satisfies IOid;
 });
 
 EquipmentSchema.set("toJSON", {
@@ -225,7 +225,7 @@ const RawUpgrades = new Schema<IRawUpgrade>(
 );
 
 RawUpgrades.virtual("LastAdded").get(function () {
-    return { $oid: this._id.toString() } satisfies IOid;
+    return { $id: this._id.toString() } satisfies IOid;
 });
 
 RawUpgrades.set("toJSON", {
@@ -279,12 +279,12 @@ FlavourItemSchema.set("toJSON", {
     }
 });
 
-//  "Mailbox": { "LastInboxId": { "$oid": "123456780000000000000000" } }
+//  "Mailbox": { "LastInboxId": { "$id": "123456780000000000000000" } }
 const MailboxSchema = new Schema<IMailbox>(
     {
         LastInboxId: {
             type: Schema.Types.ObjectId,
-            set: (v: IMailbox["LastInboxId"]) => v.$oid.toString()
+            set: (v: IMailbox["LastInboxId"]) => v.$id.toString()
         }
     },
     { id: false, _id: false }
@@ -351,7 +351,7 @@ const StepSequencersSchema = new Schema<IStepSequencer>(
 );
 
 StepSequencersSchema.virtual("ItemId").get(function () {
-    return { $oid: this._id.toString() } satisfies IOid;
+    return { $id: this._id.toString() } satisfies IOid;
 });
 
 StepSequencersSchema.set("toJSON", {
@@ -428,7 +428,7 @@ const weaponSkinsSchema = new Schema<IWeaponSkinDatabase>(
 );
 
 weaponSkinsSchema.virtual("ItemId").get(function () {
-    return { $oid: this._id.toString() };
+    return { $id: this._id.toString() };
 });
 
 weaponSkinsSchema.set("toJSON", {

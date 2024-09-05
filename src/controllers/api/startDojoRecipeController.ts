@@ -17,7 +17,7 @@ export const startDojoRecipeController: RequestHandler = async (req, res) => {
         _id: new Types.ObjectId(),
         pf: request.PlacedComponent.pf,
         ppf: request.PlacedComponent.ppf,
-        pi: new Types.ObjectId(request.PlacedComponent.pi!.$oid),
+        pi: new Types.ObjectId(request.PlacedComponent.pi!.$id),
         op: request.PlacedComponent.op,
         pp: request.PlacedComponent.pp,
         CompletionTime: new Date(Date.now()) // TOOD: Omit this field & handle the "Collecting Materials" state.

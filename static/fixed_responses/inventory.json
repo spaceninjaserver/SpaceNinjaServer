@@ -8,7 +8,7 @@
   "DrifterMelee": [
     {
       "ItemType": "/Lotus/Types/Friendly/PlayerControllable/Weapons/DuviriDualSwords",
-      "ItemId": { "$oid": "removed" }
+      "ItemId": { "$id": "removed" }
     }
   ],
   "FusionPoints": 0,
@@ -23,7 +23,7 @@
   "SpaceWeaponBin": { "Slots": 4 },
   "SuitBin": { "Slots": 2 },
   "WeaponBin": { "Slots": 8 },
-  "LastInventorySync": { "$oid": "removed" },
+  "LastInventorySync": { "$id": "removed" },
   "NextRefill": { "$date": { "$numberLong": "removed" } },
   "ActiveLandscapeTraps": [],
   "ChallengeProgress": [],
@@ -59,7 +59,7 @@
   "Scoops": [],
   "Sentinels": [],
   "SentinelWeapons": [],
-  "Ships": [{ "ItemType": "/Lotus/Types/Items/Ships/DefaultShip", "ItemId": { "$oid": "123123" } }],
+  "Ships": [{ "ItemType": "/Lotus/Types/Items/Ships/DefaultShip", "ItemId": { "$id": "123123" } }],
   "SpaceGuns": [],
   "SpaceMelee": [],
   "SpaceSuits": [],

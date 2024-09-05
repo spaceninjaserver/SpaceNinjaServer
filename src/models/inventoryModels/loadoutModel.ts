@@ -5,7 +5,7 @@ import { Model, Schema, Types, model } from "mongoose";
 
 const oidSchema = new Schema<IOid>(
     {
-        $oid: String
+        $id: String
     },
     {
         _id: false
@@ -44,7 +44,7 @@ const loadoutConfigSchema = new Schema<ILoadoutConfigDatabase>(
 );
 
 loadoutConfigSchema.virtual("ItemId").get(function () {
-    return { $oid: this._id.toString() } satisfies IOid;
+    return { $id: this._id.toString() } satisfies IOid;
 });
 
 loadoutConfigSchema.set("toJSON", {

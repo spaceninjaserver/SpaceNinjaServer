@@ -188,34 +188,6 @@ export const addItem = async (
                         }
                     };
                 }
-                case "Archwing": {
-                    const spaceSuit = await addSpaceSuit(typeName, accountId);
-                    await updateSlots(accountId, InventorySlot.SPACESUITS, 0, 1);
-                    return {
-                        InventoryChanges: {
-                            SpaceSuitBin: {
-                                count: 1,
-                                platinum: 0,
-                                Slots: -1
-                            },
-                            SpaceSuits: [spaceSuit]
-                        }
-                    };
-                }
-                case "EntratiMech": {
-                    const mechSuit = await addMechSuit(typeName, accountId);
-                    await updateSlots(accountId, InventorySlot.MECHSUITS, 0, 1);
-                    return {
-                        InventoryChanges: {
-                            MechBin: {
-                                count: 1,
-                                platinum: 0,
-                                Slots: -1
-                            },
-                            MechSuits: [mechSuit]
-                        }
-                    };
-                }
             }
             break;
         case "Weapons":
@@ -426,9 +398,6 @@ export const updateCurrency = async (price: number, usePremium: boolean, account
     const inventory = await getInventory(accountId);
 
     if (usePremium) {
-        if (inventory.PremiumCreditsFree > 0) {
-            inventory.PremiumCreditsFree -= Math.min(price, inventory.PremiumCreditsFree);
-        }
         inventory.PremiumCredits -= price;
     } else {
         inventory.RegularCredits -= price;
@@ -436,7 +405,7 @@ export const updateCurrency = async (price: number, usePremium: boolean, account
 
     const modifiedPaths = inventory.modifiedPaths();
 
-    type currencyKeys = "RegularCredits" | "PremiumCredits" | "PremiumCreditsFree";
+    type currencyKeys = "RegularCredits" | "PremiumCredits";
 
     const currencyChanges = {} as Record<currencyKeys, number>;
     modifiedPaths.forEach(path => {
@@ -556,7 +525,7 @@ const addGearExpByCategory = (
             return;
         }
 
-        const itemIndex = ItemId ? category.findIndex(item => item._id?.equals(ItemId.$oid)) : -1;
+        const itemIndex = ItemId ? category.findIndex(item => item._id?.equals(ItemId.$id)) : -1;
         if (itemIndex !== -1) {
             const item = category[itemIndex];
             item.XP ??= 0;
@@ -741,50 +710,8 @@ export const missionInventoryUpdate = async (data: IMissionInventoryUpdateReques
     // credits
     inventory.RegularCredits += RegularCredits || 0;
 
-    // endo
-    inventory.FusionPoints += FusionPoints || 0;
-
-    // syndicate
-    data.AffiliationChanges?.forEach(affiliation => {
-        const syndicate = inventory.Affiliations.find(x => x.Tag == affiliation.Tag);
-        if (syndicate !== undefined) {
-            syndicate.Standing =
-                syndicate.Standing === undefined ? affiliation.Standing : syndicate.Standing + affiliation.Standing;
-            syndicate.Title = syndicate.Title === undefined ? affiliation.Title : syndicate.Title + affiliation.Title;
-        } else {
-            inventory.Affiliations.push({
-                Standing: affiliation.Standing,
-                Title: affiliation.Title,
-                Tag: affiliation.Tag,
-                FreeFavorsEarned: [],
-                FreeFavorsUsed: []
-            });
-        }
-    });
-
     // Gear XP
     equipmentKeys.forEach(key => addGearExpByCategory(inventory, data[key], key));
-
-    // Incarnon Challenges
-    if (data.EvolutionProgress) {
-        for (const evoProgress of data.EvolutionProgress) {
-            const entry = inventory.EvolutionProgress
-                ? inventory.EvolutionProgress.find(entry => entry.ItemType == evoProgress.ItemType)
-                : undefined;
-            if (entry) {
-                entry.Progress = evoProgress.Progress;
-                entry.Rank = evoProgress.Rank;
-            } else {
-                inventory.EvolutionProgress ??= [];
-                inventory.EvolutionProgress.push(evoProgress);
-            }
-        }
-    }
-
-    // LastRegionPlayed
-    if (data.LastRegionPlayed) {
-        inventory.LastRegionPlayed = data.LastRegionPlayed;
-    }
 
     // other
     addMods(inventory, RawUpgrades);
@@ -792,7 +719,6 @@ export const missionInventoryUpdate = async (data: IMissionInventoryUpdateReques
     addConsumables(inventory, Consumables);
     addRecipes(inventory, Recipes);
     addChallenges(inventory, ChallengeProgress);
-    addFusionTreasures(inventory, FusionTreasures);
     if (Missions) {
         addMissionComplete(inventory, Missions);
     }
@@ -833,7 +759,7 @@ export const upgradeMod = async (artifactsData: IArtifactsRequest, accountId: st
         parsedUpgradeFingerprint.lvl += LevelDiff;
         const stringifiedUpgradeFingerprint = JSON.stringify(parsedUpgradeFingerprint);
 
-        let itemIndex = Upgrades.findIndex(upgrade => upgrade._id?.equals(ItemId!.$oid));
+        let itemIndex = Upgrades.findIndex(upgrade => upgrade._id?.equals(ItemId!.$id));
 
         if (itemIndex !== -1) {
             Upgrades[itemIndex].UpgradeFingerprint = stringifiedUpgradeFingerprint;
@@ -858,7 +784,7 @@ export const upgradeMod = async (artifactsData: IArtifactsRequest, accountId: st
         inventory.FusionPoints -= FusionPointCost;
 
         const changedInventory = await inventory.save();
-        const itemId = changedInventory.toJSON().Upgrades[itemIndex]?.ItemId?.$oid;
+        const itemId = changedInventory.toJSON().Upgrades[itemIndex]?.ItemId?.$id;
 
         if (!itemId) {
             throw new Error("Item Id not found in upgradeMod");

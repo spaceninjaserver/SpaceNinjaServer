@@ -26,27 +26,14 @@ export type IBinChanges = {
 export type SlotPurchaseName =
     | "SuitSlotItem"
     | "TwoSentinelSlotItem"
-    | "TwoWeaponSlotItem"
-    | "SpaceSuitSlotItem"
-    | "TwoSpaceWeaponSlotItem"
-    | "MechSlotItem"
-    | "TwoOperatorWeaponSlotItem"
-    | "RandomModSlotItem"
-    | "TwoCrewShipSalvageSlotItem"
-    | "CrewMemberSlotItem";
+    | "TwoWeaponSlotItem";
 
 export type SlotNames =
     | "SuitBin"
     | "WeaponBin"
     | "MechBin"
     | "PveBonusLoadoutBin"
-    | "SentinelBin"
-    | "SpaceSuitBin"
-    | "SpaceWeaponBin"
-    | "OperatorAmpBin"
-    | "RandomModBin"
-    | "CrewShipSalvageBin"
-    | "CrewMemberBin";
+    | "SentinelBin";
 
 export type SlotPurchase = {
     [P in SlotPurchaseName]: { name: SlotNames; slotsPerPurchase: number };

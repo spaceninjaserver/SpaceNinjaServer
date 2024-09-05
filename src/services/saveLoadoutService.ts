@@ -50,7 +50,7 @@ export const handleInventoryItemConfigChange = async (
                     if (!loadout) {
                         const { ItemId, ...loadoutConfigItemIdRemoved } = loadoutConfig;
                         operatorLoadout.push({
-                            _id: ItemId.$oid,
+                            _id: ItemId.$id,
                             ...loadoutConfigItemIdRemoved
                         });
                         continue;
@@ -89,14 +89,14 @@ export const handleInventoryItemConfigChange = async (
 
                         const { ItemId, ...loadoutConfigItemIdRemoved } = loadoutConfig;
                         const loadoutConfigDatabase: ILoadoutConfigDatabase = {
-                            _id: new Types.ObjectId(ItemId.$oid),
+                            _id: new Types.ObjectId(ItemId.$id),
                             ...loadoutConfigItemIdRemoved
                         };
 
                         // if no config with this id exists, create a new one
                         if (!oldLoadoutConfig) {
                             //save the new object id and assign it for every ffff return at the end
-                            if (ItemId.$oid === "ffffffffffffffffffffffff") {
+                            if (ItemId.$id === "ffffffffffffffffffffffff") {
                                 if (!newLoadoutId) {
                                     newLoadoutId = new Types.ObjectId();
                                 }

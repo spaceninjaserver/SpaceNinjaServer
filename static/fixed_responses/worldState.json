@@ -23,7 +23,7 @@
   ],
   "Sorties": [
     {
-      "_id": { "$oid": "663a4c7d4d932c97c0a3acd7" },
+      "_id": { "$id": "663a4c7d4d932c97c0a3acd7" },
       "Activation": { "$date": { "$numberLong": "1715097600000" } },
       "Expiry": { "$date": { "$numberLong": "1715184000000" } },
       "Reward": "/Lotus/Types/Game/MissionDecks/SortieRewards",
@@ -40,7 +40,7 @@
   ],
   "LiteSorties": [
     {
-      "_id": { "$oid": "663819fd1cec9ebe9d83a06e" },
+      "_id": { "$id": "663819fd1cec9ebe9d83a06e" },
       "Activation": { "$date": { "$numberLong": "1714953600000" } },
       "Expiry": { "$date": { "$numberLong": "1715558400000" } },
       "Reward": "/Lotus/Types/Game/MissionDecks/ArchonSortieRewards",
@@ -55,7 +55,7 @@
   ],
   "SyndicateMissions": [
     {
-      "_id": { "$oid": "663a4fc5ba6f84724fa48049" },
+      "_id": { "$id": "663a4fc5ba6f84724fa48049" },
       "Activation": { "$date": { "$numberLong": "1715097541439" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "Tag": "ArbitersSyndicate",
@@ -63,7 +63,7 @@
       "Nodes": ["SolNode223", "SolNode89", "SolNode146", "SolNode212", "SolNode167", "SolNode48", "SolNode78"]
     },
     {
-      "_id": { "$oid": "663a4fc5ba6f84724fa4804a" },
+      "_id": { "$id": "663a4fc5ba6f84724fa4804a" },
       "Activation": { "$date": { "$numberLong": "1715097541439" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "Tag": "CephalonSudaSyndicate",
@@ -71,7 +71,7 @@
       "Nodes": ["SolNode36", "SolNode59", "SettlementNode12", "SolNode61", "SolNode12", "SolNode138", "SolNode72"]
     },
     {
-      "_id": { "$oid": "663a4fc5ba6f84724fa4804c" },
+      "_id": { "$id": "663a4fc5ba6f84724fa4804c" },
       "Activation": { "$date": { "$numberLong": "1715097541439" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "Tag": "EventSyndicate",
@@ -79,7 +79,7 @@
       "Nodes": []
     },
     {
-      "_id": { "$oid": "663a4fc5ba6f84724fa4804b" },
+      "_id": { "$id": "663a4fc5ba6f84724fa4804b" },
       "Activation": { "$date": { "$numberLong": "1715097541439" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "Tag": "NecraloidSyndicate",
@@ -87,7 +87,7 @@
       "Nodes": []
     },
     {
-      "_id": { "$oid": "663a4fc5ba6f84724fa4804d" },
+      "_id": { "$id": "663a4fc5ba6f84724fa4804d" },
       "Activation": { "$date": { "$numberLong": "1715097541439" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "Tag": "KahlSyndicate",
@@ -95,7 +95,7 @@
       "Nodes": []
     },
     {
-      "_id": { "$oid": "663a4fc5ba6f84724fa4804e" },
+      "_id": { "$id": "663a4fc5ba6f84724fa4804e" },
       "Activation": { "$date": { "$numberLong": "1715097541439" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "Tag": "NewLokaSyndicate",
@@ -103,7 +103,7 @@
       "Nodes": ["SolNode101", "SolNode224", "SolNode205", "SettlementNode2", "SolNode171", "SolNode188", "SolNode75"]
     },
     {
-      "_id": { "$oid": "663a4fc5ba6f84724fa4804f" },
+      "_id": { "$id": "663a4fc5ba6f84724fa4804f" },
       "Activation": { "$date": { "$numberLong": "1715097541439" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "Tag": "QuillsSyndicate",
@@ -111,7 +111,7 @@
       "Nodes": []
     },
     {
-      "_id": { "$oid": "663a4fc5ba6f84724fa48050" },
+      "_id": { "$id": "663a4fc5ba6f84724fa48050" },
       "Activation": { "$date": { "$numberLong": "1715097541439" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "Tag": "PerrinSyndicate",
@@ -119,7 +119,7 @@
       "Nodes": ["SolNode39", "SolNode14", "SolNode203", "SolNode100", "SolNode130", "SolNode64", "SettlementNode15"]
     },
     {
-      "_id": { "$oid": "663a4fc5ba6f84724fa48052" },
+      "_id": { "$id": "663a4fc5ba6f84724fa48052" },
       "Activation": { "$date": { "$numberLong": "1715097541439" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "Tag": "RadioLegion3Syndicate",
@@ -127,7 +127,7 @@
       "Nodes": []
     },
     {
-      "_id": { "$oid": "663a4fc5ba6f84724fa48051" },
+      "_id": { "$id": "663a4fc5ba6f84724fa48051" },
       "Activation": { "$date": { "$numberLong": "1715097541439" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "Tag": "RadioLegion2Syndicate",
@@ -135,7 +135,7 @@
       "Nodes": []
     },
     {
-      "_id": { "$oid": "663a4fc5ba6f84724fa48053" },
+      "_id": { "$id": "663a4fc5ba6f84724fa48053" },
       "Activation": { "$date": { "$numberLong": "1715097541439" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "Tag": "RadioLegionIntermission10Syndicate",
@@ -143,7 +143,7 @@
       "Nodes": []
     },
     {
-      "_id": { "$oid": "663a4fc5ba6f84724fa48057" },
+      "_id": { "$id": "663a4fc5ba6f84724fa48057" },
       "Activation": { "$date": { "$numberLong": "1715097541439" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "Tag": "RadioLegionIntermission5Syndicate",
@@ -151,7 +151,7 @@
       "Nodes": []
     },
     {
-      "_id": { "$oid": "663a4fc5ba6f84724fa48055" },
+      "_id": { "$id": "663a4fc5ba6f84724fa48055" },
       "Activation": { "$date": { "$numberLong": "1715097541439" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "Tag": "RadioLegionIntermission3Syndicate",
@@ -159,7 +159,7 @@
       "Nodes": []
     },
     {
-      "_id": { "$oid": "663a4fc5ba6f84724fa48056" },
+      "_id": { "$id": "663a4fc5ba6f84724fa48056" },
       "Activation": { "$date": { "$numberLong": "1715097541439" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "Tag": "RadioLegionIntermission4Syndicate",
@@ -167,7 +167,7 @@
       "Nodes": []
     },
     {
-      "_id": { "$oid": "663a4fc5ba6f84724fa48054" },
+      "_id": { "$id": "663a4fc5ba6f84724fa48054" },
       "Activation": { "$date": { "$numberLong": "1715097541439" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "Tag": "RadioLegionIntermission2Syndicate",
@@ -175,7 +175,7 @@
       "Nodes": []
     },
     {
-      "_id": { "$oid": "663a4fc5ba6f84724fa48058" },
+      "_id": { "$id": "663a4fc5ba6f84724fa48058" },
       "Activation": { "$date": { "$numberLong": "1715097541439" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "Tag": "RadioLegionIntermission6Syndicate",
@@ -183,7 +183,7 @@
       "Nodes": []
     },
     {
-      "_id": { "$oid": "663a4fc5ba6f84724fa4805c" },
+      "_id": { "$id": "663a4fc5ba6f84724fa4805c" },
       "Activation": { "$date": { "$numberLong": "1715097541439" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "Tag": "RadioLegionIntermissionSyndicate",
@@ -191,7 +191,7 @@
       "Nodes": []
     },
     {
-      "_id": { "$oid": "663a4fc5ba6f84724fa4805a" },
+      "_id": { "$id": "663a4fc5ba6f84724fa4805a" },
       "Activation": { "$date": { "$numberLong": "1715097541439" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "Tag": "RadioLegionIntermission8Syndicate",
@@ -199,7 +199,7 @@
       "Nodes": []
     },
     {
-      "_id": { "$oid": "663a4fc5ba6f84724fa4805b" },
+      "_id": { "$id": "663a4fc5ba6f84724fa4805b" },
       "Activation": { "$date": { "$numberLong": "1715097541439" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "Tag": "RadioLegionIntermission9Syndicate",
@@ -207,7 +207,7 @@
       "Nodes": []
     },
     {
-      "_id": { "$oid": "663a4fc5ba6f84724fa48059" },
+      "_id": { "$id": "663a4fc5ba6f84724fa48059" },
       "Activation": { "$date": { "$numberLong": "1715097541439" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "Tag": "RadioLegionIntermission7Syndicate",
@@ -215,7 +215,7 @@
       "Nodes": []
     },
     {
-      "_id": { "$oid": "663a4fc5ba6f84724fa4805d" },
+      "_id": { "$id": "663a4fc5ba6f84724fa4805d" },
       "Activation": { "$date": { "$numberLong": "1715097541439" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "Tag": "RadioLegionSyndicate",
@@ -223,7 +223,7 @@
       "Nodes": []
     },
     {
-      "_id": { "$oid": "663a4fc5ba6f84724fa4805f" },
+      "_id": { "$id": "663a4fc5ba6f84724fa4805f" },
       "Activation": { "$date": { "$numberLong": "1715097541439" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "Tag": "VentKidsSyndicate",
@@ -231,7 +231,7 @@
       "Nodes": []
     },
     {
-      "_id": { "$oid": "663a4fc5ba6f84724fa4805e" },
+      "_id": { "$id": "663a4fc5ba6f84724fa4805e" },
       "Activation": { "$date": { "$numberLong": "1715097541439" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "Tag": "RedVeilSyndicate",
@@ -239,7 +239,7 @@
       "Nodes": ["SolNode226", "SolNode79", "SolNode216", "SettlementNode11", "SolNode56", "SolNode41", "SolNode23"]
     },
     {
-      "_id": { "$oid": "663a4fc5ba6f84724fa48060" },
+      "_id": { "$id": "663a4fc5ba6f84724fa48060" },
       "Activation": { "$date": { "$numberLong": "1715097541439" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "Tag": "VoxSyndicate",
@@ -247,7 +247,7 @@
       "Nodes": []
     },
     {
-      "_id": { "$oid": "663a4fc5ba6f84724fa48061" },
+      "_id": { "$id": "663a4fc5ba6f84724fa48061" },
       "Activation": { "$date": { "$numberLong": "1715097541439" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "Tag": "SteelMeridianSyndicate",
@@ -255,7 +255,7 @@
       "Nodes": ["SolNode27", "SolNode107", "SolNode214", "SettlementNode1", "SolNode177", "SolNode141", "SolNode408"]
     },
     {
-      "_id": { "$oid": "663a71c80000000000000002" },
+      "_id": { "$id": "663a71c80000000000000002" },
       "Activation": { "$date": { "$numberLong": "1715106248403" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "Tag": "EntratiSyndicate",
@@ -341,7 +341,7 @@
       ]
     },
     {
-      "_id": { "$oid": "663a71c80000000000000004" },
+      "_id": { "$id": "663a71c80000000000000004" },
       "Activation": { "$date": { "$numberLong": "1715106248403" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "Tag": "EntratiLabSyndicate",
@@ -349,7 +349,7 @@
       "Nodes": []
     },
     {
-      "_id": { "$oid": "663a71c80000000000000008" },
+      "_id": { "$id": "663a71c80000000000000008" },
       "Activation": { "$date": { "$numberLong": "1715106248403" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "Tag": "CetusSyndicate",
@@ -415,7 +415,7 @@
       ]
     },
     {
-      "_id": { "$oid": "663a71c80000000000000025" },
+      "_id": { "$id": "663a71c80000000000000025" },
       "Activation": { "$date": { "$numberLong": "1715106248403" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "Tag": "SolarisSyndicate",
@@ -481,7 +481,7 @@
       ]
     },
     {
-      "_id": { "$oid": "663a71c80000000000000029" },
+      "_id": { "$id": "663a71c80000000000000029" },
       "Activation": { "$date": { "$numberLong": "1715106248403" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "Tag": "ZarimanSyndicate",
@@ -491,7 +491,7 @@
   ],
   "ActiveMissions": [
     {
-      "_id": { "$oid": "663a7509d93367863785932d" },
+      "_id": { "$id": "663a7509d93367863785932d" },
       "Region": 15,
       "Seed": 80795,
       "Activation": { "$date": { "$numberLong": "1715107081517" } },
@@ -502,7 +502,7 @@
       "Hard": true
     },
     {
-      "_id": { "$oid": "663a75f959a5964cadb39879" },
+      "_id": { "$id": "663a75f959a5964cadb39879" },
       "Region": 19,
       "Seed": 32067,
       "Activation": { "$date": { "$numberLong": "1715107321237" } },
@@ -513,7 +513,7 @@
       "Hard": true
     },
     {
-      "_id": { "$oid": "663a779d3e347839ff301814" },
+      "_id": { "$id": "663a779d3e347839ff301814" },
       "Region": 7,
       "Seed": 51739,
       "Activation": { "$date": { "$numberLong": "1715107741454" } },
@@ -523,7 +523,7 @@
       "Modifier": "VoidT3"
     },
     {
-      "_id": { "$oid": "663a77d916c199f4644ee67d" },
+      "_id": { "$id": "663a77d916c199f4644ee67d" },
       "Region": 17,
       "Seed": 61179,
       "Activation": { "$date": { "$numberLong": "1715107801647" } },
@@ -533,7 +533,7 @@
       "Modifier": "VoidT6"
     },
     {
-      "_id": { "$oid": "663a78c98a609b49b8410726" },
+      "_id": { "$id": "663a78c98a609b49b8410726" },
       "Region": 3,
       "Seed": 9520,
       "Activation": { "$date": { "$numberLong": "1715108041501" } },
@@ -544,7 +544,7 @@
       "Hard": true
     },
     {
-      "_id": { "$oid": "663a7df15eeabaac79b0a061" },
+      "_id": { "$id": "663a7df15eeabaac79b0a061" },
       "Region": 6,
       "Seed": 48861,
       "Activation": { "$date": { "$numberLong": "1715109361974" } },
@@ -555,7 +555,7 @@
       "Hard": true
     },
     {
-      "_id": { "$oid": "663a7df25eeabaac79b0a062" },
+      "_id": { "$id": "663a7df25eeabaac79b0a062" },
       "Region": 5,
       "Seed": 13550,
       "Activation": { "$date": { "$numberLong": "1715109361974" } },
@@ -566,7 +566,7 @@
       "Hard": true
     },
     {
-      "_id": { "$oid": "663a83cdec0d5181435f1324" },
+      "_id": { "$id": "663a83cdec0d5181435f1324" },
       "Region": 19,
       "Seed": 39392,
       "Activation": { "$date": { "$numberLong": "1715110861506" } },
@@ -576,7 +576,7 @@
       "Modifier": "VoidT5"
     },
     {
-      "_id": { "$oid": "663a83cdec0d5181435f1325" },
+      "_id": { "$id": "663a83cdec0d5181435f1325" },
       "Region": 19,
       "Seed": 88668,
       "Activation": { "$date": { "$numberLong": "1715110861506" } },
@@ -586,7 +586,7 @@
       "Modifier": "VoidT5"
     },
     {
-      "_id": { "$oid": "663a83cdec0d5181435f1326" },
+      "_id": { "$id": "663a83cdec0d5181435f1326" },
       "Region": 19,
       "Seed": 73823,
       "Activation": { "$date": { "$numberLong": "1715110861506" } },
@@ -596,7 +596,7 @@
       "Modifier": "VoidT5"
     },
     {
-      "_id": { "$oid": "663a878d23d1514873170466" },
+      "_id": { "$id": "663a878d23d1514873170466" },
       "Region": 9,
       "Seed": 88696,
       "Activation": { "$date": { "$numberLong": "1715111821951" } },
@@ -607,7 +607,7 @@
       "Hard": true
     },
     {
-      "_id": { "$oid": "663a887d4903098c10992fe6" },
+      "_id": { "$id": "663a887d4903098c10992fe6" },
       "Region": 6,
       "Seed": 66337,
       "Activation": { "$date": { "$numberLong": "1715112061729" } },
@@ -617,7 +617,7 @@
       "Modifier": "VoidT2"
     },
     {
-      "_id": { "$oid": "663a887d4903098c10992fe7" },
+      "_id": { "$id": "663a887d4903098c10992fe7" },
       "Region": 10,
       "Seed": 5135,
       "Activation": { "$date": { "$numberLong": "1715112061729" } },
@@ -627,7 +627,7 @@
       "Modifier": "VoidT2"
     },
     {
-      "_id": { "$oid": "663a8931586c301b1fbe63d3" },
+      "_id": { "$id": "663a8931586c301b1fbe63d3" },
       "Region": 15,
       "Seed": 32180,
       "Activation": { "$date": { "$numberLong": "1715112241196" } },
@@ -637,7 +637,7 @@
       "Modifier": "VoidT4"
     },
     {
-      "_id": { "$oid": "663a8931586c301b1fbe63d4" },
+      "_id": { "$id": "663a8931586c301b1fbe63d4" },
       "Region": 12,
       "Seed": 22521,
       "Activation": { "$date": { "$numberLong": "1715112241196" } },
@@ -647,7 +647,7 @@
       "Modifier": "VoidT4"
     },
     {
-      "_id": { "$oid": "663a8931586c301b1fbe63d5" },
+      "_id": { "$id": "663a8931586c301b1fbe63d5" },
       "Region": 2,
       "Seed": 28500,
       "Activation": { "$date": { "$numberLong": "1715112241196" } },
@@ -657,7 +657,7 @@
       "Modifier": "VoidT1"
     },
     {
-      "_id": { "$oid": "663a8931586c301b1fbe63d6" },
+      "_id": { "$id": "663a8931586c301b1fbe63d6" },
       "Region": 3,
       "Seed": 24747,
       "Activation": { "$date": { "$numberLong": "1715112241196" } },
@@ -667,7 +667,7 @@
       "Modifier": "VoidT1"
     },
     {
-      "_id": { "$oid": "663a8931586c301b1fbe63d7" },
+      "_id": { "$id": "663a8931586c301b1fbe63d7" },
       "Region": 17,
       "Seed": 63914,
       "Activation": { "$date": { "$numberLong": "1715112241196" } },
@@ -679,19 +679,19 @@
     }
   ],
   "NodeOverrides": [
-    { "_id": { "$oid": "549b18e9b029cef5991d6aec" }, "Node": "EuropaHUB", "Hide": true },
-    { "_id": { "$oid": "54a1737aeb658f6cbccf70ff" }, "Node": "ErisHUB", "Hide": true },
-    { "_id": { "$oid": "54a736ddec12f80bd6e9e326" }, "Node": "VenusHUB", "Hide": true },
-    { "_id": { "$oid": "5ad9f9bb6df82a56eabf3d44" }, "Node": "SolNode802", "Seed": 9969639 },
+    { "_id": { "$id": "549b18e9b029cef5991d6aec" }, "Node": "EuropaHUB", "Hide": true },
+    { "_id": { "$id": "54a1737aeb658f6cbccf70ff" }, "Node": "ErisHUB", "Hide": true },
+    { "_id": { "$id": "54a736ddec12f80bd6e9e326" }, "Node": "VenusHUB", "Hide": true },
+    { "_id": { "$id": "5ad9f9bb6df82a56eabf3d44" }, "Node": "SolNode802", "Seed": 9969639 },
     {
-      "_id": { "$oid": "5b8817c2bd4f253264d6aa91" },
+      "_id": { "$id": "5b8817c2bd4f253264d6aa91" },
       "Node": "EarthHUB",
       "Hide": false,
       "LevelOverride": "/Lotus/Levels/Proc/Hub/RelayStationHubTwoB",
       "Activation": { "$date": { "$numberLong": "1535646600000" } }
     },
     {
-      "_id": { "$oid": "5d24d1f674491d51f8d44473" },
+      "_id": { "$id": "5d24d1f674491d51f8d44473" },
       "Node": "MercuryHUB",
       "Hide": true,
       "LevelOverride": "/Lotus/Levels/Proc/Hub/RelayStationHubHydroid",
@@ -700,7 +700,7 @@
   ],
   "VoidTraders": [
     {
-      "_id": { "$oid": "5d1e07a0a38e4a4fdd7cefca" },
+      "_id": { "$id": "5d1e07a0a38e4a4fdd7cefca" },
       "Activation": { "$date": { "$numberLong": "0" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "Character": "Baro'Ki Teel",
@@ -736,7 +736,7 @@
   ],
   "PrimeVaultTraders": [
     {
-      "_id": { "$oid": "631f8c4ac36af423770eaa97" },
+      "_id": { "$id": "631f8c4ac36af423770eaa97" },
       "Activation": { "$date": { "$numberLong": "1712858400000" } },
       "InitialStartDate": { "$date": { "$numberLong": "9999999999999" } },
       "Node": "TradeHUB1",
@@ -896,42 +896,42 @@
   ],
   "VoidStorms": [
     {
-      "_id": { "$oid": "663a7581ced28e18f694b550" },
+      "_id": { "$id": "663a7581ced28e18f694b550" },
       "Node": "CrewBattleNode519",
       "Activation": { "$date": { "$numberLong": "1715109601821" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "ActiveMissionTier": "VoidT1"
     },
     {
-      "_id": { "$oid": "663a7581ced28e18f694b551" },
+      "_id": { "$id": "663a7581ced28e18f694b551" },
       "Node": "CrewBattleNode515",
       "Activation": { "$date": { "$numberLong": "1715109601825" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "ActiveMissionTier": "VoidT1"
     },
     {
-      "_id": { "$oid": "663a7581ced28e18f694b554" },
+      "_id": { "$id": "663a7581ced28e18f694b554" },
       "Node": "CrewBattleNode536",
       "Activation": { "$date": { "$numberLong": "1715109601832" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "ActiveMissionTier": "VoidT4"
     },
     {
-      "_id": { "$oid": "663a7581ced28e18f694b555" },
+      "_id": { "$id": "663a7581ced28e18f694b555" },
       "Node": "CrewBattleNode539",
       "Activation": { "$date": { "$numberLong": "1715109601834" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "ActiveMissionTier": "VoidT4"
     },
     {
-      "_id": { "$oid": "663a7581ced28e18f694b553" },
+      "_id": { "$id": "663a7581ced28e18f694b553" },
       "Node": "CrewBattleNode521",
       "Activation": { "$date": { "$numberLong": "1715109601829" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
       "ActiveMissionTier": "VoidT3"
     },
     {
-      "_id": { "$oid": "663a7581ced28e18f694b552" },
+      "_id": { "$id": "663a7581ced28e18f694b552" },
       "Node": "CrewBattleNode535",
       "Activation": { "$date": { "$numberLong": "1715109601827" } },
       "Expiry": { "$date": { "$numberLong": "9999999999999" } },
@@ -956,7 +956,7 @@
   "LibraryInfo": { "LastCompletedTargetType": "/Lotus/Types/Game/Library/Targets/Research7Target" },
   "PVPChallengeInstances": [
     {
-      "_id": { "$oid": "6635562d036ce37f7f98e264" },
+      "_id": { "$id": "6635562d036ce37f7f98e264" },
       "challengeTypeRefID": "/Lotus/PVPChallengeTypes/PVPTimedChallengeGameModeComplete",
       "startDate": { "$date": { "$numberLong": "1714771501460" } },
       "endDate": { "$date": { "$numberLong": "9999999999999" } },
@@ -967,7 +967,7 @@
       "Category": "PVPChallengeTypeCategory_WEEKLY"
     },
     {
-      "_id": { "$oid": "6635562d036ce37f7f98e263" },
+      "_id": { "$id": "6635562d036ce37f7f98e263" },
       "challengeTypeRefID": "/Lotus/PVPChallengeTypes/PVPTimedChallengeGameModeWins",
       "startDate": { "$date": { "$numberLong": "1714771501460" } },
       "endDate": { "$date": { "$numberLong": "9999999999999" } },
@@ -978,7 +978,7 @@
       "Category": "PVPChallengeTypeCategory_WEEKLY"
     },
     {
-      "_id": { "$oid": "6635562d036ce37f7f98e265" },
+      "_id": { "$id": "6635562d036ce37f7f98e265" },
       "challengeTypeRefID": "/Lotus/PVPChallengeTypes/PVPTimedChallengeOtherChallengeCompleteANY",
       "startDate": { "$date": { "$numberLong": "1714771501460" } },
       "endDate": { "$date": { "$numberLong": "9999999999999" } },
@@ -989,18 +989,18 @@
       "Category": "PVPChallengeTypeCategory_WEEKLY"
     },
     {
-      "_id": { "$oid": "6635562d036ce37f7f98e266" },
+      "_id": { "$id": "6635562d036ce37f7f98e266" },
       "challengeTypeRefID": "/Lotus/PVPChallengeTypes/PVPTimedChallengeWeeklyStandardSet",
       "startDate": { "$date": { "$numberLong": "1714771501460" } },
       "endDate": { "$date": { "$numberLong": "9999999999999" } },
       "params": [{ "n": "ScriptParamValue", "v": 0 }],
       "isGenerated": true,
       "PVPMode": "PVPMODE_NONE",
-      "subChallenges": [{ "$oid": "6635562d036ce37f7f98e263" }, { "$oid": "6635562d036ce37f7f98e264" }, { "$oid": "6635562d036ce37f7f98e265" }],
+      "subChallenges": [{ "$id": "6635562d036ce37f7f98e263" }, { "$id": "6635562d036ce37f7f98e264" }, { "$id": "6635562d036ce37f7f98e265" }],
       "Category": "PVPChallengeTypeCategory_WEEKLY_ROOT"
     },
     {
-      "_id": { "$oid": "6639ca6967c1192987d75fee" },
+      "_id": { "$id": "6639ca6967c1192987d75fee" },
       "challengeTypeRefID": "/Lotus/PVPChallengeTypes/PVPTimedChallengeFlagReturnEASY",
       "startDate": { "$date": { "$numberLong": "1715063401824" } },
       "endDate": { "$date": { "$numberLong": "9999999999999" } },
@@ -1011,7 +1011,7 @@
       "Category": "PVPChallengeTypeCategory_DAILY"
     },
     {
-      "_id": { "$oid": "6639ca6967c1192987d75fed" },
+      "_id": { "$id": "6639ca6967c1192987d75fed" },
       "challengeTypeRefID": "/Lotus/PVPChallengeTypes/PVPTimedChallengeMatchCompleteMEDIUM",
       "startDate": { "$date": { "$numberLong": "1715063401824" } },
       "endDate": { "$date": { "$numberLong": "9999999999999" } },
@@ -1022,7 +1022,7 @@
       "Category": "PVPChallengeTypeCategory_DAILY"
     },
     {
-      "_id": { "$oid": "6639ca6967c1192987d75ff2" },
+      "_id": { "$id": "6639ca6967c1192987d75ff2" },
       "challengeTypeRefID": "/Lotus/PVPChallengeTypes/PVPTimedChallengeMatchCompleteEASY",
       "startDate": { "$date": { "$numberLong": "1715063401824" } },
       "endDate": { "$date": { "$numberLong": "9999999999999" } },
@@ -1033,7 +1033,7 @@
       "Category": "PVPChallengeTypeCategory_DAILY"
     },
     {
-      "_id": { "$oid": "6639ca6967c1192987d75ff1" },
+      "_id": { "$id": "6639ca6967c1192987d75ff1" },
       "challengeTypeRefID": "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsPayback_MEDIUM",
       "startDate": { "$date": { "$numberLong": "1715063401824" } },
       "endDate": { "$date": { "$numberLong": "9999999999999" } },
@@ -1044,7 +1044,7 @@
       "Category": "PVPChallengeTypeCategory_DAILY"
     },
     {
-      "_id": { "$oid": "6639ca6967c1192987d75fef" },
+      "_id": { "$id": "6639ca6967c1192987d75fef" },
       "challengeTypeRefID": "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsStreakDominationEASY",
       "startDate": { "$date": { "$numberLong": "1715063401824" } },
       "endDate": { "$date": { "$numberLong": "9999999999999" } },
@@ -1055,7 +1055,7 @@
       "Category": "PVPChallengeTypeCategory_DAILY"
     },
     {
-      "_id": { "$oid": "6639ca6967c1192987d75ff0" },
+      "_id": { "$id": "6639ca6967c1192987d75ff0" },
       "challengeTypeRefID": "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsWhileInAirHARD",
       "startDate": { "$date": { "$numberLong": "1715063401824" } },
       "endDate": { "$date": { "$numberLong": "9999999999999" } },
@@ -1066,7 +1066,7 @@
       "Category": "PVPChallengeTypeCategory_DAILY"
     },
     {
-      "_id": { "$oid": "6639ca6967c1192987d75ff3" },
+      "_id": { "$id": "6639ca6967c1192987d75ff3" },
       "challengeTypeRefID": "/Lotus/PVPChallengeTypes/PVPTimedChallengeSpeedballCatchesMEDIUM",
       "startDate": { "$date": { "$numberLong": "1715063401824" } },
       "endDate": { "$date": { "$numberLong": "9999999999999" } },
@@ -1077,7 +1077,7 @@
       "Category": "PVPChallengeTypeCategory_DAILY"
     },
     {
-      "_id": { "$oid": "6639ca6967c1192987d75ff4" },
+      "_id": { "$id": "6639ca6967c1192987d75ff4" },
       "challengeTypeRefID": "/Lotus/PVPChallengeTypes/PVPTimedChallengeSpeedballInterceptionsEASY",
       "startDate": { "$date": { "$numberLong": "1715063401824" } },
       "endDate": { "$date": { "$numberLong": "9999999999999" } },
@@ -1109,64 +1109,64 @@
     "Params": "",
     "ActiveChallenges": [
       {
-        "_id": { "$oid": "001300010000000000000008" },
+        "_id": { "$id": "001300010000000000000008" },
         "Daily": true,
         "Activation": { "$date": { "$numberLong": "1715558400000" } },
         "Expiry": { "$date": { "$numberLong": "9999999999999" } },
         "Challenge": "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyFeedMeMore"
       },
       {
-        "_id": { "$oid": "001300010000000000000009" },
+        "_id": { "$id": "001300010000000000000009" },
         "Daily": true,
         "Activation": { "$date": { "$numberLong": "1715644800000" } },
         "Expiry": { "$date": { "$numberLong": "9999999999999" } },
         "Challenge": "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyTwoForOne"
       },
       {
-        "_id": { "$oid": "001300010000000000000010" },
+        "_id": { "$id": "001300010000000000000010" },
         "Daily": true,
         "Activation": { "$date": { "$numberLong": "1715731200000" } },
         "Expiry": { "$date": { "$numberLong": "9999999999999" } },
         "Challenge": "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithFinishers"
       },
       {
-        "_id": { "$oid": "001300010000000000000001" },
+        "_id": { "$id": "001300010000000000000001" },
         "Activation": { "$date": { "$numberLong": "1715558400000" } },
         "Expiry": { "$date": { "$numberLong": "9999999999999" } },
         "Challenge": "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentCompleteMissions"
       },
       {
-        "_id": { "$oid": "001300010000000000000002" },
+        "_id": { "$id": "001300010000000000000002" },
         "Activation": { "$date": { "$numberLong": "1715558400000" } },
         "Expiry": { "$date": { "$numberLong": "9999999999999" } },
         "Challenge": "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentKillEximus"
       },
       {
-        "_id": { "$oid": "001300010000000000000003" },
+        "_id": { "$id": "001300010000000000000003" },
         "Activation": { "$date": { "$numberLong": "1715558400000" } },
         "Expiry": { "$date": { "$numberLong": "9999999999999" } },
         "Challenge": "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentKillEnemies"
       },
       {
-        "_id": { "$oid": "001300010000000000000004" },
+        "_id": { "$id": "001300010000000000000004" },
         "Activation": { "$date": { "$numberLong": "1715558400000" } },
         "Expiry": { "$date": { "$numberLong": "9999999999999" } },
         "Challenge": "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyOpenLockers"
       },
       {
-        "_id": { "$oid": "001300010000000000000005" },
+        "_id": { "$id": "001300010000000000000005" },
         "Activation": { "$date": { "$numberLong": "1715558400000" } },
         "Expiry": { "$date": { "$numberLong": "9999999999999" } },
         "Challenge": "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyBloodthirsty"
       },
       {
-        "_id": { "$oid": "001300010000000000000006" },
+        "_id": { "$id": "001300010000000000000006" },
         "Activation": { "$date": { "$numberLong": "1715558400000" } },
         "Expiry": { "$date": { "$numberLong": "9999999999999" } },
         "Challenge": "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardEliteSanctuaryOnslaught"
       },
       {
-        "_id": { "$oid": "001300010000000000000007" },
+        "_id": { "$id": "001300010000000000000007" },
         "Activation": { "$date": { "$numberLong": "1715558400000" } },
         "Expiry": { "$date": { "$numberLong": "9999999999999" } },
         "Challenge": "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardCompleteSortie"

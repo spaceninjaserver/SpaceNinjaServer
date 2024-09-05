@@ -1,7 +1,7 @@
 {
   "VendorInfo": {
     "_id": {
-      "$oid": "598a090d9a4a313746fd1f24"
+      "$id": "598a090d9a4a313746fd1f24"
     },
     "TypeName": "/Lotus/Types/Game/VendorManifests/Ostron/MaskSalesmanManifest",
     "ItemManifest": [
@@ -23,7 +23,7 @@
         },
         "AllowMultipurchase": true,
         "Id": {
-          "$oid": "63ed01ef4c37f93d0b797674"
+          "$id": "63ed01ef4c37f93d0b797674"
         }
       },
       {
@@ -59,7 +59,7 @@
         },
         "AllowMultipurchase": true,
         "Id": {
-          "$oid": "63ed01ef4c37f93d0b797675"
+          "$id": "63ed01ef4c37f93d0b797675"
         }
       },
       {
@@ -95,7 +95,7 @@
         },
         "AllowMultipurchase": true,
         "Id": {
-          "$oid": "63ed01ef4c37f93d0b797676"
+          "$id": "63ed01ef4c37f93d0b797676"
         }
       },
       {
@@ -131,7 +131,7 @@
         },
         "AllowMultipurchase": true,
         "Id": {
-          "$oid": "63ed01ef4c37f93d0b797677"
+          "$id": "63ed01ef4c37f93d0b797677"
         }
       },
       {
@@ -157,7 +157,7 @@
         },
         "AllowMultipurchase": true,
         "Id": {
-          "$oid": "6651291214e90115b91b50a1"
+          "$id": "6651291214e90115b91b50a1"
         }
       },
       {
@@ -183,7 +183,7 @@
         },
         "AllowMultipurchase": true,
         "Id": {
-          "$oid": "6651291214e90115b91b50a2"
+          "$id": "6651291214e90115b91b50a2"
         }
       },
       {
@@ -209,7 +209,7 @@
         },
         "AllowMultipurchase": true,
         "Id": {
-          "$oid": "6651291214e90115b91b50a3"
+          "$id": "6651291214e90115b91b50a3"
         }
       },
       {
@@ -235,7 +235,7 @@
         },
         "AllowMultipurchase": true,
         "Id": {
-          "$oid": "6651291214e90115b91b50a4"
+          "$id": "6651291214e90115b91b50a4"
         }
       },
       {
@@ -261,7 +261,7 @@
         },
         "AllowMultipurchase": true,
         "Id": {
-          "$oid": "6651291214e90115b91b50a5"
+          "$id": "6651291214e90115b91b50a5"
         }
       },
       {
@@ -287,7 +287,7 @@
         },
         "AllowMultipurchase": true,
         "Id": {
-          "$oid": "6651291214e90115b91b50a6"
+          "$id": "6651291214e90115b91b50a6"
         }
       }
     ],

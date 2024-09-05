@@ -57,7 +57,7 @@ const missionInventoryUpdateController: RequestHandler = async (req, res): Promi
 
         const { InventoryChanges, MissionRewards } = getRewards(lootInventory);
 
-        const { combinedInventoryChanges, TotalCredits, CreditsBonus, MissionCredits, FusionPoints } =
+        const { combinedInventoryChanges, TotalCredits, CreditsBonus, MissionCredits } =
             combineRewardAndLootInventory(InventoryChanges, lootInventory);
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -68,8 +68,7 @@ const missionInventoryUpdateController: RequestHandler = async (req, res): Promi
             InventoryChanges,
             TotalCredits,
             CreditsBonus,
-            MissionCredits,
-            FusionPoints
+            MissionCredits
         });
     } catch (err) {
         console.error("Error parsing JSON data:", err);

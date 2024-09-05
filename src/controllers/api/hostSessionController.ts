@@ -12,7 +12,7 @@ const hostSessionController: RequestHandler = async (req, res) => {
     const session = createNewSession(hostSessionRequest, accountId);
     logger.debug(`New Session Created`, { session });
 
-    res.json({ sessionId: { $oid: session.sessionId }, rewardSeed: 99999999 });
+    res.json({ sessionId: { $id: session.sessionId }, rewardSeed: 99999999 });
 };
 
 export { hostSessionController };

@@ -28,7 +28,7 @@ export const getGuildDojoController: RequestHandler = async (req, res) => {
     }
 
     const dojo: IDojoClient = {
-        _id: { $oid: guildId },
+        _id: { $id: guildId },
         Name: guild.Name,
         Tier: 1,
         FixedContributions: true,

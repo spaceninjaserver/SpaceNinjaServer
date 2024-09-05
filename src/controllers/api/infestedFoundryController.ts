@@ -12,7 +12,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             // shard installation
             const request = getJSONfromString(String(req.body)) as IShardInstallRequest;
             const inventory = await getInventory(accountId);
-            const suit = inventory.Suits.find(suit => suit._id.toString() == request.SuitId.$oid)!;
+            const suit = inventory.Suits.find(suit => suit._id.toString() == request.SuitId.$id)!;
             if (!suit.ArchonCrystalUpgrades || suit.ArchonCrystalUpgrades.length != 5) {
                 suit.ArchonCrystalUpgrades = [{}, {}, {}, {}, {}];
             }
