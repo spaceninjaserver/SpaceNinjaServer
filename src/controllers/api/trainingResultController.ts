@@ -1,13 +1,8 @@
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getInventory } from "@/src/services/inventoryService";
 import { IMongoDate } from "@/src/types/commonTypes";
 import { RequestHandler } from "express";
 import { unixTimesInMs } from "@/src/constants/timeConstants";
-
-interface ITrainingResultsRequest {
-    numLevelsGained: number;
-}
 
 interface ITrainingResultsResponse {
     NewTrainingDate: IMongoDate;

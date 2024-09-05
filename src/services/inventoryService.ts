@@ -694,17 +694,7 @@ const addMissionComplete = (inventory: IInventoryDatabaseDocument, { Tag, Comple
 };
 
 export const missionInventoryUpdate = async (data: IMissionInventoryUpdateRequest, accountId: string) => {
-    const {
-        RawUpgrades,
-        MiscItems,
-        RegularCredits,
-        ChallengeProgress,
-        FusionPoints,
-        Consumables,
-        Recipes,
-        Missions,
-        FusionTreasures
-    } = data;
+    const { RawUpgrades, MiscItems, RegularCredits, ChallengeProgress, Consumables, Recipes, Missions } = data;
     const inventory = await getInventory(accountId);
 
     // credits

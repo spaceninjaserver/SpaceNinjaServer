@@ -4,7 +4,6 @@ import { toInventoryResponse } from "@/src/helpers/inventoryHelpers";
 import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { config } from "@/src/services/configService";
 import { IInventoryDatabase } from "@/src/types/inventoryTypes/inventoryTypes";
-import { ExportCustoms, ExportFlavour } from "warframe-public-export-plus";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 const inventoryController: RequestHandler = async (request, response) => {

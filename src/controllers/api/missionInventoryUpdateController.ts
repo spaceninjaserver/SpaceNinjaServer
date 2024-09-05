@@ -57,8 +57,10 @@ const missionInventoryUpdateController: RequestHandler = async (req, res): Promi
 
         const { InventoryChanges, MissionRewards } = getRewards(lootInventory);
 
-        const { combinedInventoryChanges, TotalCredits, CreditsBonus, MissionCredits } =
-            combineRewardAndLootInventory(InventoryChanges, lootInventory);
+        const { combinedInventoryChanges, TotalCredits, CreditsBonus, MissionCredits } = combineRewardAndLootInventory(
+            InventoryChanges,
+            lootInventory
+        );
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const InventoryJson = JSON.stringify(await missionInventoryUpdate(combinedInventoryChanges, accountId));

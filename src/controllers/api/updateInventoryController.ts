@@ -1,6 +1,6 @@
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { RequestHandler } from "express";
-import { getInventory, missionInventoryUpdate } from "@/src/services/inventoryService";
+import { missionInventoryUpdate } from "@/src/services/inventoryService";
 import { combineRewardAndLootInventory } from "@/src/services/missionInventoryUpdateService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { IMissionInventoryUpdateRequest } from "@/src/types/requestTypes";
@@ -8,9 +8,11 @@ import { IMissionInventoryUpdateRequest } from "@/src/types/requestTypes";
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const updateInventoryController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const lootInventory = getJSONfromString(req.body.toString()) as IMissionInventoryUpdateRequest;
-    const { combinedInventoryChanges, TotalCredits, CreditsBonus, MissionCredits } =
-    combineRewardAndLootInventory(lootInventory, lootInventory);
+    const lootInventory = getJSONfromString(req.body as string) as IMissionInventoryUpdateRequest;
+    const { combinedInventoryChanges, TotalCredits, CreditsBonus, MissionCredits } = combineRewardAndLootInventory(
+        lootInventory,
+        lootInventory
+    );
 
     await missionInventoryUpdate(combinedInventoryChanges, accountId);
 

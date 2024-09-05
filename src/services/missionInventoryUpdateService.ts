@@ -86,7 +86,7 @@ const combineRewardAndLootInventory = (
         combinedInventoryChanges: lootInventory,
         TotalCredits: [totalCredits, totalCredits],
         CreditsBonus: [creditsBonus, creditsBonus],
-        MissionCredits: [missionCredits, missionCredits],
+        MissionCredits: [missionCredits, missionCredits]
     };
 };
 
