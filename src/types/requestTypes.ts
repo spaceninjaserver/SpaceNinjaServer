@@ -1,5 +1,5 @@
 import { IOid } from "./commonTypes";
-import { ArtifactPolarity, IPolarity, IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import {
     IBooster,
     IChallengeProgress,
@@ -100,17 +100,54 @@ export interface IUpdateGlyphRequest {
 }
 
 export interface IUpgradesRequest {
+    Category: TEquipmentKey;
+    Weapon: IWeapon;
+    UpgradesToAttach: IUpgradesToAttach[];
+    UpgradesToDetach: IUpgradesToDetach[];
+    Cost: number;
+    UpgradeReq: string;
+}
+
+export interface IWeapon {
+    ItemType: string;
+    ItemId: IOid;
+    XP: number;
+    UpgradeVer: number;
+    UnlockLevel: number;
+    ExtraCapacity: number;
+    ExtraRemaining: number;
+}
+
+/*
+export interface IUpgradesRequest {
     ItemCategory: TEquipmentKey;
     ItemId: IOid;
     ItemFeatures: number;
     UpgradeVersion: number;
     Operations: IUpgradeOperation[];
 }
+*/
 
-export interface IUpgradeOperation {
-    OperationType: string;
-    UpgradeRequirement: string; // uniqueName of item being consumed
-    PolarizeSlot: number;
-    PolarizeValue: ArtifactPolarity;
-    PolarityRemap: IPolarity[];
+export interface IUpgradesToAttach {
+    ItemType: string;
+    ItemId: IOid;
+    UpgradeFingerprint: string;
+    Slot: number;
+    ParentId: IOid;
 }
+
+export interface IUpgradesToDetach {
+    ItemType: string;
+    ItemId: IOid;
+    UpgradeFingerprint: string;
+    Slot: number;
+    ParentId: IOid;
+}
+
+// export interface IUpgradeOperation {
+//     OperationType: string;
+//     UpgradeRequirement: string; // uniqueName of item being consumed
+//     PolarizeSlot: number;
+//     PolarizeValue: ArtifactPolarity;
+//     PolarityRemap: IPolarity[];
+// }

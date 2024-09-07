@@ -111,6 +111,7 @@ export type TSolarMapRegion =
 export interface IPendingRecipeResponse extends Omit<IPendingRecipe, "CompletionDate"> {
     CompletionDate: IMongoDate;
 }
+
 export interface IInventoryResponse {
     Horses: IEquipmentDatabase[];
     DrifterMelee: IEquipmentDatabase[];
@@ -395,6 +396,9 @@ export interface ICrewShipSalvagedWeaponSkin {
     ItemType: string;
     UpgradeFingerprint?: string;
     ItemId?: IOid;
+    ParentId?: IOid;
+    Slot?: number;
+    _pid?: Types.ObjectId;
     _id?: Types.ObjectId;
 }
 
@@ -872,7 +876,6 @@ export interface INotePacks {
 
 export interface ITaunt {
     node: string;
-    state: "TS_UNLOCKED" | "TS_COMPLETED";
 }
 
 export interface IWeaponSkinDatabase {

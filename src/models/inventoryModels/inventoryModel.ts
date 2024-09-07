@@ -24,7 +24,8 @@ import {
     IQuestKeyResponse,
     IWeaponSkinDatabase,
     IPeriodicMissionCompletionDatabase,
-    IPeriodicMissionCompletionResponse
+    IPeriodicMissionCompletionResponse,
+    ITaunt
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -237,10 +238,14 @@ RawUpgrades.set("toJSON", {
 });
 
 //TODO: find out what this is
-const upgradesSchema = new Schema(
+const upgradesSchema = new Schema<ICrewShipSalvagedWeaponSkin>(
     {
         UpgradeFingerprint: String,
-        ItemType: String
+        ItemType: String,
+        Slot: Number,
+        ParentId: {
+            $id: String
+        }
     },
     { id: false }
 );
@@ -458,6 +463,13 @@ periodicMissionCompletionsSchema.set("toJSON", {
     }
 });
 
+const tauntSchema = new Schema<ITaunt>(
+    {
+        node: String
+    },
+    { _id: false }
+);
+
 const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
     {
         accountOwnerId: Schema.Types.ObjectId,
@@ -527,6 +539,8 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         Recipes: [typeCountSchema],
         //Crafting Blueprint(Item Name + CompletionDate)
         PendingRecipes: [pendingRecipeSchema],
+
+        TauntHistory: { type: [tauntSchema], default: undefined },
 
         //Skins for Suits, Weapons etc.
         WeaponSkins: [weaponSkinsSchema],

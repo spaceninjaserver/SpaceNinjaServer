@@ -4,6 +4,7 @@ import { toInventoryResponse } from "@/src/helpers/inventoryHelpers";
 import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { config } from "@/src/services/configService";
 import { IInventoryDatabase } from "@/src/types/inventoryTypes/inventoryTypes";
+//import new_inventory from "@/static/fixed_responses/postTutorialInventory.json";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 const inventoryController: RequestHandler = async (request, response) => {
