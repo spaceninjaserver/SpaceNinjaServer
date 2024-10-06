@@ -1,5 +1,6 @@
 import express from "express";
 import { addFriendImageController } from "@/src/controllers/api/addFriendImageController";
+import { arcaneCommonController } from "@/src/controllers/api/arcaneCommonController";
 import { artifactsController } from "../controllers/api/artifactsController";
 import { checkDailyMissionBonusController } from "@/src/controllers/api/checkDailyMissionBonusController";
 import { claimCompletedRecipeController } from "@/src/controllers/api/claimCompletedRecipeController";
@@ -101,6 +102,7 @@ apiRouter.get("/updateSession.php", updateSessionGetController);
 
 // post
 apiRouter.post("/addFriendImage.php", addFriendImageController);
+apiRouter.post("/arcaneCommon.php", arcaneCommonController);
 apiRouter.post("/artifacts.php", artifactsController);
 apiRouter.post("/claimCompletedRecipe.php", claimCompletedRecipeController);
 apiRouter.post("/createGuild.php", createGuildController);
