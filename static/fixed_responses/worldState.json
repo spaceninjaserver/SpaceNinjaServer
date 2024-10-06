@@ -25,7 +25,7 @@
     {
       "_id": { "$oid": "663a4c7d4d932c97c0a3acd7" },
       "Activation": { "$date": { "$numberLong": "1715097600000" } },
-      "Expiry": { "$date": { "$numberLong": "1715184000000" } },
+      "Expiry": { "$date": { "$numberLong": "2000000000000" } },
       "Reward": "/Lotus/Types/Game/MissionDecks/SortieRewards",
       "Seed": 24491,
       "Boss": "SORTIE_BOSS_TYL",
@@ -42,7 +42,7 @@
     {
       "_id": { "$oid": "663819fd1cec9ebe9d83a06e" },
       "Activation": { "$date": { "$numberLong": "1714953600000" } },
-      "Expiry": { "$date": { "$numberLong": "1715558400000" } },
+      "Expiry": { "$date": { "$numberLong": "2000000000000" } },
       "Reward": "/Lotus/Types/Game/MissionDecks/ArchonSortieRewards",
       "Seed": 58034,
       "Boss": "SORTIE_BOSS_NIRA",
@@ -766,7 +766,7 @@
         { "ItemType": "/Lotus/StoreItems/Types/Game/Projections/T3VoidProjectionWukongEquinoxVaultBBronze", "RegularPrice": 1 },
         { "ItemType": "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionWukongEquinoxVaultABronze", "RegularPrice": 1 }
       ],
-      "Expiry": { "$date": { "$numberLong": "1715277600000" } },
+      "Expiry": { "$date": { "$numberLong": "2000000000000" } },
       "EvergreenManifest": [
         { "ItemType": "/Lotus/StoreItems/Weapons/Tenno/Melee/DualDagger/FangPrimeDagger", "PrimePrice": 2 },
         { "ItemType": "/Lotus/StoreItems/Weapons/Tenno/Pistols/PrimeLex/PrimeLex", "PrimePrice": 1 },
