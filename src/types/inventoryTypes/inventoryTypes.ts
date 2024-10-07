@@ -145,6 +145,7 @@ export interface IInventoryResponse {
     GiftsRemaining: number;
     HandlerPoints: number;
     MiscItems: IMiscItem[];
+    HasOwnedVoidProjectionsPreviously?: boolean;
     ChallengesFixVersion: number;
     ChallengeProgress: IChallengeProgress[];
     RawUpgrades: IRawUpgrade[];
