@@ -15,9 +15,11 @@ import { statsRouter } from "@/src/routes/stats";
 import { webuiRouter } from "@/src/routes/webui";
 import { connectDatabase } from "@/src/services/mongoService";
 import { registerLogFileCreationListener } from "@/src/utils/logger";
+import { worldStateRunner } from "@/src/services/worldStateService";
 
 void registerLogFileCreationListener();
 void connectDatabase();
+void worldStateRunner();
 
 const app = express();
 
