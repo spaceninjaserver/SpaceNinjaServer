@@ -1,24 +1,42 @@
-version: "3.9"
-
 services:
-    mongodb:
-        container_name: mongodb
-        image: mongodb
-        restart: always
-        build:
-            context: .
-            dockerfile: Dockerfile
-            target: base
-        environment:
-            MONGO_INITDB_ROOT_USERNAME: ${DATABASE_USERNAME}
-            MONGO_INITDB_ROOT_PASSWORD: ${DATABASE_PASSWORD}
-        ports:
-            - ${DATABASE_PORT}:${DATABASE_PORT}
-        expose:
-            - "${DATABASE_PORT}"
-        networks:
-            - docker
+  openwf:
+    # build: .
+    image: ghcr.io/spaceninjaserver/SpaceNinjaServer:latest
+    environment:
+      APP_MONGODB_URL: mongodb://openwfagent:spaceninjaserver@mongodb:27017/
 
-networks:
-    docker:
-        external: true
+      # Following environment variables are set to default image values.
+      # Uncomment to edit.
+      
+      # APP_MY_ADDRESS: localhost
+      # APP_HTTP_PORT: 80
+      # APP_HTTPS_PORT: 443
+      # APP_AUTO_CREATE_ACCOUNT: true
+      # APP_SKIP_STORY_MODE_CHOICE: true
+      # APP_SKIP_TUTORIAL: true
+      # APP_SKIP_ALL_DIALOGUE: true
+      # APP_UNLOCK_ALL_SCANS: true
+      # APP_UNLOCK_ALL_MISSIONS: true
+      # APP_UNLOCK_ALL_QUESTS: true
+      # APP_COMPLETE_ALL_QUESTS: true
+      # APP_INFINITE_RESOURCES: true
+      # APP_UNLOCK_ALL_SHIP_FEATURES: true
+      # APP_UNLOCK_ALL_SHIP_DECORATIONS: true
+      # APP_UNLOCK_ALL_FLAVOUR_ITEMS: true
+      # APP_UNLOCK_ALL_SKINS: true
+      # APP_UNIVERSAL_POLARITY_EVERYWHERE: true
+      # APP_SPOOF_MASTERY_RANK: -1
+    volumes:
+      - ./static-data:/app/static/data
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - mongodb
+  mongodb:
+    image: docker.io/library/mongo:8.0.0-noble
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: openwfagent
+      MONGO_INITDB_ROOT_PASSWORD: spaceninjaserver
+    volumes:
+      - ./database:/app/static/data
