@@ -18,4 +18,4 @@ yarn.lock
 /database_scripts
 
 # Default Docker directory
-/data
+/docker-data
