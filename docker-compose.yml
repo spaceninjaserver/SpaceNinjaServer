@@ -27,7 +27,8 @@ services:
       # APP_UNIVERSAL_POLARITY_EVERYWHERE: true
       # APP_SPOOF_MASTERY_RANK: -1
     volumes:
-      - ./static-data:/app/static/data
+      - ./data/static:/app/static/data
+      - ./data/logs:/app/logs
     ports:
       - 80:80
       - 443:443
@@ -39,4 +40,4 @@ services:
       MONGO_INITDB_ROOT_USERNAME: openwfagent
       MONGO_INITDB_ROOT_PASSWORD: spaceninjaserver
     volumes:
-      - ./database:/app/static/data
+      - ./data/database:/data/db

@@ -17,6 +17,5 @@ yarn.lock
 # MongoDB VSCode extension playground scripts
 /database_scripts
 
-# Default Docker directories
-/static-data
-/database
+# Default Docker directory
+/data
