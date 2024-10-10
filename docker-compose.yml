@@ -27,8 +27,8 @@ services:
       # APP_UNIVERSAL_POLARITY_EVERYWHERE: true
       # APP_SPOOF_MASTERY_RANK: -1
     volumes:
-      - ./data/static:/app/static/data
-      - ./data/logs:/app/logs
+      - ./docker-data/static:/app/static/data
+      - ./docker-data/logs:/app/logs
     ports:
       - 80:80
       - 443:443
@@ -40,4 +40,4 @@ services:
       MONGO_INITDB_ROOT_USERNAME: openwfagent
       MONGO_INITDB_ROOT_PASSWORD: spaceninjaserver
     volumes:
-      - ./data/database:/data/db
+      - ./docker-data/database:/data/db
