@@ -2,4 +2,4 @@
 **/.git
 Dockerfile*
 .*
-data/
+docker-data/
