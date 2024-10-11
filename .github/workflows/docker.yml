@@ -5,6 +5,7 @@ on:
       - main
 jobs:
     docker:
+        if: github.repository == 'spaceninjaserver/SpaceNinjaServer'
         runs-on: ubuntu-latest
         steps:
             - name: Set up Docker buildx
