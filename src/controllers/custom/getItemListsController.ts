@@ -36,7 +36,7 @@ const getItemListsController: RequestHandler = (_req, res) => {
     }
     for (const [uniqueName, item] of Object.entries(ExportResources)) {
         miscitems.push({
-            uniqueName: "MiscItems:" + uniqueName,
+            uniqueName: item.productCategory + ":" + uniqueName,
             name: getEnglishString(item.name)
         });
     }
