@@ -18,7 +18,7 @@
     "mongoose": "^8.4.5",
     "warframe-public-export-plus": "^0.5.2",
     "warframe-riven-info": "^0.1.1",
-    "winston": "^3.13.0",
+    "winston": "^3.15.0",
     "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
