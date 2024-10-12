@@ -657,10 +657,7 @@ export const addFusionTreasures = (
 ) => {
     const { FusionTreasures } = inventory;
     itemsArray?.forEach(({ ItemType, ItemCount, Sockets }) => {
-        const itemIndex = FusionTreasures.findIndex(i => {
-            i.ItemType === ItemType;
-            i.Sockets === Sockets;
-        });
+        const itemIndex = FusionTreasures.findIndex(i => i.ItemType == ItemType && (i.Sockets || 0) == (Sockets || 0));
 
         if (itemIndex !== -1) {
             FusionTreasures[itemIndex].ItemCount += ItemCount;
