@@ -110,7 +110,7 @@ const inventoryController: RequestHandler = async (request, response) => {
             i++;
             inventoryResponse.WeaponSkins.push({
                 ItemId: {
-                    $oid: (i).toString().padStart(24, '0')
+                    $oid: i.toString().padStart(24, "0")
                 },
                 ItemType: uniqueName
             });
