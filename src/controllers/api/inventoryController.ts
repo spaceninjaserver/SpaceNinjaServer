@@ -105,10 +105,12 @@ const inventoryController: RequestHandler = async (request, response) => {
 
     if (config.unlockAllSkins) {
         inventoryResponse.WeaponSkins = [];
+        let i = 0;
         for (const uniqueName in ExportCustoms) {
+            i++;
             inventoryResponse.WeaponSkins.push({
                 ItemId: {
-                    $oid: "000000000000000000000000"
+                    $oid: (i).toString().padStart(24, '0')
                 },
                 ItemType: uniqueName
             });
