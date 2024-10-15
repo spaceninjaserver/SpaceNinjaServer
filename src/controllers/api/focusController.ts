@@ -26,7 +26,7 @@ export const focusController: RequestHandler = async (req, res) => {
                             ItemCount: -1
                         } satisfies IMiscItem
                     ]);
-					break;
+                    break;
                 }
             }
             await inventory.save();
