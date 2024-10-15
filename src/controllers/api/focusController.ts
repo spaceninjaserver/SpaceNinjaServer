@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getInventory, addMiscItems, addEquipment } from "@/src/services/inventoryService";
-import { IMiscItem, TFocusPolarity } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IMiscItem, TFocusPolarity, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
 import { logger } from "@/src/utils/logger";
 import { ExportFocusUpgrades } from "warframe-public-export-plus";
 
@@ -14,6 +14,16 @@ export const focusController: RequestHandler = async (req, res) => {
             logger.debug(req.body.toString());
             res.end();
             break;
+        case FocusOperation.InstallLens: {
+            const request = JSON.parse(String(req.body)) as ILensInstallRequest;
+            const inventory = await getInventory(accountId);
+            for (const item of inventory[request.ItemCategory]) {
+                if (item._id.toString() == request.ItemId) {
+                    item.FocusLens = request.LensType;
+                }
+            }
+            break;
+        }
         case FocusOperation.UnlockWay: {
             const focusType = (JSON.parse(String(req.body)) as IWayRequest).FocusType;
             const focusPolarity = focusTypeToPolarity(focusType);
@@ -144,6 +154,7 @@ export const focusController: RequestHandler = async (req, res) => {
 };
 
 enum FocusOperation {
+    InstallLens = "1",
     UnlockWay = "2",
     UnlockUpgrade = "3",
     LevelUpUpgrade = "4",
@@ -184,6 +195,12 @@ interface IConvertShardRequest {
 
 interface ISentTrainingAmplifierRequest {
     StartingWeaponType: string;
+}
+
+interface ILensInstallRequest {
+    LensType: string;
+    ItemCategory: TEquipmentKey;
+    ItemId: string;
 }
 
 // Works for ways & upgrades
