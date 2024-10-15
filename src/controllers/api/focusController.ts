@@ -20,10 +20,19 @@ export const focusController: RequestHandler = async (req, res) => {
             for (const item of inventory[request.Category]) {
                 if (item._id.toString() == request.WeaponId) {
                     item.FocusLens = request.LensType;
+                    addMiscItems(inventory, [
+                        {
+                            ItemType: request.LensType,
+                            ItemCount: -1
+                        } satisfies IMiscItem
+                    ]);
                 }
             }
             await inventory.save();
-            res.end();
+            res.json({
+                    weaponId: request.WeaponId,
+                    lensType: request.LensType,
+                });
             break;
         }
         case FocusOperation.UnlockWay: {
