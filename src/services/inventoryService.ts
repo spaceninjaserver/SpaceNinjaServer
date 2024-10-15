@@ -17,7 +17,8 @@ import {
     IWeaponSkinClient,
     TEquipmentKey,
     equipmentKeys,
-    IFusionTreasure
+    IFusionTreasure,
+    IPlayerSkills
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate } from "../types/genericUpdate";
 import {
