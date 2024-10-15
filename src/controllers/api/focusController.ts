@@ -30,9 +30,9 @@ export const focusController: RequestHandler = async (req, res) => {
             }
             await inventory.save();
             res.json({
-                    weaponId: request.WeaponId,
-                    lensType: request.LensType,
-                });
+                weaponId: request.WeaponId,
+                lensType: request.LensType
+            });
             break;
         }
         case FocusOperation.UnlockWay: {
