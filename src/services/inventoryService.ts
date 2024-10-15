@@ -733,7 +733,7 @@ const addFocusXpIncreases = (inventory: IInventoryDatabaseDocument, focusXpPlus:
         AP_WARD,
         AP_UMBRA,
         AP_ANY
-    };
+    }
 
     if (focusXpPlus) {
         inventory.FocusXP ??= { AP_ATTACK: 0, AP_DEFENSE: 0, AP_TACTIC: 0, AP_POWER: 0, AP_WARD: 0 };
