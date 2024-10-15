@@ -13,7 +13,8 @@ import {
     ISeasonChallenge,
     TSolarMapRegion,
     TEquipmentKey,
-    IFusionTreasure
+    IFusionTreasure,
+    IPlayerSkills
 } from "./inventoryTypes/inventoryTypes";
 
 export interface IArtifactsRequest {
