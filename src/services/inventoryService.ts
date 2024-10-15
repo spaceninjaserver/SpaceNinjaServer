@@ -722,13 +722,26 @@ const addMissionComplete = (inventory: IInventoryDatabaseDocument, { Tag, Comple
 };
 
 const addFocusXpIncreases = (inventory: IInventoryDatabaseDocument, focusXpPlus: number[] | undefined) => {
+    enum FocusType {
+        AP_UNIVERSAL,
+        AP_ATTACK,
+        AP_DEFENSE,
+        AP_TACTIC,
+        AP_POWER,
+        AP_PRECEPT,
+        AP_FUSION,
+        AP_WARD,
+        AP_UMBRA,
+        AP_ANY
+    };
+
     if (focusXpPlus) {
-        inventory.FocusXP ??= { AP_POWER: 0, AP_TACTIC: 0, AP_DEFENSE: 0, AP_ATTACK: 0, AP_WARD: 0 };
-        inventory.FocusXP.AP_ATTACK += focusXpPlus[1];
-        inventory.FocusXP.AP_DEFENSE += focusXpPlus[2];
-        inventory.FocusXP.AP_TACTIC += focusXpPlus[3];
-        inventory.FocusXP.AP_POWER += focusXpPlus[4];
-        inventory.FocusXP.AP_WARD += focusXpPlus[7];
+        inventory.FocusXP ??= { AP_ATTACK: 0, AP_DEFENSE: 0, AP_TACTIC: 0, AP_POWER: 0, AP_WARD: 0 };
+        inventory.FocusXP.AP_ATTACK += focusXpPlus[FocusType.AP_ATTACK];
+        inventory.FocusXP.AP_DEFENSE += focusXpPlus[FocusType.AP_DEFENSE];
+        inventory.FocusXP.AP_TACTIC += focusXpPlus[FocusType.AP_TACTIC];
+        inventory.FocusXP.AP_POWER += focusXpPlus[FocusType.AP_POWER];
+        inventory.FocusXP.AP_WARD += focusXpPlus[FocusType.AP_WARD];
     }
 };
 
