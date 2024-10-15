@@ -17,8 +17,8 @@ export const focusController: RequestHandler = async (req, res) => {
         case FocusOperation.InstallLens: {
             const request = JSON.parse(String(req.body)) as ILensInstallRequest;
             const inventory = await getInventory(accountId);
-            for (const item of inventory[request.ItemCategory]) {
-                if (item._id.toString() == request.ItemId) {
+            for (const item of inventory[request.Category]) {
+                if (item._id.toString() == request.WeaponId) {
                     item.FocusLens = request.LensType;
                 }
             }
@@ -201,8 +201,8 @@ interface ISentTrainingAmplifierRequest {
 
 interface ILensInstallRequest {
     LensType: string;
-    ItemCategory: TEquipmentKey;
-    ItemId: string;
+    Category: TEquipmentKey;
+    WeaponId: string;
 }
 
 // Works for ways & upgrades
