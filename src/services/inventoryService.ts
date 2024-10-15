@@ -721,6 +721,17 @@ const addMissionComplete = (inventory: IInventoryDatabaseDocument, { Tag, Comple
     }
 };
 
+const addFocusXpIncreases = (inventory: IInventoryDatabaseDocument, focusXpPlus: number[] | undefined) => {
+    if (focusXpPlus) {
+        inventory.FocusXP ??= { AP_POWER: 0, AP_TACTIC: 0, AP_DEFENSE: 0, AP_ATTACK: 0, AP_WARD: 0 };
+        inventory.FocusXP.AP_ATTACK += focusXpPlus[1];
+        inventory.FocusXP.AP_DEFENSE += focusXpPlus[2];
+        inventory.FocusXP.AP_TACTIC += focusXpPlus[3];
+        inventory.FocusXP.AP_POWER += focusXpPlus[4];
+        inventory.FocusXP.AP_WARD += focusXpPlus[7];
+    }
+};
+
 export const missionInventoryUpdate = async (data: IMissionInventoryUpdateRequest, accountId: string) => {
     const {
         RawUpgrades,
@@ -731,7 +742,8 @@ export const missionInventoryUpdate = async (data: IMissionInventoryUpdateReques
         Consumables,
         Recipes,
         Missions,
-        FusionTreasures
+        FusionTreasures,
+        FocusXpIncreases
     } = data;
     const inventory = await getInventory(accountId);
 
