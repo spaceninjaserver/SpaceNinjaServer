@@ -721,6 +721,14 @@ const addMissionComplete = (inventory: IInventoryDatabaseDocument, { Tag, Comple
     }
 };
 
+const addPlayerSkillGains = (inventory: IInventoryDatabaseDocument, PlayerSkillGains: IPlayerSkills | undefined) => {
+    if (PlayerSkillGains) {
+        inventory.PlayerSkills ??= { LPP_SPACE: 0, LPP_DRIFTER: 0, LPS_NONE: 0, LPS_PILOTING: 0, LPS_GUNNERY: 0, LPS_TACTICAL: 0, LPS_ENGINEERING: 0, LPS_COMMAND: 0, LPS_DRIFT_COMBAT: 0, LPS_DRIFT_RIDING: 0, LPS_DRIFT_OPPORTUNITY: 0, LPS_DRIFT_ENDURANCE: 0 };
+        inventory.PlayerSkills.LPP_SPACE += PlayerSkillGains.LPP_SPACE;
+        inventory.PlayerSkills.LPP_DRIFTER += PlayerSkillGains.LPP_DRIFTER;
+    }
+};
+
 export const missionInventoryUpdate = async (data: IMissionInventoryUpdateRequest, accountId: string) => {
     const {
         RawUpgrades,
@@ -731,7 +739,8 @@ export const missionInventoryUpdate = async (data: IMissionInventoryUpdateReques
         Consumables,
         Recipes,
         Missions,
-        FusionTreasures
+        FusionTreasures,
+        PlayerSkillGains
     } = data;
     const inventory = await getInventory(accountId);
 
@@ -793,6 +802,7 @@ export const missionInventoryUpdate = async (data: IMissionInventoryUpdateReques
     if (Missions) {
         addMissionComplete(inventory, Missions);
     }
+    addPlayerSkillGains(inventory, PlayerSkillGains);
 
     const changedInventory = await inventory.save();
     return changedInventory.toJSON();
