@@ -22,6 +22,8 @@ export const focusController: RequestHandler = async (req, res) => {
                     item.FocusLens = request.LensType;
                 }
             }
+            await inventory.save();
+            res.end();
             break;
         }
         case FocusOperation.UnlockWay: {
