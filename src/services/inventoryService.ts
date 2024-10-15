@@ -805,6 +805,7 @@ export const missionInventoryUpdate = async (data: IMissionInventoryUpdateReques
     if (Missions) {
         addMissionComplete(inventory, Missions);
     }
+    addFocusXpIncreases(inventory, FocusXpIncreases);
 
     const changedInventory = await inventory.save();
     return changedInventory.toJSON();
