@@ -51,7 +51,7 @@ const missionInventoryUpdateController: RequestHandler = async (req, res): Promi
 
     try {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call
-        const lootInventory = getJSONfromString(req.body.toString()) as IMissionInventoryUpdateRequest;
+        const lootInventory = getJSONfromString(String(req.body)) as IMissionInventoryUpdateRequest;
 
         logger.debug("missionInventoryUpdate with lootInventory =", lootInventory);
 

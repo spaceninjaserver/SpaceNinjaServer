@@ -10,15 +10,17 @@ const addItemController: RequestHandler = async (req, res) => {
     const request = toAddItemRequest(req.body);
 
     switch (request.type) {
-        case ItemType.Powersuit:
+        case ItemType.Powersuit: {
             const powersuit = await addPowerSuit(request.InternalName, accountId);
             res.json(powersuit);
             return;
-        case ItemType.Weapon:
+        }
+        case ItemType.Weapon: {
             const weaponType = getWeaponType(request.InternalName);
             const weapon = await addEquipment(weaponType, request.InternalName, accountId);
             res.json(weapon);
             break;
+        }
         default:
             res.status(400).json({ error: "something went wrong" });
             break;

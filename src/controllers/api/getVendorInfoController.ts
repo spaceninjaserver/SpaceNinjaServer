@@ -133,6 +133,6 @@ export const getVendorInfoController: RequestHandler = (req, res) => {
             break;
 
         default:
-            throw new Error(`Unknown vendor: ${req.query.vendor}`);
+            throw new Error(`Unknown vendor: ${String(req.query.vendor)}`);
     }
 };
