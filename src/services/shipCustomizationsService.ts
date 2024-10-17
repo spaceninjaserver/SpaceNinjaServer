@@ -4,7 +4,8 @@ import {
     ISetShipCustomizationsRequest,
     IShipDatabase,
     IShipDecorationsRequest,
-    IShipDecorationsResponse
+    IShipDecorationsResponse,
+    ISetPlacedDecoInfoRequest
 } from "@/src/types/shipTypes";
 import { logger } from "@/src/utils/logger";
 import { Types } from "mongoose";
@@ -130,4 +131,24 @@ export const handleSetShipDecorations = async (
     await personalRooms.save();
 
     return { DecoId: decoId.toString(), Room: placedDecoration.Room, IsApartment: placedDecoration.IsApartment };
+};
+
+export const handleSetPlacedDecoInfo = async (accountId: string, req: ISetPlacedDecoInfoRequest) => {
+    const personalRooms = await getPersonalRooms(accountId);
+
+    const room = personalRooms.Ship.Rooms.find(room => room.Name === req.Room);
+    if (!room) {
+        logger.error("room not found");
+        throw new Error("room not found");
+    }
+
+    const placedDeco = room.PlacedDecos?.find(x => x._id.toString() == req.DecoId);
+    if (!placedDeco) {
+        logger.error("deco not found");
+        throw new Error("deco not found");
+    }
+
+    placedDeco.PictureFrameInfo = req.PictureFrameInfo;
+
+    await personalRooms.save();
 };
