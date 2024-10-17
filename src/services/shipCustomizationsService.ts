@@ -133,7 +133,7 @@ export const handleSetShipDecorations = async (
     return { DecoId: decoId.toString(), Room: placedDecoration.Room, IsApartment: placedDecoration.IsApartment };
 };
 
-export const handleSetPlacedDecoInfo = async (accountId: string, req: ISetPlacedDecoInfoRequest) => {
+export const handleSetPlacedDecoInfo = async (accountId: string, req: ISetPlacedDecoInfoRequest): Promise<void> => {
     const personalRooms = await getPersonalRooms(accountId);
 
     const room = personalRooms.Ship.Rooms.find(room => room.Name === req.Room);
