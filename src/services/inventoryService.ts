@@ -460,7 +460,7 @@ export const updateCurrency = async (price: number, usePremium: boolean, account
 };
 
 // TODO: AffiliationMods support (Nightwave).
-export const updateGeneric = async (data: IGenericUpdate, accountId: string) => {
+export const updateGeneric = async (data: IGenericUpdate, accountId: string): Promise<void> => {
     const inventory = await getInventory(accountId);
 
     // Make it an array for easier parsing.
@@ -476,8 +476,6 @@ export const updateGeneric = async (data: IGenericUpdate, accountId: string) => 
 
     inventory.NodeIntrosCompleted = nodes;
     await inventory.save();
-
-    return data;
 };
 
 export const updateTheme = async (data: IThemeUpdateRequest, accountId: string) => {
