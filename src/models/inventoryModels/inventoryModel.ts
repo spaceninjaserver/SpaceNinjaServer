@@ -933,7 +933,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         EvolutionProgress: { type: [evolutionProgressSchema], default: undefined },
 
         //https://warframe.fandom.com/wiki/Loc-Pin
-        CustomMarkers: [CustomMarkersSchema],
+        CustomMarkers: { type: [CustomMarkersSchema], default: undefined },
 
         //Unknown and system
         DuviriInfo: DuviriInfoSchema,

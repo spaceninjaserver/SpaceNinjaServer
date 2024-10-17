@@ -794,9 +794,11 @@ export const missionInventoryUpdate = async (data: IMissionInventoryUpdateReques
                 : undefined;
             if (map) {
                 map.markerInfos = markers.markerInfos;
+                inventory.markModified("CustomMarkers");
             } else {
                 inventory.CustomMarkers ??= [];
                 inventory.CustomMarkers.push(markers);
+                inventory.markModified("CustomMarkers");
             }
         });
     }
