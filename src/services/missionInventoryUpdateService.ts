@@ -184,7 +184,7 @@ const addRewardResponse = (
     ItemType: string,
     ItemCount: number,
     InventoryCategory: IInventoryFieldType
-) => {
+): void => {
     if (!ItemType) return;
 
     if (!InventoryChanges[InventoryCategory]) {

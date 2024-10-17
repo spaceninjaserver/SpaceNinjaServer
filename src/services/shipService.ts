@@ -3,7 +3,7 @@ import { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
 import { logger } from "@/src/utils/logger";
 import { Types } from "mongoose";
 
-export const createShip = async (accountOwnerId: Types.ObjectId) => {
+export const createShip = async (accountOwnerId: Types.ObjectId): Promise<Types.ObjectId> => {
     try {
         const ship = new Ship({
             ItemType: "/Lotus/Types/Items/Ships/DefaultShip",

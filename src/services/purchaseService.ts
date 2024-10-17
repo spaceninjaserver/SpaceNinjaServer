@@ -11,13 +11,13 @@ import { IPurchaseRequest, SlotPurchase, IInventoryChanges } from "@/src/types/p
 import { logger } from "@/src/utils/logger";
 import { ExportBundles, ExportGear, TRarity } from "warframe-public-export-plus";
 
-export const getStoreItemCategory = (storeItem: string) => {
+export const getStoreItemCategory = (storeItem: string): string => {
     const storeItemString = getSubstringFromKeyword(storeItem, "StoreItems/");
     const storeItemElements = storeItemString.split("/");
     return storeItemElements[1];
 };
 
-export const getStoreItemTypesCategory = (typesItem: string) => {
+export const getStoreItemTypesCategory = (typesItem: string): string => {
     const typesString = getSubstringFromKeyword(typesItem, "Types");
     const typeElements = typesString.split("/");
     if (typesItem.includes("StoreItems")) {
@@ -26,7 +26,10 @@ export const getStoreItemTypesCategory = (typesItem: string) => {
     return typeElements[1];
 };
 
-export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountId: string) => {
+export const handlePurchase = async (
+    purchaseRequest: IPurchaseRequest,
+    accountId: string
+): Promise<{ InventoryChanges: IInventoryChanges }> => {
     logger.debug("purchase request", purchaseRequest);
 
     const purchaseResponse = await handleStoreItemAcquisition(

@@ -17,7 +17,7 @@ export const getSubstringFromKeywordToKeyword = (str: string, keywordBegin: stri
     return str.substring(beginIndex, endIndex + 1);
 };
 
-export const getIndexAfter = (str: string, searchWord: string) => {
+export const getIndexAfter = (str: string, searchWord: string): number => {
     const index = str.indexOf(searchWord);
     if (index === -1) {
         return -1;

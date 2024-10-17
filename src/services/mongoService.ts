@@ -8,7 +8,7 @@ if (url === undefined) {
     throw new Error("MONGODB_URL not found. Make sure you have a .env file in the root of the project!");
 }
 
-const connectDatabase = async () => {
+const connectDatabase = async (): Promise<void> => {
     try {
         await mongoose.connect(`${url}`);
         logger.info("Connected to MongoDB");

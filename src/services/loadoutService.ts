@@ -1,7 +1,8 @@
 import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
 import { logger } from "@/src/utils/logger";
+import { ILoadoutDatabase } from "../types/saveLoadoutTypes";
 
-export const getLoadout = async (accountId: string) => {
+export const getLoadout = async (accountId: string): Promise<ILoadoutDatabase> => {
     const loadout = await Loadout.findOne({ loadoutOwnerId: accountId });
 
     if (!loadout) {
@@ -9,5 +10,5 @@ export const getLoadout = async (accountId: string) => {
         throw new Error("loadout not found");
     }
 
-    return loadout;
+    return loadout.toJSON();
 };

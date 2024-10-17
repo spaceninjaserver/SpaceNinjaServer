@@ -43,7 +43,7 @@ export const isSlotPurchaseName = (slotPurchaseName: string): slotPurchaseName i
     return slotPurchaseName in slotPurchaseNameToSlotName;
 };
 
-export const parseSlotPurchaseName = (slotPurchaseName: string) => {
+export const parseSlotPurchaseName = (slotPurchaseName: string): SlotPurchaseName => {
     if (!isSlotPurchaseName(slotPurchaseName)) throw new Error(`invalid slot name ${slotPurchaseName}`);
     return slotPurchaseName;
 };
