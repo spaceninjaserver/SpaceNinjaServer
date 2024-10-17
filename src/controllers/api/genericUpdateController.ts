@@ -11,7 +11,8 @@ import { IGenericUpdate } from "@/src/types/genericUpdate";
 const genericUpdateController: RequestHandler = async (request, response) => {
     const accountId = await getAccountIdForRequest(request);
     const update = getJSONfromString(String(request.body)) as IGenericUpdate;
-    response.json(await updateGeneric(update, accountId));
+    await updateGeneric(update, accountId);
+    response.json(update);
 };
 
 export { genericUpdateController };
