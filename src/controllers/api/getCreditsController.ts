@@ -17,8 +17,8 @@ export const getCreditsController: RequestHandler = async (req, res) => {
         res.json({
             RegularCredits: 999999999,
             TradesRemaining: 999999999,
-            PremiumCreditsFree: 999999999,
-            PremiumCredits: 999999999
+            PremiumCreditsFree: 0,
+            PremiumCredits: 10000
         });
         return;
     }
