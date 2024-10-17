@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-const getFriendsController = (_request: Request, response: Response) => {
+const getFriendsController = (_request: Request, response: Response): void => {
     response.writeHead(200, {
         //Connection: "keep-alive",
         //"Content-Encoding": "gzip",

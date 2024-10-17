@@ -326,7 +326,7 @@ const MailboxSchema = new Schema<IMailbox>(
     {
         LastInboxId: {
             type: Schema.Types.ObjectId,
-            set: (v: IMailbox["LastInboxId"]) => v.$oid.toString()
+            set: (v: IMailbox["LastInboxId"]): string => v.$oid.toString()
         }
     },
     { id: false, _id: false }
