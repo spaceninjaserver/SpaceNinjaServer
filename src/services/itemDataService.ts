@@ -45,16 +45,11 @@ export const getRecipe = (uniqueName: string): IRecipe | undefined => {
     return ExportRecipes[uniqueName];
 };
 
-export const getExalted = (uniqueName: string) => {
-    const suit = getSuitByUniqueName(uniqueName);
-    if (suit?.exalted !== undefined) {
-        return suit.exalted;
-    } else {
-        return false;
-    }
+export const getExalted = (uniqueName: string): string[] | undefined => {
+    return getSuitByUniqueName(uniqueName)?.exalted;
 };
 
-export const getItemCategoryByUniqueName = (uniqueName: string) => {
+export const getItemCategoryByUniqueName = (uniqueName: string): string => {
     //Lotus/Types/Items/MiscItems/PolymerBundle
 
     let splitWord = "Items/";
