@@ -218,7 +218,7 @@ export const addItem = async (
                 }
             }
             break;
-        case "Weapons":
+        case "Weapons": {
             const weaponType = getWeaponType(typeName);
             const weapon = await addEquipment(weaponType, typeName, accountId);
             await updateSlots(accountId, InventorySlot.WEAPONS, 0, 1);
@@ -228,6 +228,7 @@ export const addItem = async (
                     [weaponType]: [weapon]
                 }
             };
+        }
         case "Upgrades": {
             const inventory = await getInventory(accountId);
             const changes = [
@@ -263,7 +264,7 @@ export const addItem = async (
         }
         case "Types":
             switch (typeName.substr(1).split("/")[2]) {
-                case "Sentinels":
+                case "Sentinels": {
                     // TOOD: Sentinels should also grant their DefaultUpgrades & SentinelWeapon.
                     const sentinel = await addSentinel(typeName, accountId);
                     await updateSlots(accountId, InventorySlot.SENTINELS, 0, 1);
@@ -273,6 +274,7 @@ export const addItem = async (
                             Sentinels: [sentinel]
                         }
                     };
+                }
                 case "Items": {
                     switch (typeName.substr(1).split("/")[3]) {
                         case "ShipDecos": {
@@ -328,7 +330,8 @@ export const addItem = async (
                         };
                     }
                     break;
-                case "Restoratives": // Codex Scanner, Remote Observer, Starburst
+                case "Restoratives": {
+                    // Codex Scanner, Remote Observer, Starburst
                     const inventory = await getInventory(accountId);
                     const consumablesChanges = [
                         {
@@ -343,6 +346,7 @@ export const addItem = async (
                             Consumables: consumablesChanges
                         }
                     };
+                }
             }
             break;
     }

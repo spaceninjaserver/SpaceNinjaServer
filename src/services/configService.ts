@@ -6,7 +6,7 @@ import { logger } from "@/src/utils/logger";
 const rootDir = path.join(__dirname, "../..");
 const repoDir = path.basename(rootDir) == "build" ? path.join(rootDir, "..") : rootDir;
 const configPath = path.join(repoDir, "config.json");
-export const config: IConfig = JSON.parse(fs.readFileSync(configPath, "utf-8"));
+export const config = JSON.parse(fs.readFileSync(configPath, "utf-8")) as IConfig;
 
 let amnesia = false;
 fs.watchFile(configPath, () => {
