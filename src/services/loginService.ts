@@ -29,13 +29,13 @@ export const createAccount = async (accountData: IDatabaseAccount) => {
     }
 };
 
-export const createLoadout = async (accountId: Types.ObjectId) => {
+export const createLoadout = async (accountId: Types.ObjectId): Promise<Types.ObjectId> => {
     const loadout = new Loadout({ loadoutOwnerId: accountId });
     const savedLoadout = await loadout.save();
     return savedLoadout._id;
 };
 
-export const createPersonalRooms = async (accountId: Types.ObjectId, shipId: Types.ObjectId) => {
+export const createPersonalRooms = async (accountId: Types.ObjectId, shipId: Types.ObjectId): Promise<void> => {
     const personalRooms = new PersonalRooms({
         ...new_personal_rooms,
         personalRoomsOwnerId: accountId,
