@@ -12,7 +12,6 @@
     },
     "rules": {
         "@typescript-eslint/explicit-function-return-type": "warn",
-        "@typescript-eslint/explicit-module-boundary-types": "warn",
         "@typescript-eslint/restrict-template-expressions": "warn",
         "@typescript-eslint/restrict-plus-operands": "warn",
         "@typescript-eslint/no-unsafe-member-access": "warn",
