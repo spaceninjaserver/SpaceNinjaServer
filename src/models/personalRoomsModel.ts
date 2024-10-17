@@ -1,14 +1,34 @@
 import { toOid } from "@/src/helpers/inventoryHelpers";
 import { IOrbiter, IPersonalRooms, PersonalRoomsModelType } from "@/src/types/personalRoomsTypes";
-import { IApartment, IGardening, IPlacedDecosDatabase } from "@/src/types/shipTypes";
+import { IApartment, IGardening, IPlacedDecosDatabase, IPictureFrameInfo } from "@/src/types/shipTypes";
 import { Schema, model } from "mongoose";
+
+const pictureFrameInfoSchema = new Schema<IPictureFrameInfo>(
+    {
+        Image: String,
+        Filter: String,
+        XOffset: Number,
+        YOffset: Number,
+        Scale: Number,
+        InvertX: Boolean,
+        InvertY: Boolean,
+        ColorCorrection: Number,
+        Text: String,
+        TextScale: Number,
+        TextColorA: Number,
+        TextColorB: Number,
+        TextOrientation: Number
+    },
+    { id: false, _id: false }
+);
 
 const placedDecosSchema = new Schema<IPlacedDecosDatabase>(
     {
         Type: String,
         Pos: [Number],
         Rot: [Number],
-        Scale: Number
+        Scale: Number,
+        PictureFrameInfo: { type: pictureFrameInfoSchema, default: undefined }
     },
     { id: false }
 );

@@ -70,6 +70,7 @@ export interface IPlacedDecosDatabase {
     Pos: [number, number, number];
     Rot: [number, number, number];
     Scale: number;
+    PictureFrameInfo?: IPictureFrameInfo;
     _id: Types.ObjectId;
 }
 
@@ -114,4 +115,28 @@ export interface IShipDecorationsResponse {
     MaxCapacityIncrease?: number;
     OldRoom?: string;
     NewRoom?: string;
+}
+
+export interface ISetPlacedDecoInfoRequest {
+    DecoType: string;
+    DecoId: string;
+    Room: string;
+    PictureFrameInfo: IPictureFrameInfo;
+    BootLocation: string;
+}
+
+export interface IPictureFrameInfo {
+    Image: string;
+    Filter: string;
+    XOffset: number;
+    YOffset: number;
+    Scale: number;
+    InvertX: boolean;
+    InvertY: boolean;
+    ColorCorrection: number;
+    Text: string;
+    TextScale: number;
+    TextColorA: number;
+    TextColorB: number;
+    TextOrientation: number;
 }
