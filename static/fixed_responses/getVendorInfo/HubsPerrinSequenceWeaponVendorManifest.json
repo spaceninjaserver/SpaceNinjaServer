@@ -18,7 +18,7 @@
         "QuantityMultiplier": 1,
         "Expiry": {
           "$date": {
-            "$numberLong": "1729382400000"
+            "$numberLong": "9999999000000"
           }
         },
         "PurchaseQuantityLimit": 1,
@@ -41,7 +41,7 @@
         "QuantityMultiplier": 1,
         "Expiry": {
           "$date": {
-            "$numberLong": "1729382400000"
+            "$numberLong": "9999999000000"
           }
         },
         "PurchaseQuantityLimit": 1,
@@ -64,7 +64,7 @@
         "QuantityMultiplier": 1,
         "Expiry": {
           "$date": {
-            "$numberLong": "1729382400000"
+            "$numberLong": "9999999000000"
           }
         },
         "PurchaseQuantityLimit": 1,
@@ -87,7 +87,7 @@
         "QuantityMultiplier": 1,
         "Expiry": {
           "$date": {
-            "$numberLong": "1729382400000"
+            "$numberLong": "9999999000000"
           }
         },
         "PurchaseQuantityLimit": 1,
@@ -110,7 +110,7 @@
         "QuantityMultiplier": 1,
         "Expiry": {
           "$date": {
-            "$numberLong": "1729382400000"
+            "$numberLong": "9999999000000"
           }
         },
         "PurchaseQuantityLimit": 1,
@@ -126,7 +126,7 @@
     "WeaponUpgradeValueAttenuationExponent": 2.25,
     "Expiry": {
       "$date": {
-        "$numberLong": "1729382400000"
+        "$numberLong": "9999999000000"
       }
     }
   }
