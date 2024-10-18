@@ -1,0 +1,248 @@
+{
+  "VendorInfo": {
+    "_id": {
+      "$oid": "5be4a159b144f3cdf1c22efa"
+    },
+    "TypeName": "/Lotus/Types/Game/VendorManifests/Solaris/DebtTokenVendorManifest",
+    "ItemManifest": [
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/DebtTokenBundles/DebtTokenBundleUncommonD",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/Venus/Resources/VenusCoconutItem",
+            "ItemCount": 5,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/MiscItems/Circuits",
+            "ItemCount": 3664,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "RegularPrice": [87300, 87300],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": true,
+        "LocTagRandSeed": 1881404827,
+        "Id": {
+          "$oid": "670daf92d21f34757a5e73b4"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/DebtTokenBundles/DebtTokenBundleRareC",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/MiscItems/NeuralSensor",
+            "ItemCount": 1,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "RegularPrice": [53300, 53300],
+        "Bin": "BIN_2",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": true,
+        "LocTagRandSeed": 1943984533,
+        "Id": {
+          "$oid": "6710b5029e1a3080a65e73a7"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/DebtTokenBundles/DebtTokenBundleCommonG",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/MiscItems/Salvage",
+            "ItemCount": 11540,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "RegularPrice": [27300, 27300],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": true,
+        "LocTagRandSeed": 744199559,
+        "Id": {
+          "$oid": "67112582cc115756985e73a4"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/DebtTokenBundles/DebtTokenBundleUncommonB",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Solaris/FishParts/CorpusFishThermalLaserItem",
+            "ItemCount": 9,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "RegularPrice": [75800, 75800],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": true,
+        "LocTagRandSeed": 3744711432,
+        "Id": {
+          "$oid": "670de7d28a6ec82cd25e73a2"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/DebtTokenBundles/DebtTokenBundleUncommonB",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/MiscItems/Rubedo",
+            "ItemCount": 3343,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "RegularPrice": [52200, 52200],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": true,
+        "LocTagRandSeed": 1579000687,
+        "Id": {
+          "$oid": "670e58526171148e125e73ad"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/DebtTokenBundles/DebtTokenBundleCommonA",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/Venus/Resources/CoolantItem",
+            "ItemCount": 9,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Solaris/FishParts/CorpusFishAnoscopicSensorItem",
+            "ItemCount": 5,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "RegularPrice": [12400, 12400],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": true,
+        "LocTagRandSeed": 3589081466,
+        "Id": {
+          "$oid": "67112582cc115756985e73a5"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/DebtTokenBundles/DebtTokenBundleUncommonC",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Solaris/SolarisCommonOreBAlloyItem",
+            "ItemCount": 13,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "RegularPrice": [77500, 77500],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": true,
+        "LocTagRandSeed": 1510234814,
+        "Id": {
+          "$oid": "670f0f21250ad046c35e73ee"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/DebtTokenBundles/DebtTokenBundleUncommonD",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Solaris/FishParts/CorpusFishParralelBiodeItem",
+            "ItemCount": 7,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Solaris/SolarisCommonGemBCutItem",
+            "ItemCount": 12,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "RegularPrice": [94600, 94600],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": true,
+        "LocTagRandSeed": 4222095721,
+        "Id": {
+          "$oid": "670f63827be40254f95e739d"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/DebtTokenBundles/DebtTokenBundleCommonJ",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/MiscItems/Nanospores",
+            "ItemCount": 14830,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "RegularPrice": [25600, 25600],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": true,
+        "LocTagRandSeed": 2694388669,
+        "Id": {
+          "$oid": "67112582cc115756985e73a6"
+        }
+      }
+    ],
+    "PropertyTextHash": "A39621049CA3CA13761028CD21C239EF",
+    "RandomSeedType": "VRST_FLAVOUR_TEXT",
+    "Expiry": {
+      "$date": {
+        "$numberLong": "9999999000000"
+      }
+    }
+  }
+}

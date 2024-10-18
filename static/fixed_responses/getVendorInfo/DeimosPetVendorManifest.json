@@ -1,0 +1,136 @@
+{
+  "VendorInfo": {
+    "_id": {
+      "$oid": "5f456e02c96976e97d6b8080"
+    },
+    "TypeName": "/Lotus/Types/Game/VendorManifests/Deimos/PetVendorManifest",
+    "ItemManifest": [
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Deimos/AnimalTagInfestedNexiferaRare",
+        "PremiumPrice": [35, 35],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 5,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b10ba592c4c95e89f6"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Deimos/AnimalTagInfestedNexiferaUncommon",
+        "PremiumPrice": [22, 22],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 5,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b10ba592c4c95e89f7"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Deimos/AnimalTagInfestedMergooUncommon",
+        "PremiumPrice": [28, 28],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 5,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b10ba592c4c95e89f8"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Deimos/AnimalTagInfestedKdriveUncommon",
+        "PremiumPrice": [25, 25],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 5,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b10ba592c4c95e89f9"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Deimos/AnimalTagInfestedZongroCommon",
+        "PremiumPrice": [14, 14],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 5,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b10ba592c4c95e89fa"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Deimos/AnimalTagInfestedPredatorCommon",
+        "PremiumPrice": [12, 12],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 5,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b10ba592c4c95e89fb"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Deimos/AnimalTagInfestedMergooCommon",
+        "PremiumPrice": [13, 13],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 5,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b10ba592c4c95e89fc"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Deimos/AnimalTagInfestedKdriveCommon",
+        "PremiumPrice": [14, 14],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 5,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b10ba592c4c95e89fd"
+        }
+      }
+    ],
+    "PropertyTextHash": "F14C6B6A61D7585A10537995661F5220",
+    "Expiry": {
+      "$date": {
+        "$numberLong": "9999999000000"
+      }
+    }
+  }
+}

@@ -1,0 +1,312 @@
+{
+  "VendorInfo": {
+    "_id": {
+      "$oid": "5f456e01c96976e97d6b7ff1"
+    },
+    "TypeName": "/Lotus/Types/Game/VendorManifests/Deimos/HivemindCommisionsManifestProspector",
+    "ItemManifest": [
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Otak/OtakTaskA",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Deimos/DeimosCommonOreAItem",
+            "ItemCount": 10,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Deimos/DeimosCommonGemBItem",
+            "ItemCount": 8,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 1370972414,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e8ef8"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Otak/OtakTaskC",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Deimos/DeimosCommonOreBItem",
+            "ItemCount": 20,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Deimos/DeimosUncommonGemAItem",
+            "ItemCount": 8,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Deimos/DeimosUncommonOreAItem",
+            "ItemCount": 20,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_2",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 2361790143,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e8ef9"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Otak/OtakTaskA",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Deimos/DeimosCommonGemAItem",
+            "ItemCount": 6,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Deimos/DeimosCommonOreAItem",
+            "ItemCount": 10,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 472210739,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e8efb"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Otak/OtakTaskB",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Deimos/DeimosCommonOreBItem",
+            "ItemCount": 12,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Deimos/DeimosCommonOreAItem",
+            "ItemCount": 15,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 3072462886,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e8efd"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Otak/OtakTaskA",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Deimos/DeimosCommonGemAItem",
+            "ItemCount": 8,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Deimos/DeimosCommonOreAItem",
+            "ItemCount": 10,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 767765909,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e8efe"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Otak/OtakTaskD",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Deimos/DeimosEidolonGemAItem",
+            "ItemCount": 5,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Deimos/DeimosEidolonGemBItem",
+            "ItemCount": 2,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Deimos/DeimosRareOreAItem",
+            "ItemCount": 22,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_3",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 512512880,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e8eff"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Otak/OtakTaskA",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Deimos/DeimosCommonOreAItem",
+            "ItemCount": 10,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Deimos/DeimosCommonGemAItem",
+            "ItemCount": 6,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 2037734419,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e8f00"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Otak/OtakTaskB",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Deimos/DeimosUncommonOreAItem",
+            "ItemCount": 13,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Deimos/DeimosCommonOreAItem",
+            "ItemCount": 8,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 1433662587,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e8f01"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Otak/OtakTaskB",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Deimos/DeimosCommonOreAItem",
+            "ItemCount": 12,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Deimos/DeimosCommonGemAItem",
+            "ItemCount": 8,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 1618492734,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e8f02"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Otak/OtakTaskD",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Deimos/DeimosUncommonGemAItem",
+            "ItemCount": 7,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Deimos/DeimosCommonGemBItem",
+            "ItemCount": 10,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Deimos/DeimosRareOreAItem",
+            "ItemCount": 12,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_3",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 4032699594,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e8f03"
+        }
+      }
+    ],
+    "PropertyTextHash": "0AC3C284471037011B36EC51238D13A9",
+    "RandomSeedType": "VRST_FLAVOUR_TEXT",
+    "Expiry": {
+      "$date": {
+        "$numberLong": "9999999000000"
+      }
+    }
+  }
+}

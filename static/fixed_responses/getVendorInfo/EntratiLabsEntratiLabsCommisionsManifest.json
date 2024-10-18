@@ -1,0 +1,97 @@
+{
+  "VendorInfo": {
+    "_id": {
+      "$oid": "6579d82b553a20c6fc0067ae"
+    },
+    "TypeName": "/Lotus/Types/Game/VendorManifests/EntratiLabs/EntratiLabsCommisionsManifest",
+    "ItemManifest": [
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/EntratiLabs/LoidTaskC",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLabMiscItemB",
+            "ItemCount": 17,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/MurmurItem",
+            "ItemCount": 30,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_2",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "Id": {
+          "$oid": "670a2b928ac7854ac55e73d3"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/EntratiLabs/LoidTaskB",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/MurmurItem",
+            "ItemCount": 20,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLabMiscItemA",
+            "ItemCount": 228,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "Id": {
+          "$oid": "670a2b928ac7854ac55e73d4"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/EntratiLabs/LoidTaskA",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/MurmurItem",
+            "ItemCount": 15,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Gameplay/Zariman/Resources/ZarimanMiscItemB",
+            "ItemCount": 1,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "Id": {
+          "$oid": "670a2b928ac7854ac55e73d5"
+        }
+      }
+    ],
+    "PropertyTextHash": "60C4D85A8DE5E6538AD23CDDFEEF0422",
+    "Expiry": {
+      "$date": {
+        "$numberLong": "9999999000000"
+      }
+    }
+  }
+}

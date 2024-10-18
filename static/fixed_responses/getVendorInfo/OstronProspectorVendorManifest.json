@@ -1,0 +1,62 @@
+{
+  "VendorInfo": {
+    "_id": {
+      "$oid": "59dfe591314805ffe1d47c0a"
+    },
+    "TypeName": "/Lotus/Types/Game/VendorManifests/Ostron/ProspectorVendorManifest",
+    "ItemManifest": [
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Gems/Eidolon/RareGemACutAItem",
+        "PremiumPrice": [19, 19],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 5,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e98f0"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Gems/Eidolon/CommonGemBCutAItem",
+        "PremiumPrice": [8, 8],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 20,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e98f1"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Gems/Eidolon/CommonGemACutAItem",
+        "PremiumPrice": [5, 5],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 20,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e98f2"
+        }
+      }
+    ],
+    "MaxDailyPurchases": 0,
+    "PropertyTextHash": "773C6968D9A65506CD28DF28C768F0DA",
+    "Expiry": {
+      "$date": {
+        "$numberLong": "9999999000000"
+      }
+    }
+  }
+}
