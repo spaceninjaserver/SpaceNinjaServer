@@ -53,7 +53,7 @@ export const getVendorInfoController: RequestHandler = (req, res) => {
         case "/Lotus/Types/Game/VendorManifests/Solaris/DebtTokenVendorManifest":
             res.json(SolarisDebtTokenVendorManifest);
             break;
-            
+
         case "/Lotus/Types/Game/VendorManifests/Solaris/DebtTokenVendorRepossessionsManifest":
             res.json(SolarisDebtTokenVendorRepossessionsManifest);
             break;
