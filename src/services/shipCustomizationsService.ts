@@ -10,7 +10,7 @@ import {
 import { logger } from "@/src/utils/logger";
 import { Types } from "mongoose";
 
-export const setShipCustomizations = async (shipCustomization: ISetShipCustomizationsRequest) => {
+export const setShipCustomizations = async (shipCustomization: ISetShipCustomizationsRequest): Promise<void> => {
     const ship = await getShip(new Types.ObjectId(shipCustomization.ShipId));
 
     let shipChanges: Partial<IShipDatabase>;
