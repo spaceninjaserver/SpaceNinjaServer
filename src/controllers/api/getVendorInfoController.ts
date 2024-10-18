@@ -103,9 +103,9 @@ export const getVendorInfoController: RequestHandler = (req, res) => {
             res.json(DeimosHivemindTokenVendorManifest);
             break;
 
-            case "/Lotus/Types/Game/VendorManifests/Hubs/IronwakeDondaVendorManifest":
-                res.json(HubsIronwakeDondaVendorManifest);
-                break; 
+        case "/Lotus/Types/Game/VendorManifests/Hubs/IronwakeDondaVendorManifest":
+            res.json(HubsIronwakeDondaVendorManifest);
+            break;
 
         case "/Lotus/Types/Game/VendorManifests/Zariman/ArchimedeanVendorManifest":
             res.json(ArchimedeanVendorManifest);
