@@ -1,0 +1,223 @@
+{
+  "VendorInfo": {
+    "_id": {
+      "$oid": "5f456e03c96976e97d6b80d2"
+    },
+    "TypeName": "/Lotus/Types/Game/VendorManifests/Deimos/HivemindCommisionsManifestTokenVendor",
+    "ItemManifest": [
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Grandmother/GrandmotherTaskD",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/EntratiFragmentCommonC",
+            "ItemCount": 10,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/EntratiFragmentCommonA",
+            "ItemCount": 10,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/EntratiFragmentUncommonB",
+            "ItemCount": 10,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/EntratiFragmentUncommonA",
+            "ItemCount": 10,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 1415858946,
+        "Id": {
+          "$oid": "670a47b1872b2325705e746c"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Grandmother/GrandmotherTaskD",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/EntratiFragmentCommonB",
+            "ItemCount": 2,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/EntratiFragmentUncommonA",
+            "ItemCount": 10,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/EntratiFragmentCommonA",
+            "ItemCount": 10,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/EntratiFragmentUncommonB",
+            "ItemCount": 10,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 3178511462,
+        "Id": {
+          "$oid": "670a47b1872b2325705e746e"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Grandmother/GrandmotherTaskB",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/EntratiFragmentUncommonA",
+            "ItemCount": 10,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/EntratiFragmentCommonC",
+            "ItemCount": 10,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 3313207881,
+        "Id": {
+          "$oid": "670a47b1872b2325705e7471"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Grandmother/GrandmotherTaskA",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/EntratiFragmentCommonB",
+            "ItemCount": 2,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 2241288767,
+        "Id": {
+          "$oid": "670a47b1872b2325705e7472"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Grandmother/GrandmotherTaskA",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/EntratiFragmentUncommonB",
+            "ItemCount": 10,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 3395082536,
+        "Id": {
+          "$oid": "670a47b1872b2325705e7473"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Grandmother/GrandmotherTaskB",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/EntratiFragmentCommonC",
+            "ItemCount": 10,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/EntratiFragmentUncommonB",
+            "ItemCount": 10,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 493457277,
+        "Id": {
+          "$oid": "670a47b1872b2325705e7474"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Grandmother/GrandmotherTaskB",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/EntratiFragmentUncommonB",
+            "ItemCount": 10,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/EntratiFragmentCommonB",
+            "ItemCount": 2,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 4225814786,
+        "Id": {
+          "$oid": "670a47b1872b2325705e7475"
+        }
+      }
+    ],
+    "PropertyTextHash": "58884EC7ECE7D22AD4BD9E9B436C37A8",
+    "RandomSeedType": "VRST_FLAVOUR_TEXT",
+    "Expiry": {
+      "$date": {
+        "$numberLong": "9999999000000"
+      }
+    }
+  }
+}

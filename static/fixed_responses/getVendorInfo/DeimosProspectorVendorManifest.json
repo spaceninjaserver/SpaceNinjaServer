@@ -1,0 +1,61 @@
+{
+  "VendorInfo": {
+    "_id": {
+      "$oid": "5f456e00c96976e97d6b7fd7"
+    },
+    "TypeName": "/Lotus/Types/Game/VendorManifests/Deimos/ProspectorVendorManifest",
+    "ItemManifest": [
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Gems/Deimos/DeimosUncommonGemACutItem",
+        "PremiumPrice": [13, 13],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 10,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e93a8"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Gems/Deimos/DeimosCommonGemBCutItem",
+        "PremiumPrice": [7, 7],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 20,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e93a9"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Gems/Deimos/DeimosCommonGemACutItem",
+        "PremiumPrice": [7, 7],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 20,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e93aa"
+        }
+      }
+    ],
+    "PropertyTextHash": "2BBC116116C757F6AF4FBC3B9BF754C8",
+    "Expiry": {
+      "$date": {
+        "$numberLong": "9999999000000"
+      }
+    }
+  }
+}

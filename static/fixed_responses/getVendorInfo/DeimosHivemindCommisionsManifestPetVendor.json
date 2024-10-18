@@ -1,0 +1,287 @@
+{
+  "VendorInfo": {
+    "_id": {
+      "$oid": "5f456e03c96976e97d6b80a3"
+    },
+    "TypeName": "/Lotus/Types/Game/VendorManifests/Deimos/HivemindCommisionsManifestPetVendor",
+    "ItemManifest": [
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Son/SonTaskB",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/AnimalTagInfestedMaggotRare",
+            "ItemCount": 2,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/AnimalTagInfestedMaggotCommon",
+            "ItemCount": 4,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 2707699975,
+        "Id": {
+          "$oid": "66fd60b10ba592c4c95e8897"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Son/SonTaskA",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/AnimalTagInfestedPredatorCommon",
+            "ItemCount": 2,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/AnimalTagInfestedMaggotCommon",
+            "ItemCount": 4,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 3610714639,
+        "Id": {
+          "$oid": "66fd60b10ba592c4c95e8898"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Son/SonTaskB",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/AnimalTagInfestedPredatorCommon",
+            "ItemCount": 2,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/AnimalTagInfestedMaggotRare",
+            "ItemCount": 1,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 1782149988,
+        "Id": {
+          "$oid": "66fd60b10ba592c4c95e8899"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Son/SonTaskC",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/AnimalTagInfestedMergooCommon",
+            "ItemCount": 3,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_2",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 2149416825,
+        "Id": {
+          "$oid": "66fd60b10ba592c4c95e889a"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Son/SonTaskB",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/AnimalTagInfestedCritterRare",
+            "ItemCount": 2,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/AnimalTagInfestedKdriveUncommon",
+            "ItemCount": 2,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 890863265,
+        "Id": {
+          "$oid": "66fd60b10ba592c4c95e889b"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Son/SonTaskA",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/AnimalTagInfestedCritterCommon",
+            "ItemCount": 4,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/AnimalTagInfestedPredatorCommon",
+            "ItemCount": 4,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 2507606934,
+        "Id": {
+          "$oid": "66fd60b10ba592c4c95e889c"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Son/SonTaskC",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/AnimalTagInfestedPredatorRare",
+            "ItemCount": 5,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_2",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 1037784729,
+        "Id": {
+          "$oid": "66fd60b10ba592c4c95e889e"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Son/SonTaskA",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/AnimalTagInfestedMaggotCommon",
+            "ItemCount": 4,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/AnimalTagInfestedCritterCommon",
+            "ItemCount": 4,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 2048707501,
+        "Id": {
+          "$oid": "66fd60b10ba592c4c95e889f"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Son/SonTaskA",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/AnimalTagInfestedKdriveRare",
+            "ItemCount": 2,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/AnimalTagInfestedPredatorCommon",
+            "ItemCount": 2,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 4038149313,
+        "Id": {
+          "$oid": "66fd60b10ba592c4c95e88a0"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Son/SonTaskD",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/AnimalTagInfestedMergooCommon",
+            "ItemCount": 3,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Deimos/AnimalTagInfestedPredatorRare",
+            "ItemCount": 3,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_3",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 2155290001,
+        "Id": {
+          "$oid": "66fd60b10ba592c4c95e88a1"
+        }
+      }
+    ],
+    "PropertyTextHash": "61E66B4E9E5A121DD06A476AE2A81B24",
+    "RandomSeedType": "VRST_FLAVOUR_TEXT",
+    "Expiry": {
+      "$date": {
+        "$numberLong": "9999999000000"
+      }
+    }
+  }
+}

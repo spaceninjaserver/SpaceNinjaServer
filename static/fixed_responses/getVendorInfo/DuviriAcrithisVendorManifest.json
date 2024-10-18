@@ -1,0 +1,321 @@
+{
+  "VendorInfo": {
+    "_id": {
+      "$oid": "64493ca759e9b164c86a2e14"
+    },
+    "TypeName": "/Lotus/Types/Game/VendorManifests/Duviri/AcrithisVendorManifest",
+    "ItemManifest": [
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/DangerRoom/DangerRoomTileDuviriDragonArena",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/Duviri/Resource/DuviriDragonDropItem",
+            "ItemCount": 20,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_5",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b00ba592c4c95e7d88"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Recipes/Components/FormaBlueprint",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/Duviri/Resource/DuviriDragonDropItem",
+            "ItemCount": 10,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_2",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "Id": {
+          "$oid": "66fd60b00ba592c4c95e7deb"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/MiscItems/UtilityUnlocker",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/Duviri/Resource/DuviriDragonDropItem",
+            "ItemCount": 20,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_2",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "Id": {
+          "$oid": "66fd60b00ba592c4c95e7dec"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/MiscItems/Kuva",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/Duviri/Resource/DuviriDragonDropItem",
+            "ItemCount": 10,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_2",
+        "QuantityMultiplier": 5000,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "Id": {
+          "$oid": "66fd60b00ba592c4c95e7ded"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/MiscItems/WeaponUtilityUnlocker",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/Duviri/Resource/DuviriDragonDropItem",
+            "ItemCount": 20,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_2",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "Id": {
+          "$oid": "66fd60b00ba592c4c95e7dee"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/MiscItems/Kuva",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/Duviri/Resource/DuviriDragonDropItem",
+            "ItemCount": 10,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_2",
+        "QuantityMultiplier": 5000,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "Id": {
+          "$oid": "670c5e12576f461f1e5e739c"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/MiscItems/Plastids",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/Duviri/Resource/DuviriPlantItemD",
+            "ItemCount": 40,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "6710c312fa0b2c5cd85e73c3"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/ShipDecos/Duviri/DUVxPlanterHangingPot",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/Duviri/Resource/DuviriPlantItemE",
+            "ItemCount": 51,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "6710c312fa0b2c5cd85e73c6"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/ShipDecos/Duviri/DUVxPlanterPotB",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/Duviri/Resource/DuviriRockItem",
+            "ItemCount": 44,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "6710c312fa0b2c5cd85e73c7"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/MiscItems/NeuralSensor",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/Duviri/Resource/DuviriPlantItemA",
+            "ItemCount": 52,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 3,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "6710c312fa0b2c5cd85e73c8"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/MiscItems/ControlModule",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/Duviri/Resource/DuviriPlantItemF",
+            "ItemCount": 42,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 3,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "6710c312fa0b2c5cd85e73c9"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/MiscItems/PhotoboothTileDuviriArenaOpera",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/Duviri/Resource/DuviriProcessedItem",
+            "ItemCount": 240,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "Id": {
+          "$oid": "66fd60b00ba592c4c95e7ddd"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Utility/HealthWhileUsingChanneledAbilities",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/Duviri/Resource/DuviriDragonDropItem",
+            "ItemCount": 10,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_3",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "Id": {
+          "$oid": "66fd60b00ba592c4c95e7e01"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Upgrades/Boons/DuviriVendorBoonItem",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/Duviri/Resource/DuviriPlantItemG",
+            "ItemCount": 50,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_4",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "6711a412ba1ba01e405e739c"
+        }
+      }
+    ],
+    "PropertyTextHash": "9EE40048EB685549ACA3D01AB1F65BF2",
+    "Expiry": {
+      "$date": {
+        "$numberLong": "9999999000000"
+      }
+    }
+  }
+}

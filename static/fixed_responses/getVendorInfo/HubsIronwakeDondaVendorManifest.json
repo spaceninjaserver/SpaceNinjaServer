@@ -1,0 +1,125 @@
+{
+  "VendorInfo": {
+    "_id": {
+      "$oid": "5dbb4c41e966f7886c3ce939"
+    },
+    "TypeName": "/Lotus/Types/Game/VendorManifests/Hubs/IronwakeDondaVendorManifest",
+    "ItemManifest": [
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/ShipDecos/HarrowQuestKeyOrnament",
+        "ItemPrices": [
+          {
+            "ItemCount": 25,
+            "ItemType": "/Lotus/Types/Items/MiscItems/PrimeBucks",
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e945f"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/BoosterPacks/RivenModPack",
+        "ItemPrices": [
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Items/MiscItems/RivenFragment",
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e9468"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/StoreItems/CreditBundles/150000Credits",
+        "ItemPrices": [
+          {
+            "ItemCount": 5,
+            "ItemType": "/Lotus/Types/Items/MiscItems/RivenFragment",
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e9469"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/MiscItems/Kuva",
+        "ItemPrices": [
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Items/MiscItems/RivenFragment",
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 35000,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e946a"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/BoosterPacks/RivenModPack",
+        "ItemPrices": [
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Items/MiscItems/RivenFragment",
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e946b"
+        }
+      }
+    ],
+    "PropertyTextHash": "62B64A8065B7C0FA345895D4BC234621",
+    "Expiry": {
+      "$date": {
+        "$numberLong": "9999999000000"
+      }
+    }
+  }
+}

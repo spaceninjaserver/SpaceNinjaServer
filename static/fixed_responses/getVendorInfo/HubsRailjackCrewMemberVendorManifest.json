@@ -1,0 +1,244 @@
+{
+  "VendorInfo": {
+    "_id": {
+      "$oid": "5fb70313c96976e97d6be787"
+    },
+    "TypeName": "/Lotus/Types/Game/VendorManifests/Hubs/RailjackCrewMemberVendorManifest",
+    "ItemManifest": [
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Game/CrewShip/CrewMember/SteelMeridianCrewMemberGeneratorStrong",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/RailjackMiscItems/IsosRailjackItem",
+            "ItemCount": 2220,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "RegularPrice": [2180000, 2180000],
+        "Bin": "BIN_2",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "Affiliation": "SteelMeridianSyndicate",
+        "MinAffiliationRank": 0,
+        "ReductionPerPositiveRank": 0.1,
+        "IncreasePerNegativeRank": 0.5,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 4185144421,
+        "Id": {
+          "$oid": "670daf92d21f34757a5e73da"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Game/CrewShip/CrewMember/NewLokaCrewMemberGeneratorStrong",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/RailjackMiscItems/IsosRailjackItem",
+            "ItemCount": 2130,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "RegularPrice": [1890000, 1890000],
+        "Bin": "BIN_2",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "Affiliation": "NewLokaSyndicate",
+        "MinAffiliationRank": 0,
+        "ReductionPerPositiveRank": 0.1,
+        "IncreasePerNegativeRank": 0.5,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 496053258,
+        "Id": {
+          "$oid": "670daf92d21f34757a5e73db"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Game/CrewShip/CrewMember/SteelMeridianCrewMemberGeneratorMediumVersionTwo",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/RailjackMiscItems/IsosRailjackItem",
+            "ItemCount": 440,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "Affiliation": "SteelMeridianSyndicate",
+        "MinAffiliationRank": 0,
+        "ReductionPerPositiveRank": 0.1,
+        "IncreasePerNegativeRank": 0.5,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 2078883475,
+        "Id": {
+          "$oid": "670daf92d21f34757a5e73dc"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Game/CrewShip/CrewMember/NewLokaCrewMemberGeneratorMediumVersionTwo",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/RailjackMiscItems/AsteriteRailjackItem",
+            "ItemCount": 730,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "Affiliation": "NewLokaSyndicate",
+        "MinAffiliationRank": 0,
+        "ReductionPerPositiveRank": 0.1,
+        "IncreasePerNegativeRank": 0.5,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 3890380934,
+        "Id": {
+          "$oid": "670daf92d21f34757a5e73dd"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Game/CrewShip/CrewMember/CephalonSudaCrewMemberGeneratorMediumVersionTwo",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/RailjackMiscItems/AsteriteRailjackItem",
+            "ItemCount": 720,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "Affiliation": "CephalonSudaSyndicate",
+        "MinAffiliationRank": 0,
+        "ReductionPerPositiveRank": 0.1,
+        "IncreasePerNegativeRank": 0.5,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 3425148044,
+        "Id": {
+          "$oid": "670daf92d21f34757a5e73de"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Game/CrewShip/CrewMember/ArbitersCrewMemberGeneratorMediumVersionTwo",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/RailjackMiscItems/CubicsRailjackItem",
+            "ItemCount": 6500,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "Affiliation": "ArbitersSyndicate",
+        "MinAffiliationRank": 0,
+        "ReductionPerPositiveRank": 0.1,
+        "IncreasePerNegativeRank": 0.5,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 2472754512,
+        "Id": {
+          "$oid": "670daf92d21f34757a5e73df"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Game/CrewShip/CrewMember/PerrinCrewMemberGeneratorVersionTwo",
+        "RegularPrice": [105000, 105000],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "Affiliation": "PerrinSyndicate",
+        "MinAffiliationRank": 0,
+        "ReductionPerPositiveRank": 0.1,
+        "IncreasePerNegativeRank": 0.5,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 966238763,
+        "Id": {
+          "$oid": "670daf92d21f34757a5e73e0"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Game/CrewShip/CrewMember/NewLokaCrewMemberGeneratorVersionTwo",
+        "RegularPrice": [120000, 120000],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "Affiliation": "NewLokaSyndicate",
+        "MinAffiliationRank": 0,
+        "ReductionPerPositiveRank": 0.1,
+        "IncreasePerNegativeRank": 0.5,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 356717213,
+        "Id": {
+          "$oid": "670daf92d21f34757a5e73e1"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Game/CrewShip/CrewMember/ArbitersCrewMemberGeneratorVersionTwo",
+        "RegularPrice": [120000, 120000],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "Affiliation": "ArbitersSyndicate",
+        "MinAffiliationRank": 0,
+        "ReductionPerPositiveRank": 0.1,
+        "IncreasePerNegativeRank": 0.5,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 1969797050,
+        "Id": {
+          "$oid": "670daf92d21f34757a5e73e2"
+        }
+      }
+    ],
+    "PropertyTextHash": "BE543CCC0A4F50A1D80CD2B523796EAE",
+    "RandomSeedType": "VRST_FLAVOUR_TEXT",
+    "Expiry": {
+      "$date": {
+        "$numberLong": "9999999000000"
+      }
+    }
+  }
+}

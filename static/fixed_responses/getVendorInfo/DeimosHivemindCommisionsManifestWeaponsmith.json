@@ -1,0 +1,254 @@
+{
+  "VendorInfo": {
+    "_id": {
+      "$oid": "5f456e02c96976e97d6b8049"
+    },
+    "TypeName": "/Lotus/Types/Game/VendorManifests/Deimos/HivemindCommisionsManifestWeaponsmith",
+    "ItemManifest": [
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Father/FatherTaskA",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Resources/InfGorgaricusSeedItem",
+            "ItemCount": 16,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 2438288725,
+        "Id": {
+          "$oid": "66fd60b00ba592c4c95e7caf"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Father/FatherTaskC",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Game/FishBait/Infested/OrokinFishBaitA",
+            "ItemCount": 6,
+            "ProductCategory": "Consumables"
+          },
+          {
+            "ItemType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Resources/InfMapricoFruitItem",
+            "ItemCount": 21,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Game/FishBait/Infested/InfestedFishBaitA",
+            "ItemCount": 6,
+            "ProductCategory": "Consumables"
+          }
+        ],
+        "Bin": "BIN_2",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 2431016296,
+        "Id": {
+          "$oid": "66fd60b00ba592c4c95e7cb2"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Father/FatherTaskA",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Resources/InfMapricoFruitItem",
+            "ItemCount": 16,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 18484856,
+        "Id": {
+          "$oid": "66fd60b00ba592c4c95e7cb3"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Father/FatherTaskA",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Resources/InfMapricoFruitItem",
+            "ItemCount": 14,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 2278976516,
+        "Id": {
+          "$oid": "66fd60b00ba592c4c95e7cb4"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Father/FatherTaskC",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Game/FishBait/Infested/OrokinFishBaitA",
+            "ItemCount": 7,
+            "ProductCategory": "Consumables"
+          },
+          {
+            "ItemType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Resources/OrbStoneItem",
+            "ItemCount": 25,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Game/FishBait/Infested/InfestedFishBaitA",
+            "ItemCount": 6,
+            "ProductCategory": "Consumables"
+          }
+        ],
+        "Bin": "BIN_2",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 3150323898,
+        "Id": {
+          "$oid": "66fd60b00ba592c4c95e7cb5"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Father/FatherTaskA",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Resources/InfMapricoFruitItem",
+            "ItemCount": 8,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 3971758486,
+        "Id": {
+          "$oid": "66fd60b00ba592c4c95e7cb6"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Father/FatherTaskB",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Resources/InfGorgaricusSeedItem",
+            "ItemCount": 17,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Resources/OrbStoneItem",
+            "ItemCount": 18,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 2512835718,
+        "Id": {
+          "$oid": "66fd60b00ba592c4c95e7cb7"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Father/FatherTaskA",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Resources/OrbStoneItem",
+            "ItemCount": 8,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 825411410,
+        "Id": {
+          "$oid": "66fd60b00ba592c4c95e7cb8"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Father/FatherTaskB",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Resources/InfGorgaricusSeedItem",
+            "ItemCount": 22,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Resources/OrbStoneItem",
+            "ItemCount": 12,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 2383349671,
+        "Id": {
+          "$oid": "66fd60b00ba592c4c95e7cb9"
+        }
+      }
+    ],
+    "PropertyTextHash": "CE9413585756FA39B793A9814E74E49F",
+    "RandomSeedType": "VRST_FLAVOUR_TEXT",
+    "Expiry": {
+      "$date": {
+        "$numberLong": "9999999000000"
+      }
+    }
+  }
+}

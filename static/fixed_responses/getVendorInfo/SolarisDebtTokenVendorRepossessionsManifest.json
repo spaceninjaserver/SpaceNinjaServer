@@ -1,0 +1,126 @@
+{
+  "VendorInfo": {
+    "_id": {
+      "$oid": "5be4a159b144f3cdf1c22edf"
+    },
+    "TypeName": "/Lotus/Types/Game/VendorManifests/Solaris/DebtTokenVendorRepossessionsManifest",
+    "ItemManifest": [
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/ShipDecos/Venus/SUToolBox",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Solaris/DebtTokenB",
+            "ItemCount": 6,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "6711a412ba1ba01e405e739d"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/ShipDecos/Venus/SUBookAOpen",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Solaris/DebtTokenC",
+            "ItemCount": 6,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "6711a412ba1ba01e405e739e"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/ShipDecos/Venus/SUFoodCans",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Solaris/DebtTokenC",
+            "ItemCount": 7,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "6711a412ba1ba01e405e739f"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/ShipDecos/Venus/SUTechToolD",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Solaris/DebtTokenD",
+            "ItemCount": 5,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Solaris/DebtTokenA",
+            "ItemCount": 15,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "6711a412ba1ba01e405e73a0"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/ShipDecos/Venus/SUContainerCrate",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Solaris/DebtTokenA",
+            "ItemCount": 9,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "6711a412ba1ba01e405e73a1"
+        }
+      }
+    ],
+    "PropertyTextHash": "E0E83157D73468DC578403CB9EBA9DA6",
+    "Expiry": {
+      "$date": {
+        "$numberLong": "9999999000000"
+      }
+    }
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "VendorInfo": {
+    "_id": {
+      "$oid": "5be4a159b144f3cdf1c22ebb"
+    },
+    "TypeName": "/Lotus/Types/Game/VendorManifests/Solaris/ProspectorVendorManifest",
+    "ItemManifest": [
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Gems/Solaris/SolarisRareGemACutItem",
+        "PremiumPrice": [20, 20],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 5,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e9777"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Gems/Solaris/SolarisCommonGemBCutItem",
+        "PremiumPrice": [10, 10],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 20,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e9778"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Gems/Solaris/SolarisCommonGemACutItem",
+        "PremiumPrice": [8, 8],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 20,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e9779"
+        }
+      }
+    ],
+    "PropertyTextHash": "A5756A21991FF49CFA7D096B4026515B",
+    "Expiry": {
+      "$date": {
+        "$numberLong": "9999999000000"
+      }
+    }
+  }
+}

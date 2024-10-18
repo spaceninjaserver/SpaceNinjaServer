@@ -1,0 +1,241 @@
+{
+  "VendorInfo": {
+    "_id": {
+      "$oid": "5f456e01c96976e97d6b8009"
+    },
+    "TypeName": "/Lotus/Types/Game/VendorManifests/Deimos/HivemindCommisionsManifestFishmonger",
+    "ItemManifest": [
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Daughter/DaughterTaskC",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Deimos/FishParts/DeimosInfestedFishFPartItem",
+            "ItemCount": 6,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Deimos/FishParts/DeimosInfestedFishCPartItem",
+            "ItemCount": 16,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_2",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 63978959,
+        "Id": {
+          "$oid": "66fd60b10ba592c4c95e82cc"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Daughter/DaughterTaskB",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Deimos/FishParts/DeimosInfestedFishBPartItem",
+            "ItemCount": 5,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Deimos/FishParts/DeimosInfestedFishDPartItem",
+            "ItemCount": 4,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 3808064409,
+        "Id": {
+          "$oid": "66fd60b10ba592c4c95e82cd"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Daughter/DaughterTaskA",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Deimos/FishParts/DeimosInfestedFishEPartItem",
+            "ItemCount": 2,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Deimos/FishParts/DeimosInfestedFishCPartItem",
+            "ItemCount": 2,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 3849710569,
+        "Id": {
+          "$oid": "66fd60b10ba592c4c95e82d0"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Daughter/DaughterTaskA",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Deimos/FishParts/DeimosGenericInfestedFishPartItem",
+            "ItemCount": 5,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Deimos/FishParts/DeimosInfestedFishCPartItem",
+            "ItemCount": 4,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 1687111317,
+        "Id": {
+          "$oid": "66fd60b10ba592c4c95e82d1"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Daughter/DaughterTaskA",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Deimos/FishParts/DeimosInfestedFishAPartItem",
+            "ItemCount": 4,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Deimos/FishParts/DeimosInfestedFishBPartItem",
+            "ItemCount": 4,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 2267414276,
+        "Id": {
+          "$oid": "66fd60b10ba592c4c95e82d2"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Daughter/DaughterTaskA",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Deimos/FishParts/DeimosGenericInfestedFishPartItem",
+            "ItemCount": 6,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Deimos/FishParts/DeimosGenericSharedFishPartItem",
+            "ItemCount": 6,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 1497494256,
+        "Id": {
+          "$oid": "66fd60b10ba592c4c95e82d3"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Daughter/DaughterTaskA",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Deimos/FishParts/DeimosGenericInfestedFishPartItem",
+            "ItemCount": 5,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Deimos/FishParts/DeimosInfestedFishCPartItem",
+            "ItemCount": 2,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 2883527039,
+        "Id": {
+          "$oid": "66fd60b10ba592c4c95e82d4"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Daughter/DaughterTaskC",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Deimos/FishParts/DeimosInfestedFishGPartItem",
+            "ItemCount": 10,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Deimos/FishParts/DeimosInfestedFishCPartItem",
+            "ItemCount": 12,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_2",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 4116691539,
+        "Id": {
+          "$oid": "66fd60b10ba592c4c95e82d5"
+        }
+      }
+    ],
+    "PropertyTextHash": "54B6992C6314367F8EEA74B7F1A1C352",
+    "RandomSeedType": "VRST_FLAVOUR_TEXT",
+    "Expiry": {
+      "$date": {
+        "$numberLong": "9999999000000"
+      }
+    }
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "VendorInfo": {
+    "_id": {
+      "$oid": "59d6e27ebcc718474eb17115"
+    },
+    "TypeName": "/Lotus/Types/Game/VendorManifests/Ostron/FishmongerVendorManifest",
+    "ItemManifest": [
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Fish/Eidolon/FishParts/DayUncommonFishAPartItem",
+        "PremiumPrice": [14, 14],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 10,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e9808"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Fish/Eidolon/FishParts/BothUncommonFishBPartItem",
+        "PremiumPrice": [12, 12],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 10,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e9809"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Fish/Eidolon/FishParts/DayCommonFishCPartItem",
+        "PremiumPrice": [8, 8],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 20,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e980a"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Fish/Eidolon/FishParts/DayCommonFishBPartItem",
+        "PremiumPrice": [7, 7],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 20,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e980b"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Fish/Eidolon/FishParts/DayCommonFishAPartItem",
+        "PremiumPrice": [10, 10],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 20,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e980c"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Fish/Eidolon/FishParts/BothCommonFishBPartItem",
+        "PremiumPrice": [8, 8],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 20,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e980d"
+        }
+      }
+    ],
+    "PropertyTextHash": "CC3B9DAFB38F412998E90A41421A8986",
+    "Expiry": {
+      "$date": {
+        "$numberLong": "9999999000000"
+      }
+    }
+  }
+}

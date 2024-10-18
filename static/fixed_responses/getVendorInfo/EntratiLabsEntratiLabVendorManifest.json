@@ -1,0 +1,245 @@
+{
+  "VendorInfo": {
+    "_id": {
+      "$oid": "6579d82b553a20c6fc0067ca"
+    },
+    "TypeName": "/Lotus/Types/Game/VendorManifests/EntratiLabs/EntratiLabVendorManifest",
+    "ItemManifest": [
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Gameplay/NarmerSorties/ArchonCrystalAmar",
+        "Bin": "BIN_3",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "RotatedWeekly": true,
+        "Affiliation": "EntratiLabSyndicate",
+        "MinAffiliationRank": 5,
+        "ReductionPerPositiveRank": 0,
+        "IncreasePerNegativeRank": 0,
+        "StandingCost": 30000,
+        "AllowMultipurchase": false,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e920d"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Gameplay/NarmerSorties/ArchonCrystalBoreal",
+        "Bin": "BIN_3",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "RotatedWeekly": true,
+        "Affiliation": "EntratiLabSyndicate",
+        "MinAffiliationRank": 5,
+        "ReductionPerPositiveRank": 0,
+        "IncreasePerNegativeRank": 0,
+        "StandingCost": 30000,
+        "AllowMultipurchase": false,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e920e"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Gameplay/NarmerSorties/ArchonCrystalNira",
+        "Bin": "BIN_3",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "RotatedWeekly": true,
+        "Affiliation": "EntratiLabSyndicate",
+        "MinAffiliationRank": 5,
+        "ReductionPerPositiveRank": 0,
+        "IncreasePerNegativeRank": 0,
+        "StandingCost": 30000,
+        "AllowMultipurchase": false,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e920f"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/ShipDecos/EntratiLabs/ORKxLabStool",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLabDogTagUncommon",
+            "ItemCount": 2,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLabMiscItemA",
+            "ItemCount": 22,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/MurmurItem",
+            "ItemCount": 18,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e9270"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/ShipDecos/EntratiLabs/ORKxLabChairA",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/MurmurItem",
+            "ItemCount": 15,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLabMiscItemA",
+            "ItemCount": 19,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLabMiscItemB",
+            "ItemCount": 19,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e9271"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/ShipDecos/EntratiLabs/ORKxLabLightWallCandleA",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/MurmurItem",
+            "ItemCount": 12,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLabDogTagCommon",
+            "ItemCount": 3,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e9272"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/ShipDecos/EntratiLabs/ORKxLabLightChandelierD",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLabMiscItemB",
+            "ItemCount": 8,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLabDogTagCommon",
+            "ItemCount": 3,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e9273"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/ShipDecos/EntratiLabs/ORKxLabLightChandelierB",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLabMiscItemA",
+            "ItemCount": 12,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLabDogTagCommon",
+            "ItemCount": 2,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e9274"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/ShipDecos/EntratiLabs/ORKxLabLightChandelierA",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/MurmurItem",
+            "ItemCount": 15,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLabMiscItemA",
+            "ItemCount": 13,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e9275"
+        }
+      }
+    ],
+    "PropertyTextHash": "44DA3839E6F7BDB32ACED53F2B0BE14E",
+    "Expiry": {
+      "$date": {
+        "$numberLong": "9999999000000"
+      }
+    }
+  }
+}

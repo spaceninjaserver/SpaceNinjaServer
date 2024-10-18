@@ -1,0 +1,286 @@
+{
+  "VendorInfo": {
+    "_id": {
+      "$oid": "5fb70313c96976e97d6be6fe"
+    },
+    "TypeName": "/Lotus/Types/Game/VendorManifests/Deimos/HivemindTokenVendorManifest",
+    "ItemManifest": [
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Remedies/RemedySonB",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Deimos/FishParts/DeimosInfestedFishBPartItem",
+            "ItemCount": 36,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Deimos/FishParts/DeimosInfestedFishCPartItem",
+            "ItemCount": 20,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Deimos/FishParts/DeimosInfestedFishEPartItem",
+            "ItemCount": 36,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_2",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 379215713,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e9308"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Remedies/RemedyMotherB",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Deimos/FishParts/DeimosGenericInfestedFishPartItem",
+            "ItemCount": 80,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Resources/InfGorgaricusSeedItem",
+            "ItemCount": 32,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Deimos/FishParts/DeimosInfestedFishCPartItem",
+            "ItemCount": 28,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 2534781881,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e9309"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Remedies/RemedyDaughterB",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Deimos/DeimosUncommonGemAItem",
+            "ItemCount": 28,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Deimos/FishParts/DeimosInfestedFishCPartItem",
+            "ItemCount": 32,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Deimos/FishParts/DeimosInfestedFishAPartItem",
+            "ItemCount": 32,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 1507786123,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e930a"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Remedies/RemedySonA",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Deimos/DeimosRareGemAItem",
+            "ItemCount": 15,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Deimos/DeimosCommonGemAItem",
+            "ItemCount": 30,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Resources/InfGorgaricusSeedItem",
+            "ItemCount": 21,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 616241643,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e930b"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Remedies/RemedyOtakA",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Deimos/FishParts/DeimosInfestedFishBPartItem",
+            "ItemCount": 21,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Deimos/FishParts/DeimosInfestedFishCPartItem",
+            "ItemCount": 27,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Deimos/FishParts/DeimosInfestedFishEPartItem",
+            "ItemCount": 27,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 2888479655,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e930c"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Remedies/RemedyGrandmotherA",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Deimos/DeimosCommonGemBItem",
+            "ItemCount": 20,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Deimos/FishParts/DeimosInfestedFishBPartItem",
+            "ItemCount": 28,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Resources/InfGorgaricusSeedItem",
+            "ItemCount": 24,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Deimos/DeimosCommonGemAItem",
+            "ItemCount": 20,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 2874726481,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e930d"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Remedies/RemedyFatherA",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Deimos/FishParts/DeimosGenericSharedFishPartItem",
+            "ItemCount": 75,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Deimos/DeimosUncommonGemAItem",
+            "ItemCount": 27,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Resources/OrbStoneItem",
+            "ItemCount": 30,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 274676857,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e930e"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/Tasks/Deimos/Remedies/RemedyDaughterA",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Resources/InfGorgaricusSeedItem",
+            "ItemCount": 24,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Deimos/FishParts/DeimosInfestedFishBPartItem",
+            "ItemCount": 30,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Deimos/FishParts/DeimosGenericSharedFishPartItem",
+            "ItemCount": 51,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 2487943761,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e930f"
+        }
+      }
+    ],
+    "PropertyTextHash": "C34BF0BEDEAF7CBB0EEBFFECDFD6646D",
+    "RandomSeedType": "VRST_FLAVOUR_TEXT",
+    "Expiry": {
+      "$date": {
+        "$numberLong": "9999999000000"
+      }
+    }
+  }
+}

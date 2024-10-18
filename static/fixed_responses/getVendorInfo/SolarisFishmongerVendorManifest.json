@@ -1,0 +1,106 @@
+{
+  "VendorInfo": {
+    "_id": {
+      "$oid": "5b0de8556df82a56ea9bae82"
+    },
+    "TypeName": "/Lotus/Types/Game/VendorManifests/Solaris/FishmongerVendorManifest",
+    "ItemManifest": [
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Fish/Solaris/FishParts/CorpusFishThermalLaserItem",
+        "PremiumPrice": [15, 15],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 10,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e9515"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Fish/Solaris/FishParts/CorpusFishVenedoCaseItem",
+        "PremiumPrice": [8, 8],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 20,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e9516"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Fish/Solaris/FishParts/SolarisFishDissipatorCoilItem",
+        "PremiumPrice": [18, 18],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 20,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e9517"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Fish/Solaris/FishParts/CorpusFishExaBrainItem",
+        "PremiumPrice": [5, 5],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 20,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e9518"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Fish/Solaris/FishParts/CorpusFishAnoscopicSensorItem",
+        "PremiumPrice": [5, 5],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 20,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e9519"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Fish/Solaris/FishParts/GenericFishScrapItem",
+        "PremiumPrice": [5, 5],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 20,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e951a"
+        }
+      }
+    ],
+    "PropertyTextHash": "946131D0CF5CDF7C2C03BB967DE0DF49",
+    "Expiry": {
+      "$date": {
+        "$numberLong": "9999999000000"
+      }
+    }
+  }
+}

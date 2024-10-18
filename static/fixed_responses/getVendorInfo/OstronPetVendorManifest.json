@@ -1,0 +1,94 @@
+{
+  "VendorInfo": {
+    "_id": {
+      "$oid": "5991d5e6bcc718474ee90c15"
+    },
+    "TypeName": "/Lotus/Types/Game/VendorManifests/Ostron/PetVendorManifest",
+    "ItemManifest": [
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/ShipDecos/LisetPropOstBirdCage",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Eidolon/UncommonOreAAlloyAItem",
+            "ItemCount": 10,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Eidolon/FishParts/DayUncommonFishBPartItem",
+            "ItemCount": 8,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e9a8e"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/KubrowColorPackDrahk",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Eidolon/FishParts/DayCommonFishBPartItem",
+            "ItemCount": 14,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Eidolon/FishParts/BothCommonFishBPartItem",
+            "ItemCount": 13,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e9a8f"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/Types/StoreItems/Packages/KubrowColorPackFeral",
+        "ItemPrices": [
+          {
+            "ItemType": "/Lotus/Types/Items/Fish/Eidolon/FishParts/BothCommonFishAPartItem",
+            "ItemCount": 19,
+            "ProductCategory": "MiscItems"
+          },
+          {
+            "ItemType": "/Lotus/Types/Items/Gems/Eidolon/CommonOreBAlloyBItem",
+            "ItemCount": 34,
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e9a90"
+        }
+      }
+    ],
+    "PropertyTextHash": "3D85F1A0A2B62734AE90370DEC214C26",
+    "Expiry": {
+      "$date": {
+        "$numberLong": "9999999000000"
+      }
+    }
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "VendorInfo": {
+    "_id": {
+      "$oid": "5f456e01c96976e97d6b8016"
+    },
+    "TypeName": "/Lotus/Types/Game/VendorManifests/Deimos/FishmongerVendorManifest",
+    "ItemManifest": [
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Fish/Deimos/FishParts/DeimosOrokinFishAPartItem",
+        "PremiumPrice": [9, 9],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 10,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e91b9"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Fish/Deimos/FishParts/DeimosInfestedFishDPartItem",
+        "PremiumPrice": [17, 17],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 20,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e91ba"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Fish/Deimos/FishParts/DeimosInfestedFishCPartItem",
+        "PremiumPrice": [10, 10],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 20,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e91bb"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Fish/Deimos/FishParts/DeimosInfestedFishBPartItem",
+        "PremiumPrice": [6, 6],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 20,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e91bc"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Fish/Deimos/FishParts/DeimosInfestedFishAPartItem",
+        "PremiumPrice": [5, 5],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 20,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e91bd"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Types/Items/Fish/Deimos/FishParts/DeimosGenericSharedFishPartItem",
+        "PremiumPrice": [7, 7],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 20,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "AllowMultipurchase": true,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e91be"
+        }
+      }
+    ],
+    "PropertyTextHash": "6DF13A7FB573C25B4B4F989CBEFFC615",
+    "Expiry": {
+      "$date": {
+        "$numberLong": "9999999000000"
+      }
+    }
+  }
+}
