@@ -15,6 +15,7 @@ import EntratiLabsEntratiLabsCommisionsManifest from "@/static/fixed_responses/g
 import EntratiLabsEntratiLabVendorManifest from "@/static/fixed_responses/getVendorInfo/EntratiLabsEntratiLabVendorManifest.json";
 import HubsIronwakeDondaVendorManifest from "@/static/fixed_responses/getVendorInfo/HubsIronwakeDondaVendorManifest.json";
 import HubsRailjackCrewMemberVendorManifest from "@/static/fixed_responses/getVendorInfo/HubsRailjackCrewMemberVendorManifest.json";
+import HubsPerrinSequenceWeaponVendorManifest from "@/static/fixed_responses/getVendorInfo/HubsPerrinSequenceWeaponVendorManifest.json";
 import MaskSalesmanManifest from "@/static/fixed_responses/getVendorInfo/MaskSalesmanManifest.json";
 import OstronFishmongerVendorManifest from "@/static/fixed_responses/getVendorInfo/OstronFishmongerVendorManifest.json";
 import OstronProspectorVendorManifest from "@/static/fixed_responses/getVendorInfo/OstronProspectorVendorManifest.json";
@@ -57,6 +58,10 @@ export const getVendorInfoController: RequestHandler = (req, res) => {
 
         case "/Lotus/Types/Game/VendorManifests/Solaris/DebtTokenVendorRepossessionsManifest":
             res.json(SolarisDebtTokenVendorRepossessionsManifest);
+            break;
+
+        case "/Lotus/Types/Game/VendorManifests/Hubs/PerrinSequenceWeaponVendorManifest":
+            res.json(HubsPerrinSequenceWeaponVendorManifest);
             break;
 
         case "/Lotus/Types/Game/VendorManifests/Hubs/RailjackCrewMemberVendorManifest":
