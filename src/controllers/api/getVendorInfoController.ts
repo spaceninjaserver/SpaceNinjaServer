@@ -13,6 +13,7 @@ import DeimosProspectorVendorManifest from "@/static/fixed_responses/getVendorIn
 import DuviriAcrithisVendorManifest from "@/static/fixed_responses/getVendorInfo/DuviriAcrithisVendorManifest.json";
 import EntratiLabsEntratiLabsCommisionsManifest from "@/static/fixed_responses/getVendorInfo/EntratiLabsEntratiLabsCommisionsManifest.json";
 import EntratiLabsEntratiLabVendorManifest from "@/static/fixed_responses/getVendorInfo/EntratiLabsEntratiLabVendorManifest.json";
+import HubsIronwakeDondaVendorManifest from "@/static/fixed_responses/getVendorInfo/HubsIronwakeDondaVendorManifest.json";
 import HubsRailjackCrewMemberVendorManifest from "@/static/fixed_responses/getVendorInfo/HubsRailjackCrewMemberVendorManifest.json";
 import MaskSalesmanManifest from "@/static/fixed_responses/getVendorInfo/MaskSalesmanManifest.json";
 import OstronFishmongerVendorManifest from "@/static/fixed_responses/getVendorInfo/OstronFishmongerVendorManifest.json";
@@ -101,6 +102,10 @@ export const getVendorInfoController: RequestHandler = (req, res) => {
         case "/Lotus/Types/Game/VendorManifests/Deimos/HivemindTokenVendorManifest":
             res.json(DeimosHivemindTokenVendorManifest);
             break;
+
+            case "/Lotus/Types/Game/VendorManifests/Hubs/IronwakeDondaVendorManifest":
+                res.json(HubsIronwakeDondaVendorManifest);
+                break; 
 
         case "/Lotus/Types/Game/VendorManifests/Zariman/ArchimedeanVendorManifest":
             res.json(ArchimedeanVendorManifest);
