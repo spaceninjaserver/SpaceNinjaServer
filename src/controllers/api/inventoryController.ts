@@ -70,15 +70,22 @@ const inventoryController: RequestHandler = async (request, response) => {
     }
     if (config.completeAllQuests) {
         for (const quest of inventoryResponse.QuestKeys) {
+            quest.unlock = true;
             quest.Completed = true;
-            quest.Progress = [
-                {
+
+            let numStages = 1;
+            if (quest.ItemType in ExportKeys && "chainStages" in ExportKeys[quest.ItemType]) {
+                numStages = ExportKeys[quest.ItemType].chainStages!.length;
+            }
+            quest.Progress = [];
+            for (let i = 0; i != numStages; ++i) {
+                quest.Progress.push({
                     c: 0,
                     i: false,
                     m: false,
                     b: []
-                }
-            ];
+                });
+            }
         }
 
         inventoryResponse.ArchwingEnabled = true;
