@@ -31,7 +31,6 @@ const inventoryController: RequestHandler = async (request, response) => {
 
     //TODO: make a function that converts from database representation to client
     const inventoryJSON: IInventoryDatabase = inventory.toJSON();
-    console.log(inventoryJSON.Ships);
 
     const inventoryResponse = toInventoryResponse(inventoryJSON);
 
