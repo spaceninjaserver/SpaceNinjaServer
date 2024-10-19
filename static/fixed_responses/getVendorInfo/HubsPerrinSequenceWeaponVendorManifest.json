@@ -1,0 +1,133 @@
+{
+  "VendorInfo": {
+    "_id": {
+      "$oid": "60ad3b6ec96976e97d227e19"
+    },
+    "TypeName": "/Lotus/Types/Game/VendorManifests/Hubs/PerrinSequenceWeaponVendorManifest",
+    "ItemManifest": [
+      {
+        "StoreItem": "/Lotus/StoreItems/Weapons/Corpus/BoardExec/Primary/CrpBEFerrox/CrpBEFerrox",
+        "ItemPrices": [
+          {
+            "ItemCount": 40,
+            "ItemType": "/Lotus/Types/Items/MiscItems/GranumBucks",
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 4383829823946960400,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e9488"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Weapons/Corpus/Melee/CrpBriefcaseScythe/CrpBriefcaseScythe",
+        "ItemPrices": [
+          {
+            "ItemCount": 40,
+            "ItemType": "/Lotus/Types/Items/MiscItems/GranumBucks",
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 7952272124248276000,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e9489"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Weapons/Corpus/Melee/CrpBriefcase2HKatana/CrpBriefcase2HKatana",
+        "ItemPrices": [
+          {
+            "ItemCount": 40,
+            "ItemType": "/Lotus/Types/Items/MiscItems/GranumBucks",
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 465952672558014140,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e948a"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Weapons/Tenno/Melee/Swords/CrpBigSlash/CrpBigSlash",
+        "ItemPrices": [
+          {
+            "ItemCount": 40,
+            "ItemType": "/Lotus/Types/Items/MiscItems/GranumBucks",
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 8342430883077507000,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e948b"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Weapons/Corpus/Melee/ShieldAndSword/CrpHammerShield/CrpHammerShield",
+        "ItemPrices": [
+          {
+            "ItemCount": 40,
+            "ItemType": "/Lotus/Types/Items/MiscItems/GranumBucks",
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_0",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999000000"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 7441523153174502000,
+        "Id": {
+          "$oid": "66fd60b20ba592c4c95e948c"
+        }
+      }
+    ],
+    "PropertyTextHash": "34F8CF1DFF745F0D67433A5EF0A03E70",
+    "RandomSeedType": "VRST_WEAPON",
+    "WeaponUpgradeValueAttenuationExponent": 2.25,
+    "Expiry": {
+      "$date": {
+        "$numberLong": "9999999000000"
+      }
+    }
+  }
+}
