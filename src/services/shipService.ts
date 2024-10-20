@@ -3,7 +3,7 @@ import { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
 import { logger } from "@/src/utils/logger";
 import { Types } from "mongoose";
 
-export const createShip = async (accountOwnerId: Types.ObjectId) => {
+export const createShip = async (accountOwnerId: Types.ObjectId): Promise<Types.ObjectId> => {
     try {
         const ship = new Ship({
             ItemType: "/Lotus/Types/Items/Ships/DefaultShip",
@@ -23,8 +23,8 @@ export const getShip = async (shipId: Types.ObjectId, fieldSelection: string = "
     const ship = await Ship.findOne({ _id: shipId }, fieldSelection);
 
     if (!ship) {
-        logger.error(`error finding a ship for account ${shipId}`);
-        throw new Error(`error finding a ship for account ${shipId}`);
+        logger.error(`error finding a ship for account ${String(shipId)}`);
+        throw new Error(`error finding a ship for account ${String(shipId)}`);
     }
 
     return ship;
