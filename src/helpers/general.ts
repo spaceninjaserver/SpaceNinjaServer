@@ -33,7 +33,7 @@ const parseNumber = (data: unknown): number => {
     return Number(data);
 };
 
-const isDate = (date: string) => {
+const isDate = (date: string): string => {
     if (!Date.parse(date)) {
         throw new Error("invalid date");
     }
