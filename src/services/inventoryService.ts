@@ -256,6 +256,7 @@ export const addItem = async (
                 logger.debug(`booster pack rolled`, result);
                 combineInventoryChanges(
                     InventoryChanges,
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                     (await addItem(accountId, result.type, result.itemCount, isStorePurchase)).InventoryChanges
                 );
             }
@@ -308,7 +309,7 @@ export const addItem = async (
             const changes = {
                 ItemType: typeName
             };
-            addQuestKey(typeName, accountId);
+            await addQuestKey(typeName, accountId);
             return {
                 InventoryChanges: {
                     QuestKeys: [changes]
@@ -319,7 +320,7 @@ export const addItem = async (
                 ItemType: typeName,
                 ItemCount: quantity
             };
-            addLevelKey(typeName, quantity, accountId);
+            await addLevelKey(typeName, quantity, accountId);
             return {
                 InventoryChanges: {
                     LevelKeys: [changes]
