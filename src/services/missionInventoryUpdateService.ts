@@ -124,9 +124,9 @@ const getRandomRewardByChance = (pool: IReward[]): IRngResult | undefined => {
 };
 
 export const creditBundles: Record<string, number> = {
-    "/Lotus/Types/StoreItems/CreditBundles/CreditBundleA": 50000,
-    "/Lotus/Types/StoreItems/CreditBundles/CreditBundleB": 25000,
-    "/Lotus/Types/StoreItems/CreditBundles/CreditBundleC": 175000,
+    "/Lotus/StoreItems/Types/StoreItems/CreditBundles/CreditBundleA": 50000,
+    "/Lotus/StoreItems/Types/StoreItems/CreditBundles/CreditBundleB": 25000,
+    "/Lotus/StoreItems/Types/StoreItems/CreditBundles/CreditBundleC": 175000,
     "/Lotus/StoreItems/Types/PickUps/Credits/1500Credits": 1500,
     "/Lotus/StoreItems/Types/PickUps/Credits/2000Credits": 2000,
     "/Lotus/StoreItems/Types/PickUps/Credits/2500Credits": 2500,

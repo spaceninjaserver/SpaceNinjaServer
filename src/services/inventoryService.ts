@@ -352,7 +352,8 @@ export const addItem = async (
                     };
                 }
                 break;
-            case "Restoratives": // Codex Scanner, Remote Observer, Starburst
+            case "Restoratives": {
+                // Codex Scanner, Remote Observer, Starburst
                 const inventory = await getInventory(accountId);
                 const consumablesChanges = [
                     {
@@ -367,9 +368,14 @@ export const addItem = async (
                         Consumables: consumablesChanges
                     }
                 };
+            }
             case "StoreItems":
                 if (pathParts[3] === "CreditBundles") {
-                    const currencyChanges = await updateCurrency(creditBundles[typeName] * -quantity, false, accountId);
+                    const currencyChanges = await updateCurrency(
+                        creditBundles[typeName.replace("/Lotus/Types/", "/Lotus/StoreItems/Types/")] * -quantity,
+                        false,
+                        accountId
+                    );
                     return {
                         InventoryChanges: {
                             ...currencyChanges
@@ -510,7 +516,7 @@ export const addEquipment = async (
     const defaultGear = getDefaultGear(type);
     let InventoryChanges: any = {};
 
-    if (defaultGear != false) {
+    if (defaultGear) {
         for await (const item of defaultGear) {
             logger.debug(`defaultGear ${item}`);
             const result = await addItem(accountId, item, 1, isStorePurchase);

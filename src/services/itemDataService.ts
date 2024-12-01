@@ -5,9 +5,9 @@ export const getRecipe = (uniqueName: string): IRecipe | undefined => {
     return ExportRecipes[uniqueName];
 };
 
-export const getDefaultGear = (itemType: string) => {
+export const getDefaultGear = (itemType: string): string[] | null => {
     if (itemType in ExportWarframes) {
-        return ExportWarframes[itemType]?.exalted ?? false;
+        return ExportWarframes[itemType]?.exalted ?? null;
     }
 
     if (itemType in ExportSentinels) {
@@ -16,10 +16,10 @@ export const getDefaultGear = (itemType: string) => {
             ...defaultUpgrades.map(upgrade => upgrade.ItemType),
             ...(defaultWeapon ? [defaultWeapon] : [])
         ];
-        return defaultGear.length ? defaultGear : false;
+        return defaultGear.length ? defaultGear : null;
     }
 
-    return false;
+    return null;
 };
 
 export const getEnglishString = (key: string): string => {
