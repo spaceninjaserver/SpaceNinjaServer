@@ -304,15 +304,28 @@ export const addItem = async (
     }
 
     if (typeName in ExportKeys) {
-        const changes = {
-            ItemType: typeName
-        };
-        addKey(typeName, accountId);
-        return {
-            InventoryChanges: {
-                QuestKeys: [changes]
-            }
-        };
+        if (typeName.toLocaleLowerCase().includes("quest")) {
+            const changes = {
+                ItemType: typeName
+            };
+            addQuestKey(typeName, accountId);
+            return {
+                InventoryChanges: {
+                    QuestKeys: [changes]
+                }
+            };
+        } else {
+            const changes = {
+                ItemType: typeName,
+                ItemCount: quantity
+            };
+            addLevelKey(typeName, quantity, accountId);
+            return {
+                InventoryChanges: {
+                    LevelKeys: [changes]
+                }
+            };
+        }
     }
 
     // Path-based duck typing
@@ -549,11 +562,18 @@ export const addKubrowEgg = async (
     return changedInventory.KubrowPetEggs[index - 1];
 };
 
-export const addKey = async (typeName: string, accountId: string): Promise<IQuestKeyResponse> => {
+export const addQuestKey = async (typeName: string, accountId: string): Promise<IQuestKeyResponse> => {
     const inventory = await getInventory(accountId);
     const index = inventory.QuestKeys.push({ ItemType: typeName }) - 1;
     const changedInventory = await inventory.save();
     return changedInventory.QuestKeys[index].toJSON();
+};
+
+export const addLevelKey = async (typeName: string, quantity: number, accountId: string): Promise<IConsumable> => {
+    const inventory = await getInventory(accountId);
+    const index = inventory.LevelKeys.push({ ItemType: typeName, ItemCount: quantity }) - 1;
+    const changedInventory = await inventory.save();
+    return changedInventory.LevelKeys[index];
 };
 
 const addGearExpByCategory = (
