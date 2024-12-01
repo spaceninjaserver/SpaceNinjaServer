@@ -7,7 +7,7 @@ import { RequestHandler } from "express";
 const addItemController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const request = toAddItemRequest(req.body);
-    const response = await addItem(request.InternalName, accountId, 1, true);
+    const response = await addItem(accountId, request.InternalName, 1, true);
     res.json(response);
     return;
 };
