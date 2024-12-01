@@ -103,7 +103,7 @@ export const focusController: RequestHandler = async (req, res) => {
                 "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/SentAmpTrainingChassis",
                 "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/SentAmpTrainingBarrel"
             ];
-            const result = await addEquipment("OperatorAmps", request.StartingWeaponType, accountId, parts);
+            const result = await addEquipment("OperatorAmps", request.StartingWeaponType, accountId, parts, true);
             res.json(result);
             break;
         }

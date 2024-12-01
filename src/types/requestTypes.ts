@@ -1,4 +1,4 @@
-import { IOid } from "./commonTypes";
+import { IOid } from "@/src/types/commonTypes";
 import { ArtifactPolarity, IPolarity, IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import {
     IBooster,
@@ -13,8 +13,9 @@ import {
     ISeasonChallenge,
     TSolarMapRegion,
     TEquipmentKey,
-    IFusionTreasure
-} from "./inventoryTypes/inventoryTypes";
+    IFusionTreasure,
+    IKubrowPetEggResponse
+} from "@/src/types/inventoryTypes/inventoryTypes";
 
 export interface IArtifactsRequest {
     Upgrade: ICrewShipSalvagedWeaponSkin;
@@ -58,6 +59,11 @@ export interface IMissionInventoryUpdateRequest {
     Hoverboards?: IEquipmentClient[];
     OperatorAmps?: IEquipmentClient[];
     MoaPets?: IEquipmentClient[];
+    CrewShips?: IEquipmentClient[];
+    CrewShipHarnesses?: IEquipmentClient[];
+    MechSuits?: IEquipmentClient[];
+    KubrowPets?: IEquipmentClient[];
+    KubrowPetsEggs?: IKubrowPetEggResponse[];
     FusionBundles?: ITypeCount[];
     RawUpgrades?: IRawUpgrade[];
     MiscItems?: IMiscItem[];

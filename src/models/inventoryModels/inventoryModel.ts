@@ -36,7 +36,9 @@ import {
     IPeriodicMissionCompletionDatabase,
     IPeriodicMissionCompletionResponse,
     ILoreFragmentScan,
-    IEvolutionProgress
+    IEvolutionProgress,
+    IKubrowPetEgg as IKubrowPetEggDatabase,
+    IKubrowPetEggResponse
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -578,6 +580,26 @@ const evolutionProgressSchema = new Schema<IEvolutionProgress>(
     { _id: false }
 );
 
+const kubrowPetEggSchema = new Schema<IKubrowPetEggDatabase>({
+    ItemType: String,
+    ExpirationDate: Date
+});
+
+kubrowPetEggSchema.virtual("ItemId").get(function () {
+    return { $oid: this._id.toString() };
+});
+
+kubrowPetEggSchema.set("toJSON", {
+    virtuals: true,
+    transform(_document, returnedObject) {
+        delete returnedObject._id;
+        delete returnedObject.__v;
+        (returnedObject as IKubrowPetEggResponse).ExpirationDate = {
+            $date: { $numberLong: (returnedObject as IKubrowPetEggDatabase).ExpirationDate.getTime().toString() }
+        };
+    }
+});
+
 const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
     {
         accountOwnerId: Schema.Types.ObjectId,
@@ -676,7 +698,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Modular Pets
         MoaPets: [EquipmentSchema],
 
-        KubrowPetEggs: [Schema.Types.Mixed],
+        KubrowPetEggs: [kubrowPetEggSchema],
         //Like PowerSuit Cat\Kubrow or etc Pets
         KubrowPets: [EquipmentSchema],
         //Prints   Cat(3 Prints)\Kubrow(2 Prints) Pets
@@ -726,7 +748,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         CrewShipRawSalvage: [Schema.Types.Mixed],
 
         //Default RailJack
-        CrewShips: [Schema.Types.Mixed],
+        CrewShips: [EquipmentSchema],
         CrewShipAmmo: [typeCountSchema],
         CrewShipWeapons: [Schema.Types.Mixed],
         CrewShipWeaponSkins: [Schema.Types.Mixed],
@@ -984,7 +1006,12 @@ type InventoryDocumentProps = {
     SentinelWeapons: Types.DocumentArray<IEquipmentDatabase>;
     Hoverboards: Types.DocumentArray<IEquipmentDatabase>;
     MoaPets: Types.DocumentArray<IEquipmentDatabase>;
+    KubrowPets: Types.DocumentArray<IEquipmentDatabase>;
+    CrewShips: Types.DocumentArray<IEquipmentDatabase>;
+    CrewShipHarnesses: Types.DocumentArray<IEquipmentDatabase>;
+    KubrowPetEggs: Types.DocumentArray<IKubrowPetEggDatabase>;
     WeaponSkins: Types.DocumentArray<IWeaponSkinDatabase>;
+    QuestKeys: Types.DocumentArray<IQuestKeyDatabase>;
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-types

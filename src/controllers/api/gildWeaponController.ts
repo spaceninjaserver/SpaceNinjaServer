@@ -2,16 +2,8 @@ import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getInventory } from "@/src/services/inventoryService";
-import { WeaponTypeInternal } from "@/src/services/itemDataService";
 import { ArtifactPolarity, EquipmentFeatures } from "@/src/types/inventoryTypes/commonInventoryTypes";
-
-const modularWeaponCategory: (WeaponTypeInternal | "Hoverboards")[] = [
-    "LongGuns",
-    "Pistols",
-    "Melee",
-    "OperatorAmps",
-    "Hoverboards" // Not sure about hoverboards just coppied from modual crafting
-];
+import { equipmentKeys, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
 
 interface IGildWeaponRequest {
     ItemName: string;
@@ -19,7 +11,7 @@ interface IGildWeaponRequest {
     PolarizeSlot?: number;
     PolarizeValue?: ArtifactPolarity;
     ItemId: string;
-    Category: WeaponTypeInternal | "Hoverboards";
+    Category: TEquipmentKey;
 }
 
 // In export there no recipes for gild action, so reputation and ressources only consumed visually
@@ -29,10 +21,10 @@ export const gildWeaponController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const data: IGildWeaponRequest = getJSONfromString(String(req.body));
     data.ItemId = String(req.query.ItemId);
-    if (!modularWeaponCategory.includes(req.query.Category as WeaponTypeInternal | "Hoverboards")) {
+    if (!equipmentKeys.includes(req.query.Category as TEquipmentKey)) {
         throw new Error(`Unknown modular weapon Category: ${req.query.Category}`);
     }
-    data.Category = req.query.Category as WeaponTypeInternal | "Hoverboards";
+    data.Category = req.query.Category as TEquipmentKey;
 
     const inventory = await getInventory(accountId);
     if (!inventory[data.Category]) {

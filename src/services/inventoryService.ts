@@ -13,31 +13,38 @@ import {
     IRawUpgrade,
     ISeasonChallenge,
     ITypeCount,
-    InventorySlot,
     IWeaponSkinClient,
     TEquipmentKey,
     equipmentKeys,
-    IFusionTreasure
+    IFusionTreasure,
+    IKubrowPetEgg,
+    IQuestKeyResponse
 } from "@/src/types/inventoryTypes/inventoryTypes";
-import { IGenericUpdate } from "../types/genericUpdate";
+import { IGenericUpdate } from "@/src/types/genericUpdate";
 import {
     IArtifactsRequest,
     IMissionInventoryUpdateRequest,
     IThemeUpdateRequest,
     IUpdateChallengeProgressRequest
-} from "../types/requestTypes";
+} from "@/src/types/requestTypes";
 import { logger } from "@/src/utils/logger";
-import { getWeaponType, getExalted } from "@/src/services/itemDataService";
+import { getDefaultGear, getBinKey } from "@/src/services/itemDataService";
 import { getRandomWeightedReward } from "@/src/services/rngService";
-import { ISyndicateSacrifice, ISyndicateSacrificeResponse } from "../types/syndicateTypes";
-import { IEquipmentClient } from "../types/inventoryTypes/commonInventoryTypes";
+import { ISyndicateSacrifice, ISyndicateSacrificeResponse } from "@/src/types/syndicateTypes";
+import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import {
     ExportBoosterPacks,
     ExportCustoms,
     ExportFlavour,
+    ExportKeys,
     ExportRecipes,
-    ExportResources
+    ExportResources,
+    ExportSentinels,
+    ExportUpgrades,
+    ExportWarframes,
+    ExportWeapons
 } from "warframe-public-export-plus";
+import { creditBundles, fusionBundles } from "@/src/services/missionInventoryUpdateService";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
@@ -105,8 +112,9 @@ export const getInventory = async (accountOwnerId: string) => {
 export const addItem = async (
     accountId: string,
     typeName: string,
-    quantity: number = 1
-): Promise<{ InventoryChanges: IInventoryChanges }> => {
+    quantity: number = 1,
+    isStorePurchase: boolean = false
+): Promise<{ InventoryChanges: any }> => {
     // Strict typing
     if (typeName in ExportRecipes) {
         const inventory = await getInventory(accountId);
@@ -124,22 +132,105 @@ export const addItem = async (
             }
         };
     }
+
     if (typeName in ExportResources) {
-        const inventory = await getInventory(accountId);
-        const miscItemChanges = [
-            {
-                ItemType: typeName,
-                ItemCount: quantity
-            } satisfies IMiscItem
-        ];
-        addMiscItems(inventory, miscItemChanges);
-        await inventory.save();
-        return {
-            InventoryChanges: {
-                MiscItems: miscItemChanges
+        switch (ExportResources[typeName].productCategory) {
+            case "ShipDecorations": {
+                const inventory = await getInventory(accountId);
+                const changes = [
+                    {
+                        ItemType: typeName,
+                        ItemCount: quantity
+                    } satisfies IMiscItem
+                ];
+                addShipDecorations(inventory, changes);
+                await inventory.save();
+                return {
+                    InventoryChanges: {
+                        ShipDecorations: changes
+                    }
+                };
             }
-        };
+            case "MiscItems": {
+                const inventory = await getInventory(accountId);
+                const miscItemChanges = [
+                    {
+                        ItemType: typeName,
+                        ItemCount: quantity
+                    } satisfies IMiscItem
+                ];
+                addMiscItems(inventory, miscItemChanges);
+                await inventory.save();
+                return {
+                    InventoryChanges: {
+                        MiscItems: miscItemChanges
+                    }
+                };
+            }
+            case "CrewShips": {
+                const inventory = await getInventory(accountId);
+                const miscItemChanges = [
+                    {
+                        ItemType: typeName,
+                        ItemCount: quantity
+                    } satisfies IMiscItem
+                ];
+                addMiscItems(inventory, miscItemChanges);
+                const crewShipChanges = await addEquipment(
+                    ExportResources[typeName].productCategory,
+                    typeName,
+                    accountId,
+                    undefined,
+                    isStorePurchase
+                );
+                const crewShipHarnessChanges = await addEquipment(
+                    "CrewShipHarnesses",
+                    "/Lotus/Types/Game/CrewShip/RailJack/DefaultHarness",
+                    accountId,
+                    undefined,
+                    isStorePurchase
+                );
+                await inventory.save();
+                return {
+                    InventoryChanges: {
+                        ...crewShipChanges.InventoryChanges,
+                        ...crewShipHarnessChanges.InventoryChanges,
+                        MiscItems: miscItemChanges
+                    }
+                };
+            }
+            case "KubrowPetEggs": {
+                const inventory = await getInventory(accountId);
+                const changes = {
+                    ItemType: typeName,
+                    ExpirationDate: new Date()
+                } satisfies IKubrowPetEgg;
+                return {
+                    InventoryChanges: {
+                        kubrowPetEggs: [await addKubrowEgg(inventory, changes)]
+                    }
+                };
+            }
+            case "FusionTreasures": {
+                const inventory = await getInventory(accountId);
+                const changes = [
+                    {
+                        ItemType: typeName,
+                        ItemCount: quantity,
+                        Sockets: 0
+                    } satisfies IFusionTreasure
+                ];
+                addFusionTreasures(inventory, changes);
+                await inventory.save();
+                return {
+                    InventoryChanges: {
+                        FusionTreasures: changes
+                    }
+                };
+            }
+        }
     }
+
     if (typeName in ExportCustoms) {
         return {
             InventoryChanges: {
@@ -147,6 +238,7 @@ export const addItem = async (
             }
         };
     }
+
     if (typeName in ExportFlavour) {
         return {
             InventoryChanges: {
@@ -154,6 +246,7 @@ export const addItem = async (
             }
         };
     }
+
     if (typeName in ExportBoosterPacks) {
         const pack = ExportBoosterPacks[typeName];
         const InventoryChanges = {};
@@ -163,246 +256,128 @@ export const addItem = async (
                 logger.debug(`booster pack rolled`, result);
                 combineInventoryChanges(
                     InventoryChanges,
-                    (await addItem(accountId, result.type, result.itemCount)).InventoryChanges
+                    (await addItem(accountId, result.type, result.itemCount, isStorePurchase)).InventoryChanges
                 );
             }
         }
         return { InventoryChanges };
     }
 
-    // Path-based duck typing
-    switch (typeName.substr(1).split("/")[1]) {
-        case "Powersuits":
-            switch (typeName.substr(1).split("/")[2]) {
-                default: {
-                    const suit = await addPowerSuit(typeName, accountId);
-                    await updateSlots(accountId, InventorySlot.SUITS, 0, 1);
-                    return {
-                        InventoryChanges: {
-                            SuitBin: {
-                                count: 1,
-                                platinum: 0,
-                                Slots: -1
-                            },
-                            Suits: [suit]
-                        }
-                    };
-                }
-                case "Archwing": {
-                    const spaceSuit = await addSpaceSuit(typeName, accountId);
-                    await updateSlots(accountId, InventorySlot.SPACESUITS, 0, 1);
-                    return {
-                        InventoryChanges: {
-                            SpaceSuitBin: {
-                                count: 1,
-                                platinum: 0,
-                                Slots: -1
-                            },
-                            SpaceSuits: [spaceSuit]
-                        }
-                    };
-                }
-                case "EntratiMech": {
-                    const mechSuit = await addMechSuit(typeName, accountId);
-                    await updateSlots(accountId, InventorySlot.MECHSUITS, 0, 1);
-                    return {
-                        InventoryChanges: {
-                            MechBin: {
-                                count: 1,
-                                platinum: 0,
-                                Slots: -1
-                            },
-                            MechSuits: [mechSuit]
-                        }
-                    };
-                }
+    if (typeName in ExportUpgrades) {
+        const inventory = await getInventory(accountId);
+        const changes = [
+            {
+                ItemType: typeName,
+                ItemCount: quantity
             }
-            break;
-        case "Weapons":
-            const weaponType = getWeaponType(typeName);
-            const weapon = await addEquipment(weaponType, typeName, accountId);
-            await updateSlots(accountId, InventorySlot.WEAPONS, 0, 1);
-            return {
-                InventoryChanges: {
-                    WeaponBin: { count: 1, platinum: 0, Slots: -1 },
-                    [weaponType]: [weapon]
-                }
-            };
-        case "Upgrades": {
-            const inventory = await getInventory(accountId);
-            const changes = [
-                {
-                    ItemType: typeName,
-                    ItemCount: quantity
-                }
-            ];
-            addMods(inventory, changes);
-            await inventory.save();
-            return {
-                InventoryChanges: {
-                    RawUpgrades: changes
-                }
-            };
+        ];
+        addMods(inventory, changes);
+        await inventory.save();
+        return {
+            InventoryChanges: {
+                RawUpgrades: changes
+            }
+        };
+    }
+
+    for (const exportCategory of [ExportWarframes, ExportWeapons, ExportSentinels]) {
+        if (typeName in exportCategory) {
+            const categoryData = exportCategory[typeName];
+            const productCategory = categoryData.productCategory;
+            const changes = await addEquipment(productCategory, typeName, accountId, undefined, isStorePurchase);
+            const binKey = getBinKey(productCategory);
+            const inventoryChanges = { ...changes.InventoryChanges };
+
+            if (binKey && !isStorePurchase) {
+                await updateSlots(accountId, binKey, 0, 1);
+                inventoryChanges[binKey] = inventoryChanges[binKey]
+                    ? {
+                          ...inventoryChanges[binKey],
+                          count: inventoryChanges[binKey].count + 1,
+                          Slots: inventoryChanges[binKey].Slots - 1
+                      }
+                    : { count: 1, platinum: 0, Slots: -1 };
+            }
+
+            return { InventoryChanges: inventoryChanges };
         }
-        case "Objects": {
-            // /Lotus/Objects/Tenno/Props/TnoLisetTextProjector (Note Beacon)
-            const inventory = await getInventory(accountId);
-            const changes = [
-                {
-                    ItemType: typeName,
-                    ItemCount: quantity
-                } satisfies IMiscItem
-            ];
-            addShipDecorations(inventory, changes);
-            await inventory.save();
-            return {
-                InventoryChanges: {
-                    ShipDecorations: changes
-                }
-            };
-        }
-        case "Types":
-            switch (typeName.substr(1).split("/")[2]) {
-                case "Sentinels":
-                    // TOOD: Sentinels should also grant their DefaultUpgrades & SentinelWeapon.
-                    const sentinel = await addSentinel(typeName, accountId);
-                    await updateSlots(accountId, InventorySlot.SENTINELS, 0, 1);
-                    return {
-                        InventoryChanges: {
-                            SentinelBin: { count: 1, platinum: 0, Slots: -1 },
-                            Sentinels: [sentinel]
-                        }
-                    };
-                case "Items": {
-                    switch (typeName.substr(1).split("/")[3]) {
-                        case "ShipDecos": {
-                            const inventory = await getInventory(accountId);
-                            const changes = [
-                                {
-                                    ItemType: typeName,
-                                    ItemCount: quantity
-                                } satisfies IMiscItem
-                            ];
-                            addShipDecorations(inventory, changes);
-                            await inventory.save();
-                            return {
-                                InventoryChanges: {
-                                    ShipDecorations: changes
-                                }
-                            };
-                        }
-                        default: {
-                            const inventory = await getInventory(accountId);
-                            const miscItemChanges = [
-                                {
-                                    ItemType: typeName,
-                                    ItemCount: quantity
-                                } satisfies IMiscItem
-                            ];
-                            addMiscItems(inventory, miscItemChanges);
-                            await inventory.save();
-                            return {
-                                InventoryChanges: {
-                                    MiscItems: miscItemChanges
-                                }
-                            };
-                        }
-                    }
-                }
-                case "Game":
-                    if (typeName.substr(1).split("/")[3] == "Projections") {
-                        // Void Relics, e.g. /Lotus/Types/Game/Projections/T2VoidProjectionGaussPrimeDBronze
-                        const inventory = await getInventory(accountId);
-                        const miscItemChanges = [
-                            {
-                                ItemType: typeName,
-                                ItemCount: quantity
-                            } satisfies IMiscItem
-                        ];
-                        addMiscItems(inventory, miscItemChanges);
-                        await inventory.save();
-                        return {
-                            InventoryChanges: {
-                                MiscItems: miscItemChanges
-                            }
-                        };
-                    }
-                    break;
-                case "Restoratives": // Codex Scanner, Remote Observer, Starburst
+    }
+
+    if (typeName in ExportKeys) {
+        const changes = {
+            ItemType: typeName
+        };
+        addKey(typeName, accountId);
+        return {
+            InventoryChanges: {
+                QuestKeys: [changes]
+            }
+        };
+    }
+
+    // Path-based duck typing
+    const pathParts = typeName.slice(1).split("/");
+    if (pathParts[1] === "Types") {
+        switch (pathParts[2]) {
+            case "Game":
+                if (pathParts[3] === "Projections") {
+                    // Void Relics, e.g. /Lotus/Types/Game/Projections/T2VoidProjectionGaussPrimeDBronze
                     const inventory = await getInventory(accountId);
-                    const consumablesChanges = [
+                    const miscItemChanges = [
                         {
                             ItemType: typeName,
                             ItemCount: quantity
-                        } satisfies IConsumable
+                        } satisfies IMiscItem
                     ];
-                    addConsumables(inventory, consumablesChanges);
+                    addMiscItems(inventory, miscItemChanges);
                     await inventory.save();
                     return {
                         InventoryChanges: {
-                            Consumables: consumablesChanges
+                            MiscItems: miscItemChanges
                         }
                     };
+                }
+                break;
+            case "Restoratives": // Codex Scanner, Remote Observer, Starburst
+                const inventory = await getInventory(accountId);
+                const consumablesChanges = [
+                    {
+                        ItemType: typeName,
+                        ItemCount: quantity
+                    } satisfies IConsumable
+                ];
+                addConsumables(inventory, consumablesChanges);
+                await inventory.save();
+                return {
+                    InventoryChanges: {
+                        Consumables: consumablesChanges
+                    }
+                };
+            case "StoreItems":
+                if (pathParts[3] === "CreditBundles") {
+                    const currencyChanges = await updateCurrency(creditBundles[typeName] * -quantity, false, accountId);
+                    return {
+                        InventoryChanges: {
+                            ...currencyChanges
+                        }
+                    };
+                }
+                break;
+        }
+    } else if (pathParts[2] === "Mods" && pathParts[3] === "FusionBundles") {
+        const inventory = await getInventory(accountId);
+        const fusionPoints = fusionBundles[typeName] * quantity;
+        inventory.FusionPoints += fusionPoints;
+        await inventory.save();
+        return {
+            InventoryChanges: {
+                FusionPoints: fusionPoints
             }
-            break;
+        };
     }
     const errorMessage = `unable to add item: ${typeName}`;
     logger.error(errorMessage);
     throw new Error(errorMessage);
-};
-
-//TODO: maybe genericMethod for all the add methods, they share a lot of logic
-export const addSentinel = async (sentinelName: string, accountId: string) => {
-    const inventory = await getInventory(accountId);
-    const sentinelIndex = inventory.Sentinels.push({ ItemType: sentinelName, Configs: [], XP: 0 });
-    const changedInventory = await inventory.save();
-    return changedInventory.Sentinels[sentinelIndex - 1].toJSON();
-};
-
-export const addPowerSuit = async (powersuitName: string, accountId: string): Promise<IEquipmentClient> => {
-    const specialItems = getExalted(powersuitName);
-    if (specialItems != false) {
-        for await (const specialItem of specialItems) {
-            await addSpecialItem(specialItem, accountId);
-        }
-    }
-    const inventory = await getInventory(accountId);
-    const suitIndex = inventory.Suits.push({ ItemType: powersuitName, Configs: [], UpgradeVer: 101, XP: 0 });
-    const changedInventory = await inventory.save();
-    return changedInventory.Suits[suitIndex - 1].toJSON();
-};
-
-export const addMechSuit = async (mechsuitName: string, accountId: string) => {
-    const specialItems = getExalted(mechsuitName);
-    if (specialItems != false) {
-        for await (const specialItem of specialItems) {
-            await addSpecialItem(specialItem, accountId);
-        }
-    }
-    const inventory = await getInventory(accountId);
-    const suitIndex = inventory.MechSuits.push({ ItemType: mechsuitName, Configs: [], UpgradeVer: 101, XP: 0 });
-    const changedInventory = await inventory.save();
-    return changedInventory.MechSuits[suitIndex - 1].toJSON();
-};
-
-export const addSpecialItem = async (itemName: string, accountId: string) => {
-    const inventory = await getInventory(accountId);
-    const specialItemIndex = inventory.SpecialItems.push({
-        ItemType: itemName,
-        Configs: [],
-        Features: 1,
-        UpgradeVer: 101,
-        XP: 0
-    });
-    const changedInventory = await inventory.save();
-    return changedInventory.SpecialItems[specialItemIndex - 1].toJSON();
-};
-
-export const addSpaceSuit = async (spacesuitName: string, accountId: string) => {
-    const inventory = await getInventory(accountId);
-    const suitIndex = inventory.SpaceSuits.push({ ItemType: spacesuitName, Configs: [], UpgradeVer: 101, XP: 0 });
-    const changedInventory = await inventory.save();
-    return changedInventory.SpaceSuits[suitIndex - 1].toJSON();
 };
 
 export const updateSlots = async (accountId: string, slotName: SlotNames, slotAmount: number, extraAmount: number) => {
@@ -515,8 +490,23 @@ export const addEquipment = async (
     category: TEquipmentKey,
     type: string,
     accountId: string,
-    modularParts: string[] | undefined = undefined
-): Promise<IEquipmentClient> => {
+    modularParts: string[] | undefined = undefined,
+    isStorePurchase: boolean = false
+): Promise<{ InventoryChanges: any }> => {
+    const defaultGear = getDefaultGear(type);
+    let InventoryChanges: any = {};
+
+    if (defaultGear != false) {
+        for await (const item of defaultGear) {
+            logger.debug(`defaultGear ${item}`);
+            const result = await addItem(accountId, item, 1, isStorePurchase);
+            InventoryChanges = {
+                ...InventoryChanges,
+                ...result.InventoryChanges
+            };
+        }
+    }
+
     const inventory = await getInventory(accountId);
 
     const index = inventory[category].push({
@@ -527,7 +517,12 @@ export const addEquipment = async (
     });
 
     const changedInventory = await inventory.save();
-    return changedInventory[category][index - 1].toJSON();
+
+    InventoryChanges[category] = [changedInventory[category][index - 1].toJSON()];
+
+    return {
+        InventoryChanges
+    };
 };
 
 export const addCustomization = async (customizatonName: string, accountId: string): Promise<IFlavourItem> => {
@@ -542,6 +537,23 @@ export const addSkin = async (typeName: string, accountId: string): Promise<IWea
     const index = inventory.WeaponSkins.push({ ItemType: typeName }) - 1;
     const changedInventory = await inventory.save();
     return changedInventory.WeaponSkins[index].toJSON();
+};
+
+export const addKubrowEgg = async (
+    inventory: IInventoryDatabaseDocument,
+    kubrowEgg: IKubrowPetEgg
+): Promise<IKubrowPetEgg> => {
+    const index =
+        inventory.KubrowPetEggs.push({ ItemType: kubrowEgg.ItemType, ExpirationDate: kubrowEgg.ExpirationDate }) - 1;
+    const changedInventory = await inventory.save();
+    return changedInventory.KubrowPetEggs[index - 1];
+};
+
+export const addKey = async (typeName: string, accountId: string): Promise<IQuestKeyResponse> => {
+    const inventory = await getInventory(accountId);
+    const index = inventory.QuestKeys.push({ ItemType: typeName }) - 1;
+    const changedInventory = await inventory.save();
+    return changedInventory.QuestKeys[index].toJSON();
 };
 
 const addGearExpByCategory = (

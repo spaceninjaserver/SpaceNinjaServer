@@ -123,7 +123,10 @@ const getRandomRewardByChance = (pool: IReward[]): IRngResult | undefined => {
     return getRandomReward(pool as IRngResult[]);
 };
 
-const creditBundles: Record<string, number> = {
+export const creditBundles: Record<string, number> = {
+    "/Lotus/Types/StoreItems/CreditBundles/CreditBundleA": 50000,
+    "/Lotus/Types/StoreItems/CreditBundles/CreditBundleB": 25000,
+    "/Lotus/Types/StoreItems/CreditBundles/CreditBundleC": 175000,
     "/Lotus/StoreItems/Types/PickUps/Credits/1500Credits": 1500,
     "/Lotus/StoreItems/Types/PickUps/Credits/2000Credits": 2000,
     "/Lotus/StoreItems/Types/PickUps/Credits/2500Credits": 2500,
@@ -139,7 +142,10 @@ const creditBundles: Record<string, number> = {
     "/Lotus/StoreItems/Types/PickUps/Credits/CorpusArenaCreditRewards/CorpusArenaRewardThreeHard": 250000
 };
 
-const fusionBundles: Record<string, number> = {
+export const fusionBundles: Record<string, number> = {
+    "/Lotus/Upgrades/Mods/FusionBundles/MarketTier1FusionBundle": 100,
+    "/Lotus/Upgrades/Mods/FusionBundles/MarketTier2FusionBundle": 400,
+    "/Lotus/Upgrades/Mods/FusionBundles/MarketTier3FusionBundle": 1000,
     "/Lotus/Upgrades/Mods/FusionBundles/CommonFusionBundle": 15,
     "/Lotus/Upgrades/Mods/FusionBundles/UncommonFusionBundle": 50,
     "/Lotus/Upgrades/Mods/FusionBundles/RareFusionBundle": 80
