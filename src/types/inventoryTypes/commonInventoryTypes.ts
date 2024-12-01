@@ -1,5 +1,6 @@
 import { IMongoDate, IOid } from "@/src/types/commonTypes";
 import { Types } from "mongoose";
+import { ICrewMembers, ICrewshipWeapon, ICustomization, IFlavourItem } from "@/src/types/inventoryTypes/inventoryTypes";
 
 export interface IPolarity {
     Slot: number;
@@ -113,6 +114,10 @@ export interface IEquipmentDatabase {
     Expiry?: IMongoDate;
     SkillTree?: string;
     ArchonCrystalUpgrades?: IArchonCrystalUpgrade[];
+    Weapon?: ICrewshipWeapon;
+    Customization?: ICustomization;
+    RailjackImage?: IFlavourItem;
+    CrewMembers?: ICrewMembers;
     _id: Types.ObjectId;
 }
 

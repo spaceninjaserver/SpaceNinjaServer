@@ -2,8 +2,8 @@ import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getInventory } from "@/src/services/inventoryService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { WeaponTypeInternal } from "@/src/services/itemDataService";
 import { EquipmentFeatures } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const evolveWeaponController: RequestHandler = async (req, res) => {
@@ -35,7 +35,7 @@ export const evolveWeaponController: RequestHandler = async (req, res) => {
 
 interface IEvolveWeaponRequest {
     Action: "EWA_INSTALL";
-    Category: WeaponTypeInternal;
+    Category: TEquipmentKey;
     Recipe: string; // e.g. "/Lotus/Types/Items/MiscItems/IncarnonAdapters/UnlockerBlueprints/DespairIncarnonBlueprint"
     UninstallRecipe: "";
     EvoType: string; // e.g. "/Lotus/Weapons/Tenno/ThrowingWeapons/StalkerKunai"

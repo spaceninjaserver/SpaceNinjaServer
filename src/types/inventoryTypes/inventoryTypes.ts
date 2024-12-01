@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Document, Types } from "mongoose";
-import { IOid, IMongoDate } from "../commonTypes";
+import { IOid, IMongoDate } from "@/src/types/commonTypes";
 import {
     ArtifactPolarity,
     IColor,
@@ -25,6 +25,7 @@ export interface IInventoryDatabase
         | "BlessingCooldown"
         | "Ships"
         | "WeaponSkins"
+        | "KubrowPetEggs"
     > {
     accountOwnerId: Types.ObjectId;
     Created: Date;
@@ -37,6 +38,7 @@ export interface IInventoryDatabase
     BlessingCooldown: Date;
     Ships: Types.ObjectId[];
     WeaponSkins: IWeaponSkinDatabase[];
+    KubrowPetEggs: IKubrowPetEgg[];
 }
 
 export interface IInventoryResponseDocument extends IInventoryResponse, Document {}
@@ -63,6 +65,7 @@ export interface ITypeCount {
 
 export const equipmentKeys = [
     "Suits",
+    "MechSuits",
     "LongGuns",
     "Pistols",
     "Melee",
@@ -74,7 +77,10 @@ export const equipmentKeys = [
     "SpaceMelee",
     "Hoverboards",
     "OperatorAmps",
-    "MoaPets"
+    "MoaPets",
+    "KubrowPets",
+    "CrewShips",
+    "CrewShipHarnesses"
 ] as const;
 
 export type TEquipmentKey = (typeof equipmentKeys)[number];
@@ -111,6 +117,10 @@ export type TSolarMapRegion =
 export interface IPendingRecipeResponse extends Omit<IPendingRecipe, "CompletionDate"> {
     CompletionDate: IMongoDate;
 }
+export interface IKubrowPetEggResponse extends Omit<IKubrowPetEgg, "ExpirationDate"> {
+    ExpirationDate: IMongoDate;
+}
+
 export interface IInventoryResponse {
     Horses: IEquipmentDatabase[];
     DrifterMelee: IEquipmentDatabase[];
@@ -181,7 +191,7 @@ export interface IInventoryResponse {
     TauntHistory?: ITaunt[];
     StoryModeChoice: string;
     PeriodicMissionCompletions: IPeriodicMissionCompletionDatabase[];
-    KubrowPetEggs: IKubrowPetEgg[];
+    KubrowPetEggs: IKubrowPetEggResponse[];
     LoreFragmentScans: ILoreFragmentScan[];
     EquippedEmotes: string[];
     PendingTrades: IPendingTrade[];
@@ -249,7 +259,7 @@ export interface IInventoryResponse {
     LastNemesisAllySpawnTime?: IMongoDate;
     Settings: ISettings;
     PersonalTechProjects: IPersonalTechProject[];
-    CrewShips: ICrewShip[];
+    CrewShips: IEquipmentDatabase[];
     PlayerSkills: IPlayerSkills;
     CrewShipAmmo: IConsumable[];
     CrewShipSalvagedWeaponSkins: ICrewShipSalvagedWeaponSkin[];
@@ -391,9 +401,13 @@ export enum InventorySlot {
     SUITS = "SuitBin",
     WEAPONS = "WeaponBin",
     SPACESUITS = "SpaceSuitBin",
+    SPACEWEAPON = "SpaceWeaponBin",
     MECHSUITS = "MechBin",
     PVE_LOADOUTS = "PveBonusLoadoutBin",
-    SENTINELS = "SentinelBin"
+    SENTINELS = "SentinelBin",
+    OPERATORAMP = "OperatorAmpBin",
+    CREWMEMBERS = "CrewMemberBin",
+    CREWSHIPSALVAGE = "CrewShipSalvageBin"
 }
 
 export interface ISlots {
@@ -415,18 +429,6 @@ export interface ICrewShipWeapon {
     Configs?: IItemConfig[];
     UpgradeVer?: number;
     ItemId: IOid;
-}
-
-export interface ICrewShip {
-    ItemType: string;
-    Configs: IItemConfig[];
-    Weapon: ICrewshipWeapon;
-    Customization: ICustomization;
-    ItemName: string;
-    RailjackImage: IFlavourItem;
-    CrewMembers: ICrewMembers;
-    ItemId: IOid;
-    _id: Types.ObjectId;
 }
 
 export interface ICrewMembers {
@@ -536,13 +538,9 @@ export interface IInvasionChainProgress {
 }
 
 export interface IKubrowPetEgg {
-    ItemType: KubrowPetEggItemType;
-    ExpirationDate: IMongoDate;
-    ItemId: IOid;
-}
-
-export enum KubrowPetEggItemType {
-    LotusTypesGameKubrowPetEggsKubrowEgg = "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg"
+    ItemType: string;
+    ExpirationDate: Date;
+    ItemId?: IOid;
 }
 
 export interface IKubrowPetPrint {
