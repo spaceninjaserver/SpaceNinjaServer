@@ -21,6 +21,7 @@ export interface ISaveLoadoutRequest {
     MoaPets: IItemEntry;
     Hoverboards: IItemEntry;
     DataKnives: IItemEntry;
+    Motorcycles: IItemEntry;
     MechSuits: IItemEntry;
     CrewShipHarnesses: IItemEntry;
     Horses: IItemEntry;

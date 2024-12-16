@@ -144,7 +144,8 @@ export const handleInventoryItemConfigChange = async (
             case "Hoverboards":
             case "MechSuits":
             case "CrewShipHarnesses":
-            case "CrewShips": {
+            case "CrewShips":
+            case "Motorcycles": {
                 logger.debug(`general Item config saved of type ${equipmentName}`, { config: equipment });
 
                 const itemEntries = equipment as IItemEntry;
