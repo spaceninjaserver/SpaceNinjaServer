@@ -19,7 +19,7 @@ export interface IShipInterior {
     SkinFlavourItem?: string;
 }
 
-export type TBootLocation = "LISET" | "DRIFTER_CAMP" | "APARTMENT";
+export type TBootLocation = "LISET" | "DRIFTER_CAMP" | "APARTMENT" | "SHOP";
 
 export interface IShip {
     Features: string[];
