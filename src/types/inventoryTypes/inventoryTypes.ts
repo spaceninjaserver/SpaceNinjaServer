@@ -245,6 +245,7 @@ export interface IInventoryResponse {
     EquippedInstrument: string;
     InvasionChainProgress: IInvasionChainProgress[];
     DataKnives: IEquipmentDatabase[];
+    Motorcycles: IEquipmentDatabase[];
     NemesisHistory: INemesisHistory[];
     LastNemesisAllySpawnTime?: IMongoDate;
     Settings: ISettings;

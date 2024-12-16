@@ -867,6 +867,8 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //https://warframe.fandom.com/wiki/Parazon
         DataKnives: [EquipmentSchema],
 
+        Motorcycles: [EquipmentSchema],
+
         //CorpusLich or GrineerLich
         NemesisAbandonedRewards: [String],
         //CorpusLich\KuvaLich
@@ -974,6 +976,7 @@ type InventoryDocumentProps = {
     MechSuits: Types.DocumentArray<IEquipmentDatabase>;
     Scoops: Types.DocumentArray<IEquipmentDatabase>;
     DataKnives: Types.DocumentArray<IEquipmentDatabase>;
+    Motorcycles: Types.DocumentArray<IEquipmentDatabase>;
     DrifterMelee: Types.DocumentArray<IEquipmentDatabase>;
     Sentinels: Types.DocumentArray<IEquipmentDatabase>;
     Horses: Types.DocumentArray<IEquipmentDatabase>;
