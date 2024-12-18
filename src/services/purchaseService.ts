@@ -91,10 +91,10 @@ const handleStoreItemAcquisition = async (
         }
         switch (storeCategory) {
             default:
-                purchaseResponse = await addItem(accountId, internalName, quantity);
+                purchaseResponse = await addItem(accountId, internalName, quantity, true);
                 break;
             case "Types":
-                purchaseResponse = await handleTypesPurchase(internalName, accountId, quantity);
+                purchaseResponse = await handleTypesPurchase(internalName, accountId, quantity, true);
                 break;
             case "Boosters":
                 purchaseResponse = await handleBoostersPurchase(internalName, accountId, durability);
@@ -154,13 +154,14 @@ const handleSlotPurchase = async (
 const handleTypesPurchase = async (
     typesName: string,
     accountId: string,
-    quantity: number
+    quantity: number,
+    isStorePurchase: boolean = false
 ): Promise<{ InventoryChanges: IInventoryChanges }> => {
     const typeCategory = getStoreItemTypesCategory(typesName);
     logger.debug(`type category ${typeCategory}`);
     switch (typeCategory) {
         default:
-            return await addItem(accountId, typesName, quantity);
+            return await addItem(accountId, typesName, quantity, isStorePurchase);
         case "SlotItems":
             return await handleSlotPurchase(typesName, accountId);
     }

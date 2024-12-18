@@ -2,7 +2,7 @@ import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getInventory } from "@/src/services/inventoryService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { WeaponTypeInternal } from "@/src/services/itemDataService";
+import { TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const setWeaponSkillTreeController: RequestHandler = async (req, res) => {
@@ -10,7 +10,7 @@ export const setWeaponSkillTreeController: RequestHandler = async (req, res) => 
     const inventory = await getInventory(accountId);
     const payload = getJSONfromString(String(req.body)) as ISetWeaponSkillTreeRequest;
 
-    const item = inventory[req.query.Category as WeaponTypeInternal].find(
+    const item = inventory[req.query.Category as TEquipmentKey].find(
         item => item._id.toString() == (req.query.ItemId as string)
     )!;
     item.SkillTree = payload.SkillTree;
