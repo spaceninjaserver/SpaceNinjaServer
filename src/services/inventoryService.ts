@@ -737,10 +737,7 @@ const addMissionComplete = (inventory: IInventoryDatabaseDocument, { Tag, Comple
     }
 };
 
-export const missionInventoryUpdate = async (
-    data: IMissionInventoryUpdateRequest,
-    accountId: string
-): Promise<IInventoryChanges> => {
+export const missionInventoryUpdate = async (data: IMissionInventoryUpdateRequest, accountId: string) => {
     const {
         RawUpgrades,
         MiscItems,
