@@ -1,12 +1,13 @@
 import { Schema, Types } from "mongoose";
 import { IOid } from "@/src/types/commonTypes";
 import { IColor } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { ILoadoutClient } from "./saveLoadoutTypes";
 
 export interface IGetShipResponse {
     ShipOwnerId: string;
     Ship: IShip;
     Apartment: IApartment;
-    LoadOutInventory: { LoadOutPresets: Types.ObjectId };
+    LoadOutInventory: { LoadOutPresets: ILoadoutClient };
 }
 
 export interface IShipAttachments {

@@ -369,7 +369,7 @@ export const addPowerSuit = async (powersuitName: string, accountId: string): Pr
     const inventory = await getInventory(accountId);
     const suitIndex = inventory.Suits.push({ ItemType: powersuitName, Configs: [], UpgradeVer: 101, XP: 0 });
     const changedInventory = await inventory.save();
-    return changedInventory.Suits[suitIndex - 1].toJSON();
+    return changedInventory.Suits[suitIndex - 1].toJSON() as object as IEquipmentClient;
 };
 
 export const addMechSuit = async (mechsuitName: string, accountId: string) => {
@@ -527,7 +527,7 @@ export const addEquipment = async (
     });
 
     const changedInventory = await inventory.save();
-    return changedInventory[category][index - 1].toJSON();
+    return changedInventory[category][index - 1].toJSON() as object as IEquipmentClient;
 };
 
 export const addCustomization = async (customizatonName: string, accountId: string): Promise<IFlavourItem> => {
@@ -541,7 +541,7 @@ export const addSkin = async (typeName: string, accountId: string): Promise<IWea
     const inventory = await getInventory(accountId);
     const index = inventory.WeaponSkins.push({ ItemType: typeName }) - 1;
     const changedInventory = await inventory.save();
-    return changedInventory.WeaponSkins[index].toJSON();
+    return changedInventory.WeaponSkins[index].toJSON() as object as IWeaponSkinClient;
 };
 
 const addGearExpByCategory = (
