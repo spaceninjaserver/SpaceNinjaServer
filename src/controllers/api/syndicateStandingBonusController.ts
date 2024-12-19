@@ -45,7 +45,7 @@ export const syndicateStandingBonusController: RequestHandler = async (req, res)
         },
         AffiliationMods: [
             {
-                Tag: "HexSyndicate",
+                Tag: request.Operation.AffiliationTag,
                 Standing: gainedStanding
             }
         ]
