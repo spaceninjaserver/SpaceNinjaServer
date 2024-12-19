@@ -42,7 +42,7 @@ import {
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
     defaultItemReferences: { loadOutPresetId: Types.ObjectId; ship: Types.ObjectId }
-) => {
+): Promise<void> => {
     try {
         const inventory = new Inventory({
             ...new_inventory,
@@ -218,7 +218,7 @@ export const addItem = async (
                 }
             }
             break;
-        case "Weapons":
+        case "Weapons": {
             const weaponType = getWeaponType(typeName);
             const weapon = await addEquipment(weaponType, typeName, accountId);
             await updateSlots(accountId, InventorySlot.WEAPONS, 0, 1);
@@ -228,6 +228,7 @@ export const addItem = async (
                     [weaponType]: [weapon]
                 }
             };
+        }
         case "Upgrades": {
             const inventory = await getInventory(accountId);
             const changes = [
@@ -263,7 +264,7 @@ export const addItem = async (
         }
         case "Types":
             switch (typeName.substr(1).split("/")[2]) {
-                case "Sentinels":
+                case "Sentinels": {
                     // TOOD: Sentinels should also grant their DefaultUpgrades & SentinelWeapon.
                     const sentinel = await addSentinel(typeName, accountId);
                     await updateSlots(accountId, InventorySlot.SENTINELS, 0, 1);
@@ -273,6 +274,7 @@ export const addItem = async (
                             Sentinels: [sentinel]
                         }
                     };
+                }
                 case "Items": {
                     switch (typeName.substr(1).split("/")[3]) {
                         case "ShipDecos": {
@@ -328,7 +330,8 @@ export const addItem = async (
                         };
                     }
                     break;
-                case "Restoratives": // Codex Scanner, Remote Observer, Starburst
+                case "Restoratives": {
+                    // Codex Scanner, Remote Observer, Starburst
                     const inventory = await getInventory(accountId);
                     const consumablesChanges = [
                         {
@@ -343,6 +346,7 @@ export const addItem = async (
                             Consumables: consumablesChanges
                         }
                     };
+                }
             }
             break;
     }
@@ -361,7 +365,7 @@ export const addSentinel = async (sentinelName: string, accountId: string) => {
 
 export const addPowerSuit = async (powersuitName: string, accountId: string): Promise<IEquipmentClient> => {
     const specialItems = getExalted(powersuitName);
-    if (specialItems != false) {
+    if (specialItems) {
         for await (const specialItem of specialItems) {
             await addSpecialItem(specialItem, accountId);
         }
@@ -374,7 +378,7 @@ export const addPowerSuit = async (powersuitName: string, accountId: string): Pr
 
 export const addMechSuit = async (mechsuitName: string, accountId: string) => {
     const specialItems = getExalted(mechsuitName);
-    if (specialItems != false) {
+    if (specialItems) {
         for await (const specialItem of specialItems) {
             await addSpecialItem(specialItem, accountId);
         }
@@ -405,7 +409,12 @@ export const addSpaceSuit = async (spacesuitName: string, accountId: string) => 
     return changedInventory.SpaceSuits[suitIndex - 1].toJSON();
 };
 
-export const updateSlots = async (accountId: string, slotName: SlotNames, slotAmount: number, extraAmount: number) => {
+export const updateSlots = async (
+    accountId: string,
+    slotName: SlotNames,
+    slotAmount: number,
+    extraAmount: number
+): Promise<void> => {
     const inventory = await getInventory(accountId);
 
     inventory[slotName].Slots += slotAmount;
@@ -460,7 +469,7 @@ export const updateCurrency = async (price: number, usePremium: boolean, account
 };
 
 // TODO: AffiliationMods support (Nightwave).
-export const updateGeneric = async (data: IGenericUpdate, accountId: string) => {
+export const updateGeneric = async (data: IGenericUpdate, accountId: string): Promise<void> => {
     const inventory = await getInventory(accountId);
 
     // Make it an array for easier parsing.
@@ -476,11 +485,9 @@ export const updateGeneric = async (data: IGenericUpdate, accountId: string) => 
 
     inventory.NodeIntrosCompleted = nodes;
     await inventory.save();
-
-    return data;
 };
 
-export const updateTheme = async (data: IThemeUpdateRequest, accountId: string) => {
+export const updateTheme = async (data: IThemeUpdateRequest, accountId: string): Promise<void> => {
     const inventory = await getInventory(accountId);
     if (data.Style) inventory.ThemeStyle = data.Style;
     if (data.Background) inventory.ThemeBackground = data.Background;
@@ -548,7 +555,7 @@ const addGearExpByCategory = (
     inventory: IInventoryDatabaseDocument,
     gearArray: IEquipmentClient[] | undefined,
     categoryName: TEquipmentKey
-) => {
+): void => {
     const category = inventory[categoryName];
 
     gearArray?.forEach(({ ItemId, XP }) => {
@@ -577,7 +584,7 @@ const addGearExpByCategory = (
     });
 };
 
-export const addMiscItems = (inventory: IInventoryDatabaseDocument, itemsArray: IMiscItem[] | undefined) => {
+export const addMiscItems = (inventory: IInventoryDatabaseDocument, itemsArray: IMiscItem[] | undefined): void => {
     const { MiscItems } = inventory;
 
     itemsArray?.forEach(({ ItemCount, ItemType }) => {
@@ -592,7 +599,10 @@ export const addMiscItems = (inventory: IInventoryDatabaseDocument, itemsArray: 
     });
 };
 
-export const addShipDecorations = (inventory: IInventoryDatabaseDocument, itemsArray: IConsumable[] | undefined) => {
+export const addShipDecorations = (
+    inventory: IInventoryDatabaseDocument,
+    itemsArray: IConsumable[] | undefined
+): void => {
     const { ShipDecorations } = inventory;
 
     itemsArray?.forEach(({ ItemCount, ItemType }) => {
@@ -607,7 +617,7 @@ export const addShipDecorations = (inventory: IInventoryDatabaseDocument, itemsA
     });
 };
 
-export const addConsumables = (inventory: IInventoryDatabaseDocument, itemsArray: IConsumable[] | undefined) => {
+export const addConsumables = (inventory: IInventoryDatabaseDocument, itemsArray: IConsumable[] | undefined): void => {
     const { Consumables } = inventory;
 
     itemsArray?.forEach(({ ItemCount, ItemType }) => {
@@ -622,7 +632,7 @@ export const addConsumables = (inventory: IInventoryDatabaseDocument, itemsArray
     });
 };
 
-export const addRecipes = (inventory: IInventoryDatabaseDocument, itemsArray: ITypeCount[] | undefined) => {
+export const addRecipes = (inventory: IInventoryDatabaseDocument, itemsArray: ITypeCount[] | undefined): void => {
     const { Recipes } = inventory;
 
     itemsArray?.forEach(({ ItemCount, ItemType }) => {
@@ -637,7 +647,7 @@ export const addRecipes = (inventory: IInventoryDatabaseDocument, itemsArray: IT
     });
 };
 
-export const addMods = (inventory: IInventoryDatabaseDocument, itemsArray: IRawUpgrade[] | undefined) => {
+export const addMods = (inventory: IInventoryDatabaseDocument, itemsArray: IRawUpgrade[] | undefined): void => {
     const { RawUpgrades } = inventory;
     itemsArray?.forEach(({ ItemType, ItemCount }) => {
         const itemIndex = RawUpgrades.findIndex(i => i.ItemType === ItemType);
@@ -654,7 +664,7 @@ export const addMods = (inventory: IInventoryDatabaseDocument, itemsArray: IRawU
 export const addFusionTreasures = (
     inventory: IInventoryDatabaseDocument,
     itemsArray: IFusionTreasure[] | undefined
-) => {
+): void => {
     const { FusionTreasures } = inventory;
     itemsArray?.forEach(({ ItemType, ItemCount, Sockets }) => {
         const itemIndex = FusionTreasures.findIndex(i => i.ItemType == ItemType && (i.Sockets || 0) == (Sockets || 0));
@@ -668,7 +678,10 @@ export const addFusionTreasures = (
     });
 };
 
-export const updateChallengeProgress = async (challenges: IUpdateChallengeProgressRequest, accountId: string) => {
+export const updateChallengeProgress = async (
+    challenges: IUpdateChallengeProgressRequest,
+    accountId: string
+): Promise<void> => {
     const inventory = await getInventory(accountId);
 
     addChallenges(inventory, challenges.ChallengeProgress);
@@ -680,7 +693,7 @@ export const updateChallengeProgress = async (challenges: IUpdateChallengeProgre
 export const addSeasonalChallengeHistory = (
     inventory: IInventoryDatabaseDocument,
     itemsArray: ISeasonChallenge[] | undefined
-) => {
+): void => {
     const category = inventory.SeasonChallengeHistory;
 
     itemsArray?.forEach(({ challenge, id }) => {
@@ -694,7 +707,10 @@ export const addSeasonalChallengeHistory = (
     });
 };
 
-export const addChallenges = (inventory: IInventoryDatabaseDocument, itemsArray: IChallengeProgress[] | undefined) => {
+export const addChallenges = (
+    inventory: IInventoryDatabaseDocument,
+    itemsArray: IChallengeProgress[] | undefined
+): void => {
     const category = inventory.ChallengeProgress;
 
     itemsArray?.forEach(({ Name, Progress }) => {
@@ -709,7 +725,7 @@ export const addChallenges = (inventory: IInventoryDatabaseDocument, itemsArray:
     });
 };
 
-const addMissionComplete = (inventory: IInventoryDatabaseDocument, { Tag, Completes }: IMission) => {
+const addMissionComplete = (inventory: IInventoryDatabaseDocument, { Tag, Completes }: IMission): void => {
     const { Missions } = inventory;
     const itemIndex = Missions.findIndex(item => item.Tag === Tag);
 
