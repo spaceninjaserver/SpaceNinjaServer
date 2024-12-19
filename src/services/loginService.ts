@@ -44,7 +44,7 @@ export const createPersonalRooms = async (accountId: Types.ObjectId, shipId: Typ
     await personalRooms.save();
 };
 
-export const getAccountIdForRequest = async (req: Request): Promise<string> => {
+export const getAccountForRequest = async (req: Request) => {
     if (!req.query.accountId) {
         throw new Error("Request is missing accountId parameter");
     }
@@ -61,5 +61,9 @@ export const getAccountIdForRequest = async (req: Request): Promise<string> => {
     if (!account) {
         throw new Error("Invalid accountId-nonce pair");
     }
-    return account._id.toString();
+    return account;
+};
+
+export const getAccountIdForRequest = async (req: Request): Promise<string> => {
+    return (await getAccountForRequest(req))._id.toString();
 };
