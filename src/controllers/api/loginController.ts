@@ -41,7 +41,7 @@ const loginController: RequestHandler = async (request, response) => {
             });
             logger.debug("created new account");
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const { email, password, ...databaseAccount } = newAccount;
+            const { email, password, LastLoginDay, ...databaseAccount } = newAccount;
             const newLoginResponse: ILoginResponse = {
                 ...databaseAccount,
                 Groups: groups,
@@ -77,7 +77,7 @@ const loginController: RequestHandler = async (request, response) => {
     }
     await account.save();
 
-    const { email, password, ...databaseAccount } = account.toJSON();
+    const { email, password, LastLoginDay, ...databaseAccount } = account.toJSON();
     const newLoginResponse: ILoginResponse = {
         ...databaseAccount,
         Groups: groups,

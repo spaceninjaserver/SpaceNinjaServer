@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { getAccountIdForRequest } from "@/src/services/loginService";
+import { getAccountForRequest } from "@/src/services/loginService";
 import { toInventoryResponse } from "@/src/helpers/inventoryHelpers";
 import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { config } from "@/src/services/configService";
@@ -11,21 +11,44 @@ import { ExportCustoms, ExportFlavour, ExportKeys, ExportRegions, ExportResource
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 const inventoryController: RequestHandler = async (request, response) => {
-    let accountId;
+    let account;
     try {
-        accountId = await getAccountIdForRequest(request);
+        account = await getAccountForRequest(request);
     } catch (e) {
         response.status(400).send("Log-in expired");
         return;
     }
 
-    const inventory = await Inventory.findOne({ accountOwnerId: accountId })
+    const inventory = await Inventory.findOne({ accountOwnerId: account._id.toString() })
         .populate<{ LoadOutPresets: ILoadoutDatabase }>("LoadOutPresets")
         .populate<{ Ships: IShipInventory }>("Ships", "-ShipInteriorColors");
 
     if (!inventory) {
         response.status(400).json({ error: "inventory was undefined" });
         return;
+    }
+
+    // Handle daily reset
+    const today: number = Math.trunc(new Date().getTime() / 86400000);
+    if (account.LastLoginDay != today) {
+        account.LastLoginDay = today;
+        await account.save();
+
+        inventory.DailyAffiliation = 16000;
+        inventory.DailyAffiliationPvp = 16000;
+        inventory.DailyAffiliationLibrary = 16000;
+        inventory.DailyAffiliationCetus = 16000;
+        inventory.DailyAffiliationQuills = 16000;
+        inventory.DailyAffiliationSolaris = 16000;
+        inventory.DailyAffiliationVentkids = 16000;
+        inventory.DailyAffiliationVox = 16000;
+        inventory.DailyAffiliationEntrati = 16000;
+        inventory.DailyAffiliationNecraloid = 16000;
+        inventory.DailyAffiliationZariman = 16000;
+        inventory.DailyAffiliationKahl = 16000;
+        inventory.DailyAffiliationCavia = 16000;
+        inventory.DailyAffiliationHex = 16000;
+        await inventory.save();
     }
 
     //TODO: make a function that converts from database representation to client
