@@ -4,11 +4,10 @@ import { toInventoryResponse } from "@/src/helpers/inventoryHelpers";
 import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { config } from "@/src/services/configService";
 import allDialogue from "@/static/fixed_responses/allDialogue.json";
-import allMissions from "@/static/fixed_responses/allMissions.json";
 import { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
 import { IShipInventory, equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IPolarity, ArtifactPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
-import { ExportCustoms, ExportFlavour, ExportKeys, ExportResources } from "warframe-public-export-plus";
+import { ExportCustoms, ExportFlavour, ExportKeys, ExportRegions, ExportResources } from "warframe-public-export-plus";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 const inventoryController: RequestHandler = async (request, response) => {
@@ -54,7 +53,14 @@ const inventoryController: RequestHandler = async (request, response) => {
     }
 
     if (config.unlockAllMissions) {
-        inventoryResponse.Missions = allMissions;
+        inventoryResponse.Missions = [];
+        for (const tag of Object.keys(ExportRegions)) {
+            inventoryResponse.Missions.push({
+                Completes: 1,
+                Tier: 1,
+                Tag: tag
+            });
+        }
         addString(inventoryResponse.NodeIntrosCompleted, "TeshinHardModeUnlocked");
     }
 
