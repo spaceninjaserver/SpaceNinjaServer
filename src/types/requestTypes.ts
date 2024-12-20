@@ -70,6 +70,7 @@ export interface IMissionInventoryUpdateRequest {
     Missions?: IMission;
     EvolutionProgress?: IEvolutionProgress[];
     LastRegionPlayed?: TSolarMapRegion;
+    FocusXpIncreases?: number[];
 
     FusionPoints?: number; // Not a part of the request, but we put it in this struct as an intermediate storage.
 }
