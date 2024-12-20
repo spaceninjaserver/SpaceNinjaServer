@@ -4,8 +4,12 @@ import fs from "fs/promises";
 
 const cacheRouter = express.Router();
 
-cacheRouter.get(/^\/origin\/[a-zA-Z0-9]+\/[0-9]+\/H\.Cache\.bin.*$/, (_req, res) => {
-    res.sendFile(`static/data/H.Cache_${buildConfig.version}.bin`, { root: "./" });
+cacheRouter.get(/^\/origin\/[a-zA-Z0-9]+\/[0-9]+\/H\.Cache\.bin.*$/, (req, res) => {
+    if (typeof req.query.version == "string" && req.query.version.match(/^\d\d\d\d\.\d\d\.\d\d\.\d\d\.\d\d$/)) {
+        res.sendFile(`static/data/H.Cache_${req.query.version}.bin`, { root: "./" });
+    } else {
+        res.sendFile(`static/data/H.Cache_${buildConfig.version}.bin`, { root: "./" });
+    }
 });
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises

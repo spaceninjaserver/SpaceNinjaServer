@@ -20,6 +20,11 @@ const loginController: RequestHandler = async (request, response) => {
     const account = await Account.findOne({ email: loginRequest.email }); //{ _id: 0, __v: 0 }
     const nonce = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
 
+    const buildLabel: string =
+        typeof request.query.buildLabel == "string"
+            ? request.query.buildLabel.split(" ").join("+")
+            : buildConfig.buildLabel;
+
     if (!account && config.autoCreateAccount && loginRequest.ClientType != "webui") {
         try {
             const newAccount = await createAccount({
@@ -45,7 +50,7 @@ const loginController: RequestHandler = async (request, response) => {
                 DTLS: DTLS,
                 IRC: config.myIrcAddresses ?? [config.myAddress],
                 HUB: HUB,
-                BuildLabel: buildConfig.buildLabel,
+                BuildLabel: buildLabel,
                 MatchmakingBuildId: buildConfig.matchmakingBuildId
             };
 
@@ -81,7 +86,7 @@ const loginController: RequestHandler = async (request, response) => {
         DTLS: DTLS,
         IRC: config.myIrcAddresses ?? [config.myAddress],
         HUB: HUB,
-        BuildLabel: buildConfig.buildLabel,
+        BuildLabel: buildLabel,
         MatchmakingBuildId: buildConfig.matchmakingBuildId
     };
 
