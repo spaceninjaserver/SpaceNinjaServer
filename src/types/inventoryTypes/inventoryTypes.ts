@@ -170,6 +170,14 @@ export interface IInventoryResponse {
     PendingRecipes: IPendingRecipeResponse[];
     TrainingDate: IMongoDate;
     PlayerLevel: number;
+    Staff?: boolean;
+    Founder?: number;
+    Guide?: number;
+    Moderator?: boolean;
+    Partner?: boolean;
+    Accolades?: {
+        Heirloom?: boolean;
+    };
     Upgrades: ICrewShipSalvagedWeaponSkin[];
     EquippedGear: string[];
     DeathMarks: string[];
