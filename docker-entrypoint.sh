@@ -15,7 +15,7 @@ for config in $(env | grep "APP_")
 do
   var=$(echo "${config}" | tr '[:upper:]' '[:lower:]' | sed 's/app_//g' | sed -E 's/_([a-z])/\U\1/g' | sed 's/=.*//g')
   val=$(echo "${config}" | sed 's/.*=//g')
-  jq --arg variable "$var" --arg value "$val" '.[$variable] += $value' config.json > config.tmp
+  jq --arg variable "$var" --arg value "$val" '.[$variable] += try [$value|fromjson][] catch $value' config.json > config.tmp
   mv config.tmp config.json
 done
 
