@@ -33,9 +33,10 @@ const inventoryController: RequestHandler = async (request, response) => {
 
     const inventoryResponse = toInventoryResponse(inventoryJSON);
 
-    if (config.infiniteResources) {
+    if (config.infiniteCredits) {
         inventoryResponse.RegularCredits = 999999999;
-        inventoryResponse.TradesRemaining = 999999999;
+    }
+    if (config.infinitePlatinum) {
         inventoryResponse.PremiumCreditsFree = 999999999;
         inventoryResponse.PremiumCredits = 999999999;
     }

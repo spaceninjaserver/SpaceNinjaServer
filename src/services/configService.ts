@@ -33,7 +33,8 @@ interface IConfig {
     unlockAllMissions?: boolean;
     unlockAllQuests?: boolean;
     completeAllQuests?: boolean;
-    infiniteResources?: boolean;
+    infiniteCredits?: boolean;
+    infinitePlatinum?: boolean;
     unlockAllShipFeatures?: boolean;
     unlockAllShipDecorations?: boolean;
     unlockAllFlavourItems?: boolean;
