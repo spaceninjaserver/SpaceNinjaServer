@@ -32,6 +32,7 @@ export interface IDatabaseAccount {
     ConsentNeeded: boolean;
     TrackedSettings: string[];
     Nonce: number;
+    LastLoginDay?: number;
 }
 
 export interface ILoginRequest {
