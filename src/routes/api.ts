@@ -62,6 +62,7 @@ import { startRecipeController } from "@/src/controllers/api/startRecipeControll
 import { stepSequencersController } from "@/src/controllers/api/stepSequencersController";
 import { surveysController } from "@/src/controllers/api/surveysController";
 import { syndicateSacrificeController } from "../controllers/api/syndicateSacrificeController";
+import { syndicateStandingBonusController } from "../controllers/api/syndicateStandingBonusController";
 import { tauntHistoryController } from "@/src/controllers/api/tauntHistoryController";
 import { trainingResultController } from "@/src/controllers/api/trainingResultController";
 import { updateChallengeProgressController } from "@/src/controllers/api/updateChallengeProgressController";
@@ -139,6 +140,7 @@ apiRouter.post("/startDojoRecipe.php", startDojoRecipeController);
 apiRouter.post("/startRecipe.php", startRecipeController);
 apiRouter.post("/stepSequencers.php", stepSequencersController);
 apiRouter.post("/syndicateSacrifice.php", syndicateSacrificeController);
+apiRouter.post("/syndicateStandingBonus.php", syndicateStandingBonusController);
 apiRouter.post("/tauntHistory.php", tauntHistoryController);
 apiRouter.post("/trainingResult.php", trainingResultController);
 apiRouter.post("/updateChallengeProgress.php", updateChallengeProgressController);
