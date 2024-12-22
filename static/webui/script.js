@@ -102,7 +102,7 @@ function setLanguage(lang) {
 
 function fetchItemList() {
     window.itemListPromise = new Promise(resolve => {
-        const req = $.get("/custom/getItemLists?lang=" + lang);
+        const req = $.get("/custom/getItemLists?lang=" + window.lang);
         req.done(data => {
             window.archonCrystalUpgrades = data.archonCrystalUpgrades;
 
