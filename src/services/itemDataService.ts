@@ -118,7 +118,6 @@ export const getDict = (lang: string): Record<string, string> => {
     return dict_en;
 };
 
-export const getString = (key: string, lang: string = "en"): string => {
-    const dict = getDict(lang);
+export const getString = (key: string, dict: Record<string, string>): string => {
     return dict[key] ?? key;
 };

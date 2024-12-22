@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { getString } from "@/src/services/itemDataService";
+import { getDict, getString } from "@/src/services/itemDataService";
 import {
     ExportArcanes,
     ExportGear,
@@ -17,7 +17,7 @@ interface ListedItem {
 }
 
 const getItemListsController: RequestHandler = (req, res) => {
-    const lang = typeof req.query.lang == "string" ? req.query.lang : "en";
+    const lang = getDict(typeof req.query.lang == "string" ? req.query.lang : "en");
     const weapons = [];
     const miscitems = [];
     for (const [uniqueName, item] of Object.entries(ExportWeapons)) {
