@@ -9,6 +9,7 @@ import {
     updateCurrency,
     updateSlots
 } from "@/src/services/inventoryService";
+import { getVendorManifestByOid } from "@/src/services/serversideVendorsService";
 import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IPurchaseRequest, SlotPurchase, IInventoryChanges } from "@/src/types/purchaseTypes";
 import { logger } from "@/src/utils/logger";
@@ -32,6 +33,18 @@ export const getStoreItemTypesCategory = (typesItem: string) => {
 export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountId: string) => {
     logger.debug("purchase request", purchaseRequest);
 
+    if (purchaseRequest.PurchaseParams.Source == 7) {
+        const manifest = getVendorManifestByOid(purchaseRequest.PurchaseParams.SourceId!);
+        if (manifest) {
+            const offer = manifest.VendorInfo.ItemManifest.find(
+                x => x.StoreItem == purchaseRequest.PurchaseParams.StoreItem
+            );
+            if (offer) {
+                purchaseRequest.PurchaseParams.Quantity *= offer.QuantityMultiplier;
+            }
+        }
+    }
+
     const purchaseResponse = await handleStoreItemAcquisition(
         purchaseRequest.PurchaseParams.StoreItem,
         accountId,
@@ -53,11 +66,8 @@ export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountI
 
     switch (purchaseRequest.PurchaseParams.Source) {
         case 7:
-            if (!purchaseRequest.PurchaseParams.SourceId) {
-                throw new Error("invalid request source");
-            }
-            if (ExportVendors[purchaseRequest.PurchaseParams.SourceId]) {
-                const vendor = ExportVendors[purchaseRequest.PurchaseParams.SourceId];
+            if (purchaseRequest.PurchaseParams.SourceId! in ExportVendors) {
+                const vendor = ExportVendors[purchaseRequest.PurchaseParams.SourceId!];
                 const offer = vendor.items.find(x => x.storeItem == purchaseRequest.PurchaseParams.StoreItem);
                 if (offer) {
                     const inventory = await getInventory(accountId);
