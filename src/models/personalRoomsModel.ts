@@ -1,6 +1,6 @@
 import { toOid } from "@/src/helpers/inventoryHelpers";
 import { IOrbiter, IPersonalRooms, PersonalRoomsModelType } from "@/src/types/personalRoomsTypes";
-import { IApartment, IGardening, IPlacedDecosDatabase, IPictureFrameInfo } from "@/src/types/shipTypes";
+import { IApartment, IGardening, IPlacedDecosDatabase, IPictureFrameInfo, IRoom } from "@/src/types/shipTypes";
 import { Schema, model } from "mongoose";
 
 const pictureFrameInfoSchema = new Schema<IPictureFrameInfo>(
@@ -44,7 +44,7 @@ placedDecosSchema.set("toJSON", {
     }
 });
 
-const roomSchema = new Schema(
+const roomSchema = new Schema<IRoom>(
     {
         Name: String,
         MaxCapacity: Number,
