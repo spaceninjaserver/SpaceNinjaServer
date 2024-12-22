@@ -14,7 +14,14 @@ import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IPurchaseRequest, IPurchaseResponse, SlotPurchase, IInventoryChanges } from "@/src/types/purchaseTypes";
 import { logger } from "@/src/utils/logger";
 import worldState from "@/static/fixed_responses/worldState.json";
-import { ExportBundles, ExportGear, ExportSyndicates, ExportVendors, TRarity } from "warframe-public-export-plus";
+import {
+    ExportBundles,
+    ExportGear,
+    ExportResources,
+    ExportSyndicates,
+    ExportVendors,
+    TRarity
+} from "warframe-public-export-plus";
 
 export const getStoreItemCategory = (storeItem: string) => {
     const storeItemString = getSubstringFromKeyword(storeItem, "StoreItems/");
@@ -188,6 +195,8 @@ const handleStoreItemAcquisition = async (
         if (!ignorePurchaseQuantity) {
             if (internalName in ExportGear) {
                 quantity *= ExportGear[internalName].purchaseQuantity || 1;
+            } else if (internalName in ExportResources) {
+                quantity *= ExportResources[internalName].purchaseQuantity || 1;
             }
         }
         switch (storeCategory) {
