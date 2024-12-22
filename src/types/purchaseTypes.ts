@@ -5,6 +5,7 @@ export interface IPurchaseRequest {
 
 export interface IPurchaseParams {
     Source: number;
+    SourceId?: string; // for Source 7
     StoreItem: string;
     StorePage: string;
     SearchTerm: string;
