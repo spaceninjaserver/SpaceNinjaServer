@@ -1,15 +1,18 @@
 import { parseSlotPurchaseName } from "@/src/helpers/purchaseHelpers";
 import { getSubstringFromKeyword } from "@/src/helpers/stringHelpers";
 import {
-    addItem,
     addBooster,
+    addItem,
+    addMiscItems,
     combineInventoryChanges,
+    getInventory,
     updateCurrency,
     updateSlots
 } from "@/src/services/inventoryService";
+import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IPurchaseRequest, SlotPurchase, IInventoryChanges } from "@/src/types/purchaseTypes";
 import { logger } from "@/src/utils/logger";
-import { ExportBundles, ExportGear, TRarity } from "warframe-public-export-plus";
+import { ExportBundles, ExportGear, ExportVendors, TRarity } from "warframe-public-export-plus";
 
 export const getStoreItemCategory = (storeItem: string) => {
     const storeItemString = getSubstringFromKeyword(storeItem, "StoreItems/");
@@ -43,11 +46,45 @@ export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountI
         purchaseRequest.PurchaseParams.UsePremium,
         accountId
     );
-
     purchaseResponse.InventoryChanges = {
         ...currencyChanges,
         ...purchaseResponse.InventoryChanges
     };
+
+    switch (purchaseRequest.PurchaseParams.Source) {
+        case 7:
+            if (!purchaseRequest.PurchaseParams.SourceId) {
+                throw new Error("invalid request source");
+            }
+            if (ExportVendors[purchaseRequest.PurchaseParams.SourceId]) {
+                const vendor = ExportVendors[purchaseRequest.PurchaseParams.SourceId];
+                const offer = vendor.items.find(x => x.storeItem == purchaseRequest.PurchaseParams.StoreItem);
+                if (offer) {
+                    const inventory = await getInventory(accountId);
+                    for (const item of offer.itemPrices) {
+                        const invItem: IMiscItem = {
+                            ItemType: item.ItemType,
+                            ItemCount: item.ItemCount * -1
+                        };
+
+                        addMiscItems(inventory, [invItem]);
+
+                        purchaseResponse.InventoryChanges.MiscItems ??= [];
+                        const change = (purchaseResponse.InventoryChanges.MiscItems as IMiscItem[]).find(
+                            x => x.ItemType == item.ItemType
+                        );
+                        if (change) {
+                            change.ItemCount -= item.ItemCount;
+                        } else {
+                            (purchaseResponse.InventoryChanges.MiscItems as IMiscItem[]).push(invItem);
+                        }
+                    }
+
+                    await inventory.save();
+                }
+            }
+            break;
+    }
 
     return purchaseResponse;
 };
