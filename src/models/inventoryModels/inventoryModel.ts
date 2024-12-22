@@ -25,6 +25,7 @@ import {
     IPlayerSkills,
     ISettings,
     IInfestedFoundry,
+    IHelminthResource,
     IConsumedSuit,
     IQuestProgress,
     IQuestKeyDatabase,
@@ -454,10 +455,12 @@ const consumedSchuitsSchema = new Schema<IConsumedSuit>({
     c: colorSchema
 });
 
+const helminthResourceSchema = new Schema<IHelminthResource>({ ItemType: String, Count: Number }, { _id: false });
+
 const infestedFoundrySchema = new Schema<IInfestedFoundry>(
     {
         Name: String,
-        Resources: { type: [typeCountSchema], default: undefined },
+        Resources: { type: [helminthResourceSchema], default: undefined },
         Slots: Number,
         XP: Number,
         ConsumedSuits: { type: [consumedSchuitsSchema], default: undefined },

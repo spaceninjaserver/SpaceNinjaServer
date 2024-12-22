@@ -524,9 +524,15 @@ export interface IFusionTreasure {
     Sockets: number;
 }
 
+// Like ITypeCount except 'Count' instead of 'ItemCount'
+export interface IHelminthResource {
+    ItemType: string;
+    Count: number;
+}
+
 export interface IInfestedFoundry {
     Name?: string;
-    Resources?: ITypeCount[];
+    Resources?: IHelminthResource[];
     Slots?: number;
     XP?: number;
     ConsumedSuits?: IConsumedSuit[];
