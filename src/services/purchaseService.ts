@@ -65,7 +65,7 @@ export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountI
                     for (const item of offer.itemPrices) {
                         const invItem: IMiscItem = {
                             ItemType: item.ItemType,
-                            ItemCount: item.ItemCount * -1
+                            ItemCount: item.ItemCount * purchaseRequest.PurchaseParams.Quantity * -1
                         };
 
                         addMiscItems(inventory, [invItem]);
@@ -75,7 +75,7 @@ export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountI
                             x => x.ItemType == item.ItemType
                         );
                         if (change) {
-                            change.ItemCount -= item.ItemCount;
+                            change.ItemCount += invItem.ItemCount;
                         } else {
                             (purchaseResponse.InventoryChanges.MiscItems as IMiscItem[]).push(invItem);
                         }
@@ -101,7 +101,7 @@ export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountI
                 if (offer.RegularPrice) {
                     const invItem: IMiscItem = {
                         ItemType: "/Lotus/Types/Items/MiscItems/SchismKey",
-                        ItemCount: offer.RegularPrice * -1
+                        ItemCount: offer.RegularPrice * purchaseRequest.PurchaseParams.Quantity * -1
                     };
 
                     addMiscItems(inventory, [invItem]);
@@ -109,7 +109,7 @@ export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountI
                     purchaseResponse.InventoryChanges.MiscItems ??= [];
                     (purchaseResponse.InventoryChanges.MiscItems as IMiscItem[]).push(invItem);
                 } else {
-                    inventory.PrimeTokens -= offer.PrimePrice!;
+                    inventory.PrimeTokens -= offer.PrimePrice! * purchaseRequest.PurchaseParams.Quantity;
                 }
                 await inventory.save();
             }
