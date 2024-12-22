@@ -36,7 +36,8 @@ import {
     ExportCustoms,
     ExportFlavour,
     ExportRecipes,
-    ExportResources
+    ExportResources,
+    ExportUpgrades
 } from "warframe-public-export-plus";
 
 export const createInventory = async (
@@ -169,6 +170,22 @@ export const addItem = async (
         }
         return { InventoryChanges };
     }
+    if (typeName in ExportUpgrades) {
+        const inventory = await getInventory(accountId);
+        const changes = [
+            {
+                ItemType: typeName,
+                ItemCount: quantity
+            }
+        ];
+        addMods(inventory, changes);
+        await inventory.save();
+        return {
+            InventoryChanges: {
+                RawUpgrades: changes
+            }
+        };
+    }
 
     // Path-based duck typing
     switch (typeName.substr(1).split("/")[1]) {
@@ -228,22 +245,6 @@ export const addItem = async (
                     [weaponType]: [weapon]
                 }
             };
-        case "Upgrades": {
-            const inventory = await getInventory(accountId);
-            const changes = [
-                {
-                    ItemType: typeName,
-                    ItemCount: quantity
-                }
-            ];
-            addMods(inventory, changes);
-            await inventory.save();
-            return {
-                InventoryChanges: {
-                    RawUpgrades: changes
-                }
-            };
-        }
         case "Objects": {
             // /Lotus/Objects/Tenno/Props/TnoLisetTextProjector (Note Beacon)
             const inventory = await getInventory(accountId);
