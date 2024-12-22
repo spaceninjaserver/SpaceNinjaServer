@@ -3,6 +3,8 @@ import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getInventory, addMiscItems } from "@/src/services/inventoryService";
 import { IOid } from "@/src/types/commonTypes";
+import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
+import { ExportMisc } from "warframe-public-export-plus";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const infestedFoundryController: RequestHandler = async (req, res) => {
@@ -53,6 +55,57 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             break;
         }
 
+        case "c": {
+            // consume items
+            const request = getJSONfromString(String(req.body)) as IHelminthFeedRequest;
+            const inventory = await getInventory(accountId);
+            inventory.InfestedFoundry ??= {};
+            inventory.InfestedFoundry.Resources ??= [];
+            inventory.InfestedFoundry.XP ??= 0;
+
+            const miscItemChanges: IMiscItem[] = [];
+            let totalPercentagePointsGained = 0;
+
+            for (const contribution of request.ResourceContributions) {
+                const snack = ExportMisc.helminthSnacks[contribution.ItemType];
+
+                // Note: Currently ignoring loss of apetite
+                totalPercentagePointsGained += snack.gain / 0.01;
+                const resource = inventory.InfestedFoundry.Resources.find(x => x.ItemType == snack.type);
+                if (resource) {
+                    resource.Count += Math.trunc(snack.gain * 1000);
+                } else {
+                    inventory.InfestedFoundry.Resources.push({
+                        ItemType: snack.type,
+                        Count: Math.trunc(snack.gain * 1000)
+                    });
+                }
+
+                // tally items for removal
+                const change = miscItemChanges.find(x => x.ItemType == contribution.ItemType);
+                if (change) {
+                    change.ItemCount -= snack.count;
+                } else {
+                    miscItemChanges.push({ ItemType: contribution.ItemType, ItemCount: snack.count * -1 });
+                }
+            }
+
+            inventory.InfestedFoundry.XP += 666 * totalPercentagePointsGained;
+            addMiscItems(inventory, miscItemChanges);
+            await inventory.save();
+
+            res.json({
+                InventoryChanges: {
+                    InfestedFoundry: {
+                        XP: inventory.InfestedFoundry.XP,
+                        Resources: inventory.InfestedFoundry.Resources
+                    }
+                },
+                MiscItems: miscItemChanges
+            });
+            break;
+        }
+
         case "o": // offerings update
             // {"OfferingsIndex":540,"SuitTypes":["/Lotus/Powersuits/PaxDuviricus/PaxDuviricusBaseSuit","/Lotus/Powersuits/Nezha/NezhaBaseSuit","/Lotus/Powersuits/Devourer/DevourerBaseSuit"],"Extra":false}
             res.status(404).end();
@@ -72,6 +125,13 @@ interface IShardInstallRequest {
 
 interface IHelminthNameRequest {
     newName: string;
+}
+
+interface IHelminthFeedRequest {
+    ResourceContributions: {
+        ItemType: string;
+        Date: number; // unix timestamp
+    }[];
 }
 
 const colorToShard: Record<string, string> = {
