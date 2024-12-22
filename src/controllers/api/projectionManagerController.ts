@@ -3,7 +3,6 @@ import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addMiscItems, getInventory } from "@/src/services/inventoryService";
 import { ExportRelics, IRelic } from "warframe-public-export-plus";
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const projectionManagerController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId);

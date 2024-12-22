@@ -4,7 +4,6 @@ import { getInventory } from "@/src/services/inventoryService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { WeaponTypeInternal } from "@/src/services/itemDataService";
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const setWeaponSkillTreeController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId);

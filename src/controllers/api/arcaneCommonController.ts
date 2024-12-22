@@ -4,7 +4,6 @@ import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getInventory, addMods } from "@/src/services/inventoryService";
 import { IOid } from "@/src/types/commonTypes";
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const arcaneCommonController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const json = getJSONfromString(String(req.body)) as IArcaneCommonRequest;

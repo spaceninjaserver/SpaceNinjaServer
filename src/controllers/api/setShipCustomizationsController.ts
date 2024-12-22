@@ -3,7 +3,6 @@ import { ISetShipCustomizationsRequest } from "@/src/types/shipTypes";
 import { logger } from "@/src/utils/logger";
 import { RequestHandler } from "express";
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const setShipCustomizationsController: RequestHandler = async (req, res) => {
     try {
         const setShipCustomizationsRequest = JSON.parse(req.body as string) as ISetShipCustomizationsRequest;

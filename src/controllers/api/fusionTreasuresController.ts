@@ -18,7 +18,6 @@ const parseFusionTreasure = (name: string, count: number): IFusionTreasure => {
     };
 };
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const fusionTreasuresController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId);

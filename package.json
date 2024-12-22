@@ -14,7 +14,7 @@
   "license": "GNU",
   "dependencies": {
     "copyfiles": "^2.4.1",
-    "express": "^5.0.0-beta.3",
+    "express": "^5",
     "mongoose": "^8.9.2",
     "warframe-public-export-plus": "^0.5.8",
     "warframe-riven-info": "^0.1.2",
@@ -22,7 +22,7 @@
     "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
-    "@types/express": "^4.17.20",
+    "@types/express": "^5",
     "@types/morgan": "^1.9.9",
     "@typescript-eslint/eslint-plugin": "^7.14",
     "@typescript-eslint/parser": "^7.18",

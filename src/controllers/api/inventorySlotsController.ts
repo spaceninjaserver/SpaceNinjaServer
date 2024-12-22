@@ -18,7 +18,6 @@ import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
     number of frames = extra - slots + 2
 */
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const inventorySlotsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     //const body = JSON.parse(req.body as string) as IInventorySlotsRequest;

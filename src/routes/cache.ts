@@ -12,7 +12,6 @@ cacheRouter.get(/^\/origin\/[a-zA-Z0-9]+\/[0-9]+\/H\.Cache\.bin.*$/, (req, res) 
     }
 });
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 cacheRouter.get(/\.bk2!/, async (req, res) => {
     try {
         const dir = req.path.substr(0, req.path.lastIndexOf("/"));

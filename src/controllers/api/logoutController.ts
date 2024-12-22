@@ -2,7 +2,6 @@ import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { Account } from "@/src/models/loginModel";
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 const logoutController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const account = await Account.findOne({ _id: accountId });

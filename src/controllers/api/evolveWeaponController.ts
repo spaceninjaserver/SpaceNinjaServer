@@ -5,7 +5,6 @@ import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { WeaponTypeInternal } from "@/src/services/itemDataService";
 import { EquipmentFeatures } from "@/src/types/inventoryTypes/commonInventoryTypes";
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const evolveWeaponController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId);

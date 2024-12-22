@@ -13,7 +13,6 @@ export interface IClaimCompletedRecipeRequest {
     RecipeIds: IOid[];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const claimCompletedRecipeController: RequestHandler = async (req, res) => {
     const claimCompletedRecipeRequest = getJSONfromString(String(req.body)) as IClaimCompletedRecipeRequest;
     const accountId = await getAccountIdForRequest(req);

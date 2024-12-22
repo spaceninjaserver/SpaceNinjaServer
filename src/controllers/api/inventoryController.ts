@@ -9,7 +9,6 @@ import { IShipInventory, equipmentKeys } from "@/src/types/inventoryTypes/invent
 import { IPolarity, ArtifactPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { ExportCustoms, ExportFlavour, ExportKeys, ExportRegions, ExportResources } from "warframe-public-export-plus";
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 const inventoryController: RequestHandler = async (request, response) => {
     let account;
     try {
