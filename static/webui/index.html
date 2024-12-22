@@ -7,18 +7,40 @@
     <link rel="stylesheet" href="/webui/style.css" />
 </head>
 <body>
-    <nav class="navbar sticky-top bg-body-tertiary">
+    <nav class="navbar navbar-expand sticky-top bg-body-tertiary">
         <div class="container">
             <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar" aria-label="Toggle sidebar">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <a class="navbar-brand">OpenWF WebUI</a>
-            <div class="nav-item dropdown">
-                <button class="nav-link dropdown-toggle displayname" data-bs-toggle="dropdown" aria-expanded="false"></button>
-                <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="/webui/" onclick="logout();">Logout</a></li>
-                </ul>
-            </div>
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item dropdown">
+                    <button id="active-lang-name" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item active" href="#" data-lang="en" onclick="event.preventDefault();setLanguage('en');">English</a></li>
+                        <li><a class="dropdown-item" href="#" data-lang="de" onclick="event.preventDefault();setLanguage('de');">Deutsch</a></li>
+                        <li><a class="dropdown-item" href="#" data-lang="es" onclick="event.preventDefault();setLanguage('es');">Español</a></li>
+                        <li><a class="dropdown-item" href="#" data-lang="fr" onclick="event.preventDefault();setLanguage('fr');">Français</a></li>
+                        <li><a class="dropdown-item" href="#" data-lang="it" onclick="event.preventDefault();setLanguage('it');">Italiano</a></li>
+                        <li><a class="dropdown-item" href="#" data-lang="ja" onclick="event.preventDefault();setLanguage('ja');">日本語</a></li>
+                        <li><a class="dropdown-item" href="#" data-lang="ko" onclick="event.preventDefault();setLanguage('ko');">한국어</a></li>
+                        <li><a class="dropdown-item" href="#" data-lang="pl" onclick="event.preventDefault();setLanguage('pl');">Polski</a></li>
+                        <li><a class="dropdown-item" href="#" data-lang="pt" onclick="event.preventDefault();setLanguage('pt');">Português</a></li>
+                        <li><a class="dropdown-item" href="#" data-lang="ru" onclick="event.preventDefault();setLanguage('ru');">Русский</a></li>
+                        <li><a class="dropdown-item" href="#" data-lang="tr" onclick="event.preventDefault();setLanguage('tr');">Türkçe</a></li>
+                        <li><a class="dropdown-item" href="#" data-lang="uk" onclick="event.preventDefault();setLanguage('uk');">Українська</a></li>
+                        <li><a class="dropdown-item" href="#" data-lang="zh" onclick="event.preventDefault();setLanguage('zh');">简体中文</a></li>
+                        <li><a class="dropdown-item" href="#" data-lang="tc" onclick="event.preventDefault();setLanguage('tc');">繁體中文</a></li>
+                        <li><a class="dropdown-item" href="#" data-lang="th" onclick="event.preventDefault();setLanguage('th');">แบบไทย</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <button class="nav-link dropdown-toggle displayname" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="/webui/" onclick="logout();">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
     </nav>
     <div class="container pt-3 pb-3" id="main-view">
