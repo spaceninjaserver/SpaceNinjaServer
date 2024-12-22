@@ -65,19 +65,19 @@ export const loginController: RequestHandler = async (request, response) => {
     response.json(createLoginResponse(account.toJSON(), buildLabel));
 };
 
-const createLoginResponse = (acct: IDatabaseAccountDocument, buildLabel: string): ILoginResponse => {
+const createLoginResponse = (account: IDatabaseAccountDocument, buildLabel: string): ILoginResponse => {
     return {
-        id: acct.id,
-        DisplayName: acct.DisplayName,
-        CountryCode: acct.CountryCode,
-        ClientType: acct.ClientType,
-        CrossPlatformAllowed: acct.CrossPlatformAllowed,
-        ForceLogoutVersion: acct.ForceLogoutVersion,
-        AmazonAuthToken: acct.AmazonAuthToken,
-        AmazonRefreshToken: acct.AmazonRefreshToken,
-        ConsentNeeded: acct.ConsentNeeded,
-        TrackedSettings: acct.TrackedSettings,
-        Nonce: acct.Nonce,
+        id: account.id,
+        DisplayName: account.DisplayName,
+        CountryCode: account.CountryCode,
+        ClientType: account.ClientType,
+        CrossPlatformAllowed: account.CrossPlatformAllowed,
+        ForceLogoutVersion: account.ForceLogoutVersion,
+        AmazonAuthToken: account.AmazonAuthToken,
+        AmazonRefreshToken: account.AmazonRefreshToken,
+        ConsentNeeded: account.ConsentNeeded,
+        TrackedSettings: account.TrackedSettings,
+        Nonce: account.Nonce,
         Groups: groups,
         platformCDNs: platformCDNs,
         NRS: [config.myAddress],
