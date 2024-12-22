@@ -35,6 +35,7 @@ import {
     ExportBoosterPacks,
     ExportCustoms,
     ExportFlavour,
+    ExportGear,
     ExportRecipes,
     ExportResources,
     ExportUpgrades
@@ -186,6 +187,22 @@ export const addItem = async (
             }
         };
     }
+    if (typeName in ExportGear) {
+        const inventory = await getInventory(accountId);
+        const consumablesChanges = [
+            {
+                ItemType: typeName,
+                ItemCount: quantity
+            } satisfies IConsumable
+        ];
+        addConsumables(inventory, consumablesChanges);
+        await inventory.save();
+        return {
+            InventoryChanges: {
+                Consumables: consumablesChanges
+            }
+        };
+    }
 
     // Path-based duck typing
     switch (typeName.substr(1).split("/")[1]) {
@@ -329,21 +346,6 @@ export const addItem = async (
                         };
                     }
                     break;
-                case "Restoratives": // Codex Scanner, Remote Observer, Starburst
-                    const inventory = await getInventory(accountId);
-                    const consumablesChanges = [
-                        {
-                            ItemType: typeName,
-                            ItemCount: quantity
-                        } satisfies IConsumable
-                    ];
-                    addConsumables(inventory, consumablesChanges);
-                    await inventory.save();
-                    return {
-                        InventoryChanges: {
-                            Consumables: consumablesChanges
-                        }
-                    };
             }
             break;
     }
