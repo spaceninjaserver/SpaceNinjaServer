@@ -1,4 +1,18 @@
-export interface ILoginResponse extends Omit<IDatabaseAccountDocument, "email" | "password"> {
+export interface IAccountAndLoginResponseCommons {
+    DisplayName: string;
+    CountryCode: string;
+    ClientType: string;
+    CrossPlatformAllowed: boolean;
+    ForceLogoutVersion: number;
+    AmazonAuthToken?: string;
+    AmazonRefreshToken?: string;
+    ConsentNeeded: boolean;
+    TrackedSettings: string[];
+    Nonce: number;
+}
+
+export interface ILoginResponse extends IAccountAndLoginResponseCommons {
+    id: string;
     Groups: IGroup[];
     BuildLabel: string;
     MatchmakingBuildId: string;
@@ -19,19 +33,9 @@ export interface IGroup {
     experimentGroup: string;
 }
 
-export interface IDatabaseAccount {
+export interface IDatabaseAccount extends IAccountAndLoginResponseCommons {
     email: string;
     password: string;
-    DisplayName: string;
-    CountryCode: string;
-    ClientType: string;
-    CrossPlatformAllowed: boolean;
-    ForceLogoutVersion: number;
-    AmazonAuthToken?: string;
-    AmazonRefreshToken?: string;
-    ConsentNeeded: boolean;
-    TrackedSettings: string[];
-    Nonce: number;
     LastLoginDay?: number;
 }
 
