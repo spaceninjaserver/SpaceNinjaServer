@@ -11,10 +11,10 @@ import {
 } from "@/src/services/inventoryService";
 import { getVendorManifestByOid } from "@/src/services/serversideVendorsService";
 import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
-import { IPurchaseRequest, SlotPurchase, IInventoryChanges } from "@/src/types/purchaseTypes";
+import { IPurchaseRequest, IPurchaseResponse, SlotPurchase, IInventoryChanges } from "@/src/types/purchaseTypes";
 import { logger } from "@/src/utils/logger";
 import worldState from "@/static/fixed_responses/worldState.json";
-import { ExportBundles, ExportGear, ExportVendors, TRarity } from "warframe-public-export-plus";
+import { ExportBundles, ExportGear, ExportSyndicates, ExportVendors, TRarity } from "warframe-public-export-plus";
 
 export const getStoreItemCategory = (storeItem: string) => {
     const storeItemString = getSubstringFromKeyword(storeItem, "StoreItems/");
@@ -66,6 +66,29 @@ export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountI
     };
 
     switch (purchaseRequest.PurchaseParams.Source) {
+        case 2:
+            if (!purchaseRequest.PurchaseParams.UseFreeFavor!) {
+                const syndicateTag = purchaseRequest.PurchaseParams.SyndicateTag!;
+                const syndicate = ExportSyndicates[syndicateTag];
+                if (syndicate) {
+                    const favour = syndicate.favours.find(x => x.storeItem == purchaseRequest.PurchaseParams.StoreItem);
+                    if (favour) {
+                        const inventory = await getInventory(accountId);
+                        const affiliation = inventory.Affiliations.find(x => x.Tag == syndicateTag);
+                        if (affiliation) {
+                            purchaseResponse.Standing = [
+                                {
+                                    Tag: syndicateTag,
+                                    Standing: favour.standingCost
+                                }
+                            ];
+                            affiliation.Standing -= favour.standingCost;
+                            await inventory.save();
+                        }
+                    }
+                }
+            }
+            break;
         case 7:
             if (purchaseRequest.PurchaseParams.SourceId! in ExportVendors) {
                 const vendor = ExportVendors[purchaseRequest.PurchaseParams.SourceId!];
@@ -136,7 +159,7 @@ const handleStoreItemAcquisition = async (
     quantity: number,
     durability: TRarity,
     ignorePurchaseQuantity: boolean = false
-): Promise<{ InventoryChanges: IInventoryChanges }> => {
+): Promise<IPurchaseResponse> => {
     let purchaseResponse = {
         InventoryChanges: {}
     };

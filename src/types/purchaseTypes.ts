@@ -13,9 +13,19 @@ export interface IPurchaseParams {
     Quantity: number;
     UsePremium: boolean;
     ExpectedPrice: number;
+    SyndicateTag?: string; // for Source 2
+    UseFreeFavor?: boolean; // for Source 2
 }
 
 export type IInventoryChanges = Record<string, IBinChanges | object[]>;
+
+export interface IPurchaseResponse {
+    InventoryChanges: IInventoryChanges;
+    Standing?: {
+        Tag: string;
+        Standing: number;
+    }[];
+}
 
 export type IBinChanges = {
     count: number;
