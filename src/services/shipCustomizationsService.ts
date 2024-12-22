@@ -37,7 +37,12 @@ export const handleSetShipDecorations = async (
 ): Promise<IShipDecorationsResponse> => {
     const personalRooms = await getPersonalRooms(accountId);
 
-    const rooms = placedDecoration.IsApartment ? personalRooms.Apartment.Rooms : personalRooms.Ship.Rooms;
+    const rooms =
+        placedDecoration.BootLocation == "SHOP"
+            ? personalRooms.TailorShop.Rooms
+            : placedDecoration.IsApartment
+              ? personalRooms.Apartment.Rooms
+              : personalRooms.Ship.Rooms;
 
     const roomToPlaceIn = rooms.find(room => room.Name === placedDecoration.Room);
 

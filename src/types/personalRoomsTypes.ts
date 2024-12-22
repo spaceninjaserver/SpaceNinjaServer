@@ -1,9 +1,9 @@
-import { IApartment, IRooms, IPlacedDecosDatabase, TBootLocation } from "@/src/types/shipTypes";
+import { IApartment, IRoom, IPlacedDecosDatabase, ITailorShop, TBootLocation } from "@/src/types/shipTypes";
 import { Model, Types } from "mongoose";
 
 export interface IOrbiter {
     Features: string[];
-    Rooms: IRooms[];
+    Rooms: IRoom[];
     ContentUrlSignature: string;
     BootLocation?: TBootLocation;
 }
@@ -13,6 +13,7 @@ export interface IPersonalRooms {
     activeShipId: Types.ObjectId;
     Ship: IOrbiter;
     Apartment: IApartment;
+    TailorShop: ITailorShop;
 }
 
 export type RoomsType = { Name: string; MaxCapacity: number; PlacedDecos: Types.DocumentArray<IPlacedDecosDatabase> };
@@ -22,6 +23,9 @@ export type PersonalRoomsDocumentProps = {
         Rooms: RoomsType[];
     };
     Apartment: Omit<IApartment, "Rooms"> & {
+        Rooms: RoomsType[];
+    };
+    TailorShop: Omit<ITailorShop, "Rooms"> & {
         Rooms: RoomsType[];
     };
 };

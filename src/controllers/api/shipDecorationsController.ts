@@ -13,7 +13,7 @@ export const shipDecorationsController: RequestHandler = async (req, res) => {
         res.send(placedDecoration);
     } catch (error: unknown) {
         if (error instanceof Error) {
-            logger.error(`error in saveLoadoutController: ${error.message}`);
+            logger.error(`error in shipDecorationsController: ${error.message}`);
             res.status(400).json({ error: error.message });
         }
     }

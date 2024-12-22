@@ -1,6 +1,14 @@
 import { toOid } from "@/src/helpers/inventoryHelpers";
 import { IOrbiter, IPersonalRooms, PersonalRoomsModelType } from "@/src/types/personalRoomsTypes";
-import { IApartment, IGardening, IPlacedDecosDatabase, IPictureFrameInfo } from "@/src/types/shipTypes";
+import {
+    IApartment,
+    IFavouriteLoadoutDatabase,
+    IGardening,
+    IPlacedDecosDatabase,
+    IPictureFrameInfo,
+    IRoom,
+    ITailorShopDatabase
+} from "@/src/types/shipTypes";
 import { Schema, model } from "mongoose";
 
 const pictureFrameInfoSchema = new Schema<IPictureFrameInfo>(
@@ -44,7 +52,7 @@ placedDecosSchema.set("toJSON", {
     }
 });
 
-const roomSchema = new Schema(
+const roomSchema = new Schema<IRoom>(
     {
         Name: String,
         MaxCapacity: Number,
@@ -76,11 +84,59 @@ const orbiterSchema = new Schema<IOrbiter>(
     { _id: false }
 );
 
+const favouriteLoadoutSchema = new Schema<IFavouriteLoadoutDatabase>(
+    {
+        Tag: String,
+        LoadoutId: Schema.Types.ObjectId
+    },
+    { _id: false }
+);
+favouriteLoadoutSchema.set("toJSON", {
+    virtuals: true,
+    transform(_document, returnedObject) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        returnedObject.LoadoutId = toOid(returnedObject.LoadoutId);
+    }
+});
+
+const tailorShopSchema = new Schema<ITailorShopDatabase>(
+    {
+        FavouriteLoadouts: [favouriteLoadoutSchema],
+        CustomJson: String,
+        LevelDecosVisible: Boolean,
+        Rooms: [roomSchema]
+    },
+    { _id: false }
+);
+const tailorShopDefault: ITailorShopDatabase = {
+    FavouriteLoadouts: [],
+    CustomJson: "{}",
+    LevelDecosVisible: true,
+    Rooms: [
+        {
+            Name: "LabRoom",
+            MaxCapacity: 4000
+        },
+        {
+            Name: "LivingQuartersRoom",
+            MaxCapacity: 3000
+        },
+        {
+            Name: "HelminthRoom",
+            MaxCapacity: 2000
+        }
+    ]
+};
+
 export const personalRoomsSchema = new Schema<IPersonalRooms>({
     personalRoomsOwnerId: Schema.Types.ObjectId,
     activeShipId: Schema.Types.ObjectId,
     Ship: orbiterSchema,
-    Apartment: apartmentSchema
+    Apartment: apartmentSchema,
+    TailorShop: {
+        type: tailorShopSchema,
+        default: tailorShopDefault as any as undefined // Yeah, this is bad, but mongoose types here are wrong.
+    }
 });
 
 export const PersonalRooms = model<IPersonalRooms, PersonalRoomsModelType>("PersonalRooms", personalRoomsSchema);
