@@ -70,7 +70,7 @@ export interface IPlacedDecosDatabase {
     Type: string;
     Pos: [number, number, number];
     Rot: [number, number, number];
-    Scale: number;
+    Scale?: number;
     PictureFrameInfo?: IPictureFrameInfo;
     _id: Types.ObjectId;
 }
