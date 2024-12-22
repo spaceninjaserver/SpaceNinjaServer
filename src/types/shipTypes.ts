@@ -26,7 +26,7 @@ export interface IShip {
     Features: string[];
     ShipId: IOid;
     ShipInterior: IShipInterior;
-    Rooms: IRooms[];
+    Rooms: IRoom[];
     ContentUrlSignature: string;
     BootLocation?: TBootLocation;
 }
@@ -41,7 +41,7 @@ export interface IShipDatabase {
     SkinFlavourItem?: string;
 }
 
-export interface IRooms {
+export interface IRoom {
     Name: string;
     MaxCapacity: number;
     PlacedDecos?: IPlacedDecosDatabase[];
@@ -62,7 +62,7 @@ export interface IGardening {
 }
 export interface IApartment {
     Gardening: IGardening;
-    Rooms: IRooms[];
+    Rooms: IRoom[];
     FavouriteLoadouts: string[];
 }
 
