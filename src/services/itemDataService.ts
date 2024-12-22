@@ -86,20 +86,34 @@ export const getSuitByUniqueName = (uniqueName: string): IPowersuit | undefined 
 
 export const getDict = (lang: string): Record<string, string> => {
     switch (lang) {
-    case "de": return dict_de;
-    case "es": return dict_es;
-    case "fr": return dict_fr;
-    case "it": return dict_it;
-    case "ja": return dict_ja;
-    case "ko": return dict_ko;
-    case "pl": return dict_pl;
-    case "pt": return dict_pt;
-    case "ru": return dict_ru;
-    case "tc": return dict_tc;
-    case "th": return dict_th;
-    case "tr": return dict_tr;
-    case "uk": return dict_uk;
-    case "zh": return dict_zh;
+        case "de":
+            return dict_de;
+        case "es":
+            return dict_es;
+        case "fr":
+            return dict_fr;
+        case "it":
+            return dict_it;
+        case "ja":
+            return dict_ja;
+        case "ko":
+            return dict_ko;
+        case "pl":
+            return dict_pl;
+        case "pt":
+            return dict_pt;
+        case "ru":
+            return dict_ru;
+        case "tc":
+            return dict_tc;
+        case "th":
+            return dict_th;
+        case "tr":
+            return dict_tr;
+        case "uk":
+            return dict_uk;
+        case "zh":
+            return dict_zh;
     }
     return dict_en;
 };
