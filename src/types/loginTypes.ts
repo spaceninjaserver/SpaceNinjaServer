@@ -24,7 +24,7 @@ export interface ILoginResponse extends IAccountAndLoginResponseCommons {
 }
 
 // Includes virtual ID
-export interface IDatabaseAccountDocument extends IDatabaseAccount {
+export interface IDatabaseAccountJson extends IDatabaseAccount {
     id: string;
 }
 

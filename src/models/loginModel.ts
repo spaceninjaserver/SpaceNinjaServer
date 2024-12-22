@@ -1,4 +1,4 @@
-import { IDatabaseAccountDocument } from "@/src/types/loginTypes";
+import { IDatabaseAccountJson } from "@/src/types/loginTypes";
 import { model, Schema, SchemaOptions } from "mongoose";
 
 const opts = {
@@ -20,7 +20,7 @@ const opts = {
 //   }
 // }
 
-const databaseAccountSchema = new Schema<IDatabaseAccountDocument>(
+const databaseAccountSchema = new Schema<IDatabaseAccountJson>(
     {
         email: { type: String, required: true, unique: true },
         password: { type: String, required: true },
@@ -48,4 +48,4 @@ databaseAccountSchema.set("toJSON", {
     virtuals: true
 });
 
-export const Account = model<IDatabaseAccountDocument>("Account", databaseAccountSchema);
+export const Account = model<IDatabaseAccountJson>("Account", databaseAccountSchema);

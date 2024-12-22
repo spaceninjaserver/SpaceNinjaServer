@@ -7,7 +7,7 @@ import buildConfig from "@/static/data/buildConfig.json";
 import { toLoginRequest } from "@/src/helpers/loginHelpers";
 import { Account } from "@/src/models/loginModel";
 import { createAccount, isCorrectPassword } from "@/src/services/loginService";
-import { IDatabaseAccountDocument, ILoginResponse } from "@/src/types/loginTypes";
+import { IDatabaseAccountJson, ILoginResponse } from "@/src/types/loginTypes";
 import { DTLS, groups, HUB, platformCDNs } from "@/static/fixed_responses/login_static";
 import { logger } from "@/src/utils/logger";
 
@@ -65,7 +65,7 @@ export const loginController: RequestHandler = async (request, response) => {
     response.json(createLoginResponse(account.toJSON(), buildLabel));
 };
 
-const createLoginResponse = (account: IDatabaseAccountDocument, buildLabel: string): ILoginResponse => {
+const createLoginResponse = (account: IDatabaseAccountJson, buildLabel: string): ILoginResponse => {
     return {
         id: account.id,
         DisplayName: account.DisplayName,
