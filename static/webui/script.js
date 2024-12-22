@@ -84,52 +84,71 @@ single.on("route_load", function (event) {
     }
 });
 
-window.itemListPromise = new Promise(resolve => {
-    const req = $.get("/custom/getItemLists");
-    req.done(data => {
-        window.archonCrystalUpgrades = data.archonCrystalUpgrades;
+function setActiveLanguage(lang) {
+    window.lang = lang;
+    const lang_name = document.querySelector("[data-lang=" + lang + "]").textContent;
+    document.getElementById("active-lang-name").textContent = lang_name;
+    document.querySelector("[data-lang].active").classList.remove("active");
+    document.querySelector("[data-lang=" + lang + "]").classList.add("active");
+}
+setActiveLanguage(localStorage.getItem("lang") ?? "en");
 
-        const itemMap = {
-            // Generics for rivens
-            "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun": { name: "Archgun" },
-            "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon": { name: "Melee" },
-            "/Lotus/Weapons/Tenno/Pistol/LotusPistol": { name: "Pistol" },
-            "/Lotus/Weapons/Tenno/Rifle/LotusRifle": { name: "Rifle" },
-            "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun": { name: "Shotgun" },
-            // Modular weapons
-            "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryBeam": { name: "Kitgun" },
-            "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary": { name: "Kitgun" },
-            "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryBeam": { name: "Kitgun" },
-            "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryShotgun": { name: "Kitgun" },
-            "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon": { name: "Zaw" },
-            // Missing in data sources
-            "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/CyoteMod": { name: "Traumatic Peculiar" }
-        };
-        for (const [type, items] of Object.entries(data)) {
-            if (type == "archonCrystalUpgrades") {
-                Object.entries(items).forEach(([uniqueName, name]) => {
-                    const option = document.createElement("option");
-                    option.setAttribute("data-key", uniqueName);
-                    option.value = name;
-                    document.getElementById("datalist-" + type).appendChild(option);
-                });
-            } else if (type != "badItems") {
-                items.forEach(item => {
-                    if (item.uniqueName in data.badItems) {
-                        item.name += " (Imposter)";
-                    } else if (item.uniqueName.substr(0, 18) != "/Lotus/Types/Game/") {
+function setLanguage(lang) {
+    setActiveLanguage(lang);
+    localStorage.setItem("lang", lang);
+    fetchItemList();
+    updateInventory();
+}
+
+function fetchItemList() {
+    window.itemListPromise = new Promise(resolve => {
+        const req = $.get("/custom/getItemLists?lang=" + window.lang);
+        req.done(data => {
+            window.archonCrystalUpgrades = data.archonCrystalUpgrades;
+
+            const itemMap = {
+                // Generics for rivens
+                "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun": { name: "Archgun" },
+                "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon": { name: "Melee" },
+                "/Lotus/Weapons/Tenno/Pistol/LotusPistol": { name: "Pistol" },
+                "/Lotus/Weapons/Tenno/Rifle/LotusRifle": { name: "Rifle" },
+                "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun": { name: "Shotgun" },
+                // Modular weapons
+                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryBeam": { name: "Kitgun" },
+                "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary": { name: "Kitgun" },
+                "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryBeam": { name: "Kitgun" },
+                "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryShotgun": { name: "Kitgun" },
+                "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon": { name: "Zaw" },
+                // Missing in data sources
+                "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/CyoteMod": { name: "Traumatic Peculiar" }
+            };
+            for (const [type, items] of Object.entries(data)) {
+                if (type == "archonCrystalUpgrades") {
+                    Object.entries(items).forEach(([uniqueName, name]) => {
                         const option = document.createElement("option");
-                        option.setAttribute("data-key", item.uniqueName);
-                        option.value = item.name;
+                        option.setAttribute("data-key", uniqueName);
+                        option.value = name;
                         document.getElementById("datalist-" + type).appendChild(option);
-                    }
-                    itemMap[item.uniqueName] = { ...item, type };
-                });
+                    });
+                } else if (type != "badItems") {
+                    items.forEach(item => {
+                        if (item.uniqueName in data.badItems) {
+                            item.name += " (Imposter)";
+                        } else if (item.uniqueName.substr(0, 18) != "/Lotus/Types/Game/") {
+                            const option = document.createElement("option");
+                            option.setAttribute("data-key", item.uniqueName);
+                            option.value = item.name;
+                            document.getElementById("datalist-" + type).appendChild(option);
+                        }
+                        itemMap[item.uniqueName] = { ...item, type };
+                    });
+                }
             }
-        }
-        resolve(itemMap);
+            resolve(itemMap);
+        });
     });
-});
+}
+fetchItemList();
 
 function updateInventory() {
     const req = $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1");

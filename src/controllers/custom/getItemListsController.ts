@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { getEnglishString } from "@/src/services/itemDataService";
+import { getDict, getString } from "@/src/services/itemDataService";
 import {
     ExportArcanes,
     ExportGear,
@@ -16,7 +16,8 @@ interface ListedItem {
     fusionLimit?: number;
 }
 
-const getItemListsController: RequestHandler = (_req, res) => {
+const getItemListsController: RequestHandler = (req, res) => {
+    const lang = getDict(typeof req.query.lang == "string" ? req.query.lang : "en");
     const weapons = [];
     const miscitems = [];
     for (const [uniqueName, item] of Object.entries(ExportWeapons)) {
@@ -24,12 +25,12 @@ const getItemListsController: RequestHandler = (_req, res) => {
             if (item.totalDamage !== 0) {
                 weapons.push({
                     uniqueName,
-                    name: getEnglishString(item.name)
+                    name: getString(item.name, lang)
                 });
             } else if (!item.excludeFromCodex) {
                 miscitems.push({
                     uniqueName: "MiscItems:" + uniqueName,
-                    name: getEnglishString(item.name)
+                    name: getString(item.name, lang)
                 });
             }
         }
@@ -37,13 +38,13 @@ const getItemListsController: RequestHandler = (_req, res) => {
     for (const [uniqueName, item] of Object.entries(ExportResources)) {
         miscitems.push({
             uniqueName: item.productCategory + ":" + uniqueName,
-            name: getEnglishString(item.name)
+            name: getString(item.name, lang)
         });
     }
     for (const [uniqueName, item] of Object.entries(ExportGear)) {
         miscitems.push({
             uniqueName: "Consumables:" + uniqueName,
-            name: getEnglishString(item.name)
+            name: getString(item.name, lang)
         });
     }
 
@@ -52,7 +53,7 @@ const getItemListsController: RequestHandler = (_req, res) => {
     for (const [uniqueName, upgrade] of Object.entries(ExportUpgrades)) {
         mods.push({
             uniqueName,
-            name: getEnglishString(upgrade.name),
+            name: getString(upgrade.name, lang),
             fusionLimit: upgrade.fusionLimit
         });
         if (upgrade.isStarter || upgrade.isFrivolous || upgrade.upgradeEntries) {
@@ -62,7 +63,7 @@ const getItemListsController: RequestHandler = (_req, res) => {
     for (const [uniqueName, arcane] of Object.entries(ExportArcanes)) {
         mods.push({
             uniqueName,
-            name: getEnglishString(arcane.name)
+            name: getString(arcane.name, lang)
         });
         if (arcane.isFrivolous) {
             badItems[uniqueName] = true;
@@ -75,7 +76,7 @@ const getItemListsController: RequestHandler = (_req, res) => {
             .map(([uniqueName, warframe]) => {
                 return {
                     uniqueName,
-                    name: getEnglishString(warframe.name)
+                    name: getString(warframe.name, lang)
                 };
             }),
         weapons,
