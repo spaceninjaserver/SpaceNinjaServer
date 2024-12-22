@@ -12,6 +12,7 @@ import {
 import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IPurchaseRequest, SlotPurchase, IInventoryChanges } from "@/src/types/purchaseTypes";
 import { logger } from "@/src/utils/logger";
+import worldState from "@/static/fixed_responses/worldState.json";
 import { ExportBundles, ExportGear, ExportVendors, TRarity } from "warframe-public-export-plus";
 
 export const getStoreItemCategory = (storeItem: string) => {
@@ -82,6 +83,35 @@ export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountI
 
                     await inventory.save();
                 }
+            }
+            break;
+        case 18:
+            if (purchaseRequest.PurchaseParams.SourceId! != worldState.PrimeVaultTraders[0]._id.$oid) {
+                throw new Error("invalid request source");
+            }
+            const offer =
+                worldState.PrimeVaultTraders[0].Manifest.find(
+                    x => x.ItemType == purchaseRequest.PurchaseParams.StoreItem
+                ) ??
+                worldState.PrimeVaultTraders[0].EvergreenManifest.find(
+                    x => x.ItemType == purchaseRequest.PurchaseParams.StoreItem
+                );
+            if (offer) {
+                const inventory = await getInventory(accountId);
+                if (offer.RegularPrice) {
+                    const invItem: IMiscItem = {
+                        ItemType: "/Lotus/Types/Items/MiscItems/SchismKey",
+                        ItemCount: offer.RegularPrice * -1
+                    };
+
+                    addMiscItems(inventory, [invItem]);
+
+                    purchaseResponse.InventoryChanges.MiscItems ??= [];
+                    (purchaseResponse.InventoryChanges.MiscItems as IMiscItem[]).push(invItem);
+                } else {
+                    inventory.PrimeTokens -= offer.PrimePrice!;
+                }
+                await inventory.save();
             }
             break;
     }
