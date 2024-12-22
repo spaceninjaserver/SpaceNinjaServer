@@ -93,7 +93,7 @@ export const handleSetShipDecorations = async (
             Type: placedDecoration.Type,
             Pos: placedDecoration.Pos,
             Rot: placedDecoration.Rot,
-            Scale: placedDecoration.Scale || 1,
+            Scale: placedDecoration.Scale,
             _id: placedDecoration.MoveId
         };
 
@@ -129,7 +129,7 @@ export const handleSetShipDecorations = async (
         Type: placedDecoration.Type,
         Pos: placedDecoration.Pos,
         Rot: placedDecoration.Rot,
-        Scale: placedDecoration.Scale || 1,
+        Scale: placedDecoration.Scale,
         _id: decoId
     });
 
