@@ -605,6 +605,8 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         PremiumCreditsFree: Number,
         //Endo
         FusionPoints: Number,
+        //Regal Aya
+        PrimeTokens: Number,
 
         //Slots
         SuitBin: slotsBinSchema,

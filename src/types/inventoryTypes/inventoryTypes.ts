@@ -125,6 +125,7 @@ export interface IInventoryResponse {
     PremiumCredits: number;
     PremiumCreditsFree: number;
     FusionPoints: number;
+    PrimeTokens: number;
     SuitBin: ISlots;
     WeaponBin: ISlots;
     SentinelBin: ISlots;
