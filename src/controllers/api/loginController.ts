@@ -7,11 +7,11 @@ import buildConfig from "@/static/data/buildConfig.json";
 import { toLoginRequest } from "@/src/helpers/loginHelpers";
 import { Account } from "@/src/models/loginModel";
 import { createAccount, isCorrectPassword } from "@/src/services/loginService";
-import { ILoginResponse } from "@/src/types/loginTypes";
+import { IDatabaseAccountJson, ILoginResponse } from "@/src/types/loginTypes";
 import { DTLS, groups, HUB, platformCDNs } from "@/static/fixed_responses/login_static";
 import { logger } from "@/src/utils/logger";
 
-const loginController: RequestHandler = async (request, response) => {
+export const loginController: RequestHandler = async (request, response) => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument
     const body = JSON.parse(request.body); // parse octet stream of json data to json object
     const loginRequest = toLoginRequest(body);
@@ -39,21 +39,7 @@ const loginController: RequestHandler = async (request, response) => {
                 Nonce: nonce
             });
             logger.debug("created new account");
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const { email, password, LastLoginDay, ...databaseAccount } = newAccount;
-            const newLoginResponse: ILoginResponse = {
-                ...databaseAccount,
-                Groups: groups,
-                platformCDNs: platformCDNs,
-                NRS: [config.myAddress],
-                DTLS: DTLS,
-                IRC: config.myIrcAddresses ?? [config.myAddress],
-                HUB: HUB,
-                BuildLabel: buildLabel,
-                MatchmakingBuildId: buildConfig.matchmakingBuildId
-            };
-
-            response.json(newLoginResponse);
+            response.json(createLoginResponse(newAccount, buildLabel));
             return;
         } catch (error: unknown) {
             if (error instanceof Error) {
@@ -76,9 +62,22 @@ const loginController: RequestHandler = async (request, response) => {
     }
     await account.save();
 
-    const { email, password, LastLoginDay, ...databaseAccount } = account.toJSON();
-    const newLoginResponse: ILoginResponse = {
-        ...databaseAccount,
+    response.json(createLoginResponse(account.toJSON(), buildLabel));
+};
+
+const createLoginResponse = (account: IDatabaseAccountJson, buildLabel: string): ILoginResponse => {
+    return {
+        id: account.id,
+        DisplayName: account.DisplayName,
+        CountryCode: account.CountryCode,
+        ClientType: account.ClientType,
+        CrossPlatformAllowed: account.CrossPlatformAllowed,
+        ForceLogoutVersion: account.ForceLogoutVersion,
+        AmazonAuthToken: account.AmazonAuthToken,
+        AmazonRefreshToken: account.AmazonRefreshToken,
+        ConsentNeeded: account.ConsentNeeded,
+        TrackedSettings: account.TrackedSettings,
+        Nonce: account.Nonce,
         Groups: groups,
         platformCDNs: platformCDNs,
         NRS: [config.myAddress],
@@ -88,8 +87,4 @@ const loginController: RequestHandler = async (request, response) => {
         BuildLabel: buildLabel,
         MatchmakingBuildId: buildConfig.matchmakingBuildId
     };
-
-    response.json(newLoginResponse);
 };
-
-export { loginController };

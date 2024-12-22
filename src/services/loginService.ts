@@ -1,6 +1,6 @@
 import { Account } from "@/src/models/loginModel";
 import { createInventory } from "@/src/services/inventoryService";
-import { IDatabaseAccount } from "@/src/types/loginTypes";
+import { IDatabaseAccount, IDatabaseAccountJson } from "@/src/types/loginTypes";
 import { createShip } from "./shipService";
 import { Types } from "mongoose";
 import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
@@ -12,7 +12,7 @@ export const isCorrectPassword = (requestPassword: string, databasePassword: str
     return requestPassword === databasePassword;
 };
 
-export const createAccount = async (accountData: IDatabaseAccount) => {
+export const createAccount = async (accountData: IDatabaseAccount): Promise<IDatabaseAccountJson> => {
     const account = new Account(accountData);
     try {
         await account.save();
