@@ -85,7 +85,7 @@ export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountI
                 }
             }
             break;
-        case 18:
+        case 18: {
             if (purchaseRequest.PurchaseParams.SourceId! != worldState.PrimeVaultTraders[0]._id.$oid) {
                 throw new Error("invalid request source");
             }
@@ -114,6 +114,7 @@ export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountI
                 await inventory.save();
             }
             break;
+        }
     }
 
     return purchaseResponse;
