@@ -10,6 +10,7 @@ reviews:
     review_status: true
     collapse_walkthrough: false
     sequence_diagrams: false
+    related_prs: false
     auto_review:
         enabled: true
         drafts: false
