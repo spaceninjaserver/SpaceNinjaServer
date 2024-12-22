@@ -27,7 +27,8 @@ export const getShipController: RequestHandler = async (req, res) => {
                 SkinFlavourItem: ship.SkinFlavourItem
             }
         },
-        Apartment: personalRooms.Apartment
+        Apartment: personalRooms.Apartment,
+        TailorShop: personalRooms.TailorShop
     };
 
     if (config.unlockAllShipFeatures) {

@@ -7,6 +7,7 @@ export interface IGetShipResponse {
     ShipOwnerId: string;
     Ship: IShip;
     Apartment: IApartment;
+    TailorShop: ITailorShop;
     LoadOutInventory: { LoadOutPresets: ILoadoutClient };
 }
 
@@ -102,7 +103,8 @@ export interface IShipDecorationsRequest {
     Pos: [number, number, number];
     Rot: [number, number, number];
     Room: string;
-    IsApartment: boolean;
+    BootLocation?: TBootLocation;
+    IsApartment?: boolean;
     RemoveId?: string;
     MoveId?: string;
     OldRoom?: string;
@@ -112,7 +114,7 @@ export interface IShipDecorationsRequest {
 export interface IShipDecorationsResponse {
     DecoId?: string;
     Room?: string;
-    IsApartment: boolean;
+    IsApartment?: boolean;
     MaxCapacityIncrease?: number;
     OldRoom?: string;
     NewRoom?: string;
@@ -140,4 +142,26 @@ export interface IPictureFrameInfo {
     TextColorA: number;
     TextColorB: number;
     TextOrientation: number;
+}
+
+export interface IFavouriteLoadout {
+    Tag: string;
+    LoadoutId: IOid;
+}
+
+export interface IFavouriteLoadoutDatabase {
+    Tag: string;
+    LoadoutId: Types.ObjectId;
+}
+
+export interface ITailorShopDatabase {
+    FavouriteLoadouts: IFavouriteLoadoutDatabase[];
+    CustomJson: "{}"; // ???
+    LevelDecosVisible: boolean;
+    Rooms: IRoom[];
+}
+
+export interface ITailorShop extends Omit<ITailorShopDatabase, "FavouriteLoadouts"> {
+    FavouriteLoadouts: IFavouriteLoadout[];
+    Colors: []; // ???
 }
