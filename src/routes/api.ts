@@ -8,6 +8,7 @@ import { createGuildController } from "@/src/controllers/api/createGuildControll
 import { deleteSessionController } from "@/src/controllers/api/deleteSessionController";
 import { dojoController } from "@/src/controllers/api/dojoController";
 import { dronesController } from "@/src/controllers/api/dronesController";
+import { endlessXpController } from "@/src/controllers/api/endlessXpController";
 import { evolveWeaponController } from "@/src/controllers/api/evolveWeaponController";
 import { findSessionsController } from "@/src/controllers/api/findSessionsController";
 import { focusController } from "@/src/controllers/api/focusController";
@@ -108,6 +109,7 @@ apiRouter.post("/arcaneCommon.php", arcaneCommonController);
 apiRouter.post("/artifacts.php", artifactsController);
 apiRouter.post("/claimCompletedRecipe.php", claimCompletedRecipeController);
 apiRouter.post("/createGuild.php", createGuildController);
+apiRouter.post("/endlessXp.php", endlessXpController);
 apiRouter.post("/evolveWeapon.php", evolveWeaponController);
 apiRouter.post("/findSessions.php", findSessionsController);
 apiRouter.post("/focus.php", focusController);

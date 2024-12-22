@@ -301,6 +301,7 @@ export interface IInventoryResponse {
     PendingCoupon: IPendingCoupon;
     Harvestable: boolean;
     DeathSquadable: boolean;
+    EndlessXP?: IEndlessXpProgress[];
 }
 
 export interface IAffiliation {
@@ -931,4 +932,11 @@ export interface IEvolutionProgress {
     Progress: number;
     Rank: number;
     ItemType: string;
+}
+
+export type TEndlessXpCategory = "EXC_NORMAL" | "EXC_HARD";
+
+export interface IEndlessXpProgress {
+    Category: TEndlessXpCategory;
+    Choices: string[];
 }

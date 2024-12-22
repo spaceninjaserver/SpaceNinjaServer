@@ -37,7 +37,8 @@ import {
     IPeriodicMissionCompletionDatabase,
     IPeriodicMissionCompletionResponse,
     ILoreFragmentScan,
-    IEvolutionProgress
+    IEvolutionProgress,
+    IEndlessXpProgress
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -581,6 +582,14 @@ const evolutionProgressSchema = new Schema<IEvolutionProgress>(
     { _id: false }
 );
 
+const endlessXpProgressSchema = new Schema<IEndlessXpProgress>(
+    {
+        Category: String,
+        Choices: [String]
+    },
+    { _id: false }
+);
+
 const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
     {
         accountOwnerId: Schema.Types.ObjectId,
@@ -938,7 +947,9 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Zanuka
         Harvestable: Boolean,
         //Grustag three
-        DeathSquadable: Boolean
+        DeathSquadable: Boolean,
+
+        EndlessXP: { type: [endlessXpProgressSchema], default: undefined }
     },
     { timestamps: { createdAt: "Created" } }
 );
