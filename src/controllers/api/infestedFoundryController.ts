@@ -6,7 +6,6 @@ import { IOid } from "@/src/types/commonTypes";
 import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { ExportMisc } from "warframe-public-export-plus";
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const infestedFoundryController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     switch (req.query.mode) {

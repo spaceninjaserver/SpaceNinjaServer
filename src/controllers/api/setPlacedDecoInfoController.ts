@@ -3,7 +3,6 @@ import { ISetPlacedDecoInfoRequest } from "@/src/types/shipTypes";
 import { RequestHandler } from "express";
 import { handleSetPlacedDecoInfo } from "@/src/services/shipCustomizationsService";
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const setPlacedDecoInfoController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const payload = JSON.parse(req.body as string) as ISetPlacedDecoInfoRequest;

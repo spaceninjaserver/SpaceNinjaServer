@@ -24,7 +24,6 @@ interface IGildWeaponRequest {
 
 // In export there no recipes for gild action, so reputation and ressources only consumed visually
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const gildWeaponController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const data: IGildWeaponRequest = getJSONfromString(String(req.body));

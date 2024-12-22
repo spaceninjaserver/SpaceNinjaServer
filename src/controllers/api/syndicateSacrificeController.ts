@@ -4,7 +4,6 @@ import { ISyndicateSacrifice } from "@/src/types/syndicateTypes";
 import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 const syndicateSacrificeController: RequestHandler = async (request, response) => {
     const accountId = await getAccountIdForRequest(request);
     const update = getJSONfromString(String(request.body)) as ISyndicateSacrifice;

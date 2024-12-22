@@ -5,7 +5,6 @@ import { IMiscItem, TFocusPolarity, TEquipmentKey } from "@/src/types/inventoryT
 import { logger } from "@/src/utils/logger";
 import { ExportFocusUpgrades } from "warframe-public-export-plus";
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const focusController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     switch (req.query.op) {
