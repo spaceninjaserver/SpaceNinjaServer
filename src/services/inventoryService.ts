@@ -32,6 +32,7 @@ import { getRandomWeightedReward } from "@/src/services/rngService";
 import { ISyndicateSacrifice, ISyndicateSacrificeResponse } from "../types/syndicateTypes";
 import { IEquipmentClient } from "../types/inventoryTypes/commonInventoryTypes";
 import {
+    ExportArcanes,
     ExportBoosterPacks,
     ExportCustoms,
     ExportFlavour,
@@ -171,7 +172,7 @@ export const addItem = async (
         }
         return { InventoryChanges };
     }
-    if (typeName in ExportUpgrades) {
+    if (typeName in ExportUpgrades || typeName in ExportArcanes) {
         const inventory = await getInventory(accountId);
         const changes = [
             {
