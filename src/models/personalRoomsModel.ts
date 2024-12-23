@@ -1,5 +1,5 @@
 import { toOid } from "@/src/helpers/inventoryHelpers";
-import { IOrbiter, IPersonalRooms, PersonalRoomsModelType } from "@/src/types/personalRoomsTypes";
+import { IOrbiter, IPersonalRoomsDatabase, PersonalRoomsModelType } from "@/src/types/personalRoomsTypes";
 import {
     IApartment,
     IFavouriteLoadoutDatabase,
@@ -128,15 +128,15 @@ const tailorShopDefault: ITailorShopDatabase = {
     ]
 };
 
-export const personalRoomsSchema = new Schema<IPersonalRooms>({
+export const personalRoomsSchema = new Schema<IPersonalRoomsDatabase>({
     personalRoomsOwnerId: Schema.Types.ObjectId,
     activeShipId: Schema.Types.ObjectId,
     Ship: orbiterSchema,
     Apartment: apartmentSchema,
-    TailorShop: {
-        type: tailorShopSchema,
-        default: tailorShopDefault as any as undefined // Yeah, this is bad, but mongoose types here are wrong.
-    }
+    TailorShop: { type: tailorShopSchema, default: tailorShopDefault }
 });
 
-export const PersonalRooms = model<IPersonalRooms, PersonalRoomsModelType>("PersonalRooms", personalRoomsSchema);
+export const PersonalRooms = model<IPersonalRoomsDatabase, PersonalRoomsModelType>(
+    "PersonalRooms",
+    personalRoomsSchema
+);

@@ -8,19 +8,21 @@ import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
 import { logger } from "@/src/utils/logger";
 import { toOid } from "@/src/helpers/inventoryHelpers";
 import { IGetShipResponse } from "@/src/types/shipTypes";
+import { IPersonalRooms } from "@/src/types/personalRoomsTypes";
 
 export const getShipController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const personalRooms = await getPersonalRooms(accountId);
+    const personalRoomsDb = await getPersonalRooms(accountId);
+    const personalRooms = personalRoomsDb.toJSON<IPersonalRooms>();
     const loadout = await getLoadout(accountId);
-    const ship = await getShip(personalRooms.activeShipId, "ShipInteriorColors ShipAttachments SkinFlavourItem");
+    const ship = await getShip(personalRoomsDb.activeShipId, "ShipInteriorColors ShipAttachments SkinFlavourItem");
 
     const getShipResponse: IGetShipResponse = {
         ShipOwnerId: accountId,
         LoadOutInventory: { LoadOutPresets: loadout.toJSON() },
         Ship: {
-            ...personalRooms.toJSON().Ship,
-            ShipId: toOid(personalRooms.activeShipId),
+            ...personalRooms.Ship,
+            ShipId: toOid(personalRoomsDb.activeShipId),
             ShipInterior: {
                 Colors: ship.ShipInteriorColors,
                 ShipAttachments: ship.ShipAttachments,

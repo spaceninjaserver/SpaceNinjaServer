@@ -163,5 +163,5 @@ export interface ITailorShopDatabase {
 
 export interface ITailorShop extends Omit<ITailorShopDatabase, "FavouriteLoadouts"> {
     FavouriteLoadouts: IFavouriteLoadout[];
-    Colors: []; // ???
+    Colors?: []; // ???
 }
