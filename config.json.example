@@ -8,6 +8,7 @@
   "myAddress": "localhost",
   "httpPort": 80,
   "httpsPort": 443,
+  "administratorNames": [],
   "autoCreateAccount": true,
   "skipStoryModeChoice": true,
   "skipTutorial": true,

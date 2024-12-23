@@ -25,6 +25,7 @@ interface IConfig {
     httpPort?: number;
     httpsPort?: number;
     myIrcAddresses?: string[];
+    administratorNames?: string[];
     autoCreateAccount?: boolean;
     skipStoryModeChoice?: boolean;
     skipTutorial?: boolean;
