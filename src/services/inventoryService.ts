@@ -55,9 +55,6 @@ export const createInventory = async (
             LoadOutPresets: defaultItemReferences.loadOutPresetId,
             Ships: [defaultItemReferences.ship]
         });
-        if (config.skipStoryModeChoice) {
-            inventory.StoryModeChoice = "WARFRAME";
-        }
         if (config.skipTutorial) {
             inventory.PlayedParkourTutorial = true;
             inventory.ReceivedStartingGear = true;
