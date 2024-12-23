@@ -22,9 +22,8 @@ const trainingResultController: RequestHandler = async (req, res): Promise<void>
 
     const inventory = await getInventory(accountId);
 
-    inventory.TrainingDate = new Date(Date.now() + unixTimesInMs.day);
-
     if (trainingResults.numLevelsGained == 1) {
+        inventory.TrainingDate = new Date(Date.now() + unixTimesInMs.hour * 23);
         inventory.PlayerLevel += 1;
     }
 
