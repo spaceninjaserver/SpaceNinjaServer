@@ -1,4 +1,4 @@
-import { Schema, Types } from "mongoose";
+import { Types } from "mongoose";
 import { IOid } from "@/src/types/commonTypes";
 import { IColor } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { ILoadoutClient } from "./saveLoadoutTypes";
@@ -34,8 +34,7 @@ export interface IShip {
 
 export interface IShipDatabase {
     ItemType: string;
-    ShipOwnerId: Schema.Types.ObjectId;
-    ShipInteriorColors?: IColor;
+    ShipOwnerId: Types.ObjectId;
     ShipExteriorColors?: IColor;
     AirSupportPower: string;
     ShipAttachments?: IShipAttachments;

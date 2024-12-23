@@ -8,7 +8,6 @@ const shipSchema = new Schema<IShipDatabase>(
     {
         ItemType: String,
         ShipOwnerId: Schema.Types.ObjectId,
-        ShipInteriorColors: colorSchema,
         ShipExteriorColors: colorSchema,
         AirSupportPower: String,
         ShipAttachments: { HOOD_ORNAMENT: String },

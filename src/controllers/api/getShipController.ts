@@ -15,7 +15,7 @@ export const getShipController: RequestHandler = async (req, res) => {
     const personalRoomsDb = await getPersonalRooms(accountId);
     const personalRooms = personalRoomsDb.toJSON<IPersonalRooms>();
     const loadout = await getLoadout(accountId);
-    const ship = await getShip(personalRoomsDb.activeShipId, "ShipInteriorColors ShipAttachments SkinFlavourItem");
+    const ship = await getShip(personalRoomsDb.activeShipId, "ShipAttachments SkinFlavourItem");
 
     const getShipResponse: IGetShipResponse = {
         ShipOwnerId: accountId,
@@ -24,7 +24,7 @@ export const getShipController: RequestHandler = async (req, res) => {
             ...personalRooms.Ship,
             ShipId: toOid(personalRoomsDb.activeShipId),
             ShipInterior: {
-                Colors: ship.ShipInteriorColors,
+                Colors: personalRooms.ShipInteriorColors,
                 ShipAttachments: ship.ShipAttachments,
                 SkinFlavourItem: ship.SkinFlavourItem
             }
