@@ -26,6 +26,10 @@ void (async (): Promise<void> => {
         logger.info("HTTP server started on port " + httpPort);
         https.createServer(options, app).listen(httpsPort, () => {
             logger.info("HTTPS server started on port " + httpsPort);
+
+            logger.info(
+                "Access the WebUI in your browser at http://localhost" + (httpPort == 80 ? "" : ":" + httpPort)
+            );
         });
     });
 })();
