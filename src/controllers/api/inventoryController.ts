@@ -20,7 +20,7 @@ const inventoryController: RequestHandler = async (request, response) => {
 
     const inventory = await Inventory.findOne({ accountOwnerId: account._id.toString() })
         .populate<{ LoadOutPresets: ILoadoutDatabase }>("LoadOutPresets")
-        .populate<{ Ships: IShipInventory }>("Ships", "-ShipInteriorColors");
+        .populate<{ Ships: IShipInventory }>("Ships");
 
     if (!inventory) {
         response.status(400).json({ error: "inventory was undefined" });

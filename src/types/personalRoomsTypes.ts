@@ -1,3 +1,4 @@
+import { IColor } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import {
     IApartment,
     IRoom,
@@ -16,12 +17,14 @@ export interface IOrbiter {
 }
 
 export interface IPersonalRooms {
+    ShipInteriorColors: IColor;
     Ship: IOrbiter;
     Apartment: IApartment;
     TailorShop: ITailorShop;
 }
 
 export interface IPersonalRoomsDatabase {
+    ShipInteriorColors: IColor;
     personalRoomsOwnerId: Types.ObjectId;
     activeShipId: Types.ObjectId;
     Ship: IOrbiter;

@@ -1,4 +1,5 @@
 import { toOid } from "@/src/helpers/inventoryHelpers";
+import { colorSchema } from "@/src/models/inventoryModels/inventoryModel";
 import { IOrbiter, IPersonalRoomsDatabase, PersonalRoomsModelType } from "@/src/types/personalRoomsTypes";
 import {
     IApartment,
@@ -131,6 +132,7 @@ const tailorShopDefault: ITailorShopDatabase = {
 export const personalRoomsSchema = new Schema<IPersonalRoomsDatabase>({
     personalRoomsOwnerId: Schema.Types.ObjectId,
     activeShipId: Schema.Types.ObjectId,
+    ShipInteriorColors: colorSchema,
     Ship: orbiterSchema,
     Apartment: apartmentSchema,
     TailorShop: { type: tailorShopSchema, default: tailorShopDefault }

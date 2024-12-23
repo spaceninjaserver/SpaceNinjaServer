@@ -2,7 +2,6 @@ import { getPersonalRooms } from "@/src/services/personalRoomsService";
 import { getShip } from "@/src/services/shipService";
 import {
     ISetShipCustomizationsRequest,
-    IShipDatabase,
     IShipDecorationsRequest,
     IShipDecorationsResponse,
     ISetPlacedDecoInfoRequest
@@ -10,25 +9,26 @@ import {
 import { logger } from "@/src/utils/logger";
 import { Types } from "mongoose";
 
-export const setShipCustomizations = async (shipCustomization: ISetShipCustomizationsRequest) => {
-    const ship = await getShip(new Types.ObjectId(shipCustomization.ShipId));
-
-    let shipChanges: Partial<IShipDatabase>;
+export const setShipCustomizations = async (
+    accountId: string,
+    shipCustomization: ISetShipCustomizationsRequest
+): Promise<void> => {
     if (shipCustomization.IsExterior) {
-        shipChanges = {
-            ShipExteriorColors: shipCustomization.Customization.Colors,
-            SkinFlavourItem: shipCustomization.Customization.SkinFlavourItem,
-            ShipAttachments: shipCustomization.Customization.ShipAttachments,
-            AirSupportPower: shipCustomization.AirSupportPower!
-        };
+        const ship = await getShip(new Types.ObjectId(shipCustomization.ShipId));
+        if (ship.ShipOwnerId.toString() == accountId) {
+            ship.set({
+                ShipExteriorColors: shipCustomization.Customization.Colors,
+                SkinFlavourItem: shipCustomization.Customization.SkinFlavourItem,
+                ShipAttachments: shipCustomization.Customization.ShipAttachments,
+                AirSupportPower: shipCustomization.AirSupportPower!
+            });
+            await ship.save();
+        }
     } else {
-        shipChanges = {
-            ShipInteriorColors: shipCustomization.Customization.Colors
-        };
+        const personalRooms = await getPersonalRooms(accountId);
+        personalRooms.ShipInteriorColors = shipCustomization.Customization.Colors;
+        await personalRooms.save();
     }
-    ship.set(shipChanges);
-
-    await ship.save();
 };
 
 export const handleSetShipDecorations = async (
