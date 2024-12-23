@@ -61,6 +61,15 @@ function logout() {
     localStorage.removeItem("password");
 }
 
+function renameAccount() {
+    const newname = window.prompt("What would you like to change your account name to?");
+    if (newname) {
+        fetch("/custom/renameAccount?" + window.authz + "&newname=" + newname).then(() => {
+            $(".displayname").text(newname);
+        });
+    }
+}
+
 function deleteAccount() {
     if (
         window.confirm(
@@ -71,7 +80,7 @@ function deleteAccount() {
                 ")? This action cannot be undone."
         )
     ) {
-        fetch("/custom/deleteAccount?" + window.authz).then(function () {
+        fetch("/custom/deleteAccount?" + window.authz).then(() => {
             logout();
             single.loadRoute("/webui/"); // Show login screen
         });
