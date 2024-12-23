@@ -420,28 +420,19 @@ export interface ICrewShipSalvagedWeaponSkin {
     _id?: Types.ObjectId;
 }
 
-export interface ICrewShipWeapon {
-    ItemType: string;
-    UpgradeType?: string;
-    UpgradeFingerprint?: string;
-    Configs?: IItemConfig[];
-    UpgradeVer?: number;
-    ItemId: IOid;
-}
-
 export interface ICrewShip {
     ItemType: string;
     Configs: IItemConfig[];
-    Weapon: ICrewshipWeapon;
-    Customization: ICustomization;
+    Weapon?: ICrewShipWeapon;
+    Customization?: ICrewShipCustomization;
     ItemName: string;
-    RailjackImage: IFlavourItem;
-    CrewMembers: ICrewMembers;
+    RailjackImage?: IFlavourItem;
+    CrewMembers?: ICrewShipMembers;
     ItemId: IOid;
     _id: Types.ObjectId;
 }
 
-export interface ICrewMembers {
+export interface ICrewShipMembers {
     SLOT_A: ISlot;
     SLOT_B: ISlot;
     SLOT_C: ISlot;
@@ -451,7 +442,7 @@ export interface ISlot {
     ItemId: IOid;
 }
 
-export interface ICustomization {
+export interface ICrewShipCustomization {
     CrewshipInterior: IShipExterior;
 }
 
@@ -462,7 +453,7 @@ export interface IShipExterior {
 }
 
 export interface IShipAttachments {
-    HOOD_ORNAMENT: string; //TODO: Others are probably possible
+    HOOD_ORNAMENT: string;
 }
 
 export interface IFlavourItem {
@@ -474,17 +465,18 @@ export interface IMiscItem {
     ItemType: string;
 }
 
-export interface ICrewshipWeapon {
-    PILOT: IPilot;
-    PORT_GUNS: IPortGuns;
+export interface ICrewShipWeapon {
+    PILOT: ICrewShipPilotWeapon;
+    PORT_GUNS: ICrewShipPortGuns;
 }
 
-export interface IPortGuns {
+export interface ICrewShipPilotWeapon {
     PRIMARY_A: IEquipmentSelection;
+    SECONDARY_A: IEquipmentSelection;
 }
 
-export interface IPilot extends IPortGuns {
-    SECONDARY_A: IEquipmentSelection;
+export interface ICrewShipPortGuns {
+    PRIMARY_A: IEquipmentSelection;
 }
 
 export interface IDiscoveredMarker {

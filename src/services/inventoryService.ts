@@ -144,6 +144,12 @@ export const addItem = async (
                     ]
                 }
             };
+        } else if (ExportResources[typeName].productCategory == "CrewShips") {
+            return {
+                InventoryChanges: {
+                    CrewShips: [await addCrewShip(typeName, accountId)]
+                }
+            };
         } else {
             const miscItemChanges = [
                 {
@@ -561,6 +567,13 @@ export const addSkin = async (typeName: string, accountId: string): Promise<IWea
     const index = inventory.WeaponSkins.push({ ItemType: typeName }) - 1;
     const changedInventory = await inventory.save();
     return changedInventory.WeaponSkins[index].toJSON() as object as IWeaponSkinClient;
+};
+
+const addCrewShip = async (typeName: string, accountId: string) => {
+    const inventory = await getInventory(accountId);
+    const index = inventory.CrewShips.push({ ItemType: typeName }) - 1;
+    const changedInventory = await inventory.save();
+    return changedInventory.CrewShips[index].toJSON();
 };
 
 const addGearExpByCategory = (
