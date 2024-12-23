@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import { ISellRequest } from "@/src/types/sellTypes";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getInventory, addMods, addRecipes } from "@/src/services/inventoryService";
+import { getInventory, addMods, addRecipes, addMiscItems } from "@/src/services/inventoryService";
 
 export const sellController: RequestHandler = async (req, res) => {
     const payload = JSON.parse(String(req.body)) as ISellRequest;
@@ -13,6 +13,13 @@ export const sellController: RequestHandler = async (req, res) => {
         inventory.RegularCredits += payload.SellPrice;
     } else if (payload.SellCurrency == "SC_FusionPoints") {
         inventory.FusionPoints += payload.SellPrice;
+    } else if (payload.SellCurrency == "SC_DistillPoints") {
+        addMiscItems(inventory, [
+            {
+                ItemType: "/Lotus/Types/Items/MiscItems/DistillPoints",
+                ItemCount: payload.SellPrice
+            }
+        ]);
     } else {
         throw new Error("Unknown SellCurrency: " + payload.SellCurrency);
     }
