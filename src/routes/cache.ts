@@ -12,7 +12,7 @@ cacheRouter.get(/^\/origin\/[a-zA-Z0-9]+\/[0-9]+\/H\.Cache\.bin.*$/, (req, res) 
     }
 });
 
-cacheRouter.get(/\.bk2!/, async (req, res) => {
+cacheRouter.get(/^\/0\/Lotus\/.+!.+$/, async (req, res) => {
     try {
         const dir = req.path.substr(0, req.path.lastIndexOf("/"));
         const file = req.path.substr(dir.length + 1);
