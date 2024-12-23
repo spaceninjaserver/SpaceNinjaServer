@@ -61,6 +61,23 @@ function logout() {
     localStorage.removeItem("password");
 }
 
+function deleteAccount() {
+    if (
+        window.confirm(
+            "Are you sure you want to delete your account " +
+                $(".displayname").text() +
+                " (" +
+                localStorage.getItem("email") +
+                ")? This action cannot be undone."
+        )
+    ) {
+        fetch("/custom/deleteAccount?" + window.authz).then(function () {
+            logout();
+            single.loadRoute("/webui/"); // Show login screen
+        });
+    }
+}
+
 if (localStorage.getItem("email") && localStorage.getItem("password")) {
     loginFromLocalStorage();
 }
