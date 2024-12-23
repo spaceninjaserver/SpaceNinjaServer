@@ -9,12 +9,14 @@ import {
     updateCurrency,
     updateSlots
 } from "@/src/services/inventoryService";
+import { getRandomWeightedReward } from "@/src/services/rngService";
 import { getVendorManifestByOid } from "@/src/services/serversideVendorsService";
 import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IPurchaseRequest, IPurchaseResponse, SlotPurchase, IInventoryChanges } from "@/src/types/purchaseTypes";
 import { logger } from "@/src/utils/logger";
 import worldState from "@/static/fixed_responses/worldState.json";
 import {
+    ExportBoosterPacks,
     ExportBundles,
     ExportGear,
     ExportResources,
@@ -38,7 +40,10 @@ export const getStoreItemTypesCategory = (typesItem: string) => {
     return typeElements[1];
 };
 
-export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountId: string) => {
+export const handlePurchase = async (
+    purchaseRequest: IPurchaseRequest,
+    accountId: string
+): Promise<IPurchaseResponse> => {
     logger.debug("purchase request", purchaseRequest);
 
     if (purchaseRequest.PurchaseParams.Source == 7) {
@@ -260,17 +265,43 @@ const handleSlotPurchase = async (
     };
 };
 
+const handleBoosterPackPurchase = async (typeName: string, accountId: string): Promise<IPurchaseResponse> => {
+    const pack = ExportBoosterPacks[typeName];
+    if (!pack) {
+        throw new Error(`unknown booster pack: ${typeName}`);
+    }
+    const purchaseResponse: IPurchaseResponse = {
+        BoosterPackItems: "",
+        InventoryChanges: {}
+    };
+    for (const weights of pack.rarityWeightsPerRoll) {
+        const result = getRandomWeightedReward(pack.components, weights);
+        if (result) {
+            logger.debug(`booster pack rolled`, result);
+            purchaseResponse.BoosterPackItems +=
+                result.type.split("/Lotus/").join("/Lotus/StoreItems/") + ',{"lvl":0};';
+            combineInventoryChanges(
+                purchaseResponse.InventoryChanges,
+                (await addItem(accountId, result.type, result.itemCount)).InventoryChanges
+            );
+        }
+    }
+    return purchaseResponse;
+};
+
 //TODO: change to getInventory, apply changes then save at the end
 const handleTypesPurchase = async (
     typesName: string,
     accountId: string,
     quantity: number
-): Promise<{ InventoryChanges: IInventoryChanges }> => {
+): Promise<IPurchaseResponse> => {
     const typeCategory = getStoreItemTypesCategory(typesName);
     logger.debug(`type category ${typeCategory}`);
     switch (typeCategory) {
         default:
             return await addItem(accountId, typesName, quantity);
+        case "BoosterPacks":
+            return await handleBoosterPackPurchase(typesName, accountId);
         case "SlotItems":
             return await handleSlotPurchase(typesName, accountId);
     }
