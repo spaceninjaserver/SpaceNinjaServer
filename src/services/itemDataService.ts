@@ -16,7 +16,13 @@ import {
     dict_tr,
     dict_uk,
     dict_zh,
+    ExportArcanes,
+    ExportCustoms,
+    ExportGear,
+    ExportKeys,
     ExportRecipes,
+    ExportResources,
+    ExportSentinels,
     ExportWarframes,
     ExportWeapons,
     IPowersuit,
@@ -82,6 +88,34 @@ export const getItemCategoryByUniqueName = (uniqueName: string): string => {
 
 export const getSuitByUniqueName = (uniqueName: string): IPowersuit | undefined => {
     return ExportWarframes[uniqueName];
+};
+
+export const getItemName = (uniqueName: string): string | undefined => {
+    if (uniqueName in ExportArcanes) {
+        return ExportArcanes[uniqueName].name;
+    }
+    if (uniqueName in ExportCustoms) {
+        return ExportCustoms[uniqueName].name;
+    }
+    if (uniqueName in ExportKeys) {
+        return ExportKeys[uniqueName].name;
+    }
+    if (uniqueName in ExportGear) {
+        return ExportGear[uniqueName].name;
+    }
+    if (uniqueName in ExportResources) {
+        return ExportResources[uniqueName].name;
+    }
+    if (uniqueName in ExportSentinels) {
+        return ExportSentinels[uniqueName].name;
+    }
+    if (uniqueName in ExportWarframes) {
+        return ExportWarframes[uniqueName].name;
+    }
+    if (uniqueName in ExportWeapons) {
+        return ExportWeapons[uniqueName].name;
+    }
+    return undefined;
 };
 
 export const getDict = (lang: string): Record<string, string> => {
