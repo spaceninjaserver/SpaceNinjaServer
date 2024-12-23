@@ -3,10 +3,13 @@ import { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
 import { logger } from "@/src/utils/logger";
 import { Types } from "mongoose";
 
-export const createShip = async (accountOwnerId: Types.ObjectId) => {
+export const createShip = async (
+    accountOwnerId: Types.ObjectId,
+    typeName: string = "/Lotus/Types/Items/Ships/DefaultShip"
+) => {
     try {
         const ship = new Ship({
-            ItemType: "/Lotus/Types/Items/Ships/DefaultShip",
+            ItemType: typeName,
             ShipOwnerId: accountOwnerId
         });
         const newShip = await ship.save();

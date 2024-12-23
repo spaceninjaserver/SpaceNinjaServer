@@ -41,6 +41,7 @@ import {
     ExportResources,
     ExportUpgrades
 } from "warframe-public-export-plus";
+import { createShip } from "./shipService";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
@@ -129,19 +130,35 @@ export const addItem = async (
     }
     if (typeName in ExportResources) {
         const inventory = await getInventory(accountId);
-        const miscItemChanges = [
-            {
-                ItemType: typeName,
-                ItemCount: quantity
-            } satisfies IMiscItem
-        ];
-        addMiscItems(inventory, miscItemChanges);
-        await inventory.save();
-        return {
-            InventoryChanges: {
-                MiscItems: miscItemChanges
-            }
-        };
+        if (ExportResources[typeName].productCategory == "Ships") {
+            const oid = await createShip(new Types.ObjectId(accountId), typeName);
+            inventory.Ships.push(oid);
+            await inventory.save();
+            return {
+                InventoryChanges: {
+                    Ships: [
+                        {
+                            ItemId: { $oid: oid },
+                            ItemType: typeName
+                        }
+                    ]
+                }
+            };
+        } else {
+            const miscItemChanges = [
+                {
+                    ItemType: typeName,
+                    ItemCount: quantity
+                } satisfies IMiscItem
+            ];
+            addMiscItems(inventory, miscItemChanges);
+            await inventory.save();
+            return {
+                InventoryChanges: {
+                    MiscItems: miscItemChanges
+                }
+            };
+        }
     }
     if (typeName in ExportCustoms) {
         return {
