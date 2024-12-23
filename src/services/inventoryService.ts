@@ -49,17 +49,19 @@ export const createInventory = async (
     defaultItemReferences: { loadOutPresetId: Types.ObjectId; ship: Types.ObjectId }
 ) => {
     try {
-        const inventory = new Inventory({
-            ...new_inventory,
-            accountOwnerId: accountOwnerId,
-            LoadOutPresets: defaultItemReferences.loadOutPresetId,
-            Ships: [defaultItemReferences.ship]
-        });
-        if (config.skipTutorial) {
-            inventory.PlayedParkourTutorial = true;
-            inventory.ReceivedStartingGear = true;
-        }
-
+        const inventory = config.skipTutorial
+            ? new Inventory({
+                  accountOwnerId: accountOwnerId,
+                  LoadOutPresets: defaultItemReferences.loadOutPresetId,
+                  Ships: [defaultItemReferences.ship],
+                  ...new_inventory
+              })
+            : new Inventory({
+                  accountOwnerId: accountOwnerId,
+                  LoadOutPresets: defaultItemReferences.loadOutPresetId,
+                  Ships: [defaultItemReferences.ship],
+                  TrainingDate: 0
+              });
         await inventory.save();
     } catch (error) {
         if (error instanceof Error) {
