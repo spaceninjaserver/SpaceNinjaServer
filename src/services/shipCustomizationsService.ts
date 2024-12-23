@@ -13,7 +13,6 @@ export const setShipCustomizations = async (
     accountId: string,
     shipCustomization: ISetShipCustomizationsRequest
 ): Promise<void> => {
-    console.log(shipCustomization);
     if (shipCustomization.IsExterior) {
         const ship = await getShip(new Types.ObjectId(shipCustomization.ShipId));
         if (ship.ShipOwnerId.toString() == accountId) {
