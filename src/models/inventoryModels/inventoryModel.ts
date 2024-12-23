@@ -38,7 +38,14 @@ import {
     IPeriodicMissionCompletionResponse,
     ILoreFragmentScan,
     IEvolutionProgress,
-    IEndlessXpProgress
+    IEndlessXpProgress,
+    ICrewShipPortGuns,
+    ICrewShipCustomization,
+    ICrewShipWeapon,
+    ICrewShipMembers,
+    ICrewShip,
+    ICrewShipPilotWeapon,
+    IShipExterior
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -52,6 +59,7 @@ import {
     IArchonCrystalUpgrade
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
+import { EquipmentSelectionSchema } from "./loadoutModel";
 
 const typeCountSchema = new Schema<ITypeCount>({ ItemType: String, ItemCount: Number }, { _id: false });
 
@@ -590,6 +598,85 @@ const endlessXpProgressSchema = new Schema<IEndlessXpProgress>(
     { _id: false }
 );
 
+const crewShipPilotWeaponSchema = new Schema<ICrewShipPilotWeapon>(
+    {
+        PRIMARY_A: EquipmentSelectionSchema,
+        SECONDARY_A: EquipmentSelectionSchema
+    },
+    { _id: false }
+);
+
+const crewShipPortGunsSchema = new Schema<ICrewShipPortGuns>(
+    {
+        PRIMARY_A: EquipmentSelectionSchema
+    },
+    { _id: false }
+);
+
+const crewShipWeaponSchema = new Schema<ICrewShipWeapon>(
+    {
+        PILOT: crewShipPilotWeaponSchema,
+        PORT_GUNS: crewShipPortGunsSchema
+    },
+    { _id: false }
+);
+
+const shipExteriorSchema = new Schema<IShipExterior>(
+    {
+        SkinFlavourItem: String,
+        Colors: colorSchema,
+        ShipAttachments: { HOOD_ORNAMENT: String }
+    },
+    { _id: false }
+);
+
+const crewShipCustomizationSchema = new Schema<ICrewShipCustomization>(
+    {
+        CrewshipInterior: shipExteriorSchema
+    },
+    { _id: false }
+);
+
+const crewShipMembersSchema = new Schema<ICrewShipMembers>(
+    {
+        SLOT_A: Schema.Types.ObjectId,
+        SLOT_B: Schema.Types.ObjectId,
+        SLOT_C: Schema.Types.ObjectId
+    },
+    { _id: false }
+);
+crewShipMembersSchema.set("toJSON", {
+    virtuals: true,
+    transform(_doc, ret) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        ret.SLOT_A = { ItemId: toOid(ret.SLOT_A) };
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        ret.SLOT_B = { ItemId: toOid(ret.SLOT_B) };
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        ret.SLOT_C = { ItemId: toOid(ret.SLOT_C) };
+    }
+});
+
+const crewShipSchema = new Schema<ICrewShip>({
+    ItemType: { type: String, required: true },
+    Configs: { type: [ItemConfigSchema], default: [] },
+    Weapon: { type: crewShipWeaponSchema, default: undefined },
+    Customization: { type: crewShipCustomizationSchema, default: undefined },
+    ItemName: { type: String, default: "" },
+    RailjackImage: { type: FlavourItemSchema, default: undefined },
+    CrewMembers: { type: crewShipMembersSchema, default: undefined }
+});
+crewShipSchema.virtual("ItemId").get(function () {
+    return { $oid: this._id.toString() };
+});
+crewShipSchema.set("toJSON", {
+    virtuals: true,
+    transform(_doc, ret, _options) {
+        delete ret._id;
+        delete ret.__v;
+    }
+});
+
 const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
     {
         accountOwnerId: Schema.Types.ObjectId,
@@ -741,7 +828,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         CrewShipRawSalvage: [Schema.Types.Mixed],
 
         //Default RailJack
-        CrewShips: [Schema.Types.Mixed],
+        CrewShips: [crewShipSchema],
         CrewShipAmmo: [typeCountSchema],
         CrewShipWeapons: [Schema.Types.Mixed],
         CrewShipWeaponSkins: [Schema.Types.Mixed],
@@ -1005,6 +1092,8 @@ type InventoryDocumentProps = {
     Hoverboards: Types.DocumentArray<IEquipmentDatabase>;
     MoaPets: Types.DocumentArray<IEquipmentDatabase>;
     WeaponSkins: Types.DocumentArray<IWeaponSkinDatabase>;
+    CrewShips: Types.DocumentArray<ICrewShip>;
+    CrewShipHarnesses: Types.DocumentArray<IEquipmentDatabase>;
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-types

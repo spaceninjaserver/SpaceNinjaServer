@@ -13,7 +13,7 @@ const oidSchema = new Schema<IOid>(
 );
 
 //create a mongoose schema based on interface M
-const EquipmentSelectionSchema = new Schema<IEquipmentSelection>(
+export const EquipmentSelectionSchema = new Schema<IEquipmentSelection>(
     {
         ItemId: oidSchema,
         mod: Number,
