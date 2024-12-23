@@ -792,7 +792,7 @@ const uiConfigs = [
 ];
 
 function doChangeSettings() {
-    fetch("/custom/config")
+    fetch("/custom/config?" + window.authz)
         .then(response => response.json())
         .then(json => {
             for (const i of uiConfigs) {
@@ -810,7 +810,7 @@ function doChangeSettings() {
                 }
             }
             $.post({
-                url: "/custom/config",
+                url: "/custom/config?" + window.authz,
                 contentType: "text/plain",
                 data: JSON.stringify(json, null, 2)
             });
@@ -820,23 +820,34 @@ function doChangeSettings() {
 // Cheats route
 
 single.getRoute("/webui/cheats").on("beforeload", function () {
-    fetch("/custom/config")
-        .then(response => response.json())
-        .then(json =>
-            Object.entries(json).forEach(entry => {
-                const [key, value] = entry;
-                var x = document.getElementById(`${key}`);
-                if (x != null) {
-                    if (x.type == "checkbox") {
-                        if (value === true) {
-                            x.setAttribute("checked", "checked");
-                        }
-                    } else if (x.type == "number") {
-                        x.setAttribute("value", `${value}`);
-                    }
+    let interval;
+    interval = setInterval(() => {
+        if (window.authz) {
+            clearInterval(interval);
+            fetch("/custom/config?" + window.authz).then(res => {
+                if (res.status == 200) {
+                    $("#server-settings").removeClass("d-none");
+                    res.json().then(json =>
+                        Object.entries(json).forEach(entry => {
+                            const [key, value] = entry;
+                            var x = document.getElementById(`${key}`);
+                            if (x != null) {
+                                if (x.type == "checkbox") {
+                                    if (value === true) {
+                                        x.setAttribute("checked", "checked");
+                                    }
+                                } else if (x.type == "number") {
+                                    x.setAttribute("value", `${value}`);
+                                }
+                            }
+                        })
+                    );
+                } else {
+                    $("#server-settings-no-perms").removeClass("d-none");
                 }
-            })
-        );
+            });
+        }
+    }, 10);
 
     fetch("http://localhost:61558/ping", { mode: "no-cors" })
         .then(() => {
