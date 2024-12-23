@@ -1,5 +1,5 @@
 import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
-import new_inventory from "@/static/fixed_responses/postTutorialInventory.json";
+import postTutorialInventory from "@/static/fixed_responses/postTutorialInventory.json";
 import { config } from "@/src/services/configService";
 import { Types } from "mongoose";
 import { SlotNames, IInventoryChanges, IBinChanges } from "@/src/types/purchaseTypes";
@@ -54,7 +54,7 @@ export const createInventory = async (
                   accountOwnerId: accountOwnerId,
                   LoadOutPresets: defaultItemReferences.loadOutPresetId,
                   Ships: [defaultItemReferences.ship],
-                  ...new_inventory
+                  ...postTutorialInventory
               })
             : new Inventory({
                   accountOwnerId: accountOwnerId,
