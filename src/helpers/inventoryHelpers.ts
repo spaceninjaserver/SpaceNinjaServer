@@ -9,7 +9,7 @@ export const toInventoryResponse = (inventoryDatabase: { accountOwnerId: Types.O
     return inventoryResponse as unknown as IInventoryResponse;
 };
 
-export const toOid = (objectId: Types.ObjectId) => {
+export const toOid = (objectId: Types.ObjectId): IOid => {
     return { $oid: objectId.toString() } satisfies IOid;
 };
 

@@ -1,4 +1,11 @@
-import { IApartment, IRoom, IPlacedDecosDatabase, ITailorShop, TBootLocation } from "@/src/types/shipTypes";
+import {
+    IApartment,
+    IRoom,
+    IPlacedDecosDatabase,
+    ITailorShop,
+    ITailorShopDatabase,
+    TBootLocation
+} from "@/src/types/shipTypes";
 import { Model, Types } from "mongoose";
 
 export interface IOrbiter {
@@ -9,11 +16,17 @@ export interface IOrbiter {
 }
 
 export interface IPersonalRooms {
+    Ship: IOrbiter;
+    Apartment: IApartment;
+    TailorShop: ITailorShop;
+}
+
+export interface IPersonalRoomsDatabase {
     personalRoomsOwnerId: Types.ObjectId;
     activeShipId: Types.ObjectId;
     Ship: IOrbiter;
     Apartment: IApartment;
-    TailorShop: ITailorShop;
+    TailorShop: ITailorShopDatabase;
 }
 
 export type RoomsType = { Name: string; MaxCapacity: number; PlacedDecos: Types.DocumentArray<IPlacedDecosDatabase> };
@@ -25,10 +38,10 @@ export type PersonalRoomsDocumentProps = {
     Apartment: Omit<IApartment, "Rooms"> & {
         Rooms: RoomsType[];
     };
-    TailorShop: Omit<ITailorShop, "Rooms"> & {
+    TailorShop: Omit<ITailorShopDatabase, "Rooms"> & {
         Rooms: RoomsType[];
     };
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export type PersonalRoomsModelType = Model<IPersonalRooms, {}, PersonalRoomsDocumentProps>;
+export type PersonalRoomsModelType = Model<IPersonalRoomsDatabase, {}, PersonalRoomsDocumentProps>;
