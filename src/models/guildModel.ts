@@ -13,7 +13,9 @@ const dojoComponentSchema = new Schema<IDojoComponentDatabase>({
 const guildSchema = new Schema<IGuildDatabase>(
     {
         Name: { type: String, required: true },
-        DojoComponents: [dojoComponentSchema]
+        DojoComponents: [dojoComponentSchema],
+        DojoCapacity: { type: Number, default: 100 },
+        DojoEnergy: { type: Number, default: 5 }
     },
     { id: false }
 );

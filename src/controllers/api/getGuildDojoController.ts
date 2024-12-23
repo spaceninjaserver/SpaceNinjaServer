@@ -33,8 +33,8 @@ export const getGuildDojoController: RequestHandler = async (req, res) => {
         FixedContributions: true,
         DojoRevision: 1,
         RevisionTime: Math.round(Date.now() / 1000),
-        Energy: 5,
-        Capacity: 100,
+        Energy: guild.DojoEnergy,
+        Capacity: guild.DojoCapacity,
         DojoRequestStatus: 0,
         DojoComponents: []
     };

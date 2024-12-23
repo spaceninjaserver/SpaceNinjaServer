@@ -9,6 +9,8 @@ export interface IGuild {
 export interface IGuildDatabase extends IGuild {
     _id: Types.ObjectId;
     DojoComponents?: IDojoComponentDatabase[];
+    DojoCapacity: number;
+    DojoEnergy: number;
 }
 
 export interface ICreateGuildRequest {
@@ -30,7 +32,7 @@ export interface IDojoClient {
 
 export interface IDojoComponentClient {
     id: IOid;
-    pf: string;
+    pf: string; // Prefab (.level)
     ppf: string;
     pi?: IOid; // Parent ID. N/A to root.
     op?: string; // "Open Portal"? N/A to root.
