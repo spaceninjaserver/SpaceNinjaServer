@@ -1,8 +1,9 @@
 import { RequestHandler } from "express";
-import { getDict, getString } from "@/src/services/itemDataService";
+import { getDict, getItemName, getString } from "@/src/services/itemDataService";
 import {
     ExportArcanes,
     ExportGear,
+    ExportRecipes,
     ExportResources,
     ExportUpgrades,
     ExportWarframes,
@@ -46,6 +47,18 @@ const getItemListsController: RequestHandler = (req, res) => {
             uniqueName: "Consumables:" + uniqueName,
             name: getString(item.name, lang)
         });
+    }
+    const recipeNameTemplate = getString("/Lotus/Language/Items/BlueprintAndItem", lang);
+    for (const [uniqueName, item] of Object.entries(ExportRecipes)) {
+        if (!item.secretIngredientAction) {
+            const resultName = getItemName(item.resultType);
+            if (resultName) {
+                miscitems.push({
+                    uniqueName: "Recipes:" + uniqueName,
+                    name: recipeNameTemplate.replace("|ITEM|", getString(resultName, lang))
+                });
+            }
+        }
     }
 
     const mods: ListedItem[] = [];
