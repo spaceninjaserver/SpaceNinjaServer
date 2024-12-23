@@ -598,15 +598,15 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         RewardSeed: Number,
 
         //Credit
-        RegularCredits: Number,
+        RegularCredits: { type: Number, default: 3000 },
         //Platinum
-        PremiumCredits: Number,
+        PremiumCredits: { type: Number, default: 50 },
         //Gift Platinum(Non trade)
-        PremiumCreditsFree: Number,
+        PremiumCreditsFree: { type: Number, default: 50 },
         //Endo
-        FusionPoints: Number,
+        FusionPoints: { type: Number, default: 0 },
         //Regal Aya
-        PrimeTokens: Number,
+        PrimeTokens: { type: Number, default: 0 },
 
         //Slots
         SuitBin: slotsBinSchema,
@@ -623,9 +623,9 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         CrewMemberBin: slotsBinSchema,
 
         //How many trades do you have left
-        TradesRemaining: Number,
+        TradesRemaining: { type: Number, default: 0 },
         //How many Gift do you have left*(gift spends the trade)
-        GiftsRemaining: Number,
+        GiftsRemaining: { type: Number, default: 8 },
         //Curent trade info Giving or Getting items
         PendingTrades: [Schema.Types.Mixed],
 
@@ -636,23 +636,23 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Syndicates Missions complate(Navigation->Syndicate)
         CompletedSyndicates: [String],
         //Daily Syndicates Exp
-        DailyAffiliation: Number,
-        DailyAffiliationPvp: Number,
-        DailyAffiliationLibrary: Number,
-        DailyAffiliationCetus: Number,
-        DailyAffiliationQuills: Number,
-        DailyAffiliationSolaris: Number,
-        DailyAffiliationVentkids: Number,
-        DailyAffiliationVox: Number,
-        DailyAffiliationEntrati: Number,
-        DailyAffiliationNecraloid: Number,
-        DailyAffiliationZariman: Number,
-        DailyAffiliationKahl: Number,
-        DailyAffiliationCavia: Number,
-        DailyAffiliationHex: Number,
+        DailyAffiliation: { type: Number, default: 0 },
+        DailyAffiliationPvp: { type: Number, default: 0 },
+        DailyAffiliationLibrary: { type: Number, default: 0 },
+        DailyAffiliationCetus: { type: Number, default: 0 },
+        DailyAffiliationQuills: { type: Number, default: 0 },
+        DailyAffiliationSolaris: { type: Number, default: 0 },
+        DailyAffiliationVentkids: { type: Number, default: 0 },
+        DailyAffiliationVox: { type: Number, default: 0 },
+        DailyAffiliationEntrati: { type: Number, default: 0 },
+        DailyAffiliationNecraloid: { type: Number, default: 0 },
+        DailyAffiliationZariman: { type: Number, default: 0 },
+        DailyAffiliationKahl: { type: Number, default: 0 },
+        DailyAffiliationCavia: { type: Number, default: 0 },
+        DailyAffiliationHex: { type: Number, default: 0 },
 
         //Daily Focus limit
-        DailyFocus: Number,
+        DailyFocus: { type: Number, default: 250000 },
         //Focus XP per School
         FocusXP: focusXPSchema,
         //Curent active like Active school focuses is = "Zenurik"
@@ -766,7 +766,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         Scoops: [EquipmentSchema],
 
         //Mastery Rank*(Need item XPInfo to rank up)
-        PlayerLevel: Number,
+        PlayerLevel: { type: Number, default: 0 },
         //Item Mastery Rank exp
         XPInfo: [TypeXPItemSchema],
         //Mastery Rank next availability
@@ -940,7 +940,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         Robotics: [Schema.Types.Mixed],
         UsedDailyDeals: [Schema.Types.Mixed],
         CollectibleSeries: [Schema.Types.Mixed],
-        HasResetAccount: Boolean,
+        HasResetAccount: { type: Boolean, default: false },
 
         //Discount Coupon
         PendingCoupon: Schema.Types.Mixed,
