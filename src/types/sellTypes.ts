@@ -12,6 +12,7 @@ export interface ISellRequest {
         | "SC_RegularCredits"
         | "SC_PrimeBucks"
         | "SC_FusionPoints"
+        | "SC_DistillPoints"
         | "SC_CrewShipFusionPoints"
         | "SC_Resources";
     buildLabel: string;
