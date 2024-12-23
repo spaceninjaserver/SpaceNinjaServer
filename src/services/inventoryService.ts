@@ -30,7 +30,7 @@ import { logger } from "@/src/utils/logger";
 import { getWeaponType, getExalted } from "@/src/services/itemDataService";
 import { getRandomWeightedReward } from "@/src/services/rngService";
 import { ISyndicateSacrifice, ISyndicateSacrificeResponse } from "../types/syndicateTypes";
-import { IEquipmentClient } from "../types/inventoryTypes/commonInventoryTypes";
+import { IEquipmentClient, IItemConfig } from "../types/inventoryTypes/commonInventoryTypes";
 import {
     ExportArcanes,
     ExportBoosterPacks,
@@ -39,6 +39,7 @@ import {
     ExportGear,
     ExportRecipes,
     ExportResources,
+    ExportSentinels,
     ExportUpgrades
 } from "warframe-public-export-plus";
 import { createShip } from "./shipService";
@@ -299,16 +300,16 @@ export const addItem = async (
         }
         case "Types":
             switch (typeName.substr(1).split("/")[2]) {
-                case "Sentinels":
-                    // TOOD: Sentinels should also grant their DefaultUpgrades & SentinelWeapon.
-                    const sentinel = await addSentinel(typeName, accountId);
+                case "Sentinels": {
+                    const inventoryChanges = await addSentinel(typeName, accountId);
                     await updateSlots(accountId, InventorySlot.SENTINELS, 0, 1);
                     return {
                         InventoryChanges: {
-                            SentinelBin: { count: 1, platinum: 0, Slots: -1 },
-                            Sentinels: [sentinel]
+                            ...inventoryChanges,
+                            SentinelBin: { count: 1, platinum: 0, Slots: -1 }
                         }
                     };
+                }
                 case "Items": {
                     switch (typeName.substr(1).split("/")[3]) {
                         case "ShipDecos": {
@@ -374,10 +375,43 @@ export const addItem = async (
 
 //TODO: maybe genericMethod for all the add methods, they share a lot of logic
 export const addSentinel = async (sentinelName: string, accountId: string) => {
+    const inventoryChanges: IInventoryChanges = {};
+
+    if (ExportSentinels[sentinelName]?.defaultWeapon) {
+        inventoryChanges.SentinelWeapons = [
+            await addSentinelWeapon(ExportSentinels[sentinelName].defaultWeapon, accountId)
+        ];
+    }
+
+    const modsToGive: IRawUpgrade[] = [];
+    const configs: IItemConfig[] = [];
+    if (ExportSentinels[sentinelName]?.defaultUpgrades) {
+        const upgrades = [];
+        for (const defaultUpgrade of ExportSentinels[sentinelName].defaultUpgrades) {
+            modsToGive.push({ ItemType: defaultUpgrade.ItemType, ItemCount: 1 });
+            if (defaultUpgrade.Slot != -1) {
+                upgrades[defaultUpgrade.Slot] = defaultUpgrade.ItemType;
+            }
+        }
+        if (upgrades.length != 0) {
+            configs.push({ Upgrades: upgrades });
+        }
+    }
+
     const inventory = await getInventory(accountId);
-    const sentinelIndex = inventory.Sentinels.push({ ItemType: sentinelName, Configs: [], XP: 0 });
+    addMods(inventory, modsToGive);
+    const sentinelIndex = inventory.Sentinels.push({ ItemType: sentinelName, Configs: configs, XP: 0 });
     const changedInventory = await inventory.save();
-    return changedInventory.Sentinels[sentinelIndex - 1].toJSON();
+    inventoryChanges.Sentinels = [changedInventory.Sentinels[sentinelIndex - 1].toJSON()];
+
+    return inventoryChanges;
+};
+
+export const addSentinelWeapon = async (typeName: string, accountId: string) => {
+    const inventory = await getInventory(accountId);
+    const sentinelIndex = inventory.SentinelWeapons.push({ ItemType: typeName });
+    const changedInventory = await inventory.save();
+    return changedInventory.SentinelWeapons[sentinelIndex - 1].toJSON();
 };
 
 export const addPowerSuit = async (powersuitName: string, accountId: string): Promise<IEquipmentClient> => {
