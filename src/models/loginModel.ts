@@ -24,7 +24,7 @@ const databaseAccountSchema = new Schema<IDatabaseAccountJson>(
     {
         email: { type: String, required: true, unique: true },
         password: { type: String, required: true },
-        DisplayName: { type: String, required: true },
+        DisplayName: { type: String, required: true, unique: true },
         CountryCode: { type: String, required: true },
         ClientType: { type: String },
         CrossPlatformAllowed: { type: Boolean, required: true },

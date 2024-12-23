@@ -2,14 +2,19 @@ import { Account } from "@/src/models/loginModel";
 import { createInventory } from "@/src/services/inventoryService";
 import { IDatabaseAccount, IDatabaseAccountJson } from "@/src/types/loginTypes";
 import { createShip } from "./shipService";
-import { Types } from "mongoose";
+import { Document, Types } from "mongoose";
 import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
 import { PersonalRooms } from "@/src/models/personalRoomsModel";
 import new_personal_rooms from "@/static/fixed_responses/personalRooms.json";
 import { Request } from "express";
+import { config } from "@/src/services/configService";
 
 export const isCorrectPassword = (requestPassword: string, databasePassword: string): boolean => {
     return requestPassword === databasePassword;
+};
+
+export const isNameTaken = async (name: string): Promise<boolean> => {
+    return !!(await Account.findOne({ DisplayName: name }));
 };
 
 export const createAccount = async (accountData: IDatabaseAccount): Promise<IDatabaseAccountJson> => {
@@ -44,20 +49,21 @@ export const createPersonalRooms = async (accountId: Types.ObjectId, shipId: Typ
     await personalRooms.save();
 };
 
-export const getAccountForRequest = async (req: Request) => {
+// eslint-disable-next-line @typescript-eslint/ban-types
+type TAccountDocument = Document<unknown, {}, IDatabaseAccountJson> &
+    IDatabaseAccountJson & { _id: Types.ObjectId; __v: number };
+
+export const getAccountForRequest = async (req: Request): Promise<TAccountDocument> => {
     if (!req.query.accountId) {
         throw new Error("Request is missing accountId parameter");
     }
     if (!req.query.nonce || parseInt(req.query.nonce as string) === 0) {
         throw new Error("Request is missing nonce parameter");
     }
-    const account = await Account.findOne(
-        {
-            _id: req.query.accountId,
-            Nonce: req.query.nonce
-        },
-        "_id"
-    );
+    const account = await Account.findOne({
+        _id: req.query.accountId,
+        Nonce: req.query.nonce
+    });
     if (!account) {
         throw new Error("Invalid accountId-nonce pair");
     }
@@ -66,4 +72,8 @@ export const getAccountForRequest = async (req: Request) => {
 
 export const getAccountIdForRequest = async (req: Request): Promise<string> => {
     return (await getAccountForRequest(req))._id.toString();
+};
+
+export const isAdministrator = (account: TAccountDocument): boolean => {
+    return !!config.administratorNames?.find(x => x == account.DisplayName);
 };
