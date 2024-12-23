@@ -12,6 +12,10 @@ export const isCorrectPassword = (requestPassword: string, databasePassword: str
     return requestPassword === databasePassword;
 };
 
+export const isNameTaken = async (name: string): Promise<boolean> => {
+    return !!(await Account.findOne({ DisplayName: name }));
+};
+
 export const createAccount = async (accountData: IDatabaseAccount): Promise<IDatabaseAccountJson> => {
     const account = new Account(accountData);
     try {

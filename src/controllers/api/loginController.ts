@@ -6,7 +6,7 @@ import buildConfig from "@/static/data/buildConfig.json";
 
 import { toLoginRequest } from "@/src/helpers/loginHelpers";
 import { Account } from "@/src/models/loginModel";
-import { createAccount, isCorrectPassword } from "@/src/services/loginService";
+import { createAccount, isCorrectPassword, isNameTaken } from "@/src/services/loginService";
 import { IDatabaseAccountJson, ILoginResponse } from "@/src/types/loginTypes";
 import { DTLS, groups, HUB, platformCDNs } from "@/static/fixed_responses/login_static";
 import { logger } from "@/src/utils/logger";
@@ -26,10 +26,19 @@ export const loginController: RequestHandler = async (request, response) => {
 
     if (!account && config.autoCreateAccount && loginRequest.ClientType != "webui") {
         try {
+            const nameFromEmail = loginRequest.email.substring(0, loginRequest.email.indexOf("@"));
+            let name = nameFromEmail;
+            if (await isNameTaken(name)) {
+                let suffix = 0;
+                do {
+                    ++suffix;
+                    name = nameFromEmail + suffix;
+                } while (await isNameTaken(name));
+            }
             const newAccount = await createAccount({
                 email: loginRequest.email,
                 password: loginRequest.password,
-                DisplayName: loginRequest.email.substring(0, loginRequest.email.indexOf("@")),
+                DisplayName: name,
                 CountryCode: loginRequest.lang.toUpperCase(),
                 ClientType: loginRequest.ClientType,
                 CrossPlatformAllowed: true,
