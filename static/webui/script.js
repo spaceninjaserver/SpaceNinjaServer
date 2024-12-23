@@ -62,8 +62,16 @@ function logout() {
 }
 
 function deleteAccount() {
-    if (window.confirm("Are you sure you want to delete your account " + $(".displayname").text() + " (" + localStorage.getItem("email") + ")? This action cannot be undone.")) {
-        fetch("/custom/deleteAccount?" + window.authz).then(function() {
+    if (
+        window.confirm(
+            "Are you sure you want to delete your account " +
+                $(".displayname").text() +
+                " (" +
+                localStorage.getItem("email") +
+                ")? This action cannot be undone."
+        )
+    ) {
+        fetch("/custom/deleteAccount?" + window.authz).then(function () {
             logout();
             single.loadRoute("/webui/"); // Show login screen
         });
