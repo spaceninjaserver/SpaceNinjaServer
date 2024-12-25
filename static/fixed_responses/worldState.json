@@ -487,6 +487,14 @@
       "Tag": "ZarimanSyndicate",
       "Seed": 99562,
       "Nodes": []
+    },
+    {
+      "_id": { "$oid": "676b8d340000000000000006" },
+      "Activation": { "$date": { "$numberLong": "1735101748215" } },
+      "Expiry": { "$date": { "$numberLong": "2000000000000" } },
+      "Tag": "HexSyndicate",
+      "Seed": 33872,
+      "Nodes": []
     }
   ],
   "ActiveMissions": [
