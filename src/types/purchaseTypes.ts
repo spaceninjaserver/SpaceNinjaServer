@@ -25,6 +25,7 @@ export interface IPurchaseResponse {
         Tag: string;
         Standing: number;
     }[];
+    BoosterPackItems?: string;
 }
 
 export type IBinChanges = {
