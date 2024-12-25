@@ -34,7 +34,6 @@ interface IConfig {
     myIrcAddresses?: string[];
     administratorNames?: string[];
     autoCreateAccount?: boolean;
-    skipStoryModeChoice?: boolean;
     skipTutorial?: boolean;
     skipAllDialogue?: boolean;
     unlockAllScans?: boolean;

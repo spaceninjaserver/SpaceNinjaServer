@@ -229,7 +229,7 @@ export interface IInventoryResponse {
     FocusUpgrades: IFocusUpgrade[];
     OperatorAmps: IEquipmentDatabase[];
     HasContributedToDojo?: boolean;
-    HWIDProtectEnabled: boolean;
+    HWIDProtectEnabled?: boolean;
     KubrowPetPrints: IKubrowPetPrint[];
     AlignmentReplay: IAlignment;
     PersonalGoalProgress: IPersonalGoalProgress[];
@@ -284,7 +284,7 @@ export interface IInventoryResponse {
     NemesisAbandonedRewards: string[];
     DailyAffiliationKahl: number;
     DailyAffiliationCavia: number;
-    DailyAffiliationHex?: number;
+    DailyAffiliationHex: number;
     LastInventorySync: IOid;
     NextRefill: IMongoDate; // Next time argon crystals will have a decay tick
     FoundToday?: IMiscItem[]; // for Argon Crystals

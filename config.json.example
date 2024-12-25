@@ -9,7 +9,6 @@
   "httpsPort": 443,
   "administratorNames": [],
   "autoCreateAccount": true,
-  "skipStoryModeChoice": true,
   "skipTutorial": true,
   "skipAllDialogue": true,
   "unlockAllScans": true,
