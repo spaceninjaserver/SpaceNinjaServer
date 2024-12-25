@@ -4,6 +4,7 @@ export interface ISellRequest {
         LongGuns?: ISellItem[];
         Pistols?: ISellItem[];
         Melee?: ISellItem[];
+        Consumables?: ISellItem[];
         Recipes?: ISellItem[];
         Upgrades?: ISellItem[];
     };

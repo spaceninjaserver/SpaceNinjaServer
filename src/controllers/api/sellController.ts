@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import { ISellRequest } from "@/src/types/sellTypes";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getInventory, addMods, addRecipes, addMiscItems } from "@/src/services/inventoryService";
+import { getInventory, addMods, addRecipes, addMiscItems, addConsumables } from "@/src/services/inventoryService";
 
 export const sellController: RequestHandler = async (req, res) => {
     const payload = JSON.parse(String(req.body)) as ISellRequest;
@@ -44,6 +44,16 @@ export const sellController: RequestHandler = async (req, res) => {
         payload.Items.Melee.forEach(sellItem => {
             inventory.Melee.pull({ _id: sellItem.String });
         });
+    }
+    if (payload.Items.Consumables) {
+        const consumablesChanges = [];
+        for (const sellItem of payload.Items.Consumables) {
+            consumablesChanges.push({
+                ItemType: sellItem.String,
+                ItemCount: sellItem.Count * -1
+            });
+        }
+        addConsumables(inventory, consumablesChanges);
     }
     if (payload.Items.Recipes) {
         const recipeChanges = [];
