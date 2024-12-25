@@ -56,8 +56,7 @@ export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountI
     const purchaseResponse = await handleStoreItemAcquisition(
         purchaseRequest.PurchaseParams.StoreItem,
         accountId,
-        purchaseRequest.PurchaseParams.Quantity,
-        "COMMON"
+        purchaseRequest.PurchaseParams.Quantity
     );
 
     if (!purchaseResponse) throw new Error("purchase response was undefined");
@@ -160,11 +159,11 @@ export const handlePurchase = async (purchaseRequest: IPurchaseRequest, accountI
     return purchaseResponse;
 };
 
-const handleStoreItemAcquisition = async (
+export const handleStoreItemAcquisition = async (
     storeItemName: string,
     accountId: string,
-    quantity: number,
-    durability: TRarity,
+    quantity: number = 1,
+    durability: TRarity = "COMMON",
     ignorePurchaseQuantity: boolean = false
 ): Promise<IPurchaseResponse> => {
     let purchaseResponse = {
