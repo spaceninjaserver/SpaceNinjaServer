@@ -1,3 +1,5 @@
+import { IInventoryChanges } from "./purchaseTypes";
+
 export interface ISyndicateSacrifice {
     AffiliationTag: string;
     SacrificeLevel: number;
@@ -8,6 +10,6 @@ export interface ISyndicateSacrificeResponse {
     AffiliationTag: string;
     Level: number;
     LevelIncrease: number;
-    InventoryChanges: any[];
+    InventoryChanges: IInventoryChanges;
     NewEpisodeReward: boolean;
 }
