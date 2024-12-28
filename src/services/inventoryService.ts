@@ -434,7 +434,7 @@ export const addMechSuit = async (mechsuitName: string, accountId: string) => {
 export const addSpecialItem = async (itemName: string, accountId: string) => {
     const inventory = await getInventory(accountId);
     // According to wiki there is one exalted item per suit type, so we check if we don't already have that item
-    if (!inventory.SpecialItems.length || inventory.SpecialItems.some(obj => obj.ItemType !== itemName)) {
+    if (inventory.SpecialItems.length && inventory.SpecialItems.some(obj => obj.ItemType !== itemName)) {
         const specialItemIndex = inventory.SpecialItems.push({
             ItemType: itemName,
             Configs: [],
