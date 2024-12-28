@@ -4,6 +4,7 @@ import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { IStatsView } from "@/src/types/statTypes";
 import { config } from "@/src/services/configService";
 import allScans from "@/static/fixed_responses/allScans.json";
+import { ExportEnemies } from "warframe-public-export-plus";
 
 const viewController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -23,6 +24,11 @@ const viewController: RequestHandler = async (req, res) => {
     }
     if (config.unlockAllScans) {
         responseJson.Scans = allScans;
+        for (const type of Object.keys(ExportEnemies.avatars)) {
+            if (!responseJson.Scans.find(x => x.type == type)) {
+                responseJson.Scans.push({ type, scans: 9999 });
+            }
+        }
     }
     res.json(responseJson);
 };
