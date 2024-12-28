@@ -43,7 +43,7 @@ export const worldStateController: RequestHandler = (req, res) => {
         Nodes: []
     });
 
-    // Circuit warframe choices cycling every week
+    // Circuit choices cycling every week
     worldState.EndlessXpChoices.push({
         Category: "EXC_NORMAL",
         Choices: [
