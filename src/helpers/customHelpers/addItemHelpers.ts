@@ -2,7 +2,8 @@ import { isString } from "@/src/helpers/general";
 
 export enum ItemType {
     Powersuit = "Powersuit",
-    Weapon = "Weapon"
+    Weapon = "Weapon",
+    SpecialItem = "SpecialItem"
 }
 
 export const isItemType = (itemType: string): itemType is ItemType => {

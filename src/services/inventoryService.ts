@@ -29,7 +29,7 @@ import {
 import { logger } from "@/src/utils/logger";
 import { getWeaponType, getExalted } from "@/src/services/itemDataService";
 import { ISyndicateSacrifice, ISyndicateSacrificeResponse } from "../types/syndicateTypes";
-import { IEquipmentClient, IItemConfig } from "../types/inventoryTypes/commonInventoryTypes";
+import { EquipmentFeatures, IEquipmentClient, IItemConfig } from "../types/inventoryTypes/commonInventoryTypes";
 import {
     ExportArcanes,
     ExportCustoms,
@@ -433,15 +433,19 @@ export const addMechSuit = async (mechsuitName: string, accountId: string) => {
 
 export const addSpecialItem = async (itemName: string, accountId: string) => {
     const inventory = await getInventory(accountId);
-    const specialItemIndex = inventory.SpecialItems.push({
-        ItemType: itemName,
-        Configs: [],
-        Features: 1,
-        UpgradeVer: 101,
-        XP: 0
-    });
-    const changedInventory = await inventory.save();
-    return changedInventory.SpecialItems[specialItemIndex - 1].toJSON();
+    // According to wiki there is one exalted item per suit type, so we check if we don't already have that item
+    if (!inventory.SpecialItems.length || inventory.SpecialItems.some(obj => obj.ItemType !== itemName)) {
+        const specialItemIndex = inventory.SpecialItems.push({
+            ItemType: itemName,
+            Configs: [],
+            Features: EquipmentFeatures.DOUBLE_CAPACITY,
+            UpgradeVer: 101,
+            XP: 0
+        });
+        const changedInventory = await inventory.save();
+        return changedInventory.SpecialItems[specialItemIndex - 1].toJSON();
+    }
+    return;
 };
 
 export const addSpaceSuit = async (spacesuitName: string, accountId: string) => {

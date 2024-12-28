@@ -1,10 +1,11 @@
 import { RequestHandler } from "express";
-import { getDict, getItemName, getString } from "@/src/services/itemDataService";
+import { getDict, getExalted, getItemName, getString } from "@/src/services/itemDataService";
 import {
     ExportArcanes,
     ExportGear,
     ExportRecipes,
     ExportResources,
+    ExportSentinels,
     ExportUpgrades,
     ExportWarframes,
     ExportWeapons
@@ -15,12 +16,34 @@ interface ListedItem {
     uniqueName: string;
     name: string;
     fusionLimit?: number;
+    exalted?: { uniqueName: string; name: string }[];
 }
 
 const getItemListsController: RequestHandler = (req, res) => {
     const lang = getDict(typeof req.query.lang == "string" ? req.query.lang : "en");
     const weapons = [];
     const miscitems = [];
+    const warframes = [];
+    for (const [uniqueName, item] of Object.entries(ExportWarframes)) {
+        if (item.productCategory == "Suits") {
+            const warframe: ListedItem = {
+                uniqueName,
+                name: getString(item.name, lang)
+            };
+            const exalted = getExalted(uniqueName);
+            if (exalted) {
+                warframe.exalted = [];
+                exalted.forEach(element => {
+                    const exalted = ExportWeapons[element] || ExportSentinels[element];
+                    warframe.exalted?.push({
+                        uniqueName: element,
+                        name: getString(exalted.name, lang)
+                    });
+                });
+            }
+            warframes.push(warframe);
+        }
+    }
     for (const [uniqueName, item] of Object.entries(ExportWeapons)) {
         if (item.productCategory !== "OperatorAmps") {
             if (item.totalDamage !== 0) {
@@ -84,14 +107,7 @@ const getItemListsController: RequestHandler = (req, res) => {
     }
 
     res.json({
-        warframes: Object.entries(ExportWarframes)
-            .filter(([_uniqueName, warframe]) => warframe.productCategory == "Suits")
-            .map(([uniqueName, warframe]) => {
-                return {
-                    uniqueName,
-                    name: getString(warframe.name, lang)
-                };
-            }),
+        warframes,
         weapons,
         miscitems,
         mods,

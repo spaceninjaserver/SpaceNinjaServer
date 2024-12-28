@@ -1,7 +1,7 @@
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { ItemType, toAddItemRequest } from "@/src/helpers/customHelpers/addItemHelpers";
 import { getWeaponType } from "@/src/services/itemDataService";
-import { addPowerSuit, addEquipment } from "@/src/services/inventoryService";
+import { addPowerSuit, addEquipment, addSpecialItem } from "@/src/services/inventoryService";
 import { RequestHandler } from "express";
 
 const addItemController: RequestHandler = async (req, res) => {
@@ -17,6 +17,10 @@ const addItemController: RequestHandler = async (req, res) => {
             const weaponType = getWeaponType(request.InternalName);
             const weapon = await addEquipment(weaponType, request.InternalName, accountId);
             res.json(weapon);
+            break;
+        case ItemType.SpecialItem:
+            const specialItem = await addSpecialItem(request.InternalName, accountId);
+            res.json(specialItem);
             break;
         default:
             res.status(400).json({ error: "something went wrong" });

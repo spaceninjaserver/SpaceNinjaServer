@@ -126,6 +126,10 @@
                 </div>
             </div>
             <div id="powersuit-route" data-route="~ /webui/powersuit/(.+)" data-title="Inventory | OpenWF WebUI">
+                <p class="mb-4">
+                    Note: Changes made here will only be reflected in-game when the game re-downloads your
+                    inventory. Visiting the navigation should be the easiest way to trigger that.
+                </p>
                 <h3 class="mb-0"></h3>
                 <p class="text-body-secondary"></p>
                 <div class="card mb-4">
@@ -140,6 +144,14 @@
                         </form>
                         <table class="table table-hover w-100">
                             <tbody id="crystals-list"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <h5 class="card-header">Exalted Weapons</h5>
+                    <div class="card-body">
+                        <table class="table table-hover w-100">
+                            <tbody id="exalted-list"></tbody>
                         </table>
                     </div>
                 </div>

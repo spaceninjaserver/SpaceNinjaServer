@@ -45,6 +45,11 @@ export const sellController: RequestHandler = async (req, res) => {
             inventory.Melee.pull({ _id: sellItem.String });
         });
     }
+    if (payload.Items.SpecialItems) {
+        payload.Items.SpecialItems.forEach(sellItem => {
+            inventory.SpecialItems.pull({ _id: sellItem.String });
+        });
+    }
     if (payload.Items.Consumables) {
         const consumablesChanges = [];
         for (const sellItem of payload.Items.Consumables) {
