@@ -792,7 +792,6 @@ $("#mod-to-acquire").on("input", () => {
 
 const uiConfigs = [
     "autoCreateAccount",
-    "skipStoryModeChoice",
     "skipTutorial",
     "skipAllDialogue",
     "unlockAllScans",
