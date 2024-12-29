@@ -219,16 +219,16 @@ export const addItem = async (
         case "Powersuits":
             switch (typeName.substr(1).split("/")[2]) {
                 default: {
-                    const suit = await addPowerSuit(typeName, accountId);
+                    const inventoryChanges = await addPowerSuit(typeName, accountId);
                     await updateSlots(accountId, InventorySlot.SUITS, 0, 1);
                     return {
                         InventoryChanges: {
+                            ...inventoryChanges,
                             SuitBin: {
                                 count: 1,
                                 platinum: 0,
                                 Slots: -1
-                            },
-                            Suits: [suit]
+                            }
                         }
                     };
                 }
@@ -247,16 +247,16 @@ export const addItem = async (
                     };
                 }
                 case "EntratiMech": {
-                    const mechSuit = await addMechSuit(typeName, accountId);
+                    const inventoryChanges = await addMechSuit(typeName, accountId);
                     await updateSlots(accountId, InventorySlot.MECHSUITS, 0, 1);
                     return {
                         InventoryChanges: {
+                            ...inventoryChanges,
                             MechBin: {
                                 count: 1,
                                 platinum: 0,
                                 Slots: -1
-                            },
-                            MechSuits: [mechSuit]
+                            }
                         }
                     };
                 }
@@ -405,47 +405,55 @@ export const addSentinelWeapon = async (typeName: string, accountId: string) => 
     return changedInventory.SentinelWeapons[sentinelIndex - 1].toJSON();
 };
 
-export const addPowerSuit = async (powersuitName: string, accountId: string): Promise<IEquipmentClient> => {
+export const addPowerSuit = async (powersuitName: string, accountId: string): Promise<IInventoryChanges> => {
+    const inventoryChanges: IInventoryChanges = {};
     const specialItems = getExalted(powersuitName);
     if (specialItems) {
         for await (const specialItem of specialItems) {
-            await addSpecialItem(specialItem, accountId);
+            await addSpecialItem(specialItem, accountId, inventoryChanges);
         }
     }
     const inventory = await getInventory(accountId);
     const suitIndex = inventory.Suits.push({ ItemType: powersuitName, Configs: [], UpgradeVer: 101, XP: 0 });
     const changedInventory = await inventory.save();
-    return changedInventory.Suits[suitIndex - 1].toJSON() as object as IEquipmentClient;
+    inventoryChanges.Suits = [changedInventory.Suits[suitIndex - 1].toJSON()];
+    return inventoryChanges;
 };
 
-export const addMechSuit = async (mechsuitName: string, accountId: string) => {
+export const addMechSuit = async (mechsuitName: string, accountId: string): Promise<IInventoryChanges> => {
+    const inventoryChanges: IInventoryChanges = {};
     const specialItems = getExalted(mechsuitName);
     if (specialItems) {
         for await (const specialItem of specialItems) {
-            await addSpecialItem(specialItem, accountId);
+            await addSpecialItem(specialItem, accountId, inventoryChanges);
         }
     }
     const inventory = await getInventory(accountId);
     const suitIndex = inventory.MechSuits.push({ ItemType: mechsuitName, Configs: [], UpgradeVer: 101, XP: 0 });
     const changedInventory = await inventory.save();
-    return changedInventory.MechSuits[suitIndex - 1].toJSON();
+    inventoryChanges.MechSuits = [changedInventory.MechSuits[suitIndex - 1].toJSON()];
+    return inventoryChanges;
 };
 
-export const addSpecialItem = async (itemName: string, accountId: string) => {
+export const addSpecialItem = async (
+    itemName: string,
+    accountId: string,
+    inventoryChanges: IInventoryChanges
+): Promise<void> => {
     const inventory = await getInventory(accountId);
-    // According to wiki exalted items unique for suit type, so we check if we don't already have that item
-    if (!inventory.SpecialItems.some(obj => obj.ItemType === itemName)) {
-        const specialItemIndex = inventory.SpecialItems.push({
-            ItemType: itemName,
-            Configs: [],
-            Features: EquipmentFeatures.DOUBLE_CAPACITY,
-            UpgradeVer: 101,
-            XP: 0
-        });
-        const changedInventory = await inventory.save();
-        return changedInventory.SpecialItems[specialItemIndex - 1].toJSON();
+    if (inventory.SpecialItems.find(x => x.ItemType == itemName)) {
+        return;
     }
-    return;
+    const specialItemIndex = inventory.SpecialItems.push({
+        ItemType: itemName,
+        Configs: [],
+        Features: 1,
+        UpgradeVer: 101,
+        XP: 0
+    });
+    const changedInventory = await inventory.save();
+    inventoryChanges.SpecialItems ??= [];
+    (inventoryChanges.SpecialItems as object[]).push(changedInventory.SpecialItems[specialItemIndex - 1].toJSON());
 };
 
 export const addSpaceSuit = async (spacesuitName: string, accountId: string) => {
