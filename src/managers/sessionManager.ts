@@ -44,7 +44,6 @@ function getSessionByID(sessionId: string): ISession | undefined {
     return sessions.find(session => session.sessionId === sessionId);
 }
 
-//TODO: proper typings
 function getSession(sessionIdOrRequest: string | IFindSessionRequest): any[] {
     if (typeof sessionIdOrRequest === "string") {
         const session = sessions.find(session => session.sessionId === sessionIdOrRequest);
@@ -63,7 +62,11 @@ function getSession(sessionIdOrRequest: string | IFindSessionRequest): any[] {
     const request = sessionIdOrRequest;
     const matchingSessions = sessions.filter(session => {
         for (const key in request) {
-            if (key !== "eloRating" && key !== "queryId" && request[key] !== session[key as keyof ISession]) {
+            if (
+                key !== "eloRating" &&
+                key !== "queryId" &&
+                request[key as keyof IFindSessionRequest] !== session[key as keyof ISession]
+            ) {
                 return false;
             }
         }
