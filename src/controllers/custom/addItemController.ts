@@ -19,7 +19,7 @@ const addItemController: RequestHandler = async (req, res) => {
             res.json(weapon);
             break;
         case ItemType.SpecialItem:
-            const specialItem = await addSpecialItem(request.InternalName, accountId);
+            const specialItem = await addSpecialItem(request.InternalName, accountId, {});
             res.json(specialItem);
             break;
         default:
