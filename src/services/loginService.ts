@@ -75,5 +75,11 @@ export const getAccountIdForRequest = async (req: Request): Promise<string> => {
 };
 
 export const isAdministrator = (account: TAccountDocument): boolean => {
-    return !!config.administratorNames?.find(x => x == account.DisplayName);
+    if (!config.administratorNames) {
+        return false;
+    }
+    if (typeof config.administratorNames == "string") {
+        return config.administratorNames == account.DisplayName;
+    }
+    return !!config.administratorNames.find(x => x == account.DisplayName);
 };
