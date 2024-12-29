@@ -25,13 +25,13 @@ import {
     TRarity
 } from "warframe-public-export-plus";
 
-export const getStoreItemCategory = (storeItem: string) => {
+export const getStoreItemCategory = (storeItem: string): string => {
     const storeItemString = getSubstringFromKeyword(storeItem, "StoreItems/");
     const storeItemElements = storeItemString.split("/");
     return storeItemElements[1];
 };
 
-export const getStoreItemTypesCategory = (typesItem: string) => {
+export const getStoreItemTypesCategory = (typesItem: string): string => {
     const typesString = getSubstringFromKeyword(typesItem, "Types");
     const typeElements = typesString.split("/");
     if (typesItem.includes("StoreItems")) {

@@ -56,7 +56,7 @@ interface ILoggerConfig {
     level: string; // "fatal" | "error" | "warn" | "info" | "http" | "debug" | "trace";
 }
 
-export const updateConfig = async (data: string) => {
+export const updateConfig = async (data: string): Promise<void> => {
     amnesia = true;
     await fsPromises.writeFile(configPath, data);
     Object.assign(config, JSON.parse(data));
