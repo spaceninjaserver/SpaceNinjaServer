@@ -906,8 +906,7 @@ export const upgradeMod = async (artifactsData: IArtifactsRequest, accountId: st
         const { ItemType, UpgradeFingerprint, ItemId } = Upgrade;
 
         const safeUpgradeFingerprint = UpgradeFingerprint || '{"lvl":0}';
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        const parsedUpgradeFingerprint = JSON.parse(safeUpgradeFingerprint);
+        const parsedUpgradeFingerprint = JSON.parse(safeUpgradeFingerprint) as { lvl: number };
         parsedUpgradeFingerprint.lvl += LevelDiff;
         const stringifiedUpgradeFingerprint = JSON.stringify(parsedUpgradeFingerprint);
 

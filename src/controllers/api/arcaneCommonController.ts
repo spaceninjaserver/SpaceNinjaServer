@@ -19,7 +19,7 @@ export const arcaneCommonController: RequestHandler = async (req, res) => {
         inventory.Upgrades.pull({ _id: json.arcane.ItemId.$oid });
 
         // Add RawUpgrades
-        const numRawUpgradesToGive = arcaneLevelCounts[JSON.parse(upgrade.UpgradeFingerprint).lvl];
+        const numRawUpgradesToGive = arcaneLevelCounts[(JSON.parse(upgrade.UpgradeFingerprint) as { lvl: number }).lvl];
         addMods(inventory, [
             {
                 ItemType: json.arcane.ItemType,
@@ -35,7 +35,7 @@ export const arcaneCommonController: RequestHandler = async (req, res) => {
         if (upgrade) {
             // Have an existing Upgrade item?
             if (upgrade.UpgradeFingerprint) {
-                const existingLevel = JSON.parse(upgrade.UpgradeFingerprint).lvl;
+                const existingLevel = (JSON.parse(upgrade.UpgradeFingerprint) as { lvl: number }).lvl;
                 numConsumed -= arcaneLevelCounts[existingLevel];
             }
             upgrade.UpgradeFingerprint = JSON.stringify({ lvl: json.newRank });
