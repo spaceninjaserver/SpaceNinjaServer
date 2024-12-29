@@ -4,17 +4,14 @@ import { RequestHandler } from "express";
 import { config } from "@/src/services/configService";
 import buildConfig from "@/static/data/buildConfig.json";
 
-import { toLoginRequest } from "@/src/helpers/loginHelpers";
 import { Account } from "@/src/models/loginModel";
 import { createAccount, isCorrectPassword, isNameTaken } from "@/src/services/loginService";
-import { IDatabaseAccountJson, ILoginResponse } from "@/src/types/loginTypes";
+import { IDatabaseAccountJson, ILoginRequest, ILoginResponse } from "@/src/types/loginTypes";
 import { DTLS, groups, HUB, platformCDNs } from "@/static/fixed_responses/login_static";
 import { logger } from "@/src/utils/logger";
 
 export const loginController: RequestHandler = async (request, response) => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument
-    const body = JSON.parse(request.body); // parse octet stream of json data to json object
-    const loginRequest = toLoginRequest(body);
+    const loginRequest = JSON.parse(String(request.body)) as ILoginRequest; // parse octet stream of json data to json object
 
     const account = await Account.findOne({ email: loginRequest.email }); //{ _id: 0, __v: 0 }
     const nonce = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
