@@ -4,6 +4,7 @@ import { getInventory } from "@/src/services/inventoryService";
 import { IMongoDate } from "@/src/types/commonTypes";
 import { RequestHandler } from "express";
 import { unixTimesInMs } from "@/src/constants/timeConstants";
+import { IInventoryChanges } from "@/src/types/purchaseTypes";
 
 interface ITrainingResultsRequest {
     numLevelsGained: number;
@@ -12,7 +13,7 @@ interface ITrainingResultsRequest {
 interface ITrainingResultsResponse {
     NewTrainingDate: IMongoDate;
     NewLevel: number;
-    InventoryChanges: any[];
+    InventoryChanges: IInventoryChanges;
 }
 
 const trainingResultController: RequestHandler = async (req, res): Promise<void> => {
@@ -34,7 +35,7 @@ const trainingResultController: RequestHandler = async (req, res): Promise<void>
             $date: { $numberLong: changedinventory.TrainingDate.getTime().toString() }
         },
         NewLevel: trainingResults.numLevelsGained == 1 ? changedinventory.PlayerLevel : inventory.PlayerLevel,
-        InventoryChanges: []
+        InventoryChanges: {}
     } satisfies ITrainingResultsResponse);
 };
 
