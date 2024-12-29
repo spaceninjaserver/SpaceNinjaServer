@@ -8,9 +8,7 @@ const artifactsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
 
     try {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call
-        const artifactsData = getJSONfromString(req.body.toString()) as IArtifactsRequest;
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        const artifactsData = getJSONfromString(String(req.body)) as IArtifactsRequest;
         const upgradeModId = await upgradeMod(artifactsData, accountId);
         res.send(upgradeModId);
     } catch (err) {
