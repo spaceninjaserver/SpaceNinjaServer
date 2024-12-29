@@ -207,9 +207,14 @@ function updateInventory() {
                                 for (const exaltedType of itemMap[item.ItemType].exalted) {
                                     const exaltedItem = data.SpecialItems.find(x => x.ItemType == exaltedType);
                                     if (exaltedItem) {
-                                        const exaltedCap = itemMap[exaltedType]?.type == "weapons" ? 800_000 : 1_600_000;
+                                        const exaltedCap =
+                                            itemMap[exaltedType]?.type == "weapons" ? 800_000 : 1_600_000;
                                         if (exaltedItem.XP < exaltedCap) {
-                                            addGearExp("SpecialItems", exaltedItem.ItemId.$oid, exaltedCap - exaltedItem.XP);
+                                            addGearExp(
+                                                "SpecialItems",
+                                                exaltedItem.ItemId.$oid,
+                                                exaltedCap - exaltedItem.XP
+                                            );
                                         }
                                     }
                                 }
