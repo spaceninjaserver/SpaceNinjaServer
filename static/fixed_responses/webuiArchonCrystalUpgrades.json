@@ -54,6 +54,8 @@
   "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWeaponCritBoostFromHeat": "+1% Secondary Critical Chance per Heat-affected enemy killed (Max 50%)",
   "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWeaponCritBoostFromHeatMythic": "+1.5% Secondary Critical Chance per Heat-affected enemy killed (Max 75%)",
 
+  "/Lotus/Upgrades/Mods/Warframe/AvatarAbilityRangeMod": "+7.5% Ability Range",
+  "/Lotus/Upgrades/Mods/Warframe/AvatarAbilityEfficiencyMod": "+5% Ability Efficiency",
   "/Lotus/Upgrades/Mods/Warframe/AvatarEnergyRegenMod": "+0.5 Energy Regen/s",
   "/Lotus/Upgrades/Mods/Warframe/AvatarEnemyRadarMod": "+5m Enemy Radar",
   "/Lotus/Upgrades/Mods/Warframe/AvatarLootRadarMod": "+7m Loot Radar",
