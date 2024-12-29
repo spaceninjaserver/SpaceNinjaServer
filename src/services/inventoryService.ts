@@ -29,7 +29,7 @@ import {
 import { logger } from "@/src/utils/logger";
 import { getWeaponType, getExalted } from "@/src/services/itemDataService";
 import { ISyndicateSacrifice, ISyndicateSacrificeResponse } from "../types/syndicateTypes";
-import { EquipmentFeatures, IEquipmentClient, IItemConfig } from "../types/inventoryTypes/commonInventoryTypes";
+import { IEquipmentClient, IItemConfig } from "../types/inventoryTypes/commonInventoryTypes";
 import {
     ExportArcanes,
     ExportCustoms,

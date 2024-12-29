@@ -1,7 +1,7 @@
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { ItemType, toAddItemRequest } from "@/src/helpers/customHelpers/addItemHelpers";
 import { getWeaponType } from "@/src/services/itemDataService";
-import { addPowerSuit, addEquipment, addSpecialItem } from "@/src/services/inventoryService";
+import { addPowerSuit, addEquipment } from "@/src/services/inventoryService";
 import { RequestHandler } from "express";
 
 const addItemController: RequestHandler = async (req, res) => {
