@@ -431,8 +431,11 @@ export const addMechSuit = async (mechsuitName: string, accountId: string) => {
     return changedInventory.MechSuits[suitIndex - 1].toJSON();
 };
 
-export const addSpecialItem = async (itemName: string, accountId: string) => {
+export const addSpecialItem = async (itemName: string, accountId: string): Promise<IEquipmentClient | undefined> => {
     const inventory = await getInventory(accountId);
+    if (inventory.SpecialItems.find(x => x.ItemType == itemName)) {
+        return;
+    }
     const specialItemIndex = inventory.SpecialItems.push({
         ItemType: itemName,
         Configs: [],
@@ -441,7 +444,7 @@ export const addSpecialItem = async (itemName: string, accountId: string) => {
         XP: 0
     });
     const changedInventory = await inventory.save();
-    return changedInventory.SpecialItems[specialItemIndex - 1].toJSON();
+    return changedInventory.SpecialItems[specialItemIndex - 1].toJSON<IEquipmentClient>();
 };
 
 export const addSpaceSuit = async (spacesuitName: string, accountId: string) => {
