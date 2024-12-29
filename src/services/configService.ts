@@ -22,6 +22,7 @@ fs.watchFile(configPath, () => {
         }
 
         Object.assign(config, JSON.parse(fs.readFileSync(configPath, "utf-8")));
+        validateConfig();
     }
 });
 
@@ -32,7 +33,7 @@ interface IConfig {
     httpPort?: number;
     httpsPort?: number;
     myIrcAddresses?: string[];
-    administratorNames?: string[];
+    administratorNames?: string[] | string;
     autoCreateAccount?: boolean;
     skipTutorial?: boolean;
     skipAllDialogue?: boolean;
@@ -60,4 +61,12 @@ export const updateConfig = async (data: string): Promise<void> => {
     amnesia = true;
     await fsPromises.writeFile(configPath, data);
     Object.assign(config, JSON.parse(data));
+};
+
+export const validateConfig = (): void => {
+    if (typeof config.administratorNames == "string") {
+        logger.warn(
+            `"administratorNames" should be an array; please add square brackets: ["${config.administratorNames}"]`
+        );
+    }
 };

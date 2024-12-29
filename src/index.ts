@@ -6,11 +6,12 @@ import http from "http";
 import https from "https";
 import fs from "node:fs";
 import { app } from "./app";
-import { config } from "./services/configService";
+import { config, validateConfig } from "./services/configService";
 import { connectDatabase } from "@/src/services/mongoService";
 import { registerLogFileCreationListener } from "@/src/utils/logger";
 
 registerLogFileCreationListener();
+validateConfig();
 
 void (async (): Promise<void> => {
     await connectDatabase();
