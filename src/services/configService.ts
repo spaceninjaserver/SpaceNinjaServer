@@ -46,6 +46,7 @@ interface IConfig {
     unlockAllShipDecorations?: boolean;
     unlockAllFlavourItems?: boolean;
     unlockAllSkins?: boolean;
+    unlockAllCapturaScenes?: boolean;
     universalPolarityEverywhere?: boolean;
     spoofMasteryRank?: number;
 }
