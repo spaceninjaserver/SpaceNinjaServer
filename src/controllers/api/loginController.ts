@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 
 import { config } from "@/src/services/configService";
-import buildConfig from "@/static/data/buildConfig.json";
+import { buildConfig } from "@/src/services/buildConfigService";
 
 import { Account } from "@/src/models/loginModel";
 import { createAccount, isCorrectPassword, isNameTaken } from "@/src/services/loginService";

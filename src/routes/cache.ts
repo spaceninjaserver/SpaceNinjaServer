@@ -1,5 +1,5 @@
 import express from "express";
-import buildConfig from "@/static/data/buildConfig.json";
+import { buildConfig } from "@/src/services/buildConfigService";
 import fs from "fs/promises";
 
 const cacheRouter = express.Router();

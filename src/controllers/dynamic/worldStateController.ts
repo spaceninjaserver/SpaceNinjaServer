@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import staticWorldState from "@/static/fixed_responses/worldState.json";
-import buildConfig from "@/static/data/buildConfig.json";
+import { buildConfig } from "@/src/services/buildConfigService";
 import { IMongoDate, IOid } from "@/src/types/commonTypes";
 
 export const worldStateController: RequestHandler = (req, res) => {
