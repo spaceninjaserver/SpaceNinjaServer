@@ -4,7 +4,7 @@ import { getRecipe } from "@/src/services/itemDataService";
 import { logger } from "@/src/utils/logger";
 import { Types } from "mongoose";
 
-export const startRecipe = async (recipeName: string, accountId: string): Promise<{ RecipeId: { $oid?: string } }> => {
+export const startRecipe = async (recipeName: string, accountId: string): Promise<{ RecipeId: { $oid: string } }> => {
     const recipe = getRecipe(recipeName);
 
     if (!recipe) {
@@ -34,6 +34,6 @@ export const startRecipe = async (recipeName: string, accountId: string): Promis
     const newInventory = await inventory.save();
 
     return {
-        RecipeId: { $oid: newInventory.PendingRecipes[newInventory.PendingRecipes.length - 1]._id?.toString() }
+        RecipeId: { $oid: newInventory.PendingRecipes[newInventory.PendingRecipes.length - 1]._id.toString() }
     };
 };
