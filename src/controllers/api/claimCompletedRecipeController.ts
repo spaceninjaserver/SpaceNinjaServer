@@ -7,7 +7,14 @@ import { getRecipe } from "@/src/services/itemDataService";
 import { IOid } from "@/src/types/commonTypes";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getInventory, updateCurrency, addItem, addMiscItems, addRecipes } from "@/src/services/inventoryService";
+import {
+    getInventory,
+    updateCurrency,
+    addItem,
+    addMiscItems,
+    addRecipes,
+    updateCurrencyByAccountId
+} from "@/src/services/inventoryService";
 
 export interface IClaimCompletedRecipeRequest {
     RecipeIds: IOid[];
@@ -43,9 +50,8 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
     }
 
     if (req.query.cancel) {
-        const currencyChanges = await updateCurrency(recipe.buildPrice * -1, false, accountId);
-
         const inventory = await getInventory(accountId);
+        const currencyChanges = updateCurrency(inventory, recipe.buildPrice * -1, false);
         addMiscItems(inventory, recipe.ingredients);
         await inventory.save();
 
@@ -74,7 +80,7 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
         if (req.query.rush) {
             InventoryChanges = {
                 ...InventoryChanges,
-                ...(await updateCurrency(recipe.skipBuildTimePrice, true, accountId))
+                ...(await updateCurrencyByAccountId(recipe.skipBuildTimePrice, true, accountId))
             };
         }
         res.json({

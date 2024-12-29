@@ -26,14 +26,13 @@ export const startRecipeController: RequestHandler = async (req, res) => {
         throw new Error(`unknown recipe ${recipeName}`);
     }
 
-    await updateCurrency(recipe.buildPrice, false, accountId);
-
     const ingredientsInverse = recipe.ingredients.map(component => ({
         ItemType: component.ItemType,
         ItemCount: component.ItemCount * -1
     }));
 
     const inventory = await getInventory(accountId);
+    updateCurrency(inventory, recipe.buildPrice, false);
     addMiscItems(inventory, ingredientsInverse);
 
     //buildtime is in seconds

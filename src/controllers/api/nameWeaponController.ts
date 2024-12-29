@@ -20,8 +20,9 @@ export const nameWeaponController: RequestHandler = async (req, res) => {
     } else {
         item.ItemName = undefined;
     }
+    const currencyChanges = updateCurrency(inventory, "webui" in req.query ? 0 : 15, true);
     await inventory.save();
     res.json({
-        InventoryChanges: await updateCurrency("webui" in req.query ? 0 : 15, true, accountId)
+        InventoryChanges: currencyChanges
     });
 };

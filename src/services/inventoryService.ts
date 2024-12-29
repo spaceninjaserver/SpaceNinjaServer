@@ -2,7 +2,7 @@ import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import postTutorialInventory from "@/static/fixed_responses/postTutorialInventory.json";
 import { config } from "@/src/services/configService";
 import { Types } from "mongoose";
-import { SlotNames, IInventoryChanges, IBinChanges } from "@/src/types/purchaseTypes";
+import { SlotNames, IInventoryChanges, IBinChanges, ICurrencyChanges } from "@/src/types/purchaseTypes";
 import {
     IChallengeProgress,
     IConsumable,
@@ -483,47 +483,43 @@ export const updateSlots = async (
     await inventory.save();
 };
 
-export const updateCurrency = async (
+const isCurrencyTracked = (usePremium: boolean): boolean => {
+    return usePremium ? !config.infinitePlatinum : !config.infiniteCredits;
+};
+
+export const updateCurrency = (
+    inventory: IInventoryDatabaseDocument,
+    price: number,
+    usePremium: boolean
+): ICurrencyChanges => {
+    const currencyChanges: ICurrencyChanges = {};
+    if (price != 0 && isCurrencyTracked(usePremium)) {
+        if (usePremium) {
+            if (inventory.PremiumCreditsFree > 0) {
+                currencyChanges.PremiumCreditsFree = Math.min(price, inventory.PremiumCreditsFree) * -1;
+                inventory.PremiumCreditsFree += currencyChanges.PremiumCreditsFree;
+            }
+            currencyChanges.PremiumCredits = -price;
+            inventory.PremiumCredits += currencyChanges.PremiumCredits;
+        } else {
+            currencyChanges.RegularCredits = -price;
+            inventory.RegularCredits += currencyChanges.RegularCredits;
+        }
+        logger.debug(`currency changes `, currencyChanges);
+    }
+    return currencyChanges;
+};
+
+export const updateCurrencyByAccountId = async (
     price: number,
     usePremium: boolean,
     accountId: string
-): Promise<IInventoryChanges> => {
-    if (usePremium ? config.infinitePlatinum : config.infiniteCredits) {
+): Promise<ICurrencyChanges> => {
+    if (!isCurrencyTracked(usePremium)) {
         return {};
     }
-
     const inventory = await getInventory(accountId);
-
-    if (usePremium) {
-        if (inventory.PremiumCreditsFree > 0) {
-            inventory.PremiumCreditsFree -= Math.min(price, inventory.PremiumCreditsFree);
-        }
-        inventory.PremiumCredits -= price;
-    } else {
-        inventory.RegularCredits -= price;
-    }
-
-    const modifiedPaths = inventory.modifiedPaths();
-
-    type currencyKeys = "RegularCredits" | "PremiumCredits" | "PremiumCreditsFree";
-
-    const currencyChanges = {} as Record<currencyKeys, number>;
-    modifiedPaths.forEach(path => {
-        currencyChanges[path as currencyKeys] = -price;
-    });
-
-    logger.debug(`currency changes `, { currencyChanges });
-
-    //let changes = {} as keyof currencyKeys;
-
-    // const obj2 = modifiedPaths.reduce(
-    //     (obj, key) => {
-    //         obj[key as keyof currencyKeys] = price;
-    //         return obj;
-    //     },
-    //     {} as Record<keyof currencyKeys, number>
-    // );
-
+    const currencyChanges = updateCurrency(inventory, price, usePremium);
     await inventory.save();
     return currencyChanges;
 };
