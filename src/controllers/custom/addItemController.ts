@@ -18,10 +18,6 @@ const addItemController: RequestHandler = async (req, res) => {
             const weapon = await addEquipment(weaponType, request.InternalName, accountId);
             res.json(weapon);
             break;
-        case ItemType.SpecialItem:
-            const specialItem = await addSpecialItem(request.InternalName, accountId, {});
-            res.json(specialItem);
-            break;
         default:
             res.status(400).json({ error: "something went wrong" });
             break;
