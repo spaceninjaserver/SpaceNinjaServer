@@ -28,5 +28,14 @@ export interface ISession {
 }
 
 export interface IFindSessionRequest {
-    [key: string]: any;
+    id?: string;
+    originalSessionId?: string;
+    buildId?: number;
+    gameModeId?: number;
+    regionId?: number;
+    maxEloDifference?: number;
+    eloRating?: number;
+    enforceElo?: boolean;
+    xplatform?: boolean;
+    queryId?: number;
 }
