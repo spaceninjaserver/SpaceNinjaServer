@@ -17,7 +17,9 @@ export interface IPurchaseParams {
     UseFreeFavor?: boolean; // for Source 2
 }
 
-export type IInventoryChanges = Record<string, IBinChanges | object[]>;
+export type IInventoryChanges = {
+    [_ in SlotNames]?: IBinChanges;
+} & Record<string, IBinChanges | number | object[]>;
 
 export interface IPurchaseResponse {
     InventoryChanges: IInventoryChanges;
