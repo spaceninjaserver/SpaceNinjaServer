@@ -19,6 +19,10 @@ export interface IPurchaseParams {
 
 export type IInventoryChanges = {
     [_ in SlotNames]?: IBinChanges;
+} & {
+    RegularCredits?: number;
+    PremiumCredits?: number;
+    PremiumCreditsFree?: number;
 } & Record<string, IBinChanges | number | object[]>;
 
 export interface IPurchaseResponse {
