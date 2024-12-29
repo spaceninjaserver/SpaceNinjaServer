@@ -29,17 +29,17 @@ export const gildWeaponController: RequestHandler = async (req, res) => {
     const data = getJSONfromString(String(req.body)) as IGildWeaponRequest;
     data.ItemId = String(req.query.ItemId);
     if (!modularWeaponCategory.includes(req.query.Category as WeaponTypeInternal | "Hoverboards")) {
-        throw new Error(`Unknown modular weapon Category: ${req.query.Category}`);
+        throw new Error(`Unknown modular weapon Category: ${String(req.query.Category)}`);
     }
     data.Category = req.query.Category as WeaponTypeInternal | "Hoverboards";
 
     const inventory = await getInventory(accountId);
     if (!inventory[data.Category]) {
-        throw new Error(`Category ${req.query.Category} not found in inventory`);
+        throw new Error(`Category ${String(req.query.Category)} not found in inventory`);
     }
     const weaponIndex = inventory[data.Category].findIndex(x => String(x._id) === data.ItemId);
     if (weaponIndex === -1) {
-        throw new Error(`Weapon with ${data.ItemId} not found in category ${req.query.Category}`);
+        throw new Error(`Weapon with ${data.ItemId} not found in category ${String(req.query.Category)}`);
     }
 
     const weapon = inventory[data.Category][weaponIndex];

@@ -9,7 +9,7 @@ export const focusController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     switch (req.query.op) {
         default:
-            logger.error("Unhandled focus op type: " + req.query.op);
+            logger.error("Unhandled focus op type: " + String(req.query.op));
             logger.debug(String(req.body));
             res.end();
             break;
