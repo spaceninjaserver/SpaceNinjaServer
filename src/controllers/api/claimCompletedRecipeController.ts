@@ -38,8 +38,8 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
 
     const recipe = getRecipe(pendingRecipe.ItemType);
     if (!recipe) {
-        logger.error(`no completed item found for recipe ${pendingRecipe._id}`);
-        throw new Error(`no completed item found for recipe ${pendingRecipe._id}`);
+        logger.error(`no completed item found for recipe ${pendingRecipe._id.toString()}`);
+        throw new Error(`no completed item found for recipe ${pendingRecipe._id.toString()}`);
     }
 
     if (req.query.cancel) {

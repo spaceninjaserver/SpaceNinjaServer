@@ -26,8 +26,8 @@ export const getShip = async (shipId: Types.ObjectId, fieldSelection: string = "
     const ship = await Ship.findOne({ _id: shipId }, fieldSelection);
 
     if (!ship) {
-        logger.error(`error finding a ship with id ${shipId}`);
-        throw new Error(`error finding a ship with id ${shipId}`);
+        logger.error(`error finding a ship with id ${shipId.toString()}`);
+        throw new Error(`error finding a ship with id ${shipId.toString()}`);
     }
 
     return ship;
