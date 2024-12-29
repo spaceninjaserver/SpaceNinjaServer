@@ -89,7 +89,8 @@ const getItemListsController: RequestHandler = (req, res) => {
             .map(([uniqueName, warframe]) => {
                 return {
                     uniqueName,
-                    name: getString(warframe.name, lang)
+                    name: getString(warframe.name, lang),
+                    exalted: warframe.exalted
                 };
             }),
         weapons,
