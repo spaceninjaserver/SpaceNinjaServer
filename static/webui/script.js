@@ -480,12 +480,16 @@ function updateInventory() {
                             {
                                 const td = document.createElement("td");
                                 td.classList = "text-end";
-                                if (item.XP < 1_600_000) {
+
+                                const targetXP = item.ItemType.startsWith("/Lotus/Powersuits/Khora/Kavat/")
+                                    ? 900_000
+                                    : 450_000;
+                                if (item.XP < targetXP) {
                                     const a = document.createElement("a");
                                     a.href = "#";
                                     a.onclick = function (event) {
                                         event.preventDefault();
-                                        addGearExp("SpecialItems", item.ItemId.$oid, 1_600_000 - item.XP);
+                                        addGearExp("SpecialItems", item.ItemId.$oid, targetXP - item.XP);
                                     };
                                     a.title = "Make Rank 30";
                                     a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"/></svg>`;
@@ -505,64 +509,10 @@ function updateInventory() {
                                     a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M0 80V229.5c0 17 6.7 33.3 18.7 45.3l176 176c25 25 65.5 25 90.5 0L418.7 317.3c25-25 25-65.5 0-90.5l-176-176c-12-12-28.3-18.7-45.3-18.7H48C21.5 32 0 53.5 0 80zm112 32a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/></svg>`;
                                     td.appendChild(a);
                                 }
-                                {
-                                    const a = document.createElement("a");
-                                    a.href = "#";
-                                    a.onclick = function (event) {
-                                        event.preventDefault();
-                                        disposeOfGear("SpecialItems", item.ItemId.$oid);
-                                    };
-                                    a.title = "Remove";
-                                    a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
-                                    td.appendChild(a);
-                                }
                                 tr.appendChild(td);
                             }
                             document.getElementById("exalted-list").appendChild(tr);
                         });
-
-                        const missingItems = exaltedWeapons.filter(
-                            element => !data.SpecialItems.some(x => x.ItemType === element.uniqueName)
-                        );
-                        if (missingItems) {
-                            missingItems.forEach(item => {
-                                const tr = document.createElement("tr");
-                                {
-                                    const td = document.createElement("td");
-                                    td.textContent = item?.name ?? item.uniqueName;
-                                    tr.appendChild(td);
-                                }
-                                {
-                                    const td = document.createElement("td");
-                                    td.classList = "text-end";
-                                    {
-                                        const a = document.createElement("a");
-                                        a.href = "#";
-                                        a.onclick = function (event) {
-                                            event.preventDefault();
-                                            revalidateAuthz(() => {
-                                                const req = $.post({
-                                                    url: "/custom/addItem?" + window.authz,
-                                                    contentType: "application/json",
-                                                    data: JSON.stringify({
-                                                        type: "SpecialItem",
-                                                        internalName: item.uniqueName
-                                                    })
-                                                });
-                                                req.done(() => {
-                                                    updateInventory();
-                                                });
-                                            });
-                                        };
-                                        a.title = "Add";
-                                        a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z"/></svg>`;
-                                        td.appendChild(a);
-                                    }
-                                    tr.appendChild(td);
-                                }
-                                document.getElementById("exalted-list").appendChild(tr);
-                            });
-                        }
                     } else {
                         document.getElementById("exalted-list").closest(".card").style.display = "none";
                     }
