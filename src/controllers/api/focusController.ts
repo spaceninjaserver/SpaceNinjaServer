@@ -10,7 +10,7 @@ export const focusController: RequestHandler = async (req, res) => {
     switch (req.query.op) {
         default:
             logger.error("Unhandled focus op type: " + req.query.op);
-            logger.debug(req.body.toString());
+            logger.debug(String(req.body));
             res.end();
             break;
         case FocusOperation.InstallLens: {

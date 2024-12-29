@@ -21,7 +21,7 @@ const parseFusionTreasure = (name: string, count: number): IFusionTreasure => {
 export const fusionTreasuresController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId);
-    const request = JSON.parse(req.body.toString() as string) as IFusionTreasureRequest;
+    const request = JSON.parse(String(req.body)) as IFusionTreasureRequest;
 
     const oldTreasure = parseFusionTreasure(request.oldTreasureName, -1);
     const newTreasure = parseFusionTreasure(request.newTreasureName, 1);
