@@ -81,7 +81,7 @@ export const combineInventoryChanges = (InventoryChanges: IInventoryChanges, del
             for (const item of right) {
                 left.push(item);
             }
-        } else {
+        } else if (typeof delta[key] == "object") {
             console.assert(key.substring(-3) == "Bin");
             const left = InventoryChanges[key] as IBinChanges;
             const right: IBinChanges = delta[key];
@@ -92,6 +92,8 @@ export const combineInventoryChanges = (InventoryChanges: IInventoryChanges, del
                 left.Extra ??= 0;
                 left.Extra += right.Extra;
             }
+        } else {
+            logger.warn(`inventory change not merged: ${key}`);
         }
     }
 };
@@ -476,7 +478,11 @@ export const updateSlots = async (accountId: string, slotName: SlotNames, slotAm
     await inventory.save();
 };
 
-export const updateCurrency = async (price: number, usePremium: boolean, accountId: string) => {
+export const updateCurrency = async (
+    price: number,
+    usePremium: boolean,
+    accountId: string
+): Promise<IInventoryChanges> => {
     if (usePremium ? config.infinitePlatinum : config.infiniteCredits) {
         return {};
     }
