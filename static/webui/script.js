@@ -787,6 +787,7 @@ const uiConfigs = [
     "unlockAllShipDecorations",
     "unlockAllFlavourItems",
     "unlockAllSkins",
+    "unlockAllCapturaScenes",
     "universalPolarityEverywhere",
     "spoofMasteryRank"
 ];

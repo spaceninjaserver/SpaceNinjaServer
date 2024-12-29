@@ -7,9 +7,16 @@ import allDialogue from "@/static/fixed_responses/allDialogue.json";
 import { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
 import { IShipInventory, equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IPolarity, ArtifactPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
-import { ExportCustoms, ExportFlavour, ExportKeys, ExportRegions, ExportResources } from "warframe-public-export-plus";
+import {
+    ExportCustoms,
+    ExportFlavour,
+    ExportKeys,
+    ExportRegions,
+    ExportResources,
+    ExportVirtuals
+} from "warframe-public-export-plus";
 
-const inventoryController: RequestHandler = async (request, response) => {
+export const inventoryController: RequestHandler = async (request, response) => {
     let account;
     try {
         account = await getAccountForRequest(request);
@@ -152,6 +159,17 @@ const inventoryController: RequestHandler = async (request, response) => {
         }
     }
 
+    if (config.unlockAllCapturaScenes) {
+        for (const uniqueName of Object.keys(ExportResources)) {
+            if (resourceInheritsFrom(uniqueName, "/Lotus/Types/Items/MiscItems/PhotoboothTile")) {
+                inventoryResponse.MiscItems.push({
+                    ItemType: uniqueName,
+                    ItemCount: 1
+                });
+            }
+        }
+    }
+
     if (typeof config.spoofMasteryRank === "number" && config.spoofMasteryRank >= 0) {
         inventoryResponse.PlayerLevel = config.spoofMasteryRank;
         if (!("xpBasedLevelCapDisabled" in request.query)) {
@@ -206,4 +224,19 @@ const getExpRequiredForMr = (rank: number): number => {
     return 2_250_000 + 147_500 * (rank - 30);
 };
 
-export { inventoryController };
+const resourceInheritsFrom = (resourceName: string, targetName: string): boolean => {
+    let parentName = resourceGetParent(resourceName);
+    for (; parentName != undefined; parentName = resourceGetParent(parentName)) {
+        if (parentName == targetName) {
+            return true;
+        }
+    }
+    return false;
+};
+
+const resourceGetParent = (resourceName: string): string | undefined => {
+    if (resourceName in ExportResources) {
+        return ExportResources[resourceName].parentName;
+    }
+    return ExportVirtuals[resourceName]?.parentName;
+};

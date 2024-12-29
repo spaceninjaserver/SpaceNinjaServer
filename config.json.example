@@ -22,6 +22,7 @@
   "unlockAllShipDecorations": true,
   "unlockAllFlavourItems": true,
   "unlockAllSkins": true,
+  "unlockAllCapturaScenes": true,
   "universalPolarityEverywhere": true,
   "spoofMasteryRank": -1
 }
