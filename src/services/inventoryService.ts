@@ -262,7 +262,7 @@ export const addItem = async (
                 }
             }
             break;
-        case "Weapons":
+        case "Weapons": {
             const weaponType = getWeaponType(typeName);
             const weapon = await addEquipment(weaponType, typeName, accountId);
             await updateSlots(accountId, InventorySlot.WEAPONS, 0, 1);
@@ -272,6 +272,7 @@ export const addItem = async (
                     [weaponType]: [weapon]
                 }
             };
+        }
         case "Objects": {
             // /Lotus/Objects/Tenno/Props/TnoLisetTextProjector (Note Beacon)
             const inventory = await getInventory(accountId);
