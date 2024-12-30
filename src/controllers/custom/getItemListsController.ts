@@ -50,7 +50,7 @@ const getItemListsController: RequestHandler = (req, res) => {
     }
     const recipeNameTemplate = getString("/Lotus/Language/Items/BlueprintAndItem", lang);
     for (const [uniqueName, item] of Object.entries(ExportRecipes)) {
-        if (!item.secretIngredientAction) {
+        if (!item.hidden) {
             const resultName = getItemName(item.resultType);
             if (resultName) {
                 miscitems.push({
