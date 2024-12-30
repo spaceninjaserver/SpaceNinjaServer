@@ -55,6 +55,7 @@ import { setActiveShipController } from "@/src/controllers/api/setActiveShipCont
 import { setBootLocationController } from "@/src/controllers/api/setBootLocationController";
 import { setPlacedDecoInfoController } from "@/src/controllers/api/setPlacedDecoInfoController";
 import { setShipCustomizationsController } from "@/src/controllers/api/setShipCustomizationsController";
+import { setShipFavouriteLoadoutController } from "@/src/controllers/api/setShipFavouriteLoadoutController";
 import { setSupportedSyndicateController } from "@/src/controllers/api/setSupportedSyndicateController";
 import { setWeaponSkillTreeController } from "../controllers/api/setWeaponSkillTreeController";
 import { shipDecorationsController } from "@/src/controllers/api/shipDecorationsController";
@@ -136,6 +137,7 @@ apiRouter.post("/saveLoadout.php", saveLoadoutController);
 apiRouter.post("/sell.php", sellController);
 apiRouter.post("/setPlacedDecoInfo.php", setPlacedDecoInfoController);
 apiRouter.post("/setShipCustomizations.php", setShipCustomizationsController);
+apiRouter.post("/setShipFavouriteLoadout.php", setShipFavouriteLoadoutController);
 apiRouter.post("/setWeaponSkillTree.php", setWeaponSkillTreeController);
 apiRouter.post("/shipDecorations.php", shipDecorationsController);
 apiRouter.post("/startDojoRecipe.php", startDojoRecipeController);
