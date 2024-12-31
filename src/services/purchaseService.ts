@@ -6,7 +6,7 @@ import {
     addMiscItems,
     combineInventoryChanges,
     getInventory,
-    updateCurrency,
+    updateCurrencyByAccountId,
     updateSlots
 } from "@/src/services/inventoryService";
 import { getRandomWeightedReward } from "@/src/services/rngService";
@@ -66,7 +66,7 @@ export const handlePurchase = async (
 
     if (!purchaseResponse) throw new Error("purchase response was undefined");
 
-    const currencyChanges = await updateCurrency(
+    const currencyChanges = await updateCurrencyByAccountId(
         purchaseRequest.PurchaseParams.ExpectedPrice,
         purchaseRequest.PurchaseParams.UsePremium,
         accountId

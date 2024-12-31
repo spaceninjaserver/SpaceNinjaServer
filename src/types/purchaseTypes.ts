@@ -17,13 +17,16 @@ export interface IPurchaseParams {
     UseFreeFavor?: boolean; // for Source 2
 }
 
-export type IInventoryChanges = {
-    [_ in SlotNames]?: IBinChanges;
-} & {
+export interface ICurrencyChanges {
     RegularCredits?: number;
     PremiumCredits?: number;
     PremiumCreditsFree?: number;
-} & Record<string, IBinChanges | number | object[]>;
+}
+
+export type IInventoryChanges = {
+    [_ in SlotNames]?: IBinChanges;
+} & ICurrencyChanges &
+    Record<string, IBinChanges | number | object[]>;
 
 export interface IPurchaseResponse {
     InventoryChanges: IInventoryChanges;

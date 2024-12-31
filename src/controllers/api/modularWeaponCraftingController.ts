@@ -34,14 +34,7 @@ export const modularWeaponCraftingController: RequestHandler = async (req, res) 
     // Give weapon
     const weapon = await addEquipment(category, data.WeaponType, accountId, data.Parts);
 
-    // Remove credits
-    const currencyChanges = await updateCurrency(
-        category == "Hoverboards" || category == "MoaPets" ? 5000 : 4000,
-        false,
-        accountId
-    );
-
-    // Remove parts
+    // Remove credits & parts
     const miscItemChanges = [];
     for (const part of data.Parts) {
         miscItemChanges.push({
@@ -50,6 +43,11 @@ export const modularWeaponCraftingController: RequestHandler = async (req, res) 
         });
     }
     const inventory = await getInventory(accountId);
+    const currencyChanges = updateCurrency(
+        inventory,
+        category == "Hoverboards" || category == "MoaPets" ? 5000 : 4000,
+        false
+    );
     addMiscItems(inventory, miscItemChanges);
     await inventory.save();
 
