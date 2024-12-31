@@ -7,6 +7,7 @@ export interface ISellRequest {
         Consumables?: ISellItem[];
         Recipes?: ISellItem[];
         Upgrades?: ISellItem[];
+        MiscItems?: ISellItem[];
     };
     SellPrice: number;
     SellCurrency:
