@@ -264,7 +264,11 @@ const handleSlotPurchase = async (
     };
 };
 
-const handleBoosterPackPurchase = async (typeName: string, accountId: string): Promise<IPurchaseResponse> => {
+const handleBoosterPackPurchase = async (
+    typeName: string,
+    accountId: string,
+    quantity: number
+): Promise<IPurchaseResponse> => {
     const pack = ExportBoosterPacks[typeName];
     if (!pack) {
         throw new Error(`unknown booster pack: ${typeName}`);
@@ -273,16 +277,18 @@ const handleBoosterPackPurchase = async (typeName: string, accountId: string): P
         BoosterPackItems: "",
         InventoryChanges: {}
     };
-    for (const weights of pack.rarityWeightsPerRoll) {
-        const result = getRandomWeightedReward(pack.components, weights);
-        if (result) {
-            logger.debug(`booster pack rolled`, result);
-            purchaseResponse.BoosterPackItems +=
-                result.type.split("/Lotus/").join("/Lotus/StoreItems/") + ',{"lvl":0};';
-            combineInventoryChanges(
-                purchaseResponse.InventoryChanges,
-                (await addItem(accountId, result.type, result.itemCount)).InventoryChanges
-            );
+    for (let i = 0; i != quantity; ++i) {
+        for (const weights of pack.rarityWeightsPerRoll) {
+            const result = getRandomWeightedReward(pack.components, weights);
+            if (result) {
+                logger.debug(`booster pack rolled`, result);
+                purchaseResponse.BoosterPackItems +=
+                    result.type.split("/Lotus/").join("/Lotus/StoreItems/") + ',{"lvl":0};';
+                combineInventoryChanges(
+                    purchaseResponse.InventoryChanges,
+                    (await addItem(accountId, result.type, result.itemCount)).InventoryChanges
+                );
+            }
         }
     }
     return purchaseResponse;
@@ -300,7 +306,7 @@ const handleTypesPurchase = async (
         default:
             return await addItem(accountId, typesName, quantity);
         case "BoosterPacks":
-            return await handleBoosterPackPurchase(typesName, accountId);
+            return await handleBoosterPackPurchase(typesName, accountId, quantity);
         case "SlotItems":
             return await handleSlotPurchase(typesName, accountId);
     }
