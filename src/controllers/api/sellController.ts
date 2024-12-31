@@ -13,6 +13,13 @@ export const sellController: RequestHandler = async (req, res) => {
         inventory.RegularCredits += payload.SellPrice;
     } else if (payload.SellCurrency == "SC_FusionPoints") {
         inventory.FusionPoints += payload.SellPrice;
+    } else if (payload.SellCurrency == "SC_PrimeBucks") {
+        addMiscItems(inventory, [
+            {
+                ItemType: "/Lotus/Types/Items/MiscItems/PrimeBucks",
+                ItemCount: payload.SellPrice
+            }
+        ]);
     } else if (payload.SellCurrency == "SC_DistillPoints") {
         addMiscItems(inventory, [
             {
