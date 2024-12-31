@@ -3,7 +3,7 @@ import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getInventory, addMiscItems } from "@/src/services/inventoryService";
 import { IOid } from "@/src/types/commonTypes";
-import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IInfestedFoundry, IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { ExportMisc } from "warframe-public-export-plus";
 
 export const infestedFoundryController: RequestHandler = async (req, res) => {
@@ -60,7 +60,6 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             const inventory = await getInventory(accountId);
             inventory.InfestedFoundry ??= {};
             inventory.InfestedFoundry.Resources ??= [];
-            inventory.InfestedFoundry.XP ??= 0;
 
             const miscItemChanges: IMiscItem[] = [];
             let totalPercentagePointsGained = 0;
@@ -89,7 +88,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
                 }
             }
 
-            inventory.InfestedFoundry.XP += 666 * totalPercentagePointsGained;
+            addInfestedFoundryXP(inventory.InfestedFoundry, 666 * totalPercentagePointsGained);
             addMiscItems(inventory, miscItemChanges);
             await inventory.save();
 
@@ -97,7 +96,8 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
                 InventoryChanges: {
                     InfestedFoundry: {
                         XP: inventory.InfestedFoundry.XP,
-                        Resources: inventory.InfestedFoundry.Resources
+                        Resources: inventory.InfestedFoundry.Resources,
+                        Slots: inventory.InfestedFoundry.Slots
                     }
                 },
                 MiscItems: miscItemChanges
@@ -146,4 +146,22 @@ const colorToShard: Record<string, string> = {
     ACC_ORANGE_MYTHIC: "/Lotus/Types/Gameplay/NarmerSorties/ArchonCrystalOrangeMythic",
     ACC_PURPLE: "/Lotus/Types/Gameplay/NarmerSorties/ArchonCrystalViolet",
     ACC_PURPLE_MYTHIC: "/Lotus/Types/Gameplay/NarmerSorties/ArchonCrystalVioletMythic"
+};
+
+const addInfestedFoundryXP = (infestedFoundry: IInfestedFoundry, delta: number): void => {
+    infestedFoundry.XP ??= 0;
+    const prevXP = infestedFoundry.XP;
+    infestedFoundry.XP += delta;
+    if (prevXP < 2250_00 && infestedFoundry.XP >= 2250_00) {
+        infestedFoundry.Slots ??= 0;
+        infestedFoundry.Slots += 3;
+    }
+    if (prevXP < 15750_00 && infestedFoundry.XP >= 15750_00) {
+        infestedFoundry.Slots ??= 0;
+        infestedFoundry.Slots += 10;
+    }
+    if (prevXP < 39375_00 && infestedFoundry.XP >= 39375_00) {
+        infestedFoundry.Slots ??= 0;
+        infestedFoundry.Slots += 20;
+    }
 };
