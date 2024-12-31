@@ -13,7 +13,6 @@ export const upgradesController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const payload = JSON.parse(String(req.body)) as IUpgradesRequest;
     const inventory = await getInventory(accountId);
-    const InventoryChanges: any = {};
     for (const operation of payload.Operations) {
         if (
             operation.UpgradeRequirement == "/Lotus/Types/Items/MiscItems/ModSlotUnlocker" ||
@@ -91,12 +90,6 @@ export const upgradesController: RequestHandler = async (req, res) => {
                     if (item._id.toString() == payload.ItemId.$oid) {
                         item.ModSlotPurchases ??= 0;
                         item.ModSlotPurchases += 1;
-                        InventoryChanges[payload.ItemCategory] = {
-                            ItemId: {
-                                $oid: payload.ItemId.$oid
-                            },
-                            ModSlotPurchases: item.ModSlotPurchases
-                        };
                         break;
                     }
                 }
@@ -106,12 +99,6 @@ export const upgradesController: RequestHandler = async (req, res) => {
                     if (item._id.toString() == payload.ItemId.$oid) {
                         item.CustomizationSlotPurchases ??= 0;
                         item.CustomizationSlotPurchases += 1;
-                        InventoryChanges[payload.ItemCategory] = {
-                            ItemId: {
-                                $oid: payload.ItemId.$oid
-                            },
-                            CustomizationSlotPurchases: item.CustomizationSlotPurchases
-                        };
                         break;
                     }
                 }
@@ -134,7 +121,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
         }
     }
     await inventory.save();
-    res.json({ InventoryChanges });
+    res.json({ InventoryChanges: {} });
 };
 
 const setSlotPolarity = (item: IEquipmentDatabase, slot: number, polarity: ArtifactPolarity): void => {
