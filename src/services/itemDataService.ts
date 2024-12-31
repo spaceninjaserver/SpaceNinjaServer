@@ -65,6 +65,10 @@ export const getRecipe = (uniqueName: string): IRecipe | undefined => {
     return ExportRecipes[uniqueName];
 };
 
+export const getRecipeByResult = (resultType: string): IRecipe | undefined => {
+    return Object.values(ExportRecipes).find(x => x.resultType == resultType);
+};
+
 export const getExalted = (uniqueName: string): string[] | undefined => {
     return getSuitByUniqueName(uniqueName)?.exalted;
 };

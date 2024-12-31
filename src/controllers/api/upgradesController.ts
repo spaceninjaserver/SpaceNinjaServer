@@ -3,11 +3,13 @@ import { IUpgradesRequest } from "@/src/types/requestTypes";
 import {
     ArtifactPolarity,
     IEquipmentDatabase,
-    EquipmentFeatures
+    EquipmentFeatures,
+    IAbilityOverride
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addMiscItems, getInventory, updateCurrency } from "@/src/services/inventoryService";
+import { getRecipeByResult } from "@/src/services/itemDataService";
 
 export const upgradesController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -28,7 +30,28 @@ export const upgradesController: RequestHandler = async (req, res) => {
             ]);
         }
 
-        switch (operation.UpgradeRequirement) {
+        if (operation.OperationType == "UOT_ABILITY_OVERRIDE") {
+            console.assert(payload.ItemCategory == "Suits");
+            const suit = inventory.Suits.find(x => x._id.toString() == payload.ItemId.$oid)!;
+
+            let newAbilityOverride: IAbilityOverride | undefined;
+            if (operation.UpgradeRequirement != "") {
+                newAbilityOverride = {
+                    Ability: operation.UpgradeRequirement,
+                    Index: operation.PolarizeSlot
+                };
+
+                const recipe = getRecipeByResult(operation.UpgradeRequirement)!;
+                for (const ingredient of recipe.ingredients) {
+                    inventory.InfestedFoundry!.Resources!.find(x => x.ItemType == ingredient.ItemType)!.Count -= ingredient.ItemCount;
+                }
+            }
+
+            for (const entry of operation.PolarityRemap) {
+                suit.Configs[entry.Slot] ??= {};
+                suit.Configs[entry.Slot].AbilityOverride = newAbilityOverride;
+            }
+        } else switch (operation.UpgradeRequirement) {
             case "/Lotus/Types/Items/MiscItems/OrokinReactor":
             case "/Lotus/Types/Items/MiscItems/OrokinCatalyst":
                 for (const item of inventory[payload.ItemCategory]) {
