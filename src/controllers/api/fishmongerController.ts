@@ -18,14 +18,14 @@ export const fishmongerController: RequestHandler = async (req, res) => {
             for (const part of fishData.dissectionParts!) {
                 const partItem = miscItemChanges.find(x => x.ItemType == part.ItemType);
                 if (partItem) {
-                    partItem.ItemCount += part.ItemCount;
+                    partItem.ItemCount += part.ItemCount * fish.ItemCount;
                 } else {
-                    miscItemChanges.push(part);
+                    miscItemChanges.push({ ItemType: part.ItemType, ItemCount: part.ItemCount * fish.ItemCount });
                 }
             }
         } else {
             syndicateTag = fishData.syndicateTag!;
-            standingChange += fishData.standingBonus!;
+            standingChange += fishData.standingBonus! * fish.ItemCount;
         }
         miscItemChanges.push({ ItemType: fish.ItemType, ItemCount: fish.ItemCount * -1 });
     }
