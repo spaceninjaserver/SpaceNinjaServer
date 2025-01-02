@@ -14,7 +14,7 @@
   "unlockAllScans": true,
   "unlockAllMissions": true,
   "unlockAllQuests": true,
-  "completeAllQuests": false,
+  "completeAllQuests": true,
   "infiniteCredits": true,
   "infinitePlatinum": true,
   "unlockAllShipFeatures": true,
