@@ -5,7 +5,7 @@ import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { config } from "@/src/services/configService";
 import allDialogue from "@/static/fixed_responses/allDialogue.json";
 import { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
-import { IShipInventory, equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IInventoryDatabaseDocument, IShipInventory, equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IPolarity, ArtifactPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import {
     ExportCustoms,
@@ -15,6 +15,7 @@ import {
     ExportResources,
     ExportVirtuals
 } from "warframe-public-export-plus";
+import { handleSubsumeCompletion } from "./infestedFoundryController";
 
 export const inventoryController: RequestHandler = async (request, response) => {
     let account;
@@ -54,6 +55,15 @@ export const inventoryController: RequestHandler = async (request, response) => 
         inventory.DailyAffiliationKahl = 16000;
         inventory.DailyAffiliationCavia = 16000;
         inventory.DailyAffiliationHex = 16000;
+        await inventory.save();
+    }
+
+    if (
+        inventory.InfestedFoundry &&
+        inventory.InfestedFoundry.AbilityOverrideUnlockCooldown &&
+        new Date() >= inventory.InfestedFoundry.AbilityOverrideUnlockCooldown
+    ) {
+        handleSubsumeCompletion(inventory as unknown as IInventoryDatabaseDocument);
         await inventory.save();
     }
 
