@@ -28,7 +28,6 @@ import {
 } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
 import { getWeaponType, getExalted } from "@/src/services/itemDataService";
-import { ISyndicateSacrifice, ISyndicateSacrificeResponse } from "../types/syndicateTypes";
 import { IEquipmentClient, IItemConfig } from "../types/inventoryTypes/commonInventoryTypes";
 import {
     ExportArcanes,
@@ -38,11 +37,9 @@ import {
     ExportRecipes,
     ExportResources,
     ExportSentinels,
-    ExportSyndicates,
     ExportUpgrades
 } from "warframe-public-export-plus";
 import { createShip } from "./shipService";
-import { handleStoreItemAcquisition } from "./purchaseService";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
@@ -550,45 +547,6 @@ export const updateTheme = async (data: IThemeUpdateRequest, accountId: string):
     if (data.Sounds) inventory.ThemeSounds = data.Sounds;
 
     await inventory.save();
-};
-
-export const syndicateSacrifice = async (
-    data: ISyndicateSacrifice,
-    accountId: string
-): Promise<ISyndicateSacrificeResponse> => {
-    const inventory = await getInventory(accountId);
-
-    let syndicate = inventory.Affiliations.find(x => x.Tag == data.AffiliationTag);
-    if (!syndicate) {
-        syndicate = inventory.Affiliations[inventory.Affiliations.push({ Tag: data.AffiliationTag, Standing: 0 }) - 1];
-    }
-
-    let reward: string | undefined;
-
-    const manifest = ExportSyndicates[data.AffiliationTag];
-    if (manifest?.initiationReward && data.SacrificeLevel == 0) {
-        reward = manifest.initiationReward;
-        syndicate.Initiated = true;
-    }
-
-    const level = data.SacrificeLevel - (syndicate.Title ?? 0);
-    const res: ISyndicateSacrificeResponse = {
-        AffiliationTag: data.AffiliationTag,
-        InventoryChanges: {},
-        Level: data.SacrificeLevel,
-        LevelIncrease: level <= 0 ? 1 : level,
-        NewEpisodeReward: syndicate?.Tag == "RadioLegionIntermission9Syndicate"
-    };
-
-    if (syndicate?.Title !== undefined) syndicate.Title += 1;
-
-    await inventory.save();
-
-    if (reward) {
-        res.InventoryChanges = (await handleStoreItemAcquisition(reward, accountId)).InventoryChanges;
-    }
-
-    return res;
 };
 
 export const addEquipment = async (
