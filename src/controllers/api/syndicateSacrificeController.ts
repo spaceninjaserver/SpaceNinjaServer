@@ -1,24 +1,59 @@
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { syndicateSacrifice } from "@/src/services/inventoryService";
-import { ISyndicateSacrifice } from "@/src/types/syndicateTypes";
 import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
+import { ExportSyndicates } from "warframe-public-export-plus";
+import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
+import { getInventory } from "@/src/services/inventoryService";
+import { IInventoryChanges } from "@/src/types/purchaseTypes";
 
-const syndicateSacrificeController: RequestHandler = async (request, response) => {
+export const syndicateSacrificeController: RequestHandler = async (request, response) => {
     const accountId = await getAccountIdForRequest(request);
-    const update = getJSONfromString(String(request.body)) as ISyndicateSacrifice;
-    let reply = {};
-    try {
-        if (typeof update !== "object") {
-            throw new Error("Invalid data format");
-        }
+    const inventory = await getInventory(accountId);
+    const data = getJSONfromString(String(request.body)) as ISyndicateSacrifice;
 
-        reply = await syndicateSacrifice(update, accountId);
-    } catch (err) {
-        console.error("Error parsing JSON data:", err);
+    let syndicate = inventory.Affiliations.find(x => x.Tag == data.AffiliationTag);
+    if (!syndicate) {
+        syndicate = inventory.Affiliations[inventory.Affiliations.push({ Tag: data.AffiliationTag, Standing: 0 }) - 1];
     }
 
-    response.json(reply);
+    let reward: string | undefined;
+
+    const manifest = ExportSyndicates[data.AffiliationTag];
+    if (manifest?.initiationReward && data.SacrificeLevel == 0) {
+        reward = manifest.initiationReward;
+        syndicate.Initiated = true;
+    }
+
+    const level = data.SacrificeLevel - (syndicate.Title ?? 0);
+    const res: ISyndicateSacrificeResponse = {
+        AffiliationTag: data.AffiliationTag,
+        InventoryChanges: {},
+        Level: data.SacrificeLevel,
+        LevelIncrease: level <= 0 ? 1 : level,
+        NewEpisodeReward: syndicate?.Tag == "RadioLegionIntermission9Syndicate"
+    };
+
+    if (syndicate?.Title !== undefined) syndicate.Title += 1;
+
+    await inventory.save();
+
+    if (reward) {
+        res.InventoryChanges = (await handleStoreItemAcquisition(reward, accountId)).InventoryChanges;
+    }
+
+    response.json(res);
 };
 
-export { syndicateSacrificeController };
+interface ISyndicateSacrifice {
+    AffiliationTag: string;
+    SacrificeLevel: number;
+    AllowMultiple: boolean;
+}
+
+interface ISyndicateSacrificeResponse {
+    AffiliationTag: string;
+    Level: number;
+    LevelIncrease: number;
+    InventoryChanges: IInventoryChanges;
+    NewEpisodeReward: boolean;
+}
