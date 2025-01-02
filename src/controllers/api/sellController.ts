@@ -86,6 +86,16 @@ export const sellController: RequestHandler = async (req, res) => {
             }
         });
     }
+    if (payload.Items.MiscItems) {
+        payload.Items.MiscItems.forEach(sellItem => {
+            addMiscItems(inventory, [
+                {
+                    ItemType: sellItem.String,
+                    ItemCount: sellItem.Count * -1
+                }
+            ]);
+        });
+    }
 
     await inventory.save();
     res.json({});
