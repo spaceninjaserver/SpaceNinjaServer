@@ -1,8 +1,8 @@
 import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getInventory } from "@/src/services/inventoryService";
+import { addMiscItems, getInventory } from "@/src/services/inventoryService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { WeaponTypeInternal } from "@/src/services/itemDataService";
+import { getRecipe, WeaponTypeInternal } from "@/src/services/itemDataService";
 import { EquipmentFeatures } from "@/src/types/inventoryTypes/commonInventoryTypes";
 
 export const evolveWeaponController: RequestHandler = async (req, res) => {
@@ -11,7 +11,11 @@ export const evolveWeaponController: RequestHandler = async (req, res) => {
     const payload = getJSONfromString(String(req.body)) as IEvolveWeaponRequest;
     console.assert(payload.Action == "EWA_INSTALL");
 
-    // TODO: We should remove the Genesis item & its resources, but currently we don't know these "recipes".
+    const recipe = getRecipe(payload.Recipe)!;
+    addMiscItems(
+        inventory,
+        recipe.ingredients.map(x => ({ ItemType: x.ItemType, ItemCount: x.ItemCount * -1 }))
+    );
 
     const item = inventory[payload.Category].find(item => item._id.toString() == (req.query.ItemId as string))!;
     item.Features ??= 0;
