@@ -18,15 +18,17 @@ export const guildTechController: RequestHandler = async (req, res) => {
     } else if (data.Action == "Start") {
         const recipe = ExportDojoRecipes.research[data.RecipeType!];
         guild.TechProjects ??= [];
-        guild.TechProjects.push({
-            ItemType: data.RecipeType!,
-            ReqCredits: scaleRequiredCount(recipe.price),
-            ReqItems: recipe.ingredients.map(x => ({
-                ItemType: x.ItemType,
-                ItemCount: scaleRequiredCount(x.ItemCount)
-            })),
-            State: 0
-        });
+        if (!guild.TechProjects.find(x => x.ItemType == data.RecipeType)) {
+            guild.TechProjects.push({
+                ItemType: data.RecipeType!,
+                ReqCredits: scaleRequiredCount(recipe.price),
+                ReqItems: recipe.ingredients.map(x => ({
+                    ItemType: x.ItemType,
+                    ItemCount: scaleRequiredCount(x.ItemCount)
+                })),
+                State: 0
+            });
+        }
         await guild.save();
         res.end();
     } else if (data.Action == "Contribute") {
