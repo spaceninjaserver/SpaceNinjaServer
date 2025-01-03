@@ -1,4 +1,4 @@
-import { Model, Schema, Types, model } from "mongoose";
+import { Document, Model, Schema, Types, model } from "mongoose";
 import {
     IFlavourItem,
     IRawUpgrade,
@@ -1114,3 +1114,15 @@ type InventoryDocumentProps = {
 type InventoryModelType = Model<IInventoryDatabase, {}, InventoryDocumentProps>;
 
 export const Inventory = model<IInventoryDatabase, InventoryModelType>("Inventory", inventorySchema);
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type TInventoryDatabaseDocument = Document<unknown, {}, IInventoryDatabase> &
+    Omit<
+        IInventoryDatabase & {
+            _id: Types.ObjectId;
+        } & {
+            __v: number;
+        },
+        keyof InventoryDocumentProps
+    > &
+    InventoryDocumentProps;

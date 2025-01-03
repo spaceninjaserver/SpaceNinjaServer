@@ -1,11 +1,11 @@
 import { RequestHandler } from "express";
 import { getAccountForRequest } from "@/src/services/loginService";
 import { toInventoryResponse } from "@/src/helpers/inventoryHelpers";
-import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
+import { Inventory, TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { config } from "@/src/services/configService";
 import allDialogue from "@/static/fixed_responses/allDialogue.json";
 import { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
-import { IInventoryDatabaseDocument, IShipInventory, equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IShipInventory, equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IPolarity, ArtifactPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import {
     ExportCustoms,
@@ -63,7 +63,7 @@ export const inventoryController: RequestHandler = async (request, response) => 
         inventory.InfestedFoundry.AbilityOverrideUnlockCooldown &&
         new Date() >= inventory.InfestedFoundry.AbilityOverrideUnlockCooldown
     ) {
-        handleSubsumeCompletion(inventory as unknown as IInventoryDatabaseDocument);
+        handleSubsumeCompletion(inventory as unknown as TInventoryDatabaseDocument);
         await inventory.save();
     }
 

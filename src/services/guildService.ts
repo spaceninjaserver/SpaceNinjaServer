@@ -2,7 +2,7 @@ import { Request } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getInventory } from "@/src/services/inventoryService";
 import { Guild } from "@/src/models/guildModel";
-import { IInventoryDatabaseDocument } from "../types/inventoryTypes/inventoryTypes";
+import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 
 export const getGuildForRequest = async (req: Request) => {
     const accountId = await getAccountIdForRequest(req);
@@ -10,7 +10,7 @@ export const getGuildForRequest = async (req: Request) => {
     return await getGuildForRequestEx(req, inventory);
 };
 
-export const getGuildForRequestEx = async (req: Request, inventory: IInventoryDatabaseDocument) => {
+export const getGuildForRequestEx = async (req: Request, inventory: TInventoryDatabaseDocument) => {
     const guildId = req.query.guildId as string;
     if (!inventory.GuildId || inventory.GuildId.toString() != guildId) {
         throw new Error("Account is not in the guild that it has sent a request for");
