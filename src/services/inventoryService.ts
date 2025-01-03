@@ -229,16 +229,18 @@ export const addItem = async (
                     };
                 }
                 case "Archwing": {
-                    const spaceSuit = await addSpaceSuit(typeName, accountId);
+                    const inventory = await getInventory(accountId);
+                    const inventoryChanges = addSpaceSuit(inventory, typeName);
+                    await inventory.save();
                     await updateSlots(accountId, InventorySlot.SPACESUITS, 0, 1);
                     return {
                         InventoryChanges: {
+                            ...inventoryChanges,
                             SpaceSuitBin: {
                                 count: 1,
                                 platinum: 0,
                                 Slots: -1
-                            },
-                            SpaceSuits: [spaceSuit]
+                            }
                         }
                     };
                 }
@@ -460,11 +462,17 @@ export const addSpecialItem = (
     );
 };
 
-export const addSpaceSuit = async (spacesuitName: string, accountId: string): Promise<IEquipmentClient> => {
-    const inventory = await getInventory(accountId);
-    const suitIndex = inventory.SpaceSuits.push({ ItemType: spacesuitName, Configs: [], UpgradeVer: 101, XP: 0 });
-    const changedInventory = await inventory.save();
-    return changedInventory.SpaceSuits[suitIndex - 1].toJSON<IEquipmentClient>();
+export const addSpaceSuit = (
+    inventory: TInventoryDatabaseDocument,
+    spacesuitName: string,
+    inventoryChanges: IInventoryChanges = {}
+): IInventoryChanges => {
+    const suitIndex = inventory.SpaceSuits.push({ ItemType: spacesuitName, Configs: [], UpgradeVer: 101, XP: 0 }) - 1;
+    inventoryChanges.SpaceSuits ??= [];
+    (inventoryChanges.SpaceSuits as IEquipmentClient[]).push(
+        inventory.SpaceSuits[suitIndex - 1].toJSON<IEquipmentClient>()
+    );
+    return inventoryChanges;
 };
 
 export const updateSlots = async (
