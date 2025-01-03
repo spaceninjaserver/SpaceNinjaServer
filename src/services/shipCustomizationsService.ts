@@ -47,7 +47,6 @@ export const handleSetShipDecorations = async (
     const roomToPlaceIn = rooms.find(room => room.Name === placedDecoration.Room);
 
     if (!roomToPlaceIn) {
-        logger.error("room not found");
         throw new Error("room not found");
     }
 
@@ -59,7 +58,6 @@ export const handleSetShipDecorations = async (
             );
 
             if (existingDecorationIndex === -1) {
-                logger.error("decoration to be moved not found");
                 throw new Error("decoration to be moved not found");
             }
 
@@ -143,13 +141,11 @@ export const handleSetPlacedDecoInfo = async (accountId: string, req: ISetPlaced
 
     const room = personalRooms.Ship.Rooms.find(room => room.Name === req.Room);
     if (!room) {
-        logger.error("room not found");
         throw new Error("room not found");
     }
 
     const placedDeco = room.PlacedDecos?.find(x => x._id.toString() == req.DecoId);
     if (!placedDeco) {
-        logger.error("deco not found");
         throw new Error("deco not found");
     }
 

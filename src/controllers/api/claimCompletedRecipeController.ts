@@ -30,13 +30,11 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
         recipe => recipe._id?.toString() === claimCompletedRecipeRequest.RecipeIds[0].$oid
     );
     if (!pendingRecipe) {
-        logger.error(`no pending recipe found with id ${claimCompletedRecipeRequest.RecipeIds[0].$oid}`);
         throw new Error(`no pending recipe found with id ${claimCompletedRecipeRequest.RecipeIds[0].$oid}`);
     }
 
     //check recipe is indeed ready to be completed
     // if (pendingRecipe.CompletionDate > new Date()) {
-    //     logger.error(`recipe ${pendingRecipe._id} is not ready to be completed`);
     //     throw new Error(`recipe ${pendingRecipe._id} is not ready to be completed`);
     // }
 
@@ -45,7 +43,6 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
 
     const recipe = getRecipe(pendingRecipe.ItemType);
     if (!recipe) {
-        logger.error(`no completed item found for recipe ${pendingRecipe._id.toString()}`);
         throw new Error(`no completed item found for recipe ${pendingRecipe._id.toString()}`);
     }
 
