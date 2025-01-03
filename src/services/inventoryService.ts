@@ -447,7 +447,7 @@ export const addSpaceSuit = (
     const suitIndex = inventory.SpaceSuits.push({ ItemType: spacesuitName, Configs: [], UpgradeVer: 101, XP: 0 }) - 1;
     inventoryChanges.SpaceSuits ??= [];
     (inventoryChanges.SpaceSuits as IEquipmentClient[]).push(
-        inventory.SpaceSuits[suitIndex - 1].toJSON<IEquipmentClient>()
+        inventory.SpaceSuits[suitIndex].toJSON<IEquipmentClient>()
     );
     return inventoryChanges;
 };
