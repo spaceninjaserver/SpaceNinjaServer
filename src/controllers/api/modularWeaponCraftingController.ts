@@ -5,7 +5,11 @@ import { TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
 import { getInventory, updateCurrency, addEquipment, addMiscItems } from "@/src/services/inventoryService";
 
 const modularWeaponTypes: Record<string, TEquipmentKey> = {
+    "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary": "LongGuns",
     "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryBeam": "LongGuns",
+    "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryLauncher": "LongGuns",
+    "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryShotgun": "LongGuns",
+    "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimarySniper": "LongGuns",
     "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary": "Pistols",
     "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryBeam": "Pistols",
     "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryShotgun": "Pistols",
