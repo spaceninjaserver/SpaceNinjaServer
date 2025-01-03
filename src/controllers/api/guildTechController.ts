@@ -34,11 +34,17 @@ export const guildTechController: RequestHandler = async (req, res) => {
     } else if (data.Action == "Contribute") {
         const contributions = data as IGuildTechContributeFields;
         const techProject = guild.TechProjects!.find(x => x.ItemType == contributions.RecipeType)!;
+        if (contributions.RegularCredits > techProject.ReqCredits) {
+            contributions.RegularCredits = techProject.ReqCredits;
+        }
         techProject.ReqCredits -= contributions.RegularCredits;
         const miscItemChanges = [];
         for (const miscItem of contributions.MiscItems) {
             const reqItem = techProject.ReqItems.find(x => x.ItemType == miscItem.ItemType);
             if (reqItem) {
+                if (miscItem.ItemCount > reqItem.ItemCount) {
+                    miscItem.ItemCount = reqItem.ItemCount;
+                }
                 reqItem.ItemCount -= miscItem.ItemCount;
                 miscItemChanges.push({
                     ItemType: miscItem.ItemType,
