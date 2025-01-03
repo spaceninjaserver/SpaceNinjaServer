@@ -295,7 +295,9 @@ export const addItem = async (
         case "Types":
             switch (typeName.substr(1).split("/")[2]) {
                 case "Sentinels": {
-                    const inventoryChanges = await addSentinel(typeName, accountId);
+                    const inventory = await getInventory(accountId);
+                    const inventoryChanges = addSentinel(inventory, typeName);
+                    await inventory.save();
                     await updateSlots(accountId, InventorySlot.SENTINELS, 0, 1);
                     return {
                         InventoryChanges: {
@@ -368,13 +370,13 @@ export const addItem = async (
 };
 
 //TODO: maybe genericMethod for all the add methods, they share a lot of logic
-export const addSentinel = async (sentinelName: string, accountId: string): Promise<IInventoryChanges> => {
-    const inventoryChanges: IInventoryChanges = {};
-
+export const addSentinel = (
+    inventory: TInventoryDatabaseDocument,
+    sentinelName: string,
+    inventoryChanges: IInventoryChanges = {}
+): IInventoryChanges => {
     if (ExportSentinels[sentinelName]?.defaultWeapon) {
-        inventoryChanges.SentinelWeapons = [
-            await addSentinelWeapon(ExportSentinels[sentinelName].defaultWeapon, accountId)
-        ];
+        addSentinelWeapon(inventory, ExportSentinels[sentinelName].defaultWeapon, inventoryChanges);
     }
 
     const modsToGive: IRawUpgrade[] = [];
@@ -392,20 +394,26 @@ export const addSentinel = async (sentinelName: string, accountId: string): Prom
         }
     }
 
-    const inventory = await getInventory(accountId);
     addMods(inventory, modsToGive);
-    const sentinelIndex = inventory.Sentinels.push({ ItemType: sentinelName, Configs: configs, XP: 0 });
-    const changedInventory = await inventory.save();
-    inventoryChanges.Sentinels = [changedInventory.Sentinels[sentinelIndex - 1].toJSON()];
+    const sentinelIndex = inventory.Sentinels.push({ ItemType: sentinelName, Configs: configs, XP: 0 }) - 1;
+    inventoryChanges.Sentinels ??= [];
+    (inventoryChanges.Sentinels as IEquipmentClient[]).push(
+        inventory.Sentinels[sentinelIndex].toJSON<IEquipmentClient>()
+    );
 
     return inventoryChanges;
 };
 
-export const addSentinelWeapon = async (typeName: string, accountId: string): Promise<IEquipmentClient> => {
-    const inventory = await getInventory(accountId);
-    const sentinelIndex = inventory.SentinelWeapons.push({ ItemType: typeName });
-    const changedInventory = await inventory.save();
-    return changedInventory.SentinelWeapons[sentinelIndex - 1].toJSON<IEquipmentClient>();
+export const addSentinelWeapon = (
+    inventory: TInventoryDatabaseDocument,
+    typeName: string,
+    inventoryChanges: IInventoryChanges
+): void => {
+    const index = inventory.SentinelWeapons.push({ ItemType: typeName }) - 1;
+    inventoryChanges.SentinelWeapons ??= [];
+    (inventoryChanges.SentinelWeapons as IEquipmentClient[]).push(
+        inventory.SentinelWeapons[index].toJSON<IEquipmentClient>()
+    );
 };
 
 export const addPowerSuit = (
