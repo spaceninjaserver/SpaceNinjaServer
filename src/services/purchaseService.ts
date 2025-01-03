@@ -240,7 +240,8 @@ export const slotPurchaseNameToSlotName: SlotPurchase = {
 // // number of frames = extra - slots + 2
 const handleSlotPurchase = async (
     slotPurchaseNameFull: string,
-    accountId: string
+    accountId: string,
+    quantity: number
 ): Promise<{ InventoryChanges: IInventoryChanges }> => {
     logger.debug(`slot name ${slotPurchaseNameFull}`);
     const slotPurchaseName = parseSlotPurchaseName(
@@ -249,21 +250,21 @@ const handleSlotPurchase = async (
     logger.debug(`slot purchase name ${slotPurchaseName}`);
 
     const slotName = slotPurchaseNameToSlotName[slotPurchaseName].name;
-    const slotsPerPurchase = slotPurchaseNameToSlotName[slotPurchaseName].slotsPerPurchase;
+    const slotsPurchased = slotPurchaseNameToSlotName[slotPurchaseName].slotsPerPurchase * quantity;
 
     const inventory = await getInventory(accountId);
-    updateSlots(inventory, slotName, slotsPerPurchase, slotsPerPurchase);
+    updateSlots(inventory, slotName, slotsPurchased, slotsPurchased);
     await inventory.save();
 
-    logger.debug(`added ${slotsPerPurchase} slot ${slotName}`);
+    logger.debug(`added ${slotsPurchased} slot ${slotName}`);
 
     return {
         InventoryChanges: {
             [slotName]: {
                 count: 0,
                 platinum: 1,
-                Slots: slotsPerPurchase,
-                Extra: slotsPerPurchase
+                Slots: slotsPurchased,
+                Extra: slotsPurchased
             }
         }
     };
@@ -319,7 +320,7 @@ const handleTypesPurchase = async (
         case "BoosterPacks":
             return await handleBoosterPackPurchase(typesName, accountId, quantity);
         case "SlotItems":
-            return await handleSlotPurchase(typesName, accountId);
+            return await handleSlotPurchase(typesName, accountId, quantity);
     }
 };
 
