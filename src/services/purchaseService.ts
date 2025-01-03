@@ -248,7 +248,9 @@ const handleSlotPurchase = async (
     const slotName = slotPurchaseNameToSlotName[slotPurchaseName].name;
     const slotsPerPurchase = slotPurchaseNameToSlotName[slotPurchaseName].slotsPerPurchase;
 
-    await updateSlots(accountId, slotName, slotsPerPurchase, slotsPerPurchase);
+    const inventory = await getInventory(accountId);
+    updateSlots(inventory, slotName, slotsPerPurchase, slotsPerPurchase);
+    await inventory.save();
 
     logger.debug(`added ${slotsPerPurchase} slot ${slotName}`);
 

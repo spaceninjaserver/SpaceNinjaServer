@@ -215,8 +215,8 @@ export const addItem = async (
                 default: {
                     const inventory = await getInventory(accountId);
                     const inventoryChanges = addPowerSuit(inventory, typeName);
+                    updateSlots(inventory, InventorySlot.SUITS, 0, 1);
                     await inventory.save();
-                    await updateSlots(accountId, InventorySlot.SUITS, 0, 1);
                     return {
                         InventoryChanges: {
                             ...inventoryChanges,
@@ -231,8 +231,8 @@ export const addItem = async (
                 case "Archwing": {
                     const inventory = await getInventory(accountId);
                     const inventoryChanges = addSpaceSuit(inventory, typeName);
+                    updateSlots(inventory, InventorySlot.SPACESUITS, 0, 1);
                     await inventory.save();
-                    await updateSlots(accountId, InventorySlot.SPACESUITS, 0, 1);
                     return {
                         InventoryChanges: {
                             ...inventoryChanges,
@@ -247,8 +247,8 @@ export const addItem = async (
                 case "EntratiMech": {
                     const inventory = await getInventory(accountId);
                     const inventoryChanges = addMechSuit(inventory, typeName);
+                    updateSlots(inventory, InventorySlot.MECHSUITS, 0, 1);
                     await inventory.save();
-                    await updateSlots(accountId, InventorySlot.MECHSUITS, 0, 1);
                     return {
                         InventoryChanges: {
                             ...inventoryChanges,
@@ -266,8 +266,8 @@ export const addItem = async (
             const inventory = await getInventory(accountId);
             const weaponType = getWeaponType(typeName);
             const inventoryChanges = addEquipment(inventory, weaponType, typeName);
+            updateSlots(inventory, InventorySlot.WEAPONS, 0, 1);
             await inventory.save();
-            await updateSlots(accountId, InventorySlot.WEAPONS, 0, 1);
             return {
                 InventoryChanges: {
                     ...inventoryChanges,
@@ -297,8 +297,8 @@ export const addItem = async (
                 case "Sentinels": {
                     const inventory = await getInventory(accountId);
                     const inventoryChanges = addSentinel(inventory, typeName);
+                    updateSlots(inventory, InventorySlot.SENTINELS, 0, 1);
                     await inventory.save();
-                    await updateSlots(accountId, InventorySlot.SENTINELS, 0, 1);
                     return {
                         InventoryChanges: {
                             ...inventoryChanges,
@@ -485,22 +485,18 @@ export const addSpaceSuit = (
     return inventoryChanges;
 };
 
-export const updateSlots = async (
-    accountId: string,
+export const updateSlots = (
+    inventory: TInventoryDatabaseDocument,
     slotName: SlotNames,
     slotAmount: number,
     extraAmount: number
-): Promise<void> => {
-    const inventory = await getInventory(accountId);
-
+): void => {
     inventory[slotName].Slots += slotAmount;
     if (inventory[slotName].Extra === undefined) {
         inventory[slotName].Extra = extraAmount;
     } else {
         inventory[slotName].Extra += extraAmount;
     }
-
-    await inventory.save();
 };
 
 const isCurrencyTracked = (usePremium: boolean): boolean => {
