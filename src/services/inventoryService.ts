@@ -868,7 +868,7 @@ export const addBooster = async (ItemType: string, time: number, accountId: stri
         existingBooster.ExpiryDate = Math.max(existingBooster.ExpiryDate, currentTime) + time;
         inventory.markModified(`Boosters.${itemIndex}.ExpiryDate`);
     } else {
-        Boosters.push({ ItemType, ExpiryDate: currentTime + time }) - 1;
+        Boosters.push({ ItemType, ExpiryDate: currentTime + time });
     }
 
     await inventory.save();
