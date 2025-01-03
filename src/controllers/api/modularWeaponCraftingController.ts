@@ -4,18 +4,30 @@ import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
 import { getInventory, updateCurrency, addEquipment, addMiscItems } from "@/src/services/inventoryService";
 
-const modularWeaponTypes: Record<string, TEquipmentKey> = {
-    "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryBeam": "LongGuns",
-    "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary": "Pistols",
-    "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryBeam": "Pistols",
-    "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryShotgun": "Pistols",
-    "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon": "Melee",
-    "/Lotus/Weapons/Sentients/OperatorAmplifiers/OperatorAmpWeapon": "OperatorAmps",
-    "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit": "Hoverboards",
-    "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetPowerSuit": "MoaPets",
-    "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetAPowerSuit": "MoaPets",
-    "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetBPowerSuit": "MoaPets",
-    "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetCPowerSuit": "MoaPets"
+const modularWeaponTypeToCategory = (type: string): TEquipmentKey | undefined => {
+    if (type.indexOf("LotusModularPrimary") != -1) {
+        return "LongGuns";
+    }
+    if (type.indexOf("LotusModularSecondary") != -1) {
+        return "Pistols";
+    }
+    switch (type) {
+        case "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon":
+            return "Melee";
+        case "/Lotus/Weapons/Sentients/OperatorAmplifiers/OperatorAmpWeapon":
+            return "OperatorAmps";
+        case "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit":
+            return "Hoverboards";
+        case "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetPowerSuit":
+            return "MoaPets";
+        case "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetAPowerSuit":
+            return "MoaPets";
+        case "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetBPowerSuit":
+            return "MoaPets";
+        case "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetCPowerSuit":
+            return "MoaPets";
+    }
+    return undefined;
 };
 
 interface IModularCraftRequest {
@@ -26,10 +38,10 @@ interface IModularCraftRequest {
 export const modularWeaponCraftingController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const data = getJSONfromString(String(req.body)) as IModularCraftRequest;
-    if (!(data.WeaponType in modularWeaponTypes)) {
+    const category = modularWeaponTypeToCategory(data.WeaponType);
+    if (!category) {
         throw new Error(`unknown modular weapon type: ${data.WeaponType}`);
     }
-    const category = modularWeaponTypes[data.WeaponType];
 
     // Give weapon
     const weapon = await addEquipment(category, data.WeaponType, accountId, data.Parts);
