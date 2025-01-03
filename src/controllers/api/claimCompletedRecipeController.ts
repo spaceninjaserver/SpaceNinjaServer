@@ -80,11 +80,12 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
                 ...(await updateCurrencyByAccountId(recipe.skipBuildTimePrice, true, accountId))
             };
         }
-        res.json({
-            InventoryChanges: {
-                ...InventoryChanges,
-                ...(await addItem(accountId, recipe.resultType, recipe.num)).InventoryChanges
-            }
-        });
+        const inventory = await getInventory(accountId);
+        InventoryChanges = {
+            ...InventoryChanges,
+            ...(await addItem(inventory, recipe.resultType, recipe.num)).InventoryChanges
+        };
+        await inventory.save();
+        res.json({ InventoryChanges });
     }
 };

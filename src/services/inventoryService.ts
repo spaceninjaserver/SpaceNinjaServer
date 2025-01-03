@@ -105,13 +105,12 @@ export const getInventory = async (accountOwnerId: string): Promise<TInventoryDa
 };
 
 export const addItem = async (
-    accountId: string,
+    inventory: TInventoryDatabaseDocument,
     typeName: string,
     quantity: number = 1
 ): Promise<{ InventoryChanges: IInventoryChanges }> => {
     // Strict typing
     if (typeName in ExportRecipes) {
-        const inventory = await getInventory(accountId);
         const recipeChanges = [
             {
                 ItemType: typeName,
@@ -119,7 +118,6 @@ export const addItem = async (
             } satisfies ITypeCount
         ];
         addRecipes(inventory, recipeChanges);
-        await inventory.save();
         return {
             InventoryChanges: {
                 Recipes: recipeChanges
@@ -127,11 +125,9 @@ export const addItem = async (
         };
     }
     if (typeName in ExportResources) {
-        const inventory = await getInventory(accountId);
         if (ExportResources[typeName].productCategory == "Ships") {
-            const oid = await createShip(new Types.ObjectId(accountId), typeName);
+            const oid = await createShip(inventory.accountOwnerId, typeName);
             inventory.Ships.push(oid);
-            await inventory.save();
             return {
                 InventoryChanges: {
                     Ships: [
@@ -143,11 +139,8 @@ export const addItem = async (
                 }
             };
         } else if (ExportResources[typeName].productCategory == "CrewShips") {
-            return {
-                InventoryChanges: {
-                    CrewShips: [await addCrewShip(typeName, accountId)]
-                }
-            };
+            const inventoryChanges = addCrewShip(inventory, typeName);
+            return { InventoryChanges: inventoryChanges };
         } else {
             const miscItemChanges = [
                 {
@@ -156,7 +149,6 @@ export const addItem = async (
                 } satisfies IMiscItem
             ];
             addMiscItems(inventory, miscItemChanges);
-            await inventory.save();
             return {
                 InventoryChanges: {
                     MiscItems: miscItemChanges
@@ -165,21 +157,14 @@ export const addItem = async (
         }
     }
     if (typeName in ExportCustoms) {
-        return {
-            InventoryChanges: {
-                WeaponSkins: [await addSkin(typeName, accountId)]
-            }
-        };
+        const inventoryChanges = addSkin(inventory, typeName);
+        return { InventoryChanges: inventoryChanges };
     }
     if (typeName in ExportFlavour) {
-        return {
-            InventoryChanges: {
-                FlavourItems: [await addCustomization(typeName, accountId)]
-            }
-        };
+        const inventoryChanges = addCustomization(inventory, typeName);
+        return { InventoryChanges: inventoryChanges };
     }
     if (typeName in ExportUpgrades || typeName in ExportArcanes) {
-        const inventory = await getInventory(accountId);
         const changes = [
             {
                 ItemType: typeName,
@@ -187,7 +172,6 @@ export const addItem = async (
             }
         ];
         addMods(inventory, changes);
-        await inventory.save();
         return {
             InventoryChanges: {
                 RawUpgrades: changes
@@ -195,7 +179,6 @@ export const addItem = async (
         };
     }
     if (typeName in ExportGear) {
-        const inventory = await getInventory(accountId);
         const consumablesChanges = [
             {
                 ItemType: typeName,
@@ -203,7 +186,6 @@ export const addItem = async (
             } satisfies IConsumable
         ];
         addConsumables(inventory, consumablesChanges);
-        await inventory.save();
         return {
             InventoryChanges: {
                 Consumables: consumablesChanges
@@ -216,8 +198,8 @@ export const addItem = async (
         case "Powersuits":
             switch (typeName.substr(1).split("/")[2]) {
                 default: {
-                    const inventoryChanges = await addPowerSuit(typeName, accountId);
-                    await updateSlots(accountId, InventorySlot.SUITS, 0, 1);
+                    const inventoryChanges = addPowerSuit(inventory, typeName);
+                    updateSlots(inventory, InventorySlot.SUITS, 0, 1);
                     return {
                         InventoryChanges: {
                             ...inventoryChanges,
@@ -230,22 +212,22 @@ export const addItem = async (
                     };
                 }
                 case "Archwing": {
-                    const spaceSuit = await addSpaceSuit(typeName, accountId);
-                    await updateSlots(accountId, InventorySlot.SPACESUITS, 0, 1);
+                    const inventoryChanges = addSpaceSuit(inventory, typeName);
+                    updateSlots(inventory, InventorySlot.SPACESUITS, 0, 1);
                     return {
                         InventoryChanges: {
+                            ...inventoryChanges,
                             SpaceSuitBin: {
                                 count: 1,
                                 platinum: 0,
                                 Slots: -1
-                            },
-                            SpaceSuits: [spaceSuit]
+                            }
                         }
                     };
                 }
                 case "EntratiMech": {
-                    const inventoryChanges = await addMechSuit(typeName, accountId);
-                    await updateSlots(accountId, InventorySlot.MECHSUITS, 0, 1);
+                    const inventoryChanges = addMechSuit(inventory, typeName);
+                    updateSlots(inventory, InventorySlot.MECHSUITS, 0, 1);
                     return {
                         InventoryChanges: {
                             ...inventoryChanges,
@@ -261,18 +243,17 @@ export const addItem = async (
             break;
         case "Weapons": {
             const weaponType = getWeaponType(typeName);
-            const weapon = await addEquipment(weaponType, typeName, accountId);
-            await updateSlots(accountId, InventorySlot.WEAPONS, 0, 1);
+            const inventoryChanges = addEquipment(inventory, weaponType, typeName);
+            updateSlots(inventory, InventorySlot.WEAPONS, 0, 1);
             return {
                 InventoryChanges: {
-                    WeaponBin: { count: 1, platinum: 0, Slots: -1 },
-                    [weaponType]: [weapon]
+                    ...inventoryChanges,
+                    WeaponBin: { count: 1, platinum: 0, Slots: -1 }
                 }
             };
         }
         case "Objects": {
             // /Lotus/Objects/Tenno/Props/TnoLisetTextProjector (Note Beacon)
-            const inventory = await getInventory(accountId);
             const changes = [
                 {
                     ItemType: typeName,
@@ -280,7 +261,6 @@ export const addItem = async (
                 } satisfies IMiscItem
             ];
             addShipDecorations(inventory, changes);
-            await inventory.save();
             return {
                 InventoryChanges: {
                     ShipDecorations: changes
@@ -290,8 +270,8 @@ export const addItem = async (
         case "Types":
             switch (typeName.substr(1).split("/")[2]) {
                 case "Sentinels": {
-                    const inventoryChanges = await addSentinel(typeName, accountId);
-                    await updateSlots(accountId, InventorySlot.SENTINELS, 0, 1);
+                    const inventoryChanges = addSentinel(inventory, typeName);
+                    updateSlots(inventory, InventorySlot.SENTINELS, 0, 1);
                     return {
                         InventoryChanges: {
                             ...inventoryChanges,
@@ -302,7 +282,6 @@ export const addItem = async (
                 case "Items": {
                     switch (typeName.substr(1).split("/")[3]) {
                         case "ShipDecos": {
-                            const inventory = await getInventory(accountId);
                             const changes = [
                                 {
                                     ItemType: typeName,
@@ -310,7 +289,6 @@ export const addItem = async (
                                 } satisfies IMiscItem
                             ];
                             addShipDecorations(inventory, changes);
-                            await inventory.save();
                             return {
                                 InventoryChanges: {
                                     ShipDecorations: changes
@@ -318,7 +296,6 @@ export const addItem = async (
                             };
                         }
                         default: {
-                            const inventory = await getInventory(accountId);
                             const miscItemChanges = [
                                 {
                                     ItemType: typeName,
@@ -326,7 +303,6 @@ export const addItem = async (
                                 } satisfies IMiscItem
                             ];
                             addMiscItems(inventory, miscItemChanges);
-                            await inventory.save();
                             return {
                                 InventoryChanges: {
                                     MiscItems: miscItemChanges
@@ -338,7 +314,6 @@ export const addItem = async (
                 case "Game":
                     if (typeName.substr(1).split("/")[3] == "Projections") {
                         // Void Relics, e.g. /Lotus/Types/Game/Projections/T2VoidProjectionGaussPrimeDBronze
-                        const inventory = await getInventory(accountId);
                         const miscItemChanges = [
                             {
                                 ItemType: typeName,
@@ -346,7 +321,6 @@ export const addItem = async (
                             } satisfies IMiscItem
                         ];
                         addMiscItems(inventory, miscItemChanges);
-                        await inventory.save();
                         return {
                             InventoryChanges: {
                                 MiscItems: miscItemChanges
@@ -363,13 +337,13 @@ export const addItem = async (
 };
 
 //TODO: maybe genericMethod for all the add methods, they share a lot of logic
-export const addSentinel = async (sentinelName: string, accountId: string): Promise<IInventoryChanges> => {
-    const inventoryChanges: IInventoryChanges = {};
-
+export const addSentinel = (
+    inventory: TInventoryDatabaseDocument,
+    sentinelName: string,
+    inventoryChanges: IInventoryChanges = {}
+): IInventoryChanges => {
     if (ExportSentinels[sentinelName]?.defaultWeapon) {
-        inventoryChanges.SentinelWeapons = [
-            await addSentinelWeapon(ExportSentinels[sentinelName].defaultWeapon, accountId)
-        ];
+        addSentinelWeapon(inventory, ExportSentinels[sentinelName].defaultWeapon, inventoryChanges);
     }
 
     const modsToGive: IRawUpgrade[] = [];
@@ -387,96 +361,109 @@ export const addSentinel = async (sentinelName: string, accountId: string): Prom
         }
     }
 
-    const inventory = await getInventory(accountId);
     addMods(inventory, modsToGive);
-    const sentinelIndex = inventory.Sentinels.push({ ItemType: sentinelName, Configs: configs, XP: 0 });
-    const changedInventory = await inventory.save();
-    inventoryChanges.Sentinels = [changedInventory.Sentinels[sentinelIndex - 1].toJSON()];
+    const sentinelIndex = inventory.Sentinels.push({ ItemType: sentinelName, Configs: configs, XP: 0 }) - 1;
+    inventoryChanges.Sentinels ??= [];
+    (inventoryChanges.Sentinels as IEquipmentClient[]).push(
+        inventory.Sentinels[sentinelIndex].toJSON<IEquipmentClient>()
+    );
 
     return inventoryChanges;
 };
 
-export const addSentinelWeapon = async (typeName: string, accountId: string): Promise<IEquipmentClient> => {
-    const inventory = await getInventory(accountId);
-    const sentinelIndex = inventory.SentinelWeapons.push({ ItemType: typeName });
-    const changedInventory = await inventory.save();
-    return changedInventory.SentinelWeapons[sentinelIndex - 1].toJSON<IEquipmentClient>();
+export const addSentinelWeapon = (
+    inventory: TInventoryDatabaseDocument,
+    typeName: string,
+    inventoryChanges: IInventoryChanges
+): void => {
+    const index = inventory.SentinelWeapons.push({ ItemType: typeName }) - 1;
+    inventoryChanges.SentinelWeapons ??= [];
+    (inventoryChanges.SentinelWeapons as IEquipmentClient[]).push(
+        inventory.SentinelWeapons[index].toJSON<IEquipmentClient>()
+    );
 };
 
-export const addPowerSuit = async (powersuitName: string, accountId: string): Promise<IInventoryChanges> => {
-    const inventoryChanges: IInventoryChanges = {};
+export const addPowerSuit = (
+    inventory: TInventoryDatabaseDocument,
+    powersuitName: string,
+    inventoryChanges: IInventoryChanges = {}
+): IInventoryChanges => {
     const specialItems = getExalted(powersuitName);
     if (specialItems) {
-        for await (const specialItem of specialItems) {
-            await addSpecialItem(specialItem, accountId, inventoryChanges);
+        for (const specialItem of specialItems) {
+            addSpecialItem(inventory, specialItem, inventoryChanges);
         }
     }
-    const inventory = await getInventory(accountId);
-    const suitIndex = inventory.Suits.push({ ItemType: powersuitName, Configs: [], UpgradeVer: 101, XP: 0 });
-    const changedInventory = await inventory.save();
-    inventoryChanges.Suits = [changedInventory.Suits[suitIndex - 1].toJSON()];
+    const suitIndex = inventory.Suits.push({ ItemType: powersuitName, Configs: [], UpgradeVer: 101, XP: 0 }) - 1;
+    inventoryChanges.Suits ??= [];
+    (inventoryChanges.Suits as IEquipmentClient[]).push(inventory.Suits[suitIndex].toJSON<IEquipmentClient>());
     return inventoryChanges;
 };
 
-export const addMechSuit = async (mechsuitName: string, accountId: string): Promise<IInventoryChanges> => {
-    const inventoryChanges: IInventoryChanges = {};
+export const addMechSuit = (
+    inventory: TInventoryDatabaseDocument,
+    mechsuitName: string,
+    inventoryChanges: IInventoryChanges = {}
+): IInventoryChanges => {
     const specialItems = getExalted(mechsuitName);
     if (specialItems) {
-        for await (const specialItem of specialItems) {
-            await addSpecialItem(specialItem, accountId, inventoryChanges);
+        for (const specialItem of specialItems) {
+            addSpecialItem(inventory, specialItem, inventoryChanges);
         }
     }
-    const inventory = await getInventory(accountId);
-    const suitIndex = inventory.MechSuits.push({ ItemType: mechsuitName, Configs: [], UpgradeVer: 101, XP: 0 });
-    const changedInventory = await inventory.save();
-    inventoryChanges.MechSuits = [changedInventory.MechSuits[suitIndex - 1].toJSON()];
+    const suitIndex = inventory.MechSuits.push({ ItemType: mechsuitName, Configs: [], UpgradeVer: 101, XP: 0 }) - 1;
+    inventoryChanges.MechSuits ??= [];
+    (inventoryChanges.MechSuits as IEquipmentClient[]).push(inventory.MechSuits[suitIndex].toJSON<IEquipmentClient>());
     return inventoryChanges;
 };
 
-export const addSpecialItem = async (
+export const addSpecialItem = (
+    inventory: TInventoryDatabaseDocument,
     itemName: string,
-    accountId: string,
     inventoryChanges: IInventoryChanges
-): Promise<void> => {
-    const inventory = await getInventory(accountId);
+): void => {
     if (inventory.SpecialItems.find(x => x.ItemType == itemName)) {
         return;
     }
-    const specialItemIndex = inventory.SpecialItems.push({
-        ItemType: itemName,
-        Configs: [],
-        Features: 1,
-        UpgradeVer: 101,
-        XP: 0
-    });
-    const changedInventory = await inventory.save();
+    const specialItemIndex =
+        inventory.SpecialItems.push({
+            ItemType: itemName,
+            Configs: [],
+            Features: 1,
+            UpgradeVer: 101,
+            XP: 0
+        }) - 1;
     inventoryChanges.SpecialItems ??= [];
-    (inventoryChanges.SpecialItems as object[]).push(changedInventory.SpecialItems[specialItemIndex - 1].toJSON());
+    (inventoryChanges.SpecialItems as IEquipmentClient[]).push(
+        inventory.SpecialItems[specialItemIndex].toJSON<IEquipmentClient>()
+    );
 };
 
-export const addSpaceSuit = async (spacesuitName: string, accountId: string): Promise<IEquipmentClient> => {
-    const inventory = await getInventory(accountId);
-    const suitIndex = inventory.SpaceSuits.push({ ItemType: spacesuitName, Configs: [], UpgradeVer: 101, XP: 0 });
-    const changedInventory = await inventory.save();
-    return changedInventory.SpaceSuits[suitIndex - 1].toJSON<IEquipmentClient>();
+export const addSpaceSuit = (
+    inventory: TInventoryDatabaseDocument,
+    spacesuitName: string,
+    inventoryChanges: IInventoryChanges = {}
+): IInventoryChanges => {
+    const suitIndex = inventory.SpaceSuits.push({ ItemType: spacesuitName, Configs: [], UpgradeVer: 101, XP: 0 }) - 1;
+    inventoryChanges.SpaceSuits ??= [];
+    (inventoryChanges.SpaceSuits as IEquipmentClient[]).push(
+        inventory.SpaceSuits[suitIndex].toJSON<IEquipmentClient>()
+    );
+    return inventoryChanges;
 };
 
-export const updateSlots = async (
-    accountId: string,
+export const updateSlots = (
+    inventory: TInventoryDatabaseDocument,
     slotName: SlotNames,
     slotAmount: number,
     extraAmount: number
-): Promise<void> => {
-    const inventory = await getInventory(accountId);
-
+): void => {
     inventory[slotName].Slots += slotAmount;
     if (inventory[slotName].Extra === undefined) {
         inventory[slotName].Extra = extraAmount;
     } else {
         inventory[slotName].Extra += extraAmount;
     }
-
-    await inventory.save();
 };
 
 const isCurrencyTracked = (usePremium: boolean): boolean => {
@@ -548,44 +535,61 @@ export const updateTheme = async (data: IThemeUpdateRequest, accountId: string):
     await inventory.save();
 };
 
-export const addEquipment = async (
+export const addEquipment = (
+    inventory: TInventoryDatabaseDocument,
     category: TEquipmentKey,
     type: string,
-    accountId: string,
-    modularParts: string[] | undefined = undefined
-): Promise<IEquipmentClient> => {
-    const inventory = await getInventory(accountId);
+    modularParts: string[] | undefined = undefined,
+    inventoryChanges: IInventoryChanges = {}
+): IInventoryChanges => {
+    const index =
+        inventory[category].push({
+            ItemType: type,
+            Configs: [],
+            XP: 0,
+            ModularParts: modularParts
+        }) - 1;
 
-    const index = inventory[category].push({
-        ItemType: type,
-        Configs: [],
-        XP: 0,
-        ModularParts: modularParts
-    });
-
-    const changedInventory = await inventory.save();
-    return changedInventory[category][index - 1].toJSON() as object as IEquipmentClient;
+    inventoryChanges[category] ??= [];
+    (inventoryChanges[category] as IEquipmentClient[]).push(inventory[category][index].toJSON<IEquipmentClient>());
+    return inventoryChanges;
 };
 
-export const addCustomization = async (customizatonName: string, accountId: string): Promise<IFlavourItem> => {
-    const inventory = await getInventory(accountId);
-    const flavourItemIndex = inventory.FlavourItems.push({ ItemType: customizatonName }) - 1;
-    const changedInventory = await inventory.save();
-    return changedInventory.FlavourItems[flavourItemIndex].toJSON();
+export const addCustomization = (
+    inventory: TInventoryDatabaseDocument,
+    customizationName: string,
+    inventoryChanges: IInventoryChanges = {}
+): IInventoryChanges => {
+    const flavourItemIndex = inventory.FlavourItems.push({ ItemType: customizationName }) - 1;
+    inventoryChanges.FlavourItems ??= [];
+    (inventoryChanges.FlavourItems as IFlavourItem[]).push(
+        inventory.FlavourItems[flavourItemIndex].toJSON<IFlavourItem>()
+    );
+    return inventoryChanges;
 };
 
-export const addSkin = async (typeName: string, accountId: string): Promise<IWeaponSkinClient> => {
-    const inventory = await getInventory(accountId);
+export const addSkin = (
+    inventory: TInventoryDatabaseDocument,
+    typeName: string,
+    inventoryChanges: IInventoryChanges = {}
+): IInventoryChanges => {
     const index = inventory.WeaponSkins.push({ ItemType: typeName }) - 1;
-    const changedInventory = await inventory.save();
-    return changedInventory.WeaponSkins[index].toJSON() as object as IWeaponSkinClient;
+    inventoryChanges.WeaponSkins ??= [];
+    (inventoryChanges.WeaponSkins as IWeaponSkinClient[]).push(
+        inventory.WeaponSkins[index].toJSON<IWeaponSkinClient>()
+    );
+    return inventoryChanges;
 };
 
-const addCrewShip = async (typeName: string, accountId: string) => {
-    const inventory = await getInventory(accountId);
+const addCrewShip = (
+    inventory: TInventoryDatabaseDocument,
+    typeName: string,
+    inventoryChanges: IInventoryChanges = {}
+): IInventoryChanges => {
     const index = inventory.CrewShips.push({ ItemType: typeName }) - 1;
-    const changedInventory = await inventory.save();
-    return changedInventory.CrewShips[index].toJSON();
+    inventoryChanges.CrewShips ??= [];
+    (inventoryChanges.CrewShips as object[]).push(inventory.CrewShips[index].toJSON());
+    return inventoryChanges;
 };
 
 const addGearExpByCategory = (
@@ -864,7 +868,7 @@ export const addBooster = async (ItemType: string, time: number, accountId: stri
         existingBooster.ExpiryDate = Math.max(existingBooster.ExpiryDate, currentTime) + time;
         inventory.markModified(`Boosters.${itemIndex}.ExpiryDate`);
     } else {
-        Boosters.push({ ItemType, ExpiryDate: currentTime + time }) - 1;
+        Boosters.push({ ItemType, ExpiryDate: currentTime + time });
     }
 
     await inventory.save();
