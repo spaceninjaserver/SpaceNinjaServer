@@ -164,11 +164,10 @@ export const addItem = async (
         }
     }
     if (typeName in ExportCustoms) {
-        return {
-            InventoryChanges: {
-                WeaponSkins: [await addSkin(typeName, accountId)]
-            }
-        };
+        const inventory = await getInventory(accountId);
+        const inventoryChanges = addSkin(inventory, typeName);
+        await inventory.save();
+        return { InventoryChanges: inventoryChanges };
     }
     if (typeName in ExportFlavour) {
         return {
@@ -582,11 +581,17 @@ export const addCustomization = async (customizatonName: string, accountId: stri
     return changedInventory.FlavourItems[flavourItemIndex].toJSON();
 };
 
-export const addSkin = async (typeName: string, accountId: string): Promise<IWeaponSkinClient> => {
-    const inventory = await getInventory(accountId);
+export const addSkin = (
+    inventory: TInventoryDatabaseDocument,
+    typeName: string,
+    inventoryChanges: IInventoryChanges = {}
+): IInventoryChanges => {
     const index = inventory.WeaponSkins.push({ ItemType: typeName }) - 1;
-    const changedInventory = await inventory.save();
-    return changedInventory.WeaponSkins[index].toJSON() as object as IWeaponSkinClient;
+    inventoryChanges.WeaponSkins ??= [];
+    (inventoryChanges.WeaponSkins as IWeaponSkinClient[]).push(
+        inventory.WeaponSkins[index].toJSON<IWeaponSkinClient>()
+    );
+    return inventoryChanges;
 };
 
 const addCrewShip = (
