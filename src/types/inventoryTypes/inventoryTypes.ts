@@ -460,10 +460,7 @@ export interface IFlavourItem {
     ItemType: string;
 }
 
-export interface IMiscItem {
-    ItemCount: number;
-    ItemType: string;
-}
+export type IMiscItem = ITypeCount;
 
 export interface ICrewShipWeapon {
     PILOT: ICrewShipPilotWeapon;
