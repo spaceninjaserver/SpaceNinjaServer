@@ -21,7 +21,6 @@ app.use(bodyParser.raw());
 app.use(express.json());
 app.use(bodyParser.text());
 app.use(requestLogger);
-app.use(errorHandler);
 
 app.use("/api", apiRouter);
 //app.use("/test", testRouter);
@@ -35,7 +34,6 @@ app.use("/stats", statsRouter);
 app.use("/", webuiRouter);
 
 app.use(unknownEndpointHandler);
-
-//app.use(errorHandler)
+app.use(errorHandler);
 
 export { app };
