@@ -13,10 +13,6 @@ export interface IGuildDatabase extends IGuild {
     DojoEnergy: number;
 }
 
-export interface ICreateGuildRequest {
-    guildName: string;
-}
-
 export interface IDojoClient {
     _id: IOid; // ID of the guild
     Name: string;
