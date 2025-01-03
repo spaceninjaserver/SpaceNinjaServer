@@ -105,13 +105,12 @@ export const getInventory = async (accountOwnerId: string): Promise<TInventoryDa
 };
 
 export const addItem = async (
-    accountId: string,
+    inventory: TInventoryDatabaseDocument,
     typeName: string,
     quantity: number = 1
 ): Promise<{ InventoryChanges: IInventoryChanges }> => {
     // Strict typing
     if (typeName in ExportRecipes) {
-        const inventory = await getInventory(accountId);
         const recipeChanges = [
             {
                 ItemType: typeName,
@@ -119,7 +118,6 @@ export const addItem = async (
             } satisfies ITypeCount
         ];
         addRecipes(inventory, recipeChanges);
-        await inventory.save();
         return {
             InventoryChanges: {
                 Recipes: recipeChanges
@@ -127,11 +125,9 @@ export const addItem = async (
         };
     }
     if (typeName in ExportResources) {
-        const inventory = await getInventory(accountId);
         if (ExportResources[typeName].productCategory == "Ships") {
-            const oid = await createShip(new Types.ObjectId(accountId), typeName);
+            const oid = await createShip(inventory.accountOwnerId, typeName);
             inventory.Ships.push(oid);
-            await inventory.save();
             return {
                 InventoryChanges: {
                     Ships: [
@@ -143,9 +139,7 @@ export const addItem = async (
                 }
             };
         } else if (ExportResources[typeName].productCategory == "CrewShips") {
-            const inventory = await getInventory(accountId);
             const inventoryChanges = addCrewShip(inventory, typeName);
-            await inventory.save();
             return { InventoryChanges: inventoryChanges };
         } else {
             const miscItemChanges = [
@@ -155,7 +149,6 @@ export const addItem = async (
                 } satisfies IMiscItem
             ];
             addMiscItems(inventory, miscItemChanges);
-            await inventory.save();
             return {
                 InventoryChanges: {
                     MiscItems: miscItemChanges
@@ -164,19 +157,14 @@ export const addItem = async (
         }
     }
     if (typeName in ExportCustoms) {
-        const inventory = await getInventory(accountId);
         const inventoryChanges = addSkin(inventory, typeName);
-        await inventory.save();
         return { InventoryChanges: inventoryChanges };
     }
     if (typeName in ExportFlavour) {
-        const inventory = await getInventory(accountId);
         const inventoryChanges = addCustomization(inventory, typeName);
-        await inventory.save();
         return { InventoryChanges: inventoryChanges };
     }
     if (typeName in ExportUpgrades || typeName in ExportArcanes) {
-        const inventory = await getInventory(accountId);
         const changes = [
             {
                 ItemType: typeName,
@@ -184,7 +172,6 @@ export const addItem = async (
             }
         ];
         addMods(inventory, changes);
-        await inventory.save();
         return {
             InventoryChanges: {
                 RawUpgrades: changes
@@ -192,7 +179,6 @@ export const addItem = async (
         };
     }
     if (typeName in ExportGear) {
-        const inventory = await getInventory(accountId);
         const consumablesChanges = [
             {
                 ItemType: typeName,
@@ -200,7 +186,6 @@ export const addItem = async (
             } satisfies IConsumable
         ];
         addConsumables(inventory, consumablesChanges);
-        await inventory.save();
         return {
             InventoryChanges: {
                 Consumables: consumablesChanges
@@ -213,10 +198,8 @@ export const addItem = async (
         case "Powersuits":
             switch (typeName.substr(1).split("/")[2]) {
                 default: {
-                    const inventory = await getInventory(accountId);
                     const inventoryChanges = addPowerSuit(inventory, typeName);
                     updateSlots(inventory, InventorySlot.SUITS, 0, 1);
-                    await inventory.save();
                     return {
                         InventoryChanges: {
                             ...inventoryChanges,
@@ -229,10 +212,8 @@ export const addItem = async (
                     };
                 }
                 case "Archwing": {
-                    const inventory = await getInventory(accountId);
                     const inventoryChanges = addSpaceSuit(inventory, typeName);
                     updateSlots(inventory, InventorySlot.SPACESUITS, 0, 1);
-                    await inventory.save();
                     return {
                         InventoryChanges: {
                             ...inventoryChanges,
@@ -245,10 +226,8 @@ export const addItem = async (
                     };
                 }
                 case "EntratiMech": {
-                    const inventory = await getInventory(accountId);
                     const inventoryChanges = addMechSuit(inventory, typeName);
                     updateSlots(inventory, InventorySlot.MECHSUITS, 0, 1);
-                    await inventory.save();
                     return {
                         InventoryChanges: {
                             ...inventoryChanges,
@@ -263,11 +242,9 @@ export const addItem = async (
             }
             break;
         case "Weapons": {
-            const inventory = await getInventory(accountId);
             const weaponType = getWeaponType(typeName);
             const inventoryChanges = addEquipment(inventory, weaponType, typeName);
             updateSlots(inventory, InventorySlot.WEAPONS, 0, 1);
-            await inventory.save();
             return {
                 InventoryChanges: {
                     ...inventoryChanges,
@@ -277,7 +254,6 @@ export const addItem = async (
         }
         case "Objects": {
             // /Lotus/Objects/Tenno/Props/TnoLisetTextProjector (Note Beacon)
-            const inventory = await getInventory(accountId);
             const changes = [
                 {
                     ItemType: typeName,
@@ -285,7 +261,6 @@ export const addItem = async (
                 } satisfies IMiscItem
             ];
             addShipDecorations(inventory, changes);
-            await inventory.save();
             return {
                 InventoryChanges: {
                     ShipDecorations: changes
@@ -295,10 +270,8 @@ export const addItem = async (
         case "Types":
             switch (typeName.substr(1).split("/")[2]) {
                 case "Sentinels": {
-                    const inventory = await getInventory(accountId);
                     const inventoryChanges = addSentinel(inventory, typeName);
                     updateSlots(inventory, InventorySlot.SENTINELS, 0, 1);
-                    await inventory.save();
                     return {
                         InventoryChanges: {
                             ...inventoryChanges,
@@ -309,7 +282,6 @@ export const addItem = async (
                 case "Items": {
                     switch (typeName.substr(1).split("/")[3]) {
                         case "ShipDecos": {
-                            const inventory = await getInventory(accountId);
                             const changes = [
                                 {
                                     ItemType: typeName,
@@ -317,7 +289,6 @@ export const addItem = async (
                                 } satisfies IMiscItem
                             ];
                             addShipDecorations(inventory, changes);
-                            await inventory.save();
                             return {
                                 InventoryChanges: {
                                     ShipDecorations: changes
@@ -325,7 +296,6 @@ export const addItem = async (
                             };
                         }
                         default: {
-                            const inventory = await getInventory(accountId);
                             const miscItemChanges = [
                                 {
                                     ItemType: typeName,
@@ -333,7 +303,6 @@ export const addItem = async (
                                 } satisfies IMiscItem
                             ];
                             addMiscItems(inventory, miscItemChanges);
-                            await inventory.save();
                             return {
                                 InventoryChanges: {
                                     MiscItems: miscItemChanges
@@ -345,7 +314,6 @@ export const addItem = async (
                 case "Game":
                     if (typeName.substr(1).split("/")[3] == "Projections") {
                         // Void Relics, e.g. /Lotus/Types/Game/Projections/T2VoidProjectionGaussPrimeDBronze
-                        const inventory = await getInventory(accountId);
                         const miscItemChanges = [
                             {
                                 ItemType: typeName,
@@ -353,7 +321,6 @@ export const addItem = async (
                             } satisfies IMiscItem
                         ];
                         addMiscItems(inventory, miscItemChanges);
-                        await inventory.save();
                         return {
                             InventoryChanges: {
                                 MiscItems: miscItemChanges

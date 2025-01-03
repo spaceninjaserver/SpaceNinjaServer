@@ -204,9 +204,12 @@ export const handleStoreItemAcquisition = async (
             }
         }
         switch (storeCategory) {
-            default:
-                purchaseResponse = await addItem(accountId, internalName, quantity);
+            default: {
+                const inventory = await getInventory(accountId);
+                purchaseResponse = await addItem(inventory, internalName, quantity);
+                await inventory.save();
                 break;
+            }
             case "Types":
                 purchaseResponse = await handleTypesPurchase(internalName, accountId, quantity);
                 break;
@@ -279,6 +282,7 @@ const handleBoosterPackPurchase = async (
         BoosterPackItems: "",
         InventoryChanges: {}
     };
+    const inventory = await getInventory(accountId);
     for (let i = 0; i != quantity; ++i) {
         for (const weights of pack.rarityWeightsPerRoll) {
             const result = getRandomWeightedReward(pack.components, weights);
@@ -288,11 +292,12 @@ const handleBoosterPackPurchase = async (
                     result.type.split("/Lotus/").join("/Lotus/StoreItems/") + ',{"lvl":0};';
                 combineInventoryChanges(
                     purchaseResponse.InventoryChanges,
-                    (await addItem(accountId, result.type, result.itemCount)).InventoryChanges
+                    (await addItem(inventory, result.type, result.itemCount)).InventoryChanges
                 );
             }
         }
     }
+    await inventory.save();
     return purchaseResponse;
 };
 
@@ -305,8 +310,12 @@ const handleTypesPurchase = async (
     const typeCategory = getStoreItemTypesCategory(typesName);
     logger.debug(`type category ${typeCategory}`);
     switch (typeCategory) {
-        default:
-            return await addItem(accountId, typesName, quantity);
+        default: {
+            const inventory = await getInventory(accountId);
+            const resp = await addItem(inventory, typesName, quantity);
+            await inventory.save();
+            return resp;
+        }
         case "BoosterPacks":
             return await handleBoosterPackPurchase(typesName, accountId, quantity);
         case "SlotItems":
