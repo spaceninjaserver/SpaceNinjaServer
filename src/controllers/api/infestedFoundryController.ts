@@ -1,10 +1,17 @@
 import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { getInventory, addMiscItems } from "@/src/services/inventoryService";
+import { getInventory, addMiscItems, updateCurrency, addRecipes } from "@/src/services/inventoryService";
 import { IOid } from "@/src/types/commonTypes";
-import { IInfestedFoundry, IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
-import { ExportMisc } from "warframe-public-export-plus";
+import {
+    IConsumedSuit,
+    IInfestedFoundry,
+    IInventoryDatabaseDocument,
+    IMiscItem,
+    ITypeCount
+} from "@/src/types/inventoryTypes/inventoryTypes";
+import { ExportMisc, ExportRecipes } from "warframe-public-export-plus";
+import { getRecipe } from "@/src/services/itemDataService";
 
 export const infestedFoundryController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -110,6 +117,67 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             res.status(404).end();
             break;
 
+        case "a": {
+            // subsume warframe
+            const request = getJSONfromString(String(req.body)) as IHelminthSubsumeRequest;
+            const inventory = await getInventory(accountId);
+            const recipe = getRecipe(request.Recipe)!;
+            for (const ingredient of recipe.secretIngredients!) {
+                const resource = inventory.InfestedFoundry!.Resources!.find(x => x.ItemType == ingredient.ItemType);
+                if (resource) {
+                    resource.Count -= ingredient.ItemCount;
+                }
+            }
+            const suit = inventory.Suits.find(x => x._id.toString() == request.SuitId.$oid)!;
+            inventory.Suits.pull(suit);
+            const consumedSuit: IConsumedSuit = { s: suit.ItemType };
+            if (suit.Configs && suit.Configs[0] && suit.Configs[0].pricol) {
+                consumedSuit.c = suit.Configs[0].pricol;
+            }
+            inventory.InfestedFoundry!.Slots!--;
+            inventory.InfestedFoundry!.ConsumedSuits ??= [];
+            inventory.InfestedFoundry!.ConsumedSuits?.push(consumedSuit);
+            inventory.InfestedFoundry!.LastConsumedSuit = suit;
+            inventory.InfestedFoundry!.AbilityOverrideUnlockCooldown = new Date(
+                new Date().getTime() + 24 * 60 * 60 * 1000
+            );
+            addInfestedFoundryXP(inventory.InfestedFoundry!, 1600_00);
+            await inventory.save();
+            console.log(inventory.toJSON().InfestedFoundry);
+            res.json({
+                InventoryChanges: {
+                    RemovedIdItems: [
+                        {
+                            ItemId: request.SuitId
+                        }
+                    ],
+                    SuitBin: {
+                        count: -1,
+                        platinum: 0,
+                        Slots: 1
+                    },
+                    InfestedFoundry: inventory.toJSON().InfestedFoundry
+                }
+            });
+            break;
+        }
+
+        case "r": {
+            // rush subsume
+            const inventory = await getInventory(accountId);
+            const currencyChanges = updateCurrency(inventory, 50, true);
+            const recipeChanges = handleSubsumeCompletion(inventory);
+            await inventory.save();
+            res.json({
+                InventoryChanges: {
+                    ...currencyChanges,
+                    Recipes: recipeChanges,
+                    InfestedFoundry: inventory.toJSON().InfestedFoundry
+                }
+            });
+            break;
+        }
+
         default:
             throw new Error(`unhandled infestedFoundry mode: ${String(req.query.mode)}`);
     }
@@ -164,4 +232,27 @@ const addInfestedFoundryXP = (infestedFoundry: IInfestedFoundry, delta: number):
         infestedFoundry.Slots ??= 0;
         infestedFoundry.Slots += 20;
     }
+};
+
+interface IHelminthSubsumeRequest {
+    SuitId: IOid;
+    Recipe: string;
+}
+
+export const handleSubsumeCompletion = (inventory: IInventoryDatabaseDocument): ITypeCount[] => {
+    const [recipeType] = Object.entries(ExportRecipes).find(
+        ([_recipeType, recipe]) =>
+            recipe.secretIngredientAction == "SIA_WARFRAME_ABILITY" &&
+            recipe.secretIngredients![0].ItemType == inventory.InfestedFoundry!.LastConsumedSuit!.ItemType
+    )!;
+    inventory.InfestedFoundry!.LastConsumedSuit = undefined;
+    inventory.InfestedFoundry!.AbilityOverrideUnlockCooldown = undefined;
+    const recipeChanges: ITypeCount[] = [
+        {
+            ItemType: recipeType,
+            ItemCount: 1
+        }
+    ];
+    addRecipes(inventory, recipeChanges);
+    return recipeChanges;
 };

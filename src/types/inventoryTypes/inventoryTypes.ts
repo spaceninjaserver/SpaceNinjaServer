@@ -460,10 +460,7 @@ export interface IFlavourItem {
     ItemType: string;
 }
 
-export interface IMiscItem {
-    ItemCount: number;
-    ItemType: string;
-}
+export type IMiscItem = ITypeCount;
 
 export interface ICrewShipWeapon {
     PILOT: ICrewShipPilotWeapon;
@@ -518,10 +515,13 @@ export interface IFusionTreasure {
     Sockets: number;
 }
 
-// Like ITypeCount except 'Count' instead of 'ItemCount'
 export interface IHelminthResource {
     ItemType: string;
     Count: number;
+    RecentlyConvertedResources?: {
+        ItemType: string;
+        Date: number;
+    }[];
 }
 
 export interface IInfestedFoundry {
@@ -533,6 +533,8 @@ export interface IInfestedFoundry {
     InvigorationIndex?: number;
     InvigorationSuitOfferings?: string[];
     InvigorationsApplied?: number;
+    LastConsumedSuit?: IEquipmentDatabase;
+    AbilityOverrideUnlockCooldown?: Date;
 }
 
 export interface IConsumedSuit {

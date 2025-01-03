@@ -61,7 +61,7 @@ import {
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
 import { EquipmentSelectionSchema } from "./loadoutModel";
 
-const typeCountSchema = new Schema<ITypeCount>({ ItemType: String, ItemCount: Number }, { _id: false });
+export const typeCountSchema = new Schema<ITypeCount>({ ItemType: String, ItemCount: Number }, { _id: false });
 
 const focusXPSchema = new Schema<IFocusXP>(
     {
@@ -459,10 +459,13 @@ const settingsSchema = new Schema<ISettings>({
     TradingRulesConfirmed: Boolean
 });
 
-const consumedSchuitsSchema = new Schema<IConsumedSuit>({
-    s: String,
-    c: colorSchema
-});
+const consumedSchuitsSchema = new Schema<IConsumedSuit>(
+    {
+        s: String,
+        c: colorSchema
+    },
+    { _id: false }
+);
 
 const helminthResourceSchema = new Schema<IHelminthResource>({ ItemType: String, Count: Number }, { _id: false });
 
@@ -475,10 +478,21 @@ const infestedFoundrySchema = new Schema<IInfestedFoundry>(
         ConsumedSuits: { type: [consumedSchuitsSchema], default: undefined },
         InvigorationIndex: Number,
         InvigorationSuitOfferings: { type: [String], default: undefined },
-        InvigorationsApplied: Number
+        InvigorationsApplied: Number,
+        LastConsumedSuit: { type: EquipmentSchema, default: undefined },
+        AbilityOverrideUnlockCooldown: Date
     },
     { _id: false }
 );
+
+infestedFoundrySchema.set("toJSON", {
+    transform(_doc, ret, _options) {
+        if (ret.AbilityOverrideUnlockCooldown) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+            ret.AbilityOverrideUnlockCooldown = toMongoDate(ret.AbilityOverrideUnlockCooldown);
+        }
+    }
+});
 
 const questProgressSchema = new Schema<IQuestProgress>({
     c: Number,
