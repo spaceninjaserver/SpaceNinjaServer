@@ -178,7 +178,9 @@ export const handleInventoryItemConfigChange = async (
                 break;
             }
             default: {
-                logger.error(`category not implemented: ${equipmentName}`, { config: equipment });
+                logger.warn(`loadout category not implemented, changes may be lost: ${equipmentName}`, {
+                    config: equipment
+                });
             }
             //case "KahlLoadOuts": not sure yet how to handle kahl: it is not sent in inventory
         }
