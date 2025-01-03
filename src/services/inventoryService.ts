@@ -170,11 +170,10 @@ export const addItem = async (
         return { InventoryChanges: inventoryChanges };
     }
     if (typeName in ExportFlavour) {
-        return {
-            InventoryChanges: {
-                FlavourItems: [await addCustomization(typeName, accountId)]
-            }
-        };
+        const inventory = await getInventory(accountId);
+        const inventoryChanges = addCustomization(inventory, typeName);
+        await inventory.save();
+        return { InventoryChanges: inventoryChanges };
     }
     if (typeName in ExportUpgrades || typeName in ExportArcanes) {
         const inventory = await getInventory(accountId);
@@ -574,11 +573,17 @@ export const addEquipment = async (
     return changedInventory[category][index - 1].toJSON() as object as IEquipmentClient;
 };
 
-export const addCustomization = async (customizatonName: string, accountId: string): Promise<IFlavourItem> => {
-    const inventory = await getInventory(accountId);
-    const flavourItemIndex = inventory.FlavourItems.push({ ItemType: customizatonName }) - 1;
-    const changedInventory = await inventory.save();
-    return changedInventory.FlavourItems[flavourItemIndex].toJSON();
+export const addCustomization = (
+    inventory: TInventoryDatabaseDocument,
+    customizationName: string,
+    inventoryChanges: IInventoryChanges = {}
+): IInventoryChanges => {
+    const flavourItemIndex = inventory.FlavourItems.push({ ItemType: customizationName }) - 1;
+    inventoryChanges.FlavourItems ??= [];
+    (inventoryChanges.FlavourItems as IFlavourItem[]).push(
+        inventory.FlavourItems[flavourItemIndex].toJSON<IFlavourItem>()
+    );
+    return inventoryChanges;
 };
 
 export const addSkin = (
