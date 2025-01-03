@@ -1,11 +1,10 @@
 import { RequestHandler } from "express";
 import { getAccountForRequest } from "@/src/services/loginService";
-import { toInventoryResponse } from "@/src/helpers/inventoryHelpers";
-import { Inventory, TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { config } from "@/src/services/configService";
 import allDialogue from "@/static/fixed_responses/allDialogue.json";
 import { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
-import { IShipInventory, equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IInventoryResponse, IShipInventory, equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IPolarity, ArtifactPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import {
     ExportCustoms,
@@ -26,9 +25,7 @@ export const inventoryController: RequestHandler = async (request, response) => 
         return;
     }
 
-    const inventory = await Inventory.findOne({ accountOwnerId: account._id.toString() })
-        .populate<{ LoadOutPresets: ILoadoutDatabase }>("LoadOutPresets")
-        .populate<{ Ships: IShipInventory }>("Ships");
+    const inventory = await Inventory.findOne({ accountOwnerId: account._id.toString() });
 
     if (!inventory) {
         response.status(400).json({ error: "inventory was undefined" });
@@ -63,14 +60,17 @@ export const inventoryController: RequestHandler = async (request, response) => 
         inventory.InfestedFoundry.AbilityOverrideUnlockCooldown &&
         new Date() >= inventory.InfestedFoundry.AbilityOverrideUnlockCooldown
     ) {
-        handleSubsumeCompletion(inventory as unknown as TInventoryDatabaseDocument);
+        handleSubsumeCompletion(inventory);
         await inventory.save();
     }
 
-    //TODO: make a function that converts from database representation to client
-    const inventoryJSON = inventory.toJSON();
-
-    const inventoryResponse = toInventoryResponse(inventoryJSON);
+    const inventoryWithLoadOutPresets = await inventory.populate<{ LoadOutPresets: ILoadoutDatabase }>(
+        "LoadOutPresets"
+    );
+    const inventoryWithLoadOutPresetsAndShips = await inventoryWithLoadOutPresets.populate<{ Ships: IShipInventory }>(
+        "Ships"
+    );
+    const inventoryResponse = inventoryWithLoadOutPresetsAndShips.toJSON<IInventoryResponse>();
 
     if (config.infiniteCredits) {
         inventoryResponse.RegularCredits = 999999999;

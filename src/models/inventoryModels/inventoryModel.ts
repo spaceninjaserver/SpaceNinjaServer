@@ -1061,6 +1061,7 @@ inventorySchema.set("toJSON", {
     transform(_document, returnedObject) {
         delete returnedObject._id;
         delete returnedObject.__v;
+        delete returnedObject.accountOwnerId;
 
         const inventoryDatabase = returnedObject as IInventoryDatabase;
         const inventoryResponse = returnedObject as IInventoryResponse;
