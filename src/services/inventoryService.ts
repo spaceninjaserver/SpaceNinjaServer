@@ -1,4 +1,4 @@
-import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
+import { Inventory, TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import postTutorialInventory from "@/static/fixed_responses/postTutorialInventory.json";
 import { config } from "@/src/services/configService";
 import { Types } from "mongoose";
@@ -7,7 +7,6 @@ import {
     IChallengeProgress,
     IConsumable,
     IFlavourItem,
-    IInventoryDatabaseDocument,
     IMiscItem,
     IMission,
     IRawUpgrade,
@@ -95,7 +94,7 @@ export const combineInventoryChanges = (InventoryChanges: IInventoryChanges, del
     }
 };
 
-export const getInventory = async (accountOwnerId: string) => {
+export const getInventory = async (accountOwnerId: string): Promise<TInventoryDatabaseDocument> => {
     const inventory = await Inventory.findOne({ accountOwnerId: accountOwnerId });
 
     if (!inventory) {
@@ -485,7 +484,7 @@ const isCurrencyTracked = (usePremium: boolean): boolean => {
 };
 
 export const updateCurrency = (
-    inventory: IInventoryDatabaseDocument,
+    inventory: TInventoryDatabaseDocument,
     price: number,
     usePremium: boolean
 ): ICurrencyChanges => {
@@ -590,7 +589,7 @@ const addCrewShip = async (typeName: string, accountId: string) => {
 };
 
 const addGearExpByCategory = (
-    inventory: IInventoryDatabaseDocument,
+    inventory: TInventoryDatabaseDocument,
     gearArray: IEquipmentClient[] | undefined,
     categoryName: TEquipmentKey
 ): void => {
@@ -622,7 +621,7 @@ const addGearExpByCategory = (
     });
 };
 
-export const addMiscItems = (inventory: IInventoryDatabaseDocument, itemsArray: IMiscItem[] | undefined): void => {
+export const addMiscItems = (inventory: TInventoryDatabaseDocument, itemsArray: IMiscItem[] | undefined): void => {
     const { MiscItems } = inventory;
 
     itemsArray?.forEach(({ ItemCount, ItemType }) => {
@@ -638,7 +637,7 @@ export const addMiscItems = (inventory: IInventoryDatabaseDocument, itemsArray: 
 };
 
 export const addShipDecorations = (
-    inventory: IInventoryDatabaseDocument,
+    inventory: TInventoryDatabaseDocument,
     itemsArray: IConsumable[] | undefined
 ): void => {
     const { ShipDecorations } = inventory;
@@ -655,7 +654,7 @@ export const addShipDecorations = (
     });
 };
 
-export const addConsumables = (inventory: IInventoryDatabaseDocument, itemsArray: IConsumable[] | undefined): void => {
+export const addConsumables = (inventory: TInventoryDatabaseDocument, itemsArray: IConsumable[] | undefined): void => {
     const { Consumables } = inventory;
 
     itemsArray?.forEach(({ ItemCount, ItemType }) => {
@@ -670,7 +669,7 @@ export const addConsumables = (inventory: IInventoryDatabaseDocument, itemsArray
     });
 };
 
-export const addRecipes = (inventory: IInventoryDatabaseDocument, itemsArray: ITypeCount[] | undefined): void => {
+export const addRecipes = (inventory: TInventoryDatabaseDocument, itemsArray: ITypeCount[] | undefined): void => {
     const { Recipes } = inventory;
 
     itemsArray?.forEach(({ ItemCount, ItemType }) => {
@@ -685,7 +684,7 @@ export const addRecipes = (inventory: IInventoryDatabaseDocument, itemsArray: IT
     });
 };
 
-export const addMods = (inventory: IInventoryDatabaseDocument, itemsArray: IRawUpgrade[] | undefined): void => {
+export const addMods = (inventory: TInventoryDatabaseDocument, itemsArray: IRawUpgrade[] | undefined): void => {
     const { RawUpgrades } = inventory;
     itemsArray?.forEach(({ ItemType, ItemCount }) => {
         const itemIndex = RawUpgrades.findIndex(i => i.ItemType === ItemType);
@@ -700,7 +699,7 @@ export const addMods = (inventory: IInventoryDatabaseDocument, itemsArray: IRawU
 };
 
 export const addFusionTreasures = (
-    inventory: IInventoryDatabaseDocument,
+    inventory: TInventoryDatabaseDocument,
     itemsArray: IFusionTreasure[] | undefined
 ): void => {
     const { FusionTreasures } = inventory;
@@ -729,7 +728,7 @@ export const updateChallengeProgress = async (
 };
 
 export const addSeasonalChallengeHistory = (
-    inventory: IInventoryDatabaseDocument,
+    inventory: TInventoryDatabaseDocument,
     itemsArray: ISeasonChallenge[] | undefined
 ): void => {
     const category = inventory.SeasonChallengeHistory;
@@ -746,7 +745,7 @@ export const addSeasonalChallengeHistory = (
 };
 
 export const addChallenges = (
-    inventory: IInventoryDatabaseDocument,
+    inventory: TInventoryDatabaseDocument,
     itemsArray: IChallengeProgress[] | undefined
 ): void => {
     const category = inventory.ChallengeProgress;
@@ -763,7 +762,7 @@ export const addChallenges = (
     });
 };
 
-const addMissionComplete = (inventory: IInventoryDatabaseDocument, { Tag, Completes }: IMission): void => {
+const addMissionComplete = (inventory: TInventoryDatabaseDocument, { Tag, Completes }: IMission): void => {
     const { Missions } = inventory;
     const itemIndex = Missions.findIndex(item => item.Tag === Tag);
 

@@ -3,15 +3,10 @@ import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getInventory, addMiscItems, updateCurrency, addRecipes } from "@/src/services/inventoryService";
 import { IOid } from "@/src/types/commonTypes";
-import {
-    IConsumedSuit,
-    IInfestedFoundry,
-    IInventoryDatabaseDocument,
-    IMiscItem,
-    ITypeCount
-} from "@/src/types/inventoryTypes/inventoryTypes";
+import { IConsumedSuit, IInfestedFoundry, IMiscItem, ITypeCount } from "@/src/types/inventoryTypes/inventoryTypes";
 import { ExportMisc, ExportRecipes } from "warframe-public-export-plus";
 import { getRecipe } from "@/src/services/itemDataService";
+import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 
 export const infestedFoundryController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -239,7 +234,7 @@ interface IHelminthSubsumeRequest {
     Recipe: string;
 }
 
-export const handleSubsumeCompletion = (inventory: IInventoryDatabaseDocument): ITypeCount[] => {
+export const handleSubsumeCompletion = (inventory: TInventoryDatabaseDocument): ITypeCount[] => {
     const [recipeType] = Object.entries(ExportRecipes).find(
         ([_recipeType, recipe]) =>
             recipe.secretIngredientAction == "SIA_WARFRAME_ABILITY" &&

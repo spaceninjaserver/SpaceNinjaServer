@@ -10,8 +10,6 @@ import {
     IEquipmentDatabase
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
 
-//Document extends will be deleted soon. TODO: delete and migrate uses to ...
-export interface IInventoryDatabaseDocument extends IInventoryDatabase, Document {}
 export interface IInventoryDatabase
     extends Omit<
         IInventoryResponse,
