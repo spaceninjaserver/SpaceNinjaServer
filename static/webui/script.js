@@ -140,7 +140,11 @@ function fetchItemList() {
                 "/Lotus/Weapons/Tenno/Rifle/LotusRifle": { name: "Rifle" },
                 "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun": { name: "Shotgun" },
                 // Modular weapons
+                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary": { name: "Kitgun" },
                 "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryBeam": { name: "Kitgun" },
+                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryLauncher": { name: "Kitgun" },
+                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryShotgun": { name: "Kitgun" },
+                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimarySniper": { name: "Kitgun" },
                 "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary": { name: "Kitgun" },
                 "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryBeam": { name: "Kitgun" },
                 "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryShotgun": { name: "Kitgun" },
