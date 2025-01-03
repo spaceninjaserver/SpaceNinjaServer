@@ -2,6 +2,7 @@ import express from "express";
 
 import { unknownEndpointHandler } from "@/src/middleware/middleware";
 import { requestLogger } from "@/src/middleware/morgenMiddleware";
+import { errorHandler } from "@/src/middleware/errorHandler";
 
 import { apiRouter } from "@/src/routes/api";
 //import { testRouter } from "@/src/routes/test";
@@ -20,7 +21,7 @@ app.use(bodyParser.raw());
 app.use(express.json());
 app.use(bodyParser.text());
 app.use(requestLogger);
-//app.use(requestLogger);
+app.use(errorHandler);
 
 app.use("/api", apiRouter);
 //app.use("/test", testRouter);
