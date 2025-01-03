@@ -263,13 +263,15 @@ export const addItem = async (
             }
             break;
         case "Weapons": {
+            const inventory = await getInventory(accountId);
             const weaponType = getWeaponType(typeName);
-            const weapon = await addEquipment(weaponType, typeName, accountId);
+            const inventoryChanges = addEquipment(inventory, weaponType, typeName);
+            await inventory.save();
             await updateSlots(accountId, InventorySlot.WEAPONS, 0, 1);
             return {
                 InventoryChanges: {
-                    WeaponBin: { count: 1, platinum: 0, Slots: -1 },
-                    [weaponType]: [weapon]
+                    ...inventoryChanges,
+                    WeaponBin: { count: 1, platinum: 0, Slots: -1 }
                 }
             };
         }
@@ -562,23 +564,24 @@ export const updateTheme = async (data: IThemeUpdateRequest, accountId: string):
     await inventory.save();
 };
 
-export const addEquipment = async (
+export const addEquipment = (
+    inventory: TInventoryDatabaseDocument,
     category: TEquipmentKey,
     type: string,
-    accountId: string,
-    modularParts: string[] | undefined = undefined
-): Promise<IEquipmentClient> => {
-    const inventory = await getInventory(accountId);
+    modularParts: string[] | undefined = undefined,
+    inventoryChanges: IInventoryChanges = {}
+): IInventoryChanges => {
+    const index =
+        inventory[category].push({
+            ItemType: type,
+            Configs: [],
+            XP: 0,
+            ModularParts: modularParts
+        }) - 1;
 
-    const index = inventory[category].push({
-        ItemType: type,
-        Configs: [],
-        XP: 0,
-        ModularParts: modularParts
-    });
-
-    const changedInventory = await inventory.save();
-    return changedInventory[category][index - 1].toJSON() as object as IEquipmentClient;
+    inventoryChanges[category] ??= [];
+    (inventoryChanges[category] as IEquipmentClient[]).push(inventory[category][index].toJSON<IEquipmentClient>());
+    return inventoryChanges;
 };
 
 export const addCustomization = (

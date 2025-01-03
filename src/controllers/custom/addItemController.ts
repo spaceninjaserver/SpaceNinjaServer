@@ -17,9 +17,11 @@ const addItemController: RequestHandler = async (req, res) => {
             return;
         }
         case ItemType.Weapon: {
+            const inventory = await getInventory(accountId);
             const weaponType = getWeaponType(request.InternalName);
-            const weapon = await addEquipment(weaponType, request.InternalName, accountId);
-            res.json(weapon);
+            const inventoryChanges = addEquipment(inventory, weaponType, request.InternalName);
+            await inventory.save();
+            res.json(inventoryChanges);
             break;
         }
         default:
