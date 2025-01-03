@@ -11,10 +11,7 @@ export interface IGuildDatabase extends IGuild {
     DojoComponents?: IDojoComponentDatabase[];
     DojoCapacity: number;
     DojoEnergy: number;
-}
-
-export interface ICreateGuildRequest {
-    guildName: string;
+    TechProjects?: ITechProjectDatabase[];
 }
 
 export interface IDojoClient {
@@ -48,4 +45,16 @@ export interface IDojoComponentDatabase
     _id: Types.ObjectId;
     pi?: Types.ObjectId;
     CompletionTime?: Date;
+}
+
+export interface ITechProjectClient {
+    ItemType: string;
+    ReqCredits: number;
+    ReqItems: IMiscItem[];
+    State: number; // 0 = pending, 1 = complete
+    CompletionDate?: IMongoDate;
+}
+
+export interface ITechProjectDatabase extends Omit<ITechProjectClient, "CompletionDate"> {
+    CompletionDate?: Date;
 }

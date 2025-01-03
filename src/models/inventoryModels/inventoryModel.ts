@@ -61,7 +61,7 @@ import {
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
 import { EquipmentSelectionSchema } from "./loadoutModel";
 
-const typeCountSchema = new Schema<ITypeCount>({ ItemType: String, ItemCount: Number }, { _id: false });
+export const typeCountSchema = new Schema<ITypeCount>({ ItemType: String, ItemCount: Number }, { _id: false });
 
 const focusXPSchema = new Schema<IFocusXP>(
     {
