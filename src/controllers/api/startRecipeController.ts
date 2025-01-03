@@ -22,7 +22,6 @@ export const startRecipeController: RequestHandler = async (req, res) => {
     const recipe = getRecipe(recipeName);
 
     if (!recipe) {
-        logger.error(`unknown recipe ${recipeName}`);
         throw new Error(`unknown recipe ${recipeName}`);
     }
 

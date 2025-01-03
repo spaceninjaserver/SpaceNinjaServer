@@ -17,13 +17,7 @@ import {
 import { handleSubsumeCompletion } from "./infestedFoundryController";
 
 export const inventoryController: RequestHandler = async (request, response) => {
-    let account;
-    try {
-        account = await getAccountForRequest(request);
-    } catch (e) {
-        response.status(400).send("Log-in expired");
-        return;
-    }
+    const account = await getAccountForRequest(request);
 
     const inventory = await Inventory.findOne({ accountOwnerId: account._id.toString() });
 
