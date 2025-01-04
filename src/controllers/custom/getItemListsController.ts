@@ -37,9 +37,20 @@ const getItemListsController: RequestHandler = (req, res) => {
         }
     }
     for (const [uniqueName, item] of Object.entries(ExportResources)) {
+        let name = getString(item.name, lang);
+        if ("dissectionParts" in item) {
+            name = getString("/Lotus/Language/Fish/FishDisplayName", lang).split("|FISH_NAME|").join(name);
+            if (uniqueName.indexOf("Large") != -1) {
+                name = name.split("|FISH_SIZE|").join(getString("/Lotus/Language/Fish/FishSizeLargeAbbrev", lang));
+            } else if (uniqueName.indexOf("Medium") != -1) {
+                name = name.split("|FISH_SIZE|").join(getString("/Lotus/Language/Fish/FishSizeMediumAbbrev", lang));
+            } else {
+                name = name.split("|FISH_SIZE|").join(getString("/Lotus/Language/Fish/FishSizeSmallAbbrev", lang));
+            }
+        }
         miscitems.push({
             uniqueName: item.productCategory + ":" + uniqueName,
-            name: getString(item.name, lang)
+            name: name
         });
     }
     for (const [uniqueName, item] of Object.entries(ExportGear)) {
