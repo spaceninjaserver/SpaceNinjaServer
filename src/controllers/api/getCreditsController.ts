@@ -4,13 +4,7 @@ import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getInventory } from "@/src/services/inventoryService";
 
 export const getCreditsController: RequestHandler = async (req, res) => {
-    let accountId;
-    try {
-        accountId = await getAccountIdForRequest(req);
-    } catch (e) {
-        res.status(400).send("Log-in expired");
-        return;
-    }
+    const accountId = await getAccountIdForRequest(req);
 
     const inventory = await getInventory(accountId);
 
