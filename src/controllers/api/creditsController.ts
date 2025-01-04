@@ -3,7 +3,7 @@ import { config } from "@/src/services/configService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getInventory } from "@/src/services/inventoryService";
 
-export const getCreditsController: RequestHandler = async (req, res) => {
+export const creditsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
 
     const inventory = await getInventory(accountId);
