@@ -53,7 +53,7 @@ export const getRandomWeightedReward2 = (
     for (const entry of pool) {
         resultPool.push({
             type: entry.type,
-            itemCount: 1,
+            itemCount: entry.itemCount,
             probability: weights[entry.rarity] / rarityCounts[entry.rarity]
         });
     }
