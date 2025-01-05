@@ -299,7 +299,7 @@ const addInfestedFoundryXP = (infestedFoundry: IInfestedFoundry, delta: number):
     if (prevXP < 60750_00 && infestedFoundry.XP >= 60750_00) {
         recipeChanges.push({ ItemType: "/Lotus/Types/Recipes/AbilityOverrides/HelminthStatusBlueprint", ItemCount: 1 });
     }
-    if (prevXP < 73125_00 && infestedFoundry.XP >= 73125) {
+    if (prevXP < 73125_00 && infestedFoundry.XP >= 73125_00) {
         infestedFoundry.Slots = 1;
     }
     if (prevXP < 86625_00 && infestedFoundry.XP >= 86625_00) {
