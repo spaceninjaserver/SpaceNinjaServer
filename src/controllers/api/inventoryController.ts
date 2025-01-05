@@ -46,6 +46,7 @@ export const inventoryController: RequestHandler = async (request, response) => 
         inventory.DailyAffiliationKahl = 16000 + inventory.PlayerLevel * 500;
         inventory.DailyAffiliationCavia = 16000 + inventory.PlayerLevel * 500;
         inventory.DailyAffiliationHex = 16000 + inventory.PlayerLevel * 500;
+        inventory.DailyFocus = 250000 + inventory.PlayerLevel * 5000;
         await inventory.save();
     }
 
