@@ -32,20 +32,21 @@ export const inventoryController: RequestHandler = async (request, response) => 
         account.LastLoginDay = today;
         await account.save();
 
-        inventory.DailyAffiliation = 16000;
-        inventory.DailyAffiliationPvp = 16000;
-        inventory.DailyAffiliationLibrary = 16000;
-        inventory.DailyAffiliationCetus = 16000;
-        inventory.DailyAffiliationQuills = 16000;
-        inventory.DailyAffiliationSolaris = 16000;
-        inventory.DailyAffiliationVentkids = 16000;
-        inventory.DailyAffiliationVox = 16000;
-        inventory.DailyAffiliationEntrati = 16000;
-        inventory.DailyAffiliationNecraloid = 16000;
-        inventory.DailyAffiliationZariman = 16000;
-        inventory.DailyAffiliationKahl = 16000;
-        inventory.DailyAffiliationCavia = 16000;
-        inventory.DailyAffiliationHex = 16000;
+        inventory.DailyAffiliation = 16000 + inventory.PlayerLevel * 500;
+        inventory.DailyAffiliationPvp = 16000 + inventory.PlayerLevel * 500;
+        inventory.DailyAffiliationLibrary = 16000 + inventory.PlayerLevel * 500;
+        inventory.DailyAffiliationCetus = 16000 + inventory.PlayerLevel * 500;
+        inventory.DailyAffiliationQuills = 16000 + inventory.PlayerLevel * 500;
+        inventory.DailyAffiliationSolaris = 16000 + inventory.PlayerLevel * 500;
+        inventory.DailyAffiliationVentkids = 16000 + inventory.PlayerLevel * 500;
+        inventory.DailyAffiliationVox = 16000 + inventory.PlayerLevel * 500;
+        inventory.DailyAffiliationEntrati = 16000 + inventory.PlayerLevel * 500;
+        inventory.DailyAffiliationNecraloid = 16000 + inventory.PlayerLevel * 500;
+        inventory.DailyAffiliationZariman = 16000 + inventory.PlayerLevel * 500;
+        inventory.DailyAffiliationKahl = 16000 + inventory.PlayerLevel * 500;
+        inventory.DailyAffiliationCavia = 16000 + inventory.PlayerLevel * 500;
+        inventory.DailyAffiliationHex = 16000 + inventory.PlayerLevel * 500;
+        inventory.DailyFocus = 250000 + inventory.PlayerLevel * 5000;
         await inventory.save();
     }
 
