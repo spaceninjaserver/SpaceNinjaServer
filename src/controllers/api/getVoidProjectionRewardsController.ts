@@ -22,7 +22,7 @@ export const getVoidProjectionRewardsController: RequestHandler = async (req, re
         logger.debug(`opening a relic of quality ${relic.quality}; rarity weights are`, weights);
         const reward = getRandomWeightedReward2(
             ExportRewards[relic.rewardManifest][0] as { type: string; itemCount: number; rarity: TRarity }[], // rarity is nullable in PE+ typings, but always present for relics
-            refinementToWeights[relic.quality]
+            weights
         )!;
         logger.debug(`relic rolled`, reward);
         response.ParticipantInfo.Reward = reward.type;
