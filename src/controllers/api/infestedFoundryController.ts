@@ -198,6 +198,8 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
                 inventory.InfestedFoundry!.Resources!.find(x => x.ItemType == request.ResourceTypes[i])!.Count -=
                     request.ResourceCosts[i];
             }
+            inventory.InfestedFoundry!.InvigorationsApplied ??= 0;
+            inventory.InfestedFoundry!.InvigorationsApplied += 1;
             await inventory.save();
             res.json({
                 SuitId: request.SuitId,
