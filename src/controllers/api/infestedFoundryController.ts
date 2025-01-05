@@ -223,6 +223,19 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             break;
         }
 
+        case "custom_unlockall": {
+            const inventory = await getInventory(accountId);
+            inventory.InfestedFoundry ??= {};
+            inventory.InfestedFoundry.XP ??= 0;
+            if (151875_00 > inventory.InfestedFoundry.XP) {
+                const recipeChanges = addInfestedFoundryXP(inventory.InfestedFoundry, 151875_00 - inventory.InfestedFoundry.XP)
+                addRecipes(inventory, recipeChanges);
+                await inventory.save();
+            }
+            res.end();
+            break;
+        }
+
         default:
             throw new Error(`unhandled infestedFoundry mode: ${String(req.query.mode)}`);
     }
