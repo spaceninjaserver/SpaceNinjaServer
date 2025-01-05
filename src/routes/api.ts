@@ -5,6 +5,7 @@ import { artifactsController } from "../controllers/api/artifactsController";
 import { checkDailyMissionBonusController } from "@/src/controllers/api/checkDailyMissionBonusController";
 import { claimCompletedRecipeController } from "@/src/controllers/api/claimCompletedRecipeController";
 import { createGuildController } from "@/src/controllers/api/createGuildController";
+import { creditsController } from "@/src/controllers/api/creditsController";
 import { deleteSessionController } from "@/src/controllers/api/deleteSessionController";
 import { dojoController } from "@/src/controllers/api/dojoController";
 import { dronesController } from "@/src/controllers/api/dronesController";
@@ -16,7 +17,6 @@ import { focusController } from "@/src/controllers/api/focusController";
 import { fusionTreasuresController } from "@/src/controllers/api/fusionTreasuresController";
 import { genericUpdateController } from "@/src/controllers/api/genericUpdateController";
 import { getAllianceController } from "@/src/controllers/api/getAllianceController";
-import { getCreditsController } from "@/src/controllers/api/getCreditsController";
 import { getDailyDealStockLevelsController } from "@/src/controllers/api/getDailyDealStockLevelsController";
 import { getFriendsController } from "@/src/controllers/api/getFriendsController";
 import { getGuildController } from "@/src/controllers/api/getGuildController";
@@ -76,7 +76,7 @@ const apiRouter = express.Router();
 
 // get
 apiRouter.get("/checkDailyMissionBonus.php", checkDailyMissionBonusController);
-apiRouter.get("/credits.php", getCreditsController);
+apiRouter.get("/credits.php", creditsController);
 apiRouter.get("/deleteSession.php", deleteSessionController);
 apiRouter.get("/dojo", dojoController);
 apiRouter.get("/drones.php", dronesController);

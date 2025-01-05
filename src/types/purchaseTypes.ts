@@ -1,3 +1,5 @@
+import { IInfestedFoundry } from "./inventoryTypes/inventoryTypes";
+
 export interface IPurchaseRequest {
     PurchaseParams: IPurchaseParams;
     buildLabel: string;
@@ -25,8 +27,10 @@ export interface ICurrencyChanges {
 
 export type IInventoryChanges = {
     [_ in SlotNames]?: IBinChanges;
-} & ICurrencyChanges &
-    Record<string, IBinChanges | number | object[]>;
+} & ICurrencyChanges & { InfestedFoundry?: IInfestedFoundry } & Record<
+        string,
+        IBinChanges | number | object[] | IInfestedFoundry
+    >;
 
 export interface IPurchaseResponse {
     InventoryChanges: IInventoryChanges;

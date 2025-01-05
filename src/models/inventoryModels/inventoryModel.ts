@@ -1,4 +1,4 @@
-import { Model, Schema, Types, model } from "mongoose";
+import { Document, Model, Schema, Types, model } from "mongoose";
 import {
     IFlavourItem,
     IRawUpgrade,
@@ -45,7 +45,8 @@ import {
     ICrewShipMembers,
     ICrewShip,
     ICrewShipPilotWeapon,
-    IShipExterior
+    IShipExterior,
+    IHelminthFoodRecord
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -233,6 +234,9 @@ const EquipmentSchema = new Schema<IEquipmentDatabase>(
         UnlockLevel: Number,
         Expiry: Date,
         SkillTree: String,
+        OffensiveUpgrade: String,
+        DefensiveUpgrade: String,
+        UpgradesExpiry: Date,
         ArchonCrystalUpgrades: { type: [ArchonCrystalUpgradeSchema], default: undefined }
     },
     { id: false }
@@ -467,7 +471,22 @@ const consumedSchuitsSchema = new Schema<IConsumedSuit>(
     { _id: false }
 );
 
-const helminthResourceSchema = new Schema<IHelminthResource>({ ItemType: String, Count: Number }, { _id: false });
+const helminthFoodRecordSchema = new Schema<IHelminthFoodRecord>(
+    {
+        ItemType: String,
+        Date: Number
+    },
+    { _id: false }
+);
+
+const helminthResourceSchema = new Schema<IHelminthResource>(
+    {
+        ItemType: String,
+        Count: Number,
+        RecentlyConvertedResources: { type: [helminthFoodRecordSchema], default: undefined }
+    },
+    { _id: false }
+);
 
 const infestedFoundrySchema = new Schema<IInfestedFoundry>(
     {
@@ -1061,6 +1080,7 @@ inventorySchema.set("toJSON", {
     transform(_document, returnedObject) {
         delete returnedObject._id;
         delete returnedObject.__v;
+        delete returnedObject.accountOwnerId;
 
         const inventoryDatabase = returnedObject as IInventoryDatabase;
         const inventoryResponse = returnedObject as IInventoryResponse;
@@ -1114,3 +1134,15 @@ type InventoryDocumentProps = {
 type InventoryModelType = Model<IInventoryDatabase, {}, InventoryDocumentProps>;
 
 export const Inventory = model<IInventoryDatabase, InventoryModelType>("Inventory", inventorySchema);
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type TInventoryDatabaseDocument = Document<unknown, {}, IInventoryDatabase> &
+    Omit<
+        IInventoryDatabase & {
+            _id: Types.ObjectId;
+        } & {
+            __v: number;
+        },
+        keyof InventoryDocumentProps
+    > &
+    InventoryDocumentProps;

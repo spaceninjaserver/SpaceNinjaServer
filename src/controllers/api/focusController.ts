@@ -4,6 +4,7 @@ import { getInventory, addMiscItems, addEquipment } from "@/src/services/invento
 import { IMiscItem, TFocusPolarity, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
 import { logger } from "@/src/utils/logger";
 import { ExportFocusUpgrades } from "warframe-public-export-plus";
+import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
 
 export const focusController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -102,8 +103,10 @@ export const focusController: RequestHandler = async (req, res) => {
                 "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/SentAmpTrainingChassis",
                 "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/SentAmpTrainingBarrel"
             ];
-            const result = await addEquipment("OperatorAmps", request.StartingWeaponType, accountId, parts);
-            res.json(result);
+            const inventory = await getInventory(accountId);
+            const inventoryChanges = addEquipment(inventory, "OperatorAmps", request.StartingWeaponType, parts);
+            await inventory.save();
+            res.json((inventoryChanges.OperatorAmps as IEquipmentClient[])[0]);
             break;
         }
         case FocusOperation.UnbindUpgrade: {

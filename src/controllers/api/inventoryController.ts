@@ -1,11 +1,10 @@
 import { RequestHandler } from "express";
 import { getAccountForRequest } from "@/src/services/loginService";
-import { toInventoryResponse } from "@/src/helpers/inventoryHelpers";
 import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { config } from "@/src/services/configService";
 import allDialogue from "@/static/fixed_responses/allDialogue.json";
 import { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
-import { IInventoryDatabaseDocument, IShipInventory, equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IInventoryResponse, IShipInventory, equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IPolarity, ArtifactPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import {
     ExportCustoms,
@@ -18,17 +17,9 @@ import {
 import { handleSubsumeCompletion } from "./infestedFoundryController";
 
 export const inventoryController: RequestHandler = async (request, response) => {
-    let account;
-    try {
-        account = await getAccountForRequest(request);
-    } catch (e) {
-        response.status(400).send("Log-in expired");
-        return;
-    }
+    const account = await getAccountForRequest(request);
 
-    const inventory = await Inventory.findOne({ accountOwnerId: account._id.toString() })
-        .populate<{ LoadOutPresets: ILoadoutDatabase }>("LoadOutPresets")
-        .populate<{ Ships: IShipInventory }>("Ships");
+    const inventory = await Inventory.findOne({ accountOwnerId: account._id.toString() });
 
     if (!inventory) {
         response.status(400).json({ error: "inventory was undefined" });
@@ -41,20 +32,21 @@ export const inventoryController: RequestHandler = async (request, response) => 
         account.LastLoginDay = today;
         await account.save();
 
-        inventory.DailyAffiliation = 16000;
-        inventory.DailyAffiliationPvp = 16000;
-        inventory.DailyAffiliationLibrary = 16000;
-        inventory.DailyAffiliationCetus = 16000;
-        inventory.DailyAffiliationQuills = 16000;
-        inventory.DailyAffiliationSolaris = 16000;
-        inventory.DailyAffiliationVentkids = 16000;
-        inventory.DailyAffiliationVox = 16000;
-        inventory.DailyAffiliationEntrati = 16000;
-        inventory.DailyAffiliationNecraloid = 16000;
-        inventory.DailyAffiliationZariman = 16000;
-        inventory.DailyAffiliationKahl = 16000;
-        inventory.DailyAffiliationCavia = 16000;
-        inventory.DailyAffiliationHex = 16000;
+        inventory.DailyAffiliation = 16000 + inventory.PlayerLevel * 500;
+        inventory.DailyAffiliationPvp = 16000 + inventory.PlayerLevel * 500;
+        inventory.DailyAffiliationLibrary = 16000 + inventory.PlayerLevel * 500;
+        inventory.DailyAffiliationCetus = 16000 + inventory.PlayerLevel * 500;
+        inventory.DailyAffiliationQuills = 16000 + inventory.PlayerLevel * 500;
+        inventory.DailyAffiliationSolaris = 16000 + inventory.PlayerLevel * 500;
+        inventory.DailyAffiliationVentkids = 16000 + inventory.PlayerLevel * 500;
+        inventory.DailyAffiliationVox = 16000 + inventory.PlayerLevel * 500;
+        inventory.DailyAffiliationEntrati = 16000 + inventory.PlayerLevel * 500;
+        inventory.DailyAffiliationNecraloid = 16000 + inventory.PlayerLevel * 500;
+        inventory.DailyAffiliationZariman = 16000 + inventory.PlayerLevel * 500;
+        inventory.DailyAffiliationKahl = 16000 + inventory.PlayerLevel * 500;
+        inventory.DailyAffiliationCavia = 16000 + inventory.PlayerLevel * 500;
+        inventory.DailyAffiliationHex = 16000 + inventory.PlayerLevel * 500;
+        inventory.DailyFocus = 250000 + inventory.PlayerLevel * 5000;
         await inventory.save();
     }
 
@@ -63,14 +55,17 @@ export const inventoryController: RequestHandler = async (request, response) => 
         inventory.InfestedFoundry.AbilityOverrideUnlockCooldown &&
         new Date() >= inventory.InfestedFoundry.AbilityOverrideUnlockCooldown
     ) {
-        handleSubsumeCompletion(inventory as unknown as IInventoryDatabaseDocument);
+        handleSubsumeCompletion(inventory);
         await inventory.save();
     }
 
-    //TODO: make a function that converts from database representation to client
-    const inventoryJSON = inventory.toJSON();
-
-    const inventoryResponse = toInventoryResponse(inventoryJSON);
+    const inventoryWithLoadOutPresets = await inventory.populate<{ LoadOutPresets: ILoadoutDatabase }>(
+        "LoadOutPresets"
+    );
+    const inventoryWithLoadOutPresetsAndShips = await inventoryWithLoadOutPresets.populate<{ Ships: IShipInventory }>(
+        "Ships"
+    );
+    const inventoryResponse = inventoryWithLoadOutPresetsAndShips.toJSON<IInventoryResponse>();
 
     if (config.infiniteCredits) {
         inventoryResponse.RegularCredits = 999999999;

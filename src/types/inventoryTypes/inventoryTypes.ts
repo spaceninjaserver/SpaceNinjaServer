@@ -10,8 +10,6 @@ import {
     IEquipmentDatabase
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
 
-//Document extends will be deleted soon. TODO: delete and migrate uses to ...
-export interface IInventoryDatabaseDocument extends IInventoryDatabase, Document {}
 export interface IInventoryDatabase
     extends Omit<
         IInventoryResponse,
@@ -515,13 +513,15 @@ export interface IFusionTreasure {
     Sockets: number;
 }
 
+export interface IHelminthFoodRecord {
+    ItemType: string;
+    Date: number;
+}
+
 export interface IHelminthResource {
     ItemType: string;
     Count: number;
-    RecentlyConvertedResources?: {
-        ItemType: string;
-        Date: number;
-    }[];
+    RecentlyConvertedResources?: IHelminthFoodRecord[];
 }
 
 export interface IInfestedFoundry {

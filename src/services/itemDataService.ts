@@ -1,5 +1,4 @@
 import { getIndexAfter } from "@/src/helpers/stringHelpers";
-import { logger } from "@/src/utils/logger";
 import {
     dict_de,
     dict_en,
@@ -54,7 +53,6 @@ export const getWeaponType = (weaponName: string): WeaponTypeInternal => {
     const weaponType = weaponInfo.productCategory;
 
     if (!weaponType) {
-        logger.error(`unknown weapon category for item ${weaponName}`);
         throw new Error(`unknown weapon category for item ${weaponName}`);
     }
 
@@ -83,7 +81,6 @@ export const getItemCategoryByUniqueName = (uniqueName: string): string => {
 
     const index = getIndexAfter(uniqueName, splitWord);
     if (index === -1) {
-        logger.error(`error parsing item category ${uniqueName}`);
         throw new Error(`error parsing item category ${uniqueName}`);
     }
     const category = uniqueName.substring(index).split("/")[0];

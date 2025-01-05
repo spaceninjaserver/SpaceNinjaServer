@@ -34,9 +34,10 @@ export const modularWeaponCraftingController: RequestHandler = async (req, res) 
         throw new Error(`unknown modular weapon type: ${data.WeaponType}`);
     }
     const category = modularWeaponTypes[data.WeaponType];
+    const inventory = await getInventory(accountId);
 
     // Give weapon
-    const weapon = await addEquipment(category, data.WeaponType, accountId, data.Parts);
+    const weapon = addEquipment(inventory, category, data.WeaponType, data.Parts);
 
     // Remove credits & parts
     const miscItemChanges = [];
@@ -46,7 +47,6 @@ export const modularWeaponCraftingController: RequestHandler = async (req, res) 
             ItemCount: -1
         });
     }
-    const inventory = await getInventory(accountId);
     const currencyChanges = updateCurrency(
         inventory,
         category == "Hoverboards" || category == "MoaPets" ? 5000 : 4000,

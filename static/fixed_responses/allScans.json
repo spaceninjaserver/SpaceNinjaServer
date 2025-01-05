@@ -4346,5 +4346,17 @@
   {
     "scans": 9999,
     "type": "/Lotus/Weapons/Infested/Melee/InfBoomerang/InfBoomerangSpawnAvatar"
+  },
+  {
+    "scans": 9999,
+    "type": "/Lotus/Types/Game/CrewShip/GrineerDestroyer/DeepSpace/GrineerDSDestroyerAvatar"
+  },
+  {
+    "scans": 9999,
+    "type": "/Lotus/Types/Game/CrewShip/GrineerDestroyer/Saturn/GrineerSaturnDestroyerAvatar"
+  },
+  {
+    "scans": 9999,
+    "type": "/Lotus/Types/Game/CrewShip/GrineerDestroyer/GrineerDestroyerAvatar"
   }
 ]

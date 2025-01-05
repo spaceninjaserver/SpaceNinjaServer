@@ -78,8 +78,9 @@ export interface IEquipmentSelection {
     hide?: boolean;
 }
 
-export interface IEquipmentClient extends Omit<IEquipmentDatabase, "_id"> {
+export interface IEquipmentClient extends Omit<IEquipmentDatabase, "_id" | "UpgradesExpiry"> {
     ItemId: IOid;
+    UpgradesExpiry?: IMongoDate;
 }
 
 export enum EquipmentFeatures {
@@ -112,6 +113,9 @@ export interface IEquipmentDatabase {
     UnlockLevel?: number;
     Expiry?: IMongoDate;
     SkillTree?: string;
+    OffensiveUpgrade?: string;
+    DefensiveUpgrade?: string;
+    UpgradesExpiry?: Date;
     ArchonCrystalUpgrades?: IArchonCrystalUpgrade[];
     _id: Types.ObjectId;
 }

@@ -956,6 +956,12 @@ function unlockFocusSchool(upgradeType) {
     });
 }
 
+function doHelminthUnlockAll() {
+    revalidateAuthz(() => {
+        $.post("/api/infestedFoundry.php?" + window.authz + "&mode=custom_unlockall");
+    });
+}
+
 // Powersuit Route
 
 single.getRoute("#powersuit-route").on("beforeload", function () {
