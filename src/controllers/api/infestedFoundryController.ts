@@ -212,7 +212,6 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
         }
 
         default:
-            console.log(String(req.body));
             throw new Error(`unhandled infestedFoundry mode: ${String(req.query.mode)}`);
     }
 };
