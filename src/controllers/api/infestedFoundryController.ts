@@ -92,7 +92,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
 
                 const hoursRemaining = (record.Date - currentUnixSeconds) / 3600;
                 const apetiteFactor = apetiteModel(hoursRemaining) / 30;
-                logger.debug(`helminth eating ${contribution.ItemType} (+${(snack.gain * 100).toFixed(2)}%)`, {
+                logger.debug(`helminth eating ${contribution.ItemType} (+${(snack.gain * 100).toFixed(0)}%)`, {
                     hoursRemaining,
                     apetiteFactor
                 });
