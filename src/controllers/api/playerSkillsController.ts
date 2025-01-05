@@ -10,7 +10,7 @@ export const playerSkillsController: RequestHandler = async (req, res) => {
     const request = getJSONfromString(String(req.body)) as IPlayerSkillsRequest;
 
     const oldRank: number = inventory.PlayerSkills[request.Skill as keyof IPlayerSkills];
-    const cost = (1 << oldRank) * 1000;
+    const cost = (request.Pool == "LPP_DRIFTER" ? drifterCosts[oldRank] : 1 << oldRank) * 1000;
     inventory.PlayerSkills[request.Pool as keyof IPlayerSkills] -= cost;
     inventory.PlayerSkills[request.Skill as keyof IPlayerSkills]++;
     await inventory.save();
@@ -27,3 +27,5 @@ interface IPlayerSkillsRequest {
     Pool: string;
     Skill: string;
 }
+
+const drifterCosts = [20, 25, 30, 45, 65, 90, 125, 160, 205, 255];
