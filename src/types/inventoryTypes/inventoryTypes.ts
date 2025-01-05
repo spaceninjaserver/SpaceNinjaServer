@@ -513,13 +513,15 @@ export interface IFusionTreasure {
     Sockets: number;
 }
 
+export interface IHelminthFoodRecord {
+    ItemType: string;
+    Date: number;
+}
+
 export interface IHelminthResource {
     ItemType: string;
     Count: number;
-    RecentlyConvertedResources?: {
-        ItemType: string;
-        Date: number;
-    }[];
+    RecentlyConvertedResources?: IHelminthFoodRecord[];
 }
 
 export interface IInfestedFoundry {
