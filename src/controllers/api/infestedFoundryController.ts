@@ -101,7 +101,6 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
                 } else {
                     record.Date = currentUnixSeconds + 24 * 60 * 60;
                 }
-                resource.RecentlyConvertedResources.push(record);
 
                 totalPercentagePointsGained += snack.gain * 100 * apetiteFactor; // 30% would be gain=0.3, so percentage points is equal to gain * 100.
                 resource.Count += Math.trunc(snack.gain * 1000 * apetiteFactor); // 30% would be gain=0.3 or Count=300, so Count=gain*1000.
