@@ -396,7 +396,25 @@ interface IHelminthInvigorationRequest {
     ResourceCosts: number[];
 }
 
-// Hours remaining -> percentage points gained (out of 30 total)
+// Hours remaining, percentage points gained (out of 30 total)
+// 0, 30
+// 5, 25.8
+// 10, 21.6
+// 12, 20
+// 16, 16.6
+// 17, 15.8
+// 18, 15
+// 20, 15
+// 24, 15
+// 36, 15
+// 40, 13.6
+// 47, 11.3
+// 48, 11
+// 50, 10.3
+// 60, 7
+// 70, 3.6
+// 71, 3.3
+// 72, 3
 const apetiteModel = (x: number): number => {
     if (x <= 0) {
         return 30;
