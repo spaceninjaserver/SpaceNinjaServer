@@ -3,7 +3,7 @@ import { logger } from "../utils/logger";
 
 export const errorHandler = (err: Error, req: Request, res: Response, _next: NextFunction): void => {
     if (err.message == "Invalid accountId-nonce pair") {
-        res.status(400).json("Log-in expired");
+        res.status(400).send("Log-in expired");
     } else if (err.stack) {
         const stackArr = err.stack.split("\n");
         stackArr[0] += ` while processing ${req.path} request`;
