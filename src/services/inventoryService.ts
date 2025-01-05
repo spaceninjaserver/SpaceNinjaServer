@@ -79,8 +79,9 @@ export const combineInventoryChanges = (InventoryChanges: IInventoryChanges, del
             }
         } else if (typeof delta[key] == "object") {
             console.assert(key.substring(-3) == "Bin");
+            console.assert(key != "InfestedFoundry");
             const left = InventoryChanges[key] as IBinChanges;
-            const right: IBinChanges = delta[key];
+            const right = delta[key] as IBinChanges;
             left.count += right.count;
             left.platinum += right.platinum;
             left.Slots += right.Slots;

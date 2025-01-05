@@ -71,14 +71,14 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
                 const snack = ExportMisc.helminthSnacks[contribution.ItemType];
 
                 // Note: Currently ignoring loss of apetite
-                totalPercentagePointsGained += snack.gain / 0.01;
+                totalPercentagePointsGained += snack.gain * 100; // 30% would be gain=0.3, so percentage points is equal to gain * 100.
                 const resource = inventory.InfestedFoundry.Resources.find(x => x.ItemType == snack.type);
                 if (resource) {
                     resource.Count += Math.trunc(snack.gain * 1000);
                 } else {
                     inventory.InfestedFoundry.Resources.push({
                         ItemType: snack.type,
-                        Count: Math.trunc(snack.gain * 1000)
+                        Count: Math.trunc(snack.gain * 1000) // 30% would be gain=0.3 or Count=300, so Count=gain*1000.
                     });
                 }
 
@@ -261,7 +261,7 @@ const colorToShard: Record<string, string> = {
     ACC_PURPLE_MYTHIC: "/Lotus/Types/Gameplay/NarmerSorties/ArchonCrystalVioletMythic"
 };
 
-const addInfestedFoundryXP = (infestedFoundry: IInfestedFoundry, delta: number): ITypeCount[] => {
+export const addInfestedFoundryXP = (infestedFoundry: IInfestedFoundry, delta: number): ITypeCount[] => {
     const recipeChanges: ITypeCount[] = [];
     infestedFoundry.XP ??= 0;
     const prevXP = infestedFoundry.XP;
