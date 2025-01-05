@@ -3,7 +3,13 @@ import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getInventory, addMiscItems, updateCurrency, addRecipes } from "@/src/services/inventoryService";
 import { IOid } from "@/src/types/commonTypes";
-import { IConsumedSuit, IInfestedFoundry, IMiscItem, ITypeCount } from "@/src/types/inventoryTypes/inventoryTypes";
+import {
+    IConsumedSuit,
+    IHelminthFoodRecord,
+    IInfestedFoundry,
+    IMiscItem,
+    ITypeCount
+} from "@/src/types/inventoryTypes/inventoryTypes";
 import { ExportMisc, ExportRecipes } from "warframe-public-export-plus";
 import { getRecipe } from "@/src/services/itemDataService";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
@@ -92,6 +98,34 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             for (const contribution of request.ResourceContributions) {
                 const snack = ExportMisc.helminthSnacks[contribution.ItemType];
 
+                // tally items for removal
+                const change = miscItemChanges.find(x => x.ItemType == contribution.ItemType);
+                if (change) {
+                    change.ItemCount -= snack.count;
+                } else {
+                    miscItemChanges.push({ ItemType: contribution.ItemType, ItemCount: snack.count * -1 });
+                }
+
+                if (snack.type == "/Lotus/Types/Items/InfestedFoundry/HelminthAppetiteCooldownReducer") {
+                    // sentinent apetite
+                    let mostDislikedSnackRecord: IHelminthFoodRecord = { ItemType: "", Date: 0 };
+                    for (const resource of inventory.InfestedFoundry.Resources) {
+                        if (resource.RecentlyConvertedResources) {
+                            for (const record of resource.RecentlyConvertedResources) {
+                                if (record.Date > mostDislikedSnackRecord.Date) {
+                                    mostDislikedSnackRecord = record;
+                                }
+                            }
+                        }
+                    }
+                    logger.debug("helminth eats sentient resource; most disliked snack:", {
+                        type: mostDislikedSnackRecord.ItemType,
+                        date: mostDislikedSnackRecord.Date
+                    });
+                    mostDislikedSnackRecord.Date = currentUnixSeconds + 24 * 60 * 60; // Possibly unfaithful
+                    continue;
+                }
+
                 let resource = inventory.InfestedFoundry.Resources.find(x => x.ItemType == snack.type);
                 if (!resource) {
                     resource =
@@ -116,21 +150,13 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
                     apetiteFactor
                 });
                 if (hoursRemaining >= 18) {
-                    record.Date = currentUnixSeconds + 72 * 60 * 60;
+                    record.Date = currentUnixSeconds + 72 * 60 * 60; // Possibly unfaithful
                 } else {
                     record.Date = currentUnixSeconds + 24 * 60 * 60;
                 }
 
                 totalPercentagePointsGained += snack.gain * 100 * apetiteFactor; // 30% would be gain=0.3, so percentage points is equal to gain * 100.
                 resource.Count += Math.trunc(snack.gain * 1000 * apetiteFactor); // 30% would be gain=0.3 or Count=300, so Count=gain*1000.
-
-                // tally items for removal
-                const change = miscItemChanges.find(x => x.ItemType == contribution.ItemType);
-                if (change) {
-                    change.ItemCount -= snack.count;
-                } else {
-                    miscItemChanges.push({ ItemType: contribution.ItemType, ItemCount: snack.count * -1 });
-                }
             }
 
             const recipeChanges = addInfestedFoundryXP(inventory.InfestedFoundry, 666 * totalPercentagePointsGained);
@@ -435,6 +461,8 @@ interface IHelminthInvigorationRequest {
     ResourceCosts: number[];
 }
 
+// A fitted model for observed apetite values. Likely slightly inaccurate.
+//
 // Hours remaining, percentage points gained (out of 30 total)
 // 0, 30
 // 5, 25.8
