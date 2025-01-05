@@ -115,6 +115,9 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             inventory.InfestedFoundry ??= {};
             inventory.InfestedFoundry.InvigorationIndex = request.OfferingsIndex;
             inventory.InfestedFoundry.InvigorationSuitOfferings = request.SuitTypes;
+            if (request.Extra) {
+                inventory.InfestedFoundry.InvigorationsApplied = 0;
+            }
             await inventory.save();
             res.json({
                 InventoryChanges: {
