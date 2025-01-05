@@ -45,7 +45,8 @@ import {
     ICrewShipMembers,
     ICrewShip,
     ICrewShipPilotWeapon,
-    IShipExterior
+    IShipExterior,
+    IHelminthFoodRecord
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -470,7 +471,22 @@ const consumedSchuitsSchema = new Schema<IConsumedSuit>(
     { _id: false }
 );
 
-const helminthResourceSchema = new Schema<IHelminthResource>({ ItemType: String, Count: Number }, { _id: false });
+const helminthFoodRecordSchema = new Schema<IHelminthFoodRecord>(
+    {
+        ItemType: String,
+        Date: Number
+    },
+    { _id: false }
+);
+
+const helminthResourceSchema = new Schema<IHelminthResource>(
+    {
+        ItemType: String,
+        Count: Number,
+        RecentlyConvertedResources: { type: [helminthFoodRecordSchema], default: undefined }
+    },
+    { _id: false }
+);
 
 const infestedFoundrySchema = new Schema<IInfestedFoundry>(
     {

@@ -8,6 +8,7 @@ import { ExportMisc, ExportRecipes } from "warframe-public-export-plus";
 import { getRecipe } from "@/src/services/itemDataService";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { toMongoDate } from "@/src/helpers/inventoryHelpers";
+import { logger } from "@/src/utils/logger";
 
 export const infestedFoundryController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -67,20 +68,42 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             const miscItemChanges: IMiscItem[] = [];
             let totalPercentagePointsGained = 0;
 
+            const currentUnixSeconds = Math.trunc(new Date().getTime() / 1000);
+
             for (const contribution of request.ResourceContributions) {
                 const snack = ExportMisc.helminthSnacks[contribution.ItemType];
 
-                // Note: Currently ignoring loss of apetite
-                totalPercentagePointsGained += snack.gain * 100; // 30% would be gain=0.3, so percentage points is equal to gain * 100.
-                const resource = inventory.InfestedFoundry.Resources.find(x => x.ItemType == snack.type);
-                if (resource) {
-                    resource.Count += Math.trunc(snack.gain * 1000);
-                } else {
-                    inventory.InfestedFoundry.Resources.push({
-                        ItemType: snack.type,
-                        Count: Math.trunc(snack.gain * 1000) // 30% would be gain=0.3 or Count=300, so Count=gain*1000.
-                    });
+                let resource = inventory.InfestedFoundry.Resources.find(x => x.ItemType == snack.type);
+                if (!resource) {
+                    resource =
+                        inventory.InfestedFoundry.Resources[
+                            inventory.InfestedFoundry.Resources.push({ ItemType: snack.type, Count: 0 }) - 1
+                        ];
                 }
+
+                resource.RecentlyConvertedResources ??= [];
+                let record = resource.RecentlyConvertedResources.find(x => x.ItemType == contribution.ItemType);
+                if (!record) {
+                    record =
+                        resource.RecentlyConvertedResources[
+                            resource.RecentlyConvertedResources.push({ ItemType: contribution.ItemType, Date: 0 }) - 1
+                        ];
+                }
+
+                const hoursRemaining = (record.Date - currentUnixSeconds) / 3600;
+                const apetiteFactor = apetiteModel(hoursRemaining) / 30;
+                logger.debug(`helminth eating ${contribution.ItemType} (+${(snack.gain * 100).toFixed(0)}%)`, {
+                    hoursRemaining,
+                    apetiteFactor
+                });
+                if (hoursRemaining >= 18) {
+                    record.Date = currentUnixSeconds + 72 * 60 * 60;
+                } else {
+                    record.Date = currentUnixSeconds + 24 * 60 * 60;
+                }
+
+                totalPercentagePointsGained += snack.gain * 100 * apetiteFactor; // 30% would be gain=0.3, so percentage points is equal to gain * 100.
+                resource.Count += Math.trunc(snack.gain * 1000 * apetiteFactor); // 30% would be gain=0.3 or Count=300, so Count=gain*1000.
 
                 // tally items for removal
                 const change = miscItemChanges.find(x => x.ItemType == contribution.ItemType);
@@ -387,3 +410,38 @@ interface IHelminthInvigorationRequest {
     ResourceTypes: string[];
     ResourceCosts: number[];
 }
+
+// Hours remaining, percentage points gained (out of 30 total)
+// 0, 30
+// 5, 25.8
+// 10, 21.6
+// 12, 20
+// 16, 16.6
+// 17, 15.8
+// 18, 15
+// 20, 15
+// 24, 15
+// 36, 15
+// 40, 13.6
+// 47, 11.3
+// 48, 11
+// 50, 10.3
+// 60, 7
+// 70, 3.6
+// 71, 3.3
+// 72, 3
+const apetiteModel = (x: number): number => {
+    if (x <= 0) {
+        return 30;
+    }
+    if (x < 18) {
+        return -0.84 * x + 30;
+    }
+    if (x <= 36) {
+        return 15;
+    }
+    if (x < 71.9) {
+        return -0.3327892 * x + 26.94135;
+    }
+    return 3;
+};
