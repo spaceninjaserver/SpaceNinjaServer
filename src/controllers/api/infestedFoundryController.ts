@@ -107,10 +107,21 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             break;
         }
 
-        case "o": // offerings update
-            // {"OfferingsIndex":540,"SuitTypes":["/Lotus/Powersuits/PaxDuviricus/PaxDuviricusBaseSuit","/Lotus/Powersuits/Nezha/NezhaBaseSuit","/Lotus/Powersuits/Devourer/DevourerBaseSuit"],"Extra":false}
-            res.status(404).end();
+        case "o": {
+            // offerings update
+            const request = getJSONfromString(String(req.body)) as IHelminthOfferingsUpdate;
+            const inventory = await getInventory(accountId);
+            inventory.InfestedFoundry ??= {};
+            inventory.InfestedFoundry.InvigorationIndex = request.OfferingsIndex;
+            inventory.InfestedFoundry.InvigorationSuitOfferings = request.SuitTypes;
+            await inventory.save();
+            res.json({
+                InventoryChanges: {
+                    InfestedFoundry: inventory.toJSON().InfestedFoundry
+                }
+            });
             break;
+        }
 
         case "a": {
             // subsume warframe
@@ -251,3 +262,9 @@ export const handleSubsumeCompletion = (inventory: TInventoryDatabaseDocument): 
     addRecipes(inventory, recipeChanges);
     return recipeChanges;
 };
+
+interface IHelminthOfferingsUpdate {
+    OfferingsIndex: number;
+    SuitTypes: string[];
+    Extra: boolean;
+}
