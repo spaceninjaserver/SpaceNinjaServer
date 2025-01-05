@@ -1,4 +1,5 @@
 import express from "express";
+import { activateRandomModController } from "@/src/controllers/api/activateRandomModController";
 import { addFriendImageController } from "@/src/controllers/api/addFriendImageController";
 import { arcaneCommonController } from "@/src/controllers/api/arcaneCommonController";
 import { artifactsController } from "../controllers/api/artifactsController";
@@ -107,6 +108,7 @@ apiRouter.get("/surveys.php", surveysController);
 apiRouter.get("/updateSession.php", updateSessionGetController);
 
 // post
+apiRouter.post("/activateRandomMod.php", activateRandomModController);
 apiRouter.post("/addFriendImage.php", addFriendImageController);
 apiRouter.post("/arcaneCommon.php", arcaneCommonController);
 apiRouter.post("/artifacts.php", artifactsController);
