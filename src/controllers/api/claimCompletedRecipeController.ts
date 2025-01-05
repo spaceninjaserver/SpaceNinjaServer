@@ -59,6 +59,30 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
         });
     } else {
         logger.debug("Claiming Recipe", { recipe, pendingRecipe });
+
+        if (recipe.secretIngredientAction == "SIA_SPECTRE_LOADOUT_COPY") {
+            const inventory = await getInventory(accountId);
+            inventory.PendingSpectreLoadouts ??= [];
+            inventory.SpectreLoadouts ??= [];
+
+            const pendingLoadoutIndex = inventory.PendingSpectreLoadouts.findIndex(
+                x => x.ItemType == recipe.resultType
+            );
+            if (pendingLoadoutIndex != -1) {
+                const loadoutIndex = inventory.SpectreLoadouts.findIndex(x => x.ItemType == recipe.resultType);
+                if (loadoutIndex != -1) {
+                    inventory.SpectreLoadouts.splice(loadoutIndex, 1);
+                }
+                logger.debug(
+                    "moving spectre loadout from pending to active",
+                    inventory.toJSON().PendingSpectreLoadouts![pendingLoadoutIndex]
+                );
+                inventory.SpectreLoadouts.push(inventory.PendingSpectreLoadouts[pendingLoadoutIndex]);
+                inventory.PendingSpectreLoadouts.splice(pendingLoadoutIndex, 1);
+                await inventory.save();
+            }
+        }
+
         let InventoryChanges = {};
         if (recipe.consumeOnUse) {
             const recipeChanges = [

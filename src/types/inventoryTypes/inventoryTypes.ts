@@ -203,8 +203,8 @@ export interface IInventoryResponse {
     SpaceMelee: IEquipmentDatabase[];
     SpaceGuns: IEquipmentDatabase[];
     ArchwingEnabled: boolean;
-    PendingSpectreLoadouts: any[];
-    SpectreLoadouts: ISpectreLoadout[];
+    PendingSpectreLoadouts?: ISpectreLoadout[];
+    SpectreLoadouts?: ISpectreLoadout[];
     SentinelWeapons: IEquipmentDatabase[];
     Sentinels: IEquipmentDatabase[];
     EmailItems: ITypeCount[];
@@ -869,13 +869,14 @@ export interface IShipInventory {
 }
 
 export interface ISpectreLoadout {
-    LongGuns: string;
-    Melee: string;
-    Pistols: string;
-    PistolsFeatures: number;
-    PistolsModularParts: string[];
-    Suits: string;
     ItemType: string;
+    Suits: string;
+    LongGuns: string;
+    LongGunsModularParts?: string[];
+    Pistols: string;
+    PistolsModularParts?: string[];
+    Melee: string;
+    MeleeModularParts?: string[];
 }
 
 export interface IStepSequencer {
