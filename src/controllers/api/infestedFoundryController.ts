@@ -144,7 +144,9 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             if (suit.Configs && suit.Configs[0] && suit.Configs[0].pricol) {
                 consumedSuit.c = suit.Configs[0].pricol;
             }
-            inventory.InfestedFoundry!.Slots!--;
+            if ((inventory.InfestedFoundry!.XP ?? 0) < 73125_00) {
+                inventory.InfestedFoundry!.Slots!--;
+            }
             inventory.InfestedFoundry!.ConsumedSuits ??= [];
             inventory.InfestedFoundry!.ConsumedSuits?.push(consumedSuit);
             inventory.InfestedFoundry!.LastConsumedSuit = suit;
@@ -269,6 +271,9 @@ const addInfestedFoundryXP = (infestedFoundry: IInfestedFoundry, delta: number):
     if (prevXP < 39375_00 && infestedFoundry.XP >= 39375_00) {
         infestedFoundry.Slots ??= 0;
         infestedFoundry.Slots += 20;
+    }
+    if (prevXP < 73125_00 && infestedFoundry.XP >= 73125) {
+        infestedFoundry.Slots = 1;
     }
 };
 
