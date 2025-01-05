@@ -97,7 +97,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
                         type: mostDislikedSnackRecord.ItemType,
                         date: mostDislikedSnackRecord.Date
                     });
-                    mostDislikedSnackRecord.Date = currentUnixSeconds + 24 * 60 * 60;
+                    mostDislikedSnackRecord.Date = currentUnixSeconds + 24 * 60 * 60; // Possibly unfaithful
                     continue;
                 }
 
@@ -125,7 +125,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
                     apetiteFactor
                 });
                 if (hoursRemaining >= 18) {
-                    record.Date = currentUnixSeconds + 72 * 60 * 60;
+                    record.Date = currentUnixSeconds + 72 * 60 * 60; // Possibly unfaithful
                 } else {
                     record.Date = currentUnixSeconds + 24 * 60 * 60;
                 }
@@ -431,6 +431,8 @@ interface IHelminthInvigorationRequest {
     ResourceCosts: number[];
 }
 
+// A fitted model for observed apetite values. Likely slightly inaccurate.
+//
 // Hours remaining, percentage points gained (out of 30 total)
 // 0, 30
 // 5, 25.8
