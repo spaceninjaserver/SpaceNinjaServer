@@ -228,7 +228,10 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             inventory.InfestedFoundry ??= {};
             inventory.InfestedFoundry.XP ??= 0;
             if (151875_00 > inventory.InfestedFoundry.XP) {
-                const recipeChanges = addInfestedFoundryXP(inventory.InfestedFoundry, 151875_00 - inventory.InfestedFoundry.XP)
+                const recipeChanges = addInfestedFoundryXP(
+                    inventory.InfestedFoundry,
+                    151875_00 - inventory.InfestedFoundry.XP
+                );
                 addRecipes(inventory, recipeChanges);
                 await inventory.save();
             }
