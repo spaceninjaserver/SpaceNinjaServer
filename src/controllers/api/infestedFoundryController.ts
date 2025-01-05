@@ -41,6 +41,25 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             break;
         }
 
+        case "x": {
+            // shard removal
+            const request = getJSONfromString(String(req.body)) as IShardUninstallRequest;
+            const inventory = await getInventory(accountId);
+            const suit = inventory.Suits.find(suit => suit._id.toString() == request.SuitId.$oid)!;
+            suit.ArchonCrystalUpgrades![request.Slot] = {};
+            const bile = inventory.InfestedFoundry!.Resources!.find(
+                x => x.ItemType == "/Lotus/Types/Items/InfestedFoundry/HelminthBile"
+            )!;
+            bile.Count -= 300;
+            await inventory.save();
+            res.json({
+                InventoryChanges: {
+                    InfestedFoundry: inventory.toJSON().InfestedFoundry
+                }
+            });
+            break;
+        }
+
         case "n": {
             // name the beast
             const request = getJSONfromString(String(req.body)) as IHelminthNameRequest;
@@ -272,6 +291,11 @@ interface IShardInstallRequest {
     Slot: number;
     UpgradeType: string;
     Color: string;
+}
+
+interface IShardUninstallRequest {
+    SuitId: IOid;
+    Slot: number;
 }
 
 interface IHelminthNameRequest {
