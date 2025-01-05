@@ -7,6 +7,7 @@ import { IConsumedSuit, IInfestedFoundry, IMiscItem, ITypeCount } from "@/src/ty
 import { ExportMisc, ExportRecipes } from "warframe-public-export-plus";
 import { getRecipe } from "@/src/services/itemDataService";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+import { toMongoDate } from "@/src/helpers/inventoryHelpers";
 
 export const infestedFoundryController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -184,7 +185,34 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             break;
         }
 
+        case "u": {
+            const request = getJSONfromString(String(req.body)) as IHelminthInvigorationRequest;
+            const inventory = await getInventory(accountId);
+            const suit = inventory.Suits.find(x => x._id.toString() == request.SuitId.$oid)!;
+            const upgradesExpiry = new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000);
+            suit.OffensiveUpgrade = request.OffensiveUpgradeType;
+            suit.DefensiveUpgrade = request.DefensiveUpgradeType;
+            suit.UpgradesExpiry = upgradesExpiry;
+            addInfestedFoundryXP(inventory.InfestedFoundry!, 4800_00);
+            for (let i = 0; i != request.ResourceTypes.length; ++i) {
+                inventory.InfestedFoundry!.Resources!.find(x => x.ItemType == request.ResourceTypes[i])!.Count -=
+                    request.ResourceCosts[i];
+            }
+            await inventory.save();
+            res.json({
+                SuitId: request.SuitId,
+                OffensiveUpgrade: request.OffensiveUpgradeType,
+                DefensiveUpgrade: request.DefensiveUpgradeType,
+                UpgradesExpiry: toMongoDate(upgradesExpiry),
+                InventoryChanges: {
+                    InfestedFoundry: inventory.toJSON().InfestedFoundry
+                }
+            });
+            break;
+        }
+
         default:
+            console.log(String(req.body));
             throw new Error(`unhandled infestedFoundry mode: ${String(req.query.mode)}`);
     }
 };
@@ -267,4 +295,12 @@ interface IHelminthOfferingsUpdate {
     OfferingsIndex: number;
     SuitTypes: string[];
     Extra: boolean;
+}
+
+interface IHelminthInvigorationRequest {
+    SuitId: IOid;
+    OffensiveUpgradeType: string;
+    DefensiveUpgradeType: string;
+    ResourceTypes: string[];
+    ResourceCosts: number[];
 }
