@@ -8,13 +8,16 @@ import {
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { addMiscItems, getInventory, updateCurrency } from "@/src/services/inventoryService";
+import { addMiscItems, addRecipes, getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { getRecipeByResult } from "@/src/services/itemDataService";
+import { IInventoryChanges } from "@/src/types/purchaseTypes";
+import { addInfestedFoundryXP } from "./infestedFoundryController";
 
 export const upgradesController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const payload = JSON.parse(String(req.body)) as IUpgradesRequest;
     const inventory = await getInventory(accountId);
+    const inventoryChanges: IInventoryChanges = {};
     for (const operation of payload.Operations) {
         if (
             operation.UpgradeRequirement == "/Lotus/Types/Items/MiscItems/ModSlotUnlocker" ||
@@ -35,6 +38,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
             const suit = inventory.Suits.find(x => x._id.toString() == payload.ItemId.$oid)!;
 
             let newAbilityOverride: IAbilityOverride | undefined;
+            let totalPercentagePointsConsumed = 0;
             if (operation.UpgradeRequirement != "") {
                 newAbilityOverride = {
                     Ability: operation.UpgradeRequirement,
@@ -43,6 +47,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
 
                 const recipe = getRecipeByResult(operation.UpgradeRequirement)!;
                 for (const ingredient of recipe.ingredients) {
+                    totalPercentagePointsConsumed += ingredient.ItemCount / 10;
                     inventory.InfestedFoundry!.Resources!.find(x => x.ItemType == ingredient.ItemType)!.Count -=
                         ingredient.ItemCount;
                 }
@@ -52,6 +57,12 @@ export const upgradesController: RequestHandler = async (req, res) => {
                 suit.Configs[entry.Slot] ??= {};
                 suit.Configs[entry.Slot].AbilityOverride = newAbilityOverride;
             }
+
+            const recipeChanges = addInfestedFoundryXP(inventory.InfestedFoundry!, totalPercentagePointsConsumed * 8);
+            addRecipes(inventory, recipeChanges);
+
+            inventoryChanges.Recipes = recipeChanges;
+            inventoryChanges.InfestedFoundry = inventory.toJSON().InfestedFoundry;
         } else
             switch (operation.UpgradeRequirement) {
                 case "/Lotus/Types/Items/MiscItems/OrokinReactor":
@@ -146,7 +157,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
             }
     }
     await inventory.save();
-    res.json({ InventoryChanges: {} });
+    res.json({ InventoryChanges: inventoryChanges });
 };
 
 const setSlotPolarity = (item: IEquipmentDatabase, slot: number, polarity: ArtifactPolarity): void => {
