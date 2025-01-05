@@ -26,6 +26,7 @@ import { getIgnoredUsersController } from "@/src/controllers/api/getIgnoredUsers
 import { getNewRewardSeedController } from "@/src/controllers/api/getNewRewardSeedController";
 import { getShipController } from "@/src/controllers/api/getShipController";
 import { getVendorInfoController } from "@/src/controllers/api/getVendorInfoController";
+import { getVoidProjectionRewardsController } from "@/src/controllers/api/getVoidProjectionRewardsController";
 import { gildWeaponController } from "@/src/controllers/api/gildWeaponController";
 import { guildTechController } from "../controllers/api/guildTechController";
 import { hostSessionController } from "@/src/controllers/api/hostSessionController";
@@ -120,6 +121,7 @@ apiRouter.post("/focus.php", focusController);
 apiRouter.post("/fusionTreasures.php", fusionTreasuresController);
 apiRouter.post("/genericUpdate.php", genericUpdateController);
 apiRouter.post("/getAlliance.php", getAllianceController);
+apiRouter.post("/getVoidProjectionRewards.php", getVoidProjectionRewardsController);
 apiRouter.post("/gildWeapon.php", gildWeaponController);
 apiRouter.post("/guildTech.php", guildTechController);
 apiRouter.post("/hostSession.php", hostSessionController);
