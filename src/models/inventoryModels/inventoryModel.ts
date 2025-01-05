@@ -233,6 +233,9 @@ const EquipmentSchema = new Schema<IEquipmentDatabase>(
         UnlockLevel: Number,
         Expiry: Date,
         SkillTree: String,
+        OffensiveUpgrade: String,
+        DefensiveUpgrade: String,
+        UpgradesExpiry: Date,
         ArchonCrystalUpgrades: { type: [ArchonCrystalUpgradeSchema], default: undefined }
     },
     { id: false }
