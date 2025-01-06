@@ -548,13 +548,14 @@ const fusionTreasuresSchema = new Schema<IFusionTreasure>().add(typeCountSchema)
 
 const spectreLoadoutsSchema = new Schema<ISpectreLoadout>(
     {
-        LongGuns: String,
-        Melee: String,
-        Pistols: String,
-        PistolsFeatures: Number,
-        PistolsModularParts: [String],
+        ItemType: String,
         Suits: String,
-        ItemType: String
+        LongGuns: String,
+        LongGunsModularParts: { type: [String], default: undefined },
+        Pistols: String,
+        PistolsModularParts: { type: [String], default: undefined },
+        Melee: String,
+        MeleeModularParts: { type: [String], default: undefined }
     },
     { _id: false }
 );
@@ -936,11 +937,9 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         QualifyingInvasions: [Schema.Types.Mixed],
         FactionScores: [Number],
 
-        //Have only Suit+Pistols+LongGuns+Melee+ItemType(BronzeSpectre,GoldSpectre,PlatinumSpectreArmy,SilverSpectreArmy)
-        //"/Lotus/Types/Game/SpectreArmies/BronzeSpectreArmy": "Vapor Specter Regiment",
-        SpectreLoadouts: [spectreLoadoutsSchema],
-        //If you want change Spectre Gear id
-        PendingSpectreLoadouts: [Schema.Types.Mixed],
+        // https://warframe.fandom.com/wiki/Specter_(Tenno)
+        PendingSpectreLoadouts: { type: [spectreLoadoutsSchema], default: undefined },
+        SpectreLoadouts: { type: [spectreLoadoutsSchema], default: undefined },
 
         //New Quest Email
         EmailItems: [TypeXPItemSchema],
