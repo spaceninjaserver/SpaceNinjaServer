@@ -102,7 +102,8 @@ export type TSolarMapRegion =
     | "Uranus"
     | "Venus"
     | "Void"
-    | "SolarMapDeimosName";
+    | "SolarMapDeimosName"
+    | "1999MapName";
 
 //TODO: perhaps split response and database into their own files
 
@@ -727,6 +728,8 @@ export interface IPendingRecipe {
     ItemType: string;
     CompletionDate: Date;
     ItemId: IOid;
+    TargetItemId?: string; // likely related to liches
+    TargetFingerprint?: string; // likely related to liches
 }
 
 export interface IPendingTrade {
