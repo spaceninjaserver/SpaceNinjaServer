@@ -17,6 +17,7 @@
   "/Lotus/Types/Items/ShipFeatureItems/GeneticFoundryFeatureItem",
   "/Lotus/Types/Items/ShipFeatureItems/GeneticFoundryUpgradeFeatureItem",
   "/Lotus/Types/Items/ShipFeatureItems/InfestedFoundryArchonShardFeatureItem",
+  "/Lotus/Types/Items/ShipFeatureItems/InfestedFoundryArchonShardUpgradeFeatureItem",
   "/Lotus/Types/Items/ShipFeatureItems/InfestedFoundryItem",
   "/Lotus/Types/Items/ShipFeatureItems/InfestedFoundryUpgradeFeatureItem",
   "/Lotus/Types/Items/ShipFeatureItems/JupiterNavigationFeatureItem",
