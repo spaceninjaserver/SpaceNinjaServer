@@ -439,18 +439,17 @@ const seasonChallengeHistorySchema = new Schema<ISeasonChallenge>(
 //TODO: check whether this is complete
 const playerSkillsSchema = new Schema<IPlayerSkills>(
     {
-        LPP_SPACE: Number,
-        LPP_DRIFTER: Number,
-        LPS_NONE: Number,
-        LPS_PILOTING: Number,
-        LPS_GUNNERY: Number,
-        LPS_TACTICAL: Number,
-        LPS_ENGINEERING: Number,
-        LPS_COMMAND: Number,
-        LPS_DRIFT_COMBAT: Number,
-        LPS_DRIFT_RIDING: Number,
-        LPS_DRIFT_OPPORTUNITY: Number,
-        LPS_DRIFT_ENDURANCE: Number
+        LPP_SPACE: { type: Number, default: 0 },
+        LPS_PILOTING: { type: Number, default: 0 },
+        LPS_GUNNERY: { type: Number, default: 0 },
+        LPS_TACTICAL: { type: Number, default: 0 },
+        LPS_ENGINEERING: { type: Number, default: 0 },
+        LPS_COMMAND: { type: Number, default: 0 },
+        LPP_DRIFTER: { type: Number, default: 0 },
+        LPS_DRIFT_COMBAT: { type: Number, default: 0 },
+        LPS_DRIFT_RIDING: { type: Number, default: 0 },
+        LPS_DRIFT_OPPORTUNITY: { type: Number, default: 0 },
+        LPS_DRIFT_ENDURANCE: { type: Number, default: 0 }
     },
     { _id: false }
 );
@@ -1018,7 +1017,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         //Modulars lvl and exp(Railjack|Duviri)
         //https://warframe.fandom.com/wiki/Intrinsics
-        PlayerSkills: playerSkillsSchema,
+        PlayerSkills: { type: playerSkillsSchema, default: {} },
 
         //TradeBannedUntil data
         TradeBannedUntil: Schema.Types.Mixed,
