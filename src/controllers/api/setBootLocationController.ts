@@ -16,8 +16,8 @@ export const setBootLocationController: RequestHandler = async (req, res) => {
         const inventory = await getInventory(accountId);
         if (inventory.Motorcycles.length == 0) {
             inventory.Motorcycles.push({ ItemType: "/Lotus/Types/Vehicles/Motorcycle/MotorcyclePowerSuit" });
+            await inventory.save();
         }
-        await inventory.save();
     }
 
     res.end();
