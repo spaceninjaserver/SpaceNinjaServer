@@ -341,14 +341,6 @@
       ]
     },
     {
-      "_id": { "$oid": "663a71c80000000000000004" },
-      "Activation": { "$date": { "$numberLong": "1715106248403" } },
-      "Expiry": { "$date": { "$numberLong": "2000000000000" } },
-      "Tag": "EntratiLabSyndicate",
-      "Seed": 99562,
-      "Nodes": []
-    },
-    {
       "_id": { "$oid": "663a71c80000000000000008" },
       "Activation": { "$date": { "$numberLong": "1715106248403" } },
       "Expiry": { "$date": { "$numberLong": "2000000000000" } },

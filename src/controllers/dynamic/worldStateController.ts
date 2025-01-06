@@ -22,7 +22,7 @@ export const worldStateController: RequestHandler = (req, res) => {
         Seed: week // unfaithful
     });
 
-    // Holdfast & Hex bounties cycling every 2.5 hours; unfaithful implementation
+    // Holdfast, Cavia, & Hex bounties cycling every 2.5 hours; unfaithful implementation
     const bountyCycle = Math.trunc(new Date().getTime() / 9000000);
     const bountyCycleStart = bountyCycle * 9000000;
     const bountyCycleEnd = bountyCycleStart + 9000000;
@@ -31,6 +31,14 @@ export const worldStateController: RequestHandler = (req, res) => {
         Activation: { $date: { $numberLong: bountyCycleStart.toString() } },
         Expiry: { $date: { $numberLong: bountyCycleEnd.toString() } },
         Tag: "ZarimanSyndicate",
+        Seed: bountyCycle,
+        Nodes: []
+    });
+    worldState.SyndicateMissions.push({
+        _id: { $oid: bountyCycleStart.toString(16) + "0000000000000004" },
+        Activation: { $date: { $numberLong: bountyCycleStart.toString() } },
+        Expiry: { $date: { $numberLong: bountyCycleEnd.toString() } },
+        Tag: "EntratiLabSyndicate",
         Seed: bountyCycle,
         Nodes: []
     });
