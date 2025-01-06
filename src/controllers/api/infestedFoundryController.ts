@@ -52,14 +52,33 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             const request = getJSONfromString(String(req.body)) as IShardUninstallRequest;
             const inventory = await getInventory(accountId);
             const suit = inventory.Suits.find(suit => suit._id.toString() == request.SuitId.$oid)!;
+
+            // refund shard
+            const shard = Object.entries(colorToShard).find(
+                ([color]) => color == suit.ArchonCrystalUpgrades![request.Slot].Color
+            )![1];
+            const miscItemChanges = [
+                {
+                    ItemType: shard,
+                    ItemCount: 1
+                }
+            ];
+            addMiscItems(inventory, miscItemChanges);
+
+            // remove from suit
             suit.ArchonCrystalUpgrades![request.Slot] = {};
+
+            // remove bile
             const bile = inventory.InfestedFoundry!.Resources!.find(
                 x => x.ItemType == "/Lotus/Types/Items/InfestedFoundry/HelminthBile"
             )!;
             bile.Count -= 300;
+
             await inventory.save();
+
             res.json({
                 InventoryChanges: {
+                    MiscItems: miscItemChanges,
                     InfestedFoundry: inventory.toJSON().InfestedFoundry
                 }
             });
