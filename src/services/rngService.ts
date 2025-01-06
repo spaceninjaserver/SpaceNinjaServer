@@ -40,3 +40,22 @@ export const getRandomWeightedReward = (
     }
     return getRandomReward(resultPool);
 };
+
+export const getRandomWeightedReward2 = (
+    pool: { type: string; itemCount: number; rarity: TRarity }[],
+    weights: Record<TRarity, number>
+): IRngResult | undefined => {
+    const resultPool: IRngResult[] = [];
+    const rarityCounts: Record<TRarity, number> = { COMMON: 0, UNCOMMON: 0, RARE: 0, LEGENDARY: 0 };
+    for (const entry of pool) {
+        ++rarityCounts[entry.rarity];
+    }
+    for (const entry of pool) {
+        resultPool.push({
+            type: entry.type,
+            itemCount: entry.itemCount,
+            probability: weights[entry.rarity] / rarityCounts[entry.rarity]
+        });
+    }
+    return getRandomReward(resultPool);
+};
