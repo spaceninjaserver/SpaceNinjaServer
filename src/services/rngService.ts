@@ -6,6 +6,18 @@ export interface IRngResult {
     probability: number;
 }
 
+export const getRandomElement = <T>(arr: T[]): T => {
+    return arr[Math.floor(Math.random() * arr.length)];
+};
+
+// Returns a random integer between min (inclusive) and max (inclusive).
+// https://stackoverflow.com/a/1527820
+export const getRandomInt = (min: number, max: number): number => {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
 export const getRandomReward = (pool: IRngResult[]): IRngResult | undefined => {
     if (pool.length == 0) return;
 
