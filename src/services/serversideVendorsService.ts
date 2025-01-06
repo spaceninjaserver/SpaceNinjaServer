@@ -25,6 +25,7 @@ import SolarisDebtTokenVendorManifest from "@/static/fixed_responses/getVendorIn
 import SolarisDebtTokenVendorRepossessionsManifest from "@/static/fixed_responses/getVendorInfo/SolarisDebtTokenVendorRepossessionsManifest.json";
 import SolarisFishmongerVendorManifest from "@/static/fixed_responses/getVendorInfo/SolarisFishmongerVendorManifest.json";
 import SolarisProspectorVendorManifest from "@/static/fixed_responses/getVendorInfo/SolarisProspectorVendorManifest.json";
+import TeshinHardModeVendorManifest from "@/static/fixed_responses/getVendorInfo/TeshinHardModeVendorManifest.json";
 import ZarimanCommisionsManifestArchimedean from "@/static/fixed_responses/getVendorInfo/ZarimanCommisionsManifestArchimedean.json";
 
 interface IVendorManifest {
@@ -65,6 +66,7 @@ const vendorManifests: IVendorManifest[] = [
     SolarisDebtTokenVendorRepossessionsManifest,
     SolarisFishmongerVendorManifest,
     SolarisProspectorVendorManifest,
+    TeshinHardModeVendorManifest,
     ZarimanCommisionsManifestArchimedean
 ];
 
