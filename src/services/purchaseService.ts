@@ -24,6 +24,7 @@ import {
     ExportVendors,
     TRarity
 } from "warframe-public-export-plus";
+import { config } from "./configService";
 
 export const getStoreItemCategory = (storeItem: string): string => {
     const storeItemString = getSubstringFromKeyword(storeItem, "StoreItems/");
@@ -152,7 +153,7 @@ export const handlePurchase = async (
 
                     purchaseResponse.InventoryChanges.MiscItems ??= [];
                     (purchaseResponse.InventoryChanges.MiscItems as IMiscItem[]).push(invItem);
-                } else {
+                } else if (!config.infiniteRegalAya) {
                     inventory.PrimeTokens -= offer.PrimePrice! * purchaseRequest.PurchaseParams.Quantity;
                 }
                 await inventory.save();

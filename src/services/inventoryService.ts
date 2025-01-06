@@ -908,8 +908,12 @@ export const upgradeMod = async (artifactsData: IArtifactsRequest, accountId: st
             }
         }
 
-        inventory.RegularCredits -= Cost;
-        inventory.FusionPoints -= FusionPointCost;
+        if (!config.infiniteCredits) {
+            inventory.RegularCredits -= Cost;
+        }
+        if (!config.infiniteEndo) {
+            inventory.FusionPoints -= FusionPointCost;
+        }
 
         const changedInventory = await inventory.save();
         const itemId = changedInventory.toJSON().Upgrades[itemIndex]?.ItemId?.$oid;

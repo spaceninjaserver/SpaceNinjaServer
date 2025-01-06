@@ -1,5 +1,4 @@
 import { RequestHandler } from "express";
-import { ISellRequest } from "@/src/types/sellTypes";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getInventory, addMods, addRecipes, addMiscItems, addConsumables } from "@/src/services/inventoryService";
 
@@ -100,3 +99,30 @@ export const sellController: RequestHandler = async (req, res) => {
     await inventory.save();
     res.json({});
 };
+
+interface ISellRequest {
+    Items: {
+        Suits?: ISellItem[];
+        LongGuns?: ISellItem[];
+        Pistols?: ISellItem[];
+        Melee?: ISellItem[];
+        Consumables?: ISellItem[];
+        Recipes?: ISellItem[];
+        Upgrades?: ISellItem[];
+        MiscItems?: ISellItem[];
+    };
+    SellPrice: number;
+    SellCurrency:
+        | "SC_RegularCredits"
+        | "SC_PrimeBucks"
+        | "SC_FusionPoints"
+        | "SC_DistillPoints"
+        | "SC_CrewShipFusionPoints"
+        | "SC_Resources";
+    buildLabel: string;
+}
+
+interface ISellItem {
+    String: string; // oid or uniqueName
+    Count: number;
+}

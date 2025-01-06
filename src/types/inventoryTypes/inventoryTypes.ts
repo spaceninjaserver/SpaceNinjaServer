@@ -102,7 +102,8 @@ export type TSolarMapRegion =
     | "Uranus"
     | "Venus"
     | "Void"
-    | "SolarMapDeimosName";
+    | "SolarMapDeimosName"
+    | "1999MapName";
 
 //TODO: perhaps split response and database into their own files
 
@@ -203,8 +204,8 @@ export interface IInventoryResponse {
     SpaceMelee: IEquipmentDatabase[];
     SpaceGuns: IEquipmentDatabase[];
     ArchwingEnabled: boolean;
-    PendingSpectreLoadouts: any[];
-    SpectreLoadouts: ISpectreLoadout[];
+    PendingSpectreLoadouts?: ISpectreLoadout[];
+    SpectreLoadouts?: ISpectreLoadout[];
     SentinelWeapons: IEquipmentDatabase[];
     Sentinels: IEquipmentDatabase[];
     EmailItems: ITypeCount[];
@@ -727,6 +728,8 @@ export interface IPendingRecipe {
     ItemType: string;
     CompletionDate: Date;
     ItemId: IOid;
+    TargetItemId?: string; // likely related to liches
+    TargetFingerprint?: string; // likely related to liches
 }
 
 export interface IPendingTrade {
@@ -816,13 +819,12 @@ export interface IPersonalTechProject {
 
 export interface IPlayerSkills {
     LPP_SPACE: number;
-    LPP_DRIFTER: number;
-    LPS_NONE: number;
     LPS_PILOTING: number;
     LPS_GUNNERY: number;
     LPS_TACTICAL: number;
     LPS_ENGINEERING: number;
     LPS_COMMAND: number;
+    LPP_DRIFTER: number;
     LPS_DRIFT_COMBAT: number;
     LPS_DRIFT_RIDING: number;
     LPS_DRIFT_OPPORTUNITY: number;
@@ -871,13 +873,14 @@ export interface IShipInventory {
 }
 
 export interface ISpectreLoadout {
-    LongGuns: string;
-    Melee: string;
-    Pistols: string;
-    PistolsFeatures: number;
-    PistolsModularParts: string[];
-    Suits: string;
     ItemType: string;
+    Suits: string;
+    LongGuns: string;
+    LongGunsModularParts?: string[];
+    Pistols: string;
+    PistolsModularParts?: string[];
+    Melee: string;
+    MeleeModularParts?: string[];
 }
 
 export interface IStepSequencer {

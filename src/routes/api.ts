@@ -1,4 +1,5 @@
 import express from "express";
+import { activateRandomModController } from "@/src/controllers/api/activateRandomModController";
 import { addFriendImageController } from "@/src/controllers/api/addFriendImageController";
 import { arcaneCommonController } from "@/src/controllers/api/arcaneCommonController";
 import { artifactsController } from "../controllers/api/artifactsController";
@@ -26,6 +27,7 @@ import { getIgnoredUsersController } from "@/src/controllers/api/getIgnoredUsers
 import { getNewRewardSeedController } from "@/src/controllers/api/getNewRewardSeedController";
 import { getShipController } from "@/src/controllers/api/getShipController";
 import { getVendorInfoController } from "@/src/controllers/api/getVendorInfoController";
+import { getVoidProjectionRewardsController } from "@/src/controllers/api/getVoidProjectionRewardsController";
 import { gildWeaponController } from "@/src/controllers/api/gildWeaponController";
 import { guildTechController } from "../controllers/api/guildTechController";
 import { hostSessionController } from "@/src/controllers/api/hostSessionController";
@@ -44,6 +46,7 @@ import { missionInventoryUpdateController } from "@/src/controllers/api/missionI
 import { modularWeaponCraftingController } from "@/src/controllers/api/modularWeaponCraftingController";
 import { modularWeaponSaleController } from "@/src/controllers/api/modularWeaponSaleController";
 import { nameWeaponController } from "@/src/controllers/api/nameWeaponController";
+import { playerSkillsController } from "@/src/controllers/api/playerSkillsController";
 import { projectionManagerController } from "../controllers/api/projectionManagerController";
 import { purchaseController } from "@/src/controllers/api/purchaseController";
 import { queueDojoComponentDestructionController } from "@/src/controllers/api/queueDojoComponentDestructionController";
@@ -107,6 +110,7 @@ apiRouter.get("/surveys.php", surveysController);
 apiRouter.get("/updateSession.php", updateSessionGetController);
 
 // post
+apiRouter.post("/activateRandomMod.php", activateRandomModController);
 apiRouter.post("/addFriendImage.php", addFriendImageController);
 apiRouter.post("/arcaneCommon.php", arcaneCommonController);
 apiRouter.post("/artifacts.php", artifactsController);
@@ -120,6 +124,7 @@ apiRouter.post("/focus.php", focusController);
 apiRouter.post("/fusionTreasures.php", fusionTreasuresController);
 apiRouter.post("/genericUpdate.php", genericUpdateController);
 apiRouter.post("/getAlliance.php", getAllianceController);
+apiRouter.post("/getVoidProjectionRewards.php", getVoidProjectionRewardsController);
 apiRouter.post("/gildWeapon.php", gildWeaponController);
 apiRouter.post("/guildTech.php", guildTechController);
 apiRouter.post("/hostSession.php", hostSessionController);
@@ -130,6 +135,7 @@ apiRouter.post("/login.php", loginController);
 apiRouter.post("/missionInventoryUpdate.php", missionInventoryUpdateController);
 apiRouter.post("/modularWeaponCrafting.php", modularWeaponCraftingController);
 apiRouter.post("/nameWeapon.php", nameWeaponController);
+apiRouter.post("/playerSkills.php", playerSkillsController);
 apiRouter.post("/projectionManager.php", projectionManagerController);
 apiRouter.post("/purchase.php", purchaseController);
 apiRouter.post("/rerollRandomMod.php", rerollRandomModController);

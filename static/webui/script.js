@@ -805,6 +805,8 @@ const uiConfigs = [
     "completeAllQuests",
     "infiniteCredits",
     "infinitePlatinum",
+    "infiniteEndo",
+    "infiniteRegalAya",
     "unlockAllShipFeatures",
     "unlockAllShipDecorations",
     "unlockAllFlavourItems",
