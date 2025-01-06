@@ -17,6 +17,8 @@
   "completeAllQuests": true,
   "infiniteCredits": true,
   "infinitePlatinum": true,
+  "infiniteEndo": true,
+  "infiniteRegalAya": true,
   "unlockAllShipFeatures": true,
   "unlockAllShipDecorations": true,
   "unlockAllFlavourItems": true,

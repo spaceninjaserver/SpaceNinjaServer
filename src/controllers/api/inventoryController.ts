@@ -74,6 +74,12 @@ export const inventoryController: RequestHandler = async (request, response) => 
         inventoryResponse.PremiumCreditsFree = 999999999;
         inventoryResponse.PremiumCredits = 999999999;
     }
+    if (config.infiniteEndo) {
+        inventoryResponse.FusionPoints = 999999999;
+    }
+    if (config.infiniteRegalAya) {
+        inventoryResponse.PrimeTokens = 999999999;
+    }
 
     if (config.skipAllDialogue) {
         inventoryResponse.TauntHistory = [
