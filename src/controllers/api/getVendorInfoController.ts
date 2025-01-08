@@ -2,6 +2,8 @@ import { RequestHandler } from "express";
 import { getVendorManifestByTypeName } from "@/src/services/serversideVendorsService";
 
 export const getVendorInfoController: RequestHandler = (req, res) => {
+    console.log(req.query);
+
     if (typeof req.query.vendor == "string") {
         const manifest = getVendorManifestByTypeName(req.query.vendor);
         if (!manifest) {
