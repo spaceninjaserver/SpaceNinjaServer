@@ -21,13 +21,13 @@ import MaskSalesmanManifest from "@/static/fixed_responses/getVendorInfo/MaskSal
 import OstronFishmongerVendorManifest from "@/static/fixed_responses/getVendorInfo/OstronFishmongerVendorManifest.json";
 import OstronPetVendorManifest from "@/static/fixed_responses/getVendorInfo/OstronPetVendorManifest.json";
 import OstronProspectorVendorManifest from "@/static/fixed_responses/getVendorInfo/OstronProspectorVendorManifest.json";
+import RadioLegionIntermission10VendorManifest from "@/static/fixed_responses/getVendorInfo/RadioLegionIntermission10VendorManifest.json";
 import SolarisDebtTokenVendorManifest from "@/static/fixed_responses/getVendorInfo/SolarisDebtTokenVendorManifest.json";
 import SolarisDebtTokenVendorRepossessionsManifest from "@/static/fixed_responses/getVendorInfo/SolarisDebtTokenVendorRepossessionsManifest.json";
 import SolarisFishmongerVendorManifest from "@/static/fixed_responses/getVendorInfo/SolarisFishmongerVendorManifest.json";
 import SolarisProspectorVendorManifest from "@/static/fixed_responses/getVendorInfo/SolarisProspectorVendorManifest.json";
 import TeshinHardModeVendorManifest from "@/static/fixed_responses/getVendorInfo/TeshinHardModeVendorManifest.json";
 import ZarimanCommisionsManifestArchimedean from "@/static/fixed_responses/getVendorInfo/ZarimanCommisionsManifestArchimedean.json";
-import RadioLegionIntermission10VendorManifest from "@/static/fixed_responses/getVendorInfo/RadioLegionIntermission10VendorManifest.json";
 
 interface IVendorManifest {
     VendorInfo: {
@@ -63,13 +63,13 @@ const vendorManifests: IVendorManifest[] = [
     OstronFishmongerVendorManifest,
     OstronPetVendorManifest,
     OstronProspectorVendorManifest,
+    RadioLegionIntermission10VendorManifest,
     SolarisDebtTokenVendorManifest,
     SolarisDebtTokenVendorRepossessionsManifest,
     SolarisFishmongerVendorManifest,
     SolarisProspectorVendorManifest,
     TeshinHardModeVendorManifest,
-    ZarimanCommisionsManifestArchimedean,
-    RadioLegionIntermission10VendorManifest
+    ZarimanCommisionsManifestArchimedean
 ];
 
 export const getVendorManifestByTypeName = (typeName: string): IVendorManifest | undefined => {
