@@ -27,6 +27,7 @@ import SolarisFishmongerVendorManifest from "@/static/fixed_responses/getVendorI
 import SolarisProspectorVendorManifest from "@/static/fixed_responses/getVendorInfo/SolarisProspectorVendorManifest.json";
 import TeshinHardModeVendorManifest from "@/static/fixed_responses/getVendorInfo/TeshinHardModeVendorManifest.json";
 import ZarimanCommisionsManifestArchimedean from "@/static/fixed_responses/getVendorInfo/ZarimanCommisionsManifestArchimedean.json";
+import RadioLegionIntermission10VendorManifest from "@/static/fixed_responses/getVendorInfo/RadioLegionIntermission10VendorManifest.json";
 
 interface IVendorManifest {
     VendorInfo: {
@@ -67,7 +68,8 @@ const vendorManifests: IVendorManifest[] = [
     SolarisFishmongerVendorManifest,
     SolarisProspectorVendorManifest,
     TeshinHardModeVendorManifest,
-    ZarimanCommisionsManifestArchimedean
+    ZarimanCommisionsManifestArchimedean,
+    RadioLegionIntermission10VendorManifest
 ];
 
 export const getVendorManifestByTypeName = (typeName: string): IVendorManifest | undefined => {
