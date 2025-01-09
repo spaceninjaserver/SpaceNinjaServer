@@ -6,6 +6,7 @@ import static1999SummerDays from "@/static/fixed_responses/worldState/1999_summe
 import static1999WinterDays from "@/static/fixed_responses/worldState/1999_winter_days.json";
 import { buildConfig } from "@/src/services/buildConfigService";
 import { IMongoDate, IOid } from "@/src/types/commonTypes";
+import { unixTimesInMs } from "@/src/constants/timeConstants";
 
 export const worldStateController: RequestHandler = (req, res) => {
     const worldState: IWorldState = {
@@ -97,6 +98,18 @@ export const worldStateController: RequestHandler = (req, res) => {
         static1999FallDays
     ][week % 4];
 
+    // Sentient Anomaly cycling every 30 minutes
+    const halfHour = Math.trunc(new Date().getTime() / (unixTimesInMs.hour / 2));
+    const tmp = {
+        cavabegin: "1690761600",
+        PurchasePlatformLockEnabled: true,
+        tcsn: true,
+        ennnd: true,
+        mbrt: true,
+        sfn: [550, 553, 554, 555][halfHour % 4]
+    };
+    worldState.Tmp = JSON.stringify(tmp);
+
     res.json(worldState);
 };
 
@@ -107,6 +120,7 @@ interface IWorldState {
     NodeOverrides: INodeOverride[];
     EndlessXpChoices: IEndlessXpChoice[];
     KnownCalendarSeasons: ICalendarSeason[];
+    Tmp?: string;
 }
 
 interface ISyndicateMission {
