@@ -8,6 +8,7 @@ reviews:
     high_level_summary: false
     poem: false
     review_status: true
+    commit_status: false
     collapse_walkthrough: false
     sequence_diagrams: false
     related_prs: false
