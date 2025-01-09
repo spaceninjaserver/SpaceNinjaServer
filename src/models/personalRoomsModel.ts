@@ -90,7 +90,7 @@ const orbiterSchema = new Schema<IOrbiter>(
     {
         Features: [String],
         Rooms: [roomSchema],
-        ContentUrlSignature: String,
+        ContentUrlSignature: { type: String, required: false },
         BootLocation: String
     },
     { _id: false }
