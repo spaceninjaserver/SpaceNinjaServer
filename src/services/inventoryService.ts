@@ -1,5 +1,4 @@
 import { Inventory, TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
-import postTutorialInventory from "@/static/fixed_responses/postTutorialInventory.json";
 import { config } from "@/src/services/configService";
 import { Types } from "mongoose";
 import { SlotNames, IInventoryChanges, IBinChanges, ICurrencyChanges } from "@/src/types/purchaseTypes";
@@ -45,25 +44,90 @@ export const createInventory = async (
     defaultItemReferences: { loadOutPresetId: Types.ObjectId; ship: Types.ObjectId }
 ): Promise<void> => {
     try {
-        const inventory = config.skipTutorial
-            ? new Inventory({
-                  accountOwnerId: accountOwnerId,
-                  LoadOutPresets: defaultItemReferences.loadOutPresetId,
-                  Ships: [defaultItemReferences.ship],
-                  ...postTutorialInventory
-              })
-            : new Inventory({
-                  accountOwnerId: accountOwnerId,
-                  LoadOutPresets: defaultItemReferences.loadOutPresetId,
-                  Ships: [defaultItemReferences.ship],
-                  TrainingDate: 0
-              });
+        const inventory = new Inventory({
+            accountOwnerId: accountOwnerId,
+            LoadOutPresets: defaultItemReferences.loadOutPresetId,
+            Ships: [defaultItemReferences.ship],
+            PlayedParkourTutorial: config.skipTutorial,
+            ReceivedStartingGear: config.skipTutorial
+        });
+
+        if (config.skipTutorial) {
+            const defaultEquipment = [
+                // Awakening rewards
+                { ItemCount: 1, ItemType: "/Lotus/Powersuits/Excalibur/Excalibur" },
+                { ItemCount: 1, ItemType: "/Lotus/Weapons/Tenno/Melee/LongSword/LongSword" },
+                { ItemCount: 1, ItemType: "/Lotus/Weapons/Tenno/Pistol/Pistol" },
+                { ItemCount: 1, ItemType: "/Lotus/Weapons/Tenno/Rifle/Rifle" },
+                { ItemCount: 1, ItemType: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageItem1" },
+                { ItemCount: 1, ItemType: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageItem2" },
+                { ItemCount: 1, ItemType: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageItem3" },
+                { ItemCount: 1, ItemType: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageItem4" },
+                { ItemCount: 1, ItemType: "/Lotus/Types/Restoratives/LisetAutoHack" },
+
+                // Vor's Prize rewards
+                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarHealthMaxMod" },
+                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarShieldMaxMod" },
+                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarAbilityRangeMod" },
+                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarAbilityStrengthMod" },
+                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarAbilityDurationMod" },
+                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarPickupBonusMod" },
+                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarPowerMaxMod" },
+                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarEnemyRadarMod" },
+                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Melee/WeaponFireRateMod" },
+                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Melee/WeaponMeleeDamageMod" },
+                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Rifle/WeaponFactionDamageCorpus" },
+                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Rifle/WeaponFactionDamageGrineer" },
+                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod" },
+                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Pistol/WeaponFireDamageMod" },
+                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Pistol/WeaponElectricityDamageMod" },
+                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod" },
+                { ItemCount: 1, ItemType: "/Lotus/Types/Recipes/Weapons/BurstonRifleBlueprint" },
+                { ItemCount: 1, ItemType: "/Lotus/Types/Items/MiscItems/Morphic" },
+                { ItemCount: 400, ItemType: "/Lotus/Types/Items/MiscItems/PolymerBundle" },
+                { ItemCount: 150, ItemType: "/Lotus/Types/Items/MiscItems/AlloyPlate" }
+            ];
+
+            for (const equipment of defaultEquipment) {
+                await addItem(inventory, equipment.ItemType, equipment.ItemCount);
+            }
+
+            // Missing in Public Export
+            inventory.Horses.push({
+                ItemType: "/Lotus/Types/NeutralCreatures/ErsatzHorse/ErsatzHorsePowerSuit"
+            });
+            inventory.DataKnives.push({
+                ItemType: "/Lotus/Weapons/Tenno/HackingDevices/TnHackingDevice/TnHackingDeviceWeapon",
+                XP: 450000
+            });
+            inventory.Scoops.push({
+                ItemType: "/Lotus/Weapons/Tenno/Speedball/SpeedballWeaponTest"
+            });
+            inventory.DrifterMelee.push({
+                ItemType: "/Lotus/Types/Friendly/PlayerControllable/Weapons/DuviriDualSwords"
+            });
+
+            inventory.QuestKeys.push({
+                Completed: true,
+                ItemType: "/Lotus/Types/Keys/VorsPrize/VorsPrizeQuestKeyChain"
+            });
+
+            const completedMissions = ["SolNode27", "SolNode89", "SolNode63", "SolNode85", "SolNode15", "SolNode79"];
+
+            inventory.Missions.push(
+                ...completedMissions.map(tag => ({
+                    Completes: 1,
+                    Tag: tag
+                }))
+            );
+
+            inventory.RegularCredits = 25000;
+            inventory.FusionPoints = 180;
+        }
+
         await inventory.save();
     } catch (error) {
-        if (error instanceof Error) {
-            throw new Error(`error creating inventory" ${error.message}`);
-        }
-        throw new Error("error creating inventory that is not of instance Error");
+        throw new Error(`Error creating inventory: ${error instanceof Error ? error.message : "Unknown error"}`);
     }
 };
 

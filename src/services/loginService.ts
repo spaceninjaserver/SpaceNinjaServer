@@ -5,7 +5,6 @@ import { createShip } from "./shipService";
 import { Document, Types } from "mongoose";
 import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
 import { PersonalRooms } from "@/src/models/personalRoomsModel";
-import new_personal_rooms from "@/static/fixed_responses/personalRooms.json";
 import { Request } from "express";
 import { config } from "@/src/services/configService";
 
@@ -42,10 +41,21 @@ export const createLoadout = async (accountId: Types.ObjectId): Promise<Types.Ob
 
 export const createPersonalRooms = async (accountId: Types.ObjectId, shipId: Types.ObjectId): Promise<void> => {
     const personalRooms = new PersonalRooms({
-        ...new_personal_rooms,
         personalRoomsOwnerId: accountId,
         activeShipId: shipId
     });
+    if (config.skipTutorial) {
+        // Vor's Prize rewards
+        const defaultFeatures = [
+            "/Lotus/Types/Items/ShipFeatureItems/EarthNavigationFeatureItem",
+            "/Lotus/Types/Items/ShipFeatureItems/MercuryNavigationFeatureItem",
+            "/Lotus/Types/Items/ShipFeatureItems/ArsenalFeatureItem",
+            "/Lotus/Types/Items/ShipFeatureItems/SocialMenuFeatureItem",
+            "/Lotus/Types/Items/ShipFeatureItems/FoundryFeatureItem",
+            "/Lotus/Types/Items/ShipFeatureItems/ModsFeatureItem"
+        ];
+        personalRooms.Ship.Features.push(...defaultFeatures);
+    }
     await personalRooms.save();
 };
 
