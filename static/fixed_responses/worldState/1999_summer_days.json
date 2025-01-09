@@ -1,0 +1,195 @@
+[
+  {
+    "day": 186,
+    "events": [
+      {
+        "type": "CET_CHALLENGE",
+        "challenge": "\/Lotus\/Types\/Challenges\/Calendar1999\/CalendarKillScaldraEnemiesEasy"
+      }
+    ]
+  },
+  {
+    "day": 191,
+    "events": [
+      {
+        "type": "CET_PLOT",
+        "dialogueName": "\/Lotus\/Types\/Gameplay\/1999Wf\/Dialogue\/AoiDialogue_rom.dialogue",
+        "dialogueConvo": "AoiBirthdayConvo"
+      }
+    ]
+  },
+  {
+    "day": 193,
+    "events": [
+      {
+        "type": "CET_REWARD",
+        "reward": "\/Lotus\/StoreItems\/Types\/Gameplay\/NarmerSorties\/ArchonCrystalAmar"
+      },
+      {
+        "type": "CET_REWARD",
+        "reward": "\/Lotus\/StoreItems\/Types\/BoosterPacks\/CalendarMajorArtifactPack"
+      }
+    ]
+  },
+  {
+    "day": 197,
+    "events": [
+      {
+        "type": "CET_UPGRADE",
+        "upgrade": "\/Lotus\/Upgrades\/Calendar\/MeleeAttackSpeed"
+      },
+      {
+        "type": "CET_UPGRADE",
+        "upgrade": "\/Lotus\/Upgrades\/Calendar\/AbilityStrength"
+      },
+      {
+        "type": "CET_UPGRADE",
+        "upgrade": "\/Lotus\/Upgrades\/Calendar\/CompanionDamage"
+      }
+    ]
+  },
+  {
+    "day": 199,
+    "events": [
+      {
+        "type": "CET_CHALLENGE",
+        "challenge": "\/Lotus\/Types\/Challenges\/Calendar1999\/CalendarKillScaldraEnemiesWithMeleeMedium"
+      }
+    ]
+  },
+  {
+    "day": 210,
+    "events": [
+      {
+        "type": "CET_REWARD",
+        "reward": "\/Lotus\/StoreItems\/Types\/BoosterPacks\/CalendarArtifactPack"
+      },
+      {
+        "type": "CET_REWARD",
+        "reward": "\/Lotus\/StoreItems\/Upgrades\/Mods\/FusionBundles\/CircuitSilverSteelPathFusionBundle"
+      }
+    ]
+  },
+  {
+    "day": 215,
+    "events": [
+      {
+        "type": "CET_CHALLENGE",
+        "challenge": "\/Lotus\/Types\/Challenges\/Calendar1999\/CalendarKillTechrotEnemiesWithMeleeEasy"
+      }
+    ]
+  },
+  {
+    "day": 228,
+    "events": [
+      {
+        "type": "CET_REWARD",
+        "reward": "\/Lotus\/StoreItems\/Types\/Recipes\/Components\/WeaponUtilityUnlockerBlueprint"
+      },
+      {
+        "type": "CET_REWARD",
+        "reward": "\/Lotus\/StoreItems\/Types\/BoosterPacks\/CalendarRivenPack"
+      }
+    ]
+  },
+  {
+    "day": 236,
+    "events": [
+      {
+        "type": "CET_CHALLENGE",
+        "challenge": "\/Lotus\/Types\/Challenges\/Calendar1999\/CalendarDestroyPropsMedium"
+      }
+    ]
+  },
+  {
+    "day": 237,
+    "events": [
+      {
+        "type": "CET_REWARD",
+        "reward": "\/Lotus\/Types\/StoreItems\/Packages\/Calendar\/CalendarKuvaBundleLarge"
+      },
+      {
+        "type": "CET_REWARD",
+        "reward": "\/Lotus\/StoreItems\/Types\/BoosterPacks\/CalendarMajorArtifactPack"
+      }
+    ]
+  },
+  {
+    "day": 240,
+    "events": [
+      {
+        "type": "CET_UPGRADE",
+        "upgrade": "\/Lotus\/Upgrades\/Calendar\/RadialJavelinOnHeavy"
+      },
+      {
+        "type": "CET_UPGRADE",
+        "upgrade": "\/Lotus\/Upgrades\/Calendar\/SharedFreeAbilityEveryXCasts"
+      },
+      {
+        "type": "CET_UPGRADE",
+        "upgrade": "\/Lotus\/Upgrades\/Calendar\/CompanionsRadiationChance"
+      }
+    ]
+  },
+  {
+    "day": 245,
+    "events": [
+      {
+        "type": "CET_CHALLENGE",
+        "challenge": "\/Lotus\/Types\/Challenges\/Calendar1999\/CalendarKillEnemiesWithAbilitiesHard"
+      }
+    ]
+  },
+  {
+    "day": 250,
+    "events": [
+      {
+        "type": "CET_REWARD",
+        "reward": "\/Lotus\/Types\/StoreItems\/Boosters\/AffinityBooster3DayStoreItem"
+      },
+      {
+        "type": "CET_REWARD",
+        "reward": "\/Lotus\/StoreItems\/Types\/Recipes\/Components\/OrokinReactorBlueprint"
+      }
+    ]
+  },
+  {
+    "day": 254,
+    "events": [
+      {
+        "type": "CET_CHALLENGE",
+        "challenge": "\/Lotus\/Types\/Challenges\/Calendar1999\/CalendarKillTankHard"
+      }
+    ]
+  },
+  {
+    "day": 267,
+    "events": [
+      {
+        "type": "CET_REWARD",
+        "reward": "\/Lotus\/StoreItems\/Types\/BoosterPacks\/CalendarArtifactPack"
+      },
+      {
+        "type": "CET_REWARD",
+        "reward": "\/Lotus\/StoreItems\/Types\/Items\/MiscItems\/WeaponSecondaryArcaneUnlocker"
+      }
+    ]
+  },
+  {
+    "day": 270,
+    "events": [
+      {
+        "type": "CET_UPGRADE",
+        "upgrade": "\/Lotus\/Upgrades\/Calendar\/EnergyOrbToAbilityRange"
+      },
+      {
+        "type": "CET_UPGRADE",
+        "upgrade": "\/Lotus\/Upgrades\/Calendar\/PunchToPrimary"
+      },
+      {
+        "type": "CET_UPGRADE",
+        "upgrade": "\/Lotus\/Upgrades\/Calendar\/OvershieldCap"
+      }
+    ]
+  }
+]

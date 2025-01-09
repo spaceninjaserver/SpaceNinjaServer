@@ -1,5 +1,9 @@
 import { RequestHandler } from "express";
-import staticWorldState from "@/static/fixed_responses/worldState.json";
+import staticWorldState from "@/static/fixed_responses/worldState/worldState.json";
+import static1999FallDays from "@/static/fixed_responses/worldState/1999_fall_days.json";
+import static1999SpringDays from "@/static/fixed_responses/worldState/1999_spring_days.json";
+import static1999SummerDays from "@/static/fixed_responses/worldState/1999_summer_days.json";
+import static1999WinterDays from "@/static/fixed_responses/worldState/1999_winter_days.json";
 import { buildConfig } from "@/src/services/buildConfigService";
 import { IMongoDate, IOid } from "@/src/types/commonTypes";
 
@@ -14,7 +18,10 @@ export const worldStateController: RequestHandler = (req, res) => {
         ...staticWorldState
     };
 
-    const week = Math.trunc(new Date().getTime() / 604800000);
+    const day = Math.trunc(new Date().getTime() / 86400000);
+    const week = Math.trunc((day + 4) / 7); // week begins on mondays
+    const weekStart = week * 604800000;
+    const weekEnd = weekStart + 604800000;
 
     // Elite Sanctuary Onslaught cycling every week
     worldState.NodeOverrides.find(x => x.Node == "SolNode802")!.Seed = week; // unfaithful
@@ -79,6 +86,17 @@ export const worldStateController: RequestHandler = (req, res) => {
         ][week % 8]
     });
 
+    // 1999 Calendar Season cycling every week
+    worldState.KnownCalendarSeasons[0].Activation = { $date: { $numberLong: weekStart.toString() } };
+    worldState.KnownCalendarSeasons[0].Expiry = { $date: { $numberLong: weekEnd.toString() } };
+    worldState.KnownCalendarSeasons[0].Season = ["CST_WINTER", "CST_SPRING", "CST_SUMMER", "CST_FALL"][week % 4];
+    worldState.KnownCalendarSeasons[0].Days = [
+        static1999WinterDays,
+        static1999SpringDays,
+        static1999SummerDays,
+        static1999FallDays
+    ][week % 4];
+
     res.json(worldState);
 };
 
@@ -88,6 +106,7 @@ interface IWorldState {
     SyndicateMissions: ISyndicateMission[];
     NodeOverrides: INodeOverride[];
     EndlessXpChoices: IEndlessXpChoice[];
+    KnownCalendarSeasons: ICalendarSeason[];
 }
 
 interface ISyndicateMission {
@@ -114,4 +133,13 @@ interface INodeOverride {
 interface IEndlessXpChoice {
     Category: string;
     Choices: string[];
+}
+
+interface ICalendarSeason {
+    Activation: IMongoDate;
+    Expiry: IMongoDate;
+    Season: string; // "CST_UNDEFINED" | "CST_WINTER" | "CST_SPRING" | "CST_SUMMER" | "CST_FALL"
+    Days: {
+        day: number;
+    }[];
 }

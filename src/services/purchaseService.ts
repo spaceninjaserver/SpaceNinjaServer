@@ -14,7 +14,7 @@ import { getVendorManifestByOid } from "@/src/services/serversideVendorsService"
 import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IPurchaseRequest, IPurchaseResponse, SlotPurchase, IInventoryChanges } from "@/src/types/purchaseTypes";
 import { logger } from "@/src/utils/logger";
-import worldState from "@/static/fixed_responses/worldState.json";
+import worldState from "@/static/fixed_responses/worldState/worldState.json";
 import {
     ExportBoosterPacks,
     ExportBundles,
