@@ -1,23 +1,42 @@
 {
   "Inbox": [
     {
-      "sndr": "/Lotus/Language/Bosses/Ordis",
-      "msg": "/Lotus/Language/Inbox/ThankYouFreeMultipleContent",
+      "sub": "/Lotus/Language/Inbox/DarvoWeaponCraftingMessageBTitle",
+      "sndr": "/Lotus/Language/Bosses/Darvo",
+      "msg": "/Lotus/Language/Inbox/DarvoWeaponCraftingMessageBDesc",
+      "icon": "/Lotus/Interface/Icons/Npcs/Darvo.png",
       "countedAtt": [
         {
-          "ItemType": "/Lotus/Upgrades/Skins/Promo/Twitch/OgrisTwitchSkin",
-          "ItemCount": 1
+          "ItemCount": 1,
+          "ItemType": "/Lotus/Types/Recipes/Weapons/BurstonRifleBlueprint"
         },
         {
-          "ItemType": "/Lotus/Weapons/ClanTech/Chemical/RocketLauncher",
-          "ItemCount": 1
+          "ItemCount": 1,
+          "ItemType": "/Lotus/Types/Items/MiscItems/Morphic"
+        },
+        {
+          "ItemCount": 400,
+          "ItemType": "/Lotus/Types/Items/MiscItems/PolymerBundle"
+        },
+        {
+          "ItemCount": 150,
+          "ItemType": "/Lotus/Types/Items/MiscItems/AlloyPlate"
         }
       ],
-      "sub": "/Lotus/Language/Inbox/ThankYouFreeMultipleSubject",
-      "icon": "/Lotus/Interface/Icons/Npcs/Ordis.png",
       "highPriority": true,
-      "messageId": "removed",
-      "date": { "$date": { "$numberLong": "removed" } },
+      "messageId": "66d651800000000000000000",
+      "date": { "$date": { "$numberLong": "1725321600000" } },
+      "r": true
+    },
+    {
+      "sub": "/Lotus/Language/G1Quests/Beginner_Growth_Inbox_Title",
+      "sndr": "/Lotus/Language/Menu/Mailbox_WarframeSender",
+      "msg": "/Lotus/Language/G1Quests/Beginner_Growth_Inbox_Desc",
+      "icon": "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+      "transmission": "/Lotus/Sounds/Dialog/VorsPrize/DLisetPostAssassinate110Lotus",
+      "highPriority": true,
+      "messageId": "66d651810000000000000000",
+      "date": { "$date": { "$numberLong": "1725321601000" } },
       "r": true
     }
   ]
