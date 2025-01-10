@@ -5,51 +5,48 @@ import { IMongoDate, IOid } from "@/src/types/commonTypes";
 
 export const worldStateController: RequestHandler = (req, res) => {
     const worldState: IWorldState = {
-        ...staticWorldState,
         BuildLabel:
             typeof req.query.buildLabel == "string"
                 ? req.query.buildLabel.split(" ").join("+")
                 : buildConfig.buildLabel,
-        Time: Math.round(Date.now() / 1000)
+        Time: Math.round(Date.now() / 1000),
+        EndlessXpChoices: [],
+        ...staticWorldState
     };
 
     const week = Math.trunc(new Date().getTime() / 604800000);
 
     // Elite Sanctuary Onslaught cycling every week
-    worldState.NodeOverrides.push({
-        _id: { $oid: "5ad9f9bb6df82a56eabf3d44" },
-        Node: "SolNode802",
-        Seed: week // unfaithful
-    });
+    worldState.NodeOverrides.find(x => x.Node == "SolNode802")!.Seed = week; // unfaithful
 
     // Holdfast, Cavia, & Hex bounties cycling every 2.5 hours; unfaithful implementation
     const bountyCycle = Math.trunc(new Date().getTime() / 9000000);
     const bountyCycleStart = bountyCycle * 9000000;
     const bountyCycleEnd = bountyCycleStart + 9000000;
-    worldState.SyndicateMissions.push({
+    worldState.SyndicateMissions[worldState.SyndicateMissions.findIndex(x => x.Tag == "ZarimanSyndicate")] = {
         _id: { $oid: bountyCycleStart.toString(16) + "0000000000000029" },
         Activation: { $date: { $numberLong: bountyCycleStart.toString() } },
         Expiry: { $date: { $numberLong: bountyCycleEnd.toString() } },
         Tag: "ZarimanSyndicate",
         Seed: bountyCycle,
         Nodes: []
-    });
-    worldState.SyndicateMissions.push({
+    };
+    worldState.SyndicateMissions[worldState.SyndicateMissions.findIndex(x => x.Tag == "EntratiLabSyndicate")] = {
         _id: { $oid: bountyCycleStart.toString(16) + "0000000000000004" },
         Activation: { $date: { $numberLong: bountyCycleStart.toString() } },
         Expiry: { $date: { $numberLong: bountyCycleEnd.toString() } },
         Tag: "EntratiLabSyndicate",
         Seed: bountyCycle,
         Nodes: []
-    });
-    worldState.SyndicateMissions.push({
+    };
+    worldState.SyndicateMissions[worldState.SyndicateMissions.findIndex(x => x.Tag == "HexSyndicate")] = {
         _id: { $oid: bountyCycleStart.toString(16) + "0000000000000006" },
         Activation: { $date: { $numberLong: bountyCycleStart.toString(10) } },
         Expiry: { $date: { $numberLong: bountyCycleEnd.toString(10) } },
         Tag: "HexSyndicate",
         Seed: bountyCycle,
         Nodes: []
-    });
+    };
 
     // Circuit choices cycling every week
     worldState.EndlessXpChoices.push({
