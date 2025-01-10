@@ -5,12 +5,13 @@ import { IMongoDate, IOid } from "@/src/types/commonTypes";
 
 export const worldStateController: RequestHandler = (req, res) => {
     const worldState: IWorldState = {
-        ...staticWorldState,
         BuildLabel:
             typeof req.query.buildLabel == "string"
                 ? req.query.buildLabel.split(" ").join("+")
                 : buildConfig.buildLabel,
-        Time: Math.round(Date.now() / 1000)
+        Time: Math.round(Date.now() / 1000),
+        EndlessXpChoices: [],
+        ...staticWorldState
     };
 
     const week = Math.trunc(new Date().getTime() / 604800000);

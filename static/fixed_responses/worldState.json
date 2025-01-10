@@ -1078,7 +1078,6 @@
   "ConstructionProjects": [],
   "TwitchPromos": [],
   "ExperimentRecommended": [],
-  "EndlessXpChoices": [],
   "ForceLogoutVersion": 0,
   "SeasonInfo": {
     "Activation": { "$date": { "$numberLong": "1715796000000" } },
