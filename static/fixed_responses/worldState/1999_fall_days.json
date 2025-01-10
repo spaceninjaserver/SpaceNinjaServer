@@ -1,215 +1,77 @@
 [
-  {
-    "day": 276,
-    "events": [
-      {
-        "type": "CET_CHALLENGE",
-        "challenge": "\/Lotus\/Types\/Challenges\/Calendar1999\/CalendarKillScaldraEnemiesEasy"
-      }
-    ]
-  },
+  { "day": 276, "events": [{ "type": "CET_CHALLENGE", "challenge": "/Lotus/Types/Challenges/Calendar1999/CalendarKillScaldraEnemiesEasy" }] },
   {
     "day": 283,
     "events": [
-      {
-        "type": "CET_UPGRADE",
-        "upgrade": "\/Lotus\/Upgrades\/Calendar\/CompanionDamage"
-      },
-      {
-        "type": "CET_UPGRADE",
-        "upgrade": "\/Lotus\/Upgrades\/Calendar\/GasChanceToPrimaryAndSecondary"
-      },
-      {
-        "type": "CET_UPGRADE",
-        "upgrade": "\/Lotus\/Upgrades\/Calendar\/ElectricStatusDamageAndChance"
-      }
+      { "type": "CET_UPGRADE", "upgrade": "/Lotus/Upgrades/Calendar/CompanionDamage" },
+      { "type": "CET_UPGRADE", "upgrade": "/Lotus/Upgrades/Calendar/GasChanceToPrimaryAndSecondary" },
+      { "type": "CET_UPGRADE", "upgrade": "/Lotus/Upgrades/Calendar/ElectricStatusDamageAndChance" }
     ]
   },
   {
     "day": 289,
     "events": [
-      {
-        "type": "CET_REWARD",
-        "reward": "\/Lotus\/StoreItems\/Types\/Items\/MiscItems\/WeaponUtilityUnlocker"
-      },
-      {
-        "type": "CET_REWARD",
-        "reward": "\/Lotus\/StoreItems\/Types\/BoosterPacks\/CalendarMajorArtifactPack"
-      }
+      { "type": "CET_REWARD", "reward": "/Lotus/StoreItems/Types/Items/MiscItems/WeaponUtilityUnlocker" },
+      { "type": "CET_REWARD", "reward": "/Lotus/StoreItems/Types/BoosterPacks/CalendarMajorArtifactPack" }
     ]
   },
-  {
-    "day": 295,
-    "events": [
-      {
-        "type": "CET_CHALLENGE",
-        "challenge": "\/Lotus\/Types\/Challenges\/Calendar1999\/CalendarKillEnemiesWithMeleeEasy"
-      }
-    ]
-  },
+  { "day": 295, "events": [{ "type": "CET_CHALLENGE", "challenge": "/Lotus/Types/Challenges/Calendar1999/CalendarKillEnemiesWithMeleeEasy" }] },
   {
     "day": 302,
     "events": [
-      {
-        "type": "CET_REWARD",
-        "reward": "\/Lotus\/StoreItems\/Types\/BoosterPacks\/CalendarArtifactPack"
-      },
-      {
-        "type": "CET_REWARD",
-        "reward": "\/Lotus\/StoreItems\/Types\/Items\/MiscItems\/WeaponSecondaryArcaneUnlocker"
-      }
+      { "type": "CET_REWARD", "reward": "/Lotus/StoreItems/Types/BoosterPacks/CalendarArtifactPack" },
+      { "type": "CET_REWARD", "reward": "/Lotus/StoreItems/Types/Items/MiscItems/WeaponSecondaryArcaneUnlocker" }
     ]
   },
-  {
-    "day": 305,
-    "events": [
-      {
-        "type": "CET_CHALLENGE",
-        "challenge": "\/Lotus\/Types\/Challenges\/Calendar1999\/CalendarKillEximusMedium"
-      }
-    ]
-  },
-  {
-    "day": 306,
-    "events": [
-      {
-        "type": "CET_PLOT",
-        "dialogueName": "\/Lotus\/Types\/Gameplay\/1999Wf\/Dialogue\/EleanorDialogue_rom.dialogue",
-        "dialogueConvo": "EleanorBirthdayConvo"
-      }
-    ]
-  },
-  {
-    "day": 307,
-    "events": [
-      {
-        "type": "CET_PLOT",
-        "dialogueName": "\/Lotus\/Types\/Gameplay\/1999Wf\/Dialogue\/ArthurDialogue_rom.dialogue",
-        "dialogueConvo": "ArthurBirthdayConvo"
-      }
-    ]
-  },
+  { "day": 305, "events": [{ "type": "CET_CHALLENGE", "challenge": "/Lotus/Types/Challenges/Calendar1999/CalendarKillEximusMedium" }] },
+  { "day": 306, "events": [{ "type": "CET_PLOT", "dialogueName": "/Lotus/Types/Gameplay/1999Wf/Dialogue/EleanorDialogue_rom.dialogue", "dialogueConvo": "EleanorBirthdayConvo" }] },
+  { "day": 307, "events": [{ "type": "CET_PLOT", "dialogueName": "/Lotus/Types/Gameplay/1999Wf/Dialogue/ArthurDialogue_rom.dialogue", "dialogueConvo": "ArthurBirthdayConvo" }] },
   {
     "day": 309,
     "events": [
-      {
-        "type": "CET_REWARD",
-        "reward": "\/Lotus\/StoreItems\/Types\/Items\/MiscItems\/Forma"
-      },
-      {
-        "type": "CET_REWARD",
-        "reward": "\/Lotus\/StoreItems\/Types\/Gameplay\/NarmerSorties\/ArchonCrystalBoreal"
-      }
+      { "type": "CET_REWARD", "reward": "/Lotus/StoreItems/Types/Items/MiscItems/Forma" },
+      { "type": "CET_REWARD", "reward": "/Lotus/StoreItems/Types/Gameplay/NarmerSorties/ArchonCrystalBoreal" }
     ]
   },
   {
     "day": 314,
     "events": [
-      {
-        "type": "CET_UPGRADE",
-        "upgrade": "\/Lotus\/Upgrades\/Calendar\/PowerStrengthAndEfficiencyPerEnergySpent"
-      },
-      {
-        "type": "CET_UPGRADE",
-        "upgrade": "\/Lotus\/Upgrades\/Calendar\/ElectricalDamageOnBulletJump"
-      },
-      {
-        "type": "CET_UPGRADE",
-        "upgrade": "\/Lotus\/Upgrades\/Calendar\/MeleeSlideFowardMomentumOnEnemyHit"
-      }
+      { "type": "CET_UPGRADE", "upgrade": "/Lotus/Upgrades/Calendar/PowerStrengthAndEfficiencyPerEnergySpent" },
+      { "type": "CET_UPGRADE", "upgrade": "/Lotus/Upgrades/Calendar/ElectricalDamageOnBulletJump" },
+      { "type": "CET_UPGRADE", "upgrade": "/Lotus/Upgrades/Calendar/MeleeSlideFowardMomentumOnEnemyHit" }
     ]
   },
-  {
-    "day": 322,
-    "events": [
-      {
-        "type": "CET_CHALLENGE",
-        "challenge": "\/Lotus\/Types\/Challenges\/Calendar1999\/CalendarKillEnemiesMedium"
-      }
-    ]
-  },
+  { "day": 322, "events": [{ "type": "CET_CHALLENGE", "challenge": "/Lotus/Types/Challenges/Calendar1999/CalendarKillEnemiesMedium" }] },
   {
     "day": 328,
     "events": [
-      {
-        "type": "CET_REWARD",
-        "reward": "\/Lotus\/StoreItems\/Types\/Items\/MiscItems\/WeaponSecondaryArcaneUnlocker"
-      },
-      {
-        "type": "CET_REWARD",
-        "reward": "\/Lotus\/Types\/StoreItems\/Packages\/Calendar\/CalendarKuvaBundleSmall"
-      }
+      { "type": "CET_REWARD", "reward": "/Lotus/StoreItems/Types/Items/MiscItems/WeaponSecondaryArcaneUnlocker" },
+      { "type": "CET_REWARD", "reward": "/Lotus/Types/StoreItems/Packages/Calendar/CalendarKuvaBundleSmall" }
     ]
   },
-  {
-    "day": 337,
-    "events": [
-      {
-        "type": "CET_CHALLENGE",
-        "challenge": "\/Lotus\/Types\/Challenges\/Calendar1999\/CalendarKillScaldraEnemiesWithAbilitiesHard"
-      }
-    ]
-  },
-  {
-    "day": 338,
-    "events": [
-      {
-        "type": "CET_PLOT",
-        "dialogueName": "\/Lotus\/Types\/Gameplay\/1999Wf\/Dialogue\/QuincyDialogue_rom.dialogue",
-        "dialogueConvo": "QuincyBirthdayConvo"
-      }
-    ]
-  },
+  { "day": 337, "events": [{ "type": "CET_CHALLENGE", "challenge": "/Lotus/Types/Challenges/Calendar1999/CalendarKillScaldraEnemiesWithAbilitiesHard" }] },
+  { "day": 338, "events": [{ "type": "CET_PLOT", "dialogueName": "/Lotus/Types/Gameplay/1999Wf/Dialogue/QuincyDialogue_rom.dialogue", "dialogueConvo": "QuincyBirthdayConvo" }] },
   {
     "day": 340,
     "events": [
-      {
-        "type": "CET_UPGRADE",
-        "upgrade": "\/Lotus\/Upgrades\/Calendar\/MeleeCritChance"
-      },
-      {
-        "type": "CET_UPGRADE",
-        "upgrade": "\/Lotus\/Upgrades\/Calendar\/RadiationProcOnTakeDamage"
-      },
-      {
-        "type": "CET_UPGRADE",
-        "upgrade": "\/Lotus\/Upgrades\/Calendar\/AbilityStrength"
-      }
+      { "type": "CET_UPGRADE", "upgrade": "/Lotus/Upgrades/Calendar/MeleeCritChance" },
+      { "type": "CET_UPGRADE", "upgrade": "/Lotus/Upgrades/Calendar/RadiationProcOnTakeDamage" },
+      { "type": "CET_UPGRADE", "upgrade": "/Lotus/Upgrades/Calendar/AbilityStrength" }
     ]
   },
   {
     "day": 343,
     "events": [
-      {
-        "type": "CET_REWARD",
-        "reward": "\/Lotus\/StoreItems\/Types\/Items\/MiscItems\/WeaponPrimaryArcaneUnlocker"
-      },
-      {
-        "type": "CET_REWARD",
-        "reward": "\/Lotus\/StoreItems\/Types\/Items\/MiscItems\/FormaAura"
-      }
+      { "type": "CET_REWARD", "reward": "/Lotus/StoreItems/Types/Items/MiscItems/WeaponPrimaryArcaneUnlocker" },
+      { "type": "CET_REWARD", "reward": "/Lotus/StoreItems/Types/Items/MiscItems/FormaAura" }
     ]
   },
-  {
-    "day": 352,
-    "events": [
-      {
-        "type": "CET_CHALLENGE",
-        "challenge": "\/Lotus\/Types\/Challenges\/Calendar1999\/CalendarKillTankHard"
-      }
-    ]
-  },
+  { "day": 352, "events": [{ "type": "CET_CHALLENGE", "challenge": "/Lotus/Types/Challenges/Calendar1999/CalendarKillTankHard" }] },
   {
     "day": 364,
     "events": [
-      {
-        "type": "CET_REWARD",
-        "reward": "\/Lotus\/StoreItems\/Types\/BoosterPacks\/CalendarMajorArtifactPack"
-      },
-      {
-        "type": "CET_REWARD",
-        "reward": "\/Lotus\/Types\/StoreItems\/Boosters\/ModDropChanceBooster3DayStoreItem"
-      }
+      { "type": "CET_REWARD", "reward": "/Lotus/StoreItems/Types/BoosterPacks/CalendarMajorArtifactPack" },
+      { "type": "CET_REWARD", "reward": "/Lotus/Types/StoreItems/Boosters/ModDropChanceBooster3DayStoreItem" }
     ]
   }
 ]
