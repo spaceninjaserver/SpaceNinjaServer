@@ -690,6 +690,7 @@
     { "_id": { "$oid": "549b18e9b029cef5991d6aec" }, "Node": "EuropaHUB", "Hide": true },
     { "_id": { "$oid": "54a1737aeb658f6cbccf70ff" }, "Node": "ErisHUB", "Hide": true },
     { "_id": { "$oid": "54a736ddec12f80bd6e9e326" }, "Node": "VenusHUB", "Hide": true },
+    { "_id": { "$oid": "5ad9f9bb6df82a56eabf3d44" }, "Node": "SolNode802", "Seed": 9969639 },
     {
       "_id": { "$oid": "5b8817c2bd4f253264d6aa91" },
       "Node": "EarthHUB",

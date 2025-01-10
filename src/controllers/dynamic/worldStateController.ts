@@ -17,11 +17,7 @@ export const worldStateController: RequestHandler = (req, res) => {
     const week = Math.trunc(new Date().getTime() / 604800000);
 
     // Elite Sanctuary Onslaught cycling every week
-    worldState.NodeOverrides.push({
-        _id: { $oid: "5ad9f9bb6df82a56eabf3d44" },
-        Node: "SolNode802",
-        Seed: week // unfaithful
-    });
+    worldState.NodeOverrides.find(x => x.Node == "SolNode802")!.Seed = week; // unfaithful
 
     // Holdfast, Cavia, & Hex bounties cycling every 2.5 hours; unfaithful implementation
     const bountyCycle = Math.trunc(new Date().getTime() / 9000000);
