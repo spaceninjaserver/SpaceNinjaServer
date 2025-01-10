@@ -27,30 +27,30 @@ export const worldStateController: RequestHandler = (req, res) => {
     const bountyCycle = Math.trunc(new Date().getTime() / 9000000);
     const bountyCycleStart = bountyCycle * 9000000;
     const bountyCycleEnd = bountyCycleStart + 9000000;
-    worldState.SyndicateMissions.push({
+    worldState.SyndicateMissions[worldState.SyndicateMissions.findIndex(x => x.Tag == "ZarimanSyndicate")] = {
         _id: { $oid: bountyCycleStart.toString(16) + "0000000000000029" },
         Activation: { $date: { $numberLong: bountyCycleStart.toString() } },
         Expiry: { $date: { $numberLong: bountyCycleEnd.toString() } },
         Tag: "ZarimanSyndicate",
         Seed: bountyCycle,
         Nodes: []
-    });
-    worldState.SyndicateMissions.push({
+    };
+    worldState.SyndicateMissions[worldState.SyndicateMissions.findIndex(x => x.Tag == "EntratiLabSyndicate")] = {
         _id: { $oid: bountyCycleStart.toString(16) + "0000000000000004" },
         Activation: { $date: { $numberLong: bountyCycleStart.toString() } },
         Expiry: { $date: { $numberLong: bountyCycleEnd.toString() } },
         Tag: "EntratiLabSyndicate",
         Seed: bountyCycle,
         Nodes: []
-    });
-    worldState.SyndicateMissions.push({
+    };
+    worldState.SyndicateMissions[worldState.SyndicateMissions.findIndex(x => x.Tag == "HexSyndicate")] = {
         _id: { $oid: bountyCycleStart.toString(16) + "0000000000000006" },
         Activation: { $date: { $numberLong: bountyCycleStart.toString(10) } },
         Expiry: { $date: { $numberLong: bountyCycleEnd.toString(10) } },
         Tag: "HexSyndicate",
         Seed: bountyCycle,
         Nodes: []
-    });
+    };
 
     // Circuit choices cycling every week
     worldState.EndlessXpChoices.push({
