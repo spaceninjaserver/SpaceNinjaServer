@@ -79,13 +79,6 @@ export interface IPlacedDecosClient extends Omit<IPlacedDecosDatabase, "_id"> {
     id: IOid;
 }
 
-export interface ISetShipCustomizationsRequest {
-    ShipId: string;
-    Customization: Customization;
-    IsExterior: boolean;
-    AirSupportPower?: string;
-}
-
 export interface Customization {
     SkinFlavourItem: string;
     Colors: IColor;
@@ -95,36 +88,6 @@ export interface Customization {
 //TODO: check for more attachments
 export interface ShipAttachments {
     HOOD_ORNAMENT: string;
-}
-
-export interface IShipDecorationsRequest {
-    Type: string;
-    Pos: [number, number, number];
-    Rot: [number, number, number];
-    Room: string;
-    BootLocation?: TBootLocation;
-    IsApartment?: boolean;
-    RemoveId?: string;
-    MoveId?: string;
-    OldRoom?: string;
-    Scale?: number;
-}
-
-export interface IShipDecorationsResponse {
-    DecoId?: string;
-    Room?: string;
-    IsApartment?: boolean;
-    MaxCapacityIncrease?: number;
-    OldRoom?: string;
-    NewRoom?: string;
-}
-
-export interface ISetPlacedDecoInfoRequest {
-    DecoType: string;
-    DecoId: string;
-    Room: string;
-    PictureFrameInfo: IPictureFrameInfo;
-    BootLocation: string;
 }
 
 export interface IPictureFrameInfo {
