@@ -250,7 +250,7 @@ export interface IInventoryResponse {
     CompletedJobChains: ICompletedJobChain[];
     SeasonChallengeHistory: ISeasonChallenge[];
     MoaPets: IEquipmentDatabase[];
-    EquippedInstrument: string;
+    EquippedInstrument?: string;
     InvasionChainProgress: IInvasionChainProgress[];
     DataKnives: IEquipmentDatabase[];
     Motorcycles: IEquipmentDatabase[];
