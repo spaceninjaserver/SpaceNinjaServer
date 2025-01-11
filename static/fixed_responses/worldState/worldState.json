@@ -1261,6 +1261,5 @@
       "Version": 17,
       "UpgradeAvaliabilityRequirements": ["/Lotus/Upgrades/Calendar/1999UpgradeApplicationRequirement"]
     }
-  ],
-  "Tmp": "{\"cavabegin\":\"1690761600\",\"PurchasePlatformLockEnabled\":true,\"tcsn\":true,\"pgr\":{\"ts\":\"1732572900\",\"en\":\"CUSTOM DECALS @ ZEVILA\",\"fr\":\"DECALS CUSTOM @ ZEVILA\",\"it\":\"DECALCOMANIE PERSONALIZZATE @ ZEVILA\",\"de\":\"AUFKLEBER NACH WUNSCH @ ZEVILA\",\"es\":\"CALCOMANÍAS PERSONALIZADAS @ ZEVILA\",\"pt\":\"DECALQUES PERSONALIZADOS NA ZEVILA\",\"ru\":\"ПОЛЬЗОВАТЕЛЬСКИЕ НАКЛЕЙКИ @ ЗеВиЛа\",\"pl\":\"NOWE NAKLEJKI @ ZEVILA\",\"uk\":\"КОРИСТУВАЦЬКІ ДЕКОЛІ @ ЗІВІЛА\",\"tr\":\"ÖZEL ÇIKARTMALAR @ ZEVILA\",\"ja\":\"カスタムデカール @ ゼビラ\",\"zh\":\"定制贴花认准泽威拉\",\"ko\":\"커스텀 데칼 @ ZEVILA\",\"tc\":\"自訂貼花 @ ZEVILA\",\"th\":\"รูปลอกสั่งทำที่ ZEVILA\"},\"ennnd\":true,\"mbrt\":true,\"sfn\":550}"
+  ]
 }
