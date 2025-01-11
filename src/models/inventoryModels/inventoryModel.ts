@@ -682,11 +682,11 @@ crewShipMembersSchema.set("toJSON", {
     virtuals: true,
     transform(_doc, ret) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        ret.SLOT_A = { ItemId: toOid(ret.SLOT_A) };
+        ret.SLOT_A ? { ItemId: toOid(ret.SLOT_A) } : null;
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        ret.SLOT_B = { ItemId: toOid(ret.SLOT_B) };
+        ret.SLOT_B ? { ItemId: toOid(ret.SLOT_B) } : null;
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        ret.SLOT_C = { ItemId: toOid(ret.SLOT_C) };
+        ret.SLOT_C ? { ItemId: toOid(ret.SLOT_C) } : null;
     }
 });
 
