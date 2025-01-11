@@ -1,35 +1,7 @@
 import { getPersonalRooms } from "@/src/services/personalRoomsService";
-import { getShip } from "@/src/services/shipService";
-import {
-    ISetShipCustomizationsRequest,
-    IShipDecorationsRequest,
-    IShipDecorationsResponse,
-    ISetPlacedDecoInfoRequest
-} from "@/src/types/shipTypes";
+import { IShipDecorationsRequest, IShipDecorationsResponse, ISetPlacedDecoInfoRequest } from "@/src/types/shipTypes";
 import { logger } from "@/src/utils/logger";
 import { Types } from "mongoose";
-
-export const setShipCustomizations = async (
-    accountId: string,
-    shipCustomization: ISetShipCustomizationsRequest
-): Promise<void> => {
-    if (shipCustomization.IsExterior) {
-        const ship = await getShip(new Types.ObjectId(shipCustomization.ShipId));
-        if (ship.ShipOwnerId.toString() == accountId) {
-            ship.set({
-                ShipExteriorColors: shipCustomization.Customization.Colors,
-                SkinFlavourItem: shipCustomization.Customization.SkinFlavourItem,
-                ShipAttachments: shipCustomization.Customization.ShipAttachments,
-                AirSupportPower: shipCustomization.AirSupportPower!
-            });
-            await ship.save();
-        }
-    } else {
-        const personalRooms = await getPersonalRooms(accountId);
-        personalRooms.ShipInteriorColors = shipCustomization.Customization.Colors;
-        await personalRooms.save();
-    }
-};
 
 export const handleSetShipDecorations = async (
     accountId: string,

@@ -79,13 +79,6 @@ export interface IPlacedDecosClient extends Omit<IPlacedDecosDatabase, "_id"> {
     id: IOid;
 }
 
-export interface ISetShipCustomizationsRequest {
-    ShipId: string;
-    Customization: Customization;
-    IsExterior: boolean;
-    AirSupportPower?: string;
-}
-
 export interface Customization {
     SkinFlavourItem: string;
     Colors: IColor;

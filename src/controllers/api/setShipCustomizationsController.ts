@@ -1,20 +1,35 @@
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { setShipCustomizations } from "@/src/services/shipCustomizationsService";
-import { ISetShipCustomizationsRequest } from "@/src/types/shipTypes";
-import { logger } from "@/src/utils/logger";
 import { RequestHandler } from "express";
+import { getAccountIdForRequest } from "@/src/services/loginService";
+import { getShip } from "@/src/services/shipService";
+import { getPersonalRooms } from "@/src/services/personalRoomsService";
+import { Types } from "mongoose";
+import { Customization } from "@/src/types/shipTypes";
 
 export const setShipCustomizationsController: RequestHandler = async (req, res) => {
-    try {
-        const accountId = await getAccountIdForRequest(req);
-        const setShipCustomizationsRequest = JSON.parse(req.body as string) as ISetShipCustomizationsRequest;
-
-        const setShipCustomizationsResponse = await setShipCustomizations(accountId, setShipCustomizationsRequest);
-        res.json(setShipCustomizationsResponse);
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            logger.error(`error in setShipCustomizationsController: ${error.message}`);
-            res.status(400).json({ error: error.message });
+    const accountId = await getAccountIdForRequest(req);
+    const shipCustomization = JSON.parse(req.body as string) as ISetShipCustomizationsRequest;
+    if (shipCustomization.IsExterior) {
+        const ship = await getShip(new Types.ObjectId(shipCustomization.ShipId));
+        if (ship.ShipOwnerId.toString() == accountId) {
+            ship.set({
+                ShipExteriorColors: shipCustomization.Customization.Colors,
+                SkinFlavourItem: shipCustomization.Customization.SkinFlavourItem,
+                ShipAttachments: shipCustomization.Customization.ShipAttachments,
+                AirSupportPower: shipCustomization.AirSupportPower!
+            });
+            await ship.save();
         }
+    } else {
+        const personalRooms = await getPersonalRooms(accountId);
+        personalRooms.ShipInteriorColors = shipCustomization.Customization.Colors;
+        await personalRooms.save();
     }
+    res.end();
 };
+
+interface ISetShipCustomizationsRequest {
+    ShipId: string;
+    Customization: Customization;
+    IsExterior: boolean;
+    AirSupportPower?: string;
+}
