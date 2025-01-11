@@ -142,6 +142,19 @@ export const addItem = async (
         } else if (ExportResources[typeName].productCategory == "CrewShips") {
             const inventoryChanges = addCrewShip(inventory, typeName);
             return { InventoryChanges: inventoryChanges };
+        } else if (ExportResources[typeName].productCategory == "ShipDecorations") {
+            const changes = [
+                {
+                    ItemType: typeName,
+                    ItemCount: quantity
+                } satisfies IMiscItem
+            ];
+            addShipDecorations(inventory, changes);
+            return {
+                InventoryChanges: {
+                    ShipDecorations: changes
+                }
+            };
         } else {
             const miscItemChanges = [
                 {
@@ -253,21 +266,6 @@ export const addItem = async (
                 }
             };
         }
-        case "Objects": {
-            // /Lotus/Objects/Tenno/Props/TnoLisetTextProjector (Note Beacon)
-            const changes = [
-                {
-                    ItemType: typeName,
-                    ItemCount: quantity
-                } satisfies IMiscItem
-            ];
-            addShipDecorations(inventory, changes);
-            return {
-                InventoryChanges: {
-                    ShipDecorations: changes
-                }
-            };
-        }
         case "Types":
             switch (typeName.substr(1).split("/")[2]) {
                 case "Sentinels": {
@@ -282,20 +280,6 @@ export const addItem = async (
                 }
                 case "Items": {
                     switch (typeName.substr(1).split("/")[3]) {
-                        case "ShipDecos": {
-                            const changes = [
-                                {
-                                    ItemType: typeName,
-                                    ItemCount: quantity
-                                } satisfies IMiscItem
-                            ];
-                            addShipDecorations(inventory, changes);
-                            return {
-                                InventoryChanges: {
-                                    ShipDecorations: changes
-                                }
-                            };
-                        }
                         default: {
                             const miscItemChanges = [
                                 {
