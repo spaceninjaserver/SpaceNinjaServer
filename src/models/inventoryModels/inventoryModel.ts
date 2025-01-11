@@ -42,7 +42,7 @@ import {
     ICrewShipPortGuns,
     ICrewShipCustomization,
     ICrewShipWeapon,
-    ICrewShipMembers,
+    ICrewShipMembersClient,
     ICrewShip,
     ICrewShipPilotWeapon,
     IShipExterior,
@@ -683,7 +683,7 @@ crewShipMembersSchema.set("toJSON", {
     virtuals: true,
     transform(_doc, obj) {
         const db = obj as ICrewShipMembersDatabase;
-        const client = obj as ICrewShipMembers;
+        const client = obj as ICrewShipMembersClient;
         client.SLOT_A = db.SLOT_A ? { ItemId: toOid(db.SLOT_A) } : undefined;
         client.SLOT_B = db.SLOT_B ? { ItemId: toOid(db.SLOT_B) } : undefined;
         client.SLOT_C = db.SLOT_C ? { ItemId: toOid(db.SLOT_C) } : undefined;

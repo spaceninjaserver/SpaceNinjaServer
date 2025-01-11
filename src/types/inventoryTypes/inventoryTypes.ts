@@ -426,12 +426,12 @@ export interface ICrewShip {
     Customization?: ICrewShipCustomization;
     ItemName: string;
     RailjackImage?: IFlavourItem;
-    CrewMembers?: ICrewShipMembers;
+    CrewMembers?: ICrewShipMembersClient;
     ItemId: IOid;
     _id: Types.ObjectId;
 }
 
-export interface ICrewShipMembers {
+export interface ICrewShipMembersClient {
     SLOT_A?: ISlot;
     SLOT_B?: ISlot;
     SLOT_C?: ISlot;
