@@ -90,28 +90,6 @@ export interface ShipAttachments {
     HOOD_ORNAMENT: string;
 }
 
-export interface IShipDecorationsRequest {
-    Type: string;
-    Pos: [number, number, number];
-    Rot: [number, number, number];
-    Room: string;
-    BootLocation?: TBootLocation;
-    IsApartment?: boolean;
-    RemoveId?: string;
-    MoveId?: string;
-    OldRoom?: string;
-    Scale?: number;
-}
-
-export interface IShipDecorationsResponse {
-    DecoId?: string;
-    Room?: string;
-    IsApartment?: boolean;
-    MaxCapacityIncrease?: number;
-    OldRoom?: string;
-    NewRoom?: string;
-}
-
 export interface ISetPlacedDecoInfoRequest {
     DecoType: string;
     DecoId: string;
