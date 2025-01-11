@@ -90,14 +90,6 @@ export interface ShipAttachments {
     HOOD_ORNAMENT: string;
 }
 
-export interface ISetPlacedDecoInfoRequest {
-    DecoType: string;
-    DecoId: string;
-    Room: string;
-    PictureFrameInfo: IPictureFrameInfo;
-    BootLocation: string;
-}
-
 export interface IPictureFrameInfo {
     Image: string;
     Filter: string;
