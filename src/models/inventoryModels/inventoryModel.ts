@@ -46,7 +46,8 @@ import {
     ICrewShip,
     ICrewShipPilotWeapon,
     IShipExterior,
-    IHelminthFoodRecord
+    IHelminthFoodRecord,
+    ICrewShipMembersDatabase
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -670,23 +671,22 @@ const crewShipCustomizationSchema = new Schema<ICrewShipCustomization>(
     { _id: false }
 );
 
-const crewShipMembersSchema = new Schema<ICrewShipMembers>(
+const crewShipMembersSchema = new Schema<ICrewShipMembersDatabase>(
     {
-        SLOT_A: Schema.Types.ObjectId,
-        SLOT_B: Schema.Types.ObjectId,
-        SLOT_C: Schema.Types.ObjectId
+        SLOT_A: { type: Schema.Types.ObjectId, required: false },
+        SLOT_B: { type: Schema.Types.ObjectId, required: false },
+        SLOT_C: { type: Schema.Types.ObjectId, required: false }
     },
     { _id: false }
 );
 crewShipMembersSchema.set("toJSON", {
     virtuals: true,
-    transform(_doc, ret) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        ret.SLOT_A = { ItemId: toOid(ret.SLOT_A) };
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        ret.SLOT_B = { ItemId: toOid(ret.SLOT_B) };
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        ret.SLOT_C = { ItemId: toOid(ret.SLOT_C) };
+    transform(_doc, obj) {
+        const db = obj as ICrewShipMembersDatabase;
+        const client = obj as ICrewShipMembers;
+        client.SLOT_A = db.SLOT_A ? { ItemId: toOid(db.SLOT_A) } : undefined;
+        client.SLOT_B = db.SLOT_B ? { ItemId: toOid(db.SLOT_B) } : undefined;
+        client.SLOT_C = db.SLOT_C ? { ItemId: toOid(db.SLOT_C) } : undefined;
     }
 });
 
