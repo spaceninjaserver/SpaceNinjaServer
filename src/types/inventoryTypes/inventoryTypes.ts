@@ -432,13 +432,19 @@ export interface ICrewShip {
 }
 
 export interface ICrewShipMembers {
-    SLOT_A: ISlot;
-    SLOT_B: ISlot;
-    SLOT_C: ISlot;
+    SLOT_A?: ISlot;
+    SLOT_B?: ISlot;
+    SLOT_C?: ISlot;
 }
 
 export interface ISlot {
     ItemId: IOid;
+}
+
+export interface ICrewShipMembersDatabase {
+    SLOT_A?: Types.ObjectId;
+    SLOT_B?: Types.ObjectId;
+    SLOT_C?: Types.ObjectId;
 }
 
 export interface ICrewShipCustomization {
