@@ -794,26 +794,7 @@ $("#mod-to-acquire").on("input", () => {
     $("#mod-to-acquire").removeClass("is-invalid");
 });
 
-const uiConfigs = [
-    "autoCreateAccount",
-    "skipTutorial",
-    "skipAllDialogue",
-    "unlockAllScans",
-    "unlockAllMissions",
-    "unlockAllQuests",
-    "completeAllQuests",
-    "infiniteCredits",
-    "infinitePlatinum",
-    "infiniteEndo",
-    "infiniteRegalAya",
-    "unlockAllShipFeatures",
-    "unlockAllShipDecorations",
-    "unlockAllFlavourItems",
-    "unlockAllSkins",
-    "unlockAllCapturaScenes",
-    "universalPolarityEverywhere",
-    "spoofMasteryRank"
-];
+const uiConfigs = [...$("#server-settings input[id]")].map(x => x.id);
 
 function doChangeSettings() {
     fetch("/custom/config?" + window.authz)
