@@ -594,7 +594,10 @@ function addMissingWarframes() {
             requests.push({ type: "Powersuit", internalName: elm.getAttribute("data-key") });
         }
     });
-    if (requests.length != 0 && window.confirm("Are you sure you want to add " + requests.length + " items to your account?")) {
+    if (
+        requests.length != 0 &&
+        window.confirm("Are you sure you want to add " + requests.length + " items to your account?")
+    ) {
         dispatchAddItemsRequestsBatch(requests);
     }
 }
@@ -606,7 +609,10 @@ function addMissingWeapons() {
             requests.push({ type: "Weapon", internalName: elm.getAttribute("data-key") });
         }
     });
-    if (requests.length != 0 && window.confirm("Are you sure you want to add " + requests.length + " items to your account?")) {
+    if (
+        requests.length != 0 &&
+        window.confirm("Are you sure you want to add " + requests.length + " items to your account?")
+    ) {
         dispatchAddItemsRequestsBatch(requests);
     }
 }
