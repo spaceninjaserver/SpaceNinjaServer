@@ -26,7 +26,8 @@ export const syndicateStandingBonusController: RequestHandler = async (req, res)
 
     let syndicate = inventory.Affiliations.find(x => x.Tag == request.Operation.AffiliationTag);
     if (!syndicate) {
-        syndicate = inventory.Affiliations[inventory.Affiliations.push({ Tag: request.Operation.AffiliationTag, Standing: 0 })];
+        syndicate =
+            inventory.Affiliations[inventory.Affiliations.push({ Tag: request.Operation.AffiliationTag, Standing: 0 })];
     }
 
     const max = getMaxStanding(request.Operation.AffiliationTag, syndicate.Title ?? 0);
