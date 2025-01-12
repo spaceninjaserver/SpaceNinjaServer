@@ -327,90 +327,91 @@ function updateInventory() {
                 if (item.ItemType.substr(0, 32) == "/Lotus/Upgrades/Mods/Randomized/") {
                     const rivenType = item.ItemType.substr(32);
                     const fingerprint = JSON.parse(item.UpgradeFingerprint);
-
-                    const tr = document.createElement("tr");
-                    {
-                        const td = document.createElement("td");
-                        td.textContent = itemMap[fingerprint.compat]?.name ?? fingerprint.compat;
-                        td.textContent += " " + RivenParser.parseRiven(rivenType, fingerprint, 1).name;
-                        td.innerHTML += " <span title='Number of buffs'>▲ " + fingerprint.buffs.length + "</span>";
-                        td.innerHTML += " <span title='Number of curses'>▼ " + fingerprint.curses.length + "</span>";
-                        td.innerHTML +=
-                            " <span title='Number of rerolls'>⟳ " + parseInt(fingerprint.rerolls) + "</span>";
-                        tr.appendChild(td);
-                    }
-                    {
-                        const td = document.createElement("td");
-                        td.classList = "text-end";
+                    if (fingerprint.buffs) { // Riven has been revealed?
+                        const tr = document.createElement("tr");
                         {
-                            const a = document.createElement("a");
-                            a.href =
-                                "riven-tool/#" +
-                                encodeURIComponent(
-                                    JSON.stringify({
-                                        rivenType: rivenType,
-                                        omegaAttenuation: 1,
-                                        fingerprint: fingerprint
-                                    })
-                                );
-                            a.target = "_blank";
-                            a.title = "View Stats";
-                            a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H208c-26.5 0-48-21.5-48-48V80zM0 272c0-26.5 21.5-48 48-48H80c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V272zM368 96h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H368c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48z"/></svg>`;
-                            td.appendChild(a);
+                            const td = document.createElement("td");
+                            td.textContent = itemMap[fingerprint.compat]?.name ?? fingerprint.compat;
+                            td.textContent += " " + RivenParser.parseRiven(rivenType, fingerprint, 1).name;
+                            td.innerHTML += " <span title='Number of buffs'>▲ " + fingerprint.buffs.length + "</span>";
+                            td.innerHTML += " <span title='Number of curses'>▼ " + fingerprint.curses.length + "</span>";
+                            td.innerHTML +=
+                                " <span title='Number of rerolls'>⟳ " + parseInt(fingerprint.rerolls) + "</span>";
+                            tr.appendChild(td);
                         }
                         {
-                            const a = document.createElement("a");
-                            a.href = "#";
-                            a.onclick = function (event) {
-                                event.preventDefault();
-                                disposeOfGear("Upgrades", item.ItemId.$oid);
-                            };
-                            a.title = "Remove";
-                            a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
-                            td.appendChild(a);
+                            const td = document.createElement("td");
+                            td.classList = "text-end";
+                            {
+                                const a = document.createElement("a");
+                                a.href =
+                                    "riven-tool/#" +
+                                    encodeURIComponent(
+                                        JSON.stringify({
+                                            rivenType: rivenType,
+                                            omegaAttenuation: 1,
+                                            fingerprint: fingerprint
+                                        })
+                                    );
+                                a.target = "_blank";
+                                a.title = "View Stats";
+                                a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H208c-26.5 0-48-21.5-48-48V80zM0 272c0-26.5 21.5-48 48-48H80c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V272zM368 96h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H368c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48z"/></svg>`;
+                                td.appendChild(a);
+                            }
+                            {
+                                const a = document.createElement("a");
+                                a.href = "#";
+                                a.onclick = function (event) {
+                                    event.preventDefault();
+                                    disposeOfGear("Upgrades", item.ItemId.$oid);
+                                };
+                                a.title = "Remove";
+                                a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
+                                td.appendChild(a);
+                            }
+                            tr.appendChild(td);
                         }
-                        tr.appendChild(td);
+                        document.getElementById("riven-list").appendChild(tr);
+                        return;
                     }
-                    document.getElementById("riven-list").appendChild(tr);
-                } else {
-                    const tr = document.createElement("tr");
-                    const rank = parseInt(JSON.parse(item.UpgradeFingerprint).lvl);
-                    const maxRank = itemMap[item.ItemType]?.fusionLimit ?? 5;
-                    {
-                        const td = document.createElement("td");
-                        td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
-                        td.innerHTML += " <span title='Rank'>★ " + rank + "/" + maxRank + "</span>";
-                        tr.appendChild(td);
-                    }
-                    {
-                        const td = document.createElement("td");
-                        td.classList = "text-end";
-                        if (rank < maxRank) {
-                            const a = document.createElement("a");
-                            a.href = "#";
-                            a.onclick = function (event) {
-                                event.preventDefault();
-                                setFingerprint(item.ItemType, item.ItemId, { lvl: maxRank });
-                            };
-                            a.title = "Max Rank";
-                            a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"/></svg>`;
-                            td.appendChild(a);
-                        }
-                        {
-                            const a = document.createElement("a");
-                            a.href = "#";
-                            a.onclick = function (event) {
-                                event.preventDefault();
-                                disposeOfGear("Upgrades", item.ItemId.$oid);
-                            };
-                            a.title = "Remove";
-                            a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
-                            td.appendChild(a);
-                        }
-                        tr.appendChild(td);
-                    }
-                    document.getElementById("mods-list").appendChild(tr);
                 }
+                const tr = document.createElement("tr");
+                const rank = parseInt(JSON.parse(item.UpgradeFingerprint).lvl);
+                const maxRank = itemMap[item.ItemType]?.fusionLimit ?? 5;
+                {
+                    const td = document.createElement("td");
+                    td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
+                    td.innerHTML += " <span title='Rank'>★ " + rank + "/" + maxRank + "</span>";
+                    tr.appendChild(td);
+                }
+                {
+                    const td = document.createElement("td");
+                    td.classList = "text-end";
+                    if (rank < maxRank) {
+                        const a = document.createElement("a");
+                        a.href = "#";
+                        a.onclick = function (event) {
+                            event.preventDefault();
+                            setFingerprint(item.ItemType, item.ItemId, { lvl: maxRank });
+                        };
+                        a.title = "Max Rank";
+                        a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"/></svg>`;
+                        td.appendChild(a);
+                    }
+                    {
+                        const a = document.createElement("a");
+                        a.href = "#";
+                        a.onclick = function (event) {
+                            event.preventDefault();
+                            disposeOfGear("Upgrades", item.ItemId.$oid);
+                        };
+                        a.title = "Remove";
+                        a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
+                        td.appendChild(a);
+                    }
+                    tr.appendChild(td);
+                }
+                document.getElementById("mods-list").appendChild(tr);
             });
             data.RawUpgrades.forEach(item => {
                 if (item.ItemCount > 0) {
