@@ -158,12 +158,10 @@ export const inventoryController: RequestHandler = async (request, response) => 
 
     if (config.unlockAllSkins) {
         inventoryResponse.WeaponSkins = [];
-        let i = 0;
         for (const uniqueName in ExportCustoms) {
-            i++;
             inventoryResponse.WeaponSkins.push({
                 ItemId: {
-                    $oid: i.toString().padStart(24, "0")
+                    $oid: "ca70ca70ca70ca70" + catBreadHash(uniqueName).toString(16).padStart(8, "0")
                 },
                 ItemType: uniqueName
             });
@@ -250,4 +248,14 @@ const resourceGetParent = (resourceName: string): string | undefined => {
         return ExportResources[resourceName].parentName;
     }
     return ExportVirtuals[resourceName]?.parentName;
+};
+
+// This is FNV1a-32 except operating under modulus 2^31 because JavaScript is stinky and likes producing negative integers out of nowhere.
+const catBreadHash = (name: string): number => {
+    let hash = 2166136261;
+    for (let i = 0; i != name.length; ++i) {
+        hash = (hash ^ name.charCodeAt(i)) & 0x7fffffff;
+        hash = (hash * 16777619) & 0x7fffffff;
+    }
+    return hash;
 };
