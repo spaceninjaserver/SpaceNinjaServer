@@ -327,14 +327,16 @@ function updateInventory() {
                 if (item.ItemType.substr(0, 32) == "/Lotus/Upgrades/Mods/Randomized/") {
                     const rivenType = item.ItemType.substr(32);
                     const fingerprint = JSON.parse(item.UpgradeFingerprint);
-                    if (fingerprint.buffs) { // Riven has been revealed?
+                    if (fingerprint.buffs) {
+                        // Riven has been revealed?
                         const tr = document.createElement("tr");
                         {
                             const td = document.createElement("td");
                             td.textContent = itemMap[fingerprint.compat]?.name ?? fingerprint.compat;
                             td.textContent += " " + RivenParser.parseRiven(rivenType, fingerprint, 1).name;
                             td.innerHTML += " <span title='Number of buffs'>▲ " + fingerprint.buffs.length + "</span>";
-                            td.innerHTML += " <span title='Number of curses'>▼ " + fingerprint.curses.length + "</span>";
+                            td.innerHTML +=
+                                " <span title='Number of curses'>▼ " + fingerprint.curses.length + "</span>";
                             td.innerHTML +=
                                 " <span title='Number of rerolls'>⟳ " + parseInt(fingerprint.rerolls) + "</span>";
                             tr.appendChild(td);
