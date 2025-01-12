@@ -82,11 +82,11 @@
                 </form>
             </div>
             <div data-route="/webui/inventory" data-title="Inventory | OpenWF WebUI">
-                <p class="mb-4">
+                <p class="mb-3">
                     Note: Changes made here will only be reflected in-game when the game re-downloads your
                     inventory. Visiting the navigation should be the easiest way to trigger that.
                 </p>
-                <div class="card mb-4">
+                <div class="card mb-3">
                     <h5 class="card-header">Add Items</h5>
                     <form class="card-body input-group" onsubmit="doAcquireMiscItems();return false;">
                         <input class="form-control" id="miscitem-count" type="number" min="1" value="1" />
@@ -94,9 +94,9 @@
                         <button class="btn btn-primary" type="submit">Add</button>
                     </form>
                 </div>
-                <div class="row">
+                <div class="row g-3">
                     <div class="col-lg-6">
-                        <div class="card mb-4">
+                        <div class="card mb-3">
                             <h5 class="card-header">Warframes</h5>
                             <div class="card-body">
                                 <form class="input-group mb-3" onsubmit="doAcquireWarframe();return false;">
@@ -110,7 +110,7 @@
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <div class="card mb-4">
+                        <div class="card mb-3">
                             <h5 class="card-header">Weapons</h5>
                             <div class="card-body">
                                 <form class="input-group mb-3" onsubmit="doAcquireWeapon();return false;">
@@ -128,7 +128,7 @@
             <div id="powersuit-route" data-route="~ /webui/powersuit/(.+)" data-title="Inventory | OpenWF WebUI">
                 <h3 class="mb-0"></h3>
                 <p class="text-body-secondary"></p>
-                <div class="card mb-4">
+                <div class="card mb-3">
                     <h5 class="card-header">Archon Shard Slots</h5>
                     <div class="card-body">
                         <p>You can use these unlimited slots to apply a wide range of upgrades.</p>
@@ -145,13 +145,13 @@
                 </div>
             </div>
             <div data-route="/webui/mods" data-title="Mods | OpenWF WebUI">
-                <p class="mb-4">
+                <p class="mb-3">
                     Note: Changes made here will only be reflected in-game when the game re-downloads your
                     inventory. Visiting the navigation should be the easiest way to trigger that.
                 </p>
-                <div class="row">
+                <div class="row g-3">
                     <div class="col-xxl-6">
-                        <div class="card mb-4">
+                        <div class="card mb-3">
                             <h5 class="card-header">Add Riven</h5>
                             <form class="card-body" onsubmit="doAcquireRiven();return false;">
                                 <select class="form-control mb-3" id="addriven-type">
@@ -168,7 +168,7 @@
                                 <a href="riven-tool/" target="_blank">Need help with the fingerprint?</a>
                             </form>
                         </div>
-                        <div class="card mb-4">
+                        <div class="card mb-3">
                             <h5 class="card-header">Rivens</h5>
                             <div class="card-body">
                                 <table class="table table-hover w-100">
@@ -178,7 +178,7 @@
                         </div>
                     </div>
                     <div class="col-xxl-6">
-                        <div class="card mb-4">
+                        <div class="card mb-3">
                             <h5 class="card-header">Mods</h5>
                             <div class="card-body">
                                 <form class="input-group mb-3" onsubmit="doAcquireMod();return false;">
@@ -194,9 +194,9 @@
                 </div>
             </div>
             <div data-route="/webui/cheats, /webui/settings" data-title="Cheats | OpenWF WebUI">
-                <div class="row">
+                <div class="row g-3">
                     <div class="col-lg-4">
-                        <div class="card mb-4">
+                        <div class="card mb-3">
                             <h5 class="card-header">Server</h5>
                             <div class="card-body">
                                 <div id="server-settings-no-perms" class="d-none">
@@ -283,7 +283,7 @@
                         </div>
                     </div>
                     <div class="col-lg-4">
-                        <div class="card mb-4">
+                        <div class="card mb-3">
                             <h5 class="card-header">Account</h5>
                             <div class="card-body">
                                 <p><button class="btn btn-primary" onclick="doUnlockAllFocusSchools();">Unlock All Focus Schools</button></p>
@@ -292,7 +292,7 @@
                         </div>
                     </div>
                     <div class="col-lg-4">
-                        <div class="card mb-4">
+                        <div class="card mb-3">
                             <h5 class="card-header">Client</h5>
                             <div id="client-cheats-nok" class="card-body">
                                 Client cheats are currently unavailable. This could be because your client is not running or using a DLL without an HTTP interface.
