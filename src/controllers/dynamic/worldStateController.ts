@@ -20,7 +20,7 @@ export const worldStateController: RequestHandler = (req, res) => {
     };
 
     const day = Math.trunc(new Date().getTime() / 86400000);
-    const week = Math.trunc((day + 4) / 7); // week begins on mondays
+    const week = Math.trunc((day + 3) / 7); // week begins on mondays
     const weekStart = week * 604800000;
     const weekEnd = weekStart + 604800000;
 
