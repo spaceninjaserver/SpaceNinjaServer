@@ -8,6 +8,8 @@ import {
 } from "@/src/types/shipTypes";
 import { logger } from "@/src/utils/logger";
 import { Types } from "mongoose";
+import { addShipDecorations, getInventory } from "./inventoryService";
+import { config } from "./configService";
 
 export const setShipCustomizations = async (
     accountId: string,
@@ -106,17 +108,28 @@ export const handleSetShipDecorations = async (
         };
     }
 
-    //TODO: check whether to remove from shipitems
-
     if (placedDecoration.RemoveId) {
         roomToPlaceIn.PlacedDecos.pull({ _id: placedDecoration.RemoveId });
         await personalRooms.save();
+
+        if (!config.unlockAllShipDecorations) {
+            const inventory = await getInventory(accountId);
+            addShipDecorations(inventory, [{ ItemType: placedDecoration.Type, ItemCount: 1 }]);
+            await inventory.save();
+        }
+
         return {
             DecoId: placedDecoration.RemoveId,
             Room: placedDecoration.Room,
             IsApartment: placedDecoration.IsApartment,
             MaxCapacityIncrease: 0
         };
+    } else {
+        if (!config.unlockAllShipDecorations) {
+            const inventory = await getInventory(accountId);
+            addShipDecorations(inventory, [{ ItemType: placedDecoration.Type, ItemCount: -1 }]);
+            await inventory.save();
+        }
     }
 
     // TODO: handle capacity
