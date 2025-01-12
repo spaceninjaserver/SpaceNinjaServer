@@ -8,7 +8,7 @@ import { deleteAccountController } from "@/src/controllers/custom/deleteAccountC
 import { renameAccountController } from "@/src/controllers/custom/renameAccountController";
 
 import { createAccountController } from "@/src/controllers/custom/createAccountController";
-import { addItemController } from "@/src/controllers/custom/addItemController";
+import { addItemsController } from "@/src/controllers/custom/addItemsController";
 
 import { getConfigDataController } from "@/src/controllers/custom/getConfigDataController";
 import { updateConfigDataController } from "@/src/controllers/custom/updateConfigDataController";
@@ -23,7 +23,7 @@ customRouter.get("/deleteAccount", deleteAccountController);
 customRouter.get("/renameAccount", renameAccountController);
 
 customRouter.post("/createAccount", createAccountController);
-customRouter.post("/addItem", addItemController);
+customRouter.post("/addItems", addItemsController);
 
 customRouter.get("/config", getConfigDataController);
 customRouter.post("/config", updateConfigDataController);

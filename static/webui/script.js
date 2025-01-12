@@ -524,12 +524,14 @@ function doAcquireWarframe() {
     }
     revalidateAuthz(() => {
         const req = $.post({
-            url: "/custom/addItem?" + window.authz,
+            url: "/custom/addItems?" + window.authz,
             contentType: "application/json",
-            data: JSON.stringify({
-                type: "Powersuit",
-                internalName: uniqueName
-            })
+            data: JSON.stringify([
+                {
+                    type: "Powersuit",
+                    internalName: uniqueName
+                }
+            ])
         });
         req.done(() => {
             document.getElementById("warframe-to-acquire").value = "";
@@ -550,12 +552,14 @@ function doAcquireWeapon() {
     }
     revalidateAuthz(() => {
         const req = $.post({
-            url: "/custom/addItem?" + window.authz,
+            url: "/custom/addItems?" + window.authz,
             contentType: "application/json",
-            data: JSON.stringify({
-                type: "Weapon",
-                internalName: uniqueName
-            })
+            data: JSON.stringify([
+                {
+                    type: "Weapon",
+                    internalName: uniqueName
+                }
+            ])
         });
         req.done(() => {
             document.getElementById("weapon-to-acquire").value = "";
