@@ -24,15 +24,18 @@ export const syndicateStandingBonusController: RequestHandler = async (req, res)
     const inventory = await getInventory(accountId);
     addMiscItems(inventory, request.Operation.Items);
 
-    const syndicate = inventory.Affiliations.find(x => x.Tag == request.Operation.AffiliationTag);
-    if (syndicate !== undefined) {
-        syndicate.Standing += gainedStanding;
-    } else {
-        inventory.Affiliations.push({
-            Tag: request.Operation.AffiliationTag,
-            Standing: gainedStanding
-        });
+    let syndicate = inventory.Affiliations.find(x => x.Tag == request.Operation.AffiliationTag);
+    if (!syndicate) {
+        syndicate =
+            inventory.Affiliations[inventory.Affiliations.push({ Tag: request.Operation.AffiliationTag, Standing: 0 })];
     }
+
+    const max = getMaxStanding(request.Operation.AffiliationTag, syndicate.Title ?? 0);
+    if (syndicate.Standing + gainedStanding > max) {
+        gainedStanding = max - syndicate.Standing;
+    }
+
+    syndicate.Standing += gainedStanding;
 
     // TODO: Subtract from daily limit bin; maybe also a cheat to skip that.
 
@@ -59,3 +62,15 @@ interface ISyndicateStandingBonusRequest {
     };
     ModularWeaponId: IOid; // Seems to just be "000000000000000000000000", also note there's a "Category" query field
 }
+
+const getMaxStanding = (affiliationTag: string, title: number): number => {
+    const syndicate = ExportSyndicates[affiliationTag];
+    if (!syndicate.titles) {
+        // LibrarySyndicate
+        return 125000;
+    }
+    if (title == 0) {
+        return syndicate.titles.find(x => x.level == 1)!.minStanding;
+    }
+    return syndicate.titles.find(x => x.level == title)!.maxStanding;
+};
