@@ -19,9 +19,10 @@ export const worldStateController: RequestHandler = (req, res) => {
         ...staticWorldState
     };
 
-    const day = Math.trunc(new Date().getTime() / 86400000);
-    const week = Math.trunc((day + 3) / 7); // week begins on mondays
-    const weekStart = week * 604800000;
+    const EPOCH = 1734307200 * 1000; // Monday, Dec 16, 2024 @ 00:00 UTC+0; should logically be winter in 1999 iteration 0
+    const day = Math.trunc((new Date().getTime() - EPOCH) / 86400000);
+    const week = Math.trunc(day / 7);
+    const weekStart = EPOCH + week * 604800000;
     const weekEnd = weekStart + 604800000;
 
     // Elite Sanctuary Onslaught cycling every week
@@ -87,7 +88,7 @@ export const worldStateController: RequestHandler = (req, res) => {
         ][week % 8]
     });
 
-    // 1999 Calendar Season cycling every week
+    // 1999 Calendar Season cycling every week + YearIteration every 4 weeks
     worldState.KnownCalendarSeasons[0].Activation = { $date: { $numberLong: weekStart.toString() } };
     worldState.KnownCalendarSeasons[0].Expiry = { $date: { $numberLong: weekEnd.toString() } };
     worldState.KnownCalendarSeasons[0].Season = ["CST_WINTER", "CST_SPRING", "CST_SUMMER", "CST_FALL"][week % 4];
@@ -97,6 +98,7 @@ export const worldStateController: RequestHandler = (req, res) => {
         static1999SummerDays,
         static1999FallDays
     ][week % 4];
+    worldState.KnownCalendarSeasons[0].YearIteration = Math.trunc(week / 4);
 
     // Sentient Anomaly cycling every 30 minutes
     const halfHour = Math.trunc(new Date().getTime() / (unixTimesInMs.hour / 2));
@@ -174,4 +176,5 @@ interface ICalendarSeason {
     Days: {
         day: number;
     }[];
+    YearIteration: number;
 }
