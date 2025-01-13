@@ -19,9 +19,10 @@ export const worldStateController: RequestHandler = (req, res) => {
         ...staticWorldState
     };
 
-    const day = Math.trunc(new Date().getTime() / 86400000);
-    const week = Math.trunc((day + 3) / 7); // week begins on mondays
-    const weekStart = week * 604800000;
+    const EPOCH = 1734307200 * 1000; // Monday, Dec 16, 2024 @ 00:00 UTC+0; should logically be winter in 1999 iteration 0
+    const day = Math.trunc((new Date().getTime() - EPOCH) / 86400000);
+    const week = Math.trunc(day / 7);
+    const weekStart = EPOCH + week * 604800000;
     const weekEnd = weekStart + 604800000;
 
     // Elite Sanctuary Onslaught cycling every week
