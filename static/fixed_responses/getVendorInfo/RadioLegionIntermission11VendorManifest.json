@@ -1,11 +1,11 @@
 {
   "VendorInfo": {
     "_id": { "$oid": "664190400000000000000000" },
-    "TypeName": "/Lotus/Types/Game/VendorManifests/Events/RadioLegionIntermission10VendorManifest",
+    "TypeName": "/Lotus/Types/Game/VendorManifests/Events/RadioLegionIntermission11VendorManifest",
     "ItemManifest": [
       {
         "StoreItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/TrapperChassisBlueprint",
-        "ItemPrices": [{ "ItemCount": 25, "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionTenCreds", "ProductCategory": "MiscItems" }],
+        "ItemPrices": [{ "ItemCount": 25, "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionElevenCreds", "ProductCategory": "MiscItems" }],
         "Bin": "BIN_0",
         "QuantityMultiplier": 1,
         "Expiry": { "$date": { "$numberLong": "2051240400000" } },
@@ -14,7 +14,7 @@
       },
       {
         "StoreItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/TrapperSystemsBlueprint",
-        "ItemPrices": [{ "ItemCount": 25, "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionTenCreds", "ProductCategory": "MiscItems" }],
+        "ItemPrices": [{ "ItemCount": 25, "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionElevenCreds", "ProductCategory": "MiscItems" }],
         "Bin": "BIN_0",
         "QuantityMultiplier": 1,
         "Expiry": { "$date": { "$numberLong": "2051240400000" } },
@@ -23,7 +23,7 @@
       },
       {
         "StoreItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/TrapperHelmetBlueprint",
-        "ItemPrices": [{ "ItemCount": 25, "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionTenCreds", "ProductCategory": "MiscItems" }],
+        "ItemPrices": [{ "ItemCount": 25, "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionElevenCreds", "ProductCategory": "MiscItems" }],
         "Bin": "BIN_0",
         "QuantityMultiplier": 1,
         "Expiry": { "$date": { "$numberLong": "2051240400000" } },
@@ -32,7 +32,7 @@
       },
       {
         "StoreItem": "/Lotus/StoreItems/Types/Items/MiscItems/OrokinCatalyst",
-        "ItemPrices": [{ "ItemCount": 75, "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionTenCreds", "ProductCategory": "MiscItems" }],
+        "ItemPrices": [{ "ItemCount": 75, "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionElevenCreds", "ProductCategory": "MiscItems" }],
         "Bin": "BIN_0",
         "QuantityMultiplier": 1,
         "Expiry": { "$date": { "$numberLong": "2051240400000" } },
@@ -41,7 +41,7 @@
       },
       {
         "StoreItem": "/Lotus/StoreItems/Types/Items/MiscItems/OrokinReactor",
-        "ItemPrices": [{ "ItemCount": 75, "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionTenCreds", "ProductCategory": "MiscItems" }],
+        "ItemPrices": [{ "ItemCount": 75, "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionElevenCreds", "ProductCategory": "MiscItems" }],
         "Bin": "BIN_0",
         "QuantityMultiplier": 1,
         "Expiry": { "$date": { "$numberLong": "2051240400000" } },
@@ -50,7 +50,7 @@
       },
       {
         "StoreItem": "/Lotus/StoreItems/Types/Items/MiscItems/Alertium",
-        "ItemPrices": [{ "ItemCount": 15, "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionTenCreds", "ProductCategory": "MiscItems" }],
+        "ItemPrices": [{ "ItemCount": 15, "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionElevenCreds", "ProductCategory": "MiscItems" }],
         "Bin": "BIN_0",
         "QuantityMultiplier": 5,
         "Expiry": { "$date": { "$numberLong": "2051240400000" } },
@@ -59,7 +59,7 @@
       },
       {
         "StoreItem": "/Lotus/StoreItems/Types/Items/MiscItems/Kuva",
-        "ItemPrices": [{ "ItemCount": 50, "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionTenCreds", "ProductCategory": "MiscItems" }],
+        "ItemPrices": [{ "ItemCount": 50, "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionElevenCreds", "ProductCategory": "MiscItems" }],
         "Bin": "BIN_3",
         "QuantityMultiplier": 10000,
         "Expiry": { "$date": { "$numberLong": "2051240400000" } },
@@ -68,7 +68,7 @@
       },
       {
         "StoreItem": "/Lotus/StoreItems/Types/Items/ShipDecos/Nightwave/GlassmakerShipDeco",
-        "ItemPrices": [{ "ItemCount": 60, "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionTenCreds", "ProductCategory": "MiscItems" }],
+        "ItemPrices": [{ "ItemCount": 60, "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionElevenCreds", "ProductCategory": "MiscItems" }],
         "Bin": "BIN_0",
         "QuantityMultiplier": 1,
         "Expiry": { "$date": { "$numberLong": "2051240400000" } },
