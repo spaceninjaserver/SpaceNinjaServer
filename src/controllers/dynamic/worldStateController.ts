@@ -77,14 +77,14 @@ export const worldStateController: RequestHandler = (req, res) => {
     worldState.EndlessXpChoices.push({
         Category: "EXC_HARD",
         Choices: [
-            ["Brunt", "Soma", "Vasto", "Solo", "Burston"],
-            ["Zylok", "Sibear", "Dread", "Despair", "Hate"],
-            ["Dera", "Sybaris", "Cestra", "Sicarus", "Okina"],
-            ["Braton", "Lato", "Skana", "Paris", "Kunai"],
             ["Boar", "Gammacor", "Angstrum", "Gorgon", "Anku"],
             ["Bo", "Latron", "Furis", "Furax", "Strun"],
             ["Lex", "Magistar", "Boltor", "Bronco", "Dagger"],
-            ["Torid", "Toxocyst", "Ichor", "Miter", "Atomos"]
+            ["Torid", "Toxocyst", "Ichor", "Miter", "Atomos"],
+            ["AckAndBrunt", "Soma", "Vasto", "NamiSolo", "Burston"],
+            ["Zylok", "Sibear", "Dread", "Despair", "Hate"],
+            ["Dera", "Sybaris", "Cestra", "Sicarus", "Okina"],
+            ["Braton", "Lato", "Skana", "Paris", "Kunai"]
         ][week % 8]
     });
 
