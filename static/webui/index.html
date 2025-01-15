@@ -96,9 +96,9 @@
                 </div>
                 <div class="row g-3">
                     <div class="col-lg-6">
-                        <div class="card mb-3">
+                        <div class="card mb-3" style="height: 480px;">
                             <h5 class="card-header">Warframes</h5>
-                            <div class="card-body">
+                            <div class="card-body overflow-auto">
                                 <form class="input-group mb-3" onsubmit="doAcquireWarframe();return false;">
                                     <input class="form-control" id="warframe-to-acquire" list="datalist-warframes" />
                                     <button class="btn btn-primary" type="submit">Add</button>
@@ -108,18 +108,11 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="card mb-3">
-                            <h5 class="card-header">Bulk Actions</h5>
-                            <div class="card-body">
-                                <button class="btn btn-primary" onclick="addMissingWarframes();">Add Missing Warframes</button>
-                                <button class="btn btn-primary" onclick="addMissingWeapons();">Add Missing Weapons</button>
-                            </div>
-                        </div>
                     </div>
                     <div class="col-lg-6">
-                        <div class="card mb-3">
+                        <div class="card mb-3" style="height: 480px;">
                             <h5 class="card-header">Weapons</h5>
-                            <div class="card-body">
+                            <div class="card-body overflow-auto">
                                 <form class="input-group mb-3" onsubmit="doAcquireWeapon();return false;">
                                     <input class="form-control" id="weapon-to-acquire" list="datalist-weapons" />
                                     <button class="btn btn-primary" type="submit">Add</button>
@@ -129,6 +122,15 @@
                                 </table>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="card mb-3">
+                    <h5 class="card-header">Bulk Actions</h5>
+                    <div class="card-body d-flex flex-wrap gap-2">
+                        <button class="btn btn-primary" onclick="addMissingWarframes();">Add Missing Warframes</button>
+                        <button class="btn btn-primary" onclick="addMissingWeapons();">Add Missing Weapons</button>
+                        <button class="btn btn-success" onclick="maxRankAllWarframes()">Max Rank All Warframes</button>
+                        <button class="btn btn-success" onclick="maxRankAllWeapons()">Max Rank All Weapons</button>
                     </div>
                 </div>
             </div>

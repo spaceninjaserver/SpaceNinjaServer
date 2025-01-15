@@ -605,6 +605,46 @@ function addMissingWarframes() {
     }
 }
 
+function maxRankAllWarframes() {
+    const req = $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1");
+
+    req.done(data => {
+        window.itemListPromise.then(itemMap => {
+            const batchData = { Suits: [], SpecialItems: [] };
+
+            data.Suits.forEach(item => {
+                if (item.XP < 1_600_000) {
+                    batchData.Suits.push({
+                        ItemId: { $oid: item.ItemId.$oid },
+                        XP: 1_600_000 - item.XP
+                    });
+                }
+
+                if ("exalted" in itemMap[item.ItemType]) {
+                    for (const exaltedType of itemMap[item.ItemType].exalted) {
+                        const exaltedItem = data.SpecialItems.find(x => x.ItemType == exaltedType);
+                        if (exaltedItem) {
+                            const exaltedCap = itemMap[exaltedType]?.type == "weapons" ? 800_000 : 1_600_000;
+                            if (exaltedItem.XP < exaltedCap) {
+                                batchData.SpecialItems.push({
+                                    ItemId: { $oid: exaltedItem.ItemId.$oid },
+                                    XP: exaltedCap
+                                });
+                            }
+                        }
+                    }
+                }
+            });
+
+            if (batchData.Suits.length > 0 || batchData.SpecialItems.length > 0) {
+                return sendBatchGearExp(batchData);
+            }
+
+            alert("No Warframes to rank up.");
+        });
+    });
+}
+
 function addMissingWeapons() {
     const requests = [];
     document.querySelectorAll("#datalist-weapons option").forEach(elm => {
@@ -618,6 +658,34 @@ function addMissingWeapons() {
     ) {
         dispatchAddItemsRequestsBatch(requests);
     }
+}
+
+function maxRankAllWeapons() {
+    const req = $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1");
+
+    req.done(data => {
+        const batchData = {};
+
+        ["LongGuns", "Pistols", "Melee"].forEach(category => {
+            data[category].forEach(item => {
+                if (item.XP < 800_000) {
+                    if (!batchData[category]) {
+                        batchData[category] = [];
+                    }
+                    batchData[category].push({
+                        ItemId: { $oid: item.ItemId.$oid },
+                        XP: 800_000 - item.XP
+                    });
+                }
+            });
+        });
+
+        if (Object.keys(batchData).length > 0) {
+            return sendBatchGearExp(batchData);
+        }
+
+        alert("No weapons to rank up.");
+    });
 }
 
 function addGearExp(category, oid, xp) {
@@ -637,6 +705,18 @@ function addGearExp(category, oid, xp) {
             if (category != "SpecialItems") {
                 updateInventory();
             }
+        });
+    });
+}
+
+function sendBatchGearExp(data) {
+    revalidateAuthz(() => {
+        $.post({
+            url: "/api/missionInventoryUpdate.php?" + window.authz,
+            contentType: "text/plain",
+            data: JSON.stringify(data)
+        }).done(() => {
+            updateInventory();
         });
     });
 }
