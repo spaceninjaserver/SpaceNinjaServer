@@ -21,7 +21,7 @@ import MaskSalesmanManifest from "@/static/fixed_responses/getVendorInfo/MaskSal
 import OstronFishmongerVendorManifest from "@/static/fixed_responses/getVendorInfo/OstronFishmongerVendorManifest.json";
 import OstronPetVendorManifest from "@/static/fixed_responses/getVendorInfo/OstronPetVendorManifest.json";
 import OstronProspectorVendorManifest from "@/static/fixed_responses/getVendorInfo/OstronProspectorVendorManifest.json";
-import RadioLegionIntermission10VendorManifest from "@/static/fixed_responses/getVendorInfo/RadioLegionIntermission10VendorManifest.json";
+import RadioLegionIntermission11VendorManifest from "@/static/fixed_responses/getVendorInfo/RadioLegionIntermission11VendorManifest.json";
 import SolarisDebtTokenVendorManifest from "@/static/fixed_responses/getVendorInfo/SolarisDebtTokenVendorManifest.json";
 import SolarisDebtTokenVendorRepossessionsManifest from "@/static/fixed_responses/getVendorInfo/SolarisDebtTokenVendorRepossessionsManifest.json";
 import SolarisFishmongerVendorManifest from "@/static/fixed_responses/getVendorInfo/SolarisFishmongerVendorManifest.json";
@@ -63,7 +63,7 @@ const vendorManifests: IVendorManifest[] = [
     OstronFishmongerVendorManifest,
     OstronPetVendorManifest,
     OstronProspectorVendorManifest,
-    RadioLegionIntermission10VendorManifest,
+    RadioLegionIntermission11VendorManifest,
     SolarisDebtTokenVendorManifest,
     SolarisDebtTokenVendorRepossessionsManifest,
     SolarisFishmongerVendorManifest,
