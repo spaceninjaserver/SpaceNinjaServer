@@ -5,7 +5,7 @@ import { config } from "@/src/services/configService";
 import allDialogue from "@/static/fixed_responses/allDialogue.json";
 import { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
 import { IInventoryResponse, IShipInventory, equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
-import { IPolarity, ArtifactPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { IPolarity, ArtifactPolarity, EquipmentFeatures } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import {
     ExportCustoms,
     ExportFlavour,
@@ -206,6 +206,39 @@ export const inventoryController: RequestHandler = async (request, response) => 
             if (key in inventoryResponse) {
                 for (const equipment of inventoryResponse[key]) {
                     equipment.Polarity = Polarity;
+                }
+            }
+        }
+    }
+
+    if (config.unlockDoubleCapacityPotatoesEverywhere) {
+        for (const key of equipmentKeys) {
+            if (key in inventoryResponse) {
+                for (const equipment of inventoryResponse[key]) {
+                    equipment.Features ??= 0;
+                    equipment.Features |= EquipmentFeatures.DOUBLE_CAPACITY;
+                }
+            }
+        }
+    }
+
+    if (config.unlockExilusEverywhere) {
+        for (const key of equipmentKeys) {
+            if (key in inventoryResponse) {
+                for (const equipment of inventoryResponse[key]) {
+                    equipment.Features ??= 0;
+                    equipment.Features |= EquipmentFeatures.UTILITY_SLOT;
+                }
+            }
+        }
+    }
+
+    if (config.unlockArcanesEverywhere) {
+        for (const key of equipmentKeys) {
+            if (key in inventoryResponse) {
+                for (const equipment of inventoryResponse[key]) {
+                    equipment.Features ??= 0;
+                    equipment.Features |= EquipmentFeatures.ARCANE_SLOT;
                 }
             }
         }

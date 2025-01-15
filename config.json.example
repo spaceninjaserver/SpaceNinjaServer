@@ -25,5 +25,8 @@
   "unlockAllSkins": true,
   "unlockAllCapturaScenes": true,
   "universalPolarityEverywhere": true,
+  "unlockDoubleCapacityPotatoesEverywhere": true,
+  "unlockExilusEverywhere": true,
+  "unlockArcanesEverywhere": true,
   "spoofMasteryRank": -1
 }

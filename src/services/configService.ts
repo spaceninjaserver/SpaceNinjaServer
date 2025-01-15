@@ -51,6 +51,9 @@ interface IConfig {
     unlockAllSkins?: boolean;
     unlockAllCapturaScenes?: boolean;
     universalPolarityEverywhere?: boolean;
+    unlockDoubleCapacityPotatoesEverywhere?: boolean;
+    unlockExilusEverywhere?: boolean;
+    unlockArcanesEverywhere?: boolean;
     spoofMasteryRank?: number;
 }
 
