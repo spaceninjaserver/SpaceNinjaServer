@@ -190,6 +190,7 @@ function updateInventory() {
             document.getElementById("warframe-list").innerHTML = "";
             data.Suits.forEach(item => {
                 const tr = document.createElement("tr");
+                tr.setAttribute("data-item-type", item.ItemType);
                 {
                     const td = document.createElement("td");
                     td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
@@ -267,6 +268,7 @@ function updateInventory() {
             ["LongGuns", "Pistols", "Melee"].forEach(category => {
                 data[category].forEach(item => {
                     const tr = document.createElement("tr");
+                    tr.setAttribute("data-item-type", item.ItemType);
                     {
                         const td = document.createElement("td");
                         td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
@@ -527,12 +529,14 @@ function doAcquireWarframe() {
     }
     revalidateAuthz(() => {
         const req = $.post({
-            url: "/custom/addItem?" + window.authz,
+            url: "/custom/addItems?" + window.authz,
             contentType: "application/json",
-            data: JSON.stringify({
-                type: "Powersuit",
-                internalName: uniqueName
-            })
+            data: JSON.stringify([
+                {
+                    type: "Powersuit",
+                    internalName: uniqueName
+                }
+            ])
         });
         req.done(() => {
             document.getElementById("warframe-to-acquire").value = "";
@@ -553,12 +557,14 @@ function doAcquireWeapon() {
     }
     revalidateAuthz(() => {
         const req = $.post({
-            url: "/custom/addItem?" + window.authz,
+            url: "/custom/addItems?" + window.authz,
             contentType: "application/json",
-            data: JSON.stringify({
-                type: "Weapon",
-                internalName: uniqueName
-            })
+            data: JSON.stringify([
+                {
+                    type: "Weapon",
+                    internalName: uniqueName
+                }
+            ])
         });
         req.done(() => {
             document.getElementById("weapon-to-acquire").value = "";
@@ -570,6 +576,49 @@ function doAcquireWeapon() {
 $("#weapon-to-acquire").on("input", () => {
     $("#weapon-to-acquire").removeClass("is-invalid");
 });
+
+function dispatchAddItemsRequestsBatch(requests) {
+    revalidateAuthz(() => {
+        const req = $.post({
+            url: "/custom/addItems?" + window.authz,
+            contentType: "application/json",
+            data: JSON.stringify(requests)
+        });
+        req.done(() => {
+            updateInventory();
+        });
+    });
+}
+
+function addMissingWarframes() {
+    const requests = [];
+    document.querySelectorAll("#datalist-warframes option").forEach(elm => {
+        if (!document.querySelector("#warframe-list [data-item-type='" + elm.getAttribute("data-key") + "']")) {
+            requests.push({ type: "Powersuit", internalName: elm.getAttribute("data-key") });
+        }
+    });
+    if (
+        requests.length != 0 &&
+        window.confirm("Are you sure you want to add " + requests.length + " items to your account?")
+    ) {
+        dispatchAddItemsRequestsBatch(requests);
+    }
+}
+
+function addMissingWeapons() {
+    const requests = [];
+    document.querySelectorAll("#datalist-weapons option").forEach(elm => {
+        if (!document.querySelector("#weapon-list [data-item-type='" + elm.getAttribute("data-key") + "']")) {
+            requests.push({ type: "Weapon", internalName: elm.getAttribute("data-key") });
+        }
+    });
+    if (
+        requests.length != 0 &&
+        window.confirm("Are you sure you want to add " + requests.length + " items to your account?")
+    ) {
+        dispatchAddItemsRequestsBatch(requests);
+    }
+}
 
 function addGearExp(category, oid, xp) {
     const data = {};
