@@ -47,7 +47,8 @@ export const syndicateSacrificeController: RequestHandler = async (request, resp
         res.InventoryChanges.MiscItems = miscItemChanges;
     }
 
-    if (syndicate?.Title !== undefined) syndicate.Title += 1;
+    syndicate.Title ??= 0;
+    syndicate.Title += 1;
 
     await inventory.save();
 
