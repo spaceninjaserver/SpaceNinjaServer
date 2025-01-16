@@ -16,7 +16,8 @@ import {
     IWeaponSkinClient,
     TEquipmentKey,
     equipmentKeys,
-    IFusionTreasure
+    IFusionTreasure,
+    IInventoryDatabase
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate } from "../types/genericUpdate";
 import {
@@ -36,7 +37,8 @@ import {
     ExportRecipes,
     ExportResources,
     ExportSentinels,
-    ExportUpgrades
+    ExportUpgrades,
+    TStandingLimitBin
 } from "warframe-public-export-plus";
 import { createShip } from "./shipService";
 
@@ -490,6 +492,43 @@ export const updateCurrencyByAccountId = async (
     const currencyChanges = updateCurrency(inventory, price, usePremium);
     await inventory.save();
     return currencyChanges;
+};
+
+const standingLimitBinToInventoryKey: Record<
+    Exclude<TStandingLimitBin, "STANDING_LIMIT_BIN_NONE">,
+    keyof IInventoryDatabase
+> = {
+    STANDING_LIMIT_BIN_NORMAL: "DailyAffiliation",
+    STANDING_LIMIT_BIN_PVP: "DailyAffiliationPvp",
+    STANDING_LIMIT_BIN_LIBRARY: "DailyAffiliationLibrary",
+    STANDING_LIMIT_BIN_CETUS: "DailyAffiliationCetus",
+    STANDING_LIMIT_BIN_QUILLS: "DailyAffiliationQuills",
+    STANDING_LIMIT_BIN_SOLARIS: "DailyAffiliationSolaris",
+    STANDING_LIMIT_BIN_VENTKIDS: "DailyAffiliationVentkids",
+    STANDING_LIMIT_BIN_VOX: "DailyAffiliationVox",
+    STANDING_LIMIT_BIN_ENTRATI: "DailyAffiliationEntrati",
+    STANDING_LIMIT_BIN_NECRALOID: "DailyAffiliationNecraloid",
+    STANDING_LIMIT_BIN_ZARIMAN: "DailyAffiliationZariman",
+    STANDING_LIMIT_BIN_KAHL: "DailyAffiliationKahl",
+    STANDING_LIMIT_BIN_CAVIA: "DailyAffiliationCavia",
+    STANDING_LIMIT_BIN_HEX: "DailyAffiliationHex"
+};
+
+export const getStandingLimit = (inventory: TInventoryDatabaseDocument, bin: TStandingLimitBin): number => {
+    if (bin == "STANDING_LIMIT_BIN_NONE") {
+        return Number.MAX_SAFE_INTEGER;
+    }
+    return inventory[standingLimitBinToInventoryKey[bin]] as number;
+};
+
+export const updateStandingLimit = (
+    inventory: TInventoryDatabaseDocument,
+    bin: TStandingLimitBin,
+    subtrahend: number
+): void => {
+    if (bin != "STANDING_LIMIT_BIN_NONE") {
+        (inventory[standingLimitBinToInventoryKey[bin]] as number) -= subtrahend;
+    }
 };
 
 // TODO: AffiliationMods support (Nightwave).

@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { addMiscItems, getInventory } from "@/src/services/inventoryService";
+import { addMiscItems, getInventory, getStandingLimit, updateStandingLimit } from "@/src/services/inventoryService";
 import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IOid } from "@/src/types/commonTypes";
 import { ExportSyndicates, ISyndicate } from "warframe-public-export-plus";
@@ -36,10 +36,13 @@ export const syndicateStandingBonusController: RequestHandler = async (req, res)
     if (syndicate.Standing + gainedStanding > max) {
         gainedStanding = max - syndicate.Standing;
     }
+    if (gainedStanding > getStandingLimit(inventory, syndicateMeta.dailyLimitBin)) {
+        gainedStanding = getStandingLimit(inventory, syndicateMeta.dailyLimitBin);
+    }
 
     syndicate.Standing += gainedStanding;
 
-    // TODO: Subtract from daily limit bin; maybe also a cheat to skip that.
+    updateStandingLimit(inventory, syndicateMeta.dailyLimitBin, gainedStanding);
 
     await inventory.save();
 
