@@ -79,8 +79,8 @@ export const worldStateController: RequestHandler = (req, res) => {
         Choices: [
             ["Boar", "Gammacor", "Angstrum", "Gorgon", "Anku"],
             ["Bo", "Latron", "Furis", "Furax", "Strun"],
-            ["Lex", "Magistar", "Boltor", "Bronco", "Dagger"],
-            ["Torid", "Toxocyst", "Ichor", "Miter", "Atomos"],
+            ["Lex", "Magistar", "Boltor", "Bronco", "CeramicDagger"],
+            ["Torid", "DualToxocyst", "DualIchor", "Miter", "Atomos"],
             ["AckAndBrunt", "Soma", "Vasto", "NamiSolo", "Burston"],
             ["Zylok", "Sibear", "Dread", "Despair", "Hate"],
             ["Dera", "Sybaris", "Cestra", "Sicarus", "Okina"],
