@@ -3,17 +3,17 @@ import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addMiscItems, getInventory } from "@/src/services/inventoryService";
 import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IOid } from "@/src/types/commonTypes";
-import { ExportSyndicates } from "warframe-public-export-plus";
+import { ExportSyndicates, ISyndicate } from "warframe-public-export-plus";
 
 export const syndicateStandingBonusController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const request = JSON.parse(String(req.body)) as ISyndicateStandingBonusRequest;
 
+    const syndicateMeta = ExportSyndicates[request.Operation.AffiliationTag];
+
     let gainedStanding = 0;
     request.Operation.Items.forEach(item => {
-        const medallion = (ExportSyndicates[request.Operation.AffiliationTag].medallions ?? []).find(
-            medallion => medallion.itemType == item.ItemType
-        );
+        const medallion = (syndicateMeta.medallions ?? []).find(medallion => medallion.itemType == item.ItemType);
         if (medallion) {
             gainedStanding += medallion.standing * item.ItemCount;
         }
@@ -30,7 +30,7 @@ export const syndicateStandingBonusController: RequestHandler = async (req, res)
             inventory.Affiliations[inventory.Affiliations.push({ Tag: request.Operation.AffiliationTag, Standing: 0 })];
     }
 
-    const max = getMaxStanding(request.Operation.AffiliationTag, syndicate.Title ?? 0);
+    const max = getMaxStanding(syndicateMeta, syndicate.Title ?? 0);
     if (syndicate.Standing + gainedStanding > max) {
         gainedStanding = max - syndicate.Standing;
     }
@@ -63,8 +63,7 @@ interface ISyndicateStandingBonusRequest {
     ModularWeaponId: IOid; // Seems to just be "000000000000000000000000", also note there's a "Category" query field
 }
 
-const getMaxStanding = (affiliationTag: string, title: number): number => {
-    const syndicate = ExportSyndicates[affiliationTag];
+const getMaxStanding = (syndicate: ISyndicate, title: number): number => {
     if (!syndicate.titles) {
         // LibrarySyndicate
         return 125000;
