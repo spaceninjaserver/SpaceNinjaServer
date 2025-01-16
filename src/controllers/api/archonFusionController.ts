@@ -8,7 +8,9 @@ export const archonFusionController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const request = JSON.parse(String(req.body)) as IArchonFusionRequest;
     const inventory = await getInventory(accountId);
-    request.Consumed.forEach(x => x.ItemCount * -1);
+    request.Consumed.forEach(x => {
+        x.ItemCount *= -1;
+    });
     addMiscItems(inventory, request.Consumed);
     const newArchons: IMiscItem[] = [];
     switch (request.FusionType) {
