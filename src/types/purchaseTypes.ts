@@ -17,6 +17,8 @@ export interface IPurchaseParams {
     ExpectedPrice: number;
     SyndicateTag?: string; // for Source 2
     UseFreeFavor?: boolean; // for Source 2
+    ExtraPurchaseInfoJson?: string; // for Source 7
+    IsWeekly?: boolean; // for Source 7
 }
 
 export interface ICurrencyChanges {
