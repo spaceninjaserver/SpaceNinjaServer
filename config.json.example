@@ -28,5 +28,6 @@
   "unlockDoubleCapacityPotatoesEverywhere": true,
   "unlockExilusEverywhere": true,
   "unlockArcanesEverywhere": true,
+  "noDailyStandingLimits": true,
   "spoofMasteryRank": -1
 }

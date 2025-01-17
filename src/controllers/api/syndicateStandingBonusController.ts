@@ -4,6 +4,7 @@ import { addMiscItems, getInventory, getStandingLimit, updateStandingLimit } fro
 import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IOid } from "@/src/types/commonTypes";
 import { ExportSyndicates, ISyndicate } from "warframe-public-export-plus";
+import { config } from "@/src/services/configService";
 
 export const syndicateStandingBonusController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -36,13 +37,15 @@ export const syndicateStandingBonusController: RequestHandler = async (req, res)
     if (syndicate.Standing + gainedStanding > max) {
         gainedStanding = max - syndicate.Standing;
     }
-    if (gainedStanding > getStandingLimit(inventory, syndicateMeta.dailyLimitBin)) {
+    if (!config.noDailyStandingLimits && gainedStanding > getStandingLimit(inventory, syndicateMeta.dailyLimitBin)) {
         gainedStanding = getStandingLimit(inventory, syndicateMeta.dailyLimitBin);
     }
 
     syndicate.Standing += gainedStanding;
 
-    updateStandingLimit(inventory, syndicateMeta.dailyLimitBin, gainedStanding);
+    if (!config.noDailyStandingLimits) {
+        updateStandingLimit(inventory, syndicateMeta.dailyLimitBin, gainedStanding);
+    }
 
     await inventory.save();
 

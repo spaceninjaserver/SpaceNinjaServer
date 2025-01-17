@@ -234,6 +234,12 @@ export const inventoryController: RequestHandler = async (request, response) => 
         }
     }
 
+    if (config.noDailyStandingLimits) {
+        for (const key of allDailyAffiliationKeys) {
+            inventoryResponse[key] = 999_999;
+        }
+    }
+
     // Fix for #380
     inventoryResponse.NextRefill = { $date: { $numberLong: "9999999999999" } };
 
