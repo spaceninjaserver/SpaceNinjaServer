@@ -1,9 +1,10 @@
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { addMiscItems, getInventory } from "@/src/services/inventoryService";
+import { getMaxStanding } from "@/src/helpers/syndicateStandingHelper";
+import { addMiscItems, getInventory, getStandingLimit, updateStandingLimit } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { RequestHandler } from "express";
-import { ExportResources } from "warframe-public-export-plus";
+import { ExportResources, ExportSyndicates } from "warframe-public-export-plus";
 
 export const fishmongerController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -11,7 +12,7 @@ export const fishmongerController: RequestHandler = async (req, res) => {
     const body = getJSONfromString(String(req.body)) as IFishmongerRequest;
     const miscItemChanges: IMiscItem[] = [];
     let syndicateTag: string | undefined;
-    let standingChange = 0;
+    let gainedStanding = 0;
     for (const fish of body.Fish) {
         const fishData = ExportResources[fish.ItemType];
         if (req.query.dissect == "1") {
@@ -25,21 +26,29 @@ export const fishmongerController: RequestHandler = async (req, res) => {
             }
         } else {
             syndicateTag = fishData.syndicateTag!;
-            standingChange += fishData.standingBonus! * fish.ItemCount;
+            gainedStanding += fishData.standingBonus! * fish.ItemCount;
         }
         miscItemChanges.push({ ItemType: fish.ItemType, ItemCount: fish.ItemCount * -1 });
     }
     addMiscItems(inventory, miscItemChanges);
-    if (standingChange && syndicateTag) {
-        const syndicate = inventory.Affiliations.find(x => x.Tag == syndicateTag);
-        if (syndicate !== undefined) {
-            syndicate.Standing += standingChange;
-        } else {
-            inventory.Affiliations.push({
-                Tag: syndicateTag,
-                Standing: standingChange
-            });
+    if (gainedStanding && syndicateTag) {
+        let syndicate = inventory.Affiliations.find(x => x.Tag == syndicateTag);
+        if (!syndicate) {
+            syndicate = inventory.Affiliations[inventory.Affiliations.push({ Tag: syndicateTag, Standing: 0 }) - 1];
         }
+        const syndicateMeta = ExportSyndicates[syndicateTag];
+
+        const max = getMaxStanding(syndicateMeta, syndicate.Title ?? 0);
+        if (syndicate.Standing + gainedStanding > max) {
+            gainedStanding = max - syndicate.Standing;
+        }
+        if (gainedStanding > getStandingLimit(inventory, syndicateMeta.dailyLimitBin)) {
+            gainedStanding = getStandingLimit(inventory, syndicateMeta.dailyLimitBin);
+        }
+
+        syndicate.Standing += gainedStanding;
+
+        updateStandingLimit(inventory, syndicateMeta.dailyLimitBin, gainedStanding);
     }
     await inventory.save();
     res.json({
@@ -47,7 +56,7 @@ export const fishmongerController: RequestHandler = async (req, res) => {
             MiscItems: miscItemChanges
         },
         SyndicateTag: syndicateTag,
-        StandingChange: standingChange
+        StandingChange: gainedStanding
     });
 };
 
