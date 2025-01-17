@@ -17,7 +17,7 @@ import {
     TEquipmentKey,
     equipmentKeys,
     IFusionTreasure,
-    IInventoryDatabase
+    IDailyAffiliations
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate } from "../types/genericUpdate";
 import {
@@ -496,7 +496,7 @@ export const updateCurrencyByAccountId = async (
 
 const standingLimitBinToInventoryKey: Record<
     Exclude<TStandingLimitBin, "STANDING_LIMIT_BIN_NONE">,
-    keyof IInventoryDatabase
+    keyof IDailyAffiliations
 > = {
     STANDING_LIMIT_BIN_NORMAL: "DailyAffiliation",
     STANDING_LIMIT_BIN_PVP: "DailyAffiliationPvp",
@@ -514,20 +514,20 @@ const standingLimitBinToInventoryKey: Record<
     STANDING_LIMIT_BIN_HEX: "DailyAffiliationHex"
 };
 
-export const getStandingLimit = (inventory: TInventoryDatabaseDocument, bin: TStandingLimitBin): number => {
+export const getStandingLimit = (inventory: IDailyAffiliations, bin: TStandingLimitBin): number => {
     if (bin == "STANDING_LIMIT_BIN_NONE") {
         return Number.MAX_SAFE_INTEGER;
     }
-    return inventory[standingLimitBinToInventoryKey[bin]] as number;
+    return inventory[standingLimitBinToInventoryKey[bin]];
 };
 
 export const updateStandingLimit = (
-    inventory: TInventoryDatabaseDocument,
+    inventory: IDailyAffiliations,
     bin: TStandingLimitBin,
     subtrahend: number
 ): void => {
     if (bin != "STANDING_LIMIT_BIN_NONE") {
-        (inventory[standingLimitBinToInventoryKey[bin]] as number) -= subtrahend;
+        inventory[standingLimitBinToInventoryKey[bin]] -= subtrahend;
     }
 };
 

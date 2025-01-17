@@ -110,7 +110,25 @@ export type TSolarMapRegion =
 export interface IPendingRecipeResponse extends Omit<IPendingRecipe, "CompletionDate"> {
     CompletionDate: IMongoDate;
 }
-export interface IInventoryResponse {
+
+export interface IDailyAffiliations {
+    DailyAffiliation: number;
+    DailyAffiliationPvp: number;
+    DailyAffiliationLibrary: number;
+    DailyAffiliationCetus: number;
+    DailyAffiliationQuills: number;
+    DailyAffiliationSolaris: number;
+    DailyAffiliationVentkids: number;
+    DailyAffiliationVox: number;
+    DailyAffiliationEntrati: number;
+    DailyAffiliationNecraloid: number;
+    DailyAffiliationZariman: number;
+    DailyAffiliationKahl: number;
+    DailyAffiliationCavia: number;
+    DailyAffiliationHex: number;
+}
+
+export interface IInventoryResponse extends IDailyAffiliations {
     Horses: IEquipmentDatabase[];
     DrifterMelee: IEquipmentDatabase[];
     DrifterGuns: IEquipmentDatabase[];
@@ -138,9 +156,6 @@ export interface IInventoryResponse {
     OperatorAmpBin: ISlots;
     CrewShipSalvageBin: ISlots;
     TradesRemaining: number;
-    DailyAffiliation: number;
-    DailyAffiliationPvp: number;
-    DailyAffiliationLibrary: number;
     DailyFocus: number;
     GiftsRemaining: number;
     HandlerPoints: number;
@@ -220,8 +235,6 @@ export interface IInventoryResponse {
     ActiveAvatarImageType: string;
     KubrowPets: IEquipmentDatabase[];
     ShipDecorations: IConsumable[];
-    DailyAffiliationCetus: number;
-    DailyAffiliationQuills: number;
     DiscoveredMarkers: IDiscoveredMarker[];
     CompletedJobs: ICompletedJob[];
     FocusAbility: string;
@@ -232,7 +245,6 @@ export interface IInventoryResponse {
     KubrowPetPrints: IKubrowPetPrint[];
     AlignmentReplay: IAlignment;
     PersonalGoalProgress: IPersonalGoalProgress[];
-    DailyAffiliationSolaris: number;
     SpecialItems: IEquipmentDatabase[];
     ThemeStyle: string;
     ThemeBackground: string;
@@ -241,8 +253,6 @@ export interface IInventoryResponse {
     ChallengeInstanceStates: IChallengeInstanceState[];
     LoginMilestoneRewards: string[];
     OperatorLoadOuts: IOperatorConfigClient[];
-    DailyAffiliationVentkids: number;
-    DailyAffiliationVox: number;
     RecentVendorPurchases: Array<number | string>;
     Hoverboards: IEquipmentDatabase[];
     NodeIntrosCompleted: string[];
@@ -268,8 +278,6 @@ export interface IInventoryResponse {
     TradeBannedUntil?: IMongoDate;
     PlayedParkourTutorial: boolean;
     SubscribedToEmailsPersonalized: number;
-    DailyAffiliationEntrati: number;
-    DailyAffiliationNecraloid: number;
     MechSuits: IEquipmentDatabase[];
     InfestedFoundry?: IInfestedFoundry;
     BlessingCooldown: IMongoDate;
@@ -279,11 +287,7 @@ export interface IInventoryResponse {
     AdultOperatorLoadOuts: IOperatorConfigClient[];
     LotusCustomization: ILotusCustomization;
     UseAdultOperatorLoadout?: boolean;
-    DailyAffiliationZariman: number;
     NemesisAbandonedRewards: string[];
-    DailyAffiliationKahl: number;
-    DailyAffiliationCavia: number;
-    DailyAffiliationHex: number;
     LastInventorySync: IOid;
     NextRefill: IMongoDate; // Next time argon crystals will have a decay tick
     FoundToday?: IMiscItem[]; // for Argon Crystals
