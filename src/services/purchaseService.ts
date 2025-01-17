@@ -80,23 +80,33 @@ export const handlePurchase = async (
 
     switch (purchaseRequest.PurchaseParams.Source) {
         case 2:
-            if (!purchaseRequest.PurchaseParams.UseFreeFavor!) {
+            {
                 const syndicateTag = purchaseRequest.PurchaseParams.SyndicateTag!;
-                const syndicate = ExportSyndicates[syndicateTag];
-                if (syndicate) {
-                    const favour = syndicate.favours.find(x => x.storeItem == purchaseRequest.PurchaseParams.StoreItem);
-                    if (favour) {
-                        const inventory = await getInventory(accountId);
-                        const affiliation = inventory.Affiliations.find(x => x.Tag == syndicateTag);
-                        if (affiliation) {
-                            purchaseResponse.Standing = [
-                                {
-                                    Tag: syndicateTag,
-                                    Standing: favour.standingCost
-                                }
-                            ];
-                            affiliation.Standing -= favour.standingCost;
-                            await inventory.save();
+                if (purchaseRequest.PurchaseParams.UseFreeFavor!) {
+                    const inventory = await getInventory(accountId);
+                    const affiliation = inventory.Affiliations.find(x => x.Tag == syndicateTag)!;
+                    affiliation.FreeFavorsUsed ??= [];
+                    affiliation.FreeFavorsUsed.push(affiliation.FreeFavorsEarned![affiliation.FreeFavorsUsed.length]);
+                    await inventory.save();
+                } else {
+                    const syndicate = ExportSyndicates[syndicateTag];
+                    if (syndicate) {
+                        const favour = syndicate.favours.find(
+                            x => x.storeItem == purchaseRequest.PurchaseParams.StoreItem
+                        );
+                        if (favour) {
+                            const inventory = await getInventory(accountId);
+                            const affiliation = inventory.Affiliations.find(x => x.Tag == syndicateTag);
+                            if (affiliation) {
+                                purchaseResponse.Standing = [
+                                    {
+                                        Tag: syndicateTag,
+                                        Standing: favour.standingCost
+                                    }
+                                ];
+                                affiliation.Standing -= favour.standingCost;
+                                await inventory.save();
+                            }
                         }
                     }
                 }
