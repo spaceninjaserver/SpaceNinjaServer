@@ -1,4 +1,4 @@
-import { IOid } from "@/src/types/commonTypes";
+import { IMongoDate, IOid } from "@/src/types/commonTypes";
 
 import ArchimedeanVendorManifest from "@/static/fixed_responses/getVendorInfo/ArchimedeanVendorManifest.json";
 import DeimosEntratiFragmentVendorProductsManifest from "@/static/fixed_responses/getVendorInfo/DeimosEntratiFragmentVendorProductsManifest.json";
@@ -35,9 +35,16 @@ interface IVendorManifest {
         TypeName: string;
         ItemManifest: {
             StoreItem: string;
+            ItemPrices?: { ItemType: string; ItemCount: number; ProductCategory: string }[];
+            Bin: string;
             QuantityMultiplier: number;
-            // has a few more fields but we don't care about those right now
+            Expiry: IMongoDate;
+            PurchaseQuantityLimit?: number;
+            RotatedWeekly?: boolean;
+            AllowMultipurchase: boolean;
+            Id: IOid;
         }[];
+        Expiry: IMongoDate;
     };
 }
 
