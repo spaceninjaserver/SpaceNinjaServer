@@ -514,9 +514,7 @@ const standingLimitBinToInventoryKey: Record<
     STANDING_LIMIT_BIN_HEX: "DailyAffiliationHex"
 };
 
-export const allDailyAffiliationKeys: (keyof IDailyAffiliations)[] = Object.entries(standingLimitBinToInventoryKey).map(
-    arr => arr[1]
-);
+export const allDailyAffiliationKeys: (keyof IDailyAffiliations)[] = Object.values(standingLimitBinToInventoryKey);
 
 export const getStandingLimit = (inventory: IDailyAffiliations, bin: TStandingLimitBin): number => {
     if (bin == "STANDING_LIMIT_BIN_NONE" || config.noDailyStandingLimits) {
