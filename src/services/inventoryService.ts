@@ -519,7 +519,7 @@ export const allDailyAffiliationKeys: (keyof IDailyAffiliations)[] = Object.entr
 );
 
 export const getStandingLimit = (inventory: IDailyAffiliations, bin: TStandingLimitBin): number => {
-    if (bin == "STANDING_LIMIT_BIN_NONE") {
+    if (bin == "STANDING_LIMIT_BIN_NONE" || config.noDailyStandingLimits) {
         return Number.MAX_SAFE_INTEGER;
     }
     return inventory[standingLimitBinToInventoryKey[bin]];
@@ -530,7 +530,7 @@ export const updateStandingLimit = (
     bin: TStandingLimitBin,
     subtrahend: number
 ): void => {
-    if (bin != "STANDING_LIMIT_BIN_NONE") {
+    if (bin != "STANDING_LIMIT_BIN_NONE" && !config.noDailyStandingLimits) {
         inventory[standingLimitBinToInventoryKey[bin]] -= subtrahend;
     }
 };
