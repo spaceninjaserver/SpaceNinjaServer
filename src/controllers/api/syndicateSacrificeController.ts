@@ -50,6 +50,13 @@ export const syndicateSacrificeController: RequestHandler = async (request, resp
     syndicate.Title ??= 0;
     syndicate.Title += 1;
 
+    if (syndicate.Title > 0 && manifest.favours.length != 0) {
+        syndicate.FreeFavorsEarned ??= [];
+        if (!syndicate.FreeFavorsEarned.includes(syndicate.Title)) {
+            syndicate.FreeFavorsEarned.push(syndicate.Title);
+        }
+    }
+
     await inventory.save();
 
     if (reward) {
