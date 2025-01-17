@@ -15,6 +15,7 @@ import { getRecipe } from "@/src/services/itemDataService";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { toMongoDate } from "@/src/helpers/inventoryHelpers";
 import { logger } from "@/src/utils/logger";
+import { colorToShard } from "@/src/helpers/shardHelper";
 
 export const infestedFoundryController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -354,21 +355,6 @@ interface IHelminthFeedRequest {
         Date: number; // unix timestamp
     }[];
 }
-
-const colorToShard: Record<string, string> = {
-    ACC_RED: "/Lotus/Types/Gameplay/NarmerSorties/ArchonCrystalAmar",
-    ACC_RED_MYTHIC: "/Lotus/Types/Gameplay/NarmerSorties/ArchonCrystalAmarMythic",
-    ACC_YELLOW: "/Lotus/Types/Gameplay/NarmerSorties/ArchonCrystalNira",
-    ACC_YELLOW_MYTHIC: "/Lotus/Types/Gameplay/NarmerSorties/ArchonCrystalNiraMythic",
-    ACC_BLUE: "/Lotus/Types/Gameplay/NarmerSorties/ArchonCrystalBoreal",
-    ACC_BLUE_MYTHIC: "/Lotus/Types/Gameplay/NarmerSorties/ArchonCrystalBorealMythic",
-    ACC_GREEN: "/Lotus/Types/Gameplay/NarmerSorties/ArchonCrystalGreen",
-    ACC_GREEN_MYTHIC: "/Lotus/Types/Gameplay/NarmerSorties/ArchonCrystalGreenMythic",
-    ACC_ORANGE: "/Lotus/Types/Gameplay/NarmerSorties/ArchonCrystalOrange",
-    ACC_ORANGE_MYTHIC: "/Lotus/Types/Gameplay/NarmerSorties/ArchonCrystalOrangeMythic",
-    ACC_PURPLE: "/Lotus/Types/Gameplay/NarmerSorties/ArchonCrystalViolet",
-    ACC_PURPLE_MYTHIC: "/Lotus/Types/Gameplay/NarmerSorties/ArchonCrystalVioletMythic"
-};
 
 export const addInfestedFoundryXP = (infestedFoundry: IInfestedFoundry, delta: number): ITypeCount[] => {
     const recipeChanges: ITypeCount[] = [];
