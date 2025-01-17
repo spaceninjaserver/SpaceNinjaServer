@@ -54,6 +54,7 @@ interface IConfig {
     unlockDoubleCapacityPotatoesEverywhere?: boolean;
     unlockExilusEverywhere?: boolean;
     unlockArcanesEverywhere?: boolean;
+    noDailyStandingLimits?: boolean;
     spoofMasteryRank?: number;
 }
 
