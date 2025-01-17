@@ -150,6 +150,7 @@ function fetchItemList() {
                 "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryShotgun": { name: "Kitgun" },
                 "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon": { name: "Zaw" },
                 // Missing in data sources
+                "/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser": { name: "Legendary Core" },
                 "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/CyoteMod": { name: "Traumatic Peculiar" }
             };
             for (const [type, items] of Object.entries(data)) {
