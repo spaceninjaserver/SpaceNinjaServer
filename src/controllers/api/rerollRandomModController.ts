@@ -55,21 +55,15 @@ const randomiseStats = (randomModType: string, fingerprint: IUnveiledRivenFinger
 
     fingerprint.buffs = [];
     const numBuffs = 2 + Math.trunc(Math.random() * 2); // 2 or 3
+    const buffEntries = meta.upgradeEntries!.filter(x => x.canBeBuff);
     for (let i = 0; i != numBuffs; ++i) {
-        let entry = getRandomElement(meta.upgradeEntries!);
-        while (!entry.canBeBuff) {
-            entry = getRandomElement(meta.upgradeEntries!);
-        }
+        const entry = getRandomElement(buffEntries);
         fingerprint.buffs.push({ Tag: entry.tag, Value: Math.trunc(Math.random() * 0x40000000) });
     }
 
     fingerprint.curses = [];
-    const numCurses = Math.trunc(Math.random() * 2); // 0 or 1
-    for (let i = 0; i != numCurses; ++i) {
-        let entry = getRandomElement(meta.upgradeEntries!);
-        while (!entry.canBeCurse) {
-            entry = getRandomElement(meta.upgradeEntries!);
-        }
+    if (Math.random() < 0.5) {
+        const entry = getRandomElement(meta.upgradeEntries!.filter(x => x.canBeCurse));
         fingerprint.curses.push({ Tag: entry.tag, Value: Math.trunc(Math.random() * 0x40000000) });
     }
 };
