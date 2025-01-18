@@ -1077,6 +1077,38 @@ function doHelminthUnlockAll() {
     });
 }
 
+function doAddAllMods() {
+    const mods = [];
+    for (const child of document.getElementById("datalist-mods").children) {
+        mods.push(child.getAttribute("data-key"));
+    }
+
+    // Batch to avoid PayloadTooLargeError
+    const batchSize = 500;
+    const batches = [];
+    for (let i = 0; i < mods.length; i += batchSize) {
+        batches.push(mods.slice(i, i + batchSize));
+    }
+
+    batches.forEach(batch => {
+        revalidateAuthz(() => {
+            $.post({
+                url: "/api/missionInventoryUpdate.php?" + window.authz,
+                contentType: "text/plain",
+                data: JSON.stringify({
+                    RawUpgrades: batch.map(mod => ({
+                        ItemType: mod,
+                        ItemCount: 21 // Needed to fully upgrade certain arcanes
+                    }))
+                })
+            }).done(function () {
+                document.getElementById("mod-to-acquire").value = "";
+                updateInventory();
+            });
+        });
+    });
+}
+
 // Powersuit Route
 
 single.getRoute("#powersuit-route").on("beforeload", function () {
