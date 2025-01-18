@@ -128,7 +128,7 @@ export const handlePurchase = async (
             if (purchaseRequest.PurchaseParams.SourceId! in ExportVendors) {
                 const vendor = ExportVendors[purchaseRequest.PurchaseParams.SourceId!];
                 const offer = vendor.items.find(x => x.storeItem == purchaseRequest.PurchaseParams.StoreItem);
-                if (offer) {
+                if (offer && offer.itemPrices) {
                     await handleItemPrices(
                         accountId,
                         offer.itemPrices,
