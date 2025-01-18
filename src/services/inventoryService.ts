@@ -96,8 +96,11 @@ export const combineInventoryChanges = (InventoryChanges: IInventoryChanges, del
     }
 };
 
-export const getInventory = async (accountOwnerId: string): Promise<TInventoryDatabaseDocument> => {
-    const inventory = await Inventory.findOne({ accountOwnerId: accountOwnerId });
+export const getInventory = async (
+    accountOwnerId: string,
+    projection: string | undefined = undefined
+): Promise<TInventoryDatabaseDocument> => {
+    const inventory = await Inventory.findOne({ accountOwnerId: accountOwnerId }, projection);
 
     if (!inventory) {
         throw new Error(`Didn't find an inventory for ${accountOwnerId}`);

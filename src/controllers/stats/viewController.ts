@@ -1,14 +1,14 @@
 import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { IStatsView } from "@/src/types/statTypes";
 import { config } from "@/src/services/configService";
 import allScans from "@/static/fixed_responses/allScans.json";
 import { ExportEnemies } from "warframe-public-export-plus";
+import { getInventory } from "@/src/services/inventoryService";
 
 const viewController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const inventory = await Inventory.findOne({ accountOwnerId: accountId });
+    const inventory = await getInventory(accountId, "XPInfo");
     if (!inventory) {
         res.status(400).json({ error: "inventory was undefined" });
         return;
