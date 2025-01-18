@@ -10,7 +10,7 @@ export const rerollRandomModController: RequestHandler = async (req, res) => {
     const inventory = await getInventory(accountId);
     const request = getJSONfromString(String(req.body)) as RerollRandomModRequest;
     if ("ItemIds" in request) {
-        const upgrade = inventory.Upgrades.find(x => x._id?.toString() == request.ItemIds[0])!;
+        const upgrade = inventory.Upgrades.id(request.ItemIds[0])!;
         const fingerprint = JSON.parse(upgrade.UpgradeFingerprint!) as IUnveiledRivenFingerprint;
 
         fingerprint.rerolls ??= 0;
@@ -41,7 +41,7 @@ export const rerollRandomModController: RequestHandler = async (req, res) => {
             cost: kuvaCost
         });
     } else {
-        const upgrade = inventory.Upgrades.find(x => x._id?.toString() == request.ItemId)!;
+        const upgrade = inventory.Upgrades.id(request.ItemId)!;
         if (request.CommitReroll && upgrade.PendingRerollFingerprint) {
             upgrade.UpgradeFingerprint = upgrade.PendingRerollFingerprint;
         }
