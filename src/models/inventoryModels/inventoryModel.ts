@@ -283,10 +283,10 @@ RawUpgrades.set("toJSON", {
     }
 });
 
-//TODO: find out what this is
-const upgradesSchema = new Schema(
+const upgradesSchema = new Schema<ICrewShipSalvagedWeaponSkin>(
     {
         UpgradeFingerprint: String,
+        PendingRerollFingerprint: { type: String, required: false },
         ItemType: String
     },
     { id: false }
