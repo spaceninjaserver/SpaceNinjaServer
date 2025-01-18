@@ -1078,32 +1078,39 @@ function doHelminthUnlockAll() {
 }
 
 function doAddAllMods() {
-    const mods = [];
+    let modsAll = new Set();
     for (const child of document.getElementById("datalist-mods").children) {
-        mods.push(child.getAttribute("data-key"));
+        modsAll.add(child.getAttribute("data-key"));
     }
 
-    // Batch to avoid PayloadTooLargeError
-    const batchSize = 500;
-    const batches = [];
-    for (let i = 0; i < mods.length; i += batchSize) {
-        batches.push(mods.slice(i, i + batchSize));
-    }
+    const req = $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1");
+    req.done(data => {
+        for (const modOwned of data.RawUpgrades) {
+            if (modOwned.ItemCount ?? 1 > 0) {
+                modsAll.delete(modOwned.ItemType);
+            }
+        }
 
-    batches.forEach(batch => {
-        revalidateAuthz(() => {
-            $.post({
-                url: "/api/missionInventoryUpdate.php?" + window.authz,
-                contentType: "text/plain",
-                data: JSON.stringify({
-                    RawUpgrades: batch.map(mod => ({
-                        ItemType: mod,
-                        ItemCount: 21 // Needed to fully upgrade certain arcanes
-                    }))
-                })
-            }).done(function () {
-                document.getElementById("mod-to-acquire").value = "";
-                updateInventory();
+        modsAll = Array.from(modsAll);
+        const batches = [];
+        for (let i = 0; i < modsAll.length; i += 1000) {
+            batches.push(modsAll.slice(i, i + 1000));
+        }
+        batches.forEach(batch => {
+            revalidateAuthz(() => {
+                $.post({
+                    url: "/api/missionInventoryUpdate.php?" + window.authz,
+                    contentType: "text/plain",
+                    data: JSON.stringify({
+                        RawUpgrades: batch.map(mod => ({
+                            ItemType: mod,
+                            ItemCount: 21 // To fully upgrade certain arcanes
+                        }))
+                    })
+                }).done(function () {
+                    document.getElementById("mod-to-acquire").value = "";
+                    updateInventory();
+                });
             });
         });
     });
