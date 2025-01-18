@@ -52,6 +52,7 @@ import { projectionManagerController } from "../controllers/api/projectionManage
 import { purchaseController } from "@/src/controllers/api/purchaseController";
 import { queueDojoComponentDestructionController } from "@/src/controllers/api/queueDojoComponentDestructionController";
 import { rerollRandomModController } from "@/src/controllers/api/rerollRandomModController";
+import { saveDialogueController } from "@/src/controllers/api/saveDialogueController";
 import { saveLoadoutController } from "@/src/controllers/api/saveLoadout";
 import { sellController } from "@/src/controllers/api/sellController";
 import { setActiveQuestController } from "@/src/controllers/api/setActiveQuestController";
@@ -142,6 +143,7 @@ apiRouter.post("/playerSkills.php", playerSkillsController);
 apiRouter.post("/projectionManager.php", projectionManagerController);
 apiRouter.post("/purchase.php", purchaseController);
 apiRouter.post("/rerollRandomMod.php", rerollRandomModController);
+apiRouter.post("/saveDialogue.php", saveDialogueController);
 apiRouter.post("/saveLoadout.php", saveLoadoutController);
 apiRouter.post("/sell.php", sellController);
 apiRouter.post("/setEquippedInstrument.php", setEquippedInstrumentController);

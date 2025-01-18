@@ -47,7 +47,12 @@ import {
     ICrewShipPilotWeapon,
     IShipExterior,
     IHelminthFoodRecord,
-    ICrewShipMembersDatabase
+    ICrewShipMembersDatabase,
+    IDialogueHistoryDatabase,
+    IDialogueDatabase,
+    IDialogueGift,
+    ICompletedDialogue,
+    IDialogueClient
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -710,6 +715,60 @@ crewShipSchema.set("toJSON", {
     }
 });
 
+const dialogueGiftSchema = new Schema<IDialogueGift>(
+    {
+        Item: String,
+        GiftedQuantity: Number
+    },
+    { _id: false }
+);
+
+const completedDialogueSchema = new Schema<ICompletedDialogue>(
+    {
+        Id: { type: String, required: true },
+        Booleans: { type: [String], required: true },
+        Choices: { type: [Number], required: true }
+    },
+    { _id: false }
+);
+
+const dialogueSchema = new Schema<IDialogueDatabase>(
+    {
+        Rank: Number,
+        Chemistry: Number,
+        AvailableDate: Date,
+        AvailableGiftDate: Date,
+        RankUpExpiry: Date,
+        BountyChemExpiry: Date,
+        //QueuedDialogues: ???
+        Gifts: { type: [dialogueGiftSchema], default: [] },
+        Booleans: { type: [String], default: [] },
+        Completed: { type: [completedDialogueSchema], default: [] },
+        DialogueName: String
+    },
+    { _id: false }
+);
+dialogueSchema.set("toJSON", {
+    virtuals: true,
+    transform(_doc, ret) {
+        const db = ret as IDialogueDatabase;
+        const client = ret as IDialogueClient;
+
+        client.AvailableDate = toMongoDate(db.AvailableDate);
+        client.AvailableGiftDate = toMongoDate(db.AvailableGiftDate);
+        client.RankUpExpiry = toMongoDate(db.RankUpExpiry);
+        client.BountyChemExpiry = toMongoDate(db.BountyChemExpiry);
+    }
+});
+
+const dialogueHistorySchema = new Schema<IDialogueHistoryDatabase>(
+    {
+        YearIteration: { type: Number, required: true },
+        Dialogues: { type: [dialogueSchema], required: false }
+    },
+    { _id: false }
+);
+
 const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
     {
         accountOwnerId: Schema.Types.ObjectId,
@@ -1069,7 +1128,9 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Grustag three
         DeathSquadable: Boolean,
 
-        EndlessXP: { type: [endlessXpProgressSchema], default: undefined }
+        EndlessXP: { type: [endlessXpProgressSchema], default: undefined },
+
+        DialogueHistory: dialogueHistorySchema
     },
     { timestamps: { createdAt: "Created" } }
 );

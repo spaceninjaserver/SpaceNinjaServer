@@ -306,6 +306,7 @@ export interface IInventoryResponse extends IDailyAffiliations {
     Harvestable: boolean;
     DeathSquadable: boolean;
     EndlessXP?: IEndlessXpProgress[];
+    DialogueHistory?: IDialogueHistoryDatabase;
 }
 
 export interface IAffiliation {
@@ -947,4 +948,47 @@ export type TEndlessXpCategory = "EXC_NORMAL" | "EXC_HARD";
 export interface IEndlessXpProgress {
     Category: TEndlessXpCategory;
     Choices: string[];
+}
+
+export interface IDialogueHistoryClient {
+    YearIteration: number;
+    Dialogues?: IDialogueClient[];
+}
+
+export interface IDialogueHistoryDatabase {
+    YearIteration: number;
+    Dialogues?: IDialogueDatabase[];
+}
+
+export interface IDialogueClient {
+    Rank: number;
+    Chemistry: number;
+    AvailableDate: IMongoDate;
+    AvailableGiftDate: IMongoDate;
+    RankUpExpiry: IMongoDate;
+    BountyChemExpiry: IMongoDate;
+    //QueuedDialogues: any[];
+    Gifts: IDialogueGift[];
+    Booleans: string[];
+    Completed: ICompletedDialogue[];
+    DialogueName: string;
+}
+
+export interface IDialogueDatabase
+    extends Omit<IDialogueClient, "AvailableDate" | "AvailableGiftDate" | "RankUpExpiry" | "BountyChemExpiry"> {
+    AvailableDate: Date;
+    AvailableGiftDate: Date;
+    RankUpExpiry: Date;
+    BountyChemExpiry: Date;
+}
+
+export interface IDialogueGift {
+    Item: string;
+    GiftedQuantity: number;
+}
+
+export interface ICompletedDialogue {
+    Id: string;
+    Booleans: string[];
+    Choices: number[];
 }
