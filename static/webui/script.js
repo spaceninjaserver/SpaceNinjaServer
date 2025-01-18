@@ -1092,6 +1092,7 @@ function doAddAllMods() {
         }
 
         modsAll = Array.from(modsAll);
+        // Batch to avoid PayloadTooLargeError
         const batches = [];
         for (let i = 0; i < modsAll.length; i += 1000) {
             batches.push(modsAll.slice(i, i + 1000));
