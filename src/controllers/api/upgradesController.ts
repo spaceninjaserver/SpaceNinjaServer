@@ -35,7 +35,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
 
         if (operation.OperationType == "UOT_ABILITY_OVERRIDE") {
             console.assert(payload.ItemCategory == "Suits");
-            const suit = inventory.Suits.find(x => x._id.toString() == payload.ItemId.$oid)!;
+            const suit = inventory.Suits.id(payload.ItemId.$oid)!;
 
             let newAbilityOverride: IAbilityOverride | undefined;
             let totalPercentagePointsConsumed = 0;

@@ -157,7 +157,7 @@ export const handleSetPlacedDecoInfo = async (accountId: string, req: ISetPlaced
         throw new Error("room not found");
     }
 
-    const placedDeco = room.PlacedDecos?.find(x => x._id.toString() == req.DecoId);
+    const placedDeco = room.PlacedDecos?.id(req.DecoId);
     if (!placedDeco) {
         throw new Error("deco not found");
     }

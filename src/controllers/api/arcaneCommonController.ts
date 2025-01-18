@@ -8,7 +8,7 @@ export const arcaneCommonController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const json = getJSONfromString(String(req.body)) as IArcaneCommonRequest;
     const inventory = await getInventory(accountId);
-    const upgrade = inventory.Upgrades.find(x => x._id!.toString() == json.arcane.ItemId.$oid);
+    const upgrade = inventory.Upgrades.id(json.arcane.ItemId.$oid);
     if (json.newRank == -1) {
         // Break down request?
         if (!upgrade || !upgrade.UpgradeFingerprint) {

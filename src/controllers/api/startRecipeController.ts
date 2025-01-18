@@ -64,19 +64,19 @@ export const startRecipeController: RequestHandler = async (req, res) => {
                 break;
             }
             if (type == "/Lotus/Types/Game/PowerSuits/PlayerPowerSuit") {
-                const item = inventory.Suits.find(x => x._id.toString() == oid)!;
+                const item = inventory.Suits.id(oid)!;
                 spectreLoadout.Suits = item.ItemType;
             } else if (type == "/Lotus/Weapons/Tenno/Pistol/LotusPistol") {
-                const item = inventory.Pistols.find(x => x._id.toString() == oid)!;
+                const item = inventory.Pistols.id(oid)!;
                 spectreLoadout.Pistols = item.ItemType;
                 spectreLoadout.PistolsModularParts = item.ModularParts;
             } else if (type == "/Lotus/Weapons/Tenno/LotusLongGun") {
-                const item = inventory.LongGuns.find(x => x._id.toString() == oid)!;
+                const item = inventory.LongGuns.id(oid)!;
                 spectreLoadout.LongGuns = item.ItemType;
                 spectreLoadout.LongGunsModularParts = item.ModularParts;
             } else {
                 console.assert(type == "/Lotus/Types/Game/LotusMeleeWeapon");
-                const item = inventory.Melee.find(x => x._id.toString() == oid)!;
+                const item = inventory.Melee.id(oid)!;
                 spectreLoadout.Melee = item.ItemType;
                 spectreLoadout.MeleeModularParts = item.ModularParts;
             }
