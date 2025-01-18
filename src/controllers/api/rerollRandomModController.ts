@@ -41,7 +41,7 @@ export const rerollRandomModController: RequestHandler = async (req, res) => {
         });
     } else {
         const upgrade = inventory.Upgrades.find(x => x._id?.toString() == request.ItemId)!;
-        if (request.CommitReroll) {
+        if (request.CommitReroll && upgrade.PendingRerollFingerprint) {
             upgrade.UpgradeFingerprint = upgrade.PendingRerollFingerprint;
         }
         upgrade.PendingRerollFingerprint = undefined;
