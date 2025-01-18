@@ -6,6 +6,7 @@ import { archonFusionController } from "@/src/controllers/api/archonFusionContro
 import { artifactsController } from "../controllers/api/artifactsController";
 import { checkDailyMissionBonusController } from "@/src/controllers/api/checkDailyMissionBonusController";
 import { claimCompletedRecipeController } from "@/src/controllers/api/claimCompletedRecipeController";
+import { clearDialogueHistoryController } from "@/src/controllers/api/clearDialogueHistoryController";
 import { createGuildController } from "@/src/controllers/api/createGuildController";
 import { creditsController } from "@/src/controllers/api/creditsController";
 import { deleteSessionController } from "@/src/controllers/api/deleteSessionController";
@@ -119,6 +120,7 @@ apiRouter.post("/arcaneCommon.php", arcaneCommonController);
 apiRouter.post("/archonFusion.php", archonFusionController);
 apiRouter.post("/artifacts.php", artifactsController);
 apiRouter.post("/claimCompletedRecipe.php", claimCompletedRecipeController);
+apiRouter.post("/clearDialogueHistory.php", clearDialogueHistoryController);
 apiRouter.post("/createGuild.php", createGuildController);
 apiRouter.post("/endlessXp.php", endlessXpController);
 apiRouter.post("/evolveWeapon.php", evolveWeaponController);
