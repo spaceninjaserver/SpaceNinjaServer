@@ -21,7 +21,6 @@ import {
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate } from "../types/genericUpdate";
 import {
-    IArtifactsRequest,
     IMissionInventoryUpdateRequest,
     IThemeUpdateRequest,
     IUpdateChallengeProgressRequest
@@ -898,58 +897,4 @@ export const addBooster = async (ItemType: string, time: number, accountId: stri
     }
 
     await inventory.save();
-};
-
-export const upgradeMod = async (artifactsData: IArtifactsRequest, accountId: string): Promise<string | undefined> => {
-    const { Upgrade, LevelDiff, Cost, FusionPointCost } = artifactsData;
-    try {
-        const inventory = await getInventory(accountId);
-        const { Upgrades, RawUpgrades } = inventory;
-        const { ItemType, UpgradeFingerprint, ItemId } = Upgrade;
-
-        const safeUpgradeFingerprint = UpgradeFingerprint || '{"lvl":0}';
-        const parsedUpgradeFingerprint = JSON.parse(safeUpgradeFingerprint) as { lvl: number };
-        parsedUpgradeFingerprint.lvl += LevelDiff;
-        const stringifiedUpgradeFingerprint = JSON.stringify(parsedUpgradeFingerprint);
-
-        let itemIndex = Upgrades.findIndex(upgrade => upgrade._id?.equals(ItemId!.$oid));
-
-        if (itemIndex !== -1) {
-            Upgrades[itemIndex].UpgradeFingerprint = stringifiedUpgradeFingerprint;
-            inventory.markModified(`Upgrades.${itemIndex}.UpgradeFingerprint`);
-        } else {
-            itemIndex =
-                Upgrades.push({
-                    UpgradeFingerprint: stringifiedUpgradeFingerprint,
-                    ItemType
-                }) - 1;
-
-            const rawItemIndex = RawUpgrades.findIndex(rawUpgrade => rawUpgrade.ItemType === ItemType);
-            RawUpgrades[rawItemIndex].ItemCount--;
-            if (RawUpgrades[rawItemIndex].ItemCount > 0) {
-                inventory.markModified(`RawUpgrades.${rawItemIndex}.UpgradeFingerprint`);
-            } else {
-                RawUpgrades.splice(rawItemIndex, 1);
-            }
-        }
-
-        if (!config.infiniteCredits) {
-            inventory.RegularCredits -= Cost;
-        }
-        if (!config.infiniteEndo) {
-            inventory.FusionPoints -= FusionPointCost;
-        }
-
-        const changedInventory = await inventory.save();
-        const itemId = changedInventory.toJSON().Upgrades[itemIndex]?.ItemId?.$oid;
-
-        if (!itemId) {
-            throw new Error("Item Id not found in upgradeMod");
-        }
-
-        return itemId;
-    } catch (error) {
-        console.error("Error in upgradeMod:", error);
-        throw error;
-    }
 };

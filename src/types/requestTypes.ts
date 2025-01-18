@@ -4,7 +4,6 @@ import {
     IBooster,
     IChallengeProgress,
     IConsumable,
-    ICrewShipSalvagedWeaponSkin,
     IEvolutionProgress,
     IMiscItem,
     ITypeCount,
@@ -15,13 +14,6 @@ import {
     TEquipmentKey,
     IFusionTreasure
 } from "./inventoryTypes/inventoryTypes";
-
-export interface IArtifactsRequest {
-    Upgrade: ICrewShipSalvagedWeaponSkin;
-    LevelDiff: number;
-    Cost: number;
-    FusionPointCost: number;
-}
 
 export interface IThemeUpdateRequest {
     Style?: string;
