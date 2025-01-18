@@ -1083,22 +1083,22 @@ function doAddAllMods() {
         modsAll.add(child.getAttribute("data-key"));
     }
 
-    const req = $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1");
-    req.done(data => {
-        for (const modOwned of data.RawUpgrades) {
-            if (modOwned.ItemCount ?? 1 > 0) {
-                modsAll.delete(modOwned.ItemType);
+    revalidateAuthz(() => {
+        const req = $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1");
+        req.done(data => {
+            for (const modOwned of data.RawUpgrades) {
+                if (modOwned.ItemCount ?? 1 > 0) {
+                    modsAll.delete(modOwned.ItemType);
+                }
             }
-        }
 
-        modsAll = Array.from(modsAll);
-        // Batch to avoid PayloadTooLargeError
-        const batches = [];
-        for (let i = 0; i < modsAll.length; i += 1000) {
-            batches.push(modsAll.slice(i, i + 1000));
-        }
-        batches.forEach(batch => {
-            revalidateAuthz(() => {
+            modsAll = Array.from(modsAll);
+            // Batch to avoid PayloadTooLargeError
+            const batches = [];
+            for (let i = 0; i < modsAll.length; i += 1000) {
+                batches.push(modsAll.slice(i, i + 1000));
+            }
+            batches.forEach(batch => {
                 $.post({
                     url: "/api/missionInventoryUpdate.php?" + window.authz,
                     contentType: "text/plain",
