@@ -6,7 +6,7 @@ import { getInventory } from "@/src/services/inventoryService";
 export const creditsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
 
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory(accountId, "RegularCredits TradesRemaining PremiumCreditsFree PremiumCredits");
 
     const response = {
         RegularCredits: inventory.RegularCredits,
