@@ -47,6 +47,7 @@ export const handlePurchase = async (
 ): Promise<IPurchaseResponse> => {
     logger.debug("purchase request", purchaseRequest);
 
+    const inventoryChanges: IInventoryChanges = {};
     if (purchaseRequest.PurchaseParams.Source == 7) {
         const manifest = getVendorManifestByOid(purchaseRequest.PurchaseParams.SourceId!);
         if (!manifest) {
@@ -57,6 +58,14 @@ export const handlePurchase = async (
         if (!offer) {
             throw new Error(`unknown vendor offer: ${ItemId}`);
         }
+        if (offer.ItemPrices) {
+            await handleItemPrices(
+                accountId,
+                offer.ItemPrices,
+                purchaseRequest.PurchaseParams.Quantity,
+                inventoryChanges
+            );
+        }
         purchaseRequest.PurchaseParams.Quantity *= offer.QuantityMultiplier;
     }
 
@@ -65,6 +74,7 @@ export const handlePurchase = async (
         accountId,
         purchaseRequest.PurchaseParams.Quantity
     );
+    combineInventoryChanges(purchaseResponse.InventoryChanges, inventoryChanges);
 
     if (!purchaseResponse) throw new Error("purchase response was undefined");
 
@@ -117,27 +127,12 @@ export const handlePurchase = async (
                 const vendor = ExportVendors[purchaseRequest.PurchaseParams.SourceId!];
                 const offer = vendor.items.find(x => x.storeItem == purchaseRequest.PurchaseParams.StoreItem);
                 if (offer) {
-                    const inventory = await getInventory(accountId);
-                    for (const item of offer.itemPrices) {
-                        const invItem: IMiscItem = {
-                            ItemType: item.ItemType,
-                            ItemCount: item.ItemCount * purchaseRequest.PurchaseParams.Quantity * -1
-                        };
-
-                        addMiscItems(inventory, [invItem]);
-
-                        purchaseResponse.InventoryChanges.MiscItems ??= [];
-                        const change = (purchaseResponse.InventoryChanges.MiscItems as IMiscItem[]).find(
-                            x => x.ItemType == item.ItemType
-                        );
-                        if (change) {
-                            change.ItemCount += invItem.ItemCount;
-                        } else {
-                            (purchaseResponse.InventoryChanges.MiscItems as IMiscItem[]).push(invItem);
-                        }
-                    }
-
-                    await inventory.save();
+                    await handleItemPrices(
+                        accountId,
+                        offer.itemPrices,
+                        purchaseRequest.PurchaseParams.Quantity,
+                        purchaseResponse.InventoryChanges
+                    );
                 }
             }
             break;
@@ -174,6 +169,32 @@ export const handlePurchase = async (
     }
 
     return purchaseResponse;
+};
+
+const handleItemPrices = async (
+    accountId: string,
+    itemPrices: IMiscItem[],
+    purchaseQuantity: number,
+    inventoryChanges: IInventoryChanges
+): Promise<void> => {
+    const inventory = await getInventory(accountId);
+    for (const item of itemPrices) {
+        const invItem: IMiscItem = {
+            ItemType: item.ItemType,
+            ItemCount: item.ItemCount * purchaseQuantity * -1
+        };
+
+        addMiscItems(inventory, [invItem]);
+
+        inventoryChanges.MiscItems ??= [];
+        const change = (inventoryChanges.MiscItems as IMiscItem[]).find(x => x.ItemType == item.ItemType);
+        if (change) {
+            change.ItemCount += invItem.ItemCount;
+        } else {
+            (inventoryChanges.MiscItems as IMiscItem[]).push(invItem);
+        }
+    }
+    await inventory.save();
 };
 
 export const handleStoreItemAcquisition = async (
@@ -254,7 +275,7 @@ const handleSlotPurchase = async (
     slotPurchaseNameFull: string,
     accountId: string,
     quantity: number
-): Promise<{ InventoryChanges: IInventoryChanges }> => {
+): Promise<IPurchaseResponse> => {
     logger.debug(`slot name ${slotPurchaseNameFull}`);
     const slotPurchaseName = parseSlotPurchaseName(
         slotPurchaseNameFull.substring(slotPurchaseNameFull.lastIndexOf("/") + 1)
