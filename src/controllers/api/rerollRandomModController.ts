@@ -57,8 +57,10 @@ const randomiseStats = (randomModType: string, fingerprint: IUnveiledRivenFinger
     const numBuffs = 2 + Math.trunc(Math.random() * 2); // 2 or 3
     const buffEntries = meta.upgradeEntries!.filter(x => x.canBeBuff);
     for (let i = 0; i != numBuffs; ++i) {
-        const entry = getRandomElement(buffEntries);
+        const buffIndex = Math.trunc(Math.random() * buffEntries.length);
+        const entry = buffEntries[buffIndex];
         fingerprint.buffs.push({ Tag: entry.tag, Value: Math.trunc(Math.random() * 0x40000000) });
+        buffEntries.splice(buffIndex, 1);
     }
 
     fingerprint.curses = [];
