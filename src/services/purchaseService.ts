@@ -51,7 +51,8 @@ export const handlePurchase = async (
     if (purchaseRequest.PurchaseParams.Source == 7) {
         const manifest = getVendorManifestByOid(purchaseRequest.PurchaseParams.SourceId!);
         if (manifest) {
-            const ItemId = (JSON.parse(purchaseRequest.PurchaseParams.ExtraPurchaseInfoJson!) as { ItemId: string }).ItemId;
+            const ItemId = (JSON.parse(purchaseRequest.PurchaseParams.ExtraPurchaseInfoJson!) as { ItemId: string })
+                .ItemId;
             const offer = manifest.VendorInfo.ItemManifest.find(x => x.Id.$oid == ItemId);
             if (!offer) {
                 throw new Error(`unknown vendor offer: ${ItemId}`);
