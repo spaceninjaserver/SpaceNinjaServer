@@ -1109,7 +1109,6 @@ function doAddAllMods() {
                         }))
                     })
                 }).done(function () {
-                    document.getElementById("mod-to-acquire").value = "";
                     updateInventory();
                 });
             });
