@@ -13,6 +13,7 @@ export const rerollRandomModController: RequestHandler = async (req, res) => {
         const upgrade = inventory.Upgrades.find(x => x._id?.toString() == request.ItemIds[0])!;
         const fingerprint = JSON.parse(upgrade.UpgradeFingerprint!) as IUnveiledRivenFingerprint;
 
+        fingerprint.rerolls ??= 0;
         const kuvaCost = fingerprint.rerolls < rerollCosts.length ? rerollCosts[fingerprint.rerolls] : 3500;
         addMiscItems(inventory, [
             {
@@ -86,7 +87,7 @@ interface IUnveiledRivenFingerprint {
     lim: number;
     lvl: number;
     lvlReq: 0;
-    rerolls: number;
+    rerolls?: number;
     pol: string;
     buffs: IRivenStat[];
     curses: IRivenStat[];
