@@ -50,23 +50,25 @@ export const handlePurchase = async (
     const inventoryChanges: IInventoryChanges = {};
     if (purchaseRequest.PurchaseParams.Source == 7) {
         const manifest = getVendorManifestByOid(purchaseRequest.PurchaseParams.SourceId!);
-        if (!manifest) {
-            throw new Error(`unknown vendor id: ${purchaseRequest.PurchaseParams.SourceId!}`);
+        if (manifest) {
+            const ItemId = (JSON.parse(purchaseRequest.PurchaseParams.ExtraPurchaseInfoJson!) as { ItemId: string })
+                .ItemId;
+            const offer = manifest.VendorInfo.ItemManifest.find(x => x.Id.$oid == ItemId);
+            if (!offer) {
+                throw new Error(`unknown vendor offer: ${ItemId}`);
+            }
+            if (offer.ItemPrices) {
+                await handleItemPrices(
+                    accountId,
+                    offer.ItemPrices,
+                    purchaseRequest.PurchaseParams.Quantity,
+                    inventoryChanges
+                );
+            }
+            purchaseRequest.PurchaseParams.Quantity *= offer.QuantityMultiplier;
+        } else if (!ExportVendors[purchaseRequest.PurchaseParams.SourceId!]) {
+            throw new Error(`unknown vendor: ${purchaseRequest.PurchaseParams.SourceId!}`);
         }
-        const ItemId = (JSON.parse(purchaseRequest.PurchaseParams.ExtraPurchaseInfoJson!) as { ItemId: string }).ItemId;
-        const offer = manifest.VendorInfo.ItemManifest.find(x => x.Id.$oid == ItemId);
-        if (!offer) {
-            throw new Error(`unknown vendor offer: ${ItemId}`);
-        }
-        if (offer.ItemPrices) {
-            await handleItemPrices(
-                accountId,
-                offer.ItemPrices,
-                purchaseRequest.PurchaseParams.Quantity,
-                inventoryChanges
-            );
-        }
-        purchaseRequest.PurchaseParams.Quantity *= offer.QuantityMultiplier;
     }
 
     const purchaseResponse = await handleStoreItemAcquisition(
@@ -126,7 +128,7 @@ export const handlePurchase = async (
             if (purchaseRequest.PurchaseParams.SourceId! in ExportVendors) {
                 const vendor = ExportVendors[purchaseRequest.PurchaseParams.SourceId!];
                 const offer = vendor.items.find(x => x.storeItem == purchaseRequest.PurchaseParams.StoreItem);
-                if (offer) {
+                if (offer && offer.itemPrices) {
                     await handleItemPrices(
                         accountId,
                         offer.itemPrices,
