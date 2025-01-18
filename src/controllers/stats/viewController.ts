@@ -23,11 +23,15 @@ const viewController: RequestHandler = async (req, res) => {
         });
     }
     if (config.unlockAllScans) {
-        responseJson.Scans = allScans;
+        const scans = new Set(allScans);
         for (const type of Object.keys(ExportEnemies.avatars)) {
-            if (!responseJson.Scans.find(x => x.type == type)) {
-                responseJson.Scans.push({ type, scans: 9999 });
+            if (!scans.has(type)) {
+                scans.add(type);
             }
+        }
+        responseJson.Scans = [];
+        for (const type of scans) {
+            responseJson.Scans.push({ type: type, scans: 9999 });
         }
     }
     res.json(responseJson);
