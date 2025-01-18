@@ -7,9 +7,9 @@ import { getRandomElement } from "@/src/services/rngService";
 
 export const rerollRandomModController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId);
     const request = getJSONfromString(String(req.body)) as RerollRandomModRequest;
     if ("ItemIds" in request) {
+        const inventory = await getInventory(accountId, "Upgrades MiscItems");
         const upgrade = inventory.Upgrades.id(request.ItemIds[0])!;
         const fingerprint = JSON.parse(upgrade.UpgradeFingerprint!) as IUnveiledRivenFingerprint;
 
@@ -41,6 +41,7 @@ export const rerollRandomModController: RequestHandler = async (req, res) => {
             cost: kuvaCost
         });
     } else {
+        const inventory = await getInventory(accountId, "Upgrades");
         const upgrade = inventory.Upgrades.id(request.ItemId)!;
         if (request.CommitReroll && upgrade.PendingRerollFingerprint) {
             upgrade.UpgradeFingerprint = upgrade.PendingRerollFingerprint;
