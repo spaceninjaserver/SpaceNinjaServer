@@ -1,6 +1,7 @@
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addEquipment, addPowerSuit, getInventory, updateSlots } from "@/src/services/inventoryService";
-import { productCategoryToSlotName } from "@/src/helpers/purchaseHelpers";
+import { SlotNames } from "@/src/types/purchaseTypes";
+import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
 import { RequestHandler } from "express";
 
 export const addItemsController: RequestHandler = async (req, res) => {
@@ -24,9 +25,22 @@ export const addItemsController: RequestHandler = async (req, res) => {
     res.end();
 };
 
+const productCategoryToSlotName: Record<ItemType, SlotNames> = {
+    Suits: InventorySlot.SUITS,
+    Pistols: InventorySlot.WEAPONS,
+    Melee: InventorySlot.WEAPONS,
+    LongGuns: InventorySlot.WEAPONS,
+    SpaceSuits: InventorySlot.SPACESUITS,
+    SpaceGuns: InventorySlot.SPACESUITS,
+    SpaceMelee: InventorySlot.SPACESUITS,
+    Sentinels: InventorySlot.SENTINELS,
+    SentinelWeapons: InventorySlot.SENTINELS
+};
+
 enum ItemType {
     Suits = "Suits",
     SpaceSuits = "SpaceSuits",
+    LongGuns = "LongGuns",
     Pistols = "Pistols",
     Melee = "Melee",
     SpaceGuns = "SpaceGuns",
