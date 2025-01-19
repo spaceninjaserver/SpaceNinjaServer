@@ -25,6 +25,9 @@ export interface IInventoryDatabase
         | "Ships"
         | "WeaponSkins"
         | "Suits"
+        | "Upgrades"
+        | "CrewShipSalvagedWeaponSkins"
+        | "CrewShipWeaponSkins"
     > {
     accountOwnerId: Types.ObjectId;
     Created: Date;
@@ -38,6 +41,9 @@ export interface IInventoryDatabase
     Ships: Types.ObjectId[];
     WeaponSkins: IWeaponSkinDatabase[];
     Suits: IEquipmentDatabase[];
+    Upgrades: IUpgradeDatabase[];
+    CrewShipSalvagedWeaponSkins: IUpgradeDatabase[];
+    CrewShipWeaponSkins: IUpgradeDatabase[];
 }
 
 export interface IQuestKeyDatabase {
@@ -194,7 +200,7 @@ export interface IInventoryClient extends IDailyAffiliations {
     Accolades?: {
         Heirloom?: boolean;
     };
-    Upgrades: ICrewShipSalvagedWeaponSkin[];
+    Upgrades: IUpgradeClient[];
     EquippedGear: string[];
     DeathMarks: string[];
     FusionTreasures: IFusionTreasure[];
@@ -272,10 +278,10 @@ export interface IInventoryClient extends IDailyAffiliations {
     CrewShips: ICrewShip[];
     PlayerSkills: IPlayerSkills;
     CrewShipAmmo: IConsumable[];
-    CrewShipSalvagedWeaponSkins: ICrewShipSalvagedWeaponSkin[];
+    CrewShipSalvagedWeaponSkins: IUpgradeClient[];
     CrewShipWeapons: ICrewShipWeapon[];
     CrewShipSalvagedWeapons: ICrewShipWeapon[];
-    CrewShipWeaponSkins: ICrewShipSalvagedWeaponSkin[];
+    CrewShipWeaponSkins: IUpgradeClient[];
     TradeBannedUntil?: IMongoDate;
     PlayedParkourTutorial: boolean;
     SubscribedToEmailsPersonalized: number;
@@ -418,12 +424,15 @@ export interface ISlots {
     Slots: number;
 }
 
-export interface ICrewShipSalvagedWeaponSkin {
+export interface IUpgradeClient {
     ItemType: string;
     UpgradeFingerprint?: string;
     PendingRerollFingerprint?: string;
-    ItemId?: IOid;
-    _id?: Types.ObjectId;
+    ItemId: IOid;
+}
+
+export interface IUpgradeDatabase extends Omit<IUpgradeClient, "ItemId"> {
+    _id: Types.ObjectId;
 }
 
 export interface ICrewShip {

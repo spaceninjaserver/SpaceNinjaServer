@@ -2,7 +2,6 @@ import { Document, Model, Schema, Types, model } from "mongoose";
 import {
     IFlavourItem,
     IRawUpgrade,
-    ICrewShipSalvagedWeaponSkin,
     IMiscItem,
     IInventoryDatabase,
     IBooster,
@@ -52,7 +51,8 @@ import {
     IDialogueDatabase,
     IDialogueGift,
     ICompletedDialogue,
-    IDialogueClient
+    IDialogueClient,
+    IUpgradeDatabase
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -288,7 +288,7 @@ RawUpgrades.set("toJSON", {
     }
 });
 
-const upgradesSchema = new Schema<ICrewShipSalvagedWeaponSkin>(
+const upgradeSchema = new Schema<IUpgradeDatabase>(
     {
         UpgradeFingerprint: String,
         PendingRerollFingerprint: { type: String, required: false },
@@ -297,11 +297,11 @@ const upgradesSchema = new Schema<ICrewShipSalvagedWeaponSkin>(
     { id: false }
 );
 
-upgradesSchema.virtual("ItemId").get(function () {
+upgradeSchema.virtual("ItemId").get(function () {
     return toOid(this._id);
 });
 
-upgradesSchema.set("toJSON", {
+upgradeSchema.set("toJSON", {
     virtuals: true,
     transform(_document, returnedObject) {
         delete returnedObject._id;
@@ -848,7 +848,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Non Upgrade Mods Example:I have 999 item WeaponElectricityDamageMod (only "ItemCount"+"ItemType")
         RawUpgrades: [RawUpgrades],
         //Upgrade Mods\Riven\Arcane Example:"UpgradeFingerprint"+"ItemType"+""
-        Upgrades: [upgradesSchema],
+        Upgrades: [upgradeSchema],
 
         //Warframe
         Suits: [EquipmentSchema],
@@ -1164,7 +1164,7 @@ type InventoryDocumentProps = {
     OperatorAmps: Types.DocumentArray<IEquipmentDatabase>;
     FlavourItems: Types.DocumentArray<IFlavourItem>;
     RawUpgrades: Types.DocumentArray<IRawUpgrade>;
-    Upgrades: Types.DocumentArray<ICrewShipSalvagedWeaponSkin>;
+    Upgrades: Types.DocumentArray<IUpgradeDatabase>;
     MiscItems: Types.DocumentArray<IMiscItem>;
     Boosters: Types.DocumentArray<IBooster>;
     OperatorLoadOuts: Types.DocumentArray<IOperatorConfigClient>;

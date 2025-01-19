@@ -1,7 +1,7 @@
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { RequestHandler } from "express";
-import { ICrewShipSalvagedWeaponSkin } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IInventoryClient, IUpgradeClient } from "@/src/types/inventoryTypes/inventoryTypes";
 import { addMods, getInventory } from "@/src/services/inventoryService";
 import { config } from "@/src/services/configService";
 
@@ -20,7 +20,7 @@ export const artifactsController: RequestHandler = async (req, res) => {
     parsedUpgradeFingerprint.lvl += LevelDiff;
     const stringifiedUpgradeFingerprint = JSON.stringify(parsedUpgradeFingerprint);
 
-    let itemIndex = Upgrades.findIndex(upgrade => upgrade._id?.equals(ItemId!.$oid));
+    let itemIndex = Upgrades.findIndex(upgrade => upgrade._id.equals(ItemId.$oid));
 
     if (itemIndex !== -1) {
         Upgrades[itemIndex].UpgradeFingerprint = stringifiedUpgradeFingerprint;
@@ -58,7 +58,7 @@ export const artifactsController: RequestHandler = async (req, res) => {
     }
 
     const changedInventory = await inventory.save();
-    const itemId = changedInventory.toJSON().Upgrades[itemIndex]?.ItemId?.$oid;
+    const itemId = changedInventory.toJSON<IInventoryClient>().Upgrades[itemIndex].ItemId.$oid;
 
     if (!itemId) {
         throw new Error("Item Id not found in upgradeMod");
@@ -68,7 +68,7 @@ export const artifactsController: RequestHandler = async (req, res) => {
 };
 
 interface IArtifactsRequest {
-    Upgrade: ICrewShipSalvagedWeaponSkin;
+    Upgrade: IUpgradeClient;
     LevelDiff: number;
     Cost: number;
     FusionPointCost: number;
