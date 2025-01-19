@@ -15,3 +15,8 @@ call npm i
 
 call npm run build
 call npm run start
+
+echo SpaceNinjaServer seems to have crashed.
+:a
+pause > nul
+goto a
