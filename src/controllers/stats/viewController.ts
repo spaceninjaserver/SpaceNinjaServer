@@ -1,14 +1,14 @@
 import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { IStatsView } from "@/src/types/statTypes";
 import { config } from "@/src/services/configService";
 import allScans from "@/static/fixed_responses/allScans.json";
 import { ExportEnemies } from "warframe-public-export-plus";
+import { getInventory } from "@/src/services/inventoryService";
 
 const viewController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const inventory = await Inventory.findOne({ accountOwnerId: accountId });
+    const inventory = await getInventory(accountId, "XPInfo");
     if (!inventory) {
         res.status(400).json({ error: "inventory was undefined" });
         return;
@@ -23,11 +23,15 @@ const viewController: RequestHandler = async (req, res) => {
         });
     }
     if (config.unlockAllScans) {
-        responseJson.Scans = allScans;
+        const scans = new Set(allScans);
         for (const type of Object.keys(ExportEnemies.avatars)) {
-            if (!responseJson.Scans.find(x => x.type == type)) {
-                responseJson.Scans.push({ type, scans: 9999 });
+            if (!scans.has(type)) {
+                scans.add(type);
             }
+        }
+        responseJson.Scans = [];
+        for (const type of scans) {
+            responseJson.Scans.push({ type: type, scans: 9999 });
         }
     }
     res.json(responseJson);
