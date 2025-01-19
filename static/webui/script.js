@@ -217,7 +217,7 @@ function updateInventory() {
                         if (item.ItemName) {
                             td.textContent = item.ItemName + " (" + td.textContent + ")";
                         }
-                        if (item.ModularParts) {
+                        if (item.ModularParts && item.ModularParts.length) {
                             td.textContent += " [";
                             item.ModularParts.forEach(part => {
                                 td.textContent += " " + (itemMap[part]?.name ?? part) + ",";
