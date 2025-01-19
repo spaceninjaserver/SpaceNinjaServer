@@ -51,6 +51,41 @@ export const sellController: RequestHandler = async (req, res) => {
             inventory.Melee.pull({ _id: sellItem.String });
         });
     }
+    if (payload.Items.SpaceSuits) {
+        payload.Items.SpaceSuits.forEach(sellItem => {
+            inventory.SpaceSuits.pull({ _id: sellItem.String });
+        });
+    }
+    if (payload.Items.SpaceGuns) {
+        payload.Items.SpaceGuns.forEach(sellItem => {
+            inventory.SpaceGuns.pull({ _id: sellItem.String });
+        });
+    }
+    if (payload.Items.SpaceMelee) {
+        payload.Items.SpaceMelee.forEach(sellItem => {
+            inventory.SpaceMelee.pull({ _id: sellItem.String });
+        });
+    }
+    if (payload.Items.Sentinels) {
+        payload.Items.Sentinels.forEach(sellItem => {
+            inventory.Sentinels.pull({ _id: sellItem.String });
+        });
+    }
+    if (payload.Items.SentinelWeapons) {
+        payload.Items.SentinelWeapons.forEach(sellItem => {
+            inventory.SentinelWeapons.pull({ _id: sellItem.String });
+        });
+    }
+    if (payload.Items.OperatorAmps) {
+        payload.Items.OperatorAmps.forEach(sellItem => {
+            inventory.OperatorAmps.pull({ _id: sellItem.String });
+        });
+    }
+    if (payload.Items.Hoverboards) {
+        payload.Items.Hoverboards.forEach(sellItem => {
+            inventory.Hoverboards.pull({ _id: sellItem.String });
+        });
+    }
     if (payload.Items.Consumables) {
         const consumablesChanges = [];
         for (const sellItem of payload.Items.Consumables) {
@@ -110,6 +145,13 @@ interface ISellRequest {
         Recipes?: ISellItem[];
         Upgrades?: ISellItem[];
         MiscItems?: ISellItem[];
+        SpaceSuits?: ISellItem[];
+        SpaceGuns?: ISellItem[];
+        SpaceMelee?: ISellItem[];
+        Sentinels?: ISellItem[];
+        SentinelWeapons?: ISellItem[];
+        OperatorAmps?: ISellItem[];
+        Hoverboards?: ISellItem[];
     };
     SellPrice: number;
     SellCurrency:

@@ -149,6 +149,12 @@ function fetchItemList() {
                 "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryBeam": { name: "Kitgun" },
                 "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryShotgun": { name: "Kitgun" },
                 "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon": { name: "Zaw" },
+                "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/OperatorTrainingAmpWeapon": {
+                    name: "Mote Amp"
+                },
+                "/Lotus/Weapons/Sentients/OperatorAmplifiers/OperatorAmpWeapon": { name: "Amp" },
+                "/Lotus/Weapons/Operator/Pistols/DrifterPistol/DrifterPistolPlayerWeapon": { name: "Sirocco" },
+                "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit": { name: "K-Drive" },
                 // Missing in data sources
                 "/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser": { name: "Legendary Core" },
                 "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/CyoteMod": { name: "Traumatic Peculiar" }
@@ -188,84 +194,19 @@ function updateInventory() {
             window.didInitialInventoryUpdate = true;
 
             // Populate inventory route
-            document.getElementById("warframe-list").innerHTML = "";
-            data.Suits.forEach(item => {
-                const tr = document.createElement("tr");
-                tr.setAttribute("data-item-type", item.ItemType);
-                {
-                    const td = document.createElement("td");
-                    td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
-                    if (item.ItemName) {
-                        td.textContent = item.ItemName + " (" + td.textContent + ")";
-                    }
-                    tr.appendChild(td);
-                }
-                {
-                    const td = document.createElement("td");
-                    td.classList = "text-end";
-                    if (item.XP < 1_600_000) {
-                        const a = document.createElement("a");
-                        a.href = "#";
-                        a.onclick = function (event) {
-                            event.preventDefault();
-                            addGearExp("Suits", item.ItemId.$oid, 1_600_000 - item.XP);
-                            if ("exalted" in itemMap[item.ItemType]) {
-                                for (const exaltedType of itemMap[item.ItemType].exalted) {
-                                    const exaltedItem = data.SpecialItems.find(x => x.ItemType == exaltedType);
-                                    if (exaltedItem) {
-                                        const exaltedCap =
-                                            itemMap[exaltedType]?.type == "weapons" ? 800_000 : 1_600_000;
-                                        if (exaltedItem.XP < exaltedCap) {
-                                            addGearExp(
-                                                "SpecialItems",
-                                                exaltedItem.ItemId.$oid,
-                                                exaltedCap - exaltedItem.XP
-                                            );
-                                        }
-                                    }
-                                }
-                            }
-                        };
-                        a.title = "Make Rank 30";
-                        a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"/></svg>`;
-                        td.appendChild(a);
-                    }
-                    {
-                        const a = document.createElement("a");
-                        a.href = "/webui/powersuit/" + item.ItemId.$oid;
-                        a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M278.5 215.6L23 471c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l57-57h68c49.7 0 97.9-14.4 139-41c11.1-7.2 5.5-23-7.8-23c-5.1 0-9.2-4.1-9.2-9.2c0-4.1 2.7-7.6 6.5-8.8l81-24.3c2.5-.8 4.8-2.1 6.7-4l22.4-22.4c10.1-10.1 2.9-27.3-11.3-27.3l-32.2 0c-5.1 0-9.2-4.1-9.2-9.2c0-4.1 2.7-7.6 6.5-8.8l112-33.6c4-1.2 7.4-3.9 9.3-7.7C506.4 207.6 512 184.1 512 160c0-41-16.3-80.3-45.3-109.3l-5.5-5.5C432.3 16.3 393 0 352 0s-80.3 16.3-109.3 45.3L139 149C91 197 64 262.1 64 330v55.3L253.6 195.8c6.2-6.2 16.4-6.2 22.6 0c5.4 5.4 6.1 13.6 2.2 19.8z"/></svg>`;
-                        td.appendChild(a);
-                    }
-                    {
-                        const a = document.createElement("a");
-                        a.href = "#";
-                        a.onclick = function (event) {
-                            event.preventDefault();
-                            const name = prompt("Enter new custom name:");
-                            if (name !== null) {
-                                renameGear("Suits", item.ItemId.$oid, name);
-                            }
-                        };
-                        a.title = "Rename";
-                        a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M0 80V229.5c0 17 6.7 33.3 18.7 45.3l176 176c25 25 65.5 25 90.5 0L418.7 317.3c25-25 25-65.5 0-90.5l-176-176c-12-12-28.3-18.7-45.3-18.7H48C21.5 32 0 53.5 0 80zm112 32a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/></svg>`;
-                        td.appendChild(a);
-                    }
-                    {
-                        const a = document.createElement("a");
-                        a.href = "#";
-                        a.onclick = function (event) {
-                            event.preventDefault();
-                            disposeOfGear("Suits", item.ItemId.$oid);
-                        };
-                        a.title = "Remove";
-                        a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
-                        td.appendChild(a);
-                    }
-                    tr.appendChild(td);
-                }
-                document.getElementById("warframe-list").appendChild(tr);
-            });
-            ["LongGuns", "Pistols", "Melee"].forEach(category => {
+            [
+                "Suits",
+                "SpaceSuits",
+                "Sentinels",
+                "LongGuns",
+                "Pistols",
+                "Melee",
+                "SpaceGuns",
+                "SpaceMelee",
+                "SentinelWeapons",
+                "Hoverboards",
+                "OperatorAmps"
+            ].forEach(category => {
                 document.getElementById(category + "-list").innerHTML = "";
                 data[category].forEach(item => {
                     const tr = document.createElement("tr");
@@ -276,20 +217,57 @@ function updateInventory() {
                         if (item.ItemName) {
                             td.textContent = item.ItemName + " (" + td.textContent + ")";
                         }
+                        if (item.ModularParts) {
+                            td.textContent += " [";
+                            item.ModularParts.forEach(part => {
+                                td.textContent += " " + (itemMap[part]?.name ?? part) + ",";
+                            });
+                            td.textContent = td.textContent.slice(0, -1) + " ]";
+                        }
                         tr.appendChild(td);
                     }
                     {
                         const td = document.createElement("td");
                         td.classList = "text-end";
-                        if (item.XP < 800_000) {
+                        const maxXP =
+                            category === "Suits" ||
+                            category === "SpaceSuits" ||
+                            category === "Sentinels" ||
+                            category === "Hoverboards"
+                                ? 1_600_000
+                                : 800_000;
+
+                        if (item.XP < maxXP) {
                             const a = document.createElement("a");
                             a.href = "#";
                             a.onclick = function (event) {
                                 event.preventDefault();
-                                addGearExp(category, item.ItemId.$oid, 800_000 - item.XP);
+                                addGearExp(category, item.ItemId.$oid, maxXP - item.XP);
+                                if ("exalted" in itemMap[item.ItemType]) {
+                                    for (const exaltedType of itemMap[item.ItemType].exalted) {
+                                        const exaltedItem = data.SpecialItems.find(x => x.ItemType == exaltedType);
+                                        if (exaltedItem) {
+                                            const exaltedCap =
+                                                itemMap[exaltedType]?.type == "weapons" ? 800_000 : 1_600_000;
+                                            if (exaltedItem.XP < exaltedCap) {
+                                                addGearExp(
+                                                    "SpecialItems",
+                                                    exaltedItem.ItemId.$oid,
+                                                    exaltedCap - exaltedItem.XP
+                                                );
+                                            }
+                                        }
+                                    }
+                                }
                             };
                             a.title = "Make Rank 30";
                             a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"/></svg>`;
+                            td.appendChild(a);
+                        }
+                        if (category == "Suits") {
+                            const a = document.createElement("a");
+                            a.href = "/webui/powersuit/" + item.ItemId.$oid;
+                            a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M278.5 215.6L23 471c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l57-57h68c49.7 0 97.9-14.4 139-41c11.1-7.2 5.5-23-7.8-23c-5.1 0-9.2-4.1-9.2-9.2c0-4.1 2.7-7.6 6.5-8.8l81-24.3c2.5-.8 4.8-2.1 6.7-4l22.4-22.4c10.1-10.1 2.9-27.3-11.3-27.3l-32.2 0c-5.1 0-9.2-4.1-9.2-9.2c0-4.1 2.7-7.6 6.5-8.8l112-33.6c4-1.2 7.4-3.9 9.3-7.7C506.4 207.6 512 184.1 512 160c0-41-16.3-80.3-45.3-109.3l-5.5-5.5C432.3 16.3 393 0 352 0s-80.3 16.3-109.3 45.3L139 149C91 197 64 262.1 64 330v55.3L253.6 195.8c6.2-6.2 16.4-6.2 22.6 0c5.4 5.4 6.1 13.6 2.2 19.8z"/></svg>`;
                             td.appendChild(a);
                         }
                         {
@@ -524,35 +502,7 @@ function getKey(input) {
         ?.getAttribute("data-key");
 }
 
-function doAcquireWarframe() {
-    const uniqueName = getKey(document.getElementById("warframe-to-acquire"));
-    if (!uniqueName) {
-        $("#warframe-to-acquire").addClass("is-invalid").focus();
-        return;
-    }
-    revalidateAuthz(() => {
-        const req = $.post({
-            url: "/custom/addItems?" + window.authz,
-            contentType: "application/json",
-            data: JSON.stringify([
-                {
-                    type: "Powersuit",
-                    internalName: uniqueName
-                }
-            ])
-        });
-        req.done(() => {
-            document.getElementById("warframe-to-acquire").value = "";
-            updateInventory();
-        });
-    });
-}
-
-$("input[list]").on("input", function () {
-    $(this).removeClass("is-invalid");
-});
-
-function doAcquireWeapon(category) {
+function doAcquireEquipment(category) {
     const uniqueName = getKey(document.getElementById("acquire-type-" + category));
     if (!uniqueName) {
         $("#acquire-type-" + category)
@@ -566,7 +516,7 @@ function doAcquireWeapon(category) {
             contentType: "application/json",
             data: JSON.stringify([
                 {
-                    type: "Weapon",
+                    type: category,
                     internalName: uniqueName
                 }
             ])
@@ -577,6 +527,10 @@ function doAcquireWeapon(category) {
         });
     });
 }
+
+$("input[list]").on("input", function () {
+    $(this).removeClass("is-invalid");
+});
 
 function dispatchAddItemsRequestsBatch(requests) {
     revalidateAuthz(() => {
@@ -591,12 +545,18 @@ function dispatchAddItemsRequestsBatch(requests) {
     });
 }
 
-function addMissingWarframes() {
+function addMissingEquipment(categories) {
     const requests = [];
-    document.querySelectorAll("#datalist-warframes option").forEach(elm => {
-        if (!document.querySelector("#warframe-list [data-item-type='" + elm.getAttribute("data-key") + "']")) {
-            requests.push({ type: "Powersuit", internalName: elm.getAttribute("data-key") });
-        }
+    categories.forEach(category => {
+        document.querySelectorAll("#datalist-" + category + " option").forEach(elm => {
+            if (
+                !document.querySelector(
+                    "#" + category + "-list [data-item-type='" + elm.getAttribute("data-key") + "']"
+                )
+            ) {
+                requests.push({ type: category, internalName: elm.getAttribute("data-key") });
+            }
+        });
     });
     if (
         requests.length != 0 &&
@@ -606,88 +566,57 @@ function addMissingWarframes() {
     }
 }
 
-function maxRankAllWarframes() {
+function maxRankAllEquipment(categories) {
     const req = $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1");
 
     req.done(data => {
         window.itemListPromise.then(itemMap => {
-            const batchData = { Suits: [], SpecialItems: [] };
+            const batchData = {};
 
-            data.Suits.forEach(item => {
-                if (item.XP < 1_600_000) {
-                    batchData.Suits.push({
-                        ItemId: { $oid: item.ItemId.$oid },
-                        XP: 1_600_000 - item.XP
-                    });
-                }
+            categories.forEach(category => {
+                data[category].forEach(item => {
+                    const maxXP =
+                        category === "Suits" ||
+                        category === "SpaceSuits" ||
+                        category === "Sentinels" ||
+                        category === "Hoverboards"
+                            ? 1_600_000
+                            : 800_000;
 
-                if ("exalted" in itemMap[item.ItemType]) {
-                    for (const exaltedType of itemMap[item.ItemType].exalted) {
-                        const exaltedItem = data.SpecialItems.find(x => x.ItemType == exaltedType);
-                        if (exaltedItem) {
-                            const exaltedCap = itemMap[exaltedType]?.type == "weapons" ? 800_000 : 1_600_000;
-                            if (exaltedItem.XP < exaltedCap) {
-                                batchData.SpecialItems.push({
-                                    ItemId: { $oid: exaltedItem.ItemId.$oid },
-                                    XP: exaltedCap
-                                });
+                    if (item.XP < maxXP) {
+                        if (!batchData[category]) {
+                            batchData[category] = [];
+                        }
+                        batchData[category].push({
+                            ItemId: { $oid: item.ItemId.$oid },
+                            XP: maxXP
+                        });
+                    }
+                    if (category === "Suits") {
+                        if ("exalted" in itemMap[item.ItemType]) {
+                            for (const exaltedType of itemMap[item.ItemType].exalted) {
+                                const exaltedItem = data["SpecialItems"].find(x => x.ItemType == exaltedType);
+                                if (exaltedItem) {
+                                    const exaltedCap = itemMap[exaltedType]?.type == "weapons" ? 800_000 : 1_600_000;
+                                    if (exaltedItem.XP < exaltedCap) {
+                                        batchData["SpecialItems"].push({
+                                            ItemId: { $oid: exaltedItem.ItemId.$oid },
+                                            XP: exaltedCap
+                                        });
+                                    }
+                                }
                             }
                         }
                     }
-                }
+                });
             });
 
-            if (batchData.Suits.length > 0 || batchData.SpecialItems.length > 0) {
+            if (Object.keys(batchData).length > 0) {
                 return sendBatchGearExp(batchData);
             }
 
-            alert("No Warframes to rank up.");
+            alert("No equipment to rank up.");
         });
-    });
-}
-
-function addMissingWeapons() {
-    const requests = [];
-    document
-        .querySelectorAll("#datalist-LongGuns option, #datalist-Pistols option, #datalist-Melee option")
-        .forEach(elm => {
-            if (!document.querySelector("#weapon-list [data-item-type='" + elm.getAttribute("data-key") + "']")) {
-                requests.push({ type: "Weapon", internalName: elm.getAttribute("data-key") });
-            }
-        });
-    if (
-        requests.length != 0 &&
-        window.confirm("Are you sure you want to add " + requests.length + " items to your account?")
-    ) {
-        dispatchAddItemsRequestsBatch(requests);
-    }
-}
-
-function maxRankAllWeapons() {
-    const req = $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1");
-
-    req.done(data => {
-        const batchData = {};
-
-        ["LongGuns", "Pistols", "Melee"].forEach(category => {
-            data[category].forEach(item => {
-                if (item.XP < 800_000) {
-                    if (!batchData[category]) {
-                        batchData[category] = [];
-                    }
-                    batchData[category].push({
-                        ItemId: { $oid: item.ItemId.$oid },
-                        XP: 800_000 - item.XP
-                    });
-                }
-            });
-        });
-
-        if (Object.keys(batchData).length > 0) {
-            return sendBatchGearExp(batchData);
-        }
-
-        alert("No weapons to rank up.");
     });
 }
 

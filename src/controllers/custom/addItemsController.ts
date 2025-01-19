@@ -1,8 +1,8 @@
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getWeaponType } from "@/src/services/itemDataService";
-import { addPowerSuit, addEquipment, getInventory, updateSlots } from "@/src/services/inventoryService";
-import { RequestHandler } from "express";
+import { addEquipment, addPowerSuit, getInventory, updateSlots } from "@/src/services/inventoryService";
+import { SlotNames } from "@/src/types/purchaseTypes";
 import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
+import { RequestHandler } from "express";
 
 export const addItemsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -10,14 +10,14 @@ export const addItemsController: RequestHandler = async (req, res) => {
     const inventory = await getInventory(accountId);
     for (const request of requests) {
         switch (request.type) {
-            case ItemType.Powersuit:
-                updateSlots(inventory, InventorySlot.SUITS, 0, 1);
+            case ItemType.Suits:
+                updateSlots(inventory, productCategoryToSlotName[request.type], 0, 1);
                 addPowerSuit(inventory, request.internalName);
                 break;
 
-            case ItemType.Weapon:
-                updateSlots(inventory, InventorySlot.WEAPONS, 0, 1);
-                addEquipment(inventory, getWeaponType(request.internalName), request.internalName);
+            default:
+                updateSlots(inventory, productCategoryToSlotName[request.type], 0, 1);
+                addEquipment(inventory, request.type, request.internalName);
                 break;
         }
     }
@@ -25,9 +25,28 @@ export const addItemsController: RequestHandler = async (req, res) => {
     res.end();
 };
 
+const productCategoryToSlotName: Record<ItemType, SlotNames> = {
+    Suits: InventorySlot.SUITS,
+    Pistols: InventorySlot.WEAPONS,
+    Melee: InventorySlot.WEAPONS,
+    LongGuns: InventorySlot.WEAPONS,
+    SpaceSuits: InventorySlot.SPACESUITS,
+    SpaceGuns: InventorySlot.SPACESUITS,
+    SpaceMelee: InventorySlot.SPACESUITS,
+    Sentinels: InventorySlot.SENTINELS,
+    SentinelWeapons: InventorySlot.SENTINELS
+};
+
 enum ItemType {
-    Powersuit = "Powersuit",
-    Weapon = "Weapon"
+    Suits = "Suits",
+    SpaceSuits = "SpaceSuits",
+    LongGuns = "LongGuns",
+    Pistols = "Pistols",
+    Melee = "Melee",
+    SpaceGuns = "SpaceGuns",
+    SpaceMelee = "SpaceMelee",
+    SentinelWeapons = "SentinelWeapons",
+    Sentinels = "Sentinels"
 }
 
 interface IAddItemRequest {
