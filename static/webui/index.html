@@ -99,12 +99,12 @@
                         <div class="card mb-3" style="height: 400px;">
                             <h5 class="card-header">Warframes</h5>
                             <div class="card-body overflow-auto">
-                                <form class="input-group mb-3" onsubmit="doAcquireWarframe();return false;">
-                                    <input class="form-control" id="warframe-to-acquire" list="datalist-warframes" />
+                                <form class="input-group mb-3" onsubmit="doAcquireEquipment('Suits');return false;">
+                                    <input class="form-control" id="acquire-type-Suits" list="datalist-Suits" />
                                     <button class="btn btn-primary" type="submit">Add</button>
                                 </form>
                                 <table class="table table-hover w-100">
-                                    <tbody id="warframe-list"></tbody>
+                                    <tbody id="Suits-list"></tbody>
                                 </table>
                             </div>
                         </div>
@@ -113,7 +113,7 @@
                         <div class="card mb-3" style="height: 400px;">
                             <h5 class="card-header">Primary Weapons</h5>
                             <div class="card-body overflow-auto">
-                                <form class="input-group mb-3" onsubmit="doAcquireWeapon('LongGuns');return false;">
+                                <form class="input-group mb-3" onsubmit="doAcquireEquipment('LongGuns');return false;">
                                     <input class="form-control" id="acquire-type-LongGuns" list="datalist-LongGuns" />
                                     <button class="btn btn-primary" type="submit">Add</button>
                                 </form>
@@ -129,7 +129,7 @@
                         <div class="card mb-3" style="height: 400px;">
                             <h5 class="card-header">Secondary Weapons</h5>
                             <div class="card-body overflow-auto">
-                                <form class="input-group mb-3" onsubmit="doAcquireWeapon('Pistols');return false;">
+                                <form class="input-group mb-3" onsubmit="doAcquireEquipment('Pistols');return false;">
                                     <input class="form-control" id="acquire-type-Pistols" list="datalist-Pistols" />
                                     <button class="btn btn-primary" type="submit">Add</button>
                                 </form>
@@ -143,7 +143,7 @@
                         <div class="card mb-3" style="height: 400px;">
                             <h5 class="card-header">Melee Weapons</h5>
                             <div class="card-body overflow-auto">
-                                <form class="input-group mb-3" onsubmit="doAcquireWeapon('Melee');return false;">
+                                <form class="input-group mb-3" onsubmit="doAcquireEquipment('Melee');return false;">
                                     <input class="form-control" id="acquire-type-Melee" list="datalist-Melee" />
                                     <button class="btn btn-primary" type="submit">Add</button>
                                 </form>
@@ -154,13 +154,123 @@
                         </div>
                     </div>
                 </div>
+                <div class="row g-3">
+                    <div class="col-lg-6">
+                        <div class="card mb-3" style="height: 400px;">
+                            <h5 class="card-header">Archwing</h5>
+                            <div class="card-body overflow-auto">
+                                <form class="input-group mb-3" onsubmit="doAcquireEquipment('SpaceSuits');return false;">
+                                    <input class="form-control" id="acquire-type-SpaceSuits" list="datalist-SpaceSuits" />
+                                    <button class="btn btn-primary" type="submit">Add</button>
+                                </form>
+                                <table class="table table-hover w-100">
+                                    <tbody id="SpaceSuits-list"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card mb-3" style="height: 400px;">
+                            <h5 class="card-header">Archwing Primary Weapons</h5>
+                            <div class="card-body overflow-auto">
+                                <form class="input-group mb-3" onsubmit="doAcquireEquipment('SpaceGuns');return false;">
+                                    <input class="form-control" id="acquire-type-SpaceGuns" list="datalist-SpaceGuns" />
+                                    <button class="btn btn-primary" type="submit">Add</button>
+                                </form>
+                                <table class="table table-hover w-100">
+                                    <tbody id="SpaceGuns-list"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-3">
+                    <div class="col-lg-6">
+                        <div class="card mb-3" style="height: 400px;">
+                            <h5 class="card-header">Archwing Melee Weapons</h5>
+                            <div class="card-body overflow-auto">
+                                <form class="input-group mb-3" onsubmit="doAcquireEquipment('SpaceMelee');return false;">
+                                    <input class="form-control" id="acquire-type-SpaceMelee" list="datalist-SpaceMelee" />
+                                    <button class="btn btn-primary" type="submit">Add</button>
+                                </form>
+                                <table class="table table-hover w-100">
+                                    <tbody id="SpaceMelee-list"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card mb-3" style="height: 400px;">
+                            <h5 class="card-header">Sentinel Weapons</h5>
+                            <div class="card-body overflow-auto">
+                                <form class="input-group mb-3" onsubmit="doAcquireEquipment('SentinelWeapons');return false;">
+                                    <input class="form-control" id="acquire-type-SentinelWeapons" list="datalist-SentinelWeapons" />
+                                    <button class="btn btn-primary" type="submit">Add</button>
+                                </form>
+                                <table class="table table-hover w-100">
+                                    <tbody id="SentinelWeapons-list"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-3">
+                    <div class="col-lg-6">
+                        <div class="card mb-3" style="height: 400px;">
+                            <h5 class="card-header">Sentinels</h5>
+                            <div class="card-body overflow-auto">
+                                <form class="input-group mb-3" onsubmit="doAcquireEquipment('Sentinels');return false;">
+                                    <input class="form-control" id="acquire-type-Sentinels" list="datalist-Sentinels" />
+                                    <button class="btn btn-primary" type="submit">Add</button>
+                                </form>
+                                <table class="table table-hover w-100">
+                                    <tbody id="Sentinels-list"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-3">
+                    <div class="col-lg-6">
+                        <div class="card mb-3" style="height: 400px;">
+                            <h5 class="card-header">Amps</h5>
+                            <div class="card-body overflow-auto">
+                                <table class="table table-hover w-100">
+                                    <tbody id="OperatorAmps-list"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card mb-3" style="height: 400px;">
+                            <h5 class="card-header">K-Drives</h5>
+                            <div class="card-body overflow-auto">
+                                <table class="table table-hover w-100">
+                                    <tbody id="Hoverboards-list"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="card mb-3">
                     <h5 class="card-header">Bulk Actions</h5>
-                    <div class="card-body d-flex flex-wrap gap-2">
-                        <button class="btn btn-primary" onclick="addMissingWarframes();">Add Missing Warframes</button>
-                        <button class="btn btn-primary" onclick="addMissingWeapons();">Add Missing Weapons</button>
-                        <button class="btn btn-success" onclick="maxRankAllWarframes()">Max Rank All Warframes</button>
-                        <button class="btn btn-success" onclick="maxRankAllWeapons()">Max Rank All Weapons</button>
+                    <div class="card-body">
+                        <div class="mb-2 d-flex flex-wrap gap-2">
+                            <button class="btn btn-primary" onclick="addMissingEquipment(['Suits']);">Add Missing Warframes</button>
+                            <button class="btn btn-primary" onclick="addMissingEquipment(['Melee', 'LongGuns', 'Pistols']);">Add Missing Weapons</button>
+                            <button class="btn btn-primary" onclick="addMissingEquipment(['SpaceSuits']);">Add Missing Archwings</button>
+                            <button class="btn btn-primary" onclick="addMissingEquipment(['SpaceGuns', 'SpaceMelee']);">Add Missing Archwing Weapons</button>
+                            <button class="btn btn-primary" onclick="addMissingEquipment(['Sentinels']);">Add Missing Sentinels</button>
+                            <button class="btn btn-primary" onclick="addMissingEquipment(['SentinelWeapons']);">Add Missing Sentinel Weapons</button>
+                        </div>
+                        <div class="mb-2 d-flex flex-wrap gap-2">
+                            <button class="btn btn-success" onclick="maxRankAllEquipment(['Suits']);">Max Rank All Warframes</button>
+                            <button class="btn btn-success" onclick="maxRankAllEquipment(['Melee', 'LongGuns', 'Pistols']);">Max Rank All Weapons</button>
+                            <button class="btn btn-success" onclick="maxRankAllEquipment(['SpaceSuits']);">Max Rank All Archwings</button>
+                            <button class="btn btn-success" onclick="maxRankAllEquipment(['SpaceGuns', 'SpaceMelee']);">Max Rank All Archwing Weapons</button>
+                            <button class="btn btn-success" onclick="maxRankAllEquipment(['Sentinels']);">Max Rank All Sentinels</button>
+                            <button class="btn btn-success" onclick="maxRankAllEquipment(['SentinelWeapons']);">Max Rank All Sentinel Weapons</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -384,10 +494,16 @@
             </div>
         </div>
     </div>
-    <datalist id="datalist-warframes"></datalist>
+    <datalist id="datalist-Suits"></datalist>
+    <datalist id="datalist-SpaceSuits"></datalist>
     <datalist id="datalist-LongGuns"></datalist>
     <datalist id="datalist-Pistols"></datalist>
     <datalist id="datalist-Melee"></datalist>
+    <datalist id="datalist-SpaceGuns"></datalist>
+    <datalist id="datalist-SpaceMelee"></datalist>
+    <datalist id="datalist-SentinelWeapons"></datalist>
+    <datalist id="datalist-Sentinels"></datalist>
+    <datalist id="datalist-ModularParts"></datalist>
     <datalist id="datalist-miscitems"></datalist>
     <datalist id="datalist-mods">
         <option data-key="/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser" value="Legendary Core"></option>

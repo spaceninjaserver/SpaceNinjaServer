@@ -365,7 +365,7 @@ export const addSentinelWeapon = (
     typeName: string,
     inventoryChanges: IInventoryChanges
 ): void => {
-    const index = inventory.SentinelWeapons.push({ ItemType: typeName }) - 1;
+    const index = inventory.SentinelWeapons.push({ ItemType: typeName, XP: 0 }) - 1;
     inventoryChanges.SentinelWeapons ??= [];
     (inventoryChanges.SentinelWeapons as IEquipmentClient[]).push(
         inventory.SentinelWeapons[index].toJSON<IEquipmentClient>()

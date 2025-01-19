@@ -5,6 +5,7 @@ import {
     ExportGear,
     ExportRecipes,
     ExportResources,
+    ExportSentinels,
     ExportUpgrades,
     ExportWarframes,
     ExportWeapons
@@ -15,21 +16,66 @@ interface ListedItem {
     uniqueName: string;
     name: string;
     fusionLimit?: number;
+    exalted?: string[];
 }
 
 const getItemListsController: RequestHandler = (req, response) => {
     const lang = getDict(typeof req.query.lang == "string" ? req.query.lang : "en");
     const res: Record<string, ListedItem[]> = {};
     res.LongGuns = [];
-    res.Pistols = [];
     res.Melee = [];
+    res.ModularParts = [];
+    res.Pistols = [];
+    res.Sentinels = [];
+    res.SentinelWeapons = [];
+    res.SpaceGuns = [];
+    res.SpaceMelee = [];
+    res.SpaceSuits = [];
+    res.Suits = [];
     res.miscitems = [];
+    for (const [uniqueName, item] of Object.entries(ExportWarframes)) {
+        if (item.productCategory == "Suits" || item.productCategory == "SpaceSuits") {
+            res[item.productCategory].push({
+                uniqueName,
+                name: getString(item.name, lang),
+                exalted: item.exalted
+            });
+        }
+    }
+    for (const [uniqueName, item] of Object.entries(ExportSentinels)) {
+        if (item.productCategory == "Sentinels") {
+            res[item.productCategory].push({
+                uniqueName,
+                name: getString(item.name, lang)
+            });
+        }
+    }
     for (const [uniqueName, item] of Object.entries(ExportWeapons)) {
-        if (item.totalDamage !== 0) {
+        if (
+            uniqueName.split("/")[4] == "OperatorAmplifiers" ||
+            uniqueName.split("/")[5] == "SUModularSecondarySet1" ||
+            uniqueName.split("/")[5] == "SUModularPrimarySet1" ||
+            uniqueName.split("/")[5] == "InfKitGun" ||
+            uniqueName.split("/")[5] == "HoverboardParts"
+        ) {
+            res.ModularParts.push({
+                uniqueName,
+                name: getString(item.name, lang)
+            });
+            if (uniqueName.split("/")[5] != "SentTrainingAmplifier") {
+                res.ModularParts.push({
+                    uniqueName,
+                    name: getString(item.name, lang)
+                });
+            }
+        } else if (item.totalDamage !== 0) {
             if (
                 item.productCategory == "LongGuns" ||
                 item.productCategory == "Pistols" ||
-                item.productCategory == "Melee"
+                item.productCategory == "Melee" ||
+                item.productCategory == "SpaceGuns" ||
+                item.productCategory == "SpaceMelee" ||
+                item.productCategory == "SentinelWeapons"
             ) {
                 res[item.productCategory].push({
                     uniqueName,
@@ -102,15 +148,6 @@ const getItemListsController: RequestHandler = (req, response) => {
     }
 
     response.json({
-        warframes: Object.entries(ExportWarframes)
-            .filter(([_uniqueName, warframe]) => warframe.productCategory == "Suits")
-            .map(([uniqueName, warframe]) => {
-                return {
-                    uniqueName,
-                    name: getString(warframe.name, lang),
-                    exalted: warframe.exalted
-                };
-            }),
         badItems,
         archonCrystalUpgrades,
         ...res
