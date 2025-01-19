@@ -19,11 +19,5 @@ do
   mv config.tmp config.json
 done
 
-if [ ! -f "/app/static/data/buildConfig.json" ]
-then
-  echo "buildConfig not found, refusing to start."
-  exit 1
-fi
-
 npm install
 exec npm run dev
