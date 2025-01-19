@@ -477,8 +477,10 @@ function updateInventory() {
 
                     const uniqueUpgrades = {};
                     (item.ArchonCrystalUpgrades ?? []).forEach(upgrade => {
-                        uniqueUpgrades[upgrade.UpgradeType] ??= 0;
-                        uniqueUpgrades[upgrade.UpgradeType] += 1;
+                        if (upgrade) {
+                            uniqueUpgrades[upgrade.UpgradeType] ??= 0;
+                            uniqueUpgrades[upgrade.UpgradeType] += 1;
+                        }
                     });
 
                     document.getElementById("crystals-list").innerHTML = "";
