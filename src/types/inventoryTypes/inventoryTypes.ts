@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Document, Types } from "mongoose";
+import { Types } from "mongoose";
 import { IOid, IMongoDate } from "../commonTypes";
 import {
     ArtifactPolarity,
@@ -36,8 +36,6 @@ export interface IInventoryDatabase
     Ships: Types.ObjectId[];
     WeaponSkins: IWeaponSkinDatabase[];
 }
-
-export interface IInventoryResponseDocument extends IInventoryResponse, Document {}
 
 export interface IQuestKeyDatabase {
     Progress?: IQuestProgress[];
