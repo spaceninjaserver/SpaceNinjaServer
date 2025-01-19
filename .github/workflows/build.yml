@@ -17,6 +17,5 @@ jobs:
                   node-version: ${{ matrix.version }}
             - run: npm ci
             - run: cp config.json.example config.json
-            - run: echo '{"version":"","buildLabel":"","matchmakingBuildId":""}' > static/data/buildConfig.json
             - run: npm run build
             - run: npm run lint
