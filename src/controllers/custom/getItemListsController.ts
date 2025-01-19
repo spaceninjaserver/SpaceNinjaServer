@@ -26,7 +26,11 @@ const getItemListsController: RequestHandler = (req, response) => {
     res.miscitems = [];
     for (const [uniqueName, item] of Object.entries(ExportWeapons)) {
         if (item.totalDamage !== 0) {
-            if (item.productCategory == "LongGuns" || item.productCategory == "Pistols" || item.productCategory == "Melee") {
+            if (
+                item.productCategory == "LongGuns" ||
+                item.productCategory == "Pistols" ||
+                item.productCategory == "Melee"
+            ) {
                 res[item.productCategory].push({
                     uniqueName,
                     name: getString(item.name, lang)

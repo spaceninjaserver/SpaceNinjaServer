@@ -553,7 +553,9 @@ $("input[list]").on("input", function () {
 function doAcquireWeapon(category) {
     const uniqueName = getKey(document.getElementById("acquire-type-" + category));
     if (!uniqueName) {
-        $("#acquire-type-" + category).addClass("is-invalid").focus();
+        $("#acquire-type-" + category)
+            .addClass("is-invalid")
+            .focus();
         return;
     }
     revalidateAuthz(() => {
@@ -644,11 +646,13 @@ function maxRankAllWarframes() {
 
 function addMissingWeapons() {
     const requests = [];
-    document.querySelectorAll("#datalist-LongGuns option, #datalist-Pistols option, #datalist-Melee option").forEach(elm => {
-        if (!document.querySelector("#weapon-list [data-item-type='" + elm.getAttribute("data-key") + "']")) {
-            requests.push({ type: "Weapon", internalName: elm.getAttribute("data-key") });
-        }
-    });
+    document
+        .querySelectorAll("#datalist-LongGuns option, #datalist-Pistols option, #datalist-Melee option")
+        .forEach(elm => {
+            if (!document.querySelector("#weapon-list [data-item-type='" + elm.getAttribute("data-key") + "']")) {
+                requests.push({ type: "Weapon", internalName: elm.getAttribute("data-key") });
+            }
+        });
     if (
         requests.length != 0 &&
         window.confirm("Are you sure you want to add " + requests.length + " items to your account?")
