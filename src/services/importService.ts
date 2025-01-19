@@ -4,23 +4,23 @@ import { IMongoDate } from "../types/commonTypes";
 import { IInventoryResponse } from "../types/inventoryTypes/inventoryTypes";
 import { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel";
 
-const importDate = (value: IMongoDate): Date => {
+const convertDate = (value: IMongoDate): Date => {
     return new Date(parseInt(value.$date.$numberLong));
 };
 
-const importOptionalDate = (value: IMongoDate | undefined): Date | undefined => {
-    return value ? importDate(value) : undefined;
+const convertOptionalDate = (value: IMongoDate | undefined): Date | undefined => {
+    return value ? convertDate(value) : undefined;
 };
 
-const importEquipment = (client: IEquipmentClient): IEquipmentDatabase => {
+const convertEquipment = (client: IEquipmentClient): IEquipmentDatabase => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { ItemId, ...rest } = client;
     return {
         ...rest,
         _id: new Types.ObjectId(client.ItemId.$oid),
-        InfestationDate: importOptionalDate(client.InfestationDate),
-        Expiry: importOptionalDate(client.Expiry),
-        UpgradesExpiry: importOptionalDate(client.UpgradesExpiry)
+        InfestationDate: convertOptionalDate(client.InfestationDate),
+        Expiry: convertOptionalDate(client.Expiry),
+        UpgradesExpiry: convertOptionalDate(client.UpgradesExpiry)
     };
 };
 
@@ -30,7 +30,7 @@ export const importInventory = (
     replace: boolean = false,
     update: boolean = true
 ): void => {
-    const clientSuitsInDbFormat = client.Suits.map(x => importEquipment(x));
+    const clientSuitsInDbFormat = client.Suits.map(x => convertEquipment(x));
     if (replace) {
         db.Suits.splice(0, db.Suits.length);
     }
