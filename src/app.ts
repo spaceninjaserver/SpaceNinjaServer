@@ -17,7 +17,7 @@ const app = express();
 
 app.use(bodyParser.raw());
 app.use(express.json());
-app.use(bodyParser.text());
+app.use(bodyParser.text({ limit: "4mb" }));
 app.use(requestLogger);
 
 app.use("/api", apiRouter);
