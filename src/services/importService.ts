@@ -24,27 +24,10 @@ const convertEquipment = (client: IEquipmentClient): IEquipmentDatabase => {
     };
 };
 
-export const importInventory = (
-    db: TInventoryDatabaseDocument,
-    client: IInventoryResponse,
-    replace: boolean = false,
-    update: boolean = true
-): void => {
+export const importInventory = (db: TInventoryDatabaseDocument, client: IInventoryResponse): void => {
     const clientSuitsInDbFormat = client.Suits.map(x => convertEquipment(x));
-    if (replace) {
-        db.Suits.splice(0, db.Suits.length);
-    }
+    db.Suits.splice(0, db.Suits.length);
     clientSuitsInDbFormat.forEach(suitToImport => {
-        if (update) {
-            const index = db.Suits.findIndex(x => x._id == suitToImport._id);
-            if (index != -1) {
-                db.Suits.splice(index, 1);
-            }
-        } else {
-            if (db.Suits.id(suitToImport._id)) {
-                return;
-            }
-        }
         db.Suits.push(suitToImport);
     });
 };
