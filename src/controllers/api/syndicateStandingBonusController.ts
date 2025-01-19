@@ -37,13 +37,15 @@ export const syndicateStandingBonusController: RequestHandler = async (req, res)
     if (syndicate.Standing + gainedStanding > max) {
         gainedStanding = max - syndicate.Standing;
     }
-    if (gainedStanding > getStandingLimit(inventory, syndicateMeta.dailyLimitBin)) {
-        gainedStanding = getStandingLimit(inventory, syndicateMeta.dailyLimitBin);
+
+    if (syndicateMeta.medallionsCappedByDailyLimit) {
+        if (gainedStanding > getStandingLimit(inventory, syndicateMeta.dailyLimitBin)) {
+            gainedStanding = getStandingLimit(inventory, syndicateMeta.dailyLimitBin);
+        }
+        updateStandingLimit(inventory, syndicateMeta.dailyLimitBin, gainedStanding);
     }
 
     syndicate.Standing += gainedStanding;
-
-    updateStandingLimit(inventory, syndicateMeta.dailyLimitBin, gainedStanding);
 
     await inventory.save();
 
