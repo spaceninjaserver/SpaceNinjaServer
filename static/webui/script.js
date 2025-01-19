@@ -265,8 +265,8 @@ function updateInventory() {
                 }
                 document.getElementById("warframe-list").appendChild(tr);
             });
-            document.getElementById("weapon-list").innerHTML = "";
             ["LongGuns", "Pistols", "Melee"].forEach(category => {
+                document.getElementById(category + "-list").innerHTML = "";
                 data[category].forEach(item => {
                     const tr = document.createElement("tr");
                     tr.setAttribute("data-item-type", item.ItemType);
@@ -319,7 +319,7 @@ function updateInventory() {
                         }
                         tr.appendChild(td);
                     }
-                    document.getElementById("weapon-list").appendChild(tr);
+                    document.getElementById(category + "-list").appendChild(tr);
                 });
             });
 
@@ -546,14 +546,14 @@ function doAcquireWarframe() {
     });
 }
 
-$("#warframe-to-acquire").on("input", () => {
-    $("#warframe-to-acquire").removeClass("is-invalid");
+$("input[list]").on("input", function () {
+    $(this).removeClass("is-invalid");
 });
 
-function doAcquireWeapon() {
-    const uniqueName = getKey(document.getElementById("weapon-to-acquire"));
+function doAcquireWeapon(category) {
+    const uniqueName = getKey(document.getElementById("acquire-type-" + category));
     if (!uniqueName) {
-        $("#weapon-to-acquire").addClass("is-invalid").focus();
+        $("#acquire-type-" + category).addClass("is-invalid").focus();
         return;
     }
     revalidateAuthz(() => {
@@ -568,15 +568,11 @@ function doAcquireWeapon() {
             ])
         });
         req.done(() => {
-            document.getElementById("weapon-to-acquire").value = "";
+            document.getElementById("acquire-type-" + category).value = "";
             updateInventory();
         });
     });
 }
-
-$("#weapon-to-acquire").on("input", () => {
-    $("#weapon-to-acquire").removeClass("is-invalid");
-});
 
 function dispatchAddItemsRequestsBatch(requests) {
     revalidateAuthz(() => {
@@ -648,7 +644,7 @@ function maxRankAllWarframes() {
 
 function addMissingWeapons() {
     const requests = [];
-    document.querySelectorAll("#datalist-weapons option").forEach(elm => {
+    document.querySelectorAll("#datalist-LongGuns option, #datalist-Pistols option, #datalist-Melee option").forEach(elm => {
         if (!document.querySelector("#weapon-list [data-item-type='" + elm.getAttribute("data-key") + "']")) {
             requests.push({ type: "Weapon", internalName: elm.getAttribute("data-key") });
         }
@@ -807,10 +803,6 @@ function doAcquireMiscItems() {
     });
 }
 
-$("#miscitem-type").on("input", () => {
-    $("#miscitem-type").removeClass("is-invalid");
-});
-
 function doAcquireRiven() {
     let fingerprint;
     try {
@@ -922,10 +914,6 @@ function doAcquireMod() {
         });
     });
 }
-
-$("#mod-to-acquire").on("input", () => {
-    $("#mod-to-acquire").removeClass("is-invalid");
-});
 
 const uiConfigs = [...$("#server-settings input[id]")].map(x => x.id);
 
@@ -1152,10 +1140,6 @@ function doPushArchonCrystalUpgrade() {
         });
     });
 }
-
-$("[list='datalist-archonCrystalUpgrades']").on("input", () => {
-    $("[list='datalist-archonCrystalUpgrades']").removeClass("is-invalid");
-});
 
 function doPopArchonCrystalUpgrade(type) {
     revalidateAuthz(() => {

@@ -17,23 +17,26 @@ interface ListedItem {
     fusionLimit?: number;
 }
 
-const getItemListsController: RequestHandler = (req, res) => {
+const getItemListsController: RequestHandler = (req, response) => {
     const lang = getDict(typeof req.query.lang == "string" ? req.query.lang : "en");
-    const weapons = [];
-    const miscitems = [];
+    const res: Record<string, ListedItem[]> = {};
+    res.LongGuns = [];
+    res.Pistols = [];
+    res.Melee = [];
+    res.miscitems = [];
     for (const [uniqueName, item] of Object.entries(ExportWeapons)) {
-        if (item.productCategory !== "OperatorAmps") {
-            if (item.totalDamage !== 0) {
-                weapons.push({
+        if (item.totalDamage !== 0) {
+            if (item.productCategory == "LongGuns" || item.productCategory == "Pistols" || item.productCategory == "Melee") {
+                res[item.productCategory].push({
                     uniqueName,
                     name: getString(item.name, lang)
                 });
-            } else if (!item.excludeFromCodex) {
-                miscitems.push({
-                    uniqueName: "MiscItems:" + uniqueName,
-                    name: getString(item.name, lang)
-                });
             }
+        } else if (!item.excludeFromCodex) {
+            res.miscitems.push({
+                uniqueName: "MiscItems:" + uniqueName,
+                name: getString(item.name, lang)
+            });
         }
     }
     for (const [uniqueName, item] of Object.entries(ExportResources)) {
@@ -48,13 +51,13 @@ const getItemListsController: RequestHandler = (req, res) => {
                 name = name.split("|FISH_SIZE|").join(getString("/Lotus/Language/Fish/FishSizeSmallAbbrev", lang));
             }
         }
-        miscitems.push({
+        res.miscitems.push({
             uniqueName: item.productCategory + ":" + uniqueName,
             name: name
         });
     }
     for (const [uniqueName, item] of Object.entries(ExportGear)) {
-        miscitems.push({
+        res.miscitems.push({
             uniqueName: "Consumables:" + uniqueName,
             name: getString(item.name, lang)
         });
@@ -64,7 +67,7 @@ const getItemListsController: RequestHandler = (req, res) => {
         if (!item.hidden) {
             const resultName = getItemName(item.resultType);
             if (resultName) {
-                miscitems.push({
+                res.miscitems.push({
                     uniqueName: "Recipes:" + uniqueName,
                     name: recipeNameTemplate.replace("|ITEM|", getString(resultName, lang))
                 });
@@ -72,10 +75,10 @@ const getItemListsController: RequestHandler = (req, res) => {
         }
     }
 
-    const mods: ListedItem[] = [];
+    res.mods = [];
     const badItems: Record<string, boolean> = {};
     for (const [uniqueName, upgrade] of Object.entries(ExportUpgrades)) {
-        mods.push({
+        res.mods.push({
             uniqueName,
             name: getString(upgrade.name, lang),
             fusionLimit: upgrade.fusionLimit
@@ -85,7 +88,7 @@ const getItemListsController: RequestHandler = (req, res) => {
         }
     }
     for (const [uniqueName, arcane] of Object.entries(ExportArcanes)) {
-        mods.push({
+        res.mods.push({
             uniqueName,
             name: getString(arcane.name, lang)
         });
@@ -94,7 +97,7 @@ const getItemListsController: RequestHandler = (req, res) => {
         }
     }
 
-    res.json({
+    response.json({
         warframes: Object.entries(ExportWarframes)
             .filter(([_uniqueName, warframe]) => warframe.productCategory == "Suits")
             .map(([uniqueName, warframe]) => {
@@ -104,11 +107,9 @@ const getItemListsController: RequestHandler = (req, res) => {
                     exalted: warframe.exalted
                 };
             }),
-        weapons,
-        miscitems,
-        mods,
         badItems,
-        archonCrystalUpgrades
+        archonCrystalUpgrades,
+        ...res
     });
 };
 
