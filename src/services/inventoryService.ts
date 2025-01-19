@@ -729,7 +729,13 @@ export const addMods = (inventory: TInventoryDatabaseDocument, itemsArray: IRawU
 
         if (itemIndex !== -1) {
             RawUpgrades[itemIndex].ItemCount += ItemCount;
-            inventory.markModified(`RawUpgrades.${itemIndex}.ItemCount`);
+            if (RawUpgrades[itemIndex].ItemCount <= 0) {
+                if (RawUpgrades[itemIndex].ItemCount == 0) {
+                    RawUpgrades.splice(itemIndex, 1);
+                } else {
+                    logger.warn(`account now owns a negative amount of ${ItemType}`);
+                }
+            }
         } else {
             RawUpgrades.push({ ItemCount, ItemType });
         }
