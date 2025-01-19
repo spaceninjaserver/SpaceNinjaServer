@@ -63,8 +63,8 @@ const getItemListsController: RequestHandler = (req, response) => {
                 name: getString(item.name, lang)
             });
             if (uniqueName.split("/")[5] != "SentTrainingAmplifier") {
-                res.ModularParts.push({
-                    uniqueName,
+                res.miscitems.push({
+                    uniqueName: "MiscItems:" + uniqueName,
                     name: getString(item.name, lang)
                 });
             }
