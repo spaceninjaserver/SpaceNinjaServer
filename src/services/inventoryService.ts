@@ -661,7 +661,13 @@ export const addMiscItems = (inventory: TInventoryDatabaseDocument, itemsArray: 
 
         if (itemIndex !== -1) {
             MiscItems[itemIndex].ItemCount += ItemCount;
-            inventory.markModified(`MiscItems.${itemIndex}.ItemCount`);
+            if (MiscItems[itemIndex].ItemCount <= 0) {
+                if (MiscItems[itemIndex].ItemCount == 0) {
+                    MiscItems.splice(itemIndex, 1);
+                } else {
+                    logger.warn(`account now owns a negative amount of ${ItemType}`);
+                }
+            }
         } else {
             MiscItems.push({ ItemCount, ItemType });
         }
