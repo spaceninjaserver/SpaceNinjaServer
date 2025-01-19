@@ -7,7 +7,8 @@ import {
     IItemConfig,
     IOperatorConfigClient,
     IEquipmentSelection,
-    IEquipmentDatabase
+    IEquipmentDatabase,
+    IEquipmentClient
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
 
 export interface IInventoryDatabase
@@ -23,6 +24,7 @@ export interface IInventoryDatabase
         | "BlessingCooldown"
         | "Ships"
         | "WeaponSkins"
+        | "Suits"
     > {
     accountOwnerId: Types.ObjectId;
     Created: Date;
@@ -35,6 +37,7 @@ export interface IInventoryDatabase
     BlessingCooldown: Date;
     Ships: Types.ObjectId[];
     WeaponSkins: IWeaponSkinDatabase[];
+    Suits: IEquipmentDatabase[];
 }
 
 export interface IQuestKeyDatabase {
@@ -163,7 +166,7 @@ export interface IInventoryResponse extends IDailyAffiliations {
     ChallengeProgress: IChallengeProgress[];
     RawUpgrades: IRawUpgrade[];
     ReceivedStartingGear: boolean;
-    Suits: IEquipmentDatabase[];
+    Suits: IEquipmentClient[];
     LongGuns: IEquipmentDatabase[];
     Pistols: IEquipmentDatabase[];
     Melee: IEquipmentDatabase[];
