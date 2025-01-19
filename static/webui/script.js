@@ -1077,6 +1077,50 @@ function doHelminthUnlockAll() {
     });
 }
 
+function doAddAllMods() {
+    let modsAll = new Set();
+    for (const child of document.getElementById("datalist-mods").children) {
+        modsAll.add(child.getAttribute("data-key"));
+    }
+
+    revalidateAuthz(() => {
+        const req = $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1");
+        req.done(data => {
+            for (const modOwned of data.RawUpgrades) {
+                if (modOwned.ItemCount ?? 1 > 0) {
+                    modsAll.delete(modOwned.ItemType);
+                }
+            }
+
+            modsAll = Array.from(modsAll);
+            if (
+                modsAll.length != 0 &&
+                window.confirm("Are you sure you want to add " + modsAll.length + " mods to your account?")
+            ) {
+                // Batch to avoid PayloadTooLargeError
+                const batches = [];
+                for (let i = 0; i < modsAll.length; i += 1000) {
+                    batches.push(modsAll.slice(i, i + 1000));
+                }
+                batches.forEach(batch => {
+                    $.post({
+                        url: "/api/missionInventoryUpdate.php?" + window.authz,
+                        contentType: "text/plain",
+                        data: JSON.stringify({
+                            RawUpgrades: batch.map(mod => ({
+                                ItemType: mod,
+                                ItemCount: 21 // To fully upgrade certain arcanes
+                            }))
+                        })
+                    }).done(function () {
+                        updateInventory();
+                    });
+                });
+            }
+        });
+    });
+}
+
 // Powersuit Route
 
 single.getRoute("#powersuit-route").on("beforeload", function () {
