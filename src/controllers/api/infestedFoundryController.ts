@@ -229,7 +229,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
                     resource.Count -= ingredient.ItemCount;
                 }
             }
-            const suit = inventory.Suits.find(x => x._id.toString() == request.SuitId.$oid)!;
+            const suit = inventory.Suits.id(request.SuitId.$oid)!;
             inventory.Suits.pull(suit);
             const consumedSuit: IConsumedSuit = { s: suit.ItemType };
             if (suit.Configs && suit.Configs[0] && suit.Configs[0].pricol) {
@@ -285,7 +285,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
         case "u": {
             const request = getJSONfromString(String(req.body)) as IHelminthInvigorationRequest;
             const inventory = await getInventory(accountId);
-            const suit = inventory.Suits.find(x => x._id.toString() == request.SuitId.$oid)!;
+            const suit = inventory.Suits.id(request.SuitId.$oid)!;
             const upgradesExpiry = new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000);
             suit.OffensiveUpgrade = request.OffensiveUpgradeType;
             suit.DefensiveUpgrade = request.DefensiveUpgradeType;
