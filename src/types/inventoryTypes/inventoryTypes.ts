@@ -420,6 +420,7 @@ export interface ISlots {
 export interface ICrewShipSalvagedWeaponSkin {
     ItemType: string;
     UpgradeFingerprint?: string;
+    PendingRerollFingerprint?: string;
     ItemId?: IOid;
     _id?: Types.ObjectId;
 }
