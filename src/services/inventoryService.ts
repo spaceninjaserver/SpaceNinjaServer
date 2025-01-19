@@ -661,7 +661,13 @@ export const addMiscItems = (inventory: TInventoryDatabaseDocument, itemsArray: 
 
         if (itemIndex !== -1) {
             MiscItems[itemIndex].ItemCount += ItemCount;
-            inventory.markModified(`MiscItems.${itemIndex}.ItemCount`);
+            if (MiscItems[itemIndex].ItemCount <= 0) {
+                if (MiscItems[itemIndex].ItemCount == 0) {
+                    MiscItems.splice(itemIndex, 1);
+                } else {
+                    logger.warn(`account now owns a negative amount of ${ItemType}`);
+                }
+            }
         } else {
             MiscItems.push({ ItemCount, ItemType });
         }
@@ -723,7 +729,13 @@ export const addMods = (inventory: TInventoryDatabaseDocument, itemsArray: IRawU
 
         if (itemIndex !== -1) {
             RawUpgrades[itemIndex].ItemCount += ItemCount;
-            inventory.markModified(`RawUpgrades.${itemIndex}.ItemCount`);
+            if (RawUpgrades[itemIndex].ItemCount <= 0) {
+                if (RawUpgrades[itemIndex].ItemCount == 0) {
+                    RawUpgrades.splice(itemIndex, 1);
+                } else {
+                    logger.warn(`account now owns a negative amount of ${ItemType}`);
+                }
+            }
         } else {
             RawUpgrades.push({ ItemCount, ItemType });
         }
