@@ -898,10 +898,19 @@ function setFingerprint(ItemType, ItemId, fingerprint) {
 
 function doAcquireMod() {
     const uniqueName = getKey(document.getElementById("mod-to-acquire"));
+    const modCount = parseInt(document.getElementById("mod-count").value, 10);
+
     if (!uniqueName) {
         $("#mod-to-acquire").addClass("is-invalid").focus();
         return;
     }
+
+    if (isNaN(modCount) || modCount < 1) {
+        alert("Please enter a valid count.");
+        document.getElementById("mod-count").focus();
+        return;
+    }
+
     revalidateAuthz(() => {
         $.post({
             url: "/api/missionInventoryUpdate.php?" + window.authz,
@@ -910,16 +919,21 @@ function doAcquireMod() {
                 RawUpgrades: [
                     {
                         ItemType: uniqueName,
-                        ItemCount: 1
+                        ItemCount: modCount 
                     }
                 ]
             })
         }).done(function () {
             document.getElementById("mod-to-acquire").value = "";
+            document.getElementById("mod-count").value = "1";
             updateInventory();
         });
     });
 }
+
+$("#mod-to-acquire").on("input", () => {
+    $("#mod-to-acquire").removeClass("is-invalid");
+});
 
 const uiConfigs = [...$("#server-settings input[id]")].map(x => x.id);
 

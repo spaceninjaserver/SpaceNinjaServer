@@ -217,11 +217,12 @@
                         </div>
                     </div>
                     <div class="col-xxl-6">
-                        <div class="card mb-3">
+                        <div class="card mb-3" style="height: 480px;">
                             <h5 class="card-header">Mods</h5>
-                            <div class="card-body">
+                            <div class="card-body overflow-auto">
                                 <form class="input-group mb-3" onsubmit="doAcquireMod();return false;">
-                                    <input class="form-control" id="mod-to-acquire" list="datalist-mods" />
+                                    <input class="form-control" id="mod-to-acquire" list="datalist-mods" placeholder="Enter mod name" />
+                                    <input class="form-control" type="number" id="mod-count" placeholder="Count" min="1" value="1" />
                                     <button class="btn btn-primary" type="submit">Add</button>
                                 </form>
                                 <table class="table table-hover w-100">
@@ -229,6 +230,7 @@
                                 </table>
                             </div>
                         </div>
+                    </div>
                         <div class="card mb-3">
                             <h5 class="card-header">Bulk Actions</h5>
                             <div class="card-body">
