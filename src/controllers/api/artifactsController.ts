@@ -2,7 +2,7 @@ import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { RequestHandler } from "express";
 import { ICrewShipSalvagedWeaponSkin } from "@/src/types/inventoryTypes/inventoryTypes";
-import { getInventory } from "@/src/services/inventoryService";
+import { addMods, getInventory } from "@/src/services/inventoryService";
 import { config } from "@/src/services/configService";
 
 export const artifactsController: RequestHandler = async (req, res) => {
@@ -48,6 +48,15 @@ export const artifactsController: RequestHandler = async (req, res) => {
         inventory.FusionPoints -= FusionPointCost;
     }
 
+    if (artifactsData.LegendaryFusion) {
+        addMods(inventory, [
+            {
+                ItemType: "/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser",
+                ItemCount: -1
+            }
+        ]);
+    }
+
     const changedInventory = await inventory.save();
     const itemId = changedInventory.toJSON().Upgrades[itemIndex]?.ItemId?.$oid;
 
@@ -63,4 +72,5 @@ interface IArtifactsRequest {
     LevelDiff: number;
     Cost: number;
     FusionPointCost: number;
+    LegendaryFusion?: boolean;
 }
