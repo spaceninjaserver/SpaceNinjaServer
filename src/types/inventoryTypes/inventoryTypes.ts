@@ -13,7 +13,7 @@ import {
 
 export interface IInventoryDatabase
     extends Omit<
-        IInventoryResponse,
+        IInventoryClient,
         | "TrainingDate"
         | "LoadOutPresets"
         | "Mailbox"
@@ -129,7 +129,7 @@ export interface IDailyAffiliations {
     DailyAffiliationHex: number;
 }
 
-export interface IInventoryResponse extends IDailyAffiliations {
+export interface IInventoryClient extends IDailyAffiliations {
     Horses: IEquipmentDatabase[];
     DrifterMelee: IEquipmentDatabase[];
     DrifterGuns: IEquipmentDatabase[];

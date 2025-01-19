@@ -4,7 +4,7 @@ import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { config } from "@/src/services/configService";
 import allDialogue from "@/static/fixed_responses/allDialogue.json";
 import { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
-import { IInventoryResponse, IShipInventory, equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IInventoryClient, IShipInventory, equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IPolarity, ArtifactPolarity, EquipmentFeatures } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import {
     ExportCustoms,
@@ -55,7 +55,7 @@ export const inventoryController: RequestHandler = async (request, response) => 
     const inventoryWithLoadOutPresetsAndShips = await inventoryWithLoadOutPresets.populate<{ Ships: IShipInventory }>(
         "Ships"
     );
-    const inventoryResponse = inventoryWithLoadOutPresetsAndShips.toJSON<IInventoryResponse>();
+    const inventoryResponse = inventoryWithLoadOutPresetsAndShips.toJSON<IInventoryClient>();
 
     if (config.infiniteCredits) {
         inventoryResponse.RegularCredits = 999999999;

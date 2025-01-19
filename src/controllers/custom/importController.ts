@@ -1,7 +1,7 @@
 import { importInventory } from "@/src/services/importService";
 import { getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { IInventoryResponse } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IInventoryClient } from "@/src/types/inventoryTypes/inventoryTypes";
 import { RequestHandler } from "express";
 
 export const importController: RequestHandler = async (req, res) => {
@@ -13,5 +13,5 @@ export const importController: RequestHandler = async (req, res) => {
 };
 
 interface IImportRequest {
-    inventory: IInventoryResponse;
+    inventory: IInventoryClient;
 }

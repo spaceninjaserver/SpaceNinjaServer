@@ -3,7 +3,7 @@
 import { Types } from "mongoose";
 import { IEquipmentClient, IEquipmentDatabase } from "../types/inventoryTypes/commonInventoryTypes";
 import { IMongoDate } from "../types/commonTypes";
-import { IInventoryResponse, IWeaponSkinClient, IWeaponSkinDatabase } from "../types/inventoryTypes/inventoryTypes";
+import { IInventoryClient, IWeaponSkinClient, IWeaponSkinDatabase } from "../types/inventoryTypes/inventoryTypes";
 import { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel";
 
 const convertDate = (value: IMongoDate): Date => {
@@ -40,7 +40,7 @@ const replaceArray = <T>(arr: T[], replacement: T[]): void => {
     });
 };
 
-export const importInventory = (db: TInventoryDatabaseDocument, client: IInventoryResponse): void => {
+export const importInventory = (db: TInventoryDatabaseDocument, client: IInventoryClient): void => {
     replaceArray<IEquipmentDatabase>(db.Suits, client.Suits.map(convertEquipment));
     replaceArray<IWeaponSkinDatabase>(db.WeaponSkins, client.WeaponSkins.map(convertWeaponSkin));
 };

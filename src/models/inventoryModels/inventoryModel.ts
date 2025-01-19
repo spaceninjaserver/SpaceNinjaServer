@@ -6,7 +6,7 @@ import {
     IMiscItem,
     IInventoryDatabase,
     IBooster,
-    IInventoryResponse,
+    IInventoryClient,
     ISlots,
     IMailbox,
     IDuviriInfo,
@@ -1142,7 +1142,7 @@ inventorySchema.set("toJSON", {
         delete returnedObject.accountOwnerId;
 
         const inventoryDatabase = returnedObject as IInventoryDatabase;
-        const inventoryResponse = returnedObject as IInventoryResponse;
+        const inventoryResponse = returnedObject as IInventoryClient;
 
         inventoryResponse.TrainingDate = toMongoDate(inventoryDatabase.TrainingDate);
         inventoryResponse.Created = toMongoDate(inventoryDatabase.Created);
