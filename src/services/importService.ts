@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { Types } from "mongoose";
 import { IEquipmentClient, IEquipmentDatabase } from "../types/inventoryTypes/commonInventoryTypes";
 import { IMongoDate } from "../types/commonTypes";
-import { IInventoryResponse } from "../types/inventoryTypes/inventoryTypes";
+import { IInventoryResponse, IWeaponSkinClient, IWeaponSkinDatabase } from "../types/inventoryTypes/inventoryTypes";
 import { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel";
 
 const convertDate = (value: IMongoDate): Date => {
@@ -13,7 +15,6 @@ const convertOptionalDate = (value: IMongoDate | undefined): Date | undefined =>
 };
 
 const convertEquipment = (client: IEquipmentClient): IEquipmentDatabase => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { ItemId, ...rest } = client;
     return {
         ...rest,
@@ -24,10 +25,22 @@ const convertEquipment = (client: IEquipmentClient): IEquipmentDatabase => {
     };
 };
 
-export const importInventory = (db: TInventoryDatabaseDocument, client: IInventoryResponse): void => {
-    const clientSuitsInDbFormat = client.Suits.map(x => convertEquipment(x));
-    db.Suits.splice(0, db.Suits.length);
-    clientSuitsInDbFormat.forEach(suitToImport => {
-        db.Suits.push(suitToImport);
+const convertWeaponSkin = (client: IWeaponSkinClient): IWeaponSkinDatabase => {
+    const { ItemId, ...rest } = client;
+    return {
+        ...rest,
+        _id: new Types.ObjectId(client.ItemId.$oid)
+    };
+};
+
+const replaceArray = <T>(arr: T[], replacement: T[]): void => {
+    arr.splice(0, arr.length);
+    replacement.forEach(x => {
+        arr.push(x);
     });
+};
+
+export const importInventory = (db: TInventoryDatabaseDocument, client: IInventoryResponse): void => {
+    replaceArray<IEquipmentDatabase>(db.Suits, client.Suits.map(convertEquipment));
+    replaceArray<IWeaponSkinDatabase>(db.WeaponSkins, client.WeaponSkins.map(convertWeaponSkin));
 };

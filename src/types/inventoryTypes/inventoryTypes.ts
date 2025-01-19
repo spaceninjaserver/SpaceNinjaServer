@@ -916,9 +916,10 @@ export interface ITaunt {
 
 export interface IWeaponSkinDatabase {
     ItemType: string;
+    _id: Types.ObjectId;
 }
 
-export interface IWeaponSkinClient extends IWeaponSkinDatabase {
+export interface IWeaponSkinClient extends Omit<IWeaponSkinDatabase, "_id"> {
     ItemId: IOid;
 }
 
