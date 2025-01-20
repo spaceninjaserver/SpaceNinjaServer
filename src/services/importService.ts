@@ -91,4 +91,20 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
             replaceSlots(db[key], client[key]);
         }
     }
+    for (const key of [
+        "RegularCredits",
+        "PremiumCredits",
+        "PremiumCreditsFree",
+        "FusionPoints",
+        "PrimeTokens"
+    ] as const) {
+        if (client[key]) {
+            db[key] = client[key];
+        }
+    }
+    for (const key of ["ThemeStyle", "ThemeBackground", "ThemeSounds", "EquippedInstrument"] as const) {
+        if (client[key]) {
+            db[key] = client[key];
+        }
+    }
 };
