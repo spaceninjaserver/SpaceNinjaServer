@@ -147,8 +147,9 @@ export const inventoryController: RequestHandler = async (request, response) => 
     }
 
     if (config.unlockAllSkins) {
-        inventoryResponse.WeaponSkins = [];
-        for (const uniqueName in ExportCustoms) {
+        const missingWeaponSkins = new Set(Object.keys(ExportCustoms));
+        inventoryResponse.WeaponSkins.forEach(x => missingWeaponSkins.delete(x.ItemType));
+        for (const uniqueName of missingWeaponSkins) {
             inventoryResponse.WeaponSkins.push({
                 ItemId: {
                     $oid: "ca70ca70ca70ca70" + catBreadHash(uniqueName).toString(16).padStart(8, "0")
