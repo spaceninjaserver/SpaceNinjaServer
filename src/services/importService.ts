@@ -9,6 +9,8 @@ import { IMongoDate } from "../types/commonTypes";
 import {
     equipmentKeys,
     IInventoryClient,
+    ILoadoutConfigClient,
+    ILoadOutPresets,
     ISlots,
     IUpgradeClient,
     IUpgradeDatabase,
@@ -16,6 +18,7 @@ import {
     IWeaponSkinDatabase
 } from "../types/inventoryTypes/inventoryTypes";
 import { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel";
+import { ILoadoutConfigDatabase, ILoadoutDatabase } from "../types/saveLoadoutTypes";
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -136,4 +139,26 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
             db[key] = client[key];
         }
     }
+};
+
+const convertLoadOutConfig = (client: ILoadoutConfigClient): ILoadoutConfigDatabase => {
+    const { ItemId, ...rest } = client;
+    return {
+        ...rest,
+        _id: new Types.ObjectId(client.ItemId.$oid)
+    };
+};
+
+export const importLoadOutPresets = (db: ILoadoutDatabase, client: ILoadOutPresets): void => {
+    db.NORMAL = client.NORMAL.map(convertLoadOutConfig);
+    db.SENTINEL = client.SENTINEL.map(convertLoadOutConfig);
+    db.ARCHWING = client.ARCHWING.map(convertLoadOutConfig);
+    db.NORMAL_PVP = client.NORMAL_PVP.map(convertLoadOutConfig);
+    db.LUNARO = client.LUNARO.map(convertLoadOutConfig);
+    db.OPERATOR = client.OPERATOR.map(convertLoadOutConfig);
+    db.KDRIVE = client.KDRIVE.map(convertLoadOutConfig);
+    db.DATAKNIFE = client.DATAKNIFE.map(convertLoadOutConfig);
+    db.MECH = client.MECH.map(convertLoadOutConfig);
+    db.OPERATOR_ADULT = client.OPERATOR_ADULT.map(convertLoadOutConfig);
+    db.DRIFTER = client.DRIFTER.map(convertLoadOutConfig);
 };

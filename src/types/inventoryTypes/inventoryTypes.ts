@@ -210,7 +210,7 @@ export interface IInventoryClient extends IDailyAffiliations {
     Scoops: IEquipmentDatabase[];
     TrainingRetriesLeft: number;
     LoadOutPresets: ILoadOutPresets;
-    CurrentLoadOutIds: Array<any[] | IOid>;
+    CurrentLoadOutIds: IOid[]; // we store it in the database using this representation as well :/
     Missions: IMission[];
     RandomUpgradesIdentified?: number;
     LastRegionPlayed: TSolarMapRegion;
@@ -667,7 +667,7 @@ export interface ILibraryPersonalProgress {
     Completed: boolean;
 }
 
-//this needs to be checked against ILoadoutDatabase
+// keep in sync with ILoadoutDatabase
 export interface ILoadOutPresets {
     NORMAL: ILoadoutConfigClient[];
     NORMAL_PVP: ILoadoutConfigClient[];
@@ -680,6 +680,7 @@ export interface ILoadOutPresets {
     DATAKNIFE: ILoadoutConfigClient[];
     MECH: ILoadoutConfigClient[];
     OPERATOR_ADULT: ILoadoutConfigClient[];
+    DRIFTER: ILoadoutConfigClient[];
 }
 
 export enum FocusSchool {
