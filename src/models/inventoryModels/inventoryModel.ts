@@ -949,8 +949,6 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         XPInfo: [TypeXPItemSchema],
         //Mastery Rank next availability
         TrainingDate: { type: Date, default: new Date(0) },
-        //Retries rank up(3 time)
-        TrainingRetriesLeft: Number,
 
         //you saw last played Region when you opened the star map
         LastRegionPlayed: String,
