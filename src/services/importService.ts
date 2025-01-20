@@ -20,8 +20,6 @@ import {
 import { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel";
 import { ILoadoutConfigDatabase, ILoadoutDatabase } from "../types/saveLoadoutTypes";
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 const convertDate = (value: IMongoDate): Date => {
     return new Date(parseInt(value.$date.$numberLong));
 };
@@ -31,6 +29,7 @@ const convertOptionalDate = (value: IMongoDate | undefined): Date | undefined =>
 };
 
 const convertEquipment = (client: IEquipmentClient): IEquipmentDatabase => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { ItemId, ...rest } = client;
     return {
         ...rest,
@@ -42,6 +41,7 @@ const convertEquipment = (client: IEquipmentClient): IEquipmentDatabase => {
 };
 
 const convertWeaponSkin = (client: IWeaponSkinClient): IWeaponSkinDatabase => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { ItemId, ...rest } = client;
     return {
         ...rest,
@@ -50,6 +50,7 @@ const convertWeaponSkin = (client: IWeaponSkinClient): IWeaponSkinDatabase => {
 };
 
 const convertUpgrade = (client: IUpgradeClient): IUpgradeDatabase => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { ItemId, ...rest } = client;
     return {
         ...rest,
@@ -58,6 +59,7 @@ const convertUpgrade = (client: IUpgradeClient): IUpgradeDatabase => {
 };
 
 const convertOperatorConfig = (client: IOperatorConfigClient): IOperatorConfigDatabase => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { ItemId, ...rest } = client;
     return {
         ...rest,
@@ -142,6 +144,7 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
 };
 
 const convertLoadOutConfig = (client: ILoadoutConfigClient): ILoadoutConfigDatabase => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { ItemId, ...rest } = client;
     return {
         ...rest,
