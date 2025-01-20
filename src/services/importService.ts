@@ -172,7 +172,7 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
             db[key] = client[key];
         }
     }
-    for (const key of ["EquippedGear", "EquippedEmotes"] as const) {
+    for (const key of ["EquippedGear", "EquippedEmotes", "NodeIntrosCompleted"] as const) {
         if (client[key]) {
             db[key] = client[key];
         }
