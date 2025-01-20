@@ -4,6 +4,7 @@ import { IMongoDate } from "../types/commonTypes";
 import {
     equipmentKeys,
     IInventoryClient,
+    ISlots,
     IUpgradeClient,
     IUpgradeDatabase,
     IWeaponSkinClient,
@@ -55,6 +56,11 @@ const replaceArray = <T>(arr: T[], replacement: T[]): void => {
     });
 };
 
+const replaceSlots = (db: ISlots, client: ISlots): void => {
+    db.Extra = client.Extra;
+    db.Slots = client.Slots;
+};
+
 export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<IInventoryClient>): void => {
     for (const key of equipmentKeys) {
         if (client[key]) {
@@ -66,5 +72,23 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     }
     if (client.Upgrades) {
         replaceArray<IUpgradeDatabase>(db.Upgrades, client.Upgrades.map(convertUpgrade));
+    }
+    for (const key of [
+        "SuitBin",
+        "WeaponBin",
+        "SentinelBin",
+        "SpaceSuitBin",
+        "SpaceWeaponBin",
+        "PvpBonusLoadoutBin",
+        "PveBonusLoadoutBin",
+        "RandomModBin",
+        "MechBin",
+        "CrewMemberBin",
+        "OperatorAmpBin",
+        "CrewShipSalvageBin"
+    ] as const) {
+        if (client[key]) {
+            replaceSlots(db[key], client[key]);
+        }
     }
 };
