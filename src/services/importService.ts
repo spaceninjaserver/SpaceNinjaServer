@@ -54,8 +54,14 @@ const replaceArray = <T>(arr: T[], replacement: T[]): void => {
     });
 };
 
-export const importInventory = (db: TInventoryDatabaseDocument, client: IInventoryClient): void => {
-    replaceArray<IEquipmentDatabase>(db.Suits, client.Suits.map(convertEquipment));
-    replaceArray<IWeaponSkinDatabase>(db.WeaponSkins, client.WeaponSkins.map(convertWeaponSkin));
-    replaceArray<IUpgradeDatabase>(db.Upgrades, client.Upgrades.map(convertUpgrade));
+export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<IInventoryClient>): void => {
+    if (client.Suits) {
+        replaceArray<IEquipmentDatabase>(db.Suits, client.Suits.map(convertEquipment));
+    }
+    if (client.WeaponSkins) {
+        replaceArray<IWeaponSkinDatabase>(db.WeaponSkins, client.WeaponSkins.map(convertWeaponSkin));
+    }
+    if (client.Upgrades) {
+        replaceArray<IUpgradeDatabase>(db.Upgrades, client.Upgrades.map(convertUpgrade));
+    }
 };
