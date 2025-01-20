@@ -183,6 +183,9 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     if (client.Affiliations) {
         db.Affiliations = client.Affiliations;
     }
+    if (client.FusionTreasures) {
+        db.FusionTreasures = client.FusionTreasures;
+    }
     if (client.FocusUpgrades) {
         db.FocusUpgrades = client.FocusUpgrades;
     }
