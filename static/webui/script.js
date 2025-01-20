@@ -1083,3 +1083,17 @@ function doPopArchonCrystalUpgrade(type) {
         });
     });
 }
+
+function doImport() {
+    revalidateAuthz(() => {
+        $.post({
+            url: "/custom/import?" + window.authz,
+            contentType: "text/plain",
+            data: JSON.stringify({
+                inventory: JSON.parse($("#import-inventory").val())
+            })
+        }).then(function() {
+            updateInventory();
+        });
+    });
+}
