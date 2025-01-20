@@ -77,12 +77,6 @@ export interface IQuestKeyDatabase {
     CompletionDate?: Date;
 }
 
-export interface IFocusUpgrades {
-    ItemType: string;
-    Level: number;
-    IsUniversal: boolean;
-}
-
 export interface ITypeCount {
     ItemType: string;
     ItemCount: number;

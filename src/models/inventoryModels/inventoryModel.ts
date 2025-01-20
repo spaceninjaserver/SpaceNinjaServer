@@ -13,7 +13,7 @@ import {
     IPendingRecipeResponse,
     ITypeCount,
     IFocusXP,
-    IFocusUpgrades,
+    IFocusUpgrade,
     ITypeXPItem,
     IChallengeProgress,
     IStepSequencer,
@@ -80,7 +80,7 @@ const focusXPSchema = new Schema<IFocusXP>(
     { _id: false }
 );
 
-const focusUpgradesSchema = new Schema<IFocusUpgrades>(
+const focusUpgradeSchema = new Schema<IFocusUpgrade>(
     {
         ItemType: String,
         Level: Number,
@@ -836,7 +836,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Curent active like Active school focuses is = "Zenurik"
         FocusAbility: String,
         //The treeways of the Focus school.(Active and passive Ability)
-        FocusUpgrades: [focusUpgradesSchema],
+        FocusUpgrades: [focusUpgradeSchema],
 
         //Achievement
         ChallengeProgress: [challengeProgressSchema],
