@@ -8,6 +8,10 @@ import {
 import { IMongoDate } from "../types/commonTypes";
 import {
     equipmentKeys,
+    ICrewShipClient,
+    ICrewShipDatabase,
+    ICrewShipMembersClient,
+    ICrewShipMembersDatabase,
     IDialogueClient,
     IDialogueDatabase,
     IDialogueHistoryClient,
@@ -79,6 +83,23 @@ const replaceArray = <T>(arr: T[], replacement: T[]): void => {
 const replaceSlots = (db: ISlots, client: ISlots): void => {
     db.Extra = client.Extra;
     db.Slots = client.Slots;
+};
+
+const convertCrewShipMembers = (client: ICrewShipMembersClient): ICrewShipMembersDatabase => {
+    return {
+        SLOT_A: client.SLOT_A ? new Types.ObjectId(client.SLOT_A.ItemId.$oid) : undefined,
+        SLOT_B: client.SLOT_B ? new Types.ObjectId(client.SLOT_B.ItemId.$oid) : undefined,
+        SLOT_C: client.SLOT_C ? new Types.ObjectId(client.SLOT_C.ItemId.$oid) : undefined
+    };
+};
+
+const convertCrewShip = (client: ICrewShipClient): ICrewShipDatabase => {
+    const { ItemId, ...rest } = client;
+    return {
+        ...rest,
+        _id: new Types.ObjectId(ItemId.$oid),
+        CrewMembers: client.CrewMembers ? convertCrewShipMembers(client.CrewMembers) : undefined
+    };
 };
 
 const convertInfestedFoundry = (client: IInfestedFoundryClient): IInfestedFoundryDatabase => {
@@ -191,6 +212,9 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     }
     if (client.FocusUpgrades) {
         db.FocusUpgrades = client.FocusUpgrades;
+    }
+    if (client.CrewShips) {
+        replaceArray<ICrewShipDatabase>(db.CrewShips, client.CrewShips.map(convertCrewShip));
     }
     if (client.InfestedFoundry) {
         db.InfestedFoundry = convertInfestedFoundry(client.InfestedFoundry);

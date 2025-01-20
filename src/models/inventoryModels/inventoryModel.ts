@@ -42,7 +42,6 @@ import {
     ICrewShipCustomization,
     ICrewShipWeapon,
     ICrewShipMembersClient,
-    ICrewShip,
     ICrewShipPilotWeapon,
     IShipExterior,
     IHelminthFoodRecord,
@@ -52,7 +51,8 @@ import {
     IDialogueGift,
     ICompletedDialogue,
     IDialogueClient,
-    IUpgradeDatabase
+    IUpgradeDatabase,
+    ICrewShipDatabase
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -694,7 +694,7 @@ crewShipMembersSchema.set("toJSON", {
     }
 });
 
-const crewShipSchema = new Schema<ICrewShip>({
+const crewShipSchema = new Schema<ICrewShipDatabase>({
     ItemType: { type: String, required: true },
     Configs: { type: [ItemConfigSchema], default: [] },
     Weapon: { type: crewShipWeaponSchema, default: undefined },
@@ -1184,7 +1184,7 @@ type InventoryDocumentProps = {
     Hoverboards: Types.DocumentArray<IEquipmentDatabase>;
     MoaPets: Types.DocumentArray<IEquipmentDatabase>;
     WeaponSkins: Types.DocumentArray<IWeaponSkinDatabase>;
-    CrewShips: Types.DocumentArray<ICrewShip>;
+    CrewShips: Types.DocumentArray<ICrewShipDatabase>;
     CrewShipHarnesses: Types.DocumentArray<IEquipmentDatabase>;
 };
 

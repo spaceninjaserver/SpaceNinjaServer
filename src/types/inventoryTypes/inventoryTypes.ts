@@ -30,6 +30,7 @@ export interface IInventoryDatabase
         | "CrewShipWeaponSkins"
         | "OperatorLoadOuts"
         | "AdultOperatorLoadOuts"
+        | "CrewShips"
         | "InfestedFoundry"
         | "DialogueHistory"
         | TEquipmentKey
@@ -50,6 +51,7 @@ export interface IInventoryDatabase
     CrewShipWeaponSkins: IUpgradeDatabase[];
     OperatorLoadOuts: IOperatorConfigDatabase[];
     AdultOperatorLoadOuts: IOperatorConfigDatabase[];
+    CrewShips: ICrewShipDatabase[];
     InfestedFoundry?: IInfestedFoundryDatabase;
     DialogueHistory?: IDialogueHistoryDatabase;
 
@@ -292,7 +294,7 @@ export interface IInventoryClient extends IDailyAffiliations {
     LastNemesisAllySpawnTime?: IMongoDate;
     Settings: ISettings;
     PersonalTechProjects: IPersonalTechProject[];
-    CrewShips: ICrewShip[];
+    CrewShips: ICrewShipClient[];
     PlayerSkills: IPlayerSkills;
     CrewShipAmmo: IConsumable[];
     CrewShipSalvagedWeaponSkins: IUpgradeClient[];
@@ -452,7 +454,7 @@ export interface IUpgradeDatabase extends Omit<IUpgradeClient, "ItemId"> {
     _id: Types.ObjectId;
 }
 
-export interface ICrewShip {
+export interface ICrewShipClient {
     ItemType: string;
     Configs: IItemConfig[];
     Weapon?: ICrewShipWeapon;
@@ -461,6 +463,10 @@ export interface ICrewShip {
     RailjackImage?: IFlavourItem;
     CrewMembers?: ICrewShipMembersClient;
     ItemId: IOid;
+}
+
+export interface ICrewShipDatabase extends Omit<ICrewShipClient, "CrewMembers" | "ItemId"> {
+    CrewMembers?: ICrewShipMembersDatabase;
     _id: Types.ObjectId;
 }
 
