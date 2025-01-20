@@ -2,6 +2,7 @@ import { Types } from "mongoose";
 import { IEquipmentClient, IEquipmentDatabase } from "../types/inventoryTypes/commonInventoryTypes";
 import { IMongoDate } from "../types/commonTypes";
 import {
+    equipmentKeys,
     IInventoryClient,
     IUpgradeClient,
     IUpgradeDatabase,
@@ -55,8 +56,10 @@ const replaceArray = <T>(arr: T[], replacement: T[]): void => {
 };
 
 export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<IInventoryClient>): void => {
-    if (client.Suits) {
-        replaceArray<IEquipmentDatabase>(db.Suits, client.Suits.map(convertEquipment));
+    for (const key of equipmentKeys) {
+        if (client[key]) {
+            replaceArray<IEquipmentDatabase>(db[key], client[key].map(convertEquipment));
+        }
     }
     if (client.WeaponSkins) {
         replaceArray<IWeaponSkinDatabase>(db.WeaponSkins, client.WeaponSkins.map(convertWeaponSkin));
