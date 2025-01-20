@@ -86,6 +86,17 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     if (client.Upgrades) {
         replaceArray<IUpgradeDatabase>(db.Upgrades, client.Upgrades.map(convertUpgrade));
     }
+    for (const key of ["RawUpgrades", "MiscItems"] as const) {
+        if (client[key]) {
+            db[key].splice(0, db[key].length);
+            client[key].forEach(x => {
+                db[key].push({
+                    ItemType: x.ItemType,
+                    ItemCount: x.ItemCount
+                });
+            });
+        }
+    }
     for (const key of ["OperatorLoadOuts", "AdultOperatorLoadOuts"] as const) {
         if (client[key]) {
             replaceArray<IOperatorConfigDatabase>(db[key], client[key].map(convertOperatorConfig));
