@@ -4,10 +4,10 @@ import allShipFeatures from "@/static/fixed_responses/allShipFeatures.json";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getPersonalRooms } from "@/src/services/personalRoomsService";
 import { getShip } from "@/src/services/shipService";
-import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
 import { toOid } from "@/src/helpers/inventoryHelpers";
 import { IGetShipResponse } from "@/src/types/shipTypes";
 import { IPersonalRooms } from "@/src/types/personalRoomsTypes";
+import { getLoadout } from "@/src/services/loadoutService";
 
 export const getShipController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -37,14 +37,4 @@ export const getShipController: RequestHandler = async (req, res) => {
     }
 
     res.json(getShipResponse);
-};
-
-export const getLoadout = async (accountId: string) => {
-    const loadout = await Loadout.findOne({ loadoutOwnerId: accountId });
-
-    if (!loadout) {
-        throw new Error(`loadout not found for account ${accountId}`);
-    }
-
-    return loadout;
 };
