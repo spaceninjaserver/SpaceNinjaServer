@@ -234,7 +234,7 @@ function updateInventory() {
                     }
                     {
                         const td = document.createElement("td");
-                        td.classList = "text-end";
+                        td.classList = "text-end text-nowrap";
                         const maxXP =
                             category == "Suits" ||
                             category == "SpaceSuits" ||
@@ -334,7 +334,7 @@ function updateInventory() {
                         }
                         {
                             const td = document.createElement("td");
-                            td.classList = "text-end";
+                            td.classList = "text-end text-nowrap";
                             {
                                 const a = document.createElement("a");
                                 a.href =
@@ -379,7 +379,7 @@ function updateInventory() {
                 }
                 {
                     const td = document.createElement("td");
-                    td.classList = "text-end";
+                    td.classList = "text-end text-nowrap";
                     if (rank < maxRank) {
                         const a = document.createElement("a");
                         a.href = "#";
@@ -421,7 +421,7 @@ function updateInventory() {
                     }
                     {
                         const td = document.createElement("td");
-                        td.classList = "text-end";
+                        td.classList = "text-end text-nowrap";
                         {
                             const a = document.createElement("a");
                             a.href = "#";
@@ -481,7 +481,7 @@ function updateInventory() {
                         }
                         {
                             const td = document.createElement("td");
-                            td.classList = "text-end";
+                            td.classList = "text-end text-nowrap";
                             {
                                 const a = document.createElement("a");
                                 a.href = "#";
