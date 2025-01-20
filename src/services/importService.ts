@@ -180,6 +180,9 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     if (client.CurrentLoadOutIds) {
         db.CurrentLoadOutIds = client.CurrentLoadOutIds;
     }
+    if (client.Affiliations) {
+        db.Affiliations = client.Affiliations;
+    }
     if (client.InfestedFoundry) {
         db.InfestedFoundry = convertInfestedFoundry(client.InfestedFoundry);
     }
