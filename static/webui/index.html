@@ -204,14 +204,14 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="card mb-3" style="height: 400px;">
-                            <h5 class="card-header">Sentinel Weapons</h5>
+                            <h5 class="card-header">Necramechs</h5>
                             <div class="card-body overflow-auto">
-                                <form class="input-group mb-3" onsubmit="doAcquireEquipment('SentinelWeapons');return false;">
-                                    <input class="form-control" id="acquire-type-SentinelWeapons" list="datalist-SentinelWeapons" />
+                                <form class="input-group mb-3" onsubmit="doAcquireEquipment('MechSuits');return false;">
+                                    <input class="form-control" id="acquire-type-MechSuits" list="datalist-MechSuits" />
                                     <button class="btn btn-primary" type="submit">Add</button>
                                 </form>
                                 <table class="table table-hover w-100">
-                                    <tbody id="SentinelWeapons-list"></tbody>
+                                    <tbody id="MechSuits-list"></tbody>
                                 </table>
                             </div>
                         </div>
@@ -228,6 +228,20 @@
                                 </form>
                                 <table class="table table-hover w-100">
                                     <tbody id="Sentinels-list"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card mb-3" style="height: 400px;">
+                            <h5 class="card-header">Sentinel Weapons</h5>
+                            <div class="card-body overflow-auto">
+                                <form class="input-group mb-3" onsubmit="doAcquireEquipment('SentinelWeapons');return false;">
+                                    <input class="form-control" id="acquire-type-SentinelWeapons" list="datalist-SentinelWeapons" />
+                                    <button class="btn btn-primary" type="submit">Add</button>
+                                </form>
+                                <table class="table table-hover w-100">
+                                    <tbody id="SentinelWeapons-list"></tbody>
                                 </table>
                             </div>
                         </div>
@@ -513,6 +527,7 @@
     <datalist id="datalist-SentinelWeapons"></datalist>
     <datalist id="datalist-Sentinels"></datalist>
     <datalist id="datalist-ModularParts"></datalist>
+    <datalist id="datalist-MechSuits"></datalist>
     <datalist id="datalist-miscitems"></datalist>
     <datalist id="datalist-mods">
         <option data-key="/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser" value="Legendary Core"></option>

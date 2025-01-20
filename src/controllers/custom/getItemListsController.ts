@@ -23,6 +23,7 @@ interface ListedItem {
 const getItemListsController: RequestHandler = (req, response) => {
     const lang = getDict(typeof req.query.lang == "string" ? req.query.lang : "en");
     const res: Record<string, ListedItem[]> = {};
+    res.Suits = [];
     res.LongGuns = [];
     res.Melee = [];
     res.ModularParts = [];
@@ -32,10 +33,14 @@ const getItemListsController: RequestHandler = (req, response) => {
     res.SpaceGuns = [];
     res.SpaceMelee = [];
     res.SpaceSuits = [];
-    res.Suits = [];
+    res.MechSuits = [];
     res.miscitems = [];
     for (const [uniqueName, item] of Object.entries(ExportWarframes)) {
-        if (item.productCategory == "Suits" || item.productCategory == "SpaceSuits") {
+        if (
+            item.productCategory == "Suits" ||
+            item.productCategory == "SpaceSuits" ||
+            item.productCategory == "MechSuits"
+        ) {
             res[item.productCategory].push({
                 uniqueName,
                 name: getString(item.name, lang),
