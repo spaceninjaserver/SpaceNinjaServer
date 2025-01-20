@@ -1,6 +1,7 @@
 @echo off
 
 echo Updating SpaceNinjaServer...
+git config remote.origin.prune true
 git pull
 
 if exist static\data\0\ (
