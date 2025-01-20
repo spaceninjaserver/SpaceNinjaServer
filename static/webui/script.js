@@ -215,7 +215,12 @@ function updateInventory() {
                         const td = document.createElement("td");
                         td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
                         if (item.ItemName) {
-                            td.textContent = item.ItemName + " (" + td.textContent + ")";
+                            const pipeIndex = item.ItemName.indexOf("|");
+                            if (pipeIndex != -1) {
+                                td.textContent = item.ItemName.substr(1 + pipeIndex) + " " + td.textContent;
+                            } else {
+                                td.textContent = item.ItemName + " (" + td.textContent + ")";
+                            }
                         }
                         if (item.ModularParts && item.ModularParts.length) {
                             td.textContent += " [";
@@ -1092,7 +1097,7 @@ function doImport() {
             data: JSON.stringify({
                 inventory: JSON.parse($("#import-inventory").val())
             })
-        }).then(function() {
+        }).then(function () {
             updateInventory();
         });
     });
