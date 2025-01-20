@@ -8,6 +8,8 @@ import {
 import { IMongoDate } from "../types/commonTypes";
 import {
     equipmentKeys,
+    IInfestedFoundryClient,
+    IInfestedFoundryDatabase,
     IInventoryClient,
     ILoadoutConfigClient,
     ILoadOutPresets,
@@ -75,6 +77,14 @@ const replaceSlots = (db: ISlots, client: ISlots): void => {
     db.Slots = client.Slots;
 };
 
+const convertInfestedFoundry = (client: IInfestedFoundryClient): IInfestedFoundryDatabase => {
+    return {
+        ...client,
+        LastConsumedSuit: client.LastConsumedSuit ? convertEquipment(client.LastConsumedSuit) : undefined,
+        AbilityOverrideUnlockCooldown: convertOptionalDate(client.AbilityOverrideUnlockCooldown)
+    };
+};
+
 export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<IInventoryClient>): void => {
     for (const key of equipmentKeys) {
         if (client[key]) {
@@ -136,6 +146,9 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         if (client[key]) {
             db[key] = client[key];
         }
+    }
+    if (client.InfestedFoundry) {
+        db.InfestedFoundry = convertInfestedFoundry(client.InfestedFoundry);
     }
 };
 
