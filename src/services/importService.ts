@@ -156,6 +156,7 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         db.UseAdultOperatorLoadout = client.UseAdultOperatorLoadout;
     }
     for (const key of [
+        "PlayerLevel",
         "RegularCredits",
         "PremiumCredits",
         "PremiumCreditsFree",
