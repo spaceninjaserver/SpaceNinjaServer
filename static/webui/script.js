@@ -245,8 +245,7 @@ function updateInventory() {
                             category != "Sentinels" &&
                             category != "Hoverboards" &&
                             category != "MechSuits"
-                            )
-                        {
+                        ) {
                             maxXP /= 2;
                         }
 
