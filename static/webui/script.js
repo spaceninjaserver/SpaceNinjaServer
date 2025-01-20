@@ -205,7 +205,8 @@ function updateInventory() {
                 "SpaceMelee",
                 "SentinelWeapons",
                 "Hoverboards",
-                "OperatorAmps"
+                "OperatorAmps",
+                "MechSuits"
             ].forEach(category => {
                 document.getElementById(category + "-list").innerHTML = "";
                 data[category].forEach(item => {
@@ -230,14 +231,18 @@ function updateInventory() {
                         const td = document.createElement("td");
                         td.classList = "text-end";
                         const maxXP =
-                            category === "Suits" ||
-                            category === "SpaceSuits" ||
-                            category === "Sentinels" ||
-                            category === "Hoverboards"
+                            category == "Suits" ||
+                            category == "SpaceSuits" ||
+                            category == "Sentinels" ||
+                            category == "Hoverboards" ||
+                            category == "MechSuits"
                                 ? 1_600_000
                                 : 800_000;
 
-                        if (item.XP < maxXP) {
+                        if (
+                            item.XP < maxXP &&
+                            category != "MechSuits" // missionInventoryUpdate currently doesn't handle this category
+                        ) {
                             const a = document.createElement("a");
                             a.href = "#";
                             a.onclick = function (event) {
@@ -260,7 +265,7 @@ function updateInventory() {
                                     }
                                 }
                             };
-                            a.title = "Make Rank 30";
+                            a.title = "Max Rank";
                             a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"/></svg>`;
                             td.appendChild(a);
                         }

@@ -1,5 +1,5 @@
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { addEquipment, addPowerSuit, getInventory, updateSlots } from "@/src/services/inventoryService";
+import { addEquipment, addPowerSuit, addMechSuit, getInventory, updateSlots } from "@/src/services/inventoryService";
 import { SlotNames } from "@/src/types/purchaseTypes";
 import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
 import { RequestHandler } from "express";
@@ -9,14 +9,17 @@ export const addItemsController: RequestHandler = async (req, res) => {
     const requests = req.body as IAddItemRequest[];
     const inventory = await getInventory(accountId);
     for (const request of requests) {
+        updateSlots(inventory, productCategoryToSlotName[request.type], 0, 1);
         switch (request.type) {
             case ItemType.Suits:
-                updateSlots(inventory, productCategoryToSlotName[request.type], 0, 1);
                 addPowerSuit(inventory, request.internalName);
                 break;
 
+            case ItemType.MechSuits:
+                addMechSuit(inventory, request.internalName);
+                break;
+
             default:
-                updateSlots(inventory, productCategoryToSlotName[request.type], 0, 1);
                 addEquipment(inventory, request.type, request.internalName);
                 break;
         }
@@ -34,7 +37,8 @@ const productCategoryToSlotName: Record<ItemType, SlotNames> = {
     SpaceGuns: InventorySlot.SPACESUITS,
     SpaceMelee: InventorySlot.SPACESUITS,
     Sentinels: InventorySlot.SENTINELS,
-    SentinelWeapons: InventorySlot.SENTINELS
+    SentinelWeapons: InventorySlot.SENTINELS,
+    MechSuits: InventorySlot.MECHSUITS
 };
 
 enum ItemType {
@@ -46,7 +50,8 @@ enum ItemType {
     SpaceGuns = "SpaceGuns",
     SpaceMelee = "SpaceMelee",
     SentinelWeapons = "SentinelWeapons",
-    Sentinels = "Sentinels"
+    Sentinels = "Sentinels",
+    MechSuits = "MechSuits"
 }
 
 interface IAddItemRequest {
