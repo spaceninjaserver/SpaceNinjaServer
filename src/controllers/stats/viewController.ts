@@ -9,10 +9,6 @@ import { getInventory } from "@/src/services/inventoryService";
 const viewController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId, "XPInfo");
-    if (!inventory) {
-        res.status(400).json({ error: "inventory was undefined" });
-        return;
-    }
 
     const responseJson: IStatsView = {};
     responseJson.Weapons = [];

@@ -239,7 +239,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
                 inventory.InfestedFoundry!.Slots!--;
             }
             inventory.InfestedFoundry!.ConsumedSuits ??= [];
-            inventory.InfestedFoundry!.ConsumedSuits?.push(consumedSuit);
+            inventory.InfestedFoundry!.ConsumedSuits.push(consumedSuit);
             inventory.InfestedFoundry!.LastConsumedSuit = suit;
             inventory.InfestedFoundry!.AbilityOverrideUnlockCooldown = new Date(
                 new Date().getTime() + 24 * 60 * 60 * 1000

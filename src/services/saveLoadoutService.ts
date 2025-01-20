@@ -44,7 +44,7 @@ export const handleInventoryItemConfigChange = async (
                 // all non-empty entries are one loadout slot
                 for (const [loadoutId, loadoutConfig] of Object.entries(operatorConfig)) {
                     logger.debug(`loadoutId ${loadoutId} loadoutConfig`, { config: loadoutConfig });
-                    const loadout = operatorLoadout.find(loadout => loadout._id?.toString() === loadoutId);
+                    const loadout = operatorLoadout.id(loadoutId);
 
                     // if no config with this id exists, create a new one
                     if (!loadout) {
@@ -109,7 +109,7 @@ export const handleInventoryItemConfigChange = async (
                         }
 
                         const loadoutIndex = loadout[loadoutSlot].indexOf(oldLoadoutConfig);
-                        if (loadoutIndex === undefined || loadoutIndex === -1) {
+                        if (loadoutIndex === -1) {
                             throw new Error("loadout index not found");
                         }
 

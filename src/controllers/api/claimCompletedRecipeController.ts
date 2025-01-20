@@ -26,9 +26,7 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
     if (!accountId) throw new Error("no account id");
 
     const inventory = await getInventory(accountId);
-    const pendingRecipe = inventory.PendingRecipes.find(
-        recipe => recipe._id?.toString() === claimCompletedRecipeRequest.RecipeIds[0].$oid
-    );
+    const pendingRecipe = inventory.PendingRecipes.id(claimCompletedRecipeRequest.RecipeIds[0].$oid);
     if (!pendingRecipe) {
         throw new Error(`no pending recipe found with id ${claimCompletedRecipeRequest.RecipeIds[0].$oid}`);
     }

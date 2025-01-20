@@ -255,7 +255,7 @@ export interface IInventoryClient extends IDailyAffiliations {
     SpectreLoadouts?: ISpectreLoadout[];
     EmailItems: ITypeCount[];
     CompletedSyndicates: string[];
-    FocusXP: IFocusXP;
+    FocusXP?: IFocusXP;
     Wishlist: string[];
     Alignment: IAlignment;
     CompletedSorties: string[];
@@ -267,7 +267,7 @@ export interface IInventoryClient extends IDailyAffiliations {
     ShipDecorations: IConsumable[];
     DiscoveredMarkers: IDiscoveredMarker[];
     CompletedJobs: ICompletedJob[];
-    FocusAbility: string;
+    FocusAbility?: string;
     FocusUpgrades: IFocusUpgrade[];
     HasContributedToDojo?: boolean;
     HWIDProtectEnabled?: boolean;
