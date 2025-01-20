@@ -8,6 +8,10 @@ import {
 import { IMongoDate } from "../types/commonTypes";
 import {
     equipmentKeys,
+    IDialogueClient,
+    IDialogueDatabase,
+    IDialogueHistoryClient,
+    IDialogueHistoryDatabase,
     IInfestedFoundryClient,
     IInfestedFoundryDatabase,
     IInventoryClient,
@@ -85,6 +89,23 @@ const convertInfestedFoundry = (client: IInfestedFoundryClient): IInfestedFoundr
     };
 };
 
+const convertDialogue = (client: IDialogueClient): IDialogueDatabase => {
+    return {
+        ...client,
+        AvailableDate: convertDate(client.AvailableDate),
+        AvailableGiftDate: convertDate(client.AvailableGiftDate),
+        RankUpExpiry: convertDate(client.RankUpExpiry),
+        BountyChemExpiry: convertDate(client.BountyChemExpiry)
+    };
+};
+
+const convertDialogueHistory = (client: IDialogueHistoryClient): IDialogueHistoryDatabase => {
+    return {
+        YearIteration: client.YearIteration,
+        Dialogues: client.Dialogues ? client.Dialogues.map(convertDialogue) : undefined
+    };
+};
+
 export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<IInventoryClient>): void => {
     for (const key of equipmentKeys) {
         if (client[key]) {
@@ -149,6 +170,9 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     }
     if (client.InfestedFoundry) {
         db.InfestedFoundry = convertInfestedFoundry(client.InfestedFoundry);
+    }
+    if (client.DialogueHistory) {
+        db.DialogueHistory = convertDialogueHistory(client.DialogueHistory);
     }
 };
 

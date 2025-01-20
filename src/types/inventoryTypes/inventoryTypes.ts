@@ -31,6 +31,7 @@ export interface IInventoryDatabase
         | "OperatorLoadOuts"
         | "AdultOperatorLoadOuts"
         | "InfestedFoundry"
+        | "DialogueHistory"
         | TEquipmentKey
     > {
     accountOwnerId: Types.ObjectId;
@@ -50,6 +51,7 @@ export interface IInventoryDatabase
     OperatorLoadOuts: IOperatorConfigDatabase[];
     AdultOperatorLoadOuts: IOperatorConfigDatabase[];
     InfestedFoundry?: IInfestedFoundryDatabase;
+    DialogueHistory?: IDialogueHistoryDatabase;
 
     Suits: IEquipmentDatabase[];
     LongGuns: IEquipmentDatabase[];
@@ -334,7 +336,7 @@ export interface IInventoryClient extends IDailyAffiliations {
     Harvestable: boolean;
     DeathSquadable: boolean;
     EndlessXP?: IEndlessXpProgress[];
-    DialogueHistory?: IDialogueHistoryDatabase;
+    DialogueHistory?: IDialogueHistoryClient;
 }
 
 export interface IAffiliation {
