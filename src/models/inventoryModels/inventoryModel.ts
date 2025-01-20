@@ -776,7 +776,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         RewardSeed: Number,
 
         //Credit
-        RegularCredits: { type: Number, default: 3000 },
+        RegularCredits: { type: Number, default: 0 },
         //Platinum
         PremiumCredits: { type: Number, default: 50 },
         //Gift Platinum(Non trade)
@@ -787,18 +787,18 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         PrimeTokens: { type: Number, default: 0 },
 
         //Slots
-        SuitBin: slotsBinSchema,
-        WeaponBin: slotsBinSchema,
-        SentinelBin: slotsBinSchema,
-        SpaceSuitBin: slotsBinSchema,
-        SpaceWeaponBin: slotsBinSchema,
-        PvpBonusLoadoutBin: slotsBinSchema,
-        PveBonusLoadoutBin: slotsBinSchema,
-        RandomModBin: slotsBinSchema,
-        OperatorAmpBin: slotsBinSchema,
-        CrewShipSalvageBin: slotsBinSchema,
-        MechBin: slotsBinSchema,
-        CrewMemberBin: slotsBinSchema,
+        SuitBin: { type: slotsBinSchema, default: { Slots: 3 } },
+        WeaponBin: { type: slotsBinSchema, default: { Slots: 10 } },
+        SentinelBin: { type: slotsBinSchema, default: { Slots: 10 } },
+        SpaceSuitBin: { type: slotsBinSchema, default: { Slots: 4 } },
+        SpaceWeaponBin: { type: slotsBinSchema, default: { Slots: 4 } },
+        PvpBonusLoadoutBin: { type: slotsBinSchema, default: { Slots: 0 } },
+        PveBonusLoadoutBin: { type: slotsBinSchema, default: { Slots: 0 } },
+        RandomModBin: { type: slotsBinSchema, default: { Slots: 15 } },
+        OperatorAmpBin: { type: slotsBinSchema, default: { Slots: 8 } },
+        CrewShipSalvageBin: { type: slotsBinSchema, default: { Slots: 8 } },
+        MechBin: { type: slotsBinSchema, default: { Slots: 4 } },
+        CrewMemberBin: { type: slotsBinSchema, default: { Slots: 3 } },
 
         //How many trades do you have left
         TradesRemaining: { type: Number, default: 0 },
@@ -814,20 +814,20 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Syndicates Missions complate(Navigation->Syndicate)
         CompletedSyndicates: [String],
         //Daily Syndicates Exp
-        DailyAffiliation: { type: Number, default: 0 },
-        DailyAffiliationPvp: { type: Number, default: 0 },
-        DailyAffiliationLibrary: { type: Number, default: 0 },
-        DailyAffiliationCetus: { type: Number, default: 0 },
-        DailyAffiliationQuills: { type: Number, default: 0 },
-        DailyAffiliationSolaris: { type: Number, default: 0 },
-        DailyAffiliationVentkids: { type: Number, default: 0 },
-        DailyAffiliationVox: { type: Number, default: 0 },
-        DailyAffiliationEntrati: { type: Number, default: 0 },
-        DailyAffiliationNecraloid: { type: Number, default: 0 },
-        DailyAffiliationZariman: { type: Number, default: 0 },
-        DailyAffiliationKahl: { type: Number, default: 0 },
-        DailyAffiliationCavia: { type: Number, default: 0 },
-        DailyAffiliationHex: { type: Number, default: 0 },
+        DailyAffiliation: { type: Number, default: 16000 },
+        DailyAffiliationPvp: { type: Number, default: 16000 },
+        DailyAffiliationLibrary: { type: Number, default: 16000 },
+        DailyAffiliationCetus: { type: Number, default: 16000 },
+        DailyAffiliationQuills: { type: Number, default: 16000 },
+        DailyAffiliationSolaris: { type: Number, default: 16000 },
+        DailyAffiliationVentkids: { type: Number, default: 16000 },
+        DailyAffiliationVox: { type: Number, default: 16000 },
+        DailyAffiliationEntrati: { type: Number, default: 16000 },
+        DailyAffiliationNecraloid: { type: Number, default: 16000 },
+        DailyAffiliationZariman: { type: Number, default: 16000 },
+        DailyAffiliationKahl: { type: Number, default: 16000 },
+        DailyAffiliationCavia: { type: Number, default: 16000 },
+        DailyAffiliationHex: { type: Number, default: 16000 },
 
         //Daily Focus limit
         DailyFocus: { type: Number, default: 250000 },
@@ -948,7 +948,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Item Mastery Rank exp
         XPInfo: [TypeXPItemSchema],
         //Mastery Rank next availability
-        TrainingDate: Date,
+        TrainingDate: { type: Date, default: new Date(0) },
         //Retries rank up(3 time)
         TrainingRetriesLeft: Number,
 
@@ -974,7 +974,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         CompletedAlerts: [String],
 
         //Warframe\Duviri
-        StoryModeChoice: String,
+        StoryModeChoice: { type: String, default: "WARFRAME" },
 
         //Alert->Kuva Siphon
         PeriodicMissionCompletions: [periodicMissionCompletionsSchema],

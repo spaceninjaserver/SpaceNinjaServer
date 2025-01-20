@@ -28,7 +28,7 @@ export interface IShip {
     ShipId: IOid;
     ShipInterior: IShipInterior;
     Rooms: IRoom[];
-    ContentUrlSignature: string;
+    ContentUrlSignature?: string;
     BootLocation?: TBootLocation;
 }
 
@@ -58,7 +58,7 @@ export interface IPlanters {
 }
 
 export interface IGardening {
-    Planters: IPlanters[];
+    Planters?: IPlanters[];
 }
 export interface IApartment {
     Gardening: IGardening;

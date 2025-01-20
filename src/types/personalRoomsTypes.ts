@@ -12,7 +12,7 @@ import { Model, Types } from "mongoose";
 export interface IOrbiter {
     Features: string[];
     Rooms: IRoom[];
-    ContentUrlSignature: string;
+    ContentUrlSignature?: string;
     BootLocation?: TBootLocation;
 }
 

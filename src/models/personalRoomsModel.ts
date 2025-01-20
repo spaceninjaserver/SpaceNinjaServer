@@ -74,16 +74,38 @@ const apartmentSchema = new Schema<IApartment>(
     },
     { _id: false }
 );
+const apartmentDefault: IApartment = {
+    Rooms: [
+        { Name: "ElevatorLanding", MaxCapacity: 1600 },
+        { Name: "ApartmentRoomA", MaxCapacity: 1000 },
+        { Name: "ApartmentRoomB", MaxCapacity: 1600 },
+        { Name: "ApartmentRoomC", MaxCapacity: 1600 },
+        { Name: "DuviriHallway", MaxCapacity: 1600 }
+    ],
+    FavouriteLoadouts: [],
+    Gardening: {}
+};
 
 const orbiterSchema = new Schema<IOrbiter>(
     {
         Features: [String],
         Rooms: [roomSchema],
-        ContentUrlSignature: String,
+        ContentUrlSignature: { type: String, required: false },
         BootLocation: String
     },
     { _id: false }
 );
+const orbiterDefault: IOrbiter = {
+    Features: [],
+    Rooms: [
+        { Name: "AlchemyRoom", MaxCapacity: 1600 },
+        { Name: "BridgeRoom", MaxCapacity: 1600 },
+        { Name: "LisetRoom", MaxCapacity: 1000 },
+        { Name: "OperatorChamberRoom", MaxCapacity: 1600 },
+        { Name: "OutsideRoom", MaxCapacity: 1600 },
+        { Name: "PersonalQuartersRoom", MaxCapacity: 1600 }
+    ]
+};
 
 const favouriteLoadoutSchema = new Schema<IFavouriteLoadoutDatabase>(
     {
@@ -114,18 +136,9 @@ const tailorShopDefault: ITailorShopDatabase = {
     CustomJson: "{}",
     LevelDecosVisible: true,
     Rooms: [
-        {
-            Name: "LabRoom",
-            MaxCapacity: 4000
-        },
-        {
-            Name: "LivingQuartersRoom",
-            MaxCapacity: 3000
-        },
-        {
-            Name: "HelminthRoom",
-            MaxCapacity: 2000
-        }
+        { Name: "LabRoom", MaxCapacity: 4000 },
+        { Name: "LivingQuartersRoom", MaxCapacity: 3000 },
+        { Name: "HelminthRoom", MaxCapacity: 2000 }
     ]
 };
 
@@ -133,8 +146,8 @@ export const personalRoomsSchema = new Schema<IPersonalRoomsDatabase>({
     personalRoomsOwnerId: Schema.Types.ObjectId,
     activeShipId: Schema.Types.ObjectId,
     ShipInteriorColors: colorSchema,
-    Ship: orbiterSchema,
-    Apartment: apartmentSchema,
+    Ship: { type: orbiterSchema, default: orbiterDefault },
+    Apartment: { type: apartmentSchema, default: apartmentDefault },
     TailorShop: { type: tailorShopSchema, default: tailorShopDefault }
 });
 
