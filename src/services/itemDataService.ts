@@ -50,13 +50,7 @@ export const getWeaponType = (weaponName: string): WeaponTypeInternal => {
         throw new Error(`${weaponName} doesn't quack like a weapon`);
     }
 
-    const weaponType = weaponInfo.productCategory;
-
-    if (!weaponType) {
-        throw new Error(`unknown weapon category for item ${weaponName}`);
-    }
-
-    return weaponType;
+    return weaponInfo.productCategory;
 };
 
 export const getRecipe = (uniqueName: string): IRecipe | undefined => {

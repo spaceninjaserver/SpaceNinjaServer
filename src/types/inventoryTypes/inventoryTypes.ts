@@ -223,7 +223,7 @@ export interface IInventoryResponse extends IDailyAffiliations {
     Sentinels: IEquipmentDatabase[];
     EmailItems: ITypeCount[];
     CompletedSyndicates: string[];
-    FocusXP: IFocusXP;
+    FocusXP?: IFocusXP;
     Wishlist: string[];
     Alignment: IAlignment;
     CompletedSorties: string[];
@@ -235,7 +235,7 @@ export interface IInventoryResponse extends IDailyAffiliations {
     ShipDecorations: IConsumable[];
     DiscoveredMarkers: IDiscoveredMarker[];
     CompletedJobs: ICompletedJob[];
-    FocusAbility: string;
+    FocusAbility?: string;
     FocusUpgrades: IFocusUpgrade[];
     OperatorAmps: IEquipmentDatabase[];
     HasContributedToDojo?: boolean;

@@ -9,12 +9,10 @@ export const queueDojoComponentDestructionController: RequestHandler = async (re
         guild.DojoComponents!.findIndex(x => x._id.toString() === componentId),
         1
     )[0];
-    if (component) {
-        const room = Object.values(ExportDojoRecipes.rooms).find(x => x.resultType == component.pf);
-        if (room) {
-            guild.DojoCapacity -= room.capacity;
-            guild.DojoEnergy -= room.energy;
-        }
+    const room = Object.values(ExportDojoRecipes.rooms).find(x => x.resultType == component.pf);
+    if (room) {
+        guild.DojoCapacity -= room.capacity;
+        guild.DojoEnergy -= room.energy;
     }
     await guild.save();
     res.json({

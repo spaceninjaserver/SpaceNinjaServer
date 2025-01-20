@@ -22,7 +22,7 @@ export const syndicateSacrificeController: RequestHandler = async (request, resp
         InventoryChanges: {},
         Level: data.SacrificeLevel,
         LevelIncrease: level <= 0 ? 1 : level,
-        NewEpisodeReward: syndicate?.Tag == "RadioLegionIntermission9Syndicate"
+        NewEpisodeReward: syndicate.Tag == "RadioLegionIntermission9Syndicate"
     };
 
     const manifest = ExportSyndicates[data.AffiliationTag];

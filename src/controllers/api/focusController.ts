@@ -70,7 +70,7 @@ export const focusController: RequestHandler = async (req, res) => {
                 cost += ExportFocusUpgrades[focusType].baseFocusPointCost;
                 inventory.FocusUpgrades.push({ ItemType: focusType, Level: 0 });
             }
-            inventory.FocusXP[focusPolarity] -= cost;
+            inventory.FocusXP![focusPolarity] -= cost;
             await inventory.save();
             res.json({
                 FocusTypes: request.FocusTypes,
@@ -88,7 +88,7 @@ export const focusController: RequestHandler = async (req, res) => {
                 const focusUpgradeDb = inventory.FocusUpgrades.find(entry => entry.ItemType == focusUpgrade.ItemType)!;
                 focusUpgradeDb.Level = focusUpgrade.Level;
             }
-            inventory.FocusXP[focusPolarity] -= cost;
+            inventory.FocusXP![focusPolarity] -= cost;
             await inventory.save();
             res.json({
                 FocusInfos: request.FocusInfos,
@@ -113,7 +113,7 @@ export const focusController: RequestHandler = async (req, res) => {
             const request = JSON.parse(String(req.body)) as IUnbindUpgradeRequest;
             const focusPolarity = focusTypeToPolarity(request.FocusTypes[0]);
             const inventory = await getInventory(accountId);
-            inventory.FocusXP[focusPolarity] -= 750_000 * request.FocusTypes.length;
+            inventory.FocusXP![focusPolarity] -= 750_000 * request.FocusTypes.length;
             addMiscItems(inventory, [
                 {
                     ItemType: "/Lotus/Types/Gameplay/Eidolon/Resources/SentientShards/SentientShardBrilliantItem",

@@ -55,7 +55,7 @@ export const handleSetShipDecorations = async (
     if (placedDecoration.MoveId) {
         //moved within the same room
         if (placedDecoration.OldRoom === placedDecoration.Room) {
-            const existingDecorationIndex = roomToPlaceIn?.PlacedDecos?.findIndex(
+            const existingDecorationIndex = roomToPlaceIn.PlacedDecos.findIndex(
                 deco => deco._id.toString() === placedDecoration.MoveId
             );
 
@@ -136,7 +136,7 @@ export const handleSetShipDecorations = async (
 
     //place decoration
     const decoId = new Types.ObjectId();
-    roomToPlaceIn.PlacedDecos?.push({
+    roomToPlaceIn.PlacedDecos.push({
         Type: placedDecoration.Type,
         Pos: placedDecoration.Pos,
         Rot: placedDecoration.Rot,
@@ -157,7 +157,7 @@ export const handleSetPlacedDecoInfo = async (accountId: string, req: ISetPlaced
         throw new Error("room not found");
     }
 
-    const placedDeco = room.PlacedDecos?.id(req.DecoId);
+    const placedDeco = room.PlacedDecos.id(req.DecoId);
     if (!placedDeco) {
         throw new Error("deco not found");
     }

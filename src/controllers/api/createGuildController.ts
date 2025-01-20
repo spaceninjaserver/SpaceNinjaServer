@@ -21,7 +21,6 @@ export const createGuildController: RequestHandler = async (req, res) => {
         inventory.GuildId = guild._id;
 
         // Give clan key (TODO: This should only be a blueprint)
-        inventory.LevelKeys ??= [];
         inventory.LevelKeys.push({
             ItemType: "/Lotus/Types/Keys/DojoKey",
             ItemCount: 1
