@@ -167,7 +167,7 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
             db[key] = client[key];
         }
     }
-    for (const key of ["ThemeStyle", "ThemeBackground", "ThemeSounds", "EquippedInstrument"] as const) {
+    for (const key of ["ThemeStyle", "ThemeBackground", "ThemeSounds", "EquippedInstrument", "FocusAbility"] as const) {
         if (client[key]) {
             db[key] = client[key];
         }
