@@ -839,7 +839,7 @@ function doAcquireMod() {
                 RawUpgrades: [
                     {
                         ItemType: uniqueName,
-                        ItemCount: 1
+                        ItemCount: parseInt($("#mod-count").val())
                     }
                 ]
             })

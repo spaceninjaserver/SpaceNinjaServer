@@ -331,6 +331,7 @@
                             <h5 class="card-header">Mods</h5>
                             <div class="card-body">
                                 <form class="input-group mb-3" onsubmit="doAcquireMod();return false;">
+                                    <input class="form-control" id="mod-count" type="number" min="1" value="1"/>
                                     <input class="form-control" id="mod-to-acquire" list="datalist-mods" />
                                     <button class="btn btn-primary" type="submit">Add</button>
                                 </form>
