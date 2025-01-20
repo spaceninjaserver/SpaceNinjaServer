@@ -62,7 +62,8 @@ import {
     IOperatorConfigDatabase,
     IPolarity,
     IEquipmentDatabase,
-    IArchonCrystalUpgrade
+    IArchonCrystalUpgrade,
+    IEquipmentClient
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
 import { EquipmentSelectionSchema } from "./loadoutModel";
@@ -260,6 +261,13 @@ EquipmentSchema.set("toJSON", {
     transform(_document, returnedObject) {
         delete returnedObject._id;
         delete returnedObject.__v;
+
+        const db = returnedObject as IEquipmentDatabase;
+        const client = returnedObject as IEquipmentClient;
+
+        if (db.InfestationDate) {
+            client.InfestationDate = toMongoDate(db.InfestationDate);
+        }
     }
 });
 
