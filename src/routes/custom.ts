@@ -9,6 +9,7 @@ import { renameAccountController } from "@/src/controllers/custom/renameAccountC
 
 import { createAccountController } from "@/src/controllers/custom/createAccountController";
 import { addItemsController } from "@/src/controllers/custom/addItemsController";
+import { importController } from "@/src/controllers/custom/importController";
 
 import { getConfigDataController } from "@/src/controllers/custom/getConfigDataController";
 import { updateConfigDataController } from "@/src/controllers/custom/updateConfigDataController";
@@ -24,6 +25,7 @@ customRouter.get("/renameAccount", renameAccountController);
 
 customRouter.post("/createAccount", createAccountController);
 customRouter.post("/addItems", addItemsController);
+customRouter.post("/import", importController);
 
 customRouter.get("/config", getConfigDataController);
 customRouter.post("/config", updateConfigDataController);

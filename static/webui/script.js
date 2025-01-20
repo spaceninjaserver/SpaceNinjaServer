@@ -215,7 +215,12 @@ function updateInventory() {
                         const td = document.createElement("td");
                         td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
                         if (item.ItemName) {
-                            td.textContent = item.ItemName + " (" + td.textContent + ")";
+                            const pipeIndex = item.ItemName.indexOf("|");
+                            if (pipeIndex != -1) {
+                                td.textContent = item.ItemName.substr(1 + pipeIndex) + " " + td.textContent;
+                            } else {
+                                td.textContent = item.ItemName + " (" + td.textContent + ")";
+                            }
                         }
                         if (item.ModularParts && item.ModularParts.length) {
                             td.textContent += " [";
@@ -1079,6 +1084,21 @@ function doPopArchonCrystalUpgrade(type) {
                 "&type=" +
                 type
         ).done(function () {
+            updateInventory();
+        });
+    });
+}
+
+function doImport() {
+    revalidateAuthz(() => {
+        $.post({
+            url: "/custom/import?" + window.authz,
+            contentType: "text/plain",
+            data: JSON.stringify({
+                inventory: JSON.parse($("#import-inventory").val())
+            })
+        }).then(function () {
+            alert("Successfully imported.");
             updateInventory();
         });
     });

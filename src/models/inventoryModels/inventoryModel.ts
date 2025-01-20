@@ -2,11 +2,10 @@ import { Document, Model, Schema, Types, model } from "mongoose";
 import {
     IFlavourItem,
     IRawUpgrade,
-    ICrewShipSalvagedWeaponSkin,
     IMiscItem,
     IInventoryDatabase,
     IBooster,
-    IInventoryResponse,
+    IInventoryClient,
     ISlots,
     IMailbox,
     IDuviriInfo,
@@ -14,7 +13,7 @@ import {
     IPendingRecipeResponse,
     ITypeCount,
     IFocusXP,
-    IFocusUpgrades,
+    IFocusUpgrade,
     ITypeXPItem,
     IChallengeProgress,
     IStepSequencer,
@@ -24,7 +23,7 @@ import {
     ISeasonChallenge,
     IPlayerSkills,
     ISettings,
-    IInfestedFoundry,
+    IInfestedFoundryDatabase,
     IHelminthResource,
     IConsumedSuit,
     IQuestProgress,
@@ -43,7 +42,6 @@ import {
     ICrewShipCustomization,
     ICrewShipWeapon,
     ICrewShipMembersClient,
-    ICrewShip,
     ICrewShipPilotWeapon,
     IShipExterior,
     IHelminthFoodRecord,
@@ -52,7 +50,9 @@ import {
     IDialogueDatabase,
     IDialogueGift,
     ICompletedDialogue,
-    IDialogueClient
+    IDialogueClient,
+    IUpgradeDatabase,
+    ICrewShipDatabase
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -62,7 +62,6 @@ import {
     IOperatorConfigDatabase,
     IPolarity,
     IEquipmentDatabase,
-    IOperatorConfigClient,
     IArchonCrystalUpgrade
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
@@ -81,7 +80,7 @@ const focusXPSchema = new Schema<IFocusXP>(
     { _id: false }
 );
 
-const focusUpgradesSchema = new Schema<IFocusUpgrades>(
+const focusUpgradeSchema = new Schema<IFocusUpgrade>(
     {
         ItemType: String,
         Level: Number,
@@ -288,7 +287,7 @@ RawUpgrades.set("toJSON", {
     }
 });
 
-const upgradesSchema = new Schema<ICrewShipSalvagedWeaponSkin>(
+const upgradeSchema = new Schema<IUpgradeDatabase>(
     {
         UpgradeFingerprint: String,
         PendingRerollFingerprint: { type: String, required: false },
@@ -297,11 +296,11 @@ const upgradesSchema = new Schema<ICrewShipSalvagedWeaponSkin>(
     { id: false }
 );
 
-upgradesSchema.virtual("ItemId").get(function () {
+upgradeSchema.virtual("ItemId").get(function () {
     return toOid(this._id);
 });
 
-upgradesSchema.set("toJSON", {
+upgradeSchema.set("toJSON", {
     virtuals: true,
     transform(_document, returnedObject) {
         delete returnedObject._id;
@@ -493,7 +492,7 @@ const helminthResourceSchema = new Schema<IHelminthResource>(
     { _id: false }
 );
 
-const infestedFoundrySchema = new Schema<IInfestedFoundry>(
+const infestedFoundrySchema = new Schema<IInfestedFoundryDatabase>(
     {
         Name: String,
         Resources: { type: [helminthResourceSchema], default: undefined },
@@ -695,7 +694,7 @@ crewShipMembersSchema.set("toJSON", {
     }
 });
 
-const crewShipSchema = new Schema<ICrewShip>({
+const crewShipSchema = new Schema<ICrewShipDatabase>({
     ItemType: { type: String, required: true },
     Configs: { type: [ItemConfigSchema], default: [] },
     Weapon: { type: crewShipWeaponSchema, default: undefined },
@@ -837,7 +836,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Curent active like Active school focuses is = "Zenurik"
         FocusAbility: String,
         //The treeways of the Focus school.(Active and passive Ability)
-        FocusUpgrades: [focusUpgradesSchema],
+        FocusUpgrades: [focusUpgradeSchema],
 
         //Achievement
         ChallengeProgress: [challengeProgressSchema],
@@ -848,7 +847,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Non Upgrade Mods Example:I have 999 item WeaponElectricityDamageMod (only "ItemCount"+"ItemType")
         RawUpgrades: [RawUpgrades],
         //Upgrade Mods\Riven\Arcane Example:"UpgradeFingerprint"+"ItemType"+""
-        Upgrades: [upgradesSchema],
+        Upgrades: [upgradeSchema],
 
         //Warframe
         Suits: [EquipmentSchema],
@@ -1142,7 +1141,7 @@ inventorySchema.set("toJSON", {
         delete returnedObject.accountOwnerId;
 
         const inventoryDatabase = returnedObject as IInventoryDatabase;
-        const inventoryResponse = returnedObject as IInventoryResponse;
+        const inventoryResponse = returnedObject as IInventoryClient;
 
         inventoryResponse.TrainingDate = toMongoDate(inventoryDatabase.TrainingDate);
         inventoryResponse.Created = toMongoDate(inventoryDatabase.Created);
@@ -1164,12 +1163,12 @@ type InventoryDocumentProps = {
     OperatorAmps: Types.DocumentArray<IEquipmentDatabase>;
     FlavourItems: Types.DocumentArray<IFlavourItem>;
     RawUpgrades: Types.DocumentArray<IRawUpgrade>;
-    Upgrades: Types.DocumentArray<ICrewShipSalvagedWeaponSkin>;
+    Upgrades: Types.DocumentArray<IUpgradeDatabase>;
     MiscItems: Types.DocumentArray<IMiscItem>;
     Boosters: Types.DocumentArray<IBooster>;
-    OperatorLoadOuts: Types.DocumentArray<IOperatorConfigClient>;
+    OperatorLoadOuts: Types.DocumentArray<IOperatorConfigDatabase>;
     SpecialItems: Types.DocumentArray<IEquipmentDatabase>;
-    AdultOperatorLoadOuts: Types.DocumentArray<IOperatorConfigClient>; //TODO: this should still contain _id
+    AdultOperatorLoadOuts: Types.DocumentArray<IOperatorConfigDatabase>;
     MechSuits: Types.DocumentArray<IEquipmentDatabase>;
     Scoops: Types.DocumentArray<IEquipmentDatabase>;
     DataKnives: Types.DocumentArray<IEquipmentDatabase>;
@@ -1185,7 +1184,7 @@ type InventoryDocumentProps = {
     Hoverboards: Types.DocumentArray<IEquipmentDatabase>;
     MoaPets: Types.DocumentArray<IEquipmentDatabase>;
     WeaponSkins: Types.DocumentArray<IWeaponSkinDatabase>;
-    CrewShips: Types.DocumentArray<ICrewShip>;
+    CrewShips: Types.DocumentArray<ICrewShipDatabase>;
     CrewShipHarnesses: Types.DocumentArray<IEquipmentDatabase>;
 };
 

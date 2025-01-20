@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import { getDict, getItemName, getString } from "@/src/services/itemDataService";
 import {
     ExportArcanes,
+    ExportAvionics,
     ExportGear,
     ExportRecipes,
     ExportResources,
@@ -136,6 +137,13 @@ const getItemListsController: RequestHandler = (req, response) => {
         if (upgrade.isStarter || upgrade.isFrivolous || upgrade.upgradeEntries) {
             badItems[uniqueName] = true;
         }
+    }
+    for (const [uniqueName, upgrade] of Object.entries(ExportAvionics)) {
+        res.mods.push({
+            uniqueName,
+            name: getString(upgrade.name, lang),
+            fusionLimit: upgrade.fusionLimit
+        });
     }
     for (const [uniqueName, arcane] of Object.entries(ExportArcanes)) {
         res.mods.push({

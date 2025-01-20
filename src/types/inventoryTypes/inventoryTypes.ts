@@ -7,12 +7,14 @@ import {
     IItemConfig,
     IOperatorConfigClient,
     IEquipmentSelection,
-    IEquipmentDatabase
+    IEquipmentDatabase,
+    IEquipmentClient,
+    IOperatorConfigDatabase
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
 
 export interface IInventoryDatabase
     extends Omit<
-        IInventoryResponse,
+        IInventoryClient,
         | "TrainingDate"
         | "LoadOutPresets"
         | "Mailbox"
@@ -23,6 +25,15 @@ export interface IInventoryDatabase
         | "BlessingCooldown"
         | "Ships"
         | "WeaponSkins"
+        | "Upgrades"
+        | "CrewShipSalvagedWeaponSkins"
+        | "CrewShipWeaponSkins"
+        | "OperatorLoadOuts"
+        | "AdultOperatorLoadOuts"
+        | "CrewShips"
+        | "InfestedFoundry"
+        | "DialogueHistory"
+        | TEquipmentKey
     > {
     accountOwnerId: Types.ObjectId;
     Created: Date;
@@ -35,6 +46,28 @@ export interface IInventoryDatabase
     BlessingCooldown: Date;
     Ships: Types.ObjectId[];
     WeaponSkins: IWeaponSkinDatabase[];
+    Upgrades: IUpgradeDatabase[];
+    CrewShipSalvagedWeaponSkins: IUpgradeDatabase[];
+    CrewShipWeaponSkins: IUpgradeDatabase[];
+    OperatorLoadOuts: IOperatorConfigDatabase[];
+    AdultOperatorLoadOuts: IOperatorConfigDatabase[];
+    CrewShips: ICrewShipDatabase[];
+    InfestedFoundry?: IInfestedFoundryDatabase;
+    DialogueHistory?: IDialogueHistoryDatabase;
+
+    Suits: IEquipmentDatabase[];
+    LongGuns: IEquipmentDatabase[];
+    Pistols: IEquipmentDatabase[];
+    Melee: IEquipmentDatabase[];
+    SpecialItems: IEquipmentDatabase[];
+    Sentinels: IEquipmentDatabase[];
+    SentinelWeapons: IEquipmentDatabase[];
+    SpaceSuits: IEquipmentDatabase[];
+    SpaceGuns: IEquipmentDatabase[];
+    SpaceMelee: IEquipmentDatabase[];
+    Hoverboards: IEquipmentDatabase[];
+    OperatorAmps: IEquipmentDatabase[];
+    MoaPets: IEquipmentDatabase[];
 }
 
 export interface IQuestKeyDatabase {
@@ -44,12 +77,6 @@ export interface IQuestKeyDatabase {
     CustomData?: string; //TODO: check whether this actually exists
     ItemType: string;
     CompletionDate?: Date;
-}
-
-export interface IFocusUpgrades {
-    ItemType: string;
-    Level: number;
-    IsUniversal: boolean;
 }
 
 export interface ITypeCount {
@@ -126,7 +153,21 @@ export interface IDailyAffiliations {
     DailyAffiliationHex: number;
 }
 
-export interface IInventoryResponse extends IDailyAffiliations {
+export interface IInventoryClient extends IDailyAffiliations {
+    Suits: IEquipmentClient[];
+    LongGuns: IEquipmentClient[];
+    Pistols: IEquipmentClient[];
+    Melee: IEquipmentClient[];
+    SpecialItems: IEquipmentClient[];
+    Sentinels: IEquipmentClient[];
+    SentinelWeapons: IEquipmentClient[];
+    SpaceSuits: IEquipmentClient[];
+    SpaceGuns: IEquipmentClient[];
+    SpaceMelee: IEquipmentClient[];
+    Hoverboards: IEquipmentClient[];
+    OperatorAmps: IEquipmentClient[];
+    MoaPets: IEquipmentClient[];
+
     Horses: IEquipmentDatabase[];
     DrifterMelee: IEquipmentDatabase[];
     DrifterGuns: IEquipmentDatabase[];
@@ -163,17 +204,13 @@ export interface IInventoryResponse extends IDailyAffiliations {
     ChallengeProgress: IChallengeProgress[];
     RawUpgrades: IRawUpgrade[];
     ReceivedStartingGear: boolean;
-    Suits: IEquipmentDatabase[];
-    LongGuns: IEquipmentDatabase[];
-    Pistols: IEquipmentDatabase[];
-    Melee: IEquipmentDatabase[];
     Ships: IShipInventory[];
     QuestKeys: IQuestKeyResponse[];
     FlavourItems: IFlavourItem[];
     Scoops: IEquipmentDatabase[];
     TrainingRetriesLeft: number;
     LoadOutPresets: ILoadOutPresets;
-    CurrentLoadOutIds: Array<any[] | IOid>;
+    CurrentLoadOutIds: IOid[]; // we store it in the database using this representation as well :/
     Missions: IMission[];
     RandomUpgradesIdentified?: number;
     LastRegionPlayed: TSolarMapRegion;
@@ -191,7 +228,7 @@ export interface IInventoryResponse extends IDailyAffiliations {
     Accolades?: {
         Heirloom?: boolean;
     };
-    Upgrades: ICrewShipSalvagedWeaponSkin[];
+    Upgrades: IUpgradeClient[];
     EquippedGear: string[];
     DeathMarks: string[];
     FusionTreasures: IFusionTreasure[];
@@ -213,14 +250,9 @@ export interface IInventoryResponse extends IDailyAffiliations {
     Affiliations: IAffiliation[];
     QualifyingInvasions: any[];
     FactionScores: number[];
-    SpaceSuits: IEquipmentDatabase[];
-    SpaceMelee: IEquipmentDatabase[];
-    SpaceGuns: IEquipmentDatabase[];
     ArchwingEnabled: boolean;
     PendingSpectreLoadouts?: ISpectreLoadout[];
     SpectreLoadouts?: ISpectreLoadout[];
-    SentinelWeapons: IEquipmentDatabase[];
-    Sentinels: IEquipmentDatabase[];
     EmailItems: ITypeCount[];
     CompletedSyndicates: string[];
     FocusXP: IFocusXP;
@@ -237,13 +269,11 @@ export interface IInventoryResponse extends IDailyAffiliations {
     CompletedJobs: ICompletedJob[];
     FocusAbility: string;
     FocusUpgrades: IFocusUpgrade[];
-    OperatorAmps: IEquipmentDatabase[];
     HasContributedToDojo?: boolean;
     HWIDProtectEnabled?: boolean;
     KubrowPetPrints: IKubrowPetPrint[];
     AlignmentReplay: IAlignment;
     PersonalGoalProgress: IPersonalGoalProgress[];
-    SpecialItems: IEquipmentDatabase[];
     ThemeStyle: string;
     ThemeBackground: string;
     ThemeSounds: string;
@@ -252,12 +282,10 @@ export interface IInventoryResponse extends IDailyAffiliations {
     LoginMilestoneRewards: string[];
     OperatorLoadOuts: IOperatorConfigClient[];
     RecentVendorPurchases: Array<number | string>;
-    Hoverboards: IEquipmentDatabase[];
     NodeIntrosCompleted: string[];
     GuildId?: IOid;
     CompletedJobChains: ICompletedJobChain[];
     SeasonChallengeHistory: ISeasonChallenge[];
-    MoaPets: IEquipmentDatabase[];
     EquippedInstrument?: string;
     InvasionChainProgress: IInvasionChainProgress[];
     DataKnives: IEquipmentDatabase[];
@@ -266,18 +294,18 @@ export interface IInventoryResponse extends IDailyAffiliations {
     LastNemesisAllySpawnTime?: IMongoDate;
     Settings: ISettings;
     PersonalTechProjects: IPersonalTechProject[];
-    CrewShips: ICrewShip[];
+    CrewShips: ICrewShipClient[];
     PlayerSkills: IPlayerSkills;
     CrewShipAmmo: IConsumable[];
-    CrewShipSalvagedWeaponSkins: ICrewShipSalvagedWeaponSkin[];
+    CrewShipSalvagedWeaponSkins: IUpgradeClient[];
     CrewShipWeapons: ICrewShipWeapon[];
     CrewShipSalvagedWeapons: ICrewShipWeapon[];
-    CrewShipWeaponSkins: ICrewShipSalvagedWeaponSkin[];
+    CrewShipWeaponSkins: IUpgradeClient[];
     TradeBannedUntil?: IMongoDate;
     PlayedParkourTutorial: boolean;
     SubscribedToEmailsPersonalized: number;
     MechSuits: IEquipmentDatabase[];
-    InfestedFoundry?: IInfestedFoundry;
+    InfestedFoundry?: IInfestedFoundryClient;
     BlessingCooldown: IMongoDate;
     CrewShipHarnesses: IEquipmentDatabase[];
     CrewShipRawSalvage: IConsumable[];
@@ -304,7 +332,7 @@ export interface IInventoryResponse extends IDailyAffiliations {
     Harvestable: boolean;
     DeathSquadable: boolean;
     EndlessXP?: IEndlessXpProgress[];
-    DialogueHistory?: IDialogueHistoryDatabase;
+    DialogueHistory?: IDialogueHistoryClient;
 }
 
 export interface IAffiliation {
@@ -415,15 +443,18 @@ export interface ISlots {
     Slots: number;
 }
 
-export interface ICrewShipSalvagedWeaponSkin {
+export interface IUpgradeClient {
     ItemType: string;
     UpgradeFingerprint?: string;
     PendingRerollFingerprint?: string;
-    ItemId?: IOid;
-    _id?: Types.ObjectId;
+    ItemId: IOid;
 }
 
-export interface ICrewShip {
+export interface IUpgradeDatabase extends Omit<IUpgradeClient, "ItemId"> {
+    _id: Types.ObjectId;
+}
+
+export interface ICrewShipClient {
     ItemType: string;
     Configs: IItemConfig[];
     Weapon?: ICrewShipWeapon;
@@ -432,6 +463,10 @@ export interface ICrewShip {
     RailjackImage?: IFlavourItem;
     CrewMembers?: ICrewShipMembersClient;
     ItemId: IOid;
+}
+
+export interface ICrewShipDatabase extends Omit<ICrewShipClient, "CrewMembers" | "ItemId"> {
+    CrewMembers?: ICrewShipMembersDatabase;
     _id: Types.ObjectId;
 }
 
@@ -535,7 +570,7 @@ export interface IHelminthResource {
     RecentlyConvertedResources?: IHelminthFoodRecord[];
 }
 
-export interface IInfestedFoundry {
+export interface IInfestedFoundryClient {
     Name?: string;
     Resources?: IHelminthResource[];
     Slots?: number;
@@ -544,6 +579,12 @@ export interface IInfestedFoundry {
     InvigorationIndex?: number;
     InvigorationSuitOfferings?: string[];
     InvigorationsApplied?: number;
+    LastConsumedSuit?: IEquipmentClient;
+    AbilityOverrideUnlockCooldown?: IMongoDate;
+}
+
+export interface IInfestedFoundryDatabase
+    extends Omit<IInfestedFoundryClient, "LastConsumedSuit" | "AbilityOverrideUnlockCooldown"> {
     LastConsumedSuit?: IEquipmentDatabase;
     AbilityOverrideUnlockCooldown?: Date;
 }
@@ -636,7 +677,7 @@ export interface ILibraryPersonalProgress {
     Completed: boolean;
 }
 
-//this needs to be checked against ILoadoutDatabase
+// keep in sync with ILoadoutDatabase
 export interface ILoadOutPresets {
     NORMAL: ILoadoutConfigClient[];
     NORMAL_PVP: ILoadoutConfigClient[];
@@ -649,6 +690,7 @@ export interface ILoadOutPresets {
     DATAKNIFE: ILoadoutConfigClient[];
     MECH: ILoadoutConfigClient[];
     OPERATOR_ADULT: ILoadoutConfigClient[];
+    DRIFTER: ILoadoutConfigClient[];
 }
 
 export enum FocusSchool {
@@ -913,9 +955,10 @@ export interface ITaunt {
 
 export interface IWeaponSkinDatabase {
     ItemType: string;
+    _id: Types.ObjectId;
 }
 
-export interface IWeaponSkinClient extends IWeaponSkinDatabase {
+export interface IWeaponSkinClient extends Omit<IWeaponSkinDatabase, "_id"> {
     ItemId: IOid;
 }
 

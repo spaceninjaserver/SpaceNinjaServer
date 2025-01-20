@@ -54,18 +54,19 @@ export interface IConfigEntry {
 
 export interface ILoadoutClient extends Omit<ILoadoutDatabase, "_id" | "loadoutOwnerId"> {}
 
+// keep in sync with ILoadOutPresets
 export interface ILoadoutDatabase {
-    NORMAL: ILoadoutEntry;
-    SENTINEL: ILoadoutEntry;
-    ARCHWING: ILoadoutEntry;
-    NORMAL_PVP: ILoadoutEntry;
-    LUNARO: ILoadoutEntry;
-    OPERATOR: ILoadoutEntry;
-    KDRIVE: ILoadoutEntry;
-    DATAKNIFE: ILoadoutEntry;
-    MECH: ILoadoutEntry;
-    OPERATOR_ADULT: ILoadoutEntry;
-    DRIFTER: ILoadoutEntry;
+    NORMAL: ILoadoutConfigDatabase[];
+    SENTINEL: ILoadoutConfigDatabase[];
+    ARCHWING: ILoadoutConfigDatabase[];
+    NORMAL_PVP: ILoadoutConfigDatabase[];
+    LUNARO: ILoadoutConfigDatabase[];
+    OPERATOR: ILoadoutConfigDatabase[];
+    KDRIVE: ILoadoutConfigDatabase[];
+    DATAKNIFE: ILoadoutConfigDatabase[];
+    MECH: ILoadoutConfigDatabase[];
+    OPERATOR_ADULT: ILoadoutConfigDatabase[];
+    DRIFTER: ILoadoutConfigDatabase[];
     _id: Types.ObjectId;
     loadoutOwnerId: Types.ObjectId;
 }

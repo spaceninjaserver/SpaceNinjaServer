@@ -44,7 +44,7 @@ export const arcaneCommonController: RequestHandler = async (req, res) => {
                 ItemType: json.arcane.ItemType,
                 UpgradeFingerprint: JSON.stringify({ lvl: json.newRank })
             });
-            upgradeId = inventory.Upgrades[newLength - 1]._id!.toString();
+            upgradeId = inventory.Upgrades[newLength - 1]._id.toString();
         }
 
         // Remove RawUpgrades

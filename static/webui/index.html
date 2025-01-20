@@ -64,6 +64,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/webui/cheats" data-bs-dismiss="offcanvas" data-bs-target="#sidebar">Cheats</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/webui/import" data-bs-dismiss="offcanvas" data-bs-target="#sidebar">Import</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -492,6 +495,11 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div data-route="/webui/import" data-title="Import | OpenWF WebUI">
+                <p>You can provide a full or partial inventory response (client respresentation) here. All fields that are supported by the importer <b>will be overwritten</b> in your account.</p>
+                <textarea class="form-control" id="import-inventory"></textarea>
+                <button class="btn btn-primary mt-3" onclick="doImport();">Submit</button>
             </div>
         </div>
     </div>

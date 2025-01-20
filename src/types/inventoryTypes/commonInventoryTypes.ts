@@ -78,8 +78,11 @@ export interface IEquipmentSelection {
     hide?: boolean;
 }
 
-export interface IEquipmentClient extends Omit<IEquipmentDatabase, "_id" | "UpgradesExpiry"> {
+export interface IEquipmentClient
+    extends Omit<IEquipmentDatabase, "_id" | "InfestationDate" | "Expiry" | "UpgradesExpiry"> {
     ItemId: IOid;
+    InfestationDate?: IMongoDate;
+    Expiry?: IMongoDate;
     UpgradesExpiry?: IMongoDate;
 }
 
@@ -106,12 +109,12 @@ export interface IEquipmentDatabase {
     CustomizationSlotPurchases?: number;
     UpgradeType?: string;
     UpgradeFingerprint?: string;
-    InfestationDate?: IMongoDate;
+    InfestationDate?: Date;
     InfestationDays?: number;
     InfestationType?: string;
     ModularParts?: string[];
     UnlockLevel?: number;
-    Expiry?: IMongoDate;
+    Expiry?: Date;
     SkillTree?: string;
     OffensiveUpgrade?: string;
     DefensiveUpgrade?: string;
