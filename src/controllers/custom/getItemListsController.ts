@@ -4,6 +4,7 @@ import {
     ExportArcanes,
     ExportAvionics,
     ExportGear,
+    ExportMisc,
     ExportRecipes,
     ExportResources,
     ExportSentinels,
@@ -163,6 +164,7 @@ const getItemListsController: RequestHandler = (req, response) => {
     response.json({
         badItems,
         archonCrystalUpgrades,
+        uniqueLevelCaps: ExportMisc.uniqueLevelCaps,
         ...res
     });
 };
