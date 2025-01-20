@@ -177,6 +177,9 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
             db[key] = client[key];
         }
     }
+    if (client.XPInfo) {
+        db.XPInfo = client.XPInfo;
+    }
     if (client.CurrentLoadOutIds) {
         db.CurrentLoadOutIds = client.CurrentLoadOutIds;
     }
