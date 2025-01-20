@@ -23,5 +23,5 @@ export const importController: RequestHandler = async (req, res) => {
 };
 
 interface IImportRequest {
-    inventory: IInventoryClient;
+    inventory: Partial<IInventoryClient>;
 }
