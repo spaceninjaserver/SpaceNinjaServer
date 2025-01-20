@@ -1,5 +1,10 @@
 import { Types } from "mongoose";
-import { IEquipmentClient, IEquipmentDatabase } from "../types/inventoryTypes/commonInventoryTypes";
+import {
+    IEquipmentClient,
+    IEquipmentDatabase,
+    IOperatorConfigClient,
+    IOperatorConfigDatabase
+} from "../types/inventoryTypes/commonInventoryTypes";
 import { IMongoDate } from "../types/commonTypes";
 import {
     equipmentKeys,
@@ -49,6 +54,14 @@ const convertUpgrade = (client: IUpgradeClient): IUpgradeDatabase => {
     };
 };
 
+const convertOperatorConfig = (client: IOperatorConfigClient): IOperatorConfigDatabase => {
+    const { ItemId, ...rest } = client;
+    return {
+        ...rest,
+        _id: new Types.ObjectId(client.ItemId.$oid)
+    };
+};
+
 const replaceArray = <T>(arr: T[], replacement: T[]): void => {
     arr.splice(0, arr.length);
     replacement.forEach(x => {
@@ -72,6 +85,11 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     }
     if (client.Upgrades) {
         replaceArray<IUpgradeDatabase>(db.Upgrades, client.Upgrades.map(convertUpgrade));
+    }
+    for (const key of ["OperatorLoadOuts", "AdultOperatorLoadOuts"] as const) {
+        if (client[key]) {
+            replaceArray<IOperatorConfigDatabase>(db[key], client[key].map(convertOperatorConfig));
+        }
     }
     for (const key of [
         "SuitBin",

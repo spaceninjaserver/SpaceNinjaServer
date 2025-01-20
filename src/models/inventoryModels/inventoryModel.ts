@@ -62,7 +62,6 @@ import {
     IOperatorConfigDatabase,
     IPolarity,
     IEquipmentDatabase,
-    IOperatorConfigClient,
     IArchonCrystalUpgrade
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
@@ -1167,9 +1166,9 @@ type InventoryDocumentProps = {
     Upgrades: Types.DocumentArray<IUpgradeDatabase>;
     MiscItems: Types.DocumentArray<IMiscItem>;
     Boosters: Types.DocumentArray<IBooster>;
-    OperatorLoadOuts: Types.DocumentArray<IOperatorConfigClient>;
+    OperatorLoadOuts: Types.DocumentArray<IOperatorConfigDatabase>;
     SpecialItems: Types.DocumentArray<IEquipmentDatabase>;
-    AdultOperatorLoadOuts: Types.DocumentArray<IOperatorConfigClient>; //TODO: this should still contain _id
+    AdultOperatorLoadOuts: Types.DocumentArray<IOperatorConfigDatabase>;
     MechSuits: Types.DocumentArray<IEquipmentDatabase>;
     Scoops: Types.DocumentArray<IEquipmentDatabase>;
     DataKnives: Types.DocumentArray<IEquipmentDatabase>;

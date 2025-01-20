@@ -8,7 +8,8 @@ import {
     IOperatorConfigClient,
     IEquipmentSelection,
     IEquipmentDatabase,
-    IEquipmentClient
+    IEquipmentClient,
+    IOperatorConfigDatabase
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
 
 export interface IInventoryDatabase
@@ -27,6 +28,8 @@ export interface IInventoryDatabase
         | "Upgrades"
         | "CrewShipSalvagedWeaponSkins"
         | "CrewShipWeaponSkins"
+        | "OperatorLoadOuts"
+        | "AdultOperatorLoadOuts"
         | TEquipmentKey
     > {
     accountOwnerId: Types.ObjectId;
@@ -43,6 +46,8 @@ export interface IInventoryDatabase
     Upgrades: IUpgradeDatabase[];
     CrewShipSalvagedWeaponSkins: IUpgradeDatabase[];
     CrewShipWeaponSkins: IUpgradeDatabase[];
+    OperatorLoadOuts: IOperatorConfigDatabase[];
+    AdultOperatorLoadOuts: IOperatorConfigDatabase[];
 
     Suits: IEquipmentDatabase[];
     LongGuns: IEquipmentDatabase[];
