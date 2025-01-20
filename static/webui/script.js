@@ -126,6 +126,7 @@ function setLanguage(lang) {
     updateInventory();
 }
 
+let uniqueLevelCaps = {};
 function fetchItemList() {
     window.itemListPromise = new Promise(resolve => {
         const req = $.get("/custom/getItemLists?lang=" + window.lang);
@@ -167,6 +168,8 @@ function fetchItemList() {
                         option.value = name;
                         document.getElementById("datalist-" + type).appendChild(option);
                     });
+                } else if (type == "uniqueLevelCaps") {
+                    uniqueLevelCaps = items;
                 } else if (type != "badItems") {
                     items.forEach(item => {
                         if (item.uniqueName in data.badItems) {
@@ -235,14 +238,17 @@ function updateInventory() {
                     {
                         const td = document.createElement("td");
                         td.classList = "text-end text-nowrap";
-                        const maxXP =
-                            category == "Suits" ||
-                            category == "SpaceSuits" ||
-                            category == "Sentinels" ||
-                            category == "Hoverboards" ||
-                            category == "MechSuits"
-                                ? 1_600_000
-                                : 800_000;
+                        let maxXP = Math.pow(uniqueLevelCaps[item.ItemType] ?? 30, 2) * 1000;
+                        if (
+                            category != "Suits" &&
+                            category != "SpaceSuits" &&
+                            category != "Sentinels" &&
+                            category != "Hoverboards" &&
+                            category != "MechSuits"
+                            )
+                        {
+                            maxXP /= 2;
+                        }
 
                         if (
                             item.XP < maxXP &&
