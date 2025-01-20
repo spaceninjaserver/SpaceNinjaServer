@@ -29,11 +29,10 @@ const convertOptionalDate = (value: IMongoDate | undefined): Date | undefined =>
 };
 
 const convertEquipment = (client: IEquipmentClient): IEquipmentDatabase => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { ItemId, ...rest } = client;
     return {
         ...rest,
-        _id: new Types.ObjectId(client.ItemId.$oid),
+        _id: new Types.ObjectId(ItemId.$oid),
         InfestationDate: convertOptionalDate(client.InfestationDate),
         Expiry: convertOptionalDate(client.Expiry),
         UpgradesExpiry: convertOptionalDate(client.UpgradesExpiry)
@@ -41,29 +40,26 @@ const convertEquipment = (client: IEquipmentClient): IEquipmentDatabase => {
 };
 
 const convertWeaponSkin = (client: IWeaponSkinClient): IWeaponSkinDatabase => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { ItemId, ...rest } = client;
     return {
         ...rest,
-        _id: new Types.ObjectId(client.ItemId.$oid)
+        _id: new Types.ObjectId(ItemId.$oid)
     };
 };
 
 const convertUpgrade = (client: IUpgradeClient): IUpgradeDatabase => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { ItemId, ...rest } = client;
     return {
         ...rest,
-        _id: new Types.ObjectId(client.ItemId.$oid)
+        _id: new Types.ObjectId(ItemId.$oid)
     };
 };
 
 const convertOperatorConfig = (client: IOperatorConfigClient): IOperatorConfigDatabase => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { ItemId, ...rest } = client;
     return {
         ...rest,
-        _id: new Types.ObjectId(client.ItemId.$oid)
+        _id: new Types.ObjectId(ItemId.$oid)
     };
 };
 
@@ -144,11 +140,10 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
 };
 
 const convertLoadOutConfig = (client: ILoadoutConfigClient): ILoadoutConfigDatabase => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { ItemId, ...rest } = client;
     return {
         ...rest,
-        _id: new Types.ObjectId(client.ItemId.$oid)
+        _id: new Types.ObjectId(ItemId.$oid)
     };
 };
 
