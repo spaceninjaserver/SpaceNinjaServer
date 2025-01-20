@@ -120,10 +120,14 @@ const polaritySchema = new Schema<IPolarity>(
     { _id: false }
 );
 
-const abilityOverrideSchema = new Schema<IAbilityOverride>({
-    Ability: String,
-    Index: Number
-});
+const abilityOverrideSchema = new Schema<IAbilityOverride>(
+    {
+        Ability: String,
+        Index: Number
+    },
+    { _id: false }
+);
+
 export const colorSchema = new Schema<IColor>(
     {
         t0: Number,
