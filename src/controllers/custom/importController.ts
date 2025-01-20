@@ -9,7 +9,8 @@ export const importController: RequestHandler = async (req, res) => {
     const inventory = await getInventory(accountId);
     const request = JSON.parse(String(req.body)) as IImportRequest;
     importInventory(inventory, request.inventory);
-    res.json(await inventory.save());
+    await inventory.save();
+    res.end();
 };
 
 interface IImportRequest {
