@@ -7,7 +7,7 @@ import { config } from "@/src/services/configService";
 
 export const artifactsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const artifactsData = getJSONfromString(String(req.body)) as IArtifactsRequest;
+    const artifactsData = getJSONfromString<IArtifactsRequest>(String(req.body));
 
     const { Upgrade, LevelDiff, Cost, FusionPointCost } = artifactsData;
 

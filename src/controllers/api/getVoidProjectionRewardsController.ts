@@ -10,7 +10,7 @@ import { ExportRelics, ExportRewards, TRarity } from "warframe-public-export-plu
 
 export const getVoidProjectionRewardsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const data = getJSONfromString(String(req.body)) as IVoidProjectionRewardRequest;
+    const data = getJSONfromString<IVoidProjectionRewardRequest>(String(req.body));
     const response: IVoidProjectionRewardResponse = {
         CurrentWave: data.CurrentWave,
         ParticipantInfo: data.ParticipantInfo,

@@ -5,9 +5,9 @@ import { addKeyChainItems, getInventory } from "@/src/services/inventoryService"
 
 export const giveKeyChainTriggeredItemsController: RequestHandler = async (req, res) => {
     const accountId = parseString(req.query.accountId);
-    const keyChainTriggeredItemsRequest = getJSONfromString(
+    const keyChainTriggeredItemsRequest = getJSONfromString<IGiveKeyChainTriggeredItemsRequest>(
         (req.body as string).toString()
-    ) as IGiveKeyChainTriggeredItemsRequest;
+    );
 
     const inventory = await getInventory(accountId);
     const inventoryChanges = await addKeyChainItems(inventory, keyChainTriggeredItemsRequest);

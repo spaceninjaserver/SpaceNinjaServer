@@ -9,7 +9,7 @@ import { ExportUpgrades } from "warframe-public-export-plus";
 export const activateRandomModController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId);
-    const request = getJSONfromString(String(req.body)) as IActiveRandomModRequest;
+    const request = getJSONfromString<IActiveRandomModRequest>(String(req.body));
     addMods(inventory, [
         {
             ItemType: request.ItemType,

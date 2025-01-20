@@ -6,7 +6,7 @@ import { getInventory } from "@/src/services/inventoryService";
 
 const addFriendImageController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const json = getJSONfromString(String(req.body)) as IUpdateGlyphRequest;
+    const json = getJSONfromString<IUpdateGlyphRequest>(String(req.body));
     const inventory = await getInventory(accountId);
     inventory.ActiveAvatarImageType = json.AvatarImageType;
     await inventory.save();

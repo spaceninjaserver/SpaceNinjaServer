@@ -1,6 +1,6 @@
-export const getJSONfromString = (str: string): any => {
+export const getJSONfromString = <T>(str: string): T => {
     const jsonSubstring = str.substring(0, str.lastIndexOf("}") + 1);
-    return JSON.parse(jsonSubstring);
+    return JSON.parse(jsonSubstring) as T;
 };
 
 export const getSubstringFromKeyword = (str: string, keyword: string): string => {

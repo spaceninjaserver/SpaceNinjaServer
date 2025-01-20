@@ -9,7 +9,7 @@ const updateThemeController: RequestHandler = async (request, response) => {
     const body = String(request.body);
 
     try {
-        const json = getJSONfromString(body) as IThemeUpdateRequest;
+        const json = getJSONfromString<IThemeUpdateRequest>(body);
         if (typeof json !== "object") {
             throw new Error("Invalid data format");
         }

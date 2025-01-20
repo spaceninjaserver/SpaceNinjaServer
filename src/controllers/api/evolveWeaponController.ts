@@ -8,7 +8,7 @@ import { EquipmentFeatures } from "@/src/types/inventoryTypes/commonInventoryTyp
 export const evolveWeaponController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId);
-    const payload = getJSONfromString(String(req.body)) as IEvolveWeaponRequest;
+    const payload = getJSONfromString<IEvolveWeaponRequest>(String(req.body));
 
     const recipe = getRecipe(payload.Recipe)!;
     if (payload.Action == "EWA_INSTALL") {

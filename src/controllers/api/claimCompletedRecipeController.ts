@@ -21,7 +21,7 @@ export interface IClaimCompletedRecipeRequest {
 }
 
 export const claimCompletedRecipeController: RequestHandler = async (req, res) => {
-    const claimCompletedRecipeRequest = getJSONfromString(String(req.body)) as IClaimCompletedRecipeRequest;
+    const claimCompletedRecipeRequest = getJSONfromString<IClaimCompletedRecipeRequest>(String(req.body));
     const accountId = await getAccountIdForRequest(req);
     if (!accountId) throw new Error("no account id");
 

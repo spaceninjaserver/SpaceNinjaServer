@@ -6,7 +6,7 @@ import { IOid } from "@/src/types/commonTypes";
 
 export const arcaneCommonController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const json = getJSONfromString(String(req.body)) as IArcaneCommonRequest;
+    const json = getJSONfromString<IArcaneCommonRequest>(String(req.body));
     const inventory = await getInventory(accountId);
     const upgrade = inventory.Upgrades.id(json.arcane.ItemId.$oid);
     if (json.newRank == -1) {

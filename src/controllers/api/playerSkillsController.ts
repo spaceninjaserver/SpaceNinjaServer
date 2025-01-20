@@ -7,7 +7,7 @@ import { RequestHandler } from "express";
 export const playerSkillsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId);
-    const request = getJSONfromString(String(req.body)) as IPlayerSkillsRequest;
+    const request = getJSONfromString<IPlayerSkillsRequest>(String(req.body));
 
     const oldRank: number = inventory.PlayerSkills[request.Skill as keyof IPlayerSkills];
     const cost = (request.Pool == "LPP_DRIFTER" ? drifterCosts[oldRank] : 1 << oldRank) * 1000;

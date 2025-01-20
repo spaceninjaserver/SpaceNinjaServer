@@ -7,7 +7,7 @@ import { getRandomElement } from "@/src/services/rngService";
 
 export const rerollRandomModController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const request = getJSONfromString(String(req.body)) as RerollRandomModRequest;
+    const request = getJSONfromString<RerollRandomModRequest>(String(req.body));
     if ("ItemIds" in request) {
         const inventory = await getInventory(accountId, "Upgrades MiscItems");
         const upgrade = inventory.Upgrades.id(request.ItemIds[0])!;

@@ -52,7 +52,7 @@ import { getInventory } from "@/src/services/inventoryService";
 export const missionInventoryUpdateController: RequestHandler = async (req, res): Promise<void> => {
     const accountId = await getAccountIdForRequest(req);
 
-    const missionReport = getJSONfromString((req.body as string).toString()) as IMissionInventoryUpdateRequest;
+    const missionReport = getJSONfromString<IMissionInventoryUpdateRequest>((req.body as string).toString());
 
     if (missionReport.MissionStatus !== "GS_SUCCESS") {
         console.log(`Mission failed: ${missionReport.RewardInfo?.node}`);

@@ -7,7 +7,7 @@ import { TEndlessXpCategory } from "@/src/types/inventoryTypes/inventoryTypes";
 export const endlessXpController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId);
-    const payload = getJSONfromString(String(req.body)) as IEndlessXpRequest;
+    const payload = getJSONfromString<IEndlessXpRequest>(String(req.body));
 
     inventory.EndlessXP ??= [];
     const entry = inventory.EndlessXP.find(x => x.Category == payload.Category);
