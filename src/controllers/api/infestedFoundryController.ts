@@ -6,7 +6,7 @@ import { IOid } from "@/src/types/commonTypes";
 import {
     IConsumedSuit,
     IHelminthFoodRecord,
-    IInfestedFoundry,
+    IInfestedFoundryDatabase,
     IMiscItem,
     ITypeCount
 } from "@/src/types/inventoryTypes/inventoryTypes";
@@ -356,7 +356,7 @@ interface IHelminthFeedRequest {
     }[];
 }
 
-export const addInfestedFoundryXP = (infestedFoundry: IInfestedFoundry, delta: number): ITypeCount[] => {
+export const addInfestedFoundryXP = (infestedFoundry: IInfestedFoundryDatabase, delta: number): ITypeCount[] => {
     const recipeChanges: ITypeCount[] = [];
     infestedFoundry.XP ??= 0;
     const prevXP = infestedFoundry.XP;

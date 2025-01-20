@@ -30,6 +30,7 @@ export interface IInventoryDatabase
         | "CrewShipWeaponSkins"
         | "OperatorLoadOuts"
         | "AdultOperatorLoadOuts"
+        | "InfestedFoundry"
         | TEquipmentKey
     > {
     accountOwnerId: Types.ObjectId;
@@ -48,6 +49,7 @@ export interface IInventoryDatabase
     CrewShipWeaponSkins: IUpgradeDatabase[];
     OperatorLoadOuts: IOperatorConfigDatabase[];
     AdultOperatorLoadOuts: IOperatorConfigDatabase[];
+    InfestedFoundry?: IInfestedFoundryDatabase;
 
     Suits: IEquipmentDatabase[];
     LongGuns: IEquipmentDatabase[];
@@ -305,7 +307,7 @@ export interface IInventoryClient extends IDailyAffiliations {
     PlayedParkourTutorial: boolean;
     SubscribedToEmailsPersonalized: number;
     MechSuits: IEquipmentDatabase[];
-    InfestedFoundry?: IInfestedFoundry;
+    InfestedFoundry?: IInfestedFoundryClient;
     BlessingCooldown: IMongoDate;
     CrewShipHarnesses: IEquipmentDatabase[];
     CrewShipRawSalvage: IConsumable[];
@@ -566,7 +568,7 @@ export interface IHelminthResource {
     RecentlyConvertedResources?: IHelminthFoodRecord[];
 }
 
-export interface IInfestedFoundry {
+export interface IInfestedFoundryClient {
     Name?: string;
     Resources?: IHelminthResource[];
     Slots?: number;
@@ -575,6 +577,12 @@ export interface IInfestedFoundry {
     InvigorationIndex?: number;
     InvigorationSuitOfferings?: string[];
     InvigorationsApplied?: number;
+    LastConsumedSuit?: IEquipmentClient;
+    AbilityOverrideUnlockCooldown?: IMongoDate;
+}
+
+export interface IInfestedFoundryDatabase
+    extends Omit<IInfestedFoundryClient, "LastConsumedSuit" | "AbilityOverrideUnlockCooldown"> {
     LastConsumedSuit?: IEquipmentDatabase;
     AbilityOverrideUnlockCooldown?: Date;
 }

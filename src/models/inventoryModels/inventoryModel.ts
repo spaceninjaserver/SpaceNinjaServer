@@ -23,7 +23,7 @@ import {
     ISeasonChallenge,
     IPlayerSkills,
     ISettings,
-    IInfestedFoundry,
+    IInfestedFoundryDatabase,
     IHelminthResource,
     IConsumedSuit,
     IQuestProgress,
@@ -492,7 +492,7 @@ const helminthResourceSchema = new Schema<IHelminthResource>(
     { _id: false }
 );
 
-const infestedFoundrySchema = new Schema<IInfestedFoundry>(
+const infestedFoundrySchema = new Schema<IInfestedFoundryDatabase>(
     {
         Name: String,
         Resources: { type: [helminthResourceSchema], default: undefined },

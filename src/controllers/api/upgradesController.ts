@@ -6,7 +6,7 @@ import {
     EquipmentFeatures,
     IAbilityOverride
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
-import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IInventoryClient, IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addMiscItems, addRecipes, getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { getRecipeByResult } from "@/src/services/itemDataService";
@@ -62,7 +62,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
             addRecipes(inventory, recipeChanges);
 
             inventoryChanges.Recipes = recipeChanges;
-            inventoryChanges.InfestedFoundry = inventory.toJSON().InfestedFoundry;
+            inventoryChanges.InfestedFoundry = inventory.toJSON<IInventoryClient>().InfestedFoundry;
         } else
             switch (operation.UpgradeRequirement) {
                 case "/Lotus/Types/Items/MiscItems/OrokinReactor":
