@@ -152,6 +152,9 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
             replaceSlots(db[key], client[key]);
         }
     }
+    if (client.UseAdultOperatorLoadout) {
+        db.UseAdultOperatorLoadout = client.UseAdultOperatorLoadout;
+    }
     for (const key of [
         "RegularCredits",
         "PremiumCredits",
