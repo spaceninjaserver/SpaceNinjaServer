@@ -1098,6 +1098,7 @@ function doImport() {
                 inventory: JSON.parse($("#import-inventory").val())
             })
         }).then(function () {
+            alert("Successfully imported.");
             updateInventory();
         });
     });
