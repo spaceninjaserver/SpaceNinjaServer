@@ -183,6 +183,9 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     if (client.Affiliations) {
         db.Affiliations = client.Affiliations;
     }
+    if (client.FocusUpgrades) {
+        db.FocusUpgrades = client.FocusUpgrades;
+    }
     if (client.InfestedFoundry) {
         db.InfestedFoundry = convertInfestedFoundry(client.InfestedFoundry);
     }
