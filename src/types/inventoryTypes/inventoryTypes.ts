@@ -471,19 +471,25 @@ export interface ICrewShipDatabase extends Omit<ICrewShipClient, "CrewMembers" |
 }
 
 export interface ICrewShipMembersClient {
-    SLOT_A?: ISlot;
-    SLOT_B?: ISlot;
-    SLOT_C?: ISlot;
-}
-
-export interface ISlot {
-    ItemId: IOid;
+    SLOT_A?: ICrewShipMemberClient;
+    SLOT_B?: ICrewShipMemberClient;
+    SLOT_C?: ICrewShipMemberClient;
 }
 
 export interface ICrewShipMembersDatabase {
-    SLOT_A?: Types.ObjectId;
-    SLOT_B?: Types.ObjectId;
-    SLOT_C?: Types.ObjectId;
+    SLOT_A?: ICrewShipMemberDatabase;
+    SLOT_B?: ICrewShipMemberDatabase;
+    SLOT_C?: ICrewShipMemberDatabase;
+}
+
+export interface ICrewShipMemberClient {
+    ItemId?: IOid;
+    NemesisFingerprint?: number;
+}
+
+export interface ICrewShipMemberDatabase {
+    ItemId?: Types.ObjectId;
+    NemesisFingerprint?: number;
 }
 
 export interface ICrewShipCustomization {

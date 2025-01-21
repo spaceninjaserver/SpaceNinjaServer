@@ -10,6 +10,8 @@ import {
     equipmentKeys,
     ICrewShipClient,
     ICrewShipDatabase,
+    ICrewShipMemberClient,
+    ICrewShipMemberDatabase,
     ICrewShipMembersClient,
     ICrewShipMembersDatabase,
     IDialogueClient,
@@ -85,11 +87,18 @@ const replaceSlots = (db: ISlots, client: ISlots): void => {
     db.Slots = client.Slots;
 };
 
+const convertCrewShipMember = (client: ICrewShipMemberClient): ICrewShipMemberDatabase => {
+    return {
+        ...client,
+        ItemId: client.ItemId ? new Types.ObjectId(client.ItemId.$oid) : undefined
+    };
+};
+
 const convertCrewShipMembers = (client: ICrewShipMembersClient): ICrewShipMembersDatabase => {
     return {
-        SLOT_A: client.SLOT_A ? new Types.ObjectId(client.SLOT_A.ItemId.$oid) : undefined,
-        SLOT_B: client.SLOT_B ? new Types.ObjectId(client.SLOT_B.ItemId.$oid) : undefined,
-        SLOT_C: client.SLOT_C ? new Types.ObjectId(client.SLOT_C.ItemId.$oid) : undefined
+        SLOT_A: client.SLOT_A ? convertCrewShipMember(client.SLOT_A) : undefined,
+        SLOT_B: client.SLOT_B ? convertCrewShipMember(client.SLOT_B) : undefined,
+        SLOT_C: client.SLOT_C ? convertCrewShipMember(client.SLOT_C) : undefined
     };
 };
 

@@ -41,7 +41,6 @@ import {
     ICrewShipPortGuns,
     ICrewShipCustomization,
     ICrewShipWeapon,
-    ICrewShipMembersClient,
     ICrewShipPilotWeapon,
     IShipExterior,
     IHelminthFoodRecord,
@@ -52,7 +51,9 @@ import {
     ICompletedDialogue,
     IDialogueClient,
     IUpgradeDatabase,
-    ICrewShipDatabase
+    ICrewShipDatabase,
+    ICrewShipMemberDatabase,
+    ICrewShipMemberClient
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -675,24 +676,32 @@ const crewShipCustomizationSchema = new Schema<ICrewShipCustomization>(
     { _id: false }
 );
 
-const crewShipMembersSchema = new Schema<ICrewShipMembersDatabase>(
+const crewShipMemberSchema = new Schema<ICrewShipMemberDatabase>(
     {
-        SLOT_A: { type: Schema.Types.ObjectId, required: false },
-        SLOT_B: { type: Schema.Types.ObjectId, required: false },
-        SLOT_C: { type: Schema.Types.ObjectId, required: false }
+        ItemId: { type: Schema.Types.ObjectId, required: false },
+        NemesisFingerprint: { type: Number, required: false }
     },
     { _id: false }
 );
-crewShipMembersSchema.set("toJSON", {
+crewShipMemberSchema.set("toJSON", {
     virtuals: true,
     transform(_doc, obj) {
-        const db = obj as ICrewShipMembersDatabase;
-        const client = obj as ICrewShipMembersClient;
-        client.SLOT_A = db.SLOT_A ? { ItemId: toOid(db.SLOT_A) } : undefined;
-        client.SLOT_B = db.SLOT_B ? { ItemId: toOid(db.SLOT_B) } : undefined;
-        client.SLOT_C = db.SLOT_C ? { ItemId: toOid(db.SLOT_C) } : undefined;
+        const db = obj as ICrewShipMemberDatabase;
+        const client = obj as ICrewShipMemberClient;
+        if (db.ItemId) {
+            client.ItemId = toOid(db.ItemId);
+        }
     }
 });
+
+const crewShipMembersSchema = new Schema<ICrewShipMembersDatabase>(
+    {
+        SLOT_A: { type: crewShipMemberSchema, required: false },
+        SLOT_B: { type: crewShipMemberSchema, required: false },
+        SLOT_C: { type: crewShipMemberSchema, required: false }
+    },
+    { _id: false }
+);
 
 const crewShipSchema = new Schema<ICrewShipDatabase>({
     ItemType: { type: String, required: true },
