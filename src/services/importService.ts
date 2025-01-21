@@ -129,18 +129,18 @@ const convertDialogueHistory = (client: IDialogueHistoryClient): IDialogueHistor
 
 export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<IInventoryClient>): void => {
     for (const key of equipmentKeys) {
-        if (client[key]) {
+        if (client[key] !== undefined) {
             replaceArray<IEquipmentDatabase>(db[key], client[key].map(convertEquipment));
         }
     }
-    if (client.WeaponSkins) {
+    if (client.WeaponSkins !== undefined) {
         replaceArray<IWeaponSkinDatabase>(db.WeaponSkins, client.WeaponSkins.map(convertWeaponSkin));
     }
-    if (client.Upgrades) {
+    if (client.Upgrades !== undefined) {
         replaceArray<IUpgradeDatabase>(db.Upgrades, client.Upgrades.map(convertUpgrade));
     }
     for (const key of ["RawUpgrades", "MiscItems"] as const) {
-        if (client[key]) {
+        if (client[key] !== undefined) {
             db[key].splice(0, db[key].length);
             client[key].forEach(x => {
                 db[key].push({
@@ -151,7 +151,7 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         }
     }
     for (const key of ["OperatorLoadOuts", "AdultOperatorLoadOuts"] as const) {
-        if (client[key]) {
+        if (client[key] !== undefined) {
             replaceArray<IOperatorConfigDatabase>(db[key], client[key].map(convertOperatorConfig));
         }
     }
@@ -169,11 +169,11 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         "OperatorAmpBin",
         "CrewShipSalvageBin"
     ] as const) {
-        if (client[key]) {
+        if (client[key] !== undefined) {
             replaceSlots(db[key], client[key]);
         }
     }
-    if (client.UseAdultOperatorLoadout) {
+    if (client.UseAdultOperatorLoadout !== undefined) {
         db.UseAdultOperatorLoadout = client.UseAdultOperatorLoadout;
     }
     for (const key of [
@@ -184,42 +184,42 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         "FusionPoints",
         "PrimeTokens"
     ] as const) {
-        if (client[key]) {
+        if (client[key] !== undefined) {
             db[key] = client[key];
         }
     }
     for (const key of ["ThemeStyle", "ThemeBackground", "ThemeSounds", "EquippedInstrument", "FocusAbility"] as const) {
-        if (client[key]) {
+        if (client[key] !== undefined) {
             db[key] = client[key];
         }
     }
     for (const key of ["EquippedGear", "EquippedEmotes", "NodeIntrosCompleted"] as const) {
-        if (client[key]) {
+        if (client[key] !== undefined) {
             db[key] = client[key];
         }
     }
-    if (client.XPInfo) {
+    if (client.XPInfo !== undefined) {
         db.XPInfo = client.XPInfo;
     }
-    if (client.CurrentLoadOutIds) {
+    if (client.CurrentLoadOutIds !== undefined) {
         db.CurrentLoadOutIds = client.CurrentLoadOutIds;
     }
-    if (client.Affiliations) {
+    if (client.Affiliations !== undefined) {
         db.Affiliations = client.Affiliations;
     }
-    if (client.FusionTreasures) {
+    if (client.FusionTreasures !== undefined) {
         db.FusionTreasures = client.FusionTreasures;
     }
-    if (client.FocusUpgrades) {
+    if (client.FocusUpgrades !== undefined) {
         db.FocusUpgrades = client.FocusUpgrades;
     }
-    if (client.CrewShips) {
+    if (client.CrewShips !== undefined) {
         replaceArray<ICrewShipDatabase>(db.CrewShips, client.CrewShips.map(convertCrewShip));
     }
-    if (client.InfestedFoundry) {
+    if (client.InfestedFoundry !== undefined) {
         db.InfestedFoundry = convertInfestedFoundry(client.InfestedFoundry);
     }
-    if (client.DialogueHistory) {
+    if (client.DialogueHistory !== undefined) {
         db.DialogueHistory = convertDialogueHistory(client.DialogueHistory);
     }
 };
