@@ -74,7 +74,7 @@ function deleteAccount() {
     if (
         window.confirm(
             "Are you sure you want to delete your account " +
-                $(".displayname").text() +
+                document.querySelector(".displayname").textContent +
                 " (" +
                 localStorage.getItem("email") +
                 ")? This action cannot be undone."
