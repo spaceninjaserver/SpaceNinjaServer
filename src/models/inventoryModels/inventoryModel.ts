@@ -1141,7 +1141,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         DialogueHistory: dialogueHistorySchema
     },
-    { timestamps: { createdAt: "Created" } }
+    { timestamps: { createdAt: "Created", updatedAt: false } }
 );
 
 inventorySchema.set("toJSON", {
