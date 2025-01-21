@@ -1111,7 +1111,6 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         ChallengesFixVersion: Number,
         PlayedParkourTutorial: Boolean,
         SubscribedToEmailsPersonalized: Number,
-        LastInventorySync: Schema.Types.Mixed, // this should be Schema.Types.ObjectId, but older inventories may break with that.
         ActiveLandscapeTraps: [Schema.Types.Mixed],
         RepVotes: [Schema.Types.Mixed],
         LeagueTickets: [Schema.Types.Mixed],
