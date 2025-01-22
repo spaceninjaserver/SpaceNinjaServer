@@ -247,6 +247,8 @@ export const inventoryController: RequestHandler = async (request, response) => 
     // This determines if the "void fissures" tab is shown in navigation.
     inventoryResponse.HasOwnedVoidProjectionsPreviously = true;
 
+    inventoryResponse.QuestKeys[0].Completed = true;
+
     response.json(inventoryResponse);
 };
 

@@ -70,7 +70,7 @@ const apartmentSchema = new Schema<IApartment>(
     {
         Rooms: [roomSchema],
         FavouriteLoadouts: [Schema.Types.Mixed],
-        Gardening: gardeningSchema
+        Gardening: gardeningSchema // TODO: ensure this is correct
     },
     { _id: false }
 );
@@ -88,7 +88,7 @@ const apartmentDefault: IApartment = {
 
 const orbiterSchema = new Schema<IOrbiter>(
     {
-        Features: [String],
+        Features: { type: [String], default: ["/Lotus/Types/Items/ShipFeatureItems/EarthNavigationFeatureItem"] },
         Rooms: [roomSchema],
         ContentUrlSignature: { type: String, required: false },
         BootLocation: String

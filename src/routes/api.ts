@@ -78,6 +78,9 @@ import { updateChallengeProgressController } from "@/src/controllers/api/updateC
 import { updateSessionGetController, updateSessionPostController } from "@/src/controllers/api/updateSessionController";
 import { updateThemeController } from "../controllers/api/updateThemeController";
 import { upgradesController } from "@/src/controllers/api/upgradesController";
+import { updateQuestController } from "@/src/controllers/api/updateQuestController";
+import { giveKeyChainTriggeredItemsController } from "@/src/controllers/api/giveKeyChainTriggeredItemsController";
+import { unlockShipFeatureController } from "@/src/controllers/api/unlockShipFeatureController";
 
 const apiRouter = express.Router();
 
@@ -132,6 +135,7 @@ apiRouter.post("/genericUpdate.php", genericUpdateController);
 apiRouter.post("/getAlliance.php", getAllianceController);
 apiRouter.post("/getVoidProjectionRewards.php", getVoidProjectionRewardsController);
 apiRouter.post("/gildWeapon.php", gildWeaponController);
+apiRouter.post("/giveKeyChainTriggeredItems.php", giveKeyChainTriggeredItemsController);
 apiRouter.post("/guildTech.php", guildTechController);
 apiRouter.post("/hostSession.php", hostSessionController);
 apiRouter.post("/infestedFoundry.php", infestedFoundryController);
@@ -161,10 +165,12 @@ apiRouter.post("/syndicateSacrifice.php", syndicateSacrificeController);
 apiRouter.post("/syndicateStandingBonus.php", syndicateStandingBonusController);
 apiRouter.post("/tauntHistory.php", tauntHistoryController);
 apiRouter.post("/trainingResult.php", trainingResultController);
+apiRouter.post("/unlockShipFeature.php", unlockShipFeatureController);
 apiRouter.post("/updateChallengeProgress.php", updateChallengeProgressController);
 apiRouter.post("/updateNodeIntros.php", genericUpdateController);
 apiRouter.post("/updateSession.php", updateSessionPostController);
 apiRouter.post("/updateTheme.php", updateThemeController);
+apiRouter.post("/updateQuest.php", updateQuestController);
 apiRouter.post("/upgrades.php", upgradesController);
 
 export { apiRouter };

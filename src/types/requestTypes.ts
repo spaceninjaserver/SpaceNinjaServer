@@ -3,9 +3,7 @@ import { ArtifactPolarity, IPolarity, IEquipmentClient } from "@/src/types/inven
 import {
     IBooster,
     IChallengeProgress,
-    IConsumable,
     IEvolutionProgress,
-    IMiscItem,
     ITypeCount,
     IMission,
     IRawUpgrade,
@@ -33,10 +31,13 @@ export interface IUpdateChallengeProgressRequest {
     SeasonChallengeCompletions: ISeasonChallenge[];
 }
 
-export interface IMissionInventoryUpdateRequest {
-    rewardsMultiplier?: number;
-    ActiveBoosters?: IBooster[];
+export type IMissionInventoryUpdateRequest = {
     AffiliationChanges?: IAffiliationChange[];
+    crossPlaySetting?: string;
+    rewardsMultiplier?: number;
+    GoalTag: string;
+    LevelKeyName: string;
+    ActiveBoosters?: IBooster[];
     Suits?: IEquipmentClient[];
     LongGuns?: IEquipmentClient[];
     Pistols?: IEquipmentClient[];
@@ -52,21 +53,40 @@ export interface IMissionInventoryUpdateRequest {
     MoaPets?: IEquipmentClient[];
     FusionBundles?: ITypeCount[];
     RawUpgrades?: IRawUpgrade[];
-    MiscItems?: IMiscItem[];
-    Consumables?: IConsumable[];
+    MiscItems?: ITypeCount[];
+    Consumables?: ITypeCount[];
     FusionTreasures?: IFusionTreasure[];
-    Recipes?: IConsumable[];
+    Recipes?: ITypeCount[];
+    QuestKeys?: IQuestKeyDatabase[]; //completionDate is not sent
     RegularCredits?: number;
-    ChallengeProgress?: IChallengeProgress[];
-    RewardInfo?: IMissionInventoryUpdateRequestRewardInfo;
+    MissionFailed: boolean;
+    MissionStatus: IMissionStatus;
+    AliveTime: number;
+    MissionTime: number;
     Missions?: IMission;
-    EvolutionProgress?: IEvolutionProgress[];
     LastRegionPlayed?: TSolarMapRegion;
+    GameModeId: number;
+    hosts: string[];
+    currentClients: unknown[];
+    ChallengeProgress: IChallengeProgress[];
+    PS: string;
+    ActiveDojoColorResearch: string;
+    RewardInfo?: IRewardInfo;
+    ReceivedCeremonyMsg: boolean;
+    LastCeremonyResetDate: number;
+    MissionPTS: number;
+    RepHash: string;
+    EndOfMatchUpload: boolean;
+    ObjectiveReached: boolean;
+    sharedSessionId: string;
+    FpsAvg: number;
+    FpsMin: number;
+    FpsMax: number;
+    FpsSamples: number;
+    EvolutionProgress?: IEvolutionProgress[];
+};
 
-    FusionPoints?: number; // Not a part of the request, but we put it in this struct as an intermediate storage.
-}
-
-export interface IMissionInventoryUpdateRequestRewardInfo {
+export interface IRewardInfo {
     node: string;
     VaultsCracked?: number; // for Spy missions
     rewardTier?: number;
@@ -82,15 +102,15 @@ export interface IMissionInventoryUpdateRequestRewardInfo {
     rewardSeed?: number;
 }
 
+export type IMissionStatus = "GS_SUCCESS" | "GS_FAILURE" | "GS_DUMPED" | "GS_QUIT" | "GS_INTERRUPTED";
+
 export interface IInventorySlotsRequest {
     Bin: "PveBonusLoadoutBin";
 }
-
 export interface IUpdateGlyphRequest {
     AvatarImageType: string;
     AvatarImage: string;
 }
-
 export interface IUpgradesRequest {
     ItemCategory: TEquipmentKey;
     ItemId: IOid;
@@ -98,11 +118,15 @@ export interface IUpgradesRequest {
     UpgradeVersion: number;
     Operations: IUpgradeOperation[];
 }
-
 export interface IUpgradeOperation {
     OperationType: string;
     UpgradeRequirement: string; // uniqueName of item being consumed
     PolarizeSlot: number;
     PolarizeValue: ArtifactPolarity;
     PolarityRemap: IPolarity[];
+}
+export interface IUnlockShipFeatureRequest {
+    Feature: string;
+    KeyChain: string;
+    ChainStage: number;
 }

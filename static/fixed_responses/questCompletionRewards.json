@@ -1,0 +1,13 @@
+{
+  "/Lotus/Types/Keys/VorsPrize/VorsPrizeQuestKeyChain": [
+    {
+      "ItemType": "/Lotus/Types/Keys/DuviriQuest/DuviriQuestKeyChain",
+      "ItemCount": 1
+    },
+    {
+      "ItemType": "/Lotus/Types/NeutralCreatures/ErsatzHorse/ErsatzHorsePowerSuit",
+      "ItemCount": 1
+    }
+  ],
+  "/Lotus/Types/Keys/InfestedMicroplanetQuest/InfestedMicroplanetQuestKeyChain": [{ "ItemType": "/Lotus/Types/Recipes/WarframeRecipes/BrokenFrameBlueprint", "ItemCount": 1 }]
+}
