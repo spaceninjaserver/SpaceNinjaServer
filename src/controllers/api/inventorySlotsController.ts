@@ -22,16 +22,12 @@ export const inventorySlotsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     //const body = JSON.parse(req.body as string) as IInventorySlotsRequest;
 
-    //console.log(body);
-
     //TODO: check which slot was purchased because pvpBonus is also possible
 
     const inventory = await getInventory(accountId);
     const currencyChanges = updateCurrency(inventory, 20, true);
     updateSlots(inventory, InventorySlot.PVE_LOADOUTS, 1, 1);
     await inventory.save();
-
-    //console.log({ InventoryChanges: currencyChanges }, " added loadout changes:");
 
     res.json({ InventoryChanges: currencyChanges });
 };

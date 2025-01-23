@@ -12,7 +12,6 @@ export const updateQuestKey = (
     }
 
     const questKeyIndex = inventory.QuestKeys.findIndex(questKey => questKey.ItemType === questKeyUpdate[0].ItemType);
-    console.log("quest key index", questKeyIndex);
 
     if (questKeyIndex === -1) {
         throw new Error(`quest key ${questKeyUpdate[0].ItemType} not found`);

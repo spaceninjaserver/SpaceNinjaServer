@@ -179,7 +179,7 @@ export const addMissionInventoryUpdates = (
     return inventoryChanges;
 };
 
-//return partial missioninventoryupdate response
+//TODO: return type of partial missioninventoryupdate response
 export const addMissionRewards = async (
     inventory: TInventoryDatabaseDocument,
     { RewardInfo: rewardInfo, LevelKeyName: levelKeyName, Missions: missions }: IMissionInventoryUpdateRequest
@@ -197,10 +197,10 @@ export const addMissionRewards = async (
     const inventoryChanges: IInventoryChanges = {};
 
     let missionCompletionCredits = 0;
-    //inventory change is what the client does not know the server updated, although credit updates seem to be taken from totalCredits
+    //inventory change is what the client has not rewarded itself, credit updates seem to be taken from totalCredits
     if (levelKeyName) {
         const fixedLevelRewards = getLevelKeyRewards(levelKeyName);
-        console.log("fixedLevelRewards", fixedLevelRewards);
+        //logger.debug(`fixedLevelRewards ${fixedLevelRewards}`);
         for (const reward of fixedLevelRewards) {
             if (reward.rewardType == "RT_CREDITS") {
                 inventory.RegularCredits += reward.amount;
@@ -215,13 +215,12 @@ export const addMissionRewards = async (
         const levelCreditReward = getLevelCreditRewards(missions?.Tag);
         missionCompletionCredits += levelCreditReward;
         inventory.RegularCredits += levelCreditReward;
-        console.log("levelCreditReward", levelCreditReward);
+        logger.debug(`levelCreditReward ${levelCreditReward}`);
     }
 
     //TODO: resolve issue with creditbundles
     for (const reward of MissionRewards) {
         //TODO: additem should take in storeItems
-        console.log("adding item", reward.StoreItem);
         const inventoryChange = await addItem(inventory, reward.StoreItem.replace("StoreItems/", ""), reward.ItemCount);
         //TODO: combineInventoryChanges improve type safety, merging 2 of the same item?
         //TODO: check for the case when two of the same item are added, combineInventoryChanges should merge them
@@ -229,8 +228,6 @@ export const addMissionRewards = async (
         combineInventoryChanges(inventoryChanges, inventoryChange.InventoryChanges);
     }
 
-    console.log(inventory.RegularCredits);
-    console.log("inventoryChanges", inventoryChanges);
     return { inventoryChanges, MissionRewards, missionCompletionCredits };
 };
 
@@ -246,15 +243,6 @@ export const calculateFinalCredits = (
 ) => {
     const hasDailyCreditBonus = true;
     const totalCredits = missionDropCredits + missionCompletionCredits + rngRewardCredits;
-    console.log(
-        "missionDropCredits",
-        missionDropCredits,
-        "missionCompletionCredits",
-        missionCompletionCredits,
-        "rngRewardCredits",
-        rngRewardCredits
-    );
-    console.log("totalCredits", totalCredits);
 
     const finalCredits = {
         MissionCredits: [missionDropCredits, missionDropCredits],

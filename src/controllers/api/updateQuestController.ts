@@ -25,11 +25,10 @@ export const updateQuestController: RequestHandler = async (req, res) => {
         const questKeyName = updateQuestRequest.QuestKeys[0].ItemType;
         const questCompletionItems = getQuestCompletionItems(questKeyName);
 
-        console.log(questCompletionItems, "quest completion items");
+        logger.debug(`quest completion items { ${questCompletionItems.map(item => item.ItemType).join(", ")} }`);
 
         const inventoryChanges = {};
         for (const item of questCompletionItems) {
-            console.log(item, "item");
             const inventoryDelta = await addItem(inventory, item.ItemType, item.ItemCount);
             combineInventoryChanges(inventoryChanges, inventoryDelta.InventoryChanges);
         }

@@ -17,7 +17,6 @@ export const giveKeyChainTriggeredItemsController: RequestHandler = async (req, 
     }
     // items were added: update quest stage's i (item was given)
     const quest = inventory.QuestKeys.find(quest => quest.ItemType === keyChainTriggeredItemsRequest.KeyChain);
-    console.log(`quest: ${JSON.stringify(quest)}`);
 
     if (!quest) {
         throw new Error(`Quest ${keyChainTriggeredItemsRequest.KeyChain} not found in QuestKeys`);
