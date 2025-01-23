@@ -57,6 +57,7 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
     if (missionReport.MissionStatus !== "GS_SUCCESS") {
         console.log(`Mission failed: ${missionReport.RewardInfo?.node}`);
         //todo: return expected response for failed mission
+        res.json([]);
         //duvirisadjob does not provide missionStatus
     }
 

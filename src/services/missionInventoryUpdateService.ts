@@ -300,10 +300,12 @@ function getRandomMissionDrops(RewardInfo: IRewardInfo): IRngResult[] {
             });
 
         if (region.cacheRewardManifest && RewardInfo.EnemyCachesFound) {
+            console.log("cache rewards", RewardInfo.EnemyCachesFound);
             const deck = ExportRewards[region.cacheRewardManifest];
             for (let rotation = 0; rotation != RewardInfo.EnemyCachesFound; ++rotation) {
                 const drop = getRandomRewardByChance(deck[rotation]);
                 if (drop) {
+                    console.log("cache drop", drop);
                     drops.push(drop);
                 }
             }

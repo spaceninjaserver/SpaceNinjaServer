@@ -13,9 +13,9 @@ export const getPersonalRooms = async (accountId: string) => {
 export const updateShipFeature = async (accountId: string, shipFeature: string) => {
     const personalRooms = await getPersonalRooms(accountId);
 
-    // if (personalRooms.Ship.Features.includes(shipFeature)) {
-    //     throw new Error(`ship feature ${shipFeature} already unlocked`);
-    // }
+    if (personalRooms.Ship.Features.includes(shipFeature)) {
+        throw new Error(`ship feature ${shipFeature} already unlocked`);
+    }
 
     personalRooms.Ship.Features.push(shipFeature);
     await personalRooms.save();
