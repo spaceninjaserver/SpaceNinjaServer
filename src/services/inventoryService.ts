@@ -71,8 +71,10 @@ export const createInventory = async (
                 { ItemCount: 1, ItemType: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageItem2" },
                 { ItemCount: 1, ItemType: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageItem3" },
                 { ItemCount: 1, ItemType: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageItem4" },
-                { ItemCount: 1, ItemType: "/Lotus/Types/Restoratives/LisetAutoHack" },
+                { ItemCount: 1, ItemType: "/Lotus/Types/Restoratives/LisetAutoHack" }
+            ];
 
+            const vorsPrizeRewards = [
                 // Vor's Prize rewards
                 { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarHealthMaxMod" },
                 { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarShieldMaxMod" },
@@ -95,7 +97,6 @@ export const createInventory = async (
                 { ItemCount: 400, ItemType: "/Lotus/Types/Items/MiscItems/PolymerBundle" },
                 { ItemCount: 150, ItemType: "/Lotus/Types/Items/MiscItems/AlloyPlate" }
             ];
-
             for (const equipment of defaultEquipment) {
                 await addItem(inventory, equipment.ItemType, equipment.ItemCount);
             }

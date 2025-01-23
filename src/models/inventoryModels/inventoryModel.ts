@@ -941,6 +941,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Complete Mission\Quests
         Missions: [Schema.Types.Mixed],
         QuestKeys: [questKeysSchema],
+        ActiveQuest: { type: String, default: "/Lotus/Types/Keys/VorsPrize/VorsPrizeQuestKeyChain" }, //TODO: check after mission starting gear
         //item like DojoKey or Boss missions key
         LevelKeys: [Schema.Types.Mixed],
         //Active quests

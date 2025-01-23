@@ -37,5 +37,6 @@ export const updateQuestController: RequestHandler = async (req, res) => {
         return;
     }
 
+    await inventory.save();
     res.send({ MissionRewards: [] });
 };

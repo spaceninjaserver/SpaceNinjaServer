@@ -88,7 +88,7 @@ const apartmentDefault: IApartment = {
 
 const orbiterSchema = new Schema<IOrbiter>(
     {
-        Features: { type: [String], default: ["/Lotus/Types/Items/ShipFeatureItems/EarthNavigationFeatureItem"] },
+        Features: [String],
         Rooms: [roomSchema],
         ContentUrlSignature: { type: String, required: false },
         BootLocation: String
@@ -96,7 +96,7 @@ const orbiterSchema = new Schema<IOrbiter>(
     { _id: false }
 );
 const orbiterDefault: IOrbiter = {
-    Features: [],
+    Features: ["/Lotus/Types/Items/ShipFeatureItems/EarthNavigationFeatureItem"], //TODO: potentially remove after missionstarting gear
     Rooms: [
         { Name: "AlchemyRoom", MaxCapacity: 1600 },
         { Name: "BridgeRoom", MaxCapacity: 1600 },
