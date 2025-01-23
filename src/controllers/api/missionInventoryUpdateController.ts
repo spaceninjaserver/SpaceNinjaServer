@@ -83,9 +83,6 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
     });
 
     const InventoryJson = JSON.stringify((await inventory.save()).toJSON());
-    inventoryChanges.WishlistChanges = [
-        "/Lotus/Types/Items/ShipFeatureItems/SocialMenuFeatureItem"
-    ] as unknown as object[];
 
     //TODO: figure out when to send inventory. it is needed for many cases.
     res.json({
