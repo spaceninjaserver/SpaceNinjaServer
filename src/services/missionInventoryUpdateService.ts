@@ -207,7 +207,10 @@ export const addMissionRewards = async (
                 missionCompletionCredits += reward.amount;
                 continue;
             }
-            MissionRewards.push({ StoreItem: reward.itemType, ItemCount: 1 });
+            MissionRewards.push({
+                StoreItem: reward.itemType,
+                ItemCount: reward.rewardType === "RT_RESOURCE" ? reward.amount : 1
+            });
         }
     }
 

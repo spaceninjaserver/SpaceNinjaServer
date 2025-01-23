@@ -435,6 +435,19 @@ export const addItem = async (
                         }
                     };
                 }
+                case "Recipes": {
+                    inventory.MiscItems.push({ ItemType: typeName, ItemCount: quantity });
+                    return {
+                        InventoryChanges: {
+                            MiscItems: [
+                                {
+                                    ItemType: typeName,
+                                    ItemCount: quantity
+                                }
+                            ]
+                        }
+                    };
+                }
             }
             break;
     }
