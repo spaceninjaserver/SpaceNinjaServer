@@ -734,8 +734,8 @@ function doAcquireMiscItems() {
     const [category, uniqueName] = data.split(":");
     revalidateAuthz(() => {
         $.post({
-            url: "/custom/addXp?" + window.authz,
-            contentType: "application/json",
+            url: "/api/missionInventoryUpdate.php?" + window.authz,
+            contentType: "text/plain",
             data: JSON.stringify({
                 [category]: [
                     {
@@ -771,8 +771,8 @@ function doAcquireRiven() {
     revalidateAuthz(() => {
         // Add riven type to inventory
         $.post({
-            url: "/custom/addXp?" + window.authz,
-            contentType: "application/json",
+            url: "/api/missionInventoryUpdate.php?" + window.authz,
+            contentType: "text/plain",
             data: JSON.stringify({
                 RawUpgrades: [
                     {
@@ -845,8 +845,8 @@ function doAcquireMod() {
     }
     revalidateAuthz(() => {
         $.post({
-            url: "/custom/addXp?" + window.authz,
-            contentType: "application/json",
+            url: "/api/missionInventoryUpdate.php?" + window.authz,
+            contentType: "text/plain",
             data: JSON.stringify({
                 RawUpgrades: [
                     {
@@ -1033,8 +1033,8 @@ function doAddAllMods() {
                 window.confirm("Are you sure you want to add " + modsAll.length + " mods to your account?")
             ) {
                 $.post({
-                    url: "/custom/addXp?" + window.authz,
-                    contentType: "application/json",
+                    url: "/api/missionInventoryUpdate.php?" + window.authz,
+                    contentType: "text/plain",
                     data: JSON.stringify({
                         RawUpgrades: modsAll.map(mod => ({
                             ItemType: mod,
