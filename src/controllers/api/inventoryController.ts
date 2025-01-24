@@ -59,6 +59,15 @@ export const inventoryController: RequestHandler = async (request, response) => 
     );
     const inventoryResponse = inventoryWithLoadOutPresetsAndShips.toJSON<IInventoryClient>();
 
+    applyInventoryResponseOverrides(inventoryResponse, "xpBasedLevelCapDisabled" in request.query);
+
+    response.json(inventoryResponse);
+};
+
+export const applyInventoryResponseOverrides = (
+    inventoryResponse: IInventoryClient,
+    xpBasedLevelCapDisabled: boolean
+): void => {
     if (config.infiniteCredits) {
         inventoryResponse.RegularCredits = 999999999;
     }
@@ -175,7 +184,7 @@ export const inventoryController: RequestHandler = async (request, response) => 
 
     if (typeof config.spoofMasteryRank === "number" && config.spoofMasteryRank >= 0) {
         inventoryResponse.PlayerLevel = config.spoofMasteryRank;
-        if (!("xpBasedLevelCapDisabled" in request.query)) {
+        if (!xpBasedLevelCapDisabled) {
             // This client has not been patched to accept any mastery rank, need to fake the XP.
             inventoryResponse.XPInfo = [];
             let numFrames = getExpRequiredForMr(Math.min(config.spoofMasteryRank, 5030)) / 6000;
@@ -251,8 +260,6 @@ export const inventoryController: RequestHandler = async (request, response) => 
     inventoryResponse.HasOwnedVoidProjectionsPreviously = true;
 
     inventoryResponse.LastInventorySync = toOid(new Types.ObjectId());
-
-    response.json(inventoryResponse);
 };
 
 const addString = (arr: string[], str: string): void => {
