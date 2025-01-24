@@ -528,8 +528,8 @@ function doAcquireEquipment(category) {
             contentType: "application/json",
             data: JSON.stringify([
                 {
-                    type: category,
-                    internalName: uniqueName
+                    ItemType: uniqueName,
+                    ItemCount: 1
                 }
             ])
         });
@@ -566,7 +566,7 @@ function addMissingEquipment(categories) {
                     "#" + category + "-list [data-item-type='" + elm.getAttribute("data-key") + "']"
                 )
             ) {
-                requests.push({ type: category, internalName: elm.getAttribute("data-key") });
+                requests.push({ ItemType: elm.getAttribute("data-key"), ItemCount: 1 });
             }
         });
     });
@@ -734,16 +734,14 @@ function doAcquireMiscItems() {
     const [category, uniqueName] = data.split(":");
     revalidateAuthz(() => {
         $.post({
-            url: "/api/missionInventoryUpdate.php?" + window.authz,
-            contentType: "text/plain",
-            data: JSON.stringify({
-                [category]: [
-                    {
-                        ItemType: uniqueName,
-                        ItemCount: parseInt($("#miscitem-count").val())
-                    }
-                ]
-            })
+            url: "/custom/addItems?" + window.authz,
+            contentType: "application/json",
+            data: JSON.stringify([
+                {
+                    ItemType: uniqueName,
+                    ItemCount: parseInt($("#miscitem-count").val())
+                }
+            ])
         }).done(function () {
             alert("Successfully added.");
         });
@@ -771,16 +769,14 @@ function doAcquireRiven() {
     revalidateAuthz(() => {
         // Add riven type to inventory
         $.post({
-            url: "/api/missionInventoryUpdate.php?" + window.authz,
-            contentType: "text/plain",
-            data: JSON.stringify({
-                RawUpgrades: [
-                    {
-                        ItemType: uniqueName,
-                        ItemCount: 1
-                    }
-                ]
-            })
+            url: "/custom/addItems?" + window.authz,
+            contentType: "application/json",
+            data: JSON.stringify([
+                {
+                    ItemType: uniqueName,
+                    ItemCount: 1
+                }
+            ])
         }).done(function () {
             // Get riven's assigned id
             $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1").done(data => {
@@ -845,16 +841,14 @@ function doAcquireMod() {
     }
     revalidateAuthz(() => {
         $.post({
-            url: "/api/missionInventoryUpdate.php?" + window.authz,
-            contentType: "text/plain",
-            data: JSON.stringify({
-                RawUpgrades: [
-                    {
-                        ItemType: uniqueName,
-                        ItemCount: parseInt($("#mod-count").val())
-                    }
-                ]
-            })
+            url: "/custom/addItems?" + window.authz,
+            contentType: "application/json",
+            data: JSON.stringify([
+                {
+                    ItemType: uniqueName,
+                    ItemCount: parseInt($("#mod-count").val())
+                }
+            ])
         }).done(function () {
             document.getElementById("mod-to-acquire").value = "";
             updateInventory();
@@ -1033,14 +1027,14 @@ function doAddAllMods() {
                 window.confirm("Are you sure you want to add " + modsAll.length + " mods to your account?")
             ) {
                 $.post({
-                    url: "/api/missionInventoryUpdate.php?" + window.authz,
-                    contentType: "text/plain",
-                    data: JSON.stringify({
-                        RawUpgrades: modsAll.map(mod => ({
+                    url: "/custom/addItems?" + window.authz,
+                    contentType: "application/json",
+                    data: JSON.stringify(
+                        modsAll.map(mod => ({
                             ItemType: mod,
                             ItemCount: 21 // To fully upgrade certain arcanes
                         }))
-                    })
+                    )
                 }).done(function () {
                     updateInventory();
                 });
