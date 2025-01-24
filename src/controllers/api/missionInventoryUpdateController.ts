@@ -8,6 +8,7 @@ import {
     calculateFinalCredits
 } from "@/src/services/missionInventoryUpdateService";
 import { getInventory } from "@/src/services/inventoryService";
+import { logger } from "@/src/utils/logger";
 /*
 **** INPUT ****
 - [ ]  crossPlaySetting
@@ -55,7 +56,7 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
     const missionReport = getJSONfromString<IMissionInventoryUpdateRequest>((req.body as string).toString());
 
     if (missionReport.MissionStatus !== "GS_SUCCESS") {
-        console.log(`Mission failed: ${missionReport.RewardInfo?.node}`);
+        logger.debug(`Mission failed: ${missionReport.RewardInfo?.node}`);
         //todo: return expected response for failed mission
         res.json([]);
         return;
@@ -67,7 +68,7 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
     const missionRewardsResults = await addMissionRewards(inventory, missionReport);
 
     if (!missionRewardsResults) {
-        console.error("Failed to add mission rewards");
+        logger.error("Failed to add mission rewards");
         res.status(500).json({ error: "Failed to add mission rewards" });
         return;
     }
