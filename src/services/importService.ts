@@ -8,8 +8,6 @@ import {
 import { IMongoDate } from "../types/commonTypes";
 import {
     equipmentKeys,
-    ICrewShipClient,
-    ICrewShipDatabase,
     ICrewShipMemberClient,
     ICrewShipMemberDatabase,
     ICrewShipMembersClient,
@@ -21,6 +19,8 @@ import {
     IInfestedFoundryClient,
     IInfestedFoundryDatabase,
     IInventoryClient,
+    IKubrowPetDetailsClient,
+    IKubrowPetDetailsDatabase,
     ILoadoutConfigClient,
     ILoadOutPresets,
     ISlots,
@@ -47,7 +47,22 @@ const convertEquipment = (client: IEquipmentClient): IEquipmentDatabase => {
         _id: new Types.ObjectId(ItemId.$oid),
         InfestationDate: convertOptionalDate(client.InfestationDate),
         Expiry: convertOptionalDate(client.Expiry),
-        UpgradesExpiry: convertOptionalDate(client.UpgradesExpiry)
+        UpgradesExpiry: convertOptionalDate(client.UpgradesExpiry),
+        CrewMembers: client.CrewMembers ? convertCrewShipMembers(client.CrewMembers) : undefined,
+        Details: client.Details ? convertKubrowDetalis(client.Details) : undefined,
+        /*  fix for
+            "attcol": [],
+            "sigcol": [],
+            "eyecol": [],
+            "facial": [],
+            in data from aleca */
+        Configs: client.Configs
+            ? client.Configs.map(obj =>
+                  Object.fromEntries(
+                      Object.entries(obj).filter(([_, value]) => !Array.isArray(value) || value.length > 0)
+                  )
+              )
+            : []
     };
 };
 
@@ -102,15 +117,6 @@ const convertCrewShipMembers = (client: ICrewShipMembersClient): ICrewShipMember
     };
 };
 
-const convertCrewShip = (client: ICrewShipClient): ICrewShipDatabase => {
-    const { ItemId, ...rest } = client;
-    return {
-        ...rest,
-        _id: new Types.ObjectId(ItemId.$oid),
-        CrewMembers: client.CrewMembers ? convertCrewShipMembers(client.CrewMembers) : undefined
-    };
-};
-
 const convertInfestedFoundry = (client: IInfestedFoundryClient): IInfestedFoundryDatabase => {
     return {
         ...client,
@@ -133,6 +139,13 @@ const convertDialogueHistory = (client: IDialogueHistoryClient): IDialogueHistor
     return {
         YearIteration: client.YearIteration,
         Dialogues: client.Dialogues ? client.Dialogues.map(convertDialogue) : undefined
+    };
+};
+
+const convertKubrowDetalis = (client: IKubrowPetDetailsClient): IKubrowPetDetailsDatabase => {
+    return {
+        ...client,
+        HatchDate: convertDate(client.HatchDate)
     };
 };
 
@@ -221,9 +234,6 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     }
     if (client.FocusUpgrades !== undefined) {
         db.FocusUpgrades = client.FocusUpgrades;
-    }
-    if (client.CrewShips !== undefined) {
-        replaceArray<ICrewShipDatabase>(db.CrewShips, client.CrewShips.map(convertCrewShip));
     }
     if (client.InfestedFoundry !== undefined) {
         db.InfestedFoundry = convertInfestedFoundry(client.InfestedFoundry);

@@ -12,6 +12,7 @@ import { IOid } from "@/src/types/commonTypes";
 import { Types } from "mongoose";
 import { isEmptyObject } from "@/src/helpers/general";
 import { logger } from "@/src/utils/logger";
+import { equipmentKeys, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
 
 //TODO: setup default items on account creation or like originally in giveStartingItems.php
 
@@ -124,45 +125,6 @@ export const handleInventoryItemConfigChange = async (
                 }
                 break;
             }
-            case "LongGuns":
-            case "Pistols":
-            case "Suits":
-            case "Melee":
-            case "Scoops":
-            case "DataKnives":
-            case "DrifterMelee":
-            case "Sentinels":
-            case "Horses":
-            case "OperatorAmps":
-            case "SentinelWeapons":
-            case "KubrowPets":
-            case "SpaceSuits":
-            case "SpaceGuns":
-            case "SpaceMelee":
-            case "SpecialItems":
-            case "MoaPets":
-            case "Hoverboards":
-            case "MechSuits":
-            case "CrewShipHarnesses":
-            case "CrewShips":
-            case "Motorcycles": {
-                logger.debug(`general Item config saved of type ${equipmentName}`, { config: equipment });
-
-                const itemEntries = equipment as IItemEntry;
-                for (const [itemId, itemConfigEntries] of Object.entries(itemEntries)) {
-                    const inventoryItem = inventory[equipmentName].find(item => item._id?.toString() === itemId);
-
-                    if (!inventoryItem) {
-                        throw new Error(`inventory item ${equipmentName} not found with id ${itemId}`);
-                    }
-
-                    //config ids are 0,1,2 can there be a 3?
-                    for (const [configId, config] of Object.entries(itemConfigEntries)) {
-                        inventoryItem.Configs[parseInt(configId)] = config;
-                    }
-                }
-                break;
-            }
             case "CurrentLoadOutIds": {
                 const loadoutIds = equipment as IOid[]; // TODO: Check for more than just an array of oids, I think i remember one instance
                 inventory.CurrentLoadOutIds = loadoutIds;
@@ -178,9 +140,29 @@ export const handleInventoryItemConfigChange = async (
                 break;
             }
             default: {
-                logger.warn(`loadout category not implemented, changes may be lost: ${equipmentName}`, {
-                    config: equipment
-                });
+                if (equipmentKeys.includes(equipmentName as TEquipmentKey) && equipmentName != "ValidNewLoadoutId") {
+                    logger.debug(`general Item config saved of type ${equipmentName}`, {
+                        config: equipment
+                    });
+
+                    const itemEntries = equipment as IItemEntry;
+                    for (const [itemId, itemConfigEntries] of Object.entries(itemEntries)) {
+                        const inventoryItem = inventory[equipmentName].find(item => item._id?.toString() === itemId);
+
+                        if (!inventoryItem) {
+                            throw new Error(`inventory item ${equipmentName} not found with id ${itemId}`);
+                        }
+
+                        for (const [configId, config] of Object.entries(itemConfigEntries)) {
+                            inventoryItem.Configs[parseInt(configId)] = config;
+                        }
+                    }
+                    break;
+                } else {
+                    logger.warn(`loadout category not implemented, changes may be lost: ${equipmentName}`, {
+                        config: equipment
+                    });
+                }
             }
             //case "KahlLoadOuts": not sure yet how to handle kahl: it is not sent in inventory
         }
