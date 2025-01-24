@@ -55,29 +55,25 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
 
     const missionReport = getJSONfromString<IMissionInventoryUpdateRequest>((req.body as string).toString());
 
-    if (missionReport.MissionStatus !== "GS_SUCCESS") {
-        logger.debug(`Mission failed: ${missionReport.RewardInfo?.node}`);
-        //todo: return expected response for failed mission
-        res.json([]);
-        return;
-        //duvirisadjob does not provide missionStatus
-    }
-
     const inventory = await getInventory(accountId);
 
     const missionRewardsResults = await addMissionRewards(inventory, missionReport);
 
-    if (!missionRewardsResults) {
-        logger.error("Failed to add mission rewards");
-        res.status(500).json({ error: "Failed to add mission rewards" });
+    if (missionReport.MissionStatus !== "GS_SUCCESS") {
+        const InventoryJson = JSON.stringify((await inventory.save()).toJSON());
+
+        res.json({ InventoryJson, MissionRewards: [] });
         return;
+    }
+
+    if (!missionRewardsResults) {
+        throw new Error("Failed to add mission rewards, should not happen");
     }
 
     const { MissionRewards, inventoryChanges, missionCompletionCredits } = missionRewardsResults;
 
     const inventoryUpdates = addMissionInventoryUpdates(inventory, missionReport);
 
-    //todo ? can go after not awaiting
     //creditBonus is not correct for mirage mission 3
     const credits = calculateFinalCredits(inventory, {
         missionCompletionCredits,
