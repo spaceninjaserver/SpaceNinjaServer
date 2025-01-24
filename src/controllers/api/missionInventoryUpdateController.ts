@@ -8,7 +8,7 @@ import {
     calculateFinalCredits
 } from "@/src/services/missionInventoryUpdateService";
 import { getInventory } from "@/src/services/inventoryService";
-import { logger } from "@/src/utils/logger";
+
 /*
 **** INPUT ****
 - [ ]  crossPlaySetting
