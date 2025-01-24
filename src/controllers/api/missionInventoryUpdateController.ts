@@ -52,12 +52,10 @@ import { getInventory } from "@/src/services/inventoryService";
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const missionInventoryUpdateController: RequestHandler = async (req, res): Promise<void> => {
     const accountId = await getAccountIdForRequest(req);
-
     const missionReport = getJSONfromString<IMissionInventoryUpdateRequest>((req.body as string).toString());
 
     const inventory = await getInventory(accountId);
-
-    const missionRewardsResults = await addMissionRewards(inventory, missionReport);
+    const inventoryUpdates = addMissionInventoryUpdates(inventory, missionReport);
 
     if (missionReport.MissionStatus !== "GS_SUCCESS") {
         const InventoryJson = JSON.stringify((await inventory.save()).toJSON());
@@ -65,14 +63,11 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         res.json({ InventoryJson, MissionRewards: [] });
         return;
     }
-
+    const missionRewardsResults = await addMissionRewards(inventory, missionReport);
     if (!missionRewardsResults) {
         throw new Error("Failed to add mission rewards, should not happen");
     }
-
     const { MissionRewards, inventoryChanges, missionCompletionCredits } = missionRewardsResults;
-
-    const inventoryUpdates = addMissionInventoryUpdates(inventory, missionReport);
 
     //creditBonus is not correct for mirage mission 3
     const credits = calculateFinalCredits(inventory, {
