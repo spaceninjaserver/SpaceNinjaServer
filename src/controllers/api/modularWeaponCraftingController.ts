@@ -29,7 +29,7 @@ interface IModularCraftRequest {
 
 export const modularWeaponCraftingController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const data = getJSONfromString(String(req.body)) as IModularCraftRequest;
+    const data = getJSONfromString<IModularCraftRequest>(String(req.body));
     if (!(data.WeaponType in modularWeaponTypes)) {
         throw new Error(`unknown modular weapon type: ${data.WeaponType}`);
     }

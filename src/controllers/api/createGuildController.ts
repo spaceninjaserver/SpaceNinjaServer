@@ -6,7 +6,7 @@ import { Guild } from "@/src/models/guildModel";
 
 export const createGuildController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const payload = getJSONfromString(String(req.body)) as ICreateGuildRequest;
+    const payload = getJSONfromString<ICreateGuildRequest>(String(req.body));
 
     // Create guild on database
     const guild = new Guild({

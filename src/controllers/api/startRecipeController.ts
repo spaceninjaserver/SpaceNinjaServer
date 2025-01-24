@@ -14,7 +14,7 @@ interface IStartRecipeRequest {
 }
 
 export const startRecipeController: RequestHandler = async (req, res) => {
-    const startRecipeRequest = getJSONfromString(String(req.body)) as IStartRecipeRequest;
+    const startRecipeRequest = getJSONfromString<IStartRecipeRequest>(String(req.body));
     logger.debug("StartRecipe Request", { startRecipeRequest });
 
     const accountId = await getAccountIdForRequest(req);

@@ -9,7 +9,7 @@ import { ExportResources, ExportSyndicates } from "warframe-public-export-plus";
 export const fishmongerController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId);
-    const body = getJSONfromString(String(req.body)) as IFishmongerRequest;
+    const body = getJSONfromString<IFishmongerRequest>(String(req.body));
     const miscItemChanges: IMiscItem[] = [];
     let syndicateTag: string | undefined;
     let gainedStanding = 0;

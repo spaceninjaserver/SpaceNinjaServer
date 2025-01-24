@@ -5,7 +5,7 @@ import { updateChallengeProgress } from "@/src/services/inventoryService";
 import { IUpdateChallengeProgressRequest } from "@/src/types/requestTypes";
 
 const updateChallengeProgressController: RequestHandler = async (req, res) => {
-    const payload = getJSONfromString(String(req.body)) as IUpdateChallengeProgressRequest;
+    const payload = getJSONfromString<IUpdateChallengeProgressRequest>(String(req.body));
     const accountId = await getAccountIdForRequest(req);
 
     await updateChallengeProgress(payload, accountId);

@@ -9,7 +9,7 @@ import { IInventoryChanges } from "@/src/types/purchaseTypes";
 export const syndicateSacrificeController: RequestHandler = async (request, response) => {
     const accountId = await getAccountIdForRequest(request);
     const inventory = await getInventory(accountId);
-    const data = getJSONfromString(String(request.body)) as ISyndicateSacrificeRequest;
+    const data = getJSONfromString<ISyndicateSacrificeRequest>(String(request.body));
 
     let syndicate = inventory.Affiliations.find(x => x.Tag == data.AffiliationTag);
     if (!syndicate) {

@@ -22,7 +22,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
     switch (req.query.mode) {
         case "s": {
             // shard installation
-            const request = getJSONfromString(String(req.body)) as IShardInstallRequest;
+            const request = getJSONfromString<IShardInstallRequest>(String(req.body));
             const inventory = await getInventory(accountId);
             const suit = inventory.Suits.find(suit => suit._id.toString() == request.SuitId.$oid)!;
             if (!suit.ArchonCrystalUpgrades || suit.ArchonCrystalUpgrades.length != 5) {
@@ -50,7 +50,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
 
         case "x": {
             // shard removal
-            const request = getJSONfromString(String(req.body)) as IShardUninstallRequest;
+            const request = getJSONfromString<IShardUninstallRequest>(String(req.body));
             const inventory = await getInventory(accountId);
             const suit = inventory.Suits.find(suit => suit._id.toString() == request.SuitId.$oid)!;
 
@@ -88,7 +88,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
 
         case "n": {
             // name the beast
-            const request = getJSONfromString(String(req.body)) as IHelminthNameRequest;
+            const request = getJSONfromString<IHelminthNameRequest>(String(req.body));
             const inventory = await getInventory(accountId);
             inventory.InfestedFoundry ??= {};
             inventory.InfestedFoundry.Name = request.newName;
@@ -105,7 +105,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
 
         case "c": {
             // consume items
-            const request = getJSONfromString(String(req.body)) as IHelminthFeedRequest;
+            const request = getJSONfromString<IHelminthFeedRequest>(String(req.body));
             const inventory = await getInventory(accountId);
             inventory.InfestedFoundry ??= {};
             inventory.InfestedFoundry.Resources ??= [];
@@ -201,7 +201,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
 
         case "o": {
             // offerings update
-            const request = getJSONfromString(String(req.body)) as IHelminthOfferingsUpdate;
+            const request = getJSONfromString<IHelminthOfferingsUpdate>(String(req.body));
             const inventory = await getInventory(accountId);
             inventory.InfestedFoundry ??= {};
             inventory.InfestedFoundry.InvigorationIndex = request.OfferingsIndex;
@@ -220,7 +220,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
 
         case "a": {
             // subsume warframe
-            const request = getJSONfromString(String(req.body)) as IHelminthSubsumeRequest;
+            const request = getJSONfromString<IHelminthSubsumeRequest>(String(req.body));
             const inventory = await getInventory(accountId);
             const recipe = getRecipe(request.Recipe)!;
             for (const ingredient of recipe.secretIngredients!) {
@@ -283,7 +283,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
         }
 
         case "u": {
-            const request = getJSONfromString(String(req.body)) as IHelminthInvigorationRequest;
+            const request = getJSONfromString<IHelminthInvigorationRequest>(String(req.body));
             const inventory = await getInventory(accountId);
             const suit = inventory.Suits.id(request.SuitId.$oid)!;
             const upgradesExpiry = new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000);

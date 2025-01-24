@@ -9,7 +9,7 @@ import { addItem, combineInventoryChanges, getInventory } from "@/src/services/i
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const updateQuestController: RequestHandler = async (req, res) => {
     const accountId = parseString(req.query.accountId);
-    const updateQuestRequest = getJSONfromString((req.body as string).toString()) as IUpdateQuestRequest;
+    const updateQuestRequest = getJSONfromString<IUpdateQuestRequest>((req.body as string).toString());
 
     // updates should be made only to one quest key per request
     if (updateQuestRequest.QuestKeys.length > 1) {
