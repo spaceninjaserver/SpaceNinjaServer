@@ -21,6 +21,7 @@ import { HydratedDocument } from "mongoose";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { getLevelKeyRewards, getNode } from "@/src/services/itemDataService";
 import { InventoryDocumentProps, TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+import { getEntriesUnsafe } from "@/src/utils/ts-utils";
 
 const getRotations = (rotationCount: number): number[] => {
     if (rotationCount === 0) return [0];
@@ -63,12 +64,6 @@ export const fusionBundles: Record<string, number> = {
     "/Lotus/Upgrades/Mods/FusionBundles/UncommonFusionBundle": 50,
     "/Lotus/Upgrades/Mods/FusionBundles/RareFusionBundle": 80
 };
-
-type Entries<T, K extends keyof T = keyof T> = (K extends unknown ? [K, T[K]] : never)[];
-
-function getEntriesUnsafe<T extends object>(object: T): Entries<T> {
-    return Object.entries(object) as Entries<T>;
-}
 
 //type TMissionInventoryUpdateKeys = keyof IMissionInventoryUpdateRequest;
 //const ignoredInventoryUpdateKeys = ["FpsAvg", "FpsMax", "FpsMin", "FpsSamples"] satisfies TMissionInventoryUpdateKeys[]; // for keys with no meaning for this server
@@ -185,7 +180,7 @@ export const addMissionRewards = async (
     { RewardInfo: rewardInfo, LevelKeyName: levelKeyName, Missions: missions }: IMissionInventoryUpdateRequest
 ) => {
     if (!rewardInfo) {
-        logger.error("no reward info provided");
+        logger.warn("no reward info provided");
         return;
     }
 
