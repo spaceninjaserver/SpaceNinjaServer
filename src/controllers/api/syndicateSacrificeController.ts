@@ -57,14 +57,14 @@ export const syndicateSacrificeController: RequestHandler = async (request, resp
         }
     }
 
-    await inventory.save();
-
     if (reward) {
         combineInventoryChanges(
             res.InventoryChanges,
-            (await handleStoreItemAcquisition(reward, accountId)).InventoryChanges
+            (await handleStoreItemAcquisition(reward, inventory)).InventoryChanges
         );
     }
+
+    await inventory.save();
 
     response.json(res);
 };

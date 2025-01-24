@@ -5,8 +5,7 @@ import {
     addItem,
     addMiscItems,
     combineInventoryChanges,
-    getInventory,
-    updateCurrencyByAccountId,
+    updateCurrency,
     updateSlots
 } from "@/src/services/inventoryService";
 import { getRandomWeightedReward } from "@/src/services/rngService";
@@ -25,6 +24,7 @@ import {
     TRarity
 } from "warframe-public-export-plus";
 import { config } from "./configService";
+import { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel";
 
 export const getStoreItemCategory = (storeItem: string): string => {
     const storeItemString = getSubstringFromKeyword(storeItem, "StoreItems/");
@@ -43,7 +43,7 @@ export const getStoreItemTypesCategory = (typesItem: string): string => {
 
 export const handlePurchase = async (
     purchaseRequest: IPurchaseRequest,
-    accountId: string
+    inventory: TInventoryDatabaseDocument
 ): Promise<IPurchaseResponse> => {
     logger.debug("purchase request", purchaseRequest);
 
@@ -58,8 +58,8 @@ export const handlePurchase = async (
                 throw new Error(`unknown vendor offer: ${ItemId}`);
             }
             if (offer.ItemPrices) {
-                await handleItemPrices(
-                    accountId,
+                handleItemPrices(
+                    inventory,
                     offer.ItemPrices,
                     purchaseRequest.PurchaseParams.Quantity,
                     inventoryChanges
@@ -73,17 +73,17 @@ export const handlePurchase = async (
 
     const purchaseResponse = await handleStoreItemAcquisition(
         purchaseRequest.PurchaseParams.StoreItem,
-        accountId,
+        inventory,
         purchaseRequest.PurchaseParams.Quantity
     );
     combineInventoryChanges(purchaseResponse.InventoryChanges, inventoryChanges);
 
     if (!purchaseResponse) throw new Error("purchase response was undefined");
 
-    const currencyChanges = await updateCurrencyByAccountId(
+    const currencyChanges = updateCurrency(
+        inventory,
         purchaseRequest.PurchaseParams.ExpectedPrice,
-        purchaseRequest.PurchaseParams.UsePremium,
-        accountId
+        purchaseRequest.PurchaseParams.UsePremium
     );
     purchaseResponse.InventoryChanges = {
         ...currencyChanges,
@@ -95,7 +95,6 @@ export const handlePurchase = async (
             {
                 const syndicateTag = purchaseRequest.PurchaseParams.SyndicateTag!;
                 if (purchaseRequest.PurchaseParams.UseFreeFavor!) {
-                    const inventory = await getInventory(accountId);
                     const affiliation = inventory.Affiliations.find(x => x.Tag == syndicateTag)!;
                     affiliation.FreeFavorsUsed ??= [];
                     const lastTitle = affiliation.FreeFavorsEarned![affiliation.FreeFavorsUsed.length];
@@ -106,7 +105,6 @@ export const handlePurchase = async (
                             Title: lastTitle
                         }
                     ];
-                    await inventory.save();
                 } else {
                     const syndicate = ExportSyndicates[syndicateTag];
                     if (syndicate) {
@@ -114,7 +112,6 @@ export const handlePurchase = async (
                             x => x.storeItem == purchaseRequest.PurchaseParams.StoreItem
                         );
                         if (favour) {
-                            const inventory = await getInventory(accountId);
                             const affiliation = inventory.Affiliations.find(x => x.Tag == syndicateTag);
                             if (affiliation) {
                                 purchaseResponse.Standing = [
@@ -124,7 +121,6 @@ export const handlePurchase = async (
                                     }
                                 ];
                                 affiliation.Standing -= favour.standingCost;
-                                await inventory.save();
                             }
                         }
                     }
@@ -136,8 +132,8 @@ export const handlePurchase = async (
                 const vendor = ExportVendors[purchaseRequest.PurchaseParams.SourceId!];
                 const offer = vendor.items.find(x => x.storeItem == purchaseRequest.PurchaseParams.StoreItem);
                 if (offer && offer.itemPrices) {
-                    await handleItemPrices(
-                        accountId,
+                    handleItemPrices(
+                        inventory,
                         offer.itemPrices,
                         purchaseRequest.PurchaseParams.Quantity,
                         purchaseResponse.InventoryChanges
@@ -157,7 +153,6 @@ export const handlePurchase = async (
                     x => x.ItemType == purchaseRequest.PurchaseParams.StoreItem
                 );
             if (offer) {
-                const inventory = await getInventory(accountId);
                 if (offer.RegularPrice) {
                     const invItem: IMiscItem = {
                         ItemType: "/Lotus/Types/Items/MiscItems/SchismKey",
@@ -171,7 +166,6 @@ export const handlePurchase = async (
                 } else if (!config.infiniteRegalAya) {
                     inventory.PrimeTokens -= offer.PrimePrice! * purchaseRequest.PurchaseParams.Quantity;
                 }
-                await inventory.save();
             }
             break;
         }
@@ -180,13 +174,12 @@ export const handlePurchase = async (
     return purchaseResponse;
 };
 
-const handleItemPrices = async (
-    accountId: string,
+const handleItemPrices = (
+    inventory: TInventoryDatabaseDocument,
     itemPrices: IMiscItem[],
     purchaseQuantity: number,
     inventoryChanges: IInventoryChanges
-): Promise<void> => {
-    const inventory = await getInventory(accountId);
+): void => {
     for (const item of itemPrices) {
         const invItem: IMiscItem = {
             ItemType: item.ItemType,
@@ -203,12 +196,11 @@ const handleItemPrices = async (
             (inventoryChanges.MiscItems as IMiscItem[]).push(invItem);
         }
     }
-    await inventory.save();
 };
 
 export const handleStoreItemAcquisition = async (
     storeItemName: string,
-    accountId: string,
+    inventory: TInventoryDatabaseDocument,
     quantity: number = 1,
     durability: TRarity = "COMMON",
     ignorePurchaseQuantity: boolean = false
@@ -226,7 +218,7 @@ export const handleStoreItemAcquisition = async (
                 (
                     await handleStoreItemAcquisition(
                         component.typeName,
-                        accountId,
+                        inventory,
                         component.purchaseQuantity * quantity,
                         component.durability,
                         true
@@ -247,16 +239,14 @@ export const handleStoreItemAcquisition = async (
         }
         switch (storeCategory) {
             default: {
-                const inventory = await getInventory(accountId);
                 purchaseResponse = await addItem(inventory, internalName, quantity);
-                await inventory.save();
                 break;
             }
             case "Types":
-                purchaseResponse = await handleTypesPurchase(internalName, accountId, quantity);
+                purchaseResponse = await handleTypesPurchase(internalName, inventory, quantity);
                 break;
             case "Boosters":
-                purchaseResponse = await handleBoostersPurchase(internalName, accountId, durability);
+                purchaseResponse = handleBoostersPurchase(internalName, inventory, durability);
                 break;
         }
     }
@@ -280,11 +270,11 @@ export const slotPurchaseNameToSlotName: SlotPurchase = {
 // // new slot above base = extra + 1 and slots +1
 // // new frame = slots -1
 // // number of frames = extra - slots + 2
-const handleSlotPurchase = async (
+const handleSlotPurchase = (
     slotPurchaseNameFull: string,
-    accountId: string,
+    inventory: TInventoryDatabaseDocument,
     quantity: number
-): Promise<IPurchaseResponse> => {
+): IPurchaseResponse => {
     logger.debug(`slot name ${slotPurchaseNameFull}`);
     const slotPurchaseName = parseSlotPurchaseName(
         slotPurchaseNameFull.substring(slotPurchaseNameFull.lastIndexOf("/") + 1)
@@ -294,9 +284,7 @@ const handleSlotPurchase = async (
     const slotName = slotPurchaseNameToSlotName[slotPurchaseName].name;
     const slotsPurchased = slotPurchaseNameToSlotName[slotPurchaseName].slotsPerPurchase * quantity;
 
-    const inventory = await getInventory(accountId);
     updateSlots(inventory, slotName, slotsPurchased, slotsPurchased);
-    await inventory.save();
 
     logger.debug(`added ${slotsPurchased} slot ${slotName}`);
 
@@ -314,7 +302,7 @@ const handleSlotPurchase = async (
 
 const handleBoosterPackPurchase = async (
     typeName: string,
-    accountId: string,
+    inventory: TInventoryDatabaseDocument,
     quantity: number
 ): Promise<IPurchaseResponse> => {
     const pack = ExportBoosterPacks[typeName];
@@ -325,7 +313,6 @@ const handleBoosterPackPurchase = async (
         BoosterPackItems: "",
         InventoryChanges: {}
     };
-    const inventory = await getInventory(accountId);
     for (let i = 0; i != quantity; ++i) {
         for (const weights of pack.rarityWeightsPerRoll) {
             const result = getRandomWeightedReward(pack.components, weights);
@@ -340,29 +327,24 @@ const handleBoosterPackPurchase = async (
             }
         }
     }
-    await inventory.save();
     return purchaseResponse;
 };
 
 //TODO: change to getInventory, apply changes then save at the end
 const handleTypesPurchase = async (
     typesName: string,
-    accountId: string,
+    inventory: TInventoryDatabaseDocument,
     quantity: number
 ): Promise<IPurchaseResponse> => {
     const typeCategory = getStoreItemTypesCategory(typesName);
     logger.debug(`type category ${typeCategory}`);
     switch (typeCategory) {
-        default: {
-            const inventory = await getInventory(accountId);
-            const resp = await addItem(inventory, typesName, quantity);
-            await inventory.save();
-            return resp;
-        }
+        default:
+            return await addItem(inventory, typesName, quantity);
         case "BoosterPacks":
-            return await handleBoosterPackPurchase(typesName, accountId, quantity);
+            return handleBoosterPackPurchase(typesName, inventory, quantity);
         case "SlotItems":
-            return await handleSlotPurchase(typesName, accountId, quantity);
+            return handleSlotPurchase(typesName, inventory, quantity);
     }
 };
 
@@ -380,11 +362,11 @@ const boosterDuration: Record<TRarity, number> = {
     LEGENDARY: 90 * 86400
 };
 
-const handleBoostersPurchase = async (
+const handleBoostersPurchase = (
     boosterStoreName: string,
-    accountId: string,
+    inventory: TInventoryDatabaseDocument,
     durability: TRarity
-): Promise<{ InventoryChanges: IInventoryChanges }> => {
+): { InventoryChanges: IInventoryChanges } => {
     const ItemType = boosterStoreName.replace("StoreItem", "");
     if (!boosterCollection.find(x => x == ItemType)) {
         logger.error(`unknown booster type: ${ItemType}`);
@@ -393,7 +375,7 @@ const handleBoostersPurchase = async (
 
     const ExpiryDate = boosterDuration[durability];
 
-    await addBooster(ItemType, ExpiryDate, accountId);
+    addBooster(ItemType, ExpiryDate, inventory);
 
     return {
         InventoryChanges: {
