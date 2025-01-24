@@ -366,6 +366,21 @@ export const addItem = async (
                 }
             };
         }
+        case "Upgrades": {
+            // Needed to add Traumatic Peculiar
+            const changes = [
+                {
+                    ItemType: typeName,
+                    ItemCount: quantity
+                }
+            ];
+            addMods(inventory, changes);
+            return {
+                InventoryChanges: {
+                    RawUpgrades: changes
+                }
+            };
+        }
         case "Types":
             switch (typeName.substr(1).split("/")[2]) {
                 case "Sentinels": {
