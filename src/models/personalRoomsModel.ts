@@ -70,7 +70,7 @@ const apartmentSchema = new Schema<IApartment>(
     {
         Rooms: [roomSchema],
         FavouriteLoadouts: [Schema.Types.Mixed],
-        Gardening: gardeningSchema
+        Gardening: gardeningSchema // TODO: ensure this is correct
     },
     { _id: false }
 );
@@ -96,7 +96,7 @@ const orbiterSchema = new Schema<IOrbiter>(
     { _id: false }
 );
 const orbiterDefault: IOrbiter = {
-    Features: [],
+    Features: ["/Lotus/Types/Items/ShipFeatureItems/EarthNavigationFeatureItem"], //TODO: potentially remove after missionstarting gear
     Rooms: [
         { Name: "AlchemyRoom", MaxCapacity: 1600 },
         { Name: "BridgeRoom", MaxCapacity: 1600 },

@@ -45,16 +45,16 @@ export const createPersonalRooms = async (accountId: Types.ObjectId, shipId: Typ
         activeShipId: shipId
     });
     if (config.skipTutorial) {
-        // Vor's Prize rewards
-        const defaultFeatures = [
-            "/Lotus/Types/Items/ShipFeatureItems/EarthNavigationFeatureItem",
-            "/Lotus/Types/Items/ShipFeatureItems/MercuryNavigationFeatureItem",
-            "/Lotus/Types/Items/ShipFeatureItems/ArsenalFeatureItem",
-            "/Lotus/Types/Items/ShipFeatureItems/SocialMenuFeatureItem",
-            "/Lotus/Types/Items/ShipFeatureItems/FoundryFeatureItem",
-            "/Lotus/Types/Items/ShipFeatureItems/ModsFeatureItem"
-        ];
-        personalRooms.Ship.Features.push(...defaultFeatures);
+        // // Vor's Prize rewards
+        // const defaultFeatures = [
+        //     "/Lotus/Types/Items/ShipFeatureItems/EarthNavigationFeatureItem",
+        //     "/Lotus/Types/Items/ShipFeatureItems/MercuryNavigationFeatureItem",
+        //     "/Lotus/Types/Items/ShipFeatureItems/ArsenalFeatureItem",
+        //     "/Lotus/Types/Items/ShipFeatureItems/SocialMenuFeatureItem",
+        //     "/Lotus/Types/Items/ShipFeatureItems/FoundryFeatureItem",
+        //     "/Lotus/Types/Items/ShipFeatureItems/ModsFeatureItem"
+        // ];
+        // personalRooms.Ship.Features.push(...defaultFeatures);
     }
     await personalRooms.save();
 };

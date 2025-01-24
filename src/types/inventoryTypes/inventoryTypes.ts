@@ -43,6 +43,7 @@ export interface IInventoryDatabase
     GuildId?: Types.ObjectId; // GuildId changed from ?IOid to ?Types.ObjectId
     PendingRecipes: IPendingRecipe[];
     QuestKeys: IQuestKeyDatabase[];
+    ActiveQuest: string;
     BlessingCooldown: Date;
     Ships: Types.ObjectId[];
     WeaponSkins: IWeaponSkinDatabase[];
@@ -71,7 +72,7 @@ export interface IInventoryDatabase
 }
 
 export interface IQuestKeyDatabase {
-    Progress?: IQuestProgress[];
+    Progress?: IQuestStage[];
     unlock?: boolean;
     Completed?: boolean;
     CustomData?: string; //TODO: check whether this actually exists
@@ -205,7 +206,7 @@ export interface IInventoryClient extends IDailyAffiliations {
     RawUpgrades: IRawUpgrade[];
     ReceivedStartingGear: boolean;
     Ships: IShipInventory[];
-    QuestKeys: IQuestKeyResponse[];
+    QuestKeys: IQuestKeyClient[];
     FlavourItems: IFlavourItem[];
     Scoops: IEquipmentDatabase[];
     TrainingRetriesLeft: number;
@@ -889,14 +890,14 @@ export interface IPlayerSkills {
     LPS_DRIFT_ENDURANCE: number;
 }
 
-export interface IQuestKeyResponse extends Omit<IQuestKeyDatabase, "CompletionDate"> {
+export interface IQuestKeyClient extends Omit<IQuestKeyDatabase, "CompletionDate"> {
     CompletionDate?: IMongoDate;
 }
 
-export interface IQuestProgress {
-    c: number;
-    i: boolean;
-    m: boolean;
+export interface IQuestStage {
+    c?: number;
+    i?: boolean;
+    m?: boolean;
     b?: any[];
 }
 

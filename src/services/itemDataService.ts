@@ -1,4 +1,7 @@
+import { IGiveKeyChainTriggeredItemsRequest } from "@/src/controllers/api/giveKeyChainTriggeredItemsController";
 import { getIndexAfter } from "@/src/helpers/stringHelpers";
+import { ITypeCount } from "@/src/types/inventoryTypes/inventoryTypes";
+import { logger } from "@/src/utils/logger";
 import {
     dict_de,
     dict_en,
@@ -20,13 +23,16 @@ import {
     ExportGear,
     ExportKeys,
     ExportRecipes,
+    ExportRegions,
     ExportResources,
     ExportSentinels,
     ExportWarframes,
     ExportWeapons,
     IPowersuit,
-    IRecipe
+    IRecipe,
+    IRegion
 } from "warframe-public-export-plus";
+import questCompletionItems from "@/static/fixed_responses/questCompletionRewards.json";
 
 export type WeaponTypeInternal =
     | "LongGuns"
@@ -149,4 +155,57 @@ export const getDict = (lang: string): Record<string, string> => {
 
 export const getString = (key: string, dict: Record<string, string>): string => {
     return dict[key] ?? key;
+};
+
+export const getKeyChainItems = ({ KeyChain, ChainStage }: IGiveKeyChainTriggeredItemsRequest): string[] => {
+    const chainStages = ExportKeys[KeyChain].chainStages;
+    if (!chainStages) {
+        throw new Error(`KeyChain ${KeyChain} does not contain chain stages`);
+    }
+
+    const keyChainStage = chainStages[ChainStage];
+    if (!keyChainStage) {
+        throw new Error(`KeyChainStage ${ChainStage} not found`);
+    }
+
+    if (keyChainStage.itemsToGiveWhenTriggered.length === 0) {
+        throw new Error(`No items to give for KeyChain ${KeyChain} at stage ${ChainStage}`);
+    }
+
+    return keyChainStage.itemsToGiveWhenTriggered;
+};
+
+export const getLevelKeyRewards = (levelKey: string) => {
+    const levelKeyData = ExportKeys[levelKey];
+    if (!levelKeyData) {
+        const error = `LevelKey ${levelKey} not found`;
+        logger.error(error);
+        throw new Error(error);
+    }
+
+    if (!levelKeyData.rewards) {
+        const error = `LevelKey ${levelKey} does not contain rewards`;
+        logger.error(error);
+        throw new Error(error);
+    }
+
+    return levelKeyData.rewards;
+};
+
+export const getNode = (nodeName: string): IRegion => {
+    const node = ExportRegions[nodeName];
+    if (!node) {
+        throw new Error(`Node ${nodeName} not found`);
+    }
+
+    return node;
+};
+
+export const getQuestCompletionItems = (questKey: string) => {
+    const items = (questCompletionItems as unknown as Record<string, ITypeCount[] | undefined>)[questKey];
+    if (!items) {
+        throw new Error(`Quest ${questKey} not found in questCompletionItems`);
+    }
+
+    return items;
 };

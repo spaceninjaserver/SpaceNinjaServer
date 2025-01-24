@@ -1,10 +1,13 @@
 import { RequestHandler } from "express";
-import { missionInventoryUpdate } from "@/src/services/inventoryService";
-import { combineRewardAndLootInventory, getRewards } from "@/src/services/missionInventoryUpdateService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { IMissionInventoryUpdateRequest } from "@/src/types/requestTypes";
-import { logger } from "@/src/utils/logger";
+import {
+    addMissionInventoryUpdates,
+    addMissionRewards,
+    calculateFinalCredits
+} from "@/src/services/missionInventoryUpdateService";
+import { getInventory } from "@/src/services/inventoryService";
 /*
 **** INPUT ****
 - [ ]  crossPlaySetting
@@ -30,13 +33,13 @@ import { logger } from "@/src/utils/logger";
 - [ ]  hosts
 - [x]  ChallengeProgress
 - [ ]  SeasonChallengeHistory
-- [ ]  PS (Passive anti-cheat data which includes your username, module list, process list, and system name.)
+- [ ]  PS (anticheat data)
 - [ ]  ActiveDojoColorResearch
 - [x]  RewardInfo
 - [ ]  ReceivedCeremonyMsg
 - [ ]  LastCeremonyResetDate
 - [ ]  MissionPTS (Used to validate the mission/alive time above.)
-- [ ]  RepHash (A hash from the replication manager/RepMgr Unknown what it does.)
+- [ ]  RepHash
 - [ ]  EndOfMatchUpload
 - [ ]  ObjectiveReached
 - [ ]  FpsAvg
@@ -45,34 +48,52 @@ import { logger } from "@/src/utils/logger";
 - [ ]  FpsSamples
 */
 
-const missionInventoryUpdateController: RequestHandler = async (req, res): Promise<void> => {
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+export const missionInventoryUpdateController: RequestHandler = async (req, res): Promise<void> => {
     const accountId = await getAccountIdForRequest(req);
 
-    try {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call
-        const lootInventory = getJSONfromString(req.body.toString()) as IMissionInventoryUpdateRequest;
+    const missionReport = getJSONfromString((req.body as string).toString()) as IMissionInventoryUpdateRequest;
 
-        logger.debug("missionInventoryUpdate with lootInventory =", lootInventory);
-
-        const { InventoryChanges, MissionRewards } = getRewards(lootInventory);
-
-        const { combinedInventoryChanges, TotalCredits, CreditsBonus, MissionCredits, FusionPoints } =
-            combineRewardAndLootInventory(InventoryChanges, lootInventory);
-
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const InventoryJson = JSON.stringify(await missionInventoryUpdate(combinedInventoryChanges, accountId));
-        res.json({
-            // InventoryJson, // this part will reset game data and missions will be locked
-            MissionRewards,
-            InventoryChanges,
-            TotalCredits,
-            CreditsBonus,
-            MissionCredits,
-            FusionPoints
-        });
-    } catch (err) {
-        console.error("Error parsing JSON data:", err);
+    if (missionReport.MissionStatus !== "GS_SUCCESS") {
+        console.log(`Mission failed: ${missionReport.RewardInfo?.node}`);
+        //todo: return expected response for failed mission
+        res.json([]);
+        //duvirisadjob does not provide missionStatus
     }
+
+    const inventory = await getInventory(accountId);
+
+    const missionRewardsResults = await addMissionRewards(inventory, missionReport);
+
+    if (!missionRewardsResults) {
+        console.error("Failed to add mission rewards");
+        res.status(500).json({ error: "Failed to add mission rewards" });
+        return;
+    }
+
+    const { MissionRewards, inventoryChanges, missionCompletionCredits } = missionRewardsResults;
+
+    const inventoryUpdates = addMissionInventoryUpdates(inventory, missionReport);
+
+    //todo ? can go after not awaiting
+    //creditBonus is not correct for mirage mission 3
+    const credits = calculateFinalCredits(inventory, {
+        missionCompletionCredits,
+        missionDropCredits: missionReport.RegularCredits ?? 0,
+        rngRewardCredits: inventoryChanges.RegularCredits as number
+    });
+
+    const InventoryJson = JSON.stringify((await inventory.save()).toJSON());
+
+    //TODO: figure out when to send inventory. it is needed for many cases.
+    res.json({
+        InventoryJson,
+        InventoryChanges: inventoryChanges,
+        MissionRewards,
+        ...credits,
+        ...inventoryUpdates,
+        FusionPoints: inventoryChanges.FusionPoints
+    });
 };
 
 /*
@@ -85,5 +106,3 @@ const missionInventoryUpdateController: RequestHandler = async (req, res): Promi
 - [x]  InventoryChanges
 - [x]  FusionPoints
 */
-
-export { missionInventoryUpdateController };

@@ -26,9 +26,9 @@ import {
     IInfestedFoundryDatabase,
     IHelminthResource,
     IConsumedSuit,
-    IQuestProgress,
+    IQuestStage,
     IQuestKeyDatabase,
-    IQuestKeyResponse,
+    IQuestKeyClient,
     IFusionTreasure,
     ISpectreLoadout,
     IWeaponSkinDatabase,
@@ -518,7 +518,7 @@ infestedFoundrySchema.set("toJSON", {
     }
 });
 
-const questProgressSchema = new Schema<IQuestProgress>({
+const questProgressSchema = new Schema<IQuestStage>({
     c: Number,
     i: Boolean,
     m: Boolean,
@@ -527,7 +527,7 @@ const questProgressSchema = new Schema<IQuestProgress>({
 
 const questKeysSchema = new Schema<IQuestKeyDatabase>(
     {
-        Progress: [questProgressSchema],
+        Progress: { type: [questProgressSchema], default: undefined },
         unlock: Boolean,
         Completed: Boolean,
         //CustomData: Schema.Types.Mixed,
@@ -544,7 +544,7 @@ questKeysSchema.set("toJSON", {
         const questKeysDatabase = ret as IQuestKeyDatabase;
 
         if (questKeysDatabase.CompletionDate) {
-            (questKeysDatabase as IQuestKeyResponse).CompletionDate = toMongoDate(questKeysDatabase.CompletionDate);
+            (questKeysDatabase as IQuestKeyClient).CompletionDate = toMongoDate(questKeysDatabase.CompletionDate);
         }
     }
 });
@@ -941,6 +941,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Complete Mission\Quests
         Missions: [Schema.Types.Mixed],
         QuestKeys: [questKeysSchema],
+        ActiveQuest: { type: String, default: "/Lotus/Types/Keys/VorsPrize/VorsPrizeQuestKeyChain" }, //TODO: check after mission starting gear
         //item like DojoKey or Boss missions key
         LevelKeys: [Schema.Types.Mixed],
         //Active quests
@@ -1164,7 +1165,7 @@ inventorySchema.set("toJSON", {
 });
 
 // type overwrites for subdocuments/subdocument arrays
-type InventoryDocumentProps = {
+export type InventoryDocumentProps = {
     Suits: Types.DocumentArray<IEquipmentDatabase>;
     LongGuns: Types.DocumentArray<IEquipmentDatabase>;
     Pistols: Types.DocumentArray<IEquipmentDatabase>;

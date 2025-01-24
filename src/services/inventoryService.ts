@@ -1,6 +1,10 @@
-import { Inventory, TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+import {
+    Inventory,
+    InventoryDocumentProps,
+    TInventoryDatabaseDocument
+} from "@/src/models/inventoryModels/inventoryModel";
 import { config } from "@/src/services/configService";
-import { Types } from "mongoose";
+import { HydratedDocument, Types } from "mongoose";
 import { SlotNames, IInventoryChanges, IBinChanges, ICurrencyChanges } from "@/src/types/purchaseTypes";
 import {
     IChallengeProgress,
@@ -14,9 +18,9 @@ import {
     InventorySlot,
     IWeaponSkinClient,
     TEquipmentKey,
-    equipmentKeys,
     IFusionTreasure,
-    IDailyAffiliations
+    IDailyAffiliations,
+    IInventoryDatabase
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate } from "../types/genericUpdate";
 import {
@@ -25,7 +29,7 @@ import {
     IUpdateChallengeProgressRequest
 } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
-import { getWeaponType, getExalted } from "@/src/services/itemDataService";
+import { getWeaponType, getExalted, getKeyChainItems } from "@/src/services/itemDataService";
 import { IEquipmentClient, IItemConfig } from "../types/inventoryTypes/commonInventoryTypes";
 import {
     ExportArcanes,
@@ -39,6 +43,8 @@ import {
     TStandingLimitBin
 } from "warframe-public-export-plus";
 import { createShip } from "./shipService";
+import { creditBundles, fusionBundles } from "@/src/services/missionInventoryUpdateService";
+import { IGiveKeyChainTriggeredItemsRequest } from "@/src/controllers/api/giveKeyChainTriggeredItemsController";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
@@ -64,31 +70,32 @@ export const createInventory = async (
                 { ItemCount: 1, ItemType: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageItem2" },
                 { ItemCount: 1, ItemType: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageItem3" },
                 { ItemCount: 1, ItemType: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageItem4" },
-                { ItemCount: 1, ItemType: "/Lotus/Types/Restoratives/LisetAutoHack" },
-
-                // Vor's Prize rewards
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarHealthMaxMod" },
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarShieldMaxMod" },
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarAbilityRangeMod" },
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarAbilityStrengthMod" },
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarAbilityDurationMod" },
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarPickupBonusMod" },
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarPowerMaxMod" },
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarEnemyRadarMod" },
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Melee/WeaponFireRateMod" },
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Melee/WeaponMeleeDamageMod" },
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Rifle/WeaponFactionDamageCorpus" },
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Rifle/WeaponFactionDamageGrineer" },
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod" },
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Pistol/WeaponFireDamageMod" },
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Pistol/WeaponElectricityDamageMod" },
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod" },
-                { ItemCount: 1, ItemType: "/Lotus/Types/Recipes/Weapons/BurstonRifleBlueprint" },
-                { ItemCount: 1, ItemType: "/Lotus/Types/Items/MiscItems/Morphic" },
-                { ItemCount: 400, ItemType: "/Lotus/Types/Items/MiscItems/PolymerBundle" },
-                { ItemCount: 150, ItemType: "/Lotus/Types/Items/MiscItems/AlloyPlate" }
+                { ItemCount: 1, ItemType: "/Lotus/Types/Restoratives/LisetAutoHack" }
             ];
 
+            // const vorsPrizeRewards = [
+            //     // Vor's Prize rewards
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarHealthMaxMod" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarShieldMaxMod" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarAbilityRangeMod" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarAbilityStrengthMod" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarAbilityDurationMod" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarPickupBonusMod" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarPowerMaxMod" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarEnemyRadarMod" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Melee/WeaponFireRateMod" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Melee/WeaponMeleeDamageMod" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Rifle/WeaponFactionDamageCorpus" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Rifle/WeaponFactionDamageGrineer" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Pistol/WeaponFireDamageMod" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Pistol/WeaponElectricityDamageMod" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Types/Recipes/Weapons/BurstonRifleBlueprint" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Types/Items/MiscItems/Morphic" },
+            //     { ItemCount: 400, ItemType: "/Lotus/Types/Items/MiscItems/PolymerBundle" },
+            //     { ItemCount: 150, ItemType: "/Lotus/Types/Items/MiscItems/AlloyPlate" }
+            // ];
             for (const equipment of defaultEquipment) {
                 await addItem(inventory, equipment.ItemType, equipment.ItemCount);
             }
@@ -109,7 +116,6 @@ export const createInventory = async (
             });
 
             inventory.QuestKeys.push({
-                Completed: true,
                 ItemType: "/Lotus/Types/Keys/VorsPrize/VorsPrizeQuestKeyChain"
             });
 
@@ -132,13 +138,19 @@ export const createInventory = async (
     }
 };
 
+/**
+ * Combines two inventory changes objects into one.
+ *
+ * @param InventoryChanges - will hold the combined changes
+ * @param delta - inventory changes to be added
+ */
 export const combineInventoryChanges = (InventoryChanges: IInventoryChanges, delta: IInventoryChanges): void => {
     for (const key in delta) {
         if (!(key in InventoryChanges)) {
             InventoryChanges[key] = delta[key];
         } else if (Array.isArray(delta[key])) {
             const left = InventoryChanges[key] as object[];
-            const right: object[] = delta[key];
+            const right: object[] | string[] = delta[key];
             for (const item of right) {
                 left.push(item);
             }
@@ -154,8 +166,10 @@ export const combineInventoryChanges = (InventoryChanges: IInventoryChanges, del
                 left.Extra ??= 0;
                 left.Extra += right.Extra;
             }
+        } else if (typeof delta[key] === "number") {
+            (InventoryChanges[key] as number) += delta[key];
         } else {
-            logger.warn(`inventory change not merged: ${key}`);
+            throw new Error(`inventory change not merged: unhandled type for inventory key ${key}`);
         }
     }
 };
@@ -274,6 +288,24 @@ export const addItem = async (
             }
         };
     }
+    if (typeName in creditBundles) {
+        const creditsTotal = creditBundles[typeName] * quantity;
+        inventory.RegularCredits += creditsTotal;
+        return {
+            InventoryChanges: {
+                RegularCredits: creditsTotal
+            }
+        };
+    }
+    if (typeName in fusionBundles) {
+        const fusionPointsTotal = fusionBundles[typeName] * quantity;
+        inventory.FusionPoints += fusionPointsTotal;
+        return {
+            InventoryChanges: {
+                FusionPoints: fusionPointsTotal
+            }
+        };
+    }
 
     // Path-based duck typing
     switch (typeName.substr(1).split("/")[1]) {
@@ -364,7 +396,7 @@ export const addItem = async (
                         }
                     }
                 }
-                case "Game":
+                case "Game": {
                     if (typeName.substr(1).split("/")[3] == "Projections") {
                         // Void Relics, e.g. /Lotus/Types/Game/Projections/T2VoidProjectionGaussPrimeDBronze
                         const miscItemChanges = [
@@ -381,6 +413,40 @@ export const addItem = async (
                         };
                     }
                     break;
+                }
+                case "Keys": {
+                    inventory.QuestKeys.push({ ItemType: typeName });
+                    return {
+                        InventoryChanges: {
+                            QuestKeys: [
+                                {
+                                    ItemType: typeName
+                                }
+                            ]
+                        }
+                    };
+                }
+                case "NeutralCreatures": {
+                    const horseIndex = inventory.Horses.push({ ItemType: typeName });
+                    return {
+                        InventoryChanges: {
+                            Horses: inventory.Horses[horseIndex - 1].toJSON()
+                        }
+                    };
+                }
+                case "Recipes": {
+                    inventory.MiscItems.push({ ItemType: typeName, ItemCount: quantity });
+                    return {
+                        InventoryChanges: {
+                            MiscItems: [
+                                {
+                                    ItemType: typeName,
+                                    ItemCount: quantity
+                                }
+                            ]
+                        }
+                    };
+                }
             }
             break;
     }
@@ -684,7 +750,8 @@ const addCrewShip = (
     return inventoryChanges;
 };
 
-const addGearExpByCategory = (
+//TODO: wrong id is not erroring
+export const addGearExpByCategory = (
     inventory: TInventoryDatabaseDocument,
     gearArray: IEquipmentClient[] | undefined,
     categoryName: TEquipmentKey
@@ -870,7 +937,7 @@ export const addChallenges = (
     });
 };
 
-const addMissionComplete = (inventory: TInventoryDatabaseDocument, { Tag, Completes }: IMission): void => {
+export const addMissionComplete = (inventory: TInventoryDatabaseDocument, { Tag, Completes }: IMission): void => {
     const { Missions } = inventory;
     const itemIndex = Missions.findIndex(item => item.Tag === Tag);
 
@@ -880,83 +947,6 @@ const addMissionComplete = (inventory: TInventoryDatabaseDocument, { Tag, Comple
     } else {
         Missions.push({ Tag, Completes });
     }
-};
-
-export const missionInventoryUpdate = async (data: IMissionInventoryUpdateRequest, accountId: string) => {
-    const {
-        RawUpgrades,
-        MiscItems,
-        RegularCredits,
-        ChallengeProgress,
-        FusionPoints,
-        Consumables,
-        Recipes,
-        Missions,
-        FusionTreasures
-    } = data;
-    const inventory = await getInventory(accountId);
-
-    // credits
-    inventory.RegularCredits += RegularCredits || 0;
-
-    // endo
-    inventory.FusionPoints += FusionPoints || 0;
-
-    // syndicate
-    data.AffiliationChanges?.forEach(affiliation => {
-        const syndicate = inventory.Affiliations.find(x => x.Tag == affiliation.Tag);
-        if (syndicate !== undefined) {
-            syndicate.Standing =
-                syndicate.Standing === undefined ? affiliation.Standing : syndicate.Standing + affiliation.Standing;
-            syndicate.Title = syndicate.Title === undefined ? affiliation.Title : syndicate.Title + affiliation.Title;
-        } else {
-            inventory.Affiliations.push({
-                Standing: affiliation.Standing,
-                Title: affiliation.Title,
-                Tag: affiliation.Tag,
-                FreeFavorsEarned: [],
-                FreeFavorsUsed: []
-            });
-        }
-    });
-
-    // Gear XP
-    equipmentKeys.forEach(key => addGearExpByCategory(inventory, data[key], key));
-
-    // Incarnon Challenges
-    if (data.EvolutionProgress) {
-        for (const evoProgress of data.EvolutionProgress) {
-            const entry = inventory.EvolutionProgress
-                ? inventory.EvolutionProgress.find(entry => entry.ItemType == evoProgress.ItemType)
-                : undefined;
-            if (entry) {
-                entry.Progress = evoProgress.Progress;
-                entry.Rank = evoProgress.Rank;
-            } else {
-                inventory.EvolutionProgress ??= [];
-                inventory.EvolutionProgress.push(evoProgress);
-            }
-        }
-    }
-
-    // LastRegionPlayed
-    if (data.LastRegionPlayed) {
-        inventory.LastRegionPlayed = data.LastRegionPlayed;
-    }
-
-    // other
-    addMods(inventory, RawUpgrades);
-    addMiscItems(inventory, MiscItems);
-    addConsumables(inventory, Consumables);
-    addRecipes(inventory, Recipes);
-    addChallenges(inventory, ChallengeProgress);
-    addFusionTreasures(inventory, FusionTreasures);
-    if (Missions) {
-        addMissionComplete(inventory, Missions);
-    }
-
-    const changedInventory = await inventory.save();
-    return changedInventory.toJSON();
 };
 
 export const addBooster = async (ItemType: string, time: number, accountId: string): Promise<void> => {
@@ -976,4 +966,53 @@ export const addBooster = async (ItemType: string, time: number, accountId: stri
     }
 
     await inventory.save();
+};
+
+export const updateSyndicate = (
+    inventory: HydratedDocument<IInventoryDatabase, InventoryDocumentProps>,
+    syndicateUpdate: IMissionInventoryUpdateRequest["AffiliationChanges"]
+) => {
+    syndicateUpdate?.forEach(affiliation => {
+        const syndicate = inventory.Affiliations.find(x => x.Tag == affiliation.Tag);
+        if (syndicate !== undefined) {
+            syndicate.Standing =
+                syndicate.Standing === undefined ? affiliation.Standing : syndicate.Standing + affiliation.Standing;
+            syndicate.Title = syndicate.Title === undefined ? affiliation.Title : syndicate.Title + affiliation.Title;
+        } else {
+            inventory.Affiliations.push({
+                Standing: affiliation.Standing,
+                Title: affiliation.Title,
+                Tag: affiliation.Tag,
+                FreeFavorsEarned: [],
+                FreeFavorsUsed: []
+            });
+        }
+    });
+    return { AffiliationMods: [] };
+};
+
+/**
+ * @returns object with inventory keys of changes or empty object when no items were added
+ */
+export const addKeyChainItems = async (
+    inventory: TInventoryDatabaseDocument,
+    keyChainData: IGiveKeyChainTriggeredItemsRequest
+): Promise<IInventoryChanges> => {
+    const keyChainItems = getKeyChainItems(keyChainData);
+
+    logger.debug(
+        `adding key chain items ${keyChainItems.join()} for ${keyChainData.KeyChain} at stage ${keyChainData.ChainStage}`
+    );
+
+    const nonStoreItems = keyChainItems.map(item => item.replace("StoreItems/", ""));
+
+    //TODO: inventoryChanges is not typed correctly
+    const inventoryChanges = {};
+
+    for (const item of nonStoreItems) {
+        const inventoryChangesDelta = await addItem(inventory, item);
+        combineInventoryChanges(inventoryChanges, inventoryChangesDelta.InventoryChanges);
+    }
+
+    return inventoryChanges;
 };
