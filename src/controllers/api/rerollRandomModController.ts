@@ -67,7 +67,9 @@ const randomiseStats = (randomModType: string, fingerprint: IUnveiledRivenFinger
 
     fingerprint.curses = [];
     if (Math.random() < 0.5) {
-        const entry = getRandomElement(meta.upgradeEntries!.filter(x => x.canBeCurse));
+        const entry = getRandomElement(
+            meta.upgradeEntries!.filter(x => x.canBeCurse && !fingerprint.buffs.find(y => y.Tag == x.tag))
+        );
         fingerprint.curses.push({ Tag: entry.tag, Value: Math.trunc(Math.random() * 0x40000000) });
     }
 };
