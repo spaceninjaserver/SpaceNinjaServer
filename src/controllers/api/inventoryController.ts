@@ -107,6 +107,7 @@ export const inventoryController: RequestHandler = async (request, response) => 
         }
     }
     if (config.completeAllQuests) {
+        console.log("Completing all quests");
         for (const quest of inventoryResponse.QuestKeys) {
             quest.unlock = true;
             quest.Completed = true;
@@ -127,6 +128,7 @@ export const inventoryController: RequestHandler = async (request, response) => 
         }
 
         inventoryResponse.ArchwingEnabled = true;
+        inventoryResponse.ActiveQuest = ""; //TODO: might need to reconsider this if this does not work long term.
 
         // Skip "Watch The Maker"
         addString(inventoryResponse.NodeIntrosCompleted, "/Lotus/Levels/Cinematics/NewWarIntro/NewWarStageTwo.level");

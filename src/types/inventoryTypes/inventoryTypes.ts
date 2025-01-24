@@ -43,7 +43,6 @@ export interface IInventoryDatabase
     GuildId?: Types.ObjectId; // GuildId changed from ?IOid to ?Types.ObjectId
     PendingRecipes: IPendingRecipe[];
     QuestKeys: IQuestKeyDatabase[];
-    ActiveQuest: string;
     BlessingCooldown: Date;
     Ships: Types.ObjectId[];
     WeaponSkins: IWeaponSkinDatabase[];
@@ -207,6 +206,7 @@ export interface IInventoryClient extends IDailyAffiliations {
     ReceivedStartingGear: boolean;
     Ships: IShipInventory[];
     QuestKeys: IQuestKeyClient[];
+    ActiveQuest: string;
     FlavourItems: IFlavourItem[];
     Scoops: IEquipmentDatabase[];
     LoadOutPresets: ILoadOutPresets;
