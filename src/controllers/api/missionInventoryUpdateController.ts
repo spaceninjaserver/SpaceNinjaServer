@@ -58,6 +58,7 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         console.log(`Mission failed: ${missionReport.RewardInfo?.node}`);
         //todo: return expected response for failed mission
         res.json([]);
+        return;
         //duvirisadjob does not provide missionStatus
     }
 
