@@ -107,7 +107,6 @@ export const inventoryController: RequestHandler = async (request, response) => 
         }
     }
     if (config.completeAllQuests) {
-        console.log("Completing all quests");
         for (const quest of inventoryResponse.QuestKeys) {
             quest.unlock = true;
             quest.Completed = true;
