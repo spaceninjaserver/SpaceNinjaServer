@@ -249,10 +249,7 @@ function updateInventory() {
                             maxXP /= 2;
                         }
 
-                        if (
-                            item.XP < maxXP &&
-                            category != "MechSuits" // missionInventoryUpdate currently doesn't handle this category
-                        ) {
+                        if (item.XP < maxXP) {
                             const a = document.createElement("a");
                             a.href = "#";
                             a.onclick = function (event) {
@@ -645,8 +642,8 @@ function addGearExp(category, oid, xp) {
     ];
     revalidateAuthz(() => {
         $.post({
-            url: "/api/missionInventoryUpdate.php?" + window.authz,
-            contentType: "text/plain",
+            url: "/custom/addXp?" + window.authz,
+            contentType: "application/json",
             data: JSON.stringify(data)
         }).done(function () {
             if (category != "SpecialItems") {
@@ -659,8 +656,8 @@ function addGearExp(category, oid, xp) {
 function sendBatchGearExp(data) {
     revalidateAuthz(() => {
         $.post({
-            url: "/api/missionInventoryUpdate.php?" + window.authz,
-            contentType: "text/plain",
+            url: "/custom/addXp?" + window.authz,
+            contentType: "application/json",
             data: JSON.stringify(data)
         }).done(() => {
             updateInventory();
