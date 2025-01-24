@@ -98,7 +98,14 @@ export const handlePurchase = async (
                     const inventory = await getInventory(accountId);
                     const affiliation = inventory.Affiliations.find(x => x.Tag == syndicateTag)!;
                     affiliation.FreeFavorsUsed ??= [];
-                    affiliation.FreeFavorsUsed.push(affiliation.FreeFavorsEarned![affiliation.FreeFavorsUsed.length]);
+                    const lastTitle = affiliation.FreeFavorsEarned![affiliation.FreeFavorsUsed.length];
+                    affiliation.FreeFavorsUsed.push(lastTitle);
+                    purchaseResponse.FreeFavorsUsed = [
+                        {
+                            Tag: syndicateTag,
+                            Title: lastTitle
+                        }
+                    ];
                     await inventory.save();
                 } else {
                     const syndicate = ExportSyndicates[syndicateTag];

@@ -34,12 +34,16 @@ export type IInventoryChanges = {
         IBinChanges | number | object[] | IInfestedFoundryClient
     >;
 
+export interface IAffiliationMods {
+    Tag: string;
+    Standing?: number;
+    Title?: number;
+}
+
 export interface IPurchaseResponse {
     InventoryChanges: IInventoryChanges;
-    Standing?: {
-        Tag: string;
-        Standing: number;
-    }[];
+    Standing?: IAffiliationMods[];
+    FreeFavorsUsed?: IAffiliationMods[];
     BoosterPackItems?: string;
 }
 
