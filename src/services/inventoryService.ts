@@ -949,10 +949,9 @@ export const addMissionComplete = (inventory: TInventoryDatabaseDocument, { Tag,
     }
 };
 
-export const addBooster = async (ItemType: string, time: number, accountId: string): Promise<void> => {
+export const addBooster = (ItemType: string, time: number, inventory: TInventoryDatabaseDocument): void => {
     const currentTime = Math.floor(Date.now() / 1000) - 129600; // Value is wrong without 129600. Figure out why, please. :)
 
-    const inventory = await getInventory(accountId);
     const { Boosters } = inventory;
 
     const itemIndex = Boosters.findIndex(booster => booster.ItemType === ItemType);
@@ -964,8 +963,6 @@ export const addBooster = async (ItemType: string, time: number, accountId: stri
     } else {
         Boosters.push({ ItemType, ExpiryDate: currentTime + time });
     }
-
-    await inventory.save();
 };
 
 export const updateSyndicate = (

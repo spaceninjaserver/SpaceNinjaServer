@@ -27,18 +27,17 @@ export const getVoidProjectionRewardsController: RequestHandler = async (req, re
         logger.debug(`relic rolled`, reward);
         response.ParticipantInfo.Reward = reward.type;
 
-        // Remove relic
         const inventory = await getInventory(accountId);
+        // Remove relic
         addMiscItems(inventory, [
             {
                 ItemType: data.ParticipantInfo.VoidProjection,
                 ItemCount: -1
             }
         ]);
-        await inventory.save();
-
         // Give reward
-        await handleStoreItemAcquisition(reward.type, accountId, reward.itemCount);
+        await handleStoreItemAcquisition(reward.type, inventory, reward.itemCount);
+        await inventory.save();
     }
     res.json(response);
 };
