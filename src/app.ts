@@ -16,8 +16,8 @@ import { webuiRouter } from "@/src/routes/webui";
 const app = express();
 
 app.use(bodyParser.raw());
-app.use(express.json());
-app.use(bodyParser.text({ limit: "4mb" }));
+app.use(express.json({ limit: "4mb" }));
+app.use(bodyParser.text());
 app.use(requestLogger);
 
 app.use("/api", apiRouter);

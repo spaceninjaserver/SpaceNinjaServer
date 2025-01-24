@@ -7,7 +7,7 @@ import { RequestHandler } from "express";
 
 export const importController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const request = JSON.parse(String(req.body)) as IImportRequest;
+    const request = req.body as IImportRequest;
 
     const inventory = await getInventory(accountId);
     importInventory(inventory, request.inventory);

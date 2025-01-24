@@ -1094,7 +1094,7 @@ function doImport() {
     revalidateAuthz(() => {
         $.post({
             url: "/custom/import?" + window.authz,
-            contentType: "text/plain",
+            contentType: "application/json",
             data: JSON.stringify({
                 inventory: JSON.parse($("#import-inventory").val())
             })
