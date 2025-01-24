@@ -70,10 +70,10 @@ function getEntriesUnsafe<T extends object>(object: T): Entries<T> {
     return Object.entries(object) as Entries<T>;
 }
 
-type TMissionInventoryUpdateKeys = keyof IMissionInventoryUpdateRequest;
-const ignoredInventoryUpdateKeys = ["FpsAvg", "FpsMax", "FpsMin", "FpsSamples"] satisfies TMissionInventoryUpdateKeys[]; // for keys with no meaning for this server
-type TignoredInventoryUpdateKeys = (typeof ignoredInventoryUpdateKeys)[number];
-const knownUnhandledKeys: readonly string[] = ["test"] as const; // for unimplemented but important keys
+//type TMissionInventoryUpdateKeys = keyof IMissionInventoryUpdateRequest;
+//const ignoredInventoryUpdateKeys = ["FpsAvg", "FpsMax", "FpsMin", "FpsSamples"] satisfies TMissionInventoryUpdateKeys[]; // for keys with no meaning for this server
+//type TignoredInventoryUpdateKeys = (typeof ignoredInventoryUpdateKeys)[number];
+//const knownUnhandledKeys: readonly string[] = ["test"] as const; // for unimplemented but important keys
 
 export const addMissionInventoryUpdates = (
     inventory: HydratedDocument<IInventoryDatabase, InventoryDocumentProps>,

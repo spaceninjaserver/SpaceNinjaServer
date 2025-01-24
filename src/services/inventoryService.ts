@@ -18,7 +18,6 @@ import {
     InventorySlot,
     IWeaponSkinClient,
     TEquipmentKey,
-    equipmentKeys,
     IFusionTreasure,
     IDailyAffiliations,
     IInventoryDatabase
@@ -74,29 +73,29 @@ export const createInventory = async (
                 { ItemCount: 1, ItemType: "/Lotus/Types/Restoratives/LisetAutoHack" }
             ];
 
-            const vorsPrizeRewards = [
-                // Vor's Prize rewards
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarHealthMaxMod" },
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarShieldMaxMod" },
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarAbilityRangeMod" },
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarAbilityStrengthMod" },
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarAbilityDurationMod" },
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarPickupBonusMod" },
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarPowerMaxMod" },
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarEnemyRadarMod" },
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Melee/WeaponFireRateMod" },
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Melee/WeaponMeleeDamageMod" },
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Rifle/WeaponFactionDamageCorpus" },
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Rifle/WeaponFactionDamageGrineer" },
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod" },
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Pistol/WeaponFireDamageMod" },
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Pistol/WeaponElectricityDamageMod" },
-                { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod" },
-                { ItemCount: 1, ItemType: "/Lotus/Types/Recipes/Weapons/BurstonRifleBlueprint" },
-                { ItemCount: 1, ItemType: "/Lotus/Types/Items/MiscItems/Morphic" },
-                { ItemCount: 400, ItemType: "/Lotus/Types/Items/MiscItems/PolymerBundle" },
-                { ItemCount: 150, ItemType: "/Lotus/Types/Items/MiscItems/AlloyPlate" }
-            ];
+            // const vorsPrizeRewards = [
+            //     // Vor's Prize rewards
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarHealthMaxMod" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarShieldMaxMod" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarAbilityRangeMod" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarAbilityStrengthMod" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarAbilityDurationMod" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarPickupBonusMod" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarPowerMaxMod" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarEnemyRadarMod" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Melee/WeaponFireRateMod" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Melee/WeaponMeleeDamageMod" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Rifle/WeaponFactionDamageCorpus" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Rifle/WeaponFactionDamageGrineer" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Pistol/WeaponFireDamageMod" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Pistol/WeaponElectricityDamageMod" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Types/Recipes/Weapons/BurstonRifleBlueprint" },
+            //     { ItemCount: 1, ItemType: "/Lotus/Types/Items/MiscItems/Morphic" },
+            //     { ItemCount: 400, ItemType: "/Lotus/Types/Items/MiscItems/PolymerBundle" },
+            //     { ItemCount: 150, ItemType: "/Lotus/Types/Items/MiscItems/AlloyPlate" }
+            // ];
             for (const equipment of defaultEquipment) {
                 await addItem(inventory, equipment.ItemType, equipment.ItemCount);
             }
