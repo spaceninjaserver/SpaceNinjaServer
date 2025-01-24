@@ -63,7 +63,8 @@ import {
     IOperatorConfigDatabase,
     IPolarity,
     IEquipmentDatabase,
-    IArchonCrystalUpgrade
+    IArchonCrystalUpgrade,
+    IEquipmentClient
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
 import { EquipmentSelectionSchema } from "./loadoutModel";
@@ -121,10 +122,14 @@ const polaritySchema = new Schema<IPolarity>(
     { _id: false }
 );
 
-const abilityOverrideSchema = new Schema<IAbilityOverride>({
-    Ability: String,
-    Index: Number
-});
+const abilityOverrideSchema = new Schema<IAbilityOverride>(
+    {
+        Ability: String,
+        Index: Number
+    },
+    { _id: false }
+);
+
 export const colorSchema = new Schema<IColor>(
     {
         t0: Number,
@@ -257,6 +262,13 @@ EquipmentSchema.set("toJSON", {
     transform(_document, returnedObject) {
         delete returnedObject._id;
         delete returnedObject.__v;
+
+        const db = returnedObject as IEquipmentDatabase;
+        const client = returnedObject as IEquipmentClient;
+
+        if (db.InfestationDate) {
+            client.InfestationDate = toMongoDate(db.InfestationDate);
+        }
     }
 });
 
@@ -959,8 +971,6 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         XPInfo: [TypeXPItemSchema],
         //Mastery Rank next availability
         TrainingDate: { type: Date, default: new Date(0) },
-        //Retries rank up(3 time)
-        TrainingRetriesLeft: Number,
 
         //you saw last played Region when you opened the star map
         LastRegionPlayed: String,
@@ -1111,7 +1121,6 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         ChallengesFixVersion: Number,
         PlayedParkourTutorial: Boolean,
         SubscribedToEmailsPersonalized: Number,
-        LastInventorySync: Schema.Types.Mixed, // this should be Schema.Types.ObjectId, but older inventories may break with that.
         ActiveLandscapeTraps: [Schema.Types.Mixed],
         RepVotes: [Schema.Types.Mixed],
         LeagueTickets: [Schema.Types.Mixed],
@@ -1141,7 +1150,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         DialogueHistory: dialogueHistorySchema
     },
-    { timestamps: { createdAt: "Created" } }
+    { timestamps: { createdAt: "Created", updatedAt: false } }
 );
 
 inventorySchema.set("toJSON", {

@@ -209,7 +209,6 @@ export interface IInventoryClient extends IDailyAffiliations {
     QuestKeys: IQuestKeyClient[];
     FlavourItems: IFlavourItem[];
     Scoops: IEquipmentDatabase[];
-    TrainingRetriesLeft: number;
     LoadOutPresets: ILoadOutPresets;
     CurrentLoadOutIds: IOid[]; // we store it in the database using this representation as well :/
     Missions: IMission[];
