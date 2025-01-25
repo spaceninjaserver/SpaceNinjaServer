@@ -172,7 +172,7 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
             });
         }
     }
-    for (const key of ["OperatorLoadOuts", "AdultOperatorLoadOuts"] as const) {
+    for (const key of ["AdultOperatorLoadOuts", "OperatorLoadOuts", "KahlLoadOuts"] as const) {
         if (client[key] !== undefined) {
             replaceArray<IOperatorConfigDatabase>(db[key], client[key].map(convertOperatorConfig));
         }

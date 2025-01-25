@@ -28,9 +28,9 @@ export interface IInventoryDatabase
         | "Upgrades"
         | "CrewShipSalvagedWeaponSkins"
         | "CrewShipWeaponSkins"
-        | "OperatorLoadOuts"
         | "AdultOperatorLoadOuts"
-        | "CrewShips"
+        | "OperatorLoadOuts"
+        | "KahlLoadOuts"
         | "InfestedFoundry"
         | "DialogueHistory"
         | TEquipmentKey
@@ -49,8 +49,9 @@ export interface IInventoryDatabase
     Upgrades: IUpgradeDatabase[];
     CrewShipSalvagedWeaponSkins: IUpgradeDatabase[];
     CrewShipWeaponSkins: IUpgradeDatabase[];
-    OperatorLoadOuts: IOperatorConfigDatabase[];
     AdultOperatorLoadOuts: IOperatorConfigDatabase[];
+    OperatorLoadOuts: IOperatorConfigDatabase[];
+    KahlLoadOuts: IOperatorConfigDatabase[];
     InfestedFoundry?: IInfestedFoundryDatabase;
     DialogueHistory?: IDialogueHistoryDatabase;
 
@@ -196,10 +197,12 @@ export interface IInventoryClient extends IDailyAffiliations {
     MechSuits: IEquipmentClient[];
     CrewShipHarnesses: IEquipmentClient[];
     KubrowPets: IEquipmentClient[];
+    AdultOperatorLoadOuts: IOperatorConfigClient[];
+    OperatorLoadOuts: IOperatorConfigClient[];
+    KahlLoadOuts: IOperatorConfigClient[];
 
     DuviriInfo: IDuviriInfo;
     Mailbox: IMailbox;
-    KahlLoadOuts: IEquipmentDatabase[];
     SubscribedToEmails: number;
     Created: IMongoDate;
     RewardSeed: number;
@@ -304,7 +307,6 @@ export interface IInventoryClient extends IDailyAffiliations {
     BountyScore: number;
     ChallengeInstanceStates: IChallengeInstanceState[];
     LoginMilestoneRewards: string[];
-    OperatorLoadOuts: IOperatorConfigClient[];
     RecentVendorPurchases: Array<number | string>;
     NodeIntrosCompleted: string[];
     GuildId?: IOid;
@@ -329,7 +331,6 @@ export interface IInventoryClient extends IDailyAffiliations {
     BlessingCooldown: IMongoDate;
     CrewShipRawSalvage: IConsumable[];
     CrewMembers: ICrewMember[];
-    AdultOperatorLoadOuts: IOperatorConfigClient[];
     LotusCustomization: ILotusCustomization;
     UseAdultOperatorLoadout?: boolean;
     NemesisAbandonedRewards: string[];

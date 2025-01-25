@@ -37,8 +37,9 @@ export const handleInventoryItemConfigChange = async (
         }
         // non-empty is a change in loadout(or suit...)
         switch (equipmentName) {
+            case "AdultOperatorLoadOuts":
             case "OperatorLoadOuts":
-            case "AdultOperatorLoadOuts": {
+            case "KahlLoadOuts": {
                 const operatorConfig = equipment as IOperatorConfigEntry;
                 const operatorLoadout = inventory[equipmentName];
                 logger.debug(`operator loadout received ${equipmentName} `, operatorConfig);
@@ -164,7 +165,6 @@ export const handleInventoryItemConfigChange = async (
                     });
                 }
             }
-            //case "KahlLoadOuts": not sure yet how to handle kahl: it is not sent in inventory
         }
     }
     await inventory.save();

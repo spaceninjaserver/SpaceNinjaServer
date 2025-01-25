@@ -27,9 +27,9 @@ export interface ISaveLoadoutRequest {
     Horses: IItemEntry;
     DrifterMelee: IItemEntry;
     UpgradeVer: number;
-    OperatorLoadOuts: IOperatorConfigEntry;
     AdultOperatorLoadOuts: IOperatorConfigEntry;
-    KahlLoadOuts: IItemEntry;
+    OperatorLoadOuts: IOperatorConfigEntry;
+    KahlLoadOuts: IOperatorConfigEntry;
     CrewShips: IItemEntry;
     CurrentLoadOutIds: IOid[];
     ValidNewLoadoutId: string;

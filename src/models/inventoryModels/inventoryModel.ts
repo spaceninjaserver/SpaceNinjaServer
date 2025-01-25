@@ -934,6 +934,8 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         OperatorLoadOuts: [operatorConfigSchema],
         //Drifter
         AdultOperatorLoadOuts: [operatorConfigSchema],
+        // Kahl
+        KahlLoadOuts: [operatorConfigSchema],
 
         //LandingCraft like Liset
         Ships: { type: [Schema.Types.ObjectId], ref: "Ships" },
@@ -1111,7 +1113,6 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Unknown and system
         DuviriInfo: DuviriInfoSchema,
         Mailbox: MailboxSchema,
-        KahlLoadOuts: [Schema.Types.Mixed],
         HandlerPoints: Number,
         ChallengesFixVersion: Number,
         PlayedParkourTutorial: Boolean,
@@ -1177,6 +1178,7 @@ export type InventoryDocumentProps = {
     Boosters: Types.DocumentArray<IBooster>;
     OperatorLoadOuts: Types.DocumentArray<IOperatorConfigDatabase>;
     AdultOperatorLoadOuts: Types.DocumentArray<IOperatorConfigDatabase>;
+    KahlLoadOuts: Types.DocumentArray<IOperatorConfigDatabase>;
     PendingRecipes: Types.DocumentArray<IPendingRecipeDatabase>;
     WeaponSkins: Types.DocumentArray<IWeaponSkinDatabase>;
 } & { [K in TEquipmentKey]: Types.DocumentArray<IEquipmentDatabase> };
