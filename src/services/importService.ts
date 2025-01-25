@@ -49,7 +49,7 @@ const convertEquipment = (client: IEquipmentClient): IEquipmentDatabase => {
         Expiry: convertOptionalDate(client.Expiry),
         UpgradesExpiry: convertOptionalDate(client.UpgradesExpiry),
         CrewMembers: client.CrewMembers ? convertCrewShipMembers(client.CrewMembers) : undefined,
-        Details: client.Details ? convertKubrowDetalis(client.Details) : undefined,
+        Details: client.Details ? convertKubrowDetails(client.Details) : undefined,
         /*  fix for
             "attcol": [],
             "sigcol": [],
@@ -142,7 +142,7 @@ const convertDialogueHistory = (client: IDialogueHistoryClient): IDialogueHistor
     };
 };
 
-const convertKubrowDetalis = (client: IKubrowPetDetailsClient): IKubrowPetDetailsDatabase => {
+const convertKubrowDetails = (client: IKubrowPetDetailsClient): IKubrowPetDetailsDatabase => {
     return {
         ...client,
         HatchDate: convertDate(client.HatchDate)
