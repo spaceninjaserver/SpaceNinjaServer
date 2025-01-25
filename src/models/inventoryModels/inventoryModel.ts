@@ -1111,6 +1111,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Unknown and system
         DuviriInfo: DuviriInfoSchema,
         Mailbox: MailboxSchema,
+        KahlLoadOuts: [Schema.Types.Mixed],
         HandlerPoints: Number,
         ChallengesFixVersion: Number,
         PlayedParkourTutorial: Boolean,
