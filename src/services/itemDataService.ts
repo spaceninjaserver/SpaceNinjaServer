@@ -44,21 +44,6 @@ export type WeaponTypeInternal =
     | "OperatorAmps"
     | "SpecialItems";
 
-export const getWeaponType = (weaponName: string): WeaponTypeInternal => {
-    const weaponInfo = ExportWeapons[weaponName];
-
-    if (!weaponInfo) {
-        throw new Error(`unknown weapon ${weaponName}`);
-    }
-
-    // Many non-weapon items are "Pistols" in Public Export, so some duck typing is needed.
-    if (weaponInfo.totalDamage == 0) {
-        throw new Error(`${weaponName} doesn't quack like a weapon`);
-    }
-
-    return weaponInfo.productCategory;
-};
-
 export const getRecipe = (uniqueName: string): IRecipe | undefined => {
     return ExportRecipes[uniqueName];
 };

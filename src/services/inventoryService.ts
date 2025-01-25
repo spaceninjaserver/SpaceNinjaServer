@@ -29,7 +29,7 @@ import {
     IUpdateChallengeProgressRequest
 } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
-import { getWeaponType, getExalted, getKeyChainItems } from "@/src/services/itemDataService";
+import { getExalted, getKeyChainItems } from "@/src/services/itemDataService";
 import { IEquipmentClient, IItemConfig } from "../types/inventoryTypes/commonInventoryTypes";
 import {
     ExportArcanes,
@@ -40,6 +40,7 @@ import {
     ExportResources,
     ExportSentinels,
     ExportUpgrades,
+    ExportWeapons,
     TStandingLimitBin
 } from "warframe-public-export-plus";
 import { createShip } from "./shipService";
@@ -288,6 +289,20 @@ export const addItem = async (
             }
         };
     }
+    if (typeName in ExportWeapons) {
+        const weapon = ExportWeapons[typeName];
+        // Many non-weapon items are "Pistols" in Public Export, so some duck typing is needed.
+        if (weapon.totalDamage != 0) {
+            const inventoryChanges = addEquipment(inventory, weapon.productCategory, typeName);
+            updateSlots(inventory, InventorySlot.WEAPONS, 0, 1);
+            return {
+                InventoryChanges: {
+                    ...inventoryChanges,
+                    WeaponBin: { count: 1, platinum: 0, Slots: -1 }
+                }
+            };
+        }
+    }
     if (typeName in creditBundles) {
         const creditsTotal = creditBundles[typeName] * quantity;
         inventory.RegularCredits += creditsTotal;
@@ -355,17 +370,6 @@ export const addItem = async (
                 }
             }
             break;
-        case "Weapons": {
-            const weaponType = getWeaponType(typeName);
-            const inventoryChanges = addEquipment(inventory, weaponType, typeName);
-            updateSlots(inventory, InventorySlot.WEAPONS, 0, 1);
-            return {
-                InventoryChanges: {
-                    ...inventoryChanges,
-                    WeaponBin: { count: 1, platinum: 0, Slots: -1 }
-                }
-            };
-        }
         case "Upgrades": {
             // Needed to add Traumatic Peculiar
             const changes = [
