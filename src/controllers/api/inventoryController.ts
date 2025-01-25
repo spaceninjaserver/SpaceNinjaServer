@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import { getAccountForRequest } from "@/src/services/loginService";
-import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
+import { Inventory, TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { config } from "@/src/services/configService";
 import allDialogue from "@/static/fixed_responses/allDialogue.json";
 import { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
@@ -51,6 +51,13 @@ export const inventoryController: RequestHandler = async (request, response) => 
         await inventory.save();
     }
 
+    response.json(await getInventoryResponse(inventory, "xpBasedLevelCapDisabled" in request.query));
+};
+
+export const getInventoryResponse = async (
+    inventory: TInventoryDatabaseDocument,
+    xpBasedLevelCapDisabled: boolean
+): Promise<IInventoryClient> => {
     const inventoryWithLoadOutPresets = await inventory.populate<{ LoadOutPresets: ILoadoutDatabase }>(
         "LoadOutPresets"
     );
@@ -59,15 +66,6 @@ export const inventoryController: RequestHandler = async (request, response) => 
     );
     const inventoryResponse = inventoryWithLoadOutPresetsAndShips.toJSON<IInventoryClient>();
 
-    applyInventoryResponseOverrides(inventoryResponse, "xpBasedLevelCapDisabled" in request.query);
-
-    response.json(inventoryResponse);
-};
-
-export const applyInventoryResponseOverrides = (
-    inventoryResponse: IInventoryClient,
-    xpBasedLevelCapDisabled: boolean
-): void => {
     if (config.infiniteCredits) {
         inventoryResponse.RegularCredits = 999999999;
     }
@@ -260,6 +258,8 @@ export const applyInventoryResponseOverrides = (
     inventoryResponse.HasOwnedVoidProjectionsPreviously = true;
 
     inventoryResponse.LastInventorySync = toOid(new Types.ObjectId());
+
+    return inventoryResponse;
 };
 
 const addString = (arr: string[], str: string): void => {
