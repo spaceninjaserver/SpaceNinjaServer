@@ -715,7 +715,7 @@ const traitsSchema = new Schema<ITraits>(
     { _id: false }
 );
 
-const detalisSchema = new Schema<IKubrowPetDetailsDatabase>(
+const detailsSchema = new Schema<IKubrowPetDetailsDatabase>(
     {
         Name: String,
         IsPuppy: Boolean,
@@ -731,7 +731,7 @@ const detalisSchema = new Schema<IKubrowPetDetailsDatabase>(
     { _id: false }
 );
 
-detalisSchema.set("toJSON", {
+detailsSchema.set("toJSON", {
     transform(_doc, returnedObject) {
         delete returnedObject.__v;
 
@@ -772,7 +772,7 @@ const EquipmentSchema = new Schema<IEquipmentDatabase>(
         Customization: crewShipCustomizationSchema,
         RailjackImage: FlavourItemSchema,
         CrewMembers: crewShipMembersSchema,
-        Details: detalisSchema
+        Details: detailsSchema
     },
     { id: false }
 );
