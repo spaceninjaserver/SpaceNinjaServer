@@ -796,7 +796,7 @@ EquipmentSchema.set("toJSON", {
     }
 });
 
-const equipmentFields: Record<string, any> = {};
+const equipmentFields: Record<string, { type: (typeof EquipmentSchema)[] }> = {};
 
 equipmentKeys.forEach(key => {
     equipmentFields[key] = { type: [EquipmentSchema] };

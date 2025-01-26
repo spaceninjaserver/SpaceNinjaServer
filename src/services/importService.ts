@@ -50,12 +50,6 @@ const convertEquipment = (client: IEquipmentClient): IEquipmentDatabase => {
         UpgradesExpiry: convertOptionalDate(client.UpgradesExpiry),
         CrewMembers: client.CrewMembers ? convertCrewShipMembers(client.CrewMembers) : undefined,
         Details: client.Details ? convertKubrowDetails(client.Details) : undefined,
-        /*  fix for
-            "attcol": [],
-            "sigcol": [],
-            "eyecol": [],
-            "facial": [],
-            in data from aleca */
         Configs: client.Configs
             ? client.Configs.map(obj =>
                   Object.fromEntries(
