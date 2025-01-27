@@ -6,6 +6,7 @@ import { equipmentKeys, IInventoryDatabase, TEquipmentKey } from "@/src/types/in
 import {
     addChallenges,
     addConsumables,
+    addFocusXpIncreases,
     addFusionTreasures,
     addGearExpByCategory,
     addItem,
@@ -143,6 +144,10 @@ export const addMissionInventoryUpdates = (
                     fusionPoints += fusionPointsTotal;
                 }
                 inventoryChanges.FusionPoints = fusionPoints;
+                break;
+            }
+            case "FocusXpIncreases": {
+                addFocusXpIncreases(inventory, value);
                 break;
             }
             default:
