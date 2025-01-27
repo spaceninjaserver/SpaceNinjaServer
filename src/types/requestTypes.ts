@@ -72,6 +72,7 @@ export type IMissionInventoryUpdateRequest = {
     FpsMax: number;
     FpsSamples: number;
     EvolutionProgress?: IEvolutionProgress[];
+    FocusXpIncreases?: number[];
 } & {
     [K in TEquipmentKey]?: IEquipmentClient[];
 };

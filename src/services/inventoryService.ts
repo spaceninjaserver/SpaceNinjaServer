@@ -909,6 +909,30 @@ export const addFusionTreasures = (
     });
 };
 
+export const addFocusXpIncreases = (inventory: TInventoryDatabaseDocument, focusXpPlus: number[] | undefined): void => {
+    enum FocusType {
+        AP_UNIVERSAL,
+        AP_ATTACK,
+        AP_DEFENSE,
+        AP_TACTIC,
+        AP_POWER,
+        AP_PRECEPT,
+        AP_FUSION,
+        AP_WARD,
+        AP_UMBRA,
+        AP_ANY
+    }
+
+    if (focusXpPlus) {
+        inventory.FocusXP ??= { AP_ATTACK: 0, AP_DEFENSE: 0, AP_TACTIC: 0, AP_POWER: 0, AP_WARD: 0 };
+        inventory.FocusXP.AP_ATTACK += focusXpPlus[FocusType.AP_ATTACK];
+        inventory.FocusXP.AP_DEFENSE += focusXpPlus[FocusType.AP_DEFENSE];
+        inventory.FocusXP.AP_TACTIC += focusXpPlus[FocusType.AP_TACTIC];
+        inventory.FocusXP.AP_POWER += focusXpPlus[FocusType.AP_POWER];
+        inventory.FocusXP.AP_WARD += focusXpPlus[FocusType.AP_WARD];
+    }
+};
+
 export const updateChallengeProgress = async (
     challenges: IUpdateChallengeProgressRequest,
     accountId: string
