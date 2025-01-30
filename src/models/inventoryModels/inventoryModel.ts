@@ -7,7 +7,7 @@ import {
     IBooster,
     IInventoryClient,
     ISlots,
-    IMailbox,
+    IMailboxDatabase,
     IDuviriInfo,
     IPendingRecipe as IPendingRecipeDatabase,
     IPendingRecipeResponse,
@@ -53,7 +53,8 @@ import {
     IUpgradeDatabase,
     ICrewShipDatabase,
     ICrewShipMemberDatabase,
-    ICrewShipMemberClient
+    ICrewShipMemberClient,
+    IMailboxClient
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -343,13 +344,9 @@ FlavourItemSchema.set("toJSON", {
     }
 });
 
-//  "Mailbox": { "LastInboxId": { "$oid": "123456780000000000000000" } }
-const MailboxSchema = new Schema<IMailbox>(
+const MailboxSchema = new Schema<IMailboxDatabase>(
     {
-        LastInboxId: {
-            type: Schema.Types.ObjectId,
-            set: (v: IMailbox["LastInboxId"]): string => v.$oid.toString()
-        }
+        LastInboxId: Schema.Types.ObjectId
     },
     { id: false, _id: false }
 );
@@ -357,8 +354,7 @@ const MailboxSchema = new Schema<IMailbox>(
 MailboxSchema.set("toJSON", {
     transform(_document, returnedObject) {
         delete returnedObject.__v;
-        //TODO: there is a lot of any here
-        returnedObject.LastInboxId = toOid(returnedObject.LastInboxId as Types.ObjectId);
+        (returnedObject as IMailboxClient).LastInboxId = toOid(returnedObject.LastInboxId);
     }
 });
 

@@ -11,6 +11,29 @@ export interface IAccountAndLoginResponseCommons {
     Nonce: number;
 }
 
+export interface IDatabaseAccount extends IAccountAndLoginResponseCommons {
+    email: string;
+    password: string;
+    LastLoginDay?: number;
+    LatestEventMessageDate: Date;
+}
+
+// Includes virtual ID
+export interface IDatabaseAccountJson extends IDatabaseAccount {
+    id: string;
+}
+
+export interface ILoginRequest {
+    email: string;
+    password: string;
+    time: number;
+    s: string;
+    lang: string;
+    date: number;
+    ClientType: string;
+    PS: string;
+}
+
 export interface ILoginResponse extends IAccountAndLoginResponseCommons {
     id: string;
     Groups: IGroup[];
@@ -23,29 +46,7 @@ export interface ILoginResponse extends IAccountAndLoginResponseCommons {
     HUB: string;
 }
 
-// Includes virtual ID
-export interface IDatabaseAccountJson extends IDatabaseAccount {
-    id: string;
-}
-
 export interface IGroup {
     experiment: string;
     experimentGroup: string;
-}
-
-export interface IDatabaseAccount extends IAccountAndLoginResponseCommons {
-    email: string;
-    password: string;
-    LastLoginDay?: number;
-}
-
-export interface ILoginRequest {
-    email: string;
-    password: string;
-    time: number;
-    s: string;
-    lang: string;
-    date: number;
-    ClientType: string;
-    PS: string;
 }

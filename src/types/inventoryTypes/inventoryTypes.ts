@@ -37,10 +37,10 @@ export interface IInventoryDatabase
     > {
     accountOwnerId: Types.ObjectId;
     Created: Date;
-    TrainingDate: Date; // TrainingDate changed from IMongoDate to Date
+    TrainingDate: Date;
     LoadOutPresets: Types.ObjectId; // LoadOutPresets changed from ILoadOutPresets to Types.ObjectId for population
-    Mailbox: Types.ObjectId; // Mailbox changed from IMailbox to Types.ObjectId
-    GuildId?: Types.ObjectId; // GuildId changed from ?IOid to ?Types.ObjectId
+    Mailbox?: IMailboxDatabase;
+    GuildId?: Types.ObjectId;
     PendingRecipes: IPendingRecipe[];
     QuestKeys: IQuestKeyDatabase[];
     BlessingCooldown: Date;
@@ -107,8 +107,12 @@ export interface IDuviriInfo {
     NumCompletions: number;
 }
 
-export interface IMailbox {
+export interface IMailboxClient {
     LastInboxId: IOid;
+}
+
+export interface IMailboxDatabase {
+    LastInboxId: Types.ObjectId;
 }
 
 export type TSolarMapRegion =
@@ -172,7 +176,7 @@ export interface IInventoryClient extends IDailyAffiliations {
     DrifterMelee: IEquipmentDatabase[];
     DrifterGuns: IEquipmentDatabase[];
     DuviriInfo: IDuviriInfo;
-    Mailbox: IMailbox;
+    Mailbox?: IMailboxClient;
     KahlLoadOuts: IEquipmentDatabase[];
     SubscribedToEmails: number;
     Created: IMongoDate;
@@ -210,7 +214,7 @@ export interface IInventoryClient extends IDailyAffiliations {
     FlavourItems: IFlavourItem[];
     Scoops: IEquipmentDatabase[];
     LoadOutPresets: ILoadOutPresets;
-    CurrentLoadOutIds: IOid[]; // we store it in the database using this representation as well :/
+    CurrentLoadOutIds: IOid[]; //TODO: we store it in the database using this representation as well :/
     Missions: IMission[];
     RandomUpgradesIdentified?: number;
     LastRegionPlayed: TSolarMapRegion;

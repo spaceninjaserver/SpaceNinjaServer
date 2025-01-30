@@ -470,6 +470,18 @@ export const addItem = async (
     throw new Error(errorMessage);
 };
 
+export const addItems = async (
+    inventory: TInventoryDatabaseDocument,
+    items: ITypeCount[],
+    inventoryChanges: IInventoryChanges = {}
+): Promise<IInventoryChanges> => {
+    for (const item of items) {
+        const inventoryDelta = await addItem(inventory, item.ItemType, item.ItemCount);
+        combineInventoryChanges(inventoryChanges, inventoryDelta.InventoryChanges);
+    }
+    return inventoryChanges;
+};
+
 //TODO: maybe genericMethod for all the add methods, they share a lot of logic
 export const addSentinel = (
     inventory: TInventoryDatabaseDocument,

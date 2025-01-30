@@ -14,6 +14,7 @@ import { importController } from "@/src/controllers/custom/importController";
 
 import { getConfigDataController } from "@/src/controllers/custom/getConfigDataController";
 import { updateConfigDataController } from "@/src/controllers/custom/updateConfigDataController";
+import { createMessageController } from "@/src/controllers/custom/createMessageController";
 
 const customRouter = express.Router();
 
@@ -25,6 +26,7 @@ customRouter.get("/deleteAccount", deleteAccountController);
 customRouter.get("/renameAccount", renameAccountController);
 
 customRouter.post("/createAccount", createAccountController);
+customRouter.post("/createMessage", createMessageController);
 customRouter.post("/addItems", addItemsController);
 customRouter.post("/addXp", addXpController);
 customRouter.post("/import", importController);

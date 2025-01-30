@@ -252,6 +252,8 @@ export const inventoryController: RequestHandler = async (request, response) => 
 
     inventoryResponse.LastInventorySync = toOid(new Types.ObjectId());
 
+    inventoryResponse.Mailbox = { LastInboxId: { $oid: "679be1b66e1affa6d05e75d7" } };
+
     response.json(inventoryResponse);
 };
 
