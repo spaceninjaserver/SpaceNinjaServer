@@ -85,16 +85,19 @@ const messageSchema = new Schema<IMessageDatabase>(
         startDate: Date,
         endDate: Date,
         r: Boolean,
-        att: [String],
-        countedAtt: [typeCountSchema],
+        att: { type: [String], default: undefined },
+        countedAtt: { type: [typeCountSchema], default: undefined },
         transmission: String,
-        arg: [
-            {
-                Key: String,
-                Tag: String,
-                _id: false
-            }
-        ]
+        arg: {
+            type: [
+                {
+                    Key: String,
+                    Tag: String,
+                    _id: false
+                }
+            ],
+            default: undefined
+        }
     },
     { timestamps: { createdAt: "date", updatedAt: false }, id: false }
 );
