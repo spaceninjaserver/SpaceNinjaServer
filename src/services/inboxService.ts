@@ -3,7 +3,6 @@ import { getAccountForRequest } from "@/src/services/loginService";
 import { HydratedDocument } from "mongoose";
 import { Request } from "express";
 import messages from "@/static/fixed_responses/messages.json";
-import { getInventory } from "@/src/services/inventoryService";
 import { logger } from "@/src/utils/logger";
 
 export const getAllMessagesSorted = async (accountId: string): Promise<IMessageDatabase[]> => {

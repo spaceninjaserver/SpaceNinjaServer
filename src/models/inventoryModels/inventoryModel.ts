@@ -1,4 +1,4 @@
-import { Document, Model, Schema, Types, model } from "mongoose";
+import { Document, HydratedDocument, Model, Schema, Types, model } from "mongoose";
 import {
     IFlavourItem,
     IRawUpgrade,
@@ -353,8 +353,9 @@ const MailboxSchema = new Schema<IMailboxDatabase>(
 
 MailboxSchema.set("toJSON", {
     transform(_document, returnedObject) {
-        delete returnedObject.__v;
-        (returnedObject as IMailboxClient).LastInboxId = toOid(returnedObject.LastInboxId);
+        const mailboxDatabase = returnedObject as HydratedDocument<IMailboxDatabase, { __v?: number }>;
+        delete mailboxDatabase.__v;
+        (returnedObject as IMailboxClient).LastInboxId = toOid(mailboxDatabase.LastInboxId);
     }
 });
 

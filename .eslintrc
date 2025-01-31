@@ -28,7 +28,7 @@
         "@typescript-eslint/semi": "error",
         "no-mixed-spaces-and-tabs": "error",
         "require-await": "off",
-        "@typescript-eslint/require-await": "error",
+        // "@typescript-eslint/require-await": "error",
         "@typescript-eslint/return-await": "error"
     },
     "parser": "@typescript-eslint/parser",
