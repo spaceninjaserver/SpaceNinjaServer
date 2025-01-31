@@ -12,23 +12,26 @@ export interface IMessageClient extends Omit<IMessageDatabase, "_id" | "date" | 
     messageId: IOid;
 }
 
-export interface IMessageDatabase {
+export interface IMessageDatabase extends IMessage {
     ownerId: Types.ObjectId;
-    date: Date;
+    date: Date; //created at
     _id: Types.ObjectId;
+}
+
+export interface IMessage {
     sndr: string;
     msg: string;
     sub: string;
-    icon: string;
+    icon?: string;
     highPriority?: boolean;
     lowPrioNewPlayers?: boolean;
     startDate?: Date;
     endDate?: Date;
-    r?: boolean;
     att?: string[];
     countedAtt?: ITypeCount[];
     transmission?: string;
     arg?: Arg[];
+    r?: boolean;
 }
 
 export interface Arg {

@@ -45,7 +45,7 @@ import {
 } from "warframe-public-export-plus";
 import { createShip } from "./shipService";
 import { creditBundles, fusionBundles } from "@/src/services/missionInventoryUpdateService";
-import { IGiveKeyChainTriggeredItemsRequest } from "@/src/controllers/api/giveKeyChainTriggeredItemsController";
+import { IKeyChainRequest } from "@/src/controllers/api/giveKeyChainTriggeredItemsController";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
@@ -476,11 +476,16 @@ export const addItem = async (
 
 export const addItems = async (
     inventory: TInventoryDatabaseDocument,
-    items: ITypeCount[],
+    items: ITypeCount[] | string[],
     inventoryChanges: IInventoryChanges = {}
 ): Promise<IInventoryChanges> => {
+    let inventoryDelta;
     for (const item of items) {
-        const inventoryDelta = await addItem(inventory, item.ItemType, item.ItemCount);
+        if (typeof item === "string") {
+            inventoryDelta = await addItem(inventory, item);
+        } else {
+            inventoryDelta = await addItem(inventory, item.ItemType, item.ItemCount);
+        }
         combineInventoryChanges(inventoryChanges, inventoryDelta.InventoryChanges);
     }
     return inventoryChanges;
@@ -1048,7 +1053,7 @@ export const updateSyndicate = (
  */
 export const addKeyChainItems = async (
     inventory: TInventoryDatabaseDocument,
-    keyChainData: IGiveKeyChainTriggeredItemsRequest
+    keyChainData: IKeyChainRequest
 ): Promise<IInventoryChanges> => {
     const keyChainItems = getKeyChainItems(keyChainData);
 
@@ -1065,6 +1070,8 @@ export const addKeyChainItems = async (
         const inventoryChangesDelta = await addItem(inventory, item);
         combineInventoryChanges(inventoryChanges, inventoryChangesDelta.InventoryChanges);
     }
+
+    await addItems(inventory, nonStoreItems);
 
     return inventoryChanges;
 };

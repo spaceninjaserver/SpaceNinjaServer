@@ -1,6 +1,17 @@
-import { IInventoryDatabase, IQuestKeyDatabase } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IKeyChainRequest } from "@/src/controllers/api/giveKeyChainTriggeredItemsController";
+import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+import { IInventoryDatabase, IQuestKeyDatabase, IQuestStage } from "@/src/types/inventoryTypes/inventoryTypes";
 import { logger } from "@/src/utils/logger";
 import { HydratedDocument } from "mongoose";
+
+export interface IUpdateQuestRequest {
+    QuestKeys: Omit<IQuestKeyDatabase, "CompletionDate">[];
+    PS: string;
+    questCompletion: boolean;
+    PlayerShipEvents: unknown[];
+    crossPlaySetting: string;
+    DoQuestReward: boolean;
+}
 
 export const updateQuestKey = (
     inventory: HydratedDocument<IInventoryDatabase>,
@@ -24,11 +35,31 @@ export const updateQuestKey = (
     }
 };
 
-export interface IUpdateQuestRequest {
-    QuestKeys: Omit<IQuestKeyDatabase, "CompletionDate">[];
-    PS: string;
-    questCompletion: boolean;
-    PlayerShipEvents: unknown[];
-    crossPlaySetting: string;
-    DoQuestReward: boolean;
-}
+export const updateQuestStage = (
+    inventory: TInventoryDatabaseDocument,
+    { KeyChain, ChainStage }: IKeyChainRequest,
+    questStageUpdate: IQuestStage
+): void => {
+    const quest = inventory.QuestKeys.find(quest => quest.ItemType === KeyChain);
+
+    if (!quest) {
+        throw new Error(`Quest ${KeyChain} not found in QuestKeys`);
+    }
+
+    if (!quest.Progress) {
+        throw new Error(`Progress should always exist when giving keychain triggered items or messages`);
+    }
+
+    let questStage = quest.Progress[ChainStage];
+    console.log("questStage", questStage);
+
+    if (!questStage) {
+        const questStageIndex = quest.Progress.push(questStageUpdate) - 1;
+        if (questStageIndex !== ChainStage) {
+            throw new Error(`Quest stage index mismatch: ${questStageIndex} !== ${ChainStage}`);
+        }
+        return;
+    }
+
+    Object.assign(questStage, questStageUpdate);
+};

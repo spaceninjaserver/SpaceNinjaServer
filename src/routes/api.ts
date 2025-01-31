@@ -81,6 +81,7 @@ import { updateQuestController } from "@/src/controllers/api/updateQuestControll
 import { updateSessionGetController, updateSessionPostController } from "@/src/controllers/api/updateSessionController";
 import { updateThemeController } from "../controllers/api/updateThemeController";
 import { upgradesController } from "@/src/controllers/api/upgradesController";
+import { giveKeyChainTriggeredMessageController } from "@/src/controllers/api/giveKeyChainTriggeredMessageController";
 
 const apiRouter = express.Router();
 
@@ -136,6 +137,7 @@ apiRouter.post("/getAlliance.php", getAllianceController);
 apiRouter.post("/getVoidProjectionRewards.php", getVoidProjectionRewardsController);
 apiRouter.post("/gildWeapon.php", gildWeaponController);
 apiRouter.post("/giveKeyChainTriggeredItems.php", giveKeyChainTriggeredItemsController);
+apiRouter.post("/giveKeyChainTriggeredMessage.php", giveKeyChainTriggeredMessageController);
 apiRouter.post("/guildTech.php", guildTechController);
 apiRouter.post("/hostSession.php", hostSessionController);
 apiRouter.post("/infestedFoundry.php", infestedFoundryController);
