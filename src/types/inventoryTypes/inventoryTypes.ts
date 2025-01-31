@@ -33,6 +33,7 @@ export interface IInventoryDatabase
         | "KahlLoadOuts"
         | "InfestedFoundry"
         | "DialogueHistory"
+        | "KubrowPetEggs"
         | TEquipmentKey
     > {
     accountOwnerId: Types.ObjectId;
@@ -54,6 +55,7 @@ export interface IInventoryDatabase
     KahlLoadOuts: IOperatorConfigDatabase[];
     InfestedFoundry?: IInfestedFoundryDatabase;
     DialogueHistory?: IDialogueHistoryDatabase;
+    KubrowPetEggs?: IKubrowPetEggDatabase[];
 
     Suits: IEquipmentDatabase[];
     LongGuns: IEquipmentDatabase[];
@@ -267,7 +269,7 @@ export interface IInventoryClient extends IDailyAffiliations {
     TauntHistory?: ITaunt[];
     StoryModeChoice: string;
     PeriodicMissionCompletions: IPeriodicMissionCompletionDatabase[];
-    KubrowPetEggs: IKubrowPetEgg[];
+    KubrowPetEggs?: IKubrowPetEggClient[];
     LoreFragmentScans: ILoreFragmentScan[];
     EquippedEmotes: string[];
     PendingTrades: IPendingTrade[];
@@ -609,21 +611,22 @@ export interface IInvasionChainProgress {
     count: number;
 }
 
-export interface IKubrowPetEgg {
-    ItemType: KubrowPetEggItemType;
-    ExpirationDate: IMongoDate;
+export interface IKubrowPetEggClient {
+    ItemType: string;
+    ExpirationDate: IMongoDate; // seems to be set to 7 days ahead @ 0 UTC
     ItemId: IOid;
 }
 
-export enum KubrowPetEggItemType {
-    LotusTypesGameKubrowPetEggsKubrowEgg = "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg"
+export interface IKubrowPetEggDatabase {
+    ItemType: string;
+    _id: Types.ObjectId;
 }
 
 export interface IKubrowPetPrint {
     ItemType: KubrowPetPrintItemType;
     Name: string;
     IsMale: boolean;
-    Size: number;
+    Size: number; // seems to be 0.7 to 1.0
     DominantTraits: ITraits;
     RecessiveTraits: ITraits;
     ItemId: IOid;

@@ -20,7 +20,9 @@ import {
     TEquipmentKey,
     IFusionTreasure,
     IDailyAffiliations,
-    IInventoryDatabase
+    IInventoryDatabase,
+    IKubrowPetEggDatabase,
+    IKubrowPetEggClient
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate } from "../types/genericUpdate";
 import {
@@ -46,6 +48,7 @@ import {
 import { createShip } from "./shipService";
 import { creditBundles, fusionBundles } from "@/src/services/missionInventoryUpdateService";
 import { IGiveKeyChainTriggeredItemsRequest } from "@/src/controllers/api/giveKeyChainTriggeredItemsController";
+import { toOid } from "../helpers/inventoryHelpers";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
@@ -209,7 +212,20 @@ export const addItem = async (
         };
     }
     if (typeName in ExportResources) {
-        if (ExportResources[typeName].productCategory == "Ships") {
+        if (ExportResources[typeName].productCategory == "MiscItems") {
+            const miscItemChanges = [
+                {
+                    ItemType: typeName,
+                    ItemCount: quantity
+                } satisfies IMiscItem
+            ];
+            addMiscItems(inventory, miscItemChanges);
+            return {
+                InventoryChanges: {
+                    MiscItems: miscItemChanges
+                }
+            };
+        } else if (ExportResources[typeName].productCategory == "Ships") {
             const oid = await createShip(inventory.accountOwnerId, typeName);
             inventory.Ships.push(oid);
             return {
@@ -238,17 +254,24 @@ export const addItem = async (
                     ShipDecorations: changes
                 }
             };
-        } else {
-            const miscItemChanges = [
-                {
-                    ItemType: typeName,
-                    ItemCount: quantity
-                } satisfies IMiscItem
-            ];
-            addMiscItems(inventory, miscItemChanges);
+        } else if (ExportResources[typeName].productCategory == "KubrowPetEggs") {
+            const changes: IKubrowPetEggClient[] = [];
+            for (let i = 0; i != quantity; ++i) {
+                const egg: IKubrowPetEggDatabase = {
+                    ItemType: "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg",
+                    _id: new Types.ObjectId()
+                };
+                inventory.KubrowPetEggs ??= [];
+                inventory.KubrowPetEggs.push(egg);
+                changes.push({
+                    ItemType: egg.ItemType,
+                    ExpirationDate: { $date: { $numberLong: "2000000000000" } },
+                    ItemId: toOid(egg._id)
+                });
+            }
             return {
                 InventoryChanges: {
-                    MiscItems: miscItemChanges
+                    KubrowPetEggs: changes
                 }
             };
         }
