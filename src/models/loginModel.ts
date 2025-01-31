@@ -21,7 +21,7 @@ const databaseAccountSchema = new Schema<IDatabaseAccountJson>(
         TrackedSettings: { type: [String], default: [] },
         Nonce: { type: Number, default: 0 },
         LastLoginDay: { type: Number },
-        LatestEventMessageDate: { type: Date, required: true }
+        LatestEventMessageDate: { type: Date, default: 0 }
     },
     opts
 );
