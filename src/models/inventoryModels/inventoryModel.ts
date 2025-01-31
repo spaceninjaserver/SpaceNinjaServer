@@ -51,10 +51,14 @@ import {
     ICompletedDialogue,
     IDialogueClient,
     IUpgradeDatabase,
-    ICrewShipDatabase,
     ICrewShipMemberDatabase,
     ICrewShipMemberClient,
     IMailboxClient
+    TEquipmentKey,
+    equipmentKeys,
+    IKubrowPetDetailsDatabase,
+    ITraits,
+    IKubrowPetDetailsClient
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -221,55 +225,6 @@ const ArchonCrystalUpgradeSchema = new Schema<IArchonCrystalUpgrade>(
 ArchonCrystalUpgradeSchema.set("toJSON", {
     transform(_document, returnedObject) {
         delete returnedObject.__v;
-    }
-});
-
-const EquipmentSchema = new Schema<IEquipmentDatabase>(
-    {
-        ItemType: String,
-        Configs: [ItemConfigSchema],
-        UpgradeVer: Number,
-        XP: Number,
-        Features: Number,
-        Polarized: Number,
-        Polarity: [polaritySchema],
-        FocusLens: String,
-        ModSlotPurchases: Number,
-        CustomizationSlotPurchases: Number,
-        UpgradeType: String,
-        UpgradeFingerprint: String,
-        ItemName: String,
-        InfestationDate: Date,
-        InfestationDays: Number,
-        InfestationType: String,
-        ModularParts: { type: [String], default: undefined },
-        UnlockLevel: Number,
-        Expiry: Date,
-        SkillTree: String,
-        OffensiveUpgrade: String,
-        DefensiveUpgrade: String,
-        UpgradesExpiry: Date,
-        ArchonCrystalUpgrades: { type: [ArchonCrystalUpgradeSchema], default: undefined }
-    },
-    { id: false }
-);
-
-EquipmentSchema.virtual("ItemId").get(function () {
-    return { $oid: this._id.toString() } satisfies IOid;
-});
-
-EquipmentSchema.set("toJSON", {
-    virtuals: true,
-    transform(_document, returnedObject) {
-        delete returnedObject._id;
-        delete returnedObject.__v;
-
-        const db = returnedObject as IEquipmentDatabase;
-        const client = returnedObject as IEquipmentClient;
-
-        if (db.InfestationDate) {
-            client.InfestationDate = toMongoDate(db.InfestationDate);
-        }
     }
 });
 
@@ -502,31 +457,6 @@ const helminthResourceSchema = new Schema<IHelminthResource>(
     { _id: false }
 );
 
-const infestedFoundrySchema = new Schema<IInfestedFoundryDatabase>(
-    {
-        Name: String,
-        Resources: { type: [helminthResourceSchema], default: undefined },
-        Slots: Number,
-        XP: Number,
-        ConsumedSuits: { type: [consumedSchuitsSchema], default: undefined },
-        InvigorationIndex: Number,
-        InvigorationSuitOfferings: { type: [String], default: undefined },
-        InvigorationsApplied: Number,
-        LastConsumedSuit: { type: EquipmentSchema, default: undefined },
-        AbilityOverrideUnlockCooldown: Date
-    },
-    { _id: false }
-);
-
-infestedFoundrySchema.set("toJSON", {
-    transform(_doc, ret, _options) {
-        if (ret.AbilityOverrideUnlockCooldown) {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-            ret.AbilityOverrideUnlockCooldown = toMongoDate(ret.AbilityOverrideUnlockCooldown);
-        }
-    }
-});
-
 const questProgressSchema = new Schema<IQuestStage>({
     c: Number,
     i: Boolean,
@@ -712,26 +642,6 @@ const crewShipMembersSchema = new Schema<ICrewShipMembersDatabase>(
     { _id: false }
 );
 
-const crewShipSchema = new Schema<ICrewShipDatabase>({
-    ItemType: { type: String, required: true },
-    Configs: { type: [ItemConfigSchema], default: [] },
-    Weapon: { type: crewShipWeaponSchema, default: undefined },
-    Customization: { type: crewShipCustomizationSchema, default: undefined },
-    ItemName: { type: String, default: "" },
-    RailjackImage: { type: FlavourItemSchema, default: undefined },
-    CrewMembers: { type: crewShipMembersSchema, default: undefined }
-});
-crewShipSchema.virtual("ItemId").get(function () {
-    return { $oid: this._id.toString() };
-});
-crewShipSchema.set("toJSON", {
-    virtuals: true,
-    transform(_doc, ret, _options) {
-        delete ret._id;
-        delete ret.__v;
-    }
-});
-
 const dialogueGiftSchema = new Schema<IDialogueGift>(
     {
         Item: String,
@@ -786,6 +696,134 @@ const dialogueHistorySchema = new Schema<IDialogueHistoryDatabase>(
     { _id: false }
 );
 
+const traitsSchema = new Schema<ITraits>(
+    {
+        BaseColor: String,
+        SecondaryColor: String,
+        TertiaryColor: String,
+        AccentColor: String,
+        EyeColor: String,
+        FurPattern: String,
+        Personality: String,
+        BodyType: String,
+        Head: { type: String, required: false },
+        Tail: { type: String, required: false }
+    },
+    { _id: false }
+);
+
+const detailsSchema = new Schema<IKubrowPetDetailsDatabase>(
+    {
+        Name: String,
+        IsPuppy: Boolean,
+        HasCollar: Boolean,
+        PrintsRemaining: Number,
+        Status: String,
+        HatchDate: Date,
+        DominantTraits: traitsSchema,
+        RecessiveTraits: traitsSchema,
+        IsMale: Boolean,
+        Size: Number
+    },
+    { _id: false }
+);
+
+detailsSchema.set("toJSON", {
+    transform(_doc, returnedObject) {
+        delete returnedObject.__v;
+
+        const db = returnedObject as IKubrowPetDetailsDatabase;
+        const client = returnedObject as IKubrowPetDetailsClient;
+
+        client.HatchDate = toMongoDate(db.HatchDate);
+    }
+});
+
+const EquipmentSchema = new Schema<IEquipmentDatabase>(
+    {
+        ItemType: String,
+        Configs: [ItemConfigSchema],
+        UpgradeVer: { type: Number, default: 101 },
+        XP: { type: Number, default: 0 },
+        Features: Number,
+        Polarized: Number,
+        Polarity: [polaritySchema],
+        FocusLens: String,
+        ModSlotPurchases: Number,
+        CustomizationSlotPurchases: Number,
+        UpgradeType: String,
+        UpgradeFingerprint: String,
+        ItemName: String,
+        InfestationDate: Date,
+        InfestationDays: Number,
+        InfestationType: String,
+        ModularParts: { type: [String], default: undefined },
+        UnlockLevel: Number,
+        Expiry: Date,
+        SkillTree: String,
+        OffensiveUpgrade: String,
+        DefensiveUpgrade: String,
+        UpgradesExpiry: Date,
+        ArchonCrystalUpgrades: { type: [ArchonCrystalUpgradeSchema], default: undefined },
+        Weapon: crewShipWeaponSchema,
+        Customization: crewShipCustomizationSchema,
+        RailjackImage: FlavourItemSchema,
+        CrewMembers: crewShipMembersSchema,
+        Details: detailsSchema
+    },
+    { id: false }
+);
+
+EquipmentSchema.virtual("ItemId").get(function () {
+    return { $oid: this._id.toString() } satisfies IOid;
+});
+
+EquipmentSchema.set("toJSON", {
+    virtuals: true,
+    transform(_document, returnedObject) {
+        delete returnedObject._id;
+        delete returnedObject.__v;
+
+        const db = returnedObject as IEquipmentDatabase;
+        const client = returnedObject as IEquipmentClient;
+
+        if (db.InfestationDate) {
+            client.InfestationDate = toMongoDate(db.InfestationDate);
+        }
+    }
+});
+
+const equipmentFields: Record<string, { type: (typeof EquipmentSchema)[] }> = {};
+
+equipmentKeys.forEach(key => {
+    equipmentFields[key] = { type: [EquipmentSchema] };
+});
+
+const infestedFoundrySchema = new Schema<IInfestedFoundryDatabase>(
+    {
+        Name: String,
+        Resources: { type: [helminthResourceSchema], default: undefined },
+        Slots: Number,
+        XP: Number,
+        ConsumedSuits: { type: [consumedSchuitsSchema], default: undefined },
+        InvigorationIndex: Number,
+        InvigorationSuitOfferings: { type: [String], default: undefined },
+        InvigorationsApplied: Number,
+        LastConsumedSuit: { type: EquipmentSchema, default: undefined },
+        AbilityOverrideUnlockCooldown: Date
+    },
+    { _id: false }
+);
+
+infestedFoundrySchema.set("toJSON", {
+    transform(_doc, ret, _options) {
+        if (ret.AbilityOverrideUnlockCooldown) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+            ret.AbilityOverrideUnlockCooldown = toMongoDate(ret.AbilityOverrideUnlockCooldown);
+        }
+    }
+});
+
 const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
     {
         accountOwnerId: Schema.Types.ObjectId,
@@ -817,6 +855,8 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         CrewShipSalvageBin: { type: slotsBinSchema, default: { Slots: 8 } },
         MechBin: { type: slotsBinSchema, default: { Slots: 4 } },
         CrewMemberBin: { type: slotsBinSchema, default: { Slots: 3 } },
+
+        ...equipmentFields,
 
         //How many trades do you have left
         TradesRemaining: { type: Number, default: 0 },
@@ -867,29 +907,10 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Upgrade Mods\Riven\Arcane Example:"UpgradeFingerprint"+"ItemType"+""
         Upgrades: [upgradeSchema],
 
-        //Warframe
-        Suits: [EquipmentSchema],
-        //Primary    Weapon
-        LongGuns: [EquipmentSchema],
-        //Secondary  Weapon
-        Pistols: [EquipmentSchema],
-        //Melee      Weapon
-        Melee: [EquipmentSchema],
-        //Ability Weapon like Ultimate Mech\Excalibur\Ivara etc
-        SpecialItems: [EquipmentSchema],
         //The Mandachord(Octavia) is a step sequencer
         StepSequencers: [StepSequencersSchema],
 
-        //Sentinel(like Helios or modular)
-        Sentinels: [EquipmentSchema],
-        //Any /Sentinels/SentinelWeapons/ (like warframe weapon)
-        SentinelWeapons: [EquipmentSchema],
-        //Modular Pets
-        MoaPets: [EquipmentSchema],
-
         KubrowPetEggs: [Schema.Types.Mixed],
-        //Like PowerSuit Cat\Kubrow or etc Pets
-        KubrowPets: [EquipmentSchema],
         //Prints   Cat(3 Prints)\Kubrow(2 Prints) Pets
         KubrowPetPrints: [Schema.Types.Mixed],
 
@@ -902,42 +923,26 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         EquippedInstrument: String,
         ReceivedStartingGear: Boolean,
 
-        //to use add SummonItem to Consumables+EquippedGear
-        //Archwing need Suits+Melee+Guns
-        SpaceSuits: [EquipmentSchema],
-        SpaceMelee: [EquipmentSchema],
-        SpaceGuns: [EquipmentSchema],
         ArchwingEnabled: Boolean,
-        //Mech need Suits+SpaceGuns+SpecialItem
-        MechSuits: [EquipmentSchema],
-        ///Restoratives/HoverboardSummon (like Suit)
-        Hoverboards: [EquipmentSchema],
 
         //Use Operator\Drifter
         UseAdultOperatorLoadout: Boolean,
-        //Operator\Drifter Weapon
-        OperatorAmps: [EquipmentSchema],
         //Operator
         OperatorLoadOuts: [operatorConfigSchema],
         //Drifter
         AdultOperatorLoadOuts: [operatorConfigSchema],
-        DrifterMelee: [EquipmentSchema],
-        DrifterGuns: [EquipmentSchema],
-        //ErsatzHorsePowerSuit
-        Horses: [EquipmentSchema],
+        // Kahl
+        KahlLoadOuts: [operatorConfigSchema],
 
         //LandingCraft like Liset
         Ships: { type: [Schema.Types.ObjectId], ref: "Ships" },
         // /Lotus/Types/Items/ShipDecos/
         ShipDecorations: [typeCountSchema],
 
-        //RailJack Setting(Mods,Skin,Weapon,etc)
-        CrewShipHarnesses: [EquipmentSchema],
         //Railjack/Components(https://warframe.fandom.com/wiki/Railjack/Components)
         CrewShipRawSalvage: [Schema.Types.Mixed],
 
         //Default RailJack
-        CrewShips: [crewShipSchema],
         CrewShipAmmo: [typeCountSchema],
         CrewShipWeapons: [Schema.Types.Mixed],
         CrewShipWeaponSkins: [Schema.Types.Mixed],
@@ -958,9 +963,6 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         //Cosmetics like profile glyphs\Kavasa Prime Kubrow Collar\Game Theme etc
         FlavourItems: [FlavourItemSchema],
-
-        //Lunaro Weapon
-        Scoops: [EquipmentSchema],
 
         //Mastery Rank*(Need item XPInfo to rank up)
         PlayerLevel: { type: Number, default: 0 },
@@ -1072,11 +1074,6 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //https://warframe.fandom.com/wiki/Invasion
         InvasionChainProgress: [Schema.Types.Mixed],
 
-        //https://warframe.fandom.com/wiki/Parazon
-        DataKnives: [EquipmentSchema],
-
-        Motorcycles: [EquipmentSchema],
-
         //CorpusLich or GrineerLich
         NemesisAbandonedRewards: [String],
         //CorpusLich\KuvaLich
@@ -1113,7 +1110,6 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Unknown and system
         DuviriInfo: DuviriInfoSchema,
         Mailbox: MailboxSchema,
-        KahlLoadOuts: [Schema.Types.Mixed],
         HandlerPoints: Number,
         ChallengesFixVersion: Number,
         PlayedParkourTutorial: Boolean,
@@ -1172,37 +1168,17 @@ inventorySchema.set("toJSON", {
 
 // type overwrites for subdocuments/subdocument arrays
 export type InventoryDocumentProps = {
-    Suits: Types.DocumentArray<IEquipmentDatabase>;
-    LongGuns: Types.DocumentArray<IEquipmentDatabase>;
-    Pistols: Types.DocumentArray<IEquipmentDatabase>;
-    Melee: Types.DocumentArray<IEquipmentDatabase>;
-    OperatorAmps: Types.DocumentArray<IEquipmentDatabase>;
     FlavourItems: Types.DocumentArray<IFlavourItem>;
     RawUpgrades: Types.DocumentArray<IRawUpgrade>;
     Upgrades: Types.DocumentArray<IUpgradeDatabase>;
     MiscItems: Types.DocumentArray<IMiscItem>;
     Boosters: Types.DocumentArray<IBooster>;
     OperatorLoadOuts: Types.DocumentArray<IOperatorConfigDatabase>;
-    SpecialItems: Types.DocumentArray<IEquipmentDatabase>;
     AdultOperatorLoadOuts: Types.DocumentArray<IOperatorConfigDatabase>;
-    MechSuits: Types.DocumentArray<IEquipmentDatabase>;
-    Scoops: Types.DocumentArray<IEquipmentDatabase>;
-    DataKnives: Types.DocumentArray<IEquipmentDatabase>;
-    Motorcycles: Types.DocumentArray<IEquipmentDatabase>;
-    DrifterMelee: Types.DocumentArray<IEquipmentDatabase>;
-    Sentinels: Types.DocumentArray<IEquipmentDatabase>;
-    Horses: Types.DocumentArray<IEquipmentDatabase>;
+    KahlLoadOuts: Types.DocumentArray<IOperatorConfigDatabase>;
     PendingRecipes: Types.DocumentArray<IPendingRecipeDatabase>;
-    SpaceSuits: Types.DocumentArray<IEquipmentDatabase>;
-    SpaceGuns: Types.DocumentArray<IEquipmentDatabase>;
-    SpaceMelee: Types.DocumentArray<IEquipmentDatabase>;
-    SentinelWeapons: Types.DocumentArray<IEquipmentDatabase>;
-    Hoverboards: Types.DocumentArray<IEquipmentDatabase>;
-    MoaPets: Types.DocumentArray<IEquipmentDatabase>;
     WeaponSkins: Types.DocumentArray<IWeaponSkinDatabase>;
-    CrewShips: Types.DocumentArray<ICrewShipDatabase>;
-    CrewShipHarnesses: Types.DocumentArray<IEquipmentDatabase>;
-};
+} & { [K in TEquipmentKey]: Types.DocumentArray<IEquipmentDatabase> };
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type InventoryModelType = Model<IInventoryDatabase, {}, InventoryDocumentProps>;

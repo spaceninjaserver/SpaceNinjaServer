@@ -28,9 +28,9 @@ export interface IInventoryDatabase
         | "Upgrades"
         | "CrewShipSalvagedWeaponSkins"
         | "CrewShipWeaponSkins"
-        | "OperatorLoadOuts"
         | "AdultOperatorLoadOuts"
-        | "CrewShips"
+        | "OperatorLoadOuts"
+        | "KahlLoadOuts"
         | "InfestedFoundry"
         | "DialogueHistory"
         | TEquipmentKey
@@ -49,9 +49,9 @@ export interface IInventoryDatabase
     Upgrades: IUpgradeDatabase[];
     CrewShipSalvagedWeaponSkins: IUpgradeDatabase[];
     CrewShipWeaponSkins: IUpgradeDatabase[];
-    OperatorLoadOuts: IOperatorConfigDatabase[];
     AdultOperatorLoadOuts: IOperatorConfigDatabase[];
-    CrewShips: ICrewShipDatabase[];
+    OperatorLoadOuts: IOperatorConfigDatabase[];
+    KahlLoadOuts: IOperatorConfigDatabase[];
     InfestedFoundry?: IInfestedFoundryDatabase;
     DialogueHistory?: IDialogueHistoryDatabase;
 
@@ -68,6 +68,16 @@ export interface IInventoryDatabase
     Hoverboards: IEquipmentDatabase[];
     OperatorAmps: IEquipmentDatabase[];
     MoaPets: IEquipmentDatabase[];
+    Scoops: IEquipmentDatabase[];
+    Horses: IEquipmentDatabase[];
+    DrifterGuns: IEquipmentDatabase[];
+    DrifterMelee: IEquipmentDatabase[];
+    Motorcycles: IEquipmentDatabase[];
+    CrewShips: IEquipmentDatabase[];
+    DataKnives: IEquipmentDatabase[];
+    MechSuits: IEquipmentDatabase[];
+    CrewShipHarnesses: IEquipmentDatabase[];
+    KubrowPets: IEquipmentDatabase[];
 }
 
 export interface IQuestKeyDatabase {
@@ -97,7 +107,17 @@ export const equipmentKeys = [
     "SpaceMelee",
     "Hoverboards",
     "OperatorAmps",
-    "MoaPets"
+    "MoaPets",
+    "Scoops",
+    "Horses",
+    "DrifterGuns",
+    "DrifterMelee",
+    "Motorcycles",
+    "CrewShips",
+    "DataKnives",
+    "MechSuits",
+    "CrewShipHarnesses",
+    "KubrowPets"
 ] as const;
 
 export type TEquipmentKey = (typeof equipmentKeys)[number];
@@ -171,13 +191,22 @@ export interface IInventoryClient extends IDailyAffiliations {
     Hoverboards: IEquipmentClient[];
     OperatorAmps: IEquipmentClient[];
     MoaPets: IEquipmentClient[];
+    Scoops: IEquipmentClient[];
+    Horses: IEquipmentClient[];
+    DrifterGuns: IEquipmentClient[];
+    DrifterMelee: IEquipmentClient[];
+    Motorcycles: IEquipmentClient[];
+    CrewShips: IEquipmentClient[];
+    DataKnives: IEquipmentClient[];
+    MechSuits: IEquipmentClient[];
+    CrewShipHarnesses: IEquipmentClient[];
+    KubrowPets: IEquipmentClient[];
+    AdultOperatorLoadOuts: IOperatorConfigClient[];
+    OperatorLoadOuts: IOperatorConfigClient[];
+    KahlLoadOuts: IOperatorConfigClient[];
 
-    Horses: IEquipmentDatabase[];
-    DrifterMelee: IEquipmentDatabase[];
-    DrifterGuns: IEquipmentDatabase[];
     DuviriInfo: IDuviriInfo;
     Mailbox?: IMailboxClient;
-    KahlLoadOuts: IEquipmentDatabase[];
     SubscribedToEmails: number;
     Created: IMongoDate;
     RewardSeed: number;
@@ -212,7 +241,6 @@ export interface IInventoryClient extends IDailyAffiliations {
     QuestKeys: IQuestKeyClient[];
     ActiveQuest: string;
     FlavourItems: IFlavourItem[];
-    Scoops: IEquipmentDatabase[];
     LoadOutPresets: ILoadOutPresets;
     CurrentLoadOutIds: IOid[]; //TODO: we store it in the database using this representation as well :/
     Missions: IMission[];
@@ -267,7 +295,6 @@ export interface IInventoryClient extends IDailyAffiliations {
     Drones: IDrone[];
     StepSequencers: IStepSequencer[];
     ActiveAvatarImageType: string;
-    KubrowPets: IEquipmentDatabase[];
     ShipDecorations: IConsumable[];
     DiscoveredMarkers: IDiscoveredMarker[];
     CompletedJobs: ICompletedJob[];
@@ -284,7 +311,6 @@ export interface IInventoryClient extends IDailyAffiliations {
     BountyScore: number;
     ChallengeInstanceStates: IChallengeInstanceState[];
     LoginMilestoneRewards: string[];
-    OperatorLoadOuts: IOperatorConfigClient[];
     RecentVendorPurchases: Array<number | string>;
     NodeIntrosCompleted: string[];
     GuildId?: IOid;
@@ -292,13 +318,10 @@ export interface IInventoryClient extends IDailyAffiliations {
     SeasonChallengeHistory: ISeasonChallenge[];
     EquippedInstrument?: string;
     InvasionChainProgress: IInvasionChainProgress[];
-    DataKnives: IEquipmentDatabase[];
-    Motorcycles: IEquipmentDatabase[];
     NemesisHistory: INemesisHistory[];
     LastNemesisAllySpawnTime?: IMongoDate;
     Settings: ISettings;
     PersonalTechProjects: IPersonalTechProject[];
-    CrewShips: ICrewShipClient[];
     PlayerSkills: IPlayerSkills;
     CrewShipAmmo: IConsumable[];
     CrewShipSalvagedWeaponSkins: IUpgradeClient[];
@@ -308,13 +331,10 @@ export interface IInventoryClient extends IDailyAffiliations {
     TradeBannedUntil?: IMongoDate;
     PlayedParkourTutorial: boolean;
     SubscribedToEmailsPersonalized: number;
-    MechSuits: IEquipmentDatabase[];
     InfestedFoundry?: IInfestedFoundryClient;
     BlessingCooldown: IMongoDate;
-    CrewShipHarnesses: IEquipmentDatabase[];
     CrewShipRawSalvage: IConsumable[];
     CrewMembers: ICrewMember[];
-    AdultOperatorLoadOuts: IOperatorConfigClient[];
     LotusCustomization: ILotusCustomization;
     UseAdultOperatorLoadout?: boolean;
     NemesisAbandonedRewards: string[];
@@ -455,22 +475,6 @@ export interface IUpgradeClient {
 }
 
 export interface IUpgradeDatabase extends Omit<IUpgradeClient, "ItemId"> {
-    _id: Types.ObjectId;
-}
-
-export interface ICrewShipClient {
-    ItemType: string;
-    Configs: IItemConfig[];
-    Weapon?: ICrewShipWeapon;
-    Customization?: ICrewShipCustomization;
-    ItemName: string;
-    RailjackImage?: IFlavourItem;
-    CrewMembers?: ICrewShipMembersClient;
-    ItemId: IOid;
-}
-
-export interface ICrewShipDatabase extends Omit<ICrewShipClient, "CrewMembers" | "ItemId"> {
-    CrewMembers?: ICrewShipMembersDatabase;
     _id: Types.ObjectId;
 }
 
@@ -647,17 +651,21 @@ export enum KubrowPetPrintItemType {
     LotusTypesGameKubrowPetImprintedTraitPrint = "/Lotus/Types/Game/KubrowPet/ImprintedTraitPrint"
 }
 
-export interface IDetails {
+export interface IKubrowPetDetailsDatabase {
     Name: string;
     IsPuppy: boolean;
     HasCollar: boolean;
     PrintsRemaining: number;
     Status: Status;
-    HatchDate: IMongoDate;
+    HatchDate: Date;
     DominantTraits: ITraits;
     RecessiveTraits: ITraits;
     IsMale: boolean;
     Size: number;
+}
+
+export interface IKubrowPetDetailsClient extends Omit<IKubrowPetDetailsDatabase, "HatchDate"> {
+    HatchDate: IMongoDate;
 }
 
 export enum Status {

@@ -8,6 +8,7 @@ import {
     calculateFinalCredits
 } from "@/src/services/missionInventoryUpdateService";
 import { getInventory } from "@/src/services/inventoryService";
+import { getInventoryResponse } from "./inventoryController";
 
 /*
 **** INPUT ****
@@ -58,9 +59,12 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
     const inventoryUpdates = addMissionInventoryUpdates(inventory, missionReport);
 
     if (missionReport.MissionStatus !== "GS_SUCCESS") {
-        const InventoryJson = JSON.stringify((await inventory.save()).toJSON());
-
-        res.json({ InventoryJson, MissionRewards: [] });
+        await inventory.save();
+        const inventoryResponse = await getInventoryResponse(inventory, true);
+        res.json({
+            InventoryJson: JSON.stringify(inventoryResponse),
+            MissionRewards: []
+        });
         return;
     }
     const missionRewardsResults = await addMissionRewards(inventory, missionReport);
@@ -76,11 +80,12 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         rngRewardCredits: inventoryChanges.RegularCredits as number
     });
 
-    const InventoryJson = JSON.stringify((await inventory.save()).toJSON());
+    await inventory.save();
+    const inventoryResponse = await getInventoryResponse(inventory, true);
 
     //TODO: figure out when to send inventory. it is needed for many cases.
     res.json({
-        InventoryJson,
+        InventoryJson: JSON.stringify(inventoryResponse),
         InventoryChanges: inventoryChanges,
         MissionRewards,
         ...credits,
