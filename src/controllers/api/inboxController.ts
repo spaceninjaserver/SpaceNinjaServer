@@ -1,6 +1,12 @@
 import { RequestHandler } from "express";
 import { Inbox } from "@/src/models/inboxModel";
-import { createNewEventMessages, getAllMessagesSorted, getMessage } from "@/src/services/inboxService";
+import {
+    createNewEventMessages,
+    deleteAllMessagesRead,
+    deleteMessageRead,
+    getAllMessagesSorted,
+    getMessage
+} from "@/src/services/inboxService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addItems, getInventory } from "@/src/services/inventoryService";
 import { logger } from "@/src/utils/logger";
@@ -12,12 +18,12 @@ export const inboxController: RequestHandler = async (req, res) => {
 
     if (deleteId) {
         if (deleteId === "DeleteAllRead") {
-            await Inbox.deleteMany({ ownerId: accountId, r: true });
+            await deleteAllMessagesRead(accountId);
             res.status(200).end();
             return;
         }
 
-        await Inbox.findOneAndDelete({ _id: deleteId, r: true });
+        await deleteMessageRead(deleteId as string);
         res.status(200).end();
     } else if (messageId) {
         const message = await getMessage(messageId as string);
@@ -71,6 +77,7 @@ export const inboxController: RequestHandler = async (req, res) => {
         //newly created event messages must be newer than account.LatestEventMessageDate
         await createNewEventMessages(req);
         const messages = await getAllMessagesSorted(accountId);
-        res.json({ Inbox: messages });
+        const inbox = messages.map(m => m.toJSON());
+        res.json({ Inbox: inbox });
     }
 };

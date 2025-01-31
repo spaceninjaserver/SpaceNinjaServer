@@ -5,9 +5,9 @@ import { Request } from "express";
 import messages from "@/static/fixed_responses/messages.json";
 import { logger } from "@/src/utils/logger";
 
-export const getAllMessagesSorted = async (accountId: string): Promise<IMessageDatabase[]> => {
+export const getAllMessagesSorted = async (accountId: string): Promise<HydratedDocument<IMessageDatabase>[]> => {
     const inbox = await Inbox.find({ ownerId: accountId }).sort({ date: -1 });
-    return inbox.map(message => message.toJSON());
+    return inbox;
 };
 
 export const getMessage = async (messageId: string): Promise<HydratedDocument<IMessageDatabase>> => {
@@ -19,11 +19,11 @@ export const getMessage = async (messageId: string): Promise<HydratedDocument<IM
     return message;
 };
 
-export const deleteMessage = async (messageId: string): Promise<void> => {
-    await Inbox.findOneAndDelete({ _id: messageId });
+export const deleteMessageRead = async (messageId: string): Promise<void> => {
+    await Inbox.findOneAndDelete({ _id: messageId, r: true });
 };
 
-export const deleteAllMessages = async (accountId: string): Promise<void> => {
+export const deleteAllMessagesRead = async (accountId: string): Promise<void> => {
     await Inbox.deleteMany({ ownerId: accountId, r: true });
 };
 
