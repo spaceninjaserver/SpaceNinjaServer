@@ -32,7 +32,7 @@ export const createNewEventMessages = async (req: Request) => {
     const account = await getAccountForRequest(req);
     const latestEventMessageDate = account.LatestEventMessageDate;
 
-    //TODO: is baroo there? send message
+    //TODO: is baroo there? create these kind of messages too (periodical messages)
     const newEventMessages = messages.Messages.filter(m => new Date(m.eventMessageDate) > latestEventMessageDate);
 
     if (newEventMessages.length === 0) {
@@ -40,30 +40,25 @@ export const createNewEventMessages = async (req: Request) => {
         return;
     }
 
-    const newEventMessagesSorted = newEventMessages.sort(
-        (a, b) => new Date(a.eventMessageDate).getTime() - new Date(b.eventMessageDate).getTime()
-    );
     const savedEventMessages = await createMessage(account._id.toString(), newEventMessages);
     logger.debug("created event messages", savedEventMessages);
 
-    const latestEventMessage = savedEventMessages.reduce((prev, current) =>
-        prev.date > current.date ? prev : current
+    const latestEventMessage = newEventMessages.reduce((prev, current) =>
+        prev.eventMessageDate > current.eventMessageDate ? prev : current
     );
 
-    account.LatestEventMessageDate = latestEventMessage.date;
+    console.log("latestEventMessage", latestEventMessage);
+    account.LatestEventMessageDate = new Date(latestEventMessage.eventMessageDate);
     await account.save();
 };
 
-export const createMessage = async (accountId: string, message: IMessageCreationTemplate[]) => {
-    //TODO: createmany
-    const savedMessages = [];
-    for (const msg of message) {
-        const savedMessage = await Inbox.create({
-            ...msg,
-            ownerId: accountId
-        });
-        savedMessages.push(savedMessage);
-    }
+export const createMessage = async (accountId: string, messages: IMessageCreationTemplate[]) => {
+    const ownerIdMessages = messages.map(m => ({
+        ...m,
+        ownerId: accountId
+    }));
+
+    const savedMessages = await Inbox.insertMany(ownerIdMessages);
     return savedMessages;
 };
 
