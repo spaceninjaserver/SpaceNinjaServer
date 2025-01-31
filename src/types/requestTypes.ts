@@ -11,7 +11,8 @@ import {
     TSolarMapRegion,
     TEquipmentKey,
     IFusionTreasure,
-    IQuestKeyClient
+    IQuestKeyClient,
+    IPlayerSkills
 } from "./inventoryTypes/inventoryTypes";
 
 export interface IThemeUpdateRequest {
@@ -73,6 +74,7 @@ export type IMissionInventoryUpdateRequest = {
     FpsSamples: number;
     EvolutionProgress?: IEvolutionProgress[];
     FocusXpIncreases?: number[];
+    PlayerSkillGains: IPlayerSkills;
 } & {
     [K in TEquipmentKey]?: IEquipmentClient[];
 };

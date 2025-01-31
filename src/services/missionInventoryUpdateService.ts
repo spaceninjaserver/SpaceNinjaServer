@@ -150,6 +150,11 @@ export const addMissionInventoryUpdates = (
                 addFocusXpIncreases(inventory, value);
                 break;
             }
+            case "PlayerSkillGains": {
+                inventory.PlayerSkills.LPP_SPACE += value.LPP_SPACE;
+                inventory.PlayerSkills.LPP_DRIFTER += value.LPP_DRIFTER;
+                break;
+            }
             default:
                 // Equipment XP updates
                 if (equipmentKeys.includes(key as TEquipmentKey)) {
