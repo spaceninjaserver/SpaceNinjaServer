@@ -350,6 +350,7 @@ export interface IInventoryClient extends IDailyAffiliations {
     Quests: any[];
     Robotics: any[];
     UsedDailyDeals: any[];
+    LibraryPersonalTarget: string;
     LibraryPersonalProgress: ILibraryPersonalProgress[];
     CollectibleSeries: ICollectibleSery[];
     LibraryAvailableDailyTaskInfo: ILibraryAvailableDailyTaskInfo;

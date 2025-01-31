@@ -68,6 +68,7 @@ import { setSupportedSyndicateController } from "@/src/controllers/api/setSuppor
 import { setWeaponSkillTreeController } from "../controllers/api/setWeaponSkillTreeController";
 import { shipDecorationsController } from "@/src/controllers/api/shipDecorationsController";
 import { startDojoRecipeController } from "@/src/controllers/api/startDojoRecipeController";
+import { startLibraryPersonalTargetController } from "@/src/controllers/api/startLibraryPersonalTargetController";
 import { startRecipeController } from "@/src/controllers/api/startRecipeController";
 import { stepSequencersController } from "@/src/controllers/api/stepSequencersController";
 import { surveysController } from "@/src/controllers/api/surveysController";
@@ -113,6 +114,7 @@ apiRouter.get("/setActiveQuest.php", setActiveQuestController);
 apiRouter.get("/setActiveShip.php", setActiveShipController);
 apiRouter.get("/setBootLocation.php", setBootLocationController);
 apiRouter.get("/setSupportedSyndicate.php", setSupportedSyndicateController);
+apiRouter.get("/startLibraryPersonalTarget.php", startLibraryPersonalTargetController);
 apiRouter.get("/surveys.php", surveysController);
 apiRouter.get("/updateSession.php", updateSessionGetController);
 
