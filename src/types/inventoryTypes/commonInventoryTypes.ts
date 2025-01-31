@@ -1,5 +1,14 @@
 import { IMongoDate, IOid } from "@/src/types/commonTypes";
 import { Types } from "mongoose";
+import {
+    ICrewShipCustomization,
+    ICrewShipMembersClient,
+    ICrewShipMembersDatabase,
+    ICrewShipWeapon,
+    IFlavourItem,
+    IKubrowPetDetailsClient,
+    IKubrowPetDetailsDatabase
+} from "@/src/types/inventoryTypes/inventoryTypes";
 
 export interface IPolarity {
     Slot: number;
@@ -79,11 +88,16 @@ export interface IEquipmentSelection {
 }
 
 export interface IEquipmentClient
-    extends Omit<IEquipmentDatabase, "_id" | "InfestationDate" | "Expiry" | "UpgradesExpiry"> {
+    extends Omit<
+        IEquipmentDatabase,
+        "_id" | "InfestationDate" | "Expiry" | "UpgradesExpiry" | "CrewMembers" | "Details"
+    > {
     ItemId: IOid;
     InfestationDate?: IMongoDate;
     Expiry?: IMongoDate;
     UpgradesExpiry?: IMongoDate;
+    CrewMembers?: ICrewShipMembersClient;
+    Details?: IKubrowPetDetailsClient;
 }
 
 export enum EquipmentFeatures {
@@ -120,6 +134,11 @@ export interface IEquipmentDatabase {
     DefensiveUpgrade?: string;
     UpgradesExpiry?: Date;
     ArchonCrystalUpgrades?: IArchonCrystalUpgrade[];
+    Weapon?: ICrewShipWeapon;
+    Customization?: ICrewShipCustomization;
+    RailjackImage?: IFlavourItem;
+    CrewMembers?: ICrewShipMembersDatabase;
+    Details?: IKubrowPetDetailsDatabase;
     _id: Types.ObjectId;
 }
 

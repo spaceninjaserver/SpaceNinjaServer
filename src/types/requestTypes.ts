@@ -39,19 +39,6 @@ export type IMissionInventoryUpdateRequest = {
     GoalTag: string;
     LevelKeyName: string;
     ActiveBoosters?: IBooster[];
-    Suits?: IEquipmentClient[];
-    LongGuns?: IEquipmentClient[];
-    Pistols?: IEquipmentClient[];
-    Melee?: IEquipmentClient[];
-    SpecialItems?: IEquipmentClient[];
-    Sentinels?: IEquipmentClient[];
-    SentinelWeapons?: IEquipmentClient[];
-    SpaceSuits?: IEquipmentClient[];
-    SpaceGuns?: IEquipmentClient[];
-    SpaceMelee?: IEquipmentClient[];
-    Hoverboards?: IEquipmentClient[];
-    OperatorAmps?: IEquipmentClient[];
-    MoaPets?: IEquipmentClient[];
     FusionBundles?: ITypeCount[];
     RawUpgrades?: IRawUpgrade[];
     MiscItems?: ITypeCount[];
@@ -85,6 +72,9 @@ export type IMissionInventoryUpdateRequest = {
     FpsMax: number;
     FpsSamples: number;
     EvolutionProgress?: IEvolutionProgress[];
+    FocusXpIncreases?: number[];
+} & {
+    [K in TEquipmentKey]?: IEquipmentClient[];
 };
 
 export interface IRewardInfo {

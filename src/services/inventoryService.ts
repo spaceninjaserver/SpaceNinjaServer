@@ -29,7 +29,7 @@ import {
     IUpdateChallengeProgressRequest
 } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
-import { getWeaponType, getExalted, getKeyChainItems } from "@/src/services/itemDataService";
+import { getExalted, getKeyChainItems } from "@/src/services/itemDataService";
 import { IEquipmentClient, IItemConfig } from "../types/inventoryTypes/commonInventoryTypes";
 import {
     ExportArcanes,
@@ -40,6 +40,7 @@ import {
     ExportResources,
     ExportSentinels,
     ExportUpgrades,
+    ExportWeapons,
     TStandingLimitBin
 } from "warframe-public-export-plus";
 import { createShip } from "./shipService";
@@ -288,6 +289,20 @@ export const addItem = async (
             }
         };
     }
+    if (typeName in ExportWeapons) {
+        const weapon = ExportWeapons[typeName];
+        // Many non-weapon items are "Pistols" in Public Export, so some duck typing is needed.
+        if (weapon.totalDamage != 0) {
+            const inventoryChanges = addEquipment(inventory, weapon.productCategory, typeName);
+            updateSlots(inventory, InventorySlot.WEAPONS, 0, 1);
+            return {
+                InventoryChanges: {
+                    ...inventoryChanges,
+                    WeaponBin: { count: 1, platinum: 0, Slots: -1 }
+                }
+            };
+        }
+    }
     if (typeName in creditBundles) {
         const creditsTotal = creditBundles[typeName] * quantity;
         inventory.RegularCredits += creditsTotal;
@@ -355,17 +370,6 @@ export const addItem = async (
                 }
             }
             break;
-        case "Weapons": {
-            const weaponType = getWeaponType(typeName);
-            const inventoryChanges = addEquipment(inventory, weaponType, typeName);
-            updateSlots(inventory, InventorySlot.WEAPONS, 0, 1);
-            return {
-                InventoryChanges: {
-                    ...inventoryChanges,
-                    WeaponBin: { count: 1, platinum: 0, Slots: -1 }
-                }
-            };
-        }
         case "Upgrades": {
             // Needed to add Traumatic Peculiar
             const changes = [
@@ -915,6 +919,30 @@ export const addFusionTreasures = (
             FusionTreasures.push({ ItemCount, ItemType, Sockets });
         }
     });
+};
+
+export const addFocusXpIncreases = (inventory: TInventoryDatabaseDocument, focusXpPlus: number[] | undefined): void => {
+    enum FocusType {
+        AP_UNIVERSAL,
+        AP_ATTACK,
+        AP_DEFENSE,
+        AP_TACTIC,
+        AP_POWER,
+        AP_PRECEPT,
+        AP_FUSION,
+        AP_WARD,
+        AP_UMBRA,
+        AP_ANY
+    }
+
+    if (focusXpPlus) {
+        inventory.FocusXP ??= { AP_ATTACK: 0, AP_DEFENSE: 0, AP_TACTIC: 0, AP_POWER: 0, AP_WARD: 0 };
+        inventory.FocusXP.AP_ATTACK += focusXpPlus[FocusType.AP_ATTACK];
+        inventory.FocusXP.AP_DEFENSE += focusXpPlus[FocusType.AP_DEFENSE];
+        inventory.FocusXP.AP_TACTIC += focusXpPlus[FocusType.AP_TACTIC];
+        inventory.FocusXP.AP_POWER += focusXpPlus[FocusType.AP_POWER];
+        inventory.FocusXP.AP_WARD += focusXpPlus[FocusType.AP_WARD];
+    }
 };
 
 export const updateChallengeProgress = async (

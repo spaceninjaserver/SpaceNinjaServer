@@ -2,10 +2,11 @@ import { ExportRegions, ExportRewards, IReward } from "warframe-public-export-pl
 import { IMissionInventoryUpdateRequest, IRewardInfo } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
 import { IRngResult, getRandomReward } from "@/src/services/rngService";
-import { IInventoryDatabase } from "@/src/types/inventoryTypes/inventoryTypes";
+import { equipmentKeys, IInventoryDatabase, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
 import {
     addChallenges,
     addConsumables,
+    addFocusXpIncreases,
     addFusionTreasures,
     addGearExpByCategory,
     addItem,
@@ -22,6 +23,7 @@ import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { getLevelKeyRewards, getNode } from "@/src/services/itemDataService";
 import { InventoryDocumentProps, TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { getEntriesUnsafe } from "@/src/utils/ts-utils";
+import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
 
 const getRotations = (rotationCount: number): number[] => {
     if (rotationCount === 0) return [0];
@@ -144,23 +146,16 @@ export const addMissionInventoryUpdates = (
                 inventoryChanges.FusionPoints = fusionPoints;
                 break;
             }
-            // Equipment XP updates
-            case "Suits":
-            case "LongGuns":
-            case "Pistols":
-            case "Melee":
-            case "SpecialItems":
-            case "Sentinels":
-            case "SentinelWeapons":
-            case "SpaceSuits":
-            case "SpaceGuns":
-            case "SpaceMelee":
-            case "Hoverboards":
-            case "OperatorAmps":
-            case "MoaPets":
-                addGearExpByCategory(inventory, value, key);
+            case "FocusXpIncreases": {
+                addFocusXpIncreases(inventory, value);
                 break;
+            }
             default:
+                // Equipment XP updates
+                if (equipmentKeys.includes(key as TEquipmentKey)) {
+                    addGearExpByCategory(inventory, value as IEquipmentClient[], key as TEquipmentKey);
+                }
+                break;
             // if (
             //     (ignoredInventoryUpdateKeys as readonly string[]).includes(key) ||
             //     knownUnhandledKeys.includes(key)

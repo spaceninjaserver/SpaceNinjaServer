@@ -31,6 +31,7 @@ import { getShipController } from "@/src/controllers/api/getShipController";
 import { getVendorInfoController } from "@/src/controllers/api/getVendorInfoController";
 import { getVoidProjectionRewardsController } from "@/src/controllers/api/getVoidProjectionRewardsController";
 import { gildWeaponController } from "@/src/controllers/api/gildWeaponController";
+import { giveKeyChainTriggeredItemsController } from "@/src/controllers/api/giveKeyChainTriggeredItemsController";
 import { guildTechController } from "../controllers/api/guildTechController";
 import { hostSessionController } from "@/src/controllers/api/hostSessionController";
 import { hubController } from "@/src/controllers/api/hubController";
@@ -74,13 +75,12 @@ import { syndicateSacrificeController } from "../controllers/api/syndicateSacrif
 import { syndicateStandingBonusController } from "../controllers/api/syndicateStandingBonusController";
 import { tauntHistoryController } from "@/src/controllers/api/tauntHistoryController";
 import { trainingResultController } from "@/src/controllers/api/trainingResultController";
+import { unlockShipFeatureController } from "@/src/controllers/api/unlockShipFeatureController";
 import { updateChallengeProgressController } from "@/src/controllers/api/updateChallengeProgressController";
+import { updateQuestController } from "@/src/controllers/api/updateQuestController";
 import { updateSessionGetController, updateSessionPostController } from "@/src/controllers/api/updateSessionController";
 import { updateThemeController } from "../controllers/api/updateThemeController";
 import { upgradesController } from "@/src/controllers/api/upgradesController";
-import { updateQuestController } from "@/src/controllers/api/updateQuestController";
-import { giveKeyChainTriggeredItemsController } from "@/src/controllers/api/giveKeyChainTriggeredItemsController";
-import { unlockShipFeatureController } from "@/src/controllers/api/unlockShipFeatureController";
 
 const apiRouter = express.Router();
 
