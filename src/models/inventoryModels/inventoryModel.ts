@@ -53,7 +53,7 @@ import {
     IUpgradeDatabase,
     ICrewShipMemberDatabase,
     ICrewShipMemberClient,
-    IMailboxClient
+    IMailboxClient,
     TEquipmentKey,
     equipmentKeys,
     IKubrowPetDetailsDatabase,
