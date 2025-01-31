@@ -6,20 +6,6 @@ const opts = {
     toObject: { virtuals: true }
 } satisfies SchemaOptions;
 
-// {
-//   toJSON: { virtuals: true }
-// }
-// {
-//   virtuals: {
-//     id: {
-//       get() {
-//         return "test";
-//       }
-//     },
-//     toJSON: { virtuals: true }
-//   }
-// }
-
 const databaseAccountSchema = new Schema<IDatabaseAccountJson>(
     {
         email: { type: String, required: true, unique: true },
@@ -34,14 +20,14 @@ const databaseAccountSchema = new Schema<IDatabaseAccountJson>(
         ConsentNeeded: { type: Boolean, required: true },
         TrackedSettings: { type: [String], default: [] },
         Nonce: { type: Number, default: 0 },
-        LastLoginDay: { type: Number }
+        LastLoginDay: { type: Number },
+        LatestEventMessageDate: { type: Date, required: true }
     },
     opts
 );
 
 databaseAccountSchema.set("toJSON", {
     transform(_document, returnedObject) {
-        //returnedObject.id = returnedObject._id.toString();
         delete returnedObject._id;
         delete returnedObject.__v;
     },

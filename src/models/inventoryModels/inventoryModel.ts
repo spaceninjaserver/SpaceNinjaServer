@@ -1,4 +1,4 @@
-import { Document, Model, Schema, Types, model } from "mongoose";
+import { Document, HydratedDocument, Model, Schema, Types, model } from "mongoose";
 import {
     IFlavourItem,
     IRawUpgrade,
@@ -7,7 +7,7 @@ import {
     IBooster,
     IInventoryClient,
     ISlots,
-    IMailbox,
+    IMailboxDatabase,
     IDuviriInfo,
     IPendingRecipe as IPendingRecipeDatabase,
     IPendingRecipeResponse,
@@ -53,6 +53,7 @@ import {
     IUpgradeDatabase,
     ICrewShipMemberDatabase,
     ICrewShipMemberClient,
+    IMailboxClient,
     TEquipmentKey,
     equipmentKeys,
     IKubrowPetDetailsDatabase,
@@ -298,22 +299,18 @@ FlavourItemSchema.set("toJSON", {
     }
 });
 
-//  "Mailbox": { "LastInboxId": { "$oid": "123456780000000000000000" } }
-const MailboxSchema = new Schema<IMailbox>(
+const MailboxSchema = new Schema<IMailboxDatabase>(
     {
-        LastInboxId: {
-            type: Schema.Types.ObjectId,
-            set: (v: IMailbox["LastInboxId"]): string => v.$oid.toString()
-        }
+        LastInboxId: Schema.Types.ObjectId
     },
     { id: false, _id: false }
 );
 
 MailboxSchema.set("toJSON", {
     transform(_document, returnedObject) {
-        delete returnedObject.__v;
-        //TODO: there is a lot of any here
-        returnedObject.LastInboxId = toOid(returnedObject.LastInboxId as Types.ObjectId);
+        const mailboxDatabase = returnedObject as HydratedDocument<IMailboxDatabase, { __v?: number }>;
+        delete mailboxDatabase.__v;
+        (returnedObject as IMailboxClient).LastInboxId = toOid(mailboxDatabase.LastInboxId);
     }
 });
 

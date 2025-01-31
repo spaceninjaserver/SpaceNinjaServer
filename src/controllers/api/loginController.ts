@@ -12,7 +12,7 @@ import { logger } from "@/src/utils/logger";
 export const loginController: RequestHandler = async (request, response) => {
     const loginRequest = JSON.parse(String(request.body)) as ILoginRequest; // parse octet stream of json data to json object
 
-    const account = await Account.findOne({ email: loginRequest.email }); //{ _id: 0, __v: 0 }
+    const account = await Account.findOne({ email: loginRequest.email });
     const nonce = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
 
     const buildLabel: string =
@@ -41,7 +41,8 @@ export const loginController: RequestHandler = async (request, response) => {
                 ForceLogoutVersion: 0,
                 ConsentNeeded: false,
                 TrackedSettings: [],
-                Nonce: nonce
+                Nonce: nonce,
+                LatestEventMessageDate: new Date(0)
             });
             logger.debug("created new account");
             response.json(createLoginResponse(newAccount, buildLabel));
