@@ -1069,6 +1069,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Night Wave Challenge
         SeasonChallengeHistory: [seasonChallengeHistorySchema],
 
+        LibraryPersonalTarget: String,
         //Cephalon Simaris Entries Example:"TargetType"+"Scans"(1-10)+"Completed": true|false
         LibraryPersonalProgress: [Schema.Types.Mixed],
         //Cephalon Simaris Daily Task
