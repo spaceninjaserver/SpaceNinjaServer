@@ -819,19 +819,20 @@ export const addMiscItems = (inventory: TInventoryDatabaseDocument, itemsArray: 
     const { MiscItems } = inventory;
 
     itemsArray?.forEach(({ ItemCount, ItemType }) => {
-        const itemIndex = MiscItems.findIndex(miscItem => miscItem.ItemType === ItemType);
+        if (ItemCount == 0) {
+            return;
+        }
 
-        if (itemIndex !== -1) {
-            MiscItems[itemIndex].ItemCount += ItemCount;
-            if (MiscItems[itemIndex].ItemCount <= 0) {
-                if (MiscItems[itemIndex].ItemCount == 0) {
-                    MiscItems.splice(itemIndex, 1);
-                } else {
-                    logger.warn(`account now owns a negative amount of ${ItemType}`);
-                }
-            }
-        } else {
-            MiscItems.push({ ItemCount, ItemType });
+        let itemIndex = MiscItems.findIndex(x => x.ItemType === ItemType);
+        if (itemIndex == -1) {
+            itemIndex = MiscItems.push({ ItemType, ItemCount: 0 }) - 1;
+        }
+
+        MiscItems[itemIndex].ItemCount += ItemCount;
+        if (MiscItems[itemIndex].ItemCount == 0) {
+            MiscItems.splice(itemIndex, 1);
+        } else if (MiscItems[itemIndex].ItemCount <= 0) {
+            logger.warn(`account now owns a negative amount of ${ItemType}`);
         }
     });
 };
@@ -886,20 +887,22 @@ export const addRecipes = (inventory: TInventoryDatabaseDocument, itemsArray: IT
 
 export const addMods = (inventory: TInventoryDatabaseDocument, itemsArray: IRawUpgrade[] | undefined): void => {
     const { RawUpgrades } = inventory;
-    itemsArray?.forEach(({ ItemType, ItemCount }) => {
-        const itemIndex = RawUpgrades.findIndex(i => i.ItemType === ItemType);
 
-        if (itemIndex !== -1) {
-            RawUpgrades[itemIndex].ItemCount += ItemCount;
-            if (RawUpgrades[itemIndex].ItemCount <= 0) {
-                if (RawUpgrades[itemIndex].ItemCount == 0) {
-                    RawUpgrades.splice(itemIndex, 1);
-                } else {
-                    logger.warn(`account now owns a negative amount of ${ItemType}`);
-                }
-            }
-        } else {
-            RawUpgrades.push({ ItemCount, ItemType });
+    itemsArray?.forEach(({ ItemType, ItemCount }) => {
+        if (ItemCount == 0) {
+            return;
+        }
+
+        let itemIndex = RawUpgrades.findIndex(x => x.ItemType === ItemType);
+        if (itemIndex == -1) {
+            itemIndex = RawUpgrades.push({ ItemType, ItemCount: 0 }) - 1;
+        }
+
+        RawUpgrades[itemIndex].ItemCount += ItemCount;
+        if (RawUpgrades[itemIndex].ItemCount == 0) {
+            RawUpgrades.splice(itemIndex, 1);
+        } else if (RawUpgrades[itemIndex].ItemCount <= 0) {
+            logger.warn(`account now owns a negative amount of ${ItemType}`);
         }
     });
 };
