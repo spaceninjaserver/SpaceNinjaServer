@@ -46,7 +46,6 @@ export const createNewEventMessages = async (req: Request) => {
         prev.eventMessageDate > current.eventMessageDate ? prev : current
     );
 
-    console.log("latestEventMessage", latestEventMessage);
     account.LatestEventMessageDate = new Date(latestEventMessage.eventMessageDate);
     await account.save();
 };

@@ -86,7 +86,7 @@ export interface IQuestKeyDatabase {
     Progress?: IQuestStage[];
     unlock?: boolean;
     Completed?: boolean;
-    CustomData?: string; //TODO: check whether this actually exists
+    CustomData?: string;
     ItemType: string;
     CompletionDate?: Date;
 }

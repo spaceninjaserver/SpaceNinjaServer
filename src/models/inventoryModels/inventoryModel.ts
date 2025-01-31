@@ -479,19 +479,22 @@ const helminthResourceSchema = new Schema<IHelminthResource>(
     { _id: false }
 );
 
-const questProgressSchema = new Schema<IQuestStage>({
-    c: Number,
-    i: Boolean,
-    m: Boolean,
-    b: []
-});
+const questProgressSchema = new Schema<IQuestStage>(
+    {
+        c: Number,
+        i: Boolean,
+        m: Boolean,
+        b: []
+    },
+    { _id: false }
+);
 
 const questKeysSchema = new Schema<IQuestKeyDatabase>(
     {
         Progress: { type: [questProgressSchema], default: undefined },
         unlock: Boolean,
         Completed: Boolean,
-        //CustomData: Schema.Types.Mixed,
+        CustomData: String,
         CompletionDate: Date,
         ItemType: String
     },

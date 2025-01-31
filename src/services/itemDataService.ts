@@ -1,4 +1,4 @@
-import { IGiveKeyChainTriggeredItemsRequest } from "@/src/controllers/api/giveKeyChainTriggeredItemsController";
+import { IKeyChainRequest } from "@/src/controllers/api/giveKeyChainTriggeredItemsController";
 import { getIndexAfter } from "@/src/helpers/stringHelpers";
 import { ITypeCount } from "@/src/types/inventoryTypes/inventoryTypes";
 import { logger } from "@/src/utils/logger";
@@ -142,7 +142,7 @@ export const getString = (key: string, dict: Record<string, string>): string => 
     return dict[key] ?? key;
 };
 
-export const getKeyChainItems = ({ KeyChain, ChainStage }: IGiveKeyChainTriggeredItemsRequest): string[] => {
+export const getKeyChainItems = ({ KeyChain, ChainStage }: IKeyChainRequest): string[] => {
     const chainStages = ExportKeys[KeyChain].chainStages;
     if (!chainStages) {
         throw new Error(`KeyChain ${KeyChain} does not contain chain stages`);
@@ -154,7 +154,9 @@ export const getKeyChainItems = ({ KeyChain, ChainStage }: IGiveKeyChainTriggere
     }
 
     if (keyChainStage.itemsToGiveWhenTriggered.length === 0) {
-        throw new Error(`No items to give for KeyChain ${KeyChain} at stage ${ChainStage}`);
+        throw new Error(
+            `client requested key chain items in KeyChain ${KeyChain} at stage ${ChainStage}, but they did not exist`
+        );
     }
 
     return keyChainStage.itemsToGiveWhenTriggered;
@@ -193,4 +195,25 @@ export const getQuestCompletionItems = (questKey: string) => {
     }
 
     return items;
+};
+
+export const getKeyChainMessage = ({ KeyChain, ChainStage }: IKeyChainRequest) => {
+    const chainStages = ExportKeys[KeyChain]?.chainStages;
+    if (!chainStages) {
+        throw new Error(`KeyChain ${KeyChain} does not contain chain stages`);
+    }
+
+    const keyChainStage = chainStages[ChainStage];
+    if (!keyChainStage) {
+        throw new Error(`KeyChainStage ${ChainStage} not found`);
+    }
+
+    const chainStageMessage = keyChainStage.messageToSendWhenTriggered;
+
+    if (!chainStageMessage) {
+        throw new Error(
+            `client requested key chain message in keychain ${KeyChain} at stage ${ChainStage} but they did not exist`
+        );
+    }
+    return chainStageMessage;
 };

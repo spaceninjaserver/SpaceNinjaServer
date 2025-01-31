@@ -4,7 +4,8 @@ import { logger } from "@/src/utils/logger";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { updateQuestKey, IUpdateQuestRequest } from "@/src/services/questService";
 import { getQuestCompletionItems } from "@/src/services/itemDataService";
-import { addItem, combineInventoryChanges, getInventory } from "@/src/services/inventoryService";
+import { addItems, getInventory } from "@/src/services/inventoryService";
+import { IInventoryChanges } from "@/src/types/purchaseTypes";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const updateQuestController: RequestHandler = async (req, res) => {
@@ -18,24 +19,28 @@ export const updateQuestController: RequestHandler = async (req, res) => {
 
     const inventory = await getInventory(accountId);
 
+    const updateQuestResponse: { CustomData?: string; InventoryChanges?: IInventoryChanges; MissionRewards: [] } = {
+        MissionRewards: []
+    };
     updateQuestKey(inventory, updateQuestRequest.QuestKeys);
 
     if (updateQuestRequest.QuestKeys[0].Completed) {
         logger.debug(`completed quest ${updateQuestRequest.QuestKeys[0].ItemType} `);
         const questKeyName = updateQuestRequest.QuestKeys[0].ItemType;
         const questCompletionItems = getQuestCompletionItems(questKeyName);
+        logger.debug(`quest completion items`, questCompletionItems);
 
-        logger.debug(`quest completion items { ${questCompletionItems.map(item => item.ItemType).join(", ")} }`);
+        const inventoryChanges = await addItems(inventory, questCompletionItems);
+        inventory.ActiveQuest = "";
 
-        const inventoryChanges = {};
-        for (const item of questCompletionItems) {
-            const inventoryDelta = await addItem(inventory, item.ItemType, item.ItemCount);
-            combineInventoryChanges(inventoryChanges, inventoryDelta.InventoryChanges);
-        }
-        res.json({ MissionRewards: [], inventoryChanges });
-        return;
+        updateQuestResponse.InventoryChanges = inventoryChanges;
+    }
+
+    //TODO: might need to parse the custom data and add the associated items to inventory
+    if (updateQuestRequest.QuestKeys[0].CustomData) {
+        updateQuestResponse.CustomData = updateQuestRequest.QuestKeys[0].CustomData;
     }
 
     await inventory.save();
-    res.send({ MissionRewards: [] });
+    res.send(updateQuestResponse);
 };

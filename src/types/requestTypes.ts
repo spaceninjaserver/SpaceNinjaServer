@@ -11,8 +11,8 @@ import {
     TSolarMapRegion,
     TEquipmentKey,
     IFusionTreasure,
-    IQuestKeyClient,
-    IPlayerSkills
+    IPlayerSkills,
+    IQuestKeyDatabase
 } from "./inventoryTypes/inventoryTypes";
 
 export interface IThemeUpdateRequest {
@@ -46,7 +46,7 @@ export type IMissionInventoryUpdateRequest = {
     Consumables?: ITypeCount[];
     FusionTreasures?: IFusionTreasure[];
     Recipes?: ITypeCount[];
-    QuestKeys?: IQuestKeyClient[];
+    QuestKeys?: Omit<IQuestKeyDatabase, "CompletionDate">[];
     RegularCredits?: number;
     MissionFailed: boolean;
     MissionStatus: IMissionStatus;
