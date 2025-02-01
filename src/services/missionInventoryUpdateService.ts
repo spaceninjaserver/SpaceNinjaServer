@@ -224,10 +224,14 @@ export const addMissionRewards = async (
     }
 
     if (missions) {
-        const levelCreditReward = getLevelCreditRewards(missions?.Tag);
-        missionCompletionCredits += levelCreditReward;
-        inventory.RegularCredits += levelCreditReward;
-        logger.debug(`levelCreditReward ${levelCreditReward}`);
+        const node = getNode(missions.Tag);
+
+        if (node.missionIndex !== 28) {
+            const levelCreditReward = getLevelCreditRewards(missions?.Tag);
+            missionCompletionCredits += levelCreditReward;
+            inventory.RegularCredits += levelCreditReward;
+            logger.debug(`levelCreditReward ${levelCreditReward}`);
+        }
     }
 
     //TODO: resolve issue with creditbundles
