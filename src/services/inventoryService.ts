@@ -41,6 +41,7 @@ import {
     ExportRecipes,
     ExportResources,
     ExportSentinels,
+    ExportSyndicates,
     ExportUpgrades,
     ExportWeapons,
     TStandingLimitBin
@@ -1054,12 +1055,11 @@ export const addBooster = (ItemType: string, time: number, inventory: TInventory
 export const updateSyndicate = (
     inventory: HydratedDocument<IInventoryDatabase, InventoryDocumentProps>,
     syndicateUpdate: IMissionInventoryUpdateRequest["AffiliationChanges"]
-) => {
+): void => {
     syndicateUpdate?.forEach(affiliation => {
         const syndicate = inventory.Affiliations.find(x => x.Tag == affiliation.Tag);
         if (syndicate !== undefined) {
-            syndicate.Standing =
-                syndicate.Standing === undefined ? affiliation.Standing : syndicate.Standing + affiliation.Standing;
+            syndicate.Standing += affiliation.Standing;
             syndicate.Title = syndicate.Title === undefined ? affiliation.Title : syndicate.Title + affiliation.Title;
         } else {
             inventory.Affiliations.push({
@@ -1070,8 +1070,8 @@ export const updateSyndicate = (
                 FreeFavorsUsed: []
             });
         }
+        updateStandingLimit(inventory, ExportSyndicates[affiliation.Tag].dailyLimitBin, affiliation.Standing);
     });
-    return { AffiliationMods: [] };
 };
 
 /**
