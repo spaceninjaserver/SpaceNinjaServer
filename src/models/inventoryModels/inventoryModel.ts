@@ -60,7 +60,10 @@ import {
     ITraits,
     IKubrowPetDetailsClient,
     IKubrowPetEggDatabase,
-    IKubrowPetEggClient
+    IKubrowPetEggClient,
+    ICustomMarkers,
+    IMarkerInfo,
+    IMarker
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -849,6 +852,35 @@ infestedFoundrySchema.set("toJSON", {
     }
 });
 
+const markerSchema = new Schema<IMarker>(
+    {
+        anchorName: String,
+        color: Number,
+        label: String,
+        x: Number,
+        y: Number,
+        z: Number,
+        showInHud: Boolean
+    },
+    { _id: false }
+);
+
+const markerInfoSchema = new Schema<IMarkerInfo>(
+    {
+        icon: String,
+        markers: [markerSchema]
+    },
+    { _id: false }
+);
+
+const CustomMarkersSchema = new Schema<ICustomMarkers>(
+    {
+        tag: String,
+        markerInfos: [markerInfoSchema]
+    },
+    { _id: false }
+);
+
 const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
     {
         accountOwnerId: Schema.Types.ObjectId,
@@ -1132,6 +1164,9 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Progress+Rank+ItemType(ZarimanPumpShotgun)
         //https://warframe.fandom.com/wiki/Incarnon
         EvolutionProgress: { type: [evolutionProgressSchema], default: undefined },
+
+        //https://warframe.fandom.com/wiki/Loc-Pin
+        CustomMarkers: { type: [CustomMarkersSchema], default: undefined },
 
         //Unknown and system
         DuviriInfo: DuviriInfoSchema,

@@ -343,6 +343,7 @@ export interface IInventoryClient extends IDailyAffiliations {
     LastInventorySync: IOid;
     NextRefill: IMongoDate; // Next time argon crystals will have a decay tick
     FoundToday?: IMiscItem[]; // for Argon Crystals
+    CustomMarkers: ICustomMarkers[];
     ActiveLandscapeTraps: any[];
     EvolutionProgress?: IEvolutionProgress[];
     RepVotes: any[];
@@ -1055,4 +1056,24 @@ export interface ICompletedDialogue {
     Id: string;
     Booleans: string[];
     Choices: number[];
+}
+
+export interface ICustomMarkers {
+    tag: string;
+    markerInfos: IMarkerInfo[];
+}
+
+export interface IMarkerInfo {
+    icon: string;
+    markers: IMarker[];
+}
+
+export interface IMarker {
+    anchorName: string;
+    color: number;
+    label?: string;
+    x: number;
+    y: number;
+    z: number;
+    showInHud: boolean;
 }

@@ -155,6 +155,20 @@ export const addMissionInventoryUpdates = (
                 inventory.PlayerSkills.LPP_DRIFTER += value.LPP_DRIFTER;
                 break;
             }
+            case "CustomMarkers": {
+                value.forEach(markers => {
+                    const map = inventory.CustomMarkers
+                        ? inventory.CustomMarkers.find(entry => entry.tag == markers.tag)
+                        : undefined;
+                    if (map) {
+                        map.markerInfos = markers.markerInfos;
+                    } else {
+                        inventory.CustomMarkers ??= [];
+                        inventory.CustomMarkers.push(markers);
+                    }
+                });
+                break;
+            }
             default:
                 // Equipment XP updates
                 if (equipmentKeys.includes(key as TEquipmentKey)) {
