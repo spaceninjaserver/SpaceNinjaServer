@@ -1,8 +1,9 @@
 @echo off
 
 echo Updating SpaceNinjaServer...
-git config remote.origin.prune true
-git pull
+git config remote.origin.url https://openwf.io/SpaceNinjaServer.git
+git fetch --prune
+git reset --hard origin/main
 
 if exist static\data\0\ (
 	echo Updating stripped assets...
