@@ -16,8 +16,6 @@ import {
 } from "warframe-public-export-plus";
 import { handleSubsumeCompletion } from "./infestedFoundryController";
 import { allDailyAffiliationKeys } from "@/src/services/inventoryService";
-import { toOid } from "@/src/helpers/inventoryHelpers";
-import { Types } from "mongoose";
 
 export const inventoryController: RequestHandler = async (request, response) => {
     const account = await getAccountForRequest(request);
@@ -257,7 +255,8 @@ export const getInventoryResponse = async (
     // This determines if the "void fissures" tab is shown in navigation.
     inventoryResponse.HasOwnedVoidProjectionsPreviously = true;
 
-    inventoryResponse.LastInventorySync = toOid(new Types.ObjectId());
+    // Omitting this field so opening the navigation resyncs the inventory which is more desirable for typical usage.
+    //inventoryResponse.LastInventorySync = toOid(new Types.ObjectId());
 
     return inventoryResponse;
 };
