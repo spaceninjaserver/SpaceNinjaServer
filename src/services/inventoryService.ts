@@ -823,12 +823,10 @@ export const addGearExpByCategory = (
             return;
         }
 
-        const itemIndex = ItemId ? category.findIndex(item => item._id?.equals(ItemId.$oid)) : -1;
-        if (itemIndex !== -1) {
-            const item = category[itemIndex];
+        const item = category.id(ItemId.$oid);
+        if (item) {
             item.XP ??= 0;
             item.XP += XP;
-            inventory.markModified(`${categoryName}.${itemIndex}.XP`);
 
             const xpinfoIndex = inventory.XPInfo.findIndex(x => x.ItemType == item.ItemType);
             if (xpinfoIndex !== -1) {
