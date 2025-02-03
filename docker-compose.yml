@@ -1,7 +1,7 @@
 services:
-    openwf:
+    spaceninjaserver:
         # build: .
-        image: ghcr.io/spaceninjaserver/SpaceNinjaServer:latest
+        image: openwf/spaceninjaserver:latest
         environment:
             APP_MONGODB_URL: mongodb://openwfagent:spaceninjaserver@mongodb:27017/
 
