@@ -368,7 +368,7 @@
             </div>
             <div data-route="/webui/cheats, /webui/settings" data-title="Cheats | OpenWF WebUI">
                 <div class="row g-3">
-                    <div class="col-lg-4">
+                    <div class="col-md-6">
                         <div class="card mb-3">
                             <h5 class="card-header">Server</h5>
                             <div class="card-body">
@@ -479,32 +479,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-md-6">
                         <div class="card mb-3">
                             <h5 class="card-header">Account</h5>
                             <div class="card-body">
                                 <p><button class="btn btn-primary" onclick="doUnlockAllFocusSchools();">Unlock All Focus Schools</button></p>
                                 <button class="btn btn-primary" onclick="doHelminthUnlockAll();">Fully Level Up Helminth</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="card mb-3">
-                            <h5 class="card-header">Client</h5>
-                            <div id="client-cheats-nok" class="card-body">
-                                Client cheats are currently unavailable. This could be because your client is not running or using a DLL without an HTTP interface.
-                            </div>
-                            <div id="client-cheats-ok" class="card-body d-none">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="skip_mission_start_timer" />
-                                    <label class="form-check-label" for="skip_mission_start_timer">
-                                        Skip Mission Start Timer
-                                    </label>
-                                </div>
-                                <div class="form-group mt-3">
-                                    <label class="form-label" for="fov_override">FOV Override (0 to disable)</label>
-                                    <input id="fov_override" class="form-range" type="range" min="0" value="0" max="2260000" step="10000">
-                                </div>
                             </div>
                         </div>
                     </div>

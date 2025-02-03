@@ -915,34 +915,6 @@ single.getRoute("/webui/cheats").on("beforeload", function () {
             });
         }
     }, 10);
-
-    fetch("http://localhost:61558/ping", { mode: "no-cors" })
-        .then(() => {
-            $("#client-cheats-ok").removeClass("d-none");
-            $("#client-cheats-nok").addClass("d-none");
-
-            fetch("http://localhost:61558/skip_mission_start_timer")
-                .then(res => res.text())
-                .then(res => {
-                    document.getElementById("skip_mission_start_timer").checked = res == "1";
-                });
-            document.getElementById("skip_mission_start_timer").onchange = function () {
-                fetch("http://localhost:61558/skip_mission_start_timer?" + this.checked);
-            };
-
-            fetch("http://localhost:61558/fov_override")
-                .then(res => res.text())
-                .then(res => {
-                    document.getElementById("fov_override").value = parseFloat(res) * 10000;
-                });
-            document.getElementById("fov_override").oninput = function () {
-                fetch("http://localhost:61558/fov_override?" + this.value);
-            };
-        })
-        .catch(function () {
-            $("#client-cheats-nok").removeClass("d-none");
-            $("#client-cheats-ok").addClass("d-none");
-        });
 });
 
 function doUnlockAllFocusSchools() {
