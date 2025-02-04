@@ -155,7 +155,7 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     if (client.Upgrades !== undefined) {
         replaceArray<IUpgradeDatabase>(db.Upgrades, client.Upgrades.map(convertUpgrade));
     }
-    for (const key of ["RawUpgrades", "MiscItems"] as const) {
+    for (const key of ["RawUpgrades", "MiscItems", "Consumables"] as const) {
         if (client[key] !== undefined) {
             db[key].splice(0, db[key].length);
             client[key].forEach(x => {
