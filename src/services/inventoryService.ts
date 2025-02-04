@@ -240,7 +240,14 @@ export const addItem = async (
                 }
             };
         } else if (ExportResources[typeName].productCategory == "CrewShips") {
-            const inventoryChanges = addCrewShip(inventory, typeName);
+            const inventoryChanges = {
+                ...addCrewShip(inventory, typeName),
+                // fix to unlock railjack modding, item bellow supposed to be obtained from archwing quest
+                ...(!inventory.CrewShipHarnesses?.length
+                    ? addCrewShipHarness(inventory, "/Lotus/Types/Game/CrewShip/RailJack/DefaultHarness")
+                    : {})
+            };
+
             return { InventoryChanges: inventoryChanges };
         } else if (ExportResources[typeName].productCategory == "ShipDecorations") {
             const changes = [
@@ -807,6 +814,17 @@ const addCrewShip = (
     const index = inventory.CrewShips.push({ ItemType: typeName }) - 1;
     inventoryChanges.CrewShips ??= [];
     (inventoryChanges.CrewShips as object[]).push(inventory.CrewShips[index].toJSON());
+    return inventoryChanges;
+};
+
+const addCrewShipHarness = (
+    inventory: TInventoryDatabaseDocument,
+    typeName: string,
+    inventoryChanges: IInventoryChanges = {}
+): IInventoryChanges => {
+    const index = inventory.CrewShipHarnesses.push({ ItemType: typeName }) - 1;
+    inventoryChanges.CrewShipHarnesses ??= [];
+    (inventoryChanges.CrewShipHarnesses as object[]).push(inventory.CrewShipHarnesses[index].toJSON());
     return inventoryChanges;
 };
 
