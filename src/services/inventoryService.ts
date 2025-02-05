@@ -322,7 +322,6 @@ export const addItem = async (
     }
     if (typeName in ExportWeapons) {
         const weapon = ExportWeapons[typeName];
-        // Many non-weapon items are "Pistols" in Public Export, so some duck typing is needed.
         if (weapon.totalDamage != 0) {
             const inventoryChanges = addEquipment(inventory, weapon.productCategory, typeName);
             updateSlots(inventory, InventorySlot.WEAPONS, 0, 1);
@@ -330,6 +329,20 @@ export const addItem = async (
                 InventoryChanges: {
                     ...inventoryChanges,
                     WeaponBin: { count: 1, platinum: 0, Slots: -1 }
+                }
+            };
+        } else {
+            // Modular weapon parts
+            const miscItemChanges = [
+                {
+                    ItemType: typeName,
+                    ItemCount: quantity
+                } satisfies IMiscItem
+            ];
+            addMiscItems(inventory, miscItemChanges);
+            return {
+                InventoryChanges: {
+                    MiscItems: miscItemChanges
                 }
             };
         }
