@@ -6,6 +6,8 @@ import { equipmentKeys, IInventoryDatabase, TEquipmentKey } from "@/src/types/in
 import {
     addChallenges,
     addConsumables,
+    addCrewShipAmmo,
+    addCrewShipRawSalvage,
     addFocusXpIncreases,
     addFusionTreasures,
     addGearExpByCategory,
@@ -122,6 +124,7 @@ export const addMissionInventoryUpdates = (
                 addMods(inventory, value);
                 break;
             case "MiscItems":
+            case "BonusMiscItems":
                 addMiscItems(inventory, value);
                 break;
             case "Consumables":
@@ -135,6 +138,12 @@ export const addMissionInventoryUpdates = (
                 break;
             case "FusionTreasures":
                 addFusionTreasures(inventory, value);
+                break;
+            case "CrewShipRawSalvage":
+                addCrewShipRawSalvage(inventory, value);
+                break;
+            case "CrewShipAmmo":
+                addCrewShipAmmo(inventory, value);
                 break;
             case "FusionBundles": {
                 let fusionPoints = 0;
@@ -195,7 +204,6 @@ export const addMissionRewards = async (
 ) => {
     if (!rewardInfo) {
         logger.warn("no reward info provided");
-        return;
     }
 
     //TODO: check double reward merging
@@ -287,9 +295,9 @@ function getLevelCreditRewards(nodeName: string): number {
     //TODO: get dark sektor fixed credit rewards and railjack bonus
 }
 
-function getRandomMissionDrops(RewardInfo: IRewardInfo): IRngResult[] {
+function getRandomMissionDrops(RewardInfo: IRewardInfo | undefined): IRngResult[] {
     const drops: IRngResult[] = [];
-    if (RewardInfo.node in ExportRegions) {
+    if (RewardInfo && RewardInfo.node in ExportRegions) {
         const region = ExportRegions[RewardInfo.node];
         const rewardManifests = region.rewardManifests ?? [];
 

@@ -928,6 +928,37 @@ export const addConsumables = (inventory: TInventoryDatabaseDocument, itemsArray
     });
 };
 
+export const addCrewShipRawSalvage = (
+    inventory: TInventoryDatabaseDocument,
+    itemsArray: ITypeCount[] | undefined
+): void => {
+    const { CrewShipRawSalvage } = inventory;
+
+    itemsArray?.forEach(({ ItemCount, ItemType }) => {
+        const itemIndex = CrewShipRawSalvage.findIndex(i => i.ItemType === ItemType);
+
+        if (itemIndex !== -1) {
+            CrewShipRawSalvage[itemIndex].ItemCount += ItemCount;
+        } else {
+            CrewShipRawSalvage.push({ ItemCount, ItemType });
+        }
+    });
+};
+
+export const addCrewShipAmmo = (inventory: TInventoryDatabaseDocument, itemsArray: ITypeCount[] | undefined): void => {
+    const { CrewShipAmmo } = inventory;
+
+    itemsArray?.forEach(({ ItemCount, ItemType }) => {
+        const itemIndex = CrewShipAmmo.findIndex(i => i.ItemType === ItemType);
+
+        if (itemIndex !== -1) {
+            CrewShipAmmo[itemIndex].ItemCount += ItemCount;
+        } else {
+            CrewShipAmmo.push({ ItemCount, ItemType });
+        }
+    });
+};
+
 export const addRecipes = (inventory: TInventoryDatabaseDocument, itemsArray: ITypeCount[] | undefined): void => {
     const { Recipes } = inventory;
 

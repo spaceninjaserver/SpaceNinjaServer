@@ -35,18 +35,23 @@ export interface IUpdateChallengeProgressRequest {
 }
 
 export type IMissionInventoryUpdateRequest = {
+    MiscItems?: ITypeCount[];
+    Recipes?: ITypeCount[];
+    FusionBundles?: ITypeCount[];
+    Consumables?: ITypeCount[];
+    FusionBundels?: ITypeCount[];
+    CrewShipRawSalvage?: ITypeCount[];
+    CrewShipAmmo?: ITypeCount[];
+    BonusMiscItems?: ITypeCount[];
+
     AffiliationChanges?: IAffiliationChange[];
     crossPlaySetting?: string;
     rewardsMultiplier?: number;
     GoalTag: string;
     LevelKeyName: string;
     ActiveBoosters?: IBooster[];
-    FusionBundles?: ITypeCount[];
     RawUpgrades?: IRawUpgrade[];
-    MiscItems?: ITypeCount[];
-    Consumables?: ITypeCount[];
     FusionTreasures?: IFusionTreasure[];
-    Recipes?: ITypeCount[];
     QuestKeys?: Omit<IQuestKeyDatabase, "CompletionDate">[];
     RegularCredits?: number;
     MissionFailed: boolean;

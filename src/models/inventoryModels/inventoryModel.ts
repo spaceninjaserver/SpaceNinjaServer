@@ -997,7 +997,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         ShipDecorations: [typeCountSchema],
 
         //Railjack/Components(https://warframe.fandom.com/wiki/Railjack/Components)
-        CrewShipRawSalvage: [Schema.Types.Mixed],
+        CrewShipRawSalvage: [typeCountSchema],
 
         //Default RailJack
         CrewShipAmmo: [typeCountSchema],
