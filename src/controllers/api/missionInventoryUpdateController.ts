@@ -2,11 +2,7 @@ import { RequestHandler } from "express";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { IMissionInventoryUpdateRequest } from "@/src/types/requestTypes";
-import {
-    addMissionInventoryUpdates,
-    addMissionRewards,
-    calculateFinalCredits
-} from "@/src/services/missionInventoryUpdateService";
+import { addMissionInventoryUpdates, addMissionRewards } from "@/src/services/missionInventoryUpdateService";
 import { getInventory } from "@/src/services/inventoryService";
 import { getInventoryResponse } from "./inventoryController";
 
@@ -49,7 +45,7 @@ import { getInventoryResponse } from "./inventoryController";
 - [ ]  FpsMax
 - [ ]  FpsSamples
 */
-
+//move credit calc in here, return MissionRewards: [] if no reward info
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const missionInventoryUpdateController: RequestHandler = async (req, res): Promise<void> => {
     const accountId = await getAccountIdForRequest(req);
@@ -67,18 +63,8 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         });
         return;
     }
-    const missionRewardsResults = await addMissionRewards(inventory, missionReport);
-    if (!missionRewardsResults) {
-        throw new Error("Failed to add mission rewards, should not happen");
-    }
-    const { MissionRewards, inventoryChanges, missionCompletionCredits } = missionRewardsResults;
 
-    //creditBonus is not correct for mirage mission 3
-    const credits = calculateFinalCredits(inventory, {
-        missionCompletionCredits,
-        missionDropCredits: missionReport.RegularCredits ?? 0,
-        rngRewardCredits: inventoryChanges.RegularCredits as number
-    });
+    const { MissionRewards, inventoryChanges, credits } = await addMissionRewards(inventory, missionReport);
 
     await inventory.save();
     const inventoryResponse = await getInventoryResponse(inventory, true);
@@ -90,7 +76,7 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         MissionRewards,
         ...credits,
         ...inventoryUpdates,
-        FusionPoints: inventoryChanges.FusionPoints
+        FusionPoints: inventoryChanges?.FusionPoints
     });
 };
 

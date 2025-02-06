@@ -200,10 +200,17 @@ export const addMissionInventoryUpdates = (
 //TODO: return type of partial missioninventoryupdate response
 export const addMissionRewards = async (
     inventory: TInventoryDatabaseDocument,
-    { RewardInfo: rewardInfo, LevelKeyName: levelKeyName, Missions: missions }: IMissionInventoryUpdateRequest
+    {
+        RewardInfo: rewardInfo,
+        LevelKeyName: levelKeyName,
+        Missions: missions,
+        RegularCredits: creditDrops
+    }: IMissionInventoryUpdateRequest
 ) => {
     if (!rewardInfo) {
-        logger.warn("no reward info provided");
+        //TODO: if there is a case where you can have credits collected during a mission but no rewardInfo, add credits needs to be handled earlier
+        logger.debug(`Mission ${missions!.Tag} did not have Reward Info `);
+        return { MissionRewards: [] };
     }
 
     //TODO: check double reward merging
@@ -214,11 +221,12 @@ export const addMissionRewards = async (
     const inventoryChanges: IInventoryChanges = {};
 
     let missionCompletionCredits = 0;
-    //inventory change is what the client has not rewarded itself, credit updates seem to be taken from totalCredits
+    //inventory change is what the client has not rewarded itself, also the client needs to know the credit changes for display
     if (levelKeyName) {
         const fixedLevelRewards = getLevelKeyRewards(levelKeyName);
         //logger.debug(`fixedLevelRewards ${fixedLevelRewards}`);
         for (const reward of fixedLevelRewards) {
+            //quest stage completion credit rewards
             if (reward.rewardType == "RT_CREDITS") {
                 inventory.RegularCredits += reward.amount;
                 missionCompletionCredits += reward.amount;
@@ -231,6 +239,16 @@ export const addMissionRewards = async (
         }
     }
 
+    for (const reward of MissionRewards) {
+        //TODO: additem should take in storeItems
+        const inventoryChange = await addItem(inventory, reward.StoreItem.replace("StoreItems/", ""), reward.ItemCount);
+        //TODO: combineInventoryChanges improve type safety, merging 2 of the same item?
+        //TODO: check for the case when two of the same item are added, combineInventoryChanges should merge them, but the client also merges them
+        //TODO: some conditional types to rule out binchanges?
+        combineInventoryChanges(inventoryChanges, inventoryChange.InventoryChanges);
+    }
+
+    //node based credit rewards for mission completion
     if (missions) {
         const node = getNode(missions.Tag);
 
@@ -242,27 +260,24 @@ export const addMissionRewards = async (
         }
     }
 
-    //TODO: resolve issue with creditbundles
-    for (const reward of MissionRewards) {
-        //TODO: additem should take in storeItems
-        const inventoryChange = await addItem(inventory, reward.StoreItem.replace("StoreItems/", ""), reward.ItemCount);
-        //TODO: combineInventoryChanges improve type safety, merging 2 of the same item?
-        //TODO: check for the case when two of the same item are added, combineInventoryChanges should merge them
-        //TODO: some conditional types to rule out binchanges?
-        combineInventoryChanges(inventoryChanges, inventoryChange.InventoryChanges);
-    }
+    //creditBonus is not correct for mirage mission 3
+    const credits = addCredits(inventory, {
+        missionCompletionCredits,
+        missionDropCredits: creditDrops ?? 0,
+        rngRewardCredits: inventoryChanges.RegularCredits ?? 0
+    });
 
-    return { inventoryChanges, MissionRewards, missionCompletionCredits };
+    return { inventoryChanges, MissionRewards, credits };
 };
 
-//might not be faithful to original
+//slightly inaccurate compared to official
 //TODO: consider ActiveBoosters
-export const calculateFinalCredits = (
+export const addCredits = (
     inventory: HydratedDocument<IInventoryDatabase>,
     {
         missionDropCredits,
         missionCompletionCredits,
-        rngRewardCredits = 0
+        rngRewardCredits
     }: { missionDropCredits: number; missionCompletionCredits: number; rngRewardCredits: number }
 ) => {
     const hasDailyCreditBonus = true;
@@ -275,7 +290,7 @@ export const calculateFinalCredits = (
     };
 
     if (hasDailyCreditBonus) {
-        inventory.RegularCredits += totalCredits;
+        inventory.RegularCredits += missionCompletionCredits;
         finalCredits.CreditBonus[1] *= 2;
         finalCredits.MissionCredits[1] *= 2;
         finalCredits.TotalCredits[1] *= 2;
@@ -295,9 +310,9 @@ function getLevelCreditRewards(nodeName: string): number {
     //TODO: get dark sektor fixed credit rewards and railjack bonus
 }
 
-function getRandomMissionDrops(RewardInfo: IRewardInfo | undefined): IRngResult[] {
+function getRandomMissionDrops(RewardInfo: IRewardInfo): IRngResult[] {
     const drops: IRngResult[] = [];
-    if (RewardInfo && RewardInfo.node in ExportRegions) {
+    if (RewardInfo.node in ExportRegions) {
         const region = ExportRegions[RewardInfo.node];
         const rewardManifests = region.rewardManifests ?? [];
 
