@@ -31,7 +31,7 @@ function doLoginRequest(succ_cb, fail_cb) {
         url: "/api/login.php",
         contentType: "text/plain",
         data: JSON.stringify({
-            email: localStorage.getItem("email"),
+            email: localStorage.getItem("email").toLowerCase(),
             password: wp.encSync(localStorage.getItem("password"), "hex"),
             time: parseInt(new Date() / 1000),
             s: "W0RFXVN0ZXZlIGxpa2VzIGJpZyBidXR0cw==", // signature of some kind
