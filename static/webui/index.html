@@ -34,13 +34,13 @@
                         <li><a class="dropdown-item" href="#" data-lang="th" onclick="event.preventDefault();setLanguage('th');">แบบไทย</a></li>
                     </ul>
                 </li>
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown user-dropdown">
                     <button class="nav-link dropdown-toggle displayname" data-bs-toggle="dropdown" aria-expanded="false"></button>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="/webui/" onclick="logout();">Logout</a></li>
+                        <li><a class="dropdown-item" href="/webui/" onclick="logout();" data-loc="navbar_logout"></a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#" onclick="event.preventDefault();renameAccount();">Rename Account</a></li>
-                        <li><a class="dropdown-item" href="#" onclick="event.preventDefault();deleteAccount();">Delete Account</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="event.preventDefault();renameAccount();" data-loc="navbar_renameAccount"></a></li>
+                        <li><a class="dropdown-item" href="#" onclick="event.preventDefault();deleteAccount();" data-loc="navbar_deleteAccount"></a></li>
                     </ul>
                 </li>
             </ul>
@@ -56,16 +56,16 @@
                 <div class="navbar p-0">
                     <ul class="navbar-nav justify-content-end">
                         <li class="nav-item">
-                            <a class="nav-link" href="/webui/inventory" data-bs-dismiss="offcanvas" data-bs-target="#sidebar">Inventory</a>
+                            <a class="nav-link" href="/webui/inventory" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" data-loc="navbar_inventory"></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/webui/mods" data-bs-dismiss="offcanvas" data-bs-target="#sidebar">Mods</a>
+                            <a class="nav-link" href="/webui/mods" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" data-loc="navbar_mods"></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/webui/cheats" data-bs-dismiss="offcanvas" data-bs-target="#sidebar">Cheats</a>
+                            <a class="nav-link" href="/webui/cheats" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" data-loc="navbar_cheats"></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/webui/import" data-bs-dismiss="offcanvas" data-bs-target="#sidebar">Import</a>
+                            <a class="nav-link" href="/webui/import" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" data-loc="navbar_import"></a>
                         </li>
                     </ul>
                 </div>
@@ -73,38 +73,35 @@
         </div>
         <div class="w-100">
             <div data-route="/webui/" data-title="Login | OpenWF WebUI">
-                <p>Login using your OpenWF account credentials (same as in-game when connecting to this server).</p>
+                <p data-loc="login_description"></p>
                 <form onsubmit="doLogin();return false;">
-                    <label for="email">Email address</label>
+                    <label for="email" data-loc="login_emailLabel"></label>
                     <input class="form-control" type="email" id="email" required />
                     <br />
-                    <label for="password">Password</label>
+                    <label for="password" data-loc="login_passwordLabel"></label>
                     <input class="form-control" type="password" id="password" required />
                     <br />
-                    <button class="btn btn-primary" type="submit">Login</button>
+                    <button class="btn btn-primary" type="submit" data-loc="login_loginButton"></button>
                 </form>
             </div>
             <div data-route="/webui/inventory" data-title="Inventory | OpenWF WebUI">
-                <p class="mb-3">
-                    Note: Changes made here will only be reflected in-game when the game re-downloads your
-                    inventory. Visiting the navigation should be the easiest way to trigger that.
-                </p>
+                <p class="mb-3" data-loc="general_inventoryUpdateNote"></p>
                 <div class="card mb-3">
-                    <h5 class="card-header">Add Items</h5>
+                    <h5 class="card-header" data-loc="inventory_addItems"></h5>
                     <form class="card-body input-group" onsubmit="doAcquireMiscItems();return false;">
                         <input class="form-control" id="miscitem-count" type="number" min="1" value="1" />
                         <input class="form-control w-50" id="miscitem-type" list="datalist-miscitems" />
-                        <button class="btn btn-primary" type="submit">Add</button>
+                        <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                     </form>
                 </div>
                 <div class="row g-3">
                     <div class="col-lg-6">
                         <div class="card mb-3" style="height: 400px;">
-                            <h5 class="card-header">Warframes</h5>
+                            <h5 class="card-header" data-loc="inventory_suits"></h5>
                             <div class="card-body overflow-auto">
                                 <form class="input-group mb-3" onsubmit="doAcquireEquipment('Suits');return false;">
                                     <input class="form-control" id="acquire-type-Suits" list="datalist-Suits" />
-                                    <button class="btn btn-primary" type="submit">Add</button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
                                 <table class="table table-hover w-100">
                                     <tbody id="Suits-list"></tbody>
@@ -114,11 +111,11 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="card mb-3" style="height: 400px;">
-                            <h5 class="card-header">Primary Weapons</h5>
+                            <h5 class="card-header" data-loc="inventory_longGuns"></h5>
                             <div class="card-body overflow-auto">
                                 <form class="input-group mb-3" onsubmit="doAcquireEquipment('LongGuns');return false;">
                                     <input class="form-control" id="acquire-type-LongGuns" list="datalist-LongGuns" />
-                                    <button class="btn btn-primary" type="submit">Add</button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
                                 <table class="table table-hover w-100">
                                     <tbody id="LongGuns-list"></tbody>
@@ -130,11 +127,11 @@
                 <div class="row g-3">
                     <div class="col-lg-6">
                         <div class="card mb-3" style="height: 400px;">
-                            <h5 class="card-header">Secondary Weapons</h5>
+                            <h5 class="card-header" data-loc="inventory_pistols"></h5>
                             <div class="card-body overflow-auto">
                                 <form class="input-group mb-3" onsubmit="doAcquireEquipment('Pistols');return false;">
                                     <input class="form-control" id="acquire-type-Pistols" list="datalist-Pistols" />
-                                    <button class="btn btn-primary" type="submit">Add</button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
                                 <table class="table table-hover w-100">
                                     <tbody id="Pistols-list"></tbody>
@@ -144,11 +141,11 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="card mb-3" style="height: 400px;">
-                            <h5 class="card-header">Melee Weapons</h5>
+                            <h5 class="card-header" data-loc="inventory_melee"></h5>
                             <div class="card-body overflow-auto">
                                 <form class="input-group mb-3" onsubmit="doAcquireEquipment('Melee');return false;">
                                     <input class="form-control" id="acquire-type-Melee" list="datalist-Melee" />
-                                    <button class="btn btn-primary" type="submit">Add</button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
                                 <table class="table table-hover w-100">
                                     <tbody id="Melee-list"></tbody>
@@ -160,11 +157,11 @@
                 <div class="row g-3">
                     <div class="col-lg-6">
                         <div class="card mb-3" style="height: 400px;">
-                            <h5 class="card-header">Archwing</h5>
+                            <h5 class="card-header" data-loc="inventory_spaceSuits"></h5>
                             <div class="card-body overflow-auto">
                                 <form class="input-group mb-3" onsubmit="doAcquireEquipment('SpaceSuits');return false;">
                                     <input class="form-control" id="acquire-type-SpaceSuits" list="datalist-SpaceSuits" />
-                                    <button class="btn btn-primary" type="submit">Add</button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
                                 <table class="table table-hover w-100">
                                     <tbody id="SpaceSuits-list"></tbody>
@@ -174,11 +171,11 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="card mb-3" style="height: 400px;">
-                            <h5 class="card-header">Archwing Primary Weapons</h5>
+                            <h5 class="card-header" data-loc="inventory_spaceGuns"></h5>
                             <div class="card-body overflow-auto">
                                 <form class="input-group mb-3" onsubmit="doAcquireEquipment('SpaceGuns');return false;">
                                     <input class="form-control" id="acquire-type-SpaceGuns" list="datalist-SpaceGuns" />
-                                    <button class="btn btn-primary" type="submit">Add</button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
                                 <table class="table table-hover w-100">
                                     <tbody id="SpaceGuns-list"></tbody>
@@ -190,11 +187,11 @@
                 <div class="row g-3">
                     <div class="col-lg-6">
                         <div class="card mb-3" style="height: 400px;">
-                            <h5 class="card-header">Archwing Melee Weapons</h5>
+                            <h5 class="card-header" data-loc="inventory_spaceMelee"></h5>
                             <div class="card-body overflow-auto">
                                 <form class="input-group mb-3" onsubmit="doAcquireEquipment('SpaceMelee');return false;">
                                     <input class="form-control" id="acquire-type-SpaceMelee" list="datalist-SpaceMelee" />
-                                    <button class="btn btn-primary" type="submit">Add</button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
                                 <table class="table table-hover w-100">
                                     <tbody id="SpaceMelee-list"></tbody>
@@ -204,11 +201,11 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="card mb-3" style="height: 400px;">
-                            <h5 class="card-header">Necramechs</h5>
+                            <h5 class="card-header" data-loc="inventory_mechSuits"></h5>
                             <div class="card-body overflow-auto">
                                 <form class="input-group mb-3" onsubmit="doAcquireEquipment('MechSuits');return false;">
                                     <input class="form-control" id="acquire-type-MechSuits" list="datalist-MechSuits" />
-                                    <button class="btn btn-primary" type="submit">Add</button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
                                 <table class="table table-hover w-100">
                                     <tbody id="MechSuits-list"></tbody>
@@ -220,11 +217,11 @@
                 <div class="row g-3">
                     <div class="col-lg-6">
                         <div class="card mb-3" style="height: 400px;">
-                            <h5 class="card-header">Sentinels</h5>
+                            <h5 class="card-header" data-loc="inventory_sentinels"></h5>
                             <div class="card-body overflow-auto">
                                 <form class="input-group mb-3" onsubmit="doAcquireEquipment('Sentinels');return false;">
                                     <input class="form-control" id="acquire-type-Sentinels" list="datalist-Sentinels" />
-                                    <button class="btn btn-primary" type="submit">Add</button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
                                 <table class="table table-hover w-100">
                                     <tbody id="Sentinels-list"></tbody>
@@ -234,11 +231,11 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="card mb-3" style="height: 400px;">
-                            <h5 class="card-header">Sentinel Weapons</h5>
+                            <h5 class="card-header" data-loc="inventory_sentinelWeapons"></h5>
                             <div class="card-body overflow-auto">
                                 <form class="input-group mb-3" onsubmit="doAcquireEquipment('SentinelWeapons');return false;">
                                     <input class="form-control" id="acquire-type-SentinelWeapons" list="datalist-SentinelWeapons" />
-                                    <button class="btn btn-primary" type="submit">Add</button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
                                 <table class="table table-hover w-100">
                                     <tbody id="SentinelWeapons-list"></tbody>
@@ -250,7 +247,7 @@
                 <div class="row g-3">
                     <div class="col-lg-6">
                         <div class="card mb-3" style="height: 400px;">
-                            <h5 class="card-header">Amps</h5>
+                            <h5 class="card-header" data-loc="inventory_operatorAmps"></h5>
                             <div class="card-body overflow-auto">
                                 <table class="table table-hover w-100">
                                     <tbody id="OperatorAmps-list"></tbody>
@@ -260,7 +257,7 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="card mb-3" style="height: 400px;">
-                            <h5 class="card-header">K-Drives</h5>
+                            <h5 class="card-header" data-loc="inventory_hoverboards"></h5>
                             <div class="card-body overflow-auto">
                                 <table class="table table-hover w-100">
                                     <tbody id="Hoverboards-list"></tbody>
@@ -270,23 +267,23 @@
                     </div>
                 </div>
                 <div class="card mb-3">
-                    <h5 class="card-header">Bulk Actions</h5>
+                    <h5 class="card-header" data-loc="general_bulkActions"></h5>
                     <div class="card-body">
                         <div class="mb-2 d-flex flex-wrap gap-2">
-                            <button class="btn btn-primary" onclick="addMissingEquipment(['Suits']);">Add Missing Warframes</button>
-                            <button class="btn btn-primary" onclick="addMissingEquipment(['Melee', 'LongGuns', 'Pistols']);">Add Missing Weapons</button>
-                            <button class="btn btn-primary" onclick="addMissingEquipment(['SpaceSuits']);">Add Missing Archwings</button>
-                            <button class="btn btn-primary" onclick="addMissingEquipment(['SpaceGuns', 'SpaceMelee']);">Add Missing Archwing Weapons</button>
-                            <button class="btn btn-primary" onclick="addMissingEquipment(['Sentinels']);">Add Missing Sentinels</button>
-                            <button class="btn btn-primary" onclick="addMissingEquipment(['SentinelWeapons']);">Add Missing Sentinel Weapons</button>
+                            <button class="btn btn-primary" onclick="addMissingEquipment(['Suits']);" data-loc="inventory_bulkAddSuits"></button>
+                            <button class="btn btn-primary" onclick="addMissingEquipment(['Melee', 'LongGuns', 'Pistols']);" data-loc="inventory_bulkAddWeapons"></button>
+                            <button class="btn btn-primary" onclick="addMissingEquipment(['SpaceSuits']);" data-loc="inventory_bulkAddSpaceSuits"></button>
+                            <button class="btn btn-primary" onclick="addMissingEquipment(['SpaceGuns', 'SpaceMelee']);" data-loc="inventory_bulkAddSpaceWeapons"></button>
+                            <button class="btn btn-primary" onclick="addMissingEquipment(['Sentinels']);" data-loc="inventory_bulkAddSentinels"></button>
+                            <button class="btn btn-primary" onclick="addMissingEquipment(['SentinelWeapons']);" data-loc="inventory_bulkAddSentinelWeapons"></button>
                         </div>
                         <div class="mb-2 d-flex flex-wrap gap-2">
-                            <button class="btn btn-success" onclick="maxRankAllEquipment(['Suits']);">Max Rank All Warframes</button>
-                            <button class="btn btn-success" onclick="maxRankAllEquipment(['Melee', 'LongGuns', 'Pistols']);">Max Rank All Weapons</button>
-                            <button class="btn btn-success" onclick="maxRankAllEquipment(['SpaceSuits']);">Max Rank All Archwings</button>
-                            <button class="btn btn-success" onclick="maxRankAllEquipment(['SpaceGuns', 'SpaceMelee']);">Max Rank All Archwing Weapons</button>
-                            <button class="btn btn-success" onclick="maxRankAllEquipment(['Sentinels']);">Max Rank All Sentinels</button>
-                            <button class="btn btn-success" onclick="maxRankAllEquipment(['SentinelWeapons']);">Max Rank All Sentinel Weapons</button>
+                            <button class="btn btn-success" onclick="maxRankAllEquipment(['Suits']);" data-loc="inventory_bulkRankUpSuits"></button>
+                            <button class="btn btn-success" onclick="maxRankAllEquipment(['Melee', 'LongGuns', 'Pistols']);" data-loc="inventory_bulkRankUpWeapons"></button>
+                            <button class="btn btn-success" onclick="maxRankAllEquipment(['SpaceSuits']);" data-loc="inventory_bulkRankUpSpaceSuits"></button>
+                            <button class="btn btn-success" onclick="maxRankAllEquipment(['SpaceGuns', 'SpaceMelee']);" data-loc="inventory_bulkRankUpSpaceWeapons"></button>
+                            <button class="btn btn-success" onclick="maxRankAllEquipment(['Sentinels']);" data-loc="inventory_bulkRankUpSentinels"></button>
+                            <button class="btn btn-success" onclick="maxRankAllEquipment(['SentinelWeapons']);" data-loc="inventory_bulkRankUpSentinelWeapons"></button>
                         </div>
                     </div>
                 </div>
@@ -295,14 +292,14 @@
                 <h3 class="mb-0"></h3>
                 <p class="text-body-secondary"></p>
                 <div class="card mb-3">
-                    <h5 class="card-header">Archon Shard Slots</h5>
+                    <h5 class="card-header" data-loc="powersuit_archonShardsLabel"></h5>
                     <div class="card-body">
-                        <p>You can use these unlimited slots to apply a wide range of upgrades.</p>
+                        <p data-loc="powersuit_archonShardsDescription"></p>
                         <form class="input-group mb-3" onsubmit="doPushArchonCrystalUpgrade();return false;">
                             <input type="number" id="archon-crystal-add-count" min="1" max="10000" value="1" class="form-control" style="max-width:100px" />
                             <span class="input-group-text">x</span>
                             <input class="form-control" list="datalist-archonCrystalUpgrades" />
-                            <button class="btn btn-primary" type="submit">Add</button>
+                            <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                         </form>
                         <table class="table table-hover w-100">
                             <tbody id="crystals-list"></tbody>
@@ -311,14 +308,11 @@
                 </div>
             </div>
             <div data-route="/webui/mods" data-title="Mods | OpenWF WebUI">
-                <p class="mb-3">
-                    Note: Changes made here will only be reflected in-game when the game re-downloads your
-                    inventory. Visiting the navigation should be the easiest way to trigger that.
-                </p>
+                <p class="mb-3" data-loc="general_inventoryUpdateNote"></p>
                 <div class="row g-3">
                     <div class="col-xxl-6">
                         <div class="card mb-3">
-                            <h5 class="card-header">Add Riven</h5>
+                            <h5 class="card-header" data-loc="mods_addRiven"></h5>
                             <form class="card-body" onsubmit="doAcquireRiven();return false;">
                                 <select class="form-control mb-3" id="addriven-type">
                                     <option value="LotusArchgunRandomModRare">LotusArchgunRandomModRare</option>
@@ -329,13 +323,13 @@
                                     <option value="LotusShotgunRandomModRare">LotusShotgunRandomModRare</option>
                                     <option value="PlayerMeleeWeaponRandomModRare">PlayerMeleeWeaponRandomModRare</option>
                                 </select>
-                                <textarea id="addriven-fingerprint" class="form-control mb-3" placeholder="Fingerprint"></textarea>
-                                <button class="btn btn-primary" style="margin-right: 5px" type="submit">Add</button>
-                                <a href="riven-tool/" target="_blank">Need help with the fingerprint?</a>
+                                <textarea id="addriven-fingerprint" class="form-control mb-3" data-loc-placeholder_"mods.fingerprint"></textarea>
+                                <button class="btn btn-primary" style="margin-right: 5px" type="submit" data-loc="general_addButton"></button>
+                                <a href="riven-tool/" target="_blank" data-loc="mods_fingerprintHelp"></a>
                             </form>
                         </div>
                         <div class="card mb-3">
-                            <h5 class="card-header">Rivens</h5>
+                            <h5 class="card-header" data-loc="mods_rivens"></h5>
                             <div class="card-body">
                                 <table class="table table-hover w-100">
                                     <tbody id="riven-list"></tbody>
@@ -345,12 +339,12 @@
                     </div>
                     <div class="col-xxl-6">
                         <div class="card mb-3">
-                            <h5 class="card-header">Mods</h5>
+                            <h5 class="card-header" data-loc="mods_mods"></h5>
                             <div class="card-body">
                                 <form class="input-group mb-3" onsubmit="doAcquireMod();return false;">
                                     <input class="form-control" id="mod-count" type="number" min="1" value="1"/>
                                     <input class="form-control w-50" id="mod-to-acquire" list="datalist-mods" />
-                                    <button class="btn btn-primary" type="submit">Add</button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
                                 <table class="table table-hover w-100">
                                     <tbody id="mods-list"></tbody>
@@ -358,9 +352,9 @@
                             </div>
                         </div>
                         <div class="card mb-3">
-                            <h5 class="card-header">Bulk Actions</h5>
+                            <h5 class="card-header" data-loc="general_bulkActions"></h5>
                             <div class="card-body">
-                                <button class="btn btn-primary" onclick="doAddAllMods();">Add Missing Mods</button>
+                                <button class="btn btn-primary" onclick="doAddAllMods();" data-loc="mods_bulkAddMods"></button>
                             </div>
                         </div>
                     </div>
@@ -373,127 +367,113 @@
                             <h5 class="card-header">Server</h5>
                             <div class="card-body">
                                 <div id="server-settings-no-perms" class="d-none">
-                                    <p class="card-text">You must be an administrator to use this feature. To become an administrator, add <code>"<span class="displayname"></span>"</code> to <code>administratorNames</code> in the config.json.</p>
+                                    <p class="card-text" data-loc="cheats_administratorRequirement"></p>
                                 </div>
                                 <form id="server-settings" class="d-none" onsubmit="doChangeSettings();return false;">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="skipTutorial" />
-                                        <label class="form-check-label" for="skipTutorial">Skip Tutorial</label>
+                                        <label class="form-check-label" for="skipTutorial" data-loc="cheats_skipTutorial"></label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="skipAllDialogue" />
-                                        <label class="form-check-label" for="skipAllDialogue">Skip All Dialogue</label>
+                                        <label class="form-check-label" for="skipAllDialogue" data-loc="cheats_skipAllDialogue"></label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="unlockAllScans" />
-                                        <label class="form-check-label" for="unlockAllScans">Unlock All Scans</label>
+                                        <label class="form-check-label" for="unlockAllScans" data-loc="cheats_unlockAllScans"></label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="unlockAllMissions" />
-                                        <label class="form-check-label" for="unlockAllMissions">Unlock All Missions</label>
+                                        <label class="form-check-label" for="unlockAllMissions" data-loc="cheats_unlockAllMissions"></label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="unlockAllQuests" />
-                                        <label class="form-check-label" for="unlockAllQuests">Unlock All Quests</label>
+                                        <label class="form-check-label" for="unlockAllQuests" data-loc="cheats_unlockAllQuests"></label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="completeAllQuests" />
-                                        <label class="form-check-label" for="completeAllQuests">Complete All Quests</label>
+                                        <label class="form-check-label" for="completeAllQuests" data-loc="cheats_completeAllQuests"></label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="infiniteCredits" />
-                                        <label class="form-check-label" for="infiniteCredits">Infinite Credits</label>
+                                        <label class="form-check-label" for="infiniteCredits" data-loc="cheats_infiniteCredits"></label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="infinitePlatinum" />
-                                        <label class="form-check-label" for="infinitePlatinum">Infinite Platinum</label>
+                                        <label class="form-check-label" for="infinitePlatinum" data-loc="cheats_infinitePlatinum"></label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="infiniteEndo" />
-                                        <label class="form-check-label" for="infiniteEndo">Infinite Endo</label>
+                                        <label class="form-check-label" for="infiniteEndo" data-loc="cheats_infiniteEndo"></label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="infiniteRegalAya" />
-                                        <label class="form-check-label" for="infiniteRegalAya">Infinite Regal Aya</label>
+                                        <label class="form-check-label" for="infiniteRegalAya" data-loc="cheats_infiniteRegalAya"></label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="unlockAllShipFeatures" />
-                                        <label class="form-check-label" for="unlockAllShipFeatures">Unlock All Ship Features</label>
+                                        <label class="form-check-label" for="unlockAllShipFeatures" data-loc="cheats_unlockAllShipFeatures"></label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="unlockAllShipDecorations" />
-                                        <label class="form-check-label" for="unlockAllShipDecorations">Unlock All Ship Decorations</label>
+                                        <label class="form-check-label" for="unlockAllShipDecorations" data-loc="cheats_unlockAllShipDecorations"></label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="unlockAllFlavourItems" />
-                                        <label class="form-check-label" for="unlockAllFlavourItems">
-                                            Unlock All <abbr title="Animation Sets, Glyphs, Plattes, etc.">Flavor Items</abbr>
-                                        </label>
+                                        <label class="form-check-label" for="unlockAllFlavourItems" data-loc="cheats_unlockAllFlavourItems"></label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="unlockAllSkins" />
-                                        <label class="form-check-label" for="unlockAllSkins">Unlock All Skins</label>
+                                        <label class="form-check-label" for="unlockAllSkins" data-loc="cheats_unlockAllSkins"></label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="unlockAllCapturaScenes" />
-                                        <label class="form-check-label" for="unlockAllCapturaScenes">Unlock All Captura Scenes</label>
+                                        <label class="form-check-label" for="unlockAllCapturaScenes" data-loc="cheats_unlockAllCapturaScenes"></label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="universalPolarityEverywhere" />
-                                        <label class="form-check-label" for="universalPolarityEverywhere">
-                                            Universal Polarity Everywhere
-                                        </label>
+                                        <label class="form-check-label" for="universalPolarityEverywhere" data-loc="cheats_universalPolarityEverywhere"></label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="unlockDoubleCapacityPotatoesEverywhere" />
-                                        <label class="form-check-label" for="unlockDoubleCapacityPotatoesEverywhere">
-                                            Potatoes Everywhere
-                                        </label>
+                                        <label class="form-check-label" for="unlockDoubleCapacityPotatoesEverywhere" data-loc="cheats_unlockDoubleCapacityPotatoesEverywhere"></label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="unlockExilusEverywhere" />
-                                        <label class="form-check-label" for="unlockExilusEverywhere">
-                                            Exilus Adapters Everywhere
-                                        </label>
+                                        <label class="form-check-label" for="unlockExilusEverywhere" data-loc="cheats_unlockExilusEverywhere"></label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="unlockArcanesEverywhere" />
-                                        <label class="form-check-label" for="unlockArcanesEverywhere">
-                                            Arcane Adapters Everywhere
-                                        </label>
+                                        <label class="form-check-label" for="unlockArcanesEverywhere" data-loc="cheats_unlockArcanesEverywhere"></label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="noDailyStandingLimits" />
-                                        <label class="form-check-label" for="noDailyStandingLimits">
-                                            No Daily Standing Limits
-                                        </label>
+                                        <label class="form-check-label" for="noDailyStandingLimits" data-loc="cheats_noDailyStandingLimits"></label>
                                     </div>
                                     <div class="form-group mt-2">
-                                        <label class="form-label" for="spoofMasteryRank">
-                                            Spoofed Mastery Rank (-1 to disable)
-                                        </label>
+                                        <label class="form-label" for="spoofMasteryRank" data-loc="cheats_spoofMasteryRank"></label>
                                         <input class="form-control" id="spoofMasteryRank" type="number" min="-1" max="65535" />
                                     </div>
-                                    <button class="btn btn-primary mt-3" type="submit">Save Settings</button>
+                                    <button class="btn btn-primary mt-3" type="submit" data-loc="cheats_saveSettings"></button>
                                 </form>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="card mb-3">
-                            <h5 class="card-header">Account</h5>
+                            <h5 class="card-header" data-loc="cheats_account"></h5>
                             <div class="card-body">
-                                <p><button class="btn btn-primary" onclick="doUnlockAllFocusSchools();">Unlock All Focus Schools</button></p>
-                                <button class="btn btn-primary" onclick="doHelminthUnlockAll();">Fully Level Up Helminth</button>
+                                <p><button class="btn btn-primary" onclick="doUnlockAllFocusSchools();" data-loc="cheats_unlockAllFocusSchools"></button></p>
+                                <button class="btn btn-primary" onclick="doHelminthUnlockAll();" data-loc="cheats_helminthUnlockAll"></button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div data-route="/webui/import" data-title="Import | OpenWF WebUI">
-                <p>You can provide a full or partial inventory response (client respresentation) here. All fields that are supported by the importer <b>will be overwritten</b> in your account.</p>
+                <p data-loc="import_importNote"></p>
                 <textarea class="form-control" id="import-inventory"></textarea>
-                <button class="btn btn-primary mt-3" onclick="doImport();">Submit</button>
+                <button class="btn btn-primary mt-3" onclick="doImport();" data-loc="import_submit"></button>
             </div>
         </div>
     </div>

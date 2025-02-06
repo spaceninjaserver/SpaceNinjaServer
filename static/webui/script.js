@@ -14,6 +14,9 @@ function loginFromLocalStorage() {
             $(".displayname").text(data.DisplayName);
             window.accountId = data.id;
             window.authz = "accountId=" + data.id + "&nonce=" + data.Nonce;
+            if (window.dict) {
+                updateLocElements();
+            }
             updateInventory();
         },
         () => {
@@ -50,7 +53,7 @@ function revalidateAuthz(succ_cb) {
         },
         () => {
             logout();
-            alert("Your credentials are no longer valid.");
+            alert(loc("code_nonValidAuthz"));
             single.loadRoute("/webui/"); // Show login screen
         }
     );
@@ -62,24 +65,17 @@ function logout() {
 }
 
 function renameAccount() {
-    const newname = window.prompt("What would you like to change your account name to?");
+    const newname = window.prompt(loc("code_changeNameConfirm"));
     if (newname) {
         fetch("/custom/renameAccount?" + window.authz + "&newname=" + newname).then(() => {
             $(".displayname").text(newname);
+            updateLocElements();
         });
     }
 }
 
 function deleteAccount() {
-    if (
-        window.confirm(
-            "Are you sure you want to delete your account " +
-                document.querySelector(".displayname").textContent +
-                " (" +
-                localStorage.getItem("email") +
-                ")? This action cannot be undone."
-        )
-    ) {
+    if (window.confirm(loc("code_deleteAccountConfirm"))) {
         fetch("/custom/deleteAccount?" + window.authz).then(() => {
             logout();
             single.loadRoute("/webui/"); // Show login screen
@@ -110,55 +106,80 @@ single.on("route_load", function (event) {
     }
 });
 
+function loc(tag) {
+    return ((window.dict ?? {})[tag] ?? tag)
+        .split("|DISPLAYNAME|").join(document.querySelector(".displayname").textContent)
+        .split("|EMAIL|").join(localStorage.getItem("email"));
+}
+
+function updateLocElements() {
+    document.querySelectorAll("[data-loc]").forEach(elm => {
+        elm.innerHTML = loc(elm.getAttribute("data-loc"));
+    });
+}
+
 function setActiveLanguage(lang) {
     window.lang = lang;
     const lang_name = document.querySelector("[data-lang=" + lang + "]").textContent;
     document.getElementById("active-lang-name").textContent = lang_name;
     document.querySelector("[data-lang].active").classList.remove("active");
     document.querySelector("[data-lang=" + lang + "]").classList.add("active");
+
+    window.dictPromise = new Promise(resolve => {
+        const webui_lang = ["en", "ru"].indexOf(lang) == -1 ? "en" : lang;
+        const script = document.createElement("script");
+        script.src = "/translations/" + webui_lang + ".js";
+        script.onload = function() {
+            updateLocElements();
+            resolve(window.dict);
+        };
+        document.documentElement.appendChild(script);
+    });
 }
 setActiveLanguage(localStorage.getItem("lang") ?? "en");
 
 function setLanguage(lang) {
     setActiveLanguage(lang);
     localStorage.setItem("lang", lang);
-    fetchItemList();
-    updateInventory();
+    if (window.authz) { // Not in prelogin state?
+        fetchItemList();
+        updateInventory();
+    }
 }
 
 let uniqueLevelCaps = {};
 function fetchItemList() {
     window.itemListPromise = new Promise(resolve => {
         const req = $.get("/custom/getItemLists?lang=" + window.lang);
-        req.done(data => {
+        req.done(async (data) => {
+            await dictPromise;
+
             window.archonCrystalUpgrades = data.archonCrystalUpgrades;
 
             const itemMap = {
                 // Generics for rivens
-                "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun": { name: "Archgun" },
-                "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon": { name: "Melee" },
-                "/Lotus/Weapons/Tenno/Pistol/LotusPistol": { name: "Pistol" },
-                "/Lotus/Weapons/Tenno/Rifle/LotusRifle": { name: "Rifle" },
-                "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun": { name: "Shotgun" },
+                "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun": { name: loc("code_archgun") },
+                "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon": { name: loc("code_melee") },
+                "/Lotus/Weapons/Tenno/Pistol/LotusPistol": { name: loc("code_pistol") },
+                "/Lotus/Weapons/Tenno/Rifle/LotusRifle": { name: loc("code_rifle") },
+                "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun": { name: loc("code_shotgun") },
                 // Modular weapons
-                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary": { name: "Kitgun" },
-                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryBeam": { name: "Kitgun" },
-                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryLauncher": { name: "Kitgun" },
-                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryShotgun": { name: "Kitgun" },
-                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimarySniper": { name: "Kitgun" },
-                "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary": { name: "Kitgun" },
-                "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryBeam": { name: "Kitgun" },
-                "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryShotgun": { name: "Kitgun" },
-                "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon": { name: "Zaw" },
-                "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/OperatorTrainingAmpWeapon": {
-                    name: "Mote Amp"
-                },
-                "/Lotus/Weapons/Sentients/OperatorAmplifiers/OperatorAmpWeapon": { name: "Amp" },
-                "/Lotus/Weapons/Operator/Pistols/DrifterPistol/DrifterPistolPlayerWeapon": { name: "Sirocco" },
-                "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit": { name: "K-Drive" },
+                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary": { name: loc("code_kitgun") },
+                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryBeam": { name: loc("code_kitgun") },
+                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryLauncher": { name: loc("code_kitgun") },
+                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryShotgun": { name: loc("code_kitgun") },
+                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimarySniper": { name: loc("code_kitgun") },
+                "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary": { name: loc("code_kitgun") },
+                "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryBeam": { name: loc("code_kitgun") },
+                "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryShotgun": { name: loc("code_kitgun") },
+                "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon": { name: loc("code_zaw") },
+                "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/OperatorTrainingAmpWeapon": { name: loc("code_moteAmp") },
+                "/Lotus/Weapons/Sentients/OperatorAmplifiers/OperatorAmpWeapon": { name: loc("code_amp") },
+                "/Lotus/Weapons/Operator/Pistols/DrifterPistol/DrifterPistolPlayerWeapon": { name: loc("code_sirocco") },
+                "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit": { name: loc("code_kdrive") },
                 // Missing in data sources
-                "/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser": { name: "Legendary Core" },
-                "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/CyoteMod": { name: "Traumatic Peculiar" }
+                "/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser": { name: loc("code_legendaryCore") },
+                "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/CyoteMod": { name: loc("code_traumaticPeculiar") }
             };
             for (const [type, items] of Object.entries(data)) {
                 if (type == "archonCrystalUpgrades") {
@@ -173,7 +194,7 @@ function fetchItemList() {
                 } else if (type != "badItems") {
                     items.forEach(item => {
                         if (item.uniqueName in data.badItems) {
-                            item.name += " (Imposter)";
+                            item.name += " " + loc("code_badItem");
                         } else if (item.uniqueName.substr(0, 18) != "/Lotus/Types/Game/") {
                             const option = document.createElement("option");
                             option.setAttribute("data-key", item.uniqueName);
@@ -272,7 +293,7 @@ function updateInventory() {
                                     }
                                 }
                             };
-                            a.title = "Max Rank";
+                            a.title = loc("code_maxRank");
                             a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"/></svg>`;
                             td.appendChild(a);
                         }
@@ -287,12 +308,12 @@ function updateInventory() {
                             a.href = "#";
                             a.onclick = function (event) {
                                 event.preventDefault();
-                                const name = prompt("Enter new custom name:");
+                                const name = prompt(loc("code_renamePrompt"));
                                 if (name !== null) {
                                     renameGear(category, item.ItemId.$oid, name);
                                 }
                             };
-                            a.title = "Rename";
+                            a.title = loc("code_rename");
                             a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M0 80V229.5c0 17 6.7 33.3 18.7 45.3l176 176c25 25 65.5 25 90.5 0L418.7 317.3c25-25 25-65.5 0-90.5l-176-176c-12-12-28.3-18.7-45.3-18.7H48C21.5 32 0 53.5 0 80zm112 32a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/></svg>`;
                             td.appendChild(a);
                         }
@@ -303,7 +324,7 @@ function updateInventory() {
                                 event.preventDefault();
                                 disposeOfGear(category, item.ItemId.$oid);
                             };
-                            a.title = "Remove";
+                            a.title = loc("code_remove");
                             a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
                             td.appendChild(a);
                         }
@@ -327,11 +348,11 @@ function updateInventory() {
                             const td = document.createElement("td");
                             td.textContent = itemMap[fingerprint.compat]?.name ?? fingerprint.compat;
                             td.textContent += " " + RivenParser.parseRiven(rivenType, fingerprint, 1).name;
-                            td.innerHTML += " <span title='Number of buffs'>▲ " + fingerprint.buffs.length + "</span>";
+                            td.innerHTML += " <span title='" + loc("code_buffsNumber") + "'>▲ " + fingerprint.buffs.length + "</span>";
                             td.innerHTML +=
-                                " <span title='Number of curses'>▼ " + fingerprint.curses.length + "</span>";
+                                " <span title='" + loc("code_cursesNumber") + "'>▼ " + fingerprint.curses.length + "</span>";
                             td.innerHTML +=
-                                " <span title='Number of rerolls'>⟳ " + parseInt(fingerprint.rerolls) + "</span>";
+                                " <span title='" + loc("code_rerollsNumber") + "'>⟳ " + parseInt(fingerprint.rerolls) + "</span>";
                             tr.appendChild(td);
                         }
                         {
@@ -349,7 +370,7 @@ function updateInventory() {
                                         })
                                     );
                                 a.target = "_blank";
-                                a.title = "View Stats";
+                                a.title = loc("code_viewStats");
                                 a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H208c-26.5 0-48-21.5-48-48V80zM0 272c0-26.5 21.5-48 48-48H80c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V272zM368 96h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H368c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48z"/></svg>`;
                                 td.appendChild(a);
                             }
@@ -360,7 +381,7 @@ function updateInventory() {
                                     event.preventDefault();
                                     disposeOfGear("Upgrades", item.ItemId.$oid);
                                 };
-                                a.title = "Remove";
+                                a.title = loc("code_remove");
                                 a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
                                 td.appendChild(a);
                             }
@@ -376,7 +397,7 @@ function updateInventory() {
                 {
                     const td = document.createElement("td");
                     td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
-                    td.innerHTML += " <span title='Rank'>★ " + rank + "/" + maxRank + "</span>";
+                    td.innerHTML += " <span title='" + loc("code_rank") + "'>★ " + rank + "/" + maxRank + "</span>";
                     tr.appendChild(td);
                 }
                 {
@@ -389,7 +410,7 @@ function updateInventory() {
                             event.preventDefault();
                             setFingerprint(item.ItemType, item.ItemId, { lvl: maxRank });
                         };
-                        a.title = "Max Rank";
+                        a.title = loc("code_maxRank");
                         a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"/></svg>`;
                         td.appendChild(a);
                     }
@@ -400,7 +421,7 @@ function updateInventory() {
                             event.preventDefault();
                             disposeOfGear("Upgrades", item.ItemId.$oid);
                         };
-                        a.title = "Remove";
+                        a.title = loc("code_remove");
                         a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
                         td.appendChild(a);
                     }
@@ -415,7 +436,7 @@ function updateInventory() {
                     {
                         const td = document.createElement("td");
                         td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
-                        td.innerHTML += " <span title='Rank'>★ 0/" + maxRank + "</span>";
+                        td.innerHTML += " <span title='" + loc("code_rank") + "'>★ 0/" + maxRank + "</span>";
                         if (item.ItemCount > 1) {
                             td.innerHTML += " <span title='Count'>🗍 " + parseInt(item.ItemCount) + "</span>";
                         }
@@ -431,7 +452,7 @@ function updateInventory() {
                                 event.preventDefault();
                                 setFingerprint(item.ItemType, item.LastAdded, { lvl: maxRank });
                             };
-                            a.title = "Max Rank";
+                            a.title = loc("code_maxRank");
                             a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"/></svg>`;
                             td.appendChild(a);
                         }
@@ -442,7 +463,7 @@ function updateInventory() {
                                 event.preventDefault();
                                 disposeOfItems("Upgrades", item.ItemType, item.ItemCount);
                             };
-                            a.title = "Remove";
+                            a.title = loc("code_remove");
                             a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
                             td.appendChild(a);
                         }
@@ -491,7 +512,7 @@ function updateInventory() {
                                     event.preventDefault();
                                     doPopArchonCrystalUpgrade(upgradeType);
                                 };
-                                a.title = "Remove";
+                                a.title = loc("code_remove");
                                 a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
                                 td.appendChild(a);
                             }
@@ -572,7 +593,7 @@ function addMissingEquipment(categories) {
     });
     if (
         requests.length != 0 &&
-        window.confirm("Are you sure you want to add " + requests.length + " items to your account?")
+        window.confirm(loc("code_addItemsConfirm").split("|COUNT|").join(requests.length))
     ) {
         dispatchAddItemsRequestsBatch(requests);
     }
@@ -627,7 +648,7 @@ function maxRankAllEquipment(categories) {
                 return sendBatchGearExp(batchData);
             }
 
-            alert("No equipment to rank up.");
+            alert(loc("code_noEquipmentToRankUp"));
         });
     });
 }
@@ -743,7 +764,7 @@ function doAcquireMiscItems() {
                 }
             ])
         }).done(function () {
-            alert("Successfully added.");
+            alert(loc("code_succAdded"));
         });
     });
 }
@@ -938,13 +959,9 @@ function doUnlockAllFocusSchools() {
                 await unlockFocusSchool(upgradeType);
             }
             if (Object.keys(missingFocusUpgrades).length == 0) {
-                alert("All focus schools are already unlocked.");
+                alert(loc("code_focusAllUnlocked"));
             } else {
-                alert(
-                    "Unlocked " +
-                        Object.keys(missingFocusUpgrades).length +
-                        " new focus schools! An inventory update will be needed for the changes to be reflected in-game. Visiting the navigation should be the easiest way to trigger that."
-                );
+                alert(loc("code_focusUnlocked").split("|COUNT|").join(Object.keys(missingFocusUpgrades).length));
             }
         });
     });
@@ -996,7 +1013,7 @@ function doAddAllMods() {
             modsAll = Array.from(modsAll);
             if (
                 modsAll.length != 0 &&
-                window.confirm("Are you sure you want to add " + modsAll.length + " mods to your account?")
+                window.confirm(loc("code_addModsConfirm").split("|COUNT|").join(modsAll.length))
             ) {
                 $.post({
                     url: "/custom/addItems?" + window.authz,
@@ -1071,7 +1088,7 @@ function doImport() {
                 inventory: JSON.parse($("#import-inventory").val())
             })
         }).then(function () {
-            alert("Successfully imported.");
+            alert(loc("code_succImport"));
             updateInventory();
         });
     });

@@ -14,9 +14,7 @@
     }
 }
 
-body:not(.logged-in) .navbar-toggler,
-body:not(.logged-in) .nav-item.dropdown,
-body:not(.logged-in) #refresh-note {
+body:not(.logged-in) .user-dropdown {
     display: none;
 }
 

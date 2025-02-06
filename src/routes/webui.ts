@@ -54,4 +54,9 @@ webuiRouter.get("/webui/riven-tool/RivenParser.js", (_req, res) => {
     res.sendFile(path.join(repoDir, "node_modules/warframe-riven-info/RivenParser.js"));
 });
 
+// Serve translations
+webuiRouter.get("/translations/:file", (req, res) => {
+    res.sendFile(path.join(rootDir, `static/webui/translations/${req.params.file}`));
+});
+
 export { webuiRouter };

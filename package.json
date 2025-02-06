@@ -9,7 +9,8 @@
     "build": "tsc && copyfiles static/webui/** build",
     "lint": "eslint --ext .ts .",
     "lint:fix": "eslint --fix --ext .ts .",
-    "prettier": "prettier --write ."
+    "prettier": "prettier --write .",
+    "update-translations": "cd scripts && node update-translations.js"
   },
   "license": "GNU",
   "dependencies": {
