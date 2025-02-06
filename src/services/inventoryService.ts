@@ -906,7 +906,6 @@ export const addShipDecorations = (
 
         if (itemIndex !== -1) {
             ShipDecorations[itemIndex].ItemCount += ItemCount;
-            inventory.markModified(`ShipDecorations.${itemIndex}.ItemCount`);
         } else {
             ShipDecorations.push({ ItemCount, ItemType });
         }
@@ -921,7 +920,6 @@ export const addConsumables = (inventory: TInventoryDatabaseDocument, itemsArray
 
         if (itemIndex !== -1) {
             Consumables[itemIndex].ItemCount += ItemCount;
-            inventory.markModified(`Consumables.${itemIndex}.ItemCount`);
         } else {
             Consumables.push({ ItemCount, ItemType });
         }
@@ -967,7 +965,6 @@ export const addRecipes = (inventory: TInventoryDatabaseDocument, itemsArray: IT
 
         if (itemIndex !== -1) {
             Recipes[itemIndex].ItemCount += ItemCount;
-            inventory.markModified(`Recipes.${itemIndex}.ItemCount`);
         } else {
             Recipes.push({ ItemCount, ItemType });
         }
@@ -1006,7 +1003,6 @@ export const addFusionTreasures = (
 
         if (itemIndex !== -1) {
             FusionTreasures[itemIndex].ItemCount += ItemCount;
-            inventory.markModified(`FusionTreasures.${itemIndex}.ItemCount`);
         } else {
             FusionTreasures.push({ ItemCount, ItemType, Sockets });
         }
@@ -1077,7 +1073,6 @@ export const addChallenges = (
 
         if (itemIndex !== -1) {
             category[itemIndex].Progress += Progress;
-            inventory.markModified(`ChallengeProgress.${itemIndex}.ItemCount`);
         } else {
             category.push({ Name, Progress });
         }
@@ -1090,7 +1085,6 @@ export const addMissionComplete = (inventory: TInventoryDatabaseDocument, { Tag,
 
     if (itemIndex !== -1) {
         Missions[itemIndex].Completes += Completes;
-        inventory.markModified(`Missions.${itemIndex}.Completes`);
     } else {
         Missions.push({ Tag, Completes });
     }
@@ -1106,7 +1100,6 @@ export const addBooster = (ItemType: string, time: number, inventory: TInventory
     if (itemIndex !== -1) {
         const existingBooster = Boosters[itemIndex];
         existingBooster.ExpiryDate = Math.max(existingBooster.ExpiryDate, currentTime) + time;
-        inventory.markModified(`Boosters.${itemIndex}.ExpiryDate`);
     } else {
         Boosters.push({ ItemType, ExpiryDate: currentTime + time });
     }

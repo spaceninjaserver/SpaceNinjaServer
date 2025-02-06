@@ -753,10 +753,13 @@ export interface ILotusCustomization extends IItemConfig {
     Persona: string;
 }
 
-export interface IMission {
+export interface IMissionDatabase {
+    Tag: string;
     Completes: number;
     Tier?: number;
-    Tag: string;
+}
+
+export interface IMission extends IMissionDatabase {
     RewardsCooldownTime?: IMongoDate;
 }
 

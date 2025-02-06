@@ -12,7 +12,7 @@ export const artifactsController: RequestHandler = async (req, res) => {
     const { Upgrade, LevelDiff, Cost, FusionPointCost } = artifactsData;
 
     const inventory = await getInventory(accountId);
-    const { Upgrades, RawUpgrades } = inventory;
+    const { Upgrades } = inventory;
     const { ItemType, UpgradeFingerprint, ItemId } = Upgrade;
 
     const safeUpgradeFingerprint = UpgradeFingerprint || '{"lvl":0}';
@@ -32,13 +32,7 @@ export const artifactsController: RequestHandler = async (req, res) => {
                 ItemType
             }) - 1;
 
-        const rawItemIndex = RawUpgrades.findIndex(rawUpgrade => rawUpgrade.ItemType === ItemType);
-        RawUpgrades[rawItemIndex].ItemCount--;
-        if (RawUpgrades[rawItemIndex].ItemCount > 0) {
-            inventory.markModified(`RawUpgrades.${rawItemIndex}.UpgradeFingerprint`);
-        } else {
-            RawUpgrades.splice(rawItemIndex, 1);
-        }
+        addMods(inventory, [{ ItemType, ItemCount: -1 }]);
     }
 
     if (!config.infiniteCredits) {

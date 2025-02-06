@@ -25,6 +25,7 @@ import {
     ISettings,
     IInfestedFoundryDatabase,
     IHelminthResource,
+    IMissionDatabase,
     IConsumedSuit,
     IQuestStage,
     IQuestKeyDatabase,
@@ -478,6 +479,15 @@ const helminthResourceSchema = new Schema<IHelminthResource>(
         ItemType: String,
         Count: Number,
         RecentlyConvertedResources: { type: [helminthFoodRecordSchema], default: undefined }
+    },
+    { _id: false }
+);
+
+const missionSchema = new Schema<IMissionDatabase>(
+    {
+        Tag: String,
+        Completes: { type: Number, default: 0 },
+        Tier: { type: Number, required: false }
     },
     { _id: false }
 );
@@ -1010,7 +1020,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         CrewShipSalvagedWeapons: [Schema.Types.Mixed],
 
         //Complete Mission\Quests
-        Missions: [Schema.Types.Mixed],
+        Missions: [missionSchema],
         QuestKeys: [questKeysSchema],
         ActiveQuest: { type: String, default: "/Lotus/Types/Keys/VorsPrize/VorsPrizeQuestKeyChain" }, //TODO: check after mission starting gear
         //item like DojoKey or Boss missions key
