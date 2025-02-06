@@ -7,6 +7,7 @@ import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
 import { PersonalRooms } from "@/src/models/personalRoomsModel";
 import { Request } from "express";
 import { config } from "@/src/services/configService";
+import { createStats } from "@/src/services/statsService";
 
 export const isCorrectPassword = (requestPassword: string, databasePassword: string): boolean => {
     return requestPassword === databasePassword;
@@ -24,6 +25,7 @@ export const createAccount = async (accountData: IDatabaseAccount): Promise<IDat
         const shipId = await createShip(account._id);
         await createInventory(account._id, { loadOutPresetId: loadoutId, ship: shipId });
         await createPersonalRooms(account._id, shipId);
+        await createStats(account._id.toString());
         return account.toJSON();
     } catch (error) {
         if (error instanceof Error) {
