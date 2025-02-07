@@ -627,6 +627,9 @@ function maxRankAllEquipment(categories) {
                     }
                     if (category === "Suits") {
                         if ("exalted" in itemMap[item.ItemType]) {
+                            if (!batchData["SpecialItems"]) {
+                                batchData["SpecialItems"] = [];
+                            }
                             for (const exaltedType of itemMap[item.ItemType].exalted) {
                                 const exaltedItem = data["SpecialItems"].find(x => x.ItemType == exaltedType);
                                 if (exaltedItem) {
