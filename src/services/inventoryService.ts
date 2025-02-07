@@ -415,19 +415,22 @@ export const addItem = async (
             }
             break;
         case "Upgrades": {
-            // Needed to add Traumatic Peculiar
-            const changes = [
-                {
-                    ItemType: typeName,
-                    ItemCount: quantity
-                }
-            ];
-            addMods(inventory, changes);
-            return {
-                InventoryChanges: {
-                    RawUpgrades: changes
-                }
-            };
+            if (typeName.substr(1).split("/")[2] == "CosmeticEnhancers") {
+                // Needed to add Traumatic Peculiar
+                const changes = [
+                    {
+                        ItemType: typeName,
+                        ItemCount: quantity
+                    }
+                ];
+                addMods(inventory, changes);
+                return {
+                    InventoryChanges: {
+                        RawUpgrades: changes
+                    }
+                };
+            }
+            break;
         }
         case "Types":
             switch (typeName.substr(1).split("/")[2]) {
