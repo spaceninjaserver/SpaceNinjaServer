@@ -8,9 +8,6 @@ export const setActiveQuestController: RequestHandler<
     undefined,
     { quest: string | undefined }
 > = async (req, res) => {
-    console.log("req params", JSON.stringify(req.params, null, 2));
-    console.log("req query", JSON.stringify(req.query, null, 2));
-    console.log("req body", JSON.stringify(req.body, null, 2));
     const accountId = await getAccountIdForRequest(req);
     const quest = req.query.quest;
 

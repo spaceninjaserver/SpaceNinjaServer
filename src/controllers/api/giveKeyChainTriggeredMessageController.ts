@@ -10,7 +10,6 @@ import { RequestHandler } from "express";
 export const giveKeyChainTriggeredMessageController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const keyChainInfo = JSON.parse((req.body as Buffer).toString()) as IKeyChainRequest;
-    console.log(keyChainInfo);
 
     const keyChainMessage = getKeyChainMessage(keyChainInfo);
 
@@ -25,8 +24,7 @@ export const giveKeyChainTriggeredMessageController: RequestHandler = async (req
         r: false
     } satisfies IMessage;
 
-    const savedMessages = await createMessage(accountId, [message]);
-    console.log("savedMessages", savedMessages);
+    await createMessage(accountId, [message]);
 
     const inventory = await getInventory(accountId, "QuestKeys");
     updateQuestStage(inventory, keyChainInfo, { m: true });

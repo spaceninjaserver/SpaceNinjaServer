@@ -28,7 +28,6 @@ export const updateQuestKey = (
         throw new Error(`quest key ${questKeyUpdate[0].ItemType} not found`);
     }
 
-    console.log(questKeyUpdate[0]);
     inventory.QuestKeys[questKeyIndex] = questKeyUpdate[0];
 
     if (questKeyUpdate[0].Completed) {

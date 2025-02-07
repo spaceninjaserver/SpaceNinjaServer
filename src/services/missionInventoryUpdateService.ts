@@ -217,7 +217,7 @@ export const addMissionRewards = async (
     const MissionRewards = getRandomMissionDrops(rewardInfo).map(drop => {
         return { StoreItem: drop.type, ItemCount: drop.itemCount };
     });
-    console.log("random mission drops:", MissionRewards);
+    logger.debug("random mission drops:", MissionRewards);
     const inventoryChanges: IInventoryChanges = {};
 
     let missionCompletionCredits = 0;
@@ -339,12 +339,10 @@ function getRandomMissionDrops(RewardInfo: IRewardInfo): IRngResult[] {
             });
 
         if (region.cacheRewardManifest && RewardInfo.EnemyCachesFound) {
-            console.log("cache rewards", RewardInfo.EnemyCachesFound);
             const deck = ExportRewards[region.cacheRewardManifest];
             for (let rotation = 0; rotation != RewardInfo.EnemyCachesFound; ++rotation) {
                 const drop = getRandomRewardByChance(deck[rotation]);
                 if (drop) {
-                    console.log("cache drop", drop);
                     drops.push(drop);
                 }
             }
