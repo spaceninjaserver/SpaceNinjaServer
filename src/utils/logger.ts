@@ -58,6 +58,7 @@ const combinedLog = new transports.DailyRotateFile({
 });
 
 const consoleLog = new transports.Console({
+    forceConsole: false,
     format: format.combine(
         format.colorize(),
         format.timestamp({ format: "YYYY-MM-DDTHH:mm:ss:SSS" }), // uses local timezone
