@@ -84,12 +84,15 @@ export interface ISetShipCustomizationsRequest {
     Customization: Customization;
     IsExterior: boolean;
     AirSupportPower?: string;
+    IsShop?: boolean;
 }
 
 export interface Customization {
     SkinFlavourItem: string;
     Colors: IColor;
     ShipAttachments: ShipAttachments;
+    LevelDecosVisible: boolean;
+    CustomJson: string;
 }
 
 //TODO: check for more attachments
@@ -155,12 +158,12 @@ export interface IFavouriteLoadoutDatabase {
 
 export interface ITailorShopDatabase {
     FavouriteLoadouts: IFavouriteLoadoutDatabase[];
-    CustomJson: "{}"; // ???
+    Colors?: IColor;
+    CustomJson: string;
     LevelDecosVisible: boolean;
     Rooms: IRoom[];
 }
 
 export interface ITailorShop extends Omit<ITailorShopDatabase, "FavouriteLoadouts"> {
     FavouriteLoadouts: IFavouriteLoadout[];
-    Colors?: []; // ???
 }

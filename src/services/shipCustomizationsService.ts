@@ -28,7 +28,13 @@ export const setShipCustomizations = async (
         }
     } else {
         const personalRooms = await getPersonalRooms(accountId);
-        personalRooms.ShipInteriorColors = shipCustomization.Customization.Colors;
+        if (shipCustomization.IsShop) {
+            personalRooms.TailorShop.Colors = shipCustomization.Customization.Colors;
+            personalRooms.TailorShop.LevelDecosVisible = shipCustomization.Customization.LevelDecosVisible;
+            personalRooms.TailorShop.CustomJson = shipCustomization.Customization.CustomJson;
+        } else {
+            personalRooms.ShipInteriorColors = shipCustomization.Customization.Colors;
+        }
         await personalRooms.save();
     }
 };

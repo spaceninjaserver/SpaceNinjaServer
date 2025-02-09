@@ -125,6 +125,7 @@ favouriteLoadoutSchema.set("toJSON", {
 const tailorShopSchema = new Schema<ITailorShopDatabase>(
     {
         FavouriteLoadouts: [favouriteLoadoutSchema],
+        Colors: { type: colorSchema, required: false },
         CustomJson: String,
         LevelDecosVisible: Boolean,
         Rooms: [roomSchema]
