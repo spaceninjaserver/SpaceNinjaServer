@@ -229,6 +229,9 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     if (client.FocusUpgrades !== undefined) {
         db.FocusUpgrades = client.FocusUpgrades;
     }
+    if (client.EvolutionProgress !== undefined) {
+        db.EvolutionProgress = client.EvolutionProgress;
+    }
     if (client.InfestedFoundry !== undefined) {
         db.InfestedFoundry = convertInfestedFoundry(client.InfestedFoundry);
     }
