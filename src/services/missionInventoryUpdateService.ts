@@ -347,6 +347,24 @@ function getRandomMissionDrops(RewardInfo: IRewardInfo): IRngResult[] {
                 }
             }
         }
+
+        if (RewardInfo.nightmareMode) {
+            const deck = ExportRewards["/Lotus/Types/Game/MissionDecks/NightmareModeRewards"];
+            let rotation = 0;
+
+            if (region.missionIndex === 3 && RewardInfo.rewardTier) {
+                rotation = RewardInfo.rewardTier;
+            } else if ([6, 7, 8, 10, 11].includes(region.systemIndex)) {
+                rotation = 2;
+            } else if ([4, 9, 12, 14, 15, 16, 17, 18].includes(region.systemIndex)) {
+                rotation = 1;
+            }
+
+            const drop = getRandomRewardByChance(deck[rotation]);
+            if (drop) {
+                drops.push(drop);
+            }
+        }
     }
     return drops;
 }
