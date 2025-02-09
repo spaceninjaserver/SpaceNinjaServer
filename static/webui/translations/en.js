@@ -1,5 +1,5 @@
 dict = {
-	general_inventoryUpdateNote: `Note: Changes made here will only be reflected in-game when the game re-downloads your inventory. Visiting the navigation should be the easiest way to trigger that.`,
+	general_inventoryUpdateNote: `Note: Changes made here will only be applied in-game when the game syncs the inventory. Visiting the navigation should be the easiest way to trigger that.`,
 	general_addButton: `Add`,
 	general_bulkActions: `Bulk Actions`,
 	code_nonValidAuthz: `Your credentials are no longer valid.`,
@@ -72,6 +72,11 @@ dict = {
 	inventory_bulkRankUpSpaceWeapons: `Max Rank All Archwing Weapons`,
 	inventory_bulkRankUpSentinels: `Max Rank All Sentinels`,
 	inventory_bulkRankUpSentinelWeapons: `Max Rank All Sentinel Weapons`,
+	currency_RegularCredits: `Credits`,
+	currency_PremiumCredits: `Platinum`,
+	currency_FusionPoints: `Endo`,
+	currency_PrimeTokens: `Regal Aya`,
+	currency_owned: `You have |COUNT|.`,
 	powersuit_archonShardsLabel: `Archon Shard Slots`,
 	powersuit_archonShardsDescription: `You can use these unlimited slots to apply a wide range of upgrades`,
 	mods_addRiven: `Add Riven`,

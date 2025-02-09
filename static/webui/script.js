@@ -228,6 +228,15 @@ function updateInventory() {
 
             // Populate inventory route
             [
+                "RegularCredits",
+                "PremiumCredits",
+                "FusionPoints",
+                "PrimeTokens"
+            ].forEach(currency => {
+                document.getElementById(currency + "-owned").textContent = loc("currency_owned").split("|COUNT|").join(data[currency].toLocaleString());
+            });
+
+            [
                 "Suits",
                 "SpaceSuits",
                 "Sentinels",
@@ -1114,5 +1123,18 @@ function doChangeSupportedSyndicate() {
         $.get("/api/setSupportedSyndicate.php?" + window.authz + "&syndicate=" + uniqueName).done(function () {
             updateInventory();
         });
+    });
+}
+
+function doAddCurrency(currency) {
+    $.post({
+        url: "/custom/addCurrency?" + window.authz,
+        contentType: "application/json",
+        data: JSON.stringify({
+            currency,
+            delta: document.getElementById(currency + "-delta").valueAsNumber
+        })
+    }).then(function () {
+        updateInventory();
     });
 }

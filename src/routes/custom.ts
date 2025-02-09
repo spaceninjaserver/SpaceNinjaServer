@@ -8,13 +8,14 @@ import { deleteAccountController } from "@/src/controllers/custom/deleteAccountC
 import { renameAccountController } from "@/src/controllers/custom/renameAccountController";
 
 import { createAccountController } from "@/src/controllers/custom/createAccountController";
+import { createMessageController } from "@/src/controllers/custom/createMessageController";
+import { addCurrencyController } from "../controllers/custom/addCurrencyController";
 import { addItemsController } from "@/src/controllers/custom/addItemsController";
 import { addXpController } from "@/src/controllers/custom/addXpController";
 import { importController } from "@/src/controllers/custom/importController";
 
 import { getConfigDataController } from "@/src/controllers/custom/getConfigDataController";
 import { updateConfigDataController } from "@/src/controllers/custom/updateConfigDataController";
-import { createMessageController } from "@/src/controllers/custom/createMessageController";
 
 const customRouter = express.Router();
 
@@ -27,6 +28,7 @@ customRouter.get("/renameAccount", renameAccountController);
 
 customRouter.post("/createAccount", createAccountController);
 customRouter.post("/createMessage", createMessageController);
+customRouter.post("/addCurrency", addCurrencyController);
 customRouter.post("/addItems", addItemsController);
 customRouter.post("/addXp", addXpController);
 customRouter.post("/import", importController);

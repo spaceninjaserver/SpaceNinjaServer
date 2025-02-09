@@ -95,6 +95,56 @@
                     </form>
                 </div>
                 <div class="row g-3">
+                    <div class="col-md-3">
+                        <div class="card mb-3">
+                            <h5 class="card-header" data-loc="currency_RegularCredits"></h5>
+                            <div class="card-body">
+                                <p class="card-text" id="RegularCredits-owned"></p>
+                                <form class="input-group" onsubmit="doAddCurrency('RegularCredits');return false;">
+                                    <input class="form-control" id="RegularCredits-delta" type="number" value="1000000" step="1000000" />
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card mb-3">
+                            <h5 class="card-header" data-loc="currency_PremiumCredits"></h5>
+                            <div class="card-body">
+                                <p class="card-text" id="PremiumCredits-owned"></p>
+                                <form class="input-group" onsubmit="doAddCurrency('PremiumCredits');return false;">
+                                    <input class="form-control" id="PremiumCredits-delta" type="number" value="100" step="100" />
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card mb-3">
+                            <h5 class="card-header" data-loc="currency_FusionPoints"></h5>
+                            <div class="card-body">
+                                <p class="card-text" id="FusionPoints-owned"></p>
+                                <form class="input-group" onsubmit="doAddCurrency('FusionPoints');return false;">
+                                    <input class="form-control" id="FusionPoints-delta" type="number" value="1000" step="1000" />
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card mb-3">
+                            <h5 class="card-header" data-loc="currency_PrimeTokens"></h5>
+                            <div class="card-body">
+                                <p class="card-text" id="PrimeTokens-owned"></p>
+                                <form class="input-group" onsubmit="doAddCurrency('PrimeTokens');return false;">
+                                    <input class="form-control" id="PrimeTokens-delta" type="number" value="1" step="1" />
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-3">
                     <div class="col-lg-6">
                         <div class="card mb-3" style="height: 400px;">
                             <h5 class="card-header" data-loc="inventory_suits"></h5>
