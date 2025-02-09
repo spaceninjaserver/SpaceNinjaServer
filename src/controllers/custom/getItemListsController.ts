@@ -8,6 +8,7 @@ import {
     ExportRecipes,
     ExportResources,
     ExportSentinels,
+    ExportSyndicates,
     ExportUpgrades,
     ExportWarframes,
     ExportWeapons
@@ -36,6 +37,7 @@ const getItemListsController: RequestHandler = (req, response) => {
     res.SpaceSuits = [];
     res.MechSuits = [];
     res.miscitems = [];
+    res.Syndicates = [];
     for (const [uniqueName, item] of Object.entries(ExportWarframes)) {
         if (
             item.productCategory == "Suits" ||
@@ -159,6 +161,12 @@ const getItemListsController: RequestHandler = (req, response) => {
         if (arcane.isFrivolous) {
             badItems[uniqueName] = true;
         }
+    }
+    for (const [uniqueName, syndicate] of Object.entries(ExportSyndicates)) {
+        res.Syndicates.push({
+            uniqueName,
+            name: getString(syndicate.name, lang)
+        });
     }
 
     response.json({

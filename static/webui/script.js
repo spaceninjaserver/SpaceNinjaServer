@@ -191,6 +191,15 @@ function fetchItemList() {
                     });
                 } else if (type == "uniqueLevelCaps") {
                     uniqueLevelCaps = items;
+                } else if (type == "Syndicates") {
+                    items.forEach(item => {
+                        if (item.uniqueName.startsWith("RadioLegion")) item.name += " (" + item.uniqueName + ")";
+                        const option = document.createElement("option");
+                        option.value = item.uniqueName;
+                        option.innerHTML = item.name;
+                        document.getElementById("changeSyndicate").appendChild(option);
+                        itemMap[item.uniqueName] = { ...item, type };
+                    });
                 } else if (type != "badItems") {
                     items.forEach(item => {
                         if (item.uniqueName in data.badItems) {
@@ -524,6 +533,8 @@ function updateInventory() {
                     single.loadRoute("/webui/inventory");
                 }
             }
+
+            document.getElementById("changeSyndicate").value = data.SupportedSyndicate ?? "";
         });
     });
 }
@@ -1092,6 +1103,15 @@ function doImport() {
             })
         }).then(function () {
             alert(loc("code_succImport"));
+            updateInventory();
+        });
+    });
+}
+
+function doChangeSupportedSyndicate() {
+    const uniqueName = document.getElementById("changeSyndicate").value;
+    revalidateAuthz(() => {
+        $.get("/api/setSupportedSyndicate.php?" + window.authz + "&syndicate=" + uniqueName).done(function () {
             updateInventory();
         });
     });

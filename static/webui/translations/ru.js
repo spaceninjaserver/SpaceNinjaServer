@@ -107,6 +107,9 @@ dict = {
 	cheats_account: `Аккаунт`,
 	cheats_unlockAllFocusSchools: `Разблокировать все школы фокуса`,
 	cheats_helminthUnlockAll: `Полностью улучшить Гельминта`,
+	cheats_changeSupportedSyndicate: `Поддерживаемый синдикат`,
+	cheats_changeButton: `Изменить`,
+	cheats_none: `Отсутствует`,
 	import_importNote: `Вы можете загрузить полный или частичный ответ инвентаря (клиентское представление) здесь. Все поддерживаемые поля <b>будут перезаписаны</b> в вашем аккаунте.`,
 	import_submit: `Отправить`,
 }

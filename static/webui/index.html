@@ -465,6 +465,15 @@
                             <div class="card-body">
                                 <p><button class="btn btn-primary" onclick="doUnlockAllFocusSchools();" data-loc="cheats_unlockAllFocusSchools"></button></p>
                                 <button class="btn btn-primary" onclick="doHelminthUnlockAll();" data-loc="cheats_helminthUnlockAll"></button>
+                                <form class="mt-2" onsubmit="doChangeSupportedSyndicate(); return false;">
+                                    <label class="form-label" for="changeSyndicate" data-loc="cheats_changeSupportedSyndicate"></label>
+                                    <div class="input-group">
+                                        <select class="form-control" id="changeSyndicate">
+                                            <option value="" data-loc="cheats_none"></option>
+                                        </select>
+                                        <button class="btn btn-primary" type="submit" data-loc="cheats_changeButton"></button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>

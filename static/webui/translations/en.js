@@ -106,6 +106,9 @@ dict = {
 	cheats_account: `Account`,
 	cheats_unlockAllFocusSchools: `Unlock All Focus Schools`,
 	cheats_helminthUnlockAll: `Fully Level Up Helminth`,
+	cheats_changeSupportedSyndicate: `Supported syndicate`,
+	cheats_changeButton: `Change`,
+	cheats_none: `None`,
 	import_importNote: `You can provide a full or partial inventory response (client respresentation) here. All fields that are supported by the importer <b>will be overwritten</b> in your account.`,
 	import_submit: `Submit`,
 }
