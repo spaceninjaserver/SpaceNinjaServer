@@ -189,11 +189,13 @@ export const getNode = (nodeName: string): IRegion => {
 };
 
 export const getQuestCompletionItems = (questKey: string) => {
-    const items = (questCompletionItems as unknown as Record<string, ITypeCount[] | undefined>)[questKey];
-    if (!items) {
-        throw new Error(`Quest ${questKey} not found in questCompletionItems`);
-    }
+    const items = (questCompletionItems as unknown as Record<string, ITypeCount[]> | undefined)?.[questKey];
 
+    if (!items) {
+        logger.error(
+            `Quest ${questKey} not found in questCompletionItems, quest completion items have not been given. This is a temporary solution`
+        );
+    }
     return items;
 };
 

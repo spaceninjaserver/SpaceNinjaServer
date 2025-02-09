@@ -30,10 +30,11 @@ export const updateQuestController: RequestHandler = async (req, res) => {
         const questCompletionItems = getQuestCompletionItems(questKeyName);
         logger.debug(`quest completion items`, questCompletionItems);
 
-        const inventoryChanges = await addItems(inventory, questCompletionItems);
+        if (questCompletionItems) {
+            const inventoryChanges = await addItems(inventory, questCompletionItems);
+            updateQuestResponse.InventoryChanges = inventoryChanges;
+        }
         inventory.ActiveQuest = "";
-
-        updateQuestResponse.InventoryChanges = inventoryChanges;
     }
 
     //TODO: might need to parse the custom data and add the associated items to inventory
