@@ -44,6 +44,9 @@ export type IMissionInventoryUpdateRequest = {
     CrewShipAmmo?: ITypeCount[];
     BonusMiscItems?: ITypeCount[];
 
+    SyndicateId?: string;
+    SortieId?: string;
+    SeasonChallengeCompletions?: ISeasonChallenge[];
     AffiliationChanges?: IAffiliationChange[];
     crossPlaySetting?: string;
     rewardsMultiplier?: number;
@@ -100,6 +103,7 @@ export interface IRewardInfo {
     rewardQualifications?: string; // did a Survival for 5 minutes and this was "1"
     PurgatoryRewardQualifications?: string;
     rewardSeed?: number;
+    periodicMissionTag?: string;
 }
 
 export type IMissionStatus = "GS_SUCCESS" | "GS_FAILURE" | "GS_DUMPED" | "GS_QUIT" | "GS_INTERRUPTED";

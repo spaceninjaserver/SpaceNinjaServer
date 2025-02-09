@@ -83,6 +83,19 @@ export const addMissionInventoryUpdates = (
     if (inventoryUpdates.MissionFailed === true) {
         return;
     }
+    if (inventoryUpdates.RewardInfo && inventoryUpdates.RewardInfo.periodicMissionTag) {
+        const tag = inventoryUpdates.RewardInfo.periodicMissionTag;
+        const existingCompletion = inventory.PeriodicMissionCompletions.find(completion => completion.tag === tag);
+
+        if (existingCompletion) {
+            existingCompletion.date = new Date();
+        } else {
+            inventory.PeriodicMissionCompletions.push({
+                tag: tag,
+                date: new Date()
+            });
+        }
+    }
     for (const [key, value] of getEntriesUnsafe(inventoryUpdates)) {
         if (value === undefined) {
             logger.error(`Inventory update key ${key} has no value `);
@@ -178,6 +191,22 @@ export const addMissionInventoryUpdates = (
                 });
                 break;
             }
+            case "SyndicateId": {
+                inventory.CompletedSyndicates.push(value);
+                break;
+            }
+            case "SortieId": {
+                inventory.CompletedSorties.push(value);
+                break;
+            }
+            case "SeasonChallengeCompletions":
+                const processedCompletions = value.map(({ challenge, id }) => ({
+                    challenge: challenge.substring(challenge.lastIndexOf("/") + 1),
+                    id
+                }));
+
+                inventory.SeasonChallengeHistory.push(...processedCompletions);
+                break;
             default:
                 // Equipment XP updates
                 if (equipmentKeys.includes(key as TEquipmentKey)) {
