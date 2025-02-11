@@ -151,6 +151,14 @@
       "Nodes": []
     },
     {
+      "_id": { "$oid": "663a4fc5ba6f84724fa48060" },
+      "Activation": { "$date": { "$numberLong": "1715097541439" } },
+      "Expiry": { "$date": { "$numberLong": "2000000000000" } },
+      "Tag": "RadioLegionIntermission12Syndicate",
+      "Seed": 353,
+      "Nodes": []
+    },
+    {
       "_id": { "$oid": "663a4fc5ba6f84724fa48057" },
       "Activation": { "$date": { "$numberLong": "1715097541439" } },
       "Expiry": { "$date": { "$numberLong": "2000000000000" } },
@@ -1115,8 +1123,8 @@
   "SeasonInfo": {
     "Activation": { "$date": { "$numberLong": "1715796000000" } },
     "Expiry": { "$date": { "$numberLong": "2000000000000" } },
-    "AffiliationTag": "RadioLegionIntermission11Syndicate",
-    "Season": 13,
+    "AffiliationTag": "RadioLegionIntermission12Syndicate",
+    "Season": 14,
     "Phase": 0,
     "Params": "",
     "ActiveChallenges": [
