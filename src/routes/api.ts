@@ -32,6 +32,8 @@ import { getVendorInfoController } from "@/src/controllers/api/getVendorInfoCont
 import { getVoidProjectionRewardsController } from "@/src/controllers/api/getVoidProjectionRewardsController";
 import { gildWeaponController } from "@/src/controllers/api/gildWeaponController";
 import { giveKeyChainTriggeredItemsController } from "@/src/controllers/api/giveKeyChainTriggeredItemsController";
+import { giveKeyChainTriggeredMessageController } from "@/src/controllers/api/giveKeyChainTriggeredMessageController";
+import { giveQuestKeyRewardController } from "@/src/controllers/api/giveQuestKey";
 import { guildTechController } from "../controllers/api/guildTechController";
 import { hostSessionController } from "@/src/controllers/api/hostSessionController";
 import { hubController } from "@/src/controllers/api/hubController";
@@ -82,8 +84,6 @@ import { updateQuestController } from "@/src/controllers/api/updateQuestControll
 import { updateSessionGetController, updateSessionPostController } from "@/src/controllers/api/updateSessionController";
 import { updateThemeController } from "../controllers/api/updateThemeController";
 import { upgradesController } from "@/src/controllers/api/upgradesController";
-import { giveKeyChainTriggeredMessageController } from "@/src/controllers/api/giveKeyChainTriggeredMessageController";
-import { giveQuestKeyRewardController } from "@/src/controllers/api/giveQuestKey";
 
 const apiRouter = express.Router();
 
@@ -174,9 +174,9 @@ apiRouter.post("/trainingResult.php", trainingResultController);
 apiRouter.post("/unlockShipFeature.php", unlockShipFeatureController);
 apiRouter.post("/updateChallengeProgress.php", updateChallengeProgressController);
 apiRouter.post("/updateNodeIntros.php", genericUpdateController);
+apiRouter.post("/updateQuest.php", updateQuestController);
 apiRouter.post("/updateSession.php", updateSessionPostController);
 apiRouter.post("/updateTheme.php", updateThemeController);
-apiRouter.post("/updateQuest.php", updateQuestController);
 apiRouter.post("/upgrades.php", upgradesController);
 
 export { apiRouter };
