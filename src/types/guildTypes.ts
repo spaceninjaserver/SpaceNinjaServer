@@ -32,8 +32,8 @@ export interface IDojoComponentClient {
     pf: string; // Prefab (.level)
     ppf: string;
     pi?: IOid; // Parent ID. N/A to root.
-    op?: string; // "Open Portal"? N/A to root.
-    pp?: string; // "Parent Portal"? N/A to root.
+    op?: string; // Name of the door within this room that leads to its parent. N/A to root.
+    pp?: string; // Name of the door within the parent that leads to this room. N/A to root.
     Name?: string;
     Message?: string;
     RegularCredits?: number; // "Collecting Materials" state: Number of credits that were donated.
