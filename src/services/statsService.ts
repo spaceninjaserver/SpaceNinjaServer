@@ -1,5 +1,15 @@
 import { Stats, TStatsDatabaseDocument } from "@/src/models/statsModel";
-import { IStatsUpload } from "@/src/types/statTypes";
+import {
+    IEnemy,
+    IStatsAdd,
+    IStatsMax,
+    IStatsSet,
+    IStatsTimers,
+    IStatsUpdate,
+    IUploadEntry,
+    IWeapon
+} from "@/src/types/statTypes";
+import { logger } from "../utils/logger";
 
 export const createStats = async (accountId: string): Promise<TStatsDatabaseDocument> => {
     const stats = new Stats({ accountOwnerId: accountId });
@@ -15,269 +25,383 @@ export const getStats = async (accountOwnerId: string): Promise<TStatsDatabaseDo
     return stats;
 };
 
-export const uploadStats = async (playerStats: TStatsDatabaseDocument, payload: IStatsUpload): Promise<void> => {
-    if (payload.add) {
-        const {
-            MISSION_COMPLETE,
-            PICKUP_ITEM,
-            SCAN,
-            USE_ABILITY,
-            FIRE_WEAPON,
-            HIT_ENTITY_ITEM,
-            HEADSHOT_ITEM,
-            KILL_ENEMY_ITEM,
-            KILL_ENEMY,
-            EXECUTE_ENEMY,
-            HEADSHOT,
-            DIE,
-            MELEE_KILL,
-            INCOME,
-            CIPHER
-        } = payload.add;
+export const updateStats = async (playerStats: TStatsDatabaseDocument, payload: IStatsUpdate): Promise<void> => {
+    const unknownCategories: Record<string, string[]> = {};
 
-        if (MISSION_COMPLETE) {
-            for (const [key, value] of Object.entries(MISSION_COMPLETE)) {
-                switch (key) {
-                    case "GS_SUCCESS":
-                        playerStats.MissionsCompleted ??= 0;
-                        playerStats.MissionsCompleted += value;
-                        break;
-                    case "GS_QUIT":
-                        playerStats.MissionsQuit ??= 0;
-                        playerStats.MissionsQuit += value;
-                        break;
-                    case "GS_FAILURE":
-                        playerStats.MissionsFailed ??= 0;
-                        playerStats.MissionsFailed += value;
-                        break;
+    for (const [action, actionData] of Object.entries(payload)) {
+        switch (action) {
+            case "add":
+                for (const [category, data] of Object.entries(actionData as IStatsAdd)) {
+                    switch (category) {
+                        case "MISSION_COMPLETE":
+                            for (const [key, value] of Object.entries(data as IUploadEntry)) {
+                                switch (key) {
+                                    case "GS_SUCCESS":
+                                        playerStats.MissionsCompleted ??= 0;
+                                        playerStats.MissionsCompleted += value;
+                                        break;
+                                    case "GS_QUIT":
+                                        playerStats.MissionsQuit ??= 0;
+                                        playerStats.MissionsQuit += value;
+                                        break;
+                                    case "GS_FAILURE":
+                                        playerStats.MissionsFailed ??= 0;
+                                        playerStats.MissionsFailed += value;
+                                        break;
+                                    case "GS_INTERRUPTED":
+                                        playerStats.MissionsInterrupted ??= 0;
+                                        playerStats.MissionsInterrupted += value;
+                                        break;
+                                    case "GS_DUMPED":
+                                        playerStats.MissionsDumped ??= 0;
+                                        playerStats.MissionsDumped += value;
+                                        break;
+                                    default:
+                                        if (!ignoredCategories.includes(category)) {
+                                            if (!unknownCategories[action]) {
+                                                unknownCategories[action] = [];
+                                            }
+                                            unknownCategories[action].push(category);
+                                        }
+                                        break;
+                                }
+                            }
+                            break;
+
+                        case "PICKUP_ITEM":
+                            playerStats.PickupCount ??= 0;
+                            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                            for (const [_key, value] of Object.entries(data as IUploadEntry)) {
+                                playerStats.PickupCount += value;
+                            }
+                            break;
+
+                        case "SCAN":
+                            playerStats.Scans ??= [];
+                            for (const [type, scans] of Object.entries(data as IUploadEntry)) {
+                                const scan = playerStats.Scans.find(element => element.type === type);
+                                if (scan) {
+                                    scan.scans ??= 0;
+                                    scan.scans += scans;
+                                } else {
+                                    playerStats.Scans.push({ type: type, scans });
+                                }
+                            }
+                            break;
+
+                        case "USE_ABILITY":
+                            playerStats.Abilities ??= [];
+                            for (const [type, used] of Object.entries(data as IUploadEntry)) {
+                                const ability = playerStats.Abilities.find(element => element.type === type);
+                                if (ability) {
+                                    ability.used ??= 0;
+                                    ability.used += used;
+                                } else {
+                                    playerStats.Abilities.push({ type: type, used });
+                                }
+                            }
+                            break;
+
+                        case "FIRE_WEAPON":
+                        case "HIT_ENTITY_ITEM":
+                        case "HEADSHOT_ITEM":
+                        case "KILL_ENEMY_ITEM":
+                            playerStats.Weapons ??= [];
+                            const statKey = {
+                                FIRE_WEAPON: "fired",
+                                HIT_ENTITY_ITEM: "hits",
+                                HEADSHOT_ITEM: "headshots",
+                                KILL_ENEMY_ITEM: "kills"
+                            }[category] as "fired" | "hits" | "headshots" | "kills";
+
+                            for (const [type, count] of Object.entries(data as IUploadEntry)) {
+                                const weapon = playerStats.Weapons.find(element => element.type === type);
+                                if (weapon) {
+                                    weapon[statKey] ??= 0;
+                                    weapon[statKey] += count;
+                                } else {
+                                    const newWeapon: IWeapon = { type: type };
+                                    newWeapon[statKey] = count;
+                                    playerStats.Weapons.push(newWeapon);
+                                }
+                            }
+                            break;
+
+                        case "KILL_ENEMY":
+                        case "EXECUTE_ENEMY":
+                        case "HEADSHOT":
+                            playerStats.Enemies ??= [];
+                            const enemyStatKey = {
+                                KILL_ENEMY: "kills",
+                                EXECUTE_ENEMY: "executions",
+                                HEADSHOT: "headshots"
+                            }[category] as "kills" | "executions" | "headshots";
+
+                            for (const [type, count] of Object.entries(data as IUploadEntry)) {
+                                const enemy = playerStats.Enemies.find(element => element.type === type);
+                                if (enemy) {
+                                    enemy[enemyStatKey] ??= 0;
+                                    enemy[enemyStatKey] += count;
+                                } else {
+                                    const newEnemy: IEnemy = { type: type };
+                                    newEnemy[enemyStatKey] = count;
+                                    playerStats.Enemies.push(newEnemy);
+                                }
+                            }
+                            break;
+
+                        case "DIE":
+                            playerStats.Enemies ??= [];
+                            playerStats.Deaths ??= 0;
+                            for (const [type, deaths] of Object.entries(data as IUploadEntry)) {
+                                playerStats.Deaths += deaths;
+                                const enemy = playerStats.Enemies.find(element => element.type === type);
+                                if (enemy) {
+                                    enemy.deaths ??= 0;
+                                    enemy.deaths += deaths;
+                                } else {
+                                    playerStats.Enemies.push({ type: type, deaths });
+                                }
+                            }
+                            break;
+
+                        case "MELEE_KILL":
+                            playerStats.MeleeKills ??= 0;
+                            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                            for (const [_key, kills] of Object.entries(data as IUploadEntry)) {
+                                playerStats.MeleeKills += kills;
+                            }
+                            break;
+
+                        case "INCOME":
+                            playerStats.Income ??= 0;
+                            playerStats.Income += data;
+                            break;
+
+                        case "CIPHER":
+                            if (data["0"] > 0) {
+                                playerStats.CiphersFailed ??= 0;
+                                playerStats.CiphersFailed += data["0"];
+                            }
+                            if (data["1"] > 0) {
+                                playerStats.CiphersSolved ??= 0;
+                                playerStats.CiphersSolved += data["1"];
+                            }
+                            break;
+
+                        default:
+                            if (!ignoredCategories.includes(category)) {
+                                if (!unknownCategories[action]) {
+                                    unknownCategories[action] = [];
+                                }
+                                unknownCategories[action].push(category);
+                            }
+                            break;
+                    }
                 }
-            }
-        }
+                break;
 
-        if (PICKUP_ITEM) {
-            for (const value of Object.values(PICKUP_ITEM)) {
-                playerStats.PickupCount ??= 0;
-                playerStats.PickupCount += value;
-            }
-        }
+            case "timers":
+                for (const [category, data] of Object.entries(actionData as IStatsTimers)) {
+                    switch (category) {
+                        case "EQUIP_WEAPON":
+                            playerStats.Weapons ??= [];
+                            for (const [type, equipTime] of Object.entries(data as IUploadEntry)) {
+                                const weapon = playerStats.Weapons.find(element => element.type === type);
+                                if (weapon) {
+                                    weapon.equipTime ??= 0;
+                                    weapon.equipTime += equipTime;
+                                } else {
+                                    playerStats.Weapons.push({ type: type, equipTime });
+                                }
+                            }
+                            break;
 
-        if (SCAN) {
-            playerStats.Scans ??= [];
-            for (const [key, scans] of Object.entries(SCAN)) {
-                const scan = playerStats.Scans.find(element => element.type === key);
-                if (scan) {
-                    scan.scans ??= 0;
-                    scan.scans += scans;
-                } else {
-                    playerStats.Scans.push({ type: key, scans });
+                        case "CURRENT_MISSION_TIME":
+                            playerStats.TimePlayedSec ??= 0;
+                            playerStats.TimePlayedSec += data;
+                            break;
+
+                        case "CIPHER_TIME":
+                            playerStats.CipherTime ??= 0;
+                            playerStats.CipherTime += data;
+                            break;
+
+                        default:
+                            if (!ignoredCategories.includes(category)) {
+                                if (!unknownCategories[action]) {
+                                    unknownCategories[action] = [];
+                                }
+                                unknownCategories[action].push(category);
+                            }
+                            break;
+                    }
                 }
-            }
-        }
+                break;
 
-        if (USE_ABILITY) {
-            playerStats.Abilities ??= [];
-            for (const [key, used] of Object.entries(USE_ABILITY)) {
-                const ability = playerStats.Abilities.find(element => element.type === key);
-                if (ability) {
-                    ability.used ??= 0;
-                    ability.used += used;
-                } else {
-                    playerStats.Abilities.push({ type: key, used });
+            case "max":
+                for (const [category, data] of Object.entries(actionData as IStatsMax)) {
+                    switch (category) {
+                        case "WEAPON_XP":
+                            playerStats.Weapons ??= [];
+                            for (const [type, xp] of Object.entries(data as IUploadEntry)) {
+                                const weapon = playerStats.Weapons.find(element => element.type === type);
+                                if (weapon) {
+                                    if (xp > (weapon.xp ?? 0)) {
+                                        weapon.xp = xp;
+                                    }
+                                } else {
+                                    playerStats.Weapons.push({ type: type, xp });
+                                }
+                            }
+                            break;
+
+                        case "MISSION_SCORE":
+                            playerStats.Missions ??= [];
+                            for (const [type, highScore] of Object.entries(data as IUploadEntry)) {
+                                const mission = playerStats.Missions.find(element => element.type === type);
+                                if (mission) {
+                                    if (highScore > mission.highScore) {
+                                        mission.highScore = highScore;
+                                    }
+                                } else {
+                                    playerStats.Missions.push({ type: type, highScore });
+                                }
+                            }
+                            break;
+
+                        case "RACE_SCORE":
+                            playerStats.Races ??= new Map();
+
+                            for (const [race, highScore] of Object.entries(data as Record<string, number>)) {
+                                const currentRace = playerStats.Races.get(race);
+
+                                if (currentRace) {
+                                    if (highScore > currentRace.highScore) {
+                                        playerStats.Races.set(race, { highScore });
+                                    }
+                                } else {
+                                    playerStats.Races.set(race, { highScore });
+                                }
+                            }
+
+                            break;
+
+                        default:
+                            if (!ignoredCategories.includes(category)) {
+                                if (!unknownCategories[action]) {
+                                    unknownCategories[action] = [];
+                                }
+                                unknownCategories[action].push(category);
+                            }
+                            break;
+                    }
                 }
-            }
-        }
+                break;
 
-        if (FIRE_WEAPON) {
-            playerStats.Weapons ??= [];
-            for (const [key, fired] of Object.entries(FIRE_WEAPON)) {
-                const weapon = playerStats.Weapons.find(element => element.type === key);
-                if (weapon) {
-                    weapon.fired ??= 0;
-                    weapon.fired += fired;
-                } else {
-                    playerStats.Weapons.push({ type: key, fired });
+            case "set":
+                for (const [category, value] of Object.entries(actionData as IStatsSet)) {
+                    switch (category) {
+                        case "ELO_RATING":
+                            playerStats.Rating = value;
+                            break;
+
+                        case "RANK":
+                            playerStats.Rank = value;
+                            break;
+
+                        case "PLAYER_LEVEL":
+                            playerStats.PlayerLevel = value;
+                            break;
+
+                        default:
+                            if (!ignoredCategories.includes(category)) {
+                                if (!unknownCategories[action]) {
+                                    unknownCategories[action] = [];
+                                }
+                                unknownCategories[action].push(category);
+                            }
+                            break;
+                    }
                 }
-            }
-        }
+                break;
 
-        if (HIT_ENTITY_ITEM) {
-            playerStats.Weapons ??= [];
-            for (const [key, hits] of Object.entries(HIT_ENTITY_ITEM)) {
-                const weapon = playerStats.Weapons.find(element => element.type === key);
-                if (weapon) {
-                    weapon.hits ??= 0;
-                    weapon.hits += hits;
-                } else {
-                    playerStats.Weapons.push({ type: key, hits });
-                }
-            }
-        }
+            case "displayName":
+            case "guildId":
+                break;
 
-        if (HEADSHOT_ITEM) {
-            playerStats.Weapons ??= [];
-            for (const [key, headshots] of Object.entries(HEADSHOT_ITEM)) {
-                const weapon = playerStats.Weapons.find(element => element.type === key);
-                if (weapon) {
-                    weapon.headshots ??= 0;
-                    weapon.headshots += headshots;
-                } else {
-                    playerStats.Weapons.push({ type: key, headshots });
-                }
-            }
-        }
-
-        if (KILL_ENEMY_ITEM) {
-            playerStats.Weapons ??= [];
-            for (const [key, kills] of Object.entries(KILL_ENEMY_ITEM)) {
-                const weapon = playerStats.Weapons.find(element => element.type === key);
-                if (weapon) {
-                    weapon.kills ??= 0;
-                    weapon.kills += kills;
-                } else {
-                    playerStats.Weapons.push({ type: key, kills });
-                }
-            }
-        }
-
-        if (KILL_ENEMY) {
-            playerStats.Enemies ??= [];
-            for (const [key, kills] of Object.entries(KILL_ENEMY)) {
-                const enemy = playerStats.Enemies.find(element => element.type === key);
-                if (enemy) {
-                    enemy.kills ??= 0;
-                    enemy.kills += kills;
-                } else {
-                    playerStats.Enemies.push({ type: key, kills });
-                }
-            }
-        }
-
-        if (EXECUTE_ENEMY) {
-            playerStats.Enemies ??= [];
-            for (const [key, executions] of Object.entries(EXECUTE_ENEMY)) {
-                const enemy = playerStats.Enemies.find(element => element.type === key);
-                if (enemy) {
-                    enemy.executions ??= 0;
-                    enemy.executions += executions;
-                } else {
-                    playerStats.Enemies.push({ type: key, executions });
-                }
-            }
-        }
-
-        if (HEADSHOT) {
-            playerStats.Enemies ??= [];
-            for (const [key, headshots] of Object.entries(HEADSHOT)) {
-                const enemy = playerStats.Enemies.find(element => element.type === key);
-                if (enemy) {
-                    enemy.headshots ??= 0;
-                    enemy.headshots += headshots;
-                } else {
-                    playerStats.Enemies.push({ type: key, headshots });
-                }
-            }
-        }
-
-        if (DIE) {
-            playerStats.Enemies ??= [];
-            for (const [key, deaths] of Object.entries(DIE)) {
-                playerStats.Deaths ??= 0;
-                playerStats.Deaths += deaths;
-                const enemy = playerStats.Enemies.find(element => element.type === key);
-                if (enemy) {
-                    enemy.deaths ??= 0;
-                    enemy.deaths += deaths;
-                } else {
-                    playerStats.Enemies.push({ type: key, deaths });
-                }
-            }
-        }
-
-        if (MELEE_KILL) {
-            playerStats.MeleeKills ??= 0;
-            for (const kills of Object.values(MELEE_KILL)) {
-                playerStats.MeleeKills += kills;
-            }
-        }
-
-        if (INCOME) {
-            playerStats.Income ??= 0;
-            playerStats.Income += INCOME;
-        }
-
-        if (CIPHER) {
-            if (CIPHER["0"] > 0) {
-                playerStats.CiphersFailed ??= 0;
-                playerStats.CiphersFailed += CIPHER["0"];
-            }
-            if (CIPHER["1"] > 0) {
-                playerStats.CiphersSolved ??= 0;
-                playerStats.CiphersSolved += CIPHER["1"];
-            }
+            default:
+                logger.debug(`Unknown updateStats action: ${action}`);
+                break;
         }
     }
 
-    if (payload.timers) {
-        const { EQUIP_WEAPON, CURRENT_MISSION_TIME, CIPHER_TIME } = payload.timers;
-
-        if (EQUIP_WEAPON) {
-            playerStats.Weapons ??= [];
-            for (const [key, equipTime] of Object.entries(EQUIP_WEAPON)) {
-                const weapon = playerStats.Weapons.find(element => element.type === key);
-                if (weapon) {
-                    weapon.equipTime ??= 0;
-                    weapon.equipTime += equipTime;
-                } else {
-                    playerStats.Weapons.push({ type: key, equipTime });
-                }
-            }
-        }
-
-        if (CURRENT_MISSION_TIME) {
-            playerStats.TimePlayedSec ??= 0;
-            playerStats.TimePlayedSec += CURRENT_MISSION_TIME;
-        }
-
-        if (CIPHER_TIME) {
-            playerStats.CipherTime ??= 0;
-            playerStats.CipherTime += CIPHER_TIME;
-        }
-    }
-
-    if (payload.max) {
-        const { WEAPON_XP, MISSION_SCORE } = payload.max;
-
-        if (WEAPON_XP) {
-            playerStats.Weapons ??= [];
-            for (const [key, xp] of Object.entries(WEAPON_XP)) {
-                const weapon = playerStats.Weapons.find(element => element.type === key);
-                if (weapon) {
-                    weapon.xp = xp;
-                } else {
-                    playerStats.Weapons.push({ type: key, xp });
-                }
-            }
-        }
-
-        if (MISSION_SCORE) {
-            playerStats.Missions ??= [];
-            for (const [key, highScore] of Object.entries(MISSION_SCORE)) {
-                const mission = playerStats.Missions.find(element => element.type === key);
-                if (mission) {
-                    mission.highScore = highScore;
-                } else {
-                    playerStats.Missions.push({ type: key, highScore });
-                }
-            }
-        }
-    }
-
-    if (payload.set) {
-        const { ELO_RATING, RANK, PLAYER_LEVEL } = payload.set;
-        if (ELO_RATING) playerStats.Rating = ELO_RATING;
-        if (RANK) playerStats.Rank = RANK;
-        if (PLAYER_LEVEL) playerStats.PlayerLevel = PLAYER_LEVEL;
+    for (const [action, categories] of Object.entries(unknownCategories)) {
+        logger.debug(`Unknown updateStats ${action} action categories: ${categories.join(", ")}`);
     }
 
     await playerStats.save();
 };
+
+const ignoredCategories = [
+    //add action
+    "MISSION_STARTED",
+    "HOST_OS",
+    "CPU_CORES",
+    "CPU_MODEL",
+    "CPU_VENDOR",
+    "GPU_CLASS",
+    "GFX_DRIVER",
+    "GFX_RESOLUTION",
+    "GFX_ASPECT",
+    "GFX_WINDOW",
+    "GPU_VENDOR",
+    "GFX_HDR",
+    "SPEAKER_COUNT",
+    "MISSION_MATCHMAKING",
+    "PLAYER_COUNT",
+    "HOST_MIGRATION",
+    "DESTROY_DECORATION",
+    "MOVEMENT",
+    "RECEIVE_UPGRADE",
+    "EQUIP_COSMETIC",
+    "EQUIP_UPGRADE",
+    "MISSION_TYPE",
+    "MISSION_FACTION",
+    "MISSION_PLAYED",
+    "MISSION_PLAYED_TIME",
+    "CPU_CLOCK",
+    "CPU_FEATURE",
+    "RAM",
+    "ADDR_SPACE",
+    "GFX_SCALE",
+    "LOGINS",
+    "GPU_MODEL",
+    "MEDALS_TOP",
+    "STATS_TIMERS_RESET",
+    "INPUT_ACTIVITY_TIME",
+    "LOGINS_ITEM",
+    "TAKE_DAMAGE",
+    "SQUAD_KILL_ENEMY",
+    "SQUAD_HEADSHOT",
+    "SQUAD_MELEE_KILL",
+    "MELEE_KILL_ITEM",
+    "TAKE_DAMAGE_ITEM",
+    "SQUAD_KILL_ENEMY_ITEM",
+    "SQUAD_HEADSHOT_ITEM",
+    "SQUAD_MELEE_KILL_ITEM",
+    "PRE_DIE",
+    "PRE_DIE_ITEM",
+    "GEAR_USED",
+    "DIE_ITEM",
+
+    // timers action
+    "IN_SHIP_TIME",
+    "IN_SHIP_VIEW_TIME",
+    "MISSION_LOAD_TIME",
+    "MISSION_TIME",
+    "REGION_TIME",
+    "PLATFORM_TIME",
+    "PRE_DIE_TIME",
+    "VEHICLE_TIME"
+];

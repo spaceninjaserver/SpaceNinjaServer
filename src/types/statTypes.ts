@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
 
-export interface IStatsView {
+export interface IStatsClient {
     CiphersSolved?: number;
     CiphersFailed?: number;
     CipherTime?: number;
@@ -10,9 +10,11 @@ export interface IStatsView {
     MissionsCompleted?: number;
     MissionsQuit?: number;
     MissionsFailed?: number;
+    MissionsInterrupted?: number;
+    MissionsDumped?: number;
     TimePlayedSec?: number;
     PickupCount?: number;
-    Tutorial?: { [key: string]: ITutorial };
+    Tutorial?: Map<string, ITutorial>;
     Abilities?: IAbility[];
     Rating?: number;
     Income?: number;
@@ -23,9 +25,10 @@ export interface IStatsView {
     Deaths?: number;
     HealCount?: number;
     ReviveCount?: number;
+    Races?: Map<string, IRace>;
 }
 
-export interface IStatsDatabase extends IStatsView {
+export interface IStatsDatabase extends IStatsClient {
     accountOwnerId: Types.ObjectId;
 }
 
@@ -68,7 +71,11 @@ export interface IWeapon {
     fired?: number;
 }
 
-export interface IStatsUpload {
+export interface IRace {
+    highScore: number;
+}
+
+export interface IStatsUpdate {
     displayName: string;
     guildId?: string;
     PS?: string;
@@ -128,6 +135,7 @@ export interface IUploadEntry {
 export interface IStatsMax {
     WEAPON_XP?: IUploadEntry;
     MISSION_SCORE?: IUploadEntry;
+    RACE_SCORE?: IUploadEntry;
 }
 
 export interface IStatsSet {

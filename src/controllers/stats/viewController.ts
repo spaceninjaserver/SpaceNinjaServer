@@ -5,14 +5,14 @@ import allScans from "@/static/fixed_responses/allScans.json";
 import { ExportEnemies } from "warframe-public-export-plus";
 import { getInventory } from "@/src/services/inventoryService";
 import { getStats } from "@/src/services/statsService";
-import { IStatsView } from "@/src/types/statTypes";
+import { IStatsClient } from "@/src/types/statTypes";
 
 const viewController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId, "XPInfo");
     const playerStats = await getStats(accountId);
 
-    const responseJson: IStatsView = playerStats.toJSON();
+    const responseJson = playerStats.toJSON() as IStatsClient;
     responseJson.Weapons ??= [];
     for (const item of inventory.XPInfo) {
         const weaponIndex = responseJson.Weapons.findIndex(element => element.type == item.ItemType);

@@ -1,5 +1,5 @@
 import { Document, Schema, Types, model } from "mongoose";
-import { IEnemy, IMission, IScan, ITutorial, IAbility, IWeapon, IStatsDatabase } from "@/src/types/statTypes";
+import { IEnemy, IMission, IScan, ITutorial, IAbility, IWeapon, IStatsDatabase, IRace } from "@/src/types/statTypes";
 
 const abilitySchema = new Schema<IAbility>(
     {
@@ -58,6 +58,13 @@ const weaponSchema = new Schema<IWeapon>(
     { _id: false }
 );
 
+const raceSchema = new Schema<IRace>(
+    {
+        highScore: Number
+    },
+    { _id: false }
+);
+
 const statsSchema = new Schema<IStatsDatabase>({
     accountOwnerId: { type: Schema.Types.ObjectId, required: true },
     CiphersSolved: Number,
@@ -69,6 +76,8 @@ const statsSchema = new Schema<IStatsDatabase>({
     MissionsCompleted: Number,
     MissionsQuit: Number,
     MissionsFailed: Number,
+    MissionsInterrupted: Number,
+    MissionsDumped: Number,
     TimePlayedSec: Number,
     PickupCount: Number,
     Tutorial: { type: Map, of: tutorialSchema, default: {} },
@@ -81,7 +90,8 @@ const statsSchema = new Schema<IStatsDatabase>({
     Missions: { type: [missionSchema], default: [] },
     Deaths: Number,
     HealCount: Number,
-    ReviveCount: Number
+    ReviveCount: Number,
+    Races: { type: Map, of: raceSchema, default: {} }
 });
 
 statsSchema.set("toJSON", {
