@@ -1,8 +1,7 @@
 import { RequestHandler } from "express";
 import { Types } from "mongoose";
 import { Guild } from "@/src/models/guildModel";
-import { IDojoClient, IDojoComponentClient } from "@/src/types/guildTypes";
-import { toOid, toMongoDate } from "@/src/helpers/inventoryHelpers";
+import { getDojoClient } from "@/src/services/guildService";
 
 export const getGuildDojoController: RequestHandler = async (req, res) => {
     const guildId = req.query.guildId as string;
@@ -26,34 +25,5 @@ export const getGuildDojoController: RequestHandler = async (req, res) => {
         await guild.save();
     }
 
-    const dojo: IDojoClient = {
-        _id: { $oid: guildId },
-        Name: guild.Name,
-        Tier: 1,
-        FixedContributions: true,
-        DojoRevision: 1,
-        RevisionTime: Math.round(Date.now() / 1000),
-        Energy: guild.DojoEnergy,
-        Capacity: guild.DojoCapacity,
-        DojoRequestStatus: 0,
-        DojoComponents: []
-    };
-    guild.DojoComponents.forEach(dojoComponent => {
-        const clientComponent: IDojoComponentClient = {
-            id: toOid(dojoComponent._id),
-            pf: dojoComponent.pf,
-            ppf: dojoComponent.ppf,
-            DecoCapacity: 600
-        };
-        if (dojoComponent.pi) {
-            clientComponent.pi = toOid(dojoComponent.pi);
-            clientComponent.op = dojoComponent.op!;
-            clientComponent.pp = dojoComponent.pp!;
-        }
-        if (dojoComponent.CompletionTime) {
-            clientComponent.CompletionTime = toMongoDate(dojoComponent.CompletionTime);
-        }
-        dojo.DojoComponents.push(clientComponent);
-    });
-    res.json(dojo);
+    res.json(getDojoClient(guild, 0));
 };

@@ -34,6 +34,8 @@ export interface IDojoComponentClient {
     pi?: IOid; // Parent ID. N/A to root.
     op?: string; // "Open Portal"? N/A to root.
     pp?: string; // "Parent Portal"? N/A to root.
+    Name?: string;
+    Message?: string;
     RegularCredits?: number; // "Collecting Materials" state: Number of credits that were donated.
     MiscItems?: IMiscItem[]; // "Collecting Materials" state: Resources that were donated.
     CompletionTime?: IMongoDate;

@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import { IDojoComponentClient } from "@/src/types/guildTypes";
-import { getGuildForRequest } from "@/src/services/guildService";
+import { getDojoClient, getGuildForRequest } from "@/src/services/guildService";
 import { Types } from "mongoose";
 import { ExportDojoRecipes } from "warframe-public-export-plus";
 
@@ -30,7 +30,5 @@ export const startDojoRecipeController: RequestHandler = async (req, res) => {
         CompletionTime: new Date(Date.now()) // TOOD: Omit this field & handle the "Collecting Materials" state.
     });
     await guild.save();
-    res.json({
-        DojoRequestStatus: 0
-    });
+    res.json(getDojoClient(guild, 0));
 };

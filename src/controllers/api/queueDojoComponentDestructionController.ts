@@ -1,4 +1,4 @@
-import { getGuildForRequest } from "@/src/services/guildService";
+import { getDojoClient, getGuildForRequest } from "@/src/services/guildService";
 import { RequestHandler } from "express";
 import { ExportDojoRecipes } from "warframe-public-export-plus";
 
@@ -15,7 +15,5 @@ export const queueDojoComponentDestructionController: RequestHandler = async (re
         guild.DojoEnergy -= room.energy;
     }
     await guild.save();
-    res.json({
-        DojoRequestStatus: 1
-    });
+    res.json(getDojoClient(guild, 1));
 };

@@ -14,6 +14,8 @@ const dojoComponentSchema = new Schema<IDojoComponentDatabase>({
     pi: Schema.Types.ObjectId,
     op: String,
     pp: String,
+    Name: String,
+    Message: String,
     CompletionTime: Date
 });
 
