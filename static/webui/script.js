@@ -108,8 +108,10 @@ single.on("route_load", function (event) {
 
 function loc(tag) {
     return ((window.dict ?? {})[tag] ?? tag)
-        .split("|DISPLAYNAME|").join(document.querySelector(".displayname").textContent)
-        .split("|EMAIL|").join(localStorage.getItem("email"));
+        .split("|DISPLAYNAME|")
+        .join(document.querySelector(".displayname").textContent)
+        .split("|EMAIL|")
+        .join(localStorage.getItem("email"));
 }
 
 function updateLocElements() {
@@ -129,7 +131,7 @@ function setActiveLanguage(lang) {
         const webui_lang = ["en", "ru"].indexOf(lang) == -1 ? "en" : lang;
         const script = document.createElement("script");
         script.src = "/translations/" + webui_lang + ".js";
-        script.onload = function() {
+        script.onload = function () {
             updateLocElements();
             resolve(window.dict);
         };
@@ -141,7 +143,8 @@ setActiveLanguage(localStorage.getItem("lang") ?? "en");
 function setLanguage(lang) {
     setActiveLanguage(lang);
     localStorage.setItem("lang", lang);
-    if (window.authz) { // Not in prelogin state?
+    if (window.authz) {
+        // Not in prelogin state?
         fetchItemList();
         updateInventory();
     }
@@ -151,7 +154,7 @@ let uniqueLevelCaps = {};
 function fetchItemList() {
     window.itemListPromise = new Promise(resolve => {
         const req = $.get("/custom/getItemLists?lang=" + window.lang);
-        req.done(async (data) => {
+        req.done(async data => {
             await dictPromise;
 
             window.archonCrystalUpgrades = data.archonCrystalUpgrades;
@@ -173,9 +176,13 @@ function fetchItemList() {
                 "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryBeam": { name: loc("code_kitgun") },
                 "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryShotgun": { name: loc("code_kitgun") },
                 "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon": { name: loc("code_zaw") },
-                "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/OperatorTrainingAmpWeapon": { name: loc("code_moteAmp") },
+                "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/OperatorTrainingAmpWeapon": {
+                    name: loc("code_moteAmp")
+                },
                 "/Lotus/Weapons/Sentients/OperatorAmplifiers/OperatorAmpWeapon": { name: loc("code_amp") },
-                "/Lotus/Weapons/Operator/Pistols/DrifterPistol/DrifterPistolPlayerWeapon": { name: loc("code_sirocco") },
+                "/Lotus/Weapons/Operator/Pistols/DrifterPistol/DrifterPistolPlayerWeapon": {
+                    name: loc("code_sirocco")
+                },
                 "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit": { name: loc("code_kdrive") },
                 // Missing in data sources
                 "/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser": { name: loc("code_legendaryCore") },
@@ -227,13 +234,10 @@ function updateInventory() {
             window.didInitialInventoryUpdate = true;
 
             // Populate inventory route
-            [
-                "RegularCredits",
-                "PremiumCredits",
-                "FusionPoints",
-                "PrimeTokens"
-            ].forEach(currency => {
-                document.getElementById(currency + "-owned").textContent = loc("currency_owned").split("|COUNT|").join(data[currency].toLocaleString());
+            ["RegularCredits", "PremiumCredits", "FusionPoints", "PrimeTokens"].forEach(currency => {
+                document.getElementById(currency + "-owned").textContent = loc("currency_owned")
+                    .split("|COUNT|")
+                    .join(data[currency].toLocaleString());
             });
 
             [
@@ -366,11 +370,24 @@ function updateInventory() {
                             const td = document.createElement("td");
                             td.textContent = itemMap[fingerprint.compat]?.name ?? fingerprint.compat;
                             td.textContent += " " + RivenParser.parseRiven(rivenType, fingerprint, 1).name;
-                            td.innerHTML += " <span title='" + loc("code_buffsNumber") + "'>▲ " + fingerprint.buffs.length + "</span>";
                             td.innerHTML +=
-                                " <span title='" + loc("code_cursesNumber") + "'>▼ " + fingerprint.curses.length + "</span>";
+                                " <span title='" +
+                                loc("code_buffsNumber") +
+                                "'>▲ " +
+                                fingerprint.buffs.length +
+                                "</span>";
                             td.innerHTML +=
-                                " <span title='" + loc("code_rerollsNumber") + "'>⟳ " + parseInt(fingerprint.rerolls) + "</span>";
+                                " <span title='" +
+                                loc("code_cursesNumber") +
+                                "'>▼ " +
+                                fingerprint.curses.length +
+                                "</span>";
+                            td.innerHTML +=
+                                " <span title='" +
+                                loc("code_rerollsNumber") +
+                                "'>⟳ " +
+                                parseInt(fingerprint.rerolls) +
+                                "</span>";
                             tr.appendChild(td);
                         }
                         {
@@ -611,10 +628,7 @@ function addMissingEquipment(categories) {
             }
         });
     });
-    if (
-        requests.length != 0 &&
-        window.confirm(loc("code_addItemsConfirm").split("|COUNT|").join(requests.length))
-    ) {
+    if (requests.length != 0 && window.confirm(loc("code_addItemsConfirm").split("|COUNT|").join(requests.length))) {
         dispatchAddItemsRequestsBatch(requests);
     }
 }

@@ -1,7 +1,7 @@
 // Based on http://209.141.38.3/OpenWF/Translations/src/branch/main/update.php
 // Converted via ChatGPT-4o
 
-const fs = require('fs');
+const fs = require("fs");
 
 function extractStrings(content) {
     const regex = /([a-zA-Z_]+): `([^`]*)`,/g;
@@ -22,7 +22,7 @@ fs.readdirSync("../static/webui/translations").forEach(file => {
         const content = fs.readFileSync(`../static/webui/translations/${file}`, "utf8");
         const targetStrings = extractStrings(content);
         const contentLines = content.split("\n");
-        
+
         const fileHandle = fs.openSync(`../static/webui/translations/${file}`, "w");
         fs.writeSync(fileHandle, contentLines[0] + "\n");
 
@@ -31,16 +31,16 @@ fs.readdirSync("../static/webui/translations").forEach(file => {
             if (Object.keys(strings).length > 0) {
                 Object.entries(strings).forEach(([key, value]) => {
                     if (targetStrings.hasOwnProperty(key)) {
-                        fs.writeSync(fileHandle, `\t${key}: \`${targetStrings[key]}\`,\n`);
+                        fs.writeSync(fileHandle, `    ${key}: \`${targetStrings[key]}\`,\n`);
                     } else {
-                        fs.writeSync(fileHandle, `\t${key}: \`[UNTRANSLATED] ${value}\`,\n`);
+                        fs.writeSync(fileHandle, `    ${key}: \`[UNTRANSLATED] ${value}\`,\n`);
                     }
                 });
-            } else {
+            } else if (line.length) {
                 fs.writeSync(fileHandle, line + "\n");
             }
         });
-        
+
         fs.closeSync(fileHandle);
     }
 });
