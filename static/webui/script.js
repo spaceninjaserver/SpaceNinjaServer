@@ -1023,6 +1023,7 @@ function doAddAllMods() {
     for (const child of document.getElementById("datalist-mods").children) {
         modsAll.add(child.getAttribute("data-key"));
     }
+    modsAll.delete("/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser");
 
     revalidateAuthz(() => {
         const req = $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1");
