@@ -18,6 +18,7 @@ export const giveKeyChainTriggeredMessageController: RequestHandler = async (req
         msg: keyChainMessage.body,
         sub: keyChainMessage.title,
         att: keyChainMessage.attachments.length > 0 ? keyChainMessage.attachments : undefined,
+        countedAtt: keyChainMessage.countedAttachments.length > 0 ? keyChainMessage.countedAttachments : undefined,
         icon: keyChainMessage.icon ?? "",
         transmission: keyChainMessage.transmission ?? "",
         highPriority: keyChainMessage.highPriority ?? false,
