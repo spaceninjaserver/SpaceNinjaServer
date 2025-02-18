@@ -10,6 +10,7 @@ import {
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addItems, getInventory } from "@/src/services/inventoryService";
 import { logger } from "@/src/utils/logger";
+import { ExportGear } from "warframe-public-export-plus";
 
 export const inboxController: RequestHandler = async (req, res) => {
     const { deleteId, lastMessage: latestClientMessageId, messageId } = req.query;
@@ -43,7 +44,10 @@ export const inboxController: RequestHandler = async (req, res) => {
         if (attachmentItems) {
             await addItems(
                 inventory,
-                attachmentItems.map(attItem => ({ ItemType: attItem, ItemCount: 1 })),
+                attachmentItems.map(attItem => ({
+                    ItemType: attItem,
+                    ItemCount: attItem in ExportGear ? (ExportGear[attItem].purchaseQuantity ?? 1) : 1
+                })),
                 inventoryChanges
             );
         }
