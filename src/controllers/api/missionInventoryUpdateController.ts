@@ -5,6 +5,7 @@ import { IMissionInventoryUpdateRequest } from "@/src/types/requestTypes";
 import { addMissionInventoryUpdates, addMissionRewards } from "@/src/services/missionInventoryUpdateService";
 import { getInventory } from "@/src/services/inventoryService";
 import { getInventoryResponse } from "./inventoryController";
+import { logger } from "@/src/utils/logger";
 
 /*
 **** INPUT ****
@@ -50,6 +51,7 @@ import { getInventoryResponse } from "./inventoryController";
 export const missionInventoryUpdateController: RequestHandler = async (req, res): Promise<void> => {
     const accountId = await getAccountIdForRequest(req);
     const missionReport = getJSONfromString<IMissionInventoryUpdateRequest>((req.body as string).toString());
+    logger.debug("mission report:", missionReport);
 
     const inventory = await getInventory(accountId);
     const inventoryUpdates = addMissionInventoryUpdates(inventory, missionReport);
