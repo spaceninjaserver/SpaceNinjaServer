@@ -16,6 +16,7 @@ import { importController } from "@/src/controllers/custom/importController";
 
 import { getConfigDataController } from "@/src/controllers/custom/getConfigDataController";
 import { updateConfigDataController } from "@/src/controllers/custom/updateConfigDataController";
+import { manageQuestsController } from "@/src/controllers/custom/manageQuestsController";
 
 const customRouter = express.Router();
 
@@ -32,6 +33,7 @@ customRouter.post("/addCurrency", addCurrencyController);
 customRouter.post("/addItems", addItemsController);
 customRouter.post("/addXp", addXpController);
 customRouter.post("/import", importController);
+customRouter.post("/manageQuests", manageQuestsController);
 
 customRouter.get("/config", getConfigDataController);
 customRouter.post("/config", updateConfigDataController);

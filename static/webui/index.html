@@ -410,6 +410,27 @@
                     </div>
                 </div>
             </div>
+            <div data-route="/webui/quests" data-title="Quests | OpenWF WebUI">
+                <div class="card mb-3">
+                    <h5 class="card-header" data-loc="quests_list"></h5>
+                    <div class="card-body">
+                        <table class="table table-hover w-100">
+                            <tbody id="active-quests"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card mb-3">
+                    <h5 class="card-header" data-loc="quests_Actions"></h5>
+                    <div class="card-body">
+                        <div class="mb-2 d-flex flex-wrap gap-2">
+                            <button class="btn btn-primary" onclick="doQuestUpdate('unlockAll');" data-loc="quests_UnlockAll"></button>
+                            <button class="btn btn-primary" onclick="doQuestUpdate('completeAll');" data-loc="quests_CompleteAll"></button>
+                            <button class="btn btn-primary" onclick="doQuestUpdate('completeAllUnlocked');" data-loc="quests_CompleteAllUnlocked"></button>
+                            <button class="btn btn-primary" onclick="doQuestUpdate('ResetAll');" data-loc="quests_ResetAll"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div data-route="/webui/cheats, /webui/settings" data-title="Cheats | OpenWF WebUI">
                 <div class="row g-3">
                     <div class="col-md-6">
@@ -435,14 +456,6 @@
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="unlockAllMissions" />
                                         <label class="form-check-label" for="unlockAllMissions" data-loc="cheats_unlockAllMissions"></label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="unlockAllQuests" />
-                                        <label class="form-check-label" for="unlockAllQuests" data-loc="cheats_unlockAllQuests"></label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="completeAllQuests" />
-                                        <label class="form-check-label" for="completeAllQuests" data-loc="cheats_completeAllQuests"></label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="infiniteCredits" />
@@ -524,6 +537,13 @@
                                         <button class="btn btn-primary" type="submit" data-loc="cheats_changeButton"></button>
                                     </div>
                                 </form>
+                            <h5 class="mt-3" data-loc="cheats_quests"></h6>
+                                <div class="mb-2 d-flex flex-wrap gap-2">
+                                    <button class="btn btn-primary" onclick="doQuestUpdate('unlockAll');" data-loc="cheats_quests_UnlockAll"></button>
+                                    <button class="btn btn-primary" onclick="doQuestUpdate('completeAll');" data-loc="cheats_quests_CompleteAll"></button>
+                                    <button class="btn btn-primary" onclick="doQuestUpdate('completeAllUnlocked');" data-loc="cheats_quests_CompleteAllUnlocked"></button>
+                                    <button class="btn btn-primary" onclick="doQuestUpdate('ResetAll');" data-loc="cheats_quests_ResetAll"></button>
+                                </div>
                             </div>
                         </div>
                     </div>

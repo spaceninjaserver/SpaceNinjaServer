@@ -39,8 +39,6 @@ interface IConfig {
     skipAllDialogue?: boolean;
     unlockAllScans?: boolean;
     unlockAllMissions?: boolean;
-    unlockAllQuests?: boolean;
-    completeAllQuests?: boolean;
     infiniteCredits?: boolean;
     infinitePlatinum?: boolean;
     infiniteEndo?: boolean;

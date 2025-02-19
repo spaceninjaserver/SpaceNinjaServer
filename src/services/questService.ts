@@ -3,7 +3,6 @@ import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/invento
 import { IInventoryDatabase, IQuestKeyDatabase, IQuestStage } from "@/src/types/inventoryTypes/inventoryTypes";
 import { logger } from "@/src/utils/logger";
 import { HydratedDocument } from "mongoose";
-import { config } from "@/src/services/configService";
 
 export interface IUpdateQuestRequest {
     QuestKeys: Omit<IQuestKeyDatabase, "CompletionDate">[];
@@ -23,10 +22,10 @@ export const updateQuestKey = (
         throw new Error("more than 1 quest key not supported");
     }
 
-    let questKeyIndex = inventory.QuestKeys.findIndex(questKey => questKey.ItemType === questKeyUpdate[0].ItemType);
+    const questKeyIndex = inventory.QuestKeys.findIndex(questKey => questKey.ItemType === questKeyUpdate[0].ItemType);
+
     if (questKeyIndex === -1) {
-        if (!config.unlockAllQuests) throw new Error(`quest key ${questKeyUpdate[0].ItemType} not found`);
-        questKeyIndex = inventory.QuestKeys.push({ ItemType: questKeyUpdate[0].ItemType }) - 1;
+        throw new Error(`quest key ${questKeyUpdate[0].ItemType} not found`);
     }
 
     inventory.QuestKeys[questKeyIndex] = questKeyUpdate[0];
@@ -62,4 +61,12 @@ export const updateQuestStage = (
     }
 
     Object.assign(questStage, questStageUpdate);
+};
+
+export const addQuestKey = (inventory: TInventoryDatabaseDocument, questKey: IQuestKeyDatabase): void => {
+    if (inventory.QuestKeys.some(q => q.ItemType === questKey.ItemType)) {
+        logger.error(`quest key ${questKey.ItemType} already exists`);
+        return;
+    }
+    inventory.QuestKeys.push(questKey);
 };

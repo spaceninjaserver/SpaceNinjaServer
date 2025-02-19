@@ -13,8 +13,6 @@
   "skipAllDialogue": true,
   "unlockAllScans": true,
   "unlockAllMissions": true,
-  "unlockAllQuests": true,
-  "completeAllQuests": true,
   "infiniteCredits": true,
   "infinitePlatinum": true,
   "infiniteEndo": true,

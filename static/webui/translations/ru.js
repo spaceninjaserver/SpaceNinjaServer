@@ -46,6 +46,7 @@ dict = {
     navbar_deleteAccount: `Удалить аккаунт`,
     navbar_inventory: `Инвентарь`,
     navbar_mods: `Моды`,
+    navbar_quests: `[UNTRANSLATED] Quests`,
     navbar_cheats: `Читы`,
     navbar_import: `Импорт`,
     inventory_addItems: `Добавить предметы`,
@@ -73,6 +74,7 @@ dict = {
     inventory_bulkRankUpSpaceWeapons: `Максимальный ранг всего оружия арчвингов`,
     inventory_bulkRankUpSentinels: `Максимальный ранг всех стражей`,
     inventory_bulkRankUpSentinelWeapons: `Максимальный ранг всего оружия стражей`,
+
     currency_RegularCredits: `Кредиты`,
     currency_PremiumCredits: `Платина`,
     currency_FusionPoints: `Эндо`,
@@ -116,6 +118,11 @@ dict = {
     cheats_changeSupportedSyndicate: `Поддерживаемый синдикат`,
     cheats_changeButton: `Изменить`,
     cheats_none: `Отсутствует`,
+    cheats_quests: `[UNTRANSLATED] Quests`,
+    cheats_quests_UnlockAll: `[UNTRANSLATED] Unlock All Quests`,
+    cheats_quests_CompleteAll: `[UNTRANSLATED] Complete All Quests`,
+    cheats_quests_CompleteAllUnlocked: `[UNTRANSLATED] Complete All Unlocked Quests`,
+    cheats_quests_ResetAll: `[UNTRANSLATED] Reset All Quests`,
     import_importNote: `Вы можете загрузить полный или частичный ответ инвентаря (клиентское представление) здесь. Все поддерживаемые поля <b>будут перезаписаны</b> в вашем аккаунте.`,
     import_submit: `Submit`
 };

@@ -45,6 +45,7 @@ dict = {
     navbar_deleteAccount: `Delete Account`,
     navbar_inventory: `Inventory`,
     navbar_mods: `Mods`,
+    navbar_quests: `Quests`,
     navbar_cheats: `Cheats`,
     navbar_import: `Import`,
     inventory_addItems: `Add Items`,
@@ -72,6 +73,7 @@ dict = {
     inventory_bulkRankUpSpaceWeapons: `Max Rank All Archwing Weapons`,
     inventory_bulkRankUpSentinels: `Max Rank All Sentinels`,
     inventory_bulkRankUpSentinelWeapons: `Max Rank All Sentinel Weapons`,
+
     currency_RegularCredits: `Credits`,
     currency_PremiumCredits: `Platinum`,
     currency_FusionPoints: `Endo`,
@@ -115,6 +117,11 @@ dict = {
     cheats_changeSupportedSyndicate: `Supported syndicate`,
     cheats_changeButton: `Change`,
     cheats_none: `None`,
+    cheats_quests: `Quests`,
+    cheats_quests_UnlockAll: `Unlock All Quests`,
+    cheats_quests_CompleteAll: `Complete All Quests`,
+    cheats_quests_CompleteAllUnlocked: `Complete All Unlocked Quests`,
+    cheats_quests_ResetAll: `Reset All Quests`,
     import_importNote: `You can provide a full or partial inventory response (client respresentation) here. All fields that are supported by the importer <b>will be overwritten</b> in your account.`,
     import_submit: `Submit`
 };

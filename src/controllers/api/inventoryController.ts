@@ -9,7 +9,6 @@ import { IPolarity, ArtifactPolarity, EquipmentFeatures } from "@/src/types/inve
 import {
     ExportCustoms,
     ExportFlavour,
-    ExportKeys,
     ExportRegions,
     ExportResources,
     ExportVirtuals
@@ -100,42 +99,6 @@ export const getInventoryResponse = async (
             });
         }
         addString(inventoryResponse.NodeIntrosCompleted, "TeshinHardModeUnlocked");
-    }
-
-    if (config.unlockAllQuests) {
-        for (const [k, v] of Object.entries(ExportKeys)) {
-            if ("chainStages" in v) {
-                if (!inventoryResponse.QuestKeys.find(quest => quest.ItemType == k)) {
-                    inventoryResponse.QuestKeys.push({ ItemType: k });
-                }
-            }
-        }
-    }
-    if (config.completeAllQuests) {
-        for (const quest of inventoryResponse.QuestKeys) {
-            quest.unlock = true;
-            quest.Completed = true;
-
-            let numStages = 1;
-            if (quest.ItemType in ExportKeys && "chainStages" in ExportKeys[quest.ItemType]) {
-                numStages = ExportKeys[quest.ItemType].chainStages!.length;
-            }
-            quest.Progress = [];
-            for (let i = 0; i != numStages; ++i) {
-                quest.Progress.push({
-                    c: 0,
-                    i: false,
-                    m: false,
-                    b: []
-                });
-            }
-        }
-
-        inventoryResponse.ArchwingEnabled = true;
-        inventoryResponse.ActiveQuest = ""; //TODO: might need to reconsider this if this does not work long term.
-
-        // Skip "Watch The Maker"
-        addString(inventoryResponse.NodeIntrosCompleted, "/Lotus/Levels/Cinematics/NewWarIntro/NewWarStageTwo.level");
     }
 
     if (config.unlockAllShipDecorations) {
@@ -261,7 +224,7 @@ export const getInventoryResponse = async (
     return inventoryResponse;
 };
 
-const addString = (arr: string[], str: string): void => {
+export const addString = (arr: string[], str: string): void => {
     if (!arr.find(x => x == str)) {
         arr.push(str);
     }

@@ -1153,3 +1153,12 @@ function doAddCurrency(currency) {
         updateInventory();
     });
 }
+
+function doQuestUpdate(operation) {
+    $.post({
+        url: "/custom/manageQuests?" + window.authz + "&operation=" + operation,
+        contentType: "application/json"
+    }).then(function () {
+        updateInventory();
+    });
+}
