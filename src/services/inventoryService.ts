@@ -38,6 +38,7 @@ import {
     ExportCustoms,
     ExportFlavour,
     ExportGear,
+    ExportKeys,
     ExportRecipes,
     ExportResources,
     ExportSentinels,
@@ -365,6 +366,19 @@ export const addItem = async (
             }
         };
     }
+    if (typeName in ExportKeys) {
+        // Note: "/Lotus/Types/Keys/" contains some EmailItems and ShipFeatureItems
+        inventory.QuestKeys.push({ ItemType: typeName });
+        return {
+            InventoryChanges: {
+                QuestKeys: [
+                    {
+                        ItemType: typeName
+                    }
+                ]
+            }
+        };
+    }
 
     // Path-based duck typing
     switch (typeName.substr(1).split("/")[1]) {
@@ -480,18 +494,6 @@ export const addItem = async (
                         };
                     }
                     break;
-                }
-                case "Keys": {
-                    inventory.QuestKeys.push({ ItemType: typeName });
-                    return {
-                        InventoryChanges: {
-                            QuestKeys: [
-                                {
-                                    ItemType: typeName
-                                }
-                            ]
-                        }
-                    };
                 }
                 case "NeutralCreatures": {
                     const horseIndex = inventory.Horses.push({ ItemType: typeName });
