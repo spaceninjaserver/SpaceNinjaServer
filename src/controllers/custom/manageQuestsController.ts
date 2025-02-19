@@ -1,8 +1,7 @@
 import { addString } from "@/src/controllers/api/inventoryController";
 import { getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { addQuestKey, IUpdateQuestRequest, updateQuestKey } from "@/src/services/questService";
-import { IQuestStage } from "@/src/types/inventoryTypes/inventoryTypes";
+import { addQuestKey, completeQuest, IUpdateQuestRequest, updateQuestKey } from "@/src/services/questService";
 import { logger } from "@/src/utils/logger";
 import { RequestHandler } from "express";
 import { ExportKeys } from "warframe-public-export-plus";
@@ -23,7 +22,7 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
             allQuestKeys.push(k);
         }
     }
-    const inventory = await getInventory(accountId, "QuestKeys NodeIntrosCompleted");
+    const inventory = await getInventory(accountId);
 
     switch (operation) {
         case "updateKey": {
@@ -40,21 +39,31 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
         case "completeAll": {
             logger.info("completing all quests..");
             for (const questKey of allQuestKeys) {
-                const chainStageTotal = ExportKeys[questKey].chainStages?.length ?? 0;
-                const Progress = Array(chainStageTotal).fill({ c: 0, i: true, m: true, b: [] } satisfies IQuestStage);
-                const inventoryQuestKey = inventory.QuestKeys.find(qk => qk.ItemType === questKey);
-                if (inventoryQuestKey) {
-                    inventoryQuestKey.Completed = true;
-                    inventoryQuestKey.Progress = Progress;
-                    continue;
+                try {
+                    await completeQuest(inventory, questKey);
+                } catch (error) {
+                    if (error instanceof Error) {
+                        logger.error(
+                            `Something went wrong completing quest ${questKey}, probably could not add some item`
+                        );
+                        logger.error(error.message);
+                    }
                 }
-                addQuestKey(inventory, { ItemType: questKey, Completed: true, unlock: true, Progress: Progress });
-            }
-            inventory.ArchwingEnabled = true;
-            inventory.ActiveQuest = "";
 
-            // Skip "Watch The Maker"
-            addString(inventory.NodeIntrosCompleted, "/Lotus/Levels/Cinematics/NewWarIntro/NewWarStageTwo.level");
+                //Skip "Watch The Maker"
+                if (questKey === "/Lotus/Types/Keys/NewWarIntroQuest/NewWarIntroKeyChain") {
+                    addString(
+                        inventory.NodeIntrosCompleted,
+                        "/Lotus/Levels/Cinematics/NewWarIntro/NewWarStageTwo.level"
+                    );
+                }
+
+                if (questKey === "/Lotus/Types/Keys/ArchwingQuest/ArchwingQuestKeyChain") {
+                    inventory.ArchwingEnabled = true;
+                }
+            }
+
+            inventory.ActiveQuest = "";
             break;
         }
         case "ResetAll": {
@@ -63,14 +72,37 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
                 questKey.Completed = false;
                 questKey.Progress = [];
             }
+            inventory.ActiveQuest = "";
             break;
         }
         case "completeAllUnlocked": {
             logger.info("completing all unlocked quests..");
             for (const questKey of inventory.QuestKeys) {
-                //if (!questKey.unlock) { continue; }
-                questKey.Completed = true;
+                console.log("size of questkeys", inventory.QuestKeys.length);
+                try {
+                    await completeQuest(inventory, questKey.ItemType);
+                } catch (error) {
+                    if (error instanceof Error) {
+                        logger.error(
+                            `Something went wrong completing quest ${questKey.ItemType}, probably could not add some item`
+                        );
+                        logger.error(error.message);
+                    }
+                }
+
+                //Skip "Watch The Maker"
+                if (questKey.ItemType === "/Lotus/Types/Keys/NewWarIntroQuest/NewWarIntroKeyChain") {
+                    addString(
+                        inventory.NodeIntrosCompleted,
+                        "/Lotus/Levels/Cinematics/NewWarIntro/NewWarStageTwo.level"
+                    );
+                }
+
+                if (questKey.ItemType === "/Lotus/Types/Keys/ArchwingQuest/ArchwingQuestKeyChain") {
+                    inventory.ArchwingEnabled = true;
+                }
             }
+            inventory.ActiveQuest = "";
             break;
         }
     }

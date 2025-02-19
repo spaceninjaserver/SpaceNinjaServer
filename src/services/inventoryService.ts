@@ -367,7 +367,7 @@ export const addItem = async (
         };
     }
     if (typeName in ExportKeys) {
-        // Note: "/Lotus/Types/Keys/" contains some EmailItems and ShipFeatureItems
+        // Note: "/Lotus/Types/Keys/" contains some EmailItems
         inventory.QuestKeys.push({ ItemType: typeName });
         return {
             InventoryChanges: {
@@ -524,9 +524,7 @@ export const addItem = async (
             }
             break;
     }
-    const errorMessage = `unable to add item: ${typeName}`;
-    logger.error(errorMessage);
-    throw new Error(errorMessage);
+    throw new Error(`unable to add item: ${typeName}`);
 };
 
 export const addItems = async (
@@ -1182,8 +1180,6 @@ export const addKeyChainItems = async (
         const inventoryChangesDelta = await addItem(inventory, item);
         combineInventoryChanges(inventoryChanges, inventoryChangesDelta.InventoryChanges);
     }
-
-    await addItems(inventory, nonStoreItems);
 
     return inventoryChanges;
 };

@@ -1249,6 +1249,7 @@ export type InventoryDocumentProps = {
     KahlLoadOuts: Types.DocumentArray<IOperatorConfigDatabase>;
     PendingRecipes: Types.DocumentArray<IPendingRecipeDatabase>;
     WeaponSkins: Types.DocumentArray<IWeaponSkinDatabase>;
+    QuestKeys: Types.DocumentArray<IQuestKeyDatabase>;
 } & { [K in TEquipmentKey]: Types.DocumentArray<IEquipmentDatabase> };
 
 // eslint-disable-next-line @typescript-eslint/ban-types

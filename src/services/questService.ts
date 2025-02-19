@@ -1,8 +1,14 @@
 import { IKeyChainRequest } from "@/src/controllers/api/giveKeyChainTriggeredItemsController";
+import { isEmptyObject } from "@/src/helpers/general";
+import { IMessage } from "@/src/models/inboxModel";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+import { createMessage } from "@/src/services/inboxService";
+import { addKeyChainItems } from "@/src/services/inventoryService";
+import { getKeyChainMessage } from "@/src/services/itemDataService";
 import { IInventoryDatabase, IQuestKeyDatabase, IQuestStage } from "@/src/types/inventoryTypes/inventoryTypes";
 import { logger } from "@/src/utils/logger";
 import { HydratedDocument } from "mongoose";
+import { ExportKeys } from "warframe-public-export-plus";
 
 export interface IUpdateQuestRequest {
     QuestKeys: Omit<IQuestKeyDatabase, "CompletionDate">[];
@@ -69,4 +75,99 @@ export const addQuestKey = (inventory: TInventoryDatabaseDocument, questKey: IQu
         return;
     }
     inventory.QuestKeys.push(questKey);
+};
+
+export const completeQuest = async (inventory: TInventoryDatabaseDocument, questKey: string) => {
+    const chainStages = ExportKeys[questKey]?.chainStages;
+
+    if (!chainStages) {
+        throw new Error(`Quest ${questKey} does not contain chain stages`);
+    }
+
+    const chainStageTotal = ExportKeys[questKey].chainStages?.length ?? 0;
+
+    const existingQuestKey = inventory.QuestKeys.find(qk => qk.ItemType === questKey);
+
+    if (existingQuestKey?.Completed) {
+        return;
+    }
+    const Progress = Array(chainStageTotal).fill({
+        c: 0,
+        i: false,
+        m: false,
+        b: []
+    } satisfies IQuestStage);
+
+    const completedQuestKey: IQuestKeyDatabase = {
+        ItemType: questKey,
+        Completed: true,
+        unlock: true,
+        Progress: Progress,
+        CompletionDate: new Date()
+    };
+
+    //overwrite current quest progress, might lead to multiple quest item rewards
+    if (existingQuestKey) {
+        existingQuestKey.overwrite(completedQuestKey);
+        //Object.assign(existingQuestKey, completedQuestKey);
+    } else {
+        addQuestKey(inventory, completedQuestKey);
+    }
+
+    for (let i = 0; i < chainStageTotal; i++) {
+        if (chainStages[i].itemsToGiveWhenTriggered.length > 0) {
+            await giveKeyChainItem(inventory, { KeyChain: questKey, ChainStage: i });
+        }
+
+        if (chainStages[i].messageToSendWhenTriggered) {
+            await giveKeyChainMessage(inventory, inventory.accountOwnerId.toString(), {
+                KeyChain: questKey,
+                ChainStage: i
+            });
+        }
+    }
+    //TODO: handle quest completions
+};
+
+export const giveKeyChainItem = async (inventory: TInventoryDatabaseDocument, keyChainInfo: IKeyChainRequest) => {
+    const inventoryChanges = await addKeyChainItems(inventory, keyChainInfo);
+
+    if (isEmptyObject(inventoryChanges)) {
+        throw new Error("inventory changes was empty after getting keychain items: should not happen");
+    }
+    // items were added: update quest stage's i (item was given)
+    updateQuestStage(inventory, keyChainInfo, { i: true });
+
+    //TODO: Check whether Wishlist is used to track items which should exist uniquely in the inventory
+    /*
+    some items are added or removed (not sure) to the wishlist, in that case a 
+    WishlistChanges: ["/Lotus/Types/Items/ShipFeatureItems/ArsenalFeatureItem"],
+    is added to the response, need to determine for which items this is the case and what purpose this has.
+    */
+    //{"KeyChain":"/Lotus/Types/Keys/VorsPrize/VorsPrizeQuestKeyChain","ChainStage":0}
+    //{"WishlistChanges":["/Lotus/Types/Items/ShipFeatureItems/ArsenalFeatureItem"],"MiscItems":[{"ItemType":"/Lotus/Types/Items/ShipFeatureItems/ArsenalFeatureItem","ItemCount":1}]}
+};
+
+export const giveKeyChainMessage = async (
+    inventory: TInventoryDatabaseDocument,
+    accountId: string,
+    keyChainInfo: IKeyChainRequest
+) => {
+    const keyChainMessage = getKeyChainMessage(keyChainInfo);
+
+    const message = {
+        sndr: keyChainMessage.sender,
+        msg: keyChainMessage.body,
+        sub: keyChainMessage.title,
+        att: keyChainMessage.attachments.length > 0 ? keyChainMessage.attachments : undefined,
+        countedAtt: keyChainMessage.countedAttachments.length > 0 ? keyChainMessage.countedAttachments : undefined,
+        icon: keyChainMessage.icon ?? "",
+        transmission: keyChainMessage.transmission ?? "",
+        highPriority: keyChainMessage.highPriority ?? false,
+        r: false
+    } satisfies IMessage;
+
+    await createMessage(accountId, [message]);
+
+    updateQuestStage(inventory, keyChainInfo, { m: true });
 };
