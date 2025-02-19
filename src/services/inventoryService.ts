@@ -516,6 +516,11 @@ export const addItem = async (
                         }
                     };
                 }
+                case "Vehicles":
+                    if (typeName == "/Lotus/Types/Vehicles/Motorcycle/MotorcyclePowerSuit") {
+                        return { InventoryChanges: addMotorcycle(inventory, typeName) };
+                    }
+                    break;
             }
             break;
     }
@@ -850,6 +855,20 @@ const addCrewShipHarness = (
     const index = inventory.CrewShipHarnesses.push({ ItemType: typeName }) - 1;
     inventoryChanges.CrewShipHarnesses ??= [];
     (inventoryChanges.CrewShipHarnesses as object[]).push(inventory.CrewShipHarnesses[index].toJSON());
+    return inventoryChanges;
+};
+
+const addMotorcycle = (
+    inventory: TInventoryDatabaseDocument,
+    typeName: string,
+    inventoryChanges: IInventoryChanges = {}
+): IInventoryChanges => {
+    if (inventory.Motorcycles.length != 0) {
+        throw new Error("refusing to add Motorcycle because account already has one");
+    }
+    const index = inventory.Motorcycles.push({ ItemType: typeName }) - 1;
+    inventoryChanges.Motorcycles ??= [];
+    (inventoryChanges.Motorcycles as object[]).push(inventory.Motorcycles[index].toJSON());
     return inventoryChanges;
 };
 
