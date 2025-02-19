@@ -840,7 +840,7 @@ const addCrewShip = (
     }
     const index = inventory.CrewShips.push({ ItemType: typeName }) - 1;
     inventoryChanges.CrewShips ??= [];
-    (inventoryChanges.CrewShips as object[]).push(inventory.CrewShips[index].toJSON());
+    (inventoryChanges.CrewShips as IEquipmentClient[]).push(inventory.CrewShips[index].toJSON<IEquipmentClient>());
     return inventoryChanges;
 };
 
@@ -854,7 +854,9 @@ const addCrewShipHarness = (
     }
     const index = inventory.CrewShipHarnesses.push({ ItemType: typeName }) - 1;
     inventoryChanges.CrewShipHarnesses ??= [];
-    (inventoryChanges.CrewShipHarnesses as object[]).push(inventory.CrewShipHarnesses[index].toJSON());
+    (inventoryChanges.CrewShipHarnesses as IEquipmentClient[]).push(
+        inventory.CrewShipHarnesses[index].toJSON<IEquipmentClient>()
+    );
     return inventoryChanges;
 };
 
@@ -868,7 +870,7 @@ const addMotorcycle = (
     }
     const index = inventory.Motorcycles.push({ ItemType: typeName }) - 1;
     inventoryChanges.Motorcycles ??= [];
-    (inventoryChanges.Motorcycles as object[]).push(inventory.Motorcycles[index].toJSON());
+    (inventoryChanges.Motorcycles as IEquipmentClient[]).push(inventory.Motorcycles[index].toJSON<IEquipmentClient>());
     return inventoryChanges;
 };
 
