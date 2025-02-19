@@ -830,6 +830,9 @@ const addCrewShip = (
     typeName: string,
     inventoryChanges: IInventoryChanges = {}
 ): IInventoryChanges => {
+    if (inventory.CrewShips.length != 0) {
+        throw new Error("refusing to add CrewShip because account already has one");
+    }
     const index = inventory.CrewShips.push({ ItemType: typeName }) - 1;
     inventoryChanges.CrewShips ??= [];
     (inventoryChanges.CrewShips as object[]).push(inventory.CrewShips[index].toJSON());
@@ -841,6 +844,9 @@ const addCrewShipHarness = (
     typeName: string,
     inventoryChanges: IInventoryChanges = {}
 ): IInventoryChanges => {
+    if (inventory.CrewShips.length != 0) {
+        throw new Error("refusing to add CrewShipHarness because account already has one");
+    }
     const index = inventory.CrewShipHarnesses.push({ ItemType: typeName }) - 1;
     inventoryChanges.CrewShipHarnesses ??= [];
     (inventoryChanges.CrewShipHarnesses as object[]).push(inventory.CrewShipHarnesses[index].toJSON());
