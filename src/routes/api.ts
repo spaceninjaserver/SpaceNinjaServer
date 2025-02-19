@@ -86,6 +86,7 @@ import { updateQuestController } from "@/src/controllers/api/updateQuestControll
 import { updateSessionGetController, updateSessionPostController } from "@/src/controllers/api/updateSessionController";
 import { updateThemeController } from "../controllers/api/updateThemeController";
 import { upgradesController } from "@/src/controllers/api/upgradesController";
+import { saveSettingsController } from "../controllers/api/saveSettingsController";
 
 const apiRouter = express.Router();
 
@@ -182,5 +183,6 @@ apiRouter.post("/updateQuest.php", updateQuestController);
 apiRouter.post("/updateSession.php", updateSessionPostController);
 apiRouter.post("/updateTheme.php", updateThemeController);
 apiRouter.post("/upgrades.php", upgradesController);
+apiRouter.post("/saveSettings.php", saveSettingsController);
 
 export { apiRouter };
