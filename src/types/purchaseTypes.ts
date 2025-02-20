@@ -1,4 +1,5 @@
-import { IInfestedFoundryClient } from "./inventoryTypes/inventoryTypes";
+import { IEquipmentClient } from "./inventoryTypes/commonInventoryTypes";
+import { IInfestedFoundryClient, TEquipmentKey } from "./inventoryTypes/inventoryTypes";
 
 export interface IPurchaseRequest {
     PurchaseParams: IPurchaseParams;
@@ -29,6 +30,8 @@ export interface ICurrencyChanges {
 
 export type IInventoryChanges = {
     [_ in SlotNames]?: IBinChanges;
+} & {
+    [_ in TEquipmentKey]?: IEquipmentClient[];
 } & ICurrencyChanges & { InfestedFoundry?: IInfestedFoundryClient } & Record<
         string,
         IBinChanges | number | object[] | IInfestedFoundryClient

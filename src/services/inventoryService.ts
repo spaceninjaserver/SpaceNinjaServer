@@ -234,7 +234,7 @@ export const addItem = async (
                 InventoryChanges: {
                     Ships: [
                         {
-                            ItemId: { $oid: oid },
+                            ItemId: { $oid: oid.toString() },
                             ItemType: typeName
                         }
                     ]
@@ -499,7 +499,7 @@ export const addItem = async (
                     const horseIndex = inventory.Horses.push({ ItemType: typeName });
                     return {
                         InventoryChanges: {
-                            Horses: inventory.Horses[horseIndex - 1].toJSON()
+                            Horses: [inventory.Horses[horseIndex - 1].toJSON<IEquipmentClient>()]
                         }
                     };
                 }
@@ -572,9 +572,7 @@ export const addSentinel = (
     addMods(inventory, modsToGive);
     const sentinelIndex = inventory.Sentinels.push({ ItemType: sentinelName, Configs: configs, XP: 0 }) - 1;
     inventoryChanges.Sentinels ??= [];
-    (inventoryChanges.Sentinels as IEquipmentClient[]).push(
-        inventory.Sentinels[sentinelIndex].toJSON<IEquipmentClient>()
-    );
+    inventoryChanges.Sentinels.push(inventory.Sentinels[sentinelIndex].toJSON<IEquipmentClient>());
 
     return inventoryChanges;
 };
@@ -586,9 +584,7 @@ export const addSentinelWeapon = (
 ): void => {
     const index = inventory.SentinelWeapons.push({ ItemType: typeName, XP: 0 }) - 1;
     inventoryChanges.SentinelWeapons ??= [];
-    (inventoryChanges.SentinelWeapons as IEquipmentClient[]).push(
-        inventory.SentinelWeapons[index].toJSON<IEquipmentClient>()
-    );
+    inventoryChanges.SentinelWeapons.push(inventory.SentinelWeapons[index].toJSON<IEquipmentClient>());
 };
 
 export const addPowerSuit = (
@@ -604,7 +600,7 @@ export const addPowerSuit = (
     }
     const suitIndex = inventory.Suits.push({ ItemType: powersuitName, Configs: [], UpgradeVer: 101, XP: 0 }) - 1;
     inventoryChanges.Suits ??= [];
-    (inventoryChanges.Suits as IEquipmentClient[]).push(inventory.Suits[suitIndex].toJSON<IEquipmentClient>());
+    inventoryChanges.Suits.push(inventory.Suits[suitIndex].toJSON<IEquipmentClient>());
     return inventoryChanges;
 };
 
@@ -621,7 +617,7 @@ export const addMechSuit = (
     }
     const suitIndex = inventory.MechSuits.push({ ItemType: mechsuitName, Configs: [], UpgradeVer: 101, XP: 0 }) - 1;
     inventoryChanges.MechSuits ??= [];
-    (inventoryChanges.MechSuits as IEquipmentClient[]).push(inventory.MechSuits[suitIndex].toJSON<IEquipmentClient>());
+    inventoryChanges.MechSuits.push(inventory.MechSuits[suitIndex].toJSON<IEquipmentClient>());
     return inventoryChanges;
 };
 
@@ -642,9 +638,7 @@ export const addSpecialItem = (
             XP: 0
         }) - 1;
     inventoryChanges.SpecialItems ??= [];
-    (inventoryChanges.SpecialItems as IEquipmentClient[]).push(
-        inventory.SpecialItems[specialItemIndex].toJSON<IEquipmentClient>()
-    );
+    inventoryChanges.SpecialItems.push(inventory.SpecialItems[specialItemIndex].toJSON<IEquipmentClient>());
 };
 
 export const addSpaceSuit = (
@@ -654,9 +648,7 @@ export const addSpaceSuit = (
 ): IInventoryChanges => {
     const suitIndex = inventory.SpaceSuits.push({ ItemType: spacesuitName, Configs: [], UpgradeVer: 101, XP: 0 }) - 1;
     inventoryChanges.SpaceSuits ??= [];
-    (inventoryChanges.SpaceSuits as IEquipmentClient[]).push(
-        inventory.SpaceSuits[suitIndex].toJSON<IEquipmentClient>()
-    );
+    inventoryChanges.SpaceSuits.push(inventory.SpaceSuits[suitIndex].toJSON<IEquipmentClient>());
     return inventoryChanges;
 };
 
@@ -798,7 +790,7 @@ export const addEquipment = (
         }) - 1;
 
     inventoryChanges[category] ??= [];
-    (inventoryChanges[category] as IEquipmentClient[]).push(inventory[category][index].toJSON<IEquipmentClient>());
+    inventoryChanges[category].push(inventory[category][index].toJSON<IEquipmentClient>());
     return inventoryChanges;
 };
 
@@ -838,7 +830,7 @@ const addCrewShip = (
     }
     const index = inventory.CrewShips.push({ ItemType: typeName }) - 1;
     inventoryChanges.CrewShips ??= [];
-    (inventoryChanges.CrewShips as IEquipmentClient[]).push(inventory.CrewShips[index].toJSON<IEquipmentClient>());
+    inventoryChanges.CrewShips.push(inventory.CrewShips[index].toJSON<IEquipmentClient>());
     return inventoryChanges;
 };
 
@@ -852,9 +844,7 @@ const addCrewShipHarness = (
     }
     const index = inventory.CrewShipHarnesses.push({ ItemType: typeName }) - 1;
     inventoryChanges.CrewShipHarnesses ??= [];
-    (inventoryChanges.CrewShipHarnesses as IEquipmentClient[]).push(
-        inventory.CrewShipHarnesses[index].toJSON<IEquipmentClient>()
-    );
+    inventoryChanges.CrewShipHarnesses.push(inventory.CrewShipHarnesses[index].toJSON<IEquipmentClient>());
     return inventoryChanges;
 };
 
@@ -868,7 +858,7 @@ const addMotorcycle = (
     }
     const index = inventory.Motorcycles.push({ ItemType: typeName }) - 1;
     inventoryChanges.Motorcycles ??= [];
-    (inventoryChanges.Motorcycles as IEquipmentClient[]).push(inventory.Motorcycles[index].toJSON<IEquipmentClient>());
+    inventoryChanges.Motorcycles.push(inventory.Motorcycles[index].toJSON<IEquipmentClient>());
     return inventoryChanges;
 };
 
