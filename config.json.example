@@ -5,6 +5,9 @@
     "level": "trace"
   },
   "myAddress": "localhost",
+  "hubAddress": "https://localhost/api/",
+  "platformCDNs": ["https://localhost/"],
+  "NRS": ["localhost"],
   "httpPort": 80,
   "httpsPort": 443,
   "administratorNames": [],

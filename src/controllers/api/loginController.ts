@@ -6,7 +6,6 @@ import { buildConfig } from "@/src/services/buildConfigService";
 import { Account } from "@/src/models/loginModel";
 import { createAccount, isCorrectPassword, isNameTaken } from "@/src/services/loginService";
 import { IDatabaseAccountJson, ILoginRequest, ILoginResponse } from "@/src/types/loginTypes";
-import { DTLS, groups, HUB, platformCDNs } from "@/static/fixed_responses/login_static";
 import { logger } from "@/src/utils/logger";
 
 export const loginController: RequestHandler = async (request, response) => {
@@ -84,12 +83,12 @@ const createLoginResponse = (account: IDatabaseAccountJson, buildLabel: string):
         ConsentNeeded: account.ConsentNeeded,
         TrackedSettings: account.TrackedSettings,
         Nonce: account.Nonce,
-        Groups: groups,
-        platformCDNs: platformCDNs,
-        NRS: [config.myAddress],
-        DTLS: DTLS,
+        Groups: [],
         IRC: config.myIrcAddresses ?? [config.myAddress],
-        HUB: HUB,
+        platformCDNs: config.platformCDNs,
+        HUB: config.hubAddress,
+        NRS: config.NRS,
+        DTLS: 99,
         BuildLabel: buildLabel,
         MatchmakingBuildId: buildConfig.matchmakingBuildId
     };
