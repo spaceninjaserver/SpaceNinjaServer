@@ -12,30 +12,35 @@ import {
     IOperatorConfigDatabase
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
 
+export type InventoryDatabaseEquipment = {
+    [_ in TEquipmentKey]: IEquipmentDatabase[];
+};
+
 export interface IInventoryDatabase
     extends Omit<
-        IInventoryClient,
-        | "TrainingDate"
-        | "LoadOutPresets"
-        | "Mailbox"
-        | "GuildId"
-        | "PendingRecipes"
-        | "Created"
-        | "QuestKeys"
-        | "BlessingCooldown"
-        | "Ships"
-        | "WeaponSkins"
-        | "Upgrades"
-        | "CrewShipSalvagedWeaponSkins"
-        | "CrewShipWeaponSkins"
-        | "AdultOperatorLoadOuts"
-        | "OperatorLoadOuts"
-        | "KahlLoadOuts"
-        | "InfestedFoundry"
-        | "DialogueHistory"
-        | "KubrowPetEggs"
-        | TEquipmentKey
-    > {
+            IInventoryClient,
+            | "TrainingDate"
+            | "LoadOutPresets"
+            | "Mailbox"
+            | "GuildId"
+            | "PendingRecipes"
+            | "Created"
+            | "QuestKeys"
+            | "BlessingCooldown"
+            | "Ships"
+            | "WeaponSkins"
+            | "Upgrades"
+            | "CrewShipSalvagedWeaponSkins"
+            | "CrewShipWeaponSkins"
+            | "AdultOperatorLoadOuts"
+            | "OperatorLoadOuts"
+            | "KahlLoadOuts"
+            | "InfestedFoundry"
+            | "DialogueHistory"
+            | "KubrowPetEggs"
+            | TEquipmentKey
+        >,
+        InventoryDatabaseEquipment {
     accountOwnerId: Types.ObjectId;
     Created: Date;
     TrainingDate: Date;
@@ -56,30 +61,6 @@ export interface IInventoryDatabase
     InfestedFoundry?: IInfestedFoundryDatabase;
     DialogueHistory?: IDialogueHistoryDatabase;
     KubrowPetEggs?: IKubrowPetEggDatabase[];
-
-    Suits: IEquipmentDatabase[];
-    LongGuns: IEquipmentDatabase[];
-    Pistols: IEquipmentDatabase[];
-    Melee: IEquipmentDatabase[];
-    SpecialItems: IEquipmentDatabase[];
-    Sentinels: IEquipmentDatabase[];
-    SentinelWeapons: IEquipmentDatabase[];
-    SpaceSuits: IEquipmentDatabase[];
-    SpaceGuns: IEquipmentDatabase[];
-    SpaceMelee: IEquipmentDatabase[];
-    Hoverboards: IEquipmentDatabase[];
-    OperatorAmps: IEquipmentDatabase[];
-    MoaPets: IEquipmentDatabase[];
-    Scoops: IEquipmentDatabase[];
-    Horses: IEquipmentDatabase[];
-    DrifterGuns: IEquipmentDatabase[];
-    DrifterMelee: IEquipmentDatabase[];
-    Motorcycles: IEquipmentDatabase[];
-    CrewShips: IEquipmentDatabase[];
-    DataKnives: IEquipmentDatabase[];
-    MechSuits: IEquipmentDatabase[];
-    CrewShipHarnesses: IEquipmentDatabase[];
-    KubrowPets: IEquipmentDatabase[];
 }
 
 export interface IQuestKeyDatabase {
@@ -179,30 +160,11 @@ export interface IDailyAffiliations {
     DailyAffiliationHex: number;
 }
 
-export interface IInventoryClient extends IDailyAffiliations {
-    Suits: IEquipmentClient[];
-    LongGuns: IEquipmentClient[];
-    Pistols: IEquipmentClient[];
-    Melee: IEquipmentClient[];
-    SpecialItems: IEquipmentClient[];
-    Sentinels: IEquipmentClient[];
-    SentinelWeapons: IEquipmentClient[];
-    SpaceSuits: IEquipmentClient[];
-    SpaceGuns: IEquipmentClient[];
-    SpaceMelee: IEquipmentClient[];
-    Hoverboards: IEquipmentClient[];
-    OperatorAmps: IEquipmentClient[];
-    MoaPets: IEquipmentClient[];
-    Scoops: IEquipmentClient[];
-    Horses: IEquipmentClient[];
-    DrifterGuns: IEquipmentClient[];
-    DrifterMelee: IEquipmentClient[];
-    Motorcycles: IEquipmentClient[];
-    CrewShips: IEquipmentClient[];
-    DataKnives: IEquipmentClient[];
-    MechSuits: IEquipmentClient[];
-    CrewShipHarnesses: IEquipmentClient[];
-    KubrowPets: IEquipmentClient[];
+export type InventoryClientEquipment = {
+    [_ in TEquipmentKey]: IEquipmentClient[];
+};
+
+export interface IInventoryClient extends IDailyAffiliations, InventoryClientEquipment {
     AdultOperatorLoadOuts: IOperatorConfigClient[];
     OperatorLoadOuts: IOperatorConfigClient[];
     KahlLoadOuts: IOperatorConfigClient[];
