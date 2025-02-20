@@ -191,6 +191,11 @@ export const addMissionInventoryUpdates = (
                 });
                 break;
             }
+            case "LoreFragmentScans":
+                value.forEach(x => {
+                    inventory.LoreFragmentScans.push(x);
+                });
+                break;
             case "SyndicateId": {
                 inventory.CompletedSyndicates.push(value);
                 break;

@@ -13,7 +13,8 @@ import {
     IFusionTreasure,
     ICustomMarkers,
     IPlayerSkills,
-    IQuestKeyDatabase
+    IQuestKeyDatabase,
+    ILoreFragmentScan
 } from "./inventoryTypes/inventoryTypes";
 
 export interface IThemeUpdateRequest {
@@ -85,6 +86,7 @@ export type IMissionInventoryUpdateRequest = {
     FocusXpIncreases?: number[];
     PlayerSkillGains: IPlayerSkills;
     CustomMarkers?: ICustomMarkers[];
+    LoreFragmentScans?: ILoreFragmentScan[];
 } & {
     [K in TEquipmentKey]?: IEquipmentClient[];
 };
