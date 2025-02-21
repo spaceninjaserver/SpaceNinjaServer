@@ -13,7 +13,8 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
         | "completeAll"
         | "ResetAll"
         | "completeAllUnlocked"
-        | "updateKey";
+        | "updateKey"
+        | "giveAll";
     const questKeyUpdate = req.body as IUpdateQuestRequest["QuestKeys"];
 
     const allQuestKeys: string[] = [];
@@ -71,6 +72,7 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
             for (const questKey of inventory.QuestKeys) {
                 questKey.Completed = false;
                 questKey.Progress = [];
+                questKey.CompletionDate = undefined;
             }
             inventory.ActiveQuest = "";
             break;
@@ -78,7 +80,6 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
         case "completeAllUnlocked": {
             logger.info("completing all unlocked quests..");
             for (const questKey of inventory.QuestKeys) {
-                console.log("size of questkeys", inventory.QuestKeys.length);
                 try {
                     await completeQuest(inventory, questKey.ItemType);
                 } catch (error) {
@@ -103,6 +104,12 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
                 }
             }
             inventory.ActiveQuest = "";
+            break;
+        }
+        case "giveAll": {
+            for (const questKey of allQuestKeys) {
+                addQuestKey(inventory, { ItemType: questKey });
+            }
             break;
         }
     }

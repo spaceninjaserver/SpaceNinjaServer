@@ -118,10 +118,11 @@ dict = {
     cheats_changeButton: `Change`,
     cheats_none: `None`,
     cheats_quests: `Quests`,
-    cheats_quests_UnlockAll: `Unlock All Quests`,
-    cheats_quests_CompleteAll: `Complete All Quests`,
-    cheats_quests_CompleteAllUnlocked: `Complete All Unlocked Quests`,
-    cheats_quests_ResetAll: `Reset All Quests`,
+    cheats_quests_unlockAll: `Unlock All Quests`,
+    cheats_quests_completeAll: `Complete All Quests`,
+    cheats_quests_completeAllUnlocked: `Complete All Unlocked Quests`,
+    cheats_quests_resetAll: `Reset All Quests`,
+    cheats_quests_giveAll: `Give All Quests`,
     import_importNote: `You can provide a full or partial inventory response (client respresentation) here. All fields that are supported by the importer <b>will be overwritten</b> in your account.`,
     import_submit: `Submit`
 };
