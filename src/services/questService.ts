@@ -138,6 +138,8 @@ export const giveKeyChainItem = async (inventory: TInventoryDatabaseDocument, ke
     // items were added: update quest stage's i (item was given)
     updateQuestStage(inventory, keyChainInfo, { i: true });
 
+    return inventoryChanges;
+
     //TODO: Check whether Wishlist is used to track items which should exist uniquely in the inventory
     /*
     some items are added or removed (not sure) to the wishlist, in that case a 
