@@ -39,11 +39,11 @@ export interface ILoginResponse extends IAccountAndLoginResponseCommons {
     Groups: IGroup[];
     BuildLabel: string;
     MatchmakingBuildId: string;
-    platformCDNs: string[];
-    NRS: string[];
+    platformCDNs?: string[];
+    NRS?: string[];
     DTLS: number;
     IRC: string[];
-    HUB: string;
+    HUB?: string;
 }
 
 export interface IGroup {

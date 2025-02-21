@@ -33,9 +33,9 @@ interface IConfig {
     httpPort?: number;
     httpsPort?: number;
     myIrcAddresses?: string[];
-    platformCDNs: string[];
-    hubAddress: string;
-    NRS: string[];
+    platformCDNs?: string[];
+    hubAddress?: string;
+    NRS?: string[];
     administratorNames?: string[] | string;
     autoCreateAccount?: boolean;
     skipTutorial?: boolean;
