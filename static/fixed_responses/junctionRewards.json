@@ -1,0 +1,120 @@
+{
+  "VenusToMercuryJunction": {
+    "items": [
+      { "ItemType": "/Lotus/StoreItems/Types/Keys/InfestedIntroQuest/InfestedIntroQuestKeyChain", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Types/Keys/KubrowQuest/KubrowQuestKeyChain", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Weapons/Tenno/Rifle/BoltoRifle", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Upgrades/Mods/Warframe/AvatarShieldRechargeRateMod", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Upgrades/Mods/Warframe/AvatarAbilityEfficiencyMod", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Types/Game/KubrowPet/EggHatcher", "ItemCount": 1 }
+    ],
+    "credits": 10000
+  },
+  "EarthToVenusJunction": {
+    "items": [
+      { "ItemType": "/Lotus/StoreItems/Types/Recipes/Weapons/FurisBlueprint", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Upgrades/Mods/Melee/WeaponFreezeDamageMod", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Upgrades/Mods/Rifle/WeaponElectricityDamageMod", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Types/Recipes/SentinelRecipes/TnSentinelCrossBlueprint", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Weapons/Tenno/Melee/MeleeTrees/StaffCmbOneMeleeTree", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Types/Items/MiscItems/OrokinReactor", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Upgrades/Mods/Aura/PlayerEnergyHealthRegenAuraMod", "ItemCount": 1 }
+    ],
+    "credits": 5000
+  },
+  "EarthToMarsJunction": {
+    "items": [
+      { "ItemType": "/Lotus/StoreItems/Types/Keys/ArchwingQuest/ArchwingQuestKeyChain", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Types/Game/KubrowPet/EggHatcher", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Types/Items/ShipFeatureItems/VoidProjectionFeatureItem", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Types/Game/Projections/T1VoidProjectionRevenantPrimeABronze", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Weapons/Tenno/Melee/Hammer/HammerWeapon", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Weapons/Tenno/Melee/MeleeTrees/IronPhoenixMeleeTree", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Types/Keys/InfestedMicroplanetQuest/InfestedMicroplanetQuestKeyChain", "ItemCount": 1 }
+    ],
+    "credits": 15000
+  },
+  "MarsToCeresJunction": {
+    "items": [
+      { "ItemType": "/Lotus/StoreItems/Types/Recipes/Weapons/GrnSniperRifleBlueprint", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Upgrades/Mods/Melee/WeaponToxinDamageMod", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Weapons/Tenno/Melee/MeleeTrees/DualSwordCmbOneMeleeTree", "ItemCount": 1 }
+    ],
+    "credits": 20000
+  },
+  "MarsToPhobosJunction": {
+    "items": [
+      { "ItemType": "/Lotus/StoreItems/Types/Keys/SpyQuestKeyChain/SpyQuestKeyChain", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Types/Recipes/Weapons/GrnHeavyPistolBlueprint", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Types/StoreItems/Consumables/CipherBlueprint", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Upgrades/Mods/Rifle/WeaponReloadSpeedMod", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Upgrades/Mods/Warframe/AvatarLootRadarMod", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Types/Items/MiscItems/OrokinCatalyst", "ItemCount": 1 }
+    ],
+    "credits": 20000
+  },
+  "JupiterToEuropaJunction": {
+    "items": [
+      { "ItemType": "/Lotus/StoreItems/Types/Keys/LimboQuest/LimboQuestKeyChain", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Types/Keys/DragonQuest/DragonQuestKeyChain", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Types/Recipes/Weapons/CorpusMinigunBlueprint", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Upgrades/Mods/Aura/PlayerHealthAuraMod", "ItemCount": 1 }
+    ],
+    "credits": 40000
+  },
+  "JupiterToSaturnJunction": {
+    "items": [
+      { "ItemType": "/Lotus/StoreItems/Types/Recipes/Weapons/GrenadeLauncherBlueprint", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Types/Keys/ProteaQuest/ProteaQuestKeyChain", "ItemCount": 1 }
+    ],
+    "credits": 40000
+  },
+  "SaturnToUranusJunction": {
+    "items": [
+      { "ItemType": "/Lotus/StoreItems/Types/Recipes/Weapons/CorpusWhipBlueprint", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/ChromaHelmetBlueprint", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Types/Keys/DuviriQuest/DuviriQuestKeyChain", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Types/NeutralCreatures/ErsatzHorse/ErsatzHorsePowerSuit", "ItemCount": 1 }
+    ],
+    "credits": 60000
+  },
+  "UranusToNeptuneJunction": {
+    "items": [
+      { "ItemType": "/Lotus/StoreItems/Types/Keys/OrokinMoonQuest/OrokinMoonQuestKeyChain", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Types/Recipes/Weapons/ReconnasorBlueprint", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/ChromaChassisBlueprint", "ItemCount": 1 }
+    ],
+    "credits": 80000
+  },
+  "NeptuneToPlutoJunction": {
+    "items": [
+      { "ItemType": "/Lotus/StoreItems/Types/Recipes/Weapons/GrineerFlakCannonBlueprint", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/ChromaSystemsBlueprint", "ItemCount": 1 }
+    ],
+    "credits": 80000
+  },
+  "PlutoToSednaJunction": {
+    "items": [
+      { "ItemType": "/Lotus/StoreItems/Types/Keys/WarWithinQuest/WarWithinQuestKeyChain", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Types/Keys/MirageQuest/MirageQuestKeyChain", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Types/Recipes/Weapons/DualDaggerBlueprint", "ItemCount": 1 }
+    ],
+    "credits": 100000
+  },
+  "PlutoToErisJunction": {
+    "items": [
+      { "ItemType": "/Lotus/StoreItems/Types/Keys/InfestedAladVQuest/InfestedAladVQuestKeyChain", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Types/Recipes/Weapons/MireSwordBlueprint", "ItemCount": 1 }
+    ],
+    "credits": 100000
+  },
+  "CeresToJupiterJunction": {
+    "items": [
+      { "ItemType": "/Lotus/StoreItems/Types/Recipes/Weapons/GrnStaffBlueprint", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Upgrades/Mods/Archwing/Suit/ArchwingSuitHealthMaxMod", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Upgrades/Mods/Archwing/Rifle/ArchwingRifleDamageAmountMod", "ItemCount": 1 },
+      { "ItemType": "/Lotus/StoreItems/Upgrades/Mods/Archwing/Melee/ArchwingMeleeDamageMod", "ItemCount": 1 }
+    ],
+    "credits": 30000
+  }
+}

@@ -26,6 +26,8 @@ import { getLevelKeyRewards, getNode } from "@/src/services/itemDataService";
 import { InventoryDocumentProps, TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { getEntriesUnsafe } from "@/src/utils/ts-utils";
 import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import junctionRewards from "@/static/fixed_responses/junctionRewards.json";
+import { IJunctionRewards } from "@/src/types/commonTypes";
 
 const getRotations = (rotationCount: number): number[] => {
     if (rotationCount === 0) return [0];
@@ -270,6 +272,20 @@ export const addMissionRewards = async (
                 StoreItem: reward.itemType,
                 ItemCount: reward.rewardType === "RT_RESOURCE" ? reward.amount : 1
             });
+        }
+    }
+
+    if (rewardInfo.node in junctionRewards) {
+        const junctionReward = (junctionRewards as IJunctionRewards)[rewardInfo.node];
+        for (const item of junctionReward.items) {
+            MissionRewards.push({
+                StoreItem: item.ItemType,
+                ItemCount: item.ItemCount
+            });
+        }
+        if (junctionReward.credits) {
+            inventory.RegularCredits += junctionReward.credits;
+            missionCompletionCredits += junctionReward.credits;
         }
     }
 
