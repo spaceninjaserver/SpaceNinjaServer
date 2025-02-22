@@ -119,10 +119,11 @@ dict = {
     cheats_changeButton: `Изменить`,
     cheats_none: `Отсутствует`,
     cheats_quests: `[UNTRANSLATED] Quests`,
-    cheats_quests_UnlockAll: `[UNTRANSLATED] Unlock All Quests`,
-    cheats_quests_CompleteAll: `[UNTRANSLATED] Complete All Quests`,
-    cheats_quests_CompleteAllUnlocked: `[UNTRANSLATED] Complete All Unlocked Quests`,
-    cheats_quests_ResetAll: `[UNTRANSLATED] Reset All Quests`,
+    cheats_quests_unlockAll: `[UNTRANSLATED] Unlock All Quests`,
+    cheats_quests_completeAll: `[UNTRANSLATED] Complete All Quests`,
+    cheats_quests_completeAllUnlocked: `[UNTRANSLATED] Complete All Unlocked Quests`,
+    cheats_quests_resetAll: `[UNTRANSLATED] Reset All Quests`,
+    cheats_quests_giveAll: `[UNTRANSLATED] Give All Quests`,
     import_importNote: `Вы можете загрузить полный или частичный ответ инвентаря (клиентское представление) здесь. Все поддерживаемые поля <b>будут перезаписаны</b> в вашем аккаунте.`,
     import_submit: `Submit`
 };
