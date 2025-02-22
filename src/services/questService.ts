@@ -126,7 +126,8 @@ export const completeQuest = async (inventory: TInventoryDatabaseDocument, quest
             });
         }
     }
-    //TODO: handle quest completions
+    inventory.ActiveQuest = "";
+    //TODO: handle quest completion items
 };
 
 export const giveKeyChainItem = async (inventory: TInventoryDatabaseDocument, keyChainInfo: IKeyChainRequest) => {

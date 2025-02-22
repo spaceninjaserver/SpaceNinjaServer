@@ -63,8 +63,6 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
                     inventory.ArchwingEnabled = true;
                 }
             }
-
-            inventory.ActiveQuest = "";
             break;
         }
         case "ResetAll": {
@@ -103,7 +101,6 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
                     inventory.ArchwingEnabled = true;
                 }
             }
-            inventory.ActiveQuest = "";
             break;
         }
         case "giveAll": {

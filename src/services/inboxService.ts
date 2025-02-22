@@ -2,7 +2,7 @@ import { IMessageDatabase, Inbox } from "@/src/models/inboxModel";
 import { getAccountForRequest } from "@/src/services/loginService";
 import { HydratedDocument } from "mongoose";
 import { Request } from "express";
-import messages from "@/static/fixed_responses/messages.json";
+import eventMessages from "@/static/fixed_responses/eventMessages.json";
 import { logger } from "@/src/utils/logger";
 
 export const getAllMessagesSorted = async (accountId: string): Promise<HydratedDocument<IMessageDatabase>[]> => {
@@ -32,7 +32,7 @@ export const createNewEventMessages = async (req: Request) => {
     const latestEventMessageDate = account.LatestEventMessageDate;
 
     //TODO: is baroo there? create these kind of messages too (periodical messages)
-    const newEventMessages = messages.Messages.filter(m => new Date(m.eventMessageDate) > latestEventMessageDate);
+    const newEventMessages = eventMessages.Messages.filter(m => new Date(m.eventMessageDate) > latestEventMessageDate);
 
     if (newEventMessages.length === 0) {
         logger.debug(`No new event messages. Latest event message date: ${latestEventMessageDate.toISOString()}`);

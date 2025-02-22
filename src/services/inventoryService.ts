@@ -22,7 +22,9 @@ import {
     IDailyAffiliations,
     IInventoryDatabase,
     IKubrowPetEggDatabase,
-    IKubrowPetEggClient
+    IKubrowPetEggClient,
+    ILibraryAvailableDailyTaskInfo,
+    ICalendarProgress
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate } from "../types/genericUpdate";
 import {
@@ -32,7 +34,7 @@ import {
 } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
 import { getExalted, getKeyChainItems } from "@/src/services/itemDataService";
-import { IEquipmentClient, IItemConfig } from "../types/inventoryTypes/commonInventoryTypes";
+import { IEquipmentClient, IEquipmentDatabase, IItemConfig } from "../types/inventoryTypes/commonInventoryTypes";
 import {
     ExportArcanes,
     ExportCustoms,
@@ -51,6 +53,9 @@ import { createShip } from "./shipService";
 import { creditBundles, fusionBundles } from "@/src/services/missionInventoryUpdateService";
 import { IKeyChainRequest } from "@/src/controllers/api/giveKeyChainTriggeredItemsController";
 import { toOid } from "../helpers/inventoryHelpers";
+import { generateRewardSeed } from "@/src/controllers/api/getNewRewardSeedController";
+import { addStartingGear } from "@/src/controllers/api/giveStartingGearController";
+import { completeQuest } from "@/src/services/questService";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
@@ -65,65 +70,18 @@ export const createInventory = async (
             ReceivedStartingGear: config.skipTutorial
         });
 
+        inventory.LibraryAvailableDailyTaskInfo = createLibraryAvailableDailyTaskInfo();
+        inventory.CalendarProgress = createCalendar();
+        inventory.RewardSeed = generateRewardSeed();
+        inventory.DuviriInfo = {
+            Seed: generateRewardSeed(),
+            NumCompletions: 0
+        };
+        await addItem(inventory, "/Lotus/Types/Friendly/PlayerControllable/Weapons/DuviriDualSwords");
+
         if (config.skipTutorial) {
-            const defaultEquipment = [
-                // Awakening rewards
-                { ItemCount: 1, ItemType: "/Lotus/Powersuits/Excalibur/Excalibur" },
-                { ItemCount: 1, ItemType: "/Lotus/Weapons/Tenno/Melee/LongSword/LongSword" },
-                { ItemCount: 1, ItemType: "/Lotus/Weapons/Tenno/Pistol/Pistol" },
-                { ItemCount: 1, ItemType: "/Lotus/Weapons/Tenno/Rifle/Rifle" },
-                { ItemCount: 1, ItemType: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageItem1" },
-                { ItemCount: 1, ItemType: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageItem2" },
-                { ItemCount: 1, ItemType: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageItem3" },
-                { ItemCount: 1, ItemType: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageItem4" },
-                { ItemCount: 1, ItemType: "/Lotus/Types/Restoratives/LisetAutoHack" }
-            ];
-
-            // const vorsPrizeRewards = [
-            //     // Vor's Prize rewards
-            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarHealthMaxMod" },
-            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarShieldMaxMod" },
-            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarAbilityRangeMod" },
-            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarAbilityStrengthMod" },
-            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarAbilityDurationMod" },
-            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarPickupBonusMod" },
-            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarPowerMaxMod" },
-            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Warframe/AvatarEnemyRadarMod" },
-            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Melee/WeaponFireRateMod" },
-            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Melee/WeaponMeleeDamageMod" },
-            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Rifle/WeaponFactionDamageCorpus" },
-            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Rifle/WeaponFactionDamageGrineer" },
-            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod" },
-            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Pistol/WeaponFireDamageMod" },
-            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Pistol/WeaponElectricityDamageMod" },
-            //     { ItemCount: 1, ItemType: "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod" },
-            //     { ItemCount: 1, ItemType: "/Lotus/Types/Recipes/Weapons/BurstonRifleBlueprint" },
-            //     { ItemCount: 1, ItemType: "/Lotus/Types/Items/MiscItems/Morphic" },
-            //     { ItemCount: 400, ItemType: "/Lotus/Types/Items/MiscItems/PolymerBundle" },
-            //     { ItemCount: 150, ItemType: "/Lotus/Types/Items/MiscItems/AlloyPlate" }
-            // ];
-            for (const equipment of defaultEquipment) {
-                await addItem(inventory, equipment.ItemType, equipment.ItemCount);
-            }
-
-            // Missing in Public Export
-            inventory.Horses.push({
-                ItemType: "/Lotus/Types/NeutralCreatures/ErsatzHorse/ErsatzHorsePowerSuit"
-            });
-            inventory.DataKnives.push({
-                ItemType: "/Lotus/Weapons/Tenno/HackingDevices/TnHackingDevice/TnHackingDeviceWeapon",
-                XP: 450000
-            });
-            inventory.Scoops.push({
-                ItemType: "/Lotus/Weapons/Tenno/Speedball/SpeedballWeaponTest"
-            });
-            inventory.DrifterMelee.push({
-                ItemType: "/Lotus/Types/Friendly/PlayerControllable/Weapons/DuviriDualSwords"
-            });
-
-            inventory.QuestKeys.push({
-                ItemType: "/Lotus/Types/Keys/VorsPrize/VorsPrizeQuestKeyChain"
-            });
+            await addStartingGear(inventory);
+            await completeQuest(inventory, "/Lotus/Types/Keys/VorsPrize/VorsPrizeQuestKeyChain");
 
             const completedMissions = ["SolNode27", "SolNode89", "SolNode63", "SolNode85", "SolNode15", "SolNode79"];
 
@@ -133,14 +91,11 @@ export const createInventory = async (
                     Tag: tag
                 }))
             );
-
-            inventory.RegularCredits = 25000;
-            inventory.FusionPoints = 180;
         }
 
         await inventory.save();
     } catch (error) {
-        throw new Error(`Error creating inventory: ${error instanceof Error ? error.message : "Unknown error"}`);
+        throw new Error(`Error creating inventory: ${error instanceof Error ? error.message : "Unknown error type"}`);
     }
 };
 
@@ -150,6 +105,7 @@ export const createInventory = async (
  * @param InventoryChanges - will hold the combined changes
  * @param delta - inventory changes to be added
  */
+//TODO: this fails silently when providing an incorrect object to delta
 export const combineInventoryChanges = (InventoryChanges: IInventoryChanges, delta: IInventoryChanges): void => {
     for (const key in delta) {
         if (!(key in InventoryChanges)) {
@@ -779,15 +735,19 @@ export const addEquipment = (
     category: TEquipmentKey,
     type: string,
     modularParts: string[] | undefined = undefined,
-    inventoryChanges: IInventoryChanges = {}
+    inventoryChanges: IInventoryChanges = {},
+    defaultOverwrites: Partial<IEquipmentDatabase> | undefined = undefined
 ): IInventoryChanges => {
-    const index =
-        inventory[category].push({
+    const equipment = Object.assign(
+        {
             ItemType: type,
             Configs: [],
             XP: 0,
             ModularParts: modularParts
-        }) - 1;
+        },
+        defaultOverwrites
+    );
+    const index = inventory[category].push(equipment) - 1;
 
     inventoryChanges[category] ??= [];
     inventoryChanges[category].push(inventory[category][index].toJSON<IEquipmentClient>());
@@ -1172,4 +1132,29 @@ export const addKeyChainItems = async (
     }
 
     return inventoryChanges;
+};
+const createLibraryAvailableDailyTaskInfo = (): ILibraryAvailableDailyTaskInfo => {
+    return {
+        EnemyTypes: ["/Lotus/Types/Enemies/Orokin/RifleLancerAvatar"],
+        EnemyLocTag: "/Lotus/Language/Game/CorruptedLancer",
+        EnemyIcon: "/Lotus/Interface/Icons/Npcs/OrokinRifleLancerAvatar.png",
+        ScansRequired: 3,
+        RewardStoreItem: "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/UncommonFusionBundle",
+        RewardQuantity: 7,
+        RewardStanding: 7500
+    };
+};
+
+const createCalendar = (): ICalendarProgress => {
+    return {
+        Version: 19,
+        Iteration: 2,
+        YearProgress: { Upgrades: [] },
+        SeasonProgress: {
+            SeasonType: "CST_SPRING",
+            LastCompletedDayIdx: -1,
+            LastCompletedChallengeDayIdx: -1,
+            ActivatedChallenges: []
+        }
+    };
 };

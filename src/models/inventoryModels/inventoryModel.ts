@@ -64,7 +64,11 @@ import {
     IKubrowPetEggClient,
     ICustomMarkers,
     IMarkerInfo,
-    IMarker
+    IMarker,
+    ICalendarProgress,
+    IPendingCouponDatabase,
+    IPendingCouponClient,
+    ILibraryAvailableDailyTaskInfo
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -323,7 +327,7 @@ MailboxSchema.set("toJSON", {
 const DuviriInfoSchema = new Schema<IDuviriInfo>(
     {
         Seed: Number,
-        NumCompletions: Number
+        NumCompletions: { type: Number, default: 0 }
     },
     {
         _id: false,
@@ -435,6 +439,7 @@ const seasonChallengeHistorySchema = new Schema<ISeasonChallenge>(
 //TODO: check whether this is complete
 const playerSkillsSchema = new Schema<IPlayerSkills>(
     {
+        LPP_NONE: { type: Number, default: 0 },
         LPP_SPACE: { type: Number, default: 0 },
         LPS_PILOTING: { type: Number, default: 0 },
         LPS_GUNNERY: { type: Number, default: 0 },
@@ -891,19 +896,63 @@ const CustomMarkersSchema = new Schema<ICustomMarkers>(
     { _id: false }
 );
 
+const calenderProgressSchema = new Schema<ICalendarProgress>(
+    {
+        Version: { type: Number, default: 19 },
+        Iteration: { type: Number, default: 2 },
+        YearProgress: {
+            Upgrades: { type: [] }
+        },
+        SeasonProgress: {
+            SeasonType: String,
+            LastCompletedDayIdx: { type: Number, default: -1 },
+            LastCompletedChallengeDayIdx: { type: Number, default: -1 },
+            ActivatedChallenges: []
+        }
+    },
+    { _id: false }
+);
+
+const pendingCouponSchema = new Schema<IPendingCouponDatabase>(
+    {
+        Expiry: { type: Date, default: new Date(0) },
+        Discount: { type: Number, default: 0 }
+    },
+    { _id: false }
+);
+
+pendingCouponSchema.set("toJSON", {
+    transform(_doc, ret, _options) {
+        (ret as IPendingCouponClient).Expiry = toMongoDate((ret as IPendingCouponDatabase).Expiry);
+    }
+});
+
+const libraryAvailableDailyTaskInfoSchema = new Schema<ILibraryAvailableDailyTaskInfo>(
+    {
+        EnemyTypes: [String],
+        EnemyLocTag: String,
+        EnemyIcon: String,
+        ScansRequired: Number,
+        RewardStoreItem: String,
+        RewardQuantity: Number,
+        RewardStanding: Number
+    },
+    { _id: false }
+);
+
 const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
     {
         accountOwnerId: Schema.Types.ObjectId,
-        SubscribedToEmails: Number,
-        Created: Date,
+        SubscribedToEmails: { type: Number, default: 0 },
+        SubscribedToEmailsPersonalized: { type: Number, default: 0 },
         RewardSeed: Number,
 
         //Credit
         RegularCredits: { type: Number, default: 0 },
         //Platinum
-        PremiumCredits: { type: Number, default: 50 },
+        PremiumCredits: { type: Number, default: 0 },
         //Gift Platinum(Non trade)
-        PremiumCreditsFree: { type: Number, default: 50 },
+        PremiumCreditsFree: { type: Number, default: 0 },
         //Endo
         FusionPoints: { type: Number, default: 0 },
         //Regal Aya
@@ -911,7 +960,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         //Slots
         SuitBin: { type: slotsBinSchema, default: { Slots: 3 } },
-        WeaponBin: { type: slotsBinSchema, default: { Slots: 10 } },
+        WeaponBin: { type: slotsBinSchema, default: { Slots: 11 } },
         SentinelBin: { type: slotsBinSchema, default: { Slots: 10 } },
         SpaceSuitBin: { type: slotsBinSchema, default: { Slots: 4 } },
         SpaceWeaponBin: { type: slotsBinSchema, default: { Slots: 4 } },
@@ -1022,7 +1071,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Complete Mission\Quests
         Missions: [missionSchema],
         QuestKeys: [questKeysSchema],
-        ActiveQuest: { type: String, default: "/Lotus/Types/Keys/VorsPrize/VorsPrizeQuestKeyChain" }, //TODO: check after mission starting gear
+        ActiveQuest: { type: String, default: "" },
         //item like DojoKey or Boss missions key
         LevelKeys: [Schema.Types.Mixed],
         //Active quests
@@ -1137,7 +1186,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Cephalon Simaris Entries Example:"TargetType"+"Scans"(1-10)+"Completed": true|false
         LibraryPersonalProgress: [Schema.Types.Mixed],
         //Cephalon Simaris Daily Task
-        LibraryAvailableDailyTaskInfo: Schema.Types.Mixed,
+        LibraryAvailableDailyTaskInfo: libraryAvailableDailyTaskInfoSchema,
 
         //https://warframe.fandom.com/wiki/Invasion
         InvasionChainProgress: [Schema.Types.Mixed],
@@ -1184,7 +1233,6 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         HandlerPoints: Number,
         ChallengesFixVersion: Number,
         PlayedParkourTutorial: Boolean,
-        SubscribedToEmailsPersonalized: Number,
         ActiveLandscapeTraps: [Schema.Types.Mixed],
         RepVotes: [Schema.Types.Mixed],
         LeagueTickets: [Schema.Types.Mixed],
@@ -1202,7 +1250,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         HasResetAccount: { type: Boolean, default: false },
 
         //Discount Coupon
-        PendingCoupon: Schema.Types.Mixed,
+        PendingCoupon: pendingCouponSchema,
         //Like BossAladV,BossCaptainVor come for you on missions % chance
         DeathMarks: [String],
         //Zanuka
@@ -1212,7 +1260,8 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         EndlessXP: { type: [endlessXpProgressSchema], default: undefined },
 
-        DialogueHistory: dialogueHistorySchema
+        DialogueHistory: dialogueHistorySchema,
+        CalendarProgress: calenderProgressSchema
     },
     { timestamps: { createdAt: "Created", updatedAt: false } }
 );
