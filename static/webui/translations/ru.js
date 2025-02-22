@@ -100,6 +100,7 @@ dict = {
     cheats_infinitePlatinum: `Бесконечная платина`,
     cheats_infiniteEndo: `Бесконечное эндо`,
     cheats_infiniteRegalAya: `Бесконечная Королевская Айя`,
+    cheats_infiniteHelminthMaterials: `[UNTRANSLATED] Infinite Helminth Materials`,
     cheats_unlockAllShipFeatures: `Разблокировать все функции корабля`,
     cheats_unlockAllShipDecorations: `Разблокировать все украшения корабля`,
     cheats_unlockAllFlavourItems: `Разблокировать все <abbr title=\"Наборы анимаций, глифы, палитры и т. д.\">уникальные предметы</abbr>`,

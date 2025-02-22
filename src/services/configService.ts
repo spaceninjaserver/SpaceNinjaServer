@@ -46,6 +46,7 @@ interface IConfig {
     infinitePlatinum?: boolean;
     infiniteEndo?: boolean;
     infiniteRegalAya?: boolean;
+    infiniteHelminthMaterials?: boolean;
     unlockAllShipFeatures?: boolean;
     unlockAllShipDecorations?: boolean;
     unlockAllFlavourItems?: boolean;

@@ -12,6 +12,7 @@ import { addMiscItems, addRecipes, getInventory, updateCurrency } from "@/src/se
 import { getRecipeByResult } from "@/src/services/itemDataService";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { addInfestedFoundryXP } from "./infestedFoundryController";
+import { config } from "@/src/services/configService";
 
 export const upgradesController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -48,8 +49,10 @@ export const upgradesController: RequestHandler = async (req, res) => {
                 const recipe = getRecipeByResult(operation.UpgradeRequirement)!;
                 for (const ingredient of recipe.ingredients) {
                     totalPercentagePointsConsumed += ingredient.ItemCount / 10;
-                    inventory.InfestedFoundry!.Resources!.find(x => x.ItemType == ingredient.ItemType)!.Count -=
-                        ingredient.ItemCount;
+                    if (!config.infiniteHelminthMaterials) {
+                        inventory.InfestedFoundry!.Resources!.find(x => x.ItemType == ingredient.ItemType)!.Count -=
+                            ingredient.ItemCount;
+                    }
                 }
             }
 

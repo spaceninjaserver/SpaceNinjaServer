@@ -13,7 +13,7 @@ import {
     ExportResources,
     ExportVirtuals
 } from "warframe-public-export-plus";
-import { handleSubsumeCompletion } from "./infestedFoundryController";
+import { applyCheatsToInfestedFoundry, handleSubsumeCompletion } from "./infestedFoundryController";
 import { allDailyAffiliationKeys } from "@/src/services/inventoryService";
 
 export const inventoryController: RequestHandler = async (request, response) => {
@@ -210,6 +210,10 @@ export const getInventoryResponse = async (
         for (const key of allDailyAffiliationKeys) {
             inventoryResponse[key] = 999_999;
         }
+    }
+
+    if (inventoryResponse.InfestedFoundry) {
+        applyCheatsToInfestedFoundry(inventoryResponse.InfestedFoundry);
     }
 
     // Fix for #380

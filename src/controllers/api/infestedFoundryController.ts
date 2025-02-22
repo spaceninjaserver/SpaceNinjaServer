@@ -6,7 +6,9 @@ import { IOid } from "@/src/types/commonTypes";
 import {
     IConsumedSuit,
     IHelminthFoodRecord,
+    IInfestedFoundryClient,
     IInfestedFoundryDatabase,
+    IInventoryClient,
     IMiscItem,
     ITypeCount
 } from "@/src/types/inventoryTypes/inventoryTypes";
@@ -16,6 +18,7 @@ import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/invento
 import { toMongoDate } from "@/src/helpers/inventoryHelpers";
 import { logger } from "@/src/utils/logger";
 import { colorToShard } from "@/src/helpers/shardHelper";
+import { config } from "@/src/services/configService";
 
 export const infestedFoundryController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -69,18 +72,22 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             // remove from suit
             suit.ArchonCrystalUpgrades![request.Slot] = {};
 
-            // remove bile
-            const bile = inventory.InfestedFoundry!.Resources!.find(
-                x => x.ItemType == "/Lotus/Types/Items/InfestedFoundry/HelminthBile"
-            )!;
-            bile.Count -= 300;
+            if (!config.infiniteHelminthMaterials) {
+                // remove bile
+                const bile = inventory.InfestedFoundry!.Resources!.find(
+                    x => x.ItemType == "/Lotus/Types/Items/InfestedFoundry/HelminthBile"
+                )!;
+                bile.Count -= 300;
+            }
 
             await inventory.save();
 
+            const infestedFoundry = inventory.toJSON<IInventoryClient>().InfestedFoundry!;
+            applyCheatsToInfestedFoundry(infestedFoundry);
             res.json({
                 InventoryChanges: {
                     MiscItems: miscItemChanges,
-                    InfestedFoundry: inventory.toJSON().InfestedFoundry
+                    InfestedFoundry: infestedFoundry
                 }
             });
             break;
@@ -105,6 +112,12 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
 
         case "c": {
             // consume items
+
+            if (config.infiniteHelminthMaterials) {
+                res.status(400).end();
+                return;
+            }
+
             const request = getJSONfromString<IHelminthFeedRequest>(String(req.body));
             const inventory = await getInventory(accountId);
             inventory.InfestedFoundry ??= {};
@@ -210,9 +223,11 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
                 inventory.InfestedFoundry.InvigorationsApplied = 0;
             }
             await inventory.save();
+            const infestedFoundry = inventory.toJSON<IInventoryClient>().InfestedFoundry!;
+            applyCheatsToInfestedFoundry(infestedFoundry);
             res.json({
                 InventoryChanges: {
-                    InfestedFoundry: inventory.toJSON().InfestedFoundry
+                    InfestedFoundry: infestedFoundry
                 }
             });
             break;
@@ -223,10 +238,12 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             const request = getJSONfromString<IHelminthSubsumeRequest>(String(req.body));
             const inventory = await getInventory(accountId);
             const recipe = getRecipe(request.Recipe)!;
-            for (const ingredient of recipe.secretIngredients!) {
-                const resource = inventory.InfestedFoundry!.Resources!.find(x => x.ItemType == ingredient.ItemType);
-                if (resource) {
-                    resource.Count -= ingredient.ItemCount;
+            if (!config.infiniteHelminthMaterials) {
+                for (const ingredient of recipe.secretIngredients!) {
+                    const resource = inventory.InfestedFoundry!.Resources!.find(x => x.ItemType == ingredient.ItemType);
+                    if (resource) {
+                        resource.Count -= ingredient.ItemCount;
+                    }
                 }
             }
             const suit = inventory.Suits.id(request.SuitId.$oid)!;
@@ -247,6 +264,8 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             const recipeChanges = addInfestedFoundryXP(inventory.InfestedFoundry!, 1600_00);
             addRecipes(inventory, recipeChanges);
             await inventory.save();
+            const infestedFoundry = inventory.toJSON<IInventoryClient>().InfestedFoundry!;
+            applyCheatsToInfestedFoundry(infestedFoundry);
             res.json({
                 InventoryChanges: {
                     Recipes: recipeChanges,
@@ -260,7 +279,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
                         platinum: 0,
                         Slots: 1
                     },
-                    InfestedFoundry: inventory.toJSON().InfestedFoundry
+                    InfestedFoundry: infestedFoundry
                 }
             });
             break;
@@ -272,11 +291,13 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             const currencyChanges = updateCurrency(inventory, 50, true);
             const recipeChanges = handleSubsumeCompletion(inventory);
             await inventory.save();
+            const infestedFoundry = inventory.toJSON<IInventoryClient>().InfestedFoundry!;
+            applyCheatsToInfestedFoundry(infestedFoundry);
             res.json({
                 InventoryChanges: {
                     ...currencyChanges,
                     Recipes: recipeChanges,
-                    InfestedFoundry: inventory.toJSON().InfestedFoundry
+                    InfestedFoundry: infestedFoundry
                 }
             });
             break;
@@ -292,13 +313,17 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             suit.UpgradesExpiry = upgradesExpiry;
             const recipeChanges = addInfestedFoundryXP(inventory.InfestedFoundry!, 4800_00);
             addRecipes(inventory, recipeChanges);
-            for (let i = 0; i != request.ResourceTypes.length; ++i) {
-                inventory.InfestedFoundry!.Resources!.find(x => x.ItemType == request.ResourceTypes[i])!.Count -=
-                    request.ResourceCosts[i];
+            if (!config.infiniteHelminthMaterials) {
+                for (let i = 0; i != request.ResourceTypes.length; ++i) {
+                    inventory.InfestedFoundry!.Resources!.find(x => x.ItemType == request.ResourceTypes[i])!.Count -=
+                        request.ResourceCosts[i];
+                }
             }
             inventory.InfestedFoundry!.InvigorationsApplied ??= 0;
             inventory.InfestedFoundry!.InvigorationsApplied += 1;
             await inventory.save();
+            const infestedFoundry = inventory.toJSON<IInventoryClient>().InfestedFoundry!;
+            applyCheatsToInfestedFoundry(infestedFoundry);
             res.json({
                 SuitId: request.SuitId,
                 OffensiveUpgrade: request.OffensiveUpgradeType,
@@ -306,7 +331,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
                 UpgradesExpiry: toMongoDate(upgradesExpiry),
                 InventoryChanges: {
                     Recipes: recipeChanges,
-                    InfestedFoundry: inventory.toJSON().InfestedFoundry
+                    InfestedFoundry: infestedFoundry
                 }
             });
             break;
@@ -451,6 +476,19 @@ export const handleSubsumeCompletion = (inventory: TInventoryDatabaseDocument): 
     ];
     addRecipes(inventory, recipeChanges);
     return recipeChanges;
+};
+
+export const applyCheatsToInfestedFoundry = (infestedFoundry: IInfestedFoundryClient): void => {
+    if (config.infiniteHelminthMaterials) {
+        infestedFoundry.Resources = [
+            { ItemType: "/Lotus/Types/Items/InfestedFoundry/HelminthCalx", Count: 1000 },
+            { ItemType: "/Lotus/Types/Items/InfestedFoundry/HelminthBiotics", Count: 1000 },
+            { ItemType: "/Lotus/Types/Items/InfestedFoundry/HelminthSynthetics", Count: 1000 },
+            { ItemType: "/Lotus/Types/Items/InfestedFoundry/HelminthPheromones", Count: 1000 },
+            { ItemType: "/Lotus/Types/Items/InfestedFoundry/HelminthBile", Count: 1000 },
+            { ItemType: "/Lotus/Types/Items/InfestedFoundry/HelminthOxides", Count: 1000 }
+        ];
+    }
 };
 
 interface IHelminthOfferingsUpdate {
