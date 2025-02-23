@@ -3,8 +3,8 @@ import { isEmptyObject } from "@/src/helpers/general";
 import { IMessage } from "@/src/models/inboxModel";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { createMessage } from "@/src/services/inboxService";
-import { addKeyChainItems } from "@/src/services/inventoryService";
-import { getKeyChainMessage } from "@/src/services/itemDataService";
+import { addItem, addKeyChainItems } from "@/src/services/inventoryService";
+import { getKeyChainMessage, getLevelKeyRewards } from "@/src/services/itemDataService";
 import { IInventoryDatabase, IQuestKeyDatabase, IQuestStage } from "@/src/types/inventoryTypes/inventoryTypes";
 import { logger } from "@/src/utils/logger";
 import { HydratedDocument } from "mongoose";
@@ -124,6 +124,23 @@ export const completeQuest = async (inventory: TInventoryDatabaseDocument, quest
                 KeyChain: questKey,
                 ChainStage: i
             });
+        }
+
+        const missionName = chainStages[i].key;
+        if (missionName) {
+            const fixedLevelRewards = getLevelKeyRewards(missionName);
+            //logger.debug(`fixedLevelRewards ${fixedLevelRewards}`);
+            for (const reward of fixedLevelRewards) {
+                if (reward.rewardType == "RT_CREDITS") {
+                    inventory.RegularCredits += reward.amount;
+                    continue;
+                }
+                if (reward.rewardType == "RT_RESOURCE") {
+                    await addItem(inventory, reward.itemType.replace("StoreItems/", ""), reward.amount);
+                } else {
+                    await addItem(inventory, reward.itemType.replace("StoreItems/", ""));
+                }
+            }
         }
     }
     inventory.ActiveQuest = "";
