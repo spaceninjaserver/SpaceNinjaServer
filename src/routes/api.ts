@@ -163,6 +163,7 @@ apiRouter.post("/purchase.php", purchaseController);
 apiRouter.post("/rerollRandomMod.php", rerollRandomModController);
 apiRouter.post("/saveDialogue.php", saveDialogueController);
 apiRouter.post("/saveLoadout.php", saveLoadoutController);
+apiRouter.post("/saveSettings.php", saveSettingsController);
 apiRouter.post("/sell.php", sellController);
 apiRouter.post("/setDojoComponentMessage.php", setDojoComponentMessageController);
 apiRouter.post("/setEquippedInstrument.php", setEquippedInstrumentController);
@@ -185,6 +186,5 @@ apiRouter.post("/updateQuest.php", updateQuestController);
 apiRouter.post("/updateSession.php", updateSessionPostController);
 apiRouter.post("/updateTheme.php", updateThemeController);
 apiRouter.post("/upgrades.php", upgradesController);
-apiRouter.post("/saveSettings.php", saveSettingsController);
 
 export { apiRouter };
