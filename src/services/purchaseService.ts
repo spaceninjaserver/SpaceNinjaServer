@@ -25,6 +25,7 @@ import {
 } from "warframe-public-export-plus";
 import { config } from "./configService";
 import { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel";
+import { creditBundles } from "./missionInventoryUpdateService";
 
 export const getStoreItemCategory = (storeItem: string): string => {
     const storeItemString = getSubstringFromKeyword(storeItem, "StoreItems/");
@@ -330,6 +331,22 @@ const handleBoosterPackPurchase = async (
     return purchaseResponse;
 };
 
+const handleCreditBundlePurchase = async (
+    typeName: string,
+    inventory: TInventoryDatabaseDocument
+): Promise<IPurchaseResponse> => {
+    if (typeName && typeName in creditBundles) {
+        const creditsAmount = creditBundles[typeName];
+
+        inventory.RegularCredits += creditsAmount;
+        await inventory.save();
+
+        return { InventoryChanges: { RegularCredits: creditsAmount } };
+    } else {
+        throw new Error(`unknown credit bundle: ${typeName}`);
+    }
+};
+
 //TODO: change to getInventory, apply changes then save at the end
 const handleTypesPurchase = async (
     typesName: string,
@@ -345,6 +362,8 @@ const handleTypesPurchase = async (
             return handleBoosterPackPurchase(typesName, inventory, quantity);
         case "SlotItems":
             return handleSlotPurchase(typesName, inventory, quantity);
+        case "CreditBundles":
+            return handleCreditBundlePurchase(typesName, inventory);
     }
 };
 

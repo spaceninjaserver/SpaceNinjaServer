@@ -62,7 +62,9 @@ export const creditBundles: Record<string, number> = {
     "/Lotus/Types/PickUps/Credits/CorpusArenaCreditRewards/CorpusArenaRewardTwoHard": 175000,
     "/Lotus/Types/PickUps/Credits/CorpusArenaCreditRewards/CorpusArenaRewardThreeHard": 250000,
     "/Lotus/Types/StoreItems/CreditBundles/Zariman/TableACreditsCommon": 15000,
-    "/Lotus/Types/StoreItems/CreditBundles/Zariman/TableACreditsUncommon": 30000
+    "/Lotus/Types/StoreItems/CreditBundles/Zariman/TableACreditsUncommon": 30000,
+    "/Lotus/Types/StoreItems/CreditBundles/CreditBundleA": 50000,
+    "/Lotus/Types/StoreItems/CreditBundles/CreditBundleC": 175000
 };
 
 export const fusionBundles: Record<string, number> = {
