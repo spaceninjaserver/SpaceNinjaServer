@@ -62,7 +62,7 @@ export interface IInventoryDatabase
     InfestedFoundry?: IInfestedFoundryDatabase;
     DialogueHistory?: IDialogueHistoryDatabase;
     KubrowPetEggs?: IKubrowPetEggDatabase[];
-    PendingCoupon: IPendingCouponDatabase;
+    PendingCoupon?: IPendingCouponDatabase;
 }
 
 export interface IQuestKeyDatabase {
@@ -320,7 +320,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     CollectibleSeries: ICollectibleSery[];
     LibraryAvailableDailyTaskInfo: ILibraryAvailableDailyTaskInfo;
     HasResetAccount: boolean;
-    PendingCoupon: IPendingCouponClient;
+    PendingCoupon?: IPendingCouponClient;
     Harvestable: boolean;
     DeathSquadable: boolean;
     EndlessXP?: IEndlessXpProgress[];
