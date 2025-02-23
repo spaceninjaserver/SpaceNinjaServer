@@ -39,6 +39,7 @@ import {
     ExportArcanes,
     ExportCustoms,
     ExportFlavour,
+    ExportFusionBundles,
     ExportGear,
     ExportKeys,
     ExportRecipes,
@@ -50,7 +51,7 @@ import {
     TStandingLimitBin
 } from "warframe-public-export-plus";
 import { createShip } from "./shipService";
-import { creditBundles, fusionBundles } from "@/src/services/missionInventoryUpdateService";
+import { creditBundles } from "@/src/services/missionInventoryUpdateService";
 import { IKeyChainRequest } from "@/src/controllers/api/giveKeyChainTriggeredItemsController";
 import { toOid } from "../helpers/inventoryHelpers";
 import { generateRewardSeed } from "@/src/controllers/api/getNewRewardSeedController";
@@ -313,8 +314,8 @@ export const addItem = async (
             }
         };
     }
-    if (typeName in fusionBundles) {
-        const fusionPointsTotal = fusionBundles[typeName] * quantity;
+    if (typeName in ExportFusionBundles) {
+        const fusionPointsTotal = ExportFusionBundles[typeName].fusionPoints * quantity;
         inventory.FusionPoints += fusionPointsTotal;
         return {
             InventoryChanges: {

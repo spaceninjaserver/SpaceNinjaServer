@@ -1,4 +1,4 @@
-import { ExportRegions, ExportRewards, IReward } from "warframe-public-export-plus";
+import { ExportFusionBundles, ExportRegions, ExportRewards, IReward } from "warframe-public-export-plus";
 import { IMissionInventoryUpdateRequest, IRewardInfo } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
 import { IRngResult, getRandomReward } from "@/src/services/rngService";
@@ -65,12 +65,6 @@ export const creditBundles: Record<string, number> = {
     "/Lotus/Types/StoreItems/CreditBundles/Zariman/TableACreditsUncommon": 30000,
     "/Lotus/Types/StoreItems/CreditBundles/CreditBundleA": 50000,
     "/Lotus/Types/StoreItems/CreditBundles/CreditBundleC": 175000
-};
-
-export const fusionBundles: Record<string, number> = {
-    "/Lotus/Upgrades/Mods/FusionBundles/CommonFusionBundle": 15,
-    "/Lotus/Upgrades/Mods/FusionBundles/UncommonFusionBundle": 50,
-    "/Lotus/Upgrades/Mods/FusionBundles/RareFusionBundle": 80
 };
 
 //type TMissionInventoryUpdateKeys = keyof IMissionInventoryUpdateRequest;
@@ -165,7 +159,8 @@ export const addMissionInventoryUpdates = (
             case "FusionBundles": {
                 let fusionPoints = 0;
                 for (const fusionBundle of value) {
-                    const fusionPointsTotal = fusionBundles[fusionBundle.ItemType] * fusionBundle.ItemCount;
+                    const fusionPointsTotal =
+                        ExportFusionBundles[fusionBundle.ItemType].fusionPoints * fusionBundle.ItemCount;
                     inventory.FusionPoints += fusionPointsTotal;
                     fusionPoints += fusionPointsTotal;
                 }
