@@ -8,6 +8,7 @@ import { changeDojoRootController } from "@/src/controllers/api/changeDojoRootCo
 import { checkDailyMissionBonusController } from "@/src/controllers/api/checkDailyMissionBonusController";
 import { claimCompletedRecipeController } from "@/src/controllers/api/claimCompletedRecipeController";
 import { clearDialogueHistoryController } from "@/src/controllers/api/clearDialogueHistoryController";
+import { completeRandomModChallengeController } from "@/src/controllers/api/completeRandomModChallengeController";
 import { createGuildController } from "@/src/controllers/api/createGuildController";
 import { creditsController } from "@/src/controllers/api/creditsController";
 import { deleteSessionController } from "@/src/controllers/api/deleteSessionController";
@@ -133,6 +134,7 @@ apiRouter.post("/artifacts.php", artifactsController);
 apiRouter.post("/changeDojoRoot.php", changeDojoRootController);
 apiRouter.post("/claimCompletedRecipe.php", claimCompletedRecipeController);
 apiRouter.post("/clearDialogueHistory.php", clearDialogueHistoryController);
+apiRouter.post("/completeRandomModChallenge.php", completeRandomModChallengeController);
 apiRouter.post("/createGuild.php", createGuildController);
 apiRouter.post("/endlessXp.php", endlessXpController);
 apiRouter.post("/evolveWeapon.php", evolveWeaponController);
