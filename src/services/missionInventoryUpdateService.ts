@@ -11,7 +11,6 @@ import {
     addFocusXpIncreases,
     addFusionTreasures,
     addGearExpByCategory,
-    addItem,
     addMiscItems,
     addMissionComplete,
     addMods,
@@ -28,6 +27,7 @@ import { getEntriesUnsafe } from "@/src/utils/ts-utils";
 import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import junctionRewards from "@/static/fixed_responses/junctionRewards.json";
 import { IJunctionRewards } from "@/src/types/commonTypes";
+import { handleStoreItemAcquisition } from "./purchaseService";
 
 const getRotations = (rotationCount: number): number[] => {
     if (rotationCount === 0) return [0];
@@ -287,8 +287,7 @@ export const addMissionRewards = async (
     }
 
     for (const reward of MissionRewards) {
-        //TODO: additem should take in storeItems
-        const inventoryChange = await addItem(inventory, reward.StoreItem.replace("StoreItems/", ""), reward.ItemCount);
+        const inventoryChange = await handleStoreItemAcquisition(reward.StoreItem, inventory, reward.ItemCount);
         //TODO: combineInventoryChanges improve type safety, merging 2 of the same item?
         //TODO: check for the case when two of the same item are added, combineInventoryChanges should merge them, but the client also merges them
         //TODO: some conditional types to rule out binchanges?
