@@ -3,8 +3,8 @@ import { activateRandomModController } from "@/src/controllers/api/activateRando
 import { addFriendImageController } from "@/src/controllers/api/addFriendImageController";
 import { arcaneCommonController } from "@/src/controllers/api/arcaneCommonController";
 import { archonFusionController } from "@/src/controllers/api/archonFusionController";
-import { artifactsController } from "../controllers/api/artifactsController";
-import { changeDojoRootController } from "../controllers/api/changeDojoRootController";
+import { artifactsController } from "@/src/controllers/api/artifactsController";
+import { changeDojoRootController } from "@/src/controllers/api/changeDojoRootController";
 import { checkDailyMissionBonusController } from "@/src/controllers/api/checkDailyMissionBonusController";
 import { claimCompletedRecipeController } from "@/src/controllers/api/claimCompletedRecipeController";
 import { clearDialogueHistoryController } from "@/src/controllers/api/clearDialogueHistoryController";
@@ -25,7 +25,7 @@ import { getDailyDealStockLevelsController } from "@/src/controllers/api/getDail
 import { getFriendsController } from "@/src/controllers/api/getFriendsController";
 import { getGuildController } from "@/src/controllers/api/getGuildController";
 import { getGuildDojoController } from "@/src/controllers/api/getGuildDojoController";
-import { getGuildLogController } from "../controllers/api/getGuildLogController";
+import { getGuildLogController } from "@/src/controllers/api/getGuildLogController";
 import { getIgnoredUsersController } from "@/src/controllers/api/getIgnoredUsersController";
 import { getNewRewardSeedController } from "@/src/controllers/api/getNewRewardSeedController";
 import { getShipController } from "@/src/controllers/api/getShipController";
@@ -35,7 +35,8 @@ import { gildWeaponController } from "@/src/controllers/api/gildWeaponController
 import { giveKeyChainTriggeredItemsController } from "@/src/controllers/api/giveKeyChainTriggeredItemsController";
 import { giveKeyChainTriggeredMessageController } from "@/src/controllers/api/giveKeyChainTriggeredMessageController";
 import { giveQuestKeyRewardController } from "@/src/controllers/api/giveQuestKey";
-import { guildTechController } from "../controllers/api/guildTechController";
+import { giveStartingGearController } from "@/src/controllers/api/giveStartingGearController";
+import { guildTechController } from "@/src/controllers/api/guildTechController";
 import { hostSessionController } from "@/src/controllers/api/hostSessionController";
 import { hubController } from "@/src/controllers/api/hubController";
 import { hubInstancesController } from "@/src/controllers/api/hubInstancesController";
@@ -53,12 +54,13 @@ import { modularWeaponCraftingController } from "@/src/controllers/api/modularWe
 import { modularWeaponSaleController } from "@/src/controllers/api/modularWeaponSaleController";
 import { nameWeaponController } from "@/src/controllers/api/nameWeaponController";
 import { playerSkillsController } from "@/src/controllers/api/playerSkillsController";
-import { projectionManagerController } from "../controllers/api/projectionManagerController";
+import { projectionManagerController } from "@/src/controllers/api/projectionManagerController";
 import { purchaseController } from "@/src/controllers/api/purchaseController";
 import { queueDojoComponentDestructionController } from "@/src/controllers/api/queueDojoComponentDestructionController";
 import { rerollRandomModController } from "@/src/controllers/api/rerollRandomModController";
 import { saveDialogueController } from "@/src/controllers/api/saveDialogueController";
 import { saveLoadoutController } from "@/src/controllers/api/saveLoadout";
+import { saveSettingsController } from "@/src/controllers/api/saveSettingsController";
 import { sellController } from "@/src/controllers/api/sellController";
 import { setActiveQuestController } from "@/src/controllers/api/setActiveQuestController";
 import { setActiveShipController } from "@/src/controllers/api/setActiveShipController";
@@ -69,25 +71,23 @@ import { setPlacedDecoInfoController } from "@/src/controllers/api/setPlacedDeco
 import { setShipCustomizationsController } from "@/src/controllers/api/setShipCustomizationsController";
 import { setShipFavouriteLoadoutController } from "@/src/controllers/api/setShipFavouriteLoadoutController";
 import { setSupportedSyndicateController } from "@/src/controllers/api/setSupportedSyndicateController";
-import { setWeaponSkillTreeController } from "../controllers/api/setWeaponSkillTreeController";
+import { setWeaponSkillTreeController } from "@/src/controllers/api/setWeaponSkillTreeController";
 import { shipDecorationsController } from "@/src/controllers/api/shipDecorationsController";
 import { startDojoRecipeController } from "@/src/controllers/api/startDojoRecipeController";
 import { startLibraryPersonalTargetController } from "@/src/controllers/api/startLibraryPersonalTargetController";
 import { startRecipeController } from "@/src/controllers/api/startRecipeController";
 import { stepSequencersController } from "@/src/controllers/api/stepSequencersController";
 import { surveysController } from "@/src/controllers/api/surveysController";
-import { syndicateSacrificeController } from "../controllers/api/syndicateSacrificeController";
-import { syndicateStandingBonusController } from "../controllers/api/syndicateStandingBonusController";
+import { syndicateSacrificeController } from "@/src/controllers/api/syndicateSacrificeController";
+import { syndicateStandingBonusController } from "@/src/controllers/api/syndicateStandingBonusController";
 import { tauntHistoryController } from "@/src/controllers/api/tauntHistoryController";
 import { trainingResultController } from "@/src/controllers/api/trainingResultController";
 import { unlockShipFeatureController } from "@/src/controllers/api/unlockShipFeatureController";
 import { updateChallengeProgressController } from "@/src/controllers/api/updateChallengeProgressController";
 import { updateQuestController } from "@/src/controllers/api/updateQuestController";
 import { updateSessionGetController, updateSessionPostController } from "@/src/controllers/api/updateSessionController";
-import { updateThemeController } from "../controllers/api/updateThemeController";
+import { updateThemeController } from "@/src/controllers/api/updateThemeController";
 import { upgradesController } from "@/src/controllers/api/upgradesController";
-import { saveSettingsController } from "../controllers/api/saveSettingsController";
-import { giveStartingGearController } from "@/src/controllers/api/giveStartingGearController";
 
 const apiRouter = express.Router();
 
