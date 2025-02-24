@@ -163,20 +163,21 @@ export const getKeyChainItems = ({ KeyChain, ChainStage }: IKeyChainRequest): st
 };
 
 export const getLevelKeyRewards = (levelKey: string) => {
-    const levelKeyData = ExportKeys[levelKey];
-    if (!levelKeyData) {
-        const error = `LevelKey ${levelKey} not found`;
-        logger.error(error);
-        throw new Error(error);
+    if (!ExportKeys[levelKey]) {
+        throw new Error(`LevelKey ${levelKey} not found`);
     }
 
-    if (!levelKeyData.rewards) {
-        const error = `LevelKey ${levelKey} does not contain rewards`;
-        logger.error(error);
-        throw new Error(error);
+    const levelKeyRewards = ExportKeys[levelKey]?.missionReward;
+    const levelKeyRewards2 = ExportKeys[levelKey]?.rewards;
+
+    if (!levelKeyRewards && !levelKeyRewards2) {
+        throw new Error(`LevelKey ${levelKey} does not contain either rewards1 or rewards2`);
     }
 
-    return levelKeyData.rewards;
+    return {
+        levelKeyRewards,
+        levelKeyRewards2
+    };
 };
 
 export const getNode = (nodeName: string): IRegion => {

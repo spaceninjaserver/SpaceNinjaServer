@@ -1,4 +1,10 @@
-import { ExportFusionBundles, ExportRegions, ExportRewards, IReward } from "warframe-public-export-plus";
+import {
+    ExportFusionBundles,
+    ExportRegions,
+    ExportRewards,
+    IMissionReward as IMissionRewardExternal,
+    IReward
+} from "warframe-public-export-plus";
 import { IMissionInventoryUpdateRequest, IRewardInfo } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
 import { IRngResult, getRandomReward } from "@/src/services/rngService";
@@ -25,9 +31,8 @@ import { getLevelKeyRewards, getNode } from "@/src/services/itemDataService";
 import { InventoryDocumentProps, TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { getEntriesUnsafe } from "@/src/utils/ts-utils";
 import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
-import junctionRewards from "@/static/fixed_responses/junctionRewards.json";
-import { IJunctionRewards } from "@/src/types/commonTypes";
 import { handleStoreItemAcquisition } from "./purchaseService";
+import { IMissionReward } from "../types/missionTypes";
 
 const getRotations = (rotationCount: number): number[] => {
     if (rotationCount === 0) return [0];
@@ -258,31 +263,38 @@ export const addMissionRewards = async (
     if (levelKeyName) {
         const fixedLevelRewards = getLevelKeyRewards(levelKeyName);
         //logger.debug(`fixedLevelRewards ${fixedLevelRewards}`);
-        for (const reward of fixedLevelRewards) {
-            //quest stage completion credit rewards
-            if (reward.rewardType == "RT_CREDITS") {
-                inventory.RegularCredits += reward.amount;
-                missionCompletionCredits += reward.amount;
-                continue;
+        if (fixedLevelRewards.levelKeyRewards) {
+            addFixedLevelRewards(fixedLevelRewards.levelKeyRewards, inventory, MissionRewards);
+        }
+        if (fixedLevelRewards.levelKeyRewards2) {
+            for (const reward of fixedLevelRewards.levelKeyRewards2) {
+                //quest stage completion credit rewards
+                if (reward.rewardType == "RT_CREDITS") {
+                    inventory.RegularCredits += reward.amount;
+                    missionCompletionCredits += reward.amount;
+                    continue;
+                }
+                MissionRewards.push({
+                    StoreItem: reward.itemType,
+                    ItemCount: reward.rewardType === "RT_RESOURCE" ? reward.amount : 1
+                });
             }
-            MissionRewards.push({
-                StoreItem: reward.itemType,
-                ItemCount: reward.rewardType === "RT_RESOURCE" ? reward.amount : 1
-            });
         }
     }
 
-    if (rewardInfo.node in junctionRewards) {
-        const junctionReward = (junctionRewards as IJunctionRewards)[rewardInfo.node];
-        for (const item of junctionReward.items) {
-            MissionRewards.push({
-                StoreItem: item.ItemType,
-                ItemCount: item.ItemCount
-            });
+    if (missions) {
+        const node = getNode(missions.Tag);
+
+        //node based credit rewards for mission completion
+        if (node.missionIndex !== 28) {
+            const levelCreditReward = getLevelCreditRewards(missions?.Tag);
+            missionCompletionCredits += levelCreditReward;
+            inventory.RegularCredits += levelCreditReward;
+            logger.debug(`levelCreditReward ${levelCreditReward}`);
         }
-        if (junctionReward.credits) {
-            inventory.RegularCredits += junctionReward.credits;
-            missionCompletionCredits += junctionReward.credits;
+
+        if (node.missionReward) {
+            missionCompletionCredits += addFixedLevelRewards(node.missionReward, inventory, MissionRewards);
         }
     }
 
@@ -294,19 +306,6 @@ export const addMissionRewards = async (
         combineInventoryChanges(inventoryChanges, inventoryChange.InventoryChanges);
     }
 
-    //node based credit rewards for mission completion
-    if (missions) {
-        const node = getNode(missions.Tag);
-
-        if (node.missionIndex !== 28) {
-            const levelCreditReward = getLevelCreditRewards(missions?.Tag);
-            missionCompletionCredits += levelCreditReward;
-            inventory.RegularCredits += levelCreditReward;
-            logger.debug(`levelCreditReward ${levelCreditReward}`);
-        }
-    }
-
-    //creditBonus is not correct for mirage mission 3
     const credits = addCredits(inventory, {
         missionCompletionCredits,
         missionDropCredits: creditDrops ?? 0,
@@ -316,7 +315,7 @@ export const addMissionRewards = async (
     return { inventoryChanges, MissionRewards, credits };
 };
 
-//slightly inaccurate compared to official
+//creditBonus is not entirely accurate.
 //TODO: consider ActiveBoosters
 export const addCredits = (
     inventory: HydratedDocument<IInventoryDatabase>,
@@ -346,6 +345,40 @@ export const addCredits = (
         return finalCredits;
     }
     return { ...finalCredits, DailyMissionBonus: true };
+};
+
+export const addFixedLevelRewards = (
+    rewards: IMissionRewardExternal,
+    inventory: TInventoryDatabaseDocument,
+    MissionRewards: IMissionReward[]
+) => {
+    let missionBonusCredits = 0;
+    if (rewards.credits) {
+        missionBonusCredits += rewards.credits;
+        inventory.RegularCredits += rewards.credits;
+    }
+    if (rewards.items) {
+        for (const item of rewards.items) {
+            MissionRewards.push({
+                StoreItem: `/Lotus/StoreItems${item.substring("Lotus/".length)}`,
+                ItemCount: 1
+            });
+        }
+    }
+    if (rewards.countedItems) {
+        for (const item of rewards.countedItems) {
+            MissionRewards.push({
+                StoreItem: `/Lotus/StoreItems${item.ItemType.substring("Lotus/".length)}`,
+                ItemCount: item.ItemCount
+            });
+        }
+    }
+    if (rewards.countedStoreItems) {
+        for (const item of rewards.countedStoreItems) {
+            MissionRewards.push(item);
+        }
+    }
+    return missionBonusCredits;
 };
 
 function getLevelCreditRewards(nodeName: string): number {

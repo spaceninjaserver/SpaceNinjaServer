@@ -14,6 +14,7 @@ import {
 import { logger } from "@/src/utils/logger";
 import { HydratedDocument } from "mongoose";
 import { ExportKeys } from "warframe-public-export-plus";
+import { addFixedLevelRewards } from "./missionInventoryUpdateService";
 
 export interface IUpdateQuestRequest {
     QuestKeys: Omit<IQuestKeyDatabase, "CompletionDate">[];
@@ -136,16 +137,25 @@ export const completeQuest = async (inventory: TInventoryDatabaseDocument, quest
         const missionName = chainStages[i].key;
         if (missionName) {
             const fixedLevelRewards = getLevelKeyRewards(missionName);
-            //logger.debug(`fixedLevelRewards ${fixedLevelRewards}`);
-            for (const reward of fixedLevelRewards) {
-                if (reward.rewardType == "RT_CREDITS") {
-                    inventory.RegularCredits += reward.amount;
-                    continue;
+            //logger.debug(`fixedLevelRewards`, fixedLevelRewards);
+            if (fixedLevelRewards.levelKeyRewards) {
+                const missionRewards: { StoreItem: string; ItemCount: number }[] = [];
+                addFixedLevelRewards(fixedLevelRewards.levelKeyRewards, inventory, missionRewards);
+
+                for (const reward of missionRewards) {
+                    await addItem(inventory, reward.StoreItem.replace("StoreItems/", ""), reward.ItemCount);
                 }
-                if (reward.rewardType == "RT_RESOURCE") {
-                    await addItem(inventory, reward.itemType.replace("StoreItems/", ""), reward.amount);
-                } else {
-                    await addItem(inventory, reward.itemType.replace("StoreItems/", ""));
+            } else if (fixedLevelRewards.levelKeyRewards2) {
+                for (const reward of fixedLevelRewards.levelKeyRewards2) {
+                    if (reward.rewardType == "RT_CREDITS") {
+                        inventory.RegularCredits += reward.amount;
+                        continue;
+                    }
+                    if (reward.rewardType == "RT_RESOURCE") {
+                        await addItem(inventory, reward.itemType.replace("StoreItems/", ""), reward.amount);
+                    } else {
+                        await addItem(inventory, reward.itemType.replace("StoreItems/", ""));
+                    }
                 }
             }
         }
