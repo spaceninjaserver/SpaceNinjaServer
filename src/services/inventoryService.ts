@@ -650,20 +650,6 @@ export const updateCurrency = (
     return currencyChanges;
 };
 
-export const updateCurrencyByAccountId = async (
-    price: number,
-    usePremium: boolean,
-    accountId: string
-): Promise<ICurrencyChanges> => {
-    if (!isCurrencyTracked(usePremium)) {
-        return {};
-    }
-    const inventory = await getInventory(accountId);
-    const currencyChanges = updateCurrency(inventory, price, usePremium);
-    await inventory.save();
-    return currencyChanges;
-};
-
 const standingLimitBinToInventoryKey: Record<
     Exclude<TStandingLimitBin, "STANDING_LIMIT_BIN_NONE">,
     keyof IDailyAffiliations

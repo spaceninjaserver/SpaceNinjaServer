@@ -7,14 +7,7 @@ import { getRecipe } from "@/src/services/itemDataService";
 import { IOid } from "@/src/types/commonTypes";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import {
-    getInventory,
-    updateCurrency,
-    addItem,
-    addMiscItems,
-    addRecipes,
-    updateCurrencyByAccountId
-} from "@/src/services/inventoryService";
+import { getInventory, updateCurrency, addItem, addMiscItems, addRecipes } from "@/src/services/inventoryService";
 
 export interface IClaimCompletedRecipeRequest {
     RecipeIds: IOid[];
@@ -37,7 +30,6 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
     // }
 
     inventory.PendingRecipes.pull(pendingRecipe._id);
-    await inventory.save();
 
     const recipe = getRecipe(pendingRecipe.ItemType);
     if (!recipe) {
@@ -45,11 +37,10 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
     }
 
     if (req.query.cancel) {
-        const inventory = await getInventory(accountId);
         const currencyChanges = updateCurrency(inventory, recipe.buildPrice * -1, false);
         addMiscItems(inventory, recipe.ingredients);
-        await inventory.save();
 
+        await inventory.save();
         // Not a bug: In the specific case of cancelling a recipe, InventoryChanges are expected to be the root.
         res.json({
             ...currencyChanges,
@@ -59,7 +50,6 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
         logger.debug("Claiming Recipe", { recipe, pendingRecipe });
 
         if (recipe.secretIngredientAction == "SIA_SPECTRE_LOADOUT_COPY") {
-            const inventory = await getInventory(accountId);
             inventory.PendingSpectreLoadouts ??= [];
             inventory.SpectreLoadouts ??= [];
 
@@ -77,7 +67,6 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
                 );
                 inventory.SpectreLoadouts.push(inventory.PendingSpectreLoadouts[pendingLoadoutIndex]);
                 inventory.PendingSpectreLoadouts.splice(pendingLoadoutIndex, 1);
-                await inventory.save();
             }
         }
 
@@ -92,17 +81,14 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
 
             InventoryChanges = { ...InventoryChanges, Recipes: recipeChanges };
 
-            const inventory = await getInventory(accountId);
             addRecipes(inventory, recipeChanges);
-            await inventory.save();
         }
         if (req.query.rush) {
             InventoryChanges = {
                 ...InventoryChanges,
-                ...(await updateCurrencyByAccountId(recipe.skipBuildTimePrice, true, accountId))
+                ...updateCurrency(inventory, recipe.skipBuildTimePrice, true)
             };
         }
-        const inventory = await getInventory(accountId);
         InventoryChanges = {
             ...InventoryChanges,
             ...(await addItem(inventory, recipe.resultType, recipe.num)).InventoryChanges
