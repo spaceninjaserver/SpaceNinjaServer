@@ -532,7 +532,7 @@ const questProgressSchema = new Schema<IQuestStage>(
 
 const questKeysSchema = new Schema<IQuestKeyDatabase>(
     {
-        Progress: { type: [questProgressSchema], default: undefined },
+        Progress: { type: [questProgressSchema], default: [] },
         unlock: Boolean,
         Completed: Boolean,
         CustomData: String,

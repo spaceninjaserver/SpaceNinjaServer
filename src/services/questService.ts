@@ -5,7 +5,12 @@ import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/invento
 import { createMessage } from "@/src/services/inboxService";
 import { addItem, addKeyChainItems } from "@/src/services/inventoryService";
 import { getKeyChainMessage, getLevelKeyRewards } from "@/src/services/itemDataService";
-import { IInventoryDatabase, IQuestKeyDatabase, IQuestStage } from "@/src/types/inventoryTypes/inventoryTypes";
+import {
+    IInventoryDatabase,
+    IQuestKeyClient,
+    IQuestKeyDatabase,
+    IQuestStage
+} from "@/src/types/inventoryTypes/inventoryTypes";
 import { logger } from "@/src/utils/logger";
 import { HydratedDocument } from "mongoose";
 import { ExportKeys } from "warframe-public-export-plus";
@@ -69,12 +74,14 @@ export const updateQuestStage = (
     Object.assign(questStage, questStageUpdate);
 };
 
-export const addQuestKey = (inventory: TInventoryDatabaseDocument, questKey: IQuestKeyDatabase): void => {
+export const addQuestKey = (inventory: TInventoryDatabaseDocument, questKey: IQuestKeyDatabase) => {
     if (inventory.QuestKeys.some(q => q.ItemType === questKey.ItemType)) {
         logger.error(`quest key ${questKey.ItemType} already exists`);
         return;
     }
-    inventory.QuestKeys.push(questKey);
+    const index = inventory.QuestKeys.push(questKey);
+
+    return inventory.QuestKeys[index - 1].toJSON<IQuestKeyClient>();
 };
 
 export const completeQuest = async (inventory: TInventoryDatabaseDocument, questKey: string) => {

@@ -58,7 +58,7 @@ import { IKeyChainRequest } from "@/src/controllers/api/giveKeyChainTriggeredIte
 import { toOid } from "../helpers/inventoryHelpers";
 import { generateRewardSeed } from "@/src/controllers/api/getNewRewardSeedController";
 import { addStartingGear } from "@/src/controllers/api/giveStartingGearController";
-import { completeQuest } from "@/src/services/questService";
+import { addQuestKey, completeQuest } from "@/src/services/questService";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
@@ -327,16 +327,24 @@ export const addItem = async (
     }
     if (typeName in ExportKeys) {
         // Note: "/Lotus/Types/Keys/" contains some EmailItems
-        inventory.QuestKeys.push({ ItemType: typeName });
-        return {
-            InventoryChanges: {
-                QuestKeys: [
-                    {
-                        ItemType: typeName
-                    }
-                ]
+        const key = ExportKeys[typeName];
+
+        if (key.chainStages) {
+            const key = addQuestKey(inventory, { ItemType: typeName });
+            if (key) {
+                return { InventoryChanges: { QuestKeys: [key] } };
             }
-        };
+        } else {
+            const key = { ItemType: typeName, ItemCount: quantity };
+
+            const index = inventory.LevelKeys.findIndex(levelKey => levelKey.ItemType == typeName);
+            if (index) {
+                inventory.LevelKeys[index].ItemCount += quantity;
+            } else {
+                inventory.LevelKeys.push(key);
+            }
+            return { InventoryChanges: { LevelKeys: [key] } };
+        }
     }
     if (typeName in ExportDrones) {
         const inventoryChanges = addDrone(inventory, typeName);
