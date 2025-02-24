@@ -331,9 +331,8 @@ export const addItem = async (
 
         if (key.chainStages) {
             const key = addQuestKey(inventory, { ItemType: typeName });
-            if (key) {
-                return { InventoryChanges: { QuestKeys: [key] } };
-            }
+            if (!key) return { InventoryChanges: {} };
+            return { InventoryChanges: { QuestKeys: [key] } };
         } else {
             const key = { ItemType: typeName, ItemCount: quantity };
 

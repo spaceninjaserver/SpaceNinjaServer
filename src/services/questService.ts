@@ -77,7 +77,7 @@ export const updateQuestStage = (
 
 export const addQuestKey = (inventory: TInventoryDatabaseDocument, questKey: IQuestKeyDatabase) => {
     if (inventory.QuestKeys.some(q => q.ItemType === questKey.ItemType)) {
-        logger.error(`quest key ${questKey.ItemType} already exists`);
+        logger.warn(`Quest key ${questKey.ItemType} already exists. It will not be added`);
         return;
     }
     const index = inventory.QuestKeys.push(questKey);
