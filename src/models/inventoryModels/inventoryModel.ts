@@ -68,7 +68,9 @@ import {
     ICalendarProgress,
     IPendingCouponDatabase,
     IPendingCouponClient,
-    ILibraryAvailableDailyTaskInfo
+    ILibraryAvailableDailyTaskInfo,
+    IDroneDatabase,
+    IDroneClient
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -348,6 +350,27 @@ const TypeXPItemSchema = new Schema<ITypeXPItem>(
     },
     { _id: false }
 );
+
+const droneSchema = new Schema<IDroneDatabase>(
+    {
+        ItemType: String,
+        CurrentHP: Number,
+        RepairStart: { type: Date, default: undefined }
+    },
+    { id: false }
+);
+droneSchema.set("toJSON", {
+    virtuals: true,
+    transform(_document, obj) {
+        const client = obj as IDroneClient;
+        const db = obj as IDroneDatabase;
+
+        client.ItemId = toOid(db._id);
+
+        delete obj._id;
+        delete obj.__v;
+    }
+});
 
 const challengeProgressSchema = new Schema<IChallengeProgress>(
     {
@@ -1148,8 +1171,8 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         CompletedSorties: [String],
         LastSortieReward: [Schema.Types.Mixed],
 
-        //Resource_Drone[Uselees stuff]
-        Drones: [Schema.Types.Mixed],
+        // Resource Extractor Drones
+        Drones: [droneSchema],
 
         //Active profile ico
         ActiveAvatarImageType: String,
@@ -1299,6 +1322,7 @@ export type InventoryDocumentProps = {
     PendingRecipes: Types.DocumentArray<IPendingRecipeDatabase>;
     WeaponSkins: Types.DocumentArray<IWeaponSkinDatabase>;
     QuestKeys: Types.DocumentArray<IQuestKeyDatabase>;
+    Drones: Types.DocumentArray<IDroneDatabase>;
 } & { [K in TEquipmentKey]: Types.DocumentArray<IEquipmentDatabase> };
 
 // eslint-disable-next-line @typescript-eslint/ban-types

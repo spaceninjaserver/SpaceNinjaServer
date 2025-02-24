@@ -39,6 +39,7 @@ export interface IInventoryDatabase
             | "DialogueHistory"
             | "KubrowPetEggs"
             | "PendingCoupon"
+            | "Drones"
             | TEquipmentKey
         >,
         InventoryDatabaseEquipment {
@@ -63,6 +64,7 @@ export interface IInventoryDatabase
     DialogueHistory?: IDialogueHistoryDatabase;
     KubrowPetEggs?: IKubrowPetEggDatabase[];
     PendingCoupon?: IPendingCouponDatabase;
+    Drones: IDroneDatabase[];
 }
 
 export interface IQuestKeyDatabase {
@@ -258,7 +260,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     Alignment: IAlignment;
     CompletedSorties: string[];
     LastSortieReward: ILastSortieReward[];
-    Drones: IDrone[];
+    Drones: IDroneClient[];
     StepSequencers: IStepSequencer[];
     ActiveAvatarImageType: string;
     ShipDecorations: IConsumable[];
@@ -508,11 +510,18 @@ export interface IDiscoveredMarker {
     discoveryState: number[];
 }
 
-export interface IDrone {
+export interface IDroneClient {
     ItemType: string;
     CurrentHP: number;
     ItemId: IOid;
     RepairStart?: IMongoDate;
+}
+
+export interface IDroneDatabase {
+    ItemType: string;
+    CurrentHP: number;
+    _id: Types.ObjectId;
+    RepairStart?: Date;
 }
 
 export interface ITypeXPItem {

@@ -24,7 +24,8 @@ import {
     IKubrowPetEggDatabase,
     IKubrowPetEggClient,
     ILibraryAvailableDailyTaskInfo,
-    ICalendarProgress
+    ICalendarProgress,
+    IDroneClient
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate } from "../types/genericUpdate";
 import {
@@ -38,6 +39,7 @@ import { IEquipmentClient, IEquipmentDatabase, IItemConfig } from "../types/inve
 import {
     ExportArcanes,
     ExportCustoms,
+    ExportDrones,
     ExportFlavour,
     ExportFusionBundles,
     ExportGear,
@@ -334,6 +336,12 @@ export const addItem = async (
                     }
                 ]
             }
+        };
+    }
+    if (typeName in ExportDrones) {
+        const inventoryChanges = addDrone(inventory, typeName);
+        return {
+            InventoryChanges: inventoryChanges
         };
     }
 
@@ -806,6 +814,17 @@ const addMotorcycle = (
     const index = inventory.Motorcycles.push({ ItemType: typeName }) - 1;
     inventoryChanges.Motorcycles ??= [];
     inventoryChanges.Motorcycles.push(inventory.Motorcycles[index].toJSON<IEquipmentClient>());
+    return inventoryChanges;
+};
+
+const addDrone = (
+    inventory: TInventoryDatabaseDocument,
+    typeName: string,
+    inventoryChanges: IInventoryChanges = {}
+): IInventoryChanges => {
+    const index = inventory.Drones.push({ ItemType: typeName, CurrentHP: ExportDrones[typeName].durability }) - 1;
+    inventoryChanges.Drones ??= [];
+    inventoryChanges.Drones.push(inventory.Drones[index].toJSON<IDroneClient>());
     return inventoryChanges;
 };
 
