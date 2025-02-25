@@ -263,7 +263,10 @@ export const addMissionRewards = async (
         }
     }
 
-    if (missions) {
+    if (
+        missions &&
+        missions.Tag != "" // #1013
+    ) {
         const node = getNode(missions.Tag);
 
         //node based credit rewards for mission completion
