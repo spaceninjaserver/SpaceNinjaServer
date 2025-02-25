@@ -38,6 +38,7 @@ import { getExalted, getKeyChainItems } from "@/src/services/itemDataService";
 import { IEquipmentClient, IEquipmentDatabase, IItemConfig } from "../types/inventoryTypes/commonInventoryTypes";
 import {
     ExportArcanes,
+    ExportBundles,
     ExportCustoms,
     ExportDrones,
     ExportFlavour,
@@ -59,6 +60,7 @@ import { toOid } from "../helpers/inventoryHelpers";
 import { generateRewardSeed } from "@/src/controllers/api/getNewRewardSeedController";
 import { addStartingGear } from "@/src/controllers/api/giveStartingGearController";
 import { addQuestKey, completeQuest } from "@/src/services/questService";
+import { handleBundleAcqusition } from "./purchaseService";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
@@ -157,6 +159,11 @@ export const addItem = async (
     typeName: string,
     quantity: number = 1
 ): Promise<{ InventoryChanges: IInventoryChanges }> => {
+    // Bundles are technically StoreItems but a) they don't have a normal counterpart, and b) they are used in non-StoreItem contexts, e.g. email attachments.
+    if (typeName in ExportBundles) {
+        return { InventoryChanges: await handleBundleAcqusition(typeName, inventory, quantity) };
+    }
+
     // Strict typing
     if (typeName in ExportRecipes) {
         const recipeChanges = [

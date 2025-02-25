@@ -200,6 +200,31 @@ const handleItemPrices = (
     }
 };
 
+export const handleBundleAcqusition = async (
+    storeItemName: string,
+    inventory: TInventoryDatabaseDocument,
+    quantity: number = 1,
+    inventoryChanges: IInventoryChanges = {}
+): Promise<IInventoryChanges> => {
+    const bundle = ExportBundles[storeItemName];
+    logger.debug("acquiring bundle", bundle);
+    for (const component of bundle.components) {
+        combineInventoryChanges(
+            inventoryChanges,
+            (
+                await handleStoreItemAcquisition(
+                    component.typeName,
+                    inventory,
+                    component.purchaseQuantity * quantity,
+                    component.durability,
+                    true
+                )
+            ).InventoryChanges
+        );
+    }
+    return inventoryChanges;
+};
+
 export const handleStoreItemAcquisition = async (
     storeItemName: string,
     inventory: TInventoryDatabaseDocument,
@@ -212,22 +237,7 @@ export const handleStoreItemAcquisition = async (
     };
     logger.debug(`handling acquision of ${storeItemName}`);
     if (storeItemName in ExportBundles) {
-        const bundle = ExportBundles[storeItemName];
-        logger.debug("acquiring bundle", bundle);
-        for (const component of bundle.components) {
-            combineInventoryChanges(
-                purchaseResponse.InventoryChanges,
-                (
-                    await handleStoreItemAcquisition(
-                        component.typeName,
-                        inventory,
-                        component.purchaseQuantity * quantity,
-                        component.durability,
-                        true
-                    )
-                ).InventoryChanges
-            );
-        }
+        await handleBundleAcqusition(storeItemName, inventory, quantity, purchaseResponse.InventoryChanges);
     } else {
         const storeCategory = getStoreItemCategory(storeItemName);
         const internalName = storeItemName.replace("/StoreItems", "");
