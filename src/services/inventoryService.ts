@@ -292,6 +292,11 @@ export const addItem = async (
         const weapon = ExportWeapons[typeName];
         if (weapon.totalDamage != 0) {
             const inventoryChanges = addEquipment(inventory, weapon.productCategory, typeName);
+            if (weapon.additionalItems) {
+                for (const item of weapon.additionalItems) {
+                    combineInventoryChanges(inventoryChanges, await addItem(inventory, item, 1));
+                }
+            }
             updateSlots(inventory, InventorySlot.WEAPONS, 0, 1);
             return {
                 InventoryChanges: {
