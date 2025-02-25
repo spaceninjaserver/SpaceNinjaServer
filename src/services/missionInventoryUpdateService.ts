@@ -33,6 +33,7 @@ import { getEntriesUnsafe } from "@/src/utils/ts-utils";
 import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { handleStoreItemAcquisition } from "./purchaseService";
 import { IMissionReward } from "../types/missionTypes";
+import { crackRelic } from "@/src/helpers/relicHelper";
 
 const getRotations = (rotationCount: number): number[] => {
     if (rotationCount === 0) return [0];
@@ -221,7 +222,8 @@ export const addMissionRewards = async (
         RewardInfo: rewardInfo,
         LevelKeyName: levelKeyName,
         Missions: missions,
-        RegularCredits: creditDrops
+        RegularCredits: creditDrops,
+        VoidTearParticipantsCurrWave: voidTearWave
     }: IMissionInventoryUpdateRequest
 ) => {
     if (!rewardInfo) {
@@ -290,6 +292,15 @@ export const addMissionRewards = async (
         missionDropCredits: creditDrops ?? 0,
         rngRewardCredits: inventoryChanges.RegularCredits ?? 0
     });
+
+    if (
+        voidTearWave &&
+        voidTearWave.Participants[0].QualifiesForReward &&
+        !voidTearWave.Participants[0].HaveRewardResponse
+    ) {
+        await crackRelic(inventory, voidTearWave.Participants[0]);
+        MissionRewards.push({ StoreItem: voidTearWave.Participants[0].Reward, ItemCount: 1 });
+    }
 
     return { inventoryChanges, MissionRewards, credits };
 };

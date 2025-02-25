@@ -87,6 +87,11 @@ export type IMissionInventoryUpdateRequest = {
     PlayerSkillGains: IPlayerSkills;
     CustomMarkers?: ICustomMarkers[];
     LoreFragmentScans?: ILoreFragmentScan[];
+    VoidTearParticipantsCurrWave?: {
+        Wave: number;
+        IsFinalWave: boolean;
+        Participants: IVoidTearParticipantInfo[];
+    };
 } & {
     [K in TEquipmentKey]?: IEquipmentClient[];
 };
@@ -135,4 +140,18 @@ export interface IUnlockShipFeatureRequest {
     Feature: string;
     KeyChain: string;
     ChainStage: number;
+}
+
+export interface IVoidTearParticipantInfo {
+    AccountId: string;
+    Name: string;
+    ChosenRewardOwner: string;
+    MissionHash: string;
+    VoidProjection: string;
+    Reward: string;
+    QualifiesForReward: boolean;
+    HaveRewardResponse: boolean;
+    RewardsMultiplier: number;
+    RewardProjection: string;
+    HardModeReward: ITypeCount;
 }
