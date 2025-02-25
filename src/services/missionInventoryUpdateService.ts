@@ -233,9 +233,7 @@ export const addMissionRewards = async (
     }
 
     //TODO: check double reward merging
-    const MissionRewards = getRandomMissionDrops(rewardInfo).map(drop => {
-        return { StoreItem: drop.type, ItemCount: drop.itemCount };
-    });
+    const MissionRewards: IMissionReward[] = getRandomMissionDrops(rewardInfo);
     logger.debug("random mission drops:", MissionRewards);
     const inventoryChanges: IInventoryChanges = {};
 
@@ -382,8 +380,8 @@ function getLevelCreditRewards(nodeName: string): number {
     //TODO: get dark sektor fixed credit rewards and railjack bonus
 }
 
-function getRandomMissionDrops(RewardInfo: IRewardInfo): IRngResult[] {
-    const drops: IRngResult[] = [];
+function getRandomMissionDrops(RewardInfo: IRewardInfo): IMissionReward[] {
+    const drops: IMissionReward[] = [];
     if (RewardInfo.node in ExportRegions) {
         const region = ExportRegions[RewardInfo.node];
         const rewardManifests: string[] =
@@ -408,7 +406,7 @@ function getRandomMissionDrops(RewardInfo: IRewardInfo): IRngResult[] {
                     const rotationRewards = table[rotation];
                     const drop = getRandomRewardByChance(rotationRewards);
                     if (drop) {
-                        drops.push(drop);
+                        drops.push({ StoreItem: drop.type, ItemCount: drop.itemCount });
                     }
                 }
             });
@@ -418,7 +416,7 @@ function getRandomMissionDrops(RewardInfo: IRewardInfo): IRngResult[] {
             for (let rotation = 0; rotation != RewardInfo.EnemyCachesFound; ++rotation) {
                 const drop = getRandomRewardByChance(deck[rotation]);
                 if (drop) {
-                    drops.push(drop);
+                    drops.push({ StoreItem: drop.type, ItemCount: drop.itemCount, FromEnemyCache: true });
                 }
             }
         }
@@ -437,7 +435,7 @@ function getRandomMissionDrops(RewardInfo: IRewardInfo): IRngResult[] {
 
             const drop = getRandomRewardByChance(deck[rotation]);
             if (drop) {
-                drops.push(drop);
+                drops.push({ StoreItem: drop.type, ItemCount: drop.itemCount });
             }
         }
     }

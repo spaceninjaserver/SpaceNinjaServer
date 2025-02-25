@@ -8,4 +8,6 @@ export interface IMissionReward {
     ItemCount: number;
     TweetText?: string;
     ProductCategory?: string;
+    FromEnemyCache?: boolean;
+    IsStrippedItem?: boolean;
 }
