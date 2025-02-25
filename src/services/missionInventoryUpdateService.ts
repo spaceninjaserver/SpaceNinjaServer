@@ -372,7 +372,10 @@ function getRandomMissionDrops(RewardInfo: IRewardInfo): IRngResult[] {
     const drops: IRngResult[] = [];
     if (RewardInfo.node in ExportRegions) {
         const region = ExportRegions[RewardInfo.node];
-        const rewardManifests = region.rewardManifests;
+        const rewardManifests: string[] =
+            RewardInfo.periodicMissionTag == "EliteAlert" || RewardInfo.periodicMissionTag == "EliteAlertB"
+                ? ["/Lotus/Types/Game/MissionDecks/EliteAlertMissionRewards/EliteAlertMissionRewards"]
+                : region.rewardManifests;
 
         let rotations: number[] = [];
         if (RewardInfo.VaultsCracked) {
