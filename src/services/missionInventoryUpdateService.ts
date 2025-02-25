@@ -51,27 +51,6 @@ const getRandomRewardByChance = (pool: IReward[]): IRngResult | undefined => {
     return getRandomReward(pool as IRngResult[]);
 };
 
-export const creditBundles: Record<string, number> = {
-    "/Lotus/Types/PickUps/Credits/1500Credits": 1500,
-    "/Lotus/Types/PickUps/Credits/2000Credits": 2000,
-    "/Lotus/Types/PickUps/Credits/2500Credits": 2500,
-    "/Lotus/Types/PickUps/Credits/3000Credits": 3000,
-    "/Lotus/Types/PickUps/Credits/4000Credits": 4000,
-    "/Lotus/Types/PickUps/Credits/5000Credits": 5000,
-    "/Lotus/Types/PickUps/Credits/7500Credits": 7500,
-    "/Lotus/Types/PickUps/Credits/10000Credits": 10000,
-    "/Lotus/Types/PickUps/Credits/5000Hollars": 5000,
-    "/Lotus/Types/PickUps/Credits/7500Hollars": 7500,
-    "/Lotus/Types/PickUps/Credits/10000Hollars": 10000,
-    "/Lotus/Types/PickUps/Credits/CorpusArenaCreditRewards/CorpusArenaRewardOneHard": 105000,
-    "/Lotus/Types/PickUps/Credits/CorpusArenaCreditRewards/CorpusArenaRewardTwoHard": 175000,
-    "/Lotus/Types/PickUps/Credits/CorpusArenaCreditRewards/CorpusArenaRewardThreeHard": 250000,
-    "/Lotus/Types/StoreItems/CreditBundles/Zariman/TableACreditsCommon": 15000,
-    "/Lotus/Types/StoreItems/CreditBundles/Zariman/TableACreditsUncommon": 30000,
-    "/Lotus/Types/StoreItems/CreditBundles/CreditBundleA": 50000,
-    "/Lotus/Types/StoreItems/CreditBundles/CreditBundleC": 175000
-};
-
 //type TMissionInventoryUpdateKeys = keyof IMissionInventoryUpdateRequest;
 //const ignoredInventoryUpdateKeys = ["FpsAvg", "FpsMax", "FpsMin", "FpsSamples"] satisfies TMissionInventoryUpdateKeys[]; // for keys with no meaning for this server
 //type TignoredInventoryUpdateKeys = (typeof ignoredInventoryUpdateKeys)[number];

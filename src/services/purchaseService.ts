@@ -18,6 +18,7 @@ import {
     ExportBoosterPacks,
     ExportBundles,
     ExportGear,
+    ExportMisc,
     ExportResources,
     ExportSyndicates,
     ExportVendors,
@@ -25,7 +26,6 @@ import {
 } from "warframe-public-export-plus";
 import { config } from "./configService";
 import { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel";
-import { creditBundles } from "./missionInventoryUpdateService";
 
 export const getStoreItemCategory = (storeItem: string): string => {
     const storeItemString = getSubstringFromKeyword(storeItem, "StoreItems/");
@@ -335,8 +335,8 @@ const handleCreditBundlePurchase = async (
     typeName: string,
     inventory: TInventoryDatabaseDocument
 ): Promise<IPurchaseResponse> => {
-    if (typeName && typeName in creditBundles) {
-        const creditsAmount = creditBundles[typeName];
+    if (typeName && typeName in ExportMisc.creditBundles) {
+        const creditsAmount = ExportMisc.creditBundles[typeName];
 
         inventory.RegularCredits += creditsAmount;
         await inventory.save();
