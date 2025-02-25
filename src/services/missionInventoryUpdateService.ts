@@ -351,7 +351,7 @@ export const addFixedLevelRewards = (
     if (rewards.items) {
         for (const item of rewards.items) {
             MissionRewards.push({
-                StoreItem: `/Lotus/StoreItems${item.substring("Lotus/".length)}`,
+                StoreItem: item.includes(`/StoreItems/`) ? item : `/Lotus/StoreItems${item.substring("Lotus/".length)}`,
                 ItemCount: 1
             });
         }
@@ -359,7 +359,9 @@ export const addFixedLevelRewards = (
     if (rewards.countedItems) {
         for (const item of rewards.countedItems) {
             MissionRewards.push({
-                StoreItem: `/Lotus/StoreItems${item.ItemType.substring("Lotus/".length)}`,
+                StoreItem: item.ItemType.includes(`/StoreItems/`)
+                    ? item.ItemType
+                    : `/Lotus/StoreItems${item.ItemType.substring("Lotus/".length)}`,
                 ItemCount: item.ItemCount
             });
         }
