@@ -208,14 +208,14 @@ export const addMissionInventoryUpdates = (
                 inventory.CompletedSorties.push(value);
                 break;
             }
-            case "SeasonChallengeCompletions":
+            case "SeasonChallengeCompletions": {
                 const processedCompletions = value.map(({ challenge, id }) => ({
                     challenge: challenge.substring(challenge.lastIndexOf("/") + 1),
                     id
                 }));
-
                 inventory.SeasonChallengeHistory.push(...processedCompletions);
                 break;
+            }
             default:
                 // Equipment XP updates
                 if (equipmentKeys.includes(key as TEquipmentKey)) {

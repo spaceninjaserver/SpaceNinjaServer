@@ -23,7 +23,7 @@
         "@typescript-eslint/no-explicit-any": "warn",
         "@typescript-eslint/no-loss-of-precision": "warn",
         "@typescript-eslint/no-unnecessary-condition": "warn",
-        "no-case-declarations": "warn",
+        "no-case-declarations": "error",
         "prettier/prettier": "error",
         "@typescript-eslint/semi": "error",
         "no-mixed-spaces-and-tabs": "error",

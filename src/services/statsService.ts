@@ -105,7 +105,7 @@ export const updateStats = async (playerStats: TStatsDatabaseDocument, payload: 
                         case "FIRE_WEAPON":
                         case "HIT_ENTITY_ITEM":
                         case "HEADSHOT_ITEM":
-                        case "KILL_ENEMY_ITEM":
+                        case "KILL_ENEMY_ITEM": {
                             playerStats.Weapons ??= [];
                             const statKey = {
                                 FIRE_WEAPON: "fired",
@@ -126,10 +126,11 @@ export const updateStats = async (playerStats: TStatsDatabaseDocument, payload: 
                                 }
                             }
                             break;
+                        }
 
                         case "KILL_ENEMY":
                         case "EXECUTE_ENEMY":
-                        case "HEADSHOT":
+                        case "HEADSHOT": {
                             playerStats.Enemies ??= [];
                             const enemyStatKey = {
                                 KILL_ENEMY: "kills",
@@ -149,6 +150,7 @@ export const updateStats = async (playerStats: TStatsDatabaseDocument, payload: 
                                 }
                             }
                             break;
+                        }
 
                         case "DIE":
                             playerStats.Enemies ??= [];

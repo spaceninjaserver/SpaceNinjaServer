@@ -404,18 +404,21 @@ export const addItem = async (
             switch (typeName.substr(1).split("/")[2]) {
                 case "Mods": // Legendary Core
                 case "CosmeticEnhancers": // Traumatic Peculiar
-                    const changes = [
-                        {
-                            ItemType: typeName,
-                            ItemCount: quantity
-                        }
-                    ];
-                    addMods(inventory, changes);
-                    return {
-                        InventoryChanges: {
-                            RawUpgrades: changes
-                        }
-                    };
+                    {
+                        const changes = [
+                            {
+                                ItemType: typeName,
+                                ItemCount: quantity
+                            }
+                        ];
+                        addMods(inventory, changes);
+                        return {
+                            InventoryChanges: {
+                                RawUpgrades: changes
+                            }
+                        };
+                    }
+                    break;
             }
             break;
         }
