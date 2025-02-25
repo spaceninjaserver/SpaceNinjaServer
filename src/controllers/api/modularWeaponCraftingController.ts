@@ -2,7 +2,14 @@ import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
-import { getInventory, updateCurrency, addEquipment, addMiscItems } from "@/src/services/inventoryService";
+import {
+    getInventory,
+    updateCurrency,
+    addEquipment,
+    addMiscItems,
+    applyDefaultUpgrades
+} from "@/src/services/inventoryService";
+import { ExportWeapons } from "warframe-public-export-plus";
 
 const modularWeaponTypes: Record<string, TEquipmentKey> = {
     "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary": "LongGuns",
@@ -36,8 +43,11 @@ export const modularWeaponCraftingController: RequestHandler = async (req, res) 
     const category = modularWeaponTypes[data.WeaponType];
     const inventory = await getInventory(accountId);
 
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    const configs = applyDefaultUpgrades(inventory, ExportWeapons[data.Parts[0]]?.defaultUpgrades);
+
     // Give weapon
-    const weapon = addEquipment(inventory, category, data.WeaponType, data.Parts);
+    const inventoryChanges = addEquipment(inventory, category, data.WeaponType, data.Parts, {}, { Configs: configs });
 
     // Remove credits & parts
     const miscItemChanges = [];
@@ -58,8 +68,8 @@ export const modularWeaponCraftingController: RequestHandler = async (req, res) 
     // Tell client what we did
     res.json({
         InventoryChanges: {
+            ...inventoryChanges,
             ...currencyChanges,
-            [category]: [weapon],
             MiscItems: miscItemChanges
         }
     });

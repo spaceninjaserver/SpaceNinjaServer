@@ -52,6 +52,7 @@ import {
     ExportSyndicates,
     ExportUpgrades,
     ExportWeapons,
+    IDefaultUpgrade,
     TStandingLimitBin
 } from "warframe-public-export-plus";
 import { createShip } from "./shipService";
@@ -532,6 +533,28 @@ export const addItems = async (
     return inventoryChanges;
 };
 
+export const applyDefaultUpgrades = (
+    inventory: TInventoryDatabaseDocument,
+    defaultUpgrades: IDefaultUpgrade[] | undefined
+): IItemConfig[] => {
+    const modsToGive: IRawUpgrade[] = [];
+    const configs: IItemConfig[] = [];
+    if (defaultUpgrades) {
+        const upgrades = [];
+        for (const defaultUpgrade of defaultUpgrades) {
+            modsToGive.push({ ItemType: defaultUpgrade.ItemType, ItemCount: 1 });
+            if (defaultUpgrade.Slot != -1) {
+                upgrades[defaultUpgrade.Slot] = defaultUpgrade.ItemType;
+            }
+        }
+        if (upgrades.length != 0) {
+            configs.push({ Upgrades: upgrades });
+        }
+    }
+    addMods(inventory, modsToGive);
+    return configs;
+};
+
 //TODO: maybe genericMethod for all the add methods, they share a lot of logic
 export const addSentinel = (
     inventory: TInventoryDatabaseDocument,
@@ -543,23 +566,9 @@ export const addSentinel = (
         addSentinelWeapon(inventory, ExportSentinels[sentinelName].defaultWeapon, inventoryChanges);
     }
 
-    const modsToGive: IRawUpgrade[] = [];
-    const configs: IItemConfig[] = [];
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    if (ExportSentinels[sentinelName]?.defaultUpgrades) {
-        const upgrades = [];
-        for (const defaultUpgrade of ExportSentinels[sentinelName].defaultUpgrades) {
-            modsToGive.push({ ItemType: defaultUpgrade.ItemType, ItemCount: 1 });
-            if (defaultUpgrade.Slot != -1) {
-                upgrades[defaultUpgrade.Slot] = defaultUpgrade.ItemType;
-            }
-        }
-        if (upgrades.length != 0) {
-            configs.push({ Upgrades: upgrades });
-        }
-    }
+    const configs: IItemConfig[] = applyDefaultUpgrades(inventory, ExportSentinels[sentinelName]?.defaultUpgrades);
 
-    addMods(inventory, modsToGive);
     const sentinelIndex = inventory.Sentinels.push({ ItemType: sentinelName, Configs: configs, XP: 0 }) - 1;
     inventoryChanges.Sentinels ??= [];
     inventoryChanges.Sentinels.push(inventory.Sentinels[sentinelIndex].toJSON<IEquipmentClient>());
