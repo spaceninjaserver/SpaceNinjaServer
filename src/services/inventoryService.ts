@@ -203,6 +203,7 @@ export const addItem = async (
             const inventoryChanges = {
                 ...addCrewShip(inventory, typeName),
                 // fix to unlock railjack modding, item bellow supposed to be obtained from archwing quest
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                 ...(!inventory.CrewShipHarnesses?.length
                     ? addCrewShipHarness(inventory, "/Lotus/Types/Game/CrewShip/RailJack/DefaultHarness")
                     : {})
@@ -525,12 +526,14 @@ export const addSentinel = (
     sentinelName: string,
     inventoryChanges: IInventoryChanges = {}
 ): IInventoryChanges => {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (ExportSentinels[sentinelName]?.defaultWeapon) {
         addSentinelWeapon(inventory, ExportSentinels[sentinelName].defaultWeapon, inventoryChanges);
     }
 
     const modsToGive: IRawUpgrade[] = [];
     const configs: IItemConfig[] = [];
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (ExportSentinels[sentinelName]?.defaultUpgrades) {
         const upgrades = [];
         for (const defaultUpgrade of ExportSentinels[sentinelName].defaultUpgrades) {

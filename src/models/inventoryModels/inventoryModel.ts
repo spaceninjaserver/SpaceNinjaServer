@@ -808,7 +808,7 @@ detailsSchema.set("toJSON", {
 const EquipmentSchema = new Schema<IEquipmentDatabase>(
     {
         ItemType: String,
-        Configs: [ItemConfigSchema],
+        Configs: { type: [ItemConfigSchema], default: [] },
         UpgradeVer: { type: Number, default: 101 },
         XP: { type: Number, default: 0 },
         Features: Number,
@@ -1303,7 +1303,7 @@ inventorySchema.set("toJSON", {
         if (inventoryDatabase.GuildId) {
             inventoryResponse.GuildId = toOid(inventoryDatabase.GuildId);
         }
-        if (inventoryResponse.BlessingCooldown) {
+        if (inventoryDatabase.BlessingCooldown) {
             inventoryResponse.BlessingCooldown = toMongoDate(inventoryDatabase.BlessingCooldown);
         }
     }

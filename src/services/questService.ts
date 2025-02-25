@@ -15,6 +15,7 @@ import { logger } from "@/src/utils/logger";
 import { HydratedDocument } from "mongoose";
 import { ExportKeys } from "warframe-public-export-plus";
 import { addFixedLevelRewards } from "./missionInventoryUpdateService";
+import { IInventoryChanges } from "../types/purchaseTypes";
 
 export interface IUpdateQuestRequest {
     QuestKeys: Omit<IQuestKeyDatabase, "CompletionDate">[];
@@ -64,6 +65,7 @@ export const updateQuestStage = (
 
     const questStage = quest.Progress[ChainStage];
 
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!questStage) {
         const questStageIndex = quest.Progress.push(questStageUpdate) - 1;
         if (questStageIndex !== ChainStage) {
@@ -86,6 +88,7 @@ export const addQuestKey = (inventory: TInventoryDatabaseDocument, questKey: IQu
 };
 
 export const completeQuest = async (inventory: TInventoryDatabaseDocument, questKey: string) => {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     const chainStages = ExportKeys[questKey]?.chainStages;
 
     if (!chainStages) {
@@ -164,7 +167,10 @@ export const completeQuest = async (inventory: TInventoryDatabaseDocument, quest
     //TODO: handle quest completion items
 };
 
-export const giveKeyChainItem = async (inventory: TInventoryDatabaseDocument, keyChainInfo: IKeyChainRequest) => {
+export const giveKeyChainItem = async (
+    inventory: TInventoryDatabaseDocument,
+    keyChainInfo: IKeyChainRequest
+): Promise<IInventoryChanges> => {
     const inventoryChanges = await addKeyChainItems(inventory, keyChainInfo);
 
     if (isEmptyObject(inventoryChanges)) {
@@ -189,7 +195,7 @@ export const giveKeyChainMessage = async (
     inventory: TInventoryDatabaseDocument,
     accountId: string,
     keyChainInfo: IKeyChainRequest
-) => {
+): Promise<void> => {
     const keyChainMessage = getKeyChainMessage(keyChainInfo);
 
     const message = {

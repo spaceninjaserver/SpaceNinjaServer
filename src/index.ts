@@ -25,8 +25,10 @@ mongoose
             cert: fs.readFileSync("static/certs/cert.pem")
         };
 
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         http.createServer(app).listen(httpPort, () => {
             logger.info("HTTP server started on port " + httpPort);
+            // eslint-disable-next-line @typescript-eslint/no-misused-promises
             https.createServer(options, app).listen(httpsPort, () => {
                 logger.info("HTTPS server started on port " + httpsPort);
 

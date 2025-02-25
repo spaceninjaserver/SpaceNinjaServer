@@ -249,7 +249,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             const suit = inventory.Suits.id(request.SuitId.$oid)!;
             inventory.Suits.pull(suit);
             const consumedSuit: IConsumedSuit = { s: suit.ItemType };
-            if (suit.Configs && suit.Configs[0] && suit.Configs[0].pricol) {
+            if (suit.Configs[0] && suit.Configs[0].pricol) {
                 consumedSuit.c = suit.Configs[0].pricol;
             }
             if ((inventory.InfestedFoundry!.XP ?? 0) < 73125_00) {

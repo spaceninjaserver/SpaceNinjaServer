@@ -33,9 +33,9 @@ const consolelogFormat = format.printf(info => {
             colors: true
         });
 
-        return `${info.timestamp} [${info.version}] ${info.level}: ${info.message} ${metadataString}`;
+        return `${info.timestamp as string} [${info.version as string}] ${info.level}: ${info.message as string} ${metadataString}`;
     }
-    return `${info.timestamp} [${info.version}] ${info.level}: ${info.message}`;
+    return `${info.timestamp as string} [${info.version as string}] ${info.level}: ${info.message as string}`;
 });
 
 const fileFormat = format.combine(

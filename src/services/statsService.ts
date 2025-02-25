@@ -58,6 +58,7 @@ export const updateStats = async (playerStats: TStatsDatabaseDocument, payload: 
                                         break;
                                     default:
                                         if (!ignoredCategories.includes(category)) {
+                                            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                                             if (!unknownCategories[action]) {
                                                 unknownCategories[action] = [];
                                             }
@@ -231,6 +232,7 @@ export const updateStats = async (playerStats: TStatsDatabaseDocument, payload: 
 
                         default:
                             if (!ignoredCategories.includes(category)) {
+                                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                                 if (!unknownCategories[action]) {
                                     unknownCategories[action] = [];
                                 }

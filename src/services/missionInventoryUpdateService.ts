@@ -80,7 +80,7 @@ export const creditBundles: Record<string, number> = {
 export const addMissionInventoryUpdates = (
     inventory: HydratedDocument<IInventoryDatabase, InventoryDocumentProps>,
     inventoryUpdates: IMissionInventoryUpdateRequest
-) => {
+): Partial<IInventoryDatabase> | undefined => {
     //TODO: type this properly
     const inventoryChanges: Partial<IInventoryDatabase> = {};
     if (inventoryUpdates.MissionFailed === true) {
@@ -287,7 +287,7 @@ export const addMissionRewards = async (
 
         //node based credit rewards for mission completion
         if (node.missionIndex !== 28) {
-            const levelCreditReward = getLevelCreditRewards(missions?.Tag);
+            const levelCreditReward = getLevelCreditRewards(missions.Tag);
             missionCompletionCredits += levelCreditReward;
             inventory.RegularCredits += levelCreditReward;
             logger.debug(`levelCreditReward ${levelCreditReward}`);
@@ -393,7 +393,7 @@ function getRandomMissionDrops(RewardInfo: IRewardInfo): IRngResult[] {
     const drops: IRngResult[] = [];
     if (RewardInfo.node in ExportRegions) {
         const region = ExportRegions[RewardInfo.node];
-        const rewardManifests = region.rewardManifests ?? [];
+        const rewardManifests = region.rewardManifests;
 
         let rotations: number[] = [];
         if (RewardInfo.VaultsCracked) {

@@ -27,7 +27,7 @@ export const deleteAllMessagesRead = async (accountId: string): Promise<void> =>
     await Inbox.deleteMany({ ownerId: accountId, r: true });
 };
 
-export const createNewEventMessages = async (req: Request) => {
+export const createNewEventMessages = async (req: Request): Promise<void> => {
     const account = await getAccountForRequest(req);
     const latestEventMessageDate = account.LatestEventMessageDate;
 

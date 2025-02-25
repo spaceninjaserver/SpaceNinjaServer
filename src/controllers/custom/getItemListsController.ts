@@ -39,17 +39,11 @@ const getItemListsController: RequestHandler = (req, response) => {
     res.miscitems = [];
     res.Syndicates = [];
     for (const [uniqueName, item] of Object.entries(ExportWarframes)) {
-        if (
-            item.productCategory == "Suits" ||
-            item.productCategory == "SpaceSuits" ||
-            item.productCategory == "MechSuits"
-        ) {
-            res[item.productCategory].push({
-                uniqueName,
-                name: getString(item.name, lang),
-                exalted: item.exalted
-            });
-        }
+        res[item.productCategory].push({
+            uniqueName,
+            name: getString(item.name, lang),
+            exalted: item.exalted
+        });
     }
     for (const [uniqueName, item] of Object.entries(ExportSentinels)) {
         if (item.productCategory == "Sentinels") {

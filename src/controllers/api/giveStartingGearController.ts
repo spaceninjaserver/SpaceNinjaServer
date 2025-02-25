@@ -39,7 +39,7 @@ const awakeningRewards = [
 export const addStartingGear = async (
     inventory: HydratedDocument<IInventoryDatabase, InventoryDocumentProps>,
     startingGear: TPartialStartingGear | undefined = undefined
-) => {
+): Promise<IInventoryChanges> => {
     const { LongGuns, Pistols, Suits, Melee } = startingGear || {
         LongGuns: [{ ItemType: "/Lotus/Weapons/Tenno/Rifle/Rifle" }],
         Pistols: [{ ItemType: "/Lotus/Weapons/Tenno/Pistol/Pistol" }],

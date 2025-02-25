@@ -148,7 +148,7 @@ export const handleInventoryItemConfigChange = async (
 
                     const itemEntries = equipment as IItemEntry;
                     for (const [itemId, itemConfigEntries] of Object.entries(itemEntries)) {
-                        const inventoryItem = inventory[equipmentName].find(item => item._id?.toString() === itemId);
+                        const inventoryItem = inventory[equipmentName].id(itemId);
 
                         if (!inventoryItem) {
                             throw new Error(`inventory item ${equipmentName} not found with id ${itemId}`);

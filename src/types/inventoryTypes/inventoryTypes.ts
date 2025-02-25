@@ -51,7 +51,7 @@ export interface IInventoryDatabase
     GuildId?: Types.ObjectId;
     PendingRecipes: IPendingRecipe[];
     QuestKeys: IQuestKeyDatabase[];
-    BlessingCooldown: Date;
+    BlessingCooldown?: Date;
     Ships: Types.ObjectId[];
     WeaponSkins: IWeaponSkinDatabase[];
     Upgrades: IUpgradeDatabase[];
@@ -300,7 +300,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     PlayedParkourTutorial: boolean;
     SubscribedToEmailsPersonalized: number;
     InfestedFoundry?: IInfestedFoundryClient;
-    BlessingCooldown: IMongoDate;
+    BlessingCooldown?: IMongoDate;
     CrewShipRawSalvage: IConsumable[];
     CrewMembers: ICrewMember[];
     LotusCustomization: ILotusCustomization;
@@ -309,7 +309,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     LastInventorySync: IOid;
     NextRefill: IMongoDate; // Next time argon crystals will have a decay tick
     FoundToday?: IMiscItem[]; // for Argon Crystals
-    CustomMarkers: ICustomMarkers[];
+    CustomMarkers?: ICustomMarkers[];
     ActiveLandscapeTraps: any[];
     EvolutionProgress?: IEvolutionProgress[];
     RepVotes: any[];

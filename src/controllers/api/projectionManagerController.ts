@@ -50,6 +50,7 @@ const qualityKeywordToNumber: Record<VoidProjectionQuality, number> = {
 // e.g. "/Lotus/Types/Game/Projections/T2VoidProjectionProteaPrimeDBronze" -> ["Lith", "W5", "VPQ_BRONZE"]
 const parseProjection = (typeName: string): [string, string, VoidProjectionQuality] => {
     const relic: IRelic | undefined = ExportRelics[typeName];
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!relic) {
         throw new Error(`Unknown projection ${typeName}`);
     }
