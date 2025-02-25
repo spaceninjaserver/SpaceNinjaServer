@@ -16,6 +16,7 @@ import { logger } from "@/src/utils/logger";
 import worldState from "@/static/fixed_responses/worldState/worldState.json";
 import {
     ExportBoosterPacks,
+    ExportBoosters,
     ExportBundles,
     ExportGear,
     ExportMisc,
@@ -247,7 +248,7 @@ export const handleStoreItemAcquisition = async (
                 purchaseResponse = await handleTypesPurchase(internalName, inventory, quantity);
                 break;
             case "Boosters":
-                purchaseResponse = handleBoostersPurchase(internalName, inventory, durability);
+                purchaseResponse = handleBoostersPurchase(storeItemName, inventory, durability);
                 break;
         }
     }
@@ -367,32 +368,18 @@ const handleTypesPurchase = async (
     }
 };
 
-const boosterCollection = [
-    "/Lotus/Types/Boosters/ResourceAmountBooster",
-    "/Lotus/Types/Boosters/AffinityBooster",
-    "/Lotus/Types/Boosters/ResourceDropChanceBooster",
-    "/Lotus/Types/Boosters/CreditBooster"
-];
-
-const boosterDuration: Record<TRarity, number> = {
-    COMMON: 3 * 86400,
-    UNCOMMON: 7 * 86400,
-    RARE: 30 * 86400,
-    LEGENDARY: 90 * 86400
-};
-
 const handleBoostersPurchase = (
     boosterStoreName: string,
     inventory: TInventoryDatabaseDocument,
     durability: TRarity
 ): { InventoryChanges: IInventoryChanges } => {
-    const ItemType = boosterStoreName.replace("StoreItem", "");
-    if (!boosterCollection.find(x => x == ItemType)) {
-        logger.error(`unknown booster type: ${ItemType}`);
+    if (!(boosterStoreName in ExportBoosters)) {
+        logger.error(`unknown booster type: ${boosterStoreName}`);
         return { InventoryChanges: {} };
     }
 
-    const ExpiryDate = boosterDuration[durability];
+    const ItemType = ExportBoosters[boosterStoreName].typeName;
+    const ExpiryDate = ExportMisc.boosterDurations[durability];
 
     addBooster(ItemType, ExpiryDate, inventory);
 
