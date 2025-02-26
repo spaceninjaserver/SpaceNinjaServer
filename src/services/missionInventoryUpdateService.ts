@@ -176,8 +176,13 @@ export const addMissionInventoryUpdates = (
                 break;
             }
             case "LoreFragmentScans":
-                value.forEach(x => {
-                    inventory.LoreFragmentScans.push(x);
+                value.forEach(clientFragment => {
+                    const fragment = inventory.LoreFragmentScans.find(x => x.ItemType == clientFragment.ItemType);
+                    if (fragment) {
+                        fragment.Progress += clientFragment.Progress;
+                    } else {
+                        inventory.LoreFragmentScans.push(clientFragment);
+                    }
                 });
                 break;
             case "SyndicateId": {
