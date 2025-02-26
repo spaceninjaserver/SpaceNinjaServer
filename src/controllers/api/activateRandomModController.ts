@@ -1,3 +1,4 @@
+import { toOid } from "@/src/helpers/inventoryHelpers";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { addMods, getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
@@ -47,8 +48,13 @@ export const activateRandomModController: RequestHandler = async (req, res) => {
             UpgradeFingerprint: JSON.stringify({ challenge: fingerprintChallenge })
         }) - 1;
     await inventory.save();
+    // For some reason, in this response, the UpgradeFingerprint is simply a nested object and not a string
     res.json({
-        NewMod: inventory.Upgrades[upgradeIndex].toJSON()
+        NewMod: {
+            UpgradeFingerprint: { challenge: fingerprintChallenge },
+            ItemType: inventory.Upgrades[upgradeIndex].ItemType,
+            ItemId: toOid(inventory.Upgrades[upgradeIndex]._id)
+        }
     });
 };
 
