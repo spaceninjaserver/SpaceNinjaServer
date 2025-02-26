@@ -544,6 +544,9 @@ export const applyDefaultUpgrades = (
         for (const defaultUpgrade of defaultUpgrades) {
             modsToGive.push({ ItemType: defaultUpgrade.ItemType, ItemCount: 1 });
             if (defaultUpgrade.Slot != -1) {
+                while (upgrades.length < defaultUpgrade.Slot) {
+                    upgrades.push("");
+                }
                 upgrades[defaultUpgrade.Slot] = defaultUpgrade.ItemType;
             }
         }
