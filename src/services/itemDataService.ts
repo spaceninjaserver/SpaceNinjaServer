@@ -28,6 +28,7 @@ import {
     ExportSentinels,
     ExportWarframes,
     ExportWeapons,
+    IInboxMessage,
     IPowersuit,
     IRecipe,
     IRegion
@@ -149,6 +150,7 @@ export const getKeyChainItems = ({ KeyChain, ChainStage }: IKeyChainRequest): st
     }
 
     const keyChainStage = chainStages[ChainStage];
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!keyChainStage) {
         throw new Error(`KeyChainStage ${ChainStage} not found`);
     }
@@ -163,12 +165,12 @@ export const getKeyChainItems = ({ KeyChain, ChainStage }: IKeyChainRequest): st
 };
 
 export const getLevelKeyRewards = (levelKey: string) => {
-    if (!ExportKeys[levelKey]) {
+    if (!(levelKey in ExportKeys)) {
         throw new Error(`LevelKey ${levelKey} not found`);
     }
 
-    const levelKeyRewards = ExportKeys[levelKey]?.missionReward;
-    const levelKeyRewards2 = ExportKeys[levelKey]?.rewards;
+    const levelKeyRewards = ExportKeys[levelKey].missionReward;
+    const levelKeyRewards2 = ExportKeys[levelKey].rewards;
 
     if (!levelKeyRewards && !levelKeyRewards2) {
         throw new Error(`LevelKey ${levelKey} does not contain either rewards1 or rewards2`);
@@ -182,6 +184,7 @@ export const getLevelKeyRewards = (levelKey: string) => {
 
 export const getNode = (nodeName: string): IRegion => {
     const node = ExportRegions[nodeName];
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!node) {
         throw new Error(`Node ${nodeName} not found`);
     }
@@ -189,7 +192,7 @@ export const getNode = (nodeName: string): IRegion => {
     return node;
 };
 
-export const getQuestCompletionItems = (questKey: string) => {
+export const getQuestCompletionItems = (questKey: string): ITypeCount[] | undefined => {
     const items = (questCompletionItems as unknown as Record<string, ITypeCount[]> | undefined)?.[questKey];
 
     if (!items) {
@@ -200,13 +203,15 @@ export const getQuestCompletionItems = (questKey: string) => {
     return items;
 };
 
-export const getKeyChainMessage = ({ KeyChain, ChainStage }: IKeyChainRequest) => {
+export const getKeyChainMessage = ({ KeyChain, ChainStage }: IKeyChainRequest): IInboxMessage => {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     const chainStages = ExportKeys[KeyChain]?.chainStages;
     if (!chainStages) {
         throw new Error(`KeyChain ${KeyChain} does not contain chain stages`);
     }
 
     const keyChainStage = chainStages[ChainStage];
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!keyChainStage) {
         throw new Error(`KeyChainStage ${ChainStage} not found`);
     }
