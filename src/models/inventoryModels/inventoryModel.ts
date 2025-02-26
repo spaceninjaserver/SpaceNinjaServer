@@ -1084,7 +1084,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Default RailJack
         CrewShipAmmo: [typeCountSchema],
         CrewShipWeapons: [Schema.Types.Mixed],
-        CrewShipWeaponSkins: [Schema.Types.Mixed],
+        CrewShipWeaponSkins: [upgradeSchema],
 
         //NPC Crew and weapon
         CrewMembers: [Schema.Types.Mixed],
@@ -1323,6 +1323,7 @@ export type InventoryDocumentProps = {
     WeaponSkins: Types.DocumentArray<IWeaponSkinDatabase>;
     QuestKeys: Types.DocumentArray<IQuestKeyDatabase>;
     Drones: Types.DocumentArray<IDroneDatabase>;
+    CrewShipWeaponSkins: Types.DocumentArray<IUpgradeDatabase>;
 } & { [K in TEquipmentKey]: Types.DocumentArray<IEquipmentDatabase> };
 
 // eslint-disable-next-line @typescript-eslint/ban-types

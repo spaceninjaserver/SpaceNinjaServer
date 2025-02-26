@@ -25,7 +25,8 @@ import {
     IKubrowPetEggClient,
     ILibraryAvailableDailyTaskInfo,
     ICalendarProgress,
-    IDroneClient
+    IDroneClient,
+    IUpgradeClient
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate } from "../types/genericUpdate";
 import {
@@ -254,8 +255,11 @@ export const addItem = async (
         }
     }
     if (typeName in ExportCustoms) {
-        const inventoryChanges = addSkin(inventory, typeName);
-        return { InventoryChanges: inventoryChanges };
+        if (ExportCustoms[typeName].productCategory == "CrewShipWeaponSkins") {
+            return { InventoryChanges: addCrewShipWeaponSkin(inventory, typeName) };
+        } else {
+            return { InventoryChanges: addSkin(inventory, typeName) };
+        }
     }
     if (typeName in ExportFlavour) {
         const inventoryChanges = addCustomization(inventory, typeName);
@@ -808,6 +812,19 @@ export const addSkin = (
     inventoryChanges.WeaponSkins ??= [];
     (inventoryChanges.WeaponSkins as IWeaponSkinClient[]).push(
         inventory.WeaponSkins[index].toJSON<IWeaponSkinClient>()
+    );
+    return inventoryChanges;
+};
+
+const addCrewShipWeaponSkin = (
+    inventory: TInventoryDatabaseDocument,
+    typeName: string,
+    inventoryChanges: IInventoryChanges = {}
+): IInventoryChanges => {
+    const index = inventory.CrewShipWeaponSkins.push({ ItemType: typeName }) - 1;
+    inventoryChanges.CrewShipWeaponSkins ??= [];
+    (inventoryChanges.CrewShipWeaponSkins as IUpgradeClient[]).push(
+        inventory.CrewShipWeaponSkins[index].toJSON<IUpgradeClient>()
     );
     return inventoryChanges;
 };
