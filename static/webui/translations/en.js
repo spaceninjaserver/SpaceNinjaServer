@@ -102,7 +102,7 @@ dict = {
     cheats_infiniteHelminthMaterials: `Infinite Helminth Materials`,
     cheats_unlockAllShipFeatures: `Unlock All Ship Features`,
     cheats_unlockAllShipDecorations: `Unlock All Ship Decorations`,
-    cheats_unlockAllFlavourItems: `Unlock All <abbr title=\"Animation Sets, Glyphs, Plattes, etc.\">Flavor Items</abbr>`,
+    cheats_unlockAllFlavourItems: `Unlock All <abbr title=\"Animation Sets, Glyphs, Palettes, etc.\">Flavor Items</abbr>`,
     cheats_unlockAllSkins: `Unlock All Skins`,
     cheats_unlockAllCapturaScenes: `Unlock All Captura Scenes`,
     cheats_universalPolarityEverywhere: `Universal Polarity Everywhere`,
