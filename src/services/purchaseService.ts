@@ -164,7 +164,7 @@ export const handlePurchase = async (
                     addMiscItems(inventory, [invItem]);
 
                     purchaseResponse.InventoryChanges.MiscItems ??= [];
-                    (purchaseResponse.InventoryChanges.MiscItems as IMiscItem[]).push(invItem);
+                    purchaseResponse.InventoryChanges.MiscItems.push(invItem);
                 } else if (!config.infiniteRegalAya) {
                     inventory.PrimeTokens -= offer.PrimePrice! * purchaseRequest.PurchaseParams.Quantity;
                 }
@@ -191,11 +191,11 @@ const handleItemPrices = (
         addMiscItems(inventory, [invItem]);
 
         inventoryChanges.MiscItems ??= [];
-        const change = (inventoryChanges.MiscItems as IMiscItem[]).find(x => x.ItemType == item.ItemType);
+        const change = inventoryChanges.MiscItems.find(x => x.ItemType == item.ItemType);
         if (change) {
             change.ItemCount += invItem.ItemCount;
         } else {
-            (inventoryChanges.MiscItems as IMiscItem[]).push(invItem);
+            inventoryChanges.MiscItems.push(invItem);
         }
     }
 };
@@ -251,7 +251,7 @@ export const handleStoreItemAcquisition = async (
         }
         switch (storeCategory) {
             default: {
-                purchaseResponse = await addItem(inventory, internalName, quantity);
+                purchaseResponse = await addItem(inventory, internalName, quantity, true);
                 break;
             }
             case "Types":
@@ -300,16 +300,14 @@ const handleSlotPurchase = (
 
     logger.debug(`added ${slotsPurchased} slot ${slotName}`);
 
-    return {
-        InventoryChanges: {
-            [slotName]: {
-                count: 0,
-                platinum: 1,
-                Slots: slotsPurchased,
-                Extra: slotsPurchased
-            }
-        }
+    const inventoryChanges: IInventoryChanges = {};
+    inventoryChanges[slotName] = {
+        count: 0,
+        platinum: 1,
+        Slots: slotsPurchased,
+        Extra: slotsPurchased
     };
+    return { InventoryChanges: inventoryChanges };
 };
 
 const handleBoosterPackPurchase = async (

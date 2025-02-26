@@ -7,7 +7,7 @@ export const addItemsController: RequestHandler = async (req, res) => {
     const requests = req.body as IAddItemRequest[];
     const inventory = await getInventory(accountId);
     for (const request of requests) {
-        await addItem(inventory, request.ItemType, request.ItemCount);
+        await addItem(inventory, request.ItemType, request.ItemCount, true);
     }
     await inventory.save();
     res.end();

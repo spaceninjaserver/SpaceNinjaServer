@@ -91,7 +91,7 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
         }
         InventoryChanges = {
             ...InventoryChanges,
-            ...(await addItem(inventory, recipe.resultType, recipe.num)).InventoryChanges
+            ...(await addItem(inventory, recipe.resultType, recipe.num, false)).InventoryChanges
         };
         await inventory.save();
         res.json({ InventoryChanges });

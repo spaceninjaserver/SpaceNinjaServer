@@ -1,5 +1,5 @@
 import { IEquipmentClient } from "./inventoryTypes/commonInventoryTypes";
-import { IDroneClient, IInfestedFoundryClient, TEquipmentKey } from "./inventoryTypes/inventoryTypes";
+import { IDroneClient, IInfestedFoundryClient, IMiscItem, TEquipmentKey } from "./inventoryTypes/inventoryTypes";
 
 export interface IPurchaseRequest {
     PurchaseParams: IPurchaseParams;
@@ -22,20 +22,31 @@ export interface IPurchaseParams {
     IsWeekly?: boolean; // for Source 7
 }
 
-export interface ICurrencyChanges {
-    RegularCredits?: number;
-    PremiumCredits?: number;
-    PremiumCreditsFree?: number;
-}
-
 export type IInventoryChanges = {
     [_ in SlotNames]?: IBinChanges;
 } & {
     [_ in TEquipmentKey]?: IEquipmentClient[];
-} & ICurrencyChanges & {
-        InfestedFoundry?: IInfestedFoundryClient;
-        Drones?: IDroneClient[];
-    } & Record<string, IBinChanges | number | object[] | IInfestedFoundryClient>;
+} & {
+    RegularCredits?: number;
+    PremiumCredits?: number;
+    PremiumCreditsFree?: number;
+    InfestedFoundry?: IInfestedFoundryClient;
+    Drones?: IDroneClient[];
+    MiscItems?: IMiscItem[];
+} & Record<
+        Exclude<
+            string,
+            | SlotNames
+            | TEquipmentKey
+            | "RegularCredits"
+            | "PremiumCredits"
+            | "PremiumCreditsFree"
+            | "InfestedFoundry"
+            | "Drones"
+            | "MiscItems"
+        >,
+        number | object[]
+    >;
 
 export interface IAffiliationMods {
     Tag: string;
@@ -51,8 +62,8 @@ export interface IPurchaseResponse {
 }
 
 export type IBinChanges = {
-    count: number;
-    platinum: number;
+    count?: number;
+    platinum?: number;
     Slots: number;
     Extra?: number;
 };
@@ -69,18 +80,21 @@ export type SlotPurchaseName =
     | "TwoCrewShipSalvageSlotItem"
     | "CrewMemberSlotItem";
 
-export type SlotNames =
-    | "SuitBin"
-    | "WeaponBin"
-    | "MechBin"
-    | "PveBonusLoadoutBin"
-    | "SentinelBin"
-    | "SpaceSuitBin"
-    | "SpaceWeaponBin"
-    | "OperatorAmpBin"
-    | "RandomModBin"
-    | "CrewShipSalvageBin"
-    | "CrewMemberBin";
+export const slotNames = [
+    "SuitBin",
+    "WeaponBin",
+    "MechBin",
+    "PveBonusLoadoutBin",
+    "SentinelBin",
+    "SpaceSuitBin",
+    "SpaceWeaponBin",
+    "OperatorAmpBin",
+    "RandomModBin",
+    "CrewShipSalvageBin",
+    "CrewMemberBin"
+] as const;
+
+export type SlotNames = (typeof slotNames)[number];
 
 export type SlotPurchase = {
     [P in SlotPurchaseName]: { name: SlotNames; slotsPerPurchase: number };

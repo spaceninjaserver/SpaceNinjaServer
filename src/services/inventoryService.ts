@@ -5,7 +5,7 @@ import {
 } from "@/src/models/inventoryModels/inventoryModel";
 import { config } from "@/src/services/configService";
 import { HydratedDocument, Types } from "mongoose";
-import { SlotNames, IInventoryChanges, IBinChanges, ICurrencyChanges } from "@/src/types/purchaseTypes";
+import { SlotNames, IInventoryChanges, IBinChanges, slotNames } from "@/src/types/purchaseTypes";
 import {
     IChallengeProgress,
     IConsumable,
@@ -126,13 +126,17 @@ export const combineInventoryChanges = (InventoryChanges: IInventoryChanges, del
             for (const item of right) {
                 left.push(item);
             }
-        } else if (typeof delta[key] == "object") {
-            console.assert(key.substring(-3) == "Bin");
-            console.assert(key != "InfestedFoundry");
-            const left = InventoryChanges[key] as IBinChanges;
-            const right = delta[key] as IBinChanges;
-            left.count += right.count;
-            left.platinum += right.platinum;
+        } else if (slotNames.indexOf(key as SlotNames) != -1) {
+            const left = InventoryChanges[key as SlotNames]!;
+            const right = delta[key as SlotNames]!;
+            if (right.count) {
+                left.count ??= 0;
+                left.count += right.count;
+            }
+            if (right.platinum) {
+                left.platinum ??= 0;
+                left.platinum += right.platinum;
+            }
             left.Slots += right.Slots;
             if (right.Extra) {
                 left.Extra ??= 0;
@@ -159,10 +163,32 @@ export const getInventory = async (
     return inventory;
 };
 
+const occupySlot = (
+    inventory: TInventoryDatabaseDocument,
+    bin: InventorySlot,
+    premiumPurchase: boolean
+): IInventoryChanges => {
+    const slotChanges = {
+        Slots: 0,
+        Extra: 0
+    };
+    if (premiumPurchase) {
+        slotChanges.Extra += 1;
+    } else {
+        // { count: 1, platinum: 0, Slots: -1 }
+        slotChanges.Slots -= 1;
+    }
+    updateSlots(inventory, bin, slotChanges.Slots, slotChanges.Extra);
+    const inventoryChanges: IInventoryChanges = {};
+    inventoryChanges[bin] = slotChanges satisfies IBinChanges;
+    return inventoryChanges;
+};
+
 export const addItem = async (
     inventory: TInventoryDatabaseDocument,
     typeName: string,
-    quantity: number = 1
+    quantity: number = 1,
+    premiumPurchase: boolean = false
 ): Promise<{ InventoryChanges: IInventoryChanges }> => {
     // Bundles are technically StoreItems but a) they don't have a normal counterpart, and b) they are used in non-StoreItem contexts, e.g. email attachments.
     if (typeName in ExportBundles) {
@@ -302,14 +328,13 @@ export const addItem = async (
             const inventoryChanges = addEquipment(inventory, weapon.productCategory, typeName);
             if (weapon.additionalItems) {
                 for (const item of weapon.additionalItems) {
-                    combineInventoryChanges(inventoryChanges, await addItem(inventory, item, 1));
+                    combineInventoryChanges(inventoryChanges, (await addItem(inventory, item, 1)).InventoryChanges);
                 }
             }
-            updateSlots(inventory, InventorySlot.WEAPONS, 0, 1);
             return {
                 InventoryChanges: {
                     ...inventoryChanges,
-                    WeaponBin: { count: 1, platinum: 0, Slots: -1 }
+                    ...occupySlot(inventory, InventorySlot.WEAPONS, premiumPurchase)
                 }
             };
         } else {
@@ -378,44 +403,26 @@ export const addItem = async (
         case "Powersuits":
             switch (typeName.substr(1).split("/")[2]) {
                 default: {
-                    const inventoryChanges = addPowerSuit(inventory, typeName);
-                    updateSlots(inventory, InventorySlot.SUITS, 0, 1);
                     return {
                         InventoryChanges: {
-                            ...inventoryChanges,
-                            SuitBin: {
-                                count: 1,
-                                platinum: 0,
-                                Slots: -1
-                            }
+                            ...addPowerSuit(inventory, typeName),
+                            ...occupySlot(inventory, InventorySlot.SUITS, premiumPurchase)
                         }
                     };
                 }
                 case "Archwing": {
-                    const inventoryChanges = addSpaceSuit(inventory, typeName);
-                    updateSlots(inventory, InventorySlot.SPACESUITS, 0, 1);
                     return {
                         InventoryChanges: {
-                            ...inventoryChanges,
-                            SpaceSuitBin: {
-                                count: 1,
-                                platinum: 0,
-                                Slots: -1
-                            }
+                            ...addSpaceSuit(inventory, typeName),
+                            ...occupySlot(inventory, InventorySlot.SPACESUITS, premiumPurchase)
                         }
                     };
                 }
                 case "EntratiMech": {
-                    const inventoryChanges = addMechSuit(inventory, typeName);
-                    updateSlots(inventory, InventorySlot.MECHSUITS, 0, 1);
                     return {
                         InventoryChanges: {
-                            ...inventoryChanges,
-                            MechBin: {
-                                count: 1,
-                                platinum: 0,
-                                Slots: -1
-                            }
+                            ...addMechSuit(inventory, typeName),
+                            ...occupySlot(inventory, InventorySlot.MECHSUITS, premiumPurchase)
                         }
                     };
                 }
@@ -446,12 +453,10 @@ export const addItem = async (
         case "Types":
             switch (typeName.substr(1).split("/")[2]) {
                 case "Sentinels": {
-                    const inventoryChanges = addSentinel(inventory, typeName);
-                    updateSlots(inventory, InventorySlot.SENTINELS, 0, 1);
                     return {
                         InventoryChanges: {
-                            ...inventoryChanges,
-                            SentinelBin: { count: 1, platinum: 0, Slots: -1 }
+                            ...addSentinel(inventory, typeName),
+                            ...occupySlot(inventory, InventorySlot.SENTINELS, premiumPurchase)
                         }
                     };
                 }
@@ -531,9 +536,9 @@ export const addItems = async (
     let inventoryDelta;
     for (const item of items) {
         if (typeof item === "string") {
-            inventoryDelta = await addItem(inventory, item);
+            inventoryDelta = await addItem(inventory, item, 1, true);
         } else {
-            inventoryDelta = await addItem(inventory, item.ItemType, item.ItemCount);
+            inventoryDelta = await addItem(inventory, item.ItemType, item.ItemCount, true);
         }
         combineInventoryChanges(inventoryChanges, inventoryDelta.InventoryChanges);
     }
@@ -682,8 +687,8 @@ export const updateCurrency = (
     inventory: TInventoryDatabaseDocument,
     price: number,
     usePremium: boolean
-): ICurrencyChanges => {
-    const currencyChanges: ICurrencyChanges = {};
+): IInventoryChanges => {
+    const currencyChanges: IInventoryChanges = {};
     if (price != 0 && isCurrencyTracked(usePremium)) {
         if (usePremium) {
             if (inventory.PremiumCreditsFree > 0) {

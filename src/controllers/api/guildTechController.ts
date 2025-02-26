@@ -54,10 +54,8 @@ export const guildTechController: RequestHandler = async (req, res) => {
             }
         }
         addMiscItems(inventory, miscItemChanges);
-        const inventoryChanges: IInventoryChanges = {
-            ...updateCurrency(inventory, contributions.RegularCredits, false),
-            MiscItems: miscItemChanges
-        };
+        const inventoryChanges: IInventoryChanges = updateCurrency(inventory, contributions.RegularCredits, false);
+        inventoryChanges.MiscItems = miscItemChanges;
 
         if (techProject.ReqCredits == 0 && !techProject.ReqItems.find(x => x.ItemCount > 0)) {
             // This research is now fully funded.
