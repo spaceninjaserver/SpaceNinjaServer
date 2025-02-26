@@ -435,7 +435,7 @@ export enum InventorySlot {
 }
 
 export interface ISlots {
-    Extra: number; // can be undefined, but not if used via mongoose
+    Extra?: number;
     Slots: number;
 }
 

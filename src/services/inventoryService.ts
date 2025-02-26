@@ -668,9 +668,8 @@ export const updateSlots = (
     extraAmount: number
 ): void => {
     inventory[slotName].Slots += slotAmount;
-    if (inventory[slotName].Extra === undefined) {
-        inventory[slotName].Extra = extraAmount;
-    } else {
+    if (extraAmount != 0) {
+        inventory[slotName].Extra ??= 0;
         inventory[slotName].Extra += extraAmount;
     }
 };
