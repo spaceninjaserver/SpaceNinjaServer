@@ -14,7 +14,7 @@ import {
     ExportVirtuals
 } from "warframe-public-export-plus";
 import { applyCheatsToInfestedFoundry, handleSubsumeCompletion } from "./infestedFoundryController";
-import { allDailyAffiliationKeys } from "@/src/services/inventoryService";
+import { allDailyAffiliationKeys, createLibraryDailyTask } from "@/src/services/inventoryService";
 
 export const inventoryController: RequestHandler = async (request, response) => {
     const account = await getAccountForRequest(request);
@@ -36,6 +36,9 @@ export const inventoryController: RequestHandler = async (request, response) => 
             inventory[key] = 16000 + inventory.PlayerLevel * 500;
         }
         inventory.DailyFocus = 250000 + inventory.PlayerLevel * 5000;
+
+        inventory.LibraryAvailableDailyTaskInfo = createLibraryDailyTask();
+
         await inventory.save();
     }
 

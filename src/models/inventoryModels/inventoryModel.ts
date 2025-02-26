@@ -68,7 +68,7 @@ import {
     ICalendarProgress,
     IPendingCouponDatabase,
     IPendingCouponClient,
-    ILibraryAvailableDailyTaskInfo,
+    ILibraryDailyTaskInfo,
     IDroneDatabase,
     IDroneClient
 } from "../../types/inventoryTypes/inventoryTypes";
@@ -950,11 +950,12 @@ pendingCouponSchema.set("toJSON", {
     }
 });
 
-const libraryAvailableDailyTaskInfoSchema = new Schema<ILibraryAvailableDailyTaskInfo>(
+const libraryDailyTaskInfoSchema = new Schema<ILibraryDailyTaskInfo>(
     {
         EnemyTypes: [String],
         EnemyLocTag: String,
         EnemyIcon: String,
+        Scans: Number,
         ScansRequired: Number,
         RewardStoreItem: String,
         RewardQuantity: Number,
@@ -1209,7 +1210,8 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Cephalon Simaris Entries Example:"TargetType"+"Scans"(1-10)+"Completed": true|false
         LibraryPersonalProgress: [Schema.Types.Mixed],
         //Cephalon Simaris Daily Task
-        LibraryAvailableDailyTaskInfo: libraryAvailableDailyTaskInfoSchema,
+        LibraryAvailableDailyTaskInfo: libraryDailyTaskInfoSchema,
+        LibraryActiveDailyTaskInfo: libraryDailyTaskInfoSchema,
 
         //https://warframe.fandom.com/wiki/Invasion
         InvasionChainProgress: [Schema.Types.Mixed],

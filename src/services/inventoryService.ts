@@ -23,7 +23,7 @@ import {
     IInventoryDatabase,
     IKubrowPetEggDatabase,
     IKubrowPetEggClient,
-    ILibraryAvailableDailyTaskInfo,
+    ILibraryDailyTaskInfo,
     ICalendarProgress,
     IDroneClient,
     IUpgradeClient
@@ -42,6 +42,7 @@ import {
     ExportBundles,
     ExportCustoms,
     ExportDrones,
+    ExportEnemies,
     ExportFlavour,
     ExportFusionBundles,
     ExportGear,
@@ -63,6 +64,8 @@ import { generateRewardSeed } from "@/src/controllers/api/getNewRewardSeedContro
 import { addStartingGear } from "@/src/controllers/api/giveStartingGearController";
 import { addQuestKey, completeQuest } from "@/src/services/questService";
 import { handleBundleAcqusition } from "./purchaseService";
+import libraryDailyTasks from "@/static/fixed_responses/libraryDailyTasks.json";
+import { getRandomElement, getRandomInt } from "./rngService";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
@@ -77,7 +80,7 @@ export const createInventory = async (
             ReceivedStartingGear: config.skipTutorial
         });
 
-        inventory.LibraryAvailableDailyTaskInfo = createLibraryAvailableDailyTaskInfo();
+        inventory.LibraryAvailableDailyTaskInfo = createLibraryDailyTask();
         inventory.CalendarProgress = createCalendar();
         inventory.RewardSeed = generateRewardSeed();
         inventory.DuviriInfo = {
@@ -1193,15 +1196,19 @@ export const addKeyChainItems = async (
 
     return inventoryChanges;
 };
-const createLibraryAvailableDailyTaskInfo = (): ILibraryAvailableDailyTaskInfo => {
+
+export const createLibraryDailyTask = (): ILibraryDailyTaskInfo => {
+    const enemyTypes = getRandomElement(libraryDailyTasks);
+    const enemyAvatar = ExportEnemies.avatars[enemyTypes[0]];
+    const scansRequired = getRandomInt(2, 4);
     return {
-        EnemyTypes: ["/Lotus/Types/Enemies/Orokin/RifleLancerAvatar"],
-        EnemyLocTag: "/Lotus/Language/Game/CorruptedLancer",
-        EnemyIcon: "/Lotus/Interface/Icons/Npcs/OrokinRifleLancerAvatar.png",
-        ScansRequired: 3,
-        RewardStoreItem: "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/UncommonFusionBundle",
-        RewardQuantity: 7,
-        RewardStanding: 7500
+        EnemyTypes: enemyTypes,
+        EnemyLocTag: enemyAvatar.name,
+        EnemyIcon: enemyAvatar.icon!,
+        ScansRequired: scansRequired,
+        RewardStoreItem: "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/RareFusionBundle",
+        RewardQuantity: Math.trunc(scansRequired * 2.5),
+        RewardStanding: 2500 * scansRequired
     };
 };
 

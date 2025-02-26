@@ -185,6 +185,22 @@ export const addMissionInventoryUpdates = (
                     }
                 });
                 break;
+            case "LibraryScans":
+                value.forEach(scan => {
+                    if (inventory.LibraryActiveDailyTaskInfo) {
+                        if (inventory.LibraryActiveDailyTaskInfo.EnemyTypes.find(x => x == scan.EnemyType)) {
+                            inventory.LibraryActiveDailyTaskInfo.Scans ??= 0;
+                            inventory.LibraryActiveDailyTaskInfo.Scans += scan.Count;
+                        } else {
+                            logger.warn(
+                                `ignoring synthesis of ${scan.EnemyType} as it's not part of the active daily task`
+                            );
+                        }
+                    } else {
+                        logger.warn(`no library daily task active, ignoring synthesis of ${scan.EnemyType}`);
+                    }
+                });
+                break;
             case "SyndicateId": {
                 inventory.CompletedSyndicates.push(value);
                 break;

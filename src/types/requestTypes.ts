@@ -92,6 +92,12 @@ export type IMissionInventoryUpdateRequest = {
         IsFinalWave: boolean;
         Participants: IVoidTearParticipantInfo[];
     };
+    LibraryScans?: {
+        EnemyType: string;
+        Count: number;
+        CodexScanCount: number;
+        Standing: number;
+    }[];
 } & {
     [K in TEquipmentKey]?: IEquipmentClient[];
 };

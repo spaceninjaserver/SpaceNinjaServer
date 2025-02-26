@@ -1,4 +1,5 @@
 import express from "express";
+import { abandonLibraryDailyTaskController } from "@/src/controllers/api/abandonLibraryDailyTaskController";
 import { activateRandomModController } from "@/src/controllers/api/activateRandomModController";
 import { addFriendImageController } from "@/src/controllers/api/addFriendImageController";
 import { arcaneCommonController } from "@/src/controllers/api/arcaneCommonController";
@@ -7,6 +8,7 @@ import { artifactsController } from "@/src/controllers/api/artifactsController";
 import { changeDojoRootController } from "@/src/controllers/api/changeDojoRootController";
 import { checkDailyMissionBonusController } from "@/src/controllers/api/checkDailyMissionBonusController";
 import { claimCompletedRecipeController } from "@/src/controllers/api/claimCompletedRecipeController";
+import { claimLibraryDailyTaskRewardController } from "@/src/controllers/api/claimLibraryDailyTaskRewardController";
 import { clearDialogueHistoryController } from "@/src/controllers/api/clearDialogueHistoryController";
 import { completeRandomModChallengeController } from "@/src/controllers/api/completeRandomModChallengeController";
 import { createGuildController } from "@/src/controllers/api/createGuildController";
@@ -75,6 +77,7 @@ import { setSupportedSyndicateController } from "@/src/controllers/api/setSuppor
 import { setWeaponSkillTreeController } from "@/src/controllers/api/setWeaponSkillTreeController";
 import { shipDecorationsController } from "@/src/controllers/api/shipDecorationsController";
 import { startDojoRecipeController } from "@/src/controllers/api/startDojoRecipeController";
+import { startLibraryDailyTaskController } from "@/src/controllers/api/startLibraryDailyTaskController";
 import { startLibraryPersonalTargetController } from "@/src/controllers/api/startLibraryPersonalTargetController";
 import { startRecipeController } from "@/src/controllers/api/startRecipeController";
 import { stepSequencersController } from "@/src/controllers/api/stepSequencersController";
@@ -93,7 +96,9 @@ import { upgradesController } from "@/src/controllers/api/upgradesController";
 const apiRouter = express.Router();
 
 // get
+apiRouter.get("/abandonLibraryDailyTask.php", abandonLibraryDailyTaskController);
 apiRouter.get("/checkDailyMissionBonus.php", checkDailyMissionBonusController);
+apiRouter.get("/claimLibraryDailyTaskReward.php", claimLibraryDailyTaskRewardController);
 apiRouter.get("/credits.php", creditsController);
 apiRouter.get("/deleteSession.php", deleteSessionController);
 apiRouter.get("/dojo", dojoController);
@@ -121,6 +126,7 @@ apiRouter.get("/setActiveQuest.php", setActiveQuestController);
 apiRouter.get("/setActiveShip.php", setActiveShipController);
 apiRouter.get("/setBootLocation.php", setBootLocationController);
 apiRouter.get("/setSupportedSyndicate.php", setSupportedSyndicateController);
+apiRouter.get("/startLibraryDailyTask.php", startLibraryDailyTaskController);
 apiRouter.get("/startLibraryPersonalTarget.php", startLibraryPersonalTargetController);
 apiRouter.get("/surveys.php", surveysController);
 apiRouter.get("/updateSession.php", updateSessionGetController);

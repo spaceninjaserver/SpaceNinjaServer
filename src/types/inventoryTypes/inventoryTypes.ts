@@ -320,7 +320,8 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     LibraryPersonalTarget: string;
     LibraryPersonalProgress: ILibraryPersonalProgress[];
     CollectibleSeries: ICollectibleSery[];
-    LibraryAvailableDailyTaskInfo: ILibraryAvailableDailyTaskInfo;
+    LibraryAvailableDailyTaskInfo?: ILibraryDailyTaskInfo;
+    LibraryActiveDailyTaskInfo?: ILibraryDailyTaskInfo;
     HasResetAccount: boolean;
     PendingCoupon?: IPendingCouponClient;
     Harvestable: boolean;
@@ -658,10 +659,11 @@ export interface ILastSortieReward {
     Manifest: string;
 }
 
-export interface ILibraryAvailableDailyTaskInfo {
+export interface ILibraryDailyTaskInfo {
     EnemyTypes: string[];
     EnemyLocTag: string;
     EnemyIcon: string;
+    Scans?: number;
     ScansRequired: number;
     RewardStoreItem: string;
     RewardQuantity: number;
