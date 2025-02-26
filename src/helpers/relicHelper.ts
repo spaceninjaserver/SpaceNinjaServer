@@ -1,7 +1,7 @@
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { IVoidTearParticipantInfo } from "@/src/types/requestTypes";
 import { ExportRelics, ExportRewards, TRarity } from "warframe-public-export-plus";
-import { getRandomWeightedReward2 } from "@/src/services/rngService";
+import { getRandomWeightedReward2, IRngResult } from "@/src/services/rngService";
 import { logger } from "@/src/utils/logger";
 import { addMiscItems } from "@/src/services/inventoryService";
 import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
@@ -9,7 +9,7 @@ import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
 export const crackRelic = async (
     inventory: TInventoryDatabaseDocument,
     participant: IVoidTearParticipantInfo
-): Promise<void> => {
+): Promise<IRngResult> => {
     const relic = ExportRelics[participant.VoidProjection];
     const weights = refinementToWeights[relic.quality];
     logger.debug(`opening a relic of quality ${relic.quality}; rarity weights are`, weights);
@@ -30,6 +30,8 @@ export const crackRelic = async (
 
     // Give reward
     await handleStoreItemAcquisition(reward.type, inventory, reward.itemCount);
+
+    return reward;
 };
 
 const refinementToWeights = {
