@@ -121,9 +121,6 @@ export interface IRewardInfo {
 
 export type IMissionStatus = "GS_SUCCESS" | "GS_FAILURE" | "GS_DUMPED" | "GS_QUIT" | "GS_INTERRUPTED";
 
-export interface IInventorySlotsRequest {
-    Bin: "PveBonusLoadoutBin";
-}
 export interface IUpdateGlyphRequest {
     AvatarImageType: string;
     AvatarImage: string;

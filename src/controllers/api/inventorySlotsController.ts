@@ -3,6 +3,7 @@ import { getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { RequestHandler } from "express";
 import { updateSlots } from "@/src/services/inventoryService";
 import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
+import { logger } from "@/src/utils/logger";
 
 /*
     loadout slots are additionally purchased slots only
@@ -20,14 +21,20 @@ import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
 
 export const inventorySlotsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    //const body = JSON.parse(req.body as string) as IInventorySlotsRequest;
+    const body = JSON.parse(req.body as string) as IInventorySlotsRequest;
 
-    //TODO: check which slot was purchased because pvpBonus is also possible
+    if (body.Bin != InventorySlot.SUITS && body.Bin != InventorySlot.PVE_LOADOUTS) {
+        logger.warn(`unexpected slot purchase of type ${body.Bin}, account may be overcharged`);
+    }
 
     const inventory = await getInventory(accountId);
     const currencyChanges = updateCurrency(inventory, 20, true);
-    updateSlots(inventory, InventorySlot.PVE_LOADOUTS, 1, 1);
+    updateSlots(inventory, body.Bin, 1, 1);
     await inventory.save();
 
     res.json({ InventoryChanges: currencyChanges });
 };
+
+interface IInventorySlotsRequest {
+    Bin: InventorySlot;
+}
