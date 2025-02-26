@@ -125,5 +125,6 @@ dict = {
     cheats_quests_resetAll: `Reset All Quests`,
     cheats_quests_giveAll: `Give All Quests`,
     import_importNote: `You can provide a full or partial inventory response (client respresentation) here. All fields that are supported by the importer <b>will be overwritten</b> in your account.`,
-    import_submit: `Submit`
+    import_submit: `Submit`,
+    prettier_sucks_ass: ``
 };
