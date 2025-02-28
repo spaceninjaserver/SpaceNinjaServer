@@ -7,6 +7,8 @@ import { addMiscItems, getInventory, updateCurrency } from "@/src/services/inven
 import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { Types } from "mongoose";
 import { ISpectreLoadout } from "@/src/types/inventoryTypes/inventoryTypes";
+import { toOid } from "@/src/helpers/inventoryHelpers";
+import { ExportWeapons } from "warframe-public-export-plus";
 
 interface IStartRecipeRequest {
     RecipeName: string;
@@ -26,23 +28,40 @@ export const startRecipeController: RequestHandler = async (req, res) => {
         throw new Error(`unknown recipe ${recipeName}`);
     }
 
-    const ingredientsInverse = recipe.ingredients.map(component => ({
-        ItemType: component.ItemType,
-        ItemCount: component.ItemCount * -1
-    }));
-
     const inventory = await getInventory(accountId);
     updateCurrency(inventory, recipe.buildPrice, false);
-    addMiscItems(inventory, ingredientsInverse);
 
-    //buildtime is in seconds
-    const completionDate = new Date(Date.now() + recipe.buildTime * unixTimesInMs.second);
+    const pr =
+        inventory.PendingRecipes[
+            inventory.PendingRecipes.push({
+                ItemType: recipeName,
+                CompletionDate: new Date(Date.now() + recipe.buildTime * unixTimesInMs.second),
+                _id: new Types.ObjectId()
+            }) - 1
+        ];
 
-    inventory.PendingRecipes.push({
-        ItemType: recipeName,
-        CompletionDate: completionDate,
-        _id: new Types.ObjectId()
-    });
+    for (let i = 0; i != recipe.ingredients.length; ++i) {
+        if (startRecipeRequest.Ids[i]) {
+            const category = ExportWeapons[recipe.ingredients[i].ItemType].productCategory;
+            if (category != "LongGuns" && category != "Pistols" && category != "Melee") {
+                throw new Error(`unexpected equipment ingredient type: ${category}`);
+            }
+            const equipmentIndex = inventory[category].findIndex(x => x._id.equals(startRecipeRequest.Ids[i]));
+            if (equipmentIndex == -1) {
+                throw new Error(`could not find equipment item to use for recipe`);
+            }
+            pr[category] ??= [];
+            pr[category].push(inventory[category][equipmentIndex]);
+            inventory[category].splice(equipmentIndex, 1);
+        } else {
+            addMiscItems(inventory, [
+                {
+                    ItemType: recipe.ingredients[i].ItemType,
+                    ItemCount: recipe.ingredients[i].ItemCount * -1
+                }
+            ]);
+        }
+    }
 
     if (recipe.secretIngredientAction == "SIA_SPECTRE_LOADOUT_COPY") {
         const spectreLoadout: ISpectreLoadout = {
@@ -98,9 +117,7 @@ export const startRecipeController: RequestHandler = async (req, res) => {
         }
     }
 
-    const newInventory = await inventory.save();
+    await inventory.save();
 
-    res.json({
-        RecipeId: { $oid: newInventory.PendingRecipes[newInventory.PendingRecipes.length - 1]._id.toString() }
-    });
+    res.json({ RecipeId: toOid(pr._id) });
 };

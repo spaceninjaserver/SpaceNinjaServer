@@ -49,7 +49,7 @@ export interface IInventoryDatabase
     LoadOutPresets: Types.ObjectId; // LoadOutPresets changed from ILoadOutPresets to Types.ObjectId for population
     Mailbox?: IMailboxDatabase;
     GuildId?: Types.ObjectId;
-    PendingRecipes: IPendingRecipe[];
+    PendingRecipes: IPendingRecipeDatabase[];
     QuestKeys: IQuestKeyDatabase[];
     BlessingCooldown?: Date;
     Ships: Types.ObjectId[];
@@ -143,10 +143,6 @@ export type TSolarMapRegion =
 
 //TODO: perhaps split response and database into their own files
 
-export interface IPendingRecipeResponse extends Omit<IPendingRecipe, "CompletionDate"> {
-    CompletionDate: IMongoDate;
-}
-
 export interface IDailyAffiliations {
     DailyAffiliation: number;
     DailyAffiliationPvp: number;
@@ -217,7 +213,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     XPInfo: ITypeXPItem[];
     Recipes: ITypeCount[];
     WeaponSkins: IWeaponSkinClient[];
-    PendingRecipes: IPendingRecipeResponse[];
+    PendingRecipes: IPendingRecipeClient[];
     TrainingDate: IMongoDate;
     PlayerLevel: number;
     Staff?: boolean;
@@ -783,12 +779,20 @@ export interface IPendingCouponClient {
     Discount: number;
 }
 
-export interface IPendingRecipe {
+export interface IPendingRecipeDatabase {
     ItemType: string;
     CompletionDate: Date;
     ItemId: IOid;
     TargetItemId?: string; // likely related to liches
     TargetFingerprint?: string; // likely related to liches
+    LongGuns?: IEquipmentDatabase[];
+    Pistols?: IEquipmentDatabase[];
+    Melee?: IEquipmentDatabase[];
+}
+
+export interface IPendingRecipeClient
+    extends Omit<IPendingRecipeDatabase, "CompletionDate" | "LongGuns" | "Pistols" | "Melee"> {
+    CompletionDate: IMongoDate;
 }
 
 export interface IPendingTrade {

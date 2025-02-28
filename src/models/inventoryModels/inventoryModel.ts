@@ -9,8 +9,8 @@ import {
     ISlots,
     IMailboxDatabase,
     IDuviriInfo,
-    IPendingRecipe as IPendingRecipeDatabase,
-    IPendingRecipeResponse,
+    IPendingRecipeDatabase,
+    IPendingRecipeClient,
     ITypeCount,
     IFocusXP,
     IFocusUpgrade,
@@ -107,29 +107,6 @@ const focusUpgradeSchema = new Schema<IFocusUpgrade>(
     },
     { _id: false }
 );
-
-const pendingRecipeSchema = new Schema<IPendingRecipeDatabase>(
-    {
-        ItemType: String,
-        CompletionDate: Date
-    },
-    { id: false }
-);
-
-pendingRecipeSchema.virtual("ItemId").get(function () {
-    return { $oid: this._id.toString() };
-});
-
-pendingRecipeSchema.set("toJSON", {
-    virtuals: true,
-    transform(_document, returnedObject) {
-        delete returnedObject._id;
-        delete returnedObject.__v;
-        (returnedObject as IPendingRecipeResponse).CompletionDate = {
-            $date: { $numberLong: (returnedObject as IPendingRecipeDatabase).CompletionDate.getTime().toString() }
-        };
-    }
-});
 
 const polaritySchema = new Schema<IPolarity>(
     {
@@ -863,6 +840,35 @@ const equipmentFields: Record<string, { type: (typeof EquipmentSchema)[] }> = {}
 
 equipmentKeys.forEach(key => {
     equipmentFields[key] = { type: [EquipmentSchema] };
+});
+
+const pendingRecipeSchema = new Schema<IPendingRecipeDatabase>(
+    {
+        ItemType: String,
+        CompletionDate: Date,
+        LongGuns: { type: [EquipmentSchema], default: undefined },
+        Pistols: { type: [EquipmentSchema], default: undefined },
+        Melee: { type: [EquipmentSchema], default: undefined }
+    },
+    { id: false }
+);
+
+pendingRecipeSchema.virtual("ItemId").get(function () {
+    return { $oid: this._id.toString() };
+});
+
+pendingRecipeSchema.set("toJSON", {
+    virtuals: true,
+    transform(_document, returnedObject) {
+        delete returnedObject._id;
+        delete returnedObject.__v;
+        delete returnedObject.LongGuns;
+        delete returnedObject.Pistols;
+        delete returnedObject.Melees;
+        (returnedObject as IPendingRecipeClient).CompletionDate = {
+            $date: { $numberLong: (returnedObject as IPendingRecipeDatabase).CompletionDate.getTime().toString() }
+        };
+    }
 });
 
 const infestedFoundrySchema = new Schema<IInfestedFoundryDatabase>(

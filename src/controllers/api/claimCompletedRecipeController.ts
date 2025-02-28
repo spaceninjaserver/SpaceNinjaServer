@@ -8,6 +8,9 @@ import { IOid } from "@/src/types/commonTypes";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getInventory, updateCurrency, addItem, addMiscItems, addRecipes } from "@/src/services/inventoryService";
+import { IInventoryChanges } from "@/src/types/purchaseTypes";
+import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 
 export interface IClaimCompletedRecipeRequest {
     RecipeIds: IOid[];
@@ -37,15 +40,35 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
     }
 
     if (req.query.cancel) {
-        const currencyChanges = updateCurrency(inventory, recipe.buildPrice * -1, false);
-        addMiscItems(inventory, recipe.ingredients);
+        const inventoryChanges: IInventoryChanges = {
+            ...updateCurrency(inventory, recipe.buildPrice * -1, false)
+        };
+
+        const nonMiscItemIngredients = new Set();
+        for (const category of ["LongGuns", "Pistols", "Melee"] as const) {
+            if (pendingRecipe[category]) {
+                pendingRecipe[category].forEach(item => {
+                    const index = inventory[category].push(item) - 1;
+                    inventoryChanges[category] ??= [];
+                    inventoryChanges[category].push(inventory[category][index].toJSON<IEquipmentClient>());
+                    nonMiscItemIngredients.add(item.ItemType);
+
+                    inventoryChanges.WeaponBin ??= { Slots: 0 };
+                    inventoryChanges.WeaponBin.Slots -= 1;
+                });
+            }
+        }
+        const miscItemChanges: IMiscItem[] = [];
+        recipe.ingredients.forEach(ingredient => {
+            if (!nonMiscItemIngredients.has(ingredient.ItemType)) {
+                miscItemChanges.push(ingredient);
+            }
+        });
+        addMiscItems(inventory, miscItemChanges);
+        inventoryChanges.MiscItems = miscItemChanges;
 
         await inventory.save();
-        // Not a bug: In the specific case of cancelling a recipe, InventoryChanges are expected to be the root.
-        res.json({
-            ...currencyChanges,
-            MiscItems: recipe.ingredients
-        });
+        res.json(inventoryChanges); // Not a bug: In the specific case of cancelling a recipe, InventoryChanges are expected to be the root.
     } else {
         logger.debug("Claiming Recipe", { recipe, pendingRecipe });
 
