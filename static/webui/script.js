@@ -207,11 +207,16 @@ function fetchItemList() {
                         document.getElementById("changeSyndicate").appendChild(option);
                         itemMap[item.uniqueName] = { ...item, type };
                     });
-                } else if (type != "badItems") {
+                } else {
                     items.forEach(item => {
-                        if (item.uniqueName in data.badItems) {
-                            item.name += " " + loc("code_badItem");
-                        } else if (item.uniqueName.substr(0, 18) != "/Lotus/Types/Game/") {
+                        if ("badReason" in item) {
+                            if (item.badReason == "starter") {
+                                item.name = loc("code_starter").split("|MOD|").join(item.name);
+                            } else {
+                                item.name += " " + loc("code_badItem");
+                            }
+                        }
+                        if (item.uniqueName.substr(0, 18) != "/Lotus/Types/Game/" && item.badReason != "notraw") {
                             const option = document.createElement("option");
                             option.setAttribute("data-key", item.uniqueName);
                             option.value = item.name;

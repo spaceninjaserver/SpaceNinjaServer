@@ -19,6 +19,7 @@ dict = {
     code_kDrive: `К-Драйв`,
     code_legendaryCore: `Легендарное ядро`,
     code_traumaticPeculiar: `Травмирующая Странность`,
+    code_starter: `[UNTRANSLATED] |MOD| (Flawed)`,
     code_badItem: `(Самозванец)`,
     code_maxRank: `Максимальный ранг`,
     code_rename: `Переименовать`,

@@ -18,6 +18,7 @@ dict = {
     code_kDrive: `K-Drive`,
     code_legendaryCore: `Legendary Core`,
     code_traumaticPeculiar: `Traumatic Peculiar`,
+    code_starter: `|MOD| (Flawed)`,
     code_badItem: `(Imposter)`,
     code_maxRank: `Max Rank`,
     code_rename: `Rename`,

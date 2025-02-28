@@ -20,6 +20,7 @@ interface ListedItem {
     name: string;
     fusionLimit?: number;
     exalted?: string[];
+    badReason?: "starter" | "frivolous" | "notraw";
 }
 
 const getItemListsController: RequestHandler = (req, response) => {
@@ -132,16 +133,20 @@ const getItemListsController: RequestHandler = (req, response) => {
     }
 
     res.mods = [];
-    const badItems: Record<string, boolean> = {};
     for (const [uniqueName, upgrade] of Object.entries(ExportUpgrades)) {
-        res.mods.push({
+        const mod: ListedItem = {
             uniqueName,
             name: getString(upgrade.name, lang),
             fusionLimit: upgrade.fusionLimit
-        });
-        if (upgrade.isStarter || upgrade.isFrivolous || upgrade.upgradeEntries) {
-            badItems[uniqueName] = true;
+        };
+        if (upgrade.isStarter) {
+            mod.badReason = "starter";
+        } else if (upgrade.isFrivolous) {
+            mod.badReason = "frivolous";
+        } else if (upgrade.upgradeEntries) {
+            mod.badReason = "notraw";
         }
+        res.mods.push(mod);
     }
     for (const [uniqueName, upgrade] of Object.entries(ExportAvionics)) {
         res.mods.push({
@@ -151,13 +156,14 @@ const getItemListsController: RequestHandler = (req, response) => {
         });
     }
     for (const [uniqueName, arcane] of Object.entries(ExportArcanes)) {
-        res.mods.push({
+        const mod: ListedItem = {
             uniqueName,
             name: getString(arcane.name, lang)
-        });
+        };
         if (arcane.isFrivolous) {
-            badItems[uniqueName] = true;
+            mod.badReason = "frivolous";
         }
+        res.mods.push(mod);
     }
     for (const [uniqueName, syndicate] of Object.entries(ExportSyndicates)) {
         res.Syndicates.push({
@@ -167,7 +173,6 @@ const getItemListsController: RequestHandler = (req, response) => {
     }
 
     response.json({
-        badItems,
         archonCrystalUpgrades,
         uniqueLevelCaps: ExportMisc.uniqueLevelCaps,
         ...res
