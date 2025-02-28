@@ -855,7 +855,7 @@ const addCrewShipHarness = (
     typeName: string,
     inventoryChanges: IInventoryChanges = {}
 ): IInventoryChanges => {
-    if (inventory.CrewShips.length != 0) {
+    if (inventory.CrewShipHarnesses.length != 0) {
         throw new Error("refusing to add CrewShipHarness because account already has one");
     }
     const index = inventory.CrewShipHarnesses.push({ ItemType: typeName }) - 1;
