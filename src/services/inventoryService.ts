@@ -122,7 +122,7 @@ export const combineInventoryChanges = (InventoryChanges: IInventoryChanges, del
             InventoryChanges[key] = delta[key];
         } else if (Array.isArray(delta[key])) {
             const left = InventoryChanges[key] as object[];
-            const right: object[] | string[] = delta[key];
+            const right: object[] = delta[key];
             for (const item of right) {
                 left.push(item);
             }
