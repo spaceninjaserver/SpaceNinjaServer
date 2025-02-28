@@ -253,7 +253,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     CompletedSyndicates: string[];
     FocusXP?: IFocusXP;
     Wishlist: string[];
-    Alignment: IAlignment;
+    Alignment?: IAlignment;
     CompletedSorties: string[];
     LastSortieReward: ILastSortieReward[];
     Drones: IDroneClient[];
@@ -267,7 +267,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     HasContributedToDojo?: boolean;
     HWIDProtectEnabled?: boolean;
     KubrowPetPrints: IKubrowPetPrint[];
-    AlignmentReplay: IAlignment;
+    AlignmentReplay?: IAlignment;
     PersonalGoalProgress: IPersonalGoalProgress[];
     ThemeStyle: string;
     ThemeBackground: string;

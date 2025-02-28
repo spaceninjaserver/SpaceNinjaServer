@@ -87,6 +87,7 @@ import { syndicateStandingBonusController } from "@/src/controllers/api/syndicat
 import { tauntHistoryController } from "@/src/controllers/api/tauntHistoryController";
 import { trainingResultController } from "@/src/controllers/api/trainingResultController";
 import { unlockShipFeatureController } from "@/src/controllers/api/unlockShipFeatureController";
+import { updateAlignmentController } from "@/src/controllers/api/updateAlignmentController";
 import { updateChallengeProgressController } from "@/src/controllers/api/updateChallengeProgressController";
 import { updateQuestController } from "@/src/controllers/api/updateQuestController";
 import { updateSessionGetController, updateSessionPostController } from "@/src/controllers/api/updateSessionController";
@@ -188,6 +189,7 @@ apiRouter.post("/syndicateStandingBonus.php", syndicateStandingBonusController);
 apiRouter.post("/tauntHistory.php", tauntHistoryController);
 apiRouter.post("/trainingResult.php", trainingResultController);
 apiRouter.post("/unlockShipFeature.php", unlockShipFeatureController);
+apiRouter.post("/updateAlignment.php", updateAlignmentController);
 apiRouter.post("/updateChallengeProgress.php", updateChallengeProgressController);
 apiRouter.post("/updateNodeIntros.php", genericUpdateController);
 apiRouter.post("/updateQuest.php", updateQuestController);

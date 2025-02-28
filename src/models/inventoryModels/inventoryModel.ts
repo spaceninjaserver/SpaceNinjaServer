@@ -70,7 +70,8 @@ import {
     IPendingCouponClient,
     ILibraryDailyTaskInfo,
     IDroneDatabase,
-    IDroneClient
+    IDroneClient,
+    IAlignment
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -970,6 +971,14 @@ const libraryDailyTaskInfoSchema = new Schema<ILibraryDailyTaskInfo>(
     { _id: false }
 );
 
+const alignmentSchema = new Schema<IAlignment>(
+    {
+        Alignment: Number,
+        Wisdom: Number
+    },
+    { _id: false }
+);
+
 const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
     {
         accountOwnerId: Schema.Types.ObjectId,
@@ -1171,8 +1180,8 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         //https://warframe.fandom.com/wiki/Alignment
         //like "Alignment": { "Wisdom": 9, "Alignment": 1 },
-        Alignment: Schema.Types.Mixed,
-        AlignmentReplay: Schema.Types.Mixed,
+        Alignment: alignmentSchema,
+        AlignmentReplay: alignmentSchema,
 
         //https://warframe.fandom.com/wiki/Sortie
         CompletedSorties: [String],
