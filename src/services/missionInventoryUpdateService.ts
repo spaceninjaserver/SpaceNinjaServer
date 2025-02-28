@@ -290,7 +290,7 @@ export const addMissionRewards = async (
 
     if (
         missions &&
-        missions.Tag != "" // #1013
+        missions.Tag != "" // https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1013
     ) {
         const node = getNode(missions.Tag);
 
