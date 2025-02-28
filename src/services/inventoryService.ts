@@ -1040,6 +1040,11 @@ export const addFusionTreasures = (inventory: TInventoryDatabaseDocument, itemsA
 
         if (itemIndex !== -1) {
             FusionTreasures[itemIndex].ItemCount += ItemCount;
+            if (FusionTreasures[itemIndex].ItemCount == 0) {
+                FusionTreasures.splice(itemIndex, 1);
+            } else if (FusionTreasures[itemIndex].ItemCount <= 0) {
+                logger.warn(`account now owns a negative amount of ${ItemType}`);
+            }
         } else {
             FusionTreasures.push({ ItemCount, ItemType, Sockets });
         }
