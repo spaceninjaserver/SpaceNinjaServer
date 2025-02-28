@@ -890,12 +890,12 @@ const addDrone = (
 //TODO: wrong id is not erroring
 export const addGearExpByCategory = (
     inventory: TInventoryDatabaseDocument,
-    gearArray: IEquipmentClient[] | undefined,
+    gearArray: IEquipmentClient[],
     categoryName: TEquipmentKey
 ): void => {
     const category = inventory[categoryName];
 
-    gearArray?.forEach(({ ItemId, XP }) => {
+    gearArray.forEach(({ ItemId, XP }) => {
         if (!XP) {
             return;
         }
@@ -919,10 +919,10 @@ export const addGearExpByCategory = (
     });
 };
 
-export const addMiscItems = (inventory: TInventoryDatabaseDocument, itemsArray: IMiscItem[] | undefined): void => {
+export const addMiscItems = (inventory: TInventoryDatabaseDocument, itemsArray: IMiscItem[]): void => {
     const { MiscItems } = inventory;
 
-    itemsArray?.forEach(({ ItemCount, ItemType }) => {
+    itemsArray.forEach(({ ItemCount, ItemType }) => {
         if (ItemCount == 0) {
             return;
         }
@@ -941,13 +941,10 @@ export const addMiscItems = (inventory: TInventoryDatabaseDocument, itemsArray: 
     });
 };
 
-export const addShipDecorations = (
-    inventory: TInventoryDatabaseDocument,
-    itemsArray: IConsumable[] | undefined
-): void => {
+export const addShipDecorations = (inventory: TInventoryDatabaseDocument, itemsArray: IConsumable[]): void => {
     const { ShipDecorations } = inventory;
 
-    itemsArray?.forEach(({ ItemCount, ItemType }) => {
+    itemsArray.forEach(({ ItemCount, ItemType }) => {
         const itemIndex = ShipDecorations.findIndex(miscItem => miscItem.ItemType === ItemType);
 
         if (itemIndex !== -1) {
@@ -958,10 +955,10 @@ export const addShipDecorations = (
     });
 };
 
-export const addConsumables = (inventory: TInventoryDatabaseDocument, itemsArray: IConsumable[] | undefined): void => {
+export const addConsumables = (inventory: TInventoryDatabaseDocument, itemsArray: IConsumable[]): void => {
     const { Consumables } = inventory;
 
-    itemsArray?.forEach(({ ItemCount, ItemType }) => {
+    itemsArray.forEach(({ ItemCount, ItemType }) => {
         const itemIndex = Consumables.findIndex(i => i.ItemType === ItemType);
 
         if (itemIndex !== -1) {
@@ -972,13 +969,10 @@ export const addConsumables = (inventory: TInventoryDatabaseDocument, itemsArray
     });
 };
 
-export const addCrewShipRawSalvage = (
-    inventory: TInventoryDatabaseDocument,
-    itemsArray: ITypeCount[] | undefined
-): void => {
+export const addCrewShipRawSalvage = (inventory: TInventoryDatabaseDocument, itemsArray: ITypeCount[]): void => {
     const { CrewShipRawSalvage } = inventory;
 
-    itemsArray?.forEach(({ ItemCount, ItemType }) => {
+    itemsArray.forEach(({ ItemCount, ItemType }) => {
         const itemIndex = CrewShipRawSalvage.findIndex(i => i.ItemType === ItemType);
 
         if (itemIndex !== -1) {
@@ -989,10 +983,10 @@ export const addCrewShipRawSalvage = (
     });
 };
 
-export const addCrewShipAmmo = (inventory: TInventoryDatabaseDocument, itemsArray: ITypeCount[] | undefined): void => {
+export const addCrewShipAmmo = (inventory: TInventoryDatabaseDocument, itemsArray: ITypeCount[]): void => {
     const { CrewShipAmmo } = inventory;
 
-    itemsArray?.forEach(({ ItemCount, ItemType }) => {
+    itemsArray.forEach(({ ItemCount, ItemType }) => {
         const itemIndex = CrewShipAmmo.findIndex(i => i.ItemType === ItemType);
 
         if (itemIndex !== -1) {
@@ -1003,10 +997,10 @@ export const addCrewShipAmmo = (inventory: TInventoryDatabaseDocument, itemsArra
     });
 };
 
-export const addRecipes = (inventory: TInventoryDatabaseDocument, itemsArray: ITypeCount[] | undefined): void => {
+export const addRecipes = (inventory: TInventoryDatabaseDocument, itemsArray: ITypeCount[]): void => {
     const { Recipes } = inventory;
 
-    itemsArray?.forEach(({ ItemCount, ItemType }) => {
+    itemsArray.forEach(({ ItemCount, ItemType }) => {
         const itemIndex = Recipes.findIndex(i => i.ItemType === ItemType);
 
         if (itemIndex !== -1) {
@@ -1017,10 +1011,10 @@ export const addRecipes = (inventory: TInventoryDatabaseDocument, itemsArray: IT
     });
 };
 
-export const addMods = (inventory: TInventoryDatabaseDocument, itemsArray: IRawUpgrade[] | undefined): void => {
+export const addMods = (inventory: TInventoryDatabaseDocument, itemsArray: IRawUpgrade[]): void => {
     const { RawUpgrades } = inventory;
 
-    itemsArray?.forEach(({ ItemType, ItemCount }) => {
+    itemsArray.forEach(({ ItemType, ItemCount }) => {
         if (ItemCount == 0) {
             return;
         }
@@ -1039,12 +1033,9 @@ export const addMods = (inventory: TInventoryDatabaseDocument, itemsArray: IRawU
     });
 };
 
-export const addFusionTreasures = (
-    inventory: TInventoryDatabaseDocument,
-    itemsArray: IFusionTreasure[] | undefined
-): void => {
+export const addFusionTreasures = (inventory: TInventoryDatabaseDocument, itemsArray: IFusionTreasure[]): void => {
     const { FusionTreasures } = inventory;
-    itemsArray?.forEach(({ ItemType, ItemCount, Sockets }) => {
+    itemsArray.forEach(({ ItemType, ItemCount, Sockets }) => {
         const itemIndex = FusionTreasures.findIndex(i => i.ItemType == ItemType && (i.Sockets || 0) == (Sockets || 0));
 
         if (itemIndex !== -1) {
@@ -1055,7 +1046,7 @@ export const addFusionTreasures = (
     });
 };
 
-export const addFocusXpIncreases = (inventory: TInventoryDatabaseDocument, focusXpPlus: number[] | undefined): void => {
+export const addFocusXpIncreases = (inventory: TInventoryDatabaseDocument, focusXpPlus: number[]): void => {
     enum FocusType {
         AP_UNIVERSAL,
         AP_ATTACK,
@@ -1069,14 +1060,12 @@ export const addFocusXpIncreases = (inventory: TInventoryDatabaseDocument, focus
         AP_ANY
     }
 
-    if (focusXpPlus) {
-        inventory.FocusXP ??= { AP_ATTACK: 0, AP_DEFENSE: 0, AP_TACTIC: 0, AP_POWER: 0, AP_WARD: 0 };
-        inventory.FocusXP.AP_ATTACK += focusXpPlus[FocusType.AP_ATTACK];
-        inventory.FocusXP.AP_DEFENSE += focusXpPlus[FocusType.AP_DEFENSE];
-        inventory.FocusXP.AP_TACTIC += focusXpPlus[FocusType.AP_TACTIC];
-        inventory.FocusXP.AP_POWER += focusXpPlus[FocusType.AP_POWER];
-        inventory.FocusXP.AP_WARD += focusXpPlus[FocusType.AP_WARD];
-    }
+    inventory.FocusXP ??= { AP_ATTACK: 0, AP_DEFENSE: 0, AP_TACTIC: 0, AP_POWER: 0, AP_WARD: 0 };
+    inventory.FocusXP.AP_ATTACK += focusXpPlus[FocusType.AP_ATTACK];
+    inventory.FocusXP.AP_DEFENSE += focusXpPlus[FocusType.AP_DEFENSE];
+    inventory.FocusXP.AP_TACTIC += focusXpPlus[FocusType.AP_TACTIC];
+    inventory.FocusXP.AP_POWER += focusXpPlus[FocusType.AP_POWER];
+    inventory.FocusXP.AP_WARD += focusXpPlus[FocusType.AP_WARD];
 };
 
 export const updateChallengeProgress = async (
