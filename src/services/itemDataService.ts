@@ -29,9 +29,11 @@ import {
     ExportWarframes,
     ExportWeapons,
     IInboxMessage,
+    IMissionReward,
     IPowersuit,
     IRecipe,
-    IRegion
+    IRegion,
+    TReward
 } from "warframe-public-export-plus";
 import questCompletionItems from "@/static/fixed_responses/questCompletionRewards.json";
 
@@ -164,7 +166,9 @@ export const getKeyChainItems = ({ KeyChain, ChainStage }: IKeyChainRequest): st
     return keyChainStage.itemsToGiveWhenTriggered;
 };
 
-export const getLevelKeyRewards = (levelKey: string) => {
+export const getLevelKeyRewards = (
+    levelKey: string
+): { levelKeyRewards?: IMissionReward; levelKeyRewards2?: TReward[] } => {
     if (!(levelKey in ExportKeys)) {
         throw new Error(`LevelKey ${levelKey} not found`);
     }

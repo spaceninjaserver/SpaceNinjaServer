@@ -17,7 +17,7 @@
     "copyfiles": "^2.4.1",
     "express": "^5",
     "mongoose": "^8.11.0",
-    "warframe-public-export-plus": "^0.5.37",
+    "warframe-public-export-plus": "^0.5.38",
     "warframe-riven-info": "^0.1.2",
     "winston": "^3.17.0",
     "winston-daily-rotate-file": "^5.0.0"
