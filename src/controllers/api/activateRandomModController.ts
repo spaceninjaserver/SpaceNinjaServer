@@ -1,4 +1,5 @@
 import { toOid } from "@/src/helpers/inventoryHelpers";
+import { IRivenChallenge } from "@/src/helpers/rivenFingerprintHelper";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { addMods, getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
@@ -19,7 +20,7 @@ export const activateRandomModController: RequestHandler = async (req, res) => {
     ]);
     const rivenType = getRandomElement(rivenRawToRealWeighted[request.ItemType]);
     const challenge = getRandomElement(ExportUpgrades[rivenType].availableChallenges!);
-    const fingerprintChallenge: IRandomModChallenge = {
+    const fingerprintChallenge: IRivenChallenge = {
         Type: challenge.fullName,
         Progress: 0,
         Required: getRandomInt(challenge.countRange[0], challenge.countRange[1])
@@ -60,13 +61,6 @@ export const activateRandomModController: RequestHandler = async (req, res) => {
 
 interface IActiveRandomModRequest {
     ItemType: string;
-}
-
-interface IRandomModChallenge {
-    Type: string;
-    Progress: number;
-    Required: number;
-    Complication?: string;
 }
 
 const rivenRawToRealWeighted: Record<string, string[]> = {

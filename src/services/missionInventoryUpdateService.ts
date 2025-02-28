@@ -201,6 +201,12 @@ export const addMissionInventoryUpdates = (
                     }
                 });
                 break;
+            case "Upgrades":
+                value.forEach(clientUpgrade => {
+                    const upgrade = inventory.Upgrades.id(clientUpgrade.ItemId.$oid)!;
+                    upgrade.UpgradeFingerprint = clientUpgrade.UpgradeFingerprint; // primitive way to copy over the riven challenge progress
+                });
+                break;
             case "SyndicateId": {
                 inventory.CompletedSyndicates.push(value);
                 break;

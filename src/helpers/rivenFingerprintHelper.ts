@@ -1,5 +1,18 @@
 import { IUpgrade } from "warframe-public-export-plus";
-import { getRandomElement } from "../services/rngService";
+import { getRandomElement, getRandomInt } from "../services/rngService";
+
+export type RivenFingerprint = IVeiledRivenFingerprint | IUnveiledRivenFingerprint;
+
+export interface IVeiledRivenFingerprint {
+    challenge: IRivenChallenge;
+}
+
+export interface IRivenChallenge {
+    Type: string;
+    Progress: number;
+    Required: number;
+    Complication?: string;
+}
 
 export interface IUnveiledRivenFingerprint {
     compat: string;
@@ -16,6 +29,20 @@ interface IRivenStat {
     Tag: string;
     Value: number;
 }
+
+export const createUnveiledRivenFingerprint = (meta: IUpgrade): IUnveiledRivenFingerprint => {
+    const fingerprint: IUnveiledRivenFingerprint = {
+        compat: getRandomElement(meta.compatibleItems!),
+        lim: 0,
+        lvl: 0,
+        lvlReq: getRandomInt(8, 16),
+        pol: getRandomElement(["AP_ATTACK", "AP_DEFENSE", "AP_TACTIC"]),
+        buffs: [],
+        curses: []
+    };
+    randomiseRivenStats(meta, fingerprint);
+    return fingerprint;
+};
 
 export const randomiseRivenStats = (meta: IUpgrade, fingerprint: IUnveiledRivenFingerprint): void => {
     fingerprint.buffs = [];

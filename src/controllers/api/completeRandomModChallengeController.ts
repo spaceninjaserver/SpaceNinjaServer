@@ -4,8 +4,7 @@ import { addMiscItems, getInventory, updateCurrency } from "@/src/services/inven
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { IUnveiledRivenFingerprint, randomiseRivenStats } from "@/src/helpers/rivenFingerprintHelper";
-import { getRandomElement, getRandomInt } from "@/src/services/rngService";
+import { createUnveiledRivenFingerprint } from "@/src/helpers/rivenFingerprintHelper";
 import { ExportUpgrades } from "warframe-public-export-plus";
 
 export const completeRandomModChallengeController: RequestHandler = async (req, res) => {
@@ -31,17 +30,7 @@ export const completeRandomModChallengeController: RequestHandler = async (req, 
     // Update riven fingerprint to a randomised unveiled state
     const upgrade = inventory.Upgrades.id(request.ItemId)!;
     const meta = ExportUpgrades[upgrade.ItemType];
-    const fingerprint: IUnveiledRivenFingerprint = {
-        compat: getRandomElement(meta.compatibleItems!),
-        lim: 0,
-        lvl: 0,
-        lvlReq: getRandomInt(8, 16),
-        pol: getRandomElement(["AP_ATTACK", "AP_DEFENSE", "AP_TACTIC"]),
-        buffs: [],
-        curses: []
-    };
-    randomiseRivenStats(meta, fingerprint);
-    upgrade.UpgradeFingerprint = JSON.stringify(fingerprint);
+    upgrade.UpgradeFingerprint = JSON.stringify(createUnveiledRivenFingerprint(meta));
 
     await inventory.save();
 

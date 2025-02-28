@@ -14,7 +14,8 @@ import {
     ICustomMarkers,
     IPlayerSkills,
     IQuestKeyDatabase,
-    ILoreFragmentScan
+    ILoreFragmentScan,
+    IUpgradeClient
 } from "./inventoryTypes/inventoryTypes";
 
 export interface IThemeUpdateRequest {
@@ -98,6 +99,7 @@ export type IMissionInventoryUpdateRequest = {
         CodexScanCount: number;
         Standing: number;
     }[];
+    Upgrades?: IUpgradeClient[]; // riven challenge progress
 } & {
     [K in TEquipmentKey]?: IEquipmentClient[];
 };
