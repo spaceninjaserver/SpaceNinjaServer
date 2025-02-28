@@ -31,5 +31,7 @@
   "unlockExilusEverywhere": true,
   "unlockArcanesEverywhere": true,
   "noDailyStandingLimits": true,
+  "noDojoResearchCosts": true,
+  "noDojoResearchTime": true,
   "spoofMasteryRank": -1
 }

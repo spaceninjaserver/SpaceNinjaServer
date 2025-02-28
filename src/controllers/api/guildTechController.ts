@@ -1,10 +1,12 @@
 import { RequestHandler } from "express";
 import { getGuildForRequestEx } from "@/src/services/guildService";
-import { ExportDojoRecipes } from "warframe-public-export-plus";
+import { ExportDojoRecipes, IDojoResearch } from "warframe-public-export-plus";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addMiscItems, addRecipes, getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
+import { config } from "@/src/services/configService";
+import { ITechProjectDatabase } from "@/src/types/guildTypes";
 
 export const guildTechController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -20,15 +22,21 @@ export const guildTechController: RequestHandler = async (req, res) => {
         const recipe = ExportDojoRecipes.research[data.RecipeType!];
         guild.TechProjects ??= [];
         if (!guild.TechProjects.find(x => x.ItemType == data.RecipeType)) {
-            guild.TechProjects.push({
-                ItemType: data.RecipeType!,
-                ReqCredits: scaleRequiredCount(recipe.price),
-                ReqItems: recipe.ingredients.map(x => ({
-                    ItemType: x.ItemType,
-                    ItemCount: scaleRequiredCount(x.ItemCount)
-                })),
-                State: 0
-            });
+            const techProject =
+                guild.TechProjects[
+                    guild.TechProjects.push({
+                        ItemType: data.RecipeType!,
+                        ReqCredits: config.noDojoResearchCosts ? 0 : scaleRequiredCount(recipe.price),
+                        ReqItems: recipe.ingredients.map(x => ({
+                            ItemType: x.ItemType,
+                            ItemCount: config.noDojoResearchCosts ? 0 : scaleRequiredCount(x.ItemCount)
+                        })),
+                        State: 0
+                    }) - 1
+                ];
+            if (config.noDojoResearchCosts) {
+                processFundedProject(techProject, recipe);
+            }
         }
         await guild.save();
         res.end();
@@ -59,9 +67,8 @@ export const guildTechController: RequestHandler = async (req, res) => {
 
         if (techProject.ReqCredits == 0 && !techProject.ReqItems.find(x => x.ItemCount > 0)) {
             // This research is now fully funded.
-            techProject.State = 1;
             const recipe = ExportDojoRecipes.research[data.RecipeType!];
-            techProject.CompletionDate = new Date(new Date().getTime() + recipe.time * 1000);
+            processFundedProject(techProject, recipe);
         }
 
         await guild.save();
@@ -96,6 +103,11 @@ export const guildTechController: RequestHandler = async (req, res) => {
     } else {
         throw new Error(`unknown guildTech action: ${data.Action}`);
     }
+};
+
+const processFundedProject = (techProject: ITechProjectDatabase, recipe: IDojoResearch): void => {
+    techProject.State = 1;
+    techProject.CompletionDate = new Date(new Date().getTime() + (config.noDojoResearchTime ? 0 : recipe.time) * 1000);
 };
 
 type TGuildTechRequest = {

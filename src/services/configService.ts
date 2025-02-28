@@ -57,6 +57,8 @@ interface IConfig {
     unlockExilusEverywhere?: boolean;
     unlockArcanesEverywhere?: boolean;
     noDailyStandingLimits?: boolean;
+    noDojoResearchCosts?: boolean;
+    noDojoResearchTime?: boolean;
     spoofMasteryRank?: number;
 }
 
