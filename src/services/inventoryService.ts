@@ -224,6 +224,20 @@ export const addItem = async (
                     MiscItems: miscItemChanges
                 }
             };
+        } else if (ExportResources[typeName].productCategory == "FusionTreasures") {
+            const fusionTreasureChanges = [
+                {
+                    ItemType: typeName,
+                    ItemCount: quantity,
+                    Sockets: 0
+                } satisfies IFusionTreasure
+            ];
+            addFusionTreasures(inventory, fusionTreasureChanges);
+            return {
+                InventoryChanges: {
+                    FusionTreasures: fusionTreasureChanges
+                }
+            };
         } else if (ExportResources[typeName].productCategory == "Ships") {
             const oid = await createShip(inventory.accountOwnerId, typeName);
             inventory.Ships.push(oid);
@@ -281,6 +295,8 @@ export const addItem = async (
                     KubrowPetEggs: changes
                 }
             };
+        } else {
+            throw new Error(`unknown product category: ${ExportResources[typeName].productCategory}`);
         }
     }
     if (typeName in ExportCustoms) {
@@ -459,24 +475,6 @@ export const addItem = async (
                             ...occupySlot(inventory, InventorySlot.SENTINELS, premiumPurchase)
                         }
                     };
-                }
-                case "Items": {
-                    switch (typeName.substr(1).split("/")[3]) {
-                        default: {
-                            const miscItemChanges = [
-                                {
-                                    ItemType: typeName,
-                                    ItemCount: quantity
-                                } satisfies IMiscItem
-                            ];
-                            addMiscItems(inventory, miscItemChanges);
-                            return {
-                                InventoryChanges: {
-                                    MiscItems: miscItemChanges
-                                }
-                            };
-                        }
-                    }
                 }
                 case "Game": {
                     if (typeName.substr(1).split("/")[3] == "Projections") {
