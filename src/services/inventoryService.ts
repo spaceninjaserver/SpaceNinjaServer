@@ -36,7 +36,12 @@ import {
 } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
 import { getExalted, getKeyChainItems } from "@/src/services/itemDataService";
-import { IEquipmentClient, IEquipmentDatabase, IItemConfig } from "../types/inventoryTypes/commonInventoryTypes";
+import {
+    EquipmentFeatures,
+    IEquipmentClient,
+    IEquipmentDatabase,
+    IItemConfig
+} from "../types/inventoryTypes/commonInventoryTypes";
 import {
     ExportArcanes,
     ExportBundles,
@@ -341,7 +346,14 @@ export const addItem = async (
     if (typeName in ExportWeapons) {
         const weapon = ExportWeapons[typeName];
         if (weapon.totalDamage != 0) {
-            const inventoryChanges = addEquipment(inventory, weapon.productCategory, typeName);
+            const inventoryChanges = addEquipment(
+                inventory,
+                weapon.productCategory,
+                typeName,
+                [],
+                {},
+                premiumPurchase ? { Features: EquipmentFeatures.DOUBLE_CAPACITY } : {}
+            );
             if (weapon.additionalItems) {
                 for (const item of weapon.additionalItems) {
                     combineInventoryChanges(inventoryChanges, (await addItem(inventory, item, 1)).InventoryChanges);
@@ -421,7 +433,12 @@ export const addItem = async (
                 default: {
                     return {
                         InventoryChanges: {
-                            ...addPowerSuit(inventory, typeName),
+                            ...addPowerSuit(
+                                inventory,
+                                typeName,
+                                {},
+                                premiumPurchase ? EquipmentFeatures.DOUBLE_CAPACITY : undefined
+                            ),
                             ...occupySlot(inventory, InventorySlot.SUITS, premiumPurchase)
                         }
                     };
@@ -429,7 +446,12 @@ export const addItem = async (
                 case "Archwing": {
                     return {
                         InventoryChanges: {
-                            ...addSpaceSuit(inventory, typeName),
+                            ...addSpaceSuit(
+                                inventory,
+                                typeName,
+                                {},
+                                premiumPurchase ? EquipmentFeatures.DOUBLE_CAPACITY : undefined
+                            ),
                             ...occupySlot(inventory, InventorySlot.SPACESUITS, premiumPurchase)
                         }
                     };
@@ -437,7 +459,12 @@ export const addItem = async (
                 case "EntratiMech": {
                     return {
                         InventoryChanges: {
-                            ...addMechSuit(inventory, typeName),
+                            ...addMechSuit(
+                                inventory,
+                                typeName,
+                                {},
+                                premiumPurchase ? EquipmentFeatures.DOUBLE_CAPACITY : undefined
+                            ),
                             ...occupySlot(inventory, InventorySlot.MECHSUITS, premiumPurchase)
                         }
                     };
@@ -471,7 +498,12 @@ export const addItem = async (
                 case "Sentinels": {
                     return {
                         InventoryChanges: {
-                            ...addSentinel(inventory, typeName),
+                            ...addSentinel(
+                                inventory,
+                                typeName,
+                                {},
+                                premiumPurchase ? EquipmentFeatures.DOUBLE_CAPACITY : undefined
+                            ),
                             ...occupySlot(inventory, InventorySlot.SENTINELS, premiumPurchase)
                         }
                     };
@@ -572,7 +604,8 @@ export const applyDefaultUpgrades = (
 export const addSentinel = (
     inventory: TInventoryDatabaseDocument,
     sentinelName: string,
-    inventoryChanges: IInventoryChanges = {}
+    inventoryChanges: IInventoryChanges = {},
+    features: number | undefined = undefined
 ): IInventoryChanges => {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (ExportSentinels[sentinelName]?.defaultWeapon) {
@@ -582,7 +615,8 @@ export const addSentinel = (
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     const configs: IItemConfig[] = applyDefaultUpgrades(inventory, ExportSentinels[sentinelName]?.defaultUpgrades);
 
-    const sentinelIndex = inventory.Sentinels.push({ ItemType: sentinelName, Configs: configs, XP: 0 }) - 1;
+    const sentinelIndex =
+        inventory.Sentinels.push({ ItemType: sentinelName, Configs: configs, XP: 0, Features: features }) - 1;
     inventoryChanges.Sentinels ??= [];
     inventoryChanges.Sentinels.push(inventory.Sentinels[sentinelIndex].toJSON<IEquipmentClient>());
 
@@ -602,7 +636,8 @@ export const addSentinelWeapon = (
 export const addPowerSuit = (
     inventory: TInventoryDatabaseDocument,
     powersuitName: string,
-    inventoryChanges: IInventoryChanges = {}
+    inventoryChanges: IInventoryChanges = {},
+    features: number | undefined = undefined
 ): IInventoryChanges => {
     const specialItems = getExalted(powersuitName);
     if (specialItems) {
@@ -610,7 +645,8 @@ export const addPowerSuit = (
             addSpecialItem(inventory, specialItem, inventoryChanges);
         }
     }
-    const suitIndex = inventory.Suits.push({ ItemType: powersuitName, Configs: [], UpgradeVer: 101, XP: 0 }) - 1;
+    const suitIndex =
+        inventory.Suits.push({ ItemType: powersuitName, Configs: [], UpgradeVer: 101, XP: 0, Features: features }) - 1;
     inventoryChanges.Suits ??= [];
     inventoryChanges.Suits.push(inventory.Suits[suitIndex].toJSON<IEquipmentClient>());
     return inventoryChanges;
@@ -619,7 +655,8 @@ export const addPowerSuit = (
 export const addMechSuit = (
     inventory: TInventoryDatabaseDocument,
     mechsuitName: string,
-    inventoryChanges: IInventoryChanges = {}
+    inventoryChanges: IInventoryChanges = {},
+    features: number | undefined = undefined
 ): IInventoryChanges => {
     const specialItems = getExalted(mechsuitName);
     if (specialItems) {
@@ -627,7 +664,9 @@ export const addMechSuit = (
             addSpecialItem(inventory, specialItem, inventoryChanges);
         }
     }
-    const suitIndex = inventory.MechSuits.push({ ItemType: mechsuitName, Configs: [], UpgradeVer: 101, XP: 0 }) - 1;
+    const suitIndex =
+        inventory.MechSuits.push({ ItemType: mechsuitName, Configs: [], UpgradeVer: 101, XP: 0, Features: features }) -
+        1;
     inventoryChanges.MechSuits ??= [];
     inventoryChanges.MechSuits.push(inventory.MechSuits[suitIndex].toJSON<IEquipmentClient>());
     return inventoryChanges;
@@ -656,9 +695,17 @@ export const addSpecialItem = (
 export const addSpaceSuit = (
     inventory: TInventoryDatabaseDocument,
     spacesuitName: string,
-    inventoryChanges: IInventoryChanges = {}
+    inventoryChanges: IInventoryChanges = {},
+    features: number | undefined = undefined
 ): IInventoryChanges => {
-    const suitIndex = inventory.SpaceSuits.push({ ItemType: spacesuitName, Configs: [], UpgradeVer: 101, XP: 0 }) - 1;
+    const suitIndex =
+        inventory.SpaceSuits.push({
+            ItemType: spacesuitName,
+            Configs: [],
+            UpgradeVer: 101,
+            XP: 0,
+            Features: features
+        }) - 1;
     inventoryChanges.SpaceSuits ??= [];
     inventoryChanges.SpaceSuits.push(inventory.SpaceSuits[suitIndex].toJSON<IEquipmentClient>());
     return inventoryChanges;
