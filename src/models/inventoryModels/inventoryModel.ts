@@ -71,7 +71,9 @@ import {
     ILibraryDailyTaskInfo,
     IDroneDatabase,
     IDroneClient,
-    IAlignment
+    IAlignment,
+    ICollectibleEntry,
+    IIncentiveState
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -943,6 +945,26 @@ const calenderProgressSchema = new Schema<ICalendarProgress>(
     { _id: false }
 );
 
+const incentiveStateSchema = new Schema<IIncentiveState>(
+    {
+        threshold: Number,
+        complete: Boolean,
+        sent: Boolean
+    },
+    { _id: false }
+);
+
+const collectibleEntrySchema = new Schema<ICollectibleEntry>(
+    {
+        CollectibleType: String,
+        Count: Number,
+        Tracking: String,
+        ReqScans: Number,
+        IncentiveStates: [incentiveStateSchema]
+    },
+    { _id: false }
+);
+
 const pendingCouponSchema = new Schema<IPendingCouponDatabase>(
     {
         Expiry: { type: Date, default: new Date(0) },
@@ -1286,7 +1308,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         RecentVendorPurchases: [Schema.Types.Mixed],
         Robotics: [Schema.Types.Mixed],
         UsedDailyDeals: [Schema.Types.Mixed],
-        CollectibleSeries: [Schema.Types.Mixed],
+        CollectibleSeries: { type: [collectibleEntrySchema], default: undefined },
         HasResetAccount: { type: Boolean, default: false },
 
         //Discount Coupon

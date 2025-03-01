@@ -315,7 +315,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     UsedDailyDeals: any[];
     LibraryPersonalTarget: string;
     LibraryPersonalProgress: ILibraryPersonalProgress[];
-    CollectibleSeries: ICollectibleSery[];
+    CollectibleSeries?: ICollectibleEntry[];
     LibraryAvailableDailyTaskInfo?: ILibraryDailyTaskInfo;
     LibraryActiveDailyTaskInfo?: ILibraryDailyTaskInfo;
     HasResetAccount: boolean;
@@ -364,7 +364,7 @@ export interface IChallengeProgress {
     Completed?: string[];
 }
 
-export interface ICollectibleSery {
+export interface ICollectibleEntry {
     CollectibleType: string;
     Count: number;
     Tracking: string;

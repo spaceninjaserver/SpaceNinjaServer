@@ -34,6 +34,10 @@ import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryType
 import { handleStoreItemAcquisition } from "./purchaseService";
 import { IMissionReward } from "../types/missionTypes";
 import { crackRelic } from "@/src/helpers/relicHelper";
+import { createMessage } from "./inboxService";
+import kuriaMessage50 from "@/static/fixed_responses/kuriaMessages/fiftyPercent.json";
+import kuriaMessage75 from "@/static/fixed_responses/kuriaMessages/seventyFivePercent.json";
+import kuriaMessage100 from "@/static/fixed_responses/kuriaMessages/oneHundredPercent.json";
 
 const getRotations = (rotationCount: number): number[] => {
     if (rotationCount === 0) return [0];
@@ -198,6 +202,34 @@ export const addMissionInventoryUpdates = (
                         }
                     } else {
                         logger.warn(`no library daily task active, ignoring synthesis of ${scan.EnemyType}`);
+                    }
+                });
+                break;
+            case "CollectibleScans":
+                value.forEach(scan => {
+                    const entry = inventory.CollectibleSeries?.find(x => x.CollectibleType == scan.CollectibleType);
+                    if (entry) {
+                        entry.Count = scan.Count;
+                        entry.Tracking = scan.Tracking;
+                        if (entry.CollectibleType == "/Lotus/Objects/Orokin/Props/CollectibleSeriesOne") {
+                            const progress = entry.Count / entry.ReqScans;
+                            entry.IncentiveStates.forEach(gate => {
+                                gate.complete = progress >= gate.threshold;
+                                if (gate.complete && !gate.sent) {
+                                    gate.sent = true;
+                                    if (gate.threshold == 0.5) {
+                                        void createMessage(inventory.accountOwnerId.toString(), [kuriaMessage50]);
+                                    } else {
+                                        void createMessage(inventory.accountOwnerId.toString(), [kuriaMessage75]);
+                                    }
+                                }
+                            });
+                            if (progress >= 1.0) {
+                                void createMessage(inventory.accountOwnerId.toString(), [kuriaMessage100]);
+                            }
+                        }
+                    } else {
+                        logger.warn(`${scan.CollectibleType} was not found in inventory, ignoring scans`);
                     }
                 });
                 break;

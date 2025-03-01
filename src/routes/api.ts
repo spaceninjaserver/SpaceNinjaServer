@@ -76,6 +76,7 @@ import { setShipFavouriteLoadoutController } from "@/src/controllers/api/setShip
 import { setSupportedSyndicateController } from "@/src/controllers/api/setSupportedSyndicateController";
 import { setWeaponSkillTreeController } from "@/src/controllers/api/setWeaponSkillTreeController";
 import { shipDecorationsController } from "@/src/controllers/api/shipDecorationsController";
+import { startCollectibleEntryController } from "@/src/controllers/api/startCollectibleEntryController";
 import { startDojoRecipeController } from "@/src/controllers/api/startDojoRecipeController";
 import { startLibraryDailyTaskController } from "@/src/controllers/api/startLibraryDailyTaskController";
 import { startLibraryPersonalTargetController } from "@/src/controllers/api/startLibraryPersonalTargetController";
@@ -181,6 +182,7 @@ apiRouter.post("/setShipCustomizations.php", setShipCustomizationsController);
 apiRouter.post("/setShipFavouriteLoadout.php", setShipFavouriteLoadoutController);
 apiRouter.post("/setWeaponSkillTree.php", setWeaponSkillTreeController);
 apiRouter.post("/shipDecorations.php", shipDecorationsController);
+apiRouter.post("/startCollectibleEntry.php", startCollectibleEntryController);
 apiRouter.post("/startDojoRecipe.php", startDojoRecipeController);
 apiRouter.post("/startRecipe.php", startRecipeController);
 apiRouter.post("/stepSequencers.php", stepSequencersController);

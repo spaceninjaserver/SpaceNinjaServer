@@ -1,0 +1,8 @@
+{
+  "sub": "/Lotus/Language/Oddities/SeriesOneRewardSubject",
+  "sndr": "/Lotus/Language/Menu/ScribeName",
+  "msg": "/Lotus/Language/Oddities/SeriesOneRewardInboxMessage",
+  "icon": "/Lotus/Interface/Icons/Syndicates/FactionOddityGold.png",
+  "att": ["/Lotus/Types/Items/ShipDecos/OrokinFelisBobbleHead"],
+  "highPriority": true
+}
