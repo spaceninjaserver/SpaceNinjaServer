@@ -325,6 +325,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     EndlessXP?: IEndlessXpProgress[];
     DialogueHistory?: IDialogueHistoryClient;
     CalendarProgress: ICalendarProgress;
+    SongChallenges?: ISongChallenge[];
 }
 
 export interface IAffiliation {
@@ -1078,4 +1079,9 @@ export interface ICalendarProgress {
     Iteration: number;
     YearProgress: { Upgrades: unknown[] };
     SeasonProgress: ISeasonProgress;
+}
+
+export interface ISongChallenge {
+    Song: string;
+    Difficulties: number[];
 }

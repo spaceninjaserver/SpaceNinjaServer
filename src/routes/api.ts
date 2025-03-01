@@ -92,6 +92,7 @@ import { updateAlignmentController } from "@/src/controllers/api/updateAlignment
 import { updateChallengeProgressController } from "@/src/controllers/api/updateChallengeProgressController";
 import { updateQuestController } from "@/src/controllers/api/updateQuestController";
 import { updateSessionGetController, updateSessionPostController } from "@/src/controllers/api/updateSessionController";
+import { updateSongChallengeController } from "@/src/controllers/api/updateSongChallengeController";
 import { updateThemeController } from "@/src/controllers/api/updateThemeController";
 import { upgradesController } from "@/src/controllers/api/upgradesController";
 
@@ -196,6 +197,7 @@ apiRouter.post("/updateChallengeProgress.php", updateChallengeProgressController
 apiRouter.post("/updateNodeIntros.php", genericUpdateController);
 apiRouter.post("/updateQuest.php", updateQuestController);
 apiRouter.post("/updateSession.php", updateSessionPostController);
+apiRouter.post("/updateSongChallenge.php", updateSongChallengeController);
 apiRouter.post("/updateTheme.php", updateThemeController);
 apiRouter.post("/upgrades.php", upgradesController);
 

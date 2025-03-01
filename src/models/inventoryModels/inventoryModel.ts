@@ -73,7 +73,8 @@ import {
     IDroneClient,
     IAlignment,
     ICollectibleEntry,
-    IIncentiveState
+    IIncentiveState,
+    ISongChallenge
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -965,6 +966,14 @@ const collectibleEntrySchema = new Schema<ICollectibleEntry>(
     { _id: false }
 );
 
+const songChallengeSchema = new Schema<ISongChallenge>(
+    {
+        Song: String,
+        Difficulties: [Number]
+    },
+    { _id: false }
+);
+
 const pendingCouponSchema = new Schema<IPendingCouponDatabase>(
     {
         Expiry: { type: Date, default: new Date(0) },
@@ -1323,7 +1332,9 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         EndlessXP: { type: [endlessXpProgressSchema], default: undefined },
 
         DialogueHistory: dialogueHistorySchema,
-        CalendarProgress: calenderProgressSchema
+        CalendarProgress: calenderProgressSchema,
+
+        SongChallenges: { type: [songChallengeSchema], default: undefined }
     },
     { timestamps: { createdAt: "Created", updatedAt: false } }
 );
