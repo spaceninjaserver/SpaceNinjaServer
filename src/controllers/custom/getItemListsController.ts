@@ -6,12 +6,14 @@ import {
     ExportGear,
     ExportMisc,
     ExportRecipes,
+    ExportRelics,
     ExportResources,
     ExportSentinels,
     ExportSyndicates,
     ExportUpgrades,
     ExportWarframes,
-    ExportWeapons
+    ExportWeapons,
+    TRelicQuality
 } from "warframe-public-export-plus";
 import archonCrystalUpgrades from "@/static/fixed_responses/webuiArchonCrystalUpgrades.json";
 
@@ -22,6 +24,13 @@ interface ListedItem {
     exalted?: string[];
     badReason?: "starter" | "frivolous" | "notraw";
 }
+
+const relicQualitySuffixes: Record<TRelicQuality, string> = {
+    VPQ_BRONZE: "",
+    VPQ_SILVER: " [Flawless]",
+    VPQ_GOLD: " [Radiant]",
+    VPQ_PLATINUM: " [Exceptional]"
+};
 
 const getItemListsController: RequestHandler = (req, response) => {
     const lang = getDict(typeof req.query.lang == "string" ? req.query.lang : "en");
@@ -108,9 +117,22 @@ const getItemListsController: RequestHandler = (req, response) => {
                 name = name.split("|FISH_SIZE|").join(getString("/Lotus/Language/Fish/FishSizeSmallAbbrev", lang));
             }
         }
+        if (uniqueName.substr(0, 30) != "/Lotus/Types/Game/Projections/") {
+            res.miscitems.push({
+                uniqueName: item.productCategory + ":" + uniqueName,
+                name: name
+            });
+        }
+    }
+    for (const [uniqueName, item] of Object.entries(ExportRelics)) {
         res.miscitems.push({
-            uniqueName: item.productCategory + ":" + uniqueName,
-            name: name
+            uniqueName: "MiscItems:" + uniqueName,
+            name:
+                getString("/Lotus/Language/Relics/VoidProjectionName", lang)
+                    .split("|ERA|")
+                    .join(item.era)
+                    .split("|CATEGORY|")
+                    .join(item.category) + relicQualitySuffixes[item.quality]
         });
     }
     for (const [uniqueName, item] of Object.entries(ExportGear)) {
