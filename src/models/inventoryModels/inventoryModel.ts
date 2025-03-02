@@ -1345,11 +1345,15 @@ inventorySchema.set("toJSON", {
         delete returnedObject.__v;
         delete returnedObject.accountOwnerId;
 
-        const inventoryDatabase = returnedObject as IInventoryDatabase;
+        const inventoryDatabase = returnedObject as Partial<IInventoryDatabase>;
         const inventoryResponse = returnedObject as IInventoryClient;
 
-        inventoryResponse.TrainingDate = toMongoDate(inventoryDatabase.TrainingDate);
-        inventoryResponse.Created = toMongoDate(inventoryDatabase.Created);
+        if (inventoryDatabase.TrainingDate) {
+            inventoryResponse.TrainingDate = toMongoDate(inventoryDatabase.TrainingDate);
+        }
+        if (inventoryDatabase.Created) {
+            inventoryResponse.Created = toMongoDate(inventoryDatabase.Created);
+        }
         if (inventoryDatabase.GuildId) {
             inventoryResponse.GuildId = toOid(inventoryDatabase.GuildId);
         }
