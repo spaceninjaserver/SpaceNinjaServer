@@ -36,6 +36,7 @@ import {
     TReward
 } from "warframe-public-export-plus";
 import questCompletionItems from "@/static/fixed_responses/questCompletionRewards.json";
+import { IMessage } from "../models/inboxModel";
 
 export type WeaponTypeInternal =
     | "LongGuns"
@@ -207,7 +208,7 @@ export const getQuestCompletionItems = (questKey: string): ITypeCount[] | undefi
     return items;
 };
 
-export const getKeyChainMessage = ({ KeyChain, ChainStage }: IKeyChainRequest): IInboxMessage => {
+export const getKeyChainMessage = ({ KeyChain, ChainStage }: IKeyChainRequest): IMessage => {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     const chainStages = ExportKeys[KeyChain]?.chainStages;
     if (!chainStages) {
@@ -227,5 +228,19 @@ export const getKeyChainMessage = ({ KeyChain, ChainStage }: IKeyChainRequest): 
             `client requested key chain message in keychain ${KeyChain} at stage ${ChainStage} but they did not exist`
         );
     }
-    return chainStageMessage;
+    return convertInboxMessage(chainStageMessage);
+};
+
+export const convertInboxMessage = (message: IInboxMessage): IMessage => {
+    return {
+        sndr: message.sender,
+        msg: message.body,
+        sub: message.title,
+        att: message.attachments.length > 0 ? message.attachments : undefined,
+        countedAtt: message.countedAttachments.length > 0 ? message.countedAttachments : undefined,
+        icon: message.icon ?? "",
+        transmission: message.transmission ?? "",
+        highPriority: message.highPriority ?? false,
+        r: false
+    } satisfies IMessage;
 };

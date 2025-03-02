@@ -35,7 +35,7 @@ import {
     IUpdateChallengeProgressRequest
 } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
-import { getExalted, getKeyChainItems } from "@/src/services/itemDataService";
+import { convertInboxMessage, getExalted, getKeyChainItems } from "@/src/services/itemDataService";
 import {
     EquipmentFeatures,
     IEquipmentClient,
@@ -47,6 +47,7 @@ import {
     ExportBundles,
     ExportCustoms,
     ExportDrones,
+    ExportEmailItems,
     ExportEnemies,
     ExportFlavour,
     ExportFusionBundles,
@@ -71,6 +72,7 @@ import { addQuestKey, completeQuest } from "@/src/services/questService";
 import { handleBundleAcqusition } from "./purchaseService";
 import libraryDailyTasks from "@/static/fixed_responses/libraryDailyTasks.json";
 import { getRandomElement, getRandomInt } from "./rngService";
+import { createMessage } from "./inboxService";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
@@ -423,6 +425,13 @@ export const addItem = async (
         const inventoryChanges = addDrone(inventory, typeName);
         return {
             InventoryChanges: inventoryChanges
+        };
+    }
+    if (typeName in ExportEmailItems) {
+        const emailItem = ExportEmailItems[typeName];
+        await createMessage(inventory.accountOwnerId.toString(), [convertInboxMessage(emailItem.message)]);
+        return {
+            InventoryChanges: {}
         };
     }
 

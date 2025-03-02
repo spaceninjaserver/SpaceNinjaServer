@@ -1,6 +1,5 @@
 import { IKeyChainRequest } from "@/src/controllers/api/giveKeyChainTriggeredItemsController";
 import { isEmptyObject } from "@/src/helpers/general";
-import { IMessage } from "@/src/models/inboxModel";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { createMessage } from "@/src/services/inboxService";
 import { addItem, addKeyChainItems } from "@/src/services/inventoryService";
@@ -198,19 +197,7 @@ export const giveKeyChainMessage = async (
 ): Promise<void> => {
     const keyChainMessage = getKeyChainMessage(keyChainInfo);
 
-    const message = {
-        sndr: keyChainMessage.sender,
-        msg: keyChainMessage.body,
-        sub: keyChainMessage.title,
-        att: keyChainMessage.attachments.length > 0 ? keyChainMessage.attachments : undefined,
-        countedAtt: keyChainMessage.countedAttachments.length > 0 ? keyChainMessage.countedAttachments : undefined,
-        icon: keyChainMessage.icon ?? "",
-        transmission: keyChainMessage.transmission ?? "",
-        highPriority: keyChainMessage.highPriority ?? false,
-        r: false
-    } satisfies IMessage;
-
-    await createMessage(accountId, [message]);
+    await createMessage(accountId, [keyChainMessage]);
 
     updateQuestStage(inventory, keyChainInfo, { m: true });
 };
