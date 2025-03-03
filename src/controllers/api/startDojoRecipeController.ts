@@ -20,7 +20,7 @@ export const startDojoRecipeController: RequestHandler = async (req, res) => {
         guild.DojoEnergy += room.energy;
     }
 
-    guild.DojoComponents!.push({
+    guild.DojoComponents.push({
         _id: new Types.ObjectId(),
         pf: request.PlacedComponent.pf,
         ppf: request.PlacedComponent.ppf,

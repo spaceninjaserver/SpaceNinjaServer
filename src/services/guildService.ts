@@ -1,10 +1,9 @@
 import { Request } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getInventory } from "@/src/services/inventoryService";
-import { Guild } from "@/src/models/guildModel";
+import { Guild, TGuildDatabaseDocument } from "@/src/models/guildModel";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
-import { IDojoClient, IDojoComponentClient, IGuildDatabase } from "@/src/types/guildTypes";
-import { Document, Types } from "mongoose";
+import { IDojoClient, IDojoComponentClient } from "@/src/types/guildTypes";
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
 
 export const getGuildForRequest = async (req: Request): Promise<TGuildDatabaseDocument> => {
@@ -41,7 +40,7 @@ export const getDojoClient = (guild: TGuildDatabaseDocument, status: number): ID
         DojoRequestStatus: status,
         DojoComponents: []
     };
-    guild.DojoComponents!.forEach(dojoComponent => {
+    guild.DojoComponents.forEach(dojoComponent => {
         const clientComponent: IDojoComponentClient = {
             id: toOid(dojoComponent._id),
             pf: dojoComponent.pf,
@@ -62,12 +61,3 @@ export const getDojoClient = (guild: TGuildDatabaseDocument, status: number): ID
     });
     return dojo;
 };
-
-// eslint-disable-next-line @typescript-eslint/ban-types
-export type TGuildDatabaseDocument = Document<unknown, {}, IGuildDatabase> &
-    IGuildDatabase &
-    Required<{
-        _id: Types.ObjectId;
-    }> & {
-        __v: number;
-    };

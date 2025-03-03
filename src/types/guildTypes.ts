@@ -8,7 +8,7 @@ export interface IGuild {
 
 export interface IGuildDatabase extends IGuild {
     _id: Types.ObjectId;
-    DojoComponents?: IDojoComponentDatabase[];
+    DojoComponents: IDojoComponentDatabase[];
     DojoCapacity: number;
     DojoEnergy: number;
     TechProjects?: ITechProjectDatabase[];

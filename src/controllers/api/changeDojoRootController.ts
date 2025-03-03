@@ -9,7 +9,7 @@ export const changeDojoRootController: RequestHandler = async (req, res) => {
     // At this point, we know that a member of the guild is making this request. Assuming they are allowed to change the root.
 
     const idToNode: Record<string, INode> = {};
-    guild.DojoComponents!.forEach(x => {
+    guild.DojoComponents.forEach(x => {
         idToNode[x._id.toString()] = {
             component: x,
             parent: undefined,
@@ -18,7 +18,7 @@ export const changeDojoRootController: RequestHandler = async (req, res) => {
     });
 
     let oldRoot: INode | undefined;
-    guild.DojoComponents!.forEach(x => {
+    guild.DojoComponents.forEach(x => {
         const node = idToNode[x._id.toString()];
         if (x.pi) {
             idToNode[x.pi.toString()].children.push(node);
@@ -47,7 +47,7 @@ export const changeDojoRootController: RequestHandler = async (req, res) => {
         );
         top.children.forEach(x => stack.push(x));
     }
-    guild.DojoComponents!.forEach(x => {
+    guild.DojoComponents.forEach(x => {
         x._id = idMap[x._id.toString()];
         if (x.pi) {
             x.pi = idMap[x.pi.toString()];

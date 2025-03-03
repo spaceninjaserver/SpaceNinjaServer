@@ -4,7 +4,7 @@ import {
     ITechProjectDatabase,
     ITechProjectClient
 } from "@/src/types/guildTypes";
-import { model, Schema } from "mongoose";
+import { Document, Model, model, Schema, Types } from "mongoose";
 import { typeCountSchema } from "./inventoryModels/inventoryModel";
 import { toMongoDate } from "../helpers/inventoryHelpers";
 
@@ -44,7 +44,7 @@ techProjectSchema.set("toJSON", {
 const guildSchema = new Schema<IGuildDatabase>(
     {
         Name: { type: String, required: true },
-        DojoComponents: [dojoComponentSchema],
+        DojoComponents: { type: [dojoComponentSchema], default: [] },
         DojoCapacity: { type: Number, default: 100 },
         DojoEnergy: { type: Number, default: 5 },
         TechProjects: { type: [techProjectSchema], default: undefined }
@@ -52,4 +52,23 @@ const guildSchema = new Schema<IGuildDatabase>(
     { id: false }
 );
 
-export const Guild = model<IGuildDatabase>("Guild", guildSchema);
+type GuildDocumentProps = {
+    DojoComponents: Types.DocumentArray<IDojoComponentDatabase>;
+};
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+type GuildModel = Model<IGuildDatabase, {}, GuildDocumentProps>;
+
+export const Guild = model<IGuildDatabase, GuildModel>("Guild", guildSchema);
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type TGuildDatabaseDocument = Document<unknown, {}, IGuildDatabase> &
+    Omit<
+        IGuildDatabase & {
+            _id: Types.ObjectId;
+        } & {
+            __v: number;
+        },
+        keyof GuildDocumentProps
+    > &
+    GuildDocumentProps;
