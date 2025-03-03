@@ -32,6 +32,7 @@
   "unlockArcanesEverywhere": true,
   "noDailyStandingLimits": true,
   "instantResourceExtractorDrones": false,
+  "noDojoRoomBuildStage": true,
   "noDojoResearchCosts": true,
   "noDojoResearchTime": true,
   "spoofMasteryRank": -1

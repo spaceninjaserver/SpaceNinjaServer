@@ -58,6 +58,7 @@ interface IConfig {
     unlockArcanesEverywhere?: boolean;
     noDailyStandingLimits?: boolean;
     instantResourceExtractorDrones?: boolean;
+    noDojoRoomBuildStage?: boolean;
     noDojoResearchCosts?: boolean;
     noDojoResearchTime?: boolean;
     spoofMasteryRank?: number;

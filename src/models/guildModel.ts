@@ -16,6 +16,8 @@ const dojoComponentSchema = new Schema<IDojoComponentDatabase>({
     pp: String,
     Name: String,
     Message: String,
+    RegularCredits: Number,
+    MiscItems: { type: [typeCountSchema], default: undefined },
     CompletionTime: Date
 });
 

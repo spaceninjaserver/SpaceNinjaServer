@@ -5,6 +5,7 @@ import { Guild, TGuildDatabaseDocument } from "@/src/models/guildModel";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { IDojoClient, IDojoComponentClient } from "@/src/types/guildTypes";
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
+import { Types } from "mongoose";
 
 export const getGuildForRequest = async (req: Request): Promise<TGuildDatabaseDocument> => {
     const accountId = await getAccountIdForRequest(req);
@@ -27,7 +28,11 @@ export const getGuildForRequestEx = async (
     return guild;
 };
 
-export const getDojoClient = (guild: TGuildDatabaseDocument, status: number): IDojoClient => {
+export const getDojoClient = (
+    guild: TGuildDatabaseDocument,
+    status: number,
+    componentId: Types.ObjectId | undefined = undefined
+): IDojoClient => {
     const dojo: IDojoClient = {
         _id: { $oid: guild._id.toString() },
         Name: guild.Name,
@@ -41,23 +46,33 @@ export const getDojoClient = (guild: TGuildDatabaseDocument, status: number): ID
         DojoComponents: []
     };
     guild.DojoComponents.forEach(dojoComponent => {
-        const clientComponent: IDojoComponentClient = {
-            id: toOid(dojoComponent._id),
-            pf: dojoComponent.pf,
-            ppf: dojoComponent.ppf,
-            Name: dojoComponent.Name,
-            Message: dojoComponent.Message,
-            DecoCapacity: 600
-        };
-        if (dojoComponent.pi) {
-            clientComponent.pi = toOid(dojoComponent.pi);
-            clientComponent.op = dojoComponent.op!;
-            clientComponent.pp = dojoComponent.pp!;
+        if (!componentId || componentId == dojoComponent._id) {
+            const clientComponent: IDojoComponentClient = {
+                id: toOid(dojoComponent._id),
+                pf: dojoComponent.pf,
+                ppf: dojoComponent.ppf,
+                Name: dojoComponent.Name,
+                Message: dojoComponent.Message,
+                DecoCapacity: 600
+            };
+            if (dojoComponent.pi) {
+                clientComponent.pi = toOid(dojoComponent.pi);
+                clientComponent.op = dojoComponent.op!;
+                clientComponent.pp = dojoComponent.pp!;
+            }
+            if (dojoComponent.CompletionTime) {
+                clientComponent.CompletionTime = toMongoDate(dojoComponent.CompletionTime);
+            } else {
+                clientComponent.RegularCredits = dojoComponent.RegularCredits;
+                clientComponent.MiscItems = dojoComponent.MiscItems;
+            }
+            dojo.DojoComponents.push(clientComponent);
         }
-        if (dojoComponent.CompletionTime) {
-            clientComponent.CompletionTime = toMongoDate(dojoComponent.CompletionTime);
-        }
-        dojo.DojoComponents.push(clientComponent);
     });
     return dojo;
+};
+
+export const scaleRequiredCount = (count: number): number => {
+    // The recipes in the export are for Moon clans. For now we'll just assume we only have Ghost clans.
+    return Math.max(1, Math.trunc(count / 100));
 };

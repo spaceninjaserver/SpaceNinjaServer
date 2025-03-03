@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { getGuildForRequestEx } from "@/src/services/guildService";
+import { getGuildForRequestEx, scaleRequiredCount } from "@/src/services/guildService";
 import { ExportDojoRecipes, IDojoResearch } from "warframe-public-export-plus";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addMiscItems, addRecipes, getInventory, updateCurrency } from "@/src/services/inventoryService";
@@ -130,8 +130,3 @@ interface IGuildTechContributeFields {
     VaultCredits: number;
     VaultMiscItems: IMiscItem[];
 }
-
-const scaleRequiredCount = (count: number): number => {
-    // The recipes in the export are for Moon clans. For now we'll just assume we only have Ghost clans.
-    return Math.max(1, Math.trunc(count / 100));
-};

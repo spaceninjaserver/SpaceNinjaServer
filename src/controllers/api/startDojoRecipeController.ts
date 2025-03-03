@@ -3,6 +3,7 @@ import { IDojoComponentClient } from "@/src/types/guildTypes";
 import { getDojoClient, getGuildForRequest } from "@/src/services/guildService";
 import { Types } from "mongoose";
 import { ExportDojoRecipes } from "warframe-public-export-plus";
+import { config } from "@/src/services/configService";
 
 interface IStartDojoRecipeRequest {
     PlacedComponent: IDojoComponentClient;
@@ -20,15 +21,20 @@ export const startDojoRecipeController: RequestHandler = async (req, res) => {
         guild.DojoEnergy += room.energy;
     }
 
-    guild.DojoComponents.push({
-        _id: new Types.ObjectId(),
-        pf: request.PlacedComponent.pf,
-        ppf: request.PlacedComponent.ppf,
-        pi: new Types.ObjectId(request.PlacedComponent.pi!.$oid),
-        op: request.PlacedComponent.op,
-        pp: request.PlacedComponent.pp,
-        CompletionTime: new Date(Date.now()) // TOOD: Omit this field & handle the "Collecting Materials" state.
-    });
+    const component =
+        guild.DojoComponents[
+            guild.DojoComponents.push({
+                _id: new Types.ObjectId(),
+                pf: request.PlacedComponent.pf,
+                ppf: request.PlacedComponent.ppf,
+                pi: new Types.ObjectId(request.PlacedComponent.pi!.$oid),
+                op: request.PlacedComponent.op,
+                pp: request.PlacedComponent.pp
+            }) - 1
+        ];
+    if (config.noDojoRoomBuildStage) {
+        component.CompletionTime = new Date(Date.now());
+    }
     await guild.save();
     res.json(getDojoClient(guild, 0));
 };

@@ -1,5 +1,6 @@
 import express from "express";
 import { abandonLibraryDailyTaskController } from "@/src/controllers/api/abandonLibraryDailyTaskController";
+import { abortDojoComponentController } from "@/src/controllers/api/abortDojoComponentController";
 import { activateRandomModController } from "@/src/controllers/api/activateRandomModController";
 import { addFriendImageController } from "@/src/controllers/api/addFriendImageController";
 import { arcaneCommonController } from "@/src/controllers/api/arcaneCommonController";
@@ -11,6 +12,7 @@ import { claimCompletedRecipeController } from "@/src/controllers/api/claimCompl
 import { claimLibraryDailyTaskRewardController } from "@/src/controllers/api/claimLibraryDailyTaskRewardController";
 import { clearDialogueHistoryController } from "@/src/controllers/api/clearDialogueHistoryController";
 import { completeRandomModChallengeController } from "@/src/controllers/api/completeRandomModChallengeController";
+import { contributeToDojoComponentController } from "@/src/controllers/api/contributeToDojoComponentController";
 import { createGuildController } from "@/src/controllers/api/createGuildController";
 import { creditsController } from "@/src/controllers/api/creditsController";
 import { deleteSessionController } from "@/src/controllers/api/deleteSessionController";
@@ -135,6 +137,7 @@ apiRouter.get("/surveys.php", surveysController);
 apiRouter.get("/updateSession.php", updateSessionGetController);
 
 // post
+apiRouter.post("/abortDojoComponent.php", abortDojoComponentController);
 apiRouter.post("/activateRandomMod.php", activateRandomModController);
 apiRouter.post("/addFriendImage.php", addFriendImageController);
 apiRouter.post("/arcaneCommon.php", arcaneCommonController);
@@ -144,6 +147,7 @@ apiRouter.post("/changeDojoRoot.php", changeDojoRootController);
 apiRouter.post("/claimCompletedRecipe.php", claimCompletedRecipeController);
 apiRouter.post("/clearDialogueHistory.php", clearDialogueHistoryController);
 apiRouter.post("/completeRandomModChallenge.php", completeRandomModChallengeController);
+apiRouter.post("/contributeToDojoComponent.php", contributeToDojoComponentController);
 apiRouter.post("/createGuild.php", createGuildController);
 apiRouter.post("/drones.php", dronesController);
 apiRouter.post("/endlessXp.php", endlessXpController);

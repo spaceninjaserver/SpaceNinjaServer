@@ -12,7 +12,7 @@ export const setDojoComponentMessageController: RequestHandler = async (req, res
         component.Message = payload.Message;
     }
     await guild.save();
-    res.json(getDojoClient(guild, 1));
+    res.json(getDojoClient(guild, 0, component._id));
 };
 
 type SetDojoComponentMessageRequest = { Name: string } | { Message: string };
