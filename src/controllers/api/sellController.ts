@@ -86,6 +86,11 @@ export const sellController: RequestHandler = async (req, res) => {
             inventory.Hoverboards.pull({ _id: sellItem.String });
         });
     }
+    if (payload.Items.Drones) {
+        payload.Items.Drones.forEach(sellItem => {
+            inventory.Drones.pull({ _id: sellItem.String });
+        });
+    }
     if (payload.Items.Consumables) {
         const consumablesChanges = [];
         for (const sellItem of payload.Items.Consumables) {
@@ -152,6 +157,7 @@ interface ISellRequest {
         SentinelWeapons?: ISellItem[];
         OperatorAmps?: ISellItem[];
         Hoverboards?: ISellItem[];
+        Drones?: ISellItem[];
     };
     SellPrice: number;
     SellCurrency:

@@ -112,6 +112,7 @@ dict = {
     cheats_unlockExilusEverywhere: `Адаптеры Эксилус везде`,
     cheats_unlockArcanesEverywhere: `Адаптеры для мистификаторов везде`,
     cheats_noDailyStandingLimits: `Без ежедневных ограничений репутации`,
+    cheats_instantResourceExtractorDrones: `[UNTRANSLATED] Instant Resource Extractor Drones`,
     cheats_noDojoResearchCosts: `[UNTRANSLATED] No Dojo Research Costs`,
     cheats_noDojoResearchTime: `[UNTRANSLATED] No Dojo Research Time`,
     cheats_spoofMasteryRank: `Подделанный ранг мастерства (-1 для отключения)`,

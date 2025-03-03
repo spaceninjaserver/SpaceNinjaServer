@@ -145,6 +145,7 @@ apiRouter.post("/claimCompletedRecipe.php", claimCompletedRecipeController);
 apiRouter.post("/clearDialogueHistory.php", clearDialogueHistoryController);
 apiRouter.post("/completeRandomModChallenge.php", completeRandomModChallengeController);
 apiRouter.post("/createGuild.php", createGuildController);
+apiRouter.post("/drones.php", dronesController);
 apiRouter.post("/endlessXp.php", endlessXpController);
 apiRouter.post("/evolveWeapon.php", evolveWeaponController);
 apiRouter.post("/findSessions.php", findSessionsController);

@@ -336,7 +336,14 @@ const droneSchema = new Schema<IDroneDatabase>(
     {
         ItemType: String,
         CurrentHP: Number,
-        RepairStart: { type: Date, default: undefined }
+        RepairStart: { type: Date, default: undefined },
+
+        DeployTime: { type: Date, default: undefined },
+        System: Number,
+        DamageTime: { type: Date, default: undefined },
+        PendingDamage: Number,
+        ResourceType: String,
+        ResourceCount: Number
     },
     { id: false }
 );
@@ -347,6 +354,16 @@ droneSchema.set("toJSON", {
         const db = obj as IDroneDatabase;
 
         client.ItemId = toOid(db._id);
+        if (db.RepairStart) {
+            client.RepairStart = toMongoDate(db.RepairStart);
+        }
+
+        delete db.DeployTime;
+        delete db.System;
+        delete db.DamageTime;
+        delete db.PendingDamage;
+        delete db.ResourceType;
+        delete db.ResourceCount;
 
         delete obj._id;
         delete obj.__v;

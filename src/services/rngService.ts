@@ -18,7 +18,7 @@ export const getRandomInt = (min: number, max: number): number => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-export const getRandomReward = (pool: IRngResult[]): IRngResult | undefined => {
+export const getRandomReward = <T extends { probability: number }>(pool: T[]): T | undefined => {
     if (pool.length == 0) return;
 
     const totalChance = pool.reduce((accum, item) => accum + item.probability, 0);
@@ -67,6 +67,24 @@ export const getRandomWeightedReward2 = (
             type: entry.type,
             itemCount: entry.itemCount,
             probability: weights[entry.rarity] / rarityCounts[entry.rarity]
+        });
+    }
+    return getRandomReward(resultPool);
+};
+
+export const getRandomWeightedReward3 = <T extends { Rarity: TRarity }>(
+    pool: T[],
+    weights: Record<TRarity, number>
+): (T & { probability: number }) | undefined => {
+    const resultPool: (T & { probability: number })[] = [];
+    const rarityCounts: Record<TRarity, number> = { COMMON: 0, UNCOMMON: 0, RARE: 0, LEGENDARY: 0 };
+    for (const entry of pool) {
+        ++rarityCounts[entry.Rarity];
+    }
+    for (const entry of pool) {
+        resultPool.push({
+            ...entry,
+            probability: weights[entry.Rarity] / rarityCounts[entry.Rarity]
         });
     }
     return getRandomReward(resultPool);

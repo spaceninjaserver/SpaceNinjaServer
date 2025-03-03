@@ -520,6 +520,13 @@ export interface IDroneDatabase {
     CurrentHP: number;
     _id: Types.ObjectId;
     RepairStart?: Date;
+
+    DeployTime?: Date;
+    System?: number;
+    DamageTime?: Date;
+    PendingDamage?: number;
+    ResourceType?: string;
+    ResourceCount?: number;
 }
 
 export interface ITypeXPItem {
