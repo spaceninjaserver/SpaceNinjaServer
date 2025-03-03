@@ -81,6 +81,18 @@ export const addQuestKey = (inventory: TInventoryDatabaseDocument, questKey: IQu
         logger.warn(`Quest key ${questKey.ItemType} already exists. It will not be added`);
         return;
     }
+
+    if (questKey.ItemType == "/Lotus/Types/Keys/InfestedMicroplanetQuest/InfestedMicroplanetQuestKeyChain") {
+        void createMessage(inventory.accountOwnerId.toString(), [
+            {
+                sndr: "/Lotus/Language/Bosses/Loid",
+                icon: "/Lotus/Interface/Icons/Npcs/Entrati/Loid.png",
+                sub: "/Lotus/Language/InfestedMicroplanet/DeimosIntroQuestInboxTitle",
+                msg: "/Lotus/Language/InfestedMicroplanet/DeimosIntroQuestInboxMessage"
+            }
+        ]);
+    }
+
     const index = inventory.QuestKeys.push(questKey);
 
     return inventory.QuestKeys[index - 1].toJSON<IQuestKeyClient>();
