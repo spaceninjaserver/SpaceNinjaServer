@@ -2,7 +2,7 @@ import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
 import { config } from "@/src/services/configService";
 import { addMiscItems, getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getRandomInt, getRandomWeightedReward3 } from "@/src/services/rngService";
+import { getRandomInt, getRandomWeightedRewardUc } from "@/src/services/rngService";
 import { IMongoDate, IOid } from "@/src/types/commonTypes";
 import { IDroneClient } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
@@ -56,7 +56,7 @@ export const dronesController: RequestHandler = async (req, res) => {
             Math.random() < system.damageChance
                 ? getRandomInt(system.droneDamage.minValue, system.droneDamage.maxValue)
                 : 0;
-        const resource = getRandomWeightedReward3(system.resources, droneMeta.probabilities)!;
+        const resource = getRandomWeightedRewardUc(system.resources, droneMeta.probabilities)!;
         //logger.debug(`drone rolled`, resource);
         drone.ResourceType = "/Lotus/" + resource.StoreItem.substring(18);
         const resourceMeta = ExportResources[drone.ResourceType];

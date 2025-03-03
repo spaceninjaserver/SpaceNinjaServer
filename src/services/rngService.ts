@@ -34,45 +34,25 @@ export const getRandomReward = <T extends { probability: number }>(pool: T[]): T
     throw new Error("What the fuck?");
 };
 
-export const getRandomWeightedReward = (
-    pool: { Item: string; Rarity: TRarity }[],
+export const getRandomWeightedReward = <T extends { rarity: TRarity }>(
+    pool: T[],
     weights: Record<TRarity, number>
-): IRngResult | undefined => {
-    const resultPool: IRngResult[] = [];
-    const rarityCounts: Record<TRarity, number> = { COMMON: 0, UNCOMMON: 0, RARE: 0, LEGENDARY: 0 };
-    for (const entry of pool) {
-        ++rarityCounts[entry.Rarity];
-    }
-    for (const entry of pool) {
-        resultPool.push({
-            type: entry.Item,
-            itemCount: 1,
-            probability: weights[entry.Rarity] / rarityCounts[entry.Rarity]
-        });
-    }
-    return getRandomReward(resultPool);
-};
-
-export const getRandomWeightedReward2 = (
-    pool: { type: string; itemCount: number; rarity: TRarity }[],
-    weights: Record<TRarity, number>
-): IRngResult | undefined => {
-    const resultPool: IRngResult[] = [];
+): (T & { probability: number }) | undefined => {
+    const resultPool: (T & { probability: number })[] = [];
     const rarityCounts: Record<TRarity, number> = { COMMON: 0, UNCOMMON: 0, RARE: 0, LEGENDARY: 0 };
     for (const entry of pool) {
         ++rarityCounts[entry.rarity];
     }
     for (const entry of pool) {
         resultPool.push({
-            type: entry.type,
-            itemCount: entry.itemCount,
+            ...entry,
             probability: weights[entry.rarity] / rarityCounts[entry.rarity]
         });
     }
     return getRandomReward(resultPool);
 };
 
-export const getRandomWeightedReward3 = <T extends { Rarity: TRarity }>(
+export const getRandomWeightedRewardUc = <T extends { Rarity: TRarity }>(
     pool: T[],
     weights: Record<TRarity, number>
 ): (T & { probability: number }) | undefined => {

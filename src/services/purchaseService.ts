@@ -8,7 +8,7 @@ import {
     updateCurrency,
     updateSlots
 } from "@/src/services/inventoryService";
-import { getRandomWeightedReward } from "@/src/services/rngService";
+import { getRandomWeightedRewardUc } from "@/src/services/rngService";
 import { getVendorManifestByOid } from "@/src/services/serversideVendorsService";
 import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IPurchaseRequest, IPurchaseResponse, SlotPurchase, IInventoryChanges } from "@/src/types/purchaseTypes";
@@ -325,14 +325,14 @@ const handleBoosterPackPurchase = async (
     };
     for (let i = 0; i != quantity; ++i) {
         for (const weights of pack.rarityWeightsPerRoll) {
-            const result = getRandomWeightedReward(pack.components, weights);
+            const result = getRandomWeightedRewardUc(pack.components, weights);
             if (result) {
                 logger.debug(`booster pack rolled`, result);
                 purchaseResponse.BoosterPackItems +=
-                    result.type.split("/Lotus/").join("/Lotus/StoreItems/") + ',{"lvl":0};';
+                    result.Item.split("/Lotus/").join("/Lotus/StoreItems/") + ',{"lvl":0};';
                 combineInventoryChanges(
                     purchaseResponse.InventoryChanges,
-                    (await addItem(inventory, result.type, result.itemCount)).InventoryChanges
+                    (await addItem(inventory, result.Item, 1)).InventoryChanges
                 );
             }
         }

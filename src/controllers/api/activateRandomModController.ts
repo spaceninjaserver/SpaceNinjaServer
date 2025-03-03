@@ -3,7 +3,7 @@ import { IRivenChallenge } from "@/src/helpers/rivenFingerprintHelper";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { addMods, getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getRandomElement, getRandomInt, getRandomReward, IRngResult } from "@/src/services/rngService";
+import { getRandomElement, getRandomInt, getRandomReward } from "@/src/services/rngService";
 import { logger } from "@/src/utils/logger";
 import { RequestHandler } from "express";
 import { ExportUpgrades } from "warframe-public-export-plus";
@@ -26,15 +26,14 @@ export const activateRandomModController: RequestHandler = async (req, res) => {
         Required: getRandomInt(challenge.countRange[0], challenge.countRange[1])
     };
     if (Math.random() < challenge.complicationChance) {
-        const complicationsAsRngResults: IRngResult[] = [];
+        const complications: { type: string; probability: number }[] = [];
         for (const complication of challenge.complications) {
-            complicationsAsRngResults.push({
+            complications.push({
                 type: complication.fullName,
-                itemCount: 1,
                 probability: complication.weight
             });
         }
-        fingerprintChallenge.Complication = getRandomReward(complicationsAsRngResults)!.type;
+        fingerprintChallenge.Complication = getRandomReward(complications)!.type;
         logger.debug(
             `riven rolled challenge ${fingerprintChallenge.Type} with complication ${fingerprintChallenge.Complication}`
         );
