@@ -16,9 +16,10 @@ echo Updating dependencies...
 call npm i
 
 call npm run build
-call npm run start
-
-echo SpaceNinjaServer seems to have crashed.
+if %errorlevel% == 0 (
+	call npm run start
+	echo SpaceNinjaServer seems to have crashed.
+)
 :a
 pause > nul
 goto a
