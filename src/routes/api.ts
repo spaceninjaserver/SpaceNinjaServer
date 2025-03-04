@@ -16,6 +16,7 @@ import { contributeToDojoComponentController } from "@/src/controllers/api/contr
 import { createGuildController } from "@/src/controllers/api/createGuildController";
 import { creditsController } from "@/src/controllers/api/creditsController";
 import { deleteSessionController } from "@/src/controllers/api/deleteSessionController";
+import { dojoComponentRushController } from "@/src/controllers/api/dojoComponentRushController";
 import { dojoController } from "@/src/controllers/api/dojoController";
 import { dronesController } from "@/src/controllers/api/dronesController";
 import { endlessXpController } from "@/src/controllers/api/endlessXpController";
@@ -149,6 +150,7 @@ apiRouter.post("/clearDialogueHistory.php", clearDialogueHistoryController);
 apiRouter.post("/completeRandomModChallenge.php", completeRandomModChallengeController);
 apiRouter.post("/contributeToDojoComponent.php", contributeToDojoComponentController);
 apiRouter.post("/createGuild.php", createGuildController);
+apiRouter.post("/dojoComponentRush.php", dojoComponentRushController);
 apiRouter.post("/drones.php", dronesController);
 apiRouter.post("/endlessXp.php", endlessXpController);
 apiRouter.post("/evolveWeapon.php", evolveWeaponController);

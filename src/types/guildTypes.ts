@@ -39,14 +39,20 @@ export interface IDojoComponentClient {
     RegularCredits?: number; // "Collecting Materials" state: Number of credits that were donated.
     MiscItems?: IMiscItem[]; // "Collecting Materials" state: Resources that were donated.
     CompletionTime?: IMongoDate;
+    RushPlatinum?: number;
+    DestructionTime?: IMongoDate;
     DecoCapacity?: number;
 }
 
 export interface IDojoComponentDatabase
-    extends Omit<IDojoComponentClient, "id" | "pi" | "CompletionTime" | "DecoCapacity"> {
+    extends Omit<
+        IDojoComponentClient,
+        "id" | "pi" | "CompletionTime" | "RushPlatinum" | "DestructionTime" | "DecoCapacity"
+    > {
     _id: Types.ObjectId;
     pi?: Types.ObjectId;
     CompletionTime?: Date;
+    //DestructionTime?: Date;
 }
 
 export interface ITechProjectClient {
