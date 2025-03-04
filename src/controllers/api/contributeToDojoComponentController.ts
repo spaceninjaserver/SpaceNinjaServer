@@ -10,6 +10,7 @@ export const contributeToDojoComponentController: RequestHandler = async (req, r
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId);
     const guild = await getGuildForRequestEx(req, inventory);
+    // Any clan member should have permission to contribute although notably permission is denied if they have not crafted the dojo key and were simply invited in.
     const request = JSON.parse(String(req.body)) as IContributeToDojoComponentRequest;
     const component = guild.DojoComponents.id(request.ComponentId)!;
     const componentMeta = Object.values(ExportDojoRecipes.rooms).find(x => x.resultType == component.pf)!;
