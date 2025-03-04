@@ -14,14 +14,12 @@ export const getGuildDojoController: RequestHandler = async (req, res) => {
 
     // Populate dojo info if not present
     if (guild.DojoComponents.length == 0) {
-        guild.DojoComponents.push([
-            {
-                _id: new Types.ObjectId(),
-                pf: "/Lotus/Levels/ClanDojo/DojoHall.level",
-                ppf: "",
-                CompletionTime: new Date(Date.now())
-            }
-        ]);
+        guild.DojoComponents.push({
+            _id: new Types.ObjectId(),
+            pf: "/Lotus/Levels/ClanDojo/DojoHall.level",
+            ppf: "",
+            CompletionTime: new Date(Date.now())
+        });
         await guild.save();
     }
 
