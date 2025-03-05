@@ -1,4 +1,4 @@
-// Based on http://209.141.38.3/OpenWF/Translations/src/branch/main/update.php
+// Based on https://onlyg.it/OpenWF/Translations/src/branch/main/update.php
 // Converted via ChatGPT-4o
 
 const fs = require("fs");
