@@ -94,8 +94,6 @@ dict = {
     cheats_skipAllDialogue: `Skip All Dialogue`,
     cheats_unlockAllScans: `Unlock All Scans`,
     cheats_unlockAllMissions: `Unlock All Missions`,
-    cheats_unlockAllQuests: `Unlock All Quests`,
-    cheats_completeAllQuests: `Complete All Quests`,
     cheats_infiniteCredits: `Infinite Credits`,
     cheats_infinitePlatinum: `Infinite Platinum`,
     cheats_infiniteEndo: `Infinite Endo`,

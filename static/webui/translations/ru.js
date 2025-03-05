@@ -95,8 +95,6 @@ dict = {
     cheats_skipAllDialogue: `Пропустить все диалоги`,
     cheats_unlockAllScans: `Разблокировать все сканирования`,
     cheats_unlockAllMissions: `Разблокировать все миссии`,
-    cheats_unlockAllQuests: `Разблокировать все квесты`,
-    cheats_completeAllQuests: `Завершить все квесты`,
     cheats_infiniteCredits: `Бесконечные кредиты`,
     cheats_infinitePlatinum: `Бесконечная платина`,
     cheats_infiniteEndo: `Бесконечное эндо`,
