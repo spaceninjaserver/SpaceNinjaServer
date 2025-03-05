@@ -23,12 +23,11 @@ export const fusionTreasuresController: RequestHandler = async (req, res) => {
     const inventory = await getInventory(accountId);
     const request = JSON.parse(String(req.body)) as IFusionTreasureRequest;
 
+    // Swap treasures
     const oldTreasure = parseFusionTreasure(request.oldTreasureName, -1);
     const newTreasure = parseFusionTreasure(request.newTreasureName, 1);
-
-    // Swap treasures
-    addFusionTreasures(inventory, [oldTreasure]);
-    addFusionTreasures(inventory, [newTreasure]);
+    const fusionTreasureChanges = [oldTreasure, newTreasure];
+    addFusionTreasures(inventory, fusionTreasureChanges);
 
     // Remove consumed stars
     const miscItemChanges: IMiscItem[] = [];
@@ -45,5 +44,9 @@ export const fusionTreasuresController: RequestHandler = async (req, res) => {
     addMiscItems(inventory, miscItemChanges);
 
     await inventory.save();
-    res.end();
+    // The response itself is the inventory changes for this endpoint.
+    res.json({
+        MiscItems: miscItemChanges,
+        FusionTreasures: fusionTreasureChanges
+    });
 };
