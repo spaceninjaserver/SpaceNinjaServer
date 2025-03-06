@@ -1,3 +1,4 @@
+// French translation by Vitruvio
 dict = {
     general_inventoryUpdateNote: `Note : Les changements effectués ici seront appliqués lors de la syncrhonisation. Visiter la navigation appliquera les changements apportés à l'inventaire.`,
     general_addButton: `Ajouter`,
@@ -94,8 +95,6 @@ dict = {
     cheats_skipAllDialogue: `Passer les dialogues`,
     cheats_unlockAllScans: `Débloquer tous les scans`,
     cheats_unlockAllMissions: `Débloquer toutes les missions`,
-    cheats_unlockAllQuests: `Débloquer toutes les quêtes`,
-    cheats_completeAllQuests: `Compléter toutes les quêtes`,
     cheats_infiniteCredits: `Crédits infinis`,
     cheats_infinitePlatinum: `Platinum infini`,
     cheats_infiniteEndo: `Endo infini`,
