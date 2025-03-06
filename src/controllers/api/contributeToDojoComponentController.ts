@@ -50,7 +50,7 @@ export const contributeToDojoComponentController: RequestHandler = async (req, r
     await guild.save();
     await inventory.save();
     res.json({
-        ...getDojoClient(guild, 0, component._id),
+        ...(await getDojoClient(guild, 0, component._id)),
         InventoryChanges: inventoryChanges
     });
 };

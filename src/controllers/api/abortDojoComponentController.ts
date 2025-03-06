@@ -9,7 +9,6 @@ export const abortDojoComponentController: RequestHandler = async (req, res) => 
     const guild = await getGuildForRequestEx(req, inventory);
     const request = JSON.parse(String(req.body)) as IAbortDojoComponentRequest;
 
-    // TODO: Move already-contributed credits & items to the clan vault
     if (request.DecoId) {
         removeDojoDeco(guild, request.ComponentId, request.DecoId);
     } else {
@@ -17,7 +16,7 @@ export const abortDojoComponentController: RequestHandler = async (req, res) => 
     }
 
     await guild.save();
-    res.json(getDojoClient(guild, 0, request.ComponentId));
+    res.json(await getDojoClient(guild, 0, request.ComponentId));
 };
 
 interface IAbortDojoComponentRequest {

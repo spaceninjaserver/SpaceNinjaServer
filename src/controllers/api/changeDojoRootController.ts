@@ -58,7 +58,7 @@ export const changeDojoRootController: RequestHandler = async (req, res) => {
 
     await guild.save();
 
-    res.json(getDojoClient(guild, 0));
+    res.json(await getDojoClient(guild, 0));
 };
 
 interface INode {

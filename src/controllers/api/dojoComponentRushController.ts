@@ -35,7 +35,7 @@ export const dojoComponentRushController: RequestHandler = async (req, res) => {
     await guild.save();
     await inventory.save();
     res.json({
-        ...getDojoClient(guild, 0, component._id),
+        ...(await getDojoClient(guild, 0, component._id)),
         InventoryChanges: inventoryChanges
     });
 };

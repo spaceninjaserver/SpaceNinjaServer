@@ -30,7 +30,7 @@ export const placeDecoInComponentController: RequestHandler = async (req, res) =
     }
 
     await guild.save();
-    res.json(getDojoClient(guild, 0, component._id));
+    res.json(await getDojoClient(guild, 0, component._id));
 };
 
 interface IPlaceDecoInComponentRequest {

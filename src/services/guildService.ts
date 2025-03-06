@@ -7,6 +7,7 @@ import { IDojoClient, IDojoComponentClient } from "@/src/types/guildTypes";
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
 import { Types } from "mongoose";
 import { ExportDojoRecipes } from "warframe-public-export-plus";
+import { logger } from "../utils/logger";
 
 export const getGuildForRequest = async (req: Request): Promise<TGuildDatabaseDocument> => {
     const accountId = await getAccountIdForRequest(req);
@@ -29,11 +30,11 @@ export const getGuildForRequestEx = async (
     return guild;
 };
 
-export const getDojoClient = (
+export const getDojoClient = async (
     guild: TGuildDatabaseDocument,
     status: number,
     componentId: Types.ObjectId | string | undefined = undefined
-): IDojoClient => {
+): Promise<IDojoClient> => {
     const dojo: IDojoClient = {
         _id: { $oid: guild._id.toString() },
         Name: guild.Name,
@@ -46,6 +47,7 @@ export const getDojoClient = (
         DojoRequestStatus: status,
         DojoComponents: []
     };
+    const roomsToRemove: Types.ObjectId[] = [];
     guild.DojoComponents.forEach(dojoComponent => {
         if (!componentId || dojoComponent._id.equals(componentId)) {
             const clientComponent: IDojoComponentClient = {
@@ -63,6 +65,13 @@ export const getDojoClient = (
             }
             if (dojoComponent.CompletionTime) {
                 clientComponent.CompletionTime = toMongoDate(dojoComponent.CompletionTime);
+                if (dojoComponent.DestructionTime) {
+                    if (Date.now() >= dojoComponent.DestructionTime.getTime()) {
+                        roomsToRemove.push(dojoComponent._id);
+                        return;
+                    }
+                    clientComponent.DestructionTime = toMongoDate(dojoComponent.DestructionTime);
+                }
             } else {
                 clientComponent.RegularCredits = dojoComponent.RegularCredits;
                 clientComponent.MiscItems = dojoComponent.MiscItems;
@@ -84,6 +93,13 @@ export const getDojoClient = (
             dojo.DojoComponents.push(clientComponent);
         }
     });
+    if (roomsToRemove.length) {
+        logger.debug(`removing now-destroyed rooms`, roomsToRemove);
+        for (const id of roomsToRemove) {
+            removeDojoRoom(guild, id);
+        }
+        await guild.save();
+    }
     return dojo;
 };
 
@@ -92,7 +108,7 @@ export const scaleRequiredCount = (count: number): number => {
     return Math.max(1, Math.trunc(count / 100));
 };
 
-export const removeDojoRoom = (guild: TGuildDatabaseDocument, componentId: string): void => {
+export const removeDojoRoom = (guild: TGuildDatabaseDocument, componentId: Types.ObjectId | string): void => {
     const component = guild.DojoComponents.splice(
         guild.DojoComponents.findIndex(x => x._id.equals(componentId)),
         1
@@ -102,9 +118,14 @@ export const removeDojoRoom = (guild: TGuildDatabaseDocument, componentId: strin
         guild.DojoCapacity -= meta.capacity;
         guild.DojoEnergy -= meta.energy;
     }
+    // TODO: Add resources spent to the clan vault
 };
 
-export const removeDojoDeco = (guild: TGuildDatabaseDocument, componentId: string, decoId: string): void => {
+export const removeDojoDeco = (
+    guild: TGuildDatabaseDocument,
+    componentId: Types.ObjectId | string,
+    decoId: Types.ObjectId | string
+): void => {
     const component = guild.DojoComponents.id(componentId)!;
     const deco = component.Decos!.splice(
         component.Decos!.findIndex(x => x._id.equals(decoId)),
@@ -114,4 +135,5 @@ export const removeDojoDeco = (guild: TGuildDatabaseDocument, componentId: strin
     if (meta && meta.capacityCost) {
         component.DecoCapacity! += meta.capacityCost;
     }
+    // TODO: Add resources spent to the clan vault
 };

@@ -37,5 +37,5 @@ export const startDojoRecipeController: RequestHandler = async (req, res) => {
         component.CompletionTime = new Date(Date.now());
     }
     await guild.save();
-    res.json(getDojoClient(guild, 0));
+    res.json(await getDojoClient(guild, 0));
 };

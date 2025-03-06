@@ -112,6 +112,7 @@ dict = {
     cheats_noDailyStandingLimits: `Pas de limite de réputation journalière`,
     cheats_instantResourceExtractorDrones: `Ressources de drone d'extraction instantannées`,
     cheats_noDojoRoomBuildStage: `No Dojo Room Build Stage`,
+    cheats_fastDojoRoomDestruction: `[UNTRANSLATED] Fast Dojo Room Destruction`,
     cheats_noDojoResearchCosts: `Aucun coût de recherche (Dojo)`,
     cheats_noDojoResearchTime: `Aucun temps de recherche (Dojo)`,
     cheats_spoofMasteryRank: `Spoofed Mastery Rank (-1 to disable)`,

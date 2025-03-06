@@ -59,6 +59,7 @@ interface IConfig {
     noDailyStandingLimits?: boolean;
     instantResourceExtractorDrones?: boolean;
     noDojoRoomBuildStage?: boolean;
+    fastDojoRoomDestruction?: boolean;
     noDojoResearchCosts?: boolean;
     noDojoResearchTime?: boolean;
     spoofMasteryRank?: number;

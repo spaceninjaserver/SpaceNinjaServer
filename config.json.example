@@ -33,6 +33,7 @@
   "noDailyStandingLimits": true,
   "instantResourceExtractorDrones": false,
   "noDojoRoomBuildStage": true,
+  "fastDojoRoomDestruction": true,
   "noDojoResearchCosts": true,
   "noDojoResearchTime": true,
   "spoofMasteryRank": -1

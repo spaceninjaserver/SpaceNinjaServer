@@ -111,6 +111,7 @@ dict = {
     cheats_noDailyStandingLimits: `No Daily Standing Limits`,
     cheats_instantResourceExtractorDrones: `Instant Resource Extractor Drones`,
     cheats_noDojoRoomBuildStage: `No Dojo Room Build Stage`,
+    cheats_fastDojoRoomDestruction: `Fast Dojo Room Destruction`,
     cheats_noDojoResearchCosts: `No Dojo Research Costs`,
     cheats_noDojoResearchTime: `No Dojo Research Time`,
     cheats_spoofMasteryRank: `Spoofed Mastery Rank (-1 to disable)`,

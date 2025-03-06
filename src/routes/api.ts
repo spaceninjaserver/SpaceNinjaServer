@@ -1,6 +1,7 @@
 import express from "express";
 import { abandonLibraryDailyTaskController } from "@/src/controllers/api/abandonLibraryDailyTaskController";
 import { abortDojoComponentController } from "@/src/controllers/api/abortDojoComponentController";
+import { abortDojoComponentDestructionController } from "@/src/controllers/api/abortDojoComponentDestructionController";
 import { activateRandomModController } from "@/src/controllers/api/activateRandomModController";
 import { addFriendImageController } from "@/src/controllers/api/addFriendImageController";
 import { arcaneCommonController } from "@/src/controllers/api/arcaneCommonController";
@@ -105,6 +106,7 @@ const apiRouter = express.Router();
 
 // get
 apiRouter.get("/abandonLibraryDailyTask.php", abandonLibraryDailyTaskController);
+apiRouter.get("/abortDojoComponentDestruction.php", abortDojoComponentDestructionController);
 apiRouter.get("/checkDailyMissionBonus.php", checkDailyMissionBonusController);
 apiRouter.get("/claimLibraryDailyTaskReward.php", claimLibraryDailyTaskRewardController);
 apiRouter.get("/credits.php", creditsController);
