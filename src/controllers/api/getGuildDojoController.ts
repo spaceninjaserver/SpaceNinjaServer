@@ -18,7 +18,8 @@ export const getGuildDojoController: RequestHandler = async (req, res) => {
             _id: new Types.ObjectId(),
             pf: "/Lotus/Levels/ClanDojo/DojoHall.level",
             ppf: "",
-            CompletionTime: new Date(Date.now())
+            CompletionTime: new Date(Date.now()),
+            DecoCapacity: 600
         });
         await guild.save();
     }

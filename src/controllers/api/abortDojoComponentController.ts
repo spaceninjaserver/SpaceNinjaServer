@@ -1,4 +1,4 @@
-import { getDojoClient, getGuildForRequestEx } from "@/src/services/guildService";
+import { getDojoClient, getGuildForRequestEx, removeDojoDeco, removeDojoRoom } from "@/src/services/guildService";
 import { getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { RequestHandler } from "express";
@@ -8,12 +8,20 @@ export const abortDojoComponentController: RequestHandler = async (req, res) => 
     const inventory = await getInventory(accountId);
     const guild = await getGuildForRequestEx(req, inventory);
     const request = JSON.parse(String(req.body)) as IAbortDojoComponentRequest;
+
     // TODO: Move already-contributed credits & items to the clan vault
-    guild.DojoComponents.pull({ _id: request.ComponentId });
+    if (request.DecoId) {
+        removeDojoDeco(guild, request.ComponentId, request.DecoId);
+    } else {
+        removeDojoRoom(guild, request.ComponentId);
+    }
+
     await guild.save();
-    res.json(getDojoClient(guild, 0));
+    res.json(getDojoClient(guild, 0, request.ComponentId));
 };
 
-export interface IAbortDojoComponentRequest {
+interface IAbortDojoComponentRequest {
+    DecoType?: string;
     ComponentId: string;
+    DecoId?: string;
 }

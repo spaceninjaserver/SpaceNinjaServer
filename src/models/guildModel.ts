@@ -2,11 +2,22 @@ import {
     IGuildDatabase,
     IDojoComponentDatabase,
     ITechProjectDatabase,
-    ITechProjectClient
+    ITechProjectClient,
+    IDojoDecoDatabase
 } from "@/src/types/guildTypes";
 import { Document, Model, model, Schema, Types } from "mongoose";
 import { typeCountSchema } from "./inventoryModels/inventoryModel";
 import { toMongoDate } from "../helpers/inventoryHelpers";
+
+const dojoDecoSchema = new Schema<IDojoDecoDatabase>({
+    Type: String,
+    Pos: [Number],
+    Rot: [Number],
+    Name: String,
+    RegularCredits: Number,
+    MiscItems: { type: [typeCountSchema], default: undefined },
+    CompletionTime: Date
+});
 
 const dojoComponentSchema = new Schema<IDojoComponentDatabase>({
     pf: { type: String, required: true },
@@ -18,7 +29,10 @@ const dojoComponentSchema = new Schema<IDojoComponentDatabase>({
     Message: String,
     RegularCredits: Number,
     MiscItems: { type: [typeCountSchema], default: undefined },
-    CompletionTime: Date
+    CompletionTime: Date,
+    DestructionTime: Date,
+    Decos: [dojoDecoSchema],
+    DecoCapacity: Number
 });
 
 const techProjectSchema = new Schema<ITechProjectDatabase>(

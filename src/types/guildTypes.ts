@@ -41,18 +41,33 @@ export interface IDojoComponentClient {
     CompletionTime?: IMongoDate;
     RushPlatinum?: number;
     DestructionTime?: IMongoDate;
+    Decos?: IDojoDecoClient[];
     DecoCapacity?: number;
 }
 
 export interface IDojoComponentDatabase
-    extends Omit<
-        IDojoComponentClient,
-        "id" | "pi" | "CompletionTime" | "RushPlatinum" | "DestructionTime" | "DecoCapacity"
-    > {
+    extends Omit<IDojoComponentClient, "id" | "pi" | "CompletionTime" | "RushPlatinum" | "DestructionTime" | "Decos"> {
     _id: Types.ObjectId;
     pi?: Types.ObjectId;
     CompletionTime?: Date;
-    //DestructionTime?: Date;
+    DestructionTime?: Date;
+    Decos?: IDojoDecoDatabase[];
+}
+
+export interface IDojoDecoClient {
+    id: IOid;
+    Type: string;
+    Pos: number[];
+    Rot: number[];
+    Name?: string; // for teleporters
+    RegularCredits?: number;
+    MiscItems?: IMiscItem[];
+    CompletionTime?: IMongoDate;
+}
+
+export interface IDojoDecoDatabase extends Omit<IDojoDecoClient, "id" | "CompletionTime"> {
+    _id: Types.ObjectId;
+    CompletionTime?: Date;
 }
 
 export interface ITechProjectClient {
@@ -65,4 +80,10 @@ export interface ITechProjectClient {
 
 export interface ITechProjectDatabase extends Omit<ITechProjectClient, "CompletionDate"> {
     CompletionDate?: Date;
+}
+
+export interface IDojoContributable {
+    RegularCredits?: number;
+    MiscItems?: IMiscItem[];
+    CompletionTime?: Date;
 }

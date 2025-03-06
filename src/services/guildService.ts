@@ -6,6 +6,7 @@ import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/invento
 import { IDojoClient, IDojoComponentClient } from "@/src/types/guildTypes";
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
 import { Types } from "mongoose";
+import { ExportDojoRecipes } from "warframe-public-export-plus";
 
 export const getGuildForRequest = async (req: Request): Promise<TGuildDatabaseDocument> => {
     const accountId = await getAccountIdForRequest(req);
@@ -31,7 +32,7 @@ export const getGuildForRequestEx = async (
 export const getDojoClient = (
     guild: TGuildDatabaseDocument,
     status: number,
-    componentId: Types.ObjectId | undefined = undefined
+    componentId: Types.ObjectId | string | undefined = undefined
 ): IDojoClient => {
     const dojo: IDojoClient = {
         _id: { $oid: guild._id.toString() },
@@ -46,14 +47,14 @@ export const getDojoClient = (
         DojoComponents: []
     };
     guild.DojoComponents.forEach(dojoComponent => {
-        if (!componentId || componentId == dojoComponent._id) {
+        if (!componentId || dojoComponent._id.equals(componentId)) {
             const clientComponent: IDojoComponentClient = {
                 id: toOid(dojoComponent._id),
                 pf: dojoComponent.pf,
                 ppf: dojoComponent.ppf,
                 Name: dojoComponent.Name,
                 Message: dojoComponent.Message,
-                DecoCapacity: 600
+                DecoCapacity: dojoComponent.DecoCapacity ?? 600
             };
             if (dojoComponent.pi) {
                 clientComponent.pi = toOid(dojoComponent.pi);
@@ -66,6 +67,20 @@ export const getDojoClient = (
                 clientComponent.RegularCredits = dojoComponent.RegularCredits;
                 clientComponent.MiscItems = dojoComponent.MiscItems;
             }
+            if (dojoComponent.Decos) {
+                clientComponent.Decos = [];
+                for (const deco of dojoComponent.Decos) {
+                    clientComponent.Decos.push({
+                        id: toOid(deco._id),
+                        Type: deco.Type,
+                        Pos: deco.Pos,
+                        Rot: deco.Rot,
+                        CompletionTime: deco.CompletionTime ? toMongoDate(deco.CompletionTime) : undefined,
+                        RegularCredits: deco.RegularCredits,
+                        MiscItems: deco.MiscItems
+                    });
+                }
+            }
             dojo.DojoComponents.push(clientComponent);
         }
     });
@@ -75,4 +90,28 @@ export const getDojoClient = (
 export const scaleRequiredCount = (count: number): number => {
     // The recipes in the export are for Moon clans. For now we'll just assume we only have Ghost clans.
     return Math.max(1, Math.trunc(count / 100));
+};
+
+export const removeDojoRoom = (guild: TGuildDatabaseDocument, componentId: string): void => {
+    const component = guild.DojoComponents.splice(
+        guild.DojoComponents.findIndex(x => x._id.equals(componentId)),
+        1
+    )[0];
+    const meta = Object.values(ExportDojoRecipes.rooms).find(x => x.resultType == component.pf);
+    if (meta) {
+        guild.DojoCapacity -= meta.capacity;
+        guild.DojoEnergy -= meta.energy;
+    }
+};
+
+export const removeDojoDeco = (guild: TGuildDatabaseDocument, componentId: string, decoId: string): void => {
+    const component = guild.DojoComponents.id(componentId)!;
+    const deco = component.Decos!.splice(
+        component.Decos!.findIndex(x => x._id.equals(decoId)),
+        1
+    )[0];
+    const meta = Object.values(ExportDojoRecipes.decos).find(x => x.resultType == deco.Type);
+    if (meta && meta.capacityCost) {
+        component.DecoCapacity! += meta.capacityCost;
+    }
 };

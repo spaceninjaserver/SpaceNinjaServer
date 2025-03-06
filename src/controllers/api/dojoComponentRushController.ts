@@ -1,8 +1,18 @@
 import { getDojoClient, getGuildForRequestEx, scaleRequiredCount } from "@/src/services/guildService";
 import { getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
+import { IDojoContributable } from "@/src/types/guildTypes";
 import { RequestHandler } from "express";
-import { ExportDojoRecipes } from "warframe-public-export-plus";
+import { ExportDojoRecipes, IDojoRecipe } from "warframe-public-export-plus";
+
+interface IDojoComponentRushRequest {
+    DecoType?: string;
+    DecoId?: string;
+    ComponentId: string;
+    Amount: number;
+    VaultAmount: number;
+    AllianceVaultAmount: number;
+}
 
 export const dojoComponentRushController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -10,14 +20,16 @@ export const dojoComponentRushController: RequestHandler = async (req, res) => {
     const guild = await getGuildForRequestEx(req, inventory);
     const request = JSON.parse(String(req.body)) as IDojoComponentRushRequest;
     const component = guild.DojoComponents.id(request.ComponentId)!;
-    const componentMeta = Object.values(ExportDojoRecipes.rooms).find(x => x.resultType == component.pf)!;
 
-    const fullPlatinumCost = scaleRequiredCount(componentMeta.skipTimePrice);
-    const fullDurationSeconds = componentMeta.time;
-    const secondsPerPlatinum = fullDurationSeconds / fullPlatinumCost;
-    component.CompletionTime = new Date(
-        component.CompletionTime!.getTime() - secondsPerPlatinum * request.Amount * 1000
-    );
+    if (request.DecoId) {
+        const deco = component.Decos!.find(x => x._id.equals(request.DecoId))!;
+        const meta = Object.values(ExportDojoRecipes.decos).find(x => x.resultType == deco.Type)!;
+        processContribution(deco, meta, request.Amount);
+    } else {
+        const meta = Object.values(ExportDojoRecipes.rooms).find(x => x.resultType == component.pf)!;
+        processContribution(component, meta, request.Amount);
+    }
+
     const inventoryChanges = updateCurrency(inventory, request.Amount, true);
 
     await guild.save();
@@ -28,9 +40,11 @@ export const dojoComponentRushController: RequestHandler = async (req, res) => {
     });
 };
 
-interface IDojoComponentRushRequest {
-    ComponentId: string;
-    Amount: number;
-    VaultAmount: number;
-    AllianceVaultAmount: number;
-}
+const processContribution = (component: IDojoContributable, meta: IDojoRecipe, platinumDonated: number): void => {
+    const fullPlatinumCost = scaleRequiredCount(meta.skipTimePrice);
+    const fullDurationSeconds = meta.time;
+    const secondsPerPlatinum = fullDurationSeconds / fullPlatinumCost;
+    component.CompletionTime = new Date(
+        component.CompletionTime!.getTime() - secondsPerPlatinum * platinumDonated * 1000
+    );
+};

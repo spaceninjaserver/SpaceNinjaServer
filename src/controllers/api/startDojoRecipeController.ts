@@ -29,7 +29,8 @@ export const startDojoRecipeController: RequestHandler = async (req, res) => {
                 ppf: request.PlacedComponent.ppf,
                 pi: new Types.ObjectId(request.PlacedComponent.pi!.$oid),
                 op: request.PlacedComponent.op,
-                pp: request.PlacedComponent.pp
+                pp: request.PlacedComponent.pp,
+                DecoCapacity: room?.decoCapacity
             }) - 1
         ];
     if (config.noDojoRoomBuildStage) {
