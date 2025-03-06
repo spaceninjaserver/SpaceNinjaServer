@@ -128,7 +128,7 @@ function setActiveLanguage(lang) {
     document.querySelector("[data-lang=" + lang + "]").classList.add("active");
 
     window.dictPromise = new Promise(resolve => {
-        const webui_lang = ["en", "ru"].indexOf(lang) == -1 ? "en" : lang;
+        const webui_lang = ["en", "ru", "fr"].indexOf(lang) == -1 ? "en" : lang;
         const script = document.createElement("script");
         script.src = "/translations/" + webui_lang + ".js";
         script.onload = function () {
