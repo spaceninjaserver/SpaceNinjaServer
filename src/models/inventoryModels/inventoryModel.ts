@@ -74,7 +74,8 @@ import {
     IAlignment,
     ICollectibleEntry,
     IIncentiveState,
-    ISongChallenge
+    ISongChallenge,
+    ILibraryPersonalProgress
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -1005,6 +1006,15 @@ pendingCouponSchema.set("toJSON", {
     }
 });
 
+const libraryPersonalProgressSchema = new Schema<ILibraryPersonalProgress>(
+    {
+        TargetType: String,
+        Scans: Number,
+        Completed: Boolean
+    },
+    { _id: false }
+);
+
 const libraryDailyTaskInfoSchema = new Schema<ILibraryDailyTaskInfo>(
     {
         EnemyTypes: [String],
@@ -1271,7 +1281,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         LibraryPersonalTarget: String,
         //Cephalon Simaris Entries Example:"TargetType"+"Scans"(1-10)+"Completed": true|false
-        LibraryPersonalProgress: [Schema.Types.Mixed],
+        LibraryPersonalProgress: { type: [libraryPersonalProgressSchema], default: [] },
         //Cephalon Simaris Daily Task
         LibraryAvailableDailyTaskInfo: libraryDailyTaskInfoSchema,
         LibraryActiveDailyTaskInfo: libraryDailyTaskInfoSchema,

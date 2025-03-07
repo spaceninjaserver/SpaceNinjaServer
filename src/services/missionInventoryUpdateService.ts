@@ -191,17 +191,48 @@ export const addMissionInventoryUpdates = (
                 break;
             case "LibraryScans":
                 value.forEach(scan => {
-                    if (inventory.LibraryActiveDailyTaskInfo) {
-                        if (inventory.LibraryActiveDailyTaskInfo.EnemyTypes.find(x => x == scan.EnemyType)) {
-                            inventory.LibraryActiveDailyTaskInfo.Scans ??= 0;
-                            inventory.LibraryActiveDailyTaskInfo.Scans += scan.Count;
-                        } else {
-                            logger.warn(
-                                `ignoring synthesis of ${scan.EnemyType} as it's not part of the active daily task`
-                            );
+                    let synthesisIgnored = true;
+                    if (
+                        inventory.LibraryPersonalTarget &&
+                        libraryPersonalTargetToAvatar[inventory.LibraryPersonalTarget] == scan.EnemyType
+                    ) {
+                        let progress = inventory.LibraryPersonalProgress.find(
+                            x => x.TargetType == inventory.LibraryPersonalTarget
+                        );
+                        if (!progress) {
+                            progress =
+                                inventory.LibraryPersonalProgress[
+                                    inventory.LibraryPersonalProgress.push({
+                                        TargetType: inventory.LibraryPersonalTarget,
+                                        Scans: 0,
+                                        Completed: false
+                                    }) - 1
+                                ];
                         }
-                    } else {
-                        logger.warn(`no library daily task active, ignoring synthesis of ${scan.EnemyType}`);
+                        progress.Scans += scan.Count;
+                        if (
+                            progress.Scans >=
+                            (inventory.LibraryPersonalTarget ==
+                            "/Lotus/Types/Game/Library/Targets/DragonframeQuestTarget"
+                                ? 3
+                                : 10)
+                        ) {
+                            progress.Completed = true;
+                        }
+                        logger.debug(`synthesis of ${scan.EnemyType} added to personal target progress`);
+                        synthesisIgnored = false;
+                    }
+                    if (
+                        inventory.LibraryActiveDailyTaskInfo &&
+                        inventory.LibraryActiveDailyTaskInfo.EnemyTypes.find(x => x == scan.EnemyType)
+                    ) {
+                        inventory.LibraryActiveDailyTaskInfo.Scans ??= 0;
+                        inventory.LibraryActiveDailyTaskInfo.Scans += scan.Count;
+                        logger.debug(`synthesis of ${scan.EnemyType} added to daily task progress`);
+                        synthesisIgnored = false;
+                    }
+                    if (synthesisIgnored) {
+                        logger.warn(`ignoring synthesis of ${scan.EnemyType} due to not knowing why you did that`);
                     }
                 });
                 break;
@@ -534,3 +565,25 @@ const corruptedMods = [
     "/Lotus/StoreItems/Upgrades/Mods/Rifle/DualStat/CorruptedReloadSpeedMaxClipRifle", // Depleted Reload
     "/Lotus/StoreItems/Upgrades/Mods/Warframe/DualStat/FixedShieldAndShieldGatingDuration" // Catalyzing Shields
 ];
+
+const libraryPersonalTargetToAvatar: Record<string, string> = {
+    "/Lotus/Types/Game/Library/Targets/DragonframeQuestTarget":
+        "/Lotus/Types/Enemies/Grineer/Desert/Avatars/RifleLancerAvatar",
+    "/Lotus/Types/Game/Library/Targets/Research1Target":
+        "/Lotus/Types/Enemies/Grineer/Desert/Avatars/RifleLancerAvatar",
+    "/Lotus/Types/Game/Library/Targets/Research2Target":
+        "/Lotus/Types/Enemies/Corpus/BipedRobot/AIWeek/LaserDiscBipedAvatar",
+    "/Lotus/Types/Game/Library/Targets/Research3Target":
+        "/Lotus/Types/Enemies/Grineer/Desert/Avatars/EvisceratorLancerAvatar",
+    "/Lotus/Types/Game/Library/Targets/Research4Target": "/Lotus/Types/Enemies/Orokin/OrokinHealingAncientAvatar",
+    "/Lotus/Types/Game/Library/Targets/Research5Target":
+        "/Lotus/Types/Enemies/Corpus/Spaceman/AIWeek/ShotgunSpacemanAvatar",
+    "/Lotus/Types/Game/Library/Targets/Research6Target": "/Lotus/Types/Enemies/Infested/AiWeek/Runners/RunnerAvatar",
+    "/Lotus/Types/Game/Library/Targets/Research7Target":
+        "/Lotus/Types/Enemies/Grineer/AIWeek/Avatars/GrineerMeleeStaffAvatar",
+    "/Lotus/Types/Game/Library/Targets/Research8Target": "/Lotus/Types/Enemies/Orokin/OrokinHeavyFemaleAvatar",
+    "/Lotus/Types/Game/Library/Targets/Research9Target":
+        "/Lotus/Types/Enemies/Infested/AiWeek/Quadrupeds/QuadrupedAvatar",
+    "/Lotus/Types/Game/Library/Targets/Research10Target":
+        "/Lotus/Types/Enemies/Corpus/Spaceman/AIWeek/NullifySpacemanAvatar"
+};

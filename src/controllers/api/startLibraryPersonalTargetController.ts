@@ -8,7 +8,7 @@ export const startLibraryPersonalTargetController: RequestHandler = async (req, 
     inventory.LibraryPersonalTarget = req.query.target as string;
     await inventory.save();
     res.json({
-        IsQuest: false,
+        IsQuest: req.query.target == "/Lotus/Types/Game/Library/Targets/DragonframeQuestTarget",
         Target: req.query.target
     });
 };
