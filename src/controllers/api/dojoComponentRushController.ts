@@ -47,4 +47,6 @@ const processContribution = (component: IDojoContributable, meta: IDojoRecipe, p
     component.CompletionTime = new Date(
         component.CompletionTime!.getTime() - secondsPerPlatinum * platinumDonated * 1000
     );
+    component.RushPlatinum ??= 0;
+    component.RushPlatinum += platinumDonated;
 };

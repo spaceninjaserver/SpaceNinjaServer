@@ -3,6 +3,7 @@ import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { Guild } from "@/src/models/guildModel";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { toOid } from "@/src/helpers/inventoryHelpers";
+import { getGuildVault } from "@/src/services/guildService";
 
 const getGuildController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -62,7 +63,8 @@ const getGuildController: RequestHandler = async (req, res) => {
                         Permissions: 4096
                     }
                 ],
-                Tier: 1
+                Tier: 1,
+                Vault: getGuildVault(guild)
             });
             return;
         }

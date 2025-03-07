@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { getGuildForRequestEx, scaleRequiredCount } from "@/src/services/guildService";
+import { getGuildForRequestEx, getGuildVault, scaleRequiredCount } from "@/src/services/guildService";
 import { ExportDojoRecipes, IDojoResearch } from "warframe-public-export-plus";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addMiscItems, addRecipes, getInventory, updateCurrency } from "@/src/services/inventoryService";
@@ -43,10 +43,35 @@ export const guildTechController: RequestHandler = async (req, res) => {
     } else if (action == "Contribute") {
         const contributions = data as IGuildTechContributeFields;
         const techProject = guild.TechProjects!.find(x => x.ItemType == contributions.RecipeType)!;
+
+        if (contributions.VaultCredits) {
+            if (contributions.VaultCredits > techProject.ReqCredits) {
+                contributions.VaultCredits = techProject.ReqCredits;
+            }
+            techProject.ReqCredits -= contributions.VaultCredits;
+            guild.VaultRegularCredits! -= contributions.VaultCredits;
+        }
+
         if (contributions.RegularCredits > techProject.ReqCredits) {
             contributions.RegularCredits = techProject.ReqCredits;
         }
         techProject.ReqCredits -= contributions.RegularCredits;
+
+        if (contributions.VaultMiscItems.length) {
+            for (const miscItem of contributions.VaultMiscItems) {
+                const reqItem = techProject.ReqItems.find(x => x.ItemType == miscItem.ItemType);
+                if (reqItem) {
+                    if (miscItem.ItemCount > reqItem.ItemCount) {
+                        miscItem.ItemCount = reqItem.ItemCount;
+                    }
+                    reqItem.ItemCount -= miscItem.ItemCount;
+
+                    const vaultMiscItem = guild.VaultMiscItems!.find(x => x.ItemType == miscItem.ItemType)!;
+                    vaultMiscItem.ItemCount -= miscItem.ItemCount;
+                }
+            }
+        }
+
         const miscItemChanges = [];
         for (const miscItem of contributions.MiscItems) {
             const reqItem = techProject.ReqItems.find(x => x.ItemType == miscItem.ItemType);
@@ -74,7 +99,8 @@ export const guildTechController: RequestHandler = async (req, res) => {
         await guild.save();
         await inventory.save();
         res.json({
-            InventoryChanges: inventoryChanges
+            InventoryChanges: inventoryChanges,
+            Vault: getGuildVault(guild)
         });
     } else if (action == "Buy") {
         const purchase = data as IGuildTechBuyFields;

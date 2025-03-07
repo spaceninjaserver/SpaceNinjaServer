@@ -552,7 +552,7 @@ questKeysSchema.set("toJSON", {
     }
 });
 
-const fusionTreasuresSchema = new Schema<IFusionTreasure>().add(typeCountSchema).add({ Sockets: Number });
+export const fusionTreasuresSchema = new Schema<IFusionTreasure>().add(typeCountSchema).add({ Sockets: Number });
 
 const spectreLoadoutsSchema = new Schema<ISpectreLoadout>(
     {

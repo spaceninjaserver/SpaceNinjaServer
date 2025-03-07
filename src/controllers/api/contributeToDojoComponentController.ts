@@ -13,12 +13,9 @@ interface IContributeToDojoComponentRequest {
     ComponentId: string;
     DecoId?: string;
     DecoType?: string;
-    IngredientContributions: {
-        ItemType: string;
-        ItemCount: number;
-    }[];
+    IngredientContributions: IMiscItem[];
     RegularCredits: number;
-    VaultIngredientContributions: [];
+    VaultIngredientContributions: IMiscItem[];
     VaultCredits: number;
 }
 
@@ -37,13 +34,13 @@ export const contributeToDojoComponentController: RequestHandler = async (req, r
             throw new Error("attempt to contribute to a deco in an unfinished room?!");
         }
         const meta = Object.values(ExportDojoRecipes.rooms).find(x => x.resultType == component.pf)!;
-        await processContribution(guild, request, inventory, inventoryChanges, meta, component);
+        processContribution(guild, request, inventory, inventoryChanges, meta, component);
     } else {
         // Room is past "Collecting Materials"
         if (request.DecoId) {
             const deco = component.Decos!.find(x => x._id.equals(request.DecoId))!;
             const meta = Object.values(ExportDojoRecipes.decos).find(x => x.resultType == deco.Type)!;
-            await processContribution(guild, request, inventory, inventoryChanges, meta, deco);
+            processContribution(guild, request, inventory, inventoryChanges, meta, deco);
         }
     }
 
@@ -55,46 +52,76 @@ export const contributeToDojoComponentController: RequestHandler = async (req, r
     });
 };
 
-const processContribution = async (
+const processContribution = (
     guild: TGuildDatabaseDocument,
     request: IContributeToDojoComponentRequest,
     inventory: TInventoryDatabaseDocument,
     inventoryChanges: IInventoryChanges,
     meta: IDojoRecipe,
     component: IDojoContributable
-): Promise<void> => {
+): void => {
     component.RegularCredits ??= 0;
-    if (component.RegularCredits + request.RegularCredits > scaleRequiredCount(meta.price)) {
-        request.RegularCredits = scaleRequiredCount(meta.price) - component.RegularCredits;
+    if (request.RegularCredits) {
+        component.RegularCredits += request.RegularCredits;
+        inventoryChanges.RegularCredits = -request.RegularCredits;
+        updateCurrency(inventory, request.RegularCredits, false);
     }
-    component.RegularCredits += request.RegularCredits;
-    inventoryChanges.RegularCredits = -request.RegularCredits;
-    updateCurrency(inventory, request.RegularCredits, false);
+    if (request.VaultCredits) {
+        component.RegularCredits += request.VaultCredits;
+        guild.VaultRegularCredits! -= request.VaultCredits;
+    }
+    if (component.RegularCredits > scaleRequiredCount(meta.price)) {
+        guild.VaultRegularCredits ??= 0;
+        guild.VaultRegularCredits += component.RegularCredits - scaleRequiredCount(meta.price);
+        component.RegularCredits = scaleRequiredCount(meta.price);
+    }
 
     component.MiscItems ??= [];
-    const miscItemChanges: IMiscItem[] = [];
-    for (const ingredientContribution of request.IngredientContributions) {
-        const componentMiscItem = component.MiscItems.find(x => x.ItemType == ingredientContribution.ItemType);
-        if (componentMiscItem) {
-            const ingredientMeta = meta.ingredients.find(x => x.ItemType == ingredientContribution.ItemType)!;
-            if (
-                componentMiscItem.ItemCount + ingredientContribution.ItemCount >
-                scaleRequiredCount(ingredientMeta.ItemCount)
-            ) {
-                ingredientContribution.ItemCount =
-                    scaleRequiredCount(ingredientMeta.ItemCount) - componentMiscItem.ItemCount;
+    if (request.VaultIngredientContributions.length) {
+        for (const ingredientContribution of request.VaultIngredientContributions) {
+            const componentMiscItem = component.MiscItems.find(x => x.ItemType == ingredientContribution.ItemType);
+            if (componentMiscItem) {
+                const ingredientMeta = meta.ingredients.find(x => x.ItemType == ingredientContribution.ItemType)!;
+                if (
+                    componentMiscItem.ItemCount + ingredientContribution.ItemCount >
+                    scaleRequiredCount(ingredientMeta.ItemCount)
+                ) {
+                    ingredientContribution.ItemCount =
+                        scaleRequiredCount(ingredientMeta.ItemCount) - componentMiscItem.ItemCount;
+                }
+                componentMiscItem.ItemCount += ingredientContribution.ItemCount;
+            } else {
+                component.MiscItems.push(ingredientContribution);
             }
-            componentMiscItem.ItemCount += ingredientContribution.ItemCount;
-        } else {
-            component.MiscItems.push(ingredientContribution);
+            const vaultMiscItem = guild.VaultMiscItems!.find(x => x.ItemType == ingredientContribution.ItemType)!;
+            vaultMiscItem.ItemCount -= ingredientContribution.ItemCount;
         }
-        miscItemChanges.push({
-            ItemType: ingredientContribution.ItemType,
-            ItemCount: ingredientContribution.ItemCount * -1
-        });
     }
-    addMiscItems(inventory, miscItemChanges);
-    inventoryChanges.MiscItems = miscItemChanges;
+    if (request.IngredientContributions.length) {
+        const miscItemChanges: IMiscItem[] = [];
+        for (const ingredientContribution of request.IngredientContributions) {
+            const componentMiscItem = component.MiscItems.find(x => x.ItemType == ingredientContribution.ItemType);
+            if (componentMiscItem) {
+                const ingredientMeta = meta.ingredients.find(x => x.ItemType == ingredientContribution.ItemType)!;
+                if (
+                    componentMiscItem.ItemCount + ingredientContribution.ItemCount >
+                    scaleRequiredCount(ingredientMeta.ItemCount)
+                ) {
+                    ingredientContribution.ItemCount =
+                        scaleRequiredCount(ingredientMeta.ItemCount) - componentMiscItem.ItemCount;
+                }
+                componentMiscItem.ItemCount += ingredientContribution.ItemCount;
+            } else {
+                component.MiscItems.push(ingredientContribution);
+            }
+            miscItemChanges.push({
+                ItemType: ingredientContribution.ItemType,
+                ItemCount: ingredientContribution.ItemCount * -1
+            });
+        }
+        addMiscItems(inventory, miscItemChanges);
+        inventoryChanges.MiscItems = miscItemChanges;
+    }
 
     if (component.RegularCredits >= scaleRequiredCount(meta.price)) {
         let fullyFunded = true;
@@ -106,12 +133,6 @@ const processContribution = async (
             }
         }
         if (fullyFunded) {
-            if (request.IngredientContributions.length) {
-                // We've already updated subpaths of MiscItems, we need to allow MongoDB to save this before we remove MiscItems.
-                await guild.save();
-            }
-            component.RegularCredits = undefined;
-            component.MiscItems = undefined;
             component.CompletionTime = new Date(Date.now() + meta.time * 1000);
         }
     }

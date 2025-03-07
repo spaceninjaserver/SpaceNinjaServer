@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
 import { IOid, IMongoDate } from "@/src/types/commonTypes";
-import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IFusionTreasure, IMiscItem, ITypeCount } from "@/src/types/inventoryTypes/inventoryTypes";
 
 export interface IGuild {
     Name: string;
@@ -11,7 +11,21 @@ export interface IGuildDatabase extends IGuild {
     DojoComponents: IDojoComponentDatabase[];
     DojoCapacity: number;
     DojoEnergy: number;
+    VaultRegularCredits?: number;
+    VaultPremiumCredits?: number;
+    VaultMiscItems?: IMiscItem[];
+    VaultShipDecorations?: ITypeCount[];
+    VaultFusionTreasures?: IFusionTreasure[];
     TechProjects?: ITechProjectDatabase[];
+}
+
+export interface IGuildVault {
+    DojoRefundRegularCredits?: number;
+    DojoRefundMiscItems?: IMiscItem[];
+    DojoRefundPremiumCredits?: number;
+    ShipDecorations?: ITypeCount[];
+    FusionTreasures?: IFusionTreasure[];
+    DecoRecipes?: ITypeCount[]; // Event Trophies
 }
 
 export interface IDojoClient {
@@ -20,10 +34,15 @@ export interface IDojoClient {
     Tier: number;
     FixedContributions: boolean;
     DojoRevision: number;
+    AllianceId?: IOid;
+    Vault?: IGuildVault;
+    Class?: number; // Level
     RevisionTime: number;
     Energy: number;
     Capacity: number;
     DojoRequestStatus: number;
+    ContentURL?: string;
+    GuildEmblem?: boolean;
     DojoComponents: IDojoComponentClient[];
 }
 
@@ -46,7 +65,7 @@ export interface IDojoComponentClient {
 }
 
 export interface IDojoComponentDatabase
-    extends Omit<IDojoComponentClient, "id" | "pi" | "CompletionTime" | "RushPlatinum" | "DestructionTime" | "Decos"> {
+    extends Omit<IDojoComponentClient, "id" | "pi" | "CompletionTime" | "DestructionTime" | "Decos"> {
     _id: Types.ObjectId;
     pi?: Types.ObjectId;
     CompletionTime?: Date;
@@ -63,11 +82,20 @@ export interface IDojoDecoClient {
     RegularCredits?: number;
     MiscItems?: IMiscItem[];
     CompletionTime?: IMongoDate;
+    RushPlatinum?: number;
 }
 
 export interface IDojoDecoDatabase extends Omit<IDojoDecoClient, "id" | "CompletionTime"> {
     _id: Types.ObjectId;
     CompletionTime?: Date;
+}
+
+// A common subset of the database representation of rooms & decos.
+export interface IDojoContributable {
+    RegularCredits?: number;
+    MiscItems?: IMiscItem[];
+    CompletionTime?: Date;
+    RushPlatinum?: number;
 }
 
 export interface ITechProjectClient {
@@ -80,10 +108,4 @@ export interface ITechProjectClient {
 
 export interface ITechProjectDatabase extends Omit<ITechProjectClient, "CompletionDate"> {
     CompletionDate?: Date;
-}
-
-export interface IDojoContributable {
-    RegularCredits?: number;
-    MiscItems?: IMiscItem[];
-    CompletionTime?: Date;
 }

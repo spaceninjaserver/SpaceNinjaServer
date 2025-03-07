@@ -3,7 +3,13 @@ import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getInventory } from "@/src/services/inventoryService";
 import { Guild, TGuildDatabaseDocument } from "@/src/models/guildModel";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
-import { IDojoClient, IDojoComponentClient } from "@/src/types/guildTypes";
+import {
+    IDojoClient,
+    IDojoComponentClient,
+    IDojoContributable,
+    IDojoDecoClient,
+    IGuildVault
+} from "@/src/types/guildTypes";
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
 import { Types } from "mongoose";
 import { ExportDojoRecipes } from "warframe-public-export-plus";
@@ -30,6 +36,16 @@ export const getGuildForRequestEx = async (
     return guild;
 };
 
+export const getGuildVault = (guild: TGuildDatabaseDocument): IGuildVault => {
+    return {
+        DojoRefundRegularCredits: guild.VaultRegularCredits,
+        DojoRefundMiscItems: guild.VaultMiscItems,
+        DojoRefundPremiumCredits: guild.VaultPremiumCredits,
+        ShipDecorations: guild.VaultShipDecorations,
+        FusionTreasures: guild.VaultFusionTreasures
+    };
+};
+
 export const getDojoClient = async (
     guild: TGuildDatabaseDocument,
     status: number,
@@ -41,6 +57,7 @@ export const getDojoClient = async (
         Tier: 1,
         FixedContributions: true,
         DojoRevision: 1,
+        Vault: getGuildVault(guild),
         RevisionTime: Math.round(Date.now() / 1000),
         Energy: guild.DojoEnergy,
         Capacity: guild.DojoCapacity,
@@ -79,15 +96,20 @@ export const getDojoClient = async (
             if (dojoComponent.Decos) {
                 clientComponent.Decos = [];
                 for (const deco of dojoComponent.Decos) {
-                    clientComponent.Decos.push({
+                    const clientDeco: IDojoDecoClient = {
                         id: toOid(deco._id),
                         Type: deco.Type,
                         Pos: deco.Pos,
                         Rot: deco.Rot,
-                        CompletionTime: deco.CompletionTime ? toMongoDate(deco.CompletionTime) : undefined,
-                        RegularCredits: deco.RegularCredits,
-                        MiscItems: deco.MiscItems
-                    });
+                        Name: deco.Name
+                    };
+                    if (deco.CompletionTime) {
+                        clientDeco.CompletionTime = toMongoDate(deco.CompletionTime);
+                    } else {
+                        clientDeco.RegularCredits = deco.RegularCredits;
+                        clientDeco.MiscItems = deco.MiscItems;
+                    }
+                    clientComponent.Decos.push(clientDeco);
                 }
             }
             dojo.DojoComponents.push(clientComponent);
@@ -118,7 +140,8 @@ export const removeDojoRoom = (guild: TGuildDatabaseDocument, componentId: Types
         guild.DojoCapacity -= meta.capacity;
         guild.DojoEnergy -= meta.energy;
     }
-    // TODO: Add resources spent to the clan vault
+    moveResourcesToVault(guild, component);
+    component.Decos?.forEach(deco => moveResourcesToVault(guild, deco));
 };
 
 export const removeDojoDeco = (
@@ -135,5 +158,27 @@ export const removeDojoDeco = (
     if (meta && meta.capacityCost) {
         component.DecoCapacity! += meta.capacityCost;
     }
-    // TODO: Add resources spent to the clan vault
+    moveResourcesToVault(guild, deco);
+};
+
+const moveResourcesToVault = (guild: TGuildDatabaseDocument, component: IDojoContributable): void => {
+    if (component.RegularCredits) {
+        guild.VaultRegularCredits ??= 0;
+        guild.VaultRegularCredits += component.RegularCredits;
+    }
+    if (component.MiscItems) {
+        guild.VaultMiscItems ??= [];
+        for (const componentMiscItem of component.MiscItems) {
+            const vaultMiscItem = guild.VaultMiscItems.find(x => x.ItemType == componentMiscItem.ItemType);
+            if (vaultMiscItem) {
+                vaultMiscItem.ItemCount += componentMiscItem.ItemCount;
+            } else {
+                guild.VaultMiscItems.push(componentMiscItem);
+            }
+        }
+    }
+    if (component.RushPlatinum) {
+        guild.VaultPremiumCredits ??= 0;
+        guild.VaultPremiumCredits += component.RushPlatinum;
+    }
 };

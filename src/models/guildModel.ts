@@ -6,7 +6,7 @@ import {
     IDojoDecoDatabase
 } from "@/src/types/guildTypes";
 import { Document, Model, model, Schema, Types } from "mongoose";
-import { typeCountSchema } from "./inventoryModels/inventoryModel";
+import { fusionTreasuresSchema, typeCountSchema } from "./inventoryModels/inventoryModel";
 import { toMongoDate } from "../helpers/inventoryHelpers";
 
 const dojoDecoSchema = new Schema<IDojoDecoDatabase>({
@@ -16,7 +16,8 @@ const dojoDecoSchema = new Schema<IDojoDecoDatabase>({
     Name: String,
     RegularCredits: Number,
     MiscItems: { type: [typeCountSchema], default: undefined },
-    CompletionTime: Date
+    CompletionTime: Date,
+    RushPlatinum: Number
 });
 
 const dojoComponentSchema = new Schema<IDojoComponentDatabase>({
@@ -30,6 +31,7 @@ const dojoComponentSchema = new Schema<IDojoComponentDatabase>({
     RegularCredits: Number,
     MiscItems: { type: [typeCountSchema], default: undefined },
     CompletionTime: Date,
+    RushPlatinum: Number,
     DestructionTime: Date,
     Decos: [dojoDecoSchema],
     DecoCapacity: Number
@@ -63,6 +65,11 @@ const guildSchema = new Schema<IGuildDatabase>(
         DojoComponents: { type: [dojoComponentSchema], default: [] },
         DojoCapacity: { type: Number, default: 100 },
         DojoEnergy: { type: Number, default: 5 },
+        VaultRegularCredits: Number,
+        VaultPremiumCredits: Number,
+        VaultMiscItems: { type: [typeCountSchema], default: undefined },
+        VaultShipDecorations: { type: [typeCountSchema], default: undefined },
+        VaultFusionTreasures: { type: [fusionTreasuresSchema], default: undefined },
         TechProjects: { type: [techProjectSchema], default: undefined }
     },
     { id: false }
