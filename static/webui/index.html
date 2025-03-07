@@ -555,9 +555,7 @@
                                 <form class="mt-2" onsubmit="doChangeSupportedSyndicate(); return false;">
                                     <label class="form-label" for="changeSyndicate" data-loc="cheats_changeSupportedSyndicate"></label>
                                     <div class="input-group">
-                                        <select class="form-control" id="changeSyndicate">
-                                            <option value="" data-loc="cheats_none"></option>
-                                        </select>
+                                        <input class="form-control" id="changeSyndicate" list="datalist-Syndicates" />
                                         <button class="btn btn-primary" type="submit" data-loc="cheats_changeButton"></button>
                                     </div>
                                 </form>
@@ -593,6 +591,7 @@
     <datalist id="datalist-Sentinels"></datalist>
     <datalist id="datalist-ModularParts"></datalist>
     <datalist id="datalist-MechSuits"></datalist>
+    <datalist id="datalist-Syndicates"></datalist>
     <datalist id="datalist-miscitems"></datalist>
     <datalist id="datalist-mods">
         <option data-key="/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser" value="Legendary Core"></option>

@@ -129,7 +129,11 @@ function setActiveLanguage(lang) {
 
     window.dictPromise = new Promise(resolve => {
         const webui_lang = ["en", "ru", "fr"].indexOf(lang) == -1 ? "en" : lang;
-        const script = document.createElement("script");
+        let script = document.getElementById("translations");
+        if (script) document.documentElement.removeChild(script);
+
+        script = document.createElement("script");
+        script.id = "translations";
         script.src = "/translations/" + webui_lang + ".js";
         script.onload = function () {
             updateLocElements();
@@ -156,6 +160,15 @@ function fetchItemList() {
         const req = $.get("/custom/getItemLists?lang=" + window.lang);
         req.done(async data => {
             await dictPromise;
+
+            document.querySelectorAll('[id^="datalist-"]').forEach(datalist => {
+                datalist.innerHTML = "";
+            });
+
+            const syndicateNone = document.createElement("option");
+            syndicateNone.setAttribute("data-key", "");
+            syndicateNone.value = loc("cheats_none");
+            document.getElementById("datalist-Syndicates").appendChild(syndicateNone);
 
             window.archonCrystalUpgrades = data.archonCrystalUpgrades;
 
@@ -198,15 +211,6 @@ function fetchItemList() {
                     });
                 } else if (type == "uniqueLevelCaps") {
                     uniqueLevelCaps = items;
-                } else if (type == "Syndicates") {
-                    items.forEach(item => {
-                        if (item.uniqueName.startsWith("RadioLegion")) item.name += " (" + item.uniqueName + ")";
-                        const option = document.createElement("option");
-                        option.value = item.uniqueName;
-                        option.innerHTML = item.name;
-                        document.getElementById("changeSyndicate").appendChild(option);
-                        itemMap[item.uniqueName] = { ...item, type };
-                    });
                 } else {
                     items.forEach(item => {
                         if ("badReason" in item) {
@@ -215,6 +219,9 @@ function fetchItemList() {
                             } else {
                                 item.name += " " + loc("code_badItem");
                             }
+                        }
+                        if (type == "Syndicates" && item.uniqueName.startsWith("RadioLegion")) {
+                            item.name += " (" + item.uniqueName + ")";
                         }
                         if (item.uniqueName.substr(0, 18) != "/Lotus/Types/Game/" && item.badReason != "notraw") {
                             const option = document.createElement("option");
@@ -564,8 +571,10 @@ function updateInventory() {
                     single.loadRoute("/webui/inventory");
                 }
             }
-
-            document.getElementById("changeSyndicate").value = data.SupportedSyndicate ?? "";
+            document.getElementById("changeSyndicate").value =
+                [...document.querySelectorAll("#datalist-Syndicates option")].find(
+                    option => option.getAttribute("data-key") === (data.SupportedSyndicate ?? "")
+                )?.value ?? loc("cheats_none");
         });
     });
 }
@@ -1138,7 +1147,8 @@ function doImport() {
 }
 
 function doChangeSupportedSyndicate() {
-    const uniqueName = document.getElementById("changeSyndicate").value;
+    const uniqueName = getKey(document.getElementById("changeSyndicate"));
+
     revalidateAuthz(() => {
         $.get("/api/setSupportedSyndicate.php?" + window.authz + "&syndicate=" + uniqueName).done(function () {
             updateInventory();
