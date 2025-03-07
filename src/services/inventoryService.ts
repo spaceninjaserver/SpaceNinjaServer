@@ -428,10 +428,8 @@ export const addItem = async (
         };
     }
     if (typeName in ExportEmailItems) {
-        const emailItem = ExportEmailItems[typeName];
-        await createMessage(inventory.accountOwnerId.toString(), [convertInboxMessage(emailItem.message)]);
         return {
-            InventoryChanges: {}
+            InventoryChanges: await addEmailItem(inventory, typeName)
         };
     }
 
@@ -940,6 +938,28 @@ const addDrone = (
     const index = inventory.Drones.push({ ItemType: typeName, CurrentHP: ExportDrones[typeName].durability }) - 1;
     inventoryChanges.Drones ??= [];
     inventoryChanges.Drones.push(inventory.Drones[index].toJSON<IDroneClient>());
+    return inventoryChanges;
+};
+
+export const addEmailItem = async (
+    inventory: TInventoryDatabaseDocument,
+    typeName: string,
+    inventoryChanges: IInventoryChanges = {}
+): Promise<IInventoryChanges> => {
+    const meta = ExportEmailItems[typeName];
+    const emailItem = inventory.EmailItems.find(x => x.ItemType == typeName);
+    if (!emailItem || !meta.sendOnlyOnce) {
+        await createMessage(inventory.accountOwnerId.toString(), [convertInboxMessage(meta.message)]);
+
+        if (emailItem) {
+            emailItem.ItemCount += 1;
+        } else {
+            inventory.EmailItems.push({ ItemType: typeName, ItemCount: 1 });
+        }
+
+        inventoryChanges.EmailItems ??= [];
+        inventoryChanges.EmailItems.push({ ItemType: typeName, ItemCount: 1 });
+    }
     return inventoryChanges;
 };
 

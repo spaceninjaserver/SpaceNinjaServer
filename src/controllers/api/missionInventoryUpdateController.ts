@@ -54,7 +54,7 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
     logger.debug("mission report:", missionReport);
 
     const inventory = await getInventory(accountId);
-    const inventoryUpdates = addMissionInventoryUpdates(inventory, missionReport);
+    const inventoryUpdates = await addMissionInventoryUpdates(inventory, missionReport);
 
     if (missionReport.MissionStatus !== "GS_SUCCESS") {
         await inventory.save();

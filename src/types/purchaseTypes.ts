@@ -1,5 +1,11 @@
 import { IEquipmentClient } from "./inventoryTypes/commonInventoryTypes";
-import { IDroneClient, IInfestedFoundryClient, IMiscItem, TEquipmentKey } from "./inventoryTypes/inventoryTypes";
+import {
+    IDroneClient,
+    IInfestedFoundryClient,
+    IMiscItem,
+    ITypeCount,
+    TEquipmentKey
+} from "./inventoryTypes/inventoryTypes";
 
 export interface IPurchaseRequest {
     PurchaseParams: IPurchaseParams;
@@ -33,6 +39,7 @@ export type IInventoryChanges = {
     InfestedFoundry?: IInfestedFoundryClient;
     Drones?: IDroneClient[];
     MiscItems?: IMiscItem[];
+    EmailItems?: ITypeCount[];
 } & Record<
         Exclude<
             string,
@@ -44,6 +51,7 @@ export type IInventoryChanges = {
             | "InfestedFoundry"
             | "Drones"
             | "MiscItems"
+            | "EmailItems"
         >,
         number | object[]
     >;

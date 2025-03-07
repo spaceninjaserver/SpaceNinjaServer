@@ -46,6 +46,7 @@ export type IMissionInventoryUpdateRequest = {
     CrewShipRawSalvage?: ITypeCount[];
     CrewShipAmmo?: ITypeCount[];
     BonusMiscItems?: ITypeCount[];
+    EmailItems?: ITypeCount[];
 
     SyndicateId?: string;
     SortieId?: string;

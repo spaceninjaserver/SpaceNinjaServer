@@ -14,6 +14,7 @@ import {
     addConsumables,
     addCrewShipAmmo,
     addCrewShipRawSalvage,
+    addEmailItem,
     addFocusXpIncreases,
     addFusionTreasures,
     addGearExpByCategory,
@@ -61,10 +62,10 @@ const getRandomRewardByChance = (pool: IReward[]): IRngResult | undefined => {
 //type TignoredInventoryUpdateKeys = (typeof ignoredInventoryUpdateKeys)[number];
 //const knownUnhandledKeys: readonly string[] = ["test"] as const; // for unimplemented but important keys
 
-export const addMissionInventoryUpdates = (
+export const addMissionInventoryUpdates = async (
     inventory: HydratedDocument<IInventoryDatabase, InventoryDocumentProps>,
     inventoryUpdates: IMissionInventoryUpdateRequest
-): Partial<IInventoryDatabase> | undefined => {
+): Promise<Partial<IInventoryDatabase> | undefined> => {
     //TODO: type this properly
     const inventoryChanges: Partial<IInventoryDatabase> = {};
     if (inventoryUpdates.MissionFailed === true) {
@@ -156,6 +157,12 @@ export const addMissionInventoryUpdates = (
                 inventoryChanges.FusionPoints = fusionPoints;
                 break;
             }
+            case "EmailItems": {
+                for (const tc of value) {
+                    await addEmailItem(inventory, tc.ItemType);
+                }
+                break;
+            }
             case "FocusXpIncreases": {
                 addFocusXpIncreases(inventory, value);
                 break;
@@ -237,32 +244,32 @@ export const addMissionInventoryUpdates = (
                 });
                 break;
             case "CollectibleScans":
-                value.forEach(scan => {
+                for (const scan of value) {
                     const entry = inventory.CollectibleSeries?.find(x => x.CollectibleType == scan.CollectibleType);
                     if (entry) {
                         entry.Count = scan.Count;
                         entry.Tracking = scan.Tracking;
                         if (entry.CollectibleType == "/Lotus/Objects/Orokin/Props/CollectibleSeriesOne") {
                             const progress = entry.Count / entry.ReqScans;
-                            entry.IncentiveStates.forEach(gate => {
+                            for (const gate of entry.IncentiveStates) {
                                 gate.complete = progress >= gate.threshold;
                                 if (gate.complete && !gate.sent) {
                                     gate.sent = true;
                                     if (gate.threshold == 0.5) {
-                                        void createMessage(inventory.accountOwnerId.toString(), [kuriaMessage50]);
+                                        await createMessage(inventory.accountOwnerId.toString(), [kuriaMessage50]);
                                     } else {
-                                        void createMessage(inventory.accountOwnerId.toString(), [kuriaMessage75]);
+                                        await createMessage(inventory.accountOwnerId.toString(), [kuriaMessage75]);
                                     }
                                 }
-                            });
+                            }
                             if (progress >= 1.0) {
-                                void createMessage(inventory.accountOwnerId.toString(), [kuriaMessage100]);
+                                await createMessage(inventory.accountOwnerId.toString(), [kuriaMessage100]);
                             }
                         }
                     } else {
                         logger.warn(`${scan.CollectibleType} was not found in inventory, ignoring scans`);
                     }
-                });
+                }
                 break;
             case "Upgrades":
                 value.forEach(clientUpgrade => {
