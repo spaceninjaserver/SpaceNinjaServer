@@ -675,14 +675,12 @@ function maxRankAllEquipment(categories) {
                     }
                     if (category === "Suits") {
                         if ("exalted" in itemMap[item.ItemType]) {
-                            if (!batchData["SpecialItems"]) {
-                                batchData["SpecialItems"] = [];
-                            }
                             for (const exaltedType of itemMap[item.ItemType].exalted) {
                                 const exaltedItem = data["SpecialItems"].find(x => x.ItemType == exaltedType);
                                 if (exaltedItem) {
                                     const exaltedCap = itemMap[exaltedType]?.type == "weapons" ? 800_000 : 1_600_000;
                                     if (exaltedItem.XP < exaltedCap) {
+                                        batchData["SpecialItems"] ??= [];
                                         batchData["SpecialItems"].push({
                                             ItemId: { $oid: exaltedItem.ItemId.$oid },
                                             XP: exaltedCap
