@@ -7,6 +7,7 @@ import static1999WinterDays from "@/static/fixed_responses/worldState/1999_winte
 import { buildConfig } from "@/src/services/buildConfigService";
 import { IMongoDate, IOid } from "@/src/types/commonTypes";
 import { unixTimesInMs } from "@/src/constants/timeConstants";
+import { config } from "@/src/services/configService";
 
 export const worldStateController: RequestHandler = (req, res) => {
     const worldState: IWorldState = {
@@ -15,9 +16,27 @@ export const worldStateController: RequestHandler = (req, res) => {
                 ? req.query.buildLabel.split(" ").join("+")
                 : buildConfig.buildLabel,
         Time: Math.round(Date.now() / 1000),
+        Goals: [],
         EndlessXpChoices: [],
         ...staticWorldState
     };
+
+    if (config.events?.starDays) {
+        worldState.Goals.push({
+            _id: { $oid: "67a4dcce2a198564d62e1647" },
+            Activation: { $date: { $numberLong: "1738868400000" } },
+            Expiry: { $date: { $numberLong: "2000000000000" } },
+            Count: 0,
+            Goal: 0,
+            Success: 0,
+            Personal: true,
+            Desc: "/Lotus/Language/Events/ValentinesFortunaName",
+            ToolTip: "/Lotus/Language/Events/ValentinesFortunaName",
+            Icon: "/Lotus/Interface/Icons/WorldStatePanel/ValentinesEventIcon.png",
+            Tag: "FortunaValentines",
+            Node: "SolarisUnitedHub1"
+        });
+    }
 
     const EPOCH = 1734307200 * 1000; // Monday, Dec 16, 2024 @ 00:00 UTC+0; should logically be winter in 1999 iteration 0
     const day = Math.trunc((new Date().getTime() - EPOCH) / 86400000);
@@ -134,13 +153,30 @@ export const worldStateController: RequestHandler = (req, res) => {
 };
 
 interface IWorldState {
+    Version: number; // for goals
     BuildLabel: string;
     Time: number;
+    Goals: IGoal[];
     SyndicateMissions: ISyndicateMission[];
     NodeOverrides: INodeOverride[];
     EndlessXpChoices: IEndlessXpChoice[];
     KnownCalendarSeasons: ICalendarSeason[];
     Tmp?: string;
+}
+
+interface IGoal {
+    _id: IOid;
+    Activation: IMongoDate;
+    Expiry: IMongoDate;
+    Count: number;
+    Goal: number;
+    Success: number;
+    Personal: boolean;
+    Desc: string;
+    ToolTip: string;
+    Icon: string;
+    Tag: string;
+    Node: string;
 }
 
 interface ISyndicateMission {

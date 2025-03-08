@@ -62,6 +62,9 @@ interface IConfig {
     noDojoResearchTime?: boolean;
     fastClanAscension?: boolean;
     spoofMasteryRank?: number;
+    events?: {
+        starDays?: boolean;
+    };
 }
 
 interface ILoggerConfig {

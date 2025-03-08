@@ -35,5 +35,8 @@
   "noDojoResearchCosts": true,
   "noDojoResearchTime": true,
   "fastClanAscension": true,
-  "spoofMasteryRank": -1
+  "spoofMasteryRank": -1,
+  "events": {
+    "starDays": true
+  }
 }
