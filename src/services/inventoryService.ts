@@ -284,6 +284,9 @@ export const addItem = async (
             };
         } else if (ExportResources[typeName].productCategory == "KubrowPetEggs") {
             const changes: IKubrowPetEggClient[] = [];
+            if (quantity < 0) {
+                throw new Error(`removal of KubrowPetEggs not handled`);
+            }
             for (let i = 0; i != quantity; ++i) {
                 const egg: IKubrowPetEggDatabase = {
                     ItemType: "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg",
