@@ -65,12 +65,8 @@ const getRandomRewardByChance = (pool: IReward[]): IRngResult | undefined => {
 export const addMissionInventoryUpdates = async (
     inventory: HydratedDocument<IInventoryDatabase, InventoryDocumentProps>,
     inventoryUpdates: IMissionInventoryUpdateRequest
-): Promise<Partial<IInventoryDatabase> | undefined> => {
-    //TODO: type this properly
-    const inventoryChanges: Partial<IInventoryDatabase> = {};
-    if (inventoryUpdates.MissionFailed === true) {
-        return;
-    }
+): Promise<IInventoryChanges> => {
+    const inventoryChanges: IInventoryChanges = {};
     if (inventoryUpdates.RewardInfo && inventoryUpdates.RewardInfo.periodicMissionTag) {
         const tag = inventoryUpdates.RewardInfo.periodicMissionTag;
         const existingCompletion = inventory.PeriodicMissionCompletions.find(completion => completion.tag === tag);
