@@ -1290,7 +1290,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         InvasionChainProgress: [Schema.Types.Mixed],
 
         //CorpusLich or GrineerLich
-        NemesisAbandonedRewards: [String],
+        NemesisAbandonedRewards: { type: [String], default: [] },
         //CorpusLich\KuvaLich
         NemesisHistory: [Schema.Types.Mixed],
         LastNemesisAllySpawnTime: Schema.Types.Mixed,

@@ -117,6 +117,7 @@ export interface IRewardInfo {
     toxinOk?: boolean;
     lostTargetWave?: number;
     defenseTargetCount?: number;
+    NemesisAbandonedRewards?: string[];
     EOM_AFK?: number;
     rewardQualifications?: string; // did a Survival for 5 minutes and this was "1"
     PurgatoryRewardQualifications?: string;

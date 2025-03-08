@@ -84,6 +84,9 @@ export const addMissionInventoryUpdates = async (
             });
         }
     }
+    if (inventoryUpdates.RewardInfo && inventoryUpdates.RewardInfo.NemesisAbandonedRewards) {
+        inventory.NemesisAbandonedRewards = inventoryUpdates.RewardInfo.NemesisAbandonedRewards;
+    }
     for (const [key, value] of getEntriesUnsafe(inventoryUpdates)) {
         if (value === undefined) {
             logger.error(`Inventory update key ${key} has no value `);
