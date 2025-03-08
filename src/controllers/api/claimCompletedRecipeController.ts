@@ -95,16 +95,12 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
 
         let InventoryChanges = {};
         if (recipe.consumeOnUse) {
-            const recipeChanges = [
+            addRecipes(inventory, [
                 {
                     ItemType: pendingRecipe.ItemType,
                     ItemCount: -1
                 }
-            ];
-
-            InventoryChanges = { ...InventoryChanges, Recipes: recipeChanges };
-
-            addRecipes(inventory, recipeChanges);
+            ]);
         }
         if (req.query.rush) {
             InventoryChanges = {
