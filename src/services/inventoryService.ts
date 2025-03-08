@@ -451,6 +451,7 @@ export const addItem = async (
                     };
                 }
                 case "Archwing": {
+                    inventory.ArchwingEnabled = true;
                     return {
                         InventoryChanges: {
                             ...addSpaceSuit(
