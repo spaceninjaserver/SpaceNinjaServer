@@ -21,16 +21,21 @@ export const dojoComponentRushController: RequestHandler = async (req, res) => {
     const request = JSON.parse(String(req.body)) as IDojoComponentRushRequest;
     const component = guild.DojoComponents.id(request.ComponentId)!;
 
+    let platinumDonated = request.Amount;
+    const inventoryChanges = updateCurrency(inventory, request.Amount, true);
+    if (request.VaultAmount) {
+        platinumDonated += request.VaultAmount;
+        guild.VaultPremiumCredits! -= request.VaultAmount;
+    }
+
     if (request.DecoId) {
         const deco = component.Decos!.find(x => x._id.equals(request.DecoId))!;
         const meta = Object.values(ExportDojoRecipes.decos).find(x => x.resultType == deco.Type)!;
-        processContribution(deco, meta, request.Amount);
+        processContribution(deco, meta, platinumDonated);
     } else {
         const meta = Object.values(ExportDojoRecipes.rooms).find(x => x.resultType == component.pf)!;
-        processContribution(component, meta, request.Amount);
+        processContribution(component, meta, platinumDonated);
     }
-
-    const inventoryChanges = updateCurrency(inventory, request.Amount, true);
 
     await guild.save();
     await inventory.save();
