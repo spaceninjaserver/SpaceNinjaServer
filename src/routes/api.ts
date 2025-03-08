@@ -7,6 +7,7 @@ import { addFriendImageController } from "@/src/controllers/api/addFriendImageCo
 import { arcaneCommonController } from "@/src/controllers/api/arcaneCommonController";
 import { archonFusionController } from "@/src/controllers/api/archonFusionController";
 import { artifactsController } from "@/src/controllers/api/artifactsController";
+import { artifactTransmutationController } from "@/src/controllers/api/artifactTransmutationController";
 import { changeDojoRootController } from "@/src/controllers/api/changeDojoRootController";
 import { checkDailyMissionBonusController } from "@/src/controllers/api/checkDailyMissionBonusController";
 import { claimCompletedRecipeController } from "@/src/controllers/api/claimCompletedRecipeController";
@@ -150,6 +151,7 @@ apiRouter.post("/addFriendImage.php", addFriendImageController);
 apiRouter.post("/arcaneCommon.php", arcaneCommonController);
 apiRouter.post("/archonFusion.php", archonFusionController);
 apiRouter.post("/artifacts.php", artifactsController);
+apiRouter.post("/artifactTransmutation.php", artifactTransmutationController);
 apiRouter.post("/changeDojoRoot.php", changeDojoRootController);
 apiRouter.post("/claimCompletedRecipe.php", claimCompletedRecipeController);
 apiRouter.post("/clearDialogueHistory.php", clearDialogueHistoryController);

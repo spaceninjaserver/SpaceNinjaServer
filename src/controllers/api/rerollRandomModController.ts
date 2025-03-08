@@ -2,11 +2,7 @@ import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addMiscItems, getInventory } from "@/src/services/inventoryService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import {
-    createUnveiledRivenFingerprint,
-    randomiseRivenStats,
-    RivenFingerprint
-} from "@/src/helpers/rivenFingerprintHelper";
+import { createUnveiledRivenFingerprint, randomiseRivenStats, RivenFingerprint } from "@/src/helpers/rivenHelper";
 import { ExportUpgrades } from "warframe-public-export-plus";
 import { IOid } from "@/src/types/commonTypes";
 

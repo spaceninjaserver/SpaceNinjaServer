@@ -4,7 +4,7 @@ import { addMiscItems, getInventory, updateCurrency } from "@/src/services/inven
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { createUnveiledRivenFingerprint } from "@/src/helpers/rivenFingerprintHelper";
+import { createUnveiledRivenFingerprint } from "@/src/helpers/rivenHelper";
 import { ExportUpgrades } from "warframe-public-export-plus";
 
 export const completeRandomModChallengeController: RequestHandler = async (req, res) => {
