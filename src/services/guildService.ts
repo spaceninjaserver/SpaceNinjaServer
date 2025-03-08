@@ -12,7 +12,7 @@ import {
 } from "@/src/types/guildTypes";
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
 import { Types } from "mongoose";
-import { ExportDojoRecipes } from "warframe-public-export-plus";
+import { ExportDojoRecipes, IDojoBuild } from "warframe-public-export-plus";
 import { logger } from "../utils/logger";
 
 export const getGuildForRequest = async (req: Request): Promise<TGuildDatabaseDocument> => {
@@ -180,5 +180,15 @@ const moveResourcesToVault = (guild: TGuildDatabaseDocument, component: IDojoCon
     if (component.RushPlatinum) {
         guild.VaultPremiumCredits ??= 0;
         guild.VaultPremiumCredits += component.RushPlatinum;
+    }
+};
+
+export const processDojoBuildMaterialsGathered = (guild: TGuildDatabaseDocument, build: IDojoBuild): void => {
+    if (build.guildXpValue) {
+        guild.ClaimedXP ??= [];
+        if (!guild.ClaimedXP.find(x => x == build.resultType)) {
+            guild.ClaimedXP.push(build.resultType);
+            guild.XP += build.guildXpValue;
+        }
     }
 };

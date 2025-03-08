@@ -13,6 +13,7 @@ import { claimCompletedRecipeController } from "@/src/controllers/api/claimCompl
 import { claimLibraryDailyTaskRewardController } from "@/src/controllers/api/claimLibraryDailyTaskRewardController";
 import { clearDialogueHistoryController } from "@/src/controllers/api/clearDialogueHistoryController";
 import { completeRandomModChallengeController } from "@/src/controllers/api/completeRandomModChallengeController";
+import { contributeGuildClassController } from "@/src/controllers/api/contributeGuildClassController";
 import { contributeToDojoComponentController } from "@/src/controllers/api/contributeToDojoComponentController";
 import { contributeToVaultController } from "@/src/controllers/api/contributeToVaultController";
 import { createGuildController } from "@/src/controllers/api/createGuildController";
@@ -153,6 +154,7 @@ apiRouter.post("/changeDojoRoot.php", changeDojoRootController);
 apiRouter.post("/claimCompletedRecipe.php", claimCompletedRecipeController);
 apiRouter.post("/clearDialogueHistory.php", clearDialogueHistoryController);
 apiRouter.post("/completeRandomModChallenge.php", completeRandomModChallengeController);
+apiRouter.post("/contributeGuildClass.php", contributeGuildClassController);
 apiRouter.post("/contributeToDojoComponent.php", contributeToDojoComponentController);
 apiRouter.post("/contributeToVault.php", contributeToVaultController);
 apiRouter.post("/createGuild.php", createGuildController);

@@ -60,6 +60,7 @@ interface IConfig {
     fastDojoRoomDestruction?: boolean;
     noDojoResearchCosts?: boolean;
     noDojoResearchTime?: boolean;
+    fastClanAscension?: boolean;
     spoofMasteryRank?: number;
 }
 

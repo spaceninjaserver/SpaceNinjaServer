@@ -7,6 +7,7 @@ import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { config } from "@/src/services/configService";
 import { ITechProjectDatabase } from "@/src/types/guildTypes";
+import { TGuildDatabaseDocument } from "@/src/models/guildModel";
 
 export const guildTechController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -35,7 +36,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
                     }) - 1
                 ];
             if (config.noDojoResearchCosts) {
-                processFundedProject(techProject, recipe);
+                processFundedProject(guild, techProject, recipe);
             }
         }
         await guild.save();
@@ -93,7 +94,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
         if (techProject.ReqCredits == 0 && !techProject.ReqItems.find(x => x.ItemCount > 0)) {
             // This research is now fully funded.
             const recipe = ExportDojoRecipes.research[data.RecipeType!];
-            processFundedProject(techProject, recipe);
+            processFundedProject(guild, techProject, recipe);
         }
 
         await guild.save();
@@ -131,9 +132,16 @@ export const guildTechController: RequestHandler = async (req, res) => {
     }
 };
 
-const processFundedProject = (techProject: ITechProjectDatabase, recipe: IDojoResearch): void => {
+const processFundedProject = (
+    guild: TGuildDatabaseDocument,
+    techProject: ITechProjectDatabase,
+    recipe: IDojoResearch
+): void => {
     techProject.State = 1;
     techProject.CompletionDate = new Date(new Date().getTime() + (config.noDojoResearchTime ? 0 : recipe.time) * 1000);
+    if (recipe.guildXpValue) {
+        guild.XP += recipe.guildXpValue;
+    }
 };
 
 type TGuildTechRequest = {

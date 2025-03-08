@@ -70,7 +70,14 @@ const guildSchema = new Schema<IGuildDatabase>(
         VaultMiscItems: { type: [typeCountSchema], default: undefined },
         VaultShipDecorations: { type: [typeCountSchema], default: undefined },
         VaultFusionTreasures: { type: [fusionTreasuresSchema], default: undefined },
-        TechProjects: { type: [techProjectSchema], default: undefined }
+        TechProjects: { type: [techProjectSchema], default: undefined },
+        Class: { type: Number, default: 0 },
+        XP: { type: Number, default: 0 },
+        ClaimedXP: { type: [String], default: undefined },
+        CeremonyClass: Number,
+        CeremonyContributors: { type: [Types.ObjectId], default: undefined },
+        CeremonyResetDate: Date,
+        CeremonyEndo: Number
     },
     { id: false }
 );

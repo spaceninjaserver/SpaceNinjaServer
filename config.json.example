@@ -34,5 +34,6 @@
   "fastDojoRoomDestruction": true,
   "noDojoResearchCosts": true,
   "noDojoResearchTime": true,
+  "fastClanAscension": true,
   "spoofMasteryRank": -1
 }

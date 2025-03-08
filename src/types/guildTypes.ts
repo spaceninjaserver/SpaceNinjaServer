@@ -2,21 +2,29 @@ import { Types } from "mongoose";
 import { IOid, IMongoDate } from "@/src/types/commonTypes";
 import { IFusionTreasure, IMiscItem, ITypeCount } from "@/src/types/inventoryTypes/inventoryTypes";
 
-export interface IGuild {
-    Name: string;
-}
-
-export interface IGuildDatabase extends IGuild {
+export interface IGuildDatabase {
     _id: Types.ObjectId;
+    Name: string;
+
     DojoComponents: IDojoComponentDatabase[];
     DojoCapacity: number;
     DojoEnergy: number;
+
     VaultRegularCredits?: number;
     VaultPremiumCredits?: number;
     VaultMiscItems?: IMiscItem[];
     VaultShipDecorations?: ITypeCount[];
     VaultFusionTreasures?: IFusionTreasure[];
+
     TechProjects?: ITechProjectDatabase[];
+
+    Class: number;
+    XP: number;
+    ClaimedXP?: string[]; // track rooms and decos that have already granted XP
+    CeremonyClass?: number;
+    CeremonyEndo?: number;
+    CeremonyContributors?: Types.ObjectId[];
+    CeremonyResetDate?: Date;
 }
 
 export interface IGuildVault {

@@ -115,6 +115,7 @@ dict = {
     cheats_fastDojoRoomDestruction: `[UNTRANSLATED] Fast Dojo Room Destruction`,
     cheats_noDojoResearchCosts: `Aucun coût de recherche (Dojo)`,
     cheats_noDojoResearchTime: `Aucun temps de recherche (Dojo)`,
+    cheats_fastClanAscension: `[UNTRANSLATED] Fast Clan Ascension`,
     cheats_spoofMasteryRank: `Spoofed Mastery Rank (-1 to disable)`,
     cheats_saveSettings: `Sauvegarder les paramètres`,
     cheats_account: `Compte`,

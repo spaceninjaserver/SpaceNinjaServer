@@ -115,6 +115,7 @@ dict = {
     cheats_fastDojoRoomDestruction: `Мгновенные Уничтожение Комнат Додзё`,
     cheats_noDojoResearchCosts: `Бесплатные Исследование Додзё`,
     cheats_noDojoResearchTime: `Мгновенные Исследование Додзё`,
+    cheats_fastClanAscension: `[UNTRANSLATED] Fast Clan Ascension`,
     cheats_spoofMasteryRank: `Подделанный ранг мастерства (-1 для отключения)`,
     cheats_saveSettings: `Сохранить настройки`,
     cheats_account: `Аккаунт`,

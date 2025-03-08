@@ -1,13 +1,18 @@
 import { TGuildDatabaseDocument } from "@/src/models/guildModel";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
-import { getDojoClient, getGuildForRequestEx, scaleRequiredCount } from "@/src/services/guildService";
+import {
+    getDojoClient,
+    getGuildForRequestEx,
+    processDojoBuildMaterialsGathered,
+    scaleRequiredCount
+} from "@/src/services/guildService";
 import { addMiscItems, getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { IDojoContributable } from "@/src/types/guildTypes";
 import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { RequestHandler } from "express";
-import { ExportDojoRecipes, IDojoRecipe } from "warframe-public-export-plus";
+import { ExportDojoRecipes, IDojoBuild } from "warframe-public-export-plus";
 
 interface IContributeToDojoComponentRequest {
     ComponentId: string;
@@ -57,7 +62,7 @@ const processContribution = (
     request: IContributeToDojoComponentRequest,
     inventory: TInventoryDatabaseDocument,
     inventoryChanges: IInventoryChanges,
-    meta: IDojoRecipe,
+    meta: IDojoBuild,
     component: IDojoContributable
 ): void => {
     component.RegularCredits ??= 0;
@@ -134,6 +139,7 @@ const processContribution = (
         }
         if (fullyFunded) {
             component.CompletionTime = new Date(Date.now() + meta.time * 1000);
+            processDojoBuildMaterialsGathered(guild, meta);
         }
     }
 };

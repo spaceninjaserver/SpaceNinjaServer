@@ -2,8 +2,9 @@ import { RequestHandler } from "express";
 import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { Guild } from "@/src/models/guildModel";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { toOid } from "@/src/helpers/inventoryHelpers";
+import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
 import { getGuildVault } from "@/src/services/guildService";
+import { logger } from "@/src/utils/logger";
 
 const getGuildController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -15,6 +16,13 @@ const getGuildController: RequestHandler = async (req, res) => {
     if (inventory.GuildId) {
         const guild = await Guild.findOne({ _id: inventory.GuildId });
         if (guild) {
+            if (guild.CeremonyResetDate && Date.now() >= guild.CeremonyResetDate.getTime()) {
+                logger.debug(`ascension ceremony is over`);
+                guild.CeremonyEndo = undefined;
+                guild.CeremonyContributors = undefined;
+                guild.CeremonyResetDate = undefined;
+                await guild.save();
+            }
             res.json({
                 _id: toOid(guild._id),
                 Name: guild.Name,
@@ -64,7 +72,12 @@ const getGuildController: RequestHandler = async (req, res) => {
                     }
                 ],
                 Tier: 1,
-                Vault: getGuildVault(guild)
+                Vault: getGuildVault(guild),
+                Class: guild.Class,
+                XP: guild.XP,
+                IsContributor: !!guild.CeremonyContributors?.find(x => x.equals(accountId)),
+                NumContributors: guild.CeremonyContributors?.length ?? 0,
+                CeremonyResetDate: guild.CeremonyResetDate ? toMongoDate(guild.CeremonyResetDate) : undefined
             });
             return;
         }

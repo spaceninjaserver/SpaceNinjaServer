@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import { IDojoComponentClient } from "@/src/types/guildTypes";
-import { getDojoClient, getGuildForRequest } from "@/src/services/guildService";
+import { getDojoClient, getGuildForRequest, processDojoBuildMaterialsGathered } from "@/src/services/guildService";
 import { Types } from "mongoose";
 import { ExportDojoRecipes } from "warframe-public-export-plus";
 import { config } from "@/src/services/configService";
@@ -35,6 +35,9 @@ export const startDojoRecipeController: RequestHandler = async (req, res) => {
         ];
     if (config.noDojoRoomBuildStage) {
         component.CompletionTime = new Date(Date.now());
+        if (room) {
+            processDojoBuildMaterialsGathered(guild, room);
+        }
     }
     await guild.save();
     res.json(await getDojoClient(guild, 0));

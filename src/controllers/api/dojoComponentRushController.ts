@@ -3,7 +3,7 @@ import { getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { IDojoContributable } from "@/src/types/guildTypes";
 import { RequestHandler } from "express";
-import { ExportDojoRecipes, IDojoRecipe } from "warframe-public-export-plus";
+import { ExportDojoRecipes, IDojoBuild } from "warframe-public-export-plus";
 
 interface IDojoComponentRushRequest {
     DecoType?: string;
@@ -40,7 +40,7 @@ export const dojoComponentRushController: RequestHandler = async (req, res) => {
     });
 };
 
-const processContribution = (component: IDojoContributable, meta: IDojoRecipe, platinumDonated: number): void => {
+const processContribution = (component: IDojoContributable, meta: IDojoBuild, platinumDonated: number): void => {
     const fullPlatinumCost = scaleRequiredCount(meta.skipTimePrice);
     const fullDurationSeconds = meta.time;
     const secondsPerPlatinum = fullDurationSeconds / fullPlatinumCost;
