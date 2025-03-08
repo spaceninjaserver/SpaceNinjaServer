@@ -3,6 +3,7 @@ import { InventoryDocumentProps } from "@/src/models/inventoryModels/inventoryMo
 import {
     addEquipment,
     addItem,
+    addPowerSuit,
     combineInventoryChanges,
     getInventory,
     updateSlots
@@ -52,7 +53,7 @@ export const addStartingGear = async (
     addEquipment(inventory, "LongGuns", LongGuns[0].ItemType, undefined, inventoryChanges);
     addEquipment(inventory, "Pistols", Pistols[0].ItemType, undefined, inventoryChanges);
     addEquipment(inventory, "Melee", Melee[0].ItemType, undefined, inventoryChanges);
-    addEquipment(inventory, "Suits", Suits[0].ItemType, undefined, inventoryChanges, { Configs: Suits[0].Configs });
+    addPowerSuit(inventory, Suits[0].ItemType, inventoryChanges);
     addEquipment(
         inventory,
         "DataKnives",
