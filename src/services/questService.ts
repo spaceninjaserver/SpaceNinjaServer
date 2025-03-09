@@ -2,8 +2,13 @@ import { IKeyChainRequest } from "@/src/controllers/api/giveKeyChainTriggeredIte
 import { isEmptyObject } from "@/src/helpers/general";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { createMessage } from "@/src/services/inboxService";
-import { addItem, addKeyChainItems } from "@/src/services/inventoryService";
-import { fromStoreItem, getKeyChainMessage, getLevelKeyRewards } from "@/src/services/itemDataService";
+import { addItem, addItems, addKeyChainItems } from "@/src/services/inventoryService";
+import {
+    fromStoreItem,
+    getKeyChainMessage,
+    getLevelKeyRewards,
+    getQuestCompletionItems
+} from "@/src/services/itemDataService";
 import {
     IInventoryDatabase,
     IQuestKeyClient,
@@ -25,10 +30,10 @@ export interface IUpdateQuestRequest {
     DoQuestReward: boolean;
 }
 
-export const updateQuestKey = (
+export const updateQuestKey = async (
     inventory: HydratedDocument<IInventoryDatabase>,
     questKeyUpdate: IUpdateQuestRequest["QuestKeys"]
-): void => {
+): Promise<IInventoryChanges> => {
     if (questKeyUpdate.length > 1) {
         logger.error(`more than 1 quest key not supported`);
         throw new Error("more than 1 quest key not supported");
@@ -42,9 +47,21 @@ export const updateQuestKey = (
 
     inventory.QuestKeys[questKeyIndex] = questKeyUpdate[0];
 
+    let inventoryChanges: IInventoryChanges = {};
     if (questKeyUpdate[0].Completed) {
         inventory.QuestKeys[questKeyIndex].CompletionDate = new Date();
+
+        logger.debug(`completed quest ${questKeyUpdate[0].ItemType} `);
+        const questKeyName = questKeyUpdate[0].ItemType;
+        const questCompletionItems = getQuestCompletionItems(questKeyName);
+        logger.debug(`quest completion items`, questCompletionItems);
+
+        if (questCompletionItems) {
+            inventoryChanges = await addItems(inventory as TInventoryDatabaseDocument, questCompletionItems);
+        }
+        inventory.ActiveQuest = "";
     }
+    return inventoryChanges;
 };
 
 export const updateQuestStage = (
