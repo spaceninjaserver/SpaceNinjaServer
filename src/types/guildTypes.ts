@@ -5,6 +5,8 @@ import { IFusionTreasure, IMiscItem, ITypeCount } from "@/src/types/inventoryTyp
 export interface IGuildDatabase {
     _id: Types.ObjectId;
     Name: string;
+    MOTD: string;
+    LongMOTD?: ILongMOTD;
 
     DojoComponents: IDojoComponentDatabase[];
     DojoCapacity: number;
@@ -25,6 +27,12 @@ export interface IGuildDatabase {
     CeremonyEndo?: number;
     CeremonyContributors?: Types.ObjectId[];
     CeremonyResetDate?: Date;
+}
+
+export interface ILongMOTD {
+    message: string;
+    authorName: string;
+    //authorGuildName: "";
 }
 
 export interface IGuildVault {

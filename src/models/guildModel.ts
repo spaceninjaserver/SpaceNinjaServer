@@ -3,7 +3,8 @@ import {
     IDojoComponentDatabase,
     ITechProjectDatabase,
     ITechProjectClient,
-    IDojoDecoDatabase
+    IDojoDecoDatabase,
+    ILongMOTD
 } from "@/src/types/guildTypes";
 import { Document, Model, model, Schema, Types } from "mongoose";
 import { fusionTreasuresSchema, typeCountSchema } from "./inventoryModels/inventoryModel";
@@ -59,9 +60,19 @@ techProjectSchema.set("toJSON", {
     }
 });
 
+const longMOTDSchema = new Schema<ILongMOTD>(
+    {
+        message: String,
+        authorName: String
+    },
+    { _id: false }
+);
+
 const guildSchema = new Schema<IGuildDatabase>(
     {
         Name: { type: String, required: true },
+        MOTD: { type: String, default: "" },
+        LongMOTD: { type: longMOTDSchema, default: undefined },
         DojoComponents: { type: [dojoComponentSchema], default: [] },
         DojoCapacity: { type: Number, default: 100 },
         DojoEnergy: { type: Number, default: 5 },

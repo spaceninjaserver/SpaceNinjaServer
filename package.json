@@ -17,6 +17,7 @@
     "@types/express": "^5",
     "@types/morgan": "^1.9.9",
     "copyfiles": "^2.4.1",
+    "crc-32": "^1.2.2",
     "express": "^5",
     "mongoose": "^8.11.0",
     "morgan": "^1.10.0",

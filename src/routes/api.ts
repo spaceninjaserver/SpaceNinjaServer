@@ -79,6 +79,7 @@ import { setActiveShipController } from "@/src/controllers/api/setActiveShipCont
 import { setBootLocationController } from "@/src/controllers/api/setBootLocationController";
 import { setDojoComponentMessageController } from "@/src/controllers/api/setDojoComponentMessageController";
 import { setEquippedInstrumentController } from "@/src/controllers/api/setEquippedInstrumentController";
+import { setGuildMotdController } from "@/src/controllers/api/setGuildMotdController";
 import { setPlacedDecoInfoController } from "@/src/controllers/api/setPlacedDecoInfoController";
 import { setShipCustomizationsController } from "@/src/controllers/api/setShipCustomizationsController";
 import { setShipFavouriteLoadoutController } from "@/src/controllers/api/setShipFavouriteLoadoutController";
@@ -138,6 +139,7 @@ apiRouter.get("/queueDojoComponentDestruction.php", queueDojoComponentDestructio
 apiRouter.get("/setActiveQuest.php", setActiveQuestController);
 apiRouter.get("/setActiveShip.php", setActiveShipController);
 apiRouter.get("/setBootLocation.php", setBootLocationController);
+apiRouter.get("/setGuildMotd.php", setGuildMotdController);
 apiRouter.get("/setSupportedSyndicate.php", setSupportedSyndicateController);
 apiRouter.get("/startLibraryDailyTask.php", startLibraryDailyTaskController);
 apiRouter.get("/startLibraryPersonalTarget.php", startLibraryPersonalTargetController);
@@ -197,6 +199,7 @@ apiRouter.post("/saveSettings.php", saveSettingsController);
 apiRouter.post("/sell.php", sellController);
 apiRouter.post("/setDojoComponentMessage.php", setDojoComponentMessageController);
 apiRouter.post("/setEquippedInstrument.php", setEquippedInstrumentController);
+apiRouter.post("/setGuildMotd.php", setGuildMotdController);
 apiRouter.post("/setPlacedDecoInfo.php", setPlacedDecoInfoController);
 apiRouter.post("/setShipCustomizations.php", setShipCustomizationsController);
 apiRouter.post("/setShipFavouriteLoadout.php", setShipFavouriteLoadoutController);

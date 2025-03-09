@@ -26,6 +26,8 @@ const getGuildController: RequestHandler = async (req, res) => {
             res.json({
                 _id: toOid(guild._id),
                 Name: guild.Name,
+                MOTD: guild.MOTD,
+                LongMOTD: guild.LongMOTD,
                 Members: [
                     {
                         _id: { $oid: req.query.accountId },

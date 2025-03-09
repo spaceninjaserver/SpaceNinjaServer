@@ -8,6 +8,7 @@ import { PersonalRooms } from "@/src/models/personalRoomsModel";
 import { Request } from "express";
 import { config } from "@/src/services/configService";
 import { createStats } from "@/src/services/statsService";
+import crc32 from "crc-32";
 
 export const isCorrectPassword = (requestPassword: string, databasePassword: string): boolean => {
     return requestPassword === databasePassword;
@@ -98,4 +99,12 @@ export const isAdministrator = (account: TAccountDocument): boolean => {
         return config.administratorNames == account.DisplayName;
     }
     return !!config.administratorNames.find(x => x == account.DisplayName);
+};
+
+const platform_magics = [753, 639, 247, 37, 60];
+export const getSuffixedName = (account: TAccountDocument): string => {
+    const name = account.DisplayName;
+    const platformId = 0;
+    const suffix = ((crc32.str(name.toLowerCase() + "595") >>> 0) + platform_magics[platformId]) % 1000;
+    return name + "#" + suffix.toString().padStart(3, "0");
 };
