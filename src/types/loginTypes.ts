@@ -14,6 +14,7 @@ export interface IAccountAndLoginResponseCommons {
 export interface IDatabaseAccount extends IAccountAndLoginResponseCommons {
     email: string;
     password: string;
+    Dropped?: boolean;
     LastLoginDay?: number;
     LatestEventMessageDate: Date;
 }
@@ -32,6 +33,7 @@ export interface ILoginRequest {
     date: number;
     ClientType: string;
     PS: string;
+    kick?: boolean;
 }
 
 export interface ILoginResponse extends IAccountAndLoginResponseCommons {

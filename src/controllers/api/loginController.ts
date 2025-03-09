@@ -61,10 +61,19 @@ export const loginController: RequestHandler = async (request, response) => {
         return;
     }
 
-    if (account.Nonce == 0 || loginRequest.ClientType != "webui") {
+    if (loginRequest.ClientType == "webui") {
+        if (!account.Nonce) {
+            account.ClientType = "webui";
+            account.Nonce = nonce;
+        }
+    } else {
+        if (account.Nonce && account.ClientType != "webui" && !account.Dropped && !loginRequest.kick) {
+            response.status(400).json({ error: "nonce still set" });
+            return;
+        }
+
+        account.ClientType = loginRequest.ClientType;
         account.Nonce = nonce;
-    }
-    if (loginRequest.ClientType != "webui") {
         account.CountryCode = loginRequest.lang.toUpperCase();
     }
     await account.save();

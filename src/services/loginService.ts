@@ -82,21 +82,12 @@ export const getAccountForRequest = async (req: Request): Promise<TAccountDocume
 };
 
 export const getAccountIdForRequest = async (req: Request): Promise<string> => {
-    if (!req.query.accountId) {
-        throw new Error("Request is missing accountId parameter");
+    const account = await getAccountForRequest(req);
+    if (account.Dropped && req.query.ct) {
+        account.Dropped = undefined;
+        await account.save();
     }
-    if (!req.query.nonce || parseInt(req.query.nonce as string) === 0) {
-        throw new Error("Request is missing nonce parameter");
-    }
-    if (
-        !(await Account.exists({
-            _id: req.query.accountId,
-            Nonce: req.query.nonce
-        }))
-    ) {
-        throw new Error("Invalid accountId-nonce pair");
-    }
-    return req.query.accountId as string;
+    return account._id.toString();
 };
 
 export const isAdministrator = (account: TAccountDocument): boolean => {
