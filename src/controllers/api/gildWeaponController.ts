@@ -1,28 +1,28 @@
 import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { getInventory } from "@/src/services/inventoryService";
+import { addMiscItems, getInventory } from "@/src/services/inventoryService";
 import { WeaponTypeInternal } from "@/src/services/itemDataService";
-import { ArtifactPolarity, EquipmentFeatures } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { ArtifactPolarity, EquipmentFeatures, IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { ExportRecipes } from "warframe-public-export-plus";
+import { IInventoryChanges } from "@/src/types/purchaseTypes";
 
 const modularWeaponCategory: (WeaponTypeInternal | "Hoverboards")[] = [
     "LongGuns",
     "Pistols",
     "Melee",
     "OperatorAmps",
-    "Hoverboards" // Not sure about hoverboards just coppied from modual crafting
+    "Hoverboards"
 ];
 
 interface IGildWeaponRequest {
     ItemName: string;
-    Recipe: string; // /Lotus/Weapons/SolarisUnited/LotusGildKitgunBlueprint
+    Recipe: string; // e.g. /Lotus/Weapons/SolarisUnited/LotusGildKitgunBlueprint
     PolarizeSlot?: number;
     PolarizeValue?: ArtifactPolarity;
     ItemId: string;
     Category: WeaponTypeInternal | "Hoverboards";
 }
-
-// In export there no recipes for gild action, so reputation and ressources only consumed visually
 
 export const gildWeaponController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -40,7 +40,8 @@ export const gildWeaponController: RequestHandler = async (req, res) => {
     }
 
     const weapon = inventory[data.Category][weaponIndex];
-    weapon.Features = EquipmentFeatures.GILDED; // maybe 9 idk if DOUBLE_CAPACITY is also given
+    weapon.Features ??= 0;
+    weapon.Features |= EquipmentFeatures.GILDED;
     weapon.ItemName = data.ItemName;
     weapon.XP = 0;
     if (data.Category != "OperatorAmps" && data.PolarizeSlot && data.PolarizeValue) {
@@ -52,11 +53,29 @@ export const gildWeaponController: RequestHandler = async (req, res) => {
         ];
     }
     inventory[data.Category][weaponIndex] = weapon;
-    await inventory.save();
+    const inventoryChanges: IInventoryChanges = {};
+    inventoryChanges[data.Category] = [weapon.toJSON<IEquipmentClient>()];
 
+    const recipe = ExportRecipes[data.Recipe];
+    inventoryChanges.MiscItems = recipe.secretIngredients!.map(ingredient => ({
+        ItemType: ingredient.ItemType,
+        ItemCount: ingredient.ItemCount * -1
+    }));
+    addMiscItems(inventory, inventoryChanges.MiscItems);
+
+    const affiliationMods = [];
+    if (recipe.syndicateStandingChange) {
+        const affiliation = inventory.Affiliations.find(x => x.Tag == recipe.syndicateStandingChange!.tag)!;
+        affiliation.Standing += recipe.syndicateStandingChange.value;
+        affiliationMods.push({
+            Tag: recipe.syndicateStandingChange.tag,
+            Standing: recipe.syndicateStandingChange.value
+        });
+    }
+
+    await inventory.save();
     res.json({
-        InventoryChanges: {
-            [data.Category]: [weapon]
-        }
+        InventoryChanges: inventoryChanges,
+        AffiliationMods: affiliationMods
     });
 };
