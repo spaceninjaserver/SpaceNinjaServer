@@ -24,5 +24,10 @@ export const getGuildDojoController: RequestHandler = async (req, res) => {
         await guild.save();
     }
 
-    res.json(await getDojoClient(guild, 0));
+    const payload: IGetGuildDojoRequest = req.body ? (JSON.parse(String(req.body)) as IGetGuildDojoRequest) : {};
+    res.json(await getDojoClient(guild, 0, payload.ComponentId));
 };
+
+interface IGetGuildDojoRequest {
+    ComponentId?: string;
+}

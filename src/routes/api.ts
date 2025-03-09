@@ -173,6 +173,7 @@ apiRouter.post("/focus.php", focusController);
 apiRouter.post("/fusionTreasures.php", fusionTreasuresController);
 apiRouter.post("/genericUpdate.php", genericUpdateController);
 apiRouter.post("/getAlliance.php", getAllianceController);
+apiRouter.post("/getGuildDojo.php", getGuildDojoController);
 apiRouter.post("/getVoidProjectionRewards.php", getVoidProjectionRewardsController);
 apiRouter.post("/gildWeapon.php", gildWeaponController);
 apiRouter.post("/giveKeyChainTriggeredItems.php", giveKeyChainTriggeredItemsController);
