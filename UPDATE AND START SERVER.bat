@@ -13,7 +13,7 @@ if exist static\data\0\ (
 )
 
 echo Updating dependencies...
-call npm i
+call npm i --omit=dev
 
 call npm run build
 if %errorlevel% == 0 (
