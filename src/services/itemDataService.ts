@@ -20,6 +20,7 @@ import {
     dict_zh,
     ExportArcanes,
     ExportCustoms,
+    ExportDrones,
     ExportGear,
     ExportKeys,
     ExportRecipes,
@@ -86,6 +87,9 @@ export const getItemName = (uniqueName: string): string | undefined => {
     }
     if (uniqueName in ExportCustoms) {
         return ExportCustoms[uniqueName].name;
+    }
+    if (uniqueName in ExportDrones) {
+        return ExportDrones[uniqueName].name;
     }
     if (uniqueName in ExportKeys) {
         return ExportKeys[uniqueName].name;

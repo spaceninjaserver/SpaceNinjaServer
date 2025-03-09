@@ -796,12 +796,11 @@ function disposeOfItems(category, type, count) {
 }
 
 function doAcquireMiscItems() {
-    const data = getKey(document.getElementById("miscitem-type"));
-    if (!data) {
+    const uniqueName = getKey(document.getElementById("miscitem-type"));
+    if (!uniqueName) {
         $("#miscitem-type").addClass("is-invalid").focus();
         return;
     }
-    const [category, uniqueName] = data.split(":");
     revalidateAuthz(() => {
         $.post({
             url: "/custom/addItems?" + window.authz,

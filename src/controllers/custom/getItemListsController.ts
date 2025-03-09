@@ -3,6 +3,7 @@ import { getDict, getItemName, getString } from "@/src/services/itemDataService"
 import {
     ExportArcanes,
     ExportAvionics,
+    ExportDrones,
     ExportGear,
     ExportMisc,
     ExportRecipes,
@@ -80,7 +81,7 @@ const getItemListsController: RequestHandler = (req, response) => {
             });
             if (uniqueName.split("/")[5] != "SentTrainingAmplifier") {
                 res.miscitems.push({
-                    uniqueName: "MiscItems:" + uniqueName,
+                    uniqueName: uniqueName,
                     name: getString(item.name, lang)
                 });
             }
@@ -100,7 +101,7 @@ const getItemListsController: RequestHandler = (req, response) => {
             }
         } else if (!item.excludeFromCodex) {
             res.miscitems.push({
-                uniqueName: "MiscItems:" + uniqueName,
+                uniqueName: uniqueName,
                 name: getString(item.name, lang)
             });
         }
@@ -119,14 +120,14 @@ const getItemListsController: RequestHandler = (req, response) => {
         }
         if (uniqueName.substr(0, 30) != "/Lotus/Types/Game/Projections/") {
             res.miscitems.push({
-                uniqueName: item.productCategory + ":" + uniqueName,
+                uniqueName: uniqueName,
                 name: name
             });
         }
     }
     for (const [uniqueName, item] of Object.entries(ExportRelics)) {
         res.miscitems.push({
-            uniqueName: "MiscItems:" + uniqueName,
+            uniqueName: uniqueName,
             name:
                 getString("/Lotus/Language/Relics/VoidProjectionName", lang)
                     .split("|ERA|")
@@ -137,7 +138,7 @@ const getItemListsController: RequestHandler = (req, response) => {
     }
     for (const [uniqueName, item] of Object.entries(ExportGear)) {
         res.miscitems.push({
-            uniqueName: "Consumables:" + uniqueName,
+            uniqueName: uniqueName,
             name: getString(item.name, lang)
         });
     }
@@ -147,11 +148,17 @@ const getItemListsController: RequestHandler = (req, response) => {
             const resultName = getItemName(item.resultType);
             if (resultName) {
                 res.miscitems.push({
-                    uniqueName: "Recipes:" + uniqueName,
+                    uniqueName: uniqueName,
                     name: recipeNameTemplate.replace("|ITEM|", getString(resultName, lang))
                 });
             }
         }
+    }
+    for (const [uniqueName, item] of Object.entries(ExportDrones)) {
+        res.miscitems.push({
+            uniqueName: uniqueName,
+            name: getString(item.name, lang)
+        });
     }
 
     res.mods = [];
