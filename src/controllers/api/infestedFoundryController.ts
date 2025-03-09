@@ -57,17 +57,18 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             const inventory = await getInventory(accountId);
             const suit = inventory.Suits.find(suit => suit._id.toString() == request.SuitId.$oid)!;
 
-            // refund shard
-            const shard = Object.entries(colorToShard).find(
-                ([color]) => color == suit.ArchonCrystalUpgrades![request.Slot].Color
-            )![1];
-            const miscItemChanges = [
-                {
+            const miscItemChanges: IMiscItem[] = [];
+            if (suit.ArchonCrystalUpgrades![request.Slot].Color) {
+                // refund shard
+                const shard = Object.entries(colorToShard).find(
+                    ([color]) => color == suit.ArchonCrystalUpgrades![request.Slot].Color
+                )![1];
+                miscItemChanges.push({
                     ItemType: shard,
                     ItemCount: 1
-                }
-            ];
-            addMiscItems(inventory, miscItemChanges);
+                });
+                addMiscItems(inventory, miscItemChanges);
+            }
 
             // remove from suit
             suit.ArchonCrystalUpgrades![request.Slot] = {};
