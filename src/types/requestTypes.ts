@@ -103,6 +103,10 @@ export type IMissionInventoryUpdateRequest = {
     }[];
     CollectibleScans?: ICollectibleEntry[];
     Upgrades?: IUpgradeClient[]; // riven challenge progress
+    StrippedItems?: {
+        DropTable: string;
+        DROP_MOD: number[];
+    }[];
 } & {
     [K in TEquipmentKey]?: IEquipmentClient[];
 };

@@ -244,3 +244,11 @@ export const convertInboxMessage = (message: IInboxMessage): IMessage => {
         r: false
     } satisfies IMessage;
 };
+
+export const toStoreItem = (type: string): string => {
+    return "/Lotus/StoreItems/" + type.substring("/Lotus/".length);
+};
+
+export const fromStoreItem = (type: string): string => {
+    return "/Lotus/" + type.substring("/Lotus/StoreItems/".length);
+};

@@ -3,7 +3,7 @@ import { isEmptyObject } from "@/src/helpers/general";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { createMessage } from "@/src/services/inboxService";
 import { addItem, addKeyChainItems } from "@/src/services/inventoryService";
-import { getKeyChainMessage, getLevelKeyRewards } from "@/src/services/itemDataService";
+import { fromStoreItem, getKeyChainMessage, getLevelKeyRewards } from "@/src/services/itemDataService";
 import {
     IInventoryDatabase,
     IQuestKeyClient,
@@ -157,7 +157,7 @@ export const completeQuest = async (inventory: TInventoryDatabaseDocument, quest
                 addFixedLevelRewards(fixedLevelRewards.levelKeyRewards, inventory, missionRewards);
 
                 for (const reward of missionRewards) {
-                    await addItem(inventory, reward.StoreItem.replace("StoreItems/", ""), reward.ItemCount);
+                    await addItem(inventory, fromStoreItem(reward.StoreItem), reward.ItemCount);
                 }
             } else if (fixedLevelRewards.levelKeyRewards2) {
                 for (const reward of fixedLevelRewards.levelKeyRewards2) {
@@ -166,9 +166,9 @@ export const completeQuest = async (inventory: TInventoryDatabaseDocument, quest
                         continue;
                     }
                     if (reward.rewardType == "RT_RESOURCE") {
-                        await addItem(inventory, reward.itemType.replace("StoreItems/", ""), reward.amount);
+                        await addItem(inventory, fromStoreItem(reward.itemType), reward.amount);
                     } else {
-                        await addItem(inventory, reward.itemType.replace("StoreItems/", ""));
+                        await addItem(inventory, fromStoreItem(reward.itemType));
                     }
                 }
             }

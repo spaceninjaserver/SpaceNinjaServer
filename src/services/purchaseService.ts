@@ -27,6 +27,7 @@ import {
 } from "warframe-public-export-plus";
 import { config } from "./configService";
 import { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel";
+import { fromStoreItem, toStoreItem } from "./itemDataService";
 
 export const getStoreItemCategory = (storeItem: string): string => {
     const storeItemString = getSubstringFromKeyword(storeItem, "StoreItems/");
@@ -240,7 +241,7 @@ export const handleStoreItemAcquisition = async (
         await handleBundleAcqusition(storeItemName, inventory, quantity, purchaseResponse.InventoryChanges);
     } else {
         const storeCategory = getStoreItemCategory(storeItemName);
-        const internalName = storeItemName.replace("/StoreItems", "");
+        const internalName = fromStoreItem(storeItemName);
         logger.debug(`store category ${storeCategory}`);
         if (!ignorePurchaseQuantity) {
             if (internalName in ExportGear) {
@@ -328,8 +329,7 @@ const handleBoosterPackPurchase = async (
             const result = getRandomWeightedRewardUc(pack.components, weights);
             if (result) {
                 logger.debug(`booster pack rolled`, result);
-                purchaseResponse.BoosterPackItems +=
-                    result.Item.split("/Lotus/").join("/Lotus/StoreItems/") + ',{"lvl":0};';
+                purchaseResponse.BoosterPackItems += toStoreItem(result.Item) + ',{"lvl":0};';
                 combineInventoryChanges(
                     purchaseResponse.InventoryChanges,
                     (await addItem(inventory, result.Item, 1)).InventoryChanges

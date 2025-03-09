@@ -35,7 +35,7 @@ import {
     IUpdateChallengeProgressRequest
 } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
-import { convertInboxMessage, getExalted, getKeyChainItems } from "@/src/services/itemDataService";
+import { convertInboxMessage, fromStoreItem, getExalted, getKeyChainItems } from "@/src/services/itemDataService";
 import {
     EquipmentFeatures,
     IEquipmentClient,
@@ -1260,7 +1260,7 @@ export const addKeyChainItems = async (
         `adding key chain items ${keyChainItems.join()} for ${keyChainData.KeyChain} at stage ${keyChainData.ChainStage}`
     );
 
-    const nonStoreItems = keyChainItems.map(item => item.replace("StoreItems/", ""));
+    const nonStoreItems = keyChainItems.map(item => fromStoreItem(item));
 
     //TODO: inventoryChanges is not typed correctly
     const inventoryChanges = {};

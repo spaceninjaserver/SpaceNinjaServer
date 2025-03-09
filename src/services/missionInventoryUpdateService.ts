@@ -1,4 +1,5 @@
 import {
+    ExportEnemies,
     ExportFusionBundles,
     ExportRegions,
     ExportRewards,
@@ -18,6 +19,7 @@ import {
     addFocusXpIncreases,
     addFusionTreasures,
     addGearExpByCategory,
+    addItem,
     addMiscItems,
     addMissionComplete,
     addMods,
@@ -28,7 +30,7 @@ import {
 import { updateQuestKey } from "@/src/services/questService";
 import { HydratedDocument } from "mongoose";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
-import { getLevelKeyRewards, getNode } from "@/src/services/itemDataService";
+import { getLevelKeyRewards, getNode, toStoreItem } from "@/src/services/itemDataService";
 import { InventoryDocumentProps, TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { getEntriesUnsafe } from "@/src/utils/ts-utils";
 import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
@@ -319,7 +321,8 @@ export const addMissionRewards = async (
         LevelKeyName: levelKeyName,
         Missions: missions,
         RegularCredits: creditDrops,
-        VoidTearParticipantsCurrWave: voidTearWave
+        VoidTearParticipantsCurrWave: voidTearWave,
+        StrippedItems: strippedItems
     }: IMissionInventoryUpdateRequest
 ) => {
     if (!rewardInfo) {
@@ -404,6 +407,29 @@ export const addMissionRewards = async (
     ) {
         const reward = await crackRelic(inventory, voidTearWave.Participants[0]);
         MissionRewards.push({ StoreItem: reward.type, ItemCount: reward.itemCount });
+    }
+
+    if (strippedItems) {
+        for (const si of strippedItems) {
+            const droptable = ExportEnemies.droptables[si.DropTable];
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            if (!droptable) {
+                logger.error(`unknown droptable ${si.DropTable}`);
+            } else {
+                for (let i = 0; i != si.DROP_MOD.length; ++i) {
+                    for (const pool of droptable) {
+                        const reward = getRandomReward(pool.items)!;
+                        logger.debug(`stripped droptable rolled`, reward);
+                        await addItem(inventory, reward.type);
+                        MissionRewards.push({
+                            StoreItem: toStoreItem(reward.type),
+                            ItemCount: 1,
+                            FromEnemyCache: true // to show "identified"
+                        });
+                    }
+                }
+            }
+        }
     }
 
     return { inventoryChanges, MissionRewards, credits };
