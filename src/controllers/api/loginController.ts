@@ -19,6 +19,8 @@ export const loginController: RequestHandler = async (request, response) => {
             ? request.query.buildLabel.split(" ").join("+")
             : buildConfig.buildLabel;
 
+    const myAddress = request.host.indexOf("warframe.com") == -1 ? request.host : config.myAddress;
+
     if (!account && config.autoCreateAccount && loginRequest.ClientType != "webui") {
         try {
             const nameFromEmail = loginRequest.email.substring(0, loginRequest.email.indexOf("@"));
@@ -44,7 +46,7 @@ export const loginController: RequestHandler = async (request, response) => {
                 LatestEventMessageDate: new Date(0)
             });
             logger.debug("created new account");
-            response.json(createLoginResponse(newAccount, buildLabel));
+            response.json(createLoginResponse(myAddress, newAccount, buildLabel));
             return;
         } catch (error: unknown) {
             if (error instanceof Error) {
@@ -67,10 +69,10 @@ export const loginController: RequestHandler = async (request, response) => {
     }
     await account.save();
 
-    response.json(createLoginResponse(account.toJSON(), buildLabel));
+    response.json(createLoginResponse(myAddress, account.toJSON(), buildLabel));
 };
 
-const createLoginResponse = (account: IDatabaseAccountJson, buildLabel: string): ILoginResponse => {
+const createLoginResponse = (myAddress: string, account: IDatabaseAccountJson, buildLabel: string): ILoginResponse => {
     return {
         id: account.id,
         DisplayName: account.DisplayName,
@@ -84,9 +86,9 @@ const createLoginResponse = (account: IDatabaseAccountJson, buildLabel: string):
         TrackedSettings: account.TrackedSettings,
         Nonce: account.Nonce,
         Groups: [],
-        IRC: config.myIrcAddresses ?? [config.myAddress],
-        platformCDNs: [`https://${config.myAddress}/`],
-        HUB: `https://${config.myAddress}/api/`,
+        IRC: config.myIrcAddresses ?? [myAddress],
+        platformCDNs: [`https://${myAddress}/`],
+        HUB: `https://${myAddress}/api/`,
         NRS: config.NRS,
         DTLS: 99,
         BuildLabel: buildLabel,
