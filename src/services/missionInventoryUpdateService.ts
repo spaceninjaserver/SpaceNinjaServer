@@ -405,7 +405,7 @@ export const addMissionRewards = async (
         voidTearWave.Participants[0].QualifiesForReward &&
         !voidTearWave.Participants[0].HaveRewardResponse
     ) {
-        const reward = await crackRelic(inventory, voidTearWave.Participants[0]);
+        const reward = await crackRelic(inventory, voidTearWave.Participants[0], inventoryChanges);
         MissionRewards.push({ StoreItem: reward.type, ItemCount: reward.itemCount });
     }
 

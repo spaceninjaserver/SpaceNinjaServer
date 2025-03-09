@@ -3,12 +3,14 @@ import { IVoidTearParticipantInfo } from "@/src/types/requestTypes";
 import { ExportRelics, ExportRewards, TRarity } from "warframe-public-export-plus";
 import { getRandomWeightedReward, IRngResult } from "@/src/services/rngService";
 import { logger } from "@/src/utils/logger";
-import { addMiscItems } from "@/src/services/inventoryService";
+import { addMiscItems, combineInventoryChanges } from "@/src/services/inventoryService";
 import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
+import { IInventoryChanges } from "../types/purchaseTypes";
 
 export const crackRelic = async (
     inventory: TInventoryDatabaseDocument,
-    participant: IVoidTearParticipantInfo
+    participant: IVoidTearParticipantInfo,
+    inventoryChanges: IInventoryChanges = {}
 ): Promise<IRngResult> => {
     const relic = ExportRelics[participant.VoidProjection];
     const weights = refinementToWeights[relic.quality];
@@ -21,15 +23,20 @@ export const crackRelic = async (
     participant.Reward = reward.type;
 
     // Remove relic
-    addMiscItems(inventory, [
+    const miscItemChanges = [
         {
             ItemType: participant.VoidProjection,
             ItemCount: -1
         }
-    ]);
+    ];
+    addMiscItems(inventory, miscItemChanges);
+    combineInventoryChanges(inventoryChanges, { MiscItems: miscItemChanges });
 
     // Give reward
-    await handleStoreItemAcquisition(reward.type, inventory, reward.itemCount);
+    combineInventoryChanges(
+        inventoryChanges,
+        (await handleStoreItemAcquisition(reward.type, inventory, reward.itemCount)).InventoryChanges
+    );
 
     return reward;
 };
