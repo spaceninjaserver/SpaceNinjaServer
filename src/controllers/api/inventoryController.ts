@@ -70,7 +70,7 @@ export const getInventoryResponse = async (
         inventoryResponse.RegularCredits = 999999999;
     }
     if (config.infinitePlatinum) {
-        inventoryResponse.PremiumCreditsFree = 999999999;
+        inventoryResponse.PremiumCreditsFree = 0;
         inventoryResponse.PremiumCredits = 999999999;
     }
     if (config.infiniteEndo) {

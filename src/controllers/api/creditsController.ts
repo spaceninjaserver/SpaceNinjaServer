@@ -19,7 +19,7 @@ export const creditsController: RequestHandler = async (req, res) => {
         response.RegularCredits = 999999999;
     }
     if (config.infinitePlatinum) {
-        response.PremiumCreditsFree = 999999999;
+        response.PremiumCreditsFree = 0;
         response.PremiumCredits = 999999999;
     }
 
