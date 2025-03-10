@@ -28,7 +28,7 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
     switch (operation) {
         case "updateKey": {
             //TODO: if this is intended to be used, one needs to add a updateQuestKeyMultiple, the game does never intend to do it, so it errors for multiple keys.
-            updateQuestKey(inventory, questKeyUpdate);
+            await updateQuestKey(inventory, questKeyUpdate);
             break;
         }
         case "unlockAll": {

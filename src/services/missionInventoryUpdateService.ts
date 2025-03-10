@@ -95,7 +95,7 @@ export const addMissionInventoryUpdates = async (
                 inventory.RegularCredits += value;
                 break;
             case "QuestKeys":
-                updateQuestKey(inventory, value);
+                await updateQuestKey(inventory, value);
                 break;
             case "AffiliationChanges":
                 updateSyndicate(inventory, value);
