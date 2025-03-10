@@ -4,7 +4,8 @@ import {
     ITechProjectDatabase,
     ITechProjectClient,
     IDojoDecoDatabase,
-    ILongMOTD
+    ILongMOTD,
+    IGuildMemberDatabase
 } from "@/src/types/guildTypes";
 import { Document, Model, model, Schema, Types } from "mongoose";
 import { fusionTreasuresSchema, typeCountSchema } from "./inventoryModels/inventoryModel";
@@ -70,7 +71,7 @@ const longMOTDSchema = new Schema<ILongMOTD>(
 
 const guildSchema = new Schema<IGuildDatabase>(
     {
-        Name: { type: String, required: true },
+        Name: { type: String, required: true, unique: true },
         MOTD: { type: String, default: "" },
         LongMOTD: { type: longMOTDSchema, default: undefined },
         DojoComponents: { type: [dojoComponentSchema], default: [] },
@@ -113,3 +114,14 @@ export type TGuildDatabaseDocument = Document<unknown, {}, IGuildDatabase> &
         keyof GuildDocumentProps
     > &
     GuildDocumentProps;
+
+const guildMemberSchema = new Schema<IGuildMemberDatabase>({
+    accountId: Types.ObjectId,
+    guildId: Types.ObjectId,
+    status: { type: Number, required: true },
+    rank: { type: Number, default: 7 }
+});
+
+guildMemberSchema.index({ accountId: 1, guildId: 1 }, { unique: true });
+
+export const GuildMember = model<IGuildMemberDatabase>("GuildMember", guildMemberSchema);

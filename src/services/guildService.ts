@@ -1,19 +1,23 @@
 import { Request } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getInventory } from "@/src/services/inventoryService";
-import { Guild, TGuildDatabaseDocument } from "@/src/models/guildModel";
+import { addRecipes, getInventory } from "@/src/services/inventoryService";
+import { Guild, GuildMember, TGuildDatabaseDocument } from "@/src/models/guildModel";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import {
     IDojoClient,
     IDojoComponentClient,
     IDojoContributable,
     IDojoDecoClient,
+    IGuildClient,
+    IGuildMemberClient,
     IGuildVault
 } from "@/src/types/guildTypes";
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
 import { Types } from "mongoose";
 import { ExportDojoRecipes, IDojoBuild } from "warframe-public-export-plus";
 import { logger } from "../utils/logger";
+import { config } from "./configService";
+import { Account } from "../models/loginModel";
 
 export const getGuildForRequest = async (req: Request): Promise<TGuildDatabaseDocument> => {
     const accountId = await getAccountIdForRequest(req);
@@ -34,6 +38,99 @@ export const getGuildForRequestEx = async (
         throw new Error("Account thinks it is in a guild that doesn't exist");
     }
     return guild;
+};
+
+export const getGuildClient = async (guild: TGuildDatabaseDocument, accountId: string): Promise<IGuildClient> => {
+    const guildMembers = await GuildMember.find({ guildId: guild._id });
+
+    const members: IGuildMemberClient[] = [];
+    let missingEntry = true;
+    for (const guildMember of guildMembers) {
+        const member: IGuildMemberClient = {
+            _id: toOid(guildMember.accountId),
+            Rank: guildMember.rank,
+            Status: guildMember.status
+        };
+        if (guildMember.accountId.equals(accountId)) {
+            missingEntry = false;
+        } else {
+            member.DisplayName = (await Account.findOne(
+                {
+                    _id: guildMember.accountId
+                },
+                "DisplayName"
+            ))!.DisplayName;
+            await fillInInventoryDataForGuildMember(member);
+        }
+        members.push(member);
+    }
+    if (missingEntry) {
+        // Handle clans created prior to creation of the GuildMember model.
+        await GuildMember.insertOne({
+            accountId: accountId,
+            guildId: guild._id,
+            status: 0,
+            rank: 0
+        });
+        members.push({
+            _id: { $oid: accountId },
+            Status: 0,
+            Rank: 0
+        });
+    }
+
+    return {
+        _id: toOid(guild._id),
+        Name: guild.Name,
+        MOTD: guild.MOTD,
+        LongMOTD: guild.LongMOTD,
+        Members: members,
+        Ranks: [
+            {
+                Name: "/Lotus/Language/Game/Rank_Creator",
+                Permissions: 16351
+            },
+            {
+                Name: "/Lotus/Language/Game/Rank_Warlord",
+                Permissions: 14303
+            },
+            {
+                Name: "/Lotus/Language/Game/Rank_General",
+                Permissions: 4318
+            },
+            {
+                Name: "/Lotus/Language/Game/Rank_Officer",
+                Permissions: 4314
+            },
+            {
+                Name: "/Lotus/Language/Game/Rank_Leader",
+                Permissions: 4106
+            },
+            {
+                Name: "/Lotus/Language/Game/Rank_Sage",
+                Permissions: 4304
+            },
+            {
+                Name: "/Lotus/Language/Game/Rank_Soldier",
+                Permissions: 4098
+            },
+            {
+                Name: "/Lotus/Language/Game/Rank_Initiate",
+                Permissions: 4096
+            },
+            {
+                Name: "/Lotus/Language/Game/Rank_Utility",
+                Permissions: 4096
+            }
+        ],
+        Tier: 1,
+        Vault: getGuildVault(guild),
+        Class: guild.Class,
+        XP: guild.XP,
+        IsContributor: !!guild.CeremonyContributors?.find(x => x.equals(accountId)),
+        NumContributors: guild.CeremonyContributors?.length ?? 0,
+        CeremonyResetDate: guild.CeremonyResetDate ? toMongoDate(guild.CeremonyResetDate) : undefined
+    };
 };
 
 export const getGuildVault = (guild: TGuildDatabaseDocument): IGuildVault => {
@@ -191,4 +288,30 @@ export const processDojoBuildMaterialsGathered = (guild: TGuildDatabaseDocument,
             guild.XP += build.guildXpValue;
         }
     }
+};
+
+export const fillInInventoryDataForGuildMember = async (member: IGuildMemberClient): Promise<void> => {
+    const inventory = await getInventory(member._id.$oid, "PlayerLevel ActiveAvatarImageType");
+    member.PlayerLevel = config.spoofMasteryRank == -1 ? inventory.PlayerLevel : config.spoofMasteryRank;
+    member.ActiveAvatarImageType = inventory.ActiveAvatarImageType;
+};
+
+export const updateInventoryForConfirmedGuildJoin = async (
+    accountId: string,
+    guildId: Types.ObjectId
+): Promise<void> => {
+    const inventory = await getInventory(accountId);
+
+    // Set GuildId
+    inventory.GuildId = guildId;
+
+    // Give clan key blueprint
+    addRecipes(inventory, [
+        {
+            ItemType: "/Lotus/Types/Keys/DojoKeyBlueprint",
+            ItemCount: 1
+        }
+    ]);
+
+    await inventory.save();
 };

@@ -7,11 +7,14 @@ import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
 import { PersonalRooms } from "@/src/models/personalRoomsModel";
 import { Ship } from "@/src/models/shipModel";
 import { Stats } from "@/src/models/statsModel";
+import { GuildMember } from "@/src/models/guildModel";
 
 export const deleteAccountController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
+    // TODO: Handle the account being the creator of a guild
     await Promise.all([
         Account.deleteOne({ _id: accountId }),
+        GuildMember.deleteOne({ accountId: accountId }),
         Inbox.deleteMany({ ownerId: accountId }),
         Inventory.deleteOne({ accountOwnerId: accountId }),
         Loadout.deleteOne({ loadoutOwnerId: accountId }),

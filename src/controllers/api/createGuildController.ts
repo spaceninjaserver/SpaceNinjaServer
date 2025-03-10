@@ -1,8 +1,8 @@
 import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
-import { Guild } from "@/src/models/guildModel";
+import { Guild, GuildMember } from "@/src/models/guildModel";
+import { updateInventoryForConfirmedGuildJoin } from "@/src/services/guildService";
 
 export const createGuildController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -14,20 +14,15 @@ export const createGuildController: RequestHandler = async (req, res) => {
     });
     await guild.save();
 
-    // Update inventory
-    const inventory = await Inventory.findOne({ accountOwnerId: accountId });
-    if (inventory) {
-        // Set GuildId
-        inventory.GuildId = guild._id;
+    // Create guild member on database
+    await GuildMember.insertOne({
+        accountId: accountId,
+        guildId: guild._id,
+        status: 0,
+        rank: 0
+    });
 
-        // Give clan key (TODO: This should only be a blueprint)
-        inventory.LevelKeys.push({
-            ItemType: "/Lotus/Types/Keys/DojoKey",
-            ItemCount: 1
-        });
-
-        await inventory.save();
-    }
+    await updateInventoryForConfirmedGuildJoin(accountId, guild._id);
 
     res.json(guild);
 };

@@ -32,6 +32,10 @@ export interface IMessage {
     transmission?: string;
     arg?: Arg[];
     r?: boolean;
+    contextInfo?: string;
+    acceptAction?: string;
+    declineAction?: string;
+    hasAccountAction?: boolean;
 }
 
 export interface Arg {
@@ -100,7 +104,11 @@ const messageSchema = new Schema<IMessageDatabase>(
                 }
             ],
             default: undefined
-        }
+        },
+        contextInfo: String,
+        acceptAction: String,
+        declineAction: String,
+        hasAccountAction: Boolean
     },
     { timestamps: { createdAt: "date", updatedAt: false }, id: false }
 );

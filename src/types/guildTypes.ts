@@ -2,6 +2,25 @@ import { Types } from "mongoose";
 import { IOid, IMongoDate } from "@/src/types/commonTypes";
 import { IFusionTreasure, IMiscItem, ITypeCount } from "@/src/types/inventoryTypes/inventoryTypes";
 
+export interface IGuildClient {
+    _id: IOid;
+    Name: string;
+    MOTD: string;
+    LongMOTD?: ILongMOTD;
+    Members: IGuildMemberClient[];
+    Ranks: {
+        Name: string;
+        Permissions: number;
+    }[];
+    Tier: number;
+    Vault: IGuildVault;
+    Class: number;
+    XP: number;
+    IsContributor: boolean;
+    NumContributors: number;
+    CeremonyResetDate?: IMongoDate;
+}
+
 export interface IGuildDatabase {
     _id: Types.ObjectId;
     Name: string;
@@ -33,6 +52,22 @@ export interface ILongMOTD {
     message: string;
     authorName: string;
     //authorGuildName: "";
+}
+
+export interface IGuildMemberDatabase {
+    accountId: Types.ObjectId;
+    guildId: Types.ObjectId;
+    status: number;
+    rank: number;
+}
+
+export interface IGuildMemberClient {
+    _id: IOid;
+    Status: number;
+    Rank: number;
+    DisplayName?: string;
+    ActiveAvatarImageType?: string;
+    PlayerLevel?: number;
 }
 
 export interface IGuildVault {

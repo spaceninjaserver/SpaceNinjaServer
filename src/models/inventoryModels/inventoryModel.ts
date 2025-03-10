@@ -1249,7 +1249,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         Drones: [droneSchema],
 
         //Active profile ico
-        ActiveAvatarImageType: String,
+        ActiveAvatarImageType: { type: String, default: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageDefault" },
 
         // open location store like EidolonPlainsDiscoverable or OrbVallisCaveDiscoverable
         DiscoveredMarkers: [Schema.Types.Mixed],
