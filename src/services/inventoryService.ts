@@ -416,7 +416,7 @@ export const addItem = async (
             const key = { ItemType: typeName, ItemCount: quantity };
 
             const index = inventory.LevelKeys.findIndex(levelKey => levelKey.ItemType == typeName);
-            if (index) {
+            if (index != -1) {
                 inventory.LevelKeys[index].ItemCount += quantity;
             } else {
                 inventory.LevelKeys.push(key);
