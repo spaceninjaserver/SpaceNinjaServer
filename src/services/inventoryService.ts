@@ -518,15 +518,7 @@ export const addItem = async (
             switch (typeName.substr(1).split("/")[2]) {
                 case "Sentinels": {
                     return {
-                        InventoryChanges: {
-                            ...addSentinel(
-                                inventory,
-                                typeName,
-                                {},
-                                premiumPurchase ? EquipmentFeatures.DOUBLE_CAPACITY : undefined
-                            ),
-                            ...occupySlot(inventory, InventorySlot.SENTINELS, premiumPurchase)
-                        }
+                        InventoryChanges: addSentinel(inventory, typeName, premiumPurchase)
                     };
                 }
                 case "Game": {
@@ -622,20 +614,24 @@ export const applyDefaultUpgrades = (
 };
 
 //TODO: maybe genericMethod for all the add methods, they share a lot of logic
-export const addSentinel = (
+const addSentinel = (
     inventory: TInventoryDatabaseDocument,
     sentinelName: string,
-    inventoryChanges: IInventoryChanges = {},
-    features: number | undefined = undefined
+    premiumPurchase: boolean,
+    inventoryChanges: IInventoryChanges = {}
 ): IInventoryChanges => {
+    // Sentinel itself occupies a slot in the sentinels bin
+    combineInventoryChanges(inventoryChanges, occupySlot(inventory, InventorySlot.SENTINELS, premiumPurchase));
+
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (ExportSentinels[sentinelName]?.defaultWeapon) {
-        addSentinelWeapon(inventory, ExportSentinels[sentinelName].defaultWeapon, inventoryChanges);
+        addSentinelWeapon(inventory, ExportSentinels[sentinelName].defaultWeapon, premiumPurchase, inventoryChanges);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     const configs: IItemConfig[] = applyDefaultUpgrades(inventory, ExportSentinels[sentinelName]?.defaultUpgrades);
 
+    const features = premiumPurchase ? EquipmentFeatures.DOUBLE_CAPACITY : undefined;
     const sentinelIndex =
         inventory.Sentinels.push({ ItemType: sentinelName, Configs: configs, XP: 0, Features: features }) - 1;
     inventoryChanges.Sentinels ??= [];
@@ -644,11 +640,15 @@ export const addSentinel = (
     return inventoryChanges;
 };
 
-export const addSentinelWeapon = (
+const addSentinelWeapon = (
     inventory: TInventoryDatabaseDocument,
     typeName: string,
+    premiumPurchase: boolean,
     inventoryChanges: IInventoryChanges
 ): void => {
+    // Sentinel weapons also occupy a slot in the sentinels bin
+    combineInventoryChanges(inventoryChanges, occupySlot(inventory, InventorySlot.SENTINELS, premiumPurchase));
+
     const index = inventory.SentinelWeapons.push({ ItemType: typeName, XP: 0 }) - 1;
     inventoryChanges.SentinelWeapons ??= [];
     inventoryChanges.SentinelWeapons.push(inventory.SentinelWeapons[index].toJSON<IEquipmentClient>());
