@@ -6,6 +6,7 @@ import {
     ExportDrones,
     ExportGear,
     ExportMisc,
+    ExportRailjackWeapons,
     ExportRecipes,
     ExportRelics,
     ExportResources,
@@ -155,6 +156,12 @@ const getItemListsController: RequestHandler = (req, response) => {
         }
     }
     for (const [uniqueName, item] of Object.entries(ExportDrones)) {
+        res.miscitems.push({
+            uniqueName: uniqueName,
+            name: getString(item.name, lang)
+        });
+    }
+    for (const [uniqueName, item] of Object.entries(ExportRailjackWeapons)) {
         res.miscitems.push({
             uniqueName: uniqueName,
             name: getString(item.name, lang)

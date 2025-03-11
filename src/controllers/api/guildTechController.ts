@@ -2,7 +2,14 @@ import { RequestHandler } from "express";
 import { getGuildForRequestEx, getGuildVault, scaleRequiredCount } from "@/src/services/guildService";
 import { ExportDojoRecipes, IDojoResearch } from "warframe-public-export-plus";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { addMiscItems, addRecipes, getInventory, updateCurrency } from "@/src/services/inventoryService";
+import {
+    addItem,
+    addMiscItems,
+    addRecipes,
+    combineInventoryChanges,
+    getInventory,
+    updateCurrency
+} from "@/src/services/inventoryService";
 import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { config } from "@/src/services/configService";
@@ -127,6 +134,20 @@ export const guildTechController: RequestHandler = async (req, res) => {
                 Recipes: recipeChanges
             }
         });
+    } else if (action == "Fabricate") {
+        const payload = data as IGuildTechFabricateRequest;
+        const recipe = ExportDojoRecipes.fabrications[payload.RecipeType];
+        const inventory = await getInventory(accountId);
+        const inventoryChanges: IInventoryChanges = updateCurrency(inventory, recipe.price, false);
+        inventoryChanges.MiscItems = recipe.ingredients.map(x => ({
+            ItemType: x.ItemType,
+            ItemCount: x.ItemCount * -1
+        }));
+        addMiscItems(inventory, inventoryChanges.MiscItems);
+        combineInventoryChanges(inventoryChanges, (await addItem(inventory, recipe.resultType)).InventoryChanges);
+        await inventory.save();
+        // Not a mistake: This response uses `inventoryChanges` instead of `InventoryChanges`.
+        res.json({ inventoryChanges: inventoryChanges });
     } else {
         throw new Error(`unknown guildTech action: ${data.Action}`);
     }
@@ -144,10 +165,12 @@ const processFundedProject = (
     }
 };
 
-type TGuildTechRequest = {
-    Action: string;
-} & Partial<IGuildTechStartFields> &
-    Partial<IGuildTechContributeFields>;
+type TGuildTechRequest =
+    | ({
+          Action: string;
+      } & Partial<IGuildTechStartFields> &
+          Partial<IGuildTechContributeFields>)
+    | IGuildTechFabricateRequest;
 
 interface IGuildTechStartFields {
     Mode: "Guild";
@@ -163,4 +186,10 @@ interface IGuildTechContributeFields {
     MiscItems: IMiscItem[];
     VaultCredits: number;
     VaultMiscItems: IMiscItem[];
+}
+
+interface IGuildTechFabricateRequest {
+    Action: "Fabricate";
+    Mode: "Guild";
+    RecipeType: string;
 }

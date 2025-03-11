@@ -75,7 +75,8 @@ import {
     ICollectibleEntry,
     IIncentiveState,
     ISongChallenge,
-    ILibraryPersonalProgress
+    ILibraryPersonalProgress,
+    ICrewShipWeaponDatabase
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -1037,6 +1038,25 @@ const alignmentSchema = new Schema<IAlignment>(
     { _id: false }
 );
 
+const crewShipWeaponSchema2 = new Schema<ICrewShipWeaponDatabase>(
+    {
+        ItemType: String
+    },
+    { id: false }
+);
+
+crewShipWeaponSchema2.virtual("ItemId").get(function () {
+    return { $oid: this._id.toString() } satisfies IOid;
+});
+
+crewShipWeaponSchema2.set("toJSON", {
+    virtuals: true,
+    transform(_document, returnedObject) {
+        delete returnedObject._id;
+        delete returnedObject.__v;
+    }
+});
+
 const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
     {
         accountOwnerId: Schema.Types.ObjectId,
@@ -1157,7 +1177,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         //Default RailJack
         CrewShipAmmo: [typeCountSchema],
-        CrewShipWeapons: [Schema.Types.Mixed],
+        CrewShipWeapons: [crewShipWeaponSchema2],
         CrewShipWeaponSkins: [upgradeSchema],
 
         //NPC Crew and weapon
@@ -1404,6 +1424,7 @@ export type InventoryDocumentProps = {
     WeaponSkins: Types.DocumentArray<IWeaponSkinDatabase>;
     QuestKeys: Types.DocumentArray<IQuestKeyDatabase>;
     Drones: Types.DocumentArray<IDroneDatabase>;
+    CrewShipWeapons: Types.DocumentArray<ICrewShipWeaponDatabase>;
     CrewShipWeaponSkins: Types.DocumentArray<IUpgradeDatabase>;
 } & { [K in TEquipmentKey]: Types.DocumentArray<IEquipmentDatabase> };
 

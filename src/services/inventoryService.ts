@@ -26,7 +26,8 @@ import {
     ILibraryDailyTaskInfo,
     ICalendarProgress,
     IDroneClient,
-    IUpgradeClient
+    IUpgradeClient,
+    ICrewShipWeaponClient
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate } from "../types/genericUpdate";
 import {
@@ -54,6 +55,7 @@ import {
     ExportGear,
     ExportKeys,
     ExportMisc,
+    ExportRailjackWeapons,
     ExportRecipes,
     ExportResources,
     ExportSentinels,
@@ -385,6 +387,14 @@ export const addItem = async (
                 }
             };
         }
+    }
+    if (typeName in ExportRailjackWeapons) {
+        return {
+            InventoryChanges: {
+                ...addCrewShipWeapon(inventory, typeName),
+                ...occupySlot(inventory, InventorySlot.RJ_COMPONENT_AND_ARMAMENTS, premiumPurchase)
+            }
+        };
     }
     if (typeName in ExportMisc.creditBundles) {
         const creditsTotal = ExportMisc.creditBundles[typeName] * quantity;
@@ -859,6 +869,7 @@ export const addCustomization = (
     inventoryChanges: IInventoryChanges = {}
 ): IInventoryChanges => {
     const flavourItemIndex = inventory.FlavourItems.push({ ItemType: customizationName }) - 1;
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     inventoryChanges.FlavourItems ??= [];
     (inventoryChanges.FlavourItems as IFlavourItem[]).push(
         inventory.FlavourItems[flavourItemIndex].toJSON<IFlavourItem>()
@@ -872,9 +883,24 @@ export const addSkin = (
     inventoryChanges: IInventoryChanges = {}
 ): IInventoryChanges => {
     const index = inventory.WeaponSkins.push({ ItemType: typeName }) - 1;
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     inventoryChanges.WeaponSkins ??= [];
     (inventoryChanges.WeaponSkins as IWeaponSkinClient[]).push(
         inventory.WeaponSkins[index].toJSON<IWeaponSkinClient>()
+    );
+    return inventoryChanges;
+};
+
+const addCrewShipWeapon = (
+    inventory: TInventoryDatabaseDocument,
+    typeName: string,
+    inventoryChanges: IInventoryChanges = {}
+): IInventoryChanges => {
+    const index = inventory.CrewShipWeapons.push({ ItemType: typeName, _id: new Types.ObjectId() }) - 1;
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    inventoryChanges.CrewShipWeapons ??= [];
+    (inventoryChanges.CrewShipWeapons as ICrewShipWeaponClient[]).push(
+        inventory.CrewShipWeapons[index].toJSON<ICrewShipWeaponClient>()
     );
     return inventoryChanges;
 };
@@ -885,6 +911,7 @@ const addCrewShipWeaponSkin = (
     inventoryChanges: IInventoryChanges = {}
 ): IInventoryChanges => {
     const index = inventory.CrewShipWeaponSkins.push({ ItemType: typeName }) - 1;
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     inventoryChanges.CrewShipWeaponSkins ??= [];
     (inventoryChanges.CrewShipWeaponSkins as IUpgradeClient[]).push(
         inventory.CrewShipWeaponSkins[index].toJSON<IUpgradeClient>()

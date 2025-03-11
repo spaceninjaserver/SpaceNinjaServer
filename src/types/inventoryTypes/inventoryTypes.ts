@@ -31,6 +31,7 @@ export interface IInventoryDatabase
             | "WeaponSkins"
             | "Upgrades"
             | "CrewShipSalvagedWeaponSkins"
+            | "CrewShipWeapons"
             | "CrewShipWeaponSkins"
             | "AdultOperatorLoadOuts"
             | "OperatorLoadOuts"
@@ -56,6 +57,7 @@ export interface IInventoryDatabase
     WeaponSkins: IWeaponSkinDatabase[];
     Upgrades: IUpgradeDatabase[];
     CrewShipSalvagedWeaponSkins: IUpgradeDatabase[];
+    CrewShipWeapons: ICrewShipWeaponDatabase[];
     CrewShipWeaponSkins: IUpgradeDatabase[];
     AdultOperatorLoadOuts: IOperatorConfigDatabase[];
     OperatorLoadOuts: IOperatorConfigDatabase[];
@@ -289,8 +291,8 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     PlayerSkills: IPlayerSkills;
     CrewShipAmmo: IConsumable[];
     CrewShipSalvagedWeaponSkins: IUpgradeClient[];
-    CrewShipWeapons: ICrewShipWeapon[];
-    CrewShipSalvagedWeapons: ICrewShipWeapon[];
+    CrewShipWeapons: ICrewShipWeaponClient[];
+    CrewShipSalvagedWeapons: IEquipmentClient[];
     CrewShipWeaponSkins: IUpgradeClient[];
     TradeBannedUntil?: IMongoDate;
     PlayedParkourTutorial: boolean;
@@ -428,7 +430,8 @@ export enum InventorySlot {
     SPACESUITS = "SpaceSuitBin",
     MECHSUITS = "MechBin",
     PVE_LOADOUTS = "PveBonusLoadoutBin",
-    SENTINELS = "SentinelBin"
+    SENTINELS = "SentinelBin",
+    RJ_COMPONENT_AND_ARMAMENTS = "CrewShipSalvageBin"
 }
 
 export interface ISlots {
@@ -489,9 +492,21 @@ export interface IFlavourItem {
 
 export type IMiscItem = ITypeCount;
 
+// inventory.CrewShips[0].Weapon
 export interface ICrewShipWeapon {
     PILOT: ICrewShipPilotWeapon;
     PORT_GUNS: ICrewShipPortGuns;
+}
+
+// inventory.CrewShipWeapons
+export interface ICrewShipWeaponClient {
+    ItemType: string;
+    ItemId: IOid;
+}
+
+export interface ICrewShipWeaponDatabase {
+    ItemType: string;
+    _id: Types.ObjectId;
 }
 
 export interface ICrewShipPilotWeapon {
