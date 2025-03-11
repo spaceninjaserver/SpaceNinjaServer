@@ -256,7 +256,7 @@ export const handleStoreItemAcquisition = async (
                 break;
             }
             case "Types":
-                purchaseResponse = await handleTypesPurchase(internalName, inventory, quantity);
+                purchaseResponse = await handleTypesPurchase(internalName, inventory, quantity, ignorePurchaseQuantity);
                 break;
             case "Boosters":
                 purchaseResponse = handleBoostersPurchase(storeItemName, inventory, durability);
@@ -267,16 +267,16 @@ export const handleStoreItemAcquisition = async (
 };
 
 export const slotPurchaseNameToSlotName: SlotPurchase = {
-    SuitSlotItem: { name: "SuitBin", slotsPerPurchase: 1 },
-    TwoSentinelSlotItem: { name: "SentinelBin", slotsPerPurchase: 2 },
-    TwoWeaponSlotItem: { name: "WeaponBin", slotsPerPurchase: 2 },
-    SpaceSuitSlotItem: { name: "SpaceSuitBin", slotsPerPurchase: 1 },
-    TwoSpaceWeaponSlotItem: { name: "SpaceWeaponBin", slotsPerPurchase: 2 },
-    MechSlotItem: { name: "MechBin", slotsPerPurchase: 1 },
-    TwoOperatorWeaponSlotItem: { name: "OperatorAmpBin", slotsPerPurchase: 2 },
-    RandomModSlotItem: { name: "RandomModBin", slotsPerPurchase: 3 },
-    TwoCrewShipSalvageSlotItem: { name: "CrewShipSalvageBin", slotsPerPurchase: 2 },
-    CrewMemberSlotItem: { name: "CrewMemberBin", slotsPerPurchase: 1 }
+    SuitSlotItem: { name: "SuitBin", purchaseQuantity: 1 },
+    TwoSentinelSlotItem: { name: "SentinelBin", purchaseQuantity: 2 },
+    TwoWeaponSlotItem: { name: "WeaponBin", purchaseQuantity: 2 },
+    SpaceSuitSlotItem: { name: "SpaceSuitBin", purchaseQuantity: 1 },
+    TwoSpaceWeaponSlotItem: { name: "SpaceWeaponBin", purchaseQuantity: 2 },
+    MechSlotItem: { name: "MechBin", purchaseQuantity: 1 },
+    TwoOperatorWeaponSlotItem: { name: "OperatorAmpBin", purchaseQuantity: 2 },
+    RandomModSlotItem: { name: "RandomModBin", purchaseQuantity: 3 },
+    TwoCrewShipSalvageSlotItem: { name: "CrewShipSalvageBin", purchaseQuantity: 2 },
+    CrewMemberSlotItem: { name: "CrewMemberBin", purchaseQuantity: 1 }
 };
 
 // // extra = everything above the base +2 slots (depending on slot type)
@@ -286,7 +286,8 @@ export const slotPurchaseNameToSlotName: SlotPurchase = {
 const handleSlotPurchase = (
     slotPurchaseNameFull: string,
     inventory: TInventoryDatabaseDocument,
-    quantity: number
+    quantity: number,
+    ignorePurchaseQuantity: boolean
 ): IPurchaseResponse => {
     logger.debug(`slot name ${slotPurchaseNameFull}`);
     const slotPurchaseName = parseSlotPurchaseName(
@@ -295,7 +296,10 @@ const handleSlotPurchase = (
     logger.debug(`slot purchase name ${slotPurchaseName}`);
 
     const slotName = slotPurchaseNameToSlotName[slotPurchaseName].name;
-    const slotsPurchased = slotPurchaseNameToSlotName[slotPurchaseName].slotsPerPurchase * quantity;
+    let slotsPurchased = quantity;
+    if (!ignorePurchaseQuantity) {
+        slotsPurchased *= slotPurchaseNameToSlotName[slotPurchaseName].purchaseQuantity;
+    }
 
     updateSlots(inventory, slotName, slotsPurchased, slotsPurchased);
 
@@ -360,7 +364,8 @@ const handleCreditBundlePurchase = async (
 const handleTypesPurchase = async (
     typesName: string,
     inventory: TInventoryDatabaseDocument,
-    quantity: number
+    quantity: number,
+    ignorePurchaseQuantity: boolean
 ): Promise<IPurchaseResponse> => {
     const typeCategory = getStoreItemTypesCategory(typesName);
     logger.debug(`type category ${typeCategory}`);
@@ -370,7 +375,7 @@ const handleTypesPurchase = async (
         case "BoosterPacks":
             return handleBoosterPackPurchase(typesName, inventory, quantity);
         case "SlotItems":
-            return handleSlotPurchase(typesName, inventory, quantity);
+            return handleSlotPurchase(typesName, inventory, quantity, ignorePurchaseQuantity);
         case "CreditBundles":
             return handleCreditBundlePurchase(typesName, inventory);
     }

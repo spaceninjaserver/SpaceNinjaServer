@@ -105,5 +105,5 @@ export const slotNames = [
 export type SlotNames = (typeof slotNames)[number];
 
 export type SlotPurchase = {
-    [P in SlotPurchaseName]: { name: SlotNames; slotsPerPurchase: number };
+    [P in SlotPurchaseName]: { name: SlotNames; purchaseQuantity: number };
 };
