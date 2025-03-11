@@ -2,7 +2,11 @@ import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { Guild, GuildMember } from "@/src/models/guildModel";
-import { updateInventoryForConfirmedGuildJoin } from "@/src/services/guildService";
+import {
+    createUniqueClanName,
+    getGuildClient,
+    updateInventoryForConfirmedGuildJoin
+} from "@/src/services/guildService";
 
 export const createGuildController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -10,7 +14,7 @@ export const createGuildController: RequestHandler = async (req, res) => {
 
     // Create guild on database
     const guild = new Guild({
-        Name: payload.guildName
+        Name: await createUniqueClanName(payload.guildName)
     });
     await guild.save();
 
@@ -24,7 +28,7 @@ export const createGuildController: RequestHandler = async (req, res) => {
 
     await updateInventoryForConfirmedGuildJoin(accountId, guild._id);
 
-    res.json(guild);
+    res.json(await getGuildClient(guild, accountId));
 };
 
 interface ICreateGuildRequest {

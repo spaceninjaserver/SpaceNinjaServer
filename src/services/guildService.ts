@@ -18,6 +18,7 @@ import { ExportDojoRecipes, IDojoBuild } from "warframe-public-export-plus";
 import { logger } from "../utils/logger";
 import { config } from "./configService";
 import { Account } from "../models/loginModel";
+import { getRandomInt } from "./rngService";
 
 export const getGuildForRequest = async (req: Request): Promise<TGuildDatabaseDocument> => {
     const accountId = await getAccountIdForRequest(req);
@@ -314,4 +315,17 @@ export const updateInventoryForConfirmedGuildJoin = async (
     ]);
 
     await inventory.save();
+};
+
+export const createUniqueClanName = async (name: string): Promise<string> => {
+    const initialDiscriminator = getRandomInt(0, 999);
+    let discriminator = initialDiscriminator;
+    do {
+        const fullName = name + "#" + discriminator.toString().padStart(3, "0");
+        if (!(await Guild.exists({ Name: fullName }))) {
+            return fullName;
+        }
+        discriminator = (discriminator + 1) % 1000;
+    } while (discriminator != initialDiscriminator);
+    throw new Error(`clan name is so unoriginal it's already been done 1000 times: ${name}`);
 };

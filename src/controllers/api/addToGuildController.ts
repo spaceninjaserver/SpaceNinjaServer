@@ -46,7 +46,7 @@ export const addToGuildController: RequestHandler = async (req, res) => {
             arg: [
                 {
                     Key: "clan",
-                    Tag: guild.Name + "#000"
+                    Tag: guild.Name
                 }
             ],
             sub: "/Lotus/Language/Menu/Mailbox_ClanInvite_Title",
