@@ -20,6 +20,12 @@ export const contributeGuildClassController: RequestHandler = async (req, res) =
         for (let i = guild.Class; i != guild.CeremonyClass; ++i) {
             guild.CeremonyEndo += (i + 1) * 1000;
         }
+        guild.ClassChanges ??= [];
+        guild.ClassChanges.push({
+            dateTime: new Date(),
+            entryType: 13,
+            details: guild.CeremonyClass
+        });
     }
 
     guild.CeremonyContributors.push(new Types.ObjectId(accountId));

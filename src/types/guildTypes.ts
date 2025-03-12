@@ -46,6 +46,8 @@ export interface IGuildDatabase {
     CeremonyEndo?: number;
     CeremonyContributors?: Types.ObjectId[];
     CeremonyResetDate?: Date;
+
+    ClassChanges?: IGuildLogClassChange[];
 }
 
 export interface ILongMOTD {
@@ -159,4 +161,10 @@ export interface ITechProjectClient {
 
 export interface ITechProjectDatabase extends Omit<ITechProjectClient, "CompletionDate"> {
     CompletionDate?: Date;
+}
+
+export interface IGuildLogClassChange {
+    dateTime: Date;
+    entryType: number;
+    details: number;
 }

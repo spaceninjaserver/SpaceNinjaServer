@@ -5,7 +5,8 @@ import {
     ITechProjectClient,
     IDojoDecoDatabase,
     ILongMOTD,
-    IGuildMemberDatabase
+    IGuildMemberDatabase,
+    IGuildLogClassChange
 } from "@/src/types/guildTypes";
 import { Document, Model, model, Schema, Types } from "mongoose";
 import { fusionTreasuresSchema, typeCountSchema } from "./inventoryModels/inventoryModel";
@@ -69,6 +70,15 @@ const longMOTDSchema = new Schema<ILongMOTD>(
     { _id: false }
 );
 
+const guildLogClassChangeSchema = new Schema<IGuildLogClassChange>(
+    {
+        dateTime: Date,
+        entryType: Number,
+        details: Number
+    },
+    { _id: false }
+);
+
 const guildSchema = new Schema<IGuildDatabase>(
     {
         Name: { type: String, required: true, unique: true },
@@ -89,7 +99,8 @@ const guildSchema = new Schema<IGuildDatabase>(
         CeremonyClass: Number,
         CeremonyContributors: { type: [Types.ObjectId], default: undefined },
         CeremonyResetDate: Date,
-        CeremonyEndo: Number
+        CeremonyEndo: Number,
+        ClassChanges: { type: [guildLogClassChangeSchema], default: undefined }
     },
     { id: false }
 );
