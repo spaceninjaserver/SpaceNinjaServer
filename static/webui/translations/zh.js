@@ -18,7 +18,7 @@ dict = {
     code_sirocco: `赤风`,
     code_kDrive: `K式悬浮板`,
     code_legendaryCore: `传奇核心`,
-    code_traumaticPeculiar: `Traumatic Peculiar`,
+    code_traumaticPeculiar: `创伤怪奇`,
     code_starter: `|MOD| (有瑕疵的)`,
     code_badItem: `(Imposter)`,
     code_maxRank: `满级`,
