@@ -47,6 +47,7 @@ export interface IGuildDatabase {
     CeremonyContributors?: Types.ObjectId[];
     CeremonyResetDate?: Date;
 
+    TechChanges?: IGuildLogTechChange[];
     ClassChanges?: IGuildLogClassChange[];
 }
 
@@ -161,6 +162,12 @@ export interface ITechProjectClient {
 
 export interface ITechProjectDatabase extends Omit<ITechProjectClient, "CompletionDate"> {
     CompletionDate?: Date;
+}
+
+export interface IGuildLogTechChange {
+    dateTime: Date;
+    entryType: number;
+    details: string;
 }
 
 export interface IGuildLogClassChange {

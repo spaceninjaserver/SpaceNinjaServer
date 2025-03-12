@@ -2,15 +2,14 @@ import {
     IGuildDatabase,
     IDojoComponentDatabase,
     ITechProjectDatabase,
-    ITechProjectClient,
     IDojoDecoDatabase,
     ILongMOTD,
     IGuildMemberDatabase,
-    IGuildLogClassChange
+    IGuildLogClassChange,
+    IGuildLogTechChange
 } from "@/src/types/guildTypes";
 import { Document, Model, model, Schema, Types } from "mongoose";
 import { fusionTreasuresSchema, typeCountSchema } from "./inventoryModels/inventoryModel";
-import { toMongoDate } from "../helpers/inventoryHelpers";
 
 const dojoDecoSchema = new Schema<IDojoDecoDatabase>({
     Type: String,
@@ -51,21 +50,19 @@ const techProjectSchema = new Schema<ITechProjectDatabase>(
     { _id: false }
 );
 
-techProjectSchema.set("toJSON", {
-    virtuals: true,
-    transform(_doc, obj) {
-        const db = obj as ITechProjectDatabase;
-        const client = obj as ITechProjectClient;
-        if (db.CompletionDate) {
-            client.CompletionDate = toMongoDate(db.CompletionDate);
-        }
-    }
-});
-
 const longMOTDSchema = new Schema<ILongMOTD>(
     {
         message: String,
         authorName: String
+    },
+    { _id: false }
+);
+
+const guildLogTechChangeSchema = new Schema<IGuildLogTechChange>(
+    {
+        dateTime: Date,
+        entryType: Number,
+        details: String
     },
     { _id: false }
 );
@@ -100,6 +97,7 @@ const guildSchema = new Schema<IGuildDatabase>(
         CeremonyContributors: { type: [Types.ObjectId], default: undefined },
         CeremonyResetDate: Date,
         CeremonyEndo: Number,
+        TechChanges: { type: [guildLogTechChangeSchema], default: undefined },
         ClassChanges: { type: [guildLogClassChangeSchema], default: undefined }
     },
     { id: false }
