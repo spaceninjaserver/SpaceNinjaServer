@@ -28,7 +28,7 @@ const getGuildController: RequestHandler = async (req, res) => {
             return;
         }
     }
-    res.json({});
+    res.sendStatus(200);
 };
 
 export { getGuildController };

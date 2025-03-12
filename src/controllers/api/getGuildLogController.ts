@@ -6,18 +6,18 @@ import { IMongoDate } from "@/src/types/commonTypes";
 import { RequestHandler } from "express";
 
 export const getGuildLogController: RequestHandler = async (req, res) => {
-    const log: Record<string, IGuildLogEntryClient[]> = {
-        RoomChanges: [],
-        TechChanges: [],
-        RosterActivity: [],
-        StandingsUpdates: [],
-        ClassChanges: []
-    };
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId);
     if (inventory.GuildId) {
         const guild = await Guild.findOne({ _id: inventory.GuildId });
         if (guild) {
+            const log: Record<string, IGuildLogEntryClient[]> = {
+                RoomChanges: [],
+                TechChanges: [],
+                RosterActivity: [],
+                StandingsUpdates: [],
+                ClassChanges: []
+            };
             guild.ClassChanges?.forEach(entry => {
                 log.ClassChanges.push({
                     dateTime: toMongoDate(entry.dateTime),
@@ -25,9 +25,11 @@ export const getGuildLogController: RequestHandler = async (req, res) => {
                     details: entry.details
                 });
             });
+            res.json(log);
+            return;
         }
     }
-    res.json(log);
+    res.sendStatus(200);
 };
 
 interface IGuildLogEntryClient {
