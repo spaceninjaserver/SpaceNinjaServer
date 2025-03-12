@@ -10,6 +10,7 @@ import { archonFusionController } from "@/src/controllers/api/archonFusionContro
 import { artifactsController } from "@/src/controllers/api/artifactsController";
 import { artifactTransmutationController } from "@/src/controllers/api/artifactTransmutationController";
 import { changeDojoRootController } from "@/src/controllers/api/changeDojoRootController";
+import { changeGuildRankController } from "@/src/controllers/api/changeGuildRankController";
 import { checkDailyMissionBonusController } from "@/src/controllers/api/checkDailyMissionBonusController";
 import { claimCompletedRecipeController } from "@/src/controllers/api/claimCompletedRecipeController";
 import { claimLibraryDailyTaskRewardController } from "@/src/controllers/api/claimLibraryDailyTaskRewardController";
@@ -115,6 +116,7 @@ const apiRouter = express.Router();
 // get
 apiRouter.get("/abandonLibraryDailyTask.php", abandonLibraryDailyTaskController);
 apiRouter.get("/abortDojoComponentDestruction.php", abortDojoComponentDestructionController);
+apiRouter.get("/changeGuildRank.php", changeGuildRankController);
 apiRouter.get("/checkDailyMissionBonus.php", checkDailyMissionBonusController);
 apiRouter.get("/claimLibraryDailyTaskReward.php", claimLibraryDailyTaskRewardController);
 apiRouter.get("/confirmGuildInvitation.php", confirmGuildInvitationController);
