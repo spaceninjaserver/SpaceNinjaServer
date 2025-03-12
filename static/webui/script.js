@@ -172,6 +172,16 @@ function fetchItemList() {
 
             window.archonCrystalUpgrades = data.archonCrystalUpgrades;
 
+            // Add mods mising in data sources
+            data.mods.push({
+                uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser",
+                name: loc("code_legendaryCore")
+            });
+            data.mods.push({
+                uniqueName: "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/CyoteMod",
+                name: loc("code_traumaticPeculiar")
+            });
+
             const itemMap = {
                 // Generics for rivens
                 "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun": { name: loc("code_archgun") },
@@ -196,10 +206,7 @@ function fetchItemList() {
                 "/Lotus/Weapons/Operator/Pistols/DrifterPistol/DrifterPistolPlayerWeapon": {
                     name: loc("code_sirocco")
                 },
-                "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit": { name: loc("code_kdrive") },
-                // Missing in data sources
-                "/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser": { name: loc("code_legendaryCore") },
-                "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/CyoteMod": { name: loc("code_traumaticPeculiar") }
+                "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit": { name: loc("code_kdrive") }
             };
             for (const [type, items] of Object.entries(data)) {
                 if (type == "archonCrystalUpgrades") {
