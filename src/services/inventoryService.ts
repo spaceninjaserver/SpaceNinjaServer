@@ -172,7 +172,7 @@ export const getInventory = async (
     return inventory;
 };
 
-const occupySlot = (
+export const occupySlot = (
     inventory: TInventoryDatabaseDocument,
     bin: InventorySlot,
     premiumPurchase: boolean
@@ -191,6 +191,11 @@ const occupySlot = (
     const inventoryChanges: IInventoryChanges = {};
     inventoryChanges[bin] = slotChanges satisfies IBinChanges;
     return inventoryChanges;
+};
+
+export const freeUpSlot = (inventory: TInventoryDatabaseDocument, bin: InventorySlot): void => {
+    // { count: -1, platinum: 0, Slots: 1 }
+    updateSlots(inventory, bin, 1, 0);
 };
 
 export const addItem = async (

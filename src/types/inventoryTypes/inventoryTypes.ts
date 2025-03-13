@@ -452,9 +452,11 @@ export enum InventorySlot {
     SUITS = "SuitBin",
     WEAPONS = "WeaponBin",
     SPACESUITS = "SpaceSuitBin",
+    SPACEWEAPONS = "SpaceWeaponBin",
     MECHSUITS = "MechBin",
     PVE_LOADOUTS = "PveBonusLoadoutBin",
     SENTINELS = "SentinelBin",
+    AMPS = "OperatorAmpBin",
     RJ_COMPONENT_AND_ARMAMENTS = "CrewShipSalvageBin"
 }
 

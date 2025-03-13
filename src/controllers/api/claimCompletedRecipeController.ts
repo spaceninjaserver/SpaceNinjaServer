@@ -7,10 +7,17 @@ import { getRecipe } from "@/src/services/itemDataService";
 import { IOid } from "@/src/types/commonTypes";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getInventory, updateCurrency, addItem, addMiscItems, addRecipes } from "@/src/services/inventoryService";
+import {
+    getInventory,
+    updateCurrency,
+    addItem,
+    addMiscItems,
+    addRecipes,
+    occupySlot
+} from "@/src/services/inventoryService";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
-import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IMiscItem, InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
 
 export interface IClaimCompletedRecipeRequest {
     RecipeIds: IOid[];
@@ -53,6 +60,7 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
                     inventoryChanges[category].push(inventory[category][index].toJSON<IEquipmentClient>());
                     nonMiscItemIngredients.add(item.ItemType);
 
+                    occupySlot(inventory, InventorySlot.WEAPONS, false);
                     inventoryChanges.WeaponBin ??= { Slots: 0 };
                     inventoryChanges.WeaponBin.Slots -= 1;
                 });

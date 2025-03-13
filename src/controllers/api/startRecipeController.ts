@@ -3,10 +3,10 @@ import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { logger } from "@/src/utils/logger";
 import { RequestHandler } from "express";
 import { getRecipe } from "@/src/services/itemDataService";
-import { addMiscItems, getInventory, updateCurrency } from "@/src/services/inventoryService";
+import { addMiscItems, freeUpSlot, getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { Types } from "mongoose";
-import { ISpectreLoadout } from "@/src/types/inventoryTypes/inventoryTypes";
+import { InventorySlot, ISpectreLoadout } from "@/src/types/inventoryTypes/inventoryTypes";
 import { toOid } from "@/src/helpers/inventoryHelpers";
 import { ExportWeapons } from "warframe-public-export-plus";
 
@@ -53,6 +53,7 @@ export const startRecipeController: RequestHandler = async (req, res) => {
             pr[category] ??= [];
             pr[category].push(inventory[category][equipmentIndex]);
             inventory[category].splice(equipmentIndex, 1);
+            freeUpSlot(inventory, InventorySlot.WEAPONS);
         } else {
             addMiscItems(inventory, [
                 {

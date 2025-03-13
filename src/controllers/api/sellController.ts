@@ -1,6 +1,14 @@
 import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getInventory, addMods, addRecipes, addMiscItems, addConsumables } from "@/src/services/inventoryService";
+import {
+    getInventory,
+    addMods,
+    addRecipes,
+    addMiscItems,
+    addConsumables,
+    freeUpSlot
+} from "@/src/services/inventoryService";
+import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
 
 export const sellController: RequestHandler = async (req, res) => {
     const payload = JSON.parse(String(req.body)) as ISellRequest;
@@ -34,56 +42,67 @@ export const sellController: RequestHandler = async (req, res) => {
     if (payload.Items.Suits) {
         payload.Items.Suits.forEach(sellItem => {
             inventory.Suits.pull({ _id: sellItem.String });
+            freeUpSlot(inventory, InventorySlot.SUITS);
         });
     }
     if (payload.Items.LongGuns) {
         payload.Items.LongGuns.forEach(sellItem => {
             inventory.LongGuns.pull({ _id: sellItem.String });
+            freeUpSlot(inventory, InventorySlot.WEAPONS);
         });
     }
     if (payload.Items.Pistols) {
         payload.Items.Pistols.forEach(sellItem => {
             inventory.Pistols.pull({ _id: sellItem.String });
+            freeUpSlot(inventory, InventorySlot.WEAPONS);
         });
     }
     if (payload.Items.Melee) {
         payload.Items.Melee.forEach(sellItem => {
             inventory.Melee.pull({ _id: sellItem.String });
+            freeUpSlot(inventory, InventorySlot.WEAPONS);
         });
     }
     if (payload.Items.SpaceSuits) {
         payload.Items.SpaceSuits.forEach(sellItem => {
             inventory.SpaceSuits.pull({ _id: sellItem.String });
+            freeUpSlot(inventory, InventorySlot.SPACESUITS);
         });
     }
     if (payload.Items.SpaceGuns) {
         payload.Items.SpaceGuns.forEach(sellItem => {
             inventory.SpaceGuns.pull({ _id: sellItem.String });
+            freeUpSlot(inventory, InventorySlot.SPACEWEAPONS);
         });
     }
     if (payload.Items.SpaceMelee) {
         payload.Items.SpaceMelee.forEach(sellItem => {
             inventory.SpaceMelee.pull({ _id: sellItem.String });
+            freeUpSlot(inventory, InventorySlot.SPACEWEAPONS);
         });
     }
     if (payload.Items.Sentinels) {
         payload.Items.Sentinels.forEach(sellItem => {
             inventory.Sentinels.pull({ _id: sellItem.String });
+            freeUpSlot(inventory, InventorySlot.SENTINELS);
         });
     }
     if (payload.Items.SentinelWeapons) {
         payload.Items.SentinelWeapons.forEach(sellItem => {
             inventory.SentinelWeapons.pull({ _id: sellItem.String });
+            freeUpSlot(inventory, InventorySlot.SENTINELS);
         });
     }
     if (payload.Items.OperatorAmps) {
         payload.Items.OperatorAmps.forEach(sellItem => {
             inventory.OperatorAmps.pull({ _id: sellItem.String });
+            freeUpSlot(inventory, InventorySlot.AMPS);
         });
     }
     if (payload.Items.Hoverboards) {
         payload.Items.Hoverboards.forEach(sellItem => {
             inventory.Hoverboards.pull({ _id: sellItem.String });
+            freeUpSlot(inventory, InventorySlot.SPACESUITS);
         });
     }
     if (payload.Items.Drones) {

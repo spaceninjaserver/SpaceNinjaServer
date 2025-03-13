@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { getInventory, addMiscItems, updateCurrency, addRecipes } from "@/src/services/inventoryService";
+import { getInventory, addMiscItems, updateCurrency, addRecipes, freeUpSlot } from "@/src/services/inventoryService";
 import { IOid } from "@/src/types/commonTypes";
 import {
     IConsumedSuit,
@@ -10,6 +10,7 @@ import {
     IInfestedFoundryDatabase,
     IInventoryClient,
     IMiscItem,
+    InventorySlot,
     ITypeCount
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { ExportMisc, ExportRecipes } from "warframe-public-export-plus";
@@ -264,6 +265,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             );
             const recipeChanges = addInfestedFoundryXP(inventory.InfestedFoundry!, 1600_00);
             addRecipes(inventory, recipeChanges);
+            freeUpSlot(inventory, InventorySlot.SUITS);
             await inventory.save();
             const infestedFoundry = inventory.toJSON<IInventoryClient>().InfestedFoundry!;
             applyCheatsToInfestedFoundry(infestedFoundry);
