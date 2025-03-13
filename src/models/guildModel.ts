@@ -5,8 +5,8 @@ import {
     IDojoDecoDatabase,
     ILongMOTD,
     IGuildMemberDatabase,
-    IGuildLogClassChange,
-    IGuildLogTechChange,
+    IGuildLogEntryNumber,
+    IGuildLogEntryString,
     IGuildRank
 } from "@/src/types/guildTypes";
 import { Document, Model, model, Schema, Types } from "mongoose";
@@ -106,7 +106,7 @@ const defaultRanks: IGuildRank[] = [
     }
 ];
 
-const guildLogTechChangeSchema = new Schema<IGuildLogTechChange>(
+const guildLogEntryStringSchema = new Schema<IGuildLogEntryString>(
     {
         dateTime: Date,
         entryType: Number,
@@ -115,7 +115,7 @@ const guildLogTechChangeSchema = new Schema<IGuildLogTechChange>(
     { _id: false }
 );
 
-const guildLogClassChangeSchema = new Schema<IGuildLogClassChange>(
+const guildLogEntryNumberSchema = new Schema<IGuildLogEntryNumber>(
     {
         dateTime: Date,
         entryType: Number,
@@ -146,8 +146,9 @@ const guildSchema = new Schema<IGuildDatabase>(
         CeremonyContributors: { type: [Types.ObjectId], default: undefined },
         CeremonyResetDate: Date,
         CeremonyEndo: Number,
-        TechChanges: { type: [guildLogTechChangeSchema], default: undefined },
-        ClassChanges: { type: [guildLogClassChangeSchema], default: undefined }
+        TechChanges: { type: [guildLogEntryStringSchema], default: undefined },
+        RosterActivity: { type: [guildLogEntryStringSchema], default: undefined },
+        ClassChanges: { type: [guildLogEntryNumberSchema], default: undefined }
     },
     { id: false }
 );

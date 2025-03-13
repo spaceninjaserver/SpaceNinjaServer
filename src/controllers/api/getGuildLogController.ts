@@ -25,6 +25,13 @@ export const getGuildLogController: RequestHandler = async (req, res) => {
                     details: entry.details
                 });
             });
+            guild.RosterActivity?.forEach(entry => {
+                log.RosterActivity.push({
+                    dateTime: toMongoDate(entry.dateTime),
+                    entryType: entry.entryType,
+                    details: entry.details
+                });
+            });
             guild.ClassChanges?.forEach(entry => {
                 log.ClassChanges.push({
                     dateTime: toMongoDate(entry.dateTime),

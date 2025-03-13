@@ -1,9 +1,12 @@
 import { GuildMember } from "@/src/models/guildModel";
+import { Account } from "@/src/models/loginModel";
 import { getGuildForRequest } from "@/src/services/guildService";
 import { getInventory } from "@/src/services/inventoryService";
+import { getAccountForRequest, getSuffixedName } from "@/src/services/loginService";
 import { RequestHandler } from "express";
 
 export const removeFromGuildController: RequestHandler = async (req, res) => {
+    const account = await getAccountForRequest(req);
     const guild = await getGuildForRequest(req);
     // TODO: Check permissions
     const payload = JSON.parse(String(req.body)) as IRemoveFromGuildRequest;
@@ -31,6 +34,25 @@ export const removeFromGuildController: RequestHandler = async (req, res) => {
         // TODO: Maybe the inbox message for the sent invite should be deleted?
     }
     await GuildMember.deleteOne({ _id: guildMember._id });
+
+    guild.RosterActivity ??= [];
+    if (account._id.equals(payload.userId)) {
+        // Leave
+        guild.RosterActivity.push({
+            dateTime: new Date(),
+            entryType: 7,
+            details: getSuffixedName(account)
+        });
+    } else {
+        // Kick
+        const kickee = (await Account.findOne({ _id: payload.userId }))!;
+        guild.RosterActivity.push({
+            dateTime: new Date(),
+            entryType: 12,
+            details: getSuffixedName(kickee) + "," + getSuffixedName(account)
+        });
+    }
+    await guild.save();
 
     res.json({
         _id: payload.userId,
