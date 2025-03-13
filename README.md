@@ -2,8 +2,11 @@
 
 More information for the moment here: [https://discord.gg/PNNZ3asUuY](https://discord.gg/PNNZ3asUuY)
 
->[!NOTE]
->Development of this project currently happens on <https://onlyg.it/OpenWF/SpaceNinjaServer>. If that's not the site you're on, you're looking at a one-way mirror.
+## Project Status
+
+This project is in active development at <https://onlyg.it/OpenWF/SpaceNinjaServer>.
+
+To get an idea of what functionality you can expect to be missing [have a look through the issues](https://onlyg.it/OpenWF/SpaceNinjaServer/issues?q=&type=all&state=open&labels=-4%2C-10&milestone=0&assignee=0&poster=). However, many things have been implemented and *should* work as expected. Please open an issue for anything where that's not the case and/or the server is reporting errors.
 
 ## config.json
 
