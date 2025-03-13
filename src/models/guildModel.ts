@@ -6,7 +6,8 @@ import {
     ILongMOTD,
     IGuildMemberDatabase,
     IGuildLogClassChange,
-    IGuildLogTechChange
+    IGuildLogTechChange,
+    IGuildRank
 } from "@/src/types/guildTypes";
 import { Document, Model, model, Schema, Types } from "mongoose";
 import { fusionTreasuresSchema, typeCountSchema } from "./inventoryModels/inventoryModel";
@@ -58,6 +59,53 @@ const longMOTDSchema = new Schema<ILongMOTD>(
     { _id: false }
 );
 
+const guildRankSchema = new Schema<IGuildRank>(
+    {
+        Name: String,
+        Permissions: Number
+    },
+    { _id: false }
+);
+
+const defaultRanks: IGuildRank[] = [
+    {
+        Name: "/Lotus/Language/Game/Rank_Creator",
+        Permissions: 16351
+    },
+    {
+        Name: "/Lotus/Language/Game/Rank_Warlord",
+        Permissions: 16351
+    },
+    {
+        Name: "/Lotus/Language/Game/Rank_General",
+        Permissions: 4318
+    },
+    {
+        Name: "/Lotus/Language/Game/Rank_Officer",
+        Permissions: 4314
+    },
+    {
+        Name: "/Lotus/Language/Game/Rank_Leader",
+        Permissions: 4106
+    },
+    {
+        Name: "/Lotus/Language/Game/Rank_Sage",
+        Permissions: 4304
+    },
+    {
+        Name: "/Lotus/Language/Game/Rank_Soldier",
+        Permissions: 4098
+    },
+    {
+        Name: "/Lotus/Language/Game/Rank_Initiate",
+        Permissions: 4096
+    },
+    {
+        Name: "/Lotus/Language/Game/Rank_Utility",
+        Permissions: 4096
+    }
+];
+
 const guildLogTechChangeSchema = new Schema<IGuildLogTechChange>(
     {
         dateTime: Date,
@@ -81,6 +129,7 @@ const guildSchema = new Schema<IGuildDatabase>(
         Name: { type: String, required: true, unique: true },
         MOTD: { type: String, default: "" },
         LongMOTD: { type: longMOTDSchema, default: undefined },
+        Ranks: { type: [guildRankSchema], default: defaultRanks },
         DojoComponents: { type: [dojoComponentSchema], default: [] },
         DojoCapacity: { type: Number, default: 100 },
         DojoEnergy: { type: Number, default: 5 },

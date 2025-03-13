@@ -86,44 +86,7 @@ export const getGuildClient = async (guild: TGuildDatabaseDocument, accountId: s
         MOTD: guild.MOTD,
         LongMOTD: guild.LongMOTD,
         Members: members,
-        Ranks: [
-            {
-                Name: "/Lotus/Language/Game/Rank_Creator",
-                Permissions: 16351
-            },
-            {
-                Name: "/Lotus/Language/Game/Rank_Warlord",
-                Permissions: 14303
-            },
-            {
-                Name: "/Lotus/Language/Game/Rank_General",
-                Permissions: 4318
-            },
-            {
-                Name: "/Lotus/Language/Game/Rank_Officer",
-                Permissions: 4314
-            },
-            {
-                Name: "/Lotus/Language/Game/Rank_Leader",
-                Permissions: 4106
-            },
-            {
-                Name: "/Lotus/Language/Game/Rank_Sage",
-                Permissions: 4304
-            },
-            {
-                Name: "/Lotus/Language/Game/Rank_Soldier",
-                Permissions: 4098
-            },
-            {
-                Name: "/Lotus/Language/Game/Rank_Initiate",
-                Permissions: 4096
-            },
-            {
-                Name: "/Lotus/Language/Game/Rank_Utility",
-                Permissions: 4096
-            }
-        ],
+        Ranks: guild.Ranks,
         Tier: 1,
         Vault: getGuildVault(guild),
         Class: guild.Class,

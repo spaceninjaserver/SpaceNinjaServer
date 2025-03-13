@@ -26,6 +26,7 @@ export interface IGuildDatabase {
     Name: string;
     MOTD: string;
     LongMOTD?: ILongMOTD;
+    Ranks: IGuildRank[];
 
     DojoComponents: IDojoComponentDatabase[];
     DojoCapacity: number;
@@ -55,6 +56,27 @@ export interface ILongMOTD {
     message: string;
     authorName: string;
     //authorGuildName: "";
+}
+
+// 32 seems to be reserved
+export enum GuildPermission {
+    Ruler = 1, // Change clan hierarchy
+    Advertiser = 8192,
+    Recruiter = 2, // Invite members
+    Regulator = 4, // Kick members
+    Promoter = 8, // Promote and demote members
+    Architect = 16, // Create and destroy rooms
+    Decorator = 1024, // Create and destroy decos
+    Treasurer = 64, // Contribute from vault and edit tax rate
+    Tech = 128, // Queue research
+    ChatModerator = 512,
+    Herald = 2048, // Change MOTD
+    Fabricator = 4096 // Replicate research
+}
+
+export interface IGuildRank {
+    Name: string;
+    Permissions: number;
 }
 
 export interface IGuildMemberDatabase {
