@@ -59,7 +59,9 @@ export const modularWeaponCraftingController: RequestHandler = async (req, res) 
     }
     const currencyChanges = updateCurrency(
         inventory,
-        category == "Hoverboards" || category == "MoaPets" ? 5000 : 4000,
+        category == "Hoverboards" || category == "MoaPets" || category == "LongGuns" || category == "Pistols"
+            ? 5000
+            : 4000, // Definitely correct for Melee & OperatorAmps
         false
     );
     addMiscItems(inventory, miscItemChanges);
