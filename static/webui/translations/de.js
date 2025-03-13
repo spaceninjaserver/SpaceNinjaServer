@@ -110,6 +110,7 @@ dict = {
     cheats_unlockExilusEverywhere: `Exilus-Adapter überall`,
     cheats_unlockArcanesEverywhere: `Arkana-Adapter überall`,
     cheats_noDailyStandingLimits: `Kein tägliches Ansehenslimit`,
+    cheats_noVendorPurchaseLimits: `[UNTRANSLATED] No Vendor Purchase Limits`,
     cheats_instantResourceExtractorDrones: `Sofortige Ressourcen-Extraktor-Drohnen`,
     cheats_noDojoRoomBuildStage: `Kein Dojo-Raum-Bauvorgang`,
     cheats_fastDojoRoomDestruction: `Schnelle Dojo-Raum-Zerstörung`,

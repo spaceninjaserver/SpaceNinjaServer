@@ -29,6 +29,7 @@
   "unlockExilusEverywhere": false,
   "unlockArcanesEverywhere": false,
   "noDailyStandingLimits": false,
+  "noVendorPurchaseLimits": true,
   "instantResourceExtractorDrones": false,
   "noDojoRoomBuildStage": false,
   "fastDojoRoomDestruction": false,

@@ -41,6 +41,7 @@ export interface IInventoryDatabase
             | "KubrowPetEggs"
             | "PendingCoupon"
             | "Drones"
+            | "RecentVendorPurchases"
             | TEquipmentKey
         >,
         InventoryDatabaseEquipment {
@@ -67,6 +68,7 @@ export interface IInventoryDatabase
     KubrowPetEggs?: IKubrowPetEggDatabase[];
     PendingCoupon?: IPendingCouponDatabase;
     Drones: IDroneDatabase[];
+    RecentVendorPurchases?: IRecentVendorPurchaseDatabase[];
 }
 
 export interface IQuestKeyDatabase {
@@ -277,7 +279,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     BountyScore: number;
     ChallengeInstanceStates: IChallengeInstanceState[];
     LoginMilestoneRewards: string[];
-    RecentVendorPurchases: Array<number | string>;
+    RecentVendorPurchases?: IRecentVendorPurchaseClient[];
     NodeIntrosCompleted: string[];
     GuildId?: IOid;
     CompletedJobChains: ICompletedJobChain[];
@@ -359,6 +361,28 @@ export interface IChallengeInstanceState {
 export interface IParam {
     n: string;
     v: string;
+}
+
+export interface IRecentVendorPurchaseClient {
+    VendorType: string;
+    PurchaseHistory: IVendorPurchaseHistoryEntryClient[];
+}
+
+export interface IVendorPurchaseHistoryEntryClient {
+    Expiry: IMongoDate;
+    NumPurchased: number;
+    ItemId: string;
+}
+
+export interface IRecentVendorPurchaseDatabase {
+    VendorType: string;
+    PurchaseHistory: IVendorPurchaseHistoryEntryDatabase[];
+}
+
+export interface IVendorPurchaseHistoryEntryDatabase {
+    Expiry: Date;
+    NumPurchased: number;
+    ItemId: string;
 }
 
 export interface IChallengeProgress {

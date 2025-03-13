@@ -76,7 +76,10 @@ import {
     IIncentiveState,
     ISongChallenge,
     ILibraryPersonalProgress,
-    ICrewShipWeaponDatabase
+    ICrewShipWeaponDatabase,
+    IRecentVendorPurchaseDatabase,
+    IVendorPurchaseHistoryEntryDatabase,
+    IVendorPurchaseHistoryEntryClient
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -974,6 +977,31 @@ const incentiveStateSchema = new Schema<IIncentiveState>(
     { _id: false }
 );
 
+const vendorPurchaseHistoryEntrySchema = new Schema<IVendorPurchaseHistoryEntryDatabase>(
+    {
+        Expiry: Date,
+        NumPurchased: Number,
+        ItemId: String
+    },
+    { _id: false }
+);
+
+vendorPurchaseHistoryEntrySchema.set("toJSON", {
+    transform(_doc, obj) {
+        const db = obj as IVendorPurchaseHistoryEntryDatabase;
+        const client = obj as IVendorPurchaseHistoryEntryClient;
+        client.Expiry = toMongoDate(db.Expiry);
+    }
+});
+
+const recentVendorPurchaseSchema = new Schema<IRecentVendorPurchaseDatabase>(
+    {
+        VendorType: String,
+        PurchaseHistory: [vendorPurchaseHistoryEntrySchema]
+    },
+    { _id: false }
+);
+
 const collectibleEntrySchema = new Schema<ICollectibleEntry>(
     {
         CollectibleType: String,
@@ -1361,7 +1389,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         RandomUpgradesIdentified: Number,
         BountyScore: Number,
         ChallengeInstanceStates: [Schema.Types.Mixed],
-        RecentVendorPurchases: [Schema.Types.Mixed],
+        RecentVendorPurchases: { type: [recentVendorPurchaseSchema], default: undefined },
         Robotics: [Schema.Types.Mixed],
         UsedDailyDeals: [Schema.Types.Mixed],
         CollectibleSeries: { type: [collectibleEntrySchema], default: undefined },

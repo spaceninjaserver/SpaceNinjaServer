@@ -68,6 +68,45 @@ export const handlePurchase = async (
                     inventoryChanges
                 );
             }
+            if (!config.noVendorPurchaseLimits) {
+                inventory.RecentVendorPurchases ??= [];
+                let vendorPurchases = inventory.RecentVendorPurchases.find(
+                    x => x.VendorType == manifest.VendorInfo.TypeName
+                );
+                if (!vendorPurchases) {
+                    vendorPurchases =
+                        inventory.RecentVendorPurchases[
+                            inventory.RecentVendorPurchases.push({
+                                VendorType: manifest.VendorInfo.TypeName,
+                                PurchaseHistory: []
+                            }) - 1
+                        ];
+                }
+                const historyEntry = vendorPurchases.PurchaseHistory.find(x => x.ItemId == ItemId);
+                let numPurchased = purchaseRequest.PurchaseParams.Quantity;
+                if (historyEntry) {
+                    numPurchased += historyEntry.NumPurchased;
+                    historyEntry.NumPurchased += purchaseRequest.PurchaseParams.Quantity;
+                } else {
+                    vendorPurchases.PurchaseHistory.push({
+                        ItemId: ItemId,
+                        NumPurchased: purchaseRequest.PurchaseParams.Quantity,
+                        Expiry: new Date(parseInt(offer.Expiry.$date.$numberLong))
+                    });
+                }
+                inventoryChanges.RecentVendorPurchases = [
+                    {
+                        VendorType: manifest.VendorInfo.TypeName,
+                        PurchaseHistory: [
+                            {
+                                ItemId: ItemId,
+                                NumPurchased: numPurchased,
+                                Expiry: offer.Expiry
+                            }
+                        ]
+                    }
+                ];
+            }
             purchaseRequest.PurchaseParams.Quantity *= offer.QuantityMultiplier;
         } else if (!ExportVendors[purchaseRequest.PurchaseParams.SourceId!]) {
             throw new Error(`unknown vendor: ${purchaseRequest.PurchaseParams.SourceId!}`);

@@ -109,6 +109,7 @@ dict = {
     cheats_unlockExilusEverywhere: `Exilus Adapters Everywhere`,
     cheats_unlockArcanesEverywhere: `Arcane Adapters Everywhere`,
     cheats_noDailyStandingLimits: `No Daily Standing Limits`,
+    cheats_noVendorPurchaseLimits: `No Vendor Purchase Limits`,
     cheats_instantResourceExtractorDrones: `Instant Resource Extractor Drones`,
     cheats_noDojoRoomBuildStage: `No Dojo Room Build Stage`,
     cheats_fastDojoRoomDestruction: `Fast Dojo Room Destruction`,
