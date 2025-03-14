@@ -352,7 +352,7 @@ export const hasGuildPermissionEx = (
 };
 
 export const removePigmentsFromGuildMembers = async (guildId: string | Types.ObjectId): Promise<void> => {
-    const members = await GuildMember.find({ guildId }, "accountId");
+    const members = await GuildMember.find({ guildId, status: 0 }, "accountId");
     for (const member of members) {
         const inventory = await getInventory(member.accountId.toString(), "MiscItems");
         const index = inventory.MiscItems.findIndex(
