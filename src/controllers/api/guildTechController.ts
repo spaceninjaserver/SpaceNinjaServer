@@ -193,6 +193,10 @@ export const guildTechController: RequestHandler = async (req, res) => {
         // Not a mistake: This response uses `inventoryChanges` instead of `InventoryChanges`.
         res.json({ inventoryChanges: inventoryChanges });
     } else if (data.Action == "Pause") {
+        if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Tech))) {
+            res.status(400).send("-1").end();
+            return;
+        }
         const project = guild.TechProjects!.find(x => x.ItemType == data.RecipeType)!;
         project.State = -2;
         guild.ActiveDojoColorResearch = "";
@@ -200,6 +204,10 @@ export const guildTechController: RequestHandler = async (req, res) => {
         await removePigmentsFromGuildMembers(guild._id);
         res.end();
     } else if (data.Action == "Unpause") {
+        if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Tech))) {
+            res.status(400).send("-1").end();
+            return;
+        }
         const project = guild.TechProjects!.find(x => x.ItemType == data.RecipeType)!;
         project.State = 0;
         guild.ActiveDojoColorResearch = data.RecipeType;
