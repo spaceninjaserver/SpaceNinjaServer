@@ -18,6 +18,13 @@ export const getGuildLogController: RequestHandler = async (req, res) => {
                 StandingsUpdates: [],
                 ClassChanges: []
             };
+            guild.RoomChanges?.forEach(entry => {
+                log.RoomChanges.push({
+                    dateTime: toMongoDate(entry.dateTime),
+                    entryType: entry.entryType,
+                    details: entry.details
+                });
+            });
             guild.TechChanges?.forEach(entry => {
                 log.TechChanges.push({
                     dateTime: toMongoDate(entry.dateTime),

@@ -6,6 +6,7 @@ import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/invento
 import {
     IDojoClient,
     IDojoComponentClient,
+    IDojoComponentDatabase,
     IDojoContributable,
     IDojoDecoClient,
     IGuildClient,
@@ -126,7 +127,8 @@ export const getDojoClient = async (
         DojoComponents: []
     };
     const roomsToRemove: Types.ObjectId[] = [];
-    guild.DojoComponents.forEach(dojoComponent => {
+    let needSave = false;
+    for (const dojoComponent of guild.DojoComponents) {
         if (!componentId || dojoComponent._id.equals(componentId)) {
             const clientComponent: IDojoComponentClient = {
                 id: toOid(dojoComponent._id),
@@ -143,10 +145,18 @@ export const getDojoClient = async (
             }
             if (dojoComponent.CompletionTime) {
                 clientComponent.CompletionTime = toMongoDate(dojoComponent.CompletionTime);
+                if (dojoComponent.CompletionLogPending && Date.now() >= dojoComponent.CompletionTime.getTime()) {
+                    const entry = guild.RoomChanges?.find(x => x.componentId.equals(dojoComponent._id));
+                    if (entry) {
+                        dojoComponent.CompletionLogPending = undefined;
+                        entry.entryType = 1;
+                        needSave = true;
+                    }
+                }
                 if (dojoComponent.DestructionTime) {
                     if (Date.now() >= dojoComponent.DestructionTime.getTime()) {
                         roomsToRemove.push(dojoComponent._id);
-                        return;
+                        continue;
                     }
                     clientComponent.DestructionTime = toMongoDate(dojoComponent.DestructionTime);
                 }
@@ -175,12 +185,15 @@ export const getDojoClient = async (
             }
             dojo.DojoComponents.push(clientComponent);
         }
-    });
+    }
     if (roomsToRemove.length) {
         logger.debug(`removing now-destroyed rooms`, roomsToRemove);
         for (const id of roomsToRemove) {
             removeDojoRoom(guild, id);
         }
+        needSave = true;
+    }
+    if (needSave) {
         await guild.save();
     }
     return dojo;
@@ -203,6 +216,13 @@ export const removeDojoRoom = (guild: TGuildDatabaseDocument, componentId: Types
     }
     moveResourcesToVault(guild, component);
     component.Decos?.forEach(deco => moveResourcesToVault(guild, deco));
+
+    if (guild.RoomChanges) {
+        const index = guild.RoomChanges.findIndex(x => x.componentId.equals(component._id));
+        if (index != -1) {
+            guild.RoomChanges.splice(index, 1);
+        }
+    }
 };
 
 export const removeDojoDeco = (
@@ -251,6 +271,16 @@ export const processDojoBuildMaterialsGathered = (guild: TGuildDatabaseDocument,
             guild.ClaimedXP.push(build.resultType);
             guild.XP += build.guildXpValue;
         }
+    }
+};
+
+// guild.save(); is expected some time after this function is called
+export const setDojoRoomLogFunded = (guild: TGuildDatabaseDocument, component: IDojoComponentDatabase): void => {
+    const entry = guild.RoomChanges?.find(x => x.componentId.equals(component._id));
+    if (entry && entry.entryType == 2) {
+        entry.entryType = 0;
+        entry.dateTime = component.CompletionTime!;
+        component.CompletionLogPending = true;
     }
 };
 

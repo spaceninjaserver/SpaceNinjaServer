@@ -35,6 +35,11 @@ export const dojoComponentRushController: RequestHandler = async (req, res) => {
     } else {
         const meta = Object.values(ExportDojoRecipes.rooms).find(x => x.resultType == component.pf)!;
         processContribution(component, meta, platinumDonated);
+
+        const entry = guild.RoomChanges?.find(x => x.componentId.equals(component._id));
+        if (entry) {
+            entry.dateTime = component.CompletionTime!;
+        }
     }
 
     await guild.save();

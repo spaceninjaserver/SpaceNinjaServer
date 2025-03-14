@@ -4,7 +4,8 @@ import {
     getDojoClient,
     getGuildForRequestEx,
     processDojoBuildMaterialsGathered,
-    scaleRequiredCount
+    scaleRequiredCount,
+    setDojoRoomLogFunded
 } from "@/src/services/guildService";
 import { addMiscItems, getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
@@ -40,6 +41,10 @@ export const contributeToDojoComponentController: RequestHandler = async (req, r
         }
         const meta = Object.values(ExportDojoRecipes.rooms).find(x => x.resultType == component.pf)!;
         processContribution(guild, request, inventory, inventoryChanges, meta, component);
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (component.CompletionTime) {
+            setDojoRoomLogFunded(guild, component);
+        }
     } else {
         // Room is past "Collecting Materials"
         if (request.DecoId) {

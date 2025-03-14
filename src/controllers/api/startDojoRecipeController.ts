@@ -1,6 +1,11 @@
 import { RequestHandler } from "express";
 import { IDojoComponentClient } from "@/src/types/guildTypes";
-import { getDojoClient, getGuildForRequest, processDojoBuildMaterialsGathered } from "@/src/services/guildService";
+import {
+    getDojoClient,
+    getGuildForRequest,
+    processDojoBuildMaterialsGathered,
+    setDojoRoomLogFunded
+} from "@/src/services/guildService";
 import { Types } from "mongoose";
 import { ExportDojoRecipes } from "warframe-public-export-plus";
 import { config } from "@/src/services/configService";
@@ -21,10 +26,20 @@ export const startDojoRecipeController: RequestHandler = async (req, res) => {
         guild.DojoEnergy += room.energy;
     }
 
+    const componentId = new Types.ObjectId();
+
+    guild.RoomChanges ??= [];
+    guild.RoomChanges.push({
+        dateTime: new Date(),
+        entryType: 2,
+        details: request.PlacedComponent.pf,
+        componentId: componentId
+    });
+
     const component =
         guild.DojoComponents[
             guild.DojoComponents.push({
-                _id: new Types.ObjectId(),
+                _id: componentId,
                 pf: request.PlacedComponent.pf,
                 ppf: request.PlacedComponent.ppf,
                 pi: new Types.ObjectId(request.PlacedComponent.pi!.$oid),
@@ -38,6 +53,7 @@ export const startDojoRecipeController: RequestHandler = async (req, res) => {
         if (room) {
             processDojoBuildMaterialsGathered(guild, room);
         }
+        setDojoRoomLogFunded(guild, component);
     }
     await guild.save();
     res.json(await getDojoClient(guild, 0));

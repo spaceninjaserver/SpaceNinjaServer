@@ -48,6 +48,7 @@ export interface IGuildDatabase {
     CeremonyContributors?: Types.ObjectId[];
     CeremonyResetDate?: Date;
 
+    RoomChanges?: IGuildLogRoomChange[];
     TechChanges?: IGuildLogEntryString[];
     RosterActivity?: IGuildLogEntryString[];
     ClassChanges?: IGuildLogEntryNumber[];
@@ -146,6 +147,7 @@ export interface IDojoComponentDatabase
     _id: Types.ObjectId;
     pi?: Types.ObjectId;
     CompletionTime?: Date;
+    CompletionLogPending?: boolean;
     DestructionTime?: Date;
     Decos?: IDojoDecoDatabase[];
 }
@@ -191,6 +193,10 @@ export interface IGuildLogEntryString {
     dateTime: Date;
     entryType: number;
     details: string;
+}
+
+export interface IGuildLogRoomChange extends IGuildLogEntryString {
+    componentId: Types.ObjectId;
 }
 
 export interface IGuildLogEntryNumber {

@@ -7,7 +7,8 @@ import {
     IGuildMemberDatabase,
     IGuildLogEntryNumber,
     IGuildLogEntryString,
-    IGuildRank
+    IGuildRank,
+    IGuildLogRoomChange
 } from "@/src/types/guildTypes";
 import { Document, Model, model, Schema, Types } from "mongoose";
 import { fusionTreasuresSchema, typeCountSchema } from "./inventoryModels/inventoryModel";
@@ -34,6 +35,7 @@ const dojoComponentSchema = new Schema<IDojoComponentDatabase>({
     RegularCredits: Number,
     MiscItems: { type: [typeCountSchema], default: undefined },
     CompletionTime: Date,
+    CompletionLogPending: Boolean,
     RushPlatinum: Number,
     DestructionTime: Date,
     Decos: [dojoDecoSchema],
@@ -115,6 +117,16 @@ const guildLogEntryStringSchema = new Schema<IGuildLogEntryString>(
     { _id: false }
 );
 
+const guildLogRoomChangeSchema = new Schema<IGuildLogRoomChange>(
+    {
+        dateTime: Date,
+        entryType: Number,
+        details: String,
+        componentId: Types.ObjectId
+    },
+    { _id: false }
+);
+
 const guildLogEntryNumberSchema = new Schema<IGuildLogEntryNumber>(
     {
         dateTime: Date,
@@ -146,6 +158,7 @@ const guildSchema = new Schema<IGuildDatabase>(
         CeremonyContributors: { type: [Types.ObjectId], default: undefined },
         CeremonyResetDate: Date,
         CeremonyEndo: Number,
+        RoomChanges: { type: [guildLogRoomChangeSchema], default: undefined },
         TechChanges: { type: [guildLogEntryStringSchema], default: undefined },
         RosterActivity: { type: [guildLogEntryStringSchema], default: undefined },
         ClassChanges: { type: [guildLogEntryNumberSchema], default: undefined }
