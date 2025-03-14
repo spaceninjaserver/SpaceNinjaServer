@@ -142,6 +142,10 @@ export const guildTechController: RequestHandler = async (req, res) => {
             // This research is now fully funded.
             const recipe = ExportDojoRecipes.research[data.RecipeType];
             processFundedProject(guild, techProject, recipe);
+            if (data.RecipeType.substring(0, 39) == "/Lotus/Types/Items/Research/DojoColors/") {
+                guild.ActiveDojoColorResearch = "";
+                await removePigmentsFromGuildMembers(guild._id);
+            }
         }
 
         await guild.save();
