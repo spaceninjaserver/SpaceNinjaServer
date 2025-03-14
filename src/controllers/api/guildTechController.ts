@@ -4,6 +4,7 @@ import {
     getGuildVault,
     hasAccessToDojo,
     hasGuildPermission,
+    removePigmentsFromGuildMembers,
     scaleRequiredCount
 } from "@/src/services/guildService";
 import { ExportDojoRecipes, IDojoResearch } from "warframe-public-export-plus";
@@ -188,6 +189,12 @@ export const guildTechController: RequestHandler = async (req, res) => {
         await inventory.save();
         // Not a mistake: This response uses `inventoryChanges` instead of `InventoryChanges`.
         res.json({ inventoryChanges: inventoryChanges });
+    } else if (data.Action == "Pause") {
+        const project = guild.TechProjects!.find(x => x.ItemType == data.RecipeType)!;
+        project.State = -2;
+        await guild.save();
+        await removePigmentsFromGuildMembers(guild._id);
+        res.end();
     } else {
         throw new Error(`unknown guildTech action: ${data.Action}`);
     }
@@ -236,7 +243,7 @@ type TGuildTechRequest =
     | IGuildTechContributeRequest;
 
 interface IGuildTechBasicRequest {
-    Action: "Start" | "Fabricate";
+    Action: "Start" | "Fabricate" | "Pause";
     Mode: "Guild";
     RecipeType: string;
 }
