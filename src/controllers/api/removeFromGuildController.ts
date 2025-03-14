@@ -1,15 +1,20 @@
 import { GuildMember } from "@/src/models/guildModel";
 import { Account } from "@/src/models/loginModel";
-import { getGuildForRequest } from "@/src/services/guildService";
+import { getGuildForRequest, hasGuildPermission } from "@/src/services/guildService";
 import { getInventory } from "@/src/services/inventoryService";
 import { getAccountForRequest, getSuffixedName } from "@/src/services/loginService";
+import { GuildPermission } from "@/src/types/guildTypes";
 import { RequestHandler } from "express";
 
 export const removeFromGuildController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
     const guild = await getGuildForRequest(req);
-    // TODO: Check permissions
     const payload = JSON.parse(String(req.body)) as IRemoveFromGuildRequest;
+    const isKick = !account._id.equals(payload.userId);
+    if (isKick && !(await hasGuildPermission(guild, account._id, GuildPermission.Regulator))) {
+        res.status(400).json("Invalid permission");
+        return;
+    }
 
     const guildMember = (await GuildMember.findOne({ accountId: payload.userId, guildId: guild._id }))!;
     if (guildMember.status == 0) {
@@ -36,20 +41,18 @@ export const removeFromGuildController: RequestHandler = async (req, res) => {
     await GuildMember.deleteOne({ _id: guildMember._id });
 
     guild.RosterActivity ??= [];
-    if (account._id.equals(payload.userId)) {
-        // Leave
-        guild.RosterActivity.push({
-            dateTime: new Date(),
-            entryType: 7,
-            details: getSuffixedName(account)
-        });
-    } else {
-        // Kick
+    if (isKick) {
         const kickee = (await Account.findOne({ _id: payload.userId }))!;
         guild.RosterActivity.push({
             dateTime: new Date(),
             entryType: 12,
             details: getSuffixedName(kickee) + "," + getSuffixedName(account)
+        });
+    } else {
+        guild.RosterActivity.push({
+            dateTime: new Date(),
+            entryType: 7,
+            details: getSuffixedName(account)
         });
     }
     await guild.save();

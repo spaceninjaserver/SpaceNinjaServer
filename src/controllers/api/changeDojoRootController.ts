@@ -1,12 +1,19 @@
 import { RequestHandler } from "express";
-import { getDojoClient, getGuildForRequest } from "@/src/services/guildService";
+import { getDojoClient, getGuildForRequestEx, hasAccessToDojo, hasGuildPermission } from "@/src/services/guildService";
 import { logger } from "@/src/utils/logger";
-import { IDojoComponentDatabase } from "@/src/types/guildTypes";
+import { GuildPermission, IDojoComponentDatabase } from "@/src/types/guildTypes";
 import { Types } from "mongoose";
+import { getAccountIdForRequest } from "@/src/services/loginService";
+import { getInventory } from "@/src/services/inventoryService";
 
 export const changeDojoRootController: RequestHandler = async (req, res) => {
-    const guild = await getGuildForRequest(req);
-    // At this point, we know that a member of the guild is making this request. Assuming they are allowed to change the root.
+    const accountId = await getAccountIdForRequest(req);
+    const inventory = await getInventory(accountId, "GuildId LevelKeys");
+    const guild = await getGuildForRequestEx(req, inventory);
+    if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Architect))) {
+        res.json({ DojoRequestStatus: -1 });
+        return;
+    }
 
     const idToNode: Record<string, INode> = {};
     guild.DojoComponents.forEach(x => {

@@ -1,14 +1,18 @@
 import { RequestHandler } from "express";
-import { IDojoComponentClient } from "@/src/types/guildTypes";
+import { GuildPermission, IDojoComponentClient } from "@/src/types/guildTypes";
 import {
     getDojoClient,
-    getGuildForRequest,
+    getGuildForRequestEx,
+    hasAccessToDojo,
+    hasGuildPermission,
     processDojoBuildMaterialsGathered,
     setDojoRoomLogFunded
 } from "@/src/services/guildService";
 import { Types } from "mongoose";
 import { ExportDojoRecipes } from "warframe-public-export-plus";
 import { config } from "@/src/services/configService";
+import { getAccountIdForRequest } from "@/src/services/loginService";
+import { getInventory } from "@/src/services/inventoryService";
 
 interface IStartDojoRecipeRequest {
     PlacedComponent: IDojoComponentClient;
@@ -16,8 +20,13 @@ interface IStartDojoRecipeRequest {
 }
 
 export const startDojoRecipeController: RequestHandler = async (req, res) => {
-    const guild = await getGuildForRequest(req);
-    // At this point, we know that a member of the guild is making this request. Assuming they are allowed to start a build.
+    const accountId = await getAccountIdForRequest(req);
+    const inventory = await getInventory(accountId, "GuildId LevelKeys");
+    const guild = await getGuildForRequestEx(req, inventory);
+    if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Architect))) {
+        res.json({ DojoRequestStatus: -1 });
+        return;
+    }
     const request = JSON.parse(String(req.body)) as IStartDojoRecipeRequest;
 
     const room = Object.values(ExportDojoRecipes.rooms).find(x => x.resultType == request.PlacedComponent.pf);

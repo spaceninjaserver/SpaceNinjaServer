@@ -1,4 +1,4 @@
-import { getDojoClient, getGuildForRequestEx, scaleRequiredCount } from "@/src/services/guildService";
+import { getDojoClient, getGuildForRequestEx, hasAccessToDojo, scaleRequiredCount } from "@/src/services/guildService";
 import { getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { IDojoContributable } from "@/src/types/guildTypes";
@@ -17,6 +17,10 @@ interface IDojoComponentRushRequest {
 export const dojoComponentRushController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId);
+    if (!hasAccessToDojo(inventory)) {
+        res.json({ DojoRequestStatus: -1 });
+        return;
+    }
     const guild = await getGuildForRequestEx(req, inventory);
     const request = JSON.parse(String(req.body)) as IDojoComponentRushRequest;
     const component = guild.DojoComponents.id(request.ComponentId)!;

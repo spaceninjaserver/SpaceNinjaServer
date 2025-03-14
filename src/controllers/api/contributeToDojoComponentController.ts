@@ -3,6 +3,7 @@ import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/invento
 import {
     getDojoClient,
     getGuildForRequestEx,
+    hasAccessToDojo,
     processDojoBuildMaterialsGathered,
     scaleRequiredCount,
     setDojoRoomLogFunded
@@ -28,8 +29,12 @@ interface IContributeToDojoComponentRequest {
 export const contributeToDojoComponentController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId);
-    const guild = await getGuildForRequestEx(req, inventory);
     // Any clan member should have permission to contribute although notably permission is denied if they have not crafted the dojo key and were simply invited in.
+    if (!hasAccessToDojo(inventory)) {
+        res.json({ DojoRequestStatus: -1 });
+        return;
+    }
+    const guild = await getGuildForRequestEx(req, inventory);
     const request = JSON.parse(String(req.body)) as IContributeToDojoComponentRequest;
     const component = guild.DojoComponents.id(request.ComponentId)!;
 

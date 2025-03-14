@@ -1,12 +1,20 @@
-import { getDojoClient, getGuildForRequest } from "@/src/services/guildService";
+import { getDojoClient, getGuildForRequestEx, hasAccessToDojo, hasGuildPermission } from "@/src/services/guildService";
+import { getInventory } from "@/src/services/inventoryService";
+import { getAccountIdForRequest } from "@/src/services/loginService";
+import { GuildPermission } from "@/src/types/guildTypes";
 import { RequestHandler } from "express";
 import { Types } from "mongoose";
 import { ExportDojoRecipes } from "warframe-public-export-plus";
 
 export const placeDecoInComponentController: RequestHandler = async (req, res) => {
-    const guild = await getGuildForRequest(req);
+    const accountId = await getAccountIdForRequest(req);
+    const inventory = await getInventory(accountId, "GuildId LevelKeys");
+    const guild = await getGuildForRequestEx(req, inventory);
+    if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Decorator))) {
+        res.json({ DojoRequestStatus: -1 });
+        return;
+    }
     const request = JSON.parse(String(req.body)) as IPlaceDecoInComponentRequest;
-    // At this point, we know that a member of the guild is making this request. Assuming they are allowed to place decorations.
     const component = guild.DojoComponents.id(request.ComponentId)!;
 
     if (component.DecoCapacity === undefined) {

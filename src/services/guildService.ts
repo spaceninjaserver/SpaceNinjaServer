@@ -4,6 +4,7 @@ import { addRecipes, getInventory } from "@/src/services/inventoryService";
 import { Guild, GuildMember, TGuildDatabaseDocument } from "@/src/models/guildModel";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import {
+    GuildPermission,
     IDojoClient,
     IDojoComponentClient,
     IDojoComponentDatabase,
@@ -11,6 +12,7 @@ import {
     IDojoDecoClient,
     IGuildClient,
     IGuildMemberClient,
+    IGuildMemberDatabase,
     IGuildVault
 } from "@/src/types/guildTypes";
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
@@ -321,4 +323,29 @@ export const createUniqueClanName = async (name: string): Promise<string> => {
         discriminator = (discriminator + 1) % 1000;
     } while (discriminator != initialDiscriminator);
     throw new Error(`clan name is so unoriginal it's already been done 1000 times: ${name}`);
+};
+
+export const hasAccessToDojo = (inventory: TInventoryDatabaseDocument): boolean => {
+    return inventory.LevelKeys.find(x => x.ItemType == "/Lotus/Types/Keys/DojoKey") !== undefined;
+};
+
+export const hasGuildPermission = async (
+    guild: TGuildDatabaseDocument,
+    accountId: string | Types.ObjectId,
+    perm: GuildPermission
+): Promise<boolean> => {
+    const member = await GuildMember.findOne({ accountId: accountId, guildId: guild._id });
+    if (member) {
+        return hasGuildPermissionEx(guild, member, perm);
+    }
+    return false;
+};
+
+export const hasGuildPermissionEx = (
+    guild: TGuildDatabaseDocument,
+    member: IGuildMemberDatabase,
+    perm: GuildPermission
+): boolean => {
+    const rank = guild.Ranks[member.rank];
+    return (rank.Permissions & perm) != 0;
 };

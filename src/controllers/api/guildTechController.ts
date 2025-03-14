@@ -1,5 +1,11 @@
 import { RequestHandler } from "express";
-import { getGuildForRequestEx, getGuildVault, scaleRequiredCount } from "@/src/services/guildService";
+import {
+    getGuildForRequestEx,
+    getGuildVault,
+    hasAccessToDojo,
+    hasGuildPermission,
+    scaleRequiredCount
+} from "@/src/services/guildService";
 import { ExportDojoRecipes, IDojoResearch } from "warframe-public-export-plus";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import {
@@ -13,7 +19,7 @@ import {
 import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { config } from "@/src/services/configService";
-import { ITechProjectClient, ITechProjectDatabase } from "@/src/types/guildTypes";
+import { GuildPermission, ITechProjectClient, ITechProjectDatabase } from "@/src/types/guildTypes";
 import { TGuildDatabaseDocument } from "@/src/models/guildModel";
 import { toMongoDate } from "@/src/helpers/inventoryHelpers";
 
@@ -48,6 +54,10 @@ export const guildTechController: RequestHandler = async (req, res) => {
         }
         res.json({ TechProjects: techProjects });
     } else if (action == "Start") {
+        if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Fabricator))) {
+            res.status(400).send("-1").end();
+            return;
+        }
         const recipe = ExportDojoRecipes.research[data.RecipeType!];
         guild.TechProjects ??= [];
         if (!guild.TechProjects.find(x => x.ItemType == data.RecipeType)) {
@@ -71,6 +81,10 @@ export const guildTechController: RequestHandler = async (req, res) => {
         await guild.save();
         res.end();
     } else if (action == "Contribute") {
+        if (!hasAccessToDojo(inventory)) {
+            res.status(400).send("-1").end();
+            return;
+        }
         const contributions = data as IGuildTechContributeFields;
         const techProject = guild.TechProjects!.find(x => x.ItemType == contributions.RecipeType)!;
 
@@ -133,9 +147,12 @@ export const guildTechController: RequestHandler = async (req, res) => {
             Vault: getGuildVault(guild)
         });
     } else if (action == "Buy") {
+        if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Fabricator))) {
+            res.status(400).send("-1").end();
+            return;
+        }
         const purchase = data as IGuildTechBuyFields;
         const quantity = parseInt(data.Action.split(",")[1]);
-        const inventory = await getInventory(accountId);
         const recipeChanges = [
             {
                 ItemType: purchase.RecipeType,
@@ -157,9 +174,12 @@ export const guildTechController: RequestHandler = async (req, res) => {
             }
         });
     } else if (action == "Fabricate") {
+        if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Fabricator))) {
+            res.status(400).send("-1").end();
+            return;
+        }
         const payload = data as IGuildTechFabricateRequest;
         const recipe = ExportDojoRecipes.fabrications[payload.RecipeType];
-        const inventory = await getInventory(accountId);
         const inventoryChanges: IInventoryChanges = updateCurrency(inventory, recipe.price, false);
         inventoryChanges.MiscItems = recipe.ingredients.map(x => ({
             ItemType: x.ItemType,

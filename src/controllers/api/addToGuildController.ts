@@ -1,11 +1,11 @@
 import { Guild, GuildMember } from "@/src/models/guildModel";
 import { Account } from "@/src/models/loginModel";
-import { fillInInventoryDataForGuildMember } from "@/src/services/guildService";
+import { fillInInventoryDataForGuildMember, hasGuildPermission } from "@/src/services/guildService";
 import { createMessage } from "@/src/services/inboxService";
 import { getInventory } from "@/src/services/inventoryService";
 import { getAccountForRequest, getSuffixedName } from "@/src/services/loginService";
 import { IOid } from "@/src/types/commonTypes";
-import { IGuildMemberClient } from "@/src/types/guildTypes";
+import { GuildPermission, IGuildMemberClient } from "@/src/types/guildTypes";
 import { RequestHandler } from "express";
 import { ExportFlavour } from "warframe-public-export-plus";
 
@@ -19,7 +19,10 @@ export const addToGuildController: RequestHandler = async (req, res) => {
     }
 
     const guild = (await Guild.findOne({ _id: payload.GuildId.$oid }, "Name"))!;
-    // TODO: Check sender is allowed to send invites for this guild.
+    const senderAccount = await getAccountForRequest(req);
+    if (!(await hasGuildPermission(guild, senderAccount._id.toString(), GuildPermission.Recruiter))) {
+        res.status(400).json("Invalid permission");
+    }
 
     if (
         await GuildMember.exists({
@@ -37,7 +40,6 @@ export const addToGuildController: RequestHandler = async (req, res) => {
         status: 2 // outgoing invite
     });
 
-    const senderAccount = await getAccountForRequest(req);
     const senderInventory = await getInventory(senderAccount._id.toString(), "ActiveAvatarImageType");
     await createMessage(account._id.toString(), [
         {
