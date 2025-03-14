@@ -195,6 +195,11 @@ export const guildTechController: RequestHandler = async (req, res) => {
         await guild.save();
         await removePigmentsFromGuildMembers(guild._id);
         res.end();
+    } else if (data.Action == "Unpause") {
+        const project = guild.TechProjects!.find(x => x.ItemType == data.RecipeType)!;
+        project.State = 0;
+        await guild.save();
+        res.end();
     } else {
         throw new Error(`unknown guildTech action: ${data.Action}`);
     }
@@ -243,7 +248,7 @@ type TGuildTechRequest =
     | IGuildTechContributeRequest;
 
 interface IGuildTechBasicRequest {
-    Action: "Start" | "Fabricate" | "Pause";
+    Action: "Start" | "Fabricate" | "Pause" | "Unpause";
     Mode: "Guild";
     RecipeType: string;
 }
