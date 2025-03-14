@@ -92,6 +92,7 @@ export const getGuildClient = async (guild: TGuildDatabaseDocument, accountId: s
         Ranks: guild.Ranks,
         Tier: 1,
         Vault: getGuildVault(guild),
+        ActiveDojoColorResearch: guild.ActiveDojoColorResearch,
         Class: guild.Class,
         XP: guild.XP,
         IsContributor: !!guild.CeremonyContributors?.find(x => x.equals(accountId)),

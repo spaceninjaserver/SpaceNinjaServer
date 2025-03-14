@@ -78,6 +78,9 @@ export const guildTechController: RequestHandler = async (req, res) => {
                 processFundedProject(guild, techProject, recipe);
             }
         }
+        if (data.RecipeType.substring(0, 39) == "/Lotus/Types/Items/Research/DojoColors/") {
+            guild.ActiveDojoColorResearch = data.RecipeType;
+        }
         await guild.save();
         res.end();
     } else if (data.Action == "Contribute") {
@@ -192,12 +195,14 @@ export const guildTechController: RequestHandler = async (req, res) => {
     } else if (data.Action == "Pause") {
         const project = guild.TechProjects!.find(x => x.ItemType == data.RecipeType)!;
         project.State = -2;
+        guild.ActiveDojoColorResearch = "";
         await guild.save();
         await removePigmentsFromGuildMembers(guild._id);
         res.end();
     } else if (data.Action == "Unpause") {
         const project = guild.TechProjects!.find(x => x.ItemType == data.RecipeType)!;
         project.State = 0;
+        guild.ActiveDojoColorResearch = data.RecipeType;
         await guild.save();
         res.end();
     } else {
