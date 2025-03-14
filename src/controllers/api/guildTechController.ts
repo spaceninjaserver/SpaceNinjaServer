@@ -203,6 +203,10 @@ export const guildTechController: RequestHandler = async (req, res) => {
         const project = guild.TechProjects!.find(x => x.ItemType == data.RecipeType)!;
         project.State = 0;
         guild.ActiveDojoColorResearch = data.RecipeType;
+        const entry = guild.TechChanges?.find(x => x.details == data.RecipeType);
+        if (entry) {
+            entry.dateTime = new Date();
+        }
         await guild.save();
         res.end();
     } else {
