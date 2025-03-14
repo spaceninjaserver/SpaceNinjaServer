@@ -54,7 +54,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
         }
         res.json({ TechProjects: techProjects });
     } else if (data.Action == "Start") {
-        if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Fabricator))) {
+        if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Tech))) {
             res.status(400).send("-1").end();
             return;
         }
