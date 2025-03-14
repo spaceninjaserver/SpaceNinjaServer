@@ -28,8 +28,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
     const inventory = await getInventory(accountId);
     const guild = await getGuildForRequestEx(req, inventory);
     const data = JSON.parse(String(req.body)) as TGuildTechRequest;
-    const action = data.Action.split(",")[0];
-    if (action == "Sync") {
+    if (data.Action == "Sync") {
         let needSave = false;
         const techProjects: ITechProjectClient[] = [];
         if (guild.TechProjects) {
@@ -53,18 +52,18 @@ export const guildTechController: RequestHandler = async (req, res) => {
             await guild.save();
         }
         res.json({ TechProjects: techProjects });
-    } else if (action == "Start") {
+    } else if (data.Action == "Start") {
         if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Fabricator))) {
             res.status(400).send("-1").end();
             return;
         }
-        const recipe = ExportDojoRecipes.research[data.RecipeType!];
+        const recipe = ExportDojoRecipes.research[data.RecipeType];
         guild.TechProjects ??= [];
         if (!guild.TechProjects.find(x => x.ItemType == data.RecipeType)) {
             const techProject =
                 guild.TechProjects[
                     guild.TechProjects.push({
-                        ItemType: data.RecipeType!,
+                        ItemType: data.RecipeType,
                         ReqCredits: config.noDojoResearchCosts ? 0 : scaleRequiredCount(recipe.price),
                         ReqItems: recipe.ingredients.map(x => ({
                             ItemType: x.ItemType,
@@ -80,12 +79,12 @@ export const guildTechController: RequestHandler = async (req, res) => {
         }
         await guild.save();
         res.end();
-    } else if (action == "Contribute") {
+    } else if (data.Action == "Contribute") {
         if (!hasAccessToDojo(inventory)) {
             res.status(400).send("-1").end();
             return;
         }
-        const contributions = data as IGuildTechContributeFields;
+        const contributions = data;
         const techProject = guild.TechProjects!.find(x => x.ItemType == contributions.RecipeType)!;
 
         if (contributions.VaultCredits) {
@@ -136,7 +135,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
 
         if (techProject.ReqCredits == 0 && !techProject.ReqItems.find(x => x.ItemCount > 0)) {
             // This research is now fully funded.
-            const recipe = ExportDojoRecipes.research[data.RecipeType!];
+            const recipe = ExportDojoRecipes.research[data.RecipeType];
             processFundedProject(guild, techProject, recipe);
         }
 
@@ -146,12 +145,12 @@ export const guildTechController: RequestHandler = async (req, res) => {
             InventoryChanges: inventoryChanges,
             Vault: getGuildVault(guild)
         });
-    } else if (action == "Buy") {
+    } else if (data.Action.split(",")[0] == "Buy") {
         if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Fabricator))) {
             res.status(400).send("-1").end();
             return;
         }
-        const purchase = data as IGuildTechBuyFields;
+        const purchase = data as IGuildTechBuyRequest;
         const quantity = parseInt(data.Action.split(",")[1]);
         const recipeChanges = [
             {
@@ -173,13 +172,12 @@ export const guildTechController: RequestHandler = async (req, res) => {
                 Recipes: recipeChanges
             }
         });
-    } else if (action == "Fabricate") {
+    } else if (data.Action == "Fabricate") {
         if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Fabricator))) {
             res.status(400).send("-1").end();
             return;
         }
-        const payload = data as IGuildTechFabricateRequest;
-        const recipe = ExportDojoRecipes.fabrications[payload.RecipeType];
+        const recipe = ExportDojoRecipes.fabrications[data.RecipeType];
         const inventoryChanges: IInventoryChanges = updateCurrency(inventory, recipe.price, false);
         inventoryChanges.MiscItems = recipe.ingredients.map(x => ({
             ItemType: x.ItemType,
@@ -233,30 +231,28 @@ const setTechLogState = (
 };
 
 type TGuildTechRequest =
-    | ({
-          Action: string;
-      } & Partial<IGuildTechStartFields> &
-          Partial<IGuildTechContributeFields>)
-    | IGuildTechFabricateRequest;
+    | { Action: "Sync" | "SomethingElseThatWeMightNotKnowAbout" }
+    | IGuildTechBasicRequest
+    | IGuildTechContributeRequest;
 
-interface IGuildTechStartFields {
+interface IGuildTechBasicRequest {
+    Action: "Start" | "Fabricate";
     Mode: "Guild";
     RecipeType: string;
 }
 
-type IGuildTechBuyFields = IGuildTechStartFields;
+interface IGuildTechBuyRequest {
+    Action: string;
+    Mode: "Guild";
+    RecipeType: string;
+}
 
-interface IGuildTechContributeFields {
+interface IGuildTechContributeRequest {
+    Action: "Contribute";
     ResearchId: "";
     RecipeType: string;
     RegularCredits: number;
     MiscItems: IMiscItem[];
     VaultCredits: number;
     VaultMiscItems: IMiscItem[];
-}
-
-interface IGuildTechFabricateRequest {
-    Action: "Fabricate";
-    Mode: "Guild";
-    RecipeType: string;
 }
