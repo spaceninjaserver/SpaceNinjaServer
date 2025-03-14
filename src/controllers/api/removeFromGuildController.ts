@@ -17,9 +17,9 @@ export const removeFromGuildController: RequestHandler = async (req, res) => {
         inventory.GuildId = undefined;
 
         // Remove clan key or blueprint from kicked member
-        const itemIndex = inventory.MiscItems.findIndex(x => x.ItemType == "/Lotus/Types/Keys/DojoKey");
+        const itemIndex = inventory.LevelKeys.findIndex(x => x.ItemType == "/Lotus/Types/Keys/DojoKey");
         if (itemIndex != -1) {
-            inventory.MiscItems.splice(itemIndex, 1);
+            inventory.LevelKeys.splice(itemIndex, 1);
         } else {
             const recipeIndex = inventory.Recipes.findIndex(x => x.ItemType == "/Lotus/Types/Keys/DojoKeyBlueprint");
             if (recipeIndex != -1) {
