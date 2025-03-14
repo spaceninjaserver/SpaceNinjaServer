@@ -76,10 +76,11 @@ export const guildTechController: RequestHandler = async (req, res) => {
             setTechLogState(guild, techProject.ItemType, 5);
             if (config.noDojoResearchCosts) {
                 processFundedProject(guild, techProject, recipe);
+            } else {
+                if (data.RecipeType.substring(0, 39) == "/Lotus/Types/Items/Research/DojoColors/") {
+                    guild.ActiveDojoColorResearch = data.RecipeType;
+                }
             }
-        }
-        if (data.RecipeType.substring(0, 39) == "/Lotus/Types/Items/Research/DojoColors/") {
-            guild.ActiveDojoColorResearch = data.RecipeType;
         }
         await guild.save();
         res.end();
