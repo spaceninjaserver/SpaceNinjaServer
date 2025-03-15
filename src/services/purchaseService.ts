@@ -370,6 +370,11 @@ const handleBoosterPackPurchase = async (
         BoosterPackItems: "",
         InventoryChanges: {}
     };
+    if (quantity > 100) {
+        throw new Error(
+            "attempt to roll over 100 booster packs in a single go. possible but unlikely to be desirable for the user or the server."
+        );
+    }
     for (let i = 0; i != quantity; ++i) {
         for (const weights of pack.rarityWeightsPerRoll) {
             const result = getRandomWeightedRewardUc(pack.components, weights);
