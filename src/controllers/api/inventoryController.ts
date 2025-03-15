@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { getAccountForRequest } from "@/src/services/loginService";
+import { getAccountIdForRequest } from "@/src/services/loginService";
 import { Inventory, TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { config } from "@/src/services/configService";
 import allDialogue from "@/static/fixed_responses/allDialogue.json";
@@ -14,12 +14,13 @@ import {
     ExportVirtuals
 } from "warframe-public-export-plus";
 import { applyCheatsToInfestedFoundry, handleSubsumeCompletion } from "./infestedFoundryController";
-import { allDailyAffiliationKeys, createLibraryDailyTask } from "@/src/services/inventoryService";
+import { addMiscItems, allDailyAffiliationKeys, createLibraryDailyTask } from "@/src/services/inventoryService";
+import { logger } from "@/src/utils/logger";
 
 export const inventoryController: RequestHandler = async (request, response) => {
-    const account = await getAccountForRequest(request);
+    const accountId = await getAccountIdForRequest(request);
 
-    const inventory = await Inventory.findOne({ accountOwnerId: account._id.toString() });
+    const inventory = await Inventory.findOne({ accountOwnerId: accountId });
 
     if (!inventory) {
         response.status(400).json({ error: "inventory was undefined" });
@@ -27,11 +28,7 @@ export const inventoryController: RequestHandler = async (request, response) => 
     }
 
     // Handle daily reset
-    const today: number = Math.trunc(new Date().getTime() / 86400000);
-    if (account.LastLoginDay != today) {
-        account.LastLoginDay = today;
-        await account.save();
-
+    if (!inventory.NextRefill || Date.now() >= inventory.NextRefill.getTime()) {
         for (const key of allDailyAffiliationKeys) {
             inventory[key] = 16000 + inventory.PlayerLevel * 500;
         }
@@ -39,6 +36,45 @@ export const inventoryController: RequestHandler = async (request, response) => 
 
         inventory.LibraryAvailableDailyTaskInfo = createLibraryDailyTask();
 
+        if (inventory.NextRefill) {
+            if (config.noArgonCrystalDecay) {
+                inventory.FoundToday = undefined;
+            } else {
+                const lastLoginDay = Math.trunc(inventory.NextRefill.getTime() / 86400000) - 1;
+                const today = Math.trunc(Date.now() / 86400000);
+                const daysPassed = today - lastLoginDay;
+                for (let i = 0; i != daysPassed; ++i) {
+                    const numArgonCrystals =
+                        inventory.MiscItems.find(x => x.ItemType == "/Lotus/Types/Items/MiscItems/ArgonCrystal")
+                            ?.ItemCount ?? 0;
+                    if (numArgonCrystals == 0) {
+                        break;
+                    }
+                    const numStableArgonCrystals =
+                        inventory.FoundToday?.find(x => x.ItemType == "/Lotus/Types/Items/MiscItems/ArgonCrystal")
+                            ?.ItemCount ?? 0;
+                    const numDecayingArgonCrystals = numArgonCrystals - numStableArgonCrystals;
+                    const numDecayingArgonCrystalsToRemove = Math.ceil(numDecayingArgonCrystals / 2);
+                    logger.debug(`ticking argon crystals for day ${i + 1} of ${daysPassed}`, {
+                        numArgonCrystals,
+                        numStableArgonCrystals,
+                        numDecayingArgonCrystals,
+                        numDecayingArgonCrystalsToRemove
+                    });
+                    // Remove half of owned decaying argon crystals
+                    addMiscItems(inventory, [
+                        {
+                            ItemType: "/Lotus/Types/Items/MiscItems/ArgonCrystal",
+                            ItemCount: numDecayingArgonCrystalsToRemove * -1
+                        }
+                    ]);
+                    // All stable argon crystals are now decaying
+                    inventory.FoundToday = undefined;
+                }
+            }
+        }
+
+        inventory.NextRefill = new Date((Math.trunc(Date.now() / 86400000) + 1) * 86400000);
         await inventory.save();
     }
 
@@ -218,9 +254,6 @@ export const getInventoryResponse = async (
     if (inventoryResponse.InfestedFoundry) {
         applyCheatsToInfestedFoundry(inventoryResponse.InfestedFoundry);
     }
-
-    // Fix for #380
-    inventoryResponse.NextRefill = { $date: { $numberLong: "9999999999999" } };
 
     // This determines if the "void fissures" tab is shown in navigation.
     inventoryResponse.HasOwnedVoidProjectionsPreviously = true;

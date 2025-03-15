@@ -110,6 +110,7 @@ dict = {
     cheats_unlockExilusEverywhere: `Adaptateurs Exilus partout`,
     cheats_unlockArcanesEverywhere: `Adaptateur d'Arcanes partout`,
     cheats_noDailyStandingLimits: `Pas de limite de réputation journalière`,
+    cheats_noArgonCrystalDecay: `[UNTRANSLATED] No Argon Crystal Decay`,
     cheats_noVendorPurchaseLimits: `[UNTRANSLATED] No Vendor Purchase Limits`,
     cheats_instantResourceExtractorDrones: `Ressources de drone d'extraction instantannées`,
     cheats_noDojoRoomBuildStage: `No Dojo Room Build Stage`,

@@ -15,7 +15,6 @@ export interface IDatabaseAccount extends IAccountAndLoginResponseCommons {
     email: string;
     password: string;
     Dropped?: boolean;
-    LastLoginDay?: number;
     LatestEventMessageDate: Date;
 }
 

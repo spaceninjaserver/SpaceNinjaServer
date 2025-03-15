@@ -1161,7 +1161,8 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         ChallengeProgress: [challengeProgressSchema],
 
         //Account Item like Ferrite,Form,Kuva etc
-        MiscItems: [typeCountSchema],
+        MiscItems: { type: [typeCountSchema], default: [] },
+        FoundToday: { type: [typeCountSchema], default: undefined },
 
         //Non Upgrade Mods Example:I have 999 item WeaponElectricityDamageMod (only "ItemCount"+"ItemType")
         RawUpgrades: [RawUpgrades],
@@ -1360,7 +1361,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //https://warframe.fandom.com/wiki/Helminth
         InfestedFoundry: infestedFoundrySchema,
 
-        NextRefill: Schema.Types.Mixed, // Date, convert to IMongoDate
+        NextRefill: { type: Date, default: undefined },
 
         //Purchase this new permanent skin from the Lotus customization options in Personal Quarters located in your Orbiter.
         //https://warframe.fandom.com/wiki/Lotus#The_New_War
@@ -1434,6 +1435,9 @@ inventorySchema.set("toJSON", {
         }
         if (inventoryDatabase.BlessingCooldown) {
             inventoryResponse.BlessingCooldown = toMongoDate(inventoryDatabase.BlessingCooldown);
+        }
+        if (inventoryDatabase.NextRefill) {
+            inventoryResponse.NextRefill = toMongoDate(inventoryDatabase.NextRefill);
         }
     }
 });

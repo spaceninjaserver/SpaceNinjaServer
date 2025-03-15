@@ -1045,6 +1045,22 @@ export const addMiscItems = (inventory: TInventoryDatabaseDocument, itemsArray: 
         }
 
         MiscItems[itemIndex].ItemCount += ItemCount;
+
+        if (ItemType == "/Lotus/Types/Items/MiscItems/ArgonCrystal") {
+            inventory.FoundToday ??= [];
+            let foundTodayIndex = inventory.FoundToday.findIndex(x => x.ItemType == ItemType);
+            if (foundTodayIndex == -1) {
+                foundTodayIndex = inventory.FoundToday.push({ ItemType, ItemCount: 0 }) - 1;
+            }
+            inventory.FoundToday[foundTodayIndex].ItemCount += ItemCount;
+            if (inventory.FoundToday[foundTodayIndex].ItemCount <= 0) {
+                inventory.FoundToday.splice(foundTodayIndex, 1);
+            }
+            if (inventory.FoundToday.length == 0) {
+                inventory.FoundToday = undefined;
+            }
+        }
+
         if (MiscItems[itemIndex].ItemCount == 0) {
             MiscItems.splice(itemIndex, 1);
         } else if (MiscItems[itemIndex].ItemCount <= 0) {

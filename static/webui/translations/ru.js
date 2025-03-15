@@ -110,6 +110,7 @@ dict = {
     cheats_unlockExilusEverywhere: `Адаптеры Эксилус везде`,
     cheats_unlockArcanesEverywhere: `Адаптеры для мистификаторов везде`,
     cheats_noDailyStandingLimits: `Без ежедневных ограничений репутации`,
+    cheats_noArgonCrystalDecay: `[UNTRANSLATED] No Argon Crystal Decay`,
     cheats_noVendorPurchaseLimits: `[UNTRANSLATED] No Vendor Purchase Limits`,
     cheats_instantResourceExtractorDrones: `Мгновенные Экстракторы Ресурсов`,
     cheats_noDojoRoomBuildStage: `Мгновенное Строительтво Комнат Додзё`,

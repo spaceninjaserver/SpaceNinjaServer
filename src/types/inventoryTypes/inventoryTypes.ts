@@ -42,6 +42,7 @@ export interface IInventoryDatabase
             | "PendingCoupon"
             | "Drones"
             | "RecentVendorPurchases"
+            | "NextRefill"
             | TEquipmentKey
         >,
         InventoryDatabaseEquipment {
@@ -69,6 +70,7 @@ export interface IInventoryDatabase
     PendingCoupon?: IPendingCouponDatabase;
     Drones: IDroneDatabase[];
     RecentVendorPurchases?: IRecentVendorPurchaseDatabase[];
+    NextRefill?: Date;
 }
 
 export interface IQuestKeyDatabase {
@@ -307,7 +309,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     UseAdultOperatorLoadout?: boolean;
     NemesisAbandonedRewards: string[];
     LastInventorySync: IOid;
-    NextRefill: IMongoDate; // Next time argon crystals will have a decay tick
+    NextRefill?: IMongoDate;
     FoundToday?: IMiscItem[]; // for Argon Crystals
     CustomMarkers?: ICustomMarkers[];
     ActiveLandscapeTraps: any[];
