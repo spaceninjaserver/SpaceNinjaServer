@@ -2,12 +2,13 @@ import { RequestHandler } from "express";
 import { getSessionByID } from "@/src/managers/sessionManager";
 import { logger } from "@/src/utils/logger";
 
-const joinSessionController: RequestHandler = (_req, res) => {
-    const reqBody = JSON.parse(String(_req.body));
+export const joinSessionController: RequestHandler = (req, res) => {
+    const reqBody = JSON.parse(String(req.body)) as IJoinSessionRequest;
     logger.debug(`JoinSession Request`, { reqBody });
-    const req = JSON.parse(String(_req.body));
-    const session = getSessionByID(req.sessionIds[0] as string);
+    const session = getSessionByID(reqBody.sessionIds[0]);
     res.json({ rewardSeed: session?.rewardSeed, sessionId: { $oid: session?.sessionId } });
 };
 
-export { joinSessionController };
+interface IJoinSessionRequest {
+    sessionIds: string[];
+}

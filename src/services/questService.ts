@@ -93,7 +93,10 @@ export const updateQuestStage = (
     Object.assign(questStage, questStageUpdate);
 };
 
-export const addQuestKey = (inventory: TInventoryDatabaseDocument, questKey: IQuestKeyDatabase) => {
+export const addQuestKey = (
+    inventory: TInventoryDatabaseDocument,
+    questKey: IQuestKeyDatabase
+): IQuestKeyClient | undefined => {
     if (inventory.QuestKeys.some(q => q.ItemType === questKey.ItemType)) {
         logger.warn(`Quest key ${questKey.ItemType} already exists. It will not be added`);
         return;
@@ -115,7 +118,7 @@ export const addQuestKey = (inventory: TInventoryDatabaseDocument, questKey: IQu
     return inventory.QuestKeys[index - 1].toJSON<IQuestKeyClient>();
 };
 
-export const completeQuest = async (inventory: TInventoryDatabaseDocument, questKey: string) => {
+export const completeQuest = async (inventory: TInventoryDatabaseDocument, questKey: string): Promise<void> => {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     const chainStages = ExportKeys[questKey]?.chainStages;
 

@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Document, Schema, Types, model } from "mongoose";
 import { IShipDatabase } from "../types/shipTypes";
 import { toOid } from "@/src/helpers/inventoryHelpers";
 import { colorSchema } from "@/src/models/inventoryModels/inventoryModel";
@@ -47,3 +47,11 @@ shipSchema.set("toObject", {
 });
 
 export const Ship = model("Ships", shipSchema);
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type TShipDatabaseDocument = Document<unknown, {}, IShipDatabase> &
+    IShipDatabase & {
+        _id: Types.ObjectId;
+    } & {
+        __v: number;
+    };

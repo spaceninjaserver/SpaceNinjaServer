@@ -1,7 +1,8 @@
 import { PersonalRooms } from "@/src/models/personalRoomsModel";
 import { addItem, getInventory } from "@/src/services/inventoryService";
+import { TPersonalRoomsDatabaseDocument } from "../types/personalRoomsTypes";
 
-export const getPersonalRooms = async (accountId: string) => {
+export const getPersonalRooms = async (accountId: string): Promise<TPersonalRoomsDatabaseDocument> => {
     const personalRooms = await PersonalRooms.findOne({ personalRoomsOwnerId: accountId });
 
     if (!personalRooms) {
@@ -10,7 +11,7 @@ export const getPersonalRooms = async (accountId: string) => {
     return personalRooms;
 };
 
-export const updateShipFeature = async (accountId: string, shipFeature: string) => {
+export const updateShipFeature = async (accountId: string, shipFeature: string): Promise<void> => {
     const personalRooms = await getPersonalRooms(accountId);
 
     if (personalRooms.Ship.Features.includes(shipFeature)) {

@@ -4,7 +4,7 @@ import { IEnemy, IMission, IScan, ITutorial, IAbility, IWeapon, IStatsDatabase, 
 const abilitySchema = new Schema<IAbility>(
     {
         type: { type: String, required: true },
-        used: Number
+        used: { type: Number, required: true }
     },
     { _id: false }
 );
@@ -32,7 +32,7 @@ const missionSchema = new Schema<IMission>(
 const scanSchema = new Schema<IScan>(
     {
         type: { type: String, required: true },
-        scans: Number
+        scans: { type: Number, required: true }
     },
     { _id: false }
 );

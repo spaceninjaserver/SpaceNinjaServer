@@ -82,7 +82,6 @@ export const updateStats = async (playerStats: TStatsDatabaseDocument, payload: 
                             for (const [type, scans] of Object.entries(data as IUploadEntry)) {
                                 const scan = playerStats.Scans.find(element => element.type === type);
                                 if (scan) {
-                                    scan.scans ??= 0;
                                     scan.scans += scans;
                                 } else {
                                     playerStats.Scans.push({ type: type, scans });
@@ -95,7 +94,6 @@ export const updateStats = async (playerStats: TStatsDatabaseDocument, payload: 
                             for (const [type, used] of Object.entries(data as IUploadEntry)) {
                                 const ability = playerStats.Abilities.find(element => element.type === type);
                                 if (ability) {
-                                    ability.used ??= 0;
                                     ability.used += used;
                                 } else {
                                     playerStats.Abilities.push({ type: type, used });
@@ -307,22 +305,20 @@ export const updateStats = async (playerStats: TStatsDatabaseDocument, payload: 
                 for (const [category, value] of Object.entries(actionData as IStatsSet)) {
                     switch (category) {
                         case "ELO_RATING":
-                            playerStats.Rating = value;
+                            playerStats.Rating = value as number;
                             break;
 
                         case "RANK":
-                            playerStats.Rank = value;
+                            playerStats.Rank = value as number;
                             break;
 
                         case "PLAYER_LEVEL":
-                            playerStats.PlayerLevel = value;
+                            playerStats.PlayerLevel = value as number;
                             break;
 
                         default:
                             if (!ignoredCategories.includes(category)) {
-                                if (!unknownCategories[action]) {
-                                    unknownCategories[action] = [];
-                                }
+                                unknownCategories[action] ??= [];
                                 unknownCategories[action].push(category);
                             }
                             break;

@@ -1,7 +1,7 @@
 import { IOid } from "@/src/types/commonTypes";
 import { IEquipmentSelection } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { ILoadoutConfigDatabase, ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
-import { Model, Schema, Types, model } from "mongoose";
+import { Document, Model, Schema, Types, model } from "mongoose";
 
 const oidSchema = new Schema<IOid>(
     {
@@ -97,3 +97,15 @@ type loadoutDocumentProps = {
 type loadoutModelType = Model<ILoadoutDatabase, {}, loadoutDocumentProps>;
 
 export const Loadout = model<ILoadoutDatabase, loadoutModelType>("Loadout", loadoutSchema);
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type TLoadoutDatabaseDocument = Document<unknown, {}, ILoadoutDatabase> &
+    Omit<
+        ILoadoutDatabase & {
+            _id: Types.ObjectId;
+        } & {
+            __v: number;
+        },
+        keyof loadoutDocumentProps
+    > &
+    loadoutDocumentProps;

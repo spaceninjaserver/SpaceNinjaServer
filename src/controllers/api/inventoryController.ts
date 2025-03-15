@@ -261,6 +261,7 @@ const resourceGetParent = (resourceName: string): string | undefined => {
     if (resourceName in ExportResources) {
         return ExportResources[resourceName].parentName;
     }
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     return ExportVirtuals[resourceName]?.parentName;
 };
 

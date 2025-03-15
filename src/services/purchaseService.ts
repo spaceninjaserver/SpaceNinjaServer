@@ -108,8 +108,11 @@ export const handlePurchase = async (
                 ];
             }
             purchaseRequest.PurchaseParams.Quantity *= offer.QuantityMultiplier;
-        } else if (!ExportVendors[purchaseRequest.PurchaseParams.SourceId!]) {
-            throw new Error(`unknown vendor: ${purchaseRequest.PurchaseParams.SourceId!}`);
+        } else {
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            if (!ExportVendors[purchaseRequest.PurchaseParams.SourceId!]) {
+                throw new Error(`unknown vendor: ${purchaseRequest.PurchaseParams.SourceId!}`);
+            }
         }
     }
 
@@ -119,8 +122,6 @@ export const handlePurchase = async (
         purchaseRequest.PurchaseParams.Quantity
     );
     combineInventoryChanges(purchaseResponse.InventoryChanges, inventoryChanges);
-
-    if (!purchaseResponse) throw new Error("purchase response was undefined");
 
     const currencyChanges = updateCurrency(
         inventory,
@@ -149,6 +150,7 @@ export const handlePurchase = async (
                     ];
                 } else {
                     const syndicate = ExportSyndicates[syndicateTag];
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                     if (syndicate) {
                         const favour = syndicate.favours.find(
                             x => x.storeItem == purchaseRequest.PurchaseParams.StoreItem
@@ -360,6 +362,7 @@ const handleBoosterPackPurchase = async (
     quantity: number
 ): Promise<IPurchaseResponse> => {
     const pack = ExportBoosterPacks[typeName];
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!pack) {
         throw new Error(`unknown booster pack: ${typeName}`);
     }

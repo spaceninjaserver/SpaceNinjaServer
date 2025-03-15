@@ -7,7 +7,7 @@ import {
     ITailorShopDatabase,
     TBootLocation
 } from "@/src/types/shipTypes";
-import { Model, Types } from "mongoose";
+import { Document, Model, Types } from "mongoose";
 
 export interface IOrbiter {
     Features: string[];
@@ -48,3 +48,15 @@ export type PersonalRoomsDocumentProps = {
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type PersonalRoomsModelType = Model<IPersonalRoomsDatabase, {}, PersonalRoomsDocumentProps>;
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type TPersonalRoomsDatabaseDocument = Document<unknown, {}, IPersonalRoomsDatabase> &
+    Omit<
+        IPersonalRoomsDatabase & {
+            _id: Types.ObjectId;
+        } & {
+            __v: number;
+        },
+        keyof PersonalRoomsDocumentProps
+    > &
+    PersonalRoomsDocumentProps;

@@ -313,6 +313,12 @@ export const addMissionInventoryUpdates = async (
     return inventoryChanges;
 };
 
+interface AddMissionRewardsReturnType {
+    MissionRewards: IMissionReward[];
+    inventoryChanges?: IInventoryChanges;
+    credits?: IMissionCredits;
+}
+
 //TODO: return type of partial missioninventoryupdate response
 export const addMissionRewards = async (
     inventory: TInventoryDatabaseDocument,
@@ -324,7 +330,7 @@ export const addMissionRewards = async (
         VoidTearParticipantsCurrWave: voidTearWave,
         StrippedItems: strippedItems
     }: IMissionInventoryUpdateRequest
-) => {
+): Promise<AddMissionRewardsReturnType> => {
     if (!rewardInfo) {
         //TODO: if there is a case where you can have credits collected during a mission but no rewardInfo, add credits needs to be handled earlier
         logger.debug(`Mission ${missions!.Tag} did not have Reward Info `);
@@ -435,6 +441,13 @@ export const addMissionRewards = async (
     return { inventoryChanges, MissionRewards, credits };
 };
 
+interface IMissionCredits {
+    MissionCredits: number[];
+    CreditBonus: number[];
+    TotalCredits: number[];
+    DailyMissionBonus?: boolean;
+}
+
 //creditBonus is not entirely accurate.
 //TODO: consider ActiveBoosters
 export const addCredits = (
@@ -444,11 +457,11 @@ export const addCredits = (
         missionCompletionCredits,
         rngRewardCredits
     }: { missionDropCredits: number; missionCompletionCredits: number; rngRewardCredits: number }
-) => {
+): IMissionCredits => {
     const hasDailyCreditBonus = true;
     const totalCredits = missionDropCredits + missionCompletionCredits + rngRewardCredits;
 
-    const finalCredits = {
+    const finalCredits: IMissionCredits = {
         MissionCredits: [missionDropCredits, missionDropCredits],
         CreditBonus: [missionCompletionCredits, missionCompletionCredits],
         TotalCredits: [totalCredits, totalCredits]
@@ -471,7 +484,7 @@ export const addFixedLevelRewards = (
     rewards: IMissionRewardExternal,
     inventory: TInventoryDatabaseDocument,
     MissionRewards: IMissionReward[]
-) => {
+): number => {
     let missionBonusCredits = 0;
     if (rewards.credits) {
         missionBonusCredits += rewards.credits;

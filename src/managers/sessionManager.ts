@@ -44,7 +44,7 @@ function getSessionByID(sessionId: string): ISession | undefined {
     return sessions.find(session => session.sessionId === sessionId);
 }
 
-function getSession(sessionIdOrRequest: string | IFindSessionRequest): any[] {
+function getSession(sessionIdOrRequest: string | IFindSessionRequest): { createdBy: string; id: string }[] {
     if (typeof sessionIdOrRequest === "string") {
         const session = sessions.find(session => session.sessionId === sessionIdOrRequest);
         if (session) {
@@ -107,8 +107,7 @@ function updateSession(sessionId: string, sessionData: string): boolean {
     const session = sessions.find(session => session.sessionId === sessionId);
     if (!session) return false;
     try {
-        const updatedData = JSON.parse(sessionData);
-        Object.assign(session, updatedData);
+        Object.assign(session, JSON.parse(sessionData));
         return true;
     } catch (error) {
         console.error("Invalid JSON string for session update.");

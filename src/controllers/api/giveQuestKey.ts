@@ -38,7 +38,7 @@ export interface IQuestKeyReward {
     Duration: number;
     CouponSku: number;
     Syndicate: string;
-    Milestones: any[];
+    //Milestones: any[];
     ChooseSetIndex: number;
     NewSystemReward: boolean;
     _id: IOid;
