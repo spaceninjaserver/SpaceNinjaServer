@@ -16,7 +16,8 @@ const enemySchema = new Schema<IEnemy>(
         headshots: Number,
         kills: Number,
         assists: Number,
-        deaths: Number
+        deaths: Number,
+        captures: Number
     },
     { _id: false }
 );
