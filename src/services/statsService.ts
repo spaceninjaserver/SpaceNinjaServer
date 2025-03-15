@@ -104,14 +104,16 @@ export const updateStats = async (playerStats: TStatsDatabaseDocument, payload: 
                         case "FIRE_WEAPON":
                         case "HIT_ENTITY_ITEM":
                         case "HEADSHOT_ITEM":
-                        case "KILL_ENEMY_ITEM": {
+                        case "KILL_ENEMY_ITEM":
+                        case "KILL_ASSIST_ITEM": {
                             playerStats.Weapons ??= [];
                             const statKey = {
                                 FIRE_WEAPON: "fired",
                                 HIT_ENTITY_ITEM: "hits",
                                 HEADSHOT_ITEM: "headshots",
-                                KILL_ENEMY_ITEM: "kills"
-                            }[category] as "fired" | "hits" | "headshots" | "kills";
+                                KILL_ENEMY_ITEM: "kills",
+                                KILL_ASSIST_ITEM: "assists"
+                            }[category] as "fired" | "hits" | "headshots" | "kills" | "assists";
 
                             for (const [type, count] of Object.entries(data as IUploadEntry)) {
                                 const weapon = playerStats.Weapons.find(element => element.type === type);
@@ -129,19 +131,33 @@ export const updateStats = async (playerStats: TStatsDatabaseDocument, payload: 
 
                         case "KILL_ENEMY":
                         case "EXECUTE_ENEMY":
-                        case "HEADSHOT": {
+                        case "HEADSHOT":
+                        case "KILL_ASSIST": {
                             playerStats.Enemies ??= [];
                             const enemyStatKey = {
                                 KILL_ENEMY: "kills",
                                 EXECUTE_ENEMY: "executions",
-                                HEADSHOT: "headshots"
-                            }[category] as "kills" | "executions" | "headshots";
+                                HEADSHOT: "headshots",
+                                KILL_ASSIST: "assists"
+                            }[category] as "kills" | "executions" | "headshots" | "assists";
 
                             for (const [type, count] of Object.entries(data as IUploadEntry)) {
                                 const enemy = playerStats.Enemies.find(element => element.type === type);
                                 if (enemy) {
-                                    enemy[enemyStatKey] ??= 0;
-                                    enemy[enemyStatKey] += count;
+                                    if (category === "KILL_ENEMY") {
+                                        enemy.kills ??= 0;
+                                        const captureCount = (actionData["CAPTURE_ENEMY"] as IUploadEntry)?.[type];
+                                        if (captureCount) {
+                                            enemy.kills += Math.max(count - captureCount, 0);
+                                            enemy.captures ??= 0;
+                                            enemy.captures += captureCount;
+                                        } else {
+                                            enemy.kills += count;
+                                        }
+                                    } else {
+                                        enemy[enemyStatKey] ??= 0;
+                                        enemy[enemyStatKey] += count;
+                                    }
                                 } else {
                                     const newEnemy: IEnemy = { type: type };
                                     newEnemy[enemyStatKey] = count;
@@ -394,6 +410,7 @@ const ignoredCategories = [
     "PRE_DIE_ITEM",
     "GEAR_USED",
     "DIE_ITEM",
+    "CAPTURE_ENEMY", // handled in KILL_ENEMY
 
     // timers action
     "IN_SHIP_TIME",

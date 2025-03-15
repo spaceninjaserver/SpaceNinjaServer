@@ -44,6 +44,7 @@ export interface IEnemy {
     kills?: number;
     assists?: number;
     deaths?: number;
+    captures?: number;
 }
 
 export interface IMission {
@@ -126,6 +127,8 @@ export interface IStatsAdd {
     DIE_ITEM?: IUploadEntry;
     EXECUTE_ENEMY?: IUploadEntry;
     EXECUTE_ENEMY_ITEM?: IUploadEntry;
+    KILL_ASSIST?: IUploadEntry;
+    KILL_ASSIST_ITEM?: IUploadEntry;
 }
 
 export interface IUploadEntry {
