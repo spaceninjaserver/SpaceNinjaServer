@@ -64,6 +64,9 @@ interface IConfig {
     fastClanAscension?: boolean;
     spoofMasteryRank?: number;
     events?: {
+        creditBoost?: boolean;
+        affinityBoost?: boolean;
+        resourceBoost?: boolean;
         starDays?: boolean;
     };
 }

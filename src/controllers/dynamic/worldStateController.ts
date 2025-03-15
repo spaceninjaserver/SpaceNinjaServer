@@ -17,6 +17,7 @@ export const worldStateController: RequestHandler = (req, res) => {
                 : buildConfig.buildLabel,
         Time: Math.round(Date.now() / 1000),
         Goals: [],
+        GlobalUpgrades: [],
         EndlessXpChoices: [],
         ...staticWorldState
     };
@@ -75,6 +76,43 @@ export const worldStateController: RequestHandler = (req, res) => {
         Seed: bountyCycle,
         Nodes: []
     };
+
+    if (config.events?.creditBoost) {
+        worldState.GlobalUpgrades.push({
+            _id: { $oid: "5b23106f283a555109666672" },
+            Activation: { $date: { $numberLong: "1740164400000" } },
+            ExpiryDate: { $date: { $numberLong: "2000000000000" } },
+            UpgradeType: "GAMEPLAY_MONEY_REWARD_AMOUNT",
+            OperationType: "MULTIPLY",
+            Value: 2,
+            LocalizeTag: "",
+            LocalizeDescTag: ""
+        });
+    }
+    if (config.events?.affinityBoost) {
+        worldState.GlobalUpgrades.push({
+            _id: { $oid: "5b23106f283a555109666673" },
+            Activation: { $date: { $numberLong: "1740164400000" } },
+            ExpiryDate: { $date: { $numberLong: "2000000000000" } },
+            UpgradeType: "GAMEPLAY_KILL_XP_AMOUNT",
+            OperationType: "MULTIPLY",
+            Value: 2,
+            LocalizeTag: "",
+            LocalizeDescTag: ""
+        });
+    }
+    if (config.events?.resourceBoost) {
+        worldState.GlobalUpgrades.push({
+            _id: { $oid: "5b23106f283a555109666674" },
+            Activation: { $date: { $numberLong: "1740164400000" } },
+            ExpiryDate: { $date: { $numberLong: "2000000000000" } },
+            UpgradeType: "GAMEPLAY_PICKUP_AMOUNT",
+            OperationType: "MULTIPLY",
+            Value: 2,
+            LocalizeTag: "",
+            LocalizeDescTag: ""
+        });
+    }
 
     // Circuit choices cycling every week
     worldState.EndlessXpChoices.push({
@@ -158,6 +196,7 @@ interface IWorldState {
     Time: number;
     Goals: IGoal[];
     SyndicateMissions: ISyndicateMission[];
+    GlobalUpgrades: IGlobalUpgrade[];
     NodeOverrides: INodeOverride[];
     EndlessXpChoices: IEndlessXpChoice[];
     KnownCalendarSeasons: ICalendarSeason[];
@@ -186,6 +225,17 @@ interface ISyndicateMission {
     Tag: string;
     Seed: number;
     Nodes: string[];
+}
+
+interface IGlobalUpgrade {
+    _id: IOid;
+    Activation: IMongoDate;
+    ExpiryDate: IMongoDate;
+    UpgradeType: string;
+    OperationType: string;
+    Value: number;
+    LocalizeTag: string;
+    LocalizeDescTag: string;
 }
 
 interface INodeOverride {
