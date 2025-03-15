@@ -228,6 +228,9 @@ export const getInventoryResponse = async (
     // Omitting this field so opening the navigation resyncs the inventory which is more desirable for typical usage.
     //inventoryResponse.LastInventorySync = toOid(new Types.ObjectId());
 
+    // Set 2FA enabled so trading post can be used
+    inventoryResponse.HWIDProtectEnabled = true;
+
     return inventoryResponse;
 };
 
