@@ -536,6 +536,7 @@ export const addItem = async (
                             } satisfies IMiscItem
                         ];
                         addMiscItems(inventory, miscItemChanges);
+                        inventory.HasOwnedVoidProjectionsPreviously = true;
                         return {
                             InventoryChanges: {
                                 MiscItems: miscItemChanges

@@ -252,7 +252,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     Affiliations: IAffiliation[];
     QualifyingInvasions: any[];
     FactionScores: number[];
-    ArchwingEnabled: boolean;
+    ArchwingEnabled?: boolean;
     PendingSpectreLoadouts?: ISpectreLoadout[];
     SpectreLoadouts?: ISpectreLoadout[];
     EmailItems: ITypeCount[];
