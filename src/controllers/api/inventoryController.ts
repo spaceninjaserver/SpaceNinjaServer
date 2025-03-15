@@ -255,9 +255,6 @@ export const getInventoryResponse = async (
         applyCheatsToInfestedFoundry(inventoryResponse.InfestedFoundry);
     }
 
-    // This determines if the "void fissures" tab is shown in navigation.
-    inventoryResponse.HasOwnedVoidProjectionsPreviously = true;
-
     // Omitting this field so opening the navigation resyncs the inventory which is more desirable for typical usage.
     //inventoryResponse.LastInventorySync = toOid(new Types.ObjectId());
 

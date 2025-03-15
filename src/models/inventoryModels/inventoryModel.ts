@@ -1186,6 +1186,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         ReceivedStartingGear: Boolean,
 
         ArchwingEnabled: Boolean,
+        HasOwnedVoidProjectionsPreviously: Boolean,
 
         //Use Operator\Drifter
         UseAdultOperatorLoadout: Boolean,
