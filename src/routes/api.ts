@@ -102,6 +102,7 @@ import { surveysController } from "@/src/controllers/api/surveysController";
 import { syndicateSacrificeController } from "@/src/controllers/api/syndicateSacrificeController";
 import { syndicateStandingBonusController } from "@/src/controllers/api/syndicateStandingBonusController";
 import { tauntHistoryController } from "@/src/controllers/api/tauntHistoryController";
+import { tradingController } from "@/src/controllers/api/tradingController";
 import { trainingResultController } from "@/src/controllers/api/trainingResultController";
 import { unlockShipFeatureController } from "@/src/controllers/api/unlockShipFeatureController";
 import { updateAlignmentController } from "@/src/controllers/api/updateAlignmentController";
@@ -153,6 +154,7 @@ apiRouter.get("/setSupportedSyndicate.php", setSupportedSyndicateController);
 apiRouter.get("/startLibraryDailyTask.php", startLibraryDailyTaskController);
 apiRouter.get("/startLibraryPersonalTarget.php", startLibraryPersonalTargetController);
 apiRouter.get("/surveys.php", surveysController);
+apiRouter.get("/trading.php", tradingController);
 apiRouter.get("/updateSession.php", updateSessionGetController);
 
 // post

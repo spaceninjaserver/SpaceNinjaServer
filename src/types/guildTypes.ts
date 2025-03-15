@@ -8,10 +8,8 @@ export interface IGuildClient {
     MOTD: string;
     LongMOTD?: ILongMOTD;
     Members: IGuildMemberClient[];
-    Ranks: {
-        Name: string;
-        Permissions: number;
-    }[];
+    Ranks: IGuildRank[];
+    TradeTax: number;
     Tier: number;
     Vault: IGuildVault;
     Class: number;
@@ -27,6 +25,7 @@ export interface IGuildDatabase {
     MOTD: string;
     LongMOTD?: ILongMOTD;
     Ranks: IGuildRank[];
+    TradeTax: number;
 
     DojoComponents: IDojoComponentDatabase[];
     DojoCapacity: number;

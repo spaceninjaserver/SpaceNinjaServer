@@ -90,6 +90,7 @@ export const getGuildClient = async (guild: TGuildDatabaseDocument, accountId: s
         LongMOTD: guild.LongMOTD,
         Members: members,
         Ranks: guild.Ranks,
+        TradeTax: guild.TradeTax,
         Tier: 1,
         Vault: getGuildVault(guild),
         Class: guild.Class,
