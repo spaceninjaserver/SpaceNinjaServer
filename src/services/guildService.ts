@@ -93,6 +93,7 @@ export const getGuildClient = async (guild: TGuildDatabaseDocument, accountId: s
         TradeTax: guild.TradeTax,
         Tier: 1,
         Vault: getGuildVault(guild),
+        ActiveDojoColorResearch: guild.ActiveDojoColorResearch,
         Class: guild.Class,
         XP: guild.XP,
         IsContributor: !!guild.CeremonyContributors?.find(x => x.equals(accountId)),
@@ -349,4 +350,18 @@ export const hasGuildPermissionEx = (
 ): boolean => {
     const rank = guild.Ranks[member.rank];
     return (rank.Permissions & perm) != 0;
+};
+
+export const removePigmentsFromGuildMembers = async (guildId: string | Types.ObjectId): Promise<void> => {
+    const members = await GuildMember.find({ guildId, status: 0 }, "accountId");
+    for (const member of members) {
+        const inventory = await getInventory(member.accountId.toString(), "MiscItems");
+        const index = inventory.MiscItems.findIndex(
+            x => x.ItemType == "/Lotus/Types/Items/Research/DojoColors/GenericDojoColorPigment"
+        );
+        if (index != -1) {
+            inventory.MiscItems.splice(index, 1);
+            await inventory.save();
+        }
+    }
 };

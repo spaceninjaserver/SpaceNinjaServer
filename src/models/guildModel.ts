@@ -152,6 +152,7 @@ const guildSchema = new Schema<IGuildDatabase>(
         VaultShipDecorations: { type: [typeCountSchema], default: undefined },
         VaultFusionTreasures: { type: [fusionTreasuresSchema], default: undefined },
         TechProjects: { type: [techProjectSchema], default: undefined },
+        ActiveDojoColorResearch: { type: String, default: "" },
         Class: { type: Number, default: 0 },
         XP: { type: Number, default: 0 },
         ClaimedXP: { type: [String], default: undefined },

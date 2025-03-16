@@ -12,6 +12,7 @@ export interface IGuildClient {
     TradeTax: number;
     Tier: number;
     Vault: IGuildVault;
+    ActiveDojoColorResearch: string;
     Class: number;
     XP: number;
     IsContributor: boolean;
@@ -38,6 +39,7 @@ export interface IGuildDatabase {
     VaultFusionTreasures?: IFusionTreasure[];
 
     TechProjects?: ITechProjectDatabase[];
+    ActiveDojoColorResearch: string;
 
     Class: number;
     XP: number;
