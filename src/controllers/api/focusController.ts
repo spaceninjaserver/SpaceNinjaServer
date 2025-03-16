@@ -5,6 +5,7 @@ import { IMiscItem, TFocusPolarity, TEquipmentKey, InventorySlot } from "@/src/t
 import { logger } from "@/src/utils/logger";
 import { ExportFocusUpgrades } from "warframe-public-export-plus";
 import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 
 export const focusController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -55,9 +56,16 @@ export const focusController: RequestHandler = async (req, res) => {
         }
         case FocusOperation.ActivateWay: {
             const focusType = (JSON.parse(String(req.body)) as IWayRequest).FocusType;
-            const inventory = await getInventory(accountId);
-            inventory.FocusAbility = focusType;
-            await inventory.save();
+
+            await Inventory.updateOne(
+                {
+                    accountOwnerId: accountId
+                },
+                {
+                    FocusAbility: focusType
+                }
+            );
+
             res.end();
             break;
         }
