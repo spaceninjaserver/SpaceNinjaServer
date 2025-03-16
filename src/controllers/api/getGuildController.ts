@@ -7,7 +7,7 @@ import { createUniqueClanName, getGuildClient } from "@/src/services/guildServic
 
 const getGuildController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory(accountId, "GuildId");
     if (inventory.GuildId) {
         const guild = await Guild.findOne({ _id: inventory.GuildId });
         if (guild) {
