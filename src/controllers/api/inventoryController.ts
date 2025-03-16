@@ -246,8 +246,9 @@ export const getInventoryResponse = async (
     }
 
     if (config.noDailyStandingLimits) {
+        const spoofedDailyAffiliation = Math.max(999_999, 16000 + inventoryResponse.PlayerLevel * 500);
         for (const key of allDailyAffiliationKeys) {
-            inventoryResponse[key] = 999_999;
+            inventoryResponse[key] = spoofedDailyAffiliation;
         }
     }
 
