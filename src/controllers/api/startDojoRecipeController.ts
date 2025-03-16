@@ -39,7 +39,6 @@ export const startDojoRecipeController: RequestHandler = async (req, res) => {
 
     guild.RoomChanges ??= [];
     guild.RoomChanges.push({
-        dateTime: new Date(),
         entryType: 2,
         details: request.PlacedComponent.pf,
         componentId: componentId

@@ -20,14 +20,14 @@ export const getGuildLogController: RequestHandler = async (req, res) => {
             };
             guild.RoomChanges?.forEach(entry => {
                 log.RoomChanges.push({
-                    dateTime: toMongoDate(entry.dateTime),
+                    dateTime: toMongoDate(entry.dateTime ?? new Date()),
                     entryType: entry.entryType,
                     details: entry.details
                 });
             });
             guild.TechChanges?.forEach(entry => {
                 log.TechChanges.push({
-                    dateTime: toMongoDate(entry.dateTime),
+                    dateTime: toMongoDate(entry.dateTime ?? new Date()),
                     entryType: entry.entryType,
                     details: entry.details
                 });

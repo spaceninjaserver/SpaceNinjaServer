@@ -50,8 +50,8 @@ export interface IGuildDatabase {
     CeremonyResetDate?: Date;
 
     RoomChanges?: IGuildLogRoomChange[];
-    TechChanges?: IGuildLogEntryString[];
-    RosterActivity?: IGuildLogEntryString[];
+    TechChanges?: IGuildLogEntryContributable[];
+    RosterActivity?: IGuildLogEntryRoster[];
     ClassChanges?: IGuildLogEntryNumber[];
 }
 
@@ -190,14 +190,20 @@ export interface ITechProjectDatabase extends Omit<ITechProjectClient, "Completi
     CompletionDate?: Date;
 }
 
-export interface IGuildLogEntryString {
-    dateTime: Date;
+export interface IGuildLogEntryContributable {
+    dateTime?: Date;
     entryType: number;
     details: string;
 }
 
-export interface IGuildLogRoomChange extends IGuildLogEntryString {
+export interface IGuildLogRoomChange extends IGuildLogEntryContributable {
     componentId: Types.ObjectId;
+}
+
+export interface IGuildLogEntryRoster {
+    dateTime: Date;
+    entryType: number;
+    details: string;
 }
 
 export interface IGuildLogEntryNumber {

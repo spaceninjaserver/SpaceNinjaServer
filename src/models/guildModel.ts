@@ -6,9 +6,10 @@ import {
     ILongMOTD,
     IGuildMemberDatabase,
     IGuildLogEntryNumber,
-    IGuildLogEntryString,
     IGuildRank,
-    IGuildLogRoomChange
+    IGuildLogRoomChange,
+    IGuildLogEntryRoster,
+    IGuildLogEntryContributable
 } from "@/src/types/guildTypes";
 import { Document, Model, model, Schema, Types } from "mongoose";
 import { fusionTreasuresSchema, typeCountSchema } from "./inventoryModels/inventoryModel";
@@ -108,7 +109,17 @@ const defaultRanks: IGuildRank[] = [
     }
 ];
 
-const guildLogEntryStringSchema = new Schema<IGuildLogEntryString>(
+const guildLogRoomChangeSchema = new Schema<IGuildLogRoomChange>(
+    {
+        dateTime: Date,
+        entryType: Number,
+        details: String,
+        componentId: Types.ObjectId
+    },
+    { _id: false }
+);
+
+const guildLogEntryContributableSchema = new Schema<IGuildLogEntryContributable>(
     {
         dateTime: Date,
         entryType: Number,
@@ -117,12 +128,11 @@ const guildLogEntryStringSchema = new Schema<IGuildLogEntryString>(
     { _id: false }
 );
 
-const guildLogRoomChangeSchema = new Schema<IGuildLogRoomChange>(
+const guildLogEntryRosterSchema = new Schema<IGuildLogEntryRoster>(
     {
         dateTime: Date,
         entryType: Number,
-        details: String,
-        componentId: Types.ObjectId
+        details: String
     },
     { _id: false }
 );
@@ -161,8 +171,8 @@ const guildSchema = new Schema<IGuildDatabase>(
         CeremonyResetDate: Date,
         CeremonyEndo: Number,
         RoomChanges: { type: [guildLogRoomChangeSchema], default: undefined },
-        TechChanges: { type: [guildLogEntryStringSchema], default: undefined },
-        RosterActivity: { type: [guildLogEntryStringSchema], default: undefined },
+        TechChanges: { type: [guildLogEntryContributableSchema], default: undefined },
+        RosterActivity: { type: [guildLogEntryRosterSchema], default: undefined },
         ClassChanges: { type: [guildLogEntryNumberSchema], default: undefined }
     },
     { id: false }
