@@ -294,6 +294,25 @@ export const addMissionInventoryUpdates = async (
                 inventory.SeasonChallengeHistory.push(...processedCompletions);
                 break;
             }
+            case "DeathMarks": {
+                for (const deathMark of value) {
+                    if (!inventory.DeathMarks.find(x => x == deathMark)) {
+                        // It's a new death mark; we have to say the line.
+                        await createMessage(inventory.accountOwnerId.toString(), [
+                            {
+                                sub: "/Lotus/Language/G1Quests/DeathMarkTitle",
+                                sndr: "/Lotus/Language/G1Quests/DeathMarkSender",
+                                msg: "/Lotus/Language/G1Quests/DeathMarkMessage",
+                                icon: "/Lotus/Interface/Icons/Npcs/Stalker_d.png",
+                                highPriority: true
+                            }
+                        ]);
+                        // TODO: This type of inbox message seems to automatically delete itself. Figure out under which conditions.
+                    }
+                }
+                inventory.DeathMarks = value;
+                break;
+            }
             default:
                 // Equipment XP updates
                 if (equipmentKeys.includes(key as TEquipmentKey)) {

@@ -1400,7 +1400,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Discount Coupon
         PendingCoupon: pendingCouponSchema,
         //Like BossAladV,BossCaptainVor come for you on missions % chance
-        DeathMarks: [String],
+        DeathMarks: { type: [String], default: [] },
         //Zanuka
         Harvestable: Boolean,
         //Grustag three
