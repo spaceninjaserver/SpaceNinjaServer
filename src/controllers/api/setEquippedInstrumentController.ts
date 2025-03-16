@@ -1,14 +1,21 @@
 import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getInventory } from "@/src/services/inventoryService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
+import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 
 export const setEquippedInstrumentController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId);
     const body = getJSONfromString<ISetEquippedInstrumentRequest>(String(req.body));
-    inventory.EquippedInstrument = body.Instrument;
-    await inventory.save();
+
+    await Inventory.updateOne(
+        {
+            accountOwnerId: accountId
+        },
+        {
+            EquippedInstrument: body.Instrument
+        }
+    );
+
     res.end();
 };
 

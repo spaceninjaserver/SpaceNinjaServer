@@ -132,10 +132,6 @@ export interface IRewardInfo {
 
 export type IMissionStatus = "GS_SUCCESS" | "GS_FAILURE" | "GS_DUMPED" | "GS_QUIT" | "GS_INTERRUPTED";
 
-export interface IUpdateGlyphRequest {
-    AvatarImageType: string;
-    AvatarImage: string;
-}
 export interface IUpgradesRequest {
     ItemCategory: TEquipmentKey;
     ItemId: IOid;
