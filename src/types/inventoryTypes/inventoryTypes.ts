@@ -459,7 +459,8 @@ export enum InventorySlot {
     PVE_LOADOUTS = "PveBonusLoadoutBin",
     SENTINELS = "SentinelBin",
     AMPS = "OperatorAmpBin",
-    RJ_COMPONENT_AND_ARMAMENTS = "CrewShipSalvageBin"
+    RJ_COMPONENT_AND_ARMAMENTS = "CrewShipSalvageBin",
+    CREWMEMBERS = "CrewMemberBin"
 }
 
 export interface ISlots {

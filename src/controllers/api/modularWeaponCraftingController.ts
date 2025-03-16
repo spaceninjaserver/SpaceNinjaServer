@@ -7,9 +7,12 @@ import {
     updateCurrency,
     addEquipment,
     addMiscItems,
-    applyDefaultUpgrades
+    applyDefaultUpgrades,
+    occupySlot,
+    productCategoryToInventoryBin
 } from "@/src/services/inventoryService";
 import { ExportWeapons } from "warframe-public-export-plus";
+import { IInventoryChanges } from "@/src/types/purchaseTypes";
 
 const modularWeaponTypes: Record<string, TEquipmentKey> = {
     "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary": "LongGuns",
@@ -47,7 +50,10 @@ export const modularWeaponCraftingController: RequestHandler = async (req, res) 
     const configs = applyDefaultUpgrades(inventory, ExportWeapons[data.Parts[0]]?.defaultUpgrades);
 
     // Give weapon
-    const inventoryChanges = addEquipment(inventory, category, data.WeaponType, data.Parts, {}, { Configs: configs });
+    const inventoryChanges: IInventoryChanges = {
+        ...addEquipment(inventory, category, data.WeaponType, data.Parts, {}, { Configs: configs }),
+        ...occupySlot(inventory, productCategoryToInventoryBin(category)!, false)
+    };
 
     // Remove credits & parts
     const miscItemChanges = [];

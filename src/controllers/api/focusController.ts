@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getInventory, addMiscItems, addEquipment } from "@/src/services/inventoryService";
-import { IMiscItem, TFocusPolarity, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
+import { getInventory, addMiscItems, addEquipment, occupySlot } from "@/src/services/inventoryService";
+import { IMiscItem, TFocusPolarity, TEquipmentKey, InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
 import { logger } from "@/src/utils/logger";
 import { ExportFocusUpgrades } from "warframe-public-export-plus";
 import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
@@ -105,6 +105,7 @@ export const focusController: RequestHandler = async (req, res) => {
             ];
             const inventory = await getInventory(accountId);
             const inventoryChanges = addEquipment(inventory, "OperatorAmps", request.StartingWeaponType, parts);
+            occupySlot(inventory, InventorySlot.AMPS, false);
             await inventory.save();
             res.json((inventoryChanges.OperatorAmps as IEquipmentClient[])[0]);
             break;

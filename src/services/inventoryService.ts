@@ -172,6 +172,38 @@ export const getInventory = async (
     return inventory;
 };
 
+export const productCategoryToInventoryBin = (productCategory: string): InventorySlot | undefined => {
+    switch (productCategory) {
+        case "Suits":
+            return InventorySlot.SUITS;
+        case "Pistols":
+        case "LongGuns":
+        case "Melee":
+            return InventorySlot.WEAPONS;
+        case "Sentinels":
+        case "SentinelWeapons":
+        case "KubrowPets":
+        case "MoaPets":
+            return InventorySlot.SENTINELS;
+        case "SpaceSuits":
+        case "Hoverboards":
+            return InventorySlot.SPACESUITS;
+        case "SpaceGuns":
+        case "SpaceMelee":
+            return InventorySlot.SPACEWEAPONS;
+        case "OperatorAmps":
+            return InventorySlot.AMPS;
+        case "CrewShipWeapons":
+        case "CrewShipWeaponSkins":
+            return InventorySlot.RJ_COMPONENT_AND_ARMAMENTS;
+        case "MechSuits":
+            return InventorySlot.MECHSUITS;
+        case "CrewMembers":
+            return InventorySlot.CREWMEMBERS;
+    }
+    return undefined;
+};
+
 export const occupySlot = (
     inventory: TInventoryDatabaseDocument,
     bin: InventorySlot,
