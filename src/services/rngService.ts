@@ -69,3 +69,26 @@ export const getRandomWeightedRewardUc = <T extends { Rarity: TRarity }>(
     }
     return getRandomReward(resultPool);
 };
+
+export class CRng {
+    state: number;
+
+    constructor(seed: number = 1) {
+        this.state = seed;
+    }
+
+    random(): number {
+        this.state = (this.state * 1103515245 + 12345) & 0x7fffffff;
+        return (this.state & 0x3fffffff) / 0x3fffffff;
+    }
+
+    randomInt(min: number, max: number): number {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(this.random() * (max - min + 1)) + min;
+    }
+
+    randomElement<T>(arr: T[]): T {
+        return arr[Math.floor(this.random() * arr.length)];
+    }
+}
