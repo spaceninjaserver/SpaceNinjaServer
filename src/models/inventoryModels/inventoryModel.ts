@@ -1443,6 +1443,8 @@ inventorySchema.set("toJSON", {
     }
 });
 
+inventorySchema.index({ accountOwnerId: 1 }, { unique: true });
+
 // type overwrites for subdocuments/subdocument arrays
 export type InventoryDocumentProps = {
     FlavourItems: Types.DocumentArray<IFlavourItem>;

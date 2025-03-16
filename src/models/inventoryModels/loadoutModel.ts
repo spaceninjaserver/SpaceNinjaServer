@@ -78,6 +78,8 @@ loadoutSchema.set("toJSON", {
     }
 });
 
+loadoutSchema.index({ loadoutOwnerId: 1 }, { unique: true });
+
 //create database typefor ILoadoutConfig
 type loadoutDocumentProps = {
     NORMAL: Types.DocumentArray<ILoadoutConfigDatabase>;

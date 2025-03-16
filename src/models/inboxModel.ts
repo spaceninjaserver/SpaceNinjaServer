@@ -138,4 +138,6 @@ messageSchema.set("toJSON", {
     }
 });
 
+messageSchema.index({ ownerId: 1 });
+
 export const Inbox = model<IMessageDatabase>("Inbox", messageSchema, "inbox");

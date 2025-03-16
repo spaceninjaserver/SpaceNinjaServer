@@ -152,6 +152,8 @@ export const personalRoomsSchema = new Schema<IPersonalRoomsDatabase>({
     TailorShop: { type: tailorShopSchema, default: tailorShopDefault }
 });
 
+personalRoomsSchema.index({ personalRoomsOwnerId: 1 }, { unique: true });
+
 export const PersonalRooms = model<IPersonalRoomsDatabase, PersonalRoomsModelType>(
     "PersonalRooms",
     personalRoomsSchema

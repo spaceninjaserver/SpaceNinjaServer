@@ -103,6 +103,8 @@ statsSchema.set("toJSON", {
     }
 });
 
+statsSchema.index({ accountOwnerId: 1 }, { unique: true });
+
 export const Stats = model<IStatsDatabase>("Stats", statsSchema);
 
 // eslint-disable-next-line @typescript-eslint/ban-types
