@@ -1,7 +1,6 @@
 import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
 import {
     getInventory,
     updateCurrency,
@@ -11,26 +10,9 @@ import {
     occupySlot,
     productCategoryToInventoryBin
 } from "@/src/services/inventoryService";
-import { ExportWeapons } from "warframe-public-export-plus";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
-
-const modularWeaponTypes: Record<string, TEquipmentKey> = {
-    "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary": "LongGuns",
-    "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryBeam": "LongGuns",
-    "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryLauncher": "LongGuns",
-    "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryShotgun": "LongGuns",
-    "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimarySniper": "LongGuns",
-    "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary": "Pistols",
-    "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryBeam": "Pistols",
-    "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryShotgun": "Pistols",
-    "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon": "Melee",
-    "/Lotus/Weapons/Sentients/OperatorAmplifiers/OperatorAmpWeapon": "OperatorAmps",
-    "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit": "Hoverboards",
-    "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetPowerSuit": "MoaPets",
-    "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetAPowerSuit": "MoaPets",
-    "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetBPowerSuit": "MoaPets",
-    "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetCPowerSuit": "MoaPets"
-};
+import { getDefaultUpgrades } from "@/src/services/itemDataService";
+import { modularWeaponTypes } from "@/src/helpers/modularWeaponHelper";
 
 interface IModularCraftRequest {
     WeaponType: string;
@@ -46,14 +28,15 @@ export const modularWeaponCraftingController: RequestHandler = async (req, res) 
     const category = modularWeaponTypes[data.WeaponType];
     const inventory = await getInventory(accountId);
 
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    const configs = applyDefaultUpgrades(inventory, ExportWeapons[data.Parts[0]]?.defaultUpgrades);
-
-    // Give weapon
+    const defaultUpgrades = getDefaultUpgrades(data.Parts);
+    const configs = applyDefaultUpgrades(inventory, defaultUpgrades);
     const inventoryChanges: IInventoryChanges = {
         ...addEquipment(inventory, category, data.WeaponType, data.Parts, {}, { Configs: configs }),
         ...occupySlot(inventory, productCategoryToInventoryBin(category)!, false)
     };
+    if (defaultUpgrades) {
+        inventoryChanges.RawUpgrades = defaultUpgrades.map(x => ({ ItemType: x.ItemType, ItemCount: 1 }));
+    }
 
     // Remove credits & parts
     const miscItemChanges = [];

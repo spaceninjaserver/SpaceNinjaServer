@@ -201,6 +201,7 @@ apiRouter.post("/joinSession.php", joinSessionController);
 apiRouter.post("/login.php", loginController);
 apiRouter.post("/missionInventoryUpdate.php", missionInventoryUpdateController);
 apiRouter.post("/modularWeaponCrafting.php", modularWeaponCraftingController);
+apiRouter.post("/modularWeaponSale.php", modularWeaponSaleController);
 apiRouter.post("/nameWeapon.php", nameWeaponController);
 apiRouter.post("/placeDecoInComponent.php", placeDecoInComponentController);
 apiRouter.post("/playerSkills.php", playerSkillsController);

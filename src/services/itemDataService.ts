@@ -29,6 +29,7 @@ import {
     ExportSentinels,
     ExportWarframes,
     ExportWeapons,
+    IDefaultUpgrade,
     IInboxMessage,
     IMissionReward,
     IPowersuit,
@@ -255,4 +256,16 @@ export const toStoreItem = (type: string): string => {
 
 export const fromStoreItem = (type: string): string => {
     return "/Lotus/" + type.substring("/Lotus/StoreItems/".length);
+};
+
+export const getDefaultUpgrades = (parts: string[]): IDefaultUpgrade[] | undefined => {
+    const allDefaultUpgrades: IDefaultUpgrade[] = [];
+    for (const part of parts) {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        const defaultUpgrades = ExportWeapons[part]?.defaultUpgrades;
+        if (defaultUpgrades) {
+            allDefaultUpgrades.push(...defaultUpgrades);
+        }
+    }
+    return allDefaultUpgrades.length == 0 ? undefined : allDefaultUpgrades;
 };
