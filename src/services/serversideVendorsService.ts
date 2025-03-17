@@ -14,6 +14,7 @@ import DeimosProspectorVendorManifest from "@/static/fixed_responses/getVendorIn
 import DuviriAcrithisVendorManifest from "@/static/fixed_responses/getVendorInfo/DuviriAcrithisVendorManifest.json";
 import EntratiLabsEntratiLabsCommisionsManifest from "@/static/fixed_responses/getVendorInfo/EntratiLabsEntratiLabsCommisionsManifest.json";
 import EntratiLabsEntratiLabVendorManifest from "@/static/fixed_responses/getVendorInfo/EntratiLabsEntratiLabVendorManifest.json";
+import GuildAdvertisementVendorManifest from "@/static/fixed_responses/getVendorInfo/GuildAdvertisementVendorManifest.json";
 import HubsIronwakeDondaVendorManifest from "@/static/fixed_responses/getVendorInfo/HubsIronwakeDondaVendorManifest.json";
 import HubsPerrinSequenceWeaponVendorManifest from "@/static/fixed_responses/getVendorInfo/HubsPerrinSequenceWeaponVendorManifest.json";
 import HubsRailjackCrewMemberVendorManifest from "@/static/fixed_responses/getVendorInfo/HubsRailjackCrewMemberVendorManifest.json";
@@ -63,6 +64,7 @@ const vendorManifests: IVendorManifest[] = [
     DuviriAcrithisVendorManifest,
     EntratiLabsEntratiLabsCommisionsManifest,
     EntratiLabsEntratiLabVendorManifest,
+    GuildAdvertisementVendorManifest,
     HubsIronwakeDondaVendorManifest,
     HubsPerrinSequenceWeaponVendorManifest,
     HubsRailjackCrewMemberVendorManifest,
