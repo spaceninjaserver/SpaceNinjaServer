@@ -8,7 +8,6 @@ import { HydratedDocument, Types } from "mongoose";
 import { SlotNames, IInventoryChanges, IBinChanges, slotNames } from "@/src/types/purchaseTypes";
 import {
     IChallengeProgress,
-    IConsumable,
     IFlavourItem,
     IMiscItem,
     IMission,
@@ -378,7 +377,7 @@ export const addItem = async (
             {
                 ItemType: typeName,
                 ItemCount: quantity
-            } satisfies IConsumable
+            } satisfies ITypeCount
         ];
         addConsumables(inventory, consumablesChanges);
         return {
@@ -1102,74 +1101,42 @@ export const addMiscItems = (inventory: TInventoryDatabaseDocument, itemsArray: 
     });
 };
 
-export const addShipDecorations = (inventory: TInventoryDatabaseDocument, itemsArray: IConsumable[]): void => {
-    const { ShipDecorations } = inventory;
+const applyArrayChanges = (arr: ITypeCount[], changes: ITypeCount[]): void => {
+    for (const change of changes) {
+        if (change.ItemCount != 0) {
+            let itemIndex = arr.findIndex(x => x.ItemType === change.ItemType);
+            if (itemIndex == -1) {
+                itemIndex = arr.push({ ItemType: change.ItemType, ItemCount: 0 }) - 1;
+            }
 
-    itemsArray.forEach(({ ItemCount, ItemType }) => {
-        const itemIndex = ShipDecorations.findIndex(miscItem => miscItem.ItemType === ItemType);
-
-        if (itemIndex !== -1) {
-            ShipDecorations[itemIndex].ItemCount += ItemCount;
-        } else {
-            ShipDecorations.push({ ItemCount, ItemType });
+            arr[itemIndex].ItemCount += change.ItemCount;
+            if (arr[itemIndex].ItemCount == 0) {
+                arr.splice(itemIndex, 1);
+            } else if (arr[itemIndex].ItemCount <= 0) {
+                logger.warn(`account now owns a negative amount of ${change.ItemType}`);
+            }
         }
-    });
+    }
 };
 
-export const addConsumables = (inventory: TInventoryDatabaseDocument, itemsArray: IConsumable[]): void => {
-    const { Consumables } = inventory;
+export const addShipDecorations = (inventory: TInventoryDatabaseDocument, itemsArray: ITypeCount[]): void => {
+    applyArrayChanges(inventory.ShipDecorations, itemsArray);
+};
 
-    itemsArray.forEach(({ ItemCount, ItemType }) => {
-        const itemIndex = Consumables.findIndex(i => i.ItemType === ItemType);
-
-        if (itemIndex !== -1) {
-            Consumables[itemIndex].ItemCount += ItemCount;
-        } else {
-            Consumables.push({ ItemCount, ItemType });
-        }
-    });
+export const addConsumables = (inventory: TInventoryDatabaseDocument, itemsArray: ITypeCount[]): void => {
+    applyArrayChanges(inventory.Consumables, itemsArray);
 };
 
 export const addCrewShipRawSalvage = (inventory: TInventoryDatabaseDocument, itemsArray: ITypeCount[]): void => {
-    const { CrewShipRawSalvage } = inventory;
-
-    itemsArray.forEach(({ ItemCount, ItemType }) => {
-        const itemIndex = CrewShipRawSalvage.findIndex(i => i.ItemType === ItemType);
-
-        if (itemIndex !== -1) {
-            CrewShipRawSalvage[itemIndex].ItemCount += ItemCount;
-        } else {
-            CrewShipRawSalvage.push({ ItemCount, ItemType });
-        }
-    });
+    applyArrayChanges(inventory.CrewShipRawSalvage, itemsArray);
 };
 
 export const addCrewShipAmmo = (inventory: TInventoryDatabaseDocument, itemsArray: ITypeCount[]): void => {
-    const { CrewShipAmmo } = inventory;
-
-    itemsArray.forEach(({ ItemCount, ItemType }) => {
-        const itemIndex = CrewShipAmmo.findIndex(i => i.ItemType === ItemType);
-
-        if (itemIndex !== -1) {
-            CrewShipAmmo[itemIndex].ItemCount += ItemCount;
-        } else {
-            CrewShipAmmo.push({ ItemCount, ItemType });
-        }
-    });
+    applyArrayChanges(inventory.CrewShipAmmo, itemsArray);
 };
 
 export const addRecipes = (inventory: TInventoryDatabaseDocument, itemsArray: ITypeCount[]): void => {
-    const { Recipes } = inventory;
-
-    itemsArray.forEach(({ ItemCount, ItemType }) => {
-        const itemIndex = Recipes.findIndex(i => i.ItemType === ItemType);
-
-        if (itemIndex !== -1) {
-            Recipes[itemIndex].ItemCount += ItemCount;
-        } else {
-            Recipes.push({ ItemCount, ItemType });
-        }
-    });
+    applyArrayChanges(inventory.Recipes, itemsArray);
 };
 
 export const addMods = (inventory: TInventoryDatabaseDocument, itemsArray: IRawUpgrade[]): void => {

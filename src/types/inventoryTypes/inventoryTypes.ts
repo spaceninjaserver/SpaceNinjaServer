@@ -236,8 +236,8 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     FusionTreasures: IFusionTreasure[];
     WebFlags: IWebFlags;
     CompletedAlerts: string[];
-    Consumables: IConsumable[];
-    LevelKeys: IConsumable[];
+    Consumables: ITypeCount[];
+    LevelKeys: ITypeCount[];
     TauntHistory?: ITaunt[];
     StoryModeChoice: string;
     PeriodicMissionCompletions: IPeriodicMissionCompletionDatabase[];
@@ -265,7 +265,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     Drones: IDroneClient[];
     StepSequencers: IStepSequencer[];
     ActiveAvatarImageType: string;
-    ShipDecorations: IConsumable[];
+    ShipDecorations: ITypeCount[];
     DiscoveredMarkers: IDiscoveredMarker[];
     CompletedJobs: ICompletedJob[];
     FocusAbility?: string;
@@ -293,7 +293,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     Settings: ISettings;
     PersonalTechProjects: IPersonalTechProject[];
     PlayerSkills: IPlayerSkills;
-    CrewShipAmmo: IConsumable[];
+    CrewShipAmmo: ITypeCount[];
     CrewShipSalvagedWeaponSkins: IUpgradeClient[];
     CrewShipWeapons: ICrewShipWeaponClient[];
     CrewShipSalvagedWeapons: IEquipmentClient[];
@@ -303,7 +303,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     SubscribedToEmailsPersonalized: number;
     InfestedFoundry?: IInfestedFoundryClient;
     BlessingCooldown?: IMongoDate;
-    CrewShipRawSalvage: IConsumable[];
+    CrewShipRawSalvage: ITypeCount[];
     CrewMembers: ICrewMember[];
     LotusCustomization: ILotusCustomization;
     UseAdultOperatorLoadout?: boolean;
@@ -415,11 +415,6 @@ export interface ICompletedJobChain {
 export interface ICompletedJob {
     JobId: string;
     StageCompletions: number[];
-}
-
-export interface IConsumable {
-    ItemCount: number;
-    ItemType: string;
 }
 
 export interface ICrewMember {
@@ -891,7 +886,7 @@ export enum GettingSlotOrderInfo {
 }
 
 export interface IGiving {
-    RawUpgrades: IConsumable[];
+    RawUpgrades: ITypeCount[];
     _SlotOrderInfo: GivingSlotOrderInfo[];
 }
 
@@ -924,7 +919,7 @@ export interface IPersonalTechProject {
     State: number;
     ReqCredits: number;
     ItemType: string;
-    ReqItems: IConsumable[];
+    ReqItems: ITypeCount[];
     CompletionDate?: IMongoDate;
     ItemId: IOid;
     ProductCategory?: string;
