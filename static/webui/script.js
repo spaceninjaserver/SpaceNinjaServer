@@ -230,7 +230,7 @@ function fetchItemList() {
                         if (type == "Syndicates" && item.uniqueName.startsWith("RadioLegion")) {
                             item.name += " (" + item.uniqueName + ")";
                         }
-                        if (item.uniqueName.substr(0, 18) != "/Lotus/Types/Game/" && item.badReason != "notraw") {
+                        if (item.badReason != "notraw") {
                             const option = document.createElement("option");
                             option.setAttribute("data-key", item.uniqueName);
                             option.value = item.name;

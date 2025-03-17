@@ -192,14 +192,16 @@ const getItemListsController: RequestHandler = (req, response) => {
         });
     }
     for (const [uniqueName, arcane] of Object.entries(ExportArcanes)) {
-        const mod: ListedItem = {
-            uniqueName,
-            name: getString(arcane.name, lang)
-        };
-        if (arcane.isFrivolous) {
-            mod.badReason = "frivolous";
+        if (uniqueName.substring(0, 18) != "/Lotus/Types/Game/") {
+            const mod: ListedItem = {
+                uniqueName,
+                name: getString(arcane.name, lang)
+            };
+            if (arcane.isFrivolous) {
+                mod.badReason = "frivolous";
+            }
+            res.mods.push(mod);
         }
-        res.mods.push(mod);
     }
     for (const [uniqueName, syndicate] of Object.entries(ExportSyndicates)) {
         res.Syndicates.push({
