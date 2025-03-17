@@ -542,7 +542,7 @@ function updateInventory() {
 
                     const uniqueUpgrades = {};
                     (item.ArchonCrystalUpgrades ?? []).forEach(upgrade => {
-                        if (upgrade) {
+                        if (upgrade && upgrade.UpgradeType) {
                             uniqueUpgrades[upgrade.UpgradeType] ??= 0;
                             uniqueUpgrades[upgrade.UpgradeType] += 1;
                         }
