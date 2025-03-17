@@ -53,7 +53,7 @@ export const worldStateController: RequestHandler = (req, res) => {
     const bountyCycleStart = bountyCycle * 9000000;
     const bountyCycleEnd = bountyCycleStart + 9000000;
     worldState.SyndicateMissions[worldState.SyndicateMissions.findIndex(x => x.Tag == "ZarimanSyndicate")] = {
-        _id: { $oid: bountyCycleStart.toString(16) + "0000000000000029" },
+        _id: { $oid: Math.trunc(bountyCycleStart / 1000).toString(16) + "0000000000000029" },
         Activation: { $date: { $numberLong: bountyCycleStart.toString() } },
         Expiry: { $date: { $numberLong: bountyCycleEnd.toString() } },
         Tag: "ZarimanSyndicate",
@@ -61,7 +61,7 @@ export const worldStateController: RequestHandler = (req, res) => {
         Nodes: []
     };
     worldState.SyndicateMissions[worldState.SyndicateMissions.findIndex(x => x.Tag == "EntratiLabSyndicate")] = {
-        _id: { $oid: bountyCycleStart.toString(16) + "0000000000000004" },
+        _id: { $oid: Math.trunc(bountyCycleStart / 1000).toString(16) + "0000000000000004" },
         Activation: { $date: { $numberLong: bountyCycleStart.toString() } },
         Expiry: { $date: { $numberLong: bountyCycleEnd.toString() } },
         Tag: "EntratiLabSyndicate",
@@ -69,7 +69,7 @@ export const worldStateController: RequestHandler = (req, res) => {
         Nodes: []
     };
     worldState.SyndicateMissions[worldState.SyndicateMissions.findIndex(x => x.Tag == "HexSyndicate")] = {
-        _id: { $oid: bountyCycleStart.toString(16) + "0000000000000006" },
+        _id: { $oid: Math.trunc(bountyCycleStart / 1000).toString(16) + "0000000000000006" },
         Activation: { $date: { $numberLong: bountyCycleStart.toString(10) } },
         Expiry: { $date: { $numberLong: bountyCycleEnd.toString(10) } },
         Tag: "HexSyndicate",
