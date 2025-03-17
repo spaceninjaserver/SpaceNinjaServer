@@ -40,7 +40,7 @@ export interface IMessage {
 
 export interface Arg {
     Key: string;
-    Tag: string;
+    Tag: string | number;
 }
 
 //types are wrong
@@ -99,7 +99,7 @@ const messageSchema = new Schema<IMessageDatabase>(
             type: [
                 {
                     Key: String,
-                    Tag: String,
+                    Tag: Schema.Types.Mixed,
                     _id: false
                 }
             ],
