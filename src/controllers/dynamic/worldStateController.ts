@@ -43,7 +43,7 @@ export const worldStateController: RequestHandler = (req, res) => {
     }
 
     const EPOCH = 1734307200 * 1000; // Monday, Dec 16, 2024 @ 00:00 UTC+0; should logically be winter in 1999 iteration 0
-    const day = Math.trunc((new Date().getTime() - EPOCH) / 86400000);
+    const day = Math.trunc((Date.now() - EPOCH) / 86400000);
     const week = Math.trunc(day / 7);
     const weekStart = EPOCH + week * 604800000;
     const weekEnd = weekStart + 604800000;
@@ -52,7 +52,7 @@ export const worldStateController: RequestHandler = (req, res) => {
     worldState.NodeOverrides.find(x => x.Node == "SolNode802")!.Seed = week; // unfaithful
 
     // Holdfast, Cavia, & Hex bounties cycling every 2.5 hours; unfaithful implementation
-    const bountyCycle = Math.trunc(new Date().getTime() / 9000000);
+    const bountyCycle = Math.trunc(Date.now() / 9000000);
     const bountyCycleStart = bountyCycle * 9000000;
     const bountyCycleEnd = bountyCycleStart + 9000000;
     worldState.SyndicateMissions[worldState.SyndicateMissions.findIndex(x => x.Tag == "ZarimanSyndicate")] = {
@@ -222,7 +222,7 @@ export const worldStateController: RequestHandler = (req, res) => {
     worldState.KnownCalendarSeasons[0].YearIteration = Math.trunc(week / 4);
 
     // Sentient Anomaly cycling every 30 minutes
-    const halfHour = Math.trunc(new Date().getTime() / (unixTimesInMs.hour / 2));
+    const halfHour = Math.trunc(Date.now() / (unixTimesInMs.hour / 2));
     const tmp = {
         cavabegin: "1690761600",
         PurchasePlatformLockEnabled: true,

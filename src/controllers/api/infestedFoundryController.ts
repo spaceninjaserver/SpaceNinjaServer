@@ -128,7 +128,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             const miscItemChanges: IMiscItem[] = [];
             let totalPercentagePointsGained = 0;
 
-            const currentUnixSeconds = Math.trunc(new Date().getTime() / 1000);
+            const currentUnixSeconds = Math.trunc(Date.now() / 1000);
 
             for (const contribution of request.ResourceContributions) {
                 const snack = ExportMisc.helminthSnacks[contribution.ItemType];
@@ -260,9 +260,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             inventory.InfestedFoundry!.ConsumedSuits ??= [];
             inventory.InfestedFoundry!.ConsumedSuits.push(consumedSuit);
             inventory.InfestedFoundry!.LastConsumedSuit = suit;
-            inventory.InfestedFoundry!.AbilityOverrideUnlockCooldown = new Date(
-                new Date().getTime() + 24 * 60 * 60 * 1000
-            );
+            inventory.InfestedFoundry!.AbilityOverrideUnlockCooldown = new Date(Date.now() + 24 * 60 * 60 * 1000);
             const recipeChanges = addInfestedFoundryXP(inventory.InfestedFoundry!, 1600_00);
             addRecipes(inventory, recipeChanges);
             freeUpSlot(inventory, InventorySlot.SUITS);
@@ -310,7 +308,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             const request = getJSONfromString<IHelminthInvigorationRequest>(String(req.body));
             const inventory = await getInventory(accountId);
             const suit = inventory.Suits.id(request.SuitId.$oid)!;
-            const upgradesExpiry = new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000);
+            const upgradesExpiry = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
             suit.OffensiveUpgrade = request.OffensiveUpgradeType;
             suit.DefensiveUpgrade = request.DefensiveUpgradeType;
             suit.UpgradesExpiry = upgradesExpiry;
