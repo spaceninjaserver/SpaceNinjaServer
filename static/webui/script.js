@@ -118,6 +118,9 @@ function updateLocElements() {
     document.querySelectorAll("[data-loc]").forEach(elm => {
         elm.innerHTML = loc(elm.getAttribute("data-loc"));
     });
+    document.querySelectorAll("[data-loc-placeholder]").forEach(elm => {
+        elm.placeholder = loc(elm.getAttribute("data-loc-placeholder"));
+    });
 }
 
 function setActiveLanguage(lang) {
