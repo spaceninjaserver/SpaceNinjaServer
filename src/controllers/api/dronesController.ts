@@ -12,8 +12,8 @@ import { ExportDrones, ExportResources, ExportSystems } from "warframe-public-ex
 
 export const dronesController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId);
     if ("GetActive" in req.query) {
+        const inventory = await getInventory(accountId, "Drones");
         const activeDrones: IActiveDrone[] = [];
         for (const drone of inventory.Drones) {
             if (drone.DeployTime) {
@@ -39,6 +39,7 @@ export const dronesController: RequestHandler = async (req, res) => {
             ActiveDrones: activeDrones
         });
     } else if ("droneId" in req.query && "systemIndex" in req.query) {
+        const inventory = await getInventory(accountId, "Drones");
         const drone = inventory.Drones.id(req.query.droneId as string)!;
         const droneMeta = ExportDrones[drone.ItemType];
         drone.DeployTime = config.instantResourceExtractorDrones ? new Date(0) : new Date();
@@ -76,6 +77,7 @@ export const dronesController: RequestHandler = async (req, res) => {
         await inventory.save();
         res.json({});
     } else if ("collectDroneId" in req.query) {
+        const inventory = await getInventory(accountId);
         const drone = inventory.Drones.id(req.query.collectDroneId as string)!;
 
         if (new Date() >= drone.DamageTime!) {
