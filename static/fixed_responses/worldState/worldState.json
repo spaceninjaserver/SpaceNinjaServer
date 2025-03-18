@@ -79,21 +79,6 @@
       "Twitter": true
     }
   ],
-  "LiteSorties": [
-    {
-      "_id": { "$oid": "663819fd1cec9ebe9d83a06e" },
-      "Activation": { "$date": { "$numberLong": "1714953600000" } },
-      "Expiry": { "$date": { "$numberLong": "2000000000000" } },
-      "Reward": "/Lotus/Types/Game/MissionDecks/ArchonSortieRewards",
-      "Seed": 58034,
-      "Boss": "SORTIE_BOSS_NIRA",
-      "Missions": [
-        { "missionType": "MT_MOBILE_DEFENSE", "node": "SolNode125" },
-        { "missionType": "MT_SURVIVAL", "node": "SolNode74" },
-        { "missionType": "MT_ASSASSINATION", "node": "SolNode53" }
-      ]
-    }
-  ],
   "SyndicateMissions": [
     {
       "_id": { "$oid": "663a4fc5ba6f84724fa48049" },

@@ -8,6 +8,8 @@ import { buildConfig } from "@/src/services/buildConfigService";
 import { IMongoDate, IOid } from "@/src/types/commonTypes";
 import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { config } from "@/src/services/configService";
+import { CRng } from "@/src/services/rngService";
+import { ExportRegions } from "warframe-public-export-plus";
 
 export const worldStateController: RequestHandler = (req, res) => {
     const worldState: IWorldState = {
@@ -18,6 +20,7 @@ export const worldStateController: RequestHandler = (req, res) => {
         Time: Math.round(Date.now() / 1000),
         Goals: [],
         GlobalUpgrades: [],
+        LiteSorties: [],
         EndlessXpChoices: [],
         ...staticWorldState
     };
@@ -114,6 +117,67 @@ export const worldStateController: RequestHandler = (req, res) => {
         });
     }
 
+    // Archon Hunt cycling every week
+    {
+        const boss = ["SORTIE_BOSS_AMAR", "SORTIE_BOSS_NIRA", "SORTIE_BOSS_BOREAL"][week % 3];
+        const showdownNode = ["SolNode99", "SolNode53", "SolNode24"][week % 3];
+        const systemIndex = [3, 4, 2][week % 3]; // Mars, Jupiter, Earth
+
+        const nodes: string[] = [];
+        for (const [key, value] of Object.entries(ExportRegions)) {
+            if (
+                value.systemIndex === systemIndex &&
+                value.factionIndex !== undefined &&
+                value.factionIndex < 2 &&
+                value.name.indexOf("Archwing") == -1 &&
+                value.missionIndex != 0 // Exclude MT_ASSASSINATION
+            ) {
+                nodes.push(key);
+            }
+        }
+
+        const rng = new CRng(week);
+        const firstNodeIndex = rng.randomInt(0, nodes.length - 1);
+        const firstNode = nodes[firstNodeIndex];
+        nodes.splice(firstNodeIndex, 1);
+        worldState.LiteSorties.push({
+            _id: {
+                $oid: Math.trunc(weekStart / 1000).toString(16) + "5e23a244740a190c"
+            },
+            Activation: { $date: { $numberLong: weekStart.toString() } },
+            Expiry: { $date: { $numberLong: weekEnd.toString() } },
+            Reward: "/Lotus/Types/Game/MissionDecks/ArchonSortieRewards",
+            Seed: week,
+            Boss: boss,
+            Missions: [
+                {
+                    missionType: rng.randomElement([
+                        "MT_INTEL",
+                        "MT_MOBILE_DEFENSE",
+                        "MT_EXTERMINATION",
+                        "MT_SABOTAGE",
+                        "MT_RESCUE"
+                    ]),
+                    node: firstNode
+                },
+                {
+                    missionType: rng.randomElement([
+                        "MT_DEFENSE",
+                        "MT_TERRITORY",
+                        "MT_ARTIFACT",
+                        "MT_EXCAVATE",
+                        "MT_SURVIVAL"
+                    ]),
+                    node: rng.randomElement(nodes)
+                },
+                {
+                    missionType: "MT_ASSASSINATION",
+                    node: showdownNode
+                }
+            ]
+        });
+    }
+
     // Circuit choices cycling every week
     worldState.EndlessXpChoices.push({
         Category: "EXC_NORMAL",
@@ -197,6 +261,7 @@ interface IWorldState {
     Goals: IGoal[];
     SyndicateMissions: ISyndicateMission[];
     GlobalUpgrades: IGlobalUpgrade[];
+    LiteSorties: ILiteSortie[];
     NodeOverrides: INodeOverride[];
     EndlessXpChoices: IEndlessXpChoice[];
     KnownCalendarSeasons: ICalendarSeason[];
@@ -248,6 +313,19 @@ interface INodeOverride {
     LevelOverride?: string;
     Faction?: string;
     CustomNpcEncounters?: string;
+}
+
+interface ILiteSortie {
+    _id: IOid;
+    Activation: IMongoDate;
+    Expiry: IMongoDate;
+    Reward: "/Lotus/Types/Game/MissionDecks/ArchonSortieRewards";
+    Seed: number;
+    Boss: string; // "SORTIE_BOSS_AMAR" | "SORTIE_BOSS_NIRA" | "SORTIE_BOSS_BOREAL"
+    Missions: {
+        missionType: string;
+        node: string;
+    }[];
 }
 
 interface IEndlessXpChoice {
