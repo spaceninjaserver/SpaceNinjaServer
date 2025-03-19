@@ -15,6 +15,15 @@ import { webuiRouter } from "@/src/routes/webui";
 
 const app = express();
 
+app.use((req, _res, next) => {
+    // 38.5.0 introduced "ezip" for encrypted body blobs.
+    // The bootstrapper decrypts it for us but having an unsupported Content-Encoding here would still be an issue for Express, so removing it.
+    if (req.headers["content-encoding"] == "ezip") {
+        req.headers["content-encoding"] = undefined;
+    }
+    next();
+});
+
 app.use(bodyParser.raw());
 app.use(express.json({ limit: "4mb" }));
 app.use(bodyParser.text());
