@@ -123,6 +123,7 @@ dict = {
     cheats_account: `Account`,
     cheats_unlockAllFocusSchools: `Alle Fokus-Schulen freischalten`,
     cheats_helminthUnlockAll: `Helminth vollständig aufleveln`,
+    cheats_intrinsicsUnlockAll: `[UNTRANSLATED] Max Rank All Intrinsics`,
     cheats_changeSupportedSyndicate: `Unterstütztes Syndikat`,
     cheats_changeButton: `Ändern`,
     cheats_none: `Keines`,

@@ -122,6 +122,7 @@ dict = {
     cheats_account: `Account`,
     cheats_unlockAllFocusSchools: `Unlock All Focus Schools`,
     cheats_helminthUnlockAll: `Fully Level Up Helminth`,
+    cheats_intrinsicsUnlockAll: `Max Rank All Intrinsics`,
     cheats_changeSupportedSyndicate: `Supported syndicate`,
     cheats_changeButton: `Change`,
     cheats_none: `None`,

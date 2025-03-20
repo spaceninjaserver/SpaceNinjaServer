@@ -562,8 +562,11 @@
                         <div class="card mb-3">
                             <h5 class="card-header" data-loc="cheats_account"></h5>
                             <div class="card-body">
-                                <p><button class="btn btn-primary" onclick="doUnlockAllFocusSchools();" data-loc="cheats_unlockAllFocusSchools"></button></p>
-                                <button class="btn btn-primary" onclick="doHelminthUnlockAll();" data-loc="cheats_helminthUnlockAll"></button>
+                                <div class="mb-2 d-flex flex-wrap gap-2">
+                                    <button class="btn btn-primary" onclick="doUnlockAllFocusSchools();" data-loc="cheats_unlockAllFocusSchools"></button>
+                                    <button class="btn btn-primary" onclick="doHelminthUnlockAll();" data-loc="cheats_helminthUnlockAll"></button>
+                                    <button class="btn btn-primary" onclick="doIntrinsicsUnlockAll();" data-loc="cheats_intrinsicsUnlockAll"></button>
+                                </div>
                                 <form class="mt-2" onsubmit="doChangeSupportedSyndicate(); return false;">
                                     <label class="form-label" for="changeSyndicate" data-loc="cheats_changeSupportedSyndicate"></label>
                                     <div class="input-group">
@@ -578,7 +581,6 @@
                                     <button class="btn btn-primary" onclick="doQuestUpdate('completeAllUnlocked');" data-loc="cheats_quests_completeAllUnlocked"></button>
                                     <button class="btn btn-primary" onclick="doQuestUpdate('ResetAll');" data-loc="cheats_quests_resetAll"></button>
                                     <button class="btn btn-primary" onclick="doQuestUpdate('giveAll');" data-loc="cheats_quests_giveAll"></button>
-
                                 </div>
                             </div>
                         </div>

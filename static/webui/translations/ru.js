@@ -123,6 +123,7 @@ dict = {
     cheats_account: `Аккаунт`,
     cheats_unlockAllFocusSchools: `Разблокировать все школы фокуса`,
     cheats_helminthUnlockAll: `Полностью улучшить Гельминта`,
+    cheats_intrinsicsUnlockAll: `[UNTRANSLATED] Max Rank All Intrinsics`,
     cheats_changeSupportedSyndicate: `Поддерживаемый синдикат`,
     cheats_changeButton: `Изменить`,
     cheats_none: `Отсутствует`,

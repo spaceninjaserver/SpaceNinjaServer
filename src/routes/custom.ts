@@ -8,6 +8,7 @@ import { deleteAccountController } from "@/src/controllers/custom/deleteAccountC
 import { getNameController } from "@/src/controllers/custom/getNameController";
 import { renameAccountController } from "@/src/controllers/custom/renameAccountController";
 import { ircDroppedController } from "@/src/controllers/custom/ircDroppedController";
+import { unlockAllIntrinsicsController } from "@/src/controllers/custom/unlockAllIntrinsicsController";
 
 import { createAccountController } from "@/src/controllers/custom/createAccountController";
 import { createMessageController } from "@/src/controllers/custom/createMessageController";
@@ -30,6 +31,7 @@ customRouter.get("/deleteAccount", deleteAccountController);
 customRouter.get("/getName", getNameController);
 customRouter.get("/renameAccount", renameAccountController);
 customRouter.get("/ircDropped", ircDroppedController);
+customRouter.get("/unlockAllIntrinsics", unlockAllIntrinsicsController);
 
 customRouter.post("/createAccount", createAccountController);
 customRouter.post("/createMessage", createMessageController);

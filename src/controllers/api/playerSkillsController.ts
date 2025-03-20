@@ -6,7 +6,7 @@ import { RequestHandler } from "express";
 
 export const playerSkillsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory(accountId, "PlayerSkills");
     const request = getJSONfromString<IPlayerSkillsRequest>(String(req.body));
 
     const oldRank: number = inventory.PlayerSkills[request.Skill as keyof IPlayerSkills];

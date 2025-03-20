@@ -1053,6 +1053,12 @@ function doHelminthUnlockAll() {
     });
 }
 
+function doIntrinsicsUnlockAll() {
+    revalidateAuthz(() => {
+        $.get("/custom/unlockAllIntrinsics?" + window.authz);
+    });
+}
+
 function doAddAllMods() {
     let modsAll = new Set();
     for (const child of document.getElementById("datalist-mods").children) {
