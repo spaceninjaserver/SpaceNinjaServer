@@ -119,7 +119,10 @@ const getItemListsController: RequestHandler = (req, response) => {
                 name = name.split("|FISH_SIZE|").join(getString("/Lotus/Language/Fish/FishSizeSmallAbbrev", lang));
             }
         }
-        if (uniqueName.substr(0, 30) != "/Lotus/Types/Game/Projections/") {
+        if (
+            uniqueName.substr(0, 30) != "/Lotus/Types/Game/Projections/" &&
+            uniqueName != "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLanthornBundle"
+        ) {
             res.miscitems.push({
                 uniqueName: uniqueName,
                 name: name
