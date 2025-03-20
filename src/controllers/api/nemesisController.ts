@@ -13,46 +13,74 @@ export const nemesisController: RequestHandler = async (req, res) => {
         const accountId = await getAccountIdForRequest(req);
         const inventory = await getInventory(accountId, "Nemesis NemesisAbandonedRewards");
         const body = getJSONfromString<INemesisStartRequest>(String(req.body));
-
-        const infNodes: IInfNode[] = [];
-        for (const [key, value] of Object.entries(ExportRegions)) {
-            if (
-                value.systemIndex == 2 && // earth
-                value.nodeType != 3 && // not hub
-                value.nodeType != 7 && // not junction
-                value.missionIndex && // must have a mission type and not assassination
-                value.missionIndex != 28 && // not open world
-                value.missionIndex != 32 && // not railjack
-                value.missionIndex != 41 && // not saya's visions
-                value.name.indexOf("Archwing") == -1
-            ) {
-                //console.log(dict_en[value.name]);
-                infNodes.push({ Node: key, Influence: 1 });
-            }
-        }
-
-        let weapons: readonly string[];
-        if (body.target.manifest == "/Lotus/Types/Game/Nemesis/KuvaLich/KuvaLichManifestVersionSix") {
-            weapons = kuvaLichVersionSixWeapons;
-        } else if (
-            body.target.manifest == "/Lotus/Types/Enemies/Corpus/Lawyers/LawyerManifestVersionFour" ||
-            body.target.manifest == "/Lotus/Types/Enemies/Corpus/Lawyers/LawyerManifestVersionThree"
-        ) {
-            weapons = corpusVersionThreeWeapons;
-        } else {
-            throw new Error(`unknown nemesis manifest: ${body.target.manifest}`);
-        }
-
         body.target.fp = BigInt(body.target.fp);
-        const initialWeaponIdx = new SRng(body.target.fp).randomInt(0, weapons.length - 1);
-        let weaponIdx = initialWeaponIdx;
-        do {
-            const weapon = weapons[weaponIdx];
-            if (!body.target.DisallowedWeapons.find(x => x == weapon)) {
-                break;
+
+        let infNodes: IInfNode[];
+        let weaponIdx = -1;
+        if (body.target.Faction == "FC_INFESTATION") {
+            infNodes = [
+                {
+                    Node: "SolNode852",
+                    Influence: 1
+                },
+                {
+                    Node: "SolNode850",
+                    Influence: 1
+                },
+                {
+                    Node: "SolNode851",
+                    Influence: 1
+                },
+                {
+                    Node: "SolNode853",
+                    Influence: 1
+                },
+                {
+                    Node: "SolNode854",
+                    Influence: 1
+                }
+            ];
+        } else {
+            infNodes = [];
+            for (const [key, value] of Object.entries(ExportRegions)) {
+                if (
+                    value.systemIndex == 2 && // earth
+                    value.nodeType != 3 && // not hub
+                    value.nodeType != 7 && // not junction
+                    value.missionIndex && // must have a mission type and not assassination
+                    value.missionIndex != 28 && // not open world
+                    value.missionIndex != 32 && // not railjack
+                    value.missionIndex != 41 && // not saya's visions
+                    value.name.indexOf("Archwing") == -1
+                ) {
+                    //console.log(dict_en[value.name]);
+                    infNodes.push({ Node: key, Influence: 1 });
+                }
             }
-            weaponIdx = (weaponIdx + 1) % weapons.length;
-        } while (weaponIdx != initialWeaponIdx);
+
+            let weapons: readonly string[];
+            if (body.target.manifest == "/Lotus/Types/Game/Nemesis/KuvaLich/KuvaLichManifestVersionSix") {
+                weapons = kuvaLichVersionSixWeapons;
+            } else if (
+                body.target.manifest == "/Lotus/Types/Enemies/Corpus/Lawyers/LawyerManifestVersionFour" ||
+                body.target.manifest == "/Lotus/Types/Enemies/Corpus/Lawyers/LawyerManifestVersionThree"
+            ) {
+                weapons = corpusVersionThreeWeapons;
+            } else {
+                throw new Error(`unknown nemesis manifest: ${body.target.manifest}`);
+            }
+
+            const initialWeaponIdx = new SRng(body.target.fp).randomInt(0, weapons.length - 1);
+            weaponIdx = initialWeaponIdx;
+            do {
+                const weapon = weapons[weaponIdx];
+                if (!body.target.DisallowedWeapons.find(x => x == weapon)) {
+                    break;
+                }
+                weaponIdx = (weaponIdx + 1) % weapons.length;
+            } while (weaponIdx != initialWeaponIdx);
+        }
+
         inventory.Nemesis = {
             fp: body.target.fp,
             manifest: body.target.manifest,
@@ -111,6 +139,8 @@ export interface INemesisStartRequest {
         Weakened: boolean;
         PrevOwners: number;
         HenchmenKilled: number;
+        MissionCount?: number; // Added in 38.5.0
+        LastEnc?: number; // Added in 38.5.0
         SecondInCommand: boolean;
     };
 }
