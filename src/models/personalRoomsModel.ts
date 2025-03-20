@@ -57,7 +57,7 @@ const roomSchema = new Schema<IRoom>(
     {
         Name: String,
         MaxCapacity: Number,
-        PlacedDecos: { type: [placedDecosSchema], default: undefined }
+        PlacedDecos: { type: [placedDecosSchema], default: [] }
     },
     { _id: false }
 );
