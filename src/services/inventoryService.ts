@@ -389,13 +389,40 @@ export const addItem = async (
     if (typeName in ExportWeapons) {
         const weapon = ExportWeapons[typeName];
         if (weapon.totalDamage != 0) {
+            const defaultOverwrites: Partial<IEquipmentDatabase> = {};
+            if (premiumPurchase) {
+                defaultOverwrites.Features = EquipmentFeatures.DOUBLE_CAPACITY;
+            }
+            if (
+                weapon.defaultUpgrades &&
+                weapon.defaultUpgrades[0].ItemType == "/Lotus/Weapons/Grineer/KuvaLich/Upgrades/InnateDamageRandomMod"
+            ) {
+                defaultOverwrites.UpgradeType = "/Lotus/Weapons/Grineer/KuvaLich/Upgrades/InnateDamageRandomMod";
+                defaultOverwrites.UpgradeFingerprint = JSON.stringify({
+                    compat: typeName,
+                    buffs: [
+                        {
+                            Tag: getRandomElement([
+                                "InnateElectricityDamage",
+                                "InnateFreezeDamage",
+                                "InnateHeatDamage",
+                                "InnateImpactDamage",
+                                "InnateMagDamage",
+                                "InnateRadDamage",
+                                "InnateToxinDamage"
+                            ]),
+                            Value: Math.trunc(Math.random() * 0x40000000)
+                        }
+                    ]
+                });
+            }
             const inventoryChanges = addEquipment(
                 inventory,
                 weapon.productCategory,
                 typeName,
                 [],
                 {},
-                premiumPurchase ? { Features: EquipmentFeatures.DOUBLE_CAPACITY } : {}
+                defaultOverwrites
             );
             if (weapon.additionalItems) {
                 for (const item of weapon.additionalItems) {
