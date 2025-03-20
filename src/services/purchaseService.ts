@@ -50,7 +50,7 @@ export const handlePurchase = async (
 ): Promise<IPurchaseResponse> => {
     logger.debug("purchase request", purchaseRequest);
 
-    const inventoryChanges: IInventoryChanges = {};
+    const prePurchaseInventoryChanges: IInventoryChanges = {};
     if (purchaseRequest.PurchaseParams.Source == 7) {
         const manifest = getVendorManifestByOid(purchaseRequest.PurchaseParams.SourceId!);
         if (manifest) {
@@ -65,7 +65,7 @@ export const handlePurchase = async (
                     inventory,
                     offer.ItemPrices,
                     purchaseRequest.PurchaseParams.Quantity,
-                    inventoryChanges
+                    prePurchaseInventoryChanges
                 );
             }
             if (!config.noVendorPurchaseLimits) {
@@ -94,7 +94,7 @@ export const handlePurchase = async (
                         Expiry: new Date(parseInt(offer.Expiry.$date.$numberLong))
                     });
                 }
-                inventoryChanges.RecentVendorPurchases = [
+                prePurchaseInventoryChanges.RecentVendorPurchases = [
                     {
                         VendorType: manifest.VendorInfo.TypeName,
                         PurchaseHistory: [
@@ -121,7 +121,7 @@ export const handlePurchase = async (
         inventory,
         purchaseRequest.PurchaseParams.Quantity
     );
-    combineInventoryChanges(purchaseResponse.InventoryChanges, inventoryChanges);
+    combineInventoryChanges(purchaseResponse.InventoryChanges, prePurchaseInventoryChanges);
 
     const currencyChanges = updateCurrency(
         inventory,
@@ -240,6 +240,10 @@ export const handlePurchase = async (
                     purchaseResponse.InventoryChanges.MiscItems.push(invItem);
                 } else if (!config.infiniteRegalAya) {
                     inventory.PrimeTokens -= offer.PrimePrice! * purchaseRequest.PurchaseParams.Quantity;
+
+                    purchaseResponse.InventoryChanges.PrimeTokens ??= 0;
+                    purchaseResponse.InventoryChanges.PrimeTokens -=
+                        offer.PrimePrice! * purchaseRequest.PurchaseParams.Quantity;
                 }
             }
             break;
