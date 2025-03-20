@@ -175,13 +175,21 @@ export const handlePurchase = async (
             if (purchaseRequest.PurchaseParams.SourceId! in ExportVendors) {
                 const vendor = ExportVendors[purchaseRequest.PurchaseParams.SourceId!];
                 const offer = vendor.items.find(x => x.storeItem == purchaseRequest.PurchaseParams.StoreItem);
-                if (offer && offer.itemPrices) {
-                    handleItemPrices(
-                        inventory,
-                        offer.itemPrices,
-                        purchaseRequest.PurchaseParams.Quantity,
-                        purchaseResponse.InventoryChanges
-                    );
+                if (offer) {
+                    if (offer.credits) {
+                        combineInventoryChanges(
+                            purchaseResponse.InventoryChanges,
+                            updateCurrency(inventory, offer.credits, false)
+                        );
+                    }
+                    if (offer.itemPrices) {
+                        handleItemPrices(
+                            inventory,
+                            offer.itemPrices,
+                            purchaseRequest.PurchaseParams.Quantity,
+                            purchaseResponse.InventoryChanges
+                        );
+                    }
                 }
             }
             break;
