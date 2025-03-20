@@ -113,6 +113,7 @@ import { updateSessionGetController, updateSessionPostController } from "@/src/c
 import { updateSongChallengeController } from "@/src/controllers/api/updateSongChallengeController";
 import { updateThemeController } from "@/src/controllers/api/updateThemeController";
 import { upgradesController } from "@/src/controllers/api/upgradesController";
+import { valenceSwapController } from "@/src/controllers/api/valenceSwapController";
 
 const apiRouter = express.Router();
 
@@ -241,5 +242,6 @@ apiRouter.post("/updateSession.php", updateSessionPostController);
 apiRouter.post("/updateSongChallenge.php", updateSongChallengeController);
 apiRouter.post("/updateTheme.php", updateThemeController);
 apiRouter.post("/upgrades.php", upgradesController);
+apiRouter.post("/valenceSwap.php", valenceSwapController);
 
 export { apiRouter };
