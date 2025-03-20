@@ -2,7 +2,6 @@
 import { Types } from "mongoose";
 import { IOid, IMongoDate } from "../commonTypes";
 import {
-    ArtifactPolarity,
     IColor,
     IItemConfig,
     IOperatorConfigClient,
@@ -11,6 +10,7 @@ import {
     IEquipmentClient,
     IOperatorConfigDatabase
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { IFingerprintStat, RivenFingerprint } from "@/src/helpers/rivenHelper";
 
 export type InventoryDatabaseEquipment = {
     [_ in TEquipmentKey]: IEquipmentDatabase[];
@@ -869,23 +869,14 @@ export interface IGetting {
 }
 
 export interface IRandomUpgrade {
-    UpgradeFingerprint: IUpgradeFingerprint;
+    UpgradeFingerprint: RivenFingerprint;
     ItemType: string;
     ItemId: IOid;
 }
 
-export interface IUpgradeFingerprint {
+export interface IInnateDamageFingerprint {
     compat: string;
-    lim: number;
-    lvlReq: number;
-    pol: ArtifactPolarity;
-    buffs: IBuff[];
-    curses: IBuff[];
-}
-
-export interface IBuff {
-    Tag: string;
-    Value: number;
+    buffs: IFingerprintStat[];
 }
 
 export enum GettingSlotOrderInfo {

@@ -1,7 +1,7 @@
 import { getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { IOid } from "@/src/types/commonTypes";
-import { TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IInnateDamageFingerprint, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
 import { RequestHandler } from "express";
 
 export const valenceSwapController: RequestHandler = async (req, res) => {
@@ -26,12 +26,4 @@ interface IValenceSwapRequest {
     WeaponId: IOid;
     WeaponCategory: TEquipmentKey;
     NewValenceUpgradeTag: string;
-}
-
-interface IInnateDamageFingerprint {
-    compat: string;
-    buffs: {
-        Tag: string;
-        Value: number;
-    }[];
 }

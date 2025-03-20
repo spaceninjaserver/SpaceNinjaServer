@@ -1,16 +1,56 @@
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { getInventory } from "@/src/services/inventoryService";
+import { freeUpSlot, getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { SRng } from "@/src/services/rngService";
-import { IMongoDate } from "@/src/types/commonTypes";
-import { IInfNode } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IMongoDate, IOid } from "@/src/types/commonTypes";
+import {
+    IInfNode,
+    IInnateDamageFingerprint,
+    InventorySlot,
+    TEquipmentKey
+} from "@/src/types/inventoryTypes/inventoryTypes";
 import { logger } from "@/src/utils/logger";
 import { RequestHandler } from "express";
 import { ExportRegions } from "warframe-public-export-plus";
 
 export const nemesisController: RequestHandler = async (req, res) => {
-    if ((req.query.mode as string) == "s") {
-        const accountId = await getAccountIdForRequest(req);
+    const accountId = await getAccountIdForRequest(req);
+    if ((req.query.mode as string) == "f") {
+        const body = getJSONfromString<IValenceFusionRequest>(String(req.body));
+        const inventory = await getInventory(accountId, body.Category + " WeaponBin");
+        const destWeapon = inventory[body.Category].id(body.DestWeapon.$oid)!;
+        const sourceWeapon = inventory[body.Category].id(body.SourceWeapon.$oid)!;
+        const destFingerprint = JSON.parse(destWeapon.UpgradeFingerprint!) as IInnateDamageFingerprint;
+        const sourceFingerprint = JSON.parse(sourceWeapon.UpgradeFingerprint!) as IInnateDamageFingerprint;
+
+        // Upgrade destination damage type if desireed
+        if (body.UseSourceDmgType) {
+            destFingerprint.buffs[0].Tag = sourceFingerprint.buffs[0].Tag;
+        }
+
+        // Upgrade destination damage value
+        const destDamage = 0.25 + (destFingerprint.buffs[0].Value / 0x3fffffff) * (0.6 - 0.25);
+        const sourceDamage = 0.25 + (sourceFingerprint.buffs[0].Value / 0x3fffffff) * (0.6 - 0.25);
+        let newDamage = Math.max(destDamage, sourceDamage) * 1.1;
+        if (newDamage >= 0.58) {
+            newDamage = 0.6;
+        }
+        destFingerprint.buffs[0].Value = Math.trunc(((newDamage - 0.25) / (0.6 - 0.25)) * 0x3fffffff);
+
+        // Commit fingerprint
+        destWeapon.UpgradeFingerprint = JSON.stringify(destFingerprint);
+
+        // Remove source weapon
+        inventory[body.Category].pull({ _id: body.SourceWeapon.$oid });
+        freeUpSlot(inventory, InventorySlot.WEAPONS);
+
+        await inventory.save();
+        res.json({
+            InventoryChanges: {
+                [body.Category]: [destWeapon.toJSON()]
+            }
+        });
+    } else if ((req.query.mode as string) == "s") {
         const inventory = await getInventory(accountId, "Nemesis NemesisAbandonedRewards");
         const body = getJSONfromString<INemesisStartRequest>(String(req.body));
         body.target.fp = BigInt(body.target.fp);
@@ -116,7 +156,14 @@ export const nemesisController: RequestHandler = async (req, res) => {
     }
 };
 
-export interface INemesisStartRequest {
+interface IValenceFusionRequest {
+    DestWeapon: IOid;
+    SourceWeapon: IOid;
+    Category: TEquipmentKey;
+    UseSourceDmgType: boolean;
+}
+
+interface INemesisStartRequest {
     target: {
         fp: number | bigint;
         manifest: string;

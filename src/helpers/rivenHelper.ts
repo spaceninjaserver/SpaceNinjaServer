@@ -21,11 +21,11 @@ export interface IUnveiledRivenFingerprint {
     lvlReq: number;
     rerolls?: number;
     pol: string;
-    buffs: IRivenStat[];
-    curses: IRivenStat[];
+    buffs: IFingerprintStat[];
+    curses: IFingerprintStat[];
 }
 
-interface IRivenStat {
+export interface IFingerprintStat {
     Tag: string;
     Value: number;
 }
