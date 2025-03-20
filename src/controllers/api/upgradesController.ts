@@ -98,6 +98,12 @@ export const upgradesController: RequestHandler = async (req, res) => {
                     item.Features |= EquipmentFeatures.ARCANE_SLOT;
                     break;
                 }
+                case "/Lotus/Types/Items/MiscItems/ValenceAdapter": {
+                    const item = inventory[payload.ItemCategory].id(payload.ItemId.$oid)!;
+                    item.Features ??= 0;
+                    item.Features |= EquipmentFeatures.VALENCE_SWAP;
+                    break;
+                }
                 case "/Lotus/Types/Items/MiscItems/Forma":
                 case "/Lotus/Types/Items/MiscItems/FormaUmbra":
                 case "/Lotus/Types/Items/MiscItems/FormaAura":

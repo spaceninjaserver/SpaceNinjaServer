@@ -106,7 +106,8 @@ export enum EquipmentFeatures {
     GRAVIMAG_INSTALLED = 4,
     GILDED = 8,
     ARCANE_SLOT = 32,
-    INCARNON_GENESIS = 512
+    INCARNON_GENESIS = 512,
+    VALENCE_SWAP = 1024
 }
 
 export interface IEquipmentDatabase {
