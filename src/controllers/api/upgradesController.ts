@@ -69,92 +69,68 @@ export const upgradesController: RequestHandler = async (req, res) => {
         } else
             switch (operation.UpgradeRequirement) {
                 case "/Lotus/Types/Items/MiscItems/OrokinReactor":
-                case "/Lotus/Types/Items/MiscItems/OrokinCatalyst":
-                    for (const item of inventory[payload.ItemCategory]) {
-                        if (item._id.toString() == payload.ItemId.$oid) {
-                            item.Features ??= 0;
-                            item.Features |= EquipmentFeatures.DOUBLE_CAPACITY;
-                            break;
-                        }
-                    }
+                case "/Lotus/Types/Items/MiscItems/OrokinCatalyst": {
+                    const item = inventory[payload.ItemCategory].id(payload.ItemId.$oid)!;
+                    item.Features ??= 0;
+                    item.Features |= EquipmentFeatures.DOUBLE_CAPACITY;
                     break;
+                }
                 case "/Lotus/Types/Items/MiscItems/UtilityUnlocker":
-                case "/Lotus/Types/Items/MiscItems/WeaponUtilityUnlocker":
-                    for (const item of inventory[payload.ItemCategory]) {
-                        if (item._id.toString() == payload.ItemId.$oid) {
-                            item.Features ??= 0;
-                            item.Features |= EquipmentFeatures.UTILITY_SLOT;
-                            break;
-                        }
-                    }
+                case "/Lotus/Types/Items/MiscItems/WeaponUtilityUnlocker": {
+                    const item = inventory[payload.ItemCategory].id(payload.ItemId.$oid)!;
+                    item.Features ??= 0;
+                    item.Features |= EquipmentFeatures.UTILITY_SLOT;
                     break;
-                case "/Lotus/Types/Items/MiscItems/HeavyWeaponCatalyst":
+                }
+                case "/Lotus/Types/Items/MiscItems/HeavyWeaponCatalyst": {
                     console.assert(payload.ItemCategory == "SpaceGuns");
-                    for (const item of inventory[payload.ItemCategory]) {
-                        if (item._id.toString() == payload.ItemId.$oid) {
-                            item.Features ??= 0;
-                            item.Features |= EquipmentFeatures.GRAVIMAG_INSTALLED;
-                            break;
-                        }
-                    }
+                    const item = inventory[payload.ItemCategory].id(payload.ItemId.$oid)!;
+                    item.Features ??= 0;
+                    item.Features |= EquipmentFeatures.GRAVIMAG_INSTALLED;
                     break;
+                }
                 case "/Lotus/Types/Items/MiscItems/WeaponPrimaryArcaneUnlocker":
                 case "/Lotus/Types/Items/MiscItems/WeaponSecondaryArcaneUnlocker":
                 case "/Lotus/Types/Items/MiscItems/WeaponMeleeArcaneUnlocker":
-                case "/Lotus/Types/Items/MiscItems/WeaponAmpArcaneUnlocker":
-                    for (const item of inventory[payload.ItemCategory]) {
-                        if (item._id.toString() == payload.ItemId.$oid) {
-                            item.Features ??= 0;
-                            item.Features |= EquipmentFeatures.ARCANE_SLOT;
-                            break;
-                        }
-                    }
+                case "/Lotus/Types/Items/MiscItems/WeaponAmpArcaneUnlocker": {
+                    const item = inventory[payload.ItemCategory].id(payload.ItemId.$oid)!;
+                    item.Features ??= 0;
+                    item.Features |= EquipmentFeatures.ARCANE_SLOT;
                     break;
+                }
                 case "/Lotus/Types/Items/MiscItems/Forma":
                 case "/Lotus/Types/Items/MiscItems/FormaUmbra":
                 case "/Lotus/Types/Items/MiscItems/FormaAura":
-                case "/Lotus/Types/Items/MiscItems/FormaStance":
-                    for (const item of inventory[payload.ItemCategory]) {
-                        if (item._id.toString() == payload.ItemId.$oid) {
-                            item.XP = 0;
-                            setSlotPolarity(item, operation.PolarizeSlot, operation.PolarizeValue);
-                            item.Polarized ??= 0;
-                            item.Polarized += 1;
-                            break;
-                        }
-                    }
+                case "/Lotus/Types/Items/MiscItems/FormaStance": {
+                    const item = inventory[payload.ItemCategory].id(payload.ItemId.$oid)!;
+                    item.XP = 0;
+                    setSlotPolarity(item, operation.PolarizeSlot, operation.PolarizeValue);
+                    item.Polarized ??= 0;
+                    item.Polarized += 1;
                     break;
-                case "/Lotus/Types/Items/MiscItems/ModSlotUnlocker":
-                    for (const item of inventory[payload.ItemCategory]) {
-                        if (item._id.toString() == payload.ItemId.$oid) {
-                            item.ModSlotPurchases ??= 0;
-                            item.ModSlotPurchases += 1;
-                            break;
-                        }
-                    }
+                }
+                case "/Lotus/Types/Items/MiscItems/ModSlotUnlocker": {
+                    const item = inventory[payload.ItemCategory].id(payload.ItemId.$oid)!;
+                    item.ModSlotPurchases ??= 0;
+                    item.ModSlotPurchases += 1;
                     break;
-                case "/Lotus/Types/Items/MiscItems/CustomizationSlotUnlocker":
-                    for (const item of inventory[payload.ItemCategory]) {
-                        if (item._id.toString() == payload.ItemId.$oid) {
-                            item.CustomizationSlotPurchases ??= 0;
-                            item.CustomizationSlotPurchases += 1;
-                            break;
-                        }
-                    }
+                }
+                case "/Lotus/Types/Items/MiscItems/CustomizationSlotUnlocker": {
+                    const item = inventory[payload.ItemCategory].id(payload.ItemId.$oid)!;
+                    item.CustomizationSlotPurchases ??= 0;
+                    item.CustomizationSlotPurchases += 1;
                     break;
-                case "":
+                }
+                case "": {
                     console.assert(operation.OperationType == "UOT_SWAP_POLARITY");
-                    for (const item of inventory[payload.ItemCategory]) {
-                        if (item._id.toString() == payload.ItemId.$oid) {
-                            for (let i = 0; i != operation.PolarityRemap.length; ++i) {
-                                if (operation.PolarityRemap[i].Slot != i) {
-                                    setSlotPolarity(item, i, operation.PolarityRemap[i].Value);
-                                }
-                            }
-                            break;
+                    const item = inventory[payload.ItemCategory].id(payload.ItemId.$oid)!;
+                    for (let i = 0; i != operation.PolarityRemap.length; ++i) {
+                        if (operation.PolarityRemap[i].Slot != i) {
+                            setSlotPolarity(item, i, operation.PolarityRemap[i].Value);
                         }
                     }
                     break;
+                }
                 default:
                     throw new Error("Unsupported upgrade: " + operation.UpgradeRequirement);
             }
