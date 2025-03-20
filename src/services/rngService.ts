@@ -70,6 +70,7 @@ export const getRandomWeightedRewardUc = <T extends { Rarity: TRarity }>(
     return getRandomReward(resultPool);
 };
 
+// Seeded RNG for internal usage. Based on recommendations in the ISO C standards.
 export class CRng {
     state: number;
 
@@ -90,5 +91,23 @@ export class CRng {
 
     randomElement<T>(arr: T[]): T {
         return arr[Math.floor(this.random() * arr.length)];
+    }
+}
+
+// Seeded RNG for cases where we need identical results to the game client. Based on work by Donald Knuth.
+export class SRng {
+    state: bigint;
+
+    constructor(seed: bigint) {
+        this.state = seed;
+    }
+
+    randomInt(min: number, max: number): number {
+        const diff = max - min;
+        if (diff != 0) {
+            this.state = (0x5851f42d4c957f2dn * this.state + 0x14057b7ef767814fn) & 0xffffffffffffffffn;
+            min += (Number(this.state >> 32n) & 0x3fffffff) % (diff + 1);
+        }
+        return min;
     }
 }

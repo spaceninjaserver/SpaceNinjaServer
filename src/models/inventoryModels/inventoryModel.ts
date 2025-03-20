@@ -79,7 +79,10 @@ import {
     ICrewShipWeaponDatabase,
     IRecentVendorPurchaseDatabase,
     IVendorPurchaseHistoryEntryDatabase,
-    IVendorPurchaseHistoryEntryClient
+    IVendorPurchaseHistoryEntryClient,
+    INemesisDatabase,
+    INemesisClient,
+    IInfNode
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -1058,6 +1061,54 @@ const libraryDailyTaskInfoSchema = new Schema<ILibraryDailyTaskInfo>(
     { _id: false }
 );
 
+const infNodeSchema = new Schema<IInfNode>(
+    {
+        Node: String,
+        Influence: Number
+    },
+    { _id: false }
+);
+
+const nemesisSchema = new Schema<INemesisDatabase>(
+    {
+        fp: BigInt,
+        manifest: String,
+        KillingSuit: String,
+        killingDamageType: Number,
+        ShoulderHelmet: String,
+        WeaponIdx: Number,
+        AgentIdx: Number,
+        BirthNode: String,
+        Faction: String,
+        Rank: Number,
+        k: Boolean,
+        Traded: Boolean,
+        d: Date,
+        PrevOwners: Number,
+        SecondInCommand: Boolean,
+        Weakened: Boolean,
+        InfNodes: [infNodeSchema],
+        HenchmenKilled: Number,
+        HintProgress: Number,
+        Hints: [Number],
+        GuessHistory: [Number]
+    },
+    { _id: false }
+);
+
+nemesisSchema.set("toJSON", {
+    virtuals: true,
+    transform(_doc, obj) {
+        const db = obj as INemesisDatabase;
+        const client = obj as INemesisClient;
+
+        client.d = toMongoDate(db.d);
+
+        delete obj._id;
+        delete obj.__v;
+    }
+});
+
 const alignmentSchema = new Schema<IAlignment>(
     {
         Alignment: Number,
@@ -1341,7 +1392,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         //CorpusLich or GrineerLich
         NemesisAbandonedRewards: { type: [String], default: [] },
-        //CorpusLich\KuvaLich
+        Nemesis: nemesisSchema,
         NemesisHistory: [Schema.Types.Mixed],
         LastNemesisAllySpawnTime: Schema.Types.Mixed,
 

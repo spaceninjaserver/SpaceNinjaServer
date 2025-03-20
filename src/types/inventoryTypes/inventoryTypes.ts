@@ -43,6 +43,7 @@ export interface IInventoryDatabase
             | "Drones"
             | "RecentVendorPurchases"
             | "NextRefill"
+            | "Nemesis"
             | TEquipmentKey
         >,
         InventoryDatabaseEquipment {
@@ -71,6 +72,7 @@ export interface IInventoryDatabase
     Drones: IDroneDatabase[];
     RecentVendorPurchases?: IRecentVendorPurchaseDatabase[];
     NextRefill?: Date;
+    Nemesis?: INemesisDatabase;
 }
 
 export interface IQuestKeyDatabase {
@@ -288,7 +290,8 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     SeasonChallengeHistory: ISeasonChallenge[];
     EquippedInstrument?: string;
     InvasionChainProgress: IInvasionChainProgress[];
-    NemesisHistory: INemesisHistory[];
+    Nemesis?: INemesisClient;
+    NemesisHistory: INemesisBaseClient[];
     LastNemesisAllySpawnTime?: IMongoDate;
     Settings: ISettings;
     PersonalTechProjects: IPersonalTechProject[];
@@ -782,38 +785,44 @@ export interface IMission extends IMissionDatabase {
     RewardsCooldownTime?: IMongoDate;
 }
 
-export interface INemesisHistory {
-    fp: number;
-    manifest: Manifest;
+export interface INemesisBaseClient {
+    fp: bigint;
+    manifest: string;
     KillingSuit: string;
     killingDamageType: number;
     ShoulderHelmet: string;
+    WeaponIdx: number;
     AgentIdx: number;
-    BirthNode: BirthNode;
+    BirthNode: string;
+    Faction: string;
     Rank: number;
     k: boolean;
+    Traded: boolean;
     d: IMongoDate;
-    GuessHistory?: number[];
-    currentGuess?: number;
-    Traded?: boolean;
-    PrevOwners?: number;
-    SecondInCommand?: boolean;
-    Faction?: string;
-    Weakened?: boolean;
+    PrevOwners: number;
+    SecondInCommand: boolean;
+    Weakened: boolean;
 }
 
-export enum BirthNode {
-    SolNode181 = "SolNode181",
-    SolNode4 = "SolNode4",
-    SolNode70 = "SolNode70",
-    SolNode76 = "SolNode76"
+export interface INemesisBaseDatabase extends Omit<INemesisBaseClient, "d"> {
+    d: Date;
 }
 
-export enum Manifest {
-    LotusTypesEnemiesCorpusLawyersLawyerManifest = "/Lotus/Types/Enemies/Corpus/Lawyers/LawyerManifest",
-    LotusTypesGameNemesisKuvaLichKuvaLichManifest = "/Lotus/Types/Game/Nemesis/KuvaLich/KuvaLichManifest",
-    LotusTypesGameNemesisKuvaLichKuvaLichManifestVersionThree = "/Lotus/Types/Game/Nemesis/KuvaLich/KuvaLichManifestVersionThree",
-    LotusTypesGameNemesisKuvaLichKuvaLichManifestVersionTwo = "/Lotus/Types/Game/Nemesis/KuvaLich/KuvaLichManifestVersionTwo"
+export interface INemesisClient extends INemesisBaseClient {
+    InfNodes: IInfNode[];
+    HenchmenKilled: number;
+    HintProgress: number;
+    Hints: number[];
+    GuessHistory: number[];
+}
+
+export interface INemesisDatabase extends Omit<INemesisClient, "d"> {
+    d: Date;
+}
+
+export interface IInfNode {
+    Node: string;
+    Influence: number;
 }
 
 export interface IPendingCouponDatabase {

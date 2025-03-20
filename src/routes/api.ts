@@ -69,6 +69,7 @@ import { missionInventoryUpdateController } from "@/src/controllers/api/missionI
 import { modularWeaponCraftingController } from "@/src/controllers/api/modularWeaponCraftingController";
 import { modularWeaponSaleController } from "@/src/controllers/api/modularWeaponSaleController";
 import { nameWeaponController } from "@/src/controllers/api/nameWeaponController";
+import { nemesisController } from "@/src/controllers/api/nemesisController";
 import { placeDecoInComponentController } from "@/src/controllers/api/placeDecoInComponentController";
 import { playerSkillsController } from "@/src/controllers/api/playerSkillsController";
 import { projectionManagerController } from "@/src/controllers/api/projectionManagerController";
@@ -204,6 +205,7 @@ apiRouter.post("/missionInventoryUpdate.php", missionInventoryUpdateController);
 apiRouter.post("/modularWeaponCrafting.php", modularWeaponCraftingController);
 apiRouter.post("/modularWeaponSale.php", modularWeaponSaleController);
 apiRouter.post("/nameWeapon.php", nameWeaponController);
+apiRouter.post("/nemesis.php", nemesisController);
 apiRouter.post("/placeDecoInComponent.php", placeDecoInComponentController);
 apiRouter.post("/playerSkills.php", playerSkillsController);
 apiRouter.post("/projectionManager.php", projectionManagerController);

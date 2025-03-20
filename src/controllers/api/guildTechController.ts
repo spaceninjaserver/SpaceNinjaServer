@@ -23,6 +23,7 @@ import { config } from "@/src/services/configService";
 import { GuildPermission, ITechProjectClient, ITechProjectDatabase } from "@/src/types/guildTypes";
 import { TGuildDatabaseDocument } from "@/src/models/guildModel";
 import { toMongoDate } from "@/src/helpers/inventoryHelpers";
+import { logger } from "@/src/utils/logger";
 
 export const guildTechController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -219,6 +220,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
         await guild.save();
         res.end();
     } else {
+        logger.debug(`data provided to ${req.path}: ${String(req.body)}`);
         throw new Error(`unknown guildTech action: ${data.Action}`);
     }
 };
