@@ -134,6 +134,29 @@ export const handlePurchase = async (
     };
 
     switch (purchaseRequest.PurchaseParams.Source) {
+        case 1: {
+            if (purchaseRequest.PurchaseParams.SourceId! != worldState.VoidTraders[0]._id.$oid) {
+                throw new Error("invalid request source");
+            }
+            const offer = worldState.VoidTraders[0].Manifest.find(
+                x => x.ItemType == purchaseRequest.PurchaseParams.StoreItem
+            );
+            if (offer) {
+                combineInventoryChanges(
+                    purchaseResponse.InventoryChanges,
+                    updateCurrency(inventory, offer.RegularPrice, false)
+                );
+
+                const invItem: IMiscItem = {
+                    ItemType: "/Lotus/Types/Items/MiscItems/PrimeBucks",
+                    ItemCount: offer.PrimePrice * purchaseRequest.PurchaseParams.Quantity * -1
+                };
+                addMiscItems(inventory, [invItem]);
+                purchaseResponse.InventoryChanges.MiscItems ??= [];
+                purchaseResponse.InventoryChanges.MiscItems.push(invItem);
+            }
+            break;
+        }
         case 2:
             {
                 const syndicateTag = purchaseRequest.PurchaseParams.SyndicateTag!;
