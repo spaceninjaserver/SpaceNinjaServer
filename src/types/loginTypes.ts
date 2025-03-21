@@ -11,11 +11,16 @@ export interface IAccountAndLoginResponseCommons {
     Nonce: number;
 }
 
-export interface IDatabaseAccount extends IAccountAndLoginResponseCommons {
+export interface IDatabaseAccountRequiredFields extends IAccountAndLoginResponseCommons {
     email: string;
     password: string;
+}
+
+export interface IDatabaseAccount extends IDatabaseAccountRequiredFields {
     Dropped?: boolean;
     LatestEventMessageDate: Date;
+    LastLoginRewardDate: number;
+    LoginDays: number;
 }
 
 // Includes virtual ID

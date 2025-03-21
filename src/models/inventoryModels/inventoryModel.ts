@@ -1366,7 +1366,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         ThemeSounds: String,
 
         //Daily LoginRewards
-        LoginMilestoneRewards: [String],
+        LoginMilestoneRewards: { type: [String], default: [] },
 
         //You first Dialog with NPC or use new Item
         NodeIntrosCompleted: [String],

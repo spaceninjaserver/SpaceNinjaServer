@@ -42,8 +42,7 @@ export const loginController: RequestHandler = async (request, response) => {
                 ForceLogoutVersion: 0,
                 ConsentNeeded: false,
                 TrackedSettings: [],
-                Nonce: nonce,
-                LatestEventMessageDate: new Date(0)
+                Nonce: nonce
             });
             logger.debug("created new account");
             response.json(createLoginResponse(myAddress, newAccount, buildLabel));

@@ -1,6 +1,6 @@
 import { Account } from "@/src/models/loginModel";
 import { createInventory } from "@/src/services/inventoryService";
-import { IDatabaseAccount, IDatabaseAccountJson } from "@/src/types/loginTypes";
+import { IDatabaseAccountJson, IDatabaseAccountRequiredFields } from "@/src/types/loginTypes";
 import { createShip } from "./shipService";
 import { Document, Types } from "mongoose";
 import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
@@ -18,7 +18,7 @@ export const isNameTaken = async (name: string): Promise<boolean> => {
     return !!(await Account.findOne({ DisplayName: name }));
 };
 
-export const createAccount = async (accountData: IDatabaseAccount): Promise<IDatabaseAccountJson> => {
+export const createAccount = async (accountData: IDatabaseAccountRequiredFields): Promise<IDatabaseAccountJson> => {
     const account = new Account(accountData);
     try {
         await account.save();
@@ -62,7 +62,7 @@ export const createPersonalRooms = async (accountId: Types.ObjectId, shipId: Typ
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-type TAccountDocument = Document<unknown, {}, IDatabaseAccountJson> &
+export type TAccountDocument = Document<unknown, {}, IDatabaseAccountJson> &
     IDatabaseAccountJson & { _id: Types.ObjectId; __v: number };
 
 export const getAccountForRequest = async (req: Request): Promise<TAccountDocument> => {

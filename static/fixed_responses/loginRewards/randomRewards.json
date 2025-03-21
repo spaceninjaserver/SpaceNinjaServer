@@ -1,0 +1,187 @@
+[
+  {
+    "RewardType": "RT_RESOURCE",
+    "StoreItemType": "/Lotus/StoreItems/Types/Items/MiscItems/OxiumAlloy",
+    "Amount": 100,
+    "ScalingMultiplier": 1,
+    "Rarity": "COMMON",
+    "probability": 0.055392516507703576,
+    "Transmission": "/Lotus/Sounds/Dialog/DailyTribute/Ordis/DDayTribOrdis"
+  },
+  {
+    "RewardType": "RT_RESOURCE",
+    "StoreItemType": "/Lotus/StoreItems/Types/Items/MiscItems/Gallium",
+    "Amount": 1,
+    "ScalingMultiplier": 1,
+    "Rarity": "COMMON",
+    "probability": 0.055392516507703576,
+    "Transmission": "/Lotus/Sounds/Dialog/DailyTribute/Darvo/DDayTribDarvo"
+  },
+  {
+    "RewardType": "RT_RESOURCE",
+    "StoreItemType": "/Lotus/StoreItems/Types/Items/Research/ChemFragment",
+    "Amount": 2,
+    "ScalingMultiplier": 1,
+    "Rarity": "COMMON",
+    "probability": 0.055392516507703576,
+    "Transmission": "/Lotus/Sounds/Dialog/DailyTribute/Darvo/DDayTribDarvo"
+  },
+  {
+    "RewardType": "RT_RESOURCE",
+    "StoreItemType": "/Lotus/StoreItems/Types/Items/MiscItems/Morphic",
+    "Amount": 1,
+    "ScalingMultiplier": 1,
+    "Rarity": "COMMON",
+    "probability": 0.055392516507703576,
+    "Transmission": "/Lotus/Sounds/Dialog/DailyTribute/Darvo/DDayTribDarvo"
+  },
+  {
+    "RewardType": "RT_RESOURCE",
+    "StoreItemType": "/Lotus/StoreItems/Types/Items/Research/EnergyFragment",
+    "Amount": 2,
+    "ScalingMultiplier": 1,
+    "Rarity": "COMMON",
+    "probability": 0.055392516507703576,
+    "Transmission": "/Lotus/Sounds/Dialog/DailyTribute/Darvo/DDayTribDarvo"
+  },
+  {
+    "RewardType": "RT_RESOURCE",
+    "StoreItemType": "/Lotus/StoreItems/Types/Items/MiscItems/NeuralSensor",
+    "Amount": 1,
+    "ScalingMultiplier": 1,
+    "Rarity": "COMMON",
+    "probability": 0.055392516507703576,
+    "Transmission": "/Lotus/Sounds/Dialog/DailyTribute/Darvo/DDayTribDarvo"
+  },
+  {
+    "RewardType": "RT_RESOURCE",
+    "StoreItemType": "/Lotus/StoreItems/Types/Items/Research/BioFragment",
+    "Amount": 2,
+    "ScalingMultiplier": 1,
+    "Rarity": "COMMON",
+    "probability": 0.055392516507703576,
+    "Transmission": "/Lotus/Sounds/Dialog/DailyTribute/Darvo/DDayTribDarvo"
+  },
+  {
+    "RewardType": "RT_RESOURCE",
+    "StoreItemType": "/Lotus/StoreItems/Types/Items/MiscItems/Neurode",
+    "Amount": 1,
+    "ScalingMultiplier": 1,
+    "Rarity": "COMMON",
+    "probability": 0.055392516507703576,
+    "Transmission": "/Lotus/Sounds/Dialog/DailyTribute/Darvo/DDayTribDarvo"
+  },
+  {
+    "RewardType": "RT_RESOURCE",
+    "StoreItemType": "/Lotus/StoreItems/Types/Items/MiscItems/OrokinCell",
+    "Amount": 1,
+    "ScalingMultiplier": 1,
+    "Rarity": "COMMON",
+    "probability": 0.055392516507703576,
+    "Transmission": "/Lotus/Sounds/Dialog/DailyTribute/Darvo/DDayTribDarvo"
+  },
+  {
+    "RewardType": "RT_RESOURCE",
+    "StoreItemType": "/Lotus/StoreItems/Types/Items/MiscItems/Cryotic",
+    "Amount": 50,
+    "ScalingMultiplier": 1,
+    "Rarity": "COMMON",
+    "probability": 0.055392516507703576,
+    "Transmission": "/Lotus/Sounds/Dialog/DailyTribute/Darvo/DDayTribDarvo"
+  },
+  {
+    "RewardType": "RT_RESOURCE",
+    "StoreItemType": "/Lotus/StoreItems/Types/Items/MiscItems/Tellurium",
+    "Amount": 1,
+    "ScalingMultiplier": 1,
+    "Rarity": "COMMON",
+    "probability": 0.055392516507703576,
+    "Transmission": "/Lotus/Sounds/Dialog/DailyTribute/Darvo/DDayTribDarvo"
+  },
+  {
+    "RewardType": "RT_CREDITS",
+    "StoreItemType": "",
+    "Icon": "/Lotus/Interface/Icons/StoreIcons/Currency/CreditsLarge.png",
+    "Amount": 10000,
+    "ScalingMultiplier": 1,
+    "Rarity": "COMMON",
+    "probability": 0.055392516507703576,
+    "Transmission": "/Lotus/Sounds/Dialog/DailyTribute/Simaris/DDayTribSmrs"
+  },
+  {
+    "RewardType": "RT_BOOSTER",
+    "StoreItemType": "/Lotus/Types/StoreItems/Boosters/AffinityBoosterStoreItem",
+    "Amount": 1,
+    "ScalingMultiplier": 2,
+    "Duration": 3,
+    "Rarity": "COMMON",
+    "probability": 0.055392516507703576,
+    "Transmission": "/Lotus/Sounds/Dialog/DailyTribute/Simaris/DDayTribSmrs"
+  },
+  {
+    "RewardType": "RT_BOOSTER",
+    "StoreItemType": "/Lotus/Types/StoreItems/Boosters/CreditBoosterStoreItem",
+    "Amount": 1,
+    "ScalingMultiplier": 2,
+    "Duration": 3,
+    "Rarity": "COMMON",
+    "probability": 0.055392516507703576,
+    "Transmission": "/Lotus/Sounds/Dialog/DailyTribute/Simaris/DDayTribSmrs"
+  },
+  {
+    "RewardType": "RT_BOOSTER",
+    "StoreItemType": "/Lotus/Types/StoreItems/Boosters/ResourceAmountBoosterStoreItem",
+    "Amount": 1,
+    "ScalingMultiplier": 2,
+    "Duration": 3,
+    "Rarity": "COMMON",
+    "probability": 0.055392516507703576,
+    "Transmission": "/Lotus/Sounds/Dialog/DailyTribute/Simaris/DDayTribSmrs"
+  },
+  {
+    "RewardType": "RT_BOOSTER",
+    "StoreItemType": "/Lotus/Types/StoreItems/Boosters/ResourceDropChanceBoosterStoreItem",
+    "Amount": 1,
+    "ScalingMultiplier": 2,
+    "Duration": 3,
+    "Rarity": "COMMON",
+    "probability": 0.055392516507703576,
+    "Transmission": "/Lotus/Sounds/Dialog/DailyTribute/Simaris/DDayTribSmrs"
+  },
+  {
+    "RewardType": "RT_STORE_ITEM",
+    "StoreItemType": "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/RareFusionBundle",
+    "Amount": 1,
+    "ScalingMultiplier": 1,
+    "Rarity": "COMMON",
+    "probability": 0.055392516507703576,
+    "Transmission": "/Lotus/Sounds/Dialog/DailyTribute/Maroo/DDayTribMaroo"
+  },
+  {
+    "RewardType": "RT_RECIPE",
+    "StoreItemType": "/Lotus/StoreItems/Types/Recipes/Components/FormaBlueprint",
+    "Amount": 1,
+    "ScalingMultiplier": 0.5,
+    "Rarity": "RARE",
+    "probability": 0.001467351430667816,
+    "Transmission": "/Lotus/Sounds/Dialog/DailyTribute/Maroo/DDayTribMaroo"
+  },
+  {
+    "RewardType": "RT_RANDOM_RECIPE",
+    "StoreItemType": "",
+    "Amount": 1,
+    "ScalingMultiplier": 0,
+    "Rarity": "COMMON",
+    "probability": 0.055392516507703576,
+    "Transmission": "/Lotus/Sounds/Dialog/DailyTribute/Teshin/DDayTribTeshin"
+  },
+  {
+    "RewardType": "RT_STORE_ITEM",
+    "StoreItemType": "/Lotus/StoreItems/Types/BoosterPacks/LoginRewardRandomProjection",
+    "Amount": 1,
+    "ScalingMultiplier": 1,
+    "Rarity": "RARE",
+    "probability": 0.001467351430667816,
+    "Transmission": "/Lotus/Sounds/Dialog/DailyTribute/Ordis/DDayTribOrdis"
+  }
+]

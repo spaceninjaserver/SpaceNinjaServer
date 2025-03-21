@@ -63,6 +63,7 @@ import { inventorySlotsController } from "@/src/controllers/api/inventorySlotsCo
 import { joinSessionController } from "@/src/controllers/api/joinSessionController";
 import { loginController } from "@/src/controllers/api/loginController";
 import { loginRewardsController } from "@/src/controllers/api/loginRewardsController";
+import { loginRewardsSelectionController } from "@/src/controllers/api/loginRewardsSelectionController";
 import { logoutController } from "@/src/controllers/api/logoutController";
 import { marketRecommendationsController } from "@/src/controllers/api/marketRecommendationsController";
 import { missionInventoryUpdateController } from "@/src/controllers/api/missionInventoryUpdateController";
@@ -202,6 +203,7 @@ apiRouter.post("/infestedFoundry.php", infestedFoundryController);
 apiRouter.post("/inventorySlots.php", inventorySlotsController);
 apiRouter.post("/joinSession.php", joinSessionController);
 apiRouter.post("/login.php", loginController);
+apiRouter.post("/loginRewardsSelection.php", loginRewardsSelectionController);
 apiRouter.post("/missionInventoryUpdate.php", missionInventoryUpdateController);
 apiRouter.post("/modularWeaponCrafting.php", modularWeaponCraftingController);
 apiRouter.post("/modularWeaponSale.php", modularWeaponSaleController);

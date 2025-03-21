@@ -1,5 +1,5 @@
 import { IAccountCreation } from "@/src/types/customTypes";
-import { IDatabaseAccount } from "@/src/types/loginTypes";
+import { IDatabaseAccountRequiredFields } from "@/src/types/loginTypes";
 import crypto from "crypto";
 import { isString, parseEmail, parseString } from "../general";
 
@@ -40,7 +40,7 @@ const toAccountCreation = (accountCreation: unknown): IAccountCreation => {
     throw new Error("incorrect account creation data: incorrect properties");
 };
 
-const toDatabaseAccount = (createAccount: IAccountCreation): IDatabaseAccount => {
+const toDatabaseAccount = (createAccount: IAccountCreation): IDatabaseAccountRequiredFields => {
     return {
         ...createAccount,
         ClientType: "",
@@ -48,9 +48,8 @@ const toDatabaseAccount = (createAccount: IAccountCreation): IDatabaseAccount =>
         CrossPlatformAllowed: true,
         ForceLogoutVersion: 0,
         TrackedSettings: [],
-        Nonce: 0,
-        LatestEventMessageDate: new Date(0)
-    } satisfies IDatabaseAccount;
+        Nonce: 0
+    } satisfies IDatabaseAccountRequiredFields;
 };
 
 export { toDatabaseAccount, toAccountCreation as toCreateAccount };

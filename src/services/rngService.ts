@@ -18,11 +18,11 @@ export const getRandomInt = (min: number, max: number): number => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-export const getRandomReward = <T extends { probability: number }>(pool: T[]): T | undefined => {
+const getRewardAtPercentage = <T extends { probability: number }>(pool: T[], percentage: number): T | undefined => {
     if (pool.length == 0) return;
 
     const totalChance = pool.reduce((accum, item) => accum + item.probability, 0);
-    const randomValue = Math.random() * totalChance;
+    const randomValue = percentage * totalChance;
 
     let cumulativeChance = 0;
     for (const item of pool) {
@@ -32,6 +32,10 @@ export const getRandomReward = <T extends { probability: number }>(pool: T[]): T
         }
     }
     throw new Error("What the fuck?");
+};
+
+export const getRandomReward = <T extends { probability: number }>(pool: T[]): T | undefined => {
+    return getRewardAtPercentage(pool, Math.random());
 };
 
 export const getRandomWeightedReward = <T extends { rarity: TRarity }>(
@@ -70,6 +74,15 @@ export const getRandomWeightedRewardUc = <T extends { Rarity: TRarity }>(
     return getRandomReward(resultPool);
 };
 
+// ChatGPT generated this. It seems to have a good enough distribution.
+export const mixSeeds = (seed1: number, seed2: number): number => {
+    let seed = seed1 ^ seed2;
+    seed ^= seed >>> 21;
+    seed ^= seed << 35;
+    seed ^= seed >>> 4;
+    return seed >>> 0;
+};
+
 // Seeded RNG for internal usage. Based on recommendations in the ISO C standards.
 export class CRng {
     state: number;
@@ -91,6 +104,10 @@ export class CRng {
 
     randomElement<T>(arr: T[]): T {
         return arr[Math.floor(this.random() * arr.length)];
+    }
+
+    randomReward<T extends { probability: number }>(pool: T[]): T | undefined {
+        return getRewardAtPercentage(pool, this.random());
     }
 }
 
