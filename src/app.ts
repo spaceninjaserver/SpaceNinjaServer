@@ -32,6 +32,7 @@ app.use(requestLogger);
 app.use("/api", apiRouter);
 app.use("/", cacheRouter);
 app.use("/custom", customRouter);
+app.use("/dynamic", dynamicController);
 app.use("/:id/dynamic", dynamicController);
 app.use("/pay", payRouter);
 app.use("/stats", statsRouter);

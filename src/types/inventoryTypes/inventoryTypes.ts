@@ -928,7 +928,6 @@ export interface IPersonalTechProject {
 }
 
 export interface IPlayerSkills {
-    LPP_NONE: number;
     LPP_SPACE: number;
     LPS_PILOTING: number;
     LPS_GUNNERY: number;

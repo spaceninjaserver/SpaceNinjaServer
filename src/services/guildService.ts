@@ -91,7 +91,7 @@ export const getGuildClient = async (guild: TGuildDatabaseDocument, accountId: s
         Members: members,
         Ranks: guild.Ranks,
         TradeTax: guild.TradeTax,
-        Tier: 1,
+        Tier: guild.Tier,
         Vault: getGuildVault(guild),
         ActiveDojoColorResearch: guild.ActiveDojoColorResearch,
         Class: guild.Class,

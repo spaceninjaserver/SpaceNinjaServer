@@ -153,6 +153,7 @@ const guildSchema = new Schema<IGuildDatabase>(
         LongMOTD: { type: longMOTDSchema, default: undefined },
         Ranks: { type: [guildRankSchema], default: defaultRanks },
         TradeTax: { type: Number, default: 0 },
+        Tier: { type: Number, default: 1 },
         DojoComponents: { type: [dojoComponentSchema], default: [] },
         DojoCapacity: { type: Number, default: 100 },
         DojoEnergy: { type: Number, default: 5 },

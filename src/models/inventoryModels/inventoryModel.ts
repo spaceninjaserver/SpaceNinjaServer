@@ -468,7 +468,6 @@ const seasonChallengeHistorySchema = new Schema<ISeasonChallenge>(
 //TODO: check whether this is complete
 const playerSkillsSchema = new Schema<IPlayerSkills>(
     {
-        LPP_NONE: { type: Number, default: 0 },
         LPP_SPACE: { type: Number, default: 0 },
         LPS_PILOTING: { type: Number, default: 0 },
         LPS_GUNNERY: { type: Number, default: 0 },

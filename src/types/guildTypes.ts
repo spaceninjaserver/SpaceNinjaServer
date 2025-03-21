@@ -27,6 +27,7 @@ export interface IGuildDatabase {
     LongMOTD?: ILongMOTD;
     Ranks: IGuildRank[];
     TradeTax: number;
+    Tier: number;
 
     DojoComponents: IDojoComponentDatabase[];
     DojoCapacity: number;
