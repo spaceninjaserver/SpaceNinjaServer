@@ -134,6 +134,7 @@ export interface IStatsAdd {
     EXECUTE_ENEMY_ITEM?: IUploadEntry;
     KILL_ASSIST?: IUploadEntry;
     KILL_ASSIST_ITEM?: IUploadEntry;
+    CAPTURE_ENEMY?: IUploadEntry;
 }
 
 export interface IUploadEntry {

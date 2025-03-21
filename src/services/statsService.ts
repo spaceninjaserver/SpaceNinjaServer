@@ -148,7 +148,7 @@ export const updateStats = async (accountOwnerId: string, payload: IStatsUpdate)
                                 if (enemy) {
                                     if (category === "KILL_ENEMY") {
                                         enemy.kills ??= 0;
-                                        const captureCount = (actionData["CAPTURE_ENEMY"] as IUploadEntry)?.[type];
+                                        const captureCount = (actionData as IStatsAdd)["CAPTURE_ENEMY"]?.[type];
                                         if (captureCount) {
                                             enemy.kills += Math.max(count - captureCount, 0);
                                             enemy.captures ??= 0;
@@ -198,21 +198,19 @@ export const updateStats = async (accountOwnerId: string, payload: IStatsUpdate)
                             break;
 
                         case "CIPHER":
-                            if (data["0"] > 0) {
+                            if ((data as IUploadEntry)["0"] > 0) {
                                 playerStats.CiphersFailed ??= 0;
-                                playerStats.CiphersFailed += data["0"];
+                                playerStats.CiphersFailed += (data as IUploadEntry)["0"];
                             }
-                            if (data["1"] > 0) {
+                            if ((data as IUploadEntry)["1"] > 0) {
                                 playerStats.CiphersSolved ??= 0;
-                                playerStats.CiphersSolved += data["1"];
+                                playerStats.CiphersSolved += (data as IUploadEntry)["1"];
                             }
                             break;
 
                         default:
                             if (!ignoredCategories.includes(category)) {
-                                if (!unknownCategories[action]) {
-                                    unknownCategories[action] = [];
-                                }
+                                unknownCategories[action] ??= [];
                                 unknownCategories[action].push(category);
                             }
                             break;
@@ -312,7 +310,7 @@ export const updateStats = async (accountOwnerId: string, payload: IStatsUpdate)
                         case "CaliberChicksScore":
                         case "DojoObstacleScore":
                             playerStats[category] ??= 0;
-                            if (data > playerStats[category]) playerStats[category] = data;
+                            if (data > playerStats[category]) playerStats[category] = data as number;
                             break;
 
                         case "OlliesCrashCourseScore":
@@ -331,14 +329,12 @@ export const updateStats = async (accountOwnerId: string, payload: IStatsUpdate)
                                     "/Lotus/Types/Items/EmailItems/BeatOlliesCrashCourseInNinetySecEmailItem"
                                 );
                             }
-                            if (data > playerStats[category]) playerStats[category] = data;
+                            if (data > playerStats[category]) playerStats[category] = data as number;
                             break;
 
                         default:
                             if (!ignoredCategories.includes(category)) {
-                                if (!unknownCategories[action]) {
-                                    unknownCategories[action] = [];
-                                }
+                                unknownCategories[action] ??= [];
                                 unknownCategories[action].push(category);
                             }
                             break;
