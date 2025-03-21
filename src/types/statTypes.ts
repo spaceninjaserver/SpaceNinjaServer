@@ -26,6 +26,11 @@ export interface IStatsClient {
     HealCount?: number;
     ReviveCount?: number;
     Races?: Map<string, IRace>;
+    ZephyrScore?: number;
+    SentinelGameScore?: number;
+    CaliberChicksScore?: number;
+    OlliesCrashCourseScore?: number;
+    DojoObstacleScore?: number;
 }
 
 export interface IStatsDatabase extends IStatsClient {
@@ -139,6 +144,11 @@ export interface IStatsMax {
     WEAPON_XP?: IUploadEntry;
     MISSION_SCORE?: IUploadEntry;
     RACE_SCORE?: IUploadEntry;
+    ZephyrScore?: number;
+    SentinelGameScore?: number;
+    CaliberChicksScore?: number;
+    OlliesCrashCourseScore?: number;
+    DojoObstacleScore?: number;
 }
 
 export interface IStatsSet {

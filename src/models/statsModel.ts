@@ -92,7 +92,12 @@ const statsSchema = new Schema<IStatsDatabase>({
     Deaths: Number,
     HealCount: Number,
     ReviveCount: Number,
-    Races: { type: Map, of: raceSchema, default: {} }
+    Races: { type: Map, of: raceSchema, default: {} },
+    ZephyrScore: Number,
+    SentinelGameScore: Number,
+    CaliberChicksScore: Number,
+    OlliesCrashCourseScore: Number,
+    DojoObstacleScore: Number
 });
 
 statsSchema.set("toJSON", {

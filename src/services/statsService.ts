@@ -305,6 +305,15 @@ export const updateStats = async (playerStats: TStatsDatabaseDocument, payload: 
 
                             break;
 
+                        case "ZephyrScore":
+                        case "SentinelGameScore":
+                        case "CaliberChicksScore":
+                        case "OlliesCrashCourseScore":
+                        case "DojoObstacleScore":
+                            playerStats[category] ??= 0;
+                            if (data > playerStats[category]) playerStats[category] = data;
+                            break;
+
                         default:
                             if (!ignoredCategories.includes(category)) {
                                 if (!unknownCategories[action]) {
