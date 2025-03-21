@@ -9,7 +9,8 @@ import {
     IUploadEntry,
     IWeapon
 } from "@/src/types/statTypes";
-import { logger } from "../utils/logger";
+import { logger } from "@/src/utils/logger";
+import { addEmailItem, getInventory } from "@/src/services/inventoryService";
 
 export const createStats = async (accountId: string): Promise<TStatsDatabaseDocument> => {
     const stats = new Stats({ accountOwnerId: accountId });
@@ -25,8 +26,9 @@ export const getStats = async (accountOwnerId: string): Promise<TStatsDatabaseDo
     return stats;
 };
 
-export const updateStats = async (playerStats: TStatsDatabaseDocument, payload: IStatsUpdate): Promise<void> => {
+export const updateStats = async (accountOwnerId: string, payload: IStatsUpdate): Promise<void> => {
     const unknownCategories: Record<string, string[]> = {};
+    const playerStats = await getStats(accountOwnerId);
 
     for (const [action, actionData] of Object.entries(payload)) {
         switch (action) {
@@ -308,9 +310,27 @@ export const updateStats = async (playerStats: TStatsDatabaseDocument, payload: 
                         case "ZephyrScore":
                         case "SentinelGameScore":
                         case "CaliberChicksScore":
-                        case "OlliesCrashCourseScore":
                         case "DojoObstacleScore":
                             playerStats[category] ??= 0;
+                            if (data > playerStats[category]) playerStats[category] = data;
+                            break;
+
+                        case "OlliesCrashCourseScore":
+                            playerStats[category] ??= 0;
+                            if (!playerStats[category]) {
+                                const inventory = await getInventory(accountOwnerId, "EmailItems");
+                                await addEmailItem(
+                                    inventory,
+                                    "/Lotus/Types/Items/EmailItems/PlayedOlliesCrashCourseEmailItem"
+                                );
+                            }
+                            if (data >= 9991000 && playerStats[category] < 9991000) {
+                                const inventory = await getInventory(accountOwnerId, "EmailItems");
+                                await addEmailItem(
+                                    inventory,
+                                    "/Lotus/Types/Items/EmailItems/BeatOlliesCrashCourseInNinetySecEmailItem"
+                                );
+                            }
                             if (data > playerStats[category]) playerStats[category] = data;
                             break;
 
