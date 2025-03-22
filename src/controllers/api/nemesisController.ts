@@ -66,7 +66,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
         }
         res.json({ GuessResult: guessResult });
     } else if ((req.query.mode as string) == "s") {
-        const inventory = await getInventory(accountId, "Nemesis NemesisAbandonedRewards");
+        const inventory = await getInventory(accountId, "Nemesis");
         const body = getJSONfromString<INemesisStartRequest>(String(req.body));
         body.target.fp = BigInt(body.target.fp);
 
@@ -120,7 +120,6 @@ export const nemesisController: RequestHandler = async (req, res) => {
             MissionCount: 0,
             LastEnc: 0
         };
-        inventory.NemesisAbandonedRewards = []; // unclear if we need to do this since the client also submits this with missionInventoryUpdate
         await inventory.save();
 
         res.json({
