@@ -1,17 +1,12 @@
+import { getInfNodes } from "@/src/helpers/nemesisHelpers";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { freeUpSlot, getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { SRng } from "@/src/services/rngService";
 import { IMongoDate, IOid } from "@/src/types/commonTypes";
-import {
-    IInfNode,
-    IInnateDamageFingerprint,
-    InventorySlot,
-    TEquipmentKey
-} from "@/src/types/inventoryTypes/inventoryTypes";
+import { IInnateDamageFingerprint, InventorySlot, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
 import { logger } from "@/src/utils/logger";
 import { RequestHandler } from "express";
-import { ExportRegions } from "warframe-public-export-plus";
 
 export const nemesisController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -55,49 +50,8 @@ export const nemesisController: RequestHandler = async (req, res) => {
         const body = getJSONfromString<INemesisStartRequest>(String(req.body));
         body.target.fp = BigInt(body.target.fp);
 
-        let infNodes: IInfNode[];
         let weaponIdx = -1;
-        if (body.target.Faction == "FC_INFESTATION") {
-            infNodes = [
-                {
-                    Node: "SolNode852",
-                    Influence: 1
-                },
-                {
-                    Node: "SolNode850",
-                    Influence: 1
-                },
-                {
-                    Node: "SolNode851",
-                    Influence: 1
-                },
-                {
-                    Node: "SolNode853",
-                    Influence: 1
-                },
-                {
-                    Node: "SolNode854",
-                    Influence: 1
-                }
-            ];
-        } else {
-            infNodes = [];
-            for (const [key, value] of Object.entries(ExportRegions)) {
-                if (
-                    value.systemIndex == 2 && // earth
-                    value.nodeType != 3 && // not hub
-                    value.nodeType != 7 && // not junction
-                    value.missionIndex && // must have a mission type and not assassination
-                    value.missionIndex != 28 && // not open world
-                    value.missionIndex != 32 && // not railjack
-                    value.missionIndex != 41 && // not saya's visions
-                    value.name.indexOf("Archwing") == -1
-                ) {
-                    //console.log(dict_en[value.name]);
-                    infNodes.push({ Node: key, Influence: 1 });
-                }
-            }
-
+        if (body.target.Faction != "FC_INFESTATION") {
             let weapons: readonly string[];
             if (body.target.manifest == "/Lotus/Types/Game/Nemesis/KuvaLich/KuvaLichManifestVersionSix") {
                 weapons = kuvaLichVersionSixWeapons;
@@ -135,14 +89,16 @@ export const nemesisController: RequestHandler = async (req, res) => {
             k: false,
             Traded: false,
             d: new Date(),
-            InfNodes: infNodes,
+            InfNodes: getInfNodes(body.target.Faction, 0),
             GuessHistory: [],
             Hints: [],
             HintProgress: 0,
             Weakened: body.target.Weakened,
             PrevOwners: 0,
             HenchmenKilled: 0,
-            SecondInCommand: body.target.SecondInCommand
+            SecondInCommand: body.target.SecondInCommand,
+            MissionCount: 0,
+            LastEnc: 0
         };
         inventory.NemesisAbandonedRewards = []; // unclear if we need to do this since the client also submits this with missionInventoryUpdate
         await inventory.save();

@@ -3,6 +3,7 @@ import {
     IDroneClient,
     IInfestedFoundryClient,
     IMiscItem,
+    INemesisClient,
     ITypeCount,
     TEquipmentKey
 } from "./inventoryTypes/inventoryTypes";
@@ -41,6 +42,7 @@ export type IInventoryChanges = {
     Drones?: IDroneClient[];
     MiscItems?: IMiscItem[];
     EmailItems?: ITypeCount[];
+    Nemesis?: Partial<INemesisClient>;
 } & Record<
         Exclude<
             string,

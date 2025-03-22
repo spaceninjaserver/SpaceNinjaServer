@@ -1090,7 +1090,9 @@ const nemesisSchema = new Schema<INemesisDatabase>(
         HenchmenKilled: Number,
         HintProgress: Number,
         Hints: [Number],
-        GuessHistory: [Number]
+        GuessHistory: [Number],
+        MissionCount: Number,
+        LastEnc: Number
     },
     { _id: false }
 );

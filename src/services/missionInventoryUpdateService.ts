@@ -42,6 +42,7 @@ import { createMessage } from "./inboxService";
 import kuriaMessage50 from "@/static/fixed_responses/kuriaMessages/fiftyPercent.json";
 import kuriaMessage75 from "@/static/fixed_responses/kuriaMessages/seventyFivePercent.json";
 import kuriaMessage100 from "@/static/fixed_responses/kuriaMessages/oneHundredPercent.json";
+import { getInfNodes } from "@/src/helpers/nemesisHelpers";
 
 const getRotations = (rotationCount: number): number[] => {
     if (rotationCount === 0) return [0];
@@ -347,6 +348,7 @@ interface AddMissionRewardsReturnType {
 export const addMissionRewards = async (
     inventory: TInventoryDatabaseDocument,
     {
+        Nemesis: nemesis,
         RewardInfo: rewardInfo,
         LevelKeyName: levelKeyName,
         Missions: missions,
@@ -462,6 +464,49 @@ export const addMissionRewards = async (
         }
     }
 
+    if (inventory.Nemesis) {
+        if (
+            nemesis ||
+            (inventory.Nemesis.Faction == "FC_INFESTATION" &&
+                inventory.Nemesis.InfNodes.find(obj => obj.Node == rewardInfo.node))
+        ) {
+            inventoryChanges.Nemesis ??= {};
+            const nodeIndex = inventory.Nemesis.InfNodes.findIndex(obj => obj.Node === rewardInfo.node);
+            if (nodeIndex !== -1) inventory.Nemesis.InfNodes.splice(nodeIndex, 1);
+
+            if (inventory.Nemesis.InfNodes.length <= 0) {
+                if (inventory.Nemesis.Faction != "FC_INFESTATION") {
+                    inventory.Nemesis.Rank = Math.min(inventory.Nemesis.Rank + 1, 4);
+                    inventoryChanges.Nemesis.Rank = inventory.Nemesis.Rank;
+                }
+                inventory.Nemesis.InfNodes = getInfNodes(inventory.Nemesis.Faction, inventory.Nemesis.Rank);
+            }
+
+            if (inventory.Nemesis.Faction == "FC_INFESTATION") {
+                inventoryChanges.Nemesis.HenchmenKilled ??= 0;
+                inventoryChanges.Nemesis.MissionCount ??= 0;
+
+                inventory.Nemesis.HenchmenKilled += 5;
+                inventory.Nemesis.MissionCount += 1;
+
+                inventoryChanges.Nemesis.HenchmenKilled += 5;
+                inventoryChanges.Nemesis.MissionCount += 1;
+
+                if (inventory.Nemesis.HenchmenKilled >= 100) {
+                    inventory.Nemesis.InfNodes = [
+                        {
+                            Node: "CrewBattleNode559",
+                            Influence: 1
+                        }
+                    ];
+                    inventory.Nemesis.Weakened = true;
+                    inventoryChanges.Nemesis.Weakened = true;
+                }
+            }
+
+            inventoryChanges.Nemesis.InfNodes = inventory.Nemesis.InfNodes;
+        }
+    }
     return { inventoryChanges, MissionRewards, credits };
 };
 

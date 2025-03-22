@@ -109,6 +109,7 @@ export type IMissionInventoryUpdateRequest = {
         DROP_MOD: number[];
     }[];
     DeathMarks?: string[];
+    Nemesis?: number;
 } & {
     [K in TEquipmentKey]?: IEquipmentClient[];
 };

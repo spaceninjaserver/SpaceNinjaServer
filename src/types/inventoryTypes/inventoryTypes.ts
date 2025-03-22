@@ -814,6 +814,8 @@ export interface INemesisClient extends INemesisBaseClient {
     HintProgress: number;
     Hints: number[];
     GuessHistory: number[];
+    MissionCount: number;
+    LastEnc: number;
 }
 
 export interface INemesisDatabase extends Omit<INemesisClient, "d"> {
