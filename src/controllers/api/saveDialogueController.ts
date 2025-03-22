@@ -81,5 +81,11 @@ interface SaveCompletedDialogueRequest {
     Booleans: string[];
     ResetBooleans: string[];
     Data: ICompletedDialogue;
-    OtherDialogueInfos: string[]; // unsure
+    OtherDialogueInfos: IOtherDialogueInfo[]; // unsure
+}
+
+interface IOtherDialogueInfo {
+    Dialogue: string;
+    Tag: string;
+    Value: number;
 }
