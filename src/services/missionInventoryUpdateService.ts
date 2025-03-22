@@ -24,6 +24,7 @@ import {
     addMissionComplete,
     addMods,
     addRecipes,
+    addShipDecorations,
     combineInventoryChanges,
     updateSyndicate
 } from "@/src/services/inventoryService";
@@ -146,6 +147,10 @@ export const addMissionInventoryUpdates = async (
                 break;
             case "CrewShipAmmo":
                 addCrewShipAmmo(inventory, value);
+                break;
+            case "ShipDecorations":
+                // e.g. when getting a 50+ score in happy zephyr, this is how the poster is given.
+                addShipDecorations(inventory, value);
                 break;
             case "FusionBundles": {
                 let fusionPoints = 0;
