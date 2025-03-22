@@ -812,20 +812,27 @@ function doAcquireMiscItems() {
         $("#miscitem-type").addClass("is-invalid").focus();
         return;
     }
-    revalidateAuthz(() => {
-        $.post({
-            url: "/custom/addItems?" + window.authz,
-            contentType: "application/json",
-            data: JSON.stringify([
-                {
-                    ItemType: uniqueName,
-                    ItemCount: parseInt($("#miscitem-count").val())
+    const count = parseInt($("#miscitem-count").val());
+    if (count != 0) {
+        revalidateAuthz(() => {
+            $.post({
+                url: "/custom/addItems?" + window.authz,
+                contentType: "application/json",
+                data: JSON.stringify([
+                    {
+                        ItemType: uniqueName,
+                        ItemCount: count
+                    }
+                ])
+            }).done(function () {
+                if (count > 0) {
+                    toast(loc("code_succAdded"));
+                } else {
+                    toast(loc("code_succRemoved"));
                 }
-            ])
-        }).done(function () {
-            toast(loc("code_succAdded"));
+            });
         });
-    });
+    }
 }
 
 function doAcquireRiven() {
