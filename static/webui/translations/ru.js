@@ -29,6 +29,7 @@ dict = {
     code_succRankUp: `Ранг успешно повышен`,
     code_noEquipmentToRankUp: `Нет снаряжения для повышения ранга.`,
     code_succAdded: `Успешно добавлено.`,
+    code_succRemoved: `[UNTRANSLATED] Successfully removed.`,
     code_buffsNumber: `Количество усилений`,
     code_cursesNumber: `Количество проклятий`,
     code_rerollsNumber: `Количество циклов`,

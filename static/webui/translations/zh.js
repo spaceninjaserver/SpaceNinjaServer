@@ -29,6 +29,7 @@ dict = {
     code_succRankUp: `[UNTRANSLATED] Successfully ranked up.`,
     code_noEquipmentToRankUp: `没有可升级的装备。`,
     code_succAdded: `已成功添加。`,
+    code_succRemoved: `[UNTRANSLATED] Successfully removed.`,
     code_buffsNumber: `增益数量`,
     code_cursesNumber: `负面数量`,
     code_rerollsNumber: `洗卡次数`,

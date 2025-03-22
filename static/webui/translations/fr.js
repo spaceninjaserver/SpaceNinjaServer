@@ -29,6 +29,7 @@ dict = {
     code_succRankUp: `[UNTRANSLATED] Successfully ranked up.`,
     code_noEquipmentToRankUp: `No equipment to rank up.`,
     code_succAdded: `Ajouté.`,
+    code_succRemoved: `[UNTRANSLATED] Successfully removed.`,
     code_buffsNumber: `Nombre de buffs`,
     code_cursesNumber: `Nombre de débuffs`,
     code_rerollsNumber: `Nombre de rerolls`,
