@@ -1,4 +1,4 @@
-import { getInfNodes } from "@/src/helpers/nemesisHelpers";
+import { getInfNodes, getNemesisPasscode } from "@/src/helpers/nemesisHelpers";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { freeUpSlot, getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
@@ -45,6 +45,26 @@ export const nemesisController: RequestHandler = async (req, res) => {
                 [body.Category]: [destWeapon.toJSON()]
             }
         });
+    } else if ((req.query.mode as string) == "p") {
+        const inventory = await getInventory(accountId, "Nemesis");
+        const body = getJSONfromString<INemesisPrespawnCheckRequest>(String(req.body));
+        const passcode = getNemesisPasscode(inventory.Nemesis!.fp, inventory.Nemesis!.Faction);
+        let guessResult = 0;
+        if (inventory.Nemesis!.Faction == "FC_INFESTATION") {
+            for (let i = 0; i != 3; ++i) {
+                if (body.guess[i] == passcode[0]) {
+                    guessResult = 1 + i;
+                    break;
+                }
+            }
+        } else {
+            for (let i = 0; i != 3; ++i) {
+                if (body.guess[i] == passcode[i]) {
+                    ++guessResult;
+                }
+            }
+        }
+        res.json({ GuessResult: guessResult });
     } else if ((req.query.mode as string) == "s") {
         const inventory = await getInventory(accountId, "Nemesis NemesisAbandonedRewards");
         const body = getJSONfromString<INemesisStartRequest>(String(req.body));
@@ -146,6 +166,11 @@ interface INemesisStartRequest {
         LastEnc?: number; // Added in 38.5.0
         SecondInCommand: boolean;
     };
+}
+
+interface INemesisPrespawnCheckRequest {
+    guess: number[]; // .length == 3
+    potency?: number[];
 }
 
 const kuvaLichVersionSixWeapons = [
