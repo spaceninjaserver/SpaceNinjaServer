@@ -26,6 +26,7 @@ dict = {
     code_renamePrompt: `Neuen benutzerdefinierten Namen eingeben:`,
     code_remove: `Entfernen`,
     code_addItemsConfirm: `Bist du sicher, dass du |COUNT| Gegenstände zu deinem Account hinzufügen möchtest?`,
+    code_succRankUp: `[UNTRANSLATED] Successfully ranked up.`,
     code_noEquipmentToRankUp: `Keine Ausstattung zum Rangaufstieg verfügbar.`,
     code_succAdded: `Erfolgreich hinzugefügt.`,
     code_buffsNumber: `Anzahl der Buffs`,

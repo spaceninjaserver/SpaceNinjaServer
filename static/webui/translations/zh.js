@@ -26,6 +26,7 @@ dict = {
     code_renamePrompt: `输入新的自定义名称：`,
     code_remove: `移除`,
     code_addItemsConfirm: `确定要向账户添加 |COUNT| 件物品吗？`,
+    code_succRankUp: `[UNTRANSLATED] Successfully ranked up.`,
     code_noEquipmentToRankUp: `没有可升级的装备。`,
     code_succAdded: `已成功添加。`,
     code_buffsNumber: `增益数量`,

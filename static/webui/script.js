@@ -707,7 +707,7 @@ function maxRankAllEquipment(categories) {
                 return sendBatchGearExp(batchData);
             }
 
-            alert(loc("code_noEquipmentToRankUp"));
+            toast(loc("code_noEquipmentToRankUp"));
         });
     });
 }
@@ -740,6 +740,7 @@ function sendBatchGearExp(data) {
             contentType: "application/json",
             data: JSON.stringify(data)
         }).done(() => {
+            toast(loc("code_succRankUp"));
             updateInventory();
         });
     });
@@ -822,7 +823,7 @@ function doAcquireMiscItems() {
                 }
             ])
         }).done(function () {
-            alert(loc("code_succAdded"));
+            toast(loc("code_succAdded"));
         });
     });
 }
@@ -1019,9 +1020,9 @@ function doUnlockAllFocusSchools() {
                 await unlockFocusSchool(upgradeType);
             }
             if (Object.keys(missingFocusUpgrades).length == 0) {
-                alert(loc("code_focusAllUnlocked"));
+                toast(loc("code_focusAllUnlocked"));
             } else {
-                alert(loc("code_focusUnlocked").split("|COUNT|").join(Object.keys(missingFocusUpgrades).length));
+                toast(loc("code_focusUnlocked").split("|COUNT|").join(Object.keys(missingFocusUpgrades).length));
             }
         });
     });
@@ -1155,7 +1156,7 @@ function doImport() {
                 inventory: JSON.parse($("#import-inventory").val())
             })
         }).then(function () {
-            alert(loc("code_succImport"));
+            toast(loc("code_succImport"));
             updateInventory();
         });
     });
@@ -1191,4 +1192,21 @@ function doQuestUpdate(operation) {
     }).then(function () {
         updateInventory();
     });
+}
+
+function toast(text) {
+    const toast = document.createElement("div");
+    toast.className = "toast align-items-center text-bg-primary border-0";
+    const div = document.createElement("div");
+    div.className = "d-flex";
+    const body = document.createElement("div");
+    body.className = "toast-body";
+    body.textContent = text;
+    div.appendChild(body);
+    const button = document.createElement("button");
+    button.className = "btn-close btn-close-white me-2 m-auto";
+    button.setAttribute("data-bs-dismiss", "toast");
+    div.appendChild(button);
+    toast.appendChild(div);
+    new bootstrap.Toast(document.querySelector(".toast-container").appendChild(toast)).show();
 }

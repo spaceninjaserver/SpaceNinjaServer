@@ -26,6 +26,7 @@ dict = {
     code_renamePrompt: `Введите новое имя:`,
     code_remove: `Удалить`,
     code_addItemsConfirm: `Вы уверены, что хотите добавить |COUNT| предметов на ваш аккаунт?`,
+    code_succRankUp: `[UNTRANSLATED] Successfully ranked up.`,
     code_noEquipmentToRankUp: `Нет снаряжения для повышения ранга.`,
     code_succAdded: `Успешно добавлено.`,
     code_buffsNumber: `Количество усилений`,

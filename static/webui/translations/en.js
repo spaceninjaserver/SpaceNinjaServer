@@ -25,6 +25,7 @@ dict = {
     code_renamePrompt: `Enter new custom name:`,
     code_remove: `Remove`,
     code_addItemsConfirm: `Are you sure you want to add |COUNT| items to your account?`,
+    code_succRankUp: `Successfully ranked up.`,
     code_noEquipmentToRankUp: `No equipment to rank up.`,
     code_succAdded: `Successfully added.`,
     code_buffsNumber: `Number of buffs`,
