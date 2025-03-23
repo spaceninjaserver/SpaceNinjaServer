@@ -76,7 +76,6 @@ import {
     IIncentiveState,
     ISongChallenge,
     ILibraryPersonalProgress,
-    ICrewShipWeaponDatabase,
     IRecentVendorPurchaseDatabase,
     IVendorPurchaseHistoryEntryDatabase,
     IVendorPurchaseHistoryEntryClient,
@@ -1118,25 +1117,6 @@ const alignmentSchema = new Schema<IAlignment>(
     { _id: false }
 );
 
-const crewShipWeaponSchema2 = new Schema<ICrewShipWeaponDatabase>(
-    {
-        ItemType: String
-    },
-    { id: false }
-);
-
-crewShipWeaponSchema2.virtual("ItemId").get(function () {
-    return { $oid: this._id.toString() } satisfies IOid;
-});
-
-crewShipWeaponSchema2.set("toJSON", {
-    virtuals: true,
-    transform(_document, returnedObject) {
-        delete returnedObject._id;
-        delete returnedObject.__v;
-    }
-});
-
 const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
     {
         accountOwnerId: Schema.Types.ObjectId,
@@ -1259,20 +1239,20 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         //Default RailJack
         CrewShipAmmo: [typeCountSchema],
-        CrewShipWeapons: [crewShipWeaponSchema2],
+        CrewShipWeapons: [EquipmentSchema],
         CrewShipWeaponSkins: [upgradeSchema],
+        CrewShipSalvagedWeapons: [EquipmentSchema],
+        CrewShipSalvagedWeaponSkins: [upgradeSchema],
 
-        //NPC Crew and weapon
+        //RailJack Crew
         CrewMembers: [Schema.Types.Mixed],
-        CrewShipSalvagedWeaponSkins: [Schema.Types.Mixed],
-        CrewShipSalvagedWeapons: [Schema.Types.Mixed],
 
         //Complete Mission\Quests
         Missions: [missionSchema],
         QuestKeys: [questKeysSchema],
         ActiveQuest: { type: String, default: "" },
         //item like DojoKey or Boss missions key
-        LevelKeys: [Schema.Types.Mixed],
+        LevelKeys: [typeCountSchema],
         //Active quests
         Quests: [Schema.Types.Mixed],
 
@@ -1333,7 +1313,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         SpectreLoadouts: { type: [spectreLoadoutsSchema], default: undefined },
 
         //New Quest Email
-        EmailItems: [TypeXPItemSchema],
+        EmailItems: [typeCountSchema],
 
         //Profile->Wishlist
         Wishlist: [String],
@@ -1527,8 +1507,8 @@ export type InventoryDocumentProps = {
     WeaponSkins: Types.DocumentArray<IWeaponSkinDatabase>;
     QuestKeys: Types.DocumentArray<IQuestKeyDatabase>;
     Drones: Types.DocumentArray<IDroneDatabase>;
-    CrewShipWeapons: Types.DocumentArray<ICrewShipWeaponDatabase>;
     CrewShipWeaponSkins: Types.DocumentArray<IUpgradeDatabase>;
+    CrewShipSalvagedWeaponsSkins: Types.DocumentArray<IUpgradeDatabase>;
 } & { [K in TEquipmentKey]: Types.DocumentArray<IEquipmentDatabase> };
 
 // eslint-disable-next-line @typescript-eslint/ban-types

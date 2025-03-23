@@ -23,6 +23,12 @@ import {
     IKubrowPetDetailsDatabase,
     ILoadoutConfigClient,
     ILoadOutPresets,
+    INemesisClient,
+    INemesisDatabase,
+    IPendingRecipeClient,
+    IPendingRecipeDatabase,
+    IQuestKeyClient,
+    IQuestKeyDatabase,
     ISlots,
     IUpgradeClient,
     IUpgradeDatabase,
@@ -144,6 +150,27 @@ const convertKubrowDetails = (client: IKubrowPetDetailsClient): IKubrowPetDetail
     };
 };
 
+const convertQuestKey = (client: IQuestKeyClient): IQuestKeyDatabase => {
+    return {
+        ...client,
+        CompletionDate: convertOptionalDate(client.CompletionDate)
+    };
+};
+
+const convertPendingRecipe = (client: IPendingRecipeClient): IPendingRecipeDatabase => {
+    return {
+        ...client,
+        CompletionDate: convertDate(client.CompletionDate)
+    };
+};
+
+const convertNemesis = (client: INemesisClient): INemesisDatabase => {
+    return {
+        ...client,
+        d: convertDate(client.d)
+    };
+};
+
 export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<IInventoryClient>): void => {
     for (const key of equipmentKeys) {
         if (client[key] !== undefined) {
@@ -153,10 +180,22 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     if (client.WeaponSkins !== undefined) {
         replaceArray<IWeaponSkinDatabase>(db.WeaponSkins, client.WeaponSkins.map(convertWeaponSkin));
     }
-    if (client.Upgrades !== undefined) {
-        replaceArray<IUpgradeDatabase>(db.Upgrades, client.Upgrades.map(convertUpgrade));
+    for (const key of ["Upgrades", "CrewShipSalvagedWeaponSkins", "CrewShipWeaponSkins"] as const) {
+        if (client[key] !== undefined) {
+            replaceArray<IUpgradeDatabase>(db[key], client[key].map(convertUpgrade));
+        }
     }
-    for (const key of ["RawUpgrades", "MiscItems", "Consumables"] as const) {
+    for (const key of [
+        "RawUpgrades",
+        "MiscItems",
+        "Consumables",
+        "Recipes",
+        "LevelKeys",
+        "EmailItems",
+        "ShipDecorations",
+        "CrewShipAmmo",
+        "CrewShipRawSalvage"
+    ] as const) {
         if (client[key] !== undefined) {
             db[key].splice(0, db[key].length);
             client[key].forEach(x => {
@@ -190,8 +229,16 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
             replaceSlots(db[key], client[key]);
         }
     }
-    if (client.UseAdultOperatorLoadout !== undefined) {
-        db.UseAdultOperatorLoadout = client.UseAdultOperatorLoadout;
+    for (const key of [
+        "UseAdultOperatorLoadout",
+        "HasOwnedVoidProjectionsPreviously",
+        "ReceivedStartingGear",
+        "ArchwingEnabled",
+        "PlayedParkourTutorial"
+    ] as const) {
+        if (client[key] !== undefined) {
+            db[key] = client[key];
+        }
     }
     for (const key of [
         "PlayerLevel",
@@ -199,18 +246,37 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         "PremiumCredits",
         "PremiumCreditsFree",
         "FusionPoints",
-        "PrimeTokens"
+        "PrimeTokens",
+        "TradesRemaining",
+        "GiftsRemaining",
+        "ChallengesFixVersion"
     ] as const) {
         if (client[key] !== undefined) {
             db[key] = client[key];
         }
     }
-    for (const key of ["ThemeStyle", "ThemeBackground", "ThemeSounds", "EquippedInstrument", "FocusAbility"] as const) {
+    for (const key of [
+        "ThemeStyle",
+        "ThemeBackground",
+        "ThemeSounds",
+        "EquippedInstrument",
+        "FocusAbility",
+        "ActiveQuest",
+        "SupportedSyndicate",
+        "ActiveAvatarImageType"
+    ] as const) {
         if (client[key] !== undefined) {
             db[key] = client[key];
         }
     }
-    for (const key of ["EquippedGear", "EquippedEmotes", "NodeIntrosCompleted"] as const) {
+    for (const key of [
+        "EquippedGear",
+        "EquippedEmotes",
+        "NodeIntrosCompleted",
+        "DeathMarks",
+        "Wishlist",
+        "NemesisAbandonedRewards"
+    ] as const) {
         if (client[key] !== undefined) {
             db[key] = client[key];
         }
@@ -241,6 +307,77 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     }
     if (client.CustomMarkers !== undefined) {
         db.CustomMarkers = client.CustomMarkers;
+    }
+    if (client.ChallengeProgress !== undefined) {
+        db.ChallengeProgress = client.ChallengeProgress;
+    }
+    if (client.QuestKeys !== undefined) {
+        replaceArray<IQuestKeyDatabase>(db.QuestKeys, client.QuestKeys.map(convertQuestKey));
+    }
+    if (client.LastRegionPlayed !== undefined) {
+        db.LastRegionPlayed = client.LastRegionPlayed;
+    }
+    if (client.PendingRecipes !== undefined) {
+        replaceArray<IPendingRecipeDatabase>(db.PendingRecipes, client.PendingRecipes.map(convertPendingRecipe));
+    }
+    if (client.TauntHistory !== undefined) {
+        db.TauntHistory = client.TauntHistory;
+    }
+    if (client.LoreFragmentScans !== undefined) {
+        db.LoreFragmentScans = client.LoreFragmentScans;
+    }
+    for (const key of ["PendingSpectreLoadouts", "SpectreLoadouts"] as const) {
+        if (client[key] !== undefined) {
+            db[key] = client[key];
+        }
+    }
+    if (client.FocusXP !== undefined) {
+        db.FocusXP = client.FocusXP;
+    }
+    for (const key of ["Alignment", "AlignmentReplay"] as const) {
+        if (client[key] !== undefined) {
+            db[key] = client[key];
+        }
+    }
+    if (client.StepSequencers !== undefined) {
+        db.StepSequencers = client.StepSequencers;
+    }
+    if (client.CompletedJobChains !== undefined) {
+        db.CompletedJobChains = client.CompletedJobChains;
+    }
+    if (client.Nemesis !== undefined) {
+        db.Nemesis = convertNemesis(client.Nemesis);
+    }
+    if (client.PlayerSkills !== undefined) {
+        db.PlayerSkills = client.PlayerSkills;
+    }
+    if (client.LotusCustomization !== undefined) {
+        db.LotusCustomization = client.LotusCustomization;
+    }
+    if (client.CollectibleSeries !== undefined) {
+        db.CollectibleSeries = client.CollectibleSeries;
+    }
+    for (const key of ["LibraryAvailableDailyTaskInfo", "LibraryActiveDailyTaskInfo"] as const) {
+        if (client[key] !== undefined) {
+            db[key] = client[key];
+        }
+    }
+    if (client.EndlessXP !== undefined) {
+        db.EndlessXP = client.EndlessXP;
+    }
+    if (client.SongChallenges !== undefined) {
+        db.SongChallenges = client.SongChallenges;
+    }
+    if (client.Missions !== undefined) {
+        db.Missions = client.Missions;
+    }
+    if (client.FlavourItems !== undefined) {
+        db.FlavourItems.splice(0, db.FlavourItems.length);
+        client.FlavourItems.forEach(x => {
+            db.FlavourItems.push({
+                ItemType: x.ItemType
+            });
+        });
     }
 };
 

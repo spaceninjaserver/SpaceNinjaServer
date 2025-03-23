@@ -30,9 +30,8 @@ export interface IInventoryDatabase
             | "Ships"
             | "WeaponSkins"
             | "Upgrades"
-            | "CrewShipSalvagedWeaponSkins"
-            | "CrewShipWeapons"
             | "CrewShipWeaponSkins"
+            | "CrewShipSalvagedWeaponSkins"
             | "AdultOperatorLoadOuts"
             | "OperatorLoadOuts"
             | "KahlLoadOuts"
@@ -60,9 +59,8 @@ export interface IInventoryDatabase
     Ships: Types.ObjectId[];
     WeaponSkins: IWeaponSkinDatabase[];
     Upgrades: IUpgradeDatabase[];
-    CrewShipSalvagedWeaponSkins: IUpgradeDatabase[];
-    CrewShipWeapons: ICrewShipWeaponDatabase[];
     CrewShipWeaponSkins: IUpgradeDatabase[];
+    CrewShipSalvagedWeaponSkins: IUpgradeDatabase[];
     AdultOperatorLoadOuts: IOperatorConfigDatabase[];
     OperatorLoadOuts: IOperatorConfigDatabase[];
     KahlLoadOuts: IOperatorConfigDatabase[];
@@ -114,7 +112,9 @@ export const equipmentKeys = [
     "DataKnives",
     "MechSuits",
     "CrewShipHarnesses",
-    "KubrowPets"
+    "KubrowPets",
+    "CrewShipWeapons",
+    "CrewShipSalvagedWeapons"
 ] as const;
 
 export type TEquipmentKey = (typeof equipmentKeys)[number];
@@ -299,10 +299,8 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     PersonalTechProjects: IPersonalTechProject[];
     PlayerSkills: IPlayerSkills;
     CrewShipAmmo: ITypeCount[];
-    CrewShipSalvagedWeaponSkins: IUpgradeClient[];
-    CrewShipWeapons: ICrewShipWeaponClient[];
-    CrewShipSalvagedWeapons: IEquipmentClient[];
     CrewShipWeaponSkins: IUpgradeClient[];
+    CrewShipSalvagedWeaponSkins: IUpgradeClient[];
     TradeBannedUntil?: IMongoDate;
     PlayedParkourTutorial: boolean;
     SubscribedToEmailsPersonalized: number;
@@ -536,17 +534,6 @@ export type IMiscItem = ITypeCount;
 export interface ICrewShipWeapon {
     PILOT: ICrewShipPilotWeapon;
     PORT_GUNS: ICrewShipPortGuns;
-}
-
-// inventory.CrewShipWeapons
-export interface ICrewShipWeaponClient {
-    ItemType: string;
-    ItemId: IOid;
-}
-
-export interface ICrewShipWeaponDatabase {
-    ItemType: string;
-    _id: Types.ObjectId;
 }
 
 export interface ICrewShipPilotWeapon {

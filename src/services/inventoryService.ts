@@ -25,8 +25,7 @@ import {
     ILibraryDailyTaskInfo,
     ICalendarProgress,
     IDroneClient,
-    IUpgradeClient,
-    ICrewShipWeaponClient
+    IUpgradeClient
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate, IUpdateNodeIntrosResponse } from "../types/genericUpdate";
 import { IMissionInventoryUpdateRequest, IUpdateChallengeProgressRequest } from "../types/requestTypes";
@@ -434,7 +433,7 @@ export const addItem = async (
     }
     if (typeName in ExportRailjackWeapons) {
         return {
-            ...addCrewShipWeapon(inventory, typeName),
+            ...addEquipment(inventory, ExportRailjackWeapons[typeName].productCategory, typeName),
             ...occupySlot(inventory, InventorySlot.RJ_COMPONENT_AND_ARMAMENTS, premiumPurchase)
         };
     }
@@ -943,20 +942,6 @@ export const addSkin = (
     inventoryChanges.WeaponSkins ??= [];
     (inventoryChanges.WeaponSkins as IWeaponSkinClient[]).push(
         inventory.WeaponSkins[index].toJSON<IWeaponSkinClient>()
-    );
-    return inventoryChanges;
-};
-
-const addCrewShipWeapon = (
-    inventory: TInventoryDatabaseDocument,
-    typeName: string,
-    inventoryChanges: IInventoryChanges = {}
-): IInventoryChanges => {
-    const index = inventory.CrewShipWeapons.push({ ItemType: typeName, _id: new Types.ObjectId() }) - 1;
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    inventoryChanges.CrewShipWeapons ??= [];
-    (inventoryChanges.CrewShipWeapons as ICrewShipWeaponClient[]).push(
-        inventory.CrewShipWeapons[index].toJSON<ICrewShipWeaponClient>()
     );
     return inventoryChanges;
 };
