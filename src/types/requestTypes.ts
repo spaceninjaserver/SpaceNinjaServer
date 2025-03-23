@@ -19,12 +19,6 @@ import {
     ICollectibleEntry
 } from "./inventoryTypes/inventoryTypes";
 
-export interface IThemeUpdateRequest {
-    Style?: string;
-    Background?: string;
-    Sounds?: string;
-}
-
 export interface IAffiliationChange {
     Tag: string;
     Standing: number;

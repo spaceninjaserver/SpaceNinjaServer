@@ -1,25 +1,23 @@
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { updateTheme } from "@/src/services/inventoryService";
-import { IThemeUpdateRequest } from "@/src/types/requestTypes";
 import { RequestHandler } from "express";
+import { getInventory } from "@/src/services/inventoryService";
 
-const updateThemeController: RequestHandler = async (request, response) => {
+export const updateThemeController: RequestHandler = async (request, response) => {
     const accountId = await getAccountIdForRequest(request);
-    const body = String(request.body);
+    const data = getJSONfromString<IThemeUpdateRequest>(String(request.body));
 
-    try {
-        const json = getJSONfromString<IThemeUpdateRequest>(body);
-        if (typeof json !== "object") {
-            throw new Error("Invalid data format");
-        }
-
-        await updateTheme(json, accountId);
-    } catch (err) {
-        console.error("Error parsing JSON data:", err);
-    }
+    const inventory = await getInventory(accountId, "ThemeStyle ThemeBackground ThemeSounds");
+    if (data.Style) inventory.ThemeStyle = data.Style;
+    if (data.Background) inventory.ThemeBackground = data.Background;
+    if (data.Sounds) inventory.ThemeSounds = data.Sounds;
+    await inventory.save();
 
     response.json({});
 };
 
-export { updateThemeController };
+interface IThemeUpdateRequest {
+    Style?: string;
+    Background?: string;
+    Sounds?: string;
+}

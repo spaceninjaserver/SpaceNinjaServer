@@ -29,11 +29,7 @@ import {
     ICrewShipWeaponClient
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate, IUpdateNodeIntrosResponse } from "../types/genericUpdate";
-import {
-    IMissionInventoryUpdateRequest,
-    IThemeUpdateRequest,
-    IUpdateChallengeProgressRequest
-} from "../types/requestTypes";
+import { IMissionInventoryUpdateRequest, IUpdateChallengeProgressRequest } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
 import { convertInboxMessage, fromStoreItem, getExalted, getKeyChainItems } from "@/src/services/itemDataService";
 import {
@@ -889,15 +885,6 @@ export const updateGeneric = async (data: IGenericUpdate, accountId: string): Pr
         MissionRewards: [],
         InventoryChanges: inventoryChanges
     };
-};
-
-export const updateTheme = async (data: IThemeUpdateRequest, accountId: string): Promise<void> => {
-    const inventory = await getInventory(accountId);
-    if (data.Style) inventory.ThemeStyle = data.Style;
-    if (data.Background) inventory.ThemeBackground = data.Background;
-    if (data.Sounds) inventory.ThemeSounds = data.Sounds;
-
-    await inventory.save();
 };
 
 export const addEquipment = (
