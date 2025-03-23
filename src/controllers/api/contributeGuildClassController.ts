@@ -1,7 +1,8 @@
 import { toMongoDate } from "@/src/helpers/inventoryHelpers";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { Guild } from "@/src/models/guildModel";
+import { Guild, GuildMember } from "@/src/models/guildModel";
 import { config } from "@/src/services/configService";
+import { createMessage } from "@/src/services/inboxService";
 import { getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { RequestHandler } from "express";
@@ -35,6 +36,37 @@ export const contributeGuildClassController: RequestHandler = async (req, res) =
         guild.Class = guild.CeremonyClass!;
         guild.CeremonyClass = undefined;
         guild.CeremonyResetDate = new Date(Date.now() + (config.fastClanAscension ? 5_000 : 72 * 3600_000));
+        if (!config.fastClanAscension) {
+            // Send message to all active guild members
+            const members = await GuildMember.find({ guildId: payload.GuildId, status: 0 }, "accountId");
+            for (const member of members) {
+                // somewhat unfaithful as on live the "msg" is not a loctag, but since we don't have the string, we'll let the client fill it in with "arg".
+                await createMessage(member.accountId.toString(), [
+                    {
+                        sndr: guild.Name,
+                        msg: "/Lotus/Language/Clan/Clan_AscensionCeremonyInProgressDetails",
+                        arg: [
+                            {
+                                Key: "RESETDATE",
+                                Tag:
+                                    guild.CeremonyResetDate.getUTCMonth() +
+                                    "/" +
+                                    guild.CeremonyResetDate.getUTCDate() +
+                                    "/" +
+                                    (guild.CeremonyResetDate.getUTCFullYear() % 100) +
+                                    " " +
+                                    guild.CeremonyResetDate.getUTCHours().toString().padStart(2, "0") +
+                                    ":" +
+                                    guild.CeremonyResetDate.getUTCMinutes().toString().padStart(2, "0")
+                            }
+                        ],
+                        sub: "/Lotus/Language/Clan/Clan_AscensionCeremonyInProgress",
+                        icon: "/Lotus/Interface/Graphics/ClanTileImages/ClanEnterDojo.png",
+                        highPriority: true
+                    }
+                ]);
+            }
+        }
     }
 
     await guild.save();
