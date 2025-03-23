@@ -333,7 +333,7 @@ export const handleStoreItemAcquisition = async (
         }
         switch (storeCategory) {
             default: {
-                purchaseResponse = await addItem(inventory, internalName, quantity, true);
+                purchaseResponse = { InventoryChanges: await addItem(inventory, internalName, quantity, true) };
                 break;
             }
             case "Types":
@@ -418,10 +418,7 @@ const handleBoosterPackPurchase = async (
     if (typeName == "/Lotus/Types/BoosterPacks/1999StickersPackEchoesArchimedeaFixed") {
         for (const result of pack.components) {
             purchaseResponse.BoosterPackItems += toStoreItem(result.Item) + ',{"lvl":0};';
-            combineInventoryChanges(
-                purchaseResponse.InventoryChanges,
-                (await addItem(inventory, result.Item, 1)).InventoryChanges
-            );
+            combineInventoryChanges(purchaseResponse.InventoryChanges, await addItem(inventory, result.Item, 1));
         }
     } else {
         for (let i = 0; i != quantity; ++i) {
@@ -432,7 +429,7 @@ const handleBoosterPackPurchase = async (
                     purchaseResponse.BoosterPackItems += toStoreItem(result.Item) + ',{"lvl":0};';
                     combineInventoryChanges(
                         purchaseResponse.InventoryChanges,
-                        (await addItem(inventory, result.Item, 1)).InventoryChanges
+                        await addItem(inventory, result.Item, 1)
                     );
                 }
             }
@@ -468,7 +465,7 @@ const handleTypesPurchase = async (
     logger.debug(`type category ${typeCategory}`);
     switch (typeCategory) {
         default:
-            return await addItem(inventory, typesName, quantity);
+            return { InventoryChanges: await addItem(inventory, typesName, quantity) };
         case "BoosterPacks":
             return handleBoosterPackPurchase(typesName, inventory, quantity);
         case "SlotItems":

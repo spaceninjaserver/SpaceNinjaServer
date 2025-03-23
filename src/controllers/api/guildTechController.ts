@@ -194,7 +194,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
             ItemCount: x.ItemCount * -1
         }));
         addMiscItems(inventory, inventoryChanges.MiscItems);
-        combineInventoryChanges(inventoryChanges, (await addItem(inventory, recipe.resultType)).InventoryChanges);
+        combineInventoryChanges(inventoryChanges, await addItem(inventory, recipe.resultType));
         await inventory.save();
         // Not a mistake: This response uses `inventoryChanges` instead of `InventoryChanges`.
         res.json({ inventoryChanges: inventoryChanges });

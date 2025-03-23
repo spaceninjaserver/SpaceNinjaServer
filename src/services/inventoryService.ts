@@ -234,10 +234,10 @@ export const addItem = async (
     typeName: string,
     quantity: number = 1,
     premiumPurchase: boolean = false
-): Promise<{ InventoryChanges: IInventoryChanges }> => {
+): Promise<IInventoryChanges> => {
     // Bundles are technically StoreItems but a) they don't have a normal counterpart, and b) they are used in non-StoreItem contexts, e.g. email attachments.
     if (typeName in ExportBundles) {
-        return { InventoryChanges: await handleBundleAcqusition(typeName, inventory, quantity) };
+        return await handleBundleAcqusition(typeName, inventory, quantity);
     }
 
     // Strict typing
@@ -250,9 +250,7 @@ export const addItem = async (
         ];
         addRecipes(inventory, recipeChanges);
         return {
-            InventoryChanges: {
-                Recipes: recipeChanges
-            }
+            Recipes: recipeChanges
         };
     }
     if (typeName in ExportResources) {
@@ -265,9 +263,7 @@ export const addItem = async (
             ];
             addMiscItems(inventory, miscItemChanges);
             return {
-                InventoryChanges: {
-                    MiscItems: miscItemChanges
-                }
+                MiscItems: miscItemChanges
             };
         } else if (ExportResources[typeName].productCategory == "FusionTreasures") {
             const fusionTreasureChanges = [
@@ -279,25 +275,21 @@ export const addItem = async (
             ];
             addFusionTreasures(inventory, fusionTreasureChanges);
             return {
-                InventoryChanges: {
-                    FusionTreasures: fusionTreasureChanges
-                }
+                FusionTreasures: fusionTreasureChanges
             };
         } else if (ExportResources[typeName].productCategory == "Ships") {
             const oid = await createShip(inventory.accountOwnerId, typeName);
             inventory.Ships.push(oid);
             return {
-                InventoryChanges: {
-                    Ships: [
-                        {
-                            ItemId: { $oid: oid.toString() },
-                            ItemType: typeName
-                        }
-                    ]
-                }
+                Ships: [
+                    {
+                        ItemId: { $oid: oid.toString() },
+                        ItemType: typeName
+                    }
+                ]
             };
         } else if (ExportResources[typeName].productCategory == "CrewShips") {
-            const inventoryChanges = {
+            return {
                 ...addCrewShip(inventory, typeName),
                 // fix to unlock railjack modding, item bellow supposed to be obtained from archwing quest
                 // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -305,8 +297,6 @@ export const addItem = async (
                     ? addCrewShipHarness(inventory, "/Lotus/Types/Game/CrewShip/RailJack/DefaultHarness")
                     : {})
             };
-
-            return { InventoryChanges: inventoryChanges };
         } else if (ExportResources[typeName].productCategory == "ShipDecorations") {
             const changes = [
                 {
@@ -316,9 +306,7 @@ export const addItem = async (
             ];
             addShipDecorations(inventory, changes);
             return {
-                InventoryChanges: {
-                    ShipDecorations: changes
-                }
+                ShipDecorations: changes
             };
         } else if (ExportResources[typeName].productCategory == "KubrowPetEggs") {
             const changes: IKubrowPetEggClient[] = [];
@@ -339,9 +327,7 @@ export const addItem = async (
                 });
             }
             return {
-                InventoryChanges: {
-                    KubrowPetEggs: changes
-                }
+                KubrowPetEggs: changes
             };
         } else {
             throw new Error(`unknown product category: ${ExportResources[typeName].productCategory}`);
@@ -349,14 +335,13 @@ export const addItem = async (
     }
     if (typeName in ExportCustoms) {
         if (ExportCustoms[typeName].productCategory == "CrewShipWeaponSkins") {
-            return { InventoryChanges: addCrewShipWeaponSkin(inventory, typeName) };
+            return addCrewShipWeaponSkin(inventory, typeName);
         } else {
-            return { InventoryChanges: addSkin(inventory, typeName) };
+            return addSkin(inventory, typeName);
         }
     }
     if (typeName in ExportFlavour) {
-        const inventoryChanges = addCustomization(inventory, typeName);
-        return { InventoryChanges: inventoryChanges };
+        return addCustomization(inventory, typeName);
     }
     if (typeName in ExportUpgrades || typeName in ExportArcanes) {
         const changes = [
@@ -367,9 +352,7 @@ export const addItem = async (
         ];
         addMods(inventory, changes);
         return {
-            InventoryChanges: {
-                RawUpgrades: changes
-            }
+            RawUpgrades: changes
         };
     }
     if (typeName in ExportGear) {
@@ -381,9 +364,7 @@ export const addItem = async (
         ];
         addConsumables(inventory, consumablesChanges);
         return {
-            InventoryChanges: {
-                Consumables: consumablesChanges
-            }
+            Consumables: consumablesChanges
         };
     }
     if (typeName in ExportWeapons) {
@@ -426,14 +407,12 @@ export const addItem = async (
             );
             if (weapon.additionalItems) {
                 for (const item of weapon.additionalItems) {
-                    combineInventoryChanges(inventoryChanges, (await addItem(inventory, item, 1)).InventoryChanges);
+                    combineInventoryChanges(inventoryChanges, await addItem(inventory, item, 1));
                 }
             }
             return {
-                InventoryChanges: {
-                    ...inventoryChanges,
-                    ...occupySlot(inventory, InventorySlot.WEAPONS, premiumPurchase)
-                }
+                ...inventoryChanges,
+                ...occupySlot(inventory, InventorySlot.WEAPONS, premiumPurchase)
             };
         } else {
             // Modular weapon parts
@@ -445,36 +424,28 @@ export const addItem = async (
             ];
             addMiscItems(inventory, miscItemChanges);
             return {
-                InventoryChanges: {
-                    MiscItems: miscItemChanges
-                }
+                MiscItems: miscItemChanges
             };
         }
     }
     if (typeName in ExportRailjackWeapons) {
         return {
-            InventoryChanges: {
-                ...addCrewShipWeapon(inventory, typeName),
-                ...occupySlot(inventory, InventorySlot.RJ_COMPONENT_AND_ARMAMENTS, premiumPurchase)
-            }
+            ...addCrewShipWeapon(inventory, typeName),
+            ...occupySlot(inventory, InventorySlot.RJ_COMPONENT_AND_ARMAMENTS, premiumPurchase)
         };
     }
     if (typeName in ExportMisc.creditBundles) {
         const creditsTotal = ExportMisc.creditBundles[typeName] * quantity;
         inventory.RegularCredits += creditsTotal;
         return {
-            InventoryChanges: {
-                RegularCredits: creditsTotal
-            }
+            RegularCredits: creditsTotal
         };
     }
     if (typeName in ExportFusionBundles) {
         const fusionPointsTotal = ExportFusionBundles[typeName].fusionPoints * quantity;
         inventory.FusionPoints += fusionPointsTotal;
         return {
-            InventoryChanges: {
-                FusionPoints: fusionPointsTotal
-            }
+            FusionPoints: fusionPointsTotal
         };
     }
     if (typeName in ExportKeys) {
@@ -483,8 +454,8 @@ export const addItem = async (
 
         if (key.chainStages) {
             const key = addQuestKey(inventory, { ItemType: typeName });
-            if (!key) return { InventoryChanges: {} };
-            return { InventoryChanges: { QuestKeys: [key] } };
+            if (!key) return {};
+            return { QuestKeys: [key] };
         } else {
             const key = { ItemType: typeName, ItemCount: quantity };
 
@@ -494,19 +465,14 @@ export const addItem = async (
             } else {
                 inventory.LevelKeys.push(key);
             }
-            return { InventoryChanges: { LevelKeys: [key] } };
+            return { LevelKeys: [key] };
         }
     }
     if (typeName in ExportDrones) {
-        const inventoryChanges = addDrone(inventory, typeName);
-        return {
-            InventoryChanges: inventoryChanges
-        };
+        return addDrone(inventory, typeName);
     }
     if (typeName in ExportEmailItems) {
-        return {
-            InventoryChanges: await addEmailItem(inventory, typeName)
-        };
+        return await addEmailItem(inventory, typeName);
     }
 
     // Path-based duck typing
@@ -515,42 +481,36 @@ export const addItem = async (
             switch (typeName.substr(1).split("/")[2]) {
                 default: {
                     return {
-                        InventoryChanges: {
-                            ...addPowerSuit(
-                                inventory,
-                                typeName,
-                                {},
-                                premiumPurchase ? EquipmentFeatures.DOUBLE_CAPACITY : undefined
-                            ),
-                            ...occupySlot(inventory, InventorySlot.SUITS, premiumPurchase)
-                        }
+                        ...addPowerSuit(
+                            inventory,
+                            typeName,
+                            {},
+                            premiumPurchase ? EquipmentFeatures.DOUBLE_CAPACITY : undefined
+                        ),
+                        ...occupySlot(inventory, InventorySlot.SUITS, premiumPurchase)
                     };
                 }
                 case "Archwing": {
                     inventory.ArchwingEnabled = true;
                     return {
-                        InventoryChanges: {
-                            ...addSpaceSuit(
-                                inventory,
-                                typeName,
-                                {},
-                                premiumPurchase ? EquipmentFeatures.DOUBLE_CAPACITY : undefined
-                            ),
-                            ...occupySlot(inventory, InventorySlot.SPACESUITS, premiumPurchase)
-                        }
+                        ...addSpaceSuit(
+                            inventory,
+                            typeName,
+                            {},
+                            premiumPurchase ? EquipmentFeatures.DOUBLE_CAPACITY : undefined
+                        ),
+                        ...occupySlot(inventory, InventorySlot.SPACESUITS, premiumPurchase)
                     };
                 }
                 case "EntratiMech": {
                     return {
-                        InventoryChanges: {
-                            ...addMechSuit(
-                                inventory,
-                                typeName,
-                                {},
-                                premiumPurchase ? EquipmentFeatures.DOUBLE_CAPACITY : undefined
-                            ),
-                            ...occupySlot(inventory, InventorySlot.MECHSUITS, premiumPurchase)
-                        }
+                        ...addMechSuit(
+                            inventory,
+                            typeName,
+                            {},
+                            premiumPurchase ? EquipmentFeatures.DOUBLE_CAPACITY : undefined
+                        ),
+                        ...occupySlot(inventory, InventorySlot.MECHSUITS, premiumPurchase)
                     };
                 }
             }
@@ -568,9 +528,7 @@ export const addItem = async (
                         ];
                         addMods(inventory, changes);
                         return {
-                            InventoryChanges: {
-                                RawUpgrades: changes
-                            }
+                            RawUpgrades: changes
                         };
                     }
                     break;
@@ -587,9 +545,7 @@ export const addItem = async (
                             ];
                             addMiscItems(inventory, miscItemChanges);
                             return {
-                                InventoryChanges: {
-                                    MiscItems: miscItemChanges
-                                }
+                                MiscItems: miscItemChanges
                             };
                         } else {
                             const changes = [
@@ -600,9 +556,7 @@ export const addItem = async (
                             ];
                             addMods(inventory, changes);
                             return {
-                                InventoryChanges: {
-                                    RawUpgrades: changes
-                                }
+                                RawUpgrades: changes
                             };
                         }
                     }
@@ -613,9 +567,7 @@ export const addItem = async (
         case "Types":
             switch (typeName.substr(1).split("/")[2]) {
                 case "Sentinels": {
-                    return {
-                        InventoryChanges: addSentinel(inventory, typeName, premiumPurchase)
-                    };
+                    return addSentinel(inventory, typeName, premiumPurchase);
                 }
                 case "Game": {
                     if (typeName.substr(1).split("/")[3] == "Projections") {
@@ -629,9 +581,7 @@ export const addItem = async (
                         addMiscItems(inventory, miscItemChanges);
                         inventory.HasOwnedVoidProjectionsPreviously = true;
                         return {
-                            InventoryChanges: {
-                                MiscItems: miscItemChanges
-                            }
+                            MiscItems: miscItemChanges
                         };
                     }
                     break;
@@ -639,27 +589,23 @@ export const addItem = async (
                 case "NeutralCreatures": {
                     const horseIndex = inventory.Horses.push({ ItemType: typeName });
                     return {
-                        InventoryChanges: {
-                            Horses: [inventory.Horses[horseIndex - 1].toJSON<IEquipmentClient>()]
-                        }
+                        Horses: [inventory.Horses[horseIndex - 1].toJSON<IEquipmentClient>()]
                     };
                 }
                 case "Recipes": {
                     inventory.MiscItems.push({ ItemType: typeName, ItemCount: quantity });
                     return {
-                        InventoryChanges: {
-                            MiscItems: [
-                                {
-                                    ItemType: typeName,
-                                    ItemCount: quantity
-                                }
-                            ]
-                        }
+                        MiscItems: [
+                            {
+                                ItemType: typeName,
+                                ItemCount: quantity
+                            }
+                        ]
                     };
                 }
                 case "Vehicles":
                     if (typeName == "/Lotus/Types/Vehicles/Motorcycle/MotorcyclePowerSuit") {
-                        return { InventoryChanges: addMotorcycle(inventory, typeName) };
+                        return addMotorcycle(inventory, typeName);
                     }
                     break;
             }
@@ -680,7 +626,7 @@ export const addItems = async (
         } else {
             inventoryDelta = await addItem(inventory, item.ItemType, item.ItemCount, true);
         }
-        combineInventoryChanges(inventoryChanges, inventoryDelta.InventoryChanges);
+        combineInventoryChanges(inventoryChanges, inventoryDelta);
     }
     return inventoryChanges;
 };
@@ -1388,12 +1334,11 @@ export const addKeyChainItems = async (
 
     const nonStoreItems = keyChainItems.map(item => fromStoreItem(item));
 
-    //TODO: inventoryChanges is not typed correctly
-    const inventoryChanges = {};
+    const inventoryChanges: IInventoryChanges = {};
 
     for (const item of nonStoreItems) {
         const inventoryChangesDelta = await addItem(inventory, item);
-        combineInventoryChanges(inventoryChanges, inventoryChangesDelta.InventoryChanges);
+        combineInventoryChanges(inventoryChanges, inventoryChangesDelta);
     }
 
     return inventoryChanges;

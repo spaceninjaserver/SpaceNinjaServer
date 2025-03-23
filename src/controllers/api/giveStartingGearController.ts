@@ -87,7 +87,7 @@ export const addStartingGear = async (
 
     for (const item of awakeningRewards) {
         const inventoryDelta = await addItem(inventory, item);
-        combineInventoryChanges(inventoryChanges, inventoryDelta.InventoryChanges);
+        combineInventoryChanges(inventoryChanges, inventoryDelta);
     }
 
     inventory.PlayedParkourTutorial = true;
