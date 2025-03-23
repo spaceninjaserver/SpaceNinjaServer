@@ -6,6 +6,7 @@ import { pushArchonCrystalUpgradeController } from "@/src/controllers/custom/pus
 import { popArchonCrystalUpgradeController } from "@/src/controllers/custom/popArchonCrystalUpgradeController";
 import { deleteAccountController } from "@/src/controllers/custom/deleteAccountController";
 import { getNameController } from "@/src/controllers/custom/getNameController";
+import { getAccountInfoController } from "@/src/controllers/custom/getAccountInfoController";
 import { renameAccountController } from "@/src/controllers/custom/renameAccountController";
 import { ircDroppedController } from "@/src/controllers/custom/ircDroppedController";
 import { unlockAllIntrinsicsController } from "@/src/controllers/custom/unlockAllIntrinsicsController";
@@ -29,6 +30,7 @@ customRouter.get("/pushArchonCrystalUpgrade", pushArchonCrystalUpgradeController
 customRouter.get("/popArchonCrystalUpgrade", popArchonCrystalUpgradeController);
 customRouter.get("/deleteAccount", deleteAccountController);
 customRouter.get("/getName", getNameController);
+customRouter.get("/getAccountInfo", getAccountInfoController);
 customRouter.get("/renameAccount", renameAccountController);
 customRouter.get("/ircDropped", ircDroppedController);
 customRouter.get("/unlockAllIntrinsics", unlockAllIntrinsicsController);
