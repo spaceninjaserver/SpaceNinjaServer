@@ -1286,7 +1286,7 @@ export const addMissionComplete = (inventory: TInventoryDatabaseDocument, { Tag,
 };
 
 export const addBooster = (ItemType: string, time: number, inventory: TInventoryDatabaseDocument): void => {
-    const currentTime = Math.floor(Date.now() / 1000) - 129600; // Value is wrong without 129600. Figure out why, please. :)
+    const currentTime = Math.floor(Date.now() / 1000);
 
     const { Boosters } = inventory;
 
