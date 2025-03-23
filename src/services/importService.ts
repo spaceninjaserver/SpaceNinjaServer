@@ -239,6 +239,9 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     if (client.DialogueHistory !== undefined) {
         db.DialogueHistory = convertDialogueHistory(client.DialogueHistory);
     }
+    if (client.CustomMarkers !== undefined) {
+        db.CustomMarkers = client.CustomMarkers;
+    }
 };
 
 const convertLoadOutConfig = (client: ILoadoutConfigClient): ILoadoutConfigDatabase => {
