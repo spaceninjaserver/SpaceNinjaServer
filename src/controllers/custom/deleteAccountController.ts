@@ -14,12 +14,12 @@ export const deleteAccountController: RequestHandler = async (req, res) => {
     // TODO: Handle the account being the creator of a guild
     await Promise.all([
         Account.deleteOne({ _id: accountId }),
-        GuildMember.deleteOne({ accountId: accountId }),
+        GuildMember.deleteMany({ accountId: accountId }),
         Inbox.deleteMany({ ownerId: accountId }),
         Inventory.deleteOne({ accountOwnerId: accountId }),
         Loadout.deleteOne({ loadoutOwnerId: accountId }),
         PersonalRooms.deleteOne({ personalRoomsOwnerId: accountId }),
-        Ship.deleteOne({ ShipOwnerId: accountId }),
+        Ship.deleteMany({ ShipOwnerId: accountId }),
         Stats.deleteOne({ accountOwnerId: accountId })
     ]);
     res.end();
