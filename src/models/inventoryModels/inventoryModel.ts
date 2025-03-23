@@ -1505,6 +1505,9 @@ inventorySchema.set("toJSON", {
         if (inventoryDatabase.NextRefill) {
             inventoryResponse.NextRefill = toMongoDate(inventoryDatabase.NextRefill);
         }
+        if (inventoryDatabase.EntratiVaultCountResetDate) {
+            inventoryResponse.EntratiVaultCountResetDate = toMongoDate(inventoryDatabase.EntratiVaultCountResetDate);
+        }
     }
 });
 

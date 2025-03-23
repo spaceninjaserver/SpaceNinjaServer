@@ -44,6 +44,7 @@ export interface IInventoryDatabase
             | "RecentVendorPurchases"
             | "NextRefill"
             | "Nemesis"
+            | "EntratiVaultCountResetDate"
             | TEquipmentKey
         >,
         InventoryDatabaseEquipment {
@@ -73,6 +74,7 @@ export interface IInventoryDatabase
     RecentVendorPurchases?: IRecentVendorPurchaseDatabase[];
     NextRefill?: Date;
     Nemesis?: INemesisDatabase;
+    EntratiVaultCountResetDate?: Date;
 }
 
 export interface IQuestKeyDatabase {
@@ -336,7 +338,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     CalendarProgress: ICalendarProgress;
     SongChallenges?: ISongChallenge[];
     EntratiVaultCountLastPeriod?: number;
-    EntratiVaultCountResetDate?: Date;
+    EntratiVaultCountResetDate?: IMongoDate;
     EntratiLabConquestUnlocked?: number;
     EntratiLabConquestHardModeStatus?: number;
     EntratiLabConquestCacheScoreMission?: number;
