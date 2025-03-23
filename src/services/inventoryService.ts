@@ -28,7 +28,7 @@ import {
     IUpgradeClient,
     ICrewShipWeaponClient
 } from "@/src/types/inventoryTypes/inventoryTypes";
-import { IGenericUpdate } from "../types/genericUpdate";
+import { IGenericUpdate, IUpdateNodeIntrosResponse } from "../types/genericUpdate";
 import {
     IMissionInventoryUpdateRequest,
     IThemeUpdateRequest,
@@ -574,6 +574,39 @@ export const addItem = async (
                         };
                     }
                     break;
+
+                case "Stickers":
+                    {
+                        const entry = inventory.RawUpgrades.find(x => x.ItemType == typeName);
+                        if (entry && entry.ItemCount >= 10) {
+                            const miscItemChanges = [
+                                {
+                                    ItemType: "/Lotus/Types/Items/MiscItems/1999ConquestBucks",
+                                    ItemCount: 1
+                                }
+                            ];
+                            addMiscItems(inventory, miscItemChanges);
+                            return {
+                                InventoryChanges: {
+                                    MiscItems: miscItemChanges
+                                }
+                            };
+                        } else {
+                            const changes = [
+                                {
+                                    ItemType: typeName,
+                                    ItemCount: quantity
+                                }
+                            ];
+                            addMods(inventory, changes);
+                            return {
+                                InventoryChanges: {
+                                    RawUpgrades: changes
+                                }
+                            };
+                        }
+                    }
+                    break;
             }
             break;
         }
@@ -876,12 +909,25 @@ export const updateStandingLimit = (
 };
 
 // TODO: AffiliationMods support (Nightwave).
-export const updateGeneric = async (data: IGenericUpdate, accountId: string): Promise<void> => {
-    const inventory = await getInventory(accountId);
+export const updateGeneric = async (data: IGenericUpdate, accountId: string): Promise<IUpdateNodeIntrosResponse> => {
+    const inventory = await getInventory(accountId, "NodeIntrosCompleted MiscItems");
 
     // Make it an array for easier parsing.
     if (typeof data.NodeIntrosCompleted === "string") {
         data.NodeIntrosCompleted = [data.NodeIntrosCompleted];
+    }
+
+    const inventoryChanges: IInventoryChanges = {};
+    for (const node of data.NodeIntrosCompleted) {
+        if (node == "KayaFirstVisitPack") {
+            inventoryChanges.MiscItems = [
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/1999FixedStickersPack",
+                    ItemCount: 1
+                }
+            ];
+            addMiscItems(inventory, inventoryChanges.MiscItems);
+        }
     }
 
     // Combine the two arrays into one.
@@ -892,6 +938,11 @@ export const updateGeneric = async (data: IGenericUpdate, accountId: string): Pr
 
     inventory.NodeIntrosCompleted = nodes;
     await inventory.save();
+
+    return {
+        MissionRewards: [],
+        InventoryChanges: inventoryChanges
+    };
 };
 
 export const updateTheme = async (data: IThemeUpdateRequest, accountId: string): Promise<void> => {

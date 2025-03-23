@@ -54,11 +54,16 @@ export const handlePurchase = async (
     if (purchaseRequest.PurchaseParams.Source == 7) {
         const manifest = getVendorManifestByOid(purchaseRequest.PurchaseParams.SourceId!);
         if (manifest) {
-            const ItemId = (JSON.parse(purchaseRequest.PurchaseParams.ExtraPurchaseInfoJson!) as { ItemId: string })
-                .ItemId;
-            const offer = manifest.VendorInfo.ItemManifest.find(x => x.Id.$oid == ItemId);
+            let ItemId: string | undefined;
+            if (purchaseRequest.PurchaseParams.ExtraPurchaseInfoJson) {
+                ItemId = (JSON.parse(purchaseRequest.PurchaseParams.ExtraPurchaseInfoJson) as { ItemId: string })
+                    .ItemId;
+            }
+            const offer = ItemId
+                ? manifest.VendorInfo.ItemManifest.find(x => x.Id.$oid == ItemId)
+                : manifest.VendorInfo.ItemManifest.find(x => x.StoreItem == purchaseRequest.PurchaseParams.StoreItem);
             if (!offer) {
-                throw new Error(`unknown vendor offer: ${ItemId}`);
+                throw new Error(`unknown vendor offer: ${ItemId ? ItemId : purchaseRequest.PurchaseParams.StoreItem}`);
             }
             if (offer.ItemPrices) {
                 handleItemPrices(
@@ -68,7 +73,7 @@ export const handlePurchase = async (
                     prePurchaseInventoryChanges
                 );
             }
-            if (!config.noVendorPurchaseLimits) {
+            if (!config.noVendorPurchaseLimits && ItemId) {
                 inventory.RecentVendorPurchases ??= [];
                 let vendorPurchases = inventory.RecentVendorPurchases.find(
                     x => x.VendorType == manifest.VendorInfo.TypeName
@@ -410,16 +415,26 @@ const handleBoosterPackPurchase = async (
             "attempt to roll over 100 booster packs in a single go. possible but unlikely to be desirable for the user or the server."
         );
     }
-    for (let i = 0; i != quantity; ++i) {
-        for (const weights of pack.rarityWeightsPerRoll) {
-            const result = getRandomWeightedRewardUc(pack.components, weights);
-            if (result) {
-                logger.debug(`booster pack rolled`, result);
-                purchaseResponse.BoosterPackItems += toStoreItem(result.Item) + ',{"lvl":0};';
-                combineInventoryChanges(
-                    purchaseResponse.InventoryChanges,
-                    (await addItem(inventory, result.Item, 1)).InventoryChanges
-                );
+    if (typeName == "/Lotus/Types/BoosterPacks/1999StickersPackEchoesArchimedeaFixed") {
+        for (const result of pack.components) {
+            purchaseResponse.BoosterPackItems += toStoreItem(result.Item) + ',{"lvl":0};';
+            combineInventoryChanges(
+                purchaseResponse.InventoryChanges,
+                (await addItem(inventory, result.Item, 1)).InventoryChanges
+            );
+        }
+    } else {
+        for (let i = 0; i != quantity; ++i) {
+            for (const weights of pack.rarityWeightsPerRoll) {
+                const result = getRandomWeightedRewardUc(pack.components, weights);
+                if (result) {
+                    logger.debug(`booster pack rolled`, result);
+                    purchaseResponse.BoosterPackItems += toStoreItem(result.Item) + ',{"lvl":0};';
+                    combineInventoryChanges(
+                        purchaseResponse.InventoryChanges,
+                        (await addItem(inventory, result.Item, 1)).InventoryChanges
+                    );
+                }
             }
         }
     }

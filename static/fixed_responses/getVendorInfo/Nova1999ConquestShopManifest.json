@@ -1,0 +1,188 @@
+{
+    "VendorInfo": {
+        "_id": {
+            "$oid": "67dadc30e4b6e0e5979c8d6a"
+        },
+        "TypeName": "/Lotus/Types/Game/VendorManifests/TheHex/Nova1999ConquestShopManifest",
+        "ItemManifest": [
+            {
+                "StoreItem": "/Lotus/StoreItems/Types/BoosterPacks/1999StickersPackEchoesArchimedea",
+                "ItemPrices": [
+                    {
+                        "ItemCount": 10,
+                        "ItemType": "/Lotus/Types/Items/MiscItems/1999ConquestBucks",
+                        "ProductCategory": "MiscItems"
+                    }
+                ],
+                "Bin": "BIN_0",
+                "QuantityMultiplier": 1,
+                "Expiry": {
+                    "$date": {
+                        "$numberLong": "2051240400000"
+                    }
+                },
+                "AllowMultipurchase": true,
+                "Id": {
+                    "$oid": "67db32b983b2ad79a9c1c18c"
+                }
+            },
+            {
+                "StoreItem": "/Lotus/StoreItems/Types/BoosterPacks/1999StickersPackEchoesArchimedeaFree",
+                "ItemPrices": [
+                    {
+                        "ItemCount": 1,
+                        "ItemType": "/Lotus/Types/Items/MiscItems/1999FreeStickersPack",
+                        "ProductCategory": "MiscItems"
+                    }
+                ],
+                "Bin": "BIN_0",
+                "QuantityMultiplier": 1,
+                "Expiry": {
+                    "$date": {
+                        "$numberLong": "2051240400000"
+                    }
+                },
+                "AllowMultipurchase": true,
+                "Id": {
+                    "$oid": "67db32b983b2ad79a9c1c18d"
+                }
+            },
+            {
+                "StoreItem": "/Lotus/StoreItems/Types/BoosterPacks/1999StickersPackEchoesArchimedeaFixed",
+                "ItemPrices": [
+                    {
+                        "ItemCount": 1,
+                        "ItemType": "/Lotus/Types/Items/MiscItems/1999FixedStickersPack",
+                        "ProductCategory": "MiscItems"
+                    }
+                ],
+                "Bin": "BIN_0",
+                "QuantityMultiplier": 1,
+                "Expiry": {
+                    "$date": {
+                        "$numberLong": "2051240400000"
+                    }
+                },
+                "AllowMultipurchase": true,
+                "Id": {
+                    "$oid": "67db32b983b2ad79a9c1c18e"
+                }
+            },
+            {
+                "StoreItem": "/Lotus/Types/StoreItems/Packages/SyndicateVosforPack",
+                "ItemPrices": [
+                    {
+                        "ItemCount": 6,
+                        "ItemType": "/Lotus/Types/Items/MiscItems/1999ConquestBucks",
+                        "ProductCategory": "MiscItems"
+                    }
+                ],
+                "Bin": "BIN_0",
+                "QuantityMultiplier": 1,
+                "Expiry": {
+                    "$date": {
+                        "$numberLong": "2051240400000"
+                    }
+                },
+                "AllowMultipurchase": true,
+                "Id": {
+                    "$oid": "67db32b983b2ad79a9c1c18f"
+                }
+            },
+            {
+                "StoreItem": "/Lotus/StoreItems/Types/Items/ShipDecos/StickerPictureFrame",
+                "ItemPrices": [
+                    {
+                        "ItemCount": 10,
+                        "ItemType": "/Lotus/Types/Items/MiscItems/1999ConquestBucks",
+                        "ProductCategory": "MiscItems"
+                    }
+                ],
+                "Bin": "BIN_0",
+                "QuantityMultiplier": 1,
+                "Expiry": {
+                    "$date": {
+                        "$numberLong": "2051240400000"
+                    }
+                },
+                "AllowMultipurchase": true,
+                "Id": {
+                    "$oid": "67db32b983b2ad79a9c1c190"
+                }
+            },
+            {
+                "StoreItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Utility/AbilityRadiationProcsCreateUniversalOrbsOnKill",
+                "ItemPrices": [
+                    {
+                        "ItemCount": 5,
+                        "ItemType": "/Lotus/Types/Items/MiscItems/1999ConquestBucks",
+                        "ProductCategory": "MiscItems"
+                    }
+                ],
+                "Bin": "BIN_1",
+                "QuantityMultiplier": 1,
+                "Expiry": {
+                    "$date": {
+                        "$numberLong": "2051240400000"
+                    }
+                },
+                "PurchaseQuantityLimit": 1,
+                "AllowMultipurchase": false,
+                "Id": {
+                    "$oid": "67db32b983b2ad79a9c1c191"
+                }
+            },
+            {
+                "StoreItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/AbilityHeatProcsGiveCritChance",
+                "ItemPrices": [
+                    {
+                        "ItemCount": 5,
+                        "ItemType": "/Lotus/Types/Items/MiscItems/1999ConquestBucks",
+                        "ProductCategory": "MiscItems"
+                    }
+                ],
+                "Bin": "BIN_1",
+                "QuantityMultiplier": 1,
+                "Expiry": {
+                    "$date": {
+                        "$numberLong": "2051240400000"
+                    }
+                },
+                "PurchaseQuantityLimit": 1,
+                "AllowMultipurchase": false,
+                "Id": {
+                    "$oid": "67db32b983b2ad79a9c1c192"
+                }
+            },
+            {
+                "StoreItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Defensive/InvulnerabilityOnDeathOnMercyKill",
+                "ItemPrices": [
+                    {
+                        "ItemCount": 5,
+                        "ItemType": "/Lotus/Types/Items/MiscItems/1999ConquestBucks",
+                        "ProductCategory": "MiscItems"
+                    }
+                ],
+                "Bin": "BIN_1",
+                "QuantityMultiplier": 1,
+                "Expiry": {
+                    "$date": {
+                        "$numberLong": "2051240400000"
+                    }
+                },
+                "PurchaseQuantityLimit": 1,
+                "AllowMultipurchase": false,
+                "Id": {
+                    "$oid": "67db32b983b2ad79a9c1c193"
+                }
+            }
+        ],
+        "PropertyTextHash": "CB7D0E807FD5E2BCD059195201D963B9",
+        "RequiredGoalTag": "",
+        "Expiry": {
+            "$date": {
+                "$numberLong": "2051240400000"
+            }
+        }
+    }
+}

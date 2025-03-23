@@ -19,6 +19,7 @@ import HubsIronwakeDondaVendorManifest from "@/static/fixed_responses/getVendorI
 import HubsPerrinSequenceWeaponVendorManifest from "@/static/fixed_responses/getVendorInfo/HubsPerrinSequenceWeaponVendorManifest.json";
 import HubsRailjackCrewMemberVendorManifest from "@/static/fixed_responses/getVendorInfo/HubsRailjackCrewMemberVendorManifest.json";
 import MaskSalesmanManifest from "@/static/fixed_responses/getVendorInfo/MaskSalesmanManifest.json";
+import Nova1999ConquestShopManifest from "@/static/fixed_responses/getVendorInfo/Nova1999ConquestShopManifest.json";
 import OstronFishmongerVendorManifest from "@/static/fixed_responses/getVendorInfo/OstronFishmongerVendorManifest.json";
 import OstronPetVendorManifest from "@/static/fixed_responses/getVendorInfo/OstronPetVendorManifest.json";
 import OstronProspectorVendorManifest from "@/static/fixed_responses/getVendorInfo/OstronProspectorVendorManifest.json";
@@ -69,6 +70,7 @@ const vendorManifests: IVendorManifest[] = [
     HubsPerrinSequenceWeaponVendorManifest,
     HubsRailjackCrewMemberVendorManifest,
     MaskSalesmanManifest,
+    Nova1999ConquestShopManifest,
     OstronFishmongerVendorManifest,
     OstronPetVendorManifest,
     OstronProspectorVendorManifest,
