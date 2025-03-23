@@ -35,6 +35,7 @@
   "/Lotus/Types/Items/Plants/WildGingerBPlant",
   "/Lotus/Objects/Guild/Props/Computers/PanelADeco",
   "/Lotus/Types/PickUps/LootContainers/CorpusLootCrateCommon",
+  "/Lotus/Objects/Gameplay/InfestedHiveMode/InfestedTumorObjectiveDeco",
   "/Lotus/Objects/Gameplay/InfestedHiveMode/InfestedTumorObjectiveSpawnedDeco",
   "/Lotus/Types/Friendly/Agents/HiveMode/InfestedHiveAvatarF",
   "/Lotus/Types/Friendly/Pets/DecoyCatbrowPetAvatar",
@@ -1088,5 +1089,8 @@
   "/Lotus/Weapons/Infested/Melee/InfBoomerang/InfBoomerangSpawnAvatar",
   "/Lotus/Types/Game/CrewShip/GrineerDestroyer/DeepSpace/GrineerDSDestroyerAvatar",
   "/Lotus/Types/Game/CrewShip/GrineerDestroyer/Saturn/GrineerSaturnDestroyerAvatar",
-  "/Lotus/Types/Game/CrewShip/GrineerDestroyer/GrineerDestroyerAvatar"
+  "/Lotus/Types/Game/CrewShip/GrineerDestroyer/GrineerDestroyerAvatar",
+  "/Lotus/Types/LevelObjects/Zariman/ZarLootCrateUltraRare",
+  "/Lotus/Objects/DomestikDrone/GrineerOceanDomestikDroneMover",
+  "/Lotus/Types/Gameplay/1999Wf/Extermination/SupplyCrate"
 ]
