@@ -3,6 +3,7 @@
 echo Updating SpaceNinjaServer...
 git config remote.origin.url https://openwf.io/SpaceNinjaServer.git
 git fetch --prune
+git stash
 git reset --hard origin/main
 
 if exist static\data\0\ (
