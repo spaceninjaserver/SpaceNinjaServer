@@ -415,24 +415,24 @@ const handleBoosterPackPurchase = async (
             "attempt to roll over 100 booster packs in a single go. possible but unlikely to be desirable for the user or the server."
         );
     }
-    if (typeName == "/Lotus/Types/BoosterPacks/1999StickersPackEchoesArchimedeaFixed") {
-        for (const result of pack.components) {
-            purchaseResponse.BoosterPackItems += toStoreItem(result.Item) + ',{"lvl":0};';
-            combineInventoryChanges(purchaseResponse.InventoryChanges, await addItem(inventory, result.Item, 1));
-        }
-    } else {
-        for (let i = 0; i != quantity; ++i) {
-            for (const weights of pack.rarityWeightsPerRoll) {
-                const result = getRandomWeightedRewardUc(pack.components, weights);
-                if (result) {
-                    logger.debug(`booster pack rolled`, result);
-                    purchaseResponse.BoosterPackItems += toStoreItem(result.Item) + ',{"lvl":0};';
-                    combineInventoryChanges(
-                        purchaseResponse.InventoryChanges,
-                        await addItem(inventory, result.Item, 1)
-                    );
+    for (let i = 0; i != quantity; ++i) {
+        const disallowedItems = new Set();
+        for (let roll = 0; roll != pack.rarityWeightsPerRoll.length; ) {
+            const weights = pack.rarityWeightsPerRoll[roll];
+            const result = getRandomWeightedRewardUc(pack.components, weights);
+            if (result) {
+                logger.debug(`booster pack rolled`, result);
+                if (disallowedItems.has(result.Item)) {
+                    logger.debug(`oops, can't use that one; trying again`);
+                    continue;
                 }
+                if (!pack.canGiveDuplicates) {
+                    disallowedItems.add(result.Item);
+                }
+                purchaseResponse.BoosterPackItems += toStoreItem(result.Item) + ',{"lvl":0};';
+                combineInventoryChanges(purchaseResponse.InventoryChanges, await addItem(inventory, result.Item, 1));
             }
+            ++roll;
         }
     }
     return purchaseResponse;
