@@ -30,6 +30,7 @@ import { dojoComponentRushController } from "@/src/controllers/api/dojoComponent
 import { dojoController } from "@/src/controllers/api/dojoController";
 import { dronesController } from "@/src/controllers/api/dronesController";
 import { endlessXpController } from "@/src/controllers/api/endlessXpController";
+import { entratiLabConquestModeController } from "@/src/controllers/api/entratiLabConquestModeController";
 import { evolveWeaponController } from "@/src/controllers/api/evolveWeaponController";
 import { findSessionsController } from "@/src/controllers/api/findSessionsController";
 import { fishmongerController } from "@/src/controllers/api/fishmongerController";
@@ -183,6 +184,7 @@ apiRouter.post("/destroyDojoDeco.php", destroyDojoDecoController);
 apiRouter.post("/dojoComponentRush.php", dojoComponentRushController);
 apiRouter.post("/drones.php", dronesController);
 apiRouter.post("/endlessXp.php", endlessXpController);
+apiRouter.post("/entratiLabConquestMode.php", entratiLabConquestModeController);
 apiRouter.post("/evolveWeapon.php", evolveWeaponController);
 apiRouter.post("/findSessions.php", findSessionsController);
 apiRouter.post("/fishmonger.php", fishmongerController);

@@ -1463,7 +1463,20 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         DialogueHistory: dialogueHistorySchema,
         CalendarProgress: calenderProgressSchema,
 
-        SongChallenges: { type: [songChallengeSchema], default: undefined }
+        SongChallenges: { type: [songChallengeSchema], default: undefined },
+
+        // Netracells + Deep Archimedea
+        EntratiVaultCountLastPeriod: { type: Number, default: undefined },
+        EntratiVaultCountResetDate: { type: Date, default: undefined },
+        EntratiLabConquestUnlocked: { type: Number, default: undefined },
+        EntratiLabConquestHardModeStatus: { type: Number, default: undefined },
+        EntratiLabConquestCacheScoreMission: { type: Number, default: undefined },
+        EntratiLabConquestActiveFrameVariants: { type: [String], default: undefined },
+        EchoesHexConquestUnlocked: { type: Number, default: undefined },
+        EchoesHexConquestHardModeStatus: { type: Number, default: undefined },
+        EchoesHexConquestCacheScoreMission: { type: Number, default: undefined },
+        EchoesHexConquestActiveFrameVariants: { type: [String], default: undefined },
+        EchoesHexConquestActiveStickers: { type: [String], default: undefined }
     },
     { timestamps: { createdAt: "Created", updatedAt: false } }
 );

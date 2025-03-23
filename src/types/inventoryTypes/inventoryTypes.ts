@@ -335,6 +335,17 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     DialogueHistory?: IDialogueHistoryClient;
     CalendarProgress: ICalendarProgress;
     SongChallenges?: ISongChallenge[];
+    EntratiVaultCountLastPeriod?: number;
+    EntratiVaultCountResetDate?: Date;
+    EntratiLabConquestUnlocked?: number;
+    EntratiLabConquestHardModeStatus?: number;
+    EntratiLabConquestCacheScoreMission?: number;
+    EntratiLabConquestActiveFrameVariants?: string[];
+    EchoesHexConquestUnlocked?: number;
+    EchoesHexConquestHardModeStatus?: number;
+    EchoesHexConquestCacheScoreMission?: number;
+    EchoesHexConquestActiveFrameVariants?: string[];
+    EchoesHexConquestActiveStickers?: string[];
 }
 
 export interface IAffiliation {
