@@ -330,11 +330,19 @@ export const addItem = async (
         }
     }
     if (typeName in ExportCustoms) {
-        if (ExportCustoms[typeName].productCategory == "CrewShipWeaponSkins") {
-            return addCrewShipWeaponSkin(inventory, typeName);
+        const meta = ExportCustoms[typeName];
+        let inventoryChanges: IInventoryChanges;
+        if (meta.productCategory == "CrewShipWeaponSkins") {
+            inventoryChanges = addCrewShipWeaponSkin(inventory, typeName);
         } else {
-            return addSkin(inventory, typeName);
+            inventoryChanges = addSkin(inventory, typeName);
         }
+        if (meta.additionalItems) {
+            for (const item of meta.additionalItems) {
+                combineInventoryChanges(inventoryChanges, await addItem(inventory, item));
+            }
+        }
+        return inventoryChanges;
     }
     if (typeName in ExportFlavour) {
         return addCustomization(inventory, typeName);
