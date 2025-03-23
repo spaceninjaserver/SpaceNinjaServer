@@ -115,6 +115,7 @@ import { updateSongChallengeController } from "@/src/controllers/api/updateSongC
 import { updateThemeController } from "@/src/controllers/api/updateThemeController";
 import { upgradesController } from "@/src/controllers/api/upgradesController";
 import { valenceSwapController } from "@/src/controllers/api/valenceSwapController";
+import { wishlistController } from "@/src/controllers/api/wishlistController";
 
 const apiRouter = express.Router();
 
@@ -245,5 +246,6 @@ apiRouter.post("/updateSongChallenge.php", updateSongChallengeController);
 apiRouter.post("/updateTheme.php", updateThemeController);
 apiRouter.post("/upgrades.php", upgradesController);
 apiRouter.post("/valenceSwap.php", valenceSwapController);
+apiRouter.post("/wishlist.php", wishlistController);
 
 export { apiRouter };
