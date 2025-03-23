@@ -19,9 +19,13 @@ import mongoose from "mongoose";
         return "<BIGINT>" + this.toString() + "</BIGINT>";
     };
     const og_stringify = JSON.stringify;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
-    (JSON as any).stringify = (obj: any): string => {
-        return og_stringify(obj).split(`"<BIGINT>`).join(``).split(`</BIGINT>"`).join(``);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    JSON.stringify = (obj: any, replacer?: any, space?: string | number): string => {
+        return og_stringify(obj, replacer as string[], space)
+            .split(`"<BIGINT>`)
+            .join(``)
+            .split(`</BIGINT>"`)
+            .join(``);
     };
 }
 

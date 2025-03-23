@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
-import { getAccountForRequest, isNameTaken } from "@/src/services/loginService";
+import { getAccountForRequest, isAdministrator, isNameTaken } from "@/src/services/loginService";
+import { config, saveConfig } from "@/src/services/configService";
 
 export const renameAccountController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -7,8 +8,18 @@ export const renameAccountController: RequestHandler = async (req, res) => {
         if (await isNameTaken(req.query.newname)) {
             res.status(409).json("Name already in use");
         } else {
+            if (isAdministrator(account)) {
+                for (let i = 0; i != config.administratorNames!.length; ++i) {
+                    if (config.administratorNames![i] == account.DisplayName) {
+                        config.administratorNames![i] = req.query.newname;
+                    }
+                }
+                await saveConfig();
+            }
+
             account.DisplayName = req.query.newname;
             await account.save();
+
             res.end();
         }
     } else {

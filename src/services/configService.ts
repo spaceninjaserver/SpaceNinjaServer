@@ -34,7 +34,7 @@ interface IConfig {
     httpsPort?: number;
     myIrcAddresses?: string[];
     NRS?: string[];
-    administratorNames?: string[] | string;
+    administratorNames?: string[];
     autoCreateAccount?: boolean;
     skipTutorial?: boolean;
     skipAllDialogue?: boolean;
@@ -83,10 +83,15 @@ export const updateConfig = async (data: string): Promise<void> => {
     Object.assign(config, JSON.parse(data));
 };
 
+export const saveConfig = async (): Promise<void> => {
+    amnesia = true;
+    await fsPromises.writeFile(configPath, JSON.stringify(config, null, 2));
+};
+
 export const validateConfig = (): void => {
     if (typeof config.administratorNames == "string") {
-        logger.warn(
-            `"administratorNames" should be an array; please add square brackets: ["${config.administratorNames}"]`
-        );
+        logger.info(`Updating config.json to make administratorNames an array.`);
+        config.administratorNames = [config.administratorNames];
+        void saveConfig();
     }
 };

@@ -93,13 +93,7 @@ export const getAccountIdForRequest = async (req: Request): Promise<string> => {
 };
 
 export const isAdministrator = (account: TAccountDocument): boolean => {
-    if (!config.administratorNames) {
-        return false;
-    }
-    if (typeof config.administratorNames == "string") {
-        return config.administratorNames == account.DisplayName;
-    }
-    return !!config.administratorNames.find(x => x == account.DisplayName);
+    return !!config.administratorNames?.find(x => x == account.DisplayName);
 };
 
 const platform_magics = [753, 639, 247, 37, 60];
