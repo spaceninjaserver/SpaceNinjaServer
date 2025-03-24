@@ -11,7 +11,7 @@ export const getAllMessagesSorted = async (accountId: string): Promise<HydratedD
 };
 
 export const getMessage = async (messageId: string): Promise<HydratedDocument<IMessageDatabase>> => {
-    const message = await Inbox.findOne({ _id: messageId });
+    const message = await Inbox.findById(messageId);
 
     if (!message) {
         throw new Error(`Message not found ${messageId}`);

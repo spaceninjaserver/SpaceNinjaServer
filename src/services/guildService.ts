@@ -37,7 +37,7 @@ export const getGuildForRequestEx = async (
     if (!inventory.GuildId || inventory.GuildId.toString() != guildId) {
         throw new Error("Account is not in the guild that it has sent a request for");
     }
-    const guild = await Guild.findOne({ _id: guildId });
+    const guild = await Guild.findById(guildId);
     if (!guild) {
         throw new Error("Account thinks it is in a guild that doesn't exist");
     }

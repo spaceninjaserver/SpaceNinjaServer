@@ -26,13 +26,13 @@ export const getProfileViewingDataController: RequestHandler = async (req, res) 
         res.status(400).end();
         return;
     }
-    const account = await Account.findOne({ _id: req.query.playerId as string }, "DisplayName");
+    const account = await Account.findById(req.query.playerId as string, "DisplayName");
     if (!account) {
         res.status(400).send("No account or guild ID specified");
         return;
     }
     const inventory = (await Inventory.findOne({ accountOwnerId: account._id }))!;
-    const loadout = (await Loadout.findOne({ _id: inventory.LoadOutPresets }, "NORMAL"))!;
+    const loadout = (await Loadout.findById(inventory.LoadOutPresets, "NORMAL"))!;
 
     const result: IPlayerProfileViewingDataResult = {
         AccountId: toOid(account._id),
@@ -88,7 +88,7 @@ export const getProfileViewingDataController: RequestHandler = async (req, res) 
         }
     }
     if (inventory.GuildId) {
-        const guild = (await Guild.findOne({ _id: inventory.GuildId }, "Name Tier XP Class"))!;
+        const guild = (await Guild.findById(inventory.GuildId, "Name Tier XP Class"))!;
         result.GuildId = toOid(inventory.GuildId);
         result.GuildName = guild.Name;
         result.GuildTier = guild.Tier;

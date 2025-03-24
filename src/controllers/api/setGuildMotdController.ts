@@ -8,7 +8,7 @@ import { RequestHandler } from "express";
 export const setGuildMotdController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
     const inventory = await getInventory(account._id.toString(), "GuildId");
-    const guild = (await Guild.findOne({ _id: inventory.GuildId! }))!;
+    const guild = (await Guild.findById(inventory.GuildId!))!;
     if (!(await hasGuildPermission(guild, account._id, GuildPermission.Herald))) {
         res.status(400).json("Invalid permission");
         return;

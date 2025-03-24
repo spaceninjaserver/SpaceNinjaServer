@@ -11,7 +11,7 @@ import { Types } from "mongoose";
 export const contributeGuildClassController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const payload = getJSONfromString<IContributeGuildClassRequest>(String(req.body));
-    const guild = (await Guild.findOne({ _id: payload.GuildId }))!;
+    const guild = (await Guild.findById(payload.GuildId))!;
 
     // First contributor initiates ceremony and locks the pending class.
     if (!guild.CeremonyContributors) {

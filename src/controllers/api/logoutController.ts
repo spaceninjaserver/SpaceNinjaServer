@@ -4,7 +4,7 @@ import { Account } from "@/src/models/loginModel";
 
 const logoutController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const account = await Account.findOne({ _id: accountId });
+    const account = await Account.findById(accountId);
     if (account) {
         account.Nonce = 0;
         await account.save();

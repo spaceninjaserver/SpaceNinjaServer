@@ -9,7 +9,7 @@ export const getGuildLogController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId, "GuildId");
     if (inventory.GuildId) {
-        const guild = await Guild.findOne({ _id: inventory.GuildId });
+        const guild = await Guild.findById(inventory.GuildId);
         if (guild) {
             const log: Record<string, IGuildLogEntryClient[]> = {
                 RoomChanges: [],

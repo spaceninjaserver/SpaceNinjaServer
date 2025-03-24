@@ -21,7 +21,7 @@ export const createShip = async (
 };
 
 export const getShip = async (shipId: Types.ObjectId, fieldSelection: string = ""): Promise<TShipDatabaseDocument> => {
-    const ship = await Ship.findOne({ _id: shipId }, fieldSelection);
+    const ship = await Ship.findById(shipId, fieldSelection);
 
     if (!ship) {
         throw new Error(`error finding a ship with id ${shipId.toString()}`);

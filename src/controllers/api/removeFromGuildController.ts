@@ -42,7 +42,7 @@ export const removeFromGuildController: RequestHandler = async (req, res) => {
 
     guild.RosterActivity ??= [];
     if (isKick) {
-        const kickee = (await Account.findOne({ _id: payload.userId }))!;
+        const kickee = (await Account.findById(payload.userId))!;
         guild.RosterActivity.push({
             dateTime: new Date(),
             entryType: 12,

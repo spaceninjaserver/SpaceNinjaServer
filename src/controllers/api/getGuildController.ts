@@ -9,7 +9,7 @@ const getGuildController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId, "GuildId");
     if (inventory.GuildId) {
-        const guild = await Guild.findOne({ _id: inventory.GuildId });
+        const guild = await Guild.findById(inventory.GuildId);
         if (guild) {
             // Handle guilds created before we added discriminators
             if (guild.Name.indexOf("#") == -1) {

@@ -19,7 +19,7 @@ export const confirmGuildInvitationController: RequestHandler = async (req, res)
             new Types.ObjectId(req.query.clanId as string)
         );
 
-        const guild = (await Guild.findOne({ _id: req.query.clanId as string }))!;
+        const guild = (await Guild.findById(req.query.clanId as string))!;
 
         guild.RosterActivity ??= [];
         guild.RosterActivity.push({

@@ -6,7 +6,7 @@ import { getDojoClient } from "@/src/services/guildService";
 export const getGuildDojoController: RequestHandler = async (req, res) => {
     const guildId = req.query.guildId as string;
 
-    const guild = await Guild.findOne({ _id: guildId });
+    const guild = await Guild.findById(guildId);
     if (!guild) {
         res.status(404).end();
         return;

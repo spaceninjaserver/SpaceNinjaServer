@@ -12,7 +12,7 @@ export const getAccountInfoController: RequestHandler = async (req, res) => {
     }
     const guildMember = await GuildMember.findOne({ accountId: account._id, status: 0 }, "guildId rank");
     if (guildMember) {
-        const guild = (await Guild.findOne({ _id: guildMember.guildId }, "Ranks"))!;
+        const guild = (await Guild.findById(guildMember.guildId, "Ranks"))!;
         info.GuildId = guildMember.guildId.toString();
         info.GuildPermissions = guild.Ranks[guildMember.rank].Permissions;
     }
