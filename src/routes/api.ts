@@ -77,6 +77,7 @@ import { playerSkillsController } from "@/src/controllers/api/playerSkillsContro
 import { projectionManagerController } from "@/src/controllers/api/projectionManagerController";
 import { purchaseController } from "@/src/controllers/api/purchaseController";
 import { queueDojoComponentDestructionController } from "@/src/controllers/api/queueDojoComponentDestructionController";
+import { redeemPromoCodeController } from "@/src/controllers/api/redeemPromoCodeController";
 import { removeFromGuildController } from "@/src/controllers/api/removeFromGuildController";
 import { rerollRandomModController } from "@/src/controllers/api/rerollRandomModController";
 import { saveDialogueController } from "@/src/controllers/api/saveDialogueController";
@@ -216,6 +217,7 @@ apiRouter.post("/placeDecoInComponent.php", placeDecoInComponentController);
 apiRouter.post("/playerSkills.php", playerSkillsController);
 apiRouter.post("/projectionManager.php", projectionManagerController);
 apiRouter.post("/purchase.php", purchaseController);
+apiRouter.post("/redeemPromoCode.php", redeemPromoCodeController);
 apiRouter.post("/removeFromGuild.php", removeFromGuildController);
 apiRouter.post("/rerollRandomMod.php", rerollRandomModController);
 apiRouter.post("/saveDialogue.php", saveDialogueController);
