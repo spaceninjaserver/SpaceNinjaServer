@@ -365,6 +365,7 @@ export interface IAlignment {
 export interface IBooster {
     ExpiryDate: number;
     ItemType: string;
+    UsesRemaining?: number;
 }
 
 export interface IChallengeInstanceState {

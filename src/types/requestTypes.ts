@@ -104,6 +104,7 @@ export type IMissionInventoryUpdateRequest = {
     }[];
     DeathMarks?: string[];
     Nemesis?: number;
+    Boosters?: IBooster[];
 } & {
     [K in TEquipmentKey]?: IEquipmentClient[];
 };

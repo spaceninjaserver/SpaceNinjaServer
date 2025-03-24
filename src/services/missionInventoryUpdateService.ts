@@ -11,6 +11,7 @@ import { logger } from "@/src/utils/logger";
 import { IRngResult, getRandomElement, getRandomReward } from "@/src/services/rngService";
 import { equipmentKeys, IInventoryDatabase, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
 import {
+    addBooster,
     addChallenges,
     addConsumables,
     addCrewShipAmmo,
@@ -282,6 +283,11 @@ export const addMissionInventoryUpdates = async (
                 value.forEach(clientUpgrade => {
                     const upgrade = inventory.Upgrades.id(clientUpgrade.ItemId.$oid)!;
                     upgrade.UpgradeFingerprint = clientUpgrade.UpgradeFingerprint; // primitive way to copy over the riven challenge progress
+                });
+                break;
+            case "Boosters":
+                value.forEach(booster => {
+                    addBooster(booster.ItemType, booster.ExpiryDate, inventory);
                 });
                 break;
             case "SyndicateId": {
