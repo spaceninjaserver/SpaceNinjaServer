@@ -9,25 +9,12 @@ import { app } from "./app";
 import { config, validateConfig } from "./services/configService";
 import { registerLogFileCreationListener } from "@/src/utils/logger";
 import mongoose from "mongoose";
+import { Json, JSONStringify } from "json-with-bigint";
 
-// Patch JSON.stringify to work flawlessly with Bigints. Yeah, it's not pretty.
-// TODO: Might wanna use json-with-bigint if/when possible.
-{
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
-    (BigInt.prototype as any).toJSON = function (): string {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-        return "<BIGINT>" + this.toString() + "</BIGINT>";
-    };
-    const og_stringify = JSON.stringify;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    JSON.stringify = (obj: any, replacer?: any, space?: string | number): string => {
-        return og_stringify(obj, replacer as string[], space)
-            .split(`"<BIGINT>`)
-            .join(``)
-            .split(`</BIGINT>"`)
-            .join(``);
-    };
-}
+// Patch JSON.stringify to work flawlessly with Bigints.
+JSON.stringify = (obj: Exclude<Json, undefined>, _replacer?: unknown, space?: string | number): string => {
+    return JSONStringify(obj, space);
+};
 
 registerLogFileCreationListener();
 validateConfig();
