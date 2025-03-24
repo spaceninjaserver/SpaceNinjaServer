@@ -25,12 +25,6 @@ export interface IAffiliationChange {
     Title: number;
 }
 
-export interface IUpdateChallengeProgressRequest {
-    ChallengeProgress: IChallengeProgress[];
-    SeasonChallengeHistory: ISeasonChallenge[];
-    SeasonChallengeCompletions: ISeasonChallenge[];
-}
-
 export type IMissionInventoryUpdateRequest = {
     MiscItems?: ITypeCount[];
     Recipes?: ITypeCount[];

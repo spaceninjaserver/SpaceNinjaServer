@@ -28,7 +28,7 @@ import {
     IUpgradeClient
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate, IUpdateNodeIntrosResponse } from "../types/genericUpdate";
-import { IMissionInventoryUpdateRequest, IUpdateChallengeProgressRequest } from "../types/requestTypes";
+import { IMissionInventoryUpdateRequest } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
 import { convertInboxMessage, fromStoreItem, getExalted, getKeyChainItems } from "@/src/services/itemDataService";
 import {
@@ -1203,18 +1203,6 @@ export const addFocusXpIncreases = (inventory: TInventoryDatabaseDocument, focus
     inventory.FocusXP.AP_TACTIC += focusXpPlus[FocusType.AP_TACTIC];
     inventory.FocusXP.AP_POWER += focusXpPlus[FocusType.AP_POWER];
     inventory.FocusXP.AP_WARD += focusXpPlus[FocusType.AP_WARD];
-};
-
-export const updateChallengeProgress = async (
-    challenges: IUpdateChallengeProgressRequest,
-    accountId: string
-): Promise<void> => {
-    const inventory = await getInventory(accountId);
-
-    addChallenges(inventory, challenges.ChallengeProgress);
-    addSeasonalChallengeHistory(inventory, challenges.SeasonChallengeHistory);
-
-    await inventory.save();
 };
 
 export const addSeasonalChallengeHistory = (
