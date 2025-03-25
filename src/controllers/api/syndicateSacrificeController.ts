@@ -1,10 +1,17 @@
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { ExportSyndicates, ISyndicateSacrifice } from "warframe-public-export-plus";
+import { ExportNightwave, ExportSyndicates, ISyndicateSacrifice } from "warframe-public-export-plus";
 import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
-import { addMiscItems, combineInventoryChanges, getInventory, updateCurrency } from "@/src/services/inventoryService";
+import {
+    addItem,
+    addMiscItems,
+    combineInventoryChanges,
+    getInventory,
+    updateCurrency
+} from "@/src/services/inventoryService";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
+import { fromStoreItem, isStoreItem } from "@/src/services/itemDataService";
 
 export const syndicateSacrificeController: RequestHandler = async (request, response) => {
     const accountId = await getAccountIdForRequest(request);
@@ -22,7 +29,7 @@ export const syndicateSacrificeController: RequestHandler = async (request, resp
         InventoryChanges: {},
         Level: data.SacrificeLevel,
         LevelIncrease: level <= 0 ? 1 : level,
-        NewEpisodeReward: syndicate.Tag == "RadioLegionIntermission9Syndicate"
+        NewEpisodeReward: false
     };
 
     const manifest = ExportSyndicates[data.AffiliationTag];
@@ -62,6 +69,19 @@ export const syndicateSacrificeController: RequestHandler = async (request, resp
             res.InventoryChanges,
             (await handleStoreItemAcquisition(reward, inventory)).InventoryChanges
         );
+    }
+
+    if (data.AffiliationTag == ExportNightwave.affiliationTag) {
+        const index = syndicate.Title - 1;
+        if (index < ExportNightwave.rewards.length) {
+            res.NewEpisodeReward = true;
+            const reward = ExportNightwave.rewards[index];
+            let rewardType = reward.uniqueName;
+            if (isStoreItem(rewardType)) {
+                rewardType = fromStoreItem(rewardType);
+            }
+            combineInventoryChanges(res.InventoryChanges, await addItem(inventory, rewardType, reward.itemCount ?? 1));
+        }
     }
 
     await inventory.save();

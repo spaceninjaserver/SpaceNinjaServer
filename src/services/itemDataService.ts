@@ -250,6 +250,10 @@ export const convertInboxMessage = (message: IInboxMessage): IMessage => {
     } satisfies IMessage;
 };
 
+export const isStoreItem = (type: string): boolean => {
+    return type.startsWith("/Lotus/StoreItems/");
+};
+
 export const toStoreItem = (type: string): string => {
     return "/Lotus/StoreItems/" + type.substring("/Lotus/".length);
 };

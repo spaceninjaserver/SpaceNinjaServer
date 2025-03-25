@@ -15,6 +15,7 @@ import { checkDailyMissionBonusController } from "@/src/controllers/api/checkDai
 import { claimCompletedRecipeController } from "@/src/controllers/api/claimCompletedRecipeController";
 import { claimLibraryDailyTaskRewardController } from "@/src/controllers/api/claimLibraryDailyTaskRewardController";
 import { clearDialogueHistoryController } from "@/src/controllers/api/clearDialogueHistoryController";
+import { clearNewEpisodeRewardController } from "@/src/controllers/api/clearNewEpisodeRewardController";
 import { completeRandomModChallengeController } from "@/src/controllers/api/completeRandomModChallengeController";
 import { confirmGuildInvitationController } from "@/src/controllers/api/confirmGuildInvitationController";
 import { contributeGuildClassController } from "@/src/controllers/api/contributeGuildClassController";
@@ -175,6 +176,7 @@ apiRouter.post("/artifactTransmutation.php", artifactTransmutationController);
 apiRouter.post("/changeDojoRoot.php", changeDojoRootController);
 apiRouter.post("/claimCompletedRecipe.php", claimCompletedRecipeController);
 apiRouter.post("/clearDialogueHistory.php", clearDialogueHistoryController);
+apiRouter.post("/clearNewEpisodeReward.php", clearNewEpisodeRewardController);
 apiRouter.post("/completeRandomModChallenge.php", completeRandomModChallengeController);
 apiRouter.post("/contributeGuildClass.php", contributeGuildClassController);
 apiRouter.post("/contributeToDojoComponent.php", contributeToDojoComponentController);
