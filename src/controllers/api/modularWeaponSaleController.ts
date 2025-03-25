@@ -21,7 +21,7 @@ import { IInventoryChanges } from "@/src/types/purchaseTypes";
 export const modularWeaponSaleController: RequestHandler = async (req, res) => {
     const partTypeToParts: Record<string, string[]> = {};
     for (const [uniqueName, data] of Object.entries(ExportWeapons)) {
-        if (data.partType) {
+        if (data.partType && data.premiumPrice) {
             // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             partTypeToParts[data.partType] ??= [];
             partTypeToParts[data.partType].push(uniqueName);
@@ -147,11 +147,7 @@ const getModularWeaponSale = (
     const parts = partTypes.map(partType => rng.randomElement(partTypeToParts[partType]));
     let partsCost = 0;
     for (const part of parts) {
-        const meta = ExportWeapons[part];
-        if (!meta.premiumPrice) {
-            throw new Error(`no premium price for ${part}`);
-        }
-        partsCost += meta.premiumPrice;
+        partsCost += ExportWeapons[part].premiumPrice!;
     }
     return {
         Name: name,
