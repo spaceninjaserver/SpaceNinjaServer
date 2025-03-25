@@ -1207,11 +1207,11 @@ export const addFocusXpIncreases = (inventory: TInventoryDatabaseDocument, focus
 
 export const addSeasonalChallengeHistory = (
     inventory: TInventoryDatabaseDocument,
-    itemsArray: ISeasonChallenge[] | undefined
+    itemsArray: ISeasonChallenge[]
 ): void => {
     const category = inventory.SeasonChallengeHistory;
 
-    itemsArray?.forEach(({ challenge, id }) => {
+    itemsArray.forEach(({ challenge, id }) => {
         const itemIndex = category.findIndex(i => i.challenge === challenge);
 
         if (itemIndex !== -1) {
@@ -1222,17 +1222,14 @@ export const addSeasonalChallengeHistory = (
     });
 };
 
-export const addChallenges = (
-    inventory: TInventoryDatabaseDocument,
-    itemsArray: IChallengeProgress[] | undefined
-): void => {
+export const addChallenges = (inventory: TInventoryDatabaseDocument, itemsArray: IChallengeProgress[]): void => {
     const category = inventory.ChallengeProgress;
 
-    itemsArray?.forEach(({ Name, Progress }) => {
+    itemsArray.forEach(({ Name, Progress }) => {
         const itemIndex = category.findIndex(i => i.Name === Name);
 
         if (itemIndex !== -1) {
-            category[itemIndex].Progress += Progress;
+            category[itemIndex].Progress = Progress;
         } else {
             category.push({ Name, Progress });
         }
