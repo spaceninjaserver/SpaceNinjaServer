@@ -8,6 +8,7 @@ import { PersonalRooms } from "@/src/models/personalRoomsModel";
 import { Ship } from "@/src/models/shipModel";
 import { Stats } from "@/src/models/statsModel";
 import { GuildMember } from "@/src/models/guildModel";
+import { Leaderboard } from "@/src/models/leaderboardModel";
 
 export const deleteAccountController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -17,6 +18,7 @@ export const deleteAccountController: RequestHandler = async (req, res) => {
         GuildMember.deleteMany({ accountId: accountId }),
         Inbox.deleteMany({ ownerId: accountId }),
         Inventory.deleteOne({ accountOwnerId: accountId }),
+        Leaderboard.deleteMany({ ownerId: accountId }),
         Loadout.deleteOne({ loadoutOwnerId: accountId }),
         PersonalRooms.deleteOne({ personalRoomsOwnerId: accountId }),
         Ship.deleteMany({ ShipOwnerId: accountId }),

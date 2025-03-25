@@ -11,6 +11,7 @@ import {
 } from "@/src/types/statTypes";
 import { logger } from "@/src/utils/logger";
 import { addEmailItem, getInventory } from "@/src/services/inventoryService";
+import { submitLeaderboardScore } from "./leaderboardService";
 
 export const createStats = async (accountId: string): Promise<TStatsDatabaseDocument> => {
     const stats = new Stats({ accountOwnerId: accountId });
@@ -301,6 +302,13 @@ export const updateStats = async (accountOwnerId: string, payload: IStatsUpdate)
                                 } else {
                                     playerStats.Races.set(race, { highScore });
                                 }
+
+                                await submitLeaderboardScore(
+                                    "daily.accounts." + race,
+                                    accountOwnerId,
+                                    payload.displayName,
+                                    highScore
+                                );
                             }
 
                             break;
@@ -308,9 +316,20 @@ export const updateStats = async (accountOwnerId: string, payload: IStatsUpdate)
                         case "ZephyrScore":
                         case "SentinelGameScore":
                         case "CaliberChicksScore":
+                            playerStats[category] ??= 0;
+                            if (data > playerStats[category]) playerStats[category] = data as number;
+                            break;
+
                         case "DojoObstacleScore":
                             playerStats[category] ??= 0;
                             if (data > playerStats[category]) playerStats[category] = data as number;
+                            await submitLeaderboardScore(
+                                "weekly.accounts." + category,
+                                accountOwnerId,
+                                payload.displayName,
+                                data as number,
+                                payload.guildId
+                            );
                             break;
 
                         case "OlliesCrashCourseScore":
@@ -330,6 +349,12 @@ export const updateStats = async (accountOwnerId: string, payload: IStatsUpdate)
                                 );
                             }
                             if (data > playerStats[category]) playerStats[category] = data as number;
+                            await submitLeaderboardScore(
+                                "weekly.accounts." + category,
+                                accountOwnerId,
+                                payload.displayName,
+                                data as number
+                            );
                             break;
 
                         default:
