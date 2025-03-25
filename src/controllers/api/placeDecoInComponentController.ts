@@ -24,17 +24,25 @@ export const placeDecoInComponentController: RequestHandler = async (req, res) =
     }
 
     component.Decos ??= [];
-    component.Decos.push({
-        _id: new Types.ObjectId(),
-        Type: request.Type,
-        Pos: request.Pos,
-        Rot: request.Rot,
-        Name: request.Name
-    });
+    const deco =
+        component.Decos[
+            component.Decos.push({
+                _id: new Types.ObjectId(),
+                Type: request.Type,
+                Pos: request.Pos,
+                Rot: request.Rot,
+                Name: request.Name
+            }) - 1
+        ];
 
     const meta = Object.values(ExportDojoRecipes.decos).find(x => x.resultType == request.Type);
-    if (meta && meta.capacityCost) {
-        component.DecoCapacity -= meta.capacityCost;
+    if (meta) {
+        if (meta.capacityCost) {
+            component.DecoCapacity -= meta.capacityCost;
+        }
+        if (meta.price == 0 && meta.ingredients.length == 0) {
+            deco.CompletionTime = new Date();
+        }
     }
 
     await guild.save();
