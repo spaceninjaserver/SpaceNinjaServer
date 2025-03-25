@@ -23,7 +23,7 @@ const databaseAccountSchema = new Schema<IDatabaseAccountJson>(
         Dropped: Boolean,
         LatestEventMessageDate: { type: Date, default: 0 },
         LastLoginRewardDate: { type: Number, default: 0 },
-        LoginDays: { type: Number, default: 0 }
+        LoginDays: { type: Number, default: 1 }
     },
     opts
 );

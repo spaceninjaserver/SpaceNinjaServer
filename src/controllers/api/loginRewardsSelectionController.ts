@@ -28,7 +28,7 @@ export const loginRewardsSelectionController: RequestHandler = async (req, res) 
     } else {
         const randomRewards = getRandomLoginRewards(account, inventory);
         chosenReward = randomRewards.find(x => x.StoreItemType == body.ChosenReward)!;
-        inventoryChanges = await claimLoginReward(inventory, chosenReward);
+        inventoryChanges = await claimLoginReward(account, inventory, chosenReward);
     }
     await inventory.save();
     res.json({

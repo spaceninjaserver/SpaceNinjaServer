@@ -14,7 +14,7 @@ export interface ILoginRewardsReponse {
         IsMilestoneDay?: boolean;
         IsChooseRewardSet?: boolean;
         LoginDays?: number; // when calling multiple times per day, this is already incremented to represent "tomorrow"
-        //NextMilestoneReward?: "";
+        NextMilestoneReward?: "";
         NextMilestoneDay?: number; // seems to not be used if IsMilestoneDay
         HasChosenReward?: boolean;
         NewInventory?: IInventoryChanges;
@@ -47,15 +47,22 @@ const scaleAmount = (day: number, amount: number, scalingMultiplier: number): nu
 };
 
 // Always produces the same result for the same account _id & LoginDays pair.
+export const isLoginRewardAChoice = (account: TAccountDocument): boolean => {
+    const accountSeed = parseInt(account._id.toString().substring(16), 16);
+    const rng = new CRng(mixSeeds(accountSeed, account.LoginDays));
+    return rng.random() < 0.25; // Using 25% as an approximate chance for pick-a-doors. More conclusive data analysis is needed.
+};
+
+// Always produces the same result for the same account _id & LoginDays pair.
 export const getRandomLoginRewards = (
     account: TAccountDocument,
     inventory: TInventoryDatabaseDocument
 ): ILoginReward[] => {
     const accountSeed = parseInt(account._id.toString().substring(16), 16);
     const rng = new CRng(mixSeeds(accountSeed, account.LoginDays));
+    const pick_a_door = rng.random() < 0.25; // Using 25% as an approximate chance for pick-a-doors. More conclusive data analysis is needed.
     const rewards = [getRandomLoginReward(rng, account.LoginDays, inventory)];
-    // Using 25% an approximate chance for pick-a-doors. More conclusive data analysis is needed.
-    if (rng.random() < 0.25) {
+    if (pick_a_door) {
         do {
             const reward = getRandomLoginReward(rng, account.LoginDays, inventory);
             if (!rewards.find(x => x.StoreItemType == reward.StoreItemType)) {
@@ -114,9 +121,14 @@ const getRandomLoginReward = (rng: CRng, day: number, inventory: TInventoryDatab
 };
 
 export const claimLoginReward = async (
+    account: TAccountDocument,
     inventory: TInventoryDatabaseDocument,
     reward: ILoginReward
 ): Promise<IInventoryChanges> => {
+    account.LoginDays += 1;
+    account.LastLoginRewardDate = Math.trunc(Date.now() / 86400000) * 86400;
+    await account.save();
+
     switch (reward.RewardType) {
         case "RT_RESOURCE":
         case "RT_STORE_ITEM":
