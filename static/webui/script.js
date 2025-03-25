@@ -967,6 +967,9 @@ function doChangeSettings() {
                 url: "/custom/config?" + window.authz,
                 contentType: "text/plain",
                 data: JSON.stringify(json, null, 2)
+            }).then(() => {
+                // A few cheats affect the inventory response which in turn may change what values we need to show
+                updateInventory();
             });
         });
 }
