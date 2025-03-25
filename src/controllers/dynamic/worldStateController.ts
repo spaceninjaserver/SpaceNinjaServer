@@ -9,9 +9,16 @@ import { IMongoDate, IOid } from "@/src/types/commonTypes";
 import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { config } from "@/src/services/configService";
 import { CRng } from "@/src/services/rngService";
-import { ExportRegions } from "warframe-public-export-plus";
+import { ExportNightwave, ExportRegions } from "warframe-public-export-plus";
+
+const EPOCH = 1734307200 * 1000; // Monday, Dec 16, 2024 @ 00:00 UTC+0; should logically be winter in 1999 iteration 0
 
 export const worldStateController: RequestHandler = (req, res) => {
+    const day = Math.trunc((Date.now() - EPOCH) / 86400000);
+    const week = Math.trunc(day / 7);
+    const weekStart = EPOCH + week * 604800000;
+    const weekEnd = weekStart + 604800000;
+
     const worldState: IWorldState = {
         BuildLabel:
             typeof req.query.buildLabel == "string"
@@ -22,6 +29,42 @@ export const worldStateController: RequestHandler = (req, res) => {
         GlobalUpgrades: [],
         LiteSorties: [],
         EndlessXpChoices: [],
+        SeasonInfo: {
+            Activation: { $date: { $numberLong: "1715796000000" } },
+            Expiry: { $date: { $numberLong: "2000000000000" } },
+            AffiliationTag: "RadioLegionIntermission12Syndicate",
+            Season: 14,
+            Phase: 0,
+            Params: "",
+            ActiveChallenges: [
+                getSeasonDailyChallenge(day - 2),
+                getSeasonDailyChallenge(day - 1),
+                getSeasonDailyChallenge(day - 0),
+                getSeasonWeeklyChallenge(week, 0),
+                getSeasonWeeklyChallenge(week, 1),
+                getSeasonWeeklyHardChallenge(week, 2),
+                getSeasonWeeklyHardChallenge(week, 3),
+                {
+                    _id: { $oid: "67e1b96e9d00cb47" + (week * 7 + 0).toString().padStart(8, "0") },
+                    Activation: { $date: { $numberLong: weekStart.toString() } },
+                    Expiry: { $date: { $numberLong: weekEnd.toString() } },
+                    Challenge:
+                        "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentCompleteMissions" + (week - 12)
+                },
+                {
+                    _id: { $oid: "67e1b96e9d00cb47" + (week * 7 + 1).toString().padStart(8, "0") },
+                    Activation: { $date: { $numberLong: weekStart.toString() } },
+                    Expiry: { $date: { $numberLong: weekEnd.toString() } },
+                    Challenge: "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentKillEximus" + (week - 12)
+                },
+                {
+                    _id: { $oid: "67e1b96e9d00cb47" + (week * 7 + 2).toString().padStart(8, "0") },
+                    Activation: { $date: { $numberLong: weekStart.toString() } },
+                    Expiry: { $date: { $numberLong: weekEnd.toString() } },
+                    Challenge: "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentKillEnemies" + (week - 12)
+                }
+            ]
+        },
         ...staticWorldState
     };
 
@@ -41,12 +84,6 @@ export const worldStateController: RequestHandler = (req, res) => {
             Node: "SolarisUnitedHub1"
         });
     }
-
-    const EPOCH = 1734307200 * 1000; // Monday, Dec 16, 2024 @ 00:00 UTC+0; should logically be winter in 1999 iteration 0
-    const day = Math.trunc((Date.now() - EPOCH) / 86400000);
-    const week = Math.trunc(day / 7);
-    const weekStart = EPOCH + week * 604800000;
-    const weekEnd = weekStart + 604800000;
 
     // Elite Sanctuary Onslaught cycling every week
     worldState.NodeOverrides.find(x => x.Node == "SolNode802")!.Seed = week; // unfaithful
@@ -264,6 +301,15 @@ interface IWorldState {
     LiteSorties: ILiteSortie[];
     NodeOverrides: INodeOverride[];
     EndlessXpChoices: IEndlessXpChoice[];
+    SeasonInfo: {
+        Activation: IMongoDate;
+        Expiry: IMongoDate;
+        AffiliationTag: string;
+        Season: number;
+        Phase: number;
+        Params: string;
+        ActiveChallenges: ISeasonChallenge[];
+    };
     KnownCalendarSeasons: ICalendarSeason[];
     Tmp?: string;
 }
@@ -333,6 +379,14 @@ interface IEndlessXpChoice {
     Choices: string[];
 }
 
+interface ISeasonChallenge {
+    _id: IOid;
+    Daily?: boolean;
+    Activation: IMongoDate;
+    Expiry: IMongoDate;
+    Challenge: string;
+}
+
 interface ICalendarSeason {
     Activation: IMongoDate;
     Expiry: IMongoDate;
@@ -342,3 +396,56 @@ interface ICalendarSeason {
     }[];
     YearIteration: number;
 }
+
+const dailyChallenges = Object.keys(ExportNightwave.challenges).filter(x =>
+    x.startsWith("/Lotus/Types/Challenges/Seasons/Daily/")
+);
+
+const getSeasonDailyChallenge = (day: number): ISeasonChallenge => {
+    const dayStart = EPOCH + day * 86400000;
+    const dayEnd = EPOCH + (day + 3) * 86400000;
+    const rng = new CRng(day);
+    return {
+        _id: { $oid: "67e1b5ca9d00cb47" + day.toString().padStart(8, "0") },
+        Daily: true,
+        Activation: { $date: { $numberLong: dayStart.toString() } },
+        Expiry: { $date: { $numberLong: dayEnd.toString() } },
+        Challenge: rng.randomElement(dailyChallenges)
+    };
+};
+
+const weeklyChallenges = Object.keys(ExportNightwave.challenges).filter(
+    x =>
+        x.startsWith("/Lotus/Types/Challenges/Seasons/Weekly/") &&
+        !x.startsWith("/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanent")
+);
+
+const getSeasonWeeklyChallenge = (week: number, id: number): ISeasonChallenge => {
+    const weekStart = EPOCH + week * 604800000;
+    const weekEnd = weekStart + 604800000;
+    const challengeId = week * 7 + id;
+    const rng = new CRng(challengeId);
+    return {
+        _id: { $oid: "67e1bb2d9d00cb47" + challengeId.toString().padStart(8, "0") },
+        Activation: { $date: { $numberLong: weekStart.toString() } },
+        Expiry: { $date: { $numberLong: weekEnd.toString() } },
+        Challenge: rng.randomElement(weeklyChallenges)
+    };
+};
+
+const weeklyHardChallenges = Object.keys(ExportNightwave.challenges).filter(x =>
+    x.startsWith("/Lotus/Types/Challenges/Seasons/WeeklyHard/")
+);
+
+const getSeasonWeeklyHardChallenge = (week: number, id: number): ISeasonChallenge => {
+    const weekStart = EPOCH + week * 604800000;
+    const weekEnd = weekStart + 604800000;
+    const challengeId = week * 7 + id;
+    const rng = new CRng(challengeId);
+    return {
+        _id: { $oid: "67e1bb2d9d00cb47" + challengeId.toString().padStart(8, "0") },
+        Activation: { $date: { $numberLong: weekStart.toString() } },
+        Expiry: { $date: { $numberLong: weekEnd.toString() } },
+        Challenge: rng.randomElement(weeklyHardChallenges)
+    };
+};
