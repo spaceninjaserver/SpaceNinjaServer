@@ -619,5 +619,12 @@
     <script src="/webui/riven-tool/RivenParser.js"></script>
     <script src="/webui/script.js"></script>
     <script src="/webui/libs/bootstrap.bundle.min.js"></script>
+    <script>
+        setTimeout(function() {
+            if (location.protocol == "file:") {
+                document.write("You can access the WebUI via http://localhost/ when SpaceNinjaServer is running.");
+            }
+        }, 1);
+    </script>
 </body>
 </html>
