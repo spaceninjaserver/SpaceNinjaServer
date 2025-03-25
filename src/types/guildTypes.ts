@@ -152,6 +152,7 @@ export interface IDojoComponentDatabase
     CompletionLogPending?: boolean;
     DestructionTime?: Date;
     Decos?: IDojoDecoDatabase[];
+    Leaderboard?: IDojoLeaderboardEntry[];
 }
 
 export interface IDojoDecoClient {
@@ -211,4 +212,10 @@ export interface IGuildLogEntryNumber {
     dateTime: Date;
     entryType: number;
     details: number;
+}
+
+export interface IDojoLeaderboardEntry {
+    s: number; // score
+    r: number; // rank
+    n: string; // displayName
 }

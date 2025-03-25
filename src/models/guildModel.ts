@@ -9,7 +9,8 @@ import {
     IGuildRank,
     IGuildLogRoomChange,
     IGuildLogEntryRoster,
-    IGuildLogEntryContributable
+    IGuildLogEntryContributable,
+    IDojoLeaderboardEntry
 } from "@/src/types/guildTypes";
 import { Document, Model, model, Schema, Types } from "mongoose";
 import { fusionTreasuresSchema, typeCountSchema } from "./inventoryModels/inventoryModel";
@@ -24,6 +25,15 @@ const dojoDecoSchema = new Schema<IDojoDecoDatabase>({
     CompletionTime: Date,
     RushPlatinum: Number
 });
+
+const dojoLeaderboardEntrySchema = new Schema<IDojoLeaderboardEntry>(
+    {
+        s: Number,
+        r: Number,
+        n: String
+    },
+    { _id: false }
+);
 
 const dojoComponentSchema = new Schema<IDojoComponentDatabase>({
     pf: { type: String, required: true },
@@ -40,7 +50,8 @@ const dojoComponentSchema = new Schema<IDojoComponentDatabase>({
     RushPlatinum: Number,
     DestructionTime: Date,
     Decos: [dojoDecoSchema],
-    DecoCapacity: Number
+    DecoCapacity: Number,
+    Leaderboard: { type: [dojoLeaderboardEntrySchema], default: undefined }
 });
 
 const techProjectSchema = new Schema<ITechProjectDatabase>(
