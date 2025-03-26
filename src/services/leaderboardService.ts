@@ -40,8 +40,8 @@ export const getLeaderboard = async (
     leaderboard: string,
     before: number,
     after: number,
-    guildId?: string,
     pivotId?: string,
+    guildId?: string,
     guildTier?: number
 ): Promise<ILeaderboardEntryClient[]> => {
     const filter: { leaderboard: string; guildId?: string; guildTier?: number } = { leaderboard };
