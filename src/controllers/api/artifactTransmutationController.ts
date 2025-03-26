@@ -53,6 +53,7 @@ export const artifactTransmutationController: RequestHandler = async (req, res) 
             RARE: 0,
             LEGENDARY: 0
         };
+        let forcedPolarity: string | undefined;
         payload.Consumed.forEach(upgrade => {
             const meta = ExportUpgrades[upgrade.ItemType];
             counts[meta.rarity] += upgrade.ItemCount;
@@ -62,6 +63,13 @@ export const artifactTransmutationController: RequestHandler = async (req, res) 
                     ItemCount: upgrade.ItemCount * -1
                 }
             ]);
+            if (upgrade.ItemType == "/Lotus/Upgrades/Mods/TransmuteCores/AttackTransmuteCore") {
+                forcedPolarity = "AP_ATTACK";
+            } else if (upgrade.ItemType == "/Lotus/Upgrades/Mods/TransmuteCores/DefenseTransmuteCore") {
+                forcedPolarity = "AP_DEFENSE";
+            } else if (upgrade.ItemType == "/Lotus/Upgrades/Mods/TransmuteCores/TacticTransmuteCore") {
+                forcedPolarity = "AP_TACTIC";
+            }
         });
 
         // Based on the table on https://wiki.warframe.com/w/Transmutation
@@ -74,7 +82,7 @@ export const artifactTransmutationController: RequestHandler = async (req, res) 
 
         const options: { uniqueName: string; rarity: TRarity }[] = [];
         Object.entries(ExportUpgrades).forEach(([uniqueName, upgrade]) => {
-            if (upgrade.canBeTransmutation) {
+            if (upgrade.canBeTransmutation && (!forcedPolarity || upgrade.polarity == forcedPolarity)) {
                 options.push({ uniqueName, rarity: upgrade.rarity });
             }
         });
