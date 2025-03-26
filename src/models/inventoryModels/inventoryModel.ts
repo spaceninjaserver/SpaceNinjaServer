@@ -82,7 +82,8 @@ import {
     INemesisDatabase,
     INemesisClient,
     IInfNode,
-    IDiscoveredMarker
+    IDiscoveredMarker,
+    IWeeklyMission
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -445,6 +446,18 @@ kubrowPetEggSchema.set("toJSON", {
     }
 });
 
+const weeklyMissionSchema = new Schema<IWeeklyMission>(
+    {
+        MissionIndex: Number,
+        CompletedMission: Boolean,
+        JobManifest: String,
+        Challenges: [String],
+        ChallengesReset: Boolean,
+        WeekCount: Number
+    },
+    { _id: false }
+);
+
 const affiliationsSchema = new Schema<IAffiliation>(
     {
         Initiated: Boolean,
@@ -452,6 +465,7 @@ const affiliationsSchema = new Schema<IAffiliation>(
         Title: Number,
         FreeFavorsEarned: { type: [Number], default: undefined },
         FreeFavorsUsed: { type: [Number], default: undefined },
+        WeeklyMissions: { type: [weeklyMissionSchema], default: undefined },
         Tag: String
     },
     { _id: false }

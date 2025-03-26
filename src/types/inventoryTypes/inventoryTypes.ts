@@ -354,7 +354,17 @@ export interface IAffiliation {
     Title?: number;
     FreeFavorsEarned?: number[];
     FreeFavorsUsed?: number[];
+    WeeklyMissions?: IWeeklyMission[]; // Kahl
     Tag: string;
+}
+
+export interface IWeeklyMission {
+    MissionIndex: number;
+    CompletedMission: boolean;
+    JobManifest: string;
+    Challenges: string[];
+    ChallengesReset?: boolean;
+    WeekCount: number;
 }
 
 export interface IAlignment {
