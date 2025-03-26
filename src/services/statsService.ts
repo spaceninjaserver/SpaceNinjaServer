@@ -286,6 +286,15 @@ export const updateStats = async (accountOwnerId: string, payload: IStatsUpdate)
                                 } else {
                                     playerStats.Missions.push({ type: type, highScore });
                                 }
+                                await submitLeaderboardScore(
+                                    "weekly",
+                                    type,
+                                    accountOwnerId,
+                                    payload.displayName,
+                                    highScore,
+                                    payload.guildId
+                                );
+                                break;
                             }
                             break;
 
@@ -304,27 +313,42 @@ export const updateStats = async (accountOwnerId: string, payload: IStatsUpdate)
                                 }
 
                                 await submitLeaderboardScore(
-                                    "daily.accounts." + race,
+                                    "daily",
+                                    race,
                                     accountOwnerId,
                                     payload.displayName,
-                                    highScore
+                                    highScore,
+                                    payload.guildId
                                 );
                             }
 
                             break;
 
                         case "ZephyrScore":
-                        case "SentinelGameScore":
                         case "CaliberChicksScore":
                             playerStats[category] ??= 0;
                             if (data > playerStats[category]) playerStats[category] = data as number;
+                            break;
+
+                        case "SentinelGameScore":
+                            playerStats[category] ??= 0;
+                            if (data > playerStats[category]) playerStats[category] = data as number;
+                            await submitLeaderboardScore(
+                                "weekly",
+                                category,
+                                accountOwnerId,
+                                payload.displayName,
+                                data as number,
+                                payload.guildId
+                            );
                             break;
 
                         case "DojoObstacleScore":
                             playerStats[category] ??= 0;
                             if (data > playerStats[category]) playerStats[category] = data as number;
                             await submitLeaderboardScore(
-                                "weekly.accounts." + category,
+                                "weekly",
+                                category,
                                 accountOwnerId,
                                 payload.displayName,
                                 data as number,
@@ -350,7 +374,8 @@ export const updateStats = async (accountOwnerId: string, payload: IStatsUpdate)
                             }
                             if (data > playerStats[category]) playerStats[category] = data as number;
                             await submitLeaderboardScore(
-                                "weekly.accounts." + category,
+                                "weekly",
+                                category,
                                 accountOwnerId,
                                 payload.displayName,
                                 data as number

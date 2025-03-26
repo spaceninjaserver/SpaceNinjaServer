@@ -7,6 +7,7 @@ export interface ILeaderboardEntryDatabase {
     score: number;
     guildId?: Types.ObjectId;
     expiry: Date;
+    guildTier?: number;
 }
 
 export interface ILeaderboardEntryClient {

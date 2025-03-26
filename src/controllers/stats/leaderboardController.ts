@@ -6,7 +6,14 @@ export const leaderboardController: RequestHandler = async (req, res) => {
     logger.debug(`data provided to ${req.path}: ${String(req.body)}`);
     const payload = JSON.parse(String(req.body)) as ILeaderboardRequest;
     res.json({
-        results: await getLeaderboard(payload.field, payload.before, payload.after, payload.guildId, payload.pivotId)
+        results: await getLeaderboard(
+            payload.field,
+            payload.before,
+            payload.after,
+            payload.guildId,
+            payload.pivotId,
+            payload.guildTier
+        )
     });
 };
 
@@ -16,4 +23,5 @@ interface ILeaderboardRequest {
     after: number;
     guildId?: string;
     pivotId?: string;
+    guildTier?: number;
 }

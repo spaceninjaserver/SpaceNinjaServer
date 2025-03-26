@@ -1,14 +1,15 @@
+import { Guild } from "../models/guildModel";
 import { Leaderboard, TLeaderboardEntryDocument } from "../models/leaderboardModel";
 import { ILeaderboardEntryClient } from "../types/leaderboardTypes";
 
 export const submitLeaderboardScore = async (
+    schedule: "weekly" | "daily",
     leaderboard: string,
     ownerId: string,
     displayName: string,
     score: number,
     guildId?: string
 ): Promise<void> => {
-    const schedule = leaderboard.split(".")[0] as "daily" | "weekly";
     let expiry: Date;
     if (schedule == "daily") {
         expiry = new Date(Math.trunc(Date.now() / 86400000) * 86400000 + 86400000);
@@ -21,10 +22,18 @@ export const submitLeaderboardScore = async (
         expiry = new Date(weekEnd);
     }
     await Leaderboard.findOneAndUpdate(
-        { leaderboard, ownerId },
+        { leaderboard: `${schedule}.accounts.${leaderboard}`, ownerId },
         { $max: { score }, $set: { displayName, guildId, expiry } },
         { upsert: true }
     );
+    if (guildId) {
+        const guild = (await Guild.findById(guildId, "Name Tier"))!;
+        await Leaderboard.findOneAndUpdate(
+            { leaderboard: `${schedule}.guilds.${leaderboard}`, ownerId: guildId },
+            { $max: { score }, $set: { displayName: guild.Name, guildTier: guild.Tier, expiry } },
+            { upsert: true }
+        );
+    }
 };
 
 export const getLeaderboard = async (
@@ -32,11 +41,15 @@ export const getLeaderboard = async (
     before: number,
     after: number,
     guildId?: string,
-    pivotId?: string
+    pivotId?: string,
+    guildTier?: number
 ): Promise<ILeaderboardEntryClient[]> => {
-    const filter: { leaderboard: string; guildId?: string } = { leaderboard };
+    const filter: { leaderboard: string; guildId?: string; guildTier?: number } = { leaderboard };
     if (guildId) {
         filter.guildId = guildId;
+    }
+    if (guildTier) {
+        filter.guildTier = guildTier;
     }
 
     let entries: TLeaderboardEntryDocument[];
