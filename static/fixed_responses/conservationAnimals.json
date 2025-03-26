@@ -1,0 +1,491 @@
+{
+  "/Lotus/Types/NeutralCreatures/Conservation/BirdOfPrey/CommonBirdOfPreyAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagCondrocCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/BirdOfPrey/CommonFemaleBirdOfPreyAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagCondrocCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/BirdOfPrey/CommonMaleBirdOfPreyAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagCondrocCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/BirdOfPrey/RareBirdOfPreyAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagCondrocRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/BirdOfPrey/RareFemaleBirdOfPreyAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagCondrocRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/BirdOfPrey/RareMaleBirdOfPreyAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagCondrocRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/BirdOfPrey/UncommonBirdOfPreyAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagCondrocUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/BirdOfPrey/UncommonFemaleBirdOfPreyAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagCondrocUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/BirdOfPrey/UncommonMaleBirdOfPreyAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagCondrocUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/Deimos/InfestedCritter/BaseInfestedCritterAvatar": {
+    "tag": "/Lotus/Types/Items/Conservation/ConservationTagItem",
+    "extraReward": "/Lotus/Types/Items/Conservation/WoundedAnimalRewardItem"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/Deimos/InfestedCritter/CommonInfestedCritterAvatar": {
+    "tag": "/Lotus/Types/Items/Deimos/AnimalTagInfestedCritterCommon",
+    "extraReward": "/Lotus/Types/Items/Deimos/WoundedInfestedCritterCommonRewardItem"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/Deimos/InfestedCritter/RareInfestedCritterAvatar": {
+    "tag": "/Lotus/Types/Items/Deimos/AnimalTagInfestedCritterRare",
+    "extraReward": "/Lotus/Types/Items/Deimos/WoundedInfestedCritterRareRewardItem"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/Deimos/InfestedCritter/UncommonInfestedCritterAvatar": {
+    "tag": "/Lotus/Types/Items/Deimos/AnimalTagInfestedCritterUncommon",
+    "extraReward": "/Lotus/Types/Items/Deimos/WoundedInfestedCritterUncommonRewardItem"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/Deimos/InfestedKDrive/GrottoInfKDriveAvatar": {
+    "tag": "/Lotus/Types/Items/Deimos/AnimalTagInfestedKdriveUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/Deimos/InfestedKDrive/HighlandInfKDriveAvatar": {
+    "tag": "/Lotus/Types/Items/Deimos/AnimalTagInfestedKdriveRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/Deimos/InfestedKDrive/SwampInfKDriveAvatar": {
+    "tag": "/Lotus/Types/Items/Deimos/AnimalTagInfestedKdriveCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/Deimos/InfestedMaggot/CommonInfestedMaggotAvatar": {
+    "tag": "/Lotus/Types/Items/Deimos/AnimalTagInfestedMaggotCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/Deimos/InfestedMaggot/RareInfestedMaggotAvatar": {
+    "tag": "/Lotus/Types/Items/Deimos/AnimalTagInfestedMaggotRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/Deimos/InfestedMaggot/UncommonInfestedMaggotAvatar": {
+    "tag": "/Lotus/Types/Items/Deimos/AnimalTagInfestedMaggotUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/Deimos/InfestedMergoo/CommonInfestedMergooAvatar": {
+    "tag": "/Lotus/Types/Items/Deimos/AnimalTagInfestedMergooCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/Deimos/InfestedMergoo/RareInfestedMergooAvatar": {
+    "tag": "/Lotus/Types/Items/Deimos/AnimalTagInfestedMergooRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/Deimos/InfestedMergoo/UncommonInfestedMergooAvatar": {
+    "tag": "/Lotus/Types/Items/Deimos/AnimalTagInfestedMergooUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/Deimos/InfestedNexifera/BaseInfestedNexiferaAvatar": {
+    "tag": "/Lotus/Types/Items/Deimos/AnimalTagInfestedNexiferaCommon",
+    "extraReward": "/Lotus/Types/Items/Conservation/WoundedAnimalRewardItem"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/Deimos/InfestedNexifera/CommonInfestedNexiferaAvatar": {
+    "tag": "/Lotus/Types/Items/Deimos/AnimalTagInfestedNexiferaCommon",
+    "extraReward": "/Lotus/Types/Items/Conservation/WoundedAnimalRewardItem"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/Deimos/InfestedNexifera/RareInfestedNexiferaAvatar": {
+    "tag": "/Lotus/Types/Items/Deimos/AnimalTagInfestedNexiferaRare",
+    "extraReward": "/Lotus/Types/Items/Conservation/WoundedAnimalRewardItem"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/Deimos/InfestedNexifera/UncommonInfestedNexiferaAvatar": {
+    "tag": "/Lotus/Types/Items/Deimos/AnimalTagInfestedNexiferaUncommon",
+    "extraReward": "/Lotus/Types/Items/Conservation/WoundedAnimalRewardItem"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/Deimos/InfestedPredator/BaseInfestedPredatorAvatar": {
+    "tag": "/Lotus/Types/Items/Conservation/ConservationTagItem",
+    "extraReward": "/Lotus/Types/Items/Conservation/WoundedAnimalRewardItem"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/Deimos/InfestedPredator/CommonInfestedPredatorAvatar": {
+    "tag": "/Lotus/Types/Items/Deimos/AnimalTagInfestedPredatorCommon",
+    "extraReward": "/Lotus/Types/Items/Deimos/WoundedInfestedPredatorCommonRewardItem"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/Deimos/InfestedPredator/RareInfestedPredatorAvatar": {
+    "tag": "/Lotus/Types/Items/Deimos/AnimalTagInfestedPredatorRare",
+    "extraReward": "/Lotus/Types/Items/Deimos/WoundedInfestedPredatorRareRewardItem"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/Deimos/InfestedPredator/UncommonInfestedPredatorAvatar": {
+    "tag": "/Lotus/Types/Items/Deimos/AnimalTagInfestedPredatorUncommon",
+    "extraReward": "/Lotus/Types/Items/Deimos/WoundedInfestedPredatorUncommonRewardItem"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/Deimos/InfestedUndazoa/BaseUndazoaAvatar": {
+    "tag": "/Lotus/Types/Items/Deimos/AnimalTagInfestedZongroCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/Deimos/InfestedUndazoa/CommonUndazoaAvatar": {
+    "tag": "/Lotus/Types/Items/Deimos/AnimalTagInfestedZongroCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/Deimos/InfestedUndazoa/RareUndazoaAvatar": {
+    "tag": "/Lotus/Types/Items/Deimos/AnimalTagInfestedZongroRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/Deimos/InfestedUndazoa/UncommonUndazoaAvatar": {
+    "tag": "/Lotus/Types/Items/Deimos/AnimalTagInfestedZongroUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/Duviri/Rabbit/BaseDuviriRabbitAvatar": {
+    "tag": "/Lotus/Types/Items/Conservation/ConservationTagItem"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/Duviri/Rabbit/TeshinRabbitAvatar": {
+    "tag": "/Lotus/Types/Items/Conservation/ConservationTagItem"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/Duviri/Rabbit/TeshinRabbitOnHandAvatar": {
+    "tag": "/Lotus/Types/Items/Conservation/ConservationTagItem"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/Duviri/Wolf/DuviriWolfAvatar": {
+    "tag": "/Lotus/Types/Items/Conservation/ConservationTagItem"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/Duviri/Wolf/DuviriWolfConservationAvatar": {
+    "tag": "/Lotus/Types/Items/Conservation/ConservationTagItem"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/ForestRodent/CommonFemaleForestRodentAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagKuakaCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/ForestRodent/CommonForestRodentAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagKuakaCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/ForestRodent/CommonMaleForestRodentAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagKuakaCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/ForestRodent/RareFemaleForestRodentAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagKuakaRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/ForestRodent/RareForestRodentAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagKuakaRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/ForestRodent/RareMaleForestRodentAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagKuakaRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/ForestRodent/TutorialForestRodentAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagKuakaCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/ForestRodent/UncommonFemaleForestRodentAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagKuakaUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/ForestRodent/UncommonForestRodentAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagKuakaUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/ForestRodent/UncommonMaleForestRodentAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagKuakaUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/LegendaryKubrow/BaseLegendaryKubrowAvatar": {
+    "tag": "/Lotus/Types/Items/Conservation/ConservationTagItem"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/LegendaryKubrow/CommonFemaleLegendaryKubrowAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagKubrodonCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/LegendaryKubrow/CommonLegendaryKubrowAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagKubrodonCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/LegendaryKubrow/CommonMaleLegendaryKubrowAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagKubrodonCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/LegendaryKubrow/CommonPupLegendaryKubrowAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagKubrodonCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/LegendaryKubrow/RareFemaleLegendaryKubrowAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagKubrodonRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/LegendaryKubrow/RareLegendaryKubrowAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagKubrodonRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/LegendaryKubrow/RareMaleLegendaryKubrowAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagKubrodonRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/LegendaryKubrow/RarePupLegendaryKubrowAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagKubrodonRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/LegendaryKubrow/UncommonFemaleLegendaryKubrowAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagKubrodonUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/LegendaryKubrow/UncommonLegendaryKubrowAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagKubrodonUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/LegendaryKubrow/UncommonMaleLegendaryKubrowAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagKubrodonUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/LegendaryKubrow/UncommonPupLegendaryKubrowAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagKubrodonUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/OrokinKubrow/BaseOrokinKubrowAvatar": {
+    "tag": "/Lotus/Types/Items/Conservation/ConservationTagItem"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/OrokinKubrow/CommonFemaleOrokinKubrowAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagStoverCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/OrokinKubrow/CommonMaleOrokinKubrowAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagStoverCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/OrokinKubrow/CommonOrokinKubrowAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagStoverCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/OrokinKubrow/CommonPupOrokinKubrowAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagStoverCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/OrokinKubrow/RareFemaleOrokinKubrowAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagStoverRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/OrokinKubrow/RareMaleOrokinKubrowAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagStoverRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/OrokinKubrow/RareOrokinKubrowAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagStoverRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/OrokinKubrow/RarePupOrokinKubrowAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagStoverRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/OrokinKubrow/UncommonFemaleOrokinKubrowAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagStoverUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/OrokinKubrow/UncommonMaleOrokinKubrowAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagStoverUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/OrokinKubrow/UncommonOrokinKubrowAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagStoverUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/OrokinKubrow/UncommonPupOrokinKubrowAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagStoverUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/OstronSeaBird/CommonFemaleOstronSeaBirdAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagMergooCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/OstronSeaBird/CommonMaleOstronSeaBirdAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagMergooCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/OstronSeaBird/CommonOstronSeaBirdAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagMergooCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/OstronSeaBird/RareFemaleOstronSeaBirdAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagMergooRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/OstronSeaBird/RareMaleOstronSeaBirdAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagMergooRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/OstronSeaBird/RareOstronSeaBirdAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagMergooRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/OstronSeaBird/UncommonFemaleOstronSeaBirdAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagMergooUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/OstronSeaBird/UncommonMaleOstronSeaBirdAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagMergooUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/OstronSeaBird/UncommonOstronSeaBirdAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagMergooUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowArmadillo/BaseSnowArmadilloAvatar": {
+    "tag": "/Lotus/Types/Items/Conservation/ConservationTagItem"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowArmadillo/CommonFemaleSnowArmadilloAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagBolarolaCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowArmadillo/CommonMaleSnowArmadilloAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagBolarolaCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowArmadillo/CommonPupSnowArmadilloAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagBolarolaCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowArmadillo/CommonSnowArmadilloAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagBolarolaCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowArmadillo/RareFemaleSnowArmadilloAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagBolarolaRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowArmadillo/RareMaleSnowArmadilloAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagBolarolaRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowArmadillo/RarePupSnowArmadilloAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagBolarolaRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowArmadillo/RareSnowArmadilloAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagBolarolaRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowArmadillo/UncommonFemaleSnowArmadilloAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagBolarolaUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowArmadillo/UncommonMaleSnowArmadilloAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagBolarolaUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowArmadillo/UncommonPupSnowArmadilloAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagBolarolaUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowArmadillo/UncommonSnowArmadilloAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagBolarolaUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowBird/BaseSnowBirdAvatar": {
+    "tag": "/Lotus/Types/Items/Conservation/ConservationTagItem"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowBird/CommonFemaleSnowBirdAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagSawgawCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowBird/CommonMaleSnowBirdAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagSawgawCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowBird/CommonPupSnowBirdAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagSawgawCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowBird/CommonSnowBirdAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagSawgawCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowBird/RareFemaleSnowBirdAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagSawgawRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowBird/RareMaleSnowBirdAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagSawgawRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowBird/RarePupSnowBirdAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagSawgawRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowBird/RareSnowBirdAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagSawgawRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowBird/UncommonFemaleSnowBirdAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagSawgawUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowBird/UncommonMaleSnowBirdAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagSawgawUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowBird/UncommonPupSnowBirdAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagSawgawUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowBird/UncommonSnowBirdAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagSawgawUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowCritter/BaseSnowCritterAvatar": {
+    "tag": "/Lotus/Types/Items/Conservation/ConservationTagItem"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowCritter/CommonFemaleSnowCritterAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagVirminkCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowCritter/CommonMaleSnowCritterAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagVirminkCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowCritter/CommonPupSnowCritterAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagVirminkCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowCritter/CommonSnowCritterAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagVirminkCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowCritter/RareFemaleSnowCritterAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagVirminkRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowCritter/RareMaleSnowCritterAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagVirminkRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowCritter/RarePupSnowCritterAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagVirminkRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowCritter/RareSnowCritterAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagVirminkRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowCritter/UncommonFemaleSnowCritterAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagVirminkUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowCritter/UncommonMaleSnowCritterAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagVirminkUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowCritter/UncommonPupSnowCritterAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagVirminkUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowCritter/UncommonSnowCritterAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagVirminkUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowPredator/BaseSnowPredatorAvatar": {
+    "tag": "/Lotus/Types/Items/Conservation/ConservationTagItem"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowPredator/CommonFemaleSnowPredatorAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagHorrasqueCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowPredator/CommonMaleSnowPredatorAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagHorrasqueCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowPredator/CommonPupSnowPredatorAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagHorrasqueCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowPredator/CommonSnowPredatorAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagHorrasqueCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowPredator/RareFemaleSnowPredatorAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagHorrasqueRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowPredator/RareMaleSnowPredatorAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagHorrasqueRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowPredator/RarePupSnowPredatorAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagHorrasqueRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowPredator/RareSnowPredatorAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagHorrasqueRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowPredator/UncommonFemaleSnowPredatorAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagHorrasqueUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowPredator/UncommonMaleSnowPredatorAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagHorrasqueUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowPredator/UncommonPupSnowPredatorAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagHorrasqueUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowPredator/UncommonSnowPredatorAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagHorrasqueUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowRodent/BaseSnowRodentAvatar": {
+    "tag": "/Lotus/Types/Items/Conservation/ConservationTagItem"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowRodent/CommonFemaleSnowRodentAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagPobbersCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowRodent/CommonMaleSnowRodentAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagPobbersCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowRodent/CommonSnowRodentAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagPobbersCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowRodent/RareFemaleSnowRodentAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagPobbersRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowRodent/RareMaleSnowRodentAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagPobbersRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowRodent/RareSnowRodentAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagPobbersRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowRodent/UncommonFemaleSnowRodentAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagPobbersUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowRodent/UncommonMaleSnowRodentAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagPobbersUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/SnowRodent/UncommonSnowRodentAvatar": {
+    "tag": "/Lotus/Types/Items/Solaris/AnimalTagPobbersUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/VampireKavat/BaseVampireKavatAvatar": {
+    "tag": "/Lotus/Types/Items/Conservation/ConservationTagItem"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/VampireKavat/CommonVampireKavatAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagVampireKavatCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/VampireKavat/CommonVampireKavatCubAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagVampireKavatCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/VampireKavat/CommonVampireKavatFemaleAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagVampireKavatCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/VampireKavat/CommonVampireKavatMaleAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagVampireKavatCommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/VampireKavat/RareVampireKavatAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagVampireKavatRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/VampireKavat/RareVampireKavatCubAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagVampireKavatRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/VampireKavat/RareVampireKavatFemaleAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagVampireKavatRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/VampireKavat/RareVampireKavatMaleAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagVampireKavatRare"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/VampireKavat/UncommonVampireKavatAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagVampireKavatUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/VampireKavat/UncommonVampireKavatCubAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagVampireKavatUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/VampireKavat/UncommonVampireKavatFemaleAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagVampireKavatUncommon"
+  },
+  "/Lotus/Types/NeutralCreatures/Conservation/VampireKavat/UncommonVampireKavatMaleAvatar": {
+    "tag": "/Lotus/Types/Items/Eidolon/AnimalTagVampireKavatUncommon"
+  }
+}

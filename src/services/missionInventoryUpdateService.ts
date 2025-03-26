@@ -43,6 +43,7 @@ import { createMessage } from "./inboxService";
 import kuriaMessage50 from "@/static/fixed_responses/kuriaMessages/fiftyPercent.json";
 import kuriaMessage75 from "@/static/fixed_responses/kuriaMessages/seventyFivePercent.json";
 import kuriaMessage100 from "@/static/fixed_responses/kuriaMessages/oneHundredPercent.json";
+import conservationAnimals from "@/static/fixed_responses/conservationAnimals.json";
 import { getInfNodes } from "@/src/helpers/nemesisHelpers";
 
 const getRotations = (rotationCount: number): number[] => {
@@ -323,6 +324,39 @@ export const addMissionInventoryUpdates = async (
                     }
                 }
                 inventory.DeathMarks = value;
+                break;
+            }
+            case "CapturedAnimals": {
+                for (const capturedAnimal of value) {
+                    const meta = conservationAnimals[capturedAnimal.AnimalType as keyof typeof conservationAnimals];
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                    if (meta) {
+                        if (capturedAnimal.NumTags) {
+                            addMiscItems(inventory, [
+                                {
+                                    ItemType: meta.tag,
+                                    ItemCount: capturedAnimal.NumTags
+                                }
+                            ]);
+                        }
+                        if (capturedAnimal.NumExtraRewards) {
+                            if ("extraReward" in meta) {
+                                addMiscItems(inventory, [
+                                    {
+                                        ItemType: meta.extraReward,
+                                        ItemCount: capturedAnimal.NumExtraRewards
+                                    }
+                                ]);
+                            } else {
+                                logger.warn(
+                                    `client attempted to claim unknown extra rewards for conservation of ${capturedAnimal.AnimalType}`
+                                );
+                            }
+                        }
+                    } else {
+                        logger.warn(`ignoring conservation of unknown AnimalType: ${capturedAnimal.AnimalType}`);
+                    }
+                }
                 break;
             }
             default:

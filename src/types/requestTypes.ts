@@ -99,6 +99,13 @@ export type IMissionInventoryUpdateRequest = {
     DeathMarks?: string[];
     Nemesis?: number;
     Boosters?: IBooster[];
+    CapturedAnimals?: {
+        AnimalType: string;
+        CaptureRating: number;
+        NumTags: number;
+        NumExtraRewards: number;
+        Count: number;
+    }[];
 } & {
     [K in TEquipmentKey]?: IEquipmentClient[];
 };
