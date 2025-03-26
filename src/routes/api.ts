@@ -57,6 +57,7 @@ import { giveQuestKeyRewardController } from "@/src/controllers/api/giveQuestKey
 import { giveStartingGearController } from "@/src/controllers/api/giveStartingGearController";
 import { guildTechController } from "@/src/controllers/api/guildTechController";
 import { hostSessionController } from "@/src/controllers/api/hostSessionController";
+import { hubBlessingController } from "@/src/controllers/api/hubBlessingController";
 import { hubController } from "@/src/controllers/api/hubController";
 import { hubInstancesController } from "@/src/controllers/api/hubInstancesController";
 import { inboxController } from "@/src/controllers/api/inboxController";
@@ -207,6 +208,7 @@ apiRouter.post("/giveQuestKeyReward.php", giveQuestKeyRewardController);
 apiRouter.post("/giveStartingGear.php", giveStartingGearController);
 apiRouter.post("/guildTech.php", guildTechController);
 apiRouter.post("/hostSession.php", hostSessionController);
+apiRouter.post("/hubBlessing.php", hubBlessingController);
 apiRouter.post("/infestedFoundry.php", infestedFoundryController);
 apiRouter.post("/inventorySlots.php", inventorySlotsController);
 apiRouter.post("/joinSession.php", joinSessionController);
