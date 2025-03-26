@@ -83,13 +83,13 @@ const getRandomLoginReward = (rng: CRng, day: number, inventory: TInventoryDatab
             masteredItems.add(entry.ItemType);
         }
         const unmasteredItems = new Set();
-        for (const uniqueName of Object.keys(ExportWeapons)) {
-            if (!masteredItems.has(uniqueName)) {
+        for (const [uniqueName, data] of Object.entries(ExportWeapons)) {
+            if (data.variantType == "VT_NORMAL" && !masteredItems.has(uniqueName)) {
                 unmasteredItems.add(uniqueName);
             }
         }
-        for (const uniqueName of Object.keys(ExportWarframes)) {
-            if (!masteredItems.has(uniqueName)) {
+        for (const [uniqueName, data] of Object.entries(ExportWarframes)) {
+            if (data.variantType == "VT_NORMAL" && !masteredItems.has(uniqueName)) {
                 unmasteredItems.add(uniqueName);
             }
         }
