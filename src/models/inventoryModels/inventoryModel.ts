@@ -496,7 +496,8 @@ const settingsSchema = new Schema<ISettings>({
     GiftMode: String,
     GuildInvRestriction: String,
     ShowFriendInvNotifications: Boolean,
-    TradingRulesConfirmed: Boolean
+    TradingRulesConfirmed: Boolean,
+    SubscribedToSurveys: Boolean
 });
 
 const consumedSchuitsSchema = new Schema<IConsumedSuit>(

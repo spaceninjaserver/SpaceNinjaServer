@@ -14,9 +14,9 @@ const saveSettingsController: RequestHandler = async (req, res): Promise<void> =
     const settingResults = getJSONfromString<ISaveSettingsRequest>(String(req.body));
 
     const inventory = await getInventory(accountId);
-    inventory.Settings = Object.assign(inventory.Settings, settingResults.Settings);
+    inventory.Settings = Object.assign(inventory.Settings ?? {}, settingResults.Settings);
     await inventory.save();
-    res.json(inventory.Settings);
+    res.json({ Settings: inventory.Settings });
 };
 
 export { saveSettingsController };

@@ -295,7 +295,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     Nemesis?: INemesisClient;
     NemesisHistory: INemesisBaseClient[];
     LastNemesisAllySpawnTime?: IMongoDate;
-    Settings: ISettings;
+    Settings?: ISettings;
     PersonalTechProjects: IPersonalTechProject[];
     PlayerSkills: IPlayerSkills;
     CrewShipAmmo: ITypeCount[];
@@ -971,11 +971,12 @@ export interface ISentientSpawnChanceBoosters {
 }
 
 export interface ISettings {
-    FriendInvRestriction: string;
-    GiftMode: string;
-    GuildInvRestriction: string;
+    FriendInvRestriction: "GIFT_MODE_ALL" | "GIFT_MODE_FRIENDS" | "GIFT_MODE_NONE";
+    GiftMode: "GIFT_MODE_ALL" | "GIFT_MODE_FRIENDS" | "GIFT_MODE_NONE";
+    GuildInvRestriction: "GIFT_MODE_ALL" | "GIFT_MODE_FRIENDS" | "GIFT_MODE_NONE";
     ShowFriendInvNotifications: boolean;
     TradingRulesConfirmed: boolean;
+    SubscribedToSurveys?: boolean;
 }
 
 export interface IShipInventory {
