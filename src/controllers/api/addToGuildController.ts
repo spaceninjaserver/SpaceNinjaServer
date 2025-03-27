@@ -18,6 +18,13 @@ export const addToGuildController: RequestHandler = async (req, res) => {
         return;
     }
 
+    const inventory = await getInventory(account._id.toString(), "Settings");
+    // TODO: Also consider GIFT_MODE_FRIENDS once friends are implemented
+    if (inventory.Settings?.GuildInvRestriction == "GIFT_MODE_NONE") {
+        res.status(400).json("Invite restricted");
+        return;
+    }
+
     const guild = (await Guild.findById(payload.GuildId.$oid, "Name"))!;
     const senderAccount = await getAccountForRequest(req);
     if (!(await hasGuildPermission(guild, senderAccount._id.toString(), GuildPermission.Recruiter))) {
