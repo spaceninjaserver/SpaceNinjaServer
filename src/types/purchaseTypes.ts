@@ -44,7 +44,8 @@ export type IInventoryChanges = {
     MiscItems?: IMiscItem[];
     EmailItems?: ITypeCount[];
     Nemesis?: Partial<INemesisClient>;
-    RecentVendorPurchases?: IRecentVendorPurchaseClient;
+    NewVendorPurchase?: IRecentVendorPurchaseClient; // >= 38.5.0
+    RecentVendorPurchases?: IRecentVendorPurchaseClient; // < 38.5.0
 } & Record<
         Exclude<
             string,

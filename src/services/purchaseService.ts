@@ -99,7 +99,7 @@ export const handlePurchase = async (
                         Expiry: new Date(parseInt(offer.Expiry.$date.$numberLong))
                     });
                 }
-                prePurchaseInventoryChanges.RecentVendorPurchases = {
+                prePurchaseInventoryChanges.NewVendorPurchase = {
                     VendorType: manifest.VendorInfo.TypeName,
                     PurchaseHistory: [
                         {
@@ -109,6 +109,7 @@ export const handlePurchase = async (
                         }
                     ]
                 };
+                prePurchaseInventoryChanges.RecentVendorPurchases = prePurchaseInventoryChanges.NewVendorPurchase;
             }
             purchaseRequest.PurchaseParams.Quantity *= offer.QuantityMultiplier;
         } else {
