@@ -907,7 +907,8 @@ export const addEquipment = (
             ItemType: type,
             Configs: [],
             XP: 0,
-            ModularParts: modularParts
+            ModularParts: modularParts,
+            IsNew: true
         },
         defaultOverwrites
     );

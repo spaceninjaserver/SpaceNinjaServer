@@ -155,7 +155,12 @@ export const handleInventoryItemConfigChange = async (
                         }
 
                         for (const [configId, config] of Object.entries(itemConfigEntries)) {
-                            inventoryItem.Configs[parseInt(configId)] = config;
+                            if (typeof config !== "boolean") {
+                                inventoryItem.Configs[parseInt(configId)] = config;
+                            }
+                        }
+                        if ("IsNew" in itemConfigEntries) {
+                            inventoryItem.IsNew = itemConfigEntries.IsNew;
                         }
                     }
                     break;

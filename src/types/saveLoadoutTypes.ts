@@ -48,9 +48,9 @@ export interface IItemEntry {
     [itemId: string]: IConfigEntry;
 }
 
-export interface IConfigEntry {
-    [configId: string]: IItemConfig;
-}
+export type IConfigEntry = {
+    [configId in "0" | "1" | "2" | "3" | "4" | "5"]: IItemConfig;
+} & { IsNew?: boolean };
 
 export interface ILoadoutClient extends Omit<ILoadoutDatabase, "_id" | "loadoutOwnerId"> {}
 

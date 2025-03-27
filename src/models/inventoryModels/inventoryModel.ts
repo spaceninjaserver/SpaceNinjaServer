@@ -849,7 +849,8 @@ const EquipmentSchema = new Schema<IEquipmentDatabase>(
         Customization: crewShipCustomizationSchema,
         RailjackImage: FlavourItemSchema,
         CrewMembers: crewShipMembersSchema,
-        Details: detailsSchema
+        Details: detailsSchema,
+        IsNew: Boolean
     },
     { id: false }
 );

@@ -140,6 +140,7 @@ export interface IEquipmentDatabase {
     RailjackImage?: IFlavourItem;
     CrewMembers?: ICrewShipMembersDatabase;
     Details?: IKubrowPetDetailsDatabase;
+    IsNew?: boolean;
     _id: Types.ObjectId;
 }
 
