@@ -5,6 +5,7 @@ import {
     IMiscItem,
     INemesisClient,
     ITypeCount,
+    IRecentVendorPurchaseClient,
     TEquipmentKey
 } from "./inventoryTypes/inventoryTypes";
 
@@ -43,6 +44,7 @@ export type IInventoryChanges = {
     MiscItems?: IMiscItem[];
     EmailItems?: ITypeCount[];
     Nemesis?: Partial<INemesisClient>;
+    RecentVendorPurchases?: IRecentVendorPurchaseClient;
 } & Record<
         Exclude<
             string,
