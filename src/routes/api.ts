@@ -51,6 +51,7 @@ import { getNewRewardSeedController } from "@/src/controllers/api/getNewRewardSe
 import { getShipController } from "@/src/controllers/api/getShipController";
 import { getVendorInfoController } from "@/src/controllers/api/getVendorInfoController";
 import { getVoidProjectionRewardsController } from "@/src/controllers/api/getVoidProjectionRewardsController";
+import { giftingController } from "@/src/controllers/api/giftingController";
 import { gildWeaponController } from "@/src/controllers/api/gildWeaponController";
 import { giveKeyChainTriggeredItemsController } from "@/src/controllers/api/giveKeyChainTriggeredItemsController";
 import { giveKeyChainTriggeredMessageController } from "@/src/controllers/api/giveKeyChainTriggeredMessageController";
@@ -203,6 +204,7 @@ apiRouter.post("/getAlliance.php", getAllianceController);
 apiRouter.post("/getFriends.php", getFriendsController);
 apiRouter.post("/getGuildDojo.php", getGuildDojoController);
 apiRouter.post("/getVoidProjectionRewards.php", getVoidProjectionRewardsController);
+apiRouter.post("/gifting.php", giftingController);
 apiRouter.post("/gildWeapon.php", gildWeaponController);
 apiRouter.post("/giveKeyChainTriggeredItems.php", giveKeyChainTriggeredItemsController);
 apiRouter.post("/giveKeyChainTriggeredMessage.php", giveKeyChainTriggeredMessageController);

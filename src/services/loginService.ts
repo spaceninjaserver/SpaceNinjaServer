@@ -100,3 +100,7 @@ export const getSuffixedName = (account: TAccountDocument): string => {
     const suffix = ((crc32.str(name.toLowerCase() + "595") >>> 0) + platform_magics[platformId]) % 1000;
     return name + "#" + suffix.toString().padStart(3, "0");
 };
+
+export const getAccountFromSuffixedName = (name: string): Promise<TAccountDocument | null> => {
+    return Account.findOne({ DisplayName: name.split("#")[0] });
+};

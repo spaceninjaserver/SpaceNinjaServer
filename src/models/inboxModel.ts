@@ -31,6 +31,7 @@ export interface IMessage {
     countedAtt?: ITypeCount[];
     transmission?: string;
     arg?: Arg[];
+    gifts?: IGift[];
     r?: boolean;
     contextInfo?: string;
     acceptAction?: string;
@@ -41,6 +42,10 @@ export interface IMessage {
 export interface Arg {
     Key: string;
     Tag: string | number;
+}
+
+export interface IGift {
+    GiftType: string;
 }
 
 //types are wrong
@@ -80,6 +85,14 @@ export interface Arg {
 //     cinematic: string;
 //     requiredLevel: string;
 // }
+
+const giftSchema = new Schema<IGift>(
+    {
+        GiftType: String
+    },
+    { _id: false }
+);
+
 const messageSchema = new Schema<IMessageDatabase>(
     {
         ownerId: Schema.Types.ObjectId,
@@ -93,6 +106,7 @@ const messageSchema = new Schema<IMessageDatabase>(
         endDate: Date,
         r: Boolean,
         att: { type: [String], default: undefined },
+        gifts: { type: [giftSchema], default: undefined },
         countedAtt: { type: [typeCountSchema], default: undefined },
         transmission: String,
         arg: {

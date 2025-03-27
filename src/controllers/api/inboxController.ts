@@ -1,21 +1,24 @@
 import { RequestHandler } from "express";
 import { Inbox } from "@/src/models/inboxModel";
 import {
+    createMessage,
     createNewEventMessages,
     deleteAllMessagesRead,
     deleteMessageRead,
     getAllMessagesSorted,
     getMessage
 } from "@/src/services/inboxService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { addItems, getInventory } from "@/src/services/inventoryService";
+import { getAccountForRequest, getAccountFromSuffixedName, getSuffixedName } from "@/src/services/loginService";
+import { addItems, combineInventoryChanges, getInventory } from "@/src/services/inventoryService";
 import { logger } from "@/src/utils/logger";
-import { ExportGear } from "warframe-public-export-plus";
+import { ExportFlavour, ExportGear } from "warframe-public-export-plus";
+import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
 
 export const inboxController: RequestHandler = async (req, res) => {
     const { deleteId, lastMessage: latestClientMessageId, messageId } = req.query;
 
-    const accountId = await getAccountIdForRequest(req);
+    const account = await getAccountForRequest(req);
+    const accountId = account._id.toString();
 
     if (deleteId) {
         if (deleteId === "DeleteAllRead") {
@@ -29,12 +32,12 @@ export const inboxController: RequestHandler = async (req, res) => {
     } else if (messageId) {
         const message = await getMessage(messageId as string);
         message.r = true;
+        await message.save();
+
         const attachmentItems = message.att;
         const attachmentCountedItems = message.countedAtt;
 
-        if (!attachmentItems && !attachmentCountedItems) {
-            await message.save();
-
+        if (!attachmentItems && !attachmentCountedItems && !message.gifts) {
             res.status(200).end();
             return;
         }
@@ -54,9 +57,43 @@ export const inboxController: RequestHandler = async (req, res) => {
         if (attachmentCountedItems) {
             await addItems(inventory, attachmentCountedItems, inventoryChanges);
         }
+        if (message.gifts) {
+            const sender = await getAccountFromSuffixedName(message.sndr);
+            const recipientName = getSuffixedName(account);
+            const giftQuantity = message.arg!.find(x => x.Key == "GIFT_QUANTITY")!.Tag as number;
+            for (const gift of message.gifts) {
+                combineInventoryChanges(
+                    inventoryChanges,
+                    (await handleStoreItemAcquisition(gift.GiftType, inventory, giftQuantity)).InventoryChanges
+                );
+                if (sender) {
+                    await createMessage(sender._id.toString(), [
+                        {
+                            sndr: recipientName,
+                            msg: "/Lotus/Language/Menu/GiftReceivedConfirmationBody",
+                            arg: [
+                                {
+                                    Key: "RECIPIENT_NAME",
+                                    Tag: recipientName
+                                },
+                                {
+                                    Key: "GIFT_TYPE",
+                                    Tag: gift.GiftType
+                                },
+                                {
+                                    Key: "GIFT_QUANTITY",
+                                    Tag: giftQuantity
+                                }
+                            ],
+                            sub: "/Lotus/Language/Menu/GiftReceivedConfirmationSubject",
+                            icon: ExportFlavour[inventory.ActiveAvatarImageType].icon,
+                            highPriority: true
+                        }
+                    ]);
+                }
+            }
+        }
         await inventory.save();
-        await message.save();
-
         res.json({ InventoryChanges: inventoryChanges });
     } else if (latestClientMessageId) {
         await createNewEventMessages(req);
