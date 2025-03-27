@@ -16,7 +16,8 @@ import {
     IQuestKeyDatabase,
     ILoreFragmentScan,
     IUpgradeClient,
-    ICollectibleEntry
+    ICollectibleEntry,
+    IDiscoveredMarker
 } from "./inventoryTypes/inventoryTypes";
 
 export interface IAffiliationChange {
@@ -106,6 +107,7 @@ export type IMissionInventoryUpdateRequest = {
         NumExtraRewards: number;
         Count: number;
     }[];
+    DiscoveredMarkers?: IDiscoveredMarker[];
 } & {
     [K in TEquipmentKey]?: IEquipmentClient[];
 };

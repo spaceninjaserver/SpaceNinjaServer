@@ -359,6 +359,17 @@ export const addMissionInventoryUpdates = async (
                 }
                 break;
             }
+            case "DiscoveredMarkers": {
+                for (const clientMarker of value) {
+                    const dbMarker = inventory.DiscoveredMarkers.find(x => x.tag == clientMarker.tag);
+                    if (dbMarker) {
+                        dbMarker.discoveryState = clientMarker.discoveryState;
+                    } else {
+                        inventory.DiscoveredMarkers.push(clientMarker);
+                    }
+                }
+                break;
+            }
             default:
                 // Equipment XP updates
                 if (equipmentKeys.includes(key as TEquipmentKey)) {

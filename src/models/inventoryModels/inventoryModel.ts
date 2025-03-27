@@ -81,7 +81,8 @@ import {
     IVendorPurchaseHistoryEntryClient,
     INemesisDatabase,
     INemesisClient,
-    IInfNode
+    IInfNode,
+    IDiscoveredMarker
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -376,6 +377,14 @@ droneSchema.set("toJSON", {
         delete obj.__v;
     }
 });
+
+const discoveredMarkerSchema = new Schema<IDiscoveredMarker>(
+    {
+        tag: String,
+        discoveryState: [Number]
+    },
+    { _id: false }
+);
 
 const challengeProgressSchema = new Schema<IChallengeProgress>(
     {
@@ -1334,7 +1343,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         ActiveAvatarImageType: { type: String, default: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageDefault" },
 
         // open location store like EidolonPlainsDiscoverable or OrbVallisCaveDiscoverable
-        DiscoveredMarkers: [Schema.Types.Mixed],
+        DiscoveredMarkers: [discoveredMarkerSchema],
         //Open location mission like "JobId" + "StageCompletions"
         CompletedJobs: [Schema.Types.Mixed],
 
