@@ -1,3 +1,4 @@
+import { GuildMember } from "@/src/models/guildModel";
 import { getDojoClient, getGuildForRequestEx, hasAccessToDojo, scaleRequiredCount } from "@/src/services/guildService";
 import { getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
@@ -48,6 +49,12 @@ export const dojoComponentRushController: RequestHandler = async (req, res) => {
 
     await guild.save();
     await inventory.save();
+
+    const guildMember = (await GuildMember.findOne({ accountId, guildId: guild._id }, "PremiumCreditsContributed"))!;
+    guildMember.PremiumCreditsContributed ??= 0;
+    guildMember.PremiumCreditsContributed += request.Amount;
+    await guildMember.save();
+
     res.json({
         ...(await getDojoClient(guild, 0, component._id)),
         InventoryChanges: inventoryChanges

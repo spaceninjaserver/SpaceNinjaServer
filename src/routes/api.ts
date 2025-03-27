@@ -42,6 +42,7 @@ import { genericUpdateController } from "@/src/controllers/api/genericUpdateCont
 import { getAllianceController } from "@/src/controllers/api/getAllianceController";
 import { getDailyDealStockLevelsController } from "@/src/controllers/api/getDailyDealStockLevelsController";
 import { getFriendsController } from "@/src/controllers/api/getFriendsController";
+import { getGuildContributionsController } from "@/src/controllers/api/getGuildContributionsController";
 import { getGuildController } from "@/src/controllers/api/getGuildController";
 import { getGuildDojoController } from "@/src/controllers/api/getGuildDojoController";
 import { getGuildLogController } from "@/src/controllers/api/getGuildLogController";
@@ -139,6 +140,7 @@ apiRouter.get("/drones.php", dronesController);
 apiRouter.get("/getDailyDealStockLevels.php", getDailyDealStockLevelsController);
 apiRouter.get("/getFriends.php", getFriendsController);
 apiRouter.get("/getGuild.php", getGuildController);
+apiRouter.get("/getGuildContributions.php", getGuildContributionsController);
 apiRouter.get("/getGuildDojo.php", getGuildDojoController);
 apiRouter.get("/getGuildLog.php", getGuildLogController);
 apiRouter.get("/getIgnoredUsers.php", getIgnoredUsersController);

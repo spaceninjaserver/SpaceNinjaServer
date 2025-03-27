@@ -1,4 +1,4 @@
-import { TGuildDatabaseDocument } from "@/src/models/guildModel";
+import { GuildMember, TGuildDatabaseDocument } from "@/src/models/guildModel";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import {
     getDojoClient,
@@ -10,7 +10,7 @@ import {
 } from "@/src/services/guildService";
 import { addMiscItems, getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { IDojoContributable } from "@/src/types/guildTypes";
+import { IDojoContributable, IGuildMemberDatabase } from "@/src/types/guildTypes";
 import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { RequestHandler } from "express";
@@ -35,6 +35,10 @@ export const contributeToDojoComponentController: RequestHandler = async (req, r
         return;
     }
     const guild = await getGuildForRequestEx(req, inventory);
+    const guildMember = (await GuildMember.findOne(
+        { accountId, guildId: guild._id },
+        "RegularCreditsContributed MiscItemsContributed"
+    ))!;
     const request = JSON.parse(String(req.body)) as IContributeToDojoComponentRequest;
     const component = guild.DojoComponents.id(request.ComponentId)!;
 
@@ -45,7 +49,7 @@ export const contributeToDojoComponentController: RequestHandler = async (req, r
             throw new Error("attempt to contribute to a deco in an unfinished room?!");
         }
         const meta = Object.values(ExportDojoRecipes.rooms).find(x => x.resultType == component.pf)!;
-        processContribution(guild, request, inventory, inventoryChanges, meta, component);
+        processContribution(guild, guildMember, request, inventory, inventoryChanges, meta, component);
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (component.CompletionTime) {
             setDojoRoomLogFunded(guild, component);
@@ -55,12 +59,13 @@ export const contributeToDojoComponentController: RequestHandler = async (req, r
         if (request.DecoId) {
             const deco = component.Decos!.find(x => x._id.equals(request.DecoId))!;
             const meta = Object.values(ExportDojoRecipes.decos).find(x => x.resultType == deco.Type)!;
-            processContribution(guild, request, inventory, inventoryChanges, meta, deco);
+            processContribution(guild, guildMember, request, inventory, inventoryChanges, meta, deco);
         }
     }
 
     await guild.save();
     await inventory.save();
+    await guildMember.save();
     res.json({
         ...(await getDojoClient(guild, 0, component._id)),
         InventoryChanges: inventoryChanges
@@ -69,6 +74,7 @@ export const contributeToDojoComponentController: RequestHandler = async (req, r
 
 const processContribution = (
     guild: TGuildDatabaseDocument,
+    guildMember: IGuildMemberDatabase,
     request: IContributeToDojoComponentRequest,
     inventory: TInventoryDatabaseDocument,
     inventoryChanges: IInventoryChanges,
@@ -80,6 +86,9 @@ const processContribution = (
         component.RegularCredits += request.RegularCredits;
         inventoryChanges.RegularCredits = -request.RegularCredits;
         updateCurrency(inventory, request.RegularCredits, false);
+
+        guildMember.RegularCreditsContributed ??= 0;
+        guildMember.RegularCreditsContributed += request.RegularCredits;
     }
     if (request.VaultCredits) {
         component.RegularCredits += request.VaultCredits;
@@ -133,6 +142,9 @@ const processContribution = (
                 ItemType: ingredientContribution.ItemType,
                 ItemCount: ingredientContribution.ItemCount * -1
             });
+
+            guildMember.MiscItemsContributed ??= [];
+            guildMember.MiscItemsContributed.push(ingredientContribution);
         }
         addMiscItems(inventory, miscItemChanges);
         inventoryChanges.MiscItems = miscItemChanges;

@@ -21,7 +21,7 @@ import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { config } from "@/src/services/configService";
 import { GuildPermission, ITechProjectClient, ITechProjectDatabase } from "@/src/types/guildTypes";
-import { TGuildDatabaseDocument } from "@/src/models/guildModel";
+import { GuildMember, TGuildDatabaseDocument } from "@/src/models/guildModel";
 import { toMongoDate } from "@/src/helpers/inventoryHelpers";
 import { logger } from "@/src/utils/logger";
 
@@ -90,6 +90,12 @@ export const guildTechController: RequestHandler = async (req, res) => {
             res.status(400).send("-1").end();
             return;
         }
+
+        const guildMember = (await GuildMember.findOne(
+            { accountId, guildId: guild._id },
+            "RegularCreditsContributed MiscItemsContributed"
+        ))!;
+
         const contributions = data;
         const techProject = guild.TechProjects!.find(x => x.ItemType == contributions.RecipeType)!;
 
@@ -105,6 +111,9 @@ export const guildTechController: RequestHandler = async (req, res) => {
             contributions.RegularCredits = techProject.ReqCredits;
         }
         techProject.ReqCredits -= contributions.RegularCredits;
+
+        guildMember.RegularCreditsContributed ??= 0;
+        guildMember.RegularCreditsContributed += contributions.RegularCredits;
 
         if (contributions.VaultMiscItems.length) {
             for (const miscItem of contributions.VaultMiscItems) {
@@ -133,6 +142,9 @@ export const guildTechController: RequestHandler = async (req, res) => {
                     ItemType: miscItem.ItemType,
                     ItemCount: miscItem.ItemCount * -1
                 });
+
+                guildMember.MiscItemsContributed ??= [];
+                guildMember.MiscItemsContributed.push(miscItem);
             }
         }
         addMiscItems(inventory, miscItemChanges);
@@ -151,6 +163,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
 
         await guild.save();
         await inventory.save();
+        await guildMember.save();
         res.json({
             InventoryChanges: inventoryChanges,
             Vault: getGuildVault(guild)

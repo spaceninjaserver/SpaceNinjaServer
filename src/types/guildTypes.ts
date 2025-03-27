@@ -88,6 +88,10 @@ export interface IGuildMemberDatabase {
     guildId: Types.ObjectId;
     status: number;
     rank: number;
+    RegularCreditsContributed?: number;
+    PremiumCreditsContributed?: number;
+    MiscItemsContributed?: IMiscItem[];
+    ShipDecorationsContributed?: ITypeCount[];
 }
 
 export interface IGuildMemberClient {

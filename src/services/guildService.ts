@@ -58,12 +58,7 @@ export const getGuildClient = async (guild: TGuildDatabaseDocument, accountId: s
         if (guildMember.accountId.equals(accountId)) {
             missingEntry = false;
         } else {
-            member.DisplayName = (await Account.findOne(
-                {
-                    _id: guildMember.accountId
-                },
-                "DisplayName"
-            ))!.DisplayName;
+            member.DisplayName = (await Account.findById(guildMember.accountId, "DisplayName"))!.DisplayName;
             await fillInInventoryDataForGuildMember(member);
         }
         members.push(member);

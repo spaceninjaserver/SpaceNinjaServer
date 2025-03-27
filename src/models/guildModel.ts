@@ -215,7 +215,11 @@ const guildMemberSchema = new Schema<IGuildMemberDatabase>({
     accountId: Types.ObjectId,
     guildId: Types.ObjectId,
     status: { type: Number, required: true },
-    rank: { type: Number, default: 7 }
+    rank: { type: Number, default: 7 },
+    RegularCreditsContributed: Number,
+    PremiumCreditsContributed: Number,
+    MiscItemsContributed: { type: [typeCountSchema], default: undefined },
+    ShipDecorationsContributed: { type: [typeCountSchema], default: undefined }
 });
 
 guildMemberSchema.index({ accountId: 1, guildId: 1 }, { unique: true });
