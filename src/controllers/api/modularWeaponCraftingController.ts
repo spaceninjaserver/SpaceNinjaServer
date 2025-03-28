@@ -79,10 +79,14 @@ export const modularWeaponCraftingController: RequestHandler = async (req, res) 
                       }[data.WeaponType]
                   };
         defaultOverwrites.Details = {
+            Name: "",
+            IsPuppy: false,
             HasCollar: true,
+            PrintsRemaining: 2,
             Status: Status.StatusStasis,
+            HatchDate: new Date(Math.trunc(Date.now() / 86400000) * 86400000),
             IsMale: !!getRandomInt(0, 1),
-            Size: 0.7 + Math.random() * 0.3,
+            Size: getRandomInt(70, 100) / 100,
             DominantTraits: traits,
             RecessiveTraits: traits
         };
