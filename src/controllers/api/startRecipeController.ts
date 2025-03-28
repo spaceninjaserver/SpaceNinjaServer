@@ -3,7 +3,7 @@ import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { logger } from "@/src/utils/logger";
 import { RequestHandler } from "express";
 import { getRecipe } from "@/src/services/itemDataService";
-import { addMiscItems, freeUpSlot, getInventory, updateCurrency } from "@/src/services/inventoryService";
+import { addItem, freeUpSlot, getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { Types } from "mongoose";
 import { InventorySlot, ISpectreLoadout } from "@/src/types/inventoryTypes/inventoryTypes";
@@ -55,12 +55,7 @@ export const startRecipeController: RequestHandler = async (req, res) => {
             inventory[category].splice(equipmentIndex, 1);
             freeUpSlot(inventory, InventorySlot.WEAPONS);
         } else {
-            addMiscItems(inventory, [
-                {
-                    ItemType: recipe.ingredients[i].ItemType,
-                    ItemCount: recipe.ingredients[i].ItemCount * -1
-                }
-            ]);
+            await addItem(inventory, recipe.ingredients[i].ItemType, recipe.ingredients[i].ItemCount * -1);
         }
     }
 

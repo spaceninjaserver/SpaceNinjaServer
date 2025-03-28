@@ -11,13 +11,13 @@ import {
     getInventory,
     updateCurrency,
     addItem,
-    addMiscItems,
     addRecipes,
-    occupySlot
+    occupySlot,
+    combineInventoryChanges
 } from "@/src/services/inventoryService";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
-import { IMiscItem, InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
+import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
 
 export interface IClaimCompletedRecipeRequest {
     RecipeIds: IOid[];
@@ -51,14 +51,14 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
             ...updateCurrency(inventory, recipe.buildPrice * -1, false)
         };
 
-        const nonMiscItemIngredients = new Set();
+        const equipmentIngredients = new Set();
         for (const category of ["LongGuns", "Pistols", "Melee"] as const) {
             if (pendingRecipe[category]) {
                 pendingRecipe[category].forEach(item => {
                     const index = inventory[category].push(item) - 1;
                     inventoryChanges[category] ??= [];
                     inventoryChanges[category].push(inventory[category][index].toJSON<IEquipmentClient>());
-                    nonMiscItemIngredients.add(item.ItemType);
+                    equipmentIngredients.add(item.ItemType);
 
                     occupySlot(inventory, InventorySlot.WEAPONS, false);
                     inventoryChanges.WeaponBin ??= { Slots: 0 };
@@ -66,14 +66,14 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
                 });
             }
         }
-        const miscItemChanges: IMiscItem[] = [];
-        recipe.ingredients.forEach(ingredient => {
-            if (!nonMiscItemIngredients.has(ingredient.ItemType)) {
-                miscItemChanges.push(ingredient);
+        for (const ingredient of recipe.ingredients) {
+            if (!equipmentIngredients.has(ingredient.ItemType)) {
+                combineInventoryChanges(
+                    inventoryChanges,
+                    await addItem(inventory, ingredient.ItemType, ingredient.ItemCount)
+                );
             }
-        });
-        addMiscItems(inventory, miscItemChanges);
-        inventoryChanges.MiscItems = miscItemChanges;
+        }
 
         await inventory.save();
         res.json(inventoryChanges); // Not a bug: In the specific case of cancelling a recipe, InventoryChanges are expected to be the root.
