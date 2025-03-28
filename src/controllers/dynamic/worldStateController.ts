@@ -24,7 +24,7 @@ export const worldStateController: RequestHandler = (req, res) => {
             typeof req.query.buildLabel == "string"
                 ? req.query.buildLabel.split(" ").join("+")
                 : buildConfig.buildLabel,
-        Time: Math.round(Date.now() / 1000),
+        Time: config.worldState?.lockTime || Math.round(Date.now() / 1000),
         Goals: [],
         GlobalUpgrades: [],
         LiteSorties: [],

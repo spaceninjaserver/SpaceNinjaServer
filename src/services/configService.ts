@@ -69,6 +69,7 @@ interface IConfig {
         affinityBoost?: boolean;
         resourceBoost?: boolean;
         starDays?: boolean;
+        lockTime?: number;
     };
 }
 
