@@ -815,7 +815,9 @@ detailsSchema.set("toJSON", {
         const db = returnedObject as IKubrowPetDetailsDatabase;
         const client = returnedObject as IKubrowPetDetailsClient;
 
-        client.HatchDate = toMongoDate(db.HatchDate);
+        if (db.HatchDate) {
+            client.HatchDate = toMongoDate(db.HatchDate);
+        }
     }
 });
 

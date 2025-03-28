@@ -679,12 +679,12 @@ export enum KubrowPetPrintItemType {
 }
 
 export interface IKubrowPetDetailsDatabase {
-    Name: string;
-    IsPuppy: boolean;
+    Name?: string;
+    IsPuppy?: boolean;
     HasCollar: boolean;
-    PrintsRemaining: number;
+    PrintsRemaining?: number;
     Status: Status;
-    HatchDate: Date;
+    HatchDate?: Date;
     DominantTraits: ITraits;
     RecessiveTraits: ITraits;
     IsMale: boolean;
