@@ -24,7 +24,7 @@ export const loginController: RequestHandler = async (request, response) => {
     if (!account && config.autoCreateAccount && loginRequest.ClientType != "webui") {
         try {
             const nameFromEmail = loginRequest.email.substring(0, loginRequest.email.indexOf("@"));
-            let name = nameFromEmail || "SpaceNinja";
+            let name = nameFromEmail || loginRequest.email.substring(1) || "SpaceNinja";
             if (await isNameTaken(name)) {
                 let suffix = 0;
                 do {
