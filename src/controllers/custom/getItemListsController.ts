@@ -74,7 +74,8 @@ const getItemListsController: RequestHandler = (req, response) => {
             uniqueName.split("/")[5] == "HoverboardParts" ||
             uniqueName.split("/")[5] == "ModularMelee01" ||
             uniqueName.split("/")[5] == "ModularMelee02" ||
-            uniqueName.split("/")[5] == "ModularMeleeInfested"
+            uniqueName.split("/")[5] == "ModularMeleeInfested" ||
+            uniqueName.split("/")[6] == "CreaturePetParts"
         ) {
             res.ModularParts.push({
                 uniqueName,
