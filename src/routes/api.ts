@@ -72,6 +72,7 @@ import { loginRewardsController } from "@/src/controllers/api/loginRewardsContro
 import { loginRewardsSelectionController } from "@/src/controllers/api/loginRewardsSelectionController";
 import { logoutController } from "@/src/controllers/api/logoutController";
 import { marketRecommendationsController } from "@/src/controllers/api/marketRecommendationsController";
+import { maturePetController } from "@/src/controllers/api/maturePetController";
 import { missionInventoryUpdateController } from "@/src/controllers/api/missionInventoryUpdateController";
 import { modularWeaponCraftingController } from "@/src/controllers/api/modularWeaponCraftingController";
 import { modularWeaponSaleController } from "@/src/controllers/api/modularWeaponSaleController";
@@ -219,6 +220,7 @@ apiRouter.post("/inventorySlots.php", inventorySlotsController);
 apiRouter.post("/joinSession.php", joinSessionController);
 apiRouter.post("/login.php", loginController);
 apiRouter.post("/loginRewardsSelection.php", loginRewardsSelectionController);
+apiRouter.post("/maturePet.php", maturePetController);
 apiRouter.post("/missionInventoryUpdate.php", missionInventoryUpdateController);
 apiRouter.post("/modularWeaponCrafting.php", modularWeaponCraftingController);
 apiRouter.post("/modularWeaponSale.php", modularWeaponSaleController);
