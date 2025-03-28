@@ -85,6 +85,7 @@ import { queueDojoComponentDestructionController } from "@/src/controllers/api/q
 import { redeemPromoCodeController } from "@/src/controllers/api/redeemPromoCodeController";
 import { removeFromGuildController } from "@/src/controllers/api/removeFromGuildController";
 import { rerollRandomModController } from "@/src/controllers/api/rerollRandomModController";
+import { retrievePetFromStasisController } from "@/src/controllers/api/retrievePetFromStasisController";
 import { saveDialogueController } from "@/src/controllers/api/saveDialogueController";
 import { saveLoadoutController } from "@/src/controllers/api/saveLoadout";
 import { saveSettingsController } from "@/src/controllers/api/saveSettingsController";
@@ -230,6 +231,7 @@ apiRouter.post("/purchase.php", purchaseController);
 apiRouter.post("/redeemPromoCode.php", redeemPromoCodeController);
 apiRouter.post("/removeFromGuild.php", removeFromGuildController);
 apiRouter.post("/rerollRandomMod.php", rerollRandomModController);
+apiRouter.post("/retrievePetFromStasis.php", retrievePetFromStasisController);
 apiRouter.post("/saveDialogue.php", saveDialogueController);
 apiRouter.post("/saveLoadout.php", saveLoadoutController);
 apiRouter.post("/saveSettings.php", saveSettingsController);
