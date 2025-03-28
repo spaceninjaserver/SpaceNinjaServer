@@ -209,7 +209,7 @@ function fetchItemList() {
                 "/Lotus/Weapons/Operator/Pistols/DrifterPistol/DrifterPistolPlayerWeapon": {
                     name: loc("code_sirocco")
                 },
-                "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit": { name: loc("code_kdrive") }
+                "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit": { name: loc("code_kDrive") }
             };
             for (const [type, items] of Object.entries(data)) {
                 if (type == "archonCrystalUpgrades") {
