@@ -40,44 +40,79 @@ export const modularWeaponCraftingController: RequestHandler = async (req, res) 
     };
     const inventoryChanges: IInventoryChanges = {};
     if (category == "KubrowPets") {
-        const traits =
-            data.WeaponType.indexOf("Catbrow") != -1
-                ? {
-                      BaseColor: "/Lotus/Types/Game/InfestedKavatPet/Colors/InfestedKavatColorRareBase",
-                      SecondaryColor: "/Lotus/Types/Game/InfestedKavatPet/Colors/InfestedKavatColorRareSecondary",
-                      TertiaryColor: "/Lotus/Types/Game/InfestedKavatPet/Colors/InfestedKavatColorRareTertiary",
-                      AccentColor: "/Lotus/Types/Game/InfestedKavatPet/Colors/InfestedKavatColorRareAccent",
-                      EyeColor: "/Lotus/Types/Game/InfestedKavatPet/Colors/InfestedKavatColorRareEyes",
-                      FurPattern: "/Lotus/Types/Game/InfestedKavatPet/Patterns/InfestedCritterPatternDefault",
-                      Personality: data.WeaponType,
-                      BodyType: "/Lotus/Types/Game/CatbrowPet/BodyTypes/InfestedCatbrowPetRegularBodyType",
-                      Head: {
-                          "/Lotus/Types/Friendly/Pets/CreaturePets/ArmoredInfestedCatbrowPetPowerSuit":
-                              "/Lotus/Types/Game/InfestedKavatPet/Heads/InfestedCritterHeadC",
-                          "/Lotus/Types/Friendly/Pets/CreaturePets/HornedInfestedCatbrowPetPowerSuit":
-                              "/Lotus/Types/Game/InfestedKavatPet/Heads/InfestedCritterHeadB",
-                          "/Lotus/Types/Friendly/Pets/CreaturePets/VulpineInfestedCatbrowPetPowerSuit":
-                              "/Lotus/Types/Game/InfestedKavatPet/Heads/InfestedCritterHeadA"
-                      }[data.WeaponType]
-                  }
-                : {
-                      BaseColor: "/Lotus/Types/Game/InfestedPredatorPet/Colors/InfestedPredatorColorRareBase",
-                      SecondaryColor: "/Lotus/Types/Game/InfestedPredatorPet/Colors/InfestedPredatorColorRareSecondary",
-                      TertiaryColor: "/Lotus/Types/Game/InfestedPredatorPet/Colors/InfestedPredatorColorRareTertiary",
-                      AccentColor: "/Lotus/Types/Game/InfestedPredatorPet/Colors/InfestedPredatorColorRareAccent",
-                      EyeColor: "/Lotus/Types/Game/InfestedPredatorPet/Colors/InfestedPredatorColorRareEyes",
-                      FurPattern: "/Lotus/Types/Game/InfestedPredatorPet/Patterns/InfestedPredatorPatternDefault",
-                      Personality: data.WeaponType,
-                      BodyType: "/Lotus/Types/Game/KubrowPet/BodyTypes/InfestedKubrowPetBodyType",
-                      Head: {
-                          "/Lotus/Types/Friendly/Pets/CreaturePets/MedjayPredatorKubrowPetPowerSuit":
-                              "/Lotus/Types/Game/InfestedPredatorPet/Heads/InfestedPredatorHeadA",
-                          "/Lotus/Types/Friendly/Pets/CreaturePets/PharaohPredatorKubrowPetPowerSuit":
-                              "/Lotus/Types/Game/InfestedPredatorPet/Heads/InfestedPredatorHeadB",
-                          "/Lotus/Types/Friendly/Pets/CreaturePets/VizierPredatorKubrowPetPowerSuit":
-                              "/Lotus/Types/Game/InfestedPredatorPet/Heads/InfestedPredatorHeadC"
-                      }[data.WeaponType]
-                  };
+        const traits = {
+            "/Lotus/Types/Friendly/Pets/CreaturePets/ArmoredInfestedCatbrowPetPowerSuit": {
+                BaseColor: "/Lotus/Types/Game/InfestedKavatPet/Colors/InfestedKavatColorRareBase",
+                SecondaryColor: "/Lotus/Types/Game/InfestedKavatPet/Colors/InfestedKavatColorRareSecondary",
+                TertiaryColor: "/Lotus/Types/Game/InfestedKavatPet/Colors/InfestedKavatColorRareTertiary",
+                AccentColor: "/Lotus/Types/Game/InfestedKavatPet/Colors/InfestedKavatColorRareAccent",
+                EyeColor: "/Lotus/Types/Game/InfestedKavatPet/Colors/InfestedKavatColorRareEyes",
+                FurPattern: "/Lotus/Types/Game/InfestedKavatPet/Patterns/InfestedCritterPatternDefault",
+                Personality: data.WeaponType,
+                BodyType: "/Lotus/Types/Game/CatbrowPet/BodyTypes/InfestedCatbrowPetRegularBodyType",
+                Head: "/Lotus/Types/Game/InfestedKavatPet/Heads/InfestedCritterHeadC"
+            },
+            "/Lotus/Types/Friendly/Pets/CreaturePets/HornedInfestedCatbrowPetPowerSuit": {
+                BaseColor: "/Lotus/Types/Game/InfestedKavatPet/Colors/InfestedKavatColorUncommonBase",
+                SecondaryColor: "/Lotus/Types/Game/InfestedKavatPet/Colors/InfestedKavatColorUncommonSecondary",
+                TertiaryColor: "/Lotus/Types/Game/InfestedKavatPet/Colors/InfestedKavatColorUncommonTertiary",
+                AccentColor: "/Lotus/Types/Game/InfestedKavatPet/Colors/InfestedKavatColorUncommonAccent",
+                EyeColor: "/Lotus/Types/Game/InfestedKavatPet/Colors/InfestedKavatColorUncommonEyes",
+                FurPattern: "/Lotus/Types/Game/InfestedKavatPet/Patterns/InfestedCritterPatternDefault",
+                Personality: data.WeaponType,
+                BodyType: "/Lotus/Types/Game/CatbrowPet/BodyTypes/InfestedCatbrowPetRegularBodyType",
+                Head: "/Lotus/Types/Game/InfestedKavatPet/Heads/InfestedCritterHeadB"
+            },
+            "/Lotus/Types/Friendly/Pets/CreaturePets/MedjayPredatorKubrowPetPowerSuit": {
+                BaseColor: "/Lotus/Types/Game/InfestedPredatorPet/Colors/InfestedPredatorColorRareBase",
+                SecondaryColor: "/Lotus/Types/Game/InfestedPredatorPet/Colors/InfestedPredatorColorRareSecondary",
+                TertiaryColor: "/Lotus/Types/Game/InfestedPredatorPet/Colors/InfestedPredatorColorRareTertiary",
+                AccentColor: "/Lotus/Types/Game/InfestedPredatorPet/Colors/InfestedPredatorColorRareAccent",
+                EyeColor: "/Lotus/Types/Game/InfestedPredatorPet/Colors/InfestedPredatorColorRareEyes",
+                FurPattern: "/Lotus/Types/Game/InfestedPredatorPet/Patterns/InfestedPredatorPatternDefault",
+                Personality: data.WeaponType,
+                BodyType: "/Lotus/Types/Game/KubrowPet/BodyTypes/InfestedKubrowPetBodyType",
+                Head: "/Lotus/Types/Game/InfestedPredatorPet/Heads/InfestedPredatorHeadA"
+            },
+            "/Lotus/Types/Friendly/Pets/CreaturePets/PharaohPredatorKubrowPetPowerSuit": {
+                BaseColor: "/Lotus/Types/Game/InfestedPredatorPet/Colors/InfestedPredatorColorUncommonBase",
+                SecondaryColor: "/Lotus/Types/Game/InfestedPredatorPet/Colors/InfestedPredatorColorUncommonSecondary",
+                TertiaryColor: "/Lotus/Types/Game/InfestedPredatorPet/Colors/InfestedPredatorColorUncommonTertiary",
+                AccentColor: "/Lotus/Types/Game/InfestedPredatorPet/Colors/InfestedPredatorColorUncommonAccent",
+                EyeColor: "/Lotus/Types/Game/InfestedPredatorPet/Colors/InfestedPredatorColorUncommonEyes",
+                FurPattern: "/Lotus/Types/Game/InfestedPredatorPet/Patterns/InfestedPredatorPatternDefault",
+                Personality: data.WeaponType,
+                BodyType: "/Lotus/Types/Game/KubrowPet/BodyTypes/InfestedKubrowPetBodyType",
+                Head: "/Lotus/Types/Game/InfestedPredatorPet/Heads/InfestedPredatorHeadB"
+            },
+            "/Lotus/Types/Friendly/Pets/CreaturePets/VizierPredatorKubrowPetPowerSuit": {
+                BaseColor: "/Lotus/Types/Game/InfestedPredatorPet/Colors/InfestedPredatorColorCommonBase",
+                SecondaryColor: "/Lotus/Types/Game/InfestedPredatorPet/Colors/InfestedPredatorColorCommonSecondary",
+                TertiaryColor: "/Lotus/Types/Game/InfestedPredatorPet/Colors/InfestedPredatorColorCommonTertiary",
+                AccentColor: "/Lotus/Types/Game/InfestedPredatorPet/Colors/InfestedPredatorColorCommonAccent",
+                EyeColor: "/Lotus/Types/Game/InfestedPredatorPet/Colors/InfestedPredatorColorCommonEyes",
+                FurPattern: "/Lotus/Types/Game/InfestedPredatorPet/Patterns/InfestedPredatorPatternDefault",
+                Personality: data.WeaponType,
+                BodyType: "/Lotus/Types/Game/KubrowPet/BodyTypes/InfestedKubrowPetBodyType",
+                Head: "/Lotus/Types/Game/InfestedPredatorPet/Heads/InfestedPredatorHeadC"
+            },
+            "/Lotus/Types/Friendly/Pets/CreaturePets/VulpineInfestedCatbrowPetPowerSuit": {
+                BaseColor: "/Lotus/Types/Game/InfestedKavatPet/Colors/InfestedKavatColorCommonBase",
+                SecondaryColor: "/Lotus/Types/Game/InfestedKavatPet/Colors/InfestedKavatColorCommonSecondary",
+                TertiaryColor: "/Lotus/Types/Game/InfestedKavatPet/Colors/InfestedKavatColorCommonTertiary",
+                AccentColor: "/Lotus/Types/Game/InfestedKavatPet/Colors/InfestedKavatColorCommonAccent",
+                EyeColor: "/Lotus/Types/Game/InfestedKavatPet/Colors/InfestedKavatColorCommonEyes",
+                FurPattern: "/Lotus/Types/Game/InfestedKavatPet/Patterns/InfestedCritterPatternDefault",
+                Personality: data.WeaponType,
+                BodyType: "/Lotus/Types/Game/CatbrowPet/BodyTypes/InfestedCatbrowPetRegularBodyType",
+                Head: "/Lotus/Types/Game/InfestedKavatPet/Heads/InfestedCritterHeadA"
+            }
+        }[data.WeaponType];
+
+        if (!traits) {
+            throw new Error(`unknown KubrowPets type: ${data.WeaponType}`);
+        }
+
         defaultOverwrites.Details = {
             Name: "",
             IsPuppy: false,
