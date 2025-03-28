@@ -38,7 +38,7 @@
   "noDojoResearchTime": false,
   "fastClanAscension": false,
   "spoofMasteryRank": -1,
-  "events": {
+  "worldState": {
     "creditBoost": false,
     "affinityBoost": false,
     "resourceBoost": false,

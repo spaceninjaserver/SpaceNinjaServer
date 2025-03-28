@@ -64,7 +64,7 @@ interface IConfig {
     noDojoResearchTime?: boolean;
     fastClanAscension?: boolean;
     spoofMasteryRank?: number;
-    events?: {
+    worldState?: {
         creditBoost?: boolean;
         affinityBoost?: boolean;
         resourceBoost?: boolean;
