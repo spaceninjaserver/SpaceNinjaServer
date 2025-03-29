@@ -29,7 +29,7 @@ export const removeFromGuildController: RequestHandler = async (req, res) => {
         } else {
             const recipeIndex = inventory.Recipes.findIndex(x => x.ItemType == "/Lotus/Types/Keys/DojoKeyBlueprint");
             if (recipeIndex != -1) {
-                inventory.Recipes.splice(itemIndex, 1);
+                inventory.Recipes.splice(recipeIndex, 1);
             }
         }
 
