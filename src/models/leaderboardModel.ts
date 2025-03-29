@@ -20,7 +20,7 @@ leaderboardEntrySchema.index({ expiry: 1 }, { expireAfterSeconds: 0 }); // With 
 
 export const Leaderboard = model<ILeaderboardEntryDatabase>("Leaderboard", leaderboardEntrySchema);
 
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type TLeaderboardEntryDocument = Document<unknown, {}, ILeaderboardEntryDatabase> & {
     _id: Types.ObjectId;
     __v: number;

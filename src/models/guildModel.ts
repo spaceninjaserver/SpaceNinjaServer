@@ -194,12 +194,12 @@ type GuildDocumentProps = {
     DojoComponents: Types.DocumentArray<IDojoComponentDatabase>;
 };
 
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 type GuildModel = Model<IGuildDatabase, {}, GuildDocumentProps>;
 
 export const Guild = model<IGuildDatabase, GuildModel>("Guild", guildSchema);
 
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type TGuildDatabaseDocument = Document<unknown, {}, IGuildDatabase> &
     Omit<
         IGuildDatabase & {

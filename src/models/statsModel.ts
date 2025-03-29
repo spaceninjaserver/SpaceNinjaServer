@@ -112,7 +112,7 @@ statsSchema.index({ accountOwnerId: 1 }, { unique: true });
 
 export const Stats = model<IStatsDatabase>("Stats", statsSchema);
 
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type TStatsDatabaseDocument = Document<unknown, {}, IStatsDatabase> & {
     _id: Types.ObjectId;
     __v: number;

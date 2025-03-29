@@ -39,7 +39,7 @@ export interface ISaveLoadoutRequest {
     WeaponSkins: IItemEntry;
 }
 
-export interface ISaveLoadoutRequestNoUpgradeVer extends Omit<ISaveLoadoutRequest, "UpgradeVer"> {}
+export type ISaveLoadoutRequestNoUpgradeVer = Omit<ISaveLoadoutRequest, "UpgradeVer">;
 
 export interface IOperatorConfigEntry {
     [configId: string]: IOperatorConfigClient;
@@ -53,7 +53,7 @@ export type IConfigEntry = {
     [configId in "0" | "1" | "2" | "3" | "4" | "5"]: IItemConfig;
 } & { IsNew?: boolean };
 
-export interface ILoadoutClient extends Omit<ILoadoutDatabase, "_id" | "loadoutOwnerId"> {}
+export type ILoadoutClient = Omit<ILoadoutDatabase, "_id" | "loadoutOwnerId">;
 
 // keep in sync with ILoadOutPresets
 export interface ILoadoutDatabase {

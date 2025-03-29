@@ -28,8 +28,7 @@ export const handleInventoryItemConfigChange = async (
 ): Promise<string | void> => {
     const inventory = await getInventory(accountId);
 
-    for (const [_equipmentName, _equipment] of Object.entries(equipmentChanges)) {
-        const equipment = _equipment as ISaveLoadoutRequestNoUpgradeVer[keyof ISaveLoadoutRequestNoUpgradeVer];
+    for (const [_equipmentName, equipment] of Object.entries(equipmentChanges)) {
         const equipmentName = _equipmentName as keyof ISaveLoadoutRequestNoUpgradeVer;
 
         if (isEmptyObject(equipment)) {
