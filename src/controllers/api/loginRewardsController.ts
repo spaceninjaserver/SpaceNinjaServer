@@ -4,7 +4,8 @@ import {
     claimLoginReward,
     getRandomLoginRewards,
     ILoginRewardsReponse,
-    isLoginRewardAChoice
+    isLoginRewardAChoice,
+    setAccountGotLoginRewardToday
 } from "@/src/services/loginRewardService";
 import { getInventory } from "@/src/services/inventoryService";
 
@@ -44,8 +45,11 @@ export const loginRewardsController: RequestHandler = async (req, res) => {
     if (!isMilestoneDay && randomRewards.length == 1) {
         response.DailyTributeInfo.HasChosenReward = true;
         response.DailyTributeInfo.ChosenReward = randomRewards[0];
-        response.DailyTributeInfo.NewInventory = await claimLoginReward(account, inventory, randomRewards[0]);
+        response.DailyTributeInfo.NewInventory = await claimLoginReward(inventory, randomRewards[0]);
         await inventory.save();
+
+        setAccountGotLoginRewardToday(account);
+        await account.save();
     }
     res.json(response);
 };
