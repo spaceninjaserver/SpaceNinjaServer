@@ -28,7 +28,17 @@ export const createGuildController: RequestHandler = async (req, res) => {
 
     await updateInventoryForConfirmedGuildJoin(accountId, guild._id);
 
-    res.json(await getGuildClient(guild, accountId));
+    res.json({
+        ...(await getGuildClient(guild, accountId)),
+        InventoryChanges: {
+            Recipes: [
+                {
+                    ItemType: "/Lotus/Types/Keys/DojoKeyBlueprint",
+                    ItemCount: 1
+                }
+            ]
+        }
+    });
 };
 
 interface ICreateGuildRequest {
