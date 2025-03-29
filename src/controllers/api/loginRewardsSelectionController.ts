@@ -1,5 +1,9 @@
 import { getInventory } from "@/src/services/inventoryService";
-import { claimLoginReward, getRandomLoginRewards } from "@/src/services/loginRewardService";
+import {
+    claimLoginReward,
+    getRandomLoginRewards,
+    setAccountGotLoginRewardToday
+} from "@/src/services/loginRewardService";
 import { getAccountForRequest } from "@/src/services/loginService";
 import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
@@ -28,9 +32,13 @@ export const loginRewardsSelectionController: RequestHandler = async (req, res) 
     } else {
         const randomRewards = getRandomLoginRewards(account, inventory);
         chosenReward = randomRewards.find(x => x.StoreItemType == body.ChosenReward)!;
-        inventoryChanges = await claimLoginReward(account, inventory, chosenReward);
+        inventoryChanges = await claimLoginReward(inventory, chosenReward);
     }
     await inventory.save();
+
+    setAccountGotLoginRewardToday(account);
+    await account.save();
+
     res.json({
         DailyTributeInfo: {
             NewInventory: inventoryChanges,

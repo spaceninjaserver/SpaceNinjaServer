@@ -121,14 +121,9 @@ const getRandomLoginReward = (rng: CRng, day: number, inventory: TInventoryDatab
 };
 
 export const claimLoginReward = async (
-    account: TAccountDocument,
     inventory: TInventoryDatabaseDocument,
     reward: ILoginReward
 ): Promise<IInventoryChanges> => {
-    account.LoginDays += 1;
-    account.LastLoginRewardDate = Math.trunc(Date.now() / 86400000) * 86400;
-    await account.save();
-
     switch (reward.RewardType) {
         case "RT_RESOURCE":
         case "RT_STORE_ITEM":
@@ -149,4 +144,9 @@ export const claimLoginReward = async (
         }
     }
     throw new Error(`unknown login reward type: ${reward.RewardType}`);
+};
+
+export const setAccountGotLoginRewardToday = (account: TAccountDocument): void => {
+    account.LoginDays += 1;
+    account.LastLoginRewardDate = Math.trunc(Date.now() / 86400000) * 86400;
 };
