@@ -25,7 +25,7 @@ export const addToGuildController: RequestHandler = async (req, res) => {
         return;
     }
 
-    const guild = (await Guild.findById(payload.GuildId.$oid, "Name"))!;
+    const guild = (await Guild.findById(payload.GuildId.$oid, "Name Ranks"))!;
     const senderAccount = await getAccountForRequest(req);
     if (!(await hasGuildPermission(guild, senderAccount._id.toString(), GuildPermission.Recruiter))) {
         res.status(400).json("Invalid permission");
