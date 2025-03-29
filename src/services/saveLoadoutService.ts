@@ -140,6 +140,13 @@ export const handleInventoryItemConfigChange = async (
                 inventory.UseAdultOperatorLoadout = equipment as boolean;
                 break;
             }
+            case "WeaponSkins": {
+                const itemEntries = equipment as IItemEntry;
+                for (const [itemId, itemConfigEntries] of Object.entries(itemEntries)) {
+                    inventory.WeaponSkins.id(itemId)!.IsNew = itemConfigEntries.IsNew;
+                }
+                break;
+            }
             default: {
                 if (equipmentKeys.includes(equipmentName as TEquipmentKey) && equipmentName != "ValidNewLoadoutId") {
                     logger.debug(`general Item config saved of type ${equipmentName}`, {

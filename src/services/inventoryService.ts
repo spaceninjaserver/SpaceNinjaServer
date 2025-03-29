@@ -938,7 +938,7 @@ export const addSkin = (
     typeName: string,
     inventoryChanges: IInventoryChanges = {}
 ): IInventoryChanges => {
-    const index = inventory.WeaponSkins.push({ ItemType: typeName }) - 1;
+    const index = inventory.WeaponSkins.push({ ItemType: typeName, IsNew: true }) - 1;
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     inventoryChanges.WeaponSkins ??= [];
     (inventoryChanges.WeaponSkins as IWeaponSkinClient[]).push(

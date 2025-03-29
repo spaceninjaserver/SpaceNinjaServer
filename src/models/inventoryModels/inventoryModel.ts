@@ -586,7 +586,8 @@ const spectreLoadoutsSchema = new Schema<ISpectreLoadout>(
 
 const weaponSkinsSchema = new Schema<IWeaponSkinDatabase>(
     {
-        ItemType: String
+        ItemType: String,
+        IsNew: Boolean
     },
     { id: false }
 );

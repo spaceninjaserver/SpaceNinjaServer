@@ -36,6 +36,7 @@ export interface ISaveLoadoutRequest {
     EquippedGear: string[];
     EquippedEmotes: string[];
     UseAdultOperatorLoadout: boolean;
+    WeaponSkins: IItemEntry;
 }
 
 export interface ISaveLoadoutRequestNoUpgradeVer extends Omit<ISaveLoadoutRequest, "UpgradeVer"> {}
