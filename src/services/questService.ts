@@ -60,6 +60,23 @@ export const updateQuestKey = async (
             inventoryChanges = await addItems(inventory as TInventoryDatabaseDocument, questCompletionItems);
         }
         inventory.ActiveQuest = "";
+
+        if (questKeyUpdate[0].ItemType == "/Lotus/Types/Keys/NewWarQuest/NewWarQuestKeyChain") {
+            inventory.Affiliations.push({
+                Title: 1,
+                Standing: 1,
+                WeeklyMissions: [
+                    {
+                        MissionIndex: 0,
+                        CompletedMission: false,
+                        JobManifest: "/Lotus/Syndicates/Kahl/KahlJobManifestVersionThree",
+                        WeekCount: 0,
+                        Challenges: []
+                    }
+                ],
+                Tag: "KahlSyndicate"
+            });
+        }
     }
     return inventoryChanges;
 };
