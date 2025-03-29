@@ -293,7 +293,7 @@ export const updateInventoryForConfirmedGuildJoin = async (
     accountId: string,
     guildId: Types.ObjectId
 ): Promise<void> => {
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory(accountId, "GuildId Recipes");
 
     // Set GuildId
     inventory.GuildId = guildId;
