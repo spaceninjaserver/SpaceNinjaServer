@@ -9,7 +9,7 @@ import {
     updateSlots
 } from "@/src/services/inventoryService";
 import { getRandomWeightedRewardUc } from "@/src/services/rngService";
-import { getVendorManifestByOid } from "@/src/services/serversideVendorsService";
+import { getVendorManifestByOid, preprocessVendorManifest } from "@/src/services/serversideVendorsService";
 import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IPurchaseRequest, IPurchaseResponse, SlotPurchase, IInventoryChanges } from "@/src/types/purchaseTypes";
 import { logger } from "@/src/utils/logger";
@@ -52,8 +52,9 @@ export const handlePurchase = async (
 
     const prePurchaseInventoryChanges: IInventoryChanges = {};
     if (purchaseRequest.PurchaseParams.Source == 7) {
-        const manifest = getVendorManifestByOid(purchaseRequest.PurchaseParams.SourceId!);
-        if (manifest) {
+        const rawManifest = getVendorManifestByOid(purchaseRequest.PurchaseParams.SourceId!);
+        if (rawManifest) {
+            const manifest = preprocessVendorManifest(rawManifest);
             let ItemId: string | undefined;
             if (purchaseRequest.PurchaseParams.ExtraPurchaseInfoJson) {
                 ItemId = (JSON.parse(purchaseRequest.PurchaseParams.ExtraPurchaseInfoJson) as { ItemId: string })
@@ -87,16 +88,28 @@ export const handlePurchase = async (
                             }) - 1
                         ];
                 }
+                let expiry = parseInt(offer.Expiry.$date.$numberLong);
+                if (purchaseRequest.PurchaseParams.IsWeekly) {
+                    const EPOCH = 1734307200 * 1000; // Monday
+                    const week = Math.trunc((Date.now() - EPOCH) / 604800000);
+                    const weekStart = EPOCH + week * 604800000;
+                    expiry = weekStart + 604800000;
+                }
                 const historyEntry = vendorPurchases.PurchaseHistory.find(x => x.ItemId == ItemId);
                 let numPurchased = purchaseRequest.PurchaseParams.Quantity;
                 if (historyEntry) {
-                    numPurchased += historyEntry.NumPurchased;
-                    historyEntry.NumPurchased += purchaseRequest.PurchaseParams.Quantity;
+                    if (Date.now() >= historyEntry.Expiry.getTime()) {
+                        historyEntry.NumPurchased = numPurchased;
+                        historyEntry.Expiry = new Date(expiry);
+                    } else {
+                        numPurchased += historyEntry.NumPurchased;
+                        historyEntry.NumPurchased += purchaseRequest.PurchaseParams.Quantity;
+                    }
                 } else {
                     vendorPurchases.PurchaseHistory.push({
                         ItemId: ItemId,
                         NumPurchased: purchaseRequest.PurchaseParams.Quantity,
-                        Expiry: new Date(parseInt(offer.Expiry.$date.$numberLong))
+                        Expiry: new Date(expiry)
                     });
                 }
                 prePurchaseInventoryChanges.NewVendorPurchase = {
@@ -105,7 +118,7 @@ export const handlePurchase = async (
                         {
                             ItemId: ItemId,
                             NumPurchased: numPurchased,
-                            Expiry: offer.Expiry
+                            Expiry: { $date: { $numberLong: expiry.toString() } }
                         }
                     ]
                 };

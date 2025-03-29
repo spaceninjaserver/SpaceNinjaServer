@@ -18,7 +18,7 @@
         "QuantityMultiplier": 1,
         "Expiry": {
           "$date": {
-            "$numberLong": "9999999000000"
+            "$numberLong": "604800000"
           }
         },
         "AllowMultipurchase": true,
@@ -39,7 +39,7 @@
         "QuantityMultiplier": 1,
         "Expiry": {
           "$date": {
-            "$numberLong": "9999999000000"
+            "$numberLong": "604800000"
           }
         },
         "PurchaseQuantityLimit": 1,
@@ -61,7 +61,7 @@
         "QuantityMultiplier": 1,
         "Expiry": {
           "$date": {
-            "$numberLong": "9999999000000"
+            "$numberLong": "604800000"
           }
         },
         "PurchaseQuantityLimit": 1,
@@ -83,7 +83,7 @@
         "QuantityMultiplier": 35000,
         "Expiry": {
           "$date": {
-            "$numberLong": "9999999000000"
+            "$numberLong": "604800000"
           }
         },
         "PurchaseQuantityLimit": 1,
@@ -105,7 +105,7 @@
         "QuantityMultiplier": 1,
         "Expiry": {
           "$date": {
-            "$numberLong": "9999999000000"
+            "$numberLong": "604800000"
           }
         },
         "PurchaseQuantityLimit": 1,
@@ -118,7 +118,7 @@
     "PropertyTextHash": "62B64A8065B7C0FA345895D4BC234621",
     "Expiry": {
       "$date": {
-        "$numberLong": "9999999000000"
+        "$numberLong": "604800000"
       }
     }
   }

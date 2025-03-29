@@ -5,11 +5,17 @@
     "ItemManifest": [
       {
         "StoreItem": "/Lotus/StoreItems/Types/Items/Guild/GuildAdvertisementMoon",
-        "ItemPrices": [{ "ItemType": "/Lotus/Types/Items/Research/ChemComponent", "ItemCount": 12, "ProductCategory": "MiscItems" }],
+        "ItemPrices": [
+          {
+            "ItemType": ["/Lotus/Types/Items/Research/BioFragment", "/Lotus/Types/Items/Research/ChemComponent", "/Lotus/Types/Items/Research/EnergyFragment"],
+            "ItemCount": 12,
+            "ProductCategory": "MiscItems"
+          }
+        ],
         "RegularPrice": [1, 1],
         "Bin": "BIN_4",
         "QuantityMultiplier": 1,
-        "Expiry": { "$date": { "$numberLong": "9999999000000" } },
+        "Expiry": { "$date": { "$numberLong": "604800000" } },
         "PurchaseQuantityLimit": 1,
         "AllowMultipurchase": false,
         "LocTagRandSeed": 79554843,
@@ -17,11 +23,17 @@
       },
       {
         "StoreItem": "/Lotus/StoreItems/Types/Items/Guild/GuildAdvertisementMountain",
-        "ItemPrices": [{ "ItemType": "/Lotus/Types/Items/Research/ChemComponent", "ItemCount": 7, "ProductCategory": "MiscItems" }],
+        "ItemPrices": [
+          {
+            "ItemType": ["/Lotus/Types/Items/Research/BioFragment", "/Lotus/Types/Items/Research/ChemComponent", "/Lotus/Types/Items/Research/EnergyFragment"],
+            "ItemCount": 7,
+            "ProductCategory": "MiscItems"
+          }
+        ],
         "RegularPrice": [1, 1],
         "Bin": "BIN_3",
         "QuantityMultiplier": 1,
-        "Expiry": { "$date": { "$numberLong": "9999999000000" } },
+        "Expiry": { "$date": { "$numberLong": "604800000" } },
         "PurchaseQuantityLimit": 1,
         "AllowMultipurchase": false,
         "LocTagRandSeed": 2413820225,
@@ -29,11 +41,17 @@
       },
       {
         "StoreItem": "/Lotus/StoreItems/Types/Items/Guild/GuildAdvertisementStorm",
-        "ItemPrices": [{ "ItemType": "/Lotus/Types/Items/Research/ChemComponent", "ItemCount": 3, "ProductCategory": "MiscItems" }],
+        "ItemPrices": [
+          {
+            "ItemType": ["/Lotus/Types/Items/Research/BioFragment", "/Lotus/Types/Items/Research/ChemComponent", "/Lotus/Types/Items/Research/EnergyFragment"],
+            "ItemCount": 3,
+            "ProductCategory": "MiscItems"
+          }
+        ],
         "RegularPrice": [1, 1],
         "Bin": "BIN_2",
         "QuantityMultiplier": 1,
-        "Expiry": { "$date": { "$numberLong": "9999999000000" } },
+        "Expiry": { "$date": { "$numberLong": "604800000" } },
         "PurchaseQuantityLimit": 1,
         "AllowMultipurchase": false,
         "LocTagRandSeed": 3262300883,
@@ -41,11 +59,17 @@
       },
       {
         "StoreItem": "/Lotus/StoreItems/Types/Items/Guild/GuildAdvertisementShadow",
-        "ItemPrices": [{ "ItemType": "/Lotus/Types/Items/Research/EnergyFragment", "ItemCount": 20, "ProductCategory": "MiscItems" }],
+        "ItemPrices": [
+          {
+            "ItemType": ["/Lotus/Types/Items/Research/BioFragment", "/Lotus/Types/Items/Research/ChemComponent", "/Lotus/Types/Items/Research/EnergyFragment"],
+            "ItemCount": 20,
+            "ProductCategory": "MiscItems"
+          }
+        ],
         "RegularPrice": [1, 1],
         "Bin": "BIN_1",
         "QuantityMultiplier": 1,
-        "Expiry": { "$date": { "$numberLong": "9999999000000" } },
+        "Expiry": { "$date": { "$numberLong": "604800000" } },
         "PurchaseQuantityLimit": 1,
         "AllowMultipurchase": false,
         "LocTagRandSeed": 2797325750,
@@ -53,11 +77,17 @@
       },
       {
         "StoreItem": "/Lotus/StoreItems/Types/Items/Guild/GuildAdvertisementGhost",
-        "ItemPrices": [{ "ItemType": "/Lotus/Types/Items/Research/EnergyFragment", "ItemCount": 10, "ProductCategory": "MiscItems" }],
+        "ItemPrices": [
+          {
+            "ItemType": ["/Lotus/Types/Items/Research/BioFragment", "/Lotus/Types/Items/Research/ChemComponent", "/Lotus/Types/Items/Research/EnergyFragment"],
+            "ItemCount": 10,
+            "ProductCategory": "MiscItems"
+          }
+        ],
         "RegularPrice": [1, 1],
         "Bin": "BIN_0",
         "QuantityMultiplier": 1,
-        "Expiry": { "$date": { "$numberLong": "9999999000000" } },
+        "Expiry": { "$date": { "$numberLong": "604800000" } },
         "PurchaseQuantityLimit": 1,
         "AllowMultipurchase": false,
         "LocTagRandSeed": 554932310,
@@ -66,6 +96,6 @@
     ],
     "PropertyTextHash": "255AFE2169BAE4130B4B20D7C55D14FA",
     "RandomSeedType": "VRST_FLAVOUR_TEXT",
-    "Expiry": { "$date": { "$numberLong": "9999999000000" } }
+    "Expiry": { "$date": { "$numberLong": "604800000" } }
   }
 }

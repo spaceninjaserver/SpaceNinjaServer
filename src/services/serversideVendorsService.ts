@@ -1,4 +1,6 @@
-import { IMongoDate, IOid } from "@/src/types/commonTypes";
+import { CRng, mixSeeds } from "@/src/services/rngService";
+import { IMongoDate } from "@/src/types/commonTypes";
+import { IVendorManifest, IVendorManifestPreprocessed } from "@/src/types/vendorTypes";
 
 import ArchimedeanVendorManifest from "@/static/fixed_responses/getVendorInfo/ArchimedeanVendorManifest.json";
 import DeimosEntratiFragmentVendorProductsManifest from "@/static/fixed_responses/getVendorInfo/DeimosEntratiFragmentVendorProductsManifest.json";
@@ -31,25 +33,6 @@ import SolarisProspectorVendorManifest from "@/static/fixed_responses/getVendorI
 import TeshinHardModeVendorManifest from "@/static/fixed_responses/getVendorInfo/TeshinHardModeVendorManifest.json";
 import ZarimanCommisionsManifestArchimedean from "@/static/fixed_responses/getVendorInfo/ZarimanCommisionsManifestArchimedean.json";
 
-interface IVendorManifest {
-    VendorInfo: {
-        _id: IOid;
-        TypeName: string;
-        ItemManifest: {
-            StoreItem: string;
-            ItemPrices?: { ItemType: string; ItemCount: number; ProductCategory: string }[];
-            Bin: string;
-            QuantityMultiplier: number;
-            Expiry: IMongoDate;
-            PurchaseQuantityLimit?: number;
-            RotatedWeekly?: boolean;
-            AllowMultipurchase: boolean;
-            Id: IOid;
-        }[];
-        Expiry: IMongoDate;
-    };
-}
-
 const vendorManifests: IVendorManifest[] = [
     ArchimedeanVendorManifest,
     DeimosEntratiFragmentVendorProductsManifest,
@@ -65,8 +48,8 @@ const vendorManifests: IVendorManifest[] = [
     DuviriAcrithisVendorManifest,
     EntratiLabsEntratiLabsCommisionsManifest,
     EntratiLabsEntratiLabVendorManifest,
-    GuildAdvertisementVendorManifest,
-    HubsIronwakeDondaVendorManifest,
+    GuildAdvertisementVendorManifest, // uses preprocessing
+    HubsIronwakeDondaVendorManifest, // uses preprocessing
     HubsPerrinSequenceWeaponVendorManifest,
     HubsRailjackCrewMemberVendorManifest,
     MaskSalesmanManifest,
@@ -79,7 +62,7 @@ const vendorManifests: IVendorManifest[] = [
     SolarisDebtTokenVendorRepossessionsManifest,
     SolarisFishmongerVendorManifest,
     SolarisProspectorVendorManifest,
-    TeshinHardModeVendorManifest,
+    TeshinHardModeVendorManifest, // uses preprocessing
     ZarimanCommisionsManifestArchimedean
 ];
 
@@ -99,4 +82,39 @@ export const getVendorManifestByOid = (oid: string): IVendorManifest | undefined
         }
     }
     return undefined;
+};
+
+export const preprocessVendorManifest = (originalManifest: IVendorManifest): IVendorManifestPreprocessed => {
+    if (Date.now() >= parseInt(originalManifest.VendorInfo.Expiry.$date.$numberLong)) {
+        const manifest = structuredClone(originalManifest);
+        const info = manifest.VendorInfo;
+        refreshExpiry(info.Expiry);
+        for (const offer of info.ItemManifest) {
+            const iteration = refreshExpiry(offer.Expiry);
+            if (offer.ItemPrices) {
+                for (const price of offer.ItemPrices) {
+                    if (typeof price.ItemType != "string") {
+                        const itemSeed = parseInt(offer.Id.$oid.substring(16), 16);
+                        const rng = new CRng(mixSeeds(itemSeed, iteration));
+                        price.ItemType = rng.randomElement(price.ItemType);
+                    }
+                }
+            }
+        }
+        return manifest as IVendorManifestPreprocessed;
+    }
+    return originalManifest as IVendorManifestPreprocessed;
+};
+
+const refreshExpiry = (expiry: IMongoDate): number => {
+    const period = parseInt(expiry.$date.$numberLong);
+    if (Date.now() >= period) {
+        const epoch = 1734307200 * 1000; // Monday (for weekly schedules)
+        const iteration = Math.trunc((Date.now() - epoch) / period);
+        const start = epoch + iteration * period;
+        const end = start + period;
+        expiry.$date.$numberLong = end.toString();
+        return iteration;
+    }
+    return 0;
 };

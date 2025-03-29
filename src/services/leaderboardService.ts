@@ -15,8 +15,7 @@ export const submitLeaderboardScore = async (
         expiry = new Date(Math.trunc(Date.now() / 86400000) * 86400000 + 86400000);
     } else {
         const EPOCH = 1734307200 * 1000; // Monday
-        const day = Math.trunc((Date.now() - EPOCH) / 86400000);
-        const week = Math.trunc(day / 7);
+        const week = Math.trunc((Date.now() - EPOCH) / 604800000);
         const weekStart = EPOCH + week * 604800000;
         const weekEnd = weekStart + 604800000;
         expiry = new Date(weekEnd);

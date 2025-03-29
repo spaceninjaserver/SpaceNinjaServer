@@ -561,7 +561,7 @@
         "QuantityMultiplier": 1,
         "Expiry": {
           "$date": {
-            "$numberLong": "2051240400000"
+            "$numberLong": "604800000"
           }
         },
         "PurchaseQuantityLimit": 25,
@@ -583,7 +583,7 @@
         "QuantityMultiplier": 10000,
         "Expiry": {
           "$date": {
-            "$numberLong": "2051240400000"
+            "$numberLong": "604800000"
           }
         },
         "PurchaseQuantityLimit": 25,
@@ -596,7 +596,7 @@
     "PropertyTextHash": "0A0F20AFA748FBEE490510DBF5A33A0D",
     "Expiry": {
       "$date": {
-        "$numberLong": "2051240400000"
+        "$numberLong": "604800000"
       }
     }
   }
