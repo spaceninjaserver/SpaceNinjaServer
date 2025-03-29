@@ -24,7 +24,7 @@ export const worldStateController: RequestHandler = (req, res) => {
             typeof req.query.buildLabel == "string"
                 ? req.query.buildLabel.split(" ").join("+")
                 : buildConfig.buildLabel,
-        Time: Math.round(Date.now() / 1000),
+        Time: config.worldState?.lockTime || Math.round(Date.now() / 1000),
         Goals: [],
         GlobalUpgrades: [],
         LiteSorties: [],
@@ -68,7 +68,7 @@ export const worldStateController: RequestHandler = (req, res) => {
         ...staticWorldState
     };
 
-    if (config.events?.starDays) {
+    if (config.worldState?.starDays) {
         worldState.Goals.push({
             _id: { $oid: "67a4dcce2a198564d62e1647" },
             Activation: { $date: { $numberLong: "1738868400000" } },
@@ -117,7 +117,7 @@ export const worldStateController: RequestHandler = (req, res) => {
         Nodes: []
     };
 
-    if (config.events?.creditBoost) {
+    if (config.worldState?.creditBoost) {
         worldState.GlobalUpgrades.push({
             _id: { $oid: "5b23106f283a555109666672" },
             Activation: { $date: { $numberLong: "1740164400000" } },
@@ -129,7 +129,7 @@ export const worldStateController: RequestHandler = (req, res) => {
             LocalizeDescTag: ""
         });
     }
-    if (config.events?.affinityBoost) {
+    if (config.worldState?.affinityBoost) {
         worldState.GlobalUpgrades.push({
             _id: { $oid: "5b23106f283a555109666673" },
             Activation: { $date: { $numberLong: "1740164400000" } },
@@ -141,7 +141,7 @@ export const worldStateController: RequestHandler = (req, res) => {
             LocalizeDescTag: ""
         });
     }
-    if (config.events?.resourceBoost) {
+    if (config.worldState?.resourceBoost) {
         worldState.GlobalUpgrades.push({
             _id: { $oid: "5b23106f283a555109666674" },
             Activation: { $date: { $numberLong: "1740164400000" } },
