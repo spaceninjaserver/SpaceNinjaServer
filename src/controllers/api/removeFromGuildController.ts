@@ -1,4 +1,5 @@
 import { GuildMember } from "@/src/models/guildModel";
+import { Inbox } from "@/src/models/inboxModel";
 import { Account } from "@/src/models/loginModel";
 import { getGuildForRequest, hasGuildPermission } from "@/src/services/guildService";
 import { getInventory } from "@/src/services/inventoryService";
@@ -36,7 +37,12 @@ export const removeFromGuildController: RequestHandler = async (req, res) => {
 
         // TODO: Handle clan leader kicking themselves (guild should be deleted in this case, I think)
     } else if (guildMember.status == 2) {
-        // TODO: Maybe the inbox message for the sent invite should be deleted?
+        // Delete the inbox message for the invite
+        await Inbox.deleteOne({
+            ownerId: guildMember.accountId,
+            contextInfo: guild._id.toString(),
+            acceptAction: "GUILD_INVITE"
+        });
     }
     await GuildMember.deleteOne({ _id: guildMember._id });
 
