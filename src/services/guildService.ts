@@ -13,16 +13,18 @@ import {
     IGuildClient,
     IGuildMemberClient,
     IGuildMemberDatabase,
-    IGuildVault
+    IGuildVault,
+    ITechProjectDatabase
 } from "@/src/types/guildTypes";
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
 import { Types } from "mongoose";
-import { ExportDojoRecipes, IDojoBuild } from "warframe-public-export-plus";
+import { ExportDojoRecipes, IDojoBuild, IDojoResearch } from "warframe-public-export-plus";
 import { logger } from "../utils/logger";
 import { config } from "./configService";
 import { Account } from "../models/loginModel";
 import { getRandomInt } from "./rngService";
 import { Inbox } from "../models/inboxModel";
+import { ITypeCount } from "../types/inventoryTypes/inventoryTypes";
 
 export const getGuildForRequest = async (req: Request): Promise<TGuildDatabaseDocument> => {
     const accountId = await getAccountIdForRequest(req);
@@ -152,6 +154,27 @@ export const getDojoClient = async (
                         entry.entryType = 1;
                         needSave = true;
                     }
+
+                    let newTier: number | undefined;
+                    switch (dojoComponent.pf) {
+                        case "/Lotus/Levels/ClanDojo/ClanDojoBarracksShadow.level":
+                            newTier = 2;
+                            break;
+                        case "/Lotus/Levels/ClanDojo/ClanDojoBarracksStorm.level":
+                            newTier = 3;
+                            break;
+                        case "/Lotus/Levels/ClanDojo/ClanDojoBarracksMountain.level":
+                            newTier = 4;
+                            break;
+                        case "/Lotus/Levels/ClanDojo/ClanDojoBarracksMoon.level":
+                            newTier = 5;
+                            break;
+                    }
+                    if (newTier) {
+                        logger.debug(`clan finished building barracks, updating to tier ${newTier}`);
+                        await setGuildTier(guild, newTier);
+                        needSave = true;
+                    }
                 }
                 if (dojoComponent.DestructionTime) {
                     if (Date.now() >= dojoComponent.DestructionTime.getTime()) {
@@ -189,22 +212,26 @@ export const getDojoClient = async (
     if (roomsToRemove.length) {
         logger.debug(`removing now-destroyed rooms`, roomsToRemove);
         for (const id of roomsToRemove) {
-            removeDojoRoom(guild, id);
+            await removeDojoRoom(guild, id);
         }
         needSave = true;
     }
     if (needSave) {
         await guild.save();
     }
+    dojo.Tier = guild.Tier;
     return dojo;
 };
 
-export const scaleRequiredCount = (count: number): number => {
-    // The recipes in the export are for Moon clans. For now we'll just assume we only have Ghost clans.
-    return Math.max(1, Math.trunc(count / 100));
+const guildTierScalingFactors = [0.01, 0.03, 0.1, 0.3, 1];
+export const scaleRequiredCount = (tier: number, count: number): number => {
+    return Math.max(1, Math.trunc(count * guildTierScalingFactors[tier - 1]));
 };
 
-export const removeDojoRoom = (guild: TGuildDatabaseDocument, componentId: Types.ObjectId | string): void => {
+export const removeDojoRoom = async (
+    guild: TGuildDatabaseDocument,
+    componentId: Types.ObjectId | string
+): Promise<void> => {
     const component = guild.DojoComponents.splice(
         guild.DojoComponents.findIndex(x => x._id.equals(componentId)),
         1
@@ -222,6 +249,21 @@ export const removeDojoRoom = (guild: TGuildDatabaseDocument, componentId: Types
         if (index != -1) {
             guild.RoomChanges.splice(index, 1);
         }
+    }
+
+    switch (component.pf) {
+        case "/Lotus/Levels/ClanDojo/ClanDojoBarracksShadow.level":
+            await setGuildTier(guild, 1);
+            break;
+        case "/Lotus/Levels/ClanDojo/ClanDojoBarracksStorm.level":
+            await setGuildTier(guild, 2);
+            break;
+        case "/Lotus/Levels/ClanDojo/ClanDojoBarracksMountain.level":
+            await setGuildTier(guild, 3);
+            break;
+        case "/Lotus/Levels/ClanDojo/ClanDojoBarracksMoon.level":
+            await setGuildTier(guild, 4);
+            break;
     }
 };
 
@@ -248,19 +290,23 @@ const moveResourcesToVault = (guild: TGuildDatabaseDocument, component: IDojoCon
         guild.VaultRegularCredits += component.RegularCredits;
     }
     if (component.MiscItems) {
-        guild.VaultMiscItems ??= [];
-        for (const componentMiscItem of component.MiscItems) {
-            const vaultMiscItem = guild.VaultMiscItems.find(x => x.ItemType == componentMiscItem.ItemType);
-            if (vaultMiscItem) {
-                vaultMiscItem.ItemCount += componentMiscItem.ItemCount;
-            } else {
-                guild.VaultMiscItems.push(componentMiscItem);
-            }
-        }
+        addVaultMiscItems(guild, component.MiscItems);
     }
     if (component.RushPlatinum) {
         guild.VaultPremiumCredits ??= 0;
         guild.VaultPremiumCredits += component.RushPlatinum;
+    }
+};
+
+export const addVaultMiscItems = (guild: TGuildDatabaseDocument, miscItems: ITypeCount[]): void => {
+    guild.VaultMiscItems ??= [];
+    for (const miscItem of miscItems) {
+        const vaultMiscItem = guild.VaultMiscItems.find(x => x.ItemType == miscItem.ItemType);
+        if (vaultMiscItem) {
+            vaultMiscItem.ItemCount += miscItem.ItemCount;
+        } else {
+            guild.VaultMiscItems.push(miscItem);
+        }
     }
 };
 
@@ -358,6 +404,102 @@ export const removePigmentsFromGuildMembers = async (guildId: string | Types.Obj
         if (index != -1) {
             inventory.MiscItems.splice(index, 1);
             await inventory.save();
+        }
+    }
+};
+
+export const processGuildTechProjectContributionsUpdate = async (
+    guild: TGuildDatabaseDocument,
+    techProject: ITechProjectDatabase
+): Promise<void> => {
+    if (techProject.ReqCredits == 0 && !techProject.ReqItems.find(x => x.ItemCount > 0)) {
+        // This research is now fully funded.
+
+        if (
+            techProject.State == 0 &&
+            techProject.ItemType.substring(0, 39) == "/Lotus/Types/Items/Research/DojoColors/"
+        ) {
+            guild.ActiveDojoColorResearch = "";
+            await removePigmentsFromGuildMembers(guild._id);
+        }
+
+        const recipe = ExportDojoRecipes.research[techProject.ItemType];
+        processFundedGuildTechProject(guild, techProject, recipe);
+    }
+};
+
+export const processFundedGuildTechProject = (
+    guild: TGuildDatabaseDocument,
+    techProject: ITechProjectDatabase,
+    recipe: IDojoResearch
+): void => {
+    techProject.State = 1;
+    techProject.CompletionDate = new Date(Date.now() + (config.noDojoResearchTime ? 0 : recipe.time) * 1000);
+    if (recipe.guildXpValue) {
+        guild.XP += recipe.guildXpValue;
+    }
+    setGuildTechLogState(guild, techProject.ItemType, config.noDojoResearchTime ? 4 : 3, techProject.CompletionDate);
+};
+
+export const setGuildTechLogState = (
+    guild: TGuildDatabaseDocument,
+    type: string,
+    state: number,
+    dateTime: Date | undefined = undefined
+): boolean => {
+    guild.TechChanges ??= [];
+    const entry = guild.TechChanges.find(x => x.details == type);
+    if (entry) {
+        if (entry.entryType == state) {
+            return false;
+        }
+        entry.dateTime = dateTime;
+        entry.entryType = state;
+    } else {
+        guild.TechChanges.push({
+            dateTime: dateTime,
+            entryType: state,
+            details: type
+        });
+    }
+    return true;
+};
+
+const setGuildTier = async (guild: TGuildDatabaseDocument, newTier: number): Promise<void> => {
+    const oldTier = guild.Tier;
+    guild.Tier = newTier;
+    if (guild.TechProjects) {
+        for (const project of guild.TechProjects) {
+            if (project.State == 1) {
+                continue;
+            }
+
+            const meta = ExportDojoRecipes.research[project.ItemType];
+
+            {
+                const numContributed = scaleRequiredCount(oldTier, meta.price) - project.ReqCredits;
+                project.ReqCredits = scaleRequiredCount(newTier, meta.price) - numContributed;
+                if (project.ReqCredits < 0) {
+                    guild.VaultRegularCredits ??= 0;
+                    guild.VaultRegularCredits += project.ReqCredits * -1;
+                    project.ReqCredits = 0;
+                }
+            }
+
+            for (let i = 0; i != project.ReqItems.length; ++i) {
+                const numContributed =
+                    scaleRequiredCount(oldTier, meta.ingredients[i].ItemCount) - project.ReqItems[i].ItemCount;
+                project.ReqItems[i].ItemCount =
+                    scaleRequiredCount(newTier, meta.ingredients[i].ItemCount) - numContributed;
+                if (project.ReqItems[i].ItemCount < 0) {
+                    project.ReqItems[i].ItemCount *= -1;
+                    addVaultMiscItems(guild, [project.ReqItems[i]]);
+                    project.ReqItems[i].ItemCount = 0;
+                }
+            }
+
+            // Check if research is fully funded now due to lowered requirements.
+            await processGuildTechProjectContributionsUpdate(guild, project);
         }
     }
 };

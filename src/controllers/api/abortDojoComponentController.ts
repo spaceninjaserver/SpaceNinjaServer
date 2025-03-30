@@ -32,7 +32,7 @@ export const abortDojoComponentController: RequestHandler = async (req, res) => 
     if (request.DecoId) {
         removeDojoDeco(guild, request.ComponentId, request.DecoId);
     } else {
-        removeDojoRoom(guild, request.ComponentId);
+        await removeDojoRoom(guild, request.ComponentId);
     }
 
     await guild.save();

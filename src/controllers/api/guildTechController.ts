@@ -4,10 +4,13 @@ import {
     getGuildVault,
     hasAccessToDojo,
     hasGuildPermission,
+    processFundedGuildTechProject,
+    processGuildTechProjectContributionsUpdate,
     removePigmentsFromGuildMembers,
-    scaleRequiredCount
+    scaleRequiredCount,
+    setGuildTechLogState
 } from "@/src/services/guildService";
-import { ExportDojoRecipes, IDojoResearch } from "warframe-public-export-plus";
+import { ExportDojoRecipes } from "warframe-public-export-plus";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import {
     addItem,
@@ -20,8 +23,8 @@ import {
 import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { config } from "@/src/services/configService";
-import { GuildPermission, ITechProjectClient, ITechProjectDatabase } from "@/src/types/guildTypes";
-import { GuildMember, TGuildDatabaseDocument } from "@/src/models/guildModel";
+import { GuildPermission, ITechProjectClient } from "@/src/types/guildTypes";
+import { GuildMember } from "@/src/models/guildModel";
 import { toMongoDate } from "@/src/helpers/inventoryHelpers";
 import { logger } from "@/src/utils/logger";
 
@@ -44,7 +47,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
                 if (project.CompletionDate) {
                     techProject.CompletionDate = toMongoDate(project.CompletionDate);
                     if (Date.now() >= project.CompletionDate.getTime()) {
-                        needSave ||= setTechLogState(guild, project.ItemType, 4, project.CompletionDate);
+                        needSave ||= setGuildTechLogState(guild, project.ItemType, 4, project.CompletionDate);
                     }
                 }
                 techProjects.push(techProject);
@@ -66,17 +69,17 @@ export const guildTechController: RequestHandler = async (req, res) => {
                 guild.TechProjects[
                     guild.TechProjects.push({
                         ItemType: data.RecipeType,
-                        ReqCredits: config.noDojoResearchCosts ? 0 : scaleRequiredCount(recipe.price),
+                        ReqCredits: config.noDojoResearchCosts ? 0 : scaleRequiredCount(guild.Tier, recipe.price),
                         ReqItems: recipe.ingredients.map(x => ({
                             ItemType: x.ItemType,
-                            ItemCount: config.noDojoResearchCosts ? 0 : scaleRequiredCount(x.ItemCount)
+                            ItemCount: config.noDojoResearchCosts ? 0 : scaleRequiredCount(guild.Tier, x.ItemCount)
                         })),
                         State: 0
                     }) - 1
                 ];
-            setTechLogState(guild, techProject.ItemType, 5);
+            setGuildTechLogState(guild, techProject.ItemType, 5);
             if (config.noDojoResearchCosts) {
-                processFundedProject(guild, techProject, recipe);
+                processFundedGuildTechProject(guild, techProject, recipe);
             } else {
                 if (data.RecipeType.substring(0, 39) == "/Lotus/Types/Items/Research/DojoColors/") {
                     guild.ActiveDojoColorResearch = data.RecipeType;
@@ -151,15 +154,8 @@ export const guildTechController: RequestHandler = async (req, res) => {
         const inventoryChanges: IInventoryChanges = updateCurrency(inventory, contributions.RegularCredits, false);
         inventoryChanges.MiscItems = miscItemChanges;
 
-        if (techProject.ReqCredits == 0 && !techProject.ReqItems.find(x => x.ItemCount > 0)) {
-            // This research is now fully funded.
-            const recipe = ExportDojoRecipes.research[data.RecipeType];
-            processFundedProject(guild, techProject, recipe);
-            if (data.RecipeType.substring(0, 39) == "/Lotus/Types/Items/Research/DojoColors/") {
-                guild.ActiveDojoColorResearch = "";
-                await removePigmentsFromGuildMembers(guild._id);
-            }
-        }
+        // Check if research is fully funded now.
+        await processGuildTechProjectContributionsUpdate(guild, techProject);
 
         await guild.save();
         await inventory.save();
@@ -236,43 +232,6 @@ export const guildTechController: RequestHandler = async (req, res) => {
         logger.debug(`data provided to ${req.path}: ${String(req.body)}`);
         throw new Error(`unknown guildTech action: ${data.Action}`);
     }
-};
-
-const processFundedProject = (
-    guild: TGuildDatabaseDocument,
-    techProject: ITechProjectDatabase,
-    recipe: IDojoResearch
-): void => {
-    techProject.State = 1;
-    techProject.CompletionDate = new Date(Date.now() + (config.noDojoResearchTime ? 0 : recipe.time) * 1000);
-    if (recipe.guildXpValue) {
-        guild.XP += recipe.guildXpValue;
-    }
-    setTechLogState(guild, techProject.ItemType, config.noDojoResearchTime ? 4 : 3, techProject.CompletionDate);
-};
-
-const setTechLogState = (
-    guild: TGuildDatabaseDocument,
-    type: string,
-    state: number,
-    dateTime: Date | undefined = undefined
-): boolean => {
-    guild.TechChanges ??= [];
-    const entry = guild.TechChanges.find(x => x.details == type);
-    if (entry) {
-        if (entry.entryType == state) {
-            return false;
-        }
-        entry.dateTime = dateTime;
-        entry.entryType = state;
-    } else {
-        guild.TechChanges.push({
-            dateTime: dateTime,
-            entryType: state,
-            details: type
-        });
-    }
-    return true;
 };
 
 type TGuildTechRequest =

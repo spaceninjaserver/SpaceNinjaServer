@@ -1,5 +1,5 @@
 import { GuildMember } from "@/src/models/guildModel";
-import { getGuildForRequestEx } from "@/src/services/guildService";
+import { addVaultMiscItems, getGuildForRequestEx } from "@/src/services/guildService";
 import { addFusionTreasures, addMiscItems, addShipDecorations, getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { IFusionTreasure, IMiscItem, ITypeCount } from "@/src/types/inventoryTypes/inventoryTypes";
@@ -23,11 +23,17 @@ export const contributeToVaultController: RequestHandler = async (req, res) => {
         guildMember.RegularCreditsContributed += request.RegularCredits;
     }
     if (request.MiscItems.length) {
-        guild.VaultMiscItems ??= [];
+        addVaultMiscItems(guild, request.MiscItems);
+
         guildMember.MiscItemsContributed ??= [];
         for (const item of request.MiscItems) {
-            guild.VaultMiscItems.push(item);
-            guildMember.MiscItemsContributed.push(item);
+            const miscItemContribution = guildMember.MiscItemsContributed.find(x => x.ItemType == item.ItemType);
+            if (miscItemContribution) {
+                miscItemContribution.ItemCount += item.ItemCount;
+            } else {
+                guildMember.MiscItemsContributed.push(item);
+            }
+
             addMiscItems(inventory, [{ ...item, ItemCount: item.ItemCount * -1 }]);
         }
     }

@@ -94,10 +94,10 @@ const processContribution = (
         component.RegularCredits += request.VaultCredits;
         guild.VaultRegularCredits! -= request.VaultCredits;
     }
-    if (component.RegularCredits > scaleRequiredCount(meta.price)) {
+    if (component.RegularCredits > scaleRequiredCount(guild.Tier, meta.price)) {
         guild.VaultRegularCredits ??= 0;
-        guild.VaultRegularCredits += component.RegularCredits - scaleRequiredCount(meta.price);
-        component.RegularCredits = scaleRequiredCount(meta.price);
+        guild.VaultRegularCredits += component.RegularCredits - scaleRequiredCount(guild.Tier, meta.price);
+        component.RegularCredits = scaleRequiredCount(guild.Tier, meta.price);
     }
 
     component.MiscItems ??= [];
@@ -108,10 +108,10 @@ const processContribution = (
                 const ingredientMeta = meta.ingredients.find(x => x.ItemType == ingredientContribution.ItemType)!;
                 if (
                     componentMiscItem.ItemCount + ingredientContribution.ItemCount >
-                    scaleRequiredCount(ingredientMeta.ItemCount)
+                    scaleRequiredCount(guild.Tier, ingredientMeta.ItemCount)
                 ) {
                     ingredientContribution.ItemCount =
-                        scaleRequiredCount(ingredientMeta.ItemCount) - componentMiscItem.ItemCount;
+                        scaleRequiredCount(guild.Tier, ingredientMeta.ItemCount) - componentMiscItem.ItemCount;
                 }
                 componentMiscItem.ItemCount += ingredientContribution.ItemCount;
             } else {
@@ -129,10 +129,10 @@ const processContribution = (
                 const ingredientMeta = meta.ingredients.find(x => x.ItemType == ingredientContribution.ItemType)!;
                 if (
                     componentMiscItem.ItemCount + ingredientContribution.ItemCount >
-                    scaleRequiredCount(ingredientMeta.ItemCount)
+                    scaleRequiredCount(guild.Tier, ingredientMeta.ItemCount)
                 ) {
                     ingredientContribution.ItemCount =
-                        scaleRequiredCount(ingredientMeta.ItemCount) - componentMiscItem.ItemCount;
+                        scaleRequiredCount(guild.Tier, ingredientMeta.ItemCount) - componentMiscItem.ItemCount;
                 }
                 componentMiscItem.ItemCount += ingredientContribution.ItemCount;
             } else {
@@ -150,11 +150,14 @@ const processContribution = (
         inventoryChanges.MiscItems = miscItemChanges;
     }
 
-    if (component.RegularCredits >= scaleRequiredCount(meta.price)) {
+    if (component.RegularCredits >= scaleRequiredCount(guild.Tier, meta.price)) {
         let fullyFunded = true;
         for (const ingredient of meta.ingredients) {
             const componentMiscItem = component.MiscItems.find(x => x.ItemType == ingredient.ItemType);
-            if (!componentMiscItem || componentMiscItem.ItemCount < scaleRequiredCount(ingredient.ItemCount)) {
+            if (
+                !componentMiscItem ||
+                componentMiscItem.ItemCount < scaleRequiredCount(guild.Tier, ingredient.ItemCount)
+            ) {
                 fullyFunded = false;
                 break;
             }

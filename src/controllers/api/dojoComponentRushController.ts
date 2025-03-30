@@ -1,4 +1,4 @@
-import { GuildMember } from "@/src/models/guildModel";
+import { GuildMember, TGuildDatabaseDocument } from "@/src/models/guildModel";
 import { getDojoClient, getGuildForRequestEx, hasAccessToDojo, scaleRequiredCount } from "@/src/services/guildService";
 import { getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
@@ -36,10 +36,10 @@ export const dojoComponentRushController: RequestHandler = async (req, res) => {
     if (request.DecoId) {
         const deco = component.Decos!.find(x => x._id.equals(request.DecoId))!;
         const meta = Object.values(ExportDojoRecipes.decos).find(x => x.resultType == deco.Type)!;
-        processContribution(deco, meta, platinumDonated);
+        processContribution(guild, deco, meta, platinumDonated);
     } else {
         const meta = Object.values(ExportDojoRecipes.rooms).find(x => x.resultType == component.pf)!;
-        processContribution(component, meta, platinumDonated);
+        processContribution(guild, component, meta, platinumDonated);
 
         const entry = guild.RoomChanges?.find(x => x.componentId.equals(component._id));
         if (entry) {
@@ -61,8 +61,13 @@ export const dojoComponentRushController: RequestHandler = async (req, res) => {
     });
 };
 
-const processContribution = (component: IDojoContributable, meta: IDojoBuild, platinumDonated: number): void => {
-    const fullPlatinumCost = scaleRequiredCount(meta.skipTimePrice);
+const processContribution = (
+    guild: TGuildDatabaseDocument,
+    component: IDojoContributable,
+    meta: IDojoBuild,
+    platinumDonated: number
+): void => {
+    const fullPlatinumCost = scaleRequiredCount(guild.Tier, meta.skipTimePrice);
     const fullDurationSeconds = meta.time;
     const secondsPerPlatinum = fullDurationSeconds / fullPlatinumCost;
     component.CompletionTime = new Date(
