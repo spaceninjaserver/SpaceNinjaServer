@@ -54,8 +54,12 @@ export const loginController: RequestHandler = async (request, response) => {
         }
     }
 
-    //email not found or incorrect password
-    if (!account || !isCorrectPassword(loginRequest.password, account.password)) {
+    if (!account) {
+        response.status(400).json({ error: "unknown user" });
+        return;
+    }
+
+    if (!isCorrectPassword(loginRequest.password, account.password)) {
         response.status(400).json({ error: "incorrect login data" });
         return;
     }
