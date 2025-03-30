@@ -203,12 +203,27 @@ export const getNode = (nodeName: string): IRegion => {
 };
 
 export const getQuestCompletionItems = (questKey: string): ITypeCount[] | undefined => {
-    const items = (questCompletionItems as unknown as Record<string, ITypeCount[]> | undefined)?.[questKey];
+    if (questKey in questCompletionItems) {
+        return questCompletionItems[questKey as keyof typeof questCompletionItems];
+    }
+    logger.warn(`Quest ${questKey} not found in questCompletionItems`);
 
-    if (!items) {
-        logger.error(
-            `Quest ${questKey} not found in questCompletionItems, quest completion items have not been given. This is a temporary solution`
-        );
+    const items: ITypeCount[] = [];
+    const meta = ExportKeys[questKey];
+    if (meta.rewards) {
+        for (const reward of meta.rewards) {
+            if (reward.rewardType == "RT_STORE_ITEM") {
+                items.push({
+                    ItemType: fromStoreItem(reward.itemType),
+                    ItemCount: 1
+                });
+            } else if (reward.rewardType == "RT_RESOURCE" || reward.rewardType == "RT_RECIPE") {
+                items.push({
+                    ItemType: reward.itemType,
+                    ItemCount: reward.amount
+                });
+            }
+        }
     }
     return items;
 };
