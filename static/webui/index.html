@@ -163,9 +163,14 @@
                         <div class="card mb-3" style="height: 400px;">
                             <h5 class="card-header" data-loc="inventory_longGuns"></h5>
                             <div class="card-body overflow-auto">
-                                <form class="input-group mb-3" onsubmit="doAcquireEquipment('LongGuns');return false;">
+                                <form class="input-group mb-3" onsubmit="handleModularSelection('LongGuns');return false;">
                                     <input class="form-control" id="acquire-type-LongGuns" list="datalist-LongGuns" />
                                     <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                </form>
+                                <form class="input-group mb-3" id="modular-LongGuns" style="display: none;">
+                                    <input class="form-control" id="acquire-type-LongGuns-GUN_BARREL" list="datalist-ModularParts-GUN_BARREL" />
+                                    <input class="form-control" id="acquire-type-LongGuns-GUN_PRIMARY_HANDLE" list="datalist-ModularParts-GUN_PRIMARY_HANDLE" />
+                                    <input class="form-control" id="acquire-type-LongGuns-GUN_CLIP" list="datalist-ModularParts-GUN_CLIP" />
                                 </form>
                                 <table class="table table-hover w-100">
                                     <tbody id="LongGuns-list"></tbody>
@@ -179,9 +184,14 @@
                         <div class="card mb-3" style="height: 400px;">
                             <h5 class="card-header" data-loc="inventory_pistols"></h5>
                             <div class="card-body overflow-auto">
-                                <form class="input-group mb-3" onsubmit="doAcquireEquipment('Pistols');return false;">
+                                <form class="input-group mb-3" onsubmit="handleModularSelection('Pistols');return false;">
                                     <input class="form-control" id="acquire-type-Pistols" list="datalist-Pistols" />
                                     <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                </form>
+                                <form class="input-group mb-3" id="modular-Pistols" style="display: none;">
+                                    <input class="form-control" id="acquire-type-Pistols-GUN_BARREL" list="datalist-ModularParts-GUN_BARREL" />
+                                    <input class="form-control" id="acquire-type-Pistols-GUN_SECONDARY_HANDLE" list="datalist-ModularParts-GUN_SECONDARY_HANDLE" />
+                                    <input class="form-control" id="acquire-type-Pistols-GUN_CLIP" list="datalist-ModularParts-GUN_CLIP" />
                                 </form>
                                 <table class="table table-hover w-100">
                                     <tbody id="Pistols-list"></tbody>
@@ -645,6 +655,10 @@
     <datalist id="datalist-ModularParts-BLADE"></datalist>
     <datalist id="datalist-ModularParts-HILT"></datalist>
     <datalist id="datalist-ModularParts-HILT_WEIGHT"></datalist>
+    <datalist id="datalist-ModularParts-GUN_PRIMARY_HANDLE"></datalist>
+    <datalist id="datalist-ModularParts-GUN_SECONDARY_HANDLE"></datalist>
+    <datalist id="datalist-ModularParts-GUN_BARREL"></datalist>
+    <datalist id="datalist-ModularParts-GUN_CLIP"></datalist>
     <script src="/webui/libs/jquery-3.6.0.min.js"></script>
     <script src="/webui/libs/whirlpool-js.min.js"></script>
     <script src="/webui/libs/single.js"></script>

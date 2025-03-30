@@ -194,6 +194,14 @@ function fetchItemList() {
                 uniqueName: "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
                 name: loc("code_zaw")
             });
+            data.LongGuns.push({
+                uniqueName: "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary",
+                name: loc("code_kitgun")
+            });
+            data.Pistols.push({
+                uniqueName: "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary",
+                name: loc("code_kitgun")
+            });
 
             const itemMap = {
                 // Generics for rivens
@@ -203,12 +211,10 @@ function fetchItemList() {
                 "/Lotus/Weapons/Tenno/Rifle/LotusRifle": { name: loc("code_rifle") },
                 "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun": { name: loc("code_shotgun") },
                 // Modular weapons
-                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary": { name: loc("code_kitgun") },
                 "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryBeam": { name: loc("code_kitgun") },
                 "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryLauncher": { name: loc("code_kitgun") },
                 "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryShotgun": { name: loc("code_kitgun") },
                 "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimarySniper": { name: loc("code_kitgun") },
-                "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary": { name: loc("code_kitgun") },
                 "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryBeam": { name: loc("code_kitgun") },
                 "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryShotgun": { name: loc("code_kitgun") },
                 "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/OperatorTrainingAmpWeapon": {
@@ -249,7 +255,11 @@ function fetchItemList() {
                                 "LWPT_AMP_BRACE",
                                 "LWPT_BLADE",
                                 "LWPT_HILT",
-                                "LWPT_HILT_WEIGHT"
+                                "LWPT_HILT_WEIGHT",
+                                "LWPT_GUN_PRIMARY_HANDLE",
+                                "LWPT_GUN_SECONDARY_HANDLE",
+                                "LWPT_GUN_BARREL",
+                                "LWPT_GUN_CLIP"
                             ];
                             if (supportedModularParts.includes(item.partType)) {
                                 const option = document.createElement("option");
@@ -692,6 +702,12 @@ function doAcquireModularEquipment(category, ItemType) {
             break;
         case "Melee":
             requiredParts = ["BLADE", "HILT", "HILT_WEIGHT"];
+            break;
+        case "LongGuns":
+            requiredParts = ["GUN_BARREL", "GUN_PRIMARY_HANDLE", "GUN_CLIP"];
+            break;
+        case "Pistols":
+            requiredParts = ["GUN_BARREL", "GUN_SECONDARY_HANDLE", "GUN_CLIP"];
             break;
     }
     requiredParts.forEach(part => {
@@ -1357,7 +1373,9 @@ function toast(text) {
 function handleModularSelection(category) {
     const modularWeapons = [
         "/Lotus/Weapons/Sentients/OperatorAmplifiers/OperatorAmpWeapon",
-        "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon"
+        "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
+        "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary",
+        "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary"
     ];
     const itemType = getKey(document.getElementById("acquire-type-" + category));
 
@@ -1370,9 +1388,11 @@ function handleModularSelection(category) {
 {
     const modularWeapons = [
         "/Lotus/Weapons/Sentients/OperatorAmplifiers/OperatorAmpWeapon",
-        "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon"
+        "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
+        "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary",
+        "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary"
     ];
-    const supportedModularInventoryCategory = ["OperatorAmps", "Melee"];
+    const supportedModularInventoryCategory = ["OperatorAmps", "Melee", "LongGuns", "Pistols"];
     supportedModularInventoryCategory.forEach(inventoryCategory => {
         document.getElementById("acquire-type-" + inventoryCategory).addEventListener("input", function () {
             const modularFields = document.getElementById("modular-" + inventoryCategory);
