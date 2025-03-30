@@ -465,7 +465,7 @@ function updateInventory() {
                                 " <span title='" +
                                 loc("code_rerollsNumber") +
                                 "'>⟳ " +
-                                parseInt(fingerprint.rerolls) +
+                                (fingerprint.rerolls ?? 0) +
                                 "</span>";
                             tr.appendChild(td);
                         }
