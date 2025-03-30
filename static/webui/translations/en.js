@@ -38,6 +38,7 @@ dict = {
     code_focusUnlocked: `Unlocked |COUNT| new focus schools! An inventory update will be needed for the changes to be reflected in-game. Visiting the navigation should be the easiest way to trigger that.`,
     code_addModsConfirm: `Are you sure you want to add |COUNT| mods to your account?`,
     code_succImport: `Successfully imported.`,
+    code_gild: `Gild`,
     login_description: `Login using your OpenWF account credentials (same as in-game when connecting to this server).`,
     login_emailLabel: `Email address`,
     login_passwordLabel: `Password`,

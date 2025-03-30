@@ -39,6 +39,7 @@ dict = {
     code_focusUnlocked: `已解锁 |COUNT| 个新专精学派！需要游戏内仓库更新才能生效，您可以通过访问星图来触发仓库更新。`,
     code_addModsConfirm: `确定要向账户添加 |COUNT| 张MOD吗？`,
     code_succImport: `导入成功。`,
+    code_gild: `[UNTRANSLATED] Gild`,
     login_description: `使用您的 OpenWF 账户凭证登录（与游戏内连接本服务器时使用的昵称相同）。`,
     login_emailLabel: `电子邮箱`,
     login_passwordLabel: `密码`,

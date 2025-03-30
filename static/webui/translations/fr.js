@@ -39,6 +39,7 @@ dict = {
     code_focusUnlocked: `|COUNT| écoles de Focus déverrouillées ! Synchronisation de l'inventaire nécessaire.`,
     code_addModsConfirm: `Ajouter |COUNT| mods à l'inventaire ?`,
     code_succImport: `Importé.`,
+    code_gild: `[UNTRANSLATED] Gild`,
     login_description: `Connexion avec les informations de connexion OpenWF.`,
     login_emailLabel: `Email`,
     login_passwordLabel: `Mot de passe`,

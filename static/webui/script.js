@@ -287,6 +287,20 @@ function updateInventory() {
         window.itemListPromise.then(itemMap => {
             window.didInitialInventoryUpdate = true;
 
+            const modularWeapons = [
+                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary",
+                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryBeam",
+                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryLauncher",
+                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryShotgun",
+                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimarySniper",
+                "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary",
+                "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryBeam",
+                "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryShotgun",
+                "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
+                "/Lotus/Weapons/Sentients/OperatorAmplifiers/OperatorAmpWeapon",
+                "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit"
+            ];
+
             // Populate inventory route
             ["RegularCredits", "PremiumCredits", "FusionPoints", "PrimeTokens"].forEach(currency => {
                 document.getElementById(currency + "-owned").textContent = loc("currency_owned")
@@ -371,6 +385,17 @@ function updateInventory() {
                             };
                             a.title = loc("code_maxRank");
                             a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"/></svg>`;
+                            td.appendChild(a);
+                        }
+                        if (!(item.Features & 8) && modularWeapons.includes(item.ItemType)) {
+                            const a = document.createElement("a");
+                            a.href = "#";
+                            a.onclick = function (event) {
+                                event.preventDefault();
+                                gildEquipment(category, item.ItemId.$oid);
+                            };
+                            a.title = loc("code_gild");
+                            a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"/></svg>`;
                             td.appendChild(a);
                         }
                         if (category == "Suits") {
@@ -893,6 +918,21 @@ function disposeOfItems(category, type, count) {
             url: "/api/sell.php?" + window.authz,
             contentType: "text/plain",
             data: JSON.stringify(data)
+        }).done(function () {
+            updateInventory();
+        });
+    });
+}
+
+function gildEquipment(category, oid) {
+    revalidateAuthz(() => {
+        $.post({
+            url: "/custom/gildEquipment?" + window.authz,
+            contentType: "application/json",
+            data: JSON.stringify({
+                ItemId: oid,
+                Category: category
+            })
         }).done(function () {
             updateInventory();
         });

@@ -39,6 +39,7 @@ dict = {
     code_focusUnlocked: `|COUNT| neue Fokus-Schulen freigeschaltet! Ein Inventar-Update wird benötigt, damit die Änderungen im Spiel sichtbar werden. Die Sternenkarte zu besuchen, sollte der einfachste Weg sein, dies auszulösen.`,
     code_addModsConfirm: `Bist du sicher, dass du |COUNT| Mods zu deinem Account hinzufügen möchtest?`,
     code_succImport: `Erfolgreich importiert.`,
+    code_gild: `[UNTRANSLATED] Gild`,
     login_description: `Melde dich mit deinem OpenWF-Account an (denselben Angaben wie im Spiel, wenn du dich mit diesem Server verbindest).`,
     login_emailLabel: `E-Mail-Adresse`,
     login_passwordLabel: `Passwort`,

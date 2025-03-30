@@ -17,6 +17,7 @@ import { addCurrencyController } from "@/src/controllers/custom/addCurrencyContr
 import { addItemsController } from "@/src/controllers/custom/addItemsController";
 import { addModularEquipmentController } from "@/src/controllers/custom/addModularEquipmentController";
 import { addXpController } from "@/src/controllers/custom/addXpController";
+import { gildEquipmentController } from "@/src/controllers/custom/gildEquipmentController";
 import { importController } from "@/src/controllers/custom/importController";
 
 import { getConfigDataController } from "@/src/controllers/custom/getConfigDataController";
@@ -42,6 +43,7 @@ customRouter.post("/addCurrency", addCurrencyController);
 customRouter.post("/addItems", addItemsController);
 customRouter.post("/addModularEquipment", addModularEquipmentController);
 customRouter.post("/addXp", addXpController);
+customRouter.post("/gildEquipment", gildEquipmentController);
 customRouter.post("/import", importController);
 customRouter.post("/manageQuests", manageQuestsController);
 
