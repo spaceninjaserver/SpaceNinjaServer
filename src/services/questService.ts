@@ -2,7 +2,7 @@ import { IKeyChainRequest } from "@/src/controllers/api/giveKeyChainTriggeredIte
 import { isEmptyObject } from "@/src/helpers/general";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { createMessage } from "@/src/services/inboxService";
-import { addItem, addItems, addKeyChainItems } from "@/src/services/inventoryService";
+import { addItem, addItems, addKeyChainItems, setupKahlSyndicate } from "@/src/services/inventoryService";
 import {
     fromStoreItem,
     getKeyChainMessage,
@@ -62,20 +62,7 @@ export const updateQuestKey = async (
         inventory.ActiveQuest = "";
 
         if (questKeyUpdate[0].ItemType == "/Lotus/Types/Keys/NewWarQuest/NewWarQuestKeyChain") {
-            inventory.Affiliations.push({
-                Title: 1,
-                Standing: 1,
-                WeeklyMissions: [
-                    {
-                        MissionIndex: 0,
-                        CompletedMission: false,
-                        JobManifest: "/Lotus/Syndicates/Kahl/KahlJobManifestVersionThree",
-                        WeekCount: 0,
-                        Challenges: []
-                    }
-                ],
-                Tag: "KahlSyndicate"
-            });
+            setupKahlSyndicate(inventory as TInventoryDatabaseDocument);
         }
     }
     return inventoryChanges;
@@ -211,8 +198,18 @@ export const completeQuest = async (inventory: TInventoryDatabaseDocument, quest
             }
         }
     }
+
+    const questCompletionItems = getQuestCompletionItems(questKey);
+    logger.debug(`quest completion items`, questCompletionItems);
+    if (questCompletionItems) {
+        await addItems(inventory, questCompletionItems);
+    }
+
     inventory.ActiveQuest = "";
-    //TODO: handle quest completion items
+
+    if (questKey == "/Lotus/Types/Keys/NewWarQuest/NewWarQuestKeyChain") {
+        setupKahlSyndicate(inventory);
+    }
 };
 
 export const giveKeyChainItem = async (

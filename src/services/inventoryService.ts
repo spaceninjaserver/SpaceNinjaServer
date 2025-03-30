@@ -1338,3 +1338,20 @@ const createCalendar = (): ICalendarProgress => {
         }
     };
 };
+
+export const setupKahlSyndicate = (inventory: TInventoryDatabaseDocument): void => {
+    inventory.Affiliations.push({
+        Title: 1,
+        Standing: 1,
+        WeeklyMissions: [
+            {
+                MissionIndex: 0,
+                CompletedMission: false,
+                JobManifest: "/Lotus/Syndicates/Kahl/KahlJobManifestVersionThree",
+                WeekCount: 0,
+                Challenges: []
+            }
+        ],
+        Tag: "KahlSyndicate"
+    });
+};
