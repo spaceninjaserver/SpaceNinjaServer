@@ -18,7 +18,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
         const destFingerprint = JSON.parse(destWeapon.UpgradeFingerprint!) as IInnateDamageFingerprint;
         const sourceFingerprint = JSON.parse(sourceWeapon.UpgradeFingerprint!) as IInnateDamageFingerprint;
 
-        // Upgrade destination damage type if desireed
+        // Update destination damage type if desired
         if (body.UseSourceDmgType) {
             destFingerprint.buffs[0].Tag = sourceFingerprint.buffs[0].Tag;
         }
@@ -42,7 +42,8 @@ export const nemesisController: RequestHandler = async (req, res) => {
         await inventory.save();
         res.json({
             InventoryChanges: {
-                [body.Category]: [destWeapon.toJSON()]
+                [body.Category]: [destWeapon.toJSON()],
+                RemovedIdItems: [{ ItemId: body.SourceWeapon }]
             }
         });
     } else if ((req.query.mode as string) == "p") {
