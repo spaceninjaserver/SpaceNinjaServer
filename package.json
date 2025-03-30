@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node --import ./build/src/pathman.js build/src/index.js",
     "dev": "ts-node-dev --openssl-legacy-provider -r tsconfig-paths/register src/index.ts ",
-    "build": "tsc --incremental && copyfiles static/webui/** build",
+    "build": "tsc --incremental && ncp static/webui build/static/webui",
     "verify": "tsc --noEmit",
     "lint": "eslint --ext .ts .",
     "lint:fix": "eslint --fix --ext .ts .",
@@ -17,12 +17,12 @@
   "dependencies": {
     "@types/express": "^5",
     "@types/morgan": "^1.9.9",
-    "copyfiles": "^2.4.1",
     "crc-32": "^1.2.2",
     "express": "^5",
     "json-with-bigint": "^3.2.2",
     "mongoose": "^8.11.0",
     "morgan": "^1.10.0",
+    "ncp": "^2.0.0",
     "typescript": ">=5.5 <5.6.0",
     "warframe-public-export-plus": "^0.5.48",
     "warframe-riven-info": "^0.1.2",
