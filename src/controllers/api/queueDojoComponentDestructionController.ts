@@ -16,7 +16,7 @@ export const queueDojoComponentDestructionController: RequestHandler = async (re
     const componentId = req.query.componentId as string;
 
     guild.DojoComponents.id(componentId)!.DestructionTime = new Date(
-        Date.now() + (config.fastDojoRoomDestruction ? 5_000 : 2 * 3600_000)
+        (Math.trunc(Date.now() / 1000) + (config.fastDojoRoomDestruction ? 5 : 2 * 3600)) * 1000
     );
 
     await guild.save();
