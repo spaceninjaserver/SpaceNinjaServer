@@ -15,7 +15,6 @@ dict = {
     code_zaw: `自制近战`,
     code_moteAmp: `微尘增幅器`,
     code_amp: `增幅器`,
-    code_sirocco: `赤风`,
     code_kDrive: `K式悬浮板`,
     code_legendaryCore: `传奇核心`,
     code_traumaticPeculiar: `创伤怪奇`,

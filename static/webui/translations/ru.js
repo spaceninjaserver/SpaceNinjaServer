@@ -15,7 +15,6 @@ dict = {
     code_zaw: `Зо`,
     code_moteAmp: `Пылинка`,
     code_amp: `Усилитель`,
-    code_sirocco: `Сирокко`,
     code_kDrive: `К-Драйв`,
     code_legendaryCore: `Легендарное ядро`,
     code_traumaticPeculiar: `Травмирующая Странность`,

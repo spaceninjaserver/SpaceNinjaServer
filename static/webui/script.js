@@ -185,6 +185,16 @@ function fetchItemList() {
                 name: loc("code_traumaticPeculiar")
             });
 
+            // Add modular weapons
+            data.OperatorAmps.push({
+                uniqueName: "/Lotus/Weapons/Sentients/OperatorAmplifiers/OperatorAmpWeapon",
+                name: loc("code_amp")
+            });
+            data.Melee.push({
+                uniqueName: "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
+                name: loc("code_zaw")
+            });
+
             const itemMap = {
                 // Generics for rivens
                 "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun": { name: loc("code_archgun") },
@@ -201,13 +211,8 @@ function fetchItemList() {
                 "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary": { name: loc("code_kitgun") },
                 "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryBeam": { name: loc("code_kitgun") },
                 "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryShotgun": { name: loc("code_kitgun") },
-                "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon": { name: loc("code_zaw") },
                 "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/OperatorTrainingAmpWeapon": {
                     name: loc("code_moteAmp")
-                },
-                "/Lotus/Weapons/Sentients/OperatorAmplifiers/OperatorAmpWeapon": { name: loc("code_amp") },
-                "/Lotus/Weapons/Operator/Pistols/DrifterPistol/DrifterPistolPlayerWeapon": {
-                    name: loc("code_sirocco")
                 },
                 "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit": { name: loc("code_kDrive") }
             };
@@ -232,6 +237,33 @@ function fetchItemList() {
                         }
                         if (type == "Syndicates" && item.uniqueName.startsWith("RadioLegion")) {
                             item.name += " (" + item.uniqueName + ")";
+                        }
+                        if (type == "ModularParts") {
+                            const supportedModularParts = [
+                                "LWPT_HB_DECK",
+                                "LWPT_HB_ENGINE",
+                                "LWPT_HB_FRONT",
+                                "LWPT_HB_JET",
+                                "LWPT_AMP_OCULUS",
+                                "LWPT_AMP_CORE",
+                                "LWPT_AMP_BRACE",
+                                "LWPT_BLADE",
+                                "LWPT_HILT",
+                                "LWPT_HILT_WEIGHT"
+                            ];
+                            if (supportedModularParts.includes(item.partType)) {
+                                const option = document.createElement("option");
+                                option.setAttribute("data-key", item.uniqueName);
+                                option.value = item.name;
+                                document
+                                    .getElementById("datalist-" + type + "-" + item.partType.slice(5))
+                                    .appendChild(option);
+                            } else {
+                                const option = document.createElement("option");
+                                option.setAttribute("data-key", item.uniqueName);
+                                option.value = item.name;
+                                document.getElementById("datalist-" + type).appendChild(option);
+                            }
                         }
                         if (item.badReason != "notraw") {
                             const option = document.createElement("option");
@@ -620,6 +652,67 @@ function doAcquireEquipment(category) {
             updateInventory();
         });
     });
+}
+
+function doAcquireModularEquipment(category, ItemType) {
+    let requiredParts;
+    let ModularParts = [];
+    switch (category) {
+        case "HoverBoards":
+            ItemType = "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit";
+            requiredParts = ["HB_DECK", "HB_ENGINE", "HB_FRONT", "HB_JET"];
+            break;
+        case "OperatorAmps":
+            requiredParts = ["AMP_OCULUS", "AMP_CORE", "AMP_BRACE"];
+            break;
+        case "Melee":
+            requiredParts = ["BLADE", "HILT", "HILT_WEIGHT"];
+            break;
+    }
+    requiredParts.forEach(part => {
+        const partName = getKey(document.getElementById("acquire-type-" + category + "-" + part));
+        if (partName) {
+            ModularParts.push(partName);
+        }
+    });
+    if (ModularParts.length != requiredParts.length) {
+        let isFirstPart = true;
+        requiredParts.forEach(part => {
+            const partSelector = document.getElementById("acquire-type-" + category + "-" + part);
+            if (!getKey(partSelector)) {
+                if (isFirstPart) {
+                    isFirstPart = false;
+                    $("#acquire-type-" + category + "-" + part)
+                        .addClass("is-invalid")
+                        .focus();
+                } else {
+                    $("#acquire-type-" + category + "-" + part).addClass("is-invalid");
+                }
+            }
+        });
+    } else {
+        revalidateAuthz(() => {
+            const req = $.post({
+                url: "/custom/addModularEquipment?" + window.authz,
+                contentType: "application/json",
+                data: JSON.stringify({
+                    ItemType,
+                    ModularParts
+                })
+            });
+            req.done(() => {
+                const mainInput = document.getElementById("acquire-type-" + category);
+                if (mainInput) {
+                    mainInput.value = "";
+                    document.getElementById("modular-" + category).style.display = "none";
+                }
+                requiredParts.forEach(part => {
+                    document.getElementById("acquire-type-" + category + "-" + part).value = "";
+                });
+                updateInventory();
+            });
+        });
+    }
 }
 
 $("input[list]").on("input", function () {
@@ -1219,4 +1312,35 @@ function toast(text) {
     div.appendChild(button);
     toast.appendChild(div);
     new bootstrap.Toast(document.querySelector(".toast-container").appendChild(toast)).show();
+}
+
+function handleModularSelection(category) {
+    const modularWeapons = [
+        "/Lotus/Weapons/Sentients/OperatorAmplifiers/OperatorAmpWeapon",
+        "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon"
+    ];
+    const itemType = getKey(document.getElementById("acquire-type-" + category));
+
+    if (modularWeapons.includes(itemType)) {
+        doAcquireModularEquipment(category, itemType);
+    } else {
+        doAcquireEquipment(category);
+    }
+}
+{
+    const modularWeapons = [
+        "/Lotus/Weapons/Sentients/OperatorAmplifiers/OperatorAmpWeapon",
+        "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon"
+    ];
+    const supportedModularInventoryCategory = ["OperatorAmps", "Melee"];
+    supportedModularInventoryCategory.forEach(inventoryCategory => {
+        document.getElementById("acquire-type-" + inventoryCategory).addEventListener("input", function () {
+            const modularFields = document.getElementById("modular-" + inventoryCategory);
+            if (modularWeapons.includes(getKey(this))) {
+                modularFields.style.display = "";
+            } else {
+                modularFields.style.display = "none";
+            }
+        });
+    });
 }

@@ -15,7 +15,6 @@ dict = {
     code_zaw: `Zaw`,
     code_moteAmp: `Anfangsverstärker`,
     code_amp: `Verstärker`,
-    code_sirocco: `Sirocco`,
     code_kDrive: `K-Drive`,
     code_legendaryCore: `Legendärer Kern`,
     code_traumaticPeculiar: `Kuriose Mod: Traumatisch`,

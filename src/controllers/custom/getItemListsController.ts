@@ -25,6 +25,7 @@ interface ListedItem {
     fusionLimit?: number;
     exalted?: string[];
     badReason?: "starter" | "frivolous" | "notraw";
+    partType?: string;
 }
 
 const relicQualitySuffixes: Record<TRelicQuality, string> = {
@@ -50,6 +51,7 @@ const getItemListsController: RequestHandler = (req, response) => {
     res.MechSuits = [];
     res.miscitems = [];
     res.Syndicates = [];
+    res.OperatorAmps = [];
     for (const [uniqueName, item] of Object.entries(ExportWarframes)) {
         res[item.productCategory].push({
             uniqueName,
@@ -79,7 +81,8 @@ const getItemListsController: RequestHandler = (req, response) => {
         ) {
             res.ModularParts.push({
                 uniqueName,
-                name: getString(item.name, lang)
+                name: getString(item.name, lang),
+                partType: item.partType
             });
             if (uniqueName.split("/")[5] != "SentTrainingAmplifier") {
                 res.miscitems.push({
@@ -94,7 +97,8 @@ const getItemListsController: RequestHandler = (req, response) => {
                 item.productCategory == "Melee" ||
                 item.productCategory == "SpaceGuns" ||
                 item.productCategory == "SpaceMelee" ||
-                item.productCategory == "SentinelWeapons"
+                item.productCategory == "SentinelWeapons" ||
+                item.productCategory == "OperatorAmps"
             ) {
                 res[item.productCategory].push({
                     uniqueName,

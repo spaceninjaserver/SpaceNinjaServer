@@ -193,9 +193,14 @@
                         <div class="card mb-3" style="height: 400px;">
                             <h5 class="card-header" data-loc="inventory_melee"></h5>
                             <div class="card-body overflow-auto">
-                                <form class="input-group mb-3" onsubmit="doAcquireEquipment('Melee');return false;">
+                                <form class="input-group mb-3" onsubmit="handleModularSelection('Melee');return false;">
                                     <input class="form-control" id="acquire-type-Melee" list="datalist-Melee" />
                                     <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                </form>
+                                <form class="input-group mb-3" id="modular-Melee" style="display: none;">
+                                    <input class="form-control" id="acquire-type-Melee-BLADE" list="datalist-ModularParts-BLADE" />
+                                    <input class="form-control" id="acquire-type-Melee-HILT" list="datalist-ModularParts-HILT" />
+                                    <input class="form-control" id="acquire-type-Melee-HILT_WEIGHT" list="datalist-ModularParts-HILT_WEIGHT" />
                                 </form>
                                 <table class="table table-hover w-100">
                                     <tbody id="Melee-list"></tbody>
@@ -299,6 +304,15 @@
                         <div class="card mb-3" style="height: 400px;">
                             <h5 class="card-header" data-loc="inventory_operatorAmps"></h5>
                             <div class="card-body overflow-auto">
+                                <form class="input-group mb-3" onsubmit="handleModularSelection('OperatorAmps');return false;">
+                                    <input class="form-control" id="acquire-type-OperatorAmps" list="datalist-OperatorAmps" />
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                </form>
+                                <form class="input-group mb-3" id="modular-OperatorAmps" style="display: none;">
+                                    <input class="form-control" id="acquire-type-OperatorAmps-AMP_OCULUS" list="datalist-ModularParts-AMP_OCULUS" />
+                                    <input class="form-control" id="acquire-type-OperatorAmps-AMP_CORE" list="datalist-ModularParts-AMP_CORE" />
+                                    <input class="form-control" id="acquire-type-OperatorAmps-AMP_BRACE" list="datalist-ModularParts-AMP_BRACE" />
+                                </form>
                                 <table class="table table-hover w-100">
                                     <tbody id="OperatorAmps-list"></tbody>
                                 </table>
@@ -309,6 +323,13 @@
                         <div class="card mb-3" style="height: 400px;">
                             <h5 class="card-header" data-loc="inventory_hoverboards"></h5>
                             <div class="card-body overflow-auto">
+                                <form class="input-group mb-3" onsubmit="doAcquireModularEquipment('HoverBoards');return false;">
+                                    <input class="form-control" id="acquire-type-HoverBoards-HB_DECK" list="datalist-ModularParts-HB_DECK" />
+                                    <input class="form-control" id="acquire-type-HoverBoards-HB_ENGINE" list="datalist-ModularParts-HB_ENGINE" />
+                                    <input class="form-control" id="acquire-type-HoverBoards-HB_FRONT" list="datalist-ModularParts-HB_FRONT" />
+                                    <input class="form-control" id="acquire-type-HoverBoards-HB_JET" list="datalist-ModularParts-HB_JET" />
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                </form>
                                 <table class="table table-hover w-100">
                                     <tbody id="Hoverboards-list"></tbody>
                                 </table>
@@ -604,7 +625,6 @@
     <datalist id="datalist-SpaceMelee"></datalist>
     <datalist id="datalist-SentinelWeapons"></datalist>
     <datalist id="datalist-Sentinels"></datalist>
-    <datalist id="datalist-ModularParts"></datalist>
     <datalist id="datalist-MechSuits"></datalist>
     <datalist id="datalist-Syndicates"></datalist>
     <datalist id="datalist-miscitems"></datalist>
@@ -613,6 +633,18 @@
         <option data-key="/Lotus/Upgrades/CosmeticEnhancers/Peculiars/CyoteMod" value="Traumatic Peculiar"></option>
     </datalist>
     <datalist id="datalist-archonCrystalUpgrades"></datalist>
+    <datalist id="datalist-OperatorAmps"></datalist>
+    <datalist id="datalist-ModularParts"></datalist>
+    <datalist id="datalist-ModularParts-HB_DECK"></datalist>
+    <datalist id="datalist-ModularParts-HB_ENGINE"></datalist>
+    <datalist id="datalist-ModularParts-HB_FRONT"></datalist>
+    <datalist id="datalist-ModularParts-HB_JET"></datalist>
+    <datalist id="datalist-ModularParts-AMP_OCULUS"></datalist>
+    <datalist id="datalist-ModularParts-AMP_CORE"></datalist>
+    <datalist id="datalist-ModularParts-AMP_BRACE"></datalist>
+    <datalist id="datalist-ModularParts-BLADE"></datalist>
+    <datalist id="datalist-ModularParts-HILT"></datalist>
+    <datalist id="datalist-ModularParts-HILT_WEIGHT"></datalist>
     <script src="/webui/libs/jquery-3.6.0.min.js"></script>
     <script src="/webui/libs/whirlpool-js.min.js"></script>
     <script src="/webui/libs/single.js"></script>

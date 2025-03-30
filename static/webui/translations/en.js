@@ -14,7 +14,6 @@ dict = {
     code_zaw: `Zaw`,
     code_moteAmp: `Mote Amp`,
     code_amp: `Amp`,
-    code_sirocco: `Sirocco`,
     code_kDrive: `K-Drive`,
     code_legendaryCore: `Legendary Core`,
     code_traumaticPeculiar: `Traumatic Peculiar`,
