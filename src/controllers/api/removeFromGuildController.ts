@@ -1,7 +1,7 @@
 import { GuildMember } from "@/src/models/guildModel";
 import { Inbox } from "@/src/models/inboxModel";
 import { Account } from "@/src/models/loginModel";
-import { getGuildForRequest, hasGuildPermission } from "@/src/services/guildService";
+import { deleteGuild, getGuildForRequest, hasGuildPermission } from "@/src/services/guildService";
 import { getInventory } from "@/src/services/inventoryService";
 import { getAccountForRequest, getSuffixedName } from "@/src/services/loginService";
 import { GuildPermission } from "@/src/types/guildTypes";
@@ -18,50 +18,54 @@ export const removeFromGuildController: RequestHandler = async (req, res) => {
     }
 
     const guildMember = (await GuildMember.findOne({ accountId: payload.userId, guildId: guild._id }))!;
-    if (guildMember.status == 0) {
-        const inventory = await getInventory(payload.userId);
-        inventory.GuildId = undefined;
-
-        // Remove clan key or blueprint from kicked member
-        const itemIndex = inventory.LevelKeys.findIndex(x => x.ItemType == "/Lotus/Types/Keys/DojoKey");
-        if (itemIndex != -1) {
-            inventory.LevelKeys.splice(itemIndex, 1);
-        } else {
-            const recipeIndex = inventory.Recipes.findIndex(x => x.ItemType == "/Lotus/Types/Keys/DojoKeyBlueprint");
-            if (recipeIndex != -1) {
-                inventory.Recipes.splice(recipeIndex, 1);
-            }
-        }
-
-        await inventory.save();
-
-        // TODO: Handle clan leader kicking themselves (guild should be deleted in this case, I think)
-    } else if (guildMember.status == 2) {
-        // Delete the inbox message for the invite
-        await Inbox.deleteOne({
-            ownerId: guildMember.accountId,
-            contextInfo: guild._id.toString(),
-            acceptAction: "GUILD_INVITE"
-        });
-    }
-    await GuildMember.deleteOne({ _id: guildMember._id });
-
-    guild.RosterActivity ??= [];
-    if (isKick) {
-        const kickee = (await Account.findById(payload.userId))!;
-        guild.RosterActivity.push({
-            dateTime: new Date(),
-            entryType: 12,
-            details: getSuffixedName(kickee) + "," + getSuffixedName(account)
-        });
+    if (guildMember.rank == 0) {
+        await deleteGuild(guild._id);
     } else {
-        guild.RosterActivity.push({
-            dateTime: new Date(),
-            entryType: 7,
-            details: getSuffixedName(account)
-        });
+        if (guildMember.status == 0) {
+            const inventory = await getInventory(payload.userId);
+            inventory.GuildId = undefined;
+
+            // Remove clan key or blueprint from kicked member
+            const itemIndex = inventory.LevelKeys.findIndex(x => x.ItemType == "/Lotus/Types/Keys/DojoKey");
+            if (itemIndex != -1) {
+                inventory.LevelKeys.splice(itemIndex, 1);
+            } else {
+                const recipeIndex = inventory.Recipes.findIndex(
+                    x => x.ItemType == "/Lotus/Types/Keys/DojoKeyBlueprint"
+                );
+                if (recipeIndex != -1) {
+                    inventory.Recipes.splice(recipeIndex, 1);
+                }
+            }
+
+            await inventory.save();
+        } else if (guildMember.status == 2) {
+            // Delete the inbox message for the invite
+            await Inbox.deleteOne({
+                ownerId: guildMember.accountId,
+                contextInfo: guild._id.toString(),
+                acceptAction: "GUILD_INVITE"
+            });
+        }
+        await GuildMember.deleteOne({ _id: guildMember._id });
+
+        guild.RosterActivity ??= [];
+        if (isKick) {
+            const kickee = (await Account.findById(payload.userId))!;
+            guild.RosterActivity.push({
+                dateTime: new Date(),
+                entryType: 12,
+                details: getSuffixedName(kickee) + "," + getSuffixedName(account)
+            });
+        } else {
+            guild.RosterActivity.push({
+                dateTime: new Date(),
+                entryType: 7,
+                details: getSuffixedName(account)
+            });
+        }
+        await guild.save();
     }
-    await guild.save();
 
     res.json({
         _id: payload.userId,

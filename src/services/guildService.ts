@@ -22,6 +22,7 @@ import { logger } from "../utils/logger";
 import { config } from "./configService";
 import { Account } from "../models/loginModel";
 import { getRandomInt } from "./rngService";
+import { Inbox } from "../models/inboxModel";
 
 export const getGuildForRequest = async (req: Request): Promise<TGuildDatabaseDocument> => {
     const accountId = await getAccountIdForRequest(req);
@@ -359,4 +360,15 @@ export const removePigmentsFromGuildMembers = async (guildId: string | Types.Obj
             await inventory.save();
         }
     }
+};
+
+export const deleteGuild = async (guildId: Types.ObjectId): Promise<void> => {
+    await Guild.deleteOne({ _id: guildId });
+    await GuildMember.deleteMany({ guildId });
+
+    // If guild sent any invites, delete those inbox messages as well.
+    await Inbox.deleteMany({
+        contextInfo: guildId.toString(),
+        acceptAction: "GUILD_INVITE"
+    });
 };

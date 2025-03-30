@@ -9,10 +9,17 @@ import { Ship } from "@/src/models/shipModel";
 import { Stats } from "@/src/models/statsModel";
 import { GuildMember } from "@/src/models/guildModel";
 import { Leaderboard } from "@/src/models/leaderboardModel";
+import { deleteGuild } from "@/src/services/guildService";
 
 export const deleteAccountController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    // TODO: Handle the account being the creator of a guild
+
+    // If account is the founding warlord of a guild, delete that guild as well.
+    const guildMember = await GuildMember.findOne({ accountId, rank: 0, status: 0 });
+    if (guildMember) {
+        await deleteGuild(guildMember.guildId);
+    }
+
     await Promise.all([
         Account.deleteOne({ _id: accountId }),
         GuildMember.deleteMany({ accountId: accountId }),
