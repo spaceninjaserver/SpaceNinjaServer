@@ -377,10 +377,7 @@ export const addItem = async (
             if (premiumPurchase) {
                 defaultOverwrites.Features = EquipmentFeatures.DOUBLE_CAPACITY;
             }
-            if (
-                weapon.defaultUpgrades?.[0]?.ItemType ==
-                "/Lotus/Weapons/Grineer/KuvaLich/Upgrades/InnateDamageRandomMod"
-            ) {
+            if (weapon.maxLevelCap == 40 && typeName.indexOf("BallasSword") == -1) {
                 defaultOverwrites.UpgradeType = "/Lotus/Weapons/Grineer/KuvaLich/Upgrades/InnateDamageRandomMod";
                 defaultOverwrites.UpgradeFingerprint = JSON.stringify({
                     compat: typeName,
