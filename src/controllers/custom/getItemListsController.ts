@@ -68,17 +68,7 @@ const getItemListsController: RequestHandler = (req, response) => {
         }
     }
     for (const [uniqueName, item] of Object.entries(ExportWeapons)) {
-        if (
-            uniqueName.split("/")[4] == "OperatorAmplifiers" ||
-            uniqueName.split("/")[5] == "SUModularSecondarySet1" ||
-            uniqueName.split("/")[5] == "SUModularPrimarySet1" ||
-            uniqueName.split("/")[5] == "InfKitGun" ||
-            uniqueName.split("/")[5] == "HoverboardParts" ||
-            uniqueName.split("/")[5] == "ModularMelee01" ||
-            uniqueName.split("/")[5] == "ModularMelee02" ||
-            uniqueName.split("/")[5] == "ModularMeleeInfested" ||
-            uniqueName.split("/")[6] == "CreaturePetParts"
-        ) {
+        if (item.partType) {
             res.ModularParts.push({
                 uniqueName,
                 name: getString(item.name, lang),
