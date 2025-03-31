@@ -1,18 +1,25 @@
 import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getInventory } from "@/src/services/inventoryService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { WeaponTypeInternal } from "@/src/services/itemDataService";
+import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
+import { equipmentKeys, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
 
 export const setWeaponSkillTreeController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId, req.query.Category as string);
     const payload = getJSONfromString<ISetWeaponSkillTreeRequest>(String(req.body));
 
-    const item = inventory[req.query.Category as WeaponTypeInternal].id(req.query.ItemId as string)!;
-    item.SkillTree = payload.SkillTree;
+    if (equipmentKeys.indexOf(req.query.Category as TEquipmentKey) != -1) {
+        await Inventory.updateOne(
+            {
+                accountOwnerId: accountId,
+                [`${req.query.Category as string}._id`]: req.query.ItemId as string
+            },
+            {
+                [`${req.query.Category as string}.$.SkillTree`]: payload.SkillTree
+            }
+        );
+    }
 
-    await inventory.save();
     res.end();
 };
 
