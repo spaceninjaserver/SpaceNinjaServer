@@ -252,6 +252,9 @@ function fetchItemList() {
                     uniqueLevelCaps = items;
                 } else {
                     items.forEach(item => {
+                        if (item.name.includes("<ARCHWING> ")) {
+                            item.name = item.name.replace("<ARCHWING> ", "");
+                        }
                         if ("badReason" in item) {
                             if (item.badReason == "starter") {
                                 item.name = loc("code_starter").split("|MOD|").join(item.name);
