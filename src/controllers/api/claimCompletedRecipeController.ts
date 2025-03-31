@@ -99,6 +99,11 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
                 inventory.SpectreLoadouts.push(inventory.PendingSpectreLoadouts[pendingLoadoutIndex]);
                 inventory.PendingSpectreLoadouts.splice(pendingLoadoutIndex, 1);
             }
+        } else if (recipe.secretIngredientAction == "SIA_UNBRAND") {
+            inventory.BrandedSuits!.splice(
+                inventory.BrandedSuits!.findIndex(x => x.equals(pendingRecipe.SuitToUnbrand)),
+                1
+            );
         }
 
         let InventoryChanges = {};
@@ -116,10 +121,12 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
                 ...updateCurrency(inventory, recipe.skipBuildTimePrice, true)
             };
         }
-        InventoryChanges = {
-            ...InventoryChanges,
-            ...(await addItem(inventory, recipe.resultType, recipe.num, false))
-        };
+        if (recipe.secretIngredientAction != "SIA_UNBRAND") {
+            InventoryChanges = {
+                ...InventoryChanges,
+                ...(await addItem(inventory, recipe.resultType, recipe.num, false))
+            };
+        }
         await inventory.save();
         res.json({ InventoryChanges });
     }

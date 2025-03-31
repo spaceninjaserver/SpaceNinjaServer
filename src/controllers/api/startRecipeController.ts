@@ -111,6 +111,8 @@ export const startRecipeController: RequestHandler = async (req, res) => {
             inventory.PendingSpectreLoadouts.push(spectreLoadout);
             logger.debug("pending spectre loadout", spectreLoadout);
         }
+    } else if (recipe.secretIngredientAction == "SIA_UNBRAND") {
+        pr.SuitToUnbrand = new Types.ObjectId(startRecipeRequest.Ids[recipe.ingredients.length + 0]);
     }
 
     await inventory.save();

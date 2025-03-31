@@ -903,7 +903,8 @@ const pendingRecipeSchema = new Schema<IPendingRecipeDatabase>(
         CompletionDate: Date,
         LongGuns: { type: [EquipmentSchema], default: undefined },
         Pistols: { type: [EquipmentSchema], default: undefined },
-        Melee: { type: [EquipmentSchema], default: undefined }
+        Melee: { type: [EquipmentSchema], default: undefined },
+        SuitToUnbrand: { type: Schema.Types.ObjectId, default: undefined }
     },
     { id: false }
 );
@@ -920,6 +921,7 @@ pendingRecipeSchema.set("toJSON", {
         delete returnedObject.LongGuns;
         delete returnedObject.Pistols;
         delete returnedObject.Melees;
+        delete returnedObject.SuitToUnbrand;
         (returnedObject as IPendingRecipeClient).CompletionDate = {
             $date: { $numberLong: (returnedObject as IPendingRecipeDatabase).CompletionDate.getTime().toString() }
         };
@@ -1484,7 +1486,9 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         EchoesHexConquestHardModeStatus: { type: Number, default: undefined },
         EchoesHexConquestCacheScoreMission: { type: Number, default: undefined },
         EchoesHexConquestActiveFrameVariants: { type: [String], default: undefined },
-        EchoesHexConquestActiveStickers: { type: [String], default: undefined }
+        EchoesHexConquestActiveStickers: { type: [String], default: undefined },
+
+        BrandedSuits: { type: [Schema.Types.ObjectId], default: undefined }
     },
     { timestamps: { createdAt: "Created", updatedAt: false } }
 );
@@ -1515,6 +1519,9 @@ inventorySchema.set("toJSON", {
         }
         if (inventoryDatabase.EntratiVaultCountResetDate) {
             inventoryResponse.EntratiVaultCountResetDate = toMongoDate(inventoryDatabase.EntratiVaultCountResetDate);
+        }
+        if (inventoryDatabase.BrandedSuits) {
+            inventoryResponse.BrandedSuits = inventoryDatabase.BrandedSuits.map(toOid);
         }
     }
 });

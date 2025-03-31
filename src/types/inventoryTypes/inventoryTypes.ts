@@ -44,6 +44,7 @@ export interface IInventoryDatabase
             | "NextRefill"
             | "Nemesis"
             | "EntratiVaultCountResetDate"
+            | "BrandedSuits"
             | TEquipmentKey
         >,
         InventoryDatabaseEquipment {
@@ -73,6 +74,7 @@ export interface IInventoryDatabase
     NextRefill?: Date;
     Nemesis?: INemesisDatabase;
     EntratiVaultCountResetDate?: Date;
+    BrandedSuits?: Types.ObjectId[];
 }
 
 export interface IQuestKeyDatabase {
@@ -346,6 +348,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     EchoesHexConquestCacheScoreMission?: number;
     EchoesHexConquestActiveFrameVariants?: string[];
     EchoesHexConquestActiveStickers?: string[];
+    BrandedSuits?: IOid[];
 }
 
 export interface IAffiliation {
@@ -857,10 +860,11 @@ export interface IPendingRecipeDatabase {
     LongGuns?: IEquipmentDatabase[];
     Pistols?: IEquipmentDatabase[];
     Melee?: IEquipmentDatabase[];
+    SuitToUnbrand?: Types.ObjectId;
 }
 
 export interface IPendingRecipeClient
-    extends Omit<IPendingRecipeDatabase, "CompletionDate" | "LongGuns" | "Pistols" | "Melee"> {
+    extends Omit<IPendingRecipeDatabase, "CompletionDate" | "LongGuns" | "Pistols" | "Melee" | "SuitToUnbrand"> {
     CompletionDate: IMongoDate;
 }
 

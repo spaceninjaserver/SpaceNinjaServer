@@ -30,7 +30,7 @@ import {
     updateSyndicate
 } from "@/src/services/inventoryService";
 import { updateQuestKey } from "@/src/services/questService";
-import { HydratedDocument } from "mongoose";
+import { HydratedDocument, Types } from "mongoose";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { getLevelKeyRewards, getNode, toStoreItem } from "@/src/services/itemDataService";
 import { InventoryDocumentProps, TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
@@ -45,6 +45,7 @@ import kuriaMessage75 from "@/static/fixed_responses/kuriaMessages/seventyFivePe
 import kuriaMessage100 from "@/static/fixed_responses/kuriaMessages/oneHundredPercent.json";
 import conservationAnimals from "@/static/fixed_responses/conservationAnimals.json";
 import { getInfNodes } from "@/src/helpers/nemesisHelpers";
+import { Loadout } from "../models/inventoryModels/loadoutModel";
 
 const getRotations = (rotationCount: number): number[] => {
     if (rotationCount === 0) return [0];
@@ -88,6 +89,31 @@ export const addMissionInventoryUpdates = async (
     }
     if (inventoryUpdates.RewardInfo && inventoryUpdates.RewardInfo.NemesisAbandonedRewards) {
         inventory.NemesisAbandonedRewards = inventoryUpdates.RewardInfo.NemesisAbandonedRewards;
+    }
+    if (
+        inventoryUpdates.MissionFailed &&
+        inventoryUpdates.MissionStatus == "GS_FAILURE" &&
+        inventoryUpdates.EndOfMatchUpload &&
+        inventoryUpdates.ObjectiveReached
+    ) {
+        const loadout = (await Loadout.findById(inventory.LoadOutPresets, "NORMAL"))!;
+        const config = loadout.NORMAL.id(inventory.CurrentLoadOutIds[0].$oid)!;
+        const SuitId = new Types.ObjectId(config.s!.ItemId.$oid);
+
+        inventory.BrandedSuits ??= [];
+        if (!inventory.BrandedSuits.find(x => x.equals(SuitId))) {
+            inventory.BrandedSuits.push(SuitId);
+
+            await createMessage(inventory.accountOwnerId.toString(), [
+                {
+                    sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
+                    msg: "/Lotus/Language/G1Quests/BrandedMessage",
+                    sub: "/Lotus/Language/G1Quests/BrandedTitle",
+                    att: ["/Lotus/Types/Recipes/Components/BrandRemovalBlueprint"],
+                    highPriority: true // I cannot find any content of this within the last 10 years so I can only assume that highPriority is set (it certainly would make sense), but I just don't know for sure that it is so on live.
+                }
+            ]);
+        }
     }
     for (const [key, value] of getEntriesUnsafe(inventoryUpdates)) {
         if (value === undefined) {
