@@ -202,6 +202,15 @@ function fetchItemList() {
                 uniqueName: "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary",
                 name: loc("code_kitgun")
             });
+            data.MoaPets ??= [];
+            data.MoaPets.push({
+                uniqueName: "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetPowerSuit",
+                name: loc("code_moa")
+            });
+            data.MoaPets.push({
+                uniqueName: "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetPowerSuit",
+                name: loc("code_zanuka")
+            });
 
             const itemMap = {
                 // Generics for rivens
@@ -220,7 +229,16 @@ function fetchItemList() {
                 "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/OperatorTrainingAmpWeapon": {
                     name: loc("code_moteAmp")
                 },
-                "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit": { name: loc("code_kDrive") }
+                "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit": { name: loc("code_kDrive") },
+                "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetAPowerSuit": {
+                    name: loc("code_zanukaA")
+                },
+                "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetBPowerSuit": {
+                    name: loc("code_zanukaB")
+                },
+                "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetCPowerSuit": {
+                    name: loc("code_zanukaC")
+                }
             };
             for (const [type, items] of Object.entries(data)) {
                 if (type == "archonCrystalUpgrades") {
@@ -259,7 +277,15 @@ function fetchItemList() {
                                 "LWPT_GUN_PRIMARY_HANDLE",
                                 "LWPT_GUN_SECONDARY_HANDLE",
                                 "LWPT_GUN_BARREL",
-                                "LWPT_GUN_CLIP"
+                                "LWPT_GUN_CLIP",
+                                "LWPT_MOA_ENGINE",
+                                "LWPT_MOA_PAYLOAD",
+                                "LWPT_MOA_HEAD",
+                                "LWPT_MOA_LEG",
+                                "LWPT_ZANUKA_BODY",
+                                "LWPT_ZANUKA_HEAD",
+                                "LWPT_ZANUKA_LEG",
+                                "LWPT_ZANUKA_TAIL"
                             ];
                             if (supportedModularParts.includes(item.partType)) {
                                 const option = document.createElement("option");
@@ -269,6 +295,7 @@ function fetchItemList() {
                                     .getElementById("datalist-" + type + "-" + item.partType.slice(5))
                                     .appendChild(option);
                             } else {
+                                console.log(item.partType);
                                 const option = document.createElement("option");
                                 option.setAttribute("data-key", item.uniqueName);
                                 option.value = item.name;
@@ -308,7 +335,11 @@ function updateInventory() {
                 "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryShotgun",
                 "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
                 "/Lotus/Weapons/Sentients/OperatorAmplifiers/OperatorAmpWeapon",
-                "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit"
+                "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit",
+                "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetPowerSuit",
+                "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetAPowerSuit",
+                "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetBPowerSuit",
+                "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetCPowerSuit"
             ];
 
             // Populate inventory route
@@ -330,7 +361,8 @@ function updateInventory() {
                 "SentinelWeapons",
                 "Hoverboards",
                 "OperatorAmps",
-                "MechSuits"
+                "MechSuits",
+                "MoaPets"
             ].forEach(category => {
                 document.getElementById(category + "-list").innerHTML = "";
                 data[category].forEach(item => {
@@ -708,6 +740,13 @@ function doAcquireModularEquipment(category, ItemType) {
             break;
         case "Pistols":
             requiredParts = ["GUN_BARREL", "GUN_SECONDARY_HANDLE", "GUN_CLIP"];
+            break;
+        case "MoaPets":
+            if (ItemType == "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetPowerSuit") {
+                requiredParts = ["MOA_ENGINE", "MOA_PAYLOAD", "MOA_HEAD", "MOA_LEG"];
+            } else {
+                requiredParts = ["ZANUKA_BODY", "ZANUKA_HEAD", "ZANUKA_LEG", "ZANUKA_TAIL"];
+            }
             break;
     }
     requiredParts.forEach(part => {
@@ -1375,7 +1414,9 @@ function handleModularSelection(category) {
         "/Lotus/Weapons/Sentients/OperatorAmplifiers/OperatorAmpWeapon",
         "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
         "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary",
-        "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary"
+        "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary",
+        "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetPowerSuit",
+        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetPowerSuit"
     ];
     const itemType = getKey(document.getElementById("acquire-type-" + category));
 
@@ -1390,16 +1431,37 @@ function handleModularSelection(category) {
         "/Lotus/Weapons/Sentients/OperatorAmplifiers/OperatorAmpWeapon",
         "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
         "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary",
-        "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary"
+        "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary",
+        "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetPowerSuit",
+        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetPowerSuit"
     ];
-    const supportedModularInventoryCategory = ["OperatorAmps", "Melee", "LongGuns", "Pistols"];
+    const supportedModularInventoryCategory = ["OperatorAmps", "Melee", "LongGuns", "Pistols", "MoaPets"];
     supportedModularInventoryCategory.forEach(inventoryCategory => {
         document.getElementById("acquire-type-" + inventoryCategory).addEventListener("input", function () {
             const modularFields = document.getElementById("modular-" + inventoryCategory);
-            if (modularWeapons.includes(getKey(this))) {
-                modularFields.style.display = "";
+            const modularFieldsZanuka =
+                inventoryCategory === "MoaPets"
+                    ? document.getElementById("modular-" + inventoryCategory + "-Zanuka")
+                    : null;
+            const key = getKey(this);
+
+            if (modularWeapons.includes(key)) {
+                if (key === "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetPowerSuit" && modularFieldsZanuka) {
+                    modularFields.style.display = "none";
+                    modularFieldsZanuka.style.display = "";
+                } else if (key === "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetPowerSuit") {
+                    modularFields.style.display = "";
+                    if (modularFieldsZanuka) {
+                        modularFieldsZanuka.style.display = "none";
+                    }
+                } else {
+                    modularFields.style.display = "";
+                }
             } else {
                 modularFields.style.display = "none";
+                if (modularFieldsZanuka) {
+                    modularFieldsZanuka.style.display = "none";
+                }
             }
         });
     });
