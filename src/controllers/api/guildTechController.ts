@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import {
+    addGuildMemberMiscItemContribution,
     getGuildForRequestEx,
     getGuildVault,
     hasAccessToDojo,
@@ -146,8 +147,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
                     ItemCount: miscItem.ItemCount * -1
                 });
 
-                guildMember.MiscItemsContributed ??= [];
-                guildMember.MiscItemsContributed.push(miscItem);
+                addGuildMemberMiscItemContribution(guildMember, miscItem);
             }
         }
         addMiscItems(inventory, miscItemChanges);

@@ -1,6 +1,7 @@
 import { GuildMember, TGuildDatabaseDocument } from "@/src/models/guildModel";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import {
+    addGuildMemberMiscItemContribution,
     getDojoClient,
     getGuildForRequestEx,
     hasAccessToDojo,
@@ -143,8 +144,7 @@ const processContribution = (
                 ItemCount: ingredientContribution.ItemCount * -1
             });
 
-            guildMember.MiscItemsContributed ??= [];
-            guildMember.MiscItemsContributed.push(ingredientContribution);
+            addGuildMemberMiscItemContribution(guildMember, ingredientContribution);
         }
         addMiscItems(inventory, miscItemChanges);
         inventoryChanges.MiscItems = miscItemChanges;

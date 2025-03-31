@@ -10,7 +10,8 @@ import {
     IGuildLogRoomChange,
     IGuildLogEntryRoster,
     IGuildLogEntryContributable,
-    IDojoLeaderboardEntry
+    IDojoLeaderboardEntry,
+    IGuildAdDatabase
 } from "@/src/types/guildTypes";
 import { Document, Model, model, Schema, Types } from "mongoose";
 import { fusionTreasuresSchema, typeCountSchema } from "./inventoryModels/inventoryModel";
@@ -165,6 +166,7 @@ const guildSchema = new Schema<IGuildDatabase>(
         Ranks: { type: [guildRankSchema], default: defaultRanks },
         TradeTax: { type: Number, default: 0 },
         Tier: { type: Number, default: 1 },
+        Emblem: { type: Boolean },
         DojoComponents: { type: [dojoComponentSchema], default: [] },
         DojoCapacity: { type: Number, default: 100 },
         DojoEnergy: { type: Number, default: 5 },
@@ -225,3 +227,19 @@ const guildMemberSchema = new Schema<IGuildMemberDatabase>({
 guildMemberSchema.index({ accountId: 1, guildId: 1 }, { unique: true });
 
 export const GuildMember = model<IGuildMemberDatabase>("GuildMember", guildMemberSchema);
+
+const guildAdSchema = new Schema<IGuildAdDatabase>({
+    GuildId: { type: Schema.Types.ObjectId, required: true },
+    Emblem: Boolean,
+    Expiry: { type: Date, required: true },
+    Features: { type: Number, required: true },
+    GuildName: { type: String, required: true },
+    MemberCount: { type: Number, required: true },
+    RecruitMsg: { type: String, required: true },
+    Tier: { type: Number, required: true }
+});
+
+guildAdSchema.index({ GuildId: 1 }, { unique: true });
+guildAdSchema.index({ Expiry: 1 }, { expireAfterSeconds: 0 });
+
+export const GuildAd = model<IGuildAdDatabase>("GuildAd", guildAdSchema);

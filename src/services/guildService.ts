@@ -1,7 +1,7 @@
 import { Request } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addRecipes, getInventory } from "@/src/services/inventoryService";
-import { Guild, GuildMember, TGuildDatabaseDocument } from "@/src/models/guildModel";
+import { Guild, GuildAd, GuildMember, TGuildDatabaseDocument } from "@/src/models/guildModel";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import {
     GuildPermission,
@@ -298,6 +298,10 @@ const moveResourcesToVault = (guild: TGuildDatabaseDocument, component: IDojoCon
     }
 };
 
+export const getVaultMiscItemCount = (guild: TGuildDatabaseDocument, itemType: string): number => {
+    return guild.VaultMiscItems?.find(x => x.ItemType == itemType)?.ItemCount ?? 0;
+};
+
 export const addVaultMiscItems = (guild: TGuildDatabaseDocument, miscItems: ITypeCount[]): void => {
     guild.VaultMiscItems ??= [];
     for (const miscItem of miscItems) {
@@ -307,6 +311,16 @@ export const addVaultMiscItems = (guild: TGuildDatabaseDocument, miscItems: ITyp
         } else {
             guild.VaultMiscItems.push(miscItem);
         }
+    }
+};
+
+export const addGuildMemberMiscItemContribution = (guildMember: IGuildMemberDatabase, item: ITypeCount): void => {
+    guildMember.MiscItemsContributed ??= [];
+    const miscItemContribution = guildMember.MiscItemsContributed.find(x => x.ItemType == item.ItemType);
+    if (miscItemContribution) {
+        miscItemContribution.ItemCount += item.ItemCount;
+    } else {
+        guildMember.MiscItemsContributed.push(item);
     }
 };
 
@@ -513,4 +527,6 @@ export const deleteGuild = async (guildId: Types.ObjectId): Promise<void> => {
         contextInfo: guildId.toString(),
         acceptAction: "GUILD_INVITE"
     });
+
+    await GuildAd.deleteOne({ GuildId: guildId });
 };

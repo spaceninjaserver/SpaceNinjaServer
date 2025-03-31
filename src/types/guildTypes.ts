@@ -28,6 +28,7 @@ export interface IGuildDatabase {
     Ranks: IGuildRank[];
     TradeTax: number;
     Tier: number;
+    Emblem?: boolean;
 
     DojoComponents: IDojoComponentDatabase[];
     DojoCapacity: number;
@@ -222,4 +223,28 @@ export interface IDojoLeaderboardEntry {
     s: number; // score
     r: number; // rank
     n: string; // displayName
+}
+
+export interface IGuildAdInfoClient {
+    _id: IOid; // Guild ID
+    CrossPlatformEnabled: boolean;
+    Emblem?: boolean;
+    Expiry: IMongoDate;
+    Features: number;
+    GuildName: string;
+    MemberCount: number;
+    OriginalPlatform: number;
+    RecruitMsg: string;
+    Tier: number;
+}
+
+export interface IGuildAdDatabase {
+    GuildId: Types.ObjectId;
+    Emblem?: boolean;
+    Expiry: Date;
+    Features: number;
+    GuildName: string;
+    MemberCount: number;
+    RecruitMsg: string;
+    Tier: number;
 }

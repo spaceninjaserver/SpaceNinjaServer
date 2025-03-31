@@ -9,6 +9,7 @@ import { arcaneCommonController } from "@/src/controllers/api/arcaneCommonContro
 import { archonFusionController } from "@/src/controllers/api/archonFusionController";
 import { artifactsController } from "@/src/controllers/api/artifactsController";
 import { artifactTransmutationController } from "@/src/controllers/api/artifactTransmutationController";
+import { cancelGuildAdvertisementController } from "@/src/controllers/api/cancelGuildAdvertisementController";
 import { changeDojoRootController } from "@/src/controllers/api/changeDojoRootController";
 import { changeGuildRankController } from "@/src/controllers/api/changeGuildRankController";
 import { checkDailyMissionBonusController } from "@/src/controllers/api/checkDailyMissionBonusController";
@@ -80,6 +81,7 @@ import { nameWeaponController } from "@/src/controllers/api/nameWeaponController
 import { nemesisController } from "@/src/controllers/api/nemesisController";
 import { placeDecoInComponentController } from "@/src/controllers/api/placeDecoInComponentController";
 import { playerSkillsController } from "@/src/controllers/api/playerSkillsController";
+import { postGuildAdvertisementController } from "@/src/controllers/api/postGuildAdvertisementController";
 import { projectionManagerController } from "@/src/controllers/api/projectionManagerController";
 import { purchaseController } from "@/src/controllers/api/purchaseController";
 import { queueDojoComponentDestructionController } from "@/src/controllers/api/queueDojoComponentDestructionController";
@@ -131,6 +133,7 @@ const apiRouter = express.Router();
 // get
 apiRouter.get("/abandonLibraryDailyTask.php", abandonLibraryDailyTaskController);
 apiRouter.get("/abortDojoComponentDestruction.php", abortDojoComponentDestructionController);
+apiRouter.get("/cancelGuildAdvertisement.php", cancelGuildAdvertisementController);
 apiRouter.get("/changeGuildRank.php", changeGuildRankController);
 apiRouter.get("/checkDailyMissionBonus.php", checkDailyMissionBonusController);
 apiRouter.get("/claimLibraryDailyTaskReward.php", claimLibraryDailyTaskRewardController);
@@ -228,6 +231,7 @@ apiRouter.post("/nameWeapon.php", nameWeaponController);
 apiRouter.post("/nemesis.php", nemesisController);
 apiRouter.post("/placeDecoInComponent.php", placeDecoInComponentController);
 apiRouter.post("/playerSkills.php", playerSkillsController);
+apiRouter.post("/postGuildAdvertisement.php", postGuildAdvertisementController);
 apiRouter.post("/projectionManager.php", projectionManagerController);
 apiRouter.post("/purchase.php", purchaseController);
 apiRouter.post("/redeemPromoCode.php", redeemPromoCodeController);
