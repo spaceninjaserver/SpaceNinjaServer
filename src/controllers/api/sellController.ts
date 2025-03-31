@@ -13,7 +13,42 @@ import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
 export const sellController: RequestHandler = async (req, res) => {
     const payload = JSON.parse(String(req.body)) as ISellRequest;
     const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId);
+    const requiredFields = new Set();
+    if (payload.SellCurrency == "SC_RegularCredits") {
+        requiredFields.add("RegularCredits");
+    } else if (payload.SellCurrency == "SC_FusionPoints") {
+        requiredFields.add("FusionPoints");
+    } else {
+        requiredFields.add("MiscItems");
+    }
+    for (const key of Object.keys(payload.Items)) {
+        requiredFields.add(key);
+    }
+    if (requiredFields.has("Upgrades")) {
+        requiredFields.add("RawUpgrades");
+    }
+    if (payload.Items.Suits) {
+        requiredFields.add(InventorySlot.SUITS);
+    }
+    if (payload.Items.LongGuns || payload.Items.Pistols || payload.Items.Melee) {
+        requiredFields.add(InventorySlot.WEAPONS);
+    }
+    if (payload.Items.SpaceSuits) {
+        requiredFields.add(InventorySlot.SPACESUITS);
+    }
+    if (payload.Items.SpaceGuns || payload.Items.SpaceMelee) {
+        requiredFields.add(InventorySlot.SPACEWEAPONS);
+    }
+    if (payload.Items.Sentinels || payload.Items.SentinelWeapons) {
+        requiredFields.add(InventorySlot.SENTINELS);
+    }
+    if (payload.Items.OperatorAmps) {
+        requiredFields.add(InventorySlot.AMPS);
+    }
+    if (payload.Items.Hoverboards) {
+        requiredFields.add(InventorySlot.SPACESUITS);
+    }
+    const inventory = await getInventory(accountId, Array.from(requiredFields).join(" "));
 
     // Give currency
     if (payload.SellCurrency == "SC_RegularCredits") {
