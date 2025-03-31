@@ -1,6 +1,6 @@
 import { Request } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { addRecipes, getInventory } from "@/src/services/inventoryService";
+import { getInventory } from "@/src/services/inventoryService";
 import { Guild, GuildAd, GuildMember, TGuildDatabaseDocument } from "@/src/models/guildModel";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import {
@@ -25,6 +25,7 @@ import { Account } from "../models/loginModel";
 import { getRandomInt } from "./rngService";
 import { Inbox } from "../models/inboxModel";
 import { ITypeCount } from "../types/inventoryTypes/inventoryTypes";
+import { IInventoryChanges } from "../types/purchaseTypes";
 
 export const getGuildForRequest = async (req: Request): Promise<TGuildDatabaseDocument> => {
     const accountId = await getAccountIdForRequest(req);
@@ -350,26 +351,6 @@ export const fillInInventoryDataForGuildMember = async (member: IGuildMemberClie
     member.ActiveAvatarImageType = inventory.ActiveAvatarImageType;
 };
 
-export const updateInventoryForConfirmedGuildJoin = async (
-    accountId: string,
-    guildId: Types.ObjectId
-): Promise<void> => {
-    const inventory = await getInventory(accountId, "GuildId Recipes");
-
-    // Set GuildId
-    inventory.GuildId = guildId;
-
-    // Give clan key blueprint
-    addRecipes(inventory, [
-        {
-            ItemType: "/Lotus/Types/Keys/DojoKeyBlueprint",
-            ItemCount: 1
-        }
-    ]);
-
-    await inventory.save();
-};
-
 export const createUniqueClanName = async (name: string): Promise<string> => {
     const initialDiscriminator = getRandomInt(0, 999);
     let discriminator = initialDiscriminator;
@@ -518,8 +499,45 @@ const setGuildTier = async (guild: TGuildDatabaseDocument, newTier: number): Pro
     }
 };
 
+export const removeDojoKeyItems = (inventory: TInventoryDatabaseDocument): IInventoryChanges => {
+    const inventoryChanges: IInventoryChanges = {};
+
+    const itemIndex = inventory.LevelKeys.findIndex(x => x.ItemType == "/Lotus/Types/Keys/DojoKey");
+    if (itemIndex != -1) {
+        inventoryChanges.LevelKeys = [
+            {
+                ItemType: "/Lotus/Types/Keys/DojoKey",
+                ItemCount: inventory.LevelKeys[itemIndex].ItemCount * -1
+            }
+        ];
+        inventory.LevelKeys.splice(itemIndex, 1);
+    }
+
+    const recipeIndex = inventory.Recipes.findIndex(x => x.ItemType == "/Lotus/Types/Keys/DojoKeyBlueprint");
+    if (recipeIndex != -1) {
+        inventoryChanges.Recipes = [
+            {
+                ItemType: "/Lotus/Types/Keys/DojoKeyBlueprint",
+                ItemCount: inventory.Recipes[recipeIndex].ItemCount * -1
+            }
+        ];
+        inventory.Recipes.splice(recipeIndex, 1);
+    }
+
+    return inventoryChanges;
+};
+
 export const deleteGuild = async (guildId: Types.ObjectId): Promise<void> => {
     await Guild.deleteOne({ _id: guildId });
+
+    const guildMembers = await GuildMember.find({ guildId, status: 0 }, "accountId");
+    for (const member of guildMembers) {
+        const inventory = await getInventory(member.accountId.toString(), "GuildId LevelKeys Recipes");
+        inventory.GuildId = undefined;
+        removeDojoKeyItems(inventory);
+        await inventory.save();
+    }
+
     await GuildMember.deleteMany({ guildId });
 
     // If guild sent any invites, delete those inbox messages as well.

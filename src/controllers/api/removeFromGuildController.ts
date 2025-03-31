@@ -1,7 +1,7 @@
 import { GuildMember } from "@/src/models/guildModel";
 import { Inbox } from "@/src/models/inboxModel";
 import { Account } from "@/src/models/loginModel";
-import { deleteGuild, getGuildForRequest, hasGuildPermission } from "@/src/services/guildService";
+import { deleteGuild, getGuildForRequest, hasGuildPermission, removeDojoKeyItems } from "@/src/services/guildService";
 import { getInventory } from "@/src/services/inventoryService";
 import { getAccountForRequest, getSuffixedName } from "@/src/services/loginService";
 import { GuildPermission } from "@/src/types/guildTypes";
@@ -22,22 +22,9 @@ export const removeFromGuildController: RequestHandler = async (req, res) => {
         await deleteGuild(guild._id);
     } else {
         if (guildMember.status == 0) {
-            const inventory = await getInventory(payload.userId);
+            const inventory = await getInventory(payload.userId, "GuildId LevelKeys Recipes");
             inventory.GuildId = undefined;
-
-            // Remove clan key or blueprint from kicked member
-            const itemIndex = inventory.LevelKeys.findIndex(x => x.ItemType == "/Lotus/Types/Keys/DojoKey");
-            if (itemIndex != -1) {
-                inventory.LevelKeys.splice(itemIndex, 1);
-            } else {
-                const recipeIndex = inventory.Recipes.findIndex(
-                    x => x.ItemType == "/Lotus/Types/Keys/DojoKeyBlueprint"
-                );
-                if (recipeIndex != -1) {
-                    inventory.Recipes.splice(recipeIndex, 1);
-                }
-            }
-
+            removeDojoKeyItems(inventory);
             await inventory.save();
         } else if (guildMember.status == 2) {
             // Delete the inbox message for the invite

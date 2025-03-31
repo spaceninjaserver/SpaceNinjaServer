@@ -2,11 +2,8 @@ import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { Guild, GuildMember } from "@/src/models/guildModel";
-import {
-    createUniqueClanName,
-    getGuildClient,
-    updateInventoryForConfirmedGuildJoin
-} from "@/src/services/guildService";
+import { createUniqueClanName, getGuildClient } from "@/src/services/guildService";
+import { addRecipes, getInventory } from "@/src/services/inventoryService";
 
 export const createGuildController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -26,7 +23,15 @@ export const createGuildController: RequestHandler = async (req, res) => {
         rank: 0
     });
 
-    await updateInventoryForConfirmedGuildJoin(accountId, guild._id);
+    const inventory = await getInventory(accountId, "GuildId Recipes");
+    inventory.GuildId = guild._id;
+    addRecipes(inventory, [
+        {
+            ItemType: "/Lotus/Types/Keys/DojoKeyBlueprint",
+            ItemCount: 1
+        }
+    ]);
+    await inventory.save();
 
     res.json({
         ...(await getGuildClient(guild, accountId)),
