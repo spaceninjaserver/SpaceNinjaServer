@@ -30,7 +30,7 @@ import {
 import { IGenericUpdate, IUpdateNodeIntrosResponse } from "../types/genericUpdate";
 import { IMissionInventoryUpdateRequest } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
-import { convertInboxMessage, fromStoreItem, getExalted, getKeyChainItems } from "@/src/services/itemDataService";
+import { convertInboxMessage, fromStoreItem, getKeyChainItems } from "@/src/services/itemDataService";
 import {
     EquipmentFeatures,
     IEquipmentClient,
@@ -55,8 +55,10 @@ import {
     ExportSentinels,
     ExportSyndicates,
     ExportUpgrades,
+    ExportWarframes,
     ExportWeapons,
     IDefaultUpgrade,
+    IPowersuit,
     TStandingLimitBin
 } from "warframe-public-export-plus";
 import { createShip } from "./shipService";
@@ -481,12 +483,12 @@ export const addItem = async (
             switch (typeName.substr(1).split("/")[2]) {
                 default: {
                     return {
-                        ...addPowerSuit(
+                        ...(await addPowerSuit(
                             inventory,
                             typeName,
                             {},
                             premiumPurchase ? EquipmentFeatures.DOUBLE_CAPACITY : undefined
-                        ),
+                        )),
                         ...occupySlot(inventory, InventorySlot.SUITS, premiumPurchase)
                     };
                 }
@@ -504,12 +506,12 @@ export const addItem = async (
                 }
                 case "EntratiMech": {
                     return {
-                        ...addMechSuit(
+                        ...(await addMechSuit(
                             inventory,
                             typeName,
                             {},
                             premiumPurchase ? EquipmentFeatures.DOUBLE_CAPACITY : undefined
-                        ),
+                        )),
                         ...occupySlot(inventory, InventorySlot.MECHSUITS, premiumPurchase)
                     };
                 }
@@ -697,40 +699,65 @@ const addSentinelWeapon = (
     inventoryChanges.SentinelWeapons.push(inventory.SentinelWeapons[index].toJSON<IEquipmentClient>());
 };
 
-export const addPowerSuit = (
+export const addPowerSuit = async (
     inventory: TInventoryDatabaseDocument,
     powersuitName: string,
     inventoryChanges: IInventoryChanges = {},
     features: number | undefined = undefined
-): IInventoryChanges => {
-    const specialItems = getExalted(powersuitName);
-    if (specialItems) {
-        for (const specialItem of specialItems) {
-            addSpecialItem(inventory, specialItem, inventoryChanges);
+): Promise<IInventoryChanges> => {
+    const powersuit = ExportWarframes[powersuitName] as IPowersuit | undefined;
+    const exalted = powersuit?.exalted ?? [];
+    for (const specialItem of exalted) {
+        addSpecialItem(inventory, specialItem, inventoryChanges);
+    }
+    if (powersuit?.additionalItems) {
+        for (const item of powersuit.additionalItems) {
+            if (exalted.indexOf(item) == -1) {
+                combineInventoryChanges(inventoryChanges, await addItem(inventory, item, 1));
+            }
         }
     }
     const suitIndex =
-        inventory.Suits.push({ ItemType: powersuitName, Configs: [], UpgradeVer: 101, XP: 0, Features: features }) - 1;
+        inventory.Suits.push({
+            ItemType: powersuitName,
+            Configs: [],
+            UpgradeVer: 101,
+            XP: 0,
+            Features: features,
+            IsNew: true
+        }) - 1;
     inventoryChanges.Suits ??= [];
     inventoryChanges.Suits.push(inventory.Suits[suitIndex].toJSON<IEquipmentClient>());
     return inventoryChanges;
 };
 
-export const addMechSuit = (
+export const addMechSuit = async (
     inventory: TInventoryDatabaseDocument,
     mechsuitName: string,
     inventoryChanges: IInventoryChanges = {},
     features: number | undefined = undefined
-): IInventoryChanges => {
-    const specialItems = getExalted(mechsuitName);
-    if (specialItems) {
-        for (const specialItem of specialItems) {
-            addSpecialItem(inventory, specialItem, inventoryChanges);
+): Promise<IInventoryChanges> => {
+    const powersuit = ExportWarframes[mechsuitName] as IPowersuit | undefined;
+    const exalted = powersuit?.exalted ?? [];
+    for (const specialItem of exalted) {
+        addSpecialItem(inventory, specialItem, inventoryChanges);
+    }
+    if (powersuit?.additionalItems) {
+        for (const item of powersuit.additionalItems) {
+            if (exalted.indexOf(item) == -1) {
+                combineInventoryChanges(inventoryChanges, await addItem(inventory, item, 1));
+            }
         }
     }
     const suitIndex =
-        inventory.MechSuits.push({ ItemType: mechsuitName, Configs: [], UpgradeVer: 101, XP: 0, Features: features }) -
-        1;
+        inventory.MechSuits.push({
+            ItemType: mechsuitName,
+            Configs: [],
+            UpgradeVer: 101,
+            XP: 0,
+            Features: features,
+            IsNew: true
+        }) - 1;
     inventoryChanges.MechSuits ??= [];
     inventoryChanges.MechSuits.push(inventory.MechSuits[suitIndex].toJSON<IEquipmentClient>());
     return inventoryChanges;
@@ -768,7 +795,8 @@ export const addSpaceSuit = (
             Configs: [],
             UpgradeVer: 101,
             XP: 0,
-            Features: features
+            Features: features,
+            IsNew: true
         }) - 1;
     inventoryChanges.SpaceSuits ??= [];
     inventoryChanges.SpaceSuits.push(inventory.SpaceSuits[suitIndex].toJSON<IEquipmentClient>());

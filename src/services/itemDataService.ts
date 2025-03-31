@@ -31,7 +31,6 @@ import {
     IDefaultUpgrade,
     IInboxMessage,
     IMissionReward,
-    IPowersuit,
     IRecipe,
     TReward
 } from "warframe-public-export-plus";
@@ -56,10 +55,6 @@ export const getRecipeByResult = (resultType: string): IRecipe | undefined => {
     return Object.values(ExportRecipes).find(x => x.resultType == resultType);
 };
 
-export const getExalted = (uniqueName: string): string[] | undefined => {
-    return getSuitByUniqueName(uniqueName)?.exalted;
-};
-
 export const getItemCategoryByUniqueName = (uniqueName: string): string => {
     //Lotus/Types/Items/MiscItems/PolymerBundle
 
@@ -74,10 +69,6 @@ export const getItemCategoryByUniqueName = (uniqueName: string): string => {
     }
     const category = uniqueName.substring(index).split("/")[0];
     return category;
-};
-
-export const getSuitByUniqueName = (uniqueName: string): IPowersuit | undefined => {
-    return ExportWarframes[uniqueName];
 };
 
 export const getItemName = (uniqueName: string): string | undefined => {

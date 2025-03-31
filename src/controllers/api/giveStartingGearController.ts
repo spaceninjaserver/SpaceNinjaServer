@@ -53,7 +53,7 @@ export const addStartingGear = async (
     addEquipment(inventory, "LongGuns", LongGuns[0].ItemType, undefined, inventoryChanges);
     addEquipment(inventory, "Pistols", Pistols[0].ItemType, undefined, inventoryChanges);
     addEquipment(inventory, "Melee", Melee[0].ItemType, undefined, inventoryChanges);
-    addPowerSuit(inventory, Suits[0].ItemType, inventoryChanges);
+    await addPowerSuit(inventory, Suits[0].ItemType, inventoryChanges);
     addEquipment(
         inventory,
         "DataKnives",
