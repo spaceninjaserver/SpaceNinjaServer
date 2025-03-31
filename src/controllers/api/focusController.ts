@@ -18,17 +18,15 @@ export const focusController: RequestHandler = async (req, res) => {
         case FocusOperation.InstallLens: {
             const request = JSON.parse(String(req.body)) as ILensInstallRequest;
             const inventory = await getInventory(accountId);
-            for (const item of inventory[request.Category]) {
-                if (item._id.toString() == request.WeaponId) {
-                    item.FocusLens = request.LensType;
-                    addMiscItems(inventory, [
-                        {
-                            ItemType: request.LensType,
-                            ItemCount: -1
-                        } satisfies IMiscItem
-                    ]);
-                    break;
-                }
+            const item = inventory[request.Category].id(request.WeaponId);
+            if (item) {
+                item.FocusLens = request.LensType;
+                addMiscItems(inventory, [
+                    {
+                        ItemType: request.LensType,
+                        ItemCount: -1
+                    } satisfies IMiscItem
+                ]);
             }
             await inventory.save();
             res.json({

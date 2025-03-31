@@ -28,7 +28,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             // shard installation
             const request = getJSONfromString<IShardInstallRequest>(String(req.body));
             const inventory = await getInventory(accountId);
-            const suit = inventory.Suits.find(suit => suit._id.toString() == request.SuitId.$oid)!;
+            const suit = inventory.Suits.id(request.SuitId.$oid)!;
             if (!suit.ArchonCrystalUpgrades || suit.ArchonCrystalUpgrades.length != 5) {
                 suit.ArchonCrystalUpgrades = [{}, {}, {}, {}, {}];
             }
@@ -56,7 +56,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             // shard removal
             const request = getJSONfromString<IShardUninstallRequest>(String(req.body));
             const inventory = await getInventory(accountId);
-            const suit = inventory.Suits.find(suit => suit._id.toString() == request.SuitId.$oid)!;
+            const suit = inventory.Suits.id(request.SuitId.$oid)!;
 
             const miscItemChanges: IMiscItem[] = [];
             if (suit.ArchonCrystalUpgrades![request.Slot].Color) {

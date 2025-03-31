@@ -5,7 +5,7 @@ import { getInventory } from "@/src/services/inventoryService";
 export const pushArchonCrystalUpgradeController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId);
-    const suit = inventory.Suits.find(suit => suit._id.toString() == (req.query.oid as string));
+    const suit = inventory.Suits.id(req.query.oid as string);
     if (suit) {
         suit.ArchonCrystalUpgrades ??= [];
         const count = (req.query.count as number | undefined) ?? 1;

@@ -12,9 +12,7 @@ export const nameWeaponController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId);
     const body = getJSONfromString<INameWeaponRequest>(String(req.body));
-    const item = inventory[req.query.Category as string as TEquipmentKey].find(
-        item => item._id.toString() == (req.query.ItemId as string)
-    )!;
+    const item = inventory[req.query.Category as string as TEquipmentKey].id(req.query.ItemId as string)!;
     if (body.ItemName != "") {
         item.ItemName = body.ItemName;
     } else {

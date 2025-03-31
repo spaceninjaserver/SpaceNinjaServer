@@ -17,7 +17,7 @@ export const evolveWeaponController: RequestHandler = async (req, res) => {
             recipe.ingredients.map(x => ({ ItemType: x.ItemType, ItemCount: x.ItemCount * -1 }))
         );
 
-        const item = inventory[payload.Category].find(item => item._id.toString() == (req.query.ItemId as string))!;
+        const item = inventory[payload.Category].id(req.query.ItemId as string)!;
         item.Features ??= 0;
         item.Features |= EquipmentFeatures.INCARNON_GENESIS;
 
@@ -39,7 +39,7 @@ export const evolveWeaponController: RequestHandler = async (req, res) => {
             }
         ]);
 
-        const item = inventory[payload.Category].find(item => item._id.toString() == (req.query.ItemId as string))!;
+        const item = inventory[payload.Category].id(req.query.ItemId as string)!;
         item.Features! &= ~EquipmentFeatures.INCARNON_GENESIS;
     } else {
         throw new Error(`unexpected evolve weapon action: ${payload.Action}`);

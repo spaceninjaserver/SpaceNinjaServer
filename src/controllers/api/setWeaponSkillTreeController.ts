@@ -6,12 +6,10 @@ import { WeaponTypeInternal } from "@/src/services/itemDataService";
 
 export const setWeaponSkillTreeController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory(accountId, req.query.Category as string);
     const payload = getJSONfromString<ISetWeaponSkillTreeRequest>(String(req.body));
 
-    const item = inventory[req.query.Category as WeaponTypeInternal].find(
-        item => item._id.toString() == (req.query.ItemId as string)
-    )!;
+    const item = inventory[req.query.Category as WeaponTypeInternal].id(req.query.ItemId as string)!;
     item.SkillTree = payload.SkillTree;
 
     await inventory.save();

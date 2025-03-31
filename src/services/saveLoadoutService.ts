@@ -84,9 +84,7 @@ export const handleInventoryItemConfigChange = async (
                             continue;
                         }
 
-                        const oldLoadoutConfig = loadout[loadoutSlot].find(
-                            loadout => loadout._id.toString() === loadoutId
-                        );
+                        const oldLoadoutConfig = loadout[loadoutSlot].id(loadoutId);
 
                         const { ItemId, ...loadoutConfigItemIdRemoved } = loadoutConfig;
                         const loadoutConfigDatabase: ILoadoutConfigDatabase = {
