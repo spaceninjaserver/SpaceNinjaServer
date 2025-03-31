@@ -47,13 +47,11 @@ export const dojoComponentRushController: RequestHandler = async (req, res) => {
         }
     }
 
-    await guild.save();
-    await inventory.save();
-
     const guildMember = (await GuildMember.findOne({ accountId, guildId: guild._id }, "PremiumCreditsContributed"))!;
     guildMember.PremiumCreditsContributed ??= 0;
     guildMember.PremiumCreditsContributed += request.Amount;
-    await guildMember.save();
+
+    await Promise.all([guild.save(), inventory.save(), guildMember.save()]);
 
     res.json({
         ...(await getDojoClient(guild, 0, component._id)),

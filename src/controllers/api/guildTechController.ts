@@ -157,9 +157,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
         // Check if research is fully funded now.
         await processGuildTechProjectContributionsUpdate(guild, techProject);
 
-        await guild.save();
-        await inventory.save();
-        await guildMember.save();
+        await Promise.all([guild.save(), inventory.save(), guildMember.save()]);
         res.json({
             InventoryChanges: inventoryChanges,
             Vault: getGuildVault(guild)

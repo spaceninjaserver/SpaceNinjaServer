@@ -4,14 +4,20 @@ import {
     addVaultMiscItems,
     getGuildForRequestEx
 } from "@/src/services/guildService";
-import { addFusionTreasures, addMiscItems, addShipDecorations, getInventory } from "@/src/services/inventoryService";
+import {
+    addFusionTreasures,
+    addMiscItems,
+    addShipDecorations,
+    getInventory,
+    updateCurrency
+} from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { IFusionTreasure, IMiscItem, ITypeCount } from "@/src/types/inventoryTypes/inventoryTypes";
 import { RequestHandler } from "express";
 
 export const contributeToVaultController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory(accountId, "GuildId RegularCredits MiscItems ShipDecorations FusionTreasures");
     const guild = await getGuildForRequestEx(req, inventory);
     const guildMember = (await GuildMember.findOne(
         { accountId, guildId: guild._id },
@@ -20,6 +26,8 @@ export const contributeToVaultController: RequestHandler = async (req, res) => {
     const request = JSON.parse(String(req.body)) as IContributeToVaultRequest;
 
     if (request.RegularCredits) {
+        updateCurrency(inventory, request.RegularCredits, false);
+
         guild.VaultRegularCredits ??= 0;
         guild.VaultRegularCredits += request.RegularCredits;
 
@@ -52,9 +60,7 @@ export const contributeToVaultController: RequestHandler = async (req, res) => {
         }
     }
 
-    await guild.save();
-    await inventory.save();
-    await guildMember.save();
+    await Promise.all([guild.save(), inventory.save(), guildMember.save()]);
     res.end();
 };
 
