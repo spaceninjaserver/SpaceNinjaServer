@@ -24,7 +24,6 @@ import {
     ExportGear,
     ExportKeys,
     ExportRecipes,
-    ExportRegions,
     ExportResources,
     ExportSentinels,
     ExportWarframes,
@@ -34,7 +33,6 @@ import {
     IMissionReward,
     IPowersuit,
     IRecipe,
-    IRegion,
     TReward
 } from "warframe-public-export-plus";
 import questCompletionItems from "@/static/fixed_responses/questCompletionRewards.json";
@@ -190,16 +188,6 @@ export const getLevelKeyRewards = (
         levelKeyRewards,
         levelKeyRewards2
     };
-};
-
-export const getNode = (nodeName: string): IRegion => {
-    const node = ExportRegions[nodeName];
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    if (!node) {
-        throw new Error(`Node ${nodeName} not found`);
-    }
-
-    return node;
 };
 
 export const getQuestCompletionItems = (questKey: string): ITypeCount[] | undefined => {

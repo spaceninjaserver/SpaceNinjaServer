@@ -4,6 +4,7 @@ import {
     ExportRegions,
     ExportRewards,
     IMissionReward as IMissionRewardExternal,
+    IRegion,
     IReward
 } from "warframe-public-export-plus";
 import { IMissionInventoryUpdateRequest, IRewardInfo } from "../types/requestTypes";
@@ -32,7 +33,7 @@ import {
 import { updateQuestKey } from "@/src/services/questService";
 import { HydratedDocument, Types } from "mongoose";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
-import { getLevelKeyRewards, getNode, toStoreItem } from "@/src/services/itemDataService";
+import { getLevelKeyRewards, toStoreItem } from "@/src/services/itemDataService";
 import { InventoryDocumentProps, TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { getEntriesUnsafe } from "@/src/utils/ts-utils";
 import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
@@ -469,15 +470,15 @@ export const addMissionRewards = async (
         }
     }
 
-    if (
-        missions &&
-        missions.Tag != "" // https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1013
-    ) {
-        const node = getNode(missions.Tag);
+    // ignoring tags not in ExportRegions, because it can just be garbage:
+    // - https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1013
+    // - https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1365
+    if (missions && missions.Tag in ExportRegions) {
+        const node = ExportRegions[missions.Tag];
 
         //node based credit rewards for mission completion
         if (node.missionIndex !== 28) {
-            const levelCreditReward = getLevelCreditRewards(missions.Tag);
+            const levelCreditReward = getLevelCreditRewards(node);
             missionCompletionCredits += levelCreditReward;
             inventory.RegularCredits += levelCreditReward;
             logger.debug(`levelCreditReward ${levelCreditReward}`);
@@ -660,8 +661,8 @@ export const addFixedLevelRewards = (
     return missionBonusCredits;
 };
 
-function getLevelCreditRewards(nodeName: string): number {
-    const minEnemyLevel = getNode(nodeName).minEnemyLevel;
+function getLevelCreditRewards(node: IRegion): number {
+    const minEnemyLevel = node.minEnemyLevel;
 
     return 1000 + (minEnemyLevel - 1) * 100;
 
