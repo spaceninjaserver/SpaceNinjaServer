@@ -56,7 +56,7 @@ export const giftingController: RequestHandler = async (req, res) => {
     await senderInventory.save();
 
     const senderName = getSuffixedName(senderAccount);
-    await createMessage(account._id.toString(), [
+    await createMessage(account._id, [
         {
             sndr: senderName,
             msg: data.Message || "/Lotus/Language/Menu/GiftReceivedBody_NoCustomMessage",

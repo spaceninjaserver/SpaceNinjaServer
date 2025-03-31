@@ -67,7 +67,7 @@ export const inboxController: RequestHandler = async (req, res) => {
                     (await handleStoreItemAcquisition(gift.GiftType, inventory, giftQuantity)).InventoryChanges
                 );
                 if (sender) {
-                    await createMessage(sender._id.toString(), [
+                    await createMessage(sender._id, [
                         {
                             sndr: recipientName,
                             msg: "/Lotus/Language/Menu/GiftReceivedConfirmationBody",

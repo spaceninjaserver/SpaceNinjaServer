@@ -105,13 +105,13 @@ export const addMissionInventoryUpdates = async (
         if (!inventory.BrandedSuits.find(x => x.equals(SuitId))) {
             inventory.BrandedSuits.push(SuitId);
 
-            await createMessage(inventory.accountOwnerId.toString(), [
+            await createMessage(inventory.accountOwnerId, [
                 {
                     sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
                     msg: "/Lotus/Language/G1Quests/BrandedMessage",
                     sub: "/Lotus/Language/G1Quests/BrandedTitle",
                     att: ["/Lotus/Types/Recipes/Components/BrandRemovalBlueprint"],
-                    highPriority: true // I cannot find any content of this within the last 10 years so I can only assume that highPriority is set (it certainly would make sense), but I just don't know for sure that it is so on live.
+                    highPriority: true // TOVERIFY: I cannot find any content of this within the last 10 years so I can only assume that highPriority is set (it certainly would make sense), but I just don't know for sure that it is so on live.
                 }
             ]);
         }
@@ -292,14 +292,14 @@ export const addMissionInventoryUpdates = async (
                                 if (gate.complete && !gate.sent) {
                                     gate.sent = true;
                                     if (gate.threshold == 0.5) {
-                                        await createMessage(inventory.accountOwnerId.toString(), [kuriaMessage50]);
+                                        await createMessage(inventory.accountOwnerId, [kuriaMessage50]);
                                     } else {
-                                        await createMessage(inventory.accountOwnerId.toString(), [kuriaMessage75]);
+                                        await createMessage(inventory.accountOwnerId, [kuriaMessage75]);
                                     }
                                 }
                             }
                             if (progress >= 1.0) {
-                                await createMessage(inventory.accountOwnerId.toString(), [kuriaMessage100]);
+                                await createMessage(inventory.accountOwnerId, [kuriaMessage100]);
                             }
                         }
                     } else {
@@ -338,7 +338,7 @@ export const addMissionInventoryUpdates = async (
                 for (const deathMark of value) {
                     if (!inventory.DeathMarks.find(x => x == deathMark)) {
                         // It's a new death mark; we have to say the line.
-                        await createMessage(inventory.accountOwnerId.toString(), [
+                        await createMessage(inventory.accountOwnerId, [
                             {
                                 sub: "/Lotus/Language/G1Quests/DeathMarkTitle",
                                 sndr: "/Lotus/Language/G1Quests/DeathMarkSender",

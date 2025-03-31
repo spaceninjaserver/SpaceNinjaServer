@@ -16,7 +16,7 @@ import {
     IQuestStage
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { logger } from "@/src/utils/logger";
-import { HydratedDocument } from "mongoose";
+import { HydratedDocument, Types } from "mongoose";
 import { ExportKeys } from "warframe-public-export-plus";
 import { addFixedLevelRewards } from "./missionInventoryUpdateService";
 import { IInventoryChanges } from "../types/purchaseTypes";
@@ -107,7 +107,7 @@ export const addQuestKey = (
     }
 
     if (questKey.ItemType == "/Lotus/Types/Keys/InfestedMicroplanetQuest/InfestedMicroplanetQuestKeyChain") {
-        void createMessage(inventory.accountOwnerId.toString(), [
+        void createMessage(inventory.accountOwnerId, [
             {
                 sndr: "/Lotus/Language/Bosses/Loid",
                 icon: "/Lotus/Interface/Icons/Npcs/Entrati/Loid.png",
@@ -166,7 +166,7 @@ export const completeQuest = async (inventory: TInventoryDatabaseDocument, quest
         }
 
         if (chainStages[i].messageToSendWhenTriggered) {
-            await giveKeyChainMessage(inventory, inventory.accountOwnerId.toString(), {
+            await giveKeyChainMessage(inventory, inventory.accountOwnerId, {
                 KeyChain: questKey,
                 ChainStage: i
             });
@@ -238,7 +238,7 @@ export const giveKeyChainItem = async (
 
 export const giveKeyChainMessage = async (
     inventory: TInventoryDatabaseDocument,
-    accountId: string,
+    accountId: string | Types.ObjectId,
     keyChainInfo: IKeyChainRequest
 ): Promise<void> => {
     const keyChainMessage = getKeyChainMessage(keyChainInfo);

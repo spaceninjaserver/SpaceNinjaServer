@@ -41,7 +41,7 @@ export const contributeGuildClassController: RequestHandler = async (req, res) =
             const members = await GuildMember.find({ guildId: payload.GuildId, status: 0 }, "accountId");
             for (const member of members) {
                 // somewhat unfaithful as on live the "msg" is not a loctag, but since we don't have the string, we'll let the client fill it in with "arg".
-                await createMessage(member.accountId.toString(), [
+                await createMessage(member.accountId, [
                     {
                         sndr: guild.Name,
                         msg: "/Lotus/Language/Clan/Clan_AscensionCeremonyInProgressDetails",

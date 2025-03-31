@@ -1019,7 +1019,7 @@ export const addEmailItem = async (
     const meta = ExportEmailItems[typeName];
     const emailItem = inventory.EmailItems.find(x => x.ItemType == typeName);
     if (!emailItem || !meta.sendOnlyOnce) {
-        await createMessage(inventory.accountOwnerId.toString(), [convertInboxMessage(meta.message)]);
+        await createMessage(inventory.accountOwnerId, [convertInboxMessage(meta.message)]);
 
         if (emailItem) {
             emailItem.ItemCount += 1;

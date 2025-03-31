@@ -1,6 +1,6 @@
 import { IMessageDatabase, Inbox } from "@/src/models/inboxModel";
 import { getAccountForRequest } from "@/src/services/loginService";
-import { HydratedDocument } from "mongoose";
+import { HydratedDocument, Types } from "mongoose";
 import { Request } from "express";
 import eventMessages from "@/static/fixed_responses/eventMessages.json";
 import { logger } from "@/src/utils/logger";
@@ -39,7 +39,7 @@ export const createNewEventMessages = async (req: Request): Promise<void> => {
         return;
     }
 
-    const savedEventMessages = await createMessage(account._id.toString(), newEventMessages);
+    const savedEventMessages = await createMessage(account._id, newEventMessages);
     logger.debug("created event messages", savedEventMessages);
 
     const latestEventMessage = newEventMessages.reduce((prev, current) =>
@@ -50,7 +50,7 @@ export const createNewEventMessages = async (req: Request): Promise<void> => {
     await account.save();
 };
 
-export const createMessage = async (accountId: string, messages: IMessageCreationTemplate[]) => {
+export const createMessage = async (accountId: string | Types.ObjectId, messages: IMessageCreationTemplate[]) => {
     const ownerIdMessages = messages.map(m => ({
         ...m,
         ownerId: accountId
