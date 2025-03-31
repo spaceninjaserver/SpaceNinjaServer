@@ -116,9 +116,15 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
             ]);
         }
         if (req.query.rush) {
+            const end = Math.trunc(pendingRecipe.CompletionDate.getTime() / 1000);
+            const start = end - recipe.buildTime;
+            const secondsElapsed = Math.trunc(Date.now() / 1000) - start;
+            const progress = secondsElapsed / recipe.buildTime;
+            logger.debug(`rushing recipe at ${Math.trunc(progress * 100)}% completion`);
+            const cost = Math.round(recipe.skipBuildTimePrice * (1 - (progress - 0.5)));
             InventoryChanges = {
                 ...InventoryChanges,
-                ...updateCurrency(inventory, recipe.skipBuildTimePrice, true)
+                ...updateCurrency(inventory, cost, true)
             };
         }
         if (recipe.secretIngredientAction != "SIA_UNBRAND") {
