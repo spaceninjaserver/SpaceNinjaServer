@@ -39,7 +39,7 @@ dict = {
     code_focusUnlocked: `已解锁 |COUNT| 个新专精学派！需要游戏内仓库更新才能生效，您可以通过访问星图来触发仓库更新。`,
     code_addModsConfirm: `确定要向账户添加 |COUNT| 张MOD吗？`,
     code_succImport: `导入成功。`,
-    code_gild: `[UNTRANSLATED] Gild`,
+    code_gild: `镀金`,
     code_moa: `恐鸟`,
     code_zanuka: `猎犬`,
     code_zanukaA: `铎玛猎犬`,

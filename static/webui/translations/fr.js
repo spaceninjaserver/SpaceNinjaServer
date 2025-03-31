@@ -39,7 +39,7 @@ dict = {
     code_focusUnlocked: `|COUNT| écoles de Focus déverrouillées ! Synchronisation de l'inventaire nécessaire.`,
     code_addModsConfirm: `Ajouter |COUNT| mods à l'inventaire ?`,
     code_succImport: `Importé.`,
-    code_gild: `[UNTRANSLATED] Gild`,
+    code_gild: `Polir`,
     code_moa: `Moa`,
     code_zanuka: `Molosse`,
     code_zanukaA: `Molosse Dorma`,
