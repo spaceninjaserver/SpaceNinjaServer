@@ -83,7 +83,8 @@ import {
     INemesisClient,
     IInfNode,
     IDiscoveredMarker,
-    IWeeklyMission
+    IWeeklyMission,
+    ILockedWeaponGroupDatabase
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -1147,6 +1148,17 @@ const alignmentSchema = new Schema<IAlignment>(
     { _id: false }
 );
 
+const lockedWeaponGroupSchema = new Schema<ILockedWeaponGroupDatabase>(
+    {
+        s: Schema.Types.ObjectId,
+        p: Schema.Types.ObjectId,
+        l: Schema.Types.ObjectId,
+        m: Schema.Types.ObjectId,
+        sn: Schema.Types.ObjectId
+    },
+    { _id: false }
+);
+
 const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
     {
         accountOwnerId: Schema.Types.ObjectId,
@@ -1488,7 +1500,9 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         EchoesHexConquestActiveFrameVariants: { type: [String], default: undefined },
         EchoesHexConquestActiveStickers: { type: [String], default: undefined },
 
-        BrandedSuits: { type: [Schema.Types.ObjectId], default: undefined }
+        // G3 + Zanuka
+        BrandedSuits: { type: [Schema.Types.ObjectId], default: undefined },
+        LockedWeaponGroup: { type: lockedWeaponGroupSchema, default: undefined }
     },
     { timestamps: { createdAt: "Created", updatedAt: false } }
 );
@@ -1522,6 +1536,15 @@ inventorySchema.set("toJSON", {
         }
         if (inventoryDatabase.BrandedSuits) {
             inventoryResponse.BrandedSuits = inventoryDatabase.BrandedSuits.map(toOid);
+        }
+        if (inventoryDatabase.LockedWeaponGroup) {
+            inventoryResponse.LockedWeaponGroup = {
+                s: toOid(inventoryDatabase.LockedWeaponGroup.s),
+                l: inventoryDatabase.LockedWeaponGroup.l ? toOid(inventoryDatabase.LockedWeaponGroup.l) : undefined,
+                p: inventoryDatabase.LockedWeaponGroup.p ? toOid(inventoryDatabase.LockedWeaponGroup.p) : undefined,
+                m: inventoryDatabase.LockedWeaponGroup.m ? toOid(inventoryDatabase.LockedWeaponGroup.m) : undefined,
+                sn: inventoryDatabase.LockedWeaponGroup.sn ? toOid(inventoryDatabase.LockedWeaponGroup.sn) : undefined
+            };
         }
     }
 });

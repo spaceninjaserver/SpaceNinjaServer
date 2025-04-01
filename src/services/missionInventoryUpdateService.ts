@@ -47,6 +47,7 @@ import kuriaMessage100 from "@/static/fixed_responses/kuriaMessages/oneHundredPe
 import conservationAnimals from "@/static/fixed_responses/conservationAnimals.json";
 import { getInfNodes } from "@/src/helpers/nemesisHelpers";
 import { Loadout } from "../models/inventoryModels/loadoutModel";
+import { ILoadoutConfigDatabase } from "../types/saveLoadoutTypes";
 
 const getRotations = (rotationCount: number): number[] => {
     if (rotationCount === 0) return [0];
@@ -95,7 +96,8 @@ export const addMissionInventoryUpdates = async (
         inventoryUpdates.MissionFailed &&
         inventoryUpdates.MissionStatus == "GS_FAILURE" &&
         inventoryUpdates.EndOfMatchUpload &&
-        inventoryUpdates.ObjectiveReached
+        inventoryUpdates.ObjectiveReached &&
+        !inventoryUpdates.LockedWeaponGroup
     ) {
         const loadout = (await Loadout.findById(inventory.LoadOutPresets, "NORMAL"))!;
         const config = loadout.NORMAL.id(inventory.CurrentLoadOutIds[0].$oid)!;
@@ -394,6 +396,35 @@ export const addMissionInventoryUpdates = async (
                     } else {
                         inventory.DiscoveredMarkers.push(clientMarker);
                     }
+                }
+                break;
+            }
+            case "LockedWeaponGroup": {
+                inventory.LockedWeaponGroup = {
+                    s: new Types.ObjectId(value.s.$oid),
+                    l: value.l ? new Types.ObjectId(value.l.$oid) : undefined,
+                    p: value.p ? new Types.ObjectId(value.p.$oid) : undefined,
+                    m: value.m ? new Types.ObjectId(value.m.$oid) : undefined,
+                    sn: value.sn ? new Types.ObjectId(value.sn.$oid) : undefined
+                };
+                break;
+            }
+            case "UnlockWeapons": {
+                inventory.LockedWeaponGroup = undefined;
+                break;
+            }
+            case "CurrentLoadOutIds": {
+                const loadout = await Loadout.findOne({ loadoutOwnerId: inventory.accountOwnerId });
+                if (loadout) {
+                    for (const [loadoutId, loadoutConfig] of Object.entries(value.LoadOuts.NORMAL)) {
+                        const { ItemId, ...loadoutConfigItemIdRemoved } = loadoutConfig;
+                        const loadoutConfigDatabase: ILoadoutConfigDatabase = {
+                            _id: new Types.ObjectId(ItemId.$oid),
+                            ...loadoutConfigItemIdRemoved
+                        };
+                        loadout.NORMAL.id(loadoutId)!.overwrite(loadoutConfigDatabase);
+                    }
+                    await loadout.save();
                 }
                 break;
             }

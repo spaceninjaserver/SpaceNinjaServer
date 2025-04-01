@@ -45,6 +45,7 @@ export interface IInventoryDatabase
             | "Nemesis"
             | "EntratiVaultCountResetDate"
             | "BrandedSuits"
+            | "LockedWeaponGroup"
             | TEquipmentKey
         >,
         InventoryDatabaseEquipment {
@@ -75,6 +76,7 @@ export interface IInventoryDatabase
     Nemesis?: INemesisDatabase;
     EntratiVaultCountResetDate?: Date;
     BrandedSuits?: Types.ObjectId[];
+    LockedWeaponGroup?: ILockedWeaponGroupDatabase;
 }
 
 export interface IQuestKeyDatabase {
@@ -349,6 +351,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     EchoesHexConquestActiveFrameVariants?: string[];
     EchoesHexConquestActiveStickers?: string[];
     BrandedSuits?: IOid[];
+    LockedWeaponGroup?: ILockedWeaponGroupClient;
 }
 
 export interface IAffiliation {
@@ -1148,4 +1151,20 @@ export interface ICalendarProgress {
 export interface ISongChallenge {
     Song: string;
     Difficulties: number[];
+}
+
+export interface ILockedWeaponGroupClient {
+    s: IOid;
+    p?: IOid;
+    l?: IOid;
+    m?: IOid;
+    sn?: IOid;
+}
+
+export interface ILockedWeaponGroupDatabase {
+    s: Types.ObjectId;
+    p?: Types.ObjectId;
+    l?: Types.ObjectId;
+    m?: Types.ObjectId;
+    sn?: Types.ObjectId;
 }

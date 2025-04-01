@@ -17,7 +17,9 @@ import {
     ILoreFragmentScan,
     IUpgradeClient,
     ICollectibleEntry,
-    IDiscoveredMarker
+    IDiscoveredMarker,
+    ILockedWeaponGroupClient,
+    ILoadOutPresets
 } from "./inventoryTypes/inventoryTypes";
 
 export interface IAffiliationChange {
@@ -108,6 +110,12 @@ export type IMissionInventoryUpdateRequest = {
         Count: number;
     }[];
     DiscoveredMarkers?: IDiscoveredMarker[];
+    LockedWeaponGroup?: ILockedWeaponGroupClient; // sent when captured by zanuka
+    UnlockWeapons?: boolean; // sent when recovered weapons from zanuka capture
+    IncHarvester?: boolean; // sent when recovered weapons from zanuka capture
+    CurrentLoadOutIds?: {
+        LoadOuts: ILoadOutPresets; // sent when recovered weapons from zanuka capture
+    };
 } & {
     [K in TEquipmentKey]?: IEquipmentClient[];
 };
