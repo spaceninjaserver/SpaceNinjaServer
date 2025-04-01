@@ -1,0 +1,157 @@
+{
+  "VendorInfo": {
+    "_id": {
+      "$oid": "67dadc30e4b6e0e5979c8d84"
+    },
+    "TypeName": "/Lotus/Types/Game/VendorManifests/TheHex/InfestedLichWeaponVendorManifest",
+    "ItemManifest": [
+      {
+        "StoreItem": "/Lotus/StoreItems/Weapons/Infested/InfestedLich/LongGuns/1999InfShotgun/1999InfShotgunWeapon",
+        "ItemPrices": [
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Items/MiscItems/CodaWeaponBucks",
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999999999"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 65079176837546984,
+        "Id": {
+          "$oid": "67e9da12793a120dbbc1c193"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Weapons/Infested/InfestedLich/Melee/CodaCaustacyst/CodaCaustacyst",
+        "ItemPrices": [
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Items/MiscItems/CodaWeaponBucks",
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999999999"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 5687904240491804000,
+        "Id": {
+          "$oid": "67e9da12793a120dbbc1c194"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Weapons/Infested/InfestedLich/Melee/CodaPathocyst/CodaPathocyst",
+        "ItemPrices": [
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Items/MiscItems/CodaWeaponBucks",
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999999999"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 6177144662234093000,
+        "Id": {
+          "$oid": "67e9da12793a120dbbc1c195"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Weapons/Infested/InfestedLich/Pistols/CodaTysis",
+        "ItemPrices": [
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Items/MiscItems/CodaWeaponBucks",
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999999999"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 1988275604378227700,
+        "Id": {
+          "$oid": "67e9da12793a120dbbc1c196"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Weapons/Infested/InfestedLich/LongGuns/CodaSynapse",
+        "ItemPrices": [
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Items/MiscItems/CodaWeaponBucks",
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999999999"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 8607452585593957000,
+        "Id": {
+          "$oid": "67e9da12793a120dbbc1c197"
+        }
+      },
+      {
+        "StoreItem": "/Lotus/StoreItems/Weapons/Infested/InfestedLich/Melee/CodaHirudo",
+        "ItemPrices": [
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Items/MiscItems/CodaWeaponBucks",
+            "ProductCategory": "MiscItems"
+          }
+        ],
+        "Bin": "BIN_1",
+        "QuantityMultiplier": 1,
+        "Expiry": {
+          "$date": {
+            "$numberLong": "9999999999999"
+          }
+        },
+        "PurchaseQuantityLimit": 1,
+        "AllowMultipurchase": false,
+        "LocTagRandSeed": 8385013066220909000,
+        "Id": {
+          "$oid": "67e9da12793a120dbbc1c198"
+        }
+      }
+    ],
+    "PropertyTextHash": "77093DD05A8561A022DEC9A4B9BB4A56",
+    "RandomSeedType": "VRST_WEAPON",
+    "RequiredGoalTag": "",
+    "WeaponUpgradeValueAttenuationExponent": 2.25,
+    "Expiry": {
+      "$date": {
+        "$numberLong": "9999999999999"
+      }
+    }
+  }
+}

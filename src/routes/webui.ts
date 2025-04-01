@@ -1,9 +1,8 @@
 import express from "express";
 import path from "path";
+import { repoDir, rootDir } from "@/src/helpers/pathHelper";
 
 const webuiRouter = express.Router();
-const rootDir = path.join(__dirname, "../..");
-const repoDir = path.basename(rootDir) == "build" ? path.join(rootDir, "..") : rootDir;
 
 // Redirect / to /webui/
 webuiRouter.get("/", (_req, res) => {

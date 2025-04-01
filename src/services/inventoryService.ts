@@ -69,7 +69,7 @@ import { addStartingGear } from "@/src/controllers/api/giveStartingGearControlle
 import { addQuestKey, completeQuest } from "@/src/services/questService";
 import { handleBundleAcqusition } from "./purchaseService";
 import libraryDailyTasks from "@/static/fixed_responses/libraryDailyTasks.json";
-import { getRandomElement, getRandomInt } from "./rngService";
+import { getRandomElement, getRandomInt, SRng } from "./rngService";
 import { createMessage } from "./inboxService";
 
 export const createInventory = async (
@@ -230,7 +230,8 @@ export const addItem = async (
     inventory: TInventoryDatabaseDocument,
     typeName: string,
     quantity: number = 1,
-    premiumPurchase: boolean = false
+    premiumPurchase: boolean = false,
+    seed?: bigint
 ): Promise<IInventoryChanges> => {
     // Bundles are technically StoreItems but a) they don't have a normal counterpart, and b) they are used in non-StoreItem contexts, e.g. email attachments.
     if (typeName in ExportBundles) {
@@ -380,21 +381,31 @@ export const addItem = async (
                 defaultOverwrites.Features = EquipmentFeatures.DOUBLE_CAPACITY;
             }
             if (weapon.maxLevelCap == 40 && typeName.indexOf("BallasSword") == -1) {
+                if (!seed) {
+                    seed = BigInt(Math.round(Math.random() * Number.MAX_SAFE_INTEGER));
+                }
+                const rng = new SRng(seed);
+                const tag = rng.randomElement([
+                    "InnateElectricityDamage",
+                    "InnateFreezeDamage",
+                    "InnateHeatDamage",
+                    "InnateImpactDamage",
+                    "InnateMagDamage",
+                    "InnateRadDamage",
+                    "InnateToxinDamage"
+                ]);
+                const WeaponUpgradeValueAttenuationExponent = 2.25;
+                let value = Math.pow(rng.randomFloat(), WeaponUpgradeValueAttenuationExponent);
+                if (value >= 0.941428) {
+                    value = 1;
+                }
                 defaultOverwrites.UpgradeType = "/Lotus/Weapons/Grineer/KuvaLich/Upgrades/InnateDamageRandomMod";
                 defaultOverwrites.UpgradeFingerprint = JSON.stringify({
                     compat: typeName,
                     buffs: [
                         {
-                            Tag: getRandomElement([
-                                "InnateElectricityDamage",
-                                "InnateFreezeDamage",
-                                "InnateHeatDamage",
-                                "InnateImpactDamage",
-                                "InnateMagDamage",
-                                "InnateRadDamage",
-                                "InnateToxinDamage"
-                            ]),
-                            Value: Math.trunc(Math.random() * 0x40000000)
+                            Tag: tag,
+                            Value: Math.trunc(value * 0x40000000)
                         }
                     ]
                 });

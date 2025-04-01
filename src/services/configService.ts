@@ -1,10 +1,9 @@
-import path from "path";
 import fs from "fs";
 import fsPromises from "fs/promises";
+import path from "path";
+import { repoDir } from "@/src/helpers/pathHelper";
 import { logger } from "@/src/utils/logger";
 
-const rootDir = path.join(__dirname, "../..");
-const repoDir = path.basename(rootDir) == "build" ? path.join(rootDir, "..") : rootDir;
 const configPath = path.join(repoDir, "config.json");
 export const config = JSON.parse(fs.readFileSync(configPath, "utf-8")) as IConfig;
 

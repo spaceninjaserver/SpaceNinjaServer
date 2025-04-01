@@ -51,6 +51,7 @@ export const handlePurchase = async (
     logger.debug("purchase request", purchaseRequest);
 
     const prePurchaseInventoryChanges: IInventoryChanges = {};
+    let seed: bigint | undefined;
     if (purchaseRequest.PurchaseParams.Source == 7) {
         const rawManifest = getVendorManifestByOid(purchaseRequest.PurchaseParams.SourceId!);
         if (rawManifest) {
@@ -73,6 +74,9 @@ export const handlePurchase = async (
                     purchaseRequest.PurchaseParams.Quantity,
                     prePurchaseInventoryChanges
                 );
+            }
+            if (offer.LocTagRandSeed !== undefined) {
+                seed = BigInt(offer.LocTagRandSeed);
             }
             if (!config.noVendorPurchaseLimits && ItemId) {
                 inventory.RecentVendorPurchases ??= [];
@@ -136,7 +140,10 @@ export const handlePurchase = async (
     const purchaseResponse = await handleStoreItemAcquisition(
         purchaseRequest.PurchaseParams.StoreItem,
         inventory,
-        purchaseRequest.PurchaseParams.Quantity
+        purchaseRequest.PurchaseParams.Quantity,
+        undefined,
+        undefined,
+        seed
     );
     combineInventoryChanges(purchaseResponse.InventoryChanges, prePurchaseInventoryChanges);
 
@@ -324,7 +331,8 @@ export const handleStoreItemAcquisition = async (
     inventory: TInventoryDatabaseDocument,
     quantity: number = 1,
     durability: TRarity = "COMMON",
-    ignorePurchaseQuantity: boolean = false
+    ignorePurchaseQuantity: boolean = false,
+    seed?: bigint
 ): Promise<IPurchaseResponse> => {
     let purchaseResponse = {
         InventoryChanges: {}
@@ -345,7 +353,7 @@ export const handleStoreItemAcquisition = async (
         }
         switch (storeCategory) {
             default: {
-                purchaseResponse = { InventoryChanges: await addItem(inventory, internalName, quantity, true) };
+                purchaseResponse = { InventoryChanges: await addItem(inventory, internalName, quantity, true, seed) };
                 break;
             }
             case "Types":

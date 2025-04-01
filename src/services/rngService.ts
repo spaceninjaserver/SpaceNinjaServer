@@ -127,4 +127,13 @@ export class SRng {
         }
         return min;
     }
+
+    randomElement<T>(arr: T[]): T {
+        return arr[this.randomInt(0, arr.length - 1)];
+    }
+
+    randomFloat(): number {
+        this.state = (0x5851f42d4c957f2dn * this.state + 0x14057b7ef767814fn) & 0xffffffffffffffffn;
+        return (Number(this.state >> 38n) & 0xffffff) * 0.000000059604645;
+    }
 }

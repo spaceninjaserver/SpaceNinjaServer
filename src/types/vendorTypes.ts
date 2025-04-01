@@ -19,6 +19,7 @@ interface IItemManifest {
     PurchaseQuantityLimit?: number;
     RotatedWeekly?: boolean;
     AllowMultipurchase: boolean;
+    LocTagRandSeed?: number | bigint;
     Id: IOid;
 }
 
