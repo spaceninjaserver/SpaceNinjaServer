@@ -7,7 +7,7 @@
     "start": "node --import ./build/src/pathman.js build/src/index.js",
     "dev": "ts-node-dev --openssl-legacy-provider -r tsconfig-paths/register src/index.ts ",
     "build": "tsc --incremental && ncp static/webui build/static/webui",
-    "verify": "tsc --noEmit",
+    "verify": "tsgo --noEmit",
     "lint": "eslint --ext .ts .",
     "lint:fix": "eslint --fix --ext .ts .",
     "prettier": "prettier --write .",
@@ -30,6 +30,7 @@
     "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
+    "@rxliuli/tsgo": "^2025.3.31",
     "@typescript-eslint/eslint-plugin": "^8.28.0",
     "@typescript-eslint/parser": "^8.28.0",
     "eslint": "^8",
