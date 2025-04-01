@@ -31,6 +31,14 @@ export interface IStatsClient {
     CaliberChicksScore?: number;
     OlliesCrashCourseScore?: number;
     DojoObstacleScore?: number;
+
+    // not in schema
+    PVP?: {
+        suitDeaths?: number;
+        suitKills?: number;
+        weaponKills?: number;
+        type: string;
+    }[];
 }
 
 export interface IStatsDatabase extends IStatsClient {
