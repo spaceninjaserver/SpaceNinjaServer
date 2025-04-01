@@ -89,19 +89,39 @@ export interface IGuildMemberDatabase {
     guildId: Types.ObjectId;
     status: number;
     rank: number;
+    RequestMsg?: string;
+    RequestExpiry?: Date;
     RegularCreditsContributed?: number;
     PremiumCreditsContributed?: number;
     MiscItemsContributed?: IMiscItem[];
     ShipDecorationsContributed?: ITypeCount[];
 }
 
-export interface IGuildMemberClient {
+interface IFriendInfo {
     _id: IOid;
-    Status: number;
-    Rank: number;
     DisplayName?: string;
+    PlatformNames?: string[];
+    PlatformAccountId?: string;
+    Status: number;
     ActiveAvatarImageType?: string;
+    LastLogin?: IMongoDate;
     PlayerLevel?: number;
+    Suffix?: number;
+    Note?: string;
+    Favorite?: boolean;
+    NewRequest?: boolean;
+}
+
+// GuildMemberInfo
+export interface IGuildMemberClient extends IFriendInfo {
+    Rank: number;
+    Joined?: IMongoDate;
+    RequestExpiry?: IMongoDate;
+    RegularCreditsContributed?: number;
+    PremiumCreditsContributed?: number;
+    MiscItemsContributed?: IMiscItem[];
+    ConsumablesContributed?: ITypeCount[];
+    ShipDecorationsContributed?: ITypeCount[];
 }
 
 export interface IGuildVault {

@@ -2,6 +2,7 @@ import { GuildMember } from "@/src/models/guildModel";
 import { Inbox } from "@/src/models/inboxModel";
 import { Account } from "@/src/models/loginModel";
 import { deleteGuild, getGuildForRequest, hasGuildPermission, removeDojoKeyItems } from "@/src/services/guildService";
+import { createMessage } from "@/src/services/inboxService";
 import { getInventory } from "@/src/services/inventoryService";
 import { getAccountForRequest, getSuffixedName } from "@/src/services/loginService";
 import { GuildPermission } from "@/src/types/guildTypes";
@@ -26,6 +27,26 @@ export const removeFromGuildController: RequestHandler = async (req, res) => {
             inventory.GuildId = undefined;
             removeDojoKeyItems(inventory);
             await inventory.save();
+        } else if (guildMember.status == 1) {
+            // TOVERIFY: Is this inbox message actually sent on live?
+            await createMessage(guildMember.accountId, [
+                {
+                    sndr: "/Lotus/Language/Bosses/Ordis",
+                    msg: "/Lotus/Language/Clan/RejectedFromClan",
+                    sub: "/Lotus/Language/Clan/RejectedFromClanHeader",
+                    arg: [
+                        {
+                            Key: "PLAYER_NAME",
+                            Tag: (await Account.findOne({ _id: guildMember.accountId }, "DisplayName"))!.DisplayName
+                        },
+                        {
+                            Key: "CLAN_NAME",
+                            Tag: guild.Name
+                        }
+                    ]
+                    // TOVERIFY: If this message is sent on live, is it highPriority?
+                }
+            ]);
         } else if (guildMember.status == 2) {
             // Delete the inbox message for the invite
             await Inbox.deleteOne({

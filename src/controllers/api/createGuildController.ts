@@ -9,6 +9,9 @@ export const createGuildController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const payload = getJSONfromString<ICreateGuildRequest>(String(req.body));
 
+    // Remove pending applications for this account
+    await GuildMember.deleteMany({ accountId, status: 1 });
+
     // Create guild on database
     const guild = new Guild({
         Name: await createUniqueClanName(payload.guildName)

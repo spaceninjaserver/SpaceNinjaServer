@@ -57,7 +57,9 @@ export const getGuildClient = async (guild: TGuildDatabaseDocument, accountId: s
         const member: IGuildMemberClient = {
             _id: toOid(guildMember.accountId),
             Rank: guildMember.rank,
-            Status: guildMember.status
+            Status: guildMember.status,
+            Note: guildMember.RequestMsg,
+            RequestExpiry: guildMember.RequestExpiry ? toMongoDate(guildMember.RequestExpiry) : undefined
         };
         if (guildMember.accountId.equals(accountId)) {
             missingEntry = false;

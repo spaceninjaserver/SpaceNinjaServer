@@ -218,6 +218,8 @@ const guildMemberSchema = new Schema<IGuildMemberDatabase>({
     guildId: Types.ObjectId,
     status: { type: Number, required: true },
     rank: { type: Number, default: 7 },
+    RequestMsg: String,
+    RequestExpiry: Date,
     RegularCreditsContributed: Number,
     PremiumCreditsContributed: Number,
     MiscItemsContributed: { type: [typeCountSchema], default: undefined },
@@ -225,6 +227,7 @@ const guildMemberSchema = new Schema<IGuildMemberDatabase>({
 });
 
 guildMemberSchema.index({ accountId: 1, guildId: 1 }, { unique: true });
+guildMemberSchema.index({ RequestExpiry: 1 }, { expireAfterSeconds: 0 });
 
 export const GuildMember = model<IGuildMemberDatabase>("GuildMember", guildMemberSchema);
 

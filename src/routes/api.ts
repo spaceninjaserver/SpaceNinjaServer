@@ -188,6 +188,7 @@ apiRouter.post("/claimCompletedRecipe.php", claimCompletedRecipeController);
 apiRouter.post("/clearDialogueHistory.php", clearDialogueHistoryController);
 apiRouter.post("/clearNewEpisodeReward.php", clearNewEpisodeRewardController);
 apiRouter.post("/completeRandomModChallenge.php", completeRandomModChallengeController);
+apiRouter.post("/confirmGuildInvitation.php", confirmGuildInvitationController);
 apiRouter.post("/contributeGuildClass.php", contributeGuildClassController);
 apiRouter.post("/contributeToDojoComponent.php", contributeToDojoComponentController);
 apiRouter.post("/contributeToVault.php", contributeToVaultController);
