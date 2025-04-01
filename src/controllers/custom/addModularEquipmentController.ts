@@ -64,7 +64,7 @@ export const addModularEquipmentController: RequestHandler = async (req, res) =>
             "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetMeleeWeaponPS"
         ]
     };
-    const defaultWeapons = defaultWeaponsMap[request.ItemType];
+    const defaultWeapons = defaultWeaponsMap[request.ItemType] as string[] | undefined;
     if (defaultWeapons) {
         for (const defaultWeapon of defaultWeapons) {
             const category = ExportWeapons[defaultWeapon].productCategory;
