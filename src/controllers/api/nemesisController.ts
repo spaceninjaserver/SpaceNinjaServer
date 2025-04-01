@@ -27,7 +27,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
         const destDamage = 0.25 + (destFingerprint.buffs[0].Value / 0x3fffffff) * (0.6 - 0.25);
         const sourceDamage = 0.25 + (sourceFingerprint.buffs[0].Value / 0x3fffffff) * (0.6 - 0.25);
         let newDamage = Math.max(destDamage, sourceDamage) * 1.1;
-        if (newDamage >= 0.58) {
+        if (newDamage >= 0.5794998) {
             newDamage = 0.6;
         }
         destFingerprint.buffs[0].Value = Math.trunc(((newDamage - 0.25) / (0.6 - 0.25)) * 0x3fffffff);
