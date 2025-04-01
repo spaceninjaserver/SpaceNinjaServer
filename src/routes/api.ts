@@ -86,6 +86,7 @@ import { projectionManagerController } from "@/src/controllers/api/projectionMan
 import { purchaseController } from "@/src/controllers/api/purchaseController";
 import { queueDojoComponentDestructionController } from "@/src/controllers/api/queueDojoComponentDestructionController";
 import { redeemPromoCodeController } from "@/src/controllers/api/redeemPromoCodeController";
+import { releasePetController } from "@/src/controllers/api/releasePetController";
 import { removeFromGuildController } from "@/src/controllers/api/removeFromGuildController";
 import { rerollRandomModController } from "@/src/controllers/api/rerollRandomModController";
 import { retrievePetFromStasisController } from "@/src/controllers/api/retrievePetFromStasisController";
@@ -236,6 +237,7 @@ apiRouter.post("/postGuildAdvertisement.php", postGuildAdvertisementController);
 apiRouter.post("/projectionManager.php", projectionManagerController);
 apiRouter.post("/purchase.php", purchaseController);
 apiRouter.post("/redeemPromoCode.php", redeemPromoCodeController);
+apiRouter.post("/releasePet.php", releasePetController);
 apiRouter.post("/removeFromGuild.php", removeFromGuildController);
 apiRouter.post("/rerollRandomMod.php", rerollRandomModController);
 apiRouter.post("/retrievePetFromStasis.php", retrievePetFromStasisController);
