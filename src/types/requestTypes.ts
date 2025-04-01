@@ -114,7 +114,7 @@ export type IMissionInventoryUpdateRequest = {
     UnlockWeapons?: boolean; // sent when recovered weapons from zanuka capture
     IncHarvester?: boolean; // sent when recovered weapons from zanuka capture
     CurrentLoadOutIds?: {
-        LoadOuts: ILoadOutPresets; // sent when recovered weapons from zanuka capture
+        LoadOuts?: ILoadOutPresets; // sent when recovered weapons from zanuka capture
     };
 } & {
     [K in TEquipmentKey]?: IEquipmentClient[];

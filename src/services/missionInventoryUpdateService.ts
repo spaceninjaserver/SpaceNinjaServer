@@ -414,17 +414,19 @@ export const addMissionInventoryUpdates = async (
                 break;
             }
             case "CurrentLoadOutIds": {
-                const loadout = await Loadout.findOne({ loadoutOwnerId: inventory.accountOwnerId });
-                if (loadout) {
-                    for (const [loadoutId, loadoutConfig] of Object.entries(value.LoadOuts.NORMAL)) {
-                        const { ItemId, ...loadoutConfigItemIdRemoved } = loadoutConfig;
-                        const loadoutConfigDatabase: ILoadoutConfigDatabase = {
-                            _id: new Types.ObjectId(ItemId.$oid),
-                            ...loadoutConfigItemIdRemoved
-                        };
-                        loadout.NORMAL.id(loadoutId)!.overwrite(loadoutConfigDatabase);
+                if (value.LoadOuts) {
+                    const loadout = await Loadout.findOne({ loadoutOwnerId: inventory.accountOwnerId });
+                    if (loadout) {
+                        for (const [loadoutId, loadoutConfig] of Object.entries(value.LoadOuts.NORMAL)) {
+                            const { ItemId, ...loadoutConfigItemIdRemoved } = loadoutConfig;
+                            const loadoutConfigDatabase: ILoadoutConfigDatabase = {
+                                _id: new Types.ObjectId(ItemId.$oid),
+                                ...loadoutConfigItemIdRemoved
+                            };
+                            loadout.NORMAL.id(loadoutId)!.overwrite(loadoutConfigDatabase);
+                        }
+                        await loadout.save();
                     }
-                    await loadout.save();
                 }
                 break;
             }
