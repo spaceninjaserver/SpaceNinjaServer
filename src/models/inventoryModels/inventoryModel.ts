@@ -102,6 +102,16 @@ import { EquipmentSelectionSchema } from "./loadoutModel";
 
 export const typeCountSchema = new Schema<ITypeCount>({ ItemType: String, ItemCount: Number }, { _id: false });
 
+typeCountSchema.set("toJSON", {
+    transform(_doc, obj) {
+        if (obj.ItemCount > 2147483647) {
+            obj.ItemCount = 2147483647;
+        } else if (obj.ItemCount < -2147483648) {
+            obj.ItemCount = -2147483648;
+        }
+    }
+});
+
 const focusXPSchema = new Schema<IFocusXP>(
     {
         AP_POWER: Number,
