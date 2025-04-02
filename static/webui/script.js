@@ -157,6 +157,15 @@ function setLanguage(lang) {
     }
 }
 
+const webUiModularWeapons = [
+    "/Lotus/Weapons/Sentients/OperatorAmplifiers/OperatorAmpWeapon",
+    "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
+    "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary",
+    "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary",
+    "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetPowerSuit",
+    "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetPowerSuit"
+];
+
 let uniqueLevelCaps = {};
 function fetchItemList() {
     window.itemListPromise = new Promise(resolve => {
@@ -824,7 +833,9 @@ function addMissingEquipment(categories) {
                     "#" + category + "-list [data-item-type='" + elm.getAttribute("data-key") + "']"
                 )
             ) {
-                requests.push({ ItemType: elm.getAttribute("data-key"), ItemCount: 1 });
+                if (!webUiModularWeapons.includes(elm.getAttribute("data-key"))) {
+                    requests.push({ ItemType: elm.getAttribute("data-key"), ItemCount: 1 });
+                }
             }
         });
     });
@@ -1413,31 +1424,15 @@ function toast(text) {
 }
 
 function handleModularSelection(category) {
-    const modularWeapons = [
-        "/Lotus/Weapons/Sentients/OperatorAmplifiers/OperatorAmpWeapon",
-        "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
-        "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary",
-        "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary",
-        "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetPowerSuit",
-        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetPowerSuit"
-    ];
     const itemType = getKey(document.getElementById("acquire-type-" + category));
 
-    if (modularWeapons.includes(itemType)) {
+    if (webUiModularWeapons.includes(itemType)) {
         doAcquireModularEquipment(category, itemType);
     } else {
         doAcquireEquipment(category);
     }
 }
 {
-    const modularWeapons = [
-        "/Lotus/Weapons/Sentients/OperatorAmplifiers/OperatorAmpWeapon",
-        "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
-        "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary",
-        "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary",
-        "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetPowerSuit",
-        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetPowerSuit"
-    ];
     const supportedModularInventoryCategory = ["OperatorAmps", "Melee", "LongGuns", "Pistols", "MoaPets"];
     supportedModularInventoryCategory.forEach(inventoryCategory => {
         document.getElementById("acquire-type-" + inventoryCategory).addEventListener("input", function () {
@@ -1448,7 +1443,7 @@ function handleModularSelection(category) {
                     : null;
             const key = getKey(this);
 
-            if (modularWeapons.includes(key)) {
+            if (webUiModularWeapons.includes(key)) {
                 if (key === "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetPowerSuit" && modularFieldsZanuka) {
                     modularFields.style.display = "none";
                     modularFieldsZanuka.style.display = "";
