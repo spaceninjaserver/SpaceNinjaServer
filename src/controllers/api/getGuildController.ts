@@ -5,7 +5,7 @@ import { logger } from "@/src/utils/logger";
 import { getInventory } from "@/src/services/inventoryService";
 import { createUniqueClanName, getGuildClient } from "@/src/services/guildService";
 
-const getGuildController: RequestHandler = async (req, res) => {
+export const getGuildController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId, "GuildId");
     if (inventory.GuildId) {
@@ -28,7 +28,5 @@ const getGuildController: RequestHandler = async (req, res) => {
             return;
         }
     }
-    res.sendStatus(200);
+    res.end();
 };
-
-export { getGuildController };

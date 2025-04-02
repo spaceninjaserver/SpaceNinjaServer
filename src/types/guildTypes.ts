@@ -18,6 +18,9 @@ export interface IGuildClient {
     IsContributor: boolean;
     NumContributors: number;
     CeremonyResetDate?: IMongoDate;
+    CrossPlatformEnabled?: boolean;
+    AutoContributeFromVault?: boolean;
+    AllianceId?: IOid;
 }
 
 export interface IGuildDatabase {
@@ -29,6 +32,7 @@ export interface IGuildDatabase {
     TradeTax: number;
     Tier: number;
     Emblem?: boolean;
+    AllianceId?: Types.ObjectId;
 
     DojoComponents: IDojoComponentDatabase[];
     DojoCapacity: number;
@@ -60,21 +64,21 @@ export interface IGuildDatabase {
 export interface ILongMOTD {
     message: string;
     authorName: string;
-    //authorGuildName: "";
+    authorGuildName?: "";
 }
 
 // 32 seems to be reserved
 export enum GuildPermission {
-    Ruler = 1, // Change clan hierarchy
+    Ruler = 1, // Clan: Change hierarchy. Alliance: Kick clans.
     Advertiser = 8192,
-    Recruiter = 2, // Invite members
+    Recruiter = 2, // Send invites (Clans & Alliances)
     Regulator = 4, // Kick members
-    Promoter = 8, // Promote and demote members
+    Promoter = 8, // Clan: Promote and demote members. Alliance: Change clan permissions.
     Architect = 16, // Create and destroy rooms
     Decorator = 1024, // Create and destroy decos
-    Treasurer = 64, // Contribute from vault and edit tax rate
+    Treasurer = 64, // Clan: Contribute from vault and edit tax rate. Alliance: Divvy vault.
     Tech = 128, // Queue research
-    ChatModerator = 512,
+    ChatModerator = 512, // (Clans & Alliances)
     Herald = 2048, // Change MOTD
     Fabricator = 4096 // Replicate research
 }
@@ -268,3 +272,51 @@ export interface IGuildAdDatabase {
     RecruitMsg: string;
     Tier: number;
 }
+
+export interface IAllianceClient {
+    _id: IOid;
+    Name: string;
+    MOTD?: ILongMOTD;
+    LongMOTD?: ILongMOTD;
+    Emblem?: boolean;
+    CrossPlatformEnabled?: boolean;
+    Clans: IAllianceMemberClient[];
+    OriginalPlatform?: number;
+}
+
+export interface IAllianceDatabase {
+    _id: Types.ObjectId;
+    Name: string;
+    MOTD?: ILongMOTD;
+    LongMOTD?: ILongMOTD;
+    Emblem?: boolean;
+}
+
+export interface IAllianceMemberClient {
+    _id: IOid;
+    Name: string;
+    Tier: number;
+    Pending: boolean;
+    Emblem?: boolean;
+    Permissions: number;
+    MemberCount: number;
+    ClanLeader?: string;
+    ClanLeaderId?: IOid;
+    OriginalPlatform?: number;
+}
+
+export interface IAllianceMemberDatabase {
+    allianceId: Types.ObjectId;
+    guildId: Types.ObjectId;
+    Pending: boolean;
+    Permissions: number;
+}
+
+// TODO: Alliance chat permissions
+// TODO: POST /api/addToAlliance.php: {"clanName":"abc"}
+// TODO: GET /api/divvyAllianceVault.php?accountId=6633b81e9dba0b714f28ff02&nonce=5702391171614479&ct=MSI&guildId=663e9be9f741eeb5782f9df0&allianceId=000000000000000000000069&credits=1
+// TODO: GET /api/divvyAllianceVault.php?accountId=6633b81e9dba0b714f28ff02&nonce=5702391171614479&ct=MSI&guildId=663e9be9f741eeb5782f9df0&allianceId=000000000000000000000069&credits=0
+// TODO: GET /api/removeFromAlliance.php?accountId=6633b81e9dba0b714f28ff02&nonce=5702391171614479&ct=MSI&guildId=663e9be9f741eeb5782f9df0
+// TODO: GET /api/setAllianceGuildPermissions.php?accountId=6633b81e9dba0b714f28ff02&nonce=5702391171614479&ct=MSI&guildId=000000000000000000000042&perms=2
+// TODO: Handle alliance in contributeToVault
+// TODO: Handle alliance in setGuildMotd

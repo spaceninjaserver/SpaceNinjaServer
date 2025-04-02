@@ -11,7 +11,9 @@ import {
     IGuildLogEntryRoster,
     IGuildLogEntryContributable,
     IDojoLeaderboardEntry,
-    IGuildAdDatabase
+    IGuildAdDatabase,
+    IAllianceDatabase,
+    IAllianceMemberDatabase
 } from "@/src/types/guildTypes";
 import { Document, Model, model, Schema, Types } from "mongoose";
 import { fusionTreasuresSchema, typeCountSchema } from "./inventoryModels/inventoryModel";
@@ -167,6 +169,7 @@ const guildSchema = new Schema<IGuildDatabase>(
         TradeTax: { type: Number, default: 0 },
         Tier: { type: Number, default: 1 },
         Emblem: { type: Boolean },
+        AllianceId: { type: Types.ObjectId },
         DojoComponents: { type: [dojoComponentSchema], default: [] },
         DojoCapacity: { type: Number, default: 100 },
         DojoEnergy: { type: Number, default: 5 },
@@ -246,3 +249,25 @@ guildAdSchema.index({ GuildId: 1 }, { unique: true });
 guildAdSchema.index({ Expiry: 1 }, { expireAfterSeconds: 0 });
 
 export const GuildAd = model<IGuildAdDatabase>("GuildAd", guildAdSchema);
+
+const allianceSchema = new Schema<IAllianceDatabase>({
+    Name: String,
+    MOTD: longMOTDSchema,
+    LongMOTD: longMOTDSchema,
+    Emblem: Boolean
+});
+
+allianceSchema.index({ Name: 1 }, { unique: true });
+
+export const Alliance = model<IAllianceDatabase>("Alliance", allianceSchema);
+
+const allianceMemberSchema = new Schema<IAllianceMemberDatabase>({
+    allianceId: Schema.Types.ObjectId,
+    guildId: Schema.Types.ObjectId,
+    Pending: Boolean,
+    Permissions: Number
+});
+
+guildMemberSchema.index({ allianceId: 1, guildId: 1 }, { unique: true });
+
+export const AllianceMember = model<IAllianceMemberDatabase>("AllianceMember", allianceMemberSchema);

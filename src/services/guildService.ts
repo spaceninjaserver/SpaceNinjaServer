@@ -1,10 +1,13 @@
 import { Request } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getInventory } from "@/src/services/inventoryService";
-import { Guild, GuildAd, GuildMember, TGuildDatabaseDocument } from "@/src/models/guildModel";
+import { AllianceMember, Guild, GuildAd, GuildMember, TGuildDatabaseDocument } from "@/src/models/guildModel";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import {
     GuildPermission,
+    IAllianceClient,
+    IAllianceDatabase,
+    IAllianceMemberClient,
     IDojoClient,
     IDojoComponentClient,
     IDojoComponentDatabase,
@@ -99,7 +102,8 @@ export const getGuildClient = async (guild: TGuildDatabaseDocument, accountId: s
         XP: guild.XP,
         IsContributor: !!guild.CeremonyContributors?.find(x => x.equals(accountId)),
         NumContributors: guild.CeremonyContributors?.length ?? 0,
-        CeremonyResetDate: guild.CeremonyResetDate ? toMongoDate(guild.CeremonyResetDate) : undefined
+        CeremonyResetDate: guild.CeremonyResetDate ? toMongoDate(guild.CeremonyResetDate) : undefined,
+        AllianceId: guild.AllianceId ? toOid(guild.AllianceId) : undefined
     };
 };
 
@@ -549,4 +553,34 @@ export const deleteGuild = async (guildId: Types.ObjectId): Promise<void> => {
     });
 
     await GuildAd.deleteOne({ GuildId: guildId });
+
+    await AllianceMember.deleteMany({ guildId });
+
+    // TODO: If this guild was the founding guild of an alliance (ruler permission), that would need to be forcefully deleted now as well.
+};
+
+export const getAllianceClient = async (
+    alliance: IAllianceDatabase,
+    guild: TGuildDatabaseDocument
+): Promise<IAllianceClient> => {
+    const allianceMembers = await AllianceMember.find({ allianceId: alliance._id });
+    const clans: IAllianceMemberClient[] = [];
+    for (const allianceMember of allianceMembers) {
+        const memberGuild = allianceMember.guildId.equals(guild._id)
+            ? guild
+            : (await Guild.findById(allianceMember.guildId))!;
+        clans.push({
+            _id: toOid(allianceMember.guildId),
+            Name: memberGuild.Name,
+            Tier: memberGuild.Tier,
+            Pending: allianceMember.Pending,
+            Permissions: allianceMember.Permissions,
+            MemberCount: await GuildMember.countDocuments({ guildId: memberGuild._id, status: 0 })
+        });
+    }
+    return {
+        _id: toOid(alliance._id),
+        Name: alliance.Name,
+        Clans: clans
+    };
 };

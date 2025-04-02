@@ -22,6 +22,7 @@ import { confirmGuildInvitationController } from "@/src/controllers/api/confirmG
 import { contributeGuildClassController } from "@/src/controllers/api/contributeGuildClassController";
 import { contributeToDojoComponentController } from "@/src/controllers/api/contributeToDojoComponentController";
 import { contributeToVaultController } from "@/src/controllers/api/contributeToVaultController";
+import { createAllianceController } from "@/src/controllers/api/createAllianceController";
 import { createGuildController } from "@/src/controllers/api/createGuildController";
 import { creditsController } from "@/src/controllers/api/creditsController";
 import { customizeGuildRanksController } from "@/src/controllers/api/customizeGuildRanksController";
@@ -193,6 +194,7 @@ apiRouter.post("/confirmGuildInvitation.php", confirmGuildInvitationController);
 apiRouter.post("/contributeGuildClass.php", contributeGuildClassController);
 apiRouter.post("/contributeToDojoComponent.php", contributeToDojoComponentController);
 apiRouter.post("/contributeToVault.php", contributeToVaultController);
+apiRouter.post("/createAlliance.php", createAllianceController);
 apiRouter.post("/createGuild.php", createGuildController);
 apiRouter.post("/customizeGuildRanks.php", customizeGuildRanksController);
 apiRouter.post("/customObstacleCourseLeaderboard.php", customObstacleCourseLeaderboardController);
