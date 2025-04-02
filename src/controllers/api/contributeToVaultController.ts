@@ -1,4 +1,4 @@
-import { GuildMember } from "@/src/models/guildModel";
+import { Alliance, GuildMember } from "@/src/models/guildModel";
 import {
     addGuildMemberMiscItemContribution,
     addVaultMiscItems,
@@ -19,12 +19,27 @@ export const contributeToVaultController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId, "GuildId RegularCredits MiscItems ShipDecorations FusionTreasures");
     const guild = await getGuildForRequestEx(req, inventory);
+    const request = JSON.parse(String(req.body)) as IContributeToVaultRequest;
+
+    if (request.Alliance) {
+        const alliance = (await Alliance.findById(guild.AllianceId!))!;
+        alliance.VaultRegularCredits ??= 0;
+        alliance.VaultRegularCredits += request.RegularCredits;
+        if (request.FromVault) {
+            guild.VaultRegularCredits! -= request.RegularCredits;
+            await Promise.all([guild.save(), alliance.save()]);
+        } else {
+            updateCurrency(inventory, request.RegularCredits, false);
+            await Promise.all([inventory.save(), alliance.save()]);
+        }
+        res.end();
+        return;
+    }
+
     const guildMember = (await GuildMember.findOne(
         { accountId, guildId: guild._id },
         "RegularCreditsContributed MiscItemsContributed ShipDecorationsContributed"
     ))!;
-    const request = JSON.parse(String(req.body)) as IContributeToVaultRequest;
-
     if (request.RegularCredits) {
         updateCurrency(inventory, request.RegularCredits, false);
 
@@ -69,4 +84,6 @@ interface IContributeToVaultRequest {
     MiscItems: IMiscItem[];
     ShipDecorations: ITypeCount[];
     FusionTreasures: IFusionTreasure[];
+    Alliance?: boolean;
+    FromVault?: boolean;
 }

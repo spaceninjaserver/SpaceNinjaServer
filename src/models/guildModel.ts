@@ -254,7 +254,8 @@ const allianceSchema = new Schema<IAllianceDatabase>({
     Name: String,
     MOTD: longMOTDSchema,
     LongMOTD: longMOTDSchema,
-    Emblem: Boolean
+    Emblem: Boolean,
+    VaultRegularCredits: Number
 });
 
 allianceSchema.index({ Name: 1 }, { unique: true });
