@@ -11,7 +11,7 @@ import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addMiscItems, addRecipes, getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { getRecipeByResult } from "@/src/services/itemDataService";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
-import { addInfestedFoundryXP } from "./infestedFoundryController";
+import { addInfestedFoundryXP, applyCheatsToInfestedFoundry } from "./infestedFoundryController";
 import { config } from "@/src/services/configService";
 
 export const upgradesController: RequestHandler = async (req, res) => {
@@ -25,7 +25,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
             operation.UpgradeRequirement == "/Lotus/Types/Items/MiscItems/CustomizationSlotUnlocker"
         ) {
             updateCurrency(inventory, 10, true);
-        } else {
+        } else if (operation.OperationType != "UOT_ABILITY_OVERRIDE") {
             addMiscItems(inventory, [
                 {
                     ItemType: operation.UpgradeRequirement,
@@ -66,6 +66,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
 
             inventoryChanges.Recipes = recipeChanges;
             inventoryChanges.InfestedFoundry = inventory.toJSON<IInventoryClient>().InfestedFoundry;
+            applyCheatsToInfestedFoundry(inventoryChanges.InfestedFoundry!);
         } else
             switch (operation.UpgradeRequirement) {
                 case "/Lotus/Types/Items/MiscItems/OrokinReactor":
