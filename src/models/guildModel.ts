@@ -268,6 +268,6 @@ const allianceMemberSchema = new Schema<IAllianceMemberDatabase>({
     Permissions: Number
 });
 
-guildMemberSchema.index({ allianceId: 1, guildId: 1 }, { unique: true });
+allianceMemberSchema.index({ allianceId: 1, guildId: 1 }, { unique: true });
 
 export const AllianceMember = model<IAllianceMemberDatabase>("AllianceMember", allianceMemberSchema);
