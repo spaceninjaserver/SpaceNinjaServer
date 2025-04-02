@@ -1281,9 +1281,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         //Default RailJack
         CrewShipAmmo: [typeCountSchema],
-        CrewShipWeapons: [EquipmentSchema],
         CrewShipWeaponSkins: [upgradeSchema],
-        CrewShipSalvagedWeapons: [EquipmentSchema],
         CrewShipSalvagedWeaponSkins: [upgradeSchema],
 
         //RailJack Crew
