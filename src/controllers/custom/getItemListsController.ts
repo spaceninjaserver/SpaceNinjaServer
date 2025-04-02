@@ -115,6 +115,7 @@ const getItemListsController: RequestHandler = (req, response) => {
             }
         }
         if (
+            name &&
             uniqueName.substr(0, 30) != "/Lotus/Types/Game/Projections/" &&
             uniqueName != "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLanthornBundle"
         ) {
