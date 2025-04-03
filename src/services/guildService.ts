@@ -581,6 +581,8 @@ export const getAllianceClient = async (
     return {
         _id: toOid(alliance._id),
         Name: alliance.Name,
+        MOTD: alliance.MOTD,
+        LongMOTD: alliance.LongMOTD,
         Clans: clans,
         AllianceVault: {
             DojoRefundRegularCredits: alliance.VaultRegularCredits

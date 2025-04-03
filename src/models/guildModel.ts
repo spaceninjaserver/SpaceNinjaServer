@@ -71,7 +71,8 @@ const techProjectSchema = new Schema<ITechProjectDatabase>(
 const longMOTDSchema = new Schema<ILongMOTD>(
     {
         message: String,
-        authorName: String
+        authorName: String,
+        authorGuildName: String
     },
     { _id: false }
 );
