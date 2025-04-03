@@ -35,21 +35,17 @@ export const addToGuildController: RequestHandler = async (req, res) => {
             res.status(400).json("Invalid permission");
         }
 
-        if (
-            await GuildMember.exists({
+        try {
+            await GuildMember.insertOne({
                 accountId: account._id,
-                guildId: payload.GuildId.$oid
-            })
-        ) {
+                guildId: payload.GuildId.$oid,
+                status: 2 // outgoing invite
+            });
+        } catch (e) {
+            logger.debug(`guild invite failed due to ${String(e)}`);
             res.status(400).json("User already invited to clan");
             return;
         }
-
-        await GuildMember.insertOne({
-            accountId: account._id,
-            guildId: payload.GuildId.$oid,
-            status: 2 // outgoing invite
-        });
 
         const senderInventory = await getInventory(senderAccount._id.toString(), "ActiveAvatarImageType");
         await createMessage(account._id, [
@@ -92,7 +88,7 @@ export const addToGuildController: RequestHandler = async (req, res) => {
                 RequestExpiry: new Date(Date.now() + 14 * 86400 * 1000) // TOVERIFY: I can't find any good information about this with regards to live, but 2 weeks seem reasonable.
             });
         } catch (e) {
-            // Assuming this is "E11000 duplicate key error" due to the guildId-accountId unique index.
+            logger.debug(`alliance invite failed due to ${String(e)}`);
             res.status(400).send("Already requested");
         }
         res.end();
