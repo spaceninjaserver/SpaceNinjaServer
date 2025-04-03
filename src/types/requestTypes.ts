@@ -116,6 +116,8 @@ export type IMissionInventoryUpdateRequest = {
     CurrentLoadOutIds?: {
         LoadOuts?: ILoadOutPresets; // sent when recovered weapons from zanuka capture
     };
+    wagerTier?: number; // the index
+    creditsFee?: number; // the index
 } & {
     [K in TEquipmentKey]?: IEquipmentClient[];
 };

@@ -28,6 +28,7 @@ import {
     addRecipes,
     addShipDecorations,
     combineInventoryChanges,
+    updateCurrency,
     updateSyndicate
 } from "@/src/services/inventoryService";
 import { updateQuestKey } from "@/src/services/questService";
@@ -428,6 +429,12 @@ export const addMissionInventoryUpdates = async (
                         await loadout.save();
                     }
                 }
+                break;
+            }
+            case "creditsFee": {
+                updateCurrency(inventory, value, false);
+                inventoryChanges.RegularCredits ??= 0;
+                inventoryChanges.RegularCredits -= value;
                 break;
             }
             default:
