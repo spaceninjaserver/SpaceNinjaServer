@@ -1119,7 +1119,7 @@ export const addMiscItems = (inventory: TInventoryDatabaseDocument, itemsArray: 
 
         MiscItems[itemIndex].ItemCount += ItemCount;
 
-        if (ItemType == "/Lotus/Types/Items/MiscItems/ArgonCrystal") {
+        if (ItemType == "/Lotus/Types/Items/MiscItems/ArgonCrystal" && ItemCount > 0) {
             inventory.FoundToday ??= [];
             let foundTodayIndex = inventory.FoundToday.findIndex(x => x.ItemType == ItemType);
             if (foundTodayIndex == -1) {

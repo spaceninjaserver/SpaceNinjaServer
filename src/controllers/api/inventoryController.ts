@@ -51,9 +51,11 @@ export const inventoryController: RequestHandler = async (request, response) => 
                     if (numArgonCrystals == 0) {
                         break;
                     }
-                    const numStableArgonCrystals =
+                    const numStableArgonCrystals = Math.min(
+                        numArgonCrystals,
                         inventory.FoundToday?.find(x => x.ItemType == "/Lotus/Types/Items/MiscItems/ArgonCrystal")
-                            ?.ItemCount ?? 0;
+                            ?.ItemCount ?? 0
+                    );
                     const numDecayingArgonCrystals = numArgonCrystals - numStableArgonCrystals;
                     const numDecayingArgonCrystalsToRemove = Math.ceil(numDecayingArgonCrystals / 2);
                     logger.debug(`ticking argon crystals for day ${i + 1} of ${daysPassed}`, {
