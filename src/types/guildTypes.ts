@@ -32,6 +32,7 @@ export interface IGuildDatabase {
     TradeTax: number;
     Tier: number;
     Emblem?: boolean;
+    AutoContributeFromVault?: boolean;
     AllianceId?: Types.ObjectId;
 
     DojoComponents: IDojoComponentDatabase[];

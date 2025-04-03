@@ -1,4 +1,12 @@
-import { getDojoClient, getGuildForRequestEx, hasAccessToDojo, hasGuildPermission } from "@/src/services/guildService";
+import {
+    getDojoClient,
+    getGuildForRequestEx,
+    getVaultMiscItemCount,
+    hasAccessToDojo,
+    hasGuildPermission,
+    processDojoBuildMaterialsGathered,
+    scaleRequiredCount
+} from "@/src/services/guildService";
 import { getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { GuildPermission } from "@/src/types/guildTypes";
@@ -42,6 +50,36 @@ export const placeDecoInComponentController: RequestHandler = async (req, res) =
         }
         if (meta.price == 0 && meta.ingredients.length == 0) {
             deco.CompletionTime = new Date();
+        } else if (guild.AutoContributeFromVault && guild.VaultRegularCredits && guild.VaultMiscItems) {
+            if (guild.VaultRegularCredits >= scaleRequiredCount(guild.Tier, meta.price)) {
+                let enoughMiscItems = true;
+                for (const ingredient of meta.ingredients) {
+                    if (
+                        getVaultMiscItemCount(guild, ingredient.ItemType) <
+                        scaleRequiredCount(guild.Tier, ingredient.ItemCount)
+                    ) {
+                        enoughMiscItems = false;
+                        break;
+                    }
+                }
+                if (enoughMiscItems) {
+                    guild.VaultRegularCredits -= meta.price;
+                    deco.RegularCredits = meta.price;
+
+                    deco.MiscItems = [];
+                    for (const ingredient of meta.ingredients) {
+                        guild.VaultMiscItems.find(x => x.ItemType == ingredient.ItemType)!.ItemCount -=
+                            scaleRequiredCount(guild.Tier, ingredient.ItemCount);
+                        deco.MiscItems.push({
+                            ItemType: ingredient.ItemType,
+                            ItemCount: scaleRequiredCount(guild.Tier, ingredient.ItemCount)
+                        });
+                    }
+
+                    deco.CompletionTime = new Date(Date.now() + meta.time * 1000);
+                    processDojoBuildMaterialsGathered(guild, meta);
+                }
+            }
         }
     }
 

@@ -170,6 +170,7 @@ const guildSchema = new Schema<IGuildDatabase>(
         TradeTax: { type: Number, default: 0 },
         Tier: { type: Number, default: 1 },
         Emblem: { type: Boolean },
+        AutoContributeFromVault: { type: Boolean },
         AllianceId: { type: Types.ObjectId },
         DojoComponents: { type: [dojoComponentSchema], default: [] },
         DojoCapacity: { type: Number, default: 100 },
