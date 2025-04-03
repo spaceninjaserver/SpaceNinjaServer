@@ -537,7 +537,13 @@ export const addMissionRewards = async (
     }
 
     for (const reward of MissionRewards) {
-        const inventoryChange = await handleStoreItemAcquisition(reward.StoreItem, inventory, reward.ItemCount);
+        const inventoryChange = await handleStoreItemAcquisition(
+            reward.StoreItem,
+            inventory,
+            reward.ItemCount,
+            undefined,
+            true
+        );
         //TODO: combineInventoryChanges improve type safety, merging 2 of the same item?
         //TODO: check for the case when two of the same item are added, combineInventoryChanges should merge them, but the client also merges them
         //TODO: some conditional types to rule out binchanges?
