@@ -130,73 +130,56 @@ export const completeQuest = async (inventory: TInventoryDatabaseDocument, quest
         throw new Error(`Quest ${questKey} does not contain chain stages`);
     }
 
-    const chainStageTotal = ExportKeys[questKey].chainStages?.length ?? 0;
+    const chainStageTotal = chainStages.length;
 
     const existingQuestKey = inventory.QuestKeys.find(qk => qk.ItemType === questKey);
+
+    const startingStage = Math.max((existingQuestKey?.Progress?.length ?? 0) - 1, 0);
 
     if (existingQuestKey?.Completed) {
         return;
     }
-    const Progress = Array(chainStageTotal).fill({
-        c: 0,
-        i: false,
-        m: false,
-        b: []
-    } satisfies IQuestStage);
-
-    const completedQuestKey: IQuestKeyDatabase = {
-        ItemType: questKey,
-        Completed: true,
-        unlock: true,
-        Progress: Progress,
-        CompletionDate: new Date()
-    };
-
-    //overwrite current quest progress, might lead to multiple quest item rewards
     if (existingQuestKey) {
-        existingQuestKey.overwrite(completedQuestKey);
-        //Object.assign(existingQuestKey, completedQuestKey);
+        existingQuestKey.Progress = existingQuestKey.Progress ?? [];
+
+        const existingProgressLength = existingQuestKey.Progress.length;
+
+        if (existingProgressLength < chainStageTotal) {
+            const missingProgress: IQuestStage[] = Array.from(
+                { length: chainStageTotal - existingProgressLength },
+                () =>
+                    ({
+                        c: 0,
+                        i: false,
+                        m: false,
+                        b: []
+                    }) as IQuestStage
+            );
+
+            existingQuestKey.Progress.push(...missingProgress);
+            existingQuestKey.CompletionDate = new Date();
+            existingQuestKey.Completed = true;
+        }
     } else {
+        const completedQuestKey: IQuestKeyDatabase = {
+            ItemType: questKey,
+            Completed: true,
+            unlock: true,
+            Progress: Array(chainStageTotal).fill({
+                c: 0,
+                i: false,
+                m: false,
+                b: []
+            } satisfies IQuestStage),
+            CompletionDate: new Date()
+        };
         addQuestKey(inventory, completedQuestKey);
     }
 
-    for (let i = 0; i < chainStageTotal; i++) {
-        if (chainStages[i].itemsToGiveWhenTriggered.length > 0) {
-            await giveKeyChainItem(inventory, { KeyChain: questKey, ChainStage: i });
-        }
+    for (let i = startingStage; i < chainStageTotal; i++) {
+        await giveKeyChainStageTriggered(inventory, { KeyChain: questKey, ChainStage: i });
 
-        if (chainStages[i].messageToSendWhenTriggered) {
-            await giveKeyChainMessage(inventory, inventory.accountOwnerId, {
-                KeyChain: questKey,
-                ChainStage: i
-            });
-        }
-
-        const missionName = chainStages[i].key;
-        if (missionName) {
-            const fixedLevelRewards = getLevelKeyRewards(missionName);
-            //logger.debug(`fixedLevelRewards`, fixedLevelRewards);
-            if (fixedLevelRewards.levelKeyRewards) {
-                const missionRewards: { StoreItem: string; ItemCount: number }[] = [];
-                addFixedLevelRewards(fixedLevelRewards.levelKeyRewards, inventory, missionRewards);
-
-                for (const reward of missionRewards) {
-                    await addItem(inventory, fromStoreItem(reward.StoreItem), reward.ItemCount);
-                }
-            } else if (fixedLevelRewards.levelKeyRewards2) {
-                for (const reward of fixedLevelRewards.levelKeyRewards2) {
-                    if (reward.rewardType == "RT_CREDITS") {
-                        inventory.RegularCredits += reward.amount;
-                        continue;
-                    }
-                    if (reward.rewardType == "RT_RESOURCE") {
-                        await addItem(inventory, fromStoreItem(reward.itemType), reward.amount);
-                    } else {
-                        await addItem(inventory, fromStoreItem(reward.itemType));
-                    }
-                }
-            }
-        }
+        await giveKeyChainMissionReward(inventory, { KeyChain: questKey, ChainStage: i });
     }
 
     const questCompletionItems = getQuestCompletionItems(questKey);
@@ -205,7 +188,7 @@ export const completeQuest = async (inventory: TInventoryDatabaseDocument, quest
         await addItems(inventory, questCompletionItems);
     }
 
-    inventory.ActiveQuest = "";
+    if (inventory.ActiveQuest == questKey) inventory.ActiveQuest = "";
 
     if (questKey == "/Lotus/Types/Keys/NewWarQuest/NewWarQuestKeyChain") {
         setupKahlSyndicate(inventory);
@@ -246,4 +229,61 @@ export const giveKeyChainMessage = async (
     await createMessage(accountId, [keyChainMessage]);
 
     updateQuestStage(inventory, keyChainInfo, { m: true });
+};
+
+export const giveKeyChainMissionReward = async (
+    inventory: TInventoryDatabaseDocument,
+    keyChainInfo: IKeyChainRequest
+): Promise<void> => {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    const chainStages = ExportKeys[keyChainInfo.KeyChain]?.chainStages;
+
+    if (chainStages) {
+        const missionName = chainStages[keyChainInfo.ChainStage].key;
+        if (missionName) {
+            const fixedLevelRewards = getLevelKeyRewards(missionName);
+            if (fixedLevelRewards.levelKeyRewards) {
+                const missionRewards: { StoreItem: string; ItemCount: number }[] = [];
+                addFixedLevelRewards(fixedLevelRewards.levelKeyRewards, inventory, missionRewards);
+
+                for (const reward of missionRewards) {
+                    await addItem(inventory, fromStoreItem(reward.StoreItem), reward.ItemCount);
+                }
+
+                updateQuestStage(inventory, keyChainInfo, { c: 0 });
+            } else if (fixedLevelRewards.levelKeyRewards2) {
+                for (const reward of fixedLevelRewards.levelKeyRewards2) {
+                    if (reward.rewardType == "RT_CREDITS") {
+                        inventory.RegularCredits += reward.amount;
+                        continue;
+                    }
+                    if (reward.rewardType == "RT_RESOURCE") {
+                        await addItem(inventory, fromStoreItem(reward.itemType), reward.amount);
+                    } else {
+                        await addItem(inventory, fromStoreItem(reward.itemType));
+                    }
+                }
+
+                updateQuestStage(inventory, keyChainInfo, { c: 0 });
+            }
+        }
+    }
+};
+
+export const giveKeyChainStageTriggered = async (
+    inventory: TInventoryDatabaseDocument,
+    keyChainInfo: IKeyChainRequest
+): Promise<void> => {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    const chainStages = ExportKeys[keyChainInfo.KeyChain]?.chainStages;
+
+    if (chainStages) {
+        if (chainStages[keyChainInfo.ChainStage].itemsToGiveWhenTriggered.length > 0) {
+            await giveKeyChainItem(inventory, keyChainInfo);
+        }
+
+        if (chainStages[keyChainInfo.ChainStage].messageToSendWhenTriggered) {
+            await giveKeyChainMessage(inventory, inventory.accountOwnerId, keyChainInfo);
+        }
+    }
 };

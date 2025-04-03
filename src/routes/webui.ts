@@ -30,6 +30,9 @@ webuiRouter.get("/webui/mods", (_req, res) => {
 webuiRouter.get("/webui/settings", (_req, res) => {
     res.sendFile(path.join(rootDir, "static/webui/index.html"));
 });
+webuiRouter.get("/webui/quests", (_req, res) => {
+    res.sendFile(path.join(rootDir, "static/webui/index.html"));
+});
 webuiRouter.get("/webui/cheats", (_req, res) => {
     res.sendFile(path.join(rootDir, "static/webui/index.html"));
 });

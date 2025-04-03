@@ -1,7 +1,11 @@
-import { addString } from "@/src/controllers/api/inventoryController";
 import { getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { addQuestKey, completeQuest, IUpdateQuestRequest, updateQuestKey } from "@/src/services/questService";
+import {
+    addQuestKey,
+    completeQuest,
+    giveKeyChainMissionReward,
+    giveKeyChainStageTriggered
+} from "@/src/services/questService";
 import { logger } from "@/src/utils/logger";
 import { RequestHandler } from "express";
 import { ExportKeys } from "warframe-public-export-plus";
@@ -9,13 +13,17 @@ import { ExportKeys } from "warframe-public-export-plus";
 export const manageQuestsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const operation = req.query.operation as
-        | "unlockAll"
         | "completeAll"
-        | "ResetAll"
-        | "completeAllUnlocked"
-        | "updateKey"
-        | "giveAll";
-    const questKeyUpdate = req.body as IUpdateQuestRequest["QuestKeys"];
+        | "resetAll"
+        | "giveAll"
+        | "completeKey"
+        | "deleteKey"
+        | "resetKey"
+        | "prevStage"
+        | "nextStage"
+        | "setInactive";
+
+    const questItemType = req.query.itemType as string;
 
     const allQuestKeys: string[] = [];
     for (const [k, v] of Object.entries(ExportKeys)) {
@@ -26,47 +34,15 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
     const inventory = await getInventory(accountId);
 
     switch (operation) {
-        case "updateKey": {
-            //TODO: if this is intended to be used, one needs to add a updateQuestKeyMultiple, the game does never intend to do it, so it errors for multiple keys.
-            await updateQuestKey(inventory, questKeyUpdate);
-            break;
-        }
-        case "unlockAll": {
-            for (const questKey of allQuestKeys) {
-                addQuestKey(inventory, { ItemType: questKey, Completed: false, unlock: true, Progress: [] });
-            }
-            break;
-        }
         case "completeAll": {
-            logger.info("completing all quests..");
-            for (const questKey of allQuestKeys) {
-                try {
-                    await completeQuest(inventory, questKey);
-                } catch (error) {
-                    if (error instanceof Error) {
-                        logger.error(
-                            `Something went wrong completing quest ${questKey}, probably could not add some item`
-                        );
-                        logger.error(error.message);
-                    }
-                }
-
-                //Skip "Watch The Maker"
-                if (questKey === "/Lotus/Types/Keys/NewWarIntroQuest/NewWarIntroKeyChain") {
-                    addString(
-                        inventory.NodeIntrosCompleted,
-                        "/Lotus/Levels/Cinematics/NewWarIntro/NewWarStageTwo.level"
-                    );
-                }
-
-                if (questKey === "/Lotus/Types/Keys/ArchwingQuest/ArchwingQuestKeyChain") {
-                    inventory.ArchwingEnabled = true;
+            if (allQuestKeys.includes(questItemType)) {
+                for (const questKey of inventory.QuestKeys) {
+                    await completeQuest(inventory, questKey.ItemType);
                 }
             }
             break;
         }
-        case "ResetAll": {
-            logger.info("resetting all quests..");
+        case "resetAll": {
             for (const questKey of inventory.QuestKeys) {
                 questKey.Completed = false;
                 questKey.Progress = [];
@@ -75,40 +51,113 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
             inventory.ActiveQuest = "";
             break;
         }
-        case "completeAllUnlocked": {
-            logger.info("completing all unlocked quests..");
-            for (const questKey of inventory.QuestKeys) {
-                try {
+        case "giveAll": {
+            allQuestKeys.forEach(questKey => addQuestKey(inventory, { ItemType: questKey }));
+            break;
+        }
+        case "deleteKey": {
+            if (allQuestKeys.includes(questItemType)) {
+                const questKey = inventory.QuestKeys.find(key => key.ItemType === questItemType);
+                if (!questKey) {
+                    logger.error(`Quest key not found in inventory: ${questItemType}`);
+                    break;
+                }
+
+                inventory.QuestKeys.pull({ ItemType: questItemType });
+            }
+            break;
+        }
+        case "completeKey": {
+            if (allQuestKeys.includes(questItemType)) {
+                const questKey = inventory.QuestKeys.find(key => key.ItemType === questItemType);
+                if (!questKey) {
+                    logger.error(`Quest key not found in inventory: ${questItemType}`);
+                    break;
+                }
+
+                await completeQuest(inventory, questItemType);
+            }
+            break;
+        }
+        case "resetKey": {
+            if (allQuestKeys.includes(questItemType)) {
+                const questKey = inventory.QuestKeys.find(key => key.ItemType === questItemType);
+                if (!questKey) {
+                    logger.error(`Quest key not found in inventory: ${questItemType}`);
+                    break;
+                }
+
+                questKey.Completed = false;
+                questKey.Progress = [];
+                questKey.CompletionDate = undefined;
+            }
+            break;
+        }
+        case "prevStage": {
+            if (allQuestKeys.includes(questItemType)) {
+                const questKey = inventory.QuestKeys.find(key => key.ItemType === questItemType);
+                if (!questKey) {
+                    logger.error(`Quest key not found in inventory: ${questItemType}`);
+                    break;
+                }
+                if (!questKey.Progress) break;
+
+                if (questKey.Completed) {
+                    questKey.Completed = false;
+                    questKey.CompletionDate = undefined;
+                }
+                questKey.Progress.pop();
+                const stage = questKey.Progress.length - 1;
+                if (stage > 0) {
+                    await giveKeyChainStageTriggered(inventory, {
+                        KeyChain: questKey.ItemType,
+                        ChainStage: stage
+                    });
+                }
+            }
+            break;
+        }
+        case "nextStage": {
+            if (allQuestKeys.includes(questItemType)) {
+                const questKey = inventory.QuestKeys.find(key => key.ItemType === questItemType);
+                const questManifest = ExportKeys[questItemType];
+                if (!questKey) {
+                    logger.error(`Quest key not found in inventory: ${questItemType}`);
+                    break;
+                }
+                if (!questKey.Progress) break;
+
+                const currentStage = questKey.Progress.length;
+                if (currentStage + 1 == questManifest.chainStages?.length) {
+                    logger.debug(`Trying to complete last stage with nextStage, calling completeQuest instead`);
                     await completeQuest(inventory, questKey.ItemType);
-                } catch (error) {
-                    if (error instanceof Error) {
-                        logger.error(
-                            `Something went wrong completing quest ${questKey.ItemType}, probably could not add some item`
-                        );
-                        logger.error(error.message);
+                } else {
+                    const progress = {
+                        c: questManifest.chainStages![currentStage].key ? -1 : 0,
+                        i: false,
+                        m: false,
+                        b: []
+                    };
+                    questKey.Progress.push(progress);
+
+                    await giveKeyChainStageTriggered(inventory, {
+                        KeyChain: questKey.ItemType,
+                        ChainStage: currentStage
+                    });
+
+                    if (currentStage > 0) {
+                        await giveKeyChainMissionReward(inventory, {
+                            KeyChain: questKey.ItemType,
+                            ChainStage: currentStage - 1
+                        });
                     }
                 }
-
-                //Skip "Watch The Maker"
-                if (questKey.ItemType === "/Lotus/Types/Keys/NewWarIntroQuest/NewWarIntroKeyChain") {
-                    addString(
-                        inventory.NodeIntrosCompleted,
-                        "/Lotus/Levels/Cinematics/NewWarIntro/NewWarStageTwo.level"
-                    );
-                }
-
-                if (questKey.ItemType === "/Lotus/Types/Keys/ArchwingQuest/ArchwingQuestKeyChain") {
-                    inventory.ArchwingEnabled = true;
-                }
             }
             break;
         }
-        case "giveAll": {
-            for (const questKey of allQuestKeys) {
-                addQuestKey(inventory, { ItemType: questKey });
-            }
+        case "setInactive":
+            inventory.ActiveQuest = "";
             break;
-        }
     }
 
     await inventory.save();

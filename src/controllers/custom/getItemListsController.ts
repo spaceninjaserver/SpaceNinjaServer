@@ -5,6 +5,7 @@ import {
     ExportAvionics,
     ExportDrones,
     ExportGear,
+    ExportKeys,
     ExportMisc,
     ExportRailjackWeapons,
     ExportRecipes,
@@ -26,6 +27,7 @@ interface ListedItem {
     exalted?: string[];
     badReason?: "starter" | "frivolous" | "notraw";
     partType?: string;
+    chainLength?: number;
 }
 
 const relicQualitySuffixes: Record<TRelicQuality, string> = {
@@ -52,6 +54,7 @@ const getItemListsController: RequestHandler = (req, response) => {
     res.miscitems = [];
     res.Syndicates = [];
     res.OperatorAmps = [];
+    res.QuestKeys = [];
     for (const [uniqueName, item] of Object.entries(ExportWarframes)) {
         res[item.productCategory].push({
             uniqueName,
@@ -207,6 +210,15 @@ const getItemListsController: RequestHandler = (req, response) => {
             uniqueName,
             name: getString(syndicate.name, lang)
         });
+    }
+    for (const [uniqueName, key] of Object.entries(ExportKeys)) {
+        if (key.chainStages) {
+            res.QuestKeys.push({
+                uniqueName,
+                name: getString(key.name || "", lang),
+                chainLength: key.chainStages.length
+            });
+        }
     }
 
     response.json({

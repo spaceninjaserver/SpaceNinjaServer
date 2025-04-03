@@ -62,6 +62,9 @@
                             <a class="nav-link" href="/webui/mods" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" data-loc="navbar_mods"></a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="/webui/quests" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" data-loc="navbar_quests"></a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="/webui/cheats" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" data-loc="navbar_cheats"></a>
                         </li>
                         <li class="nav-item">
@@ -470,22 +473,31 @@
                 </div>
             </div>
             <div data-route="/webui/quests" data-title="Quests | OpenWF WebUI">
-                <div class="card mb-3">
-                    <h5 class="card-header" data-loc="quests_list"></h5>
-                    <div class="card-body">
-                        <table class="table table-hover w-100">
-                            <tbody id="active-quests"></tbody>
-                        </table>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="card mb-3">
+                            <h5 class="card-header" data-loc="quests_list"></h5>
+                            <div class="card-body">
+                                <form class="input-group mb-3" onsubmit="doAcquireEquipment('QuestKeys');return false;">
+                                    <input class="form-control" id="acquire-type-QuestKeys" list="datalist-QuestKeys" />
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                </form>
+                                <table class="table table-hover w-100">
+                                    <tbody id="QuestKeys-list"></tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="card mb-3">
-                    <h5 class="card-header" data-loc="quests_Actions"></h5>
-                    <div class="card-body">
-                        <div class="mb-2 d-flex flex-wrap gap-2">
-                            <button class="btn btn-primary" onclick="doQuestUpdate('unlockAll');" data-loc="quests_UnlockAll"></button>
-                            <button class="btn btn-primary" onclick="doQuestUpdate('completeAll');" data-loc="quests_CompleteAll"></button>
-                            <button class="btn btn-primary" onclick="doQuestUpdate('completeAllUnlocked');" data-loc="quests_CompleteAllUnlocked"></button>
-                            <button class="btn btn-primary" onclick="doQuestUpdate('ResetAll');" data-loc="quests_ResetAll"></button>
+                    <div class="col-md-6">
+                        <div class="card mb-3">
+                            <h5 class="card-header" data-loc="general_bulkActions"></h5>
+                            <div class="card-body">
+                                <div class="d-flex flex-wrap gap-2">
+                                    <button class="btn btn-primary" onclick="doBulkQuestUpdate('giveAll');" data-loc="quests_giveAll"></button>
+                                    <button class="btn btn-primary" onclick="doBulkQuestUpdate('completeAll');" data-loc="quests_completeAll"></button>
+                                    <button class="btn btn-primary" onclick="doBulkQuestUpdate('resetAll');" data-loc="quests_resetAll"></button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -633,14 +645,6 @@
                                         <button class="btn btn-primary" type="submit" data-loc="cheats_changeButton"></button>
                                     </div>
                                 </form>
-                            <h5 class="mt-3" data-loc="cheats_quests"></h6>
-                                <div class="mb-2 d-flex flex-wrap gap-2">
-                                    <button class="btn btn-primary" onclick="doQuestUpdate('unlockAll');" data-loc="cheats_quests_unlockAll"></button>
-                                    <button class="btn btn-primary" onclick="doQuestUpdate('completeAll');" data-loc="cheats_quests_completeAll"></button>
-                                    <button class="btn btn-primary" onclick="doQuestUpdate('completeAllUnlocked');" data-loc="cheats_quests_completeAllUnlocked"></button>
-                                    <button class="btn btn-primary" onclick="doQuestUpdate('ResetAll');" data-loc="cheats_quests_resetAll"></button>
-                                    <button class="btn btn-primary" onclick="doQuestUpdate('giveAll');" data-loc="cheats_quests_giveAll"></button>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -666,6 +670,7 @@
     <datalist id="datalist-MechSuits"></datalist>
     <datalist id="datalist-Syndicates"></datalist>
     <datalist id="datalist-MoaPets"></datalist>
+    <datalist id="datalist-QuestKeys"></datalist>
     <datalist id="datalist-miscitems"></datalist>
     <datalist id="datalist-mods">
         <option data-key="/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser" value="Legendary Core"></option>
