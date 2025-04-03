@@ -1240,6 +1240,8 @@ export const addFocusXpIncreases = (inventory: TInventoryDatabaseDocument, focus
     inventory.FocusXP.AP_TACTIC += focusXpPlus[FocusType.AP_TACTIC];
     inventory.FocusXP.AP_POWER += focusXpPlus[FocusType.AP_POWER];
     inventory.FocusXP.AP_WARD += focusXpPlus[FocusType.AP_WARD];
+
+    inventory.DailyFocus -= focusXpPlus.reduce((a, b) => a + b, 0);
 };
 
 export const addSeasonalChallengeHistory = (
