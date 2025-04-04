@@ -1,4 +1,10 @@
-import { Alliance, GuildMember } from "@/src/models/guildModel";
+import {
+    Alliance,
+    Guild,
+    GuildMember,
+    TGuildDatabaseDocument,
+    TGuildMemberDatabaseDocument
+} from "@/src/models/guildModel";
 import {
     addGuildMemberMiscItemContribution,
     addGuildMemberShipDecoContribution,
@@ -21,10 +27,10 @@ import { RequestHandler } from "express";
 export const contributeToVaultController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId, "GuildId RegularCredits MiscItems ShipDecorations FusionTreasures");
-    const guild = await getGuildForRequestEx(req, inventory);
     const request = JSON.parse(String(req.body)) as IContributeToVaultRequest;
 
     if (request.Alliance) {
+        const guild = await getGuildForRequestEx(req, inventory);
         const alliance = (await Alliance.findById(guild.AllianceId!))!;
         alliance.VaultRegularCredits ??= 0;
         alliance.VaultRegularCredits += request.RegularCredits;
@@ -39,30 +45,44 @@ export const contributeToVaultController: RequestHandler = async (req, res) => {
         return;
     }
 
-    const guildMember = (await GuildMember.findOne(
-        { accountId, guildId: guild._id },
-        "RegularCreditsContributed MiscItemsContributed ShipDecorationsContributed"
-    ))!;
+    let guild: TGuildDatabaseDocument;
+    let guildMember: TGuildMemberDatabaseDocument | undefined;
+    if (request.GuildVault) {
+        guild = (await Guild.findById(request.GuildVault))!;
+    } else {
+        guild = await getGuildForRequestEx(req, inventory);
+        guildMember = (await GuildMember.findOne(
+            { accountId, guildId: guild._id },
+            "RegularCreditsContributed MiscItemsContributed ShipDecorationsContributed"
+        ))!;
+    }
+
     if (request.RegularCredits) {
         updateCurrency(inventory, request.RegularCredits, false);
 
         guild.VaultRegularCredits ??= 0;
         guild.VaultRegularCredits += request.RegularCredits;
 
-        guildMember.RegularCreditsContributed ??= 0;
-        guildMember.RegularCreditsContributed += request.RegularCredits;
+        if (guildMember) {
+            guildMember.RegularCreditsContributed ??= 0;
+            guildMember.RegularCreditsContributed += request.RegularCredits;
+        }
     }
     if (request.MiscItems.length) {
         addVaultMiscItems(guild, request.MiscItems);
         for (const item of request.MiscItems) {
-            addGuildMemberMiscItemContribution(guildMember, item);
+            if (guildMember) {
+                addGuildMemberMiscItemContribution(guildMember, item);
+            }
             addMiscItems(inventory, [{ ...item, ItemCount: item.ItemCount * -1 }]);
         }
     }
     if (request.ShipDecorations.length) {
         addVaultShipDecos(guild, request.ShipDecorations);
         for (const item of request.ShipDecorations) {
-            addGuildMemberShipDecoContribution(guildMember, item);
+            if (guildMember) {
+                addGuildMemberShipDecoContribution(guildMember, item);
+            }
             addShipDecorations(inventory, [{ ...item, ItemCount: item.ItemCount * -1 }]);
         }
     }
@@ -73,7 +93,12 @@ export const contributeToVaultController: RequestHandler = async (req, res) => {
         }
     }
 
-    await Promise.all([guild.save(), inventory.save(), guildMember.save()]);
+    const promises: Promise<unknown>[] = [guild.save(), inventory.save()];
+    if (guildMember) {
+        promises.push(guildMember.save());
+    }
+    await Promise.all(promises);
+
     res.end();
 };
 
@@ -84,4 +109,5 @@ interface IContributeToVaultRequest {
     FusionTreasures: IFusionTreasure[];
     Alliance?: boolean;
     FromVault?: boolean;
+    GuildVault?: string;
 }
