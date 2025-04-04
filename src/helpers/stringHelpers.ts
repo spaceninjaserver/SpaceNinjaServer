@@ -26,3 +26,21 @@ export const getIndexAfter = (str: string, searchWord: string): number => {
     }
     return index + searchWord.length;
 };
+
+export const regexEscape = (str: string): string => {
+    str = str.split(".").join("\\.");
+    str = str.split("\\").join("\\\\");
+    str = str.split("[").join("\\[");
+    str = str.split("]").join("\\]");
+    str = str.split("+").join("\\+");
+    str = str.split("*").join("\\*");
+    str = str.split("$").join("\\$");
+    str = str.split("^").join("\\^");
+    str = str.split("?").join("\\?");
+    str = str.split("|").join("\\|");
+    str = str.split("(").join("\\(");
+    str = str.split(")").join("\\)");
+    str = str.split("{").join("\\{");
+    str = str.split("}").join("\\}");
+    return str;
+};

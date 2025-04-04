@@ -265,10 +265,10 @@ allianceSchema.index({ Name: 1 }, { unique: true });
 export const Alliance = model<IAllianceDatabase>("Alliance", allianceSchema);
 
 const allianceMemberSchema = new Schema<IAllianceMemberDatabase>({
-    allianceId: Schema.Types.ObjectId,
-    guildId: Schema.Types.ObjectId,
-    Pending: Boolean,
-    Permissions: Number
+    allianceId: { type: Schema.Types.ObjectId, required: true },
+    guildId: { type: Schema.Types.ObjectId, required: true },
+    Pending: { type: Boolean, required: true },
+    Permissions: { type: Number, required: true }
 });
 
 allianceMemberSchema.index({ allianceId: 1, guildId: 1 }, { unique: true });

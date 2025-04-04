@@ -315,8 +315,6 @@ export interface IAllianceMemberDatabase {
     Permissions: number;
 }
 
-// TODO: Alliance chat permissions
-// TODO: POST /api/addToAlliance.php: {"clanName":"abc"}
 // TODO: GET /api/divvyAllianceVault.php?accountId=6633b81e9dba0b714f28ff02&nonce=5702391171614479&ct=MSI&guildId=663e9be9f741eeb5782f9df0&allianceId=000000000000000000000069&credits=1
 // TODO: GET /api/divvyAllianceVault.php?accountId=6633b81e9dba0b714f28ff02&nonce=5702391171614479&ct=MSI&guildId=663e9be9f741eeb5782f9df0&allianceId=000000000000000000000069&credits=0
 // TODO: GET /api/removeFromAlliance.php?accountId=6633b81e9dba0b714f28ff02&nonce=5702391171614479&ct=MSI&guildId=663e9be9f741eeb5782f9df0

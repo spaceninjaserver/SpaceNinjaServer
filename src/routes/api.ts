@@ -4,6 +4,7 @@ import { abortDojoComponentController } from "@/src/controllers/api/abortDojoCom
 import { abortDojoComponentDestructionController } from "@/src/controllers/api/abortDojoComponentDestructionController";
 import { activateRandomModController } from "@/src/controllers/api/activateRandomModController";
 import { addFriendImageController } from "@/src/controllers/api/addFriendImageController";
+import { addToAllianceController } from "@/src/controllers/api/addToAllianceController";
 import { addToGuildController } from "@/src/controllers/api/addToGuildController";
 import { arcaneCommonController } from "@/src/controllers/api/arcaneCommonController";
 import { archonFusionController } from "@/src/controllers/api/archonFusionController";
@@ -18,6 +19,7 @@ import { claimLibraryDailyTaskRewardController } from "@/src/controllers/api/cla
 import { clearDialogueHistoryController } from "@/src/controllers/api/clearDialogueHistoryController";
 import { clearNewEpisodeRewardController } from "@/src/controllers/api/clearNewEpisodeRewardController";
 import { completeRandomModChallengeController } from "@/src/controllers/api/completeRandomModChallengeController";
+import { confirmAllianceInvitationController } from "@/src/controllers/api/confirmAllianceInvitationController";
 import { confirmGuildInvitationController } from "@/src/controllers/api/confirmGuildInvitationController";
 import { contributeGuildClassController } from "@/src/controllers/api/contributeGuildClassController";
 import { contributeToDojoComponentController } from "@/src/controllers/api/contributeToDojoComponentController";
@@ -27,6 +29,7 @@ import { createGuildController } from "@/src/controllers/api/createGuildControll
 import { creditsController } from "@/src/controllers/api/creditsController";
 import { customizeGuildRanksController } from "@/src/controllers/api/customizeGuildRanksController";
 import { customObstacleCourseLeaderboardController } from "@/src/controllers/api/customObstacleCourseLeaderboardController";
+import { declineAllianceInviteController } from "@/src/controllers/api/declineAllianceInviteController";
 import { declineGuildInviteController } from "@/src/controllers/api/declineGuildInviteController";
 import { deleteSessionController } from "@/src/controllers/api/deleteSessionController";
 import { destroyDojoDecoController } from "@/src/controllers/api/destroyDojoDecoController";
@@ -140,8 +143,10 @@ apiRouter.get("/cancelGuildAdvertisement.php", cancelGuildAdvertisementControlle
 apiRouter.get("/changeGuildRank.php", changeGuildRankController);
 apiRouter.get("/checkDailyMissionBonus.php", checkDailyMissionBonusController);
 apiRouter.get("/claimLibraryDailyTaskReward.php", claimLibraryDailyTaskRewardController);
+apiRouter.get("/confirmAllianceInvitation.php", confirmAllianceInvitationController);
 apiRouter.get("/confirmGuildInvitation.php", confirmGuildInvitationController);
 apiRouter.get("/credits.php", creditsController);
+apiRouter.get("/declineAllianceInvite.php", declineAllianceInviteController);
 apiRouter.get("/declineGuildInvite.php", declineGuildInviteController);
 apiRouter.get("/deleteSession.php", deleteSessionController);
 apiRouter.get("/dojo", dojoController);
@@ -181,6 +186,7 @@ apiRouter.get("/updateSession.php", updateSessionGetController);
 apiRouter.post("/abortDojoComponent.php", abortDojoComponentController);
 apiRouter.post("/activateRandomMod.php", activateRandomModController);
 apiRouter.post("/addFriendImage.php", addFriendImageController);
+apiRouter.post("/addToAlliance.php", addToAllianceController);
 apiRouter.post("/addToGuild.php", addToGuildController);
 apiRouter.post("/arcaneCommon.php", arcaneCommonController);
 apiRouter.post("/archonFusion.php", archonFusionController);

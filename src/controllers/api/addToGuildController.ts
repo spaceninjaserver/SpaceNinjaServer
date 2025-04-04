@@ -88,7 +88,7 @@ export const addToGuildController: RequestHandler = async (req, res) => {
                 RequestExpiry: new Date(Date.now() + 14 * 86400 * 1000) // TOVERIFY: I can't find any good information about this with regards to live, but 2 weeks seem reasonable.
             });
         } catch (e) {
-            logger.debug(`alliance invite failed due to ${String(e)}`);
+            logger.debug(`guild invite failed due to ${String(e)}`);
             res.status(400).send("Already requested");
         }
         res.end();
