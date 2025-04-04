@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { updateConfig } from "@/src/services/configService";
+import { updateConfig } from "@/src/services/configWatcherService";
 import { getAccountForRequest, isAdministrator } from "@/src/services/loginService";
 
 const updateConfigDataController: RequestHandler = async (req, res) => {
