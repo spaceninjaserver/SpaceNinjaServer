@@ -1,0 +1,74 @@
+import { Alliance, AllianceMember, Guild, GuildMember } from "@/src/models/guildModel";
+import { getAccountForRequest } from "@/src/services/loginService";
+import { GuildPermission } from "@/src/types/guildTypes";
+import { logger } from "@/src/utils/logger";
+import { RequestHandler } from "express";
+
+export const divvyAllianceVaultController: RequestHandler = async (req, res) => {
+    // Afaict, there's no way to put anything other than credits in the alliance vault (anymore?), so just no-op if this is not a request to divvy credits.
+    if (req.query.credits == "1") {
+        // Check requester is a warlord in their guild
+        const account = await getAccountForRequest(req);
+        const guildMember = (await GuildMember.findOne({ accountId: account._id, status: 0 }))!;
+        if (guildMember.rank > 1) {
+            res.status(400).end();
+            return;
+        }
+
+        // Check guild has treasurer permissions in the alliance
+        const allianceMember = (await AllianceMember.findOne({
+            allianceId: req.query.allianceId,
+            guildId: guildMember.guildId
+        }))!;
+        if (!(allianceMember.Permissions & GuildPermission.Treasurer)) {
+            res.status(400).end();
+            return;
+        }
+
+        const allianceMembers = await AllianceMember.find({ allianceId: req.query.allianceId });
+        const memberCounts: Record<string, number> = {};
+        let totalMembers = 0;
+        await parallelForeach(allianceMembers, async allianceMember => {
+            const memberCount = await GuildMember.countDocuments({
+                guildId: allianceMember.guildId
+            });
+            memberCounts[allianceMember.guildId.toString()] = memberCount;
+            totalMembers += memberCount;
+        });
+        logger.debug(`alliance has ${totalMembers} members between all its clans`);
+
+        const alliance = (await Alliance.findById(allianceMember.allianceId, "VaultRegularCredits"))!;
+        if (alliance.VaultRegularCredits) {
+            let creditsHandedOutInTotal = 0;
+            await parallelForeach(allianceMembers, async allianceMember => {
+                const memberCount = memberCounts[allianceMember.guildId.toString()];
+                const cutPercentage = memberCount / totalMembers;
+                const creditsToHandOut = Math.trunc(alliance.VaultRegularCredits! * cutPercentage);
+                logger.debug(
+                    `${allianceMember.guildId.toString()} has ${memberCount} member(s) = ${Math.trunc(cutPercentage * 100)}% of alliance; giving ${creditsToHandOut} credit(s)`
+                );
+                if (creditsToHandOut != 0) {
+                    await Guild.updateOne(
+                        { _id: allianceMember.guildId },
+                        { $inc: { VaultRegularCredits: creditsToHandOut } }
+                    );
+                    creditsHandedOutInTotal += creditsToHandOut;
+                }
+            });
+            alliance.VaultRegularCredits -= creditsHandedOutInTotal;
+            logger.debug(
+                `handed out ${creditsHandedOutInTotal} credits; alliance vault now has ${alliance.VaultRegularCredits} credit(s)`
+            );
+        }
+        await alliance.save();
+    }
+    res.end();
+};
+
+const parallelForeach = async <T>(data: T[], op: (datum: T) => Promise<void>): Promise<void> => {
+    const promises: Promise<void>[] = [];
+    for (const datum of data) {
+        promises.push(op(datum));
+    }
+    await Promise.all(promises);
+};

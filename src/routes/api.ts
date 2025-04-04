@@ -33,6 +33,7 @@ import { declineAllianceInviteController } from "@/src/controllers/api/declineAl
 import { declineGuildInviteController } from "@/src/controllers/api/declineGuildInviteController";
 import { deleteSessionController } from "@/src/controllers/api/deleteSessionController";
 import { destroyDojoDecoController } from "@/src/controllers/api/destroyDojoDecoController";
+import { divvyAllianceVaultController } from "@/src/controllers/api/divvyAllianceVaultController";
 import { dojoComponentRushController } from "@/src/controllers/api/dojoComponentRushController";
 import { dojoController } from "@/src/controllers/api/dojoController";
 import { dronesController } from "@/src/controllers/api/dronesController";
@@ -149,6 +150,7 @@ apiRouter.get("/credits.php", creditsController);
 apiRouter.get("/declineAllianceInvite.php", declineAllianceInviteController);
 apiRouter.get("/declineGuildInvite.php", declineGuildInviteController);
 apiRouter.get("/deleteSession.php", deleteSessionController);
+apiRouter.get("/divvyAllianceVault.php", divvyAllianceVaultController);
 apiRouter.get("/dojo", dojoController);
 apiRouter.get("/drones.php", dronesController);
 apiRouter.get("/getDailyDealStockLevels.php", getDailyDealStockLevelsController);
