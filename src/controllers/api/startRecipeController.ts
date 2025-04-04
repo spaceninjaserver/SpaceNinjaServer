@@ -90,7 +90,6 @@ export const startRecipeController: RequestHandler = async (req, res) => {
                 spectreLoadout.LongGuns = item.ItemType;
                 spectreLoadout.LongGunsModularParts = item.ModularParts;
             } else {
-                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                 console.assert(type == "/Lotus/Types/Game/LotusMeleeWeapon");
                 const item = inventory.Melee.id(oid)!;
                 spectreLoadout.Melee = item.ItemType;

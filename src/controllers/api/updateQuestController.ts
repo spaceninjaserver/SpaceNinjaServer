@@ -5,7 +5,6 @@ import { updateQuestKey, IUpdateQuestRequest } from "@/src/services/questService
 import { getInventory } from "@/src/services/inventoryService";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const updateQuestController: RequestHandler = async (req, res) => {
     const accountId = parseString(req.query.accountId);
     const updateQuestRequest = getJSONfromString<IUpdateQuestRequest>((req.body as string).toString());
