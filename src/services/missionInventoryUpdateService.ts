@@ -77,6 +77,21 @@ export const addMissionInventoryUpdates = async (
     inventoryUpdates: IMissionInventoryUpdateRequest
 ): Promise<IInventoryChanges> => {
     const inventoryChanges: IInventoryChanges = {};
+    if (
+        inventoryUpdates.EndOfMatchUpload &&
+        inventoryUpdates.Missions &&
+        inventoryUpdates.Missions.Tag in ExportRegions
+    ) {
+        const node = ExportRegions[inventoryUpdates.Missions.Tag];
+        if (node.miscItemFee) {
+            addMiscItems(inventory, [
+                {
+                    ItemType: node.miscItemFee.ItemType,
+                    ItemCount: node.miscItemFee.ItemCount * -1
+                }
+            ]);
+        }
+    }
     if (inventoryUpdates.RewardInfo) {
         if (inventoryUpdates.RewardInfo.periodicMissionTag) {
             const tag = inventoryUpdates.RewardInfo.periodicMissionTag;
