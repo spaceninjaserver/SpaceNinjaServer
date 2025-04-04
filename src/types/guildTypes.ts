@@ -1,6 +1,7 @@
 import { Types } from "mongoose";
 import { IOid, IMongoDate } from "@/src/types/commonTypes";
 import { IFusionTreasure, IMiscItem, ITypeCount } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IPictureFrameInfo } from "./shipTypes";
 
 export interface IGuildClient {
     _id: IOid;
@@ -191,10 +192,12 @@ export interface IDojoDecoClient {
     Pos: number[];
     Rot: number[];
     Name?: string; // for teleporters
+    Sockets?: number;
     RegularCredits?: number;
     MiscItems?: IMiscItem[];
     CompletionTime?: IMongoDate;
     RushPlatinum?: number;
+    PictureFrameInfo?: IPictureFrameInfo;
 }
 
 export interface IDojoDecoDatabase extends Omit<IDojoDecoClient, "id" | "CompletionTime"> {

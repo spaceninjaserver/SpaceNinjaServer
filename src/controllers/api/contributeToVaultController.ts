@@ -1,7 +1,10 @@
 import { Alliance, GuildMember } from "@/src/models/guildModel";
 import {
     addGuildMemberMiscItemContribution,
+    addGuildMemberShipDecoContribution,
+    addVaultFusionTreasures,
     addVaultMiscItems,
+    addVaultShipDecos,
     getGuildForRequestEx
 } from "@/src/services/guildService";
 import {
@@ -51,26 +54,21 @@ export const contributeToVaultController: RequestHandler = async (req, res) => {
     }
     if (request.MiscItems.length) {
         addVaultMiscItems(guild, request.MiscItems);
-
         for (const item of request.MiscItems) {
             addGuildMemberMiscItemContribution(guildMember, item);
-
             addMiscItems(inventory, [{ ...item, ItemCount: item.ItemCount * -1 }]);
         }
     }
     if (request.ShipDecorations.length) {
-        guild.VaultShipDecorations ??= [];
-        guildMember.ShipDecorationsContributed ??= [];
+        addVaultShipDecos(guild, request.ShipDecorations);
         for (const item of request.ShipDecorations) {
-            guild.VaultShipDecorations.push(item);
-            guildMember.ShipDecorationsContributed.push(item);
+            addGuildMemberShipDecoContribution(guildMember, item);
             addShipDecorations(inventory, [{ ...item, ItemCount: item.ItemCount * -1 }]);
         }
     }
     if (request.FusionTreasures.length) {
-        guild.VaultFusionTreasures ??= [];
+        addVaultFusionTreasures(guild, request.FusionTreasures);
         for (const item of request.FusionTreasures) {
-            guild.VaultFusionTreasures.push(item);
             addFusionTreasures(inventory, [{ ...item, ItemCount: item.ItemCount * -1 }]);
         }
     }

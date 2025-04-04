@@ -17,16 +17,19 @@ import {
 } from "@/src/types/guildTypes";
 import { Document, Model, model, Schema, Types } from "mongoose";
 import { fusionTreasuresSchema, typeCountSchema } from "./inventoryModels/inventoryModel";
+import { pictureFrameInfoSchema } from "./personalRoomsModel";
 
 const dojoDecoSchema = new Schema<IDojoDecoDatabase>({
     Type: String,
     Pos: [Number],
     Rot: [Number],
     Name: String,
+    Sockets: Number,
     RegularCredits: Number,
     MiscItems: { type: [typeCountSchema], default: undefined },
     CompletionTime: Date,
-    RushPlatinum: Number
+    RushPlatinum: Number,
+    PictureFrameInfo: pictureFrameInfoSchema
 });
 
 const dojoLeaderboardEntrySchema = new Schema<IDojoLeaderboardEntry>(

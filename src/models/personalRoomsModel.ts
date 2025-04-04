@@ -12,7 +12,7 @@ import {
 } from "@/src/types/shipTypes";
 import { Schema, model } from "mongoose";
 
-const pictureFrameInfoSchema = new Schema<IPictureFrameInfo>(
+export const pictureFrameInfoSchema = new Schema<IPictureFrameInfo>(
     {
         Image: String,
         Filter: String,

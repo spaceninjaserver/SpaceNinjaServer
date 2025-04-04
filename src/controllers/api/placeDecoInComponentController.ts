@@ -12,7 +12,7 @@ import { getAccountIdForRequest } from "@/src/services/loginService";
 import { GuildPermission } from "@/src/types/guildTypes";
 import { RequestHandler } from "express";
 import { Types } from "mongoose";
-import { ExportDojoRecipes } from "warframe-public-export-plus";
+import { ExportDojoRecipes, ExportResources } from "warframe-public-export-plus";
 
 export const placeDecoInComponentController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -32,23 +32,37 @@ export const placeDecoInComponentController: RequestHandler = async (req, res) =
     }
 
     component.Decos ??= [];
-    const deco =
-        component.Decos[
-            component.Decos.push({
-                _id: new Types.ObjectId(),
-                Type: request.Type,
-                Pos: request.Pos,
-                Rot: request.Rot,
-                Name: request.Name
-            }) - 1
-        ];
-
-    const meta = Object.values(ExportDojoRecipes.decos).find(x => x.resultType == request.Type);
-    if (meta) {
-        if (meta.capacityCost) {
-            component.DecoCapacity -= meta.capacityCost;
+    if (request.MoveId) {
+        const deco = component.Decos.find(x => x._id.equals(request.MoveId))!;
+        deco.Pos = request.Pos;
+        deco.Rot = request.Rot;
+    } else {
+        const deco =
+            component.Decos[
+                component.Decos.push({
+                    _id: new Types.ObjectId(),
+                    Type: request.Type,
+                    Pos: request.Pos,
+                    Rot: request.Rot,
+                    Name: request.Name,
+                    Sockets: request.Sockets
+                }) - 1
+            ];
+        const meta = Object.values(ExportDojoRecipes.decos).find(x => x.resultType == request.Type);
+        if (meta) {
+            if (meta.capacityCost) {
+                component.DecoCapacity -= meta.capacityCost;
+            }
+        } else {
+            const itemType = Object.entries(ExportResources).find(arr => arr[1].deco == deco.Type)![0];
+            if (deco.Sockets !== undefined) {
+                guild.VaultFusionTreasures!.find(x => x.ItemType == itemType && x.Sockets == deco.Sockets)!.ItemCount -=
+                    1;
+            } else {
+                guild.VaultShipDecorations!.find(x => x.ItemType == itemType)!.ItemCount -= 1;
+            }
         }
-        if (meta.price == 0 && meta.ingredients.length == 0) {
+        if (!meta || (meta.price == 0 && meta.ingredients.length == 0)) {
             deco.CompletionTime = new Date();
         } else if (guild.AutoContributeFromVault && guild.VaultRegularCredits && guild.VaultMiscItems) {
             if (guild.VaultRegularCredits >= scaleRequiredCount(guild.Tier, meta.price)) {
@@ -94,4 +108,9 @@ interface IPlaceDecoInComponentRequest {
     Pos: number[];
     Rot: number[];
     Name?: string;
+    Sockets?: number;
+    Scale?: number; // only provided alongside MoveId and seems to always be 1
+    MoveId?: string;
+    ShipDeco?: boolean;
+    VaultDeco?: boolean;
 }

@@ -10,6 +10,9 @@ import { logger } from "@/src/utils/logger";
 import { Types } from "mongoose";
 import { addShipDecorations, getInventory } from "./inventoryService";
 import { config } from "./configService";
+import { Guild } from "../models/guildModel";
+import { hasGuildPermission } from "./guildService";
+import { GuildPermission } from "../types/guildTypes";
 
 export const setShipCustomizations = async (
     accountId: string,
@@ -154,6 +157,17 @@ export const handleSetShipDecorations = async (
 };
 
 export const handleSetPlacedDecoInfo = async (accountId: string, req: ISetPlacedDecoInfoRequest): Promise<void> => {
+    if (req.GuildId && req.ComponentId) {
+        const guild = (await Guild.findById(req.GuildId))!;
+        if (await hasGuildPermission(guild, accountId, GuildPermission.Decorator)) {
+            const component = guild.DojoComponents.id(req.ComponentId)!;
+            const deco = component.Decos!.find(x => x._id.equals(req.DecoId))!;
+            deco.PictureFrameInfo = req.PictureFrameInfo;
+            await guild.save();
+        }
+        return;
+    }
+
     const personalRooms = await getPersonalRooms(accountId);
 
     const room = personalRooms.Ship.Rooms.find(room => room.Name === req.Room);

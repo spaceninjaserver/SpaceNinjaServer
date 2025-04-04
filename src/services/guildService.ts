@@ -21,13 +21,13 @@ import {
 } from "@/src/types/guildTypes";
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
 import { Types } from "mongoose";
-import { ExportDojoRecipes, IDojoBuild, IDojoResearch } from "warframe-public-export-plus";
+import { ExportDojoRecipes, ExportResources, IDojoBuild, IDojoResearch } from "warframe-public-export-plus";
 import { logger } from "../utils/logger";
 import { config } from "./configService";
 import { Account } from "../models/loginModel";
 import { getRandomInt } from "./rngService";
 import { Inbox } from "../models/inboxModel";
-import { ITypeCount } from "../types/inventoryTypes/inventoryTypes";
+import { IFusionTreasure, ITypeCount } from "../types/inventoryTypes/inventoryTypes";
 import { IInventoryChanges } from "../types/purchaseTypes";
 
 export const getGuildForRequest = async (req: Request): Promise<TGuildDatabaseDocument> => {
@@ -202,7 +202,9 @@ export const getDojoClient = async (
                         Type: deco.Type,
                         Pos: deco.Pos,
                         Rot: deco.Rot,
-                        Name: deco.Name
+                        Name: deco.Name,
+                        Sockets: deco.Sockets,
+                        PictureFrameInfo: deco.PictureFrameInfo
                     };
                     if (deco.CompletionTime) {
                         clientDeco.CompletionTime = toMongoDate(deco.CompletionTime);
@@ -285,8 +287,28 @@ export const removeDojoDeco = (
         1
     )[0];
     const meta = Object.values(ExportDojoRecipes.decos).find(x => x.resultType == deco.Type);
-    if (meta && meta.capacityCost) {
-        component.DecoCapacity! += meta.capacityCost;
+    if (meta) {
+        if (meta.capacityCost) {
+            component.DecoCapacity! += meta.capacityCost;
+        }
+    } else {
+        const itemType = Object.entries(ExportResources).find(arr => arr[1].deco == deco.Type)![0];
+        if (deco.Sockets !== undefined) {
+            addVaultFusionTreasures(guild, [
+                {
+                    ItemType: itemType,
+                    ItemCount: 1,
+                    Sockets: deco.Sockets
+                }
+            ]);
+        } else {
+            addVaultShipDecos(guild, [
+                {
+                    ItemType: itemType,
+                    ItemCount: 1
+                }
+            ]);
+        }
     }
     moveResourcesToVault(guild, deco);
 };
@@ -311,12 +333,38 @@ export const getVaultMiscItemCount = (guild: TGuildDatabaseDocument, itemType: s
 
 export const addVaultMiscItems = (guild: TGuildDatabaseDocument, miscItems: ITypeCount[]): void => {
     guild.VaultMiscItems ??= [];
-    for (const miscItem of miscItems) {
-        const vaultMiscItem = guild.VaultMiscItems.find(x => x.ItemType == miscItem.ItemType);
-        if (vaultMiscItem) {
-            vaultMiscItem.ItemCount += miscItem.ItemCount;
+    for (const item of miscItems) {
+        const vaultItem = guild.VaultMiscItems.find(x => x.ItemType == item.ItemType);
+        if (vaultItem) {
+            vaultItem.ItemCount += item.ItemCount;
         } else {
-            guild.VaultMiscItems.push(miscItem);
+            guild.VaultMiscItems.push(item);
+        }
+    }
+};
+
+export const addVaultShipDecos = (guild: TGuildDatabaseDocument, shipDecos: ITypeCount[]): void => {
+    guild.VaultShipDecorations ??= [];
+    for (const item of shipDecos) {
+        const vaultItem = guild.VaultShipDecorations.find(x => x.ItemType == item.ItemType);
+        if (vaultItem) {
+            vaultItem.ItemCount += item.ItemCount;
+        } else {
+            guild.VaultShipDecorations.push(item);
+        }
+    }
+};
+
+export const addVaultFusionTreasures = (guild: TGuildDatabaseDocument, fusionTreasures: IFusionTreasure[]): void => {
+    guild.VaultFusionTreasures ??= [];
+    for (const item of fusionTreasures) {
+        const vaultItem = guild.VaultFusionTreasures.find(
+            x => x.ItemType == item.ItemType && x.Sockets == item.Sockets
+        );
+        if (vaultItem) {
+            vaultItem.ItemCount += item.ItemCount;
+        } else {
+            guild.VaultFusionTreasures.push(item);
         }
     }
 };
@@ -328,6 +376,16 @@ export const addGuildMemberMiscItemContribution = (guildMember: IGuildMemberData
         miscItemContribution.ItemCount += item.ItemCount;
     } else {
         guildMember.MiscItemsContributed.push(item);
+    }
+};
+
+export const addGuildMemberShipDecoContribution = (guildMember: IGuildMemberDatabase, item: ITypeCount): void => {
+    guildMember.ShipDecorationsContributed ??= [];
+    const shipDecoContribution = guildMember.ShipDecorationsContributed.find(x => x.ItemType == item.ItemType);
+    if (shipDecoContribution) {
+        shipDecoContribution.ItemCount += item.ItemCount;
+    } else {
+        guildMember.ShipDecorationsContributed.push(item);
     }
 };
 
