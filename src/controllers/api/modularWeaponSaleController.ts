@@ -22,7 +22,6 @@ export const modularWeaponSaleController: RequestHandler = async (req, res) => {
     const partTypeToParts: Record<string, string[]> = {};
     for (const [uniqueName, data] of Object.entries(ExportWeapons)) {
         if (data.partType && data.premiumPrice) {
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             partTypeToParts[data.partType] ??= [];
             partTypeToParts[data.partType].push(uniqueName);
         }

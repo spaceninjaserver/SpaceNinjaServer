@@ -47,7 +47,6 @@ import { logger } from "@/src/utils/logger";
 - [ ]  FpsSamples
 */
 //move credit calc in here, return MissionRewards: [] if no reward info
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const missionInventoryUpdateController: RequestHandler = async (req, res): Promise<void> => {
     const accountId = await getAccountIdForRequest(req);
     const missionReport = getJSONfromString<IMissionInventoryUpdateRequest>((req.body as string).toString());
