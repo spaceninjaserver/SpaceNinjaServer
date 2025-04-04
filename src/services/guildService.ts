@@ -29,6 +29,7 @@ import { getRandomInt } from "./rngService";
 import { Inbox } from "../models/inboxModel";
 import { IFusionTreasure, ITypeCount } from "../types/inventoryTypes/inventoryTypes";
 import { IInventoryChanges } from "../types/purchaseTypes";
+import { parallelForeach } from "../utils/async-utils";
 
 export const getGuildForRequest = async (req: Request): Promise<TGuildDatabaseDocument> => {
     const accountId = await getAccountIdForRequest(req);
@@ -595,12 +596,12 @@ export const deleteGuild = async (guildId: Types.ObjectId): Promise<void> => {
     await Guild.deleteOne({ _id: guildId });
 
     const guildMembers = await GuildMember.find({ guildId, status: 0 }, "accountId");
-    for (const member of guildMembers) {
+    await parallelForeach(guildMembers, async member => {
         const inventory = await getInventory(member.accountId.toString(), "GuildId LevelKeys Recipes");
         inventory.GuildId = undefined;
         removeDojoKeyItems(inventory);
         await inventory.save();
-    }
+    });
 
     await GuildMember.deleteMany({ guildId });
 
