@@ -1,7 +1,7 @@
 import { Request } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getInventory } from "@/src/services/inventoryService";
-import { AllianceMember, Guild, GuildAd, GuildMember, TGuildDatabaseDocument } from "@/src/models/guildModel";
+import { Alliance, AllianceMember, Guild, GuildAd, GuildMember, TGuildDatabaseDocument } from "@/src/models/guildModel";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import {
     GuildPermission,
@@ -613,9 +613,26 @@ export const deleteGuild = async (guildId: Types.ObjectId): Promise<void> => {
 
     await GuildAd.deleteOne({ GuildId: guildId });
 
-    await AllianceMember.deleteMany({ guildId });
+    // If guild is the creator of an alliance, delete that as well.
+    const allianceMember = await AllianceMember.findOne({ guildId, Pending: false });
+    if (allianceMember) {
+        if (allianceMember.Permissions & GuildPermission.Ruler) {
+            await deleteAlliance(allianceMember.allianceId);
+        }
+    }
 
-    // TODO: If this guild was the founding guild of an alliance (ruler permission), that would need to be forcefully deleted now as well.
+    await AllianceMember.deleteMany({ guildId });
+};
+
+export const deleteAlliance = async (allianceId: Types.ObjectId): Promise<void> => {
+    const allianceMembers = await AllianceMember.find({ allianceId, Pending: false });
+    await parallelForeach(allianceMembers, async allianceMember => {
+        await Guild.updateOne({ _id: allianceMember.guildId }, { $unset: { AllianceId: "" } });
+    });
+
+    await AllianceMember.deleteMany({ allianceId });
+
+    await Alliance.deleteOne({ _id: allianceId });
 };
 
 export const getAllianceClient = async (

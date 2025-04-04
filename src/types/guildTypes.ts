@@ -71,11 +71,11 @@ export interface ILongMOTD {
 
 // 32 seems to be reserved
 export enum GuildPermission {
-    Ruler = 1, // Clan: Change hierarchy. Alliance: Kick clans.
+    Ruler = 1, // Clan: Change hierarchy. Alliance (Creator only): Kick clans.
     Advertiser = 8192,
     Recruiter = 2, // Send invites (Clans & Alliances)
     Regulator = 4, // Kick members
-    Promoter = 8, // Clan: Promote and demote members. Alliance: Change clan permissions.
+    Promoter = 8, // Clan: Promote and demote members. Alliance (Creator only): Change clan permissions.
     Architect = 16, // Create and destroy rooms
     Decorator = 1024, // Create and destroy decos
     Treasurer = 64, // Clan: Contribute from vault and edit tax rate. Alliance: Divvy vault.
@@ -318,5 +318,4 @@ export interface IAllianceMemberDatabase {
     Permissions: number;
 }
 
-// TODO: GET /api/removeFromAlliance.php?accountId=6633b81e9dba0b714f28ff02&nonce=5702391171614479&ct=MSI&guildId=663e9be9f741eeb5782f9df0
 // TODO: GET /api/setAllianceGuildPermissions.php?accountId=6633b81e9dba0b714f28ff02&nonce=5702391171614479&ct=MSI&guildId=000000000000000000000042&perms=2
