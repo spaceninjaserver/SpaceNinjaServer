@@ -1,6 +1,7 @@
 import { Alliance, AllianceMember, Guild, GuildMember } from "@/src/models/guildModel";
 import { getAccountForRequest } from "@/src/services/loginService";
 import { GuildPermission } from "@/src/types/guildTypes";
+import { parallelForeach } from "@/src/utils/async-utils";
 import { logger } from "@/src/utils/logger";
 import { RequestHandler } from "express";
 
@@ -63,12 +64,4 @@ export const divvyAllianceVaultController: RequestHandler = async (req, res) => 
         await alliance.save();
     }
     res.end();
-};
-
-const parallelForeach = async <T>(data: T[], op: (datum: T) => Promise<void>): Promise<void> => {
-    const promises: Promise<void>[] = [];
-    for (const datum of data) {
-        promises.push(op(datum));
-    }
-    await Promise.all(promises);
 };
