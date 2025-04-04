@@ -77,21 +77,23 @@ export const addMissionInventoryUpdates = async (
     inventoryUpdates: IMissionInventoryUpdateRequest
 ): Promise<IInventoryChanges> => {
     const inventoryChanges: IInventoryChanges = {};
-    if (inventoryUpdates.RewardInfo && inventoryUpdates.RewardInfo.periodicMissionTag) {
-        const tag = inventoryUpdates.RewardInfo.periodicMissionTag;
-        const existingCompletion = inventory.PeriodicMissionCompletions.find(completion => completion.tag === tag);
+    if (inventoryUpdates.RewardInfo) {
+        if (inventoryUpdates.RewardInfo.periodicMissionTag) {
+            const tag = inventoryUpdates.RewardInfo.periodicMissionTag;
+            const existingCompletion = inventory.PeriodicMissionCompletions.find(completion => completion.tag === tag);
 
-        if (existingCompletion) {
-            existingCompletion.date = new Date();
-        } else {
-            inventory.PeriodicMissionCompletions.push({
-                tag: tag,
-                date: new Date()
-            });
+            if (existingCompletion) {
+                existingCompletion.date = new Date();
+            } else {
+                inventory.PeriodicMissionCompletions.push({
+                    tag: tag,
+                    date: new Date()
+                });
+            }
         }
-    }
-    if (inventoryUpdates.RewardInfo && inventoryUpdates.RewardInfo.NemesisAbandonedRewards) {
-        inventory.NemesisAbandonedRewards = inventoryUpdates.RewardInfo.NemesisAbandonedRewards;
+        if (inventoryUpdates.RewardInfo.NemesisAbandonedRewards) {
+            inventory.NemesisAbandonedRewards = inventoryUpdates.RewardInfo.NemesisAbandonedRewards;
+        }
     }
     if (
         inventoryUpdates.MissionFailed &&
