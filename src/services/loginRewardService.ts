@@ -84,7 +84,7 @@ const getRandomLoginReward = (rng: CRng, day: number, inventory: TInventoryDatab
         }
         const unmasteredItems = new Set();
         for (const [uniqueName, data] of Object.entries(ExportWeapons)) {
-            if (data.variantType == "VT_NORMAL" && !masteredItems.has(uniqueName)) {
+            if (data.totalDamage != 0 && data.variantType == "VT_NORMAL" && !masteredItems.has(uniqueName)) {
                 unmasteredItems.add(uniqueName);
             }
         }
