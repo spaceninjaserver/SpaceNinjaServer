@@ -1,10 +1,6 @@
-import {
-    Inventory,
-    InventoryDocumentProps,
-    TInventoryDatabaseDocument
-} from "@/src/models/inventoryModels/inventoryModel";
+import { Inventory, TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { config } from "@/src/services/configService";
-import { HydratedDocument, Types } from "mongoose";
+import { Types } from "mongoose";
 import { SlotNames, IInventoryChanges, IBinChanges, slotNames } from "@/src/types/purchaseTypes";
 import {
     IChallengeProgress,
@@ -19,7 +15,6 @@ import {
     TEquipmentKey,
     IFusionTreasure,
     IDailyAffiliations,
-    IInventoryDatabase,
     IKubrowPetEggDatabase,
     IKubrowPetEggClient,
     ILibraryDailyTaskInfo,
@@ -129,7 +124,7 @@ const awakeningRewards = [
 ];
 
 export const addStartingGear = async (
-    inventory: HydratedDocument<IInventoryDatabase, InventoryDocumentProps>,
+    inventory: TInventoryDatabaseDocument,
     startingGear: TPartialStartingGear | undefined = undefined
 ): Promise<IInventoryChanges> => {
     const { LongGuns, Pistols, Suits, Melee } = startingGear || {
@@ -1375,7 +1370,7 @@ export const addBooster = (ItemType: string, time: number, inventory: TInventory
 };
 
 export const updateSyndicate = (
-    inventory: HydratedDocument<IInventoryDatabase, InventoryDocumentProps>,
+    inventory: TInventoryDatabaseDocument,
     syndicateUpdate: IMissionInventoryUpdateRequest["AffiliationChanges"]
 ): void => {
     syndicateUpdate?.forEach(affiliation => {
