@@ -103,6 +103,7 @@ import { saveVaultAutoContributeController } from "@/src/controllers/api/saveVau
 import { sellController } from "@/src/controllers/api/sellController";
 import { setActiveQuestController } from "@/src/controllers/api/setActiveQuestController";
 import { setActiveShipController } from "@/src/controllers/api/setActiveShipController";
+import { setAllianceGuildPermissionsController } from "@/src/controllers/api/setAllianceGuildPermissionsController";
 import { setBootLocationController } from "@/src/controllers/api/setBootLocationController";
 import { setDojoComponentMessageController } from "@/src/controllers/api/setDojoComponentMessageController";
 import { setEquippedInstrumentController } from "@/src/controllers/api/setEquippedInstrumentController";
@@ -177,6 +178,7 @@ apiRouter.get("/queueDojoComponentDestruction.php", queueDojoComponentDestructio
 apiRouter.get("/removeFromAlliance.php", removeFromAllianceController);
 apiRouter.get("/setActiveQuest.php", setActiveQuestController);
 apiRouter.get("/setActiveShip.php", setActiveShipController);
+apiRouter.get("/setAllianceGuildPermissions.php", setAllianceGuildPermissionsController);
 apiRouter.get("/setBootLocation.php", setBootLocationController);
 apiRouter.get("/setGuildMotd.php", setGuildMotdController);
 apiRouter.get("/setSupportedSyndicate.php", setSupportedSyndicateController);
