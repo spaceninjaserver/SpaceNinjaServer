@@ -1,22 +1,30 @@
-import { logger } from "./utils/logger";
+// First, init config.
+import { config, loadConfig } from "@/src/services/configService";
+try {
+    loadConfig();
+} catch (e) {
+    console.log("ERROR: Failed to load config.json. You can copy config.json.example to create your config.json.");
+    process.exit(1);
+}
 
+// Now we can init the logger with the settings provided in the config.
+import { logger } from "@/src/utils/logger";
 logger.info("Starting up...");
 
+// Proceed with normal startup: bring up config watcher service, validate config, connect to MongoDB, and finally start listening for HTTP.
 import http from "http";
 import https from "https";
 import fs from "node:fs";
 import { app } from "./app";
-import { config, validateConfig } from "./services/configService";
-import { registerLogFileCreationListener } from "@/src/utils/logger";
 import mongoose from "mongoose";
 import { Json, JSONStringify } from "json-with-bigint";
+import { validateConfig } from "@/src/services/configWatcherService";
 
 // Patch JSON.stringify to work flawlessly with Bigints.
 JSON.stringify = (obj: Exclude<Json, undefined>, _replacer?: unknown, space?: string | number): string => {
     return JSONStringify(obj, space);
 };
 
-registerLogFileCreationListener();
 validateConfig();
 
 mongoose

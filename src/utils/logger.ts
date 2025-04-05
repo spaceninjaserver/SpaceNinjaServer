@@ -104,9 +104,7 @@ export const logger = createLogger({
 
 addColors(logLevels.colors);
 
-export function registerLogFileCreationListener(): void {
-    errorLog.on("new", filename => logger.info(`Using error log file: ${filename}`));
-    combinedLog.on("new", filename => logger.info(`Using combined log file: ${filename}`));
-    errorLog.on("rotate", filename => logger.info(`Rotated error log file: ${filename}`));
-    combinedLog.on("rotate", filename => logger.info(`Rotated combined log file: ${filename}`));
-}
+errorLog.on("new", filename => logger.info(`Using error log file: ${filename}`));
+combinedLog.on("new", filename => logger.info(`Using combined log file: ${filename}`));
+errorLog.on("rotate", filename => logger.info(`Rotated error log file: ${filename}`));
+combinedLog.on("rotate", filename => logger.info(`Rotated combined log file: ${filename}`));
