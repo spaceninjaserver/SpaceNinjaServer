@@ -18,7 +18,7 @@ import {
     ITypeXPItem
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { RequestHandler } from "express";
-import { catBreadHash } from "../api/inventoryController";
+import { catBreadHash } from "@/src/helpers/stringHelpers";
 import { ExportCustoms, ExportDojoRecipes } from "warframe-public-export-plus";
 import { IStatsClient } from "@/src/types/statTypes";
 import { toStoreItem } from "@/src/services/itemDataService";

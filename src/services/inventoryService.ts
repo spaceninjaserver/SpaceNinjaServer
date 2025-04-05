@@ -1,10 +1,6 @@
-import {
-    Inventory,
-    InventoryDocumentProps,
-    TInventoryDatabaseDocument
-} from "@/src/models/inventoryModels/inventoryModel";
+import { Inventory, TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { config } from "@/src/services/configService";
-import { HydratedDocument, Types } from "mongoose";
+import { Types } from "mongoose";
 import { SlotNames, IInventoryChanges, IBinChanges, slotNames } from "@/src/types/purchaseTypes";
 import {
     IChallengeProgress,
@@ -19,16 +15,16 @@ import {
     TEquipmentKey,
     IFusionTreasure,
     IDailyAffiliations,
-    IInventoryDatabase,
     IKubrowPetEggDatabase,
     IKubrowPetEggClient,
     ILibraryDailyTaskInfo,
     ICalendarProgress,
     IDroneClient,
-    IUpgradeClient
+    IUpgradeClient,
+    TPartialStartingGear
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate, IUpdateNodeIntrosResponse } from "../types/genericUpdate";
-import { IMissionInventoryUpdateRequest } from "../types/requestTypes";
+import { IKeyChainRequest, IMissionInventoryUpdateRequest } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
 import { convertInboxMessage, fromStoreItem, getKeyChainItems } from "@/src/services/itemDataService";
 import {
@@ -62,10 +58,7 @@ import {
     TStandingLimitBin
 } from "warframe-public-export-plus";
 import { createShip } from "./shipService";
-import { IKeyChainRequest } from "@/src/controllers/api/giveKeyChainTriggeredItemsController";
 import { toOid } from "../helpers/inventoryHelpers";
-import { generateRewardSeed } from "@/src/controllers/api/getNewRewardSeedController";
-import { addStartingGear } from "@/src/controllers/api/giveStartingGearController";
 import { addQuestKey, completeQuest } from "@/src/services/questService";
 import { handleBundleAcqusition } from "./purchaseService";
 import libraryDailyTasks from "@/static/fixed_responses/libraryDailyTasks.json";
@@ -112,6 +105,81 @@ export const createInventory = async (
     } catch (error) {
         throw new Error(`Error creating inventory: ${error instanceof Error ? error.message : "Unknown error type"}`);
     }
+};
+
+export const generateRewardSeed = (): number => {
+    const min = -Number.MAX_SAFE_INTEGER;
+    const max = Number.MAX_SAFE_INTEGER;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+//TODO: RawUpgrades might need to return a LastAdded
+const awakeningRewards = [
+    "/Lotus/Types/StoreItems/AvatarImages/AvatarImageItem1",
+    "/Lotus/Types/StoreItems/AvatarImages/AvatarImageItem2",
+    "/Lotus/Types/StoreItems/AvatarImages/AvatarImageItem3",
+    "/Lotus/Types/StoreItems/AvatarImages/AvatarImageItem4",
+    "/Lotus/Types/Restoratives/LisetAutoHack",
+    "/Lotus/Upgrades/Mods/Warframe/AvatarShieldMaxMod"
+];
+
+export const addStartingGear = async (
+    inventory: TInventoryDatabaseDocument,
+    startingGear: TPartialStartingGear | undefined = undefined
+): Promise<IInventoryChanges> => {
+    const { LongGuns, Pistols, Suits, Melee } = startingGear || {
+        LongGuns: [{ ItemType: "/Lotus/Weapons/Tenno/Rifle/Rifle" }],
+        Pistols: [{ ItemType: "/Lotus/Weapons/Tenno/Pistol/Pistol" }],
+        Suits: [{ ItemType: "/Lotus/Powersuits/Excalibur/Excalibur" }],
+        Melee: [{ ItemType: "/Lotus/Weapons/Tenno/Melee/LongSword/LongSword" }]
+    };
+
+    //TODO: properly merge weapon bin changes it is currently static here
+    const inventoryChanges: IInventoryChanges = {};
+    addEquipment(inventory, "LongGuns", LongGuns[0].ItemType, undefined, inventoryChanges);
+    addEquipment(inventory, "Pistols", Pistols[0].ItemType, undefined, inventoryChanges);
+    addEquipment(inventory, "Melee", Melee[0].ItemType, undefined, inventoryChanges);
+    await addPowerSuit(inventory, Suits[0].ItemType, inventoryChanges);
+    addEquipment(
+        inventory,
+        "DataKnives",
+        "/Lotus/Weapons/Tenno/HackingDevices/TnHackingDevice/TnHackingDeviceWeapon",
+        undefined,
+        inventoryChanges,
+        { XP: 450_000 }
+    );
+    addEquipment(
+        inventory,
+        "Scoops",
+        "/Lotus/Weapons/Tenno/Speedball/SpeedballWeaponTest",
+        undefined,
+        inventoryChanges
+    );
+
+    updateSlots(inventory, InventorySlot.SUITS, 0, 1);
+    updateSlots(inventory, InventorySlot.WEAPONS, 0, 3);
+    inventoryChanges.SuitBin = { count: 1, platinum: 0, Slots: -1 };
+    inventoryChanges.WeaponBin = { count: 3, platinum: 0, Slots: -3 };
+
+    await addItem(inventory, "/Lotus/Types/Keys/VorsPrize/VorsPrizeQuestKeyChain");
+    inventory.ActiveQuest = "/Lotus/Types/Keys/VorsPrize/VorsPrizeQuestKeyChain";
+
+    inventory.PremiumCredits = 50;
+    inventory.PremiumCreditsFree = 50;
+    inventoryChanges.PremiumCredits = 50;
+    inventoryChanges.PremiumCreditsFree = 50;
+    inventory.RegularCredits = 3000;
+    inventoryChanges.RegularCredits = 3000;
+
+    for (const item of awakeningRewards) {
+        const inventoryDelta = await addItem(inventory, item);
+        combineInventoryChanges(inventoryChanges, inventoryDelta);
+    }
+
+    inventory.PlayedParkourTutorial = true;
+    inventory.ReceivedStartingGear = true;
+
+    return inventoryChanges;
 };
 
 /**
@@ -1302,7 +1370,7 @@ export const addBooster = (ItemType: string, time: number, inventory: TInventory
 };
 
 export const updateSyndicate = (
-    inventory: HydratedDocument<IInventoryDatabase, InventoryDocumentProps>,
+    inventory: TInventoryDatabaseDocument,
     syndicateUpdate: IMissionInventoryUpdateRequest["AffiliationChanges"]
 ): void => {
     syndicateUpdate?.forEach(affiliation => {

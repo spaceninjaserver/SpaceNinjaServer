@@ -2,8 +2,8 @@ import { RequestHandler } from "express";
 import { parseString } from "@/src/helpers/general";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getInventory } from "@/src/services/inventoryService";
-import { IGroup } from "@/src/types/loginTypes";
 import { giveKeyChainItem } from "@/src/services/questService";
+import { IKeyChainRequest } from "@/src/types/requestTypes";
 
 export const giveKeyChainTriggeredItemsController: RequestHandler = async (req, res) => {
     const accountId = parseString(req.query.accountId);
@@ -15,9 +15,3 @@ export const giveKeyChainTriggeredItemsController: RequestHandler = async (req, 
 
     res.send(inventoryChanges);
 };
-
-export interface IKeyChainRequest {
-    KeyChain: string;
-    ChainStage: number;
-    Groups?: IGroup[];
-}

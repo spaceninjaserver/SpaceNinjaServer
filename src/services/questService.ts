@@ -1,4 +1,4 @@
-import { IKeyChainRequest } from "@/src/controllers/api/giveKeyChainTriggeredItemsController";
+import { IKeyChainRequest } from "@/src/types/requestTypes";
 import { isEmptyObject } from "@/src/helpers/general";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { createMessage } from "@/src/services/inboxService";
@@ -9,14 +9,9 @@ import {
     getLevelKeyRewards,
     getQuestCompletionItems
 } from "@/src/services/itemDataService";
-import {
-    IInventoryDatabase,
-    IQuestKeyClient,
-    IQuestKeyDatabase,
-    IQuestStage
-} from "@/src/types/inventoryTypes/inventoryTypes";
+import { IQuestKeyClient, IQuestKeyDatabase, IQuestStage } from "@/src/types/inventoryTypes/inventoryTypes";
 import { logger } from "@/src/utils/logger";
-import { HydratedDocument, Types } from "mongoose";
+import { Types } from "mongoose";
 import { ExportKeys } from "warframe-public-export-plus";
 import { addFixedLevelRewards } from "./missionInventoryUpdateService";
 import { IInventoryChanges } from "../types/purchaseTypes";
@@ -31,7 +26,7 @@ export interface IUpdateQuestRequest {
 }
 
 export const updateQuestKey = async (
-    inventory: HydratedDocument<IInventoryDatabase>,
+    inventory: TInventoryDatabaseDocument,
     questKeyUpdate: IUpdateQuestRequest["QuestKeys"]
 ): Promise<IInventoryChanges> => {
     if (questKeyUpdate.length > 1) {
@@ -45,7 +40,7 @@ export const updateQuestKey = async (
         throw new Error(`quest key ${questKeyUpdate[0].ItemType} not found`);
     }
 
-    inventory.QuestKeys[questKeyIndex] = questKeyUpdate[0];
+    inventory.QuestKeys[questKeyIndex].overwrite(questKeyUpdate[0]);
 
     let inventoryChanges: IInventoryChanges = {};
     if (questKeyUpdate[0].Completed) {
@@ -57,12 +52,12 @@ export const updateQuestKey = async (
         logger.debug(`quest completion items`, questCompletionItems);
 
         if (questCompletionItems) {
-            inventoryChanges = await addItems(inventory as TInventoryDatabaseDocument, questCompletionItems);
+            inventoryChanges = await addItems(inventory, questCompletionItems);
         }
         inventory.ActiveQuest = "";
 
         if (questKeyUpdate[0].ItemType == "/Lotus/Types/Keys/NewWarQuest/NewWarQuestKeyChain") {
-            setupKahlSyndicate(inventory as TInventoryDatabaseDocument);
+            setupKahlSyndicate(inventory);
         }
     }
     return inventoryChanges;

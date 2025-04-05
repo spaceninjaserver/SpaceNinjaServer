@@ -10,7 +10,7 @@ import {
 import { IMissionInventoryUpdateRequest, IRewardInfo } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
 import { IRngResult, getRandomElement, getRandomReward } from "@/src/services/rngService";
-import { equipmentKeys, IInventoryDatabase, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
+import { equipmentKeys, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
 import {
     addBooster,
     addChallenges,
@@ -32,10 +32,10 @@ import {
     updateSyndicate
 } from "@/src/services/inventoryService";
 import { updateQuestKey } from "@/src/services/questService";
-import { HydratedDocument, Types } from "mongoose";
+import { Types } from "mongoose";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { getLevelKeyRewards, toStoreItem } from "@/src/services/itemDataService";
-import { InventoryDocumentProps, TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { getEntriesUnsafe } from "@/src/utils/ts-utils";
 import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { handleStoreItemAcquisition } from "./purchaseService";
@@ -73,7 +73,7 @@ const getRandomRewardByChance = (pool: IReward[]): IRngResult | undefined => {
 //const knownUnhandledKeys: readonly string[] = ["test"] as const; // for unimplemented but important keys
 
 export const addMissionInventoryUpdates = async (
-    inventory: HydratedDocument<IInventoryDatabase, InventoryDocumentProps>,
+    inventory: TInventoryDatabaseDocument,
     inventoryUpdates: IMissionInventoryUpdateRequest
 ): Promise<IInventoryChanges> => {
     const inventoryChanges: IInventoryChanges = {};
@@ -661,7 +661,7 @@ interface IMissionCredits {
 //creditBonus is not entirely accurate.
 //TODO: consider ActiveBoosters
 export const addCredits = (
-    inventory: HydratedDocument<IInventoryDatabase>,
+    inventory: TInventoryDatabaseDocument,
     {
         missionDropCredits,
         missionCompletionCredits,

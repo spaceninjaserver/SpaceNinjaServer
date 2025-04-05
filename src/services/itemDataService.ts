@@ -1,4 +1,4 @@
-import { IKeyChainRequest } from "@/src/controllers/api/giveKeyChainTriggeredItemsController";
+import { IKeyChainRequest } from "@/src/types/requestTypes";
 import { getIndexAfter } from "@/src/helpers/stringHelpers";
 import { ITypeCount } from "@/src/types/inventoryTypes/inventoryTypes";
 import { logger } from "@/src/utils/logger";

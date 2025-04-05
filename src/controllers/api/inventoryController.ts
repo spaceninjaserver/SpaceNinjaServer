@@ -13,9 +13,10 @@ import {
     ExportResources,
     ExportVirtuals
 } from "warframe-public-export-plus";
-import { applyCheatsToInfestedFoundry, handleSubsumeCompletion } from "./infestedFoundryController";
+import { applyCheatsToInfestedFoundry, handleSubsumeCompletion } from "@/src/services/infestedFoundryService";
 import { addMiscItems, allDailyAffiliationKeys, createLibraryDailyTask } from "@/src/services/inventoryService";
 import { logger } from "@/src/utils/logger";
+import { catBreadHash } from "@/src/helpers/stringHelpers";
 
 export const inventoryController: RequestHandler = async (request, response) => {
     const accountId = await getAccountIdForRequest(request);
@@ -269,7 +270,7 @@ export const getInventoryResponse = async (
     return inventoryResponse;
 };
 
-export const addString = (arr: string[], str: string): void => {
+const addString = (arr: string[], str: string): void => {
     if (!arr.find(x => x == str)) {
         arr.push(str);
     }
@@ -298,14 +299,4 @@ const resourceGetParent = (resourceName: string): string | undefined => {
     }
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     return ExportVirtuals[resourceName]?.parentName;
-};
-
-// This is FNV1a-32 except operating under modulus 2^31 because JavaScript is stinky and likes producing negative integers out of nowhere.
-export const catBreadHash = (name: string): number => {
-    let hash = 2166136261;
-    for (let i = 0; i != name.length; ++i) {
-        hash = (hash ^ name.charCodeAt(i)) & 0x7fffffff;
-        hash = (hash * 16777619) & 0x7fffffff;
-    }
-    return hash;
 };
