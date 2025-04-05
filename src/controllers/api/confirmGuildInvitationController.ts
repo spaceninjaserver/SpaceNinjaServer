@@ -9,62 +9,8 @@ import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { RequestHandler } from "express";
 import { Types } from "mongoose";
 
-export const confirmGuildInvitationController: RequestHandler = async (req, res) => {
-    if (req.body) {
-        // POST request: Clan representative accepting invite(s).
-        const accountId = await getAccountIdForRequest(req);
-        const guild = (await Guild.findById(req.query.clanId as string, "Ranks RosterActivity"))!;
-        if (!(await hasGuildPermission(guild, accountId, GuildPermission.Recruiter))) {
-            res.status(400).json("Invalid permission");
-            return;
-        }
-        const payload = getJSONfromString<{ userId: string }>(String(req.body));
-        const filter: { accountId?: string; status: number } = { status: 1 };
-        if (payload.userId != "all") {
-            filter.accountId = payload.userId;
-        }
-        const guildMembers = await GuildMember.find(filter);
-        const newMembers: string[] = [];
-        for (const guildMember of guildMembers) {
-            guildMember.status = 0;
-            guildMember.RequestMsg = undefined;
-            guildMember.RequestExpiry = undefined;
-            await guildMember.save();
-
-            // Remove other pending applications for this account
-            await GuildMember.deleteMany({ accountId: guildMember.accountId, status: 1 });
-
-            // Update inventory of new member
-            const inventory = await getInventory(guildMember.accountId.toString(), "GuildId Recipes");
-            inventory.GuildId = new Types.ObjectId(req.query.clanId as string);
-            addRecipes(inventory, [
-                {
-                    ItemType: "/Lotus/Types/Keys/DojoKeyBlueprint",
-                    ItemCount: 1
-                }
-            ]);
-            await inventory.save();
-
-            // Add join to clan log
-            const account = (await Account.findOne({ _id: guildMember.accountId }))!;
-            guild.RosterActivity ??= [];
-            guild.RosterActivity.push({
-                dateTime: new Date(),
-                entryType: 6,
-                details: getSuffixedName(account)
-            });
-
-            newMembers.push(account._id.toString());
-        }
-        await guild.save();
-        res.json({
-            NewMembers: newMembers
-        });
-        return;
-    }
-
-    // GET request: A player accepting an invite they got in their inbox.
-
+// GET request: A player accepting an invite they got in their inbox.
+export const confirmGuildInvitationGetController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
     const invitedGuildMember = await GuildMember.findOne({
         accountId: account._id,
@@ -123,4 +69,56 @@ export const confirmGuildInvitationController: RequestHandler = async (req, res)
     } else {
         res.end();
     }
+};
+
+// POST request: Clan representative accepting invite(s).
+export const confirmGuildInvitationPostController: RequestHandler = async (req, res) => {
+    const accountId = await getAccountIdForRequest(req);
+    const guild = (await Guild.findById(req.query.clanId as string, "Ranks RosterActivity"))!;
+    if (!(await hasGuildPermission(guild, accountId, GuildPermission.Recruiter))) {
+        res.status(400).json("Invalid permission");
+        return;
+    }
+    const payload = getJSONfromString<{ userId: string }>(String(req.body));
+    const filter: { accountId?: string; status: number } = { status: 1 };
+    if (payload.userId != "all") {
+        filter.accountId = payload.userId;
+    }
+    const guildMembers = await GuildMember.find(filter);
+    const newMembers: string[] = [];
+    for (const guildMember of guildMembers) {
+        guildMember.status = 0;
+        guildMember.RequestMsg = undefined;
+        guildMember.RequestExpiry = undefined;
+        await guildMember.save();
+
+        // Remove other pending applications for this account
+        await GuildMember.deleteMany({ accountId: guildMember.accountId, status: 1 });
+
+        // Update inventory of new member
+        const inventory = await getInventory(guildMember.accountId.toString(), "GuildId Recipes");
+        inventory.GuildId = new Types.ObjectId(req.query.clanId as string);
+        addRecipes(inventory, [
+            {
+                ItemType: "/Lotus/Types/Keys/DojoKeyBlueprint",
+                ItemCount: 1
+            }
+        ]);
+        await inventory.save();
+
+        // Add join to clan log
+        const account = (await Account.findOne({ _id: guildMember.accountId }))!;
+        guild.RosterActivity ??= [];
+        guild.RosterActivity.push({
+            dateTime: new Date(),
+            entryType: 6,
+            details: getSuffixedName(account)
+        });
+
+        newMembers.push(account._id.toString());
+    }
+    await guild.save();
+    res.json({
+        NewMembers: newMembers
+    });
 };
