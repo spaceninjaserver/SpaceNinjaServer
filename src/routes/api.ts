@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import express from "express";
 import { abandonLibraryDailyTaskController } from "@/src/controllers/api/abandonLibraryDailyTaskController";
 import { abortDojoComponentController } from "@/src/controllers/api/abortDojoComponentController";
