@@ -239,6 +239,13 @@ guildMemberSchema.index({ RequestExpiry: 1 }, { expireAfterSeconds: 0 });
 
 export const GuildMember = model<IGuildMemberDatabase>("GuildMember", guildMemberSchema);
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export type TGuildMemberDatabaseDocument = Document<unknown, {}, IGuildMemberDatabase> &
+    IGuildMemberDatabase & {
+        _id: Types.ObjectId;
+        __v: number;
+    };
+
 const guildAdSchema = new Schema<IGuildAdDatabase>({
     GuildId: { type: Schema.Types.ObjectId, required: true },
     Emblem: Boolean,
