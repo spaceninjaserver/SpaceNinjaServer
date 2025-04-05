@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { getVendorManifestByTypeName, preprocessVendorManifest } from "@/src/services/serversideVendorsService";
+import { getVendorManifestByTypeName } from "@/src/services/serversideVendorsService";
 
 export const getVendorInfoController: RequestHandler = (req, res) => {
     if (typeof req.query.vendor == "string") {
@@ -7,7 +7,7 @@ export const getVendorInfoController: RequestHandler = (req, res) => {
         if (!manifest) {
             throw new Error(`Unknown vendor: ${req.query.vendor}`);
         }
-        res.json(preprocessVendorManifest(manifest));
+        res.json(manifest);
     } else {
         res.status(400).end();
     }

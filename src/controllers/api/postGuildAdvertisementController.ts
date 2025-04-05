@@ -9,7 +9,7 @@ import {
 } from "@/src/services/guildService";
 import { getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getVendorManifestByTypeName, preprocessVendorManifest } from "@/src/services/serversideVendorsService";
+import { getVendorManifestByTypeName } from "@/src/services/serversideVendorsService";
 import { GuildPermission } from "@/src/types/guildTypes";
 import { IPurchaseParams } from "@/src/types/purchaseTypes";
 import { RequestHandler } from "express";
@@ -26,9 +26,9 @@ export const postGuildAdvertisementController: RequestHandler = async (req, res)
     const payload = getJSONfromString<IPostGuildAdvertisementRequest>(String(req.body));
 
     // Handle resource cost
-    const vendor = preprocessVendorManifest(
-        getVendorManifestByTypeName("/Lotus/Types/Game/VendorManifests/Hubs/GuildAdvertisementVendorManifest")!
-    );
+    const vendor = getVendorManifestByTypeName(
+        "/Lotus/Types/Game/VendorManifests/Hubs/GuildAdvertisementVendorManifest"
+    )!;
     const offer = vendor.VendorInfo.ItemManifest.find(x => x.StoreItem == payload.PurchaseParams.StoreItem)!;
     if (getVaultMiscItemCount(guild, offer.ItemPrices![0].ItemType) >= offer.ItemPrices![0].ItemCount) {
         addVaultMiscItems(guild, [

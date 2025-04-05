@@ -3,14 +3,14 @@ import path from "path";
 import { repoDir } from "@/src/helpers/pathHelper";
 import { CRng, mixSeeds } from "@/src/services/rngService";
 import { IMongoDate } from "@/src/types/commonTypes";
-import { IVendorManifest, IVendorManifestPreprocessed } from "@/src/types/vendorTypes";
+import { IRawVendorManifest, IVendorManifestPreprocessed } from "@/src/types/vendorTypes";
 import { JSONParse } from "json-with-bigint";
 
-const getVendorManifestJson = (name: string): IVendorManifest => {
+const getVendorManifestJson = (name: string): IRawVendorManifest => {
     return JSONParse(fs.readFileSync(path.join(repoDir, `static/fixed_responses/getVendorInfo/${name}.json`), "utf-8"));
 };
 
-const vendorManifests: IVendorManifest[] = [
+const rawVendorManifests: IRawVendorManifest[] = [
     getVendorManifestJson("ArchimedeanVendorManifest"),
     getVendorManifestJson("DeimosEntratiFragmentVendorProductsManifest"),
     getVendorManifestJson("DeimosFishmongerVendorManifest"),
@@ -44,25 +44,25 @@ const vendorManifests: IVendorManifest[] = [
     getVendorManifestJson("ZarimanCommisionsManifestArchimedean")
 ];
 
-export const getVendorManifestByTypeName = (typeName: string): IVendorManifest | undefined => {
-    for (const vendorManifest of vendorManifests) {
+export const getVendorManifestByTypeName = (typeName: string): IVendorManifestPreprocessed | undefined => {
+    for (const vendorManifest of rawVendorManifests) {
         if (vendorManifest.VendorInfo.TypeName == typeName) {
-            return vendorManifest;
+            return preprocessVendorManifest(vendorManifest);
         }
     }
     return undefined;
 };
 
-export const getVendorManifestByOid = (oid: string): IVendorManifest | undefined => {
-    for (const vendorManifest of vendorManifests) {
+export const getVendorManifestByOid = (oid: string): IVendorManifestPreprocessed | undefined => {
+    for (const vendorManifest of rawVendorManifests) {
         if (vendorManifest.VendorInfo._id.$oid == oid) {
-            return vendorManifest;
+            return preprocessVendorManifest(vendorManifest);
         }
     }
     return undefined;
 };
 
-export const preprocessVendorManifest = (originalManifest: IVendorManifest): IVendorManifestPreprocessed => {
+const preprocessVendorManifest = (originalManifest: IRawVendorManifest): IVendorManifestPreprocessed => {
     if (Date.now() >= parseInt(originalManifest.VendorInfo.Expiry.$date.$numberLong)) {
         const manifest = structuredClone(originalManifest);
         const info = manifest.VendorInfo;

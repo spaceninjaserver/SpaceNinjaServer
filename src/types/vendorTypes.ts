@@ -38,7 +38,7 @@ interface IVendorInfoPreprocessed extends Omit<IVendorInfo, "ItemManifest"> {
     ItemManifest: IItemManifestPreprocessed[];
 }
 
-export interface IVendorManifest {
+export interface IRawVendorManifest {
     VendorInfo: IVendorInfo;
 }
 
