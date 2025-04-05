@@ -317,5 +317,3 @@ export interface IAllianceMemberDatabase {
     Pending: boolean;
     Permissions: number;
 }
-
-// TODO: GET /api/setAllianceGuildPermissions.php?accountId=6633b81e9dba0b714f28ff02&nonce=5702391171614479&ct=MSI&guildId=000000000000000000000042&perms=2
