@@ -20,11 +20,11 @@ export const giveQuestKeyRewardController: RequestHandler = async (req, res) => 
     //TODO: consider whishlist changes
 };
 
-export interface IQuestKeyRewardRequest {
+interface IQuestKeyRewardRequest {
     reward: IQuestKeyReward;
 }
 
-export interface IQuestKeyReward {
+interface IQuestKeyReward {
     RewardType: string;
     CouponType: string;
     Icon: string;

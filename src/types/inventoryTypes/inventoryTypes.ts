@@ -1168,3 +1168,5 @@ export interface ILockedWeaponGroupDatabase {
     m?: Types.ObjectId;
     sn?: Types.ObjectId;
 }
+
+export type TPartialStartingGear = Pick<IInventoryClient, "LongGuns" | "Suits" | "Pistols" | "Melee">;

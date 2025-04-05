@@ -11,7 +11,7 @@ import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addMiscItems, addRecipes, getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { getRecipeByResult } from "@/src/services/itemDataService";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
-import { addInfestedFoundryXP, applyCheatsToInfestedFoundry } from "./infestedFoundryController";
+import { addInfestedFoundryXP, applyCheatsToInfestedFoundry } from "@/src/services/infestedFoundryService";
 import { config } from "@/src/services/configService";
 
 export const upgradesController: RequestHandler = async (req, res) => {

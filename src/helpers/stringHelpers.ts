@@ -27,6 +27,16 @@ export const getIndexAfter = (str: string, searchWord: string): number => {
     return index + searchWord.length;
 };
 
+// This is FNV1a-32 except operating under modulus 2^31 because JavaScript is stinky and likes producing negative integers out of nowhere.
+export const catBreadHash = (name: string): number => {
+    let hash = 2166136261;
+    for (let i = 0; i != name.length; ++i) {
+        hash = (hash ^ name.charCodeAt(i)) & 0x7fffffff;
+        hash = (hash * 16777619) & 0x7fffffff;
+    }
+    return hash;
+};
+
 export const regexEscape = (str: string): string => {
     str = str.split(".").join("\\.");
     str = str.split("\\").join("\\\\");

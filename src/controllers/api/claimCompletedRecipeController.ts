@@ -19,7 +19,7 @@ import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
 
-export interface IClaimCompletedRecipeRequest {
+interface IClaimCompletedRecipeRequest {
     RecipeIds: IOid[];
 }
 

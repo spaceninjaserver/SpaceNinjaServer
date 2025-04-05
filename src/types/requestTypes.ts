@@ -21,6 +21,7 @@ import {
     ILockedWeaponGroupClient,
     ILoadOutPresets
 } from "./inventoryTypes/inventoryTypes";
+import { IGroup } from "./loginTypes";
 
 export interface IAffiliationChange {
     Tag: string;
@@ -174,4 +175,10 @@ export interface IVoidTearParticipantInfo {
     RewardsMultiplier: number;
     RewardProjection: string;
     HardModeReward: ITypeCount;
+}
+
+export interface IKeyChainRequest {
+    KeyChain: string;
+    ChainStage: number;
+    Groups?: IGroup[];
 }

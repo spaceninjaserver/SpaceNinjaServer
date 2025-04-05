@@ -1,4 +1,4 @@
-import { IKeyChainRequest } from "@/src/controllers/api/giveKeyChainTriggeredItemsController";
+import { IKeyChainRequest } from "@/src/types/requestTypes";
 import { isEmptyObject } from "@/src/helpers/general";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { createMessage } from "@/src/services/inboxService";
