@@ -20,7 +20,10 @@ import { clearDialogueHistoryController } from "@/src/controllers/api/clearDialo
 import { clearNewEpisodeRewardController } from "@/src/controllers/api/clearNewEpisodeRewardController";
 import { completeRandomModChallengeController } from "@/src/controllers/api/completeRandomModChallengeController";
 import { confirmAllianceInvitationController } from "@/src/controllers/api/confirmAllianceInvitationController";
-import { confirmGuildInvitationGetController, confirmGuildInvitationPostController } from "@/src/controllers/api/confirmGuildInvitationController";
+import {
+    confirmGuildInvitationGetController,
+    confirmGuildInvitationPostController
+} from "@/src/controllers/api/confirmGuildInvitationController";
 import { contributeGuildClassController } from "@/src/controllers/api/contributeGuildClassController";
 import { contributeToDojoComponentController } from "@/src/controllers/api/contributeToDojoComponentController";
 import { contributeToVaultController } from "@/src/controllers/api/contributeToVaultController";
