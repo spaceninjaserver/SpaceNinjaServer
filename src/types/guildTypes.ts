@@ -10,7 +10,6 @@ export interface IGuildClient {
     LongMOTD?: ILongMOTD;
     Members: IGuildMemberClient[];
     Ranks: IGuildRank[];
-    TradeTax: number;
     Tier: number;
     Vault: IGuildVault;
     ActiveDojoColorResearch: string;
@@ -143,6 +142,7 @@ export interface IDojoClient {
     _id: IOid; // ID of the guild
     Name: string;
     Tier: number;
+    TradeTax?: number;
     FixedContributions: boolean;
     DojoRevision: number;
     AllianceId?: IOid;
@@ -155,6 +155,8 @@ export interface IDojoClient {
     ContentURL?: string;
     GuildEmblem?: boolean;
     DojoComponents: IDojoComponentClient[];
+    NumContributors?: number;
+    CeremonyResetDate?: IMongoDate;
 }
 
 export interface IDojoComponentClient {
