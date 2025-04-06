@@ -726,6 +726,20 @@ export const addFixedLevelRewards = (
             MissionRewards.push(item);
         }
     }
+    if (rewards.droptable) {
+        if (rewards.droptable in ExportRewards) {
+            logger.debug(`rolling ${rewards.droptable} for level key rewards`);
+            const reward = getRandomRewardByChance(ExportRewards[rewards.droptable][0]);
+            if (reward) {
+                MissionRewards.push({
+                    StoreItem: reward.type,
+                    ItemCount: reward.itemCount
+                });
+            }
+        } else {
+            logger.error(`unknown droptable ${rewards.droptable}`);
+        }
+    }
     return missionBonusCredits;
 };
 
