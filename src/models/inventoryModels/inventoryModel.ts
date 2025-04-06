@@ -899,6 +899,9 @@ EquipmentSchema.set("toJSON", {
         if (db.InfestationDate) {
             client.InfestationDate = toMongoDate(db.InfestationDate);
         }
+        if (db.UpgradesExpiry) {
+            client.UpgradesExpiry = toMongoDate(db.UpgradesExpiry);
+        }
     }
 });
 
