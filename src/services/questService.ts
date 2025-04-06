@@ -199,7 +199,7 @@ const handleQuestCompletion = async (
     logger.debug(`completed quest ${questKey}`);
 
     if (questKey == "/Lotus/Types/Keys/OrokinMoonQuest/OrokinMoonQuestKeyChain") {
-        void createMessage(inventory.accountOwnerId, [
+        await createMessage(inventory.accountOwnerId, [
             {
                 sndr: "/Lotus/Language/Bosses/Ordis",
                 msg: "/Lotus/Language/G1Quests/SecondDreamFinishInboxMessage",
