@@ -5,5 +5,11 @@
       "ItemCount": 1
     }
   ],
-  "/Lotus/Types/Keys/InfestedMicroplanetQuest/InfestedMicroplanetQuestKeyChain": [{ "ItemType": "/Lotus/Types/Recipes/WarframeRecipes/BrokenFrameBlueprint", "ItemCount": 1 }]
+  "/Lotus/Types/Keys/InfestedMicroplanetQuest/InfestedMicroplanetQuestKeyChain": [{ "ItemType": "/Lotus/Types/Recipes/WarframeRecipes/BrokenFrameBlueprint", "ItemCount": 1 }],
+  "/Lotus/Types/Keys/OrokinMoonQuest/OrokinMoonQuestKeyChain": [
+    {
+      "ItemType": "/Lotus/Types/Keys/RailJackBuildQuest/RailjackBuildQuestEmailItem",
+      "ItemCount": 1
+    }
+  ]
 }

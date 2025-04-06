@@ -177,6 +177,22 @@ export const completeQuest = async (inventory: TInventoryDatabaseDocument, quest
         await giveKeyChainMissionReward(inventory, { KeyChain: questKey, ChainStage: i });
     }
 
+    if (questKey == "/Lotus/Types/Keys/OrokinMoonQuest/OrokinMoonQuestKeyChain") {
+        void createMessage(inventory.accountOwnerId, [
+            {
+                sndr: "/Lotus/Language/Bosses/Ordis",
+                msg: "/Lotus/Language/G1Quests/SecondDreamFinishInboxMessage",
+                att: [
+                    "/Lotus/Weapons/Tenno/Melee/Swords/StalkerTwo/StalkerTwoSmallSword",
+                    "/Lotus/Upgrades/Skins/Sigils/ScarSigil"
+                ],
+                sub: "/Lotus/Language/G1Quests/SecondDreamFinishInboxTitle",
+                icon: "/Lotus/Interface/Icons/Npcs/Ordis.png",
+                highPriority: true
+            }
+        ]);
+    }
+
     const questCompletionItems = getQuestCompletionItems(questKey);
     logger.debug(`quest completion items`, questCompletionItems);
     if (questCompletionItems) {
