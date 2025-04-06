@@ -3,8 +3,9 @@ import path from "path";
 import { repoDir } from "@/src/helpers/pathHelper";
 import { CRng, mixSeeds } from "@/src/services/rngService";
 import { IMongoDate } from "@/src/types/commonTypes";
-import { IRawVendorManifest, IVendorManifestPreprocessed } from "@/src/types/vendorTypes";
+import { IItemManifestPreprocessed, IRawVendorManifest, IVendorManifestPreprocessed } from "@/src/types/vendorTypes";
 import { JSONParse } from "json-with-bigint";
+import { ExportVendors } from "warframe-public-export-plus";
 
 const getVendorManifestJson = (name: string): IRawVendorManifest => {
     return JSONParse(fs.readFileSync(path.join(repoDir, `static/fixed_responses/getVendorInfo/${name}.json`), "utf-8"));
@@ -29,7 +30,6 @@ const rawVendorManifests: IRawVendorManifest[] = [
     getVendorManifestJson("HubsIronwakeDondaVendorManifest"), // uses preprocessing
     getVendorManifestJson("HubsPerrinSequenceWeaponVendorManifest"),
     getVendorManifestJson("HubsRailjackCrewMemberVendorManifest"),
-    getVendorManifestJson("InfestedLichWeaponVendorManifest"),
     getVendorManifestJson("MaskSalesmanManifest"),
     getVendorManifestJson("Nova1999ConquestShopManifest"),
     getVendorManifestJson("OstronFishmongerVendorManifest"),
@@ -50,6 +50,9 @@ export const getVendorManifestByTypeName = (typeName: string): IVendorManifestPr
             return preprocessVendorManifest(vendorManifest);
         }
     }
+    if (typeName == "/Lotus/Types/Game/VendorManifests/TheHex/InfestedLichWeaponVendorManifest") {
+        return generateCodaWeaponVendorManifest();
+    }
     return undefined;
 };
 
@@ -58,6 +61,9 @@ export const getVendorManifestByOid = (oid: string): IVendorManifestPreprocessed
         if (vendorManifest.VendorInfo._id.$oid == oid) {
             return preprocessVendorManifest(vendorManifest);
         }
+    }
+    if (oid == "67dadc30e4b6e0e5979c8d84") {
+        return generateCodaWeaponVendorManifest();
     }
     return undefined;
 };
@@ -95,4 +101,43 @@ const refreshExpiry = (expiry: IMongoDate): number => {
         return iteration;
     }
     return 0;
+};
+
+const generateCodaWeaponVendorManifest = (): IVendorManifestPreprocessed => {
+    const EPOCH = 1740960000 * 1000;
+    const DUR = 4 * 86400 * 1000;
+    const cycle = Math.trunc((Date.now() - EPOCH) / DUR);
+    const cycleStart = EPOCH + cycle * DUR;
+    const cycleEnd = cycleStart + DUR;
+    const binThisCycle = cycle % 2; // isOneBinPerCycle
+    const items: IItemManifestPreprocessed[] = [];
+    const manifest = ExportVendors["/Lotus/Types/Game/VendorManifests/TheHex/InfestedLichWeaponVendorManifest"];
+    const rng = new CRng(cycle);
+    for (const rawItem of manifest.items) {
+        if (rawItem.bin != binThisCycle) {
+            continue;
+        }
+        items.push({
+            StoreItem: rawItem.storeItem,
+            ItemPrices: rawItem.itemPrices!.map(item => ({ ...item, ProductCategory: "MiscItems" })),
+            Bin: "BIN_" + rawItem.bin,
+            QuantityMultiplier: 1,
+            Expiry: { $date: { $numberLong: cycleEnd.toString() } },
+            AllowMultipurchase: false,
+            LocTagRandSeed: (BigInt(rng.randomInt(0, 0xffffffff)) << 32n) | BigInt(rng.randomInt(0, 0xffffffff)),
+            Id: { $oid: "67e9da12793a120d" + rng.randomInt(0, 0xffffffff).toString(16).padStart(8, "0") }
+        });
+    }
+    return {
+        VendorInfo: {
+            _id: { $oid: "67dadc30e4b6e0e5979c8d84" },
+            TypeName: "/Lotus/Types/Game/VendorManifests/TheHex/InfestedLichWeaponVendorManifest",
+            ItemManifest: items,
+            PropertyTextHash: "77093DD05A8561A022DEC9A4B9BB4A56",
+            RandomSeedType: "VRST_WEAPON",
+            RequiredGoalTag: "",
+            WeaponUpgradeValueAttenuationExponent: 2.25,
+            Expiry: { $date: { $numberLong: cycleEnd.toString() } }
+        }
+    };
 };

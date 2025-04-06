@@ -23,7 +23,7 @@ interface IItemManifest {
     Id: IOid;
 }
 
-interface IItemManifestPreprocessed extends Omit<IItemManifest, "ItemPrices"> {
+export interface IItemManifestPreprocessed extends Omit<IItemManifest, "ItemPrices"> {
     ItemPrices?: IItemPricePreprocessed[];
 }
 
@@ -31,6 +31,10 @@ interface IVendorInfo {
     _id: IOid;
     TypeName: string;
     ItemManifest: IItemManifest[];
+    PropertyTextHash?: string;
+    RandomSeedType?: "VRST_WEAPON";
+    RequiredGoalTag?: string;
+    WeaponUpgradeValueAttenuationExponent?: number;
     Expiry: IMongoDate; // Either a date in the distant future or a period in milliseconds for preprocessing.
 }
 
