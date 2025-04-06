@@ -1060,11 +1060,12 @@ const addCrewShip = (
     inventoryChanges: IInventoryChanges = {}
 ): IInventoryChanges => {
     if (inventory.CrewShips.length != 0) {
-        throw new Error("refusing to add CrewShip because account already has one");
+        logger.warn("refusing to add CrewShip because account already has one");
+    } else {
+        const index = inventory.CrewShips.push({ ItemType: typeName }) - 1;
+        inventoryChanges.CrewShips ??= [];
+        inventoryChanges.CrewShips.push(inventory.CrewShips[index].toJSON<IEquipmentClient>());
     }
-    const index = inventory.CrewShips.push({ ItemType: typeName }) - 1;
-    inventoryChanges.CrewShips ??= [];
-    inventoryChanges.CrewShips.push(inventory.CrewShips[index].toJSON<IEquipmentClient>());
     return inventoryChanges;
 };
 
@@ -1074,11 +1075,12 @@ const addCrewShipHarness = (
     inventoryChanges: IInventoryChanges = {}
 ): IInventoryChanges => {
     if (inventory.CrewShipHarnesses.length != 0) {
-        throw new Error("refusing to add CrewShipHarness because account already has one");
+        logger.warn("refusing to add CrewShipHarness because account already has one");
+    } else {
+        const index = inventory.CrewShipHarnesses.push({ ItemType: typeName }) - 1;
+        inventoryChanges.CrewShipHarnesses ??= [];
+        inventoryChanges.CrewShipHarnesses.push(inventory.CrewShipHarnesses[index].toJSON<IEquipmentClient>());
     }
-    const index = inventory.CrewShipHarnesses.push({ ItemType: typeName }) - 1;
-    inventoryChanges.CrewShipHarnesses ??= [];
-    inventoryChanges.CrewShipHarnesses.push(inventory.CrewShipHarnesses[index].toJSON<IEquipmentClient>());
     return inventoryChanges;
 };
 
@@ -1088,11 +1090,12 @@ const addMotorcycle = (
     inventoryChanges: IInventoryChanges = {}
 ): IInventoryChanges => {
     if (inventory.Motorcycles.length != 0) {
-        throw new Error("refusing to add Motorcycle because account already has one");
+        logger.warn("refusing to add Motorcycle because account already has one");
+    } else {
+        const index = inventory.Motorcycles.push({ ItemType: typeName }) - 1;
+        inventoryChanges.Motorcycles ??= [];
+        inventoryChanges.Motorcycles.push(inventory.Motorcycles[index].toJSON<IEquipmentClient>());
     }
-    const index = inventory.Motorcycles.push({ ItemType: typeName }) - 1;
-    inventoryChanges.Motorcycles ??= [];
-    inventoryChanges.Motorcycles.push(inventory.Motorcycles[index].toJSON<IEquipmentClient>());
     return inventoryChanges;
 };
 
