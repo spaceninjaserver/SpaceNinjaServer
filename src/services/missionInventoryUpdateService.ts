@@ -441,7 +441,12 @@ export const addMissionInventoryUpdates = async (
                                 _id: new Types.ObjectId(ItemId.$oid),
                                 ...loadoutConfigItemIdRemoved
                             };
-                            loadout.NORMAL.id(loadoutId)!.overwrite(loadoutConfigDatabase);
+                            const dbConfig = loadout.NORMAL.id(loadoutId);
+                            if (dbConfig) {
+                                dbConfig.overwrite(loadoutConfigDatabase);
+                            } else {
+                                logger.warn(`couldn't update loadout because there's no config with id ${loadoutId}`);
+                            }
                         }
                         await loadout.save();
                     }
