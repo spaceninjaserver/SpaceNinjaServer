@@ -23,7 +23,7 @@ const trainingResultController: RequestHandler = async (req, res): Promise<void>
 
     const trainingResults = getJSONfromString<ITrainingResultsRequest>(String(req.body));
 
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory(accountId, "TrainingDate PlayerLevel TradesRemaining");
 
     if (trainingResults.numLevelsGained == 1) {
         let time = Date.now();
@@ -33,6 +33,7 @@ const trainingResultController: RequestHandler = async (req, res): Promise<void>
         inventory.TrainingDate = new Date(time);
 
         inventory.PlayerLevel += 1;
+        inventory.TradesRemaining += 1;
 
         await createMessage(accountId, [
             {
