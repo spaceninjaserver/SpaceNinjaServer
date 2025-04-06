@@ -103,6 +103,7 @@ export const getGuildClient = async (guild: TGuildDatabaseDocument, accountId: s
         IsContributor: !!guild.CeremonyContributors?.find(x => x.equals(accountId)),
         NumContributors: guild.CeremonyContributors?.length ?? 0,
         CeremonyResetDate: guild.CeremonyResetDate ? toMongoDate(guild.CeremonyResetDate) : undefined,
+        AutoContributeFromVault: guild.AutoContributeFromVault,
         AllianceId: guild.AllianceId ? toOid(guild.AllianceId) : undefined
     };
 };
