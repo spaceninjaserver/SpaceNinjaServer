@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node --import ./build/src/pathman.js build/src/index.js",
     "dev": "ts-node-dev --openssl-legacy-provider -r tsconfig-paths/register src/index.ts ",
-    "build": "tsc --incremental && ncp static/webui build/static/webui",
+    "build": "tsc --incremental --sourceMap && ncp static/webui build/static/webui",
     "verify": "tsgo --noEmit",
     "lint": "eslint --ext .ts .",
     "lint:fix": "eslint --fix --ext .ts .",
