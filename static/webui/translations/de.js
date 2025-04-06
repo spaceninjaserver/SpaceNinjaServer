@@ -132,7 +132,7 @@ dict = {
     cheats_unlockArcanesEverywhere: `Arkana-Adapter überall`,
     cheats_noDailyStandingLimits: `Kein tägliches Ansehenslimit`,
     cheats_noArgonCrystalDecay: `Argon-Kristalle verschwinden niemals`,
-    cheats_noMasteryRankUpCooldown: `[UNTRANSLATED] No Mastery Rank Up Cooldown`,
+	cheats_noMasteryRankUpCooldown: `Keine Wartezeit beim Meisterschaftsrangaufstieg`,
     cheats_noVendorPurchaseLimits: `Keine Kaufbeschränkungen bei Händlern`,
     cheats_instantResourceExtractorDrones: `Sofortige Ressourcen-Extraktor-Drohnen`,
     cheats_noDojoRoomBuildStage: `Kein Dojo-Raum-Bauvorgang`,
