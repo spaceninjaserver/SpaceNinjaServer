@@ -6,6 +6,7 @@ import { RequestHandler } from "express";
 import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { createMessage } from "@/src/services/inboxService";
+import { config } from "@/src/services/configService";
 
 interface ITrainingResultsRequest {
     numLevelsGained: number;
@@ -25,7 +26,12 @@ const trainingResultController: RequestHandler = async (req, res): Promise<void>
     const inventory = await getInventory(accountId);
 
     if (trainingResults.numLevelsGained == 1) {
-        inventory.TrainingDate = new Date(Date.now() + unixTimesInMs.hour * 23);
+        let time = Date.now();
+        if (!config.noMasteryRankUpCooldown) {
+            time += unixTimesInMs.hour * 23;
+        }
+        inventory.TrainingDate = new Date(time);
+
         inventory.PlayerLevel += 1;
 
         await createMessage(accountId, [

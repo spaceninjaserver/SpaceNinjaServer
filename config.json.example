@@ -30,6 +30,7 @@
   "unlockArcanesEverywhere": false,
   "noDailyStandingLimits": false,
   "noArgonCrystalDecay": false,
+  "noMasteryRankUpCooldown": false,
   "noVendorPurchaseLimits": true,
   "instantResourceExtractorDrones": false,
   "noDojoRoomBuildStage": false,

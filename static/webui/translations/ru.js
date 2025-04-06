@@ -132,6 +132,7 @@ dict = {
     cheats_unlockArcanesEverywhere: `Адаптеры для мистификаторов везде`,
     cheats_noDailyStandingLimits: `Без ежедневных ограничений репутации`,
     cheats_noArgonCrystalDecay: `Без распада аргоновых кристаллов`,
+    cheats_noMasteryRankUpCooldown: `[UNTRANSLATED] No Mastery Rank Up Cooldown`,
     cheats_noVendorPurchaseLimits: `Отсутствие лимитов на покупки у вендоров`,
     cheats_instantResourceExtractorDrones: `Мгновенные Экстракторы Ресурсов`,
     cheats_noDojoRoomBuildStage: `Мгновенное Строительтво Комнат Додзё`,

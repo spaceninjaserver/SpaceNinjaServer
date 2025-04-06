@@ -131,6 +131,7 @@ dict = {
     cheats_unlockArcanesEverywhere: `Arcane Adapters Everywhere`,
     cheats_noDailyStandingLimits: `No Daily Standing Limits`,
     cheats_noArgonCrystalDecay: `No Argon Crystal Decay`,
+    cheats_noMasteryRankUpCooldown: `No Mastery Rank Up Cooldown`,
     cheats_noVendorPurchaseLimits: `No Vendor Purchase Limits`,
     cheats_instantResourceExtractorDrones: `Instant Resource Extractor Drones`,
     cheats_noDojoRoomBuildStage: `No Dojo Room Build Stage`,

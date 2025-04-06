@@ -132,6 +132,7 @@ dict = {
     cheats_unlockArcanesEverywhere: `全物品自带赋能适配器`,
     cheats_noDailyStandingLimits: `无每日声望限制`,
     cheats_noArgonCrystalDecay: `[UNTRANSLATED] No Argon Crystal Decay`,
+    cheats_noMasteryRankUpCooldown: `[UNTRANSLATED] No Mastery Rank Up Cooldown`,
     cheats_noVendorPurchaseLimits: `[UNTRANSLATED] No Vendor Purchase Limits`,
     cheats_instantResourceExtractorDrones: `即时资源采集无人机`,
     cheats_noDojoRoomBuildStage: `无视道场房间建造阶段`,
