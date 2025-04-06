@@ -673,17 +673,6 @@ export const addItem = async (
                         Horses: [inventory.Horses[horseIndex - 1].toJSON<IEquipmentClient>()]
                     };
                 }
-                case "Recipes": {
-                    inventory.MiscItems.push({ ItemType: typeName, ItemCount: quantity });
-                    return {
-                        MiscItems: [
-                            {
-                                ItemType: typeName,
-                                ItemCount: quantity
-                            }
-                        ]
-                    };
-                }
                 case "Vehicles":
                     if (typeName == "/Lotus/Types/Vehicles/Motorcycle/MotorcyclePowerSuit") {
                         return addMotorcycle(inventory, typeName);
