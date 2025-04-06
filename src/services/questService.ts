@@ -3,18 +3,14 @@ import { isEmptyObject } from "@/src/helpers/general";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { createMessage } from "@/src/services/inboxService";
 import { addItem, addItems, addKeyChainItems, setupKahlSyndicate } from "@/src/services/inventoryService";
-import {
-    fromStoreItem,
-    getKeyChainMessage,
-    getLevelKeyRewards,
-    getQuestCompletionItems
-} from "@/src/services/itemDataService";
-import { IQuestKeyClient, IQuestKeyDatabase, IQuestStage } from "@/src/types/inventoryTypes/inventoryTypes";
+import { fromStoreItem, getKeyChainMessage, getLevelKeyRewards } from "@/src/services/itemDataService";
+import { IQuestKeyClient, IQuestKeyDatabase, IQuestStage, ITypeCount } from "@/src/types/inventoryTypes/inventoryTypes";
 import { logger } from "@/src/utils/logger";
 import { Types } from "mongoose";
 import { ExportKeys } from "warframe-public-export-plus";
 import { addFixedLevelRewards } from "./missionInventoryUpdateService";
 import { IInventoryChanges } from "../types/purchaseTypes";
+import questCompletionItems from "@/static/fixed_responses/questCompletionRewards.json";
 
 export interface IUpdateQuestRequest {
     QuestKeys: Omit<IQuestKeyDatabase, "CompletionDate">[];
@@ -42,23 +38,12 @@ export const updateQuestKey = async (
 
     inventory.QuestKeys[questKeyIndex].overwrite(questKeyUpdate[0]);
 
-    let inventoryChanges: IInventoryChanges = {};
+    const inventoryChanges: IInventoryChanges = {};
     if (questKeyUpdate[0].Completed) {
         inventory.QuestKeys[questKeyIndex].CompletionDate = new Date();
 
-        logger.debug(`completed quest ${questKeyUpdate[0].ItemType} `);
-        const questKeyName = questKeyUpdate[0].ItemType;
-        const questCompletionItems = getQuestCompletionItems(questKeyName);
-        logger.debug(`quest completion items`, questCompletionItems);
-
-        if (questCompletionItems) {
-            inventoryChanges = await addItems(inventory, questCompletionItems);
-        }
-        inventory.ActiveQuest = "";
-
-        if (questKeyUpdate[0].ItemType == "/Lotus/Types/Keys/NewWarQuest/NewWarQuestKeyChain") {
-            setupKahlSyndicate(inventory);
-        }
+        const questKey = questKeyUpdate[0].ItemType;
+        await handleQuestCompletion(inventory, questKey, inventoryChanges);
     }
     return inventoryChanges;
 };
@@ -177,6 +162,42 @@ export const completeQuest = async (inventory: TInventoryDatabaseDocument, quest
         await giveKeyChainMissionReward(inventory, { KeyChain: questKey, ChainStage: i });
     }
 
+    await handleQuestCompletion(inventory, questKey);
+};
+
+const getQuestCompletionItems = (questKey: string): ITypeCount[] | undefined => {
+    if (questKey in questCompletionItems) {
+        return questCompletionItems[questKey as keyof typeof questCompletionItems];
+    }
+    logger.warn(`Quest ${questKey} not found in questCompletionItems`);
+
+    const items: ITypeCount[] = [];
+    const meta = ExportKeys[questKey];
+    if (meta.rewards) {
+        for (const reward of meta.rewards) {
+            if (reward.rewardType == "RT_STORE_ITEM") {
+                items.push({
+                    ItemType: fromStoreItem(reward.itemType),
+                    ItemCount: 1
+                });
+            } else if (reward.rewardType == "RT_RESOURCE" || reward.rewardType == "RT_RECIPE") {
+                items.push({
+                    ItemType: reward.itemType,
+                    ItemCount: reward.amount
+                });
+            }
+        }
+    }
+    return items;
+};
+
+const handleQuestCompletion = async (
+    inventory: TInventoryDatabaseDocument,
+    questKey: string,
+    inventoryChanges: IInventoryChanges = {}
+): Promise<void> => {
+    logger.debug(`completed quest ${questKey}`);
+
     if (questKey == "/Lotus/Types/Keys/OrokinMoonQuest/OrokinMoonQuestKeyChain") {
         void createMessage(inventory.accountOwnerId, [
             {
@@ -191,19 +212,17 @@ export const completeQuest = async (inventory: TInventoryDatabaseDocument, quest
                 highPriority: true
             }
         ]);
+    } else if (questKey == "/Lotus/Types/Keys/NewWarQuest/NewWarQuestKeyChain") {
+        setupKahlSyndicate(inventory);
     }
 
     const questCompletionItems = getQuestCompletionItems(questKey);
     logger.debug(`quest completion items`, questCompletionItems);
     if (questCompletionItems) {
-        await addItems(inventory, questCompletionItems);
+        await addItems(inventory, questCompletionItems, inventoryChanges);
     }
 
     if (inventory.ActiveQuest == questKey) inventory.ActiveQuest = "";
-
-    if (questKey == "/Lotus/Types/Keys/NewWarQuest/NewWarQuestKeyChain") {
-        setupKahlSyndicate(inventory);
-    }
 };
 
 export const giveKeyChainItem = async (
