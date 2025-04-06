@@ -77,8 +77,8 @@ export const placeDecoInComponentController: RequestHandler = async (req, res) =
                     }
                 }
                 if (enoughMiscItems) {
-                    guild.VaultRegularCredits -= meta.price;
-                    deco.RegularCredits = meta.price;
+                    guild.VaultRegularCredits -= scaleRequiredCount(guild.Tier, meta.price);
+                    deco.RegularCredits = scaleRequiredCount(guild.Tier, meta.price);
 
                     deco.MiscItems = [];
                     for (const ingredient of meta.ingredients) {
