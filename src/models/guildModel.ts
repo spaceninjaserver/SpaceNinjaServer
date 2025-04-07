@@ -29,7 +29,8 @@ const dojoDecoSchema = new Schema<IDojoDecoDatabase>({
     MiscItems: { type: [typeCountSchema], default: undefined },
     CompletionTime: Date,
     RushPlatinum: Number,
-    PictureFrameInfo: pictureFrameInfoSchema
+    PictureFrameInfo: pictureFrameInfoSchema,
+    Pending: Boolean
 });
 
 const dojoLeaderboardEntrySchema = new Schema<IDojoLeaderboardEntry>(
@@ -57,6 +58,11 @@ const dojoComponentSchema = new Schema<IDojoComponentDatabase>({
     DestructionTime: Date,
     Decos: [dojoDecoSchema],
     DecoCapacity: Number,
+    PaintBot: Schema.Types.ObjectId,
+    PendingColors: { type: [Number], default: undefined },
+    Colors: { type: [Number], default: undefined },
+    PendingLights: { type: [Number], default: undefined },
+    Lights: { type: [Number], default: undefined },
     Leaderboard: { type: [dojoLeaderboardEntrySchema], default: undefined }
 });
 

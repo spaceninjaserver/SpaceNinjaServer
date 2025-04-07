@@ -105,6 +105,7 @@ import { setActiveQuestController } from "@/src/controllers/api/setActiveQuestCo
 import { setActiveShipController } from "@/src/controllers/api/setActiveShipController";
 import { setAllianceGuildPermissionsController } from "@/src/controllers/api/setAllianceGuildPermissionsController";
 import { setBootLocationController } from "@/src/controllers/api/setBootLocationController";
+import { setDojoComponentColorsController } from "@/src/controllers/api/setDojoComponentColorsController";
 import { setDojoComponentMessageController } from "@/src/controllers/api/setDojoComponentMessageController";
 import { setEquippedInstrumentController } from "@/src/controllers/api/setEquippedInstrumentController";
 import { setGuildMotdController } from "@/src/controllers/api/setGuildMotdController";
@@ -261,6 +262,7 @@ apiRouter.post("/saveLoadout.php", saveLoadoutController);
 apiRouter.post("/saveSettings.php", saveSettingsController);
 apiRouter.post("/saveVaultAutoContribute.php", saveVaultAutoContributeController);
 apiRouter.post("/sell.php", sellController);
+apiRouter.post("/setDojoComponentColors.php", setDojoComponentColorsController);
 apiRouter.post("/setDojoComponentMessage.php", setDojoComponentMessageController);
 apiRouter.post("/setEquippedInstrument.php", setEquippedInstrumentController);
 apiRouter.post("/setGuildMotd.php", setGuildMotdController);

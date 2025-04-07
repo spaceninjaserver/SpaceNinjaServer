@@ -64,7 +64,12 @@ export const placeDecoInComponentController: RequestHandler = async (req, res) =
         }
         if (!meta || (meta.price == 0 && meta.ingredients.length == 0)) {
             deco.CompletionTime = new Date();
-        } else if (guild.AutoContributeFromVault && guild.VaultRegularCredits && guild.VaultMiscItems) {
+        } else if (
+            guild.AutoContributeFromVault &&
+            guild.VaultRegularCredits &&
+            guild.VaultMiscItems &&
+            deco.Type != "/Lotus/Objects/Tenno/Props/TnoPaintBotDojoDeco"
+        ) {
             if (guild.VaultRegularCredits >= scaleRequiredCount(guild.Tier, meta.price)) {
                 let enoughMiscItems = true;
                 for (const ingredient of meta.ingredients) {

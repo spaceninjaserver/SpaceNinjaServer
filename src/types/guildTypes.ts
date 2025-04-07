@@ -161,6 +161,7 @@ export interface IDojoClient {
 
 export interface IDojoComponentClient {
     id: IOid;
+    SortId?: IOid;
     pf: string; // Prefab (.level)
     ppf: string;
     pi?: IOid; // Parent ID. N/A to root.
@@ -175,16 +176,25 @@ export interface IDojoComponentClient {
     DestructionTime?: IMongoDate;
     Decos?: IDojoDecoClient[];
     DecoCapacity?: number;
+    PaintBot?: IOid;
+    PendingColors?: number[];
+    Colors?: number[];
+    PendingLights?: number[];
+    Lights?: number[];
 }
 
 export interface IDojoComponentDatabase
-    extends Omit<IDojoComponentClient, "id" | "pi" | "CompletionTime" | "DestructionTime" | "Decos"> {
+    extends Omit<
+        IDojoComponentClient,
+        "id" | "SortId" | "pi" | "CompletionTime" | "DestructionTime" | "Decos" | "PaintBot"
+    > {
     _id: Types.ObjectId;
     pi?: Types.ObjectId;
     CompletionTime?: Date;
     CompletionLogPending?: boolean;
     DestructionTime?: Date;
     Decos?: IDojoDecoDatabase[];
+    PaintBot?: Types.ObjectId;
     Leaderboard?: IDojoLeaderboardEntry[];
 }
 
@@ -200,6 +210,7 @@ export interface IDojoDecoClient {
     CompletionTime?: IMongoDate;
     RushPlatinum?: number;
     PictureFrameInfo?: IPictureFrameInfo;
+    Pending?: boolean;
 }
 
 export interface IDojoDecoDatabase extends Omit<IDojoDecoClient, "id" | "CompletionTime"> {

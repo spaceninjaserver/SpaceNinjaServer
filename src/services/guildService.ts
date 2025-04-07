@@ -141,6 +141,7 @@ export const getDojoClient = async (
         DojoComponents: []
     };
     const roomsToRemove: Types.ObjectId[] = [];
+    const decosToRemoveNoRefund: { componentId: Types.ObjectId; decoId: Types.ObjectId }[] = [];
     let needSave = false;
     for (const dojoComponent of guild.DojoComponents) {
         if (!componentId || dojoComponent._id.equals(componentId)) {
@@ -212,6 +213,21 @@ export const getDojoClient = async (
                         PictureFrameInfo: deco.PictureFrameInfo
                     };
                     if (deco.CompletionTime) {
+                        if (
+                            deco.Type == "/Lotus/Objects/Tenno/Props/TnoPaintBotDojoDeco" &&
+                            Date.now() >= deco.CompletionTime.getTime()
+                        ) {
+                            if (dojoComponent.PendingColors) {
+                                dojoComponent.Colors = dojoComponent.PendingColors;
+                                dojoComponent.PendingColors = undefined;
+                            }
+                            if (dojoComponent.PendingLights) {
+                                dojoComponent.Lights = dojoComponent.PendingLights;
+                                dojoComponent.PendingLights = undefined;
+                            }
+                            decosToRemoveNoRefund.push({ componentId: dojoComponent._id, decoId: deco._id });
+                            continue;
+                        }
                         clientDeco.CompletionTime = toMongoDate(deco.CompletionTime);
                     } else {
                         clientDeco.RegularCredits = deco.RegularCredits;
@@ -220,6 +236,10 @@ export const getDojoClient = async (
                     clientComponent.Decos.push(clientDeco);
                 }
             }
+            clientComponent.PendingColors = dojoComponent.PendingColors;
+            clientComponent.Colors = dojoComponent.Colors;
+            clientComponent.PendingLights = dojoComponent.PendingLights;
+            clientComponent.Lights = dojoComponent.Lights;
             dojo.DojoComponents.push(clientComponent);
         }
     }
@@ -228,6 +248,15 @@ export const getDojoClient = async (
         for (const id of roomsToRemove) {
             await removeDojoRoom(guild, id);
         }
+        needSave = true;
+    }
+    for (const deco of decosToRemoveNoRefund) {
+        logger.debug(`removing polychrome`, deco);
+        const component = guild.DojoComponents.id(deco.componentId)!;
+        component.Decos!.splice(
+            component.Decos!.findIndex(x => x._id.equals(deco.decoId)),
+            1
+        );
         needSave = true;
     }
     if (needSave) {
