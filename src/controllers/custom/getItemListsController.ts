@@ -150,9 +150,11 @@ const getItemListsController: RequestHandler = (req, response) => {
         if (!item.hidden) {
             const resultName = getItemName(item.resultType);
             if (resultName) {
+                let itemName = getString(resultName, lang);
+                if (item.num > 1) itemName = `${itemName} X ${item.num}`;
                 res.miscitems.push({
                     uniqueName: uniqueName,
-                    name: recipeNameTemplate.replace("|ITEM|", getString(resultName, lang))
+                    name: recipeNameTemplate.replace("|ITEM|", itemName)
                 });
             }
         }
