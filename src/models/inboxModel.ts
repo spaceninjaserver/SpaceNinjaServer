@@ -4,7 +4,8 @@ import { typeCountSchema } from "@/src/models/inventoryModels/inventoryModel";
 import { IMongoDate, IOid } from "@/src/types/commonTypes";
 import { ITypeCount } from "@/src/types/inventoryTypes/inventoryTypes";
 
-export interface IMessageClient extends Omit<IMessageDatabase, "_id" | "date" | "startDate" | "endDate" | "ownerId"> {
+export interface IMessageClient
+    extends Omit<IMessageDatabase, "_id" | "date" | "startDate" | "endDate" | "ownerId" | "attVisualOnly"> {
     _id?: IOid;
     date: IMongoDate;
     startDate?: IMongoDate;
@@ -29,6 +30,7 @@ export interface IMessage {
     endDate?: Date;
     att?: string[];
     countedAtt?: ITypeCount[];
+    attVisualOnly?: boolean;
     transmission?: string;
     arg?: Arg[];
     gifts?: IGift[];
@@ -108,6 +110,7 @@ const messageSchema = new Schema<IMessageDatabase>(
         att: { type: [String], default: undefined },
         gifts: { type: [giftSchema], default: undefined },
         countedAtt: { type: [typeCountSchema], default: undefined },
+        attVisualOnly: Boolean,
         transmission: String,
         arg: {
             type: [
@@ -141,6 +144,7 @@ messageSchema.set("toJSON", {
 
         delete returnedObject._id;
         delete returnedObject.__v;
+        delete returnedObject.attVisualOnly;
 
         messageClient.date = toMongoDate(messageDatabase.date);
 

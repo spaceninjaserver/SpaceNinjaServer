@@ -34,8 +34,8 @@ export const inboxController: RequestHandler = async (req, res) => {
         message.r = true;
         await message.save();
 
-        const attachmentItems = message.att;
-        const attachmentCountedItems = message.countedAtt;
+        const attachmentItems = message.attVisualOnly ? undefined : message.att;
+        const attachmentCountedItems = message.attVisualOnly ? undefined : message.countedAtt;
 
         if (!attachmentItems && !attachmentCountedItems && !message.gifts) {
             res.status(200).end();
