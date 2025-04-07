@@ -22,6 +22,7 @@ import {
     addFusionTreasures,
     addGearExpByCategory,
     addItem,
+    addLevelKeys,
     addMiscItems,
     addMissionComplete,
     addMods,
@@ -77,19 +78,52 @@ export const addMissionInventoryUpdates = async (
     inventoryUpdates: IMissionInventoryUpdateRequest
 ): Promise<IInventoryChanges> => {
     const inventoryChanges: IInventoryChanges = {};
-    if (
-        inventoryUpdates.EndOfMatchUpload &&
-        inventoryUpdates.Missions &&
-        inventoryUpdates.Missions.Tag in ExportRegions
-    ) {
-        const node = ExportRegions[inventoryUpdates.Missions.Tag];
-        if (node.miscItemFee) {
-            addMiscItems(inventory, [
-                {
-                    ItemType: node.miscItemFee.ItemType,
-                    ItemCount: node.miscItemFee.ItemCount * -1
-                }
-            ]);
+    if (inventoryUpdates.EndOfMatchUpload) {
+        if (inventoryUpdates.Missions && inventoryUpdates.Missions.Tag in ExportRegions) {
+            const node = ExportRegions[inventoryUpdates.Missions.Tag];
+            if (node.miscItemFee) {
+                addMiscItems(inventory, [
+                    {
+                        ItemType: node.miscItemFee.ItemType,
+                        ItemCount: node.miscItemFee.ItemCount * -1
+                    }
+                ]);
+            }
+        }
+        if (inventoryUpdates.KeyToRemove) {
+            if (!inventoryUpdates.KeyOwner || inventory.accountOwnerId.equals(inventoryUpdates.KeyOwner)) {
+                addLevelKeys(inventory, [
+                    {
+                        ItemType: inventoryUpdates.KeyToRemove,
+                        ItemCount: -1
+                    }
+                ]);
+            }
+        }
+        if (
+            inventoryUpdates.MissionFailed &&
+            inventoryUpdates.MissionStatus == "GS_FAILURE" &&
+            inventoryUpdates.ObjectiveReached &&
+            !inventoryUpdates.LockedWeaponGroup
+        ) {
+            const loadout = (await Loadout.findById(inventory.LoadOutPresets, "NORMAL"))!;
+            const config = loadout.NORMAL.id(inventory.CurrentLoadOutIds[0].$oid)!;
+            const SuitId = new Types.ObjectId(config.s!.ItemId.$oid);
+
+            inventory.BrandedSuits ??= [];
+            if (!inventory.BrandedSuits.find(x => x.equals(SuitId))) {
+                inventory.BrandedSuits.push(SuitId);
+
+                await createMessage(inventory.accountOwnerId, [
+                    {
+                        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
+                        msg: "/Lotus/Language/G1Quests/BrandedMessage",
+                        sub: "/Lotus/Language/G1Quests/BrandedTitle",
+                        att: ["/Lotus/Types/Recipes/Components/BrandRemovalBlueprint"],
+                        highPriority: true // TOVERIFY: I cannot find any content of this within the last 10 years so I can only assume that highPriority is set (it certainly would make sense), but I just don't know for sure that it is so on live.
+                    }
+                ]);
+            }
         }
     }
     if (inventoryUpdates.RewardInfo) {
@@ -108,32 +142,6 @@ export const addMissionInventoryUpdates = async (
         }
         if (inventoryUpdates.RewardInfo.NemesisAbandonedRewards) {
             inventory.NemesisAbandonedRewards = inventoryUpdates.RewardInfo.NemesisAbandonedRewards;
-        }
-    }
-    if (
-        inventoryUpdates.MissionFailed &&
-        inventoryUpdates.MissionStatus == "GS_FAILURE" &&
-        inventoryUpdates.EndOfMatchUpload &&
-        inventoryUpdates.ObjectiveReached &&
-        !inventoryUpdates.LockedWeaponGroup
-    ) {
-        const loadout = (await Loadout.findById(inventory.LoadOutPresets, "NORMAL"))!;
-        const config = loadout.NORMAL.id(inventory.CurrentLoadOutIds[0].$oid)!;
-        const SuitId = new Types.ObjectId(config.s!.ItemId.$oid);
-
-        inventory.BrandedSuits ??= [];
-        if (!inventory.BrandedSuits.find(x => x.equals(SuitId))) {
-            inventory.BrandedSuits.push(SuitId);
-
-            await createMessage(inventory.accountOwnerId, [
-                {
-                    sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
-                    msg: "/Lotus/Language/G1Quests/BrandedMessage",
-                    sub: "/Lotus/Language/G1Quests/BrandedTitle",
-                    att: ["/Lotus/Types/Recipes/Components/BrandRemovalBlueprint"],
-                    highPriority: true // TOVERIFY: I cannot find any content of this within the last 10 years so I can only assume that highPriority is set (it certainly would make sense), but I just don't know for sure that it is so on live.
-                }
-            ]);
         }
     }
     for (const [key, value] of getEntriesUnsafe(inventoryUpdates)) {

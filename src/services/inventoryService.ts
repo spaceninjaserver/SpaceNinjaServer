@@ -538,15 +538,9 @@ export const addItem = async (
             if (!key) return {};
             return { QuestKeys: [key] };
         } else {
-            const key = { ItemType: typeName, ItemCount: quantity };
-
-            const index = inventory.LevelKeys.findIndex(levelKey => levelKey.ItemType == typeName);
-            if (index != -1) {
-                inventory.LevelKeys[index].ItemCount += quantity;
-            } else {
-                inventory.LevelKeys.push(key);
-            }
-            return { LevelKeys: [key] };
+            const levelKeyChanges = [{ ItemType: typeName, ItemCount: quantity }];
+            addLevelKeys(inventory, levelKeyChanges);
+            return { LevelKeys: levelKeyChanges };
         }
     }
     if (typeName in ExportDrones) {
@@ -1238,6 +1232,10 @@ export const addCrewShipAmmo = (inventory: TInventoryDatabaseDocument, itemsArra
 
 export const addRecipes = (inventory: TInventoryDatabaseDocument, itemsArray: ITypeCount[]): void => {
     applyArrayChanges(inventory.Recipes, itemsArray);
+};
+
+export const addLevelKeys = (inventory: TInventoryDatabaseDocument, itemsArray: ITypeCount[]): void => {
+    applyArrayChanges(inventory.LevelKeys, itemsArray);
 };
 
 export const addMods = (inventory: TInventoryDatabaseDocument, itemsArray: IRawUpgrade[]): void => {

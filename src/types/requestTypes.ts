@@ -49,6 +49,9 @@ export type IMissionInventoryUpdateRequest = {
     rewardsMultiplier?: number;
     GoalTag: string;
     LevelKeyName: string;
+    KeyOwner?: string;
+    KeyRemovalHash?: string;
+    KeyToRemove?: string;
     ActiveBoosters?: IBooster[];
     RawUpgrades?: IRawUpgrade[];
     FusionTreasures?: IFusionTreasure[];
