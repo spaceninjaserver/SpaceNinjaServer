@@ -872,6 +872,7 @@ const EquipmentSchema = new Schema<IEquipmentDatabase>(
         OffensiveUpgrade: String,
         DefensiveUpgrade: String,
         UpgradesExpiry: Date,
+        UmbraDate: Date,
         ArchonCrystalUpgrades: { type: [ArchonCrystalUpgradeSchema], default: undefined },
         Weapon: crewShipWeaponSchema,
         Customization: crewShipCustomizationSchema,
@@ -901,6 +902,9 @@ EquipmentSchema.set("toJSON", {
         }
         if (db.UpgradesExpiry) {
             client.UpgradesExpiry = toMongoDate(db.UpgradesExpiry);
+        }
+        if (db.UmbraDate) {
+            client.UmbraDate = toMongoDate(db.UmbraDate);
         }
     }
 });

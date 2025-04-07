@@ -54,6 +54,7 @@ const convertEquipment = (client: IEquipmentClient): IEquipmentDatabase => {
         InfestationDate: convertOptionalDate(client.InfestationDate),
         Expiry: convertOptionalDate(client.Expiry),
         UpgradesExpiry: convertOptionalDate(client.UpgradesExpiry),
+        UmbraDate: convertOptionalDate(client.UmbraDate),
         CrewMembers: client.CrewMembers ? convertCrewShipMembers(client.CrewMembers) : undefined,
         Details: client.Details ? convertKubrowDetails(client.Details) : undefined,
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition

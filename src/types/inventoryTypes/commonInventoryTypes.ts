@@ -90,12 +90,13 @@ export interface IEquipmentSelection {
 export interface IEquipmentClient
     extends Omit<
         IEquipmentDatabase,
-        "_id" | "InfestationDate" | "Expiry" | "UpgradesExpiry" | "CrewMembers" | "Details"
+        "_id" | "InfestationDate" | "Expiry" | "UpgradesExpiry" | "UmbraDate" | "CrewMembers" | "Details"
     > {
     ItemId: IOid;
     InfestationDate?: IMongoDate;
     Expiry?: IMongoDate;
     UpgradesExpiry?: IMongoDate;
+    UmbraDate?: IMongoDate;
     CrewMembers?: ICrewShipMembersClient;
     Details?: IKubrowPetDetailsClient;
 }
@@ -134,6 +135,7 @@ export interface IEquipmentDatabase {
     OffensiveUpgrade?: string;
     DefensiveUpgrade?: string;
     UpgradesExpiry?: Date;
+    UmbraDate?: Date; // related to scrapped "echoes of umbra" feature
     ArchonCrystalUpgrades?: IArchonCrystalUpgrade[];
     Weapon?: ICrewShipWeapon;
     Customization?: ICrewShipCustomization;
