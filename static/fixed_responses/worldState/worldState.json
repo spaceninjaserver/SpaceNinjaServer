@@ -62,23 +62,6 @@
       }
     }
   ],
-  "Sorties": [
-    {
-      "_id": { "$oid": "663a4c7d4d932c97c0a3acd7" },
-      "Activation": { "$date": { "$numberLong": "1715097600000" } },
-      "Expiry": { "$date": { "$numberLong": "2000000000000" } },
-      "Reward": "/Lotus/Types/Game/MissionDecks/SortieRewards",
-      "Seed": 24491,
-      "Boss": "SORTIE_BOSS_TYL",
-      "ExtraDrops": [],
-      "Variants": [
-        { "missionType": "MT_TERRITORY", "modifierType": "SORTIE_MODIFIER_ARMOR", "node": "SolNode122", "tileset": "GrineerOceanTileset" },
-        { "missionType": "MT_MOBILE_DEFENSE", "modifierType": "SORTIE_MODIFIER_LOW_ENERGY", "node": "SolNode184", "tileset": "GrineerGalleonTileset" },
-        { "missionType": "MT_LANDSCAPE", "modifierType": "SORTIE_MODIFIER_EXIMUS", "node": "SolNode228", "tileset": "EidolonTileset" }
-      ],
-      "Twitter": true
-    }
-  ],
   "SyndicateMissions": [
     {
       "_id": { "$oid": "663a4fc5ba6f84724fa48049" },
