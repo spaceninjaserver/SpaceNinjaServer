@@ -218,6 +218,11 @@ const getItemListsController: RequestHandler = (req, response) => {
                 name: getString(key.name || "", lang),
                 chainLength: key.chainStages.length
             });
+        } else if (key.name) {
+            res.miscitems.push({
+                uniqueName,
+                name: getString(key.name, lang)
+            });
         }
     }
 
