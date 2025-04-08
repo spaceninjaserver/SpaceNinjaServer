@@ -1,7 +1,7 @@
 import { Inventory, TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { config } from "@/src/services/configService";
 import { Types } from "mongoose";
-import { SlotNames, IInventoryChanges, IBinChanges, slotNames } from "@/src/types/purchaseTypes";
+import { SlotNames, IInventoryChanges, IBinChanges, slotNames, IAffiliationMods } from "@/src/types/purchaseTypes";
 import {
     IChallengeProgress,
     IFlavourItem,
@@ -45,6 +45,7 @@ import {
     ExportGear,
     ExportKeys,
     ExportMisc,
+    ExportNightwave,
     ExportRailjackWeapons,
     ExportRecipes,
     ExportResources,
@@ -1302,35 +1303,52 @@ export const addFocusXpIncreases = (inventory: TInventoryDatabaseDocument, focus
     inventory.DailyFocus -= focusXpPlus.reduce((a, b) => a + b, 0);
 };
 
-export const addSeasonalChallengeHistory = (
+export const addChallenges = (
     inventory: TInventoryDatabaseDocument,
-    itemsArray: ISeasonChallenge[]
-): void => {
-    const category = inventory.SeasonChallengeHistory;
-
-    itemsArray.forEach(({ challenge, id }) => {
-        const itemIndex = category.findIndex(i => i.challenge === challenge);
-
-        if (itemIndex !== -1) {
-            category[itemIndex].id = id;
-        } else {
-            category.push({ challenge, id });
-        }
-    });
-};
-
-export const addChallenges = (inventory: TInventoryDatabaseDocument, itemsArray: IChallengeProgress[]): void => {
-    const category = inventory.ChallengeProgress;
-
-    itemsArray.forEach(({ Name, Progress }) => {
-        const itemIndex = category.findIndex(i => i.Name === Name);
+    ChallengeProgress: IChallengeProgress[],
+    SeasonChallengeCompletions: ISeasonChallenge[] | undefined
+): IAffiliationMods[] => {
+    ChallengeProgress.forEach(({ Name, Progress }) => {
+        const itemIndex = inventory.ChallengeProgress.findIndex(i => i.Name === Name);
 
         if (itemIndex !== -1) {
-            category[itemIndex].Progress = Progress;
+            inventory.ChallengeProgress[itemIndex].Progress = Progress;
         } else {
-            category.push({ Name, Progress });
+            inventory.ChallengeProgress.push({ Name, Progress });
         }
     });
+
+    const affiliationMods: IAffiliationMods[] = [];
+    if (SeasonChallengeCompletions) {
+        for (const challenge of SeasonChallengeCompletions) {
+            // Ignore challenges that weren't completed just now
+            if (!ChallengeProgress.find(x => challenge.challenge.indexOf(x.Name) != -1)) {
+                continue;
+            }
+
+            const meta = ExportNightwave.challenges[challenge.challenge];
+            logger.debug("Completed challenge", meta);
+
+            let affiliation = inventory.Affiliations.find(x => x.Tag == ExportNightwave.affiliationTag);
+            if (!affiliation) {
+                affiliation =
+                    inventory.Affiliations[
+                        inventory.Affiliations.push({
+                            Tag: ExportNightwave.affiliationTag,
+                            Standing: 0
+                        }) - 1
+                    ];
+            }
+            affiliation.Standing += meta.standing;
+
+            if (affiliationMods.length == 0) {
+                affiliationMods.push({ Tag: ExportNightwave.affiliationTag });
+            }
+            affiliationMods[0].Standing ??= 0;
+            affiliationMods[0].Standing += meta.standing;
+        }
+    }
+    return affiliationMods;
 };
 
 export const addMissionComplete = (inventory: TInventoryDatabaseDocument, { Tag, Completes }: IMission): void => {
