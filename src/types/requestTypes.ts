@@ -101,7 +101,8 @@ export type IMissionInventoryUpdateRequest = {
     Upgrades?: IUpgradeClient[]; // riven challenge progress
     StrippedItems?: {
         DropTable: string;
-        DROP_MOD: number[];
+        DROP_MOD?: number[];
+        DROP_BLUEPRINT?: number[];
     }[];
     DeathMarks?: string[];
     Nemesis?: number;

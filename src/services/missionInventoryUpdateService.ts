@@ -602,10 +602,24 @@ export const addMissionRewards = async (
             if (!droptable) {
                 logger.error(`unknown droptable ${si.DropTable}`);
             } else {
-                for (let i = 0; i != si.DROP_MOD.length; ++i) {
-                    for (const pool of droptable) {
-                        const reward = getRandomReward(pool.items)!;
-                        logger.debug(`stripped droptable rolled`, reward);
+                const modsPool = droptable[0].items;
+                const blueprintsPool = (droptable.length > 1 ? droptable[1] : droptable[0]).items;
+                if (si.DROP_MOD) {
+                    for (let i = 0; i != si.DROP_MOD.length; ++i) {
+                        const reward = getRandomReward(modsPool)!;
+                        logger.debug(`stripped droptable (mods pool) rolled`, reward);
+                        await addItem(inventory, reward.type);
+                        MissionRewards.push({
+                            StoreItem: toStoreItem(reward.type),
+                            ItemCount: 1,
+                            FromEnemyCache: true // to show "identified"
+                        });
+                    }
+                }
+                if (si.DROP_BLUEPRINT) {
+                    for (let i = 0; i != si.DROP_BLUEPRINT.length; ++i) {
+                        const reward = getRandomReward(blueprintsPool)!;
+                        logger.debug(`stripped droptable (blueprints pool) rolled`, reward);
                         await addItem(inventory, reward.type);
                         MissionRewards.push({
                             StoreItem: toStoreItem(reward.type),
