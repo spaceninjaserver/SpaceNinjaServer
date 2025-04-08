@@ -53,6 +53,7 @@ dict = {
     code_setInactive: `Quest inaktiv setzen`,
     code_completed: `Abgeschlossen`,
     code_active: `Aktiv`,
+    code_pigment: `Pigment`,
     login_description: `Melde dich mit deinem OpenWF-Account an (denselben Angaben wie im Spiel, wenn du dich mit diesem Server verbindest).`,
     login_emailLabel: `E-Mail-Adresse`,
     login_passwordLabel: `Passwort`,

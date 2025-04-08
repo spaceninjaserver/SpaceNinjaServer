@@ -53,6 +53,7 @@ dict = {
     code_setInactive: `[UNTRANSLATED] Make the quest inactive`,
     code_completed: `[UNTRANSLATED] Completed`,
     code_active: `[UNTRANSLATED] Active`,
+    code_pigment: `Pigment`,
     login_description: `Connexion avec les informations de connexion OpenWF.`,
     login_emailLabel: `Email`,
     login_passwordLabel: `Mot de passe`,

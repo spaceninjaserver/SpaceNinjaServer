@@ -221,6 +221,11 @@ function fetchItemList() {
                 name: loc("code_zanuka")
             });
 
+            data.miscitems.push({
+                uniqueName: "/Lotus/Types/Items/Research/DojoColors/GenericDojoColorPigment",
+                name: loc("code_pigment")
+            });
+
             const itemMap = {
                 // Generics for rivens
                 "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun": { name: loc("code_archgun") },

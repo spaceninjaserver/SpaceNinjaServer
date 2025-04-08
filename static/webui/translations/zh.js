@@ -53,6 +53,7 @@ dict = {
     code_setInactive: `[UNTRANSLATED] Make the quest inactive`,
     code_completed: `[UNTRANSLATED] Completed`,
     code_active: `[UNTRANSLATED] Active`,
+    code_pigment: `颜料`,
     login_description: `使用您的 OpenWF 账户凭证登录（与游戏内连接本服务器时使用的昵称相同）。`,
     login_emailLabel: `电子邮箱`,
     login_passwordLabel: `密码`,

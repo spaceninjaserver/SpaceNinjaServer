@@ -53,6 +53,7 @@ dict = {
     code_setInactive: `Сделать квест неактивным`,
     code_completed: `Завершено`,
     code_active: `Активный`,
+    code_pigment: `Пигмент`,
     login_description: `Войдите, используя учетные данные OpenWF (те же, что и в игре при подключении к этому серверу).`,
     login_emailLabel: `Адрес электронной почты`,
     login_passwordLabel: `Пароль`,
