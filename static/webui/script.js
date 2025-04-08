@@ -265,6 +265,7 @@ function fetchItemList() {
                 } else if (type == "uniqueLevelCaps") {
                     uniqueLevelCaps = items;
                 } else {
+                    const nameSet = new Set();
                     items.forEach(item => {
                         if (item.name.includes("<ARCHWING> ")) {
                             item.name = item.name.replace("<ARCHWING> ", "");
@@ -311,19 +312,18 @@ function fetchItemList() {
                                 document
                                     .getElementById("datalist-" + type + "-" + item.partType.slice(5))
                                     .appendChild(option);
+                            }
+                        } else if (item.badReason != "notraw") {
+                            if (nameSet.has(item.name)) {
+                                //console.log(`Not adding ${item.uniqueName} to datalist for ${type} due to duplicate display name: ${item.name}`);
                             } else {
-                                console.log(item.partType);
+                                nameSet.add(item.name);
+
                                 const option = document.createElement("option");
                                 option.setAttribute("data-key", item.uniqueName);
                                 option.value = item.name;
                                 document.getElementById("datalist-" + type).appendChild(option);
                             }
-                        }
-                        if (item.badReason != "notraw") {
-                            const option = document.createElement("option");
-                            option.setAttribute("data-key", item.uniqueName);
-                            option.value = item.name;
-                            document.getElementById("datalist-" + type).appendChild(option);
                         }
                         itemMap[item.uniqueName] = { ...item, type };
                     });
