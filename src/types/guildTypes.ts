@@ -181,6 +181,7 @@ export interface IDojoComponentClient {
     Colors?: number[];
     PendingLights?: number[];
     Lights?: number[];
+    Settings?: string;
 }
 
 export interface IDojoComponentDatabase

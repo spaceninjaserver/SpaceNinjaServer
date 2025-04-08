@@ -63,6 +63,7 @@ const dojoComponentSchema = new Schema<IDojoComponentDatabase>({
     Colors: { type: [Number], default: undefined },
     PendingLights: { type: [Number], default: undefined },
     Lights: { type: [Number], default: undefined },
+    Settings: String,
     Leaderboard: { type: [dojoLeaderboardEntrySchema], default: undefined }
 });
 

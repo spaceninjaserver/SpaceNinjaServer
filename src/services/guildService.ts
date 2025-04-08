@@ -151,7 +151,8 @@ export const getDojoClient = async (
                 ppf: dojoComponent.ppf,
                 Name: dojoComponent.Name,
                 Message: dojoComponent.Message,
-                DecoCapacity: dojoComponent.DecoCapacity ?? 600
+                DecoCapacity: dojoComponent.DecoCapacity ?? 600,
+                Settings: dojoComponent.Settings
             };
             if (dojoComponent.pi) {
                 clientComponent.pi = toOid(dojoComponent.pi);
