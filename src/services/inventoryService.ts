@@ -1014,12 +1014,14 @@ export const addCustomization = (
     customizationName: string,
     inventoryChanges: IInventoryChanges = {}
 ): IInventoryChanges => {
-    const flavourItemIndex = inventory.FlavourItems.push({ ItemType: customizationName }) - 1;
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    inventoryChanges.FlavourItems ??= [];
-    (inventoryChanges.FlavourItems as IFlavourItem[]).push(
-        inventory.FlavourItems[flavourItemIndex].toJSON<IFlavourItem>()
-    );
+    if (!inventory.FlavourItems.find(x => x.ItemType == customizationName)) {
+        const flavourItemIndex = inventory.FlavourItems.push({ ItemType: customizationName }) - 1;
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        inventoryChanges.FlavourItems ??= [];
+        (inventoryChanges.FlavourItems as IFlavourItem[]).push(
+            inventory.FlavourItems[flavourItemIndex].toJSON<IFlavourItem>()
+        );
+    }
     return inventoryChanges;
 };
 
