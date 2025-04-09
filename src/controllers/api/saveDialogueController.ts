@@ -1,6 +1,7 @@
-import { getInventory } from "@/src/services/inventoryService";
+import { addEmailItem, getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { ICompletedDialogue } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { logger } from "@/src/utils/logger";
 import { RequestHandler } from "express";
 
@@ -24,6 +25,7 @@ export const saveDialogueController: RequestHandler = async (req, res) => {
         if (request.OtherDialogueInfos.length != 0) {
             logger.error(`saveDialogue request not fully handled: ${String(req.body)}`);
         }
+        const inventoryChanges: IInventoryChanges = {};
         inventory.DialogueHistory.Dialogues ??= [];
         let dialogue = inventory.DialogueHistory.Dialogues.find(x => x.DialogueName == request.DialogueName);
         if (!dialogue) {
@@ -49,6 +51,13 @@ export const saveDialogueController: RequestHandler = async (req, res) => {
         dialogue.QueuedDialogues = request.QueuedDialogues;
         for (const bool of request.Booleans) {
             dialogue.Booleans.push(bool);
+            if (bool == "LizzieShawzin") {
+                await addEmailItem(
+                    inventory,
+                    "/Lotus/Types/Items/EmailItems/LizzieShawzinSkinEmailItem",
+                    inventoryChanges
+                );
+            }
         }
         for (const bool of request.ResetBooleans) {
             const index = dialogue.Booleans.findIndex(x => x == bool);
@@ -61,7 +70,7 @@ export const saveDialogueController: RequestHandler = async (req, res) => {
         dialogue.AvailableDate = new Date(tomorrowAt0Utc);
         await inventory.save();
         res.json({
-            InventoryChanges: [],
+            InventoryChanges: inventoryChanges,
             AvailableDate: { $date: { $numberLong: tomorrowAt0Utc.toString() } }
         });
     }
