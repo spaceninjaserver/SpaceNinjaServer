@@ -1091,7 +1091,7 @@ export interface IDialogueClient {
     AvailableGiftDate: IMongoDate;
     RankUpExpiry: IMongoDate;
     BountyChemExpiry: IMongoDate;
-    //QueuedDialogues: any[];
+    QueuedDialogues: string[];
     Gifts: IDialogueGift[];
     Booleans: string[];
     Completed: ICompletedDialogue[];

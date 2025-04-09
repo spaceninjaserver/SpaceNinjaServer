@@ -773,7 +773,7 @@ const dialogueSchema = new Schema<IDialogueDatabase>(
         AvailableGiftDate: Date,
         RankUpExpiry: Date,
         BountyChemExpiry: Date,
-        //QueuedDialogues: ???
+        QueuedDialogues: { type: [String], default: [] },
         Gifts: { type: [dialogueGiftSchema], default: [] },
         Booleans: { type: [String], default: [] },
         Completed: { type: [completedDialogueSchema], default: [] },

@@ -21,7 +21,7 @@ export const saveDialogueController: RequestHandler = async (req, res) => {
         if (!inventory.DialogueHistory) {
             throw new Error("bad inventory state");
         }
-        if (request.QueuedDialogues.length != 0 || request.OtherDialogueInfos.length != 0) {
+        if (request.OtherDialogueInfos.length != 0) {
             logger.error(`saveDialogue request not fully handled: ${String(req.body)}`);
         }
         inventory.DialogueHistory.Dialogues ??= [];
@@ -36,6 +36,7 @@ export const saveDialogueController: RequestHandler = async (req, res) => {
                         AvailableGiftDate: new Date(0),
                         RankUpExpiry: new Date(0),
                         BountyChemExpiry: new Date(0),
+                        QueuedDialogues: [],
                         Gifts: [],
                         Booleans: [],
                         Completed: [],
@@ -45,7 +46,7 @@ export const saveDialogueController: RequestHandler = async (req, res) => {
         }
         dialogue.Rank = request.Rank;
         dialogue.Chemistry = request.Chemistry;
-        //dialogue.QueuedDialogues = request.QueuedDialogues;
+        dialogue.QueuedDialogues = request.QueuedDialogues;
         for (const bool of request.Booleans) {
             dialogue.Booleans.push(bool);
         }
@@ -77,7 +78,7 @@ interface SaveCompletedDialogueRequest {
     Rank: number;
     Chemistry: number;
     CompletionType: number;
-    QueuedDialogues: string[]; // unsure
+    QueuedDialogues: string[];
     Booleans: string[];
     ResetBooleans: string[];
     Data: ICompletedDialogue;
