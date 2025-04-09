@@ -659,6 +659,8 @@ export const addItem = async (
                         return {
                             MiscItems: miscItemChanges
                         };
+                    } else if (typeName == "/Lotus/Types/Game/CrewShip/RailJack/DefaultHarness") {
+                        return addCrewShipHarness(inventory, typeName);
                     }
                     break;
                 }
