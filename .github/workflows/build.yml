@@ -13,4 +13,13 @@ jobs:
             - run: npm ci
             - run: cp config.json.example config.json
             - run: npm run verify
-            - run: npm run lint
+            - run: npm run lint:ci
+            - run: npm run prettier
+            - name: Fail if there are uncommitted changes
+              run: |
+                  if [[ -n "$(git status --porcelain)" ]]; then
+                    echo "Uncommitted changes detected:"
+                    git status
+                    git diff
+                    exit 1
+                  fi
