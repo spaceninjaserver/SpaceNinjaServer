@@ -1,4 +1,4 @@
-import { addEmailItem, getInventory } from "@/src/services/inventoryService";
+import { addEmailItem, getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { ICompletedDialogue } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
@@ -9,7 +9,7 @@ export const saveDialogueController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const request = JSON.parse(String(req.body)) as SaveDialogueRequest;
     if ("YearIteration" in request) {
-        const inventory = await getInventory(accountId);
+        const inventory = await getInventory(accountId, "DialogueHistory");
         if (inventory.DialogueHistory) {
             inventory.DialogueHistory.YearIteration = request.YearIteration;
         } else {
@@ -22,10 +22,11 @@ export const saveDialogueController: RequestHandler = async (req, res) => {
         if (!inventory.DialogueHistory) {
             throw new Error("bad inventory state");
         }
-        if (request.OtherDialogueInfos.length != 0) {
+        if (request.OtherDialogueInfos.length != 0 || !(request.Data || request.Gift)) {
             logger.error(`saveDialogue request not fully handled: ${String(req.body)}`);
         }
         const inventoryChanges: IInventoryChanges = {};
+        const tomorrowAt0Utc = (Math.trunc(Date.now() / 86400_000) + 1) * 86400_000;
         inventory.DialogueHistory.Dialogues ??= [];
         let dialogue = inventory.DialogueHistory.Dialogues.find(x => x.DialogueName == request.DialogueName);
         if (!dialogue) {
@@ -48,31 +49,46 @@ export const saveDialogueController: RequestHandler = async (req, res) => {
         }
         dialogue.Rank = request.Rank;
         dialogue.Chemistry = request.Chemistry;
-        dialogue.QueuedDialogues = request.QueuedDialogues;
-        for (const bool of request.Booleans) {
-            dialogue.Booleans.push(bool);
-            if (bool == "LizzieShawzin") {
-                await addEmailItem(
-                    inventory,
-                    "/Lotus/Types/Items/EmailItems/LizzieShawzinSkinEmailItem",
-                    inventoryChanges
-                );
+        if (request.Data) {
+            dialogue.QueuedDialogues = request.QueuedDialogues;
+            for (const bool of request.Booleans) {
+                dialogue.Booleans.push(bool);
+                if (bool == "LizzieShawzin") {
+                    await addEmailItem(
+                        inventory,
+                        "/Lotus/Types/Items/EmailItems/LizzieShawzinSkinEmailItem",
+                        inventoryChanges
+                    );
+                }
             }
-        }
-        for (const bool of request.ResetBooleans) {
-            const index = dialogue.Booleans.findIndex(x => x == bool);
-            if (index != -1) {
-                dialogue.Booleans.splice(index, 1);
+            for (const bool of request.ResetBooleans) {
+                const index = dialogue.Booleans.findIndex(x => x == bool);
+                if (index != -1) {
+                    dialogue.Booleans.splice(index, 1);
+                }
             }
+            dialogue.Completed.push(request.Data);
+            dialogue.AvailableDate = new Date(tomorrowAt0Utc);
+            await inventory.save();
+            res.json({
+                InventoryChanges: inventoryChanges,
+                AvailableDate: { $date: { $numberLong: tomorrowAt0Utc.toString() } }
+            });
+        } else if (request.Gift) {
+            const inventoryChanges = updateCurrency(inventory, request.Gift.Cost, false);
+            const gift = dialogue.Gifts.find(x => x.Item == request.Gift!.Item);
+            if (gift) {
+                gift.GiftedQuantity += 1;
+            } else {
+                dialogue.Gifts.push({ Item: request.Gift.Item, GiftedQuantity: 1 });
+            }
+            dialogue.AvailableGiftDate = new Date(tomorrowAt0Utc);
+            await inventory.save();
+            res.json({
+                InventoryChanges: inventoryChanges,
+                AvailableGiftDate: { $date: { $numberLong: tomorrowAt0Utc.toString() } }
+            });
         }
-        dialogue.Completed.push(request.Data);
-        const tomorrowAt0Utc = (Math.trunc(Date.now() / (86400 * 1000)) + 1) * 86400 * 1000;
-        dialogue.AvailableDate = new Date(tomorrowAt0Utc);
-        await inventory.save();
-        res.json({
-            InventoryChanges: inventoryChanges,
-            AvailableDate: { $date: { $numberLong: tomorrowAt0Utc.toString() } }
-        });
     }
 };
 
@@ -88,9 +104,15 @@ interface SaveCompletedDialogueRequest {
     Chemistry: number;
     CompletionType: number;
     QueuedDialogues: string[];
+    Gift?: {
+        Item: string;
+        GainedChemistry: number;
+        Cost: number;
+        GiftedQuantity: number;
+    };
     Booleans: string[];
     ResetBooleans: string[];
-    Data: ICompletedDialogue;
+    Data?: ICompletedDialogue;
     OtherDialogueInfos: IOtherDialogueInfo[]; // unsure
 }
 
