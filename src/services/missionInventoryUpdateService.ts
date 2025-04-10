@@ -832,7 +832,9 @@ function getRandomMissionDrops(RewardInfo: IRewardInfo, tierOverride: number | u
             const rotationCount = RewardInfo.rewardQualifications?.length || 0;
             rotations = getRotations(rotationCount, tierOverride);
         }
-        logger.debug(`generating random mission rewards`, { rewardManifests, rotations });
+        if (rewardManifests.length != 0) {
+            logger.debug(`generating random mission rewards`, { rewardManifests, rotations });
+        }
         rewardManifests
             .map(name => ExportRewards[name])
             .forEach(table => {
