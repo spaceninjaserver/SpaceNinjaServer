@@ -19,7 +19,7 @@ import {
     sortieBossToFaction,
     sortieFactionToFactionIndexes,
     sortieFactionToSystemIndexes
-} from "@/src/helpers/worlstateHelper";
+} from "@/src/helpers/worldStateHelper";
 
 export const worldStateController: RequestHandler = (req, res) => {
     const day = Math.trunc((Date.now() - EPOCH) / 86400000);
