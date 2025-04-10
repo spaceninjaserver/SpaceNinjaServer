@@ -145,9 +145,9 @@ export interface IRewardInfo {
     periodicMissionTag?: string;
 
     // for bounties, only EOM_AFK and node are given from above, plus:
-    JobTier?: string;
+    JobTier?: number;
     jobId?: string;
-    JobStage?: string;
+    JobStage?: number;
     Q?: boolean; // always false?
     CheckpointCounter?: number; // starts at 1, is incremented with each job stage upload, and does not reset when starting a new job
 }

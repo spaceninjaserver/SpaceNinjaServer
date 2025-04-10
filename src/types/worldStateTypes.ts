@@ -5,7 +5,7 @@ export interface IWorldState {
     BuildLabel: string;
     Time: number;
     Goals: IGoal[];
-    SyndicateMissions: ISyndicateMission[];
+    SyndicateMissions: ISyndicateMissionInfo[];
     GlobalUpgrades: IGlobalUpgrade[];
     Sorties: ISortie[];
     LiteSorties: ILiteSortie[];
@@ -39,13 +39,24 @@ export interface IGoal {
     Node: string;
 }
 
-export interface ISyndicateMission {
+export interface ISyndicateMissionInfo {
     _id: IOid;
     Activation: IMongoDate;
     Expiry: IMongoDate;
     Tag: string;
     Seed: number;
     Nodes: string[];
+    Jobs?: {
+        jobType?: string;
+        rewards: string;
+        masteryReq: number;
+        minEnemyLevel: number;
+        maxEnemyLevel: number;
+        xpAmounts: number[];
+        endless?: boolean;
+        locationTag?: string;
+        isVault?: boolean;
+    }[];
 }
 
 export interface IGlobalUpgrade {

@@ -55,7 +55,8 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
     const inventory = await getInventory(accountId);
     const inventoryUpdates = await addMissionInventoryUpdates(inventory, missionReport);
 
-    if (missionReport.MissionStatus !== "GS_SUCCESS") {
+    // skip mission rewards if not GS_SUCCESS and not a bounty (by presence of jobId, as there's a reward every stage but only the last stage has GS_SUCCESS)
+    if (missionReport.MissionStatus !== "GS_SUCCESS" && !missionReport.RewardInfo?.jobId) {
         await inventory.save();
         const inventoryResponse = await getInventoryResponse(inventory, true);
         res.json({
