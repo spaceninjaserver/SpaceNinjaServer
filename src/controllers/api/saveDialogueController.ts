@@ -1,6 +1,7 @@
+import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { addEmailItem, getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { ICompletedDialogue } from "@/src/types/inventoryTypes/inventoryTypes";
+import { ICompletedDialogue, IDialogueDatabase } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { logger } from "@/src/utils/logger";
 import { RequestHandler } from "express";
@@ -22,31 +23,10 @@ export const saveDialogueController: RequestHandler = async (req, res) => {
         if (!inventory.DialogueHistory) {
             throw new Error("bad inventory state");
         }
-        if (request.OtherDialogueInfos.length != 0 || !(request.Data || request.Gift)) {
-            logger.error(`saveDialogue request not fully handled: ${String(req.body)}`);
-        }
         const inventoryChanges: IInventoryChanges = {};
         const tomorrowAt0Utc = (Math.trunc(Date.now() / 86400_000) + 1) * 86400_000;
         inventory.DialogueHistory.Dialogues ??= [];
-        let dialogue = inventory.DialogueHistory.Dialogues.find(x => x.DialogueName == request.DialogueName);
-        if (!dialogue) {
-            dialogue =
-                inventory.DialogueHistory.Dialogues[
-                    inventory.DialogueHistory.Dialogues.push({
-                        Rank: 0,
-                        Chemistry: 0,
-                        AvailableDate: new Date(0),
-                        AvailableGiftDate: new Date(0),
-                        RankUpExpiry: new Date(0),
-                        BountyChemExpiry: new Date(0),
-                        QueuedDialogues: [],
-                        Gifts: [],
-                        Booleans: [],
-                        Completed: [],
-                        DialogueName: request.DialogueName
-                    }) - 1
-                ];
-        }
+        const dialogue = getDialogue(inventory, request.DialogueName);
         dialogue.Rank = request.Rank;
         dialogue.Chemistry = request.Chemistry;
         if (request.Data) {
@@ -69,6 +49,13 @@ export const saveDialogueController: RequestHandler = async (req, res) => {
             }
             dialogue.Completed.push(request.Data);
             dialogue.AvailableDate = new Date(tomorrowAt0Utc);
+            for (const info of request.OtherDialogueInfos) {
+                const otherDialogue = getDialogue(inventory, info.Dialogue);
+                if (info.Tag != "") {
+                    otherDialogue.QueuedDialogues.push(info.Tag);
+                }
+                otherDialogue.Chemistry += info.Value; // unsure
+            }
             await inventory.save();
             res.json({
                 InventoryChanges: inventoryChanges,
@@ -88,6 +75,8 @@ export const saveDialogueController: RequestHandler = async (req, res) => {
                 InventoryChanges: inventoryChanges,
                 AvailableGiftDate: { $date: { $numberLong: tomorrowAt0Utc.toString() } }
             });
+        } else {
+            logger.error(`saveDialogue request not fully handled: ${String(req.body)}`);
         }
     }
 };
@@ -113,7 +102,7 @@ interface SaveCompletedDialogueRequest {
     Booleans: string[];
     ResetBooleans: string[];
     Data?: ICompletedDialogue;
-    OtherDialogueInfos: IOtherDialogueInfo[]; // unsure
+    OtherDialogueInfos: IOtherDialogueInfo[];
 }
 
 interface IOtherDialogueInfo {
@@ -121,3 +110,26 @@ interface IOtherDialogueInfo {
     Tag: string;
     Value: number;
 }
+
+const getDialogue = (inventory: TInventoryDatabaseDocument, dialogueName: string): IDialogueDatabase => {
+    let dialogue = inventory.DialogueHistory!.Dialogues!.find(x => x.DialogueName == dialogueName);
+    if (!dialogue) {
+        dialogue =
+            inventory.DialogueHistory!.Dialogues![
+                inventory.DialogueHistory!.Dialogues!.push({
+                    Rank: 0,
+                    Chemistry: 0,
+                    AvailableDate: new Date(0),
+                    AvailableGiftDate: new Date(0),
+                    RankUpExpiry: new Date(0),
+                    BountyChemExpiry: new Date(0),
+                    QueuedDialogues: [],
+                    Gifts: [],
+                    Booleans: [],
+                    Completed: [],
+                    DialogueName: dialogueName
+                }) - 1
+            ];
+    }
+    return dialogue;
+};
