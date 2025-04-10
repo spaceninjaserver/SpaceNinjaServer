@@ -8,7 +8,7 @@ export const submitLeaderboardScore = async (
     ownerId: string,
     displayName: string,
     score: number,
-    guildId?: string
+    guildId: string | undefined
 ): Promise<void> => {
     let expiry: Date;
     if (schedule == "daily") {
@@ -39,9 +39,9 @@ export const getLeaderboard = async (
     leaderboard: string,
     before: number,
     after: number,
-    pivotId?: string,
-    guildId?: string,
-    guildTier?: number
+    pivotId: string | undefined,
+    guildId: string | undefined,
+    guildTier: number | undefined
 ): Promise<ILeaderboardEntryClient[]> => {
     const filter: { leaderboard: string; guildId?: string; guildTier?: number } = { leaderboard };
     if (guildId) {
