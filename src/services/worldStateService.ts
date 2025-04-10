@@ -322,6 +322,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     for (const syndicateInfo of worldState.SyndicateMissions) {
         if (syndicateInfo.Jobs && syndicateInfo.Seed != bountyCycle) {
             syndicateInfo.Seed = bountyCycle;
+            logger.debug(`refreshing jobs for ${syndicateInfo.Tag}`);
             const rng = new CRng(bountyCycle);
             const table = String.fromCharCode(65 + ((bountyCycle - 1) % 3));
             const vaultTable = String.fromCharCode(65 + ((bountyCycle - 2) % 3));
