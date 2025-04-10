@@ -136,6 +136,7 @@ dict = {
     cheats_noVendorPurchaseLimits: `No Vendor Purchase Limits`,
     cheats_instantResourceExtractorDrones: `Instant Resource Extractor Drones`,
     cheats_noDojoRoomBuildStage: `No Dojo Room Build Stage`,
+    cheats_noDojoDecoBuildStage: `No Dojo Deco Build Stage`,
     cheats_fastDojoRoomDestruction: `Fast Dojo Room Destruction`,
     cheats_noDojoResearchCosts: `No Dojo Research Costs`,
     cheats_noDojoResearchTime: `No Dojo Research Time`,

@@ -34,6 +34,7 @@
   "noVendorPurchaseLimits": true,
   "instantResourceExtractorDrones": false,
   "noDojoRoomBuildStage": false,
+  "noDecoBuildStage": false,
   "fastDojoRoomDestruction": false,
   "noDojoResearchCosts": false,
   "noDojoResearchTime": false,

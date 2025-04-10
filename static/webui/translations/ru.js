@@ -137,6 +137,7 @@ dict = {
     cheats_noVendorPurchaseLimits: `Отсутствие лимитов на покупки у вендоров`,
     cheats_instantResourceExtractorDrones: `Мгновенные Экстракторы Ресурсов`,
     cheats_noDojoRoomBuildStage: `Мгновенное Строительтво Комнат Додзё`,
+    cheats_noDojoDecoBuildStage: `[UNTRANSLATED] No Dojo Deco Build Stage`,
     cheats_fastDojoRoomDestruction: `Мгновенные Уничтожение Комнат Додзё`,
     cheats_noDojoResearchCosts: `Бесплатные Исследование Додзё`,
     cheats_noDojoResearchTime: `Мгновенные Исследование Додзё`,

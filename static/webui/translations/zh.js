@@ -137,6 +137,7 @@ dict = {
     cheats_noVendorPurchaseLimits: `[UNTRANSLATED] No Vendor Purchase Limits`,
     cheats_instantResourceExtractorDrones: `即时资源采集无人机`,
     cheats_noDojoRoomBuildStage: `无视道场房间建造阶段`,
+    cheats_noDojoDecoBuildStage: `[UNTRANSLATED] No Dojo Deco Build Stage`,
     cheats_fastDojoRoomDestruction: `快速拆除道场房间`,
     cheats_noDojoResearchCosts: `无视道场研究消耗`,
     cheats_noDojoResearchTime: `无视道场研究时间`,

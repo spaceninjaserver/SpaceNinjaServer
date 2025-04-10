@@ -39,6 +39,7 @@ interface IConfig {
     noVendorPurchaseLimits?: boolean;
     instantResourceExtractorDrones?: boolean;
     noDojoRoomBuildStage?: boolean;
+    noDojoDecoBuildStage?: boolean;
     fastDojoRoomDestruction?: boolean;
     noDojoResearchCosts?: boolean;
     noDojoResearchTime?: boolean;
