@@ -385,12 +385,12 @@ export const addMissionInventoryUpdates = async (
                 break;
             }
             case "DeathMarks": {
-                for (const deathMark of value) {
-                    if (!inventory.DeathMarks.find(x => x == deathMark)) {
+                for (const bossName of value) {
+                    if (inventory.DeathMarks.indexOf(bossName) == -1) {
                         // It's a new death mark; we have to say the line.
                         await createMessage(inventory.accountOwnerId, [
                             {
-                                sub: "/Lotus/Language/G1Quests/DeathMarkTitle",
+                                sub: bossName,
                                 sndr: "/Lotus/Language/G1Quests/DeathMarkSender",
                                 msg: "/Lotus/Language/G1Quests/DeathMarkMessage",
                                 icon: "/Lotus/Interface/Icons/Npcs/Stalker_d.png",
