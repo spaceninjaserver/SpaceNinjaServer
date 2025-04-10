@@ -324,9 +324,10 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             syndicateInfo.Seed = bountyCycle;
             logger.debug(`refreshing jobs for ${syndicateInfo.Tag}`);
             const rng = new CRng(bountyCycle);
-            const table = String.fromCharCode(65 + ((bountyCycle - 1) % 3));
-            const vaultTable = String.fromCharCode(65 + ((bountyCycle - 2) % 3));
-            const endlessTable = String.fromCharCode(65 + ((bountyCycle - 3) % 3));
+            const table = String.fromCharCode(65 + (bountyCycle % 3));
+            const vaultTable = String.fromCharCode(65 + ((bountyCycle + 1) % 3));
+            const deimosDTable = String.fromCharCode(65 + (bountyCycle % 2));
+            //console.log({ bountyCycleStart, bountyCycleEnd, table, vaultTable, deimosDTable });
             for (const jobInfo of syndicateInfo.Jobs) {
                 if (jobInfo.jobType) {
                     let found = false;
@@ -342,11 +343,11 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                         logger.warn(`no job set found for type ${jobInfo.jobType}`);
                     }
                 }
-                if (jobInfo.endless) {
-                    jobInfo.rewards = jobInfo.rewards.replace(/Table.Rewards/, `Table${endlessTable}Rewards`);
-                } else if (jobInfo.isVault) {
+                if (jobInfo.endless || jobInfo.isVault) {
                     jobInfo.rewards = jobInfo.rewards.replace(/Table.Rewards/, `Table${vaultTable}Rewards`);
-                } else {
+                } else if (jobInfo.rewards.startsWith("/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierD")) {
+                    jobInfo.rewards = jobInfo.rewards.replace(/Table.Rewards/, `Table${deimosDTable}Rewards`);
+                } else if (!jobInfo.rewards.startsWith("/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierE")) {
                     jobInfo.rewards = jobInfo.rewards.replace(/Table.Rewards/, `Table${table}Rewards`);
                 }
             }
