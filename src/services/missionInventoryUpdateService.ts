@@ -51,10 +51,13 @@ import { getInfNodes } from "@/src/helpers/nemesisHelpers";
 import { Loadout } from "../models/inventoryModels/loadoutModel";
 import { ILoadoutConfigDatabase } from "../types/saveLoadoutTypes";
 
-const getRotations = (rotationCount: number): number[] => {
+const getRotations = (rotationCount: number, tierOverride: number | undefined): number[] => {
     if (rotationCount === 0) return [0];
 
-    const rotationPattern = [0, 0, 1, 2]; // A, A, B, C
+    const rotationPattern =
+        tierOverride === undefined
+            ? [0, 0, 1, 2] // A, A, B, C
+            : [tierOverride];
     const rotatedValues = [];
 
     for (let i = 0; i < rotationCount; i++) {
@@ -518,6 +521,7 @@ interface AddMissionRewardsReturnType {
 export const addMissionRewards = async (
     inventory: TInventoryDatabaseDocument,
     {
+        wagerTier: wagerTier,
         Nemesis: nemesis,
         RewardInfo: rewardInfo,
         LevelKeyName: levelKeyName,
@@ -534,7 +538,7 @@ export const addMissionRewards = async (
     }
 
     //TODO: check double reward merging
-    const MissionRewards: IMissionReward[] = getRandomMissionDrops(rewardInfo);
+    const MissionRewards: IMissionReward[] = getRandomMissionDrops(rewardInfo, wagerTier);
     logger.debug("random mission drops:", MissionRewards);
     const inventoryChanges: IInventoryChanges = {};
 
@@ -798,7 +802,7 @@ function getLevelCreditRewards(node: IRegion): number {
     //TODO: get dark sektor fixed credit rewards and railjack bonus
 }
 
-function getRandomMissionDrops(RewardInfo: IRewardInfo): IMissionReward[] {
+function getRandomMissionDrops(RewardInfo: IRewardInfo, tierOverride: number | undefined): IMissionReward[] {
     const drops: IMissionReward[] = [];
     if (RewardInfo.node in ExportRegions) {
         const region = ExportRegions[RewardInfo.node];
@@ -815,7 +819,7 @@ function getRandomMissionDrops(RewardInfo: IRewardInfo): IMissionReward[] {
             }
         } else {
             const rotationCount = RewardInfo.rewardQualifications?.length || 0;
-            rotations = getRotations(rotationCount);
+            rotations = getRotations(rotationCount, tierOverride);
         }
         rewardManifests
             .map(name => ExportRewards[name])
