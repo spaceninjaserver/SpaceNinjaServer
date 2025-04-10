@@ -178,9 +178,9 @@ function fetchItemList() {
             });
 
             const syndicateNone = document.createElement("option");
-            syndicateNone.setAttribute("data-key", "");
-            syndicateNone.value = loc("cheats_none");
-            document.getElementById("datalist-Syndicates").appendChild(syndicateNone);
+            syndicateNone.textContent = loc("cheats_none");
+            document.getElementById("changeSyndicate").innerHTML = "";
+            document.getElementById("changeSyndicate").appendChild(syndicateNone);
 
             window.archonCrystalUpgrades = data.archonCrystalUpgrades;
 
@@ -264,6 +264,16 @@ function fetchItemList() {
                     });
                 } else if (type == "uniqueLevelCaps") {
                     uniqueLevelCaps = items;
+                } else if (type == "Syndicates") {
+                    items.forEach(item => {
+                        if (item.uniqueName.startsWith("RadioLegion")) {
+                            item.name += " (" + item.uniqueName + ")";
+                        }
+                        const option = document.createElement("option");
+                        option.value = item.uniqueName;
+                        option.textContent = item.name;
+                        document.getElementById("changeSyndicate").appendChild(option);
+                    });
                 } else {
                     const nameSet = new Set();
                     items.forEach(item => {
@@ -276,9 +286,6 @@ function fetchItemList() {
                             } else {
                                 item.name += " " + loc("code_badItem");
                             }
-                        }
-                        if (type == "Syndicates" && item.uniqueName.startsWith("RadioLegion")) {
-                            item.name += " (" + item.uniqueName + ")";
                         }
                         if (type == "ModularParts") {
                             const supportedModularParts = [
@@ -823,10 +830,7 @@ function updateInventory() {
                     single.loadRoute("/webui/inventory");
                 }
             }
-            document.getElementById("changeSyndicate").value =
-                [...document.querySelectorAll("#datalist-Syndicates option")].find(
-                    option => option.getAttribute("data-key") === (data.SupportedSyndicate ?? "")
-                )?.value ?? loc("cheats_none");
+            document.getElementById("changeSyndicate").value = data.SupportedSyndicate ?? "";
         });
     });
 }
@@ -1505,7 +1509,7 @@ function doImport() {
 }
 
 function doChangeSupportedSyndicate() {
-    const uniqueName = getKey(document.getElementById("changeSyndicate"));
+    const uniqueName = document.getElementById("changeSyndicate").value;
 
     revalidateAuthz(() => {
         $.get("/api/setSupportedSyndicate.php?" + window.authz + "&syndicate=" + uniqueName).done(function () {
