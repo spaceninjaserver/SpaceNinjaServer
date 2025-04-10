@@ -1415,7 +1415,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         //https://warframe.fandom.com/wiki/Heist
         //ProfitTaker(1-4) Example:"LocationTag": "EudicoHeists", "Jobs":Mission name
-        CompletedJobChains: [completedJobChainsSchema],
+        CompletedJobChains: { type: [completedJobChainsSchema], default: undefined },
         //Night Wave Challenge
         SeasonChallengeHistory: [seasonChallengeHistorySchema],
 

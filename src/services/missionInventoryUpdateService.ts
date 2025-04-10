@@ -143,6 +143,28 @@ export const addMissionInventoryUpdates = async (
         if (inventoryUpdates.RewardInfo.NemesisAbandonedRewards) {
             inventory.NemesisAbandonedRewards = inventoryUpdates.RewardInfo.NemesisAbandonedRewards;
         }
+        if (inventoryUpdates.MissionStatus == "GS_SUCCESS" && inventoryUpdates.RewardInfo.jobId) {
+            // e.g. for Profit-Taker Phase 1:
+            // JobTier: -6,
+            // jobId: '/Lotus/Types/Gameplay/Venus/Jobs/Heists/HeistProfitTakerBountyOne_-6_SolarisUnitedHub1_663a71c80000000000000025_EudicoHeists',
+            // This is sent multiple times, with JobStage starting at 0 and incrementing each time, but only the final upload has GS_SUCCESS.
+
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const [bounty, tier, hub, id, tag] = inventoryUpdates.RewardInfo.jobId.split("_");
+            if (tag == "EudicoHeists") {
+                inventory.CompletedJobChains ??= [];
+                let chain = inventory.CompletedJobChains.find(x => x.LocationTag == tag);
+                if (!chain) {
+                    chain =
+                        inventory.CompletedJobChains[
+                            inventory.CompletedJobChains.push({ LocationTag: tag, Jobs: [] }) - 1
+                        ];
+                }
+                if (!chain.Jobs.includes(bounty)) {
+                    chain.Jobs.push(bounty);
+                }
+            }
+        }
     }
     for (const [key, value] of getEntriesUnsafe(inventoryUpdates)) {
         if (value === undefined) {

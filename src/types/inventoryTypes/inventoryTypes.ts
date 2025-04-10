@@ -292,7 +292,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     RecentVendorPurchases?: IRecentVendorPurchaseClient[];
     NodeIntrosCompleted: string[];
     GuildId?: IOid;
-    CompletedJobChains: ICompletedJobChain[];
+    CompletedJobChains?: ICompletedJobChain[];
     SeasonChallengeHistory: ISeasonChallenge[];
     EquippedInstrument?: string;
     InvasionChainProgress: IInvasionChainProgress[];
