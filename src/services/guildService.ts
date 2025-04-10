@@ -147,6 +147,7 @@ export const getDojoClient = async (
         if (!componentId || dojoComponent._id.equals(componentId)) {
             const clientComponent: IDojoComponentClient = {
                 id: toOid(dojoComponent._id),
+                SortId: toOid(dojoComponent.SortId ?? dojoComponent._id), // always providing a SortId so decos don't need repositioning to reparent
                 pf: dojoComponent.pf,
                 ppf: dojoComponent.ppf,
                 Name: dojoComponent.Name,

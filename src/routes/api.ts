@@ -145,6 +145,7 @@ const apiRouter = express.Router();
 apiRouter.get("/abandonLibraryDailyTask.php", abandonLibraryDailyTaskController);
 apiRouter.get("/abortDojoComponentDestruction.php", abortDojoComponentDestructionController);
 apiRouter.get("/cancelGuildAdvertisement.php", cancelGuildAdvertisementController);
+apiRouter.get("/changeDojoRoot.php", changeDojoRootController);
 apiRouter.get("/changeGuildRank.php", changeGuildRankController);
 apiRouter.get("/checkDailyMissionBonus.php", checkDailyMissionBonusController);
 apiRouter.get("/claimLibraryDailyTaskReward.php", claimLibraryDailyTaskRewardController);

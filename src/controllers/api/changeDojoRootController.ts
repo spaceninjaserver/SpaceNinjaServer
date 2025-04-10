@@ -15,6 +15,12 @@ export const changeDojoRootController: RequestHandler = async (req, res) => {
         return;
     }
 
+    // Example POST body: {"pivot":[0, 0, -64],"components":"{\"670429301ca0a63848ccc467\":{\"R\":[0,0,0],\"P\":[0,3,32]},\"6704254a1ca0a63848ccb33c\":{\"R\":[0,0,0],\"P\":[0,9.25,-32]},\"670429461ca0a63848ccc731\":{\"R\":[-90,0,0],\"P\":[-47.999992370605,3,16]}}"}
+    if (req.body) {
+        logger.debug(`data provided to ${req.path}: ${String(req.body)}`);
+        throw new Error("dojo reparent operation should not need deco repositioning"); // because we always provide SortId
+    }
+
     const idToNode: Record<string, INode> = {};
     guild.DojoComponents.forEach(x => {
         idToNode[x._id.toString()] = {
@@ -43,23 +49,13 @@ export const changeDojoRootController: RequestHandler = async (req, res) => {
     newRoot.component.pp = undefined;
     newRoot.parent = undefined;
 
-    // Don't even ask me why this is needed because I don't know either
+    // Set/update SortId in top-to-bottom order
     const stack: INode[] = [newRoot];
-    let i = 0;
-    const idMap: Record<string, Types.ObjectId> = {};
     while (stack.length != 0) {
         const top = stack.shift()!;
-        idMap[top.component._id.toString()] = new Types.ObjectId(
-            (++i).toString(16).padStart(8, "0") + top.component._id.toString().substr(8)
-        );
+        top.component.SortId = new Types.ObjectId();
         top.children.forEach(x => stack.push(x));
     }
-    guild.DojoComponents.forEach(x => {
-        x._id = idMap[x._id.toString()];
-        if (x.pi) {
-            x.pi = idMap[x.pi.toString()];
-        }
-    });
 
     logger.debug("New tree:\n" + treeToString(newRoot));
 

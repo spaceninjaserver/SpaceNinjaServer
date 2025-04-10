@@ -190,6 +190,7 @@ export interface IDojoComponentDatabase
         "id" | "SortId" | "pi" | "CompletionTime" | "DestructionTime" | "Decos" | "PaintBot"
     > {
     _id: Types.ObjectId;
+    SortId?: Types.ObjectId;
     pi?: Types.ObjectId;
     CompletionTime?: Date;
     CompletionLogPending?: boolean;

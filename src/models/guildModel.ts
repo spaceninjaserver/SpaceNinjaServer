@@ -43,6 +43,7 @@ const dojoLeaderboardEntrySchema = new Schema<IDojoLeaderboardEntry>(
 );
 
 const dojoComponentSchema = new Schema<IDojoComponentDatabase>({
+    SortId: Schema.Types.ObjectId,
     pf: { type: String, required: true },
     ppf: String,
     pi: Schema.Types.ObjectId,
