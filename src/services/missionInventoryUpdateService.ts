@@ -619,16 +619,12 @@ export const addMissionRewards = async (
 
     if (strippedItems) {
         for (const si of strippedItems) {
-            const droptable = ExportEnemies.droptables[si.DropTable];
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-            if (!droptable) {
-                logger.error(`unknown droptable ${si.DropTable}`);
-            } else {
-                const modsPool = droptable[0].items;
-                const blueprintsPool = (droptable.length > 1 ? droptable[1] : droptable[0]).items;
-                if (si.DROP_MOD) {
+            const droptables = ExportEnemies.droptables[si.DropTable] ?? [];
+            if (si.DROP_MOD) {
+                const modDroptable = droptables.find(x => x.type == "mod");
+                if (modDroptable) {
                     for (let i = 0; i != si.DROP_MOD.length; ++i) {
-                        const reward = getRandomReward(modsPool)!;
+                        const reward = getRandomReward(modDroptable.items)!;
                         logger.debug(`stripped droptable (mods pool) rolled`, reward);
                         await addItem(inventory, reward.type);
                         MissionRewards.push({
@@ -637,10 +633,15 @@ export const addMissionRewards = async (
                             FromEnemyCache: true // to show "identified"
                         });
                     }
+                } else {
+                    logger.error(`unknown droptable ${si.DropTable} for DROP_MOD`);
                 }
-                if (si.DROP_BLUEPRINT) {
+            }
+            if (si.DROP_BLUEPRINT) {
+                const blueprintDroptable = droptables.find(x => x.type == "blueprint");
+                if (blueprintDroptable) {
                     for (let i = 0; i != si.DROP_BLUEPRINT.length; ++i) {
-                        const reward = getRandomReward(blueprintsPool)!;
+                        const reward = getRandomReward(blueprintDroptable.items)!;
                         logger.debug(`stripped droptable (blueprints pool) rolled`, reward);
                         await addItem(inventory, reward.type);
                         MissionRewards.push({
@@ -649,6 +650,8 @@ export const addMissionRewards = async (
                             FromEnemyCache: true // to show "identified"
                         });
                     }
+                } else {
+                    logger.error(`unknown droptable ${si.DropTable} for DROP_BLUEPRINT`);
                 }
             }
         }

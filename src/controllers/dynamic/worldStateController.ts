@@ -9,11 +9,10 @@ import { IMongoDate, IOid } from "@/src/types/commonTypes";
 import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { config } from "@/src/services/configService";
 import { CRng } from "@/src/services/rngService";
-import { ExportNightwave, ExportRegions } from "warframe-public-export-plus";
+import { eMissionType, ExportNightwave, ExportRegions } from "warframe-public-export-plus";
 import {
     EPOCH,
     getSortieTime,
-    missionTags,
     sortieBosses,
     sortieBossNode,
     sortieBossToFaction,
@@ -269,7 +268,7 @@ export const worldStateController: RequestHandler = (req, res) => {
                 }
             }
 
-            const missionType = missionTags[missionIndex];
+            const missionType = eMissionType[missionIndex].tag;
 
             if (missionTypes.has(missionType)) {
                 i--;
