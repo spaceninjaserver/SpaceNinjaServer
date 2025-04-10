@@ -394,10 +394,10 @@ export const addMissionInventoryUpdates = async (
                                 sndr: "/Lotus/Language/G1Quests/DeathMarkSender",
                                 msg: "/Lotus/Language/G1Quests/DeathMarkMessage",
                                 icon: "/Lotus/Interface/Icons/Npcs/Stalker_d.png",
-                                highPriority: true
+                                highPriority: true,
+                                expiry: new Date(Date.now() + 86400_000) // TOVERIFY: This type of inbox message seems to automatically delete itself. We'll just delete it after 24 hours, but it's clear if this is correct.
                             }
                         ]);
-                        // TODO: This type of inbox message seems to automatically delete itself. Figure out under which conditions.
                     }
                 }
                 inventory.DeathMarks = value;

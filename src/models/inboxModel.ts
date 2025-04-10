@@ -5,7 +5,7 @@ import { IMongoDate, IOid } from "@/src/types/commonTypes";
 import { ITypeCount } from "@/src/types/inventoryTypes/inventoryTypes";
 
 export interface IMessageClient
-    extends Omit<IMessageDatabase, "_id" | "date" | "startDate" | "endDate" | "ownerId" | "attVisualOnly"> {
+    extends Omit<IMessageDatabase, "_id" | "date" | "startDate" | "endDate" | "ownerId" | "attVisualOnly" | "expiry"> {
     _id?: IOid;
     date: IMongoDate;
     startDate?: IMongoDate;
@@ -16,6 +16,8 @@ export interface IMessageClient
 export interface IMessageDatabase extends IMessage {
     ownerId: Types.ObjectId;
     date: Date; //created at
+    attVisualOnly?: boolean;
+    expiry?: Date;
     _id: Types.ObjectId;
 }
 
@@ -30,7 +32,6 @@ export interface IMessage {
     endDate?: Date;
     att?: string[];
     countedAtt?: ITypeCount[];
-    attVisualOnly?: boolean;
     transmission?: string;
     arg?: Arg[];
     gifts?: IGift[];
@@ -137,14 +138,14 @@ messageSchema.virtual("messageId").get(function (this: IMessageDatabase) {
 messageSchema.set("toJSON", {
     virtuals: true,
     transform(_document, returnedObject) {
-        delete returnedObject.ownerId;
-
         const messageDatabase = returnedObject as IMessageDatabase;
         const messageClient = returnedObject as IMessageClient;
 
         delete returnedObject._id;
         delete returnedObject.__v;
+        delete returnedObject.ownerId;
         delete returnedObject.attVisualOnly;
+        delete returnedObject.expiry;
 
         messageClient.date = toMongoDate(messageDatabase.date);
 
@@ -157,5 +158,6 @@ messageSchema.set("toJSON", {
 });
 
 messageSchema.index({ ownerId: 1 });
+messageSchema.index({ expiry: 1 }, { expireAfterSeconds: 0 });
 
 export const Inbox = model<IMessageDatabase>("Inbox", messageSchema, "inbox");
