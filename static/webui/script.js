@@ -1127,11 +1127,10 @@ function disposeOfItems(category, type, count) {
 function gildEquipment(category, oid) {
     revalidateAuthz(() => {
         $.post({
-            url: "/custom/gildEquipment?" + window.authz,
-            contentType: "application/json",
+            url: "/api/gildWeapon.php?" + window.authz + "&ItemId=" + oid + "&Category=" + category,
+            contentType: "application/octet-stream",
             data: JSON.stringify({
-                ItemId: oid,
-                Category: category
+                Recipe: "webui"
             })
         }).done(function () {
             updateInventory();
