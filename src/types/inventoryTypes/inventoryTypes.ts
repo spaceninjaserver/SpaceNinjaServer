@@ -1034,6 +1034,7 @@ export interface ITaunt {
 
 export interface IWeaponSkinDatabase {
     ItemType: string;
+    Favorite?: boolean;
     IsNew?: boolean;
     _id: Types.ObjectId;
 }

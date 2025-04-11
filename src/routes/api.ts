@@ -97,7 +97,7 @@ import { removeFromGuildController } from "@/src/controllers/api/removeFromGuild
 import { rerollRandomModController } from "@/src/controllers/api/rerollRandomModController";
 import { retrievePetFromStasisController } from "@/src/controllers/api/retrievePetFromStasisController";
 import { saveDialogueController } from "@/src/controllers/api/saveDialogueController";
-import { saveLoadoutController } from "@/src/controllers/api/saveLoadout";
+import { saveLoadoutController } from "@/src/controllers/api/saveLoadoutController";
 import { saveSettingsController } from "@/src/controllers/api/saveSettingsController";
 import { saveVaultAutoContributeController } from "@/src/controllers/api/saveVaultAutoContributeController";
 import { sellController } from "@/src/controllers/api/sellController";
