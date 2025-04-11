@@ -9,6 +9,7 @@ import { config } from "@/src/services/configService";
 import { CRng } from "@/src/services/rngService";
 import { eMissionType, ExportNightwave, ExportRegions } from "warframe-public-export-plus";
 import { ISeasonChallenge, IWorldState } from "../types/worldStateTypes";
+import { logger } from "../utils/logger";
 
 const sortieBosses = [
     "SORTIE_BOSS_HYENA",
@@ -78,6 +79,75 @@ const sortieBossNode: Record<string, string> = {
     SORTIE_BOSS_LEPHANTIS: "SolNode712",
     SORTIE_BOSS_INFALAD: "SolNode705"
 };
+
+const jobSets: string[][] = [
+    [
+        "/Lotus/Types/Gameplay/Eidolon/Jobs/AssassinateBountyAss",
+        "/Lotus/Types/Gameplay/Eidolon/Jobs/AssassinateBountyCap",
+        "/Lotus/Types/Gameplay/Eidolon/Jobs/AttritionBountySab",
+        "/Lotus/Types/Gameplay/Eidolon/Jobs/AttritionBountyLib",
+        "/Lotus/Types/Gameplay/Eidolon/Jobs/AttritionBountyCap",
+        "/Lotus/Types/Gameplay/Eidolon/Jobs/AttritionBountyExt",
+        "/Lotus/Types/Gameplay/Eidolon/Jobs/ReclamationBountyCap",
+        "/Lotus/Types/Gameplay/Eidolon/Jobs/ReclamationBountyTheft",
+        "/Lotus/Types/Gameplay/Eidolon/Jobs/ReclamationBountyCache",
+        "/Lotus/Types/Gameplay/Eidolon/Jobs/CaptureBountyCapOne",
+        "/Lotus/Types/Gameplay/Eidolon/Jobs/CaptureBountyCapTwo",
+        "/Lotus/Types/Gameplay/Eidolon/Jobs/SabotageBountySab",
+        "/Lotus/Types/Gameplay/Eidolon/Jobs/RescueBountyResc"
+    ],
+    [
+        "/Lotus/Types/Gameplay/Eidolon/Jobs/Narmer/AssassinateBountyAss",
+        "/Lotus/Types/Gameplay/Eidolon/Jobs/Narmer/AttritionBountyExt",
+        "/Lotus/Types/Gameplay/Eidolon/Jobs/Narmer/ReclamationBountyTheft",
+        "/Lotus/Types/Gameplay/Eidolon/Jobs/Narmer/AttritionBountyLib"
+    ],
+    [
+        "/Lotus/Types/Gameplay/Venus/Jobs/VenusArtifactJobAmbush",
+        "/Lotus/Types/Gameplay/Venus/Jobs/VenusArtifactJobExcavation",
+        "/Lotus/Types/Gameplay/Venus/Jobs/VenusArtifactJobRecovery",
+        "/Lotus/Types/Gameplay/Venus/Jobs/VenusChaosJobAssassinate",
+        "/Lotus/Types/Gameplay/Venus/Jobs/VenusChaosJobExcavation",
+        "/Lotus/Types/Gameplay/Venus/Jobs/VenusCullJobAssassinate",
+        "/Lotus/Types/Gameplay/Venus/Jobs/VenusCullJobExterminate",
+        "/Lotus/Types/Gameplay/Venus/Jobs/VenusCullJobResource",
+        "/Lotus/Types/Gameplay/Venus/Jobs/VenusIntelJobRecovery",
+        "/Lotus/Types/Gameplay/Venus/Jobs/VenusIntelJobResource",
+        "/Lotus/Types/Gameplay/Venus/Jobs/VenusIntelJobSpy",
+        "/Lotus/Types/Gameplay/Venus/Jobs/VenusSpyJobSpy",
+        "/Lotus/Types/Gameplay/Venus/Jobs/VenusTheftJobAmbush",
+        "/Lotus/Types/Gameplay/Venus/Jobs/VenusTheftJobExcavation",
+        "/Lotus/Types/Gameplay/Venus/Jobs/VenusTheftJobResource",
+        "/Lotus/Types/Gameplay/Venus/Jobs/VenusHelpingJobCaches",
+        "/Lotus/Types/Gameplay/Venus/Jobs/VenusHelpingJobResource",
+        "/Lotus/Types/Gameplay/Venus/Jobs/VenusHelpingJobSpy",
+        "/Lotus/Types/Gameplay/Venus/Jobs/VenusPreservationJobDefense",
+        "/Lotus/Types/Gameplay/Venus/Jobs/VenusPreservationJobRecovery",
+        "/Lotus/Types/Gameplay/Venus/Jobs/VenusPreservationJobResource",
+        "/Lotus/Types/Gameplay/Venus/Jobs/VenusWetworkJobAssassinate",
+        "/Lotus/Types/Gameplay/Venus/Jobs/VenusWetworkJobSpy"
+    ],
+    [
+        "/Lotus/Types/Gameplay/Venus/Jobs/Narmer/NarmerVenusCullJobAssassinate",
+        "/Lotus/Types/Gameplay/Venus/Jobs/Narmer/NarmerVenusCullJobExterminate",
+        "/Lotus/Types/Gameplay/Venus/Jobs/Narmer/NarmerVenusPreservationJobDefense",
+        "/Lotus/Types/Gameplay/Venus/Jobs/Narmer/NarmerVenusTheftJobExcavation"
+    ],
+    [
+        "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosAreaDefenseBounty",
+        "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosAssassinateBounty",
+        "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosCrpSurvivorBounty",
+        "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosGrnSurvivorBounty",
+        "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosKeyPiecesBounty",
+        "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosExcavateBounty",
+        "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosPurifyBounty"
+    ],
+    [
+        "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosEndlessAreaDefenseBounty",
+        "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosEndlessExcavateBounty",
+        "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosEndlessPurifyBounty"
+    ]
+];
 
 const EPOCH = 1734307200 * 1000; // Monday, Dec 16, 2024 @ 00:00 UTC+0; should logically be winter in 1999 iteration 0
 
@@ -249,6 +319,40 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         Seed: bountyCycle,
         Nodes: []
     };
+    for (const syndicateInfo of worldState.SyndicateMissions) {
+        if (syndicateInfo.Jobs && syndicateInfo.Seed != bountyCycle) {
+            syndicateInfo.Seed = bountyCycle;
+            logger.debug(`refreshing jobs for ${syndicateInfo.Tag}`);
+            const rng = new CRng(bountyCycle);
+            const table = String.fromCharCode(65 + (bountyCycle % 3));
+            const vaultTable = String.fromCharCode(65 + ((bountyCycle + 1) % 3));
+            const deimosDTable = String.fromCharCode(65 + (bountyCycle % 2));
+            //console.log({ bountyCycleStart, bountyCycleEnd, table, vaultTable, deimosDTable });
+            for (const jobInfo of syndicateInfo.Jobs) {
+                if (jobInfo.jobType) {
+                    let found = false;
+                    for (const jobSet of jobSets) {
+                        if (jobSet.indexOf(jobInfo.jobType) != -1) {
+                            jobInfo.jobType = rng.randomElement(jobSet);
+                            // TODO: xpAmounts seems like it might need to differ depending on the job?
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        logger.warn(`no job set found for type ${jobInfo.jobType}`);
+                    }
+                }
+                if (jobInfo.endless || jobInfo.isVault) {
+                    jobInfo.rewards = jobInfo.rewards.replace(/Table.Rewards/, `Table${vaultTable}Rewards`);
+                } else if (jobInfo.rewards.startsWith("/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierD")) {
+                    jobInfo.rewards = jobInfo.rewards.replace(/Table.Rewards/, `Table${deimosDTable}Rewards`);
+                } else if (!jobInfo.rewards.startsWith("/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierE")) {
+                    jobInfo.rewards = jobInfo.rewards.replace(/Table.Rewards/, `Table${table}Rewards`);
+                }
+            }
+        }
+    }
 
     if (config.worldState?.creditBoost) {
         worldState.GlobalUpgrades.push({
