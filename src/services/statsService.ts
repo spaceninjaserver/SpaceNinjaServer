@@ -378,7 +378,8 @@ export const updateStats = async (accountOwnerId: string, payload: IStatsUpdate)
                                 category,
                                 accountOwnerId,
                                 payload.displayName,
-                                data as number
+                                data as number,
+                                payload.guildId
                             );
                             break;
 
