@@ -140,7 +140,22 @@ export const handleInventoryItemConfigChange = async (
             case "WeaponSkins": {
                 const itemEntries = equipment as IItemEntry;
                 for (const [itemId, itemConfigEntries] of Object.entries(itemEntries)) {
-                    inventory.WeaponSkins.id(itemId)!.IsNew = itemConfigEntries.IsNew;
+                    if (itemId.startsWith("ca70ca70ca70ca70")) {
+                        logger.warn(
+                            `unlockAllSkins does not work with favoriting items because you don't actually own it`
+                        );
+                    } else {
+                        const inventoryItem = inventory.WeaponSkins.id(itemId);
+                        if (!inventoryItem) {
+                            throw new Error(`inventory item WeaponSkins not found with id ${itemId}`);
+                        }
+                        if ("Favorite" in itemConfigEntries) {
+                            inventoryItem.Favorite = itemConfigEntries.Favorite;
+                        }
+                        if ("IsNew" in itemConfigEntries) {
+                            inventoryItem.IsNew = itemConfigEntries.IsNew;
+                        }
+                    }
                 }
                 break;
             }
@@ -162,6 +177,9 @@ export const handleInventoryItemConfigChange = async (
                             if (typeof config !== "boolean") {
                                 inventoryItem.Configs[parseInt(configId)] = config;
                             }
+                        }
+                        if ("Favorite" in itemConfigEntries) {
+                            inventoryItem.Favorite = itemConfigEntries.Favorite;
                         }
                         if ("IsNew" in itemConfigEntries) {
                             inventoryItem.IsNew = itemConfigEntries.IsNew;

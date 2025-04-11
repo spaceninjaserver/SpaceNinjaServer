@@ -51,7 +51,7 @@ export interface IItemEntry {
 
 export type IConfigEntry = {
     [configId in "0" | "1" | "2" | "3" | "4" | "5"]: IItemConfig;
-} & { IsNew?: boolean };
+} & { Favorite?: boolean; IsNew?: boolean };
 
 export type ILoadoutClient = Omit<ILoadoutDatabase, "_id" | "loadoutOwnerId">;
 

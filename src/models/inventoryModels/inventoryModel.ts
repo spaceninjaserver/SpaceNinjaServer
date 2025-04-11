@@ -612,6 +612,7 @@ const spectreLoadoutsSchema = new Schema<ISpectreLoadout>(
 const weaponSkinsSchema = new Schema<IWeaponSkinDatabase>(
     {
         ItemType: String,
+        Favorite: Boolean,
         IsNew: Boolean
     },
     { id: false }
@@ -880,6 +881,7 @@ const EquipmentSchema = new Schema<IEquipmentDatabase>(
         RailjackImage: FlavourItemSchema,
         CrewMembers: crewShipMembersSchema,
         Details: detailsSchema,
+        Favorite: Boolean,
         IsNew: Boolean
     },
     { id: false }
