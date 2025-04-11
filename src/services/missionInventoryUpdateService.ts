@@ -50,6 +50,7 @@ import conservationAnimals from "@/static/fixed_responses/conservationAnimals.js
 import { getInfNodes } from "@/src/helpers/nemesisHelpers";
 import { Loadout } from "../models/inventoryModels/loadoutModel";
 import { ILoadoutConfigDatabase } from "../types/saveLoadoutTypes";
+import { getWorldState } from "./worldStateService";
 
 const getRotations = (rotationCount: number, tierOverride: number | undefined): number[] => {
     if (rotationCount === 0) return [0];
@@ -806,13 +807,23 @@ function getRandomMissionDrops(RewardInfo: IRewardInfo, tierOverride: number | u
     const drops: IMissionReward[] = [];
     if (RewardInfo.node in ExportRegions) {
         const region = ExportRegions[RewardInfo.node];
-        const rewardManifests: string[] =
+        let rewardManifests: string[] =
             RewardInfo.periodicMissionTag == "EliteAlert" || RewardInfo.periodicMissionTag == "EliteAlertB"
                 ? ["/Lotus/Types/Game/MissionDecks/EliteAlertMissionRewards/EliteAlertMissionRewards"]
                 : region.rewardManifests;
 
         let rotations: number[] = [];
-        if (RewardInfo.VaultsCracked) {
+        if (RewardInfo.jobId) {
+            if (RewardInfo.JobTier! >= 0) {
+                const id = RewardInfo.jobId.split("_")[3];
+                const syndicateInfo = getWorldState().SyndicateMissions.find(x => x._id.$oid == id);
+                if (syndicateInfo) {
+                    const jobInfo = syndicateInfo.Jobs![RewardInfo.JobTier!];
+                    rewardManifests = [jobInfo.rewards];
+                    rotations = [RewardInfo.JobStage!];
+                }
+            }
+        } else if (RewardInfo.VaultsCracked) {
             // For Spy missions, e.g. 3 vaults cracked = A, B, C
             for (let i = 0; i != RewardInfo.VaultsCracked; ++i) {
                 rotations.push(i);
@@ -820,6 +831,9 @@ function getRandomMissionDrops(RewardInfo: IRewardInfo, tierOverride: number | u
         } else {
             const rotationCount = RewardInfo.rewardQualifications?.length || 0;
             rotations = getRotations(rotationCount, tierOverride);
+        }
+        if (rewardManifests.length != 0) {
+            logger.debug(`generating random mission rewards`, { rewardManifests, rotations });
         }
         rewardManifests
             .map(name => ExportRewards[name])
