@@ -29,6 +29,7 @@ interface IConfig {
     unlockAllFlavourItems?: boolean;
     unlockAllSkins?: boolean;
     unlockAllCapturaScenes?: boolean;
+    unlockAllDecoRecipes?: boolean;
     universalPolarityEverywhere?: boolean;
     unlockDoubleCapacityPotatoesEverywhere?: boolean;
     unlockExilusEverywhere?: boolean;

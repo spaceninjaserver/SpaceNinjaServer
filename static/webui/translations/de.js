@@ -127,6 +127,7 @@ dict = {
     cheats_unlockAllFlavourItems: `Alle <abbr title=\"Animationssets, Glyphen, Farbpaletten usw.\">Sammlerstücke</abbr> freischalten`,
     cheats_unlockAllSkins: `Alle Skins freischalten`,
     cheats_unlockAllCapturaScenes: `Alle Photora-Szenen freischalten`,
+    cheats_unlockAllDecoRecipes: `[UNTRANSLATED] Unlock All Dojo Deco Recipes`,
     cheats_universalPolarityEverywhere: `Universelle Polarität überall`,
     cheats_unlockDoubleCapacityPotatoesEverywhere: `Orokin Reaktor & Beschleuniger überall`,
     cheats_unlockExilusEverywhere: `Exilus-Adapter überall`,

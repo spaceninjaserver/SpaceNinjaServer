@@ -30,6 +30,7 @@ import { Inbox } from "../models/inboxModel";
 import { IFusionTreasure, ITypeCount } from "../types/inventoryTypes/inventoryTypes";
 import { IInventoryChanges } from "../types/purchaseTypes";
 import { parallelForeach } from "../utils/async-utils";
+import allDecoRecipes from "@/static/fixed_responses/allDecoRecipes.json";
 
 export const getGuildForRequest = async (req: Request): Promise<TGuildDatabaseDocument> => {
     const accountId = await getAccountIdForRequest(req);
@@ -114,7 +115,10 @@ export const getGuildVault = (guild: TGuildDatabaseDocument): IGuildVault => {
         DojoRefundMiscItems: guild.VaultMiscItems,
         DojoRefundPremiumCredits: guild.VaultPremiumCredits,
         ShipDecorations: guild.VaultShipDecorations,
-        FusionTreasures: guild.VaultFusionTreasures
+        FusionTreasures: guild.VaultFusionTreasures,
+        DecoRecipes: config.unlockAllDecoRecipes
+            ? allDecoRecipes.map(recipe => ({ ItemType: recipe, ItemCount: 1 }))
+            : guild.VaultDecoRecipes
     };
 };
 

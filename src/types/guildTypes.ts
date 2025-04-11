@@ -44,6 +44,7 @@ export interface IGuildDatabase {
     VaultMiscItems?: IMiscItem[];
     VaultShipDecorations?: ITypeCount[];
     VaultFusionTreasures?: IFusionTreasure[];
+    VaultDecoRecipes?: ITypeCount[];
 
     TechProjects?: ITechProjectDatabase[];
     ActiveDojoColorResearch: string;

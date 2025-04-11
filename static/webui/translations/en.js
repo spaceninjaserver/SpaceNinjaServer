@@ -126,6 +126,7 @@ dict = {
     cheats_unlockAllFlavourItems: `Unlock All <abbr title=\"Animation Sets, Glyphs, Palettes, etc.\">Flavor Items</abbr>`,
     cheats_unlockAllSkins: `Unlock All Skins`,
     cheats_unlockAllCapturaScenes: `Unlock All Captura Scenes`,
+    cheats_unlockAllDecoRecipes: `Unlock All Dojo Deco Recipes`,
     cheats_universalPolarityEverywhere: `Universal Polarity Everywhere`,
     cheats_unlockDoubleCapacityPotatoesEverywhere: `Potatoes Everywhere`,
     cheats_unlockExilusEverywhere: `Exilus Adapters Everywhere`,

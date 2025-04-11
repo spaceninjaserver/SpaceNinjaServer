@@ -127,6 +127,7 @@ dict = {
     cheats_unlockAllFlavourItems: `Разблокировать все <abbr title=\"Наборы анимаций, глифы, палитры и т. д.\">уникальные предметы</abbr>`,
     cheats_unlockAllSkins: `Разблокировать все скины`,
     cheats_unlockAllCapturaScenes: `Разблокировать все сцены Каптуры`,
+    cheats_unlockAllDecoRecipes: `Разблокировать все рецепты декораций Дoдзё`,
     cheats_universalPolarityEverywhere: `Универсальная полярность везде`,
     cheats_unlockDoubleCapacityPotatoesEverywhere: `Катализаторы везде`,
     cheats_unlockExilusEverywhere: `Адаптеры Эксилус везде`,

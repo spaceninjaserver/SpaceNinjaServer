@@ -127,6 +127,7 @@ dict = {
     cheats_unlockAllFlavourItems: `解锁所有<abbr title=\"动画组合、图标、调色板等\">装饰物品</abbr>`,
     cheats_unlockAllSkins: `解锁所有外观`,
     cheats_unlockAllCapturaScenes: `解锁所有Captura场景`,
+    cheats_unlockAllDecoRecipes: `[UNTRANSLATED] Unlock All Dojo Deco Recipes`,
     cheats_universalPolarityEverywhere: `全局万用极性`,
     cheats_unlockDoubleCapacityPotatoesEverywhere: `全物品自带Orokin反应堆`,
     cheats_unlockExilusEverywhere: `全物品自带适配器`,
