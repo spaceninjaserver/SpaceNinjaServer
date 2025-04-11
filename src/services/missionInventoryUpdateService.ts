@@ -166,6 +166,19 @@ export const addMissionInventoryUpdates = async (
                 }
                 if (!chain.Jobs.includes(bounty)) {
                     chain.Jobs.push(bounty);
+                    if (bounty == "/Lotus/Types/Gameplay/Venus/Jobs/Heists/HeistProfitTakerBountyThree") {
+                        await createMessage(inventory.accountOwnerId, [
+                            {
+                                sub: "/Lotus/Language/SolarisHeists/HeavyCatalystInboxTitle",
+                                sndr: "/Lotus/Language/Bosses/Ordis",
+                                msg: "/Lotus/Language/SolarisHeists/HeavyCatalystInboxMessage",
+                                icon: "/Lotus/Interface/Icons/Npcs/Ordis.png",
+                                att: ["/Lotus/Types/Restoratives/HeavyWeaponSummon"],
+                                highPriority: true
+                            }
+                        ]);
+                        await addItem(inventory, "/Lotus/Types/Items/MiscItems/HeavyWeaponCatalyst", 1);
+                    }
                 }
             }
         }
