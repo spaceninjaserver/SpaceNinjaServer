@@ -138,7 +138,7 @@ dict = {
     cheats_noVendorPurchaseLimits: `Keine Kaufbeschränkungen bei Händlern`,
     cheats_instantResourceExtractorDrones: `Sofortige Ressourcen-Extraktor-Drohnen`,
     cheats_noDojoRoomBuildStage: `Kein Dojo-Raum-Bauvorgang`,
-    cheats_noDojoDecoBuildStage: `[UNTRANSLATED] No Dojo Deco Build Stage`,
+    cheats_noDojoDecoBuildStage: `Kein Dojo-Deko-Bauvorgang`,
     cheats_fastDojoRoomDestruction: `Schnelle Dojo-Raum-Zerstörung`,
     cheats_noDojoResearchCosts: `Keine Dojo-Forschungskosten`,
     cheats_noDojoResearchTime: `Keine Dojo-Forschungszeit`,
