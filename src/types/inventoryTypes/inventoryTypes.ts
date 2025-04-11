@@ -238,6 +238,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     Accolades?: {
         Heirloom?: boolean;
     };
+    Counselor?: boolean;
     Upgrades: IUpgradeClient[];
     EquippedGear: string[];
     DeathMarks: string[];
