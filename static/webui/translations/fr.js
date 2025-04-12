@@ -105,6 +105,7 @@ dict = {
     currency_owned: `|COUNT| possédés.`,
     powersuit_archonShardsLabel: `Emplacements de fragments d'Archonte`,
     powersuit_archonShardsDescription: `Slots illimités pour appliquer plusieurs améliorations.`,
+    powersuit_archonShardsDescription2: `[UNTRANSLATED] Note that each archon shard takes some time to be applied when loading in.`,
     mods_addRiven: `Ajouter un riven`,
     mods_fingerprint: `Empreinte`,
     mods_fingerprintHelp: `Besoin d'aide pour l'empreinte ?`,

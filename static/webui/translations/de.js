@@ -105,6 +105,7 @@ dict = {
     currency_owned: `Du hast |COUNT|.`,
     powersuit_archonShardsLabel: `Archon-Scherben-Slots`,
     powersuit_archonShardsDescription: `Du kannst diese unbegrenzten Slots nutzen, um eine Vielzahl von Verbesserungen anzuwenden.`,
+    powersuit_archonShardsDescription2: `[UNTRANSLATED] Note that each archon shard takes some time to be applied when loading in.`,
     mods_addRiven: `Riven hinzufügen`,
     mods_fingerprint: `Fingerabdruck`,
     mods_fingerprintHelp: `Benötigst du Hilfe mit dem Fingerabdruck?`,

@@ -4,7 +4,7 @@
 const fs = require("fs");
 
 function extractStrings(content) {
-    const regex = /([a-zA-Z_]+): `([^`]*)`,/g;
+    const regex = /([a-zA-Z0-9_]+): `([^`]*)`,/g;
     let matches;
     const strings = {};
     while ((matches = regex.exec(content)) !== null) {
@@ -15,7 +15,7 @@ function extractStrings(content) {
 
 const source = fs.readFileSync("../static/webui/translations/en.js", "utf8");
 const sourceStrings = extractStrings(source);
-const sourceLines = source.split("\n");
+const sourceLines = source.substring(0, source.length - 1).split("\n");
 
 fs.readdirSync("../static/webui/translations").forEach(file => {
     if (fs.lstatSync(`../static/webui/translations/${file}`).isFile() && file !== "en.js") {
@@ -36,7 +36,7 @@ fs.readdirSync("../static/webui/translations").forEach(file => {
                         fs.writeSync(fileHandle, `    ${key}: \`[UNTRANSLATED] ${value}\`,\n`);
                     }
                 });
-            } else if (line.length) {
+            } else {
                 fs.writeSync(fileHandle, line + "\n");
             }
         });

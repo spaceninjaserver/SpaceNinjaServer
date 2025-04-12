@@ -105,6 +105,7 @@ dict = {
     currency_owned: `Tienes |COUNT|.`,
     powersuit_archonShardsLabel: `Ranuras de Fragmento de Archón`,
     powersuit_archonShardsDescription: `Puedes usar estas ranuras ilimitadas para aplicar una amplia variedad de mejoras`,
+    powersuit_archonShardsDescription2: `[UNTRANSLATED] Note that each archon shard takes some time to be applied when loading in.`,
     mods_addRiven: `Agregar Agrietado`,
     mods_fingerprint: `Huella digital`,
     mods_fingerprintHelp: `¿Necesitas ayuda con la huella digital?`,

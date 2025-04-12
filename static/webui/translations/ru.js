@@ -105,6 +105,7 @@ dict = {
     currency_owned: `У тебя |COUNT|.`,
     powersuit_archonShardsLabel: `Ячейки осколков архонта`,
     powersuit_archonShardsDescription: `Вы можете использовать эти неограниченные ячейки для установки множества улучшений.`,
+    powersuit_archonShardsDescription2: `[UNTRANSLATED] Note that each archon shard takes some time to be applied when loading in.`,
     mods_addRiven: `Добавить Мод Разлома`,
     mods_fingerprint: `Отпечаток`,
     mods_fingerprintHelp: `Нужна помощь с отпечатком?`,

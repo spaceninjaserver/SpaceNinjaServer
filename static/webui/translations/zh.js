@@ -105,6 +105,7 @@ dict = {
     currency_owned: `当前拥有 |COUNT|。`,
     powersuit_archonShardsLabel: `执刑官源力石槽位`,
     powersuit_archonShardsDescription: `您可以使用这些无限插槽应用各种强化效果`,
+    powersuit_archonShardsDescription2: `[UNTRANSLATED] Note that each archon shard takes some time to be applied when loading in.`,
     mods_addRiven: `添加裂罅MOD`,
     mods_fingerprint: `印记`,
     mods_fingerprintHelp: `需要印记相关的帮助？`,
