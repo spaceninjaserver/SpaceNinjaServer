@@ -963,7 +963,7 @@ export const addStanding = (
     const max = getMaxStanding(syndicateMeta, syndicate.Title ?? 0);
     if (syndicate.Standing + gainedStanding > max) gainedStanding = max - syndicate.Standing;
 
-    if (!isMedallion || (isMedallion && syndicateMeta.medallionsCappedByDailyLimit)) {
+    if (!isMedallion || syndicateMeta.medallionsCappedByDailyLimit) {
         if (gainedStanding > getStandingLimit(inventory, syndicateMeta.dailyLimitBin)) {
             gainedStanding = getStandingLimit(inventory, syndicateMeta.dailyLimitBin);
         }
