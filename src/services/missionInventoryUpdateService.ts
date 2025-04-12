@@ -28,13 +28,14 @@ import {
     addMods,
     addRecipes,
     addShipDecorations,
+    addStanding,
     combineInventoryChanges,
     updateCurrency,
     updateSyndicate
 } from "@/src/services/inventoryService";
 import { updateQuestKey } from "@/src/services/questService";
 import { Types } from "mongoose";
-import { IInventoryChanges } from "@/src/types/purchaseTypes";
+import { IAffiliationMods, IInventoryChanges } from "@/src/types/purchaseTypes";
 import { getLevelKeyRewards, toStoreItem } from "@/src/services/itemDataService";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { getEntriesUnsafe } from "@/src/utils/ts-utils";
@@ -529,6 +530,8 @@ interface AddMissionRewardsReturnType {
     MissionRewards: IMissionReward[];
     inventoryChanges?: IInventoryChanges;
     credits?: IMissionCredits;
+    AffiliationMods?: IAffiliationMods[];
+    SyndicateXPItemReward?: number;
 }
 
 //TODO: return type of partial missioninventoryupdate response
@@ -555,6 +558,8 @@ export const addMissionRewards = async (
     const MissionRewards: IMissionReward[] = getRandomMissionDrops(rewardInfo, wagerTier);
     logger.debug("random mission drops:", MissionRewards);
     const inventoryChanges: IInventoryChanges = {};
+    const AffiliationMods: IAffiliationMods[] = [];
+    let SyndicateXPItemReward;
 
     let missionCompletionCredits = 0;
     //inventory change is what the client has not rewarded itself, also the client needs to know the credit changes for display
@@ -718,7 +723,97 @@ export const addMissionRewards = async (
             inventoryChanges.Nemesis.InfNodes = inventory.Nemesis.InfNodes;
         }
     }
-    return { inventoryChanges, MissionRewards, credits };
+
+    if (rewardInfo.JobStage != undefined && rewardInfo.jobId) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const [jobType, tierStr, hubNode, syndicateId, locationTag] = rewardInfo.jobId.split("_");
+        const tier = Number(tierStr);
+
+        const worldState = getWorldState();
+        let syndicateEntry = worldState.SyndicateMissions.find(m => m._id.$oid === syndicateId);
+        if (!syndicateEntry) syndicateEntry = worldState.SyndicateMissions.find(m => m.Tag === syndicateId); // Sometimes syndicateId can be tag
+        if (syndicateEntry && syndicateEntry.Jobs) {
+            let currentJob = syndicateEntry.Jobs[tier];
+            if (syndicateEntry.Tag === "EntratiSyndicate") {
+                const vault = syndicateEntry.Jobs.find(j => j.locationTag === locationTag);
+                if (vault) currentJob = vault;
+                let medallionAmount = currentJob.xpAmounts[rewardInfo.JobStage];
+
+                if (
+                    ["DeimosEndlessAreaDefenseBounty", "DeimosEndlessExcavateBounty", "DeimosEndlessPurifyBounty"].some(
+                        ending => jobType.endsWith(ending)
+                    )
+                ) {
+                    const endlessJob = syndicateEntry.Jobs.find(j => j.endless);
+                    if (endlessJob) {
+                        const index = rewardInfo.JobStage % endlessJob.xpAmounts.length;
+                        const excess = Math.floor(rewardInfo.JobStage / endlessJob.xpAmounts.length);
+                        medallionAmount = Math.floor(endlessJob.xpAmounts[index] * (1 + 0.15000001 * excess));
+                    }
+                }
+                await addItem(inventory, "/Lotus/Types/Items/Deimos/EntratiFragmentUncommonB", medallionAmount);
+                MissionRewards.push({
+                    StoreItem: "/Lotus/StoreItems/Types/Items/Deimos/EntratiFragmentUncommonB",
+                    ItemCount: medallionAmount
+                });
+                SyndicateXPItemReward = medallionAmount;
+            } else {
+                if (tier >= 0) {
+                    AffiliationMods.push(
+                        addStanding(inventory, syndicateEntry.Tag, currentJob.xpAmounts[rewardInfo.JobStage])
+                    );
+                } else {
+                    if (jobType.endsWith("Heists/HeistProfitTakerBountyOne") && rewardInfo.JobStage === 2) {
+                        AffiliationMods.push(addStanding(inventory, syndicateEntry.Tag, 1000));
+                    }
+                    if (jobType.endsWith("Hunts/AllTeralystsHunt") && rewardInfo.JobStage === 2) {
+                        AffiliationMods.push(addStanding(inventory, syndicateEntry.Tag, 5000));
+                    }
+                    if (
+                        [
+                            "Hunts/TeralystHunt",
+                            "Heists/HeistProfitTakerBountyTwo",
+                            "Heists/HeistProfitTakerBountyThree",
+                            "Heists/HeistProfitTakerBountyFour",
+                            "Heists/HeistExploiterBountyOne"
+                        ].some(ending => jobType.endsWith(ending))
+                    ) {
+                        AffiliationMods.push(addStanding(inventory, syndicateEntry.Tag, 1000));
+                    }
+                }
+            }
+        }
+    }
+
+    if (rewardInfo.challengeMissionId) {
+        const [syndicateTag, tierStr] = rewardInfo.challengeMissionId.split("_"); // TODO: third part in HexSyndicate jobs - Chemistry points
+        const tier = Number(tierStr);
+        const isSteelPath = missions?.Tier;
+        if (syndicateTag === "ZarimanSyndicate") {
+            let medallionAmount = tier + 1;
+            if (isSteelPath) medallionAmount = Math.round(medallionAmount * 1.5);
+            await addItem(inventory, "/Lotus/Types/Gameplay/Zariman/Resources/ZarimanDogTagBounty", medallionAmount);
+            MissionRewards.push({
+                StoreItem: "/Lotus/StoreItems/Types/Gameplay/Zariman/Resources/ZarimanDogTagBounty",
+                ItemCount: medallionAmount
+            });
+            SyndicateXPItemReward = medallionAmount;
+        } else {
+            let standingAmount = (tier + 1) * 1000;
+            if (tier > 5) standingAmount = 7500; // InfestedLichBounty
+            if (isSteelPath) standingAmount *= 1.5;
+            AffiliationMods.push(addStanding(inventory, syndicateTag, standingAmount));
+        }
+        if (isSteelPath) {
+            await addItem(inventory, "/Lotus/Types/Items/MiscItems/SteelEssence", 1);
+            MissionRewards.push({
+                StoreItem: "/Lotus/StoreItems/Types/Items/MiscItems/SteelEssence",
+                ItemCount: 1
+            });
+        }
+    }
+
+    return { inventoryChanges, MissionRewards, credits, AffiliationMods, SyndicateXPItemReward };
 };
 
 interface IMissionCredits {

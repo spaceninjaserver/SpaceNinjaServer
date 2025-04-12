@@ -65,6 +65,7 @@ import { handleBundleAcqusition } from "./purchaseService";
 import libraryDailyTasks from "@/static/fixed_responses/libraryDailyTasks.json";
 import { getRandomElement, getRandomInt, SRng } from "./rngService";
 import { createMessage } from "./inboxService";
+import { getMaxStanding } from "@/src/helpers/syndicateStandingHelper";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
@@ -930,21 +931,48 @@ const standingLimitBinToInventoryKey: Record<
 
 export const allDailyAffiliationKeys: (keyof IDailyAffiliations)[] = Object.values(standingLimitBinToInventoryKey);
 
-export const getStandingLimit = (inventory: IDailyAffiliations, bin: TStandingLimitBin): number => {
+const getStandingLimit = (inventory: IDailyAffiliations, bin: TStandingLimitBin): number => {
     if (bin == "STANDING_LIMIT_BIN_NONE" || config.noDailyStandingLimits) {
         return Number.MAX_SAFE_INTEGER;
     }
     return inventory[standingLimitBinToInventoryKey[bin]];
 };
 
-export const updateStandingLimit = (
-    inventory: IDailyAffiliations,
-    bin: TStandingLimitBin,
-    subtrahend: number
-): void => {
+const updateStandingLimit = (inventory: IDailyAffiliations, bin: TStandingLimitBin, subtrahend: number): void => {
     if (bin != "STANDING_LIMIT_BIN_NONE" && !config.noDailyStandingLimits) {
         inventory[standingLimitBinToInventoryKey[bin]] -= subtrahend;
     }
+};
+
+export const addStanding = (
+    inventory: TInventoryDatabaseDocument,
+    syndicateTag: string,
+    gainedStanding: number,
+    isMedallion: boolean = false
+): IAffiliationMods => {
+    let syndicate = inventory.Affiliations.find(x => x.Tag == syndicateTag);
+    const syndicateMeta = ExportSyndicates[syndicateTag];
+
+    if (!syndicate) {
+        syndicate =
+            inventory.Affiliations[inventory.Affiliations.push({ Tag: syndicateTag, Standing: 0, Title: 0 }) - 1];
+    }
+
+    const max = getMaxStanding(syndicateMeta, syndicate.Title ?? 0);
+    if (syndicate.Standing + gainedStanding > max) gainedStanding = max - syndicate.Standing;
+
+    if (!isMedallion || (isMedallion && syndicateMeta.medallionsCappedByDailyLimit)) {
+        if (gainedStanding > getStandingLimit(inventory, syndicateMeta.dailyLimitBin)) {
+            gainedStanding = getStandingLimit(inventory, syndicateMeta.dailyLimitBin);
+        }
+        updateStandingLimit(inventory, syndicateMeta.dailyLimitBin, gainedStanding);
+    }
+
+    syndicate.Standing += gainedStanding;
+    return {
+        Tag: syndicateTag,
+        Standing: gainedStanding
+    };
 };
 
 // TODO: AffiliationMods support (Nightwave).

@@ -1,16 +1,9 @@
 import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import {
-    addMiscItems,
-    freeUpSlot,
-    getInventory,
-    getStandingLimit,
-    updateStandingLimit
-} from "@/src/services/inventoryService";
+import { addMiscItems, addStanding, freeUpSlot, getInventory } from "@/src/services/inventoryService";
 import { IMiscItem, InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IOid } from "@/src/types/commonTypes";
 import { ExportSyndicates, ExportWeapons } from "warframe-public-export-plus";
-import { getMaxStanding } from "@/src/helpers/syndicateStandingHelper";
 import { logger } from "@/src/utils/logger";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { EquipmentFeatures } from "@/src/types/inventoryTypes/commonInventoryTypes";
@@ -61,38 +54,13 @@ export const syndicateStandingBonusController: RequestHandler = async (req, res)
         inventoryChanges[slotBin] = { count: -1, platinum: 0, Slots: 1 };
     }
 
-    let syndicate = inventory.Affiliations.find(x => x.Tag == request.Operation.AffiliationTag);
-    if (!syndicate) {
-        syndicate =
-            inventory.Affiliations[
-                inventory.Affiliations.push({ Tag: request.Operation.AffiliationTag, Standing: 0 }) - 1
-            ];
-    }
-
-    const max = getMaxStanding(syndicateMeta, syndicate.Title ?? 0);
-    if (syndicate.Standing + gainedStanding > max) {
-        gainedStanding = max - syndicate.Standing;
-    }
-
-    if (syndicateMeta.medallionsCappedByDailyLimit) {
-        if (gainedStanding > getStandingLimit(inventory, syndicateMeta.dailyLimitBin)) {
-            gainedStanding = getStandingLimit(inventory, syndicateMeta.dailyLimitBin);
-        }
-        updateStandingLimit(inventory, syndicateMeta.dailyLimitBin, gainedStanding);
-    }
-
-    syndicate.Standing += gainedStanding;
+    const affiliationMod = addStanding(inventory, request.Operation.AffiliationTag, gainedStanding, true);
 
     await inventory.save();
 
     res.json({
         InventoryChanges: inventoryChanges,
-        AffiliationMods: [
-            {
-                Tag: request.Operation.AffiliationTag,
-                Standing: gainedStanding
-            }
-        ]
+        AffiliationMods: [affiliationMod]
     });
 };
 
