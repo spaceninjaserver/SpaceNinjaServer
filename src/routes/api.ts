@@ -35,7 +35,7 @@ import { deleteSessionController } from "@/src/controllers/api/deleteSessionCont
 import { destroyDojoDecoController } from "@/src/controllers/api/destroyDojoDecoController";
 import { divvyAllianceVaultController } from "@/src/controllers/api/divvyAllianceVaultController";
 import { dojoComponentRushController } from "@/src/controllers/api/dojoComponentRushController";
-import { dojoController } from "@/src/controllers/api/dojoController";
+import { dojoController, setDojoURLController } from "@/src/controllers/api/dojoController";
 import { dronesController } from "@/src/controllers/api/dronesController";
 import { endlessXpController } from "@/src/controllers/api/endlessXpController";
 import { entratiLabConquestModeController } from "@/src/controllers/api/entratiLabConquestModeController";
@@ -183,6 +183,7 @@ apiRouter.get("/setActiveQuest.php", setActiveQuestController);
 apiRouter.get("/setActiveShip.php", setActiveShipController);
 apiRouter.get("/setAllianceGuildPermissions.php", setAllianceGuildPermissionsController);
 apiRouter.get("/setBootLocation.php", setBootLocationController);
+apiRouter.get("/setDojoURL", setDojoURLController);
 apiRouter.get("/setGuildMotd.php", setGuildMotdController);
 apiRouter.get("/setSupportedSyndicate.php", setSupportedSyndicateController);
 apiRouter.get("/startLibraryDailyTask.php", startLibraryDailyTaskController);
