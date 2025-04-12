@@ -321,6 +321,8 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     };
     for (const syndicateInfo of worldState.SyndicateMissions) {
         if (syndicateInfo.Jobs && syndicateInfo.Seed != bountyCycle) {
+            syndicateInfo.Activation.$date.$numberLong = bountyCycleStart.toString(10);
+            syndicateInfo.Expiry.$date.$numberLong = bountyCycleEnd.toString(10);
             syndicateInfo.Seed = bountyCycle;
             logger.debug(`refreshing jobs for ${syndicateInfo.Tag}`);
             const rng = new CRng(bountyCycle);
