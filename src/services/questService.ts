@@ -232,7 +232,7 @@ export const giveKeyChainItem = async (
     const inventoryChanges = await addKeyChainItems(inventory, keyChainInfo);
 
     if (isEmptyObject(inventoryChanges)) {
-        throw new Error("inventory changes was empty after getting keychain items: should not happen");
+        logger.warn("inventory changes was empty after getting keychain items: should not happen");
     }
     // items were added: update quest stage's i (item was given)
     updateQuestStage(inventory, keyChainInfo, { i: true });
