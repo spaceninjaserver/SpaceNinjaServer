@@ -102,6 +102,7 @@ import { saveLoadoutController } from "@/src/controllers/api/saveLoadoutControll
 import { saveSettingsController } from "@/src/controllers/api/saveSettingsController";
 import { saveVaultAutoContributeController } from "@/src/controllers/api/saveVaultAutoContributeController";
 import { sellController } from "@/src/controllers/api/sellController";
+import { sendMsgToInBoxController } from "@/src/controllers/api/sendMsgToInBoxController";
 import { setActiveQuestController } from "@/src/controllers/api/setActiveQuestController";
 import { setActiveShipController } from "@/src/controllers/api/setActiveShipController";
 import { setAllianceGuildPermissionsController } from "@/src/controllers/api/setAllianceGuildPermissionsController";
@@ -267,6 +268,7 @@ apiRouter.post("/saveLoadout.php", saveLoadoutController);
 apiRouter.post("/saveSettings.php", saveSettingsController);
 apiRouter.post("/saveVaultAutoContribute.php", saveVaultAutoContributeController);
 apiRouter.post("/sell.php", sellController);
+apiRouter.post("/sendMsgToInBox.php", sendMsgToInBoxController);
 apiRouter.post("/setDojoComponentColors.php", setDojoComponentColorsController);
 apiRouter.post("/setDojoComponentMessage.php", setDojoComponentMessageController);
 apiRouter.post("/setDojoComponentSettings.php", setDojoComponentSettingsController);
