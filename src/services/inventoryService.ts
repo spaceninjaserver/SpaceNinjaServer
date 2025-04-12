@@ -178,7 +178,9 @@ export const addStartingGear = async (
         combineInventoryChanges(inventoryChanges, inventoryDelta);
     }
 
-    inventory.PlayedParkourTutorial = true;
+    if (inventory.ReceivedStartingGear) {
+        logger.warn(`account already had starting gear but asked for it again?!`);
+    }
     inventory.ReceivedStartingGear = true;
 
     return inventoryChanges;
