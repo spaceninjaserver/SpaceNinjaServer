@@ -185,13 +185,14 @@ export const getKeyChainMessage = ({ KeyChain, ChainStage }: IKeyChainRequest): 
         throw new Error(`KeyChain ${KeyChain} does not contain chain stages`);
     }
 
-    const keyChainStage = chainStages[ChainStage];
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    if (!keyChainStage) {
-        throw new Error(`KeyChainStage ${ChainStage} not found`);
+    let i = ChainStage;
+    let chainStageMessage = chainStages[i].messageToSendWhenTriggered;
+    while (!chainStageMessage) {
+        if (++i >= chainStages.length) {
+            break;
+        }
+        chainStageMessage = chainStages[i].messageToSendWhenTriggered;
     }
-
-    const chainStageMessage = keyChainStage.messageToSendWhenTriggered;
 
     if (!chainStageMessage) {
         throw new Error(
