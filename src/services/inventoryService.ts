@@ -996,6 +996,10 @@ export const updateGeneric = async (data: IGenericUpdate, accountId: string): Pr
                 }
             ];
             addMiscItems(inventory, inventoryChanges.MiscItems);
+        } else if (node == "BeatCaliberChicks") {
+            await addEmailItem(inventory, "/Lotus/Types/Items/EmailItems/BeatCaliberChicksEmailItem", inventoryChanges);
+        } else if (node == "ClearedFiveLoops") {
+            await addEmailItem(inventory, "/Lotus/Types/Items/EmailItems/ClearedFiveLoopsEmailItem", inventoryChanges);
         }
     }
 
