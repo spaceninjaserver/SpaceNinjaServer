@@ -46,6 +46,7 @@ export interface IInventoryDatabase
             | "EntratiVaultCountResetDate"
             | "BrandedSuits"
             | "LockedWeaponGroup"
+            | "PersonalTechProjects"
             | TEquipmentKey
         >,
         InventoryDatabaseEquipment {
@@ -77,6 +78,7 @@ export interface IInventoryDatabase
     EntratiVaultCountResetDate?: Date;
     BrandedSuits?: Types.ObjectId[];
     LockedWeaponGroup?: ILockedWeaponGroupDatabase;
+    PersonalTechProjects: IPersonalTechProjectDatabase[];
 }
 
 export interface IQuestKeyDatabase {
@@ -306,7 +308,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     NemesisHistory: INemesisBaseClient[];
     LastNemesisAllySpawnTime?: IMongoDate;
     Settings?: ISettings;
-    PersonalTechProjects: IPersonalTechProject[];
+    PersonalTechProjects: IPersonalTechProjectClient[];
     PlayerSkills: IPlayerSkills;
     CrewShipAmmo: ITypeCount[];
     CrewShipWeaponSkins: IUpgradeClient[];
@@ -941,16 +943,20 @@ export interface IPersonalGoalProgress {
     ReceivedClanReward1?: boolean;
 }
 
-export interface IPersonalTechProject {
+export interface IPersonalTechProjectDatabase {
     State: number;
     ReqCredits: number;
     ItemType: string;
     ReqItems: ITypeCount[];
+    HasContributions?: boolean;
+    CompletionDate?: Date;
+}
+
+export interface IPersonalTechProjectClient extends Omit<IPersonalTechProjectDatabase, "CompletionDate"> {
     CompletionDate?: IMongoDate;
-    ItemId: IOid;
     ProductCategory?: string;
     CategoryItemId?: IOid;
-    HasContributions?: boolean;
+    ItemId: IOid;
 }
 
 export interface IPlayerSkills {

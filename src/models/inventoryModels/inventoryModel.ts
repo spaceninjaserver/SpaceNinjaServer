@@ -84,7 +84,9 @@ import {
     IInfNode,
     IDiscoveredMarker,
     IWeeklyMission,
-    ILockedWeaponGroupDatabase
+    ILockedWeaponGroupDatabase,
+    IPersonalTechProjectDatabase,
+    IPersonalTechProjectClient
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -498,7 +500,34 @@ const seasonChallengeHistorySchema = new Schema<ISeasonChallenge>(
     { _id: false }
 );
 
-//TODO: check whether this is complete
+const personalTechProjectSchema = new Schema<IPersonalTechProjectDatabase>({
+    State: Number,
+    ReqCredits: Number,
+    ItemType: String,
+    ReqItems: { type: [typeCountSchema], default: undefined },
+    HasContributions: Boolean,
+    CompletionDate: Date
+});
+
+personalTechProjectSchema.virtual("ItemId").get(function () {
+    return { $oid: this._id.toString() };
+});
+
+personalTechProjectSchema.set("toJSON", {
+    virtuals: true,
+    transform(_doc, ret, _options) {
+        delete ret._id;
+        delete ret.__v;
+
+        const db = ret as IPersonalTechProjectDatabase;
+        const client = ret as IPersonalTechProjectClient;
+
+        if (db.CompletionDate) {
+            client.CompletionDate = toMongoDate(db.CompletionDate);
+        }
+    }
+});
+
 const playerSkillsSchema = new Schema<IPlayerSkills>(
     {
         LPP_SPACE: { type: Number, default: 0 },
@@ -1442,7 +1471,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         //Railjack craft
         //https://warframe.fandom.com/wiki/Rising_Tide
-        PersonalTechProjects: [Schema.Types.Mixed],
+        PersonalTechProjects: { type: [personalTechProjectSchema], default: [] },
 
         //Modulars lvl and exp(Railjack|Duviri)
         //https://warframe.fandom.com/wiki/Intrinsics
@@ -1585,6 +1614,7 @@ export type InventoryDocumentProps = {
     Drones: Types.DocumentArray<IDroneDatabase>;
     CrewShipWeaponSkins: Types.DocumentArray<IUpgradeDatabase>;
     CrewShipSalvagedWeaponsSkins: Types.DocumentArray<IUpgradeDatabase>;
+    PersonalTechProjects: Types.DocumentArray<IPersonalTechProjectDatabase>;
 } & { [K in TEquipmentKey]: Types.DocumentArray<IEquipmentDatabase> };
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type

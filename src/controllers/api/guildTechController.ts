@@ -32,11 +32,11 @@ import { logger } from "@/src/utils/logger";
 export const guildTechController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId);
-    const guild = await getGuildForRequestEx(req, inventory);
     const data = JSON.parse(String(req.body)) as TGuildTechRequest;
     if (data.Action == "Sync") {
         let needSave = false;
         const techProjects: ITechProjectClient[] = [];
+        const guild = await getGuildForRequestEx(req, inventory);
         if (guild.TechProjects) {
             for (const project of guild.TechProjects) {
                 const techProject: ITechProjectClient = {
@@ -59,110 +59,170 @@ export const guildTechController: RequestHandler = async (req, res) => {
         }
         res.json({ TechProjects: techProjects });
     } else if (data.Action == "Start") {
-        if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Tech))) {
-            res.status(400).send("-1").end();
-            return;
-        }
-        const recipe = ExportDojoRecipes.research[data.RecipeType];
-        guild.TechProjects ??= [];
-        if (!guild.TechProjects.find(x => x.ItemType == data.RecipeType)) {
-            const techProject =
-                guild.TechProjects[
-                    guild.TechProjects.push({
-                        ItemType: data.RecipeType,
-                        ReqCredits: config.noDojoResearchCosts ? 0 : scaleRequiredCount(guild.Tier, recipe.price),
-                        ReqItems: recipe.ingredients.map(x => ({
-                            ItemType: x.ItemType,
-                            ItemCount: config.noDojoResearchCosts ? 0 : scaleRequiredCount(guild.Tier, x.ItemCount)
-                        })),
-                        State: 0
-                    }) - 1
-                ];
-            setGuildTechLogState(guild, techProject.ItemType, 5);
-            if (config.noDojoResearchCosts) {
-                processFundedGuildTechProject(guild, techProject, recipe);
-            } else {
-                if (data.RecipeType.substring(0, 39) == "/Lotus/Types/Items/Research/DojoColors/") {
-                    guild.ActiveDojoColorResearch = data.RecipeType;
+        if (data.Mode == "Guild") {
+            const guild = await getGuildForRequestEx(req, inventory);
+            if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Tech))) {
+                res.status(400).send("-1").end();
+                return;
+            }
+            const recipe = ExportDojoRecipes.research[data.RecipeType];
+            guild.TechProjects ??= [];
+            if (!guild.TechProjects.find(x => x.ItemType == data.RecipeType)) {
+                const techProject =
+                    guild.TechProjects[
+                        guild.TechProjects.push({
+                            ItemType: data.RecipeType,
+                            ReqCredits: config.noDojoResearchCosts ? 0 : scaleRequiredCount(guild.Tier, recipe.price),
+                            ReqItems: recipe.ingredients.map(x => ({
+                                ItemType: x.ItemType,
+                                ItemCount: config.noDojoResearchCosts ? 0 : scaleRequiredCount(guild.Tier, x.ItemCount)
+                            })),
+                            State: 0
+                        }) - 1
+                    ];
+                setGuildTechLogState(guild, techProject.ItemType, 5);
+                if (config.noDojoResearchCosts) {
+                    processFundedGuildTechProject(guild, techProject, recipe);
+                } else {
+                    if (data.RecipeType.substring(0, 39) == "/Lotus/Types/Items/Research/DojoColors/") {
+                        guild.ActiveDojoColorResearch = data.RecipeType;
+                    }
                 }
             }
+            await guild.save();
+            res.end();
+        } else {
+            const recipe = ExportDojoRecipes.research[data.RecipeType];
+            const techProject =
+                inventory.PersonalTechProjects[
+                    inventory.PersonalTechProjects.push({
+                        State: 0,
+                        ReqCredits: recipe.price,
+                        ItemType: data.RecipeType,
+                        ReqItems: recipe.ingredients
+                    }) - 1
+                ];
+            await inventory.save();
+            res.json({
+                isPersonal: true,
+                action: "Start",
+                personalTech: techProject.toJSON()
+            });
         }
-        await guild.save();
-        res.end();
     } else if (data.Action == "Contribute") {
-        if (!hasAccessToDojo(inventory)) {
-            res.status(400).send("-1").end();
-            return;
-        }
+        if ((req.query.guildId as string) == "000000000000000000000000") {
+            const techProject = inventory.PersonalTechProjects.id(data.ResearchId)!;
 
-        const guildMember = (await GuildMember.findOne(
-            { accountId, guildId: guild._id },
-            "RegularCreditsContributed MiscItemsContributed"
-        ))!;
+            techProject.ReqCredits -= data.RegularCredits;
+            const inventoryChanges: IInventoryChanges = updateCurrency(inventory, data.RegularCredits, false);
 
-        const contributions = data;
-        const techProject = guild.TechProjects!.find(x => x.ItemType == contributions.RecipeType)!;
-
-        if (contributions.VaultCredits) {
-            if (contributions.VaultCredits > techProject.ReqCredits) {
-                contributions.VaultCredits = techProject.ReqCredits;
-            }
-            techProject.ReqCredits -= contributions.VaultCredits;
-            guild.VaultRegularCredits! -= contributions.VaultCredits;
-        }
-
-        if (contributions.RegularCredits > techProject.ReqCredits) {
-            contributions.RegularCredits = techProject.ReqCredits;
-        }
-        techProject.ReqCredits -= contributions.RegularCredits;
-
-        guildMember.RegularCreditsContributed ??= 0;
-        guildMember.RegularCreditsContributed += contributions.RegularCredits;
-
-        if (contributions.VaultMiscItems.length) {
-            for (const miscItem of contributions.VaultMiscItems) {
+            const miscItemChanges = [];
+            for (const miscItem of data.MiscItems) {
                 const reqItem = techProject.ReqItems.find(x => x.ItemType == miscItem.ItemType);
                 if (reqItem) {
                     if (miscItem.ItemCount > reqItem.ItemCount) {
                         miscItem.ItemCount = reqItem.ItemCount;
                     }
                     reqItem.ItemCount -= miscItem.ItemCount;
-
-                    const vaultMiscItem = guild.VaultMiscItems!.find(x => x.ItemType == miscItem.ItemType)!;
-                    vaultMiscItem.ItemCount -= miscItem.ItemCount;
+                    miscItemChanges.push({
+                        ItemType: miscItem.ItemType,
+                        ItemCount: miscItem.ItemCount * -1
+                    });
                 }
             }
-        }
+            addMiscItems(inventory, miscItemChanges);
+            inventoryChanges.MiscItems = miscItemChanges;
 
-        const miscItemChanges = [];
-        for (const miscItem of contributions.MiscItems) {
-            const reqItem = techProject.ReqItems.find(x => x.ItemType == miscItem.ItemType);
-            if (reqItem) {
-                if (miscItem.ItemCount > reqItem.ItemCount) {
-                    miscItem.ItemCount = reqItem.ItemCount;
-                }
-                reqItem.ItemCount -= miscItem.ItemCount;
-                miscItemChanges.push({
-                    ItemType: miscItem.ItemType,
-                    ItemCount: miscItem.ItemCount * -1
-                });
+            techProject.HasContributions = true;
 
-                addGuildMemberMiscItemContribution(guildMember, miscItem);
+            if (techProject.ReqCredits == 0 && !techProject.ReqItems.find(x => x.ItemCount > 0)) {
+                techProject.State = 1;
+                const recipe = ExportDojoRecipes.research[techProject.ItemType];
+                techProject.CompletionDate = new Date(Date.now() + recipe.time * 1000);
             }
+
+            await inventory.save();
+            res.json({
+                InventoryChanges: inventoryChanges,
+                PersonalResearch: { $oid: data.ResearchId },
+                PersonalResearchDate: techProject.CompletionDate ? toMongoDate(techProject.CompletionDate) : undefined
+            });
+        } else {
+            if (!hasAccessToDojo(inventory)) {
+                res.status(400).send("-1").end();
+                return;
+            }
+
+            const guild = await getGuildForRequestEx(req, inventory);
+            const guildMember = (await GuildMember.findOne(
+                { accountId, guildId: guild._id },
+                "RegularCreditsContributed MiscItemsContributed"
+            ))!;
+
+            const techProject = guild.TechProjects!.find(x => x.ItemType == data.RecipeType)!;
+
+            if (data.VaultCredits) {
+                if (data.VaultCredits > techProject.ReqCredits) {
+                    data.VaultCredits = techProject.ReqCredits;
+                }
+                techProject.ReqCredits -= data.VaultCredits;
+                guild.VaultRegularCredits! -= data.VaultCredits;
+            }
+
+            if (data.RegularCredits > techProject.ReqCredits) {
+                data.RegularCredits = techProject.ReqCredits;
+            }
+            techProject.ReqCredits -= data.RegularCredits;
+
+            guildMember.RegularCreditsContributed ??= 0;
+            guildMember.RegularCreditsContributed += data.RegularCredits;
+
+            if (data.VaultMiscItems.length) {
+                for (const miscItem of data.VaultMiscItems) {
+                    const reqItem = techProject.ReqItems.find(x => x.ItemType == miscItem.ItemType);
+                    if (reqItem) {
+                        if (miscItem.ItemCount > reqItem.ItemCount) {
+                            miscItem.ItemCount = reqItem.ItemCount;
+                        }
+                        reqItem.ItemCount -= miscItem.ItemCount;
+
+                        const vaultMiscItem = guild.VaultMiscItems!.find(x => x.ItemType == miscItem.ItemType)!;
+                        vaultMiscItem.ItemCount -= miscItem.ItemCount;
+                    }
+                }
+            }
+
+            const miscItemChanges = [];
+            for (const miscItem of data.MiscItems) {
+                const reqItem = techProject.ReqItems.find(x => x.ItemType == miscItem.ItemType);
+                if (reqItem) {
+                    if (miscItem.ItemCount > reqItem.ItemCount) {
+                        miscItem.ItemCount = reqItem.ItemCount;
+                    }
+                    reqItem.ItemCount -= miscItem.ItemCount;
+                    miscItemChanges.push({
+                        ItemType: miscItem.ItemType,
+                        ItemCount: miscItem.ItemCount * -1
+                    });
+
+                    addGuildMemberMiscItemContribution(guildMember, miscItem);
+                }
+            }
+            addMiscItems(inventory, miscItemChanges);
+            const inventoryChanges: IInventoryChanges = updateCurrency(inventory, data.RegularCredits, false);
+            inventoryChanges.MiscItems = miscItemChanges;
+
+            // Check if research is fully funded now.
+            await processGuildTechProjectContributionsUpdate(guild, techProject);
+
+            await Promise.all([guild.save(), inventory.save(), guildMember.save()]);
+            res.json({
+                InventoryChanges: inventoryChanges,
+                Vault: getGuildVault(guild)
+            });
         }
-        addMiscItems(inventory, miscItemChanges);
-        const inventoryChanges: IInventoryChanges = updateCurrency(inventory, contributions.RegularCredits, false);
-        inventoryChanges.MiscItems = miscItemChanges;
-
-        // Check if research is fully funded now.
-        await processGuildTechProjectContributionsUpdate(guild, techProject);
-
-        await Promise.all([guild.save(), inventory.save(), guildMember.save()]);
-        res.json({
-            InventoryChanges: inventoryChanges,
-            Vault: getGuildVault(guild)
-        });
     } else if (data.Action.split(",")[0] == "Buy") {
+        const guild = await getGuildForRequestEx(req, inventory);
         if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Fabricator))) {
             res.status(400).send("-1").end();
             return;
@@ -190,6 +250,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
             }
         });
     } else if (data.Action == "Fabricate") {
+        const guild = await getGuildForRequestEx(req, inventory);
         if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Fabricator))) {
             res.status(400).send("-1").end();
             return;
@@ -206,6 +267,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
         // Not a mistake: This response uses `inventoryChanges` instead of `InventoryChanges`.
         res.json({ inventoryChanges: inventoryChanges });
     } else if (data.Action == "Pause") {
+        const guild = await getGuildForRequestEx(req, inventory);
         if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Tech))) {
             res.status(400).send("-1").end();
             return;
@@ -217,6 +279,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
         await removePigmentsFromGuildMembers(guild._id);
         res.end();
     } else if (data.Action == "Unpause") {
+        const guild = await getGuildForRequestEx(req, inventory);
         if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Tech))) {
             res.status(400).send("-1").end();
             return;
@@ -239,7 +302,7 @@ type TGuildTechRequest =
 
 interface IGuildTechBasicRequest {
     Action: "Start" | "Fabricate" | "Pause" | "Unpause";
-    Mode: "Guild";
+    Mode: "Guild" | "Personal";
     RecipeType: string;
 }
 
@@ -251,7 +314,7 @@ interface IGuildTechBuyRequest {
 
 interface IGuildTechContributeRequest {
     Action: "Contribute";
-    ResearchId: "";
+    ResearchId: string;
     RecipeType: string;
     RegularCredits: number;
     MiscItems: IMiscItem[];
