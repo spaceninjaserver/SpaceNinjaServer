@@ -732,7 +732,7 @@ export const addMissionRewards = async (
                     const endlessJob = syndicateEntry.Jobs.find(j => j.endless);
                     if (endlessJob) {
                         const index = rewardInfo.JobStage % endlessJob.xpAmounts.length;
-                        const excess = Math.floor(rewardInfo.JobStage / endlessJob.xpAmounts.length);
+                        const excess = Math.floor(rewardInfo.JobStage / (endlessJob.xpAmounts.length - 1));
                         medallionAmount = Math.floor(endlessJob.xpAmounts[index] * (1 + 0.15000001 * excess));
                     }
                 }
@@ -907,14 +907,139 @@ function getRandomMissionDrops(RewardInfo: IRewardInfo, tierOverride: number | u
 
         let rotations: number[] = [];
         if (RewardInfo.jobId) {
-            if (RewardInfo.JobTier! >= 0) {
-                const id = RewardInfo.jobId.split("_")[3];
-                const syndicateInfo = getWorldState().SyndicateMissions.find(x => x._id.$oid == id);
-                if (syndicateInfo) {
-                    const jobInfo = syndicateInfo.Jobs![RewardInfo.JobTier!];
-                    rewardManifests = [jobInfo.rewards];
-                    rotations = [RewardInfo.JobStage!];
+            if (RewardInfo.JobStage! >= 0) {
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                const [jobType, tierStr, hubNode, syndicateId, locationTag] = RewardInfo.jobId.split("_");
+                const tier = Number(tierStr);
+                let isEndlessJob = false;
+                if (syndicateId) {
+                    const worldState = getWorldState();
+                    let syndicateEntry = worldState.SyndicateMissions.find(m => m._id.$oid === syndicateId);
+                    if (!syndicateEntry) syndicateEntry = worldState.SyndicateMissions.find(m => m.Tag === syndicateId);
+
+                    if (syndicateEntry && syndicateEntry.Jobs) {
+                        let job = syndicateEntry.Jobs[tier];
+
+                        if (syndicateEntry.Tag === "EntratiSyndicate") {
+                            const vault = syndicateEntry.Jobs.find(j => j.locationTag === locationTag);
+                            if (vault) job = vault;
+                            // if (
+                            //     [
+                            //         "DeimosRuinsExterminateBounty",
+                            //         "DeimosRuinsEscortBounty",
+                            //         "DeimosRuinsMistBounty",
+                            //         "DeimosRuinsPurifyBounty",
+                            //         "DeimosRuinsSacBounty"
+                            //     ].some(ending => jobType.endsWith(ending))
+                            // ) {
+                            //     job.rewards = "TODO"; // Droptable for Arcana Isolation Vault
+                            // }
+                            if (
+                                [
+                                    "DeimosEndlessAreaDefenseBounty",
+                                    "DeimosEndlessExcavateBounty",
+                                    "DeimosEndlessPurifyBounty"
+                                ].some(ending => jobType.endsWith(ending))
+                            ) {
+                                const endlessJob = syndicateEntry.Jobs.find(j => j.endless);
+                                if (endlessJob) {
+                                    isEndlessJob = true;
+                                    job = endlessJob;
+                                    const excess = Math.floor(RewardInfo.JobStage! / (job.xpAmounts.length - 1));
+
+                                    const rotationIndexes = [0, 0, 1, 2];
+                                    const rotationIndex = rotationIndexes[excess % rotationIndexes.length];
+                                    const dropTable = [
+                                        "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierBTableARewards",
+                                        "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierBTableBRewards",
+                                        "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierBTableCRewards"
+                                    ];
+                                    job.rewards = dropTable[rotationIndex];
+                                }
+                            }
+                        } else if (syndicateEntry.Tag === "SolarisSyndicate") {
+                            if (jobType.endsWith("Heists/HeistProfitTakerBountyOne") && RewardInfo.JobStage == 2) {
+                                job = {
+                                    rewards:
+                                        "/Lotus/Types/Game/MissionDecks/HeistJobMissionRewards/HeistTierATableARewards",
+                                    masteryReq: 0,
+                                    minEnemyLevel: 40,
+                                    maxEnemyLevel: 60,
+                                    xpAmounts: [1000]
+                                };
+                                RewardInfo.Q = false; // Just in case
+                            } else {
+                                const tierMap = {
+                                    Two: "B",
+                                    Three: "C",
+                                    Four: "D"
+                                };
+
+                                for (const [key, tier] of Object.entries(tierMap)) {
+                                    if (jobType.endsWith(`Heists/HeistProfitTakerBounty${key}`)) {
+                                        job = {
+                                            rewards: `/Lotus/Types/Game/MissionDecks/HeistJobMissionRewards/HeistTier${tier}TableARewards`,
+                                            masteryReq: 0,
+                                            minEnemyLevel: 40,
+                                            maxEnemyLevel: 60,
+                                            xpAmounts: [1000]
+                                        };
+                                        RewardInfo.Q = false; // Just in case
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        rewardManifests = [job.rewards];
+                        rotations = [RewardInfo.JobStage! % (job.xpAmounts.length - 1)];
+                        if (
+                            RewardInfo.Q &&
+                            (RewardInfo.JobStage === job.xpAmounts.length - 1 || job.isVault) &&
+                            !isEndlessJob
+                        ) {
+                            rewardManifests.push(job.rewards);
+                            rotations.push(ExportRewards[job.rewards].length - 1);
+                        }
+                    }
                 }
+            }
+        } else if (RewardInfo.challengeMissionId) {
+            const rewardTables: Record<string, string[]> = {
+                EntratiLabSyndicate: [
+                    "/Lotus/Types/Game/MissionDecks/EntratiLabJobMissionReward/TierATableRewards",
+                    "/Lotus/Types/Game/MissionDecks/EntratiLabJobMissionReward/TierBTableRewards",
+                    "/Lotus/Types/Game/MissionDecks/EntratiLabJobMissionReward/TierCTableRewards",
+                    "/Lotus/Types/Game/MissionDecks/EntratiLabJobMissionReward/TierDTableRewards",
+                    "/Lotus/Types/Game/MissionDecks/EntratiLabJobMissionReward/TierETableRewards"
+                ],
+                ZarimanSyndicate: [
+                    "/Lotus/Types/Game/MissionDecks/ZarimanJobMissionRewards/TierATableRewards",
+                    "/Lotus/Types/Game/MissionDecks/ZarimanJobMissionRewards/TierBTableRewards",
+                    "/Lotus/Types/Game/MissionDecks/ZarimanJobMissionRewards/TierCTableRewards",
+                    "/Lotus/Types/Game/MissionDecks/ZarimanJobMissionRewards/TierDTableRewards",
+                    "/Lotus/Types/Game/MissionDecks/ZarimanJobMissionRewards/TierETableRewards"
+                ],
+                HexSyndicate: [
+                    "/Lotus/Types/Game/MissionDecks/1999MissionRewards/TierABountyRewards",
+                    "/Lotus/Types/Game/MissionDecks/1999MissionRewards/TierBBountyRewards",
+                    "/Lotus/Types/Game/MissionDecks/1999MissionRewards/TierCBountyRewards",
+                    "/Lotus/Types/Game/MissionDecks/1999MissionRewards/TierDBountyRewards",
+                    "/Lotus/Types/Game/MissionDecks/1999MissionRewards/TierEBountyRewards",
+                    "/Lotus/Types/Game/MissionDecks/1999MissionRewards/TierFBountyRewards",
+                    "/Lotus/Types/Game/MissionDecks/1999MissionRewards/InfestedLichBountyRewards"
+                ]
+            };
+
+            const [syndicateTag, tierStr] = RewardInfo.challengeMissionId.split("_");
+            const tier = Number(tierStr);
+
+            const rewardTable = rewardTables[syndicateTag][tier];
+
+            if (rewardTable) {
+                rewardManifests = [rewardTable];
+                rotations = [0];
+            } else {
+                logger.error(`Unknown syndicate or tier: ${RewardInfo.challengeMissionId}`);
             }
         } else if (RewardInfo.VaultsCracked) {
             // For Spy missions, e.g. 3 vaults cracked = A, B, C
