@@ -277,9 +277,7 @@ function fetchItemList() {
                 } else {
                     const nameSet = new Set();
                     items.forEach(item => {
-                        if (item.name.includes("<ARCHWING> ")) {
-                            item.name = item.name.replace("<ARCHWING> ", "");
-                        }
+                        item.name = item.name.replace(/<.+>/g, "").trim();
                         if ("badReason" in item) {
                             if (item.badReason == "starter") {
                                 item.name = loc("code_starter").split("|MOD|").join(item.name);
