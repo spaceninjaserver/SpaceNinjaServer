@@ -16,9 +16,9 @@ import { webuiRouter } from "@/src/routes/webui";
 const app = express();
 
 app.use((req, _res, next) => {
-    // 38.5.0 introduced "ezip" for encrypted body blobs.
+    // 38.5.0 introduced "ezip" for encrypted body blobs and "e" for request verification only (encrypted body blobs with no application data).
     // The bootstrapper decrypts it for us but having an unsupported Content-Encoding here would still be an issue for Express, so removing it.
-    if (req.headers["content-encoding"] == "ezip") {
+    if (req.headers["content-encoding"] == "ezip" || req.headers["content-encoding"] == "e") {
         req.headers["content-encoding"] = undefined;
     }
     next();
