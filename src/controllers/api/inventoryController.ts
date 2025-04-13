@@ -202,7 +202,8 @@ export const getInventoryResponse = async (
 
     if (config.universalPolarityEverywhere) {
         const Polarity: IPolarity[] = [];
-        for (let i = 0; i != 12; ++i) {
+        // 12 is needed for necramechs. 14 is needed for plexus/crewshipharness.
+        for (let i = 0; i != 14; ++i) {
             Polarity.push({
                 Slot: i,
                 Value: ArtifactPolarity.Any
