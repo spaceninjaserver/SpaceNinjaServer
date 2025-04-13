@@ -1471,7 +1471,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         DuviriInfo: DuviriInfoSchema,
         Mailbox: MailboxSchema,
         HandlerPoints: Number,
-        ChallengesFixVersion: Number,
+        ChallengesFixVersion: { type: Number, default: 6 },
         PlayedParkourTutorial: Boolean,
         ActiveLandscapeTraps: [Schema.Types.Mixed],
         RepVotes: [Schema.Types.Mixed],
