@@ -15,11 +15,12 @@ jobs:
             - run: npm run verify
             - run: npm run lint:ci
             - run: npm run prettier
+            - run: npm run update-translations
             - name: Fail if there are uncommitted changes
               run: |
                   if [[ -n "$(git status --porcelain)" ]]; then
                     echo "Uncommitted changes detected:"
                     git status
-                    git diff
+                    git --no-pager diff
                     exit 1
                   fi

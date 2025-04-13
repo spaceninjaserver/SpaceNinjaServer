@@ -1,4 +1,5 @@
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+import { config } from "@/src/services/configService";
 import { addEmailItem, getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { ICompletedDialogue, IDialogueDatabase } from "@/src/types/inventoryTypes/inventoryTypes";
@@ -24,7 +25,9 @@ export const saveDialogueController: RequestHandler = async (req, res) => {
             throw new Error("bad inventory state");
         }
         const inventoryChanges: IInventoryChanges = {};
-        const tomorrowAt0Utc = (Math.trunc(Date.now() / 86400_000) + 1) * 86400_000;
+        const tomorrowAt0Utc = config.noKimCooldowns
+            ? Date.now()
+            : (Math.trunc(Date.now() / 86400_000) + 1) * 86400_000;
         inventory.DialogueHistory.Dialogues ??= [];
         const dialogue = getDialogue(inventory, request.DialogueName);
         dialogue.Rank = request.Rank;

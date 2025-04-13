@@ -38,6 +38,7 @@ interface IConfig {
     noArgonCrystalDecay?: boolean;
     noMasteryRankUpCooldown?: boolean;
     noVendorPurchaseLimits?: boolean;
+    noKimCooldowns?: boolean;
     instantResourceExtractorDrones?: boolean;
     noDojoRoomBuildStage?: boolean;
     noDojoDecoBuildStage?: boolean;

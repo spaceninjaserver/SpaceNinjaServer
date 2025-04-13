@@ -137,6 +137,7 @@ dict = {
     cheats_noArgonCrystalDecay: `Без распада аргоновых кристаллов`,
     cheats_noMasteryRankUpCooldown: `Повышение ранга мастерства без кулдауна`,
     cheats_noVendorPurchaseLimits: `Отсутствие лимитов на покупки у вендоров`,
+    cheats_noKimCooldowns: `[UNTRANSLATED] No KIM Cooldowns`,
     cheats_instantResourceExtractorDrones: `Мгновенные Экстракторы Ресурсов`,
     cheats_noDojoRoomBuildStage: `Мгновенное Строительтво Комнат Додзё`,
     cheats_noDojoDecoBuildStage: `Мгновенное Строительтво Декораций Додзё`,

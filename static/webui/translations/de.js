@@ -137,6 +137,7 @@ dict = {
     cheats_noArgonCrystalDecay: `Argon-Kristalle verschwinden niemals`,
     cheats_noMasteryRankUpCooldown: `Keine Wartezeit beim Meisterschaftsrangaufstieg`,
     cheats_noVendorPurchaseLimits: `Keine Kaufbeschränkungen bei Händlern`,
+    cheats_noKimCooldowns: `[UNTRANSLATED] No KIM Cooldowns`,
     cheats_instantResourceExtractorDrones: `Sofortige Ressourcen-Extraktor-Drohnen`,
     cheats_noDojoRoomBuildStage: `Kein Dojo-Raum-Bauvorgang`,
     cheats_noDojoDecoBuildStage: `Kein Dojo-Deko-Bauvorgang`,

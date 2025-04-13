@@ -137,6 +137,7 @@ dict = {
     cheats_noArgonCrystalDecay: `Sin descomposición de cristal de Argón`,
     cheats_noMasteryRankUpCooldown: `Sin tiempo de espera para rango de maestría`,
     cheats_noVendorPurchaseLimits: `Sin límite de compras de vendedores`,
+    cheats_noKimCooldowns: `[UNTRANSLATED] No KIM Cooldowns`,
     cheats_instantResourceExtractorDrones: `Drones de extracción de recursos instantáneos`,
     cheats_noDojoRoomBuildStage: `Sin etapa de construcción de sala del dojo`,
     cheats_noDojoDecoBuildStage: `Sin etapa de construcción de decoraciones del dojo`,
