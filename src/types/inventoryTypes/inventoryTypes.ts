@@ -157,6 +157,11 @@ export type TSolarMapRegion =
 
 //TODO: perhaps split response and database into their own files
 
+export enum LoadoutIndex {
+    NORMAL = 0,
+    DATAKNIFE = 7
+}
+
 export interface IDailyAffiliations {
     DailyAffiliation: number;
     DailyAffiliationPvp: number;
@@ -220,7 +225,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     ActiveQuest: string;
     FlavourItems: IFlavourItem[];
     LoadOutPresets: ILoadOutPresets;
-    CurrentLoadOutIds: IOid[]; //TODO: we store it in the database using this representation as well :/
+    CurrentLoadOutIds: IOid[]; // we store it in the database using this representation as well :/
     Missions: IMission[];
     RandomUpgradesIdentified?: number;
     LastRegionPlayed: TSolarMapRegion;

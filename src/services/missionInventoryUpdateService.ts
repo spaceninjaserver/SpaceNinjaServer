@@ -699,25 +699,10 @@ export const addMissionRewards = async (
             }
 
             if (inventory.Nemesis.Faction == "FC_INFESTATION") {
-                inventoryChanges.Nemesis.HenchmenKilled ??= 0;
-                inventoryChanges.Nemesis.MissionCount ??= 0;
-
-                inventory.Nemesis.HenchmenKilled += 5;
                 inventory.Nemesis.MissionCount += 1;
 
-                inventoryChanges.Nemesis.HenchmenKilled += 5;
+                inventoryChanges.Nemesis.MissionCount ??= 0;
                 inventoryChanges.Nemesis.MissionCount += 1;
-
-                if (inventory.Nemesis.HenchmenKilled >= 100) {
-                    inventory.Nemesis.InfNodes = [
-                        {
-                            Node: "CrewBattleNode559",
-                            Influence: 1
-                        }
-                    ];
-                    inventory.Nemesis.Weakened = true;
-                    inventoryChanges.Nemesis.Weakened = true;
-                }
             }
 
             inventoryChanges.Nemesis.InfNodes = inventory.Nemesis.InfNodes;

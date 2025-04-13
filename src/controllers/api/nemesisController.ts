@@ -1,10 +1,25 @@
-import { getInfNodes, getNemesisPasscode } from "@/src/helpers/nemesisHelpers";
+import {
+    consumeModCharge,
+    encodeNemesisGuess,
+    getInfNodes,
+    getNemesisPasscode,
+    IKnifeResponse
+} from "@/src/helpers/nemesisHelpers";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
+import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
 import { freeUpSlot, getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { SRng } from "@/src/services/rngService";
 import { IMongoDate, IOid } from "@/src/types/commonTypes";
-import { IInnateDamageFingerprint, InventorySlot, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import {
+    IInnateDamageFingerprint,
+    InventorySlot,
+    IUpgradeClient,
+    IWeaponSkinClient,
+    LoadoutIndex,
+    TEquipmentKey
+} from "@/src/types/inventoryTypes/inventoryTypes";
 import { logger } from "@/src/utils/logger";
 import { RequestHandler } from "express";
 
@@ -49,7 +64,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
     } else if ((req.query.mode as string) == "p") {
         const inventory = await getInventory(accountId, "Nemesis");
         const body = getJSONfromString<INemesisPrespawnCheckRequest>(String(req.body));
-        const passcode = getNemesisPasscode(inventory.Nemesis!.fp, inventory.Nemesis!.Faction);
+        const passcode = getNemesisPasscode(inventory.Nemesis!);
         let guessResult = 0;
         if (inventory.Nemesis!.Faction == "FC_INFESTATION") {
             for (let i = 0; i != 3; ++i) {
@@ -66,6 +81,88 @@ export const nemesisController: RequestHandler = async (req, res) => {
             }
         }
         res.json({ GuessResult: guessResult });
+    } else if (req.query.mode == "r") {
+        const inventory = await getInventory(
+            accountId,
+            "Nemesis LoadOutPresets CurrentLoadOutIds DataKnives Upgrades RawUpgrades"
+        );
+        const body = getJSONfromString<INemesisRequiemRequest>(String(req.body));
+        if (inventory.Nemesis!.Faction == "FC_INFESTATION") {
+            const guess: number[] = [body.guess & 0xf, (body.guess >> 4) & 0xf, (body.guess >> 8) & 0xf];
+            const passcode = getNemesisPasscode(inventory.Nemesis!)[0];
+
+            // Add to GuessHistory
+            const result1 = passcode == guess[0] ? 0 : 1;
+            const result2 = passcode == guess[1] ? 0 : 1;
+            const result3 = passcode == guess[2] ? 0 : 1;
+            inventory.Nemesis!.GuessHistory.push(
+                encodeNemesisGuess(guess[0], result1, guess[1], result2, guess[2], result3)
+            );
+
+            // Increase antivirus
+            let antivirusGain = 5;
+            const loadout = (await Loadout.findById(inventory.LoadOutPresets, "DATAKNIFE"))!;
+            const dataknifeLoadout = loadout.DATAKNIFE.id(inventory.CurrentLoadOutIds[LoadoutIndex.DATAKNIFE].$oid);
+            const dataknifeConfigIndex = dataknifeLoadout?.s?.mod ?? 0;
+            const dataknifeUpgrades = inventory.DataKnives[0].Configs[dataknifeConfigIndex].Upgrades!;
+            const response: IKnifeResponse = {};
+            for (const upgrade of body.knife!.AttachedUpgrades) {
+                switch (upgrade.ItemType) {
+                    case "/Lotus/Upgrades/Mods/DataSpike/Potency/GainAntivirusAndSpeedOnUseMod":
+                        antivirusGain += 10;
+                        consumeModCharge(response, inventory, upgrade, dataknifeUpgrades);
+                        break;
+                    case "/Lotus/Upgrades/Mods/DataSpike/Potency/GainAntivirusAndWeaponDamageOnUseMod":
+                        antivirusGain += 10;
+                        consumeModCharge(response, inventory, upgrade, dataknifeUpgrades);
+                        break;
+                    case "/Lotus/Upgrades/Mods/DataSpike/Potency/GainAntivirusLargeOnSingleUseMod": // Instant Secure
+                        antivirusGain += 15;
+                        consumeModCharge(response, inventory, upgrade, dataknifeUpgrades);
+                        break;
+                    case "/Lotus/Upgrades/Mods/DataSpike/Potency/GainAntivirusOnUseMod": // Immuno Shield
+                        antivirusGain += 15;
+                        consumeModCharge(response, inventory, upgrade, dataknifeUpgrades);
+                        break;
+                    case "/Lotus/Upgrades/Mods/DataSpike/Potency/GainAntivirusSmallOnSingleUseMod":
+                        antivirusGain += 10;
+                        consumeModCharge(response, inventory, upgrade, dataknifeUpgrades);
+                        break;
+                }
+            }
+            inventory.Nemesis!.HenchmenKilled += antivirusGain;
+            if (inventory.Nemesis!.HenchmenKilled >= 100) {
+                inventory.Nemesis!.HenchmenKilled = 100;
+                inventory.Nemesis!.InfNodes = [
+                    {
+                        Node: "CrewBattleNode559",
+                        Influence: 1
+                    }
+                ];
+                inventory.Nemesis!.Weakened = true;
+            } else {
+                inventory.Nemesis!.InfNodes = getInfNodes("FC_INFESTATION", 0);
+            }
+
+            await inventory.save();
+            res.json(response);
+        } else {
+            const passcode = getNemesisPasscode(inventory.Nemesis!);
+            if (passcode[body.position] != body.guess) {
+                res.end();
+            } else {
+                inventory.Nemesis!.Rank += 1;
+                inventory.Nemesis!.InfNodes = getInfNodes(inventory.Nemesis!.Faction, inventory.Nemesis!.Rank);
+                await inventory.save();
+                res.json({ RankIncrease: 1 });
+            }
+        }
+    } else if ((req.query.mode as string) == "rs") {
+        // report spawn; POST but no application data in body
+        const inventory = await getInventory(accountId, "Nemesis");
+        inventory.Nemesis!.LastEnc = inventory.Nemesis!.MissionCount;
+        await inventory.save();
+        res.json({ LastEnc: inventory.Nemesis!.LastEnc });
     } else if ((req.query.mode as string) == "s") {
         const inventory = await getInventory(accountId, "Nemesis");
         const body = getJSONfromString<INemesisStartRequest>(String(req.body));
@@ -171,6 +268,20 @@ interface INemesisStartRequest {
 interface INemesisPrespawnCheckRequest {
     guess: number[]; // .length == 3
     potency?: number[];
+}
+
+interface INemesisRequiemRequest {
+    guess: number; // grn/crp: 4 bits | coda: 3x 4 bits
+    position: number; // grn/crp: 0-2 | coda: 0
+    // knife field provided for coda only
+    knife?: {
+        Item: IEquipmentClient;
+        Skins: IWeaponSkinClient[];
+        ModSlot: number;
+        CustSlot: number;
+        AttachedUpgrades: IUpgradeClient[];
+        HiddenWhenHolstered: boolean;
+    };
 }
 
 const kuvaLichVersionSixWeapons = [
