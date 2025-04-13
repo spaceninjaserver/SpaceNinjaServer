@@ -3,15 +3,9 @@ import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { ExportNightwave, ExportSyndicates, ISyndicateSacrifice } from "warframe-public-export-plus";
 import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
-import {
-    addItem,
-    addMiscItems,
-    combineInventoryChanges,
-    getInventory,
-    updateCurrency
-} from "@/src/services/inventoryService";
+import { addMiscItems, combineInventoryChanges, getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
-import { fromStoreItem, isStoreItem } from "@/src/services/itemDataService";
+import { isStoreItem, toStoreItem } from "@/src/services/itemDataService";
 
 export const syndicateSacrificeController: RequestHandler = async (request, response) => {
     const accountId = await getAccountIdForRequest(request);
@@ -77,10 +71,13 @@ export const syndicateSacrificeController: RequestHandler = async (request, resp
             res.NewEpisodeReward = true;
             const reward = ExportNightwave.rewards[index];
             let rewardType = reward.uniqueName;
-            if (isStoreItem(rewardType)) {
-                rewardType = fromStoreItem(rewardType);
+            if (!isStoreItem(rewardType)) {
+                rewardType = toStoreItem(rewardType);
             }
-            combineInventoryChanges(res.InventoryChanges, await addItem(inventory, rewardType, reward.itemCount ?? 1));
+            combineInventoryChanges(
+                res.InventoryChanges,
+                (await handleStoreItemAcquisition(rewardType, inventory, reward.itemCount)).InventoryChanges
+            );
         }
     }
 
