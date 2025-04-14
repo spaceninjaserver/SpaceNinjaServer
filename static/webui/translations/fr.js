@@ -139,6 +139,7 @@ dict = {
     cheats_noVendorPurchaseLimits: `[UNTRANSLATED] No Vendor Purchase Limits`,
     cheats_noKimCooldowns: `[UNTRANSLATED] No KIM Cooldowns`,
     cheats_instantResourceExtractorDrones: `Ressources de drone d'extraction instantannées`,
+    cheats_noResourceExtractorDronesDamage: `[UNTRANSLATED] No Resource Extractor Drones Damage`,
     cheats_noDojoRoomBuildStage: `No Dojo Room Build Stage`,
     cheats_noDojoDecoBuildStage: `[UNTRANSLATED] No Dojo Deco Build Stage`,
     cheats_fastDojoRoomDestruction: `[UNTRANSLATED] Fast Dojo Room Destruction`,

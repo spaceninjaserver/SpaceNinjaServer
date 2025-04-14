@@ -55,7 +55,7 @@ export const dronesController: RequestHandler = async (req, res) => {
             ? new Date()
             : new Date(Date.now() + getRandomInt(3 * 3600 * 1000, 4 * 3600 * 1000));
         drone.PendingDamage =
-            Math.random() < system.damageChance
+            !config.noResourceExtractorDronesDamage && Math.random() < system.damageChance
                 ? getRandomInt(system.droneDamage.minValue, system.droneDamage.maxValue)
                 : 0;
         const resource = getRandomWeightedRewardUc(system.resources, droneMeta.probabilities)!;
