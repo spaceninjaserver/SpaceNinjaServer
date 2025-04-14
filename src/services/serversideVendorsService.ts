@@ -3,9 +3,15 @@ import path from "path";
 import { repoDir } from "@/src/helpers/pathHelper";
 import { CRng, mixSeeds } from "@/src/services/rngService";
 import { IMongoDate } from "@/src/types/commonTypes";
-import { IItemManifestPreprocessed, IRawVendorManifest, IVendorManifestPreprocessed } from "@/src/types/vendorTypes";
+import {
+    IItemManifestPreprocessed,
+    IRawVendorManifest,
+    IVendorInfo,
+    IVendorManifestPreprocessed
+} from "@/src/types/vendorTypes";
 import { JSONParse } from "json-with-bigint";
 import { ExportVendors } from "warframe-public-export-plus";
+import { unixTimesInMs } from "../constants/timeConstants";
 
 const getVendorManifestJson = (name: string): IRawVendorManifest => {
     return JSONParse(fs.readFileSync(path.join(repoDir, `static/fixed_responses/getVendorInfo/${name}.json`), "utf-8"));
@@ -44,14 +50,37 @@ const rawVendorManifests: IRawVendorManifest[] = [
     getVendorManifestJson("ZarimanCommisionsManifestArchimedean")
 ];
 
+interface IGeneratableVendorInfo extends Omit<IVendorInfo, "ItemManifest" | "Expiry"> {
+    cycleDuration?: number;
+}
+
+const generatableVendors: IGeneratableVendorInfo[] = [
+    {
+        _id: { $oid: "67dadc30e4b6e0e5979c8d84" },
+        TypeName: "/Lotus/Types/Game/VendorManifests/TheHex/InfestedLichWeaponVendorManifest",
+        PropertyTextHash: "77093DD05A8561A022DEC9A4B9BB4A56",
+        RandomSeedType: "VRST_WEAPON",
+        RequiredGoalTag: "",
+        WeaponUpgradeValueAttenuationExponent: 2.25,
+        cycleDuration: 4 * unixTimesInMs.day
+    }
+    // {
+    //     _id: { $oid: "5dbb4c41e966f7886c3ce939" },
+    //     TypeName: "/Lotus/Types/Game/VendorManifests/Hubs/IronwakeDondaVendorManifest",
+    //     PropertyTextHash: "62B64A8065B7C0FA345895D4BC234621"
+    // }
+];
+
 export const getVendorManifestByTypeName = (typeName: string): IVendorManifestPreprocessed | undefined => {
     for (const vendorManifest of rawVendorManifests) {
         if (vendorManifest.VendorInfo.TypeName == typeName) {
             return preprocessVendorManifest(vendorManifest);
         }
     }
-    if (typeName == "/Lotus/Types/Game/VendorManifests/TheHex/InfestedLichWeaponVendorManifest") {
-        return generateCodaWeaponVendorManifest();
+    for (const vendorInfo of generatableVendors) {
+        if (vendorInfo.TypeName == typeName) {
+            return generateVendorManifest(vendorInfo);
+        }
     }
     return undefined;
 };
@@ -62,8 +91,10 @@ export const getVendorManifestByOid = (oid: string): IVendorManifestPreprocessed
             return preprocessVendorManifest(vendorManifest);
         }
     }
-    if (oid == "67dadc30e4b6e0e5979c8d84") {
-        return generateCodaWeaponVendorManifest();
+    for (const vendorInfo of generatableVendors) {
+        if (vendorInfo._id.$oid == oid) {
+            return generateVendorManifest(vendorInfo);
+        }
     }
     return undefined;
 };
@@ -103,41 +134,59 @@ const refreshExpiry = (expiry: IMongoDate): number => {
     return 0;
 };
 
-const generateCodaWeaponVendorManifest = (): IVendorManifestPreprocessed => {
-    const EPOCH = 1740960000 * 1000;
-    const DUR = 4 * 86400 * 1000;
-    const cycle = Math.trunc((Date.now() - EPOCH) / DUR);
-    const cycleStart = EPOCH + cycle * DUR;
-    const cycleEnd = cycleStart + DUR;
-    const binThisCycle = cycle % 2; // isOneBinPerCycle
+const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorManifestPreprocessed => {
+    const EPOCH = 1740960000 * 1000; // Monday; aligns with coda weapons 8 day cycle.
+    const manifest = ExportVendors[vendorInfo.TypeName];
+    let binThisCycle;
+    if (manifest.isOneBinPerCycle) {
+        const cycleDuration = vendorInfo.cycleDuration!; // manifest.items[0].durationHours! * 3600_000;
+        const cycleIndex = Math.trunc((Date.now() - EPOCH) / cycleDuration);
+        binThisCycle = cycleIndex % 2; // Note: May want to auto-compute the bin size, but this is only used for coda weapons right now.
+    }
     const items: IItemManifestPreprocessed[] = [];
-    const manifest = ExportVendors["/Lotus/Types/Game/VendorManifests/TheHex/InfestedLichWeaponVendorManifest"];
-    const rng = new CRng(cycle);
-    for (const rawItem of manifest.items) {
-        if (rawItem.bin != binThisCycle) {
+    let soonestOfferExpiry: number = Number.MAX_SAFE_INTEGER;
+    for (let i = 0; i != manifest.items.length; ++i) {
+        const rawItem = manifest.items[i];
+        if (manifest.isOneBinPerCycle && rawItem.bin != binThisCycle) {
             continue;
         }
-        items.push({
-            StoreItem: rawItem.storeItem,
-            ItemPrices: rawItem.itemPrices!.map(item => ({ ...item, ProductCategory: "MiscItems" })),
-            Bin: "BIN_" + rawItem.bin,
-            QuantityMultiplier: 1,
-            Expiry: { $date: { $numberLong: cycleEnd.toString() } },
-            AllowMultipurchase: false,
-            LocTagRandSeed: (BigInt(rng.randomInt(0, 0xffffffff)) << 32n) | BigInt(rng.randomInt(0, 0xffffffff)),
-            Id: { $oid: "67e9da12793a120d" + rng.randomInt(0, 0xffffffff).toString(16).padStart(8, "0") }
-        });
+        const cycleDuration = vendorInfo.cycleDuration!; // rawItem.durationHours! * 3600_000;
+        const cycleIndex = Math.trunc((Date.now() - EPOCH) / cycleDuration);
+        const cycleStart = EPOCH + cycleIndex * cycleDuration;
+        const cycleEnd = cycleStart + cycleDuration;
+        if (soonestOfferExpiry > cycleEnd) {
+            soonestOfferExpiry = cycleEnd;
+        }
+        const rng = new CRng(cycleIndex);
+        rng.churnSeed(i);
+        /*for (let j = -1; j != rawItem.duplicates; ++j)*/ {
+            const item: IItemManifestPreprocessed = {
+                StoreItem: rawItem.storeItem,
+                ItemPrices: rawItem.itemPrices!.map(itemPrice => ({ ...itemPrice, ProductCategory: "MiscItems" })),
+                Bin: "BIN_" + rawItem.bin,
+                QuantityMultiplier: 1,
+                Expiry: { $date: { $numberLong: cycleEnd.toString() } },
+                AllowMultipurchase: false,
+                Id: {
+                    $oid:
+                        i.toString(16).padStart(8, "0") +
+                        vendorInfo._id.$oid.substring(8, 16) +
+                        rng.randomInt(0, 0xffffffff).toString(16).padStart(8, "0")
+                }
+            };
+            if (vendorInfo.RandomSeedType) {
+                item.LocTagRandSeed =
+                    (BigInt(rng.randomInt(0, 0xffffffff)) << 32n) | BigInt(rng.randomInt(0, 0xffffffff));
+            }
+            items.push(item);
+        }
     }
+    delete vendorInfo.cycleDuration;
     return {
         VendorInfo: {
-            _id: { $oid: "67dadc30e4b6e0e5979c8d84" },
-            TypeName: "/Lotus/Types/Game/VendorManifests/TheHex/InfestedLichWeaponVendorManifest",
+            ...vendorInfo,
             ItemManifest: items,
-            PropertyTextHash: "77093DD05A8561A022DEC9A4B9BB4A56",
-            RandomSeedType: "VRST_WEAPON",
-            RequiredGoalTag: "",
-            WeaponUpgradeValueAttenuationExponent: 2.25,
-            Expiry: { $date: { $numberLong: cycleEnd.toString() } }
+            Expiry: { $date: { $numberLong: soonestOfferExpiry.toString() } }
         }
     };
 };

@@ -1,16 +1,16 @@
 import { IMongoDate, IOid } from "./commonTypes";
 
-interface IItemPrice {
+export interface IItemPrice {
     ItemType: string | string[]; // If string[], preprocessing will use RNG to pick one for the current period.
     ItemCount: number;
     ProductCategory: string;
 }
 
-interface IItemPricePreprocessed extends Omit<IItemPrice, "ItemType"> {
+export interface IItemPricePreprocessed extends Omit<IItemPrice, "ItemType"> {
     ItemType: string;
 }
 
-interface IItemManifest {
+export interface IItemManifest {
     StoreItem: string;
     ItemPrices?: IItemPrice[];
     Bin: string;
@@ -27,7 +27,7 @@ export interface IItemManifestPreprocessed extends Omit<IItemManifest, "ItemPric
     ItemPrices?: IItemPricePreprocessed[];
 }
 
-interface IVendorInfo {
+export interface IVendorInfo {
     _id: IOid;
     TypeName: string;
     ItemManifest: IItemManifest[];
@@ -38,7 +38,7 @@ interface IVendorInfo {
     Expiry: IMongoDate; // Either a date in the distant future or a period in milliseconds for preprocessing.
 }
 
-interface IVendorInfoPreprocessed extends Omit<IVendorInfo, "ItemManifest"> {
+export interface IVendorInfoPreprocessed extends Omit<IVendorInfo, "ItemManifest"> {
     ItemManifest: IItemManifestPreprocessed[];
 }
 

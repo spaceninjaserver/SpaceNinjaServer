@@ -109,6 +109,12 @@ export class CRng {
     randomReward<T extends { probability: number }>(pool: T[]): T | undefined {
         return getRewardAtPercentage(pool, this.random());
     }
+
+    churnSeed(its: number): void {
+        while (its--) {
+            this.state = (this.state * 1103515245 + 12345) & 0x7fffffff;
+        }
+    }
 }
 
 // Seeded RNG for cases where we need identical results to the game client. Based on work by Donald Knuth.
