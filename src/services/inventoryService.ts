@@ -381,7 +381,7 @@ export const addItem = async (
         } else if (ExportResources[typeName].productCategory == "KubrowPetEggs") {
             const changes: IKubrowPetEggClient[] = [];
             if (quantity < 0 || quantity > 100) {
-                throw new Error(`unexpected acquisition quantity of KubrowPetEggs: ${quantity}`);
+                throw new Error(`unexpected acquisition quantity of KubrowPetEggs: got ${quantity}, expected 0..100`);
             }
             for (let i = 0; i != quantity; ++i) {
                 const egg: IKubrowPetEggDatabase = {
@@ -548,9 +548,18 @@ export const addItem = async (
         }
     }
     if (typeName in ExportDrones) {
-        return addDrone(inventory, typeName);
+        // Can only get 1 at a time from crafting, but for convenience's sake, allow up 100 to via the WebUI.
+        if (quantity < 0 || quantity > 100) {
+            throw new Error(`unexpected acquisition quantity of Drones: got ${quantity}, expected 0..100`);
+        }
+        for (let i = 0; i != quantity; ++i) {
+            return addDrone(inventory, typeName);
+        }
     }
     if (typeName in ExportEmailItems) {
+        if (quantity != 1) {
+            throw new Error(`unexpected acquisition quantity of EmailItems: got ${quantity}, expected 1`);
+        }
         return await addEmailItem(inventory, typeName);
     }
 
