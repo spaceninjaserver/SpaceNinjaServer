@@ -26,7 +26,10 @@ export const getShipController: RequestHandler = async (req, res) => {
                 Colors: personalRooms.ShipInteriorColors,
                 ShipAttachments: ship.ShipAttachments,
                 SkinFlavourItem: ship.SkinFlavourItem
-            }
+            },
+            FavouriteLoadoutId: personalRooms.Ship.FavouriteLoadoutId
+                ? toOid(personalRooms.Ship.FavouriteLoadoutId)
+                : undefined
         },
         Apartment: personalRooms.Apartment,
         TailorShop: personalRooms.TailorShop

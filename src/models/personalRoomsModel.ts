@@ -2,13 +2,13 @@ import { toOid } from "@/src/helpers/inventoryHelpers";
 import { colorSchema } from "@/src/models/inventoryModels/inventoryModel";
 import { IOrbiter, IPersonalRoomsDatabase, PersonalRoomsModelType } from "@/src/types/personalRoomsTypes";
 import {
-    IApartment,
     IFavouriteLoadoutDatabase,
     IGardening,
     IPlacedDecosDatabase,
     IPictureFrameInfo,
     IRoom,
-    ITailorShopDatabase
+    ITailorShopDatabase,
+    IApartmentDatabase
 } from "@/src/types/shipTypes";
 import { Schema, model } from "mongoose";
 
@@ -62,19 +62,34 @@ const roomSchema = new Schema<IRoom>(
     { _id: false }
 );
 
+const favouriteLoadoutSchema = new Schema<IFavouriteLoadoutDatabase>(
+    {
+        Tag: String,
+        LoadoutId: Schema.Types.ObjectId
+    },
+    { _id: false }
+);
+favouriteLoadoutSchema.set("toJSON", {
+    virtuals: true,
+    transform(_document, returnedObject) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        returnedObject.LoadoutId = toOid(returnedObject.LoadoutId);
+    }
+});
+
 const gardeningSchema = new Schema<IGardening>({
     Planters: [Schema.Types.Mixed] //TODO: add when implementing gardening
 });
 
-const apartmentSchema = new Schema<IApartment>(
+const apartmentSchema = new Schema<IApartmentDatabase>(
     {
         Rooms: [roomSchema],
-        FavouriteLoadouts: [Schema.Types.Mixed],
+        FavouriteLoadouts: [favouriteLoadoutSchema],
         Gardening: gardeningSchema // TODO: ensure this is correct
     },
     { _id: false }
 );
-const apartmentDefault: IApartment = {
+const apartmentDefault: IApartmentDatabase = {
     Rooms: [
         { Name: "ElevatorLanding", MaxCapacity: 1600 },
         { Name: "ApartmentRoomA", MaxCapacity: 1000 },
@@ -90,6 +105,10 @@ const orbiterSchema = new Schema<IOrbiter>(
     {
         Features: [String],
         Rooms: [roomSchema],
+        VignetteFish: { type: [String], default: undefined },
+        FavouriteLoadoutId: Schema.Types.ObjectId,
+        Wallpaper: String,
+        Vignette: String,
         ContentUrlSignature: { type: String, required: false },
         BootLocation: String
     },
@@ -106,21 +125,6 @@ const orbiterDefault: IOrbiter = {
         { Name: "PersonalQuartersRoom", MaxCapacity: 1600 }
     ]
 };
-
-const favouriteLoadoutSchema = new Schema<IFavouriteLoadoutDatabase>(
-    {
-        Tag: String,
-        LoadoutId: Schema.Types.ObjectId
-    },
-    { _id: false }
-);
-favouriteLoadoutSchema.set("toJSON", {
-    virtuals: true,
-    transform(_document, returnedObject) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        returnedObject.LoadoutId = toOid(returnedObject.LoadoutId);
-    }
-});
 
 const tailorShopSchema = new Schema<ITailorShopDatabase>(
     {

@@ -5,13 +5,18 @@ import {
     IPlacedDecosDatabase,
     ITailorShop,
     ITailorShopDatabase,
-    TBootLocation
+    TBootLocation,
+    IApartmentDatabase
 } from "@/src/types/shipTypes";
 import { Document, Model, Types } from "mongoose";
 
 export interface IOrbiter {
     Features: string[];
     Rooms: IRoom[];
+    VignetteFish?: string[];
+    FavouriteLoadoutId?: Types.ObjectId;
+    Wallpaper?: string;
+    Vignette?: string;
     ContentUrlSignature?: string;
     BootLocation?: TBootLocation;
 }
@@ -28,7 +33,7 @@ export interface IPersonalRoomsDatabase {
     personalRoomsOwnerId: Types.ObjectId;
     activeShipId: Types.ObjectId;
     Ship: IOrbiter;
-    Apartment: IApartment;
+    Apartment: IApartmentDatabase;
     TailorShop: ITailorShopDatabase;
 }
 
@@ -38,7 +43,7 @@ export type PersonalRoomsDocumentProps = {
     Ship: Omit<IOrbiter, "Rooms"> & {
         Rooms: RoomsType[];
     };
-    Apartment: Omit<IApartment, "Rooms"> & {
+    Apartment: Omit<IApartmentDatabase, "Rooms"> & {
         Rooms: RoomsType[];
     };
     TailorShop: Omit<ITailorShopDatabase, "Rooms"> & {

@@ -28,8 +28,12 @@ export interface IShip {
     ShipId: IOid;
     ShipInterior: IShipInterior;
     Rooms: IRoom[];
-    ContentUrlSignature?: string;
+    VignetteFish?: string[];
+    FavouriteLoadoutId?: IOid;
+    Wallpaper?: string;
+    Vignette?: string;
     BootLocation?: TBootLocation;
+    ContentUrlSignature?: string;
 }
 
 export interface IShipDatabase {
@@ -60,10 +64,17 @@ export interface IPlanters {
 export interface IGardening {
     Planters?: IPlanters[];
 }
+
 export interface IApartment {
     Gardening: IGardening;
     Rooms: IRoom[];
-    FavouriteLoadouts: string[];
+    FavouriteLoadouts: IFavouriteLoadout[];
+}
+
+export interface IApartmentDatabase {
+    Gardening: IGardening;
+    Rooms: IRoom[];
+    FavouriteLoadouts: IFavouriteLoadoutDatabase[];
 }
 
 export interface IPlacedDecosDatabase {
