@@ -55,7 +55,22 @@ import { Loadout } from "../models/inventoryModels/loadoutModel";
 import { ILoadoutConfigDatabase } from "../types/saveLoadoutTypes";
 import { getWorldState } from "./worldStateService";
 
-const getRotations = (rotationCount: number, tierOverride: number | undefined): number[] => {
+const getRotations = (rewardInfo: IRewardInfo, tierOverride: number | undefined): number[] => {
+    // For Spy missions, e.g. 3 vaults cracked = A, B, C
+    if (rewardInfo.VaultsCracked) {
+        const rotations: number[] = [];
+        for (let i = 0; i != rewardInfo.VaultsCracked; ++i) {
+            rotations.push(i);
+        }
+        return rotations;
+    }
+
+    // For Rescue missions
+    if (rewardInfo.rewardTier) {
+        return [rewardInfo.rewardTier];
+    }
+
+    const rotationCount = rewardInfo.rewardQualifications?.length || 0;
     if (rotationCount === 0) return [0];
 
     const rotationPattern =
@@ -1062,14 +1077,8 @@ function getRandomMissionDrops(RewardInfo: IRewardInfo, tierOverride: number | u
             } else {
                 logger.error(`Unknown syndicate or tier: ${RewardInfo.challengeMissionId}`);
             }
-        } else if (RewardInfo.VaultsCracked) {
-            // For Spy missions, e.g. 3 vaults cracked = A, B, C
-            for (let i = 0; i != RewardInfo.VaultsCracked; ++i) {
-                rotations.push(i);
-            }
         } else {
-            const rotationCount = RewardInfo.rewardQualifications?.length || 0;
-            rotations = getRotations(rotationCount, tierOverride);
+            rotations = getRotations(RewardInfo, tierOverride);
         }
         if (rewardManifests.length != 0) {
             logger.debug(`generating random mission rewards`, { rewardManifests, rotations });

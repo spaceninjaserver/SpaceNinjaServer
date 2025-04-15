@@ -130,7 +130,7 @@ export type IMissionInventoryUpdateRequest = {
 export interface IRewardInfo {
     node: string;
     VaultsCracked?: number; // for Spy missions
-    rewardTier?: number;
+    rewardTier?: number; // for Rescue missions
     nightmareMode?: boolean;
     useVaultManifest?: boolean;
     EnemyCachesFound?: number;
