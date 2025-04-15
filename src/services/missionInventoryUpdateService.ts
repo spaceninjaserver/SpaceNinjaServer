@@ -899,6 +899,12 @@ function getLevelCreditRewards(node: IRegion): number {
 
 function getRandomMissionDrops(RewardInfo: IRewardInfo, tierOverride: number | undefined): IMissionReward[] {
     const drops: IMissionReward[] = [];
+    if (RewardInfo.periodicMissionTag?.startsWith("HardDaily")) {
+        drops.push({
+            StoreItem: "/Lotus/StoreItems/Types/Items/MiscItems/SteelEssence",
+            ItemCount: 5
+        });
+    }
     if (RewardInfo.node in ExportRegions) {
         const region = ExportRegions[RewardInfo.node];
         let rewardManifests: string[] =
