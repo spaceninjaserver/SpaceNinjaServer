@@ -25,7 +25,13 @@ export const upgradesController: RequestHandler = async (req, res) => {
             operation.UpgradeRequirement == "/Lotus/Types/Items/MiscItems/CustomizationSlotUnlocker"
         ) {
             updateCurrency(inventory, 10, true);
-        } else if (operation.OperationType != "UOT_ABILITY_OVERRIDE") {
+        } else if (
+            operation.OperationType != "UOT_SWAP_POLARITY" &&
+            operation.OperationType != "UOT_ABILITY_OVERRIDE"
+        ) {
+            if (!operation.UpgradeRequirement) {
+                throw new Error(`${operation.OperationType} operation should be free?`);
+            }
             addMiscItems(inventory, [
                 {
                     ItemType: operation.UpgradeRequirement,
