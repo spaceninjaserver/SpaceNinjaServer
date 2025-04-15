@@ -62,6 +62,7 @@ import { gildWeaponController } from "@/src/controllers/api/gildWeaponController
 import { giveKeyChainTriggeredItemsController } from "@/src/controllers/api/giveKeyChainTriggeredItemsController";
 import { giveKeyChainTriggeredMessageController } from "@/src/controllers/api/giveKeyChainTriggeredMessageController";
 import { giveQuestKeyRewardController } from "@/src/controllers/api/giveQuestKey";
+import { giveShipDecoAndLoreFragmentController } from "@/src/controllers/api/giveShipDecoAndLoreFragmentController";
 import { giveStartingGearController } from "@/src/controllers/api/giveStartingGearController";
 import { guildTechController } from "@/src/controllers/api/guildTechController";
 import { hostSessionController } from "@/src/controllers/api/hostSessionController";
@@ -239,6 +240,7 @@ apiRouter.post("/gildWeapon.php", gildWeaponController);
 apiRouter.post("/giveKeyChainTriggeredItems.php", giveKeyChainTriggeredItemsController);
 apiRouter.post("/giveKeyChainTriggeredMessage.php", giveKeyChainTriggeredMessageController);
 apiRouter.post("/giveQuestKeyReward.php", giveQuestKeyRewardController);
+apiRouter.post("/giveShipDecoAndLoreFragment.php", giveShipDecoAndLoreFragmentController);
 apiRouter.post("/giveStartingGear.php", giveStartingGearController);
 apiRouter.post("/guildTech.php", guildTechController);
 apiRouter.post("/hostSession.php", hostSessionController);

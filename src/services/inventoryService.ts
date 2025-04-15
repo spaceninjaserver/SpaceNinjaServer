@@ -21,7 +21,8 @@ import {
     ICalendarProgress,
     IDroneClient,
     IUpgradeClient,
-    TPartialStartingGear
+    TPartialStartingGear,
+    ILoreFragmentScan
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate, IUpdateNodeIntrosResponse } from "../types/genericUpdate";
 import { IKeyChainRequest, IMissionInventoryUpdateRequest } from "../types/requestTypes";
@@ -1348,6 +1349,17 @@ export const addFocusXpIncreases = (inventory: TInventoryDatabaseDocument, focus
     inventory.FocusXP.AP_WARD += focusXpPlus[FocusType.AP_WARD];
 
     inventory.DailyFocus -= focusXpPlus.reduce((a, b) => a + b, 0);
+};
+
+export const addLoreFragmentScans = (inventory: TInventoryDatabaseDocument, arr: ILoreFragmentScan[]): void => {
+    arr.forEach(clientFragment => {
+        const fragment = inventory.LoreFragmentScans.find(x => x.ItemType == clientFragment.ItemType);
+        if (fragment) {
+            fragment.Progress += clientFragment.Progress;
+        } else {
+            inventory.LoreFragmentScans.push(clientFragment);
+        }
+    });
 };
 
 export const addChallenges = (

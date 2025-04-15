@@ -23,6 +23,7 @@ import {
     addGearExpByCategory,
     addItem,
     addLevelKeys,
+    addLoreFragmentScans,
     addMiscItems,
     addMissionComplete,
     addMods,
@@ -291,14 +292,7 @@ export const addMissionInventoryUpdates = async (
                 break;
             }
             case "LoreFragmentScans":
-                value.forEach(clientFragment => {
-                    const fragment = inventory.LoreFragmentScans.find(x => x.ItemType == clientFragment.ItemType);
-                    if (fragment) {
-                        fragment.Progress += clientFragment.Progress;
-                    } else {
-                        inventory.LoreFragmentScans.push(clientFragment);
-                    }
-                });
+                addLoreFragmentScans(inventory, value);
                 break;
             case "LibraryScans":
                 value.forEach(scan => {
