@@ -922,7 +922,7 @@ function getRandomMissionDrops(RewardInfo: IRewardInfo, tierOverride: number | u
 
                         if (syndicateEntry.Tag === "EntratiSyndicate") {
                             const vault = syndicateEntry.Jobs.find(j => j.locationTag === locationTag);
-                            if (vault) job = vault;
+                            if (vault && locationTag) job = vault;
                             // if (
                             //     [
                             //         "DeimosRuinsExterminateBounty",
@@ -997,8 +997,10 @@ function getRandomMissionDrops(RewardInfo: IRewardInfo, tierOverride: number | u
                             (RewardInfo.JobStage === job.xpAmounts.length - 1 || job.isVault) &&
                             !isEndlessJob
                         ) {
-                            rewardManifests.push(job.rewards);
-                            rotations.push(ExportRewards[job.rewards].length - 1);
+                            if (ExportRewards[job.rewards]) {
+                                rewardManifests.push(job.rewards);
+                                rotations.push(ExportRewards[job.rewards].length - 1);
+                            }
                         }
                     }
                 }
@@ -1053,17 +1055,20 @@ function getRandomMissionDrops(RewardInfo: IRewardInfo, tierOverride: number | u
         if (rewardManifests.length != 0) {
             logger.debug(`generating random mission rewards`, { rewardManifests, rotations });
         }
-        rewardManifests
-            .map(name => ExportRewards[name])
-            .forEach(table => {
-                for (const rotation of rotations) {
-                    const rotationRewards = table[rotation];
-                    const drop = getRandomRewardByChance(rotationRewards);
-                    if (drop) {
-                        drops.push({ StoreItem: drop.type, ItemCount: drop.itemCount });
-                    }
+        rewardManifests.forEach(name => {
+            const table = ExportRewards[name];
+            if (!table) {
+                logger.error(`unknown droptable: ${name}`);
+                return;
+            }
+            for (const rotation of rotations) {
+                const rotationRewards = table[rotation];
+                const drop = getRandomRewardByChance(rotationRewards);
+                if (drop) {
+                    drops.push({ StoreItem: drop.type, ItemCount: drop.itemCount });
                 }
-            });
+            }
+        });
 
         if (region.cacheRewardManifest && RewardInfo.EnemyCachesFound) {
             const deck = ExportRewards[region.cacheRewardManifest];
