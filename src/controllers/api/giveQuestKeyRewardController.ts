@@ -16,7 +16,7 @@ export const giveQuestKeyRewardController: RequestHandler = async (req, res) => 
     const inventory = await getInventory(accountId);
     const inventoryChanges = await addItem(inventory, reward.ItemType, reward.Amount);
     await inventory.save();
-    res.json(inventoryChanges.InventoryChanges);
+    res.json(inventoryChanges);
     //TODO: consider whishlist changes
 };
 
