@@ -61,7 +61,7 @@ import { giftingController } from "@/src/controllers/api/giftingController";
 import { gildWeaponController } from "@/src/controllers/api/gildWeaponController";
 import { giveKeyChainTriggeredItemsController } from "@/src/controllers/api/giveKeyChainTriggeredItemsController";
 import { giveKeyChainTriggeredMessageController } from "@/src/controllers/api/giveKeyChainTriggeredMessageController";
-import { giveQuestKeyRewardController } from "@/src/controllers/api/giveQuestKey";
+import { giveQuestKeyRewardController } from "@/src/controllers/api/giveQuestKeyRewardController";
 import { giveShipDecoAndLoreFragmentController } from "@/src/controllers/api/giveShipDecoAndLoreFragmentController";
 import { giveStartingGearController } from "@/src/controllers/api/giveStartingGearController";
 import { guildTechController } from "@/src/controllers/api/guildTechController";
