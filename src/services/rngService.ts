@@ -31,7 +31,7 @@ const getRewardAtPercentage = <T extends { probability: number }>(pool: T[], per
             return item;
         }
     }
-    throw new Error("What the fuck?");
+    return pool[pool.length - 1];
 };
 
 export const getRandomReward = <T extends { probability: number }>(pool: T[]): T | undefined => {
@@ -141,5 +141,9 @@ export class SRng {
     randomFloat(): number {
         this.state = (0x5851f42d4c957f2dn * this.state + 0x14057b7ef767814fn) & 0xffffffffffffffffn;
         return (Number(this.state >> 38n) & 0xffffff) * 0.000000059604645;
+    }
+
+    randomReward<T extends { probability: number }>(pool: T[]): T | undefined {
+        return getRewardAtPercentage(pool, this.randomFloat());
     }
 }

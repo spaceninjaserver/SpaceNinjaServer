@@ -1213,7 +1213,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         accountOwnerId: Schema.Types.ObjectId,
         SubscribedToEmails: { type: Number, default: 0 },
         SubscribedToEmailsPersonalized: { type: Number, default: 0 },
-        RewardSeed: Number,
+        RewardSeed: BigInt,
 
         //Credit
         RegularCredits: { type: Number, default: 0 },

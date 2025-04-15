@@ -194,7 +194,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     Mailbox?: IMailboxClient;
     SubscribedToEmails: number;
     Created: IMongoDate;
-    RewardSeed: number;
+    RewardSeed: number | bigint;
     RegularCredits: number;
     PremiumCredits: number;
     PremiumCreditsFree: number;

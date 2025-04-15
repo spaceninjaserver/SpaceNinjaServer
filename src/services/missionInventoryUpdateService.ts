@@ -9,7 +9,7 @@ import {
 } from "warframe-public-export-plus";
 import { IMissionInventoryUpdateRequest, IRewardInfo } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
-import { IRngResult, getRandomElement, getRandomReward } from "@/src/services/rngService";
+import { IRngResult, SRng, getRandomElement, getRandomReward } from "@/src/services/rngService";
 import { equipmentKeys, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
 import {
     addBooster,
@@ -31,6 +31,7 @@ import {
     addShipDecorations,
     addStanding,
     combineInventoryChanges,
+    generateRewardSeed,
     updateCurrency,
     updateSyndicate
 } from "@/src/services/inventoryService";
@@ -70,7 +71,12 @@ const getRotations = (rotationCount: number, tierOverride: number | undefined): 
     return rotatedValues;
 };
 
-const getRandomRewardByChance = (pool: IReward[]): IRngResult | undefined => {
+const getRandomRewardByChance = (pool: IReward[], rng?: SRng): IRngResult | undefined => {
+    if (rng) {
+        const res = rng.randomReward(pool as IRngResult[]);
+        rng.randomFloat(); // something related to rewards multiplier
+        return res;
+    }
     return getRandomReward(pool as IRngResult[]);
 };
 
@@ -546,6 +552,11 @@ export const addMissionRewards = async (
         //TODO: if there is a case where you can have credits collected during a mission but no rewardInfo, add credits needs to be handled earlier
         logger.debug(`Mission ${missions!.Tag} did not have Reward Info `);
         return { MissionRewards: [] };
+    }
+
+    if (rewardInfo.rewardSeed) {
+        // We're using a reward seed, so give the client a new one in the response. On live, missionInventoryUpdate seems to always provide a fresh one in the response.
+        inventory.RewardSeed = generateRewardSeed();
     }
 
     //TODO: check double reward merging
@@ -1062,6 +1073,7 @@ function getRandomMissionDrops(RewardInfo: IRewardInfo, tierOverride: number | u
         if (rewardManifests.length != 0) {
             logger.debug(`generating random mission rewards`, { rewardManifests, rotations });
         }
+        const rng = new SRng(BigInt(RewardInfo.rewardSeed ?? generateRewardSeed()) ^ 0xffffffffffffffffn);
         rewardManifests.forEach(name => {
             const table = ExportRewards[name];
             if (!table) {
@@ -1070,7 +1082,7 @@ function getRandomMissionDrops(RewardInfo: IRewardInfo, tierOverride: number | u
             }
             for (const rotation of rotations) {
                 const rotationRewards = table[rotation];
-                const drop = getRandomRewardByChance(rotationRewards);
+                const drop = getRandomRewardByChance(rotationRewards, rng);
                 if (drop) {
                     drops.push({ StoreItem: drop.type, ItemCount: drop.itemCount });
                 }

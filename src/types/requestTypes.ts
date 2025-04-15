@@ -141,7 +141,7 @@ export interface IRewardInfo {
     EOM_AFK?: number;
     rewardQualifications?: string; // did a Survival for 5 minutes and this was "1"
     PurgatoryRewardQualifications?: string;
-    rewardSeed?: number;
+    rewardSeed?: number | bigint;
     periodicMissionTag?: string;
 
     // for bounties, only EOM_AFK and node are given from above, plus:
