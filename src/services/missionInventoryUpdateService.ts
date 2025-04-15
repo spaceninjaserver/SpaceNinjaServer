@@ -55,7 +55,7 @@ import { Loadout } from "../models/inventoryModels/loadoutModel";
 import { ILoadoutConfigDatabase } from "../types/saveLoadoutTypes";
 import { getWorldState } from "./worldStateService";
 
-const getRotations = (rewardInfo: IRewardInfo, tierOverride: number | undefined): number[] => {
+const getRotations = (rewardInfo: IRewardInfo, tierOverride?: number): number[] => {
     // For Spy missions, e.g. 3 vaults cracked = A, B, C
     if (rewardInfo.VaultsCracked) {
         const rotations: number[] = [];
@@ -587,7 +587,7 @@ export const addMissionRewards = async (
         const fixedLevelRewards = getLevelKeyRewards(levelKeyName);
         //logger.debug(`fixedLevelRewards ${fixedLevelRewards}`);
         if (fixedLevelRewards.levelKeyRewards) {
-            addFixedLevelRewards(fixedLevelRewards.levelKeyRewards, inventory, MissionRewards);
+            addFixedLevelRewards(fixedLevelRewards.levelKeyRewards, inventory, MissionRewards, rewardInfo);
         }
         if (fixedLevelRewards.levelKeyRewards2) {
             for (const reward of fixedLevelRewards.levelKeyRewards2) {
@@ -627,7 +627,7 @@ export const addMissionRewards = async (
         }
 
         if (node.missionReward) {
-            missionCompletionCredits += addFixedLevelRewards(node.missionReward, inventory, MissionRewards);
+            missionCompletionCredits += addFixedLevelRewards(node.missionReward, inventory, MissionRewards, rewardInfo);
         }
     }
 
@@ -870,7 +870,8 @@ export const addCredits = (
 export const addFixedLevelRewards = (
     rewards: IMissionRewardExternal,
     inventory: TInventoryDatabaseDocument,
-    MissionRewards: IMissionReward[]
+    MissionRewards: IMissionReward[],
+    rewardInfo?: IRewardInfo
 ): number => {
     let missionBonusCredits = 0;
     if (rewards.credits) {
@@ -900,13 +901,16 @@ export const addFixedLevelRewards = (
     }
     if (rewards.droptable) {
         if (rewards.droptable in ExportRewards) {
-            logger.debug(`rolling ${rewards.droptable} for level key rewards`);
-            const reward = getRandomRewardByChance(ExportRewards[rewards.droptable][0]);
-            if (reward) {
-                MissionRewards.push({
-                    StoreItem: reward.type,
-                    ItemCount: reward.itemCount
-                });
+            const rotations: number[] = rewardInfo ? getRotations(rewardInfo) : [0];
+            logger.debug(`rolling ${rewards.droptable} for level key rewards`, { rotations });
+            for (const tier of rotations) {
+                const reward = getRandomRewardByChance(ExportRewards[rewards.droptable][tier]);
+                if (reward) {
+                    MissionRewards.push({
+                        StoreItem: reward.type,
+                        ItemCount: reward.itemCount
+                    });
+                }
             }
         } else {
             logger.error(`unknown droptable ${rewards.droptable}`);
