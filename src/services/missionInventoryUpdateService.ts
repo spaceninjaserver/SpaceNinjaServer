@@ -586,7 +586,14 @@ export const addMissionRewards = async (
         const node = ExportRegions[missions.Tag];
 
         //node based credit rewards for mission completion
-        if (node.missionIndex !== 28) {
+        if (
+            node.missionIndex != 23 && // junction
+            node.missionIndex != 28 && // open world
+            missions.Tag != "SolNode761" && // the index
+            missions.Tag != "SolNode762" && // the index
+            missions.Tag != "SolNode763" && // the index
+            missions.Tag != "CrewBattleNode556" // free flight
+        ) {
             const levelCreditReward = getLevelCreditRewards(node);
             missionCompletionCredits += levelCreditReward;
             inventory.RegularCredits += levelCreditReward;
