@@ -1015,6 +1015,7 @@ function getRandomMissionDrops(RewardInfo: IRewardInfo, tierOverride: number | u
                             (RewardInfo.JobStage === job.xpAmounts.length - 1 || job.isVault) &&
                             !isEndlessJob
                         ) {
+                            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                             if (ExportRewards[job.rewards]) {
                                 rewardManifests.push(job.rewards);
                                 rotations.push(ExportRewards[job.rewards].length - 1);
@@ -1076,6 +1077,7 @@ function getRandomMissionDrops(RewardInfo: IRewardInfo, tierOverride: number | u
         const rng = new SRng(BigInt(RewardInfo.rewardSeed ?? generateRewardSeed()) ^ 0xffffffffffffffffn);
         rewardManifests.forEach(name => {
             const table = ExportRewards[name];
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             if (!table) {
                 logger.error(`unknown droptable: ${name}`);
                 return;
