@@ -1613,7 +1613,7 @@ export type InventoryDocumentProps = {
     QuestKeys: Types.DocumentArray<IQuestKeyDatabase>;
     Drones: Types.DocumentArray<IDroneDatabase>;
     CrewShipWeaponSkins: Types.DocumentArray<IUpgradeDatabase>;
-    CrewShipSalvagedWeaponsSkins: Types.DocumentArray<IUpgradeDatabase>;
+    CrewShipSalvagedWeaponSkins: Types.DocumentArray<IUpgradeDatabase>;
     PersonalTechProjects: Types.DocumentArray<IPersonalTechProjectDatabase>;
 } & { [K in TEquipmentKey]: Types.DocumentArray<IEquipmentDatabase> };
 
