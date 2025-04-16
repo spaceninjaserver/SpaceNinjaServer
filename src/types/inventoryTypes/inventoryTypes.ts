@@ -947,15 +947,17 @@ export interface IPersonalTechProjectDatabase {
     State: number;
     ReqCredits: number;
     ItemType: string;
+    ProductCategory?: string;
+    CategoryItemId?: Types.ObjectId;
     ReqItems: ITypeCount[];
     HasContributions?: boolean;
     CompletionDate?: Date;
 }
 
-export interface IPersonalTechProjectClient extends Omit<IPersonalTechProjectDatabase, "CompletionDate"> {
-    CompletionDate?: IMongoDate;
-    ProductCategory?: string;
+export interface IPersonalTechProjectClient
+    extends Omit<IPersonalTechProjectDatabase, "CategoryItemId" | "CompletionDate"> {
     CategoryItemId?: IOid;
+    CompletionDate?: IMongoDate;
     ItemId: IOid;
 }
 

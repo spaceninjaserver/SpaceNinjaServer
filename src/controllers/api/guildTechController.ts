@@ -14,20 +14,23 @@ import {
 import { ExportDojoRecipes } from "warframe-public-export-plus";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import {
+    addCrewShipWeaponSkin,
     addItem,
     addMiscItems,
     addRecipes,
     combineInventoryChanges,
     getInventory,
+    occupySlot,
     updateCurrency
 } from "@/src/services/inventoryService";
-import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IMiscItem, InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { config } from "@/src/services/configService";
 import { GuildPermission, ITechProjectClient } from "@/src/types/guildTypes";
 import { GuildMember } from "@/src/models/guildModel";
 import { toMongoDate } from "@/src/helpers/inventoryHelpers";
 import { logger } from "@/src/utils/logger";
+import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 
 export const guildTechController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -99,6 +102,8 @@ export const guildTechController: RequestHandler = async (req, res) => {
                         State: 0,
                         ReqCredits: recipe.price,
                         ItemType: data.RecipeType,
+                        ProductCategory: data.TechProductCategory,
+                        CategoryItemId: data.CategoryItemId,
                         ReqItems: recipe.ingredients
                     }) - 1
                 ];
@@ -222,33 +227,44 @@ export const guildTechController: RequestHandler = async (req, res) => {
             });
         }
     } else if (data.Action.split(",")[0] == "Buy") {
-        const guild = await getGuildForRequestEx(req, inventory);
-        if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Fabricator))) {
-            res.status(400).send("-1").end();
-            return;
-        }
         const purchase = data as IGuildTechBuyRequest;
-        const quantity = parseInt(data.Action.split(",")[1]);
-        const recipeChanges = [
-            {
-                ItemType: purchase.RecipeType,
-                ItemCount: quantity
+        if (purchase.Mode == "Guild") {
+            const guild = await getGuildForRequestEx(req, inventory);
+            if (
+                !hasAccessToDojo(inventory) ||
+                !(await hasGuildPermission(guild, accountId, GuildPermission.Fabricator))
+            ) {
+                res.status(400).send("-1").end();
+                return;
             }
-        ];
-        addRecipes(inventory, recipeChanges);
-        const currencyChanges = updateCurrency(
-            inventory,
-            ExportDojoRecipes.research[purchase.RecipeType].replicatePrice,
-            false
-        );
-        await inventory.save();
-        // Not a mistake: This response uses `inventoryChanges` instead of `InventoryChanges`.
-        res.json({
-            inventoryChanges: {
-                ...currencyChanges,
-                Recipes: recipeChanges
-            }
-        });
+            const quantity = parseInt(data.Action.split(",")[1]);
+            const recipeChanges = [
+                {
+                    ItemType: purchase.RecipeType,
+                    ItemCount: quantity
+                }
+            ];
+            addRecipes(inventory, recipeChanges);
+            const currencyChanges = updateCurrency(
+                inventory,
+                ExportDojoRecipes.research[purchase.RecipeType].replicatePrice,
+                false
+            );
+            await inventory.save();
+            // Not a mistake: This response uses `inventoryChanges` instead of `InventoryChanges`.
+            res.json({
+                inventoryChanges: {
+                    ...currencyChanges,
+                    Recipes: recipeChanges
+                }
+            });
+        } else {
+            const inventoryChanges = claimSalvagedComponent(inventory, purchase.CategoryItemId!);
+            await inventory.save();
+            res.json({
+                inventoryChanges: inventoryChanges
+            });
+        }
     } else if (data.Action == "Fabricate") {
         const guild = await getGuildForRequestEx(req, inventory);
         if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Fabricator))) {
@@ -289,9 +305,18 @@ export const guildTechController: RequestHandler = async (req, res) => {
         guild.ActiveDojoColorResearch = data.RecipeType;
         await guild.save();
         res.end();
+    } else if (data.Action == "Rush" && data.CategoryItemId) {
+        const inventoryChanges: IInventoryChanges = {
+            ...updateCurrency(inventory, 20, true),
+            ...claimSalvagedComponent(inventory, data.CategoryItemId)
+        };
+        await inventory.save();
+        res.json({
+            inventoryChanges: inventoryChanges
+        });
     } else {
         logger.debug(`data provided to ${req.path}: ${String(req.body)}`);
-        throw new Error(`unknown guildTech action: ${data.Action}`);
+        throw new Error(`unhandled guildTech request`);
     }
 };
 
@@ -301,15 +326,15 @@ type TGuildTechRequest =
     | IGuildTechContributeRequest;
 
 interface IGuildTechBasicRequest {
-    Action: "Start" | "Fabricate" | "Pause" | "Unpause";
+    Action: "Start" | "Fabricate" | "Pause" | "Unpause" | "Cancel" | "Rush";
     Mode: "Guild" | "Personal";
     RecipeType: string;
+    TechProductCategory?: string;
+    CategoryItemId?: string;
 }
 
-interface IGuildTechBuyRequest {
+interface IGuildTechBuyRequest extends Omit<IGuildTechBasicRequest, "Action"> {
     Action: string;
-    Mode: "Guild";
-    RecipeType: string;
 }
 
 interface IGuildTechContributeRequest {
@@ -321,3 +346,30 @@ interface IGuildTechContributeRequest {
     VaultCredits: number;
     VaultMiscItems: IMiscItem[];
 }
+
+const claimSalvagedComponent = (inventory: TInventoryDatabaseDocument, itemId: string): IInventoryChanges => {
+    // delete personal tech project
+    const personalTechProjectIndex = inventory.PersonalTechProjects.findIndex(x => x.CategoryItemId?.equals(itemId));
+    if (personalTechProjectIndex != -1) {
+        inventory.PersonalTechProjects.splice(personalTechProjectIndex, 1);
+    }
+
+    // find salved part & delete it
+    const crewShipSalvagedWeaponSkinsIndex = inventory.CrewShipSalvagedWeaponSkins.findIndex(x => x._id.equals(itemId));
+    const crewShipWeaponSkin = inventory.CrewShipSalvagedWeaponSkins[crewShipSalvagedWeaponSkinsIndex];
+    inventory.CrewShipSalvagedWeaponSkins.splice(crewShipSalvagedWeaponSkinsIndex, 1);
+
+    // add final item
+    const inventoryChanges = {
+        ...addCrewShipWeaponSkin(inventory, crewShipWeaponSkin.ItemType, crewShipWeaponSkin.UpgradeFingerprint),
+        ...occupySlot(inventory, InventorySlot.RJ_COMPONENT_AND_ARMAMENTS, false)
+    };
+
+    inventoryChanges.RemovedIdItems = [
+        {
+            ItemId: { $oid: itemId }
+        }
+    ];
+
+    return inventoryChanges;
+};

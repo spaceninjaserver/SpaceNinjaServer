@@ -27,6 +27,7 @@ import { contributeToVaultController } from "@/src/controllers/api/contributeToV
 import { createAllianceController } from "@/src/controllers/api/createAllianceController";
 import { createGuildController } from "@/src/controllers/api/createGuildController";
 import { creditsController } from "@/src/controllers/api/creditsController";
+import { crewShipIdentifySalvageController } from "@/src/controllers/api/crewShipIdentifySalvageController";
 import { customizeGuildRanksController } from "@/src/controllers/api/customizeGuildRanksController";
 import { customObstacleCourseLeaderboardController } from "@/src/controllers/api/customObstacleCourseLeaderboardController";
 import { declineAllianceInviteController } from "@/src/controllers/api/declineAllianceInviteController";
@@ -218,6 +219,7 @@ apiRouter.post("/contributeToDojoComponent.php", contributeToDojoComponentContro
 apiRouter.post("/contributeToVault.php", contributeToVaultController);
 apiRouter.post("/createAlliance.php", createAllianceController);
 apiRouter.post("/createGuild.php", createGuildController);
+apiRouter.post("/crewShipIdentifySalvage.php", crewShipIdentifySalvageController);
 apiRouter.post("/customizeGuildRanks.php", customizeGuildRanksController);
 apiRouter.post("/customObstacleCourseLeaderboard.php", customObstacleCourseLeaderboardController);
 apiRouter.post("/destroyDojoDeco.php", destroyDojoDecoController);

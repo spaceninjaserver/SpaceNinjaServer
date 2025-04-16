@@ -504,6 +504,8 @@ const personalTechProjectSchema = new Schema<IPersonalTechProjectDatabase>({
     State: Number,
     ReqCredits: Number,
     ItemType: String,
+    ProductCategory: String,
+    CategoryItemId: Schema.Types.ObjectId,
     ReqItems: { type: [typeCountSchema], default: undefined },
     HasContributions: Boolean,
     CompletionDate: Date
@@ -522,6 +524,9 @@ personalTechProjectSchema.set("toJSON", {
         const db = ret as IPersonalTechProjectDatabase;
         const client = ret as IPersonalTechProjectClient;
 
+        if (db.CategoryItemId) {
+            client.CategoryItemId = toOid(db.CategoryItemId);
+        }
         if (db.CompletionDate) {
             client.CompletionDate = toMongoDate(db.CompletionDate);
         }

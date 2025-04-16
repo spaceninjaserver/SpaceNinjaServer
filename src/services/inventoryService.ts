@@ -426,7 +426,7 @@ export const addItem = async (
                     );
                 }
                 inventoryChanges = {
-                    ...addCrewShipWeaponSkin(inventory, typeName),
+                    ...addCrewShipWeaponSkin(inventory, typeName, undefined),
                     ...occupySlot(inventory, InventorySlot.RJ_COMPONENT_AND_ARMAMENTS, premiumPurchase)
                 };
             }
@@ -1107,16 +1107,34 @@ export const addSkin = (
     return inventoryChanges;
 };
 
-const addCrewShipWeaponSkin = (
+export const addCrewShipWeaponSkin = (
     inventory: TInventoryDatabaseDocument,
     typeName: string,
+    upgradeFingerprint: string | undefined,
     inventoryChanges: IInventoryChanges = {}
 ): IInventoryChanges => {
-    const index = inventory.CrewShipWeaponSkins.push({ ItemType: typeName }) - 1;
+    const index =
+        inventory.CrewShipWeaponSkins.push({ ItemType: typeName, UpgradeFingerprint: upgradeFingerprint }) - 1;
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     inventoryChanges.CrewShipWeaponSkins ??= [];
     (inventoryChanges.CrewShipWeaponSkins as IUpgradeClient[]).push(
         inventory.CrewShipWeaponSkins[index].toJSON<IUpgradeClient>()
+    );
+    return inventoryChanges;
+};
+
+export const addCrewShipSalvagedWeaponSkin = (
+    inventory: TInventoryDatabaseDocument,
+    typeName: string,
+    upgradeFingerprint: string | undefined,
+    inventoryChanges: IInventoryChanges = {}
+): IInventoryChanges => {
+    const index =
+        inventory.CrewShipSalvagedWeaponSkins.push({ ItemType: typeName, UpgradeFingerprint: upgradeFingerprint }) - 1;
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    inventoryChanges.CrewShipSalvagedWeaponSkins ??= [];
+    (inventoryChanges.CrewShipSalvagedWeaponSkins as IUpgradeClient[]).push(
+        inventory.CrewShipSalvagedWeaponSkins[index].toJSON<IUpgradeClient>()
     );
     return inventoryChanges;
 };
