@@ -907,6 +907,10 @@ export interface IInnateDamageFingerprint {
     buffs: IFingerprintStat[];
 }
 
+export interface ICrewShipComponentFingerprint extends IInnateDamageFingerprint {
+    SubroutineIndex?: number;
+}
+
 export enum GettingSlotOrderInfo {
     Empty = "",
     LotusUpgradesModsRandomizedPlayerMeleeWeaponRandomModRare0 = "/Lotus/Upgrades/Mods/Randomized/PlayerMeleeWeaponRandomModRare:0",

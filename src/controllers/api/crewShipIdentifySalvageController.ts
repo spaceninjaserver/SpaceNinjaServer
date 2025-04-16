@@ -1,25 +1,32 @@
 import { addCrewShipSalvagedWeaponSkin, addCrewShipRawSalvage, getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { RequestHandler } from "express";
-import { IInnateDamageFingerprint } from "@/src/types/inventoryTypes/inventoryTypes";
+import { ICrewShipComponentFingerprint } from "@/src/types/inventoryTypes/inventoryTypes";
 import { ExportCustoms } from "warframe-public-export-plus";
-import { IFingerprintStat } from "@/src/helpers/rivenHelper";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
+import { getRandomInt } from "@/src/services/rngService";
 
 export const crewShipIdentifySalvageController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId, "CrewShipSalvagedWeaponSkins CrewShipRawSalvage");
     const payload = getJSONfromString<ICrewShipIdentifySalvageRequest>(String(req.body));
 
-    const buffs: IFingerprintStat[] = [];
-    for (const upgrade of ExportCustoms[payload.ItemType].randomisedUpgrades!) {
-        buffs.push({ Tag: upgrade.tag, Value: Math.trunc(Math.random() * 0x40000000) });
+    const meta = ExportCustoms[payload.ItemType];
+    let upgradeFingerprint: ICrewShipComponentFingerprint = { compat: payload.ItemType, buffs: [] };
+    if (meta.subroutines) {
+        upgradeFingerprint = {
+            SubroutineIndex: getRandomInt(0, meta.subroutines.length - 1),
+            ...upgradeFingerprint
+        };
+    }
+    for (const upgrade of meta.randomisedUpgrades!) {
+        upgradeFingerprint.buffs.push({ Tag: upgrade.tag, Value: Math.trunc(Math.random() * 0x40000000) });
     }
     const inventoryChanges: IInventoryChanges = addCrewShipSalvagedWeaponSkin(
         inventory,
         payload.ItemType,
-        JSON.stringify({ compat: payload.ItemType, buffs } satisfies IInnateDamageFingerprint)
+        JSON.stringify(upgradeFingerprint)
     );
 
     inventoryChanges.CrewShipRawSalvage = [
