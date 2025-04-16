@@ -66,7 +66,7 @@ const getRotations = (rewardInfo: IRewardInfo, tierOverride?: number): number[] 
     }
 
     // For Rescue missions
-    if (rewardInfo.rewardTier) {
+    if (rewardInfo.node in ExportRegions && ExportRegions[rewardInfo.node].missionIndex == 3 && rewardInfo.rewardTier) {
         return [rewardInfo.rewardTier];
     }
 
