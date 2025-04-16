@@ -149,7 +149,7 @@ export const getInventoryResponse = async (
         inventoryResponse.ShipDecorations = [];
         for (const [uniqueName, item] of Object.entries(ExportResources)) {
             if (item.productCategory == "ShipDecorations") {
-                inventoryResponse.ShipDecorations.push({ ItemType: uniqueName, ItemCount: 1 });
+                inventoryResponse.ShipDecorations.push({ ItemType: uniqueName, ItemCount: 999_999 });
             }
         }
     }
