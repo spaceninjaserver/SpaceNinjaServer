@@ -738,14 +738,12 @@ export const addMissionRewards = async (
 
     if (rewardInfo.JobStage != undefined && rewardInfo.jobId) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const [jobType, tierStr, hubNode, syndicateId, locationTag] = rewardInfo.jobId.split("_");
-        const tier = Number(tierStr);
-
+        const [jobType, unkIndex, hubNode, syndicateId, locationTag] = rewardInfo.jobId.split("_");
         const worldState = getWorldState();
         let syndicateEntry = worldState.SyndicateMissions.find(m => m._id.$oid === syndicateId);
         if (!syndicateEntry) syndicateEntry = worldState.SyndicateMissions.find(m => m.Tag === syndicateId); // Sometimes syndicateId can be tag
         if (syndicateEntry && syndicateEntry.Jobs) {
-            let currentJob = syndicateEntry.Jobs[tier];
+            let currentJob = syndicateEntry.Jobs[rewardInfo.JobTier!];
             if (syndicateEntry.Tag === "EntratiSyndicate") {
                 const vault = syndicateEntry.Jobs.find(j => j.locationTag === locationTag);
                 if (vault) currentJob = vault;
@@ -770,7 +768,7 @@ export const addMissionRewards = async (
                 });
                 SyndicateXPItemReward = medallionAmount;
             } else {
-                if (tier >= 0) {
+                if (rewardInfo.JobTier! >= 0) {
                     AffiliationMods.push(
                         addStanding(inventory, syndicateEntry.Tag, currentJob.xpAmounts[rewardInfo.JobStage])
                     );
@@ -946,8 +944,7 @@ function getRandomMissionDrops(RewardInfo: IRewardInfo, tierOverride: number | u
         if (RewardInfo.jobId) {
             if (RewardInfo.JobStage! >= 0) {
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                const [jobType, tierStr, hubNode, syndicateId, locationTag] = RewardInfo.jobId.split("_");
-                const tier = Number(tierStr);
+                const [jobType, unkIndex, hubNode, syndicateId, locationTag] = RewardInfo.jobId.split("_");
                 let isEndlessJob = false;
                 if (syndicateId) {
                     const worldState = getWorldState();
@@ -955,7 +952,7 @@ function getRandomMissionDrops(RewardInfo: IRewardInfo, tierOverride: number | u
                     if (!syndicateEntry) syndicateEntry = worldState.SyndicateMissions.find(m => m.Tag === syndicateId);
 
                     if (syndicateEntry && syndicateEntry.Jobs) {
-                        let job = syndicateEntry.Jobs[tier];
+                        let job = syndicateEntry.Jobs[RewardInfo.JobTier!];
 
                         if (syndicateEntry.Tag === "EntratiSyndicate") {
                             const vault = syndicateEntry.Jobs.find(j => j.locationTag === locationTag);
