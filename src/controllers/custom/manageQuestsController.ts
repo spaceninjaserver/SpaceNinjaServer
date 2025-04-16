@@ -56,15 +56,12 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
             break;
         }
         case "deleteKey": {
-            if (allQuestKeys.includes(questItemType)) {
-                const questKey = inventory.QuestKeys.find(key => key.ItemType === questItemType);
-                if (!questKey) {
-                    logger.error(`Quest key not found in inventory: ${questItemType}`);
-                    break;
-                }
-
-                inventory.QuestKeys.pull({ ItemType: questItemType });
+            const questKey = inventory.QuestKeys.find(key => key.ItemType === questItemType);
+            if (!questKey) {
+                logger.error(`Quest key not found in inventory: ${questItemType}`);
+                break;
             }
+            inventory.QuestKeys.pull({ ItemType: questItemType });
             break;
         }
         case "completeKey": {
