@@ -31,6 +31,7 @@ import { IFusionTreasure, ITypeCount } from "../types/inventoryTypes/inventoryTy
 import { IInventoryChanges } from "../types/purchaseTypes";
 import { parallelForeach } from "../utils/async-utils";
 import allDecoRecipes from "@/static/fixed_responses/allDecoRecipes.json";
+import { createMessage } from "./inboxService";
 
 export const getGuildForRequest = async (req: Request): Promise<TGuildDatabaseDocument> => {
     const accountId = await getAccountIdForRequest(req);
@@ -599,6 +600,50 @@ const setGuildTier = async (guild: TGuildDatabaseDocument, newTier: number): Pro
 
             // Check if research is fully funded now due to lowered requirements.
             await processGuildTechProjectContributionsUpdate(guild, project);
+        }
+    }
+    if (guild.CeremonyContributors) {
+        await checkClanAscensionHasRequiredContributors(guild);
+    }
+};
+
+export const checkClanAscensionHasRequiredContributors = async (guild: TGuildDatabaseDocument): Promise<void> => {
+    const requiredContributors = [1, 5, 15, 30, 50][guild.Tier - 1];
+    // Once required contributor count is hit, the class is committed and there's 72 hours to claim endo.
+    if (guild.CeremonyContributors!.length >= requiredContributors) {
+        guild.Class = guild.CeremonyClass!;
+        guild.CeremonyClass = undefined;
+        guild.CeremonyResetDate = new Date(Date.now() + (config.fastClanAscension ? 5_000 : 72 * 3600_000));
+        if (!config.fastClanAscension) {
+            // Send message to all active guild members
+            const members = await GuildMember.find({ guildId: guild._id, status: 0 }, "accountId");
+            await parallelForeach(members, async member => {
+                // somewhat unfaithful as on live the "msg" is not a loctag, but since we don't have the string, we'll let the client fill it in with "arg".
+                await createMessage(member.accountId, [
+                    {
+                        sndr: guild.Name,
+                        msg: "/Lotus/Language/Clan/Clan_AscensionCeremonyInProgressDetails",
+                        arg: [
+                            {
+                                Key: "RESETDATE",
+                                Tag:
+                                    guild.CeremonyResetDate!.getUTCMonth() +
+                                    "/" +
+                                    guild.CeremonyResetDate!.getUTCDate() +
+                                    "/" +
+                                    (guild.CeremonyResetDate!.getUTCFullYear() % 100) +
+                                    " " +
+                                    guild.CeremonyResetDate!.getUTCHours().toString().padStart(2, "0") +
+                                    ":" +
+                                    guild.CeremonyResetDate!.getUTCMinutes().toString().padStart(2, "0")
+                            }
+                        ],
+                        sub: "/Lotus/Language/Clan/Clan_AscensionCeremonyInProgress",
+                        icon: "/Lotus/Interface/Graphics/ClanTileImages/ClanEnterDojo.png",
+                        highPriority: true
+                    }
+                ]);
+            });
         }
     }
 };
