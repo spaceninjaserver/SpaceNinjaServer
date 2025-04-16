@@ -35,6 +35,7 @@ interface IConfig {
     unlockExilusEverywhere?: boolean;
     unlockArcanesEverywhere?: boolean;
     noDailyStandingLimits?: boolean;
+    noDailyFocusLimit?: boolean;
     noArgonCrystalDecay?: boolean;
     noMasteryRankUpCooldown?: boolean;
     noVendorPurchaseLimits?: boolean;

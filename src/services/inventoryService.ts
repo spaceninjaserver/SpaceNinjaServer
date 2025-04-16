@@ -1372,7 +1372,9 @@ export const addFocusXpIncreases = (inventory: TInventoryDatabaseDocument, focus
     inventory.FocusXP.AP_POWER += focusXpPlus[FocusType.AP_POWER];
     inventory.FocusXP.AP_WARD += focusXpPlus[FocusType.AP_WARD];
 
-    inventory.DailyFocus -= focusXpPlus.reduce((a, b) => a + b, 0);
+    if (!config.noDailyFocusLimit) {
+        inventory.DailyFocus -= focusXpPlus.reduce((a, b) => a + b, 0);
+    }
 };
 
 export const addLoreFragmentScans = (inventory: TInventoryDatabaseDocument, arr: ILoreFragmentScan[]): void => {

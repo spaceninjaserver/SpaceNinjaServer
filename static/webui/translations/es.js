@@ -134,6 +134,7 @@ dict = {
     cheats_unlockExilusEverywhere: `Adaptadores Exilus en todas partes`,
     cheats_unlockArcanesEverywhere: `Adaptadores de Arcanos en todas partes`,
     cheats_noDailyStandingLimits: `Sin límite diario de reputación`,
+    cheats_noDailyFocusLimit: `[UNTRANSLATED] No Daily Focus Limits`,
     cheats_noArgonCrystalDecay: `Sin descomposición de cristal de Argón`,
     cheats_noMasteryRankUpCooldown: `Sin tiempo de espera para rango de maestría`,
     cheats_noVendorPurchaseLimits: `Sin límite de compras de vendedores`,

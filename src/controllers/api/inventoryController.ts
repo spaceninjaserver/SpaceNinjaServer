@@ -258,6 +258,10 @@ export const getInventoryResponse = async (
         }
     }
 
+    if (config.noDailyFocusLimit) {
+        inventoryResponse.DailyFocus = Math.max(999_999, 250000 + inventoryResponse.PlayerLevel * 5000);
+    }
+
     if (inventoryResponse.InfestedFoundry) {
         applyCheatsToInfestedFoundry(inventoryResponse.InfestedFoundry);
     }

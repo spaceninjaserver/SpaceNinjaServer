@@ -134,6 +134,7 @@ dict = {
     cheats_unlockExilusEverywhere: `Адаптеры Эксилус везде`,
     cheats_unlockArcanesEverywhere: `Адаптеры для мистификаторов везде`,
     cheats_noDailyStandingLimits: `Без ежедневных ограничений репутации`,
+    cheats_noDailyFocusLimit: `[UNTRANSLATED] No Daily Focus Limits`,
     cheats_noArgonCrystalDecay: `Без распада аргоновых кристаллов`,
     cheats_noMasteryRankUpCooldown: `Повышение ранга мастерства без кулдауна`,
     cheats_noVendorPurchaseLimits: `Отсутствие лимитов на покупки у вендоров`,

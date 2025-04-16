@@ -134,6 +134,7 @@ dict = {
     cheats_unlockExilusEverywhere: `全物品自带适配器`,
     cheats_unlockArcanesEverywhere: `全物品自带赋能适配器`,
     cheats_noDailyStandingLimits: `无每日声望限制`,
+    cheats_noDailyFocusLimit: `[UNTRANSLATED] No Daily Focus Limits`,
     cheats_noArgonCrystalDecay: `[UNTRANSLATED] No Argon Crystal Decay`,
     cheats_noMasteryRankUpCooldown: `[UNTRANSLATED] No Mastery Rank Up Cooldown`,
     cheats_noVendorPurchaseLimits: `[UNTRANSLATED] No Vendor Purchase Limits`,

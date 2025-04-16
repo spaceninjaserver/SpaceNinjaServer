@@ -29,6 +29,7 @@
   "unlockExilusEverywhere": false,
   "unlockArcanesEverywhere": false,
   "noDailyStandingLimits": false,
+  "noDailyFocusLimit": false,
   "noArgonCrystalDecay": false,
   "noMasteryRankUpCooldown": false,
   "noVendorPurchaseLimits": true,
