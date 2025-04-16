@@ -9,7 +9,6 @@ import { config } from "@/src/services/configService";
 import { CRng } from "@/src/services/rngService";
 import { eMissionType, ExportNightwave, ExportRegions } from "warframe-public-export-plus";
 import { ISeasonChallenge, IWorldState } from "../types/worldStateTypes";
-import { logger } from "../utils/logger";
 
 const sortieBosses = [
     "SORTIE_BOSS_HYENA",
@@ -80,73 +79,76 @@ const sortieBossNode: Record<string, string> = {
     SORTIE_BOSS_INFALAD: "SolNode705"
 };
 
-const jobSets: string[][] = [
-    [
-        "/Lotus/Types/Gameplay/Eidolon/Jobs/AssassinateBountyAss",
-        "/Lotus/Types/Gameplay/Eidolon/Jobs/AssassinateBountyCap",
-        "/Lotus/Types/Gameplay/Eidolon/Jobs/AttritionBountySab",
-        "/Lotus/Types/Gameplay/Eidolon/Jobs/AttritionBountyLib",
-        "/Lotus/Types/Gameplay/Eidolon/Jobs/AttritionBountyCap",
-        "/Lotus/Types/Gameplay/Eidolon/Jobs/AttritionBountyExt",
-        "/Lotus/Types/Gameplay/Eidolon/Jobs/ReclamationBountyCap",
-        "/Lotus/Types/Gameplay/Eidolon/Jobs/ReclamationBountyTheft",
-        "/Lotus/Types/Gameplay/Eidolon/Jobs/ReclamationBountyCache",
-        "/Lotus/Types/Gameplay/Eidolon/Jobs/CaptureBountyCapOne",
-        "/Lotus/Types/Gameplay/Eidolon/Jobs/CaptureBountyCapTwo",
-        "/Lotus/Types/Gameplay/Eidolon/Jobs/SabotageBountySab",
-        "/Lotus/Types/Gameplay/Eidolon/Jobs/RescueBountyResc"
-    ],
-    [
-        "/Lotus/Types/Gameplay/Eidolon/Jobs/Narmer/AssassinateBountyAss",
-        "/Lotus/Types/Gameplay/Eidolon/Jobs/Narmer/AttritionBountyExt",
-        "/Lotus/Types/Gameplay/Eidolon/Jobs/Narmer/ReclamationBountyTheft",
-        "/Lotus/Types/Gameplay/Eidolon/Jobs/Narmer/AttritionBountyLib"
-    ],
-    [
-        "/Lotus/Types/Gameplay/Venus/Jobs/VenusArtifactJobAmbush",
-        "/Lotus/Types/Gameplay/Venus/Jobs/VenusArtifactJobExcavation",
-        "/Lotus/Types/Gameplay/Venus/Jobs/VenusArtifactJobRecovery",
-        "/Lotus/Types/Gameplay/Venus/Jobs/VenusChaosJobAssassinate",
-        "/Lotus/Types/Gameplay/Venus/Jobs/VenusChaosJobExcavation",
-        "/Lotus/Types/Gameplay/Venus/Jobs/VenusCullJobAssassinate",
-        "/Lotus/Types/Gameplay/Venus/Jobs/VenusCullJobExterminate",
-        "/Lotus/Types/Gameplay/Venus/Jobs/VenusCullJobResource",
-        "/Lotus/Types/Gameplay/Venus/Jobs/VenusIntelJobRecovery",
-        "/Lotus/Types/Gameplay/Venus/Jobs/VenusIntelJobResource",
-        "/Lotus/Types/Gameplay/Venus/Jobs/VenusIntelJobSpy",
-        "/Lotus/Types/Gameplay/Venus/Jobs/VenusSpyJobSpy",
-        "/Lotus/Types/Gameplay/Venus/Jobs/VenusTheftJobAmbush",
-        "/Lotus/Types/Gameplay/Venus/Jobs/VenusTheftJobExcavation",
-        "/Lotus/Types/Gameplay/Venus/Jobs/VenusTheftJobResource",
-        "/Lotus/Types/Gameplay/Venus/Jobs/VenusHelpingJobCaches",
-        "/Lotus/Types/Gameplay/Venus/Jobs/VenusHelpingJobResource",
-        "/Lotus/Types/Gameplay/Venus/Jobs/VenusHelpingJobSpy",
-        "/Lotus/Types/Gameplay/Venus/Jobs/VenusPreservationJobDefense",
-        "/Lotus/Types/Gameplay/Venus/Jobs/VenusPreservationJobRecovery",
-        "/Lotus/Types/Gameplay/Venus/Jobs/VenusPreservationJobResource",
-        "/Lotus/Types/Gameplay/Venus/Jobs/VenusWetworkJobAssassinate",
-        "/Lotus/Types/Gameplay/Venus/Jobs/VenusWetworkJobSpy"
-    ],
-    [
-        "/Lotus/Types/Gameplay/Venus/Jobs/Narmer/NarmerVenusCullJobAssassinate",
-        "/Lotus/Types/Gameplay/Venus/Jobs/Narmer/NarmerVenusCullJobExterminate",
-        "/Lotus/Types/Gameplay/Venus/Jobs/Narmer/NarmerVenusPreservationJobDefense",
-        "/Lotus/Types/Gameplay/Venus/Jobs/Narmer/NarmerVenusTheftJobExcavation"
-    ],
-    [
-        "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosAreaDefenseBounty",
-        "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosAssassinateBounty",
-        "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosCrpSurvivorBounty",
-        "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosGrnSurvivorBounty",
-        "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosKeyPiecesBounty",
-        "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosExcavateBounty",
-        "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosPurifyBounty"
-    ],
-    [
-        "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosEndlessAreaDefenseBounty",
-        "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosEndlessExcavateBounty",
-        "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosEndlessPurifyBounty"
-    ]
+const eidolonJobs = [
+    "/Lotus/Types/Gameplay/Eidolon/Jobs/AssassinateBountyAss",
+    "/Lotus/Types/Gameplay/Eidolon/Jobs/AssassinateBountyCap",
+    "/Lotus/Types/Gameplay/Eidolon/Jobs/AttritionBountySab",
+    "/Lotus/Types/Gameplay/Eidolon/Jobs/AttritionBountyLib",
+    "/Lotus/Types/Gameplay/Eidolon/Jobs/AttritionBountyCap",
+    "/Lotus/Types/Gameplay/Eidolon/Jobs/AttritionBountyExt",
+    "/Lotus/Types/Gameplay/Eidolon/Jobs/ReclamationBountyCap",
+    "/Lotus/Types/Gameplay/Eidolon/Jobs/ReclamationBountyTheft",
+    "/Lotus/Types/Gameplay/Eidolon/Jobs/ReclamationBountyCache",
+    "/Lotus/Types/Gameplay/Eidolon/Jobs/CaptureBountyCapOne",
+    "/Lotus/Types/Gameplay/Eidolon/Jobs/CaptureBountyCapTwo",
+    "/Lotus/Types/Gameplay/Eidolon/Jobs/SabotageBountySab",
+    "/Lotus/Types/Gameplay/Eidolon/Jobs/RescueBountyResc"
+];
+
+const eidolonNarmerJobs = [
+    "/Lotus/Types/Gameplay/Eidolon/Jobs/Narmer/AssassinateBountyAss",
+    "/Lotus/Types/Gameplay/Eidolon/Jobs/Narmer/AttritionBountyExt",
+    "/Lotus/Types/Gameplay/Eidolon/Jobs/Narmer/ReclamationBountyTheft",
+    "/Lotus/Types/Gameplay/Eidolon/Jobs/Narmer/AttritionBountyLib"
+];
+
+const venusJobs = [
+    "/Lotus/Types/Gameplay/Venus/Jobs/VenusArtifactJobAmbush",
+    "/Lotus/Types/Gameplay/Venus/Jobs/VenusArtifactJobExcavation",
+    "/Lotus/Types/Gameplay/Venus/Jobs/VenusArtifactJobRecovery",
+    "/Lotus/Types/Gameplay/Venus/Jobs/VenusChaosJobAssassinate",
+    "/Lotus/Types/Gameplay/Venus/Jobs/VenusChaosJobExcavation",
+    "/Lotus/Types/Gameplay/Venus/Jobs/VenusCullJobAssassinate",
+    "/Lotus/Types/Gameplay/Venus/Jobs/VenusCullJobExterminate",
+    "/Lotus/Types/Gameplay/Venus/Jobs/VenusCullJobResource",
+    "/Lotus/Types/Gameplay/Venus/Jobs/VenusIntelJobRecovery",
+    "/Lotus/Types/Gameplay/Venus/Jobs/VenusIntelJobResource",
+    "/Lotus/Types/Gameplay/Venus/Jobs/VenusIntelJobSpy",
+    "/Lotus/Types/Gameplay/Venus/Jobs/VenusSpyJobSpy",
+    "/Lotus/Types/Gameplay/Venus/Jobs/VenusTheftJobAmbush",
+    "/Lotus/Types/Gameplay/Venus/Jobs/VenusTheftJobExcavation",
+    "/Lotus/Types/Gameplay/Venus/Jobs/VenusTheftJobResource",
+    "/Lotus/Types/Gameplay/Venus/Jobs/VenusHelpingJobCaches",
+    "/Lotus/Types/Gameplay/Venus/Jobs/VenusHelpingJobResource",
+    "/Lotus/Types/Gameplay/Venus/Jobs/VenusHelpingJobSpy",
+    "/Lotus/Types/Gameplay/Venus/Jobs/VenusPreservationJobDefense",
+    "/Lotus/Types/Gameplay/Venus/Jobs/VenusPreservationJobRecovery",
+    "/Lotus/Types/Gameplay/Venus/Jobs/VenusPreservationJobResource",
+    "/Lotus/Types/Gameplay/Venus/Jobs/VenusWetworkJobAssassinate",
+    "/Lotus/Types/Gameplay/Venus/Jobs/VenusWetworkJobSpy"
+];
+
+const venusNarmerJobs = [
+    "/Lotus/Types/Gameplay/Venus/Jobs/Narmer/NarmerVenusCullJobAssassinate",
+    "/Lotus/Types/Gameplay/Venus/Jobs/Narmer/NarmerVenusCullJobExterminate",
+    "/Lotus/Types/Gameplay/Venus/Jobs/Narmer/NarmerVenusPreservationJobDefense",
+    "/Lotus/Types/Gameplay/Venus/Jobs/Narmer/NarmerVenusTheftJobExcavation"
+];
+
+const microplanetJobs = [
+    "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosAreaDefenseBounty",
+    "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosAssassinateBounty",
+    "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosCrpSurvivorBounty",
+    "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosGrnSurvivorBounty",
+    "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosKeyPiecesBounty",
+    "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosExcavateBounty",
+    "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosPurifyBounty"
+];
+
+const microplanetEndlessJobs = [
+    "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosEndlessAreaDefenseBounty",
+    "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosEndlessExcavateBounty",
+    "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosEndlessPurifyBounty"
 ];
 
 const EPOCH = 1734307200 * 1000; // Monday, Dec 16, 2024 @ 00:00 UTC+0; should logically be winter in 1999 iteration 0
@@ -218,6 +220,10 @@ const getSeasonWeeklyHardChallenge = (week: number, id: number): ISeasonChalleng
     };
 };
 
+const expiresBeforeNextExpectedWorldStateRefresh = (date: number): boolean => {
+    return Date.now() + 300_000 > date;
+};
+
 export const getWorldState = (buildLabel?: string): IWorldState => {
     const day = Math.trunc((Date.now() - EPOCH) / 86400000);
     const week = Math.trunc(day / 7);
@@ -228,9 +234,10 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         BuildLabel: typeof buildLabel == "string" ? buildLabel.split(" ").join("+") : buildConfig.buildLabel,
         Time: config.worldState?.lockTime || Math.round(Date.now() / 1000),
         Goals: [],
-        GlobalUpgrades: [],
+        Alerts: [],
         Sorties: [],
         LiteSorties: [],
+        GlobalUpgrades: [],
         EndlessXpChoices: [],
         SeasonInfo: {
             Activation: { $date: { $numberLong: "1715796000000" } },
@@ -268,7 +275,8 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                 }
             ]
         },
-        ...staticWorldState
+        ...staticWorldState,
+        SyndicateMissions: [...staticWorldState.SyndicateMissions]
     };
 
     if (config.worldState?.starDays) {
@@ -292,69 +300,272 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     worldState.NodeOverrides.find(x => x.Node == "SolNode802")!.Seed = week; // unfaithful
 
     // Holdfast, Cavia, & Hex bounties cycling every 2.5 hours; unfaithful implementation
-    const bountyCycle = Math.trunc(Date.now() / 9000000);
-    const bountyCycleStart = bountyCycle * 9000000;
-    const bountyCycleEnd = bountyCycleStart + 9000000;
-    worldState.SyndicateMissions[worldState.SyndicateMissions.findIndex(x => x.Tag == "ZarimanSyndicate")] = {
-        _id: { $oid: Math.trunc(bountyCycleStart / 1000).toString(16) + "0000000000000029" },
-        Activation: { $date: { $numberLong: bountyCycleStart.toString() } },
-        Expiry: { $date: { $numberLong: bountyCycleEnd.toString() } },
-        Tag: "ZarimanSyndicate",
-        Seed: bountyCycle,
-        Nodes: []
-    };
-    worldState.SyndicateMissions[worldState.SyndicateMissions.findIndex(x => x.Tag == "EntratiLabSyndicate")] = {
-        _id: { $oid: Math.trunc(bountyCycleStart / 1000).toString(16) + "0000000000000004" },
-        Activation: { $date: { $numberLong: bountyCycleStart.toString() } },
-        Expiry: { $date: { $numberLong: bountyCycleEnd.toString() } },
-        Tag: "EntratiLabSyndicate",
-        Seed: bountyCycle,
-        Nodes: []
-    };
-    worldState.SyndicateMissions[worldState.SyndicateMissions.findIndex(x => x.Tag == "HexSyndicate")] = {
-        _id: { $oid: Math.trunc(bountyCycleStart / 1000).toString(16) + "0000000000000006" },
-        Activation: { $date: { $numberLong: bountyCycleStart.toString(10) } },
-        Expiry: { $date: { $numberLong: bountyCycleEnd.toString(10) } },
-        Tag: "HexSyndicate",
-        Seed: bountyCycle,
-        Nodes: []
-    };
-    for (const syndicateInfo of worldState.SyndicateMissions) {
-        if (syndicateInfo.Jobs && syndicateInfo.Seed != bountyCycle) {
-            syndicateInfo.Activation.$date.$numberLong = bountyCycleStart.toString(10);
-            syndicateInfo.Expiry.$date.$numberLong = bountyCycleEnd.toString(10);
-            syndicateInfo.Seed = bountyCycle;
-            logger.debug(`refreshing jobs for ${syndicateInfo.Tag}`);
+    let bountyCycle = Math.trunc(Date.now() / 9000000);
+    let bountyCycleEnd: number | undefined;
+    do {
+        const bountyCycleStart = bountyCycle * 9000000;
+        bountyCycleEnd = bountyCycleStart + 9000000;
+        worldState.SyndicateMissions.push({
+            _id: { $oid: Math.trunc(bountyCycleStart / 1000).toString(16) + "0000000000000029" },
+            Activation: { $date: { $numberLong: bountyCycleStart.toString() } },
+            Expiry: { $date: { $numberLong: bountyCycleEnd.toString() } },
+            Tag: "ZarimanSyndicate",
+            Seed: bountyCycle,
+            Nodes: []
+        });
+        worldState.SyndicateMissions.push({
+            _id: { $oid: Math.trunc(bountyCycleStart / 1000).toString(16) + "0000000000000004" },
+            Activation: { $date: { $numberLong: bountyCycleStart.toString() } },
+            Expiry: { $date: { $numberLong: bountyCycleEnd.toString() } },
+            Tag: "EntratiLabSyndicate",
+            Seed: bountyCycle,
+            Nodes: []
+        });
+        worldState.SyndicateMissions.push({
+            _id: { $oid: Math.trunc(bountyCycleStart / 1000).toString(16) + "0000000000000006" },
+            Activation: { $date: { $numberLong: bountyCycleStart.toString(10) } },
+            Expiry: { $date: { $numberLong: bountyCycleEnd.toString(10) } },
+            Tag: "HexSyndicate",
+            Seed: bountyCycle,
+            Nodes: []
+        });
+
+        const table = String.fromCharCode(65 + (bountyCycle % 3));
+        const vaultTable = String.fromCharCode(65 + ((bountyCycle + 1) % 3));
+        const deimosDTable = String.fromCharCode(65 + (bountyCycle % 2));
+
+        // TODO: xpAmounts need to be calculated based on the jobType somehow?
+
+        {
             const rng = new CRng(bountyCycle);
-            const table = String.fromCharCode(65 + (bountyCycle % 3));
-            const vaultTable = String.fromCharCode(65 + ((bountyCycle + 1) % 3));
-            const deimosDTable = String.fromCharCode(65 + (bountyCycle % 2));
-            //console.log({ bountyCycleStart, bountyCycleEnd, table, vaultTable, deimosDTable });
-            for (const jobInfo of syndicateInfo.Jobs) {
-                if (jobInfo.jobType) {
-                    let found = false;
-                    for (const jobSet of jobSets) {
-                        if (jobSet.indexOf(jobInfo.jobType) != -1) {
-                            jobInfo.jobType = rng.randomElement(jobSet);
-                            // TODO: xpAmounts seems like it might need to differ depending on the job?
-                            found = true;
-                            break;
-                        }
+            worldState.SyndicateMissions.push({
+                _id: { $oid: Math.trunc(bountyCycleStart / 1000).toString(16) + "0000000000000008" },
+                Activation: { $date: { $numberLong: bountyCycleStart.toString(10) } },
+                Expiry: { $date: { $numberLong: bountyCycleEnd.toString(10) } },
+                Tag: "CetusSyndicate",
+                Seed: bountyCycle,
+                Nodes: [],
+                Jobs: [
+                    {
+                        jobType: rng.randomElement(eidolonJobs),
+                        rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierATable${table}Rewards`,
+                        masteryReq: 0,
+                        minEnemyLevel: 5,
+                        maxEnemyLevel: 15,
+                        xpAmounts: [430, 430, 430]
+                    },
+                    {
+                        jobType: rng.randomElement(eidolonJobs),
+                        rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierBTable${table}Rewards`,
+                        masteryReq: 1,
+                        minEnemyLevel: 10,
+                        maxEnemyLevel: 30,
+                        xpAmounts: [620, 620, 620]
+                    },
+                    {
+                        jobType: rng.randomElement(eidolonJobs),
+                        rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierCTable${table}Rewards`,
+                        masteryReq: 2,
+                        minEnemyLevel: 20,
+                        maxEnemyLevel: 40,
+                        xpAmounts: [670, 670, 670, 990]
+                    },
+                    {
+                        jobType: rng.randomElement(eidolonJobs),
+                        rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierDTable${table}Rewards`,
+                        masteryReq: 3,
+                        minEnemyLevel: 30,
+                        maxEnemyLevel: 50,
+                        xpAmounts: [570, 570, 570, 570, 1110]
+                    },
+                    {
+                        jobType: rng.randomElement(eidolonJobs),
+                        rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierETable${table}Rewards`,
+                        masteryReq: 5,
+                        minEnemyLevel: 40,
+                        maxEnemyLevel: 60,
+                        xpAmounts: [740, 740, 740, 740, 1450]
+                    },
+                    {
+                        jobType: rng.randomElement(eidolonJobs),
+                        rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierETable${table}Rewards`,
+                        masteryReq: 10,
+                        minEnemyLevel: 100,
+                        maxEnemyLevel: 100,
+                        xpAmounts: [840, 840, 840, 840, 1660]
+                    },
+                    {
+                        jobType: rng.randomElement(eidolonNarmerJobs),
+                        rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/NarmerTable${table}Rewards`,
+                        masteryReq: 0,
+                        minEnemyLevel: 50,
+                        maxEnemyLevel: 70,
+                        xpAmounts: [840, 840, 840, 840, 1650]
                     }
-                    if (!found) {
-                        logger.warn(`no job set found for type ${jobInfo.jobType}`);
-                    }
-                }
-                if (jobInfo.endless || jobInfo.isVault) {
-                    jobInfo.rewards = jobInfo.rewards.replace(/Table.Rewards/, `Table${vaultTable}Rewards`);
-                } else if (jobInfo.rewards.startsWith("/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierD")) {
-                    jobInfo.rewards = jobInfo.rewards.replace(/Table.Rewards/, `Table${deimosDTable}Rewards`);
-                } else if (!jobInfo.rewards.startsWith("/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierE")) {
-                    jobInfo.rewards = jobInfo.rewards.replace(/Table.Rewards/, `Table${table}Rewards`);
-                }
-            }
+                ]
+            });
         }
-    }
+
+        {
+            const rng = new CRng(bountyCycle);
+            worldState.SyndicateMissions.push({
+                _id: { $oid: Math.trunc(bountyCycleStart / 1000).toString(16) + "0000000000000025" },
+                Activation: { $date: { $numberLong: bountyCycleStart.toString(10) } },
+                Expiry: { $date: { $numberLong: bountyCycleEnd.toString(10) } },
+                Tag: "SolarisSyndicate",
+                Seed: bountyCycle,
+                Nodes: [],
+                Jobs: [
+                    {
+                        jobType: rng.randomElement(venusJobs),
+                        rewards: `Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierATable${table}Rewards`,
+                        masteryReq: 0,
+                        minEnemyLevel: 5,
+                        maxEnemyLevel: 15,
+                        xpAmounts: [340, 340, 340]
+                    },
+                    {
+                        jobType: rng.randomElement(venusJobs),
+                        rewards: `Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierBTable${table}Rewards`,
+                        masteryReq: 1,
+                        minEnemyLevel: 10,
+                        maxEnemyLevel: 30,
+                        xpAmounts: [660, 660, 660]
+                    },
+                    {
+                        jobType: rng.randomElement(venusJobs),
+                        rewards: `Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierCTable${table}Rewards`,
+                        masteryReq: 2,
+                        minEnemyLevel: 20,
+                        maxEnemyLevel: 40,
+                        xpAmounts: [610, 610, 610, 900]
+                    },
+                    {
+                        jobType: rng.randomElement(venusJobs),
+                        rewards: `Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierDTable${table}Rewards`,
+                        masteryReq: 3,
+                        minEnemyLevel: 30,
+                        maxEnemyLevel: 50,
+                        xpAmounts: [600, 600, 600, 600, 1170]
+                    },
+                    {
+                        jobType: rng.randomElement(venusJobs),
+                        rewards: `Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierETable${table}Rewards`,
+                        masteryReq: 5,
+                        minEnemyLevel: 40,
+                        maxEnemyLevel: 60,
+                        xpAmounts: [690, 690, 690, 690, 1350]
+                    },
+                    {
+                        jobType: rng.randomElement(venusJobs),
+                        rewards: `Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierETable${table}Rewards`,
+                        masteryReq: 10,
+                        minEnemyLevel: 100,
+                        maxEnemyLevel: 100,
+                        xpAmounts: [840, 840, 840, 840, 1660]
+                    },
+                    {
+                        jobType: rng.randomElement(venusNarmerJobs),
+                        rewards: "/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/NarmerTableBRewards",
+                        masteryReq: 0,
+                        minEnemyLevel: 50,
+                        maxEnemyLevel: 70,
+                        xpAmounts: [780, 780, 780, 780, 1540]
+                    }
+                ]
+            });
+        }
+
+        {
+            const rng = new CRng(bountyCycle);
+            worldState.SyndicateMissions.push({
+                _id: { $oid: Math.trunc(bountyCycleStart / 1000).toString(16) + "0000000000000002" },
+                Activation: { $date: { $numberLong: bountyCycleStart.toString(10) } },
+                Expiry: { $date: { $numberLong: bountyCycleEnd.toString(10) } },
+                Tag: "EntratiSyndicate",
+                Seed: bountyCycle,
+                Nodes: [],
+                Jobs: [
+                    {
+                        jobType: rng.randomElement(microplanetJobs),
+                        rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierATable${table}Rewards`,
+                        masteryReq: 0,
+                        minEnemyLevel: 5,
+                        maxEnemyLevel: 15,
+                        xpAmounts: [5, 5, 5]
+                    },
+                    {
+                        jobType: rng.randomElement(microplanetJobs),
+                        rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierCTable${table}Rewards`,
+                        masteryReq: 1,
+                        minEnemyLevel: 15,
+                        maxEnemyLevel: 25,
+                        xpAmounts: [12, 12, 12]
+                    },
+                    {
+                        jobType: rng.randomElement(microplanetEndlessJobs),
+                        rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierBTable${table}Rewards`,
+                        masteryReq: 5,
+                        minEnemyLevel: 25,
+                        maxEnemyLevel: 30,
+                        endless: true,
+                        xpAmounts: [14, 14, 14]
+                    },
+                    {
+                        jobType: rng.randomElement(microplanetJobs),
+                        rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierDTable${deimosDTable}Rewards`,
+                        masteryReq: 2,
+                        minEnemyLevel: 30,
+                        maxEnemyLevel: 40,
+                        xpAmounts: [17, 17, 17, 25]
+                    },
+                    {
+                        jobType: rng.randomElement(microplanetJobs),
+                        rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierETableARewards`,
+                        masteryReq: 3,
+                        minEnemyLevel: 40,
+                        maxEnemyLevel: 60,
+                        xpAmounts: [22, 22, 22, 22, 43]
+                    },
+                    {
+                        jobType: rng.randomElement(microplanetJobs),
+                        rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierETableARewards`,
+                        masteryReq: 10,
+                        minEnemyLevel: 100,
+                        maxEnemyLevel: 100,
+                        xpAmounts: [25, 25, 25, 25, 50]
+                    },
+                    {
+                        rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/VaultBountyTierATable${vaultTable}Rewards`,
+                        masteryReq: 5,
+                        minEnemyLevel: 30,
+                        maxEnemyLevel: 40,
+                        xpAmounts: [2, 2, 2, 4],
+                        locationTag: "ChamberB",
+                        isVault: true
+                    },
+                    {
+                        rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/VaultBountyTierBTable${vaultTable}Rewards`,
+                        masteryReq: 5,
+                        minEnemyLevel: 40,
+                        maxEnemyLevel: 50,
+                        xpAmounts: [4, 4, 4, 5],
+                        locationTag: "ChamberA",
+                        isVault: true
+                    },
+                    {
+                        rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/VaultBountyTierCTable${vaultTable}Rewards`,
+                        masteryReq: 5,
+                        minEnemyLevel: 50,
+                        maxEnemyLevel: 60,
+                        xpAmounts: [5, 5, 5, 7],
+                        locationTag: "ChamberC",
+                        isVault: true
+                    }
+                ]
+            });
+        }
+    } while (expiresBeforeNextExpectedWorldStateRefresh(bountyCycleEnd) && ++bountyCycle);
 
     if (config.worldState?.creditBoost) {
         worldState.GlobalUpgrades.push({

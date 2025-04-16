@@ -5,10 +5,11 @@ export interface IWorldState {
     BuildLabel: string;
     Time: number;
     Goals: IGoal[];
-    SyndicateMissions: ISyndicateMissionInfo[];
-    GlobalUpgrades: IGlobalUpgrade[];
+    Alerts: [];
     Sorties: ISortie[];
     LiteSorties: ILiteSortie[];
+    SyndicateMissions: ISyndicateMissionInfo[];
+    GlobalUpgrades: IGlobalUpgrade[];
     NodeOverrides: INodeOverride[];
     EndlessXpChoices: IEndlessXpChoice[];
     SeasonInfo: {
