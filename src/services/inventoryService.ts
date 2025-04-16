@@ -408,8 +408,32 @@ export const addItem = async (
         const meta = ExportCustoms[typeName];
         let inventoryChanges: IInventoryChanges;
         if (meta.productCategory == "CrewShipWeaponSkins") {
-            inventoryChanges = addCrewShipWeaponSkin(inventory, typeName);
+            if (meta.subroutines || meta.randomisedUpgrades) {
+                // House versions need to be identified to get stats so put them into raw salvage first.
+                const rawSalvageChanges = [
+                    {
+                        ItemType: typeName,
+                        ItemCount: quantity
+                    }
+                ];
+                addCrewShipRawSalvage(inventory, rawSalvageChanges);
+                inventoryChanges = { CrewShipRawSalvage: rawSalvageChanges };
+            } else {
+                // Sigma versions can be added directly.
+                if (quantity != 1) {
+                    throw new Error(
+                        `unexpected acquisition quantity of CrewShipWeaponSkin: got ${quantity}, expected 1`
+                    );
+                }
+                inventoryChanges = {
+                    ...addCrewShipWeaponSkin(inventory, typeName),
+                    ...occupySlot(inventory, InventorySlot.RJ_COMPONENT_AND_ARMAMENTS, premiumPurchase)
+                };
+            }
         } else {
+            if (quantity != 1) {
+                throw new Error(`unexpected acquisition quantity of WeaponSkins: got ${quantity}, expected 1`);
+            }
             inventoryChanges = addSkin(inventory, typeName);
         }
         if (meta.additionalItems) {
