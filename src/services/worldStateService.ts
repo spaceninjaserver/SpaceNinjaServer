@@ -374,34 +374,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             Season: 14,
             Phase: 0,
             Params: "",
-            ActiveChallenges: [
-                getSeasonDailyChallenge(day - 2),
-                getSeasonDailyChallenge(day - 1),
-                getSeasonDailyChallenge(day - 0),
-                getSeasonWeeklyChallenge(week, 0),
-                getSeasonWeeklyChallenge(week, 1),
-                getSeasonWeeklyHardChallenge(week, 2),
-                getSeasonWeeklyHardChallenge(week, 3),
-                {
-                    _id: { $oid: "67e1b96e9d00cb47" + (week * 7 + 0).toString().padStart(8, "0") },
-                    Activation: { $date: { $numberLong: weekStart.toString() } },
-                    Expiry: { $date: { $numberLong: weekEnd.toString() } },
-                    Challenge:
-                        "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentCompleteMissions" + (week - 12)
-                },
-                {
-                    _id: { $oid: "67e1b96e9d00cb47" + (week * 7 + 1).toString().padStart(8, "0") },
-                    Activation: { $date: { $numberLong: weekStart.toString() } },
-                    Expiry: { $date: { $numberLong: weekEnd.toString() } },
-                    Challenge: "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentKillEximus" + (week - 12)
-                },
-                {
-                    _id: { $oid: "67e1b96e9d00cb47" + (week * 7 + 2).toString().padStart(8, "0") },
-                    Activation: { $date: { $numberLong: weekStart.toString() } },
-                    Expiry: { $date: { $numberLong: weekEnd.toString() } },
-                    Challenge: "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentKillEnemies" + (week - 12)
-                }
-            ]
+            ActiveChallenges: []
         },
         ...staticWorldState,
         SyndicateMissions: [...staticWorldState.SyndicateMissions]
@@ -423,6 +396,37 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             Node: "SolarisUnitedHub1"
         });
     }
+
+    // Nightwave Challenges
+    worldState.SeasonInfo.ActiveChallenges.push(getSeasonDailyChallenge(day - 2));
+    worldState.SeasonInfo.ActiveChallenges.push(getSeasonDailyChallenge(day - 1));
+    worldState.SeasonInfo.ActiveChallenges.push(getSeasonDailyChallenge(day - 0));
+    if (isBeforeNextExpectedWorldStateRefresh(EPOCH + (day + 1) * 86400000)) {
+        worldState.SeasonInfo.ActiveChallenges.push(getSeasonDailyChallenge(day + 1));
+    }
+    worldState.SeasonInfo.ActiveChallenges.push(getSeasonWeeklyChallenge(week, 0));
+    worldState.SeasonInfo.ActiveChallenges.push(getSeasonWeeklyChallenge(week, 1));
+    worldState.SeasonInfo.ActiveChallenges.push(getSeasonWeeklyHardChallenge(week, 2));
+    worldState.SeasonInfo.ActiveChallenges.push(getSeasonWeeklyHardChallenge(week, 3));
+    worldState.SeasonInfo.ActiveChallenges.push({
+        _id: { $oid: "67e1b96e9d00cb47" + (week * 7 + 0).toString().padStart(8, "0") },
+        Activation: { $date: { $numberLong: weekStart.toString() } },
+        Expiry: { $date: { $numberLong: weekEnd.toString() } },
+        Challenge: "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentCompleteMissions" + (week - 12)
+    });
+    worldState.SeasonInfo.ActiveChallenges.push({
+        _id: { $oid: "67e1b96e9d00cb47" + (week * 7 + 1).toString().padStart(8, "0") },
+        Activation: { $date: { $numberLong: weekStart.toString() } },
+        Expiry: { $date: { $numberLong: weekEnd.toString() } },
+        Challenge: "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentKillEximus" + (week - 12)
+    });
+    worldState.SeasonInfo.ActiveChallenges.push({
+        _id: { $oid: "67e1b96e9d00cb47" + (week * 7 + 2).toString().padStart(8, "0") },
+        Activation: { $date: { $numberLong: weekStart.toString() } },
+        Expiry: { $date: { $numberLong: weekEnd.toString() } },
+        Challenge: "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentKillEnemies" + (week - 12)
+    });
+    // TODO: Provide upcoming weekly acts if rollover is imminent
 
     // Elite Sanctuary Onslaught cycling every week
     worldState.NodeOverrides.find(x => x.Node == "SolNode802")!.Seed = week; // unfaithful
@@ -737,6 +741,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     pushSortieIfRelevant(worldState.Sorties, day);
 
     // Archon Hunt cycling every week
+    // TODO: Handle imminent rollover
     {
         const boss = ["SORTIE_BOSS_AMAR", "SORTIE_BOSS_NIRA", "SORTIE_BOSS_BOREAL"][week % 3];
         const showdownNode = ["SolNode99", "SolNode53", "SolNode24"][week % 3];
@@ -829,6 +834,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     });
 
     // 1999 Calendar Season cycling every week + YearIteration every 4 weeks
+    // TODO: Handle imminent rollover
     worldState.KnownCalendarSeasons[0].Activation = { $date: { $numberLong: weekStart.toString() } };
     worldState.KnownCalendarSeasons[0].Expiry = { $date: { $numberLong: weekEnd.toString() } };
     worldState.KnownCalendarSeasons[0].Season = ["CST_WINTER", "CST_SPRING", "CST_SUMMER", "CST_FALL"][week % 4];
