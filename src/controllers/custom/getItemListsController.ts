@@ -3,6 +3,7 @@ import { getDict, getItemName, getString } from "@/src/services/itemDataService"
 import {
     ExportArcanes,
     ExportAvionics,
+    ExportCustoms,
     ExportDrones,
     ExportGear,
     ExportKeys,
@@ -166,6 +167,12 @@ const getItemListsController: RequestHandler = (req, response) => {
         });
     }
     for (const [uniqueName, item] of Object.entries(ExportRailjackWeapons)) {
+        res.miscitems.push({
+            uniqueName: uniqueName,
+            name: getString(item.name, lang)
+        });
+    }
+    for (const [uniqueName, item] of Object.entries(ExportCustoms)) {
         res.miscitems.push({
             uniqueName: uniqueName,
             name: getString(item.name, lang)
