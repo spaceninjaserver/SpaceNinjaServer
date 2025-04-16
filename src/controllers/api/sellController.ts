@@ -6,9 +6,12 @@ import {
     addRecipes,
     addMiscItems,
     addConsumables,
-    freeUpSlot
+    freeUpSlot,
+    combineInventoryChanges
 } from "@/src/services/inventoryService";
 import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
+import { ExportDojoRecipes } from "warframe-public-export-plus";
+import { IInventoryChanges } from "@/src/types/purchaseTypes";
 
 export const sellController: RequestHandler = async (req, res) => {
     const payload = JSON.parse(String(req.body)) as ISellRequest;
@@ -48,6 +51,9 @@ export const sellController: RequestHandler = async (req, res) => {
     if (payload.Items.Hoverboards) {
         requiredFields.add(InventorySlot.SPACESUITS);
     }
+    if (payload.Items.CrewShipWeapons) {
+        requiredFields.add(InventorySlot.RJ_COMPONENT_AND_ARMAMENTS);
+    }
     const inventory = await getInventory(accountId, Array.from(requiredFields).join(" "));
 
     // Give currency
@@ -69,9 +75,13 @@ export const sellController: RequestHandler = async (req, res) => {
                 ItemCount: payload.SellPrice
             }
         ]);
+    } else if (payload.SellCurrency == "SC_Resources") {
+        // Will add appropriate MiscItems from CrewShipWeapons
     } else {
         throw new Error("Unknown SellCurrency: " + payload.SellCurrency);
     }
+
+    const inventoryChanges: IInventoryChanges = {};
 
     // Remove item(s)
     if (payload.Items.Suits) {
@@ -145,6 +155,24 @@ export const sellController: RequestHandler = async (req, res) => {
             inventory.Drones.pull({ _id: sellItem.String });
         });
     }
+    if (payload.Items.CrewShipWeapons) {
+        payload.Items.CrewShipWeapons.forEach(sellItem => {
+            const index = inventory.CrewShipWeapons.findIndex(x => x._id.equals(sellItem.String));
+            if (index != -1) {
+                const itemType = inventory.CrewShipWeapons[index].ItemType;
+                const recipe = Object.values(ExportDojoRecipes.fabrications).find(x => x.resultType == itemType)!;
+                const miscItemChanges = recipe.ingredients.map(x => ({
+                    ItemType: x.ItemType,
+                    ItemCount: Math.trunc(x.ItemCount * 0.8)
+                }));
+                addMiscItems(inventory, miscItemChanges);
+                combineInventoryChanges(inventoryChanges, { MiscItems: miscItemChanges });
+
+                inventory.CrewShipWeapons.splice(index, 1);
+                freeUpSlot(inventory, InventorySlot.RJ_COMPONENT_AND_ARMAMENTS);
+            }
+        });
+    }
     if (payload.Items.Consumables) {
         const consumablesChanges = [];
         for (const sellItem of payload.Items.Consumables) {
@@ -191,7 +219,9 @@ export const sellController: RequestHandler = async (req, res) => {
     }
 
     await inventory.save();
-    res.json({});
+    res.json({
+        inventoryChanges: inventoryChanges // "inventoryChanges" for this response instead of the usual "InventoryChanges"
+    });
 };
 
 interface ISellRequest {
@@ -212,6 +242,7 @@ interface ISellRequest {
         OperatorAmps?: ISellItem[];
         Hoverboards?: ISellItem[];
         Drones?: ISellItem[];
+        CrewShipWeapons?: ISellItem[];
     };
     SellPrice: number;
     SellCurrency:
