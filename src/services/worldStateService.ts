@@ -8,7 +8,7 @@ import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { config } from "@/src/services/configService";
 import { CRng } from "@/src/services/rngService";
 import { eMissionType, ExportNightwave, ExportRegions } from "warframe-public-export-plus";
-import { ISeasonChallenge, IWorldState } from "../types/worldStateTypes";
+import { ISeasonChallenge, ISortie, IWorldState } from "../types/worldStateTypes";
 
 const sortieBosses = [
     "SORTIE_BOSS_HYENA",
@@ -153,6 +153,10 @@ const microplanetEndlessJobs = [
 
 const EPOCH = 1734307200 * 1000; // Monday, Dec 16, 2024 @ 00:00 UTC+0; should logically be winter in 1999 iteration 0
 
+const isBeforeNextExpectedWorldStateRefresh = (date: number): boolean => {
+    return Date.now() + 300_000 > date;
+};
+
 const getSortieTime = (day: number): number => {
     const dayStart = EPOCH + day * 86400000;
     const date = new Date(dayStart);
@@ -165,6 +169,134 @@ const getSortieTime = (day: number): number => {
         .find(part => part.type === "timeZoneName")!
         .value.includes("DT");
     return dayStart + (isDst ? 16 : 17) * 3600000;
+};
+
+const pushSortieIfRelevant = (out: ISortie[], day: number): void => {
+    const dayStart = getSortieTime(day);
+    if (!isBeforeNextExpectedWorldStateRefresh(dayStart)) {
+        return;
+    }
+    const dayEnd = getSortieTime(day + 1);
+    if (Date.now() >= dayEnd) {
+        return;
+    }
+
+    const rng = new CRng(day);
+
+    const boss = rng.randomElement(sortieBosses);
+
+    const modifiers = [
+        "SORTIE_MODIFIER_LOW_ENERGY",
+        "SORTIE_MODIFIER_IMPACT",
+        "SORTIE_MODIFIER_SLASH",
+        "SORTIE_MODIFIER_PUNCTURE",
+        "SORTIE_MODIFIER_EXIMUS",
+        "SORTIE_MODIFIER_MAGNETIC",
+        "SORTIE_MODIFIER_CORROSIVE",
+        "SORTIE_MODIFIER_VIRAL",
+        "SORTIE_MODIFIER_ELECTRICITY",
+        "SORTIE_MODIFIER_RADIATION",
+        "SORTIE_MODIFIER_GAS",
+        "SORTIE_MODIFIER_FIRE",
+        "SORTIE_MODIFIER_EXPLOSION",
+        "SORTIE_MODIFIER_FREEZE",
+        "SORTIE_MODIFIER_TOXIN",
+        "SORTIE_MODIFIER_POISON",
+        "SORTIE_MODIFIER_HAZARD_RADIATION",
+        "SORTIE_MODIFIER_HAZARD_MAGNETIC",
+        "SORTIE_MODIFIER_HAZARD_FOG", // TODO: push this if the mission tileset is Grineer Forest
+        "SORTIE_MODIFIER_HAZARD_FIRE", // TODO: push this if the mission tileset is Corpus Ship or Grineer Galleon
+        "SORTIE_MODIFIER_HAZARD_ICE",
+        "SORTIE_MODIFIER_HAZARD_COLD",
+        "SORTIE_MODIFIER_SECONDARY_ONLY",
+        "SORTIE_MODIFIER_SHOTGUN_ONLY",
+        "SORTIE_MODIFIER_SNIPER_ONLY",
+        "SORTIE_MODIFIER_RIFLE_ONLY",
+        "SORTIE_MODIFIER_MELEE_ONLY",
+        "SORTIE_MODIFIER_BOW_ONLY"
+    ];
+
+    if (sortieBossToFaction[boss] == "FC_CORPUS") modifiers.push("SORTIE_MODIFIER_SHIELDS");
+    if (sortieBossToFaction[boss] != "FC_CORPUS") modifiers.push("SORTIE_MODIFIER_ARMOR");
+
+    const nodes: string[] = [];
+    const availableMissionIndexes: number[] = [];
+    for (const [key, value] of Object.entries(ExportRegions)) {
+        if (
+            sortieFactionToSystemIndexes[sortieBossToFaction[boss]].includes(value.systemIndex) &&
+            sortieFactionToFactionIndexes[sortieBossToFaction[boss]].includes(value.factionIndex!) &&
+            value.name.indexOf("Archwing") == -1 &&
+            value.missionIndex != 0 && // Exclude MT_ASSASSINATION
+            value.missionIndex != 5 && // Exclude MT_CAPTURE
+            value.missionIndex != 21 && // Exclude MT_PURIFY
+            value.missionIndex != 23 && // Exclude MT_JUNCTION
+            value.missionIndex <= 28
+        ) {
+            if (!availableMissionIndexes.includes(value.missionIndex)) {
+                availableMissionIndexes.push(value.missionIndex);
+            }
+            nodes.push(key);
+        }
+    }
+
+    const selectedNodes: { missionType: string; modifierType: string; node: string }[] = [];
+    const missionTypes = new Set();
+
+    for (let i = 0; i < 3; i++) {
+        const randomIndex = rng.randomInt(0, nodes.length - 1);
+        const node = nodes[randomIndex];
+        let missionIndex = ExportRegions[node].missionIndex;
+
+        if (
+            !["SolNode404", "SolNode411"].includes(node) && // for some reason the game doesn't like missionType changes for these missions
+            missionIndex != 28 &&
+            rng.randomInt(0, 2) == 2
+        ) {
+            missionIndex = rng.randomElement(availableMissionIndexes);
+        }
+
+        if (i == 2 && rng.randomInt(0, 2) == 2) {
+            const filteredModifiers = modifiers.filter(mod => mod !== "SORTIE_MODIFIER_MELEE_ONLY");
+            const modifierType = rng.randomElement(filteredModifiers);
+
+            if (boss == "SORTIE_BOSS_PHORID") {
+                selectedNodes.push({ missionType: "MT_ASSASSINATION", modifierType, node });
+                nodes.splice(randomIndex, 1);
+                continue;
+            } else if (sortieBossNode[boss]) {
+                selectedNodes.push({ missionType: "MT_ASSASSINATION", modifierType, node: sortieBossNode[boss] });
+                continue;
+            }
+        }
+
+        const missionType = eMissionType[missionIndex].tag;
+
+        if (missionTypes.has(missionType)) {
+            i--;
+            continue;
+        }
+
+        const filteredModifiers =
+            missionType === "MT_TERRITORY"
+                ? modifiers.filter(mod => mod != "SORTIE_MODIFIER_HAZARD_RADIATION")
+                : modifiers;
+
+        const modifierType = rng.randomElement(filteredModifiers);
+
+        selectedNodes.push({ missionType, modifierType, node });
+        nodes.splice(randomIndex, 1);
+        missionTypes.add(missionType);
+    }
+
+    out.push({
+        _id: { $oid: Math.trunc(dayStart / 1000).toString(16) + "d4d932c97c0a3acd" },
+        Activation: { $date: { $numberLong: dayStart.toString() } },
+        Expiry: { $date: { $numberLong: dayEnd.toString() } },
+        Reward: "/Lotus/Types/Game/MissionDecks/SortieRewards",
+        Seed: day,
+        Boss: boss,
+        Variants: selectedNodes
+    });
 };
 
 const dailyChallenges = Object.keys(ExportNightwave.challenges).filter(x =>
@@ -218,10 +350,6 @@ const getSeasonWeeklyHardChallenge = (week: number, id: number): ISeasonChalleng
         Expiry: { $date: { $numberLong: weekEnd.toString() } },
         Challenge: rng.randomElement(weeklyHardChallenges)
     };
-};
-
-const expiresBeforeNextExpectedWorldStateRefresh = (date: number): boolean => {
-    return Date.now() + 300_000 > date;
 };
 
 export const getWorldState = (buildLabel?: string): IWorldState => {
@@ -565,7 +693,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                 ]
             });
         }
-    } while (expiresBeforeNextExpectedWorldStateRefresh(bountyCycleEnd) && ++bountyCycle);
+    } while (isBeforeNextExpectedWorldStateRefresh(bountyCycleEnd) && ++bountyCycle);
 
     if (config.worldState?.creditBoost) {
         worldState.GlobalUpgrades.push({
@@ -605,140 +733,8 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     }
 
     // Sortie cycling every day
-    {
-        let genDay;
-        let dayStart;
-        let dayEnd;
-        const sortieRolloverToday = getSortieTime(day);
-        if (Date.now() < sortieRolloverToday) {
-            // Early in the day, generate sortie for `day - 1`, expiring at `sortieRolloverToday`.
-            genDay = day - 1;
-            dayStart = getSortieTime(genDay);
-            dayEnd = sortieRolloverToday;
-        } else {
-            // Late in the day, generate sortie for `day`, expiring at `getSortieTime(day + 1)`.
-            genDay = day;
-            dayStart = sortieRolloverToday;
-            dayEnd = getSortieTime(day + 1);
-        }
-
-        const rng = new CRng(genDay);
-
-        const boss = rng.randomElement(sortieBosses);
-
-        const modifiers = [
-            "SORTIE_MODIFIER_LOW_ENERGY",
-            "SORTIE_MODIFIER_IMPACT",
-            "SORTIE_MODIFIER_SLASH",
-            "SORTIE_MODIFIER_PUNCTURE",
-            "SORTIE_MODIFIER_EXIMUS",
-            "SORTIE_MODIFIER_MAGNETIC",
-            "SORTIE_MODIFIER_CORROSIVE",
-            "SORTIE_MODIFIER_VIRAL",
-            "SORTIE_MODIFIER_ELECTRICITY",
-            "SORTIE_MODIFIER_RADIATION",
-            "SORTIE_MODIFIER_GAS",
-            "SORTIE_MODIFIER_FIRE",
-            "SORTIE_MODIFIER_EXPLOSION",
-            "SORTIE_MODIFIER_FREEZE",
-            "SORTIE_MODIFIER_TOXIN",
-            "SORTIE_MODIFIER_POISON",
-            "SORTIE_MODIFIER_HAZARD_RADIATION",
-            "SORTIE_MODIFIER_HAZARD_MAGNETIC",
-            "SORTIE_MODIFIER_HAZARD_FOG", // TODO: push this if the mission tileset is Grineer Forest
-            "SORTIE_MODIFIER_HAZARD_FIRE", // TODO: push this if the mission tileset is Corpus Ship or Grineer Galleon
-            "SORTIE_MODIFIER_HAZARD_ICE",
-            "SORTIE_MODIFIER_HAZARD_COLD",
-            "SORTIE_MODIFIER_SECONDARY_ONLY",
-            "SORTIE_MODIFIER_SHOTGUN_ONLY",
-            "SORTIE_MODIFIER_SNIPER_ONLY",
-            "SORTIE_MODIFIER_RIFLE_ONLY",
-            "SORTIE_MODIFIER_MELEE_ONLY",
-            "SORTIE_MODIFIER_BOW_ONLY"
-        ];
-
-        if (sortieBossToFaction[boss] == "FC_CORPUS") modifiers.push("SORTIE_MODIFIER_SHIELDS");
-        if (sortieBossToFaction[boss] != "FC_CORPUS") modifiers.push("SORTIE_MODIFIER_ARMOR");
-
-        const nodes: string[] = [];
-        const availableMissionIndexes: number[] = [];
-        for (const [key, value] of Object.entries(ExportRegions)) {
-            if (
-                sortieFactionToSystemIndexes[sortieBossToFaction[boss]].includes(value.systemIndex) &&
-                sortieFactionToFactionIndexes[sortieBossToFaction[boss]].includes(value.factionIndex!) &&
-                value.name.indexOf("Archwing") == -1 &&
-                value.missionIndex != 0 && // Exclude MT_ASSASSINATION
-                value.missionIndex != 5 && // Exclude MT_CAPTURE
-                value.missionIndex != 21 && // Exclude MT_PURIFY
-                value.missionIndex != 23 && // Exclude MT_JUNCTION
-                value.missionIndex <= 28
-            ) {
-                if (!availableMissionIndexes.includes(value.missionIndex)) {
-                    availableMissionIndexes.push(value.missionIndex);
-                }
-                nodes.push(key);
-            }
-        }
-
-        const selectedNodes: { missionType: string; modifierType: string; node: string }[] = [];
-        const missionTypes = new Set();
-
-        for (let i = 0; i < 3; i++) {
-            const randomIndex = rng.randomInt(0, nodes.length - 1);
-            const node = nodes[randomIndex];
-            let missionIndex = ExportRegions[node].missionIndex;
-
-            if (
-                !["SolNode404", "SolNode411"].includes(node) && // for some reason the game doesn't like missionType changes for these missions
-                missionIndex != 28 &&
-                rng.randomInt(0, 2) == 2
-            ) {
-                missionIndex = rng.randomElement(availableMissionIndexes);
-            }
-
-            if (i == 2 && rng.randomInt(0, 2) == 2) {
-                const filteredModifiers = modifiers.filter(mod => mod !== "SORTIE_MODIFIER_MELEE_ONLY");
-                const modifierType = rng.randomElement(filteredModifiers);
-
-                if (boss == "SORTIE_BOSS_PHORID") {
-                    selectedNodes.push({ missionType: "MT_ASSASSINATION", modifierType, node });
-                    nodes.splice(randomIndex, 1);
-                    continue;
-                } else if (sortieBossNode[boss]) {
-                    selectedNodes.push({ missionType: "MT_ASSASSINATION", modifierType, node: sortieBossNode[boss] });
-                    continue;
-                }
-            }
-
-            const missionType = eMissionType[missionIndex].tag;
-
-            if (missionTypes.has(missionType)) {
-                i--;
-                continue;
-            }
-
-            const filteredModifiers =
-                missionType === "MT_TERRITORY"
-                    ? modifiers.filter(mod => mod != "SORTIE_MODIFIER_HAZARD_RADIATION")
-                    : modifiers;
-
-            const modifierType = rng.randomElement(filteredModifiers);
-
-            selectedNodes.push({ missionType, modifierType, node });
-            nodes.splice(randomIndex, 1);
-            missionTypes.add(missionType);
-        }
-
-        worldState.Sorties.push({
-            _id: { $oid: Math.trunc(dayStart / 1000).toString(16) + "d4d932c97c0a3acd" },
-            Activation: { $date: { $numberLong: dayStart.toString() } },
-            Expiry: { $date: { $numberLong: dayEnd.toString() } },
-            Reward: "/Lotus/Types/Game/MissionDecks/SortieRewards",
-            Seed: genDay,
-            Boss: boss,
-            Variants: selectedNodes
-        });
-    }
+    pushSortieIfRelevant(worldState.Sorties, day - 1);
+    pushSortieIfRelevant(worldState.Sorties, day);
 
     // Archon Hunt cycling every week
     {
