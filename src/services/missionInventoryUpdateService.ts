@@ -629,6 +629,19 @@ export const addMissionRewards = async (
         if (node.missionReward) {
             missionCompletionCredits += addFixedLevelRewards(node.missionReward, inventory, MissionRewards, rewardInfo);
         }
+
+        if (missions.Tag == "PlutoToErisJunction") {
+            await createMessage(inventory.accountOwnerId, [
+                {
+                    sndr: "/Lotus/Language/G1Quests/GolemQuestJordasName",
+                    msg: "/Lotus/Language/G1Quests/GolemQuestIntroBody",
+                    att: ["/Lotus/Types/Keys/GolemQuest/GolemQuestKeyChainItem"],
+                    sub: "/Lotus/Language/G1Quests/GolemQuestIntroTitle",
+                    icon: "/Lotus/Interface/Icons/Npcs/JordasPortrait.png",
+                    highPriority: true
+                }
+            ]);
+        }
     }
 
     if (rewardInfo.useVaultManifest) {
