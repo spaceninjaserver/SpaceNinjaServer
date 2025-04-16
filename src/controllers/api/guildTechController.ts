@@ -28,7 +28,7 @@ import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { config } from "@/src/services/configService";
 import { GuildPermission, ITechProjectClient } from "@/src/types/guildTypes";
 import { GuildMember } from "@/src/models/guildModel";
-import { toMongoDate } from "@/src/helpers/inventoryHelpers";
+import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
 import { logger } from "@/src/utils/logger";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 
@@ -305,6 +305,38 @@ export const guildTechController: RequestHandler = async (req, res) => {
         guild.ActiveDojoColorResearch = data.RecipeType;
         await guild.save();
         res.end();
+    } else if (data.Action == "Cancel" && data.CategoryItemId) {
+        const personalTechProjectIndex = inventory.PersonalTechProjects.findIndex(x =>
+            x.CategoryItemId?.equals(data.CategoryItemId)
+        );
+        const personalTechProject = inventory.PersonalTechProjects[personalTechProjectIndex];
+        inventory.PersonalTechProjects.splice(personalTechProjectIndex, 1);
+
+        const meta = ExportDojoRecipes.research[personalTechProject.ItemType];
+        const contributedCredits = meta.price - personalTechProject.ReqCredits;
+        const inventoryChanges = updateCurrency(inventory, contributedCredits * -1, false);
+        inventoryChanges.MiscItems = [];
+        for (const ingredient of meta.ingredients) {
+            const reqItem = personalTechProject.ReqItems.find(x => x.ItemType == ingredient.ItemType);
+            if (reqItem) {
+                const contributedItems = ingredient.ItemCount - reqItem.ItemCount;
+                inventoryChanges.MiscItems.push({
+                    ItemType: ingredient.ItemType,
+                    ItemCount: contributedItems
+                });
+            }
+        }
+        addMiscItems(inventory, inventoryChanges.MiscItems);
+
+        await inventory.save();
+        res.json({
+            action: "Cancel",
+            isPersonal: true,
+            inventoryChanges: inventoryChanges,
+            personalTech: {
+                ItemId: toOid(personalTechProject._id)
+            }
+        });
     } else if (data.Action == "Rush" && data.CategoryItemId) {
         const inventoryChanges: IInventoryChanges = {
             ...updateCurrency(inventory, 20, true),
