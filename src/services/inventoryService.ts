@@ -539,10 +539,27 @@ export const addItem = async (
         }
     }
     if (typeName in ExportRailjackWeapons) {
-        return {
-            ...addEquipment(inventory, ExportRailjackWeapons[typeName].productCategory, typeName),
-            ...occupySlot(inventory, InventorySlot.RJ_COMPONENT_AND_ARMAMENTS, premiumPurchase)
-        };
+        const meta = ExportRailjackWeapons[typeName];
+        if (meta.defaultUpgrades?.length) {
+            // House versions need to be identified to get stats so put them into raw salvage first.
+            const rawSalvageChanges = [
+                {
+                    ItemType: typeName,
+                    ItemCount: quantity
+                }
+            ];
+            addCrewShipRawSalvage(inventory, rawSalvageChanges);
+            return { CrewShipRawSalvage: rawSalvageChanges };
+        } else {
+            // Sigma versions can be added directly.
+            if (quantity != 1) {
+                throw new Error(`unexpected acquisition quantity of CrewShipWeapon: got ${quantity}, expected 1`);
+            }
+            return {
+                ...addEquipment(inventory, meta.productCategory, typeName),
+                ...occupySlot(inventory, InventorySlot.RJ_COMPONENT_AND_ARMAMENTS, premiumPurchase)
+            };
+        }
     }
     if (typeName in ExportMisc.creditBundles) {
         const creditsTotal = ExportMisc.creditBundles[typeName] * quantity;
