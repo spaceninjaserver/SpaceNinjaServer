@@ -1141,6 +1141,32 @@ function getRandomMissionDrops(RewardInfo: IRewardInfo, tierOverride: number | u
                 drops.push({ StoreItem: drop.type, ItemCount: drop.itemCount });
             }
         }
+
+        if (RewardInfo.PurgatoryRewardQualifications) {
+            for (const encodedQualification of RewardInfo.PurgatoryRewardQualifications) {
+                const qualification = parseInt(encodedQualification) - 1;
+                if (qualification < 0 || qualification > 8) {
+                    logger.error(`unexpected purgatory reward qualification: ${qualification}`);
+                } else {
+                    const drop = getRandomRewardByChance(
+                        ExportRewards[
+                            [
+                                "/Lotus/Types/Game/MissionDecks/PurgatoryMissionRewards/PurgatoryBlackTokenRewards",
+                                "/Lotus/Types/Game/MissionDecks/PurgatoryMissionRewards/PurgatoryGoldTokenRewards",
+                                "/Lotus/Types/Game/MissionDecks/PurgatoryMissionRewards/PurgatoryBlueTokenRewards"
+                            ][Math.trunc(qualification / 3)]
+                        ][qualification % 3]
+                    );
+                    if (drop) {
+                        drops.push({
+                            StoreItem: drop.type,
+                            ItemCount: drop.itemCount,
+                            FromEnemyCache: true // to show "identified"
+                        });
+                    }
+                }
+            }
+        }
     }
     return drops;
 }
