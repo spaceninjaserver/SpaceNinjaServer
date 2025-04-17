@@ -1,14 +1,10 @@
 import staticWorldState from "@/static/fixed_responses/worldState/worldState.json";
-import static1999FallDays from "@/static/fixed_responses/worldState/1999_fall_days.json";
-import static1999SpringDays from "@/static/fixed_responses/worldState/1999_spring_days.json";
-import static1999SummerDays from "@/static/fixed_responses/worldState/1999_summer_days.json";
-import static1999WinterDays from "@/static/fixed_responses/worldState/1999_winter_days.json";
 import { buildConfig } from "@/src/services/buildConfigService";
 import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { config } from "@/src/services/configService";
 import { CRng } from "@/src/services/rngService";
 import { eMissionType, ExportNightwave, ExportRegions } from "warframe-public-export-plus";
-import { ISeasonChallenge, ISortie, IWorldState } from "../types/worldStateTypes";
+import { ICalendarDay, ICalendarSeason, ISeasonChallenge, ISortie, IWorldState } from "../types/worldStateTypes";
 
 const sortieBosses = [
     "SORTIE_BOSS_HYENA",
@@ -352,6 +348,209 @@ const getSeasonWeeklyHardChallenge = (week: number, id: number): ISeasonChalleng
     };
 };
 
+const birthdays: number[] = [
+    1, // Kaya
+    45, // Lettie
+    74, // Minerva (MinervaVelemirDialogue_rom.dialogue)
+    143, // Amir
+    166, // Flare
+    191, // Aoi
+    306, // Eleanor
+    307, // Arthur
+    338, // Quincy
+    355 // Velimir (MinervaVelemirDialogue_rom.dialogue)
+];
+
+const getCalendarSeason = (week: number): ICalendarSeason => {
+    const seasonIndex = week % 4;
+    const seasonDay1 = seasonIndex * 90 + 1;
+    const seasonDay91 = seasonIndex * 90 + 91;
+    const eventDays: ICalendarDay[] = [];
+    for (const day of birthdays) {
+        if (day < seasonDay1) {
+            continue;
+        }
+        if (day >= seasonDay91) {
+            break;
+        }
+        //logger.debug(`birthday on day ${day}`);
+        eventDays.push({ day, events: [] }); // This is how CET_PLOT looks in worldState as of around 38.5.0
+    }
+    const rng = new CRng(week);
+    const challenges = [
+        "/Lotus/Types/Challenges/Calendar1999/CalendarKillEnemiesEasy",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarKillEnemiesMedium",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarKillEnemiesHard",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarKillEnemiesWithMeleeEasy",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarKillEnemiesWithMeleeMedium",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarKillEnemiesWithMeleeHard",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarKillEnemiesWithAbilitiesEasy",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarKillEnemiesWithAbilitiesMedium",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarKillEnemiesWithAbilitiesHard",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarDestroyPropsEasy",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarDestroyPropsMedium",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarDestroyPropsHard",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarKillEximusEasy",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarKillEximusMedium",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarKillEximusHard",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarKillScaldraEnemiesEasy",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarKillScaldraEnemiesMedium",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarKillScaldraEnemiesHard",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarKillScaldraEnemiesWithAbilitiesEasy",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarKillScaldraEnemiesWithAbilitiesMedium",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarKillScaldraEnemiesWithAbilitiesHard",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarKillTankHard",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarKillScaldraEnemiesWithMeleeEasy",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarKillScaldraEnemiesWithMeleeMedium",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarKillScaldraEnemiesWithMeleeHard",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarKillTechrotEnemiesEasy",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarKillTechrotEnemiesMedium",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarKillTechrotEnemiesHard",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarKillTechrotEnemiesWithAbilitiesEasy",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarKillTechrotEnemiesWithAbilitiesMedium",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarKillTechrotEnemiesWithAbilitiesHard",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarKillTechrotEnemiesWithMeleeEasy",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarKillTechrotEnemiesWithMeleeMedium",
+        "/Lotus/Types/Challenges/Calendar1999/CalendarKillTechrotEnemiesWithMeleeHard"
+    ];
+    const rewardRanges: number[] = [];
+    const upgradeRanges: number[] = [];
+    for (let i = 0; i != 6; ++i) {
+        const chunkDay1 = seasonDay1 + i * 15;
+        const chunkDay13 = chunkDay1 - 1 + 13;
+        let challengeDay: number;
+        do {
+            challengeDay = rng.randomInt(chunkDay1, chunkDay13);
+        } while (birthdays.indexOf(challengeDay) != -1);
+
+        const challengeIndex = rng.randomInt(0, challenges.length - 1);
+        const challenge = challenges[challengeIndex];
+        challenges.splice(challengeIndex, 1);
+
+        //logger.debug(`challenge on day ${challengeDay}`);
+        eventDays.push({
+            day: challengeDay,
+            events: [{ type: "CET_CHALLENGE", challenge }]
+        });
+
+        rewardRanges.push(challengeDay);
+        if (i == 0 || i == 3 || i == 5) {
+            upgradeRanges.push(challengeDay);
+        }
+    }
+    rewardRanges.push(seasonDay91);
+    upgradeRanges.push(seasonDay91);
+
+    const rewards = [
+        "/Lotus/StoreItems/Types/Items/MiscItems/UtilityUnlocker",
+        "/Lotus/StoreItems/Types/Recipes/Components/FormaAuraBlueprint",
+        "/Lotus/StoreItems/Types/Recipes/Components/FormaBlueprint",
+        "/Lotus/StoreItems/Types/Recipes/Components/WeaponUtilityUnlockerBlueprint",
+        "/Lotus/StoreItems/Types/Items/MiscItems/WeaponMeleeArcaneUnlocker",
+        "/Lotus/StoreItems/Types/Items/MiscItems/WeaponSecondaryArcaneUnlocker",
+        "/Lotus/StoreItems/Types/Items/MiscItems/WeaponPrimaryArcaneUnlocker",
+        "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/CircuitSilverSteelPathFusionBundle",
+        "/Lotus/StoreItems/Types/BoosterPacks/CalendarRivenPack",
+        "/Lotus/Types/StoreItems/Packages/Calendar/CalendarKuvaBundleSmall",
+        "/Lotus/Types/StoreItems/Packages/Calendar/CalendarKuvaBundleLarge",
+        "/Lotus/StoreItems/Types/BoosterPacks/CalendarArtifactPack",
+        "/Lotus/StoreItems/Types/BoosterPacks/CalendarMajorArtifactPack",
+        "/Lotus/Types/StoreItems/Boosters/AffinityBooster3DayStoreItem",
+        "/Lotus/Types/StoreItems/Boosters/ModDropChanceBooster3DayStoreItem",
+        "/Lotus/Types/StoreItems/Boosters/ResourceDropChance3DayStoreItem",
+        "/Lotus/StoreItems/Types/Items/MiscItems/Forma",
+        "/Lotus/StoreItems/Types/Recipes/Components/OrokinCatalystBlueprint",
+        "/Lotus/StoreItems/Types/Recipes/Components/OrokinReactorBlueprint",
+        "/Lotus/StoreItems/Types/Items/MiscItems/WeaponUtilityUnlocker",
+        "/Lotus/Types/StoreItems/Packages/Calendar/CalendarVosforPack",
+        "/Lotus/StoreItems/Types/Gameplay/NarmerSorties/ArchonCrystalOrange",
+        "/Lotus/StoreItems/Types/Gameplay/NarmerSorties/ArchonCrystalNira",
+        "/Lotus/StoreItems/Types/Gameplay/NarmerSorties/ArchonCrystalGreen",
+        "/Lotus/StoreItems/Types/Gameplay/NarmerSorties/ArchonCrystalBoreal",
+        "/Lotus/StoreItems/Types/Gameplay/NarmerSorties/ArchonCrystalAmar",
+        "/Lotus/StoreItems/Types/Gameplay/NarmerSorties/ArchonCrystalViolet"
+    ];
+    for (let i = 0; i != rewardRanges.length - 1; ++i) {
+        const rewardIndex = rng.randomInt(0, rewards.length - 1);
+        const reward = rewards[rewardIndex];
+        rewards.splice(rewardIndex, 1);
+
+        //logger.debug(`trying to fit a reward between day ${rewardRanges[i]} and ${rewardRanges[i + 1]}`);
+        let day: number;
+        do {
+            day = rng.randomInt(rewardRanges[i] + 1, rewardRanges[i + 1] - 1);
+        } while (eventDays.find(x => x.day == day));
+        eventDays.push({ day, events: [{ type: "CET_REWARD", reward }] });
+    }
+
+    const upgrades = [
+        "/Lotus/Upgrades/Calendar/MeleeCritChance",
+        "/Lotus/Upgrades/Calendar/MeleeAttackSpeed",
+        "/Lotus/Upgrades/Calendar/EnergyOrbToAbilityRange",
+        "/Lotus/Upgrades/Calendar/AbilityStrength",
+        "/Lotus/Upgrades/Calendar/Armor",
+        "/Lotus/Upgrades/Calendar/RadiationProcOnTakeDamage",
+        "/Lotus/Upgrades/Calendar/CompanionDamage",
+        "/Lotus/Upgrades/Calendar/GasChanceToPrimaryAndSecondary",
+        "/Lotus/Upgrades/Calendar/MagazineCapacity",
+        "/Lotus/Upgrades/Calendar/PunchToPrimary",
+        "/Lotus/Upgrades/Calendar/HealingEffects",
+        "/Lotus/Upgrades/Calendar/EnergyRestoration",
+        "/Lotus/Upgrades/Calendar/OvershieldCap",
+        "/Lotus/Upgrades/Calendar/ElectricStatusDamageAndChance",
+        "/Lotus/Upgrades/Calendar/FinisherChancePerComboMultiplier",
+        "/Lotus/Upgrades/Calendar/MagnetStatusPull",
+        "/Lotus/Upgrades/Calendar/CompanionsBuffNearbyPlayer",
+        "/Lotus/Upgrades/Calendar/StatusChancePerAmmoSpent",
+        "/Lotus/Upgrades/Calendar/OrbsDuplicateOnPickup",
+        "/Lotus/Upgrades/Calendar/AttackAndMovementSpeedOnCritMelee",
+        "/Lotus/Upgrades/Calendar/RadialJavelinOnHeavy",
+        "/Lotus/Upgrades/Calendar/MagnitizeWithinRangeEveryXCasts",
+        "/Lotus/Upgrades/Calendar/CompanionsRadiationChance",
+        "/Lotus/Upgrades/Calendar/BlastEveryXShots",
+        "/Lotus/Upgrades/Calendar/GenerateOmniOrbsOnWeakKill",
+        "/Lotus/Upgrades/Calendar/ElectricDamagePerDistance",
+        "/Lotus/Upgrades/Calendar/MeleeSlideFowardMomentumOnEnemyHit",
+        "/Lotus/Upgrades/Calendar/SharedFreeAbilityEveryXCasts",
+        "/Lotus/Upgrades/Calendar/ReviveEnemyAsSpectreOnKill",
+        "/Lotus/Upgrades/Calendar/RefundBulletOnStatusProc",
+        "/Lotus/Upgrades/Calendar/ExplodingHealthOrbs",
+        "/Lotus/Upgrades/Calendar/SpeedBuffsWhenAirborne",
+        "/Lotus/Upgrades/Calendar/EnergyWavesOnCombo",
+        "/Lotus/Upgrades/Calendar/PowerStrengthAndEfficiencyPerEnergySpent",
+        "/Lotus/Upgrades/Calendar/CloneActiveCompanionForEnergySpent",
+        "/Lotus/Upgrades/Calendar/GuidingMissilesChance",
+        "/Lotus/Upgrades/Calendar/EnergyOrbsGrantShield",
+        "/Lotus/Upgrades/Calendar/ElectricalDamageOnBulletJump"
+    ];
+    for (let i = 0; i != upgradeRanges.length - 1; ++i) {
+        const upgradeIndex = rng.randomInt(0, upgrades.length - 1);
+        const upgrade = upgrades[upgradeIndex];
+        upgrades.splice(upgradeIndex, 1);
+
+        //logger.debug(`trying to fit an upgrade between day ${upgradeRanges[i]} and ${upgradeRanges[i + 1]}`);
+        let day: number;
+        do {
+            day = rng.randomInt(upgradeRanges[i] + 1, upgradeRanges[i + 1] - 1);
+        } while (eventDays.find(x => x.day == day));
+        eventDays.push({ day, events: [{ type: "CET_UPGRADE", upgrade }] });
+    }
+
+    eventDays.sort((a, b) => a.day - b.day);
+
+    const weekStart = EPOCH + week * 604800000;
+    const weekEnd = weekStart + 604800000;
+    return {
+        Activation: { $date: { $numberLong: weekStart.toString() } },
+        Expiry: { $date: { $numberLong: weekEnd.toString() } },
+        Days: eventDays,
+        Season: ["CST_WINTER", "CST_SPRING", "CST_SUMMER", "CST_FALL"][seasonIndex],
+        YearIteration: Math.trunc(week / 4),
+        Version: 19,
+        UpgradeAvaliabilityRequirements: ["/Lotus/Upgrades/Calendar/1999UpgradeApplicationRequirement"]
+    };
+};
+
 export const getWorldState = (buildLabel?: string): IWorldState => {
     const day = Math.trunc((Date.now() - EPOCH) / 86400000);
     const week = Math.trunc(day / 7);
@@ -376,6 +575,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             Params: "",
             ActiveChallenges: []
         },
+        KnownCalendarSeasons: [],
         ...staticWorldState,
         SyndicateMissions: [...staticWorldState.SyndicateMissions]
     };
@@ -834,17 +1034,10 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     });
 
     // 1999 Calendar Season cycling every week + YearIteration every 4 weeks
-    // TODO: Handle imminent rollover
-    worldState.KnownCalendarSeasons[0].Activation = { $date: { $numberLong: weekStart.toString() } };
-    worldState.KnownCalendarSeasons[0].Expiry = { $date: { $numberLong: weekEnd.toString() } };
-    worldState.KnownCalendarSeasons[0].Season = ["CST_WINTER", "CST_SPRING", "CST_SUMMER", "CST_FALL"][week % 4];
-    worldState.KnownCalendarSeasons[0].Days = [
-        static1999WinterDays,
-        static1999SpringDays,
-        static1999SummerDays,
-        static1999FallDays
-    ][week % 4];
-    worldState.KnownCalendarSeasons[0].YearIteration = Math.trunc(week / 4);
+    worldState.KnownCalendarSeasons.push(getCalendarSeason(week));
+    if (isBeforeNextExpectedWorldStateRefresh(weekEnd)) {
+        worldState.KnownCalendarSeasons.push(getCalendarSeason(week + 1));
+    }
 
     // Sentient Anomaly cycling every 30 minutes
     const halfHour = Math.trunc(Date.now() / (unixTimesInMs.hour / 2));

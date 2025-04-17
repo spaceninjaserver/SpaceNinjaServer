@@ -127,8 +127,22 @@ export interface ICalendarSeason {
     Activation: IMongoDate;
     Expiry: IMongoDate;
     Season: string; // "CST_UNDEFINED" | "CST_WINTER" | "CST_SPRING" | "CST_SUMMER" | "CST_FALL"
-    Days: {
-        day: number;
-    }[];
+    Days: ICalendarDay[];
     YearIteration: number;
+    Version: number;
+    UpgradeAvaliabilityRequirements: string[];
+}
+
+export interface ICalendarDay {
+    day: number;
+    events: ICalendarEvent[];
+}
+
+export interface ICalendarEvent {
+    type: string;
+    challenge?: string;
+    reward?: string;
+    upgrade?: string;
+    dialogueName?: string;
+    dialogueConvo?: string;
 }
