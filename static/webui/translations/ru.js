@@ -138,6 +138,7 @@ dict = {
     cheats_noArgonCrystalDecay: `Без распада аргоновых кристаллов`,
     cheats_noMasteryRankUpCooldown: `Повышение ранга мастерства без кулдауна`,
     cheats_noVendorPurchaseLimits: `Отсутствие лимитов на покупки у вендоров`,
+    cheats_noDeathMarks: `[UNTRANSLATED] No Death Marks`,
     cheats_noKimCooldowns: `[UNTRANSLATED] No KIM Cooldowns`,
     cheats_instantResourceExtractorDrones: `Мгновенные Экстракторы Ресурсов`,
     cheats_noResourceExtractorDronesDamage: `[UNTRANSLATED] No Resource Extractor Drones Damage`,

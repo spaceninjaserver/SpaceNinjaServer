@@ -39,6 +39,7 @@ interface IConfig {
     noArgonCrystalDecay?: boolean;
     noMasteryRankUpCooldown?: boolean;
     noVendorPurchaseLimits?: boolean;
+    noDeathMarks?: boolean;
     noKimCooldowns?: boolean;
     instantResourceExtractorDrones?: boolean;
     noResourceExtractorDronesDamage?: boolean;

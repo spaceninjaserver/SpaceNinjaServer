@@ -138,6 +138,7 @@ dict = {
     cheats_noArgonCrystalDecay: `[UNTRANSLATED] No Argon Crystal Decay`,
     cheats_noMasteryRankUpCooldown: `[UNTRANSLATED] No Mastery Rank Up Cooldown`,
     cheats_noVendorPurchaseLimits: `[UNTRANSLATED] No Vendor Purchase Limits`,
+    cheats_noDeathMarks: `[UNTRANSLATED] No Death Marks`,
     cheats_noKimCooldowns: `[UNTRANSLATED] No KIM Cooldowns`,
     cheats_instantResourceExtractorDrones: `即时资源采集无人机`,
     cheats_noResourceExtractorDronesDamage: `[UNTRANSLATED] No Resource Extractor Drones Damage`,

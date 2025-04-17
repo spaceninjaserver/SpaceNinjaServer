@@ -33,6 +33,7 @@
   "noArgonCrystalDecay": false,
   "noMasteryRankUpCooldown": false,
   "noVendorPurchaseLimits": true,
+  "noDeathMarks": false,
   "noKimCooldowns": false,
   "instantResourceExtractorDrones": false,
   "noResourceExtractorDronesDamage": false,

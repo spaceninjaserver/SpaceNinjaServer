@@ -54,6 +54,7 @@ import { getInfNodes } from "@/src/helpers/nemesisHelpers";
 import { Loadout } from "../models/inventoryModels/loadoutModel";
 import { ILoadoutConfigDatabase } from "../types/saveLoadoutTypes";
 import { getWorldState } from "./worldStateService";
+import { config } from "./configService";
 
 const getRotations = (rewardInfo: IRewardInfo, tierOverride?: number): number[] => {
     // For Spy missions, e.g. 3 vaults cracked = A, B, C
@@ -418,22 +419,24 @@ export const addMissionInventoryUpdates = async (
                 break;
             }
             case "DeathMarks": {
-                for (const bossName of value) {
-                    if (inventory.DeathMarks.indexOf(bossName) == -1) {
-                        // It's a new death mark; we have to say the line.
-                        await createMessage(inventory.accountOwnerId, [
-                            {
-                                sub: bossName,
-                                sndr: "/Lotus/Language/G1Quests/DeathMarkSender",
-                                msg: "/Lotus/Language/G1Quests/DeathMarkMessage",
-                                icon: "/Lotus/Interface/Icons/Npcs/Stalker_d.png",
-                                highPriority: true,
-                                expiry: new Date(Date.now() + 86400_000) // TOVERIFY: This type of inbox message seems to automatically delete itself. We'll just delete it after 24 hours, but it's clear if this is correct.
-                            }
-                        ]);
+                if (!config.noDeathMarks) {
+                    for (const bossName of value) {
+                        if (inventory.DeathMarks.indexOf(bossName) == -1) {
+                            // It's a new death mark; we have to say the line.
+                            await createMessage(inventory.accountOwnerId, [
+                                {
+                                    sub: bossName,
+                                    sndr: "/Lotus/Language/G1Quests/DeathMarkSender",
+                                    msg: "/Lotus/Language/G1Quests/DeathMarkMessage",
+                                    icon: "/Lotus/Interface/Icons/Npcs/Stalker_d.png",
+                                    highPriority: true,
+                                    expiry: new Date(Date.now() + 86400_000) // TOVERIFY: This type of inbox message seems to automatically delete itself. We'll just delete it after 24 hours, but it's clear if this is correct.
+                                }
+                            ]);
+                        }
                     }
+                    inventory.DeathMarks = value;
                 }
-                inventory.DeathMarks = value;
                 break;
             }
             case "CapturedAnimals": {

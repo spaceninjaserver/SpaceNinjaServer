@@ -137,6 +137,7 @@ dict = {
     cheats_noArgonCrystalDecay: `No Argon Crystal Decay`,
     cheats_noMasteryRankUpCooldown: `No Mastery Rank Up Cooldown`,
     cheats_noVendorPurchaseLimits: `No Vendor Purchase Limits`,
+    cheats_noDeathMarks: `No Death Marks`,
     cheats_noKimCooldowns: `No KIM Cooldowns`,
     cheats_instantResourceExtractorDrones: `Instant Resource Extractor Drones`,
     cheats_noResourceExtractorDronesDamage: `No Resource Extractor Drones Damage`,
