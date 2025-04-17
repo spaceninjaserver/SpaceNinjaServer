@@ -97,6 +97,19 @@ export const guildTechController: RequestHandler = async (req, res) => {
             res.end();
         } else {
             const recipe = ExportDojoRecipes.research[data.RecipeType];
+            if (data.TechProductCategory) {
+                if (
+                    data.TechProductCategory != "CrewShipWeapons" &&
+                    data.TechProductCategory != "CrewShipWeaponSkins"
+                ) {
+                    throw new Error(`unexpected TechProductCategory: ${data.TechProductCategory}`);
+                }
+                if (!inventory[getSalvageCategory(data.TechProductCategory)].id(data.CategoryItemId)) {
+                    throw new Error(
+                        `no item with id ${data.CategoryItemId} in ${getSalvageCategory(data.TechProductCategory)} array`
+                    );
+                }
+            }
             const techProject =
                 inventory.PersonalTechProjects[
                     inventory.PersonalTechProjects.push({
@@ -380,6 +393,12 @@ interface IGuildTechContributeRequest {
     VaultMiscItems: IMiscItem[];
 }
 
+const getSalvageCategory = (
+    category: "CrewShipWeapons" | "CrewShipWeaponSkins"
+): "CrewShipSalvagedWeapons" | "CrewShipSalvagedWeaponSkins" => {
+    return category == "CrewShipWeapons" ? "CrewShipSalvagedWeapons" : "CrewShipSalvagedWeaponSkins";
+};
+
 const claimSalvagedComponent = (inventory: TInventoryDatabaseDocument, itemId: string): IInventoryChanges => {
     // delete personal tech project
     const personalTechProjectIndex = inventory.PersonalTechProjects.findIndex(x => x.CategoryItemId?.equals(itemId));
@@ -387,7 +406,7 @@ const claimSalvagedComponent = (inventory: TInventoryDatabaseDocument, itemId: s
     inventory.PersonalTechProjects.splice(personalTechProjectIndex, 1);
 
     const category = personalTechProject.ProductCategory! as "CrewShipWeapons" | "CrewShipWeaponSkins";
-    const salvageCategory = category == "CrewShipWeapons" ? "CrewShipSalvagedWeapons" : "CrewShipSalvagedWeaponSkins";
+    const salvageCategory = getSalvageCategory(category);
 
     // find salved part & delete it
     const salvageIndex = inventory[salvageCategory].findIndex(x => x._id.equals(itemId));
