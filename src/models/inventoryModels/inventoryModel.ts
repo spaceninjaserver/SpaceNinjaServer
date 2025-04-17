@@ -86,7 +86,9 @@ import {
     IWeeklyMission,
     ILockedWeaponGroupDatabase,
     IPersonalTechProjectDatabase,
-    IPersonalTechProjectClient
+    IPersonalTechProjectClient,
+    ILastSortieRewardDatabase,
+    ILastSortieRewardClient
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -1202,6 +1204,28 @@ const alignmentSchema = new Schema<IAlignment>(
     { _id: false }
 );
 
+const lastSortieRewardSchema = new Schema<ILastSortieRewardDatabase>(
+    {
+        SortieId: Schema.Types.ObjectId,
+        StoreItem: String,
+        Manifest: String
+    },
+    { _id: false }
+);
+
+lastSortieRewardSchema.set("toJSON", {
+    virtuals: true,
+    transform(_doc, obj) {
+        const db = obj as ILastSortieRewardDatabase;
+        const client = obj as ILastSortieRewardClient;
+
+        client.SortieId = toOid(db.SortieId);
+
+        delete obj._id;
+        delete obj.__v;
+    }
+});
+
 const lockedWeaponGroupSchema = new Schema<ILockedWeaponGroupDatabase>(
     {
         s: Schema.Types.ObjectId,
@@ -1419,7 +1443,8 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         //https://warframe.fandom.com/wiki/Sortie
         CompletedSorties: [String],
-        LastSortieReward: [Schema.Types.Mixed],
+        LastSortieReward: { type: [lastSortieRewardSchema], default: undefined },
+        LastLiteSortieReward: { type: [lastSortieRewardSchema], default: undefined },
 
         // Resource Extractor Drones
         Drones: [droneSchema],

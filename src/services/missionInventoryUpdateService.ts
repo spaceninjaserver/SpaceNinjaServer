@@ -584,6 +584,16 @@ export const addMissionRewards = async (
     const AffiliationMods: IAffiliationMods[] = [];
     let SyndicateXPItemReward;
 
+    if (rewardInfo.sortieTag == "Final") {
+        inventory.LastSortieReward = [
+            {
+                SortieId: new Types.ObjectId(rewardInfo.sortieId!.split("_")[1]),
+                StoreItem: MissionRewards[0].StoreItem,
+                Manifest: "/Lotus/Types/Game/MissionDecks/SortieRewards"
+            }
+        ];
+    }
+
     let missionCompletionCredits = 0;
     //inventory change is what the client has not rewarded itself, also the client needs to know the credit changes for display
     if (levelKeyName) {
@@ -943,6 +953,10 @@ function getLevelCreditRewards(node: IRegion): number {
 
 function getRandomMissionDrops(RewardInfo: IRewardInfo, tierOverride: number | undefined): IMissionReward[] {
     const drops: IMissionReward[] = [];
+    if (RewardInfo.sortieTag == "Final") {
+        const drop = getRandomRewardByChance(ExportRewards["/Lotus/Types/Game/MissionDecks/SortieRewards"][0])!;
+        drops.push({ StoreItem: drop.type, ItemCount: drop.itemCount });
+    }
     if (RewardInfo.periodicMissionTag?.startsWith("HardDaily")) {
         drops.push({
             StoreItem: "/Lotus/StoreItems/Types/Items/MiscItems/SteelEssence",

@@ -47,6 +47,8 @@ export interface IInventoryDatabase
             | "BrandedSuits"
             | "LockedWeaponGroup"
             | "PersonalTechProjects"
+            | "LastSortieReward"
+            | "LastLiteSortieReward"
             | TEquipmentKey
         >,
         InventoryDatabaseEquipment {
@@ -79,6 +81,8 @@ export interface IInventoryDatabase
     BrandedSuits?: Types.ObjectId[];
     LockedWeaponGroup?: ILockedWeaponGroupDatabase;
     PersonalTechProjects: IPersonalTechProjectDatabase[];
+    LastSortieReward?: ILastSortieRewardDatabase[];
+    LastLiteSortieReward?: ILastSortieRewardDatabase[];
 }
 
 export interface IQuestKeyDatabase {
@@ -277,7 +281,8 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     Wishlist: string[];
     Alignment?: IAlignment;
     CompletedSorties: string[];
-    LastSortieReward: ILastSortieReward[];
+    LastSortieReward?: ILastSortieRewardClient[];
+    LastLiteSortieReward?: ILastSortieRewardClient[];
     Drones: IDroneClient[];
     StepSequencers: IStepSequencer[];
     ActiveAvatarImageType: string;
@@ -724,10 +729,14 @@ export enum Status {
     StatusStasis = "STATUS_STASIS"
 }
 
-export interface ILastSortieReward {
+export interface ILastSortieRewardClient {
     SortieId: IOid;
     StoreItem: string;
     Manifest: string;
+}
+
+export interface ILastSortieRewardDatabase extends Omit<ILastSortieRewardClient, "SortieId"> {
+    SortieId: Types.ObjectId;
 }
 
 export interface ILibraryDailyTaskInfo {

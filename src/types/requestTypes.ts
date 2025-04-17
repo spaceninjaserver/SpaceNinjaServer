@@ -129,6 +129,9 @@ export type IMissionInventoryUpdateRequest = {
 
 export interface IRewardInfo {
     node: string;
+    sortieId?: string;
+    sortieTag?: string;
+    sortiePrereqs?: string[];
     VaultsCracked?: number; // for Spy missions
     rewardTier?: number;
     nightmareMode?: boolean;
