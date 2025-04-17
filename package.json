@@ -4,7 +4,7 @@
   "description": "WF Emulator",
   "main": "index.ts",
   "scripts": {
-    "start": "node --import ./build/src/pathman.js build/src/index.js",
+    "start": "node --enable-source-maps --import ./build/src/pathman.js build/src/index.js",
     "dev": "ts-node-dev --openssl-legacy-provider -r tsconfig-paths/register src/index.ts ",
     "build": "tsc --incremental --sourceMap && ncp static/webui build/static/webui",
     "verify": "tsgo --noEmit",
