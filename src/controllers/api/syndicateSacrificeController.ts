@@ -51,7 +51,7 @@ export const syndicateSacrificeController: RequestHandler = async (request, resp
     syndicate.Title ??= 0;
     syndicate.Title += 1;
 
-    if (syndicate.Title > 0 && manifest.favours.length != 0) {
+    if (syndicate.Title > 0 && manifest.favours.find(x => x.rankUpReward && x.requiredLevel == syndicate.Title)) {
         syndicate.FreeFavorsEarned ??= [];
         if (!syndicate.FreeFavorsEarned.includes(syndicate.Title)) {
             syndicate.FreeFavorsEarned.push(syndicate.Title);
