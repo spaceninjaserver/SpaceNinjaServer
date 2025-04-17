@@ -128,11 +128,16 @@ export const addMissionInventoryUpdates = async (
                 ]);
             }
         }
+
+        // Somewhat heuristically detect G3 capture:
+        // - https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1365
+        // - https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1694
         if (
             inventoryUpdates.MissionFailed &&
             inventoryUpdates.MissionStatus == "GS_FAILURE" &&
             inventoryUpdates.ObjectiveReached &&
-            !inventoryUpdates.LockedWeaponGroup
+            !inventoryUpdates.LockedWeaponGroup &&
+            !inventoryUpdates.LevelKeyName
         ) {
             const loadout = (await Loadout.findById(inventory.LoadOutPresets, "NORMAL"))!;
             const config = loadout.NORMAL.id(inventory.CurrentLoadOutIds[0].$oid)!;
