@@ -1083,7 +1083,7 @@ export const addEquipment = (
             Configs: [],
             XP: 0,
             ModularParts: modularParts,
-            IsNew: category != "CrewShipWeapons" ? true : undefined
+            IsNew: category != "CrewShipWeapons" && category != "CrewShipSalvagedWeapons" ? true : undefined
         },
         defaultOverwrites
     );

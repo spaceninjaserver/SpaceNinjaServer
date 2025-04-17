@@ -15,6 +15,7 @@ import { ExportDojoRecipes } from "warframe-public-export-plus";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import {
     addCrewShipWeaponSkin,
+    addEquipment,
     addItem,
     addMiscItems,
     addRecipes,
@@ -382,18 +383,31 @@ interface IGuildTechContributeRequest {
 const claimSalvagedComponent = (inventory: TInventoryDatabaseDocument, itemId: string): IInventoryChanges => {
     // delete personal tech project
     const personalTechProjectIndex = inventory.PersonalTechProjects.findIndex(x => x.CategoryItemId?.equals(itemId));
-    if (personalTechProjectIndex != -1) {
-        inventory.PersonalTechProjects.splice(personalTechProjectIndex, 1);
-    }
+    const personalTechProject = inventory.PersonalTechProjects[personalTechProjectIndex];
+    inventory.PersonalTechProjects.splice(personalTechProjectIndex, 1);
+
+    const category = personalTechProject.ProductCategory! as "CrewShipWeapons" | "CrewShipWeaponSkins";
+    const salvageCategory = category == "CrewShipWeapons" ? "CrewShipSalvagedWeapons" : "CrewShipSalvagedWeaponSkins";
 
     // find salved part & delete it
-    const crewShipSalvagedWeaponSkinsIndex = inventory.CrewShipSalvagedWeaponSkins.findIndex(x => x._id.equals(itemId));
-    const crewShipWeaponSkin = inventory.CrewShipSalvagedWeaponSkins[crewShipSalvagedWeaponSkinsIndex];
-    inventory.CrewShipSalvagedWeaponSkins.splice(crewShipSalvagedWeaponSkinsIndex, 1);
+    const salvageIndex = inventory[salvageCategory].findIndex(x => x._id.equals(itemId));
+    const salvageItem = inventory[category][salvageIndex];
+    inventory[salvageCategory].splice(salvageIndex, 1);
 
     // add final item
     const inventoryChanges = {
-        ...addCrewShipWeaponSkin(inventory, crewShipWeaponSkin.ItemType, crewShipWeaponSkin.UpgradeFingerprint),
+        ...(category == "CrewShipWeaponSkins"
+            ? addCrewShipWeaponSkin(inventory, salvageItem.ItemType, salvageItem.UpgradeFingerprint)
+            : addEquipment(
+                  inventory,
+                  category,
+                  salvageItem.ItemType,
+                  undefined,
+                  {},
+                  {
+                      UpgradeFingerprint: salvageItem.UpgradeFingerprint
+                  }
+              )),
         ...occupySlot(inventory, InventorySlot.RJ_COMPONENT_AND_ARMAMENTS, false)
     };
 
