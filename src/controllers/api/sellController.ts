@@ -7,16 +7,18 @@ import {
     addMiscItems,
     addConsumables,
     freeUpSlot,
-    combineInventoryChanges
+    combineInventoryChanges,
+    addCrewShipRawSalvage
 } from "@/src/services/inventoryService";
 import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
 import { ExportDojoRecipes } from "warframe-public-export-plus";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
+import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 
 export const sellController: RequestHandler = async (req, res) => {
     const payload = JSON.parse(String(req.body)) as ISellRequest;
     const accountId = await getAccountIdForRequest(req);
-    const requiredFields = new Set();
+    const requiredFields = new Set<keyof TInventoryDatabaseDocument>();
     if (payload.SellCurrency == "SC_RegularCredits") {
         requiredFields.add("RegularCredits");
     } else if (payload.SellCurrency == "SC_FusionPoints") {
@@ -25,7 +27,7 @@ export const sellController: RequestHandler = async (req, res) => {
         requiredFields.add("MiscItems");
     }
     for (const key of Object.keys(payload.Items)) {
-        requiredFields.add(key);
+        requiredFields.add(key as keyof TInventoryDatabaseDocument);
     }
     if (requiredFields.has("Upgrades")) {
         requiredFields.add("RawUpgrades");
@@ -51,8 +53,15 @@ export const sellController: RequestHandler = async (req, res) => {
     if (payload.Items.Hoverboards) {
         requiredFields.add(InventorySlot.SPACESUITS);
     }
-    if (payload.Items.CrewShipWeapons) {
+    if (payload.Items.CrewShipWeapons || payload.Items.CrewShipWeaponSkins) {
         requiredFields.add(InventorySlot.RJ_COMPONENT_AND_ARMAMENTS);
+        requiredFields.add("CrewShipRawSalvage");
+        if (payload.Items.CrewShipWeapons) {
+            requiredFields.add("CrewShipSalvagedWeapons");
+        }
+        if (payload.Items.CrewShipWeaponSkins) {
+            requiredFields.add("CrewShipSalvagedWeaponSkins");
+        }
     }
     const inventory = await getInventory(accountId, Array.from(requiredFields).join(" "));
 
@@ -76,7 +85,7 @@ export const sellController: RequestHandler = async (req, res) => {
             }
         ]);
     } else if (payload.SellCurrency == "SC_Resources") {
-        // Will add appropriate MiscItems from CrewShipWeapons
+        // Will add appropriate MiscItems from CrewShipWeapons or CrewShipWeaponSkins
     } else {
         throw new Error("Unknown SellCurrency: " + payload.SellCurrency);
     }
@@ -157,19 +166,51 @@ export const sellController: RequestHandler = async (req, res) => {
     }
     if (payload.Items.CrewShipWeapons) {
         payload.Items.CrewShipWeapons.forEach(sellItem => {
-            const index = inventory.CrewShipWeapons.findIndex(x => x._id.equals(sellItem.String));
-            if (index != -1) {
-                const itemType = inventory.CrewShipWeapons[index].ItemType;
-                const recipe = Object.values(ExportDojoRecipes.fabrications).find(x => x.resultType == itemType)!;
-                const miscItemChanges = recipe.ingredients.map(x => ({
-                    ItemType: x.ItemType,
-                    ItemCount: Math.trunc(x.ItemCount * 0.8)
-                }));
-                addMiscItems(inventory, miscItemChanges);
-                combineInventoryChanges(inventoryChanges, { MiscItems: miscItemChanges });
-
-                inventory.CrewShipWeapons.splice(index, 1);
-                freeUpSlot(inventory, InventorySlot.RJ_COMPONENT_AND_ARMAMENTS);
+            if (sellItem.String[0] == "/") {
+                addCrewShipRawSalvage(inventory, [
+                    {
+                        ItemType: sellItem.String,
+                        ItemCount: sellItem.Count * -1
+                    }
+                ]);
+            } else {
+                const index = inventory.CrewShipWeapons.findIndex(x => x._id.equals(sellItem.String));
+                if (index != -1) {
+                    if (payload.SellCurrency == "SC_Resources") {
+                        refundPartialBuildCosts(inventory, inventory.CrewShipWeapons[index].ItemType, inventoryChanges);
+                    }
+                    inventory.CrewShipWeapons.splice(index, 1);
+                    freeUpSlot(inventory, InventorySlot.RJ_COMPONENT_AND_ARMAMENTS);
+                } else {
+                    inventory.CrewShipSalvagedWeapons.pull({ _id: sellItem.String });
+                }
+            }
+        });
+    }
+    if (payload.Items.CrewShipWeaponSkins) {
+        payload.Items.CrewShipWeaponSkins.forEach(sellItem => {
+            if (sellItem.String[0] == "/") {
+                addCrewShipRawSalvage(inventory, [
+                    {
+                        ItemType: sellItem.String,
+                        ItemCount: sellItem.Count * -1
+                    }
+                ]);
+            } else {
+                const index = inventory.CrewShipWeaponSkins.findIndex(x => x._id.equals(sellItem.String));
+                if (index != -1) {
+                    if (payload.SellCurrency == "SC_Resources") {
+                        refundPartialBuildCosts(
+                            inventory,
+                            inventory.CrewShipWeaponSkins[index].ItemType,
+                            inventoryChanges
+                        );
+                    }
+                    inventory.CrewShipWeaponSkins.splice(index, 1);
+                    freeUpSlot(inventory, InventorySlot.RJ_COMPONENT_AND_ARMAMENTS);
+                } else {
+                    inventory.CrewShipSalvagedWeaponSkins.pull({ _id: sellItem.String });
+                }
             }
         });
     }
@@ -243,6 +284,7 @@ interface ISellRequest {
         Hoverboards?: ISellItem[];
         Drones?: ISellItem[];
         CrewShipWeapons?: ISellItem[];
+        CrewShipWeaponSkins?: ISellItem[];
     };
     SellPrice: number;
     SellCurrency:
@@ -259,3 +301,33 @@ interface ISellItem {
     String: string; // oid or uniqueName
     Count: number;
 }
+
+const refundPartialBuildCosts = (
+    inventory: TInventoryDatabaseDocument,
+    itemType: string,
+    inventoryChanges: IInventoryChanges
+): void => {
+    // House versions
+    const research = Object.values(ExportDojoRecipes.research).find(x => x.resultType == itemType);
+    if (research) {
+        const miscItemChanges = research.ingredients.map(x => ({
+            ItemType: x.ItemType,
+            ItemCount: Math.trunc(x.ItemCount * 0.8)
+        }));
+        addMiscItems(inventory, miscItemChanges);
+        combineInventoryChanges(inventoryChanges, { MiscItems: miscItemChanges });
+        return;
+    }
+
+    // Sigma versions
+    const recipe = Object.values(ExportDojoRecipes.fabrications).find(x => x.resultType == itemType);
+    if (recipe) {
+        const miscItemChanges = recipe.ingredients.map(x => ({
+            ItemType: x.ItemType,
+            ItemCount: Math.trunc(x.ItemCount * 0.8)
+        }));
+        addMiscItems(inventory, miscItemChanges);
+        combineInventoryChanges(inventoryChanges, { MiscItems: miscItemChanges });
+        return;
+    }
+};
