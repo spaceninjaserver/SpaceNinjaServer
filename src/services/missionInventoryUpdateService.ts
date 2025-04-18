@@ -532,6 +532,26 @@ export const addMissionInventoryUpdates = async (
                 inventoryChanges.RegularCredits -= value;
                 break;
             }
+            case "InvasionProgress": {
+                for (const clientProgress of value) {
+                    const dbProgress = inventory.QualifyingInvasions.find(x =>
+                        x.invasionId.equals(clientProgress._id.$oid)
+                    );
+                    if (dbProgress) {
+                        dbProgress.Delta += clientProgress.Delta;
+                        dbProgress.AttackerScore += clientProgress.AttackerScore;
+                        dbProgress.DefenderScore += clientProgress.DefenderScore;
+                    } else {
+                        inventory.QualifyingInvasions.push({
+                            invasionId: new Types.ObjectId(clientProgress._id.$oid),
+                            Delta: clientProgress.Delta,
+                            AttackerScore: clientProgress.AttackerScore,
+                            DefenderScore: clientProgress.DefenderScore
+                        });
+                    }
+                }
+                break;
+            }
             default:
                 // Equipment XP updates
                 if (equipmentKeys.includes(key as TEquipmentKey)) {

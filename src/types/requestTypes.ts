@@ -19,7 +19,8 @@ import {
     ICollectibleEntry,
     IDiscoveredMarker,
     ILockedWeaponGroupClient,
-    ILoadOutPresets
+    ILoadOutPresets,
+    IInvasionProgressClient
 } from "./inventoryTypes/inventoryTypes";
 import { IGroup } from "./loginTypes";
 
@@ -123,6 +124,7 @@ export type IMissionInventoryUpdateRequest = {
     };
     wagerTier?: number; // the index
     creditsFee?: number; // the index
+    InvasionProgress?: IInvasionProgressClient[];
 } & {
     [K in TEquipmentKey]?: IEquipmentClient[];
 };

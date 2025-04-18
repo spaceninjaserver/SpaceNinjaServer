@@ -92,7 +92,9 @@ import {
     ICrewMemberSkillEfficiency,
     ICrewMemberDatabase,
     ICrewMemberClient,
-    ISortieRewardAttenuation
+    ISortieRewardAttenuation,
+    IInvasionProgressDatabase,
+    IInvasionProgressClient
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -683,6 +685,27 @@ questKeysSchema.set("toJSON", {
 });
 
 export const fusionTreasuresSchema = new Schema<IFusionTreasure>().add(typeCountSchema).add({ Sockets: Number });
+
+const invasionProgressSchema = new Schema<IInvasionProgressDatabase>(
+    {
+        invasionId: Schema.Types.ObjectId,
+        Delta: Number,
+        AttackerScore: Number,
+        DefenderScore: Number
+    },
+    { _id: false }
+);
+
+invasionProgressSchema.set("toJSON", {
+    transform(_doc, obj) {
+        const db = obj as IInvasionProgressDatabase;
+        const client = obj as IInvasionProgressClient;
+
+        client._id = toOid(db.invasionId);
+        delete obj.invasionId;
+        delete obj.__v;
+    }
+});
 
 const spectreLoadoutsSchema = new Schema<ISpectreLoadout>(
     {
@@ -1482,7 +1505,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         SentientSpawnChanceBoosters: Schema.Types.Mixed,
 
-        QualifyingInvasions: [Schema.Types.Mixed],
+        QualifyingInvasions: [invasionProgressSchema],
         FactionScores: [Number],
 
         // https://warframe.fandom.com/wiki/Specter_(Tenno)

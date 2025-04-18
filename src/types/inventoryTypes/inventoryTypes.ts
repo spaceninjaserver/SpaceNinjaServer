@@ -50,6 +50,7 @@ export interface IInventoryDatabase
             | "LastSortieReward"
             | "LastLiteSortieReward"
             | "CrewMembers"
+            | "QualifyingInvasions"
             | TEquipmentKey
         >,
         InventoryDatabaseEquipment {
@@ -85,6 +86,7 @@ export interface IInventoryDatabase
     LastSortieReward?: ILastSortieRewardDatabase[];
     LastLiteSortieReward?: ILastSortieRewardDatabase[];
     CrewMembers: ICrewMemberDatabase[];
+    QualifyingInvasions: IInvasionProgressDatabase[];
 }
 
 export interface IQuestKeyDatabase {
@@ -272,7 +274,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     SentientSpawnChanceBoosters: ISentientSpawnChanceBoosters;
     SupportedSyndicate?: string;
     Affiliations: IAffiliation[];
-    QualifyingInvasions: any[];
+    QualifyingInvasions: IInvasionProgressClient[];
     FactionScores: number[];
     ArchwingEnabled?: boolean;
     PendingSpectreLoadouts?: ISpectreLoadout[];
@@ -674,6 +676,17 @@ export interface IConsumedSuit {
 export interface IInvasionChainProgress {
     id: IOid;
     count: number;
+}
+
+export interface IInvasionProgressClient {
+    _id: IOid;
+    Delta: number;
+    AttackerScore: number;
+    DefenderScore: number;
+}
+
+export interface IInvasionProgressDatabase extends Omit<IInvasionProgressClient, "_id"> {
+    invasionId: Types.ObjectId;
 }
 
 export interface IKubrowPetEggClient {
