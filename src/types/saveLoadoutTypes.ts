@@ -1,7 +1,13 @@
 import { IOid } from "@/src/types/commonTypes";
 import { IItemConfig, IOperatorConfigClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { Types } from "mongoose";
-import { ILoadoutConfigClient } from "./inventoryTypes/inventoryTypes";
+import {
+    ICrewShipCustomization,
+    ICrewShipMembersClient,
+    ICrewShipWeapon,
+    IFlavourItem,
+    ILoadoutConfigClient
+} from "./inventoryTypes/inventoryTypes";
 
 export interface ISaveLoadoutRequest {
     LoadOuts: ILoadoutClient;
@@ -51,7 +57,16 @@ export interface IItemEntry {
 
 export type IConfigEntry = {
     [configId in "0" | "1" | "2" | "3" | "4" | "5"]: IItemConfig;
-} & { Favorite?: boolean; IsNew?: boolean };
+} & {
+    Favorite?: boolean;
+    IsNew?: boolean;
+    // Railjack
+    ItemName?: string;
+    RailjackImage?: IFlavourItem;
+    Customization?: ICrewShipCustomization;
+    Weapon?: ICrewShipWeapon;
+    CrewMembers?: ICrewShipMembersClient;
+};
 
 export type ILoadoutClient = Omit<ILoadoutDatabase, "_id" | "loadoutOwnerId">;
 

@@ -13,6 +13,8 @@ import { Types } from "mongoose";
 import { isEmptyObject } from "@/src/helpers/general";
 import { logger } from "@/src/utils/logger";
 import { equipmentKeys, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IItemConfig } from "../types/inventoryTypes/commonInventoryTypes";
+import { importCrewMemberId } from "./importService";
 
 //TODO: setup default items on account creation or like originally in giveStartingItems.php
 
@@ -174,8 +176,8 @@ export const handleInventoryItemConfigChange = async (
                         }
 
                         for (const [configId, config] of Object.entries(itemConfigEntries)) {
-                            if (typeof config !== "boolean") {
-                                inventoryItem.Configs[parseInt(configId)] = config;
+                            if (/^[0-9]+$/.test(configId)) {
+                                inventoryItem.Configs[parseInt(configId)] = config as IItemConfig;
                             }
                         }
                         if ("Favorite" in itemConfigEntries) {
@@ -183,6 +185,26 @@ export const handleInventoryItemConfigChange = async (
                         }
                         if ("IsNew" in itemConfigEntries) {
                             inventoryItem.IsNew = itemConfigEntries.IsNew;
+                        }
+
+                        if ("ItemName" in itemConfigEntries) {
+                            inventoryItem.ItemName = itemConfigEntries.ItemName;
+                        }
+                        if ("RailjackImage" in itemConfigEntries) {
+                            inventoryItem.RailjackImage = itemConfigEntries.RailjackImage;
+                        }
+                        if ("Customization" in itemConfigEntries) {
+                            inventoryItem.Customization = itemConfigEntries.Customization;
+                        }
+                        if ("Weapon" in itemConfigEntries) {
+                            inventoryItem.Weapon = itemConfigEntries.Weapon;
+                        }
+                        if (itemConfigEntries.CrewMembers) {
+                            inventoryItem.CrewMembers = {
+                                SLOT_A: importCrewMemberId(itemConfigEntries.CrewMembers.SLOT_A ?? {}),
+                                SLOT_B: importCrewMemberId(itemConfigEntries.CrewMembers.SLOT_B ?? {}),
+                                SLOT_C: importCrewMemberId(itemConfigEntries.CrewMembers.SLOT_C ?? {})
+                            };
                         }
                     }
                     break;

@@ -39,10 +39,9 @@ import {
     ILoreFragmentScan,
     IEvolutionProgress,
     IEndlessXpProgress,
-    ICrewShipPortGuns,
     ICrewShipCustomization,
     ICrewShipWeapon,
-    ICrewShipPilotWeapon,
+    ICrewShipWeaponEmplacements,
     IShipExterior,
     IHelminthFoodRecord,
     ICrewShipMembersDatabase,
@@ -772,25 +771,23 @@ const endlessXpProgressSchema = new Schema<IEndlessXpProgress>(
     { _id: false }
 );
 
-const crewShipPilotWeaponSchema = new Schema<ICrewShipPilotWeapon>(
+const crewShipWeaponEmplacementsSchema = new Schema<ICrewShipWeaponEmplacements>(
     {
         PRIMARY_A: EquipmentSelectionSchema,
-        SECONDARY_A: EquipmentSelectionSchema
-    },
-    { _id: false }
-);
-
-const crewShipPortGunsSchema = new Schema<ICrewShipPortGuns>(
-    {
-        PRIMARY_A: EquipmentSelectionSchema
+        PRIMARY_B: EquipmentSelectionSchema,
+        SECONDARY_A: EquipmentSelectionSchema,
+        SECONDARY_B: EquipmentSelectionSchema
     },
     { _id: false }
 );
 
 const crewShipWeaponSchema = new Schema<ICrewShipWeapon>(
     {
-        PILOT: crewShipPilotWeaponSchema,
-        PORT_GUNS: crewShipPortGunsSchema
+        PILOT: crewShipWeaponEmplacementsSchema,
+        PORT_GUNS: crewShipWeaponEmplacementsSchema,
+        STARBOARD_GUNS: crewShipWeaponEmplacementsSchema,
+        ARTILLERY: crewShipWeaponEmplacementsSchema,
+        SCANNER: crewShipWeaponEmplacementsSchema
     },
     { _id: false }
 );
@@ -814,7 +811,7 @@ const crewShipCustomizationSchema = new Schema<ICrewShipCustomization>(
 const crewShipMemberSchema = new Schema<ICrewShipMemberDatabase>(
     {
         ItemId: { type: Schema.Types.ObjectId, required: false },
-        NemesisFingerprint: { type: Number, required: false }
+        NemesisFingerprint: { type: BigInt, required: false }
     },
     { _id: false }
 );

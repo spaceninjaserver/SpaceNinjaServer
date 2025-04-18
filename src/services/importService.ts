@@ -104,18 +104,18 @@ const replaceSlots = (db: ISlots, client: ISlots): void => {
     db.Slots = client.Slots;
 };
 
-const convertCrewShipMember = (client: ICrewShipMemberClient): ICrewShipMemberDatabase => {
-    return {
-        ...client,
-        ItemId: client.ItemId ? new Types.ObjectId(client.ItemId.$oid) : undefined
-    };
+export const importCrewMemberId = (crewMemberId: ICrewShipMemberClient): ICrewShipMemberDatabase => {
+    if (crewMemberId.ItemId) {
+        return { ItemId: new Types.ObjectId(crewMemberId.ItemId.$oid) };
+    }
+    return { NemesisFingerprint: BigInt(crewMemberId.NemesisFingerprint ?? 0) };
 };
 
 const convertCrewShipMembers = (client: ICrewShipMembersClient): ICrewShipMembersDatabase => {
     return {
-        SLOT_A: client.SLOT_A ? convertCrewShipMember(client.SLOT_A) : undefined,
-        SLOT_B: client.SLOT_B ? convertCrewShipMember(client.SLOT_B) : undefined,
-        SLOT_C: client.SLOT_C ? convertCrewShipMember(client.SLOT_C) : undefined
+        SLOT_A: client.SLOT_A ? importCrewMemberId(client.SLOT_A) : undefined,
+        SLOT_B: client.SLOT_B ? importCrewMemberId(client.SLOT_B) : undefined,
+        SLOT_C: client.SLOT_C ? importCrewMemberId(client.SLOT_C) : undefined
     };
 };
 

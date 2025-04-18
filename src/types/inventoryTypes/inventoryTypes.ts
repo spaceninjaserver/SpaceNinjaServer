@@ -538,12 +538,12 @@ export interface ICrewShipMembersDatabase {
 
 export interface ICrewShipMemberClient {
     ItemId?: IOid;
-    NemesisFingerprint?: number;
+    NemesisFingerprint?: number | bigint;
 }
 
 export interface ICrewShipMemberDatabase {
     ItemId?: Types.ObjectId;
-    NemesisFingerprint?: number;
+    NemesisFingerprint?: bigint;
 }
 
 export interface ICrewShipCustomization {
@@ -568,17 +568,18 @@ export type IMiscItem = ITypeCount;
 
 // inventory.CrewShips[0].Weapon
 export interface ICrewShipWeapon {
-    PILOT: ICrewShipPilotWeapon;
-    PORT_GUNS: ICrewShipPortGuns;
+    PILOT?: ICrewShipWeaponEmplacements;
+    PORT_GUNS?: ICrewShipWeaponEmplacements;
+    STARBOARD_GUNS?: ICrewShipWeaponEmplacements;
+    ARTILLERY?: ICrewShipWeaponEmplacements;
+    SCANNER?: ICrewShipWeaponEmplacements;
 }
 
-export interface ICrewShipPilotWeapon {
-    PRIMARY_A: IEquipmentSelection;
-    SECONDARY_A: IEquipmentSelection;
-}
-
-export interface ICrewShipPortGuns {
-    PRIMARY_A: IEquipmentSelection;
+export interface ICrewShipWeaponEmplacements {
+    PRIMARY_A?: IEquipmentSelection;
+    PRIMARY_B?: IEquipmentSelection;
+    SECONDARY_A?: IEquipmentSelection;
+    SECONDARY_B?: IEquipmentSelection;
 }
 
 export interface IDiscoveredMarker {
