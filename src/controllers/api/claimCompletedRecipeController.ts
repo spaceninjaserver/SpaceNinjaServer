@@ -18,6 +18,7 @@ import {
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
+import { toOid } from "@/src/helpers/inventoryHelpers";
 
 interface IClaimCompletedRecipeRequest {
     RecipeIds: IOid[];
@@ -80,6 +81,7 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
     } else {
         logger.debug("Claiming Recipe", { recipe, pendingRecipe });
 
+        let BrandedSuits: undefined | IOid[];
         if (recipe.secretIngredientAction == "SIA_SPECTRE_LOADOUT_COPY") {
             inventory.PendingSpectreLoadouts ??= [];
             inventory.SpectreLoadouts ??= [];
@@ -104,9 +106,10 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
                 inventory.BrandedSuits!.findIndex(x => x.equals(pendingRecipe.SuitToUnbrand)),
                 1
             );
+            BrandedSuits = [toOid(pendingRecipe.SuitToUnbrand!)];
         }
 
-        let InventoryChanges = {};
+        let InventoryChanges: IInventoryChanges = {};
         if (recipe.consumeOnUse) {
             addRecipes(inventory, [
                 {
@@ -134,6 +137,6 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
             };
         }
         await inventory.save();
-        res.json({ InventoryChanges });
+        res.json({ InventoryChanges, BrandedSuits });
     }
 };
