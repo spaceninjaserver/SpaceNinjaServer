@@ -88,7 +88,11 @@ import {
     IPersonalTechProjectDatabase,
     IPersonalTechProjectClient,
     ILastSortieRewardDatabase,
-    ILastSortieRewardClient
+    ILastSortieRewardClient,
+    ICrewMemberSkill,
+    ICrewMemberSkillEfficiency,
+    ICrewMemberDatabase,
+    ICrewMemberClient
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -291,6 +295,55 @@ upgradeSchema.set("toJSON", {
     transform(_document, returnedObject) {
         delete returnedObject._id;
         delete returnedObject.__v;
+    }
+});
+
+const crewMemberSkillSchema = new Schema<ICrewMemberSkill>(
+    {
+        Assigned: Number
+    },
+    { _id: false }
+);
+
+const crewMemberSkillEfficiencySchema = new Schema<ICrewMemberSkillEfficiency>(
+    {
+        PILOTING: crewMemberSkillSchema,
+        GUNNERY: crewMemberSkillSchema,
+        ENGINEERING: crewMemberSkillSchema,
+        COMBAT: crewMemberSkillSchema,
+        SURVIVABILITY: crewMemberSkillSchema
+    },
+    { _id: false }
+);
+
+const crewMemberSchema = new Schema<ICrewMemberDatabase>(
+    {
+        ItemType: { type: String, required: true },
+        NemesisFingerprint: { type: BigInt, default: 0n },
+        Seed: { type: BigInt, default: 0n },
+        AssignedRole: Number,
+        SkillEfficiency: crewMemberSkillEfficiencySchema,
+        WeaponConfigIdx: Number,
+        WeaponId: { type: Schema.Types.ObjectId, default: "000000000000000000000000" },
+        XP: { type: Number, default: 0 },
+        PowersuitType: { type: String, required: true },
+        Configs: [ItemConfigSchema],
+        SecondInCommand: { type: Boolean, default: false }
+    },
+    { id: false }
+);
+
+crewMemberSchema.set("toJSON", {
+    virtuals: true,
+    transform(_doc, obj) {
+        const db = obj as ICrewMemberDatabase;
+        const client = obj as ICrewMemberClient;
+
+        client.WeaponId = toOid(db.WeaponId);
+        client.ItemId = toOid(db._id);
+
+        delete obj._id;
+        delete obj.__v;
     }
 });
 
@@ -1363,7 +1416,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         CrewShipSalvagedWeaponSkins: [upgradeSchema],
 
         //RailJack Crew
-        CrewMembers: [Schema.Types.Mixed],
+        CrewMembers: [crewMemberSchema],
 
         //Complete Mission\Quests
         Missions: [missionSchema],
@@ -1645,6 +1698,7 @@ export type InventoryDocumentProps = {
     CrewShipWeaponSkins: Types.DocumentArray<IUpgradeDatabase>;
     CrewShipSalvagedWeaponSkins: Types.DocumentArray<IUpgradeDatabase>;
     PersonalTechProjects: Types.DocumentArray<IPersonalTechProjectDatabase>;
+    CrewMembers: Types.DocumentArray<ICrewMemberDatabase>;
 } & { [K in TEquipmentKey]: Types.DocumentArray<IEquipmentDatabase> };
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type

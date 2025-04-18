@@ -141,7 +141,8 @@ export const handlePurchase = async (
         inventory,
         purchaseRequest.PurchaseParams.Quantity,
         undefined,
-        undefined,
+        false,
+        purchaseRequest.PurchaseParams.UsePremium,
         seed
     );
     combineInventoryChanges(purchaseResponse.InventoryChanges, prePurchaseInventoryChanges);
@@ -331,6 +332,7 @@ export const handleStoreItemAcquisition = async (
     quantity: number = 1,
     durability: TRarity = "COMMON",
     ignorePurchaseQuantity: boolean = false,
+    premiumPurchase: boolean = true,
     seed?: bigint
 ): Promise<IPurchaseResponse> => {
     let purchaseResponse = {
@@ -352,11 +354,20 @@ export const handleStoreItemAcquisition = async (
         }
         switch (storeCategory) {
             default: {
-                purchaseResponse = { InventoryChanges: await addItem(inventory, internalName, quantity, true, seed) };
+                purchaseResponse = {
+                    InventoryChanges: await addItem(inventory, internalName, quantity, premiumPurchase, seed)
+                };
                 break;
             }
             case "Types":
-                purchaseResponse = await handleTypesPurchase(internalName, inventory, quantity, ignorePurchaseQuantity);
+                purchaseResponse = await handleTypesPurchase(
+                    internalName,
+                    inventory,
+                    quantity,
+                    ignorePurchaseQuantity,
+                    premiumPurchase,
+                    seed
+                );
                 break;
             case "Boosters":
                 purchaseResponse = handleBoostersPurchase(storeItemName, inventory, durability);
@@ -478,13 +489,15 @@ const handleTypesPurchase = async (
     typesName: string,
     inventory: TInventoryDatabaseDocument,
     quantity: number,
-    ignorePurchaseQuantity: boolean
+    ignorePurchaseQuantity: boolean,
+    premiumPurchase: boolean = true,
+    seed?: bigint
 ): Promise<IPurchaseResponse> => {
     const typeCategory = getStoreItemTypesCategory(typesName);
     logger.debug(`type category ${typeCategory}`);
     switch (typeCategory) {
         default:
-            return { InventoryChanges: await addItem(inventory, typesName, quantity) };
+            return { InventoryChanges: await addItem(inventory, typesName, quantity, premiumPurchase, seed) };
         case "BoosterPacks":
             return handleBoosterPackPurchase(typesName, inventory, quantity);
         case "SlotItems":

@@ -6,7 +6,8 @@ import {
     INemesisClient,
     ITypeCount,
     IRecentVendorPurchaseClient,
-    TEquipmentKey
+    TEquipmentKey,
+    ICrewMemberClient
 } from "./inventoryTypes/inventoryTypes";
 
 export interface IPurchaseRequest {
@@ -47,6 +48,7 @@ export type IInventoryChanges = {
     Nemesis?: Partial<INemesisClient>;
     NewVendorPurchase?: IRecentVendorPurchaseClient; // >= 38.5.0
     RecentVendorPurchases?: IRecentVendorPurchaseClient; // < 38.5.0
+    CrewMembers?: ICrewMemberClient[];
 } & Record<
         Exclude<
             string,

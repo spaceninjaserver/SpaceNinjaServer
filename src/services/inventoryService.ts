@@ -22,7 +22,8 @@ import {
     IDroneClient,
     IUpgradeClient,
     TPartialStartingGear,
-    ILoreFragmentScan
+    ILoreFragmentScan,
+    ICrewMemberClient
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate, IUpdateNodeIntrosResponse } from "../types/genericUpdate";
 import { IKeyChainRequest, IMissionInventoryUpdateRequest } from "../types/requestTypes";
@@ -713,6 +714,15 @@ export const addItem = async (
                         return {
                             MiscItems: miscItemChanges
                         };
+                    } else if (typeName.startsWith("/Lotus/Types/Game/CrewShip/CrewMember/")) {
+                        if (!seed) {
+                            throw new Error(`Expected crew member to have a seed`);
+                        }
+                        seed |= 0x33b81en << 32n;
+                        return {
+                            ...addCrewMember(inventory, typeName, seed),
+                            ...occupySlot(inventory, InventorySlot.CREWMEMBERS, premiumPurchase)
+                        };
                     } else if (typeName == "/Lotus/Types/Game/CrewShip/RailJack/DefaultHarness") {
                         return addCrewShipHarness(inventory, typeName);
                     }
@@ -1209,6 +1219,78 @@ const addDrone = (
     const index = inventory.Drones.push({ ItemType: typeName, CurrentHP: ExportDrones[typeName].durability }) - 1;
     inventoryChanges.Drones ??= [];
     inventoryChanges.Drones.push(inventory.Drones[index].toJSON<IDroneClient>());
+    return inventoryChanges;
+};
+
+/*const getCrewMemberSkills = (seed: bigint, skillPointsToAssign: number): Record<string, number> => {
+    const rng = new SRng(seed);
+
+    const skills = ["PILOTING", "GUNNERY", "ENGINEERING", "COMBAT", "SURVIVABILITY"];
+    for (let i = 1; i != 5; ++i) {
+        const swapIndex = rng.randomInt(0, i);
+        if (swapIndex != i) {
+            const tmp = skills[i];
+            skills[i] = skills[swapIndex];
+            skills[swapIndex] = tmp;
+        }
+    }
+
+    rng.randomFloat(); // unused afaict
+
+    const skillAssignments = [0, 0, 0, 0, 0];
+    for (let skill = 0; skillPointsToAssign; skill = (skill + 1) % 5) {
+        const maxIncrease = Math.min(5 - skillAssignments[skill], skillPointsToAssign);
+        const increase = rng.randomInt(0, maxIncrease);
+        skillAssignments[skill] += increase;
+        skillPointsToAssign -= increase;
+    }
+
+    skillAssignments.sort((a, b) => b - a);
+
+    const combined: Record<string, number> = {};
+    for (let i = 0; i != 5; ++i) {
+        combined[skills[i]] = skillAssignments[i];
+    }
+    return combined;
+};*/
+
+const addCrewMember = (
+    inventory: TInventoryDatabaseDocument,
+    itemType: string,
+    seed: bigint,
+    inventoryChanges: IInventoryChanges = {}
+): IInventoryChanges => {
+    // SkillEfficiency is additional to the base stats, so we don't need to compute this
+    //const skillPointsToAssign = itemType.endsWith("Strong") ? 12 : itemType.indexOf("Medium") != -1 ? 10 : 8;
+    //const skills = getCrewMemberSkills(seed, skillPointsToAssign);
+
+    // Arbiters = male
+    // CephalonSuda = female
+    // NewLoka = female
+    // Perrin = male
+    // RedVeil = male
+    // SteelMeridian = female
+    const powersuitType =
+        itemType.indexOf("Arbiters") != -1 || itemType.indexOf("Perrin") != -1 || itemType.indexOf("RedVeil") != -1
+            ? "/Lotus/Powersuits/NpcPowersuits/CrewMemberMaleSuit"
+            : "/Lotus/Powersuits/NpcPowersuits/CrewMemberFemaleSuit";
+
+    const index =
+        inventory.CrewMembers.push({
+            ItemType: itemType,
+            NemesisFingerprint: 0n,
+            Seed: seed,
+            SkillEfficiency: {
+                PILOTING: { Assigned: 0 },
+                GUNNERY: { Assigned: 0 },
+                ENGINEERING: { Assigned: 0 },
+                COMBAT: { Assigned: 0 },
+                SURVIVABILITY: { Assigned: 0 }
+            },
+            PowersuitType: powersuitType
+        }) - 1;
+    inventoryChanges.CrewMembers ??= [];
+    inventoryChanges.CrewMembers.push(inventory.CrewMembers[index].toJSON<ICrewMemberClient>());
     return inventoryChanges;
 };
 

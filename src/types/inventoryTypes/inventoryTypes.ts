@@ -49,6 +49,7 @@ export interface IInventoryDatabase
             | "PersonalTechProjects"
             | "LastSortieReward"
             | "LastLiteSortieReward"
+            | "CrewMembers"
             | TEquipmentKey
         >,
         InventoryDatabaseEquipment {
@@ -83,6 +84,7 @@ export interface IInventoryDatabase
     PersonalTechProjects: IPersonalTechProjectDatabase[];
     LastSortieReward?: ILastSortieRewardDatabase[];
     LastLiteSortieReward?: ILastSortieRewardDatabase[];
+    CrewMembers: ICrewMemberDatabase[];
 }
 
 export interface IQuestKeyDatabase {
@@ -324,7 +326,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     InfestedFoundry?: IInfestedFoundryClient;
     BlessingCooldown?: IMongoDate;
     CrewShipRawSalvage: ITypeCount[];
-    CrewMembers: ICrewMember[];
+    CrewMembers: ICrewMemberClient[];
     LotusCustomization: ILotusCustomization;
     UseAdultOperatorLoadout?: boolean;
     NemesisAbandonedRewards: string[];
@@ -461,13 +463,24 @@ export interface ICompletedJob {
     StageCompletions: number[];
 }
 
-export interface ICrewMember {
+export interface ICrewMemberSkill {
+    Assigned: number;
+}
+
+export interface ICrewMemberSkillEfficiency {
+    PILOTING: ICrewMemberSkill;
+    GUNNERY: ICrewMemberSkill;
+    ENGINEERING: ICrewMemberSkill;
+    COMBAT: ICrewMemberSkill;
+    SURVIVABILITY: ICrewMemberSkill;
+}
+
+export interface ICrewMemberClient {
     ItemType: string;
-    NemesisFingerprint: number;
-    Seed: number;
-    HireDate: IMongoDate;
-    AssignedRole: number;
-    SkillEfficiency: ISkillEfficiency;
+    NemesisFingerprint: bigint;
+    Seed: bigint;
+    AssignedRole?: number;
+    SkillEfficiency: ICrewMemberSkillEfficiency;
     WeaponConfigIdx: number;
     WeaponId: IOid;
     XP: number;
@@ -477,16 +490,9 @@ export interface ICrewMember {
     ItemId: IOid;
 }
 
-export interface ISkillEfficiency {
-    PILOTING: ICombat;
-    GUNNERY: ICombat;
-    ENGINEERING: ICombat;
-    COMBAT: ICombat;
-    SURVIVABILITY: ICombat;
-}
-
-export interface ICombat {
-    Assigned: number;
+export interface ICrewMemberDatabase extends Omit<ICrewMemberClient, "WeaponId" | "ItemId"> {
+    WeaponId: Types.ObjectId;
+    _id: Types.ObjectId;
 }
 
 export enum InventorySlot {
