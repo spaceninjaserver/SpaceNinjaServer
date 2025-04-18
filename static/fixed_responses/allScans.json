@@ -1092,5 +1092,10 @@
   "/Lotus/Types/Game/CrewShip/GrineerDestroyer/GrineerDestroyerAvatar",
   "/Lotus/Types/LevelObjects/Zariman/ZarLootCrateUltraRare",
   "/Lotus/Objects/DomestikDrone/GrineerOceanDomestikDroneMover",
-  "/Lotus/Types/Gameplay/1999Wf/Extermination/SupplyCrate"
+  "/Lotus/Types/Gameplay/1999Wf/Extermination/SupplyCrate",
+  "/Lotus/Objects/Orokin/Props/CollectibleSeriesOne",
+  "/Lotus/Types/LevelObjects/InfestedPumpkinCocoonLamp",
+  "/Lotus/Types/LevelObjects/InfestedPumpkinCocoonLampLarge",
+  "/Lotus/Types/LevelObjects/InfestedPumpkinCocoonLampSmall",
+  "/Lotus/Types/LevelObjects/InfestedPumpkinExplosiveTotem"
 ]
