@@ -700,6 +700,12 @@ export const addMissionRewards = async (
 
     if (strippedItems) {
         for (const si of strippedItems) {
+            if (si.DropTable == "/Lotus/Types/DropTables/ManInTheWall/MITWGruzzlingArcanesDropTable") {
+                logger.debug(
+                    `rewriting ${si.DropTable} to /Lotus/Types/DropTables/EntratiLabDropTables/DoppelgangerDropTable`
+                );
+                si.DropTable = "/Lotus/Types/DropTables/EntratiLabDropTables/DoppelgangerDropTable";
+            }
             const droptables = ExportEnemies.droptables[si.DropTable] ?? [];
             if (si.DROP_MOD) {
                 const modDroptable = droptables.find(x => x.type == "mod");
