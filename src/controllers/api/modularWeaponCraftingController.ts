@@ -17,7 +17,7 @@ import { getDefaultUpgrades } from "@/src/services/itemDataService";
 import { modularWeaponTypes } from "@/src/helpers/modularWeaponHelper";
 import { IEquipmentDatabase } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { getRandomInt } from "@/src/services/rngService";
-import { ExportSentinels } from "warframe-public-export-plus";
+import { ExportSentinels, IDefaultUpgrade } from "warframe-public-export-plus";
 import { Status } from "@/src/types/inventoryTypes/inventoryTypes";
 
 interface IModularCraftRequest {
@@ -34,10 +34,8 @@ export const modularWeaponCraftingController: RequestHandler = async (req, res) 
     const category = modularWeaponTypes[data.WeaponType];
     const inventory = await getInventory(accountId);
 
-    const defaultUpgrades = getDefaultUpgrades(data.Parts);
-    const defaultOverwrites: Partial<IEquipmentDatabase> = {
-        Configs: applyDefaultUpgrades(inventory, defaultUpgrades)
-    };
+    let defaultUpgrades: IDefaultUpgrade[] | undefined;
+    const defaultOverwrites: Partial<IEquipmentDatabase> = {};
     const inventoryChanges: IInventoryChanges = {};
     if (category == "KubrowPets") {
         const traits = {
@@ -129,10 +127,17 @@ export const modularWeaponCraftingController: RequestHandler = async (req, res) 
         // Only save mutagen & antigen in the ModularParts.
         defaultOverwrites.ModularParts = [data.Parts[1], data.Parts[2]];
 
-        for (const specialItem of ExportSentinels[data.WeaponType].exalted!) {
+        const meta = ExportSentinels[data.WeaponType];
+
+        for (const specialItem of meta.exalted!) {
             addSpecialItem(inventory, specialItem, inventoryChanges);
         }
+
+        defaultUpgrades = meta.defaultUpgrades;
+    } else {
+        defaultUpgrades = getDefaultUpgrades(data.Parts);
     }
+    defaultOverwrites.Configs = applyDefaultUpgrades(inventory, defaultUpgrades);
     addEquipment(inventory, category, data.WeaponType, data.Parts, inventoryChanges, defaultOverwrites);
     combineInventoryChanges(inventoryChanges, occupySlot(inventory, productCategoryToInventoryBin(category)!, false));
     if (defaultUpgrades) {
