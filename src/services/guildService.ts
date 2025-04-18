@@ -59,6 +59,7 @@ export const getGuildClient = async (guild: TGuildDatabaseDocument, accountId: s
 
     const members: IGuildMemberClient[] = [];
     let missingEntry = true;
+    const dataFillInPromises: Promise<void>[] = [];
     for (const guildMember of guildMembers) {
         const member: IGuildMemberClient = {
             _id: toOid(guildMember.accountId),
@@ -70,8 +71,12 @@ export const getGuildClient = async (guild: TGuildDatabaseDocument, accountId: s
         if (guildMember.accountId.equals(accountId)) {
             missingEntry = false;
         } else {
-            member.DisplayName = (await Account.findById(guildMember.accountId, "DisplayName"))!.DisplayName;
-            await fillInInventoryDataForGuildMember(member);
+            dataFillInPromises.push(
+                (async (): Promise<void> => {
+                    member.DisplayName = (await Account.findById(guildMember.accountId, "DisplayName"))!.DisplayName;
+                })()
+            );
+            dataFillInPromises.push(fillInInventoryDataForGuildMember(member));
         }
         members.push(member);
     }
@@ -89,6 +94,8 @@ export const getGuildClient = async (guild: TGuildDatabaseDocument, accountId: s
             Rank: 0
         });
     }
+
+    await Promise.all(dataFillInPromises);
 
     return {
         _id: toOid(guild._id),
