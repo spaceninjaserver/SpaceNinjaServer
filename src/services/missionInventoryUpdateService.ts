@@ -976,10 +976,16 @@ function getRandomMissionDrops(RewardInfo: IRewardInfo, tierOverride: number | u
     }
     if (RewardInfo.node in ExportRegions) {
         const region = ExportRegions[RewardInfo.node];
-        let rewardManifests: string[] =
-            RewardInfo.periodicMissionTag == "EliteAlert" || RewardInfo.periodicMissionTag == "EliteAlertB"
-                ? ["/Lotus/Types/Game/MissionDecks/EliteAlertMissionRewards/EliteAlertMissionRewards"]
-                : region.rewardManifests;
+        let rewardManifests: string[];
+        if (RewardInfo.periodicMissionTag == "EliteAlert" || RewardInfo.periodicMissionTag == "EliteAlertB") {
+            rewardManifests = ["/Lotus/Types/Game/MissionDecks/EliteAlertMissionRewards/EliteAlertMissionRewards"];
+        } else if (RewardInfo.invasionId && region.missionIndex == 0) {
+            // Invasion assassination has Phorid has the boss who should drop Nyx parts
+            // TODO: Check that the invasion faction is indeed FC_INFESTATION once the Invasions in worldState are more dynamic
+            rewardManifests = ["/Lotus/Types/Game/MissionDecks/BossMissionRewards/NyxRewards"];
+        } else {
+            rewardManifests = region.rewardManifests;
+        }
 
         let rotations: number[] = [];
         if (RewardInfo.jobId) {

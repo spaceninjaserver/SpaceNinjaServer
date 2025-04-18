@@ -129,6 +129,8 @@ export type IMissionInventoryUpdateRequest = {
 
 export interface IRewardInfo {
     node: string;
+    invasionId?: string;
+    invasionAllyFaction?: "FC_GRINEER" | "FC_CORPUS";
     sortieId?: string;
     sortieTag?: string;
     sortiePrereqs?: string[];
