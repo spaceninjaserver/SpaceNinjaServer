@@ -1315,7 +1315,7 @@ single.getRoute("/webui/cheats").on("beforeload", function () {
     interval = setInterval(() => {
         if (window.authz) {
             clearInterval(interval);
-            fetch("/custom/config?" + window.authz).then(res => {
+            fetch("/custom/config?" + window.authz).then(async res => {
                 if (res.status == 200) {
                     $("#server-settings-no-perms").addClass("d-none");
                     $("#server-settings").removeClass("d-none");
@@ -1335,8 +1335,16 @@ single.getRoute("/webui/cheats").on("beforeload", function () {
                         })
                     );
                 } else {
-                    $("#server-settings-no-perms").removeClass("d-none");
-                    $("#server-settings").addClass("d-none");
+                    if ((await res.text()) == "Log-in expired") {
+                        revalidateAuthz(() => {
+                            if (single.getCurrentPath() == "/webui/cheats") {
+                                single.loadRoute("/webui/cheats");
+                            }
+                        });
+                    } else {
+                        $("#server-settings-no-perms").removeClass("d-none");
+                        $("#server-settings").addClass("d-none");
+                    }
                 }
             });
         }
