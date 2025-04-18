@@ -53,6 +53,9 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
     logger.debug("mission report:", missionReport);
 
     const inventory = await getInventory(accountId);
+    const firstCompletion = missionReport.SortieId
+        ? inventory.CompletedSorties.indexOf(missionReport.SortieId) == -1
+        : false;
     const inventoryUpdates = await addMissionInventoryUpdates(inventory, missionReport);
 
     if (
@@ -69,7 +72,7 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
     }
 
     const { MissionRewards, inventoryChanges, credits, AffiliationMods, SyndicateXPItemReward } =
-        await addMissionRewards(inventory, missionReport);
+        await addMissionRewards(inventory, missionReport, firstCompletion);
 
     await inventory.save();
     const inventoryResponse = await getInventoryResponse(inventory, true);

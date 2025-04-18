@@ -91,7 +91,8 @@ import {
     ICrewMemberSkill,
     ICrewMemberSkillEfficiency,
     ICrewMemberDatabase,
-    ICrewMemberClient
+    ICrewMemberClient,
+    ISortieRewardAttenuation
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -1276,6 +1277,14 @@ lastSortieRewardSchema.set("toJSON", {
     }
 });
 
+const sortieRewardAttenutationSchema = new Schema<ISortieRewardAttenuation>(
+    {
+        Tag: String,
+        Atten: Number
+    },
+    { _id: false }
+);
+
 const lockedWeaponGroupSchema = new Schema<ILockedWeaponGroupDatabase>(
     {
         s: Schema.Types.ObjectId,
@@ -1495,6 +1504,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         CompletedSorties: [String],
         LastSortieReward: { type: [lastSortieRewardSchema], default: undefined },
         LastLiteSortieReward: { type: [lastSortieRewardSchema], default: undefined },
+        SortieRewardAttenuation: { type: [sortieRewardAttenutationSchema], default: undefined },
 
         // Resource Extractor Drones
         Drones: [droneSchema],

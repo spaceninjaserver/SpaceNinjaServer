@@ -412,7 +412,9 @@ export const addMissionInventoryUpdates = async (
                 break;
             }
             case "SortieId": {
-                inventory.CompletedSorties.push(value);
+                if (inventory.CompletedSorties.indexOf(value) == -1) {
+                    inventory.CompletedSorties.push(value);
+                }
                 break;
             }
             case "SeasonChallengeCompletions": {
@@ -569,7 +571,8 @@ export const addMissionRewards = async (
         RegularCredits: creditDrops,
         VoidTearParticipantsCurrWave: voidTearWave,
         StrippedItems: strippedItems
-    }: IMissionInventoryUpdateRequest
+    }: IMissionInventoryUpdateRequest,
+    firstCompletion: boolean
 ): Promise<AddMissionRewardsReturnType> => {
     if (!rewardInfo) {
         //TODO: if there is a case where you can have credits collected during a mission but no rewardInfo, add credits needs to be handled earlier
@@ -583,21 +586,11 @@ export const addMissionRewards = async (
     }
 
     //TODO: check double reward merging
-    const MissionRewards: IMissionReward[] = getRandomMissionDrops(rewardInfo, wagerTier);
+    const MissionRewards: IMissionReward[] = getRandomMissionDrops(inventory, rewardInfo, wagerTier, firstCompletion);
     logger.debug("random mission drops:", MissionRewards);
     const inventoryChanges: IInventoryChanges = {};
     const AffiliationMods: IAffiliationMods[] = [];
     let SyndicateXPItemReward;
-
-    if (rewardInfo.sortieTag == "Final") {
-        inventory.LastSortieReward = [
-            {
-                SortieId: new Types.ObjectId(rewardInfo.sortieId!.split("_")[1]),
-                StoreItem: MissionRewards[0].StoreItem,
-                Manifest: "/Lotus/Types/Game/MissionDecks/SortieRewards"
-            }
-        ];
-    }
 
     let missionCompletionCredits = 0;
     //inventory change is what the client has not rewarded itself, also the client needs to know the credit changes for display
@@ -962,11 +955,78 @@ function getLevelCreditRewards(node: IRegion): number {
     //TODO: get dark sektor fixed credit rewards and railjack bonus
 }
 
-function getRandomMissionDrops(RewardInfo: IRewardInfo, tierOverride: number | undefined): IMissionReward[] {
+function getRandomMissionDrops(
+    inventory: TInventoryDatabaseDocument,
+    RewardInfo: IRewardInfo,
+    tierOverride: number | undefined,
+    firstCompletion: boolean
+): IMissionReward[] {
     const drops: IMissionReward[] = [];
-    if (RewardInfo.sortieTag == "Final") {
-        const drop = getRandomRewardByChance(ExportRewards["/Lotus/Types/Game/MissionDecks/SortieRewards"][0])!;
-        drops.push({ StoreItem: drop.type, ItemCount: drop.itemCount });
+    if (RewardInfo.sortieTag == "Final" && firstCompletion) {
+        const arr = RewardInfo.sortieId!.split("_");
+        let sortieId = arr[1];
+        if (sortieId == "Lite") {
+            sortieId = arr[2];
+
+            // TODO: Some way to get from sortieId to reward to make this faster + more reliable at week rollover.
+            const boss = getWorldState().LiteSorties[0].Boss as
+                | "SORTIE_BOSS_AMAR"
+                | "SORTIE_BOSS_NIRA"
+                | "SORTIE_BOSS_BOREAL";
+            let crystalType = {
+                SORTIE_BOSS_AMAR: "/Lotus/StoreItems/Types/Gameplay/NarmerSorties/ArchonCrystalAmar",
+                SORTIE_BOSS_NIRA: "/Lotus/StoreItems/Types/Gameplay/NarmerSorties/ArchonCrystalNira",
+                SORTIE_BOSS_BOREAL: "/Lotus/StoreItems/Types/Gameplay/NarmerSorties/ArchonCrystalBoreal"
+            }[boss];
+            const attenTag = {
+                SORTIE_BOSS_AMAR: "NarmerSortieAmarCrystalRewards",
+                SORTIE_BOSS_NIRA: "NarmerSortieNiraCrystalRewards",
+                SORTIE_BOSS_BOREAL: "NarmerSortieBorealCrystalRewards"
+            }[boss];
+            const attenIndex = inventory.SortieRewardAttenuation?.findIndex(x => x.Tag == attenTag) ?? -1;
+            const mythicProbability =
+                0.2 + (inventory.SortieRewardAttenuation?.find(x => x.Tag == attenTag)?.Atten ?? 0);
+            if (Math.random() < mythicProbability) {
+                crystalType += "Mythic";
+                if (attenIndex != -1) {
+                    inventory.SortieRewardAttenuation!.splice(attenIndex, 1);
+                }
+            } else {
+                if (attenIndex == -1) {
+                    inventory.SortieRewardAttenuation ??= [];
+                    inventory.SortieRewardAttenuation.push({
+                        Tag: attenTag,
+                        Atten: 0.2
+                    });
+                } else {
+                    inventory.SortieRewardAttenuation![attenIndex].Atten += 0.2;
+                }
+            }
+
+            drops.push({ StoreItem: crystalType, ItemCount: 1 });
+
+            const drop = getRandomRewardByChance(
+                ExportRewards["/Lotus/Types/Game/MissionDecks/ArchonSortieRewards"][0]
+            )!;
+            drops.push({ StoreItem: drop.type, ItemCount: drop.itemCount });
+            inventory.LastLiteSortieReward = [
+                {
+                    SortieId: new Types.ObjectId(sortieId),
+                    StoreItem: drop.type,
+                    Manifest: "/Lotus/Types/Game/MissionDecks/ArchonSortieRewards"
+                }
+            ];
+        } else {
+            const drop = getRandomRewardByChance(ExportRewards["/Lotus/Types/Game/MissionDecks/SortieRewards"][0])!;
+            drops.push({ StoreItem: drop.type, ItemCount: drop.itemCount });
+            inventory.LastSortieReward = [
+                {
+                    SortieId: new Types.ObjectId(sortieId),
+                    StoreItem: drop.type,
+                    Manifest: "/Lotus/Types/Game/MissionDecks/SortieRewards"
+                }
+            ];
+        }
     }
     if (RewardInfo.periodicMissionTag?.startsWith("HardDaily")) {
         drops.push({

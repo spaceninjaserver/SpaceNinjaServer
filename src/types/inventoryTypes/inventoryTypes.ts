@@ -285,6 +285,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     CompletedSorties: string[];
     LastSortieReward?: ILastSortieRewardClient[];
     LastLiteSortieReward?: ILastSortieRewardClient[];
+    SortieRewardAttenuation?: ISortieRewardAttenuation[];
     Drones: IDroneClient[];
     StepSequencers: IStepSequencer[];
     ActiveAvatarImageType: string;
@@ -744,6 +745,11 @@ export interface ILastSortieRewardClient {
 
 export interface ILastSortieRewardDatabase extends Omit<ILastSortieRewardClient, "SortieId"> {
     SortieId: Types.ObjectId;
+}
+
+export interface ISortieRewardAttenuation {
+    Tag: string;
+    Atten: number;
 }
 
 export interface ILibraryDailyTaskInfo {
