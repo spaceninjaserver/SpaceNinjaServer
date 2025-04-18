@@ -105,7 +105,7 @@ import {
     IEquipmentClient
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
-import { EquipmentSelectionSchema } from "./loadoutModel";
+import { EquipmentSelectionSchema, oidSchema } from "./loadoutModel";
 
 export const typeCountSchema = new Schema<ITypeCount>({ ItemType: String, ItemCount: Number }, { _id: false });
 
@@ -1588,7 +1588,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         HasContributedToDojo: Boolean,
         HWIDProtectEnabled: Boolean,
         LoadOutPresets: { type: Schema.Types.ObjectId, ref: "Loadout" },
-        CurrentLoadOutIds: [Schema.Types.Mixed],
+        CurrentLoadOutIds: [oidSchema],
         RandomUpgradesIdentified: Number,
         BountyScore: Number,
         ChallengeInstanceStates: [Schema.Types.Mixed],
