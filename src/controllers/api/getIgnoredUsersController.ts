@@ -1,16 +1,20 @@
+import { toOid } from "@/src/helpers/inventoryHelpers";
+import { Account, Ignore } from "@/src/models/loginModel";
+import { getAccountIdForRequest } from "@/src/services/loginService";
+import { IFriendInfo } from "@/src/types/guildTypes";
+import { parallelForeach } from "@/src/utils/async-utils";
 import { RequestHandler } from "express";
 
-const getIgnoredUsersController: RequestHandler = (_req, res) => {
-    res.writeHead(200, {
-        "Content-Type": "text/html",
-        "Content-Length": "3"
+export const getIgnoredUsersController: RequestHandler = async (req, res) => {
+    const accountId = await getAccountIdForRequest(req);
+    const ignores = await Ignore.find({ ignorer: accountId });
+    const ignoredUsers: IFriendInfo[] = [];
+    await parallelForeach(ignores, async ignore => {
+        const ignoreeAccount = (await Account.findById(ignore.ignoree, "DisplayName"))!;
+        ignoredUsers.push({
+            _id: toOid(ignore.ignoree),
+            DisplayName: ignoreeAccount.DisplayName + ""
+        });
     });
-    res.end(
-        Buffer.from([
-            0x7b, 0x22, 0x4e, 0x6f, 0x6e, 0x63, 0x65, 0x22, 0x3a, 0x38, 0x33, 0x30, 0x34, 0x30, 0x37, 0x37, 0x32, 0x32,
-            0x34, 0x30, 0x32, 0x32, 0x32, 0x36, 0x31, 0x35, 0x30, 0x31, 0x7d
-        ])
-    );
+    res.json({ IgnoredUsers: ignoredUsers });
 };
-
-export { getIgnoredUsersController };

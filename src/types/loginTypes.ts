@@ -1,3 +1,5 @@
+import { Types } from "mongoose";
+
 export interface IAccountAndLoginResponseCommons {
     DisplayName: string;
     CountryCode: string;
@@ -55,4 +57,9 @@ export interface ILoginResponse extends IAccountAndLoginResponseCommons {
 export interface IGroup {
     experiment: string;
     experimentGroup: string;
+}
+
+export interface IIgnore {
+    ignorer: Types.ObjectId;
+    ignoree: Types.ObjectId;
 }

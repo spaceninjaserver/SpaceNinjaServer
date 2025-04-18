@@ -1,4 +1,4 @@
-import { IDatabaseAccountJson } from "@/src/types/loginTypes";
+import { IDatabaseAccountJson, IIgnore } from "@/src/types/loginTypes";
 import { model, Schema, SchemaOptions } from "mongoose";
 
 const opts = {
@@ -37,3 +37,13 @@ databaseAccountSchema.set("toJSON", {
 });
 
 export const Account = model<IDatabaseAccountJson>("Account", databaseAccountSchema);
+
+const ignoreSchema = new Schema<IIgnore>({
+    ignorer: Schema.Types.ObjectId,
+    ignoree: Schema.Types.ObjectId
+});
+
+ignoreSchema.index({ ignorer: 1 });
+ignoreSchema.index({ ignorer: 1, ignoree: 1 }, { unique: true });
+
+export const Ignore = model<IIgnore>("Ignore", ignoreSchema);

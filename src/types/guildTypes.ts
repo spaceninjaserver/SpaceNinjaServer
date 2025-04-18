@@ -103,12 +103,12 @@ export interface IGuildMemberDatabase {
     ShipDecorationsContributed?: ITypeCount[];
 }
 
-interface IFriendInfo {
+export interface IFriendInfo {
     _id: IOid;
     DisplayName?: string;
     PlatformNames?: string[];
     PlatformAccountId?: string;
-    Status: number;
+    Status?: number;
     ActiveAvatarImageType?: string;
     LastLogin?: IMongoDate;
     PlayerLevel?: number;
