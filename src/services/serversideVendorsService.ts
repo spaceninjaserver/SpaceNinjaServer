@@ -34,7 +34,6 @@ const rawVendorManifests: IRawVendorManifest[] = [
     getVendorManifestJson("EntratiLabsEntratiLabVendorManifest"),
     getVendorManifestJson("GuildAdvertisementVendorManifest"), // uses preprocessing
     getVendorManifestJson("HubsIronwakeDondaVendorManifest"), // uses preprocessing
-    getVendorManifestJson("HubsPerrinSequenceWeaponVendorManifest"),
     getVendorManifestJson("HubsRailjackCrewMemberVendorManifest"),
     getVendorManifestJson("MaskSalesmanManifest"),
     getVendorManifestJson("Nova1999ConquestShopManifest"),
@@ -51,7 +50,8 @@ const rawVendorManifests: IRawVendorManifest[] = [
 ];
 
 interface IGeneratableVendorInfo extends Omit<IVendorInfo, "ItemManifest" | "Expiry"> {
-    cycleDuration?: number;
+    cycleStart: number;
+    cycleDuration: number;
 }
 
 const generatableVendors: IGeneratableVendorInfo[] = [
@@ -62,6 +62,16 @@ const generatableVendors: IGeneratableVendorInfo[] = [
         RandomSeedType: "VRST_WEAPON",
         RequiredGoalTag: "",
         WeaponUpgradeValueAttenuationExponent: 2.25,
+        cycleStart: 1740960000_000,
+        cycleDuration: 4 * unixTimesInMs.day
+    },
+    {
+        _id: { $oid: "60ad3b6ec96976e97d227e19" },
+        TypeName: "/Lotus/Types/Game/VendorManifests/Hubs/PerrinSequenceWeaponVendorManifest",
+        PropertyTextHash: "34F8CF1DFF745F0D67433A5EF0A03E70",
+        RandomSeedType: "VRST_WEAPON",
+        WeaponUpgradeValueAttenuationExponent: 2.25,
+        cycleStart: 1744934400_000,
         cycleDuration: 4 * unixTimesInMs.day
     }
     // {
@@ -124,7 +134,7 @@ const preprocessVendorManifest = (originalManifest: IRawVendorManifest): IVendor
 const refreshExpiry = (expiry: IMongoDate): number => {
     const period = parseInt(expiry.$date.$numberLong);
     if (Date.now() >= period) {
-        const epoch = 1734307200 * 1000; // Monday (for weekly schedules)
+        const epoch = 1734307200_000; // Monday (for weekly schedules)
         const iteration = Math.trunc((Date.now() - epoch) / period);
         const start = epoch + iteration * period;
         const end = start + period;
@@ -135,11 +145,11 @@ const refreshExpiry = (expiry: IMongoDate): number => {
 };
 
 const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorManifestPreprocessed => {
-    const EPOCH = 1740960000 * 1000; // Monday; aligns with coda weapons 8 day cycle.
+    const EPOCH = vendorInfo.cycleStart;
     const manifest = ExportVendors[vendorInfo.TypeName];
     let binThisCycle;
     if (manifest.isOneBinPerCycle) {
-        const cycleDuration = vendorInfo.cycleDuration!; // manifest.items[0].durationHours! * 3600_000;
+        const cycleDuration = vendorInfo.cycleDuration; // manifest.items[0].durationHours! * 3600_000;
         const cycleIndex = Math.trunc((Date.now() - EPOCH) / cycleDuration);
         binThisCycle = cycleIndex % 2; // Note: May want to auto-compute the bin size, but this is only used for coda weapons right now.
     }
@@ -150,7 +160,7 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
         if (manifest.isOneBinPerCycle && rawItem.bin != binThisCycle) {
             continue;
         }
-        const cycleDuration = vendorInfo.cycleDuration!; // rawItem.durationHours! * 3600_000;
+        const cycleDuration = vendorInfo.cycleDuration; // rawItem.durationHours! * 3600_000;
         const cycleIndex = Math.trunc((Date.now() - EPOCH) / cycleDuration);
         const cycleStart = EPOCH + cycleIndex * cycleDuration;
         const cycleEnd = cycleStart + cycleDuration;
@@ -181,10 +191,11 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
             items.push(item);
         }
     }
-    delete vendorInfo.cycleDuration;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { cycleStart, cycleDuration, ...clientVendorInfo } = vendorInfo;
     return {
         VendorInfo: {
-            ...vendorInfo,
+            ...clientVendorInfo,
             ItemManifest: items,
             Expiry: { $date: { $numberLong: soonestOfferExpiry.toString() } }
         }
