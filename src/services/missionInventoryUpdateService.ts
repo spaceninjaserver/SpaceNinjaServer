@@ -71,7 +71,12 @@ const getRotations = (rewardInfo: IRewardInfo, tierOverride?: number): number[] 
         return [rewardInfo.rewardTier];
     }
 
-    const rotationCount = rewardInfo.rewardQualifications?.length || 0;
+    // Aborting a railjack mission should not give any rewards (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1741)
+    if (rewardInfo.rewardQualifications === undefined) {
+        return [];
+    }
+
+    const rotationCount = rewardInfo.rewardQualifications.length || 0;
     if (rotationCount === 0) return [0];
 
     const rotationPattern =
