@@ -32,7 +32,7 @@ export interface IVendorInfo {
     TypeName: string;
     ItemManifest: IItemManifest[];
     PropertyTextHash?: string;
-    RandomSeedType?: "VRST_WEAPON";
+    RandomSeedType?: string;
     RequiredGoalTag?: string;
     WeaponUpgradeValueAttenuationExponent?: number;
     Expiry: IMongoDate; // Either a date in the distant future or a period in milliseconds for preprocessing.
