@@ -489,7 +489,7 @@ export interface ICrewMemberClient {
     XP: number;
     PowersuitType: string;
     Configs: IItemConfig[];
-    SecondInCommand: boolean;
+    SecondInCommand: boolean; // on call
     ItemId: IOid;
 }
 
