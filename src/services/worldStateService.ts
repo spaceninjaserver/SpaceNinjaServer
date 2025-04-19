@@ -4,7 +4,14 @@ import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { config } from "@/src/services/configService";
 import { CRng } from "@/src/services/rngService";
 import { eMissionType, ExportNightwave, ExportRegions } from "warframe-public-export-plus";
-import { ICalendarDay, ICalendarSeason, ISeasonChallenge, ISortie, IWorldState } from "../types/worldStateTypes";
+import {
+    ICalendarDay,
+    ICalendarSeason,
+    ILiteSortie,
+    ISeasonChallenge,
+    ISortie,
+    IWorldState
+} from "../types/worldStateTypes";
 
 const sortieBosses = [
     "SORTIE_BOSS_HYENA",
@@ -941,65 +948,9 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     pushSortieIfRelevant(worldState.Sorties, day);
 
     // Archon Hunt cycling every week
-    // TODO: Handle imminent rollover
-    {
-        const boss = ["SORTIE_BOSS_AMAR", "SORTIE_BOSS_NIRA", "SORTIE_BOSS_BOREAL"][week % 3];
-        const showdownNode = ["SolNode99", "SolNode53", "SolNode24"][week % 3];
-        const systemIndex = [3, 4, 2][week % 3]; // Mars, Jupiter, Earth
-
-        const nodes: string[] = [];
-        for (const [key, value] of Object.entries(ExportRegions)) {
-            if (
-                value.systemIndex === systemIndex &&
-                value.factionIndex !== undefined &&
-                value.factionIndex < 2 &&
-                value.name.indexOf("Archwing") == -1 &&
-                value.missionIndex != 0 // Exclude MT_ASSASSINATION
-            ) {
-                nodes.push(key);
-            }
-        }
-
-        const rng = new CRng(week);
-        const firstNodeIndex = rng.randomInt(0, nodes.length - 1);
-        const firstNode = nodes[firstNodeIndex];
-        nodes.splice(firstNodeIndex, 1);
-        worldState.LiteSorties.push({
-            _id: {
-                $oid: Math.trunc(weekStart / 1000).toString(16) + "5e23a244740a190c"
-            },
-            Activation: { $date: { $numberLong: weekStart.toString() } },
-            Expiry: { $date: { $numberLong: weekEnd.toString() } },
-            Reward: "/Lotus/Types/Game/MissionDecks/ArchonSortieRewards",
-            Seed: week,
-            Boss: boss,
-            Missions: [
-                {
-                    missionType: rng.randomElement([
-                        "MT_INTEL",
-                        "MT_MOBILE_DEFENSE",
-                        "MT_EXTERMINATION",
-                        "MT_SABOTAGE",
-                        "MT_RESCUE"
-                    ]),
-                    node: firstNode
-                },
-                {
-                    missionType: rng.randomElement([
-                        "MT_DEFENSE",
-                        "MT_TERRITORY",
-                        "MT_ARTIFACT",
-                        "MT_EXCAVATE",
-                        "MT_SURVIVAL"
-                    ]),
-                    node: rng.randomElement(nodes)
-                },
-                {
-                    missionType: "MT_ASSASSINATION",
-                    node: showdownNode
-                }
-            ]
-        });
+    worldState.LiteSorties.push(getLiteSortie(week));
+    if (isBeforeNextExpectedWorldStateRefresh(weekEnd)) {
+        worldState.LiteSorties.push(getLiteSortie(week + 1));
     }
 
     // Circuit choices cycling every week
@@ -1070,4 +1021,71 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     worldState.Tmp = JSON.stringify(tmp);
 
     return worldState;
+};
+
+export const idToWeek = (id: string): number => {
+    return (parseInt(id.substring(0, 8), 16) * 1000 - EPOCH) / 604800000;
+};
+
+export const getLiteSortie = (week: number): ILiteSortie => {
+    const boss = (["SORTIE_BOSS_AMAR", "SORTIE_BOSS_NIRA", "SORTIE_BOSS_BOREAL"] as const)[week % 3];
+    const showdownNode = ["SolNode99", "SolNode53", "SolNode24"][week % 3];
+    const systemIndex = [3, 4, 2][week % 3]; // Mars, Jupiter, Earth
+
+    const nodes: string[] = [];
+    for (const [key, value] of Object.entries(ExportRegions)) {
+        if (
+            value.systemIndex === systemIndex &&
+            value.factionIndex !== undefined &&
+            value.factionIndex < 2 &&
+            value.name.indexOf("Archwing") == -1 &&
+            value.missionIndex != 0 // Exclude MT_ASSASSINATION
+        ) {
+            nodes.push(key);
+        }
+    }
+
+    const rng = new CRng(week);
+    const firstNodeIndex = rng.randomInt(0, nodes.length - 1);
+    const firstNode = nodes[firstNodeIndex];
+    nodes.splice(firstNodeIndex, 1);
+
+    const weekStart = EPOCH + week * 604800000;
+    const weekEnd = weekStart + 604800000;
+    return {
+        _id: {
+            $oid: Math.trunc(weekStart / 1000).toString(16) + "5e23a244740a190c"
+        },
+        Activation: { $date: { $numberLong: weekStart.toString() } },
+        Expiry: { $date: { $numberLong: weekEnd.toString() } },
+        Reward: "/Lotus/Types/Game/MissionDecks/ArchonSortieRewards",
+        Seed: week,
+        Boss: boss,
+        Missions: [
+            {
+                missionType: rng.randomElement([
+                    "MT_INTEL",
+                    "MT_MOBILE_DEFENSE",
+                    "MT_EXTERMINATION",
+                    "MT_SABOTAGE",
+                    "MT_RESCUE"
+                ]),
+                node: firstNode
+            },
+            {
+                missionType: rng.randomElement([
+                    "MT_DEFENSE",
+                    "MT_TERRITORY",
+                    "MT_ARTIFACT",
+                    "MT_EXCAVATE",
+                    "MT_SURVIVAL"
+                ]),
+                node: rng.randomElement(nodes)
+            },
+            {
+                missionType: "MT_ASSASSINATION",
+                node: showdownNode
+            }
+        ]
+    };
 };

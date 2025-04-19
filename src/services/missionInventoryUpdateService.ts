@@ -53,7 +53,7 @@ import conservationAnimals from "@/static/fixed_responses/conservationAnimals.js
 import { getInfNodes } from "@/src/helpers/nemesisHelpers";
 import { Loadout } from "../models/inventoryModels/loadoutModel";
 import { ILoadoutConfigDatabase } from "../types/saveLoadoutTypes";
-import { getWorldState } from "./worldStateService";
+import { getLiteSortie, getWorldState, idToWeek } from "./worldStateService";
 import { config } from "./configService";
 
 const getRotations = (rewardInfo: IRewardInfo, tierOverride?: number): number[] => {
@@ -990,11 +990,7 @@ function getRandomMissionDrops(
         if (sortieId == "Lite") {
             sortieId = arr[2];
 
-            // TODO: Some way to get from sortieId to reward to make this faster + more reliable at week rollover.
-            const boss = getWorldState().LiteSorties[0].Boss as
-                | "SORTIE_BOSS_AMAR"
-                | "SORTIE_BOSS_NIRA"
-                | "SORTIE_BOSS_BOREAL";
+            const boss = getLiteSortie(idToWeek(sortieId)).Boss;
             let crystalType = {
                 SORTIE_BOSS_AMAR: "/Lotus/StoreItems/Types/Gameplay/NarmerSorties/ArchonCrystalAmar",
                 SORTIE_BOSS_NIRA: "/Lotus/StoreItems/Types/Gameplay/NarmerSorties/ArchonCrystalNira",

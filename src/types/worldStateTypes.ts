@@ -103,7 +103,7 @@ export interface ILiteSortie {
     Expiry: IMongoDate;
     Reward: "/Lotus/Types/Game/MissionDecks/ArchonSortieRewards";
     Seed: number;
-    Boss: string; // "SORTIE_BOSS_AMAR" | "SORTIE_BOSS_NIRA" | "SORTIE_BOSS_BOREAL"
+    Boss: "SORTIE_BOSS_AMAR" | "SORTIE_BOSS_NIRA" | "SORTIE_BOSS_BOREAL";
     Missions: {
         missionType: string;
         node: string;
