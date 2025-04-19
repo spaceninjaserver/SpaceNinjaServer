@@ -355,6 +355,34 @@ const getSeasonWeeklyHardChallenge = (week: number, id: number): ISeasonChalleng
     };
 };
 
+const pushWeeklyActs = (worldState: IWorldState, week: number): void => {
+    const weekStart = EPOCH + week * 604800000;
+    const weekEnd = weekStart + 604800000;
+
+    worldState.SeasonInfo.ActiveChallenges.push(getSeasonWeeklyChallenge(week, 0));
+    worldState.SeasonInfo.ActiveChallenges.push(getSeasonWeeklyChallenge(week, 1));
+    worldState.SeasonInfo.ActiveChallenges.push(getSeasonWeeklyHardChallenge(week, 2));
+    worldState.SeasonInfo.ActiveChallenges.push(getSeasonWeeklyHardChallenge(week, 3));
+    worldState.SeasonInfo.ActiveChallenges.push({
+        _id: { $oid: "67e1b96e9d00cb47" + (week * 7 + 0).toString().padStart(8, "0") },
+        Activation: { $date: { $numberLong: weekStart.toString() } },
+        Expiry: { $date: { $numberLong: weekEnd.toString() } },
+        Challenge: "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentCompleteMissions" + (week - 12)
+    });
+    worldState.SeasonInfo.ActiveChallenges.push({
+        _id: { $oid: "67e1b96e9d00cb47" + (week * 7 + 1).toString().padStart(8, "0") },
+        Activation: { $date: { $numberLong: weekStart.toString() } },
+        Expiry: { $date: { $numberLong: weekEnd.toString() } },
+        Challenge: "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentKillEximus" + (week - 12)
+    });
+    worldState.SeasonInfo.ActiveChallenges.push({
+        _id: { $oid: "67e1b96e9d00cb47" + (week * 7 + 2).toString().padStart(8, "0") },
+        Activation: { $date: { $numberLong: weekStart.toString() } },
+        Expiry: { $date: { $numberLong: weekEnd.toString() } },
+        Challenge: "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentKillEnemies" + (week - 12)
+    });
+};
+
 const birthdays: number[] = [
     1, // Kaya
     45, // Lettie
@@ -611,29 +639,10 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     if (isBeforeNextExpectedWorldStateRefresh(EPOCH + (day + 1) * 86400000)) {
         worldState.SeasonInfo.ActiveChallenges.push(getSeasonDailyChallenge(day + 1));
     }
-    worldState.SeasonInfo.ActiveChallenges.push(getSeasonWeeklyChallenge(week, 0));
-    worldState.SeasonInfo.ActiveChallenges.push(getSeasonWeeklyChallenge(week, 1));
-    worldState.SeasonInfo.ActiveChallenges.push(getSeasonWeeklyHardChallenge(week, 2));
-    worldState.SeasonInfo.ActiveChallenges.push(getSeasonWeeklyHardChallenge(week, 3));
-    worldState.SeasonInfo.ActiveChallenges.push({
-        _id: { $oid: "67e1b96e9d00cb47" + (week * 7 + 0).toString().padStart(8, "0") },
-        Activation: { $date: { $numberLong: weekStart.toString() } },
-        Expiry: { $date: { $numberLong: weekEnd.toString() } },
-        Challenge: "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentCompleteMissions" + (week - 12)
-    });
-    worldState.SeasonInfo.ActiveChallenges.push({
-        _id: { $oid: "67e1b96e9d00cb47" + (week * 7 + 1).toString().padStart(8, "0") },
-        Activation: { $date: { $numberLong: weekStart.toString() } },
-        Expiry: { $date: { $numberLong: weekEnd.toString() } },
-        Challenge: "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentKillEximus" + (week - 12)
-    });
-    worldState.SeasonInfo.ActiveChallenges.push({
-        _id: { $oid: "67e1b96e9d00cb47" + (week * 7 + 2).toString().padStart(8, "0") },
-        Activation: { $date: { $numberLong: weekStart.toString() } },
-        Expiry: { $date: { $numberLong: weekEnd.toString() } },
-        Challenge: "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentKillEnemies" + (week - 12)
-    });
-    // TODO: Provide upcoming weekly acts if rollover is imminent
+    pushWeeklyActs(worldState, week);
+    if (isBeforeNextExpectedWorldStateRefresh(weekEnd)) {
+        pushWeeklyActs(worldState, week + 1);
+    }
 
     // Elite Sanctuary Onslaught cycling every week
     worldState.NodeOverrides.find(x => x.Node == "SolNode802")!.Seed = week; // unfaithful
