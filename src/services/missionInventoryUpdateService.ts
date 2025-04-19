@@ -132,11 +132,13 @@ export const addMissionInventoryUpdates = async (
         // Somewhat heuristically detect G3 capture:
         // - https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1365
         // - https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1694
+        // - https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1724
         if (
             inventoryUpdates.MissionFailed &&
             inventoryUpdates.MissionStatus == "GS_FAILURE" &&
             inventoryUpdates.ObjectiveReached &&
             !inventoryUpdates.LockedWeaponGroup &&
+            !inventory.LockedWeaponGroup &&
             !inventoryUpdates.LevelKeyName
         ) {
             const loadout = (await Loadout.findById(inventory.LoadOutPresets, "NORMAL"))!;
