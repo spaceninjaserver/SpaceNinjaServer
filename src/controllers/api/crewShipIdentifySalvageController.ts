@@ -12,6 +12,7 @@ import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { getRandomInt } from "@/src/services/rngService";
 import { IFingerprintStat } from "@/src/helpers/rivenHelper";
+import { IEquipmentDatabase } from "@/src/types/inventoryTypes/commonInventoryTypes";
 
 export const crewShipIdentifySalvageController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -42,22 +43,33 @@ export const crewShipIdentifySalvageController: RequestHandler = async (req, res
         );
     } else {
         const meta = ExportRailjackWeapons[payload.ItemType];
-        const upgradeType = meta.defaultUpgrades![0].ItemType;
-        const upgradeMeta = ExportUpgrades[upgradeType];
-        const buffs: IFingerprintStat[] = [];
-        for (const buff of upgradeMeta.upgradeEntries!) {
-            buffs.push({
-                Tag: buff.tag,
-                Value: Math.trunc(Math.random() * 0x40000000)
-            });
+        let defaultOverwrites: Partial<IEquipmentDatabase> | undefined;
+        if (meta.defaultUpgrades?.[0]) {
+            const upgradeType = meta.defaultUpgrades[0].ItemType;
+            const upgradeMeta = ExportUpgrades[upgradeType];
+            const buffs: IFingerprintStat[] = [];
+            for (const buff of upgradeMeta.upgradeEntries!) {
+                buffs.push({
+                    Tag: buff.tag,
+                    Value: Math.trunc(Math.random() * 0x40000000)
+                });
+            }
+            defaultOverwrites = {
+                UpgradeType: upgradeType,
+                UpgradeFingerprint: JSON.stringify({
+                    compat: payload.ItemType,
+                    buffs
+                } satisfies IInnateDamageFingerprint)
+            };
         }
-        addEquipment(inventory, "CrewShipSalvagedWeapons", payload.ItemType, undefined, inventoryChanges, {
-            UpgradeType: upgradeType,
-            UpgradeFingerprint: JSON.stringify({
-                compat: payload.ItemType,
-                buffs
-            } satisfies IInnateDamageFingerprint)
-        });
+        addEquipment(
+            inventory,
+            "CrewShipSalvagedWeapons",
+            payload.ItemType,
+            undefined,
+            inventoryChanges,
+            defaultOverwrites
+        );
     }
 
     inventoryChanges.CrewShipRawSalvage = [
