@@ -487,6 +487,7 @@ function updateInventory() {
                             a.href = "#";
                             a.onclick = function (event) {
                                 event.preventDefault();
+                                document.getElementById(category + "-list").removeChild(tr);
                                 disposeOfGear(category, item.ItemId.$oid);
                             };
                             a.title = loc("code_remove");
@@ -683,6 +684,7 @@ function updateInventory() {
                                 a.href = "#";
                                 a.onclick = function (event) {
                                     event.preventDefault();
+                                    document.getElementById("riven-list").removeChild(tr);
                                     disposeOfGear("Upgrades", item.ItemId.$oid);
                                 };
                                 a.title = loc("code_remove");
@@ -723,6 +725,7 @@ function updateInventory() {
                         a.href = "#";
                         a.onclick = function (event) {
                             event.preventDefault();
+                            document.getElementById("mods-list").removeChild(tr);
                             disposeOfGear("Upgrades", item.ItemId.$oid);
                         };
                         a.title = loc("code_remove");
@@ -765,6 +768,7 @@ function updateInventory() {
                             a.href = "#";
                             a.onclick = function (event) {
                                 event.preventDefault();
+                                document.getElementById("mods-list").removeChild(tr);
                                 disposeOfItems("Upgrades", item.ItemType, item.ItemCount);
                             };
                             a.title = loc("code_remove");
@@ -1097,8 +1101,6 @@ function disposeOfGear(category, oid) {
             url: "/api/sell.php?" + window.authz,
             contentType: "text/plain",
             data: JSON.stringify(data)
-        }).done(function () {
-            updateInventory();
         });
     });
 }
@@ -1120,8 +1122,6 @@ function disposeOfItems(category, type, count) {
             url: "/api/sell.php?" + window.authz,
             contentType: "text/plain",
             data: JSON.stringify(data)
-        }).done(function () {
-            updateInventory();
         });
     });
 }
