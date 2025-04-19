@@ -1260,21 +1260,28 @@ function doAcquireMod() {
         $("#mod-to-acquire").addClass("is-invalid").focus();
         return;
     }
-    revalidateAuthz(() => {
-        $.post({
-            url: "/custom/addItems?" + window.authz,
-            contentType: "application/json",
-            data: JSON.stringify([
-                {
-                    ItemType: uniqueName,
-                    ItemCount: parseInt($("#mod-count").val())
+    const count = parseInt($("#mod-count").val());
+    if (count != 0) {
+        revalidateAuthz(() => {
+            $.post({
+                url: "/custom/addItems?" + window.authz,
+                contentType: "application/json",
+                data: JSON.stringify([
+                    {
+                        ItemType: uniqueName,
+                        ItemCount: count
+                    }
+                ])
+            }).done(function () {
+                if (count > 0) {
+                    toast(loc("code_succAdded"));
+                } else {
+                    toast(loc("code_succRemoved"));
                 }
-            ])
-        }).done(function () {
-            document.getElementById("mod-to-acquire").value = "";
-            updateInventory();
+                updateInventory();
+            });
         });
-    });
+    }
 }
 
 const uiConfigs = [...$("#server-settings input[id]")].map(x => x.id);
