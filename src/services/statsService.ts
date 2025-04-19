@@ -1,6 +1,5 @@
 import { Stats, TStatsDatabaseDocument } from "@/src/models/statsModel";
 import {
-    IEnemy,
     IStatsAdd,
     IStatsMax,
     IStatsSet,
@@ -137,34 +136,34 @@ export const updateStats = async (accountOwnerId: string, payload: IStatsUpdate)
                         case "HEADSHOT":
                         case "KILL_ASSIST": {
                             playerStats.Enemies ??= [];
-                            const enemyStatKey = {
-                                KILL_ENEMY: "kills",
-                                EXECUTE_ENEMY: "executions",
-                                HEADSHOT: "headshots",
-                                KILL_ASSIST: "assists"
-                            }[category] as "kills" | "executions" | "headshots" | "assists";
+                            const enemyStatKey = (
+                                {
+                                    KILL_ENEMY: "kills",
+                                    EXECUTE_ENEMY: "executions",
+                                    HEADSHOT: "headshots",
+                                    KILL_ASSIST: "assists"
+                                } as const
+                            )[category];
 
                             for (const [type, count] of Object.entries(data as IUploadEntry)) {
-                                const enemy = playerStats.Enemies.find(element => element.type === type);
-                                if (enemy) {
-                                    if (category === "KILL_ENEMY") {
-                                        enemy.kills ??= 0;
-                                        const captureCount = (actionData as IStatsAdd)["CAPTURE_ENEMY"]?.[type];
-                                        if (captureCount) {
-                                            enemy.kills += Math.max(count - captureCount, 0);
-                                            enemy.captures ??= 0;
-                                            enemy.captures += captureCount;
-                                        } else {
-                                            enemy.kills += count;
-                                        }
+                                let enemy = playerStats.Enemies.find(element => element.type === type);
+                                if (!enemy) {
+                                    enemy = { type: type };
+                                    playerStats.Enemies.push(enemy);
+                                }
+                                if (category === "KILL_ENEMY") {
+                                    enemy.kills ??= 0;
+                                    const captureCount = (actionData as IStatsAdd)["CAPTURE_ENEMY"]?.[type];
+                                    if (captureCount) {
+                                        enemy.kills += Math.max(count - captureCount, 0);
+                                        enemy.captures ??= 0;
+                                        enemy.captures += captureCount;
                                     } else {
-                                        enemy[enemyStatKey] ??= 0;
-                                        enemy[enemyStatKey] += count;
+                                        enemy.kills += count;
                                     }
                                 } else {
-                                    const newEnemy: IEnemy = { type: type };
-                                    newEnemy[enemyStatKey] = count;
-                                    playerStats.Enemies.push(newEnemy);
+                                    enemy[enemyStatKey] ??= 0;
+                                    enemy[enemyStatKey] += count;
                                 }
                             }
                             break;
