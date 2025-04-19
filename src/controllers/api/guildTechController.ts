@@ -360,6 +360,22 @@ export const guildTechController: RequestHandler = async (req, res) => {
         res.json({
             inventoryChanges: inventoryChanges
         });
+    } else if (data.Action == "InstantFinish") {
+        if (data.TechProductCategory != "CrewShipWeapons" && data.TechProductCategory != "CrewShipWeaponSkins") {
+            throw new Error(`unexpected TechProductCategory: ${data.TechProductCategory}`);
+        }
+        const inventoryChanges = finishComponentRepair(inventory, data.TechProductCategory, data.CategoryItemId!);
+        inventoryChanges.MiscItems = [
+            {
+                ItemType: "/Lotus/Types/Items/MiscItems/InstantSalvageRepairItem",
+                ItemCount: -1
+            }
+        ];
+        addMiscItems(inventory, inventoryChanges.MiscItems);
+        await inventory.save();
+        res.json({
+            inventoryChanges: inventoryChanges
+        });
     } else {
         logger.debug(`data provided to ${req.path}: ${String(req.body)}`);
         throw new Error(`unhandled guildTech request`);
@@ -372,7 +388,7 @@ type TGuildTechRequest =
     | IGuildTechContributeRequest;
 
 interface IGuildTechBasicRequest {
-    Action: "Start" | "Fabricate" | "Pause" | "Unpause" | "Cancel" | "Rush";
+    Action: "Start" | "Fabricate" | "Pause" | "Unpause" | "Cancel" | "Rush" | "InstantFinish";
     Mode: "Guild" | "Personal";
     RecipeType: string;
     TechProductCategory?: string;
@@ -406,11 +422,19 @@ const claimSalvagedComponent = (inventory: TInventoryDatabaseDocument, itemId: s
     inventory.PersonalTechProjects.splice(personalTechProjectIndex, 1);
 
     const category = personalTechProject.ProductCategory! as "CrewShipWeapons" | "CrewShipWeaponSkins";
+    return finishComponentRepair(inventory, category, itemId);
+};
+
+const finishComponentRepair = (
+    inventory: TInventoryDatabaseDocument,
+    category: "CrewShipWeapons" | "CrewShipWeaponSkins",
+    itemId: string
+): IInventoryChanges => {
     const salvageCategory = getSalvageCategory(category);
 
     // find salved part & delete it
     const salvageIndex = inventory[salvageCategory].findIndex(x => x._id.equals(itemId));
-    const salvageItem = inventory[category][salvageIndex];
+    const salvageItem = inventory[salvageCategory][salvageIndex];
     inventory[salvageCategory].splice(salvageIndex, 1);
 
     // add final item
