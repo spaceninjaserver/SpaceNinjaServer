@@ -216,6 +216,27 @@ const handleQuestCompletion = async (
         setupKahlSyndicate(inventory);
     }
 
+    // Whispers in the Walls is unlocked once The New + Heart of Deimos are completed.
+    if (
+        (questKey == "/Lotus/Types/Keys/NewWarQuest/NewWarQuestKeyChain" &&
+            inventory.QuestKeys.find(
+                x => x.ItemType == "/Lotus/Types/Keys/InfestedMicroplanetQuest/InfestedMicroplanetQuestKeyChain"
+            )?.Completed) ||
+        (questKey == "/Lotus/Types/Keys/InfestedMicroplanetQuest/InfestedMicroplanetQuestKeyChain" &&
+            inventory.QuestKeys.find(x => x.ItemType == "/Lotus/Types/Keys/NewWarQuest/NewWarQuestKeyChain")?.Completed)
+    ) {
+        await createMessage(inventory.accountOwnerId, [
+            {
+                sndr: "/Lotus/Language/Bosses/Loid",
+                msg: "/Lotus/Language/EntratiLab/EntratiQuest/WiTWQuestRecievedInboxBody",
+                att: ["/Lotus/Types/Keys/EntratiLab/EntratiQuestKeyChain"],
+                sub: "/Lotus/Language/EntratiLab/EntratiQuest/WiTWQuestRecievedInboxTitle",
+                icon: "/Lotus/Interface/Icons/Npcs/Entrati/Loid.png",
+                highPriority: true
+            }
+        ]);
+    }
+
     const questCompletionItems = getQuestCompletionItems(questKey);
     logger.debug(`quest completion items`, questCompletionItems);
     if (questCompletionItems) {
