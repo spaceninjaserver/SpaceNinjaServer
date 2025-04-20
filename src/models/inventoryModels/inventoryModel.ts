@@ -94,7 +94,8 @@ import {
     ICrewMemberClient,
     ISortieRewardAttenuation,
     IInvasionProgressDatabase,
-    IInvasionProgressClient
+    IInvasionProgressClient,
+    IAccolades
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -1059,6 +1060,13 @@ pendingRecipeSchema.set("toJSON", {
     }
 });
 
+const accoladesSchema = new Schema<IAccolades>(
+    {
+        Heirloom: Boolean
+    },
+    { _id: false }
+);
+
 const infestedFoundrySchema = new Schema<IInfestedFoundryDatabase>(
     {
         Name: String,
@@ -1465,6 +1473,16 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         XPInfo: [TypeXPItemSchema],
         //Mastery Rank next availability
         TrainingDate: { type: Date, default: new Date(0) },
+
+        //Accolades
+        Staff: Boolean,
+        Founder: Number,
+        Guide: Number,
+        Moderator: Boolean,
+        Partner: Boolean,
+        Accolades: accoladesSchema,
+        //Not an accolade but unlocks an extra chat
+        Counselor: Boolean,
 
         //you saw last played Region when you opened the star map
         LastRegionPlayed: String,

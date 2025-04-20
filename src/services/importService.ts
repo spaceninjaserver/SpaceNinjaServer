@@ -230,17 +230,23 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
             replaceSlots(db[key], client[key]);
         }
     }
+    // boolean
     for (const key of [
         "UseAdultOperatorLoadout",
         "HasOwnedVoidProjectionsPreviously",
         "ReceivedStartingGear",
         "ArchwingEnabled",
-        "PlayedParkourTutorial"
+        "PlayedParkourTutorial",
+        "Staff",
+        "Moderator",
+        "Partner",
+        "Counselor"
     ] as const) {
         if (client[key] !== undefined) {
             db[key] = client[key];
         }
     }
+    // number
     for (const key of [
         "PlayerLevel",
         "RegularCredits",
@@ -250,12 +256,15 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         "PrimeTokens",
         "TradesRemaining",
         "GiftsRemaining",
-        "ChallengesFixVersion"
+        "ChallengesFixVersion",
+        "Founder",
+        "Guide"
     ] as const) {
         if (client[key] !== undefined) {
             db[key] = client[key];
         }
     }
+    // string
     for (const key of [
         "ThemeStyle",
         "ThemeBackground",
@@ -270,6 +279,7 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
             db[key] = client[key];
         }
     }
+    // string[]
     for (const key of [
         "EquippedGear",
         "EquippedEmotes",
@@ -379,6 +389,9 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
                 ItemType: x.ItemType
             });
         });
+    }
+    if (client.Accolades !== undefined) {
+        db.Accolades = client.Accolades;
     }
 };
 

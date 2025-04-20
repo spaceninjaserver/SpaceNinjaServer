@@ -250,9 +250,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     Guide?: number;
     Moderator?: boolean;
     Partner?: boolean;
-    Accolades?: {
-        Heirloom?: boolean;
-    };
+    Accolades?: IAccolades;
     Counselor?: boolean;
     Upgrades: IUpgradeClient[];
     EquippedGear: string[];
@@ -912,6 +910,10 @@ export interface IPendingRecipeDatabase {
 export interface IPendingRecipeClient
     extends Omit<IPendingRecipeDatabase, "CompletionDate" | "LongGuns" | "Pistols" | "Melee" | "SuitToUnbrand"> {
     CompletionDate: IMongoDate;
+}
+
+export interface IAccolades {
+    Heirloom?: boolean;
 }
 
 export interface IPendingTrade {
