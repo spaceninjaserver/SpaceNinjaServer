@@ -1097,5 +1097,6 @@
   "/Lotus/Types/LevelObjects/InfestedPumpkinCocoonLamp",
   "/Lotus/Types/LevelObjects/InfestedPumpkinCocoonLampLarge",
   "/Lotus/Types/LevelObjects/InfestedPumpkinCocoonLampSmall",
-  "/Lotus/Types/LevelObjects/InfestedPumpkinExplosiveTotem"
+  "/Lotus/Types/LevelObjects/InfestedPumpkinExplosiveTotem",
+  "/Lotus/Types/Enemies/Orokin/OrokinMoaBipedAvatar"
 ]
