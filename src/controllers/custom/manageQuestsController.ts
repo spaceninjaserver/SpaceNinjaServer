@@ -35,10 +35,8 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
 
     switch (operation) {
         case "completeAll": {
-            if (allQuestKeys.includes(questItemType)) {
-                for (const questKey of inventory.QuestKeys) {
-                    await completeQuest(inventory, questKey.ItemType);
-                }
+            for (const questKey of inventory.QuestKeys) {
+                await completeQuest(inventory, questKey.ItemType);
             }
             break;
         }
