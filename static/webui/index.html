@@ -305,7 +305,7 @@
                                     <input class="form-control" id="acquire-type-MoaPets" list="datalist-MoaPets" />
                                     <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
-                                <form class="input-group mb-3" id="modular-MoaPets" style="display: none;">
+                                <form class="input-group mb-3" id="modular-MoaPets-Moa" style="display: none;">
                                     <input class="form-control" id="acquire-type-MoaPets-MOA_ENGINE" list="datalist-ModularParts-MOA_ENGINE" />
                                     <input class="form-control" id="acquire-type-MoaPets-MOA_PAYLOAD" list="datalist-ModularParts-MOA_PAYLOAD" />
                                     <input class="form-control" id="acquire-type-MoaPets-MOA_HEAD" list="datalist-ModularParts-MOA_HEAD" />
@@ -325,6 +325,28 @@
                     </div>
                 </div>
                 <div class="row g-3">
+                    <div class="col-lg-6">
+                        <div class="card mb-3" style="height: 400px;">
+                            <h5 class="card-header" data-loc="inventory_kubrowPets"></h5>
+                            <div class="card-body overflow-auto">
+                                <form class="input-group mb-3" onsubmit="handleModularSelection('KubrowPets');return false;">
+                                    <input class="form-control" id="acquire-type-KubrowPets" list="datalist-KubrowPets" />
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                </form>
+                                <form class="input-group mb-3" id="modular-KubrowPets-Catbrow" style="display: none;">
+                                    <input class="form-control" id="acquire-type-KubrowPets-CATBROW_ANTIGEN" list="datalist-ModularParts-CATBROW_ANTIGEN" />
+                                    <input class="form-control" id="acquire-type-KubrowPets-CATBROW_MUTAGEN" list="datalist-ModularParts-CATBROW_MUTAGEN" />
+                                </form>
+                                <form class="input-group mb-3" id="modular-KubrowPets-Kubrow" style="display: none;">
+                                    <input class="form-control" id="acquire-type-KubrowPets-KUBROW_ANTIGEN" list="datalist-ModularParts-KUBROW_ANTIGEN" />
+                                    <input class="form-control" id="acquire-type-KubrowPets-KUBROW_MUTAGEN" list="datalist-ModularParts-KUBROW_MUTAGEN" />
+                                </form>
+                                <table class="table table-hover w-100">
+                                    <tbody id="KubrowPets-list"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-lg-6">
                         <div class="card mb-3" style="height: 400px;">
                             <h5 class="card-header" data-loc="inventory_sentinelWeapons"></h5>
@@ -700,6 +722,7 @@
     <datalist id="datalist-Sentinels"></datalist>
     <datalist id="datalist-MechSuits"></datalist>
     <datalist id="datalist-MoaPets"></datalist>
+    <datalist id="datalist-KubrowPets"></datalist>
     <datalist id="datalist-QuestKeys"></datalist>
     <datalist id="datalist-miscitems"></datalist>
     <datalist id="datalist-mods">
@@ -731,6 +754,10 @@
     <datalist id="datalist-ModularParts-ZANUKA_HEAD"></datalist>
     <datalist id="datalist-ModularParts-ZANUKA_LEG"></datalist>
     <datalist id="datalist-ModularParts-ZANUKA_TAIL"></datalist>
+    <datalist id="datalist-ModularParts-CATBROW_ANTIGEN"></datalist>
+    <datalist id="datalist-ModularParts-CATBROW_MUTAGEN"></datalist>
+    <datalist id="datalist-ModularParts-KUBROW_ANTIGEN"></datalist>
+    <datalist id="datalist-ModularParts-KUBROW_MUTAGEN"></datalist>
     <script src="/webui/libs/jquery-3.6.0.min.js"></script>
     <script src="/webui/libs/whirlpool-js.min.js"></script>
     <script src="/webui/libs/single.js"></script>

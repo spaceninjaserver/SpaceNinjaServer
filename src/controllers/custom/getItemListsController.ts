@@ -56,6 +56,7 @@ const getItemListsController: RequestHandler = (req, response) => {
     res.Syndicates = [];
     res.OperatorAmps = [];
     res.QuestKeys = [];
+    res.KubrowPets = [];
     for (const [uniqueName, item] of Object.entries(ExportWarframes)) {
         res[item.productCategory].push({
             uniqueName,
@@ -64,7 +65,7 @@ const getItemListsController: RequestHandler = (req, response) => {
         });
     }
     for (const [uniqueName, item] of Object.entries(ExportSentinels)) {
-        if (item.productCategory == "Sentinels") {
+        if (item.productCategory != "SpecialItems") {
             res[item.productCategory].push({
                 uniqueName,
                 name: getString(item.name, lang)
@@ -73,11 +74,13 @@ const getItemListsController: RequestHandler = (req, response) => {
     }
     for (const [uniqueName, item] of Object.entries(ExportWeapons)) {
         if (item.partType) {
-            res.ModularParts.push({
-                uniqueName,
-                name: getString(item.name, lang),
-                partType: item.partType
-            });
+            if (!uniqueName.startsWith("/Lotus/Types/Items/Deimos/")) {
+                res.ModularParts.push({
+                    uniqueName,
+                    name: getString(item.name, lang),
+                    partType: item.partType
+                });
+            }
             if (uniqueName.split("/")[5] != "SentTrainingAmplifier") {
                 res.miscitems.push({
                     uniqueName: uniqueName,

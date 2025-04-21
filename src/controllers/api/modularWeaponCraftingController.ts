@@ -23,6 +23,7 @@ import { Status } from "@/src/types/inventoryTypes/inventoryTypes";
 interface IModularCraftRequest {
     WeaponType: string;
     Parts: string[];
+    isWebUi?: boolean;
 }
 
 export const modularWeaponCraftingController: RequestHandler = async (req, res) => {
@@ -139,33 +140,39 @@ export const modularWeaponCraftingController: RequestHandler = async (req, res) 
     }
     defaultOverwrites.Configs = applyDefaultUpgrades(inventory, defaultUpgrades);
     addEquipment(inventory, category, data.WeaponType, data.Parts, inventoryChanges, defaultOverwrites);
-    combineInventoryChanges(inventoryChanges, occupySlot(inventory, productCategoryToInventoryBin(category)!, false));
+    combineInventoryChanges(
+        inventoryChanges,
+        occupySlot(inventory, productCategoryToInventoryBin(category)!, !!data.isWebUi)
+    );
     if (defaultUpgrades) {
         inventoryChanges.RawUpgrades = defaultUpgrades.map(x => ({ ItemType: x.ItemType, ItemCount: 1 }));
     }
 
     // Remove credits & parts
     const miscItemChanges = [];
-    for (const part of data.Parts) {
-        miscItemChanges.push({
-            ItemType: part,
-            ItemCount: -1
-        });
+    let currencyChanges = {};
+    if (!data.isWebUi) {
+        for (const part of data.Parts) {
+            miscItemChanges.push({
+                ItemType: part,
+                ItemCount: -1
+            });
+        }
+        currencyChanges = updateCurrency(
+            inventory,
+            category == "Hoverboards" ||
+                category == "MoaPets" ||
+                category == "LongGuns" ||
+                category == "Pistols" ||
+                category == "KubrowPets"
+                ? 5000
+                : 4000, // Definitely correct for Melee & OperatorAmps
+            false
+        );
+        addMiscItems(inventory, miscItemChanges);
     }
-    const currencyChanges = updateCurrency(
-        inventory,
-        category == "Hoverboards" ||
-            category == "MoaPets" ||
-            category == "LongGuns" ||
-            category == "Pistols" ||
-            category == "KubrowPets"
-            ? 5000
-            : 4000, // Definitely correct for Melee & OperatorAmps
-        false
-    );
-    addMiscItems(inventory, miscItemChanges);
-    await inventory.save();
 
+    await inventory.save();
     // Tell client what we did
     res.json({
         InventoryChanges: {

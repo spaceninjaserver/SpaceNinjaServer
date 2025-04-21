@@ -163,7 +163,13 @@ const webUiModularWeapons = [
     "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary",
     "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary",
     "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetPowerSuit",
-    "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetPowerSuit"
+    "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetPowerSuit",
+    "/Lotus/Types/Friendly/Pets/CreaturePets/VulpineInfestedCatbrowPetPowerSuit",
+    "/Lotus/Types/Friendly/Pets/CreaturePets/HornedInfestedCatbrowPetPowerSuit",
+    "/Lotus/Types/Friendly/Pets/CreaturePets/ArmoredInfestedCatbrowPetPowerSuit",
+    "/Lotus/Types/Friendly/Pets/CreaturePets/VizierPredatorKubrowPetPowerSuit",
+    "/Lotus/Types/Friendly/Pets/CreaturePets/PharaohPredatorKubrowPetPowerSuit",
+    "/Lotus/Types/Friendly/Pets/CreaturePets/MedjayPredatorKubrowPetPowerSuit"
 ];
 
 let uniqueLevelCaps = {};
@@ -308,7 +314,11 @@ function fetchItemList() {
                                 "LWPT_ZANUKA_BODY",
                                 "LWPT_ZANUKA_HEAD",
                                 "LWPT_ZANUKA_LEG",
-                                "LWPT_ZANUKA_TAIL"
+                                "LWPT_ZANUKA_TAIL",
+                                "LWPT_CATBROW_ANTIGEN",
+                                "LWPT_CATBROW_MUTAGEN",
+                                "LWPT_KUBROW_ANTIGEN",
+                                "LWPT_KUBROW_MUTAGEN"
                             ];
                             if (supportedModularParts.includes(item.partType)) {
                                 const option = document.createElement("option");
@@ -361,7 +371,13 @@ function updateInventory() {
                 "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetPowerSuit",
                 "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetAPowerSuit",
                 "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetBPowerSuit",
-                "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetCPowerSuit"
+                "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetCPowerSuit",
+                "/Lotus/Types/Friendly/Pets/CreaturePets/VulpineInfestedCatbrowPetPowerSuit",
+                "/Lotus/Types/Friendly/Pets/CreaturePets/HornedInfestedCatbrowPetPowerSuit",
+                "/Lotus/Types/Friendly/Pets/CreaturePets/ArmoredInfestedCatbrowPetPowerSuit",
+                "/Lotus/Types/Friendly/Pets/CreaturePets/VizierPredatorKubrowPetPowerSuit",
+                "/Lotus/Types/Friendly/Pets/CreaturePets/PharaohPredatorKubrowPetPowerSuit",
+                "/Lotus/Types/Friendly/Pets/CreaturePets/MedjayPredatorKubrowPetPowerSuit"
             ];
 
             // Populate inventory route
@@ -384,7 +400,8 @@ function updateInventory() {
                 "Hoverboards",
                 "OperatorAmps",
                 "MechSuits",
-                "MoaPets"
+                "MoaPets",
+                "KubrowPets"
             ].forEach(category => {
                 document.getElementById(category + "-list").innerHTML = "";
                 data[category].forEach(item => {
@@ -460,6 +477,23 @@ function updateInventory() {
                             };
                             a.title = loc("code_gild");
                             a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"/></svg>`;
+                            td.appendChild(a);
+                        }
+                        if (category == "KubrowPets") {
+                            const a = document.createElement("a");
+                            a.href = "#";
+                            a.onclick = function (event) {
+                                event.preventDefault();
+                                maturePet(item.ItemId.$oid, !item.Details.IsPuppy);
+                            };
+                            if (item.Details.IsPuppy) {
+                                a.title = loc("code_mature");
+                                a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M112 48a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm40 304l0 128c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-223.1L59.4 304.5c-9.1 15.1-28.8 20-43.9 10.9s-20-28.8-10.9-43.9l58.3-97c17.4-28.9 48.6-46.6 82.3-46.6l29.7 0c33.7 0 64.9 17.7 82.3 46.6l58.3 97c9.1 15.1 4.2 34.8-10.9 43.9s-34.8 4.2-43.9-10.9L232 256.9 232 480c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-128-16 0z"/></svg>`;
+                            } else {
+                                a.title = loc("code_unmature");
+                                a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M256 64A64 64 0 1 0 128 64a64 64 0 1 0 128 0zM152.9 169.3c-23.7-8.4-44.5-24.3-58.8-45.8L74.6 94.2C64.8 79.5 45 75.6 30.2 85.4s-18.7 29.7-8.9 44.4L40.9 159c18.1 27.1 42.8 48.4 71.1 62.4L112 480c0 17.7 14.3 32 32 32s32-14.3 32-32l0-96 32 0 0 96c0 17.7 14.3 32 32 32s32-14.3 32-32l0-258.4c29.1-14.2 54.4-36.2 72.7-64.2l18.2-27.9c9.6-14.8 5.4-34.6-9.4-44.3s-34.6-5.5-44.3 9.4L291 122.4c-21.8 33.4-58.9 53.6-98.8 53.6c-12.6 0-24.9-2-36.6-5.8c-.9-.3-1.8-.7-2.7-.9z"/></svg>`;
+                            }
+
                             td.appendChild(a);
                         }
                         if (category == "Suits") {
@@ -870,12 +904,12 @@ function doAcquireEquipment(category) {
     });
 }
 
-function doAcquireModularEquipment(category, ItemType) {
+function doAcquireModularEquipment(category, WeaponType) {
     let requiredParts;
-    let ModularParts = [];
+    let Parts = [];
     switch (category) {
         case "HoverBoards":
-            ItemType = "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit";
+            WeaponType = "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit";
             requiredParts = ["HB_DECK", "HB_ENGINE", "HB_FRONT", "HB_JET"];
             break;
         case "OperatorAmps":
@@ -891,20 +925,33 @@ function doAcquireModularEquipment(category, ItemType) {
             requiredParts = ["GUN_BARREL", "GUN_SECONDARY_HANDLE", "GUN_CLIP"];
             break;
         case "MoaPets":
-            if (ItemType == "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetPowerSuit") {
+            if (WeaponType == "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetPowerSuit") {
                 requiredParts = ["MOA_ENGINE", "MOA_PAYLOAD", "MOA_HEAD", "MOA_LEG"];
             } else {
                 requiredParts = ["ZANUKA_BODY", "ZANUKA_HEAD", "ZANUKA_LEG", "ZANUKA_TAIL"];
+            }
+            break;
+        case "KubrowPets":
+            if (
+                [
+                    "/Lotus/Types/Friendly/Pets/CreaturePets/VulpineInfestedCatbrowPetPowerSuit",
+                    "/Lotus/Types/Friendly/Pets/CreaturePets/HornedInfestedCatbrowPetPowerSuit",
+                    "/Lotus/Types/Friendly/Pets/CreaturePets/ArmoredInfestedCatbrowPetPowerSuit"
+                ].includes(WeaponType)
+            ) {
+                requiredParts = ["CATBROW_ANTIGEN", "CATBROW_MUTAGEN"];
+            } else {
+                requiredParts = ["KUBROW_ANTIGEN", "KUBROW_MUTAGEN"];
             }
             break;
     }
     requiredParts.forEach(part => {
         const partName = getKey(document.getElementById("acquire-type-" + category + "-" + part));
         if (partName) {
-            ModularParts.push(partName);
+            Parts.push(partName);
         }
     });
-    if (ModularParts.length != requiredParts.length) {
+    if (Parts.length != requiredParts.length) {
         let isFirstPart = true;
         requiredParts.forEach(part => {
             const partSelector = document.getElementById("acquire-type-" + category + "-" + part);
@@ -920,20 +967,80 @@ function doAcquireModularEquipment(category, ItemType) {
             }
         });
     } else {
+        const mapping = {
+            LongGuns: {
+                "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelAPart":
+                    "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryShotgun",
+                "/Lotus/Weapons/Infested/Pistols/InfKitGun/Barrels/InfBarrelEgg/InfModularBarrelEggPart":
+                    "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryShotgun",
+                "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelBPart":
+                    "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary",
+                "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelCPart":
+                    "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary",
+                "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelDPart":
+                    "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryBeam",
+                "/Lotus/Weapons/Infested/Pistols/InfKitGun/Barrels/InfBarrelBeam/InfModularBarrelBeamPart":
+                    "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryBeam"
+            },
+            Pistols: {
+                "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelAPart":
+                    "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryShotgun",
+                "/Lotus/Weapons/Infested/Pistols/InfKitGun/Barrels/InfBarrelEgg/InfModularBarrelEggPart":
+                    "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryShotgun",
+                "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelBPart":
+                    "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary",
+                "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelCPart":
+                    "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary",
+                "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelDPart":
+                    "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryBeam",
+                "/Lotus/Weapons/Infested/Pistols/InfKitGun/Barrels/InfBarrelBeam/InfModularBarrelBeamPart":
+                    "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryBeam"
+            },
+            MoaPets: {
+                "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadA":
+                    "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetAPowerSuit",
+                "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadB":
+                    "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetBPowerSuit",
+                "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadC":
+                    "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetCPowerSuit"
+            }
+        };
+
+        Parts.forEach(part => {
+            const categoryMap = mapping[category];
+            if (categoryMap && categoryMap[part]) {
+                WeaponType = categoryMap[part];
+            }
+        });
+        if (category == "KubrowPets") Parts.unshift(WeaponType);
         revalidateAuthz(() => {
             const req = $.post({
-                url: "/custom/addModularEquipment?" + window.authz,
-                contentType: "application/json",
+                url: "/api/modularWeaponCrafting.php?" + window.authz,
+                contentType: "application/octet-stream",
                 data: JSON.stringify({
-                    ItemType,
-                    ModularParts
+                    WeaponType,
+                    Parts,
+                    isWebUi: true
                 })
             });
             req.done(() => {
                 const mainInput = document.getElementById("acquire-type-" + category);
                 if (mainInput) {
                     mainInput.value = "";
-                    document.getElementById("modular-" + category).style.display = "none";
+                    if (category === "MoaPets") {
+                        const modularFieldsMoa = document.getElementById("modular-MoaPets-Moa");
+                        const modularFieldsZanuka = document.getElementById("modular-MoaPets-Zanuka");
+                        modularFieldsZanuka.style.display = "none";
+                        modularFieldsMoa.style.display = "none";
+                    } else if (category === "KubrowPets") {
+                        const modularFieldsCatbrow = document.getElementById("modular-KubrowPets-Catbrow");
+                        const modularFieldsKubrow = document.getElementById("modular-KubrowPets-Kubrow");
+                        modularFieldsCatbrow.style.display = "none";
+                        modularFieldsKubrow.style.display = "none";
+                    } else {
+                        const modularFields = document.getElementById("modular-" + category);
+                        modularFields.style.display = "none";
+                    }
                 }
                 requiredParts.forEach(part => {
                     document.getElementById("acquire-type-" + category + "-" + part).value = "";
@@ -1085,24 +1192,37 @@ function renameGear(category, oid, name) {
 }
 
 function disposeOfGear(category, oid) {
-    const data = {
-        SellCurrency: "SC_RegularCredits",
-        SellPrice: 0,
-        Items: {}
-    };
-    data.Items[category] = [
-        {
-            String: oid,
-            Count: 0
-        }
-    ];
-    revalidateAuthz(() => {
-        $.post({
-            url: "/api/sell.php?" + window.authz,
-            contentType: "text/plain",
-            data: JSON.stringify(data)
+    if (category == "KubrowPets") {
+        revalidateAuthz(() => {
+            $.post({
+                url: "/api/releasePet.php?" + window.authz,
+                contentType: "application/octet-stream",
+                data: JSON.stringify({
+                    Recipe: "webui",
+                    petId: oid
+                })
+            });
         });
-    });
+    } else {
+        const data = {
+            SellCurrency: "SC_RegularCredits",
+            SellPrice: 0,
+            Items: {}
+        };
+        data.Items[category] = [
+            {
+                String: oid,
+                Count: 0
+            }
+        ];
+        revalidateAuthz(() => {
+            $.post({
+                url: "/api/sell.php?" + window.authz,
+                contentType: "text/plain",
+                data: JSON.stringify(data)
+            });
+        });
+    }
 }
 
 function disposeOfItems(category, type, count) {
@@ -1133,6 +1253,21 @@ function gildEquipment(category, oid) {
             contentType: "application/octet-stream",
             data: JSON.stringify({
                 Recipe: "webui"
+            })
+        }).done(function () {
+            updateInventory();
+        });
+    });
+}
+
+function maturePet(oid, revert) {
+    revalidateAuthz(() => {
+        $.post({
+            url: "/api/maturePet.php?" + window.authz,
+            contentType: "application/octet-stream",
+            data: JSON.stringify({
+                petId: oid,
+                revert
             })
         }).done(function () {
             updateInventory();
@@ -1589,32 +1724,60 @@ function handleModularSelection(category) {
     }
 }
 {
-    const supportedModularInventoryCategory = ["OperatorAmps", "Melee", "LongGuns", "Pistols", "MoaPets"];
+    const supportedModularInventoryCategory = ["OperatorAmps", "Melee", "LongGuns", "Pistols", "MoaPets", "KubrowPets"];
     supportedModularInventoryCategory.forEach(inventoryCategory => {
         document.getElementById("acquire-type-" + inventoryCategory).addEventListener("input", function () {
             const modularFields = document.getElementById("modular-" + inventoryCategory);
-            const modularFieldsZanuka =
-                inventoryCategory === "MoaPets"
-                    ? document.getElementById("modular-" + inventoryCategory + "-Zanuka")
-                    : null;
+            const modularFieldsMoa = document.getElementById("modular-MoaPets-Moa");
+            const modularFieldsZanuka = document.getElementById("modular-MoaPets-Zanuka");
+            const modularFieldsCatbrow = document.getElementById("modular-KubrowPets-Catbrow");
+            const modularFieldsKubrow = document.getElementById("modular-KubrowPets-Kubrow");
             const key = getKey(this);
 
             if (webUiModularWeapons.includes(key)) {
-                if (key === "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetPowerSuit" && modularFieldsZanuka) {
-                    modularFields.style.display = "none";
-                    modularFieldsZanuka.style.display = "";
-                } else if (key === "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetPowerSuit") {
-                    modularFields.style.display = "";
-                    if (modularFieldsZanuka) {
+                if (inventoryCategory === "MoaPets") {
+                    if (key === "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetPowerSuit") {
+                        modularFieldsMoa.style.display = "none";
+                        modularFieldsZanuka.style.display = "";
+                    } else if (key === "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetPowerSuit") {
+                        modularFieldsMoa.style.display = "";
                         modularFieldsZanuka.style.display = "none";
+                    }
+                } else if (inventoryCategory === "KubrowPets") {
+                    if (
+                        [
+                            "/Lotus/Types/Friendly/Pets/CreaturePets/VulpineInfestedCatbrowPetPowerSuit",
+                            "/Lotus/Types/Friendly/Pets/CreaturePets/HornedInfestedCatbrowPetPowerSuit",
+                            "/Lotus/Types/Friendly/Pets/CreaturePets/ArmoredInfestedCatbrowPetPowerSuit"
+                        ].includes(key)
+                    ) {
+                        modularFieldsCatbrow.style.display = "";
+                        modularFieldsKubrow.style.display = "none";
+                    } else if (
+                        [
+                            "/Lotus/Types/Friendly/Pets/CreaturePets/VizierPredatorKubrowPetPowerSuit",
+                            "/Lotus/Types/Friendly/Pets/CreaturePets/PharaohPredatorKubrowPetPowerSuit",
+                            "/Lotus/Types/Friendly/Pets/CreaturePets/MedjayPredatorKubrowPetPowerSuit"
+                        ].includes(key)
+                    ) {
+                        modularFieldsCatbrow.style.display = "none";
+                        modularFieldsKubrow.style.display = "";
+                    } else {
+                        modularFieldsCatbrow.style.display = "none";
+                        modularFieldsKubrow.style.display = "none";
                     }
                 } else {
                     modularFields.style.display = "";
                 }
             } else {
-                modularFields.style.display = "none";
-                if (modularFieldsZanuka) {
+                if (inventoryCategory === "MoaPets") {
                     modularFieldsZanuka.style.display = "none";
+                    modularFieldsMoa.style.display = "none";
+                } else if (inventoryCategory === "KubrowPets") {
+                    modularFieldsCatbrow.style.display = "none";
+                    modularFieldsKubrow.style.display = "none";
+                } else {
+                    modularFields.style.display = "none";
                 }
             }
         });

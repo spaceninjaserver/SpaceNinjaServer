@@ -15,7 +15,6 @@ import { createAccountController } from "@/src/controllers/custom/createAccountC
 import { createMessageController } from "@/src/controllers/custom/createMessageController";
 import { addCurrencyController } from "@/src/controllers/custom/addCurrencyController";
 import { addItemsController } from "@/src/controllers/custom/addItemsController";
-import { addModularEquipmentController } from "@/src/controllers/custom/addModularEquipmentController";
 import { addXpController } from "@/src/controllers/custom/addXpController";
 import { importController } from "@/src/controllers/custom/importController";
 
@@ -40,7 +39,6 @@ customRouter.post("/createAccount", createAccountController);
 customRouter.post("/createMessage", createMessageController);
 customRouter.post("/addCurrency", addCurrencyController);
 customRouter.post("/addItems", addItemsController);
-customRouter.post("/addModularEquipment", addModularEquipmentController);
 customRouter.post("/addXp", addXpController);
 customRouter.post("/import", importController);
 customRouter.post("/manageQuests", manageQuestsController);

@@ -8,7 +8,11 @@ export const releasePetController: RequestHandler = async (req, res) => {
     const inventory = await getInventory(accountId, "RegularCredits KubrowPets");
     const payload = getJSONfromString<IReleasePetRequest>(String(req.body));
 
-    const inventoryChanges = updateCurrency(inventory, 25000, false);
+    const inventoryChanges = updateCurrency(
+        inventory,
+        payload.recipeName == "/Lotus/Types/Game/KubrowPet/ReleasePetRecipe" ? 25000 : 0,
+        false
+    );
 
     inventoryChanges.RemovedIdItems = [{ ItemId: { $oid: payload.petId } }];
     inventory.KubrowPets.pull({ _id: payload.petId });
@@ -18,6 +22,6 @@ export const releasePetController: RequestHandler = async (req, res) => {
 };
 
 interface IReleasePetRequest {
-    recipeName: "/Lotus/Types/Game/KubrowPet/ReleasePetRecipe";
+    recipeName: "/Lotus/Types/Game/KubrowPet/ReleasePetRecipe" | "webui";
     petId: string;
 }

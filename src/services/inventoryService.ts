@@ -23,7 +23,10 @@ import {
     IUpgradeClient,
     TPartialStartingGear,
     ILoreFragmentScan,
-    ICrewMemberClient
+    ICrewMemberClient,
+    Status,
+    IKubrowPetDetailsDatabase,
+    ITraits
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate, IUpdateNodeIntrosResponse } from "../types/genericUpdate";
 import { IKeyChainRequest, IMissionInventoryUpdateRequest } from "../types/requestTypes";
@@ -58,14 +61,21 @@ import {
     ExportWeapons,
     IDefaultUpgrade,
     IPowersuit,
+    ISentinel,
     TStandingLimitBin
 } from "warframe-public-export-plus";
 import { createShip } from "./shipService";
-import { toOid } from "../helpers/inventoryHelpers";
+import {
+    catbrowDetails,
+    kubrowDetails,
+    kubrowFurPatternsWeights,
+    kubrowWeights,
+    toOid
+} from "../helpers/inventoryHelpers";
 import { addQuestKey, completeQuest } from "@/src/services/questService";
 import { handleBundleAcqusition } from "./purchaseService";
 import libraryDailyTasks from "@/static/fixed_responses/libraryDailyTasks.json";
-import { getRandomElement, getRandomInt, SRng } from "./rngService";
+import { getRandomElement, getRandomInt, getRandomWeightedReward, SRng } from "./rngService";
 import { createMessage } from "./inboxService";
 import { getMaxStanding } from "@/src/helpers/syndicateStandingHelper";
 
@@ -714,6 +724,11 @@ export const addItem = async (
                         return {
                             MiscItems: miscItemChanges
                         };
+                    } else if (
+                        typeName.substr(1).split("/")[3] == "CatbrowPet" ||
+                        typeName.substr(1).split("/")[3] == "KubrowPet"
+                    ) {
+                        return addKubrowPet(inventory, typeName, undefined, premiumPurchase);
                     } else if (typeName.startsWith("/Lotus/Types/Game/CrewShip/CrewMember/")) {
                         if (!seed) {
                             throw new Error(`Expected crew member to have a seed`);
@@ -929,6 +944,89 @@ export const addSpaceSuit = (
         }) - 1;
     inventoryChanges.SpaceSuits ??= [];
     inventoryChanges.SpaceSuits.push(inventory.SpaceSuits[suitIndex].toJSON<IEquipmentClient>());
+    return inventoryChanges;
+};
+
+export const addKubrowPet = (
+    inventory: TInventoryDatabaseDocument,
+    kubrowPetName: string,
+    details: IKubrowPetDetailsDatabase | undefined,
+    premiumPurchase: boolean,
+    inventoryChanges: IInventoryChanges = {}
+): IInventoryChanges => {
+    combineInventoryChanges(inventoryChanges, occupySlot(inventory, InventorySlot.SENTINELS, premiumPurchase));
+
+    const kubrowPet = ExportSentinels[kubrowPetName] as ISentinel | undefined;
+    const exalted = kubrowPet?.exalted ?? [];
+    for (const specialItem of exalted) {
+        addSpecialItem(inventory, specialItem, inventoryChanges);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    const configs: IItemConfig[] = applyDefaultUpgrades(inventory, kubrowPet?.defaultUpgrades);
+
+    if (!details) {
+        let traits: ITraits;
+
+        if (kubrowPetName == "/Lotus/Types/Game/CatbrowPet/VampireCatbrowPetPowerSuit") {
+            traits = {
+                BaseColor: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorBaseVampire",
+                SecondaryColor: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorSecondaryVampire",
+                TertiaryColor: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorTertiaryVampire",
+                AccentColor: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorAccentsVampire",
+                EyeColor: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorBaseA",
+                FurPattern: "/Lotus/Types/Game/CatbrowPet/Patterns/CatbrowPetPatternVampire",
+                Personality: kubrowPetName,
+                BodyType: "/Lotus/Types/Game/CatbrowPet/BodyTypes/CatbrowPetVampireBodyType",
+                Head: "/Lotus/Types/Game/CatbrowPet/Heads/CatbrowHeadVampire",
+                Tail: "/Lotus/Types/Game/CatbrowPet/Tails/CatbrowTailVampire"
+            };
+        } else {
+            const isCatbrow = [
+                "/Lotus/Types/Game/CatbrowPet/MirrorCatbrowPetPowerSuit",
+                "/Lotus/Types/Game/CatbrowPet/CheshireCatbrowPetPowerSuit"
+            ].includes(kubrowPetName);
+            const traitsPool = isCatbrow ? catbrowDetails : kubrowDetails;
+
+            traits = {
+                BaseColor: getRandomWeightedReward(traitsPool.Colors, kubrowWeights)!.type,
+                SecondaryColor: getRandomWeightedReward(traitsPool.Colors, kubrowWeights)!.type,
+                TertiaryColor: getRandomWeightedReward(traitsPool.Colors, kubrowWeights)!.type,
+                AccentColor: getRandomWeightedReward(traitsPool.Colors, kubrowWeights)!.type,
+                EyeColor: getRandomWeightedReward(traitsPool.EyeColors, kubrowWeights)!.type,
+                FurPattern: getRandomWeightedReward(traitsPool.FurPatterns, kubrowFurPatternsWeights)!.type,
+                Personality: kubrowPetName,
+                BodyType: getRandomWeightedReward(traitsPool.BodyTypes, kubrowWeights)!.type,
+                Head: isCatbrow ? getRandomWeightedReward(traitsPool.Heads, kubrowWeights)!.type : undefined,
+                Tail: isCatbrow ? getRandomWeightedReward(traitsPool.Tails, kubrowWeights)!.type : undefined
+            };
+        }
+
+        details = {
+            Name: "",
+            IsPuppy: false,
+            HasCollar: true,
+            PrintsRemaining: 2,
+            Status: Status.StatusStasis,
+            HatchDate: new Date(Math.trunc(Date.now() / 86400000) * 86400000),
+            IsMale: !!getRandomInt(0, 1),
+            Size: getRandomInt(70, 100) / 100,
+            DominantTraits: traits,
+            RecessiveTraits: traits
+        };
+    }
+
+    const kubrowPetIndex =
+        inventory.KubrowPets.push({
+            ItemType: kubrowPetName,
+            Configs: configs,
+            XP: 0,
+            Details: details,
+            IsNew: true
+        }) - 1;
+    inventoryChanges.KubrowPets ??= [];
+    inventoryChanges.KubrowPets.push(inventory.KubrowPets[kubrowPetIndex].toJSON<IEquipmentClient>());
+
     return inventoryChanges;
 };
 
