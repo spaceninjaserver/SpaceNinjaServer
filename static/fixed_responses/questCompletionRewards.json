@@ -11,5 +11,11 @@
       "ItemType": "/Lotus/Types/Keys/RailJackBuildQuest/RailjackBuildQuestEmailItem",
       "ItemCount": 1
     }
+  ],
+  "/Lotus/Types/Keys/EntratiLab/EntratiQuestKeyChain": [
+    {
+      "ItemType": "/Lotus/Types/Keys/1999PrologueQuest/1999PrologueQuestKeyChain",
+      "ItemCount": 1
+    }
   ]
 }
