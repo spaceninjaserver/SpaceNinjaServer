@@ -368,6 +368,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     EchoesHexConquestActiveStickers?: string[];
     BrandedSuits?: IOid[];
     LockedWeaponGroup?: ILockedWeaponGroupClient;
+    HubNpcCustomizations?: IHubNpcCustomization[];
 }
 
 export interface IAffiliation {
@@ -1228,3 +1229,9 @@ export interface ILockedWeaponGroupDatabase {
 }
 
 export type TPartialStartingGear = Pick<IInventoryClient, "LongGuns" | "Suits" | "Pistols" | "Melee">;
+
+export interface IHubNpcCustomization {
+    Colors?: IColor;
+    Pattern: string;
+    Tag: string;
+}

@@ -95,7 +95,8 @@ import {
     ISortieRewardAttenuation,
     IInvasionProgressDatabase,
     IInvasionProgressClient,
-    IAccolades
+    IAccolades,
+    IHubNpcCustomization
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -1327,6 +1328,15 @@ const lockedWeaponGroupSchema = new Schema<ILockedWeaponGroupDatabase>(
     { _id: false }
 );
 
+const hubNpcCustomizationSchema = new Schema<IHubNpcCustomization>(
+    {
+        Colors: colorSchema,
+        Pattern: String,
+        Tag: String
+    },
+    { _id: false }
+);
+
 const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
     {
         accountOwnerId: Schema.Types.ObjectId,
@@ -1680,7 +1690,9 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         // G3 + Zanuka
         BrandedSuits: { type: [Schema.Types.ObjectId], default: undefined },
-        LockedWeaponGroup: { type: lockedWeaponGroupSchema, default: undefined }
+        LockedWeaponGroup: { type: lockedWeaponGroupSchema, default: undefined },
+
+        HubNpcCustomizations: { type: [hubNpcCustomizationSchema], default: undefined }
     },
     { timestamps: { createdAt: "Created", updatedAt: false } }
 );

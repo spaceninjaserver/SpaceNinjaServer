@@ -117,6 +117,7 @@ import { setDojoComponentMessageController } from "@/src/controllers/api/setDojo
 import { setDojoComponentSettingsController } from "@/src/controllers/api/setDojoComponentSettingsController";
 import { setEquippedInstrumentController } from "@/src/controllers/api/setEquippedInstrumentController";
 import { setGuildMotdController } from "@/src/controllers/api/setGuildMotdController";
+import { setHubNpcCustomizationsController } from "@/src/controllers/api/setHubNpcCustomizationsController";
 import { setPlacedDecoInfoController } from "@/src/controllers/api/setPlacedDecoInfoController";
 import { setShipCustomizationsController } from "@/src/controllers/api/setShipCustomizationsController";
 import { setShipFavouriteLoadoutController } from "@/src/controllers/api/setShipFavouriteLoadoutController";
@@ -285,6 +286,7 @@ apiRouter.post("/setDojoComponentMessage.php", setDojoComponentMessageController
 apiRouter.post("/setDojoComponentSettings.php", setDojoComponentSettingsController);
 apiRouter.post("/setEquippedInstrument.php", setEquippedInstrumentController);
 apiRouter.post("/setGuildMotd.php", setGuildMotdController);
+apiRouter.post("/setHubNpcCustomizations.php", setHubNpcCustomizationsController);
 apiRouter.post("/setPlacedDecoInfo.php", setPlacedDecoInfoController);
 apiRouter.post("/setShipCustomizations.php", setShipCustomizationsController);
 apiRouter.post("/setShipFavouriteLoadout.php", setShipFavouriteLoadoutController);
