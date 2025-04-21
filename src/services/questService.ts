@@ -191,6 +191,25 @@ const getQuestCompletionItems = (questKey: string): ITypeCount[] | undefined => 
     return items;
 };
 
+// Checks that `questKey` is in `requirements`, and if so, that all other quests in `requirements` are also already completed.
+const doesQuestCompletionFinishSet = (
+    inventory: TInventoryDatabaseDocument,
+    questKey: string,
+    requirements: string[]
+): boolean => {
+    let holds = false;
+    for (const requirement of requirements) {
+        if (questKey == requirement) {
+            holds = true;
+        } else {
+            if (!inventory.QuestKeys.find(x => x.ItemType == requirement)?.Completed) {
+                return false;
+            }
+        }
+    }
+    return holds;
+};
+
 const handleQuestCompletion = async (
     inventory: TInventoryDatabaseDocument,
     questKey: string,
@@ -218,12 +237,10 @@ const handleQuestCompletion = async (
 
     // Whispers in the Walls is unlocked once The New + Heart of Deimos are completed.
     if (
-        (questKey == "/Lotus/Types/Keys/NewWarQuest/NewWarQuestKeyChain" &&
-            inventory.QuestKeys.find(
-                x => x.ItemType == "/Lotus/Types/Keys/InfestedMicroplanetQuest/InfestedMicroplanetQuestKeyChain"
-            )?.Completed) ||
-        (questKey == "/Lotus/Types/Keys/InfestedMicroplanetQuest/InfestedMicroplanetQuestKeyChain" &&
-            inventory.QuestKeys.find(x => x.ItemType == "/Lotus/Types/Keys/NewWarQuest/NewWarQuestKeyChain")?.Completed)
+        doesQuestCompletionFinishSet(inventory, questKey, [
+            "/Lotus/Types/Keys/NewWarQuest/NewWarQuestKeyChain",
+            "/Lotus/Types/Keys/InfestedMicroplanetQuest/InfestedMicroplanetQuestKeyChain"
+        ])
     ) {
         await createMessage(inventory.accountOwnerId, [
             {
@@ -232,6 +249,25 @@ const handleQuestCompletion = async (
                 att: ["/Lotus/Types/Keys/EntratiLab/EntratiQuestKeyChain"],
                 sub: "/Lotus/Language/EntratiLab/EntratiQuest/WiTWQuestRecievedInboxTitle",
                 icon: "/Lotus/Interface/Icons/Npcs/Entrati/Loid.png",
+                highPriority: true
+            }
+        ]);
+    }
+
+    // The Hex (Quest) is unlocked once The Lotus Eaters + The Duviri Paradox are completed.
+    if (
+        doesQuestCompletionFinishSet(inventory, questKey, [
+            "/Lotus/Types/Keys/1999PrologueQuest/1999PrologueQuestKeyChain",
+            "/Lotus/Types/Keys/DuviriQuest/DuviriQuestKeyChain"
+        ])
+    ) {
+        await createMessage(inventory.accountOwnerId, [
+            {
+                sndr: "/Lotus/Language/NewWar/P3M1ChooseMara",
+                msg: "/Lotus/Language/1999Quest/1999QuestInboxBody",
+                att: ["/Lotus/Types/Keys/1999Quest/1999QuestKeyChain"],
+                sub: "/Lotus/Language/1999Quest/1999QuestInboxSubject",
+                icon: "/Lotus/Interface/Icons/Npcs/Operator.png",
                 highPriority: true
             }
         ]);
