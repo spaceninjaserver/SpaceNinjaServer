@@ -436,7 +436,9 @@ function updateInventory() {
                             category != "SpaceSuits" &&
                             category != "Sentinels" &&
                             category != "Hoverboards" &&
-                            category != "MechSuits"
+                            category != "MechSuits" &&
+                            category != "MoaPets" &&
+                            category != "KubrowPets"
                         ) {
                             maxXP /= 2;
                         }
