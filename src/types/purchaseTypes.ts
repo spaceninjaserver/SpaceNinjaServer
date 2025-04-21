@@ -39,6 +39,7 @@ export type IInventoryChanges = {
     RegularCredits?: number;
     PremiumCredits?: number;
     PremiumCreditsFree?: number;
+    FusionPoints?: number;
     PrimeTokens?: number;
     InfestedFoundry?: IInfestedFoundryClient;
     Drones?: IDroneClient[];

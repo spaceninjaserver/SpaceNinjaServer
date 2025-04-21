@@ -84,7 +84,7 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         MissionRewards,
         ...credits,
         ...inventoryUpdates,
-        FusionPoints: inventoryChanges?.FusionPoints,
+        //FusionPoints: inventoryChanges?.FusionPoints, // This in combination with InventoryJson or InventoryChanges seems to just double the number of endo shown, so unsure when this is needed.
         SyndicateXPItemReward,
         AffiliationMods
     });
