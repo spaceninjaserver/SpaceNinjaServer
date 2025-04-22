@@ -232,6 +232,7 @@ const pushSortieIfRelevant = (out: ISortie[], day: number): void => {
             value.missionIndex != 0 && // Exclude MT_ASSASSINATION
             value.missionIndex != 5 && // Exclude MT_CAPTURE
             value.missionIndex != 21 && // Exclude MT_PURIFY
+            value.missionIndex != 22 && // Exclude MT_ARENA
             value.missionIndex != 23 && // Exclude MT_JUNCTION
             value.missionIndex <= 28
         ) {
