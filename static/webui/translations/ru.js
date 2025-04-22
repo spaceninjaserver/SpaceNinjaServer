@@ -115,6 +115,7 @@ dict = {
     mods_rivens: `Моды Разлома`,
     mods_mods: `Моды`,
     mods_bulkAddMods: `Добавить отсутствующие моды`,
+    mods_removeUnranked: `[UNTRANSLATED] Remove Unranked Mods`,
     cheats_administratorRequirement: `Вы должны быть администратором для использования этой функции. Чтобы стать администратором, добавьте <code>\"|DISPLAYNAME|\"</code> в <code>administratorNames</code> в config.json.`,
     cheats_server: `Сервер`,
     cheats_skipTutorial: `Пропустить обучение`,

@@ -804,7 +804,7 @@ function updateInventory() {
                     {
                         const td = document.createElement("td");
                         td.classList = "text-end text-nowrap";
-                        {
+                        if (maxRank != 0) {
                             const a = document.createElement("a");
                             a.href = "#";
                             a.onclick = function (event) {
@@ -1608,6 +1608,31 @@ function doAddAllMods() {
                     updateInventory();
                 });
             }
+        });
+    });
+}
+
+function doRemoveUnrankedMods() {
+    revalidateAuthz(() => {
+        const req = $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1");
+        req.done(inventory => {
+            window.itemListPromise.then(itemMap => {
+                $.post({
+                    url: "/api/sell.php?" + window.authz,
+                    contentType: "text/plain",
+                    data: JSON.stringify({
+                        SellCurrency: "SC_RegularCredits",
+                        SellPrice: 0,
+                        Items: {
+                            Upgrades: inventory.RawUpgrades.filter(
+                                x => !itemMap[x.ItemType]?.parazon && x.ItemCount > 0
+                            ).map(x => ({ String: x.ItemType, Count: x.ItemCount }))
+                        }
+                    })
+                }).done(function () {
+                    updateInventory();
+                });
+            });
         });
     });
 }

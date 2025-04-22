@@ -115,6 +115,7 @@ dict = {
     mods_rivens: `裂罅MOD`,
     mods_mods: `Mods`,
     mods_bulkAddMods: `添加缺失MOD`,
+    mods_removeUnranked: `[UNTRANSLATED] Remove Unranked Mods`,
     cheats_administratorRequirement: `您必须是管理员才能使用此功能。要成为管理员，请将 <code>|DISPLAYNAME|</code> 添加到 config.json 的 <code>administratorNames</code> 中。`,
     cheats_server: `服务器`,
     cheats_skipTutorial: `跳过教程`,

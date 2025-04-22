@@ -26,7 +26,7 @@ app.use((req, _res, next) => {
 
 app.use(bodyParser.raw());
 app.use(express.json({ limit: "4mb" }));
-app.use(bodyParser.text());
+app.use(bodyParser.text({ limit: "4mb" }));
 app.use(requestLogger);
 
 app.use("/api", apiRouter);

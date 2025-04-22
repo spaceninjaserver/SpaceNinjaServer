@@ -29,6 +29,7 @@ interface ListedItem {
     badReason?: "starter" | "frivolous" | "notraw";
     partType?: string;
     chainLength?: number;
+    parazon?: boolean;
 }
 
 const relicQualitySuffixes: Record<TRelicQuality, string> = {
@@ -195,6 +196,9 @@ const getItemListsController: RequestHandler = (req, response) => {
             mod.badReason = "frivolous";
         } else if (upgrade.upgradeEntries) {
             mod.badReason = "notraw";
+        }
+        if (upgrade.type == "PARAZON") {
+            mod.parazon = true;
         }
         res.mods.push(mod);
     }

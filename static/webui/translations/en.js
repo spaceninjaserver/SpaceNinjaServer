@@ -114,6 +114,7 @@ dict = {
     mods_rivens: `Rivens`,
     mods_mods: `Mods`,
     mods_bulkAddMods: `Add Missing Mods`,
+    mods_removeUnranked: `Remove Unranked Mods`,
     cheats_administratorRequirement: `You must be an administrator to use this feature. To become an administrator, add <code>|DISPLAYNAME|</code> to <code>administratorNames</code> in the config.json.`,
     cheats_server: `Server`,
     cheats_skipTutorial: `Skip Tutorial`,

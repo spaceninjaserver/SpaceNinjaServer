@@ -115,6 +115,7 @@ dict = {
     mods_rivens: `Agrietados`,
     mods_mods: `Mods`,
     mods_bulkAddMods: `Agregar mods faltantes`,
+    mods_removeUnranked: `[UNTRANSLATED] Remove Unranked Mods`,
     cheats_administratorRequirement: `Debes ser administrador para usar esta función. Para convertirte en administrador, agrega <code>|DISPLAYNAME|</code> a <code>administratorNames</code> en el archivo config.json.`,
     cheats_server: `Servidor`,
     cheats_skipTutorial: `Omitir tutorial`,
