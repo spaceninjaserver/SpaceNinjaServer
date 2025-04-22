@@ -87,9 +87,7 @@ export const createInventory = async (
         const inventory = new Inventory({
             accountOwnerId: accountOwnerId,
             LoadOutPresets: defaultItemReferences.loadOutPresetId,
-            Ships: [defaultItemReferences.ship],
-            PlayedParkourTutorial: config.skipTutorial,
-            ReceivedStartingGear: config.skipTutorial
+            Ships: [defaultItemReferences.ship]
         });
 
         inventory.LibraryAvailableDailyTaskInfo = createLibraryDailyTask();
@@ -102,6 +100,7 @@ export const createInventory = async (
         await addItem(inventory, "/Lotus/Types/Friendly/PlayerControllable/Weapons/DuviriDualSwords");
 
         if (config.skipTutorial) {
+            inventory.PlayedParkourTutorial = true;
             await addStartingGear(inventory);
             await completeQuest(inventory, "/Lotus/Types/Keys/VorsPrize/VorsPrizeQuestKeyChain");
 
