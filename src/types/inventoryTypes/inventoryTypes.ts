@@ -1130,13 +1130,13 @@ export interface IEndlessXpProgress {
 }
 
 export interface IDialogueHistoryClient {
-    YearIteration: number;
+    YearIteration?: number;
     Resets?: number; // added in 38.5.0
     Dialogues?: IDialogueClient[];
 }
 
 export interface IDialogueHistoryDatabase {
-    YearIteration: number;
+    YearIteration?: number;
     Resets?: number;
     Dialogues?: IDialogueDatabase[];
 }

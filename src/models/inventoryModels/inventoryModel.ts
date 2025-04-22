@@ -909,7 +909,7 @@ dialogueSchema.set("toJSON", {
 
 const dialogueHistorySchema = new Schema<IDialogueHistoryDatabase>(
     {
-        YearIteration: { type: Number, required: true },
+        YearIteration: Number,
         Resets: Number,
         Dialogues: { type: [dialogueSchema], required: false }
     },

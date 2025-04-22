@@ -12,22 +12,17 @@ export const saveDialogueController: RequestHandler = async (req, res) => {
     const request = JSON.parse(String(req.body)) as SaveDialogueRequest;
     if ("YearIteration" in request) {
         const inventory = await getInventory(accountId, "DialogueHistory");
-        if (inventory.DialogueHistory) {
-            inventory.DialogueHistory.YearIteration = request.YearIteration;
-        } else {
-            inventory.DialogueHistory = { YearIteration: request.YearIteration };
-        }
+        inventory.DialogueHistory ??= {};
+        inventory.DialogueHistory.YearIteration = request.YearIteration;
         await inventory.save();
         res.end();
     } else {
         const inventory = await getInventory(accountId);
-        if (!inventory.DialogueHistory) {
-            throw new Error("bad inventory state");
-        }
         const inventoryChanges: IInventoryChanges = {};
         const tomorrowAt0Utc = config.noKimCooldowns
             ? Date.now()
             : (Math.trunc(Date.now() / 86400_000) + 1) * 86400_000;
+        inventory.DialogueHistory ??= {};
         inventory.DialogueHistory.Dialogues ??= [];
         const dialogue = getDialogue(inventory, request.DialogueName);
         dialogue.Rank = request.Rank;
