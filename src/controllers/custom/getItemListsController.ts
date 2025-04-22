@@ -69,7 +69,8 @@ const getItemListsController: RequestHandler = (req, response) => {
         if (item.productCategory != "SpecialItems") {
             res[item.productCategory].push({
                 uniqueName,
-                name: getString(item.name, lang)
+                name: getString(item.name, lang),
+                exalted: item.exalted
             });
         }
     }
