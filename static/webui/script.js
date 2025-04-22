@@ -443,12 +443,28 @@ function updateInventory() {
                             maxXP /= 2;
                         }
 
-                        if (item.XP < maxXP) {
+                        let anyExaltedMissingXP = false;
+                        if (item.XP >= maxXP && "exalted" in itemMap[item.ItemType]) {
+                            for (const exaltedType of itemMap[item.ItemType].exalted) {
+                                const exaltedItem = data.SpecialItems.find(x => x.ItemType == exaltedType);
+                                if (exaltedItem) {
+                                    const exaltedCap = itemMap[exaltedType]?.type == "weapons" ? 800_000 : 1_600_000;
+                                    if (exaltedItem.XP < exaltedCap) {
+                                        anyExaltedMissingXP = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (item.XP < maxXP || anyExaltedMissingXP) {
                             const a = document.createElement("a");
                             a.href = "#";
                             a.onclick = function (event) {
                                 event.preventDefault();
-                                addGearExp(category, item.ItemId.$oid, maxXP - item.XP);
+                                if (item.XP < maxXP) {
+                                    addGearExp(category, item.ItemId.$oid, maxXP - item.XP);
+                                }
                                 if ("exalted" in itemMap[item.ItemType]) {
                                     for (const exaltedType of itemMap[item.ItemType].exalted) {
                                         const exaltedItem = data.SpecialItems.find(x => x.ItemType == exaltedType);
