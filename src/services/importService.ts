@@ -37,6 +37,7 @@ import {
 } from "../types/inventoryTypes/inventoryTypes";
 import { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel";
 import { ILoadoutConfigDatabase, ILoadoutDatabase } from "../types/saveLoadoutTypes";
+import { slotNames } from "../types/purchaseTypes";
 
 const convertDate = (value: IMongoDate): Date => {
     return new Date(parseInt(value.$date.$numberLong));
@@ -212,20 +213,7 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
             replaceArray<IOperatorConfigDatabase>(db[key], client[key].map(convertOperatorConfig));
         }
     }
-    for (const key of [
-        "SuitBin",
-        "WeaponBin",
-        "SentinelBin",
-        "SpaceSuitBin",
-        "SpaceWeaponBin",
-        "PvpBonusLoadoutBin",
-        "PveBonusLoadoutBin",
-        "RandomModBin",
-        "MechBin",
-        "CrewMemberBin",
-        "OperatorAmpBin",
-        "CrewShipSalvageBin"
-    ] as const) {
+    for (const key of slotNames) {
         if (client[key] !== undefined) {
             replaceSlots(db[key], client[key]);
         }

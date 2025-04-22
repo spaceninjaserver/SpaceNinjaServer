@@ -103,6 +103,7 @@ export const slotNames = [
     "WeaponBin",
     "MechBin",
     "PveBonusLoadoutBin",
+    "PvpBonusLoadoutBin",
     "SentinelBin",
     "SpaceSuitBin",
     "SpaceWeaponBin",
