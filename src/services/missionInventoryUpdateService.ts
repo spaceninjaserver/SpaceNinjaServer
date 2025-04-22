@@ -55,6 +55,7 @@ import { Loadout } from "../models/inventoryModels/loadoutModel";
 import { ILoadoutConfigDatabase } from "../types/saveLoadoutTypes";
 import { getLiteSortie, getWorldState, idToWeek } from "./worldStateService";
 import { config } from "./configService";
+import libraryDailyTasks from "@/static/fixed_responses/libraryDailyTasks.json";
 
 const getRotations = (rewardInfo: IRewardInfo, tierOverride?: number): number[] => {
     // For Spy missions, e.g. 3 vaults cracked = A, B, C
@@ -331,35 +332,36 @@ export const addMissionInventoryUpdates = async (
             case "LibraryScans":
                 value.forEach(scan => {
                     let synthesisIgnored = true;
-                    if (
-                        inventory.LibraryPersonalTarget &&
-                        libraryPersonalTargetToAvatar[inventory.LibraryPersonalTarget] == scan.EnemyType
-                    ) {
-                        let progress = inventory.LibraryPersonalProgress.find(
-                            x => x.TargetType == inventory.LibraryPersonalTarget
-                        );
-                        if (!progress) {
-                            progress =
-                                inventory.LibraryPersonalProgress[
-                                    inventory.LibraryPersonalProgress.push({
-                                        TargetType: inventory.LibraryPersonalTarget,
-                                        Scans: 0,
-                                        Completed: false
-                                    }) - 1
-                                ];
+                    if (inventory.LibraryPersonalTarget) {
+                        const taskAvatar = libraryPersonalTargetToAvatar[inventory.LibraryPersonalTarget];
+                        const taskAvatars = libraryDailyTasks.find(x => x.indexOf(taskAvatar) != -1)!;
+                        if (taskAvatars.indexOf(scan.EnemyType) != -1) {
+                            let progress = inventory.LibraryPersonalProgress.find(
+                                x => x.TargetType == inventory.LibraryPersonalTarget
+                            );
+                            if (!progress) {
+                                progress =
+                                    inventory.LibraryPersonalProgress[
+                                        inventory.LibraryPersonalProgress.push({
+                                            TargetType: inventory.LibraryPersonalTarget,
+                                            Scans: 0,
+                                            Completed: false
+                                        }) - 1
+                                    ];
+                            }
+                            progress.Scans += scan.Count;
+                            if (
+                                progress.Scans >=
+                                (inventory.LibraryPersonalTarget ==
+                                "/Lotus/Types/Game/Library/Targets/DragonframeQuestTarget"
+                                    ? 3
+                                    : 10)
+                            ) {
+                                progress.Completed = true;
+                            }
+                            logger.debug(`synthesis of ${scan.EnemyType} added to personal target progress`);
+                            synthesisIgnored = false;
                         }
-                        progress.Scans += scan.Count;
-                        if (
-                            progress.Scans >=
-                            (inventory.LibraryPersonalTarget ==
-                            "/Lotus/Types/Game/Library/Targets/DragonframeQuestTarget"
-                                ? 3
-                                : 10)
-                        ) {
-                            progress.Completed = true;
-                        }
-                        logger.debug(`synthesis of ${scan.EnemyType} added to personal target progress`);
-                        synthesisIgnored = false;
                     }
                     if (
                         inventory.LibraryActiveDailyTaskInfo &&
