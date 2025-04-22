@@ -1769,3 +1769,23 @@ export const setupKahlSyndicate = (inventory: TInventoryDatabaseDocument): void 
         Tag: "KahlSyndicate"
     });
 };
+
+export const cleanupInventory = (inventory: TInventoryDatabaseDocument): void => {
+    let index = inventory.MiscItems.findIndex(x => x.ItemType == "");
+    if (index != -1) {
+        inventory.MiscItems.splice(index, 1);
+    }
+
+    index = inventory.Affiliations.findIndex(x => x.Tag == "KahlSyndicate");
+    if (index != -1 && !inventory.Affiliations[index].WeeklyMissions) {
+        logger.debug(`KahlSyndicate seems broken, removing it and setting up again`);
+        inventory.Affiliations.splice(index, 1);
+        setupKahlSyndicate(inventory);
+    }
+
+    const LibrarySyndicate = inventory.Affiliations.find(x => x.Tag == "LibrarySyndicate");
+    if (LibrarySyndicate && LibrarySyndicate.FreeFavorsEarned) {
+        logger.debug(`removing FreeFavorsEarned from LibrarySyndicate`);
+        LibrarySyndicate.FreeFavorsEarned = undefined;
+    }
+};

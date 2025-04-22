@@ -14,7 +14,12 @@ import {
     ExportVirtuals
 } from "warframe-public-export-plus";
 import { applyCheatsToInfestedFoundry, handleSubsumeCompletion } from "@/src/services/infestedFoundryService";
-import { addMiscItems, allDailyAffiliationKeys, createLibraryDailyTask } from "@/src/services/inventoryService";
+import {
+    addMiscItems,
+    allDailyAffiliationKeys,
+    cleanupInventory,
+    createLibraryDailyTask
+} from "@/src/services/inventoryService";
 import { logger } from "@/src/utils/logger";
 import { catBreadHash } from "@/src/helpers/stringHelpers";
 
@@ -78,6 +83,8 @@ export const inventoryController: RequestHandler = async (request, response) => 
                 }
             }
         }
+
+        cleanupInventory(inventory);
 
         inventory.NextRefill = new Date((Math.trunc(Date.now() / 86400000) + 1) * 86400000);
         await inventory.save();
