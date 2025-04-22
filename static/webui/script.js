@@ -1,8 +1,15 @@
+let loginOrRegisterPending = false;
+window.registerSubmit = false;
+
 function doLogin() {
+    if (loginOrRegisterPending) {
+        return;
+    }
+    loginOrRegisterPending = true;
     localStorage.setItem("email", $("#email").val());
     localStorage.setItem("password", $("#password").val());
-    $("#email, #password").val("");
     loginFromLocalStorage();
+    registerSubmit = false;
 }
 
 function loginFromLocalStorage() {
@@ -37,12 +44,15 @@ function doLoginRequest(succ_cb, fail_cb) {
             s: "W0RFXVN0ZXZlIGxpa2VzIGJpZyBidXR0cw==", // signature of some kind
             lang: "en",
             date: 1501230947855458660, // ???
-            ClientType: "webui",
+            ClientType: registerSubmit ? "" : "webui",
             PS: "W0RFXVN0ZXZlIGxpa2VzIGJpZyBidXR0cw==" // anti-cheat data
         })
     });
     req.done(succ_cb);
     req.fail(fail_cb);
+    req.always(() => {
+        loginOrRegisterPending = false;
+    });
 }
 
 function revalidateAuthz(succ_cb) {

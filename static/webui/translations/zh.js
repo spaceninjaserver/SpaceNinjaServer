@@ -60,6 +60,7 @@ dict = {
     login_emailLabel: `电子邮箱`,
     login_passwordLabel: `密码`,
     login_loginButton: `登录`,
+    login_registerButton: `[UNTRANSLATED] Register`,
     navbar_logout: `退出登录`,
     navbar_renameAccount: `重命名账户`,
     navbar_deleteAccount: `删除账户`,

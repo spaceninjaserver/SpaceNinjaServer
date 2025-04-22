@@ -60,6 +60,7 @@ dict = {
     login_emailLabel: `Email`,
     login_passwordLabel: `Mot de passe`,
     login_loginButton: `Connexion`,
+    login_registerButton: `[UNTRANSLATED] Register`,
     navbar_logout: `Déconnexion`,
     navbar_renameAccount: `Renommer le compte`,
     navbar_deleteAccount: `Supprimer le compte`,
