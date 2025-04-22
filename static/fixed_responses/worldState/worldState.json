@@ -64,22 +64,6 @@
   ],
   "SyndicateMissions": [
     {
-      "_id": { "$oid": "663a4fc5ba6f84724fa48049" },
-      "Activation": { "$date": { "$numberLong": "1715097541439" } },
-      "Expiry": { "$date": { "$numberLong": "2000000000000" } },
-      "Tag": "ArbitersSyndicate",
-      "Seed": 24491,
-      "Nodes": ["SolNode223", "SolNode89", "SolNode146", "SolNode212", "SolNode167", "SolNode48", "SolNode78"]
-    },
-    {
-      "_id": { "$oid": "663a4fc5ba6f84724fa4804a" },
-      "Activation": { "$date": { "$numberLong": "1715097541439" } },
-      "Expiry": { "$date": { "$numberLong": "2000000000000" } },
-      "Tag": "CephalonSudaSyndicate",
-      "Seed": 12770,
-      "Nodes": ["SolNode36", "SolNode59", "SettlementNode12", "SolNode61", "SolNode12", "SolNode138", "SolNode72"]
-    },
-    {
       "_id": { "$oid": "663a4fc5ba6f84724fa4804c" },
       "Activation": { "$date": { "$numberLong": "1715097541439" } },
       "Expiry": { "$date": { "$numberLong": "2000000000000" } },
@@ -104,28 +88,12 @@
       "Nodes": []
     },
     {
-      "_id": { "$oid": "663a4fc5ba6f84724fa4804e" },
-      "Activation": { "$date": { "$numberLong": "1715097541439" } },
-      "Expiry": { "$date": { "$numberLong": "2000000000000" } },
-      "Tag": "NewLokaSyndicate",
-      "Seed": 16064,
-      "Nodes": ["SolNode101", "SolNode224", "SolNode205", "SettlementNode2", "SolNode171", "SolNode188", "SolNode75"]
-    },
-    {
       "_id": { "$oid": "663a4fc5ba6f84724fa4804f" },
       "Activation": { "$date": { "$numberLong": "1715097541439" } },
       "Expiry": { "$date": { "$numberLong": "2000000000000" } },
       "Tag": "QuillsSyndicate",
       "Seed": 77721,
       "Nodes": []
-    },
-    {
-      "_id": { "$oid": "663a4fc5ba6f84724fa48050" },
-      "Activation": { "$date": { "$numberLong": "1715097541439" } },
-      "Expiry": { "$date": { "$numberLong": "2000000000000" } },
-      "Tag": "PerrinSyndicate",
-      "Seed": 9940,
-      "Nodes": ["SolNode39", "SolNode14", "SolNode203", "SolNode100", "SolNode130", "SolNode64", "SettlementNode15"]
     },
     {
       "_id": { "$oid": "663a4fc5ba6f84724fa48052" },
@@ -256,28 +224,12 @@
       "Nodes": []
     },
     {
-      "_id": { "$oid": "663a4fc5ba6f84724fa4805e" },
-      "Activation": { "$date": { "$numberLong": "1715097541439" } },
-      "Expiry": { "$date": { "$numberLong": "2000000000000" } },
-      "Tag": "RedVeilSyndicate",
-      "Seed": 46649,
-      "Nodes": ["SolNode226", "SolNode79", "SolNode216", "SettlementNode11", "SolNode56", "SolNode41", "SolNode23"]
-    },
-    {
       "_id": { "$oid": "663a4fc5ba6f84724fa48060" },
       "Activation": { "$date": { "$numberLong": "1715097541439" } },
       "Expiry": { "$date": { "$numberLong": "2000000000000" } },
       "Tag": "VoxSyndicate",
       "Seed": 77972,
       "Nodes": []
-    },
-    {
-      "_id": { "$oid": "663a4fc5ba6f84724fa48061" },
-      "Activation": { "$date": { "$numberLong": "1715097541439" } },
-      "Expiry": { "$date": { "$numberLong": "2000000000000" } },
-      "Tag": "SteelMeridianSyndicate",
-      "Seed": 42366,
-      "Nodes": ["SolNode27", "SolNode107", "SolNode214", "SettlementNode1", "SolNode177", "SolNode141", "SolNode408"]
     }
   ],
   "ActiveMissions": [

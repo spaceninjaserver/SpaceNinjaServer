@@ -4,14 +4,7 @@ import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { config } from "@/src/services/configService";
 import { CRng } from "@/src/services/rngService";
 import { eMissionType, ExportNightwave, ExportRegions } from "warframe-public-export-plus";
-import {
-    ICalendarDay,
-    ICalendarSeason,
-    ILiteSortie,
-    ISeasonChallenge,
-    ISortie,
-    IWorldState
-} from "../types/worldStateTypes";
+import { ICalendarDay, ICalendarSeason, ILiteSortie, ISeasonChallenge, IWorldState } from "../types/worldStateTypes";
 
 const sortieBosses = [
     "SORTIE_BOSS_HYENA",
@@ -174,7 +167,47 @@ const getSortieTime = (day: number): number => {
     return dayStart + (isDst ? 16 : 17) * 3600000;
 };
 
-const pushSortieIfRelevant = (out: ISortie[], day: number): void => {
+const pushSyndicateMissions = (
+    worldState: IWorldState,
+    day: number,
+    seed: number,
+    idSuffix: string,
+    syndicateTag: string
+): void => {
+    const nodeOptions: string[] = [];
+    for (const [key, value] of Object.entries(ExportRegions)) {
+        if (
+            value.name.indexOf("Archwing") == -1 && // no archwing
+            value.systemIndex != 23 && // no 1999 stuff
+            value.missionIndex != 10 && // Exclude MT_PVP (for relays)
+            value.missionIndex != 23 && // no junctions
+            value.missionIndex <= 28 // no railjack or some such
+        ) {
+            nodeOptions.push(key);
+        }
+    }
+
+    const rng = new CRng(seed);
+    const nodes: string[] = [];
+    for (let i = 0; i != 6; ++i) {
+        const index = rng.randomInt(0, nodeOptions.length - 1);
+        nodes.push(nodeOptions[index]);
+        nodeOptions.splice(index, 1);
+    }
+
+    const dayStart = getSortieTime(day);
+    const dayEnd = getSortieTime(day + 1);
+    worldState.SyndicateMissions.push({
+        _id: { $oid: Math.trunc(dayStart / 1000).toString(16) + idSuffix },
+        Activation: { $date: { $numberLong: dayStart.toString() } },
+        Expiry: { $date: { $numberLong: dayEnd.toString() } },
+        Tag: syndicateTag,
+        Seed: seed,
+        Nodes: nodes
+    });
+};
+
+const pushSortieIfRelevant = (worldState: IWorldState, day: number): void => {
     const dayStart = getSortieTime(day);
     if (!isBeforeNextExpectedWorldStateRefresh(dayStart)) {
         return;
@@ -231,6 +264,7 @@ const pushSortieIfRelevant = (out: ISortie[], day: number): void => {
             value.name.indexOf("Archwing") == -1 &&
             value.missionIndex != 0 && // Exclude MT_ASSASSINATION
             value.missionIndex != 5 && // Exclude MT_CAPTURE
+            value.missionIndex != 10 && // Exclude MT_PVP (for relays)
             value.missionIndex != 21 && // Exclude MT_PURIFY
             value.missionIndex != 22 && // Exclude MT_ARENA
             value.missionIndex != 23 && // Exclude MT_JUNCTION
@@ -292,7 +326,7 @@ const pushSortieIfRelevant = (out: ISortie[], day: number): void => {
         missionTypes.add(missionType);
     }
 
-    out.push({
+    worldState.Sorties.push({
         _id: { $oid: Math.trunc(dayStart / 1000).toString(16) + "d4d932c97c0a3acd" },
         Activation: { $date: { $numberLong: dayStart.toString() } },
         Expiry: { $date: { $numberLong: dayEnd.toString() } },
@@ -301,6 +335,13 @@ const pushSortieIfRelevant = (out: ISortie[], day: number): void => {
         Boss: boss,
         Variants: selectedNodes
     });
+
+    pushSyndicateMissions(worldState, day, rng.randomInt(0, 0xffff), "ba6f84724fa48049", "ArbitersSyndicate");
+    pushSyndicateMissions(worldState, day, rng.randomInt(0, 0xffff), "ba6f84724fa4804a", "CephalonSudaSyndicate");
+    pushSyndicateMissions(worldState, day, rng.randomInt(0, 0xffff), "ba6f84724fa4804e", "NewLokaSyndicate");
+    pushSyndicateMissions(worldState, day, rng.randomInt(0, 0xffff), "ba6f84724fa48050", "PerrinSyndicate");
+    pushSyndicateMissions(worldState, day, rng.randomInt(0, 0xffff), "ba6f84724fa4805e", "RedVeilSyndicate");
+    pushSyndicateMissions(worldState, day, rng.randomInt(0, 0xffff), "ba6f84724fa48061", "SteelMeridianSyndicate");
 };
 
 const dailyChallenges = Object.keys(ExportNightwave.challenges).filter(x =>
@@ -953,9 +994,9 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         });
     }
 
-    // Sortie cycling every day
-    pushSortieIfRelevant(worldState.Sorties, day - 1);
-    pushSortieIfRelevant(worldState.Sorties, day);
+    // Sortie & syndicate missions cycling every day (at 16:00 or 17:00 UTC depending on if London, OT is observing DST)
+    pushSortieIfRelevant(worldState, day - 1);
+    pushSortieIfRelevant(worldState, day);
 
     // Archon Hunt cycling every week
     worldState.LiteSorties.push(getLiteSortie(week));
