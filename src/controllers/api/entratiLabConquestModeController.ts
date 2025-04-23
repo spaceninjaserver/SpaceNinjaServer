@@ -21,10 +21,12 @@ export const entratiLabConquestModeController: RequestHandler = async (req, res)
         inventory.EntratiVaultCountResetDate = new Date(weekEnd);
         if (inventory.EntratiLabConquestUnlocked) {
             inventory.EntratiLabConquestUnlocked = 0;
+            inventory.EntratiLabConquestCacheScoreMission = 0;
             inventory.EntratiLabConquestActiveFrameVariants = [];
         }
         if (inventory.EchoesHexConquestUnlocked) {
             inventory.EchoesHexConquestUnlocked = 0;
+            inventory.EchoesHexConquestCacheScoreMission = 0;
             inventory.EchoesHexConquestActiveFrameVariants = [];
             inventory.EchoesHexConquestActiveStickers = [];
         }

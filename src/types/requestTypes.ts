@@ -125,6 +125,7 @@ export type IMissionInventoryUpdateRequest = {
     wagerTier?: number; // the index
     creditsFee?: number; // the index
     InvasionProgress?: IInvasionProgressClient[];
+    ConquestMissionsCompleted?: number;
 } & {
     [K in TEquipmentKey]?: IEquipmentClient[];
 };
@@ -150,7 +151,12 @@ export interface IRewardInfo {
     PurgatoryRewardQualifications?: string;
     rewardSeed?: number | bigint;
     periodicMissionTag?: string;
-
+    ConquestType?: string;
+    ConquestCompleted?: number;
+    ConquestEquipmentSuggestionsFulfilled?: number;
+    ConquestPersonalModifiersActive?: number;
+    ConquestStickersActive?: number;
+    ConquestHardModeActive?: number;
     // for bounties, only EOM_AFK and node are given from above, plus:
     JobTier?: number;
     jobId?: string;

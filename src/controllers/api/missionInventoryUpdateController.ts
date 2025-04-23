@@ -6,6 +6,7 @@ import { addMissionInventoryUpdates, addMissionRewards } from "@/src/services/mi
 import { getInventory } from "@/src/services/inventoryService";
 import { getInventoryResponse } from "./inventoryController";
 import { logger } from "@/src/utils/logger";
+import { IMissionInventoryUpdateResponse } from "@/src/types/missionTypes";
 
 /*
 **** INPUT ****
@@ -71,8 +72,14 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         return;
     }
 
-    const { MissionRewards, inventoryChanges, credits, AffiliationMods, SyndicateXPItemReward } =
-        await addMissionRewards(inventory, missionReport, firstCompletion);
+    const {
+        MissionRewards,
+        inventoryChanges,
+        credits,
+        AffiliationMods,
+        SyndicateXPItemReward,
+        ConquestCompletedMissionsCount
+    } = await addMissionRewards(inventory, missionReport, firstCompletion);
 
     await inventory.save();
     const inventoryResponse = await getInventoryResponse(inventory, true);
@@ -86,8 +93,9 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         ...inventoryUpdates,
         //FusionPoints: inventoryChanges?.FusionPoints, // This in combination with InventoryJson or InventoryChanges seems to just double the number of endo shown, so unsure when this is needed.
         SyndicateXPItemReward,
-        AffiliationMods
-    });
+        AffiliationMods,
+        ConquestCompletedMissionsCount
+    } satisfies IMissionInventoryUpdateResponse);
 };
 
 /*

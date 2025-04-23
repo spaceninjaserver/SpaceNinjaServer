@@ -43,7 +43,7 @@ import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/invento
 import { getEntriesUnsafe } from "@/src/utils/ts-utils";
 import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { handleStoreItemAcquisition } from "./purchaseService";
-import { IMissionReward } from "../types/missionTypes";
+import { IMissionCredits, IMissionReward } from "../types/missionTypes";
 import { crackRelic } from "@/src/helpers/relicHelper";
 import { createMessage } from "./inboxService";
 import kuriaMessage50 from "@/static/fixed_responses/kuriaMessages/fiftyPercent.json";
@@ -586,7 +586,139 @@ interface AddMissionRewardsReturnType {
     credits?: IMissionCredits;
     AffiliationMods?: IAffiliationMods[];
     SyndicateXPItemReward?: number;
+    ConquestCompletedMissionsCount?: number;
 }
+
+interface IConquestReward {
+    at: number;
+    pool: IRngResult[];
+}
+
+const labConquestRewards: IConquestReward[] = [
+    {
+        at: 5,
+        pool: ExportRewards[
+            "/Lotus/Types/Game/MissionDecks/EntratiLabConquestRewards/EntratiLabConquestSilverRewards"
+        ][0] as IRngResult[]
+    },
+    {
+        at: 10,
+        pool: ExportRewards[
+            "/Lotus/Types/Game/MissionDecks/EntratiLabConquestRewards/EntratiLabConquestSilverRewards"
+        ][0] as IRngResult[]
+    },
+    {
+        at: 15,
+        pool: [
+            {
+                type: "/Lotus/StoreItems/Types/Gameplay/EntratiLab/Resources/EntratiLanthornBundle",
+                itemCount: 3,
+                probability: 1
+            }
+        ]
+    },
+    {
+        at: 20,
+        pool: ExportRewards[
+            "/Lotus/Types/Game/MissionDecks/EntratiLabConquestRewards/EntratiLabConquestGoldRewards"
+        ][0] as IRngResult[]
+    },
+    {
+        at: 28,
+        pool: [
+            {
+                type: "/Lotus/StoreItems/Types/Items/MiscItems/DistillPoints",
+                itemCount: 20,
+                probability: 1
+            }
+        ]
+    },
+    {
+        at: 31,
+        pool: ExportRewards[
+            "/Lotus/Types/Game/MissionDecks/EntratiLabConquestRewards/EntratiLabConquestGoldRewards"
+        ][0] as IRngResult[]
+    },
+    {
+        at: 34,
+        pool: ExportRewards[
+            "/Lotus/Types/Game/MissionDecks/EntratiLabConquestRewards/EntratiLabConquestArcaneRewards"
+        ][0] as IRngResult[]
+    },
+    {
+        at: 37,
+        pool: [
+            {
+                type: "/Lotus/StoreItems/Types/Items/MiscItems/DistillPoints",
+                itemCount: 50,
+                probability: 1
+            }
+        ]
+    }
+];
+
+const hexConquestRewards: IConquestReward[] = [
+    {
+        at: 5,
+        pool: ExportRewards[
+            "/Lotus/Types/Game/MissionDecks/1999ConquestRewards/1999ConquestSilverRewards"
+        ][0] as IRngResult[]
+    },
+    {
+        at: 10,
+        pool: ExportRewards[
+            "/Lotus/Types/Game/MissionDecks/1999ConquestRewards/1999ConquestSilverRewards"
+        ][0] as IRngResult[]
+    },
+    {
+        at: 15,
+        pool: [
+            {
+                type: "/Lotus/StoreItems/Types/BoosterPacks/1999StickersPackEchoesArchimedea",
+                itemCount: 1,
+                probability: 1
+            }
+        ]
+    },
+    {
+        at: 20,
+        pool: ExportRewards[
+            "/Lotus/Types/Game/MissionDecks/1999ConquestRewards/1999ConquestGoldRewards"
+        ][0] as IRngResult[]
+    },
+    {
+        at: 28,
+        pool: [
+            {
+                type: "/Lotus/StoreItems/Types/Items/MiscItems/1999ConquestBucks",
+                itemCount: 6,
+                probability: 1
+            }
+        ]
+    },
+    {
+        at: 31,
+        pool: ExportRewards[
+            "/Lotus/Types/Game/MissionDecks/1999ConquestRewards/1999ConquestGoldRewards"
+        ][0] as IRngResult[]
+    },
+    {
+        at: 34,
+        pool: ExportRewards[
+            "/Lotus/Types/Game/MissionDecks/1999ConquestRewards/1999ConquestArcaneRewards"
+        ][0] as IRngResult[]
+    },
+    {
+        at: 37,
+        pool: [
+            {
+                type: "/Lotus/StoreItems/Types/Items/MiscItems/1999ConquestBucks",
+                itemCount: 9,
+                probability: 1
+            }
+        ]
+    }
+];
 
 //TODO: return type of partial missioninventoryupdate response
 export const addMissionRewards = async (
@@ -620,6 +752,7 @@ export const addMissionRewards = async (
     const inventoryChanges: IInventoryChanges = {};
     const AffiliationMods: IAffiliationMods[] = [];
     let SyndicateXPItemReward;
+    let ConquestCompletedMissionsCount;
 
     let missionCompletionCredits = 0;
     //inventory change is what the client has not rewarded itself, also the client needs to know the credit changes for display
@@ -689,6 +822,62 @@ export const addMissionRewards = async (
             StoreItem: getRandomElement(corruptedMods),
             ItemCount: 1
         });
+    }
+
+    if (rewardInfo.ConquestCompleted !== undefined) {
+        let score = 1;
+        if (rewardInfo.ConquestHardModeActive === 1) score += 3;
+
+        if (rewardInfo.ConquestPersonalModifiersActive !== undefined)
+            score += rewardInfo.ConquestPersonalModifiersActive;
+        if (rewardInfo.ConquestEquipmentSuggestionsFulfilled !== undefined)
+            score += rewardInfo.ConquestEquipmentSuggestionsFulfilled;
+
+        score *= rewardInfo.ConquestCompleted + 1;
+
+        if (rewardInfo.ConquestCompleted == 2 && rewardInfo.ConquestHardModeActive === 1) score += 1;
+
+        logger.debug(`completed conquest mission ${rewardInfo.ConquestCompleted + 1} for a score of ${score}`);
+
+        const conquestType = rewardInfo.ConquestType;
+        const conquestNode =
+            conquestType == "HexConquest" ? "EchoesHexConquestHardModeUnlocked" : "EntratiLabConquestHardModeUnlocked";
+        if (score >= 25 && inventory.NodeIntrosCompleted.indexOf(conquestNode) == -1)
+            inventory.NodeIntrosCompleted.push(conquestNode);
+
+        if (conquestType == "HexConquest") {
+            inventory.EchoesHexConquestCacheScoreMission ??= 0;
+            if (score > inventory.EchoesHexConquestCacheScoreMission) {
+                for (const reward of hexConquestRewards) {
+                    if (score >= reward.at && inventory.EchoesHexConquestCacheScoreMission < reward.at) {
+                        const rolled = getRandomReward(reward.pool)!;
+                        logger.debug(`rolled hex conquest reward for reaching ${reward.at} points`, rolled);
+                        MissionRewards.push({
+                            StoreItem: rolled.type,
+                            ItemCount: rolled.itemCount
+                        });
+                    }
+                }
+                inventory.EchoesHexConquestCacheScoreMission = score;
+            }
+        } else {
+            inventory.EntratiLabConquestCacheScoreMission ??= 0;
+            if (score > inventory.EntratiLabConquestCacheScoreMission) {
+                for (const reward of labConquestRewards) {
+                    if (score >= reward.at && inventory.EntratiLabConquestCacheScoreMission < reward.at) {
+                        const rolled = getRandomReward(reward.pool)!;
+                        logger.debug(`rolled lab conquest reward for reaching ${reward.at} points`, rolled);
+                        MissionRewards.push({
+                            StoreItem: rolled.type,
+                            ItemCount: rolled.itemCount
+                        });
+                    }
+                }
+                inventory.EntratiLabConquestCacheScoreMission = score;
+            }
+        }
+
+        ConquestCompletedMissionsCount = rewardInfo.ConquestCompleted == 2 ? 0 : rewardInfo.ConquestCompleted + 1;
     }
 
     for (const reward of MissionRewards) {
@@ -882,15 +1071,15 @@ export const addMissionRewards = async (
         }
     }
 
-    return { inventoryChanges, MissionRewards, credits, AffiliationMods, SyndicateXPItemReward };
+    return {
+        inventoryChanges,
+        MissionRewards,
+        credits,
+        AffiliationMods,
+        SyndicateXPItemReward,
+        ConquestCompletedMissionsCount
+    };
 };
-
-interface IMissionCredits {
-    MissionCredits: number[];
-    CreditBonus: number[];
-    TotalCredits: number[];
-    DailyMissionBonus?: boolean;
-}
 
 //creditBonus is not entirely accurate.
 //TODO: consider ActiveBoosters
