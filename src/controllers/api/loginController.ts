@@ -21,7 +21,11 @@ export const loginController: RequestHandler = async (request, response) => {
 
     const myAddress = request.host.indexOf("warframe.com") == -1 ? request.host : config.myAddress;
 
-    if (!account && config.autoCreateAccount && loginRequest.ClientType != "webui") {
+    if (
+        !account &&
+        ((config.autoCreateAccount && loginRequest.ClientType != "webui") ||
+            loginRequest.ClientType == "webui-register")
+    ) {
         try {
             const nameFromEmail = loginRequest.email.substring(0, loginRequest.email.indexOf("@"));
             let name = nameFromEmail || loginRequest.email.substring(1) || "SpaceNinja";
@@ -37,7 +41,7 @@ export const loginController: RequestHandler = async (request, response) => {
                 password: loginRequest.password,
                 DisplayName: name,
                 CountryCode: loginRequest.lang.toUpperCase(),
-                ClientType: loginRequest.ClientType,
+                ClientType: loginRequest.ClientType == "webui-register" ? "webui" : loginRequest.ClientType,
                 CrossPlatformAllowed: true,
                 ForceLogoutVersion: 0,
                 ConsentNeeded: false,
@@ -56,6 +60,11 @@ export const loginController: RequestHandler = async (request, response) => {
 
     if (!account) {
         response.status(400).json({ error: "unknown user" });
+        return;
+    }
+
+    if (loginRequest.ClientType == "webui-register") {
+        response.status(400).json({ error: "account already exists" });
         return;
     }
 

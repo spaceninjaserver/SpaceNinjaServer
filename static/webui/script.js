@@ -13,6 +13,7 @@ function doLogin() {
 }
 
 function loginFromLocalStorage() {
+    const isRegister = registerSubmit;
     doLoginRequest(
         data => {
             if (single.getCurrentPath() == "/webui/") {
@@ -28,7 +29,7 @@ function loginFromLocalStorage() {
         },
         () => {
             logout();
-            alert("Login failed");
+            alert(isRegister ? "Registration failed. Account already exists?" : "Login failed");
         }
     );
 }
@@ -44,7 +45,7 @@ function doLoginRequest(succ_cb, fail_cb) {
             s: "W0RFXVN0ZXZlIGxpa2VzIGJpZyBidXR0cw==", // signature of some kind
             lang: "en",
             date: 1501230947855458660, // ???
-            ClientType: registerSubmit ? "" : "webui",
+            ClientType: registerSubmit ? "webui-register" : "webui",
             PS: "W0RFXVN0ZXZlIGxpa2VzIGJpZyBidXR0cw==" // anti-cheat data
         })
     });
