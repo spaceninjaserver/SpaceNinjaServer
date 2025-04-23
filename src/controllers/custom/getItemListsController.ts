@@ -115,12 +115,28 @@ const getItemListsController: RequestHandler = (req, response) => {
         let name = getString(item.name, lang);
         if ("dissectionParts" in item) {
             name = getString("/Lotus/Language/Fish/FishDisplayName", lang).split("|FISH_NAME|").join(name);
-            if (uniqueName.indexOf("Large") != -1) {
-                name = name.split("|FISH_SIZE|").join(getString("/Lotus/Language/Fish/FishSizeLargeAbbrev", lang));
-            } else if (uniqueName.indexOf("Medium") != -1) {
-                name = name.split("|FISH_SIZE|").join(getString("/Lotus/Language/Fish/FishSizeMediumAbbrev", lang));
+            if (item.syndicateTag == "CetusSyndicate") {
+                if (uniqueName.indexOf("Large") != -1) {
+                    name = name.split("|FISH_SIZE|").join(getString("/Lotus/Language/Fish/FishSizeLargeAbbrev", lang));
+                } else if (uniqueName.indexOf("Medium") != -1) {
+                    name = name.split("|FISH_SIZE|").join(getString("/Lotus/Language/Fish/FishSizeMediumAbbrev", lang));
+                } else {
+                    name = name.split("|FISH_SIZE|").join(getString("/Lotus/Language/Fish/FishSizeSmallAbbrev", lang));
+                }
             } else {
-                name = name.split("|FISH_SIZE|").join(getString("/Lotus/Language/Fish/FishSizeSmallAbbrev", lang));
+                if (uniqueName.indexOf("Large") != -1) {
+                    name = name
+                        .split("|FISH_SIZE|")
+                        .join(getString("/Lotus/Language/SolarisVenus/RobofishAgeCategoryElderAbbrev", lang));
+                } else if (uniqueName.indexOf("Medium") != -1) {
+                    name = name
+                        .split("|FISH_SIZE|")
+                        .join(getString("/Lotus/Language/SolarisVenus/RobofishAgeCategoryMatureAbbrev", lang));
+                } else {
+                    name = name
+                        .split("|FISH_SIZE|")
+                        .join(getString("/Lotus/Language/SolarisVenus/RobofishAgeCategoryYoungAbbrev", lang));
+                }
             }
         }
         if (
