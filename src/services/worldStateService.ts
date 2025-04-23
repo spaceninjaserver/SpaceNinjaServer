@@ -1,10 +1,18 @@
 import staticWorldState from "@/static/fixed_responses/worldState/worldState.json";
+import sortieTilesets from "@/static/fixed_responses/worldState/sortieTilesets.json";
 import { buildConfig } from "@/src/services/buildConfigService";
 import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { config } from "@/src/services/configService";
 import { CRng } from "@/src/services/rngService";
 import { eMissionType, ExportNightwave, ExportRegions } from "warframe-public-export-plus";
-import { ICalendarDay, ICalendarSeason, ILiteSortie, ISeasonChallenge, IWorldState } from "../types/worldStateTypes";
+import {
+    ICalendarDay,
+    ICalendarSeason,
+    ILiteSortie,
+    ISeasonChallenge,
+    ISortieMission,
+    IWorldState
+} from "../types/worldStateTypes";
 
 const sortieBosses = [
     "SORTIE_BOSS_HYENA",
@@ -277,7 +285,7 @@ const pushSortieIfRelevant = (worldState: IWorldState, day: number): void => {
         }
     }
 
-    const selectedNodes: { missionType: string; modifierType: string; node: string }[] = [];
+    const selectedNodes: ISortieMission[] = [];
     const missionTypes = new Set();
 
     for (let i = 0; i < 3; i++) {
@@ -298,11 +306,21 @@ const pushSortieIfRelevant = (worldState: IWorldState, day: number): void => {
             const modifierType = rng.randomElement(filteredModifiers);
 
             if (boss == "SORTIE_BOSS_PHORID") {
-                selectedNodes.push({ missionType: "MT_ASSASSINATION", modifierType, node });
+                selectedNodes.push({
+                    missionType: "MT_ASSASSINATION",
+                    modifierType,
+                    node,
+                    tileset: sortieTilesets[node as keyof typeof sortieTilesets]
+                });
                 nodes.splice(randomIndex, 1);
                 continue;
             } else if (sortieBossNode[boss]) {
-                selectedNodes.push({ missionType: "MT_ASSASSINATION", modifierType, node: sortieBossNode[boss] });
+                selectedNodes.push({
+                    missionType: "MT_ASSASSINATION",
+                    modifierType,
+                    node: sortieBossNode[boss],
+                    tileset: sortieTilesets[sortieBossNode[boss] as keyof typeof sortieTilesets]
+                });
                 continue;
             }
         }
@@ -321,7 +339,12 @@ const pushSortieIfRelevant = (worldState: IWorldState, day: number): void => {
 
         const modifierType = rng.randomElement(filteredModifiers);
 
-        selectedNodes.push({ missionType, modifierType, node });
+        selectedNodes.push({
+            missionType,
+            modifierType,
+            node,
+            tileset: sortieTilesets[node as keyof typeof sortieTilesets]
+        });
         nodes.splice(randomIndex, 1);
         missionTypes.add(missionType);
     }

@@ -97,6 +97,13 @@ export interface ISortie {
     }[];
 }
 
+export interface ISortieMission {
+    missionType: string;
+    modifierType: string;
+    node: string;
+    tileset: string;
+}
+
 export interface ILiteSortie {
     _id: IOid;
     Activation: IMongoDate;
