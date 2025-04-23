@@ -206,6 +206,7 @@ export interface IDojoDecoClient {
     Type: string;
     Pos: number[];
     Rot: number[];
+    Scale?: number;
     Name?: string; // for teleporters
     Sockets?: number;
     RegularCredits?: number;

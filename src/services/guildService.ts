@@ -222,6 +222,7 @@ export const getDojoClient = async (
                         Type: deco.Type,
                         Pos: deco.Pos,
                         Rot: deco.Rot,
+                        Scale: deco.Scale,
                         Name: deco.Name,
                         Sockets: deco.Sockets,
                         PictureFrameInfo: deco.PictureFrameInfo

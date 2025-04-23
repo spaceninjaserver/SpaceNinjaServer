@@ -23,6 +23,7 @@ const dojoDecoSchema = new Schema<IDojoDecoDatabase>({
     Type: String,
     Pos: [Number],
     Rot: [Number],
+    Scale: Number,
     Name: String,
     Sockets: Number,
     RegularCredits: Number,

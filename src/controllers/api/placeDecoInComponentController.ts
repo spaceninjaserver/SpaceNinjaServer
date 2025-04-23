@@ -37,6 +37,7 @@ export const placeDecoInComponentController: RequestHandler = async (req, res) =
         const deco = component.Decos.find(x => x._id.equals(request.MoveId))!;
         deco.Pos = request.Pos;
         deco.Rot = request.Rot;
+        deco.Scale = request.Scale;
     } else {
         const deco =
             component.Decos[
@@ -45,6 +46,7 @@ export const placeDecoInComponentController: RequestHandler = async (req, res) =
                     Type: request.Type,
                     Pos: request.Pos,
                     Rot: request.Rot,
+                    Scale: request.Scale,
                     Name: request.Name,
                     Sockets: request.Sockets
                 }) - 1
@@ -113,9 +115,9 @@ interface IPlaceDecoInComponentRequest {
     Type: string;
     Pos: number[];
     Rot: number[];
+    Scale?: number;
     Name?: string;
     Sockets?: number;
-    Scale?: number; // only provided alongside MoveId and seems to always be 1
     MoveId?: string;
     ShipDeco?: boolean;
     VaultDeco?: boolean;
