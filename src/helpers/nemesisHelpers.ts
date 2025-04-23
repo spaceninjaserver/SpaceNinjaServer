@@ -6,6 +6,7 @@ import { logger } from "../utils/logger";
 import { IOid } from "../types/commonTypes";
 import { Types } from "mongoose";
 import { addMods } from "../services/inventoryService";
+import { isArchwingMission } from "../services/worldStateService";
 
 export const getInfNodes = (faction: string, rank: number): IInfNode[] => {
     const infNodes = [];
@@ -22,7 +23,7 @@ export const getInfNodes = (faction: string, rank: number): IInfNode[] => {
             value.missionIndex != 42 && // not face off
             value.name.indexOf("1999NodeI") == -1 && // not stage defence
             value.name.indexOf("1999NodeJ") == -1 && // not lich bounty
-            value.name.indexOf("Archwing") == -1
+            !isArchwingMission(value)
         ) {
             //console.log(dict_en[value.name]);
             infNodes.push({ Node: key, Influence: 1 });

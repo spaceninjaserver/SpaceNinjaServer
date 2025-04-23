@@ -4,7 +4,7 @@ import { buildConfig } from "@/src/services/buildConfigService";
 import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { config } from "@/src/services/configService";
 import { CRng } from "@/src/services/rngService";
-import { eMissionType, ExportNightwave, ExportRegions } from "warframe-public-export-plus";
+import { eMissionType, ExportNightwave, ExportRegions, IRegion } from "warframe-public-export-plus";
 import {
     ICalendarDay,
     ICalendarSeason,
@@ -185,7 +185,7 @@ const pushSyndicateMissions = (
     const nodeOptions: string[] = [];
     for (const [key, value] of Object.entries(ExportRegions)) {
         if (
-            value.name.indexOf("Archwing") == -1 && // no archwing
+            !isArchwingMission(value) &&
             value.systemIndex != 23 && // no 1999 stuff
             value.missionIndex != 10 && // Exclude MT_PVP (for relays)
             value.missionIndex != 23 && // no junctions
@@ -269,7 +269,7 @@ const pushSortieIfRelevant = (worldState: IWorldState, day: number): void => {
         if (
             sortieFactionToSystemIndexes[sortieBossToFaction[boss]].includes(value.systemIndex) &&
             sortieFactionToFactionIndexes[sortieBossToFaction[boss]].includes(value.factionIndex!) &&
-            value.name.indexOf("Archwing") == -1 &&
+            !isArchwingMission(value) &&
             value.missionIndex != 0 && // Exclude MT_ASSASSINATION
             value.missionIndex != 10 && // Exclude MT_PVP (for relays)
             value.missionIndex != 21 && // Exclude MT_PURIFY
@@ -1112,7 +1112,7 @@ export const getLiteSortie = (week: number): ILiteSortie => {
             value.systemIndex === systemIndex &&
             value.factionIndex !== undefined &&
             value.factionIndex < 2 &&
-            value.name.indexOf("Archwing") == -1 &&
+            !isArchwingMission(value) &&
             value.missionIndex != 0 // Exclude MT_ASSASSINATION
         ) {
             nodes.push(key);
@@ -1162,4 +1162,15 @@ export const getLiteSortie = (week: number): ILiteSortie => {
             }
         ]
     };
+};
+
+export const isArchwingMission = (node: IRegion): boolean => {
+    if (node.name.indexOf("Archwing") != -1) {
+        return true;
+    }
+    // SettlementNode10
+    if (node.missionIndex == 25) {
+        return true;
+    }
+    return false;
 };
