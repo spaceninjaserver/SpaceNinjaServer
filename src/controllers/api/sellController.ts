@@ -8,7 +8,8 @@ import {
     addConsumables,
     freeUpSlot,
     combineInventoryChanges,
-    addCrewShipRawSalvage
+    addCrewShipRawSalvage,
+    addFusionPoints
 } from "@/src/services/inventoryService";
 import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
 import { ExportDojoRecipes } from "warframe-public-export-plus";
@@ -69,7 +70,7 @@ export const sellController: RequestHandler = async (req, res) => {
     if (payload.SellCurrency == "SC_RegularCredits") {
         inventory.RegularCredits += payload.SellPrice;
     } else if (payload.SellCurrency == "SC_FusionPoints") {
-        inventory.FusionPoints += payload.SellPrice;
+        addFusionPoints(inventory, payload.SellPrice);
     } else if (payload.SellCurrency == "SC_PrimeBucks") {
         addMiscItems(inventory, [
             {

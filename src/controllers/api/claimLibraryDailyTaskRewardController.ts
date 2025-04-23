@@ -1,4 +1,4 @@
-import { getInventory } from "@/src/services/inventoryService";
+import { addFusionPoints, getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { RequestHandler } from "express";
 
@@ -17,7 +17,7 @@ export const claimLibraryDailyTaskRewardController: RequestHandler = async (req,
     }
     syndicate.Standing += rewardStanding;
 
-    inventory.FusionPoints += 80 * rewardQuantity;
+    addFusionPoints(inventory, 80 * rewardQuantity);
     await inventory.save();
 
     res.json({

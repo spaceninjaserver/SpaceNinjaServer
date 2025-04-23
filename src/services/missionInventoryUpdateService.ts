@@ -19,6 +19,7 @@ import {
     addCrewShipRawSalvage,
     addEmailItem,
     addFocusXpIncreases,
+    addFusionPoints,
     addFusionTreasures,
     addGearExpByCategory,
     addItem,
@@ -287,14 +288,14 @@ export const addMissionInventoryUpdates = async (
                 addShipDecorations(inventory, value);
                 break;
             case "FusionBundles": {
-                let fusionPoints = 0;
+                let fusionPointsDelta = 0;
                 for (const fusionBundle of value) {
-                    const fusionPointsTotal =
-                        ExportFusionBundles[fusionBundle.ItemType].fusionPoints * fusionBundle.ItemCount;
-                    inventory.FusionPoints += fusionPointsTotal;
-                    fusionPoints += fusionPointsTotal;
+                    fusionPointsDelta += addFusionPoints(
+                        inventory,
+                        ExportFusionBundles[fusionBundle.ItemType].fusionPoints * fusionBundle.ItemCount
+                    );
                 }
-                inventoryChanges.FusionPoints = fusionPoints;
+                inventoryChanges.FusionPoints = fusionPointsDelta;
                 break;
             }
             case "EmailItems": {

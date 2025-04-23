@@ -580,7 +580,7 @@ export const addItem = async (
     }
     if (typeName in ExportFusionBundles) {
         const fusionPointsTotal = ExportFusionBundles[typeName].fusionPoints * quantity;
-        inventory.FusionPoints += fusionPointsTotal;
+        addFusionPoints(inventory, fusionPointsTotal);
         return {
             FusionPoints: fusionPointsTotal
         };
@@ -1067,6 +1067,15 @@ export const updateCurrency = (
         logger.debug(`currency changes `, currencyChanges);
     }
     return currencyChanges;
+};
+
+export const addFusionPoints = (inventory: TInventoryDatabaseDocument, add: number): number => {
+    if (inventory.FusionPoints + add > 2147483647) {
+        logger.warn(`capping FusionPoints balance at 2147483647`);
+        add = 2147483647 - inventory.FusionPoints;
+    }
+    inventory.FusionPoints += add;
+    return add;
 };
 
 const standingLimitBinToInventoryKey: Record<

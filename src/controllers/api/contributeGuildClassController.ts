@@ -2,7 +2,7 @@ import { toMongoDate } from "@/src/helpers/inventoryHelpers";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { Guild } from "@/src/models/guildModel";
 import { checkClanAscensionHasRequiredContributors } from "@/src/services/guildService";
-import { getInventory } from "@/src/services/inventoryService";
+import { addFusionPoints, getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { RequestHandler } from "express";
 import { Types } from "mongoose";
@@ -36,7 +36,7 @@ export const contributeGuildClassController: RequestHandler = async (req, res) =
 
     // Either way, endo is given to the contributor.
     const inventory = await getInventory(accountId, "FusionPoints");
-    inventory.FusionPoints += guild.CeremonyEndo!;
+    addFusionPoints(inventory, guild.CeremonyEndo!);
     await inventory.save();
 
     res.json({
