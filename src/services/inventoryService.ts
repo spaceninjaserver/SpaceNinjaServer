@@ -825,7 +825,8 @@ const addSentinel = (
 
     const features = premiumPurchase ? EquipmentFeatures.DOUBLE_CAPACITY : undefined;
     const sentinelIndex =
-        inventory.Sentinels.push({ ItemType: sentinelName, Configs: configs, XP: 0, Features: features }) - 1;
+        inventory.Sentinels.push({ ItemType: sentinelName, Configs: configs, XP: 0, Features: features, IsNew: true }) -
+        1;
     inventoryChanges.Sentinels ??= [];
     inventoryChanges.Sentinels.push(inventory.Sentinels[sentinelIndex].toJSON<IEquipmentClient>());
 
