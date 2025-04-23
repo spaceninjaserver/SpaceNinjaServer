@@ -32,6 +32,29 @@ interface ListedItem {
     parazon?: boolean;
 }
 
+interface ItemLists {
+    archonCrystalUpgrades: Record<string, string>;
+    uniqueLevelCaps: Record<string, number>;
+    Suits: ListedItem[];
+    LongGuns: ListedItem[];
+    Melee: ListedItem[];
+    ModularParts: ListedItem[];
+    Pistols: ListedItem[];
+    Sentinels: ListedItem[];
+    SentinelWeapons: ListedItem[];
+    SpaceGuns: ListedItem[];
+    SpaceMelee: ListedItem[];
+    SpaceSuits: ListedItem[];
+    MechSuits: ListedItem[];
+    miscitems: ListedItem[];
+    Syndicates: ListedItem[];
+    OperatorAmps: ListedItem[];
+    QuestKeys: ListedItem[];
+    KubrowPets: ListedItem[];
+    MoaPets: ListedItem[];
+    mods: ListedItem[];
+}
+
 const relicQualitySuffixes: Record<TRelicQuality, string> = {
     VPQ_BRONZE: "",
     VPQ_SILVER: " [Flawless]",
@@ -41,24 +64,28 @@ const relicQualitySuffixes: Record<TRelicQuality, string> = {
 
 const getItemListsController: RequestHandler = (req, response) => {
     const lang = getDict(typeof req.query.lang == "string" ? req.query.lang : "en");
-    const res: Record<string, ListedItem[]> = {};
-    res.Suits = [];
-    res.LongGuns = [];
-    res.Melee = [];
-    res.ModularParts = [];
-    res.Pistols = [];
-    res.Sentinels = [];
-    res.SentinelWeapons = [];
-    res.SpaceGuns = [];
-    res.SpaceMelee = [];
-    res.SpaceSuits = [];
-    res.MechSuits = [];
-    res.miscitems = [];
-    res.Syndicates = [];
-    res.OperatorAmps = [];
-    res.QuestKeys = [];
-    res.KubrowPets = [];
-    res.MoaPets = [];
+    const res: ItemLists = {
+        archonCrystalUpgrades,
+        uniqueLevelCaps: ExportMisc.uniqueLevelCaps,
+        Suits: [],
+        LongGuns: [],
+        Melee: [],
+        ModularParts: [],
+        Pistols: [],
+        Sentinels: [],
+        SentinelWeapons: [],
+        SpaceGuns: [],
+        SpaceMelee: [],
+        SpaceSuits: [],
+        MechSuits: [],
+        miscitems: [],
+        Syndicates: [],
+        OperatorAmps: [],
+        QuestKeys: [],
+        KubrowPets: [],
+        MoaPets: [],
+        mods: []
+    };
     for (const [uniqueName, item] of Object.entries(ExportWarframes)) {
         res[item.productCategory].push({
             uniqueName,
@@ -201,7 +228,6 @@ const getItemListsController: RequestHandler = (req, response) => {
         });
     }
 
-    res.mods = [];
     for (const [uniqueName, upgrade] of Object.entries(ExportUpgrades)) {
         const mod: ListedItem = {
             uniqueName,
@@ -260,11 +286,7 @@ const getItemListsController: RequestHandler = (req, response) => {
         }
     }
 
-    response.json({
-        archonCrystalUpgrades,
-        uniqueLevelCaps: ExportMisc.uniqueLevelCaps,
-        ...res
-    });
+    response.json(res);
 };
 
 export { getItemListsController };
