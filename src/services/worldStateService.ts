@@ -268,7 +268,8 @@ const pushSortieIfRelevant = (worldState: IWorldState, day: number): void => {
             value.missionIndex != 21 && // Exclude MT_PURIFY
             value.missionIndex != 22 && // Exclude MT_ARENA
             value.missionIndex != 23 && // Exclude MT_JUNCTION
-            value.missionIndex <= 28
+            (value.missionIndex != 28 || value.systemIndex == 2) && // MT_LANDSCAPE only on Earth
+            value.missionIndex < 29
         ) {
             if (!availableMissionIndexes.includes(value.missionIndex)) {
                 availableMissionIndexes.push(value.missionIndex);
