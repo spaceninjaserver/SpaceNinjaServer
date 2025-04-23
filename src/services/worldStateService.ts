@@ -263,7 +263,6 @@ const pushSortieIfRelevant = (worldState: IWorldState, day: number): void => {
             sortieFactionToFactionIndexes[sortieBossToFaction[boss]].includes(value.factionIndex!) &&
             value.name.indexOf("Archwing") == -1 &&
             value.missionIndex != 0 && // Exclude MT_ASSASSINATION
-            value.missionIndex != 5 && // Exclude MT_CAPTURE
             value.missionIndex != 10 && // Exclude MT_PVP (for relays)
             value.missionIndex != 21 && // Exclude MT_PURIFY
             value.missionIndex != 22 && // Exclude MT_ARENA
