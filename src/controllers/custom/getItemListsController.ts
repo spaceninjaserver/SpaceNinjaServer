@@ -58,6 +58,7 @@ const getItemListsController: RequestHandler = (req, response) => {
     res.OperatorAmps = [];
     res.QuestKeys = [];
     res.KubrowPets = [];
+    res.MoaPets = [];
     for (const [uniqueName, item] of Object.entries(ExportWarframes)) {
         res[item.productCategory].push({
             uniqueName,
