@@ -223,7 +223,7 @@ export const handlePurchase = async (
                 const vendor = ExportVendors[purchaseRequest.PurchaseParams.SourceId!];
                 const offer = vendor.items.find(x => x.storeItem == purchaseRequest.PurchaseParams.StoreItem);
                 if (offer) {
-                    if (offer.credits) {
+                    if (typeof offer.credits == "number") {
                         combineInventoryChanges(
                             purchaseResponse.InventoryChanges,
                             updateCurrency(inventory, offer.credits, false)
