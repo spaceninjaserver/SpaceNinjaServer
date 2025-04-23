@@ -532,7 +532,11 @@ export const addItem = async (
             }
             return {
                 ...inventoryChanges,
-                ...occupySlot(inventory, InventorySlot.WEAPONS, premiumPurchase)
+                ...occupySlot(
+                    inventory,
+                    productCategoryToInventoryBin(weapon.productCategory) ?? InventorySlot.WEAPONS,
+                    premiumPurchase
+                )
             };
         } else {
             // Modular weapon parts
