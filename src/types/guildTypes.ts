@@ -11,6 +11,7 @@ export interface IGuildClient {
     Members: IGuildMemberClient[];
     Ranks: IGuildRank[];
     Tier: number;
+    Emblem?: boolean;
     Vault: IGuildVault;
     ActiveDojoColorResearch: string;
     Class: number;
