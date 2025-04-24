@@ -6,6 +6,9 @@ import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
 import { addMiscItems, combineInventoryChanges, getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { isStoreItem, toStoreItem } from "@/src/services/itemDataService";
+import { logger } from "@/src/utils/logger";
+
+const nightwaveCredsItemType = ExportNightwave.rewards[ExportNightwave.rewards.length - 1].uniqueName;
 
 export const syndicateSacrificeController: RequestHandler = async (request, response) => {
     const accountId = await getAccountIdForRequest(request);
@@ -74,10 +77,14 @@ export const syndicateSacrificeController: RequestHandler = async (request, resp
             if (!isStoreItem(rewardType)) {
                 rewardType = toStoreItem(rewardType);
             }
-            combineInventoryChanges(
-                res.InventoryChanges,
-                (await handleStoreItemAcquisition(rewardType, inventory, reward.itemCount)).InventoryChanges
-            );
+            const rewardInventoryChanges = (await handleStoreItemAcquisition(rewardType, inventory, reward.itemCount))
+                .InventoryChanges;
+            if (Object.keys(rewardInventoryChanges).length == 0) {
+                logger.debug(`nightwave rank up reward did not seem to get added, giving 50 creds instead`);
+                rewardInventoryChanges.MiscItems = [{ ItemType: nightwaveCredsItemType, ItemCount: 50 }];
+                addMiscItems(inventory, rewardInventoryChanges.MiscItems);
+            }
+            combineInventoryChanges(res.InventoryChanges, rewardInventoryChanges);
         }
     }
 

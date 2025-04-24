@@ -1236,12 +1236,16 @@ export const addSkin = (
     typeName: string,
     inventoryChanges: IInventoryChanges = {}
 ): IInventoryChanges => {
-    const index = inventory.WeaponSkins.push({ ItemType: typeName, IsNew: true }) - 1;
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    inventoryChanges.WeaponSkins ??= [];
-    (inventoryChanges.WeaponSkins as IWeaponSkinClient[]).push(
-        inventory.WeaponSkins[index].toJSON<IWeaponSkinClient>()
-    );
+    if (inventory.WeaponSkins.find(x => x.ItemType == typeName)) {
+        logger.debug(`refusing to add WeaponSkin ${typeName} because account already owns it`);
+    } else {
+        const index = inventory.WeaponSkins.push({ ItemType: typeName, IsNew: true }) - 1;
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        inventoryChanges.WeaponSkins ??= [];
+        (inventoryChanges.WeaponSkins as IWeaponSkinClient[]).push(
+            inventory.WeaponSkins[index].toJSON<IWeaponSkinClient>()
+        );
+    }
     return inventoryChanges;
 };
 
