@@ -225,7 +225,8 @@ const pushSortieIfRelevant = (worldState: IWorldState, day: number): void => {
         return;
     }
 
-    const rng = new CRng(day);
+    const seed = new CRng(day).randomInt(0, 0xffff);
+    const rng = new CRng(seed);
 
     const boss = rng.randomElement(sortieBosses);
 
@@ -354,7 +355,7 @@ const pushSortieIfRelevant = (worldState: IWorldState, day: number): void => {
         Activation: { $date: { $numberLong: dayStart.toString() } },
         Expiry: { $date: { $numberLong: dayEnd.toString() } },
         Reward: "/Lotus/Types/Game/MissionDecks/SortieRewards",
-        Seed: day,
+        Seed: seed,
         Boss: boss,
         Variants: selectedNodes
     });
@@ -374,7 +375,7 @@ const dailyChallenges = Object.keys(ExportNightwave.challenges).filter(x =>
 const getSeasonDailyChallenge = (day: number): ISeasonChallenge => {
     const dayStart = EPOCH + day * 86400000;
     const dayEnd = EPOCH + (day + 3) * 86400000;
-    const rng = new CRng(day);
+    const rng = new CRng(new CRng(day).randomInt(0, 0xffff));
     return {
         _id: { $oid: "67e1b5ca9d00cb47" + day.toString().padStart(8, "0") },
         Daily: true,
@@ -394,7 +395,7 @@ const getSeasonWeeklyChallenge = (week: number, id: number): ISeasonChallenge =>
     const weekStart = EPOCH + week * 604800000;
     const weekEnd = weekStart + 604800000;
     const challengeId = week * 7 + id;
-    const rng = new CRng(challengeId);
+    const rng = new CRng(new CRng(challengeId).randomInt(0, 0xffff));
     return {
         _id: { $oid: "67e1bb2d9d00cb47" + challengeId.toString().padStart(8, "0") },
         Activation: { $date: { $numberLong: weekStart.toString() } },
@@ -411,7 +412,7 @@ const getSeasonWeeklyHardChallenge = (week: number, id: number): ISeasonChalleng
     const weekStart = EPOCH + week * 604800000;
     const weekEnd = weekStart + 604800000;
     const challengeId = week * 7 + id;
-    const rng = new CRng(challengeId);
+    const rng = new CRng(new CRng(challengeId).randomInt(0, 0xffff));
     return {
         _id: { $oid: "67e1bb2d9d00cb47" + challengeId.toString().padStart(8, "0") },
         Activation: { $date: { $numberLong: weekStart.toString() } },
@@ -476,7 +477,7 @@ const getCalendarSeason = (week: number): ICalendarSeason => {
         //logger.debug(`birthday on day ${day}`);
         eventDays.push({ day, events: [] }); // This is how CET_PLOT looks in worldState as of around 38.5.0
     }
-    const rng = new CRng(week);
+    const rng = new CRng(new CRng(week).randomInt(0, 0xffff));
     const challenges = [
         "/Lotus/Types/Challenges/Calendar1999/CalendarKillEnemiesEasy",
         "/Lotus/Types/Challenges/Calendar1999/CalendarKillEnemiesMedium",
@@ -710,7 +711,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     }
 
     // Elite Sanctuary Onslaught cycling every week
-    worldState.NodeOverrides.find(x => x.Node == "SolNode802")!.Seed = week; // unfaithful
+    worldState.NodeOverrides.find(x => x.Node == "SolNode802")!.Seed = new CRng(week).randomInt(0, 0xffff);
 
     // Holdfast, Cavia, & Hex bounties cycling every 2.5 hours; unfaithful implementation
     let bountyCycle = Math.trunc(Date.now() / 9000000);
@@ -749,14 +750,16 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
 
         // TODO: xpAmounts need to be calculated based on the jobType somehow?
 
+        const seed = new CRng(bountyCycle).randomInt(0, 0xffff);
+
         {
-            const rng = new CRng(bountyCycle);
+            const rng = new CRng(seed);
             worldState.SyndicateMissions.push({
                 _id: { $oid: Math.trunc(bountyCycleStart / 1000).toString(16) + "0000000000000008" },
                 Activation: { $date: { $numberLong: bountyCycleStart.toString(10) } },
                 Expiry: { $date: { $numberLong: bountyCycleEnd.toString(10) } },
                 Tag: "CetusSyndicate",
-                Seed: bountyCycle,
+                Seed: seed,
                 Nodes: [],
                 Jobs: [
                     {
@@ -820,13 +823,13 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         }
 
         {
-            const rng = new CRng(bountyCycle);
+            const rng = new CRng(seed);
             worldState.SyndicateMissions.push({
                 _id: { $oid: Math.trunc(bountyCycleStart / 1000).toString(16) + "0000000000000025" },
                 Activation: { $date: { $numberLong: bountyCycleStart.toString(10) } },
                 Expiry: { $date: { $numberLong: bountyCycleEnd.toString(10) } },
                 Tag: "SolarisSyndicate",
-                Seed: bountyCycle,
+                Seed: seed,
                 Nodes: [],
                 Jobs: [
                     {
@@ -890,13 +893,13 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         }
 
         {
-            const rng = new CRng(bountyCycle);
+            const rng = new CRng(seed);
             worldState.SyndicateMissions.push({
                 _id: { $oid: Math.trunc(bountyCycleStart / 1000).toString(16) + "0000000000000002" },
                 Activation: { $date: { $numberLong: bountyCycleStart.toString(10) } },
                 Expiry: { $date: { $numberLong: bountyCycleEnd.toString(10) } },
                 Tag: "EntratiSyndicate",
-                Seed: bountyCycle,
+                Seed: seed,
                 Nodes: [],
                 Jobs: [
                     {
@@ -1119,7 +1122,8 @@ export const getLiteSortie = (week: number): ILiteSortie => {
         }
     }
 
-    const rng = new CRng(week);
+    const seed = new CRng(week).randomInt(0, 0xffff);
+    const rng = new CRng(seed);
     const firstNodeIndex = rng.randomInt(0, nodes.length - 1);
     const firstNode = nodes[firstNodeIndex];
     nodes.splice(firstNodeIndex, 1);
@@ -1133,7 +1137,7 @@ export const getLiteSortie = (week: number): ILiteSortie => {
         Activation: { $date: { $numberLong: weekStart.toString() } },
         Expiry: { $date: { $numberLong: weekEnd.toString() } },
         Reward: "/Lotus/Types/Game/MissionDecks/ArchonSortieRewards",
-        Seed: week,
+        Seed: seed,
         Boss: boss,
         Missions: [
             {
