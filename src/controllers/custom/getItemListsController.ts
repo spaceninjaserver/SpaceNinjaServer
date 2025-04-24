@@ -51,7 +51,6 @@ interface ItemLists {
     OperatorAmps: ListedItem[];
     QuestKeys: ListedItem[];
     KubrowPets: ListedItem[];
-    MoaPets: ListedItem[];
     mods: ListedItem[];
 }
 
@@ -83,7 +82,6 @@ const getItemListsController: RequestHandler = (req, response) => {
         OperatorAmps: [],
         QuestKeys: [],
         KubrowPets: [],
-        MoaPets: [],
         mods: []
     };
     for (const [uniqueName, item] of Object.entries(ExportWarframes)) {
@@ -94,7 +92,7 @@ const getItemListsController: RequestHandler = (req, response) => {
         });
     }
     for (const [uniqueName, item] of Object.entries(ExportSentinels)) {
-        if (item.productCategory != "SpecialItems") {
+        if (item.productCategory == "Sentinels" || item.productCategory == "KubrowPets") {
             res[item.productCategory].push({
                 uniqueName,
                 name: getString(item.name, lang),
