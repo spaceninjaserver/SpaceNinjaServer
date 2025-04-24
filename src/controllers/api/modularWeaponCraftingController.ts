@@ -17,7 +17,7 @@ import { getDefaultUpgrades } from "@/src/services/itemDataService";
 import { modularWeaponTypes } from "@/src/helpers/modularWeaponHelper";
 import { IEquipmentDatabase } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { getRandomInt } from "@/src/services/rngService";
-import { ExportSentinels, IDefaultUpgrade } from "warframe-public-export-plus";
+import { ExportSentinels, ExportWeapons, IDefaultUpgrade } from "warframe-public-export-plus";
 import { Status } from "@/src/types/inventoryTypes/inventoryTypes";
 
 interface IModularCraftRequest {
@@ -137,6 +137,18 @@ export const modularWeaponCraftingController: RequestHandler = async (req, res) 
         defaultUpgrades = meta.defaultUpgrades;
     } else {
         defaultUpgrades = getDefaultUpgrades(data.Parts);
+    }
+
+    if (category == "MoaPets") {
+        const weapon = ExportSentinels[data.WeaponType].defaultWeapon;
+        if (weapon) {
+            const category = ExportWeapons[weapon].productCategory;
+            addEquipment(inventory, category, weapon, undefined, inventoryChanges);
+            combineInventoryChanges(
+                inventoryChanges,
+                occupySlot(inventory, productCategoryToInventoryBin(category)!, !!data.isWebUi)
+            );
+        }
     }
     defaultOverwrites.Configs = applyDefaultUpgrades(inventory, defaultUpgrades);
     addEquipment(inventory, category, data.WeaponType, data.Parts, inventoryChanges, defaultOverwrites);
