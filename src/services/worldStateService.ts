@@ -186,10 +186,12 @@ const pushSyndicateMissions = (
     for (const [key, value] of Object.entries(ExportRegions)) {
         if (
             !isArchwingMission(value) &&
-            value.systemIndex != 23 && // no 1999 stuff
+            !value.questReq && // Exclude zariman, murmor, and 1999 stuff
+            !value.hidden && // Exclude the index
+            !value.darkSectorData && // Exclude dark sectors
             value.missionIndex != 10 && // Exclude MT_PVP (for relays)
             value.missionIndex != 23 && // no junctions
-            value.missionIndex <= 28 // no railjack or some such
+            value.missionIndex < 28 // no open worlds, railjack, etc
         ) {
             nodeOptions.push(key);
         }
