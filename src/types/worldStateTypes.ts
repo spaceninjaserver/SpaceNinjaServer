@@ -133,7 +133,7 @@ export interface ISeasonChallenge {
 export interface ICalendarSeason {
     Activation: IMongoDate;
     Expiry: IMongoDate;
-    Season: string; // "CST_UNDEFINED" | "CST_WINTER" | "CST_SPRING" | "CST_SUMMER" | "CST_FALL"
+    Season: "CST_WINTER" | "CST_SPRING" | "CST_SUMMER" | "CST_FALL";
     Days: ICalendarDay[];
     YearIteration: number;
     Version: number;

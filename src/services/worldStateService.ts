@@ -683,7 +683,7 @@ const getCalendarSeason = (week: number): ICalendarSeason => {
         Activation: { $date: { $numberLong: weekStart.toString() } },
         Expiry: { $date: { $numberLong: weekEnd.toString() } },
         Days: eventDays,
-        Season: ["CST_WINTER", "CST_SPRING", "CST_SUMMER", "CST_FALL"][seasonIndex],
+        Season: (["CST_WINTER", "CST_SPRING", "CST_SUMMER", "CST_FALL"] as const)[seasonIndex],
         YearIteration: Math.trunc(week / 4),
         Version: 19,
         UpgradeAvaliabilityRequirements: ["/Lotus/Upgrades/Calendar/1999UpgradeApplicationRequirement"]

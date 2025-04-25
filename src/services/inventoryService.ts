@@ -18,7 +18,6 @@ import {
     IKubrowPetEggDatabase,
     IKubrowPetEggClient,
     ILibraryDailyTaskInfo,
-    ICalendarProgress,
     IDroneClient,
     IUpgradeClient,
     TPartialStartingGear,
@@ -26,7 +25,8 @@ import {
     ICrewMemberClient,
     Status,
     IKubrowPetDetailsDatabase,
-    ITraits
+    ITraits,
+    ICalendarProgress
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate, IUpdateNodeIntrosResponse } from "../types/genericUpdate";
 import { IKeyChainRequest, IMissionInventoryUpdateRequest } from "../types/requestTypes";
@@ -78,6 +78,7 @@ import libraryDailyTasks from "@/static/fixed_responses/libraryDailyTasks.json";
 import { getRandomElement, getRandomInt, getRandomWeightedReward, SRng } from "./rngService";
 import { createMessage } from "./inboxService";
 import { getMaxStanding } from "@/src/helpers/syndicateStandingHelper";
+import { getWorldState } from "./worldStateService";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
@@ -91,7 +92,6 @@ export const createInventory = async (
         });
 
         inventory.LibraryAvailableDailyTaskInfo = createLibraryDailyTask();
-        inventory.CalendarProgress = createCalendar();
         inventory.RewardSeed = generateRewardSeed();
         inventory.DuviriInfo = {
             Seed: generateRewardSeed(),
@@ -1756,20 +1756,6 @@ export const createLibraryDailyTask = (): ILibraryDailyTaskInfo => {
     };
 };
 
-const createCalendar = (): ICalendarProgress => {
-    return {
-        Version: 19,
-        Iteration: 2,
-        YearProgress: { Upgrades: [] },
-        SeasonProgress: {
-            SeasonType: "CST_SPRING",
-            LastCompletedDayIdx: -1,
-            LastCompletedChallengeDayIdx: -1,
-            ActivatedChallenges: []
-        }
-    };
-};
-
 export const setupKahlSyndicate = (inventory: TInventoryDatabaseDocument): void => {
     inventory.Affiliations.push({
         Title: 1,
@@ -1805,4 +1791,38 @@ export const cleanupInventory = (inventory: TInventoryDatabaseDocument): void =>
         logger.debug(`removing FreeFavorsEarned from LibrarySyndicate`);
         LibrarySyndicate.FreeFavorsEarned = undefined;
     }
+};
+
+export const getCalendarProgress = (inventory: TInventoryDatabaseDocument): ICalendarProgress => {
+    const currentSeason = getWorldState().KnownCalendarSeasons[0];
+
+    if (!inventory.CalendarProgress) {
+        inventory.CalendarProgress = {
+            Version: 19,
+            Iteration: currentSeason.YearIteration,
+            YearProgress: {
+                Upgrades: []
+            },
+            SeasonProgress: {
+                SeasonType: currentSeason.Season,
+                LastCompletedDayIdx: 0,
+                LastCompletedChallengeDayIdx: 0,
+                ActivatedChallenges: []
+            }
+        };
+    }
+
+    const yearRolledOver = inventory.CalendarProgress.Iteration != currentSeason.YearIteration;
+    if (yearRolledOver) {
+        inventory.CalendarProgress.Iteration = currentSeason.YearIteration;
+        inventory.CalendarProgress.YearProgress.Upgrades = [];
+    }
+    if (yearRolledOver || inventory.CalendarProgress.SeasonProgress.SeasonType != currentSeason.Season) {
+        inventory.CalendarProgress.SeasonProgress.SeasonType = currentSeason.Season;
+        inventory.CalendarProgress.SeasonProgress.LastCompletedDayIdx = -1;
+        inventory.CalendarProgress.SeasonProgress.LastCompletedChallengeDayIdx = -1;
+        inventory.CalendarProgress.SeasonProgress.ActivatedChallenges = [];
+    }
+
+    return inventory.CalendarProgress;
 };

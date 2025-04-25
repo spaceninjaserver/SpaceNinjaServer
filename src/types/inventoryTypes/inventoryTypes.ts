@@ -353,7 +353,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     DeathSquadable: boolean;
     EndlessXP?: IEndlessXpProgress[];
     DialogueHistory?: IDialogueHistoryClient;
-    CalendarProgress: ICalendarProgress;
+    CalendarProgress?: ICalendarProgress;
     SongChallenges?: ISongChallenge[];
     EntratiVaultCountLastPeriod?: number;
     EntratiVaultCountResetDate?: IMongoDate;
@@ -1193,17 +1193,18 @@ export interface IMarker {
     z: number;
     showInHud: boolean;
 }
+
 export interface ISeasonProgress {
-    SeasonType: "CST_UNDEFINED" | "CST_WINTER" | "CST_SPRING" | "CST_SUMMER" | "CST_FALL";
+    SeasonType: "CST_WINTER" | "CST_SPRING" | "CST_SUMMER" | "CST_FALL";
     LastCompletedDayIdx: number;
     LastCompletedChallengeDayIdx: number;
-    ActivatedChallenges: unknown[];
+    ActivatedChallenges: string[];
 }
 
 export interface ICalendarProgress {
     Version: number;
     Iteration: number;
-    YearProgress: { Upgrades: unknown[] };
+    YearProgress: { Upgrades: string[] };
     SeasonProgress: ISeasonProgress;
 }
 

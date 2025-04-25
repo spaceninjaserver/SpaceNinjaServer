@@ -44,6 +44,7 @@ export type IMissionInventoryUpdateRequest = {
 
     SyndicateId?: string;
     SortieId?: string;
+    CalendarProgress?: { challenge: string }[];
     SeasonChallengeCompletions?: ISeasonChallenge[];
     AffiliationChanges?: IAffiliationChange[];
     crossPlaySetting?: string;

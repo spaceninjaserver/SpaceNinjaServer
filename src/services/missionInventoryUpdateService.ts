@@ -33,6 +33,7 @@ import {
     addStanding,
     combineInventoryChanges,
     generateRewardSeed,
+    getCalendarProgress,
     updateCurrency,
     updateSyndicate
 } from "@/src/services/inventoryService";
@@ -557,6 +558,15 @@ export const addMissionInventoryUpdates = async (
                             DefenderScore: clientProgress.DefenderScore
                         });
                     }
+                }
+                break;
+            }
+            case "CalendarProgress": {
+                const calendarProgress = getCalendarProgress(inventory);
+                for (const progress of value) {
+                    const challengeName = progress.challenge.substring(progress.challenge.lastIndexOf("/") + 1);
+                    calendarProgress.SeasonProgress.LastCompletedChallengeDayIdx++;
+                    calendarProgress.SeasonProgress.ActivatedChallenges.push(challengeName);
                 }
                 break;
             }

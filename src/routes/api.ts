@@ -19,6 +19,7 @@ import { claimCompletedRecipeController } from "@/src/controllers/api/claimCompl
 import { claimLibraryDailyTaskRewardController } from "@/src/controllers/api/claimLibraryDailyTaskRewardController";
 import { clearDialogueHistoryController } from "@/src/controllers/api/clearDialogueHistoryController";
 import { clearNewEpisodeRewardController } from "@/src/controllers/api/clearNewEpisodeRewardController";
+import { completeCalendarEventController } from "@/src/controllers/api/completeCalendarEventController";
 import { completeRandomModChallengeController } from "@/src/controllers/api/completeRandomModChallengeController";
 import { confirmAllianceInvitationController } from "@/src/controllers/api/confirmAllianceInvitationController";
 import { confirmGuildInvitationGetController, confirmGuildInvitationPostController } from "@/src/controllers/api/confirmGuildInvitationController";
@@ -158,6 +159,7 @@ apiRouter.get("/changeDojoRoot.php", changeDojoRootController);
 apiRouter.get("/changeGuildRank.php", changeGuildRankController);
 apiRouter.get("/checkDailyMissionBonus.php", checkDailyMissionBonusController);
 apiRouter.get("/claimLibraryDailyTaskReward.php", claimLibraryDailyTaskRewardController);
+apiRouter.get("/completeCalendarEvent.php", completeCalendarEventController);
 apiRouter.get("/confirmAllianceInvitation.php", confirmAllianceInvitationController);
 apiRouter.get("/confirmGuildInvitation.php", confirmGuildInvitationGetController);
 apiRouter.get("/credits.php", creditsController);

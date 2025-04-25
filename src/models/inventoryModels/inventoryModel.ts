@@ -1125,15 +1125,15 @@ const CustomMarkersSchema = new Schema<ICustomMarkers>(
 const calenderProgressSchema = new Schema<ICalendarProgress>(
     {
         Version: { type: Number, default: 19 },
-        Iteration: { type: Number, default: 2 },
+        Iteration: { type: Number, required: true },
         YearProgress: {
-            Upgrades: { type: [] }
+            Upgrades: { type: [String], default: [] }
         },
         SeasonProgress: {
-            SeasonType: String,
-            LastCompletedDayIdx: { type: Number, default: -1 },
-            LastCompletedChallengeDayIdx: { type: Number, default: -1 },
-            ActivatedChallenges: []
+            SeasonType: { type: String, required: true },
+            LastCompletedDayIdx: { type: Number, default: 0 },
+            LastCompletedChallengeDayIdx: { type: Number, default: 0 },
+            ActivatedChallenges: { type: [String], default: [] }
         }
     },
     { _id: false }
