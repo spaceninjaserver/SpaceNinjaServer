@@ -73,13 +73,11 @@ const getRotations = (rewardInfo: IRewardInfo, tierOverride?: number): number[] 
         return [rewardInfo.rewardTier];
     }
 
-    // Aborting a railjack mission should not give any rewards (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1741)
-    if (rewardInfo.rewardQualifications === undefined) {
-        return [];
-    }
+    const rotationCount = rewardInfo.rewardQualifications?.length || 0;
 
-    const rotationCount = rewardInfo.rewardQualifications.length || 0;
-    if (rotationCount === 0) return [0];
+    // Empty or absent rewardQualifications should not give rewards:
+    // - Aborting a railjack mission (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1741)
+    // - Completing only 1 zone of (E)SO (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1823)
 
     const rotationPattern =
         tierOverride === undefined
@@ -792,7 +790,8 @@ export const addMissionRewards = async (
             missions.Tag != "SolNode761" && // the index
             missions.Tag != "SolNode762" && // the index
             missions.Tag != "SolNode763" && // the index
-            missions.Tag != "CrewBattleNode556" // free flight
+            missions.Tag != "CrewBattleNode556" && // free flight
+            getRotations(rewardInfo).length > 0 // (E)SO should not give credits for only completing zone 1, in which case it has no rewardQualifications (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1823)
         ) {
             const levelCreditReward = getLevelCreditRewards(node);
             missionCompletionCredits += levelCreditReward;
