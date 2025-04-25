@@ -134,7 +134,7 @@ export const getGuildVault = (guild: TGuildDatabaseDocument): IGuildVault => {
 export const getDojoClient = async (
     guild: TGuildDatabaseDocument,
     status: number,
-    componentId: Types.ObjectId | string | undefined = undefined
+    componentId?: Types.ObjectId | string
 ): Promise<IDojoClient> => {
     const dojo: IDojoClient = {
         _id: { $oid: guild._id.toString() },
@@ -554,7 +554,7 @@ export const setGuildTechLogState = (
     guild: TGuildDatabaseDocument,
     type: string,
     state: number,
-    dateTime: Date | undefined = undefined
+    dateTime?: Date
 ): boolean => {
     guild.TechChanges ??= [];
     const entry = guild.TechChanges.find(x => x.details == type);

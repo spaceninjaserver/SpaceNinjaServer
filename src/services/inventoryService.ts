@@ -143,7 +143,7 @@ const awakeningRewards = [
 
 export const addStartingGear = async (
     inventory: TInventoryDatabaseDocument,
-    startingGear: TPartialStartingGear | undefined = undefined
+    startingGear?: TPartialStartingGear
 ): Promise<IInventoryChanges> => {
     const { LongGuns, Pistols, Suits, Melee } = startingGear || {
         LongGuns: [{ ItemType: "/Lotus/Weapons/Tenno/Rifle/Rifle" }],
@@ -245,7 +245,7 @@ export const combineInventoryChanges = (InventoryChanges: IInventoryChanges, del
 
 export const getInventory = async (
     accountOwnerId: string,
-    projection: string | undefined = undefined
+    projection?: string
 ): Promise<TInventoryDatabaseDocument> => {
     const inventory = await Inventory.findOne({ accountOwnerId: accountOwnerId }, projection);
 
@@ -856,7 +856,7 @@ export const addPowerSuit = async (
     inventory: TInventoryDatabaseDocument,
     powersuitName: string,
     inventoryChanges: IInventoryChanges = {},
-    features: number | undefined = undefined
+    features?: number
 ): Promise<IInventoryChanges> => {
     const powersuit = ExportWarframes[powersuitName] as IPowersuit | undefined;
     const exalted = powersuit?.exalted ?? [];
@@ -888,7 +888,7 @@ export const addMechSuit = async (
     inventory: TInventoryDatabaseDocument,
     mechsuitName: string,
     inventoryChanges: IInventoryChanges = {},
-    features: number | undefined = undefined
+    features?: number
 ): Promise<IInventoryChanges> => {
     const powersuit = ExportWarframes[mechsuitName] as IPowersuit | undefined;
     const exalted = powersuit?.exalted ?? [];
@@ -940,7 +940,7 @@ export const addSpaceSuit = (
     inventory: TInventoryDatabaseDocument,
     spacesuitName: string,
     inventoryChanges: IInventoryChanges = {},
-    features: number | undefined = undefined
+    features?: number
 ): IInventoryChanges => {
     const suitIndex =
         inventory.SpaceSuits.push({
@@ -1199,9 +1199,9 @@ export const addEquipment = (
     inventory: TInventoryDatabaseDocument,
     category: TEquipmentKey,
     type: string,
-    modularParts: string[] | undefined = undefined,
+    modularParts?: string[],
     inventoryChanges: IInventoryChanges = {},
-    defaultOverwrites: Partial<IEquipmentDatabase> | undefined = undefined
+    defaultOverwrites?: Partial<IEquipmentDatabase>
 ): IInventoryChanges => {
     const equipment = Object.assign(
         {
