@@ -127,6 +127,15 @@ export type IMissionInventoryUpdateRequest = {
     creditsFee?: number; // the index
     InvasionProgress?: IInvasionProgressClient[];
     ConquestMissionsCompleted?: number;
+    duviriSuitSelection?: string;
+    duviriPistolSelection?: string;
+    duviriLongGunSelection?: string;
+    duviriMeleeSelection?: string;
+    duviriCaveOffers?: {
+        Seed: number | bigint;
+        Warframes: string[];
+        Weapons: string[];
+    };
 } & {
     [K in TEquipmentKey]?: IEquipmentClient[];
 };
