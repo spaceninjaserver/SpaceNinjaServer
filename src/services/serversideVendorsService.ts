@@ -1,13 +1,7 @@
 import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { CRng, mixSeeds } from "@/src/services/rngService";
 import { IMongoDate } from "@/src/types/commonTypes";
-import {
-    IItemManifestPreprocessed,
-    IRawVendorManifest,
-    IVendorInfo,
-    IVendorInfoPreprocessed,
-    IVendorManifestPreprocessed
-} from "@/src/types/vendorTypes";
+import { IItemManifest, IVendorInfo, IVendorManifest } from "@/src/types/vendorTypes";
 import { ExportVendors, IRange } from "warframe-public-export-plus";
 
 import ArchimedeanVendorManifest from "@/static/fixed_responses/getVendorInfo/ArchimedeanVendorManifest.json";
@@ -24,7 +18,6 @@ import DeimosProspectorVendorManifest from "@/static/fixed_responses/getVendorIn
 import DuviriAcrithisVendorManifest from "@/static/fixed_responses/getVendorInfo/DuviriAcrithisVendorManifest.json";
 import EntratiLabsEntratiLabsCommisionsManifest from "@/static/fixed_responses/getVendorInfo/EntratiLabsEntratiLabsCommisionsManifest.json";
 import EntratiLabsEntratiLabVendorManifest from "@/static/fixed_responses/getVendorInfo/EntratiLabsEntratiLabVendorManifest.json";
-import GuildAdvertisementVendorManifest from "@/static/fixed_responses/getVendorInfo/GuildAdvertisementVendorManifest.json";
 import HubsIronwakeDondaVendorManifest from "@/static/fixed_responses/getVendorInfo/HubsIronwakeDondaVendorManifest.json";
 import HubsRailjackCrewMemberVendorManifest from "@/static/fixed_responses/getVendorInfo/HubsRailjackCrewMemberVendorManifest.json";
 import MaskSalesmanManifest from "@/static/fixed_responses/getVendorInfo/MaskSalesmanManifest.json";
@@ -39,7 +32,7 @@ import SolarisProspectorVendorManifest from "@/static/fixed_responses/getVendorI
 import TeshinHardModeVendorManifest from "@/static/fixed_responses/getVendorInfo/TeshinHardModeVendorManifest.json";
 import ZarimanCommisionsManifestArchimedean from "@/static/fixed_responses/getVendorInfo/ZarimanCommisionsManifestArchimedean.json";
 
-const rawVendorManifests: IRawVendorManifest[] = [
+const rawVendorManifests: IVendorManifest[] = [
     ArchimedeanVendorManifest,
     DeimosEntratiFragmentVendorProductsManifest,
     DeimosFishmongerVendorManifest,
@@ -54,7 +47,6 @@ const rawVendorManifests: IRawVendorManifest[] = [
     DuviriAcrithisVendorManifest,
     EntratiLabsEntratiLabsCommisionsManifest,
     EntratiLabsEntratiLabVendorManifest,
-    GuildAdvertisementVendorManifest, // uses preprocessing
     HubsIronwakeDondaVendorManifest, // uses preprocessing
     HubsRailjackCrewMemberVendorManifest,
     MaskSalesmanManifest,
@@ -71,8 +63,8 @@ const rawVendorManifests: IRawVendorManifest[] = [
 ];
 
 interface IGeneratableVendorInfo extends Omit<IVendorInfo, "ItemManifest" | "Expiry"> {
-    cycleOffset: number;
-    cycleDuration: number;
+    cycleOffset?: number;
+    cycleDuration?: number;
 }
 
 const generatableVendors: IGeneratableVendorInfo[] = [
@@ -99,9 +91,13 @@ const generatableVendors: IGeneratableVendorInfo[] = [
         _id: { $oid: "5be4a159b144f3cdf1c22efa" },
         TypeName: "/Lotus/Types/Game/VendorManifests/Solaris/DebtTokenVendorManifest",
         PropertyTextHash: "A39621049CA3CA13761028CD21C239EF",
-        RandomSeedType: "VRST_FLAVOUR_TEXT",
-        cycleOffset: 1734307200_000,
-        cycleDuration: unixTimesInMs.hour
+        RandomSeedType: "VRST_FLAVOUR_TEXT"
+    },
+    {
+        _id: { $oid: "61ba123467e5d37975aeeb03" },
+        TypeName: "/Lotus/Types/Game/VendorManifests/Hubs/GuildAdvertisementVendorManifest",
+        PropertyTextHash: "255AFE2169BAE4130B4B20D7C55D14FA",
+        RandomSeedType: "VRST_FLAVOUR_TEXT"
     }
     // {
     //     _id: { $oid: "5dbb4c41e966f7886c3ce939" },
@@ -110,7 +106,7 @@ const generatableVendors: IGeneratableVendorInfo[] = [
     // }
 ];
 
-export const getVendorManifestByTypeName = (typeName: string): IVendorManifestPreprocessed | undefined => {
+export const getVendorManifestByTypeName = (typeName: string): IVendorManifest | undefined => {
     for (const vendorManifest of rawVendorManifests) {
         if (vendorManifest.VendorInfo.TypeName == typeName) {
             return preprocessVendorManifest(vendorManifest);
@@ -124,7 +120,7 @@ export const getVendorManifestByTypeName = (typeName: string): IVendorManifestPr
     return undefined;
 };
 
-export const getVendorManifestByOid = (oid: string): IVendorManifestPreprocessed | undefined => {
+export const getVendorManifestByOid = (oid: string): IVendorManifest | undefined => {
     for (const vendorManifest of rawVendorManifests) {
         if (vendorManifest.VendorInfo._id.$oid == oid) {
             return preprocessVendorManifest(vendorManifest);
@@ -138,29 +134,20 @@ export const getVendorManifestByOid = (oid: string): IVendorManifestPreprocessed
     return undefined;
 };
 
-const preprocessVendorManifest = (originalManifest: IRawVendorManifest): IVendorManifestPreprocessed => {
+const preprocessVendorManifest = (originalManifest: IVendorManifest): IVendorManifest => {
     if (Date.now() >= parseInt(originalManifest.VendorInfo.Expiry.$date.$numberLong)) {
         const manifest = structuredClone(originalManifest);
         const info = manifest.VendorInfo;
         refreshExpiry(info.Expiry);
         for (const offer of info.ItemManifest) {
-            const iteration = refreshExpiry(offer.Expiry);
-            if (offer.ItemPrices) {
-                for (const price of offer.ItemPrices) {
-                    if (typeof price.ItemType != "string") {
-                        const itemSeed = parseInt(offer.Id.$oid.substring(16), 16);
-                        const rng = new CRng(mixSeeds(itemSeed, iteration));
-                        price.ItemType = rng.randomElement(price.ItemType);
-                    }
-                }
-            }
+            refreshExpiry(offer.Expiry);
         }
-        return manifest as IVendorManifestPreprocessed;
+        return manifest;
     }
-    return originalManifest as IVendorManifestPreprocessed;
+    return originalManifest;
 };
 
-const refreshExpiry = (expiry: IMongoDate): number => {
+const refreshExpiry = (expiry: IMongoDate): void => {
     const period = parseInt(expiry.$date.$numberLong);
     if (Date.now() >= period) {
         const epoch = 1734307200_000; // Monday (for weekly schedules)
@@ -168,9 +155,7 @@ const refreshExpiry = (expiry: IMongoDate): number => {
         const start = epoch + iteration * period;
         const end = start + period;
         expiry.$date.$numberLong = end.toString();
-        return iteration;
     }
-    return 0;
 };
 
 const toRange = (value: IRange | number): IRange => {
@@ -180,9 +165,9 @@ const toRange = (value: IRange | number): IRange => {
     return value;
 };
 
-const vendorInfoCache: Record<string, IVendorInfoPreprocessed> = {};
+const vendorInfoCache: Record<string, IVendorInfo> = {};
 
-const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorManifestPreprocessed => {
+const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorManifest => {
     if (!(vendorInfo.TypeName in vendorInfoCache)) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { cycleOffset, cycleDuration, ...clientVendorInfo } = vendorInfo;
@@ -205,7 +190,9 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
 
         // Add new offers
         const vendorSeed = parseInt(vendorInfo._id.$oid.substring(16), 16);
-        const cycleIndex = Math.trunc((Date.now() - vendorInfo.cycleOffset) / vendorInfo.cycleDuration);
+        const cycleOffset = vendorInfo.cycleOffset ?? 1734307200_000;
+        const cycleDuration = vendorInfo.cycleDuration ?? unixTimesInMs.hour;
+        const cycleIndex = Math.trunc((Date.now() - cycleOffset) / cycleDuration);
         const rng = new CRng(mixSeeds(vendorSeed, cycleIndex));
         const manifest = ExportVendors[vendorInfo.TypeName];
         const offersToAdd = [];
@@ -226,14 +213,19 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
                     offersToAdd.push(rawItem);
                 }
             }
+
+            // For most vendors, the offers seem to roughly be in reverse order from the manifest. Coda weapons are an odd exception.
+            if (!manifest.isOneBinPerCycle) {
+                offersToAdd.reverse();
+            }
         }
-        const cycleStart = vendorInfo.cycleOffset + cycleIndex * vendorInfo.cycleDuration;
+        const cycleStart = cycleOffset + cycleIndex * cycleDuration;
         for (const rawItem of offersToAdd) {
             const durationHoursRange = toRange(rawItem.durationHours);
             const expiry =
                 cycleStart +
                 rng.randomInt(durationHoursRange.minValue, durationHoursRange.maxValue) * unixTimesInMs.hour;
-            const item: IItemManifestPreprocessed = {
+            const item: IItemManifest = {
                 StoreItem: rawItem.storeItem,
                 ItemPrices: rawItem.itemPrices?.map(itemPrice => ({ ...itemPrice, ProductCategory: "MiscItems" })),
                 Bin: "BIN_" + rawItem.bin,
