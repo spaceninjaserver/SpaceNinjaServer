@@ -13,6 +13,7 @@ export interface IItemPricePreprocessed extends Omit<IItemPrice, "ItemType"> {
 export interface IItemManifest {
     StoreItem: string;
     ItemPrices?: IItemPrice[];
+    RegularPrice?: number[];
     Bin: string;
     QuantityMultiplier: number;
     Expiry: IMongoDate; // Either a date in the distant future or a period in milliseconds for preprocessing.

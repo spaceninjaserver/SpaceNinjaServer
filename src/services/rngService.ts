@@ -97,9 +97,17 @@ export class CRng {
     }
 
     randomInt(min: number, max: number): number {
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        return Math.floor(this.random() * (max - min + 1)) + min;
+        const diff = max - min;
+        if (diff != 0) {
+            if (diff < 0) {
+                throw new Error(`max must be greater than min`);
+            }
+            if (diff > 0x3fffffff) {
+                throw new Error(`insufficient entropy`);
+            }
+            min += Math.floor(this.random() * (diff + 1));
+        }
+        return min;
     }
 
     randomElement<T>(arr: T[]): T {
