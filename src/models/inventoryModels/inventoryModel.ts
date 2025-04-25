@@ -390,7 +390,7 @@ MailboxSchema.set("toJSON", {
 
 const DuviriInfoSchema = new Schema<IDuviriInfo>(
     {
-        Seed: Number,
+        Seed: BigInt,
         NumCompletions: { type: Number, default: 0 }
     },
     {

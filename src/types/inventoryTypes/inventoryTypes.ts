@@ -134,7 +134,7 @@ export const equipmentKeys = [
 export type TEquipmentKey = (typeof equipmentKeys)[number];
 
 export interface IDuviriInfo {
-    Seed: number;
+    Seed: bigint;
     NumCompletions: number;
 }
 
@@ -202,7 +202,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     Mailbox?: IMailboxClient;
     SubscribedToEmails: number;
     Created: IMongoDate;
-    RewardSeed: number | bigint;
+    RewardSeed: bigint;
     RegularCredits: number;
     PremiumCredits: number;
     PremiumCreditsFree: number;
