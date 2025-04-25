@@ -135,7 +135,7 @@ export interface IRewardInfo {
     invasionId?: string;
     invasionAllyFaction?: "FC_GRINEER" | "FC_CORPUS";
     sortieId?: string;
-    sortieTag?: string;
+    sortieTag?: "Mission1" | "Mission2" | "Final";
     sortiePrereqs?: string[];
     VaultsCracked?: number; // for Spy missions
     rewardTier?: number;

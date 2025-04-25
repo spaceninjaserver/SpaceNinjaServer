@@ -803,6 +803,14 @@ export const addMissionRewards = async (
             missionCompletionCredits += addFixedLevelRewards(node.missionReward, inventory, MissionRewards, rewardInfo);
         }
 
+        if (rewardInfo.sortieTag == "Mission1") {
+            missionCompletionCredits += 20_000;
+        } else if (rewardInfo.sortieTag == "Mission2") {
+            missionCompletionCredits += 30_000;
+        } else if (rewardInfo.sortieTag == "Final") {
+            missionCompletionCredits += 50_000;
+        }
+
         if (missions.Tag == "PlutoToErisJunction") {
             await createMessage(inventory.accountOwnerId, [
                 {
