@@ -1098,5 +1098,6 @@
   "/Lotus/Types/LevelObjects/InfestedPumpkinCocoonLampLarge",
   "/Lotus/Types/LevelObjects/InfestedPumpkinCocoonLampSmall",
   "/Lotus/Types/LevelObjects/InfestedPumpkinExplosiveTotem",
-  "/Lotus/Types/Enemies/Orokin/OrokinMoaBipedAvatar"
+  "/Lotus/Types/Enemies/Orokin/OrokinMoaBipedAvatar",
+  "/Lotus/Types/Enemies/Grineer/AIWeek/Avatars/BeastMasterAvatar"
 ]
