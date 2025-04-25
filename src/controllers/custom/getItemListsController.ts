@@ -20,6 +20,7 @@ import {
     TRelicQuality
 } from "warframe-public-export-plus";
 import archonCrystalUpgrades from "@/static/fixed_responses/webuiArchonCrystalUpgrades.json";
+import allIncarnons from "@/static/fixed_responses/allIncarnonList.json";
 
 interface ListedItem {
     uniqueName: string;
@@ -51,6 +52,7 @@ interface ItemLists {
     OperatorAmps: ListedItem[];
     QuestKeys: ListedItem[];
     KubrowPets: ListedItem[];
+    EvolutionProgress: ListedItem[];
     mods: ListedItem[];
 }
 
@@ -82,6 +84,7 @@ const getItemListsController: RequestHandler = (req, response) => {
         OperatorAmps: [],
         QuestKeys: [],
         KubrowPets: [],
+        EvolutionProgress: [],
         mods: []
     };
     for (const [uniqueName, item] of Object.entries(ExportWarframes)) {
@@ -282,6 +285,12 @@ const getItemListsController: RequestHandler = (req, response) => {
                 name: getString(key.name, lang)
             });
         }
+    }
+    for (const uniqueName of allIncarnons) {
+        res.EvolutionProgress.push({
+            uniqueName,
+            name: getString(getItemName(uniqueName) || "", lang)
+        });
     }
 
     response.json(res);

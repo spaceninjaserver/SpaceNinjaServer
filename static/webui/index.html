@@ -401,6 +401,22 @@
                         </div>
                     </div>
                 </div>
+                <div class="row g-3">
+                    <div class="col-lg-6">
+                        <div class="card mb-3" style="height: 400px;">
+                            <h5 class="card-header" data-loc="inventory_evolutionProgress"></h5>
+                            <div class="card-body overflow-auto">
+                                <form class="input-group mb-3" onsubmit="doAcquireEvolution();return false;">
+                                    <input class="form-control" id="acquire-type-EvolutionProgress" list="datalist-EvolutionProgress" />
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                </form>
+                                <table class="table table-hover w-100">
+                                    <tbody id="EvolutionProgress-list"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="card mb-3">
                     <h5 class="card-header" data-loc="general_bulkActions"></h5>
                     <div class="card-body">
@@ -411,6 +427,7 @@
                             <button class="btn btn-primary" onclick="addMissingEquipment(['SpaceGuns', 'SpaceMelee']);" data-loc="inventory_bulkAddSpaceWeapons"></button>
                             <button class="btn btn-primary" onclick="addMissingEquipment(['Sentinels']);" data-loc="inventory_bulkAddSentinels"></button>
                             <button class="btn btn-primary" onclick="addMissingEquipment(['SentinelWeapons']);" data-loc="inventory_bulkAddSentinelWeapons"></button>
+                            <button class="btn btn-primary" onclick="addMissingEvolutionProgress();" data-loc="inventory_bulkAddEvolutionProgress"></button>
                         </div>
                         <div class="mb-2 d-flex flex-wrap gap-2">
                             <button class="btn btn-success" onclick="maxRankAllEquipment(['Suits']);" data-loc="inventory_bulkRankUpSuits"></button>
@@ -419,6 +436,7 @@
                             <button class="btn btn-success" onclick="maxRankAllEquipment(['SpaceGuns', 'SpaceMelee']);" data-loc="inventory_bulkRankUpSpaceWeapons"></button>
                             <button class="btn btn-success" onclick="maxRankAllEquipment(['Sentinels']);" data-loc="inventory_bulkRankUpSentinels"></button>
                             <button class="btn btn-success" onclick="maxRankAllEquipment(['SentinelWeapons']);" data-loc="inventory_bulkRankUpSentinelWeapons"></button>
+                            <button class="btn btn-success" onclick="maxRankAllEvolutions();" data-loc="inventory_bulkRankUpEvolutionProgress"></button>
                         </div>
                     </div>
                 </div>
@@ -733,6 +751,7 @@
     </datalist>
     <datalist id="datalist-archonCrystalUpgrades"></datalist>
     <datalist id="datalist-OperatorAmps"></datalist>
+    <datalist id="datalist-EvolutionProgress"></datalist>
     <datalist id="datalist-ModularParts"></datalist>
     <datalist id="datalist-ModularParts-HB_DECK"></datalist>
     <datalist id="datalist-ModularParts-HB_ENGINE"></datalist>

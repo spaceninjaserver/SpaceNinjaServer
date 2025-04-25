@@ -183,6 +183,16 @@ const webUiModularWeapons = [
     "/Lotus/Types/Friendly/Pets/CreaturePets/MedjayPredatorKubrowPetPowerSuit"
 ];
 
+const permanentEvolutionWeapons = new Set([
+    "/Lotus/Weapons/Tenno/Zariman/LongGuns/PumpShotgun/ZarimanPumpShotgun",
+    "/Lotus/Weapons/Tenno/Zariman/LongGuns/SemiAutoRifle/ZarimanSemiAutoRifle",
+    "/Lotus/Weapons/Tenno/Zariman/Melee/Dagger/ZarimanDaggerWeapon",
+    "/Lotus/Weapons/Tenno/Zariman/Melee/Tonfas/ZarimanTonfaWeapon",
+    "/Lotus/Weapons/Tenno/Zariman/Pistols/HeavyPistol/ZarimanHeavyPistol",
+    "/Lotus/Weapons/Thanotech/EntFistIncarnon/EntFistIncarnon",
+    "/Lotus/Weapons/Thanotech/EntratiWristGun/EntratiWristGunWeapon"
+]);
+
 let uniqueLevelCaps = {};
 function fetchItemList() {
     window.itemListPromise = new Promise(resolve => {
@@ -563,6 +573,82 @@ function updateInventory() {
                 });
             });
 
+            document.getElementById("EvolutionProgress-list").innerHTML = "";
+            data.EvolutionProgress.forEach(item => {
+                const datalist = document.getElementById("datalist-EvolutionProgress");
+                const optionToRemove = datalist.querySelector(`option[data-key="${item.ItemType}"]`);
+                if (optionToRemove) {
+                    datalist.removeChild(optionToRemove);
+                }
+                const tr = document.createElement("tr");
+                tr.setAttribute("data-item-type", item.ItemType);
+                {
+                    const td = document.createElement("td");
+                    td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
+                    if (item.Rank != null) {
+                        td.textContent += " | " + loc("code_rank") + ": [" + item.Rank + "/5]";
+                    }
+                    tr.appendChild(td);
+                }
+                {
+                    const td = document.createElement("td");
+                    td.classList = "text-end text-nowrap";
+                    if (item.Rank < 5) {
+                        const a = document.createElement("a");
+                        a.href = "#";
+                        a.onclick = function (event) {
+                            event.preventDefault();
+                            setEvolutionProgress([{ ItemType: item.ItemType, Rank: 5 }]);
+                        };
+                        a.title = loc("code_maxRank");
+                        a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"/></svg>`;
+
+                        td.appendChild(a);
+                    }
+                    if ((permanentEvolutionWeapons.has(item.ItemType) && item.Rank > 0) || item.Rank > 1) {
+                        const a = document.createElement("a");
+                        a.href = "#";
+                        a.onclick = function (event) {
+                            event.preventDefault();
+                            setEvolutionProgress([{ ItemType: item.ItemType, Rank: item.Rank - 1 }]);
+                        };
+                        a.title = loc("code_rankDown");
+                        a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg>`;
+
+                        td.appendChild(a);
+                    }
+                    if (item.Rank < 5) {
+                        const a = document.createElement("a");
+                        a.href = "#";
+                        a.onclick = function (event) {
+                            event.preventDefault();
+                            setEvolutionProgress([{ ItemType: item.ItemType, Rank: item.Rank + 1 }]);
+                        };
+                        a.title = loc("code_rankUp");
+                        a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"/></svg>`;
+
+                        td.appendChild(a);
+                    }
+
+                    tr.appendChild(td);
+                }
+
+                document.getElementById("EvolutionProgress-list").appendChild(tr);
+            });
+
+            const datalistEvolutionProgress = document.querySelectorAll("#datalist-EvolutionProgress option");
+            const formEvolutionProgress = document.querySelector('form[onsubmit*="doAcquireEvolution()"]');
+            const giveAllQEvolutionProgress = document.querySelector(
+                'button[onclick*="addMissingEvolutionProgress()"]'
+            );
+
+            if (datalistEvolutionProgress.length === 0) {
+                formEvolutionProgress.classList.add("disabled");
+                formEvolutionProgress.querySelector("input").disabled = true;
+                formEvolutionProgress.querySelector("button").disabled = true;
+                giveAllQEvolutionProgress.disabled = true;
+            }
+
             // Populate quests route
             document.getElementById("QuestKeys-list").innerHTML = "";
             data.QuestKeys.forEach(item => {
@@ -674,18 +760,18 @@ function updateInventory() {
             });
 
             const datalistQuestKeys = document.querySelectorAll("#datalist-QuestKeys option");
-            const form = document.querySelector("form[onsubmit*=\"doAcquireEquipment('QuestKeys')\"]");
+            const formQuestKeys = document.querySelector("form[onsubmit*=\"doAcquireEquipment('QuestKeys')\"]");
             const giveAllQuestButton = document.querySelector("button[onclick*=\"doBulkQuestUpdate('giveAll')\"]");
 
             if (datalistQuestKeys.length === 0) {
-                form.classList.add("disabled");
-                form.querySelector("input").disabled = true;
-                form.querySelector("button").disabled = true;
+                formQuestKeys.classList.add("disabled");
+                formQuestKeys.querySelector("input").disabled = true;
+                formQuestKeys.querySelector("button").disabled = true;
                 giveAllQuestButton.disabled = true;
             } else {
-                form.classList.remove("disabled");
-                form.querySelector("input").disabled = false;
-                form.querySelector("button").disabled = false;
+                formQuestKeys.classList.remove("disabled");
+                formQuestKeys.querySelector("input").disabled = false;
+                formQuestKeys.querySelector("button").disabled = false;
                 giveAllQuestButton.disabled = false;
             }
 
@@ -1080,6 +1166,16 @@ function doAcquireModularEquipment(category, WeaponType) {
     }
 }
 
+function doAcquireEvolution() {
+    const uniqueName = getKey(document.getElementById("acquire-type-EvolutionProgress"));
+    if (!uniqueName) {
+        $("#acquire-type-EvolutionProgress").addClass("is-invalid").focus();
+        return;
+    }
+
+    setEvolutionProgress([{ ItemType: uniqueName, Rank: permanentEvolutionWeapons.has(uniqueName) ? 0 : 1 }]);
+}
+
 $("input[list]").on("input", function () {
     $(this).removeClass("is-invalid");
 });
@@ -1115,6 +1211,40 @@ function addMissingEquipment(categories) {
     if (requests.length != 0 && window.confirm(loc("code_addItemsConfirm").split("|COUNT|").join(requests.length))) {
         dispatchAddItemsRequestsBatch(requests);
     }
+}
+
+function addMissingEvolutionProgress() {
+    const requests = [];
+    document.querySelectorAll("#datalist-EvolutionProgress option").forEach(elm => {
+        const uniqueName = elm.getAttribute("data-key");
+        requests.push({ ItemType: uniqueName, Rank: permanentEvolutionWeapons.has(uniqueName) ? 0 : 1 });
+    });
+    if (requests.length != 0 && window.confirm(loc("code_addItemsConfirm").split("|COUNT|").join(requests.length))) {
+        setEvolutionProgress(requests);
+    }
+}
+
+function maxRankAllEvolutions() {
+    const req = $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1");
+
+    req.done(data => {
+        const requests = [];
+
+        data.EvolutionProgress.forEach(item => {
+            if (item.Rank < 5) {
+                requests.push({
+                    ItemType: item.ItemType,
+                    Rank: 5
+                });
+            }
+        });
+
+        if (Object.keys(requests).length > 0) {
+            return setEvolutionProgress(requests);
+        }
+
+        toast(loc("code_noEquipmentToRankUp"));
+    });
 }
 
 function maxRankAllEquipment(categories) {
@@ -1299,6 +1429,19 @@ function maturePet(oid, revert) {
                 revert
             })
         }).done(function () {
+            updateInventory();
+        });
+    });
+}
+
+function setEvolutionProgress(requests) {
+    revalidateAuthz(() => {
+        const req = $.post({
+            url: "/custom/setEvolutionProgress?" + window.authz,
+            contentType: "application/json",
+            data: JSON.stringify(requests)
+        });
+        req.done(() => {
             updateInventory();
         });
     });

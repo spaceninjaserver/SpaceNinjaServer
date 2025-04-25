@@ -17,10 +17,11 @@ import { addCurrencyController } from "@/src/controllers/custom/addCurrencyContr
 import { addItemsController } from "@/src/controllers/custom/addItemsController";
 import { addXpController } from "@/src/controllers/custom/addXpController";
 import { importController } from "@/src/controllers/custom/importController";
+import { manageQuestsController } from "@/src/controllers/custom/manageQuestsController";
+import { setEvolutionProgressController } from "@/src/controllers/custom/setEvolutionProgressController";
 
 import { getConfigDataController } from "@/src/controllers/custom/getConfigDataController";
 import { updateConfigDataController } from "@/src/controllers/custom/updateConfigDataController";
-import { manageQuestsController } from "@/src/controllers/custom/manageQuestsController";
 
 const customRouter = express.Router();
 
@@ -42,6 +43,7 @@ customRouter.post("/addItems", addItemsController);
 customRouter.post("/addXp", addXpController);
 customRouter.post("/import", importController);
 customRouter.post("/manageQuests", manageQuestsController);
+customRouter.post("/setEvolutionProgress", setEvolutionProgressController);
 
 customRouter.get("/config", getConfigDataController);
 customRouter.post("/config", updateConfigDataController);
