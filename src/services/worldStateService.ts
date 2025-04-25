@@ -7,6 +7,7 @@ import { CRng } from "@/src/services/rngService";
 import { eMissionType, ExportNightwave, ExportRegions, IRegion } from "warframe-public-export-plus";
 import {
     ICalendarDay,
+    ICalendarEvent,
     ICalendarSeason,
     ILiteSortie,
     ISeasonChallenge,
@@ -466,8 +467,8 @@ const birthdays: number[] = [
 
 const getCalendarSeason = (week: number): ICalendarSeason => {
     const seasonIndex = week % 4;
-    const seasonDay1 = seasonIndex * 90 + 1;
-    const seasonDay91 = seasonIndex * 90 + 91;
+    const seasonDay1 = [1, 91, 182, 274][seasonIndex];
+    const seasonDay91 = seasonDay1 + 90;
     const eventDays: ICalendarDay[] = [];
     for (const day of birthdays) {
         if (day < seasonDay1) {
@@ -526,8 +527,12 @@ const getCalendarSeason = (week: number): ICalendarSeason => {
             challengeDay = rng.randomInt(chunkDay1, chunkDay13);
         } while (birthdays.indexOf(challengeDay) != -1);
 
-        const challengeIndex = rng.randomInt(0, challenges.length - 1);
-        const challenge = challenges[challengeIndex];
+        let challengeIndex;
+        let challenge;
+        do {
+            challengeIndex = rng.randomInt(0, challenges.length - 1);
+            challenge = challenges[challengeIndex];
+        } while (i < 2 && !challenge.endsWith("Easy")); // First 2 challenges should be easy
         challenges.splice(challengeIndex, 1);
 
         //logger.debug(`challenge on day ${challengeDay}`);
@@ -574,69 +579,100 @@ const getCalendarSeason = (week: number): ICalendarSeason => {
         "/Lotus/StoreItems/Types/Gameplay/NarmerSorties/ArchonCrystalViolet"
     ];
     for (let i = 0; i != rewardRanges.length - 1; ++i) {
-        const rewardIndex = rng.randomInt(0, rewards.length - 1);
-        const reward = rewards[rewardIndex];
-        rewards.splice(rewardIndex, 1);
+        const events: ICalendarEvent[] = [];
+        for (let j = 0; j != 2; ++j) {
+            const rewardIndex = rng.randomInt(0, rewards.length - 1);
+            events.push({ type: "CET_REWARD", reward: rewards[rewardIndex] });
+            rewards.splice(rewardIndex, 1);
+        }
 
-        //logger.debug(`trying to fit a reward between day ${rewardRanges[i]} and ${rewardRanges[i + 1]}`);
+        //logger.debug(`trying to fit rewards between day ${rewardRanges[i]} and ${rewardRanges[i + 1]}`);
         let day: number;
         do {
             day = rng.randomInt(rewardRanges[i] + 1, rewardRanges[i + 1] - 1);
         } while (eventDays.find(x => x.day == day));
-        eventDays.push({ day, events: [{ type: "CET_REWARD", reward }] });
+        eventDays.push({ day, events });
     }
 
-    const upgrades = [
-        "/Lotus/Upgrades/Calendar/MeleeCritChance",
-        "/Lotus/Upgrades/Calendar/MeleeAttackSpeed",
-        "/Lotus/Upgrades/Calendar/EnergyOrbToAbilityRange",
-        "/Lotus/Upgrades/Calendar/AbilityStrength",
-        "/Lotus/Upgrades/Calendar/Armor",
-        "/Lotus/Upgrades/Calendar/RadiationProcOnTakeDamage",
-        "/Lotus/Upgrades/Calendar/CompanionDamage",
-        "/Lotus/Upgrades/Calendar/GasChanceToPrimaryAndSecondary",
-        "/Lotus/Upgrades/Calendar/MagazineCapacity",
-        "/Lotus/Upgrades/Calendar/PunchToPrimary",
-        "/Lotus/Upgrades/Calendar/HealingEffects",
-        "/Lotus/Upgrades/Calendar/EnergyRestoration",
-        "/Lotus/Upgrades/Calendar/OvershieldCap",
-        "/Lotus/Upgrades/Calendar/ElectricStatusDamageAndChance",
-        "/Lotus/Upgrades/Calendar/FinisherChancePerComboMultiplier",
-        "/Lotus/Upgrades/Calendar/MagnetStatusPull",
-        "/Lotus/Upgrades/Calendar/CompanionsBuffNearbyPlayer",
-        "/Lotus/Upgrades/Calendar/StatusChancePerAmmoSpent",
-        "/Lotus/Upgrades/Calendar/OrbsDuplicateOnPickup",
-        "/Lotus/Upgrades/Calendar/AttackAndMovementSpeedOnCritMelee",
-        "/Lotus/Upgrades/Calendar/RadialJavelinOnHeavy",
-        "/Lotus/Upgrades/Calendar/MagnitizeWithinRangeEveryXCasts",
-        "/Lotus/Upgrades/Calendar/CompanionsRadiationChance",
-        "/Lotus/Upgrades/Calendar/BlastEveryXShots",
-        "/Lotus/Upgrades/Calendar/GenerateOmniOrbsOnWeakKill",
-        "/Lotus/Upgrades/Calendar/ElectricDamagePerDistance",
-        "/Lotus/Upgrades/Calendar/MeleeSlideFowardMomentumOnEnemyHit",
-        "/Lotus/Upgrades/Calendar/SharedFreeAbilityEveryXCasts",
-        "/Lotus/Upgrades/Calendar/ReviveEnemyAsSpectreOnKill",
-        "/Lotus/Upgrades/Calendar/RefundBulletOnStatusProc",
-        "/Lotus/Upgrades/Calendar/ExplodingHealthOrbs",
-        "/Lotus/Upgrades/Calendar/SpeedBuffsWhenAirborne",
-        "/Lotus/Upgrades/Calendar/EnergyWavesOnCombo",
-        "/Lotus/Upgrades/Calendar/PowerStrengthAndEfficiencyPerEnergySpent",
-        "/Lotus/Upgrades/Calendar/CloneActiveCompanionForEnergySpent",
-        "/Lotus/Upgrades/Calendar/GuidingMissilesChance",
-        "/Lotus/Upgrades/Calendar/EnergyOrbsGrantShield",
-        "/Lotus/Upgrades/Calendar/ElectricalDamageOnBulletJump"
+    const upgradesByHexMember = [
+        [
+            "/Lotus/Upgrades/Calendar/AttackAndMovementSpeedOnCritMelee",
+            "/Lotus/Upgrades/Calendar/ElectricalDamageOnBulletJump",
+            "/Lotus/Upgrades/Calendar/ElectricDamagePerDistance",
+            "/Lotus/Upgrades/Calendar/ElectricStatusDamageAndChance",
+            "/Lotus/Upgrades/Calendar/OvershieldCap",
+            "/Lotus/Upgrades/Calendar/SpeedBuffsWhenAirborne"
+        ],
+        [
+            "/Lotus/Upgrades/Calendar/AbilityStrength",
+            "/Lotus/Upgrades/Calendar/EnergyOrbToAbilityRange",
+            "/Lotus/Upgrades/Calendar/MagnetStatusPull",
+            "/Lotus/Upgrades/Calendar/MagnitizeWithinRangeEveryXCasts",
+            "/Lotus/Upgrades/Calendar/PowerStrengthAndEfficiencyPerEnergySpent",
+            "/Lotus/Upgrades/Calendar/SharedFreeAbilityEveryXCasts"
+        ],
+        [
+            "/Lotus/Upgrades/Calendar/EnergyWavesOnCombo",
+            "/Lotus/Upgrades/Calendar/FinisherChancePerComboMultiplier",
+            "/Lotus/Upgrades/Calendar/MeleeAttackSpeed",
+            "/Lotus/Upgrades/Calendar/MeleeCritChance",
+            "/Lotus/Upgrades/Calendar/MeleeSlideFowardMomentumOnEnemyHit",
+            "/Lotus/Upgrades/Calendar/RadialJavelinOnHeavy"
+        ],
+        [
+            "/Lotus/Upgrades/Calendar/Armor",
+            "/Lotus/Upgrades/Calendar/CloneActiveCompanionForEnergySpent",
+            "/Lotus/Upgrades/Calendar/CompanionDamage",
+            "/Lotus/Upgrades/Calendar/CompanionsBuffNearbyPlayer",
+            "/Lotus/Upgrades/Calendar/CompanionsRadiationChance",
+            "/Lotus/Upgrades/Calendar/RadiationProcOnTakeDamage",
+            "/Lotus/Upgrades/Calendar/ReviveEnemyAsSpectreOnKill"
+        ],
+        [
+            "/Lotus/Upgrades/Calendar/EnergyOrbsGrantShield",
+            "/Lotus/Upgrades/Calendar/EnergyRestoration",
+            "/Lotus/Upgrades/Calendar/ExplodingHealthOrbs",
+            "/Lotus/Upgrades/Calendar/GenerateOmniOrbsOnWeakKill",
+            "/Lotus/Upgrades/Calendar/HealingEffects",
+            "/Lotus/Upgrades/Calendar/OrbsDuplicateOnPickup"
+        ],
+        [
+            "/Lotus/Upgrades/Calendar/BlastEveryXShots",
+            "/Lotus/Upgrades/Calendar/GasChanceToPrimaryAndSecondary",
+            "/Lotus/Upgrades/Calendar/GuidingMissilesChance",
+            "/Lotus/Upgrades/Calendar/MagazineCapacity",
+            "/Lotus/Upgrades/Calendar/PunchToPrimary",
+            "/Lotus/Upgrades/Calendar/RefundBulletOnStatusProc",
+            "/Lotus/Upgrades/Calendar/StatusChancePerAmmoSpent"
+        ]
     ];
     for (let i = 0; i != upgradeRanges.length - 1; ++i) {
-        const upgradeIndex = rng.randomInt(0, upgrades.length - 1);
-        const upgrade = upgrades[upgradeIndex];
-        upgrades.splice(upgradeIndex, 1);
+        // Pick 3 unique hex members
+        const hexMembersPickedForThisDay: number[] = [];
+        for (let j = 0; j != 3; ++j) {
+            let hexMemberIndex: number;
+            do {
+                hexMemberIndex = rng.randomInt(0, upgradesByHexMember.length - 1);
+            } while (hexMembersPickedForThisDay.indexOf(hexMemberIndex) != -1);
+            hexMembersPickedForThisDay.push(hexMemberIndex);
+        }
+        hexMembersPickedForThisDay.sort(); // Always present them in the same order
 
-        //logger.debug(`trying to fit an upgrade between day ${upgradeRanges[i]} and ${upgradeRanges[i + 1]}`);
+        // For each hex member, pick an upgrade that was not yet picked this season.
+        const events: ICalendarEvent[] = [];
+        for (const hexMemberIndex of hexMembersPickedForThisDay) {
+            const upgrades = upgradesByHexMember[hexMemberIndex];
+            const upgradeIndex = rng.randomInt(0, upgrades.length - 1);
+            events.push({ type: "CET_UPGRADE", upgrade: upgrades[upgradeIndex] });
+            upgrades.splice(upgradeIndex, 1);
+        }
+
+        //logger.debug(`trying to fit upgrades between day ${upgradeRanges[i]} and ${upgradeRanges[i + 1]}`);
         let day: number;
         do {
             day = rng.randomInt(upgradeRanges[i] + 1, upgradeRanges[i + 1] - 1);
         } while (eventDays.find(x => x.day == day));
-        eventDays.push({ day, events: [{ type: "CET_UPGRADE", upgrade }] });
+        eventDays.push({ day, events });
     }
 
     eventDays.sort((a, b) => a.day - b.day);
