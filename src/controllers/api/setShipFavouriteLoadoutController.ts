@@ -20,7 +20,7 @@ export const setShipFavouriteLoadoutController: RequestHandler = async (req, res
         throw new Error(`unexpected BootLocation: ${body.BootLocation}`);
     }
     await personalRooms.save();
-    res.json({});
+    res.json(body);
 };
 
 interface ISetShipFavouriteLoadoutRequest {
