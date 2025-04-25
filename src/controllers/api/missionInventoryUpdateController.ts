@@ -3,7 +3,7 @@ import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { IMissionInventoryUpdateRequest } from "@/src/types/requestTypes";
 import { addMissionInventoryUpdates, addMissionRewards } from "@/src/services/missionInventoryUpdateService";
-import { getInventory } from "@/src/services/inventoryService";
+import { generateRewardSeed, getInventory } from "@/src/services/inventoryService";
 import { getInventoryResponse } from "./inventoryController";
 import { logger } from "@/src/utils/logger";
 import { IMissionInventoryUpdateResponse } from "@/src/types/missionTypes";
@@ -63,6 +63,7 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         missionReport.MissionStatus !== "GS_SUCCESS" &&
         !(missionReport.RewardInfo?.jobId || missionReport.RewardInfo?.challengeMissionId)
     ) {
+        inventory.RewardSeed = generateRewardSeed();
         await inventory.save();
         const inventoryResponse = await getInventoryResponse(inventory, true);
         res.json({
@@ -81,6 +82,7 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         ConquestCompletedMissionsCount
     } = await addMissionRewards(inventory, missionReport, firstCompletion);
 
+    inventory.RewardSeed = generateRewardSeed();
     await inventory.save();
     const inventoryResponse = await getInventoryResponse(inventory, true);
 

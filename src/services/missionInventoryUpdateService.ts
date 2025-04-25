@@ -750,11 +750,6 @@ export const addMissionRewards = async (
         return { MissionRewards: [] };
     }
 
-    if (rewardInfo.rewardSeed) {
-        // We're using a reward seed, so give the client a new one in the response. On live, missionInventoryUpdate seems to always provide a fresh one in the response.
-        inventory.RewardSeed = generateRewardSeed();
-    }
-
     //TODO: check double reward merging
     const MissionRewards: IMissionReward[] = getRandomMissionDrops(inventory, rewardInfo, wagerTier, firstCompletion);
     logger.debug("random mission drops:", MissionRewards);
@@ -1422,6 +1417,11 @@ function getRandomMissionDrops(
         }
         if (rewardManifests.length != 0) {
             logger.debug(`generating random mission rewards`, { rewardManifests, rotations });
+        }
+        if (RewardInfo.rewardSeed) {
+            if (RewardInfo.rewardSeed != inventory.RewardSeed) {
+                logger.warn(`RewardSeed mismatch:`, { client: RewardInfo.rewardSeed, database: inventory.RewardSeed });
+            }
         }
         const rng = new SRng(BigInt(RewardInfo.rewardSeed ?? generateRewardSeed()) ^ 0xffffffffffffffffn);
         rewardManifests.forEach(name => {
