@@ -578,7 +578,7 @@ function updateInventory() {
             });
 
             document.getElementById("EvolutionProgress-list").innerHTML = "";
-            data.EvolutionProgress.forEach(item => {
+            data.EvolutionProgress?.forEach(item => {
                 const datalist = document.getElementById("datalist-EvolutionProgress");
                 const optionToRemove = datalist.querySelector(`option[data-key="${item.ItemType}"]`);
                 if (optionToRemove) {
