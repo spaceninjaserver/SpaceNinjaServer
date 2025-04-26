@@ -70,16 +70,21 @@ const getRotations = (rewardInfo: IRewardInfo, tierOverride?: number): number[] 
         return rotations;
     }
 
+    const missionIndex = ExportRegions[rewardInfo.node].missionIndex;
+
     // For Rescue missions
-    if (rewardInfo.node in ExportRegions && ExportRegions[rewardInfo.node].missionIndex == 3 && rewardInfo.rewardTier) {
+    if (rewardInfo.node in ExportRegions && missionIndex == 3 && rewardInfo.rewardTier) {
         return [rewardInfo.rewardTier];
     }
 
     const rotationCount = rewardInfo.rewardQualifications?.length || 0;
 
-    // Empty or absent rewardQualifications should not give rewards:
-    // - Aborting a railjack mission (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1741)
+    // Empty or absent rewardQualifications should not give rewards when:
     // - Completing only 1 zone of (E)SO (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1823)
+    // - Aborting a railjack mission (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1741)
+    if (rotationCount == 0 && missionIndex != 30 && missionIndex != 32) {
+        return [0];
+    }
 
     const rotationPattern =
         tierOverride === undefined
