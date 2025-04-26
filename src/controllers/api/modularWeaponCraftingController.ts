@@ -36,7 +36,9 @@ export const modularWeaponCraftingController: RequestHandler = async (req, res) 
     const inventory = await getInventory(accountId);
 
     let defaultUpgrades: IDefaultUpgrade[] | undefined;
-    const defaultOverwrites: Partial<IEquipmentDatabase> = {};
+    const defaultOverwrites: Partial<IEquipmentDatabase> = {
+        ModularParts: data.Parts
+    };
     const inventoryChanges: IInventoryChanges = {};
     if (category == "KubrowPets") {
         const traits = {
@@ -151,7 +153,7 @@ export const modularWeaponCraftingController: RequestHandler = async (req, res) 
         }
     }
     defaultOverwrites.Configs = applyDefaultUpgrades(inventory, defaultUpgrades);
-    addEquipment(inventory, category, data.WeaponType, data.Parts, inventoryChanges, defaultOverwrites);
+    addEquipment(inventory, category, data.WeaponType, defaultOverwrites, inventoryChanges);
     combineInventoryChanges(
         inventoryChanges,
         occupySlot(inventory, productCategoryToInventoryBin(category)!, !!data.isWebUi)

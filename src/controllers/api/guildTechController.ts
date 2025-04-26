@@ -441,16 +441,9 @@ const finishComponentRepair = (
     const inventoryChanges = {
         ...(category == "CrewShipWeaponSkins"
             ? addCrewShipWeaponSkin(inventory, salvageItem.ItemType, salvageItem.UpgradeFingerprint)
-            : addEquipment(
-                  inventory,
-                  category,
-                  salvageItem.ItemType,
-                  undefined,
-                  {},
-                  {
-                      UpgradeFingerprint: salvageItem.UpgradeFingerprint
-                  }
-              )),
+            : addEquipment(inventory, category, salvageItem.ItemType, {
+                  UpgradeFingerprint: salvageItem.UpgradeFingerprint
+              })),
         ...occupySlot(inventory, InventorySlot.RJ_COMPONENT_AND_ARMAMENTS, false)
     };
 

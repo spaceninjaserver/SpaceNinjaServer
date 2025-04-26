@@ -154,23 +154,22 @@ export const addStartingGear = async (
 
     //TODO: properly merge weapon bin changes it is currently static here
     const inventoryChanges: IInventoryChanges = {};
-    addEquipment(inventory, "LongGuns", LongGuns[0].ItemType, undefined, inventoryChanges);
-    addEquipment(inventory, "Pistols", Pistols[0].ItemType, undefined, inventoryChanges);
-    addEquipment(inventory, "Melee", Melee[0].ItemType, undefined, inventoryChanges);
-    await addPowerSuit(inventory, Suits[0].ItemType, inventoryChanges);
+    addEquipment(inventory, "LongGuns", LongGuns[0].ItemType, { IsNew: false }, inventoryChanges);
+    addEquipment(inventory, "Pistols", Pistols[0].ItemType, { IsNew: false }, inventoryChanges);
+    addEquipment(inventory, "Melee", Melee[0].ItemType, { IsNew: false }, inventoryChanges);
+    await addPowerSuit(inventory, Suits[0].ItemType, { IsNew: false }, inventoryChanges);
     addEquipment(
         inventory,
         "DataKnives",
         "/Lotus/Weapons/Tenno/HackingDevices/TnHackingDevice/TnHackingDeviceWeapon",
-        undefined,
-        inventoryChanges,
-        { XP: 450_000 }
+        { XP: 450_000, IsNew: false },
+        inventoryChanges
     );
     addEquipment(
         inventory,
         "Scoops",
         "/Lotus/Weapons/Tenno/Speedball/SpeedballWeaponTest",
-        undefined,
+        { IsNew: false },
         inventoryChanges
     );
 
@@ -531,14 +530,7 @@ export const addItem = async (
                     ]
                 });
             }
-            const inventoryChanges = addEquipment(
-                inventory,
-                weapon.productCategory,
-                typeName,
-                [],
-                {},
-                defaultOverwrites
-            );
+            const inventoryChanges = addEquipment(inventory, weapon.productCategory, typeName, defaultOverwrites);
             if (weapon.additionalItems) {
                 for (const item of weapon.additionalItems) {
                     combineInventoryChanges(inventoryChanges, await addItem(inventory, item, 1));
@@ -639,12 +631,9 @@ export const addItem = async (
             switch (typeName.substr(1).split("/")[2]) {
                 default: {
                     return {
-                        ...(await addPowerSuit(
-                            inventory,
-                            typeName,
-                            {},
-                            premiumPurchase ? EquipmentFeatures.DOUBLE_CAPACITY : undefined
-                        )),
+                        ...(await addPowerSuit(inventory, typeName, {
+                            Features: premiumPurchase ? EquipmentFeatures.DOUBLE_CAPACITY : undefined
+                        })),
                         ...occupySlot(inventory, InventorySlot.SUITS, premiumPurchase)
                     };
                 }
@@ -864,8 +853,8 @@ const addSentinelWeapon = (
 export const addPowerSuit = async (
     inventory: TInventoryDatabaseDocument,
     powersuitName: string,
-    inventoryChanges: IInventoryChanges = {},
-    features?: number
+    defaultOverwrites?: Partial<IEquipmentDatabase>,
+    inventoryChanges: IInventoryChanges = {}
 ): Promise<IInventoryChanges> => {
     const powersuit = ExportWarframes[powersuitName] as IPowersuit | undefined;
     const exalted = powersuit?.exalted ?? [];
@@ -879,15 +868,20 @@ export const addPowerSuit = async (
             }
         }
     }
-    const suitIndex =
-        inventory.Suits.push({
+    const suit: Omit<IEquipmentDatabase, "_id"> = Object.assign(
+        {
             ItemType: powersuitName,
             Configs: [],
             UpgradeVer: 101,
             XP: 0,
-            Features: features,
             IsNew: true
-        }) - 1;
+        },
+        defaultOverwrites
+    );
+    if (!suit.IsNew) {
+        suit.IsNew = undefined;
+    }
+    const suitIndex = inventory.Suits.push(suit) - 1;
     inventoryChanges.Suits ??= [];
     inventoryChanges.Suits.push(inventory.Suits[suitIndex].toJSON<IEquipmentClient>());
     return inventoryChanges;
@@ -1208,20 +1202,21 @@ export const addEquipment = (
     inventory: TInventoryDatabaseDocument,
     category: TEquipmentKey,
     type: string,
-    modularParts?: string[],
-    inventoryChanges: IInventoryChanges = {},
-    defaultOverwrites?: Partial<IEquipmentDatabase>
+    defaultOverwrites?: Partial<IEquipmentDatabase>,
+    inventoryChanges: IInventoryChanges = {}
 ): IInventoryChanges => {
-    const equipment = Object.assign(
+    const equipment: Omit<IEquipmentDatabase, "_id"> = Object.assign(
         {
             ItemType: type,
             Configs: [],
             XP: 0,
-            ModularParts: modularParts,
-            IsNew: category != "CrewShipWeapons" && category != "CrewShipSalvagedWeapons" ? true : undefined
+            IsNew: category != "CrewShipWeapons" && category != "CrewShipSalvagedWeapons"
         },
         defaultOverwrites
     );
+    if (!equipment.IsNew) {
+        equipment.IsNew = undefined;
+    }
     const index = inventory[category].push(equipment) - 1;
 
     inventoryChanges[category] ??= [];

@@ -45,24 +45,18 @@ export const modularWeaponSaleController: RequestHandler = async (req, res) => {
         const defaultUpgrades = getDefaultUpgrades(weaponInfo.ModularParts);
         const configs = applyDefaultUpgrades(inventory, defaultUpgrades);
         const inventoryChanges: IInventoryChanges = {
-            ...addEquipment(
-                inventory,
-                category,
-                weaponInfo.ItemType,
-                weaponInfo.ModularParts,
-                {},
-                {
-                    Features: EquipmentFeatures.DOUBLE_CAPACITY | EquipmentFeatures.GILDED,
-                    ItemName: payload.ItemName,
-                    Configs: configs,
-                    Polarity: [
-                        {
-                            Slot: payload.PolarizeSlot,
-                            Value: payload.PolarizeValue
-                        }
-                    ]
-                }
-            ),
+            ...addEquipment(inventory, category, weaponInfo.ItemType, {
+                Features: EquipmentFeatures.DOUBLE_CAPACITY | EquipmentFeatures.GILDED,
+                ItemName: payload.ItemName,
+                Configs: configs,
+                ModularParts: weaponInfo.ModularParts,
+                Polarity: [
+                    {
+                        Slot: payload.PolarizeSlot,
+                        Value: payload.PolarizeValue
+                    }
+                ]
+            }),
             ...occupySlot(inventory, productCategoryToInventoryBin(category)!, true),
             ...updateCurrency(inventory, weaponInfo.PremiumPrice, true)
         };

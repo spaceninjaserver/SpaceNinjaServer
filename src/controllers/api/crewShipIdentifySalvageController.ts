@@ -62,14 +62,7 @@ export const crewShipIdentifySalvageController: RequestHandler = async (req, res
                 } satisfies IInnateDamageFingerprint)
             };
         }
-        addEquipment(
-            inventory,
-            "CrewShipSalvagedWeapons",
-            payload.ItemType,
-            undefined,
-            inventoryChanges,
-            defaultOverwrites
-        );
+        addEquipment(inventory, "CrewShipSalvagedWeapons", payload.ItemType, defaultOverwrites, inventoryChanges);
     }
 
     inventoryChanges.CrewShipRawSalvage = [

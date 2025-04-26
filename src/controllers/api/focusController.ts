@@ -104,13 +104,14 @@ export const focusController: RequestHandler = async (req, res) => {
         }
         case FocusOperation.SentTrainingAmplifier: {
             const request = JSON.parse(String(req.body)) as ISentTrainingAmplifierRequest;
-            const parts: string[] = [
-                "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/SentAmpTrainingGrip",
-                "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/SentAmpTrainingChassis",
-                "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/SentAmpTrainingBarrel"
-            ];
             const inventory = await getInventory(accountId);
-            const inventoryChanges = addEquipment(inventory, "OperatorAmps", request.StartingWeaponType, parts);
+            const inventoryChanges = addEquipment(inventory, "OperatorAmps", request.StartingWeaponType, {
+                ModularParts: [
+                    "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/SentAmpTrainingGrip",
+                    "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/SentAmpTrainingChassis",
+                    "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/SentAmpTrainingBarrel"
+                ]
+            });
             occupySlot(inventory, InventorySlot.AMPS, false);
             await inventory.save();
             res.json((inventoryChanges.OperatorAmps as IEquipmentClient[])[0]);
