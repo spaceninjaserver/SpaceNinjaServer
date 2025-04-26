@@ -158,6 +158,8 @@ export interface IRewardInfo {
     lostTargetWave?: number;
     defenseTargetCount?: number;
     NemesisAbandonedRewards?: string[];
+    NemesisHenchmenKills?: number;
+    NemesisHintProgress?: number;
     EOM_AFK?: number;
     rewardQualifications?: string; // did a Survival for 5 minutes and this was "1"
     PurgatoryRewardQualifications?: string;

@@ -191,6 +191,12 @@ export const addMissionInventoryUpdates = async (
         if (inventoryUpdates.RewardInfo.NemesisAbandonedRewards) {
             inventory.NemesisAbandonedRewards = inventoryUpdates.RewardInfo.NemesisAbandonedRewards;
         }
+        if (inventoryUpdates.RewardInfo.NemesisHenchmenKills && inventory.Nemesis) {
+            inventory.Nemesis.HenchmenKilled += inventoryUpdates.RewardInfo.NemesisHenchmenKills;
+        }
+        if (inventoryUpdates.RewardInfo.NemesisHintProgress && inventory.Nemesis) {
+            inventory.Nemesis.HintProgress += inventoryUpdates.RewardInfo.NemesisHintProgress;
+        }
         if (inventoryUpdates.MissionStatus == "GS_SUCCESS" && inventoryUpdates.RewardInfo.jobId) {
             // e.g. for Profit-Taker Phase 1:
             // JobTier: -6,
