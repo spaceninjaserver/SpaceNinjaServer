@@ -209,7 +209,7 @@ const pushSyndicateMissions = (
     const dayStart = getSortieTime(day);
     const dayEnd = getSortieTime(day + 1);
     worldState.SyndicateMissions.push({
-        _id: { $oid: Math.trunc(dayStart / 1000).toString(16) + idSuffix },
+        _id: { $oid: ((dayStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + idSuffix },
         Activation: { $date: { $numberLong: dayStart.toString() } },
         Expiry: { $date: { $numberLong: dayEnd.toString() } },
         Tag: syndicateTag,
@@ -354,7 +354,7 @@ const pushSortieIfRelevant = (worldState: IWorldState, day: number): void => {
     }
 
     worldState.Sorties.push({
-        _id: { $oid: Math.trunc(dayStart / 1000).toString(16) + "d4d932c97c0a3acd" },
+        _id: { $oid: ((dayStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "d4d932c97c0a3acd" },
         Activation: { $date: { $numberLong: dayStart.toString() } },
         Expiry: { $date: { $numberLong: dayEnd.toString() } },
         Reward: "/Lotus/Types/Game/MissionDecks/SortieRewards",
@@ -758,7 +758,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         const bountyCycleStart = bountyCycle * 9000000;
         bountyCycleEnd = bountyCycleStart + 9000000;
         worldState.SyndicateMissions.push({
-            _id: { $oid: Math.trunc(bountyCycleStart / 1000).toString(16) + "0000000000000029" },
+            _id: { $oid: ((bountyCycleStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "0000000000000029" },
             Activation: { $date: { $numberLong: bountyCycleStart.toString() } },
             Expiry: { $date: { $numberLong: bountyCycleEnd.toString() } },
             Tag: "ZarimanSyndicate",
@@ -766,7 +766,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             Nodes: []
         });
         worldState.SyndicateMissions.push({
-            _id: { $oid: Math.trunc(bountyCycleStart / 1000).toString(16) + "0000000000000004" },
+            _id: { $oid: ((bountyCycleStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "0000000000000004" },
             Activation: { $date: { $numberLong: bountyCycleStart.toString() } },
             Expiry: { $date: { $numberLong: bountyCycleEnd.toString() } },
             Tag: "EntratiLabSyndicate",
@@ -774,7 +774,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             Nodes: []
         });
         worldState.SyndicateMissions.push({
-            _id: { $oid: Math.trunc(bountyCycleStart / 1000).toString(16) + "0000000000000006" },
+            _id: { $oid: ((bountyCycleStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "0000000000000006" },
             Activation: { $date: { $numberLong: bountyCycleStart.toString(10) } },
             Expiry: { $date: { $numberLong: bountyCycleEnd.toString(10) } },
             Tag: "HexSyndicate",
@@ -793,7 +793,9 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         {
             const rng = new CRng(seed);
             worldState.SyndicateMissions.push({
-                _id: { $oid: Math.trunc(bountyCycleStart / 1000).toString(16) + "0000000000000008" },
+                _id: {
+                    $oid: ((bountyCycleStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "0000000000000008"
+                },
                 Activation: { $date: { $numberLong: bountyCycleStart.toString(10) } },
                 Expiry: { $date: { $numberLong: bountyCycleEnd.toString(10) } },
                 Tag: "CetusSyndicate",
@@ -863,7 +865,9 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         {
             const rng = new CRng(seed);
             worldState.SyndicateMissions.push({
-                _id: { $oid: Math.trunc(bountyCycleStart / 1000).toString(16) + "0000000000000025" },
+                _id: {
+                    $oid: ((bountyCycleStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "0000000000000025"
+                },
                 Activation: { $date: { $numberLong: bountyCycleStart.toString(10) } },
                 Expiry: { $date: { $numberLong: bountyCycleEnd.toString(10) } },
                 Tag: "SolarisSyndicate",
@@ -933,7 +937,9 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         {
             const rng = new CRng(seed);
             worldState.SyndicateMissions.push({
-                _id: { $oid: Math.trunc(bountyCycleStart / 1000).toString(16) + "0000000000000002" },
+                _id: {
+                    $oid: ((bountyCycleStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "0000000000000002"
+                },
                 Activation: { $date: { $numberLong: bountyCycleStart.toString(10) } },
                 Expiry: { $date: { $numberLong: bountyCycleEnd.toString(10) } },
                 Tag: "EntratiSyndicate",
@@ -1170,7 +1176,7 @@ export const getLiteSortie = (week: number): ILiteSortie => {
     const weekEnd = weekStart + 604800000;
     return {
         _id: {
-            $oid: Math.trunc(weekStart / 1000).toString(16) + "5e23a244740a190c"
+            $oid: ((weekStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "5e23a244740a190c"
         },
         Activation: { $date: { $numberLong: weekStart.toString() } },
         Expiry: { $date: { $numberLong: weekEnd.toString() } },

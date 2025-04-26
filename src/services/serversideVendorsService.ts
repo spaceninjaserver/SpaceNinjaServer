@@ -236,9 +236,7 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
                 AllowMultipurchase: false,
                 Id: {
                     $oid:
-                        Math.trunc(cycleStart / 1000)
-                            .toString(16)
-                            .padStart(8, "0") +
+                        ((cycleStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") +
                         vendorInfo._id.$oid.substring(8, 16) +
                         rng.randomInt(0, 0xffff).toString(16).padStart(4, "0") +
                         rng.randomInt(0, 0xffff).toString(16).padStart(4, "0")
