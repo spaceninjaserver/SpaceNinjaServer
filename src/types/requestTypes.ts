@@ -20,7 +20,8 @@ import {
     IDiscoveredMarker,
     ILockedWeaponGroupClient,
     ILoadOutPresets,
-    IInvasionProgressClient
+    IInvasionProgressClient,
+    IWeaponSkinClient
 } from "./inventoryTypes/inventoryTypes";
 import { IGroup } from "./loginTypes";
 
@@ -101,6 +102,7 @@ export type IMissionInventoryUpdateRequest = {
     }[];
     CollectibleScans?: ICollectibleEntry[];
     Upgrades?: IUpgradeClient[]; // riven challenge progress
+    WeaponSkins?: IWeaponSkinClient[];
     StrippedItems?: {
         DropTable: string;
         DROP_MOD?: number[];

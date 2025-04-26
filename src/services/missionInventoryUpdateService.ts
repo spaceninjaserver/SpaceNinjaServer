@@ -30,6 +30,7 @@ import {
     addMods,
     addRecipes,
     addShipDecorations,
+    addSkin,
     addStanding,
     combineInventoryChanges,
     generateRewardSeed,
@@ -410,6 +411,11 @@ export const addMissionInventoryUpdates = async (
                     const upgrade = inventory.Upgrades.id(clientUpgrade.ItemId.$oid)!;
                     upgrade.UpgradeFingerprint = clientUpgrade.UpgradeFingerprint; // primitive way to copy over the riven challenge progress
                 });
+                break;
+            case "WeaponSkins":
+                for (const item of value) {
+                    addSkin(inventory, item.ItemType);
+                }
                 break;
             case "Boosters":
                 value.forEach(booster => {
