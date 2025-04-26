@@ -845,7 +845,7 @@ export interface IMission extends IMissionDatabase {
 }
 
 export interface INemesisBaseClient {
-    fp: bigint;
+    fp: bigint | number;
     manifest: string;
     KillingSuit: string;
     killingDamageType: number;
@@ -863,7 +863,8 @@ export interface INemesisBaseClient {
     Weakened: boolean;
 }
 
-export interface INemesisBaseDatabase extends Omit<INemesisBaseClient, "d"> {
+export interface INemesisBaseDatabase extends Omit<INemesisBaseClient, "fp" | "d"> {
+    fp: bigint;
     d: Date;
 }
 
@@ -877,7 +878,8 @@ export interface INemesisClient extends INemesisBaseClient {
     LastEnc: number;
 }
 
-export interface INemesisDatabase extends Omit<INemesisClient, "d"> {
+export interface INemesisDatabase extends Omit<INemesisClient, "fp" | "d"> {
+    fp: bigint;
     d: Date;
 }
 

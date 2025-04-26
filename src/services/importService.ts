@@ -169,6 +169,7 @@ const convertPendingRecipe = (client: IPendingRecipeClient): IPendingRecipeDatab
 const convertNemesis = (client: INemesisClient): INemesisDatabase => {
     return {
         ...client,
+        fp: BigInt(client.fp),
         d: convertDate(client.d)
     };
 };
