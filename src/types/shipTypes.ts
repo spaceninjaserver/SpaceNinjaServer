@@ -1,12 +1,12 @@
 import { Types } from "mongoose";
-import { IOid } from "@/src/types/commonTypes";
+import { IMongoDate, IOid } from "@/src/types/commonTypes";
 import { IColor } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { ILoadoutClient } from "./saveLoadoutTypes";
 
 export interface IGetShipResponse {
     ShipOwnerId: string;
     Ship: IShip;
-    Apartment: IApartment;
+    Apartment: IApartmentClient;
     TailorShop: ITailorShop;
     LoadOutInventory: { LoadOutPresets: ILoadoutClient };
 }
@@ -51,28 +51,42 @@ export interface IRoom {
     PlacedDecos?: IPlacedDecosDatabase[];
 }
 
-export interface IPlants {
+export interface IPlantClient {
     PlantType: string;
-    EndTime: IOid;
+    EndTime: IMongoDate;
     PlotIndex: number;
 }
-export interface IPlanters {
+
+export interface IPlantDatabase extends Omit<IPlantClient, "EndTime"> {
+    EndTime: Date;
+}
+
+export interface IPlanterClient {
     Name: string;
-    Plants: IPlants[];
+    Plants: IPlantClient[];
 }
 
-export interface IGardening {
-    Planters?: IPlanters[];
+export interface IPlanterDatabase {
+    Name: string;
+    Plants: IPlantDatabase[];
 }
 
-export interface IApartment {
-    Gardening: IGardening;
+export interface IGardeningClient {
+    Planters: IPlanterClient[];
+}
+
+export interface IGardeningDatabase {
+    Planters: IPlanterDatabase[];
+}
+
+export interface IApartmentClient {
+    Gardening: IGardeningClient;
     Rooms: IRoom[];
     FavouriteLoadouts: IFavouriteLoadout[];
 }
 
 export interface IApartmentDatabase {
-    Gardening: IGardening;
+    Gardening: IGardeningDatabase;
     Rooms: IRoom[];
     FavouriteLoadouts: IFavouriteLoadoutDatabase[];
 }

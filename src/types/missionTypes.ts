@@ -8,6 +8,8 @@ export interface IMissionReward {
     TypeName?: string;
     UpgradeLevel?: number;
     ItemCount: number;
+    DailyCooldown?: boolean;
+    Rarity?: number;
     TweetText?: string;
     ProductCategory?: string;
     FromEnemyCache?: boolean;

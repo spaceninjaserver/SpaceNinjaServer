@@ -1,14 +1,17 @@
-import { toOid } from "@/src/helpers/inventoryHelpers";
+import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
 import { colorSchema } from "@/src/models/inventoryModels/inventoryModel";
 import { IOrbiter, IPersonalRoomsDatabase, PersonalRoomsModelType } from "@/src/types/personalRoomsTypes";
 import {
     IFavouriteLoadoutDatabase,
-    IGardening,
+    IGardeningDatabase,
     IPlacedDecosDatabase,
     IPictureFrameInfo,
     IRoom,
     ITailorShopDatabase,
-    IApartmentDatabase
+    IApartmentDatabase,
+    IPlanterDatabase,
+    IPlantDatabase,
+    IPlantClient
 } from "@/src/types/shipTypes";
 import { Schema, model } from "mongoose";
 
@@ -77,15 +80,45 @@ favouriteLoadoutSchema.set("toJSON", {
     }
 });
 
-const gardeningSchema = new Schema<IGardening>({
-    Planters: [Schema.Types.Mixed] //TODO: add when implementing gardening
+const plantSchema = new Schema<IPlantDatabase>(
+    {
+        PlantType: String,
+        EndTime: Date,
+        PlotIndex: Number
+    },
+    { _id: false }
+);
+
+plantSchema.set("toJSON", {
+    virtuals: true,
+    transform(_doc, obj) {
+        const client = obj as IPlantClient;
+        const db = obj as IPlantDatabase;
+
+        client.EndTime = toMongoDate(db.EndTime);
+    }
 });
+
+const planterSchema = new Schema<IPlanterDatabase>(
+    {
+        Name: { type: String, required: true },
+        Plants: { type: [plantSchema], default: [] }
+    },
+    { _id: false }
+);
+
+const gardeningSchema = new Schema<IGardeningDatabase>(
+    {
+        Planters: { type: [planterSchema], default: [] }
+    },
+    { _id: false }
+);
 
 const apartmentSchema = new Schema<IApartmentDatabase>(
     {
         Rooms: [roomSchema],
         FavouriteLoadouts: [favouriteLoadoutSchema],
-        Gardening: gardeningSchema // TODO: ensure this is correct
+        Gardening: gardeningSchema
     },
     { _id: false }
 );
@@ -98,7 +131,9 @@ const apartmentDefault: IApartmentDatabase = {
         { Name: "DuviriHallway", MaxCapacity: 1600 }
     ],
     FavouriteLoadouts: [],
-    Gardening: {}
+    Gardening: {
+        Planters: []
+    }
 };
 
 const orbiterSchema = new Schema<IOrbiter>(

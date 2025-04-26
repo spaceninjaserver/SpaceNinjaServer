@@ -1,12 +1,12 @@
 import { IColor } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import {
-    IApartment,
     IRoom,
     IPlacedDecosDatabase,
     ITailorShop,
     ITailorShopDatabase,
     TBootLocation,
-    IApartmentDatabase
+    IApartmentDatabase,
+    IApartmentClient
 } from "@/src/types/shipTypes";
 import { Document, Model, Types } from "mongoose";
 
@@ -21,10 +21,10 @@ export interface IOrbiter {
     BootLocation?: TBootLocation;
 }
 
-export interface IPersonalRooms {
+export interface IPersonalRoomsClient {
     ShipInteriorColors: IColor;
     Ship: IOrbiter;
-    Apartment: IApartment;
+    Apartment: IApartmentClient;
     TailorShop: ITailorShop;
 }
 

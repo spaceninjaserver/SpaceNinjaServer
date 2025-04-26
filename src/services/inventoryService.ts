@@ -213,6 +213,15 @@ export const combineInventoryChanges = (InventoryChanges: IInventoryChanges, del
     for (const key in delta) {
         if (!(key in InventoryChanges)) {
             InventoryChanges[key] = delta[key];
+        } else if (key == "MiscItems") {
+            for (const deltaItem of delta[key]!) {
+                const existing = InventoryChanges[key]!.find(x => x.ItemType == deltaItem.ItemType);
+                if (existing) {
+                    existing.ItemCount += deltaItem.ItemCount;
+                } else {
+                    InventoryChanges[key]!.push(deltaItem);
+                }
+            }
         } else if (Array.isArray(delta[key])) {
             const left = InventoryChanges[key] as object[];
             const right: object[] = delta[key];
@@ -1466,6 +1475,22 @@ export const addGearExpByCategory = (
             }
         }
     });
+};
+
+export const addMiscItem = (
+    inventory: TInventoryDatabaseDocument,
+    type: string,
+    count: number,
+    inventoryChanges: IInventoryChanges
+): void => {
+    const miscItemChanges: IMiscItem[] = [
+        {
+            ItemType: type,
+            ItemCount: count
+        }
+    ];
+    addMiscItems(inventory, miscItemChanges);
+    combineInventoryChanges(inventoryChanges, { MiscItems: miscItemChanges });
 };
 
 export const addMiscItems = (inventory: TInventoryDatabaseDocument, itemsArray: IMiscItem[]): void => {

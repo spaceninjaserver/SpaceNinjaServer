@@ -48,6 +48,7 @@ import { findSessionsController } from "@/src/controllers/api/findSessionsContro
 import { fishmongerController } from "@/src/controllers/api/fishmongerController";
 import { focusController } from "@/src/controllers/api/focusController";
 import { fusionTreasuresController } from "@/src/controllers/api/fusionTreasuresController";
+import { gardeningController } from "@/src/controllers/api/gardeningController";
 import { genericUpdateController } from "@/src/controllers/api/genericUpdateController";
 import { getAllianceController } from "@/src/controllers/api/getAllianceController";
 import { getDailyDealStockLevelsController } from "@/src/controllers/api/getDailyDealStockLevelsController";
@@ -240,6 +241,7 @@ apiRouter.post("/findSessions.php", findSessionsController);
 apiRouter.post("/fishmonger.php", fishmongerController);
 apiRouter.post("/focus.php", focusController);
 apiRouter.post("/fusionTreasures.php", fusionTreasuresController);
+apiRouter.post("/gardening.php", gardeningController);
 apiRouter.post("/genericUpdate.php", genericUpdateController);
 apiRouter.post("/getAlliance.php", getAllianceController);
 apiRouter.post("/getFriends.php", getFriendsController);
