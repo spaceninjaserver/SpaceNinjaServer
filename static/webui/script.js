@@ -78,18 +78,22 @@ function logout() {
 function renameAccount() {
     const newname = window.prompt(loc("code_changeNameConfirm"));
     if (newname) {
-        fetch("/custom/renameAccount?" + window.authz + "&newname=" + newname).then(() => {
-            $(".displayname").text(newname);
-            updateLocElements();
+        revalidateAuthz(() => {
+            fetch("/custom/renameAccount?" + window.authz + "&newname=" + newname).then(() => {
+                $(".displayname").text(newname);
+                updateLocElements();
+            });
         });
     }
 }
 
 function deleteAccount() {
     if (window.confirm(loc("code_deleteAccountConfirm"))) {
-        fetch("/custom/deleteAccount?" + window.authz).then(() => {
-            logout();
-            single.loadRoute("/webui/"); // Show login screen
+        revalidateAuthz(() => {
+            fetch("/custom/deleteAccount?" + window.authz).then(() => {
+                logout();
+                single.loadRoute("/webui/"); // Show login screen
+            });
         });
     }
 }
