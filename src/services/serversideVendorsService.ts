@@ -66,7 +66,7 @@ const rawVendorManifests: IVendorManifest[] = [
 
 interface IGeneratableVendorInfo extends Omit<IVendorInfo, "ItemManifest" | "Expiry"> {
     cycleOffset?: number;
-    cycleDuration?: number;
+    cycleDuration: number;
 }
 
 const generatableVendors: IGeneratableVendorInfo[] = [
@@ -93,13 +93,15 @@ const generatableVendors: IGeneratableVendorInfo[] = [
         _id: { $oid: "5be4a159b144f3cdf1c22efa" },
         TypeName: "/Lotus/Types/Game/VendorManifests/Solaris/DebtTokenVendorManifest",
         PropertyTextHash: "A39621049CA3CA13761028CD21C239EF",
-        RandomSeedType: "VRST_FLAVOUR_TEXT"
+        RandomSeedType: "VRST_FLAVOUR_TEXT",
+        cycleDuration: unixTimesInMs.hour
     },
     {
         _id: { $oid: "61ba123467e5d37975aeeb03" },
         TypeName: "/Lotus/Types/Game/VendorManifests/Hubs/GuildAdvertisementVendorManifest",
         PropertyTextHash: "255AFE2169BAE4130B4B20D7C55D14FA",
-        RandomSeedType: "VRST_FLAVOUR_TEXT"
+        RandomSeedType: "VRST_FLAVOUR_TEXT",
+        cycleDuration: unixTimesInMs.week
     }
     // {
     //     _id: { $oid: "5dbb4c41e966f7886c3ce939" },
@@ -193,7 +195,7 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
         // Add new offers
         const vendorSeed = parseInt(vendorInfo._id.$oid.substring(16), 16);
         const cycleOffset = vendorInfo.cycleOffset ?? 1734307200_000;
-        const cycleDuration = vendorInfo.cycleDuration ?? unixTimesInMs.hour;
+        const cycleDuration = vendorInfo.cycleDuration;
         const cycleIndex = Math.trunc((Date.now() - cycleOffset) / cycleDuration);
         const rng = new CRng(mixSeeds(vendorSeed, cycleIndex));
         const manifest = ExportVendors[vendorInfo.TypeName];
