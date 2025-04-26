@@ -21,7 +21,11 @@ import { IInventoryChanges } from "@/src/types/purchaseTypes";
 export const modularWeaponSaleController: RequestHandler = async (req, res) => {
     const partTypeToParts: Record<string, string[]> = {};
     for (const [uniqueName, data] of Object.entries(ExportWeapons)) {
-        if (data.partType && data.premiumPrice) {
+        if (
+            data.partType &&
+            data.premiumPrice &&
+            !data.excludeFromCodex // exclude pvp variants
+        ) {
             partTypeToParts[data.partType] ??= [];
             partTypeToParts[data.partType].push(uniqueName);
         }
