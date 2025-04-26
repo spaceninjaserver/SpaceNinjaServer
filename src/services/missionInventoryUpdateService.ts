@@ -70,10 +70,11 @@ const getRotations = (rewardInfo: IRewardInfo, tierOverride?: number): number[] 
         return rotations;
     }
 
-    const missionIndex = ExportRegions[rewardInfo.node].missionIndex;
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    const missionIndex: number | undefined = ExportRegions[rewardInfo.node]?.missionIndex;
 
     // For Rescue missions
-    if (rewardInfo.node in ExportRegions && missionIndex == 3 && rewardInfo.rewardTier) {
+    if (missionIndex == 3 && rewardInfo.rewardTier) {
         return [rewardInfo.rewardTier];
     }
 
