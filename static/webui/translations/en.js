@@ -132,6 +132,7 @@ dict = {
     cheats_infiniteEndo: `Infinite Endo`,
     cheats_infiniteRegalAya: `Infinite Regal Aya`,
     cheats_infiniteHelminthMaterials: `Infinite Helminth Materials`,
+    cheats_dontSubtractConsumables: `Don't Subtract Consumables`,
     cheats_unlockAllShipFeatures: `Unlock All Ship Features`,
     cheats_unlockAllShipDecorations: `Unlock All Ship Decorations`,
     cheats_unlockAllFlavourItems: `Unlock All <abbr title=\"Animation Sets, Glyphs, Palettes, etc.\">Flavor Items</abbr>`,

@@ -133,6 +133,7 @@ dict = {
     cheats_infiniteEndo: `无限内融核心`,
     cheats_infiniteRegalAya: `无限御品阿耶`,
     cheats_infiniteHelminthMaterials: `无限Helminth材料`,
+    cheats_dontSubtractConsumables: `[UNTRANSLATED] Don't Subtract Consumables`,
     cheats_unlockAllShipFeatures: `解锁所有飞船功能`,
     cheats_unlockAllShipDecorations: `解锁所有飞船装饰`,
     cheats_unlockAllFlavourItems: `解锁所有<abbr title=\"动画组合、图标、调色板等\">装饰物品</abbr>`,

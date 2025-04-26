@@ -266,7 +266,14 @@ export const addMissionInventoryUpdates = async (
                 addMiscItems(inventory, value);
                 break;
             case "Consumables":
-                addConsumables(inventory, value);
+                if (config.dontSubtractConsumables) {
+                    addConsumables(
+                        inventory,
+                        value.filter(x => x.ItemCount > 0)
+                    );
+                } else {
+                    addConsumables(inventory, value);
+                }
                 break;
             case "Recipes":
                 addRecipes(inventory, value);

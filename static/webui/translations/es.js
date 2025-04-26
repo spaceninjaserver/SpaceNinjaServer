@@ -133,6 +133,7 @@ dict = {
     cheats_infiniteEndo: `Endo infinito`,
     cheats_infiniteRegalAya: `Aya Real infinita`,
     cheats_infiniteHelminthMaterials: `Materiales Helminto infinitos`,
+    cheats_dontSubtractConsumables: `[UNTRANSLATED] Don't Subtract Consumables`,
     cheats_unlockAllShipFeatures: `Desbloquear todas las funciones de nave`,
     cheats_unlockAllShipDecorations: `Desbloquear todas las decoraciones de nave`,
     cheats_unlockAllFlavourItems: `Desbloquear todos los <abbr title="Conjuntos de animaciones, glifos, paletas, etc.">ítems estéticos</abbr>`,
