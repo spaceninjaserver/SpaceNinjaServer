@@ -1283,6 +1283,9 @@ function getRandomMissionDrops(
             // Invasion assassination has Phorid has the boss who should drop Nyx parts
             // TODO: Check that the invasion faction is indeed FC_INFESTATION once the Invasions in worldState are more dynamic
             rewardManifests = ["/Lotus/Types/Game/MissionDecks/BossMissionRewards/NyxRewards"];
+        } else if (RewardInfo.sortieId && region.missionIndex != 0) {
+            // Sortie mission types differ from the underlying node and hence also don't give rewards from the underlying nodes. Assassinations are an exception to this.
+            rewardManifests = [];
         } else {
             rewardManifests = region.rewardManifests;
         }
