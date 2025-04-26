@@ -10,6 +10,7 @@ import { getAccountInfoController } from "@/src/controllers/custom/getAccountInf
 import { renameAccountController } from "@/src/controllers/custom/renameAccountController";
 import { ircDroppedController } from "@/src/controllers/custom/ircDroppedController";
 import { unlockAllIntrinsicsController } from "@/src/controllers/custom/unlockAllIntrinsicsController";
+import { addMissingMaxRankModsController } from "@/src/controllers/custom/addMissingMaxRankModsController";
 
 import { createAccountController } from "@/src/controllers/custom/createAccountController";
 import { createMessageController } from "@/src/controllers/custom/createMessageController";
@@ -35,6 +36,7 @@ customRouter.get("/getAccountInfo", getAccountInfoController);
 customRouter.get("/renameAccount", renameAccountController);
 customRouter.get("/ircDropped", ircDroppedController);
 customRouter.get("/unlockAllIntrinsics", unlockAllIntrinsicsController);
+customRouter.get("/addMissingMaxRankMods", addMissingMaxRankModsController);
 
 customRouter.post("/createAccount", createAccountController);
 customRouter.post("/createMessage", createMessageController);

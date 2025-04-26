@@ -1795,6 +1795,14 @@ function doRemoveUnrankedMods() {
     });
 }
 
+function doAddMissingMaxRankMods() {
+    revalidateAuthz(() => {
+        fetch("/custom/addMissingMaxRankMods?" + window.authz).then(() => {
+            updateInventory();
+        });
+    });
+}
+
 // Powersuit Route
 
 single.getRoute("#powersuit-route").on("beforeload", function () {
