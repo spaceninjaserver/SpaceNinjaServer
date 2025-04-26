@@ -50,21 +50,27 @@ const sortieBossToFaction: Record<string, string> = {
     SORTIE_BOSS_PHORID: "FC_INFESTATION",
     SORTIE_BOSS_LEPHANTIS: "FC_INFESTATION",
     SORTIE_BOSS_INFALAD: "FC_INFESTATION",
-    SORTIE_BOSS_CORRUPTED_VOR: "FC_CORRUPTED"
+    SORTIE_BOSS_CORRUPTED_VOR: "FC_OROKIN"
 };
 
 const sortieFactionToSystemIndexes: Record<string, number[]> = {
     FC_GRINEER: [0, 2, 3, 5, 6, 9, 11, 18],
     FC_CORPUS: [1, 4, 7, 8, 12, 15],
     FC_INFESTATION: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15],
-    FC_CORRUPTED: [14]
+    FC_OROKIN: [14]
 };
 
 const sortieFactionToFactionIndexes: Record<string, number[]> = {
     FC_GRINEER: [0],
     FC_CORPUS: [1],
     FC_INFESTATION: [0, 1, 2],
-    FC_CORRUPTED: [3]
+    FC_OROKIN: [3]
+};
+
+const sortieFactionToSpecialMissionTileset: Record<string, string> = {
+    FC_GRINEER: "GrineerGalleonTileset",
+    FC_CORPUS: "CorpusShipTileset",
+    FC_INFESTATION: "CorpusShipTileset"
 };
 
 const sortieBossNode: Record<string, string> = {
@@ -273,14 +279,7 @@ const pushSortieIfRelevant = (worldState: IWorldState, day: number): void => {
         if (
             sortieFactionToSystemIndexes[sortieBossToFaction[boss]].includes(value.systemIndex) &&
             sortieFactionToFactionIndexes[sortieBossToFaction[boss]].includes(value.factionIndex!) &&
-            !isArchwingMission(value) &&
-            value.missionIndex != 0 && // Exclude MT_ASSASSINATION
-            value.missionIndex != 10 && // Exclude MT_PVP (for relays)
-            value.missionIndex != 21 && // Exclude MT_PURIFY
-            value.missionIndex != 22 && // Exclude MT_ARENA
-            value.missionIndex != 23 && // Exclude MT_JUNCTION
-            (value.missionIndex != 28 || value.systemIndex == 2) && // MT_LANDSCAPE only on Earth
-            value.missionIndex < 29
+            key in sortieTilesets
         ) {
             if (!availableMissionIndexes.includes(value.missionIndex)) {
                 availableMissionIndexes.push(value.missionIndex);
@@ -289,21 +288,36 @@ const pushSortieIfRelevant = (worldState: IWorldState, day: number): void => {
         }
     }
 
+    const specialMissionTypes = [1, 3, 5, 9];
+    if (!(sortieBossToFaction[boss] in sortieFactionToSpecialMissionTileset)) {
+        for (const missionType of specialMissionTypes) {
+            const i = availableMissionIndexes.indexOf(missionType);
+            if (i != -1) {
+                availableMissionIndexes.splice(i, 1);
+            }
+        }
+    }
+
     const selectedNodes: ISortieMission[] = [];
     const missionTypes = new Set();
 
     for (let i = 0; i < 3; i++) {
-        const randomIndex = rng.randomInt(0, nodes.length - 1);
-        const node = nodes[randomIndex];
-        let missionIndex = ExportRegions[node].missionIndex;
+        let randomIndex;
+        let node;
+        let missionIndex;
+        do {
+            randomIndex = rng.randomInt(0, nodes.length - 1);
+            node = nodes[randomIndex];
 
-        if (
-            !["SolNode404", "SolNode411"].includes(node) && // for some reason the game doesn't like missionType changes for these missions
-            missionIndex != 28 &&
-            rng.randomInt(0, 2) == 2
-        ) {
-            missionIndex = rng.randomElement(availableMissionIndexes);
-        }
+            missionIndex = ExportRegions[node].missionIndex;
+            if (missionIndex != 28) {
+                missionIndex = rng.randomElement(availableMissionIndexes);
+            }
+        } while (
+            specialMissionTypes.indexOf(missionIndex) != -1 &&
+            sortieTilesets[node as keyof typeof sortieTilesets] !=
+                sortieFactionToSpecialMissionTileset[sortieBossToFaction[boss]]
+        );
 
         if (i == 2 && rng.randomInt(0, 2) == 2) {
             const filteredModifiers = modifiers.filter(mod => mod !== "SORTIE_MODIFIER_MELEE_ONLY");
