@@ -29,6 +29,7 @@ import RadioLegionIntermission12VendorManifest from "@/static/fixed_responses/ge
 import SolarisDebtTokenVendorRepossessionsManifest from "@/static/fixed_responses/getVendorInfo/SolarisDebtTokenVendorRepossessionsManifest.json";
 import SolarisFishmongerVendorManifest from "@/static/fixed_responses/getVendorInfo/SolarisFishmongerVendorManifest.json";
 import SolarisProspectorVendorManifest from "@/static/fixed_responses/getVendorInfo/SolarisProspectorVendorManifest.json";
+import Temple1999VendorManifest from "@/static/fixed_responses/getVendorInfo/Temple1999VendorManifest.json";
 import TeshinHardModeVendorManifest from "@/static/fixed_responses/getVendorInfo/TeshinHardModeVendorManifest.json";
 import ZarimanCommisionsManifestArchimedean from "@/static/fixed_responses/getVendorInfo/ZarimanCommisionsManifestArchimedean.json";
 
@@ -58,6 +59,7 @@ const rawVendorManifests: IVendorManifest[] = [
     SolarisDebtTokenVendorRepossessionsManifest,
     SolarisFishmongerVendorManifest,
     SolarisProspectorVendorManifest,
+    Temple1999VendorManifest,
     TeshinHardModeVendorManifest, // uses preprocessing
     ZarimanCommisionsManifestArchimedean
 ];
