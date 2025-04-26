@@ -6,7 +6,8 @@ import {
     ICrewShipMembersClient,
     ICrewShipWeapon,
     IFlavourItem,
-    ILoadoutConfigClient
+    ILoadoutConfigClient,
+    ILotusCustomization
 } from "./inventoryTypes/inventoryTypes";
 
 export interface ISaveLoadoutRequest {
@@ -43,6 +44,7 @@ export interface ISaveLoadoutRequest {
     EquippedEmotes: string[];
     UseAdultOperatorLoadout: boolean;
     WeaponSkins: IItemEntry;
+    LotusCustomization: ILotusCustomization;
 }
 
 export type ISaveLoadoutRequestNoUpgradeVer = Omit<ISaveLoadoutRequest, "UpgradeVer">;

@@ -96,7 +96,8 @@ import {
     IInvasionProgressDatabase,
     IInvasionProgressClient,
     IAccolades,
-    IHubNpcCustomization
+    IHubNpcCustomization,
+    ILotusCustomization
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -779,6 +780,10 @@ const loreFragmentScansSchema = new Schema<ILoreFragmentScan>(
     },
     { _id: false }
 );
+
+const lotusCustomizationSchema = new Schema<ILotusCustomization>().add(ItemConfigSchema).add({
+    Persona: String
+});
 
 const evolutionProgressSchema = new Schema<IEvolutionProgress>(
     {
@@ -1628,7 +1633,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         //Purchase this new permanent skin from the Lotus customization options in Personal Quarters located in your Orbiter.
         //https://warframe.fandom.com/wiki/Lotus#The_New_War
-        LotusCustomization: Schema.Types.Mixed,
+        LotusCustomization: { type: lotusCustomizationSchema, default: undefined },
 
         //Progress+Rank+ItemType(ZarimanPumpShotgun)
         //https://warframe.fandom.com/wiki/Incarnon

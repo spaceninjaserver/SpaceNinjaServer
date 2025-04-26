@@ -161,6 +161,11 @@ export const handleInventoryItemConfigChange = async (
                 }
                 break;
             }
+            case "LotusCustomization": {
+                logger.debug(`saved LotusCustomization`, equipmentChanges.LotusCustomization);
+                inventory.LotusCustomization = equipmentChanges.LotusCustomization;
+                break;
+            }
             default: {
                 if (equipmentKeys.includes(equipmentName as TEquipmentKey) && equipmentName != "ValidNewLoadoutId") {
                     logger.debug(`general Item config saved of type ${equipmentName}`, {
