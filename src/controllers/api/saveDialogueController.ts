@@ -72,6 +72,8 @@ export const saveDialogueController: RequestHandler = async (req, res) => {
                 InventoryChanges: inventoryChanges,
                 AvailableGiftDate: { $date: { $numberLong: tomorrowAt0Utc.toString() } }
             });
+        } else {
+            res.end();
         }
     }
 };
