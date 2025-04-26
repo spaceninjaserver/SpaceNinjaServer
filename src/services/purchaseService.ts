@@ -66,6 +66,18 @@ export const handlePurchase = async (
             if (!offer) {
                 throw new Error(`unknown vendor offer: ${ItemId ? ItemId : purchaseRequest.PurchaseParams.StoreItem}`);
             }
+            if (offer.RegularPrice) {
+                combineInventoryChanges(
+                    prePurchaseInventoryChanges,
+                    updateCurrency(inventory, offer.RegularPrice[0], false)
+                );
+            }
+            if (offer.PremiumPrice) {
+                combineInventoryChanges(
+                    prePurchaseInventoryChanges,
+                    updateCurrency(inventory, offer.PremiumPrice[0], true)
+                );
+            }
             if (offer.ItemPrices) {
                 handleItemPrices(
                     inventory,
@@ -170,6 +182,9 @@ export const handlePurchase = async (
                     purchaseResponse.InventoryChanges,
                     updateCurrency(inventory, offer.RegularPrice, false)
                 );
+                if (purchaseRequest.PurchaseParams.ExpectedPrice) {
+                    throw new Error(`vendor purchase should not have an expected price`);
+                }
 
                 const invItem: IMiscItem = {
                     ItemType: "/Lotus/Types/Items/MiscItems/PrimeBucks",
@@ -229,6 +244,12 @@ export const handlePurchase = async (
                             updateCurrency(inventory, offer.credits, false)
                         );
                     }
+                    if (typeof offer.platinum == "number") {
+                        combineInventoryChanges(
+                            purchaseResponse.InventoryChanges,
+                            updateCurrency(inventory, offer.platinum, true)
+                        );
+                    }
                     if (offer.itemPrices) {
                         handleItemPrices(
                             inventory,
@@ -238,6 +259,9 @@ export const handlePurchase = async (
                         );
                     }
                 }
+            }
+            if (purchaseRequest.PurchaseParams.ExpectedPrice) {
+                throw new Error(`vendor purchase should not have an expected price`);
             }
             break;
         case 18: {
