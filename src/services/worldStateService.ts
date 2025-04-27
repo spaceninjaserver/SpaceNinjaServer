@@ -1,5 +1,6 @@
 import staticWorldState from "@/static/fixed_responses/worldState/worldState.json";
 import sortieTilesets from "@/static/fixed_responses/worldState/sortieTilesets.json";
+import syndicateMissions from "@/static/fixed_responses/worldState/syndicateMissions.json";
 import { buildConfig } from "@/src/services/buildConfigService";
 import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { config } from "@/src/services/configService";
@@ -189,20 +190,7 @@ const pushSyndicateMissions = (
     idSuffix: string,
     syndicateTag: string
 ): void => {
-    const nodeOptions: string[] = [];
-    for (const [key, value] of Object.entries(ExportRegions)) {
-        if (
-            !isArchwingMission(value) &&
-            !value.questReq && // Exclude zariman, murmor, and 1999 stuff
-            !value.hidden && // Exclude the index
-            !value.darkSectorData && // Exclude dark sectors
-            value.missionIndex != 10 && // Exclude MT_PVP (for relays)
-            value.missionIndex != 23 && // no junctions
-            value.missionIndex < 28 // no open worlds, railjack, etc
-        ) {
-            nodeOptions.push(key);
-        }
-    }
+    const nodeOptions: string[] = [...syndicateMissions];
 
     const rng = new CRng(seed);
     const nodes: string[] = [];
