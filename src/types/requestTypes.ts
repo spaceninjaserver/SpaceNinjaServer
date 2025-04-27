@@ -21,7 +21,8 @@ import {
     ILockedWeaponGroupClient,
     ILoadOutPresets,
     IInvasionProgressClient,
-    IWeaponSkinClient
+    IWeaponSkinClient,
+    IKubrowPetEggClient
 } from "./inventoryTypes/inventoryTypes";
 import { IGroup } from "./loginTypes";
 
@@ -118,6 +119,7 @@ export type IMissionInventoryUpdateRequest = {
         NumExtraRewards: number;
         Count: number;
     }[];
+    KubrowPetEggs?: IKubrowPetEggClient[];
     DiscoveredMarkers?: IDiscoveredMarker[];
     LockedWeaponGroup?: ILockedWeaponGroupClient; // sent when captured by zanuka
     UnlockWeapons?: boolean; // sent when recovered weapons from zanuka capture

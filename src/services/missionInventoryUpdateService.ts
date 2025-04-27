@@ -513,6 +513,16 @@ export const addMissionInventoryUpdates = async (
                 }
                 break;
             }
+            case "KubrowPetEggs": {
+                for (const egg of value) {
+                    inventory.KubrowPetEggs ??= [];
+                    inventory.KubrowPetEggs.push({
+                        ItemType: egg.ItemType,
+                        _id: new Types.ObjectId()
+                    });
+                }
+                break;
+            }
             case "DiscoveredMarkers": {
                 for (const clientMarker of value) {
                     const dbMarker = inventory.DiscoveredMarkers.find(x => x.tag == clientMarker.tag);
