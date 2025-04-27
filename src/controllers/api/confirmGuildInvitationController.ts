@@ -1,8 +1,14 @@
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { Guild, GuildMember } from "@/src/models/guildModel";
 import { Account } from "@/src/models/loginModel";
-import { deleteGuild, getGuildClient, hasGuildPermission, removeDojoKeyItems } from "@/src/services/guildService";
-import { addRecipes, combineInventoryChanges, getInventory } from "@/src/services/inventoryService";
+import {
+    deleteGuild,
+    getGuildClient,
+    giveClanKey,
+    hasGuildPermission,
+    removeDojoKeyItems
+} from "@/src/services/guildService";
+import { getInventory } from "@/src/services/inventoryService";
 import { getAccountForRequest, getAccountIdForRequest, getSuffixedName } from "@/src/services/loginService";
 import { GuildPermission } from "@/src/types/guildTypes";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
@@ -41,14 +47,7 @@ export const confirmGuildInvitationGetController: RequestHandler = async (req, r
         // Update inventory of new member
         const inventory = await getInventory(account._id.toString(), "GuildId LevelKeys Recipes");
         inventory.GuildId = new Types.ObjectId(req.query.clanId as string);
-        const recipeChanges = [
-            {
-                ItemType: "/Lotus/Types/Keys/DojoKeyBlueprint",
-                ItemCount: 1
-            }
-        ];
-        addRecipes(inventory, recipeChanges);
-        combineInventoryChanges(inventoryChanges, { Recipes: recipeChanges });
+        giveClanKey(inventory, inventoryChanges);
         await inventory.save();
 
         const guild = (await Guild.findById(req.query.clanId as string))!;
@@ -96,14 +95,9 @@ export const confirmGuildInvitationPostController: RequestHandler = async (req, 
         await GuildMember.deleteMany({ accountId: guildMember.accountId, status: 1 });
 
         // Update inventory of new member
-        const inventory = await getInventory(guildMember.accountId.toString(), "GuildId Recipes");
+        const inventory = await getInventory(guildMember.accountId.toString(), "GuildId LevelKeys Recipes");
         inventory.GuildId = new Types.ObjectId(req.query.clanId as string);
-        addRecipes(inventory, [
-            {
-                ItemType: "/Lotus/Types/Keys/DojoKeyBlueprint",
-                ItemCount: 1
-            }
-        ]);
+        giveClanKey(inventory);
         await inventory.save();
 
         // Add join to clan log

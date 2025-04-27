@@ -38,6 +38,7 @@
   "noKimCooldowns": false,
   "instantResourceExtractorDrones": false,
   "noResourceExtractorDronesDamage": false,
+  "skipClanKeyCrafting": false,
   "noDojoRoomBuildStage": false,
   "noDecoBuildStage": false,
   "fastDojoRoomDestruction": false,

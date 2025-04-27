@@ -153,6 +153,7 @@ dict = {
     cheats_noKimCooldowns: `No KIM Cooldowns`,
     cheats_instantResourceExtractorDrones: `Instant Resource Extractor Drones`,
     cheats_noResourceExtractorDronesDamage: `No Resource Extractor Drones Damage`,
+    cheats_skipClanKeyCrafting: `Skip Clan Key Crafting`,
     cheats_noDojoRoomBuildStage: `No Dojo Room Build Stage`,
     cheats_noDojoDecoBuildStage: `No Dojo Deco Build Stage`,
     cheats_fastDojoRoomDestruction: `Fast Dojo Room Destruction`,

@@ -154,6 +154,7 @@ dict = {
     cheats_noKimCooldowns: `Чаты KIM без кулдауна`,
     cheats_instantResourceExtractorDrones: `Мгновенные Экстракторы Ресурсов`,
     cheats_noResourceExtractorDronesDamage: `Без урона по дронам-сборщикам`,
+    cheats_skipClanKeyCrafting: `[UNTRANSLATED] Skip Clan Key Crafting`,
     cheats_noDojoRoomBuildStage: `Мгновенное Строительтво Комнат Додзё`,
     cheats_noDojoDecoBuildStage: `Мгновенное Строительтво Декораций Додзё`,
     cheats_fastDojoRoomDestruction: `Мгновенные Уничтожение Комнат Додзё`,

@@ -1,6 +1,6 @@
 import { Request } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getInventory } from "@/src/services/inventoryService";
+import { addLevelKeys, addRecipes, combineInventoryChanges, getInventory } from "@/src/services/inventoryService";
 import { Alliance, AllianceMember, Guild, GuildAd, GuildMember, TGuildDatabaseDocument } from "@/src/models/guildModel";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import {
@@ -653,6 +653,32 @@ export const checkClanAscensionHasRequiredContributors = async (guild: TGuildDat
                     }
                 ]);
             });
+        }
+    }
+};
+
+export const giveClanKey = (inventory: TInventoryDatabaseDocument, inventoryChanges?: IInventoryChanges): void => {
+    if (config.skipClanKeyCrafting) {
+        const levelKeyChanges = [
+            {
+                ItemType: "/Lotus/Types/Keys/DojoKey",
+                ItemCount: 1
+            }
+        ];
+        addLevelKeys(inventory, levelKeyChanges);
+        if (inventoryChanges) {
+            combineInventoryChanges(inventoryChanges, { LevelKeys: levelKeyChanges });
+        }
+    } else {
+        const recipeChanges = [
+            {
+                ItemType: "/Lotus/Types/Keys/DojoKeyBlueprint",
+                ItemCount: 1
+            }
+        ];
+        addRecipes(inventory, recipeChanges);
+        if (inventoryChanges) {
+            combineInventoryChanges(inventoryChanges, { Recipes: recipeChanges });
         }
     }
 };

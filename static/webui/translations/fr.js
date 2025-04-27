@@ -154,6 +154,7 @@ dict = {
     cheats_noKimCooldowns: `Aucun cooldown sur le KIM`,
     cheats_instantResourceExtractorDrones: `Ressources de drones d'extraction instantannées`,
     cheats_noResourceExtractorDronesDamage: `Aucun dégâts aux drones d'extraction de resources`,
+    cheats_skipClanKeyCrafting: `[UNTRANSLATED] Skip Clan Key Crafting`,
     cheats_noDojoRoomBuildStage: `Aucune attente (construction des salles)`,
     cheats_noDojoDecoBuildStage: `Aucune attente (construction des décorations)`,
     cheats_fastDojoRoomDestruction: `Destruction de salle instantanée (Dojo)`,

@@ -2,8 +2,9 @@ import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { Guild, GuildMember } from "@/src/models/guildModel";
-import { createUniqueClanName, getGuildClient } from "@/src/services/guildService";
-import { addRecipes, getInventory } from "@/src/services/inventoryService";
+import { createUniqueClanName, getGuildClient, giveClanKey } from "@/src/services/guildService";
+import { getInventory } from "@/src/services/inventoryService";
+import { IInventoryChanges } from "@/src/types/purchaseTypes";
 
 export const createGuildController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -26,26 +27,15 @@ export const createGuildController: RequestHandler = async (req, res) => {
         rank: 0
     });
 
-    const inventory = await getInventory(accountId, "GuildId Recipes");
+    const inventory = await getInventory(accountId, "GuildId LevelKeys Recipes");
     inventory.GuildId = guild._id;
-    addRecipes(inventory, [
-        {
-            ItemType: "/Lotus/Types/Keys/DojoKeyBlueprint",
-            ItemCount: 1
-        }
-    ]);
+    const inventoryChanges: IInventoryChanges = {};
+    giveClanKey(inventory, inventoryChanges);
     await inventory.save();
 
     res.json({
         ...(await getGuildClient(guild, accountId)),
-        InventoryChanges: {
-            Recipes: [
-                {
-                    ItemType: "/Lotus/Types/Keys/DojoKeyBlueprint",
-                    ItemCount: 1
-                }
-            ]
-        }
+        InventoryChanges: inventoryChanges
     });
 };
 

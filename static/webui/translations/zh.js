@@ -154,6 +154,7 @@ dict = {
     cheats_noKimCooldowns: `[UNTRANSLATED] No KIM Cooldowns`,
     cheats_instantResourceExtractorDrones: `即时资源采集无人机`,
     cheats_noResourceExtractorDronesDamage: `[UNTRANSLATED] No Resource Extractor Drones Damage`,
+    cheats_skipClanKeyCrafting: `[UNTRANSLATED] Skip Clan Key Crafting`,
     cheats_noDojoRoomBuildStage: `无视道场房间建造阶段`,
     cheats_noDojoDecoBuildStage: `[UNTRANSLATED] No Dojo Deco Build Stage`,
     cheats_fastDojoRoomDestruction: `快速拆除道场房间`,

@@ -44,6 +44,7 @@ interface IConfig {
     noKimCooldowns?: boolean;
     instantResourceExtractorDrones?: boolean;
     noResourceExtractorDronesDamage?: boolean;
+    skipClanKeyCrafting?: boolean;
     noDojoRoomBuildStage?: boolean;
     noDojoDecoBuildStage?: boolean;
     fastDojoRoomDestruction?: boolean;
