@@ -27,7 +27,15 @@ const viewController: RequestHandler = async (req, res) => {
         for (const type of Object.keys(ExportEnemies.avatars)) {
             if (!scans.has(type)) scans.add(type);
         }
-        responseJson.Scans ??= [];
+
+        // Take any existing scans and also set them to 9999
+        if (responseJson.Scans) {
+            for (const scan of responseJson.Scans) {
+                scans.add(scan.type);
+            }
+        }
+        responseJson.Scans = [];
+
         for (const type of scans) {
             responseJson.Scans.push({ type: type, scans: 9999 });
         }
