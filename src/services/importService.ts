@@ -2,6 +2,7 @@ import { Types } from "mongoose";
 import {
     IEquipmentClient,
     IEquipmentDatabase,
+    IItemConfig,
     IOperatorConfigClient,
     IOperatorConfigDatabase
 } from "../types/inventoryTypes/commonInventoryTypes";
@@ -171,6 +172,20 @@ const convertNemesis = (client: INemesisClient): INemesisDatabase => {
         ...client,
         fp: BigInt(client.fp),
         d: convertDate(client.d)
+    };
+};
+
+// Empty objects from live may have been encoded as empty arrays because of PHP.
+const convertItemConfig = <T extends IItemConfig>(client: T): T => {
+    return {
+        ...client,
+        pricol: Array.isArray(client.pricol) ? {} : client.pricol,
+        attcol: Array.isArray(client.attcol) ? {} : client.attcol,
+        sigcol: Array.isArray(client.sigcol) ? {} : client.sigcol,
+        eyecol: Array.isArray(client.eyecol) ? {} : client.eyecol,
+        facial: Array.isArray(client.facial) ? {} : client.facial,
+        cloth: Array.isArray(client.cloth) ? {} : client.cloth,
+        syancol: Array.isArray(client.syancol) ? {} : client.syancol
     };
 };
 
@@ -352,7 +367,7 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         db.PlayerSkills = client.PlayerSkills;
     }
     if (client.LotusCustomization !== undefined) {
-        db.LotusCustomization = client.LotusCustomization;
+        db.LotusCustomization = convertItemConfig(client.LotusCustomization);
     }
     if (client.CollectibleSeries !== undefined) {
         db.CollectibleSeries = client.CollectibleSeries;

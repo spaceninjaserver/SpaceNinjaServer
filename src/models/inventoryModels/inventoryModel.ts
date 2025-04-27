@@ -781,9 +781,25 @@ const loreFragmentScansSchema = new Schema<ILoreFragmentScan>(
     { _id: false }
 );
 
-const lotusCustomizationSchema = new Schema<ILotusCustomization>().add(ItemConfigSchema).add({
-    Persona: String
-});
+// const lotusCustomizationSchema = new Schema<ILotusCustomization>().add(ItemConfigSchema).add({
+//     Persona: String
+// });
+
+// Laxer schema for cleanupInventory
+const lotusCustomizationSchema = new Schema<ILotusCustomization>(
+    {
+        Skins: [String],
+        pricol: colorSchema,
+        attcol: Schema.Types.Mixed,
+        sigcol: Schema.Types.Mixed,
+        eyecol: Schema.Types.Mixed,
+        facial: Schema.Types.Mixed,
+        cloth: Schema.Types.Mixed,
+        syancol: Schema.Types.Mixed,
+        Persona: String
+    },
+    { _id: false }
+);
 
 const evolutionProgressSchema = new Schema<IEvolutionProgress>(
     {

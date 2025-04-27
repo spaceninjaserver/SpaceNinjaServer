@@ -1847,6 +1847,25 @@ export const cleanupInventory = (inventory: TInventoryDatabaseDocument): void =>
         logger.debug(`removing FreeFavorsEarned from LibrarySyndicate`);
         LibrarySyndicate.FreeFavorsEarned = undefined;
     }
+
+    if (inventory.LotusCustomization) {
+        if (
+            Array.isArray(inventory.LotusCustomization.attcol) ||
+            Array.isArray(inventory.LotusCustomization.sigcol) ||
+            Array.isArray(inventory.LotusCustomization.eyecol) ||
+            Array.isArray(inventory.LotusCustomization.facial) ||
+            Array.isArray(inventory.LotusCustomization.cloth) ||
+            Array.isArray(inventory.LotusCustomization.syancol)
+        ) {
+            logger.debug(`fixing empty objects represented as empty arrays in LotusCustomization`);
+            inventory.LotusCustomization.attcol = {};
+            inventory.LotusCustomization.sigcol = {};
+            inventory.LotusCustomization.eyecol = {};
+            inventory.LotusCustomization.facial = {};
+            inventory.LotusCustomization.cloth = {};
+            inventory.LotusCustomization.syancol = {};
+        }
+    }
 };
 
 export const getCalendarProgress = (inventory: TInventoryDatabaseDocument): ICalendarProgress => {
