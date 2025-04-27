@@ -1039,6 +1039,8 @@ const pendingRecipeSchema = new Schema<IPendingRecipeDatabase>(
     {
         ItemType: String,
         CompletionDate: Date,
+        TargetItemId: String,
+        TargetFingerprint: String,
         LongGuns: { type: [EquipmentSchema], default: undefined },
         Pistols: { type: [EquipmentSchema], default: undefined },
         Melee: { type: [EquipmentSchema], default: undefined },
@@ -1260,11 +1262,11 @@ const nemesisSchema = new Schema<INemesisDatabase>(
         PrevOwners: Number,
         SecondInCommand: Boolean,
         Weakened: Boolean,
-        InfNodes: [infNodeSchema],
+        InfNodes: { type: [infNodeSchema], default: undefined },
         HenchmenKilled: Number,
         HintProgress: Number,
-        Hints: [Number],
-        GuessHistory: [Number],
+        Hints: { type: [Number], default: undefined },
+        GuessHistory: { type: [Number], default: undefined },
         MissionCount: Number,
         LastEnc: Number
     },
@@ -1609,7 +1611,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //CorpusLich or GrineerLich
         NemesisAbandonedRewards: { type: [String], default: [] },
         Nemesis: nemesisSchema,
-        NemesisHistory: [Schema.Types.Mixed],
+        NemesisHistory: { type: [nemesisSchema], default: undefined },
         LastNemesisAllySpawnTime: Schema.Types.Mixed,
 
         //TradingRulesConfirmed,ShowFriendInvNotifications(Option->Social)

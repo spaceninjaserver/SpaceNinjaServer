@@ -43,6 +43,7 @@ export interface IInventoryDatabase
             | "RecentVendorPurchases"
             | "NextRefill"
             | "Nemesis"
+            | "NemesisHistory"
             | "EntratiVaultCountResetDate"
             | "BrandedSuits"
             | "LockedWeaponGroup"
@@ -79,6 +80,7 @@ export interface IInventoryDatabase
     RecentVendorPurchases?: IRecentVendorPurchaseDatabase[];
     NextRefill?: Date;
     Nemesis?: INemesisDatabase;
+    NemesisHistory?: INemesisBaseDatabase[];
     EntratiVaultCountResetDate?: Date;
     BrandedSuits?: Types.ObjectId[];
     LockedWeaponGroup?: ILockedWeaponGroupDatabase;
@@ -313,7 +315,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     EquippedInstrument?: string;
     InvasionChainProgress: IInvasionChainProgress[];
     Nemesis?: INemesisClient;
-    NemesisHistory: INemesisBaseClient[];
+    NemesisHistory?: INemesisBaseClient[];
     LastNemesisAllySpawnTime?: IMongoDate;
     Settings?: ISettings;
     PersonalTechProjects: IPersonalTechProjectClient[];
@@ -902,8 +904,8 @@ export interface IPendingRecipeDatabase {
     ItemType: string;
     CompletionDate: Date;
     ItemId: IOid;
-    TargetItemId?: string; // likely related to liches
-    TargetFingerprint?: string; // likely related to liches
+    TargetItemId?: string; // unsure what this is for
+    TargetFingerprint?: string;
     LongGuns?: IEquipmentDatabase[];
     Pistols?: IEquipmentDatabase[];
     Melee?: IEquipmentDatabase[];
@@ -949,6 +951,17 @@ export interface IInnateDamageFingerprint {
 
 export interface ICrewShipComponentFingerprint extends IInnateDamageFingerprint {
     SubroutineIndex?: number;
+}
+
+export interface INemesisWeaponTargetFingerprint {
+    ItemType: string;
+    UpgradeFingerprint: IInnateDamageFingerprint;
+    Name: string;
+}
+
+export interface INemesisPetTargetFingerprint {
+    Parts: string[];
+    Name: string;
 }
 
 export enum GettingSlotOrderInfo {

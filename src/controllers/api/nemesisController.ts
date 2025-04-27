@@ -3,6 +3,7 @@ import {
     encodeNemesisGuess,
     getInfNodes,
     getNemesisPasscode,
+    getWeaponsForManifest,
     IKnifeResponse
 } from "@/src/helpers/nemesisHelpers";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
@@ -170,18 +171,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
 
         let weaponIdx = -1;
         if (body.target.Faction != "FC_INFESTATION") {
-            let weapons: readonly string[];
-            if (body.target.manifest == "/Lotus/Types/Game/Nemesis/KuvaLich/KuvaLichManifestVersionSix") {
-                weapons = kuvaLichVersionSixWeapons;
-            } else if (
-                body.target.manifest == "/Lotus/Types/Enemies/Corpus/Lawyers/LawyerManifestVersionFour" ||
-                body.target.manifest == "/Lotus/Types/Enemies/Corpus/Lawyers/LawyerManifestVersionThree"
-            ) {
-                weapons = corpusVersionThreeWeapons;
-            } else {
-                throw new Error(`unknown nemesis manifest: ${body.target.manifest}`);
-            }
-
+            const weapons = getWeaponsForManifest(body.target.manifest);
             const initialWeaponIdx = new SRng(body.target.fp).randomInt(0, weapons.length - 1);
             weaponIdx = initialWeaponIdx;
             do {
@@ -283,39 +273,3 @@ interface INemesisRequiemRequest {
         HiddenWhenHolstered: boolean;
     };
 }
-
-const kuvaLichVersionSixWeapons = [
-    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Drakgoon/KuvaDrakgoon",
-    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Karak/KuvaKarak",
-    "/Lotus/Weapons/Grineer/Melee/GrnKuvaLichScythe/GrnKuvaLichScytheWeapon",
-    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Kohm/KuvaKohm",
-    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Ogris/KuvaOgris",
-    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Quartakk/KuvaQuartakk",
-    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Tonkor/KuvaTonkor",
-    "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Brakk/KuvaBrakk",
-    "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Kraken/KuvaKraken",
-    "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Seer/KuvaSeer",
-    "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Stubba/KuvaStubba",
-    "/Lotus/Weapons/Grineer/HeavyWeapons/GrnHeavyGrenadeLauncher",
-    "/Lotus/Weapons/Grineer/LongGuns/GrnKuvaLichRifle/GrnKuvaLichRifleWeapon",
-    "/Lotus/Weapons/Grineer/Bows/GrnBow/GrnBowWeapon",
-    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Hind/KuvaHind",
-    "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Nukor/KuvaNukor",
-    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Hek/KuvaHekWeapon",
-    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Zarr/KuvaZarr",
-    "/Lotus/Weapons/Grineer/KuvaLich/HeavyWeapons/Grattler/KuvaGrattler",
-    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Sobek/KuvaSobek"
-];
-
-const corpusVersionThreeWeapons = [
-    "/Lotus/Weapons/Corpus/LongGuns/CrpBriefcaseLauncher/CrpBriefcaseLauncher",
-    "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEArcaPlasmor/CrpBEArcaPlasmor",
-    "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEFluxRifle/CrpBEFluxRifle",
-    "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBETetra/CrpBETetra",
-    "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBECycron/CrpBECycron",
-    "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEDetron/CrpBEDetron",
-    "/Lotus/Weapons/Corpus/Pistols/CrpIgniterPistol/CrpIgniterPistol",
-    "/Lotus/Weapons/Corpus/Pistols/CrpBriefcaseAkimbo/CrpBriefcaseAkimboPistol",
-    "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxWeapon",
-    "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEGlaxion/CrpBEGlaxion"
-];

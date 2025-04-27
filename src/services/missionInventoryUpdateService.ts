@@ -35,6 +35,8 @@ import {
     combineInventoryChanges,
     generateRewardSeed,
     getCalendarProgress,
+    giveNemesisPetRecipe,
+    giveNemesisWeaponRecipe,
     updateCurrency,
     updateSyndicate
 } from "@/src/services/inventoryService";
@@ -53,7 +55,7 @@ import kuriaMessage50 from "@/static/fixed_responses/kuriaMessages/fiftyPercent.
 import kuriaMessage75 from "@/static/fixed_responses/kuriaMessages/seventyFivePercent.json";
 import kuriaMessage100 from "@/static/fixed_responses/kuriaMessages/oneHundredPercent.json";
 import conservationAnimals from "@/static/fixed_responses/conservationAnimals.json";
-import { getInfNodes } from "@/src/helpers/nemesisHelpers";
+import { getInfNodes, getWeaponsForManifest } from "@/src/helpers/nemesisHelpers";
 import { Loadout } from "../models/inventoryModels/loadoutModel";
 import { ILoadoutConfigDatabase } from "../types/saveLoadoutTypes";
 import { getLiteSortie, getWorldState, idToWeek } from "./worldStateService";
@@ -612,6 +614,52 @@ export const addMissionInventoryUpdates = async (
                 }
                 break;
             }
+            case "NemesisKillConvert":
+                if (inventory.Nemesis) {
+                    inventory.NemesisHistory ??= [];
+                    inventory.NemesisHistory.push({
+                        // Copy over all 'base' values
+                        fp: inventory.Nemesis.fp,
+                        d: inventory.Nemesis.d,
+                        manifest: inventory.Nemesis.manifest,
+                        KillingSuit: inventory.Nemesis.KillingSuit,
+                        killingDamageType: inventory.Nemesis.killingDamageType,
+                        ShoulderHelmet: inventory.Nemesis.ShoulderHelmet,
+                        WeaponIdx: inventory.Nemesis.WeaponIdx,
+                        AgentIdx: inventory.Nemesis.AgentIdx,
+                        BirthNode: inventory.Nemesis.BirthNode,
+                        Faction: inventory.Nemesis.Faction,
+                        Rank: inventory.Nemesis.Rank,
+                        Traded: inventory.Nemesis.Traded,
+                        PrevOwners: inventory.Nemesis.PrevOwners,
+                        SecondInCommand: inventory.Nemesis.SecondInCommand,
+                        Weakened: inventory.Nemesis.Weakened,
+                        // And set killed flag
+                        k: value.killed
+                    });
+
+                    if (value.killed) {
+                        if (value.weaponLoc) {
+                            const weaponType = getWeaponsForManifest(inventory.Nemesis.manifest)[
+                                inventory.Nemesis.WeaponIdx
+                            ];
+                            giveNemesisWeaponRecipe(
+                                inventory,
+                                weaponType,
+                                value.nemesisName,
+                                value.weaponLoc,
+                                inventory.Nemesis.KillingSuit,
+                                inventory.Nemesis.fp
+                            );
+                        }
+                        if (value.petLoc) {
+                            giveNemesisPetRecipe(inventory);
+                        }
+                    }
+
+                    inventory.Nemesis = undefined;
+                }
+                break;
             default:
                 // Equipment XP updates
                 if (equipmentKeys.includes(key as TEquipmentKey)) {

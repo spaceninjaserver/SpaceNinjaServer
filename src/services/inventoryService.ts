@@ -26,7 +26,9 @@ import {
     Status,
     IKubrowPetDetailsDatabase,
     ITraits,
-    ICalendarProgress
+    ICalendarProgress,
+    INemesisWeaponTargetFingerprint,
+    INemesisPetTargetFingerprint
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate, IUpdateNodeIntrosResponse } from "../types/genericUpdate";
 import { IKeyChainRequest, IMissionInventoryUpdateRequest } from "../types/requestTypes";
@@ -79,6 +81,7 @@ import { getRandomElement, getRandomInt, getRandomWeightedReward, SRng } from ".
 import { createMessage } from "./inboxService";
 import { getMaxStanding } from "@/src/helpers/syndicateStandingHelper";
 import { getWorldState } from "./worldStateService";
+import { getInnateDamageTag, getInnateDamageValue } from "../helpers/nemesisHelpers";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
@@ -327,7 +330,8 @@ export const addItem = async (
     typeName: string,
     quantity: number = 1,
     premiumPurchase: boolean = false,
-    seed?: bigint
+    seed?: bigint,
+    targetFingerprint?: string
 ): Promise<IInventoryChanges> => {
     // Bundles are technically StoreItems but a) they don't have a normal counterpart, and b) they are used in non-StoreItem contexts, e.g. email attachments.
     if (typeName in ExportBundles) {
@@ -530,6 +534,12 @@ export const addItem = async (
                     ]
                 });
             }
+            if (targetFingerprint) {
+                const targetFingerprintObj = JSON.parse(targetFingerprint) as INemesisWeaponTargetFingerprint;
+                defaultOverwrites.UpgradeType = targetFingerprintObj.ItemType;
+                defaultOverwrites.UpgradeFingerprint = JSON.stringify(targetFingerprintObj.UpgradeFingerprint);
+                defaultOverwrites.ItemName = targetFingerprintObj.Name;
+            }
             const inventoryChanges = addEquipment(inventory, weapon.productCategory, typeName, defaultOverwrites);
             if (weapon.additionalItems) {
                 for (const item of weapon.additionalItems) {
@@ -543,6 +553,27 @@ export const addItem = async (
                     productCategoryToInventoryBin(weapon.productCategory) ?? InventorySlot.WEAPONS,
                     premiumPurchase
                 )
+            };
+        } else if (targetFingerprint) {
+            // Sister's Hound
+            const targetFingerprintObj = JSON.parse(targetFingerprint) as INemesisPetTargetFingerprint;
+            const head = targetFingerprintObj.Parts[0];
+            const defaultOverwrites: Partial<IEquipmentDatabase> = {
+                ModularParts: targetFingerprintObj.Parts,
+                ItemName: targetFingerprintObj.Name,
+                Configs: applyDefaultUpgrades(inventory, ExportWeapons[head].defaultUpgrades)
+            };
+            const itemType = {
+                "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadA":
+                    "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetAPowerSuit",
+                "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadB":
+                    "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetBPowerSuit",
+                "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadC":
+                    "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetCPowerSuit"
+            }[head] as string;
+            return {
+                ...addEquipment(inventory, "MoaPets", itemType, defaultOverwrites),
+                ...occupySlot(inventory, InventorySlot.SENTINELS, premiumPurchase)
             };
         } else {
             // Modular weapon parts
@@ -1850,4 +1881,79 @@ export const getCalendarProgress = (inventory: TInventoryDatabaseDocument): ICal
     }
 
     return inventory.CalendarProgress;
+};
+
+export const giveNemesisWeaponRecipe = (
+    inventory: TInventoryDatabaseDocument,
+    weaponType: string,
+    nemesisName: string = "AGOR ROK",
+    weaponLoc?: string,
+    KillingSuit: string = "/Lotus/Powersuits/Ember/Ember",
+    fp: bigint = generateRewardSeed()
+): void => {
+    if (!weaponLoc) {
+        weaponLoc = ExportWeapons[weaponType].name;
+    }
+    const recipeType = Object.entries(ExportRecipes).find(arr => arr[1].resultType == weaponType)![0];
+    addRecipes(inventory, [
+        {
+            ItemType: recipeType,
+            ItemCount: 1
+        }
+    ]);
+    inventory.PendingRecipes.push({
+        CompletionDate: new Date(),
+        ItemType: recipeType,
+        TargetFingerprint: JSON.stringify({
+            ItemType: "/Lotus/Weapons/Grineer/KuvaLich/Upgrades/InnateDamageRandomMod",
+            UpgradeFingerprint: {
+                compat: weaponType,
+                buffs: [
+                    {
+                        Tag: getInnateDamageTag(KillingSuit),
+                        Value: getInnateDamageValue(fp)
+                    }
+                ]
+            },
+            Name: weaponLoc + "|" + nemesisName
+        } satisfies INemesisWeaponTargetFingerprint)
+    });
+};
+
+export const giveNemesisPetRecipe = (inventory: TInventoryDatabaseDocument, nemesisName: string = "AGOR ROK"): void => {
+    const head = getRandomElement([
+        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadA",
+        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadB",
+        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadC"
+    ]);
+    const body = getRandomElement([
+        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartBodyA",
+        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartBodyB",
+        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartBodyC"
+    ]);
+    const legs = getRandomElement([
+        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartLegsA",
+        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartLegsB",
+        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartLegsC"
+    ]);
+    const tail = getRandomElement([
+        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartTailA",
+        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartTailB",
+        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartTailC"
+    ]);
+    const recipeType = Object.entries(ExportRecipes).find(arr => arr[1].resultType == head)![0];
+    addRecipes(inventory, [
+        {
+            ItemType: recipeType,
+            ItemCount: 1
+        }
+    ]);
+    inventory.PendingRecipes.push({
+        CompletionDate: new Date(),
+        ItemType: recipeType,
+        TargetFingerprint: JSON.stringify({
+            Parts: [head, body, legs, tail],
+            Name: "/Lotus/Language/Pets/ZanukaPetName|" + nemesisName
+        } satisfies INemesisPetTargetFingerprint)
+    });
 };

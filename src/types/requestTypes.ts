@@ -22,7 +22,8 @@ import {
     ILoadOutPresets,
     IInvasionProgressClient,
     IWeaponSkinClient,
-    IKubrowPetEggClient
+    IKubrowPetEggClient,
+    INemesisClient
 } from "./inventoryTypes/inventoryTypes";
 import { IGroup } from "./loginTypes";
 
@@ -74,6 +75,14 @@ export type IMissionInventoryUpdateRequest = {
     PS: string;
     ActiveDojoColorResearch: string;
     RewardInfo?: IRewardInfo;
+    NemesisKillConvert?: {
+        nemesisName: string;
+        weaponLoc: string;
+        petLoc: "" | "/Lotus/Language/Pets/ZanukaPetName";
+        fingerprint: bigint | number;
+        killed: boolean;
+    };
+    target?: INemesisClient;
     ReceivedCeremonyMsg: boolean;
     LastCeremonyResetDate: number;
     MissionPTS: number;

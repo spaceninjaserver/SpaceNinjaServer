@@ -1,4 +1,4 @@
-import { ExportRegions } from "warframe-public-export-plus";
+import { ExportRegions, ExportWarframes } from "warframe-public-export-plus";
 import { IInfNode } from "@/src/types/inventoryTypes/inventoryTypes";
 import { SRng } from "@/src/services/rngService";
 import { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel";
@@ -128,4 +128,148 @@ export const consumeModCharge = (
         response.UpgradeFingerprints.push({ lvl: 1 });
         response.UpgradeNew.push(true);
     }
+};
+
+const kuvaLichVersionSixWeapons = [
+    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Drakgoon/KuvaDrakgoon",
+    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Karak/KuvaKarak",
+    "/Lotus/Weapons/Grineer/Melee/GrnKuvaLichScythe/GrnKuvaLichScytheWeapon",
+    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Kohm/KuvaKohm",
+    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Ogris/KuvaOgris",
+    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Quartakk/KuvaQuartakk",
+    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Tonkor/KuvaTonkor",
+    "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Brakk/KuvaBrakk",
+    "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Kraken/KuvaKraken",
+    "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Seer/KuvaSeer",
+    "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Stubba/KuvaStubba",
+    "/Lotus/Weapons/Grineer/HeavyWeapons/GrnHeavyGrenadeLauncher",
+    "/Lotus/Weapons/Grineer/LongGuns/GrnKuvaLichRifle/GrnKuvaLichRifleWeapon",
+    "/Lotus/Weapons/Grineer/Bows/GrnBow/GrnBowWeapon",
+    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Hind/KuvaHind",
+    "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Nukor/KuvaNukor",
+    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Hek/KuvaHekWeapon",
+    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Zarr/KuvaZarr",
+    "/Lotus/Weapons/Grineer/KuvaLich/HeavyWeapons/Grattler/KuvaGrattler",
+    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Sobek/KuvaSobek"
+];
+
+const corpusVersionThreeWeapons = [
+    "/Lotus/Weapons/Corpus/LongGuns/CrpBriefcaseLauncher/CrpBriefcaseLauncher",
+    "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEArcaPlasmor/CrpBEArcaPlasmor",
+    "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEFluxRifle/CrpBEFluxRifle",
+    "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBETetra/CrpBETetra",
+    "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBECycron/CrpBECycron",
+    "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEDetron/CrpBEDetron",
+    "/Lotus/Weapons/Corpus/Pistols/CrpIgniterPistol/CrpIgniterPistol",
+    "/Lotus/Weapons/Corpus/Pistols/CrpBriefcaseAkimbo/CrpBriefcaseAkimboPistol",
+    "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxWeapon",
+    "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEGlaxion/CrpBEGlaxion"
+];
+
+export const getWeaponsForManifest = (manifest: string): readonly string[] => {
+    switch (manifest) {
+        case "/Lotus/Types/Game/Nemesis/KuvaLich/KuvaLichManifestVersionSix":
+            return kuvaLichVersionSixWeapons;
+        case "/Lotus/Types/Enemies/Corpus/Lawyers/LawyerManifestVersionThree":
+        case "/Lotus/Types/Enemies/Corpus/Lawyers/LawyerManifestVersionFour":
+            return corpusVersionThreeWeapons;
+    }
+    throw new Error(`unknown nemesis manifest: ${manifest}`);
+};
+
+// TODO: This sucks.
+export const getInnateDamageTag = (
+    KillingSuit: string
+):
+    | "InnateElectricityDamage"
+    | "InnateFreezeDamage"
+    | "InnateHeatDamage"
+    | "InnateImpactDamage"
+    | "InnateMagDamage"
+    | "InnateRadDamage"
+    | "InnateToxinDamage" => {
+    const baseSuitType = ExportWarframes[KillingSuit].parentName;
+    switch (baseSuitType) {
+        case "/Lotus/Powersuits/Volt/VoltBaseSuit":
+        case "/Lotus/Powersuits/Excalibur/ExcaliburBaseSuit":
+        case "/Lotus/Powersuits/AntiMatter/NovaBaseSuit":
+        case "/Lotus/Powersuits/Banshee/BansheeBaseSuit":
+        case "/Lotus/Powersuits/Berserker/BerserkerBaseSuit":
+        case "/Lotus/Powersuits/Magician/MagicianBaseSuit":
+        case "/Lotus/Powersuits/Sentient/SentientBaseSuit":
+        case "/Lotus/Powersuits/Gyre/GyreBaseSuit":
+            return "InnateElectricityDamage";
+        case "/Lotus/Powersuits/Ember/EmberBaseSuit":
+        case "/Lotus/Powersuits/Dragon/DragonBaseSuit":
+        case "/Lotus/Powersuits/Nezha/NezhaBaseSuit":
+        case "/Lotus/Powersuits/Sandman/SandmanBaseSuit":
+        case "/Lotus/Powersuits/Trapper/TrapperBaseSuit":
+        case "/Lotus/Powersuits/Wisp/WispBaseSuit":
+        case "/Lotus/Powersuits/Odalisk/OdaliskBaseSuit":
+        case "/Lotus/Powersuits/PaxDuviricus/PaxDuviricusBaseSuit":
+        case "/Lotus/Powersuits/Choir/ChoirBaseSuit":
+        case "/Lotus/Powersuits/Temple/TempleBaseSuit":
+            return "InnateHeatDamage";
+        case "/Lotus/Powersuits/Frost/FrostBaseSuit":
+        case "/Lotus/Powersuits/Glass/GlassBaseSuit":
+        case "/Lotus/Powersuits/Fairy/FairyBaseSuit":
+        case "/Lotus/Powersuits/IronFrame/IronFrameBaseSuit":
+        case "/Lotus/Powersuits/Revenant/RevenantBaseSuit":
+        case "/Lotus/Powersuits/Trinity/TrinityBaseSuit":
+        case "/Lotus/Powersuits/Hoplite/HopliteBaseSuit":
+        case "/Lotus/Powersuits/Koumei/KoumeiBaseSuit":
+            return "InnateFreezeDamage";
+        case "/Lotus/Powersuits/Saryn/SarynBaseSuit":
+        case "/Lotus/Powersuits/Paladin/PaladinBaseSuit":
+        case "/Lotus/Powersuits/Brawler/BrawlerBaseSuit":
+        case "/Lotus/Powersuits/Infestation/InfestationBaseSuit":
+        case "/Lotus/Powersuits/Necro/NecroBaseSuit":
+        case "/Lotus/Powersuits/Khora/KhoraBaseSuit":
+        case "/Lotus/Powersuits/Ranger/RangerBaseSuit":
+        case "/Lotus/Powersuits/Dagath/DagathBaseSuit":
+            return "InnateToxinDamage";
+        case "/Lotus/Powersuits/Mag/MagBaseSuit":
+        case "/Lotus/Powersuits/Pirate/PirateBaseSuit":
+        case "/Lotus/Powersuits/Cowgirl/CowgirlBaseSuit":
+        case "/Lotus/Powersuits/Priest/PriestBaseSuit":
+        case "/Lotus/Powersuits/BrokenFrame/BrokenFrameBaseSuit":
+        case "/Lotus/Powersuits/Alchemist/AlchemistBaseSuit":
+        case "/Lotus/Powersuits/Yareli/YareliBaseSuit":
+        case "/Lotus/Powersuits/Geode/GeodeBaseSuit":
+        case "/Lotus/Powersuits/Frumentarius/FrumentariusBaseSuit":
+            return "InnateMagDamage";
+        case "/Lotus/Powersuits/Loki/LokiBaseSuit":
+        case "/Lotus/Powersuits/Ninja/NinjaBaseSuit":
+        case "/Lotus/Powersuits/Jade/JadeBaseSuit":
+        case "/Lotus/Powersuits/Bard/BardBaseSuit":
+        case "/Lotus/Powersuits/Harlequin/HarlequinBaseSuit":
+        case "/Lotus/Powersuits/Garuda/GarudaBaseSuit":
+        case "/Lotus/Powersuits/YinYang/YinYangBaseSuit":
+        case "/Lotus/Powersuits/Werewolf/WerewolfBaseSuit":
+        case "/Lotus/Powersuits/ConcreteFrame/ConcreteFrameBaseSuit":
+            return "InnateRadDamage";
+        case "/Lotus/Powersuits/Rhino/RhinoBaseSuit":
+        case "/Lotus/Powersuits/Tengu/TenguBaseSuit":
+        case "/Lotus/Powersuits/MonkeyKing/MonkeyKingBaseSuit":
+        case "/Lotus/Powersuits/Runner/RunnerBaseSuit":
+        case "/Lotus/Powersuits/Pacifist/PacifistBaseSuit":
+        case "/Lotus/Powersuits/Devourer/DevourerBaseSuit":
+        case "/Lotus/Powersuits/Wraith/WraithBaseSuit":
+        case "/Lotus/Powersuits/Pagemaster/PagemasterBaseSuit":
+            return "InnateImpactDamage";
+    }
+    logger.warn(`unknown innate damage type for ${KillingSuit}, using heat as a fallback`);
+    return "InnateHeatDamage";
+};
+
+// TODO: For -1399275245665749231n, the value should be 75306944, but we're off by 59 with 75307003.
+export const getInnateDamageValue = (fp: bigint): number => {
+    const rng = new SRng(fp);
+    rng.randomFloat(); // used for the weapon index
+    const WeaponUpgradeValueAttenuationExponent = 2.25;
+    let value = Math.pow(rng.randomFloat(), WeaponUpgradeValueAttenuationExponent);
+    if (value >= 0.941428) {
+        value = 1;
+    }
+    return Math.trunc(value * 0x40000000);
 };

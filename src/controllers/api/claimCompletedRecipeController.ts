@@ -133,7 +133,14 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
         if (recipe.secretIngredientAction != "SIA_UNBRAND") {
             InventoryChanges = {
                 ...InventoryChanges,
-                ...(await addItem(inventory, recipe.resultType, recipe.num, false))
+                ...(await addItem(
+                    inventory,
+                    recipe.resultType,
+                    recipe.num,
+                    false,
+                    undefined,
+                    pendingRecipe.TargetFingerprint
+                ))
             };
         }
         await inventory.save();
