@@ -505,7 +505,7 @@ export const hasGuildPermissionEx = (
 
 export const removePigmentsFromGuildMembers = async (guildId: string | Types.ObjectId): Promise<void> => {
     const members = await GuildMember.find({ guildId, status: 0 }, "accountId");
-    for (const member of members) {
+    await parallelForeach(members, async member => {
         const inventory = await getInventory(member.accountId.toString(), "MiscItems");
         const index = inventory.MiscItems.findIndex(
             x => x.ItemType == "/Lotus/Types/Items/Research/DojoColors/GenericDojoColorPigment"
@@ -514,7 +514,7 @@ export const removePigmentsFromGuildMembers = async (guildId: string | Types.Obj
             inventory.MiscItems.splice(index, 1);
             await inventory.save();
         }
-    }
+    });
 };
 
 export const processGuildTechProjectContributionsUpdate = async (
