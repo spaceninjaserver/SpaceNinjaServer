@@ -73,7 +73,6 @@ const generatableVendors: IGeneratableVendorInfo[] = [
     {
         _id: { $oid: "67dadc30e4b6e0e5979c8d84" },
         TypeName: "/Lotus/Types/Game/VendorManifests/TheHex/InfestedLichWeaponVendorManifest",
-        PropertyTextHash: "77093DD05A8561A022DEC9A4B9BB4A56",
         RandomSeedType: "VRST_WEAPON",
         RequiredGoalTag: "",
         WeaponUpgradeValueAttenuationExponent: 2.25,
@@ -83,7 +82,6 @@ const generatableVendors: IGeneratableVendorInfo[] = [
     {
         _id: { $oid: "60ad3b6ec96976e97d227e19" },
         TypeName: "/Lotus/Types/Game/VendorManifests/Hubs/PerrinSequenceWeaponVendorManifest",
-        PropertyTextHash: "34F8CF1DFF745F0D67433A5EF0A03E70",
         RandomSeedType: "VRST_WEAPON",
         WeaponUpgradeValueAttenuationExponent: 2.25,
         cycleOffset: 1744934400_000,
@@ -92,21 +90,18 @@ const generatableVendors: IGeneratableVendorInfo[] = [
     {
         _id: { $oid: "5be4a159b144f3cdf1c22efa" },
         TypeName: "/Lotus/Types/Game/VendorManifests/Solaris/DebtTokenVendorManifest",
-        PropertyTextHash: "A39621049CA3CA13761028CD21C239EF",
         RandomSeedType: "VRST_FLAVOUR_TEXT",
         cycleDuration: unixTimesInMs.hour
     },
     {
         _id: { $oid: "61ba123467e5d37975aeeb03" },
         TypeName: "/Lotus/Types/Game/VendorManifests/Hubs/GuildAdvertisementVendorManifest",
-        PropertyTextHash: "255AFE2169BAE4130B4B20D7C55D14FA",
         RandomSeedType: "VRST_FLAVOUR_TEXT",
         cycleDuration: unixTimesInMs.week
     }
     // {
     //     _id: { $oid: "5dbb4c41e966f7886c3ce939" },
-    //     TypeName: "/Lotus/Types/Game/VendorManifests/Hubs/IronwakeDondaVendorManifest",
-    //     PropertyTextHash: "62B64A8065B7C0FA345895D4BC234621"
+    //     TypeName: "/Lotus/Types/Game/VendorManifests/Hubs/IronwakeDondaVendorManifest"
     // }
 ];
 
