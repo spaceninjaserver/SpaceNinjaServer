@@ -17,6 +17,7 @@ import {
     dict_uk,
     dict_zh,
     ExportArcanes,
+    ExportBoosters,
     ExportCustoms,
     ExportDrones,
     ExportGear,
@@ -217,15 +218,30 @@ export const convertInboxMessage = (message: IInboxMessage): IMessage => {
 };
 
 export const isStoreItem = (type: string): boolean => {
-    return type.startsWith("/Lotus/StoreItems/");
+    return type.startsWith("/Lotus/StoreItems/") || type in ExportBoosters;
 };
 
 export const toStoreItem = (type: string): string => {
+    if (type.startsWith("/Lotus/Types/StoreItems/Boosters/")) {
+        const boosterEntry = Object.entries(ExportBoosters).find(arr => arr[1].typeName == type);
+        if (boosterEntry) {
+            return boosterEntry[0];
+        }
+        throw new Error(`could not convert ${type} to a store item`);
+    }
     return "/Lotus/StoreItems/" + type.substring("/Lotus/".length);
 };
 
 export const fromStoreItem = (type: string): string => {
-    return "/Lotus/" + type.substring("/Lotus/StoreItems/".length);
+    if (type.startsWith("/Lotus/StoreItems/")) {
+        return "/Lotus/" + type.substring("/Lotus/StoreItems/".length);
+    }
+
+    if (type in ExportBoosters) {
+        return ExportBoosters[type].typeName;
+    }
+
+    throw new Error(`${type} is not a store item`);
 };
 
 export const getDefaultUpgrades = (parts: string[]): IDefaultUpgrade[] | undefined => {
