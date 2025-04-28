@@ -2,9 +2,12 @@ import {
     consumeModCharge,
     encodeNemesisGuess,
     getInfNodes,
+    getKnifeUpgrade,
     getNemesisPasscode,
+    getNemesisPasscodeModTypes,
     getWeaponsForManifest,
-    IKnifeResponse
+    IKnifeResponse,
+    showdownNodes
 } from "@/src/helpers/nemesisHelpers";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
@@ -15,6 +18,8 @@ import { IMongoDate, IOid } from "@/src/types/commonTypes";
 import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import {
     IInnateDamageFingerprint,
+    IInventoryClient,
+    INemesisClient,
     InventorySlot,
     IUpgradeClient,
     IWeaponSkinClient,
@@ -100,50 +105,45 @@ export const nemesisController: RequestHandler = async (req, res) => {
                 encodeNemesisGuess(guess[0], result1, guess[1], result2, guess[2], result3)
             );
 
-            // Increase antivirus
-            let antivirusGain = 5;
-            const loadout = (await Loadout.findById(inventory.LoadOutPresets, "DATAKNIFE"))!;
-            const dataknifeLoadout = loadout.DATAKNIFE.id(inventory.CurrentLoadOutIds[LoadoutIndex.DATAKNIFE].$oid);
-            const dataknifeConfigIndex = dataknifeLoadout?.s?.mod ?? 0;
-            const dataknifeUpgrades = inventory.DataKnives[0].Configs[dataknifeConfigIndex].Upgrades!;
+            // Increase antivirus if correct antivirus mod is installed
             const response: IKnifeResponse = {};
-            for (const upgrade of body.knife!.AttachedUpgrades) {
-                switch (upgrade.ItemType) {
-                    case "/Lotus/Upgrades/Mods/DataSpike/Potency/GainAntivirusAndSpeedOnUseMod":
-                        antivirusGain += 10;
-                        consumeModCharge(response, inventory, upgrade, dataknifeUpgrades);
-                        break;
-                    case "/Lotus/Upgrades/Mods/DataSpike/Potency/GainAntivirusAndWeaponDamageOnUseMod":
-                        antivirusGain += 10;
-                        consumeModCharge(response, inventory, upgrade, dataknifeUpgrades);
-                        break;
-                    case "/Lotus/Upgrades/Mods/DataSpike/Potency/GainAntivirusLargeOnSingleUseMod": // Instant Secure
-                        antivirusGain += 15;
-                        consumeModCharge(response, inventory, upgrade, dataknifeUpgrades);
-                        break;
-                    case "/Lotus/Upgrades/Mods/DataSpike/Potency/GainAntivirusOnUseMod": // Immuno Shield
-                        antivirusGain += 15;
-                        consumeModCharge(response, inventory, upgrade, dataknifeUpgrades);
-                        break;
-                    case "/Lotus/Upgrades/Mods/DataSpike/Potency/GainAntivirusSmallOnSingleUseMod":
-                        antivirusGain += 10;
-                        consumeModCharge(response, inventory, upgrade, dataknifeUpgrades);
-                        break;
+            if (result1 == 0 || result2 == 0 || result3 == 0) {
+                let antivirusGain = 5;
+                const loadout = (await Loadout.findById(inventory.LoadOutPresets, "DATAKNIFE"))!;
+                const dataknifeLoadout = loadout.DATAKNIFE.id(inventory.CurrentLoadOutIds[LoadoutIndex.DATAKNIFE].$oid);
+                const dataknifeConfigIndex = dataknifeLoadout?.s?.mod ?? 0;
+                const dataknifeUpgrades = inventory.DataKnives[0].Configs[dataknifeConfigIndex].Upgrades!;
+                for (const upgrade of body.knife!.AttachedUpgrades) {
+                    switch (upgrade.ItemType) {
+                        case "/Lotus/Upgrades/Mods/DataSpike/Potency/GainAntivirusAndSpeedOnUseMod":
+                            antivirusGain += 10;
+                            consumeModCharge(response, inventory, upgrade, dataknifeUpgrades);
+                            break;
+                        case "/Lotus/Upgrades/Mods/DataSpike/Potency/GainAntivirusAndWeaponDamageOnUseMod":
+                            antivirusGain += 10;
+                            consumeModCharge(response, inventory, upgrade, dataknifeUpgrades);
+                            break;
+                        case "/Lotus/Upgrades/Mods/DataSpike/Potency/GainAntivirusLargeOnSingleUseMod": // Instant Secure
+                            antivirusGain += 15;
+                            consumeModCharge(response, inventory, upgrade, dataknifeUpgrades);
+                            break;
+                        case "/Lotus/Upgrades/Mods/DataSpike/Potency/GainAntivirusOnUseMod": // Immuno Shield
+                            antivirusGain += 15;
+                            consumeModCharge(response, inventory, upgrade, dataknifeUpgrades);
+                            break;
+                        case "/Lotus/Upgrades/Mods/DataSpike/Potency/GainAntivirusSmallOnSingleUseMod":
+                            antivirusGain += 10;
+                            consumeModCharge(response, inventory, upgrade, dataknifeUpgrades);
+                            break;
+                    }
                 }
+                inventory.Nemesis!.HenchmenKilled += antivirusGain;
             }
-            inventory.Nemesis!.HenchmenKilled += antivirusGain;
+
             if (inventory.Nemesis!.HenchmenKilled >= 100) {
                 inventory.Nemesis!.HenchmenKilled = 100;
-                inventory.Nemesis!.InfNodes = [
-                    {
-                        Node: "CrewBattleNode559",
-                        Influence: 1
-                    }
-                ];
-                inventory.Nemesis!.Weakened = true;
-            } else {
-                inventory.Nemesis!.InfNodes = getInfNodes("FC_INFESTATION", 0);
             }
+            inventory.Nemesis!.InfNodes = getInfNodes("FC_INFESTATION", 0);
 
             await inventory.save();
             res.json(response);
@@ -213,6 +213,38 @@ export const nemesisController: RequestHandler = async (req, res) => {
         res.json({
             target: inventory.toJSON().Nemesis
         });
+    } else if ((req.query.mode as string) == "w") {
+        const inventory = await getInventory(
+            accountId,
+            "Nemesis LoadOutPresets CurrentLoadOutIds DataKnives Upgrades RawUpgrades"
+        );
+        //const body = getJSONfromString<INemesisWeakenRequest>(String(req.body));
+
+        inventory.Nemesis!.InfNodes = [
+            {
+                Node: showdownNodes[inventory.Nemesis!.Faction],
+                Influence: 1
+            }
+        ];
+        inventory.Nemesis!.Weakened = true;
+
+        const response: IKnifeResponse & { target: INemesisClient } = {
+            target: inventory.toJSON<IInventoryClient>().Nemesis!
+        };
+
+        // Consume charge of the correct requiem mod(s)
+        const loadout = (await Loadout.findById(inventory.LoadOutPresets, "DATAKNIFE"))!;
+        const dataknifeLoadout = loadout.DATAKNIFE.id(inventory.CurrentLoadOutIds[LoadoutIndex.DATAKNIFE].$oid);
+        const dataknifeConfigIndex = dataknifeLoadout?.s?.mod ?? 0;
+        const dataknifeUpgrades = inventory.DataKnives[0].Configs[dataknifeConfigIndex].Upgrades!;
+        const modTypes = getNemesisPasscodeModTypes(inventory.Nemesis!);
+        for (const modType of modTypes) {
+            const upgrade = getKnifeUpgrade(inventory, dataknifeUpgrades, modType);
+            consumeModCharge(response, inventory, upgrade, dataknifeUpgrades);
+        }
+
+        await inventory.save();
+        res.json(response);
     } else {
         logger.debug(`data provided to ${req.path}: ${String(req.body)}`);
         throw new Error(`unknown nemesis mode: ${String(req.query.mode)}`);
@@ -264,12 +296,19 @@ interface INemesisRequiemRequest {
     guess: number; // grn/crp: 4 bits | coda: 3x 4 bits
     position: number; // grn/crp: 0-2 | coda: 0
     // knife field provided for coda only
-    knife?: {
-        Item: IEquipmentClient;
-        Skins: IWeaponSkinClient[];
-        ModSlot: number;
-        CustSlot: number;
-        AttachedUpgrades: IUpgradeClient[];
-        HiddenWhenHolstered: boolean;
-    };
+    knife?: IKnife;
+}
+
+// interface INemesisWeakenRequest {
+//     target: INemesisClient;
+//     knife: IKnife;
+// }
+
+interface IKnife {
+    Item: IEquipmentClient;
+    Skins: IWeaponSkinClient[];
+    ModSlot: number;
+    CustSlot: number;
+    AttachedUpgrades: IUpgradeClient[];
+    HiddenWhenHolstered: boolean;
 }

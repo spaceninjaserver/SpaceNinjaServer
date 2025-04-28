@@ -38,15 +38,57 @@ const systemIndexes: Record<string, number[]> = {
     FC_INFESTATION: [23]
 };
 
+export const showdownNodes: Record<string, string> = {
+    FC_GRINEER: "CrewBattleNode557",
+    FC_CORPUS: "CrewBattleNode558",
+    FC_INFESTATION: "CrewBattleNode559"
+};
+
 // Get a parazon 'passcode' based on the nemesis fingerprint so it's always the same for the same nemesis.
 export const getNemesisPasscode = (nemesis: { fp: bigint; Faction: string }): number[] => {
     const rng = new SRng(nemesis.fp);
-    const passcode = [rng.randomInt(0, 7)];
+    const choices = [0, 1, 2, 3, 5, 6, 7];
+    let choiceIndex = rng.randomInt(0, choices.length - 1);
+    const passcode = [choices[choiceIndex]];
     if (nemesis.Faction != "FC_INFESTATION") {
-        passcode.push(rng.randomInt(0, 7));
-        passcode.push(rng.randomInt(0, 7));
+        choices.splice(choiceIndex, 1);
+        choiceIndex = rng.randomInt(0, choices.length - 1);
+        passcode.push(choices[choiceIndex]);
+
+        choices.splice(choiceIndex, 1);
+        choiceIndex = rng.randomInt(0, choices.length - 1);
+        passcode.push(choices[choiceIndex]);
     }
     return passcode;
+};
+
+const reqiuemMods: readonly string[] = [
+    "/Lotus/Upgrades/Mods/Immortal/ImmortalOneMod",
+    "/Lotus/Upgrades/Mods/Immortal/ImmortalTwoMod",
+    "/Lotus/Upgrades/Mods/Immortal/ImmortalThreeMod",
+    "/Lotus/Upgrades/Mods/Immortal/ImmortalFourMod",
+    "/Lotus/Upgrades/Mods/Immortal/ImmortalFiveMod",
+    "/Lotus/Upgrades/Mods/Immortal/ImmortalSixMod",
+    "/Lotus/Upgrades/Mods/Immortal/ImmortalSevenMod",
+    "/Lotus/Upgrades/Mods/Immortal/ImmortalEightMod"
+];
+
+const antivirusMods: readonly string[] = [
+    "/Lotus/Upgrades/Mods/Immortal/AntivirusOneMod",
+    "/Lotus/Upgrades/Mods/Immortal/AntivirusTwoMod",
+    "/Lotus/Upgrades/Mods/Immortal/AntivirusThreeMod",
+    "/Lotus/Upgrades/Mods/Immortal/AntivirusFourMod",
+    "/Lotus/Upgrades/Mods/Immortal/AntivirusFiveMod",
+    "/Lotus/Upgrades/Mods/Immortal/AntivirusSixMod",
+    "/Lotus/Upgrades/Mods/Immortal/AntivirusSevenMod",
+    "/Lotus/Upgrades/Mods/Immortal/AntivirusEightMod"
+];
+
+export const getNemesisPasscodeModTypes = (nemesis: { fp: bigint; Faction: string }): string[] => {
+    const passcode = getNemesisPasscode(nemesis);
+    return nemesis.Faction == "FC_INFESTATION"
+        ? passcode.map(i => antivirusMods[i])
+        : passcode.map(i => reqiuemMods[i]);
 };
 
 export const encodeNemesisGuess = (
@@ -78,6 +120,31 @@ export interface IKnifeResponse {
     UpgradeNew?: boolean[];
     HasKnife?: boolean;
 }
+
+export const getKnifeUpgrade = (
+    inventory: TInventoryDatabaseDocument,
+    dataknifeUpgrades: string[],
+    type: string
+): { ItemId: IOid; ItemType: string } => {
+    if (dataknifeUpgrades.indexOf(type) != -1) {
+        return {
+            ItemId: { $oid: "000000000000000000000000" },
+            ItemType: type
+        };
+    }
+    for (const upgradeId of dataknifeUpgrades) {
+        if (upgradeId.length == 24) {
+            const upgrade = inventory.Upgrades.id(upgradeId);
+            if (upgrade && upgrade.ItemType == type) {
+                return {
+                    ItemId: { $oid: upgradeId },
+                    ItemType: type
+                };
+            }
+        }
+    }
+    throw new Error(`${type} does not seem to be installed on parazon?!`);
+};
 
 export const consumeModCharge = (
     response: IKnifeResponse,
