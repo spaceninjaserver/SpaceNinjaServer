@@ -1,4 +1,5 @@
 import { unixTimesInMs } from "@/src/constants/timeConstants";
+import { catBreadHash } from "@/src/helpers/stringHelpers";
 import { CRng, mixSeeds } from "@/src/services/rngService";
 import { IMongoDate } from "@/src/types/commonTypes";
 import { IItemManifest, IVendorInfo, IVendorManifest } from "@/src/types/vendorTypes";
@@ -6,7 +7,6 @@ import { ExportVendors, IRange } from "warframe-public-export-plus";
 
 import ArchimedeanVendorManifest from "@/static/fixed_responses/getVendorInfo/ArchimedeanVendorManifest.json";
 import DeimosEntratiFragmentVendorProductsManifest from "@/static/fixed_responses/getVendorInfo/DeimosEntratiFragmentVendorProductsManifest.json";
-import DeimosFishmongerVendorManifest from "@/static/fixed_responses/getVendorInfo/DeimosFishmongerVendorManifest.json";
 import DeimosHivemindCommisionsManifestFishmonger from "@/static/fixed_responses/getVendorInfo/DeimosHivemindCommisionsManifestFishmonger.json";
 import DeimosHivemindCommisionsManifestPetVendor from "@/static/fixed_responses/getVendorInfo/DeimosHivemindCommisionsManifestPetVendor.json";
 import DeimosHivemindCommisionsManifestProspector from "@/static/fixed_responses/getVendorInfo/DeimosHivemindCommisionsManifestProspector.json";
@@ -22,12 +22,10 @@ import HubsIronwakeDondaVendorManifest from "@/static/fixed_responses/getVendorI
 import HubsRailjackCrewMemberVendorManifest from "@/static/fixed_responses/getVendorInfo/HubsRailjackCrewMemberVendorManifest.json";
 import MaskSalesmanManifest from "@/static/fixed_responses/getVendorInfo/MaskSalesmanManifest.json";
 import Nova1999ConquestShopManifest from "@/static/fixed_responses/getVendorInfo/Nova1999ConquestShopManifest.json";
-import OstronFishmongerVendorManifest from "@/static/fixed_responses/getVendorInfo/OstronFishmongerVendorManifest.json";
 import OstronPetVendorManifest from "@/static/fixed_responses/getVendorInfo/OstronPetVendorManifest.json";
 import OstronProspectorVendorManifest from "@/static/fixed_responses/getVendorInfo/OstronProspectorVendorManifest.json";
 import RadioLegionIntermission12VendorManifest from "@/static/fixed_responses/getVendorInfo/RadioLegionIntermission12VendorManifest.json";
 import SolarisDebtTokenVendorRepossessionsManifest from "@/static/fixed_responses/getVendorInfo/SolarisDebtTokenVendorRepossessionsManifest.json";
-import SolarisFishmongerVendorManifest from "@/static/fixed_responses/getVendorInfo/SolarisFishmongerVendorManifest.json";
 import SolarisProspectorVendorManifest from "@/static/fixed_responses/getVendorInfo/SolarisProspectorVendorManifest.json";
 import Temple1999VendorManifest from "@/static/fixed_responses/getVendorInfo/Temple1999VendorManifest.json";
 import TeshinHardModeVendorManifest from "@/static/fixed_responses/getVendorInfo/TeshinHardModeVendorManifest.json";
@@ -36,7 +34,6 @@ import ZarimanCommisionsManifestArchimedean from "@/static/fixed_responses/getVe
 const rawVendorManifests: IVendorManifest[] = [
     ArchimedeanVendorManifest,
     DeimosEntratiFragmentVendorProductsManifest,
-    DeimosFishmongerVendorManifest,
     DeimosHivemindCommisionsManifestFishmonger,
     DeimosHivemindCommisionsManifestPetVendor,
     DeimosHivemindCommisionsManifestProspector,
@@ -52,12 +49,10 @@ const rawVendorManifests: IVendorManifest[] = [
     HubsRailjackCrewMemberVendorManifest,
     MaskSalesmanManifest,
     Nova1999ConquestShopManifest,
-    OstronFishmongerVendorManifest,
     OstronPetVendorManifest,
     OstronProspectorVendorManifest,
     RadioLegionIntermission12VendorManifest,
     SolarisDebtTokenVendorRepossessionsManifest,
-    SolarisFishmongerVendorManifest,
     SolarisProspectorVendorManifest,
     Temple1999VendorManifest,
     TeshinHardModeVendorManifest, // uses preprocessing
@@ -88,22 +83,20 @@ const generatableVendors: IGeneratableVendorInfo[] = [
         cycleDuration: 4 * unixTimesInMs.day
     },
     {
-        _id: { $oid: "5be4a159b144f3cdf1c22efa" },
-        TypeName: "/Lotus/Types/Game/VendorManifests/Solaris/DebtTokenVendorManifest",
-        RandomSeedType: "VRST_FLAVOUR_TEXT",
-        cycleDuration: unixTimesInMs.hour
-    },
-    {
         _id: { $oid: "61ba123467e5d37975aeeb03" },
         TypeName: "/Lotus/Types/Game/VendorManifests/Hubs/GuildAdvertisementVendorManifest",
         RandomSeedType: "VRST_FLAVOUR_TEXT",
-        cycleDuration: unixTimesInMs.week
+        cycleDuration: unixTimesInMs.week // TODO: Auto-detect this based on the items, so we don't need to specify it explicitly.
     }
     // {
     //     _id: { $oid: "5dbb4c41e966f7886c3ce939" },
     //     TypeName: "/Lotus/Types/Game/VendorManifests/Hubs/IronwakeDondaVendorManifest"
     // }
 ];
+
+const getVendorOid = (typeName: string): string => {
+    return "5be4a159b144f3cd" + catBreadHash(typeName).toString(16).padStart(8, "0");
+};
 
 export const getVendorManifestByTypeName = (typeName: string): IVendorManifest | undefined => {
     for (const vendorManifest of rawVendorManifests) {
@@ -115,6 +108,14 @@ export const getVendorManifestByTypeName = (typeName: string): IVendorManifest |
         if (vendorInfo.TypeName == typeName) {
             return generateVendorManifest(vendorInfo);
         }
+    }
+    if (typeName in ExportVendors) {
+        return generateVendorManifest({
+            _id: { $oid: getVendorOid(typeName) },
+            TypeName: typeName,
+            RandomSeedType: ExportVendors[typeName].randomSeedType,
+            cycleDuration: unixTimesInMs.hour
+        });
     }
     return undefined;
 };
@@ -128,6 +129,17 @@ export const getVendorManifestByOid = (oid: string): IVendorManifest | undefined
     for (const vendorInfo of generatableVendors) {
         if (vendorInfo._id.$oid == oid) {
             return generateVendorManifest(vendorInfo);
+        }
+    }
+    for (const [typeName, manifest] of Object.entries(ExportVendors)) {
+        const typeNameOid = getVendorOid(typeName);
+        if (typeNameOid == oid) {
+            return generateVendorManifest({
+                _id: { $oid: typeNameOid },
+                TypeName: typeName,
+                RandomSeedType: manifest.randomSeedType,
+                cycleDuration: unixTimesInMs.hour
+            });
         }
     }
     return undefined;
@@ -195,7 +207,7 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
         const rng = new CRng(mixSeeds(vendorSeed, cycleIndex));
         const manifest = ExportVendors[vendorInfo.TypeName];
         const offersToAdd = [];
-        if (manifest.numItems && manifest.numItems.minValue != manifest.numItems.maxValue) {
+        if (manifest.numItems && !manifest.isOneBinPerCycle) {
             const numItemsTarget = rng.randomInt(manifest.numItems.minValue, manifest.numItems.maxValue);
             while (processed.ItemManifest.length + offersToAdd.length < numItemsTarget) {
                 // TODO: Consider per-bin item limits
@@ -262,6 +274,13 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
                               rawItem.credits.maxValue / rawItem.credits.step
                           ) * rawItem.credits.step;
                 item.RegularPrice = [value, value];
+            }
+            if (rawItem.platinum) {
+                const value =
+                    typeof rawItem.platinum == "number"
+                        ? rawItem.platinum
+                        : rng.randomInt(rawItem.platinum.minValue, rawItem.platinum.maxValue);
+                item.PremiumPrice = [value, value];
             }
             if (vendorInfo.RandomSeedType) {
                 item.LocTagRandSeed = (rng.randomInt(0, 0xffff) << 16) | rng.randomInt(0, 0xffff);
