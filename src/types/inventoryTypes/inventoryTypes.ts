@@ -52,6 +52,7 @@ export interface IInventoryDatabase
             | "LastLiteSortieReward"
             | "CrewMembers"
             | "QualifyingInvasions"
+            | "LastInventorySync"
             | TEquipmentKey
         >,
         InventoryDatabaseEquipment {
@@ -89,6 +90,7 @@ export interface IInventoryDatabase
     LastLiteSortieReward?: ILastSortieRewardDatabase[];
     CrewMembers: ICrewMemberDatabase[];
     QualifyingInvasions: IInvasionProgressDatabase[];
+    LastInventorySync?: Types.ObjectId;
 }
 
 export interface IQuestKeyDatabase {
@@ -333,7 +335,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     LotusCustomization?: ILotusCustomization;
     UseAdultOperatorLoadout?: boolean;
     NemesisAbandonedRewards: string[];
-    LastInventorySync: IOid;
+    LastInventorySync?: IOid;
     NextRefill?: IMongoDate;
     FoundToday?: IMiscItem[]; // for Argon Crystals
     CustomMarkers?: ICustomMarkers[];

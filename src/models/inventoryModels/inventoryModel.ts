@@ -1662,6 +1662,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         //Unknown and system
         DuviriInfo: DuviriInfoSchema,
+        LastInventorySync: Schema.Types.ObjectId,
         Mailbox: MailboxSchema,
         HandlerPoints: Number,
         ChallengesFixVersion: { type: Number, default: 6 },
@@ -1758,6 +1759,9 @@ inventorySchema.set("toJSON", {
                 m: inventoryDatabase.LockedWeaponGroup.m ? toOid(inventoryDatabase.LockedWeaponGroup.m) : undefined,
                 sn: inventoryDatabase.LockedWeaponGroup.sn ? toOid(inventoryDatabase.LockedWeaponGroup.sn) : undefined
             };
+        }
+        if (inventoryDatabase.LastInventorySync) {
+            inventoryResponse.LastInventorySync = toOid(inventoryDatabase.LastInventorySync);
         }
     }
 });

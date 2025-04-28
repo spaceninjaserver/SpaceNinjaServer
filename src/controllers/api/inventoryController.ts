@@ -18,10 +18,12 @@ import {
     addMiscItems,
     allDailyAffiliationKeys,
     cleanupInventory,
-    createLibraryDailyTask
+    createLibraryDailyTask,
+    generateRewardSeed
 } from "@/src/services/inventoryService";
 import { logger } from "@/src/utils/logger";
 import { catBreadHash } from "@/src/helpers/stringHelpers";
+import { Types } from "mongoose";
 
 export const inventoryController: RequestHandler = async (request, response) => {
     const accountId = await getAccountIdForRequest(request);
@@ -87,7 +89,7 @@ export const inventoryController: RequestHandler = async (request, response) => 
         cleanupInventory(inventory);
 
         inventory.NextRefill = new Date((Math.trunc(Date.now() / 86400000) + 1) * 86400000);
-        await inventory.save();
+        //await inventory.save();
     }
 
     if (
@@ -96,8 +98,19 @@ export const inventoryController: RequestHandler = async (request, response) => 
         new Date() >= inventory.InfestedFoundry.AbilityOverrideUnlockCooldown
     ) {
         handleSubsumeCompletion(inventory);
-        await inventory.save();
+        //await inventory.save();
     }
+
+    if (inventory.LastInventorySync) {
+        const lastSyncDuviriMood = Math.trunc(inventory.LastInventorySync.getTimestamp().getTime() / 7200000);
+        const currentDuviriMood = Math.trunc(Date.now() / 7200000);
+        if (lastSyncDuviriMood != currentDuviriMood) {
+            logger.debug(`refreshing duviri seed`);
+            inventory.DuviriInfo.Seed = generateRewardSeed();
+        }
+    }
+    inventory.LastInventorySync = new Types.ObjectId();
+    await inventory.save();
 
     response.json(await getInventoryResponse(inventory, "xpBasedLevelCapDisabled" in request.query));
 };
@@ -274,7 +287,7 @@ export const getInventoryResponse = async (
     }
 
     // Omitting this field so opening the navigation resyncs the inventory which is more desirable for typical usage.
-    //inventoryResponse.LastInventorySync = toOid(new Types.ObjectId());
+    inventoryResponse.LastInventorySync = undefined;
 
     // Set 2FA enabled so trading post can be used
     inventoryResponse.HWIDProtectEnabled = true;
