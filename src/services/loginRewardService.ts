@@ -77,7 +77,6 @@ const getRandomLoginReward = (rng: CRng, day: number, inventory: TInventoryDatab
     const reward = rng.randomReward(randomRewards)!;
     //const reward = randomRewards.find(x => x.RewardType == "RT_BOOSTER")!;
     if (reward.RewardType == "RT_RANDOM_RECIPE") {
-        // Not very faithful implementation but roughly the same idea
         const masteredItems = new Set();
         for (const entry of inventory.XPInfo) {
             masteredItems.add(entry.ItemType);
@@ -95,12 +94,12 @@ const getRandomLoginReward = (rng: CRng, day: number, inventory: TInventoryDatab
         }
         const eligibleRecipes: string[] = [];
         for (const [uniqueName, recipe] of Object.entries(ExportRecipes)) {
-            if (unmasteredItems.has(recipe.resultType)) {
+            if (!recipe.excludeFromMarket && unmasteredItems.has(recipe.resultType)) {
                 eligibleRecipes.push(uniqueName);
             }
         }
         if (eligibleRecipes.length == 0) {
-            // This account has all warframes and weapons already mastered (filthy cheater), need a different reward.
+            // This account has all applicable warframes and weapons already mastered (filthy cheater), need a different reward.
             return getRandomLoginReward(rng, day, inventory);
         }
         reward.StoreItemType = toStoreItem(rng.randomElement(eligibleRecipes));
