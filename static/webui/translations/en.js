@@ -83,7 +83,7 @@ dict = {
     inventory_sentinelWeapons: `Sentinel Weapons`,
     inventory_operatorAmps: `Amps`,
     inventory_hoverboards: `K-Drives`,
-    inventory_moaPets: `Moa`,
+    inventory_moaPets: `Moas`,
     inventory_kubrowPets: `Beasts`,
     inventory_evolutionProgress: `Incarnon Evolution Progress`,
     inventory_bulkAddSuits: `Add Missing Warframes`,

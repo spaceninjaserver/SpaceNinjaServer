@@ -84,7 +84,7 @@ dict = {
     inventory_sentinelWeapons: `Armes de sentinelles`,
     inventory_operatorAmps: `Amplificateurs`,
     inventory_hoverboards: `K-Drives`,
-    inventory_moaPets: `Moa`,
+    inventory_moaPets: `Moas`,
     inventory_kubrowPets: `Bêtes`,
     inventory_evolutionProgress: `[UNTRANSLATED] Incarnon Evolution Progress`,
     inventory_bulkAddSuits: `Ajouter les Warframes manquantes`,
