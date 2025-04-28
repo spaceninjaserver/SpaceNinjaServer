@@ -13,6 +13,7 @@ import { addItems, combineInventoryChanges, getInventory } from "@/src/services/
 import { logger } from "@/src/utils/logger";
 import { ExportFlavour, ExportGear } from "warframe-public-export-plus";
 import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
+import { fromStoreItem, isStoreItem } from "@/src/services/itemDataService";
 
 export const inboxController: RequestHandler = async (req, res) => {
     const { deleteId, lastMessage: latestClientMessageId, messageId } = req.query;
@@ -48,7 +49,7 @@ export const inboxController: RequestHandler = async (req, res) => {
             await addItems(
                 inventory,
                 attachmentItems.map(attItem => ({
-                    ItemType: attItem,
+                    ItemType: isStoreItem(attItem) ? fromStoreItem(attItem) : attItem,
                     ItemCount: attItem in ExportGear ? (ExportGear[attItem].purchaseQuantity ?? 1) : 1
                 })),
                 inventoryChanges

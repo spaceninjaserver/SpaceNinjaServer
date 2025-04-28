@@ -1,12 +1,14 @@
 import { ExportRegions, ExportWarframes } from "warframe-public-export-plus";
-import { IInfNode } from "@/src/types/inventoryTypes/inventoryTypes";
-import { SRng } from "@/src/services/rngService";
+import { IInfNode, ITypeCount } from "@/src/types/inventoryTypes/inventoryTypes";
+import { getRewardAtPercentage, SRng } from "@/src/services/rngService";
 import { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel";
 import { logger } from "../utils/logger";
 import { IOid } from "../types/commonTypes";
 import { Types } from "mongoose";
-import { addMods } from "../services/inventoryService";
+import { addMods, generateRewardSeed } from "../services/inventoryService";
 import { isArchwingMission } from "../services/worldStateService";
+import { fromStoreItem, toStoreItem } from "../services/itemDataService";
+import { createMessage } from "../services/inboxService";
 
 export const getInfNodes = (faction: string, rank: number): IInfNode[] => {
     const infNodes = [];
@@ -339,4 +341,110 @@ export const getInnateDamageValue = (fp: bigint): number => {
         value = 1;
     }
     return Math.trunc(value * 0x40000000);
+};
+
+export const getKillTokenRewardCount = (fp: bigint): number => {
+    const rng = new SRng(fp);
+    return rng.randomInt(10, 15);
+};
+
+// /Lotus/Types/Enemies/InfestedLich/InfestedLichRewardManifest
+const infestedLichRotA = [
+    { type: "/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/PlushyDJRomHuman", probability: 0.046 },
+    { type: "/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/PlushyDJRomInfested", probability: 0.045 },
+    { type: "/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/PlushyDrillbitHuman", probability: 0.046 },
+    { type: "/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/PlushyDrillbitInfested", probability: 0.045 },
+    { type: "/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/PlushyHarddriveHuman", probability: 0.046 },
+    { type: "/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/PlushyHarddriveInfested", probability: 0.045 },
+    { type: "/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/PlushyPacketHuman", probability: 0.046 },
+    { type: "/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/PlushyPacketInfested", probability: 0.045 },
+    { type: "/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/PlushyZekeHuman", probability: 0.046 },
+    { type: "/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/PlushyZekeInfested", probability: 0.045 },
+    { type: "/Lotus/StoreItems/Types/Items/ShipDecos/BoybandPosters/BoybandBillboardPosterA", probability: 0.045 },
+    { type: "/Lotus/StoreItems/Types/Items/ShipDecos/BoybandPosters/BoybandBillboardPosterB", probability: 0.046 },
+    { type: "/Lotus/StoreItems/Types/Items/ShipDecos/BoybandPosters/BoybandDespairPoster", probability: 0.045 },
+    { type: "/Lotus/StoreItems/Types/Items/ShipDecos/BoybandPosters/BoybandGridPoster", probability: 0.046 },
+    { type: "/Lotus/StoreItems/Types/Items/ShipDecos/BoybandPosters/BoybandHuddlePoster", probability: 0.045 },
+    { type: "/Lotus/StoreItems/Types/Items/ShipDecos/BoybandPosters/BoybandJumpPoster", probability: 0.046 },
+    { type: "/Lotus/StoreItems/Types/Items/ShipDecos/BoybandPosters/BoybandLimoPoster", probability: 0.045 },
+    { type: "/Lotus/StoreItems/Types/Items/ShipDecos/BoybandPosters/BoybandLookingDownPosterDay", probability: 0.046 },
+    {
+        type: "/Lotus/StoreItems/Types/Items/ShipDecos/BoybandPosters/BoybandLookingDownPosterNight",
+        probability: 0.045
+    },
+    { type: "/Lotus/StoreItems/Types/Items/ShipDecos/BoybandPosters/BoybandSillyPoster", probability: 0.046 },
+    { type: "/Lotus/StoreItems/Types/Items/ShipDecos/BoybandPosters/BoybandWhiteBluePoster", probability: 0.045 },
+    { type: "/Lotus/StoreItems/Types/Items/ShipDecos/BoybandPosters/BoybandWhitePinkPoster", probability: 0.045 }
+];
+const infestedLichRotB = [
+    { type: "/Lotus/StoreItems/Upgrades/Skins/Effects/InfestedLichEphemeraA", probability: 0.072 },
+    { type: "/Lotus/StoreItems/Upgrades/Skins/Effects/InfestedLichEphemeraB", probability: 0.071 },
+    { type: "/Lotus/StoreItems/Upgrades/Skins/Effects/InfestedLichEphemeraC", probability: 0.072 },
+    { type: "/Lotus/StoreItems/Upgrades/Skins/Effects/InfestedLichEphemeraD", probability: 0.071 },
+    { type: "/Lotus/StoreItems/Upgrades/Skins/Effects/InfestedLichEphemeraE", probability: 0.072 },
+    { type: "/Lotus/StoreItems/Upgrades/Skins/Effects/InfestedLichEphemeraF", probability: 0.071 },
+    { type: "/Lotus/StoreItems/Upgrades/Skins/Effects/InfestedLichEphemeraG", probability: 0.071 },
+    { type: "/Lotus/StoreItems/Upgrades/Skins/Effects/InfestedLichEphemeraH", probability: 0.072 },
+    { type: "/Lotus/StoreItems/Types/Items/Emotes/DanceDJRomHype", probability: 0.071 },
+    { type: "/Lotus/StoreItems/Types/Items/Emotes/DancePacketWindmillShuffle", probability: 0.072 },
+    { type: "/Lotus/StoreItems/Types/Items/Emotes/DanceHarddrivePony", probability: 0.071 },
+    { type: "/Lotus/StoreItems/Types/Items/Emotes/DanceDrillbitCrisscross", probability: 0.072 },
+    { type: "/Lotus/StoreItems/Types/Items/Emotes/DanceZekeCanthavethis", probability: 0.071 },
+    { type: "/Lotus/StoreItems/Types/Items/PhotoBooth/PhotoboothTileRJLasXStadiumBossArena", probability: 0.071 }
+];
+export const getInfestedLichItemRewards = (fp: bigint): string[] => {
+    const rng = new SRng(fp);
+    const rotAReward = getRewardAtPercentage(infestedLichRotA, rng.randomFloat())!.type;
+    rng.randomFloat(); // unused afaict
+    const rotBReward = getRewardAtPercentage(infestedLichRotB, rng.randomFloat())!.type;
+    return [rotAReward, rotBReward];
+};
+
+export const sendCodaFinishedMessage = async (
+    inventory: TInventoryDatabaseDocument,
+    fp: bigint = generateRewardSeed(),
+    name: string = "ZEKE_BEATWOMAN_TM.1999",
+    killed: boolean = true
+): Promise<void> => {
+    const att: string[] = [];
+
+    // First vanquish/convert gives a sigil
+    const sigil = killed
+        ? "/Lotus/Upgrades/Skins/Sigils/InfLichVanquishedSigil"
+        : "/Lotus/Upgrades/Skins/Sigils/InfLichConvertedSigil";
+    if (!inventory.WeaponSkins.find(x => x.ItemType == sigil)) {
+        att.push(toStoreItem(sigil));
+    }
+
+    const [rotAReward, rotBReward] = getInfestedLichItemRewards(fp);
+    att.push(fromStoreItem(rotAReward));
+    att.push(fromStoreItem(rotBReward));
+
+    let countedAtt: ITypeCount[] | undefined;
+    if (killed) {
+        countedAtt = [
+            {
+                ItemType: "/Lotus/Types/Items/MiscItems/CodaWeaponBucks",
+                ItemCount: getKillTokenRewardCount(fp)
+            }
+        ];
+    }
+
+    await createMessage(inventory.accountOwnerId, [
+        {
+            sndr: "/Lotus/Language/Bosses/Ordis",
+            msg: "/Lotus/Language/Inbox/VanquishBandMsgBody",
+            arg: [
+                {
+                    Key: "LICH_NAME",
+                    Tag: name
+                }
+            ],
+            att: att,
+            countedAtt: countedAtt,
+            sub: "/Lotus/Language/Inbox/VanquishBandMsgTitle",
+            icon: "/Lotus/Interface/Icons/Npcs/Ordis.png",
+            highPriority: true
+        }
+    ]);
 };

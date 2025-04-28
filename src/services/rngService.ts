@@ -18,7 +18,10 @@ export const getRandomInt = (min: number, max: number): number => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-const getRewardAtPercentage = <T extends { probability: number }>(pool: T[], percentage: number): T | undefined => {
+export const getRewardAtPercentage = <T extends { probability: number }>(
+    pool: T[],
+    percentage: number
+): T | undefined => {
     if (pool.length == 0) return;
 
     const totalChance = pool.reduce((accum, item) => accum + item.probability, 0);
