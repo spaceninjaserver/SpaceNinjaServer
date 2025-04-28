@@ -1399,7 +1399,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //How many Gift do you have left*(gift spends the trade)
         GiftsRemaining: { type: Number, default: 8 },
         //Curent trade info Giving or Getting items
-        PendingTrades: [Schema.Types.Mixed],
+        //PendingTrades: [Schema.Types.Mixed],
 
         //Syndicate currently being pledged to.
         SupportedSyndicate: String,
@@ -1449,7 +1449,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         KubrowPetEggs: [kubrowPetEggSchema],
         //Prints   Cat(3 Prints)\Kubrow(2 Prints) Pets
-        KubrowPetPrints: [Schema.Types.Mixed],
+        //KubrowPetPrints: [Schema.Types.Mixed],
 
         //Item for EquippedGear example:Scaner,LoadoutTechSummon etc
         Consumables: [typeCountSchema],
@@ -1495,7 +1495,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //item like DojoKey or Boss missions key
         LevelKeys: [typeCountSchema],
         //Active quests
-        Quests: [Schema.Types.Mixed],
+        //Quests: [Schema.Types.Mixed],
 
         //Cosmetics like profile glyphs\Kavasa Prime Kubrow Collar\Game Theme etc
         FlavourItems: [FlavourItemSchema],
@@ -1534,7 +1534,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         TauntHistory: { type: [tauntSchema], default: undefined },
 
         //noShow2FA,VisitPrimeVault etc
-        WebFlags: Schema.Types.Mixed,
+        //WebFlags: Schema.Types.Mixed,
         //Id CompletedAlerts
         CompletedAlerts: [String],
 
@@ -1554,7 +1554,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //the color your clan requests like Items/Research/DojoColors/DojoColorPlainsB
         ActiveDojoColorResearch: String,
 
-        SentientSpawnChanceBoosters: Schema.Types.Mixed,
+        //SentientSpawnChanceBoosters: Schema.Types.Mixed,
 
         QualifyingInvasions: [invasionProgressSchema],
         FactionScores: [Number],
@@ -1589,10 +1589,10 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         // open location store like EidolonPlainsDiscoverable or OrbVallisCaveDiscoverable
         DiscoveredMarkers: [discoveredMarkerSchema],
         //Open location mission like "JobId" + "StageCompletions"
-        CompletedJobs: [Schema.Types.Mixed],
+        //CompletedJobs: [Schema.Types.Mixed],
 
         //Game mission\ivent score example  "Tag": "WaterFight", "Best": 170, "Count": 1258,
-        PersonalGoalProgress: [Schema.Types.Mixed],
+        //PersonalGoalProgress: [Schema.Types.Mixed],
 
         //Setting interface Style
         ThemeStyle: String,
@@ -1622,13 +1622,13 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         LibraryActiveDailyTaskInfo: libraryDailyTaskInfoSchema,
 
         //https://warframe.fandom.com/wiki/Invasion
-        InvasionChainProgress: [Schema.Types.Mixed],
+        //InvasionChainProgress: [Schema.Types.Mixed],
 
         //CorpusLich or GrineerLich
         NemesisAbandonedRewards: { type: [String], default: [] },
         Nemesis: nemesisSchema,
         NemesisHistory: { type: [nemesisSchema], default: undefined },
-        LastNemesisAllySpawnTime: Schema.Types.Mixed,
+        //LastNemesisAllySpawnTime: Schema.Types.Mixed,
 
         //TradingRulesConfirmed,ShowFriendInvNotifications(Option->Social)
         Settings: settingsSchema,
@@ -1642,7 +1642,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         PlayerSkills: { type: playerSkillsSchema, default: {} },
 
         //TradeBannedUntil data
-        TradeBannedUntil: Schema.Types.Mixed,
+        //TradeBannedUntil: Schema.Types.Mixed,
 
         //https://warframe.fandom.com/wiki/Helminth
         InfestedFoundry: infestedFoundrySchema,
@@ -1666,19 +1666,19 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         HandlerPoints: Number,
         ChallengesFixVersion: { type: Number, default: 6 },
         PlayedParkourTutorial: Boolean,
-        ActiveLandscapeTraps: [Schema.Types.Mixed],
-        RepVotes: [Schema.Types.Mixed],
-        LeagueTickets: [Schema.Types.Mixed],
+        //ActiveLandscapeTraps: [Schema.Types.Mixed],
+        //RepVotes: [Schema.Types.Mixed],
+        //LeagueTickets: [Schema.Types.Mixed],
         HasContributedToDojo: Boolean,
         HWIDProtectEnabled: Boolean,
         LoadOutPresets: { type: Schema.Types.ObjectId, ref: "Loadout" },
         CurrentLoadOutIds: [oidSchema],
         RandomUpgradesIdentified: Number,
         BountyScore: Number,
-        ChallengeInstanceStates: [Schema.Types.Mixed],
+        //ChallengeInstanceStates: [Schema.Types.Mixed],
         RecentVendorPurchases: { type: [recentVendorPurchaseSchema], default: undefined },
-        Robotics: [Schema.Types.Mixed],
-        UsedDailyDeals: [Schema.Types.Mixed],
+        //Robotics: [Schema.Types.Mixed],
+        //UsedDailyDeals: [Schema.Types.Mixed],
         CollectibleSeries: { type: [collectibleEntrySchema], default: undefined },
         HasResetAccount: { type: Boolean, default: false },
 
