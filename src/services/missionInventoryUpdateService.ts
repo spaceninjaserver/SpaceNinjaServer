@@ -380,6 +380,7 @@ export const addMissionInventoryUpdates = async (
                                     : 10)
                             ) {
                                 progress.Completed = true;
+                                inventory.LibraryPersonalTarget = undefined;
                             }
                             logger.debug(`synthesis of ${scan.EnemyType} added to personal target progress`);
                             synthesisIgnored = false;
