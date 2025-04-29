@@ -286,7 +286,7 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
                 item.LocTagRandSeed = (rng.randomInt(0, 0xffff) << 16) | rng.randomInt(0, 0xffff);
                 if (vendorInfo.RandomSeedType == "VRST_WEAPON") {
                     const highDword = (rng.randomInt(0, 0xffff) << 16) | rng.randomInt(0, 0xffff);
-                    item.LocTagRandSeed = (BigInt(highDword) << 32n) | BigInt(item.LocTagRandSeed);
+                    item.LocTagRandSeed = (BigInt(highDword) << 32n) | (BigInt(item.LocTagRandSeed) & 0xffffffffn);
                 }
             }
             processed.ItemManifest.push(item);
