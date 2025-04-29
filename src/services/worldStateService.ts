@@ -269,7 +269,10 @@ const pushSortieIfRelevant = (worldState: IWorldState, day: number): void => {
             sortieFactionToFactionIndexes[sortieBossToFaction[boss]].includes(value.factionIndex!) &&
             key in sortieTilesets
         ) {
-            if (!availableMissionIndexes.includes(value.missionIndex)) {
+            if (
+                value.missionIndex != 5 && // Sorties do not have capture missions
+                !availableMissionIndexes.includes(value.missionIndex)
+            ) {
                 availableMissionIndexes.push(value.missionIndex);
             }
             nodes.push(key);
