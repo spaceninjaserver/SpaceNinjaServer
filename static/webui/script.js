@@ -375,6 +375,7 @@ function fetchItemList() {
 }
 fetchItemList();
 
+// Assumes that caller revalidates authz
 function updateInventory() {
     const req = $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1");
     req.done(data => {
@@ -487,25 +488,27 @@ function updateInventory() {
                             a.href = "#";
                             a.onclick = function (event) {
                                 event.preventDefault();
-                                if (item.XP < maxXP) {
-                                    addGearExp(category, item.ItemId.$oid, maxXP - item.XP);
-                                }
-                                if ("exalted" in itemMap[item.ItemType]) {
-                                    for (const exaltedType of itemMap[item.ItemType].exalted) {
-                                        const exaltedItem = data.SpecialItems.find(x => x.ItemType == exaltedType);
-                                        if (exaltedItem) {
-                                            const exaltedCap =
-                                                itemMap[exaltedType]?.type == "weapons" ? 800_000 : 1_600_000;
-                                            if (exaltedItem.XP < exaltedCap) {
-                                                addGearExp(
-                                                    "SpecialItems",
-                                                    exaltedItem.ItemId.$oid,
-                                                    exaltedCap - exaltedItem.XP
-                                                );
+                                revalidateAuthz(() => {
+                                    if (item.XP < maxXP) {
+                                        addGearExp(category, item.ItemId.$oid, maxXP - item.XP);
+                                    }
+                                    if ("exalted" in itemMap[item.ItemType]) {
+                                        for (const exaltedType of itemMap[item.ItemType].exalted) {
+                                            const exaltedItem = data.SpecialItems.find(x => x.ItemType == exaltedType);
+                                            if (exaltedItem) {
+                                                const exaltedCap =
+                                                    itemMap[exaltedType]?.type == "weapons" ? 800_000 : 1_600_000;
+                                                if (exaltedItem.XP < exaltedCap) {
+                                                    addGearExp(
+                                                        "SpecialItems",
+                                                        exaltedItem.ItemId.$oid,
+                                                        exaltedCap - exaltedItem.XP
+                                                    );
+                                                }
                                             }
                                         }
                                     }
-                                }
+                                });
                             };
                             a.title = loc("code_maxRank");
                             a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"/></svg>`;
@@ -1229,76 +1232,22 @@ function addMissingEvolutionProgress() {
 }
 
 function maxRankAllEvolutions() {
-    const req = $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1");
+    revalidateAuthz(() => {
+        const req = $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1");
+        req.done(data => {
+            const requests = [];
 
-    req.done(data => {
-        const requests = [];
-
-        data.EvolutionProgress.forEach(item => {
-            if (item.Rank < 5) {
-                requests.push({
-                    ItemType: item.ItemType,
-                    Rank: 5
-                });
-            }
-        });
-
-        if (Object.keys(requests).length > 0) {
-            return setEvolutionProgress(requests);
-        }
-
-        toast(loc("code_noEquipmentToRankUp"));
-    });
-}
-
-function maxRankAllEquipment(categories) {
-    const req = $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1");
-
-    req.done(data => {
-        window.itemListPromise.then(itemMap => {
-            const batchData = {};
-
-            categories.forEach(category => {
-                data[category].forEach(item => {
-                    const maxXP =
-                        category === "Suits" ||
-                        category === "SpaceSuits" ||
-                        category === "Sentinels" ||
-                        category === "Hoverboards"
-                            ? 1_600_000
-                            : 800_000;
-
-                    if (item.XP < maxXP) {
-                        if (!batchData[category]) {
-                            batchData[category] = [];
-                        }
-                        batchData[category].push({
-                            ItemId: { $oid: item.ItemId.$oid },
-                            XP: maxXP
-                        });
-                    }
-                    if (category === "Suits") {
-                        if ("exalted" in itemMap[item.ItemType]) {
-                            for (const exaltedType of itemMap[item.ItemType].exalted) {
-                                const exaltedItem = data["SpecialItems"].find(x => x.ItemType == exaltedType);
-                                if (exaltedItem) {
-                                    const exaltedCap = itemMap[exaltedType]?.type == "weapons" ? 800_000 : 1_600_000;
-                                    if (exaltedItem.XP < exaltedCap) {
-                                        batchData["SpecialItems"] ??= [];
-                                        batchData["SpecialItems"].push({
-                                            ItemId: { $oid: exaltedItem.ItemId.$oid },
-                                            XP: exaltedCap
-                                        });
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
+            data.EvolutionProgress.forEach(item => {
+                if (item.Rank < 5) {
+                    requests.push({
+                        ItemType: item.ItemType,
+                        Rank: 5
+                    });
+                }
             });
 
-            if (Object.keys(batchData).length > 0) {
-                return sendBatchGearExp(batchData);
+            if (Object.keys(requests).length > 0) {
+                return setEvolutionProgress(requests);
             }
 
             toast(loc("code_noEquipmentToRankUp"));
@@ -1306,6 +1255,64 @@ function maxRankAllEquipment(categories) {
     });
 }
 
+function maxRankAllEquipment(categories) {
+    revalidateAuthz(() => {
+        const req = $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1");
+        req.done(data => {
+            window.itemListPromise.then(itemMap => {
+                const batchData = {};
+
+                categories.forEach(category => {
+                    data[category].forEach(item => {
+                        const maxXP =
+                            category === "Suits" ||
+                            category === "SpaceSuits" ||
+                            category === "Sentinels" ||
+                            category === "Hoverboards"
+                                ? 1_600_000
+                                : 800_000;
+
+                        if (item.XP < maxXP) {
+                            if (!batchData[category]) {
+                                batchData[category] = [];
+                            }
+                            batchData[category].push({
+                                ItemId: { $oid: item.ItemId.$oid },
+                                XP: maxXP
+                            });
+                        }
+                        if (category === "Suits") {
+                            if ("exalted" in itemMap[item.ItemType]) {
+                                for (const exaltedType of itemMap[item.ItemType].exalted) {
+                                    const exaltedItem = data["SpecialItems"].find(x => x.ItemType == exaltedType);
+                                    if (exaltedItem) {
+                                        const exaltedCap =
+                                            itemMap[exaltedType]?.type == "weapons" ? 800_000 : 1_600_000;
+                                        if (exaltedItem.XP < exaltedCap) {
+                                            batchData["SpecialItems"] ??= [];
+                                            batchData["SpecialItems"].push({
+                                                ItemId: { $oid: exaltedItem.ItemId.$oid },
+                                                XP: exaltedCap
+                                            });
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                });
+
+                if (Object.keys(batchData).length > 0) {
+                    return sendBatchGearExp(batchData);
+                }
+
+                toast(loc("code_noEquipmentToRankUp"));
+            });
+        });
+    });
+}
+
+// Assumes that caller revalidates authz
 function addGearExp(category, oid, xp) {
     const data = {};
     data[category] = [
@@ -1314,16 +1321,14 @@ function addGearExp(category, oid, xp) {
             XP: xp
         }
     ];
-    revalidateAuthz(() => {
-        $.post({
-            url: "/custom/addXp?" + window.authz,
-            contentType: "application/json",
-            data: JSON.stringify(data)
-        }).done(function () {
-            if (category != "SpecialItems") {
-                updateInventory();
-            }
-        });
+    $.post({
+        url: "/custom/addXp?" + window.authz,
+        contentType: "application/json",
+        data: JSON.stringify(data)
+    }).done(function () {
+        if (category != "SpecialItems") {
+            updateInventory();
+        }
     });
 }
 
@@ -1598,32 +1603,34 @@ function doAcquireMod() {
 const uiConfigs = [...$("#server-settings input[id]")].map(x => x.id);
 
 function doChangeSettings() {
-    fetch("/custom/config?" + window.authz)
-        .then(response => response.json())
-        .then(json => {
-            for (const i of uiConfigs) {
-                var x = document.getElementById(i);
-                if (x != null) {
-                    if (x.type == "checkbox") {
-                        if (x.checked === true) {
-                            json[i] = true;
-                        } else {
-                            json[i] = false;
+    revalidateAuthz(() => {
+        fetch("/custom/config?" + window.authz)
+            .then(response => response.json())
+            .then(json => {
+                for (const i of uiConfigs) {
+                    var x = document.getElementById(i);
+                    if (x != null) {
+                        if (x.type == "checkbox") {
+                            if (x.checked === true) {
+                                json[i] = true;
+                            } else {
+                                json[i] = false;
+                            }
+                        } else if (x.type == "number") {
+                            json[i] = parseInt(x.value);
                         }
-                    } else if (x.type == "number") {
-                        json[i] = parseInt(x.value);
                     }
                 }
-            }
-            $.post({
-                url: "/custom/config?" + window.authz,
-                contentType: "text/plain",
-                data: JSON.stringify(json, null, 2)
-            }).then(() => {
-                // A few cheats affect the inventory response which in turn may change what values we need to show
-                updateInventory();
+                $.post({
+                    url: "/custom/config?" + window.authz,
+                    contentType: "text/plain",
+                    data: JSON.stringify(json, null, 2)
+                }).then(() => {
+                    // A few cheats affect the inventory response which in turn may change what values we need to show
+                    updateInventory();
+                });
             });
-        });
+    });
 }
 
 // Cheats route
@@ -1876,33 +1883,39 @@ function doChangeSupportedSyndicate() {
 }
 
 function doAddCurrency(currency) {
-    $.post({
-        url: "/custom/addCurrency?" + window.authz,
-        contentType: "application/json",
-        data: JSON.stringify({
-            currency,
-            delta: document.getElementById(currency + "-delta").valueAsNumber
-        })
-    }).then(function () {
-        updateInventory();
+    revalidateAuthz(() => {
+        $.post({
+            url: "/custom/addCurrency?" + window.authz,
+            contentType: "application/json",
+            data: JSON.stringify({
+                currency,
+                delta: document.getElementById(currency + "-delta").valueAsNumber
+            })
+        }).then(function () {
+            updateInventory();
+        });
     });
 }
 
 function doQuestUpdate(operation, itemType) {
-    $.post({
-        url: "/custom/manageQuests?" + window.authz + "&operation=" + operation + "&itemType=" + itemType,
-        contentType: "application/json"
-    }).then(function () {
-        updateInventory();
+    revalidateAuthz(() => {
+        $.post({
+            url: "/custom/manageQuests?" + window.authz + "&operation=" + operation + "&itemType=" + itemType,
+            contentType: "application/json"
+        }).then(function () {
+            updateInventory();
+        });
     });
 }
 
 function doBulkQuestUpdate(operation) {
-    $.post({
-        url: "/custom/manageQuests?" + window.authz + "&operation=" + operation,
-        contentType: "application/json"
-    }).then(function () {
-        updateInventory();
+    revalidateAuthz(() => {
+        $.post({
+            url: "/custom/manageQuests?" + window.authz + "&operation=" + operation,
+            contentType: "application/json"
+        }).then(function () {
+            updateInventory();
+        });
     });
 }
 
