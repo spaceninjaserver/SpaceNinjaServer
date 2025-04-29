@@ -28,7 +28,7 @@ export const artifactTransmutationController: RequestHandler = async (req, res) 
         });
 
         const rawRivenType = getRandomRawRivenType();
-        const rivenType = getRandomElement(rivenRawToRealWeighted[rawRivenType]);
+        const rivenType = getRandomElement(rivenRawToRealWeighted[rawRivenType])!;
         const fingerprint = createVeiledRivenFingerprint(ExportUpgrades[rivenType]);
 
         const upgradeIndex =

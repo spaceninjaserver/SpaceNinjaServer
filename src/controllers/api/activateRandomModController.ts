@@ -17,7 +17,7 @@ export const activateRandomModController: RequestHandler = async (req, res) => {
             ItemCount: -1
         }
     ]);
-    const rivenType = getRandomElement(rivenRawToRealWeighted[request.ItemType]);
+    const rivenType = getRandomElement(rivenRawToRealWeighted[request.ItemType])!;
     const fingerprint = createVeiledRivenFingerprint(ExportUpgrades[rivenType]);
     const upgradeIndex =
         inventory.Upgrades.push({

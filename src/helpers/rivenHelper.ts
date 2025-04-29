@@ -31,7 +31,7 @@ export interface IFingerprintStat {
 }
 
 export const createVeiledRivenFingerprint = (meta: IUpgrade): IVeiledRivenFingerprint => {
-    const challenge = getRandomElement(meta.availableChallenges!);
+    const challenge = getRandomElement(meta.availableChallenges!)!;
     const fingerprintChallenge: IRivenChallenge = {
         Type: challenge.fullName,
         Progress: 0,
@@ -54,11 +54,11 @@ export const createVeiledRivenFingerprint = (meta: IUpgrade): IVeiledRivenFinger
 
 export const createUnveiledRivenFingerprint = (meta: IUpgrade): IUnveiledRivenFingerprint => {
     const fingerprint: IUnveiledRivenFingerprint = {
-        compat: getRandomElement(meta.compatibleItems!),
+        compat: getRandomElement(meta.compatibleItems!)!,
         lim: 0,
         lvl: 0,
         lvlReq: getRandomInt(8, 16),
-        pol: getRandomElement(["AP_ATTACK", "AP_DEFENSE", "AP_TACTIC"]),
+        pol: getRandomElement(["AP_ATTACK", "AP_DEFENSE", "AP_TACTIC"])!,
         buffs: [],
         curses: []
     };
@@ -81,7 +81,7 @@ export const randomiseRivenStats = (meta: IUpgrade, fingerprint: IUnveiledRivenF
     if (Math.random() < 0.5) {
         const entry = getRandomElement(
             meta.upgradeEntries!.filter(x => x.canBeCurse && !fingerprint.buffs.find(y => y.Tag == x.tag))
-        );
+        )!;
         fingerprint.curses.push({ Tag: entry.tag, Value: Math.trunc(Math.random() * 0x40000000) });
     }
 };

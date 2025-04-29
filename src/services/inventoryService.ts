@@ -1798,7 +1798,7 @@ export const addKeyChainItems = async (
 };
 
 export const createLibraryDailyTask = (): ILibraryDailyTaskInfo => {
-    const enemyTypes = getRandomElement(libraryDailyTasks);
+    const enemyTypes = getRandomElement(libraryDailyTasks)!;
     const enemyAvatar = ExportEnemies.avatars[enemyTypes[0]];
     const scansRequired = getRandomInt(2, 4);
     return {
@@ -1944,22 +1944,22 @@ export const giveNemesisPetRecipe = (inventory: TInventoryDatabaseDocument, neme
         "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadA",
         "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadB",
         "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadC"
-    ]);
+    ])!;
     const body = getRandomElement([
         "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartBodyA",
         "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartBodyB",
         "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartBodyC"
-    ]);
+    ])!;
     const legs = getRandomElement([
         "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartLegsA",
         "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartLegsB",
         "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartLegsC"
-    ]);
+    ])!;
     const tail = getRandomElement([
         "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartTailA",
         "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartTailB",
         "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartTailC"
-    ]);
+    ])!;
     const recipeType = Object.entries(ExportRecipes).find(arr => arr[1].resultType == head)![0];
     addRecipes(inventory, [
         {

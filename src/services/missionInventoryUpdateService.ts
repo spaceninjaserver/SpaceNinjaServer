@@ -930,7 +930,7 @@ export const addMissionRewards = async (
 
     if (rewardInfo.useVaultManifest) {
         MissionRewards.push({
-            StoreItem: getRandomElement(corruptedMods),
+            StoreItem: getRandomElement(corruptedMods)!,
             ItemCount: 1
         });
     }

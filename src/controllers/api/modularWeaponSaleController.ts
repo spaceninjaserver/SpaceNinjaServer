@@ -141,7 +141,7 @@ const getModularWeaponSale = (
     getItemType: (parts: string[]) => string
 ): IModularWeaponSaleInfo => {
     const rng = new CRng(day);
-    const parts = partTypes.map(partType => rng.randomElement(partTypeToParts[partType]));
+    const parts = partTypes.map(partType => rng.randomElement(partTypeToParts[partType])!);
     let partsCost = 0;
     for (const part of parts) {
         partsCost += ExportWeapons[part].premiumPrice!;

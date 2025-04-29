@@ -212,7 +212,7 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
             while (processed.ItemManifest.length + offersToAdd.length < numItemsTarget) {
                 // TODO: Consider per-bin item limits
                 // TODO: Consider item probability weightings
-                offersToAdd.push(rng.randomElement(manifest.items));
+                offersToAdd.push(rng.randomElement(manifest.items)!);
             }
         } else {
             let binThisCycle;
@@ -256,7 +256,7 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
                 for (let i = 0; i != rawItem.numRandomItemPrices; ++i) {
                     let itemPrice: { type: string; count: IRange };
                     do {
-                        itemPrice = rng.randomElement(manifest.randomItemPricesPerBin![rawItem.bin]);
+                        itemPrice = rng.randomElement(manifest.randomItemPricesPerBin![rawItem.bin])!;
                     } while (item.ItemPrices.find(x => x.ItemType == itemPrice.type));
                     item.ItemPrices.push({
                         ItemType: itemPrice.type,

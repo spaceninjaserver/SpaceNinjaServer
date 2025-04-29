@@ -6,7 +6,7 @@ export interface IRngResult {
     probability: number;
 }
 
-export const getRandomElement = <T>(arr: T[]): T => {
+export const getRandomElement = <T>(arr: T[]): T | undefined => {
     return arr[Math.floor(Math.random() * arr.length)];
 };
 
@@ -113,7 +113,7 @@ export class CRng {
         return min;
     }
 
-    randomElement<T>(arr: T[]): T {
+    randomElement<T>(arr: T[]): T | undefined {
         return arr[Math.floor(this.random() * arr.length)];
     }
 
@@ -145,7 +145,7 @@ export class SRng {
         return min;
     }
 
-    randomElement<T>(arr: T[]): T {
+    randomElement<T>(arr: T[]): T | undefined {
         return arr[this.randomInt(0, arr.length - 1)];
     }
 

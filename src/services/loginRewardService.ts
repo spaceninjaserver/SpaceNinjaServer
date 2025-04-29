@@ -102,7 +102,7 @@ const getRandomLoginReward = (rng: CRng, day: number, inventory: TInventoryDatab
             // This account has all applicable warframes and weapons already mastered (filthy cheater), need a different reward.
             return getRandomLoginReward(rng, day, inventory);
         }
-        reward.StoreItemType = toStoreItem(rng.randomElement(eligibleRecipes));
+        reward.StoreItemType = toStoreItem(rng.randomElement(eligibleRecipes)!);
     }
     return {
         //_id: toOid(new Types.ObjectId()),

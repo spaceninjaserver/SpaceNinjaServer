@@ -47,12 +47,12 @@ export const createGarden = (): IGardeningDatabase => {
                 Name: "Garden0",
                 Plants: [
                     {
-                        PlantType: getRandomElement(plantTypes),
+                        PlantType: getRandomElement(plantTypes)!,
                         EndTime: endTime,
                         PlotIndex: 0
                     },
                     {
-                        PlantType: getRandomElement(plantTypes),
+                        PlantType: getRandomElement(plantTypes)!,
                         EndTime: endTime,
                         PlotIndex: 1
                     }
@@ -62,12 +62,12 @@ export const createGarden = (): IGardeningDatabase => {
                 Name: "Garden1",
                 Plants: [
                     {
-                        PlantType: getRandomElement(plantTypes),
+                        PlantType: getRandomElement(plantTypes)!,
                         EndTime: endTime,
                         PlotIndex: 0
                     },
                     {
-                        PlantType: getRandomElement(plantTypes),
+                        PlantType: getRandomElement(plantTypes)!,
                         EndTime: endTime,
                         PlotIndex: 1
                     }
@@ -77,12 +77,12 @@ export const createGarden = (): IGardeningDatabase => {
                 Name: "Garden2",
                 Plants: [
                     {
-                        PlantType: getRandomElement(plantTypes),
+                        PlantType: getRandomElement(plantTypes)!,
                         EndTime: endTime,
                         PlotIndex: 0
                     },
                     {
-                        PlantType: getRandomElement(plantTypes),
+                        PlantType: getRandomElement(plantTypes)!,
                         EndTime: endTime,
                         PlotIndex: 1
                     }

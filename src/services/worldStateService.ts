@@ -225,7 +225,7 @@ const pushSortieIfRelevant = (worldState: IWorldState, day: number): void => {
     const seed = new CRng(day).randomInt(0, 0xffff);
     const rng = new CRng(seed);
 
-    const boss = rng.randomElement(sortieBosses);
+    const boss = rng.randomElement(sortieBosses)!;
 
     const modifiers = [
         "SORTIE_MODIFIER_LOW_ENERGY",
@@ -302,7 +302,7 @@ const pushSortieIfRelevant = (worldState: IWorldState, day: number): void => {
 
             missionIndex = ExportRegions[node].missionIndex;
             if (missionIndex != 28) {
-                missionIndex = rng.randomElement(availableMissionIndexes);
+                missionIndex = rng.randomElement(availableMissionIndexes)!;
             }
         } while (
             specialMissionTypes.indexOf(missionIndex) != -1 &&
@@ -312,7 +312,7 @@ const pushSortieIfRelevant = (worldState: IWorldState, day: number): void => {
 
         if (i == 2 && rng.randomInt(0, 2) == 2) {
             const filteredModifiers = modifiers.filter(mod => mod !== "SORTIE_MODIFIER_MELEE_ONLY");
-            const modifierType = rng.randomElement(filteredModifiers);
+            const modifierType = rng.randomElement(filteredModifiers)!;
 
             if (boss == "SORTIE_BOSS_PHORID") {
                 selectedNodes.push({
@@ -346,7 +346,7 @@ const pushSortieIfRelevant = (worldState: IWorldState, day: number): void => {
                 ? modifiers.filter(mod => mod != "SORTIE_MODIFIER_HAZARD_RADIATION")
                 : modifiers;
 
-        const modifierType = rng.randomElement(filteredModifiers);
+        const modifierType = rng.randomElement(filteredModifiers)!;
 
         selectedNodes.push({
             missionType,
@@ -389,7 +389,7 @@ const getSeasonDailyChallenge = (day: number): ISeasonChallenge => {
         Daily: true,
         Activation: { $date: { $numberLong: dayStart.toString() } },
         Expiry: { $date: { $numberLong: dayEnd.toString() } },
-        Challenge: rng.randomElement(dailyChallenges)
+        Challenge: rng.randomElement(dailyChallenges)!
     };
 };
 
@@ -408,7 +408,7 @@ const getSeasonWeeklyChallenge = (week: number, id: number): ISeasonChallenge =>
         _id: { $oid: "67e1bb2d9d00cb47" + challengeId.toString().padStart(8, "0") },
         Activation: { $date: { $numberLong: weekStart.toString() } },
         Expiry: { $date: { $numberLong: weekEnd.toString() } },
-        Challenge: rng.randomElement(weeklyChallenges)
+        Challenge: rng.randomElement(weeklyChallenges)!
     };
 };
 
@@ -425,7 +425,7 @@ const getSeasonWeeklyHardChallenge = (week: number, id: number): ISeasonChalleng
         _id: { $oid: "67e1bb2d9d00cb47" + challengeId.toString().padStart(8, "0") },
         Activation: { $date: { $numberLong: weekStart.toString() } },
         Expiry: { $date: { $numberLong: weekEnd.toString() } },
-        Challenge: rng.randomElement(weeklyHardChallenges)
+        Challenge: rng.randomElement(weeklyHardChallenges)!
     };
 };
 
@@ -1196,7 +1196,7 @@ export const getLiteSortie = (week: number): ILiteSortie => {
                     "MT_EXTERMINATION",
                     "MT_SABOTAGE",
                     "MT_RESCUE"
-                ]),
+                ])!,
                 node: firstNode
             },
             {
@@ -1206,8 +1206,8 @@ export const getLiteSortie = (week: number): ILiteSortie => {
                     "MT_ARTIFACT",
                     "MT_EXCAVATE",
                     "MT_SURVIVAL"
-                ]),
-                node: rng.randomElement(nodes)
+                ])!,
+                node: rng.randomElement(nodes)!
             },
             {
                 missionType: "MT_ASSASSINATION",
