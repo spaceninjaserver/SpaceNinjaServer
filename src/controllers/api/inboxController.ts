@@ -11,7 +11,7 @@ import {
 import { getAccountForRequest, getAccountFromSuffixedName, getSuffixedName } from "@/src/services/loginService";
 import { addItems, combineInventoryChanges, getInventory } from "@/src/services/inventoryService";
 import { logger } from "@/src/utils/logger";
-import { ExportFlavour, ExportGear } from "warframe-public-export-plus";
+import { ExportFlavour } from "warframe-public-export-plus";
 import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
 import { fromStoreItem, isStoreItem } from "@/src/services/itemDataService";
 
@@ -50,7 +50,7 @@ export const inboxController: RequestHandler = async (req, res) => {
                 inventory,
                 attachmentItems.map(attItem => ({
                     ItemType: isStoreItem(attItem) ? fromStoreItem(attItem) : attItem,
-                    ItemCount: attItem in ExportGear ? (ExportGear[attItem].purchaseQuantity ?? 1) : 1
+                    ItemCount: 1
                 })),
                 inventoryChanges
             );

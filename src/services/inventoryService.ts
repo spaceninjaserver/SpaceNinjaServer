@@ -486,6 +486,10 @@ export const addItem = async (
         };
     }
     if (typeName in ExportGear) {
+        // Multipling by purchase quantity for gear because:
+        // - The Saya's Vigil scanner message has it as a non-counted attachment.
+        // - Blueprints for Ancient Protector Specter, Shield Osprey Specter, etc. have num=1 despite giving their purchaseQuantity.
+        quantity *= ExportGear[typeName].purchaseQuantity ?? 1;
         const consumablesChanges = [
             {
                 ItemType: typeName,
