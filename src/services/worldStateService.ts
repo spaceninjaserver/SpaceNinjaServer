@@ -33,9 +33,11 @@ const sortieBosses = [
     "SORTIE_BOSS_LEPHANTIS",
     "SORTIE_BOSS_INFALAD",
     "SORTIE_BOSS_CORRUPTED_VOR"
-];
+] as const;
 
-const sortieBossToFaction: Record<string, string> = {
+type TSortieBoss = (typeof sortieBosses)[number];
+
+const sortieBossToFaction: Record<TSortieBoss, string> = {
     SORTIE_BOSS_HYENA: "FC_CORPUS",
     SORTIE_BOSS_KELA: "FC_GRINEER",
     SORTIE_BOSS_VOR: "FC_GRINEER",
@@ -74,21 +76,22 @@ const sortieFactionToSpecialMissionTileset: Record<string, string> = {
     FC_INFESTATION: "CorpusShipTileset"
 };
 
-const sortieBossNode: Record<string, string> = {
-    SORTIE_BOSS_HYENA: "SolNode127",
-    SORTIE_BOSS_KELA: "SolNode193",
-    SORTIE_BOSS_VOR: "SolNode108",
-    SORTIE_BOSS_RUK: "SolNode32",
-    SORTIE_BOSS_HEK: "SolNode24",
-    SORTIE_BOSS_KRIL: "SolNode99",
-    SORTIE_BOSS_TYL: "SolNode105",
-    SORTIE_BOSS_JACKAL: "SolNode104",
+const sortieBossNode: Record<Exclude<TSortieBoss, "SORTIE_BOSS_CORRUPTED_VOR">, string> = {
     SORTIE_BOSS_ALAD: "SolNode53",
     SORTIE_BOSS_AMBULAS: "SolNode51",
-    SORTIE_BOSS_NEF: "SettlementNode20",
-    SORTIE_BOSS_RAPTOR: "SolNode210",
+    SORTIE_BOSS_HEK: "SolNode24",
+    SORTIE_BOSS_HYENA: "SolNode127",
+    SORTIE_BOSS_INFALAD: "SolNode166",
+    SORTIE_BOSS_JACKAL: "SolNode104",
+    SORTIE_BOSS_KELA: "SolNode193",
+    SORTIE_BOSS_KRIL: "SolNode99",
     SORTIE_BOSS_LEPHANTIS: "SolNode712",
-    SORTIE_BOSS_INFALAD: "SolNode705"
+    SORTIE_BOSS_NEF: "SettlementNode20",
+    SORTIE_BOSS_PHORID: "SolNode171",
+    SORTIE_BOSS_RAPTOR: "SolNode210",
+    SORTIE_BOSS_RUK: "SolNode32",
+    SORTIE_BOSS_TYL: "SolNode105",
+    SORTIE_BOSS_VOR: "SolNode108"
 };
 
 const eidolonJobs = [
@@ -270,6 +273,7 @@ const pushSortieIfRelevant = (worldState: IWorldState, day: number): void => {
             key in sortieTilesets
         ) {
             if (
+                value.missionIndex != 0 && // Assassination will be decided independently
                 value.missionIndex != 5 && // Sorties do not have capture missions
                 !availableMissionIndexes.includes(value.missionIndex)
             ) {
@@ -310,28 +314,17 @@ const pushSortieIfRelevant = (worldState: IWorldState, day: number): void => {
                 sortieFactionToSpecialMissionTileset[sortieBossToFaction[boss]]
         );
 
-        if (i == 2 && rng.randomInt(0, 2) == 2) {
+        if (i == 2 && boss != "SORTIE_BOSS_CORRUPTED_VOR" && rng.randomInt(0, 2) == 2) {
             const filteredModifiers = modifiers.filter(mod => mod !== "SORTIE_MODIFIER_MELEE_ONLY");
             const modifierType = rng.randomElement(filteredModifiers)!;
 
-            if (boss == "SORTIE_BOSS_PHORID") {
-                selectedNodes.push({
-                    missionType: "MT_ASSASSINATION",
-                    modifierType,
-                    node,
-                    tileset: sortieTilesets[node as keyof typeof sortieTilesets]
-                });
-                nodes.splice(randomIndex, 1);
-                continue;
-            } else if (sortieBossNode[boss]) {
-                selectedNodes.push({
-                    missionType: "MT_ASSASSINATION",
-                    modifierType,
-                    node: sortieBossNode[boss],
-                    tileset: sortieTilesets[sortieBossNode[boss] as keyof typeof sortieTilesets]
-                });
-                continue;
-            }
+            selectedNodes.push({
+                missionType: "MT_ASSASSINATION",
+                modifierType,
+                node: sortieBossNode[boss],
+                tileset: sortieTilesets[sortieBossNode[boss] as keyof typeof sortieTilesets]
+            });
+            continue;
         }
 
         const missionType = eMissionType[missionIndex].tag;
