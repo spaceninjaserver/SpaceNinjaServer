@@ -7,6 +7,7 @@ import { Account } from "@/src/models/loginModel";
 import { createAccount, isCorrectPassword, isNameTaken } from "@/src/services/loginService";
 import { IDatabaseAccountJson, ILoginRequest, ILoginResponse } from "@/src/types/loginTypes";
 import { logger } from "@/src/utils/logger";
+import { version_compare } from "@/src/services/worldStateService";
 
 export const loginController: RequestHandler = async (request, response) => {
     const loginRequest = JSON.parse(String(request.body)) as ILoginRequest; // parse octet stream of json data to json object
@@ -94,7 +95,7 @@ export const loginController: RequestHandler = async (request, response) => {
 };
 
 const createLoginResponse = (myAddress: string, account: IDatabaseAccountJson, buildLabel: string): ILoginResponse => {
-    return {
+    const resp: ILoginResponse = {
         id: account.id,
         DisplayName: account.DisplayName,
         CountryCode: account.CountryCode,
@@ -108,11 +109,14 @@ const createLoginResponse = (myAddress: string, account: IDatabaseAccountJson, b
         Nonce: account.Nonce,
         Groups: [],
         IRC: config.myIrcAddresses ?? [myAddress],
-        platformCDNs: [`https://${myAddress}/`],
         HUB: `https://${myAddress}/api/`,
         NRS: config.NRS,
         DTLS: 99,
         BuildLabel: buildLabel,
         MatchmakingBuildId: buildConfig.matchmakingBuildId
     };
+    if (version_compare(buildLabel, "2023.04.25.23.40") >= 0) {
+        resp.platformCDNs = [`https://${myAddress}/`];
+    }
+    return resp;
 };
