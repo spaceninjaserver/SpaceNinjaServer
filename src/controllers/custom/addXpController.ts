@@ -1,4 +1,4 @@
-import { addGearExpByCategory, getInventory } from "@/src/services/inventoryService";
+import { applyClientEquipmentUpdates, getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
@@ -20,7 +20,7 @@ export const addXpController: RequestHandler = async (req, res) => {
                 }
             }
         }
-        addGearExpByCategory(inventory, gear, category as TEquipmentKey);
+        applyClientEquipmentUpdates(inventory, gear, category as TEquipmentKey);
     }
     await inventory.save();
     res.end();

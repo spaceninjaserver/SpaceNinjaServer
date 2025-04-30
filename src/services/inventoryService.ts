@@ -69,6 +69,7 @@ import {
 import { createShip } from "./shipService";
 import {
     catbrowDetails,
+    fromMongoData,
     kubrowDetails,
     kubrowFurPatternsWeights,
     kubrowWeights,
@@ -1475,21 +1476,20 @@ export const addEmailItem = async (
     return inventoryChanges;
 };
 
-//TODO: wrong id is not erroring
-export const addGearExpByCategory = (
+export const applyClientEquipmentUpdates = (
     inventory: TInventoryDatabaseDocument,
     gearArray: IEquipmentClient[],
     categoryName: TEquipmentKey
 ): void => {
     const category = inventory[categoryName];
 
-    gearArray.forEach(({ ItemId, XP }) => {
-        if (!XP) {
-            return;
+    gearArray.forEach(({ ItemId, XP, InfestationDate }) => {
+        const item = category.id(ItemId.$oid);
+        if (!item) {
+            throw new Error(`No item with id ${ItemId.$oid} in ${categoryName}`);
         }
 
-        const item = category.id(ItemId.$oid);
-        if (item) {
+        if (XP) {
             item.XP ??= 0;
             item.XP += XP;
 
@@ -1503,6 +1503,10 @@ export const addGearExpByCategory = (
                     XP: XP
                 });
             }
+        }
+
+        if (InfestationDate) {
+            item.InfestationDate = fromMongoData(InfestationDate);
         }
     });
 };

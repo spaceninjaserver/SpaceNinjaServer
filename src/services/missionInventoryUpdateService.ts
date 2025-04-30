@@ -21,7 +21,6 @@ import {
     addFocusXpIncreases,
     addFusionPoints,
     addFusionTreasures,
-    addGearExpByCategory,
     addItem,
     addLevelKeys,
     addLoreFragmentScans,
@@ -32,6 +31,7 @@ import {
     addShipDecorations,
     addSkin,
     addStanding,
+    applyClientEquipmentUpdates,
     combineInventoryChanges,
     generateRewardSeed,
     getCalendarProgress,
@@ -660,9 +660,8 @@ export const addMissionInventoryUpdates = async (
                 }
                 break;
             default:
-                // Equipment XP updates
                 if (equipmentKeys.includes(key as TEquipmentKey)) {
-                    addGearExpByCategory(inventory, value as IEquipmentClient[], key as TEquipmentKey);
+                    applyClientEquipmentUpdates(inventory, value as IEquipmentClient[], key as TEquipmentKey);
                 }
                 break;
             // if (

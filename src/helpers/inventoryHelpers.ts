@@ -10,6 +10,10 @@ export const toMongoDate = (date: Date): IMongoDate => {
     return { $date: { $numberLong: date.getTime().toString() } };
 };
 
+export const fromMongoData = (date: IMongoDate): Date => {
+    return new Date(parseInt(date.$date.$numberLong));
+};
+
 export const kubrowWeights: Record<TRarity, number> = {
     COMMON: 6,
     UNCOMMON: 4,
