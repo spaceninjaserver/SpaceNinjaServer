@@ -130,6 +130,7 @@ export type IMissionInventoryUpdateRequest = {
     }[];
     KubrowPetEggs?: IKubrowPetEggClient[];
     DiscoveredMarkers?: IDiscoveredMarker[];
+    BrandedSuits?: IOid; // sent when captured by g3
     LockedWeaponGroup?: ILockedWeaponGroupClient; // sent when captured by zanuka
     UnlockWeapons?: boolean; // sent when recovered weapons from zanuka capture
     IncHarvester?: boolean; // sent when recovered weapons from zanuka capture

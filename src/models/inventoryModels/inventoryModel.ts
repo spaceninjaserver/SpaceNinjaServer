@@ -1688,9 +1688,9 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Like BossAladV,BossCaptainVor come for you on missions % chance
         DeathMarks: { type: [String], default: [] },
         //Zanuka
-        Harvestable: Boolean,
+        Harvestable: { type: Boolean, default: true },
         //Grustag three
-        DeathSquadable: Boolean,
+        DeathSquadable: { type: Boolean, default: true },
 
         EndlessXP: { type: [endlessXpProgressSchema], default: undefined },
 

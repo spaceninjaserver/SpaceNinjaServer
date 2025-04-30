@@ -143,38 +143,6 @@ export const addMissionInventoryUpdates = async (
                 ]);
             }
         }
-
-        // Somewhat heuristically detect G3 capture:
-        // - https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1365
-        // - https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1694
-        // - https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1724
-        if (
-            inventoryUpdates.MissionFailed &&
-            inventoryUpdates.MissionStatus == "GS_FAILURE" &&
-            inventoryUpdates.ObjectiveReached &&
-            !inventoryUpdates.LockedWeaponGroup &&
-            !inventory.LockedWeaponGroup &&
-            !inventoryUpdates.LevelKeyName
-        ) {
-            const loadout = (await Loadout.findById(inventory.LoadOutPresets, "NORMAL"))!;
-            const config = loadout.NORMAL.id(inventory.CurrentLoadOutIds[0].$oid)!;
-            const SuitId = new Types.ObjectId(config.s!.ItemId.$oid);
-
-            inventory.BrandedSuits ??= [];
-            if (!inventory.BrandedSuits.find(x => x.equals(SuitId))) {
-                inventory.BrandedSuits.push(SuitId);
-
-                await createMessage(inventory.accountOwnerId, [
-                    {
-                        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
-                        msg: "/Lotus/Language/G1Quests/BrandedMessage",
-                        sub: "/Lotus/Language/G1Quests/BrandedTitle",
-                        att: ["/Lotus/Types/Recipes/Components/BrandRemovalBlueprint"],
-                        highPriority: true // TOVERIFY: I cannot find any content of this within the last 10 years so I can only assume that highPriority is set (it certainly would make sense), but I just don't know for sure that it is so on live.
-                    }
-                ]);
-            }
-        }
     }
     if (inventoryUpdates.RewardInfo) {
         if (inventoryUpdates.RewardInfo.periodicMissionTag) {
@@ -537,6 +505,23 @@ export const addMissionInventoryUpdates = async (
                 }
                 break;
             }
+            case "BrandedSuits": {
+                inventory.BrandedSuits ??= [];
+                if (!inventory.BrandedSuits.find(x => x.equals(value.$oid))) {
+                    inventory.BrandedSuits.push(new Types.ObjectId(value.$oid));
+
+                    await createMessage(inventory.accountOwnerId, [
+                        {
+                            sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
+                            msg: "/Lotus/Language/G1Quests/BrandedMessage",
+                            sub: "/Lotus/Language/G1Quests/BrandedTitle",
+                            att: ["/Lotus/Types/Recipes/Components/BrandRemovalBlueprint"],
+                            highPriority: true // TOVERIFY: I cannot find any content of this within the last 10 years so I can only assume that highPriority is set (it certainly would make sense), but I just don't know for sure that it is so on live.
+                        }
+                    ]);
+                }
+                break;
+            }
             case "LockedWeaponGroup": {
                 inventory.LockedWeaponGroup = {
                     s: new Types.ObjectId(value.s.$oid),
@@ -545,10 +530,15 @@ export const addMissionInventoryUpdates = async (
                     m: value.m ? new Types.ObjectId(value.m.$oid) : undefined,
                     sn: value.sn ? new Types.ObjectId(value.sn.$oid) : undefined
                 };
+                inventory.Harvestable = false;
                 break;
             }
             case "UnlockWeapons": {
                 inventory.LockedWeaponGroup = undefined;
+                break;
+            }
+            case "IncHarvester": {
+                inventory.Harvestable = true;
                 break;
             }
             case "CurrentLoadOutIds": {
