@@ -106,7 +106,14 @@ export const inventoryController: RequestHandler = async (request, response) => 
         const currentDuviriMood = Math.trunc(Date.now() / 7200000);
         if (lastSyncDuviriMood != currentDuviriMood) {
             logger.debug(`refreshing duviri seed`);
-            inventory.DuviriInfo.Seed = generateRewardSeed();
+            if (!inventory.DuviriInfo) {
+                inventory.DuviriInfo = {
+                    Seed: generateRewardSeed(),
+                    NumCompletions: 0
+                };
+            } else {
+                inventory.DuviriInfo.Seed = generateRewardSeed();
+            }
         }
     }
     inventory.LastInventorySync = new Types.ObjectId();

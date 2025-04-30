@@ -202,7 +202,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     OperatorLoadOuts: IOperatorConfigClient[];
     KahlLoadOuts: IOperatorConfigClient[];
 
-    DuviriInfo: IDuviriInfo;
+    DuviriInfo?: IDuviriInfo;
     Mailbox?: IMailboxClient;
     SubscribedToEmails: number;
     Created: IMongoDate;

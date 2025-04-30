@@ -391,8 +391,8 @@ MailboxSchema.set("toJSON", {
 
 const DuviriInfoSchema = new Schema<IDuviriInfo>(
     {
-        Seed: BigInt,
-        NumCompletions: { type: Number, default: 0 }
+        Seed: { type: BigInt, required: true },
+        NumCompletions: { type: Number, required: true }
     },
     {
         _id: false,
