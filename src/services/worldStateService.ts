@@ -724,6 +724,11 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         SyndicateMissions: [...staticWorldState.SyndicateMissions]
     };
 
+    // Omit void fissures for versions prior to Whispers in the Walls to avoid errors with the unknown deimos nodes having void fissures.
+    if (buildLabel && version_compare(buildLabel, "2023.11.06.13.39") <= 0) {
+        worldState.ActiveMissions = [];
+    }
+
     if (config.worldState?.starDays) {
         worldState.Goals.push({
             _id: { $oid: "67a4dcce2a198564d62e1647" },
@@ -1226,4 +1231,21 @@ export const isArchwingMission = (node: IRegion): boolean => {
         return true;
     }
     return false;
+};
+
+export const version_compare = (a: string, b: string): number => {
+    const a_digits = a
+        .split("/")[0]
+        .split(".")
+        .map(x => parseInt(x));
+    const b_digits = b
+        .split("/")[0]
+        .split(".")
+        .map(x => parseInt(x));
+    for (let i = 0; i != a_digits.length; ++i) {
+        if (a_digits[i] != b_digits[i]) {
+            return a_digits[i] > b_digits[i] ? 1 : -1;
+        }
+    }
+    return 0;
 };

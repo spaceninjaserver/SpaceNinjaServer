@@ -10,6 +10,7 @@ export interface IWorldState {
     LiteSorties: ILiteSortie[];
     SyndicateMissions: ISyndicateMissionInfo[];
     GlobalUpgrades: IGlobalUpgrade[];
+    ActiveMissions: IFissure[];
     NodeOverrides: INodeOverride[];
     EndlessXpChoices: IEndlessXpChoice[];
     SeasonInfo: {
@@ -69,6 +70,18 @@ export interface IGlobalUpgrade {
     Value: number;
     LocalizeTag: string;
     LocalizeDescTag: string;
+}
+
+export interface IFissure {
+    _id: IOid;
+    Region: number;
+    Seed: number;
+    Activation: IMongoDate;
+    Expiry: IMongoDate;
+    Node: string;
+    MissionType: string;
+    Modifier: string;
+    Hard?: boolean;
 }
 
 export interface INodeOverride {
