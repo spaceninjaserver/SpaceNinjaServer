@@ -1509,7 +1509,9 @@ export const applyClientEquipmentUpdates = (
         }
 
         if (InfestationDate) {
-            item.InfestationDate = fromMongoDate(InfestationDate);
+            // 2147483647000 means cured, otherwise became infected
+            item.InfestationDate =
+                InfestationDate.$date.$numberLong == "2147483647000" ? new Date(0) : fromMongoDate(InfestationDate);
         }
     });
 };
