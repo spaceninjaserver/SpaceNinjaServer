@@ -6,7 +6,7 @@ import { logger } from "../utils/logger";
 import { IOid } from "../types/commonTypes";
 import { Types } from "mongoose";
 import { addMods, generateRewardSeed } from "../services/inventoryService";
-import { isArchwingMission } from "../services/worldStateService";
+import { isArchwingMission, version_compare } from "../services/worldStateService";
 import { fromStoreItem, toStoreItem } from "../services/itemDataService";
 import { createMessage } from "../services/inboxService";
 
@@ -237,13 +237,37 @@ const corpusVersionThreeWeapons = [
 
 export const getWeaponsForManifest = (manifest: string): readonly string[] => {
     switch (manifest) {
-        case "/Lotus/Types/Game/Nemesis/KuvaLich/KuvaLichManifestVersionSix":
+        case "/Lotus/Types/Game/Nemesis/KuvaLich/KuvaLichManifestVersionSix": // >= 35.6.0
             return kuvaLichVersionSixWeapons;
-        case "/Lotus/Types/Enemies/Corpus/Lawyers/LawyerManifestVersionThree":
-        case "/Lotus/Types/Enemies/Corpus/Lawyers/LawyerManifestVersionFour":
+        case "/Lotus/Types/Enemies/Corpus/Lawyers/LawyerManifestVersionThree": // >= 35.6.0
+        case "/Lotus/Types/Enemies/Corpus/Lawyers/LawyerManifestVersionFour": // >= 37.0.0
             return corpusVersionThreeWeapons;
     }
     throw new Error(`unknown nemesis manifest: ${manifest}`);
+};
+
+export const isNemesisCompatibleWithVersion = (
+    nemesis: { manifest: string; Faction: string },
+    buildLabel: string
+): boolean => {
+    // Anything below 35.6.0 is not going to be okay given our set of supported manifests.
+    if (version_compare(buildLabel, "2024.05.15.11.07") < 0) {
+        return false;
+    }
+
+    if (nemesis.Faction == "FC_INFESTATION") {
+        // Anything below 38.5.0 isn't gonna like an infested lich.
+        if (version_compare(buildLabel, "2025.03.18.16.07") < 0) {
+            return false;
+        }
+    } else if (nemesis.manifest == "/Lotus/Types/Enemies/Corpus/Lawyers/LawyerManifestVersionFour") {
+        // Anything below 37.0.0 isn't gonna know version 4, but version 3 is identical in terms of weapon choices, so we can spoof it to that.
+        if (version_compare(buildLabel, "2024.10.01.11.03") < 0) {
+            nemesis.manifest = "/Lotus/Types/Enemies/Corpus/Lawyers/LawyerManifestVersionThree";
+        }
+    }
+
+    return true;
 };
 
 export const getInnateDamageTag = (

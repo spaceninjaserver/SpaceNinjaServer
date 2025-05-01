@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { getAccountIdForRequest } from "@/src/services/loginService";
+import { getAccountForRequest } from "@/src/services/loginService";
 import { Inventory, TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { config } from "@/src/services/configService";
 import allDialogue from "@/static/fixed_responses/allDialogue.json";
@@ -24,11 +24,12 @@ import {
 import { logger } from "@/src/utils/logger";
 import { catBreadHash } from "@/src/helpers/stringHelpers";
 import { Types } from "mongoose";
+import { isNemesisCompatibleWithVersion } from "@/src/helpers/nemesisHelpers";
 
 export const inventoryController: RequestHandler = async (request, response) => {
-    const accountId = await getAccountIdForRequest(request);
+    const account = await getAccountForRequest(request);
 
-    const inventory = await Inventory.findOne({ accountOwnerId: accountId });
+    const inventory = await Inventory.findOne({ accountOwnerId: account._id });
 
     if (!inventory) {
         response.status(400).json({ error: "inventory was undefined" });
@@ -119,12 +120,15 @@ export const inventoryController: RequestHandler = async (request, response) => 
     inventory.LastInventorySync = new Types.ObjectId();
     await inventory.save();
 
-    response.json(await getInventoryResponse(inventory, "xpBasedLevelCapDisabled" in request.query));
+    response.json(
+        await getInventoryResponse(inventory, "xpBasedLevelCapDisabled" in request.query, account.BuildLabel)
+    );
 };
 
 export const getInventoryResponse = async (
     inventory: TInventoryDatabaseDocument,
-    xpBasedLevelCapDisabled: boolean
+    xpBasedLevelCapDisabled: boolean,
+    buildLabel: string | undefined
 ): Promise<IInventoryClient> => {
     const inventoryWithLoadOutPresets = await inventory.populate<{ LoadOutPresets: ILoadoutDatabase }>(
         "LoadOutPresets"
@@ -298,6 +302,15 @@ export const getInventoryResponse = async (
 
     // Set 2FA enabled so trading post can be used
     inventoryResponse.HWIDProtectEnabled = true;
+
+    // Fix nemesis for older versions
+    if (
+        inventoryResponse.Nemesis &&
+        buildLabel &&
+        !isNemesisCompatibleWithVersion(inventoryResponse.Nemesis, buildLabel)
+    ) {
+        inventoryResponse.Nemesis = undefined;
+    }
 
     return inventoryResponse;
 };

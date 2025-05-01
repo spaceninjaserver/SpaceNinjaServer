@@ -20,6 +20,7 @@ const databaseAccountSchema = new Schema<IDatabaseAccountJson>(
         ConsentNeeded: { type: Boolean, required: true },
         TrackedSettings: { type: [String], default: [] },
         Nonce: { type: Number, default: 0 },
+        BuildLabel: String,
         Dropped: Boolean,
         LatestEventMessageDate: { type: Date, default: 0 },
         LastLoginRewardDate: { type: Number, default: 0 },

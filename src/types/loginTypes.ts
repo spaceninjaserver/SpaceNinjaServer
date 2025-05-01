@@ -16,6 +16,7 @@ export interface IAccountAndLoginResponseCommons {
 export interface IDatabaseAccountRequiredFields extends IAccountAndLoginResponseCommons {
     email: string;
     password: string;
+    BuildLabel?: string;
 }
 
 export interface IDatabaseAccount extends IDatabaseAccountRequiredFields {

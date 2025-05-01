@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { getAccountIdForRequest } from "@/src/services/loginService";
+import { getAccountForRequest } from "@/src/services/loginService";
 import { IMissionInventoryUpdateRequest } from "@/src/types/requestTypes";
 import { addMissionInventoryUpdates, addMissionRewards } from "@/src/services/missionInventoryUpdateService";
 import { generateRewardSeed, getInventory } from "@/src/services/inventoryService";
@@ -49,11 +49,11 @@ import { IMissionInventoryUpdateResponse } from "@/src/types/missionTypes";
 */
 //move credit calc in here, return MissionRewards: [] if no reward info
 export const missionInventoryUpdateController: RequestHandler = async (req, res): Promise<void> => {
-    const accountId = await getAccountIdForRequest(req);
+    const account = await getAccountForRequest(req);
     const missionReport = getJSONfromString<IMissionInventoryUpdateRequest>((req.body as string).toString());
     logger.debug("mission report:", missionReport);
 
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory(account._id.toString());
     const firstCompletion = missionReport.SortieId
         ? inventory.CompletedSorties.indexOf(missionReport.SortieId) == -1
         : false;
@@ -65,7 +65,7 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
     ) {
         inventory.RewardSeed = generateRewardSeed();
         await inventory.save();
-        const inventoryResponse = await getInventoryResponse(inventory, true);
+        const inventoryResponse = await getInventoryResponse(inventory, true, account.BuildLabel);
         res.json({
             InventoryJson: JSON.stringify(inventoryResponse),
             MissionRewards: []
@@ -84,7 +84,7 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
 
     inventory.RewardSeed = generateRewardSeed();
     await inventory.save();
-    const inventoryResponse = await getInventoryResponse(inventory, true);
+    const inventoryResponse = await getInventoryResponse(inventory, true, account.BuildLabel);
 
     //TODO: figure out when to send inventory. it is needed for many cases.
     res.json({

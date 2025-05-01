@@ -47,7 +47,8 @@ export const loginController: RequestHandler = async (request, response) => {
                 ForceLogoutVersion: 0,
                 ConsentNeeded: false,
                 TrackedSettings: [],
-                Nonce: nonce
+                Nonce: nonce,
+                BuildLabel: buildLabel
             });
             logger.debug("created new account");
             response.json(createLoginResponse(myAddress, newAccount, buildLabel));
@@ -88,6 +89,7 @@ export const loginController: RequestHandler = async (request, response) => {
         account.ClientType = loginRequest.ClientType;
         account.Nonce = nonce;
         account.CountryCode = loginRequest.lang.toUpperCase();
+        account.BuildLabel = buildLabel;
     }
     await account.save();
 
