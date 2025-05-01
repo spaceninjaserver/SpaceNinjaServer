@@ -230,40 +230,6 @@ const pushSortieIfRelevant = (worldState: IWorldState, day: number): void => {
 
     const boss = rng.randomElement(sortieBosses)!;
 
-    const modifiers = [
-        "SORTIE_MODIFIER_LOW_ENERGY",
-        "SORTIE_MODIFIER_IMPACT",
-        "SORTIE_MODIFIER_SLASH",
-        "SORTIE_MODIFIER_PUNCTURE",
-        "SORTIE_MODIFIER_EXIMUS",
-        "SORTIE_MODIFIER_MAGNETIC",
-        "SORTIE_MODIFIER_CORROSIVE",
-        "SORTIE_MODIFIER_VIRAL",
-        "SORTIE_MODIFIER_ELECTRICITY",
-        "SORTIE_MODIFIER_RADIATION",
-        "SORTIE_MODIFIER_GAS",
-        "SORTIE_MODIFIER_FIRE",
-        "SORTIE_MODIFIER_EXPLOSION",
-        "SORTIE_MODIFIER_FREEZE",
-        "SORTIE_MODIFIER_TOXIN",
-        "SORTIE_MODIFIER_POISON",
-        "SORTIE_MODIFIER_HAZARD_RADIATION",
-        "SORTIE_MODIFIER_HAZARD_MAGNETIC",
-        "SORTIE_MODIFIER_HAZARD_FOG", // TODO: push this if the mission tileset is Grineer Forest
-        "SORTIE_MODIFIER_HAZARD_FIRE", // TODO: push this if the mission tileset is Corpus Ship or Grineer Galleon
-        "SORTIE_MODIFIER_HAZARD_ICE",
-        "SORTIE_MODIFIER_HAZARD_COLD",
-        "SORTIE_MODIFIER_SECONDARY_ONLY",
-        "SORTIE_MODIFIER_SHOTGUN_ONLY",
-        "SORTIE_MODIFIER_SNIPER_ONLY",
-        "SORTIE_MODIFIER_RIFLE_ONLY",
-        "SORTIE_MODIFIER_MELEE_ONLY",
-        "SORTIE_MODIFIER_BOW_ONLY"
-    ];
-
-    if (sortieBossToFaction[boss] == "FC_CORPUS") modifiers.push("SORTIE_MODIFIER_SHIELDS");
-    if (sortieBossToFaction[boss] != "FC_CORPUS") modifiers.push("SORTIE_MODIFIER_ARMOR");
-
     const nodes: string[] = [];
     const availableMissionIndexes: number[] = [];
     for (const [key, value] of Object.entries(ExportRegions)) {
@@ -314,9 +280,38 @@ const pushSortieIfRelevant = (worldState: IWorldState, day: number): void => {
                 sortieFactionToSpecialMissionTileset[sortieBossToFaction[boss]]
         );
 
+        const modifiers = [
+            "SORTIE_MODIFIER_LOW_ENERGY",
+            "SORTIE_MODIFIER_IMPACT",
+            "SORTIE_MODIFIER_SLASH",
+            "SORTIE_MODIFIER_PUNCTURE",
+            "SORTIE_MODIFIER_EXIMUS",
+            "SORTIE_MODIFIER_MAGNETIC",
+            "SORTIE_MODIFIER_CORROSIVE",
+            "SORTIE_MODIFIER_VIRAL",
+            "SORTIE_MODIFIER_ELECTRICITY",
+            "SORTIE_MODIFIER_RADIATION",
+            "SORTIE_MODIFIER_GAS",
+            "SORTIE_MODIFIER_FIRE",
+            "SORTIE_MODIFIER_EXPLOSION",
+            "SORTIE_MODIFIER_FREEZE",
+            "SORTIE_MODIFIER_TOXIN",
+            "SORTIE_MODIFIER_POISON",
+            "SORTIE_MODIFIER_HAZARD_RADIATION",
+            "SORTIE_MODIFIER_HAZARD_MAGNETIC",
+            "SORTIE_MODIFIER_HAZARD_FOG", // TODO: push this if the mission tileset is Grineer Forest
+            "SORTIE_MODIFIER_HAZARD_FIRE", // TODO: push this if the mission tileset is Corpus Ship or Grineer Galleon
+            "SORTIE_MODIFIER_HAZARD_ICE",
+            "SORTIE_MODIFIER_HAZARD_COLD",
+            "SORTIE_MODIFIER_SECONDARY_ONLY",
+            "SORTIE_MODIFIER_SHOTGUN_ONLY",
+            "SORTIE_MODIFIER_SNIPER_ONLY",
+            "SORTIE_MODIFIER_RIFLE_ONLY",
+            "SORTIE_MODIFIER_BOW_ONLY"
+        ];
+
         if (i == 2 && boss != "SORTIE_BOSS_CORRUPTED_VOR" && rng.randomInt(0, 2) == 2) {
-            const filteredModifiers = modifiers.filter(mod => mod !== "SORTIE_MODIFIER_MELEE_ONLY");
-            const modifierType = rng.randomElement(filteredModifiers)!;
+            const modifierType = rng.randomElement(modifiers)!;
 
             selectedNodes.push({
                 missionType: "MT_ASSASSINATION",
@@ -334,12 +329,21 @@ const pushSortieIfRelevant = (worldState: IWorldState, day: number): void => {
             continue;
         }
 
-        const filteredModifiers =
-            missionType === "MT_TERRITORY"
-                ? modifiers.filter(mod => mod != "SORTIE_MODIFIER_HAZARD_RADIATION")
-                : modifiers;
+        modifiers.push("SORTIE_MODIFIER_MELEE_ONLY"); // not an assassination mission, can now push this
 
-        const modifierType = rng.randomElement(filteredModifiers)!;
+        if (missionType != "MT_TERRITORY") {
+            modifiers.push("SORTIE_MODIFIER_HAZARD_RADIATION");
+        }
+
+        if (ExportRegions[node].factionIndex == 0) {
+            // Grineer
+            modifiers.push("SORTIE_MODIFIER_ARMOR");
+        } else if (ExportRegions[node].factionIndex == 1) {
+            // Corpus
+            modifiers.push("SORTIE_MODIFIER_SHIELDS");
+        }
+
+        const modifierType = rng.randomElement(modifiers)!;
 
         selectedNodes.push({
             missionType,
