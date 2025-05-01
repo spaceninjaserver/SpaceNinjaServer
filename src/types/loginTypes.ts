@@ -3,7 +3,7 @@ import { Types } from "mongoose";
 export interface IAccountAndLoginResponseCommons {
     DisplayName: string;
     CountryCode: string;
-    ClientType: string;
+    ClientType?: string;
     CrossPlatformAllowed?: boolean;
     ForceLogoutVersion: number;
     AmazonAuthToken?: string;
