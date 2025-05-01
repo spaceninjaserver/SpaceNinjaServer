@@ -721,8 +721,8 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         SyndicateMissions: [...staticWorldState.SyndicateMissions]
     };
 
-    // Omit void fissures for versions prior to Whispers in the Walls to avoid errors with the unknown deimos nodes having void fissures.
-    if (buildLabel && version_compare(buildLabel, "2023.11.06.13.39") <= 0) {
+    // Omit void fissures for versions prior to Dante Unbound to avoid script errors.
+    if (buildLabel && version_compare(buildLabel, "2024.03.24.20.00") < 0) {
         worldState.ActiveMissions = [];
     }
 
