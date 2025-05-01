@@ -100,7 +100,6 @@ const createLoginResponse = (myAddress: string, account: IDatabaseAccountJson, b
         DisplayName: account.DisplayName,
         CountryCode: account.CountryCode,
         ClientType: account.ClientType,
-        CrossPlatformAllowed: account.CrossPlatformAllowed,
         ForceLogoutVersion: account.ForceLogoutVersion,
         AmazonAuthToken: account.AmazonAuthToken,
         AmazonRefreshToken: account.AmazonRefreshToken,
@@ -109,14 +108,17 @@ const createLoginResponse = (myAddress: string, account: IDatabaseAccountJson, b
         Nonce: account.Nonce,
         Groups: [],
         IRC: config.myIrcAddresses ?? [myAddress],
-        HUB: `https://${myAddress}/api/`,
         NRS: config.NRS,
         DTLS: 99,
-        BuildLabel: buildLabel,
-        MatchmakingBuildId: buildConfig.matchmakingBuildId
+        BuildLabel: buildLabel
     };
-    if (version_compare(buildLabel, "2023.04.25.23.40") >= 0) {
-        resp.platformCDNs = [`https://${myAddress}/`];
+    if (version_compare(buildLabel, "2022.09.06.19.24") >= 0) {
+        resp.CrossPlatformAllowed = account.CrossPlatformAllowed;
+        resp.HUB = `https://${myAddress}/api/`;
+        resp.MatchmakingBuildId = buildConfig.matchmakingBuildId;
+        if (version_compare(buildLabel, "2023.04.25.23.40") >= 0) {
+            resp.platformCDNs = [`https://${myAddress}/`];
+        }
     }
     return resp;
 };
