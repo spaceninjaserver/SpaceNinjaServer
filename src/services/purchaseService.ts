@@ -223,10 +223,10 @@ export const handlePurchase = async (
                                 purchaseResponse.Standing = [
                                     {
                                         Tag: syndicateTag,
-                                        Standing: favour.standingCost
+                                        Standing: favour.standingCost * purchaseRequest.PurchaseParams.Quantity
                                     }
                                 ];
-                                affiliation.Standing -= favour.standingCost;
+                                affiliation.Standing -= favour.standingCost * purchaseRequest.PurchaseParams.Quantity;
                             }
                         }
                     }
