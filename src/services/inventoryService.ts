@@ -69,7 +69,7 @@ import {
 import { createShip } from "./shipService";
 import {
     catbrowDetails,
-    fromMongoData,
+    fromMongoDate,
     kubrowDetails,
     kubrowFurPatternsWeights,
     kubrowWeights,
@@ -1506,7 +1506,7 @@ export const applyClientEquipmentUpdates = (
         }
 
         if (InfestationDate) {
-            item.InfestationDate = fromMongoData(InfestationDate);
+            item.InfestationDate = fromMongoDate(InfestationDate);
         }
     });
 };

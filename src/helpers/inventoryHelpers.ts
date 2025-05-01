@@ -10,7 +10,7 @@ export const toMongoDate = (date: Date): IMongoDate => {
     return { $date: { $numberLong: date.getTime().toString() } };
 };
 
-export const fromMongoData = (date: IMongoDate): Date => {
+export const fromMongoDate = (date: IMongoDate): Date => {
     return new Date(parseInt(date.$date.$numberLong));
 };
 
