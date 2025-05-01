@@ -332,7 +332,8 @@ export const addItem = async (
     quantity: number = 1,
     premiumPurchase: boolean = false,
     seed?: bigint,
-    targetFingerprint?: string
+    targetFingerprint?: string,
+    exactQuantity: boolean = false
 ): Promise<IInventoryChanges> => {
     // Bundles are technically StoreItems but a) they don't have a normal counterpart, and b) they are used in non-StoreItem contexts, e.g. email attachments.
     if (typeName in ExportBundles) {
@@ -490,7 +491,9 @@ export const addItem = async (
         // Multipling by purchase quantity for gear because:
         // - The Saya's Vigil scanner message has it as a non-counted attachment.
         // - Blueprints for Ancient Protector Specter, Shield Osprey Specter, etc. have num=1 despite giving their purchaseQuantity.
-        quantity *= ExportGear[typeName].purchaseQuantity ?? 1;
+        if (!exactQuantity) {
+            quantity *= ExportGear[typeName].purchaseQuantity ?? 1;
+        }
         const consumablesChanges = [
             {
                 ItemType: typeName,
