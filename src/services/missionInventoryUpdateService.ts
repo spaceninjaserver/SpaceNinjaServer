@@ -858,8 +858,7 @@ export const addMissionRewards = async (
             for (const reward of fixedLevelRewards.levelKeyRewards2) {
                 //quest stage completion credit rewards
                 if (reward.rewardType == "RT_CREDITS") {
-                    inventory.RegularCredits += reward.amount;
-                    missionCompletionCredits += reward.amount;
+                    missionCompletionCredits += reward.amount; // will be added to inventory in addCredits
                     continue;
                 }
                 MissionRewards.push({
