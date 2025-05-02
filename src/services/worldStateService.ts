@@ -298,26 +298,42 @@ const pushSortieIfRelevant = (worldState: IWorldState, day: number): void => {
             "SORTIE_MODIFIER_TOXIN",
             "SORTIE_MODIFIER_POISON",
             "SORTIE_MODIFIER_HAZARD_RADIATION",
-            "SORTIE_MODIFIER_HAZARD_MAGNETIC",
-            "SORTIE_MODIFIER_HAZARD_FOG", // TODO: push this if the mission tileset is Grineer Forest
-            "SORTIE_MODIFIER_HAZARD_FIRE", // TODO: push this if the mission tileset is Corpus Ship or Grineer Galleon
-            "SORTIE_MODIFIER_HAZARD_ICE",
-            "SORTIE_MODIFIER_HAZARD_COLD",
             "SORTIE_MODIFIER_SECONDARY_ONLY",
             "SORTIE_MODIFIER_SHOTGUN_ONLY",
             "SORTIE_MODIFIER_SNIPER_ONLY",
             "SORTIE_MODIFIER_RIFLE_ONLY",
             "SORTIE_MODIFIER_BOW_ONLY"
         ];
+        const pushTilesetModifiers = (tileset: string): void => {
+            switch (tileset) {
+                case "SORTIE_MODIFIER_HAZARD_FOG":
+                    modifiers.push("SORTIE_MODIFIER_HAZARD_FOG");
+                    break;
+                case "CorpusShipTileset":
+                case "GrineerGalleonTileset":
+                case "InfestedCorpusShipTileset":
+                    modifiers.push("SORTIE_MODIFIER_HAZARD_MAGNETIC");
+                    modifiers.push("SORTIE_MODIFIER_HAZARD_FIRE");
+                    modifiers.push("SORTIE_MODIFIER_HAZARD_ICE");
+                    break;
+                case "CorpusIcePlanetTileset":
+                case "CorpusIcePlanetTilesetCaves":
+                    modifiers.push("SORTIE_MODIFIER_HAZARD_COLD");
+                    break;
+            }
+        };
 
         if (i == 2 && boss != "SORTIE_BOSS_CORRUPTED_VOR" && rng.randomInt(0, 2) == 2) {
+            const tileset = sortieTilesets[sortieBossNode[boss] as keyof typeof sortieTilesets];
+            pushTilesetModifiers(tileset);
+
             const modifierType = rng.randomElement(modifiers)!;
 
             selectedNodes.push({
                 missionType: "MT_ASSASSINATION",
                 modifierType,
                 node: sortieBossNode[boss],
-                tileset: sortieTilesets[sortieBossNode[boss] as keyof typeof sortieTilesets]
+                tileset
             });
             continue;
         }
@@ -343,13 +359,16 @@ const pushSortieIfRelevant = (worldState: IWorldState, day: number): void => {
             modifiers.push("SORTIE_MODIFIER_SHIELDS");
         }
 
+        const tileset = sortieTilesets[node as keyof typeof sortieTilesets];
+        pushTilesetModifiers(tileset);
+
         const modifierType = rng.randomElement(modifiers)!;
 
         selectedNodes.push({
             missionType,
             modifierType,
             node,
-            tileset: sortieTilesets[node as keyof typeof sortieTilesets]
+            tileset
         });
         nodes.splice(randomIndex, 1);
         missionTypes.add(missionType);
