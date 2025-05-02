@@ -63,7 +63,9 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         missionReport.MissionStatus !== "GS_SUCCESS" &&
         !(missionReport.RewardInfo?.jobId || missionReport.RewardInfo?.challengeMissionId)
     ) {
-        inventory.RewardSeed = generateRewardSeed();
+        if (missionReport.EndOfMatchUpload) {
+            inventory.RewardSeed = generateRewardSeed();
+        }
         await inventory.save();
         const inventoryResponse = await getInventoryResponse(inventory, true, account.BuildLabel);
         res.json({
@@ -82,7 +84,9 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         ConquestCompletedMissionsCount
     } = await addMissionRewards(inventory, missionReport, firstCompletion);
 
-    inventory.RewardSeed = generateRewardSeed();
+    if (missionReport.EndOfMatchUpload) {
+        inventory.RewardSeed = generateRewardSeed();
+    }
     await inventory.save();
     const inventoryResponse = await getInventoryResponse(inventory, true, account.BuildLabel);
 
