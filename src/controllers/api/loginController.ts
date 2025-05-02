@@ -110,17 +110,19 @@ const createLoginResponse = (myAddress: string, account: IDatabaseAccountJson, b
         Groups: [],
         IRC: config.myIrcAddresses ?? [myAddress],
         NRS: config.NRS,
-        DTLS: 99,
         BuildLabel: buildLabel
     };
-    if (version_compare(buildLabel, "2022.04.29.12.53") >= 0) {
-        resp.ClientType = account.ClientType;
-        if (version_compare(buildLabel, "2022.09.06.19.24") >= 0) {
-            resp.CrossPlatformAllowed = account.CrossPlatformAllowed;
-            resp.HUB = `https://${myAddress}/api/`;
-            resp.MatchmakingBuildId = buildConfig.matchmakingBuildId;
-            if (version_compare(buildLabel, "2023.04.25.23.40") >= 0) {
-                resp.platformCDNs = [`https://${myAddress}/`];
+    if (version_compare(buildLabel, "2021.04.13.19.58") >= 0) {
+        resp.DTLS = 99;
+        if (version_compare(buildLabel, "2022.04.29.12.53") >= 0) {
+            resp.ClientType = account.ClientType;
+            if (version_compare(buildLabel, "2022.09.06.19.24") >= 0) {
+                resp.CrossPlatformAllowed = account.CrossPlatformAllowed;
+                resp.HUB = `https://${myAddress}/api/`;
+                resp.MatchmakingBuildId = buildConfig.matchmakingBuildId;
+                if (version_compare(buildLabel, "2023.04.25.23.40") >= 0) {
+                    resp.platformCDNs = [`https://${myAddress}/`];
+                }
             }
         }
     }

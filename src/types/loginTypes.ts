@@ -50,7 +50,7 @@ export interface ILoginResponse extends IAccountAndLoginResponseCommons {
     MatchmakingBuildId?: string;
     platformCDNs?: string[];
     NRS?: string[];
-    DTLS: number;
+    DTLS?: number;
     IRC: string[];
     HUB?: string;
 }
