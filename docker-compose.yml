@@ -12,19 +12,40 @@ services:
             # APP_HTTP_PORT: 80
             # APP_HTTPS_PORT: 443
             # APP_AUTO_CREATE_ACCOUNT: true
-            # APP_SKIP_STORY_MODE_CHOICE: true
-            # APP_SKIP_TUTORIAL: true
-            # APP_SKIP_ALL_DIALOGUE: true
-            # APP_UNLOCK_ALL_SCANS: true
-            # APP_UNLOCK_ALL_MISSIONS: true
-            # APP_UNLOCK_ALL_QUESTS: true
-            # APP_COMPLETE_ALL_QUESTS: true
-            # APP_INFINITE_RESOURCES: true
-            # APP_UNLOCK_ALL_SHIP_FEATURES: true
-            # APP_UNLOCK_ALL_SHIP_DECORATIONS: true
-            # APP_UNLOCK_ALL_FLAVOUR_ITEMS: true
-            # APP_UNLOCK_ALL_SKINS: true
-            # APP_UNIVERSAL_POLARITY_EVERYWHERE: true
+            # APP_SKIP_TUTORIAL: false
+            # APP_SKIP_ALL_DIALOGUE: false
+            # APP_UNLOCK_ALL_SCANS: false
+            # APP_UNLOCK_ALL_MISSIONS: false
+            # APP_INFINITE_CREDITS: false
+            # APP_INFINITE_PLATINUM: false
+            # APP_INFINITE_ENDO: false
+            # APP_INFINITE_REGAL_AYA: false
+            # APP_INFINITE_HELMINTH_MATERIALS: false
+            # APP_DONT_SUBTRACT_CONSUMABLES: false
+            # APP_UNLOCK_ALL_SHIP_FEATURES: false
+            # APP_UNLOCK_ALL_SHIP_DECORATIONS: false
+            # APP_UNLOCK_ALL_FLAVOUR_ITEMS: false
+            # APP_UNLOCK_ALL_SKINS: false
+            # APP_UNLOCK_ALL_CAPTURA_SCENES: false
+            # APP_UNIVERSAL_POLARITY_EVERYWHERE: false
+            # APP_UNLOCK_DOUBLE_CAPACITY_POTATOES_EVERYWHERE: false
+            # APP_UNLOCK_EXILUS_EVERYWHERE: false
+            # APP_UNLOCK_ARCANES_EVERYWHERE: false
+            # APP_NO_DAILY_FOCUS_LIMIT: false
+            # APP_NO_ARGON_CRYSTAL_DECAY: false
+            # APP_NO_MASTERY_RANK_UP_COOLDOWN: false
+            # APP_NO_VENDOR_PURCHASE_LIMITS: true
+            # APP_NO_DEATH_MARKS: false
+            # APP_NO_KIM_COOLDOWNS: false
+            # APP_INSTANT_RESOURCE_EXTRACTOR_DRONES: false
+            # APP_NO_RESOURCE_EXTRACTOR_DRONES_DAMAGE: false
+            # APP_SKIP_CLAN_KEY_CRAFTING: false
+            # APP_NO_DOJO_ROOM_BUILD_STAGE: false
+            # APP_NO_DECO_BUILD_STAGE: false
+            # APP_FAST_DOJO_ROOM_DESTRUCTION: false
+            # APP_NO_DOJO_RESEARCH_COSTS: false
+            # APP_NO_DOJO_RESEARCH_TIME: false
+            # APP_FAST_CLAN_ASCENSION: false
             # APP_SPOOF_MASTERY_RANK: -1
         volumes:
             - ./docker-data/static:/app/static/data

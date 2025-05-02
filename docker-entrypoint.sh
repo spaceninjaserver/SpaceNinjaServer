@@ -19,5 +19,6 @@ do
   mv config.tmp config.json
 done
 
-npm install
-exec npm run dev
+npm i --omit=dev
+npm run build
+exec npm run start
