@@ -18,6 +18,7 @@ export const getAllianceController: RequestHandler = async (req, res) => {
     res.end();
 };
 
+// POST request since U27
 /*interface IGetAllianceRequest {
     memberCount: number;
     clanLeaderName: string;

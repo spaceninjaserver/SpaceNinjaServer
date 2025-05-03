@@ -101,30 +101,36 @@ const createLoginResponse = (myAddress: string, account: IDatabaseAccountJson, b
         id: account.id,
         DisplayName: account.DisplayName,
         CountryCode: account.CountryCode,
-        ForceLogoutVersion: account.ForceLogoutVersion,
         AmazonAuthToken: account.AmazonAuthToken,
         AmazonRefreshToken: account.AmazonRefreshToken,
         ConsentNeeded: account.ConsentNeeded,
         TrackedSettings: account.TrackedSettings,
         Nonce: account.Nonce,
-        Groups: [],
         IRC: config.myIrcAddresses ?? [myAddress],
         NRS: config.NRS,
         BuildLabel: buildLabel
     };
+    if (version_compare(buildLabel, "2019.08.29.20.01") >= 0) {
+        // U25.7 and up
+        resp.ForceLogoutVersion = account.ForceLogoutVersion;
+    }
+    if (version_compare(buildLabel, "2019.10.31.22.42") >= 0) {
+        // U26 and up
+        resp.Groups = [];
+    }
     if (version_compare(buildLabel, "2021.04.13.19.58") >= 0) {
         resp.DTLS = 99;
-        if (version_compare(buildLabel, "2022.04.29.12.53") >= 0) {
-            resp.ClientType = account.ClientType;
-            if (version_compare(buildLabel, "2022.09.06.19.24") >= 0) {
-                resp.CrossPlatformAllowed = account.CrossPlatformAllowed;
-                resp.HUB = `https://${myAddress}/api/`;
-                resp.MatchmakingBuildId = buildConfig.matchmakingBuildId;
-                if (version_compare(buildLabel, "2023.04.25.23.40") >= 0) {
-                    resp.platformCDNs = [`https://${myAddress}/`];
-                }
-            }
-        }
+    }
+    if (version_compare(buildLabel, "2022.04.29.12.53") >= 0) {
+        resp.ClientType = account.ClientType;
+    }
+    if (version_compare(buildLabel, "2022.09.06.19.24") >= 0) {
+        resp.CrossPlatformAllowed = account.CrossPlatformAllowed;
+        resp.HUB = `https://${myAddress}/api/`;
+        resp.MatchmakingBuildId = buildConfig.matchmakingBuildId;
+    }
+    if (version_compare(buildLabel, "2023.04.25.23.40") >= 0) {
+        resp.platformCDNs = [`https://${myAddress}/`];
     }
     return resp;
 };

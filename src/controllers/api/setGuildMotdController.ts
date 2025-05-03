@@ -2,6 +2,7 @@ import { Alliance, Guild, GuildMember } from "@/src/models/guildModel";
 import { hasGuildPermissionEx } from "@/src/services/guildService";
 import { getInventory } from "@/src/services/inventoryService";
 import { getAccountForRequest, getSuffixedName } from "@/src/services/loginService";
+import { version_compare } from "@/src/services/worldStateService";
 import { GuildPermission, ILongMOTD } from "@/src/types/guildTypes";
 import { RequestHandler } from "express";
 
@@ -55,5 +56,9 @@ export const setGuildMotdController: RequestHandler = async (req, res) => {
         await guild.save();
     }
 
-    res.json({ IsLongMOTD, MOTD });
+    if (!account.BuildLabel || version_compare(account.BuildLabel, "2020.03.24.20.24") > 0) {
+        res.json({ IsLongMOTD, MOTD });
+    } else {
+        res.send(MOTD).end();
+    }
 };

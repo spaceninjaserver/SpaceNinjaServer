@@ -5,7 +5,7 @@ export interface IAccountAndLoginResponseCommons {
     CountryCode: string;
     ClientType?: string;
     CrossPlatformAllowed?: boolean;
-    ForceLogoutVersion: number;
+    ForceLogoutVersion?: number;
     AmazonAuthToken?: string;
     AmazonRefreshToken?: string;
     ConsentNeeded: boolean;
@@ -45,7 +45,7 @@ export interface ILoginRequest {
 
 export interface ILoginResponse extends IAccountAndLoginResponseCommons {
     id: string;
-    Groups: IGroup[];
+    Groups?: IGroup[];
     BuildLabel: string;
     MatchmakingBuildId?: string;
     platformCDNs?: string[];

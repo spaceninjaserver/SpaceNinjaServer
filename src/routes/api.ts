@@ -170,6 +170,7 @@ apiRouter.get("/deleteSession.php", deleteSessionController);
 apiRouter.get("/divvyAllianceVault.php", divvyAllianceVaultController);
 apiRouter.get("/dojo", dojoController);
 apiRouter.get("/drones.php", dronesController);
+apiRouter.get("/getAlliance.php", getAllianceController);
 apiRouter.get("/getDailyDealStockLevels.php", getDailyDealStockLevelsController);
 apiRouter.get("/getFriends.php", getFriendsController);
 apiRouter.get("/getGuild.php", getGuildController);
@@ -308,6 +309,7 @@ apiRouter.post("/trainingResult.php", trainingResultController);
 apiRouter.post("/unlockShipFeature.php", unlockShipFeatureController);
 apiRouter.post("/updateAlignment.php", updateAlignmentController);
 apiRouter.post("/updateChallengeProgress.php", updateChallengeProgressController);
+apiRouter.post("/updateInventory.php", missionInventoryUpdateController); // U26 and below
 apiRouter.post("/updateNodeIntros.php", genericUpdateController);
 apiRouter.post("/updateQuest.php", updateQuestController);
 apiRouter.post("/updateSession.php", updateSessionPostController);
