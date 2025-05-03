@@ -297,7 +297,6 @@ const pushSortieIfRelevant = (worldState: IWorldState, day: number): void => {
             "SORTIE_MODIFIER_FREEZE",
             "SORTIE_MODIFIER_TOXIN",
             "SORTIE_MODIFIER_POISON",
-            "SORTIE_MODIFIER_HAZARD_RADIATION",
             "SORTIE_MODIFIER_SECONDARY_ONLY",
             "SORTIE_MODIFIER_SHOTGUN_ONLY",
             "SORTIE_MODIFIER_SNIPER_ONLY",
