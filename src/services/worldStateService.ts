@@ -306,7 +306,7 @@ const pushSortieIfRelevant = (worldState: IWorldState, day: number): void => {
         ];
         const pushTilesetModifiers = (tileset: string): void => {
             switch (tileset) {
-                case "SORTIE_MODIFIER_HAZARD_FOG":
+                case "GrineerForestTileset":
                     modifiers.push("SORTIE_MODIFIER_HAZARD_FOG");
                     break;
                 case "CorpusShipTileset":
