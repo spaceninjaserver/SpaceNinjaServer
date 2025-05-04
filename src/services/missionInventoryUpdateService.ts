@@ -1449,7 +1449,11 @@ function getRandomMissionDrops(
                             }
                         }
                         rewardManifests = [job.rewards];
-                        rotations = [RewardInfo.JobStage! % (job.xpAmounts.length - 1)];
+                        if (job.xpAmounts.length > 1) {
+                            rotations = [RewardInfo.JobStage! % (job.xpAmounts.length - 1)];
+                        } else {
+                            rotations = [RewardInfo.JobStage!];
+                        }
                         if (
                             RewardInfo.Q &&
                             (RewardInfo.JobStage === job.xpAmounts.length - 1 || job.isVault) &&
