@@ -8,8 +8,8 @@ export interface IAccountAndLoginResponseCommons {
     ForceLogoutVersion?: number;
     AmazonAuthToken?: string;
     AmazonRefreshToken?: string;
-    ConsentNeeded: boolean;
-    TrackedSettings: string[];
+    ConsentNeeded?: boolean;
+    TrackedSettings?: string[];
     Nonce: number;
 }
 

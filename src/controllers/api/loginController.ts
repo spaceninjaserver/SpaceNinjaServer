@@ -103,13 +103,16 @@ const createLoginResponse = (myAddress: string, account: IDatabaseAccountJson, b
         CountryCode: account.CountryCode,
         AmazonAuthToken: account.AmazonAuthToken,
         AmazonRefreshToken: account.AmazonRefreshToken,
-        ConsentNeeded: account.ConsentNeeded,
-        TrackedSettings: account.TrackedSettings,
         Nonce: account.Nonce,
         IRC: config.myIrcAddresses ?? [myAddress],
         NRS: config.NRS,
         BuildLabel: buildLabel
     };
+    if (version_compare(buildLabel, "2018.11.08.14.45") >= 0) {
+        // U24 and up
+        resp.ConsentNeeded = account.ConsentNeeded;
+        resp.TrackedSettings = account.TrackedSettings;
+    }
     if (version_compare(buildLabel, "2019.08.29.20.01") >= 0) {
         // U25.7 and up
         resp.ForceLogoutVersion = account.ForceLogoutVersion;
