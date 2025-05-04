@@ -18,62 +18,71 @@ import {
     ITypeXPItem
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { RequestHandler } from "express";
-import { catBreadHash } from "@/src/helpers/stringHelpers";
+import { catBreadHash, getJSONfromString } from "@/src/helpers/stringHelpers";
 import { ExportCustoms, ExportDojoRecipes } from "warframe-public-export-plus";
 import { IStatsClient } from "@/src/types/statTypes";
 import { toStoreItem } from "@/src/services/itemDataService";
+import { FlattenMaps } from "mongoose";
 
-export const getProfileViewingDataController: RequestHandler = async (req, res) => {
+const getProfileViewingDataByPlayerIdImpl = async (playerId: string): Promise<IProfileViewingData | undefined> => {
+    const account = await Account.findById(playerId, "DisplayName");
+    if (!account) {
+        return;
+    }
+    const inventory = (await Inventory.findOne({ accountOwnerId: account._id }))!;
+
+    const result: IPlayerProfileViewingDataResult = {
+        AccountId: toOid(account._id),
+        DisplayName: account.DisplayName,
+        PlayerLevel: inventory.PlayerLevel,
+        LoadOutInventory: {
+            WeaponSkins: [],
+            XPInfo: inventory.XPInfo
+        },
+        PlayerSkills: inventory.PlayerSkills,
+        ChallengeProgress: inventory.ChallengeProgress,
+        DeathMarks: inventory.DeathMarks,
+        Harvestable: inventory.Harvestable,
+        DeathSquadable: inventory.DeathSquadable,
+        Created: toMongoDate(inventory.Created),
+        MigratedToConsole: false,
+        Missions: inventory.Missions,
+        Affiliations: inventory.Affiliations,
+        DailyFocus: inventory.DailyFocus,
+        Wishlist: inventory.Wishlist,
+        Alignment: inventory.Alignment
+    };
+    await populateLoadout(inventory, result);
+    if (inventory.GuildId) {
+        const guild = (await Guild.findById(inventory.GuildId, "Name Tier XP Class Emblem"))!;
+        populateGuild(guild, result);
+    }
+    for (const key of allDailyAffiliationKeys) {
+        result[key] = inventory[key];
+    }
+
+    const stats = (await Stats.findOne({ accountOwnerId: account._id }))!.toJSON<Partial<TStatsDatabaseDocument>>();
+    delete stats._id;
+    delete stats.__v;
+    delete stats.accountOwnerId;
+
+    return {
+        Results: [result],
+        TechProjects: [],
+        XpComponents: [],
+        //XpCacheExpiryDate, some IMongoDate in the future, no clue what it's for
+        Stats: stats
+    };
+};
+
+export const getProfileViewingDataGetController: RequestHandler = async (req, res) => {
     if (req.query.playerId) {
-        const account = await Account.findById(req.query.playerId as string, "DisplayName");
-        if (!account) {
+        const data = await getProfileViewingDataByPlayerIdImpl(req.query.playerId as string);
+        if (data) {
+            res.json(data);
+        } else {
             res.status(409).send("Could not find requested account");
-            return;
         }
-        const inventory = (await Inventory.findOne({ accountOwnerId: account._id }))!;
-
-        const result: IPlayerProfileViewingDataResult = {
-            AccountId: toOid(account._id),
-            DisplayName: account.DisplayName,
-            PlayerLevel: inventory.PlayerLevel,
-            LoadOutInventory: {
-                WeaponSkins: [],
-                XPInfo: inventory.XPInfo
-            },
-            PlayerSkills: inventory.PlayerSkills,
-            ChallengeProgress: inventory.ChallengeProgress,
-            DeathMarks: inventory.DeathMarks,
-            Harvestable: inventory.Harvestable,
-            DeathSquadable: inventory.DeathSquadable,
-            Created: toMongoDate(inventory.Created),
-            MigratedToConsole: false,
-            Missions: inventory.Missions,
-            Affiliations: inventory.Affiliations,
-            DailyFocus: inventory.DailyFocus,
-            Wishlist: inventory.Wishlist,
-            Alignment: inventory.Alignment
-        };
-        await populateLoadout(inventory, result);
-        if (inventory.GuildId) {
-            const guild = (await Guild.findById(inventory.GuildId, "Name Tier XP Class Emblem"))!;
-            populateGuild(guild, result);
-        }
-        for (const key of allDailyAffiliationKeys) {
-            result[key] = inventory[key];
-        }
-
-        const stats = (await Stats.findOne({ accountOwnerId: account._id }))!.toJSON<Partial<TStatsDatabaseDocument>>();
-        delete stats._id;
-        delete stats.__v;
-        delete stats.accountOwnerId;
-
-        res.json({
-            Results: [result],
-            TechProjects: [],
-            XpComponents: [],
-            //XpCacheExpiryDate, some IMongoDate in the future, no clue what it's for
-            Stats: stats
-        });
     } else if (req.query.guildId) {
         const guild = await Guild.findById(req.query.guildId, "Name Tier XP Class Emblem TechProjects ClaimedXP");
         if (!guild) {
@@ -169,6 +178,28 @@ export const getProfileViewingDataController: RequestHandler = async (req, res) 
         res.sendStatus(400);
     }
 };
+
+// For old versions, this was an authenticated POST request.
+interface IGetProfileViewingDataRequest {
+    AccountId: string;
+}
+export const getProfileViewingDataPostController: RequestHandler = async (req, res) => {
+    const payload = getJSONfromString<IGetProfileViewingDataRequest>(String(req.body));
+    const data = await getProfileViewingDataByPlayerIdImpl(payload.AccountId);
+    if (data) {
+        res.json(data);
+    } else {
+        res.status(409).send("Could not find requested account");
+    }
+};
+
+interface IProfileViewingData {
+    Results: IPlayerProfileViewingDataResult[];
+    TechProjects: [];
+    XpComponents: [];
+    //XpCacheExpiryDate, some IMongoDate in the future, no clue what it's for
+    Stats: FlattenMaps<Partial<TStatsDatabaseDocument>>;
+}
 
 interface IPlayerProfileViewingDataResult extends Partial<IDailyAffiliations> {
     AccountId: IOid;

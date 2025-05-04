@@ -59,6 +59,7 @@ import { getGuildDojoController } from "@/src/controllers/api/getGuildDojoContro
 import { getGuildLogController } from "@/src/controllers/api/getGuildLogController";
 import { getIgnoredUsersController } from "@/src/controllers/api/getIgnoredUsersController";
 import { getNewRewardSeedController } from "@/src/controllers/api/getNewRewardSeedController";
+import { getProfileViewingDataPostController } from "@/src/controllers/dynamic/getProfileViewingDataController";
 import { getShipController } from "@/src/controllers/api/getShipController";
 import { getVendorInfoController } from "@/src/controllers/api/getVendorInfoController";
 import { getVoidProjectionRewardsController } from "@/src/controllers/api/getVoidProjectionRewardsController";
@@ -247,6 +248,7 @@ apiRouter.post("/genericUpdate.php", genericUpdateController);
 apiRouter.post("/getAlliance.php", getAllianceController);
 apiRouter.post("/getFriends.php", getFriendsController);
 apiRouter.post("/getGuildDojo.php", getGuildDojoController);
+apiRouter.post("/getProfileViewingData.php", getProfileViewingDataPostController);
 apiRouter.post("/getVoidProjectionRewards.php", getVoidProjectionRewardsController);
 apiRouter.post("/gifting.php", giftingController);
 apiRouter.post("/gildWeapon.php", gildWeaponController);
