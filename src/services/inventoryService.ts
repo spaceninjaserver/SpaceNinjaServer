@@ -789,6 +789,10 @@ export const addItem = async (
                     break;
                 }
                 case "NeutralCreatures": {
+                    if (inventory.Horses.length != 0) {
+                        logger.warn("refusing to add Horse because account already has one");
+                        return {};
+                    }
                     const horseIndex = inventory.Horses.push({ ItemType: typeName });
                     return {
                         Horses: [inventory.Horses[horseIndex - 1].toJSON<IEquipmentClient>()]
