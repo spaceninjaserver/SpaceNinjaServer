@@ -762,15 +762,18 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     }
 
     // Nightwave Challenges
-    worldState.SeasonInfo.ActiveChallenges.push(getSeasonDailyChallenge(day - 2));
-    worldState.SeasonInfo.ActiveChallenges.push(getSeasonDailyChallenge(day - 1));
-    worldState.SeasonInfo.ActiveChallenges.push(getSeasonDailyChallenge(day - 0));
-    if (isBeforeNextExpectedWorldStateRefresh(EPOCH + (day + 1) * 86400000)) {
-        worldState.SeasonInfo.ActiveChallenges.push(getSeasonDailyChallenge(day + 1));
-    }
-    pushWeeklyActs(worldState, week);
-    if (isBeforeNextExpectedWorldStateRefresh(weekEnd)) {
-        pushWeeklyActs(worldState, week + 1);
+    // Current nightwave season was introduced in 38.0.8 so omitting challenges before that to avoid UI bugs and even crashes on really old versions.
+    if (!buildLabel || version_compare(buildLabel, "2025.02.05.11.19") >= 0) {
+        worldState.SeasonInfo.ActiveChallenges.push(getSeasonDailyChallenge(day - 2));
+        worldState.SeasonInfo.ActiveChallenges.push(getSeasonDailyChallenge(day - 1));
+        worldState.SeasonInfo.ActiveChallenges.push(getSeasonDailyChallenge(day - 0));
+        if (isBeforeNextExpectedWorldStateRefresh(EPOCH + (day + 1) * 86400000)) {
+            worldState.SeasonInfo.ActiveChallenges.push(getSeasonDailyChallenge(day + 1));
+        }
+        pushWeeklyActs(worldState, week);
+        if (isBeforeNextExpectedWorldStateRefresh(weekEnd)) {
+            pushWeeklyActs(worldState, week + 1);
+        }
     }
 
     // Elite Sanctuary Onslaught cycling every week
