@@ -173,9 +173,11 @@ export interface IDojoComponentClient {
     Message?: string;
     RegularCredits?: number; // "Collecting Materials" state: Number of credits that were donated.
     MiscItems?: IMiscItem[]; // "Collecting Materials" state: Resources that were donated.
-    CompletionTime?: IMongoDate;
+    CompletionTime?: IMongoDate; // new versions
+    TimeRemaining?: number; // old versions
     RushPlatinum?: number;
-    DestructionTime?: IMongoDate;
+    DestructionTime?: IMongoDate; // new versions
+    DestructionTimeRemaining?: number; // old versions
     Decos?: IDojoDecoClient[];
     DecoCapacity?: number;
     PaintBot?: IOid;
@@ -212,7 +214,8 @@ export interface IDojoDecoClient {
     Sockets?: number;
     RegularCredits?: number;
     MiscItems?: IMiscItem[];
-    CompletionTime?: IMongoDate;
+    CompletionTime?: IMongoDate; // new versions
+    TimeRemaining?: number; // old versions
     RushPlatinum?: number;
     PictureFrameInfo?: IPictureFrameInfo;
     Pending?: boolean;
