@@ -21,6 +21,12 @@ app.use((req, _res, next) => {
     if (req.headers["content-encoding"] == "ezip" || req.headers["content-encoding"] == "e") {
         req.headers["content-encoding"] = undefined;
     }
+
+    // U18 uses application/x-www-form-urlencoded even tho the data is JSON which Express doesn't like.
+    if (req.headers["content-type"] == "application/x-www-form-urlencoded") {
+        req.headers["content-type"] = "application/octet-stream";
+    }
+
     next();
 });
 
