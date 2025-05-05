@@ -904,7 +904,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                 Jobs: [
                     {
                         jobType: rng.randomElement(venusJobs),
-                        rewards: `Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierATable${table}Rewards`,
+                        rewards: `/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierATable${table}Rewards`,
                         masteryReq: 0,
                         minEnemyLevel: 5,
                         maxEnemyLevel: 15,
@@ -912,7 +912,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                     },
                     {
                         jobType: rng.randomElement(venusJobs),
-                        rewards: `Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierBTable${table}Rewards`,
+                        rewards: `/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierBTable${table}Rewards`,
                         masteryReq: 1,
                         minEnemyLevel: 10,
                         maxEnemyLevel: 30,
@@ -920,7 +920,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                     },
                     {
                         jobType: rng.randomElement(venusJobs),
-                        rewards: `Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierCTable${table}Rewards`,
+                        rewards: `/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierCTable${table}Rewards`,
                         masteryReq: 2,
                         minEnemyLevel: 20,
                         maxEnemyLevel: 40,
@@ -928,7 +928,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                     },
                     {
                         jobType: rng.randomElement(venusJobs),
-                        rewards: `Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierDTable${table}Rewards`,
+                        rewards: `/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierDTable${table}Rewards`,
                         masteryReq: 3,
                         minEnemyLevel: 30,
                         maxEnemyLevel: 50,
@@ -936,7 +936,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                     },
                     {
                         jobType: rng.randomElement(venusJobs),
-                        rewards: `Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierETable${table}Rewards`,
+                        rewards: `/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierETable${table}Rewards`,
                         masteryReq: 5,
                         minEnemyLevel: 40,
                         maxEnemyLevel: 60,
@@ -944,7 +944,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                     },
                     {
                         jobType: rng.randomElement(venusJobs),
-                        rewards: `Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierETable${table}Rewards`,
+                        rewards: `/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierETable${table}Rewards`,
                         masteryReq: 10,
                         minEnemyLevel: 100,
                         maxEnemyLevel: 100,
