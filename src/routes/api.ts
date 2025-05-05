@@ -97,6 +97,7 @@ import { playerSkillsController } from "@/src/controllers/api/playerSkillsContro
 import { postGuildAdvertisementController } from "@/src/controllers/api/postGuildAdvertisementController";
 import { projectionManagerController } from "@/src/controllers/api/projectionManagerController";
 import { purchaseController } from "@/src/controllers/api/purchaseController";
+import { questControlController } from "@/src/controllers/api/questControlController";
 import { queueDojoComponentDestructionController } from "@/src/controllers/api/queueDojoComponentDestructionController";
 import { redeemPromoCodeController } from "@/src/controllers/api/redeemPromoCodeController";
 import { releasePetController } from "@/src/controllers/api/releasePetController";
@@ -192,6 +193,7 @@ apiRouter.get("/marketRecommendations.php", marketRecommendationsController);
 apiRouter.get("/marketSearchRecommendations.php", marketRecommendationsController);
 apiRouter.get("/modularWeaponSale.php", modularWeaponSaleController);
 apiRouter.get("/playedParkourTutorial.php", playedParkourTutorialController);
+apiRouter.get("/questControl.php", questControlController);
 apiRouter.get("/queueDojoComponentDestruction.php", queueDojoComponentDestructionController);
 apiRouter.get("/removeFromAlliance.php", removeFromAllianceController);
 apiRouter.get("/setActiveQuest.php", setActiveQuestController);
