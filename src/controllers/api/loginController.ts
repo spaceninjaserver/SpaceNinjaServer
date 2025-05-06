@@ -41,7 +41,7 @@ export const loginController: RequestHandler = async (request, response) => {
                 email: loginRequest.email,
                 password: loginRequest.password,
                 DisplayName: name,
-                CountryCode: loginRequest.lang.toUpperCase(),
+                CountryCode: loginRequest.lang?.toUpperCase() ?? "EN",
                 ClientType: loginRequest.ClientType == "webui-register" ? "webui" : loginRequest.ClientType,
                 CrossPlatformAllowed: true,
                 ForceLogoutVersion: 0,
@@ -91,7 +91,7 @@ export const loginController: RequestHandler = async (request, response) => {
 
         account.ClientType = loginRequest.ClientType;
         account.Nonce = nonce;
-        account.CountryCode = loginRequest.lang.toUpperCase();
+        account.CountryCode = loginRequest.lang?.toUpperCase() ?? "EN";
         account.BuildLabel = buildLabel;
     }
     await account.save();
@@ -107,10 +107,13 @@ const createLoginResponse = (myAddress: string, account: IDatabaseAccountJson, b
         AmazonAuthToken: account.AmazonAuthToken,
         AmazonRefreshToken: account.AmazonRefreshToken,
         Nonce: account.Nonce,
-        IRC: config.myIrcAddresses ?? [myAddress],
         NRS: config.NRS,
         BuildLabel: buildLabel
     };
+    if (version_compare(buildLabel, "2015.05.14.16.29") >= 0) {
+        // U17 and up
+        resp.IRC = config.myIrcAddresses ?? [myAddress];
+    }
     if (version_compare(buildLabel, "2018.11.08.14.45") >= 0) {
         // U24 and up
         resp.ConsentNeeded = account.ConsentNeeded;

@@ -35,11 +35,11 @@ export interface ILoginRequest {
     email: string;
     password: string;
     time: number;
-    s: string;
-    lang: string;
+    s?: string;
+    lang?: string;
     date: number;
-    ClientType: string;
-    PS: string;
+    ClientType?: string;
+    PS?: string;
     kick?: boolean;
 }
 
@@ -51,7 +51,7 @@ export interface ILoginResponse extends IAccountAndLoginResponseCommons {
     platformCDNs?: string[];
     NRS?: string[];
     DTLS?: number;
-    IRC: string[];
+    IRC?: string[];
     HUB?: string;
 }
 
