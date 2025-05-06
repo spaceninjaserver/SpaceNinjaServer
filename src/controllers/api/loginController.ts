@@ -107,9 +107,11 @@ const createLoginResponse = (myAddress: string, account: IDatabaseAccountJson, b
         AmazonAuthToken: account.AmazonAuthToken,
         AmazonRefreshToken: account.AmazonRefreshToken,
         Nonce: account.Nonce,
-        NRS: config.NRS,
         BuildLabel: buildLabel
     };
+    if (version_compare(buildLabel, "2015.02.13.10.41") >= 0) {
+        resp.NRS = config.NRS;
+    }
     if (version_compare(buildLabel, "2015.05.14.16.29") >= 0) {
         // U17 and up
         resp.IRC = config.myIrcAddresses ?? [myAddress];
