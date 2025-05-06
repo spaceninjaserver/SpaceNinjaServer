@@ -744,6 +744,10 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     // Omit void fissures for versions prior to Dante Unbound to avoid script errors.
     if (buildLabel && version_compare(buildLabel, "2024.03.24.20.00") < 0) {
         worldState.ActiveMissions = [];
+        if (version_compare(buildLabel, "2017.10.12.17.04") < 0) {
+            // Old versions seem to really get hung up on not being able to load these.
+            worldState.PVPChallengeInstances = [];
+        }
     }
 
     if (config.worldState?.starDays) {

@@ -186,6 +186,7 @@ apiRouter.get("/getVendorInfo.php", getVendorInfoController);
 apiRouter.get("/hub", hubController);
 apiRouter.get("/hubInstances", hubInstancesController);
 apiRouter.get("/inbox.php", inboxController);
+apiRouter.get("/getMessages.php", inboxController); // unsure if this is correct, but needed for U17
 apiRouter.get("/inventory.php", inventoryController);
 apiRouter.get("/loginRewards.php", loginRewardsController);
 apiRouter.get("/logout.php", logoutController);
@@ -278,6 +279,7 @@ apiRouter.post("/playerSkills.php", playerSkillsController);
 apiRouter.post("/postGuildAdvertisement.php", postGuildAdvertisementController);
 apiRouter.post("/projectionManager.php", projectionManagerController);
 apiRouter.post("/purchase.php", purchaseController);
+apiRouter.post("/questControl.php", questControlController); // U17
 apiRouter.post("/redeemPromoCode.php", redeemPromoCodeController);
 apiRouter.post("/releasePet.php", releasePetController);
 apiRouter.post("/removeFromGuild.php", removeFromGuildController);

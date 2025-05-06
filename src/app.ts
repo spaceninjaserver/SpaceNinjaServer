@@ -23,7 +23,8 @@ app.use((req, _res, next) => {
     }
 
     // U18 uses application/x-www-form-urlencoded even tho the data is JSON which Express doesn't like.
-    if (req.headers["content-type"] == "application/x-www-form-urlencoded") {
+    // U17 sets no Content-Type at all, which Express also doesn't like.
+    if (!req.headers["content-type"] || req.headers["content-type"] == "application/x-www-form-urlencoded") {
         req.headers["content-type"] = "application/octet-stream";
     }
 

@@ -12,6 +12,7 @@ export interface IWorldState {
     GlobalUpgrades: IGlobalUpgrade[];
     ActiveMissions: IFissure[];
     NodeOverrides: INodeOverride[];
+    PVPChallengeInstances: IPVPChallengeInstance[];
     EndlessXpChoices: IEndlessXpChoice[];
     SeasonInfo: {
         Activation: IMongoDate;
@@ -128,6 +129,21 @@ export interface ILiteSortie {
         missionType: string;
         node: string;
     }[];
+}
+
+export interface IPVPChallengeInstance {
+    _id: IOid;
+    challengeTypeRefID: string;
+    startDate: IMongoDate;
+    endDate: IMongoDate;
+    params: {
+        n: string; // "ScriptParamValue";
+        v: number;
+    }[];
+    isGenerated: boolean;
+    PVPMode: string;
+    subChallenges: IOid[];
+    Category: string; // "PVPChallengeTypeCategory_WEEKLY" | "PVPChallengeTypeCategory_WEEKLY_ROOT" | "PVPChallengeTypeCategory_DAILY";
 }
 
 export interface IEndlessXpChoice {

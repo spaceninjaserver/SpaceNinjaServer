@@ -82,8 +82,11 @@ export const loginController: RequestHandler = async (request, response) => {
         }
     } else {
         if (account.Nonce && account.ClientType != "webui" && !account.Dropped && !loginRequest.kick) {
-            response.status(400).json({ error: "nonce still set" });
-            return;
+            // U17 seems to handle "nonce still set" like a login failure.
+            if (version_compare(buildLabel, "2015.12.05.18.07") >= 0) {
+                response.status(400).send({ error: "nonce still set" });
+                return;
+            }
         }
 
         account.ClientType = loginRequest.ClientType;
