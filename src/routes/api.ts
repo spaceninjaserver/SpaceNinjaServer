@@ -225,6 +225,7 @@ apiRouter.post("/changeDojoRoot.php", changeDojoRootController);
 apiRouter.post("/claimCompletedRecipe.php", claimCompletedRecipeController);
 apiRouter.post("/clearDialogueHistory.php", clearDialogueHistoryController);
 apiRouter.post("/clearNewEpisodeReward.php", clearNewEpisodeRewardController);
+apiRouter.post("/commitStoryModeDecision.php", (_req, res) => { res.end(); }); // U14 (maybe wanna actually unlock the ship features?)
 apiRouter.post("/completeRandomModChallenge.php", completeRandomModChallengeController);
 apiRouter.post("/confirmGuildInvitation.php", confirmGuildInvitationPostController);
 apiRouter.post("/contributeGuildClass.php", contributeGuildClassController);

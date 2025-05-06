@@ -11,6 +11,7 @@ import {
     IOperatorConfigDatabase
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { IFingerprintStat, RivenFingerprint } from "@/src/helpers/rivenHelper";
+import { IOrbiter } from "../personalRoomsTypes";
 
 export type InventoryDatabaseEquipment = {
     [_ in TEquipmentKey]: IEquipmentDatabase[];
@@ -373,6 +374,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     BrandedSuits?: IOid[];
     LockedWeaponGroup?: ILockedWeaponGroupClient;
     HubNpcCustomizations?: IHubNpcCustomization[];
+    Ship?: IOrbiter; // U22 and below, response only
 }
 
 export interface IAffiliation {
