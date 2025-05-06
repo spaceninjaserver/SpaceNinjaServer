@@ -1452,7 +1452,7 @@ function getRandomMissionDrops(
                         if (job.xpAmounts.length > 1) {
                             rotations = [RewardInfo.JobStage! % (job.xpAmounts.length - 1)];
                         } else {
-                            rotations = [RewardInfo.JobStage!];
+                            rotations = [0];
                         }
                         if (
                             RewardInfo.Q &&
