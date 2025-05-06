@@ -58,7 +58,7 @@ import conservationAnimals from "@/static/fixed_responses/conservationAnimals.js
 import { getInfNodes, getWeaponsForManifest, sendCodaFinishedMessage } from "@/src/helpers/nemesisHelpers";
 import { Loadout } from "../models/inventoryModels/loadoutModel";
 import { ILoadoutConfigDatabase } from "../types/saveLoadoutTypes";
-import { getLiteSortie, getWorldState, idToWeek } from "./worldStateService";
+import { getLiteSortie, getSortie, getWorldState, idToDay, idToWeek } from "./worldStateService";
 import { config } from "./configService";
 import libraryDailyTasks from "@/static/fixed_responses/libraryDailyTasks.json";
 
@@ -1357,9 +1357,24 @@ function getRandomMissionDrops(
             // Invasion assassination has Phorid has the boss who should drop Nyx parts
             // TODO: Check that the invasion faction is indeed FC_INFESTATION once the Invasions in worldState are more dynamic
             rewardManifests = ["/Lotus/Types/Game/MissionDecks/BossMissionRewards/NyxRewards"];
-        } else if (RewardInfo.sortieId && region.missionIndex != 0) {
+        } else if (RewardInfo.sortieId) {
             // Sortie mission types differ from the underlying node and hence also don't give rewards from the underlying nodes. Assassinations are an exception to this.
-            rewardManifests = [];
+            if (region.missionIndex == 0) {
+                const arr = RewardInfo.sortieId.split("_");
+                let sortieId = arr[1];
+                if (sortieId == "Lite") {
+                    sortieId = arr[2];
+                }
+                const sortie = getSortie(idToDay(sortieId));
+                const mission = sortie.Variants.find(x => x.node == arr[0])!;
+                if (mission.missionType == "MT_ASSASSINATION") {
+                    rewardManifests = region.rewardManifests;
+                } else {
+                    rewardManifests = [];
+                }
+            } else {
+                rewardManifests = [];
+            }
         } else {
             rewardManifests = region.rewardManifests;
         }

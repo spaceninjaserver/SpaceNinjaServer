@@ -12,6 +12,7 @@ import {
     ICalendarSeason,
     ILiteSortie,
     ISeasonChallenge,
+    ISortie,
     ISortieMission,
     IWorldState
 } from "../types/worldStateTypes";
@@ -193,12 +194,6 @@ const pushSyndicateMissions = (
     idSuffix: string,
     syndicateTag: string
 ): void => {
-    const dayStart = getSortieTime(day);
-    if (Date.now() >= dayStart) {
-        return; // The client does not seem to respect activation.
-    }
-    const dayEnd = getSortieTime(day + 1);
-
     const nodeOptions: string[] = [...syndicateMissions];
 
     const rng = new CRng(seed);
@@ -209,6 +204,8 @@ const pushSyndicateMissions = (
         nodeOptions.splice(index, 1);
     }
 
+    const dayStart = getSortieTime(day);
+    const dayEnd = getSortieTime(day + 1);
     worldState.SyndicateMissions.push({
         _id: { $oid: ((dayStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + idSuffix },
         Activation: { $date: { $numberLong: dayStart.toString() } },
@@ -219,16 +216,7 @@ const pushSyndicateMissions = (
     });
 };
 
-const pushSortieIfRelevant = (worldState: IWorldState, day: number): void => {
-    const dayStart = getSortieTime(day);
-    if (!isBeforeNextExpectedWorldStateRefresh(dayStart)) {
-        return;
-    }
-    const dayEnd = getSortieTime(day + 1);
-    if (Date.now() >= dayEnd) {
-        return;
-    }
-
+export const getSortie = (day: number): ISortie => {
     const seed = new CRng(day).randomInt(0, 0xffff);
     const rng = new CRng(seed);
 
@@ -375,7 +363,9 @@ const pushSortieIfRelevant = (worldState: IWorldState, day: number): void => {
         missionTypes.add(missionType);
     }
 
-    worldState.Sorties.push({
+    const dayStart = getSortieTime(day);
+    const dayEnd = getSortieTime(day + 1);
+    return {
         _id: { $oid: ((dayStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "d4d932c97c0a3acd" },
         Activation: { $date: { $numberLong: dayStart.toString() } },
         Expiry: { $date: { $numberLong: dayEnd.toString() } },
@@ -383,14 +373,7 @@ const pushSortieIfRelevant = (worldState: IWorldState, day: number): void => {
         Seed: seed,
         Boss: boss,
         Variants: selectedNodes
-    });
-
-    pushSyndicateMissions(worldState, day, rng.randomInt(0, 0xffff), "ba6f84724fa48049", "ArbitersSyndicate");
-    pushSyndicateMissions(worldState, day, rng.randomInt(0, 0xffff), "ba6f84724fa4804a", "CephalonSudaSyndicate");
-    pushSyndicateMissions(worldState, day, rng.randomInt(0, 0xffff), "ba6f84724fa4804e", "NewLokaSyndicate");
-    pushSyndicateMissions(worldState, day, rng.randomInt(0, 0xffff), "ba6f84724fa48050", "PerrinSyndicate");
-    pushSyndicateMissions(worldState, day, rng.randomInt(0, 0xffff), "ba6f84724fa4805e", "RedVeilSyndicate");
-    pushSyndicateMissions(worldState, day, rng.randomInt(0, 0xffff), "ba6f84724fa48061", "SteelMeridianSyndicate");
+    };
 };
 
 const dailyChallenges = Object.keys(ExportNightwave.challenges).filter(x =>
@@ -1099,8 +1082,25 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     }
 
     // Sortie & syndicate missions cycling every day (at 16:00 or 17:00 UTC depending on if London, OT is observing DST)
-    pushSortieIfRelevant(worldState, day - 1);
-    pushSortieIfRelevant(worldState, day);
+    {
+        const rollover = getSortieTime(day);
+
+        if (Date.now() < rollover) {
+            worldState.Sorties.push(getSortie(day - 1));
+        }
+        if (isBeforeNextExpectedWorldStateRefresh(rollover)) {
+            worldState.Sorties.push(getSortie(day));
+        }
+
+        // The client does not seem to respect activation for classic syndicate missions, so only pushing current ones.
+        const rng = new CRng(Date.now() >= rollover ? day : day - 1);
+        pushSyndicateMissions(worldState, day, rng.randomInt(0, 0xffff), "ba6f84724fa48049", "ArbitersSyndicate");
+        pushSyndicateMissions(worldState, day, rng.randomInt(0, 0xffff), "ba6f84724fa4804a", "CephalonSudaSyndicate");
+        pushSyndicateMissions(worldState, day, rng.randomInt(0, 0xffff), "ba6f84724fa4804e", "NewLokaSyndicate");
+        pushSyndicateMissions(worldState, day, rng.randomInt(0, 0xffff), "ba6f84724fa48050", "PerrinSyndicate");
+        pushSyndicateMissions(worldState, day, rng.randomInt(0, 0xffff), "ba6f84724fa4805e", "RedVeilSyndicate");
+        pushSyndicateMissions(worldState, day, rng.randomInt(0, 0xffff), "ba6f84724fa48061", "SteelMeridianSyndicate");
+    }
 
     // Archon Hunt cycling every week
     worldState.LiteSorties.push(getLiteSortie(week));
@@ -1178,8 +1178,12 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     return worldState;
 };
 
+export const idToDay = (id: string): number => {
+    return Math.trunc((parseInt(id.substring(0, 8), 16) * 1000 - EPOCH) / 86400_000);
+};
+
 export const idToWeek = (id: string): number => {
-    return (parseInt(id.substring(0, 8), 16) * 1000 - EPOCH) / 604800000;
+    return Math.trunc((parseInt(id.substring(0, 8), 16) * 1000 - EPOCH) / 604800_000);
 };
 
 export const getLiteSortie = (week: number): ILiteSortie => {
