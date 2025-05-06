@@ -193,6 +193,12 @@ const pushSyndicateMissions = (
     idSuffix: string,
     syndicateTag: string
 ): void => {
+    const dayStart = getSortieTime(day);
+    if (Date.now() >= dayStart) {
+        return; // The client does not seem to respect activation.
+    }
+    const dayEnd = getSortieTime(day + 1);
+
     const nodeOptions: string[] = [...syndicateMissions];
 
     const rng = new CRng(seed);
@@ -203,8 +209,6 @@ const pushSyndicateMissions = (
         nodeOptions.splice(index, 1);
     }
 
-    const dayStart = getSortieTime(day);
-    const dayEnd = getSortieTime(day + 1);
     worldState.SyndicateMissions.push({
         _id: { $oid: ((dayStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + idSuffix },
         Activation: { $date: { $numberLong: dayStart.toString() } },
