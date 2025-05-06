@@ -41,7 +41,7 @@ export const startRecipeController: RequestHandler = async (req, res) => {
         ];
 
     for (let i = 0; i != recipe.ingredients.length; ++i) {
-        if (startRecipeRequest.Ids[i]) {
+        if (startRecipeRequest.Ids[i] && startRecipeRequest.Ids[i][0] != "/") {
             const category = ExportWeapons[recipe.ingredients[i].ItemType].productCategory;
             if (category != "LongGuns" && category != "Pistols" && category != "Melee") {
                 throw new Error(`unexpected equipment ingredient type: ${category}`);
