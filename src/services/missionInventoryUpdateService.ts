@@ -58,9 +58,10 @@ import conservationAnimals from "@/static/fixed_responses/conservationAnimals.js
 import { getInfNodes, getWeaponsForManifest, sendCodaFinishedMessage } from "@/src/helpers/nemesisHelpers";
 import { Loadout } from "../models/inventoryModels/loadoutModel";
 import { ILoadoutConfigDatabase } from "../types/saveLoadoutTypes";
-import { getLiteSortie, getSortie, getWorldState, idToDay, idToWeek } from "./worldStateService";
+import { getLiteSortie, getSortie, idToBountyCycle, idToDay, idToWeek, pushClassicBounties } from "./worldStateService";
 import { config } from "./configService";
 import libraryDailyTasks from "@/static/fixed_responses/libraryDailyTasks.json";
+import { ISyndicateMissionInfo } from "../types/worldStateTypes";
 
 const getRotations = (rewardInfo: IRewardInfo, tierOverride?: number): number[] => {
     // For Spy missions, e.g. 3 vaults cracked = A, B, C
@@ -1086,10 +1087,10 @@ export const addMissionRewards = async (
 
     if (rewardInfo.JobStage != undefined && rewardInfo.jobId) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const [jobType, unkIndex, hubNode, syndicateId, locationTag] = rewardInfo.jobId.split("_");
-        const worldState = getWorldState();
-        let syndicateEntry = worldState.SyndicateMissions.find(m => m._id.$oid === syndicateId);
-        if (!syndicateEntry) syndicateEntry = worldState.SyndicateMissions.find(m => m.Tag === syndicateId); // Sometimes syndicateId can be tag
+        const [jobType, unkIndex, hubNode, syndicateMissionId, locationTag] = rewardInfo.jobId.split("_");
+        const syndicateMissions: ISyndicateMissionInfo[] = [];
+        pushClassicBounties(syndicateMissions, idToBountyCycle(syndicateMissionId));
+        const syndicateEntry = syndicateMissions.find(m => m._id.$oid === syndicateMissionId);
         if (syndicateEntry && syndicateEntry.Jobs) {
             let currentJob = syndicateEntry.Jobs[rewardInfo.JobTier!];
             if (syndicateEntry.Tag === "EntratiSyndicate") {
@@ -1383,13 +1384,12 @@ function getRandomMissionDrops(
         if (RewardInfo.jobId) {
             if (RewardInfo.JobStage! >= 0) {
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                const [jobType, unkIndex, hubNode, syndicateId, locationTag] = RewardInfo.jobId.split("_");
+                const [jobType, unkIndex, hubNode, syndicateMissionId, locationTag] = RewardInfo.jobId.split("_");
                 let isEndlessJob = false;
-                if (syndicateId) {
-                    const worldState = getWorldState();
-                    let syndicateEntry = worldState.SyndicateMissions.find(m => m._id.$oid === syndicateId);
-                    if (!syndicateEntry) syndicateEntry = worldState.SyndicateMissions.find(m => m.Tag === syndicateId);
-
+                if (syndicateMissionId) {
+                    const syndicateMissions: ISyndicateMissionInfo[] = [];
+                    pushClassicBounties(syndicateMissions, idToBountyCycle(syndicateMissionId));
+                    const syndicateEntry = syndicateMissions.find(m => m._id.$oid === syndicateMissionId);
                     if (syndicateEntry && syndicateEntry.Jobs) {
                         let job = syndicateEntry.Jobs[RewardInfo.JobTier!];
 
