@@ -45,6 +45,9 @@ export const sellController: RequestHandler = async (req, res) => {
     if (payload.Items.SpaceGuns || payload.Items.SpaceMelee) {
         requiredFields.add(InventorySlot.SPACEWEAPONS);
     }
+    if (payload.Items.MechSuits) {
+        requiredFields.add(InventorySlot.MECHSUITS);
+    }
     if (payload.Items.Sentinels || payload.Items.SentinelWeapons || payload.Items.MoaPets) {
         requiredFields.add(InventorySlot.SENTINELS);
     }
@@ -134,6 +137,12 @@ export const sellController: RequestHandler = async (req, res) => {
         payload.Items.SpaceMelee.forEach(sellItem => {
             inventory.SpaceMelee.pull({ _id: sellItem.String });
             freeUpSlot(inventory, InventorySlot.SPACEWEAPONS);
+        });
+    }
+    if (payload.Items.MechSuits) {
+        payload.Items.MechSuits.forEach(sellItem => {
+            inventory.MechSuits.pull({ _id: sellItem.String });
+            freeUpSlot(inventory, InventorySlot.MECHSUITS);
         });
     }
     if (payload.Items.Sentinels) {
@@ -285,6 +294,7 @@ interface ISellRequest {
         SpaceSuits?: ISellItem[];
         SpaceGuns?: ISellItem[];
         SpaceMelee?: ISellItem[];
+        MechSuits?: ISellItem[];
         Sentinels?: ISellItem[];
         SentinelWeapons?: ISellItem[];
         MoaPets?: ISellItem[];
