@@ -149,6 +149,11 @@ export const addStartingGear = async (
     inventory: TInventoryDatabaseDocument,
     startingGear?: TPartialStartingGear
 ): Promise<IInventoryChanges> => {
+    if (inventory.ReceivedStartingGear) {
+        throw new Error(`account has already received starting gear`);
+    }
+    inventory.ReceivedStartingGear = true;
+
     const { LongGuns, Pistols, Suits, Melee } = startingGear || {
         LongGuns: [{ ItemType: "/Lotus/Weapons/Tenno/Rifle/Rifle" }],
         Pistols: [{ ItemType: "/Lotus/Weapons/Tenno/Pistol/Pistol" }],
@@ -196,11 +201,6 @@ export const addStartingGear = async (
         const inventoryDelta = await addItem(inventory, item);
         combineInventoryChanges(inventoryChanges, inventoryDelta);
     }
-
-    if (inventory.ReceivedStartingGear) {
-        logger.warn(`account already had starting gear but asked for it again?!`);
-    }
-    inventory.ReceivedStartingGear = true;
 
     return inventoryChanges;
 };
