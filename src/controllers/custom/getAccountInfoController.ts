@@ -1,15 +1,18 @@
 import { AllianceMember, Guild, GuildMember } from "@/src/models/guildModel";
+import { getInventory } from "@/src/services/inventoryService";
 import { getAccountForRequest, isAdministrator } from "@/src/services/loginService";
 import { RequestHandler } from "express";
 
 export const getAccountInfoController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
+    const inventory = await getInventory(account._id.toString(), "QuestKeys");
     const info: IAccountInfo = {
-        DisplayName: account.DisplayName
+        DisplayName: account.DisplayName,
+        IsAdministrator: isAdministrator(account),
+        CompletedVorsPrize: !!inventory.QuestKeys.find(
+            x => x.ItemType == "/Lotus/Types/Keys/VorsPrize/VorsPrizeQuestKeyChain"
+        )?.Completed
     };
-    if (isAdministrator(account)) {
-        info.IsAdministrator = true;
-    }
     const guildMember = await GuildMember.findOne({ accountId: account._id, status: 0 }, "guildId rank");
     if (guildMember) {
         const guild = (await Guild.findById(guildMember.guildId, "Ranks AllianceId"))!;
@@ -31,7 +34,8 @@ export const getAccountInfoController: RequestHandler = async (req, res) => {
 
 interface IAccountInfo {
     DisplayName: string;
-    IsAdministrator?: boolean;
+    IsAdministrator: boolean;
+    CompletedVorsPrize: boolean;
     GuildId?: string;
     GuildPermissions?: number;
     GuildRank?: number;
