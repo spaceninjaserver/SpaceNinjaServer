@@ -1096,7 +1096,7 @@ export const addMissionRewards = async (
             if (syndicateEntry.Tag === "EntratiSyndicate") {
                 const vault = syndicateEntry.Jobs.find(j => j.locationTag === locationTag);
                 if (vault) currentJob = vault;
-                let medallionAmount = currentJob.xpAmounts[rewardInfo.JobStage];
+                let medallionAmount = Math.floor(currentJob.xpAmounts[rewardInfo.JobStage] / (rewardInfo.Q ? 0.8 : 1));
 
                 if (
                     ["DeimosEndlessAreaDefenseBounty", "DeimosEndlessExcavateBounty", "DeimosEndlessPurifyBounty"].some(
@@ -1119,7 +1119,11 @@ export const addMissionRewards = async (
             } else {
                 if (rewardInfo.JobTier! >= 0) {
                     AffiliationMods.push(
-                        addStanding(inventory, syndicateEntry.Tag, currentJob.xpAmounts[rewardInfo.JobStage])
+                        addStanding(
+                            inventory,
+                            syndicateEntry.Tag,
+                            Math.floor(currentJob.xpAmounts[rewardInfo.JobStage] / (rewardInfo.Q ? 0.8 : 1))
+                        )
                     );
                 } else {
                     if (jobType.endsWith("Heists/HeistProfitTakerBountyOne") && rewardInfo.JobStage === 2) {
