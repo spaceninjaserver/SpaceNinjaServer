@@ -1614,6 +1614,17 @@ function getRandomMissionDrops(
                 }
             }
         }
+
+        if (RewardInfo.periodicMissionTag?.startsWith("KuvaMission")) {
+            const drop = getRandomRewardByChance(
+                ExportRewards[
+                    RewardInfo.periodicMissionTag == "KuvaMission6" || RewardInfo.periodicMissionTag == "KuvaMission12"
+                        ? "/Lotus/Types/Game/MissionDecks/KuvaMissionRewards/KuvaSiphonFloodRewards"
+                        : "/Lotus/Types/Game/MissionDecks/KuvaMissionRewards/KuvaSiphonRewards"
+                ][0]
+            )!;
+            drops.push({ StoreItem: drop.type, ItemCount: drop.itemCount });
+        }
     }
     return drops;
 }
