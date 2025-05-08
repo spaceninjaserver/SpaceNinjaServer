@@ -925,6 +925,14 @@ export const addMissionRewards = async (
         });
     }
 
+    if (rewardInfo.periodicMissionTag == "EliteAlert" || rewardInfo.periodicMissionTag == "EliteAlertB") {
+        missionCompletionCredits += 50_000;
+        MissionRewards.push({
+            StoreItem: "/Lotus/StoreItems/Types/Items/MiscItems/Elitium",
+            ItemCount: 1
+        });
+    }
+
     if (rewardInfo.ConquestCompleted !== undefined) {
         let score = 1;
         if (rewardInfo.ConquestHardModeActive === 1) score += 3;
