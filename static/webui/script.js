@@ -276,13 +276,19 @@ function fetchItemList() {
                 },
                 "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit": { name: loc("code_kDrive") },
                 "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetAPowerSuit": {
-                    name: loc("code_zanukaA")
+                    name: data.ModularParts.find(
+                        i => i.uniqueName === "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadA"
+                    ).name
                 },
                 "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetBPowerSuit": {
-                    name: loc("code_zanukaB")
+                    name: data.ModularParts.find(
+                        i => i.uniqueName === "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadB"
+                    ).name
                 },
                 "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetCPowerSuit": {
-                    name: loc("code_zanukaC")
+                    name: data.ModularParts.find(
+                        i => i.uniqueName === "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadC"
+                    ).name
                 }
             };
             for (const [type, items] of Object.entries(data)) {
