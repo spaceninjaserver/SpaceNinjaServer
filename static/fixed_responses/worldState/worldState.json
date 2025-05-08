@@ -22,6 +22,101 @@
       "Icon": "/Lotus/Interface/Icons/DiscordIconNoBacker.png"
     }
   ],
+  "InGameMarket": {
+    "LandingPage": {
+      "Categories": [
+        {
+          "CategoryName": "NEW_PLAYER",
+          "Name": "/Lotus/Language/Store/NewPlayerCategoryTitle",
+          "Icon": "newplayer",
+          "AddToMenu": true,
+          "Items": [
+            "/Lotus/Types/StoreItems/Packages/2024Bundles/WeaponStarterPack",
+            "/Lotus/StoreItems/Powersuits/MonkeyKing/MonkeyKing",
+            "/Lotus/StoreItems/Weapons/Tenno/Melee/SwordsAndBoards/MeleeContestWinnerOne/TennoSwordShield",
+            "/Lotus/StoreItems/Upgrades/Skins/Effects/WerewolfEphemera",
+            "/Lotus/StoreItems/Types/StoreItems/SlotItems/TwoWeaponSlotItem",
+            "/Lotus/StoreItems/Powersuits/Wisp/Wisp",
+            "/Lotus/StoreItems/Weapons/Tenno/Shotgun/Shotgun",
+            "/Lotus/StoreItems/Weapons/Corpus/Pistols/CrpAirPistol/CrpAirPistolArray",
+            "/Lotus/StoreItems/Upgrades/Skins/Scarves/FlameScarf",
+            "/Lotus/Types/StoreItems/Boosters/AffinityBooster3DayStoreItem"
+          ]
+        },
+        {
+          "CategoryName": "POPULAR",
+          "Name": "/Lotus/Language/Menu/StorePopular",
+          "Icon": "popular",
+          "AddToMenu": true,
+          "Items": [
+            "/Lotus/Types/StoreItems/Packages/2025Bundles/TC2025DigitalPack",
+            "/Lotus/Types/StoreItems/Packages/2025Bundles/EncoreCompSupPack",
+            "/Lotus/Types/StoreItems/Packages/2025Bundles/EncoreGeminiSupPack",
+            "/Lotus/Types/StoreItems/Packages/WarframeBundles/TempleItemsBundle",
+            "/Lotus/Types/StoreItems/Packages/FormaPack",
+            "/Lotus/StoreItems/Upgrades/Skins/Saryn/WF1999SarynSkin",
+            "/Lotus/StoreItems/Weapons/Tenno/Melee/Swords/DaxDuviriKatana/DaxDuviriKatanaWeapon",
+            "/Lotus/StoreItems/Upgrades/Skins/Jade/WF1999NyxSkin",
+            "/Lotus/StoreItems/Types/StoreItems/SuitCustomizations/NinjaColourPickerItem",
+            "/Lotus/StoreItems/Upgrades/Skins/Mag/WF1999MagSkin",
+            "/Lotus/StoreItems/Upgrades/Skins/Frost/WF1999FrostSkin",
+            "/Lotus/StoreItems/Weapons/Tenno/Melee/Swords/DaxDuviriTwoHandedKatana/DaxDuviriTwoHandedKatanaWeapon",
+            "/Lotus/StoreItems/Upgrades/Skins/Harlequin/MirageDeluxeSkin",
+            "/Lotus/StoreItems/Weapons/Tenno/Melee/Hammer/DaxDuviriHammer/DaxDuviriHammerWeapon"
+          ]
+        },
+        {
+          "CategoryName": "HEIRLOOM",
+          "Name": "/Lotus/Language/Store/HeirloomCategoryTitle",
+          "Icon": "heirloom",
+          "AddToMenu": true,
+          "Items": [
+            "/Lotus/Types/StoreItems/Packages/2025Bundles/RhinoHeirloomPack",
+            "/Lotus/Types/StoreItems/Packages/HeirloomPackRhino",
+            "/Lotus/StoreItems/Upgrades/Skins/Rhino/RhinoHeirloomSkin",
+            "/Lotus/StoreItems/Upgrades/Skins/Crowns/HeirloomRhinoCrown",
+            "/Lotus/StoreItems/Types/StoreItems/SuitCustomizations/ColourPickerRhinoHeirloom",
+            "/Lotus/StoreItems/Types/Items/ShipDecos/TarotCardRhinoHeirloom",
+            "/Lotus/StoreItems/Types/StoreItems/AvatarImages/HeirloomRhinoGlyph",
+            "/Lotus/StoreItems/Upgrades/Skins/Sigils/HeirloomRhinoSigil",
+            "/Lotus/Types/StoreItems/Packages/HeirloomPackEmber",
+            "/Lotus/StoreItems/Upgrades/Skins/Ember/EmberHeirloomSkin",
+            "/Lotus/StoreItems/Upgrades/Skins/Crowns/HeirloomEmberCrown",
+            "/Lotus/StoreItems/Types/StoreItems/SuitCustomizations/ColourPickerEmberHeirloom",
+            "/Lotus/StoreItems/Types/Items/ShipDecos/TarotCardEmberHeirloom",
+            "/Lotus/StoreItems/Types/StoreItems/AvatarImages/HeirloomEmberGlyph",
+            "/Lotus/StoreItems/Upgrades/Skins/Sigils/HeirloomEmberSigil"
+          ]
+        },
+        {
+          "CategoryName": "TENNOGEN",
+          "Name": "/Lotus/Language/Menu/Store_Tennogen",
+          "Icon": "tennogen",
+          "AddToMenu": true,
+          "Items": [
+            "/Lotus/StoreItems/Upgrades/Skins/Armor/SWEndocitosShoulderArmor/SWEndocitosShoulderArmorA",
+            "/Lotus/StoreItems/Upgrades/Skins/Scarves/SWLunariusSyandana",
+            "/Lotus/StoreItems/Upgrades/Skins/Scarves/SWRauSyandana",
+            "/Lotus/StoreItems/Upgrades/Skins/Hoplite/SWStyanaxHuzarrSkin",
+            "/Lotus/StoreItems/Upgrades/Skins/Werewolf/VorunaDemionnaSkin"
+          ]
+        },
+        {
+          "CategoryName": "SALE",
+          "Name": "/Lotus/Language/Menu/Store_Sale",
+          "Icon": "sale",
+          "AddToMenu": true,
+          "Items": []
+        },
+        {
+          "CategoryName": "WISH_LIST",
+          "Name": "/Lotus/Language/Menu/Store_Wishlist",
+          "Icon": "wishlist",
+          "Items": []
+        }
+      ]
+    }
+  },
   "Invasions": [
     {
       "_id": {
