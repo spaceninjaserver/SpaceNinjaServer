@@ -2,7 +2,7 @@ import { JSONParse } from "json-with-bigint";
 
 export const getJSONfromString = <T>(str: string): T => {
     const jsonSubstring = str.substring(0, str.lastIndexOf("}") + 1);
-    return JSONParse<T>(jsonSubstring);
+    return JSONParse(jsonSubstring) as T;
 };
 
 export const getSubstringFromKeyword = (str: string, keyword: string): string => {

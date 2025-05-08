@@ -17,13 +17,11 @@ import https from "https";
 import fs from "node:fs";
 import { app } from "./app";
 import mongoose from "mongoose";
-import { Json, JSONStringify } from "json-with-bigint";
+import { JSONStringify } from "json-with-bigint";
 import { validateConfig } from "@/src/services/configWatcherService";
 
 // Patch JSON.stringify to work flawlessly with Bigints.
-JSON.stringify = (obj: Exclude<Json, undefined>, _replacer?: unknown, space?: string | number): string => {
-    return JSONStringify(obj, space);
-};
+JSON.stringify = JSONStringify;
 
 validateConfig();
 
