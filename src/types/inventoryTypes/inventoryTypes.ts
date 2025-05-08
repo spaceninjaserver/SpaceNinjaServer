@@ -560,7 +560,7 @@ export interface ICrewShipCustomization {
 
 export interface IShipExterior {
     SkinFlavourItem?: string;
-    Colors: IColor;
+    Colors?: IColor;
     ShipAttachments?: IShipAttachments;
 }
 

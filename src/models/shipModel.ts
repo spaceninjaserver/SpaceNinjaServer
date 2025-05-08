@@ -28,17 +28,15 @@ shipSchema.set("toJSON", {
         delete returnedObject._id;
         delete returnedObject.__v;
         delete returnedObject.ShipOwnerId;
-        if (shipDatabase.ShipExteriorColors) {
-            shipResponse.ShipExterior = {
-                Colors: shipDatabase.ShipExteriorColors,
-                ShipAttachments: shipDatabase.ShipAttachments,
-                SkinFlavourItem: shipDatabase.SkinFlavourItem
-            };
 
-            delete shipDatabase.ShipExteriorColors;
-            delete shipDatabase.ShipAttachments;
-            delete shipDatabase.SkinFlavourItem;
-        }
+        shipResponse.ShipExterior = {
+            Colors: shipDatabase.ShipExteriorColors,
+            ShipAttachments: shipDatabase.ShipAttachments,
+            SkinFlavourItem: shipDatabase.SkinFlavourItem
+        };
+        delete shipDatabase.ShipExteriorColors;
+        delete shipDatabase.ShipAttachments;
+        delete shipDatabase.SkinFlavourItem;
     }
 });
 

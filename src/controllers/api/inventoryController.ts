@@ -28,6 +28,7 @@ import { isNemesisCompatibleWithVersion } from "@/src/helpers/nemesisHelpers";
 import { version_compare } from "@/src/services/worldStateService";
 import { getPersonalRooms } from "@/src/services/personalRoomsService";
 import { IPersonalRoomsClient } from "@/src/types/personalRoomsTypes";
+import { Ship } from "@/src/models/shipModel";
 
 export const inventoryController: RequestHandler = async (request, response) => {
     const account = await getAccountForRequest(request);
@@ -133,13 +134,12 @@ export const getInventoryResponse = async (
     xpBasedLevelCapDisabled: boolean,
     buildLabel: string | undefined
 ): Promise<IInventoryClient> => {
-    const inventoryWithLoadOutPresets = await inventory.populate<{ LoadOutPresets: ILoadoutDatabase }>(
-        "LoadOutPresets"
-    );
-    const inventoryWithLoadOutPresetsAndShips = await inventoryWithLoadOutPresets.populate<{ Ships: IShipInventory }>(
-        "Ships"
-    );
-    const inventoryResponse = inventoryWithLoadOutPresetsAndShips.toJSON<IInventoryClient>();
+    const [inventoryWithLoadOutPresets, ships] = await Promise.all([
+        inventory.populate<{ LoadOutPresets: ILoadoutDatabase }>("LoadOutPresets"),
+        Ship.find({ ShipOwnerId: inventory.accountOwnerId })
+    ]);
+    const inventoryResponse = inventoryWithLoadOutPresets.toJSON<IInventoryClient>();
+    inventoryResponse.Ships = ships.map(x => x.toJSON<IShipInventory>());
 
     if (config.infiniteCredits) {
         inventoryResponse.RegularCredits = 999999999;
