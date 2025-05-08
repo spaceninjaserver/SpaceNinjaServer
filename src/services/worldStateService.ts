@@ -1,11 +1,12 @@
 import staticWorldState from "@/static/fixed_responses/worldState/worldState.json";
 import sortieTilesets from "@/static/fixed_responses/worldState/sortieTilesets.json";
+import sortieTilesetMissions from "@/static/fixed_responses/worldState/sortieTilesetMissions.json";
 import syndicateMissions from "@/static/fixed_responses/worldState/syndicateMissions.json";
 import { buildConfig } from "@/src/services/buildConfigService";
 import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { config } from "@/src/services/configService";
 import { CRng } from "@/src/services/rngService";
-import { eMissionType, ExportNightwave, ExportRegions, IRegion } from "warframe-public-export-plus";
+import { ExportNightwave, ExportRegions, IRegion } from "warframe-public-export-plus";
 import {
     ICalendarDay,
     ICalendarEvent,
@@ -70,12 +71,6 @@ const sortieFactionToFactionIndexes: Record<string, number[]> = {
     FC_CORPUS: [1],
     FC_INFESTATION: [0, 1, 2],
     FC_OROKIN: [3]
-};
-
-const sortieFactionToSpecialMissionTileset: Record<string, string> = {
-    FC_GRINEER: "GrineerGalleonTileset",
-    FC_CORPUS: "CorpusShipTileset",
-    FC_INFESTATION: "CorpusShipTileset"
 };
 
 const sortieBossNode: Record<Exclude<TSortieBoss, "SORTIE_BOSS_CORRUPTED_VOR">, string> = {
@@ -217,6 +212,27 @@ const pushSyndicateMissions = (
     });
 };
 
+type TSortieTileset = keyof typeof sortieTilesetMissions;
+
+const pushTilesetModifiers = (modifiers: string[], tileset: TSortieTileset): void => {
+    switch (tileset) {
+        case "GrineerForestTileset":
+            modifiers.push("SORTIE_MODIFIER_HAZARD_FOG");
+            break;
+        case "CorpusShipTileset":
+        case "GrineerGalleonTileset":
+        case "InfestedCorpusShipTileset":
+            modifiers.push("SORTIE_MODIFIER_HAZARD_MAGNETIC");
+            modifiers.push("SORTIE_MODIFIER_HAZARD_FIRE");
+            modifiers.push("SORTIE_MODIFIER_HAZARD_ICE");
+            break;
+        case "CorpusIcePlanetTileset":
+        case "CorpusIcePlanetTilesetCaves":
+            modifiers.push("SORTIE_MODIFIER_HAZARD_COLD");
+            break;
+    }
+};
+
 export const getSortie = (day: number): ISortie => {
     const seed = new CRng(day).randomInt(0, 0xffff);
     const rng = new CRng(seed);
@@ -224,31 +240,13 @@ export const getSortie = (day: number): ISortie => {
     const boss = rng.randomElement(sortieBosses)!;
 
     const nodes: string[] = [];
-    const availableMissionIndexes: number[] = [];
     for (const [key, value] of Object.entries(ExportRegions)) {
         if (
             sortieFactionToSystemIndexes[sortieBossToFaction[boss]].includes(value.systemIndex) &&
             sortieFactionToFactionIndexes[sortieBossToFaction[boss]].includes(value.factionIndex!) &&
             key in sortieTilesets
         ) {
-            if (
-                value.missionIndex != 0 && // Assassination will be decided independently
-                value.missionIndex != 5 && // Sorties do not have capture missions
-                !availableMissionIndexes.includes(value.missionIndex)
-            ) {
-                availableMissionIndexes.push(value.missionIndex);
-            }
             nodes.push(key);
-        }
-    }
-
-    const specialMissionTypes = [1, 3, 5, 9];
-    if (!(sortieBossToFaction[boss] in sortieFactionToSpecialMissionTileset)) {
-        for (const missionType of specialMissionTypes) {
-            const i = availableMissionIndexes.indexOf(missionType);
-            if (i != -1) {
-                availableMissionIndexes.splice(i, 1);
-            }
         }
     }
 
@@ -256,22 +254,8 @@ export const getSortie = (day: number): ISortie => {
     const missionTypes = new Set();
 
     for (let i = 0; i < 3; i++) {
-        let randomIndex;
-        let node;
-        let missionIndex;
-        do {
-            randomIndex = rng.randomInt(0, nodes.length - 1);
-            node = nodes[randomIndex];
-
-            missionIndex = ExportRegions[node].missionIndex;
-            if (missionIndex != 28) {
-                missionIndex = rng.randomElement(availableMissionIndexes)!;
-            }
-        } while (
-            specialMissionTypes.indexOf(missionIndex) != -1 &&
-            sortieTilesets[node as keyof typeof sortieTilesets] !=
-                sortieFactionToSpecialMissionTileset[sortieBossToFaction[boss]]
-        );
+        const randomIndex = rng.randomInt(0, nodes.length - 1);
+        const node = nodes[randomIndex];
 
         const modifiers = [
             "SORTIE_MODIFIER_LOW_ENERGY",
@@ -294,28 +278,10 @@ export const getSortie = (day: number): ISortie => {
             "SORTIE_MODIFIER_RIFLE_ONLY",
             "SORTIE_MODIFIER_BOW_ONLY"
         ];
-        const pushTilesetModifiers = (tileset: string): void => {
-            switch (tileset) {
-                case "GrineerForestTileset":
-                    modifiers.push("SORTIE_MODIFIER_HAZARD_FOG");
-                    break;
-                case "CorpusShipTileset":
-                case "GrineerGalleonTileset":
-                case "InfestedCorpusShipTileset":
-                    modifiers.push("SORTIE_MODIFIER_HAZARD_MAGNETIC");
-                    modifiers.push("SORTIE_MODIFIER_HAZARD_FIRE");
-                    modifiers.push("SORTIE_MODIFIER_HAZARD_ICE");
-                    break;
-                case "CorpusIcePlanetTileset":
-                case "CorpusIcePlanetTilesetCaves":
-                    modifiers.push("SORTIE_MODIFIER_HAZARD_COLD");
-                    break;
-            }
-        };
 
         if (i == 2 && boss != "SORTIE_BOSS_CORRUPTED_VOR" && rng.randomInt(0, 2) == 2) {
-            const tileset = sortieTilesets[sortieBossNode[boss] as keyof typeof sortieTilesets];
-            pushTilesetModifiers(tileset);
+            const tileset = sortieTilesets[sortieBossNode[boss] as keyof typeof sortieTilesets] as TSortieTileset;
+            pushTilesetModifiers(modifiers, tileset);
 
             const modifierType = rng.randomElement(modifiers)!;
 
@@ -328,9 +294,12 @@ export const getSortie = (day: number): ISortie => {
             continue;
         }
 
-        const missionType = eMissionType[missionIndex].tag;
+        const tileset = sortieTilesets[node as keyof typeof sortieTilesets] as TSortieTileset;
+        pushTilesetModifiers(modifiers, tileset);
 
-        if (missionTypes.has(missionType)) {
+        const missionType = rng.randomElement(sortieTilesetMissions[tileset])!;
+
+        if (missionTypes.has(missionType) || missionType == "MT_ASSASSINATION") {
             i--;
             continue;
         }
@@ -348,9 +317,6 @@ export const getSortie = (day: number): ISortie => {
             // Corpus
             modifiers.push("SORTIE_MODIFIER_SHIELDS");
         }
-
-        const tileset = sortieTilesets[node as keyof typeof sortieTilesets];
-        pushTilesetModifiers(tileset);
 
         const modifierType = rng.randomElement(modifiers)!;
 
