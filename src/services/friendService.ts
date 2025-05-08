@@ -4,9 +4,12 @@ import { config } from "./configService";
 import { Account } from "../models/loginModel";
 import { Types } from "mongoose";
 import { Friendship } from "../models/friendModel";
+import { toMongoDate } from "../helpers/inventoryHelpers";
 
 export const addAccountDataToFriendInfo = async (info: IFriendInfo): Promise<void> => {
-    info.DisplayName = (await Account.findById(info._id.$oid, "DisplayName"))!.DisplayName;
+    const account = (await Account.findById(info._id.$oid, "DisplayName LastLogin"))!;
+    info.DisplayName = account.DisplayName;
+    info.LastLogin = toMongoDate(account.LastLogin);
 };
 
 export const addInventoryDataToFriendInfo = async (info: IFriendInfo): Promise<void> => {

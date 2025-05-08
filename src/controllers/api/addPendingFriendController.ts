@@ -1,4 +1,4 @@
-import { toOid } from "@/src/helpers/inventoryHelpers";
+import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { Friendship } from "@/src/models/friendModel";
 import { Account } from "@/src/models/loginModel";
@@ -37,6 +37,7 @@ export const addPendingFriendController: RequestHandler = async (req, res) => {
     const friendInfo: IFriendInfo = {
         _id: toOid(account._id),
         DisplayName: account.DisplayName,
+        LastLogin: toMongoDate(account.LastLogin),
         Note: payload.message
     };
     await addInventoryDataToFriendInfo(friendInfo);

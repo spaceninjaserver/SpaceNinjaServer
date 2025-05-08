@@ -17,6 +17,7 @@ export interface IDatabaseAccountRequiredFields extends IAccountAndLoginResponse
     email: string;
     password: string;
     BuildLabel?: string;
+    LastLogin: Date;
 }
 
 export interface IDatabaseAccount extends IDatabaseAccountRequiredFields {

@@ -1,3 +1,4 @@
+import { toMongoDate } from "@/src/helpers/inventoryHelpers";
 import { Guild, GuildMember } from "@/src/models/guildModel";
 import { Account } from "@/src/models/loginModel";
 import { addInventoryDataToFriendInfo, areFriends } from "@/src/services/friendService";
@@ -75,6 +76,7 @@ export const addToGuildController: RequestHandler = async (req, res) => {
         const member: IGuildMemberClient = {
             _id: { $oid: account._id.toString() },
             DisplayName: account.DisplayName,
+            LastLogin: toMongoDate(account.LastLogin),
             Rank: 7,
             Status: 2
         };

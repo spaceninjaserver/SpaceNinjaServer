@@ -48,7 +48,8 @@ const toDatabaseAccount = (createAccount: IAccountCreation): IDatabaseAccountReq
         CrossPlatformAllowed: true,
         ForceLogoutVersion: 0,
         TrackedSettings: [],
-        Nonce: 0
+        Nonce: 0,
+        LastLogin: new Date()
     } satisfies IDatabaseAccountRequiredFields;
 };
 
