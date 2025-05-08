@@ -1066,13 +1066,14 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         }
 
         // The client does not seem to respect activation for classic syndicate missions, so only pushing current ones.
-        const rng = new CRng(Date.now() >= rollover ? day : day - 1);
-        pushSyndicateMissions(worldState, day, rng.randomInt(0, 0xffff), "ba6f84724fa48049", "ArbitersSyndicate");
-        pushSyndicateMissions(worldState, day, rng.randomInt(0, 0xffff), "ba6f84724fa4804a", "CephalonSudaSyndicate");
-        pushSyndicateMissions(worldState, day, rng.randomInt(0, 0xffff), "ba6f84724fa4804e", "NewLokaSyndicate");
-        pushSyndicateMissions(worldState, day, rng.randomInt(0, 0xffff), "ba6f84724fa48050", "PerrinSyndicate");
-        pushSyndicateMissions(worldState, day, rng.randomInt(0, 0xffff), "ba6f84724fa4805e", "RedVeilSyndicate");
-        pushSyndicateMissions(worldState, day, rng.randomInt(0, 0xffff), "ba6f84724fa48061", "SteelMeridianSyndicate");
+        const sday = Date.now() >= rollover ? day : day - 1;
+        const rng = new CRng(sday);
+        pushSyndicateMissions(worldState, sday, rng.randomInt(0, 0xffff), "ba6f84724fa48049", "ArbitersSyndicate");
+        pushSyndicateMissions(worldState, sday, rng.randomInt(0, 0xffff), "ba6f84724fa4804a", "CephalonSudaSyndicate");
+        pushSyndicateMissions(worldState, sday, rng.randomInt(0, 0xffff), "ba6f84724fa4804e", "NewLokaSyndicate");
+        pushSyndicateMissions(worldState, sday, rng.randomInt(0, 0xffff), "ba6f84724fa48050", "PerrinSyndicate");
+        pushSyndicateMissions(worldState, sday, rng.randomInt(0, 0xffff), "ba6f84724fa4805e", "RedVeilSyndicate");
+        pushSyndicateMissions(worldState, sday, rng.randomInt(0, 0xffff), "ba6f84724fa48061", "SteelMeridianSyndicate");
     }
 
     // Archon Hunt cycling every week
