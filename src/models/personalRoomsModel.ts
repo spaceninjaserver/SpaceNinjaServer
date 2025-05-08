@@ -13,7 +13,7 @@ import {
     IPlantDatabase,
     IPlantClient
 } from "@/src/types/shipTypes";
-import { Schema, model } from "mongoose";
+import { Schema, Types, model } from "mongoose";
 
 export const pictureFrameInfoSchema = new Schema<IPictureFrameInfo>(
     {
@@ -153,7 +153,18 @@ const orbiterDefault: IOrbiter = {
     Features: ["/Lotus/Types/Items/ShipFeatureItems/EarthNavigationFeatureItem"], //TODO: potentially remove after missionstarting gear
     Rooms: [
         { Name: "AlchemyRoom", MaxCapacity: 1600 },
-        { Name: "BridgeRoom", MaxCapacity: 1600 },
+        {
+            Name: "BridgeRoom",
+            MaxCapacity: 1600,
+            PlacedDecos: [
+                {
+                    Type: "/Lotus/Objects/Tenno/Props/Ships/LandCraftPlayerProps/ConclaveConsolePlayerShipDeco",
+                    Pos: [-30.082, -3.95954, -16.7913],
+                    Rot: [-135, 0, 0],
+                    _id: undefined as unknown as Types.ObjectId
+                }
+            ]
+        },
         { Name: "LisetRoom", MaxCapacity: 1000 },
         { Name: "OperatorChamberRoom", MaxCapacity: 1600 },
         { Name: "OutsideRoom", MaxCapacity: 1600 },
