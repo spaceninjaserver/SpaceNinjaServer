@@ -10,6 +10,7 @@ import { Stats } from "@/src/models/statsModel";
 import { GuildMember } from "@/src/models/guildModel";
 import { Leaderboard } from "@/src/models/leaderboardModel";
 import { deleteGuild } from "@/src/services/guildService";
+import { Friendship } from "@/src/models/friendModel";
 
 export const deleteAccountController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -22,6 +23,8 @@ export const deleteAccountController: RequestHandler = async (req, res) => {
 
     await Promise.all([
         Account.deleteOne({ _id: accountId }),
+        Friendship.deleteMany({ owner: accountId }),
+        Friendship.deleteMany({ friend: accountId }),
         GuildMember.deleteMany({ accountId: accountId }),
         Ignore.deleteMany({ ignorer: accountId }),
         Ignore.deleteMany({ ignoree: accountId }),

@@ -2,6 +2,7 @@ import { Types } from "mongoose";
 import { IOid, IMongoDate } from "@/src/types/commonTypes";
 import { IFusionTreasure, IMiscItem, ITypeCount } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IPictureFrameInfo } from "./shipTypes";
+import { IFriendInfo } from "./friendTypes";
 
 export interface IGuildClient {
     _id: IOid;
@@ -102,21 +103,6 @@ export interface IGuildMemberDatabase {
     PremiumCreditsContributed?: number;
     MiscItemsContributed?: IMiscItem[];
     ShipDecorationsContributed?: ITypeCount[];
-}
-
-export interface IFriendInfo {
-    _id: IOid;
-    DisplayName?: string;
-    PlatformNames?: string[];
-    PlatformAccountId?: string;
-    Status?: number;
-    ActiveAvatarImageType?: string;
-    LastLogin?: IMongoDate;
-    PlayerLevel?: number;
-    Suffix?: number;
-    Note?: string;
-    Favorite?: boolean;
-    NewRequest?: boolean;
 }
 
 // GuildMemberInfo

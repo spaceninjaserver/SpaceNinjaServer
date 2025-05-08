@@ -3,8 +3,10 @@ import { abandonLibraryDailyTaskController } from "@/src/controllers/api/abandon
 import { abortDojoComponentController } from "@/src/controllers/api/abortDojoComponentController";
 import { abortDojoComponentDestructionController } from "@/src/controllers/api/abortDojoComponentDestructionController";
 import { activateRandomModController } from "@/src/controllers/api/activateRandomModController";
+import { addFriendController } from "@/src/controllers/api/addFriendController";
 import { addFriendImageController } from "@/src/controllers/api/addFriendImageController";
 import { addIgnoredUserController } from "@/src/controllers/api/addIgnoredUserController";
+import { addPendingFriendController } from "@/src/controllers/api/addPendingFriendController";
 import { addToAllianceController } from "@/src/controllers/api/addToAllianceController";
 import { addToGuildController } from "@/src/controllers/api/addToGuildController";
 import { arcaneCommonController } from "@/src/controllers/api/arcaneCommonController";
@@ -101,6 +103,7 @@ import { questControlController } from "@/src/controllers/api/questControlContro
 import { queueDojoComponentDestructionController } from "@/src/controllers/api/queueDojoComponentDestructionController";
 import { redeemPromoCodeController } from "@/src/controllers/api/redeemPromoCodeController";
 import { releasePetController } from "@/src/controllers/api/releasePetController";
+import { removeFriendGetController } from "@/src/controllers/api/removeFriendController";
 import { removeFromAllianceController } from "@/src/controllers/api/removeFromAllianceController";
 import { removeFromGuildController } from "@/src/controllers/api/removeFromGuildController";
 import { removeIgnoredUserController } from "@/src/controllers/api/removeIgnoredUserController";
@@ -120,6 +123,7 @@ import { setDojoComponentColorsController } from "@/src/controllers/api/setDojoC
 import { setDojoComponentMessageController } from "@/src/controllers/api/setDojoComponentMessageController";
 import { setDojoComponentSettingsController } from "@/src/controllers/api/setDojoComponentSettingsController";
 import { setEquippedInstrumentController } from "@/src/controllers/api/setEquippedInstrumentController";
+import { setFriendNoteController } from "@/src/controllers/api/setFriendNoteController";
 import { setGuildMotdController } from "@/src/controllers/api/setGuildMotdController";
 import { setHubNpcCustomizationsController } from "@/src/controllers/api/setHubNpcCustomizationsController";
 import { setPlacedDecoInfoController } from "@/src/controllers/api/setPlacedDecoInfoController";
@@ -180,13 +184,13 @@ apiRouter.get("/getGuildContributions.php", getGuildContributionsController);
 apiRouter.get("/getGuildDojo.php", getGuildDojoController);
 apiRouter.get("/getGuildLog.php", getGuildLogController);
 apiRouter.get("/getIgnoredUsers.php", getIgnoredUsersController);
+apiRouter.get("/getMessages.php", inboxController); // unsure if this is correct, but needed for U17
 apiRouter.get("/getNewRewardSeed.php", getNewRewardSeedController);
 apiRouter.get("/getShip.php", getShipController);
 apiRouter.get("/getVendorInfo.php", getVendorInfoController);
 apiRouter.get("/hub", hubController);
 apiRouter.get("/hubInstances", hubInstancesController);
 apiRouter.get("/inbox.php", inboxController);
-apiRouter.get("/getMessages.php", inboxController); // unsure if this is correct, but needed for U17
 apiRouter.get("/inventory.php", inventoryController);
 apiRouter.get("/loginRewards.php", loginRewardsController);
 apiRouter.get("/logout.php", logoutController);
@@ -196,6 +200,7 @@ apiRouter.get("/modularWeaponSale.php", modularWeaponSaleController);
 apiRouter.get("/playedParkourTutorial.php", playedParkourTutorialController);
 apiRouter.get("/questControl.php", questControlController);
 apiRouter.get("/queueDojoComponentDestruction.php", queueDojoComponentDestructionController);
+apiRouter.get("/removeFriend.php", removeFriendGetController);
 apiRouter.get("/removeFromAlliance.php", removeFromAllianceController);
 apiRouter.get("/setActiveQuest.php", setActiveQuestController);
 apiRouter.get("/setActiveShip.php", setActiveShipController);
@@ -213,8 +218,10 @@ apiRouter.get("/updateSession.php", updateSessionGetController);
 // post
 apiRouter.post("/abortDojoComponent.php", abortDojoComponentController);
 apiRouter.post("/activateRandomMod.php", activateRandomModController);
+apiRouter.post("/addFriend.php", addFriendController);
 apiRouter.post("/addFriendImage.php", addFriendImageController);
 apiRouter.post("/addIgnoredUser.php", addIgnoredUserController);
+apiRouter.post("/addPendingFriend.php", addPendingFriendController);
 apiRouter.post("/addToAlliance.php", addToAllianceController);
 apiRouter.post("/addToGuild.php", addToGuildController);
 apiRouter.post("/arcaneCommon.php", arcaneCommonController);
@@ -297,6 +304,7 @@ apiRouter.post("/setDojoComponentColors.php", setDojoComponentColorsController);
 apiRouter.post("/setDojoComponentMessage.php", setDojoComponentMessageController);
 apiRouter.post("/setDojoComponentSettings.php", setDojoComponentSettingsController);
 apiRouter.post("/setEquippedInstrument.php", setEquippedInstrumentController);
+apiRouter.post("/setFriendNote.php", setFriendNoteController);
 apiRouter.post("/setGuildMotd.php", setGuildMotdController);
 apiRouter.post("/setHubNpcCustomizations.php", setHubNpcCustomizationsController);
 apiRouter.post("/setPlacedDecoInfo.php", setPlacedDecoInfoController);

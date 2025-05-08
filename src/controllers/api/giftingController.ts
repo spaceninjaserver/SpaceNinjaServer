@@ -1,5 +1,6 @@
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { Account } from "@/src/models/loginModel";
+import { areFriends } from "@/src/services/friendService";
 import { createMessage } from "@/src/services/inboxService";
 import { getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { getAccountForRequest, getSuffixedName } from "@/src/services/loginService";
@@ -30,8 +31,11 @@ export const giftingController: RequestHandler = async (req, res) => {
     }
 
     // Cannot gift to players who have gifting disabled.
-    // TODO: Also consider GIFT_MODE_FRIENDS once friends are implemented
-    if (inventory.Settings?.GiftMode == "GIFT_MODE_NONE") {
+    const senderAccount = await getAccountForRequest(req);
+    if (
+        inventory.Settings?.GiftMode == "GIFT_MODE_NONE" ||
+        (inventory.Settings?.GiftMode == "GIFT_MODE_FRIENDS" && !(await areFriends(account._id, senderAccount._id)))
+    ) {
         res.status(400).send("17").end();
         return;
     }
@@ -40,7 +44,6 @@ export const giftingController: RequestHandler = async (req, res) => {
     // TODO: Cannot gift archwing items to players that have not completed the archwing quest. (Code 7)
     // TODO: Cannot gift necramechs to players that have not completed heart of deimos. (Code 20)
 
-    const senderAccount = await getAccountForRequest(req);
     const senderInventory = await getInventory(
         senderAccount._id.toString(),
         "PremiumCredits PremiumCreditsFree ActiveAvatarImageType GiftsRemaining"

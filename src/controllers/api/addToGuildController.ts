@@ -1,6 +1,7 @@
 import { Guild, GuildMember } from "@/src/models/guildModel";
 import { Account } from "@/src/models/loginModel";
-import { fillInInventoryDataForGuildMember, hasGuildPermission } from "@/src/services/guildService";
+import { addInventoryDataToFriendInfo, areFriends } from "@/src/services/friendService";
+import { hasGuildPermission } from "@/src/services/guildService";
 import { createMessage } from "@/src/services/inboxService";
 import { getInventory } from "@/src/services/inventoryService";
 import { getAccountForRequest, getAccountIdForRequest, getSuffixedName } from "@/src/services/loginService";
@@ -22,15 +23,18 @@ export const addToGuildController: RequestHandler = async (req, res) => {
             return;
         }
 
+        const senderAccount = await getAccountForRequest(req);
         const inventory = await getInventory(account._id.toString(), "Settings");
-        // TODO: Also consider GIFT_MODE_FRIENDS once friends are implemented
-        if (inventory.Settings?.GuildInvRestriction == "GIFT_MODE_NONE") {
+        if (
+            inventory.Settings?.GuildInvRestriction == "GIFT_MODE_NONE" ||
+            (inventory.Settings?.GuildInvRestriction == "GIFT_MODE_FRIENDS" &&
+                !(await areFriends(account._id, senderAccount._id)))
+        ) {
             res.status(400).json("Invite restricted");
             return;
         }
 
         const guild = (await Guild.findById(payload.GuildId.$oid, "Name Ranks"))!;
-        const senderAccount = await getAccountForRequest(req);
         if (!(await hasGuildPermission(guild, senderAccount._id.toString(), GuildPermission.Recruiter))) {
             res.status(400).json("Invalid permission");
         }
@@ -74,7 +78,7 @@ export const addToGuildController: RequestHandler = async (req, res) => {
             Rank: 7,
             Status: 2
         };
-        await fillInInventoryDataForGuildMember(member);
+        await addInventoryDataToFriendInfo(member);
         res.json({ NewMember: member });
     } else if ("RequestMsg" in payload) {
         // Player applying to join a clan

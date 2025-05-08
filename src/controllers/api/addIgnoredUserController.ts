@@ -2,7 +2,7 @@ import { toOid } from "@/src/helpers/inventoryHelpers";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { Account, Ignore } from "@/src/models/loginModel";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { IFriendInfo } from "@/src/types/guildTypes";
+import { IFriendInfo } from "@/src/types/friendTypes";
 import { RequestHandler } from "express";
 
 export const addIgnoredUserController: RequestHandler = async (req, res) => {

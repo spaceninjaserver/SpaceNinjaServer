@@ -24,7 +24,6 @@ import { Types } from "mongoose";
 import { ExportDojoRecipes, ExportResources, IDojoBuild, IDojoResearch } from "warframe-public-export-plus";
 import { logger } from "../utils/logger";
 import { config } from "./configService";
-import { Account } from "../models/loginModel";
 import { getRandomInt } from "./rngService";
 import { Inbox } from "../models/inboxModel";
 import { IFusionTreasure, ITypeCount } from "../types/inventoryTypes/inventoryTypes";
@@ -32,6 +31,7 @@ import { IInventoryChanges } from "../types/purchaseTypes";
 import { parallelForeach } from "../utils/async-utils";
 import allDecoRecipes from "@/static/fixed_responses/allDecoRecipes.json";
 import { createMessage } from "./inboxService";
+import { addAccountDataToFriendInfo, addInventoryDataToFriendInfo } from "./friendService";
 
 export const getGuildForRequest = async (req: Request): Promise<TGuildDatabaseDocument> => {
     const accountId = await getAccountIdForRequest(req);
@@ -71,12 +71,8 @@ export const getGuildClient = async (guild: TGuildDatabaseDocument, accountId: s
         if (guildMember.accountId.equals(accountId)) {
             missingEntry = false;
         } else {
-            dataFillInPromises.push(
-                (async (): Promise<void> => {
-                    member.DisplayName = (await Account.findById(guildMember.accountId, "DisplayName"))!.DisplayName;
-                })()
-            );
-            dataFillInPromises.push(fillInInventoryDataForGuildMember(member));
+            dataFillInPromises.push(addAccountDataToFriendInfo(member));
+            dataFillInPromises.push(addInventoryDataToFriendInfo(member));
         }
         members.push(member);
     }
@@ -464,12 +460,6 @@ export const setDojoRoomLogFunded = (guild: TGuildDatabaseDocument, component: I
         entry.dateTime = component.CompletionTime!;
         component.CompletionLogPending = true;
     }
-};
-
-export const fillInInventoryDataForGuildMember = async (member: IGuildMemberClient): Promise<void> => {
-    const inventory = await getInventory(member._id.$oid, "PlayerLevel ActiveAvatarImageType");
-    member.PlayerLevel = config.spoofMasteryRank == -1 ? inventory.PlayerLevel : config.spoofMasteryRank;
-    member.ActiveAvatarImageType = inventory.ActiveAvatarImageType;
 };
 
 export const createUniqueClanName = async (name: string): Promise<string> => {
