@@ -1590,9 +1590,9 @@ function getRandomMissionDrops(
                     const drop = getRandomRewardByChance(
                         ExportRewards[
                             [
-                                "/Lotus/Types/Game/MissionDecks/PurgatoryMissionRewards/PurgatoryBlackTokenRewards",
+                                "/Lotus/Types/Game/MissionDecks/PurgatoryMissionRewards/PurgatoryBlueTokenRewards",
                                 "/Lotus/Types/Game/MissionDecks/PurgatoryMissionRewards/PurgatoryGoldTokenRewards",
-                                "/Lotus/Types/Game/MissionDecks/PurgatoryMissionRewards/PurgatoryBlueTokenRewards"
+                                "/Lotus/Types/Game/MissionDecks/PurgatoryMissionRewards/PurgatoryBlackTokenRewards"
                             ][Math.trunc(qualification / 3)]
                         ][qualification % 3]
                     );
