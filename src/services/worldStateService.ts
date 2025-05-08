@@ -1209,7 +1209,8 @@ export const getLiteSortie = (week: number): ILiteSortie => {
             value.factionIndex !== undefined &&
             value.factionIndex < 2 &&
             !isArchwingMission(value) &&
-            value.missionIndex != 0 // Exclude MT_ASSASSINATION
+            value.missionIndex != 0 && // Exclude MT_ASSASSINATION
+            value.missionIndex != 32 // Exclude railjack
         ) {
             nodes.push(key);
         }
