@@ -3,7 +3,6 @@ import { config } from "@/src/services/configService";
 import allShipFeatures from "@/static/fixed_responses/allShipFeatures.json";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { createGarden, getPersonalRooms } from "@/src/services/personalRoomsService";
-import { getShip } from "@/src/services/shipService";
 import { toOid } from "@/src/helpers/inventoryHelpers";
 import { IGetShipResponse } from "@/src/types/shipTypes";
 import { IPersonalRoomsClient } from "@/src/types/personalRoomsTypes";
@@ -21,7 +20,6 @@ export const getShipController: RequestHandler = async (req, res) => {
 
     const personalRooms = personalRoomsDb.toJSON<IPersonalRoomsClient>();
     const loadout = await getLoadout(accountId);
-    const ship = await getShip(personalRoomsDb.activeShipId, "ShipAttachments SkinFlavourItem");
 
     const getShipResponse: IGetShipResponse = {
         ShipOwnerId: accountId,
@@ -31,8 +29,8 @@ export const getShipController: RequestHandler = async (req, res) => {
             ShipId: toOid(personalRoomsDb.activeShipId),
             ShipInterior: {
                 Colors: personalRooms.ShipInteriorColors,
-                ShipAttachments: ship.ShipAttachments,
-                SkinFlavourItem: ship.SkinFlavourItem
+                ShipAttachments: { HOOD_ORNAMENT: "" },
+                SkinFlavourItem: ""
             },
             FavouriteLoadoutId: personalRooms.Ship.FavouriteLoadoutId
                 ? toOid(personalRooms.Ship.FavouriteLoadoutId)
