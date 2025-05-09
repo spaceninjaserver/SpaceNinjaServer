@@ -13,7 +13,7 @@ export const setDojoComponentSettingsController: RequestHandler = async (req, re
         res.json({ DojoRequestStatus: -1 });
         return;
     }
-    const component = guild.DojoComponents.id(req.query.componentId)!;
+    const component = guild.DojoComponents.id(req.query.componentId as string)!;
     const data = getJSONfromString<ISetDojoComponentSettingsRequest>(String(req.body));
     component.Settings = data.Settings;
     await guild.save();

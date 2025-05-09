@@ -104,7 +104,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
                 ) {
                     throw new Error(`unexpected TechProductCategory: ${data.TechProductCategory}`);
                 }
-                if (!inventory[getSalvageCategory(data.TechProductCategory)].id(data.CategoryItemId)) {
+                if (!inventory[getSalvageCategory(data.TechProductCategory)].id(data.CategoryItemId!)) {
                     throw new Error(
                         `no item with id ${data.CategoryItemId} in ${getSalvageCategory(data.TechProductCategory)} array`
                     );
