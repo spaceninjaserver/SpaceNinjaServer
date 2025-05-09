@@ -1,8 +1,8 @@
+import { version_compare } from "@/src/helpers/inventoryHelpers";
 import { Alliance, Guild, GuildMember } from "@/src/models/guildModel";
 import { hasGuildPermissionEx } from "@/src/services/guildService";
 import { getInventory } from "@/src/services/inventoryService";
 import { getAccountForRequest, getSuffixedName } from "@/src/services/loginService";
-import { version_compare } from "@/src/services/worldStateService";
 import { GuildPermission, ILongMOTD } from "@/src/types/guildTypes";
 import { RequestHandler } from "express";
 

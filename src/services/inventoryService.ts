@@ -70,6 +70,7 @@ import { createShip } from "./shipService";
 import {
     catbrowDetails,
     fromMongoDate,
+    fromOid,
     kubrowDetails,
     kubrowFurPatternsWeights,
     kubrowWeights,
@@ -423,7 +424,7 @@ export const addItem = async (
                 changes.push({
                     ItemType: egg.ItemType,
                     ExpirationDate: { $date: { $numberLong: "2000000000000" } },
-                    ItemId: toOid(egg._id)
+                    ItemId: toOid(egg._id) // TODO: Pass on buildLabel from purchaseService
                 });
             }
             return {
@@ -1491,9 +1492,9 @@ export const applyClientEquipmentUpdates = (
     const category = inventory[categoryName];
 
     gearArray.forEach(({ ItemId, XP, InfestationDate }) => {
-        const item = category.id(ItemId.$oid);
+        const item = category.id(fromOid(ItemId));
         if (!item) {
-            throw new Error(`No item with id ${ItemId.$oid} in ${categoryName}`);
+            throw new Error(`No item with id ${fromOid(ItemId)} in ${categoryName}`);
         }
 
         if (XP) {

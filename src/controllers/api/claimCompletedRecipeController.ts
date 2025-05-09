@@ -4,9 +4,9 @@
 import { RequestHandler } from "express";
 import { logger } from "@/src/utils/logger";
 import { getRecipe } from "@/src/services/itemDataService";
-import { IOid } from "@/src/types/commonTypes";
+import { IOid, IOidWithLegacySupport } from "@/src/types/commonTypes";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { getAccountIdForRequest } from "@/src/services/loginService";
+import { getAccountForRequest } from "@/src/services/loginService";
 import {
     getInventory,
     updateCurrency,
@@ -18,7 +18,7 @@ import {
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
-import { toOid } from "@/src/helpers/inventoryHelpers";
+import { toOid2 } from "@/src/helpers/inventoryHelpers";
 
 interface IClaimCompletedRecipeRequest {
     RecipeIds: IOid[];
@@ -26,10 +26,8 @@ interface IClaimCompletedRecipeRequest {
 
 export const claimCompletedRecipeController: RequestHandler = async (req, res) => {
     const claimCompletedRecipeRequest = getJSONfromString<IClaimCompletedRecipeRequest>(String(req.body));
-    const accountId = await getAccountIdForRequest(req);
-    if (!accountId) throw new Error("no account id");
-
-    const inventory = await getInventory(accountId);
+    const account = await getAccountForRequest(req);
+    const inventory = await getInventory(account._id.toString());
     const pendingRecipe = inventory.PendingRecipes.id(claimCompletedRecipeRequest.RecipeIds[0].$oid);
     if (!pendingRecipe) {
         throw new Error(`no pending recipe found with id ${claimCompletedRecipeRequest.RecipeIds[0].$oid}`);
@@ -81,7 +79,7 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
     } else {
         logger.debug("Claiming Recipe", { recipe, pendingRecipe });
 
-        let BrandedSuits: undefined | IOid[];
+        let BrandedSuits: undefined | IOidWithLegacySupport[];
         if (recipe.secretIngredientAction == "SIA_SPECTRE_LOADOUT_COPY") {
             inventory.PendingSpectreLoadouts ??= [];
             inventory.SpectreLoadouts ??= [];
@@ -106,7 +104,7 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
                 inventory.BrandedSuits!.findIndex(x => x.equals(pendingRecipe.SuitToUnbrand)),
                 1
             );
-            BrandedSuits = [toOid(pendingRecipe.SuitToUnbrand!)];
+            BrandedSuits = [toOid2(pendingRecipe.SuitToUnbrand!, account.BuildLabel)];
         }
 
         let InventoryChanges: IInventoryChanges = {};

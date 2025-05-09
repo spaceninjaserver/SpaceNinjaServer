@@ -1,4 +1,4 @@
-import { IMongoDate, IOid } from "@/src/types/commonTypes";
+import { IMongoDate, IOid, IOidWithLegacySupport } from "@/src/types/commonTypes";
 import { Types } from "mongoose";
 import {
     ICrewShipCustomization,
@@ -92,7 +92,7 @@ export interface IEquipmentClient
         IEquipmentDatabase,
         "_id" | "InfestationDate" | "Expiry" | "UpgradesExpiry" | "UmbraDate" | "CrewMembers" | "Details"
     > {
-    ItemId: IOid;
+    ItemId: IOidWithLegacySupport;
     InfestationDate?: IMongoDate;
     Expiry?: IMongoDate;
     UpgradesExpiry?: IMongoDate;

@@ -4,6 +4,11 @@ export interface IOid {
     $oid: string;
 }
 
+export interface IOidWithLegacySupport {
+    $oid?: string;
+    $id?: string;
+}
+
 export interface IMongoDate {
     $date: {
         $numberLong: string;

@@ -6,9 +6,10 @@ import { logger } from "../utils/logger";
 import { IOid } from "../types/commonTypes";
 import { Types } from "mongoose";
 import { addMods, generateRewardSeed } from "../services/inventoryService";
-import { isArchwingMission, version_compare } from "../services/worldStateService";
+import { isArchwingMission } from "../services/worldStateService";
 import { fromStoreItem, toStoreItem } from "../services/itemDataService";
 import { createMessage } from "../services/inboxService";
+import { version_compare } from "./inventoryHelpers";
 
 export const getInfNodes = (faction: string, rank: number): IInfNode[] => {
     const infNodes = [];

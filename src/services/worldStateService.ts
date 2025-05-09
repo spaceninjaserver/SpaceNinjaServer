@@ -18,6 +18,7 @@ import {
     ISyndicateMissionInfo,
     IWorldState
 } from "../types/worldStateTypes";
+import { version_compare } from "../helpers/inventoryHelpers";
 
 const sortieBosses = [
     "SORTIE_BOSS_HYENA",
@@ -1238,21 +1239,4 @@ export const isArchwingMission = (node: IRegion): boolean => {
         return true;
     }
     return false;
-};
-
-export const version_compare = (a: string, b: string): number => {
-    const a_digits = a
-        .split("/")[0]
-        .split(".")
-        .map(x => parseInt(x));
-    const b_digits = b
-        .split("/")[0]
-        .split(".")
-        .map(x => parseInt(x));
-    for (let i = 0; i != a_digits.length; ++i) {
-        if (a_digits[i] != b_digits[i]) {
-            return a_digits[i] > b_digits[i] ? 1 : -1;
-        }
-    }
-    return 0;
 };

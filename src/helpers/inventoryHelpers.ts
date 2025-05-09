@@ -1,9 +1,46 @@
-import { IMongoDate, IOid } from "@/src/types/commonTypes";
+import { IMongoDate, IOid, IOidWithLegacySupport } from "@/src/types/commonTypes";
 import { Types } from "mongoose";
 import { TRarity } from "warframe-public-export-plus";
 
+export const version_compare = (a: string, b: string): number => {
+    const a_digits = a
+        .split("/")[0]
+        .split(".")
+        .map(x => parseInt(x));
+    const b_digits = b
+        .split("/")[0]
+        .split(".")
+        .map(x => parseInt(x));
+    for (let i = 0; i != a_digits.length; ++i) {
+        if (a_digits[i] != b_digits[i]) {
+            return a_digits[i] > b_digits[i] ? 1 : -1;
+        }
+    }
+    return 0;
+};
+
 export const toOid = (objectId: Types.ObjectId): IOid => {
-    return { $oid: objectId.toString() } satisfies IOid;
+    return { $oid: objectId.toString() };
+};
+
+export function toOid2(objectId: Types.ObjectId, buildLabel: undefined): IOid;
+export function toOid2(objectId: Types.ObjectId, buildLabel: string | undefined): IOidWithLegacySupport;
+export function toOid2(objectId: Types.ObjectId, buildLabel: string | undefined): IOidWithLegacySupport {
+    if (buildLabel && version_compare(buildLabel, "2016.12.21.19.13") <= 0) {
+        return { $id: objectId.toString() };
+    }
+    return { $oid: objectId.toString() };
+}
+
+export const toLegacyOid = (oid: IOidWithLegacySupport): void => {
+    if (!("$id" in oid)) {
+        oid.$id = oid.$oid;
+        delete oid.$oid;
+    }
+};
+
+export const fromOid = (oid: IOidWithLegacySupport): string => {
+    return (oid.$oid ?? oid.$id)!;
 };
 
 export const toMongoDate = (date: Date): IMongoDate => {

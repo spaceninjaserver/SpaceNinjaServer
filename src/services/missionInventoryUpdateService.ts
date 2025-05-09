@@ -62,6 +62,7 @@ import { getLiteSortie, getSortie, idToBountyCycle, idToDay, idToWeek, pushClass
 import { config } from "./configService";
 import libraryDailyTasks from "@/static/fixed_responses/libraryDailyTasks.json";
 import { ISyndicateMissionInfo } from "../types/worldStateTypes";
+import { fromOid } from "../helpers/inventoryHelpers";
 
 const getRotations = (rewardInfo: IRewardInfo, tierOverride?: number): number[] => {
     // For Spy missions, e.g. 3 vaults cracked = A, B, C
@@ -399,7 +400,7 @@ export const addMissionInventoryUpdates = async (
                 break;
             case "Upgrades":
                 value.forEach(clientUpgrade => {
-                    const upgrade = inventory.Upgrades.id(clientUpgrade.ItemId.$oid)!;
+                    const upgrade = inventory.Upgrades.id(fromOid(clientUpgrade.ItemId))!;
                     upgrade.UpgradeFingerprint = clientUpgrade.UpgradeFingerprint; // primitive way to copy over the riven challenge progress
                 });
                 break;

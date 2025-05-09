@@ -25,10 +25,10 @@ import { logger } from "@/src/utils/logger";
 import { catBreadHash } from "@/src/helpers/stringHelpers";
 import { Types } from "mongoose";
 import { isNemesisCompatibleWithVersion } from "@/src/helpers/nemesisHelpers";
-import { version_compare } from "@/src/services/worldStateService";
 import { getPersonalRooms } from "@/src/services/personalRoomsService";
 import { IPersonalRoomsClient } from "@/src/types/personalRoomsTypes";
 import { Ship } from "@/src/models/shipModel";
+import { toLegacyOid, version_compare } from "@/src/helpers/inventoryHelpers";
 
 export const inventoryController: RequestHandler = async (request, response) => {
     const account = await getAccountForRequest(request);
@@ -306,19 +306,34 @@ export const getInventoryResponse = async (
     // Set 2FA enabled so trading post can be used
     inventoryResponse.HWIDProtectEnabled = true;
 
-    // Fix nemesis for older versions
-    if (
-        inventoryResponse.Nemesis &&
-        buildLabel &&
-        !isNemesisCompatibleWithVersion(inventoryResponse.Nemesis, buildLabel)
-    ) {
-        inventoryResponse.Nemesis = undefined;
-    }
+    if (buildLabel) {
+        // Fix nemesis for older versions
+        if (inventoryResponse.Nemesis && !isNemesisCompatibleWithVersion(inventoryResponse.Nemesis, buildLabel)) {
+            inventoryResponse.Nemesis = undefined;
+        }
 
-    if (buildLabel && version_compare(buildLabel, "2018.02.22.14.34") < 0) {
-        const personalRoomsDb = await getPersonalRooms(inventory.accountOwnerId.toString());
-        const personalRooms = personalRoomsDb.toJSON<IPersonalRoomsClient>();
-        inventoryResponse.Ship = personalRooms.Ship;
+        if (version_compare(buildLabel, "2018.02.22.14.34") < 0) {
+            const personalRoomsDb = await getPersonalRooms(inventory.accountOwnerId.toString());
+            const personalRooms = personalRoomsDb.toJSON<IPersonalRoomsClient>();
+            inventoryResponse.Ship = personalRooms.Ship;
+
+            if (version_compare(buildLabel, "2016.12.21.19.13") <= 0) {
+                // U19.5 and below use $id instead of $oid
+                for (const category of equipmentKeys) {
+                    for (const item of inventoryResponse[category]) {
+                        toLegacyOid(item.ItemId);
+                    }
+                }
+                for (const upgrade of inventoryResponse.Upgrades) {
+                    toLegacyOid(upgrade.ItemId);
+                }
+                if (inventoryResponse.BrandedSuits) {
+                    for (const id of inventoryResponse.BrandedSuits) {
+                        toLegacyOid(id);
+                    }
+                }
+            }
+        }
     }
 
     return inventoryResponse;

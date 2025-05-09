@@ -7,7 +7,7 @@ import { Account } from "@/src/models/loginModel";
 import { createAccount, isCorrectPassword, isNameTaken } from "@/src/services/loginService";
 import { IDatabaseAccountJson, ILoginRequest, ILoginResponse } from "@/src/types/loginTypes";
 import { logger } from "@/src/utils/logger";
-import { version_compare } from "@/src/services/worldStateService";
+import { version_compare } from "@/src/helpers/inventoryHelpers";
 
 export const loginController: RequestHandler = async (request, response) => {
     const loginRequest = JSON.parse(String(request.body)) as ILoginRequest; // parse octet stream of json data to json object

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Types } from "mongoose";
-import { IOid, IMongoDate } from "../commonTypes";
+import { IOid, IMongoDate, IOidWithLegacySupport } from "../commonTypes";
 import {
     IColor,
     IItemConfig,
@@ -371,7 +371,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     EchoesHexConquestCacheScoreMission?: number;
     EchoesHexConquestActiveFrameVariants?: string[];
     EchoesHexConquestActiveStickers?: string[];
-    BrandedSuits?: IOid[];
+    BrandedSuits?: IOidWithLegacySupport[];
     LockedWeaponGroup?: ILockedWeaponGroupClient;
     HubNpcCustomizations?: IHubNpcCustomization[];
     Ship?: IOrbiter; // U22 and below, response only
