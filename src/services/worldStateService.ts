@@ -5,7 +5,7 @@ import syndicateMissions from "@/static/fixed_responses/worldState/syndicateMiss
 import { buildConfig } from "@/src/services/buildConfigService";
 import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { config } from "@/src/services/configService";
-import { CRng } from "@/src/services/rngService";
+import { CRng, SRng } from "@/src/services/rngService";
 import { ExportNightwave, ExportRegions, IRegion } from "warframe-public-export-plus";
 import {
     ICalendarDay,
@@ -234,7 +234,7 @@ const pushTilesetModifiers = (modifiers: string[], tileset: TSortieTileset): voi
 };
 
 export const getSortie = (day: number): ISortie => {
-    const seed = new CRng(day).randomInt(0, 0xffff);
+    const seed = new CRng(day).randomInt(0, 100_000);
     const rng = new CRng(seed);
 
     const boss = rng.randomElement(sortieBosses)!;
@@ -350,7 +350,7 @@ const dailyChallenges = Object.keys(ExportNightwave.challenges).filter(x =>
 const getSeasonDailyChallenge = (day: number): ISeasonChallenge => {
     const dayStart = EPOCH + day * 86400000;
     const dayEnd = EPOCH + (day + 3) * 86400000;
-    const rng = new CRng(new CRng(day).randomInt(0, 0xffff));
+    const rng = new CRng(new CRng(day).randomInt(0, 100_000));
     return {
         _id: { $oid: "67e1b5ca9d00cb47" + day.toString().padStart(8, "0") },
         Daily: true,
@@ -370,7 +370,7 @@ const getSeasonWeeklyChallenge = (week: number, id: number): ISeasonChallenge =>
     const weekStart = EPOCH + week * 604800000;
     const weekEnd = weekStart + 604800000;
     const challengeId = week * 7 + id;
-    const rng = new CRng(new CRng(challengeId).randomInt(0, 0xffff));
+    const rng = new CRng(new CRng(challengeId).randomInt(0, 100_000));
     return {
         _id: { $oid: "67e1bb2d9d00cb47" + challengeId.toString().padStart(8, "0") },
         Activation: { $date: { $numberLong: weekStart.toString() } },
@@ -387,7 +387,7 @@ const getSeasonWeeklyHardChallenge = (week: number, id: number): ISeasonChalleng
     const weekStart = EPOCH + week * 604800000;
     const weekEnd = weekStart + 604800000;
     const challengeId = week * 7 + id;
-    const rng = new CRng(new CRng(challengeId).randomInt(0, 0xffff));
+    const rng = new CRng(new CRng(challengeId).randomInt(0, 100_000));
     return {
         _id: { $oid: "67e1bb2d9d00cb47" + challengeId.toString().padStart(8, "0") },
         Activation: { $date: { $numberLong: weekStart.toString() } },
@@ -431,7 +431,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
 
     // TODO: xpAmounts need to be calculated based on the jobType somehow?
 
-    const seed = new CRng(bountyCycle).randomInt(0, 0xffff);
+    const seed = new CRng(bountyCycle).randomInt(0, 100_000);
     const bountyCycleStart = bountyCycle * 9000000;
     const bountyCycleEnd = bountyCycleStart + 9000000;
 
@@ -700,7 +700,7 @@ const getCalendarSeason = (week: number): ICalendarSeason => {
         //logger.debug(`birthday on day ${day}`);
         eventDays.push({ day, events: [] }); // This is how CET_PLOT looks in worldState as of around 38.5.0
     }
-    const rng = new CRng(new CRng(week).randomInt(0, 0xffff));
+    const rng = new CRng(new CRng(week).randomInt(0, 100_000));
     const challenges = [
         "/Lotus/Types/Challenges/Calendar1999/CalendarKillEnemiesEasy",
         "/Lotus/Types/Challenges/Calendar1999/CalendarKillEnemiesMedium",
@@ -981,7 +981,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     }
 
     // Elite Sanctuary Onslaught cycling every week
-    worldState.NodeOverrides.find(x => x.Node == "SolNode802")!.Seed = new CRng(week).randomInt(0, 0xffff);
+    worldState.NodeOverrides.find(x => x.Node == "SolNode802")!.Seed = new SRng(BigInt(week)).randomInt(0, 0xff_ffff);
 
     // Holdfast, Cavia, & Hex bounties cycling every 2.5 hours; unfaithful implementation
     let bountyCycle = Math.trunc(Date.now() / 9000000);
@@ -1066,14 +1066,14 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         }
 
         // The client does not seem to respect activation for classic syndicate missions, so only pushing current ones.
-        const sday = Date.now() >= rollover ? day : day - 1;
-        const rng = new CRng(sday);
-        pushSyndicateMissions(worldState, sday, rng.randomInt(0, 0xffff), "ba6f84724fa48049", "ArbitersSyndicate");
-        pushSyndicateMissions(worldState, sday, rng.randomInt(0, 0xffff), "ba6f84724fa4804a", "CephalonSudaSyndicate");
-        pushSyndicateMissions(worldState, sday, rng.randomInt(0, 0xffff), "ba6f84724fa4804e", "NewLokaSyndicate");
-        pushSyndicateMissions(worldState, sday, rng.randomInt(0, 0xffff), "ba6f84724fa48050", "PerrinSyndicate");
-        pushSyndicateMissions(worldState, sday, rng.randomInt(0, 0xffff), "ba6f84724fa4805e", "RedVeilSyndicate");
-        pushSyndicateMissions(worldState, sday, rng.randomInt(0, 0xffff), "ba6f84724fa48061", "SteelMeridianSyndicate");
+        const sdy = Date.now() >= rollover ? day : day - 1;
+        const rng = new CRng(sdy);
+        pushSyndicateMissions(worldState, sdy, rng.randomInt(0, 100_000), "ba6f84724fa48049", "ArbitersSyndicate");
+        pushSyndicateMissions(worldState, sdy, rng.randomInt(0, 100_000), "ba6f84724fa4804a", "CephalonSudaSyndicate");
+        pushSyndicateMissions(worldState, sdy, rng.randomInt(0, 100_000), "ba6f84724fa4804e", "NewLokaSyndicate");
+        pushSyndicateMissions(worldState, sdy, rng.randomInt(0, 100_000), "ba6f84724fa48050", "PerrinSyndicate");
+        pushSyndicateMissions(worldState, sdy, rng.randomInt(0, 100_000), "ba6f84724fa4805e", "RedVeilSyndicate");
+        pushSyndicateMissions(worldState, sdy, rng.randomInt(0, 100_000), "ba6f84724fa48061", "SteelMeridianSyndicate");
     }
 
     // Archon Hunt cycling every week
@@ -1183,7 +1183,7 @@ export const getLiteSortie = (week: number): ILiteSortie => {
         }
     }
 
-    const seed = new CRng(week).randomInt(0, 0xffff);
+    const seed = new CRng(week).randomInt(0, 100_000);
     const rng = new CRng(seed);
     const firstNodeIndex = rng.randomInt(0, nodes.length - 1);
     const firstNode = nodes[firstNodeIndex];
