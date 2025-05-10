@@ -131,7 +131,7 @@ dict = {
     cheats_infiniteEndo: `Unendlich Endo`,
     cheats_infiniteRegalAya: `Unendlich Reines Aya`,
     cheats_infiniteHelminthMaterials: `Unendlich Helminth-Materialien`,
-    cheats_claimingBlueprintRefundsIngredients: `[UNTRANSLATED] Claiming Blueprint Refunds Ingredients`,
+    cheats_claimingBlueprintRefundsIngredients: `Fertige Blaupausen erstatten Ressourcen zurück`,
     cheats_dontSubtractConsumables: `Verbrauchsgegenstände (Ausrüstung) nicht verbrauchen`,
     cheats_unlockAllShipFeatures: `Alle Schiffs-Funktionen freischalten`,
     cheats_unlockAllShipDecorations: `Alle Schiffsdekorationen freischalten`,
