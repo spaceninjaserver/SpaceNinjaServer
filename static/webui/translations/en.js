@@ -130,6 +130,7 @@ dict = {
     cheats_infiniteEndo: `Infinite Endo`,
     cheats_infiniteRegalAya: `Infinite Regal Aya`,
     cheats_infiniteHelminthMaterials: `Infinite Helminth Materials`,
+    cheats_claimingBlueprintRefundsIngredients: `Claiming Blueprint Refunds Ingredients`,
     cheats_dontSubtractConsumables: `Don't Subtract Consumables`,
     cheats_unlockAllShipFeatures: `Unlock All Ship Features`,
     cheats_unlockAllShipDecorations: `Unlock All Ship Decorations`,

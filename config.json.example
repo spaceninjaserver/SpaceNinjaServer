@@ -19,6 +19,7 @@
   "infiniteEndo": false,
   "infiniteRegalAya": false,
   "infiniteHelminthMaterials": false,
+  "claimingBlueprintRefundsIngredients": false,
   "dontSubtractConsumables": false,
   "unlockAllShipFeatures": false,
   "unlockAllShipDecorations": false,

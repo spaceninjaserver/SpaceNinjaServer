@@ -24,6 +24,7 @@ interface IConfig {
     infiniteEndo?: boolean;
     infiniteRegalAya?: boolean;
     infiniteHelminthMaterials?: boolean;
+    claimingBlueprintRefundsIngredients?: boolean;
     dontSubtractConsumables?: boolean;
     unlockAllShipFeatures?: boolean;
     unlockAllShipDecorations?: boolean;

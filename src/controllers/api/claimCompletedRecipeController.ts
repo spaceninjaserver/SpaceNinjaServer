@@ -17,8 +17,11 @@ import {
 } from "@/src/services/inventoryService";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
-import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
+import { InventorySlot, IPendingRecipeDatabase } from "@/src/types/inventoryTypes/inventoryTypes";
 import { toOid2 } from "@/src/helpers/inventoryHelpers";
+import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+import { IRecipe } from "warframe-public-export-plus";
+import { config } from "@/src/services/configService";
 
 interface IClaimCompletedRecipeRequest {
     RecipeIds: IOid[];
@@ -46,34 +49,8 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
     }
 
     if (req.query.cancel) {
-        const inventoryChanges: IInventoryChanges = {
-            ...updateCurrency(inventory, recipe.buildPrice * -1, false)
-        };
-
-        const equipmentIngredients = new Set();
-        for (const category of ["LongGuns", "Pistols", "Melee"] as const) {
-            if (pendingRecipe[category]) {
-                pendingRecipe[category].forEach(item => {
-                    const index = inventory[category].push(item) - 1;
-                    inventoryChanges[category] ??= [];
-                    inventoryChanges[category].push(inventory[category][index].toJSON<IEquipmentClient>());
-                    equipmentIngredients.add(item.ItemType);
-
-                    occupySlot(inventory, InventorySlot.WEAPONS, false);
-                    inventoryChanges.WeaponBin ??= { Slots: 0 };
-                    inventoryChanges.WeaponBin.Slots -= 1;
-                });
-            }
-        }
-        for (const ingredient of recipe.ingredients) {
-            if (!equipmentIngredients.has(ingredient.ItemType)) {
-                combineInventoryChanges(
-                    inventoryChanges,
-                    await addItem(inventory, ingredient.ItemType, ingredient.ItemCount)
-                );
-            }
-        }
-
+        const inventoryChanges: IInventoryChanges = {};
+        await refundRecipeIngredients(inventory, inventoryChanges, recipe, pendingRecipe);
         await inventory.save();
         res.json(inventoryChanges); // Not a bug: In the specific case of cancelling a recipe, InventoryChanges are expected to be the root.
     } else {
@@ -141,7 +118,43 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
                 ))
             };
         }
+        if (config.claimingBlueprintRefundsIngredients) {
+            await refundRecipeIngredients(inventory, InventoryChanges, recipe, pendingRecipe);
+        }
         await inventory.save();
         res.json({ InventoryChanges, BrandedSuits });
+    }
+};
+
+const refundRecipeIngredients = async (
+    inventory: TInventoryDatabaseDocument,
+    inventoryChanges: IInventoryChanges,
+    recipe: IRecipe,
+    pendingRecipe: IPendingRecipeDatabase
+): Promise<void> => {
+    updateCurrency(inventory, recipe.buildPrice * -1, false, inventoryChanges);
+
+    const equipmentIngredients = new Set();
+    for (const category of ["LongGuns", "Pistols", "Melee"] as const) {
+        if (pendingRecipe[category]) {
+            pendingRecipe[category].forEach(item => {
+                const index = inventory[category].push(item) - 1;
+                inventoryChanges[category] ??= [];
+                inventoryChanges[category].push(inventory[category][index].toJSON<IEquipmentClient>());
+                equipmentIngredients.add(item.ItemType);
+
+                occupySlot(inventory, InventorySlot.WEAPONS, false);
+                inventoryChanges.WeaponBin ??= { Slots: 0 };
+                inventoryChanges.WeaponBin.Slots -= 1;
+            });
+        }
+    }
+    for (const ingredient of recipe.ingredients) {
+        if (!equipmentIngredients.has(ingredient.ItemType)) {
+            combineInventoryChanges(
+                inventoryChanges,
+                await addItem(inventory, ingredient.ItemType, ingredient.ItemCount)
+            );
+        }
     }
 };

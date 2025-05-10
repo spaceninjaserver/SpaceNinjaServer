@@ -1113,24 +1113,29 @@ const isCurrencyTracked = (usePremium: boolean): boolean => {
 export const updateCurrency = (
     inventory: TInventoryDatabaseDocument,
     price: number,
-    usePremium: boolean
+    usePremium: boolean,
+    inventoryChanges: IInventoryChanges = {}
 ): IInventoryChanges => {
-    const currencyChanges: IInventoryChanges = {};
     if (price != 0 && isCurrencyTracked(usePremium)) {
         if (usePremium) {
             if (inventory.PremiumCreditsFree > 0) {
-                currencyChanges.PremiumCreditsFree = Math.min(price, inventory.PremiumCreditsFree) * -1;
-                inventory.PremiumCreditsFree += currencyChanges.PremiumCreditsFree;
+                const premiumCreditsFreeDelta = Math.min(price, inventory.PremiumCreditsFree) * -1;
+                inventoryChanges.PremiumCreditsFree ??= 0;
+                inventoryChanges.PremiumCreditsFree += premiumCreditsFreeDelta;
+                inventory.PremiumCreditsFree += premiumCreditsFreeDelta;
             }
-            currencyChanges.PremiumCredits = -price;
-            inventory.PremiumCredits += currencyChanges.PremiumCredits;
+            inventoryChanges.PremiumCredits ??= 0;
+            inventoryChanges.PremiumCredits -= price;
+            inventory.PremiumCredits -= price;
+            logger.debug(`currency changes `, { PremiumCredits: -price });
         } else {
-            currencyChanges.RegularCredits = -price;
-            inventory.RegularCredits += currencyChanges.RegularCredits;
+            inventoryChanges.RegularCredits ??= 0;
+            inventoryChanges.RegularCredits -= price;
+            inventory.RegularCredits -= price;
+            logger.debug(`currency changes `, { RegularCredits: -price });
         }
-        logger.debug(`currency changes `, currencyChanges);
     }
-    return currencyChanges;
+    return inventoryChanges;
 };
 
 export const addFusionPoints = (inventory: TInventoryDatabaseDocument, add: number): number => {
