@@ -1,9 +1,9 @@
-import { toOid } from "@/src/helpers/inventoryHelpers";
+import { fromOid, toOid } from "@/src/helpers/inventoryHelpers";
 import { createVeiledRivenFingerprint, rivenRawToRealWeighted } from "@/src/helpers/rivenHelper";
 import { addMiscItems, addMods, getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getRandomElement, getRandomWeightedReward, getRandomWeightedRewardUc } from "@/src/services/rngService";
-import { IOid } from "@/src/types/commonTypes";
+import { IUpgradeFromClient } from "@/src/types/inventoryTypes/inventoryTypes";
 import { RequestHandler } from "express";
 import { ExportBoosterPacks, ExportUpgrades, TRarity } from "warframe-public-export-plus";
 
@@ -24,7 +24,7 @@ export const artifactTransmutationController: RequestHandler = async (req, res) 
         ]);
 
         payload.Consumed.forEach(upgrade => {
-            inventory.Upgrades.pull({ _id: upgrade.ItemId.$oid });
+            inventory.Upgrades.pull({ _id: fromOid(upgrade.ItemId) });
         });
 
         const rawRivenType = getRandomRawRivenType();
@@ -57,8 +57,8 @@ export const artifactTransmutationController: RequestHandler = async (req, res) 
         payload.Consumed.forEach(upgrade => {
             const meta = ExportUpgrades[upgrade.ItemType];
             counts[meta.rarity] += upgrade.ItemCount;
-            if (upgrade.ItemId.$oid != "000000000000000000000000") {
-                inventory.Upgrades.pull({ _id: upgrade.ItemId.$oid });
+            if (fromOid(upgrade.ItemId) != "000000000000000000000000") {
+                inventory.Upgrades.pull({ _id: fromOid(upgrade.ItemId) });
             } else {
                 addMods(inventory, [
                     {
@@ -128,22 +128,12 @@ const getRandomRawRivenType = (): string => {
 };
 
 interface IArtifactTransmutationRequest {
-    Upgrade: IAgnosticUpgradeClient;
+    Upgrade: IUpgradeFromClient;
     LevelDiff: number;
-    Consumed: IAgnosticUpgradeClient[];
+    Consumed: IUpgradeFromClient[];
     Cost: number;
     FusionPointCost: number;
     RivenTransmute?: boolean;
-}
-
-interface IAgnosticUpgradeClient {
-    ItemType: string;
-    ItemId: IOid;
-    FromSKU: boolean;
-    UpgradeFingerprint: string;
-    PendingRerollFingerprint: string;
-    ItemCount: number;
-    LastAdded: IOid;
 }
 
 const specialModSets: string[][] = [

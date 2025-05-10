@@ -535,6 +535,16 @@ export interface IUpgradeDatabase extends Omit<IUpgradeClient, "ItemId"> {
     _id: Types.ObjectId;
 }
 
+export interface IUpgradeFromClient {
+    ItemType: string;
+    ItemId: IOidWithLegacySupport;
+    FromSKU?: boolean;
+    UpgradeFingerprint: string;
+    PendingRerollFingerprint: string;
+    ItemCount: number;
+    LastAdded: IOidWithLegacySupport;
+}
+
 export interface ICrewShipMembersClient {
     SLOT_A?: ICrewShipMemberClient;
     SLOT_B?: ICrewShipMemberClient;
@@ -1053,7 +1063,7 @@ export interface IQuestStage {
 export interface IRawUpgrade {
     ItemType: string;
     ItemCount: number;
-    LastAdded?: IOid;
+    LastAdded?: IOidWithLegacySupport;
 }
 
 export interface ISeasonChallenge {

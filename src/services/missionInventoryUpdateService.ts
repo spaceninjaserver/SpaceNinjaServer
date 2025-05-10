@@ -400,8 +400,14 @@ export const addMissionInventoryUpdates = async (
                 break;
             case "Upgrades":
                 value.forEach(clientUpgrade => {
-                    const upgrade = inventory.Upgrades.id(fromOid(clientUpgrade.ItemId))!;
-                    upgrade.UpgradeFingerprint = clientUpgrade.UpgradeFingerprint; // primitive way to copy over the riven challenge progress
+                    const id = fromOid(clientUpgrade.ItemId);
+                    if (id == "") {
+                        // U19 does not provide RawUpgrades and instead interleaves them with riven progress here
+                        addMods(inventory, [clientUpgrade]);
+                    } else {
+                        const upgrade = inventory.Upgrades.id(id)!;
+                        upgrade.UpgradeFingerprint = clientUpgrade.UpgradeFingerprint; // primitive way to copy over the riven challenge progress
+                    }
                 });
                 break;
             case "WeaponSkins":

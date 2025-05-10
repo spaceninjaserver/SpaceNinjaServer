@@ -15,7 +15,7 @@ import {
     IPlayerSkills,
     IQuestKeyDatabase,
     ILoreFragmentScan,
-    IUpgradeClient,
+    IUpgradeFromClient,
     ICollectibleEntry,
     IDiscoveredMarker,
     ILockedWeaponGroupClient,
@@ -111,7 +111,7 @@ export type IMissionInventoryUpdateRequest = {
         Standing: number;
     }[];
     CollectibleScans?: ICollectibleEntry[];
-    Upgrades?: IUpgradeClient[]; // riven challenge progress
+    Upgrades?: IUpgradeFromClient[]; // riven challenge progress
     WeaponSkins?: IWeaponSkinClient[];
     StrippedItems?: {
         DropTable: string;
