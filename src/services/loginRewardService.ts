@@ -1,7 +1,7 @@
 import randomRewards from "@/static/fixed_responses/loginRewards/randomRewards.json";
 import { IInventoryChanges } from "../types/purchaseTypes";
 import { TAccountDocument } from "./loginService";
-import { CRng, mixSeeds } from "./rngService";
+import { mixSeeds, SRng } from "./rngService";
 import { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel";
 import { addBooster, updateCurrency } from "./inventoryService";
 import { handleStoreItemAcquisition } from "./purchaseService";
@@ -49,8 +49,8 @@ const scaleAmount = (day: number, amount: number, scalingMultiplier: number): nu
 // Always produces the same result for the same account _id & LoginDays pair.
 export const isLoginRewardAChoice = (account: TAccountDocument): boolean => {
     const accountSeed = parseInt(account._id.toString().substring(16), 16);
-    const rng = new CRng(mixSeeds(accountSeed, account.LoginDays));
-    return rng.random() < 0.25; // Using 25% as an approximate chance for pick-a-doors. More conclusive data analysis is needed.
+    const rng = new SRng(mixSeeds(accountSeed, account.LoginDays));
+    return rng.randomFloat() < 0.25;
 };
 
 // Always produces the same result for the same account _id & LoginDays pair.
@@ -59,8 +59,8 @@ export const getRandomLoginRewards = (
     inventory: TInventoryDatabaseDocument
 ): ILoginReward[] => {
     const accountSeed = parseInt(account._id.toString().substring(16), 16);
-    const rng = new CRng(mixSeeds(accountSeed, account.LoginDays));
-    const pick_a_door = rng.random() < 0.25; // Using 25% as an approximate chance for pick-a-doors. More conclusive data analysis is needed.
+    const rng = new SRng(mixSeeds(accountSeed, account.LoginDays));
+    const pick_a_door = rng.randomFloat() < 0.25;
     const rewards = [getRandomLoginReward(rng, account.LoginDays, inventory)];
     if (pick_a_door) {
         do {
@@ -73,7 +73,7 @@ export const getRandomLoginRewards = (
     return rewards;
 };
 
-const getRandomLoginReward = (rng: CRng, day: number, inventory: TInventoryDatabaseDocument): ILoginReward => {
+const getRandomLoginReward = (rng: SRng, day: number, inventory: TInventoryDatabaseDocument): ILoginReward => {
     const reward = rng.randomReward(randomRewards)!;
     //const reward = randomRewards.find(x => x.RewardType == "RT_BOOSTER")!;
     if (reward.RewardType == "RT_RANDOM_RECIPE") {

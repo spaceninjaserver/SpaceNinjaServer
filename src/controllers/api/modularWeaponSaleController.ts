@@ -2,7 +2,7 @@ import { RequestHandler } from "express";
 import { ExportWeapons } from "warframe-public-export-plus";
 import { IMongoDate } from "@/src/types/commonTypes";
 import { toMongoDate } from "@/src/helpers/inventoryHelpers";
-import { CRng } from "@/src/services/rngService";
+import { SRng } from "@/src/services/rngService";
 import { ArtifactPolarity, EquipmentFeatures } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import {
@@ -140,7 +140,7 @@ const getModularWeaponSale = (
     partTypes: string[],
     getItemType: (parts: string[]) => string
 ): IModularWeaponSaleInfo => {
-    const rng = new CRng(day);
+    const rng = new SRng(day);
     const parts = partTypes.map(partType => rng.randomElement(partTypeToParts[partType])!);
     let partsCost = 0;
     for (const part of parts) {

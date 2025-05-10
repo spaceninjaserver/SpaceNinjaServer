@@ -86,54 +86,12 @@ export const mixSeeds = (seed1: number, seed2: number): number => {
     return seed >>> 0;
 };
 
-// Seeded RNG for internal usage. Based on recommendations in the ISO C standards.
-export class CRng {
-    state: number;
-
-    constructor(seed: number = 1) {
-        this.state = seed;
-    }
-
-    random(): number {
-        this.state = (this.state * 1103515245 + 12345) & 0x7fffffff;
-        return (this.state & 0x3fffffff) / 0x3fffffff;
-    }
-
-    randomInt(min: number, max: number): number {
-        const diff = max - min;
-        if (diff != 0) {
-            if (diff < 0) {
-                throw new Error(`max must be greater than min`);
-            }
-            if (diff > 0x3fffffff) {
-                throw new Error(`insufficient entropy`);
-            }
-            min += Math.floor(this.random() * (diff + 1));
-        }
-        return min;
-    }
-
-    randomElement<T>(arr: readonly T[]): T | undefined {
-        return arr[Math.floor(this.random() * arr.length)];
-    }
-
-    randomReward<T extends { probability: number }>(pool: T[]): T | undefined {
-        return getRewardAtPercentage(pool, this.random());
-    }
-
-    churnSeed(its: number): void {
-        while (its--) {
-            this.state = (this.state * 1103515245 + 12345) & 0x7fffffff;
-        }
-    }
-}
-
-// Seeded RNG for cases where we need identical results to the game client. Based on work by Donald Knuth.
+// Seeded RNG with identical results to the game client. Based on work by Donald Knuth.
 export class SRng {
     state: bigint;
 
-    constructor(seed: bigint) {
-        this.state = seed;
+    constructor(seed: bigint | number) {
+        this.state = BigInt(seed);
     }
 
     randomInt(min: number, max: number): number {

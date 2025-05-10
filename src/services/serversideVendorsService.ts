@@ -1,6 +1,6 @@
 import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { catBreadHash } from "@/src/helpers/stringHelpers";
-import { CRng, mixSeeds } from "@/src/services/rngService";
+import { mixSeeds, SRng } from "@/src/services/rngService";
 import { IMongoDate } from "@/src/types/commonTypes";
 import { IItemManifest, IVendorInfo, IVendorManifest } from "@/src/types/vendorTypes";
 import { ExportVendors, IRange } from "warframe-public-export-plus";
@@ -204,7 +204,7 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
         const cycleOffset = vendorInfo.cycleOffset ?? 1734307200_000;
         const cycleDuration = vendorInfo.cycleDuration;
         const cycleIndex = Math.trunc((Date.now() - cycleOffset) / cycleDuration);
-        const rng = new CRng(mixSeeds(vendorSeed, cycleIndex));
+        const rng = new SRng(mixSeeds(vendorSeed, cycleIndex));
         const manifest = ExportVendors[vendorInfo.TypeName];
         const offersToAdd = [];
         if (manifest.numItems && !manifest.isOneBinPerCycle) {
@@ -247,8 +247,7 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
                     $oid:
                         ((cycleStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") +
                         vendorInfo._id.$oid.substring(8, 16) +
-                        rng.randomInt(0, 0xffff).toString(16).padStart(4, "0") +
-                        rng.randomInt(0, 0xffff).toString(16).padStart(4, "0")
+                        rng.randomInt(0, 0xffff_ffff).toString(16).padStart(8, "0")
                 }
             };
             if (rawItem.numRandomItemPrices) {
@@ -283,9 +282,9 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
                 item.PremiumPrice = [value, value];
             }
             if (vendorInfo.RandomSeedType) {
-                item.LocTagRandSeed = (rng.randomInt(0, 0xffff) << 16) | rng.randomInt(0, 0xffff);
+                item.LocTagRandSeed = rng.randomInt(0, 0xffff_ffff);
                 if (vendorInfo.RandomSeedType == "VRST_WEAPON") {
-                    const highDword = (rng.randomInt(0, 0xffff) << 16) | rng.randomInt(0, 0xffff);
+                    const highDword = rng.randomInt(0, 0xffff_ffff);
                     item.LocTagRandSeed = (BigInt(highDword) << 32n) | (BigInt(item.LocTagRandSeed) & 0xffffffffn);
                 }
             }
