@@ -1372,20 +1372,16 @@ function getRandomMissionDrops(
             // TODO: Check that the invasion faction is indeed FC_INFESTATION once the Invasions in worldState are more dynamic
             rewardManifests = ["/Lotus/Types/Game/MissionDecks/BossMissionRewards/NyxRewards"];
         } else if (RewardInfo.sortieId) {
-            // Sortie mission types differ from the underlying node and hence also don't give rewards from the underlying nodes. Assassinations are an exception to this.
+            // Sortie mission types differ from the underlying node and hence also don't give rewards from the underlying nodes.
+            // Assassinations in non-lite sorties are an exception to this.
             if (region.missionIndex == 0) {
                 const arr = RewardInfo.sortieId.split("_");
-                let sortieId = arr[1];
-                if (sortieId == "Lite") {
-                    sortieId = arr[2];
+                let giveNodeReward = false;
+                if (arr[1] != "Lite") {
+                    const sortie = getSortie(idToDay(arr[1]));
+                    giveNodeReward = sortie.Variants.find(x => x.node == arr[0])!.missionType == "MT_ASSASSINATION";
                 }
-                const sortie = getSortie(idToDay(sortieId));
-                const mission = sortie.Variants.find(x => x.node == arr[0])!;
-                if (mission.missionType == "MT_ASSASSINATION") {
-                    rewardManifests = region.rewardManifests;
-                } else {
-                    rewardManifests = [];
-                }
+                rewardManifests = giveNodeReward ? region.rewardManifests : [];
             } else {
                 rewardManifests = [];
             }
