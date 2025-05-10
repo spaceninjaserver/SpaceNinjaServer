@@ -103,7 +103,7 @@ import { questControlController } from "@/src/controllers/api/questControlContro
 import { queueDojoComponentDestructionController } from "@/src/controllers/api/queueDojoComponentDestructionController";
 import { redeemPromoCodeController } from "@/src/controllers/api/redeemPromoCodeController";
 import { releasePetController } from "@/src/controllers/api/releasePetController";
-import { removeFriendGetController } from "@/src/controllers/api/removeFriendController";
+import { removeFriendGetController, removeFriendPostController } from "@/src/controllers/api/removeFriendController";
 import { removeFromAllianceController } from "@/src/controllers/api/removeFromAllianceController";
 import { removeFromGuildController } from "@/src/controllers/api/removeFromGuildController";
 import { removeIgnoredUserController } from "@/src/controllers/api/removeIgnoredUserController";
@@ -290,6 +290,7 @@ apiRouter.post("/purchase.php", purchaseController);
 apiRouter.post("/questControl.php", questControlController); // U17
 apiRouter.post("/redeemPromoCode.php", redeemPromoCodeController);
 apiRouter.post("/releasePet.php", releasePetController);
+apiRouter.post("/removeFriend.php", removeFriendPostController);
 apiRouter.post("/removeFromGuild.php", removeFromGuildController);
 apiRouter.post("/removeIgnoredUser.php", removeIgnoredUserController);
 apiRouter.post("/rerollRandomMod.php", rerollRandomModController);
