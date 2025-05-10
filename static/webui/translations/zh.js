@@ -132,6 +132,7 @@ dict = {
     cheats_infiniteRegalAya: `无限御品阿耶`,
     cheats_infiniteHelminthMaterials: `无限Helminth材料`,
     cheats_claimingBlueprintRefundsIngredients: `[UNTRANSLATED] Claiming Blueprint Refunds Ingredients`,
+    cheats_dontSubtractVoidTraces: `[UNTRANSLATED] Don't Subtract Void Traces`,
     cheats_dontSubtractConsumables: `[UNTRANSLATED] Don't Subtract Consumables`,
     cheats_unlockAllShipFeatures: `解锁所有飞船功能`,
     cheats_unlockAllShipDecorations: `解锁所有飞船装饰`,

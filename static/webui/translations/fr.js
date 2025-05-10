@@ -132,6 +132,7 @@ dict = {
     cheats_infiniteRegalAya: `Aya Raffiné infini`,
     cheats_infiniteHelminthMaterials: `Ressources d'Helminth infinies`,
     cheats_claimingBlueprintRefundsIngredients: `[UNTRANSLATED] Claiming Blueprint Refunds Ingredients`,
+    cheats_dontSubtractVoidTraces: `[UNTRANSLATED] Don't Subtract Void Traces`,
     cheats_dontSubtractConsumables: `[UNTRANSLATED] Don't Subtract Consumables`,
     cheats_unlockAllShipFeatures: `Débloquer tous les segments du vaisseau`,
     cheats_unlockAllShipDecorations: `Débloquer toutes les décorations du vaisseau`,

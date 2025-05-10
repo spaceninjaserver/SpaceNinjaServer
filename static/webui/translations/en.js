@@ -131,6 +131,7 @@ dict = {
     cheats_infiniteRegalAya: `Infinite Regal Aya`,
     cheats_infiniteHelminthMaterials: `Infinite Helminth Materials`,
     cheats_claimingBlueprintRefundsIngredients: `Claiming Blueprint Refunds Ingredients`,
+    cheats_dontSubtractVoidTraces: `Don't Subtract Void Traces`,
     cheats_dontSubtractConsumables: `Don't Subtract Consumables`,
     cheats_unlockAllShipFeatures: `Unlock All Ship Features`,
     cheats_unlockAllShipDecorations: `Unlock All Ship Decorations`,
