@@ -870,10 +870,14 @@ const addSentinel = (
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     const configs: IItemConfig[] = applyDefaultUpgrades(inventory, ExportSentinels[sentinelName]?.defaultUpgrades);
 
-    const features = premiumPurchase ? EquipmentFeatures.DOUBLE_CAPACITY : undefined;
     const sentinelIndex =
-        inventory.Sentinels.push({ ItemType: sentinelName, Configs: configs, XP: 0, Features: features, IsNew: true }) -
-        1;
+        inventory.Sentinels.push({
+            ItemType: sentinelName,
+            Configs: configs,
+            XP: 0,
+            Features: premiumPurchase ? EquipmentFeatures.DOUBLE_CAPACITY : undefined,
+            IsNew: inventory.Sentinels.find(x => x.ItemType == sentinelName) ? undefined : true
+        }) - 1;
     inventoryChanges.Sentinels ??= [];
     inventoryChanges.Sentinels.push(inventory.Sentinels[sentinelIndex].toJSON<IEquipmentClient>());
 
@@ -922,6 +926,9 @@ export const addPowerSuit = async (
         },
         defaultOverwrites
     );
+    if (suit.IsNew) {
+        suit.IsNew = !inventory.Suits.find(x => x.ItemType == powersuitName);
+    }
     if (!suit.IsNew) {
         suit.IsNew = undefined;
     }
@@ -956,7 +963,7 @@ export const addMechSuit = async (
             UpgradeVer: 101,
             XP: 0,
             Features: features,
-            IsNew: true
+            IsNew: inventory.MechSuits.find(x => x.ItemType == mechsuitName) ? undefined : true
         }) - 1;
     inventoryChanges.MechSuits ??= [];
     inventoryChanges.MechSuits.push(inventory.MechSuits[suitIndex].toJSON<IEquipmentClient>());
@@ -996,7 +1003,7 @@ export const addSpaceSuit = (
             UpgradeVer: 101,
             XP: 0,
             Features: features,
-            IsNew: true
+            IsNew: inventory.SpaceSuits.find(x => x.ItemType == spacesuitName) ? undefined : true
         }) - 1;
     inventoryChanges.SpaceSuits ??= [];
     inventoryChanges.SpaceSuits.push(inventory.SpaceSuits[suitIndex].toJSON<IEquipmentClient>());
@@ -1078,7 +1085,7 @@ export const addKubrowPet = (
             Configs: configs,
             XP: 0,
             Details: details,
-            IsNew: true
+            IsNew: inventory.KubrowPets.find(x => x.ItemType == kubrowPetName) ? undefined : true
         }) - 1;
     inventoryChanges.KubrowPets ??= [];
     inventoryChanges.KubrowPets.push(inventory.KubrowPets[kubrowPetIndex].toJSON<IEquipmentClient>());
@@ -1258,6 +1265,9 @@ export const addEquipment = (
         },
         defaultOverwrites
     );
+    if (equipment.IsNew) {
+        equipment.IsNew = !inventory[category].find(x => x.ItemType == type);
+    }
     if (!equipment.IsNew) {
         equipment.IsNew = undefined;
     }
