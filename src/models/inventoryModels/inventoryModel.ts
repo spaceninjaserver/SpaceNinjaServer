@@ -38,7 +38,8 @@ import {
     IPeriodicMissionCompletionResponse,
     ILoreFragmentScan,
     IEvolutionProgress,
-    IEndlessXpProgress,
+    IEndlessXpProgressDatabase,
+    IEndlessXpProgressClient,
     ICrewShipCustomization,
     ICrewShipWeapon,
     ICrewShipWeaponEmplacements,
@@ -97,7 +98,8 @@ import {
     IInvasionProgressClient,
     IAccolades,
     IHubNpcCustomization,
-    ILotusCustomization
+    ILotusCustomization,
+    IEndlessXpReward
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -112,6 +114,7 @@ import {
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
 import { EquipmentSelectionSchema, oidSchema } from "./loadoutModel";
+import { ICountedStoreItem } from "warframe-public-export-plus";
 
 export const typeCountSchema = new Schema<ITypeCount>({ ItemType: String, ItemCount: Number }, { _id: false });
 
@@ -810,14 +813,48 @@ const evolutionProgressSchema = new Schema<IEvolutionProgress>(
     { _id: false }
 );
 
-const endlessXpProgressSchema = new Schema<IEndlessXpProgress>(
+const countedStoreItemSchema = new Schema<ICountedStoreItem>(
     {
-        Category: String,
-        Choices: [String]
+        StoreItem: String,
+        ItemCount: Number
     },
     { _id: false }
 );
 
+const endlessXpRewardSchema = new Schema<IEndlessXpReward>(
+    {
+        RequiredTotalXp: Number,
+        Rewards: [countedStoreItemSchema]
+    },
+    { _id: false }
+);
+
+const endlessXpProgressSchema = new Schema<IEndlessXpProgressDatabase>(
+    {
+        Category: { type: String, required: true },
+        Earn: { type: Number, default: 0 },
+        Claim: { type: Number, default: 0 },
+        BonusAvailable: Date,
+        Expiry: Date,
+        Choices: { type: [String], required: true },
+        PendingRewards: { type: [endlessXpRewardSchema], default: [] }
+    },
+    { _id: false }
+);
+
+endlessXpProgressSchema.set("toJSON", {
+    transform(_doc, ret) {
+        const db = ret as IEndlessXpProgressDatabase;
+        const client = ret as IEndlessXpProgressClient;
+
+        if (db.BonusAvailable) {
+            client.BonusAvailable = toMongoDate(db.BonusAvailable);
+        }
+        if (db.Expiry) {
+            client.Expiry = toMongoDate(db.Expiry);
+        }
+    }
+});
 const crewShipWeaponEmplacementsSchema = new Schema<ICrewShipWeaponEmplacements>(
     {
         PRIMARY_A: EquipmentSelectionSchema,

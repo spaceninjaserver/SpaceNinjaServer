@@ -12,6 +12,7 @@ import {
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { IFingerprintStat, RivenFingerprint } from "@/src/helpers/rivenHelper";
 import { IOrbiter } from "../personalRoomsTypes";
+import { ICountedStoreItem } from "warframe-public-export-plus";
 
 export type InventoryDatabaseEquipment = {
     [_ in TEquipmentKey]: IEquipmentDatabase[];
@@ -54,6 +55,7 @@ export interface IInventoryDatabase
             | "CrewMembers"
             | "QualifyingInvasions"
             | "LastInventorySync"
+            | "EndlessXP"
             | TEquipmentKey
         >,
         InventoryDatabaseEquipment {
@@ -92,6 +94,7 @@ export interface IInventoryDatabase
     CrewMembers: ICrewMemberDatabase[];
     QualifyingInvasions: IInvasionProgressDatabase[];
     LastInventorySync?: Types.ObjectId;
+    EndlessXP?: IEndlessXpProgressDatabase[];
 }
 
 export interface IQuestKeyDatabase {
@@ -356,7 +359,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     PendingCoupon?: IPendingCouponClient;
     Harvestable: boolean;
     DeathSquadable: boolean;
-    EndlessXP?: IEndlessXpProgress[];
+    EndlessXP?: IEndlessXpProgressClient[];
     DialogueHistory?: IDialogueHistoryClient;
     CalendarProgress?: ICalendarProgress;
     SongChallenges?: ISongChallenge[];
@@ -1143,9 +1146,24 @@ export interface IEvolutionProgress {
 
 export type TEndlessXpCategory = "EXC_NORMAL" | "EXC_HARD";
 
-export interface IEndlessXpProgress {
+export interface IEndlessXpProgressDatabase {
     Category: TEndlessXpCategory;
+    Earn: number;
+    Claim: number;
+    BonusAvailable?: Date;
+    Expiry?: Date;
     Choices: string[];
+    PendingRewards: IEndlessXpReward[];
+}
+
+export interface IEndlessXpProgressClient extends Omit<IEndlessXpProgressDatabase, "BonusAvailable" | "Expiry"> {
+    BonusAvailable?: IMongoDate;
+    Expiry?: IMongoDate;
+}
+
+export interface IEndlessXpReward {
+    RequiredTotalXp: number;
+    Rewards: ICountedStoreItem[];
 }
 
 export interface IDialogueHistoryClient {

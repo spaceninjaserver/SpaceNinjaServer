@@ -377,9 +377,6 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
             db[key] = client[key];
         }
     }
-    if (client.EndlessXP !== undefined) {
-        db.EndlessXP = client.EndlessXP;
-    }
     if (client.SongChallenges !== undefined) {
         db.SongChallenges = client.SongChallenges;
     }

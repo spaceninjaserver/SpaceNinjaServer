@@ -10,7 +10,7 @@ import {
 import { IMissionInventoryUpdateRequest, IRewardInfo } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
 import { IRngResult, SRng, getRandomElement, getRandomReward } from "@/src/services/rngService";
-import { equipmentKeys, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
+import { equipmentKeys, IMission, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
 import {
     addBooster,
     addChallenges,
@@ -841,7 +841,13 @@ export const addMissionRewards = async (
     }
 
     //TODO: check double reward merging
-    const MissionRewards: IMissionReward[] = getRandomMissionDrops(inventory, rewardInfo, wagerTier, firstCompletion);
+    const MissionRewards: IMissionReward[] = getRandomMissionDrops(
+        inventory,
+        rewardInfo,
+        missions,
+        wagerTier,
+        firstCompletion
+    );
     logger.debug("random mission drops:", MissionRewards);
     const inventoryChanges: IInventoryChanges = {};
     const AffiliationMods: IAffiliationMods[] = [];
@@ -1290,6 +1296,7 @@ function getLevelCreditRewards(node: IRegion): number {
 function getRandomMissionDrops(
     inventory: TInventoryDatabaseDocument,
     RewardInfo: IRewardInfo,
+    mission: IMission | undefined,
     tierOverride: number | undefined,
     firstCompletion: boolean
 ): IMissionReward[] {
@@ -1531,6 +1538,35 @@ function getRandomMissionDrops(
                 logger.error(`Unknown syndicate or tier: ${RewardInfo.challengeMissionId}`);
             }
         } else {
+            if (RewardInfo.node == "SolNode238") {
+                // The Circuit
+                const category = mission?.Tier == 1 ? "EXC_HARD" : "EXC_NORMAL";
+                const progress = inventory.EndlessXP?.find(x => x.Category == category);
+                if (progress) {
+                    // https://wiki.warframe.com/w/The%20Circuit#Tiers_and_Weekly_Rewards
+                    const roundsCompleted = RewardInfo.rewardQualifications?.length || 0;
+                    if (roundsCompleted >= 1) {
+                        progress.Earn += 100;
+                    }
+                    if (roundsCompleted >= 2) {
+                        progress.Earn += 110;
+                    }
+                    if (roundsCompleted >= 3) {
+                        progress.Earn += 125;
+                    }
+                    if (roundsCompleted >= 4) {
+                        progress.Earn += 145;
+                        if (progress.BonusAvailable && progress.BonusAvailable.getTime() <= Date.now()) {
+                            progress.Earn += 50;
+                            progress.BonusAvailable = new Date(Date.now() + 24 * 3600_000); // TOVERIFY
+                        }
+                    }
+                    if (roundsCompleted >= 5) {
+                        progress.Earn += (roundsCompleted - 4) * 170;
+                    }
+                }
+                tierOverride = 0;
+            }
             rotations = getRotations(RewardInfo, tierOverride);
         }
         if (rewardManifests.length != 0) {
