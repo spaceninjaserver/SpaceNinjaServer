@@ -2,12 +2,13 @@ import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { Account } from "@/src/models/loginModel";
 import { areFriends } from "@/src/services/friendService";
 import { createMessage } from "@/src/services/inboxService";
-import { getInventory, updateCurrency } from "@/src/services/inventoryService";
+import { combineInventoryChanges, getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { getAccountForRequest, getSuffixedName } from "@/src/services/loginService";
+import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
 import { IOid } from "@/src/types/commonTypes";
-import { IPurchaseParams } from "@/src/types/purchaseTypes";
+import { IInventoryChanges, IPurchaseParams } from "@/src/types/purchaseTypes";
 import { RequestHandler } from "express";
-import { ExportFlavour } from "warframe-public-export-plus";
+import { ExportBundles, ExportFlavour } from "warframe-public-export-plus";
 
 export const giftingController: RequestHandler = async (req, res) => {
     const data = getJSONfromString<IGiftingRequest>(String(req.body));
@@ -44,10 +45,7 @@ export const giftingController: RequestHandler = async (req, res) => {
     // TODO: Cannot gift archwing items to players that have not completed the archwing quest. (Code 7)
     // TODO: Cannot gift necramechs to players that have not completed heart of deimos. (Code 20)
 
-    const senderInventory = await getInventory(
-        senderAccount._id.toString(),
-        "PremiumCredits PremiumCreditsFree ActiveAvatarImageType GiftsRemaining"
-    );
+    const senderInventory = await getInventory(senderAccount._id.toString());
 
     if (senderInventory.GiftsRemaining == 0) {
         res.status(400).send("10").end();
@@ -55,7 +53,20 @@ export const giftingController: RequestHandler = async (req, res) => {
     }
     senderInventory.GiftsRemaining -= 1;
 
-    updateCurrency(senderInventory, data.PurchaseParams.ExpectedPrice, true);
+    const inventoryChanges: IInventoryChanges = updateCurrency(
+        senderInventory,
+        data.PurchaseParams.ExpectedPrice,
+        true
+    );
+    if (data.PurchaseParams.StoreItem in ExportBundles) {
+        const bundle = ExportBundles[data.PurchaseParams.StoreItem];
+        if (bundle.giftingBonus) {
+            combineInventoryChanges(
+                inventoryChanges,
+                (await handleStoreItemAcquisition(bundle.giftingBonus, senderInventory)).InventoryChanges
+            );
+        }
+    }
     await senderInventory.save();
 
     const senderName = getSuffixedName(senderAccount);
@@ -83,7 +94,9 @@ export const giftingController: RequestHandler = async (req, res) => {
         }
     ]);
 
-    res.end();
+    res.json({
+        InventoryChanges: inventoryChanges
+    });
 };
 
 interface IGiftingRequest {
