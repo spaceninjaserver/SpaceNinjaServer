@@ -187,6 +187,7 @@ apiRouter.get("/getIgnoredUsers.php", getIgnoredUsersController);
 apiRouter.get("/getMessages.php", inboxController); // unsure if this is correct, but needed for U17
 apiRouter.get("/getNewRewardSeed.php", getNewRewardSeedController);
 apiRouter.get("/getShip.php", getShipController);
+apiRouter.get("/getShipDecos.php", (_req, res) => { res.end(); }); // needed to log in on U22.8
 apiRouter.get("/getVendorInfo.php", getVendorInfoController);
 apiRouter.get("/hub", hubController);
 apiRouter.get("/hubInstances", hubInstancesController);
