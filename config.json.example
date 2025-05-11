@@ -20,6 +20,7 @@
   "infiniteRegalAya": false,
   "infiniteHelminthMaterials": false,
   "claimingBlueprintRefundsIngredients": false,
+  "dontSubtractVoidTraces": false,
   "dontSubtractConsumables": false,
   "unlockAllShipFeatures": false,
   "unlockAllShipDecorations": false,

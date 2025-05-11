@@ -132,6 +132,7 @@ dict = {
     cheats_infiniteRegalAya: `Бесконечная Королевская Айя`,
     cheats_infiniteHelminthMaterials: `Бесконечные Выделения Гельминта`,
     cheats_claimingBlueprintRefundsIngredients: `[UNTRANSLATED] Claiming Blueprint Refunds Ingredients`,
+    cheats_dontSubtractVoidTraces: `[UNTRANSLATED] Don't Subtract Void Traces`,
     cheats_dontSubtractConsumables: `Не уменьшать количество расходников`,
     cheats_unlockAllShipFeatures: `Разблокировать все функции корабля`,
     cheats_unlockAllShipDecorations: `Разблокировать все украшения корабля`,
