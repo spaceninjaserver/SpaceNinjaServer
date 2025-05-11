@@ -132,7 +132,7 @@ dict = {
     cheats_infiniteRegalAya: `Aya Real infinita`,
     cheats_infiniteHelminthMaterials: `Materiales Helminto infinitos`,
     cheats_claimingBlueprintRefundsIngredients: `Reclamar ingredientes devueltos por planos`,
-    cheats_dontSubtractVoidTraces: `[UNTRANSLATED] Don't Subtract Void Traces`,
+    cheats_dontSubtractVoidTraces: `No descontar vestigios del Vacío`,
     cheats_dontSubtractConsumables: `No restar consumibles`,
     cheats_unlockAllShipFeatures: `Desbloquear todas las funciones de nave`,
     cheats_unlockAllShipDecorations: `Desbloquear todas las decoraciones de nave`,
