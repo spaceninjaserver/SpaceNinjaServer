@@ -20,7 +20,7 @@
     "@types/morgan": "^1.9.9",
     "crc-32": "^1.2.2",
     "express": "^5",
-    "json-with-bigint": "^3.2.2",
+    "json-with-bigint": "^3.4.4",
     "mongoose": "^8.11.0",
     "morgan": "^1.10.0",
     "ncp": "^2.0.0",
