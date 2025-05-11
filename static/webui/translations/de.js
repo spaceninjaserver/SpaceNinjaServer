@@ -132,7 +132,7 @@ dict = {
     cheats_infiniteRegalAya: `Unendlich Reines Aya`,
     cheats_infiniteHelminthMaterials: `Unendlich Helminth-Materialien`,
     cheats_claimingBlueprintRefundsIngredients: `Fertige Blaupausen erstatten Ressourcen zurück`,
-    cheats_dontSubtractVoidTraces: `[UNTRANSLATED] Don't Subtract Void Traces`,
+    cheats_dontSubtractVoidTraces: `Void-Spuren nicht verbrauchen`,
     cheats_dontSubtractConsumables: `Verbrauchsgegenstände (Ausrüstung) nicht verbrauchen`,
     cheats_unlockAllShipFeatures: `Alle Schiffs-Funktionen freischalten`,
     cheats_unlockAllShipDecorations: `Alle Schiffsdekorationen freischalten`,
