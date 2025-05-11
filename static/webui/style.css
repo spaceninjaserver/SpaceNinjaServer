@@ -29,3 +29,13 @@ td.text-end > a > svg {
 .card-body {
     overflow: auto;
 }
+
+/* fixes for navbar on small resolutions due to not being navbar-expand */
+.navbar.sticky-top .navbar-nav {
+    flex-direction: row;
+}
+
+.dropdown-toggle {
+    padding-right: var(--bs-navbar-nav-link-padding-x);
+    padding-left: var(--bs-navbar-nav-link-padding-x);
+}
