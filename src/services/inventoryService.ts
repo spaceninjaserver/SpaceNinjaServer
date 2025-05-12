@@ -1585,12 +1585,17 @@ export const addMiscItems = (inventory: TInventoryDatabaseDocument, itemsArray: 
         if (MiscItems[itemIndex].ItemCount == 0) {
             MiscItems.splice(itemIndex, 1);
         } else if (MiscItems[itemIndex].ItemCount <= 0) {
-            logger.warn(`account now owns a negative amount of ${ItemType}`);
+            logger.warn(`inventory.MiscItems has a negative count for ${ItemType}`);
         }
     });
 };
 
-const applyArrayChanges = (arr: ITypeCount[], changes: ITypeCount[]): void => {
+const applyArrayChanges = (
+    inventory: TInventoryDatabaseDocument,
+    key: "ShipDecorations" | "Consumables" | "CrewShipRawSalvage" | "CrewShipAmmo" | "Recipes" | "LevelKeys",
+    changes: ITypeCount[]
+): void => {
+    const arr: ITypeCount[] = inventory[key];
     for (const change of changes) {
         if (change.ItemCount != 0) {
             let itemIndex = arr.findIndex(x => x.ItemType === change.ItemType);
@@ -1602,34 +1607,34 @@ const applyArrayChanges = (arr: ITypeCount[], changes: ITypeCount[]): void => {
             if (arr[itemIndex].ItemCount == 0) {
                 arr.splice(itemIndex, 1);
             } else if (arr[itemIndex].ItemCount <= 0) {
-                logger.warn(`account now owns a negative amount of ${change.ItemType}`);
+                logger.warn(`inventory.${key} has a negative count for ${change.ItemType}`);
             }
         }
     }
 };
 
 export const addShipDecorations = (inventory: TInventoryDatabaseDocument, itemsArray: ITypeCount[]): void => {
-    applyArrayChanges(inventory.ShipDecorations, itemsArray);
+    applyArrayChanges(inventory, "ShipDecorations", itemsArray);
 };
 
 export const addConsumables = (inventory: TInventoryDatabaseDocument, itemsArray: ITypeCount[]): void => {
-    applyArrayChanges(inventory.Consumables, itemsArray);
+    applyArrayChanges(inventory, "Consumables", itemsArray);
 };
 
 export const addCrewShipRawSalvage = (inventory: TInventoryDatabaseDocument, itemsArray: ITypeCount[]): void => {
-    applyArrayChanges(inventory.CrewShipRawSalvage, itemsArray);
+    applyArrayChanges(inventory, "CrewShipRawSalvage", itemsArray);
 };
 
 export const addCrewShipAmmo = (inventory: TInventoryDatabaseDocument, itemsArray: ITypeCount[]): void => {
-    applyArrayChanges(inventory.CrewShipAmmo, itemsArray);
+    applyArrayChanges(inventory, "CrewShipAmmo", itemsArray);
 };
 
 export const addRecipes = (inventory: TInventoryDatabaseDocument, itemsArray: ITypeCount[]): void => {
-    applyArrayChanges(inventory.Recipes, itemsArray);
+    applyArrayChanges(inventory, "Recipes", itemsArray);
 };
 
 export const addLevelKeys = (inventory: TInventoryDatabaseDocument, itemsArray: ITypeCount[]): void => {
-    applyArrayChanges(inventory.LevelKeys, itemsArray);
+    applyArrayChanges(inventory, "LevelKeys", itemsArray);
 };
 
 export const addMods = (inventory: TInventoryDatabaseDocument, itemsArray: IRawUpgrade[]): void => {
@@ -1649,7 +1654,7 @@ export const addMods = (inventory: TInventoryDatabaseDocument, itemsArray: IRawU
         if (RawUpgrades[itemIndex].ItemCount == 0) {
             RawUpgrades.splice(itemIndex, 1);
         } else if (RawUpgrades[itemIndex].ItemCount <= 0) {
-            logger.warn(`account now owns a negative amount of ${ItemType}`);
+            logger.warn(`inventory.RawUpgrades has a negative count for ${ItemType}`);
         }
     });
 };
@@ -1664,7 +1669,7 @@ export const addFusionTreasures = (inventory: TInventoryDatabaseDocument, itemsA
             if (FusionTreasures[itemIndex].ItemCount == 0) {
                 FusionTreasures.splice(itemIndex, 1);
             } else if (FusionTreasures[itemIndex].ItemCount <= 0) {
-                logger.warn(`account now owns a negative amount of ${ItemType}`);
+                logger.warn(`inventory.FusionTreasures has a negative count for ${ItemType}`);
             }
         } else {
             FusionTreasures.push({ ItemCount, ItemType, Sockets });
