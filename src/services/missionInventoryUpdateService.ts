@@ -825,6 +825,13 @@ const hexConquestRewards: IConquestReward[] = [
     }
 ];
 
+const droptableAliases: Record<string, string> = {
+    "/Lotus/Types/DropTables/ManInTheWall/MITWGruzzlingArcanesDropTable":
+        "/Lotus/Types/DropTables/EntratiLabDropTables/DoppelgangerDropTable",
+    "/Lotus/Types/DropTables/WF1999DropTables/LasrianTankSteelPathDropTable":
+        "/Lotus/Types/DropTables/WF1999DropTables/LasrianTankHardModeDropTable"
+};
+
 //TODO: return type of partial missioninventoryupdate response
 export const addMissionRewards = async (
     inventory: TInventoryDatabaseDocument,
@@ -1033,11 +1040,9 @@ export const addMissionRewards = async (
 
     if (strippedItems) {
         for (const si of strippedItems) {
-            if (si.DropTable == "/Lotus/Types/DropTables/ManInTheWall/MITWGruzzlingArcanesDropTable") {
-                logger.debug(
-                    `rewriting ${si.DropTable} to /Lotus/Types/DropTables/EntratiLabDropTables/DoppelgangerDropTable`
-                );
-                si.DropTable = "/Lotus/Types/DropTables/EntratiLabDropTables/DoppelgangerDropTable";
+            if (si.DropTable in droptableAliases) {
+                logger.debug(`rewriting ${si.DropTable} to ${droptableAliases[si.DropTable]}`);
+                si.DropTable = droptableAliases[si.DropTable];
             }
             const droptables = ExportEnemies.droptables[si.DropTable] ?? [];
             if (si.DROP_MOD) {
