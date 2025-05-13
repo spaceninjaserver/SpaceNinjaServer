@@ -21,6 +21,8 @@ services:
             # APP_INFINITE_ENDO: false
             # APP_INFINITE_REGAL_AYA: false
             # APP_INFINITE_HELMINTH_MATERIALS: false
+            # APP_CLAIMING_BLUEPRINT_REFUNDS_INGREDIENTS: false
+            # APP_DONT_SUBTRACT_VOIDTRACES: false
             # APP_DONT_SUBTRACT_CONSUMABLES: false
             # APP_UNLOCK_ALL_SHIP_FEATURES: false
             # APP_UNLOCK_ALL_SHIP_DECORATIONS: false
