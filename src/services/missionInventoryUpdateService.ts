@@ -1522,7 +1522,7 @@ function getRandomMissionDrops(
                 ZarimanSyndicate: [
                     "/Lotus/Types/Game/MissionDecks/ZarimanJobMissionRewards/TierATableRewards",
                     "/Lotus/Types/Game/MissionDecks/ZarimanJobMissionRewards/TierBTableRewards",
-                    "/Lotus/Types/Game/MissionDecks/ZarimanJobMissionRewards/TierCTableRewards",
+                    "/Lotus/Types/Game/MissionDecks/ZarimanJobMissionRewards/TierCTableARewards", // [sic]
                     "/Lotus/Types/Game/MissionDecks/ZarimanJobMissionRewards/TierDTableRewards",
                     "/Lotus/Types/Game/MissionDecks/ZarimanJobMissionRewards/TierETableRewards"
                 ],
