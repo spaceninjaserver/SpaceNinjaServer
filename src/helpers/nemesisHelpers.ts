@@ -1,5 +1,5 @@
 import { ExportRegions, ExportWarframes } from "warframe-public-export-plus";
-import { IInfNode, ITypeCount } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IInfNode, ITypeCount, TNemesisFaction } from "@/src/types/inventoryTypes/inventoryTypes";
 import { getRewardAtPercentage, SRng } from "@/src/services/rngService";
 import { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel";
 import { logger } from "../utils/logger";
@@ -11,7 +11,7 @@ import { fromStoreItem, toStoreItem } from "../services/itemDataService";
 import { createMessage } from "../services/inboxService";
 import { version_compare } from "./inventoryHelpers";
 
-export const getInfNodes = (faction: string, rank: number): IInfNode[] => {
+export const getInfNodes = (faction: TNemesisFaction, rank: number): IInfNode[] => {
     const infNodes = [];
     const systemIndex = systemIndexes[faction][rank];
     for (const [key, value] of Object.entries(ExportRegions)) {
@@ -35,20 +35,20 @@ export const getInfNodes = (faction: string, rank: number): IInfNode[] => {
     return infNodes;
 };
 
-const systemIndexes: Record<string, number[]> = {
+const systemIndexes: Record<TNemesisFaction, number[]> = {
     FC_GRINEER: [2, 3, 9, 11, 18],
     FC_CORPUS: [1, 15, 4, 7, 8],
     FC_INFESTATION: [23]
 };
 
-export const showdownNodes: Record<string, string> = {
+export const showdownNodes: Record<TNemesisFaction, string> = {
     FC_GRINEER: "CrewBattleNode557",
     FC_CORPUS: "CrewBattleNode558",
     FC_INFESTATION: "CrewBattleNode559"
 };
 
 // Get a parazon 'passcode' based on the nemesis fingerprint so it's always the same for the same nemesis.
-export const getNemesisPasscode = (nemesis: { fp: bigint; Faction: string }): number[] => {
+export const getNemesisPasscode = (nemesis: { fp: bigint; Faction: TNemesisFaction }): number[] => {
     const rng = new SRng(nemesis.fp);
     const choices = [0, 1, 2, 3, 5, 6, 7];
     let choiceIndex = rng.randomInt(0, choices.length - 1);
@@ -87,7 +87,7 @@ const antivirusMods: readonly string[] = [
     "/Lotus/Upgrades/Mods/Immortal/AntivirusEightMod"
 ];
 
-export const getNemesisPasscodeModTypes = (nemesis: { fp: bigint; Faction: string }): string[] => {
+export const getNemesisPasscodeModTypes = (nemesis: { fp: bigint; Faction: TNemesisFaction }): string[] => {
     const passcode = getNemesisPasscode(nemesis);
     return nemesis.Faction == "FC_INFESTATION"
         ? passcode.map(i => antivirusMods[i])
@@ -248,7 +248,7 @@ export const getWeaponsForManifest = (manifest: string): readonly string[] => {
 };
 
 export const isNemesisCompatibleWithVersion = (
-    nemesis: { manifest: string; Faction: string },
+    nemesis: { manifest: string; Faction: TNemesisFaction },
     buildLabel: string
 ): boolean => {
     // Anything below 35.6.0 is not going to be okay given our set of supported manifests.

@@ -24,7 +24,8 @@ import {
     IUpgradeClient,
     IWeaponSkinClient,
     LoadoutIndex,
-    TEquipmentKey
+    TEquipmentKey,
+    TNemesisFaction
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { logger } from "@/src/utils/logger";
 import { RequestHandler } from "express";
@@ -269,7 +270,7 @@ interface INemesisStartRequest {
         WeaponIdx: number;
         AgentIdx: number;
         BirthNode: string;
-        Faction: string;
+        Faction: TNemesisFaction;
         Rank: number;
         k: boolean;
         Traded: boolean;

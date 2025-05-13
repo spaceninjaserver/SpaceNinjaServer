@@ -863,6 +863,8 @@ export interface IMission extends IMissionDatabase {
     RewardsCooldownTime?: IMongoDate;
 }
 
+export type TNemesisFaction = "FC_GRINEER" | "FC_CORPUS" | "FC_INFESTATION";
+
 export interface INemesisBaseClient {
     fp: bigint | number;
     manifest: string;
@@ -872,7 +874,7 @@ export interface INemesisBaseClient {
     WeaponIdx: number;
     AgentIdx: number;
     BirthNode: string;
-    Faction: string;
+    Faction: TNemesisFaction;
     Rank: number;
     k: boolean;
     Traded: boolean;
