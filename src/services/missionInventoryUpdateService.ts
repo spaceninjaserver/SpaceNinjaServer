@@ -631,7 +631,7 @@ export const addMissionInventoryUpdates = async (
                         Rank: inventory.Nemesis.Rank,
                         Traded: inventory.Nemesis.Traded,
                         PrevOwners: inventory.Nemesis.PrevOwners,
-                        SecondInCommand: inventory.Nemesis.SecondInCommand,
+                        SecondInCommand: false,
                         Weakened: inventory.Nemesis.Weakened,
                         // And set killed flag
                         k: value.killed

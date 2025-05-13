@@ -15,6 +15,14 @@ export const crewMembersController: RequestHandler = async (req, res) => {
     dbCrewMember.WeaponConfigIdx = data.crewMember.WeaponConfigIdx;
     dbCrewMember.WeaponId = new Types.ObjectId(data.crewMember.WeaponId.$oid);
     dbCrewMember.Configs = data.crewMember.Configs;
+    if (data.crewMember.SecondInCommand) {
+        for (const cm of inventory.CrewMembers) {
+            if (cm.SecondInCommand) {
+                cm.SecondInCommand = false;
+                break;
+            }
+        }
+    }
     dbCrewMember.SecondInCommand = data.crewMember.SecondInCommand;
     await inventory.save();
     res.json({
