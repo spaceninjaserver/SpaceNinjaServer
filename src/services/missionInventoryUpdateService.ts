@@ -1416,6 +1416,37 @@ function getRandomMissionDrops(
             } else {
                 rewardManifests = [];
             }
+        } else if (RewardInfo.T == 13) {
+            // Undercroft extra/side portal (normal mode), gives 1 Pathos Clamp + Duviri Arcane.
+            drops.push({
+                StoreItem: "/Lotus/StoreItems/Types/Gameplay/Duviri/Resource/DuviriDragonDropItem",
+                ItemCount: 1
+            });
+            rewardManifests = [
+                "/Lotus/Types/Game/MissionDecks/DuviriEncounterRewards/DuviriStaticUndercroftResourceRewards"
+            ];
+        } else if (RewardInfo.T == 14) {
+            // Undercroft extra/side portal (steel path), gives 3 Pathos Clamps + Eidolon Arcane.
+            drops.push({
+                StoreItem: "/Lotus/StoreItems/Types/Gameplay/Duviri/Resource/DuviriDragonDropItem",
+                ItemCount: 3
+            });
+            rewardManifests = [
+                "/Lotus/Types/Game/MissionDecks/DuviriEncounterRewards/DuviriSteelPathStaticUndercroftResourceRewards"
+            ];
+        } else if (RewardInfo.T == 15) {
+            rewardManifests = [
+                mission?.Tier == 1
+                    ? "/Lotus/Types/Game/MissionDecks/DuviriEncounterRewards/DuviriKullervoSteelPathRNGRewards"
+                    : "/Lotus/Types/Game/MissionDecks/DuviriEncounterRewards/DuviriKullervoNormalRNGRewards"
+            ];
+        } else if (RewardInfo.T == 70) {
+            // Orowyrm chest, gives 10 Pathos Clamps, or 15 on Steel Path.
+            drops.push({
+                StoreItem: "/Lotus/StoreItems/Types/Gameplay/Duviri/Resource/DuviriDragonDropItem",
+                ItemCount: mission?.Tier == 1 ? 15 : 10
+            });
+            rewardManifests = [];
         } else {
             rewardManifests = region.rewardManifests;
         }

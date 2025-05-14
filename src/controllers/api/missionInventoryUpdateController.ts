@@ -61,7 +61,11 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
 
     if (
         missionReport.MissionStatus !== "GS_SUCCESS" &&
-        !(missionReport.RewardInfo?.jobId || missionReport.RewardInfo?.challengeMissionId)
+        !(
+            missionReport.RewardInfo?.jobId ||
+            missionReport.RewardInfo?.challengeMissionId ||
+            missionReport.RewardInfo?.T
+        )
     ) {
         if (missionReport.EndOfMatchUpload) {
             inventory.RewardSeed = generateRewardSeed();

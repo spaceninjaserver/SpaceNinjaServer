@@ -177,6 +177,7 @@ export interface IRewardInfo {
     PurgatoryRewardQualifications?: string;
     rewardSeed?: number | bigint;
     periodicMissionTag?: string;
+    T?: number; // Duviri
     ConquestType?: string;
     ConquestCompleted?: number;
     ConquestEquipmentSuggestionsFulfilled?: number;
