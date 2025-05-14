@@ -686,9 +686,34 @@ export const addMissionInventoryUpdates = async (
                         addSkin(inventory, profile.ephemera);
                     }
 
-                    // TOVERIFY: Is the inbox message also sent when converting a lich? If not, how are the rewards given?
-                    if (inventory.Nemesis.Faction == "FC_INFESTATION") {
-                        await sendCodaFinishedMessage(inventory, inventory.Nemesis.fp, value.nemesisName, value.killed);
+                    switch (inventory.Nemesis.Faction) {
+                        case "FC_GRINEER":
+                            addSkin(
+                                inventory,
+                                value.killed
+                                    ? "/Lotus/Upgrades/Skins/Clan/LichKillerBadgeItem"
+                                    : "/Lotus/Upgrades/Skins/Sigils/KuvaLichSigil"
+                            );
+                            break;
+
+                        case "FC_CORPUS":
+                            addSkin(
+                                inventory,
+                                value.killed
+                                    ? "/Lotus/Upgrades/Skins/Clan/CorpusLichBadgeItem"
+                                    : "/Lotus/Upgrades/Skins/Sigils/CorpusLichSigil"
+                            );
+                            break;
+
+                        case "FC_INFESTATION":
+                            // TOVERIFY: Is the inbox message also sent when converting a lich? If not, how are the rewards given?
+                            await sendCodaFinishedMessage(
+                                inventory,
+                                inventory.Nemesis.fp,
+                                value.nemesisName,
+                                value.killed
+                            );
+                            break;
                     }
 
                     inventory.Nemesis = undefined;
