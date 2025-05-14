@@ -35,6 +35,7 @@ import {
     combineInventoryChanges,
     generateRewardSeed,
     getCalendarProgress,
+    getDialogue,
     giveNemesisPetRecipe,
     giveNemesisWeaponRecipe,
     updateCurrency,
@@ -63,7 +64,15 @@ import {
 } from "@/src/helpers/nemesisHelpers";
 import { Loadout } from "../models/inventoryModels/loadoutModel";
 import { ILoadoutConfigDatabase } from "../types/saveLoadoutTypes";
-import { getLiteSortie, getSortie, idToBountyCycle, idToDay, idToWeek, pushClassicBounties } from "./worldStateService";
+import {
+    getLiteSortie,
+    getSortie,
+    getWorldState,
+    idToBountyCycle,
+    idToDay,
+    idToWeek,
+    pushClassicBounties
+} from "./worldStateService";
 import { config } from "./configService";
 import libraryDailyTasks from "@/static/fixed_responses/libraryDailyTasks.json";
 import { ISyndicateMissionInfo } from "../types/worldStateTypes";
@@ -1188,8 +1197,9 @@ export const addMissionRewards = async (
     }
 
     if (rewardInfo.challengeMissionId) {
-        const [syndicateTag, tierStr] = rewardInfo.challengeMissionId.split("_"); // TODO: third part in HexSyndicate jobs - Chemistry points
+        const [syndicateTag, tierStr, chemistryStr] = rewardInfo.challengeMissionId.split("_");
         const tier = Number(tierStr);
+        const chemistry = Number(chemistryStr);
         const isSteelPath = missions?.Tier;
         if (syndicateTag === "ZarimanSyndicate") {
             let medallionAmount = tier + 1;
@@ -1205,6 +1215,23 @@ export const addMissionRewards = async (
             if (tier > 5) standingAmount = 7500; // InfestedLichBounty
             if (isSteelPath) standingAmount *= 1.5;
             AffiliationMods.push(addStanding(inventory, syndicateTag, standingAmount));
+        }
+        if (syndicateTag == "HexSyndicate" && chemistry && tier < 6) {
+            const seed = getWorldState().SyndicateMissions.find(x => x.Tag == "HexSyndicate")!.Seed;
+            const { nodes, buddies } = getHexBounties(seed);
+            const buddy = buddies[tier];
+            logger.debug(`Hex seed is ${seed}, giving chemistry for ${buddy}`);
+            if (missions?.Tag != nodes[tier]) {
+                logger.warn(
+                    `Uh-oh, tier ${tier} bounty should've been on ${nodes[tier]} but you were just on ${missions?.Tag}`
+                );
+            }
+            const tomorrowAt0Utc = config.noKimCooldowns
+                ? Date.now()
+                : (Math.trunc(Date.now() / 86400_000) + 1) * 86400_000;
+            const dialogue = getDialogue(inventory, buddy);
+            dialogue.Chemistry += chemistry;
+            dialogue.BountyChemExpiry = new Date(tomorrowAt0Utc);
         }
         if (isSteelPath) {
             await addItem(inventory, "/Lotus/Types/Items/MiscItems/SteelEssence", 1);
@@ -1764,4 +1791,56 @@ const libraryPersonalTargetToAvatar: Record<string, string> = {
         "/Lotus/Types/Enemies/Infested/AiWeek/Quadrupeds/QuadrupedAvatar",
     "/Lotus/Types/Game/Library/Targets/Research10Target":
         "/Lotus/Types/Enemies/Corpus/Spaceman/AIWeek/NullifySpacemanAvatar"
+};
+
+const node_excluded_buddies: Record<string, string> = {
+    SolNode856: "/Lotus/Types/Gameplay/1999Wf/Dialogue/ArthurDialogue_rom.dialogue",
+    SolNode852: "/Lotus/Types/Gameplay/1999Wf/Dialogue/LettieDialogue_rom.dialogue",
+    SolNode851: "/Lotus/Types/Gameplay/1999Wf/Dialogue/JabirDialogue_rom.dialogue",
+    SolNode850: "/Lotus/Types/Gameplay/1999Wf/Dialogue/EleanorDialogue_rom.dialogue",
+    SolNode853: "/Lotus/Types/Gameplay/1999Wf/Dialogue/AoiDialogue_rom.dialogue",
+    SolNode854: "/Lotus/Types/Gameplay/1999Wf/Dialogue/QuincyDialogue_rom.dialogue"
+};
+
+const getHexBounties = (seed: number): { nodes: string[]; buddies: string[] } => {
+    // We're gonna shuffle these arrays, so they're not truly 'const'.
+    const nodes: string[] = [
+        "SolNode850",
+        "SolNode851",
+        "SolNode852",
+        "SolNode853",
+        "SolNode854",
+        "SolNode856",
+        "SolNode858"
+    ];
+    const excludable_nodes: string[] = ["SolNode851", "SolNode852", "SolNode853", "SolNode854"];
+    const buddies: string[] = [
+        "/Lotus/Types/Gameplay/1999Wf/Dialogue/JabirDialogue_rom.dialogue",
+        "/Lotus/Types/Gameplay/1999Wf/Dialogue/AoiDialogue_rom.dialogue",
+        "/Lotus/Types/Gameplay/1999Wf/Dialogue/ArthurDialogue_rom.dialogue",
+        "/Lotus/Types/Gameplay/1999Wf/Dialogue/EleanorDialogue_rom.dialogue",
+        "/Lotus/Types/Gameplay/1999Wf/Dialogue/LettieDialogue_rom.dialogue",
+        "/Lotus/Types/Gameplay/1999Wf/Dialogue/QuincyDialogue_rom.dialogue"
+    ];
+
+    const rng = new SRng(seed);
+    rng.shuffleArray(nodes);
+    rng.shuffleArray(excludable_nodes);
+    while (nodes.length > buddies.length) {
+        nodes.splice(
+            nodes.findIndex(x => x == excludable_nodes[0]),
+            1
+        );
+        excludable_nodes.splice(0, 1);
+    }
+    rng.shuffleArray(buddies);
+    for (let i = 0; i != 6; ++i) {
+        if (buddies[i] == node_excluded_buddies[nodes[i]]) {
+            const swapIdx = (i + 1) % buddies.length;
+            const tmp = buddies[swapIdx];
+            buddies[swapIdx] = buddies[i];
+            buddies[i] = tmp;
+        }
+    }
+    return { nodes, buddies };
 };

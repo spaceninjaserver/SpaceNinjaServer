@@ -1,8 +1,7 @@
-import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { config } from "@/src/services/configService";
-import { addEmailItem, getInventory, updateCurrency } from "@/src/services/inventoryService";
+import { addEmailItem, getDialogue, getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { ICompletedDialogue, IDialogueDatabase } from "@/src/types/inventoryTypes/inventoryTypes";
+import { ICompletedDialogue } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { RequestHandler } from "express";
 
@@ -107,26 +106,3 @@ interface IOtherDialogueInfo {
     Tag: string;
     Value: number;
 }
-
-const getDialogue = (inventory: TInventoryDatabaseDocument, dialogueName: string): IDialogueDatabase => {
-    let dialogue = inventory.DialogueHistory!.Dialogues!.find(x => x.DialogueName == dialogueName);
-    if (!dialogue) {
-        dialogue =
-            inventory.DialogueHistory!.Dialogues![
-                inventory.DialogueHistory!.Dialogues!.push({
-                    Rank: 0,
-                    Chemistry: 0,
-                    AvailableDate: new Date(0),
-                    AvailableGiftDate: new Date(0),
-                    RankUpExpiry: new Date(0),
-                    BountyChemExpiry: new Date(0),
-                    QueuedDialogues: [],
-                    Gifts: [],
-                    Booleans: [],
-                    Completed: [],
-                    DialogueName: dialogueName
-                }) - 1
-            ];
-    }
-    return dialogue;
-};

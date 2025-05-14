@@ -115,4 +115,19 @@ export class SRng {
     randomReward<T extends { probability: number }>(pool: T[]): T | undefined {
         return getRewardAtPercentage(pool, this.randomFloat());
     }
+
+    churnSeed(its: number): void {
+        while (its--) {
+            this.state = (0x5851f42d4c957f2dn * this.state + 0x14057b7ef767814fn) & 0xffffffffffffffffn;
+        }
+    }
+
+    shuffleArray<T>(arr: T[]): void {
+        for (let lastIdx = arr.length - 1; lastIdx >= 1; --lastIdx) {
+            const swapIdx = this.randomInt(0, lastIdx);
+            const tmp = arr[swapIdx];
+            arr[swapIdx] = arr[lastIdx];
+            arr[lastIdx] = tmp;
+        }
+    }
 }
