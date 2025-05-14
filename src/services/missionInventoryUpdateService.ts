@@ -57,6 +57,7 @@ import kuriaMessage75 from "@/static/fixed_responses/kuriaMessages/seventyFivePe
 import kuriaMessage100 from "@/static/fixed_responses/kuriaMessages/oneHundredPercent.json";
 import conservationAnimals from "@/static/fixed_responses/conservationAnimals.json";
 import {
+    generateNemesisProfile,
     getInfNodes,
     getNemesisPasscode,
     getWeaponsForManifest,
@@ -659,6 +660,12 @@ export const addMissionInventoryUpdates = async (
                         k: value.killed
                     });
 
+                    const profile = generateNemesisProfile(
+                        inventory.Nemesis.fp,
+                        inventory.Nemesis.Faction,
+                        inventory.Nemesis.KillingSuit
+                    );
+
                     if (value.killed) {
                         if (
                             value.weaponLoc &&
@@ -667,18 +674,16 @@ export const addMissionInventoryUpdates = async (
                             const weaponType = getWeaponsForManifest(inventory.Nemesis.manifest)[
                                 inventory.Nemesis.WeaponIdx
                             ];
-                            giveNemesisWeaponRecipe(
-                                inventory,
-                                weaponType,
-                                value.nemesisName,
-                                value.weaponLoc,
-                                inventory.Nemesis.KillingSuit,
-                                inventory.Nemesis.fp
-                            );
+                            giveNemesisWeaponRecipe(inventory, weaponType, value.nemesisName, value.weaponLoc, profile);
                         }
                         if (value.petLoc) {
-                            giveNemesisPetRecipe(inventory);
+                            giveNemesisPetRecipe(inventory, value.nemesisName, profile);
                         }
+                    }
+
+                    // "Players will receive a Lich's Ephemera regardless of whether they Vanquish or Convert them."
+                    if (profile.ephemera) {
+                        addSkin(inventory, profile.ephemera);
                     }
 
                     // TOVERIFY: Is the inbox message also sent when converting a lich? If not, how are the rewards given?

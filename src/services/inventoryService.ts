@@ -84,7 +84,7 @@ import { getRandomElement, getRandomInt, getRandomWeightedReward, SRng } from ".
 import { createMessage } from "./inboxService";
 import { getMaxStanding } from "@/src/helpers/syndicateStandingHelper";
 import { getWorldState } from "./worldStateService";
-import { getInnateDamageTag, getInnateDamageValue } from "../helpers/nemesisHelpers";
+import { generateNemesisProfile, INemesisProfile } from "../helpers/nemesisHelpers";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
@@ -1969,8 +1969,7 @@ export const giveNemesisWeaponRecipe = (
     weaponType: string,
     nemesisName: string = "AGOR ROK",
     weaponLoc?: string,
-    KillingSuit: string = "/Lotus/Powersuits/Ember/Ember",
-    fp: bigint = generateRewardSeed()
+    profile: INemesisProfile = generateNemesisProfile()
 ): void => {
     if (!weaponLoc) {
         weaponLoc = ExportWeapons[weaponType].name;
@@ -1991,8 +1990,8 @@ export const giveNemesisWeaponRecipe = (
                 compat: weaponType,
                 buffs: [
                     {
-                        Tag: getInnateDamageTag(KillingSuit),
-                        Value: getInnateDamageValue(fp)
+                        Tag: profile.innateDamageTag,
+                        Value: profile.innateDamageValue
                     }
                 ]
             },
@@ -2001,27 +2000,15 @@ export const giveNemesisWeaponRecipe = (
     });
 };
 
-export const giveNemesisPetRecipe = (inventory: TInventoryDatabaseDocument, nemesisName: string = "AGOR ROK"): void => {
-    const head = getRandomElement([
-        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadA",
-        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadB",
-        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadC"
-    ])!;
-    const body = getRandomElement([
-        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartBodyA",
-        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartBodyB",
-        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartBodyC"
-    ])!;
-    const legs = getRandomElement([
-        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartLegsA",
-        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartLegsB",
-        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartLegsC"
-    ])!;
-    const tail = getRandomElement([
-        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartTailA",
-        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartTailB",
-        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartTailC"
-    ])!;
+export const giveNemesisPetRecipe = (
+    inventory: TInventoryDatabaseDocument,
+    nemesisName: string = "AGOR ROK",
+    profile: INemesisProfile = generateNemesisProfile()
+): void => {
+    const head = profile.petHead!;
+    const body = profile.petBody!;
+    const legs = profile.petLegs!;
+    const tail = profile.petTail!;
     const recipeType = Object.entries(ExportRecipes).find(arr => arr[1].resultType == head)![0];
     addRecipes(inventory, [
         {

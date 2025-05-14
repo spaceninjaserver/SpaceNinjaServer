@@ -47,6 +47,42 @@ export const showdownNodes: Record<TNemesisFaction, string> = {
     FC_INFESTATION: "CrewBattleNode559"
 };
 
+const ephemeraProbabilities: Record<TNemesisFaction, number> = {
+    FC_GRINEER: 0.05,
+    FC_CORPUS: 0.2,
+    FC_INFESTATION: 0
+};
+
+type TInnateDamageTag =
+    | "InnateElectricityDamage"
+    | "InnateHeatDamage"
+    | "InnateFreezeDamage"
+    | "InnateToxinDamage"
+    | "InnateMagDamage"
+    | "InnateRadDamage"
+    | "InnateImpactDamage";
+
+const ephmeraTypes: Record<"FC_GRINEER" | "FC_CORPUS", Record<TInnateDamageTag, string>> = {
+    FC_GRINEER: {
+        InnateElectricityDamage: "/Lotus/Upgrades/Skins/Effects/Kuva/KuvaLightningEphemera",
+        InnateHeatDamage: "/Lotus/Upgrades/Skins/Effects/Kuva/KuvaFireEphemera",
+        InnateFreezeDamage: "/Lotus/Upgrades/Skins/Effects/Kuva/KuvaIceEphemera",
+        InnateToxinDamage: "/Lotus/Upgrades/Skins/Effects/Kuva/KuvaToxinEphemera",
+        InnateMagDamage: "/Lotus/Upgrades/Skins/Effects/Kuva/KuvaMagneticEphemera",
+        InnateRadDamage: "/Lotus/Upgrades/Skins/Effects/Kuva/KuvaTricksterEphemera",
+        InnateImpactDamage: "/Lotus/Upgrades/Skins/Effects/Kuva/KuvaImpactEphemera"
+    },
+    FC_CORPUS: {
+        InnateElectricityDamage: "/Lotus/Upgrades/Skins/Effects/CorpusLichEphemeraA",
+        InnateHeatDamage: "/Lotus/Upgrades/Skins/Effects/CorpusLichEphemeraB",
+        InnateFreezeDamage: "/Lotus/Upgrades/Skins/Effects/CorpusLichEphemeraC",
+        InnateToxinDamage: "/Lotus/Upgrades/Skins/Effects/CorpusLichEphemeraD",
+        InnateMagDamage: "/Lotus/Upgrades/Skins/Effects/CorpusLichEphemeraE",
+        InnateRadDamage: "/Lotus/Upgrades/Skins/Effects/CorpusLichEphemeraF",
+        InnateImpactDamage: "/Lotus/Upgrades/Skins/Effects/CorpusLichEphemeraG"
+    }
+};
+
 // Get a parazon 'passcode' based on the nemesis fingerprint so it's always the same for the same nemesis.
 export const getNemesisPasscode = (nemesis: { fp: bigint; Faction: TNemesisFaction }): number[] => {
     const rng = new SRng(nemesis.fp);
@@ -271,21 +307,25 @@ export const isNemesisCompatibleWithVersion = (
     return true;
 };
 
-export const getInnateDamageTag = (
-    KillingSuit: string
-):
-    | "InnateElectricityDamage"
-    | "InnateFreezeDamage"
-    | "InnateHeatDamage"
-    | "InnateImpactDamage"
-    | "InnateMagDamage"
-    | "InnateRadDamage"
-    | "InnateToxinDamage" => {
+export const getInnateDamageTag = (KillingSuit: string): TInnateDamageTag => {
     return ExportWarframes[KillingSuit].nemesisUpgradeTag!;
 };
 
-// TODO: For -1399275245665749231n, the value should be 75306944, but we're off by 59 with 75307003.
-export const getInnateDamageValue = (fp: bigint): number => {
+export interface INemesisProfile {
+    innateDamageTag: TInnateDamageTag;
+    innateDamageValue: number;
+    ephemera?: string;
+    petHead?: string;
+    petBody?: string;
+    petLegs?: string;
+    petTail?: string;
+}
+
+export const generateNemesisProfile = (
+    fp: bigint = generateRewardSeed(),
+    Faction: TNemesisFaction = "FC_CORPUS",
+    killingSuit: string = "/Lotus/Powersuits/Ember/Ember"
+): INemesisProfile => {
     const rng = new SRng(fp);
     rng.randomFloat(); // used for the weapon index
     const WeaponUpgradeValueAttenuationExponent = 2.25;
@@ -293,7 +333,37 @@ export const getInnateDamageValue = (fp: bigint): number => {
     if (value >= 0.941428) {
         value = 1;
     }
-    return Math.trunc(value * 0x40000000);
+    const profile: INemesisProfile = {
+        innateDamageTag: getInnateDamageTag(killingSuit),
+        innateDamageValue: Math.trunc(value * 0x40000000) // TODO: For -1399275245665749231n, the value should be 75306944, but we're off by 59 with 75307003.
+    };
+    if (rng.randomFloat() <= ephemeraProbabilities[Faction] && Faction != "FC_INFESTATION") {
+        profile.ephemera = ephmeraTypes[Faction][profile.innateDamageTag];
+    }
+    rng.randomFloat(); // something related to sentinel agent maybe
+    if (Faction == "FC_CORPUS") {
+        profile.petHead = rng.randomElement([
+            "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadA",
+            "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadB",
+            "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadC"
+        ])!;
+        profile.petBody = rng.randomElement([
+            "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartBodyA",
+            "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartBodyB",
+            "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartBodyC"
+        ])!;
+        profile.petLegs = rng.randomElement([
+            "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartLegsA",
+            "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartLegsB",
+            "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartLegsC"
+        ])!;
+        profile.petTail = rng.randomElement([
+            "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartTailA",
+            "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartTailB",
+            "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartTailC"
+        ])!;
+    }
+    return profile;
 };
 
 export const getKillTokenRewardCount = (fp: bigint): number => {
