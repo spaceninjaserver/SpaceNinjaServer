@@ -1318,7 +1318,7 @@ const nemesisSchema = new Schema<INemesisDatabase>(
         InfNodes: { type: [infNodeSchema], default: undefined },
         HenchmenKilled: Number,
         HintProgress: Number,
-        Hints: { type: [Number], default: undefined },
+        Hints: { type: [Number], default: [] },
         GuessHistory: { type: [Number], default: undefined },
         MissionCount: Number,
         LastEnc: Number

@@ -55,7 +55,12 @@ import kuriaMessage50 from "@/static/fixed_responses/kuriaMessages/fiftyPercent.
 import kuriaMessage75 from "@/static/fixed_responses/kuriaMessages/seventyFivePercent.json";
 import kuriaMessage100 from "@/static/fixed_responses/kuriaMessages/oneHundredPercent.json";
 import conservationAnimals from "@/static/fixed_responses/conservationAnimals.json";
-import { getInfNodes, getWeaponsForManifest, sendCodaFinishedMessage } from "@/src/helpers/nemesisHelpers";
+import {
+    getInfNodes,
+    getNemesisPasscode,
+    getWeaponsForManifest,
+    sendCodaFinishedMessage
+} from "@/src/helpers/nemesisHelpers";
 import { Loadout } from "../models/inventoryModels/loadoutModel";
 import { ILoadoutConfigDatabase } from "../types/saveLoadoutTypes";
 import { getLiteSortie, getSortie, idToBountyCycle, idToDay, idToWeek, pushClassicBounties } from "./worldStateService";
@@ -168,6 +173,14 @@ export const addMissionInventoryUpdates = async (
         }
         if (inventoryUpdates.RewardInfo.NemesisHintProgress && inventory.Nemesis) {
             inventory.Nemesis.HintProgress += inventoryUpdates.RewardInfo.NemesisHintProgress;
+            if (inventory.Nemesis.Faction != "FC_INFESTATION" && inventory.Nemesis.Hints.length != 3) {
+                const progressNeeded = [35, 60, 100][inventory.Nemesis.Hints.length];
+                if (inventory.Nemesis.HintProgress >= progressNeeded) {
+                    inventory.Nemesis.HintProgress -= progressNeeded;
+                    const passcode = getNemesisPasscode(inventory.Nemesis);
+                    inventory.Nemesis.Hints.push(passcode[inventory.Nemesis.Hints.length]);
+                }
+            }
         }
         if (inventoryUpdates.MissionStatus == "GS_SUCCESS" && inventoryUpdates.RewardInfo.jobId) {
             // e.g. for Profit-Taker Phase 1:
