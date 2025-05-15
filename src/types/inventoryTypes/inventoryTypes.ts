@@ -296,7 +296,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     SortieRewardAttenuation?: ISortieRewardAttenuation[];
     Drones: IDroneClient[];
     StepSequencers: IStepSequencer[];
-    ActiveAvatarImageType: string;
+    ActiveAvatarImageType?: string;
     ShipDecorations: ITypeCount[];
     DiscoveredMarkers: IDiscoveredMarker[];
     //CompletedJobs: ICompletedJob[];

@@ -2025,3 +2025,7 @@ export const giveNemesisPetRecipe = (
         } satisfies INemesisPetTargetFingerprint)
     });
 };
+
+export const getEffectiveAvatarImageType = (inventory: TInventoryDatabaseDocument): string => {
+    return inventory.ActiveAvatarImageType ?? "/Lotus/Types/StoreItems/AvatarImages/AvatarImageDefault";
+};

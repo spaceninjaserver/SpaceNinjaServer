@@ -9,7 +9,12 @@ import {
     getMessage
 } from "@/src/services/inboxService";
 import { getAccountForRequest, getAccountFromSuffixedName, getSuffixedName } from "@/src/services/loginService";
-import { addItems, combineInventoryChanges, getInventory } from "@/src/services/inventoryService";
+import {
+    addItems,
+    combineInventoryChanges,
+    getEffectiveAvatarImageType,
+    getInventory
+} from "@/src/services/inventoryService";
 import { logger } from "@/src/utils/logger";
 import { ExportFlavour } from "warframe-public-export-plus";
 import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
@@ -88,7 +93,7 @@ export const inboxController: RequestHandler = async (req, res) => {
                                 }
                             ],
                             sub: "/Lotus/Language/Menu/GiftReceivedConfirmationSubject",
-                            icon: ExportFlavour[inventory.ActiveAvatarImageType].icon,
+                            icon: ExportFlavour[getEffectiveAvatarImageType(inventory)].icon,
                             highPriority: true
                         }
                     ]);

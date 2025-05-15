@@ -2,7 +2,12 @@ import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { Account } from "@/src/models/loginModel";
 import { areFriends } from "@/src/services/friendService";
 import { createMessage } from "@/src/services/inboxService";
-import { combineInventoryChanges, getInventory, updateCurrency } from "@/src/services/inventoryService";
+import {
+    combineInventoryChanges,
+    getEffectiveAvatarImageType,
+    getInventory,
+    updateCurrency
+} from "@/src/services/inventoryService";
 import { getAccountForRequest, getSuffixedName } from "@/src/services/loginService";
 import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
 import { IOid } from "@/src/types/commonTypes";
@@ -85,7 +90,7 @@ export const giftingController: RequestHandler = async (req, res) => {
                 }
             ],
             sub: "/Lotus/Language/Menu/GiftReceivedSubject",
-            icon: ExportFlavour[senderInventory.ActiveAvatarImageType].icon,
+            icon: ExportFlavour[getEffectiveAvatarImageType(senderInventory)].icon,
             gifts: [
                 {
                     GiftType: data.PurchaseParams.StoreItem

@@ -1,7 +1,7 @@
 import { getJSONfromString, regexEscape } from "@/src/helpers/stringHelpers";
 import { Alliance, AllianceMember, Guild, GuildMember } from "@/src/models/guildModel";
 import { createMessage } from "@/src/services/inboxService";
-import { getInventory } from "@/src/services/inventoryService";
+import { getEffectiveAvatarImageType, getInventory } from "@/src/services/inventoryService";
 import { getAccountForRequest, getSuffixedName } from "@/src/services/loginService";
 import { GuildPermission } from "@/src/types/guildTypes";
 import { logger } from "@/src/utils/logger";
@@ -95,7 +95,7 @@ export const addToAllianceController: RequestHandler = async (req, res) => {
                 }
             ],
             sub: "/Lotus/Language/Menu/Mailbox_AllianceInvite_Title",
-            icon: ExportFlavour[senderInventory.ActiveAvatarImageType].icon,
+            icon: ExportFlavour[getEffectiveAvatarImageType(senderInventory)].icon,
             contextInfo: alliance._id.toString(),
             highPriority: true,
             acceptAction: "ALLIANCE_INVITE",

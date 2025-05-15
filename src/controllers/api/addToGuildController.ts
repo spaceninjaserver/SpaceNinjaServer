@@ -4,7 +4,7 @@ import { Account } from "@/src/models/loginModel";
 import { addInventoryDataToFriendInfo, areFriends } from "@/src/services/friendService";
 import { hasGuildPermission } from "@/src/services/guildService";
 import { createMessage } from "@/src/services/inboxService";
-import { getInventory } from "@/src/services/inventoryService";
+import { getEffectiveAvatarImageType, getInventory } from "@/src/services/inventoryService";
 import { getAccountForRequest, getAccountIdForRequest, getSuffixedName } from "@/src/services/loginService";
 import { IOid } from "@/src/types/commonTypes";
 import { GuildPermission, IGuildMemberClient } from "@/src/types/guildTypes";
@@ -64,7 +64,7 @@ export const addToGuildController: RequestHandler = async (req, res) => {
                     }
                 ],
                 sub: "/Lotus/Language/Menu/Mailbox_ClanInvite_Title",
-                icon: ExportFlavour[senderInventory.ActiveAvatarImageType].icon,
+                icon: ExportFlavour[getEffectiveAvatarImageType(senderInventory)].icon,
                 contextInfo: payload.GuildId.$oid,
                 highPriority: true,
                 acceptAction: "GUILD_INVITE",
