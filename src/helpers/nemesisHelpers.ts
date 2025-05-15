@@ -1,5 +1,5 @@
 import { ExportRegions, ExportWarframes } from "warframe-public-export-plus";
-import { IInfNode, ITypeCount, TNemesisFaction } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IInfNode, TNemesisFaction } from "@/src/types/inventoryTypes/inventoryTypes";
 import { getRewardAtPercentage, SRng } from "@/src/services/rngService";
 import { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel";
 import { logger } from "../utils/logger";
@@ -7,13 +7,51 @@ import { IOid } from "../types/commonTypes";
 import { Types } from "mongoose";
 import { addMods, generateRewardSeed } from "../services/inventoryService";
 import { isArchwingMission } from "../services/worldStateService";
-import { fromStoreItem, toStoreItem } from "../services/itemDataService";
-import { createMessage } from "../services/inboxService";
 import { version_compare } from "./inventoryHelpers";
+
+export interface INemesisFactionInfo {
+    systemIndexes: number[];
+    showdownNode: string;
+    ephemeraChance: number;
+    firstKillReward: string;
+    firstConvertReward: string;
+    messageTitle: string;
+    messageBody: string;
+}
+
+export const nemesisFactionInfos: Record<TNemesisFaction, INemesisFactionInfo> = {
+    FC_GRINEER: {
+        systemIndexes: [2, 3, 9, 11, 18],
+        showdownNode: "CrewBattleNode557",
+        ephemeraChance: 0.05,
+        firstKillReward: "/Lotus/StoreItems/Upgrades/Skins/Clan/LichKillerBadgeItem",
+        firstConvertReward: "/Lotus/StoreItems/Upgrades/Skins/Sigils/KuvaLichSigil",
+        messageTitle: "/Lotus/Language/Inbox/VanquishKuvaMsgTitle",
+        messageBody: "/Lotus/Language/Inbox/VanquishLichMsgBody"
+    },
+    FC_CORPUS: {
+        systemIndexes: [1, 15, 4, 7, 8],
+        showdownNode: "CrewBattleNode558",
+        ephemeraChance: 0.2,
+        firstKillReward: "/Lotus/StoreItems/Upgrades/Skins/Clan/CorpusLichBadgeItem",
+        firstConvertReward: "/Lotus/StoreItems/Upgrades/Skins/Sigils/CorpusLichSigil",
+        messageTitle: "/Lotus/Language/Inbox/VanquishLawyerMsgTitle",
+        messageBody: "/Lotus/Language/Inbox/VanquishLichMsgBody"
+    },
+    FC_INFESTATION: {
+        systemIndexes: [23],
+        showdownNode: "CrewBattleNode559",
+        ephemeraChance: 0,
+        firstKillReward: "/Lotus/StoreItems/Upgrades/Skins/Sigils/InfLichVanquishedSigil",
+        firstConvertReward: "/Lotus/StoreItems/Upgrades/Skins/Sigils/InfLichConvertedSigil",
+        messageTitle: "/Lotus/Language/Inbox/VanquishBandMsgTitle",
+        messageBody: "/Lotus/Language/Inbox/VanquishBandMsgBody"
+    }
+};
 
 export const getInfNodes = (faction: TNemesisFaction, rank: number): IInfNode[] => {
     const infNodes = [];
-    const systemIndex = systemIndexes[faction][rank];
+    const systemIndex = nemesisFactionInfos[faction].systemIndexes[rank];
     for (const [key, value] of Object.entries(ExportRegions)) {
         if (
             value.systemIndex === systemIndex &&
@@ -33,24 +71,6 @@ export const getInfNodes = (faction: TNemesisFaction, rank: number): IInfNode[] 
         }
     }
     return infNodes;
-};
-
-const systemIndexes: Record<TNemesisFaction, number[]> = {
-    FC_GRINEER: [2, 3, 9, 11, 18],
-    FC_CORPUS: [1, 15, 4, 7, 8],
-    FC_INFESTATION: [23]
-};
-
-export const showdownNodes: Record<TNemesisFaction, string> = {
-    FC_GRINEER: "CrewBattleNode557",
-    FC_CORPUS: "CrewBattleNode558",
-    FC_INFESTATION: "CrewBattleNode559"
-};
-
-const ephemeraProbabilities: Record<TNemesisFaction, number> = {
-    FC_GRINEER: 0.05,
-    FC_CORPUS: 0.2,
-    FC_INFESTATION: 0
 };
 
 type TInnateDamageTag =
@@ -311,11 +331,17 @@ export const getInnateDamageTag = (KillingSuit: string): TInnateDamageTag => {
     return ExportWarframes[KillingSuit].nemesisUpgradeTag!;
 };
 
+const petHeads = [
+    "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadA",
+    "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadB",
+    "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadC"
+] as const;
+
 export interface INemesisProfile {
     innateDamageTag: TInnateDamageTag;
     innateDamageValue: number;
     ephemera?: string;
-    petHead?: string;
+    petHead?: (typeof petHeads)[number];
     petBody?: string;
     petLegs?: string;
     petTail?: string;
@@ -337,16 +363,12 @@ export const generateNemesisProfile = (
         innateDamageTag: getInnateDamageTag(killingSuit),
         innateDamageValue: Math.trunc(value * 0x40000000) // TODO: For -1399275245665749231n, the value should be 75306944, but we're off by 59 with 75307003.
     };
-    if (rng.randomFloat() <= ephemeraProbabilities[Faction] && Faction != "FC_INFESTATION") {
+    if (rng.randomFloat() <= nemesisFactionInfos[Faction].ephemeraChance && Faction != "FC_INFESTATION") {
         profile.ephemera = ephmeraTypes[Faction][profile.innateDamageTag];
     }
     rng.randomFloat(); // something related to sentinel agent maybe
     if (Faction == "FC_CORPUS") {
-        profile.petHead = rng.randomElement([
-            "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadA",
-            "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadB",
-            "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadC"
-        ])!;
+        profile.petHead = rng.randomElement(petHeads)!;
         profile.petBody = rng.randomElement([
             "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartBodyA",
             "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartBodyB",
@@ -421,53 +443,4 @@ export const getInfestedLichItemRewards = (fp: bigint): string[] => {
     rng.randomFloat(); // unused afaict
     const rotBReward = getRewardAtPercentage(infestedLichRotB, rng.randomFloat())!.type;
     return [rotAReward, rotBReward];
-};
-
-export const sendCodaFinishedMessage = async (
-    inventory: TInventoryDatabaseDocument,
-    fp: bigint = generateRewardSeed(),
-    name: string = "ZEKE_BEATWOMAN_TM.1999",
-    killed: boolean = true
-): Promise<void> => {
-    const att: string[] = [];
-
-    // First vanquish/convert gives a sigil
-    const sigil = killed
-        ? "/Lotus/Upgrades/Skins/Sigils/InfLichVanquishedSigil"
-        : "/Lotus/Upgrades/Skins/Sigils/InfLichConvertedSigil";
-    if (!inventory.WeaponSkins.find(x => x.ItemType == sigil)) {
-        att.push(toStoreItem(sigil));
-    }
-
-    const [rotAReward, rotBReward] = getInfestedLichItemRewards(fp);
-    att.push(fromStoreItem(rotAReward));
-    att.push(fromStoreItem(rotBReward));
-
-    let countedAtt: ITypeCount[] | undefined;
-    if (killed) {
-        countedAtt = [
-            {
-                ItemType: "/Lotus/Types/Items/MiscItems/CodaWeaponBucks",
-                ItemCount: getKillTokenRewardCount(fp)
-            }
-        ];
-    }
-
-    await createMessage(inventory.accountOwnerId, [
-        {
-            sndr: "/Lotus/Language/Bosses/Ordis",
-            msg: "/Lotus/Language/Inbox/VanquishBandMsgBody",
-            arg: [
-                {
-                    Key: "LICH_NAME",
-                    Tag: name
-                }
-            ],
-            att: att,
-            countedAtt: countedAtt,
-            sub: "/Lotus/Language/Inbox/VanquishBandMsgTitle",
-            icon: "/Lotus/Interface/Icons/Npcs/Ordis.png",
-            highPriority: true
-        }
-    ]);
 };

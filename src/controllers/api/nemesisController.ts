@@ -7,7 +7,7 @@ import {
     getNemesisPasscodeModTypes,
     getWeaponsForManifest,
     IKnifeResponse,
-    showdownNodes
+    nemesisFactionInfos
 } from "@/src/helpers/nemesisHelpers";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
@@ -223,7 +223,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
 
         inventory.Nemesis!.InfNodes = [
             {
-                Node: showdownNodes[inventory.Nemesis!.Faction],
+                Node: nemesisFactionInfos[inventory.Nemesis!.Faction].showdownNode,
                 Influence: 1
             }
         ];

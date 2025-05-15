@@ -10,7 +10,7 @@ import {
 import { IMissionInventoryUpdateRequest, IRewardInfo } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
 import { IRngResult, SRng, getRandomElement, getRandomReward } from "@/src/services/rngService";
-import { equipmentKeys, IMission, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
+import { equipmentKeys, IMission, ITypeCount, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
 import {
     addBooster,
     addChallenges,
@@ -44,7 +44,7 @@ import {
 import { updateQuestKey } from "@/src/services/questService";
 import { Types } from "mongoose";
 import { IAffiliationMods, IInventoryChanges } from "@/src/types/purchaseTypes";
-import { getLevelKeyRewards, toStoreItem } from "@/src/services/itemDataService";
+import { fromStoreItem, getLevelKeyRewards, toStoreItem } from "@/src/services/itemDataService";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { getEntriesUnsafe } from "@/src/utils/ts-utils";
 import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
@@ -58,10 +58,12 @@ import kuriaMessage100 from "@/static/fixed_responses/kuriaMessages/oneHundredPe
 import conservationAnimals from "@/static/fixed_responses/conservationAnimals.json";
 import {
     generateNemesisProfile,
+    getInfestedLichItemRewards,
     getInfNodes,
+    getKillTokenRewardCount,
     getNemesisPasscode,
     getWeaponsForManifest,
-    sendCodaFinishedMessage
+    nemesisFactionInfos
 } from "@/src/helpers/nemesisHelpers";
 import { Loadout } from "../models/inventoryModels/loadoutModel";
 import { ILoadoutConfigDatabase } from "../types/saveLoadoutTypes";
@@ -665,6 +667,9 @@ export const addMissionInventoryUpdates = async (
                         inventory.Nemesis.Faction,
                         inventory.Nemesis.KillingSuit
                     );
+                    const nemesisFactionInfo = nemesisFactionInfos[inventory.Nemesis.Faction];
+                    const att: string[] = [];
+                    let countedAtt: ITypeCount[] | undefined;
 
                     if (value.killed) {
                         if (
@@ -675,45 +680,78 @@ export const addMissionInventoryUpdates = async (
                                 inventory.Nemesis.WeaponIdx
                             ];
                             giveNemesisWeaponRecipe(inventory, weaponType, value.nemesisName, value.weaponLoc, profile);
+                            att.push(weaponType);
                         }
-                        if (value.petLoc) {
+                        //if (value.petLoc) {
+                        if (profile.petHead) {
                             giveNemesisPetRecipe(inventory, value.nemesisName, profile);
+                            att.push(
+                                {
+                                    "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadA":
+                                        "/Lotus/Types/Recipes/ZanukaPet/ZanukaPetCompleteHeadABlueprint",
+                                    "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadB":
+                                        "/Lotus/Types/Recipes/ZanukaPet/ZanukaPetCompleteHeadBBlueprint",
+                                    "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadC":
+                                        "/Lotus/Types/Recipes/ZanukaPet/ZanukaPetCompleteHeadCBlueprint"
+                                }[profile.petHead]
+                            );
                         }
                     }
 
                     // "Players will receive a Lich's Ephemera regardless of whether they Vanquish or Convert them."
                     if (profile.ephemera) {
                         addSkin(inventory, profile.ephemera);
+                        att.push(profile.ephemera);
                     }
 
-                    switch (inventory.Nemesis.Faction) {
-                        case "FC_GRINEER":
-                            addSkin(
-                                inventory,
-                                value.killed
-                                    ? "/Lotus/Upgrades/Skins/Clan/LichKillerBadgeItem"
-                                    : "/Lotus/Upgrades/Skins/Sigils/KuvaLichSigil"
-                            );
-                            break;
+                    const skinRewardStoreItem = value.killed
+                        ? nemesisFactionInfo.firstKillReward
+                        : nemesisFactionInfo.firstConvertReward;
+                    if (Object.keys(addSkin(inventory, fromStoreItem(skinRewardStoreItem))).length != 0) {
+                        att.push(skinRewardStoreItem);
+                    }
 
-                        case "FC_CORPUS":
-                            addSkin(
-                                inventory,
-                                value.killed
-                                    ? "/Lotus/Upgrades/Skins/Clan/CorpusLichBadgeItem"
-                                    : "/Lotus/Upgrades/Skins/Sigils/CorpusLichSigil"
-                            );
-                            break;
+                    if (inventory.Nemesis.Faction == "FC_INFESTATION") {
+                        const [rotARewardStoreItem, rotBRewardStoreItem] = getInfestedLichItemRewards(
+                            inventory.Nemesis.fp
+                        );
+                        const rotAReward = fromStoreItem(rotARewardStoreItem);
+                        const rotBReward = fromStoreItem(rotBRewardStoreItem);
+                        await addItem(inventory, rotAReward);
+                        await addItem(inventory, rotBReward);
+                        att.push(rotAReward);
+                        att.push(rotBReward);
 
-                        case "FC_INFESTATION":
-                            // TOVERIFY: Is the inbox message also sent when converting a lich? If not, how are the rewards given?
-                            await sendCodaFinishedMessage(
-                                inventory,
-                                inventory.Nemesis.fp,
-                                value.nemesisName,
-                                value.killed
-                            );
-                            break;
+                        if (value.killed) {
+                            countedAtt = [
+                                {
+                                    ItemType: "/Lotus/Types/Items/MiscItems/CodaWeaponBucks",
+                                    ItemCount: getKillTokenRewardCount(inventory.Nemesis.fp)
+                                }
+                            ];
+                            addMiscItems(inventory, countedAtt);
+                        }
+                    }
+
+                    if (value.killed) {
+                        await createMessage(inventory.accountOwnerId, [
+                            {
+                                sndr: "/Lotus/Language/Bosses/Ordis",
+                                msg: nemesisFactionInfo.messageBody,
+                                arg: [
+                                    {
+                                        Key: "LICH_NAME",
+                                        Tag: value.nemesisName
+                                    }
+                                ],
+                                att: att,
+                                countedAtt: countedAtt,
+                                attVisualOnly: true,
+                                sub: nemesisFactionInfo.messageTitle,
+                                icon: "/Lotus/Interface/Icons/Npcs/Ordis.png",
+                                highPriority: true
+                            }
+                        ]);
                     }
 
                     inventory.Nemesis = undefined;
