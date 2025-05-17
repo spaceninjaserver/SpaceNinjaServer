@@ -3,7 +3,7 @@ import { catBreadHash } from "@/src/helpers/stringHelpers";
 import { mixSeeds, SRng } from "@/src/services/rngService";
 import { IMongoDate } from "@/src/types/commonTypes";
 import { IItemManifest, IVendorInfo, IVendorManifest } from "@/src/types/vendorTypes";
-import { ExportVendors, IRange } from "warframe-public-export-plus";
+import { ExportVendors, IRange, IVendor } from "warframe-public-export-plus";
 
 import ArchimedeanVendorManifest from "@/static/fixed_responses/getVendorInfo/ArchimedeanVendorManifest.json";
 import DeimosEntratiFragmentVendorProductsManifest from "@/static/fixed_responses/getVendorInfo/DeimosEntratiFragmentVendorProductsManifest.json";
@@ -81,12 +81,6 @@ const generatableVendors: IGeneratableVendorInfo[] = [
         WeaponUpgradeValueAttenuationExponent: 2.25,
         cycleOffset: 1744934400_000,
         cycleDuration: 4 * unixTimesInMs.day
-    },
-    {
-        _id: { $oid: "61ba123467e5d37975aeeb03" },
-        TypeName: "/Lotus/Types/Game/VendorManifests/Hubs/GuildAdvertisementVendorManifest",
-        RandomSeedType: "VRST_FLAVOUR_TEXT",
-        cycleDuration: unixTimesInMs.week // TODO: Auto-detect this based on the items, so we don't need to specify it explicitly.
     }
     // {
     //     _id: { $oid: "5dbb4c41e966f7886c3ce939" },
@@ -96,6 +90,25 @@ const generatableVendors: IGeneratableVendorInfo[] = [
 
 const getVendorOid = (typeName: string): string => {
     return "5be4a159b144f3cd" + catBreadHash(typeName).toString(16).padStart(8, "0");
+};
+
+// https://stackoverflow.com/a/17445304
+const gcd = (a: number, b: number): number => {
+    return b ? gcd(b, a % b) : a;
+};
+
+const getCycleDuration = (manifest: IVendor): number => {
+    let dur = 0;
+    for (const item of manifest.items) {
+        if (typeof item.durationHours != "number") {
+            dur = 1;
+            break;
+        }
+        if (dur != item.durationHours) {
+            dur = gcd(dur, item.durationHours);
+        }
+    }
+    return dur * unixTimesInMs.hour;
 };
 
 export const getVendorManifestByTypeName = (typeName: string): IVendorManifest | undefined => {
@@ -110,11 +123,12 @@ export const getVendorManifestByTypeName = (typeName: string): IVendorManifest |
         }
     }
     if (typeName in ExportVendors) {
+        const manifest = ExportVendors[typeName];
         return generateVendorManifest({
             _id: { $oid: getVendorOid(typeName) },
             TypeName: typeName,
-            RandomSeedType: ExportVendors[typeName].randomSeedType,
-            cycleDuration: unixTimesInMs.hour
+            RandomSeedType: manifest.randomSeedType,
+            cycleDuration: getCycleDuration(manifest)
         });
     }
     return undefined;
@@ -138,7 +152,7 @@ export const getVendorManifestByOid = (oid: string): IVendorManifest | undefined
                 _id: { $oid: typeNameOid },
                 TypeName: typeName,
                 RandomSeedType: manifest.randomSeedType,
-                cycleDuration: unixTimesInMs.hour
+                cycleDuration: getCycleDuration(manifest)
             });
         }
     }
