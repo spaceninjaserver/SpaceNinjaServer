@@ -207,7 +207,12 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
         const rng = new SRng(mixSeeds(vendorSeed, cycleIndex));
         const manifest = ExportVendors[vendorInfo.TypeName];
         const offersToAdd = [];
-        if (manifest.numItems && !manifest.isOneBinPerCycle) {
+        if (
+            manifest.numItems &&
+            (manifest.numItems.minValue != manifest.numItems.maxValue ||
+                manifest.items.length != manifest.numItems.minValue) &&
+            !manifest.isOneBinPerCycle
+        ) {
             const numItemsTarget = rng.randomInt(manifest.numItems.minValue, manifest.numItems.maxValue);
             while (processed.ItemManifest.length + offersToAdd.length < numItemsTarget) {
                 // TODO: Consider per-bin item limits
