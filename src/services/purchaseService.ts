@@ -9,7 +9,7 @@ import {
     updateSlots
 } from "@/src/services/inventoryService";
 import { getRandomWeightedRewardUc } from "@/src/services/rngService";
-import { getVendorManifestByOid } from "@/src/services/serversideVendorsService";
+import { applyStandingToVendorManifest, getVendorManifestByOid } from "@/src/services/serversideVendorsService";
 import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IPurchaseRequest, IPurchaseResponse, SlotPurchase, IInventoryChanges } from "@/src/types/purchaseTypes";
 import { logger } from "@/src/utils/logger";
@@ -53,8 +53,9 @@ export const handlePurchase = async (
     const prePurchaseInventoryChanges: IInventoryChanges = {};
     let seed: bigint | undefined;
     if (purchaseRequest.PurchaseParams.Source == 7) {
-        const manifest = getVendorManifestByOid(purchaseRequest.PurchaseParams.SourceId!);
+        let manifest = getVendorManifestByOid(purchaseRequest.PurchaseParams.SourceId!);
         if (manifest) {
+            manifest = applyStandingToVendorManifest(inventory, manifest);
             let ItemId: string | undefined;
             if (purchaseRequest.PurchaseParams.ExtraPurchaseInfoJson) {
                 ItemId = (JSON.parse(purchaseRequest.PurchaseParams.ExtraPurchaseInfoJson) as { ItemId: string })
@@ -92,7 +93,7 @@ export const handlePurchase = async (
             if (!config.noVendorPurchaseLimits && ItemId) {
                 inventory.RecentVendorPurchases ??= [];
                 let vendorPurchases = inventory.RecentVendorPurchases.find(
-                    x => x.VendorType == manifest.VendorInfo.TypeName
+                    x => x.VendorType == manifest!.VendorInfo.TypeName
                 );
                 if (!vendorPurchases) {
                     vendorPurchases =

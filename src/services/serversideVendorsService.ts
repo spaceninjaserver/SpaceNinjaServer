@@ -1,5 +1,6 @@
 import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { catBreadHash } from "@/src/helpers/stringHelpers";
+import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { mixSeeds, SRng } from "@/src/services/rngService";
 import { IMongoDate } from "@/src/types/commonTypes";
 import { IItemManifest, IVendorInfo, IVendorManifest } from "@/src/types/vendorTypes";
@@ -159,6 +160,43 @@ export const getVendorManifestByOid = (oid: string): IVendorManifest | undefined
     return undefined;
 };
 
+export const applyStandingToVendorManifest = (
+    inventory: TInventoryDatabaseDocument,
+    vendorManifest: IVendorManifest
+): IVendorManifest => {
+    return {
+        VendorInfo: {
+            ...vendorManifest.VendorInfo,
+            ItemManifest: [...vendorManifest.VendorInfo.ItemManifest].map(offer => {
+                if (offer.Affiliation && offer.ReductionPerPositiveRank && offer.IncreasePerNegativeRank) {
+                    const title: number = inventory.Affiliations.find(x => x.Tag == offer.Affiliation)?.Title ?? 0;
+                    const factor =
+                        1 + (title < 0 ? offer.IncreasePerNegativeRank : offer.ReductionPerPositiveRank) * title * -1;
+                    //console.log(offer.Affiliation, title, factor);
+                    if (factor) {
+                        offer = { ...offer };
+                        if (offer.RegularPrice) {
+                            offer.RegularPriceBeforeDiscount = offer.RegularPrice;
+                            offer.RegularPrice = [
+                                Math.trunc(offer.RegularPriceBeforeDiscount[0] * factor),
+                                Math.trunc(offer.RegularPriceBeforeDiscount[1] * factor)
+                            ];
+                        }
+                        if (offer.ItemPrices) {
+                            offer.ItemPricesBeforeDiscount = offer.ItemPrices;
+                            offer.ItemPrices = [];
+                            for (const item of offer.ItemPricesBeforeDiscount) {
+                                offer.ItemPrices.push({ ...item, ItemCount: Math.trunc(item.ItemCount * factor) });
+                            }
+                        }
+                    }
+                }
+                return offer;
+            })
+        }
+    };
+};
+
 const preprocessVendorManifest = (originalManifest: IVendorManifest): IVendorManifest => {
     if (Date.now() >= parseInt(originalManifest.VendorInfo.Expiry.$date.$numberLong)) {
         const manifest = structuredClone(originalManifest);
@@ -190,24 +228,27 @@ const toRange = (value: IRange | number): IRange => {
     return value;
 };
 
-const vendorInfoCache: Record<string, IVendorInfo> = {};
+const vendorManifestCache: Record<string, IVendorManifest> = {};
 
 const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorManifest => {
-    if (!(vendorInfo.TypeName in vendorInfoCache)) {
+    if (!(vendorInfo.TypeName in vendorManifestCache)) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { cycleOffset, cycleDuration, ...clientVendorInfo } = vendorInfo;
-        vendorInfoCache[vendorInfo.TypeName] = {
-            ...clientVendorInfo,
-            ItemManifest: [],
-            Expiry: { $date: { $numberLong: "0" } }
+        vendorManifestCache[vendorInfo.TypeName] = {
+            VendorInfo: {
+                ...clientVendorInfo,
+                ItemManifest: [],
+                Expiry: { $date: { $numberLong: "0" } }
+            }
         };
     }
-    const processed = vendorInfoCache[vendorInfo.TypeName];
-    if (Date.now() >= parseInt(processed.Expiry.$date.$numberLong)) {
+    const cacheEntry = vendorManifestCache[vendorInfo.TypeName];
+    const info = cacheEntry.VendorInfo;
+    if (Date.now() >= parseInt(info.Expiry.$date.$numberLong)) {
         // Remove expired offers
-        for (let i = 0; i != processed.ItemManifest.length; ) {
-            if (Date.now() >= parseInt(processed.ItemManifest[i].Expiry.$date.$numberLong)) {
-                processed.ItemManifest.splice(i, 1);
+        for (let i = 0; i != info.ItemManifest.length; ) {
+            if (Date.now() >= parseInt(info.ItemManifest[i].Expiry.$date.$numberLong)) {
+                info.ItemManifest.splice(i, 1);
             } else {
                 ++i;
             }
@@ -228,7 +269,7 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
             !manifest.isOneBinPerCycle
         ) {
             const numItemsTarget = rng.randomInt(manifest.numItems.minValue, manifest.numItems.maxValue);
-            while (processed.ItemManifest.length + offersToAdd.length < numItemsTarget) {
+            while (info.ItemManifest.length + offersToAdd.length < numItemsTarget) {
                 // TODO: Consider per-bin item limits
                 // TODO: Consider item probability weightings
                 offersToAdd.push(rng.randomElement(manifest.items)!);
@@ -307,20 +348,18 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
                     item.LocTagRandSeed = (BigInt(highDword) << 32n) | (BigInt(item.LocTagRandSeed) & 0xffffffffn);
                 }
             }
-            processed.ItemManifest.push(item);
+            info.ItemManifest.push(item);
         }
 
         // Update vendor expiry
         let soonestOfferExpiry: number = Number.MAX_SAFE_INTEGER;
-        for (const offer of processed.ItemManifest) {
+        for (const offer of info.ItemManifest) {
             const offerExpiry = parseInt(offer.Expiry.$date.$numberLong);
             if (soonestOfferExpiry > offerExpiry) {
                 soonestOfferExpiry = offerExpiry;
             }
         }
-        processed.Expiry.$date.$numberLong = soonestOfferExpiry.toString();
+        info.Expiry.$date.$numberLong = soonestOfferExpiry.toString();
     }
-    return {
-        VendorInfo: processed
-    };
+    return cacheEntry;
 };
