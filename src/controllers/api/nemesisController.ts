@@ -3,11 +3,10 @@ import {
     encodeNemesisGuess,
     getInfNodes,
     getKnifeUpgrade,
+    getNemesisManifest,
     getNemesisPasscode,
     getNemesisPasscodeModTypes,
-    getWeaponsForManifest,
-    IKnifeResponse,
-    nemesisFactionInfos
+    IKnifeResponse
 } from "@/src/helpers/nemesisHelpers";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
@@ -144,7 +143,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
             if (inventory.Nemesis!.HenchmenKilled >= 100) {
                 inventory.Nemesis!.HenchmenKilled = 100;
             }
-            inventory.Nemesis!.InfNodes = getInfNodes("FC_INFESTATION", 0);
+            inventory.Nemesis!.InfNodes = getInfNodes(getNemesisManifest(inventory.Nemesis!.manifest), 0);
 
             await inventory.save();
             res.json(response);
@@ -154,7 +153,10 @@ export const nemesisController: RequestHandler = async (req, res) => {
                 res.end();
             } else {
                 inventory.Nemesis!.Rank += 1;
-                inventory.Nemesis!.InfNodes = getInfNodes(inventory.Nemesis!.Faction, inventory.Nemesis!.Rank);
+                inventory.Nemesis!.InfNodes = getInfNodes(
+                    getNemesisManifest(inventory.Nemesis!.manifest),
+                    inventory.Nemesis!.Rank
+                );
                 await inventory.save();
                 res.json({ RankIncrease: 1 });
             }
@@ -170,9 +172,11 @@ export const nemesisController: RequestHandler = async (req, res) => {
         const body = getJSONfromString<INemesisStartRequest>(String(req.body));
         body.target.fp = BigInt(body.target.fp);
 
+        const manifest = getNemesisManifest(body.target.manifest);
+
         let weaponIdx = -1;
         if (body.target.Faction != "FC_INFESTATION") {
-            const weapons = getWeaponsForManifest(body.target.manifest);
+            const weapons: readonly string[] = manifest.weapons;
             const initialWeaponIdx = new SRng(body.target.fp).randomInt(0, weapons.length - 1);
             weaponIdx = initialWeaponIdx;
             do {
@@ -198,7 +202,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
             k: false,
             Traded: false,
             d: new Date(),
-            InfNodes: getInfNodes(body.target.Faction, 0),
+            InfNodes: getInfNodes(manifest, 0),
             GuessHistory: [],
             Hints: [],
             HintProgress: 0,
@@ -223,7 +227,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
 
         inventory.Nemesis!.InfNodes = [
             {
-                Node: nemesisFactionInfos[inventory.Nemesis!.Faction].showdownNode,
+                Node: getNemesisManifest(inventory.Nemesis!.manifest).showdownNode,
                 Influence: 1
             }
         ];

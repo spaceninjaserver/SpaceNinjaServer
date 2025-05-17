@@ -7,51 +7,197 @@ import { IOid } from "../types/commonTypes";
 import { Types } from "mongoose";
 import { addMods, generateRewardSeed } from "../services/inventoryService";
 import { isArchwingMission } from "../services/worldStateService";
-import { version_compare } from "./inventoryHelpers";
 
-export interface INemesisFactionInfo {
-    systemIndexes: number[];
+type TInnateDamageTag =
+    | "InnateElectricityDamage"
+    | "InnateHeatDamage"
+    | "InnateFreezeDamage"
+    | "InnateToxinDamage"
+    | "InnateMagDamage"
+    | "InnateRadDamage"
+    | "InnateImpactDamage";
+
+export interface INemesisManifest {
+    weapons: readonly string[];
+    systemIndexes: readonly number[];
     showdownNode: string;
     ephemeraChance: number;
+    ephemeraTypes?: Record<TInnateDamageTag, string>;
     firstKillReward: string;
     firstConvertReward: string;
     messageTitle: string;
     messageBody: string;
+    minBuild: string;
 }
 
-export const nemesisFactionInfos: Record<TNemesisFaction, INemesisFactionInfo> = {
-    FC_GRINEER: {
-        systemIndexes: [2, 3, 9, 11, 18],
-        showdownNode: "CrewBattleNode557",
-        ephemeraChance: 0.05,
-        firstKillReward: "/Lotus/StoreItems/Upgrades/Skins/Clan/LichKillerBadgeItem",
-        firstConvertReward: "/Lotus/StoreItems/Upgrades/Skins/Sigils/KuvaLichSigil",
-        messageTitle: "/Lotus/Language/Inbox/VanquishKuvaMsgTitle",
-        messageBody: "/Lotus/Language/Inbox/VanquishLichMsgBody"
-    },
-    FC_CORPUS: {
-        systemIndexes: [1, 15, 4, 7, 8],
-        showdownNode: "CrewBattleNode558",
-        ephemeraChance: 0.2,
-        firstKillReward: "/Lotus/StoreItems/Upgrades/Skins/Clan/CorpusLichBadgeItem",
-        firstConvertReward: "/Lotus/StoreItems/Upgrades/Skins/Sigils/CorpusLichSigil",
-        messageTitle: "/Lotus/Language/Inbox/VanquishLawyerMsgTitle",
-        messageBody: "/Lotus/Language/Inbox/VanquishLichMsgBody"
-    },
-    FC_INFESTATION: {
-        systemIndexes: [23],
-        showdownNode: "CrewBattleNode559",
-        ephemeraChance: 0,
-        firstKillReward: "/Lotus/StoreItems/Upgrades/Skins/Sigils/InfLichVanquishedSigil",
-        firstConvertReward: "/Lotus/StoreItems/Upgrades/Skins/Sigils/InfLichConvertedSigil",
-        messageTitle: "/Lotus/Language/Inbox/VanquishBandMsgTitle",
-        messageBody: "/Lotus/Language/Inbox/VanquishBandMsgBody"
+class KuvaLichManifest implements INemesisManifest {
+    weapons = [
+        "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Drakgoon/KuvaDrakgoon",
+        "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Karak/KuvaKarak",
+        "/Lotus/Weapons/Grineer/Melee/GrnKuvaLichScythe/GrnKuvaLichScytheWeapon",
+        "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Kohm/KuvaKohm",
+        "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Ogris/KuvaOgris",
+        "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Quartakk/KuvaQuartakk",
+        "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Tonkor/KuvaTonkor",
+        "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Brakk/KuvaBrakk",
+        "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Kraken/KuvaKraken",
+        "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Seer/KuvaSeer",
+        "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Stubba/KuvaStubba",
+        "/Lotus/Weapons/Grineer/HeavyWeapons/GrnHeavyGrenadeLauncher",
+        "/Lotus/Weapons/Grineer/LongGuns/GrnKuvaLichRifle/GrnKuvaLichRifleWeapon"
+    ];
+    systemIndexes = [2, 3, 9, 11, 18];
+    showdownNode = "CrewBattleNode557";
+    ephemeraChance = 0.05;
+    ephemeraTypes = {
+        InnateElectricityDamage: "/Lotus/Upgrades/Skins/Effects/Kuva/KuvaLightningEphemera",
+        InnateHeatDamage: "/Lotus/Upgrades/Skins/Effects/Kuva/KuvaFireEphemera",
+        InnateFreezeDamage: "/Lotus/Upgrades/Skins/Effects/Kuva/KuvaIceEphemera",
+        InnateToxinDamage: "/Lotus/Upgrades/Skins/Effects/Kuva/KuvaToxinEphemera",
+        InnateMagDamage: "/Lotus/Upgrades/Skins/Effects/Kuva/KuvaMagneticEphemera",
+        InnateRadDamage: "/Lotus/Upgrades/Skins/Effects/Kuva/KuvaTricksterEphemera",
+        InnateImpactDamage: "/Lotus/Upgrades/Skins/Effects/Kuva/KuvaImpactEphemera"
+    };
+    firstKillReward = "/Lotus/StoreItems/Upgrades/Skins/Clan/LichKillerBadgeItem";
+    firstConvertReward = "/Lotus/StoreItems/Upgrades/Skins/Sigils/KuvaLichSigil";
+    messageTitle = "/Lotus/Language/Inbox/VanquishKuvaMsgTitle";
+    messageBody = "/Lotus/Language/Inbox/VanquishLichMsgBody";
+    minBuild = "2019.10.31.22.42"; // 26.0.0
+}
+
+class KuvaLichManifestVersionTwo extends KuvaLichManifest {
+    constructor() {
+        super();
+        this.ephemeraChance = 0.1;
+        this.minBuild = "2020.03.05.16.06"; // Unsure about this one, so using the same value as in version three.
     }
+}
+
+class KuvaLichManifestVersionThree extends KuvaLichManifestVersionTwo {
+    constructor() {
+        super();
+        this.weapons.push("/Lotus/Weapons/Grineer/Bows/GrnBow/GrnBowWeapon");
+        this.weapons.push("/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Hind/KuvaHind");
+        this.weapons.push("/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Nukor/KuvaNukor");
+        this.ephemeraChance = 0.2;
+        this.minBuild = "2020.03.05.16.06"; // This is 27.2.0, tho 27.1.0 should also recognise this.
+    }
+}
+
+class KuvaLichManifestVersionFour extends KuvaLichManifestVersionThree {
+    constructor() {
+        super();
+        this.minBuild = "2021.07.05.17.03"; // Unsure about this one, so using the same value as in version five.
+    }
+}
+
+class KuvaLichManifestVersionFive extends KuvaLichManifestVersionFour {
+    constructor() {
+        super();
+        this.weapons.push("/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Hek/KuvaHekWeapon");
+        this.weapons.push("/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Zarr/KuvaZarr");
+        this.weapons.push("/Lotus/Weapons/Grineer/KuvaLich/HeavyWeapons/Grattler/KuvaGrattler");
+        this.minBuild = "2021.07.05.17.03"; // 30.5.0
+    }
+}
+
+class KuvaLichManifestVersionSix extends KuvaLichManifestVersionFive {
+    constructor() {
+        super();
+        this.weapons.push("/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Sobek/KuvaSobek");
+        this.minBuild = "2024.05.15.11.07"; // 35.6.0
+    }
+}
+
+class LawyerManifest implements INemesisManifest {
+    weapons = [
+        "/Lotus/Weapons/Corpus/LongGuns/CrpBriefcaseLauncher/CrpBriefcaseLauncher",
+        "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEArcaPlasmor/CrpBEArcaPlasmor",
+        "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEFluxRifle/CrpBEFluxRifle",
+        "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBETetra/CrpBETetra",
+        "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBECycron/CrpBECycron",
+        "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEDetron/CrpBEDetron",
+        "/Lotus/Weapons/Corpus/Pistols/CrpIgniterPistol/CrpIgniterPistol",
+        "/Lotus/Weapons/Corpus/Pistols/CrpBriefcaseAkimbo/CrpBriefcaseAkimboPistol"
+    ];
+    systemIndexes = [1, 15, 4, 7, 8];
+    showdownNode = "CrewBattleNode558";
+    ephemeraChance = 0.2;
+    ephemeraTypes = {
+        InnateElectricityDamage: "/Lotus/Upgrades/Skins/Effects/CorpusLichEphemeraA",
+        InnateHeatDamage: "/Lotus/Upgrades/Skins/Effects/CorpusLichEphemeraB",
+        InnateFreezeDamage: "/Lotus/Upgrades/Skins/Effects/CorpusLichEphemeraC",
+        InnateToxinDamage: "/Lotus/Upgrades/Skins/Effects/CorpusLichEphemeraD",
+        InnateMagDamage: "/Lotus/Upgrades/Skins/Effects/CorpusLichEphemeraE",
+        InnateRadDamage: "/Lotus/Upgrades/Skins/Effects/CorpusLichEphemeraF",
+        InnateImpactDamage: "/Lotus/Upgrades/Skins/Effects/CorpusLichEphemeraG"
+    };
+    firstKillReward = "/Lotus/StoreItems/Upgrades/Skins/Clan/CorpusLichBadgeItem";
+    firstConvertReward = "/Lotus/StoreItems/Upgrades/Skins/Sigils/CorpusLichSigil";
+    messageTitle = "/Lotus/Language/Inbox/VanquishLawyerMsgTitle";
+    messageBody = "/Lotus/Language/Inbox/VanquishLichMsgBody";
+    minBuild = "2021.07.05.17.03"; // 30.5.0
+}
+
+class LawyerManifestVersionTwo extends LawyerManifest {
+    constructor() {
+        super();
+        this.weapons.push("/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxWeapon");
+        this.minBuild = "2022.11.30.08.13"; // 32.2.0
+    }
+}
+
+class LawyerManifestVersionThree extends LawyerManifestVersionTwo {
+    constructor() {
+        super();
+        this.weapons.push("/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEGlaxion/CrpBEGlaxion");
+        this.minBuild = "2024.05.15.11.07"; // 35.6.0
+    }
+}
+
+class LawyerManifestVersionFour extends LawyerManifestVersionThree {
+    constructor() {
+        super();
+        this.minBuild = "2024.10.01.11.03"; // 37.0.0
+    }
+}
+
+class InfestedLichManfest implements INemesisManifest {
+    weapons = [];
+    systemIndexes = [23];
+    showdownNode = "CrewBattleNode559";
+    ephemeraChance = 0;
+    firstKillReward = "/Lotus/StoreItems/Upgrades/Skins/Sigils/InfLichVanquishedSigil";
+    firstConvertReward = "/Lotus/StoreItems/Upgrades/Skins/Sigils/InfLichConvertedSigil";
+    messageTitle = "/Lotus/Language/Inbox/VanquishBandMsgTitle";
+    messageBody = "/Lotus/Language/Inbox/VanquishBandMsgBody";
+    minBuild = "2025.03.18.09.51"; // 38.5.0
+}
+
+const nemesisManifests: Record<string, INemesisManifest> = {
+    "/Lotus/Types/Game/Nemesis/KuvaLich/KuvaLichManifest": new KuvaLichManifest(),
+    "/Lotus/Types/Game/Nemesis/KuvaLich/KuvaLichManifestVersionTwo": new KuvaLichManifestVersionTwo(),
+    "/Lotus/Types/Game/Nemesis/KuvaLich/KuvaLichManifestVersionThree": new KuvaLichManifestVersionThree(),
+    "/Lotus/Types/Game/Nemesis/KuvaLich/KuvaLichManifestVersionFour": new KuvaLichManifestVersionFour(),
+    "/Lotus/Types/Game/Nemesis/KuvaLich/KuvaLichManifestVersionFive": new KuvaLichManifestVersionFive(),
+    "/Lotus/Types/Game/Nemesis/KuvaLich/KuvaLichManifestVersionSix": new KuvaLichManifestVersionSix(),
+    "/Lotus/Types/Enemies/Corpus/Lawyers/LawyerManifest": new LawyerManifest(),
+    "/Lotus/Types/Enemies/Corpus/Lawyers/LawyerManifestVersionTwo": new LawyerManifestVersionTwo(),
+    "/Lotus/Types/Enemies/Corpus/Lawyers/LawyerManifestVersionThree": new LawyerManifestVersionThree(),
+    "/Lotus/Types/Enemies/Corpus/Lawyers/LawyerManifestVersionFour": new LawyerManifestVersionFour(),
+    "/Lotus/Types/Enemies/InfestedLich/InfestedLichManifest": new InfestedLichManfest()
 };
 
-export const getInfNodes = (faction: TNemesisFaction, rank: number): IInfNode[] => {
+export const getNemesisManifest = (manifest: string): INemesisManifest => {
+    if (manifest in nemesisManifests) {
+        return nemesisManifests[manifest];
+    }
+    throw new Error(`unknown nemesis manifest: ${manifest}`);
+};
+
+export const getInfNodes = (manifest: INemesisManifest, rank: number): IInfNode[] => {
     const infNodes = [];
-    const systemIndex = nemesisFactionInfos[faction].systemIndexes[rank];
+    const systemIndex = manifest.systemIndexes[rank];
     for (const [key, value] of Object.entries(ExportRegions)) {
         if (
             value.systemIndex === systemIndex &&
@@ -71,36 +217,6 @@ export const getInfNodes = (faction: TNemesisFaction, rank: number): IInfNode[] 
         }
     }
     return infNodes;
-};
-
-type TInnateDamageTag =
-    | "InnateElectricityDamage"
-    | "InnateHeatDamage"
-    | "InnateFreezeDamage"
-    | "InnateToxinDamage"
-    | "InnateMagDamage"
-    | "InnateRadDamage"
-    | "InnateImpactDamage";
-
-const ephmeraTypes: Record<"FC_GRINEER" | "FC_CORPUS", Record<TInnateDamageTag, string>> = {
-    FC_GRINEER: {
-        InnateElectricityDamage: "/Lotus/Upgrades/Skins/Effects/Kuva/KuvaLightningEphemera",
-        InnateHeatDamage: "/Lotus/Upgrades/Skins/Effects/Kuva/KuvaFireEphemera",
-        InnateFreezeDamage: "/Lotus/Upgrades/Skins/Effects/Kuva/KuvaIceEphemera",
-        InnateToxinDamage: "/Lotus/Upgrades/Skins/Effects/Kuva/KuvaToxinEphemera",
-        InnateMagDamage: "/Lotus/Upgrades/Skins/Effects/Kuva/KuvaMagneticEphemera",
-        InnateRadDamage: "/Lotus/Upgrades/Skins/Effects/Kuva/KuvaTricksterEphemera",
-        InnateImpactDamage: "/Lotus/Upgrades/Skins/Effects/Kuva/KuvaImpactEphemera"
-    },
-    FC_CORPUS: {
-        InnateElectricityDamage: "/Lotus/Upgrades/Skins/Effects/CorpusLichEphemeraA",
-        InnateHeatDamage: "/Lotus/Upgrades/Skins/Effects/CorpusLichEphemeraB",
-        InnateFreezeDamage: "/Lotus/Upgrades/Skins/Effects/CorpusLichEphemeraC",
-        InnateToxinDamage: "/Lotus/Upgrades/Skins/Effects/CorpusLichEphemeraD",
-        InnateMagDamage: "/Lotus/Upgrades/Skins/Effects/CorpusLichEphemeraE",
-        InnateRadDamage: "/Lotus/Upgrades/Skins/Effects/CorpusLichEphemeraF",
-        InnateImpactDamage: "/Lotus/Upgrades/Skins/Effects/CorpusLichEphemeraG"
-    }
 };
 
 // Get a parazon 'passcode' based on the nemesis fingerprint so it's always the same for the same nemesis.
@@ -256,77 +372,6 @@ export const consumeModCharge = (
     }
 };
 
-const kuvaLichVersionSixWeapons = [
-    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Drakgoon/KuvaDrakgoon",
-    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Karak/KuvaKarak",
-    "/Lotus/Weapons/Grineer/Melee/GrnKuvaLichScythe/GrnKuvaLichScytheWeapon",
-    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Kohm/KuvaKohm",
-    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Ogris/KuvaOgris",
-    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Quartakk/KuvaQuartakk",
-    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Tonkor/KuvaTonkor",
-    "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Brakk/KuvaBrakk",
-    "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Kraken/KuvaKraken",
-    "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Seer/KuvaSeer",
-    "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Stubba/KuvaStubba",
-    "/Lotus/Weapons/Grineer/HeavyWeapons/GrnHeavyGrenadeLauncher",
-    "/Lotus/Weapons/Grineer/LongGuns/GrnKuvaLichRifle/GrnKuvaLichRifleWeapon",
-    "/Lotus/Weapons/Grineer/Bows/GrnBow/GrnBowWeapon",
-    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Hind/KuvaHind",
-    "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Nukor/KuvaNukor",
-    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Hek/KuvaHekWeapon",
-    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Zarr/KuvaZarr",
-    "/Lotus/Weapons/Grineer/KuvaLich/HeavyWeapons/Grattler/KuvaGrattler",
-    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Sobek/KuvaSobek"
-];
-
-const corpusVersionThreeWeapons = [
-    "/Lotus/Weapons/Corpus/LongGuns/CrpBriefcaseLauncher/CrpBriefcaseLauncher",
-    "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEArcaPlasmor/CrpBEArcaPlasmor",
-    "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEFluxRifle/CrpBEFluxRifle",
-    "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBETetra/CrpBETetra",
-    "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBECycron/CrpBECycron",
-    "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEDetron/CrpBEDetron",
-    "/Lotus/Weapons/Corpus/Pistols/CrpIgniterPistol/CrpIgniterPistol",
-    "/Lotus/Weapons/Corpus/Pistols/CrpBriefcaseAkimbo/CrpBriefcaseAkimboPistol",
-    "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxWeapon",
-    "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEGlaxion/CrpBEGlaxion"
-];
-
-export const getWeaponsForManifest = (manifest: string): readonly string[] => {
-    switch (manifest) {
-        case "/Lotus/Types/Game/Nemesis/KuvaLich/KuvaLichManifestVersionSix": // >= 35.6.0
-            return kuvaLichVersionSixWeapons;
-        case "/Lotus/Types/Enemies/Corpus/Lawyers/LawyerManifestVersionThree": // >= 35.6.0
-        case "/Lotus/Types/Enemies/Corpus/Lawyers/LawyerManifestVersionFour": // >= 37.0.0
-            return corpusVersionThreeWeapons;
-    }
-    throw new Error(`unknown nemesis manifest: ${manifest}`);
-};
-
-export const isNemesisCompatibleWithVersion = (
-    nemesis: { manifest: string; Faction: TNemesisFaction },
-    buildLabel: string
-): boolean => {
-    // Anything below 35.6.0 is not going to be okay given our set of supported manifests.
-    if (version_compare(buildLabel, "2024.05.15.11.07") < 0) {
-        return false;
-    }
-
-    if (nemesis.Faction == "FC_INFESTATION") {
-        // Anything below 38.5.0 isn't gonna like an infested lich.
-        if (version_compare(buildLabel, "2025.03.18.16.07") < 0) {
-            return false;
-        }
-    } else if (nemesis.manifest == "/Lotus/Types/Enemies/Corpus/Lawyers/LawyerManifestVersionFour") {
-        // Anything below 37.0.0 isn't gonna know version 4, but version 3 is identical in terms of weapon choices, so we can spoof it to that.
-        if (version_compare(buildLabel, "2024.10.01.11.03") < 0) {
-            nemesis.manifest = "/Lotus/Types/Enemies/Corpus/Lawyers/LawyerManifestVersionThree";
-        }
-    }
-
-    return true;
-};
-
 export const getInnateDamageTag = (KillingSuit: string): TInnateDamageTag => {
     return ExportWarframes[KillingSuit].nemesisUpgradeTag!;
 };
@@ -349,7 +394,7 @@ export interface INemesisProfile {
 
 export const generateNemesisProfile = (
     fp: bigint = generateRewardSeed(),
-    Faction: TNemesisFaction = "FC_CORPUS",
+    manifest: INemesisManifest = new LawyerManifest(),
     killingSuit: string = "/Lotus/Powersuits/Ember/Ember"
 ): INemesisProfile => {
     const rng = new SRng(fp);
@@ -363,11 +408,11 @@ export const generateNemesisProfile = (
         innateDamageTag: getInnateDamageTag(killingSuit),
         innateDamageValue: Math.trunc(value * 0x40000000) // TODO: For -1399275245665749231n, the value should be 75306944, but we're off by 59 with 75307003.
     };
-    if (rng.randomFloat() <= nemesisFactionInfos[Faction].ephemeraChance && Faction != "FC_INFESTATION") {
-        profile.ephemera = ephmeraTypes[Faction][profile.innateDamageTag];
+    if (rng.randomFloat() <= manifest.ephemeraChance && manifest.ephemeraTypes) {
+        profile.ephemera = manifest.ephemeraTypes[profile.innateDamageTag];
     }
     rng.randomFloat(); // something related to sentinel agent maybe
-    if (Faction == "FC_CORPUS") {
+    if (manifest instanceof LawyerManifest) {
         profile.petHead = rng.randomElement(petHeads)!;
         profile.petBody = rng.randomElement([
             "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartBodyA",

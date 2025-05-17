@@ -61,9 +61,8 @@ import {
     getInfestedLichItemRewards,
     getInfNodes,
     getKillTokenRewardCount,
-    getNemesisPasscode,
-    getWeaponsForManifest,
-    nemesisFactionInfos
+    getNemesisManifest,
+    getNemesisPasscode
 } from "@/src/helpers/nemesisHelpers";
 import { Loadout } from "../models/inventoryModels/loadoutModel";
 import { ILoadoutConfigDatabase } from "../types/saveLoadoutTypes";
@@ -662,12 +661,12 @@ export const addMissionInventoryUpdates = async (
                         k: value.killed
                     });
 
+                    const manifest = getNemesisManifest(inventory.Nemesis.manifest);
                     const profile = generateNemesisProfile(
                         inventory.Nemesis.fp,
-                        inventory.Nemesis.Faction,
+                        manifest,
                         inventory.Nemesis.KillingSuit
                     );
-                    const nemesisFactionInfo = nemesisFactionInfos[inventory.Nemesis.Faction];
                     const att: string[] = [];
                     let countedAtt: ITypeCount[] | undefined;
 
@@ -676,9 +675,7 @@ export const addMissionInventoryUpdates = async (
                             value.weaponLoc &&
                             inventory.Nemesis.Faction != "FC_INFESTATION" // weaponLoc is "/Lotus/Language/Weapons/DerelictCernosName" for these for some reason
                         ) {
-                            const weaponType = getWeaponsForManifest(inventory.Nemesis.manifest)[
-                                inventory.Nemesis.WeaponIdx
-                            ];
+                            const weaponType = manifest.weapons[inventory.Nemesis.WeaponIdx];
                             giveNemesisWeaponRecipe(inventory, weaponType, value.nemesisName, value.weaponLoc, profile);
                             att.push(weaponType);
                         }
@@ -704,9 +701,7 @@ export const addMissionInventoryUpdates = async (
                         att.push(profile.ephemera);
                     }
 
-                    const skinRewardStoreItem = value.killed
-                        ? nemesisFactionInfo.firstKillReward
-                        : nemesisFactionInfo.firstConvertReward;
+                    const skinRewardStoreItem = value.killed ? manifest.firstKillReward : manifest.firstConvertReward;
                     if (Object.keys(addSkin(inventory, fromStoreItem(skinRewardStoreItem))).length != 0) {
                         att.push(skinRewardStoreItem);
                     }
@@ -737,7 +732,7 @@ export const addMissionInventoryUpdates = async (
                         await createMessage(inventory.accountOwnerId, [
                             {
                                 sndr: "/Lotus/Language/Bosses/Ordis",
-                                msg: nemesisFactionInfo.messageBody,
+                                msg: manifest.messageBody,
                                 arg: [
                                     {
                                         Key: "LICH_NAME",
@@ -747,7 +742,7 @@ export const addMissionInventoryUpdates = async (
                                 att: att,
                                 countedAtt: countedAtt,
                                 attVisualOnly: true,
-                                sub: nemesisFactionInfo.messageTitle,
+                                sub: manifest.messageTitle,
                                 icon: "/Lotus/Interface/Icons/Npcs/Ordis.png",
                                 highPriority: true
                             }
@@ -1187,7 +1182,10 @@ export const addMissionRewards = async (
                     inventory.Nemesis.Rank = Math.min(inventory.Nemesis.Rank + 1, 4);
                     inventoryChanges.Nemesis.Rank = inventory.Nemesis.Rank;
                 }
-                inventory.Nemesis.InfNodes = getInfNodes(inventory.Nemesis.Faction, inventory.Nemesis.Rank);
+                inventory.Nemesis.InfNodes = getInfNodes(
+                    getNemesisManifest(inventory.Nemesis.manifest),
+                    inventory.Nemesis.Rank
+                );
             }
 
             if (inventory.Nemesis.Faction == "FC_INFESTATION") {
