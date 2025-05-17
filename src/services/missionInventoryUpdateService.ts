@@ -383,7 +383,7 @@ export const addMissionInventoryUpdates = async (
                     }
                     if (
                         inventory.LibraryActiveDailyTaskInfo &&
-                        inventory.LibraryActiveDailyTaskInfo.EnemyTypes.find(x => x == scan.EnemyType)
+                        inventory.LibraryActiveDailyTaskInfo.EnemyTypes.indexOf(scan.EnemyType) != -1
                     ) {
                         inventory.LibraryActiveDailyTaskInfo.Scans ??= 0;
                         inventory.LibraryActiveDailyTaskInfo.Scans += scan.Count;

@@ -340,7 +340,7 @@ export const getInventoryResponse = async (
 };
 
 const addString = (arr: string[], str: string): void => {
-    if (!arr.find(x => x == str)) {
+    if (arr.indexOf(str) == -1) {
         arr.push(str);
     }
 };

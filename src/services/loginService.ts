@@ -90,7 +90,7 @@ export const getAccountIdForRequest = async (req: Request): Promise<string> => {
 };
 
 export const isAdministrator = (account: TAccountDocument): boolean => {
-    return !!config.administratorNames?.find(x => x == account.DisplayName);
+    return config.administratorNames?.indexOf(account.DisplayName) != -1;
 };
 
 const platform_magics = [753, 639, 247, 37, 60];

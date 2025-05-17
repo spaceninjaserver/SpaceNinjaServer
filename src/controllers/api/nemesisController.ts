@@ -177,7 +177,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
             weaponIdx = initialWeaponIdx;
             do {
                 const weapon = weapons[weaponIdx];
-                if (!body.target.DisallowedWeapons.find(x => x == weapon)) {
+                if (body.target.DisallowedWeapons.indexOf(weapon) == -1) {
                     break;
                 }
                 weaponIdx = (weaponIdx + 1) % weapons.length;

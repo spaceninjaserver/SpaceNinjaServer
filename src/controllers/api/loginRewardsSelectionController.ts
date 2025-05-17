@@ -26,7 +26,7 @@ export const loginRewardsSelectionController: RequestHandler = async (req, res) 
             StoreItemType: body.ChosenReward
         };
         inventoryChanges = (await handleStoreItemAcquisition(body.ChosenReward, inventory)).InventoryChanges;
-        if (!evergreenRewards.find(x => x == body.ChosenReward)) {
+        if (evergreenRewards.indexOf(body.ChosenReward) == -1) {
             inventory.LoginMilestoneRewards.push(body.ChosenReward);
         }
     } else {

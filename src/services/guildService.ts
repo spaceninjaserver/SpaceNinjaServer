@@ -445,7 +445,7 @@ export const addGuildMemberShipDecoContribution = (guildMember: IGuildMemberData
 export const processDojoBuildMaterialsGathered = (guild: TGuildDatabaseDocument, build: IDojoBuild): void => {
     if (build.guildXpValue) {
         guild.ClaimedXP ??= [];
-        if (!guild.ClaimedXP.find(x => x == build.resultType)) {
+        if (guild.ClaimedXP.indexOf(build.resultType) == -1) {
             guild.ClaimedXP.push(build.resultType);
             guild.XP += build.guildXpValue;
         }
