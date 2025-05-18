@@ -24,7 +24,7 @@ import {
 import { logger } from "@/src/utils/logger";
 import { catBreadHash } from "@/src/helpers/stringHelpers";
 import { Types } from "mongoose";
-import { isNemesisCompatibleWithVersion } from "@/src/helpers/nemesisHelpers";
+import { getNemesisManifest } from "@/src/helpers/nemesisHelpers";
 import { getPersonalRooms } from "@/src/services/personalRoomsService";
 import { IPersonalRoomsClient } from "@/src/types/personalRoomsTypes";
 import { Ship } from "@/src/models/shipModel";
@@ -308,7 +308,10 @@ export const getInventoryResponse = async (
 
     if (buildLabel) {
         // Fix nemesis for older versions
-        if (inventoryResponse.Nemesis && !isNemesisCompatibleWithVersion(inventoryResponse.Nemesis, buildLabel)) {
+        if (
+            inventoryResponse.Nemesis &&
+            version_compare(getNemesisManifest(inventoryResponse.Nemesis.manifest).minBuild, buildLabel) < 0
+        ) {
             inventoryResponse.Nemesis = undefined;
         }
 

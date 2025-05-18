@@ -1,18 +1,18 @@
+import { version_compare } from "@/src/helpers/inventoryHelpers";
 import {
     consumeModCharge,
     encodeNemesisGuess,
     getInfNodes,
     getKnifeUpgrade,
+    getNemesisManifest,
     getNemesisPasscode,
     getNemesisPasscodeModTypes,
-    getWeaponsForManifest,
-    IKnifeResponse,
-    nemesisFactionInfos
+    IKnifeResponse
 } from "@/src/helpers/nemesisHelpers";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
 import { freeUpSlot, getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
+import { getAccountForRequest } from "@/src/services/loginService";
 import { SRng } from "@/src/services/rngService";
 import { IMongoDate, IOid } from "@/src/types/commonTypes";
 import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
@@ -31,10 +31,10 @@ import { logger } from "@/src/utils/logger";
 import { RequestHandler } from "express";
 
 export const nemesisController: RequestHandler = async (req, res) => {
-    const accountId = await getAccountIdForRequest(req);
+    const account = await getAccountForRequest(req);
     if ((req.query.mode as string) == "f") {
         const body = getJSONfromString<IValenceFusionRequest>(String(req.body));
-        const inventory = await getInventory(accountId, body.Category + " WeaponBin");
+        const inventory = await getInventory(account._id.toString(), body.Category + " WeaponBin");
         const destWeapon = inventory[body.Category].id(body.DestWeapon.$oid)!;
         const sourceWeapon = inventory[body.Category].id(body.SourceWeapon.$oid)!;
         const destFingerprint = JSON.parse(destWeapon.UpgradeFingerprint!) as IInnateDamageFingerprint;
@@ -69,7 +69,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
             }
         });
     } else if ((req.query.mode as string) == "p") {
-        const inventory = await getInventory(accountId, "Nemesis");
+        const inventory = await getInventory(account._id.toString(), "Nemesis");
         const body = getJSONfromString<INemesisPrespawnCheckRequest>(String(req.body));
         const passcode = getNemesisPasscode(inventory.Nemesis!);
         let guessResult = 0;
@@ -90,7 +90,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
         res.json({ GuessResult: guessResult });
     } else if (req.query.mode == "r") {
         const inventory = await getInventory(
-            accountId,
+            account._id.toString(),
             "Nemesis LoadOutPresets CurrentLoadOutIds DataKnives Upgrades RawUpgrades"
         );
         const body = getJSONfromString<INemesisRequiemRequest>(String(req.body));
@@ -144,7 +144,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
             if (inventory.Nemesis!.HenchmenKilled >= 100) {
                 inventory.Nemesis!.HenchmenKilled = 100;
             }
-            inventory.Nemesis!.InfNodes = getInfNodes("FC_INFESTATION", 0);
+            inventory.Nemesis!.InfNodes = getInfNodes(getNemesisManifest(inventory.Nemesis!.manifest), 0);
 
             await inventory.save();
             res.json(response);
@@ -154,25 +154,35 @@ export const nemesisController: RequestHandler = async (req, res) => {
                 res.end();
             } else {
                 inventory.Nemesis!.Rank += 1;
-                inventory.Nemesis!.InfNodes = getInfNodes(inventory.Nemesis!.Faction, inventory.Nemesis!.Rank);
+                inventory.Nemesis!.InfNodes = getInfNodes(
+                    getNemesisManifest(inventory.Nemesis!.manifest),
+                    inventory.Nemesis!.Rank
+                );
                 await inventory.save();
                 res.json({ RankIncrease: 1 });
             }
         }
     } else if ((req.query.mode as string) == "rs") {
         // report spawn; POST but no application data in body
-        const inventory = await getInventory(accountId, "Nemesis");
+        const inventory = await getInventory(account._id.toString(), "Nemesis");
         inventory.Nemesis!.LastEnc = inventory.Nemesis!.MissionCount;
         await inventory.save();
         res.json({ LastEnc: inventory.Nemesis!.LastEnc });
     } else if ((req.query.mode as string) == "s") {
-        const inventory = await getInventory(accountId, "Nemesis");
+        const inventory = await getInventory(account._id.toString(), "Nemesis");
         const body = getJSONfromString<INemesisStartRequest>(String(req.body));
         body.target.fp = BigInt(body.target.fp);
 
+        const manifest = getNemesisManifest(body.target.manifest);
+        if (account.BuildLabel && version_compare(manifest.minBuild, account.BuildLabel) < 0) {
+            logger.warn(
+                `client on version ${account.BuildLabel} provided nemesis manifest ${body.target.manifest} which was expected to require ${manifest.minBuild} or above. please file a bug report.`
+            );
+        }
+
         let weaponIdx = -1;
         if (body.target.Faction != "FC_INFESTATION") {
-            const weapons = getWeaponsForManifest(body.target.manifest);
+            const weapons: readonly string[] = manifest.weapons;
             const initialWeaponIdx = new SRng(body.target.fp).randomInt(0, weapons.length - 1);
             weaponIdx = initialWeaponIdx;
             do {
@@ -198,7 +208,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
             k: false,
             Traded: false,
             d: new Date(),
-            InfNodes: getInfNodes(body.target.Faction, 0),
+            InfNodes: getInfNodes(manifest, 0),
             GuessHistory: [],
             Hints: [],
             HintProgress: 0,
@@ -216,14 +226,14 @@ export const nemesisController: RequestHandler = async (req, res) => {
         });
     } else if ((req.query.mode as string) == "w") {
         const inventory = await getInventory(
-            accountId,
+            account._id.toString(),
             "Nemesis LoadOutPresets CurrentLoadOutIds DataKnives Upgrades RawUpgrades"
         );
         //const body = getJSONfromString<INemesisWeakenRequest>(String(req.body));
 
         inventory.Nemesis!.InfNodes = [
             {
-                Node: nemesisFactionInfos[inventory.Nemesis!.Faction].showdownNode,
+                Node: getNemesisManifest(inventory.Nemesis!.manifest).showdownNode,
                 Influence: 1
             }
         ];
