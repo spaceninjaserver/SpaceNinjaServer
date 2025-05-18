@@ -270,11 +270,22 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
                 manifest.items.length != manifest.numItems.minValue) &&
             !manifest.isOneBinPerCycle
         ) {
+            const remainingItemCapacity: Record<string, number> = {};
+            for (const item of manifest.items) {
+                remainingItemCapacity[item.storeItem] = 1 + item.duplicates;
+            }
+            for (const offer of info.ItemManifest) {
+                remainingItemCapacity[offer.StoreItem] -= 1;
+            }
             const numItemsTarget = rng.randomInt(manifest.numItems.minValue, manifest.numItems.maxValue);
             while (info.ItemManifest.length + offersToAdd.length < numItemsTarget) {
                 // TODO: Consider per-bin item limits
                 // TODO: Consider item probability weightings
-                offersToAdd.push(rng.randomElement(manifest.items)!);
+                const item = rng.randomElement(manifest.items)!;
+                if (remainingItemCapacity[item.storeItem] != 0) {
+                    remainingItemCapacity[item.storeItem] -= 1;
+                    offersToAdd.push(item);
+                }
             }
         } else {
             let binThisCycle;
