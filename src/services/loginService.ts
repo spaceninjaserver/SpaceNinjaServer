@@ -74,7 +74,7 @@ export const getAccountForRequest = async (req: Request): Promise<TAccountDocume
         throw new Error("Request is missing nonce parameter");
     }
 
-    const account = await Account.findById(req.query.accountId);
+    const account = await Account.findById(req.query.accountId as string);
     if (!account || account.Nonce != nonce) {
         throw new Error("Invalid accountId-nonce pair");
     }

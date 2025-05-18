@@ -84,7 +84,10 @@ export const getProfileViewingDataGetController: RequestHandler = async (req, re
             res.status(409).send("Could not find requested account");
         }
     } else if (req.query.guildId) {
-        const guild = await Guild.findById(req.query.guildId, "Name Tier XP Class Emblem TechProjects ClaimedXP");
+        const guild = await Guild.findById(
+            req.query.guildId as string,
+            "Name Tier XP Class Emblem TechProjects ClaimedXP"
+        );
         if (!guild) {
             res.status(409).send("Could not find guild");
             return;

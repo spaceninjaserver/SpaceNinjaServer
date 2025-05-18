@@ -75,7 +75,7 @@ export const addToAllianceController: RequestHandler = async (req, res) => {
     const invitedClanOwnerMember = (await GuildMember.findOne({ guildId: guilds[0]._id, rank: 0 }))!;
     const senderInventory = await getInventory(account._id.toString(), "ActiveAvatarImageType");
     const senderGuild = (await Guild.findById(allianceMember.guildId, "Name"))!;
-    const alliance = (await Alliance.findById(req.query.allianceId, "Name"))!;
+    const alliance = (await Alliance.findById(req.query.allianceId as string, "Name"))!;
     await createMessage(invitedClanOwnerMember.accountId, [
         {
             sndr: getSuffixedName(account),
