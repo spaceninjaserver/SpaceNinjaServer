@@ -1,9 +1,11 @@
 import { unixTimesInMs } from "@/src/constants/timeConstants";
+import { isDev } from "@/src/helpers/pathHelper";
 import { catBreadHash } from "@/src/helpers/stringHelpers";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { mixSeeds, SRng } from "@/src/services/rngService";
 import { IMongoDate } from "@/src/types/commonTypes";
 import { IItemManifest, IVendorInfo, IVendorManifest } from "@/src/types/vendorTypes";
+import { logger } from "@/src/utils/logger";
 import { ExportVendors, IRange, IVendor } from "warframe-public-export-plus";
 
 import ArchimedeanVendorManifest from "@/static/fixed_responses/getVendorInfo/ArchimedeanVendorManifest.json";
@@ -363,3 +365,18 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
     }
     return cacheEntry;
 };
+
+if (isDev) {
+    const ads = getVendorManifestByTypeName("/Lotus/Types/Game/VendorManifests/Hubs/GuildAdvertisementVendorManifest")!
+        .VendorInfo.ItemManifest;
+    if (
+        ads.length != 5 ||
+        ads[0].Bin != "BIN_4" ||
+        ads[1].Bin != "BIN_3" ||
+        ads[2].Bin != "BIN_2" ||
+        ads[3].Bin != "BIN_1" ||
+        ads[4].Bin != "BIN_0"
+    ) {
+        logger.warn(`self test failed for /Lotus/Types/Game/VendorManifests/Hubs/GuildAdvertisementVendorManifest`);
+    }
+}
