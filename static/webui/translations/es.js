@@ -151,6 +151,7 @@ dict = {
     cheats_noVendorPurchaseLimits: `Sin límite de compras de vendedores`,
     cheats_noDeathMarks: `Sin marcas de muerte`,
     cheats_noKimCooldowns: `Sin tiempo de espera para conversaciones KIM`,
+    cheats_instantFinishRivenChallenge: `[UNTRANSLATED] Instant Finish Riven Challenge`,
     cheats_instantResourceExtractorDrones: `Drones de extracción de recursos instantáneos`,
     cheats_noResourceExtractorDronesDamage: `Sin daño a los drones extractores de recursos`,
     cheats_skipClanKeyCrafting: `Saltar la fabricación de la llave de clan`,

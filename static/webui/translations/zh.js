@@ -151,6 +151,7 @@ dict = {
     cheats_noVendorPurchaseLimits: `[UNTRANSLATED] No Vendor Purchase Limits`,
     cheats_noDeathMarks: `[UNTRANSLATED] No Death Marks`,
     cheats_noKimCooldowns: `[UNTRANSLATED] No KIM Cooldowns`,
+    cheats_instantFinishRivenChallenge: `[UNTRANSLATED] Instant Finish Riven Challenge`,
     cheats_instantResourceExtractorDrones: `即时资源采集无人机`,
     cheats_noResourceExtractorDronesDamage: `[UNTRANSLATED] No Resource Extractor Drones Damage`,
     cheats_skipClanKeyCrafting: `[UNTRANSLATED] Skip Clan Key Crafting`,

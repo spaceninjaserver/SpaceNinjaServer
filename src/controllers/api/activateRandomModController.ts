@@ -1,11 +1,16 @@
 import { toOid } from "@/src/helpers/inventoryHelpers";
-import { createVeiledRivenFingerprint, rivenRawToRealWeighted } from "@/src/helpers/rivenHelper";
+import {
+    createVeiledRivenFingerprint,
+    createUnveiledRivenFingerprint,
+    rivenRawToRealWeighted
+} from "@/src/helpers/rivenHelper";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { addMods, getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getRandomElement } from "@/src/services/rngService";
 import { RequestHandler } from "express";
 import { ExportUpgrades } from "warframe-public-export-plus";
+import { config } from "@/src/services/configService";
 
 export const activateRandomModController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -18,7 +23,9 @@ export const activateRandomModController: RequestHandler = async (req, res) => {
         }
     ]);
     const rivenType = getRandomElement(rivenRawToRealWeighted[request.ItemType])!;
-    const fingerprint = createVeiledRivenFingerprint(ExportUpgrades[rivenType]);
+    const fingerprint = config.instantFinishRivenChallenge
+        ? createUnveiledRivenFingerprint(ExportUpgrades[rivenType])
+        : createVeiledRivenFingerprint(ExportUpgrades[rivenType]);
     const upgradeIndex =
         inventory.Upgrades.push({
             ItemType: rivenType,

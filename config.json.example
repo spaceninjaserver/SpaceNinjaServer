@@ -38,6 +38,7 @@
   "noVendorPurchaseLimits": true,
   "noDeathMarks": false,
   "noKimCooldowns": false,
+  "instantFinishRivenChallenge": false,
   "instantResourceExtractorDrones": false,
   "noResourceExtractorDronesDamage": false,
   "skipClanKeyCrafting": false,
