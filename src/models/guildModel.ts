@@ -13,7 +13,8 @@ import {
     IDojoLeaderboardEntry,
     IGuildAdDatabase,
     IAllianceDatabase,
-    IAllianceMemberDatabase
+    IAllianceMemberDatabase,
+    GuildPermission
 } from "@/src/types/guildTypes";
 import { Document, Model, model, Schema, Types } from "mongoose";
 import { fusionTreasuresSchema, typeCountSchema } from "./inventoryModels/inventoryModel";
@@ -108,31 +109,31 @@ const defaultRanks: IGuildRank[] = [
     },
     {
         Name: "/Lotus/Language/Game/Rank_General",
-        Permissions: 4318
+        Permissions: GuildPermission.Host | 4318
     },
     {
         Name: "/Lotus/Language/Game/Rank_Officer",
-        Permissions: 4314
+        Permissions: GuildPermission.Host | 4314
     },
     {
         Name: "/Lotus/Language/Game/Rank_Leader",
-        Permissions: 4106
+        Permissions: GuildPermission.Host | 4106
     },
     {
         Name: "/Lotus/Language/Game/Rank_Sage",
-        Permissions: 4304
+        Permissions: GuildPermission.Host | 4304
     },
     {
         Name: "/Lotus/Language/Game/Rank_Soldier",
-        Permissions: 4098
+        Permissions: GuildPermission.Host | 4098
     },
     {
         Name: "/Lotus/Language/Game/Rank_Initiate",
-        Permissions: 4096
+        Permissions: GuildPermission.Host | GuildPermission.Fabricator
     },
     {
         Name: "/Lotus/Language/Game/Rank_Utility",
-        Permissions: 4096
+        Permissions: GuildPermission.Host | GuildPermission.Fabricator
     }
 ];
 

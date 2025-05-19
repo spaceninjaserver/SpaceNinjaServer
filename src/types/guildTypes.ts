@@ -1,11 +1,11 @@
 import { Types } from "mongoose";
-import { IOid, IMongoDate } from "@/src/types/commonTypes";
+import { IOid, IMongoDate, IOidWithLegacySupport } from "@/src/types/commonTypes";
 import { IFusionTreasure, IMiscItem, ITypeCount } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IPictureFrameInfo } from "./shipTypes";
 import { IFriendInfo } from "./friendTypes";
 
 export interface IGuildClient {
-    _id: IOid;
+    _id: IOidWithLegacySupport;
     Name: string;
     MOTD: string;
     LongMOTD?: ILongMOTD;
@@ -22,7 +22,7 @@ export interface IGuildClient {
     CeremonyResetDate?: IMongoDate;
     CrossPlatformEnabled?: boolean;
     AutoContributeFromVault?: boolean;
-    AllianceId?: IOid;
+    AllianceId?: IOidWithLegacySupport;
 }
 
 export interface IGuildDatabase {
@@ -71,7 +71,6 @@ export interface ILongMOTD {
     authorGuildName?: string;
 }
 
-// 32 seems to be reserved
 export enum GuildPermission {
     Ruler = 1, // Clan: Change hierarchy. Alliance (Creator only): Kick clans.
     Advertiser = 8192,
@@ -79,6 +78,7 @@ export enum GuildPermission {
     Regulator = 4, // Kick members
     Promoter = 8, // Clan: Promote and demote members. Alliance (Creator only): Change clan permissions.
     Architect = 16, // Create and destroy rooms
+    Host = 32, // No longer used in modern versions
     Decorator = 1024, // Create and destroy decos
     Treasurer = 64, // Clan: Contribute from vault and edit tax rate. Alliance: Divvy vault.
     Tech = 128, // Queue research
@@ -127,13 +127,13 @@ export interface IGuildVault {
 }
 
 export interface IDojoClient {
-    _id: IOid; // ID of the guild
+    _id: IOidWithLegacySupport; // ID of the guild
     Name: string;
     Tier: number;
     TradeTax?: number;
     FixedContributions: boolean;
     DojoRevision: number;
-    AllianceId?: IOid;
+    AllianceId?: IOidWithLegacySupport;
     Vault?: IGuildVault;
     Class?: number; // Level
     RevisionTime: number;
@@ -148,11 +148,11 @@ export interface IDojoClient {
 }
 
 export interface IDojoComponentClient {
-    id: IOid;
-    SortId?: IOid;
+    id: IOidWithLegacySupport;
+    SortId?: IOidWithLegacySupport;
     pf: string; // Prefab (.level)
     ppf: string;
-    pi?: IOid; // Parent ID. N/A to root.
+    pi?: IOidWithLegacySupport; // Parent ID. N/A to root.
     op?: string; // Name of the door within this room that leads to its parent. N/A to root.
     pp?: string; // Name of the door within the parent that leads to this room. N/A to root.
     Name?: string;
@@ -166,7 +166,7 @@ export interface IDojoComponentClient {
     DestructionTimeRemaining?: number; // old versions
     Decos?: IDojoDecoClient[];
     DecoCapacity?: number;
-    PaintBot?: IOid;
+    PaintBot?: IOidWithLegacySupport;
     PendingColors?: number[];
     Colors?: number[];
     PendingLights?: number[];
@@ -191,7 +191,7 @@ export interface IDojoComponentDatabase
 }
 
 export interface IDojoDecoClient {
-    id: IOid;
+    id: IOidWithLegacySupport;
     Type: string;
     Pos: number[];
     Rot: number[];
@@ -285,7 +285,7 @@ export interface IGuildAdDatabase {
 }
 
 export interface IAllianceClient {
-    _id: IOid;
+    _id: IOidWithLegacySupport;
     Name: string;
     MOTD?: ILongMOTD;
     LongMOTD?: ILongMOTD;
@@ -306,7 +306,7 @@ export interface IAllianceDatabase {
 }
 
 export interface IAllianceMemberClient {
-    _id: IOid;
+    _id: IOidWithLegacySupport;
     Name: string;
     Tier: number;
     Pending: boolean;
@@ -314,7 +314,7 @@ export interface IAllianceMemberClient {
     Permissions: number;
     MemberCount: number;
     ClanLeader?: string;
-    ClanLeaderId?: IOid;
+    ClanLeaderId?: IOidWithLegacySupport;
     OriginalPlatform?: number;
 }
 

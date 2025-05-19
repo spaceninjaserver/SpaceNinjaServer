@@ -1,8 +1,8 @@
 import { Types } from "mongoose";
-import { IMongoDate, IOid } from "./commonTypes";
+import { IMongoDate, IOidWithLegacySupport } from "./commonTypes";
 
 export interface IFriendInfo {
-    _id: IOid;
+    _id: IOidWithLegacySupport;
     DisplayName?: string;
     PlatformNames?: string[];
     PlatformAccountId?: string;

@@ -1,5 +1,5 @@
 import { Request } from "express";
-import { getAccountIdForRequest } from "@/src/services/loginService";
+import { getAccountIdForRequest, TAccountDocument } from "@/src/services/loginService";
 import { addLevelKeys, addRecipes, combineInventoryChanges, getInventory } from "@/src/services/inventoryService";
 import { Alliance, AllianceMember, Guild, GuildAd, GuildMember, TGuildDatabaseDocument } from "@/src/models/guildModel";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
@@ -19,7 +19,7 @@ import {
     IGuildVault,
     ITechProjectDatabase
 } from "@/src/types/guildTypes";
-import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
+import { toMongoDate, toOid, toOid2 } from "@/src/helpers/inventoryHelpers";
 import { Types } from "mongoose";
 import { ExportDojoRecipes, ExportResources, IDojoBuild, IDojoResearch } from "warframe-public-export-plus";
 import { logger } from "../utils/logger";
@@ -54,7 +54,10 @@ export const getGuildForRequestEx = async (
     return guild;
 };
 
-export const getGuildClient = async (guild: TGuildDatabaseDocument, accountId: string): Promise<IGuildClient> => {
+export const getGuildClient = async (
+    guild: TGuildDatabaseDocument,
+    account: TAccountDocument
+): Promise<IGuildClient> => {
     const guildMembers = await GuildMember.find({ guildId: guild._id });
 
     const members: IGuildMemberClient[] = [];
@@ -62,13 +65,13 @@ export const getGuildClient = async (guild: TGuildDatabaseDocument, accountId: s
     const dataFillInPromises: Promise<void>[] = [];
     for (const guildMember of guildMembers) {
         const member: IGuildMemberClient = {
-            _id: toOid(guildMember.accountId),
+            _id: toOid2(guildMember.accountId, account.BuildLabel),
             Rank: guildMember.rank,
             Status: guildMember.status,
             Note: guildMember.RequestMsg,
             RequestExpiry: guildMember.RequestExpiry ? toMongoDate(guildMember.RequestExpiry) : undefined
         };
-        if (guildMember.accountId.equals(accountId)) {
+        if (guildMember.accountId.equals(account._id)) {
             missingEntry = false;
         } else {
             dataFillInPromises.push(addAccountDataToFriendInfo(member));
@@ -79,13 +82,13 @@ export const getGuildClient = async (guild: TGuildDatabaseDocument, accountId: s
     if (missingEntry) {
         // Handle clans created prior to creation of the GuildMember model.
         await GuildMember.insertOne({
-            accountId: accountId,
+            accountId: account._id,
             guildId: guild._id,
             status: 0,
             rank: 0
         });
         members.push({
-            _id: { $oid: accountId },
+            _id: toOid2(account._id, account.BuildLabel),
             Status: 0,
             Rank: 0
         });
@@ -94,7 +97,7 @@ export const getGuildClient = async (guild: TGuildDatabaseDocument, accountId: s
     await Promise.all(dataFillInPromises);
 
     return {
-        _id: toOid(guild._id),
+        _id: toOid2(guild._id, account.BuildLabel),
         Name: guild.Name,
         MOTD: guild.MOTD,
         LongMOTD: guild.LongMOTD,
@@ -106,11 +109,11 @@ export const getGuildClient = async (guild: TGuildDatabaseDocument, accountId: s
         ActiveDojoColorResearch: guild.ActiveDojoColorResearch,
         Class: guild.Class,
         XP: guild.XP,
-        IsContributor: !!guild.CeremonyContributors?.find(x => x.equals(accountId)),
+        IsContributor: !!guild.CeremonyContributors?.find(x => x.equals(account._id)),
         NumContributors: guild.CeremonyContributors?.length ?? 0,
         CeremonyResetDate: guild.CeremonyResetDate ? toMongoDate(guild.CeremonyResetDate) : undefined,
         AutoContributeFromVault: guild.AutoContributeFromVault,
-        AllianceId: guild.AllianceId ? toOid(guild.AllianceId) : undefined
+        AllianceId: guild.AllianceId ? toOid2(guild.AllianceId, account.BuildLabel) : undefined
     };
 };
 
@@ -130,10 +133,11 @@ export const getGuildVault = (guild: TGuildDatabaseDocument): IGuildVault => {
 export const getDojoClient = async (
     guild: TGuildDatabaseDocument,
     status: number,
-    componentId?: Types.ObjectId | string
+    componentId?: Types.ObjectId | string,
+    buildLabel?: string
 ): Promise<IDojoClient> => {
     const dojo: IDojoClient = {
-        _id: { $oid: guild._id.toString() },
+        _id: toOid2(guild._id, buildLabel),
         Name: guild.Name,
         Tier: guild.Tier,
         GuildEmblem: guild.Emblem,
@@ -155,8 +159,8 @@ export const getDojoClient = async (
     for (const dojoComponent of guild.DojoComponents) {
         if (!componentId || dojoComponent._id.equals(componentId)) {
             const clientComponent: IDojoComponentClient = {
-                id: toOid(dojoComponent._id),
-                SortId: toOid(dojoComponent.SortId ?? dojoComponent._id), // always providing a SortId so decos don't need repositioning to reparent
+                id: toOid2(dojoComponent._id, buildLabel),
+                SortId: toOid2(dojoComponent.SortId ?? dojoComponent._id, buildLabel), // always providing a SortId so decos don't need repositioning to reparent
                 pf: dojoComponent.pf,
                 ppf: dojoComponent.ppf,
                 Name: dojoComponent.Name,
@@ -165,7 +169,7 @@ export const getDojoClient = async (
                 Settings: dojoComponent.Settings
             };
             if (dojoComponent.pi) {
-                clientComponent.pi = toOid(dojoComponent.pi);
+                clientComponent.pi = toOid2(dojoComponent.pi, buildLabel);
                 clientComponent.op = dojoComponent.op!;
                 clientComponent.pp = dojoComponent.pp!;
             }
@@ -221,7 +225,7 @@ export const getDojoClient = async (
                 clientComponent.Decos = [];
                 for (const deco of dojoComponent.Decos) {
                     const clientDeco: IDojoDecoClient = {
-                        id: toOid(deco._id),
+                        id: toOid2(deco._id, buildLabel),
                         Type: deco.Type,
                         Pos: deco.Pos,
                         Rot: deco.Rot,

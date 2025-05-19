@@ -1,10 +1,12 @@
 import { ISession, IFindSessionRequest } from "@/src/types/session";
 import { logger } from "@/src/utils/logger";
+import { JSONParse } from "json-with-bigint";
+import { Types } from "mongoose";
 
 const sessions: ISession[] = [];
 
-function createNewSession(sessionData: ISession, Creator: string): ISession {
-    const sessionId = getNewSessionID();
+function createNewSession(sessionData: ISession, Creator: Types.ObjectId): ISession {
+    const sessionId = new Types.ObjectId();
     const newSession: ISession = {
         sessionId,
         creatorId: Creator,
@@ -25,7 +27,7 @@ function createNewSession(sessionData: ISession, Creator: string): ISession {
         customSettings: sessionData.customSettings || "",
         rewardSeed: sessionData.rewardSeed || -1,
         guildId: sessionData.guildId || "",
-        buildId: sessionData.buildId || 4920386201513015989,
+        buildId: sessionData.buildId || 4920386201513015989n,
         platform: sessionData.platform || 0,
         xplatform: sessionData.xplatform || true,
         freePublic: sessionData.freePublic || 3,
@@ -40,13 +42,15 @@ function getAllSessions(): ISession[] {
     return sessions;
 }
 
-function getSessionByID(sessionId: string): ISession | undefined {
-    return sessions.find(session => session.sessionId === sessionId);
+function getSessionByID(sessionId: string | Types.ObjectId): ISession | undefined {
+    return sessions.find(session => session.sessionId.equals(sessionId));
 }
 
-function getSession(sessionIdOrRequest: string | IFindSessionRequest): { createdBy: string; id: string }[] {
-    if (typeof sessionIdOrRequest === "string") {
-        const session = sessions.find(session => session.sessionId === sessionIdOrRequest);
+function getSession(
+    sessionIdOrRequest: string | Types.ObjectId | IFindSessionRequest
+): { createdBy: Types.ObjectId; id: Types.ObjectId }[] {
+    if (typeof sessionIdOrRequest === "string" || sessionIdOrRequest instanceof Types.ObjectId) {
+        const session = sessions.find(session => session.sessionId.equals(sessionIdOrRequest));
         if (session) {
             logger.debug("Found Sessions:", { session });
             return [
@@ -79,35 +83,15 @@ function getSession(sessionIdOrRequest: string | IFindSessionRequest): { created
     }));
 }
 
-function getSessionByCreatorID(creatorId: string): ISession | undefined {
-    return sessions.find(session => session.creatorId === creatorId);
+function getSessionByCreatorID(creatorId: string | Types.ObjectId): ISession | undefined {
+    return sessions.find(session => session.creatorId.equals(creatorId));
 }
 
-function getNewSessionID(): string {
-    const characters = "0123456789abcdef";
-    const maxAttempts = 100;
-    let sessionId = "";
-
-    for (let attempt = 0; attempt < maxAttempts; attempt++) {
-        sessionId = "64";
-        for (let i = 0; i < 22; i++) {
-            const randomIndex = Math.floor(Math.random() * characters.length);
-            sessionId += characters[randomIndex];
-        }
-
-        if (!sessions.some(session => session.sessionId === sessionId)) {
-            return sessionId;
-        }
-    }
-
-    throw new Error("Failed to generate a unique session ID");
-}
-
-function updateSession(sessionId: string, sessionData: string): boolean {
-    const session = sessions.find(session => session.sessionId === sessionId);
+function updateSession(sessionId: string | Types.ObjectId, sessionData: string): boolean {
+    const session = sessions.find(session => session.sessionId.equals(sessionId));
     if (!session) return false;
     try {
-        Object.assign(session, JSON.parse(sessionData));
+        Object.assign(session, JSONParse(sessionData));
         return true;
     } catch (error) {
         console.error("Invalid JSON string for session update.");
@@ -115,8 +99,8 @@ function updateSession(sessionId: string, sessionData: string): boolean {
     }
 }
 
-function deleteSession(sessionId: string): boolean {
-    const index = sessions.findIndex(session => session.sessionId === sessionId);
+function deleteSession(sessionId: string | Types.ObjectId): boolean {
+    const index = sessions.findIndex(session => session.sessionId.equals(sessionId));
     if (index !== -1) {
         sessions.splice(index, 1);
         return true;
@@ -129,7 +113,6 @@ export {
     getAllSessions,
     getSessionByID,
     getSessionByCreatorID,
-    getNewSessionID,
     updateSession,
     deleteSession,
     getSession

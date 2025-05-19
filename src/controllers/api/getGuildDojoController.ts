@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import { Types } from "mongoose";
 import { Guild } from "@/src/models/guildModel";
 import { getDojoClient } from "@/src/services/guildService";
+import { Account } from "@/src/models/loginModel";
 
 export const getGuildDojoController: RequestHandler = async (req, res) => {
     const guildId = req.query.guildId as string;
@@ -25,7 +26,8 @@ export const getGuildDojoController: RequestHandler = async (req, res) => {
     }
 
     const payload: IGetGuildDojoRequest = req.body ? (JSON.parse(String(req.body)) as IGetGuildDojoRequest) : {};
-    res.json(await getDojoClient(guild, 0, payload.ComponentId));
+    const account = await Account.findById(req.query.accountId as string);
+    res.json(await getDojoClient(guild, 0, payload.ComponentId, account?.BuildLabel));
 };
 
 interface IGetGuildDojoRequest {

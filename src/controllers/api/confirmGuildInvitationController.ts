@@ -62,7 +62,7 @@ export const confirmGuildInvitationGetController: RequestHandler = async (req, r
         await guild.save();
 
         res.json({
-            ...(await getGuildClient(guild, account._id.toString())),
+            ...(await getGuildClient(guild, account)),
             InventoryChanges: inventoryChanges
         });
     } else {

@@ -4,16 +4,16 @@ import { config } from "./configService";
 import { Account } from "../models/loginModel";
 import { Types } from "mongoose";
 import { Friendship } from "../models/friendModel";
-import { toMongoDate } from "../helpers/inventoryHelpers";
+import { fromOid, toMongoDate } from "../helpers/inventoryHelpers";
 
 export const addAccountDataToFriendInfo = async (info: IFriendInfo): Promise<void> => {
-    const account = (await Account.findById(info._id.$oid, "DisplayName LastLogin"))!;
+    const account = (await Account.findById(fromOid(info._id), "DisplayName LastLogin"))!;
     info.DisplayName = account.DisplayName;
     info.LastLogin = toMongoDate(account.LastLogin);
 };
 
 export const addInventoryDataToFriendInfo = async (info: IFriendInfo): Promise<void> => {
-    const inventory = await getInventory(info._id.$oid, "PlayerLevel ActiveAvatarImageType");
+    const inventory = await getInventory(fromOid(info._id), "PlayerLevel ActiveAvatarImageType");
     info.PlayerLevel = config.spoofMasteryRank == -1 ? inventory.PlayerLevel : config.spoofMasteryRank;
     info.ActiveAvatarImageType = inventory.ActiveAvatarImageType;
 };

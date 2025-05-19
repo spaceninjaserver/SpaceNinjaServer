@@ -1,6 +1,8 @@
+import { Types } from "mongoose";
+
 export interface ISession {
-    sessionId: string;
-    creatorId: string;
+    sessionId: Types.ObjectId;
+    creatorId: Types.ObjectId;
     maxPlayers?: number;
     minPlayers?: number;
     privateSlots?: number;
@@ -18,7 +20,7 @@ export interface ISession {
     customSettings?: string;
     rewardSeed?: number;
     guildId?: string;
-    buildId?: number;
+    buildId?: number | bigint;
     platform?: number;
     xplatform?: boolean;
     freePublic?: number;
