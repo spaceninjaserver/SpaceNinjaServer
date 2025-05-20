@@ -445,7 +445,9 @@ export const addMissionInventoryUpdates = async (
                 });
                 break;
             case "SyndicateId": {
-                inventory.CompletedSyndicates.push(value);
+                if (!config.syndicateMissionsRepeatable) {
+                    inventory.CompletedSyndicates.push(value);
+                }
                 break;
             }
             case "SortieId": {

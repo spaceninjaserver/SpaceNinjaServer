@@ -151,6 +151,7 @@ dict = {
     cheats_noVendorPurchaseLimits: `Keine Kaufbeschränkungen bei Händlern`,
     cheats_noDeathMarks: `Keine Todesmarkierungen`,
     cheats_noKimCooldowns: `Keine Wartezeit bei KIM`,
+    cheats_syndicateMissionsRepeatable: `Syndikat-Missionen wiederholbar`,
     cheats_instantFinishRivenChallenge: `Riven-Mod Herausforderung sofort abschließen`,
     cheats_instantResourceExtractorDrones: `Sofortige Ressourcen-Extraktor-Drohnen`,
     cheats_noResourceExtractorDronesDamage: `Kein Schaden für Ressourcen-Extraktor-Drohnen`,

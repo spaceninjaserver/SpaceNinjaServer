@@ -150,6 +150,7 @@ dict = {
     cheats_noVendorPurchaseLimits: `No Vendor Purchase Limits`,
     cheats_noDeathMarks: `No Death Marks`,
     cheats_noKimCooldowns: `No KIM Cooldowns`,
+    cheats_syndicateMissionsRepeatable: `Syndicate Missions Repeatable`,
     cheats_instantFinishRivenChallenge: `Instant Finish Riven Challenge`,
     cheats_instantResourceExtractorDrones: `Instant Resource Extractor Drones`,
     cheats_noResourceExtractorDronesDamage: `No Resource Extractor Drones Damage`,

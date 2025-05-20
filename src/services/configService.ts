@@ -44,6 +44,7 @@ interface IConfig {
     noVendorPurchaseLimits?: boolean;
     noDeathMarks?: boolean;
     noKimCooldowns?: boolean;
+    syndicateMissionsRepeatable?: boolean;
     instantFinishRivenChallenge?: boolean;
     instantResourceExtractorDrones?: boolean;
     noResourceExtractorDronesDamage?: boolean;

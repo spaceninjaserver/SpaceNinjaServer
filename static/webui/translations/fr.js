@@ -151,6 +151,7 @@ dict = {
     cheats_noVendorPurchaseLimits: `Aucune limite d'achat chez les PNJ`,
     cheats_noDeathMarks: `Aucune marque d'assassin`,
     cheats_noKimCooldowns: `Aucun cooldown sur le KIM`,
+    cheats_syndicateMissionsRepeatable: `[UNTRANSLATED] Syndicate Missions Repeatable`,
     cheats_instantFinishRivenChallenge: `[UNTRANSLATED] Instant Finish Riven Challenge`,
     cheats_instantResourceExtractorDrones: `Ressources de drones d'extraction instantannées`,
     cheats_noResourceExtractorDronesDamage: `Aucun dégâts aux drones d'extraction de resources`,
