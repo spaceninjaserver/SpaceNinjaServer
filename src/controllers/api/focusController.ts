@@ -64,7 +64,9 @@ export const focusController: RequestHandler = async (req, res) => {
                 }
             );
 
-            res.end();
+            res.json({
+                FocusUpgrade: { ItemType: focusType }
+            });
             break;
         }
         case FocusOperation.UnlockUpgrade: {
