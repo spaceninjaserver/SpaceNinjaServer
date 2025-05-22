@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { getAccountIdForRequest } from "@/src/services/loginService";
+import { getAccountForRequest } from "@/src/services/loginService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getInventory, addMiscItems, updateCurrency, addRecipes, freeUpSlot } from "@/src/services/inventoryService";
 import { IOid } from "@/src/types/commonTypes";
@@ -12,7 +12,7 @@ import {
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { ExportMisc } from "warframe-public-export-plus";
 import { getRecipe } from "@/src/services/itemDataService";
-import { toMongoDate } from "@/src/helpers/inventoryHelpers";
+import { toMongoDate, version_compare } from "@/src/helpers/inventoryHelpers";
 import { logger } from "@/src/utils/logger";
 import { colorToShard } from "@/src/helpers/shardHelper";
 import { config } from "@/src/services/configService";
@@ -23,12 +23,12 @@ import {
 } from "@/src/services/infestedFoundryService";
 
 export const infestedFoundryController: RequestHandler = async (req, res) => {
-    const accountId = await getAccountIdForRequest(req);
+    const account = await getAccountForRequest(req);
     switch (req.query.mode) {
         case "s": {
             // shard installation
             const request = getJSONfromString<IShardInstallRequest>(String(req.body));
-            const inventory = await getInventory(accountId);
+            const inventory = await getInventory(account._id.toString());
             const suit = inventory.Suits.id(request.SuitId.$oid)!;
             if (!suit.ArchonCrystalUpgrades || suit.ArchonCrystalUpgrades.length != 5) {
                 suit.ArchonCrystalUpgrades = [{}, {}, {}, {}, {}];
@@ -56,7 +56,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
         case "x": {
             // shard removal
             const request = getJSONfromString<IShardUninstallRequest>(String(req.body));
-            const inventory = await getInventory(accountId);
+            const inventory = await getInventory(account._id.toString());
             const suit = inventory.Suits.id(request.SuitId.$oid)!;
 
             const miscItemChanges: IMiscItem[] = [];
@@ -70,18 +70,29 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
                     ItemCount: 1
                 });
                 addMiscItems(inventory, miscItemChanges);
+
+                // consume resources
+                if (!config.infiniteHelminthMaterials) {
+                    let type: string;
+                    let count: number;
+                    if (account.BuildLabel && version_compare(account.BuildLabel, "2025.05.20.10.18") < 0) {
+                        // < 38.6.0
+                        type = "/Lotus/Types/Items/InfestedFoundry/HelminthBile";
+                        count = 300;
+                    } else {
+                        // >= 38.6.0
+                        type =
+                            archonCrystalRemovalResource[
+                                suit.ArchonCrystalUpgrades![request.Slot].Color!.replace("_MYTHIC", "")
+                            ];
+                        count = suit.ArchonCrystalUpgrades![request.Slot].Color!.indexOf("_MYTHIC") != -1 ? 300 : 150;
+                    }
+                    inventory.InfestedFoundry!.Resources!.find(x => x.ItemType == type)!.Count -= count;
+                }
             }
 
             // remove from suit
             suit.ArchonCrystalUpgrades![request.Slot] = {};
-
-            if (!config.infiniteHelminthMaterials) {
-                // remove bile
-                const bile = inventory.InfestedFoundry!.Resources!.find(
-                    x => x.ItemType == "/Lotus/Types/Items/InfestedFoundry/HelminthBile"
-                )!;
-                bile.Count -= 300;
-            }
 
             await inventory.save();
 
@@ -99,7 +110,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
         case "n": {
             // name the beast
             const request = getJSONfromString<IHelminthNameRequest>(String(req.body));
-            const inventory = await getInventory(accountId);
+            const inventory = await getInventory(account._id.toString());
             inventory.InfestedFoundry ??= {};
             inventory.InfestedFoundry.Name = request.newName;
             await inventory.save();
@@ -122,7 +133,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             }
 
             const request = getJSONfromString<IHelminthFeedRequest>(String(req.body));
-            const inventory = await getInventory(accountId);
+            const inventory = await getInventory(account._id.toString());
             inventory.InfestedFoundry ??= {};
             inventory.InfestedFoundry.Resources ??= [];
 
@@ -218,7 +229,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
         case "o": {
             // offerings update
             const request = getJSONfromString<IHelminthOfferingsUpdate>(String(req.body));
-            const inventory = await getInventory(accountId);
+            const inventory = await getInventory(account._id.toString());
             inventory.InfestedFoundry ??= {};
             inventory.InfestedFoundry.InvigorationIndex = request.OfferingsIndex;
             inventory.InfestedFoundry.InvigorationSuitOfferings = request.SuitTypes;
@@ -239,7 +250,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
         case "a": {
             // subsume warframe
             const request = getJSONfromString<IHelminthSubsumeRequest>(String(req.body));
-            const inventory = await getInventory(accountId);
+            const inventory = await getInventory(account._id.toString());
             const recipe = getRecipe(request.Recipe)!;
             if (!config.infiniteHelminthMaterials) {
                 for (const ingredient of recipe.secretIngredients!) {
@@ -289,7 +300,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
 
         case "r": {
             // rush subsume
-            const inventory = await getInventory(accountId);
+            const inventory = await getInventory(account._id.toString());
             const currencyChanges = updateCurrency(inventory, 50, true);
             const recipeChanges = handleSubsumeCompletion(inventory);
             await inventory.save();
@@ -307,7 +318,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
 
         case "u": {
             const request = getJSONfromString<IHelminthInvigorationRequest>(String(req.body));
-            const inventory = await getInventory(accountId);
+            const inventory = await getInventory(account._id.toString());
             const suit = inventory.Suits.id(request.SuitId.$oid)!;
             const upgradesExpiry = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
             suit.OffensiveUpgrade = request.OffensiveUpgradeType;
@@ -340,7 +351,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
         }
 
         case "custom_unlockall": {
-            const inventory = await getInventory(accountId);
+            const inventory = await getInventory(account._id.toString());
             inventory.InfestedFoundry ??= {};
             inventory.InfestedFoundry.XP ??= 0;
             if (151875_00 > inventory.InfestedFoundry.XP) {
@@ -438,4 +449,13 @@ const apetiteModel = (x: number): number => {
         return -0.3327892 * x + 26.94135;
     }
     return 3;
+};
+
+const archonCrystalRemovalResource: Record<string, string> = {
+    ACC_RED: "/Lotus/Types/Items/InfestedFoundry/HelminthOxides",
+    ACC_YELLOW: "/Lotus/Types/Items/InfestedFoundry/HelminthBile",
+    ACC_BLUE: "/Lotus/Types/Items/InfestedFoundry/HelminthSynthetics",
+    ACC_GREEN: "/Lotus/Types/Items/InfestedFoundry/HelminthBiotics",
+    ACC_ORANGE: "/Lotus/Types/Items/InfestedFoundry/HelminthPheromones",
+    ACC_PURPLE: "/Lotus/Types/Items/InfestedFoundry/HelminthCalx"
 };
