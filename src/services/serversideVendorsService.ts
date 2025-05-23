@@ -27,7 +27,6 @@ import MaskSalesmanManifest from "@/static/fixed_responses/getVendorInfo/MaskSal
 import Nova1999ConquestShopManifest from "@/static/fixed_responses/getVendorInfo/Nova1999ConquestShopManifest.json";
 import OstronPetVendorManifest from "@/static/fixed_responses/getVendorInfo/OstronPetVendorManifest.json";
 import OstronProspectorVendorManifest from "@/static/fixed_responses/getVendorInfo/OstronProspectorVendorManifest.json";
-import RadioLegionIntermission12VendorManifest from "@/static/fixed_responses/getVendorInfo/RadioLegionIntermission12VendorManifest.json";
 import SolarisDebtTokenVendorRepossessionsManifest from "@/static/fixed_responses/getVendorInfo/SolarisDebtTokenVendorRepossessionsManifest.json";
 import SolarisProspectorVendorManifest from "@/static/fixed_responses/getVendorInfo/SolarisProspectorVendorManifest.json";
 import Temple1999VendorManifest from "@/static/fixed_responses/getVendorInfo/Temple1999VendorManifest.json";
@@ -54,7 +53,6 @@ const rawVendorManifests: IVendorManifest[] = [
     Nova1999ConquestShopManifest,
     OstronPetVendorManifest,
     OstronProspectorVendorManifest,
-    RadioLegionIntermission12VendorManifest,
     SolarisDebtTokenVendorRepossessionsManifest,
     SolarisProspectorVendorManifest,
     Temple1999VendorManifest,

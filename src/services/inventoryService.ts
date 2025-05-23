@@ -44,6 +44,7 @@ import {
 import {
     ExportArcanes,
     ExportBundles,
+    ExportChallenges,
     ExportCustoms,
     ExportDrones,
     ExportEmailItems,
@@ -53,7 +54,6 @@ import {
     ExportGear,
     ExportKeys,
     ExportMisc,
-    ExportNightwave,
     ExportRailjackWeapons,
     ExportRecipes,
     ExportResources,
@@ -83,8 +83,9 @@ import libraryDailyTasks from "@/static/fixed_responses/libraryDailyTasks.json";
 import { getRandomElement, getRandomInt, getRandomWeightedReward, SRng } from "./rngService";
 import { createMessage } from "./inboxService";
 import { getMaxStanding } from "@/src/helpers/syndicateStandingHelper";
-import { getWorldState } from "./worldStateService";
+import { getNightwaveSyndicateTag, getWorldState } from "./worldStateService";
 import { generateNemesisProfile, INemesisProfile } from "../helpers/nemesisHelpers";
+import { TAccountDocument } from "./loginService";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
@@ -1716,6 +1717,7 @@ export const addLoreFragmentScans = (inventory: TInventoryDatabaseDocument, arr:
 };
 
 export const addChallenges = (
+    account: TAccountDocument,
     inventory: TInventoryDatabaseDocument,
     ChallengeProgress: IChallengeProgress[],
     SeasonChallengeCompletions: ISeasonChallenge[] | undefined
@@ -1738,26 +1740,32 @@ export const addChallenges = (
                 continue;
             }
 
-            const meta = ExportNightwave.challenges[challenge.challenge];
-            logger.debug("Completed challenge", meta);
+            const meta = ExportChallenges[challenge.challenge];
+            const nightwaveSyndicateTag = getNightwaveSyndicateTag(account.BuildLabel);
+            logger.debug("Completed season challenge", {
+                uniqueName: challenge.challenge,
+                syndicateTag: nightwaveSyndicateTag,
+                ...meta
+            });
+            if (nightwaveSyndicateTag) {
+                let affiliation = inventory.Affiliations.find(x => x.Tag == nightwaveSyndicateTag);
+                if (!affiliation) {
+                    affiliation =
+                        inventory.Affiliations[
+                            inventory.Affiliations.push({
+                                Tag: nightwaveSyndicateTag,
+                                Standing: 0
+                            }) - 1
+                        ];
+                }
+                affiliation.Standing += meta.standing!;
 
-            let affiliation = inventory.Affiliations.find(x => x.Tag == ExportNightwave.affiliationTag);
-            if (!affiliation) {
-                affiliation =
-                    inventory.Affiliations[
-                        inventory.Affiliations.push({
-                            Tag: ExportNightwave.affiliationTag,
-                            Standing: 0
-                        }) - 1
-                    ];
+                if (affiliationMods.length == 0) {
+                    affiliationMods.push({ Tag: nightwaveSyndicateTag });
+                }
+                affiliationMods[0].Standing ??= 0;
+                affiliationMods[0].Standing += meta.standing!;
             }
-            affiliation.Standing += meta.standing;
-
-            if (affiliationMods.length == 0) {
-                affiliationMods.push({ Tag: ExportNightwave.affiliationTag });
-            }
-            affiliationMods[0].Standing ??= 0;
-            affiliationMods[0].Standing += meta.standing;
         }
     }
     return affiliationMods;

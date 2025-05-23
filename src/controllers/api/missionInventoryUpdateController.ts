@@ -57,7 +57,7 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
     const firstCompletion = missionReport.SortieId
         ? inventory.CompletedSorties.indexOf(missionReport.SortieId) == -1
         : false;
-    const inventoryUpdates = await addMissionInventoryUpdates(inventory, missionReport);
+    const inventoryUpdates = await addMissionInventoryUpdates(account, inventory, missionReport);
 
     if (
         missionReport.MissionStatus !== "GS_SUCCESS" &&

@@ -14,7 +14,7 @@ export interface IWorldState {
     NodeOverrides: INodeOverride[];
     PVPChallengeInstances: IPVPChallengeInstance[];
     EndlessXpChoices: IEndlessXpChoice[];
-    SeasonInfo: {
+    SeasonInfo?: {
         Activation: IMongoDate;
         Expiry: IMongoDate;
         AffiliationTag: string;

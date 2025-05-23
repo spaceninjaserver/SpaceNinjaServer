@@ -1,18 +1,26 @@
 import { RequestHandler } from "express";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { getAccountIdForRequest } from "@/src/services/loginService";
+import { getAccountForRequest } from "@/src/services/loginService";
 import { addChallenges, getInventory } from "@/src/services/inventoryService";
 import { IChallengeProgress, ISeasonChallenge } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IAffiliationMods } from "@/src/types/purchaseTypes";
 
 export const updateChallengeProgressController: RequestHandler = async (req, res) => {
     const challenges = getJSONfromString<IUpdateChallengeProgressRequest>(String(req.body));
-    const accountId = await getAccountIdForRequest(req);
+    const account = await getAccountForRequest(req);
 
-    const inventory = await getInventory(accountId, "ChallengeProgress SeasonChallengeHistory Affiliations");
+    const inventory = await getInventory(
+        account._id.toString(),
+        "ChallengeProgress SeasonChallengeHistory Affiliations"
+    );
     let affiliationMods: IAffiliationMods[] = [];
     if (challenges.ChallengeProgress) {
-        affiliationMods = addChallenges(inventory, challenges.ChallengeProgress, challenges.SeasonChallengeCompletions);
+        affiliationMods = addChallenges(
+            account,
+            inventory,
+            challenges.ChallengeProgress,
+            challenges.SeasonChallengeCompletions
+        );
     }
     if (challenges.SeasonChallengeHistory) {
         challenges.SeasonChallengeHistory.forEach(({ challenge, id }) => {

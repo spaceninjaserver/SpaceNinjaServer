@@ -79,6 +79,7 @@ import { config } from "./configService";
 import libraryDailyTasks from "@/static/fixed_responses/libraryDailyTasks.json";
 import { ISyndicateMissionInfo } from "../types/worldStateTypes";
 import { fromOid } from "../helpers/inventoryHelpers";
+import { TAccountDocument } from "./loginService";
 
 const getRotations = (rewardInfo: IRewardInfo, tierOverride?: number): number[] => {
     // For Spy missions, e.g. 3 vaults cracked = A, B, C
@@ -135,6 +136,7 @@ const getRandomRewardByChance = (pool: IReward[], rng?: SRng): IRngResult | unde
 //const knownUnhandledKeys: readonly string[] = ["test"] as const; // for unimplemented but important keys
 
 export const addMissionInventoryUpdates = async (
+    account: TAccountDocument,
     inventory: TInventoryDatabaseDocument,
     inventoryUpdates: IMissionInventoryUpdateRequest
 ): Promise<IInventoryChanges> => {
@@ -287,7 +289,7 @@ export const addMissionInventoryUpdates = async (
                 addRecipes(inventory, value);
                 break;
             case "ChallengeProgress":
-                addChallenges(inventory, value, inventoryUpdates.SeasonChallengeCompletions);
+                addChallenges(account, inventory, value, inventoryUpdates.SeasonChallengeCompletions);
                 break;
             case "FusionTreasures":
                 addFusionTreasures(inventory, value);

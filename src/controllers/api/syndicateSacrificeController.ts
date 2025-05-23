@@ -1,14 +1,12 @@
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { ExportNightwave, ExportSyndicates, ISyndicateSacrifice } from "warframe-public-export-plus";
+import { ExportSyndicates, ISyndicateSacrifice } from "warframe-public-export-plus";
 import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
 import { addMiscItems, combineInventoryChanges, getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
-import { isStoreItem, toStoreItem } from "@/src/services/itemDataService";
+import { toStoreItem } from "@/src/services/itemDataService";
 import { logger } from "@/src/utils/logger";
-
-const nightwaveCredsItemType = ExportNightwave.rewards[ExportNightwave.rewards.length - 1].uniqueName;
 
 export const syndicateSacrificeController: RequestHandler = async (request, response) => {
     const accountId = await getAccountIdForRequest(request);
@@ -54,13 +52,6 @@ export const syndicateSacrificeController: RequestHandler = async (request, resp
     syndicate.Title ??= 0;
     syndicate.Title += 1;
 
-    if (syndicate.Title > 0 && manifest.favours.find(x => x.rankUpReward && x.requiredLevel == syndicate.Title)) {
-        syndicate.FreeFavorsEarned ??= [];
-        if (!syndicate.FreeFavorsEarned.includes(syndicate.Title)) {
-            syndicate.FreeFavorsEarned.push(syndicate.Title);
-        }
-    }
-
     if (reward) {
         combineInventoryChanges(
             res.InventoryChanges,
@@ -68,23 +59,36 @@ export const syndicateSacrificeController: RequestHandler = async (request, resp
         );
     }
 
-    if (data.AffiliationTag == ExportNightwave.affiliationTag) {
-        const index = syndicate.Title - 1;
-        if (index < ExportNightwave.rewards.length) {
+    // Quacks like a nightwave syndicate?
+    if (manifest.dailyChallenges) {
+        const title = manifest.titles!.find(x => x.level == syndicate.Title);
+        if (title) {
             res.NewEpisodeReward = true;
-            const reward = ExportNightwave.rewards[index];
-            let rewardType = reward.uniqueName;
-            if (!isStoreItem(rewardType)) {
-                rewardType = toStoreItem(rewardType);
+            let rewardType: string;
+            let rewardCount: number;
+            if (title.storeItemReward) {
+                rewardType = title.storeItemReward;
+                rewardCount = 1;
+            } else {
+                rewardType = toStoreItem(title.reward!.ItemType);
+                rewardCount = title.reward!.ItemCount;
             }
-            const rewardInventoryChanges = (await handleStoreItemAcquisition(rewardType, inventory, reward.itemCount))
+            const rewardInventoryChanges = (await handleStoreItemAcquisition(rewardType, inventory, rewardCount))
                 .InventoryChanges;
             if (Object.keys(rewardInventoryChanges).length == 0) {
                 logger.debug(`nightwave rank up reward did not seem to get added, giving 50 creds instead`);
+                const nightwaveCredsItemType = manifest.titles![0].reward!.ItemType;
                 rewardInventoryChanges.MiscItems = [{ ItemType: nightwaveCredsItemType, ItemCount: 50 }];
                 addMiscItems(inventory, rewardInventoryChanges.MiscItems);
             }
             combineInventoryChanges(res.InventoryChanges, rewardInventoryChanges);
+        }
+    } else {
+        if (syndicate.Title > 0 && manifest.favours.find(x => x.rankUpReward && x.requiredLevel == syndicate.Title)) {
+            syndicate.FreeFavorsEarned ??= [];
+            if (!syndicate.FreeFavorsEarned.includes(syndicate.Title)) {
+                syndicate.FreeFavorsEarned.push(syndicate.Title);
+            }
         }
     }
 
