@@ -2,6 +2,7 @@ import fs from "fs";
 import fsPromises from "fs/promises";
 import { logger } from "../utils/logger";
 import { config, configPath, loadConfig } from "./configService";
+import { getWebPorts, startWebServer, stopWebServer } from "./webService";
 
 let amnesia = false;
 fs.watchFile(configPath, () => {
@@ -16,6 +17,12 @@ fs.watchFile(configPath, () => {
             process.exit(1);
         }
         validateConfig();
+
+        const webPorts = getWebPorts();
+        if (config.httpPort != webPorts.http || config.httpsPort != webPorts.https) {
+            logger.info(`Restarting web server to apply port changes.`);
+            void stopWebServer().then(startWebServer);
+        }
     }
 });
 

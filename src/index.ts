@@ -12,12 +12,10 @@ import { logger } from "@/src/utils/logger";
 logger.info("Starting up...");
 
 // Proceed with normal startup: bring up config watcher service, validate config, connect to MongoDB, and finally start listening for HTTP.
-import http from "http";
-import https from "https";
-import fs from "node:fs";
-import { app } from "./app";
 import mongoose from "mongoose";
 import { JSONStringify } from "json-with-bigint";
+import { startWebServer } from "./services/webService";
+
 import { validateConfig } from "@/src/services/configWatcherService";
 
 // Patch JSON.stringify to work flawlessly with Bigints.
@@ -29,26 +27,7 @@ mongoose
     .connect(config.mongodbUrl)
     .then(() => {
         logger.info("Connected to MongoDB");
-
-        const httpPort = config.httpPort || 80;
-        const httpsPort = config.httpsPort || 443;
-        const options = {
-            key: fs.readFileSync("static/certs/key.pem"),
-            cert: fs.readFileSync("static/certs/cert.pem")
-        };
-
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        http.createServer(app).listen(httpPort, () => {
-            logger.info("HTTP server started on port " + httpPort);
-            // eslint-disable-next-line @typescript-eslint/no-misused-promises
-            https.createServer(options, app).listen(httpsPort, () => {
-                logger.info("HTTPS server started on port " + httpsPort);
-
-                logger.info(
-                    "Access the WebUI in your browser at http://localhost" + (httpPort == 80 ? "" : ":" + httpPort)
-                );
-            });
-        });
+        startWebServer();
     })
     .catch(error => {
         if (error instanceof Error) {
