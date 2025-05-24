@@ -20,7 +20,21 @@ export const loginController: RequestHandler = async (request, response) => {
             ? request.query.buildLabel.split(" ").join("+")
             : buildConfig.buildLabel;
 
-    const myAddress = request.host.indexOf("warframe.com") == -1 ? request.host : config.myAddress;
+    let myAddress: string;
+    let myUrlBase: string = request.protocol + "://";
+    if (request.host.indexOf("warframe.com") == -1) {
+        // Client request was redirected cleanly, so we know it can reach us how it's reaching us now.
+        myAddress = request.hostname;
+        myUrlBase += request.host;
+    } else {
+        // Don't know how the client reached us, hoping the config does.
+        myAddress = config.myAddress;
+        myUrlBase += myAddress;
+        const port: number = request.protocol == "http" ? config.httpPort || 80 : config.httpsPort || 443;
+        if (port != (request.protocol == "http" ? 80 : 443)) {
+            myUrlBase += ":" + port;
+        }
+    }
 
     if (
         !account &&
@@ -52,7 +66,7 @@ export const loginController: RequestHandler = async (request, response) => {
                 LastLogin: new Date()
             });
             logger.debug("created new account");
-            response.json(createLoginResponse(myAddress, newAccount, buildLabel));
+            response.json(createLoginResponse(myAddress, myUrlBase, newAccount, buildLabel));
             return;
         } catch (error: unknown) {
             if (error instanceof Error) {
@@ -98,10 +112,15 @@ export const loginController: RequestHandler = async (request, response) => {
     }
     await account.save();
 
-    response.json(createLoginResponse(myAddress, account.toJSON(), buildLabel));
+    response.json(createLoginResponse(myAddress, myUrlBase, account.toJSON(), buildLabel));
 };
 
-const createLoginResponse = (myAddress: string, account: IDatabaseAccountJson, buildLabel: string): ILoginResponse => {
+const createLoginResponse = (
+    myAddress: string,
+    myUrlBase: string,
+    account: IDatabaseAccountJson,
+    buildLabel: string
+): ILoginResponse => {
     const resp: ILoginResponse = {
         id: account.id,
         DisplayName: account.DisplayName,
@@ -139,11 +158,11 @@ const createLoginResponse = (myAddress: string, account: IDatabaseAccountJson, b
     }
     if (version_compare(buildLabel, "2022.09.06.19.24") >= 0) {
         resp.CrossPlatformAllowed = account.CrossPlatformAllowed;
-        resp.HUB = `https://${myAddress}/api/`;
+        resp.HUB = `${myUrlBase}/api/`;
         resp.MatchmakingBuildId = buildConfig.matchmakingBuildId;
     }
     if (version_compare(buildLabel, "2023.04.25.23.40") >= 0) {
-        resp.platformCDNs = [`https://${myAddress}/`];
+        resp.platformCDNs = [`${myUrlBase}/`];
     }
     return resp;
 };
