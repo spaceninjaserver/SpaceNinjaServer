@@ -5,7 +5,13 @@ import { mixSeeds, SRng } from "./rngService";
 import { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel";
 import { addBooster, updateCurrency } from "./inventoryService";
 import { handleStoreItemAcquisition } from "./purchaseService";
-import { ExportBoosters, ExportRecipes, ExportWarframes, ExportWeapons } from "warframe-public-export-plus";
+import {
+    ExportBoosterPacks,
+    ExportBoosters,
+    ExportRecipes,
+    ExportWarframes,
+    ExportWeapons
+} from "warframe-public-export-plus";
 import { toStoreItem } from "./itemDataService";
 
 export interface ILoginRewardsReponse {
@@ -76,6 +82,7 @@ export const getRandomLoginRewards = (
 const getRandomLoginReward = (rng: SRng, day: number, inventory: TInventoryDatabaseDocument): ILoginReward => {
     const reward = rng.randomReward(randomRewards)!;
     //const reward = randomRewards.find(x => x.RewardType == "RT_BOOSTER")!;
+    let storeItemType: string = reward.StoreItemType;
     if (reward.RewardType == "RT_RANDOM_RECIPE") {
         const masteredItems = new Set();
         for (const entry of inventory.XPInfo) {
@@ -102,7 +109,12 @@ const getRandomLoginReward = (rng: SRng, day: number, inventory: TInventoryDatab
             // This account has all applicable warframes and weapons already mastered (filthy cheater), need a different reward.
             return getRandomLoginReward(rng, day, inventory);
         }
-        reward.StoreItemType = toStoreItem(rng.randomElement(eligibleRecipes)!);
+        storeItemType = toStoreItem(rng.randomElement(eligibleRecipes)!);
+    } else if (reward.StoreItemType == "/Lotus/StoreItems/Types/BoosterPacks/LoginRewardRandomProjection") {
+        storeItemType = toStoreItem(
+            rng.randomElement(ExportBoosterPacks["/Lotus/Types/BoosterPacks/LoginRewardRandomProjection"].components)!
+                .Item
+        );
     }
     return {
         //_id: toOid(new Types.ObjectId()),
@@ -110,7 +122,7 @@ const getRandomLoginReward = (rng: SRng, day: number, inventory: TInventoryDatab
         //CouponType: "CPT_PLATINUM",
         Icon: reward.Icon ?? "",
         //ItemType: "",
-        StoreItemType: reward.StoreItemType,
+        StoreItemType: storeItemType,
         //ProductCategory: "Pistols",
         Amount: reward.Duration ? 1 : Math.round(scaleAmount(day, reward.Amount, reward.ScalingMultiplier)),
         ScalingMultiplier: reward.ScalingMultiplier,
