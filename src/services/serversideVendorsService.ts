@@ -303,7 +303,7 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
         }
         const cycleStart = cycleOffset + cycleIndex * cycleDuration;
         for (const rawItem of offersToAdd) {
-            const durationHoursRange = toRange(rawItem.durationHours);
+            const durationHoursRange = toRange(rawItem.durationHours ?? cycleDuration);
             const expiry =
                 cycleStart +
                 rng.randomInt(durationHoursRange.minValue, durationHoursRange.maxValue) * unixTimesInMs.hour;

@@ -25,7 +25,7 @@
     "morgan": "^1.10.0",
     "ncp": "^2.0.0",
     "typescript": "^5.5",
-    "warframe-public-export-plus": "^0.5.64",
+    "warframe-public-export-plus": "^0.5.65",
     "warframe-riven-info": "^0.1.2",
     "winston": "^3.17.0",
     "winston-daily-rotate-file": "^5.0.0"
