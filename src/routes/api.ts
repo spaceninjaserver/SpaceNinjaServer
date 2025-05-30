@@ -107,6 +107,7 @@ import { removeFriendGetController, removeFriendPostController } from "@/src/con
 import { removeFromAllianceController } from "@/src/controllers/api/removeFromAllianceController";
 import { removeFromGuildController } from "@/src/controllers/api/removeFromGuildController";
 import { removeIgnoredUserController } from "@/src/controllers/api/removeIgnoredUserController";
+import { renamePetController } from "@/src/controllers/api/renamePetController";
 import { rerollRandomModController } from "@/src/controllers/api/rerollRandomModController";
 import { retrievePetFromStasisController } from "@/src/controllers/api/retrievePetFromStasisController";
 import { saveDialogueController } from "@/src/controllers/api/saveDialogueController";
@@ -294,6 +295,7 @@ apiRouter.post("/releasePet.php", releasePetController);
 apiRouter.post("/removeFriend.php", removeFriendPostController);
 apiRouter.post("/removeFromGuild.php", removeFromGuildController);
 apiRouter.post("/removeIgnoredUser.php", removeIgnoredUserController);
+apiRouter.post("/renamePet.php", renamePetController);
 apiRouter.post("/rerollRandomMod.php", rerollRandomModController);
 apiRouter.post("/retrievePetFromStasis.php", retrievePetFromStasisController);
 apiRouter.post("/saveDialogue.php", saveDialogueController);
