@@ -326,8 +326,8 @@ export const addMissionInventoryUpdates = async (
                 break;
             }
             case "PlayerSkillGains": {
-                inventory.PlayerSkills.LPP_SPACE += value.LPP_SPACE;
-                inventory.PlayerSkills.LPP_DRIFTER += value.LPP_DRIFTER;
+                inventory.PlayerSkills.LPP_SPACE += value.LPP_SPACE ?? 0;
+                inventory.PlayerSkills.LPP_DRIFTER += value.LPP_DRIFTER ?? 0;
                 break;
             }
             case "CustomMarkers": {

@@ -96,7 +96,7 @@ export type IMissionInventoryUpdateRequest = {
     FpsSamples: number;
     EvolutionProgress?: IEvolutionProgress[];
     FocusXpIncreases?: number[];
-    PlayerSkillGains: IPlayerSkills;
+    PlayerSkillGains: Partial<IPlayerSkills>;
     CustomMarkers?: ICustomMarkers[];
     LoreFragmentScans?: ILoreFragmentScan[];
     VoidTearParticipantsCurrWave?: {
