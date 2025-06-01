@@ -3,7 +3,7 @@
 echo "Updating SpaceNinjaServer..."
 git fetch --prune
 git stash
-git reset --hard origin/main
+git checkout -f origin/main
 
 if [ -d "static/data/0/" ]; then
     echo "Updating stripped assets..."
