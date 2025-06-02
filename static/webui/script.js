@@ -476,7 +476,7 @@ function updateInventory() {
                         }
 
                         let anyExaltedMissingXP = false;
-                        if (item.XP >= maxXP && "exalted" in itemMap[item.ItemType]) {
+                        if (item.XP >= maxXP && item.ItemType in itemMap && "exalted" in itemMap[item.ItemType]) {
                             for (const exaltedType of itemMap[item.ItemType].exalted) {
                                 const exaltedItem = data.SpecialItems.find(x => x.ItemType == exaltedType);
                                 if (exaltedItem) {
