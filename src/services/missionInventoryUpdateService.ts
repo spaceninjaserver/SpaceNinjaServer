@@ -1207,7 +1207,9 @@ export const addMissionRewards = async (
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const [jobType, unkIndex, hubNode, syndicateMissionId, locationTag] = rewardInfo.jobId.split("_");
         const syndicateMissions: ISyndicateMissionInfo[] = [];
-        pushClassicBounties(syndicateMissions, idToBountyCycle(syndicateMissionId));
+        if (syndicateMissionId) {
+            pushClassicBounties(syndicateMissions, idToBountyCycle(syndicateMissionId));
+        }
         const syndicateEntry = syndicateMissions.find(m => m._id.$oid === syndicateMissionId);
         if (syndicateEntry && syndicateEntry.Jobs) {
             let currentJob = syndicateEntry.Jobs[rewardInfo.JobTier!];
@@ -1556,7 +1558,9 @@ function getRandomMissionDrops(
                 let isEndlessJob = false;
                 if (syndicateMissionId) {
                     const syndicateMissions: ISyndicateMissionInfo[] = [];
-                    pushClassicBounties(syndicateMissions, idToBountyCycle(syndicateMissionId));
+                    if (syndicateMissionId) {
+                        pushClassicBounties(syndicateMissions, idToBountyCycle(syndicateMissionId));
+                    }
                     const syndicateEntry = syndicateMissions.find(m => m._id.$oid === syndicateMissionId);
                     if (syndicateEntry && syndicateEntry.Jobs) {
                         let job = syndicateEntry.Jobs[RewardInfo.JobTier!];
