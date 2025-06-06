@@ -174,7 +174,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
         body.target.fp = BigInt(body.target.fp);
 
         const manifest = getNemesisManifest(body.target.manifest);
-        if (account.BuildLabel && version_compare(manifest.minBuild, account.BuildLabel) < 0) {
+        if (account.BuildLabel && version_compare(account.BuildLabel, manifest.minBuild) < 0) {
             logger.warn(
                 `client on version ${account.BuildLabel} provided nemesis manifest ${body.target.manifest} which was expected to require ${manifest.minBuild} or above. please file a bug report.`
             );
