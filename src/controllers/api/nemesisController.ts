@@ -150,17 +150,17 @@ export const nemesisController: RequestHandler = async (req, res) => {
             res.json(response);
         } else {
             const passcode = getNemesisPasscode(inventory.Nemesis!);
+            let RankIncrease: number | undefined;
             if (passcode[body.position] != body.guess) {
-                res.end();
-            } else {
-                inventory.Nemesis!.Rank += 1;
-                inventory.Nemesis!.InfNodes = getInfNodes(
-                    getNemesisManifest(inventory.Nemesis!.manifest),
-                    inventory.Nemesis!.Rank
-                );
+                const manifest = getNemesisManifest(inventory.Nemesis!.manifest);
+                if (inventory.Nemesis!.Rank + 1 < manifest.systemIndexes.length) {
+                    inventory.Nemesis!.Rank += 1;
+                    RankIncrease = 1;
+                }
+                inventory.Nemesis!.InfNodes = getInfNodes(manifest, inventory.Nemesis!.Rank);
                 await inventory.save();
-                res.json({ RankIncrease: 1 });
             }
+            res.json({ RankIncrease });
         }
     } else if ((req.query.mode as string) == "rs") {
         // report spawn; POST but no application data in body
