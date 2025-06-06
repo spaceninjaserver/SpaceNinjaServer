@@ -791,6 +791,12 @@ export const addItem = async (
                     }
                     break;
                 }
+                case "Items": {
+                    if (typeName.substr(1).split("/")[3] == "Emotes") {
+                        return addCustomization(inventory, typeName);
+                    }
+                    break;
+                }
                 case "NeutralCreatures": {
                     if (inventory.Horses.length != 0) {
                         logger.warn("refusing to add Horse because account already has one");
