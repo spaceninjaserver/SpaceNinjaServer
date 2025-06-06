@@ -310,7 +310,7 @@ export const getInventoryResponse = async (
         // Fix nemesis for older versions
         if (
             inventoryResponse.Nemesis &&
-            version_compare(getNemesisManifest(inventoryResponse.Nemesis.manifest).minBuild, buildLabel) < 0
+            version_compare(buildLabel, getNemesisManifest(inventoryResponse.Nemesis.manifest).minBuild) < 0
         ) {
             inventoryResponse.Nemesis = undefined;
         }
