@@ -237,7 +237,7 @@ export const getNemesisPasscode = (nemesis: { fp: bigint; Faction: TNemesisFacti
     return passcode;
 };
 
-const reqiuemMods: readonly string[] = [
+const requiemMods: readonly string[] = [
     "/Lotus/Upgrades/Mods/Immortal/ImmortalOneMod",
     "/Lotus/Upgrades/Mods/Immortal/ImmortalTwoMod",
     "/Lotus/Upgrades/Mods/Immortal/ImmortalThreeMod",
@@ -263,7 +263,7 @@ export const getNemesisPasscodeModTypes = (nemesis: { fp: bigint; Faction: TNeme
     const passcode = getNemesisPasscode(nemesis);
     return nemesis.Faction == "FC_INFESTATION"
         ? passcode.map(i => antivirusMods[i])
-        : passcode.map(i => reqiuemMods[i]);
+        : passcode.map(i => requiemMods[i]);
 };
 
 export const GUESS_NONE = 8;
