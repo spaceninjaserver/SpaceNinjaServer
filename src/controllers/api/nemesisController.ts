@@ -1,12 +1,17 @@
 import { version_compare } from "@/src/helpers/inventoryHelpers";
 import {
     consumeModCharge,
+    decodeNemesisGuess,
     encodeNemesisGuess,
     getInfNodes,
     getKnifeUpgrade,
     getNemesisManifest,
     getNemesisPasscode,
     getNemesisPasscodeModTypes,
+    GUESS_CORRECT,
+    GUESS_INCORRECT,
+    GUESS_NEUTRAL,
+    GUESS_NONE,
     GUESS_WILDCARD,
     IKnifeResponse
 } from "@/src/helpers/nemesisHelpers";
@@ -98,18 +103,29 @@ export const nemesisController: RequestHandler = async (req, res) => {
         if (inventory.Nemesis!.Faction == "FC_INFESTATION") {
             const guess: number[] = [body.guess & 0xf, (body.guess >> 4) & 0xf, (body.guess >> 8) & 0xf];
             const passcode = getNemesisPasscode(inventory.Nemesis!)[0];
-
-            // Add to GuessHistory
-            const result1 = passcode == guess[0] ? 0 : 1;
-            const result2 = passcode == guess[1] ? 0 : 1;
-            const result3 = passcode == guess[2] ? 0 : 1;
+            const result1 = passcode == guess[0] ? GUESS_CORRECT : GUESS_INCORRECT;
+            const result2 = passcode == guess[1] ? GUESS_CORRECT : GUESS_INCORRECT;
+            const result3 = passcode == guess[2] ? GUESS_CORRECT : GUESS_INCORRECT;
             inventory.Nemesis!.GuessHistory.push(
-                encodeNemesisGuess(guess[0], result1, guess[1], result2, guess[2], result3)
+                encodeNemesisGuess([
+                    {
+                        symbol: guess[0],
+                        result: result1
+                    },
+                    {
+                        symbol: guess[1],
+                        result: result2
+                    },
+                    {
+                        symbol: guess[2],
+                        result: result3
+                    }
+                ])
             );
 
             // Increase antivirus if correct antivirus mod is installed
             const response: IKnifeResponse = {};
-            if (result1 == 0 || result2 == 0 || result3 == 0) {
+            if (result1 == GUESS_CORRECT || result2 == GUESS_CORRECT || result3 == GUESS_CORRECT) {
                 let antivirusGain = 5;
                 const loadout = (await Loadout.findById(inventory.LoadOutPresets, "DATAKNIFE"))!;
                 const dataknifeLoadout = loadout.DATAKNIFE.id(inventory.CurrentLoadOutIds[LoadoutIndex.DATAKNIFE].$oid);
@@ -150,19 +166,47 @@ export const nemesisController: RequestHandler = async (req, res) => {
             await inventory.save();
             res.json(response);
         } else {
-            let RankIncrease: number | undefined;
-            if (body.guess != GUESS_WILDCARD) {
-                const passcode = getNemesisPasscode(inventory.Nemesis!);
-                if (passcode[body.position] != body.guess) {
-                    const manifest = getNemesisManifest(inventory.Nemesis!.manifest);
-                    if (inventory.Nemesis!.Rank + 1 < manifest.systemIndexes.length) {
-                        inventory.Nemesis!.Rank += 1;
-                        RankIncrease = 1;
-                    }
-                    inventory.Nemesis!.InfNodes = getInfNodes(manifest, inventory.Nemesis!.Rank);
-                    await inventory.save();
-                }
+            // For first guess, create a new entry.
+            if (body.position == 0) {
+                inventory.Nemesis!.GuessHistory.push(
+                    encodeNemesisGuess([
+                        {
+                            symbol: GUESS_NONE,
+                            result: GUESS_NEUTRAL
+                        },
+                        {
+                            symbol: GUESS_NONE,
+                            result: GUESS_NEUTRAL
+                        },
+                        {
+                            symbol: GUESS_NONE,
+                            result: GUESS_NEUTRAL
+                        }
+                    ])
+                );
             }
+
+            // Evaluate guess
+            const correct =
+                body.guess == GUESS_WILDCARD || getNemesisPasscode(inventory.Nemesis!)[body.position] == body.guess;
+
+            // Update entry
+            const guess = decodeNemesisGuess(
+                inventory.Nemesis!.GuessHistory[inventory.Nemesis!.GuessHistory.length - 1]
+            );
+            guess[body.position].symbol = body.guess;
+            guess[body.position].result = correct ? GUESS_CORRECT : GUESS_INCORRECT;
+            inventory.Nemesis!.GuessHistory[inventory.Nemesis!.GuessHistory.length - 1] = encodeNemesisGuess(guess);
+
+            // Increase rank if incorrect
+            let RankIncrease: number | undefined;
+            if (!correct) {
+                RankIncrease = 1;
+                const manifest = getNemesisManifest(inventory.Nemesis!.manifest);
+                inventory.Nemesis!.Rank = Math.min(inventory.Nemesis!.Rank + 1, manifest.systemIndexes.length - 1);
+                inventory.Nemesis!.InfNodes = getInfNodes(manifest, inventory.Nemesis!.Rank);
+            }
+            await inventory.save();
             res.json({ RankIncrease });
         }
     } else if ((req.query.mode as string) == "rs") {

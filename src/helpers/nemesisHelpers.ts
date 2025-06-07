@@ -237,7 +237,7 @@ export const getNemesisPasscode = (nemesis: { fp: bigint; Faction: TNemesisFacti
     return passcode;
 };
 
-const reqiuemMods: readonly string[] = [
+const requiemMods: readonly string[] = [
     "/Lotus/Upgrades/Mods/Immortal/ImmortalOneMod",
     "/Lotus/Upgrades/Mods/Immortal/ImmortalTwoMod",
     "/Lotus/Upgrades/Mods/Immortal/ImmortalThreeMod",
@@ -263,32 +263,51 @@ export const getNemesisPasscodeModTypes = (nemesis: { fp: bigint; Faction: TNeme
     const passcode = getNemesisPasscode(nemesis);
     return nemesis.Faction == "FC_INFESTATION"
         ? passcode.map(i => antivirusMods[i])
-        : passcode.map(i => reqiuemMods[i]);
+        : passcode.map(i => requiemMods[i]);
 };
 
+// Symbols; 0-7 are the normal requiem mods.
 export const GUESS_NONE = 8;
 export const GUESS_WILDCARD = 9;
 
-export const encodeNemesisGuess = (
-    symbol1: number,
-    result1: number,
-    symbol2: number,
-    result2: number,
-    symbol3: number,
-    result3: number
-): number => {
+// Results; there are 3, 4, 5 as well which are more muted versions but unused afaik.
+export const GUESS_NEUTRAL = 0;
+export const GUESS_INCORRECT = 1;
+export const GUESS_CORRECT = 2;
+
+interface NemesisPositionGuess {
+    symbol: number;
+    result: number;
+}
+
+export type NemesisGuess = [NemesisPositionGuess, NemesisPositionGuess, NemesisPositionGuess];
+
+export const encodeNemesisGuess = (guess: NemesisGuess): number => {
     return (
-        (symbol1 & 0xf) |
-        ((result1 & 3) << 12) |
-        ((symbol2 << 4) & 0xff) |
-        ((result2 << 14) & 0xffff) |
-        ((symbol3 & 0xf) << 8) |
-        ((result3 & 3) << 16)
+        (guess[0].symbol & 0xf) |
+        ((guess[0].result & 3) << 12) |
+        ((guess[1].symbol << 4) & 0xff) |
+        ((guess[1].result << 14) & 0xffff) |
+        ((guess[2].symbol & 0xf) << 8) |
+        ((guess[2].result & 3) << 16)
     );
 };
 
-export const decodeNemesisGuess = (val: number): number[] => {
-    return [val & 0xf, (val >> 12) & 3, (val & 0xff) >> 4, (val & 0xffff) >> 14, (val >> 8) & 0xf, (val >> 16) & 3];
+export const decodeNemesisGuess = (val: number): NemesisGuess => {
+    return [
+        {
+            symbol: val & 0xf,
+            result: (val >> 12) & 3
+        },
+        {
+            symbol: (val & 0xff) >> 4,
+            result: (val & 0xffff) >> 14
+        },
+        {
+            symbol: (val >> 8) & 0xf,
+            result: (val >> 16) & 3
+        }
+    ];
 };
 
 export interface IKnifeResponse {
