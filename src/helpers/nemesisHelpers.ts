@@ -266,6 +266,9 @@ export const getNemesisPasscodeModTypes = (nemesis: { fp: bigint; Faction: TNeme
         : passcode.map(i => reqiuemMods[i]);
 };
 
+export const GUESS_NONE = 8;
+export const GUESS_WILDCARD = 9;
+
 export const encodeNemesisGuess = (
     symbol1: number,
     result1: number,

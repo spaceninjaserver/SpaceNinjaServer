@@ -7,6 +7,7 @@ import {
     getNemesisManifest,
     getNemesisPasscode,
     getNemesisPasscodeModTypes,
+    GUESS_WILDCARD,
     IKnifeResponse
 } from "@/src/helpers/nemesisHelpers";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
@@ -82,7 +83,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
             }
         } else {
             for (let i = 0; i != 3; ++i) {
-                if (body.guess[i] == passcode[i]) {
+                if (body.guess[i] == passcode[i] || body.guess[i] == GUESS_WILDCARD) {
                     ++guessResult;
                 }
             }
@@ -149,16 +150,18 @@ export const nemesisController: RequestHandler = async (req, res) => {
             await inventory.save();
             res.json(response);
         } else {
-            const passcode = getNemesisPasscode(inventory.Nemesis!);
             let RankIncrease: number | undefined;
-            if (passcode[body.position] != body.guess) {
-                const manifest = getNemesisManifest(inventory.Nemesis!.manifest);
-                if (inventory.Nemesis!.Rank + 1 < manifest.systemIndexes.length) {
-                    inventory.Nemesis!.Rank += 1;
-                    RankIncrease = 1;
+            if (body.guess != GUESS_WILDCARD) {
+                const passcode = getNemesisPasscode(inventory.Nemesis!);
+                if (passcode[body.position] != body.guess) {
+                    const manifest = getNemesisManifest(inventory.Nemesis!.manifest);
+                    if (inventory.Nemesis!.Rank + 1 < manifest.systemIndexes.length) {
+                        inventory.Nemesis!.Rank += 1;
+                        RankIncrease = 1;
+                    }
+                    inventory.Nemesis!.InfNodes = getInfNodes(manifest, inventory.Nemesis!.Rank);
+                    await inventory.save();
                 }
-                inventory.Nemesis!.InfNodes = getInfNodes(manifest, inventory.Nemesis!.Rank);
-                await inventory.save();
             }
             res.json({ RankIncrease });
         }
