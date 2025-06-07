@@ -1,5 +1,4 @@
 import { IKeyChainRequest } from "@/src/types/requestTypes";
-import { getIndexAfter } from "@/src/helpers/stringHelpers";
 import {
     dict_de,
     dict_en,
@@ -53,20 +52,32 @@ export const getRecipeByResult = (resultType: string): IRecipe | undefined => {
     return Object.values(ExportRecipes).find(x => x.resultType == resultType);
 };
 
-export const getItemCategoryByUniqueName = (uniqueName: string): string => {
-    //Lotus/Types/Items/MiscItems/PolymerBundle
-
-    let splitWord = "Items/";
-    if (!uniqueName.includes("/Items/")) {
-        splitWord = "/Types/";
+export const getItemCategoryByUniqueName = (uniqueName: string): string | undefined => {
+    if (uniqueName in ExportCustoms) {
+        return ExportCustoms[uniqueName].productCategory;
     }
-
-    const index = getIndexAfter(uniqueName, splitWord);
-    if (index === -1) {
-        throw new Error(`error parsing item category ${uniqueName}`);
+    if (uniqueName in ExportDrones) {
+        return "Drones";
     }
-    const category = uniqueName.substring(index).split("/")[0];
-    return category;
+    if (uniqueName in ExportKeys) {
+        return "LevelKeys";
+    }
+    if (uniqueName in ExportGear) {
+        return "Consumables";
+    }
+    if (uniqueName in ExportResources) {
+        return ExportResources[uniqueName].productCategory;
+    }
+    if (uniqueName in ExportSentinels) {
+        return ExportSentinels[uniqueName].productCategory;
+    }
+    if (uniqueName in ExportWarframes) {
+        return ExportWarframes[uniqueName].productCategory;
+    }
+    if (uniqueName in ExportWeapons) {
+        return ExportWeapons[uniqueName].productCategory;
+    }
+    return undefined;
 };
 
 export const getItemName = (uniqueName: string): string | undefined => {
