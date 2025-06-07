@@ -765,7 +765,8 @@ export interface IKubrowPetDetailsClient extends Omit<IKubrowPetDetailsDatabase,
 
 export enum Status {
     StatusAvailable = "STATUS_AVAILABLE",
-    StatusStasis = "STATUS_STASIS"
+    StatusStasis = "STATUS_STASIS",
+    StatusIncubating = "STATUS_INCUBATING"
 }
 
 export interface ILastSortieRewardClient {
@@ -929,10 +930,14 @@ export interface IPendingRecipeDatabase {
     Pistols?: IEquipmentDatabase[];
     Melee?: IEquipmentDatabase[];
     SuitToUnbrand?: Types.ObjectId;
+    KubrowPet?: Types.ObjectId;
 }
 
 export interface IPendingRecipeClient
-    extends Omit<IPendingRecipeDatabase, "CompletionDate" | "LongGuns" | "Pistols" | "Melee" | "SuitToUnbrand"> {
+    extends Omit<
+        IPendingRecipeDatabase,
+        "CompletionDate" | "LongGuns" | "Pistols" | "Melee" | "SuitToUnbrand" | "KubrowPet"
+    > {
     CompletionDate: IMongoDate;
 }
 

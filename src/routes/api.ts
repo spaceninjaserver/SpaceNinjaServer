@@ -9,6 +9,7 @@ import { addIgnoredUserController } from "@/src/controllers/api/addIgnoredUserCo
 import { addPendingFriendController } from "@/src/controllers/api/addPendingFriendController";
 import { addToAllianceController } from "@/src/controllers/api/addToAllianceController";
 import { addToGuildController } from "@/src/controllers/api/addToGuildController";
+import { adoptPetController } from "@/src/controllers/api/adoptPetController";
 import { arcaneCommonController } from "@/src/controllers/api/arcaneCommonController";
 import { archonFusionController } from "@/src/controllers/api/archonFusionController";
 import { artifactsController } from "@/src/controllers/api/artifactsController";
@@ -226,6 +227,7 @@ apiRouter.post("/addIgnoredUser.php", addIgnoredUserController);
 apiRouter.post("/addPendingFriend.php", addPendingFriendController);
 apiRouter.post("/addToAlliance.php", addToAllianceController);
 apiRouter.post("/addToGuild.php", addToGuildController);
+apiRouter.post("/adoptPet.php", adoptPetController);
 apiRouter.post("/arcaneCommon.php", arcaneCommonController);
 apiRouter.post("/archonFusion.php", archonFusionController);
 apiRouter.post("/artifacts.php", artifactsController);

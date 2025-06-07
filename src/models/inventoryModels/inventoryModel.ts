@@ -1097,7 +1097,8 @@ const pendingRecipeSchema = new Schema<IPendingRecipeDatabase>(
         LongGuns: { type: [EquipmentSchema], default: undefined },
         Pistols: { type: [EquipmentSchema], default: undefined },
         Melee: { type: [EquipmentSchema], default: undefined },
-        SuitToUnbrand: { type: Schema.Types.ObjectId, default: undefined }
+        SuitToUnbrand: { type: Schema.Types.ObjectId, default: undefined },
+        KubrowPet: { type: Schema.Types.ObjectId, default: undefined }
     },
     { id: false }
 );
@@ -1115,6 +1116,7 @@ pendingRecipeSchema.set("toJSON", {
         delete returnedObject.Pistols;
         delete returnedObject.Melees;
         delete returnedObject.SuitToUnbrand;
+        delete returnedObject.KubrowPet;
         (returnedObject as IPendingRecipeClient).CompletionDate = {
             $date: { $numberLong: (returnedObject as IPendingRecipeDatabase).CompletionDate.getTime().toString() }
         };

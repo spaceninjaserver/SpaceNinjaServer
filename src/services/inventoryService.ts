@@ -86,6 +86,7 @@ import { getMaxStanding } from "@/src/helpers/syndicateStandingHelper";
 import { getNightwaveSyndicateTag, getWorldState } from "./worldStateService";
 import { generateNemesisProfile, INemesisProfile } from "../helpers/nemesisHelpers";
 import { TAccountDocument } from "./loginService";
+import { unixTimesInMs } from "../constants/timeConstants";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
@@ -780,7 +781,9 @@ export const addItem = async (
                         typeName.substr(1).split("/")[3] == "CatbrowPet" ||
                         typeName.substr(1).split("/")[3] == "KubrowPet"
                     ) {
-                        return addKubrowPet(inventory, typeName, undefined, premiumPurchase);
+                        if (typeName != "/Lotus/Types/Game/KubrowPet/Eggs/KubrowPetEggItem") {
+                            return addKubrowPet(inventory, typeName, undefined, premiumPurchase);
+                        }
                     } else if (typeName.startsWith("/Lotus/Types/Game/CrewShip/CrewMember/")) {
                         if (!seed) {
                             throw new Error(`Expected crew member to have a seed`);
@@ -1025,12 +1028,13 @@ export const addSpaceSuit = (
 export const addKubrowPet = (
     inventory: TInventoryDatabaseDocument,
     kubrowPetName: string,
-    details: IKubrowPetDetailsDatabase | undefined,
-    premiumPurchase: boolean,
+    details?: IKubrowPetDetailsDatabase,
+    premiumPurchase: boolean = false,
     inventoryChanges: IInventoryChanges = {}
 ): IInventoryChanges => {
     combineInventoryChanges(inventoryChanges, occupySlot(inventory, InventorySlot.SENTINELS, premiumPurchase));
 
+    // TODO: When incubating, this should only be given when claiming the recipe.
     const kubrowPet = ExportSentinels[kubrowPetName] as ISentinel | undefined;
     const exalted = kubrowPet?.exalted ?? [];
     for (const specialItem of exalted) {
@@ -1079,11 +1083,11 @@ export const addKubrowPet = (
 
         details = {
             Name: "",
-            IsPuppy: false,
+            IsPuppy: !premiumPurchase,
             HasCollar: true,
-            PrintsRemaining: 2,
-            Status: Status.StatusStasis,
-            HatchDate: new Date(Math.trunc(Date.now() / 86400000) * 86400000),
+            PrintsRemaining: 3,
+            Status: premiumPurchase ? Status.StatusStasis : Status.StatusIncubating,
+            HatchDate: premiumPurchase ? new Date() : new Date(Date.now() + 10 * unixTimesInMs.hour), // On live, this seems to be somewhat randomised so that the pet hatches 9~11 hours after start.
             IsMale: !!getRandomInt(0, 1),
             Size: getRandomInt(70, 100) / 100,
             DominantTraits: traits,

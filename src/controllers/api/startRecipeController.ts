@@ -3,12 +3,14 @@ import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { logger } from "@/src/utils/logger";
 import { RequestHandler } from "express";
 import { getRecipe } from "@/src/services/itemDataService";
-import { addItem, freeUpSlot, getInventory, updateCurrency } from "@/src/services/inventoryService";
+import { addItem, addKubrowPet, freeUpSlot, getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { Types } from "mongoose";
 import { InventorySlot, ISpectreLoadout } from "@/src/types/inventoryTypes/inventoryTypes";
-import { toOid } from "@/src/helpers/inventoryHelpers";
+import { fromOid, toOid } from "@/src/helpers/inventoryHelpers";
 import { ExportWeapons } from "warframe-public-export-plus";
+import { getRandomElement } from "@/src/services/rngService";
+import { IInventoryChanges } from "@/src/types/purchaseTypes";
 
 interface IStartRecipeRequest {
     RecipeName: string;
@@ -42,24 +44,35 @@ export const startRecipeController: RequestHandler = async (req, res) => {
 
     for (let i = 0; i != recipe.ingredients.length; ++i) {
         if (startRecipeRequest.Ids[i] && startRecipeRequest.Ids[i][0] != "/") {
-            const category = ExportWeapons[recipe.ingredients[i].ItemType].productCategory;
-            if (category != "LongGuns" && category != "Pistols" && category != "Melee") {
-                throw new Error(`unexpected equipment ingredient type: ${category}`);
+            if (recipe.ingredients[i].ItemType == "/Lotus/Types/Game/KubrowPet/Eggs/KubrowPetEggItem") {
+                const index = inventory.KubrowPetEggs!.findIndex(x => x._id.equals(startRecipeRequest.Ids[i]));
+                if (index != -1) {
+                    inventory.KubrowPetEggs!.splice(index, 1);
+                }
+            } else {
+                const category = ExportWeapons[recipe.ingredients[i].ItemType].productCategory;
+                if (category != "LongGuns" && category != "Pistols" && category != "Melee") {
+                    throw new Error(`unexpected equipment ingredient type: ${category}`);
+                }
+                const equipmentIndex = inventory[category].findIndex(x => x._id.equals(startRecipeRequest.Ids[i]));
+                if (equipmentIndex == -1) {
+                    throw new Error(`could not find equipment item to use for recipe`);
+                }
+                pr[category] ??= [];
+                pr[category].push(inventory[category][equipmentIndex]);
+                inventory[category].splice(equipmentIndex, 1);
+                freeUpSlot(inventory, InventorySlot.WEAPONS);
             }
-            const equipmentIndex = inventory[category].findIndex(x => x._id.equals(startRecipeRequest.Ids[i]));
-            if (equipmentIndex == -1) {
-                throw new Error(`could not find equipment item to use for recipe`);
-            }
-            pr[category] ??= [];
-            pr[category].push(inventory[category][equipmentIndex]);
-            inventory[category].splice(equipmentIndex, 1);
-            freeUpSlot(inventory, InventorySlot.WEAPONS);
         } else {
             await addItem(inventory, recipe.ingredients[i].ItemType, recipe.ingredients[i].ItemCount * -1);
         }
     }
 
-    if (recipe.secretIngredientAction == "SIA_SPECTRE_LOADOUT_COPY") {
+    let inventoryChanges: IInventoryChanges | undefined;
+    if (recipe.secretIngredientAction == "SIA_CREATE_KUBROW") {
+        inventoryChanges = addKubrowPet(inventory, getRandomElement(recipe.secretIngredients!)!.ItemType);
+        pr.KubrowPet = new Types.ObjectId(fromOid(inventoryChanges.KubrowPets![0].ItemId));
+    } else if (recipe.secretIngredientAction == "SIA_SPECTRE_LOADOUT_COPY") {
         const spectreLoadout: ISpectreLoadout = {
             ItemType: recipe.resultType,
             Suits: "",
@@ -116,5 +129,5 @@ export const startRecipeController: RequestHandler = async (req, res) => {
 
     await inventory.save();
 
-    res.json({ RecipeId: toOid(pr._id) });
+    res.json({ RecipeId: toOid(pr._id), InventoryChanges: inventoryChanges });
 };

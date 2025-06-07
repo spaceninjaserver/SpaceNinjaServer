@@ -17,7 +17,7 @@ import {
 } from "@/src/services/inventoryService";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
-import { InventorySlot, IPendingRecipeDatabase } from "@/src/types/inventoryTypes/inventoryTypes";
+import { InventorySlot, IPendingRecipeDatabase, Status } from "@/src/types/inventoryTypes/inventoryTypes";
 import { toOid2 } from "@/src/helpers/inventoryHelpers";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { IRecipe } from "warframe-public-export-plus";
@@ -105,7 +105,21 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
                 ...updateCurrency(inventory, cost, true)
             };
         }
-        if (recipe.secretIngredientAction != "SIA_UNBRAND") {
+
+        if (recipe.secretIngredientAction == "SIA_CREATE_KUBROW") {
+            const pet = inventory.KubrowPets.id(pendingRecipe.KubrowPet!)!;
+            if (pet.Details!.HatchDate!.getTime() > Date.now()) {
+                pet.Details!.HatchDate = new Date();
+            }
+            let canSetActive = true;
+            for (const pet of inventory.KubrowPets) {
+                if (pet.Details!.Status == Status.StatusAvailable) {
+                    canSetActive = false;
+                    break;
+                }
+            }
+            pet.Details!.Status = canSetActive ? Status.StatusAvailable : Status.StatusIncubating;
+        } else if (recipe.secretIngredientAction != "SIA_UNBRAND") {
             InventoryChanges = {
                 ...InventoryChanges,
                 ...(await addItem(
@@ -118,7 +132,10 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
                 ))
             };
         }
-        if (config.claimingBlueprintRefundsIngredients) {
+        if (
+            config.claimingBlueprintRefundsIngredients &&
+            recipe.secretIngredientAction != "SIA_CREATE_KUBROW" // Can't refund the egg
+        ) {
             await refundRecipeIngredients(inventory, InventoryChanges, recipe, pendingRecipe);
         }
         await inventory.save();
