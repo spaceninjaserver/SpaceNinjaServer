@@ -348,6 +348,7 @@ interface IRotatingSeasonChallengePools {
     daily: string[];
     weekly: string[];
     hardWeekly: string[];
+    hasWeeklyPermanent: boolean;
 }
 
 const getSeasonChallengePools = (syndicateTag: string): IRotatingSeasonChallengePools => {
@@ -359,7 +360,12 @@ const getSeasonChallengePools = (syndicateTag: string): IRotatingSeasonChallenge
                 x.startsWith("/Lotus/Types/Challenges/Seasons/Weekly/") &&
                 !x.startsWith("/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanent")
         ),
-        hardWeekly: syndicate.weeklyChallenges!.filter(x => x.startsWith("/Lotus/Types/Challenges/Seasons/WeeklyHard/"))
+        hardWeekly: syndicate.weeklyChallenges!.filter(x =>
+            x.startsWith("/Lotus/Types/Challenges/Seasons/WeeklyHard/")
+        ),
+        hasWeeklyPermanent: !!syndicate.weeklyChallenges!.find(x =>
+            x.startsWith("/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanent")
+        )
     };
 };
 
@@ -416,26 +422,34 @@ const pushWeeklyActs = (
 
     activeChallenges.push(getSeasonWeeklyChallenge(pools, week, 0));
     activeChallenges.push(getSeasonWeeklyChallenge(pools, week, 1));
-    activeChallenges.push(getSeasonWeeklyHardChallenge(pools, week, 2));
-    activeChallenges.push(getSeasonWeeklyHardChallenge(pools, week, 3));
-    activeChallenges.push({
-        _id: { $oid: "67e1b96e9d00cb47" + (week * 7 + 0).toString().padStart(8, "0") },
-        Activation: { $date: { $numberLong: weekStart.toString() } },
-        Expiry: { $date: { $numberLong: weekEnd.toString() } },
-        Challenge: "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentCompleteMissions"
-    });
-    activeChallenges.push({
-        _id: { $oid: "67e1b96e9d00cb47" + (week * 7 + 1).toString().padStart(8, "0") },
-        Activation: { $date: { $numberLong: weekStart.toString() } },
-        Expiry: { $date: { $numberLong: weekEnd.toString() } },
-        Challenge: "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentKillEximus"
-    });
-    activeChallenges.push({
-        _id: { $oid: "67e1b96e9d00cb47" + (week * 7 + 2).toString().padStart(8, "0") },
-        Activation: { $date: { $numberLong: weekStart.toString() } },
-        Expiry: { $date: { $numberLong: weekEnd.toString() } },
-        Challenge: "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentKillEnemies"
-    });
+    if (pools.hasWeeklyPermanent) {
+        activeChallenges.push({
+            _id: { $oid: "67e1b96e9d00cb47" + (week * 7 + 0).toString().padStart(8, "0") },
+            Activation: { $date: { $numberLong: weekStart.toString() } },
+            Expiry: { $date: { $numberLong: weekEnd.toString() } },
+            Challenge: "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentCompleteMissions"
+        });
+        activeChallenges.push({
+            _id: { $oid: "67e1b96e9d00cb47" + (week * 7 + 1).toString().padStart(8, "0") },
+            Activation: { $date: { $numberLong: weekStart.toString() } },
+            Expiry: { $date: { $numberLong: weekEnd.toString() } },
+            Challenge: "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentKillEximus"
+        });
+        activeChallenges.push({
+            _id: { $oid: "67e1b96e9d00cb47" + (week * 7 + 2).toString().padStart(8, "0") },
+            Activation: { $date: { $numberLong: weekStart.toString() } },
+            Expiry: { $date: { $numberLong: weekEnd.toString() } },
+            Challenge: "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentKillEnemies"
+        });
+        activeChallenges.push(getSeasonWeeklyHardChallenge(pools, week, 2));
+        activeChallenges.push(getSeasonWeeklyHardChallenge(pools, week, 3));
+    } else {
+        activeChallenges.push(getSeasonWeeklyChallenge(pools, week, 2));
+        activeChallenges.push(getSeasonWeeklyChallenge(pools, week, 3));
+        activeChallenges.push(getSeasonWeeklyChallenge(pools, week, 4));
+        activeChallenges.push(getSeasonWeeklyHardChallenge(pools, week, 5));
+        activeChallenges.push(getSeasonWeeklyHardChallenge(pools, week, 6));
+    }
 };
 
 export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], bountyCycle: number): void => {
@@ -1258,6 +1272,9 @@ export const isArchwingMission = (node: IRegion): boolean => {
 };
 
 export const getNightwaveSyndicateTag = (buildLabel: string | undefined): string | undefined => {
+    if (config.worldState?.nightwaveOverride) {
+        return config.worldState.nightwaveOverride;
+    }
     if (!buildLabel || version_compare(buildLabel, "2025.05.20.10.18") >= 0) {
         return "RadioLegionIntermission13Syndicate";
     }
@@ -1268,6 +1285,20 @@ export const getNightwaveSyndicateTag = (buildLabel: string | undefined): string
 };
 
 const nightwaveTagToSeason: Record<string, number> = {
-    RadioLegionIntermission13Syndicate: 15,
-    RadioLegionIntermission12Syndicate: 14
+    RadioLegionIntermission13Syndicate: 15, // Nora's Mix Vol. 9
+    RadioLegionIntermission12Syndicate: 14, // Nora's Mix Vol. 8
+    RadioLegionIntermission11Syndicate: 13, // Nora's Mix Vol. 7
+    RadioLegionIntermission10Syndicate: 12, // Nora's Mix Vol. 6
+    RadioLegionIntermission9Syndicate: 11, // Nora's Mix Vol. 5
+    RadioLegionIntermission8Syndicate: 10, // Nora's Mix Vol. 4
+    RadioLegionIntermission7Syndicate: 9, // Nora's Mix Vol. 3
+    RadioLegionIntermission6Syndicate: 8, // Nora's Mix Vol. 2
+    RadioLegionIntermission5Syndicate: 7, // Nora's Mix Vol. 1
+    RadioLegionIntermission4Syndicate: 6, // Nora's Choice
+    RadioLegionIntermission3Syndicate: 5, // Intermission III
+    RadioLegion3Syndicate: 4, // Glassmaker
+    RadioLegionIntermission2Syndicate: 3, // Intermission II
+    RadioLegion2Syndicate: 2, // The Emissary
+    RadioLegionIntermissionSyndicate: 1, // Intermission I
+    RadioLegionSyndicate: 0 // The Wolf of Saturn Six
 };

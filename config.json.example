@@ -55,6 +55,7 @@
     "affinityBoost": false,
     "resourceBoost": false,
     "starDays": true,
-    "lockTime": 0
+    "lockTime": 0,
+    "nightwaveOverride": ""
   }
 }

@@ -62,6 +62,7 @@ interface IConfig {
         resourceBoost?: boolean;
         starDays?: boolean;
         lockTime?: number;
+        nightwaveOverride?: string;
     };
 }
 

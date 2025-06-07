@@ -15,3 +15,20 @@ SpaceNinjaServer requires a `config.json`. To set it up, you can copy the [confi
 - `logger.level` can be `fatal`, `error`, `warn`, `info`, `http`, `debug`, or `trace`.
 - `myIrcAddresses` can be used to point to an IRC server. If not provided, defaults to `[ myAddress ]`.
 - `worldState.lockTime` will lock the time provided in worldState if nonzero, e.g. `1743202800` for night in POE.
+- `worldState.nightwaveOverride` will lock the nightwave season, assuming the client is new enough for it. Valid values:
+  - `RadioLegionIntermission13Syndicate` for Nora's Mix Vol. 9
+  - `RadioLegionIntermission12Syndicate` for Nora's Mix Vol. 8
+  - `RadioLegionIntermission11Syndicate` for Nora's Mix Vol. 7
+  - `RadioLegionIntermission10Syndicate` for Nora's Mix Vol. 6
+  - `RadioLegionIntermission9Syndicate` for Nora's Mix Vol. 5
+  - `RadioLegionIntermission8Syndicate` for Nora's Mix Vol. 4
+  - `RadioLegionIntermission7Syndicate` for Nora's Mix Vol. 3
+  - `RadioLegionIntermission6Syndicate` for Nora's Mix Vol. 2
+  - `RadioLegionIntermission5Syndicate` for Nora's Mix Vol. 1
+  - `RadioLegionIntermission4Syndicate` for Nora's Choice
+  - `RadioLegionIntermission3Syndicate` for Intermission III
+  - `RadioLegion3Syndicate` for Glassmaker
+  - `RadioLegionIntermission2Syndicate` for Intermission II
+  - `RadioLegion2Syndicate` for The Emissary
+  - `RadioLegionIntermissionSyndicate` for Intermission I
+  - `RadioLegionSyndicate` for The Wolf of Saturn Six
