@@ -173,6 +173,9 @@ export const nemesisController: RequestHandler = async (req, res) => {
         res.json({ LastEnc: inventory.Nemesis!.LastEnc });
     } else if ((req.query.mode as string) == "s") {
         const inventory = await getInventory(account._id.toString(), "Nemesis");
+        if (inventory.Nemesis) {
+            logger.warn(`overwriting an existing nemesis as a new one is being requested`);
+        }
         const body = getJSONfromString<INemesisStartRequest>(String(req.body));
         body.target.fp = BigInt(body.target.fp);
 
@@ -188,13 +191,15 @@ export const nemesisController: RequestHandler = async (req, res) => {
             const weapons: readonly string[] = manifest.weapons;
             const initialWeaponIdx = new SRng(body.target.fp).randomInt(0, weapons.length - 1);
             weaponIdx = initialWeaponIdx;
-            do {
-                const weapon = weapons[weaponIdx];
-                if (body.target.DisallowedWeapons.indexOf(weapon) == -1) {
-                    break;
-                }
-                weaponIdx = (weaponIdx + 1) % weapons.length;
-            } while (weaponIdx != initialWeaponIdx);
+            if (body.target.DisallowedWeapons) {
+                do {
+                    const weapon = weapons[weaponIdx];
+                    if (body.target.DisallowedWeapons.indexOf(weapon) == -1) {
+                        break;
+                    }
+                    weaponIdx = (weaponIdx + 1) % weapons.length;
+                } while (weaponIdx != initialWeaponIdx);
+            }
         }
 
         inventory.Nemesis = {
@@ -215,10 +220,10 @@ export const nemesisController: RequestHandler = async (req, res) => {
             GuessHistory: [],
             Hints: [],
             HintProgress: 0,
-            Weakened: body.target.Weakened,
+            Weakened: false,
             PrevOwners: 0,
             HenchmenKilled: 0,
-            SecondInCommand: body.target.SecondInCommand,
+            SecondInCommand: false,
             MissionCount: 0,
             LastEnc: 0
         };
@@ -279,7 +284,7 @@ interface INemesisStartRequest {
         KillingSuit: string;
         killingDamageType: number;
         ShoulderHelmet: string;
-        DisallowedWeapons: string[];
+        DisallowedWeapons?: string[];
         WeaponIdx: number;
         AgentIdx: number;
         BirthNode: string;
