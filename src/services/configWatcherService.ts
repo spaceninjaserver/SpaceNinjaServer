@@ -27,9 +27,21 @@ fs.watchFile(configPath, () => {
 });
 
 export const validateConfig = (): void => {
-    if (typeof config.administratorNames == "string") {
-        logger.info(`Updating config.json to make administratorNames an array.`);
-        config.administratorNames = [config.administratorNames];
+    let modified = false;
+    if (config.administratorNames) {
+        if (!Array.isArray(config.administratorNames)) {
+            config.administratorNames = [config.administratorNames];
+            modified = true;
+        }
+        for (let i = 0; i != config.administratorNames.length; ++i) {
+            if (typeof config.administratorNames[i] != "string") {
+                config.administratorNames[i] = String(config.administratorNames[i]);
+                modified = true;
+            }
+        }
+    }
+    if (modified) {
+        logger.info(`Updating config.json to fix some issues with it.`);
         void saveConfig();
     }
 };
