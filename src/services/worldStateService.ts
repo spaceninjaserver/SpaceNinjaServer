@@ -166,8 +166,8 @@ const microplanetEndlessJobs = [
 
 const EPOCH = 1734307200 * 1000; // Monday, Dec 16, 2024 @ 00:00 UTC+0; should logically be winter in 1999 iteration 0
 
-const isBeforeNextExpectedWorldStateRefresh = (date: number): boolean => {
-    return Date.now() + 300_000 > date;
+const isBeforeNextExpectedWorldStateRefresh = (nowMs: number, thenMs: number): boolean => {
+    return nowMs + 300_000 > thenMs;
 };
 
 const getSortieTime = (day: number): number => {
@@ -939,14 +939,16 @@ const getCalendarSeason = (week: number): ICalendarSeason => {
 };
 
 export const getWorldState = (buildLabel?: string): IWorldState => {
-    const day = Math.trunc((Date.now() - EPOCH) / 86400000);
+    const timeSecs = config.worldState?.lockTime || Math.round(Date.now() / 1000);
+    const timeMs = timeSecs * 1000;
+    const day = Math.trunc((timeMs - EPOCH) / 86400000);
     const week = Math.trunc(day / 7);
     const weekStart = EPOCH + week * 604800000;
     const weekEnd = weekStart + 604800000;
 
     const worldState: IWorldState = {
         BuildLabel: typeof buildLabel == "string" ? buildLabel.split(" ").join("+") : buildConfig.buildLabel,
-        Time: config.worldState?.lockTime || Math.round(Date.now() / 1000),
+        Time: timeSecs,
         Goals: [],
         Alerts: [],
         Sorties: [],
@@ -1000,11 +1002,11 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         worldState.SeasonInfo.ActiveChallenges.push(getSeasonDailyChallenge(pools, day - 2));
         worldState.SeasonInfo.ActiveChallenges.push(getSeasonDailyChallenge(pools, day - 1));
         worldState.SeasonInfo.ActiveChallenges.push(getSeasonDailyChallenge(pools, day - 0));
-        if (isBeforeNextExpectedWorldStateRefresh(EPOCH + (day + 1) * 86400000)) {
+        if (isBeforeNextExpectedWorldStateRefresh(timeMs, EPOCH + (day + 1) * 86400000)) {
             worldState.SeasonInfo.ActiveChallenges.push(getSeasonDailyChallenge(pools, day + 1));
         }
         pushWeeklyActs(worldState.SeasonInfo.ActiveChallenges, pools, week);
-        if (isBeforeNextExpectedWorldStateRefresh(weekEnd)) {
+        if (isBeforeNextExpectedWorldStateRefresh(timeMs, weekEnd)) {
             pushWeeklyActs(worldState.SeasonInfo.ActiveChallenges, pools, week + 1);
         }
     }
@@ -1013,7 +1015,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     worldState.NodeOverrides.find(x => x.Node == "SolNode802")!.Seed = new SRng(week).randomInt(0, 0xff_ffff);
 
     // Holdfast, Cavia, & Hex bounties cycling every 2.5 hours; unfaithful implementation
-    let bountyCycle = Math.trunc(Date.now() / 9000000);
+    let bountyCycle = Math.trunc(timeSecs / 9000);
     let bountyCycleEnd: number | undefined;
     do {
         const bountyCycleStart = bountyCycle * 9000000;
@@ -1044,7 +1046,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         });
 
         pushClassicBounties(worldState.SyndicateMissions, bountyCycle);
-    } while (isBeforeNextExpectedWorldStateRefresh(bountyCycleEnd) && ++bountyCycle);
+    } while (isBeforeNextExpectedWorldStateRefresh(timeMs, bountyCycleEnd) && ++bountyCycle);
 
     if (config.worldState?.creditBoost) {
         worldState.GlobalUpgrades.push({
@@ -1087,15 +1089,15 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     {
         const rollover = getSortieTime(day);
 
-        if (Date.now() < rollover) {
+        if (timeMs < rollover) {
             worldState.Sorties.push(getSortie(day - 1));
         }
-        if (isBeforeNextExpectedWorldStateRefresh(rollover)) {
+        if (isBeforeNextExpectedWorldStateRefresh(timeMs, rollover)) {
             worldState.Sorties.push(getSortie(day));
         }
 
         // The client does not seem to respect activation for classic syndicate missions, so only pushing current ones.
-        const sdy = Date.now() >= rollover ? day : day - 1;
+        const sdy = timeMs >= rollover ? day : day - 1;
         const rng = new SRng(sdy);
         pushSyndicateMissions(worldState, sdy, rng.randomInt(0, 100_000), "ba6f84724fa48049", "ArbitersSyndicate");
         pushSyndicateMissions(worldState, sdy, rng.randomInt(0, 100_000), "ba6f84724fa4804a", "CephalonSudaSyndicate");
@@ -1107,7 +1109,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
 
     // Archon Hunt cycling every week
     worldState.LiteSorties.push(getLiteSortie(week));
-    if (isBeforeNextExpectedWorldStateRefresh(weekEnd)) {
+    if (isBeforeNextExpectedWorldStateRefresh(timeMs, weekEnd)) {
         worldState.LiteSorties.push(getLiteSortie(week + 1));
     }
 
@@ -1144,12 +1146,12 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
 
     // 1999 Calendar Season cycling every week + YearIteration every 4 weeks
     worldState.KnownCalendarSeasons.push(getCalendarSeason(week));
-    if (isBeforeNextExpectedWorldStateRefresh(weekEnd)) {
+    if (isBeforeNextExpectedWorldStateRefresh(timeMs, weekEnd)) {
         worldState.KnownCalendarSeasons.push(getCalendarSeason(week + 1));
     }
 
     // Sentient Anomaly cycling every 30 minutes
-    const halfHour = Math.trunc(Date.now() / (unixTimesInMs.hour / 2));
+    const halfHour = Math.trunc(timeMs / (unixTimesInMs.hour / 2));
     const tmp = {
         cavabegin: "1690761600",
         PurchasePlatformLockEnabled: true,
