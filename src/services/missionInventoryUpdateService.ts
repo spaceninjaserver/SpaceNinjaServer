@@ -1182,14 +1182,12 @@ export const addMissionRewards = async (
             if (nodeIndex !== -1) inventory.Nemesis.InfNodes.splice(nodeIndex, 1);
 
             if (inventory.Nemesis.InfNodes.length <= 0) {
+                const manifest = getNemesisManifest(inventory.Nemesis.manifest);
                 if (inventory.Nemesis.Faction != "FC_INFESTATION") {
-                    inventory.Nemesis.Rank = Math.min(inventory.Nemesis.Rank + 1, 4);
+                    inventory.Nemesis.Rank = Math.min(inventory.Nemesis.Rank + 1, manifest.systemIndexes.length - 1);
                     inventoryChanges.Nemesis.Rank = inventory.Nemesis.Rank;
                 }
-                inventory.Nemesis.InfNodes = getInfNodes(
-                    getNemesisManifest(inventory.Nemesis.manifest),
-                    inventory.Nemesis.Rank
-                );
+                inventory.Nemesis.InfNodes = getInfNodes(manifest, inventory.Nemesis.Rank);
             }
 
             if (inventory.Nemesis.Faction == "FC_INFESTATION") {

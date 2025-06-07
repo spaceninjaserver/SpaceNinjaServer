@@ -266,8 +266,14 @@ export const getNemesisPasscodeModTypes = (nemesis: { fp: bigint; Faction: TNeme
         : passcode.map(i => requiemMods[i]);
 };
 
+// Symbols; 0-7 are the normal requiem mods.
 export const GUESS_NONE = 8;
 export const GUESS_WILDCARD = 9;
+
+// Results; there are 3, 4, 5 as well which are more muted versions but unused afaik.
+export const GUESS_NEUTRAL = 0;
+export const GUESS_INCORRECT = 1;
+export const GUESS_CORRECT = 2;
 
 interface NemesisPositionGuess {
     symbol: number;
