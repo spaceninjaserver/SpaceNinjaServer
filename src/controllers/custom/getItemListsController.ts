@@ -25,6 +25,7 @@ import allIncarnons from "@/static/fixed_responses/allIncarnonList.json";
 interface ListedItem {
     uniqueName: string;
     name: string;
+    subtype?: string;
     fusionLimit?: number;
     exalted?: string[];
     badReason?: "starter" | "frivolous" | "notraw";
@@ -175,7 +176,8 @@ const getItemListsController: RequestHandler = (req, response) => {
         ) {
             res.miscitems.push({
                 uniqueName: uniqueName,
-                name: name
+                name: name,
+                subtype: "Resource"
             });
         }
     }
@@ -193,7 +195,8 @@ const getItemListsController: RequestHandler = (req, response) => {
     for (const [uniqueName, item] of Object.entries(ExportGear)) {
         res.miscitems.push({
             uniqueName: uniqueName,
-            name: getString(item.name, lang)
+            name: getString(item.name, lang),
+            subtype: "Gear"
         });
     }
     const recipeNameTemplate = getString("/Lotus/Language/Items/BlueprintAndItem", lang);

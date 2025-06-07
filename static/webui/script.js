@@ -312,7 +312,7 @@ function fetchItemList() {
                         document.getElementById("changeSyndicate").appendChild(option);
                     });
                 } else {
-                    const nameSet = new Set();
+                    const nameToItems = {};
                     items.forEach(item => {
                         item.name = item.name.replace(/<.+>/g, "").trim();
                         if ("badReason" in item) {
@@ -322,6 +322,11 @@ function fetchItemList() {
                                 item.name += " " + loc("code_badItem");
                             }
                         }
+                        nameToItems[item.name] ??= [];
+                        nameToItems[item.name].push(item);
+                    });
+
+                    items.forEach(item => {
                         if (type == "ModularParts") {
                             const supportedModularParts = [
                                 "LWPT_HB_DECK",
@@ -360,15 +365,26 @@ function fetchItemList() {
                                     .appendChild(option);
                             }
                         } else if (item.badReason != "notraw") {
-                            if (nameSet.has(item.name)) {
-                                //console.log(`Not adding ${item.uniqueName} to datalist for ${type} due to duplicate display name: ${item.name}`);
-                            } else {
-                                nameSet.add(item.name);
-
+                            const ambiguous = nameToItems[item.name].length > 1;
+                            let canDisambiguate = true;
+                            if (ambiguous) {
+                                for (const i2 of nameToItems[item.name]) {
+                                    if (!i2.subtype) {
+                                        canDisambiguate = false;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (!ambiguous || canDisambiguate || nameToItems[item.name][0] == item) {
                                 const option = document.createElement("option");
                                 option.setAttribute("data-key", item.uniqueName);
                                 option.value = item.name;
+                                if (ambiguous && canDisambiguate) {
+                                    option.value += " (" + item.subtype + ")";
+                                }
                                 document.getElementById("datalist-" + type).appendChild(option);
+                            } else {
+                                //console.log(`Not adding ${item.uniqueName} to datalist for ${type} due to duplicate display name: ${item.name}`);
                             }
                         }
                         itemMap[item.uniqueName] = { ...item, type };
