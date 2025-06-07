@@ -8,7 +8,8 @@ import {
     getNemesisPasscode,
     getNemesisPasscodeModTypes,
     GUESS_WILDCARD,
-    IKnifeResponse
+    IKnifeResponse,
+    NemesisGuess
 } from "@/src/helpers/nemesisHelpers";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
@@ -98,13 +99,24 @@ export const nemesisController: RequestHandler = async (req, res) => {
         if (inventory.Nemesis!.Faction == "FC_INFESTATION") {
             const guess: number[] = [body.guess & 0xf, (body.guess >> 4) & 0xf, (body.guess >> 8) & 0xf];
             const passcode = getNemesisPasscode(inventory.Nemesis!)[0];
-
-            // Add to GuessHistory
             const result1 = passcode == guess[0] ? 0 : 1;
             const result2 = passcode == guess[1] ? 0 : 1;
             const result3 = passcode == guess[2] ? 0 : 1;
             inventory.Nemesis!.GuessHistory.push(
-                encodeNemesisGuess(guess[0], result1, guess[1], result2, guess[2], result3)
+                encodeNemesisGuess([
+                    {
+                        symbol: guess[0],
+                        result: result1
+                    },
+                    {
+                        symbol: guess[1],
+                        result: result2
+                    },
+                    {
+                        symbol: guess[2],
+                        result: result3
+                    }
+                ])
             );
 
             // Increase antivirus if correct antivirus mod is installed
