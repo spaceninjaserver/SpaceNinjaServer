@@ -722,6 +722,10 @@ export const addItem = async (
                     }
                     break;
 
+                case "Boons":
+                    // Can purchase /Lotus/Upgrades/Boons/DuviriVendorBoonItem from Acrithis, doesn't need to be added to inventory.
+                    return {};
+
                 case "Stickers":
                     {
                         const entry = inventory.RawUpgrades.find(x => x.ItemType == typeName);
