@@ -19,6 +19,7 @@ import {
     IWorldState
 } from "../types/worldStateTypes";
 import { version_compare } from "../helpers/inventoryHelpers";
+import { logger } from "../utils/logger";
 
 const sortieBosses = [
     "SORTIE_BOSS_HYENA",
@@ -1275,7 +1276,13 @@ export const isArchwingMission = (node: IRegion): boolean => {
 
 export const getNightwaveSyndicateTag = (buildLabel: string | undefined): string | undefined => {
     if (config.worldState?.nightwaveOverride) {
-        return config.worldState.nightwaveOverride;
+        if (config.worldState.nightwaveOverride in nightwaveTagToSeason) {
+            return config.worldState.nightwaveOverride;
+        }
+        logger.warn(`ignoring invalid config value for worldState.nightwaveOverride`, {
+            value: config.worldState.nightwaveOverride,
+            valid_values: Object.keys(nightwaveTagToSeason)
+        });
     }
     if (!buildLabel || version_compare(buildLabel, "2025.05.20.10.18") >= 0) {
         return "RadioLegionIntermission13Syndicate";
