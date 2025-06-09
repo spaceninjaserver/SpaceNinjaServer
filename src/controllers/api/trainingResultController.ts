@@ -35,6 +35,17 @@ const trainingResultController: RequestHandler = async (req, res): Promise<void>
         inventory.PlayerLevel += 1;
         inventory.TradesRemaining += 1;
 
+        if (inventory.PlayerLevel == 2) {
+            await createMessage(accountId, [
+                {
+                    sndr: "/Lotus/Language/Game/Maroo",
+                    msg: "/Lotus/Language/Clan/MarooClanSearchDesc",
+                    sub: "/Lotus/Language/Clan/MarooClanSearchTitle",
+                    icon: "/Lotus/Interface/Icons/Npcs/Maroo.png"
+                }
+            ]);
+        }
+
         await createMessage(accountId, [
             {
                 sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
