@@ -939,8 +939,61 @@ const getCalendarSeason = (week: number): ICalendarSeason => {
     };
 };
 
+const doesTimeSatsifyConstraints = (timeSecs: number): boolean => {
+    if (config.worldState?.eidolonOverride) {
+        const eidolonEpoch = 1391992660;
+        const eidolonCycle = Math.trunc((timeSecs - eidolonEpoch) / 9000);
+        const eidolonCycleStart = eidolonEpoch + eidolonCycle * 9000;
+        const eidolonCycleEnd = eidolonCycleStart + 9000;
+        const eidolonCycleNightStart = eidolonCycleEnd - 3000;
+        if (config.worldState.eidolonOverride == "day") {
+            if (
+                //timeSecs < eidolonCycleStart ||
+                isBeforeNextExpectedWorldStateRefresh(timeSecs * 1000, eidolonCycleNightStart * 1000)
+            ) {
+                return false;
+            }
+        } else {
+            if (
+                timeSecs < eidolonCycleNightStart ||
+                isBeforeNextExpectedWorldStateRefresh(timeSecs * 1000, eidolonCycleEnd * 1000)
+            ) {
+                return false;
+            }
+        }
+    }
+
+    if (config.worldState?.vallisOverride) {
+        const vallisEpoch = 1541837628;
+        const vallisCycle = Math.trunc((timeSecs - vallisEpoch) / 1600);
+        const vallisCycleStart = vallisEpoch + vallisCycle * 1600;
+        const vallisCycleEnd = vallisCycleStart + 1600;
+        const vallisCycleColdStart = vallisCycleStart + 400;
+        if (config.worldState.vallisOverride == "cold") {
+            if (
+                timeSecs < vallisCycleColdStart ||
+                isBeforeNextExpectedWorldStateRefresh(timeSecs * 1000, vallisCycleEnd * 1000)
+            ) {
+                return false;
+            }
+        } else {
+            if (
+                //timeSecs < vallisCycleStart ||
+                isBeforeNextExpectedWorldStateRefresh(timeSecs * 1000, vallisCycleColdStart * 1000)
+            ) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+};
+
 export const getWorldState = (buildLabel?: string): IWorldState => {
-    const timeSecs = config.worldState?.lockTime || Math.round(Date.now() / 1000);
+    let timeSecs = Math.round(Date.now() / 1000);
+    while (!doesTimeSatsifyConstraints(timeSecs)) {
+        timeSecs -= 60;
+    }
     const timeMs = timeSecs * 1000;
     const day = Math.trunc((timeMs - EPOCH) / 86400000);
     const week = Math.trunc(day / 7);

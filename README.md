@@ -14,7 +14,8 @@ SpaceNinjaServer requires a `config.json`. To set it up, you can copy the [confi
 
 - `logger.level` can be `fatal`, `error`, `warn`, `info`, `http`, `debug`, or `trace`.
 - `myIrcAddresses` can be used to point to an IRC server. If not provided, defaults to `[ myAddress ]`.
-- `worldState.lockTime` will lock the time provided in worldState if nonzero, e.g. `1743202800` for night in POE.
+- `worldState.eidolonOverride` can be set to `day` or `night` to lock the time to day/fass and night/vome on Plains of Eidolon/Cambion Drift.
+- `worldState.vallisOverride` can be set to `warm` or `cold` to lock the temperature on Orb Vallis.
 - `worldState.nightwaveOverride` will lock the nightwave season, assuming the client is new enough for it. Valid values:
   - `RadioLegionIntermission13Syndicate` for Nora's Mix Vol. 9
   - `RadioLegionIntermission12Syndicate` for Nora's Mix Vol. 8

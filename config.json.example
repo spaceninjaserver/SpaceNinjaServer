@@ -55,7 +55,8 @@
     "affinityBoost": false,
     "resourceBoost": false,
     "starDays": true,
-    "lockTime": 0,
+    "eidolonOverride": "",
+    "vallisOverride": "",
     "nightwaveOverride": ""
   }
 }

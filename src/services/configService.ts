@@ -61,7 +61,8 @@ interface IConfig {
         affinityBoost?: boolean;
         resourceBoost?: boolean;
         starDays?: boolean;
-        lockTime?: number;
+        eidolonOverride?: string;
+        vallisOverride?: string;
         nightwaveOverride?: string;
     };
 }
