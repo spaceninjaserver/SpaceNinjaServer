@@ -233,7 +233,7 @@ export const isStoreItem = (type: string): boolean => {
 };
 
 export const toStoreItem = (type: string): string => {
-    if (type.startsWith("/Lotus/Types/StoreItems/Boosters/")) {
+    if (type.startsWith("/Lotus/Types/Boosters/")) {
         const boosterEntry = Object.entries(ExportBoosters).find(arr => arr[1].typeName == type);
         if (boosterEntry) {
             return boosterEntry[0];
