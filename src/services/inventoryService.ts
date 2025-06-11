@@ -1525,7 +1525,8 @@ export const applyClientEquipmentUpdates = (
     gearArray.forEach(({ ItemId, XP, InfestationDate }) => {
         const item = category.id(fromOid(ItemId));
         if (!item) {
-            throw new Error(`No item with id ${fromOid(ItemId)} in ${categoryName}`);
+            logger.warn(`Skipping unknown ${categoryName} item: id ${fromOid(ItemId)} not found`);
+            return;
         }
 
         if (XP) {
