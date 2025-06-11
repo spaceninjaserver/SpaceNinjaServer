@@ -118,7 +118,7 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
                     break;
                 }
             }
-            pet.Details!.Status = canSetActive ? Status.StatusAvailable : Status.StatusIncubating;
+            pet.Details!.Status = canSetActive ? Status.StatusAvailable : Status.StatusStasis;
         } else if (recipe.secretIngredientAction != "SIA_UNBRAND") {
             InventoryChanges = {
                 ...InventoryChanges,
