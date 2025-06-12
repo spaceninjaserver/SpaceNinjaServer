@@ -98,7 +98,7 @@ dict = {
     inventory_bulkRankUpSentinels: `Maximizar rango de todos los centinelas`,
     inventory_bulkRankUpSentinelWeapons: `Maximizar rango de todas las armas de centinela`,
     inventory_bulkRankUpEvolutionProgress: `Maximizar todo el progreso de evolución Incarnon`,
-    inventory_Boosters: `[UNTRANSLATED] Boosters`,
+    inventory_Boosters: `Potenciadores`,
 
     quests_list: `Misiones`,
     quests_completeAll: `Completar todas las misiones`,
@@ -164,7 +164,7 @@ dict = {
     cheats_noDojoResearchTime: `Sin tiempo de investigación del dojo`,
     cheats_fastClanAscension: `Ascenso rápido del clan`,
     cheats_spoofMasteryRank: `Rango de maestría simulado (-1 para desactivar)`,
-    cheats_nightwaveStandingMultiplier: `[UNTRANSLATED] Nightwave Standing Multiplier`,
+    cheats_nightwaveStandingMultiplier: `Multiplicador de Reputación de Onda Nocturna`,
     cheats_saveSettings: `Guardar configuración`,
     cheats_account: `Cuenta`,
     cheats_unlockAllFocusSchools: `Desbloquear todas las escuelas de enfoque`,
