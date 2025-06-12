@@ -20,8 +20,8 @@ export const syndicateSacrificeController: RequestHandler = async (request, resp
 
     const oldLevel = syndicate.Title ?? 0;
     const levelIncrease = data.SacrificeLevel - oldLevel;
-    if (levelIncrease < 1) {
-        throw new Error(`syndicate sacrifice needs an increase of at least 1`);
+    if (levelIncrease < 0) {
+        throw new Error(`syndicate sacrifice can not decrease level`);
     }
     if (levelIncrease > 1 && !data.AllowMultiple) {
         throw new Error(`desired syndicate level is an increase of ${levelIncrease}, max. allowed increase is 1`);
@@ -37,7 +37,7 @@ export const syndicateSacrificeController: RequestHandler = async (request, resp
 
     // Process sacrifices and rewards for every level we're reaching
     const manifest = ExportSyndicates[data.AffiliationTag];
-    for (let level = oldLevel + 1; level <= data.SacrificeLevel; ++level) {
+    for (let level = oldLevel + levelIncrease; level <= data.SacrificeLevel; ++level) {
         let sacrifice: ISyndicateSacrifice | undefined;
         if (level == 0) {
             sacrifice = manifest.initiationSacrifice;
