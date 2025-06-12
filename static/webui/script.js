@@ -1011,6 +1011,63 @@ function updateInventory() {
                 }
             }
             document.getElementById("changeSyndicate").value = data.SupportedSyndicate ?? "";
+
+            document.getElementById("Boosters-list").innerHTML = "";
+            const now = Math.floor(Date.now() / 1000);
+            data.Boosters.forEach(({ ItemType, ExpiryDate }) => {
+                if (ExpiryDate < now) {
+                    // Booster has expired, skip it
+                    return;
+                }
+                const tr = document.createElement("tr");
+                {
+                    const td = document.createElement("td");
+                    td.textContent = itemMap[ItemType]?.name ?? ItemType;
+                    tr.appendChild(td);
+                }
+                {
+                    const td = document.createElement("td");
+                    td.classList = "text-end text-nowrap";
+                    const timeString = formatDatetime("%Y-%m-%d %H:%M:%s", ExpiryDate * 1000);
+                    const inlineForm = document.createElement("form");
+                    const input = document.createElement("input");
+
+                    inlineForm.style.display = "inline-block";
+                    inlineForm.onsubmit = function (event) {
+                        event.preventDefault();
+                        doChangeBoosterExpiry(ItemType, input);
+                    };
+                    input.type = "datetime-local";
+                    input.classList.add("form-control");
+                    input.classList.add("form-control-sm");
+                    input.value = timeString;
+                    let changed = false;
+                    input.onchange = function () {
+                        changed = true;
+                    };
+                    input.onblur = function () {
+                        if (changed) {
+                            doChangeBoosterExpiry(ItemType, input);
+                        }
+                    };
+                    inlineForm.appendChild(input);
+
+                    td.appendChild(inlineForm);
+
+                    const removeButton = document.createElement("a");
+                    removeButton.title = loc("code_remove");
+                    removeButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
+                    removeButton.href = "#";
+                    removeButton.onclick = function (event) {
+                        event.preventDefault();
+                        setBooster(ItemType, 0);
+                    };
+                    td.appendChild(removeButton);
+
+                    tr.appendChild(td);
+                }
+                document.getElementById("Boosters-list").appendChild(tr);
+            });
         });
     });
 }
@@ -2025,5 +2082,79 @@ function handleModularSelection(category) {
                 }
             }
         });
+    });
+}
+
+function setBooster(ItemType, ExpiryDate, callback) {
+    revalidateAuthz(() => {
+        $.post({
+            url: "/custom/setBooster?" + window.authz,
+            contentType: "application/json",
+            data: JSON.stringify([
+                {
+                    ItemType,
+                    ExpiryDate
+                }
+            ])
+        }).done(function () {
+            updateInventory();
+            if (callback) callback();
+        });
+    });
+}
+
+function doAcquireBoosters() {
+    const uniqueName = getKey(document.getElementById("acquire-type-Boosters"));
+    if (!uniqueName) {
+        $("#acquire-type-Boosters").addClass("is-invalid").focus();
+        return;
+    }
+    const ExpiryDate = Date.now() / 1000 + 3 * 24 * 60 * 60; // default 3 days
+    setBooster(uniqueName, ExpiryDate, () => {
+        $("#acquire-type-Boosters").val("");
+        updateInventory();
+    });
+}
+
+function doChangeBoosterExpiry(ItemType, ExpiryDateInput) {
+    console.log("Changing booster expiry for", ItemType, "to", ExpiryDateInput.value);
+    // cast local datetime string to unix timestamp
+    const ExpiryDate = new Date(ExpiryDateInput.value).getTime() / 1000;
+    if (isNaN(ExpiryDate)) {
+        ExpiryDateInput.addClass("is-invalid").focus();
+        return false;
+    }
+    setBooster(ItemType, ExpiryDate);
+    return true;
+}
+
+function formatDatetime(fmt, date) {
+    if (typeof date === "number") date = new Date(date);
+    return fmt.replace(/(%[yY]|%m|%[Dd]|%H|%h|%M|%[Ss]|%[Pp])/g, match => {
+        switch (match) {
+            case "%Y":
+                return date.getFullYear().toString();
+            case "%y":
+                return date.getFullYear().toString().slice(-2);
+            case "%m":
+                return (date.getMonth() + 1).toString().padStart(2, "0");
+            case "%D":
+            case "%d":
+                return date.getDate().toString().padStart(2, "0");
+            case "%H":
+                return date.getHours().toString().padStart(2, "0");
+            case "%h":
+                return (date.getHours() % 12).toString().padStart(2, "0");
+            case "%M":
+                return date.getMinutes().toString().padStart(2, "0");
+            case "%S":
+            case "%s":
+                return date.getSeconds().toString().padStart(2, "0");
+            case "%P":
+            case "%p":
+                return date.getHours() < 12 ? "am" : "pm";
+            default:
+                return match;
+        }
     });
 }

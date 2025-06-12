@@ -416,6 +416,20 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-lg-6">
+                        <div class="card mb-3" style="height: 400px;">
+                            <h5 class="card-header" data-loc="inventory_Boosters"></h5>
+                            <div class="card-body overflow-auto">
+                                <form class="input-group mb-3" onsubmit="doAcquireBoosters();return false;">
+                                    <input class="form-control" id="acquire-type-Boosters" list="datalist-Boosters" />
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                </form>
+                                <table class="table table-hover w-100">
+                                    <tbody id="Boosters-list"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="card mb-3">
                     <h5 class="card-header" data-loc="general_bulkActions"></h5>
@@ -804,6 +818,7 @@
     <datalist id="datalist-ModularParts-CATBROW_MUTAGEN"></datalist>
     <datalist id="datalist-ModularParts-KUBROW_ANTIGEN"></datalist>
     <datalist id="datalist-ModularParts-KUBROW_MUTAGEN"></datalist>
+    <datalist id="datalist-Boosters"></datalist>
     <script src="/webui/libs/jquery-3.6.0.min.js"></script>
     <script src="/webui/libs/whirlpool-js.min.js"></script>
     <script src="/webui/libs/single.js"></script>

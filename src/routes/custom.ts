@@ -23,6 +23,7 @@ import { setEvolutionProgressController } from "@/src/controllers/custom/setEvol
 
 import { getConfigDataController } from "@/src/controllers/custom/getConfigDataController";
 import { updateConfigDataController } from "@/src/controllers/custom/updateConfigDataController";
+import { setBoosterController } from "../controllers/custom/setBoosterController";
 
 const customRouter = express.Router();
 
@@ -46,6 +47,7 @@ customRouter.post("/addXp", addXpController);
 customRouter.post("/import", importController);
 customRouter.post("/manageQuests", manageQuestsController);
 customRouter.post("/setEvolutionProgress", setEvolutionProgressController);
+customRouter.post("/setBooster", setBoosterController);
 
 customRouter.get("/config", getConfigDataController);
 customRouter.post("/config", updateConfigDataController);

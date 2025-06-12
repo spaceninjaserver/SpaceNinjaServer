@@ -97,6 +97,7 @@ dict = {
     inventory_bulkRankUpSentinels: `Max Rank All Sentinels`,
     inventory_bulkRankUpSentinelWeapons: `Max Rank All Sentinel Weapons`,
     inventory_bulkRankUpEvolutionProgress: `Max Rank All Incarnon Evolution Progress`,
+    inventory_Boosters: `Boosters`,
 
     quests_list: `Quests`,
     quests_completeAll: `Complete All Quests`,

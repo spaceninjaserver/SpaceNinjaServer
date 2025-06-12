@@ -98,6 +98,7 @@ dict = {
     inventory_bulkRankUpSentinels: `Maximizar rango de todos los centinelas`,
     inventory_bulkRankUpSentinelWeapons: `Maximizar rango de todas las armas de centinela`,
     inventory_bulkRankUpEvolutionProgress: `Maximizar todo el progreso de evolución Incarnon`,
+    inventory_Boosters: `[UNTRANSLATED] Boosters`,
 
     quests_list: `Misiones`,
     quests_completeAll: `Completar todas las misiones`,

@@ -98,6 +98,7 @@ dict = {
     inventory_bulkRankUpSentinels: `Toutes les Sentinelles au rang max`,
     inventory_bulkRankUpSentinelWeapons: `Toutes les armes de Sentinelles au rang max`,
     inventory_bulkRankUpEvolutionProgress: `Toutes les évolutions Incarnon au rang max`,
+    inventory_Boosters: `[UNTRANSLATED] Boosters`,
 
     quests_list: `Quêtes`,
     quests_completeAll: `Compléter toutes les quêtes`,

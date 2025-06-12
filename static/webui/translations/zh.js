@@ -98,6 +98,7 @@ dict = {
     inventory_bulkRankUpSentinels: `所有守护升满级`,
     inventory_bulkRankUpSentinelWeapons: `所有守护武器升满级`,
     inventory_bulkRankUpEvolutionProgress: `所有灵化之源最大等级`,
+    inventory_Boosters: `加成器`,
 
     quests_list: `任务`,
     quests_completeAll: `完成所有任务`,

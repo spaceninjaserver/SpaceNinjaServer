@@ -98,6 +98,7 @@ dict = {
     inventory_bulkRankUpSentinels: `Максимальный ранг всех стражей`,
     inventory_bulkRankUpSentinelWeapons: `Максимальный ранг всего оружия стражей`,
     inventory_bulkRankUpEvolutionProgress: `Максимальный ранг всех эволюций Инкарнонов`,
+    inventory_Boosters: `[UNTRANSLATED] Boosters`,
 
     quests_list: `Квесты`,
     quests_completeAll: `Завершить все квесты`,

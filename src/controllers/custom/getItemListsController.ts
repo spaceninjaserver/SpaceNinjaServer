@@ -3,6 +3,7 @@ import { getDict, getItemName, getString } from "@/src/services/itemDataService"
 import {
     ExportArcanes,
     ExportAvionics,
+    ExportBoosters,
     ExportCustoms,
     ExportDrones,
     ExportGear,
@@ -55,6 +56,7 @@ interface ItemLists {
     KubrowPets: ListedItem[];
     EvolutionProgress: ListedItem[];
     mods: ListedItem[];
+    Boosters: ListedItem[];
 }
 
 const relicQualitySuffixes: Record<TRelicQuality, string> = {
@@ -86,7 +88,8 @@ const getItemListsController: RequestHandler = (req, response) => {
         QuestKeys: [],
         KubrowPets: [],
         EvolutionProgress: [],
-        mods: []
+        mods: [],
+        Boosters: []
     };
     for (const [uniqueName, item] of Object.entries(ExportWarframes)) {
         res[item.productCategory].push({
@@ -293,6 +296,13 @@ const getItemListsController: RequestHandler = (req, response) => {
         res.EvolutionProgress.push({
             uniqueName,
             name: getString(getItemName(uniqueName) || "", lang)
+        });
+    }
+
+    for (const item of Object.values(ExportBoosters)) {
+        res.Boosters.push({
+            uniqueName: item.typeName,
+            name: getString(item.name, lang)
         });
     }
 
