@@ -163,6 +163,7 @@ dict = {
     cheats_noDojoResearchTime: `No Dojo Research Time`,
     cheats_fastClanAscension: `Fast Clan Ascension`,
     cheats_spoofMasteryRank: `Spoofed Mastery Rank (-1 to disable)`,
+    cheats_nightwaveStandingMultiplier: `Nightwave Standing Multiplier`,
     cheats_saveSettings: `Save Settings`,
     cheats_account: `Account`,
     cheats_unlockAllFocusSchools: `Unlock All Focus Schools`,

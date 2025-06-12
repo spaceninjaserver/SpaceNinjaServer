@@ -164,6 +164,7 @@ dict = {
     cheats_noDojoResearchTime: `Мгновенные Исследование Додзё`,
     cheats_fastClanAscension: `Мгновенное Вознесение Клана`,
     cheats_spoofMasteryRank: `Подделанный ранг мастерства (-1 для отключения)`,
+    cheats_nightwaveStandingMultiplier: `[UNTRANSLATED] Nightwave Standing Multiplier`,
     cheats_saveSettings: `Сохранить настройки`,
     cheats_account: `Аккаунт`,
     cheats_unlockAllFocusSchools: `Разблокировать все школы фокуса`,

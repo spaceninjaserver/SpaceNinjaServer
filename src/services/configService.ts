@@ -65,6 +65,7 @@ interface IConfig {
         vallisOverride?: string;
         nightwaveOverride?: string;
     };
+    nightwaveStandingMultiplier?: number;
 }
 
 export const configPath = path.join(repoDir, "config.json");

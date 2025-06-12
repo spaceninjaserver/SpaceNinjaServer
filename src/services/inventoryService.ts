@@ -1773,13 +1773,14 @@ export const addChallenges = (
                             }) - 1
                         ];
                 }
-                affiliation.Standing += meta.standing!;
 
+                const standingToAdd = meta.standing! * (config.nightwaveStandingMultiplier ?? 1);
+                affiliation.Standing += standingToAdd;
                 if (affiliationMods.length == 0) {
                     affiliationMods.push({ Tag: nightwaveSyndicateTag });
                 }
                 affiliationMods[0].Standing ??= 0;
-                affiliationMods[0].Standing += meta.standing!;
+                affiliationMods[0].Standing += standingToAdd;
             }
         }
     }

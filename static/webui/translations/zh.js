@@ -164,6 +164,7 @@ dict = {
     cheats_noDojoResearchTime: `无视道场研究时间`,
     cheats_fastClanAscension: `快速升级氏族`,
     cheats_spoofMasteryRank: `伪造精通段位(-1为禁用)`,
+    cheats_nightwaveStandingMultiplier: `午夜电波声望倍率`,
     cheats_saveSettings: `保存设置`,
     cheats_account: `账户`,
     cheats_unlockAllFocusSchools: `解锁所有专精学派`,

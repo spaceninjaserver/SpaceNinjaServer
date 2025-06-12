@@ -164,6 +164,7 @@ dict = {
     cheats_noDojoResearchTime: `Sin tiempo de investigación del dojo`,
     cheats_fastClanAscension: `Ascenso rápido del clan`,
     cheats_spoofMasteryRank: `Rango de maestría simulado (-1 para desactivar)`,
+    cheats_nightwaveStandingMultiplier: `[UNTRANSLATED] Nightwave Standing Multiplier`,
     cheats_saveSettings: `Guardar configuración`,
     cheats_account: `Cuenta`,
     cheats_unlockAllFocusSchools: `Desbloquear todas las escuelas de enfoque`,
