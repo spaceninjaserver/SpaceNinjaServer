@@ -453,12 +453,36 @@ const pushWeeklyActs = (
     }
 };
 
+const generateXpAmounts = (rng: SRng, stageCount: number, minXp: number, maxXp: number): number[] => {
+    const step = minXp < 1000 ? 1 : 10;
+    const totalDeciXp = rng.randomInt(minXp / step, maxXp / step);
+    const xpAmounts: number[] = [];
+    if (stageCount < 4) {
+        const perStage = Math.ceil(totalDeciXp / stageCount) * step;
+        for (let i = 0; i != stageCount; ++i) {
+            xpAmounts.push(perStage);
+        }
+    } else {
+        const perStage = Math.ceil(Math.round(totalDeciXp * 0.667) / (stageCount - 1)) * step;
+        for (let i = 0; i != stageCount - 1; ++i) {
+            xpAmounts.push(perStage);
+        }
+        xpAmounts.push(Math.ceil(totalDeciXp * 0.332) * step);
+    }
+    return xpAmounts;
+};
+// Test vectors:
+//console.log(generateXpAmounts(new SRng(1337n), 5, 5000, 5000)); // [840, 840, 840, 840, 1660]
+//console.log(generateXpAmounts(new SRng(1337n), 3, 40, 40)); // [14, 14, 14]
+//console.log(generateXpAmounts(new SRng(1337n), 5, 150, 150)); // [25, 25, 25, 25, 50]
+//console.log(generateXpAmounts(new SRng(1337n), 4, 10, 10)); // [2, 2, 2, 4]
+//console.log(generateXpAmounts(new SRng(1337n), 4, 15, 15)); // [4, 4, 4, 5]
+//console.log(generateXpAmounts(new SRng(1337n), 4, 20, 20)); // [5, 5, 5, 7]
+
 export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], bountyCycle: number): void => {
     const table = String.fromCharCode(65 + (bountyCycle % 3));
     const vaultTable = String.fromCharCode(65 + ((bountyCycle + 1) % 3));
     const deimosDTable = String.fromCharCode(65 + (bountyCycle % 2));
-
-    // TODO: xpAmounts need to be calculated based on the jobType somehow?
 
     const seed = new SRng(bountyCycle).randomInt(0, 100_000);
     const bountyCycleStart = bountyCycle * 9000000;
@@ -482,7 +506,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                     masteryReq: 0,
                     minEnemyLevel: 5,
                     maxEnemyLevel: 15,
-                    xpAmounts: [430, 430, 430]
+                    xpAmounts: generateXpAmounts(rng, 3, 1000, 1500)
                 },
                 {
                     jobType: rng.randomElement(eidolonJobs),
@@ -490,7 +514,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                     masteryReq: 1,
                     minEnemyLevel: 10,
                     maxEnemyLevel: 30,
-                    xpAmounts: [620, 620, 620]
+                    xpAmounts: generateXpAmounts(rng, 3, 1750, 2250)
                 },
                 {
                     jobType: rng.randomElement(eidolonJobs),
@@ -498,7 +522,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                     masteryReq: 2,
                     minEnemyLevel: 20,
                     maxEnemyLevel: 40,
-                    xpAmounts: [670, 670, 670, 990]
+                    xpAmounts: generateXpAmounts(rng, 4, 2500, 3000)
                 },
                 {
                     jobType: rng.randomElement(eidolonJobs),
@@ -506,7 +530,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                     masteryReq: 3,
                     minEnemyLevel: 30,
                     maxEnemyLevel: 50,
-                    xpAmounts: [570, 570, 570, 570, 1110]
+                    xpAmounts: generateXpAmounts(rng, 5, 3250, 3750)
                 },
                 {
                     jobType: rng.randomElement(eidolonJobs),
@@ -514,7 +538,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                     masteryReq: 5,
                     minEnemyLevel: 40,
                     maxEnemyLevel: 60,
-                    xpAmounts: [740, 740, 740, 740, 1450]
+                    xpAmounts: generateXpAmounts(rng, 5, 4000, 4500)
                 },
                 {
                     jobType: rng.randomElement(eidolonJobs),
@@ -530,7 +554,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                     masteryReq: 0,
                     minEnemyLevel: 50,
                     maxEnemyLevel: 70,
-                    xpAmounts: [840, 840, 840, 840, 1650]
+                    xpAmounts: generateXpAmounts(rng, 5, 4500, 5000)
                 }
             ]
         });
@@ -554,7 +578,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                     masteryReq: 0,
                     minEnemyLevel: 5,
                     maxEnemyLevel: 15,
-                    xpAmounts: [340, 340, 340]
+                    xpAmounts: generateXpAmounts(rng, 3, 1000, 1500)
                 },
                 {
                     jobType: rng.randomElement(venusJobs),
@@ -562,7 +586,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                     masteryReq: 1,
                     minEnemyLevel: 10,
                     maxEnemyLevel: 30,
-                    xpAmounts: [660, 660, 660]
+                    xpAmounts: generateXpAmounts(rng, 3, 1750, 2250)
                 },
                 {
                     jobType: rng.randomElement(venusJobs),
@@ -570,7 +594,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                     masteryReq: 2,
                     minEnemyLevel: 20,
                     maxEnemyLevel: 40,
-                    xpAmounts: [610, 610, 610, 900]
+                    xpAmounts: generateXpAmounts(rng, 4, 2500, 3000)
                 },
                 {
                     jobType: rng.randomElement(venusJobs),
@@ -578,7 +602,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                     masteryReq: 3,
                     minEnemyLevel: 30,
                     maxEnemyLevel: 50,
-                    xpAmounts: [600, 600, 600, 600, 1170]
+                    xpAmounts: generateXpAmounts(rng, 5, 3250, 3750)
                 },
                 {
                     jobType: rng.randomElement(venusJobs),
@@ -586,7 +610,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                     masteryReq: 5,
                     minEnemyLevel: 40,
                     maxEnemyLevel: 60,
-                    xpAmounts: [690, 690, 690, 690, 1350]
+                    xpAmounts: generateXpAmounts(rng, 5, 4000, 4500)
                 },
                 {
                     jobType: rng.randomElement(venusJobs),
@@ -602,7 +626,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                     masteryReq: 0,
                     minEnemyLevel: 50,
                     maxEnemyLevel: 70,
-                    xpAmounts: [780, 780, 780, 780, 1540]
+                    xpAmounts: generateXpAmounts(rng, 5, 4500, 5000)
                 }
             ]
         });
@@ -626,7 +650,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                     masteryReq: 0,
                     minEnemyLevel: 5,
                     maxEnemyLevel: 15,
-                    xpAmounts: [5, 5, 5]
+                    xpAmounts: generateXpAmounts(rng, 3, 12, 18)
                 },
                 {
                     jobType: rng.randomElement(microplanetJobs),
@@ -634,7 +658,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                     masteryReq: 1,
                     minEnemyLevel: 15,
                     maxEnemyLevel: 25,
-                    xpAmounts: [12, 12, 12]
+                    xpAmounts: generateXpAmounts(rng, 3, 24, 36)
                 },
                 {
                     jobType: rng.randomElement(microplanetEndlessJobs),
@@ -651,7 +675,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                     masteryReq: 2,
                     minEnemyLevel: 30,
                     maxEnemyLevel: 40,
-                    xpAmounts: [17, 17, 17, 25]
+                    xpAmounts: generateXpAmounts(rng, 4, 72, 88)
                 },
                 {
                     jobType: rng.randomElement(microplanetJobs),
@@ -659,7 +683,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                     masteryReq: 3,
                     minEnemyLevel: 40,
                     maxEnemyLevel: 60,
-                    xpAmounts: [22, 22, 22, 22, 43]
+                    xpAmounts: generateXpAmounts(rng, 5, 115, 135)
                 },
                 {
                     jobType: rng.randomElement(microplanetJobs),
