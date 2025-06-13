@@ -31,7 +31,7 @@ export const syndicateSacrificeController: RequestHandler = async (request, resp
         AffiliationTag: data.AffiliationTag,
         InventoryChanges: {},
         Level: data.SacrificeLevel,
-        LevelIncrease: levelIncrease,
+        LevelIncrease: data.SacrificeLevel < 0 ? 1 : levelIncrease,
         NewEpisodeReward: false
     };
 
@@ -94,7 +94,7 @@ export const syndicateSacrificeController: RequestHandler = async (request, resp
     }
 
     // Commit
-    syndicate.Title = data.SacrificeLevel;
+    syndicate.Title = data.SacrificeLevel < 0 ? data.SacrificeLevel + 1 : data.SacrificeLevel;
     await inventory.save();
 
     response.json(res);
