@@ -20,7 +20,6 @@ import {
     ExportWeapons,
     TRelicQuality
 } from "warframe-public-export-plus";
-import archonCrystalUpgrades from "@/static/fixed_responses/webuiArchonCrystalUpgrades.json";
 import allIncarnons from "@/static/fixed_responses/allIncarnonList.json";
 
 interface ListedItem {
@@ -36,7 +35,6 @@ interface ListedItem {
 }
 
 interface ItemLists {
-    archonCrystalUpgrades: Record<string, string>;
     uniqueLevelCaps: Record<string, number>;
     Suits: ListedItem[];
     LongGuns: ListedItem[];
@@ -69,7 +67,6 @@ const relicQualitySuffixes: Record<TRelicQuality, string> = {
 const getItemListsController: RequestHandler = (req, response) => {
     const lang = getDict(typeof req.query.lang == "string" ? req.query.lang : "en");
     const res: ItemLists = {
-        archonCrystalUpgrades,
         uniqueLevelCaps: ExportMisc.uniqueLevelCaps,
         Suits: [],
         LongGuns: [],
