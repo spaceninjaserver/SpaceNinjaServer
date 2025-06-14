@@ -24,7 +24,7 @@ export const saveDialogueController: RequestHandler = async (req, res) => {
         inventory.DialogueHistory.Dialogues ??= [];
         const dialogue = getDialogue(inventory, request.DialogueName);
         dialogue.Rank = request.Rank;
-        dialogue.Chemistry = request.Chemistry;
+        dialogue.Chemistry += request.Chemistry;
         dialogue.QueuedDialogues = request.QueuedDialogues;
         for (const bool of request.Booleans) {
             dialogue.Booleans.push(bool);
