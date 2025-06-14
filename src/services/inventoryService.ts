@@ -82,7 +82,7 @@ import { handleBundleAcqusition } from "./purchaseService";
 import libraryDailyTasks from "@/static/fixed_responses/libraryDailyTasks.json";
 import { getRandomElement, getRandomInt, getRandomWeightedReward, SRng } from "./rngService";
 import { createMessage } from "./inboxService";
-import { getMaxStanding } from "@/src/helpers/syndicateStandingHelper";
+import { getMaxStanding, getMinStanding } from "@/src/helpers/syndicateStandingHelper";
 import { getNightwaveSyndicateTag, getWorldState } from "./worldStateService";
 import { generateNemesisProfile, INemesisProfile } from "../helpers/nemesisHelpers";
 import { TAccountDocument } from "./loginService";
@@ -1202,8 +1202,10 @@ export const addStanding = (
     inventory: TInventoryDatabaseDocument,
     syndicateTag: string,
     gainedStanding: number,
-    isMedallion: boolean = false
-): IAffiliationMods => {
+    affiliationMods: IAffiliationMods[] = [],
+    isMedallion: boolean = false,
+    propagateAlignments: boolean = true
+): void => {
     let syndicate = inventory.Affiliations.find(x => x.Tag == syndicateTag);
     const syndicateMeta = ExportSyndicates[syndicateTag];
 
@@ -1215,6 +1217,10 @@ export const addStanding = (
     const max = getMaxStanding(syndicateMeta, syndicate.Title ?? 0);
     if (syndicate.Standing + gainedStanding > max) gainedStanding = max - syndicate.Standing;
 
+    if (syndicate.Title == -2 && syndicate.Standing + gainedStanding < -71000) {
+        gainedStanding = -71000 + syndicate.Standing;
+    }
+
     if (!isMedallion || syndicateMeta.medallionsCappedByDailyLimit) {
         if (gainedStanding > getStandingLimit(inventory, syndicateMeta.dailyLimitBin)) {
             gainedStanding = getStandingLimit(inventory, syndicateMeta.dailyLimitBin);
@@ -1223,10 +1229,27 @@ export const addStanding = (
     }
 
     syndicate.Standing += gainedStanding;
-    return {
+    const affiliationMod: IAffiliationMods = {
         Tag: syndicateTag,
         Standing: gainedStanding
     };
+    affiliationMods.push(affiliationMod);
+
+    if (syndicateMeta.alignments) {
+        if (propagateAlignments) {
+            for (const [tag, factor] of Object.entries(syndicateMeta.alignments)) {
+                addStanding(inventory, tag, gainedStanding * factor, affiliationMods, isMedallion, false);
+            }
+        } else {
+            while (syndicate.Standing < getMinStanding(syndicateMeta, syndicate.Title ?? 0)) {
+                syndicate.Title ??= 0;
+                syndicate.Title -= 1;
+                affiliationMod.Title ??= 0;
+                affiliationMod.Title -= 1;
+                logger.debug(`${syndicateTag} is decreasing to title ${syndicate.Title} after applying alignment`);
+            }
+        }
+    }
 };
 
 // TODO: AffiliationMods support (Nightwave).

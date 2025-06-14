@@ -1236,19 +1236,18 @@ export const addMissionRewards = async (
                 SyndicateXPItemReward = medallionAmount;
             } else {
                 if (rewardInfo.JobTier! >= 0) {
-                    AffiliationMods.push(
-                        addStanding(
-                            inventory,
-                            syndicateEntry.Tag,
-                            Math.floor(currentJob.xpAmounts[rewardInfo.JobStage] / (rewardInfo.Q ? 0.8 : 1))
-                        )
+                    addStanding(
+                        inventory,
+                        syndicateEntry.Tag,
+                        Math.floor(currentJob.xpAmounts[rewardInfo.JobStage] / (rewardInfo.Q ? 0.8 : 1)),
+                        AffiliationMods
                     );
                 } else {
                     if (jobType.endsWith("Heists/HeistProfitTakerBountyOne") && rewardInfo.JobStage === 2) {
-                        AffiliationMods.push(addStanding(inventory, syndicateEntry.Tag, 1000));
+                        addStanding(inventory, syndicateEntry.Tag, 1000, AffiliationMods);
                     }
                     if (jobType.endsWith("Hunts/AllTeralystsHunt") && rewardInfo.JobStage === 2) {
-                        AffiliationMods.push(addStanding(inventory, syndicateEntry.Tag, 5000));
+                        addStanding(inventory, syndicateEntry.Tag, 5000, AffiliationMods);
                     }
                     if (
                         [
@@ -1259,7 +1258,7 @@ export const addMissionRewards = async (
                             "Heists/HeistExploiterBountyOne"
                         ].some(ending => jobType.endsWith(ending))
                     ) {
-                        AffiliationMods.push(addStanding(inventory, syndicateEntry.Tag, 1000));
+                        addStanding(inventory, syndicateEntry.Tag, 1000, AffiliationMods);
                     }
                 }
             }
@@ -1284,7 +1283,7 @@ export const addMissionRewards = async (
             let standingAmount = (tier + 1) * 1000;
             if (tier > 5) standingAmount = 7500; // InfestedLichBounty
             if (isSteelPath) standingAmount *= 1.5;
-            AffiliationMods.push(addStanding(inventory, syndicateTag, standingAmount));
+            addStanding(inventory, syndicateTag, standingAmount, AffiliationMods);
         }
         if (syndicateTag == "HexSyndicate" && chemistry && tier < 6) {
             const seed = getWorldState().SyndicateMissions.find(x => x.Tag == "HexSyndicate")!.Seed;

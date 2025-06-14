@@ -5,7 +5,7 @@ import { IMiscItem, InventorySlot } from "@/src/types/inventoryTypes/inventoryTy
 import { IOid } from "@/src/types/commonTypes";
 import { ExportSyndicates, ExportWeapons } from "warframe-public-export-plus";
 import { logger } from "@/src/utils/logger";
-import { IInventoryChanges } from "@/src/types/purchaseTypes";
+import { IAffiliationMods, IInventoryChanges } from "@/src/types/purchaseTypes";
 import { EquipmentFeatures } from "@/src/types/inventoryTypes/commonInventoryTypes";
 
 export const syndicateStandingBonusController: RequestHandler = async (req, res) => {
@@ -54,13 +54,14 @@ export const syndicateStandingBonusController: RequestHandler = async (req, res)
         inventoryChanges[slotBin] = { count: -1, platinum: 0, Slots: 1 };
     }
 
-    const affiliationMod = addStanding(inventory, request.Operation.AffiliationTag, gainedStanding, true);
+    const affiliationMods: IAffiliationMods[] = [];
+    addStanding(inventory, request.Operation.AffiliationTag, gainedStanding, affiliationMods, true);
 
     await inventory.save();
 
     res.json({
         InventoryChanges: inventoryChanges,
-        AffiliationMods: [affiliationMod]
+        AffiliationMods: affiliationMods
     });
 };
 

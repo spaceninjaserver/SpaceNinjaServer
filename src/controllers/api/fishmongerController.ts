@@ -30,15 +30,14 @@ export const fishmongerController: RequestHandler = async (req, res) => {
         miscItemChanges.push({ ItemType: fish.ItemType, ItemCount: fish.ItemCount * -1 });
     }
     addMiscItems(inventory, miscItemChanges);
-    let affiliationMod;
-    if (gainedStanding && syndicateTag) affiliationMod = addStanding(inventory, syndicateTag, gainedStanding);
+    if (gainedStanding && syndicateTag) addStanding(inventory, syndicateTag, gainedStanding);
     await inventory.save();
     res.json({
         InventoryChanges: {
             MiscItems: miscItemChanges
         },
         SyndicateTag: syndicateTag,
-        StandingChange: affiliationMod?.Standing || 0
+        StandingChange: gainedStanding
     });
 };
 
