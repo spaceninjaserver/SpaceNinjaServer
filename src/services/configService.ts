@@ -56,6 +56,7 @@ interface IConfig {
     noDojoResearchTime?: boolean;
     fastClanAscension?: boolean;
     spoofMasteryRank?: number;
+    nightwaveStandingMultiplier?: number;
     worldState?: {
         creditBoost?: boolean;
         affinityBoost?: boolean;
@@ -65,7 +66,9 @@ interface IConfig {
         vallisOverride?: string;
         nightwaveOverride?: string;
     };
-    nightwaveStandingMultiplier?: number;
+    dev?: {
+        keepVendorsExpired?: boolean;
+    };
 }
 
 export const configPath = path.join(repoDir, "config.json");

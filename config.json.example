@@ -50,6 +50,7 @@
   "noDojoResearchTime": false,
   "fastClanAscension": false,
   "spoofMasteryRank": -1,
+  "nightwaveStandingMultiplier": 1,
   "worldState": {
     "creditBoost": false,
     "affinityBoost": false,
@@ -58,5 +59,8 @@
     "eidolonOverride": "",
     "vallisOverride": "",
     "nightwaveOverride": ""
+  },
+  "dev": {
+    "keepVendorsExpired": false
   }
 }
