@@ -6,7 +6,7 @@ import { mixSeeds, SRng } from "@/src/services/rngService";
 import { IMongoDate } from "@/src/types/commonTypes";
 import { IItemManifest, IVendorInfo, IVendorManifest } from "@/src/types/vendorTypes";
 import { logger } from "@/src/utils/logger";
-import { ExportVendors, IRange, IVendor } from "warframe-public-export-plus";
+import { ExportVendors, IRange, IVendor, IVendorOffer } from "warframe-public-export-plus";
 
 import ArchimedeanVendorManifest from "@/static/fixed_responses/getVendorInfo/ArchimedeanVendorManifest.json";
 import DeimosEntratiFragmentVendorProductsManifest from "@/static/fixed_responses/getVendorInfo/DeimosEntratiFragmentVendorProductsManifest.json";
@@ -21,7 +21,6 @@ import DeimosProspectorVendorManifest from "@/static/fixed_responses/getVendorIn
 import DuviriAcrithisVendorManifest from "@/static/fixed_responses/getVendorInfo/DuviriAcrithisVendorManifest.json";
 import EntratiLabsEntratiLabsCommisionsManifest from "@/static/fixed_responses/getVendorInfo/EntratiLabsEntratiLabsCommisionsManifest.json";
 import EntratiLabsEntratiLabVendorManifest from "@/static/fixed_responses/getVendorInfo/EntratiLabsEntratiLabVendorManifest.json";
-import HubsIronwakeDondaVendorManifest from "@/static/fixed_responses/getVendorInfo/HubsIronwakeDondaVendorManifest.json";
 import HubsRailjackCrewMemberVendorManifest from "@/static/fixed_responses/getVendorInfo/HubsRailjackCrewMemberVendorManifest.json";
 import MaskSalesmanManifest from "@/static/fixed_responses/getVendorInfo/MaskSalesmanManifest.json";
 import Nova1999ConquestShopManifest from "@/static/fixed_responses/getVendorInfo/Nova1999ConquestShopManifest.json";
@@ -47,7 +46,6 @@ const rawVendorManifests: IVendorManifest[] = [
     DuviriAcrithisVendorManifest,
     EntratiLabsEntratiLabsCommisionsManifest,
     EntratiLabsEntratiLabVendorManifest,
-    HubsIronwakeDondaVendorManifest, // uses preprocessing
     HubsRailjackCrewMemberVendorManifest,
     MaskSalesmanManifest,
     Nova1999ConquestShopManifest,
@@ -83,10 +81,6 @@ const generatableVendors: IGeneratableVendorInfo[] = [
         cycleOffset: 1744934400_000,
         cycleDuration: 4 * unixTimesInMs.day
     }
-    // {
-    //     _id: { $oid: "5dbb4c41e966f7886c3ce939" },
-    //     TypeName: "/Lotus/Types/Game/VendorManifests/Hubs/IronwakeDondaVendorManifest"
-    // }
 ];
 
 const getVendorOid = (typeName: string): string => {
@@ -261,13 +255,8 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
         const cycleIndex = Math.trunc((Date.now() - cycleOffset) / cycleDuration);
         const rng = new SRng(mixSeeds(vendorSeed, cycleIndex));
         const manifest = ExportVendors[vendorInfo.TypeName];
-        const offersToAdd = [];
-        if (
-            manifest.numItems &&
-            (manifest.numItems.minValue != manifest.numItems.maxValue ||
-                manifest.items.length != manifest.numItems.minValue) &&
-            !manifest.isOneBinPerCycle
-        ) {
+        const offersToAdd: IVendorOffer[] = [];
+        if (!manifest.isOneBinPerCycle) {
             const remainingItemCapacity: Record<string, number> = {};
             for (const item of manifest.items) {
                 remainingItemCapacity[item.storeItem] = 1 + item.duplicates;
@@ -275,30 +264,47 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
             for (const offer of info.ItemManifest) {
                 remainingItemCapacity[offer.StoreItem] -= 1;
             }
-            const numItemsTarget = rng.randomInt(manifest.numItems.minValue, manifest.numItems.maxValue);
-            while (info.ItemManifest.length + offersToAdd.length < numItemsTarget) {
-                // TODO: Consider per-bin item limits
-                // TODO: Consider item probability weightings
-                const item = rng.randomElement(manifest.items)!;
-                if (remainingItemCapacity[item.storeItem] != 0) {
-                    remainingItemCapacity[item.storeItem] -= 1;
-                    offersToAdd.push(item);
+            if (manifest.numItems && manifest.items.length != manifest.numItems.minValue) {
+                const numItemsTarget = rng.randomInt(manifest.numItems.minValue, manifest.numItems.maxValue);
+                while (info.ItemManifest.length + offersToAdd.length < numItemsTarget) {
+                    // TODO: Consider per-bin item limits
+                    // TODO: Consider item probability weightings
+                    const item = rng.randomElement(manifest.items)!;
+                    if (remainingItemCapacity[item.storeItem] != 0) {
+                        remainingItemCapacity[item.storeItem] -= 1;
+                        offersToAdd.push(item);
+                    }
                 }
+            } else {
+                for (const item of manifest.items) {
+                    if (!item.alwaysOffered && remainingItemCapacity[item.storeItem] != 0) {
+                        remainingItemCapacity[item.storeItem] -= 1;
+                        offersToAdd.push(item);
+                    }
+                }
+                for (const e of Object.entries(remainingItemCapacity)) {
+                    const item = manifest.items.find(x => x.storeItem == e[0])!;
+                    if (!item.alwaysOffered) {
+                        while (e[1] != 0) {
+                            e[1] -= 1;
+                            offersToAdd.push(item);
+                        }
+                    }
+                }
+                for (const item of manifest.items) {
+                    if (item.alwaysOffered && remainingItemCapacity[item.storeItem] != 0) {
+                        remainingItemCapacity[item.storeItem] -= 1;
+                        offersToAdd.push(item);
+                    }
+                }
+                offersToAdd.reverse();
             }
         } else {
-            let binThisCycle;
-            if (manifest.isOneBinPerCycle) {
-                binThisCycle = cycleIndex % 2; // Note: May want to auto-compute the bin size, but this is only used for coda weapons right now.
-            }
+            const binThisCycle = cycleIndex % 2; // Note: May want to auto-compute the bin size, but this is only used for coda weapons right now.
             for (const rawItem of manifest.items) {
-                if (!manifest.isOneBinPerCycle || rawItem.bin == binThisCycle) {
+                if (rawItem.bin == binThisCycle) {
                     offersToAdd.push(rawItem);
                 }
-            }
-
-            // For most vendors, the offers seem to roughly be in reverse order from the manifest. Coda weapons are an odd exception.
-            if (!manifest.isOneBinPerCycle) {
-                offersToAdd.reverse();
             }
         }
         const cycleStart = cycleOffset + cycleIndex * cycleDuration;
@@ -387,5 +393,18 @@ if (isDev) {
         ads[4].Bin != "BIN_0"
     ) {
         logger.warn(`self test failed for /Lotus/Types/Game/VendorManifests/Hubs/GuildAdvertisementVendorManifest`);
+    }
+
+    const pall = getVendorManifestByTypeName("/Lotus/Types/Game/VendorManifests/Hubs/IronwakeDondaVendorManifest")!
+        .VendorInfo.ItemManifest;
+    if (
+        pall.length != 5 ||
+        pall[0].StoreItem != "/Lotus/StoreItems/Types/Items/ShipDecos/HarrowQuestKeyOrnament" ||
+        pall[1].StoreItem != "/Lotus/StoreItems/Types/BoosterPacks/RivenModPack" ||
+        pall[2].StoreItem != "/Lotus/StoreItems/Types/StoreItems/CreditBundles/150000Credits" ||
+        pall[3].StoreItem != "/Lotus/StoreItems/Types/Items/MiscItems/Kuva" ||
+        pall[4].StoreItem != "/Lotus/StoreItems/Types/BoosterPacks/RivenModPack"
+    ) {
+        logger.warn(`self test failed for /Lotus/Types/Game/VendorManifests/Hubs/IronwakeDondaVendorManifest`);
     }
 }
