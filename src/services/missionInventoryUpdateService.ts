@@ -66,15 +66,7 @@ import {
 } from "@/src/helpers/nemesisHelpers";
 import { Loadout } from "../models/inventoryModels/loadoutModel";
 import { ILoadoutConfigDatabase } from "../types/saveLoadoutTypes";
-import {
-    getLiteSortie,
-    getSortie,
-    getWorldState,
-    idToBountyCycle,
-    idToDay,
-    idToWeek,
-    pushClassicBounties
-} from "./worldStateService";
+import { getLiteSortie, getSortie, idToBountyCycle, idToDay, idToWeek, pushClassicBounties } from "./worldStateService";
 import { config } from "./configService";
 import libraryDailyTasks from "@/static/fixed_responses/libraryDailyTasks.json";
 import { ISyndicateMissionInfo } from "../types/worldStateTypes";
@@ -1266,9 +1258,9 @@ export const addMissionRewards = async (
     }
 
     if (rewardInfo.challengeMissionId) {
-        const [syndicateTag, tierStr, chemistryStr] = rewardInfo.challengeMissionId.split("_");
+        const [syndicateTag, tierStr, chemistryBuddyStr] = rewardInfo.challengeMissionId.split("_");
         const tier = Number(tierStr);
-        const chemistry = Number(chemistryStr);
+        const chemistryBuddy = Number(chemistryBuddyStr);
         const isSteelPath = missions?.Tier;
         if (syndicateTag === "ZarimanSyndicate") {
             let medallionAmount = tier + 1;
@@ -1285,22 +1277,19 @@ export const addMissionRewards = async (
             if (isSteelPath) standingAmount *= 1.5;
             addStanding(inventory, syndicateTag, standingAmount, AffiliationMods);
         }
-        if (syndicateTag == "HexSyndicate" && chemistry && tier < 6) {
-            const seed = getWorldState().SyndicateMissions.find(x => x.Tag == "HexSyndicate")!.Seed;
-            const { nodes, buddies } = getHexBounties(seed);
-            const buddy = buddies[tier];
-            logger.debug(`Hex seed is ${seed}, giving chemistry for ${buddy}`);
-            if (missions?.Tag != nodes[tier]) {
-                logger.warn(
-                    `Uh-oh, tier ${tier} bounty should've been on ${nodes[tier]} but you were just on ${missions?.Tag}`
-                );
-            }
-            const tomorrowAt0Utc = config.noKimCooldowns
-                ? Date.now()
-                : (Math.trunc(Date.now() / 86400_000) + 1) * 86400_000;
+        if (syndicateTag == "HexSyndicate" && tier < 6) {
+            const buddy = chemistryBuddies[chemistryBuddy];
             const dialogue = getDialogue(inventory, buddy);
-            dialogue.Chemistry += chemistry;
-            dialogue.BountyChemExpiry = new Date(tomorrowAt0Utc);
+            if (Date.now() >= dialogue.BountyChemExpiry.getTime()) {
+                logger.debug(`Giving 20 chemistry for ${buddy}`);
+                const tomorrowAt0Utc = config.noKimCooldowns
+                    ? Date.now()
+                    : (Math.trunc(Date.now() / 86400_000) + 1) * 86400_000;
+                dialogue.Chemistry += 20;
+                dialogue.BountyChemExpiry = new Date(tomorrowAt0Utc);
+            } else {
+                logger.debug(`Already got today's chemistry for ${buddy}`);
+            }
         }
         if (isSteelPath) {
             await addItem(inventory, "/Lotus/Types/Items/MiscItems/SteelEssence", 1);
@@ -1864,7 +1853,16 @@ const libraryPersonalTargetToAvatar: Record<string, string> = {
         "/Lotus/Types/Enemies/Corpus/Spaceman/AIWeek/NullifySpacemanAvatar"
 };
 
-const node_excluded_buddies: Record<string, string> = {
+const chemistryBuddies: readonly string[] = [
+    "/Lotus/Types/Gameplay/1999Wf/Dialogue/JabirDialogue_rom.dialogue",
+    "/Lotus/Types/Gameplay/1999Wf/Dialogue/AoiDialogue_rom.dialogue",
+    "/Lotus/Types/Gameplay/1999Wf/Dialogue/ArthurDialogue_rom.dialogue",
+    "/Lotus/Types/Gameplay/1999Wf/Dialogue/EleanorDialogue_rom.dialogue",
+    "/Lotus/Types/Gameplay/1999Wf/Dialogue/LettieDialogue_rom.dialogue",
+    "/Lotus/Types/Gameplay/1999Wf/Dialogue/QuincyDialogue_rom.dialogue"
+];
+
+/*const node_excluded_buddies: Record<string, string> = {
     SolNode856: "/Lotus/Types/Gameplay/1999Wf/Dialogue/ArthurDialogue_rom.dialogue",
     SolNode852: "/Lotus/Types/Gameplay/1999Wf/Dialogue/LettieDialogue_rom.dialogue",
     SolNode851: "/Lotus/Types/Gameplay/1999Wf/Dialogue/JabirDialogue_rom.dialogue",
@@ -1914,4 +1912,4 @@ const getHexBounties = (seed: number): { nodes: string[]; buddies: string[] } =>
         }
     }
     return { nodes, buddies };
-};
+};*/
