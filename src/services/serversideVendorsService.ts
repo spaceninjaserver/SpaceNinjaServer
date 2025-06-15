@@ -309,9 +309,9 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
                 rng.randomInt(durationHoursRange.minValue, durationHoursRange.maxValue) * unixTimesInMs.hour;
             const item: IItemManifest = {
                 StoreItem: rawItem.storeItem,
-                QuantityMultiplier: rawItem.quantity,
                 ItemPrices: rawItem.itemPrices?.map(itemPrice => ({ ...itemPrice, ProductCategory: "MiscItems" })),
                 Bin: "BIN_" + rawItem.bin,
+                QuantityMultiplier: rawItem.quantity,
                 Expiry: { $date: { $numberLong: expiry.toString() } },
                 AllowMultipurchase: false,
                 Id: {
