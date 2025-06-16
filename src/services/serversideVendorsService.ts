@@ -216,6 +216,22 @@ const toRange = (value: IRange | number): IRange => {
     return value;
 };
 
+const getCycleDurationRange = (manifest: IVendor): IRange | undefined => {
+    const res: IRange = { minValue: Number.MAX_SAFE_INTEGER, maxValue: 0 };
+    for (const offer of manifest.items) {
+        if (offer.durationHours) {
+            const range = toRange(offer.durationHours);
+            if (res.minValue > range.minValue) {
+                res.minValue = range.minValue;
+            }
+            if (res.maxValue < range.maxValue) {
+                res.maxValue = range.maxValue;
+            }
+        }
+    }
+    return res.maxValue != 0 ? res : undefined;
+};
+
 const vendorManifestCache: Record<string, IVendorManifest> = {};
 
 const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorManifest => {
@@ -232,10 +248,16 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
     }
     const cacheEntry = vendorManifestCache[vendorInfo.TypeName];
     const info = cacheEntry.VendorInfo;
-    if (Date.now() >= parseInt(info.Expiry.$date.$numberLong)) {
+    const manifest = ExportVendors[vendorInfo.TypeName];
+    const cycleDurationRange = getCycleDurationRange(manifest);
+    let now = Date.now();
+    if (cycleDurationRange && cycleDurationRange.minValue != cycleDurationRange.maxValue) {
+        now -= (cycleDurationRange.maxValue - 1) * unixTimesInMs.hour;
+    }
+    while (Date.now() >= parseInt(info.Expiry.$date.$numberLong)) {
         // Remove expired offers
         for (let i = 0; i != info.ItemManifest.length; ) {
-            if (Date.now() >= parseInt(info.ItemManifest[i].Expiry.$date.$numberLong)) {
+            if (now >= parseInt(info.ItemManifest[i].Expiry.$date.$numberLong)) {
                 info.ItemManifest.splice(i, 1);
             } else {
                 ++i;
@@ -246,9 +268,8 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
         const vendorSeed = parseInt(vendorInfo._id.$oid.substring(16), 16);
         const cycleOffset = vendorInfo.cycleOffset ?? 1734307200_000;
         const cycleDuration = vendorInfo.cycleDuration;
-        const cycleIndex = Math.trunc((Date.now() - cycleOffset) / cycleDuration);
+        const cycleIndex = Math.trunc((now - cycleOffset) / cycleDuration);
         const rng = new SRng(mixSeeds(vendorSeed, cycleIndex));
-        const manifest = ExportVendors[vendorInfo.TypeName];
         const offersToAdd: IVendorOffer[] = [];
         if (!manifest.isOneBinPerCycle) {
             const remainingItemCapacity: Record<string, number> = {};
@@ -371,6 +392,8 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
             }
         }
         info.Expiry.$date.$numberLong = soonestOfferExpiry.toString();
+
+        now += unixTimesInMs.hour;
     }
     return cacheEntry;
 };
