@@ -13,7 +13,7 @@ fs.watchFile(configPath, () => {
         try {
             loadConfig();
         } catch (e) {
-            logger.error("Failed to reload config.json. Did you delete it?! Execution cannot continue.");
+            logger.error("FATAL ERROR: Config failed to be reloaded: " + (e as Error).message);
             process.exit(1);
         }
         validateConfig();

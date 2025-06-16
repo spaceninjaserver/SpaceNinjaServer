@@ -1,9 +1,14 @@
 // First, init config.
 import { config, loadConfig } from "@/src/services/configService";
+import fs from "fs";
 try {
     loadConfig();
 } catch (e) {
-    console.log("ERROR: Failed to load config.json. You can copy config.json.example to create your config.json.");
+    if (fs.existsSync("config.json")) {
+        console.log("Failed to load config.json: " + (e as Error).message);
+    } else {
+        console.log("Failed to load config.json. You can copy config.json.example to create your config.json.");
+    }
     process.exit(1);
 }
 
