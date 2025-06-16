@@ -16,6 +16,7 @@ import {
     ISortie,
     ISortieMission,
     ISyndicateMissionInfo,
+    IVoidStorm,
     IWorldState
 } from "../types/worldStateTypes";
 import { version_compare } from "../helpers/inventoryHelpers";
@@ -963,6 +964,61 @@ const getCalendarSeason = (week: number): ICalendarSeason => {
     };
 };
 
+// Not very faithful, but to avoid the same node coming up back-to-back (which is not valid), I've split these into 2 arrays which we're alternating between.
+
+const voidStormMissionsA = {
+    VoidT1: ["CrewBattleNode519", "CrewBattleNode518", "CrewBattleNode515", "CrewBattleNode503"],
+    VoidT2: ["CrewBattleNode501", "CrewBattleNode534", "CrewBattleNode530"],
+    VoidT3: ["CrewBattleNode521", "CrewBattleNode516"],
+    VoidT4: [
+        "CrewBattleNode555",
+        "CrewBattleNode553",
+        "CrewBattleNode554",
+        "CrewBattleNode539",
+        "CrewBattleNode531",
+        "CrewBattleNode527"
+    ]
+};
+
+const voidStormMissionsB = {
+    VoidT1: ["CrewBattleNode509", "CrewBattleNode522", "CrewBattleNode511", "CrewBattleNode512"],
+    VoidT2: ["CrewBattleNode535", "CrewBattleNode533"],
+    VoidT3: ["CrewBattleNode524", "CrewBattleNode525"],
+    VoidT4: [
+        "CrewBattleNode542",
+        "CrewBattleNode538",
+        "CrewBattleNode543",
+        "CrewBattleNode536",
+        "CrewBattleNode550",
+        "CrewBattleNode529"
+    ]
+};
+
+const pushVoidStorms = (arr: IVoidStorm[], hour: number): void => {
+    const activation = hour * unixTimesInMs.hour + 40 * unixTimesInMs.minute;
+    const expiry = activation + 90 * unixTimesInMs.minute;
+    let accum = 0;
+    const rng = new SRng(new SRng(hour).randomInt(0, 100_000));
+    const voidStormMissions = structuredClone(hour & 1 ? voidStormMissionsA : voidStormMissionsB);
+    for (const tier of ["VoidT1", "VoidT1", "VoidT2", "VoidT3", "VoidT4", "VoidT4"] as const) {
+        const idx = rng.randomInt(0, voidStormMissions[tier].length - 1);
+        const node = voidStormMissions[tier][idx];
+        voidStormMissions[tier].splice(idx, 1);
+        arr.push({
+            _id: {
+                $oid:
+                    ((activation / 1000) & 0xffffffff).toString(16).padStart(8, "0") +
+                    "0321e89b" +
+                    (accum++).toString().padStart(8, "0")
+            },
+            Node: node,
+            Activation: { $date: { $numberLong: activation.toString() } },
+            Expiry: { $date: { $numberLong: expiry.toString() } },
+            ActiveMissionTier: tier
+        });
+    }
+};
+
 const doesTimeSatsifyConstraints = (timeSecs: number): boolean => {
     if (config.worldState?.eidolonOverride) {
         const eidolonEpoch = 1391992660;
@@ -1032,6 +1088,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         Sorties: [],
         LiteSorties: [],
         GlobalUpgrades: [],
+        VoidStorms: [],
         EndlessXpChoices: [],
         KnownCalendarSeasons: [],
         ...staticWorldState,
@@ -1226,6 +1283,18 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     worldState.KnownCalendarSeasons.push(getCalendarSeason(week));
     if (isBeforeNextExpectedWorldStateRefresh(timeMs, weekEnd)) {
         worldState.KnownCalendarSeasons.push(getCalendarSeason(week + 1));
+    }
+
+    // Void Storms
+    const hour = Math.trunc(timeMs / unixTimesInMs.hour);
+    const overLastHourStormExpiry = hour * unixTimesInMs.hour + 10 * unixTimesInMs.minute;
+    const thisHourStormActivation = hour * unixTimesInMs.hour + 40 * unixTimesInMs.minute;
+    if (overLastHourStormExpiry > timeMs) {
+        pushVoidStorms(worldState.VoidStorms, hour - 2);
+    }
+    pushVoidStorms(worldState.VoidStorms, hour - 1);
+    if (isBeforeNextExpectedWorldStateRefresh(timeMs, thisHourStormActivation)) {
+        pushVoidStorms(worldState.VoidStorms, hour);
     }
 
     // Sentient Anomaly cycling every 30 minutes

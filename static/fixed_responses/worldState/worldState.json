@@ -2562,50 +2562,6 @@
       ]
     }
   ],
-  "VoidStorms": [
-    {
-      "_id": { "$oid": "663a7581ced28e18f694b550" },
-      "Node": "CrewBattleNode519",
-      "Activation": { "$date": { "$numberLong": "1715109601821" } },
-      "Expiry": { "$date": { "$numberLong": "2000000000000" } },
-      "ActiveMissionTier": "VoidT1"
-    },
-    {
-      "_id": { "$oid": "663a7581ced28e18f694b551" },
-      "Node": "CrewBattleNode515",
-      "Activation": { "$date": { "$numberLong": "1715109601825" } },
-      "Expiry": { "$date": { "$numberLong": "2000000000000" } },
-      "ActiveMissionTier": "VoidT1"
-    },
-    {
-      "_id": { "$oid": "663a7581ced28e18f694b554" },
-      "Node": "CrewBattleNode536",
-      "Activation": { "$date": { "$numberLong": "1715109601832" } },
-      "Expiry": { "$date": { "$numberLong": "2000000000000" } },
-      "ActiveMissionTier": "VoidT4"
-    },
-    {
-      "_id": { "$oid": "663a7581ced28e18f694b555" },
-      "Node": "CrewBattleNode539",
-      "Activation": { "$date": { "$numberLong": "1715109601834" } },
-      "Expiry": { "$date": { "$numberLong": "2000000000000" } },
-      "ActiveMissionTier": "VoidT4"
-    },
-    {
-      "_id": { "$oid": "663a7581ced28e18f694b553" },
-      "Node": "CrewBattleNode521",
-      "Activation": { "$date": { "$numberLong": "1715109601829" } },
-      "Expiry": { "$date": { "$numberLong": "2000000000000" } },
-      "ActiveMissionTier": "VoidT3"
-    },
-    {
-      "_id": { "$oid": "663a7581ced28e18f694b552" },
-      "Node": "CrewBattleNode535",
-      "Activation": { "$date": { "$numberLong": "1715109601827" } },
-      "Expiry": { "$date": { "$numberLong": "2000000000000" } },
-      "ActiveMissionTier": "VoidT2"
-    }
-  ],
   "PrimeAccessAvailability": { "State": "PRIME1" },
   "PrimeVaultAvailabilities": [false, false, false, false, false],
   "PrimeTokenAvailability": true,

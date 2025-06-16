@@ -12,6 +12,7 @@ export interface IWorldState {
     GlobalUpgrades: IGlobalUpgrade[];
     ActiveMissions: IFissure[];
     NodeOverrides: INodeOverride[];
+    VoidStorms: IVoidStorm[];
     PVPChallengeInstances: IPVPChallengeInstance[];
     EndlessXpChoices: IEndlessXpChoice[];
     SeasonInfo?: {
@@ -129,6 +130,14 @@ export interface ILiteSortie {
         missionType: string;
         node: string;
     }[];
+}
+
+export interface IVoidStorm {
+    _id: IOid;
+    Node: string;
+    Activation: IMongoDate;
+    Expiry: IMongoDate;
+    ActiveMissionTier: string;
 }
 
 export interface IPVPChallengeInstance {
