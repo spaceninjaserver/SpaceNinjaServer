@@ -3,6 +3,8 @@ dict = {
     general_inventoryUpdateNote: `注意：此处所做的更改只有在游戏同步仓库后才会生效。您可以通过访问星图来触发仓库更新。`,
     general_addButton: `添加`,
     general_bulkActions: `批量操作`,
+    code_loginFail: `[UNTRANSLATED] Login failed. Double-check the email and password.`,
+    code_regFail: `[UNTRANSLATED] Registration failed. Account already exists?`,
     code_nonValidAuthz: `您的登录凭证已失效。`,
     code_changeNameConfirm: `您想将账户名称更改为什么？`,
     code_deleteAccountConfirm: `确定要删除账户 |DISPLAYNAME| (|EMAIL|) 吗？此操作不可撤销。`,

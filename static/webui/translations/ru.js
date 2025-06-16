@@ -3,6 +3,8 @@ dict = {
     general_inventoryUpdateNote: `Примечание: изменения, внесенные здесь, отобразятся в игре только после повторной загрузки вашего инвентаря. Посещение навигации — самый простой способ этого добиться.`,
     general_addButton: `Добавить`,
     general_bulkActions: `Массовые действия`,
+    code_loginFail: `[UNTRANSLATED] Login failed. Double-check the email and password.`,
+    code_regFail: `[UNTRANSLATED] Registration failed. Account already exists?`,
     code_nonValidAuthz: `Ваши данные больше не действительны.`,
     code_changeNameConfirm: `Какое имя вы хотите установить для своей учетной записи?`,
     code_deleteAccountConfirm: `Вы уверены, что хотите удалить аккаунт |DISPLAYNAME| (|EMAIL|)? Это действие нельзя отменить.`,

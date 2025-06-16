@@ -29,7 +29,7 @@ function loginFromLocalStorage() {
         },
         () => {
             logout();
-            alert(isRegister ? "Registration failed. Account already exists?" : "Login failed");
+            alert(loc(isRegister ? "code_regFail" : "code_loginFail"));
         }
     );
 }

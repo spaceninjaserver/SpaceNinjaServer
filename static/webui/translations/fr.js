@@ -3,6 +3,8 @@ dict = {
     general_inventoryUpdateNote: `Note : Les changements effectués ici seront appliqués lors de la syncrhonisation. Visiter la navigation appliquera les changements apportés à l'inventaire.`,
     general_addButton: `Ajouter`,
     general_bulkActions: `Action groupée`,
+    code_loginFail: `[UNTRANSLATED] Login failed. Double-check the email and password.`,
+    code_regFail: `[UNTRANSLATED] Registration failed. Account already exists?`,
     code_nonValidAuthz: `Informations de connexion invalides`,
     code_changeNameConfirm: `Nouveau nom du compte :`,
     code_deleteAccountConfirm: `Supprimer |DISPLAYNAME| (|EMAIL|) ? Cette action est irreversible.`,

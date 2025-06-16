@@ -2,6 +2,8 @@ dict = {
     general_inventoryUpdateNote: `Note: Changes made here will only be applied in-game when the game syncs the inventory. Visiting the navigation should be the easiest way to trigger that.`,
     general_addButton: `Add`,
     general_bulkActions: `Bulk Actions`,
+    code_loginFail: `Login failed. Double-check the email and password.`,
+    code_regFail: `Registration failed. Account already exists?`,
     code_nonValidAuthz: `Your credentials are no longer valid.`,
     code_changeNameConfirm: `What would you like to change your account name to?`,
     code_deleteAccountConfirm: `Are you sure you want to delete your account |DISPLAYNAME| (|EMAIL|)? This action cannot be undone.`,
