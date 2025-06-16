@@ -15,6 +15,7 @@ export const pushArchonCrystalUpgradeController: RequestHandler = async (req, re
             }
             await inventory.save();
             res.end();
+            return;
         }
     }
     res.status(400).end();

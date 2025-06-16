@@ -12,6 +12,7 @@ export const popArchonCrystalUpgradeController: RequestHandler = async (req, res
         );
         await inventory.save();
         res.end();
+        return;
     }
     res.status(400).end();
 };
