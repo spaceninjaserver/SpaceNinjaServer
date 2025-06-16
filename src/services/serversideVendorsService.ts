@@ -17,7 +17,6 @@ import DeimosHivemindCommisionsManifestTokenVendor from "@/static/fixed_response
 import DeimosHivemindCommisionsManifestWeaponsmith from "@/static/fixed_responses/getVendorInfo/DeimosHivemindCommisionsManifestWeaponsmith.json";
 import DeimosHivemindTokenVendorManifest from "@/static/fixed_responses/getVendorInfo/DeimosHivemindTokenVendorManifest.json";
 import DeimosPetVendorManifest from "@/static/fixed_responses/getVendorInfo/DeimosPetVendorManifest.json";
-import DeimosProspectorVendorManifest from "@/static/fixed_responses/getVendorInfo/DeimosProspectorVendorManifest.json";
 import DuviriAcrithisVendorManifest from "@/static/fixed_responses/getVendorInfo/DuviriAcrithisVendorManifest.json";
 import EntratiLabsEntratiLabsCommisionsManifest from "@/static/fixed_responses/getVendorInfo/EntratiLabsEntratiLabsCommisionsManifest.json";
 import EntratiLabsEntratiLabVendorManifest from "@/static/fixed_responses/getVendorInfo/EntratiLabsEntratiLabVendorManifest.json";
@@ -25,9 +24,7 @@ import HubsRailjackCrewMemberVendorManifest from "@/static/fixed_responses/getVe
 import MaskSalesmanManifest from "@/static/fixed_responses/getVendorInfo/MaskSalesmanManifest.json";
 import Nova1999ConquestShopManifest from "@/static/fixed_responses/getVendorInfo/Nova1999ConquestShopManifest.json";
 import OstronPetVendorManifest from "@/static/fixed_responses/getVendorInfo/OstronPetVendorManifest.json";
-import OstronProspectorVendorManifest from "@/static/fixed_responses/getVendorInfo/OstronProspectorVendorManifest.json";
 import SolarisDebtTokenVendorRepossessionsManifest from "@/static/fixed_responses/getVendorInfo/SolarisDebtTokenVendorRepossessionsManifest.json";
-import SolarisProspectorVendorManifest from "@/static/fixed_responses/getVendorInfo/SolarisProspectorVendorManifest.json";
 import Temple1999VendorManifest from "@/static/fixed_responses/getVendorInfo/Temple1999VendorManifest.json";
 import TeshinHardModeVendorManifest from "@/static/fixed_responses/getVendorInfo/TeshinHardModeVendorManifest.json";
 import ZarimanCommisionsManifestArchimedean from "@/static/fixed_responses/getVendorInfo/ZarimanCommisionsManifestArchimedean.json";
@@ -42,7 +39,6 @@ const rawVendorManifests: IVendorManifest[] = [
     DeimosHivemindCommisionsManifestWeaponsmith,
     DeimosHivemindTokenVendorManifest,
     DeimosPetVendorManifest,
-    DeimosProspectorVendorManifest,
     DuviriAcrithisVendorManifest,
     EntratiLabsEntratiLabsCommisionsManifest,
     EntratiLabsEntratiLabVendorManifest,
@@ -50,9 +46,7 @@ const rawVendorManifests: IVendorManifest[] = [
     MaskSalesmanManifest,
     Nova1999ConquestShopManifest,
     OstronPetVendorManifest,
-    OstronProspectorVendorManifest,
     SolarisDebtTokenVendorRepossessionsManifest,
-    SolarisProspectorVendorManifest,
     Temple1999VendorManifest,
     TeshinHardModeVendorManifest, // uses preprocessing
     ZarimanCommisionsManifestArchimedean
@@ -317,7 +311,7 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
                 StoreItem: rawItem.storeItem,
                 ItemPrices: rawItem.itemPrices?.map(itemPrice => ({ ...itemPrice, ProductCategory: "MiscItems" })),
                 Bin: "BIN_" + rawItem.bin,
-                QuantityMultiplier: 1,
+                QuantityMultiplier: rawItem.quantity,
                 Expiry: { $date: { $numberLong: expiry.toString() } },
                 AllowMultipurchase: false,
                 Id: {
