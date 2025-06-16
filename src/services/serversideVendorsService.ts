@@ -20,7 +20,6 @@ import DeimosPetVendorManifest from "@/static/fixed_responses/getVendorInfo/Deim
 import DuviriAcrithisVendorManifest from "@/static/fixed_responses/getVendorInfo/DuviriAcrithisVendorManifest.json";
 import EntratiLabsEntratiLabsCommisionsManifest from "@/static/fixed_responses/getVendorInfo/EntratiLabsEntratiLabsCommisionsManifest.json";
 import EntratiLabsEntratiLabVendorManifest from "@/static/fixed_responses/getVendorInfo/EntratiLabsEntratiLabVendorManifest.json";
-import HubsRailjackCrewMemberVendorManifest from "@/static/fixed_responses/getVendorInfo/HubsRailjackCrewMemberVendorManifest.json";
 import MaskSalesmanManifest from "@/static/fixed_responses/getVendorInfo/MaskSalesmanManifest.json";
 import Nova1999ConquestShopManifest from "@/static/fixed_responses/getVendorInfo/Nova1999ConquestShopManifest.json";
 import OstronPetVendorManifest from "@/static/fixed_responses/getVendorInfo/OstronPetVendorManifest.json";
@@ -42,7 +41,6 @@ const rawVendorManifests: IVendorManifest[] = [
     DuviriAcrithisVendorManifest,
     EntratiLabsEntratiLabsCommisionsManifest,
     EntratiLabsEntratiLabVendorManifest,
-    HubsRailjackCrewMemberVendorManifest,
     MaskSalesmanManifest,
     Nova1999ConquestShopManifest,
     OstronPetVendorManifest,
@@ -273,20 +271,39 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
         const offersToAdd: IVendorOffer[] = [];
         if (!manifest.isOneBinPerCycle) {
             const remainingItemCapacity: Record<string, number> = {};
+            const missingItemsPerBin: Record<number, number> = {};
+            let numOffersThatNeedToMatchABin = 0;
+            if (manifest.numItemsPerBin) {
+                for (let bin = 0; bin != manifest.numItemsPerBin.length; ++bin) {
+                    missingItemsPerBin[bin] = manifest.numItemsPerBin[bin];
+                    numOffersThatNeedToMatchABin += manifest.numItemsPerBin[bin];
+                }
+            }
             for (const item of manifest.items) {
                 remainingItemCapacity[item.storeItem] = 1 + item.duplicates;
             }
             for (const offer of info.ItemManifest) {
                 remainingItemCapacity[offer.StoreItem] -= 1;
+                const bin = parseInt(offer.Bin.substring(4));
+                if (missingItemsPerBin[bin]) {
+                    missingItemsPerBin[bin] -= 1;
+                    numOffersThatNeedToMatchABin -= 1;
+                }
             }
             if (manifest.numItems && manifest.items.length != manifest.numItems.minValue) {
                 const numItemsTarget = rng.randomInt(manifest.numItems.minValue, manifest.numItems.maxValue);
                 while (info.ItemManifest.length + offersToAdd.length < numItemsTarget) {
-                    // TODO: Consider per-bin item limits
                     // TODO: Consider item probability weightings
                     const item = rng.randomElement(manifest.items)!;
-                    if (remainingItemCapacity[item.storeItem] != 0) {
+                    if (
+                        remainingItemCapacity[item.storeItem] != 0 &&
+                        (numOffersThatNeedToMatchABin == 0 || missingItemsPerBin[item.bin])
+                    ) {
                         remainingItemCapacity[item.storeItem] -= 1;
+                        if (missingItemsPerBin[item.bin]) {
+                            missingItemsPerBin[item.bin] -= 1;
+                            numOffersThatNeedToMatchABin -= 1;
+                        }
                         offersToAdd.push(item);
                     }
                 }
@@ -383,6 +400,12 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
             info.ItemManifest.push(item);
         }
 
+        info.ItemManifest.sort((a, b) => {
+            const aBin = parseInt(a.Bin.substring(4));
+            const bBin = parseInt(b.Bin.substring(4));
+            return aBin == bBin ? 0 : aBin < bBin ? +1 : -1;
+        });
+
         // Update vendor expiry
         let soonestOfferExpiry: number = Number.MAX_SAFE_INTEGER;
         for (const offer of info.ItemManifest) {
@@ -423,5 +446,18 @@ if (isDev) {
         pall[4].StoreItem != "/Lotus/StoreItems/Types/BoosterPacks/RivenModPack"
     ) {
         logger.warn(`self test failed for /Lotus/Types/Game/VendorManifests/Hubs/IronwakeDondaVendorManifest`);
+    }
+
+    const cms = getVendorManifestByTypeName("/Lotus/Types/Game/VendorManifests/Hubs/RailjackCrewMemberVendorManifest")!
+        .VendorInfo.ItemManifest;
+    if (
+        cms.length != 9 ||
+        cms[0].Bin != "BIN_2" ||
+        cms[8].Bin != "BIN_0" ||
+        cms.reduce((a, x) => a + (x.Bin == "BIN_2" ? 1 : 0), 0) < 2 ||
+        cms.reduce((a, x) => a + (x.Bin == "BIN_1" ? 1 : 0), 0) < 2 ||
+        cms.reduce((a, x) => a + (x.Bin == "BIN_0" ? 1 : 0), 0) < 4
+    ) {
+        logger.warn(`self test failed for /Lotus/Types/Game/VendorManifests/Hubs/RailjackCrewMemberVendorManifest`);
     }
 }
