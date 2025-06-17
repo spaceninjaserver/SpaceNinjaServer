@@ -30,8 +30,9 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             const request = getJSONfromString<IShardInstallRequest>(String(req.body));
             const inventory = await getInventory(account._id.toString());
             const suit = inventory.Suits.id(request.SuitId.$oid)!;
-            if (!suit.ArchonCrystalUpgrades || suit.ArchonCrystalUpgrades.length != 5) {
-                suit.ArchonCrystalUpgrades = [{}, {}, {}, {}, {}];
+            suit.ArchonCrystalUpgrades ??= [];
+            while (suit.ArchonCrystalUpgrades.length < request.Slot) {
+                suit.ArchonCrystalUpgrades.push({});
             }
             suit.ArchonCrystalUpgrades[request.Slot] = {
                 UpgradeType: request.UpgradeType,
@@ -92,7 +93,8 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             }
 
             // remove from suit
-            suit.ArchonCrystalUpgrades![request.Slot] = {};
+            suit.ArchonCrystalUpgrades![request.Slot].UpgradeType = undefined;
+            suit.ArchonCrystalUpgrades![request.Slot].Color = undefined;
 
             await inventory.save();
 

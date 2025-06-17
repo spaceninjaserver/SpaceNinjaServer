@@ -251,12 +251,6 @@ const ArchonCrystalUpgradeSchema = new Schema<IArchonCrystalUpgrade>(
     { _id: false }
 );
 
-ArchonCrystalUpgradeSchema.set("toJSON", {
-    transform(_document, returnedObject) {
-        delete returnedObject.__v;
-    }
-});
-
 const boosterSchema = new Schema<IBooster>(
     {
         ExpiryDate: Number,
@@ -1078,6 +1072,11 @@ EquipmentSchema.set("toJSON", {
         }
         if (db.UmbraDate) {
             client.UmbraDate = toMongoDate(db.UmbraDate);
+        }
+
+        if (client.ArchonCrystalUpgrades) {
+            // For some reason, mongoose turns empty objects here into nulls, so we have to fix it.
+            client.ArchonCrystalUpgrades = client.ArchonCrystalUpgrades.map(x => (x as unknown) ?? {});
         }
     }
 });
