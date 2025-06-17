@@ -1731,12 +1731,27 @@ export const addFocusXpIncreases = (inventory: TInventoryDatabaseDocument, focus
         AP_ANY
     }
 
-    inventory.FocusXP ??= { AP_ATTACK: 0, AP_DEFENSE: 0, AP_TACTIC: 0, AP_POWER: 0, AP_WARD: 0 };
-    inventory.FocusXP.AP_ATTACK += focusXpPlus[FocusType.AP_ATTACK];
-    inventory.FocusXP.AP_DEFENSE += focusXpPlus[FocusType.AP_DEFENSE];
-    inventory.FocusXP.AP_TACTIC += focusXpPlus[FocusType.AP_TACTIC];
-    inventory.FocusXP.AP_POWER += focusXpPlus[FocusType.AP_POWER];
-    inventory.FocusXP.AP_WARD += focusXpPlus[FocusType.AP_WARD];
+    inventory.FocusXP ??= {};
+    if (focusXpPlus[FocusType.AP_ATTACK]) {
+        inventory.FocusXP.AP_ATTACK ??= 0;
+        inventory.FocusXP.AP_ATTACK += focusXpPlus[FocusType.AP_ATTACK];
+    }
+    if (focusXpPlus[FocusType.AP_DEFENSE]) {
+        inventory.FocusXP.AP_DEFENSE ??= 0;
+        inventory.FocusXP.AP_DEFENSE += focusXpPlus[FocusType.AP_DEFENSE];
+    }
+    if (focusXpPlus[FocusType.AP_TACTIC]) {
+        inventory.FocusXP.AP_TACTIC ??= 0;
+        inventory.FocusXP.AP_TACTIC += focusXpPlus[FocusType.AP_TACTIC];
+    }
+    if (focusXpPlus[FocusType.AP_POWER]) {
+        inventory.FocusXP.AP_POWER ??= 0;
+        inventory.FocusXP.AP_POWER += focusXpPlus[FocusType.AP_POWER];
+    }
+    if (focusXpPlus[FocusType.AP_WARD]) {
+        inventory.FocusXP.AP_WARD ??= 0;
+        inventory.FocusXP.AP_WARD += focusXpPlus[FocusType.AP_WARD];
+    }
 
     if (!config.noDailyFocusLimit) {
         inventory.DailyFocus -= focusXpPlus.reduce((a, b) => a + b, 0);

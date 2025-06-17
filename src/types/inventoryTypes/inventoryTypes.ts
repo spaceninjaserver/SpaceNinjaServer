@@ -641,11 +641,11 @@ export interface IFocusUpgrade {
 }
 
 export interface IFocusXP {
-    AP_POWER: number;
-    AP_TACTIC: number;
-    AP_DEFENSE: number;
-    AP_ATTACK: number;
-    AP_WARD: number;
+    AP_POWER?: number;
+    AP_TACTIC?: number;
+    AP_DEFENSE?: number;
+    AP_ATTACK?: number;
+    AP_WARD?: number;
 }
 
 export type TFocusPolarity = keyof IFocusXP;
