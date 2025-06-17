@@ -248,7 +248,7 @@ const requiemMods: readonly string[] = [
     "/Lotus/Upgrades/Mods/Immortal/ImmortalEightMod"
 ];
 
-const antivirusMods: readonly string[] = [
+export const antivirusMods: readonly string[] = [
     "/Lotus/Upgrades/Mods/Immortal/AntivirusOneMod",
     "/Lotus/Upgrades/Mods/Immortal/AntivirusTwoMod",
     "/Lotus/Upgrades/Mods/Immortal/AntivirusThreeMod",

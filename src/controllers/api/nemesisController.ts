@@ -1,5 +1,6 @@
 import { version_compare } from "@/src/helpers/inventoryHelpers";
 import {
+    antivirusMods,
     consumeModCharge,
     decodeNemesisGuess,
     encodeNemesisGuess,
@@ -134,34 +135,37 @@ export const nemesisController: RequestHandler = async (req, res) => {
                 for (const upgrade of body.knife!.AttachedUpgrades) {
                     switch (upgrade.ItemType) {
                         case "/Lotus/Upgrades/Mods/DataSpike/Potency/GainAntivirusAndSpeedOnUseMod":
-                            antivirusGain += 10;
-                            consumeModCharge(response, inventory, upgrade, dataknifeUpgrades);
-                            break;
                         case "/Lotus/Upgrades/Mods/DataSpike/Potency/GainAntivirusAndWeaponDamageOnUseMod":
+                        case "/Lotus/Upgrades/Mods/DataSpike/Potency/GainAntivirusSmallOnSingleUseMod":
                             antivirusGain += 10;
                             consumeModCharge(response, inventory, upgrade, dataknifeUpgrades);
                             break;
                         case "/Lotus/Upgrades/Mods/DataSpike/Potency/GainAntivirusLargeOnSingleUseMod": // Instant Secure
-                            antivirusGain += 15;
-                            consumeModCharge(response, inventory, upgrade, dataknifeUpgrades);
-                            break;
                         case "/Lotus/Upgrades/Mods/DataSpike/Potency/GainAntivirusOnUseMod": // Immuno Shield
                             antivirusGain += 15;
-                            consumeModCharge(response, inventory, upgrade, dataknifeUpgrades);
-                            break;
-                        case "/Lotus/Upgrades/Mods/DataSpike/Potency/GainAntivirusSmallOnSingleUseMod":
-                            antivirusGain += 10;
                             consumeModCharge(response, inventory, upgrade, dataknifeUpgrades);
                             break;
                     }
                 }
                 inventory.Nemesis!.HenchmenKilled += antivirusGain;
+                if (inventory.Nemesis!.HenchmenKilled >= 100) {
+                    inventory.Nemesis!.HenchmenKilled = 100;
+                    // Client doesn't seem to request mode=w for infested liches, so weakening it here.
+                    inventory.Nemesis!.InfNodes = [
+                        {
+                            Node: getNemesisManifest(inventory.Nemesis!.manifest).showdownNode,
+                            Influence: 1
+                        }
+                    ];
+                    inventory.Nemesis!.Weakened = true;
+                    const upgrade = getKnifeUpgrade(inventory, dataknifeUpgrades, antivirusMods[passcode]);
+                    consumeModCharge(response, inventory, upgrade, dataknifeUpgrades);
+                }
             }
 
-            if (inventory.Nemesis!.HenchmenKilled >= 100) {
-                inventory.Nemesis!.HenchmenKilled = 100;
+            if (inventory.Nemesis!.HenchmenKilled < 100) {
+                inventory.Nemesis!.InfNodes = getInfNodes(getNemesisManifest(inventory.Nemesis!.manifest), 0);
             }
-            inventory.Nemesis!.InfNodes = getInfNodes(getNemesisManifest(inventory.Nemesis!.manifest), 0);
 
             await inventory.save();
             res.json(response);
@@ -282,6 +286,10 @@ export const nemesisController: RequestHandler = async (req, res) => {
             "Nemesis LoadOutPresets CurrentLoadOutIds DataKnives Upgrades RawUpgrades"
         );
         //const body = getJSONfromString<INemesisWeakenRequest>(String(req.body));
+
+        if (inventory.Nemesis!.Weakened) {
+            logger.warn(`client is weakening an already-weakened nemesis?!`);
+        }
 
         inventory.Nemesis!.InfNodes = [
             {
