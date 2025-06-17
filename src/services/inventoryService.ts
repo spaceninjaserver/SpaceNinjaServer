@@ -1580,7 +1580,7 @@ export const addMiscItem = (
     inventory: TInventoryDatabaseDocument,
     type: string,
     count: number,
-    inventoryChanges: IInventoryChanges
+    inventoryChanges: IInventoryChanges = {}
 ): void => {
     const miscItemChanges: IMiscItem[] = [
         {

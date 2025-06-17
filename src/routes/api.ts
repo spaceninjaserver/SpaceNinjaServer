@@ -148,6 +148,7 @@ import { syndicateStandingBonusController } from "@/src/controllers/api/syndicat
 import { tauntHistoryController } from "@/src/controllers/api/tauntHistoryController";
 import { tradingController } from "@/src/controllers/api/tradingController";
 import { trainingResultController } from "@/src/controllers/api/trainingResultController";
+import { umbraController } from "@/src/controllers/api/umbraController";
 import { unlockShipFeatureController } from "@/src/controllers/api/unlockShipFeatureController";
 import { updateAlignmentController } from "@/src/controllers/api/updateAlignmentController";
 import { updateChallengeProgressController } from "@/src/controllers/api/updateChallengeProgressController";
@@ -329,6 +330,7 @@ apiRouter.post("/syndicateSacrifice.php", syndicateSacrificeController);
 apiRouter.post("/syndicateStandingBonus.php", syndicateStandingBonusController);
 apiRouter.post("/tauntHistory.php", tauntHistoryController);
 apiRouter.post("/trainingResult.php", trainingResultController);
+apiRouter.post("/umbra.php", umbraController);
 apiRouter.post("/unlockShipFeature.php", unlockShipFeatureController);
 apiRouter.post("/updateAlignment.php", updateAlignmentController);
 apiRouter.post("/updateChallengeProgress.php", updateChallengeProgressController);
