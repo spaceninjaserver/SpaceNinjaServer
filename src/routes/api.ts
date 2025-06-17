@@ -132,6 +132,7 @@ import { setPlacedDecoInfoController } from "@/src/controllers/api/setPlacedDeco
 import { setShipCustomizationsController } from "@/src/controllers/api/setShipCustomizationsController";
 import { setShipFavouriteLoadoutController } from "@/src/controllers/api/setShipFavouriteLoadoutController";
 import { setShipVignetteController } from "@/src/controllers/api/setShipVignetteController";
+import { setSuitInfectionController } from "@/src/controllers/api/setSuitInfectionController";
 import { setSupportedSyndicateController } from "@/src/controllers/api/setSupportedSyndicateController";
 import { setWeaponSkillTreeController } from "@/src/controllers/api/setWeaponSkillTreeController";
 import { shipDecorationsController } from "@/src/controllers/api/shipDecorationsController";
@@ -317,6 +318,7 @@ apiRouter.post("/setPlacedDecoInfo.php", setPlacedDecoInfoController);
 apiRouter.post("/setShipCustomizations.php", setShipCustomizationsController);
 apiRouter.post("/setShipFavouriteLoadout.php", setShipFavouriteLoadoutController);
 apiRouter.post("/setShipVignette.php", setShipVignetteController);
+apiRouter.post("/setSuitInfection.php", setSuitInfectionController);
 apiRouter.post("/setWeaponSkillTree.php", setWeaponSkillTreeController);
 apiRouter.post("/shipDecorations.php", shipDecorationsController);
 apiRouter.post("/startCollectibleEntry.php", startCollectibleEntryController);
