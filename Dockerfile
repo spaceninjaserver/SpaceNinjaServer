@@ -1,4 +1,4 @@
-FROM node:18-alpine3.19
+FROM node:24-alpine3.21
 
 ENV APP_MONGODB_URL=mongodb://mongodb:27017/openWF
 ENV APP_MY_ADDRESS=localhost
