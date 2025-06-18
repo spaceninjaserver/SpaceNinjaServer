@@ -17,6 +17,7 @@ import {
     IKnifeResponse
 } from "@/src/helpers/nemesisHelpers";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
+import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
 import { freeUpSlot, getInventory } from "@/src/services/inventoryService";
 import { getAccountForRequest } from "@/src/services/loginService";
@@ -202,16 +203,28 @@ export const nemesisController: RequestHandler = async (req, res) => {
             guess[body.position].result = correct ? GUESS_CORRECT : GUESS_INCORRECT;
             inventory.Nemesis!.GuessHistory[inventory.Nemesis!.GuessHistory.length - 1] = encodeNemesisGuess(guess);
 
-            // Increase rank if incorrect
-            let RankIncrease: number | undefined;
-            if (!correct) {
-                RankIncrease = 1;
+            const response: INemesisRequiemResponse = {};
+            if (correct) {
+                if (body.position == 2) {
+                    // That was all 3 guesses correct, nemesis is now weakened.
+                    inventory.Nemesis!.InfNodes = [
+                        {
+                            Node: getNemesisManifest(inventory.Nemesis!.manifest).showdownNode,
+                            Influence: 1
+                        }
+                    ];
+                    inventory.Nemesis!.Weakened = true;
+                    await consumePasscodeModCharges(inventory, response);
+                }
+            } else {
+                // Guess was incorrect, increase rank
+                response.RankIncrease = 1;
                 const manifest = getNemesisManifest(inventory.Nemesis!.manifest);
                 inventory.Nemesis!.Rank = Math.min(inventory.Nemesis!.Rank + 1, manifest.systemIndexes.length - 1);
                 inventory.Nemesis!.InfNodes = getInfNodes(manifest, inventory.Nemesis!.Rank);
             }
             await inventory.save();
-            res.json({ RankIncrease });
+            res.json(response);
         }
     } else if ((req.query.mode as string) == "rs") {
         // report spawn; POST but no application data in body
@@ -299,20 +312,11 @@ export const nemesisController: RequestHandler = async (req, res) => {
         ];
         inventory.Nemesis!.Weakened = true;
 
-        const response: IKnifeResponse & { target: INemesisClient } = {
+        const response: INemesisWeakenResponse = {
             target: inventory.toJSON<IInventoryClient>().Nemesis!
         };
 
-        // Consume charge of the correct requiem mod(s)
-        const loadout = (await Loadout.findById(inventory.LoadOutPresets, "DATAKNIFE"))!;
-        const dataknifeLoadout = loadout.DATAKNIFE.id(inventory.CurrentLoadOutIds[LoadoutIndex.DATAKNIFE].$oid);
-        const dataknifeConfigIndex = dataknifeLoadout?.s?.mod ?? 0;
-        const dataknifeUpgrades = inventory.DataKnives[0].Configs[dataknifeConfigIndex].Upgrades!;
-        const modTypes = getNemesisPasscodeModTypes(inventory.Nemesis!);
-        for (const modType of modTypes) {
-            const upgrade = getKnifeUpgrade(inventory, dataknifeUpgrades, modType);
-            consumeModCharge(response, inventory, upgrade, dataknifeUpgrades);
-        }
+        await consumePasscodeModCharges(inventory, response);
 
         await inventory.save();
         res.json(response);
@@ -370,10 +374,18 @@ interface INemesisRequiemRequest {
     knife?: IKnife;
 }
 
+interface INemesisRequiemResponse extends IKnifeResponse {
+    RankIncrease?: number;
+}
+
 // interface INemesisWeakenRequest {
 //     target: INemesisClient;
 //     knife: IKnife;
 // }
+
+interface INemesisWeakenResponse extends IKnifeResponse {
+    target: INemesisClient;
+}
 
 interface IKnife {
     Item: IEquipmentClient;
@@ -383,3 +395,18 @@ interface IKnife {
     AttachedUpgrades: IUpgradeClient[];
     HiddenWhenHolstered: boolean;
 }
+
+const consumePasscodeModCharges = async (
+    inventory: TInventoryDatabaseDocument,
+    response: IKnifeResponse
+): Promise<void> => {
+    const loadout = (await Loadout.findById(inventory.LoadOutPresets, "DATAKNIFE"))!;
+    const dataknifeLoadout = loadout.DATAKNIFE.id(inventory.CurrentLoadOutIds[LoadoutIndex.DATAKNIFE].$oid);
+    const dataknifeConfigIndex = dataknifeLoadout?.s?.mod ?? 0;
+    const dataknifeUpgrades = inventory.DataKnives[0].Configs[dataknifeConfigIndex].Upgrades!;
+    const modTypes = getNemesisPasscodeModTypes(inventory.Nemesis!);
+    for (const modType of modTypes) {
+        const upgrade = getKnifeUpgrade(inventory, dataknifeUpgrades, modType);
+        consumeModCharge(response, inventory, upgrade, dataknifeUpgrades);
+    }
+};
