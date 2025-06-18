@@ -50,14 +50,17 @@ export const createNewEventMessages = async (req: Request): Promise<void> => {
     await account.save();
 };
 
-export const createMessage = async (accountId: string | Types.ObjectId, messages: IMessageCreationTemplate[]) => {
+export const createMessage = async (
+    accountId: string | Types.ObjectId,
+    messages: IMessageCreationTemplate[]
+): Promise<HydratedDocument<IMessageDatabase>[]> => {
     const ownerIdMessages = messages.map(m => ({
         ...m,
         ownerId: accountId
     }));
 
     const savedMessages = await Inbox.insertMany(ownerIdMessages);
-    return savedMessages;
+    return savedMessages as HydratedDocument<IMessageDatabase>[];
 };
 
 export interface IMessageCreationTemplate extends Omit<IMessageDatabase, "_id" | "date" | "ownerId"> {
