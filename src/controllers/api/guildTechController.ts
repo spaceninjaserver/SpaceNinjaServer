@@ -11,7 +11,7 @@ import {
     scaleRequiredCount,
     setGuildTechLogState
 } from "@/src/services/guildService";
-import { ExportDojoRecipes } from "warframe-public-export-plus";
+import { ExportDojoRecipes, ExportRailjackWeapons } from "warframe-public-export-plus";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import {
     addCrewShipWeaponSkin,
@@ -442,6 +442,7 @@ const finishComponentRepair = (
         ...(category == "CrewShipWeaponSkins"
             ? addCrewShipWeaponSkin(inventory, salvageItem.ItemType, salvageItem.UpgradeFingerprint)
             : addEquipment(inventory, category, salvageItem.ItemType, {
+                  UpgradeType: ExportRailjackWeapons[salvageItem.ItemType].defaultUpgrades?.[0].ItemType,
                   UpgradeFingerprint: salvageItem.UpgradeFingerprint
               })),
         ...occupySlot(inventory, InventorySlot.RJ_COMPONENT_AND_ARMAMENTS, false)
