@@ -234,7 +234,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     HandlerPoints: number;
     MiscItems: IMiscItem[];
     HasOwnedVoidProjectionsPreviously?: boolean;
-    ChallengesFixVersion: number;
+    ChallengesFixVersion?: number;
     ChallengeProgress: IChallengeProgress[];
     RawUpgrades: IRawUpgrade[];
     ReceivedStartingGear: boolean;

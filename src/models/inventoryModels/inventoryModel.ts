@@ -1703,7 +1703,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         LastInventorySync: Schema.Types.ObjectId,
         Mailbox: MailboxSchema,
         HandlerPoints: Number,
-        ChallengesFixVersion: { type: Number, default: 6 },
+        ChallengesFixVersion: Number,
         PlayedParkourTutorial: Boolean,
         //ActiveLandscapeTraps: [Schema.Types.Mixed],
         //RepVotes: [Schema.Types.Mixed],

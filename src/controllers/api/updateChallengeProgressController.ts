@@ -11,8 +11,11 @@ export const updateChallengeProgressController: RequestHandler = async (req, res
 
     const inventory = await getInventory(
         account._id.toString(),
-        "ChallengeProgress SeasonChallengeHistory Affiliations"
+        "ChallengesFixVersion ChallengeProgress SeasonChallengeHistory Affiliations"
     );
+    if (challenges.ChallengesFixVersion !== undefined) {
+        inventory.ChallengesFixVersion = challenges.ChallengesFixVersion;
+    }
     let affiliationMods: IAffiliationMods[] = [];
     if (challenges.ChallengeProgress) {
         affiliationMods = addChallenges(
@@ -40,6 +43,7 @@ export const updateChallengeProgressController: RequestHandler = async (req, res
 };
 
 interface IUpdateChallengeProgressRequest {
+    ChallengesFixVersion?: number;
     ChallengeProgress?: IChallengeProgress[];
     SeasonChallengeHistory?: ISeasonChallenge[];
     SeasonChallengeCompletions?: ISeasonChallenge[];
