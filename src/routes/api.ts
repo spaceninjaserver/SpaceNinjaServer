@@ -33,6 +33,7 @@ import { createAllianceController } from "@/src/controllers/api/createAllianceCo
 import { createGuildController } from "@/src/controllers/api/createGuildController";
 import { creditsController } from "@/src/controllers/api/creditsController";
 import { crewMembersController } from "@/src/controllers/api/crewMembersController";
+import { crewShipFusionController } from "@/src/controllers/api/crewShipFusionController";
 import { crewShipIdentifySalvageController } from "@/src/controllers/api/crewShipIdentifySalvageController";
 import { customizeGuildRanksController } from "@/src/controllers/api/customizeGuildRanksController";
 import { customObstacleCourseLeaderboardController } from "@/src/controllers/api/customObstacleCourseLeaderboardController";
@@ -247,6 +248,7 @@ apiRouter.post("/contributeToVault.php", contributeToVaultController);
 apiRouter.post("/createAlliance.php", createAllianceController);
 apiRouter.post("/createGuild.php", createGuildController);
 apiRouter.post("/crewMembers.php", crewMembersController);
+apiRouter.post("/crewShipFusion.php", crewShipFusionController);
 apiRouter.post("/crewShipIdentifySalvage.php", crewShipIdentifySalvageController);
 apiRouter.post("/customizeGuildRanks.php", customizeGuildRanksController);
 apiRouter.post("/customObstacleCourseLeaderboard.php", customObstacleCourseLeaderboardController);
