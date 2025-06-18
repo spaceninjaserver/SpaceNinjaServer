@@ -65,6 +65,7 @@ interface IConfig {
         eidolonOverride?: string;
         vallisOverride?: string;
         nightwaveOverride?: string;
+        circuitGameModes?: string[];
     };
     dev?: {
         keepVendorsExpired?: boolean;

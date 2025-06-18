@@ -33,3 +33,4 @@ SpaceNinjaServer requires a `config.json`. To set it up, you can copy the [confi
   - `RadioLegion2Syndicate` for The Emissary
   - `RadioLegionIntermissionSyndicate` for Intermission I
   - `RadioLegionSyndicate` for The Wolf of Saturn Six
+- `worldState.circuitGameModes` can be provided with an array of valid game modes (`Survival`, `VoidFlood`, `Excavation`, `Defense`, `Exterminate`, `Assassination`, `Alchemy`)

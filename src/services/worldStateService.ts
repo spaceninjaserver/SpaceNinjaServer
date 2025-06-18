@@ -16,8 +16,10 @@ import {
     ISortie,
     ISortieMission,
     ISyndicateMissionInfo,
+    ITmp,
     IVoidStorm,
-    IWorldState
+    IWorldState,
+    TCircuitGameMode
 } from "../types/worldStateTypes";
 import { version_compare } from "../helpers/inventoryHelpers";
 import { logger } from "../utils/logger";
@@ -1303,10 +1305,9 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     const cheeseInterval = hourInSeconds * 8;
     const cheeseDuration = hourInSeconds * 2;
     const cheeseIndex = Math.trunc(timeSecs / cheeseInterval);
-    const tmp = {
+    const tmp: ITmp = {
         cavabegin: "1690761600",
         PurchasePlatformLockEnabled: true,
-        tcsn: true,
         pgr: {
             ts: "1732572900",
             en: "CUSTOM DECALS @ ZEVILA",
@@ -1330,10 +1331,13 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         fbst: {
             a: cheeseIndex * cheeseInterval, // This has a bug where the client shows a negative time for "Xtra cheese starts in ..." until it refreshes the world state. This is because we're only providing the new activation as soon as that time/date is reached. However, this is 100% faithful to live.
             e: cheeseIndex * cheeseInterval + cheeseDuration,
-            n: (cheeseIndex + 1) * hourInSeconds * 8
+            n: (cheeseIndex + 1) * cheeseInterval
         },
         sfn: [550, 553, 554, 555][halfHour % 4]
     };
+    if (Array.isArray(config.worldState?.circuitGameModes)) {
+        tmp.edg = config.worldState.circuitGameModes as TCircuitGameMode[];
+    }
     worldState.Tmp = JSON.stringify(tmp);
 
     return worldState;

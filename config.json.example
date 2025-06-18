@@ -58,7 +58,8 @@
     "starDays": true,
     "eidolonOverride": "",
     "vallisOverride": "",
-    "nightwaveOverride": ""
+    "nightwaveOverride": "",
+    "circuitGameModes": null
   },
   "dev": {
     "keepVendorsExpired": false

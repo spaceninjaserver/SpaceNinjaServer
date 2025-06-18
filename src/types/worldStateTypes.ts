@@ -191,3 +191,48 @@ export interface ICalendarEvent {
     dialogueName?: string;
     dialogueConvo?: string;
 }
+
+export type TCircuitGameMode =
+    | "Survival"
+    | "VoidFlood"
+    | "Excavation"
+    | "Defense"
+    | "Exterminate"
+    | "Assassination"
+    | "Alchemy";
+
+export interface ITmp {
+    cavabegin: string;
+    PurchasePlatformLockEnabled: boolean; // Seems unused
+    pgr: IPgr;
+    ennnd?: boolean; // True if 1999 demo is available (no effect for >=38.6.0)
+    mbrt?: boolean; // Related to mobile app rating request
+    fbst: IFbst;
+    sfn: number;
+    edg?: TCircuitGameMode[]; // The Circuit game modes overwrite
+}
+
+interface IPgr {
+    ts: string;
+    en: string;
+    fr: string;
+    it: string;
+    de: string;
+    es: string;
+    pt: string;
+    ru: string;
+    pl: string;
+    uk: string;
+    tr: string;
+    ja: string;
+    zh: string;
+    ko: string;
+    tc: string;
+    th: string;
+}
+
+interface IFbst {
+    a: number;
+    e: number;
+    n: number;
+}
