@@ -3,7 +3,6 @@ import { isDev } from "@/src/helpers/pathHelper";
 import { catBreadHash } from "@/src/helpers/stringHelpers";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { mixSeeds, SRng } from "@/src/services/rngService";
-import { IMongoDate } from "@/src/types/commonTypes";
 import { IItemManifest, IVendorInfo, IVendorManifest } from "@/src/types/vendorTypes";
 import { logger } from "@/src/utils/logger";
 import { ExportVendors, IRange, IVendor, IVendorOffer } from "warframe-public-export-plus";
@@ -25,7 +24,6 @@ import Nova1999ConquestShopManifest from "@/static/fixed_responses/getVendorInfo
 import OstronPetVendorManifest from "@/static/fixed_responses/getVendorInfo/OstronPetVendorManifest.json";
 import SolarisDebtTokenVendorRepossessionsManifest from "@/static/fixed_responses/getVendorInfo/SolarisDebtTokenVendorRepossessionsManifest.json";
 import Temple1999VendorManifest from "@/static/fixed_responses/getVendorInfo/Temple1999VendorManifest.json";
-import TeshinHardModeVendorManifest from "@/static/fixed_responses/getVendorInfo/TeshinHardModeVendorManifest.json";
 import ZarimanCommisionsManifestArchimedean from "@/static/fixed_responses/getVendorInfo/ZarimanCommisionsManifestArchimedean.json";
 
 const rawVendorManifests: IVendorManifest[] = [
@@ -46,7 +44,6 @@ const rawVendorManifests: IVendorManifest[] = [
     OstronPetVendorManifest,
     SolarisDebtTokenVendorRepossessionsManifest,
     Temple1999VendorManifest,
-    TeshinHardModeVendorManifest, // uses preprocessing
     ZarimanCommisionsManifestArchimedean
 ];
 
@@ -87,12 +84,16 @@ const gcd = (a: number, b: number): number => {
 const getCycleDuration = (manifest: IVendor): number => {
     let dur = 0;
     for (const item of manifest.items) {
-        if (typeof item.durationHours != "number") {
+        if (item.alwaysOffered) {
+            continue;
+        }
+        const durationHours = item.rotatedWeekly ? 168 : item.durationHours;
+        if (typeof durationHours != "number") {
             dur = 1;
             break;
         }
-        if (dur != item.durationHours) {
-            dur = gcd(dur, item.durationHours);
+        if (dur != durationHours) {
+            dur = gcd(dur, durationHours);
         }
     }
     return dur * unixTimesInMs.hour;
@@ -101,7 +102,7 @@ const getCycleDuration = (manifest: IVendor): number => {
 export const getVendorManifestByTypeName = (typeName: string): IVendorManifest | undefined => {
     for (const vendorManifest of rawVendorManifests) {
         if (vendorManifest.VendorInfo.TypeName == typeName) {
-            return preprocessVendorManifest(vendorManifest);
+            return vendorManifest;
         }
     }
     for (const vendorInfo of generatableVendors) {
@@ -124,7 +125,7 @@ export const getVendorManifestByTypeName = (typeName: string): IVendorManifest |
 export const getVendorManifestByOid = (oid: string): IVendorManifest | undefined => {
     for (const vendorManifest of rawVendorManifests) {
         if (vendorManifest.VendorInfo._id.$oid == oid) {
-            return preprocessVendorManifest(vendorManifest);
+            return vendorManifest;
         }
     }
     for (const vendorInfo of generatableVendors) {
@@ -183,30 +184,6 @@ export const applyStandingToVendorManifest = (
     };
 };
 
-const preprocessVendorManifest = (originalManifest: IVendorManifest): IVendorManifest => {
-    if (Date.now() >= parseInt(originalManifest.VendorInfo.Expiry.$date.$numberLong)) {
-        const manifest = structuredClone(originalManifest);
-        const info = manifest.VendorInfo;
-        refreshExpiry(info.Expiry);
-        for (const offer of info.ItemManifest) {
-            refreshExpiry(offer.Expiry);
-        }
-        return manifest;
-    }
-    return originalManifest;
-};
-
-const refreshExpiry = (expiry: IMongoDate): void => {
-    const period = parseInt(expiry.$date.$numberLong);
-    if (Date.now() >= period) {
-        const epoch = 1734307200_000; // Monday (for weekly schedules)
-        const iteration = Math.trunc((Date.now() - epoch) / period);
-        const start = epoch + iteration * period;
-        const end = start + period;
-        expiry.$date.$numberLong = end.toString();
-    }
-};
-
 const toRange = (value: IRange | number): IRange => {
     if (typeof value == "number") {
         return { minValue: value, maxValue: value };
@@ -228,6 +205,18 @@ const getCycleDurationRange = (manifest: IVendor): IRange | undefined => {
         }
     }
     return res.maxValue != 0 ? res : undefined;
+};
+
+type TOfferId = string;
+
+const getOfferId = (offer: IVendorOffer | IItemManifest): TOfferId => {
+    if ("storeItem" in offer) {
+        // IVendorOffer
+        return offer.storeItem + "x" + offer.quantity;
+    } else {
+        // IItemManifest
+        return offer.StoreItem + "x" + offer.QuantityMultiplier;
+    }
 };
 
 const vendorManifestCache: Record<string, IVendorManifest> = {};
@@ -270,7 +259,8 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
         const rng = new SRng(mixSeeds(vendorSeed, cycleIndex));
         const offersToAdd: IVendorOffer[] = [];
         if (!manifest.isOneBinPerCycle) {
-            const remainingItemCapacity: Record<string, number> = {};
+            // Compute vendor requirements, subtracting existing offers
+            const remainingItemCapacity: Record<TOfferId, number> = {};
             const missingItemsPerBin: Record<number, number> = {};
             let numOffersThatNeedToMatchABin = 0;
             if (manifest.numItemsPerBin) {
@@ -280,56 +270,59 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
                 }
             }
             for (const item of manifest.items) {
-                remainingItemCapacity[item.storeItem] = 1 + item.duplicates;
+                remainingItemCapacity[getOfferId(item)] = 1 + item.duplicates;
             }
             for (const offer of info.ItemManifest) {
-                remainingItemCapacity[offer.StoreItem] -= 1;
+                remainingItemCapacity[getOfferId(offer)] -= 1;
                 const bin = parseInt(offer.Bin.substring(4));
                 if (missingItemsPerBin[bin]) {
                     missingItemsPerBin[bin] -= 1;
                     numOffersThatNeedToMatchABin -= 1;
                 }
             }
-            if (manifest.numItems && manifest.items.length != manifest.numItems.minValue) {
-                const numItemsTarget = rng.randomInt(manifest.numItems.minValue, manifest.numItems.maxValue);
+
+            // Add permanent offers
+            let numUncountedOffers = 0;
+            let offset = 0;
+            for (const item of manifest.items) {
+                if (item.alwaysOffered || item.rotatedWeekly) {
+                    ++numUncountedOffers;
+                    const id = getOfferId(item);
+                    if (remainingItemCapacity[id] != 0) {
+                        remainingItemCapacity[id] -= 1;
+                        offersToAdd.push(item);
+                        ++offset;
+                    }
+                }
+            }
+
+            // Add counted offers
+            if (manifest.numItems) {
+                const useRng = manifest.numItems.minValue != manifest.numItems.maxValue;
+                const numItemsTarget =
+                    numUncountedOffers +
+                    (useRng
+                        ? rng.randomInt(manifest.numItems.minValue, manifest.numItems.maxValue)
+                        : manifest.numItems.minValue);
+                let i = 0;
                 while (info.ItemManifest.length + offersToAdd.length < numItemsTarget) {
-                    // TODO: Consider item probability weightings
-                    const item = rng.randomElement(manifest.items)!;
+                    const item = useRng ? rng.randomElement(manifest.items)! : manifest.items[i++];
                     if (
-                        remainingItemCapacity[item.storeItem] != 0 &&
+                        !item.alwaysOffered &&
+                        remainingItemCapacity[getOfferId(item)] != 0 &&
                         (numOffersThatNeedToMatchABin == 0 || missingItemsPerBin[item.bin])
                     ) {
-                        remainingItemCapacity[item.storeItem] -= 1;
+                        remainingItemCapacity[getOfferId(item)] -= 1;
                         if (missingItemsPerBin[item.bin]) {
                             missingItemsPerBin[item.bin] -= 1;
                             numOffersThatNeedToMatchABin -= 1;
                         }
-                        offersToAdd.push(item);
+                        offersToAdd.splice(offset, 0, item);
+                    }
+                    if (i == manifest.items.length) {
+                        i = 0;
                     }
                 }
-            } else {
-                for (const item of manifest.items) {
-                    if (!item.alwaysOffered && remainingItemCapacity[item.storeItem] != 0) {
-                        remainingItemCapacity[item.storeItem] -= 1;
-                        offersToAdd.push(item);
-                    }
-                }
-                for (const e of Object.entries(remainingItemCapacity)) {
-                    const item = manifest.items.find(x => x.storeItem == e[0])!;
-                    if (!item.alwaysOffered) {
-                        while (e[1] != 0) {
-                            e[1] -= 1;
-                            offersToAdd.push(item);
-                        }
-                    }
-                }
-                for (const item of manifest.items) {
-                    if (item.alwaysOffered && remainingItemCapacity[item.storeItem] != 0) {
-                        remainingItemCapacity[item.storeItem] -= 1;
-                        offersToAdd.push(item);
-                    }
-                }
-                offersToAdd.reverse();
             }
         } else {
             const binThisCycle = cycleIndex % 2; // Note: May want to auto-compute the bin size, but this is only used for coda weapons right now.
@@ -342,16 +335,21 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
         const cycleStart = cycleOffset + cycleIndex * cycleDuration;
         for (const rawItem of offersToAdd) {
             const durationHoursRange = toRange(rawItem.durationHours ?? cycleDuration);
-            const expiry =
-                cycleStart +
-                rng.randomInt(durationHoursRange.minValue, durationHoursRange.maxValue) * unixTimesInMs.hour;
+            const expiry = rawItem.alwaysOffered
+                ? 2051240400_000
+                : cycleStart +
+                  (rawItem.rotatedWeekly
+                      ? unixTimesInMs.week
+                      : rng.randomInt(durationHoursRange.minValue, durationHoursRange.maxValue) * unixTimesInMs.hour);
             const item: IItemManifest = {
                 StoreItem: rawItem.storeItem,
                 ItemPrices: rawItem.itemPrices?.map(itemPrice => ({ ...itemPrice, ProductCategory: "MiscItems" })),
                 Bin: "BIN_" + rawItem.bin,
                 QuantityMultiplier: rawItem.quantity,
                 Expiry: { $date: { $numberLong: expiry.toString() } },
-                AllowMultipurchase: false,
+                PurchaseQuantityLimit: rawItem.purchaseLimit,
+                RotatedWeekly: rawItem.rotatedWeekly,
+                AllowMultipurchase: rawItem.purchaseLimit !== 1,
                 Id: {
                     $oid:
                         ((cycleStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") +
@@ -422,6 +420,13 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
 };
 
 if (isDev) {
+    if (
+        getCycleDuration(ExportVendors["/Lotus/Types/Game/VendorManifests/Hubs/TeshinHardModeVendorManifest"]) !=
+        unixTimesInMs.week
+    ) {
+        logger.warn(`getCycleDuration self test failed`);
+    }
+
     const ads = getVendorManifestByTypeName("/Lotus/Types/Game/VendorManifests/Hubs/GuildAdvertisementVendorManifest")!
         .VendorInfo.ItemManifest;
     if (
