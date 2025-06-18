@@ -1297,8 +1297,12 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         pushVoidStorms(worldState.VoidStorms, hour);
     }
 
-    // Sentient Anomaly cycling every 30 minutes
+    // Sentient Anomaly + Xtra Cheese cycles
     const halfHour = Math.trunc(timeMs / (unixTimesInMs.hour / 2));
+    const hourInSeconds = 3600;
+    const cheeseInterval = hourInSeconds * 8;
+    const cheeseDuration = hourInSeconds * 2;
+    const cheeseIndex = Math.trunc(timeSecs / cheeseInterval);
     const tmp = {
         cavabegin: "1690761600",
         PurchasePlatformLockEnabled: true,
@@ -1323,6 +1327,11 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         },
         ennnd: true,
         mbrt: true,
+        fbst: {
+            a: cheeseIndex * cheeseInterval, // This has a bug where the client shows a negative time for "Xtra cheese starts in ..." until it refreshes the world state. This is because we're only providing the new activation as soon as that time/date is reached. However, this is 100% faithful to live.
+            e: cheeseIndex * cheeseInterval + cheeseDuration,
+            n: (cheeseIndex + 1) * hourInSeconds * 8
+        },
         sfn: [550, 553, 554, 555][halfHour % 4]
     };
     worldState.Tmp = JSON.stringify(tmp);
