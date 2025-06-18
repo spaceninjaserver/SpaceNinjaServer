@@ -9,7 +9,7 @@ fs.watchFile(configPath, () => {
     if (amnesia) {
         amnesia = false;
     } else {
-        logger.info("Detected a change to config.json, reloading its contents.");
+        logger.info("Detected a change to config file, reloading its contents.");
         try {
             loadConfig();
         } catch (e) {
@@ -41,7 +41,7 @@ export const validateConfig = (): void => {
         }
     }
     if (modified) {
-        logger.info(`Updating config.json to fix some issues with it.`);
+        logger.info(`Updating config file to fix some issues with it.`);
         void saveConfig();
     }
 };

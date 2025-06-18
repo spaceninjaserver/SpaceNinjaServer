@@ -72,7 +72,7 @@ export interface IConfig {
     };
 }
 
-export const configPath = path.join(repoDir, "config.json");
+export const configPath = path.join(repoDir, process.argv[2] ?? "config.json");
 
 export const config: IConfig = {
     mongodbUrl: "mongodb://127.0.0.1:27017/openWF",
