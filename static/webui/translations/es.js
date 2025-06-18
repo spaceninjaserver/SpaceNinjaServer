@@ -167,7 +167,7 @@ dict = {
     cheats_fastClanAscension: `Ascenso rápido del clan`,
     cheats_spoofMasteryRank: `Rango de maestría simulado (-1 para desactivar)`,
     cheats_nightwaveStandingMultiplier: `Multiplicador de Reputación de Onda Nocturna`,
-    cheats_save: `[UNTRANSLATED] Save`,
+    cheats_save: `Guardar`,
     cheats_account: `Cuenta`,
     cheats_unlockAllFocusSchools: `Desbloquear todas las escuelas de enfoque`,
     cheats_helminthUnlockAll: `Subir al máximo el Helminto`,
