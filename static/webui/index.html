@@ -571,7 +571,7 @@
                                 <div id="server-settings-no-perms" class="d-none">
                                     <p class="card-text" data-loc="cheats_administratorRequirement"></p>
                                 </div>
-                                <form id="server-settings" class="d-none" onsubmit="doChangeSettings();return false;">
+                                <div id="server-settings" class="d-none">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="skipTutorial" />
                                         <label class="form-check-label" for="skipTutorial" data-loc="cheats_skipTutorial"></label>
@@ -732,16 +732,21 @@
                                         <input class="form-check-input" type="checkbox" id="fastClanAscension" />
                                         <label class="form-check-label" for="fastClanAscension" data-loc="cheats_fastClanAscension"></label>
                                     </div>
-                                    <div class="form-group mt-2">
+                                    <form class="form-group mt-2" onsubmit="doSaveConfig('spoofMasteryRank'); return false;">
                                         <label class="form-label" for="spoofMasteryRank" data-loc="cheats_spoofMasteryRank"></label>
-                                        <input class="form-control" id="spoofMasteryRank" type="number" min="-1" max="65535" />
-                                    </div>
-                                    <div class="form-group mt-2">
+                                        <div class="input-group">
+                                            <input class="form-control" id="spoofMasteryRank" type="number" min="-1" max="65535" />
+                                            <button class="btn btn-primary" type="submit" data-loc="cheats_save"></button>
+                                        </div>
+                                    </form>
+                                    <form class="form-group mt-2" onsubmit="doSaveConfig('nightwaveStandingMultiplier'); return false;">
                                         <label class="form-label" for="nightwaveStandingMultiplier" data-loc="cheats_nightwaveStandingMultiplier"></label>
-                                        <input class="form-control" id="nightwaveStandingMultiplier" type="number" min="1" max="1000000" value="1" />
-                                    </div>
-                                    <button class="btn btn-primary mt-3" type="submit" data-loc="cheats_saveSettings"></button>
-                                </form>
+                                        <div class="input-group">
+                                            <input class="form-control" id="nightwaveStandingMultiplier" type="number" min="1" max="1000000" value="1" />
+                                            <button class="btn btn-primary" type="submit" data-loc="cheats_save"></button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>

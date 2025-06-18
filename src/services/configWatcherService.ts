@@ -46,12 +46,6 @@ export const validateConfig = (): void => {
     }
 };
 
-export const updateConfig = async (data: string): Promise<void> => {
-    amnesia = true;
-    await fsPromises.writeFile(configPath, data);
-    Object.assign(config, JSON.parse(data));
-};
-
 export const saveConfig = async (): Promise<void> => {
     amnesia = true;
     await fsPromises.writeFile(configPath, JSON.stringify(config, null, 2));

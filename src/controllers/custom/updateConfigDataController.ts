@@ -1,15 +1,21 @@
 import { RequestHandler } from "express";
-import { updateConfig } from "@/src/services/configWatcherService";
+import { saveConfig } from "@/src/services/configWatcherService";
 import { getAccountForRequest, isAdministrator } from "@/src/services/loginService";
+import { config, IConfig } from "@/src/services/configService";
 
-const updateConfigDataController: RequestHandler = async (req, res) => {
+export const updateConfigDataController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
     if (isAdministrator(account)) {
-        await updateConfig(String(req.body));
+        const data = req.body as IUpdateConfigDataRequest;
+        config[data.key] = data.value;
+        await saveConfig();
         res.end();
     } else {
         res.status(401).end();
     }
 };
 
-export { updateConfigDataController };
+interface IUpdateConfigDataRequest {
+    key: keyof IConfig;
+    value: never;
+}

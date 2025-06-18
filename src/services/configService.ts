@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { repoDir } from "@/src/helpers/pathHelper";
 
-interface IConfig {
+export interface IConfig {
     mongodbUrl: string;
     logger: {
         files: boolean;

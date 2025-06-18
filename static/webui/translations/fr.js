@@ -167,7 +167,7 @@ dict = {
     cheats_fastClanAscension: `Ascension de clan rapide`,
     cheats_spoofMasteryRank: `Rang de maîtrise personnalisé (-1 pour désactiver)`,
     cheats_nightwaveStandingMultiplier: `[UNTRANSLATED] Nightwave Standing Multiplier`,
-    cheats_saveSettings: `Sauvegarder les paramètres`,
+    cheats_save: `[UNTRANSLATED] Save`,
     cheats_account: `Compte`,
     cheats_unlockAllFocusSchools: `Débloquer toutes les écoles de focus`,
     cheats_helminthUnlockAll: `Helminth niveau max`,

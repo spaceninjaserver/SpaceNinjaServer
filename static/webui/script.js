@@ -1761,34 +1761,29 @@ function doAcquireMod() {
 
 const uiConfigs = [...$("#server-settings input[id]")].map(x => x.id);
 
-function doChangeSettings() {
-    revalidateAuthz(() => {
-        fetch("/custom/config?" + window.authz)
-            .then(response => response.json())
-            .then(json => {
-                for (const i of uiConfigs) {
-                    var x = document.getElementById(i);
-                    if (x != null) {
-                        if (x.type == "checkbox") {
-                            if (x.checked === true) {
-                                json[i] = true;
-                            } else {
-                                json[i] = false;
-                            }
-                        } else if (x.type == "number") {
-                            json[i] = parseInt(x.value);
-                        }
-                    }
-                }
-                $.post({
-                    url: "/custom/config?" + window.authz,
-                    contentType: "text/plain",
-                    data: JSON.stringify(json, null, 2)
-                }).then(() => {
-                    // A few cheats affect the inventory response which in turn may change what values we need to show
+for (const id of uiConfigs) {
+    const elm = document.getElementById(id);
+    if (elm.type == "checkbox") {
+        elm.onchange = function () {
+            $.post({
+                url: "/custom/config?" + window.authz,
+                contentType: "application/json",
+                data: JSON.stringify({ key: id, value: this.checked })
+            }).then(() => {
+                if (["infiniteCredits", "infinitePlatinum", "infiniteEndo", "infiniteRegalAya"].indexOf(id) != -1) {
                     updateInventory();
-                });
+                }
             });
+        };
+    }
+}
+
+function doSaveConfig(id) {
+    const elm = document.getElementById(id);
+    $.post({
+        url: "/custom/config?" + window.authz,
+        contentType: "application/json",
+        data: JSON.stringify({ key: id, value: parseInt(elm.value) })
     });
 }
 
