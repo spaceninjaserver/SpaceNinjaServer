@@ -4,6 +4,8 @@ import { getAccountForRequest } from "@/src/services/loginService";
 import { addChallenges, getInventory } from "@/src/services/inventoryService";
 import { IChallengeProgress, ISeasonChallenge } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IAffiliationMods } from "@/src/types/purchaseTypes";
+import { getEntriesUnsafe } from "@/src/utils/ts-utils";
+import { logger } from "@/src/utils/logger";
 
 export const updateChallengeProgressController: RequestHandler = async (req, res) => {
     const challenges = getJSONfromString<IUpdateChallengeProgressRequest>(String(req.body));
@@ -13,9 +15,6 @@ export const updateChallengeProgressController: RequestHandler = async (req, res
         account._id.toString(),
         "ChallengesFixVersion ChallengeProgress SeasonChallengeHistory Affiliations"
     );
-    if (challenges.ChallengesFixVersion !== undefined) {
-        inventory.ChallengesFixVersion = challenges.ChallengesFixVersion;
-    }
     let affiliationMods: IAffiliationMods[] = [];
     if (challenges.ChallengeProgress) {
         affiliationMods = addChallenges(
@@ -25,15 +24,30 @@ export const updateChallengeProgressController: RequestHandler = async (req, res
             challenges.SeasonChallengeCompletions
         );
     }
-    if (challenges.SeasonChallengeHistory) {
-        challenges.SeasonChallengeHistory.forEach(({ challenge, id }) => {
-            const itemIndex = inventory.SeasonChallengeHistory.findIndex(i => i.challenge === challenge);
-            if (itemIndex !== -1) {
-                inventory.SeasonChallengeHistory[itemIndex].id = id;
-            } else {
-                inventory.SeasonChallengeHistory.push({ challenge, id });
-            }
-        });
+    for (const [key, value] of getEntriesUnsafe(challenges)) {
+        switch (key) {
+            case "ChallengesFixVersion":
+                inventory.ChallengesFixVersion = value;
+                break;
+
+            case "SeasonChallengeHistory":
+                value!.forEach(({ challenge, id }) => {
+                    const itemIndex = inventory.SeasonChallengeHistory.findIndex(i => i.challenge === challenge);
+                    if (itemIndex !== -1) {
+                        inventory.SeasonChallengeHistory[itemIndex].id = id;
+                    } else {
+                        inventory.SeasonChallengeHistory.push({ challenge, id });
+                    }
+                });
+                break;
+
+            case "ChallengeProgress":
+            case "SeasonChallengeCompletions":
+            case "ChallengePTS":
+                break;
+            default:
+                logger.warn(`unknown challenge progress entry`, { key, value });
+        }
     }
     await inventory.save();
 
@@ -43,6 +57,7 @@ export const updateChallengeProgressController: RequestHandler = async (req, res
 };
 
 interface IUpdateChallengeProgressRequest {
+    ChallengePTS?: number;
     ChallengesFixVersion?: number;
     ChallengeProgress?: IChallengeProgress[];
     SeasonChallengeHistory?: ISeasonChallenge[];
