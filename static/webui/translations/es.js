@@ -185,7 +185,7 @@ dict = {
     upgrade_WarframeAbilityDuration: `+|VAL|% de duración de habilidades`,
     upgrade_WarframeAbilityStrength: `+|VAL|% de fuerza de habilidades`,
     upgrade_WarframeArmourMax: `+|VAL| de armadura`,
-    upgrade_WarframeBlastProc: `+|VAL| de escudos al infligir estado de explosión`,
+    upgrade_WarframeBlastProc: `[UNTRANSLATED] +|VAL| Shields on kill with Blast Damage`,
     upgrade_WarframeCastingSpeed: `+|VAL|% de velocidad de lanzamiento de habilidades`,
     upgrade_WarframeCorrosiveDamageBoost: `+|VAL|% de daño de habilidades a enemigos con estado corrosivo`,
     upgrade_WarframeCorrosiveStack: `Aumenta los acumuladores máximos de estado corrosivo en +|VAL|`,

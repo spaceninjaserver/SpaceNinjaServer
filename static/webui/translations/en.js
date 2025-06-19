@@ -184,7 +184,7 @@ dict = {
     upgrade_WarframeAbilityDuration: `+|VAL|% Ability Duration`,
     upgrade_WarframeAbilityStrength: `+|VAL|% Ability Strength`,
     upgrade_WarframeArmourMax: `+|VAL| Armor`,
-    upgrade_WarframeBlastProc: `+|VAL| Shields on inflicting Blast Status`,
+    upgrade_WarframeBlastProc: `+|VAL| Shields on kill with Blast Damage`,
     upgrade_WarframeCastingSpeed: `+|VAL|% Casting Speed`,
     upgrade_WarframeCorrosiveDamageBoost: `+|VAL|% Ability Damage on enemies affected by Corrosion Status`,
     upgrade_WarframeCorrosiveStack: `Increase max stacks of Corrosion Status by +|VAL|`,

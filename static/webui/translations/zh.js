@@ -185,7 +185,7 @@ dict = {
     upgrade_WarframeAbilityDuration: `+|VAL|% 技能持续时间`,
     upgrade_WarframeAbilityStrength: `+|VAL|% 技能强度`,
     upgrade_WarframeArmourMax: `+|VAL| 护甲`,
-    upgrade_WarframeBlastProc: `施加爆炸状态时，护盾 +|VAL|`,
+    upgrade_WarframeBlastProc: `[UNTRANSLATED] +|VAL| Shields on kill with Blast Damage`,
     upgrade_WarframeCastingSpeed: `+|VAL|% 施放速度`,
     upgrade_WarframeCorrosiveDamageBoost: `对受腐蚀状态影响的敌人 +|VAL|% 技能伤害`,
     upgrade_WarframeCorrosiveStack: `腐蚀状态最大堆叠数 +|VAL|`,
