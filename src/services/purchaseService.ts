@@ -67,25 +67,31 @@ export const handlePurchase = async (
             if (!offer) {
                 throw new Error(`unknown vendor offer: ${ItemId ? ItemId : purchaseRequest.PurchaseParams.StoreItem}`);
             }
-            if (offer.RegularPrice) {
-                combineInventoryChanges(
-                    prePurchaseInventoryChanges,
-                    updateCurrency(inventory, offer.RegularPrice[0], false)
-                );
+            if (!config.dontSubtractPurchaseCreditCost) {
+                if (offer.RegularPrice) {
+                    combineInventoryChanges(
+                        prePurchaseInventoryChanges,
+                        updateCurrency(inventory, offer.RegularPrice[0], false)
+                    );
+                }
             }
-            if (offer.PremiumPrice) {
-                combineInventoryChanges(
-                    prePurchaseInventoryChanges,
-                    updateCurrency(inventory, offer.PremiumPrice[0], true)
-                );
+            if (!config.dontSubtractPurchasePlatinumCost) {
+                if (offer.PremiumPrice) {
+                    combineInventoryChanges(
+                        prePurchaseInventoryChanges,
+                        updateCurrency(inventory, offer.PremiumPrice[0], true)
+                    );
+                }
             }
-            if (offer.ItemPrices) {
-                handleItemPrices(
-                    inventory,
-                    offer.ItemPrices,
-                    purchaseRequest.PurchaseParams.Quantity,
-                    prePurchaseInventoryChanges
-                );
+            if (!config.dontSubtractPurchaseItemCost) {
+                if (offer.ItemPrices) {
+                    handleItemPrices(
+                        inventory,
+                        offer.ItemPrices,
+                        purchaseRequest.PurchaseParams.Quantity,
+                        prePurchaseInventoryChanges
+                    );
+                }
             }
             if (offer.LocTagRandSeed !== undefined) {
                 seed = BigInt(offer.LocTagRandSeed);
@@ -179,21 +185,25 @@ export const handlePurchase = async (
                 x => x.ItemType == purchaseRequest.PurchaseParams.StoreItem
             );
             if (offer) {
-                combineInventoryChanges(
-                    purchaseResponse.InventoryChanges,
-                    updateCurrency(inventory, offer.RegularPrice, false)
-                );
+                if (!config.dontSubtractPurchaseCreditCost) {
+                    combineInventoryChanges(
+                        purchaseResponse.InventoryChanges,
+                        updateCurrency(inventory, offer.RegularPrice, false)
+                    );
+                }
                 if (purchaseRequest.PurchaseParams.ExpectedPrice) {
                     throw new Error(`vendor purchase should not have an expected price`);
                 }
 
-                const invItem: IMiscItem = {
-                    ItemType: "/Lotus/Types/Items/MiscItems/PrimeBucks",
-                    ItemCount: offer.PrimePrice * purchaseRequest.PurchaseParams.Quantity * -1
-                };
-                addMiscItems(inventory, [invItem]);
-                purchaseResponse.InventoryChanges.MiscItems ??= [];
-                purchaseResponse.InventoryChanges.MiscItems.push(invItem);
+                if (!config.dontSubtractPurchaseItemCost) {
+                    const invItem: IMiscItem = {
+                        ItemType: "/Lotus/Types/Items/MiscItems/PrimeBucks",
+                        ItemCount: offer.PrimePrice * purchaseRequest.PurchaseParams.Quantity * -1
+                    };
+                    addMiscItems(inventory, [invItem]);
+                    purchaseResponse.InventoryChanges.MiscItems ??= [];
+                    purchaseResponse.InventoryChanges.MiscItems.push(invItem);
+                }
             }
             break;
         }
@@ -211,7 +221,7 @@ export const handlePurchase = async (
                             Title: lastTitle
                         }
                     ];
-                } else {
+                } else if (!config.dontSubtractPurchaseStandingCost) {
                     const syndicate = ExportSyndicates[syndicateTag];
                     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                     if (syndicate) {
@@ -239,19 +249,19 @@ export const handlePurchase = async (
                 const vendor = ExportVendors[purchaseRequest.PurchaseParams.SourceId!];
                 const offer = vendor.items.find(x => x.storeItem == purchaseRequest.PurchaseParams.StoreItem);
                 if (offer) {
-                    if (typeof offer.credits == "number") {
+                    if (typeof offer.credits == "number" && !config.dontSubtractPurchaseCreditCost) {
                         combineInventoryChanges(
                             purchaseResponse.InventoryChanges,
                             updateCurrency(inventory, offer.credits, false)
                         );
                     }
-                    if (typeof offer.platinum == "number") {
+                    if (typeof offer.platinum == "number" && !config.dontSubtractPurchasePlatinumCost) {
                         combineInventoryChanges(
                             purchaseResponse.InventoryChanges,
                             updateCurrency(inventory, offer.platinum, true)
                         );
                     }
-                    if (offer.itemPrices) {
+                    if (offer.itemPrices && !config.dontSubtractPurchaseItemCost) {
                         handleItemPrices(
                             inventory,
                             offer.itemPrices,
@@ -278,15 +288,17 @@ export const handlePurchase = async (
                 );
             if (offer) {
                 if (offer.RegularPrice) {
-                    const invItem: IMiscItem = {
-                        ItemType: "/Lotus/Types/Items/MiscItems/SchismKey",
-                        ItemCount: offer.RegularPrice * purchaseRequest.PurchaseParams.Quantity * -1
-                    };
+                    if (!config.dontSubtractPurchaseItemCost) {
+                        const invItem: IMiscItem = {
+                            ItemType: "/Lotus/Types/Items/MiscItems/SchismKey",
+                            ItemCount: offer.RegularPrice * purchaseRequest.PurchaseParams.Quantity * -1
+                        };
 
-                    addMiscItems(inventory, [invItem]);
+                        addMiscItems(inventory, [invItem]);
 
-                    purchaseResponse.InventoryChanges.MiscItems ??= [];
-                    purchaseResponse.InventoryChanges.MiscItems.push(invItem);
+                        purchaseResponse.InventoryChanges.MiscItems ??= [];
+                        purchaseResponse.InventoryChanges.MiscItems.push(invItem);
+                    }
                 } else if (!config.infiniteRegalAya) {
                     inventory.PrimeTokens -= offer.PrimePrice! * purchaseRequest.PurchaseParams.Quantity;
 

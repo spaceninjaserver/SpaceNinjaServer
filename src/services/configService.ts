@@ -25,6 +25,10 @@ export interface IConfig {
     infiniteRegalAya?: boolean;
     infiniteHelminthMaterials?: boolean;
     claimingBlueprintRefundsIngredients?: boolean;
+    dontSubtractPurchaseCreditCost?: boolean;
+    dontSubtractPurchasePlatinumCost?: boolean;
+    dontSubtractPurchaseItemCost?: boolean;
+    dontSubtractPurchaseStandingCost?: boolean;
     dontSubtractVoidTraces?: boolean;
     dontSubtractConsumables?: boolean;
     unlockAllShipFeatures?: boolean;
