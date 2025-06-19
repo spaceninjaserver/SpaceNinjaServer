@@ -16,6 +16,7 @@ SpaceNinjaServer requires a `config.json`. To set it up, you can copy the [confi
 - `myIrcAddresses` can be used to point to an IRC server. If not provided, defaults to `[ myAddress ]`.
 - `worldState.eidolonOverride` can be set to `day` or `night` to lock the time to day/fass and night/vome on Plains of Eidolon/Cambion Drift.
 - `worldState.vallisOverride` can be set to `warm` or `cold` to lock the temperature on Orb Vallis.
+- `worldState.duviriOverride` can be set to `joy`, `anger`, `envy`, `sorrow`, or `fear` to lock the Duviri spiral.
 - `worldState.nightwaveOverride` will lock the nightwave season, assuming the client is new enough for it. Valid values:
   - `RadioLegionIntermission13Syndicate` for Nora's Mix Vol. 9
   - `RadioLegionIntermission12Syndicate` for Nora's Mix Vol. 8

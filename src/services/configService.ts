@@ -64,6 +64,7 @@ export interface IConfig {
         starDays?: boolean;
         eidolonOverride?: string;
         vallisOverride?: string;
+        duviriOverride?: string;
         nightwaveOverride?: string;
         circuitGameModes?: string[];
     };

@@ -1068,6 +1068,27 @@ const doesTimeSatsifyConstraints = (timeSecs: number): boolean => {
         }
     }
 
+    if (config.worldState?.duviriOverride) {
+        const duviriMoods = ["sorrow", "fear", "joy", "anger", "envy"];
+        const desiredMood = duviriMoods.indexOf(config.worldState.duviriOverride);
+        if (desiredMood == -1) {
+            logger.warn(`ignoring invalid config value for worldState.duviriOverride`, {
+                value: config.worldState.duviriOverride,
+                valid_values: duviriMoods
+            });
+        } else {
+            const moodIndex = Math.trunc(timeSecs / 7200);
+            const moodStart = moodIndex * 7200;
+            const moodEnd = moodStart + 7200;
+            if (
+                moodIndex % 5 != desiredMood ||
+                isBeforeNextExpectedWorldStateRefresh(timeSecs * 1000, moodEnd * 1000)
+            ) {
+                return false;
+            }
+        }
+    }
+
     return true;
 };
 
