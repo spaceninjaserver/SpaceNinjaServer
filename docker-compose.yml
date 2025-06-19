@@ -1,5 +1,8 @@
 services:
     spaceninjaserver:
+        # The image to use. If you have an ARM CPU, replace 'latest' with 'latest-arm64'.
+        image: openwf/spaceninjaserver:latest
+
         volumes:
             - ./docker-data/conf:/app/conf
             - ./docker-data/static-data:/app/static/data
@@ -8,10 +11,9 @@ services:
             - 80:80
             - 443:443
 
-        # Normally, the image is fetched from Docker Hub, but you can use the local Dockerfile by swapping the following two fields.
-        # Works best when using `docker-compose up --force-recreate --build`.
-        image: openwf/spaceninjaserver:latest
+        # Normally, the image is fetched from Docker Hub, but you can use the local Dockerfile by removing "image" above and adding this:
         #build: .
+        # Works best when using `docker-compose up --force-recreate --build`.
 
         depends_on:
             - mongodb
