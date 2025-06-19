@@ -151,7 +151,8 @@ export const nemesisController: RequestHandler = async (req, res) => {
                 inventory.Nemesis!.HenchmenKilled += antivirusGain;
                 if (inventory.Nemesis!.HenchmenKilled >= 100) {
                     inventory.Nemesis!.HenchmenKilled = 100;
-                    // Client doesn't seem to request mode=w for infested liches, so weakening it here.
+
+                    // Weaken nemesis now.
                     inventory.Nemesis!.InfNodes = [
                         {
                             Node: getNemesisManifest(inventory.Nemesis!.manifest).showdownNode,
@@ -294,31 +295,15 @@ export const nemesisController: RequestHandler = async (req, res) => {
             target: inventory.toJSON().Nemesis
         });
     } else if ((req.query.mode as string) == "w") {
-        const inventory = await getInventory(
-            account._id.toString(),
-            "Nemesis LoadOutPresets CurrentLoadOutIds DataKnives Upgrades RawUpgrades"
-        );
+        const inventory = await getInventory(account._id.toString(), "Nemesis");
         //const body = getJSONfromString<INemesisWeakenRequest>(String(req.body));
 
-        if (inventory.Nemesis!.Weakened) {
-            logger.warn(`client is weakening an already-weakened nemesis?!`);
-        }
-
-        inventory.Nemesis!.InfNodes = [
-            {
-                Node: getNemesisManifest(inventory.Nemesis!.manifest).showdownNode,
-                Influence: 1
-            }
-        ];
-        inventory.Nemesis!.Weakened = true;
+        // As of 38.6.0, this request is no longer sent, instead mode=r already weakens the nemesis if appropriate.
+        // We always weaken the nemesis in mode=r so simply giving the client back the nemesis.
 
         const response: INemesisWeakenResponse = {
             target: inventory.toJSON<IInventoryClient>().Nemesis!
         };
-
-        await consumePasscodeModCharges(inventory, response);
-
-        await inventory.save();
         res.json(response);
     } else {
         logger.debug(`data provided to ${req.path}: ${String(req.body)}`);
