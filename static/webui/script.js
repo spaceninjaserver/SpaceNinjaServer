@@ -546,6 +546,9 @@ function updateInventory() {
                                 td.textContent = item.ItemName + " (" + td.textContent + ")";
                             }
                         }
+                        if (item.Details?.Name) {
+                            td.textContent = item.Details.Name + " (" + td.textContent + ")";
+                        }
                         if (item.ModularParts && item.ModularParts.length) {
                             td.textContent += " [";
                             item.ModularParts.forEach(part => {
@@ -1506,15 +1509,28 @@ function sendBatchGearExp(data) {
 
 function renameGear(category, oid, name) {
     revalidateAuthz(() => {
-        $.post({
-            url: "/api/nameWeapon.php?" + window.authz + "&Category=" + category + "&ItemId=" + oid + "&webui=1",
-            contentType: "text/plain",
-            data: JSON.stringify({
-                ItemName: name
-            })
-        }).done(function () {
-            updateInventory();
-        });
+        if (category == "KubrowPets") {
+            $.post({
+                url: "/api/renamePet.php?" + window.authz + "&webui=1",
+                contentType: "text/plain",
+                data: JSON.stringify({
+                    petId: oid,
+                    name: name
+                })
+            }).done(function () {
+                updateInventory();
+            });
+        } else {
+            $.post({
+                url: "/api/nameWeapon.php?" + window.authz + "&Category=" + category + "&ItemId=" + oid + "&webui=1",
+                contentType: "text/plain",
+                data: JSON.stringify({
+                    ItemName: name
+                })
+            }).done(function () {
+                updateInventory();
+            });
+        }
     });
 }
 
