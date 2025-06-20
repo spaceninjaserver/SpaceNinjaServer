@@ -1204,8 +1204,10 @@ export const addMissionRewards = async (
         if (syndicateEntry && syndicateEntry.Jobs) {
             let currentJob = syndicateEntry.Jobs[rewardInfo.JobTier!];
             if (syndicateEntry.Tag === "EntratiSyndicate") {
-                const vault = syndicateEntry.Jobs.find(j => j.locationTag === locationTag);
-                if (vault) currentJob = vault;
+                if (jobType.endsWith("VaultBounty")) {
+                    const vault = syndicateEntry.Jobs.find(j => j.locationTag === locationTag);
+                    if (vault) currentJob = vault;
+                }
                 let medallionAmount = Math.floor(currentJob.xpAmounts[rewardInfo.JobStage] / (rewardInfo.Q ? 0.8 : 1));
 
                 if (
@@ -1552,8 +1554,10 @@ function getRandomMissionDrops(
                         let job = syndicateEntry.Jobs[RewardInfo.JobTier!];
 
                         if (syndicateEntry.Tag === "EntratiSyndicate") {
-                            const vault = syndicateEntry.Jobs.find(j => j.locationTag === locationTag);
-                            if (vault && locationTag) job = vault;
+                            if (jobType.endsWith("VaultBounty")) {
+                                const vault = syndicateEntry.Jobs.find(j => j.locationTag === locationTag);
+                                if (vault) job = vault;
+                            }
                             // if (
                             //     [
                             //         "DeimosRuinsExterminateBounty",
