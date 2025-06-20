@@ -18,7 +18,6 @@ import DeimosPetVendorManifest from "@/static/fixed_responses/getVendorInfo/Deim
 import DuviriAcrithisVendorManifest from "@/static/fixed_responses/getVendorInfo/DuviriAcrithisVendorManifest.json";
 import EntratiLabsEntratiLabsCommisionsManifest from "@/static/fixed_responses/getVendorInfo/EntratiLabsEntratiLabsCommisionsManifest.json";
 import EntratiLabsEntratiLabVendorManifest from "@/static/fixed_responses/getVendorInfo/EntratiLabsEntratiLabVendorManifest.json";
-import MaskSalesmanManifest from "@/static/fixed_responses/getVendorInfo/MaskSalesmanManifest.json";
 import Nova1999ConquestShopManifest from "@/static/fixed_responses/getVendorInfo/Nova1999ConquestShopManifest.json";
 import OstronPetVendorManifest from "@/static/fixed_responses/getVendorInfo/OstronPetVendorManifest.json";
 import SolarisDebtTokenVendorRepossessionsManifest from "@/static/fixed_responses/getVendorInfo/SolarisDebtTokenVendorRepossessionsManifest.json";
@@ -35,7 +34,6 @@ const rawVendorManifests: IVendorManifest[] = [
     DuviriAcrithisVendorManifest,
     EntratiLabsEntratiLabsCommisionsManifest,
     EntratiLabsEntratiLabVendorManifest,
-    MaskSalesmanManifest,
     Nova1999ConquestShopManifest,
     OstronPetVendorManifest,
     SolarisDebtTokenVendorRepossessionsManifest
@@ -277,6 +275,7 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
 
             // Add permanent offers
             let numUncountedOffers = 0;
+            let numCountedOffers = 0;
             let offset = 0;
             for (const item of manifest.items) {
                 if (item.alwaysOffered || item.rotatedWeekly) {
@@ -287,11 +286,16 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
                         offersToAdd.push(item);
                         ++offset;
                     }
+                } else {
+                    numCountedOffers += 1 + item.duplicates;
                 }
             }
 
             // Add counted offers
-            const useRng = manifest.numItems && manifest.numItems.minValue != manifest.numItems.maxValue;
+            const useRng =
+                manifest.numItems &&
+                (manifest.numItems.minValue != manifest.numItems.maxValue ||
+                    manifest.numItems.minValue != numCountedOffers);
             const numItemsTarget = manifest.numItems
                 ? numUncountedOffers +
                   (useRng
@@ -299,10 +303,13 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
                       : manifest.numItems.minValue)
                 : manifest.items.length;
             let i = 0;
+            const rollableOffers = manifest.items.filter(x => x.probability !== undefined) as (Omit<
+                IVendorOffer,
+                "probability"
+            > & { probability: number })[];
             while (info.ItemManifest.length + offersToAdd.length < numItemsTarget) {
-                const item = useRng ? rng.randomElement(manifest.items)! : manifest.items[i++];
+                const item = useRng ? rng.randomReward(rollableOffers)! : rollableOffers[i++];
                 if (
-                    !item.alwaysOffered &&
                     remainingItemCapacity[getOfferId(item)] != 0 &&
                     (numOffersThatNeedToMatchABin == 0 || missingItemsPerBin[item.bin])
                 ) {
@@ -313,7 +320,7 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
                     }
                     offersToAdd.splice(offset, 0, item);
                 }
-                if (i == manifest.items.length) {
+                if (i == rollableOffers.length) {
                     i = 0;
                 }
             }
@@ -351,7 +358,7 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
                 }
             };
             if (rawItem.numRandomItemPrices) {
-                item.ItemPrices = [];
+                item.ItemPrices ??= [];
                 for (let i = 0; i != rawItem.numRandomItemPrices; ++i) {
                     let itemPrice: { type: string; count: IRange };
                     do {
@@ -391,11 +398,13 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
             info.ItemManifest.push(item);
         }
 
-        info.ItemManifest.sort((a, b) => {
-            const aBin = parseInt(a.Bin.substring(4));
-            const bBin = parseInt(b.Bin.substring(4));
-            return aBin == bBin ? 0 : aBin < bBin ? +1 : -1;
-        });
+        if (manifest.numItemsPerBin) {
+            info.ItemManifest.sort((a, b) => {
+                const aBin = parseInt(a.Bin.substring(4));
+                const bBin = parseInt(b.Bin.substring(4));
+                return aBin == bBin ? 0 : aBin < bBin ? +1 : -1;
+            });
+        }
 
         // Update vendor expiry
         let soonestOfferExpiry: number = Number.MAX_SAFE_INTEGER;
@@ -463,5 +472,21 @@ if (isDev) {
         .VendorInfo.ItemManifest;
     if (!temple.find(x => x.StoreItem == "/Lotus/StoreItems/Types/Items/MiscItems/Kuva")) {
         logger.warn(`self test failed for /Lotus/Types/Game/VendorManifests/TheHex/Temple1999VendorManifest`);
+    }
+
+    const nakak = getVendorManifestByTypeName("/Lotus/Types/Game/VendorManifests/Ostron/MaskSalesmanManifest")!
+        .VendorInfo.ItemManifest;
+    if (
+        nakak.length != 10 ||
+        nakak[0].StoreItem != "/Lotus/StoreItems/Upgrades/Skins/Ostron/RevenantMask" ||
+        nakak[1].StoreItem != "/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/PlushyThumper" ||
+        nakak[1].ItemPrices?.length != 4 ||
+        nakak[2].StoreItem != "/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/PlushyThumperMedium" ||
+        nakak[2].ItemPrices?.length != 4 ||
+        nakak[3].StoreItem != "/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/PlushyThumperLarge" ||
+        nakak[3].ItemPrices?.length != 4
+        // The remaining offers should be computed by weighted RNG.
+    ) {
+        logger.warn(`self test failed for /Lotus/Types/Game/VendorManifests/Ostron/MaskSalesmanManifest`);
     }
 }
