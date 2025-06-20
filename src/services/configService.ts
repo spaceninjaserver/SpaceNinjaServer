@@ -49,6 +49,7 @@ export interface IConfig {
     noDeathMarks?: boolean;
     noKimCooldowns?: boolean;
     syndicateMissionsRepeatable?: boolean;
+    unlockAllProfitTakerStages?: boolean;
     instantFinishRivenChallenge?: boolean;
     instantResourceExtractorDrones?: boolean;
     noResourceExtractorDronesDamage?: boolean;

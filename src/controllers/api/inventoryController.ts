@@ -339,8 +339,28 @@ export const getInventoryResponse = async (
         }
     }
 
+    if (config.unlockAllProfitTakerStages) {
+        inventoryResponse.CompletedJobChains ??= [];
+        const EudicoHeists = inventoryResponse.CompletedJobChains.find(x => x.LocationTag == "EudicoHeists");
+        if (EudicoHeists) {
+            EudicoHeists.Jobs = allEudicoHeistJobs;
+        } else {
+            inventoryResponse.CompletedJobChains.push({
+                LocationTag: "EudicoHeists",
+                Jobs: allEudicoHeistJobs
+            });
+        }
+    }
+
     return inventoryResponse;
 };
+
+const allEudicoHeistJobs = [
+    "/Lotus/Types/Gameplay/Venus/Jobs/Heists/HeistProfitTakerBountyOne",
+    "/Lotus/Types/Gameplay/Venus/Jobs/Heists/HeistProfitTakerBountyTwo",
+    "/Lotus/Types/Gameplay/Venus/Jobs/Heists/HeistProfitTakerBountyThree",
+    "/Lotus/Types/Gameplay/Venus/Jobs/Heists/HeistProfitTakerBountyFour"
+];
 
 const addString = (arr: string[], str: string): void => {
     if (arr.indexOf(str) == -1) {

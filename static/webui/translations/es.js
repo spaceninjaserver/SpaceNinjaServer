@@ -159,6 +159,7 @@ dict = {
     cheats_noDeathMarks: `Sin marcas de muerte`,
     cheats_noKimCooldowns: `Sin tiempo de espera para conversaciones KIM`,
     cheats_syndicateMissionsRepeatable: `Misiones de sindicato rejugables`,
+    cheats_unlockAllProfitTakerStages: `[UNTRANSLATED] Unlock All Profit Taker Stages`,
     cheats_instantFinishRivenChallenge: `Terminar desafío de agrietado inmediatamente`,
     cheats_instantResourceExtractorDrones: `Drones de extracción de recursos instantáneos`,
     cheats_noResourceExtractorDronesDamage: `Sin daño a los drones extractores de recursos`,

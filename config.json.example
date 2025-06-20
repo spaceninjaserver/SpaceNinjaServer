@@ -43,6 +43,7 @@
   "noDeathMarks": false,
   "noKimCooldowns": false,
   "syndicateMissionsRepeatable": false,
+  "unlockAllProfitTakerStages": false,
   "instantFinishRivenChallenge": false,
   "instantResourceExtractorDrones": false,
   "noResourceExtractorDronesDamage": false,

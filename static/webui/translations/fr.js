@@ -159,6 +159,7 @@ dict = {
     cheats_noDeathMarks: `Aucune marque d'assassin`,
     cheats_noKimCooldowns: `Aucun cooldown sur le KIM`,
     cheats_syndicateMissionsRepeatable: `Mission syndicat répétables`,
+    cheats_unlockAllProfitTakerStages: `[UNTRANSLATED] Unlock All Profit Taker Stages`,
     cheats_instantFinishRivenChallenge: `Débloquer le challenge Riven instantanément`,
     cheats_instantResourceExtractorDrones: `Ressources de drones d'extraction instantannées`,
     cheats_noResourceExtractorDronesDamage: `Aucun dégâts aux drones d'extraction de resources`,

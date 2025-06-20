@@ -159,6 +159,7 @@ dict = {
     cheats_noDeathMarks: `无死亡标记(不会被 Stalker/Grustrag 三霸/Zanuka 猎人等标记)`,
     cheats_noKimCooldowns: `无 KIM 冷却时间`,
     cheats_syndicateMissionsRepeatable: `集团任务可重复`,
+    cheats_unlockAllProfitTakerStages: `[UNTRANSLATED] Unlock All Profit Taker Stages`,
     cheats_instantFinishRivenChallenge: `立即完成裂罅挑战`,
     cheats_instantResourceExtractorDrones: `即时资源采集无人机`,
     cheats_noResourceExtractorDronesDamage: `资源提取器不会损毁`,
