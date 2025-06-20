@@ -9,8 +9,8 @@ export interface IWorldState {
     Sorties: ISortie[];
     LiteSorties: ILiteSortie[];
     SyndicateMissions: ISyndicateMissionInfo[];
-    GlobalUpgrades: IGlobalUpgrade[];
     ActiveMissions: IFissure[];
+    GlobalUpgrades: IGlobalUpgrade[];
     NodeOverrides: INodeOverride[];
     VoidStorms: IVoidStorm[];
     PVPChallengeInstances: IPVPChallengeInstance[];
@@ -83,6 +83,14 @@ export interface IFissure {
     Node: string;
     MissionType: string;
     Modifier: string;
+    Hard?: boolean;
+}
+
+export interface IFissureDatabase {
+    Activation: Date;
+    Expiry: Date;
+    Node: string;
+    Modifier: "VoidT1" | "VoidT2" | "VoidT3" | "VoidT4" | "VoidT5" | "VoidT6";
     Hard?: boolean;
 }
 

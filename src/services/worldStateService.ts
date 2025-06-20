@@ -1,12 +1,13 @@
 import staticWorldState from "@/static/fixed_responses/worldState/worldState.json";
+import fissureMissions from "@/static/fixed_responses/worldState/fissureMissions.json";
 import sortieTilesets from "@/static/fixed_responses/worldState/sortieTilesets.json";
 import sortieTilesetMissions from "@/static/fixed_responses/worldState/sortieTilesetMissions.json";
 import syndicateMissions from "@/static/fixed_responses/worldState/syndicateMissions.json";
 import { buildConfig } from "@/src/services/buildConfigService";
 import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { config } from "@/src/services/configService";
-import { SRng } from "@/src/services/rngService";
-import { ExportRegions, ExportSyndicates, IRegion } from "warframe-public-export-plus";
+import { getRandomElement, getRandomInt, SRng } from "@/src/services/rngService";
+import { eMissionType, ExportRegions, ExportSyndicates, IRegion } from "warframe-public-export-plus";
 import {
     ICalendarDay,
     ICalendarEvent,
@@ -21,8 +22,9 @@ import {
     IWorldState,
     TCircuitGameMode
 } from "../types/worldStateTypes";
-import { version_compare } from "../helpers/inventoryHelpers";
+import { toMongoDate, toOid, version_compare } from "../helpers/inventoryHelpers";
 import { logger } from "../utils/logger";
+import { Fissure } from "../models/worldStateModel";
 
 const sortieBosses = [
     "SORTIE_BOSS_HYENA",
@@ -1110,6 +1112,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         Alerts: [],
         Sorties: [],
         LiteSorties: [],
+        ActiveMissions: [],
         GlobalUpgrades: [],
         VoidStorms: [],
         EndlessXpChoices: [],
@@ -1118,13 +1121,9 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         SyndicateMissions: [...staticWorldState.SyndicateMissions]
     };
 
-    // Omit void fissures for versions prior to Dante Unbound to avoid script errors.
-    if (buildLabel && version_compare(buildLabel, "2024.03.24.20.00") < 0) {
-        worldState.ActiveMissions = [];
-        if (version_compare(buildLabel, "2017.10.12.17.04") < 0) {
-            // Old versions seem to really get hung up on not being able to load these.
-            worldState.PVPChallengeInstances = [];
-        }
+    // Old versions seem to really get hung up on not being able to load these.
+    if (buildLabel && version_compare(buildLabel, "2017.10.12.17.04") < 0) {
+        worldState.PVPChallengeInstances = [];
     }
 
     if (config.worldState?.starDays) {
@@ -1364,6 +1363,24 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     return worldState;
 };
 
+export const populateFissures = async (worldState: IWorldState): Promise<void> => {
+    const fissures = await Fissure.find({});
+    for (const fissure of fissures) {
+        const meta = ExportRegions[fissure.Node];
+        worldState.ActiveMissions.push({
+            _id: toOid(fissure._id),
+            Region: meta.systemIndex + 1,
+            Seed: 1337,
+            Activation: toMongoDate(fissure.Activation),
+            Expiry: toMongoDate(fissure.Expiry),
+            Node: fissure.Node,
+            MissionType: eMissionType[meta.missionIndex].tag,
+            Modifier: fissure.Modifier,
+            Hard: fissure.Hard
+        });
+    }
+};
+
 export const idToBountyCycle = (id: string): number => {
     return Math.trunc((parseInt(id.substring(0, 8), 16) * 1000) / 9000_000);
 };
@@ -1490,4 +1507,58 @@ const nightwaveTagToSeason: Record<string, number> = {
     RadioLegion2Syndicate: 2, // The Emissary
     RadioLegionIntermissionSyndicate: 1, // Intermission I
     RadioLegionSyndicate: 0 // The Wolf of Saturn Six
+};
+
+export const updateWorldStateCollections = async (): Promise<void> => {
+    const fissures = await Fissure.find();
+
+    const activeNodes = new Set<string>();
+    const tierToFurthestExpiry: Record<string, number> = {
+        VoidT1: 0,
+        VoidT2: 0,
+        VoidT3: 0,
+        VoidT4: 0,
+        VoidT5: 0,
+        VoidT6: 0,
+        VoidT1Hard: 0,
+        VoidT2Hard: 0,
+        VoidT3Hard: 0,
+        VoidT4Hard: 0,
+        VoidT5Hard: 0,
+        VoidT6Hard: 0
+    };
+    for (const fissure of fissures) {
+        activeNodes.add(fissure.Node);
+
+        const key = fissure.Modifier + (fissure.Hard ? "Hard" : "");
+        tierToFurthestExpiry[key] = Math.max(tierToFurthestExpiry[key], fissure.Expiry.getTime());
+    }
+
+    const deadline = Date.now() - 6 * unixTimesInMs.minute;
+    for (const [tier, expiry] of Object.entries(tierToFurthestExpiry)) {
+        if (expiry < deadline) {
+            const numFissures = getRandomInt(1, 3);
+            for (let i = 0; i != numFissures; ++i) {
+                const modifier = tier.replace("Hard", "") as
+                    | "VoidT1"
+                    | "VoidT2"
+                    | "VoidT3"
+                    | "VoidT4"
+                    | "VoidT5"
+                    | "VoidT6";
+                let node: string;
+                do {
+                    node = getRandomElement(fissureMissions[modifier])!;
+                } while (activeNodes.has(node));
+                activeNodes.add(node);
+                await Fissure.insertOne({
+                    Activation: new Date(),
+                    Expiry: new Date(Date.now() + getRandomInt(60, 120) * unixTimesInMs.minute),
+                    Node: node,
+                    Modifier: modifier,
+                    Hard: tier.indexOf("Hard") != -1 ? true : undefined
+                });
+            }
+        }
+    }
 };

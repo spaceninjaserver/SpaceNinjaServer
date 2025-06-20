@@ -22,6 +22,7 @@ import { JSONStringify } from "json-with-bigint";
 import { startWebServer } from "./services/webService";
 
 import { validateConfig } from "@/src/services/configWatcherService";
+import { updateWorldStateCollections } from "./services/worldStateService";
 
 // Patch JSON.stringify to work flawlessly with Bigints.
 JSON.stringify = JSONStringify;
@@ -33,6 +34,11 @@ mongoose
     .then(() => {
         logger.info("Connected to MongoDB");
         startWebServer();
+
+        void updateWorldStateCollections();
+        setInterval(() => {
+            void updateWorldStateCollections();
+        }, 60_000);
     })
     .catch(error => {
         if (error instanceof Error) {
