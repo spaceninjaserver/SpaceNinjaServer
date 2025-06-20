@@ -60,6 +60,7 @@ export interface IConfig {
     noDojoResearchCosts?: boolean;
     noDojoResearchTime?: boolean;
     fastClanAscension?: boolean;
+    missionsCanGiveAllRelics?: boolean;
     spoofMasteryRank?: number;
     nightwaveStandingMultiplier?: number;
     worldState?: {

@@ -170,6 +170,7 @@ dict = {
     cheats_noDojoResearchCosts: `Бесплатные Исследование Додзё`,
     cheats_noDojoResearchTime: `Мгновенные Исследование Додзё`,
     cheats_fastClanAscension: `Мгновенное Вознесение Клана`,
+    cheats_missionsCanGiveAllRelics: `[UNTRANSLATED] Missions Can Give All Relics`,
     cheats_spoofMasteryRank: `Подделанный ранг мастерства (-1 для отключения)`,
     cheats_nightwaveStandingMultiplier: `[UNTRANSLATED] Nightwave Standing Multiplier`,
     cheats_save: `[UNTRANSLATED] Save`,

@@ -54,6 +54,7 @@
   "noDojoResearchCosts": false,
   "noDojoResearchTime": false,
   "fastClanAscension": false,
+  "missionsCanGiveAllRelics": false,
   "spoofMasteryRank": -1,
   "nightwaveStandingMultiplier": 1,
   "worldState": {

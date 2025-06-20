@@ -170,6 +170,7 @@ dict = {
     cheats_noDojoResearchCosts: `无视道场研究消耗`,
     cheats_noDojoResearchTime: `无视道场研究时间`,
     cheats_fastClanAscension: `快速升级氏族`,
+    cheats_missionsCanGiveAllRelics: `[UNTRANSLATED] Missions Can Give All Relics`,
     cheats_spoofMasteryRank: `伪造精通段位(-1为禁用)`,
     cheats_nightwaveStandingMultiplier: `午夜电波声望倍率`,
     cheats_save: `[UNTRANSLATED] Save`,

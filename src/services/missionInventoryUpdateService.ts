@@ -2,6 +2,7 @@ import {
     ExportEnemies,
     ExportFusionBundles,
     ExportRegions,
+    ExportRelics,
     ExportRewards,
     IMissionReward as IMissionRewardExternal,
     IRegion,
@@ -1805,6 +1806,23 @@ function getRandomMissionDrops(
             drops.push({ StoreItem: drop.type, ItemCount: drop.itemCount });
         }
     }
+
+    if (config.missionsCanGiveAllRelics) {
+        for (const drop of drops) {
+            const itemType = fromStoreItem(drop.StoreItem);
+            if (itemType in ExportRelics) {
+                const relic = ExportRelics[itemType];
+                const replacement = getRandomElement(
+                    Object.entries(ExportRelics).filter(
+                        arr => arr[1].era == relic.era && arr[1].quality == relic.quality
+                    )
+                )!;
+                logger.debug(`replacing ${relic.era} ${relic.category} with ${replacement[1].category}`);
+                drop.StoreItem = toStoreItem(replacement[0]);
+            }
+        }
+    }
+
     return drops;
 }
 

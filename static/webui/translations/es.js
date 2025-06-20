@@ -170,6 +170,7 @@ dict = {
     cheats_noDojoResearchCosts: `Sin costo de investigación del dojo`,
     cheats_noDojoResearchTime: `Sin tiempo de investigación del dojo`,
     cheats_fastClanAscension: `Ascenso rápido del clan`,
+    cheats_missionsCanGiveAllRelics: `[UNTRANSLATED] Missions Can Give All Relics`,
     cheats_spoofMasteryRank: `Rango de maestría simulado (-1 para desactivar)`,
     cheats_nightwaveStandingMultiplier: `Multiplicador de Reputación de Onda Nocturna`,
     cheats_save: `Guardar`,
