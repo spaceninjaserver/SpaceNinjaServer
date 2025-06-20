@@ -44,6 +44,7 @@ export const updateChallengeProgressController: RequestHandler = async (req, res
             case "ChallengeProgress":
             case "SeasonChallengeCompletions":
             case "ChallengePTS":
+            case "crossPlaySetting":
                 break;
             default:
                 logger.warn(`unknown challenge progress entry`, { key, value });
@@ -62,4 +63,5 @@ interface IUpdateChallengeProgressRequest {
     ChallengeProgress?: IChallengeProgress[];
     SeasonChallengeHistory?: ISeasonChallenge[];
     SeasonChallengeCompletions?: ISeasonChallenge[];
+    crossPlaySetting?: string;
 }
