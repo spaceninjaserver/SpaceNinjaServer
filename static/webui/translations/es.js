@@ -86,6 +86,7 @@ dict = {
     inventory_moaPets: `Moas`,
     inventory_kubrowPets: `Bestias`,
     inventory_evolutionProgress: `Progreso de evolución Incarnon`,
+    inventory_Boosters: `Potenciadores`,
     inventory_bulkAddSuits: `Agregar Warframes faltantes`,
     inventory_bulkAddWeapons: `Agregar armas faltantes`,
     inventory_bulkAddSpaceSuits: `Agregar Archwings faltantes`,
@@ -100,7 +101,7 @@ dict = {
     inventory_bulkRankUpSentinels: `Maximizar rango de todos los centinelas`,
     inventory_bulkRankUpSentinelWeapons: `Maximizar rango de todas las armas de centinela`,
     inventory_bulkRankUpEvolutionProgress: `Maximizar todo el progreso de evolución Incarnon`,
-    inventory_Boosters: `Potenciadores`,
+    inventory_maxPlexus: `[UNTRANSLATED] Max Rank Plexus`,
 
     quests_list: `Misiones`,
     quests_completeAll: `Completar todas las misiones`,

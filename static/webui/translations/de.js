@@ -86,6 +86,7 @@ dict = {
     inventory_moaPets: `Moas`,
     inventory_kubrowPets: `Bestien`,
     inventory_evolutionProgress: `Incarnon-Entwicklungsfortschritte`,
+    inventory_Boosters: `[UNTRANSLATED] Boosters`,
     inventory_bulkAddSuits: `Fehlende Warframes hinzufügen`,
     inventory_bulkAddWeapons: `Fehlende Waffen hinzufügen`,
     inventory_bulkAddSpaceSuits: `Fehlende Archwings hinzufügen`,
@@ -100,7 +101,7 @@ dict = {
     inventory_bulkRankUpSentinels: `Alle Wächter auf Max. Rang`,
     inventory_bulkRankUpSentinelWeapons: `Alle Wächter-Waffen auf Max. Rang`,
     inventory_bulkRankUpEvolutionProgress: `Alle Incarnon-Entwicklungsfortschritte auf Max. Rang`,
-    inventory_Boosters: `[UNTRANSLATED] Boosters`,
+    inventory_maxPlexus: `[UNTRANSLATED] Max Rank Plexus`,
 
     quests_list: `Quests`,
     quests_completeAll: `Alle Quests abschließen`,

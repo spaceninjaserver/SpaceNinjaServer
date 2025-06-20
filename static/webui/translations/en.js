@@ -85,6 +85,7 @@ dict = {
     inventory_moaPets: `Moas`,
     inventory_kubrowPets: `Beasts`,
     inventory_evolutionProgress: `Incarnon Evolution Progress`,
+    inventory_Boosters: `Boosters`,
     inventory_bulkAddSuits: `Add Missing Warframes`,
     inventory_bulkAddWeapons: `Add Missing Weapons`,
     inventory_bulkAddSpaceSuits: `Add Missing Archwings`,
@@ -99,7 +100,7 @@ dict = {
     inventory_bulkRankUpSentinels: `Max Rank All Sentinels`,
     inventory_bulkRankUpSentinelWeapons: `Max Rank All Sentinel Weapons`,
     inventory_bulkRankUpEvolutionProgress: `Max Rank All Incarnon Evolution Progress`,
-    inventory_Boosters: `Boosters`,
+    inventory_maxPlexus: `Max Rank Plexus`,
 
     quests_list: `Quests`,
     quests_completeAll: `Complete All Quests`,

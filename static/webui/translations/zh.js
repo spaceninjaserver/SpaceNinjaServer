@@ -86,6 +86,7 @@ dict = {
     inventory_moaPets: `恐鸟`,
     inventory_kubrowPets: `动物同伴`,
     inventory_evolutionProgress: `灵化之源进度`,
+    inventory_Boosters: `加成器`,
     inventory_bulkAddSuits: `添加缺失战甲`,
     inventory_bulkAddWeapons: `添加缺失武器`,
     inventory_bulkAddSpaceSuits: `添加缺失Archwing`,
@@ -100,7 +101,7 @@ dict = {
     inventory_bulkRankUpSentinels: `所有守护升满级`,
     inventory_bulkRankUpSentinelWeapons: `所有守护武器升满级`,
     inventory_bulkRankUpEvolutionProgress: `所有灵化之源最大等级`,
-    inventory_Boosters: `加成器`,
+    inventory_maxPlexus: `[UNTRANSLATED] Max Rank Plexus`,
 
     quests_list: `任务`,
     quests_completeAll: `完成所有任务`,

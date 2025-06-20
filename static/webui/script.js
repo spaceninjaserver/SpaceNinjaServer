@@ -594,8 +594,9 @@ function updateInventory() {
                             a.onclick = function (event) {
                                 event.preventDefault();
                                 revalidateAuthz(() => {
+                                    const promises = [];
                                     if (item.XP < maxXP) {
-                                        addGearExp(category, item.ItemId.$oid, maxXP - item.XP);
+                                        promises.push(addGearExp(category, item.ItemId.$oid, maxXP - item.XP));
                                     }
                                     if ("exalted" in itemMap[item.ItemType]) {
                                         for (const exaltedType of itemMap[item.ItemType].exalted) {
@@ -604,15 +605,20 @@ function updateInventory() {
                                                 const exaltedCap =
                                                     itemMap[exaltedType]?.type == "weapons" ? 800_000 : 1_600_000;
                                                 if (exaltedItem.XP < exaltedCap) {
-                                                    addGearExp(
-                                                        "SpecialItems",
-                                                        exaltedItem.ItemId.$oid,
-                                                        exaltedCap - exaltedItem.XP
+                                                    promises.push(
+                                                        addGearExp(
+                                                            "SpecialItems",
+                                                            exaltedItem.ItemId.$oid,
+                                                            exaltedCap - exaltedItem.XP
+                                                        )
                                                     );
                                                 }
                                             }
                                         }
                                     }
+                                    Promise.all(promises).then(() => {
+                                        updateInventory();
+                                    });
                                 });
                             };
                             a.title = loc("code_maxRank");
@@ -759,6 +765,13 @@ function updateInventory() {
                 formEvolutionProgress.querySelector("input").disabled = true;
                 formEvolutionProgress.querySelector("button").disabled = true;
                 giveAllQEvolutionProgress.disabled = true;
+            }
+
+            if (data.CrewShipHarnesses?.length) {
+                window.plexus = {
+                    id: data.CrewShipHarnesses[0].ItemId.$oid,
+                    xp: data.CrewShipHarnesses[0].XP
+                };
             }
 
             // Populate quests route
@@ -1443,20 +1456,17 @@ function maxRankAllEquipment(categories) {
                                 XP: maxXP
                             });
                         }
-                        if (category === "Suits") {
-                            if ("exalted" in itemMap[item.ItemType]) {
-                                for (const exaltedType of itemMap[item.ItemType].exalted) {
-                                    const exaltedItem = data["SpecialItems"].find(x => x.ItemType == exaltedType);
-                                    if (exaltedItem) {
-                                        const exaltedCap =
-                                            itemMap[exaltedType]?.type == "weapons" ? 800_000 : 1_600_000;
-                                        if (exaltedItem.XP < exaltedCap) {
-                                            batchData["SpecialItems"] ??= [];
-                                            batchData["SpecialItems"].push({
-                                                ItemId: { $oid: exaltedItem.ItemId.$oid },
-                                                XP: exaltedCap
-                                            });
-                                        }
+                        if (item.ItemType in itemMap && "exalted" in itemMap[item.ItemType]) {
+                            for (const exaltedType of itemMap[item.ItemType].exalted) {
+                                const exaltedItem = data["SpecialItems"].find(x => x.ItemType == exaltedType);
+                                if (exaltedItem) {
+                                    const exaltedCap = itemMap[exaltedType]?.type == "weapons" ? 800_000 : 1_600_000;
+                                    if (exaltedItem.XP < exaltedCap) {
+                                        batchData["SpecialItems"] ??= [];
+                                        batchData["SpecialItems"].push({
+                                            ItemId: { $oid: exaltedItem.ItemId.$oid },
+                                            XP: exaltedCap
+                                        });
                                     }
                                 }
                             }
@@ -1483,14 +1493,14 @@ function addGearExp(category, oid, xp) {
             XP: xp
         }
     ];
-    $.post({
-        url: "/custom/addXp?" + window.authz,
-        contentType: "application/json",
-        data: JSON.stringify(data)
-    }).done(function () {
-        if (category != "SpecialItems") {
-            updateInventory();
-        }
+    return new Promise((resolve, reject) => {
+        $.post({
+            url: "/custom/addXp?" + window.authz,
+            contentType: "application/json",
+            data: JSON.stringify(data)
+        })
+            .done(resolve)
+            .fail(reject);
     });
 }
 
@@ -2248,4 +2258,22 @@ function formatDatetime(fmt, date) {
                 return match;
         }
     });
+}
+
+const calls_in_flight = new Set();
+
+async function debounce(func, ...args) {
+    calls_in_flight.add(func);
+    await func(...args);
+    calls_in_flight.delete(func);
+}
+
+async function doMaxPlexus() {
+    if ((window.plexus?.xp ?? 0) < 900_000) {
+        await addGearExp("CrewShipHarnesses", window.plexus.id, 900_000 - window.plexus.xp);
+        window.plexus.xp = 900_000;
+        toast(loc("code_succRankUp"));
+    } else {
+        toast(loc("code_noEquipmentToRankUp"));
+    }
 }

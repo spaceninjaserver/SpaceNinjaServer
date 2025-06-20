@@ -86,6 +86,7 @@ dict = {
     inventory_moaPets: `Moas`,
     inventory_kubrowPets: `Bêtes`,
     inventory_evolutionProgress: `Progrès de l'évolution Incarnon`,
+    inventory_Boosters: `[UNTRANSLATED] Boosters`,
     inventory_bulkAddSuits: `Ajouter les Warframes manquantes`,
     inventory_bulkAddWeapons: `Ajouter les armes manquantes`,
     inventory_bulkAddSpaceSuits: `Ajouter les Archwings manquants`,
@@ -100,7 +101,7 @@ dict = {
     inventory_bulkRankUpSentinels: `Toutes les Sentinelles au rang max`,
     inventory_bulkRankUpSentinelWeapons: `Toutes les armes de Sentinelles au rang max`,
     inventory_bulkRankUpEvolutionProgress: `Toutes les évolutions Incarnon au rang max`,
-    inventory_Boosters: `[UNTRANSLATED] Boosters`,
+    inventory_maxPlexus: `[UNTRANSLATED] Max Rank Plexus`,
 
     quests_list: `Quêtes`,
     quests_completeAll: `Compléter toutes les quêtes`,

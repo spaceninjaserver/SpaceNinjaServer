@@ -86,6 +86,7 @@ dict = {
     inventory_moaPets: `МОА`,
     inventory_kubrowPets: `Звери`,
     inventory_evolutionProgress: `Прогресс эволюции Инкарнонов`,
+    inventory_Boosters: `[UNTRANSLATED] Boosters`,
     inventory_bulkAddSuits: `Добавить отсутствующие варфреймы`,
     inventory_bulkAddWeapons: `Добавить отсутствующее оружие`,
     inventory_bulkAddSpaceSuits: `Добавить отсутствующие арчвинги`,
@@ -100,7 +101,7 @@ dict = {
     inventory_bulkRankUpSentinels: `Максимальный ранг всех стражей`,
     inventory_bulkRankUpSentinelWeapons: `Максимальный ранг всего оружия стражей`,
     inventory_bulkRankUpEvolutionProgress: `Максимальный ранг всех эволюций Инкарнонов`,
-    inventory_Boosters: `[UNTRANSLATED] Boosters`,
+    inventory_maxPlexus: `[UNTRANSLATED] Max Rank Plexus`,
 
     quests_list: `Квесты`,
     quests_completeAll: `Завершить все квесты`,
