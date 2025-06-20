@@ -2,7 +2,7 @@ import fs from "fs";
 import fsPromises from "fs/promises";
 import { logger } from "../utils/logger";
 import { config, configPath, loadConfig } from "./configService";
-import { getWebPorts, startWebServer, stopWebServer } from "./webService";
+import { getWebPorts, sendWsBroadcast, startWebServer, stopWebServer } from "./webService";
 
 let amnesia = false;
 fs.watchFile(configPath, () => {
@@ -21,7 +21,13 @@ fs.watchFile(configPath, () => {
         const webPorts = getWebPorts();
         if (config.httpPort != webPorts.http || config.httpsPort != webPorts.https) {
             logger.info(`Restarting web server to apply port changes.`);
+
+            // Tell webui clients to reload with new port
+            sendWsBroadcast({ ports: { http: config.httpPort, https: config.httpsPort } });
+
             void stopWebServer().then(startWebServer);
+        } else {
+            sendWsBroadcast({ config_reloaded: true });
         }
     }
 });

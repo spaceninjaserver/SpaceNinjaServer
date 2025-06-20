@@ -1,3 +1,23 @@
+function openWebSocket() {
+    window.ws = new WebSocket("/custom/ws");
+    window.ws.onmessage = e => {
+        const msg = JSON.parse(e.data);
+        if ("ports" in msg) {
+            location.port = location.protocol == "https:" ? msg.ports.https : msg.ports.http;
+        }
+        if ("config_reloaded" in msg) {
+            //window.is_admin = undefined;
+            if (single.getCurrentPath() == "/webui/cheats") {
+                single.loadRoute("/webui/cheats");
+            }
+        }
+    };
+    window.ws.onclose = function () {
+        setTimeout(openWebSocket, 3000);
+    };
+}
+openWebSocket();
+
 let loginOrRegisterPending = false;
 window.registerSubmit = false;
 
@@ -1822,6 +1842,7 @@ single.getRoute("/webui/cheats").on("beforeload", function () {
             clearInterval(interval);
             fetch("/custom/config?" + window.authz).then(async res => {
                 if (res.status == 200) {
+                    //window.is_admin = true;
                     $("#server-settings-no-perms").addClass("d-none");
                     $("#server-settings").removeClass("d-none");
                     res.json().then(json =>
@@ -1830,9 +1851,7 @@ single.getRoute("/webui/cheats").on("beforeload", function () {
                             var x = document.getElementById(`${key}`);
                             if (x != null) {
                                 if (x.type == "checkbox") {
-                                    if (value === true) {
-                                        x.setAttribute("checked", "checked");
-                                    }
+                                    x.checked = value;
                                 } else if (x.type == "number") {
                                     x.setAttribute("value", `${value}`);
                                 }
@@ -1847,6 +1866,7 @@ single.getRoute("/webui/cheats").on("beforeload", function () {
                             }
                         });
                     } else {
+                        //window.is_admin = false;
                         $("#server-settings-no-perms").removeClass("d-none");
                         $("#server-settings").addClass("d-none");
                     }

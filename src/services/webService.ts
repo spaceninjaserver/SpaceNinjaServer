@@ -5,9 +5,12 @@ import { config } from "./configService";
 import { logger } from "../utils/logger";
 import { app } from "../app";
 import { AddressInfo } from "node:net";
+import ws from "ws";
 
 let httpServer: http.Server | undefined;
 let httpsServer: https.Server | undefined;
+let wsServer: ws.Server | undefined;
+let wssServer: ws.Server | undefined;
 
 const tlsOptions = {
     key: fs.readFileSync("static/certs/key.pem"),
@@ -21,10 +24,17 @@ export const startWebServer = (): void => {
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     httpServer = http.createServer(app);
     httpServer.listen(httpPort, () => {
+        wsServer = new ws.Server({ server: httpServer });
+        //wsServer.on("connection", wsOnConnect);
+
         logger.info("HTTP server started on port " + httpPort);
+
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         httpsServer = https.createServer(tlsOptions, app);
         httpsServer.listen(httpsPort, () => {
+            wssServer = new ws.Server({ server: httpsServer });
+            //wssServer.on("connection", wsOnConnect);
+
             logger.info("HTTPS server started on port " + httpsPort);
 
             logger.info(
@@ -61,5 +71,41 @@ export const stopWebServer = async (): Promise<void> => {
             })
         );
     }
+    if (wsServer) {
+        promises.push(
+            new Promise(resolve => {
+                wsServer!.close(() => {
+                    resolve();
+                });
+            })
+        );
+    }
+    if (wssServer) {
+        promises.push(
+            new Promise(resolve => {
+                wssServer!.close(() => {
+                    resolve();
+                });
+            })
+        );
+    }
     await Promise.all(promises);
+};
+
+/*const wsOnConnect = (ws: ws, _req: http.IncomingMessage): void => {
+    ws.on("message", console.log);
+};*/
+
+export const sendWsBroadcast = <T>(data: T): void => {
+    const msg = JSON.stringify(data);
+    if (wsServer) {
+        for (const client of wsServer.clients) {
+            client.send(msg);
+        }
+    }
+    if (wssServer) {
+        for (const client of wssServer.clients) {
+            client.send(msg);
+        }
+    }
 };
