@@ -7,7 +7,6 @@ import { IItemManifest, IVendorInfo, IVendorManifest } from "@/src/types/vendorT
 import { logger } from "@/src/utils/logger";
 import { ExportVendors, IRange, IVendor, IVendorOffer } from "warframe-public-export-plus";
 
-import ArchimedeanVendorManifest from "@/static/fixed_responses/getVendorInfo/ArchimedeanVendorManifest.json";
 import DeimosEntratiFragmentVendorProductsManifest from "@/static/fixed_responses/getVendorInfo/DeimosEntratiFragmentVendorProductsManifest.json";
 import DeimosHivemindCommisionsManifestFishmonger from "@/static/fixed_responses/getVendorInfo/DeimosHivemindCommisionsManifestFishmonger.json";
 import DeimosHivemindCommisionsManifestPetVendor from "@/static/fixed_responses/getVendorInfo/DeimosHivemindCommisionsManifestPetVendor.json";
@@ -23,11 +22,8 @@ import MaskSalesmanManifest from "@/static/fixed_responses/getVendorInfo/MaskSal
 import Nova1999ConquestShopManifest from "@/static/fixed_responses/getVendorInfo/Nova1999ConquestShopManifest.json";
 import OstronPetVendorManifest from "@/static/fixed_responses/getVendorInfo/OstronPetVendorManifest.json";
 import SolarisDebtTokenVendorRepossessionsManifest from "@/static/fixed_responses/getVendorInfo/SolarisDebtTokenVendorRepossessionsManifest.json";
-import Temple1999VendorManifest from "@/static/fixed_responses/getVendorInfo/Temple1999VendorManifest.json";
-import ZarimanCommisionsManifestArchimedean from "@/static/fixed_responses/getVendorInfo/ZarimanCommisionsManifestArchimedean.json";
 
 const rawVendorManifests: IVendorManifest[] = [
-    ArchimedeanVendorManifest,
     DeimosEntratiFragmentVendorProductsManifest,
     DeimosHivemindCommisionsManifestFishmonger,
     DeimosHivemindCommisionsManifestPetVendor,
@@ -42,9 +38,7 @@ const rawVendorManifests: IVendorManifest[] = [
     MaskSalesmanManifest,
     Nova1999ConquestShopManifest,
     OstronPetVendorManifest,
-    SolarisDebtTokenVendorRepossessionsManifest,
-    Temple1999VendorManifest,
-    ZarimanCommisionsManifestArchimedean
+    SolarisDebtTokenVendorRepossessionsManifest
 ];
 
 interface IGeneratableVendorInfo extends Omit<IVendorInfo, "ItemManifest" | "Expiry"> {
@@ -297,31 +291,30 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
             }
 
             // Add counted offers
-            if (manifest.numItems) {
-                const useRng = manifest.numItems.minValue != manifest.numItems.maxValue;
-                const numItemsTarget =
-                    numUncountedOffers +
-                    (useRng
-                        ? rng.randomInt(manifest.numItems.minValue, manifest.numItems.maxValue)
-                        : manifest.numItems.minValue);
-                let i = 0;
-                while (info.ItemManifest.length + offersToAdd.length < numItemsTarget) {
-                    const item = useRng ? rng.randomElement(manifest.items)! : manifest.items[i++];
-                    if (
-                        !item.alwaysOffered &&
-                        remainingItemCapacity[getOfferId(item)] != 0 &&
-                        (numOffersThatNeedToMatchABin == 0 || missingItemsPerBin[item.bin])
-                    ) {
-                        remainingItemCapacity[getOfferId(item)] -= 1;
-                        if (missingItemsPerBin[item.bin]) {
-                            missingItemsPerBin[item.bin] -= 1;
-                            numOffersThatNeedToMatchABin -= 1;
-                        }
-                        offersToAdd.splice(offset, 0, item);
+            const useRng = manifest.numItems && manifest.numItems.minValue != manifest.numItems.maxValue;
+            const numItemsTarget = manifest.numItems
+                ? numUncountedOffers +
+                  (useRng
+                      ? rng.randomInt(manifest.numItems.minValue, manifest.numItems.maxValue)
+                      : manifest.numItems.minValue)
+                : manifest.items.length;
+            let i = 0;
+            while (info.ItemManifest.length + offersToAdd.length < numItemsTarget) {
+                const item = useRng ? rng.randomElement(manifest.items)! : manifest.items[i++];
+                if (
+                    !item.alwaysOffered &&
+                    remainingItemCapacity[getOfferId(item)] != 0 &&
+                    (numOffersThatNeedToMatchABin == 0 || missingItemsPerBin[item.bin])
+                ) {
+                    remainingItemCapacity[getOfferId(item)] -= 1;
+                    if (missingItemsPerBin[item.bin]) {
+                        missingItemsPerBin[item.bin] -= 1;
+                        numOffersThatNeedToMatchABin -= 1;
                     }
-                    if (i == manifest.items.length) {
-                        i = 0;
-                    }
+                    offersToAdd.splice(offset, 0, item);
+                }
+                if (i == manifest.items.length) {
+                    i = 0;
                 }
             }
         } else {
@@ -464,5 +457,11 @@ if (isDev) {
         cms.reduce((a, x) => a + (x.Bin == "BIN_0" ? 1 : 0), 0) < 4
     ) {
         logger.warn(`self test failed for /Lotus/Types/Game/VendorManifests/Hubs/RailjackCrewMemberVendorManifest`);
+    }
+
+    const temple = getVendorManifestByTypeName("/Lotus/Types/Game/VendorManifests/TheHex/Temple1999VendorManifest")!
+        .VendorInfo.ItemManifest;
+    if (!temple.find(x => x.StoreItem == "/Lotus/StoreItems/Types/Items/MiscItems/Kuva")) {
+        logger.warn(`self test failed for /Lotus/Types/Game/VendorManifests/TheHex/Temple1999VendorManifest`);
     }
 }
