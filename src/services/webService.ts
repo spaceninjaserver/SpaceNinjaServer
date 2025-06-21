@@ -176,7 +176,17 @@ const wsOnConnect = (ws: ws, _req: http.IncomingMessage): void => {
             }
         }
         if (data.logout) {
+            const accountId = (ws as IWsCustomData).accountId;
             (ws as IWsCustomData).accountId = undefined;
+            await Account.updateOne(
+                {
+                    _id: accountId,
+                    ClientType: "webui"
+                },
+                {
+                    Nonce: 0
+                }
+            );
         }
     });
 };
