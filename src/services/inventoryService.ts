@@ -1825,12 +1825,15 @@ export const addChallenges = (
     return affiliationMods;
 };
 
-export const addMissionComplete = (inventory: TInventoryDatabaseDocument, { Tag, Completes }: IMission): void => {
+export const addMissionComplete = (inventory: TInventoryDatabaseDocument, { Tag, Completes, Tier }: IMission): void => {
     const { Missions } = inventory;
     const itemIndex = Missions.findIndex(item => item.Tag === Tag);
 
     if (itemIndex !== -1) {
         Missions[itemIndex].Completes += Completes;
+        if (Tier) {
+            Missions[itemIndex].Tier = Tier;
+        }
     } else {
         Missions.push({ Tag, Completes });
     }
