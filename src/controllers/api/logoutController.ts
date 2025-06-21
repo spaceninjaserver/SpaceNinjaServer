@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import { Account } from "@/src/models/loginModel";
+import { sendWsBroadcastTo } from "@/src/services/webService";
 
 export const logoutController: RequestHandler = async (req, res) => {
     if (!req.query.accountId) {
@@ -10,7 +11,7 @@ export const logoutController: RequestHandler = async (req, res) => {
         throw new Error("Request is missing nonce parameter");
     }
 
-    await Account.updateOne(
+    const stat = await Account.updateOne(
         {
             _id: req.query.accountId,
             Nonce: nonce
@@ -19,6 +20,10 @@ export const logoutController: RequestHandler = async (req, res) => {
             Nonce: 0
         }
     );
+    if (stat.modifiedCount) {
+        // Tell WebUI its nonce has been invalidated
+        sendWsBroadcastTo(req.query.accountId as string, { logged_out: true });
+    }
 
     res.writeHead(200, {
         "Content-Type": "text/html",

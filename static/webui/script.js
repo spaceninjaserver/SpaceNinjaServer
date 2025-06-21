@@ -8,8 +8,28 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
+let auth_pending = false,
+    did_initial_auth = false;
+const sendAuth = isRegister => {
+    if (localStorage.getItem("email") && localStorage.getItem("password")) {
+        auth_pending = true;
+        window.ws.send(
+            JSON.stringify({
+                auth: {
+                    email: localStorage.getItem("email"),
+                    password: wp.encSync(localStorage.getItem("password")),
+                    isRegister
+                }
+            })
+        );
+    }
+};
+
 function openWebSocket() {
     window.ws = new WebSocket("/custom/ws");
+    window.ws.onopen = () => {
+        sendAuth(false);
+    };
     window.ws.onmessage = e => {
         const msg = JSON.parse(e.data);
         if ("ports" in msg) {
@@ -21,31 +41,9 @@ function openWebSocket() {
                 single.loadRoute("/webui/cheats");
             }
         }
-    };
-    window.ws.onclose = function () {
-        setTimeout(openWebSocket, 3000);
-    };
-}
-openWebSocket();
-
-let loginOrRegisterPending = false;
-window.registerSubmit = false;
-
-function doLogin() {
-    if (loginOrRegisterPending) {
-        return;
-    }
-    loginOrRegisterPending = true;
-    localStorage.setItem("email", $("#email").val());
-    localStorage.setItem("password", $("#password").val());
-    loginFromLocalStorage();
-    registerSubmit = false;
-}
-
-function loginFromLocalStorage() {
-    const isRegister = registerSubmit;
-    doLoginRequest(
-        data => {
+        if ("auth_succ" in msg) {
+            auth_pending = false;
+            const data = msg.auth_succ;
             if (single.getCurrentPath() == "/webui/") {
                 single.loadRoute("/webui/inventory");
             }
@@ -55,55 +53,74 @@ function loginFromLocalStorage() {
             if (window.dict) {
                 updateLocElements();
             }
-            updateInventory();
-        },
-        () => {
-            logout();
-            alert(loc(isRegister ? "code_regFail" : "code_loginFail"));
+            if (!did_initial_auth) {
+                did_initial_auth = true;
+                updateInventory();
+            }
         }
-    );
+        if ("auth_fail" in msg) {
+            auth_pending = false;
+            logout();
+            if (single.getCurrentPath() == "/webui/") {
+                alert(loc(msg.auth_fail.isRegister ? "code_regFail" : "code_loginFail"));
+            } else {
+                single.loadRoute("/webui/");
+            }
+        }
+        if ("logged_out" in msg) {
+            sendAuth();
+        }
+    };
+    window.ws.onclose = function () {
+        window.ws = undefined;
+        setTimeout(openWebSocket, 3000);
+    };
+}
+openWebSocket();
+
+function getWebSocket() {
+    return new Promise(resolve => {
+        let interval;
+        interval = setInterval(() => {
+            if (window.ws) {
+                clearInterval(interval);
+                resolve(window.ws);
+            }
+        }, 10);
+    });
 }
 
-function doLoginRequest(succ_cb, fail_cb) {
-    const req = $.post({
-        url: "/api/login.php",
-        contentType: "text/plain",
-        data: JSON.stringify({
-            email: localStorage.getItem("email").toLowerCase(),
-            password: wp.encSync(localStorage.getItem("password"), "hex"),
-            time: parseInt(new Date() / 1000),
-            s: "W0RFXVN0ZXZlIGxpa2VzIGJpZyBidXR0cw==", // signature of some kind
-            lang: "en",
-            // eslint-disable-next-line no-loss-of-precision
-            date: 1501230947855458660, // ???
-            ClientType: registerSubmit ? "webui-register" : "webui",
-            PS: "W0RFXVN0ZXZlIGxpa2VzIGJpZyBidXR0cw==" // anti-cheat data
-        })
-    });
-    req.done(succ_cb);
-    req.fail(fail_cb);
-    req.always(() => {
-        loginOrRegisterPending = false;
-    });
+window.registerSubmit = false;
+
+function doLogin() {
+    if (auth_pending) {
+        return;
+    }
+    localStorage.setItem("email", $("#email").val());
+    localStorage.setItem("password", $("#password").val());
+    sendAuth(registerSubmit);
+    window.registerSubmit = false;
 }
 
 function revalidateAuthz(succ_cb) {
-    return doLoginRequest(
-        data => {
-            window.authz = "accountId=" + data.id + "&nonce=" + data.Nonce;
-            succ_cb();
-        },
-        () => {
-            logout();
-            alert(loc("code_nonValidAuthz"));
-            single.loadRoute("/webui/"); // Show login screen
-        }
-    );
+    getWebSocket().then(() => {
+        // We have a websocket connection, so authz should be good.
+        succ_cb();
+    });
 }
 
 function logout() {
     localStorage.removeItem("email");
     localStorage.removeItem("password");
+    did_initial_auth = false;
+}
+
+function doLogout() {
+    logout();
+    if (window.ws) {
+        // Unsubscribe from notifications about nonce invalidation
+        window.ws.send(JSON.stringify({ logout: true }));
+    }
 }
 
 function renameAccount() {
@@ -127,10 +144,6 @@ function deleteAccount() {
             });
         });
     }
-}
-
-if (localStorage.getItem("email") && localStorage.getItem("password")) {
-    loginFromLocalStorage();
 }
 
 single.on("route_load", function (event) {

@@ -18,6 +18,23 @@ export const isNameTaken = async (name: string): Promise<boolean> => {
     return !!(await Account.findOne({ DisplayName: name }));
 };
 
+export const createNonce = (): number => {
+    return Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
+};
+
+export const getUsernameFromEmail = async (email: string): Promise<string> => {
+    const nameFromEmail = email.substring(0, email.indexOf("@"));
+    let name = nameFromEmail || email.substring(1) || "SpaceNinja";
+    if (await isNameTaken(name)) {
+        let suffix = 0;
+        do {
+            ++suffix;
+            name = nameFromEmail + suffix;
+        } while (await isNameTaken(name));
+    }
+    return nameFromEmail;
+};
+
 export const createAccount = async (accountData: IDatabaseAccountRequiredFields): Promise<IDatabaseAccountJson> => {
     const account = new Account(accountData);
     try {

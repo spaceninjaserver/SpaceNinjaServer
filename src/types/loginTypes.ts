@@ -2,7 +2,7 @@ import { Types } from "mongoose";
 
 export interface IAccountAndLoginResponseCommons {
     DisplayName: string;
-    CountryCode: string;
+    CountryCode?: string;
     ClientType?: string;
     CrossPlatformAllowed?: boolean;
     ForceLogoutVersion?: number;

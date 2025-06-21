@@ -4,16 +4,16 @@ import { config } from "@/src/services/configService";
 import { buildConfig } from "@/src/services/buildConfigService";
 
 import { Account } from "@/src/models/loginModel";
-import { createAccount, isCorrectPassword, isNameTaken } from "@/src/services/loginService";
+import { createAccount, createNonce, getUsernameFromEmail, isCorrectPassword } from "@/src/services/loginService";
 import { IDatabaseAccountJson, ILoginRequest, ILoginResponse } from "@/src/types/loginTypes";
 import { logger } from "@/src/utils/logger";
 import { version_compare } from "@/src/helpers/inventoryHelpers";
+import { sendWsBroadcastTo } from "@/src/services/webService";
 
 export const loginController: RequestHandler = async (request, response) => {
     const loginRequest = JSON.parse(String(request.body)) as ILoginRequest; // parse octet stream of json data to json object
 
     const account = await Account.findOne({ email: loginRequest.email });
-    const nonce = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
 
     const buildLabel: string =
         typeof request.query.buildLabel == "string"
@@ -42,26 +42,14 @@ export const loginController: RequestHandler = async (request, response) => {
             loginRequest.ClientType == "webui-register")
     ) {
         try {
-            const nameFromEmail = loginRequest.email.substring(0, loginRequest.email.indexOf("@"));
-            let name = nameFromEmail || loginRequest.email.substring(1) || "SpaceNinja";
-            if (await isNameTaken(name)) {
-                let suffix = 0;
-                do {
-                    ++suffix;
-                    name = nameFromEmail + suffix;
-                } while (await isNameTaken(name));
-            }
+            const name = await getUsernameFromEmail(loginRequest.email);
             const newAccount = await createAccount({
                 email: loginRequest.email,
                 password: loginRequest.password,
                 DisplayName: name,
                 CountryCode: loginRequest.lang?.toUpperCase() ?? "EN",
-                ClientType: loginRequest.ClientType == "webui-register" ? "webui" : loginRequest.ClientType,
-                CrossPlatformAllowed: true,
-                ForceLogoutVersion: 0,
-                ConsentNeeded: false,
-                TrackedSettings: [],
-                Nonce: nonce,
+                ClientType: loginRequest.ClientType,
+                Nonce: createNonce(),
                 BuildLabel: buildLabel,
                 LastLogin: new Date()
             });
@@ -80,37 +68,28 @@ export const loginController: RequestHandler = async (request, response) => {
         return;
     }
 
-    if (loginRequest.ClientType == "webui-register") {
-        response.status(400).json({ error: "account already exists" });
-        return;
-    }
-
     if (!isCorrectPassword(loginRequest.password, account.password)) {
         response.status(400).json({ error: "incorrect login data" });
         return;
     }
 
-    if (loginRequest.ClientType == "webui") {
-        if (!account.Nonce) {
-            account.ClientType = "webui";
-            account.Nonce = nonce;
+    if (account.Nonce && account.ClientType != "webui" && !account.Dropped && !loginRequest.kick) {
+        // U17 seems to handle "nonce still set" like a login failure.
+        if (version_compare(buildLabel, "2015.12.05.18.07") >= 0) {
+            response.status(400).send({ error: "nonce still set" });
+            return;
         }
-    } else {
-        if (account.Nonce && account.ClientType != "webui" && !account.Dropped && !loginRequest.kick) {
-            // U17 seems to handle "nonce still set" like a login failure.
-            if (version_compare(buildLabel, "2015.12.05.18.07") >= 0) {
-                response.status(400).send({ error: "nonce still set" });
-                return;
-            }
-        }
-
-        account.ClientType = loginRequest.ClientType;
-        account.Nonce = nonce;
-        account.CountryCode = loginRequest.lang?.toUpperCase() ?? "EN";
-        account.BuildLabel = buildLabel;
-        account.LastLogin = new Date();
     }
+
+    account.ClientType = loginRequest.ClientType;
+    account.Nonce = createNonce();
+    account.CountryCode = loginRequest.lang?.toUpperCase() ?? "EN";
+    account.BuildLabel = buildLabel;
+    account.LastLogin = new Date();
     await account.save();
+
+    // Tell WebUI its nonce has been invalidated
+    sendWsBroadcastTo(account._id.toString(), { logged_out: true });
 
     response.json(createLoginResponse(myAddress, myUrlBase, account.toJSON(), buildLabel));
 };
