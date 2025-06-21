@@ -13,7 +13,7 @@ args.push("--dev");
 args.push("--secret");
 args.push(secret);
 
-let buildproc, runproc;
+let buildproc, runproc, timeout;
 function run(changedFile) {
     if (changedFile) {
         console.log(`Change to ${changedFile} detected`);
@@ -28,22 +28,27 @@ function run(changedFile) {
         runproc = undefined;
     }
 
-    buildproc = spawn("npm", ["run", "build:dev"], { stdio: "inherit", shell: true });
-    buildproc.on("exit", code => {
-        buildproc = undefined;
-        if (code === 0) {
-            runproc = spawn("npm", ["run", "start", "--", ...args], { stdio: "inherit", shell: true });
-            runproc.on("exit", () => {
-                runproc = undefined;
-            });
-        }
-    });
+    clearTimeout(timeout);
+    timeout = setTimeout(function() {
+        buildproc = spawn("npm", ["run", "build:dev"], { stdio: "inherit", shell: true });
+        buildproc.on("exit", code => {
+            buildproc = undefined;
+            if (code === 0) {
+                runproc = spawn("npm", ["run", "start", "--", ...args], { stdio: "inherit", shell: true });
+                runproc.on("exit", () => {
+                    runproc = undefined;
+                });
+            }
+        });
+    }, 20);
 }
 
 run();
 chokidar.watch("src").on("change", run);
 chokidar.watch("static/fixed_responses").on("change", run);
 
-chokidar.watch("static/webui").on("change", () => {
-    fetch("http://localhost/custom/webuiFileChangeDetected?secret=" + secret);
+chokidar.watch("static/webui").on("change", async () => {
+    try {
+        await fetch("http://localhost/custom/webuiFileChangeDetected?secret=" + secret);
+    } catch (e) {}
 });

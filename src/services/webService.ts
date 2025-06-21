@@ -110,6 +110,7 @@ interface IWsMsgFromClient {
 }
 
 interface IWsMsgToClient {
+    reload?: boolean;
     ports?: {
         http: number | undefined;
         https: number | undefined;
