@@ -1,6 +1,7 @@
 // Based on https://onlyg.it/OpenWF/Translations/src/branch/main/update.php
 // Converted via ChatGPT-4o
 
+/* eslint-disable */
 const fs = require("fs");
 
 function extractStrings(content) {

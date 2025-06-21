@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { repoDir } from "@/src/helpers/pathHelper";
+import { args } from "@/src/helpers/commandLineArguments";
 
 export interface IConfig {
     mongodbUrl: string;
@@ -79,7 +80,7 @@ export interface IConfig {
     };
 }
 
-export const configPath = path.join(repoDir, process.argv[2] ?? "config.json");
+export const configPath = path.join(repoDir, args.configPath ?? "config.json");
 
 export const config: IConfig = {
     mongodbUrl: "mongodb://127.0.0.1:27017/openWF",

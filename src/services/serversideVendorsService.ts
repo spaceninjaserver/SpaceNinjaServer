@@ -1,5 +1,5 @@
 import { unixTimesInMs } from "@/src/constants/timeConstants";
-import { isDev } from "@/src/helpers/pathHelper";
+import { args } from "@/src/helpers/commandLineArguments";
 import { catBreadHash } from "@/src/helpers/stringHelpers";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { mixSeeds, SRng } from "@/src/services/rngService";
@@ -421,7 +421,7 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
     return cacheEntry;
 };
 
-if (isDev) {
+if (args.dev) {
     if (
         getCycleDuration(ExportVendors["/Lotus/Types/Game/VendorManifests/Hubs/TeshinHardModeVendorManifest"]) !=
         unixTimesInMs.week

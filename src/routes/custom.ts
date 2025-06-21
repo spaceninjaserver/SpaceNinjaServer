@@ -11,6 +11,7 @@ import { renameAccountController } from "@/src/controllers/custom/renameAccountC
 import { ircDroppedController } from "@/src/controllers/custom/ircDroppedController";
 import { unlockAllIntrinsicsController } from "@/src/controllers/custom/unlockAllIntrinsicsController";
 import { addMissingMaxRankModsController } from "@/src/controllers/custom/addMissingMaxRankModsController";
+import { webuiFileChangeDetectedController } from "@/src/controllers/custom/webuiFileChangeDetectedController";
 
 import { createAccountController } from "@/src/controllers/custom/createAccountController";
 import { createMessageController } from "@/src/controllers/custom/createMessageController";
@@ -20,10 +21,10 @@ import { addXpController } from "@/src/controllers/custom/addXpController";
 import { importController } from "@/src/controllers/custom/importController";
 import { manageQuestsController } from "@/src/controllers/custom/manageQuestsController";
 import { setEvolutionProgressController } from "@/src/controllers/custom/setEvolutionProgressController";
+import { setBoosterController } from "@/src/controllers/custom/setBoosterController";
 
 import { getConfigDataController } from "@/src/controllers/custom/getConfigDataController";
 import { updateConfigDataController } from "@/src/controllers/custom/updateConfigDataController";
-import { setBoosterController } from "../controllers/custom/setBoosterController";
 
 const customRouter = express.Router();
 
@@ -38,6 +39,7 @@ customRouter.get("/renameAccount", renameAccountController);
 customRouter.get("/ircDropped", ircDroppedController);
 customRouter.get("/unlockAllIntrinsics", unlockAllIntrinsicsController);
 customRouter.get("/addMissingMaxRankMods", addMissingMaxRankModsController);
+customRouter.get("/webuiFileChangeDetected", webuiFileChangeDetectedController);
 
 customRouter.post("/createAccount", createAccountController);
 customRouter.post("/createMessage", createMessageController);

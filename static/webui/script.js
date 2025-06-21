@@ -1,3 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-floating-promises */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+
 function openWebSocket() {
     window.ws = new WebSocket("/custom/ws");
     window.ws.onmessage = e => {
@@ -64,6 +74,7 @@ function doLoginRequest(succ_cb, fail_cb) {
             time: parseInt(new Date() / 1000),
             s: "W0RFXVN0ZXZlIGxpa2VzIGJpZyBidXR0cw==", // signature of some kind
             lang: "en",
+            // eslint-disable-next-line no-loss-of-precision
             date: 1501230947855458660, // ???
             ClientType: registerSubmit ? "webui-register" : "webui",
             PS: "W0RFXVN0ZXZlIGxpa2VzIGJpZyBidXR0cw==" // anti-cheat data
@@ -1697,7 +1708,9 @@ function doAcquireRiven() {
         if (typeof fingerprint !== "object") {
             fingerprint = JSON.parse(fingerprint);
         }
-    } catch (e) {}
+    } catch (e) {
+        /* empty */
+    }
     if (
         typeof fingerprint !== "object" ||
         !("compat" in fingerprint) ||
@@ -1950,7 +1963,7 @@ function doAddAllMods() {
         const req = $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1");
         req.done(data => {
             for (const modOwned of data.RawUpgrades) {
-                if (modOwned.ItemCount ?? 1 > 0) {
+                if ((modOwned.ItemCount ?? 1) > 0) {
                     modsAll.delete(modOwned.ItemType);
                 }
             }
