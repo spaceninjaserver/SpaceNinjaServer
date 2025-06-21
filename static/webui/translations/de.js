@@ -5,7 +5,6 @@ dict = {
     general_bulkActions: `Massenaktionen`,
     code_loginFail: `[UNTRANSLATED] Login failed. Double-check the email and password.`,
     code_regFail: `[UNTRANSLATED] Registration failed. Account already exists?`,
-    code_nonValidAuthz: `Deine Anmeldedaten sind nicht mehr gültig.`,
     code_changeNameConfirm: `In welchen Namen möchtest du deinen Account umbenennen?`,
     code_deleteAccountConfirm: `Bist du sicher, dass du deinen Account |DISPLAYNAME| (|EMAIL|) löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.`,
     code_archgun: `Arch-Gewehr`,

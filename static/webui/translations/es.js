@@ -5,7 +5,6 @@ dict = {
     general_bulkActions: `Acciones masivas`,
     code_loginFail: `Error al iniciar sesión. Verifica el correo electrónico y la contraseña.`,
     code_regFail: `Error al registrar la cuenta. ¿Ya existe una cuenta con este correo?`,
-    code_nonValidAuthz: `Tus credenciales no son válidas.`,
     code_changeNameConfirm: `¿Qué nombre te gustaría ponerle a tu cuenta?`,
     code_deleteAccountConfirm: `¿Estás seguro de que deseas eliminar tu cuenta |DISPLAYNAME| (|EMAIL|)? Esta acción es permanente.`,
     code_archgun: `Archcañón`,
