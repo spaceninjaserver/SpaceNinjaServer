@@ -28,8 +28,12 @@ function run(changedFile) {
         runproc = undefined;
     }
 
-    buildproc = spawn("npm", ["run", "build:dev"], { stdio: "inherit", shell: true });
+    const thisbuildproc = spawn("npm", ["run", "build:dev"], { stdio: "inherit", shell: true });
+    buildproc = thisbuildproc;
     buildproc.on("exit", code => {
+        if (buildproc !== thisbuildproc) {
+            return;
+        }
         buildproc = undefined;
         if (code === 0) {
             runproc = spawn("npm", ["run", "start", "--", ...args], { stdio: "inherit", shell: true });
@@ -44,6 +48,8 @@ run();
 chokidar.watch("src").on("change", run);
 chokidar.watch("static/fixed_responses").on("change", run);
 
-chokidar.watch("static/webui").on("change", () => {
-    fetch("http://localhost/custom/webuiFileChangeDetected?secret=" + secret);
+chokidar.watch("static/webui").on("change", async () => {
+    try {
+        await fetch("http://localhost/custom/webuiFileChangeDetected?secret=" + secret);
+    } catch (e) {}
 });

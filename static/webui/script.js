@@ -9,9 +9,10 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 let auth_pending = false,
-    did_initial_auth = false;
+    did_initial_auth = false,
+    ws_is_open = false;
 const sendAuth = isRegister => {
-    if (localStorage.getItem("email") && localStorage.getItem("password")) {
+    if (ws_is_open && localStorage.getItem("email") && localStorage.getItem("password")) {
         auth_pending = true;
         window.ws.send(
             JSON.stringify({
@@ -28,10 +29,18 @@ const sendAuth = isRegister => {
 function openWebSocket() {
     window.ws = new WebSocket("/custom/ws");
     window.ws.onopen = () => {
+        ws_is_open = true;
         sendAuth(false);
     };
     window.ws.onmessage = e => {
         const msg = JSON.parse(e.data);
+        if ("reload" in msg) {
+            setTimeout(() => {
+                getWebSocket().then(() => {
+                    location.reload();
+                });
+            }, 100);
+        }
         if ("ports" in msg) {
             location.port = location.protocol == "https:" ? msg.ports.https : msg.ports.http;
         }
@@ -72,7 +81,7 @@ function openWebSocket() {
         }
     };
     window.ws.onclose = function () {
-        window.ws = undefined;
+        ws_is_open = false;
         setTimeout(openWebSocket, 3000);
     };
 }
@@ -82,7 +91,7 @@ function getWebSocket() {
     return new Promise(resolve => {
         let interval;
         interval = setInterval(() => {
-            if (window.ws) {
+            if (ws_is_open) {
                 clearInterval(interval);
                 resolve(window.ws);
             }
@@ -117,7 +126,7 @@ function logout() {
 
 function doLogout() {
     logout();
-    if (window.ws) {
+    if (ws_is_open) {
         // Unsubscribe from notifications about nonce invalidation
         window.ws.send(JSON.stringify({ logout: true }));
     }
