@@ -29,7 +29,7 @@ function run(changedFile) {
     }
 
     clearTimeout(timeout);
-    timeout = setTimeout(function() {
+    timeout = setTimeout(function () {
         buildproc = spawn("npm", ["run", "build:dev"], { stdio: "inherit", shell: true });
         buildproc.on("exit", code => {
             buildproc = undefined;
