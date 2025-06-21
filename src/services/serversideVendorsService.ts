@@ -7,38 +7,6 @@ import { IItemManifest, IVendorInfo, IVendorManifest } from "@/src/types/vendorT
 import { logger } from "@/src/utils/logger";
 import { ExportVendors, IRange, IVendor, IVendorOffer } from "warframe-public-export-plus";
 
-import DeimosEntratiFragmentVendorProductsManifest from "@/static/fixed_responses/getVendorInfo/DeimosEntratiFragmentVendorProductsManifest.json";
-import DeimosHivemindCommisionsManifestFishmonger from "@/static/fixed_responses/getVendorInfo/DeimosHivemindCommisionsManifestFishmonger.json";
-import DeimosHivemindCommisionsManifestPetVendor from "@/static/fixed_responses/getVendorInfo/DeimosHivemindCommisionsManifestPetVendor.json";
-import DeimosHivemindCommisionsManifestProspector from "@/static/fixed_responses/getVendorInfo/DeimosHivemindCommisionsManifestProspector.json";
-import DeimosHivemindCommisionsManifestTokenVendor from "@/static/fixed_responses/getVendorInfo/DeimosHivemindCommisionsManifestTokenVendor.json";
-import DeimosHivemindCommisionsManifestWeaponsmith from "@/static/fixed_responses/getVendorInfo/DeimosHivemindCommisionsManifestWeaponsmith.json";
-import DeimosHivemindTokenVendorManifest from "@/static/fixed_responses/getVendorInfo/DeimosHivemindTokenVendorManifest.json";
-import DeimosPetVendorManifest from "@/static/fixed_responses/getVendorInfo/DeimosPetVendorManifest.json";
-import DuviriAcrithisVendorManifest from "@/static/fixed_responses/getVendorInfo/DuviriAcrithisVendorManifest.json";
-import EntratiLabsEntratiLabsCommisionsManifest from "@/static/fixed_responses/getVendorInfo/EntratiLabsEntratiLabsCommisionsManifest.json";
-import EntratiLabsEntratiLabVendorManifest from "@/static/fixed_responses/getVendorInfo/EntratiLabsEntratiLabVendorManifest.json";
-import Nova1999ConquestShopManifest from "@/static/fixed_responses/getVendorInfo/Nova1999ConquestShopManifest.json";
-import OstronPetVendorManifest from "@/static/fixed_responses/getVendorInfo/OstronPetVendorManifest.json";
-import SolarisDebtTokenVendorRepossessionsManifest from "@/static/fixed_responses/getVendorInfo/SolarisDebtTokenVendorRepossessionsManifest.json";
-
-const rawVendorManifests: IVendorManifest[] = [
-    DeimosEntratiFragmentVendorProductsManifest,
-    DeimosHivemindCommisionsManifestFishmonger,
-    DeimosHivemindCommisionsManifestPetVendor,
-    DeimosHivemindCommisionsManifestProspector,
-    DeimosHivemindCommisionsManifestTokenVendor,
-    DeimosHivemindCommisionsManifestWeaponsmith,
-    DeimosHivemindTokenVendorManifest,
-    DeimosPetVendorManifest,
-    DuviriAcrithisVendorManifest,
-    EntratiLabsEntratiLabsCommisionsManifest,
-    EntratiLabsEntratiLabVendorManifest,
-    Nova1999ConquestShopManifest,
-    OstronPetVendorManifest,
-    SolarisDebtTokenVendorRepossessionsManifest
-];
-
 interface IGeneratableVendorInfo extends Omit<IVendorInfo, "ItemManifest" | "Expiry"> {
     cycleOffset?: number;
     cycleDuration: number;
@@ -92,11 +60,6 @@ const getCycleDuration = (manifest: IVendor): number => {
 };
 
 export const getVendorManifestByTypeName = (typeName: string): IVendorManifest | undefined => {
-    for (const vendorManifest of rawVendorManifests) {
-        if (vendorManifest.VendorInfo.TypeName == typeName) {
-            return vendorManifest;
-        }
-    }
     for (const vendorInfo of generatableVendors) {
         if (vendorInfo.TypeName == typeName) {
             return generateVendorManifest(vendorInfo);
@@ -115,11 +78,6 @@ export const getVendorManifestByTypeName = (typeName: string): IVendorManifest |
 };
 
 export const getVendorManifestByOid = (oid: string): IVendorManifest | undefined => {
-    for (const vendorManifest of rawVendorManifests) {
-        if (vendorManifest.VendorInfo._id.$oid == oid) {
-            return vendorManifest;
-        }
-    }
     for (const vendorInfo of generatableVendors) {
         if (vendorInfo._id.$oid == oid) {
             return generateVendorManifest(vendorInfo);

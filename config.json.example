@@ -39,7 +39,7 @@
   "noDailyFocusLimit": false,
   "noArgonCrystalDecay": false,
   "noMasteryRankUpCooldown": false,
-  "noVendorPurchaseLimits": true,
+  "noVendorPurchaseLimits": false,
   "noDeathMarks": false,
   "noKimCooldowns": false,
   "syndicateMissionsRepeatable": false,
