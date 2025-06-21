@@ -284,6 +284,7 @@ apiRouter.post("/inventorySlots.php", inventorySlotsController);
 apiRouter.post("/joinSession.php", joinSessionController);
 apiRouter.post("/login.php", loginController);
 apiRouter.post("/loginRewardsSelection.php", loginRewardsSelectionController);
+apiRouter.post("/logout.php", logoutController); // from ~U16, don't know when they changed it to GET
 apiRouter.post("/maturePet.php", maturePetController);
 apiRouter.post("/missionInventoryUpdate.php", missionInventoryUpdateController);
 apiRouter.post("/modularWeaponCrafting.php", modularWeaponCraftingController);
