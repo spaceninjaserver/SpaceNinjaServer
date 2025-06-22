@@ -128,7 +128,7 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
                     await completeQuest(inventory, questKey.ItemType);
                 } else {
                     const progress = {
-                        c: questManifest.chainStages![currentStage].key ? -1 : 0,
+                        c: 0,
                         i: false,
                         m: false,
                         b: []
