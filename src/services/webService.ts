@@ -10,6 +10,7 @@ import { Account } from "../models/loginModel";
 import { createAccount, createNonce, getUsernameFromEmail, isCorrectPassword } from "./loginService";
 import { IDatabaseAccountJson } from "../types/loginTypes";
 import { HydratedDocument } from "mongoose";
+import websocket from "websocket";
 
 let httpServer: http.Server | undefined;
 let httpsServer: https.Server | undefined;
@@ -44,6 +45,37 @@ export const startWebServer = (): void => {
             logger.info(
                 "Access the WebUI in your browser at http://localhost" + (httpPort == 80 ? "" : ":" + httpPort)
             );
+
+            void runWsSelfTest("wss", httpsPort).then(ok => {
+                if (!ok) {
+                    logger.warn(`WSS self-test failed. The server may not actually be reachable at port ${httpsPort}.`);
+                    if (process.platform == "win32") {
+                        logger.warn(
+                            `You can check who actually has that port via powershell: Get-Process -Id (Get-NetTCPConnection -LocalPort ${httpsPort}).OwningProcess`
+                        );
+                    }
+                }
+            });
+        });
+    });
+};
+
+const runWsSelfTest = (protocol: "ws" | "wss", port: number): Promise<boolean> => {
+    return new Promise(resolve => {
+        const client = new websocket.client({ tlsOptions: { rejectUnauthorized: false } });
+        client.connect(`${protocol}://localhost:${port}/custom/selftest`);
+        client.on("connect", connection => {
+            connection.on("message", msg => {
+                if (msg.type == "utf8" && msg.utf8Data == "SpaceNinjaServer") {
+                    resolve(true);
+                }
+            });
+            connection.on("close", () => {
+                resolve(false);
+            });
+        });
+        client.on("connectFailed", () => {
+            resolve(false);
         });
     });
 };
@@ -128,7 +160,12 @@ interface IWsMsgToClient {
     update_inventory?: boolean;
 }
 
-const wsOnConnect = (ws: ws, _req: http.IncomingMessage): void => {
+const wsOnConnect = (ws: ws, req: http.IncomingMessage): void => {
+    if (req.url == "/custom/selftest") {
+        ws.send("SpaceNinjaServer");
+        ws.close();
+        return;
+    }
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     ws.on("message", async msg => {
         const data = JSON.parse(String(msg)) as IWsMsgFromClient;
