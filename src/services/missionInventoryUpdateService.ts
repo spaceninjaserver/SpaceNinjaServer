@@ -1367,7 +1367,7 @@ export const addFixedLevelRewards = (
     if (rewards.countedItems) {
         for (const item of rewards.countedItems) {
             MissionRewards.push({
-                StoreItem: `/Lotus/StoreItems${item.ItemType.substring("Lotus/".length)}`,
+                StoreItem: toStoreItem(item.ItemType),
                 ItemCount: item.ItemCount
             });
         }

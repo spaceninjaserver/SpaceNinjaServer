@@ -19,7 +19,6 @@ export interface IConfig {
     skipTutorial?: boolean;
     skipAllDialogue?: boolean;
     unlockAllScans?: boolean;
-    unlockAllMissions?: boolean;
     infiniteCredits?: boolean;
     infinitePlatinum?: boolean;
     infiniteEndo?: boolean;

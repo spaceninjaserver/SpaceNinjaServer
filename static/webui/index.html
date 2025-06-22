@@ -452,9 +452,6 @@
                             <button class="btn btn-success" onclick="maxRankAllEquipment(['SentinelWeapons']);" data-loc="inventory_bulkRankUpSentinelWeapons"></button>
                             <button class="btn btn-success" onclick="maxRankAllEvolutions();" data-loc="inventory_bulkRankUpEvolutionProgress"></button>
                         </div>
-                        <div class="mb-2 d-flex flex-wrap gap-2">
-                            <button class="btn btn-primary" onclick="debounce(doMaxPlexus);" data-loc="inventory_maxPlexus"></button>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -586,10 +583,6 @@
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="unlockAllScans" />
                                         <label class="form-check-label" for="unlockAllScans" data-loc="cheats_unlockAllScans"></label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="unlockAllMissions" />
-                                        <label class="form-check-label" for="unlockAllMissions" data-loc="cheats_unlockAllMissions"></label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="infiniteCredits" />
@@ -782,9 +775,11 @@
                             <h5 class="card-header" data-loc="cheats_account"></h5>
                             <div class="card-body">
                                 <div class="mb-2 d-flex flex-wrap gap-2">
+                                    <button class="btn btn-primary" onclick="debounce(doUnlockAllMissions);" data-loc="cheats_unlockAllMissions"></button>
                                     <button class="btn btn-primary" onclick="doUnlockAllFocusSchools();" data-loc="cheats_unlockAllFocusSchools"></button>
                                     <button class="btn btn-primary" onclick="doHelminthUnlockAll();" data-loc="cheats_helminthUnlockAll"></button>
                                     <button class="btn btn-primary" onclick="doIntrinsicsUnlockAll();" data-loc="cheats_intrinsicsUnlockAll"></button>
+                                    <button class="btn btn-primary" onclick="debounce(doMaxPlexus);" data-loc="inventory_maxPlexus"></button>
                                 </div>
                                 <form class="mt-2" onsubmit="doChangeSupportedSyndicate(); return false;">
                                     <label class="form-label" for="changeSyndicate" data-loc="cheats_changeSupportedSyndicate"></label>

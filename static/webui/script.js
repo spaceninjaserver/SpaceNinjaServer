@@ -114,11 +114,9 @@ function doLogin() {
     window.registerSubmit = false;
 }
 
-function revalidateAuthz(succ_cb) {
-    getWebSocket().then(() => {
-        // We have a websocket connection, so authz should be good.
-        succ_cb();
-    });
+async function revalidateAuthz() {
+    await getWebSocket();
+    // We have a websocket connection, so authz should be good.
 }
 
 function logout() {
@@ -138,7 +136,7 @@ function doLogout() {
 function renameAccount() {
     const newname = window.prompt(loc("code_changeNameConfirm"));
     if (newname) {
-        revalidateAuthz(() => {
+        revalidateAuthz().then(() => {
             fetch("/custom/renameAccount?" + window.authz + "&newname=" + newname).then(() => {
                 $(".displayname").text(newname);
                 updateLocElements();
@@ -149,7 +147,7 @@ function renameAccount() {
 
 function deleteAccount() {
     if (window.confirm(loc("code_deleteAccountConfirm"))) {
-        revalidateAuthz(() => {
+        revalidateAuthz().then(() => {
             fetch("/custom/deleteAccount?" + window.authz).then(() => {
                 logout();
                 single.loadRoute("/webui/"); // Show login screen
@@ -649,7 +647,7 @@ function updateInventory() {
                             a.href = "#";
                             a.onclick = function (event) {
                                 event.preventDefault();
-                                revalidateAuthz(() => {
+                                revalidateAuthz().then(() => {
                                     const promises = [];
                                     if (item.XP < maxXP) {
                                         promises.push(addGearExp(category, item.ItemId.$oid, maxXP - item.XP));
@@ -1239,7 +1237,7 @@ function doAcquireEquipment(category) {
             .focus();
         return;
     }
-    revalidateAuthz(() => {
+    revalidateAuthz().then(() => {
         const req = $.post({
             url: "/custom/addItems?" + window.authz,
             contentType: "application/json",
@@ -1366,7 +1364,7 @@ function doAcquireModularEquipment(category, WeaponType) {
             }
         });
         if (category == "KubrowPets") Parts.unshift(WeaponType);
-        revalidateAuthz(() => {
+        revalidateAuthz().then(() => {
             const req = $.post({
                 url: "/api/modularWeaponCrafting.php?" + window.authz,
                 contentType: "application/octet-stream",
@@ -1419,7 +1417,7 @@ $("input[list]").on("input", function () {
 });
 
 function dispatchAddItemsRequestsBatch(requests) {
-    revalidateAuthz(() => {
+    revalidateAuthz().then(() => {
         const req = $.post({
             url: "/custom/addItems?" + window.authz,
             contentType: "application/json",
@@ -1463,7 +1461,7 @@ function addMissingEvolutionProgress() {
 }
 
 function maxRankAllEvolutions() {
-    revalidateAuthz(() => {
+    revalidateAuthz().then(() => {
         const req = $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1");
         req.done(data => {
             const requests = [];
@@ -1487,7 +1485,7 @@ function maxRankAllEvolutions() {
 }
 
 function maxRankAllEquipment(categories) {
-    revalidateAuthz(() => {
+    revalidateAuthz().then(() => {
         const req = $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1");
         req.done(data => {
             window.itemListPromise.then(itemMap => {
@@ -1561,7 +1559,7 @@ function addGearExp(category, oid, xp) {
 }
 
 function sendBatchGearExp(data) {
-    revalidateAuthz(() => {
+    revalidateAuthz().then(() => {
         $.post({
             url: "/custom/addXp?" + window.authz,
             contentType: "application/json",
@@ -1574,7 +1572,7 @@ function sendBatchGearExp(data) {
 }
 
 function renameGear(category, oid, name) {
-    revalidateAuthz(() => {
+    revalidateAuthz().then(() => {
         if (category == "KubrowPets") {
             $.post({
                 url: "/api/renamePet.php?" + window.authz + "&webui=1",
@@ -1602,7 +1600,7 @@ function renameGear(category, oid, name) {
 
 function disposeOfGear(category, oid) {
     if (category == "KubrowPets") {
-        revalidateAuthz(() => {
+        revalidateAuthz().then(() => {
             $.post({
                 url: "/api/releasePet.php?" + window.authz,
                 contentType: "application/octet-stream",
@@ -1624,7 +1622,7 @@ function disposeOfGear(category, oid) {
                 Count: 0
             }
         ];
-        revalidateAuthz(() => {
+        revalidateAuthz().then(() => {
             $.post({
                 url: "/api/sell.php?" + window.authz,
                 contentType: "text/plain",
@@ -1646,7 +1644,7 @@ function disposeOfItems(category, type, count) {
             Count: count
         }
     ];
-    revalidateAuthz(() => {
+    revalidateAuthz().then(() => {
         $.post({
             url: "/api/sell.php?" + window.authz,
             contentType: "text/plain",
@@ -1656,7 +1654,7 @@ function disposeOfItems(category, type, count) {
 }
 
 function gildEquipment(category, oid) {
-    revalidateAuthz(() => {
+    revalidateAuthz().then(() => {
         $.post({
             url: "/api/gildWeapon.php?" + window.authz + "&ItemId=" + oid + "&Category=" + category,
             contentType: "application/octet-stream",
@@ -1670,7 +1668,7 @@ function gildEquipment(category, oid) {
 }
 
 function maturePet(oid, revert) {
-    revalidateAuthz(() => {
+    revalidateAuthz().then(() => {
         $.post({
             url: "/api/maturePet.php?" + window.authz,
             contentType: "application/octet-stream",
@@ -1685,7 +1683,7 @@ function maturePet(oid, revert) {
 }
 
 function setEvolutionProgress(requests) {
-    revalidateAuthz(() => {
+    revalidateAuthz().then(() => {
         const req = $.post({
             url: "/custom/setEvolutionProgress?" + window.authz,
             contentType: "application/json",
@@ -1705,7 +1703,7 @@ function doAcquireMiscItems() {
     }
     const count = parseInt($("#miscitem-count").val());
     if (count != 0) {
-        revalidateAuthz(() => {
+        revalidateAuthz().then(() => {
             $.post({
                 url: "/custom/addItems?" + window.authz,
                 contentType: "application/json",
@@ -1746,7 +1744,7 @@ function doAcquireRiven() {
         return;
     }
     const uniqueName = "/Lotus/Upgrades/Mods/Randomized/" + $("#addriven-type").val();
-    revalidateAuthz(() => {
+    revalidateAuthz().then(() => {
         // Add riven type to inventory
         $.post({
             url: "/custom/addItems?" + window.authz,
@@ -1793,7 +1791,7 @@ $("#addriven-fingerprint").on("input", () => {
 });
 
 function setFingerprint(ItemType, ItemId, fingerprint) {
-    revalidateAuthz(() => {
+    revalidateAuthz().then(() => {
         $.post({
             url: "/api/artifacts.php?" + window.authz,
             contentType: "text/plain",
@@ -1821,7 +1819,7 @@ function doAcquireMod() {
     }
     const count = parseInt($("#mod-count").val());
     if (count != 0) {
-        revalidateAuthz(() => {
+        revalidateAuthz().then(() => {
             $.post({
                 url: "/custom/addItems?" + window.authz,
                 contentType: "application/json",
@@ -1898,7 +1896,7 @@ single.getRoute("/webui/cheats").on("beforeload", function () {
                     );
                 } else {
                     if ((await res.text()) == "Log-in expired") {
-                        revalidateAuthz(() => {
+                        revalidateAuthz().then(() => {
                             if (single.getCurrentPath() == "/webui/cheats") {
                                 single.loadRoute("/webui/cheats");
                             }
@@ -1915,7 +1913,7 @@ single.getRoute("/webui/cheats").on("beforeload", function () {
 });
 
 function doUnlockAllFocusSchools() {
-    revalidateAuthz(() => {
+    revalidateAuthz().then(() => {
         $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1").done(async data => {
             const missingFocusUpgrades = {
                 "/Lotus/Upgrades/Focus/Attack/AttackFocusAbility": true,
@@ -1966,13 +1964,13 @@ function unlockFocusSchool(upgradeType) {
 }
 
 function doHelminthUnlockAll() {
-    revalidateAuthz(() => {
+    revalidateAuthz().then(() => {
         $.post("/api/infestedFoundry.php?" + window.authz + "&mode=custom_unlockall");
     });
 }
 
 function doIntrinsicsUnlockAll() {
-    revalidateAuthz(() => {
+    revalidateAuthz().then(() => {
         $.get("/custom/unlockAllIntrinsics?" + window.authz);
     });
 }
@@ -1984,7 +1982,7 @@ function doAddAllMods() {
     }
     modsAll.delete("/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser");
 
-    revalidateAuthz(() => {
+    revalidateAuthz().then(() => {
         const req = $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1");
         req.done(data => {
             for (const modOwned of data.RawUpgrades) {
@@ -2016,7 +2014,7 @@ function doAddAllMods() {
 }
 
 function doRemoveUnrankedMods() {
-    revalidateAuthz(() => {
+    revalidateAuthz().then(() => {
         const req = $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1");
         req.done(inventory => {
             window.itemListPromise.then(itemMap => {
@@ -2041,7 +2039,7 @@ function doRemoveUnrankedMods() {
 }
 
 function doAddMissingMaxRankMods() {
-    revalidateAuthz(() => {
+    revalidateAuthz().then(() => {
         fetch("/custom/addMissingMaxRankMods?" + window.authz).then(() => {
             updateInventory();
         });
@@ -2063,7 +2061,7 @@ function doPushArchonCrystalUpgrade() {
         $("[list='datalist-archonCrystalUpgrades']").addClass("is-invalid").focus();
         return;
     }
-    revalidateAuthz(() => {
+    revalidateAuthz().then(() => {
         $.get(
             "/custom/pushArchonCrystalUpgrade?" +
                 window.authz +
@@ -2081,7 +2079,7 @@ function doPushArchonCrystalUpgrade() {
 }
 
 function doPopArchonCrystalUpgrade(type) {
-    revalidateAuthz(() => {
+    revalidateAuthz().then(() => {
         $.get(
             "/custom/popArchonCrystalUpgrade?" +
                 window.authz +
@@ -2096,7 +2094,7 @@ function doPopArchonCrystalUpgrade(type) {
 }
 
 function doImport() {
-    revalidateAuthz(() => {
+    revalidateAuthz().then(() => {
         $.post({
             url: "/custom/import?" + window.authz,
             contentType: "application/json",
@@ -2113,7 +2111,7 @@ function doImport() {
 function doChangeSupportedSyndicate() {
     const uniqueName = document.getElementById("changeSyndicate").value;
 
-    revalidateAuthz(() => {
+    revalidateAuthz().then(() => {
         $.get("/api/setSupportedSyndicate.php?" + window.authz + "&syndicate=" + uniqueName).done(function () {
             updateInventory();
         });
@@ -2121,7 +2119,7 @@ function doChangeSupportedSyndicate() {
 }
 
 function doAddCurrency(currency) {
-    revalidateAuthz(() => {
+    revalidateAuthz().then(() => {
         $.post({
             url: "/custom/addCurrency?" + window.authz,
             contentType: "application/json",
@@ -2136,7 +2134,7 @@ function doAddCurrency(currency) {
 }
 
 function doQuestUpdate(operation, itemType) {
-    revalidateAuthz(() => {
+    revalidateAuthz().then(() => {
         $.post({
             url: "/custom/manageQuests?" + window.authz + "&operation=" + operation + "&itemType=" + itemType,
             contentType: "application/json"
@@ -2147,7 +2145,7 @@ function doQuestUpdate(operation, itemType) {
 }
 
 function doBulkQuestUpdate(operation) {
-    revalidateAuthz(() => {
+    revalidateAuthz().then(() => {
         $.post({
             url: "/custom/manageQuests?" + window.authz + "&operation=" + operation,
             contentType: "application/json"
@@ -2245,7 +2243,7 @@ function handleModularSelection(category) {
 }
 
 function setBooster(ItemType, ExpiryDate, callback) {
-    revalidateAuthz(() => {
+    revalidateAuthz().then(() => {
         $.post({
             url: "/custom/setBooster?" + window.authz,
             contentType: "application/json",
@@ -2334,4 +2332,10 @@ async function doMaxPlexus() {
     } else {
         toast(loc("code_noEquipmentToRankUp"));
     }
+}
+
+async function doUnlockAllMissions() {
+    await revalidateAuthz();
+    await fetch("/custom/completeAllMissions?" + window.authz);
+    updateInventory();
 }

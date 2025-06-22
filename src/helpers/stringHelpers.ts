@@ -54,3 +54,9 @@ export const regexEscape = (str: string): string => {
     str = str.split("}").join("\\}");
     return str;
 };
+
+export const addString = (arr: string[], str: string): void => {
+    if (arr.indexOf(str) == -1) {
+        arr.push(str);
+    }
+};

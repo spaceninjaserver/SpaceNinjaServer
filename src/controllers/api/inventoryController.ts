@@ -6,13 +6,7 @@ import allDialogue from "@/static/fixed_responses/allDialogue.json";
 import { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
 import { IInventoryClient, IShipInventory, equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IPolarity, ArtifactPolarity, EquipmentFeatures } from "@/src/types/inventoryTypes/commonInventoryTypes";
-import {
-    ExportCustoms,
-    ExportFlavour,
-    ExportRegions,
-    ExportResources,
-    ExportVirtuals
-} from "warframe-public-export-plus";
+import { ExportCustoms, ExportFlavour, ExportResources, ExportVirtuals } from "warframe-public-export-plus";
 import { applyCheatsToInfestedFoundry, handleSubsumeCompletion } from "@/src/services/infestedFoundryService";
 import {
     addMiscItems,
@@ -22,7 +16,7 @@ import {
     generateRewardSeed
 } from "@/src/services/inventoryService";
 import { logger } from "@/src/utils/logger";
-import { catBreadHash } from "@/src/helpers/stringHelpers";
+import { addString, catBreadHash } from "@/src/helpers/stringHelpers";
 import { Types } from "mongoose";
 import { getNemesisManifest } from "@/src/helpers/nemesisHelpers";
 import { getPersonalRooms } from "@/src/services/personalRoomsService";
@@ -165,18 +159,6 @@ export const getInventoryResponse = async (
         for (const str of allDialogue) {
             addString(inventoryResponse.NodeIntrosCompleted, str);
         }
-    }
-
-    if (config.unlockAllMissions) {
-        inventoryResponse.Missions = [];
-        for (const tag of Object.keys(ExportRegions)) {
-            inventoryResponse.Missions.push({
-                Completes: 1,
-                Tier: 1,
-                Tag: tag
-            });
-        }
-        addString(inventoryResponse.NodeIntrosCompleted, "TeshinHardModeUnlocked");
     }
 
     if (config.unlockAllShipDecorations) {
@@ -361,12 +343,6 @@ const allEudicoHeistJobs = [
     "/Lotus/Types/Gameplay/Venus/Jobs/Heists/HeistProfitTakerBountyThree",
     "/Lotus/Types/Gameplay/Venus/Jobs/Heists/HeistProfitTakerBountyFour"
 ];
-
-const addString = (arr: string[], str: string): void => {
-    if (arr.indexOf(str) == -1) {
-        arr.push(str);
-    }
-};
 
 const getExpRequiredForMr = (rank: number): number => {
     if (rank <= 30) {

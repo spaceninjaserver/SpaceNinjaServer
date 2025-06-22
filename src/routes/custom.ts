@@ -12,6 +12,7 @@ import { ircDroppedController } from "@/src/controllers/custom/ircDroppedControl
 import { unlockAllIntrinsicsController } from "@/src/controllers/custom/unlockAllIntrinsicsController";
 import { addMissingMaxRankModsController } from "@/src/controllers/custom/addMissingMaxRankModsController";
 import { webuiFileChangeDetectedController } from "@/src/controllers/custom/webuiFileChangeDetectedController";
+import { completeAllMissionsController } from "@/src/controllers/custom/completeAllMissionsController";
 
 import { createAccountController } from "@/src/controllers/custom/createAccountController";
 import { createMessageController } from "@/src/controllers/custom/createMessageController";
@@ -40,6 +41,7 @@ customRouter.get("/ircDropped", ircDroppedController);
 customRouter.get("/unlockAllIntrinsics", unlockAllIntrinsicsController);
 customRouter.get("/addMissingMaxRankMods", addMissingMaxRankModsController);
 customRouter.get("/webuiFileChangeDetected", webuiFileChangeDetectedController);
+customRouter.get("/completeAllMissions", completeAllMissionsController);
 
 customRouter.post("/createAccount", createAccountController);
 customRouter.post("/createMessage", createMessageController);
