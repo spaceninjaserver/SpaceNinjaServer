@@ -7,6 +7,7 @@ import { generateRewardSeed, getInventory } from "@/src/services/inventoryServic
 import { getInventoryResponse } from "./inventoryController";
 import { logger } from "@/src/utils/logger";
 import { IMissionInventoryUpdateResponse } from "@/src/types/missionTypes";
+import { sendWsBroadcastTo } from "@/src/services/webService";
 
 /*
 **** INPUT ****
@@ -76,6 +77,7 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
             InventoryJson: JSON.stringify(inventoryResponse),
             MissionRewards: []
         });
+        sendWsBroadcastTo(account._id.toString(), { update_inventory: true });
         return;
     }
 
@@ -106,6 +108,7 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         AffiliationMods,
         ConquestCompletedMissionsCount
     } satisfies IMissionInventoryUpdateResponse);
+    sendWsBroadcastTo(account._id.toString(), { update_inventory: true });
 };
 
 /*

@@ -125,6 +125,7 @@ interface IWsMsgToClient {
         isRegister: boolean;
     };
     logged_out?: boolean;
+    update_inventory?: boolean;
 }
 
 const wsOnConnect = (ws: ws, _req: http.IncomingMessage): void => {

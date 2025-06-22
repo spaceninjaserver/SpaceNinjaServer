@@ -79,6 +79,9 @@ function openWebSocket() {
         if ("logged_out" in msg) {
             sendAuth();
         }
+        if ("update_inventory" in msg) {
+            updateInventory();
+        }
     };
     window.ws.onclose = function () {
         ws_is_open = false;

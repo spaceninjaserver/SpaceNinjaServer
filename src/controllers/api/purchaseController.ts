@@ -3,6 +3,7 @@ import { getAccountIdForRequest } from "@/src/services/loginService";
 import { IPurchaseRequest } from "@/src/types/purchaseTypes";
 import { handlePurchase } from "@/src/services/purchaseService";
 import { getInventory } from "@/src/services/inventoryService";
+import { sendWsBroadcastTo } from "@/src/services/webService";
 
 export const purchaseController: RequestHandler = async (req, res) => {
     const purchaseRequest = JSON.parse(String(req.body)) as IPurchaseRequest;
@@ -11,4 +12,5 @@ export const purchaseController: RequestHandler = async (req, res) => {
     const response = await handlePurchase(purchaseRequest, inventory);
     await inventory.save();
     res.json(response);
+    sendWsBroadcastTo(accountId, { update_inventory: true });
 };

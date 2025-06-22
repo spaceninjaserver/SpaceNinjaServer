@@ -15,6 +15,7 @@ import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
 import { ExportDojoRecipes } from "warframe-public-export-plus";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+import { sendWsBroadcastTo } from "@/src/services/webService";
 
 export const sellController: RequestHandler = async (req, res) => {
     const payload = JSON.parse(String(req.body)) as ISellRequest;
@@ -279,6 +280,7 @@ export const sellController: RequestHandler = async (req, res) => {
     res.json({
         inventoryChanges: inventoryChanges // "inventoryChanges" for this response instead of the usual "InventoryChanges"
     });
+    sendWsBroadcastTo(accountId, { update_inventory: true });
 };
 
 interface ISellRequest {
