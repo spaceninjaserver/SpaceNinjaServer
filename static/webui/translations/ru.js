@@ -158,6 +158,7 @@ dict = {
     cheats_noVendorPurchaseLimits: `Отсутствие лимитов на покупки у вендоров`,
     cheats_noDeathMarks: `Без меток сметри`,
     cheats_noKimCooldowns: `Чаты KIM без кулдауна`,
+    cheats_fullyStockedVendors: `[UNTRANSLATED] Fully Stocked Vendors`,
     cheats_syndicateMissionsRepeatable: `[UNTRANSLATED] Syndicate Missions Repeatable`,
     cheats_unlockAllProfitTakerStages: `[UNTRANSLATED] Unlock All Profit Taker Stages`,
     cheats_instantFinishRivenChallenge: `[UNTRANSLATED] Instant Finish Riven Challenge`,

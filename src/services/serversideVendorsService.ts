@@ -6,6 +6,7 @@ import { mixSeeds, SRng } from "@/src/services/rngService";
 import { IItemManifest, IVendorInfo, IVendorManifest } from "@/src/types/vendorTypes";
 import { logger } from "@/src/utils/logger";
 import { ExportVendors, IRange, IVendor, IVendorOffer } from "warframe-public-export-plus";
+import { config } from "./configService";
 
 interface IGeneratableVendorInfo extends Omit<IVendorInfo, "ItemManifest" | "Expiry"> {
     cycleOffset?: number;
@@ -59,20 +60,23 @@ const getCycleDuration = (manifest: IVendor): number => {
     return dur * unixTimesInMs.hour;
 };
 
-export const getVendorManifestByTypeName = (typeName: string): IVendorManifest | undefined => {
+export const getVendorManifestByTypeName = (typeName: string, fullStock?: boolean): IVendorManifest | undefined => {
     for (const vendorInfo of generatableVendors) {
         if (vendorInfo.TypeName == typeName) {
-            return generateVendorManifest(vendorInfo);
+            return generateVendorManifest(vendorInfo, fullStock ?? config.fullyStockedVendors);
         }
     }
     if (typeName in ExportVendors) {
         const manifest = ExportVendors[typeName];
-        return generateVendorManifest({
-            _id: { $oid: getVendorOid(typeName) },
-            TypeName: typeName,
-            RandomSeedType: manifest.randomSeedType,
-            cycleDuration: getCycleDuration(manifest)
-        });
+        return generateVendorManifest(
+            {
+                _id: { $oid: getVendorOid(typeName) },
+                TypeName: typeName,
+                RandomSeedType: manifest.randomSeedType,
+                cycleDuration: getCycleDuration(manifest)
+            },
+            fullStock ?? config.fullyStockedVendors
+        );
     }
     return undefined;
 };
@@ -80,18 +84,21 @@ export const getVendorManifestByTypeName = (typeName: string): IVendorManifest |
 export const getVendorManifestByOid = (oid: string): IVendorManifest | undefined => {
     for (const vendorInfo of generatableVendors) {
         if (vendorInfo._id.$oid == oid) {
-            return generateVendorManifest(vendorInfo);
+            return generateVendorManifest(vendorInfo, config.fullyStockedVendors);
         }
     }
     for (const [typeName, manifest] of Object.entries(ExportVendors)) {
         const typeNameOid = getVendorOid(typeName);
         if (typeNameOid == oid) {
-            return generateVendorManifest({
-                _id: { $oid: typeNameOid },
-                TypeName: typeName,
-                RandomSeedType: manifest.randomSeedType,
-                cycleDuration: getCycleDuration(manifest)
-            });
+            return generateVendorManifest(
+                {
+                    _id: { $oid: typeNameOid },
+                    TypeName: typeName,
+                    RandomSeedType: manifest.randomSeedType,
+                    cycleDuration: getCycleDuration(manifest)
+                },
+                config.fullyStockedVendors
+            );
         }
     }
     return undefined;
@@ -169,9 +176,26 @@ const getOfferId = (offer: IVendorOffer | IItemManifest): TOfferId => {
     }
 };
 
+let vendorManifestsUsingFullStock = false;
 const vendorManifestCache: Record<string, IVendorManifest> = {};
 
-const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorManifest => {
+const clearVendorCache = (): void => {
+    for (const k of Object.keys(vendorManifestCache)) {
+        delete vendorManifestCache[k];
+    }
+};
+
+const generateVendorManifest = (
+    vendorInfo: IGeneratableVendorInfo,
+    fullStock: boolean | undefined
+): IVendorManifest => {
+    fullStock ??= config.fullyStockedVendors;
+    fullStock ??= false;
+    if (vendorManifestsUsingFullStock != fullStock) {
+        vendorManifestsUsingFullStock = fullStock;
+        clearVendorCache();
+    }
+
     if (!(vendorInfo.TypeName in vendorManifestCache)) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { cycleOffset, cycleDuration, ...clientVendorInfo } = vendorInfo;
@@ -208,7 +232,20 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
         const cycleIndex = Math.trunc((now - cycleOffset) / cycleDuration);
         const rng = new SRng(mixSeeds(vendorSeed, cycleIndex));
         const offersToAdd: IVendorOffer[] = [];
-        if (!manifest.isOneBinPerCycle) {
+        if (manifest.isOneBinPerCycle) {
+            if (fullStock) {
+                for (const rawItem of manifest.items) {
+                    offersToAdd.push(rawItem);
+                }
+            } else {
+                const binThisCycle = cycleIndex % 2; // Note: May want to check the actual number of bins, but this is only used for coda weapons right now.
+                for (const rawItem of manifest.items) {
+                    if (rawItem.bin == binThisCycle) {
+                        offersToAdd.push(rawItem);
+                    }
+                }
+            }
+        } else {
             // Compute vendor requirements, subtracting existing offers
             const remainingItemCapacity: Record<TOfferId, number> = {};
             const missingItemsPerBin: Record<number, number> = {};
@@ -254,12 +291,14 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
                 manifest.numItems &&
                 (manifest.numItems.minValue != manifest.numItems.maxValue ||
                     manifest.numItems.minValue != numCountedOffers);
-            const numItemsTarget = manifest.numItems
-                ? numUncountedOffers +
-                  (useRng
-                      ? rng.randomInt(manifest.numItems.minValue, manifest.numItems.maxValue)
-                      : manifest.numItems.minValue)
-                : manifest.items.length;
+            const numItemsTarget = fullStock
+                ? numUncountedOffers + numCountedOffers
+                : manifest.numItems
+                  ? numUncountedOffers +
+                    (useRng
+                        ? rng.randomInt(manifest.numItems.minValue, manifest.numItems.maxValue)
+                        : manifest.numItems.minValue)
+                  : manifest.items.length;
             let i = 0;
             const rollableOffers = manifest.items.filter(x => x.probability !== undefined) as (Omit<
                 IVendorOffer,
@@ -280,13 +319,6 @@ const generateVendorManifest = (vendorInfo: IGeneratableVendorInfo): IVendorMani
                 }
                 if (i == rollableOffers.length) {
                     i = 0;
-                }
-            }
-        } else {
-            const binThisCycle = cycleIndex % 2; // Note: May want to auto-compute the bin size, but this is only used for coda weapons right now.
-            for (const rawItem of manifest.items) {
-                if (rawItem.bin == binThisCycle) {
-                    offersToAdd.push(rawItem);
                 }
             }
         }
@@ -387,34 +419,44 @@ if (args.dev) {
         logger.warn(`getCycleDuration self test failed`);
     }
 
-    const ads = getVendorManifestByTypeName("/Lotus/Types/Game/VendorManifests/Hubs/GuildAdvertisementVendorManifest")!
-        .VendorInfo.ItemManifest;
-    if (
-        ads.length != 5 ||
-        ads[0].Bin != "BIN_4" ||
-        ads[1].Bin != "BIN_3" ||
-        ads[2].Bin != "BIN_2" ||
-        ads[3].Bin != "BIN_1" ||
-        ads[4].Bin != "BIN_0"
-    ) {
-        logger.warn(`self test failed for /Lotus/Types/Game/VendorManifests/Hubs/GuildAdvertisementVendorManifest`);
+    for (let i = 0; i != 2; ++i) {
+        const fullStock = !!i;
+
+        const ads = getVendorManifestByTypeName(
+            "/Lotus/Types/Game/VendorManifests/Hubs/GuildAdvertisementVendorManifest",
+            fullStock
+        )!.VendorInfo.ItemManifest;
+        if (
+            ads.length != 5 ||
+            ads[0].Bin != "BIN_4" ||
+            ads[1].Bin != "BIN_3" ||
+            ads[2].Bin != "BIN_2" ||
+            ads[3].Bin != "BIN_1" ||
+            ads[4].Bin != "BIN_0"
+        ) {
+            logger.warn(`self test failed for /Lotus/Types/Game/VendorManifests/Hubs/GuildAdvertisementVendorManifest`);
+        }
+
+        const pall = getVendorManifestByTypeName(
+            "/Lotus/Types/Game/VendorManifests/Hubs/IronwakeDondaVendorManifest",
+            fullStock
+        )!.VendorInfo.ItemManifest;
+        if (
+            pall.length != 5 ||
+            pall[0].StoreItem != "/Lotus/StoreItems/Types/Items/ShipDecos/HarrowQuestKeyOrnament" ||
+            pall[1].StoreItem != "/Lotus/StoreItems/Types/BoosterPacks/RivenModPack" ||
+            pall[2].StoreItem != "/Lotus/StoreItems/Types/StoreItems/CreditBundles/150000Credits" ||
+            pall[3].StoreItem != "/Lotus/StoreItems/Types/Items/MiscItems/Kuva" ||
+            pall[4].StoreItem != "/Lotus/StoreItems/Types/BoosterPacks/RivenModPack"
+        ) {
+            logger.warn(`self test failed for /Lotus/Types/Game/VendorManifests/Hubs/IronwakeDondaVendorManifest`);
+        }
     }
 
-    const pall = getVendorManifestByTypeName("/Lotus/Types/Game/VendorManifests/Hubs/IronwakeDondaVendorManifest")!
-        .VendorInfo.ItemManifest;
-    if (
-        pall.length != 5 ||
-        pall[0].StoreItem != "/Lotus/StoreItems/Types/Items/ShipDecos/HarrowQuestKeyOrnament" ||
-        pall[1].StoreItem != "/Lotus/StoreItems/Types/BoosterPacks/RivenModPack" ||
-        pall[2].StoreItem != "/Lotus/StoreItems/Types/StoreItems/CreditBundles/150000Credits" ||
-        pall[3].StoreItem != "/Lotus/StoreItems/Types/Items/MiscItems/Kuva" ||
-        pall[4].StoreItem != "/Lotus/StoreItems/Types/BoosterPacks/RivenModPack"
-    ) {
-        logger.warn(`self test failed for /Lotus/Types/Game/VendorManifests/Hubs/IronwakeDondaVendorManifest`);
-    }
-
-    const cms = getVendorManifestByTypeName("/Lotus/Types/Game/VendorManifests/Hubs/RailjackCrewMemberVendorManifest")!
-        .VendorInfo.ItemManifest;
+    const cms = getVendorManifestByTypeName(
+        "/Lotus/Types/Game/VendorManifests/Hubs/RailjackCrewMemberVendorManifest",
+        false
+    )!.VendorInfo.ItemManifest;
     if (
         cms.length != 9 ||
         cms[0].Bin != "BIN_2" ||
@@ -426,13 +468,15 @@ if (args.dev) {
         logger.warn(`self test failed for /Lotus/Types/Game/VendorManifests/Hubs/RailjackCrewMemberVendorManifest`);
     }
 
-    const temple = getVendorManifestByTypeName("/Lotus/Types/Game/VendorManifests/TheHex/Temple1999VendorManifest")!
-        .VendorInfo.ItemManifest;
+    const temple = getVendorManifestByTypeName(
+        "/Lotus/Types/Game/VendorManifests/TheHex/Temple1999VendorManifest",
+        false
+    )!.VendorInfo.ItemManifest;
     if (!temple.find(x => x.StoreItem == "/Lotus/StoreItems/Types/Items/MiscItems/Kuva")) {
         logger.warn(`self test failed for /Lotus/Types/Game/VendorManifests/TheHex/Temple1999VendorManifest`);
     }
 
-    const nakak = getVendorManifestByTypeName("/Lotus/Types/Game/VendorManifests/Ostron/MaskSalesmanManifest")!
+    const nakak = getVendorManifestByTypeName("/Lotus/Types/Game/VendorManifests/Ostron/MaskSalesmanManifest", false)!
         .VendorInfo.ItemManifest;
     if (
         nakak.length != 10 ||

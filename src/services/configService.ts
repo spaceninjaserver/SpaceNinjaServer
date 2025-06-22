@@ -48,6 +48,7 @@ export interface IConfig {
     noVendorPurchaseLimits?: boolean;
     noDeathMarks?: boolean;
     noKimCooldowns?: boolean;
+    fullyStockedVendors?: boolean;
     syndicateMissionsRepeatable?: boolean;
     unlockAllProfitTakerStages?: boolean;
     instantFinishRivenChallenge?: boolean;

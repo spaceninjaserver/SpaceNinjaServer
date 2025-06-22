@@ -158,6 +158,7 @@ dict = {
     cheats_noVendorPurchaseLimits: `商城或商人无购买限制`,
     cheats_noDeathMarks: `无死亡标记(不会被 Stalker/Grustrag 三霸/Zanuka 猎人等标记)`,
     cheats_noKimCooldowns: `无 KIM 冷却时间`,
+    cheats_fullyStockedVendors: `[UNTRANSLATED] Fully Stocked Vendors`,
     cheats_syndicateMissionsRepeatable: `集团任务可重复`,
     cheats_unlockAllProfitTakerStages: `解锁利润收割者圆蛛所有阶段`,
     cheats_instantFinishRivenChallenge: `立即完成裂罅挑战`,

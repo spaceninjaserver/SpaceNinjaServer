@@ -41,6 +41,7 @@
   "noVendorPurchaseLimits": false,
   "noDeathMarks": false,
   "noKimCooldowns": false,
+  "fullyStockedVendors": false,
   "syndicateMissionsRepeatable": false,
   "unlockAllProfitTakerStages": false,
   "instantFinishRivenChallenge": false,

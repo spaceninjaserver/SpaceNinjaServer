@@ -157,6 +157,7 @@ dict = {
     cheats_noVendorPurchaseLimits: `No Vendor Purchase Limits`,
     cheats_noDeathMarks: `No Death Marks`,
     cheats_noKimCooldowns: `No KIM Cooldowns`,
+    cheats_fullyStockedVendors: `Fully Stocked Vendors`,
     cheats_syndicateMissionsRepeatable: `Syndicate Missions Repeatable`,
     cheats_unlockAllProfitTakerStages: `Unlock All Profit Taker Stages`,
     cheats_instantFinishRivenChallenge: `Instant Finish Riven Challenge`,

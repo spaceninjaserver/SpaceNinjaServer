@@ -158,6 +158,7 @@ dict = {
     cheats_noVendorPurchaseLimits: `Keine Kaufbeschränkungen bei Händlern`,
     cheats_noDeathMarks: `Keine Todesmarkierungen`,
     cheats_noKimCooldowns: `Keine Wartezeit bei KIM`,
+    cheats_fullyStockedVendors: `[UNTRANSLATED] Fully Stocked Vendors`,
     cheats_syndicateMissionsRepeatable: `Syndikat-Missionen wiederholbar`,
     cheats_unlockAllProfitTakerStages: `[UNTRANSLATED] Unlock All Profit Taker Stages`,
     cheats_instantFinishRivenChallenge: `Riven-Mod Herausforderung sofort abschließen`,
