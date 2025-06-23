@@ -334,6 +334,19 @@ export const getInventoryResponse = async (
         }
     }
 
+    if (config.unlockAllSimarisResearchEntries) {
+        inventoryResponse.LibraryPersonalTarget = undefined;
+        inventoryResponse.LibraryPersonalProgress = [
+            "/Lotus/Types/Game/Library/Targets/Research1Target",
+            "/Lotus/Types/Game/Library/Targets/Research2Target",
+            "/Lotus/Types/Game/Library/Targets/Research3Target",
+            "/Lotus/Types/Game/Library/Targets/Research4Target",
+            "/Lotus/Types/Game/Library/Targets/Research5Target",
+            "/Lotus/Types/Game/Library/Targets/Research6Target",
+            "/Lotus/Types/Game/Library/Targets/Research7Target"
+        ].map(type => ({ TargetType: type, Scans: 10, Completed: true }));
+    }
+
     return inventoryResponse;
 };
 

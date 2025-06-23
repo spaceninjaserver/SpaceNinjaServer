@@ -62,6 +62,7 @@ export interface IConfig {
     noDojoResearchTime?: boolean;
     fastClanAscension?: boolean;
     missionsCanGiveAllRelics?: boolean;
+    unlockAllSimarisResearchEntries?: boolean;
     spoofMasteryRank?: number;
     nightwaveStandingMultiplier?: number;
     worldState?: {

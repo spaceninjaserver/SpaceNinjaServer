@@ -172,6 +172,7 @@ dict = {
     cheats_noDojoResearchTime: `无视道场研究时间`,
     cheats_fastClanAscension: `快速升级氏族`,
     cheats_missionsCanGiveAllRelics: `任务可获取所有遗物`,
+    cheats_unlockAllSimarisResearchEntries: `[UNTRANSLATED] Unlock All Simaris Research Entries`,
     cheats_spoofMasteryRank: `伪造精通段位(-1为禁用)`,
     cheats_nightwaveStandingMultiplier: `午夜电波声望倍率`,
     cheats_save: `保存`,

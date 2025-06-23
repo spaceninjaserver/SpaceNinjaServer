@@ -172,6 +172,7 @@ dict = {
     cheats_noDojoResearchTime: `Sin tiempo de investigación del dojo`,
     cheats_fastClanAscension: `Ascenso rápido del clan`,
     cheats_missionsCanGiveAllRelics: `Las misiones pueden otorgar todas las reliquias`,
+    cheats_unlockAllSimarisResearchEntries: `[UNTRANSLATED] Unlock All Simaris Research Entries`,
     cheats_spoofMasteryRank: `Rango de maestría simulado (-1 para desactivar)`,
     cheats_nightwaveStandingMultiplier: `Multiplicador de Reputación de Onda Nocturna`,
     cheats_save: `Guardar`,
