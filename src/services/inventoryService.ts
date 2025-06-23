@@ -84,9 +84,11 @@ import { getRandomElement, getRandomInt, getRandomWeightedReward, SRng } from ".
 import { createMessage } from "./inboxService";
 import { getMaxStanding, getMinStanding } from "@/src/helpers/syndicateStandingHelper";
 import { getNightwaveSyndicateTag, getWorldState } from "./worldStateService";
+import { ICalendarSeason } from "@/src/types/worldStateTypes";
 import { generateNemesisProfile, INemesisProfile } from "../helpers/nemesisHelpers";
 import { TAccountDocument } from "./loginService";
 import { unixTimesInMs } from "../constants/timeConstants";
+import { addString } from "../helpers/stringHelpers";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
@@ -1783,6 +1785,10 @@ export const addChallenges = (
         } else {
             inventory.ChallengeProgress.push({ Name, Progress });
         }
+
+        if (Name.startsWith("Calendar")) {
+            addString(getCalendarProgress(inventory).SeasonProgress.ActivatedChallenges, Name);
+        }
     });
 
     const affiliationMods: IAffiliationMods[] = [];
@@ -2027,6 +2033,20 @@ export const getCalendarProgress = (inventory: TInventoryDatabaseDocument): ICal
     }
 
     return inventory.CalendarProgress;
+};
+
+export const checkCalendarChallengeCompletion = (
+    calendarProgress: ICalendarProgress,
+    currentSeason: ICalendarSeason
+): void => {
+    const dayIndex = calendarProgress.SeasonProgress.LastCompletedDayIdx + 1;
+    if (calendarProgress.SeasonProgress.LastCompletedChallengeDayIdx >= dayIndex) {
+        const day = currentSeason.Days[dayIndex];
+        if (day.events.length != 0 && day.events[0].type == "CET_CHALLENGE") {
+            //logger.debug(`already completed the challenge, skipping ahead`);
+            calendarProgress.SeasonProgress.LastCompletedDayIdx++;
+        }
+    }
 };
 
 export const giveNemesisWeaponRecipe = (

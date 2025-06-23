@@ -33,6 +33,7 @@ import {
     addSkin,
     addStanding,
     applyClientEquipmentUpdates,
+    checkCalendarChallengeCompletion,
     combineInventoryChanges,
     generateRewardSeed,
     getCalendarProgress,
@@ -67,7 +68,15 @@ import {
 } from "@/src/helpers/nemesisHelpers";
 import { Loadout } from "../models/inventoryModels/loadoutModel";
 import { ILoadoutConfigDatabase } from "../types/saveLoadoutTypes";
-import { getLiteSortie, getSortie, idToBountyCycle, idToDay, idToWeek, pushClassicBounties } from "./worldStateService";
+import {
+    getLiteSortie,
+    getSortie,
+    getWorldState,
+    idToBountyCycle,
+    idToDay,
+    idToWeek,
+    pushClassicBounties
+} from "./worldStateService";
 import { config } from "./configService";
 import libraryDailyTasks from "@/static/fixed_responses/libraryDailyTasks.json";
 import { ISyndicateMissionInfo } from "../types/worldStateTypes";
@@ -620,12 +629,11 @@ export const addMissionInventoryUpdates = async (
             }
             case "CalendarProgress": {
                 const calendarProgress = getCalendarProgress(inventory);
-                for (const progress of value) {
-                    const challengeName = progress.challenge.substring(progress.challenge.lastIndexOf("/") + 1);
-                    calendarProgress.SeasonProgress.LastCompletedDayIdx++;
-                    calendarProgress.SeasonProgress.LastCompletedChallengeDayIdx++;
-                    calendarProgress.SeasonProgress.ActivatedChallenges.push(challengeName);
-                }
+                const currentSeason = getWorldState().KnownCalendarSeasons[0];
+                calendarProgress.SeasonProgress.LastCompletedChallengeDayIdx = currentSeason.Days.findIndex(
+                    x => x.events[0].challenge == value[value.length - 1].challenge
+                );
+                checkCalendarChallengeCompletion(calendarProgress, currentSeason);
                 break;
             }
             case "duviriCaveOffers": {

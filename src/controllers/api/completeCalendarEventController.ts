@@ -1,4 +1,4 @@
-import { getCalendarProgress, getInventory } from "@/src/services/inventoryService";
+import { checkCalendarChallengeCompletion, getCalendarProgress, getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
 import { getWorldState } from "@/src/services/worldStateService";
@@ -12,27 +12,23 @@ export const completeCalendarEventController: RequestHandler = async (req, res) 
     const calendarProgress = getCalendarProgress(inventory);
     const currentSeason = getWorldState().KnownCalendarSeasons[0];
     let inventoryChanges: IInventoryChanges = {};
-    let dayIndex = 0;
-    for (const day of currentSeason.Days) {
-        if (day.events.length == 0 || day.events[0].type != "CET_CHALLENGE") {
-            if (dayIndex == calendarProgress.SeasonProgress.LastCompletedDayIdx) {
-                if (day.events.length != 0) {
-                    const selection = day.events[parseInt(req.query.CompletedEventIdx as string)];
-                    if (selection.type == "CET_REWARD") {
-                        inventoryChanges = (await handleStoreItemAcquisition(selection.reward!, inventory))
-                            .InventoryChanges;
-                    } else if (selection.type == "CET_UPGRADE") {
-                        calendarProgress.YearProgress.Upgrades.push(selection.upgrade!);
-                    } else if (selection.type != "CET_PLOT") {
-                        throw new Error(`unexpected selection type: ${selection.type}`);
-                    }
-                }
-                break;
-            }
-            ++dayIndex;
+    const dayIndex = calendarProgress.SeasonProgress.LastCompletedDayIdx + 1;
+    const day = currentSeason.Days[dayIndex];
+    if (day.events.length != 0) {
+        if (day.events[0].type == "CET_CHALLENGE") {
+            throw new Error(`completeCalendarEvent should not be used for challenges`);
+        }
+        const selection = day.events[parseInt(req.query.CompletedEventIdx as string)];
+        if (selection.type == "CET_REWARD") {
+            inventoryChanges = (await handleStoreItemAcquisition(selection.reward!, inventory)).InventoryChanges;
+        } else if (selection.type == "CET_UPGRADE") {
+            calendarProgress.YearProgress.Upgrades.push(selection.upgrade!);
+        } else if (selection.type != "CET_PLOT") {
+            throw new Error(`unexpected selection type: ${selection.type}`);
         }
     }
-    calendarProgress.SeasonProgress.LastCompletedDayIdx++;
+    calendarProgress.SeasonProgress.LastCompletedDayIdx = dayIndex;
+    checkCalendarChallengeCompletion(calendarProgress, currentSeason);
     await inventory.save();
     res.json({
         InventoryChanges: inventoryChanges,
