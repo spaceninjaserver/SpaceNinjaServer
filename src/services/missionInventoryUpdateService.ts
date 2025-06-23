@@ -622,6 +622,7 @@ export const addMissionInventoryUpdates = async (
                 const calendarProgress = getCalendarProgress(inventory);
                 for (const progress of value) {
                     const challengeName = progress.challenge.substring(progress.challenge.lastIndexOf("/") + 1);
+                    calendarProgress.SeasonProgress.LastCompletedDayIdx++;
                     calendarProgress.SeasonProgress.LastCompletedChallengeDayIdx++;
                     calendarProgress.SeasonProgress.ActivatedChallenges.push(challengeName);
                 }
