@@ -237,7 +237,7 @@ export const getNemesisPasscode = (nemesis: { fp: bigint; Faction: TNemesisFacti
     return passcode;
 };
 
-const requiemMods: readonly string[] = [
+/*const requiemMods: readonly string[] = [
     "/Lotus/Upgrades/Mods/Immortal/ImmortalOneMod",
     "/Lotus/Upgrades/Mods/Immortal/ImmortalTwoMod",
     "/Lotus/Upgrades/Mods/Immortal/ImmortalThreeMod",
@@ -246,7 +246,7 @@ const requiemMods: readonly string[] = [
     "/Lotus/Upgrades/Mods/Immortal/ImmortalSixMod",
     "/Lotus/Upgrades/Mods/Immortal/ImmortalSevenMod",
     "/Lotus/Upgrades/Mods/Immortal/ImmortalEightMod"
-];
+];*/
 
 export const antivirusMods: readonly string[] = [
     "/Lotus/Upgrades/Mods/Immortal/AntivirusOneMod",
@@ -259,12 +259,12 @@ export const antivirusMods: readonly string[] = [
     "/Lotus/Upgrades/Mods/Immortal/AntivirusEightMod"
 ];
 
-export const getNemesisPasscodeModTypes = (nemesis: { fp: bigint; Faction: TNemesisFaction }): string[] => {
+/*export const getNemesisPasscodeModTypes = (nemesis: { fp: bigint; Faction: TNemesisFaction }): string[] => {
     const passcode = getNemesisPasscode(nemesis);
     return nemesis.Faction == "FC_INFESTATION"
         ? passcode.map(i => antivirusMods[i])
         : passcode.map(i => requiemMods[i]);
-};
+};*/
 
 // Symbols; 0-7 are the normal requiem mods.
 export const GUESS_NONE = 8;
@@ -341,6 +341,27 @@ export const getKnifeUpgrade = (
         }
     }
     throw new Error(`${type} does not seem to be installed on parazon?!`);
+};
+
+export const parseUpgrade = (
+    inventory: TInventoryDatabaseDocument,
+    str: string
+): { ItemId: IOid; ItemType: string } => {
+    if (str.length == 24) {
+        const upgrade = inventory.Upgrades.id(str);
+        if (upgrade) {
+            return {
+                ItemId: { $oid: str },
+                ItemType: upgrade.ItemType
+            };
+        }
+        throw new Error(`Could not resolve oid ${str}`);
+    } else {
+        return {
+            ItemId: { $oid: "000000000000000000000000" },
+            ItemType: str
+        };
+    }
 };
 
 export const consumeModCharge = (

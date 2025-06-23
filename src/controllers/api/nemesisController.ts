@@ -8,16 +8,15 @@ import {
     getKnifeUpgrade,
     getNemesisManifest,
     getNemesisPasscode,
-    getNemesisPasscodeModTypes,
     GUESS_CORRECT,
     GUESS_INCORRECT,
     GUESS_NEUTRAL,
     GUESS_NONE,
     GUESS_WILDCARD,
-    IKnifeResponse
+    IKnifeResponse,
+    parseUpgrade
 } from "@/src/helpers/nemesisHelpers";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
 import { freeUpSlot, getInventory } from "@/src/services/inventoryService";
 import { getAccountForRequest } from "@/src/services/loginService";
@@ -215,7 +214,19 @@ export const nemesisController: RequestHandler = async (req, res) => {
                         }
                     ];
                     inventory.Nemesis!.Weakened = true;
-                    await consumePasscodeModCharges(inventory, response);
+
+                    // Subtract a charge from all requiem mods installed on parazon
+                    const loadout = (await Loadout.findById(inventory.LoadOutPresets, "DATAKNIFE"))!;
+                    const dataknifeLoadout = loadout.DATAKNIFE.id(
+                        inventory.CurrentLoadOutIds[LoadoutIndex.DATAKNIFE].$oid
+                    );
+                    const dataknifeConfigIndex = dataknifeLoadout?.s?.mod ?? 0;
+                    const dataknifeUpgrades = inventory.DataKnives[0].Configs[dataknifeConfigIndex].Upgrades!;
+                    for (let i = 3; i != 6; ++i) {
+                        //logger.debug(`subtracting a charge from ${dataknifeUpgrades[i]}`);
+                        const upgrade = parseUpgrade(inventory, dataknifeUpgrades[i]);
+                        consumeModCharge(response, inventory, upgrade, dataknifeUpgrades);
+                    }
                 }
             } else {
                 // Guess was incorrect, increase rank
@@ -380,18 +391,3 @@ interface IKnife {
     AttachedUpgrades: IUpgradeClient[];
     HiddenWhenHolstered: boolean;
 }
-
-const consumePasscodeModCharges = async (
-    inventory: TInventoryDatabaseDocument,
-    response: IKnifeResponse
-): Promise<void> => {
-    const loadout = (await Loadout.findById(inventory.LoadOutPresets, "DATAKNIFE"))!;
-    const dataknifeLoadout = loadout.DATAKNIFE.id(inventory.CurrentLoadOutIds[LoadoutIndex.DATAKNIFE].$oid);
-    const dataknifeConfigIndex = dataknifeLoadout?.s?.mod ?? 0;
-    const dataknifeUpgrades = inventory.DataKnives[0].Configs[dataknifeConfigIndex].Upgrades!;
-    const modTypes = getNemesisPasscodeModTypes(inventory.Nemesis!);
-    for (const modType of modTypes) {
-        const upgrade = getKnifeUpgrade(inventory, dataknifeUpgrades, modType);
-        consumeModCharge(response, inventory, upgrade, dataknifeUpgrades);
-    }
-};
