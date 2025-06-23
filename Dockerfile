@@ -1,6 +1,6 @@
 FROM node:24-alpine3.21
 
-RUN apk add --no-cache bash jq python3 make gcc alpine-sdk
+RUN apk add --no-cache bash jq
 
 COPY . /app
 WORKDIR /app

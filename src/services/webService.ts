@@ -10,7 +10,7 @@ import { Account } from "../models/loginModel";
 import { createAccount, createNonce, getUsernameFromEmail, isCorrectPassword } from "./loginService";
 import { IDatabaseAccountJson } from "../types/loginTypes";
 import { HydratedDocument } from "mongoose";
-import websocket from "websocket";
+import { Agent, WebSocket } from "undici";
 
 let httpServer: http.Server | undefined;
 let httpsServer: https.Server | undefined;
@@ -67,21 +67,14 @@ export const startWebServer = (): void => {
 
 const runWsSelfTest = (protocol: "ws" | "wss", port: number): Promise<boolean> => {
     return new Promise(resolve => {
-        const client = new websocket.client({ tlsOptions: { rejectUnauthorized: false } });
-        client.connect(`${protocol}://localhost:${port}/custom/selftest`);
-        client.on("connect", connection => {
-            connection.on("message", msg => {
-                if (msg.type == "utf8" && msg.utf8Data == "SpaceNinjaServer") {
-                    resolve(true);
-                }
-            });
-            connection.on("close", () => {
-                resolve(false);
-            });
-        });
-        client.on("connectFailed", () => {
+        const agent = new Agent({ connect: { rejectUnauthorized: false } });
+        const client = new WebSocket(`${protocol}://localhost:${port}/custom/selftest`, { dispatcher: agent });
+        client.onmessage = (e): void => {
+            resolve(e.data == "SpaceNinjaServer");
+        };
+        client.onerror = client.onclose = (): void => {
             resolve(false);
-        });
+        };
     });
 };
 
