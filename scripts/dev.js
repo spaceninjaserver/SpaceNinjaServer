@@ -14,6 +14,7 @@ args.push("--secret");
 args.push(secret);
 
 let buildproc, runproc;
+const spawnopts = { stdio: "inherit", shell: true };
 function run(changedFile) {
     if (changedFile) {
         console.log(`Change to ${changedFile} detected`);
@@ -28,7 +29,8 @@ function run(changedFile) {
         runproc = undefined;
     }
 
-    const thisbuildproc = spawn("npm", ["run", "build:dev"], { stdio: "inherit", shell: true });
+    const thisbuildproc = spawn("npm", ["run", process.versions.bun ? "verify" : "build:dev"], spawnopts);
+    const thisbuildstart = Date.now();
     buildproc = thisbuildproc;
     buildproc.on("exit", code => {
         if (buildproc !== thisbuildproc) {
@@ -36,7 +38,8 @@ function run(changedFile) {
         }
         buildproc = undefined;
         if (code === 0) {
-            runproc = spawn("npm", ["run", "start", "--", ...args], { stdio: "inherit", shell: true });
+            console.log(`${process.versions.bun ? "Verified" : "Built"} in ${Date.now() - thisbuildstart} ms`);
+            runproc = spawn("npm", ["run", process.versions.bun ? "bun-run" : "start", "--", ...args], spawnopts);
             runproc.on("exit", () => {
                 runproc = undefined;
             });

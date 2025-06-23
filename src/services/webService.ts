@@ -46,16 +46,21 @@ export const startWebServer = (): void => {
                 "Access the WebUI in your browser at http://localhost" + (httpPort == 80 ? "" : ":" + httpPort)
             );
 
-            void runWsSelfTest("wss", httpsPort).then(ok => {
-                if (!ok) {
-                    logger.warn(`WSS self-test failed. The server may not actually be reachable at port ${httpsPort}.`);
-                    if (process.platform == "win32") {
+            // https://github.com/oven-sh/bun/issues/20547
+            if (!process.versions.bun) {
+                void runWsSelfTest("wss", httpsPort).then(ok => {
+                    if (!ok) {
                         logger.warn(
-                            `You can check who actually has that port via powershell: Get-Process -Id (Get-NetTCPConnection -LocalPort ${httpsPort}).OwningProcess`
+                            `WSS self-test failed. The server may not actually be reachable at port ${httpsPort}.`
                         );
+                        if (process.platform == "win32") {
+                            logger.warn(
+                                `You can check who actually has that port via powershell: Get-Process -Id (Get-NetTCPConnection -LocalPort ${httpsPort}).OwningProcess`
+                            );
+                        }
                     }
-                }
-            });
+                });
+            }
         });
     });
 };

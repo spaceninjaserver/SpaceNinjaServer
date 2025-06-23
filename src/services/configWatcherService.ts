@@ -5,7 +5,12 @@ import { config, configPath, loadConfig } from "./configService";
 import { getWebPorts, sendWsBroadcast, startWebServer, stopWebServer } from "./webService";
 
 let amnesia = false;
-fs.watchFile(configPath, () => {
+fs.watchFile(configPath, (now, then) => {
+    // https://github.com/oven-sh/bun/issues/20542
+    if (process.versions.bun && now.mtimeMs == then.mtimeMs) {
+        return;
+    }
+
     if (amnesia) {
         amnesia = false;
     } else {
