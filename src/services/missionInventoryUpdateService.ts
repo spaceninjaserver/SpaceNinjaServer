@@ -79,7 +79,7 @@ const getRotations = (rewardInfo: IRewardInfo, tierOverride?: number): number[] 
     if (rewardInfo.VaultsCracked) {
         const rotations: number[] = [];
         for (let i = 0; i != rewardInfo.VaultsCracked; ++i) {
-            rotations.push(i);
+            rotations.push(Math.min(i, 2));
         }
         return rotations;
     }
