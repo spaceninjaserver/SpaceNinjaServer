@@ -1629,7 +1629,19 @@ function getRandomMissionDrops(
                         }
                         rewardManifests = [job.rewards];
                         if (job.xpAmounts.length > 1) {
-                            rotations = [RewardInfo.JobStage! % (job.xpAmounts.length - 1)];
+                            const curentStage = RewardInfo.JobStage! + 1;
+                            const totalStage = job.xpAmounts.length;
+                            let tableIndex = 1; // Stage 2, Stage 3 of 4, and Stage 3 of 5
+
+                            if (curentStage == 1) {
+                                tableIndex = 0;
+                            } else if (curentStage == totalStage) {
+                                tableIndex = 3;
+                            } else if (totalStage == 5 && curentStage == 4) {
+                                tableIndex = 2;
+                            }
+
+                            rotations = [tableIndex];
                         } else {
                             rotations = [0];
                         }
@@ -1638,11 +1650,7 @@ function getRandomMissionDrops(
                             (RewardInfo.JobStage === job.xpAmounts.length - 1 || job.isVault) &&
                             !isEndlessJob
                         ) {
-                            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-                            if (ExportRewards[job.rewards]) {
-                                rewardManifests.push(job.rewards);
-                                rotations.push(ExportRewards[job.rewards].length - 1);
-                            }
+                            rotations.push(3);
                         }
                     }
                 }
