@@ -10,7 +10,7 @@ import { Account } from "../models/loginModel";
 import { createAccount, createNonce, getUsernameFromEmail, isCorrectPassword } from "./loginService";
 import { IDatabaseAccountJson } from "../types/loginTypes";
 import { HydratedDocument } from "mongoose";
-import { Agent, WebSocket } from "undici";
+import { Agent, WebSocket as UnidiciWebSocket } from "undici";
 
 let httpServer: http.Server | undefined;
 let httpsServer: https.Server | undefined;
@@ -46,35 +46,45 @@ export const startWebServer = (): void => {
                 "Access the WebUI in your browser at http://localhost" + (httpPort == 80 ? "" : ":" + httpPort)
             );
 
-            // https://github.com/oven-sh/bun/issues/20547
-            if (!process.versions.bun) {
-                void runWsSelfTest("wss", httpsPort).then(ok => {
-                    if (!ok) {
+            void runWsSelfTest("wss", httpsPort).then(ok => {
+                if (!ok) {
+                    logger.warn(`WSS self-test failed. The server may not actually be reachable at port ${httpsPort}.`);
+                    if (process.platform == "win32") {
                         logger.warn(
-                            `WSS self-test failed. The server may not actually be reachable at port ${httpsPort}.`
+                            `You can check who actually has that port via powershell: Get-Process -Id (Get-NetTCPConnection -LocalPort ${httpsPort}).OwningProcess`
                         );
-                        if (process.platform == "win32") {
-                            logger.warn(
-                                `You can check who actually has that port via powershell: Get-Process -Id (Get-NetTCPConnection -LocalPort ${httpsPort}).OwningProcess`
-                            );
-                        }
                     }
-                });
-            }
+                }
+            });
         });
     });
 };
 
 const runWsSelfTest = (protocol: "ws" | "wss", port: number): Promise<boolean> => {
     return new Promise(resolve => {
-        const agent = new Agent({ connect: { rejectUnauthorized: false } });
-        const client = new WebSocket(`${protocol}://localhost:${port}/custom/selftest`, { dispatcher: agent });
-        client.onmessage = (e): void => {
-            resolve(e.data == "SpaceNinjaServer");
-        };
-        client.onerror = client.onclose = (): void => {
-            resolve(false);
-        };
+        // https://github.com/oven-sh/bun/issues/20547
+        if (process.versions.bun) {
+            const client = new WebSocket(`${protocol}://localhost:${port}/custom/selftest`, {
+                tls: { rejectUnauthorized: false }
+            } as unknown as string);
+            client.onmessage = (e): void => {
+                resolve(e.data == "SpaceNinjaServer");
+            };
+            client.onerror = client.onclose = (): void => {
+                resolve(false);
+            };
+        } else {
+            const agent = new Agent({ connect: { rejectUnauthorized: false } });
+            const client = new UnidiciWebSocket(`${protocol}://localhost:${port}/custom/selftest`, {
+                dispatcher: agent
+            });
+            client.onmessage = (e): void => {
+                resolve(e.data == "SpaceNinjaServer");
+            };
+            client.onerror = client.onclose = (): void => {
+                resolve(false);
+            };
+        }
     });
 };
 
