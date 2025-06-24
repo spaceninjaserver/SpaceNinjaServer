@@ -58,6 +58,10 @@
   "unlockAllSimarisResearchEntries": false,
   "spoofMasteryRank": -1,
   "nightwaveStandingMultiplier": 1,
+  "unfaithfulBugFixes": {
+    "ignore1999LastRegionPlayed": false,
+    "fixXtraCheeseTimer": false
+  },
   "worldState": {
     "creditBoost": false,
     "affinityBoost": false,

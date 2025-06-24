@@ -1325,6 +1325,17 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     const cheeseInterval = hourInSeconds * 8;
     const cheeseDuration = hourInSeconds * 2;
     const cheeseIndex = Math.trunc(timeSecs / cheeseInterval);
+    let cheeseStart = cheeseIndex * cheeseInterval;
+    let cheeseEnd = cheeseStart + cheeseDuration;
+    let cheeseNext = (cheeseIndex + 1) * cheeseInterval;
+    // Live servers only update the start time once it happens, which makes the
+    // client show a negative countdown during off-hours. Optionally adjust the
+    // times so the next activation is always in the future.
+    if (config.unfaithfulBugFixes?.fixXtraCheeseTimer && timeSecs >= cheeseEnd) {
+        cheeseStart = cheeseNext;
+        cheeseEnd = cheeseStart + cheeseDuration;
+        cheeseNext += cheeseInterval;
+    }
     const tmp: ITmp = {
         cavabegin: "1690761600",
         PurchasePlatformLockEnabled: true,
@@ -1349,9 +1360,9 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         ennnd: true,
         mbrt: true,
         fbst: {
-            a: cheeseIndex * cheeseInterval, // This has a bug where the client shows a negative time for "Xtra cheese starts in ..." until it refreshes the world state. This is because we're only providing the new activation as soon as that time/date is reached. However, this is 100% faithful to live.
-            e: cheeseIndex * cheeseInterval + cheeseDuration,
-            n: (cheeseIndex + 1) * cheeseInterval
+            a: cheeseStart,
+            e: cheeseEnd,
+            n: cheeseNext
         },
         sfn: [550, 553, 554, 555][halfHour % 4]
     };
