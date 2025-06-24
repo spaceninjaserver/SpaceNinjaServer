@@ -159,6 +159,8 @@ dict = {
     cheats_noDeathMarks: `Aucune marque d'assassin`,
     cheats_noKimCooldowns: `Aucun cooldown sur le KIM`,
     cheats_fullyStockedVendors: `[UNTRANSLATED] Fully Stocked Vendors`,
+    cheats_baroAlwaysAvailable: `[UNTRANSLATED] Baro Always Available`,
+    cheats_baroFullyStocked: `[UNTRANSLATED] Baro Fully Stocked`,
     cheats_syndicateMissionsRepeatable: `Mission syndicat répétables`,
     cheats_unlockAllProfitTakerStages: `[UNTRANSLATED] Unlock All Profit Taker Stages`,
     cheats_instantFinishRivenChallenge: `Débloquer le challenge Riven instantanément`,

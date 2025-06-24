@@ -12,6 +12,7 @@ export interface IWorldState {
     ActiveMissions: IFissure[];
     GlobalUpgrades: IGlobalUpgrade[];
     NodeOverrides: INodeOverride[];
+    VoidTraders: IVoidTrader[];
     VoidStorms: IVoidStorm[];
     PVPChallengeInstances: IPVPChallengeInstance[];
     EndlessXpChoices: IEndlessXpChoice[];
@@ -138,6 +139,21 @@ export interface ILiteSortie {
         missionType: string;
         node: string;
     }[];
+}
+
+export interface IVoidTrader {
+    _id: IOid;
+    Activation: IMongoDate;
+    Expiry: IMongoDate;
+    Character: string;
+    Node: string;
+    Manifest: IVoidTraderOffer[];
+}
+
+export interface IVoidTraderOffer {
+    ItemType: string;
+    PrimePrice: number;
+    RegularPrice: number;
 }
 
 export interface IVoidStorm {

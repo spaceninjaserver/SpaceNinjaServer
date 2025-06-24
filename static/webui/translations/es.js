@@ -159,6 +159,8 @@ dict = {
     cheats_noDeathMarks: `Sin marcas de muerte`,
     cheats_noKimCooldowns: `Sin tiempo de espera para conversaciones KIM`,
     cheats_fullyStockedVendors: `[UNTRANSLATED] Fully Stocked Vendors`,
+    cheats_baroAlwaysAvailable: `[UNTRANSLATED] Baro Always Available`,
+    cheats_baroFullyStocked: `[UNTRANSLATED] Baro Fully Stocked`,
     cheats_syndicateMissionsRepeatable: `Misiones de sindicato rejugables`,
     cheats_unlockAllProfitTakerStages: `Deslobquea todas las etapas del Roba-ganancias`,
     cheats_instantFinishRivenChallenge: `Terminar desafío de agrietado inmediatamente`,

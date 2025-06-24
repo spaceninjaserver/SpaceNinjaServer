@@ -1,4 +1,5 @@
 import staticWorldState from "@/static/fixed_responses/worldState/worldState.json";
+import baro from "@/static/fixed_responses/worldState/baro.json";
 import fissureMissions from "@/static/fixed_responses/worldState/fissureMissions.json";
 import sortieTilesets from "@/static/fixed_responses/worldState/sortieTilesets.json";
 import sortieTilesetMissions from "@/static/fixed_responses/worldState/sortieTilesetMissions.json";
@@ -19,6 +20,8 @@ import {
     ISyndicateMissionInfo,
     ITmp,
     IVoidStorm,
+    IVoidTrader,
+    IVoidTraderOffer,
     IWorldState,
     TCircuitGameMode
 } from "../types/worldStateTypes";
@@ -1114,6 +1117,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         LiteSorties: [],
         ActiveMissions: [],
         GlobalUpgrades: [],
+        VoidTraders: [],
         VoidStorms: [],
         EndlessXpChoices: [],
         KnownCalendarSeasons: [],
@@ -1240,6 +1244,77 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             LocalizeTag: "",
             LocalizeDescTag: ""
         });
+    }
+
+    // Baro
+    {
+        const baroIndex = Math.trunc((Date.now() - 910800000) / (unixTimesInMs.day * 14));
+        const baroStart = baroIndex * (unixTimesInMs.day * 14) + 910800000;
+        const baroActualStart = baroStart + unixTimesInMs.day * (config.baroAlwaysAvailable ? 0 : 12);
+        const baroEnd = baroStart + unixTimesInMs.day * 14;
+        const baroNode = ["EarthHUB", "MercuryHUB", "SaturnHUB", "PlutoHUB"][baroIndex % 4];
+        const vt: IVoidTrader = {
+            _id: { $oid: ((baroStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "493c96d6067610bc" },
+            Activation: { $date: { $numberLong: baroActualStart.toString() } },
+            Expiry: { $date: { $numberLong: baroEnd.toString() } },
+            Character: "Baro'Ki Teel",
+            Node: baroNode,
+            Manifest: []
+        };
+        worldState.VoidTraders.push(vt);
+        if (isBeforeNextExpectedWorldStateRefresh(timeMs, baroActualStart)) {
+            vt.Manifest = [];
+            if (config.baroFullyStocked) {
+                for (const armorSet of baro.armorSets) {
+                    if (Array.isArray(armorSet[0])) {
+                        for (const set of armorSet as IVoidTraderOffer[][]) {
+                            for (const item of set) {
+                                vt.Manifest.push(item);
+                            }
+                        }
+                    } else {
+                        for (const item of armorSet as IVoidTraderOffer[]) {
+                            vt.Manifest.push(item);
+                        }
+                    }
+                }
+                for (const item of baro.rest) {
+                    vt.Manifest.push(item);
+                }
+            } else {
+                const rng = new SRng(new SRng(baroIndex).randomInt(0, 100_000));
+                // TOVERIFY: Constraint for upgrades amount?
+                // TOVERIFY: Constraint for weapon amount?
+                // TOVERIFY: Constraint for relics amount?
+                let armorSet = rng.randomElement(baro.armorSets)!;
+                if (Array.isArray(armorSet[0])) {
+                    armorSet = rng.randomElement(baro.armorSets)!;
+                }
+                while (vt.Manifest.length + armorSet.length < 31) {
+                    const item = rng.randomElement(baro.rest)!;
+                    if (vt.Manifest.indexOf(item) == -1) {
+                        const set = baro.allIfAny.find(set => set.indexOf(item.ItemType) != -1);
+                        if (set) {
+                            for (const itemType of set) {
+                                vt.Manifest.push(baro.rest.find(x => x.ItemType == itemType)!);
+                            }
+                        } else {
+                            vt.Manifest.push(item);
+                        }
+                    }
+                }
+                const overflow = 31 - (vt.Manifest.length + armorSet.length);
+                if (overflow > 0) {
+                    vt.Manifest.splice(0, overflow);
+                }
+                for (const armor of armorSet) {
+                    vt.Manifest.push(armor as IVoidTraderOffer);
+                }
+            }
+            for (const item of baro.evergreen) {
+                vt.Manifest.push(item);
+            }
+        }
     }
 
     // Sortie & syndicate missions cycling every day (at 16:00 or 17:00 UTC depending on if London, OT is observing DST)

@@ -42,6 +42,8 @@
   "noDeathMarks": false,
   "noKimCooldowns": false,
   "fullyStockedVendors": false,
+  "baroAlwaysAvailable": false,
+  "baroFullyStocked": false,
   "syndicateMissionsRepeatable": false,
   "unlockAllProfitTakerStages": false,
   "instantFinishRivenChallenge": false,

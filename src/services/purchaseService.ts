@@ -19,7 +19,8 @@ import {
     PurchaseSource
 } from "@/src/types/purchaseTypes";
 import { logger } from "@/src/utils/logger";
-import worldState from "@/static/fixed_responses/worldState/worldState.json";
+import { getWorldState } from "./worldStateService";
+import staticWorldState from "@/static/fixed_responses/worldState/worldState.json";
 import {
     ExportBoosterPacks,
     ExportBoosters,
@@ -175,6 +176,7 @@ export const handlePurchase = async (
 
     switch (purchaseRequest.PurchaseParams.Source) {
         case PurchaseSource.VoidTrader: {
+            const worldState = getWorldState();
             if (purchaseRequest.PurchaseParams.SourceId! != worldState.VoidTraders[0]._id.$oid) {
                 throw new Error("invalid request source");
             }
@@ -264,14 +266,14 @@ export const handlePurchase = async (
             }
             break;
         case PurchaseSource.PrimeVaultTrader: {
-            if (purchaseRequest.PurchaseParams.SourceId! != worldState.PrimeVaultTraders[0]._id.$oid) {
+            if (purchaseRequest.PurchaseParams.SourceId! != staticWorldState.PrimeVaultTraders[0]._id.$oid) {
                 throw new Error("invalid request source");
             }
             const offer =
-                worldState.PrimeVaultTraders[0].Manifest.find(
+                staticWorldState.PrimeVaultTraders[0].Manifest.find(
                     x => x.ItemType == purchaseRequest.PurchaseParams.StoreItem
                 ) ??
-                worldState.PrimeVaultTraders[0].EvergreenManifest.find(
+                staticWorldState.PrimeVaultTraders[0].EvergreenManifest.find(
                     x => x.ItemType == purchaseRequest.PurchaseParams.StoreItem
                 );
             if (offer) {

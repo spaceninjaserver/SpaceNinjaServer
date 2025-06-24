@@ -49,6 +49,8 @@ export interface IConfig {
     noDeathMarks?: boolean;
     noKimCooldowns?: boolean;
     fullyStockedVendors?: boolean;
+    baroAlwaysAvailable?: boolean;
+    baroFullyStocked?: boolean;
     syndicateMissionsRepeatable?: boolean;
     unlockAllProfitTakerStages?: boolean;
     instantFinishRivenChallenge?: boolean;

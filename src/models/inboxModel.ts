@@ -17,7 +17,6 @@ export interface IMessageDatabase extends IMessage {
     ownerId: Types.ObjectId;
     date: Date; //created at
     attVisualOnly?: boolean;
-    expiry?: Date;
     _id: Types.ObjectId;
 }
 
@@ -33,6 +32,7 @@ export interface IMessage {
     att?: string[];
     countedAtt?: ITypeCount[];
     transmission?: string;
+    CrossPlatform?: boolean;
     arg?: Arg[];
     gifts?: IGift[];
     r?: boolean;
@@ -107,7 +107,9 @@ const messageSchema = new Schema<IMessageDatabase>(
         lowPrioNewPlayers: Boolean,
         startDate: Date,
         endDate: Date,
+        date: { type: Date, required: true },
         r: Boolean,
+        CrossPlatform: Boolean,
         att: { type: [String], default: undefined },
         gifts: { type: [giftSchema], default: undefined },
         countedAtt: { type: [typeCountSchema], default: undefined },
@@ -128,7 +130,7 @@ const messageSchema = new Schema<IMessageDatabase>(
         declineAction: String,
         hasAccountAction: Boolean
     },
-    { timestamps: { createdAt: "date", updatedAt: false }, id: false }
+    { id: false }
 );
 
 messageSchema.virtual("messageId").get(function (this: IMessageDatabase) {
@@ -151,13 +153,15 @@ messageSchema.set("toJSON", {
 
         if (messageDatabase.startDate && messageDatabase.endDate) {
             messageClient.startDate = toMongoDate(messageDatabase.startDate);
-
             messageClient.endDate = toMongoDate(messageDatabase.endDate);
+        } else {
+            delete messageClient.startDate;
+            delete messageClient.endDate;
         }
     }
 });
 
 messageSchema.index({ ownerId: 1 });
-messageSchema.index({ expiry: 1 }, { expireAfterSeconds: 0 });
+messageSchema.index({ endDate: 1 }, { expireAfterSeconds: 0 });
 
 export const Inbox = model<IMessageDatabase>("Inbox", messageSchema, "inbox");

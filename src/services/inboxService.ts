@@ -2,8 +2,8 @@ import { IMessageDatabase, Inbox } from "@/src/models/inboxModel";
 import { getAccountForRequest } from "@/src/services/loginService";
 import { HydratedDocument, Types } from "mongoose";
 import { Request } from "express";
-import eventMessages from "@/static/fixed_responses/eventMessages.json";
-import { logger } from "@/src/utils/logger";
+import { unixTimesInMs } from "../constants/timeConstants";
+import { config } from "./configService";
 
 export const getAllMessagesSorted = async (accountId: string): Promise<HydratedDocument<IMessageDatabase>[]> => {
     const inbox = await Inbox.find({ ownerId: accountId }).sort({ date: -1 });
@@ -29,40 +29,56 @@ export const deleteAllMessagesRead = async (accountId: string): Promise<void> =>
 
 export const createNewEventMessages = async (req: Request): Promise<void> => {
     const account = await getAccountForRequest(req);
-    const latestEventMessageDate = account.LatestEventMessageDate;
+    const newEventMessages: IMessageCreationTemplate[] = [];
 
-    //TODO: is baroo there? create these kind of messages too (periodical messages)
-    const newEventMessages = eventMessages.Messages.filter(m => new Date(m.eventMessageDate) > latestEventMessageDate);
+    // Baro
+    const baroIndex = Math.trunc((Date.now() - 910800000) / (unixTimesInMs.day * 14));
+    const baroStart = baroIndex * (unixTimesInMs.day * 14) + 910800000;
+    const baroActualStart = baroStart + unixTimesInMs.day * (config.baroAlwaysAvailable ? 0 : 12);
+    if (account.LatestEventMessageDate.getTime() < baroActualStart) {
+        newEventMessages.push({
+            sndr: "/Lotus/Language/G1Quests/VoidTraderName",
+            sub: "/Lotus/Language/CommunityMessages/VoidTraderAppearanceTitle",
+            msg: "/Lotus/Language/CommunityMessages/VoidTraderAppearanceMessage",
+            icon: "/Lotus/Interface/Icons/Npcs/BaroKiTeerPortrait.png",
+            startDate: new Date(baroActualStart),
+            endDate: new Date(baroStart + unixTimesInMs.day * 14),
+            CrossPlatform: true,
+            arg: [
+                {
+                    Key: "NODE_NAME",
+                    Tag: ["EarthHUB", "MercuryHUB", "SaturnHUB", "PlutoHUB"][baroIndex % 4]
+                }
+            ],
+            date: new Date(baroActualStart)
+        });
+    }
 
     if (newEventMessages.length === 0) {
-        logger.debug(`No new event messages. Latest event message date: ${latestEventMessageDate.toISOString()}`);
         return;
     }
 
-    const savedEventMessages = await createMessage(account._id, newEventMessages);
-    logger.debug("created event messages", savedEventMessages);
+    await createMessage(account._id, newEventMessages);
 
     const latestEventMessage = newEventMessages.reduce((prev, current) =>
-        prev.eventMessageDate > current.eventMessageDate ? prev : current
+        prev.startDate! > current.startDate! ? prev : current
     );
-
-    account.LatestEventMessageDate = new Date(latestEventMessage.eventMessageDate);
+    account.LatestEventMessageDate = new Date(latestEventMessage.startDate!);
     await account.save();
 };
 
 export const createMessage = async (
     accountId: string | Types.ObjectId,
     messages: IMessageCreationTemplate[]
-): Promise<HydratedDocument<IMessageDatabase>[]> => {
+): Promise<void> => {
     const ownerIdMessages = messages.map(m => ({
         ...m,
+        date: m.date ?? new Date(),
         ownerId: accountId
     }));
-
-    const savedMessages = await Inbox.insertMany(ownerIdMessages);
-    return savedMessages as HydratedDocument<IMessageDatabase>[];
+    await Inbox.insertMany(ownerIdMessages);
 };
 
 export interface IMessageCreationTemplate extends Omit<IMessageDatabase, "_id" | "date" | "ownerId"> {
-    ownerId?: string;
+    date?: Date;
 }
