@@ -11,13 +11,13 @@ import {
 import { getAccountForRequest, getSuffixedName } from "@/src/services/loginService";
 import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
 import { IOid } from "@/src/types/commonTypes";
-import { IInventoryChanges, IPurchaseParams } from "@/src/types/purchaseTypes";
+import { IInventoryChanges, IPurchaseParams, PurchaseSource } from "@/src/types/purchaseTypes";
 import { RequestHandler } from "express";
 import { ExportBundles, ExportFlavour } from "warframe-public-export-plus";
 
 export const giftingController: RequestHandler = async (req, res) => {
     const data = getJSONfromString<IGiftingRequest>(String(req.body));
-    if (data.PurchaseParams.Source != 0 || !data.PurchaseParams.UsePremium) {
+    if (data.PurchaseParams.Source != PurchaseSource.Market || !data.PurchaseParams.UsePremium) {
         throw new Error(`unexpected purchase params in gifting request: ${String(req.body)}`);
     }
 
