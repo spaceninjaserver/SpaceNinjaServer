@@ -185,6 +185,8 @@ dict = {
     cheats_none: `无`,
     import_importNote: `您可以在此处提供完整或部分库存响应（客户端表示）。支持的所有字段<b>将被覆盖</b>到您的账户中。`,
     import_submit: `提交`,
+    import_samples: `[UNTRANSLATED] Samples:`,
+    import_samples_maxFocus: `[UNTRANSLATED] All Focus Schools Maxed Out`,
 
     upgrade_Equilibrium: `+|VAL|% 能量 来自生命球, +|VAL|% 生命 来自能量球`,
     upgrade_MeleeCritDamage: `+|VAL|% 近战暴击伤害`,

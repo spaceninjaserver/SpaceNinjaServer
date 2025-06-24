@@ -185,6 +185,8 @@ dict = {
     cheats_none: `Отсутствует`,
     import_importNote: `Вы можете загрузить полный или частичный ответ инвентаря (клиентское представление) здесь. Все поддерживаемые поля <b>будут перезаписаны</b> в вашем аккаунте.`,
     import_submit: `Отправить`,
+    import_samples: `[UNTRANSLATED] Samples:`,
+    import_samples_maxFocus: `[UNTRANSLATED] All Focus Schools Maxed Out`,
 
     upgrade_Equilibrium: `[UNTRANSLATED] +|VAL|% Energy from Health pickups, +|VAL|% Health from Energy pickups`,
     upgrade_MeleeCritDamage: `[UNTRANSLATED] +|VAL|% Melee Critical Damage`,

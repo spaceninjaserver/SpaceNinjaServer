@@ -184,6 +184,8 @@ dict = {
     cheats_none: `None`,
     import_importNote: `You can provide a full or partial inventory response (client respresentation) here. All fields that are supported by the importer <b>will be overwritten</b> in your account.`,
     import_submit: `Submit`,
+    import_samples: `Samples:`,
+    import_samples_maxFocus: `All Focus Schools Maxed Out`,
 
     upgrade_Equilibrium: `+|VAL|% Energy from Health pickups, +|VAL|% Health from Energy pickups`,
     upgrade_MeleeCritDamage: `+|VAL|% Melee Critical Damage`,

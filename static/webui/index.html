@@ -803,8 +803,12 @@
             </div>
             <div data-route="/webui/import" data-title="Import | OpenWF WebUI">
                 <p data-loc="import_importNote"></p>
-                <textarea class="form-control" id="import-inventory"></textarea>
+                <textarea class="form-control" id="import-inventory" style="height: calc(100vh - 300px)"></textarea>
                 <button class="btn btn-primary mt-3" onclick="doImport();" data-loc="import_submit"></button>
+                <p class="mt-3 mb-1" data-loc="import_samples"></p>
+                <ul>
+                    <li><a href="#" onclick="event.preventDefault();setImportSample('maxFocus');" data-loc="import_samples_maxFocus"></a></li>
+                </ul>
             </div>
         </div>
         <div class="toast-container position-fixed bottom-0 end-0 p-3"></div>

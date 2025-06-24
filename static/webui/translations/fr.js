@@ -185,6 +185,8 @@ dict = {
     cheats_none: `Aucun`,
     import_importNote: `Import manuel. Toutes les modifcations supportées par l'inventaire <b>écraseront celles présentes dans la base de données</b>.`,
     import_submit: `Soumettre`,
+    import_samples: `[UNTRANSLATED] Samples:`,
+    import_samples_maxFocus: `[UNTRANSLATED] All Focus Schools Maxed Out`,
 
     upgrade_Equilibrium: `[UNTRANSLATED] +|VAL|% Energy from Health pickups, +|VAL|% Health from Energy pickups`,
     upgrade_MeleeCritDamage: `[UNTRANSLATED] +|VAL|% Melee Critical Damage`,

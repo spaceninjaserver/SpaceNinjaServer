@@ -2339,3 +2339,238 @@ async function doUnlockAllMissions() {
     await fetch("/custom/completeAllMissions?" + window.authz);
     updateInventory();
 }
+
+const importSamples = {
+    maxFocus: {
+        FocusUpgrades: [
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Attack/AttackFocusAbility"
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Attack/Stats/MoreAmmoFocusUpgrade",
+                Level: 3,
+                IsUniversal: true
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Attack/Residual/PowerSnapFocusUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Attack/Residual/PhysicalDamageFocusUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Attack/Active/CloakAttackChargeFocusUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Attack/Stats/RegenAmmoFocusUpgrade",
+                Level: 3,
+                IsUniversal: true
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Tactic/TacticFocusAbility"
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Ward/WardFocusAbility"
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Defense/DefenseFocusAbility"
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Power/PowerFocusAbility"
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Ward/Active/KnockdownImmunityFocusUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Ward/Active/UnairuWispFocusUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Ward/Active/SunderingDissipationUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Ward/Active/MagneticExtensionUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Ward/Active/MagneticFieldFocusUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Ward/Residual/ArmourBuffFocusUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Ward/Active/ClearStaticOnKillFocusUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Ward/Residual/SecondChanceDamageBuffFocusUpgrade",
+                Level: 3,
+                IsUniversal: true
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Ward/Residual/SecondChanceFocusUpgrade",
+                Level: 3,
+                IsUniversal: true
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Ward/Active/InvulnerableReturnFocusUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Attack/Active/ConsecutivePowerUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Attack/Active/AttackEfficiencyFocusUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Attack/Active/GhostlyTouchUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Attack/Active/GhostWaveUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Attack/Active/ConsecutiveEfficienyUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Tactic/Active/ProjectionStretchUpgrade",
+                Level: 3,
+                IsUniversal: true
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Tactic/Active/ProjectionExecutionUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Tactic/Active/FinisherTransferenceUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Tactic/Active/ComboAmpDamageFocusUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Tactic/Residual/MeleeComboFocusUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Tactic/Residual/MeleeXpFocusUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Tactic/Active/LiftHitWaveUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Tactic/Active/LiftHitDamageUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Tactic/Stats/MoveSpeedFocusUpgrade",
+                Level: 3,
+                IsUniversal: true
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Tactic/Active/SlamComboFocusUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Power/Active/PowerFieldFocusUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Power/Active/DisarmedEnergyUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Power/Stats/EnergyPoolFocusUpgrade",
+                Level: 3,
+                IsUniversal: true
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Power/Residual/EnergyOverTimeFocusUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Power/Active/BlastSlowFocusUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Power/Stats/EnergyRestoreFocusUpgrade",
+                Level: 3,
+                IsUniversal: true
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Power/Residual/FreeAbilityCastsFocusUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Power/Active/DisarmingProjectionUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Power/Residual/SlowHeadshotDamageFocusUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Power/Active/DashBubbleFocusUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Defense/Stats/HealthRegenFocusUpgrade",
+                Level: 3,
+                IsUniversal: true
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Defense/Residual/RadialXpFocusUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Defense/Active/DefenseShieldFocusUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Defense/Active/CloakHealFocusUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Defense/Active/DefenseShieldBreakFocusUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Defense/Active/DashImmunityFocusUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Defense/Residual/InstantReviveFocusUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Defense/Active/SonicDissipationUpgrade",
+                Level: 3
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Defense/Stats/HealthMaxFocusUpgrade",
+                Level: 3,
+                IsUniversal: true
+            },
+            {
+                ItemType: "/Lotus/Upgrades/Focus/Defense/Active/CloakHealOthersFocusUpgrade",
+                Level: 2
+            }
+        ]
+    }
+};
+function setImportSample(key) {
+    $("#import-inventory").val(JSON.stringify(importSamples[key], null, 2));
+}

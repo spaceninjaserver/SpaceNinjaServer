@@ -185,6 +185,8 @@ dict = {
     cheats_none: `Ninguno`,
     import_importNote: `Puedes proporcionar una respuesta de inventario completa o parcial (representación del cliente) aquí. Todos los campos compatibles con el importador <b>serán sobrescritos</b> en tu cuenta.`,
     import_submit: `Enviar`,
+    import_samples: `[UNTRANSLATED] Samples:`,
+    import_samples_maxFocus: `[UNTRANSLATED] All Focus Schools Maxed Out`,
 
     upgrade_Equilibrium: `+|VAL|% de Energía al recoger salud, +|VAL|% de Salud al recoger energía`,
     upgrade_MeleeCritDamage: `+|VAL|% de daño crítico cuerpo a cuerpo`,

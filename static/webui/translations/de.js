@@ -185,6 +185,8 @@ dict = {
     cheats_none: `Keines`,
     import_importNote: `Du kannst hier eine vollständige oder teilweise Inventarantwort (Client-Darstellung) einfügen. Alle Felder, die vom Importer unterstützt werden, <b>werden in deinem Account überschrieben</b>.`,
     import_submit: `Absenden`,
+    import_samples: `[UNTRANSLATED] Samples:`,
+    import_samples_maxFocus: `[UNTRANSLATED] All Focus Schools Maxed Out`,
 
     upgrade_Equilibrium: `[UNTRANSLATED] +|VAL|% Energy from Health pickups, +|VAL|% Health from Energy pickups`,
     upgrade_MeleeCritDamage: `[UNTRANSLATED] +|VAL|% Melee Critical Damage`,
