@@ -21,13 +21,14 @@ import mongoose from "mongoose";
 import { JSONStringify } from "json-with-bigint";
 import { startWebServer } from "./services/webService";
 
-import { validateConfig } from "@/src/services/configWatcherService";
+import { syncConfigWithDatabase, validateConfig } from "@/src/services/configWatcherService";
 import { updateWorldStateCollections } from "./services/worldStateService";
 
 // Patch JSON.stringify to work flawlessly with Bigints.
 JSON.stringify = JSONStringify;
 
 validateConfig();
+syncConfigWithDatabase();
 
 mongoose
     .connect(config.mongodbUrl)

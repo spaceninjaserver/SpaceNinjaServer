@@ -22,7 +22,8 @@ import { getNemesisManifest } from "@/src/helpers/nemesisHelpers";
 import { getPersonalRooms } from "@/src/services/personalRoomsService";
 import { IPersonalRoomsClient } from "@/src/types/personalRoomsTypes";
 import { Ship } from "@/src/models/shipModel";
-import { toLegacyOid, version_compare } from "@/src/helpers/inventoryHelpers";
+import { toLegacyOid, toOid, version_compare } from "@/src/helpers/inventoryHelpers";
+import { Inbox } from "@/src/models/inboxModel";
 
 export const inventoryController: RequestHandler = async (request, response) => {
     const account = await getAccountForRequest(request);
@@ -128,12 +129,20 @@ export const getInventoryResponse = async (
     xpBasedLevelCapDisabled: boolean,
     buildLabel: string | undefined
 ): Promise<IInventoryClient> => {
-    const [inventoryWithLoadOutPresets, ships] = await Promise.all([
+    const [inventoryWithLoadOutPresets, ships, latestMessage] = await Promise.all([
         inventory.populate<{ LoadOutPresets: ILoadoutDatabase }>("LoadOutPresets"),
-        Ship.find({ ShipOwnerId: inventory.accountOwnerId })
+        Ship.find({ ShipOwnerId: inventory.accountOwnerId }),
+        Inbox.findOne({ ownerId: inventory.accountOwnerId }, "_id").sort({ date: -1 })
     ]);
     const inventoryResponse = inventoryWithLoadOutPresets.toJSON<IInventoryClient>();
     inventoryResponse.Ships = ships.map(x => x.toJSON<IShipInventory>());
+
+    // In case mission inventory update added an inbox message, we need to send the Mailbox part so the client knows to refresh it.
+    if (latestMessage) {
+        inventoryResponse.Mailbox = {
+            LastInboxId: toOid(latestMessage._id)
+        };
+    }
 
     if (config.infiniteCredits) {
         inventoryResponse.RegularCredits = 999999999;

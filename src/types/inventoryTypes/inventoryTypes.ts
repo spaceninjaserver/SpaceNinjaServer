@@ -56,6 +56,7 @@ export interface IInventoryDatabase
             | "QualifyingInvasions"
             | "LastInventorySync"
             | "EndlessXP"
+            | "PersonalGoalProgress"
             | TEquipmentKey
         >,
         InventoryDatabaseEquipment {
@@ -63,7 +64,7 @@ export interface IInventoryDatabase
     Created: Date;
     TrainingDate: Date;
     LoadOutPresets: Types.ObjectId; // LoadOutPresets changed from ILoadOutPresets to Types.ObjectId for population
-    Mailbox?: IMailboxDatabase;
+    //Mailbox?: IMailboxDatabase;
     GuildId?: Types.ObjectId;
     PendingRecipes: IPendingRecipeDatabase[];
     QuestKeys: IQuestKeyDatabase[];
@@ -95,6 +96,7 @@ export interface IInventoryDatabase
     QualifyingInvasions: IInvasionProgressDatabase[];
     LastInventorySync?: Types.ObjectId;
     EndlessXP?: IEndlessXpProgressDatabase[];
+    PersonalGoalProgress?: IPersonalGoalProgressDatabase[];
 }
 
 export interface IQuestKeyDatabase {
@@ -150,9 +152,9 @@ export interface IMailboxClient {
     LastInboxId: IOid;
 }
 
-export interface IMailboxDatabase {
+/*export interface IMailboxDatabase {
     LastInboxId: Types.ObjectId;
-}
+}*/
 
 export type TSolarMapRegion =
     | "Earth"
@@ -306,7 +308,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     HWIDProtectEnabled?: boolean;
     //KubrowPetPrints: IKubrowPetPrint[];
     AlignmentReplay?: IAlignment;
-    //PersonalGoalProgress: IPersonalGoalProgress[];
+    PersonalGoalProgress?: IPersonalGoalProgressClient[];
     ThemeStyle: string;
     ThemeBackground: string;
     ThemeSounds: string;
@@ -1015,13 +1017,17 @@ export interface IPeriodicMissionCompletionResponse extends Omit<IPeriodicMissio
     date: IMongoDate;
 }
 
-export interface IPersonalGoalProgress {
+export interface IPersonalGoalProgressClient {
+    Best: number;
     Count: number;
     Tag: string;
-    Best?: number;
     _id: IOid;
-    ReceivedClanReward0?: boolean;
-    ReceivedClanReward1?: boolean;
+    //ReceivedClanReward0?: boolean;
+    //ReceivedClanReward1?: boolean;
+}
+
+export interface IPersonalGoalProgressDatabase extends Omit<IPersonalGoalProgressClient, "_id"> {
+    goalId: Types.ObjectId;
 }
 
 export interface IPersonalTechProjectDatabase {

@@ -54,6 +54,22 @@ export const createNewEventMessages = async (req: Request): Promise<void> => {
         });
     }
 
+    // BUG: Deleting the inbox message manually means it'll just be automatically re-created. This is because we don't use startDate/endDate for these config-toggled events.
+    if (config.worldState?.galleonOfGhouls) {
+        if (!(await Inbox.exists({ ownerId: account._id, goalTag: "GalleonRobbery" }))) {
+            newEventMessages.push({
+                sndr: "/Lotus/Language/Bosses/BossCouncilorVayHek",
+                sub: "/Lotus/Language/Events/GalleonRobberyIntroMsgTitle",
+                msg: "/Lotus/Language/Events/GalleonRobberyIntroMsgDesc",
+                icon: "/Lotus/Interface/Icons/Npcs/VayHekPortrait.png",
+                transmission: "/Lotus/Sounds/Dialog/GalleonOfGhouls/DGhoulsWeekOneInbox0010VayHek",
+                att: ["/Lotus/Upgrades/Skins/Events/OgrisOldSchool"],
+                startDate: new Date(),
+                goalTag: "GalleonRobbery"
+            });
+        }
+    }
+
     if (newEventMessages.length === 0) {
         return;
     }

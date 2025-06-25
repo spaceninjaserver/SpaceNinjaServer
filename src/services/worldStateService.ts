@@ -1149,6 +1149,77 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             Node: "SolarisUnitedHub1"
         });
     }
+    // The client gets kinda confused when multiple goals have the same tag, so considering these mutually exclusive.
+    if (config.worldState?.galleonOfGhouls == 1) {
+        worldState.Goals.push({
+            _id: { $oid: "6814ddf00000000000000000" },
+            Activation: { $date: { $numberLong: "1746198000000" } },
+            Expiry: { $date: { $numberLong: "2000000000000" } },
+            Count: 0,
+            Goal: 1,
+            Success: 0,
+            Personal: true,
+            Bounty: true,
+            ClampNodeScores: true,
+            Node: "EventNode19",
+            MissionKeyName: "/Lotus/Types/Keys/GalleonRobberyAlert",
+            Desc: "/Lotus/Language/Events/GalleonRobberyEventMissionTitle",
+            Icon: "/Lotus/Interface/Icons/Player/GalleonRobberiesEvent.png",
+            Tag: "GalleonRobbery",
+            Reward: {
+                items: [
+                    "/Lotus/StoreItems/Types/Recipes/Weapons/GrnChainSawTonfaBlueprint",
+                    "/Lotus/StoreItems/Upgrades/Skins/Clan/BountyHunterBadgeItem"
+                ]
+            }
+        });
+    } else if (config.worldState?.galleonOfGhouls == 2) {
+        worldState.Goals.push({
+            _id: { $oid: "681e18700000000000000000" },
+            Activation: { $date: { $numberLong: "1746802800000" } },
+            Expiry: { $date: { $numberLong: "2000000000000" } },
+            Count: 0,
+            Goal: 1,
+            Success: 0,
+            Personal: true,
+            Bounty: true,
+            ClampNodeScores: true,
+            Node: "EventNode28",
+            MissionKeyName: "/Lotus/Types/Keys/GalleonRobberyAlertB",
+            Desc: "/Lotus/Language/Events/GalleonRobberyEventMissionTitle",
+            Icon: "/Lotus/Interface/Icons/Player/GalleonRobberiesEvent.png",
+            Tag: "GalleonRobbery",
+            Reward: {
+                items: [
+                    "/Lotus/StoreItems/Types/Recipes/Weapons/MortiforShieldAndSwordBlueprint",
+                    "/Lotus/StoreItems/Upgrades/Skins/Clan/BountyHunterBadgeItem"
+                ]
+            }
+        });
+    } else if (config.worldState?.galleonOfGhouls == 3) {
+        worldState.Goals.push({
+            _id: { $oid: "682752f00000000000000000" },
+            Activation: { $date: { $numberLong: "1747407600000" } },
+            Expiry: { $date: { $numberLong: "2000000000000" } },
+            Count: 0,
+            Goal: 1,
+            Success: 0,
+            Personal: true,
+            Bounty: true,
+            ClampNodeScores: true,
+            Node: "EventNode19",
+            MissionKeyName: "/Lotus/Types/Keys/GalleonRobberyAlertC",
+            Desc: "/Lotus/Language/Events/GalleonRobberyEventMissionTitle",
+            Icon: "/Lotus/Interface/Icons/Player/GalleonRobberiesEvent.png",
+            Tag: "GalleonRobbery",
+            Reward: {
+                items: [
+                    "/Lotus/Types/StoreItems/Packages/EventCatalystReactorBundle",
+                    "/Lotus/StoreItems/Upgrades/Skins/Clan/BountyHunterBadgeItem"
+                ]
+            }
+        });
+    }
 
     // Nightwave Challenges
     const nightwaveSyndicateTag = getNightwaveSyndicateTag(buildLabel);

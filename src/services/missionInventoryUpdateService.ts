@@ -46,7 +46,7 @@ import {
 import { updateQuestKey } from "@/src/services/questService";
 import { Types } from "mongoose";
 import { IAffiliationMods, IInventoryChanges } from "@/src/types/purchaseTypes";
-import { fromStoreItem, getLevelKeyRewards, toStoreItem } from "@/src/services/itemDataService";
+import { fromStoreItem, getLevelKeyRewards, isStoreItem, toStoreItem } from "@/src/services/itemDataService";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { getEntriesUnsafe } from "@/src/utils/ts-utils";
 import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
@@ -609,6 +609,47 @@ export const addMissionInventoryUpdates = async (
                 inventoryChanges.RegularCredits -= value;
                 break;
             }
+            case "GoalProgress": {
+                for (const uploadProgress of value) {
+                    const goal = getWorldState().Goals.find(x => x._id.$oid == uploadProgress._id.$oid);
+                    if (goal && goal.Personal) {
+                        inventory.PersonalGoalProgress ??= [];
+                        const goalProgress = inventory.PersonalGoalProgress.find(x => x.goalId.equals(goal._id.$oid));
+                        if (goalProgress) {
+                            goalProgress.Best = Math.max(goalProgress.Best, uploadProgress.Best);
+                            goalProgress.Count += uploadProgress.Count;
+                        } else {
+                            inventory.PersonalGoalProgress.push({
+                                Best: uploadProgress.Best,
+                                Count: uploadProgress.Count,
+                                Tag: goal.Tag,
+                                goalId: new Types.ObjectId(goal._id.$oid)
+                            });
+
+                            if (
+                                goal.Reward &&
+                                goal.Reward.items &&
+                                goal.MissionKeyName &&
+                                goal.MissionKeyName in goalMessagesByKey
+                            ) {
+                                // Send reward via inbox
+                                const info = goalMessagesByKey[goal.MissionKeyName];
+                                await createMessage(inventory.accountOwnerId, [
+                                    {
+                                        sndr: info.sndr,
+                                        msg: info.msg,
+                                        att: goal.Reward.items.map(x => (isStoreItem(x) ? fromStoreItem(x) : x)),
+                                        sub: info.sub,
+                                        icon: info.icon,
+                                        highPriority: true
+                                    }
+                                ]);
+                            }
+                        }
+                    }
+                }
+                break;
+            }
             case "InvasionProgress": {
                 for (const clientProgress of value) {
                     const dbProgress = inventory.QualifyingInvasions.find(x =>
@@ -962,6 +1003,14 @@ export const addMissionRewards = async (
 
     let missionCompletionCredits = 0;
     //inventory change is what the client has not rewarded itself, also the client needs to know the credit changes for display
+
+    if (rewardInfo.goalId) {
+        const goal = getWorldState().Goals.find(x => x._id.$oid == rewardInfo.goalId);
+        if (goal?.MissionKeyName) {
+            levelKeyName = goal.MissionKeyName;
+        }
+    }
+
     if (levelKeyName) {
         const fixedLevelRewards = getLevelKeyRewards(levelKeyName);
         //logger.debug(`fixedLevelRewards ${fixedLevelRewards}`);
@@ -1978,3 +2027,24 @@ const getHexBounties = (seed: number): { nodes: string[]; buddies: string[] } =>
     }
     return { nodes, buddies };
 };*/
+
+const goalMessagesByKey: Record<string, { sndr: string; msg: string; sub: string; icon: string }> = {
+    "/Lotus/Types/Keys/GalleonRobberyAlert": {
+        sndr: "/Lotus/Language/Bosses/BossCouncilorVayHek",
+        msg: "/Lotus/Language/Messages/GalleonRobbery2025RewardMsgA",
+        sub: "/Lotus/Language/Messages/GalleonRobbery2025MissionTitleA",
+        icon: "/Lotus/Interface/Icons/Npcs/VayHekPortrait.png"
+    },
+    "/Lotus/Types/Keys/GalleonRobberyAlertB": {
+        sndr: "/Lotus/Language/Bosses/BossCouncilorVayHek",
+        msg: "/Lotus/Language/Messages/GalleonRobbery2025RewardMsgB",
+        sub: "/Lotus/Language/Messages/GalleonRobbery2025MissionTitleB",
+        icon: "/Lotus/Interface/Icons/Npcs/VayHekPortrait.png"
+    },
+    "/Lotus/Types/Keys/GalleonRobberyAlertC": {
+        sndr: "/Lotus/Language/Bosses/BossCouncilorVayHek",
+        msg: "/Lotus/Language/Messages/GalleonRobbery2025RewardMsgC",
+        sub: "/Lotus/Language/Messages/GalleonRobbery2025MissionTitleC",
+        icon: "/Lotus/Interface/Icons/Npcs/VayHekPortrait.png"
+    }
+};

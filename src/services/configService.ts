@@ -76,6 +76,7 @@ export interface IConfig {
         affinityBoost?: boolean;
         resourceBoost?: boolean;
         starDays?: boolean;
+        galleonOfGhouls?: number;
         eidolonOverride?: string;
         vallisOverride?: string;
         duviriOverride?: string;

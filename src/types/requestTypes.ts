@@ -139,6 +139,14 @@ export type IMissionInventoryUpdateRequest = {
     };
     wagerTier?: number; // the index
     creditsFee?: number; // the index
+    GoalProgress?: {
+        _id: IOid;
+        Count: number;
+        Best: number;
+        Tag: string;
+        IsMultiProgress: boolean;
+        MultiProgress: unknown[];
+    }[];
     InvasionProgress?: IInvasionProgressClient[];
     ConquestMissionsCompleted?: number;
     duviriSuitSelection?: string;
@@ -156,6 +164,8 @@ export type IMissionInventoryUpdateRequest = {
 
 export interface IRewardInfo {
     node: string;
+    goalId?: string;
+    goalManifest?: string;
     invasionId?: string;
     invasionAllyFaction?: "FC_GRINEER" | "FC_CORPUS";
     sortieId?: string;

@@ -1,3 +1,4 @@
+import { IMissionReward } from "warframe-public-export-plus";
 import { IMongoDate, IOid } from "./commonTypes";
 
 export interface IWorldState {
@@ -37,11 +38,15 @@ export interface IGoal {
     Goal: number;
     Success: number;
     Personal: boolean;
+    Bounty?: boolean;
+    ClampNodeScores?: boolean;
     Desc: string;
-    ToolTip: string;
+    ToolTip?: string;
     Icon: string;
     Tag: string;
     Node: string;
+    MissionKeyName?: string;
+    Reward?: IMissionReward;
 }
 
 export interface ISyndicateMissionInfo {

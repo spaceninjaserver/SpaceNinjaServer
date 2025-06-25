@@ -27,11 +27,12 @@ export interface IMessage {
     icon?: string;
     highPriority?: boolean;
     lowPrioNewPlayers?: boolean;
-    startDate?: Date;
-    endDate?: Date;
+    transmission?: string;
     att?: string[];
     countedAtt?: ITypeCount[];
-    transmission?: string;
+    startDate?: Date;
+    endDate?: Date;
+    goalTag?: string;
     CrossPlatform?: boolean;
     arg?: Arg[];
     gifts?: IGift[];
@@ -107,6 +108,7 @@ const messageSchema = new Schema<IMessageDatabase>(
         lowPrioNewPlayers: Boolean,
         startDate: Date,
         endDate: Date,
+        goalTag: String,
         date: { type: Date, required: true },
         r: Boolean,
         CrossPlatform: Boolean,

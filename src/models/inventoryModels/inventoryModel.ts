@@ -1,4 +1,4 @@
-import { Document, HydratedDocument, Model, Schema, Types, model } from "mongoose";
+import { Document, Model, Schema, Types, model } from "mongoose";
 import {
     IFlavourItem,
     IRawUpgrade,
@@ -7,7 +7,6 @@ import {
     IBooster,
     IInventoryClient,
     ISlots,
-    IMailboxDatabase,
     IDuviriInfo,
     IPendingRecipeDatabase,
     IPendingRecipeClient,
@@ -54,7 +53,6 @@ import {
     IUpgradeDatabase,
     ICrewShipMemberDatabase,
     ICrewShipMemberClient,
-    IMailboxClient,
     TEquipmentKey,
     equipmentKeys,
     IKubrowPetDetailsDatabase,
@@ -99,7 +97,9 @@ import {
     IAccolades,
     IHubNpcCustomization,
     ILotusCustomization,
-    IEndlessXpReward
+    IEndlessXpReward,
+    IPersonalGoalProgressDatabase,
+    IPersonalGoalProgressClient
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -371,7 +371,7 @@ FlavourItemSchema.set("toJSON", {
     }
 });
 
-const MailboxSchema = new Schema<IMailboxDatabase>(
+/*const MailboxSchema = new Schema<IMailboxDatabase>(
     {
         LastInboxId: Schema.Types.ObjectId
     },
@@ -384,7 +384,7 @@ MailboxSchema.set("toJSON", {
         delete mailboxDatabase.__v;
         (returnedObject as IMailboxClient).LastInboxId = toOid(mailboxDatabase.LastInboxId);
     }
-});
+});*/
 
 const DuviriInfoSchema = new Schema<IDuviriInfo>(
     {
@@ -456,6 +456,29 @@ const discoveredMarkerSchema = new Schema<IDiscoveredMarker>(
     },
     { _id: false }
 );
+
+const personalGoalProgressSchema = new Schema<IPersonalGoalProgressDatabase>(
+    {
+        Best: Number,
+        Count: Number,
+        Tag: String,
+        goalId: Types.ObjectId
+    },
+    { _id: false }
+);
+
+personalGoalProgressSchema.set("toJSON", {
+    virtuals: true,
+    transform(_doc, obj) {
+        const db = obj as IPersonalGoalProgressDatabase;
+        const client = obj as IPersonalGoalProgressClient;
+
+        client._id = toOid(db.goalId);
+
+        delete obj.goalId;
+        delete obj.__v;
+    }
+});
 
 const challengeProgressSchema = new Schema<IChallengeProgress>(
     {
@@ -1630,7 +1653,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //CompletedJobs: [Schema.Types.Mixed],
 
         //Game mission\ivent score example  "Tag": "WaterFight", "Best": 170, "Count": 1258,
-        //PersonalGoalProgress: [Schema.Types.Mixed],
+        PersonalGoalProgress: { type: [personalGoalProgressSchema], default: undefined },
 
         //Setting interface Style
         ThemeStyle: String,
@@ -1701,7 +1724,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Unknown and system
         DuviriInfo: DuviriInfoSchema,
         LastInventorySync: Schema.Types.ObjectId,
-        Mailbox: MailboxSchema,
+        //Mailbox: MailboxSchema,
         HandlerPoints: Number,
         ChallengesFixVersion: Number,
         PlayedParkourTutorial: Boolean,

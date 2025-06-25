@@ -3,6 +3,7 @@ import fsPromises from "fs/promises";
 import { logger } from "../utils/logger";
 import { config, configPath, loadConfig } from "./configService";
 import { getWebPorts, sendWsBroadcast, startWebServer, stopWebServer } from "./webService";
+import { Inbox } from "../models/inboxModel";
 
 let amnesia = false;
 fs.watchFile(configPath, (now, then) => {
@@ -22,6 +23,7 @@ fs.watchFile(configPath, (now, then) => {
             process.exit(1);
         }
         validateConfig();
+        syncConfigWithDatabase();
 
         const webPorts = getWebPorts();
         if (config.httpPort != webPorts.http || config.httpsPort != webPorts.https) {
@@ -51,6 +53,15 @@ export const validateConfig = (): void => {
             }
         }
     }
+    if (
+        config.worldState?.galleonOfGhouls &&
+        config.worldState.galleonOfGhouls != 1 &&
+        config.worldState.galleonOfGhouls != 2 &&
+        config.worldState.galleonOfGhouls != 3
+    ) {
+        config.worldState.galleonOfGhouls = 0;
+        modified = true;
+    }
     if (modified) {
         logger.info(`Updating config file to fix some issues with it.`);
         void saveConfig();
@@ -60,4 +71,11 @@ export const validateConfig = (): void => {
 export const saveConfig = async (): Promise<void> => {
     amnesia = true;
     await fsPromises.writeFile(configPath, JSON.stringify(config, null, 2));
+};
+
+export const syncConfigWithDatabase = (): void => {
+    // Event messages are deleted after endDate. Since we don't use beginDate/endDate and instead have config toggles, we need to delete the messages once those bools are false.
+    if (!config.worldState?.galleonOfGhouls) {
+        void Inbox.deleteMany({ goalTag: "GalleonRobbery" }).then(() => {}); // For some reason, I can't just do `Inbox.deleteMany(...)`; it needs this whole circus.
+    }
 };
