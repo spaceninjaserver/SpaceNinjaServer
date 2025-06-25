@@ -5,8 +5,10 @@
   "main": "index.ts",
   "scripts": {
     "start": "node --enable-source-maps --import ./build/src/pathman.js build/src/index.js",
-    "build": "tsc --incremental --sourceMap && ncp static/webui build/static/webui",
-    "build:dev": "tsc --incremental --sourceMap",
+    "build": "tsgo --sourceMap && ncp static/webui build/static/webui",
+    "build:tsc": "tsc --incremental --sourceMap && ncp static/webui build/static/webui",
+    "build:dev": "tsgo --sourceMap",
+    "build:dev:tsc": "tsc --incremental --sourceMap",
     "build-and-start": "npm run build && npm run start",
     "build-and-start:bun": "npm run verify && npm run bun-run",
     "dev": "node scripts/dev.js",
@@ -25,6 +27,7 @@
     "@types/morgan": "^1.9.9",
     "@types/websocket": "^1.0.10",
     "@types/ws": "^8.18.1",
+    "@typescript/native-preview": "^7.0.0-dev.20250625.1",
     "crc-32": "^1.2.2",
     "express": "^5",
     "json-with-bigint": "^3.4.4",
@@ -42,7 +45,6 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^8.28.0",
     "@typescript-eslint/parser": "^8.28.0",
-    "@typescript/native-preview": "^7.0.0-dev.20250523.1",
     "chokidar": "^4.0.3",
     "eslint": "^8",
     "eslint-plugin-prettier": "^5.2.5",
