@@ -101,7 +101,7 @@ const sortieBossNode: Record<Exclude<TSortieBoss, "SORTIE_BOSS_CORRUPTED_VOR">, 
     SORTIE_BOSS_VOR: "SolNode108"
 };
 
-const eidolonJobs = [
+const eidolonJobs: readonly string[] = [
     "/Lotus/Types/Gameplay/Eidolon/Jobs/AssassinateBountyAss",
     "/Lotus/Types/Gameplay/Eidolon/Jobs/AssassinateBountyCap",
     "/Lotus/Types/Gameplay/Eidolon/Jobs/AttritionBountySab",
@@ -117,14 +117,14 @@ const eidolonJobs = [
     "/Lotus/Types/Gameplay/Eidolon/Jobs/RescueBountyResc"
 ];
 
-const eidolonNarmerJobs = [
+const eidolonNarmerJobs: readonly string[] = [
     "/Lotus/Types/Gameplay/Eidolon/Jobs/Narmer/AssassinateBountyAss",
     "/Lotus/Types/Gameplay/Eidolon/Jobs/Narmer/AttritionBountyExt",
     "/Lotus/Types/Gameplay/Eidolon/Jobs/Narmer/ReclamationBountyTheft",
     "/Lotus/Types/Gameplay/Eidolon/Jobs/Narmer/AttritionBountyLib"
 ];
 
-const venusJobs = [
+const venusJobs: readonly string[] = [
     "/Lotus/Types/Gameplay/Venus/Jobs/VenusArtifactJobAmbush",
     "/Lotus/Types/Gameplay/Venus/Jobs/VenusArtifactJobExcavation",
     "/Lotus/Types/Gameplay/Venus/Jobs/VenusArtifactJobRecovery",
@@ -150,14 +150,14 @@ const venusJobs = [
     "/Lotus/Types/Gameplay/Venus/Jobs/VenusWetworkJobSpy"
 ];
 
-const venusNarmerJobs = [
+const venusNarmerJobs: readonly string[] = [
     "/Lotus/Types/Gameplay/Venus/Jobs/Narmer/NarmerVenusCullJobAssassinate",
     "/Lotus/Types/Gameplay/Venus/Jobs/Narmer/NarmerVenusCullJobExterminate",
     "/Lotus/Types/Gameplay/Venus/Jobs/Narmer/NarmerVenusPreservationJobDefense",
     "/Lotus/Types/Gameplay/Venus/Jobs/Narmer/NarmerVenusTheftJobExcavation"
 ];
 
-const microplanetJobs = [
+const microplanetJobs: readonly string[] = [
     "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosAreaDefenseBounty",
     "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosAssassinateBounty",
     "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosCrpSurvivorBounty",
@@ -167,7 +167,7 @@ const microplanetJobs = [
     "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosPurifyBounty"
 ];
 
-const microplanetEndlessJobs = [
+const microplanetEndlessJobs: readonly string[] = [
     "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosEndlessAreaDefenseBounty",
     "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosEndlessExcavateBounty",
     "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosEndlessPurifyBounty"
@@ -498,6 +498,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
 
     {
         const rng = new SRng(seed);
+        const pool = [...eidolonJobs];
         syndicateMissions.push({
             _id: {
                 $oid: ((bountyCycleStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "0000000000000008"
@@ -509,7 +510,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
             Nodes: [],
             Jobs: [
                 {
-                    jobType: rng.randomElement(eidolonJobs),
+                    jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierATable${table}Rewards`,
                     masteryReq: 0,
                     minEnemyLevel: 5,
@@ -517,7 +518,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                     xpAmounts: generateXpAmounts(rng, 3, 1000, 1500)
                 },
                 {
-                    jobType: rng.randomElement(eidolonJobs),
+                    jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierBTable${table}Rewards`,
                     masteryReq: 1,
                     minEnemyLevel: 10,
@@ -525,7 +526,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                     xpAmounts: generateXpAmounts(rng, 3, 1750, 2250)
                 },
                 {
-                    jobType: rng.randomElement(eidolonJobs),
+                    jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierCTable${table}Rewards`,
                     masteryReq: 2,
                     minEnemyLevel: 20,
@@ -533,7 +534,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                     xpAmounts: generateXpAmounts(rng, 4, 2500, 3000)
                 },
                 {
-                    jobType: rng.randomElement(eidolonJobs),
+                    jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierDTable${table}Rewards`,
                     masteryReq: 3,
                     minEnemyLevel: 30,
@@ -541,7 +542,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                     xpAmounts: generateXpAmounts(rng, 5, 3250, 3750)
                 },
                 {
-                    jobType: rng.randomElement(eidolonJobs),
+                    jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierETable${table}Rewards`,
                     masteryReq: 5,
                     minEnemyLevel: 40,
@@ -549,7 +550,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                     xpAmounts: generateXpAmounts(rng, 5, 4000, 4500)
                 },
                 {
-                    jobType: rng.randomElement(eidolonJobs),
+                    jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierETable${table}Rewards`,
                     masteryReq: 10,
                     minEnemyLevel: 100,
@@ -570,6 +571,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
 
     {
         const rng = new SRng(seed);
+        const pool = [...venusJobs];
         syndicateMissions.push({
             _id: {
                 $oid: ((bountyCycleStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "0000000000000025"
@@ -581,7 +583,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
             Nodes: [],
             Jobs: [
                 {
-                    jobType: rng.randomElement(venusJobs),
+                    jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierATable${table}Rewards`,
                     masteryReq: 0,
                     minEnemyLevel: 5,
@@ -589,7 +591,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                     xpAmounts: generateXpAmounts(rng, 3, 1000, 1500)
                 },
                 {
-                    jobType: rng.randomElement(venusJobs),
+                    jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierBTable${table}Rewards`,
                     masteryReq: 1,
                     minEnemyLevel: 10,
@@ -597,7 +599,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                     xpAmounts: generateXpAmounts(rng, 3, 1750, 2250)
                 },
                 {
-                    jobType: rng.randomElement(venusJobs),
+                    jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierCTable${table}Rewards`,
                     masteryReq: 2,
                     minEnemyLevel: 20,
@@ -605,7 +607,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                     xpAmounts: generateXpAmounts(rng, 4, 2500, 3000)
                 },
                 {
-                    jobType: rng.randomElement(venusJobs),
+                    jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierDTable${table}Rewards`,
                     masteryReq: 3,
                     minEnemyLevel: 30,
@@ -613,7 +615,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                     xpAmounts: generateXpAmounts(rng, 5, 3250, 3750)
                 },
                 {
-                    jobType: rng.randomElement(venusJobs),
+                    jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierETable${table}Rewards`,
                     masteryReq: 5,
                     minEnemyLevel: 40,
@@ -621,7 +623,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                     xpAmounts: generateXpAmounts(rng, 5, 4000, 4500)
                 },
                 {
-                    jobType: rng.randomElement(venusJobs),
+                    jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierETable${table}Rewards`,
                     masteryReq: 10,
                     minEnemyLevel: 100,
@@ -642,6 +644,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
 
     {
         const rng = new SRng(seed);
+        const pool = [...microplanetJobs];
         syndicateMissions.push({
             _id: {
                 $oid: ((bountyCycleStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "0000000000000002"
@@ -653,7 +656,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
             Nodes: [],
             Jobs: [
                 {
-                    jobType: rng.randomElement(microplanetJobs),
+                    jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierATable${table}Rewards`,
                     masteryReq: 0,
                     minEnemyLevel: 5,
@@ -661,7 +664,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                     xpAmounts: generateXpAmounts(rng, 3, 12, 18)
                 },
                 {
-                    jobType: rng.randomElement(microplanetJobs),
+                    jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierCTable${table}Rewards`,
                     masteryReq: 1,
                     minEnemyLevel: 15,
@@ -678,7 +681,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                     xpAmounts: [14, 14, 14]
                 },
                 {
-                    jobType: rng.randomElement(microplanetJobs),
+                    jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierDTable${deimosDTable}Rewards`,
                     masteryReq: 2,
                     minEnemyLevel: 30,
@@ -686,7 +689,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                     xpAmounts: generateXpAmounts(rng, 4, 72, 88)
                 },
                 {
-                    jobType: rng.randomElement(microplanetJobs),
+                    jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierETableARewards`,
                     masteryReq: 3,
                     minEnemyLevel: 40,
@@ -694,7 +697,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                     xpAmounts: generateXpAmounts(rng, 5, 115, 135)
                 },
                 {
-                    jobType: rng.randomElement(microplanetJobs),
+                    jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierETableARewards`,
                     masteryReq: 10,
                     minEnemyLevel: 100,

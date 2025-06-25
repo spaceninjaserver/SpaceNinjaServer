@@ -107,6 +107,16 @@ export class SRng {
         return arr[this.randomInt(0, arr.length - 1)];
     }
 
+    randomElementPop<T>(arr: T[]): T | undefined {
+        if (arr.length != 0) {
+            const index = this.randomInt(0, arr.length - 1);
+            const elm = arr[index];
+            arr.splice(index, 1);
+            return elm;
+        }
+        return undefined;
+    }
+
     randomFloat(): number {
         this.state = (0x5851f42d4c957f2dn * this.state + 0x14057b7ef767814fn) & 0xffffffffffffffffn;
         return (Number(this.state >> 38n) & 0xffffff) * 0.000000059604645;
