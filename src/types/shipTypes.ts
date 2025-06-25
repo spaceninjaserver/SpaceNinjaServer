@@ -96,6 +96,7 @@ export interface IPlacedDecosDatabase {
     Pos: [number, number, number];
     Rot: [number, number, number];
     Scale?: number;
+    Sockets?: number;
     PictureFrameInfo?: IPictureFrameInfo;
     _id: Types.ObjectId;
 }
@@ -136,6 +137,7 @@ export interface IShipDecorationsRequest {
     MoveId?: string;
     OldRoom?: string;
     Scale?: number;
+    Sockets?: number;
 }
 
 export interface IShipDecorationsResponse {

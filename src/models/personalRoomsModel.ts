@@ -40,6 +40,7 @@ const placedDecosSchema = new Schema<IPlacedDecosDatabase>(
         Pos: [Number],
         Rot: [Number],
         Scale: Number,
+        Sockets: Number,
         PictureFrameInfo: { type: pictureFrameInfoSchema, default: undefined }
     },
     { id: false }

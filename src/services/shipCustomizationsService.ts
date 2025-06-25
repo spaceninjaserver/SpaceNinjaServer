@@ -8,11 +8,12 @@ import {
 } from "@/src/types/shipTypes";
 import { logger } from "@/src/utils/logger";
 import { Types } from "mongoose";
-import { addShipDecorations, getInventory } from "./inventoryService";
+import { addFusionTreasures, addShipDecorations, getInventory } from "./inventoryService";
 import { config } from "./configService";
 import { Guild } from "../models/guildModel";
 import { hasGuildPermission } from "./guildService";
 import { GuildPermission } from "../types/guildTypes";
+import { ExportResources } from "warframe-public-export-plus";
 
 export const setShipCustomizations = async (
     accountId: string,
@@ -101,6 +102,7 @@ export const handleSetShipDecorations = async (
             Pos: placedDecoration.Pos,
             Rot: placedDecoration.Rot,
             Scale: placedDecoration.Scale,
+            Sockets: placedDecoration.Sockets,
             _id: placedDecoration.MoveId
         };
 
@@ -116,12 +118,19 @@ export const handleSetShipDecorations = async (
     }
 
     if (placedDecoration.RemoveId) {
-        roomToPlaceIn.PlacedDecos.pull({ _id: placedDecoration.RemoveId });
+        const decoIndex = roomToPlaceIn.PlacedDecos.findIndex(x => x._id.equals(placedDecoration.RemoveId));
+        const deco = roomToPlaceIn.PlacedDecos[decoIndex];
+        roomToPlaceIn.PlacedDecos.splice(decoIndex, 1);
         await personalRooms.save();
 
         if (!config.unlockAllShipDecorations) {
             const inventory = await getInventory(accountId);
-            addShipDecorations(inventory, [{ ItemType: placedDecoration.Type, ItemCount: 1 }]);
+            const itemType = Object.entries(ExportResources).find(arr => arr[1].deco == deco.Type)![0];
+            if (deco.Sockets !== undefined) {
+                addFusionTreasures(inventory, [{ ItemType: itemType, Sockets: deco.Sockets, ItemCount: 1 }]);
+            } else {
+                addShipDecorations(inventory, [{ ItemType: itemType, ItemCount: 1 }]);
+            }
             await inventory.save();
         }
 
@@ -134,7 +143,14 @@ export const handleSetShipDecorations = async (
     } else {
         if (!config.unlockAllShipDecorations) {
             const inventory = await getInventory(accountId);
-            addShipDecorations(inventory, [{ ItemType: placedDecoration.Type, ItemCount: -1 }]);
+            const itemType = Object.entries(ExportResources).find(arr => arr[1].deco == placedDecoration.Type)![0];
+            if (placedDecoration.Sockets !== undefined) {
+                addFusionTreasures(inventory, [
+                    { ItemType: itemType, Sockets: placedDecoration.Sockets, ItemCount: -1 }
+                ]);
+            } else {
+                addShipDecorations(inventory, [{ ItemType: itemType, ItemCount: -1 }]);
+            }
             await inventory.save();
         }
     }
@@ -148,6 +164,7 @@ export const handleSetShipDecorations = async (
         Pos: placedDecoration.Pos,
         Rot: placedDecoration.Rot,
         Scale: placedDecoration.Scale,
+        Sockets: placedDecoration.Sockets,
         _id: decoId
     });
 
