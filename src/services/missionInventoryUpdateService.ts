@@ -1207,7 +1207,7 @@ export const addMissionRewards = async (
 
     if (rewardInfo.JobStage != undefined && rewardInfo.jobId) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const [jobType, unkIndex, hubNode, syndicateMissionId, locationTag] = rewardInfo.jobId.split("_");
+        const [jobType, unkIndex, hubNode, syndicateMissionId] = rewardInfo.jobId.split("_");
         const syndicateMissions: ISyndicateMissionInfo[] = [];
         if (syndicateMissionId) {
             pushClassicBounties(syndicateMissions, idToBountyCycle(syndicateMissionId));
@@ -1216,12 +1216,27 @@ export const addMissionRewards = async (
         if (syndicateEntry && syndicateEntry.Jobs) {
             let currentJob = syndicateEntry.Jobs[rewardInfo.JobTier!];
             if (syndicateEntry.Tag === "EntratiSyndicate") {
-                if (jobType.endsWith("VaultBounty")) {
-                    const vault = syndicateEntry.Jobs.find(j => j.locationTag === locationTag);
-                    if (vault) currentJob = vault;
+                if (
+                    [
+                        "DeimosRuinsExterminateBounty",
+                        "DeimosRuinsEscortBounty",
+                        "DeimosRuinsMistBounty",
+                        "DeimosRuinsPurifyBounty",
+                        "DeimosRuinsSacBounty",
+                        "VaultBounty"
+                    ].some(ending => jobType.endsWith(ending))
+                ) {
+                    const vault = syndicateEntry.Jobs.find(j => j.locationTag == rewardInfo.jobId!.split("_").at(-1));
+                    if (vault) {
+                        currentJob = vault;
+                        if (jobType.endsWith("VaultBounty")) {
+                            currentJob.xpAmounts = [currentJob.xpAmounts.reduce((partialSum, a) => partialSum + a, 0)];
+                        }
+                    }
                 }
-                let medallionAmount = Math.floor(currentJob.xpAmounts[rewardInfo.JobStage] / (rewardInfo.Q ? 0.8 : 1));
-
+                let medallionAmount = Math.floor(
+                    Math.min(rewardInfo.JobStage, currentJob.xpAmounts.length - 1) / (rewardInfo.Q ? 0.8 : 1)
+                );
                 if (
                     ["DeimosEndlessAreaDefenseBounty", "DeimosEndlessExcavateBounty", "DeimosEndlessPurifyBounty"].some(
                         ending => jobType.endsWith(ending)
@@ -1554,7 +1569,7 @@ function getRandomMissionDrops(
         if (RewardInfo.jobId) {
             if (RewardInfo.JobStage! >= 0) {
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                const [jobType, unkIndex, hubNode, syndicateMissionId, locationTag] = RewardInfo.jobId.split("_");
+                const [jobType, unkIndex, hubNode, syndicateMissionId] = RewardInfo.jobId.split("_");
                 let isEndlessJob = false;
                 if (syndicateMissionId) {
                     const syndicateMissions: ISyndicateMissionInfo[] = [];
@@ -1566,21 +1581,30 @@ function getRandomMissionDrops(
                         let job = syndicateEntry.Jobs[RewardInfo.JobTier!];
 
                         if (syndicateEntry.Tag === "EntratiSyndicate") {
-                            if (jobType.endsWith("VaultBounty")) {
-                                const vault = syndicateEntry.Jobs.find(j => j.locationTag === locationTag);
-                                if (vault) job = vault;
+                            if (
+                                [
+                                    "DeimosRuinsExterminateBounty",
+                                    "DeimosRuinsEscortBounty",
+                                    "DeimosRuinsMistBounty",
+                                    "DeimosRuinsPurifyBounty",
+                                    "DeimosRuinsSacBounty",
+                                    "VaultBounty"
+                                ].some(ending => jobType.endsWith(ending))
+                            ) {
+                                const vault = syndicateEntry.Jobs.find(
+                                    j => j.locationTag === RewardInfo.jobId!.split("_").at(-1)
+                                );
+                                if (vault) {
+                                    job = vault;
+                                    if (jobType.endsWith("VaultBounty")) {
+                                        job.rewards = job.rewards.replace(
+                                            "/Lotus/Types/Game/MissionDecks/",
+                                            "/Supplementals/"
+                                        );
+                                        job.xpAmounts = [job.xpAmounts.reduce((partialSum, a) => partialSum + a, 0)];
+                                    }
+                                }
                             }
-                            // if (
-                            //     [
-                            //         "DeimosRuinsExterminateBounty",
-                            //         "DeimosRuinsEscortBounty",
-                            //         "DeimosRuinsMistBounty",
-                            //         "DeimosRuinsPurifyBounty",
-                            //         "DeimosRuinsSacBounty"
-                            //     ].some(ending => jobType.endsWith(ending))
-                            // ) {
-                            //     job.rewards = "TODO"; // Droptable for Arcana Isolation Vault
-                            // }
                             if (
                                 [
                                     "DeimosEndlessAreaDefenseBounty",
@@ -1657,10 +1681,10 @@ function getRandomMissionDrops(
                         }
                         if (
                             RewardInfo.Q &&
-                            (RewardInfo.JobStage === job.xpAmounts.length - 1 || job.isVault) &&
+                            (RewardInfo.JobStage === job.xpAmounts.length - 1 || jobType.endsWith("VaultBounty")) &&
                             !isEndlessJob
                         ) {
-                            rotations.push(3);
+                            rotations.push(ExportRewards[job.rewards].length - 1);
                         }
                     }
                 }
