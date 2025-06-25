@@ -231,7 +231,7 @@ dict = {
     upgrade_DamageReductionOnHack: `[UNTRANSLATED] 75% Damage Reduction while Hacking`,
     upgrade_OnExecutionReviveCompanion: `[UNTRANSLATED] Mercy Kills reduce Companion Recovery by 15s`,
     upgrade_OnExecutionParkourSpeed: `[UNTRANSLATED] +60% Parkour Speed after a Mercy for 15s`,
-    upgrade_AvatarTimeLimitIncrease: `[UNTRANSLATED] s to Hacking`,
+    upgrade_AvatarTimeLimitIncrease: `[UNTRANSLATED] +8s to Hacking`,
     upgrade_ElectrifyOnHack: `[UNTRANSLATED] Shock enemies within 20m while Hacking`,
     upgrade_OnExecutionTerrify: `[UNTRANSLATED] 50% chance for enemies within 15m to cower in fear for 8 seconds on Mercy`,
     upgrade_OnHackLockers: `[UNTRANSLATED] Unlock 5 lockers within 20m after Hacking`,

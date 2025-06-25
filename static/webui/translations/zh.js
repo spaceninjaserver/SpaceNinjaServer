@@ -231,7 +231,7 @@ dict = {
     upgrade_DamageReductionOnHack: `入侵时，+75% 伤害减免`,
     upgrade_OnExecutionReviveCompanion: `怜悯之击 减少同伴复苏时间 15秒`,
     upgrade_OnExecutionParkourSpeed: `怜悯之击 15秒内 +60% 跑酷速度`,
-    upgrade_AvatarTimeLimitIncrease: `增加入侵限制时间`,
+    upgrade_AvatarTimeLimitIncrease: `[UNTRANSLATED] +8s to Hacking`,
     upgrade_ElectrifyOnHack: `入侵时震慑20米之内的敌人`,
     upgrade_OnExecutionTerrify: `怜悯之击 50% 几率让 15米 以内的敌人恐慌`,
     upgrade_OnHackLockers: `入侵后解锁20米内的5个储物柜`,

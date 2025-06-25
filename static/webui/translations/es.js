@@ -231,7 +231,7 @@ dict = {
     upgrade_DamageReductionOnHack: `75% de reducción de daño al hackear`,
     upgrade_OnExecutionReviveCompanion: `Las ejecuciones reducen el tiempo de recuperación del compañero en 15s`,
     upgrade_OnExecutionParkourSpeed: `+60% de velocidad de parkour durante 15s tras una ejecución`,
-    upgrade_AvatarTimeLimitIncrease: `+|VAL|s al tiempo de hackeo`,
+    upgrade_AvatarTimeLimitIncrease: `[UNTRANSLATED] +8s to Hacking`,
     upgrade_ElectrifyOnHack: `Electrocuta a los enemigos en un radio de 20m al hackear`,
     upgrade_OnExecutionTerrify: `50% de probabilidad de que enemigos en un radio de 15m entren en pánico por 8s tras una ejecución`,
     upgrade_OnHackLockers: `Desbloquea 5 casilleros en un radio de 20m tras hackear`,
