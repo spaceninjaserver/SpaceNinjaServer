@@ -1,4 +1,4 @@
-import fs from "fs";
+import chokidar from "chokidar";
 import fsPromises from "fs/promises";
 import { logger } from "../utils/logger";
 import { config, configPath, loadConfig } from "./configService";
@@ -6,12 +6,7 @@ import { getWebPorts, sendWsBroadcast, startWebServer, stopWebServer } from "./w
 import { Inbox } from "../models/inboxModel";
 
 let amnesia = false;
-fs.watchFile(configPath, (now, then) => {
-    // https://github.com/oven-sh/bun/issues/20542
-    if (process.versions.bun && now.mtimeMs == then.mtimeMs) {
-        return;
-    }
-
+chokidar.watch(configPath).on("change", () => {
     if (amnesia) {
         amnesia = false;
     } else {

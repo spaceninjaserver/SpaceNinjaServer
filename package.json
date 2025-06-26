@@ -28,6 +28,7 @@
     "@types/websocket": "^1.0.10",
     "@types/ws": "^8.18.1",
     "@typescript/native-preview": "^7.0.0-dev.20250625.1",
+    "chokidar": "^4.0.3",
     "crc-32": "^1.2.2",
     "express": "^5",
     "json-with-bigint": "^3.4.4",
@@ -45,7 +46,6 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^8.28.0",
     "@typescript-eslint/parser": "^8.28.0",
-    "chokidar": "^4.0.3",
     "eslint": "^8",
     "eslint-plugin-prettier": "^5.2.5",
     "prettier": "^3.5.3",
