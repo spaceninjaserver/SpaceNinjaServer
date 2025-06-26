@@ -19,6 +19,7 @@ import { changeDojoRootController } from "@/src/controllers/api/changeDojoRootCo
 import { changeGuildRankController } from "@/src/controllers/api/changeGuildRankController";
 import { checkDailyMissionBonusController } from "@/src/controllers/api/checkDailyMissionBonusController";
 import { claimCompletedRecipeController } from "@/src/controllers/api/claimCompletedRecipeController";
+import { claimJunctionChallengeRewardController } from "@/src/controllers/api/claimJunctionChallengeRewardController";
 import { claimLibraryDailyTaskRewardController } from "@/src/controllers/api/claimLibraryDailyTaskRewardController";
 import { clearDialogueHistoryController } from "@/src/controllers/api/clearDialogueHistoryController";
 import { clearNewEpisodeRewardController } from "@/src/controllers/api/clearNewEpisodeRewardController";
@@ -237,6 +238,7 @@ apiRouter.post("/artifacts.php", artifactsController);
 apiRouter.post("/artifactTransmutation.php", artifactTransmutationController);
 apiRouter.post("/changeDojoRoot.php", changeDojoRootController);
 apiRouter.post("/claimCompletedRecipe.php", claimCompletedRecipeController);
+apiRouter.post("/claimJunctionChallengeReward.php", claimJunctionChallengeRewardController);
 apiRouter.post("/clearDialogueHistory.php", clearDialogueHistoryController);
 apiRouter.post("/clearNewEpisodeReward.php", clearNewEpisodeRewardController);
 apiRouter.post("/commitStoryModeDecision.php", (_req, res) => { res.end(); }); // U14 (maybe wanna actually unlock the ship features?)

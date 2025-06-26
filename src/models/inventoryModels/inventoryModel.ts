@@ -483,8 +483,9 @@ personalGoalProgressSchema.set("toJSON", {
 const challengeProgressSchema = new Schema<IChallengeProgress>(
     {
         Progress: Number,
-        Name: String,
-        Completed: [String]
+        Completed: { type: [String], default: undefined },
+        ReceivedJunctionReward: Boolean,
+        Name: { type: String, required: true }
     },
     { _id: false }
 );
@@ -1777,7 +1778,9 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         BrandedSuits: { type: [Schema.Types.ObjectId], default: undefined },
         LockedWeaponGroup: { type: lockedWeaponGroupSchema, default: undefined },
 
-        HubNpcCustomizations: { type: [hubNpcCustomizationSchema], default: undefined }
+        HubNpcCustomizations: { type: [hubNpcCustomizationSchema], default: undefined },
+
+        ClaimedJunctionChallengeRewards: { type: [String], default: undefined }
     },
     { timestamps: { createdAt: "Created", updatedAt: false } }
 );

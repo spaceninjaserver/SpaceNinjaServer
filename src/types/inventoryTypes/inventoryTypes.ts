@@ -380,6 +380,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     LockedWeaponGroup?: ILockedWeaponGroupClient;
     HubNpcCustomizations?: IHubNpcCustomization[];
     Ship?: IOrbiter; // U22 and below, response only
+    ClaimedJunctionChallengeRewards?: string[]; // U39
 }
 
 export interface IAffiliation {
@@ -448,8 +449,9 @@ export interface IVendorPurchaseHistoryEntryDatabase {
 
 export interface IChallengeProgress {
     Progress: number;
-    Name: string;
     Completed?: string[];
+    ReceivedJunctionReward?: boolean; // U39
+    Name: string;
 }
 
 export interface ICollectibleEntry {
