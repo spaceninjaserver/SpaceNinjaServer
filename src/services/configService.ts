@@ -81,6 +81,7 @@ export interface IConfig {
         vallisOverride?: string;
         duviriOverride?: string;
         nightwaveOverride?: string;
+        allTheFissures?: string;
         circuitGameModes?: string[];
     };
     dev?: {

@@ -1524,20 +1524,40 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
 };
 
 export const populateFissures = async (worldState: IWorldState): Promise<void> => {
-    const fissures = await Fissure.find({});
-    for (const fissure of fissures) {
-        const meta = ExportRegions[fissure.Node];
-        worldState.ActiveMissions.push({
-            _id: toOid(fissure._id),
-            Region: meta.systemIndex + 1,
-            Seed: 1337,
-            Activation: toMongoDate(fissure.Activation),
-            Expiry: toMongoDate(fissure.Expiry),
-            Node: fissure.Node,
-            MissionType: eMissionType[meta.missionIndex].tag,
-            Modifier: fissure.Modifier,
-            Hard: fissure.Hard
-        });
+    if (config.worldState?.allTheFissures) {
+        let i = 0;
+        for (const [tier, nodes] of Object.entries(fissureMissions)) {
+            for (const node of nodes) {
+                const meta = ExportRegions[node];
+                worldState.ActiveMissions.push({
+                    _id: { $oid: (i++).toString().padStart(8, "0") + "8e0c70ba050f1eb7" },
+                    Region: meta.systemIndex + 1,
+                    Seed: 1337,
+                    Activation: { $date: { $numberLong: "1000000000000" } },
+                    Expiry: { $date: { $numberLong: "2000000000000" } },
+                    Node: node,
+                    MissionType: eMissionType[meta.missionIndex].tag,
+                    Modifier: tier,
+                    Hard: config.worldState.allTheFissures == "hard"
+                });
+            }
+        }
+    } else {
+        const fissures = await Fissure.find({});
+        for (const fissure of fissures) {
+            const meta = ExportRegions[fissure.Node];
+            worldState.ActiveMissions.push({
+                _id: toOid(fissure._id),
+                Region: meta.systemIndex + 1,
+                Seed: 1337,
+                Activation: toMongoDate(fissure.Activation),
+                Expiry: toMongoDate(fissure.Expiry),
+                Node: fissure.Node,
+                MissionType: eMissionType[meta.missionIndex].tag,
+                Modifier: fissure.Modifier,
+                Hard: fissure.Hard
+            });
+        }
     }
 };
 
