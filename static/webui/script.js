@@ -248,7 +248,8 @@ const permanentEvolutionWeapons = new Set([
     "/Lotus/Weapons/Tenno/Zariman/Melee/Tonfas/ZarimanTonfaWeapon",
     "/Lotus/Weapons/Tenno/Zariman/Pistols/HeavyPistol/ZarimanHeavyPistol",
     "/Lotus/Weapons/Thanotech/EntFistIncarnon/EntFistIncarnon",
-    "/Lotus/Weapons/Thanotech/EntratiWristGun/EntratiWristGunWeapon"
+    "/Lotus/Weapons/Thanotech/EntratiWristGun/EntratiWristGunWeapon",
+    "/Lotus/Weapons/Tenno/Zariman/Melee/HeavyScythe/ZarimanHeavyScythe/ZarimanHeavyScytheWeapon"
 ]);
 
 let uniqueLevelCaps = {};
