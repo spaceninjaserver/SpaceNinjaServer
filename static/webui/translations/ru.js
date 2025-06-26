@@ -181,6 +181,7 @@ dict = {
     cheats_account: `Аккаунт`,
     cheats_unlockAllFocusSchools: `Разблокировать все школы фокуса`,
     cheats_helminthUnlockAll: `Полностью улучшить Гельминта`,
+    cheats_addMissingSubsumedAbilities: `Добавить отсутствующие поглощённые способности`,
     cheats_intrinsicsUnlockAll: `Полностью улучшить Модуляры`,
     cheats_changeSupportedSyndicate: `Поддерживаемый синдикат`,
     cheats_changeButton: `Изменить`,

@@ -13,6 +13,7 @@ import { unlockAllIntrinsicsController } from "@/src/controllers/custom/unlockAl
 import { addMissingMaxRankModsController } from "@/src/controllers/custom/addMissingMaxRankModsController";
 import { webuiFileChangeDetectedController } from "@/src/controllers/custom/webuiFileChangeDetectedController";
 import { completeAllMissionsController } from "@/src/controllers/custom/completeAllMissionsController";
+import { addMissingHelminthBlueprintsController } from "@/src/controllers/custom/addMissingHelminthBlueprintsController";
 
 import { createAccountController } from "@/src/controllers/custom/createAccountController";
 import { createMessageController } from "@/src/controllers/custom/createMessageController";
@@ -42,6 +43,7 @@ customRouter.get("/unlockAllIntrinsics", unlockAllIntrinsicsController);
 customRouter.get("/addMissingMaxRankMods", addMissingMaxRankModsController);
 customRouter.get("/webuiFileChangeDetected", webuiFileChangeDetectedController);
 customRouter.get("/completeAllMissions", completeAllMissionsController);
+customRouter.get("/addMissingHelminthBlueprints", addMissingHelminthBlueprintsController);
 
 customRouter.post("/createAccount", createAccountController);
 customRouter.post("/createMessage", createMessageController);

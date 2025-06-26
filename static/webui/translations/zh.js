@@ -181,6 +181,7 @@ dict = {
     cheats_account: `账户`,
     cheats_unlockAllFocusSchools: `解锁所有专精学派`,
     cheats_helminthUnlockAll: `完全升级Helminth`,
+    cheats_addMissingSubsumedAbilities: `[UNTRANSLATED] Add Missing Subsumed Abilities`,
     cheats_intrinsicsUnlockAll: `所有内源之力最大等级`,
     cheats_changeSupportedSyndicate: `支持的集团`,
     cheats_changeButton: `更改`,

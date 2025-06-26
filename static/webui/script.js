@@ -1449,6 +1449,11 @@ function addMissingEquipment(categories) {
     }
 }
 
+async function addMissingHelminthRecipes() {
+    await revalidateAuthz();
+    await fetch("/custom/addMissingHelminthBlueprints?" + window.authz);
+}
+
 function addMissingEvolutionProgress() {
     const requests = [];
     document.querySelectorAll("#datalist-EvolutionProgress option").forEach(elm => {

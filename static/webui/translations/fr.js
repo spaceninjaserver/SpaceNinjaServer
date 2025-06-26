@@ -181,6 +181,7 @@ dict = {
     cheats_account: `Compte`,
     cheats_unlockAllFocusSchools: `Débloquer toutes les écoles de focus`,
     cheats_helminthUnlockAll: `Helminth niveau max`,
+    cheats_addMissingSubsumedAbilities: `[UNTRANSLATED] Add Missing Subsumed Abilities`,
     cheats_intrinsicsUnlockAll: `Inhérences niveau max`,
     cheats_changeSupportedSyndicate: `Allégeance`,
     cheats_changeButton: `Changer`,
