@@ -1832,6 +1832,15 @@ export const addChallenges = (
     return affiliationMods;
 };
 
+export const addCalendarProgress = (inventory: TInventoryDatabaseDocument, value: { challenge: string }[]): void => {
+    const calendarProgress = getCalendarProgress(inventory);
+    const currentSeason = getWorldState().KnownCalendarSeasons[0];
+    calendarProgress.SeasonProgress.LastCompletedChallengeDayIdx = currentSeason.Days.findIndex(
+        day => day.events.length != 0 && day.events[0].challenge == value[value.length - 1].challenge
+    );
+    checkCalendarChallengeCompletion(calendarProgress, currentSeason);
+};
+
 export const addMissionComplete = (inventory: TInventoryDatabaseDocument, { Tag, Completes, Tier }: IMission): void => {
     const { Missions } = inventory;
     const itemIndex = Missions.findIndex(item => item.Tag === Tag);

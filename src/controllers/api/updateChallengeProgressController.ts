@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getAccountForRequest } from "@/src/services/loginService";
-import { addChallenges, getInventory } from "@/src/services/inventoryService";
+import { addCalendarProgress, addChallenges, getInventory } from "@/src/services/inventoryService";
 import { IChallengeProgress, ISeasonChallenge } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IAffiliationMods } from "@/src/types/purchaseTypes";
 import { getEntriesUnsafe } from "@/src/utils/ts-utils";
@@ -25,13 +25,17 @@ export const updateChallengeProgressController: RequestHandler = async (req, res
         );
     }
     for (const [key, value] of getEntriesUnsafe(challenges)) {
+        if (value === undefined) {
+            logger.error(`Challenge progress update key ${key} has no value`);
+            continue;
+        }
         switch (key) {
             case "ChallengesFixVersion":
                 inventory.ChallengesFixVersion = value;
                 break;
 
             case "SeasonChallengeHistory":
-                value!.forEach(({ challenge, id }) => {
+                value.forEach(({ challenge, id }) => {
                     const itemIndex = inventory.SeasonChallengeHistory.findIndex(i => i.challenge === challenge);
                     if (itemIndex !== -1) {
                         inventory.SeasonChallengeHistory[itemIndex].id = id;
@@ -39,6 +43,10 @@ export const updateChallengeProgressController: RequestHandler = async (req, res
                         inventory.SeasonChallengeHistory.push({ challenge, id });
                     }
                 });
+                break;
+
+            case "CalendarProgress":
+                addCalendarProgress(inventory, value);
                 break;
 
             case "ChallengeProgress":
@@ -63,5 +71,6 @@ interface IUpdateChallengeProgressRequest {
     ChallengeProgress?: IChallengeProgress[];
     SeasonChallengeHistory?: ISeasonChallenge[];
     SeasonChallengeCompletions?: ISeasonChallenge[];
+    CalendarProgress?: { challenge: string }[];
     crossPlaySetting?: string;
 }

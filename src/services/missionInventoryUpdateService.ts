@@ -14,6 +14,7 @@ import { IRngResult, SRng, getRandomElement, getRandomReward } from "@/src/servi
 import { equipmentKeys, IMission, ITypeCount, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
 import {
     addBooster,
+    addCalendarProgress,
     addChallenges,
     addConsumables,
     addCrewShipAmmo,
@@ -33,10 +34,8 @@ import {
     addSkin,
     addStanding,
     applyClientEquipmentUpdates,
-    checkCalendarChallengeCompletion,
     combineInventoryChanges,
     generateRewardSeed,
-    getCalendarProgress,
     getDialogue,
     giveNemesisPetRecipe,
     giveNemesisWeaponRecipe,
@@ -235,7 +234,7 @@ export const addMissionInventoryUpdates = async (
     }
     for (const [key, value] of getEntriesUnsafe(inventoryUpdates)) {
         if (value === undefined) {
-            logger.error(`Inventory update key ${key} has no value `);
+            logger.error(`Inventory update key ${key} has no value`);
             continue;
         }
         switch (key) {
@@ -671,12 +670,7 @@ export const addMissionInventoryUpdates = async (
                 break;
             }
             case "CalendarProgress": {
-                const calendarProgress = getCalendarProgress(inventory);
-                const currentSeason = getWorldState().KnownCalendarSeasons[0];
-                calendarProgress.SeasonProgress.LastCompletedChallengeDayIdx = currentSeason.Days.findIndex(
-                    day => day.events.length != 0 && day.events[0].challenge == value[value.length - 1].challenge
-                );
-                checkCalendarChallengeCompletion(calendarProgress, currentSeason);
+                addCalendarProgress(inventory, value);
                 break;
             }
             case "duviriCaveOffers": {
