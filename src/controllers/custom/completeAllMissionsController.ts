@@ -12,18 +12,24 @@ export const completeAllMissionsController: RequestHandler = async (req, res) =>
     const inventory = await getInventory(accountId);
     const MissionRewards: IMissionReward[] = [];
     for (const [tag, node] of Object.entries(ExportRegions)) {
-        if (!inventory.Missions.find(x => x.Tag == tag)) {
-            inventory.Missions.push({
-                Completes: 1,
-                Tier: 1,
-                Tag: tag
-            });
-
+        let mission = inventory.Missions.find(x => x.Tag == tag);
+        if (!mission) {
+            mission =
+                inventory.Missions[
+                    inventory.Missions.push({
+                        Completes: 0,
+                        Tier: 0,
+                        Tag: tag
+                    }) - 1
+                ];
+        }
+        if (mission.Completes == 0) {
+            mission.Completes++;
             if (node.missionReward) {
-                console.log(node.missionReward);
                 addFixedLevelRewards(node.missionReward, inventory, MissionRewards);
             }
         }
+        mission.Tier = 1;
     }
     for (const reward of MissionRewards) {
         await handleStoreItemAcquisition(reward.StoreItem, inventory, reward.ItemCount, undefined, true);
