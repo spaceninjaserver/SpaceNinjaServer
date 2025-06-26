@@ -499,6 +499,7 @@ export const addItem = async (
         // - Blueprints for Ancient Protector Specter, Shield Osprey Specter, etc. have num=1 despite giving their purchaseQuantity.
         if (!exactQuantity) {
             quantity *= ExportGear[typeName].purchaseQuantity ?? 1;
+            logger.debug(`non-exact acquisition of ${typeName}; factored quantity is ${quantity}`);
         }
         const consumablesChanges = [
             {

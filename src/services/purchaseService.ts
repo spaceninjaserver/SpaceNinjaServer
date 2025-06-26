@@ -371,18 +371,28 @@ export const handleStoreItemAcquisition = async (
     } else {
         const storeCategory = getStoreItemCategory(storeItemName);
         const internalName = fromStoreItem(storeItemName);
-        logger.debug(`store category ${storeCategory}`);
         if (!ignorePurchaseQuantity) {
             if (internalName in ExportGear) {
                 quantity *= ExportGear[internalName].purchaseQuantity || 1;
+                logger.debug(`factored quantity is ${quantity}`);
             } else if (internalName in ExportResources) {
                 quantity *= ExportResources[internalName].purchaseQuantity || 1;
+                logger.debug(`factored quantity is ${quantity}`);
             }
         }
+        logger.debug(`store category ${storeCategory}`);
         switch (storeCategory) {
             default: {
                 purchaseResponse = {
-                    InventoryChanges: await addItem(inventory, internalName, quantity, premiumPurchase, seed)
+                    InventoryChanges: await addItem(
+                        inventory,
+                        internalName,
+                        quantity,
+                        premiumPurchase,
+                        seed,
+                        undefined,
+                        true
+                    )
                 };
                 break;
             }
@@ -524,7 +534,9 @@ const handleTypesPurchase = async (
     logger.debug(`type category ${typeCategory}`);
     switch (typeCategory) {
         default:
-            return { InventoryChanges: await addItem(inventory, typesName, quantity, premiumPurchase, seed) };
+            return {
+                InventoryChanges: await addItem(inventory, typesName, quantity, premiumPurchase, seed, undefined, true)
+            };
         case "BoosterPacks":
             return handleBoosterPackPurchase(typesName, inventory, quantity);
         case "SlotItems":
