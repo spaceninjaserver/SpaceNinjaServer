@@ -568,10 +568,10 @@
                         <div class="card mb-3">
                             <h5 class="card-header" data-loc="cheats_server"></h5>
                             <div class="card-body">
-                                <div id="server-settings-no-perms" class="d-none">
+                                <div class="d-none config-admin-hide">
                                     <p class="card-text" data-loc="cheats_administratorRequirement"></p>
                                 </div>
-                                <div id="server-settings" class="d-none">
+                                <div class="d-none config-admin-show config-form">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="skipTutorial" />
                                         <label class="form-check-label" for="skipTutorial" data-loc="cheats_skipTutorial"></label>
@@ -805,6 +805,93 @@
                                         <button class="btn btn-primary" type="submit" data-loc="cheats_changeButton"></button>
                                     </div>
                                 </form>
+                            </div>
+                        </div>
+                        <div class="card mb-3 d-none config-admin-show config-form">
+                            <h5 class="card-header" data-loc="worldState"></h5>
+                            <div class="card-body">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="worldState.creditBoost" />
+                                    <label class="form-check-label" for="worldState.creditBoost" data-loc="worldState_creditBoost"></label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="worldState.affinityBoost" />
+                                    <label class="form-check-label" for="worldState.affinityBoost" data-loc="worldState_affinityBoost"></label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="worldState.resourceBoost" />
+                                    <label class="form-check-label" for="worldState.resourceBoost" data-loc="worldState_resourceBoost"></label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="worldState.starDays" />
+                                    <label class="form-check-label" for="worldState.starDays" data-loc="worldState_starDays"></label>
+                                </div>
+                                <div class="form-group mt-2">
+                                    <label class="form-label" for="changeSyndicate" data-loc="worldState_galleonOfGhouls"></label>
+                                    <select class="form-control" id="worldState.galleonOfGhouls">
+                                        <option value="0" data-loc="disabled"></option>
+                                        <option value="1" data-loc="worldState_we1"></option>
+                                        <option value="2" data-loc="worldState_we2"></option>
+                                        <option value="3" data-loc="worldState_we3"></option>
+                                    </select>
+                                </div>
+                                <div class="form-group mt-2">
+                                    <label class="form-label" for="changeSyndicate" data-loc="worldState_eidolonOverride"></label>
+                                    <select class="form-control" id="worldState.eidolonOverride">
+                                        <option value="" data-loc="disabled"></option>
+                                        <option value="day" data-loc="worldState_day"></option>
+                                        <option value="night" data-loc="worldState_night"></option>
+                                    </select>
+                                </div>
+                                <div class="form-group mt-2">
+                                    <label class="form-label" for="changeSyndicate" data-loc="worldState_vallisOverride"></label>
+                                    <select class="form-control" id="worldState.vallisOverride">
+                                        <option value="" data-loc="disabled"></option>
+                                        <option value="warm" data-loc="worldState_warm"></option>
+                                        <option value="cold" data-loc="worldState_cold"></option>
+                                    </select>
+                                </div>
+                                <div class="form-group mt-2">
+                                    <label class="form-label" for="changeSyndicate" data-loc="worldState_duviriOverride"></label>
+                                    <select class="form-control" id="worldState.duviriOverride">
+                                        <option value="" data-loc="disabled"></option>
+                                        <option value="joy" data-loc="worldState_joy"></option>
+                                        <option value="anger" data-loc="worldState_anger"></option>
+                                        <option value="envy" data-loc="worldState_envy"></option>
+                                        <option value="sorrow" data-loc="worldState_sorrow"></option>
+                                        <option value="fear" data-loc="worldState_fear"></option>
+                                    </select>
+                                </div>
+                                <div class="form-group mt-2">
+                                    <label class="form-label" for="changeSyndicate" data-loc="worldState_nightwaveOverride"></label>
+                                    <select class="form-control" id="worldState.nightwaveOverride">
+                                        <option value="" data-loc="disabled"></option>
+                                        <option value="RadioLegionIntermission13Syndicate" data-loc="worldState_RadioLegionIntermission13Syndicate"></option>
+                                        <option value="RadioLegionIntermission12Syndicate" data-loc="worldState_RadioLegionIntermission12Syndicate"></option>
+                                        <option value="RadioLegionIntermission11Syndicate" data-loc="worldState_RadioLegionIntermission11Syndicate"></option>
+                                        <option value="RadioLegionIntermission10Syndicate" data-loc="worldState_RadioLegionIntermission10Syndicate"></option>
+                                        <option value="RadioLegionIntermission9Syndicate" data-loc="worldState_RadioLegionIntermission9Syndicate"></option>
+                                        <option value="RadioLegionIntermission8Syndicate" data-loc="worldState_RadioLegionIntermission8Syndicate"></option>
+                                        <option value="RadioLegionIntermission7Syndicate" data-loc="worldState_RadioLegionIntermission7Syndicate"></option>
+                                        <option value="RadioLegionIntermission6Syndicate" data-loc="worldState_RadioLegionIntermission6Syndicate"></option>
+                                        <option value="RadioLegionIntermission5Syndicate" data-loc="worldState_RadioLegionIntermission5Syndicate"></option>
+                                        <option value="RadioLegionIntermission4Syndicate" data-loc="worldState_RadioLegionIntermission4Syndicate"></option>
+                                        <option value="RadioLegionIntermission3Syndicate" data-loc="worldState_RadioLegionIntermission3Syndicate"></option>
+                                        <option value="RadioLegion3Syndicate" data-loc="worldState_RadioLegion3Syndicate"></option>
+                                        <option value="RadioLegionIntermission2Syndicate" data-loc="worldState_RadioLegionIntermission2Syndicate"></option>
+                                        <option value="RadioLegion2Syndicate" data-loc="worldState_RadioLegion2Syndicate"></option>
+                                        <option value="RadioLegionIntermissionSyndicate" data-loc="worldState_RadioLegionIntermissionSyndicate"></option>
+                                        <option value="RadioLegionSyndicate" data-loc="worldState_RadioLegionSyndicate"></option>
+                                    </select>
+                                </div>
+                                <div class="form-group mt-2">
+                                    <label class="form-label" for="changeSyndicate" data-loc="worldState_fissures"></label>
+                                    <select class="form-control" id="worldState.allTheFissures">
+                                        <option value="" data-loc="normal"></option>
+                                        <option value="normal" data-loc="worldState_allAtOnceNormal"></option>
+                                        <option value="hard" data-loc="worldState_allAtOnceSteelPath"></option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>

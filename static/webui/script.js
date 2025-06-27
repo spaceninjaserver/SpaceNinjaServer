@@ -1847,16 +1847,28 @@ function doAcquireMod() {
     }
 }
 
-const uiConfigs = [...$("#server-settings input[id]")].map(x => x.id);
+const uiConfigs = [...$(".config-form input[id], .config-form select[id]")].map(x => x.id);
 
 for (const id of uiConfigs) {
     const elm = document.getElementById(id);
-    if (elm.type == "checkbox") {
+    if (elm.tagName == "SELECT") {
+        elm.onchange = function () {
+            let value = this.value;
+            if (!isNaN(parseInt(value))) {
+                value = parseInt(value);
+            }
+            $.post({
+                url: "/custom/setConfig?" + window.authz,
+                contentType: "application/json",
+                data: JSON.stringify({ [id]: value })
+            });
+        };
+    } else if (elm.type == "checkbox") {
         elm.onchange = function () {
             $.post({
-                url: "/custom/config?" + window.authz,
+                url: "/custom/setConfig?" + window.authz,
                 contentType: "application/json",
-                data: JSON.stringify({ key: id, value: this.checked })
+                data: JSON.stringify({ [id]: this.checked })
             }).then(() => {
                 if (["infiniteCredits", "infinitePlatinum", "infiniteEndo", "infiniteRegalAya"].indexOf(id) != -1) {
                     updateInventory();
@@ -1869,9 +1881,9 @@ for (const id of uiConfigs) {
 function doSaveConfig(id) {
     const elm = document.getElementById(id);
     $.post({
-        url: "/custom/config?" + window.authz,
+        url: "/custom/setConfig?" + window.authz,
         contentType: "application/json",
-        data: JSON.stringify({ key: id, value: parseInt(elm.value) })
+        data: JSON.stringify({ [id]: parseInt(elm.value) })
     });
 }
 
@@ -1882,26 +1894,29 @@ single.getRoute("/webui/cheats").on("beforeload", function () {
     interval = setInterval(() => {
         if (window.authz) {
             clearInterval(interval);
-            fetch("/custom/config?" + window.authz).then(async res => {
-                if (res.status == 200) {
+            $.post({
+                url: "/custom/getConfig?" + window.authz,
+                contentType: "application/json",
+                data: JSON.stringify(uiConfigs)
+            })
+                .done(json => {
                     //window.is_admin = true;
-                    $("#server-settings-no-perms").addClass("d-none");
-                    $("#server-settings").removeClass("d-none");
-                    res.json().then(json =>
-                        Object.entries(json).forEach(entry => {
-                            const [key, value] = entry;
-                            var x = document.getElementById(`${key}`);
-                            if (x != null) {
-                                if (x.type == "checkbox") {
-                                    x.checked = value;
-                                } else if (x.type == "number") {
-                                    x.setAttribute("value", `${value}`);
-                                }
+                    $(".config-admin-hide").addClass("d-none");
+                    $(".config-admin-show").removeClass("d-none");
+                    Object.entries(json).forEach(entry => {
+                        const [key, value] = entry;
+                        var x = document.getElementById(`${key}`);
+                        if (x != null) {
+                            if (x.type == "checkbox") {
+                                x.checked = value;
+                            } else if (x.type == "number") {
+                                x.setAttribute("value", `${value}`);
                             }
-                        })
-                    );
-                } else {
-                    if ((await res.text()) == "Log-in expired") {
+                        }
+                    });
+                })
+                .fail(res => {
+                    if (res.responseText == "Log-in expired") {
                         revalidateAuthz().then(() => {
                             if (single.getCurrentPath() == "/webui/cheats") {
                                 single.loadRoute("/webui/cheats");
@@ -1909,11 +1924,10 @@ single.getRoute("/webui/cheats").on("beforeload", function () {
                         });
                     } else {
                         //window.is_admin = false;
-                        $("#server-settings-no-perms").removeClass("d-none");
-                        $("#server-settings").addClass("d-none");
+                        $(".config-admin-hide").removeClass("d-none");
+                        $(".config-admin-show").addClass("d-none");
                     }
-                }
-            });
+                });
         }
     }, 10);
 });
