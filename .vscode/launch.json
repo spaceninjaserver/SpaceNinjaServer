@@ -8,8 +8,7 @@
       "type": "node",
       "request": "launch",
       "name": "Debug and Watch",
-      "runtimeArgs": ["-r", "tsconfig-paths/register", "-r", "ts-node/register", "--watch-path", "src"],
-      "args": ["${workspaceFolder}/src/index.ts"],
+      "args": ["${workspaceFolder}/scripts/dev.js"],
       "console": "integratedTerminal"
     }
   ]
