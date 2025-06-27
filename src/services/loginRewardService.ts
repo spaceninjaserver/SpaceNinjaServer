@@ -144,7 +144,8 @@ export const claimLoginReward = async (
         case "RT_STORE_ITEM":
         case "RT_RECIPE":
         case "RT_RANDOM_RECIPE":
-            return (await handleStoreItemAcquisition(reward.StoreItemType, inventory, reward.Amount)).InventoryChanges;
+            return (await handleStoreItemAcquisition(reward.StoreItemType, inventory, reward.Amount, undefined, true))
+                .InventoryChanges;
 
         case "RT_CREDITS":
             return updateCurrency(inventory, -reward.Amount, false);
