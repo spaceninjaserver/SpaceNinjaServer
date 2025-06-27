@@ -372,7 +372,7 @@ const getSeasonChallengePools = (syndicateTag: string): IRotatingSeasonChallenge
         hardWeekly: syndicate.weeklyChallenges!.filter(x =>
             x.startsWith("/Lotus/Types/Challenges/Seasons/WeeklyHard/")
         ),
-        hasWeeklyPermanent: !!syndicate.weeklyChallenges!.find(x =>
+        hasWeeklyPermanent: syndicate.weeklyChallenges!.some(x =>
             x.startsWith("/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanent")
         )
     };
