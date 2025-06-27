@@ -349,7 +349,8 @@ export const removeDojoDeco = (
             component.DecoCapacity! += meta.capacityCost;
         }
     } else {
-        const itemType = Object.entries(ExportResources).find(arr => arr[1].deco == deco.Type)![0];
+        const [itemType, meta] = Object.entries(ExportResources).find(arr => arr[1].deco == deco.Type)!;
+        component.DecoCapacity! += meta.dojoCapacityCost!;
         if (deco.Sockets !== undefined) {
             addVaultFusionTreasures(guild, [
                 {

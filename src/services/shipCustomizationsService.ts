@@ -59,7 +59,12 @@ export const handleSetShipDecorations = async (
     const roomToPlaceIn = rooms.find(room => room.Name === placedDecoration.Room);
 
     if (!roomToPlaceIn) {
-        throw new Error("room not found");
+        throw new Error(`unknown room: ${placedDecoration.Room}`);
+    }
+
+    const [itemType, meta] = Object.entries(ExportResources).find(arr => arr[1].deco == placedDecoration.Type)!;
+    if (!itemType || meta.capacityCost === undefined) {
+        throw new Error(`unknown deco type: ${placedDecoration.Type}`);
     }
 
     if (placedDecoration.MoveId) {
@@ -83,7 +88,7 @@ export const handleSetShipDecorations = async (
                 OldRoom: placedDecoration.OldRoom,
                 NewRoom: placedDecoration.Room,
                 IsApartment: placedDecoration.IsApartment,
-                MaxCapacityIncrease: 0 // TODO: calculate capacity change upon removal
+                MaxCapacityIncrease: 0
             };
         }
 
@@ -96,6 +101,7 @@ export const handleSetShipDecorations = async (
         }
 
         oldRoom.PlacedDecos.pull({ _id: placedDecoration.MoveId });
+        oldRoom.MaxCapacity += meta.capacityCost;
 
         const newDecoration = {
             Type: placedDecoration.Type,
@@ -108,12 +114,14 @@ export const handleSetShipDecorations = async (
 
         //the new room is still roomToPlaceIn
         roomToPlaceIn.PlacedDecos.push(newDecoration);
+        roomToPlaceIn.MaxCapacity -= meta.capacityCost;
+
         await personalRooms.save();
         return {
             OldRoom: placedDecoration.OldRoom,
             NewRoom: placedDecoration.Room,
             IsApartment: placedDecoration.IsApartment,
-            MaxCapacityIncrease: 0 // TODO: calculate capacity change upon removal
+            MaxCapacityIncrease: -meta.capacityCost
         };
     }
 
@@ -121,11 +129,11 @@ export const handleSetShipDecorations = async (
         const decoIndex = roomToPlaceIn.PlacedDecos.findIndex(x => x._id.equals(placedDecoration.RemoveId));
         const deco = roomToPlaceIn.PlacedDecos[decoIndex];
         roomToPlaceIn.PlacedDecos.splice(decoIndex, 1);
+        roomToPlaceIn.MaxCapacity += meta.capacityCost;
         await personalRooms.save();
 
         if (!config.unlockAllShipDecorations) {
             const inventory = await getInventory(accountId);
-            const itemType = Object.entries(ExportResources).find(arr => arr[1].deco == deco.Type)![0];
             if (deco.Sockets !== undefined) {
                 addFusionTreasures(inventory, [{ ItemType: itemType, Sockets: deco.Sockets, ItemCount: 1 }]);
             } else {
@@ -138,24 +146,20 @@ export const handleSetShipDecorations = async (
             DecoId: placedDecoration.RemoveId,
             Room: placedDecoration.Room,
             IsApartment: placedDecoration.IsApartment,
-            MaxCapacityIncrease: 0
+            MaxCapacityIncrease: 0 // Client already implies the capacity being refunded.
         };
-    } else {
-        if (!config.unlockAllShipDecorations) {
-            const inventory = await getInventory(accountId);
-            const itemType = Object.entries(ExportResources).find(arr => arr[1].deco == placedDecoration.Type)![0];
-            if (placedDecoration.Sockets !== undefined) {
-                addFusionTreasures(inventory, [
-                    { ItemType: itemType, Sockets: placedDecoration.Sockets, ItemCount: -1 }
-                ]);
-            } else {
-                addShipDecorations(inventory, [{ ItemType: itemType, ItemCount: -1 }]);
-            }
-            await inventory.save();
-        }
     }
 
-    // TODO: handle capacity
+    if (!config.unlockAllShipDecorations) {
+        const inventory = await getInventory(accountId);
+        const itemType = Object.entries(ExportResources).find(arr => arr[1].deco == placedDecoration.Type)![0];
+        if (placedDecoration.Sockets !== undefined) {
+            addFusionTreasures(inventory, [{ ItemType: itemType, Sockets: placedDecoration.Sockets, ItemCount: -1 }]);
+        } else {
+            addShipDecorations(inventory, [{ ItemType: itemType, ItemCount: -1 }]);
+        }
+        await inventory.save();
+    }
 
     //place decoration
     const decoId = new Types.ObjectId();
@@ -167,10 +171,16 @@ export const handleSetShipDecorations = async (
         Sockets: placedDecoration.Sockets,
         _id: decoId
     });
+    roomToPlaceIn.MaxCapacity -= meta.capacityCost;
 
     await personalRooms.save();
 
-    return { DecoId: decoId.toString(), Room: placedDecoration.Room, IsApartment: placedDecoration.IsApartment };
+    return {
+        DecoId: decoId.toString(),
+        Room: placedDecoration.Room,
+        IsApartment: placedDecoration.IsApartment,
+        MaxCapacityIncrease: -meta.capacityCost
+    };
 };
 
 export const handleSetPlacedDecoInfo = async (accountId: string, req: ISetPlacedDecoInfoRequest): Promise<void> => {
