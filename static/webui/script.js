@@ -2289,14 +2289,13 @@ function doAcquireBoosters() {
     const ExpiryDate = Date.now() / 1000 + 3 * 24 * 60 * 60; // default 3 days
     setBooster(uniqueName, ExpiryDate, () => {
         $("#acquire-type-Boosters").val("");
-        updateInventory();
     });
 }
 
 function doChangeBoosterExpiry(ItemType, ExpiryDateInput) {
     console.log("Changing booster expiry for", ItemType, "to", ExpiryDateInput.value);
     // cast local datetime string to unix timestamp
-    const ExpiryDate = new Date(ExpiryDateInput.value).getTime() / 1000;
+    const ExpiryDate = Math.trunc(new Date(ExpiryDateInput.value).getTime() / 1000);
     if (isNaN(ExpiryDate)) {
         ExpiryDateInput.addClass("is-invalid").focus();
         return false;

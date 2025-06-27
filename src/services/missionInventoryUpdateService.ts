@@ -962,6 +962,7 @@ const droptableAliases: Record<string, string> = {
 
 //TODO: return type of partial missioninventoryupdate response
 export const addMissionRewards = async (
+    account: TAccountDocument,
     inventory: TInventoryDatabaseDocument,
     {
         wagerTier: wagerTier,
@@ -1009,13 +1010,17 @@ export const addMissionRewards = async (
         const fixedLevelRewards = getLevelKeyRewards(levelKeyName);
         //logger.debug(`fixedLevelRewards ${fixedLevelRewards}`);
         if (fixedLevelRewards.levelKeyRewards) {
-            addFixedLevelRewards(fixedLevelRewards.levelKeyRewards, inventory, MissionRewards, rewardInfo);
+            missionCompletionCredits += addFixedLevelRewards(
+                fixedLevelRewards.levelKeyRewards,
+                MissionRewards,
+                rewardInfo
+            );
         }
         if (fixedLevelRewards.levelKeyRewards2) {
             for (const reward of fixedLevelRewards.levelKeyRewards2) {
                 //quest stage completion credit rewards
                 if (reward.rewardType == "RT_CREDITS") {
-                    missionCompletionCredits += reward.amount; // will be added to inventory in addCredits
+                    missionCompletionCredits += reward.amount;
                     continue;
                 }
                 MissionRewards.push({
@@ -1044,12 +1049,11 @@ export const addMissionRewards = async (
         ) {
             const levelCreditReward = getLevelCreditRewards(node);
             missionCompletionCredits += levelCreditReward;
-            inventory.RegularCredits += levelCreditReward;
             logger.debug(`levelCreditReward ${levelCreditReward}`);
         }
 
         if (node.missionReward) {
-            missionCompletionCredits += addFixedLevelRewards(node.missionReward, inventory, MissionRewards, rewardInfo);
+            missionCompletionCredits += addFixedLevelRewards(node.missionReward, MissionRewards, rewardInfo);
         }
 
         if (rewardInfo.sortieTag == "Mission1") {
@@ -1159,7 +1163,9 @@ export const addMissionRewards = async (
         combineInventoryChanges(inventoryChanges, inventoryChange.InventoryChanges);
     }
 
-    const credits = addCredits(inventory, {
+    inventory.RegularCredits += missionCompletionCredits;
+
+    const credits = await addCredits(account, inventory, {
         missionCompletionCredits,
         missionDropCredits: creditDrops ?? 0,
         rngRewardCredits: inventoryChanges.RegularCredits ?? 0
@@ -1382,48 +1388,61 @@ export const addMissionRewards = async (
     };
 };
 
-//creditBonus is not entirely accurate.
-//TODO: consider ActiveBoosters
-export const addCredits = (
+export const addCredits = async (
+    account: TAccountDocument,
     inventory: TInventoryDatabaseDocument,
     {
         missionDropCredits,
         missionCompletionCredits,
         rngRewardCredits
     }: { missionDropCredits: number; missionCompletionCredits: number; rngRewardCredits: number }
-): IMissionCredits => {
-    const hasDailyCreditBonus = true;
-    const totalCredits = missionDropCredits + missionCompletionCredits + rngRewardCredits;
-
+): Promise<IMissionCredits> => {
     const finalCredits: IMissionCredits = {
         MissionCredits: [missionDropCredits, missionDropCredits],
-        CreditBonus: [missionCompletionCredits, missionCompletionCredits],
-        TotalCredits: [totalCredits, totalCredits]
+        CreditsBonus: [missionCompletionCredits, missionCompletionCredits],
+        TotalCredits: [0, 0]
     };
 
-    if (hasDailyCreditBonus) {
+    const today = Math.trunc(Date.now() / 86400000) * 86400;
+    if (account.DailyFirstWinDate != today) {
+        account.DailyFirstWinDate = today;
+        await account.save();
+
+        logger.debug(`daily first win, doubling missionCompletionCredits (${missionCompletionCredits})`);
+
+        finalCredits.DailyMissionBonus = true;
         inventory.RegularCredits += missionCompletionCredits;
-        finalCredits.CreditBonus[1] *= 2;
-        finalCredits.MissionCredits[1] *= 2;
-        finalCredits.TotalCredits[1] *= 2;
+        finalCredits.CreditsBonus[1] *= 2;
     }
 
-    if (!hasDailyCreditBonus) {
-        return finalCredits;
+    const totalCredits = finalCredits.MissionCredits[1] + finalCredits.CreditsBonus[1] + rngRewardCredits;
+    finalCredits.TotalCredits = [totalCredits, totalCredits];
+
+    if (config.worldState?.creditBoost) {
+        inventory.RegularCredits += finalCredits.TotalCredits[1];
+        finalCredits.TotalCredits[1] += finalCredits.TotalCredits[1];
     }
-    return { ...finalCredits, DailyMissionBonus: true };
+    const now = Math.trunc(Date.now() / 1000); // TOVERIFY: Should we maybe subtract mission time as to apply credit boosters that expired during mission?
+    if ((inventory.Boosters.find(x => x.ItemType == "/Lotus/Types/Boosters/CreditBooster")?.ExpiryDate ?? 0) > now) {
+        inventory.RegularCredits += finalCredits.TotalCredits[1];
+        finalCredits.TotalCredits[1] += finalCredits.TotalCredits[1];
+    }
+    if ((inventory.Boosters.find(x => x.ItemType == "/Lotus/Types/Boosters/CreditBlessing")?.ExpiryDate ?? 0) > now) {
+        inventory.RegularCredits += finalCredits.TotalCredits[1];
+        finalCredits.TotalCredits[1] += finalCredits.TotalCredits[1];
+    }
+
+    return finalCredits;
 };
 
 export const addFixedLevelRewards = (
     rewards: IMissionRewardExternal,
-    inventory: TInventoryDatabaseDocument,
     MissionRewards: IMissionReward[],
     rewardInfo?: IRewardInfo
 ): number => {
     let missionBonusCredits = 0;
     if (rewards.credits) {
         missionBonusCredits += rewards.credits;
-        inventory.RegularCredits += rewards.credits;
     }
     if (rewards.items) {
         for (const item of rewards.items) {

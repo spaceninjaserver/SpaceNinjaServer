@@ -25,7 +25,8 @@ const databaseAccountSchema = new Schema<IDatabaseAccountJson>(
         LastLogin: { type: Date, default: 0 },
         LatestEventMessageDate: { type: Date, default: 0 },
         LastLoginRewardDate: { type: Number, default: 0 },
-        LoginDays: { type: Number, default: 1 }
+        LoginDays: { type: Number, default: 1 },
+        DailyFirstWinDate: { type: Number, default: 0 }
     },
     opts
 );

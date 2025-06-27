@@ -17,9 +17,9 @@ export interface IMissionReward {
 }
 
 export interface IMissionCredits {
-    MissionCredits: number[];
-    CreditBonus: number[];
-    TotalCredits: number[];
+    MissionCredits: [number, number];
+    CreditsBonus: [number, number]; // "Credit Reward"; `CreditsBonus[1]` is `CreditsBonus[0] * 2` if DailyMissionBonus
+    TotalCredits: [number, number];
     DailyMissionBonus?: boolean;
 }
 

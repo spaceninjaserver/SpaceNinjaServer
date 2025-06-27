@@ -23,9 +23,9 @@ export const setBoosterController: RequestHandler = async (req, res) => {
         res.status(400).send("Invalid ItemType provided.");
         return;
     }
-    const now = Math.floor(Date.now() / 1000);
+    const now = Math.trunc(Date.now() / 1000);
     for (const { ItemType, ExpiryDate } of requests) {
-        if (ExpiryDate < now) {
+        if (ExpiryDate <= now) {
             // remove expired boosters
             const index = boosters.findIndex(item => item.ItemType === ItemType);
             if (index !== -1) {

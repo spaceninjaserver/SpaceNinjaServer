@@ -25,6 +25,7 @@ export interface IDatabaseAccount extends IDatabaseAccountRequiredFields {
     LatestEventMessageDate: Date;
     LastLoginRewardDate: number;
     LoginDays: number;
+    DailyFirstWinDate: number;
 }
 
 // Includes virtual ID

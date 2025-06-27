@@ -88,7 +88,7 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         AffiliationMods,
         SyndicateXPItemReward,
         ConquestCompletedMissionsCount
-    } = await addMissionRewards(inventory, missionReport, firstCompletion);
+    } = await addMissionRewards(account, inventory, missionReport, firstCompletion);
 
     if (missionReport.EndOfMatchUpload) {
         inventory.RewardSeed = generateRewardSeed();

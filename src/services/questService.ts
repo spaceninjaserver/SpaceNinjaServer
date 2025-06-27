@@ -331,7 +331,7 @@ export const giveKeyChainMissionReward = async (
             const fixedLevelRewards = getLevelKeyRewards(missionName);
             if (fixedLevelRewards.levelKeyRewards) {
                 const missionRewards: { StoreItem: string; ItemCount: number }[] = [];
-                addFixedLevelRewards(fixedLevelRewards.levelKeyRewards, inventory, missionRewards);
+                inventory.RegularCredits += addFixedLevelRewards(fixedLevelRewards.levelKeyRewards, missionRewards);
 
                 for (const reward of missionRewards) {
                     await addItem(inventory, fromStoreItem(reward.StoreItem), reward.ItemCount);
