@@ -136,7 +136,10 @@ export const stopWebServer = async (): Promise<void> => {
     await Promise.all(promises);
 };
 
+let lastWsid: number = 0;
+
 interface IWsCustomData extends ws {
+    id?: number;
     accountId?: string;
 }
 
@@ -150,6 +153,7 @@ interface IWsMsgFromClient {
 }
 
 interface IWsMsgToClient {
+    //wsid?: number;
     reload?: boolean;
     ports?: {
         http: number | undefined;
@@ -174,6 +178,10 @@ const wsOnConnect = (ws: ws, req: http.IncomingMessage): void => {
         ws.close();
         return;
     }
+
+    (ws as IWsCustomData).id = ++lastWsid;
+    ws.send(JSON.stringify({ wsid: lastWsid }));
+
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     ws.on("message", async msg => {
         const data = JSON.parse(String(msg)) as IWsMsgFromClient;
@@ -263,6 +271,24 @@ export const sendWsBroadcastTo = (accountId: string, data: IWsMsgToClient): void
     if (wssServer) {
         for (const client of wssServer.clients) {
             if ((client as IWsCustomData).accountId == accountId) {
+                client.send(msg);
+            }
+        }
+    }
+};
+
+export const sendWsBroadcastExcept = (wsid: number | undefined, data: IWsMsgToClient): void => {
+    const msg = JSON.stringify(data);
+    if (wsServer) {
+        for (const client of wsServer.clients) {
+            if ((client as IWsCustomData).id != wsid) {
+                client.send(msg);
+            }
+        }
+    }
+    if (wssServer) {
+        for (const client of wssServer.clients) {
+            if ((client as IWsCustomData).id != wsid) {
                 client.send(msg);
             }
         }

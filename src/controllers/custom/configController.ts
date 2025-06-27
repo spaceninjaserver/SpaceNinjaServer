@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import { config } from "@/src/services/configService";
 import { getAccountForRequest, isAdministrator } from "@/src/services/loginService";
 import { saveConfig } from "@/src/services/configWatcherService";
+import { sendWsBroadcastExcept } from "@/src/services/webService";
 
 export const getConfigController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -24,6 +25,7 @@ export const setConfigController: RequestHandler = async (req, res) => {
             const [obj, idx] = configIdToIndexable(id);
             obj[idx] = value;
         }
+        sendWsBroadcastExcept(parseInt(String(req.query.wsid)), { config_reloaded: true });
         await saveConfig();
         res.end();
     } else {

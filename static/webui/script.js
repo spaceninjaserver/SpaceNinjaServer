@@ -10,7 +10,8 @@
 
 let auth_pending = false,
     did_initial_auth = false,
-    ws_is_open = false;
+    ws_is_open = false,
+    wsid = 0;
 const sendAuth = isRegister => {
     if (ws_is_open && localStorage.getItem("email") && localStorage.getItem("password")) {
         auth_pending = true;
@@ -34,6 +35,9 @@ function openWebSocket() {
     };
     window.ws.onmessage = e => {
         const msg = JSON.parse(e.data);
+        if ("wsid" in msg) {
+            wsid = msg.wsid;
+        }
         if ("reload" in msg) {
             setTimeout(() => {
                 getWebSocket().then(() => {
@@ -1858,7 +1862,7 @@ for (const id of uiConfigs) {
                 value = parseInt(value);
             }
             $.post({
-                url: "/custom/setConfig?" + window.authz,
+                url: "/custom/setConfig?" + window.authz + "&wsid=" + wsid,
                 contentType: "application/json",
                 data: JSON.stringify({ [id]: value })
             });
@@ -1866,7 +1870,7 @@ for (const id of uiConfigs) {
     } else if (elm.type == "checkbox") {
         elm.onchange = function () {
             $.post({
-                url: "/custom/setConfig?" + window.authz,
+                url: "/custom/setConfig?" + window.authz + "&wsid=" + wsid,
                 contentType: "application/json",
                 data: JSON.stringify({ [id]: this.checked })
             }).then(() => {
@@ -1881,7 +1885,7 @@ for (const id of uiConfigs) {
 function doSaveConfig(id) {
     const elm = document.getElementById(id);
     $.post({
-        url: "/custom/setConfig?" + window.authz,
+        url: "/custom/setConfig?" + window.authz + "&wsid=" + wsid,
         contentType: "application/json",
         data: JSON.stringify({ [id]: parseInt(elm.value) })
     });
