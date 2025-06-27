@@ -281,6 +281,10 @@ const generateVendorManifest = (
                         offersToAdd.push(item);
                         ++offset;
                     }
+                    if (missingItemsPerBin[item.bin]) {
+                        missingItemsPerBin[item.bin] -= 1;
+                        numOffersThatNeedToMatchABin -= 1;
+                    }
                 } else {
                     numCountedOffers += 1 + item.duplicates;
                 }
