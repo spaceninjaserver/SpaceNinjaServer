@@ -149,7 +149,8 @@ export const handleInventoryItemConfigChange = async (
                     } else {
                         const inventoryItem = inventory.WeaponSkins.id(itemId);
                         if (!inventoryItem) {
-                            throw new Error(`inventory item WeaponSkins not found with id ${itemId}`);
+                            logger.warn(`inventory item WeaponSkins not found with id ${itemId}`);
+                            continue;
                         }
                         if ("Favorite" in itemConfigEntries) {
                             inventoryItem.Favorite = itemConfigEntries.Favorite;
@@ -177,7 +178,8 @@ export const handleInventoryItemConfigChange = async (
                         const inventoryItem = inventory[equipmentName].id(itemId);
 
                         if (!inventoryItem) {
-                            throw new Error(`inventory item ${equipmentName} not found with id ${itemId}`);
+                            logger.warn(`inventory item ${equipmentName} not found with id ${itemId}`);
+                            continue;
                         }
 
                         for (const [configId, config] of Object.entries(itemConfigEntries)) {
