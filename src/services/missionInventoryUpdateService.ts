@@ -1616,6 +1616,27 @@ function getRandomMissionDrops(
                     ? "/Lotus/Types/Game/MissionDecks/DuviriEncounterRewards/DuviriKullervoSteelPathRNGRewards"
                     : "/Lotus/Types/Game/MissionDecks/DuviriEncounterRewards/DuviriKullervoNormalRNGRewards"
             ];
+        } else if (RewardInfo.T == 17) {
+            if (mission?.Tier == 1) {
+                logger.warn(`non-steel path duviri murmur tier used on steel path?!`);
+            }
+            /*if (operation eight claw is active) {
+                drops.push({
+                    StoreItem: "/Lotus/StoreItems/Types/Gameplay/DuviriMITW/Resources/DuviriMurmurItemEvent",
+                    ItemCount: 10
+                });
+            }*/
+            rewardManifests = ["/Lotus/Types/Game/MissionDecks/DuviriEncounterRewards/DuviriMurmurFinalChestRewards"];
+        } else if (RewardInfo.T == 19) {
+            /*if (operation eight claw is active) {
+                drops.push({
+                    StoreItem: "/Lotus/StoreItems/Types/Gameplay/DuviriMITW/Resources/DuviriMurmurItemEvent",
+                    ItemCount: 15
+                });
+            }*/
+            rewardManifests = [
+                "/Lotus/Types/Game/MissionDecks/DuviriEncounterRewards/DuviriMurmurFinalSteelChestRewards"
+            ];
         } else if (RewardInfo.T == 70) {
             // Orowyrm chest, gives 10 Pathos Clamps, or 15 on Steel Path.
             drops.push({
