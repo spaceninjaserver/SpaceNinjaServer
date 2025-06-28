@@ -313,9 +313,6 @@ export const getInventoryResponse = async (
         applyCheatsToInfestedFoundry(inventoryResponse.InfestedFoundry);
     }
 
-    // Omitting this field so opening the navigation resyncs the inventory which is more desirable for typical usage.
-    inventoryResponse.LastInventorySync = undefined;
-
     // Set 2FA enabled so trading post can be used
     inventoryResponse.HWIDProtectEnabled = true;
 

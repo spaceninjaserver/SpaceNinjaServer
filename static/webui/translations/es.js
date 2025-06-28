@@ -1,6 +1,6 @@
 // Spanish translation by hxedcl
 dict = {
-    general_inventoryUpdateNote: `Nota: Los cambios realizados aquí se reflejarán en el juego cuando este sincronice el inventario. Usar la navegación debería ser la forma más sencilla de activar esto.`,
+    general_inventoryUpdateNote: `[UNTRANSLATED] Note: To see changes in-game, you need to resync your inventory, e.g. using the bootstrapper's /sync command, visiting a dojo/relay, or relogging.`,
     general_addButton: `Agregar`,
     general_bulkActions: `Acciones masivas`,
     code_loginFail: `Error al iniciar sesión. Verifica el correo electrónico y la contraseña.`,

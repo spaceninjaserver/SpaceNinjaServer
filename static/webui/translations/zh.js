@@ -1,6 +1,6 @@
 // Chinese translation by meb154, bishan178 & Corvus
 dict = {
-    general_inventoryUpdateNote: `注意：此处所做的更改只有在游戏同步仓库后才会生效。您可以通过访问星图来触发仓库更新。`,
+    general_inventoryUpdateNote: `[UNTRANSLATED] Note: To see changes in-game, you need to resync your inventory, e.g. using the bootstrapper's /sync command, visiting a dojo/relay, or relogging.`,
     general_addButton: `添加`,
     general_bulkActions: `批量操作`,
     code_loginFail: `登录失败。请检查邮箱和密码。`,

@@ -1,6 +1,6 @@
 // Russian translation by AMelonInsideLemon
 dict = {
-    general_inventoryUpdateNote: `Примечание: изменения, внесенные здесь, отобразятся в игре только после повторной загрузки вашего инвентаря. Посещение навигации — самый простой способ этого добиться.`,
+    general_inventoryUpdateNote: `[UNTRANSLATED] Note: To see changes in-game, you need to resync your inventory, e.g. using the bootstrapper's /sync command, visiting a dojo/relay, or relogging.`,
     general_addButton: `Добавить`,
     general_bulkActions: `Массовые действия`,
     code_loginFail: `[UNTRANSLATED] Login failed. Double-check the email and password.`,

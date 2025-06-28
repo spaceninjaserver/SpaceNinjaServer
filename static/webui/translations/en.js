@@ -1,5 +1,5 @@
 dict = {
-    general_inventoryUpdateNote: `Note: Changes made here will only be applied in-game when the game syncs the inventory. Visiting the navigation should be the easiest way to trigger that.`,
+    general_inventoryUpdateNote: `Note: To see changes in-game, you need to resync your inventory, e.g. using the bootstrapper's /sync command, visiting a dojo/relay, or relogging.`,
     general_addButton: `Add`,
     general_bulkActions: `Bulk Actions`,
     code_loginFail: `Login failed. Double-check the email and password.`,

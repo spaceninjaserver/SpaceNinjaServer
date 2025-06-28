@@ -1,6 +1,6 @@
 // German translation by Animan8000
 dict = {
-    general_inventoryUpdateNote: `Hinweis: Änderungen, die hier vorgenommen werden, werden erst im Spiel angewendet, sobald das Inventar synchronisiert wird. Die Sternenkarte zu besuchen, sollte der einfachste Weg sein, dies auszulösen.`,
+    general_inventoryUpdateNote: `[UNTRANSLATED] Note: To see changes in-game, you need to resync your inventory, e.g. using the bootstrapper's /sync command, visiting a dojo/relay, or relogging.`,
     general_addButton: `Hinzufügen`,
     general_bulkActions: `Massenaktionen`,
     code_loginFail: `[UNTRANSLATED] Login failed. Double-check the email and password.`,
