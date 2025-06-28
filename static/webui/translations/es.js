@@ -231,6 +231,7 @@ dict = {
     worldState_allAtOnceNormal: `[UNTRANSLATED] All At Once, Normal`,
     worldState_allAtOnceSteelPath: `[UNTRANSLATED] All At Once, Steel Path`,
     worldState_theCircuitOverride: `[UNTRANSLATED] The Circuit Override`,
+    worldState_darvoStockMultiplier: `[UNTRANSLATED] Darvo Stock Multiplier`,
 
     import_importNote: `Puedes proporcionar una respuesta de inventario completa o parcial (representación del cliente) aquí. Todos los campos compatibles con el importador <b>serán sobrescritos</b> en tu cuenta.`,
     import_submit: `Enviar`,

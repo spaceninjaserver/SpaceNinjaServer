@@ -510,18 +510,6 @@
   "PrimeAccessAvailability": { "State": "PRIME1" },
   "PrimeVaultAvailabilities": [false, false, false, false, false],
   "PrimeTokenAvailability": true,
-  "DailyDeals": [
-    {
-      "StoreItem": "/Lotus/StoreItems/Upgrades/Focus/PowerLensGreater",
-      "Activation": { "$date": { "$numberLong": "1715058000000" } },
-      "Expiry": { "$date": { "$numberLong": "2000000000000" } },
-      "Discount": 50,
-      "OriginalPrice": 40,
-      "SalePrice": 20,
-      "AmountTotal": 50,
-      "AmountSold": 0
-    }
-  ],
   "LibraryInfo": { "LastCompletedTargetType": "/Lotus/Types/Game/Library/Targets/Research7Target" },
   "PVPChallengeInstances": [
     {

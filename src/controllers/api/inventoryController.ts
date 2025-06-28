@@ -24,6 +24,8 @@ import { IPersonalRoomsClient } from "@/src/types/personalRoomsTypes";
 import { Ship } from "@/src/models/shipModel";
 import { toLegacyOid, toOid, version_compare } from "@/src/helpers/inventoryHelpers";
 import { Inbox } from "@/src/models/inboxModel";
+import { unixTimesInMs } from "@/src/constants/timeConstants";
+import { DailyDeal } from "@/src/models/worldStateModel";
 
 export const inventoryController: RequestHandler = async (request, response) => {
     const account = await getAccountForRequest(request);
@@ -37,6 +39,8 @@ export const inventoryController: RequestHandler = async (request, response) => 
 
     // Handle daily reset
     if (!inventory.NextRefill || Date.now() >= inventory.NextRefill.getTime()) {
+        const today = Math.trunc(Date.now() / 86400000);
+
         for (const key of allDailyAffiliationKeys) {
             inventory[key] = 16000 + inventory.PlayerLevel * 500;
         }
@@ -47,12 +51,12 @@ export const inventoryController: RequestHandler = async (request, response) => 
         inventory.LibraryAvailableDailyTaskInfo = createLibraryDailyTask();
 
         if (inventory.NextRefill) {
+            const lastLoginDay = Math.trunc(inventory.NextRefill.getTime() / 86400000) - 1;
+            const daysPassed = today - lastLoginDay;
+
             if (config.noArgonCrystalDecay) {
                 inventory.FoundToday = undefined;
             } else {
-                const lastLoginDay = Math.trunc(inventory.NextRefill.getTime() / 86400000) - 1;
-                const today = Math.trunc(Date.now() / 86400000);
-                const daysPassed = today - lastLoginDay;
                 for (let i = 0; i != daysPassed; ++i) {
                     const numArgonCrystals =
                         inventory.MiscItems.find(x => x.ItemType == "/Lotus/Types/Items/MiscItems/ArgonCrystal")
@@ -84,11 +88,29 @@ export const inventoryController: RequestHandler = async (request, response) => 
                     inventory.FoundToday = undefined;
                 }
             }
+
+            if (inventory.UsedDailyDeals.length != 0) {
+                if (daysPassed == 1) {
+                    const todayAt0Utc = today * 86400000;
+                    const darvoIndex = Math.trunc((todayAt0Utc - 25200000) / (26 * unixTimesInMs.hour));
+                    const darvoStart = darvoIndex * (26 * unixTimesInMs.hour) + 25200000;
+                    const darvoOid =
+                        ((darvoStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "adc51a72f7324d95";
+                    const deal = await DailyDeal.findById(darvoOid);
+                    if (deal) {
+                        inventory.UsedDailyDeals = inventory.UsedDailyDeals.filter(x => x == deal.StoreItem); // keep only the deal that came into this new day with us
+                    } else {
+                        inventory.UsedDailyDeals = [];
+                    }
+                } else {
+                    inventory.UsedDailyDeals = [];
+                }
+            }
         }
 
         cleanupInventory(inventory);
 
-        inventory.NextRefill = new Date((Math.trunc(Date.now() / 86400000) + 1) * 86400000);
+        inventory.NextRefill = new Date((today + 1) * 86400000); // tomorrow at 0 UTC
         //await inventory.save();
     }
 

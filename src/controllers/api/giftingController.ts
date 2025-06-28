@@ -9,15 +9,26 @@ import {
     updateCurrency
 } from "@/src/services/inventoryService";
 import { getAccountForRequest, getSuffixedName } from "@/src/services/loginService";
-import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
+import { handleDailyDealPurchase, handleStoreItemAcquisition } from "@/src/services/purchaseService";
 import { IOid } from "@/src/types/commonTypes";
-import { IInventoryChanges, IPurchaseParams, PurchaseSource } from "@/src/types/purchaseTypes";
+import { IPurchaseParams, IPurchaseResponse, PurchaseSource } from "@/src/types/purchaseTypes";
 import { RequestHandler } from "express";
 import { ExportBundles, ExportFlavour } from "warframe-public-export-plus";
 
+const checkPurchaseParams = (params: IPurchaseParams): boolean => {
+    switch (params.Source) {
+        case PurchaseSource.Market:
+            return params.UsePremium;
+
+        case PurchaseSource.DailyDeal:
+            return true;
+    }
+    return false;
+};
+
 export const giftingController: RequestHandler = async (req, res) => {
     const data = getJSONfromString<IGiftingRequest>(String(req.body));
-    if (data.PurchaseParams.Source != PurchaseSource.Market || !data.PurchaseParams.UsePremium) {
+    if (!checkPurchaseParams(data.PurchaseParams)) {
         throw new Error(`unexpected purchase params in gifting request: ${String(req.body)}`);
     }
 
@@ -58,16 +69,19 @@ export const giftingController: RequestHandler = async (req, res) => {
     }
     senderInventory.GiftsRemaining -= 1;
 
-    const inventoryChanges: IInventoryChanges = updateCurrency(
-        senderInventory,
-        data.PurchaseParams.ExpectedPrice,
-        true
-    );
+    const response: IPurchaseResponse = {
+        InventoryChanges: {}
+    };
+    if (data.PurchaseParams.Source == PurchaseSource.DailyDeal) {
+        await handleDailyDealPurchase(senderInventory, data.PurchaseParams, response);
+    } else {
+        updateCurrency(senderInventory, data.PurchaseParams.ExpectedPrice, true, response.InventoryChanges);
+    }
     if (data.PurchaseParams.StoreItem in ExportBundles) {
         const bundle = ExportBundles[data.PurchaseParams.StoreItem];
         if (bundle.giftingBonus) {
             combineInventoryChanges(
-                inventoryChanges,
+                response.InventoryChanges,
                 (await handleStoreItemAcquisition(bundle.giftingBonus, senderInventory)).InventoryChanges
             );
         }
@@ -99,9 +113,7 @@ export const giftingController: RequestHandler = async (req, res) => {
         }
     ]);
 
-    res.json({
-        InventoryChanges: inventoryChanges
-    });
+    res.json(response);
 };
 
 interface IGiftingRequest {

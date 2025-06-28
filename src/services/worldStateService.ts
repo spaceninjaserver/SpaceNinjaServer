@@ -4,6 +4,7 @@ import fissureMissions from "@/static/fixed_responses/worldState/fissureMissions
 import sortieTilesets from "@/static/fixed_responses/worldState/sortieTilesets.json";
 import sortieTilesetMissions from "@/static/fixed_responses/worldState/sortieTilesetMissions.json";
 import syndicateMissions from "@/static/fixed_responses/worldState/syndicateMissions.json";
+import darvoDeals from "@/static/fixed_responses/worldState/darvoDeals.json";
 import { buildConfig } from "@/src/services/buildConfigService";
 import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { config } from "@/src/services/configService";
@@ -27,7 +28,7 @@ import {
 } from "../types/worldStateTypes";
 import { toMongoDate, toOid, version_compare } from "../helpers/inventoryHelpers";
 import { logger } from "../utils/logger";
-import { Fissure } from "../models/worldStateModel";
+import { DailyDeal, Fissure } from "../models/worldStateModel";
 
 const sortieBosses = [
     "SORTIE_BOSS_HYENA",
@@ -1122,6 +1123,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         GlobalUpgrades: [],
         VoidTraders: [],
         VoidStorms: [],
+        DailyDeals: [],
         EndlessXpChoices: [],
         KnownCalendarSeasons: [],
         ...staticWorldState,
@@ -1561,6 +1563,24 @@ export const populateFissures = async (worldState: IWorldState): Promise<void> =
     }
 };
 
+export const populateDailyDeal = async (worldState: IWorldState): Promise<void> => {
+    const dailyDeals = await DailyDeal.find({});
+    for (const dailyDeal of dailyDeals) {
+        if (dailyDeal.Expiry.getTime() > Date.now()) {
+            worldState.DailyDeals.push({
+                StoreItem: dailyDeal.StoreItem,
+                Activation: toMongoDate(dailyDeal.Activation),
+                Expiry: toMongoDate(dailyDeal.Expiry),
+                Discount: dailyDeal.Discount,
+                OriginalPrice: dailyDeal.OriginalPrice,
+                SalePrice: dailyDeal.SalePrice,
+                AmountTotal: Math.round(dailyDeal.AmountTotal * (config.worldState?.darvoStockMultiplier ?? 1)),
+                AmountSold: dailyDeal.AmountSold
+            });
+        }
+    }
+};
+
 export const idToBountyCycle = (id: string): number => {
     return Math.trunc((parseInt(id.substring(0, 8), 16) * 1000) / 9000_000);
 };
@@ -1689,7 +1709,7 @@ const nightwaveTagToSeason: Record<string, number> = {
     RadioLegionSyndicate: 0 // The Wolf of Saturn Six
 };
 
-export const updateWorldStateCollections = async (): Promise<void> => {
+const updateFissures = async (): Promise<void> => {
     const fissures = await Fissure.find();
 
     const activeNodes = new Set<string>();
@@ -1741,4 +1761,39 @@ export const updateWorldStateCollections = async (): Promise<void> => {
             }
         }
     }
+};
+
+const updateDailyDeal = async (): Promise<void> => {
+    let darvoIndex = Math.trunc((Date.now() - 25200000) / (26 * unixTimesInMs.hour));
+    let darvoEnd;
+    do {
+        const darvoStart = darvoIndex * (26 * unixTimesInMs.hour) + 25200000;
+        darvoEnd = darvoStart + 26 * unixTimesInMs.hour;
+        const darvoOid = ((darvoStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "adc51a72f7324d95";
+        if (!(await DailyDeal.findById(darvoOid))) {
+            const seed = new SRng(darvoIndex).randomInt(0, 100_000);
+            const rng = new SRng(seed);
+            let deal;
+            do {
+                deal = rng.randomReward(darvoDeals)!; // Using an actual sampling collected over roughly a year because I can't extrapolate an algorithm from it with enough certainty.
+                //const [storeItem, meta] = rng.randomElement(Object.entries(darvoDeals))!;
+                //const discount = Math.min(rng.randomInt(1, 9) * 10, (meta as { MaxDiscount?: number }).MaxDiscount ?? 1);
+            } while (await DailyDeal.exists({ StoreItem: deal.StoreItem }));
+            await DailyDeal.insertOne({
+                _id: darvoOid,
+                StoreItem: deal.StoreItem,
+                Activation: new Date(darvoStart),
+                Expiry: new Date(darvoEnd),
+                Discount: deal.Discount,
+                OriginalPrice: deal.OriginalPrice,
+                SalePrice: deal.SalePrice, //Math.trunc(deal.OriginalPrice * (1 - discount))
+                AmountTotal: deal.AmountTotal,
+                AmountSold: 0
+            });
+        }
+    } while (darvoEnd < Date.now() + 6 * unixTimesInMs.minute && ++darvoIndex);
+};
+
+export const updateWorldStateCollections = async (): Promise<void> => {
+    await Promise.all([updateFissures(), updateDailyDeal()]);
 };

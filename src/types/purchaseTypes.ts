@@ -105,6 +105,7 @@ export interface IPurchaseResponse {
     Standing?: IAffiliationMods[];
     FreeFavorsUsed?: IAffiliationMods[];
     BoosterPackItems?: string;
+    DailyDealUsed?: string;
 }
 
 export type IBinChanges = {

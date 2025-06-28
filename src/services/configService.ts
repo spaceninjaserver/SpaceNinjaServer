@@ -83,6 +83,7 @@ export interface IConfig {
         nightwaveOverride?: string;
         allTheFissures?: string;
         circuitGameModes?: string[];
+        darvoStockMultiplier?: number;
     };
     dev?: {
         keepVendorsExpired?: boolean;

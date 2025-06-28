@@ -75,7 +75,8 @@
     "duviriOverride": "",
     "nightwaveOverride": "",
     "allTheFissures": "",
-    "circuitGameModes": null
+    "circuitGameModes": null,
+    "darvoStockMultiplier": 1
   },
   "dev": {
     "keepVendorsExpired": false

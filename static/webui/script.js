@@ -1892,6 +1892,16 @@ function doSaveConfigInt(id) {
     });
 }
 
+function doSaveConfigFloat(id) {
+    $.post({
+        url: "/custom/setConfig?" + window.authz + "&wsid=" + wsid,
+        contentType: "application/json",
+        data: JSON.stringify({
+            [id]: parseFloat(document.getElementById(id).value)
+        })
+    });
+}
+
 function doSaveConfigStringArray(id) {
     $.post({
         url: "/custom/setConfig?" + window.authz + "&wsid=" + wsid,
@@ -1928,8 +1938,6 @@ single.getRoute("/webui/cheats").on("beforeload", function () {
                         if (x != null) {
                             if (x.type == "checkbox") {
                                 x.checked = value;
-                            } else if (x.type == "number") {
-                                x.setAttribute("value", value);
                             } else if (x.classList.contains("tags-input")) {
                                 x.value = value.join(", ");
                                 x.oninput();

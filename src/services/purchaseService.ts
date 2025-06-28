@@ -16,7 +16,8 @@ import {
     IPurchaseResponse,
     SlotPurchase,
     IInventoryChanges,
-    PurchaseSource
+    PurchaseSource,
+    IPurchaseParams
 } from "@/src/types/purchaseTypes";
 import { logger } from "@/src/utils/logger";
 import { getWorldState } from "./worldStateService";
@@ -35,6 +36,7 @@ import {
 import { config } from "./configService";
 import { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel";
 import { fromStoreItem, toStoreItem } from "./itemDataService";
+import { DailyDeal } from "../models/worldStateModel";
 
 export const getStoreItemCategory = (storeItem: string): string => {
     const storeItemString = getSubstringFromKeyword(storeItem, "StoreItems/");
@@ -240,6 +242,12 @@ export const handlePurchase = async (
                 }
             }
             break;
+        case PurchaseSource.DailyDeal:
+            if (purchaseRequest.PurchaseParams.ExpectedPrice) {
+                throw new Error(`daily deal purchase should not have an expected price`);
+            }
+            await handleDailyDealPurchase(inventory, purchaseRequest.PurchaseParams, purchaseResponse);
+            break;
         case PurchaseSource.Vendor:
             if (purchaseRequest.PurchaseParams.SourceId! in ExportVendors) {
                 const vendor = ExportVendors[purchaseRequest.PurchaseParams.SourceId!];
@@ -325,6 +333,25 @@ const handleItemPrices = (
         } else {
             inventoryChanges.MiscItems.push(invItem);
         }
+    }
+};
+
+export const handleDailyDealPurchase = async (
+    inventory: TInventoryDatabaseDocument,
+    purchaseParams: IPurchaseParams,
+    purchaseResponse: IPurchaseResponse
+): Promise<void> => {
+    const dailyDeal = (await DailyDeal.findOne({ StoreItem: purchaseParams.StoreItem }))!;
+    dailyDeal.AmountSold += 1;
+    await dailyDeal.save();
+
+    if (!config.dontSubtractPurchasePlatinumCost) {
+        updateCurrency(inventory, dailyDeal.SalePrice, true, purchaseResponse.InventoryChanges);
+    }
+
+    if (!config.noVendorPurchaseLimits) {
+        inventory.UsedDailyDeals.push(purchaseParams.StoreItem);
+        purchaseResponse.DailyDealUsed = purchaseParams.StoreItem;
     }
 };
 
