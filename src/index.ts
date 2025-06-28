@@ -28,12 +28,13 @@ import { updateWorldStateCollections } from "./services/worldStateService";
 JSON.stringify = JSONStringify;
 
 validateConfig();
-syncConfigWithDatabase();
 
 mongoose
     .connect(config.mongodbUrl)
     .then(() => {
         logger.info("Connected to MongoDB");
+        syncConfigWithDatabase();
+
         startWebServer();
 
         void updateWorldStateCollections();
