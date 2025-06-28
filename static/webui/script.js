@@ -1882,12 +1882,27 @@ for (const id of uiConfigs) {
     }
 }
 
-function doSaveConfig(id) {
-    const elm = document.getElementById(id);
+function doSaveConfigInt(id) {
     $.post({
         url: "/custom/setConfig?" + window.authz + "&wsid=" + wsid,
         contentType: "application/json",
-        data: JSON.stringify({ [id]: parseInt(elm.value) })
+        data: JSON.stringify({
+            [id]: parseInt(document.getElementById(id).value)
+        })
+    });
+}
+
+function doSaveConfigStringArray(id) {
+    $.post({
+        url: "/custom/setConfig?" + window.authz + "&wsid=" + wsid,
+        contentType: "application/json",
+        data: JSON.stringify({
+            [id]: document
+                .getElementById(id)
+                .getAttribute("data-tags-value")
+                .split(", ")
+                .filter(x => x)
+        })
     });
 }
 
@@ -1914,7 +1929,12 @@ single.getRoute("/webui/cheats").on("beforeload", function () {
                             if (x.type == "checkbox") {
                                 x.checked = value;
                             } else if (x.type == "number") {
-                                x.setAttribute("value", `${value}`);
+                                x.setAttribute("value", value);
+                            } else if (x.classList.contains("tags-input")) {
+                                x.value = value.join(", ");
+                                x.oninput();
+                            } else {
+                                x.value = value;
                             }
                         }
                     });
@@ -2597,3 +2617,27 @@ const importSamples = {
 function setImportSample(key) {
     $("#import-inventory").val(JSON.stringify(importSamples[key], null, 2));
 }
+
+document.querySelectorAll(".tags-input").forEach(input => {
+    const datalist = document.getElementById(input.getAttribute("list"));
+    const options = [...datalist.querySelectorAll("option")].map(x => x.textContent);
+    input.oninput = function () {
+        const value = [];
+        for (const tag of this.value.split(",")) {
+            const index = options.map(x => x.toLowerCase()).indexOf(tag.trim().toLowerCase());
+            if (index != -1) {
+                value.push(options[index]);
+            }
+        }
+
+        this.setAttribute("data-tags-value", value.join(", "));
+
+        datalist.innerHTML = "";
+        for (const option of options) {
+            const elm = document.createElement("option");
+            elm.textContent = [...value, option, ""].join(", ");
+            datalist.appendChild(elm);
+        }
+    };
+    input.oninput();
+});

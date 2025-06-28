@@ -55,6 +55,7 @@ interface ItemLists {
     EvolutionProgress: ListedItem[];
     mods: ListedItem[];
     Boosters: ListedItem[];
+    //circuitGameModes: ListedItem[];
 }
 
 const relicQualitySuffixes: Record<TRelicQuality, string> = {
@@ -63,6 +64,10 @@ const relicQualitySuffixes: Record<TRelicQuality, string> = {
     VPQ_GOLD: " [Radiant]",
     VPQ_PLATINUM: " [Exceptional]"
 };
+
+/*const toTitleCase = (str: string): string => {
+    return str.replace(/[^\s-]+/g, word => word.charAt(0).toUpperCase() + word.substr(1).toLowerCase());
+};*/
 
 const getItemListsController: RequestHandler = (req, response) => {
     const lang = getDict(typeof req.query.lang == "string" ? req.query.lang : "en");
@@ -87,6 +92,36 @@ const getItemListsController: RequestHandler = (req, response) => {
         EvolutionProgress: [],
         mods: [],
         Boosters: []
+        /*circuitGameModes: [
+            {
+                uniqueName: "Survival",
+                name: toTitleCase(getString("/Lotus/Language/Missions/MissionName_Survival", lang))
+            },
+            {
+                uniqueName: "VoidFlood",
+                name: toTitleCase(getString("/Lotus/Language/Missions/MissionName_Corruption", lang))
+            },
+            {
+                uniqueName: "Excavation",
+                name: toTitleCase(getString("/Lotus/Language/Missions/MissionName_Excavation", lang))
+            },
+            {
+                uniqueName: "Defense",
+                name: toTitleCase(getString("/Lotus/Language/Missions/MissionName_Defense", lang))
+            },
+            {
+                uniqueName: "Exterminate",
+                name: toTitleCase(getString("/Lotus/Language/Missions/MissionName_Exterminate", lang))
+            },
+            {
+                uniqueName: "Assassination",
+                name: toTitleCase(getString("/Lotus/Language/Missions/MissionName_Assassination", lang))
+            },
+            {
+                uniqueName: "Alchemy",
+                name: toTitleCase(getString("/Lotus/Language/Missions/MissionName_Alchemy", lang))
+            }
+        ]*/
     };
     for (const [uniqueName, item] of Object.entries(ExportWarframes)) {
         res[item.productCategory].push({

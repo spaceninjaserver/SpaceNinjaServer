@@ -768,14 +768,14 @@
                                         <input class="form-check-input" type="checkbox" id="unlockAllSimarisResearchEntries" />
                                         <label class="form-check-label" for="unlockAllSimarisResearchEntries" data-loc="cheats_unlockAllSimarisResearchEntries"></label>
                                     </div>
-                                    <form class="form-group mt-2" onsubmit="doSaveConfig('spoofMasteryRank'); return false;">
+                                    <form class="form-group mt-2" onsubmit="doSaveConfigInt('spoofMasteryRank'); return false;">
                                         <label class="form-label" for="spoofMasteryRank" data-loc="cheats_spoofMasteryRank"></label>
                                         <div class="input-group">
                                             <input class="form-control" id="spoofMasteryRank" type="number" min="-1" max="65535" />
                                             <button class="btn btn-primary" type="submit" data-loc="cheats_save"></button>
                                         </div>
                                     </form>
-                                    <form class="form-group mt-2" onsubmit="doSaveConfig('nightwaveStandingMultiplier'); return false;">
+                                    <form class="form-group mt-2" onsubmit="doSaveConfigInt('nightwaveStandingMultiplier'); return false;">
                                         <label class="form-label" for="nightwaveStandingMultiplier" data-loc="cheats_nightwaveStandingMultiplier"></label>
                                         <div class="input-group">
                                             <input class="form-control" id="nightwaveStandingMultiplier" type="number" min="1" max="1000000" value="1" />
@@ -892,6 +892,13 @@
                                         <option value="hard" data-loc="worldState_allAtOnceSteelPath"></option>
                                     </select>
                                 </div>
+                                <form class="form-group mt-2" onsubmit="doSaveConfigStringArray('worldState.circuitGameModes'); return false;">
+                                    <label class="form-label" for="worldState.circuitGameModes" data-loc="worldState_theCircuitOverride"></label>
+                                    <div class="input-group">
+                                        <input id="worldState.circuitGameModes" type="text" class="form-control tags-input" list="datalist-circuitGameModes" />
+                                        <button class="btn btn-primary" type="submit" data-loc="cheats_save"></button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -923,10 +930,7 @@
     <datalist id="datalist-KubrowPets"></datalist>
     <datalist id="datalist-QuestKeys"></datalist>
     <datalist id="datalist-miscitems"></datalist>
-    <datalist id="datalist-mods">
-        <option data-key="/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser" value="Legendary Core"></option>
-        <option data-key="/Lotus/Upgrades/CosmeticEnhancers/Peculiars/CyoteMod" value="Traumatic Peculiar"></option>
-    </datalist>
+    <datalist id="datalist-mods"></datalist>
     <datalist id="datalist-archonCrystalUpgrades"></datalist>
     <datalist id="datalist-OperatorAmps"></datalist>
     <datalist id="datalist-EvolutionProgress"></datalist>
@@ -958,6 +962,15 @@
     <datalist id="datalist-ModularParts-KUBROW_ANTIGEN"></datalist>
     <datalist id="datalist-ModularParts-KUBROW_MUTAGEN"></datalist>
     <datalist id="datalist-Boosters"></datalist>
+    <datalist id="datalist-circuitGameModes">
+        <option>Survival</option>
+        <option>VoidFlood</option>
+        <option>Excavation</option>
+        <option>Defense</option>
+        <option>Exterminate</option>
+        <option>Assassination</option>
+        <option>Alchemy</option>
+    </datalist>
     <script src="/webui/libs/jquery-3.6.0.min.js"></script>
     <script src="/webui/libs/whirlpool-js.min.js"></script>
     <script src="/webui/libs/single.js"></script>

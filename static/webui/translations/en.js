@@ -229,6 +229,7 @@ dict = {
     normal: `Normal`,
     worldState_allAtOnceNormal: `All At Once, Normal`,
     worldState_allAtOnceSteelPath: `All At Once, Steel Path`,
+    worldState_theCircuitOverride: `The Circuit Override`,
 
     import_importNote: `You can provide a full or partial inventory response (client respresentation) here. All fields that are supported by the importer <b>will be overwritten</b> in your account.`,
     import_submit: `Submit`,

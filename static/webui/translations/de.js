@@ -230,6 +230,7 @@ dict = {
     normal: `[UNTRANSLATED] Normal`,
     worldState_allAtOnceNormal: `[UNTRANSLATED] All At Once, Normal`,
     worldState_allAtOnceSteelPath: `[UNTRANSLATED] All At Once, Steel Path`,
+    worldState_theCircuitOverride: `[UNTRANSLATED] The Circuit Override`,
 
     import_importNote: `Du kannst hier eine vollständige oder teilweise Inventarantwort (Client-Darstellung) einfügen. Alle Felder, die vom Importer unterstützt werden, <b>werden in deinem Account überschrieben</b>.`,
     import_submit: `Absenden`,
