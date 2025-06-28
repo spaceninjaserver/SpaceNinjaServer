@@ -230,7 +230,7 @@ dict = {
     normal: `正常`,
     worldState_allAtOnceNormal: `全部开启（普通）`,
     worldState_allAtOnceSteelPath: `全部开启（钢铁之路）`,
-    worldState_theCircuitOverride: `[UNTRANSLATED] The Circuit Override`,
+    worldState_theCircuitOverride: `无尽回廊任务循环配置:`,
     worldState_darvoStockMultiplier: `[UNTRANSLATED] Darvo Stock Multiplier`,
 
     import_importNote: `您可以在此处提供完整或部分库存响应（客户端表示）。支持的所有字段<b>将被覆盖</b>到您的账户中。`,
