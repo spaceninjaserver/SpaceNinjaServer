@@ -11,6 +11,7 @@ export const purchaseController: RequestHandler = async (req, res) => {
     const inventory = await getInventory(accountId);
     const response = await handlePurchase(purchaseRequest, inventory);
     await inventory.save();
+    //console.log(JSON.stringify(response, null, 2));
     res.json(response);
     sendWsBroadcastTo(accountId, { update_inventory: true });
 };

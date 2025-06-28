@@ -44,6 +44,7 @@ import {
 } from "../types/inventoryTypes/commonInventoryTypes";
 import {
     ExportArcanes,
+    ExportBoosters,
     ExportBundles,
     ExportChallenges,
     ExportCustoms,
@@ -669,6 +670,17 @@ export const addItem = async (
             throw new Error(`unexpected acquisition quantity of EmailItems: got ${quantity}, expected 1`);
         }
         return await addEmailItem(inventory, typeName);
+    }
+
+    // Boosters are an odd case. They're only added like this via Baro's Void Surplus afaik.
+    {
+        const boosterEntry = Object.entries(ExportBoosters).find(arr => arr[1].typeName == typeName);
+        if (boosterEntry) {
+            addBooster(typeName, quantity, inventory);
+            return {
+                Boosters: [{ ItemType: typeName, ExpiryDate: quantity }]
+            };
+        }
     }
 
     // Path-based duck typing
@@ -1354,7 +1366,7 @@ export const addCustomization = (
     customizationName: string,
     inventoryChanges: IInventoryChanges = {}
 ): IInventoryChanges => {
-    if (!inventory.FlavourItems.find(x => x.ItemType == customizationName)) {
+    if (!inventory.FlavourItems.some(x => x.ItemType == customizationName)) {
         const flavourItemIndex = inventory.FlavourItems.push({ ItemType: customizationName }) - 1;
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         inventoryChanges.FlavourItems ??= [];
@@ -1370,7 +1382,7 @@ export const addSkin = (
     typeName: string,
     inventoryChanges: IInventoryChanges = {}
 ): IInventoryChanges => {
-    if (inventory.WeaponSkins.find(x => x.ItemType == typeName)) {
+    if (inventory.WeaponSkins.some(x => x.ItemType == typeName)) {
         logger.debug(`refusing to add WeaponSkin ${typeName} because account already owns it`);
     } else {
         const index = inventory.WeaponSkins.push({ ItemType: typeName, IsNew: true }) - 1;

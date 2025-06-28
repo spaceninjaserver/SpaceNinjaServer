@@ -91,7 +91,7 @@ import {
     ICrewMemberSkillEfficiency,
     ICrewMemberDatabase,
     ICrewMemberClient,
-    ISortieRewardAttenuation,
+    IRewardAttenuation,
     IInvasionProgressDatabase,
     IInvasionProgressClient,
     IAccolades,
@@ -1417,10 +1417,10 @@ lastSortieRewardSchema.set("toJSON", {
     }
 });
 
-const sortieRewardAttenutationSchema = new Schema<ISortieRewardAttenuation>(
+const rewardAttenutationSchema = new Schema<IRewardAttenuation>(
     {
-        Tag: String,
-        Atten: Number
+        Tag: { type: String, required: true },
+        Atten: { type: Number, required: true }
     },
     { _id: false }
 );
@@ -1666,7 +1666,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         CompletedSorties: [String],
         LastSortieReward: { type: [lastSortieRewardSchema], default: undefined },
         LastLiteSortieReward: { type: [lastSortieRewardSchema], default: undefined },
-        SortieRewardAttenuation: { type: [sortieRewardAttenutationSchema], default: undefined },
+        SortieRewardAttenuation: { type: [rewardAttenutationSchema], default: undefined },
 
         // Resource Extractor Drones
         Drones: [droneSchema],
@@ -1805,7 +1805,9 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         HubNpcCustomizations: { type: [hubNpcCustomizationSchema], default: undefined },
 
-        ClaimedJunctionChallengeRewards: { type: [String], default: undefined }
+        ClaimedJunctionChallengeRewards: { type: [String], default: undefined },
+
+        SpecialItemRewardAttenuation: { type: [rewardAttenutationSchema], default: undefined }
     },
     { timestamps: { createdAt: "Created", updatedAt: false } }
 );

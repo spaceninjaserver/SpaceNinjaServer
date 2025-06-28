@@ -298,7 +298,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     CompletedSorties: string[];
     LastSortieReward?: ILastSortieRewardClient[];
     LastLiteSortieReward?: ILastSortieRewardClient[];
-    SortieRewardAttenuation?: ISortieRewardAttenuation[];
+    SortieRewardAttenuation?: IRewardAttenuation[];
     Drones: IDroneClient[];
     StepSequencers: IStepSequencer[];
     ActiveAvatarImageType?: string;
@@ -383,6 +383,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     HubNpcCustomizations?: IHubNpcCustomization[];
     Ship?: IOrbiter; // U22 and below, response only
     ClaimedJunctionChallengeRewards?: string[]; // U39
+    SpecialItemRewardAttenuation?: IRewardAttenuation[]; // Baro's Void Surplus
 }
 
 export interface IAffiliation {
@@ -785,7 +786,7 @@ export interface ILastSortieRewardDatabase extends Omit<ILastSortieRewardClient,
     SortieId: Types.ObjectId;
 }
 
-export interface ISortieRewardAttenuation {
+export interface IRewardAttenuation {
     Tag: string;
     Atten: number;
 }

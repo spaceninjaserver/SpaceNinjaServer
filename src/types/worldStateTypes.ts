@@ -160,6 +160,7 @@ export interface IVoidTraderOffer {
     ItemType: string;
     PrimePrice: number;
     RegularPrice: number;
+    Limit?: number;
 }
 
 export interface IVoidStorm {

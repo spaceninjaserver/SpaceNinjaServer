@@ -296,6 +296,12 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
             db[key] = client[key];
         }
     }
+    // IRewardAtten[]
+    for (const key of ["SortieRewardAttenuation", "SpecialItemRewardAttenuation"] as const) {
+        if (client[key] !== undefined) {
+            db[key] = client[key];
+        }
+    }
     if (client.XPInfo !== undefined) {
         db.XPInfo = client.XPInfo;
     }

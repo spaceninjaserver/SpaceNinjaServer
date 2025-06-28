@@ -8,7 +8,7 @@ import {
     updateCurrency,
     updateSlots
 } from "@/src/services/inventoryService";
-import { getRandomWeightedRewardUc } from "@/src/services/rngService";
+import { getRandomReward, getRandomWeightedRewardUc } from "@/src/services/rngService";
 import { applyStandingToVendorManifest, getVendorManifestByOid } from "@/src/services/serversideVendorsService";
 import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import {
@@ -37,6 +37,7 @@ import { config } from "./configService";
 import { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel";
 import { fromStoreItem, toStoreItem } from "./itemDataService";
 import { DailyDeal } from "../models/worldStateModel";
+import { fromMongoDate, toMongoDate } from "../helpers/inventoryHelpers";
 
 export const getStoreItemCategory = (storeItem: string): string => {
     const storeItemString = getSubstringFromKeyword(storeItem, "StoreItems/");
@@ -51,6 +52,58 @@ export const getStoreItemTypesCategory = (typesItem: string): string => {
         return typeElements[2];
     }
     return typeElements[1];
+};
+
+const tallyVendorPurchase = (
+    inventory: TInventoryDatabaseDocument,
+    inventoryChanges: IInventoryChanges,
+    VendorType: string,
+    ItemId: string,
+    numPurchased: number,
+    Expiry: Date
+): void => {
+    if (!config.noVendorPurchaseLimits) {
+        inventory.RecentVendorPurchases ??= [];
+        let vendorPurchases = inventory.RecentVendorPurchases.find(x => x.VendorType == VendorType);
+        if (!vendorPurchases) {
+            vendorPurchases =
+                inventory.RecentVendorPurchases[
+                    inventory.RecentVendorPurchases.push({
+                        VendorType: VendorType,
+                        PurchaseHistory: []
+                    }) - 1
+                ];
+        }
+        let historyEntry = vendorPurchases.PurchaseHistory.find(x => x.ItemId == ItemId);
+        if (historyEntry) {
+            if (Date.now() >= historyEntry.Expiry.getTime()) {
+                historyEntry.NumPurchased = numPurchased;
+                historyEntry.Expiry = Expiry;
+            } else {
+                historyEntry.NumPurchased += numPurchased;
+            }
+        } else {
+            historyEntry =
+                vendorPurchases.PurchaseHistory[
+                    vendorPurchases.PurchaseHistory.push({
+                        ItemId: ItemId,
+                        NumPurchased: numPurchased,
+                        Expiry: Expiry
+                    }) - 1
+                ];
+        }
+        inventoryChanges.NewVendorPurchase = {
+            VendorType: VendorType,
+            PurchaseHistory: [
+                {
+                    ItemId: ItemId,
+                    NumPurchased: historyEntry.NumPurchased,
+                    Expiry: toMongoDate(Expiry)
+                }
+            ]
+        };
+        inventoryChanges.RecentVendorPurchases = inventoryChanges.NewVendorPurchase;
+    }
 };
 
 export const handlePurchase = async (
@@ -99,20 +152,7 @@ export const handlePurchase = async (
             if (offer.LocTagRandSeed !== undefined) {
                 seed = BigInt(offer.LocTagRandSeed);
             }
-            if (!config.noVendorPurchaseLimits && ItemId) {
-                inventory.RecentVendorPurchases ??= [];
-                let vendorPurchases = inventory.RecentVendorPurchases.find(
-                    x => x.VendorType == manifest!.VendorInfo.TypeName
-                );
-                if (!vendorPurchases) {
-                    vendorPurchases =
-                        inventory.RecentVendorPurchases[
-                            inventory.RecentVendorPurchases.push({
-                                VendorType: manifest.VendorInfo.TypeName,
-                                PurchaseHistory: []
-                            }) - 1
-                        ];
-                }
+            if (ItemId) {
                 let expiry = parseInt(offer.Expiry.$date.$numberLong);
                 if (purchaseRequest.PurchaseParams.IsWeekly) {
                     const EPOCH = 1734307200 * 1000; // Monday
@@ -120,34 +160,14 @@ export const handlePurchase = async (
                     const weekStart = EPOCH + week * 604800000;
                     expiry = weekStart + 604800000;
                 }
-                const historyEntry = vendorPurchases.PurchaseHistory.find(x => x.ItemId == ItemId);
-                let numPurchased = purchaseRequest.PurchaseParams.Quantity;
-                if (historyEntry) {
-                    if (Date.now() >= historyEntry.Expiry.getTime()) {
-                        historyEntry.NumPurchased = numPurchased;
-                        historyEntry.Expiry = new Date(expiry);
-                    } else {
-                        numPurchased += historyEntry.NumPurchased;
-                        historyEntry.NumPurchased += purchaseRequest.PurchaseParams.Quantity;
-                    }
-                } else {
-                    vendorPurchases.PurchaseHistory.push({
-                        ItemId: ItemId,
-                        NumPurchased: purchaseRequest.PurchaseParams.Quantity,
-                        Expiry: new Date(expiry)
-                    });
-                }
-                prePurchaseInventoryChanges.NewVendorPurchase = {
-                    VendorType: manifest.VendorInfo.TypeName,
-                    PurchaseHistory: [
-                        {
-                            ItemId: ItemId,
-                            NumPurchased: numPurchased,
-                            Expiry: { $date: { $numberLong: expiry.toString() } }
-                        }
-                    ]
-                };
-                prePurchaseInventoryChanges.RecentVendorPurchases = prePurchaseInventoryChanges.NewVendorPurchase;
+                tallyVendorPurchase(
+                    inventory,
+                    prePurchaseInventoryChanges,
+                    manifest.VendorInfo.TypeName,
+                    ItemId,
+                    purchaseRequest.PurchaseParams.Quantity,
+                    new Date(expiry)
+                );
             }
             purchaseRequest.PurchaseParams.Quantity *= offer.QuantityMultiplier;
         } else {
@@ -193,7 +213,7 @@ export const handlePurchase = async (
                     throw new Error(`vendor purchase should not have an expected price`);
                 }
 
-                if (!config.dontSubtractPurchaseItemCost) {
+                if (offer.PrimePrice && !config.dontSubtractPurchaseItemCost) {
                     const invItem: IMiscItem = {
                         ItemType: "/Lotus/Types/Items/MiscItems/PrimeBucks",
                         ItemCount: offer.PrimePrice * purchaseRequest.PurchaseParams.Quantity * -1
@@ -201,6 +221,17 @@ export const handlePurchase = async (
                     addMiscItems(inventory, [invItem]);
                     purchaseResponse.InventoryChanges.MiscItems ??= [];
                     purchaseResponse.InventoryChanges.MiscItems.push(invItem);
+                }
+
+                if (offer.Limit) {
+                    tallyVendorPurchase(
+                        inventory,
+                        purchaseResponse.InventoryChanges,
+                        "VoidTrader",
+                        offer.ItemType,
+                        purchaseRequest.PurchaseParams.Quantity,
+                        fromMongoDate(worldState.VoidTraders[0].Expiry)
+                    );
                 }
             }
             break;
@@ -509,12 +540,57 @@ const handleBoosterPackPurchase = async (
             "attempt to roll over 100 booster packs in a single go. possible but unlikely to be desirable for the user or the server."
         );
     }
+    const specialItemReward = pack.components.find(x => x.PityIncreaseRate);
     for (let i = 0; i != quantity; ++i) {
-        const disallowedItems = new Set();
-        for (let roll = 0; roll != pack.rarityWeightsPerRoll.length; ) {
-            const weights = pack.rarityWeightsPerRoll[roll];
-            const result = getRandomWeightedRewardUc(pack.components, weights);
-            if (result) {
+        if (specialItemReward) {
+            {
+                const normalComponents = [];
+                for (const comp of pack.components) {
+                    if (!comp.PityIncreaseRate) {
+                        const { Probability, ...rest } = comp;
+                        normalComponents.push({
+                            ...rest,
+                            probability: Probability!
+                        });
+                    }
+                }
+                const result = getRandomReward(normalComponents)!;
+                logger.debug(`booster pack rolled`, result);
+                purchaseResponse.BoosterPackItems += toStoreItem(result.Item) + ',{"lvl":0};';
+                combineInventoryChanges(
+                    purchaseResponse.InventoryChanges,
+                    await addItem(inventory, result.Item, result.Amount)
+                );
+            }
+
+            if (!inventory.WeaponSkins.some(x => x.ItemType == specialItemReward.Item)) {
+                inventory.SpecialItemRewardAttenuation ??= [];
+                let atten = inventory.SpecialItemRewardAttenuation.find(x => x.Tag == specialItemReward.Item);
+                if (!atten) {
+                    atten =
+                        inventory.SpecialItemRewardAttenuation[
+                            inventory.SpecialItemRewardAttenuation.push({
+                                Tag: specialItemReward.Item,
+                                Atten: specialItemReward.Probability!
+                            }) - 1
+                        ];
+                }
+                if (Math.random() < atten.Atten) {
+                    purchaseResponse.BoosterPackItems += toStoreItem(specialItemReward.Item) + ',{"lvl":0};';
+                    combineInventoryChanges(
+                        purchaseResponse.InventoryChanges,
+                        await addItem(inventory, specialItemReward.Item)
+                    );
+                    // TOVERIFY: Is the SpecialItemRewardAttenuation entry removed now?
+                } else {
+                    atten.Atten += specialItemReward.PityIncreaseRate!;
+                }
+            }
+        } else {
+            const disallowedItems = new Set();
+            for (let roll = 0; roll != pack.rarityWeightsPerRoll.length; ) {
+                const weights = pack.rarityWeightsPerRoll[roll];
+                const result = getRandomWeightedRewardUc(pack.components, weights)!;
                 logger.debug(`booster pack rolled`, result);
                 if (disallowedItems.has(result.Item)) {
                     logger.debug(`oops, can't use that one; trying again`);
@@ -524,9 +600,12 @@ const handleBoosterPackPurchase = async (
                     disallowedItems.add(result.Item);
                 }
                 purchaseResponse.BoosterPackItems += toStoreItem(result.Item) + ',{"lvl":0};';
-                combineInventoryChanges(purchaseResponse.InventoryChanges, await addItem(inventory, result.Item, 1));
+                combineInventoryChanges(
+                    purchaseResponse.InventoryChanges,
+                    await addItem(inventory, result.Item, result.Amount)
+                );
+                ++roll;
             }
-            ++roll;
         }
     }
     return purchaseResponse;

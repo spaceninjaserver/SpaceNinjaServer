@@ -1,7 +1,8 @@
 {
   "evergreen": [
     { "ItemType": "/Lotus/StoreItems/Types/Keys/MummyQuestKeyBlueprint", "PrimePrice": 100, "RegularPrice": 25000 },
-    { "ItemType": "/Lotus/StoreItems/Upgrades/Skins/Effects/FootstepsMaple", "PrimePrice": 15, "RegularPrice": 1000 }
+    { "ItemType": "/Lotus/StoreItems/Upgrades/Skins/Effects/FootstepsMaple", "PrimePrice": 15, "RegularPrice": 1000 },
+    { "ItemType": "/Lotus/StoreItems/Types/BoosterPacks/BaroTreasureBox", "PrimePrice": 0, "RegularPrice": 50000, "Limit": 1 }
   ],
   "armorSets": [
     [
