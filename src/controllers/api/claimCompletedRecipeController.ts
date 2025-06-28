@@ -13,7 +13,8 @@ import {
     addItem,
     addRecipes,
     occupySlot,
-    combineInventoryChanges
+    combineInventoryChanges,
+    addKubrowPetPrint
 } from "@/src/services/inventoryService";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
@@ -119,6 +120,9 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
                 }
             }
             pet.Details!.Status = canSetActive ? Status.StatusAvailable : Status.StatusStasis;
+        } else if (recipe.secretIngredientAction == "SIA_DISTILL_PRINT") {
+            const pet = inventory.KubrowPets.id(pendingRecipe.KubrowPet!)!;
+            addKubrowPetPrint(inventory, pet, InventoryChanges);
         } else if (recipe.secretIngredientAction != "SIA_UNBRAND") {
             InventoryChanges = {
                 ...InventoryChanges,

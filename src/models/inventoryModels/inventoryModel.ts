@@ -99,7 +99,9 @@ import {
     ILotusCustomization,
     IEndlessXpReward,
     IPersonalGoalProgressDatabase,
-    IPersonalGoalProgressClient
+    IPersonalGoalProgressClient,
+    IKubrowPetPrintClient,
+    IKubrowPetPrintDatabase
 } from "../../types/inventoryTypes/inventoryTypes";
 import { IOid } from "../../types/commonTypes";
 import {
@@ -1008,6 +1010,27 @@ const traitsSchema = new Schema<ITraits>(
     { _id: false }
 );
 
+const kubrowPetPrintSchema = new Schema<IKubrowPetPrintDatabase>({
+    ItemType: String,
+    Name: String,
+    IsMale: Boolean,
+    Size: Number,
+    DominantTraits: traitsSchema,
+    RecessiveTraits: traitsSchema
+});
+kubrowPetPrintSchema.set("toJSON", {
+    virtuals: true,
+    transform(_doc, obj) {
+        const db = obj as IKubrowPetPrintDatabase;
+        const client = obj as IKubrowPetPrintClient;
+
+        client.ItemId = toOid(db._id);
+
+        delete obj._id;
+        delete obj.__v;
+    }
+});
+
 const detailsSchema = new Schema<IKubrowPetDetailsDatabase>(
     {
         Name: String,
@@ -1511,7 +1534,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         KubrowPetEggs: [kubrowPetEggSchema],
         //Prints   Cat(3 Prints)\Kubrow(2 Prints) Pets
-        //KubrowPetPrints: [Schema.Types.Mixed],
+        KubrowPetPrints: [kubrowPetPrintSchema],
 
         //Item for EquippedGear example:Scaner,LoadoutTechSummon etc
         Consumables: [typeCountSchema],
@@ -1852,6 +1875,7 @@ export type InventoryDocumentProps = {
     CrewShipSalvagedWeaponSkins: Types.DocumentArray<IUpgradeDatabase>;
     PersonalTechProjects: Types.DocumentArray<IPersonalTechProjectDatabase>;
     CrewMembers: Types.DocumentArray<ICrewMemberDatabase>;
+    KubrowPetPrints: Types.DocumentArray<IKubrowPetPrintDatabase>;
 } & { [K in TEquipmentKey]: Types.DocumentArray<IEquipmentDatabase> };
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type

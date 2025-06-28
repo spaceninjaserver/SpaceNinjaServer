@@ -40,6 +40,7 @@ export interface IInventoryDatabase
             | "InfestedFoundry"
             | "DialogueHistory"
             | "KubrowPetEggs"
+            | "KubrowPetPrints"
             | "PendingCoupon"
             | "Drones"
             | "RecentVendorPurchases"
@@ -79,7 +80,8 @@ export interface IInventoryDatabase
     KahlLoadOuts: IOperatorConfigDatabase[];
     InfestedFoundry?: IInfestedFoundryDatabase;
     DialogueHistory?: IDialogueHistoryDatabase;
-    KubrowPetEggs?: IKubrowPetEggDatabase[];
+    KubrowPetEggs: IKubrowPetEggDatabase[];
+    KubrowPetPrints: IKubrowPetPrintDatabase[];
     PendingCoupon?: IPendingCouponDatabase;
     Drones: IDroneDatabase[];
     RecentVendorPurchases?: IRecentVendorPurchaseDatabase[];
@@ -307,7 +309,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     FocusUpgrades: IFocusUpgrade[];
     HasContributedToDojo?: boolean;
     HWIDProtectEnabled?: boolean;
-    //KubrowPetPrints: IKubrowPetPrint[];
+    KubrowPetPrints: IKubrowPetPrintClient[];
     AlignmentReplay?: IAlignment;
     PersonalGoalProgress?: IPersonalGoalProgressClient[];
     ThemeStyle: string;
@@ -722,8 +724,8 @@ export interface IKubrowPetEggDatabase {
     _id: Types.ObjectId;
 }
 
-export interface IKubrowPetPrint {
-    ItemType: KubrowPetPrintItemType;
+export interface IKubrowPetPrintClient {
+    ItemType: "/Lotus/Types/Game/KubrowPet/ImprintedTraitPrint";
     Name: string;
     IsMale: boolean;
     Size: number; // seems to be 0.7 to 1.0
@@ -731,6 +733,10 @@ export interface IKubrowPetPrint {
     RecessiveTraits: ITraits;
     ItemId: IOid;
     InheritedModularParts?: any[];
+}
+
+export interface IKubrowPetPrintDatabase extends Omit<IKubrowPetPrintClient, "ItemId" | "InheritedModularParts"> {
+    _id: Types.ObjectId;
 }
 
 export interface ITraits {
@@ -746,15 +752,11 @@ export interface ITraits {
     Tail?: string;
 }
 
-export enum KubrowPetPrintItemType {
-    LotusTypesGameKubrowPetImprintedTraitPrint = "/Lotus/Types/Game/KubrowPet/ImprintedTraitPrint"
-}
-
 export interface IKubrowPetDetailsDatabase {
     Name?: string;
     IsPuppy?: boolean;
     HasCollar: boolean;
-    PrintsRemaining?: number;
+    PrintsRemaining: number;
     Status: Status;
     HatchDate?: Date;
     DominantTraits: ITraits;

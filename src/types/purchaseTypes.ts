@@ -7,7 +7,8 @@ import {
     ITypeCount,
     IRecentVendorPurchaseClient,
     TEquipmentKey,
-    ICrewMemberClient
+    ICrewMemberClient,
+    IKubrowPetPrintClient
 } from "./inventoryTypes/inventoryTypes";
 
 export enum PurchaseSource {
@@ -78,6 +79,7 @@ export type IInventoryChanges = {
     NewVendorPurchase?: IRecentVendorPurchaseClient; // >= 38.5.0
     RecentVendorPurchases?: IRecentVendorPurchaseClient; // < 38.5.0
     CrewMembers?: ICrewMemberClient[];
+    KubrowPetPrints?: IKubrowPetPrintClient[];
 } & Record<
         Exclude<
             string,

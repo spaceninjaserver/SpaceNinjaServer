@@ -29,7 +29,8 @@ import {
     ICalendarProgress,
     INemesisWeaponTargetFingerprint,
     INemesisPetTargetFingerprint,
-    IDialogueDatabase
+    IDialogueDatabase,
+    IKubrowPetPrintClient
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate, IUpdateNodeIntrosResponse } from "../types/genericUpdate";
 import { IKeyChainRequest, IMissionInventoryUpdateRequest } from "../types/requestTypes";
@@ -424,7 +425,6 @@ export const addItem = async (
                     ItemType: "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg",
                     _id: new Types.ObjectId()
                 };
-                inventory.KubrowPetEggs ??= [];
                 inventory.KubrowPetEggs.push(egg);
                 changes.push({
                     ItemType: egg.ItemType,
@@ -784,7 +784,11 @@ export const addItem = async (
                         typeName.substr(1).split("/")[3] == "CatbrowPet" ||
                         typeName.substr(1).split("/")[3] == "KubrowPet"
                     ) {
-                        if (typeName != "/Lotus/Types/Game/KubrowPet/Eggs/KubrowPetEggItem") {
+                        if (
+                            typeName != "/Lotus/Types/Game/KubrowPet/Eggs/KubrowPetEggItem" &&
+                            typeName != "/Lotus/Types/Game/KubrowPet/BlankTraitPrint" &&
+                            typeName != "/Lotus/Types/Game/KubrowPet/ImprintedTraitPrint"
+                        ) {
                             return addKubrowPet(inventory, typeName, undefined, premiumPurchase);
                         }
                     } else if (typeName.startsWith("/Lotus/Types/Game/CrewShip/CrewMember/")) {
@@ -1048,8 +1052,13 @@ export const addKubrowPet = (
     const configs: IItemConfig[] = applyDefaultUpgrades(inventory, kubrowPet?.defaultUpgrades);
 
     if (!details) {
-        let traits: ITraits;
+        const isCatbrow = [
+            "/Lotus/Types/Game/CatbrowPet/CheshireCatbrowPetPowerSuit",
+            "/Lotus/Types/Game/CatbrowPet/MirrorCatbrowPetPowerSuit",
+            "/Lotus/Types/Game/CatbrowPet/VampireCatbrowPetPowerSuit"
+        ].includes(kubrowPetName);
 
+        let traits: ITraits;
         if (kubrowPetName == "/Lotus/Types/Game/CatbrowPet/VampireCatbrowPetPowerSuit") {
             traits = {
                 BaseColor: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorBaseVampire",
@@ -1064,12 +1073,7 @@ export const addKubrowPet = (
                 Tail: "/Lotus/Types/Game/CatbrowPet/Tails/CatbrowTailVampire"
             };
         } else {
-            const isCatbrow = [
-                "/Lotus/Types/Game/CatbrowPet/MirrorCatbrowPetPowerSuit",
-                "/Lotus/Types/Game/CatbrowPet/CheshireCatbrowPetPowerSuit"
-            ].includes(kubrowPetName);
             const traitsPool = isCatbrow ? catbrowDetails : kubrowDetails;
-
             traits = {
                 BaseColor: getRandomWeightedReward(traitsPool.Colors, kubrowWeights)!.type,
                 SecondaryColor: getRandomWeightedReward(traitsPool.Colors, kubrowWeights)!.type,
@@ -1088,7 +1092,7 @@ export const addKubrowPet = (
             Name: "",
             IsPuppy: !premiumPurchase,
             HasCollar: true,
-            PrintsRemaining: 3,
+            PrintsRemaining: isCatbrow ? 3 : 2,
             Status: premiumPurchase ? Status.StatusStasis : Status.StatusIncubating,
             HatchDate: premiumPurchase ? new Date() : new Date(Date.now() + 10 * unixTimesInMs.hour), // On live, this seems to be somewhat randomised so that the pet hatches 9~11 hours after start.
             IsMale: !!getRandomInt(0, 1),
@@ -1110,6 +1114,26 @@ export const addKubrowPet = (
     inventoryChanges.KubrowPets.push(inventory.KubrowPets[kubrowPetIndex].toJSON<IEquipmentClient>());
 
     return inventoryChanges;
+};
+
+export const addKubrowPetPrint = (
+    inventory: TInventoryDatabaseDocument,
+    pet: IEquipmentDatabase,
+    inventoryChanges: IInventoryChanges
+): void => {
+    inventoryChanges.KubrowPetPrints ??= [];
+    inventoryChanges.KubrowPetPrints.push(
+        inventory.KubrowPetPrints[
+            inventory.KubrowPetPrints.push({
+                ItemType: "/Lotus/Types/Game/KubrowPet/ImprintedTraitPrint",
+                Name: pet.Details!.Name,
+                IsMale: pet.Details!.IsMale,
+                Size: pet.Details!.Size,
+                DominantTraits: pet.Details!.DominantTraits,
+                RecessiveTraits: pet.Details!.RecessiveTraits
+            }) - 1
+        ].toJSON<IKubrowPetPrintClient>()
+    );
 };
 
 export const updateSlots = (

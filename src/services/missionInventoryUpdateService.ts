@@ -525,7 +525,6 @@ export const addMissionInventoryUpdates = async (
             }
             case "KubrowPetEggs": {
                 for (const egg of value) {
-                    inventory.KubrowPetEggs ??= [];
                     inventory.KubrowPetEggs.push({
                         ItemType: egg.ItemType,
                         _id: new Types.ObjectId()

@@ -45,9 +45,9 @@ export const startRecipeController: RequestHandler = async (req, res) => {
     for (let i = 0; i != recipe.ingredients.length; ++i) {
         if (startRecipeRequest.Ids[i] && startRecipeRequest.Ids[i][0] != "/") {
             if (recipe.ingredients[i].ItemType == "/Lotus/Types/Game/KubrowPet/Eggs/KubrowPetEggItem") {
-                const index = inventory.KubrowPetEggs!.findIndex(x => x._id.equals(startRecipeRequest.Ids[i]));
+                const index = inventory.KubrowPetEggs.findIndex(x => x._id.equals(startRecipeRequest.Ids[i]));
                 if (index != -1) {
-                    inventory.KubrowPetEggs!.splice(index, 1);
+                    inventory.KubrowPetEggs.splice(index, 1);
                 }
             } else {
                 const category = ExportWeapons[recipe.ingredients[i].ItemType].productCategory;
@@ -72,6 +72,10 @@ export const startRecipeController: RequestHandler = async (req, res) => {
     if (recipe.secretIngredientAction == "SIA_CREATE_KUBROW") {
         inventoryChanges = addKubrowPet(inventory, getRandomElement(recipe.secretIngredients!)!.ItemType);
         pr.KubrowPet = new Types.ObjectId(fromOid(inventoryChanges.KubrowPets![0].ItemId));
+    } else if (recipe.secretIngredientAction == "SIA_DISTILL_PRINT") {
+        pr.KubrowPet = new Types.ObjectId(startRecipeRequest.Ids[recipe.ingredients.length]);
+        const pet = inventory.KubrowPets.id(pr.KubrowPet)!;
+        pet.Details!.PrintsRemaining -= 1;
     } else if (recipe.secretIngredientAction == "SIA_SPECTRE_LOADOUT_COPY") {
         const spectreLoadout: ISpectreLoadout = {
             ItemType: recipe.resultType,
