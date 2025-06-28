@@ -257,7 +257,7 @@ dict = {
     upgrade_WarframeGlobeEffectEnergy: `+|VAL|% d'efficacité d'orbe d'énergie`,
     upgrade_WarframeGlobeEffectHealth: `+|VAL|% d'efficacité d'orbe de santé`,
     upgrade_WarframeHealthMax: `+|VAL| de santé`,
-    upgrade_WarframeHPBoostFromImpact: `+|VAL1| de santé par ennemi tué avec des dégâts explosifs (Max |VAL2| de santé)`,
+    upgrade_WarframeHPBoostFromImpact: `[UNTRANSLATED] +|VAL1| Health on kill with Blast Damage (Max |VAL2| Health)`,
     upgrade_WarframeParkourVelocity: `+|VAL|% de vélocité de parkour`,
     upgrade_WarframeRadiationDamageBoost: `+|VAL|% de dégâts de pouvoir sur les ennemis affectés par du statut radiation`,
     upgrade_WarframeRegen: `+|VAL| régénération de santé/s`,

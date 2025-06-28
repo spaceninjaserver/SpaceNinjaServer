@@ -257,7 +257,7 @@ dict = {
     upgrade_WarframeGlobeEffectEnergy: `+|VAL|% 能量球效果`,
     upgrade_WarframeGlobeEffectHealth: `+|VAL|% 生命球效果`,
     upgrade_WarframeHealthMax: `+|VAL| 生命`,
-    upgrade_WarframeHPBoostFromImpact: `每个被爆炸伤害击杀的敌人，补充 |VAL1|生命 (最大 |VAL2| 生命)`,
+    upgrade_WarframeHPBoostFromImpact: `[UNTRANSLATED] +|VAL1| Health on kill with Blast Damage (Max |VAL2| Health)`,
     upgrade_WarframeParkourVelocity: `+|VAL|% 跑酷速度`,
     upgrade_WarframeRadiationDamageBoost: `对受辐射状态影响的敌人 +|VAL|% 技能伤害`,
     upgrade_WarframeRegen: `+|VAL| 生命再生/s`,

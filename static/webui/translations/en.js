@@ -256,7 +256,7 @@ dict = {
     upgrade_WarframeGlobeEffectEnergy: `+|VAL|% Energy Orb Effectiveness`,
     upgrade_WarframeGlobeEffectHealth: `+|VAL|% Health Orb Effectiveness`,
     upgrade_WarframeHealthMax: `+|VAL| Health`,
-    upgrade_WarframeHPBoostFromImpact: `+|VAL1| Health per enemy killed with Blast Damage (Max |VAL2| Health)`,
+    upgrade_WarframeHPBoostFromImpact: `+|VAL1| Health on kill with Blast Damage (Max |VAL2| Health)`,
     upgrade_WarframeParkourVelocity: `+|VAL|% Parkour Velocity`,
     upgrade_WarframeRadiationDamageBoost: `+|VAL|% Ability Damage on enemies affected by Radiation Status`,
     upgrade_WarframeRegen: `+|VAL| Health Regen/s`,
