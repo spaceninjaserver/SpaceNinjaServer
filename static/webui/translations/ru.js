@@ -175,6 +175,7 @@ dict = {
     cheats_fastClanAscension: `Мгновенное Вознесение Клана`,
     cheats_missionsCanGiveAllRelics: `[UNTRANSLATED] Missions Can Give All Relics`,
     cheats_unlockAllSimarisResearchEntries: `[UNTRANSLATED] Unlock All Simaris Research Entries`,
+    cheats_disableDailyTribute: `[UNTRANSLATED] Disable Daily Tribute`,
     cheats_spoofMasteryRank: `Подделанный ранг мастерства (-1 для отключения)`,
     cheats_nightwaveStandingMultiplier: `[UNTRANSLATED] Nightwave Standing Multiplier`,
     cheats_save: `[UNTRANSLATED] Save`,

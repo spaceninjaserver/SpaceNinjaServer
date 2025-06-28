@@ -58,6 +58,7 @@
   "fastClanAscension": false,
   "missionsCanGiveAllRelics": false,
   "unlockAllSimarisResearchEntries": false,
+  "disableDailyTribute": false,
   "spoofMasteryRank": -1,
   "nightwaveStandingMultiplier": 1,
   "unfaithfulBugFixes": {

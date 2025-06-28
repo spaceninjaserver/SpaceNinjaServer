@@ -65,6 +65,7 @@ export interface IConfig {
     fastClanAscension?: boolean;
     missionsCanGiveAllRelics?: boolean;
     unlockAllSimarisResearchEntries?: boolean;
+    disableDailyTribute?: boolean;
     spoofMasteryRank?: number;
     nightwaveStandingMultiplier?: number;
     unfaithfulBugFixes?: {

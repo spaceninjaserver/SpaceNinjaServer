@@ -175,6 +175,7 @@ dict = {
     cheats_fastClanAscension: `Ascension de clan rapide`,
     cheats_missionsCanGiveAllRelics: `Les missions donnent toutes les reliques`,
     cheats_unlockAllSimarisResearchEntries: `Débloquer toute les recherches chez Simaris`,
+    cheats_disableDailyTribute: `[UNTRANSLATED] Disable Daily Tribute`,
     cheats_spoofMasteryRank: `Rang de maîtrise personnalisé (-1 pour désactiver)`,
     cheats_nightwaveStandingMultiplier: `Multiplicateur de réputation d'Ondes Nocturnes`,
     cheats_save: `Sauvegarder`,

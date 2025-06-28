@@ -8,6 +8,7 @@ import {
     setAccountGotLoginRewardToday
 } from "@/src/services/loginRewardService";
 import { getInventory } from "@/src/services/inventoryService";
+import { config } from "@/src/services/configService";
 
 export const loginRewardsController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -15,7 +16,7 @@ export const loginRewardsController: RequestHandler = async (req, res) => {
     const isMilestoneDay = account.LoginDays == 5 || account.LoginDays % 50 == 0;
     const nextMilestoneDay = account.LoginDays < 5 ? 5 : (Math.trunc(account.LoginDays / 50) + 1) * 50;
 
-    if (today == account.LastLoginRewardDate) {
+    if (today == account.LastLoginRewardDate || config.disableDailyTribute) {
         res.json({
             DailyTributeInfo: {
                 IsMilestoneDay: isMilestoneDay,

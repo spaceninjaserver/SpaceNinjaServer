@@ -175,6 +175,7 @@ dict = {
     cheats_fastClanAscension: `快速升级氏族`,
     cheats_missionsCanGiveAllRelics: `任务可获取所有遗物`,
     cheats_unlockAllSimarisResearchEntries: `解锁所有Simaris研究条目`,
+    cheats_disableDailyTribute: `[UNTRANSLATED] Disable Daily Tribute`,
     cheats_spoofMasteryRank: `伪造精通段位(-1为禁用)`,
     cheats_nightwaveStandingMultiplier: `午夜电波声望倍率`,
     cheats_save: `保存`,
