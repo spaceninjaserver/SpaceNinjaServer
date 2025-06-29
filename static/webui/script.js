@@ -2738,3 +2738,9 @@ function handleValenceBonusChange(event) {
         });
     });
 }
+
+document.querySelectorAll("#sidebar .nav-link").forEach(function (elm) {
+    elm.addEventListener("click", function () {
+        window.scrollTo(0, 0);
+    });
+});
