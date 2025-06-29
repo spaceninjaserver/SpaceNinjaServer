@@ -11,11 +11,11 @@
         margin-left: 7rem;
     }
 
-    body.logged-in:has([data-lang=de].active) #main-content {
+    body.logged-in:has([data-lang="de"].active) #main-content {
         margin-left: 8rem;
     }
 
-    body.logged-in:has([data-lang=zh].active) #main-content {
+    body.logged-in:has([data-lang="zh"].active) #main-content {
         margin-left: 6rem;
     }
 
