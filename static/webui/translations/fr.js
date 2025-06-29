@@ -2,7 +2,10 @@
 dict = {
     general_inventoryUpdateNote: `[UNTRANSLATED] Note: To see changes in-game, you need to resync your inventory, e.g. using the bootstrapper's /sync command, visiting a dojo/relay, or relogging.`,
     general_addButton: `Ajouter`,
+    general_setButton: `[UNTRANSLATED] Set`,
+    general_removeButton: `[UNTRANSLATED] Remove`,
     general_bulkActions: `Action groupée`,
+
     code_loginFail: `Connexion échouée. Vérifiez le mot de passe.`,
     code_regFail: `Enregistrement impossible. Compte existant?`,
     code_changeNameConfirm: `Nouveau nom du compte :`,
@@ -112,9 +115,13 @@ dict = {
     currency_FusionPoints: `Endo`,
     currency_PrimeTokens: `Aya Raffiné`,
     currency_owned: `|COUNT| possédés.`,
-    powersuit_archonShardsLabel: `Emplacements de fragments d'Archonte`,
-    powersuit_archonShardsDescription: `Slots illimités pour appliquer plusieurs améliorations`,
-    powersuit_archonShardsDescription2: `Un délai sera présent entre l'application des éclats et le chargement en jeu.`,
+
+    detailedView_archonShardsLabel: `Emplacements de fragments d'Archonte`,
+    detailedView_archonShardsDescription: `Slots illimités pour appliquer plusieurs améliorations`,
+    detailedView_archonShardsDescription2: `Un délai sera présent entre l'application des éclats et le chargement en jeu.`,
+    detailedView_valenceBonusLabel: `Bonus de Valence`,
+    detailedView_valenceBonusDescription: `[UNTRANSLATED] You can set or remove the Valence Bonus from your weapon.`,
+
     mods_addRiven: `Ajouter un riven`,
     mods_fingerprint: `Empreinte`,
     mods_fingerprintHelp: `Besoin d'aide pour l'empreinte ?`,
@@ -290,6 +297,14 @@ dict = {
     upgrade_OnHackSprintSpeed: `+75% de vitesse de course pendant 15s après un piratage`,
     upgrade_SwiftExecute: `Vitesse des miséricordes augmentée de 50%`,
     upgrade_OnHackInvis: `Invisible pendant 15 secondes après un piratage`,
+
+    damageType_Electricity: `Électrique`,
+    damageType_Fire: `Feu`,
+    damageType_Freeze: `Glace`,
+    damageType_Impact: `Impact`,
+    damageType_Magnetic: `Magnétique`,
+    damageType_Poison: `Poison`,
+    damageType_Radiation: `Radiations`,
 
     theme_dark: `[UNTRANSLATED] Dark Theme`,
     theme_light: `[UNTRANSLATED] Light Theme`,

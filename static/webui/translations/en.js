@@ -1,7 +1,10 @@
 dict = {
     general_inventoryUpdateNote: `Note: To see changes in-game, you need to resync your inventory, e.g. using the bootstrapper's /sync command, visiting a dojo/relay, or relogging.`,
     general_addButton: `Add`,
+    general_setButton: `Set`,
+    general_removeButton: `Remove`,
     general_bulkActions: `Bulk Actions`,
+
     code_loginFail: `Login failed. Double-check the email and password.`,
     code_regFail: `Registration failed. Account already exists?`,
     code_changeNameConfirm: `What would you like to change your account name to?`,
@@ -111,9 +114,13 @@ dict = {
     currency_FusionPoints: `Endo`,
     currency_PrimeTokens: `Regal Aya`,
     currency_owned: `You have |COUNT|.`,
-    powersuit_archonShardsLabel: `Archon Shard Slots`,
-    powersuit_archonShardsDescription: `You can use these unlimited slots to apply a wide range of upgrades.`,
-    powersuit_archonShardsDescription2: `Note that each archon shard takes some time to be applied when loading in.`,
+
+    detailedView_archonShardsLabel: `Archon Shard Slots`,
+    detailedView_archonShardsDescription: `You can use these unlimited slots to apply a wide range of upgrades.`,
+    detailedView_archonShardsDescription2: `Note that each archon shard takes some time to be applied when loading in.`,
+    detailedView_valenceBonusLabel: `Valence Bonus`,
+    detailedView_valenceBonusDescription: `You can set or remove the Valence Bonus from your weapon.`,
+
     mods_addRiven: `Add Riven`,
     mods_fingerprint: `Fingerprint`,
     mods_fingerprintHelp: `Need help with the fingerprint?`,
@@ -289,6 +296,14 @@ dict = {
     upgrade_OnHackSprintSpeed: `+75% Sprint Speed for 15s after Hacking`,
     upgrade_SwiftExecute: `Speed of Mercy Kills increased by 50%`,
     upgrade_OnHackInvis: `Invisible for 15 seconds after hacking`,
+
+    damageType_Electricity: `Electricity`,
+    damageType_Fire: `Heat`,
+    damageType_Freeze: `Cold`,
+    damageType_Impact: `Impact`,
+    damageType_Magnetic: `Magnetic`,
+    damageType_Poison: `Toxin`,
+    damageType_Radiation: `Radiation`,
 
     theme_dark: `Dark Theme`,
     theme_light: `Light Theme`,

@@ -456,15 +456,15 @@
                     </div>
                 </div>
             </div>
-            <div id="powersuit-route" data-route="~ /webui/powersuit/(.+)" data-title="Inventory | OpenWF WebUI">
+            <div id="detailedView-route" data-route="/webui/detailedView" data-title="Inventory | OpenWF WebUI">
                 <h3 class="mb-0"></h3>
                 <p class="text-body-secondary"></p>
-                <div class="card">
-                    <h5 class="card-header" data-loc="powersuit_archonShardsLabel"></h5>
+                <div id="archonShards-card" class="card mb-3 d-none">
+                    <h5 class="card-header" data-loc="detailedView_archonShardsLabel"></h5>
                     <div class="card-body">
                         <p>
-                            <span data-loc="powersuit_archonShardsDescription"></span>
-                            <span data-loc="powersuit_archonShardsDescription2"></span>
+                            <span data-loc="detailedView_archonShardsDescription"></span>
+                            <span data-loc="detailedView_archonShardsDescription2"></span>
                         </p>
                         <form class="input-group mb-3" onsubmit="doPushArchonCrystalUpgrade();return false;">
                             <input type="number" id="archon-crystal-add-count" min="1" max="10000" value="1" class="form-control" style="max-width:100px" />
@@ -475,6 +475,18 @@
                         <table class="table table-hover w-100">
                             <tbody id="crystals-list"></tbody>
                         </table>
+                    </div>
+                </div>
+                <div id="valenceBonus-card" class="card mb-3 d-none">
+                    <h5 class="card-header" data-loc="detailedView_valenceBonusLabel"></h5>
+                    <div class="card-body">
+                        <p data-loc="detailedView_valenceBonusDescription"></p>
+                        <form class="input-group mb-3" onsubmit="handleValenceBonusChange(event)">
+                            <select class="form-control" id="valenceBonus-innateDamage"></select>
+                            <input type="number" id="valenceBonus-procent" min="25" max="60" step="0.1" class="form-control" style="max-width:100px" />
+                            <button class="btn btn-primary" type="submit" value="set" data-loc="general_setButton"></button>
+                            <button class="btn btn-danger" type="submit" value="remove" data-loc="general_removeButton"></button>
+                        </form>
                     </div>
                 </div>
             </div>

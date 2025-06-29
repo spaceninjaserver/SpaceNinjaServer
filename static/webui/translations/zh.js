@@ -2,7 +2,10 @@
 dict = {
     general_inventoryUpdateNote: `注意：要在游戏中查看更改，您需要重新同步库存，例如使用引导程序的 /sync 命令、访问道场 / 中继站或重新登录`,
     general_addButton: `添加`,
+    general_setButton: `[UNTRANSLATED] Set`,
+    general_removeButton: `[UNTRANSLATED] Remove`,
     general_bulkActions: `批量操作`,
+
     code_loginFail: `登录失败。请检查邮箱和密码。`,
     code_regFail: `注册失败。账号已存在。`,
     code_changeNameConfirm: `您想将账户名称更改为什么？`,
@@ -112,9 +115,13 @@ dict = {
     currency_FusionPoints: `内融核心`,
     currency_PrimeTokens: `御品阿耶`,
     currency_owned: `当前拥有 |COUNT|。`,
-    powersuit_archonShardsLabel: `执刑官源力石槽位`,
-    powersuit_archonShardsDescription: `您可以使用这些无限插槽应用各种强化效果`,
-    powersuit_archonShardsDescription2: `请注意, 在加载时, 每个执政官源力石都需要一定的时间来生效。`,
+
+    detailedView_archonShardsLabel: `执刑官源力石槽位`,
+    detailedView_archonShardsDescription: `您可以使用这些无限插槽应用各种强化效果`,
+    detailedView_archonShardsDescription2: `请注意, 在加载时, 每个执政官源力石都需要一定的时间来生效。`,
+    detailedView_valenceBonusLabel: `效价加成`,
+    detailedView_valenceBonusDescription: `[UNTRANSLATED] You can set or remove the Valence Bonus from your weapon.`,
+
     mods_addRiven: `添加裂罅MOD`,
     mods_fingerprint: `印记`,
     mods_fingerprintHelp: `需要印记相关的帮助？`,
@@ -290,6 +297,14 @@ dict = {
     upgrade_OnHackSprintSpeed: `入侵后+75%冲刺速度，持续15秒`,
     upgrade_SwiftExecute: `怜悯之击速度提升50%`,
     upgrade_OnHackInvis: `入侵后隐身15秒`,
+
+    damageType_Electricity: `电击`,
+    damageType_Fire: `火焰`,
+    damageType_Freeze: `冰冻`,
+    damageType_Impact: `冲击`,
+    damageType_Magnetic: `磁力`,
+    damageType_Poison: `毒素`,
+    damageType_Radiation: `辐射`,
 
     theme_dark: `[UNTRANSLATED] Dark Theme`,
     theme_light: `[UNTRANSLATED] Light Theme`,

@@ -2,7 +2,10 @@
 dict = {
     general_inventoryUpdateNote: `[UNTRANSLATED] Note: To see changes in-game, you need to resync your inventory, e.g. using the bootstrapper's /sync command, visiting a dojo/relay, or relogging.`,
     general_addButton: `Hinzufügen`,
+    general_setButton: `[UNTRANSLATED] Set`,
+    general_removeButton: `[UNTRANSLATED] Remove`,
     general_bulkActions: `Massenaktionen`,
+
     code_loginFail: `[UNTRANSLATED] Login failed. Double-check the email and password.`,
     code_regFail: `[UNTRANSLATED] Registration failed. Account already exists?`,
     code_changeNameConfirm: `In welchen Namen möchtest du deinen Account umbenennen?`,
@@ -112,9 +115,13 @@ dict = {
     currency_FusionPoints: `Endo`,
     currency_PrimeTokens: `Reines Aya`,
     currency_owned: `Du hast |COUNT|.`,
-    powersuit_archonShardsLabel: `Archon-Scherben-Slots`,
-    powersuit_archonShardsDescription: `Du kannst diese unbegrenzten Slots nutzen, um eine Vielzahl von Verbesserungen anzuwenden.`,
-    powersuit_archonShardsDescription2: `Hinweis: Jede Archon-Scherbe benötigt beim Laden etwas Zeit, um angewendet zu werden.`,
+
+    detailedView_archonShardsLabel: `Archon-Scherben-Slots`,
+    detailedView_archonShardsDescription: `Du kannst diese unbegrenzten Slots nutzen, um eine Vielzahl von Verbesserungen anzuwenden.`,
+    detailedView_archonShardsDescription2: `Hinweis: Jede Archon-Scherbe benötigt beim Laden etwas Zeit, um angewendet zu werden.`,
+    detailedView_valenceBonusLabel: `Valenz-Bonus`,
+    detailedView_valenceBonusDescription: `[UNTRANSLATED] You can set or remove the Valence Bonus from your weapon.`,
+
     mods_addRiven: `Riven hinzufügen`,
     mods_fingerprint: `Fingerabdruck`,
     mods_fingerprintHelp: `Benötigst du Hilfe mit dem Fingerabdruck?`,
@@ -290,6 +297,14 @@ dict = {
     upgrade_OnHackSprintSpeed: `[UNTRANSLATED] +75% Sprint Speed for 15s after Hacking`,
     upgrade_SwiftExecute: `[UNTRANSLATED] Speed of Mercy Kills increased by 50%`,
     upgrade_OnHackInvis: `[UNTRANSLATED] Invisible for 15 seconds after hacking`,
+
+    damageType_Electricity: `Elektrizität`,
+    damageType_Fire: `Hitze`,
+    damageType_Freeze: `Kälte`,
+    damageType_Impact: `Einschlag`,
+    damageType_Magnetic: `Magnetismus`,
+    damageType_Poison: `Gift`,
+    damageType_Radiation: `Strahlung`,
 
     theme_dark: `[UNTRANSLATED] Dark Theme`,
     theme_light: `[UNTRANSLATED] Light Theme`,

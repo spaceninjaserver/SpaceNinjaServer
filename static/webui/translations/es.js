@@ -2,7 +2,10 @@
 dict = {
     general_inventoryUpdateNote: `Para ver los cambios en el juego, necesitas volver a sincronizar tu inventario, por ejemplo, usando el comando /sync del bootstrapper, visitando un dojo o repetidor, o volviendo a iniciar sesión.`,
     general_addButton: `Agregar`,
+    general_setButton: `[UNTRANSLATED] Set`,
+    general_removeButton: `[UNTRANSLATED] Remove`,
     general_bulkActions: `Acciones masivas`,
+
     code_loginFail: `Error al iniciar sesión. Verifica el correo electrónico y la contraseña.`,
     code_regFail: `Error al registrar la cuenta. ¿Ya existe una cuenta con este correo?`,
     code_changeNameConfirm: `¿Qué nombre te gustaría ponerle a tu cuenta?`,
@@ -112,9 +115,13 @@ dict = {
     currency_FusionPoints: `Endo`,
     currency_PrimeTokens: `Aya Real`,
     currency_owned: `Tienes |COUNT|.`,
-    powersuit_archonShardsLabel: `Ranuras de Fragmento de Archón`,
-    powersuit_archonShardsDescription: `Puedes usar estas ranuras ilimitadas para aplicar una amplia variedad de mejoras`,
-    powersuit_archonShardsDescription2: `Ten en cuenta que cada fragmento de archón tarda un poco en aplicarse al cargar`,
+
+    detailedView_archonShardsLabel: `Ranuras de Fragmento de Archón`,
+    detailedView_archonShardsDescription: `Puedes usar estas ranuras ilimitadas para aplicar una amplia variedad de mejoras`,
+    detailedView_archonShardsDescription2: `Ten en cuenta que cada fragmento de archón tarda un poco en aplicarse al cargar`,
+    detailedView_valenceBonusLabel: `Bônus de Valência`,
+    detailedView_valenceBonusDescription: `[UNTRANSLATED] You can set or remove the Valence Bonus from your weapon.`,
+
     mods_addRiven: `Agregar Agrietado`,
     mods_fingerprint: `Huella digital`,
     mods_fingerprintHelp: `¿Necesitas ayuda con la huella digital?`,
@@ -290,6 +297,14 @@ dict = {
     upgrade_OnHackSprintSpeed: `+75% de velocidad de carrera durante 15s después de hackear`,
     upgrade_SwiftExecute: `Velocidad de ejecuciones aumentada en un 50%`,
     upgrade_OnHackInvis: `Invisible durante 15 segundos después de hackear`,
+
+    damageType_Electricity: `Eletricidade`,
+    damageType_Fire: `Ígneo`,
+    damageType_Freeze: `Glacial`,
+    damageType_Impact: `Colisivo`,
+    damageType_Magnetic: `Magnético`,
+    damageType_Poison: `Tóxico`,
+    damageType_Radiation: `Radioativo`,
 
     theme_dark: `[UNTRANSLATED] Dark Theme`,
     theme_light: `[UNTRANSLATED] Light Theme`,

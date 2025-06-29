@@ -284,6 +284,8 @@ function fetchItemList() {
             document.getElementById("changeSyndicate").innerHTML = "";
             document.getElementById("changeSyndicate").appendChild(syndicateNone);
 
+            document.getElementById("valenceBonus-innateDamage").innerHTML = "";
+
             // prettier-ignore
             data.archonCrystalUpgrades = {
                 "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeEquilibrium": loc("upgrade_Equilibrium").split("|VAL|").join("20"),
@@ -365,6 +367,16 @@ function fetchItemList() {
                 "/Lotus/Upgrades/Mods/DataSpike/Cipher/OnHackInvisMod": loc("upgrade_OnHackInvis"),
             };
             window.archonCrystalUpgrades = data.archonCrystalUpgrades;
+
+            data.innateDamages = {
+                InnateElectricityDamage: loc("damageType_Electricity"),
+                InnateFreezeDamage: loc("damageType_Freeze"),
+                InnateHeatDamage: loc("damageType_Fire"),
+                InnateImpactDamage: loc("damageType_Impact"),
+                InnateMagDamage: loc("damageType_Magnetic"),
+                InnateRadDamage: loc("damageType_Radiation"),
+                InnateToxinDamage: loc("damageType_Poison")
+            };
 
             // Add mods mising in data sources
             data.mods.push({
@@ -449,6 +461,13 @@ function fetchItemList() {
                         option.setAttribute("data-key", uniqueName);
                         option.value = name;
                         document.getElementById("datalist-" + type).appendChild(option);
+                    });
+                } else if (type == "innateDamages") {
+                    Object.entries(items).forEach(([uniqueName, name]) => {
+                        const option = document.createElement("option");
+                        option.value = uniqueName;
+                        option.textContent = name;
+                        document.getElementById("valenceBonus-innateDamage").appendChild(option);
                     });
                 } else if (type == "uniqueLevelCaps") {
                     uniqueLevelCaps = items;
@@ -659,6 +678,12 @@ function updateInventory() {
                             }
                         }
 
+                        if (["Suits", "LongGuns", "Pistols", "Melee", "SpaceGuns", "SpaceMelee"].includes(category)) {
+                            const a = document.createElement("a");
+                            a.href = "/webui/detailedView?productCategory=" + category + "&itemId=" + item.ItemId.$oid;
+                            a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M278.5 215.6L23 471c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l57-57h68c49.7 0 97.9-14.4 139-41c11.1-7.2 5.5-23-7.8-23c-5.1 0-9.2-4.1-9.2-9.2c0-4.1 2.7-7.6 6.5-8.8l81-24.3c2.5-.8 4.8-2.1 6.7-4l22.4-22.4c10.1-10.1 2.9-27.3-11.3-27.3l-32.2 0c-5.1 0-9.2-4.1-9.2-9.2c0-4.1 2.7-7.6 6.5-8.8l112-33.6c4-1.2 7.4-3.9 9.3-7.7C506.4 207.6 512 184.1 512 160c0-41-16.3-80.3-45.3-109.3l-5.5-5.5C432.3 16.3 393 0 352 0s-80.3 16.3-109.3 45.3L139 149C91 197 64 262.1 64 330v55.3L253.6 195.8c6.2-6.2 16.4-6.2 22.6 0c5.4 5.4 6.1 13.6 2.2 19.8z"/></svg>`;
+                            td.appendChild(a);
+                        }
                         if (item.XP < maxXP || anyExaltedMissingXP) {
                             const a = document.createElement("a");
                             a.href = "#";
@@ -721,13 +746,6 @@ function updateInventory() {
                                 a.title = loc("code_unmature");
                                 a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M256 64A64 64 0 1 0 128 64a64 64 0 1 0 128 0zM152.9 169.3c-23.7-8.4-44.5-24.3-58.8-45.8L74.6 94.2C64.8 79.5 45 75.6 30.2 85.4s-18.7 29.7-8.9 44.4L40.9 159c18.1 27.1 42.8 48.4 71.1 62.4L112 480c0 17.7 14.3 32 32 32s32-14.3 32-32l0-96 32 0 0 96c0 17.7 14.3 32 32 32s32-14.3 32-32l0-258.4c29.1-14.2 54.4-36.2 72.7-64.2l18.2-27.9c9.6-14.8 5.4-34.6-9.4-44.3s-34.6-5.5-44.3 9.4L291 122.4c-21.8 33.4-58.9 53.6-98.8 53.6c-12.6 0-24.9-2-36.6-5.8c-.9-.3-1.8-.7-2.7-.9z"/></svg>`;
                             }
-
-                            td.appendChild(a);
-                        }
-                        if (category == "Suits") {
-                            const a = document.createElement("a");
-                            a.href = "/webui/powersuit/" + item.ItemId.$oid;
-                            a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M278.5 215.6L23 471c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l57-57h68c49.7 0 97.9-14.4 139-41c11.1-7.2 5.5-23-7.8-23c-5.1 0-9.2-4.1-9.2-9.2c0-4.1 2.7-7.6 6.5-8.8l81-24.3c2.5-.8 4.8-2.1 6.7-4l22.4-22.4c10.1-10.1 2.9-27.3-11.3-27.3l-32.2 0c-5.1 0-9.2-4.1-9.2-9.2c0-4.1 2.7-7.6 6.5-8.8l112-33.6c4-1.2 7.4-3.9 9.3-7.7C506.4 207.6 512 184.1 512 160c0-41-16.3-80.3-45.3-109.3l-5.5-5.5C432.3 16.3 393 0 352 0s-80.3 16.3-109.3 45.3L139 149C91 197 64 262.1 64 330v55.3L253.6 195.8c6.2-6.2 16.4-6.2 22.6 0c5.4 5.4 6.1 13.6 2.2 19.8z"/></svg>`;
                             td.appendChild(a);
                         }
                         {
@@ -1126,53 +1144,73 @@ function updateInventory() {
                 }
             });
 
-            // Populate powersuit route
-            if (single.getCurrentPath().substr(0, 17) == "/webui/powersuit/") {
-                const oid = single.getCurrentPath().substr(17);
-                const item = data.Suits.find(x => x.ItemId.$oid == oid);
+            // Populate detailedView route
+            if (single.getCurrentPath().substr(0, 19) == "/webui/detailedView") {
+                const urlParams = new URLSearchParams(window.location.search);
+                const oid = urlParams.get("itemId");
+                const category = urlParams.get("productCategory");
+                const item = data[category].find(x => x.ItemId.$oid == oid);
+
                 if (item) {
                     if (item.ItemName) {
-                        $("#powersuit-route h3").text(item.ItemName);
-                        $("#powersuit-route .text-body-secondary").text(itemMap[item.ItemType]?.name ?? item.ItemType);
+                        $("#detailedView-route h3").text(item.ItemName);
+                        $("#detailedView-route .text-body-secondary").text(
+                            itemMap[item.ItemType]?.name ?? item.ItemType
+                        );
                     } else {
-                        $("#powersuit-route h3").text(itemMap[item.ItemType]?.name ?? item.ItemType);
-                        $("#powersuit-route .text-body-secondary").text("");
+                        $("#detailedView-route h3").text(itemMap[item.ItemType]?.name ?? item.ItemType);
+                        $("#detailedView-route .text-body-secondary").text("");
                     }
 
-                    const uniqueUpgrades = {};
-                    (item.ArchonCrystalUpgrades ?? []).forEach(upgrade => {
-                        if (upgrade && upgrade.UpgradeType) {
-                            uniqueUpgrades[upgrade.UpgradeType] ??= 0;
-                            uniqueUpgrades[upgrade.UpgradeType] += 1;
-                        }
-                    });
+                    if (category == "Suits") {
+                        document.getElementById("archonShards-card").classList.remove("d-none");
 
-                    document.getElementById("crystals-list").innerHTML = "";
-                    Object.entries(uniqueUpgrades).forEach(([upgradeType, count]) => {
-                        const tr = document.createElement("tr");
-                        {
-                            const td = document.createElement("td");
-                            td.textContent = count + "x " + (archonCrystalUpgrades[upgradeType] ?? upgradeType);
-                            tr.appendChild(td);
-                        }
-                        {
-                            const td = document.createElement("td");
-                            td.classList = "text-end text-nowrap";
-                            {
-                                const a = document.createElement("a");
-                                a.href = "#";
-                                a.onclick = function (event) {
-                                    event.preventDefault();
-                                    doPopArchonCrystalUpgrade(upgradeType);
-                                };
-                                a.title = loc("code_remove");
-                                a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
-                                td.appendChild(a);
+                        const uniqueUpgrades = {};
+                        (item.ArchonCrystalUpgrades ?? []).forEach(upgrade => {
+                            if (upgrade && upgrade.UpgradeType) {
+                                uniqueUpgrades[upgrade.UpgradeType] ??= 0;
+                                uniqueUpgrades[upgrade.UpgradeType] += 1;
                             }
-                            tr.appendChild(td);
+                        });
+
+                        document.getElementById("crystals-list").innerHTML = "";
+                        Object.entries(uniqueUpgrades).forEach(([upgradeType, count]) => {
+                            const tr = document.createElement("tr");
+                            {
+                                const td = document.createElement("td");
+                                td.textContent = count + "x " + (archonCrystalUpgrades[upgradeType] ?? upgradeType);
+                                tr.appendChild(td);
+                            }
+                            {
+                                const td = document.createElement("td");
+                                td.classList = "text-end text-nowrap";
+                                {
+                                    const a = document.createElement("a");
+                                    a.href = "#";
+                                    a.onclick = function (event) {
+                                        event.preventDefault();
+                                        doPopArchonCrystalUpgrade(upgradeType);
+                                    };
+                                    a.title = loc("code_remove");
+                                    a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
+                                    td.appendChild(a);
+                                }
+                                tr.appendChild(td);
+                            }
+                            document.getElementById("crystals-list").appendChild(tr);
+                        });
+                    } else if (["LongGuns", "Pistols", "Melee", "SpaceGuns", "SpaceMelee"].includes(category)) {
+                        document.getElementById("valenceBonus-card").classList.remove("d-none");
+                        document.getElementById("valenceBonus-innateDamage").value = "";
+                        document.getElementById("valenceBonus-procent").value = 25;
+
+                        if (item.UpgradeFingerprint) {
+                            const buff = JSON.parse(item.UpgradeFingerprint).buffs[0];
+                            const buffValue = fromUpdradeFingerPrintVaule(buff.Value, 0.25);
+                            document.getElementById("valenceBonus-innateDamage").value = buff.Tag ?? "";
+                            document.getElementById("valenceBonus-procent").value = Math.round(buffValue * 1000) / 10;
                         }
-                        document.getElementById("crystals-list").appendChild(tr);
-                    });
+                    }
                 } else {
                     single.loadRoute("/webui/inventory");
                 }
@@ -2110,16 +2148,19 @@ function doAddMissingMaxRankMods() {
     });
 }
 
-// Powersuit Route
+// DetailedView Route
 
-single.getRoute("#powersuit-route").on("beforeload", function () {
+single.getRoute("#detailedView-route").on("beforeload", function () {
     this.element.querySelector("h3").textContent = "Loading...";
+    document.getElementById("archonShards-card").classList.add("d-none");
+    document.getElementById("valenceBonus-card").classList.add("d-none");
     if (window.didInitialInventoryUpdate) {
         updateInventory();
     }
 });
 
 function doPushArchonCrystalUpgrade() {
+    const urlParams = new URLSearchParams(window.location.search);
     const uniqueName = getKey(document.querySelector("[list='datalist-archonCrystalUpgrades']"));
     if (!uniqueName) {
         $("[list='datalist-archonCrystalUpgrades']").addClass("is-invalid").focus();
@@ -2130,7 +2171,7 @@ function doPushArchonCrystalUpgrade() {
             "/custom/pushArchonCrystalUpgrade?" +
                 window.authz +
                 "&oid=" +
-                single.getCurrentPath().substr(17) +
+                urlParams.get("itemId") +
                 "&type=" +
                 uniqueName +
                 "&count=" +
@@ -2143,14 +2184,10 @@ function doPushArchonCrystalUpgrade() {
 }
 
 function doPopArchonCrystalUpgrade(type) {
+    const urlParams = new URLSearchParams(window.location.search);
     revalidateAuthz().then(() => {
         $.get(
-            "/custom/popArchonCrystalUpgrade?" +
-                window.authz +
-                "&oid=" +
-                single.getCurrentPath().substr(17) +
-                "&type=" +
-                type
+            "/custom/popArchonCrystalUpgrade?" + window.authz + "&oid=" + urlParams.get("itemId") + "&type=" + type
         ).done(function () {
             updateInventory();
         });
@@ -2661,3 +2698,43 @@ document.querySelectorAll(".tags-input").forEach(input => {
     };
     input.oninput();
 });
+
+function fromUpdradeFingerPrintVaule(raw, min) {
+    const range = 0.6 - min;
+    return min + (raw * range) / 0x3fffffff;
+}
+
+function toUpdradeFingerPrintVaule(value, min) {
+    const range = 0.6 - min;
+    return Math.trunc(((value - min) * 0x3fffffff) / range);
+}
+
+function handleValenceBonusChange(event) {
+    event.preventDefault();
+    const urlParams = new URLSearchParams(window.location.search);
+    const action = event.submitter.value;
+    const Tag = document.getElementById("valenceBonus-innateDamage").value;
+    const Value = toUpdradeFingerPrintVaule(document.getElementById("valenceBonus-procent").value / 100, 0.25);
+    revalidateAuthz().then(() => {
+        $.post({
+            url: "/custom/updateFingerprint?" + window.authz,
+            contentType: "application/json",
+            data: JSON.stringify({
+                category: urlParams.get("productCategory"),
+                oid: urlParams.get("itemId"),
+                action,
+                upgradeType: "/Lotus/Weapons/Grineer/KuvaLich/Upgrades/InnateDamageRandomMod",
+                upgradeFingerprint: {
+                    buffs: [
+                        {
+                            Tag,
+                            Value
+                        }
+                    ]
+                }
+            })
+        }).done(function () {
+            updateInventory();
+        });
+    });
+}

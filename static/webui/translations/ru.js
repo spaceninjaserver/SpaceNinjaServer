@@ -2,7 +2,10 @@
 dict = {
     general_inventoryUpdateNote: `[UNTRANSLATED] Note: To see changes in-game, you need to resync your inventory, e.g. using the bootstrapper's /sync command, visiting a dojo/relay, or relogging.`,
     general_addButton: `Добавить`,
+    general_setButton: `Установить`,
+    general_removeButton: `Удалить`,
     general_bulkActions: `Массовые действия`,
+
     code_loginFail: `[UNTRANSLATED] Login failed. Double-check the email and password.`,
     code_regFail: `[UNTRANSLATED] Registration failed. Account already exists?`,
     code_changeNameConfirm: `Какое имя вы хотите установить для своей учетной записи?`,
@@ -112,9 +115,13 @@ dict = {
     currency_FusionPoints: `Эндо`,
     currency_PrimeTokens: `Королевские Айя`,
     currency_owned: `У тебя |COUNT|.`,
-    powersuit_archonShardsLabel: `Ячейки осколков архонта`,
-    powersuit_archonShardsDescription: `Вы можете использовать эти неограниченные ячейки для установки множества улучшений.`,
-    powersuit_archonShardsDescription2: `Обратите внимание: каждый фрагмент архонта применяется с задержкой при загрузке.`,
+
+    detailedView_archonShardsLabel: `Ячейки осколков архонта`,
+    detailedView_archonShardsDescription: `Вы можете использовать эти неограниченные ячейки для установки множества улучшений.`,
+    detailedView_archonShardsDescription2: `Обратите внимание: каждый фрагмент архонта применяется с задержкой при загрузке.`,
+    detailedView_valenceBonusLabel: `Бонус Валентности`,
+    detailedView_valenceBonusDescription: `Вы можете установить или убрать бонус валентности с вашего оружия.`,
+
     mods_addRiven: `Добавить Мод Разлома`,
     mods_fingerprint: `Отпечаток`,
     mods_fingerprintHelp: `Нужна помощь с отпечатком?`,
@@ -290,6 +297,14 @@ dict = {
     upgrade_OnHackSprintSpeed: `[UNTRANSLATED] +75% Sprint Speed for 15s after Hacking`,
     upgrade_SwiftExecute: `[UNTRANSLATED] Speed of Mercy Kills increased by 50%`,
     upgrade_OnHackInvis: `[UNTRANSLATED] Invisible for 15 seconds after hacking`,
+
+    damageType_Electricity: `Электричество`,
+    damageType_Fire: `Огонь`,
+    damageType_Freeze: `Холод`,
+    damageType_Impact: `Удар`,
+    damageType_Magnetic: `Магнит`,
+    damageType_Poison: `Токсин`,
+    damageType_Radiation: `Радиация`,
 
     theme_dark: `[UNTRANSLATED] Dark Theme`,
     theme_light: `[UNTRANSLATED] Light Theme`,
