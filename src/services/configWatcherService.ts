@@ -14,8 +14,8 @@ chokidar.watch(configPath).on("change", () => {
         try {
             loadConfig();
         } catch (e) {
-            logger.error("FATAL ERROR: Config failed to be reloaded: " + (e as Error).message);
-            process.exit(1);
+            logger.error("Config changes were not applied: " + (e as Error).message);
+            return;
         }
         validateConfig();
         syncConfigWithDatabase();
