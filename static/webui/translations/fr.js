@@ -129,6 +129,7 @@ dict = {
     cheats_skipAllDialogue: `Passer les dialogues`,
     cheats_unlockAllScans: `Débloquer tous les scans`,
     cheats_unlockAllMissions: `Débloquer toutes les missions`,
+    cheats_unlockAllMissions_ok: `[UNTRANSLATED] Success. Please note that you'll need to enter a dojo/relay or relog for the client to refresh the star chart.`,
     cheats_infiniteCredits: `Crédits infinis`,
     cheats_infinitePlatinum: `Platinum infini`,
     cheats_infiniteEndo: `Endo infini`,

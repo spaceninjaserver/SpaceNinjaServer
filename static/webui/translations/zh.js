@@ -129,6 +129,7 @@ dict = {
     cheats_skipAllDialogue: `跳过所有对话`,
     cheats_unlockAllScans: `解锁所有扫描`,
     cheats_unlockAllMissions: `解锁所有任务`,
+    cheats_unlockAllMissions_ok: `[UNTRANSLATED] Success. Please note that you'll need to enter a dojo/relay or relog for the client to refresh the star chart.`,
     cheats_infiniteCredits: `无限现金`,
     cheats_infinitePlatinum: `无限白金`,
     cheats_infiniteEndo: `无限内融核心`,

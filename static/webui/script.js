@@ -2388,7 +2388,7 @@ async function doMaxPlexus() {
 async function doUnlockAllMissions() {
     await revalidateAuthz();
     await fetch("/custom/completeAllMissions?" + window.authz);
-    updateInventory();
+    toast(loc("cheats_unlockAllMissions_ok"));
 }
 
 const importSamples = {
