@@ -4,7 +4,8 @@ import {
     ISetShipCustomizationsRequest,
     IShipDecorationsRequest,
     IShipDecorationsResponse,
-    ISetPlacedDecoInfoRequest
+    ISetPlacedDecoInfoRequest,
+    TBootLocation
 } from "@/src/types/shipTypes";
 import { logger } from "@/src/utils/logger";
 import { Types } from "mongoose";
@@ -14,6 +15,7 @@ import { Guild } from "../models/guildModel";
 import { hasGuildPermission } from "./guildService";
 import { GuildPermission } from "../types/guildTypes";
 import { ExportResources } from "warframe-public-export-plus";
+import { RoomsType, TPersonalRoomsDatabaseDocument } from "../types/personalRoomsTypes";
 
 export const setShipCustomizations = async (
     accountId: string,
@@ -183,6 +185,19 @@ export const handleSetShipDecorations = async (
     };
 };
 
+const getRoomsForBootLocation = (
+    personalRooms: TPersonalRoomsDatabaseDocument,
+    bootLocation: TBootLocation | undefined
+): RoomsType[] => {
+    if (bootLocation == "SHOP") {
+        return personalRooms.TailorShop.Rooms;
+    }
+    if (bootLocation == "APARTMENT") {
+        return personalRooms.Apartment.Rooms;
+    }
+    return personalRooms.Ship.Rooms;
+};
+
 export const handleSetPlacedDecoInfo = async (accountId: string, req: ISetPlacedDecoInfoRequest): Promise<void> => {
     if (req.GuildId && req.ComponentId) {
         const guild = (await Guild.findById(req.GuildId))!;
@@ -197,14 +212,14 @@ export const handleSetPlacedDecoInfo = async (accountId: string, req: ISetPlaced
 
     const personalRooms = await getPersonalRooms(accountId);
 
-    const room = personalRooms.Ship.Rooms.find(room => room.Name === req.Room);
+    const room = getRoomsForBootLocation(personalRooms, req.BootLocation).find(room => room.Name === req.Room);
     if (!room) {
-        throw new Error("room not found");
+        throw new Error(`unknown room: ${req.Room}`);
     }
 
     const placedDeco = room.PlacedDecos.id(req.DecoId);
     if (!placedDeco) {
-        throw new Error("deco not found");
+        throw new Error(`unknown deco id: ${req.DecoId}`);
     }
 
     placedDeco.PictureFrameInfo = req.PictureFrameInfo;

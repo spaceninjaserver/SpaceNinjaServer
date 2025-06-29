@@ -154,7 +154,7 @@ export interface ISetPlacedDecoInfoRequest {
     DecoId: string;
     Room: string;
     PictureFrameInfo: IPictureFrameInfo;
-    BootLocation?: string;
+    BootLocation?: TBootLocation;
     ComponentId?: string;
     GuildId?: string;
 }
