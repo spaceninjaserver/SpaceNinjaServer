@@ -291,5 +291,8 @@ dict = {
     upgrade_SwiftExecute: `Velocidad de ejecuciones aumentada en un 50%`,
     upgrade_OnHackInvis: `Invisible durante 15 segundos después de hackear`,
 
+    theme_dark: `[UNTRANSLATED] Dark Theme`,
+    theme_light: `[UNTRANSLATED] Light Theme`,
+
     prettier_sucks_ass: ``
 };

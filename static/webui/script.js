@@ -230,6 +230,18 @@ function setLanguage(lang) {
     }
 }
 
+function setActiveTheme(theme) {
+    document.documentElement.setAttribute("data-bs-theme", theme);
+    document.querySelector("[data-theme].active").classList.remove("active");
+    document.querySelector("[data-theme=" + theme + "]").classList.add("active");
+}
+setActiveTheme(localStorage.getItem("theme") ?? "dark");
+
+function setTheme(theme) {
+    setActiveTheme(theme);
+    localStorage.setItem("theme", theme);
+}
+
 const webUiModularWeapons = [
     "/Lotus/Weapons/Sentients/OperatorAmplifiers/OperatorAmpWeapon",
     "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",

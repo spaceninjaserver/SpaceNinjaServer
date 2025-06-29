@@ -291,5 +291,8 @@ dict = {
     upgrade_SwiftExecute: `怜悯之击速度提升50%`,
     upgrade_OnHackInvis: `入侵后隐身15秒`,
 
+    theme_dark: `[UNTRANSLATED] Dark Theme`,
+    theme_light: `[UNTRANSLATED] Light Theme`,
+
     prettier_sucks_ass: ``
 };
