@@ -2666,7 +2666,7 @@ const importSamples = {
             },
             {
                 ItemType: "/Lotus/Upgrades/Focus/Defense/Active/CloakHealOthersFocusUpgrade",
-                Level: 2
+                Level: 3
             }
         ]
     }
