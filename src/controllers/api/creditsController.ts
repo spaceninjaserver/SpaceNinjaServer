@@ -4,9 +4,15 @@ import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getInventory } from "@/src/services/inventoryService";
 
 export const creditsController: RequestHandler = async (req, res) => {
-    const accountId = await getAccountIdForRequest(req);
-
-    const inventory = await getInventory(accountId, "RegularCredits TradesRemaining PremiumCreditsFree PremiumCredits");
+    const inventory = (
+        await Promise.all([
+            getAccountIdForRequest(req),
+            getInventory(
+                req.query.accountId as string,
+                "RegularCredits TradesRemaining PremiumCreditsFree PremiumCredits"
+            )
+        ])
+    )[1];
 
     const response = {
         RegularCredits: inventory.RegularCredits,
