@@ -2,8 +2,8 @@
 dict = {
     general_inventoryUpdateNote: `Para ver los cambios en el juego, necesitas volver a sincronizar tu inventario, por ejemplo, usando el comando /sync del bootstrapper, visitando un dojo o repetidor, o volviendo a iniciar sesión.`,
     general_addButton: `Agregar`,
-    general_setButton: `[UNTRANSLATED] Set`,
-    general_removeButton: `[UNTRANSLATED] Remove`,
+    general_setButton: `Establecer`,
+    general_removeButton: `Quitar`,
     general_bulkActions: `Acciones masivas`,
 
     code_loginFail: `Error al iniciar sesión. Verifica el correo electrónico y la contraseña.`,
@@ -120,7 +120,7 @@ dict = {
     detailedView_archonShardsDescription: `Puedes usar estas ranuras ilimitadas para aplicar una amplia variedad de mejoras`,
     detailedView_archonShardsDescription2: `Ten en cuenta que cada fragmento de archón tarda un poco en aplicarse al cargar`,
     detailedView_valenceBonusLabel: `Bônus de Valência`,
-    detailedView_valenceBonusDescription: `[UNTRANSLATED] You can set or remove the Valence Bonus from your weapon.`,
+    detailedView_valenceBonusDescription: `Puedes establecer o quitar el bono de valencia de tu arma.`,
 
     mods_addRiven: `Agregar Agrietado`,
     mods_fingerprint: `Huella digital`,
@@ -136,7 +136,7 @@ dict = {
     cheats_skipAllDialogue: `Omitir todos los diálogos`,
     cheats_unlockAllScans: `Desbloquear todos los escaneos`,
     cheats_unlockAllMissions: `Desbloquear todas las misiones`,
-    cheats_unlockAllMissions_ok: `[UNTRANSLATED] Success. Please note that you'll need to enter a dojo/relay or relog for the client to refresh the star chart.`,
+    cheats_unlockAllMissions_ok: `Éxito. Ten en cuenta que deberás entrar a un dojo, repetidor o volver a iniciar sesión para que el cliente actualice el mapa estelar.`,
     cheats_infiniteCredits: `Créditos infinitos`,
     cheats_infinitePlatinum: `Platino infinito`,
     cheats_infiniteEndo: `Endo infinito`,
@@ -306,8 +306,8 @@ dict = {
     damageType_Poison: `Tóxico`,
     damageType_Radiation: `Radioativo`,
 
-    theme_dark: `[UNTRANSLATED] Dark Theme`,
-    theme_light: `[UNTRANSLATED] Light Theme`,
+    theme_dark: `Tema Oscuro`,
+    theme_light: `Tema Claro`,
 
     prettier_sucks_ass: ``
 };
