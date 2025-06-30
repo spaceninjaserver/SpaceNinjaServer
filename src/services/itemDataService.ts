@@ -45,6 +45,39 @@ export type WeaponTypeInternal =
     | "SpecialItems";
 
 export const getRecipe = (uniqueName: string): IRecipe | undefined => {
+    // Handle crafting of archwing summon for versions prior to 39.0.0 as this blueprint was removed then.
+    if (uniqueName == "/Lotus/Types/Recipes/EidolonRecipes/OpenArchwingSummonBlueprint") {
+        return {
+            resultType: "/Lotus/Types/Restoratives/OpenArchwingSummon",
+            buildPrice: 7500,
+            buildTime: 1800,
+            skipBuildTimePrice: 10,
+            consumeOnUse: false,
+            num: 1,
+            codexSecret: false,
+            alwaysAvailable: true,
+            ingredients: [
+                {
+                    ItemType: "/Lotus/Types/Gameplay/Eidolon/Resources/IraditeItem",
+                    ItemCount: 50
+                },
+                {
+                    ItemType: "/Lotus/Types/Gameplay/Eidolon/Resources/GrokdrulItem",
+                    ItemCount: 50
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/Fish/Eidolon/FishParts/EidolonFishOilItem",
+                    ItemCount: 30
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Circuits",
+                    ItemCount: 600
+                }
+            ],
+            excludeFromMarket: true
+        };
+    }
+
     return ExportRecipes[uniqueName];
 };
 
