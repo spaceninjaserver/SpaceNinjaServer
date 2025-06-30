@@ -13,7 +13,8 @@ import {
     allDailyAffiliationKeys,
     cleanupInventory,
     createLibraryDailyTask,
-    generateRewardSeed
+    generateRewardSeed,
+    getCalendarProgress
 } from "@/src/services/inventoryService";
 import { logger } from "@/src/utils/logger";
 import { addString, catBreadHash } from "@/src/helpers/stringHelpers";
@@ -106,6 +107,10 @@ export const inventoryController: RequestHandler = async (request, response) => 
                     inventory.UsedDailyDeals = [];
                 }
             }
+        }
+
+        if (inventory.CalendarProgress) {
+            getCalendarProgress(inventory); // handle year rollover; the client expects to receive an inventory with an up-to-date CalendarProgress
         }
 
         cleanupInventory(inventory);
