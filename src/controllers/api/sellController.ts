@@ -58,6 +58,9 @@ export const sellController: RequestHandler = async (req, res) => {
     if (payload.Items.Hoverboards) {
         requiredFields.add(InventorySlot.SPACESUITS);
     }
+    if (payload.Items.CrewMembers) {
+        requiredFields.add(InventorySlot.CREWMEMBERS);
+    }
     if (payload.Items.CrewShipWeapons || payload.Items.CrewShipWeaponSkins) {
         requiredFields.add(InventorySlot.RJ_COMPONENT_AND_ARMAMENTS);
         requiredFields.add("CrewShipRawSalvage");
@@ -179,6 +182,12 @@ export const sellController: RequestHandler = async (req, res) => {
     if (payload.Items.Drones) {
         payload.Items.Drones.forEach(sellItem => {
             inventory.Drones.pull({ _id: sellItem.String });
+        });
+    }
+    if (payload.Items.CrewMembers) {
+        payload.Items.CrewMembers.forEach(sellItem => {
+            inventory.CrewMembers.pull({ _id: sellItem.String });
+            freeUpSlot(inventory, InventorySlot.CREWMEMBERS);
         });
     }
     if (payload.Items.CrewShipWeapons) {
@@ -303,6 +312,7 @@ interface ISellRequest {
         OperatorAmps?: ISellItem[];
         Hoverboards?: ISellItem[];
         Drones?: ISellItem[];
+        CrewMembers?: ISellItem[];
         CrewShipWeapons?: ISellItem[];
         CrewShipWeaponSkins?: ISellItem[];
     };
