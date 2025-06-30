@@ -9,6 +9,7 @@ import {
 } from "@/src/services/loginRewardService";
 import { getInventory } from "@/src/services/inventoryService";
 import { config } from "@/src/services/configService";
+import { sendWsBroadcastTo } from "@/src/services/webService";
 
 export const loginRewardsController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -51,6 +52,8 @@ export const loginRewardsController: RequestHandler = async (req, res) => {
 
         setAccountGotLoginRewardToday(account);
         await account.save();
+
+        sendWsBroadcastTo(account._id.toString(), { update_inventory: true });
     }
     res.json(response);
 };

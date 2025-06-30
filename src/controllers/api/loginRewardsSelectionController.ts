@@ -6,6 +6,7 @@ import {
 } from "@/src/services/loginRewardService";
 import { getAccountForRequest } from "@/src/services/loginService";
 import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
+import { sendWsBroadcastTo } from "@/src/services/webService";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { logger } from "@/src/utils/logger";
 import { RequestHandler } from "express";
@@ -39,6 +40,7 @@ export const loginRewardsSelectionController: RequestHandler = async (req, res) 
     setAccountGotLoginRewardToday(account);
     await account.save();
 
+    sendWsBroadcastTo(account._id.toString(), { update_inventory: true });
     res.json({
         DailyTributeInfo: {
             NewInventory: inventoryChanges,
