@@ -4,9 +4,19 @@
     }
 
     body.logged-in #sidebar {
-        position: sticky;
-        top: 5rem;
-        margin-right: 3rem;
+        position: fixed;
+    }
+
+    body.logged-in #main-content {
+        margin-left: 7rem;
+    }
+
+    body.logged-in:has([data-lang="de"].active) #main-content {
+        margin-left: 8rem;
+    }
+
+    body.logged-in:has([data-lang="zh"].active) #main-content {
+        margin-left: 6rem;
     }
 
     body:not(.logged-in) #sidebar {
