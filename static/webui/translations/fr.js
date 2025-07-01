@@ -185,6 +185,7 @@ dict = {
     cheats_unlockAllSimarisResearchEntries: `Débloquer toute les recherches chez Simaris`,
     cheats_disableDailyTribute: `[UNTRANSLATED] Disable Daily Tribute`,
     cheats_spoofMasteryRank: `Rang de maîtrise personnalisé (-1 pour désactiver)`,
+    cheats_relicRewardItemCountMultiplier: `[UNTRANSLATED] Relic Reward Item Count Multiplier`,
     cheats_nightwaveStandingMultiplier: `Multiplicateur de réputation d'Ondes Nocturnes`,
     cheats_save: `Sauvegarder`,
     cheats_account: `Compte`,

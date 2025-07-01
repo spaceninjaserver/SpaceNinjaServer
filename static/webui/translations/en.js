@@ -184,6 +184,7 @@ dict = {
     cheats_unlockAllSimarisResearchEntries: `Unlock All Simaris Research Entries`,
     cheats_disableDailyTribute: `Disable Daily Tribute`,
     cheats_spoofMasteryRank: `Spoofed Mastery Rank (-1 to disable)`,
+    cheats_relicRewardItemCountMultiplier: `Relic Reward Item Count Multiplier`,
     cheats_nightwaveStandingMultiplier: `Nightwave Standing Multiplier`,
     cheats_save: `Save`,
     cheats_account: `Account`,

@@ -788,14 +788,21 @@
                                     <form class="form-group mt-2" onsubmit="doSaveConfigInt('spoofMasteryRank'); return false;">
                                         <label class="form-label" for="spoofMasteryRank" data-loc="cheats_spoofMasteryRank"></label>
                                         <div class="input-group">
-                                            <input class="form-control" id="spoofMasteryRank" type="number" min="-1" max="65535" />
+                                            <input class="form-control" id="spoofMasteryRank" type="number" min="-1" max="65535" data-default="-1" />
+                                            <button class="btn btn-primary" type="submit" data-loc="cheats_save"></button>
+                                        </div>
+                                    </form>
+                                    <form class="form-group mt-2" onsubmit="doSaveConfigInt('relicRewardItemCountMultiplier'); return false;">
+                                        <label class="form-label" for="relicRewardItemCountMultiplier" data-loc="cheats_relicRewardItemCountMultiplier"></label>
+                                        <div class="input-group">
+                                            <input class="form-control" id="relicRewardItemCountMultiplier" type="number" min="1" max="1000000" data-default="1" />
                                             <button class="btn btn-primary" type="submit" data-loc="cheats_save"></button>
                                         </div>
                                     </form>
                                     <form class="form-group mt-2" onsubmit="doSaveConfigInt('nightwaveStandingMultiplier'); return false;">
                                         <label class="form-label" for="nightwaveStandingMultiplier" data-loc="cheats_nightwaveStandingMultiplier"></label>
                                         <div class="input-group">
-                                            <input class="form-control" id="nightwaveStandingMultiplier" type="number" min="1" max="1000000" value="1" />
+                                            <input class="form-control" id="nightwaveStandingMultiplier" type="number" min="1" max="1000000" data-default="1" />
                                             <button class="btn btn-primary" type="submit" data-loc="cheats_save"></button>
                                         </div>
                                     </form>
@@ -919,7 +926,7 @@
                                 <form class="form-group mt-2" onsubmit="doSaveConfigFloat('worldState.darvoStockMultiplier'); return false;">
                                     <label class="form-label" for="worldState.circuitGameModes" data-loc="worldState_darvoStockMultiplier"></label>
                                     <div class="input-group">
-                                        <input id="worldState.darvoStockMultiplier" class="form-control" type="number" step="0.01" placeholder="1" />
+                                        <input id="worldState.darvoStockMultiplier" class="form-control" type="number" step="0.01" data-default="1" />
                                         <button class="btn btn-primary" type="submit" data-loc="cheats_save"></button>
                                     </div>
                                 </form>

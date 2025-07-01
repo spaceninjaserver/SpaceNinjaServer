@@ -6,6 +6,7 @@ import { logger } from "@/src/utils/logger";
 import { addMiscItems, combineInventoryChanges } from "@/src/services/inventoryService";
 import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
 import { IInventoryChanges } from "../types/purchaseTypes";
+import { config } from "../services/configService";
 
 export const crackRelic = async (
     inventory: TInventoryDatabaseDocument,
@@ -35,7 +36,13 @@ export const crackRelic = async (
     // Give reward
     combineInventoryChanges(
         inventoryChanges,
-        (await handleStoreItemAcquisition(reward.type, inventory, reward.itemCount)).InventoryChanges
+        (
+            await handleStoreItemAcquisition(
+                reward.type,
+                inventory,
+                reward.itemCount * (config.relicRewardItemCountMultiplier ?? 1)
+            )
+        ).InventoryChanges
     );
 
     return reward;

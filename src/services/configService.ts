@@ -67,6 +67,7 @@ export interface IConfig {
     unlockAllSimarisResearchEntries?: boolean;
     disableDailyTribute?: boolean;
     spoofMasteryRank?: number;
+    relicRewardItemCountMultiplier?: number;
     nightwaveStandingMultiplier?: number;
     unfaithfulBugFixes?: {
         ignore1999LastRegionPlayed?: boolean;

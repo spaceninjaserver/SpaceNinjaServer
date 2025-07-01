@@ -60,6 +60,7 @@
   "unlockAllSimarisResearchEntries": false,
   "disableDailyTribute": false,
   "spoofMasteryRank": -1,
+  "relicRewardItemCountMultiplier": 1,
   "nightwaveStandingMultiplier": 1,
   "unfaithfulBugFixes": {
     "ignore1999LastRegionPlayed": false,

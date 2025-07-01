@@ -185,6 +185,7 @@ dict = {
     cheats_unlockAllSimarisResearchEntries: `解锁所有Simaris研究条目`,
     cheats_disableDailyTribute: `禁用每日登录奖励`,
     cheats_spoofMasteryRank: `伪造精通段位(-1为禁用)`,
+    cheats_relicRewardItemCountMultiplier: `[UNTRANSLATED] Relic Reward Item Count Multiplier`,
     cheats_nightwaveStandingMultiplier: `午夜电波声望倍率`,
     cheats_save: `保存`,
     cheats_account: `账户`,

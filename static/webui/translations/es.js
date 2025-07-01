@@ -185,6 +185,7 @@ dict = {
     cheats_unlockAllSimarisResearchEntries: `Desbloquear todas las entradas de investigación de Simaris`,
     cheats_disableDailyTribute: `Desactivar tributo diario`,
     cheats_spoofMasteryRank: `Rango de maestría simulado (-1 para desactivar)`,
+    cheats_relicRewardItemCountMultiplier: `[UNTRANSLATED] Relic Reward Item Count Multiplier`,
     cheats_nightwaveStandingMultiplier: `Multiplicador de Reputación de Onda Nocturna`,
     cheats_save: `Guardar`,
     cheats_account: `Cuenta`,

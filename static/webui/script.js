@@ -1984,16 +1984,14 @@ single.getRoute("/webui/cheats").on("beforeload", function () {
                     $(".config-admin-show").removeClass("d-none");
                     Object.entries(json).forEach(entry => {
                         const [key, value] = entry;
-                        var x = document.getElementById(`${key}`);
-                        if (x != null) {
-                            if (x.type == "checkbox") {
-                                x.checked = value;
-                            } else if (x.classList.contains("tags-input")) {
-                                x.value = value.join(", ");
-                                x.oninput();
-                            } else {
-                                x.value = value;
-                            }
+                        const elm = document.getElementById(key);
+                        if (elm.type == "checkbox") {
+                            elm.checked = value;
+                        } else if (elm.classList.contains("tags-input")) {
+                            elm.value = value.join(", ");
+                            elm.oninput();
+                        } else {
+                            elm.value = value ?? elm.getAttribute("data-default");
                         }
                     });
                 })
