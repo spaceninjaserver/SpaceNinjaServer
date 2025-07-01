@@ -19,6 +19,7 @@ import { sendWsBroadcastTo } from "@/src/services/webService";
 
 export const sellController: RequestHandler = async (req, res) => {
     const payload = JSON.parse(String(req.body)) as ISellRequest;
+    //console.log(JSON.stringify(payload, null, 2));
     const accountId = await getAccountIdForRequest(req);
     const requiredFields = new Set<keyof TInventoryDatabaseDocument>();
     if (payload.SellCurrency == "SC_RegularCredits") {
@@ -184,6 +185,11 @@ export const sellController: RequestHandler = async (req, res) => {
             inventory.Drones.pull({ _id: sellItem.String });
         });
     }
+    if (payload.Items.KubrowPetPrints) {
+        payload.Items.KubrowPetPrints.forEach(sellItem => {
+            inventory.KubrowPetPrints.pull({ _id: sellItem.String });
+        });
+    }
     if (payload.Items.CrewMembers) {
         payload.Items.CrewMembers.forEach(sellItem => {
             inventory.CrewMembers.pull({ _id: sellItem.String });
@@ -312,6 +318,7 @@ interface ISellRequest {
         OperatorAmps?: ISellItem[];
         Hoverboards?: ISellItem[];
         Drones?: ISellItem[];
+        KubrowPetPrints?: ISellItem[];
         CrewMembers?: ISellItem[];
         CrewShipWeapons?: ISellItem[];
         CrewShipWeaponSkins?: ISellItem[];
