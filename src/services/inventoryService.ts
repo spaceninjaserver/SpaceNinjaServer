@@ -83,7 +83,7 @@ import { addQuestKey, completeQuest } from "@/src/services/questService";
 import { handleBundleAcqusition } from "./purchaseService";
 import libraryDailyTasks from "@/static/fixed_responses/libraryDailyTasks.json";
 import { getRandomElement, getRandomInt, getRandomWeightedReward, SRng } from "./rngService";
-import { createMessage } from "./inboxService";
+import { createMessage, IMessageCreationTemplate } from "./inboxService";
 import { getMaxStanding, getMinStanding } from "@/src/helpers/syndicateStandingHelper";
 import { getNightwaveSyndicateTag, getWorldState } from "./worldStateService";
 import { ICalendarSeason } from "@/src/types/worldStateTypes";
@@ -1563,7 +1563,22 @@ export const addEmailItem = async (
     const meta = ExportEmailItems[typeName];
     const emailItem = inventory.EmailItems.find(x => x.ItemType == typeName);
     if (!emailItem || !meta.sendOnlyOnce) {
-        await createMessage(inventory.accountOwnerId, [convertInboxMessage(meta.message)]);
+        const msg: IMessageCreationTemplate = convertInboxMessage(meta.message);
+        if (msg.cinematic == "/Lotus/Levels/1999/PlayerHomeBalconyCinematics.level") {
+            msg.customData = JSON.stringify({
+                Tag: msg.customData + "KissCin",
+                CinLoadout: {
+                    Skins: inventory.AdultOperatorLoadOuts[0].Skins,
+                    Upgrades: inventory.AdultOperatorLoadOuts[0].Upgrades,
+                    attcol: inventory.AdultOperatorLoadOuts[0].attcol,
+                    cloth: inventory.AdultOperatorLoadOuts[0].cloth,
+                    eyecol: inventory.AdultOperatorLoadOuts[0].eyecol,
+                    pricol: inventory.AdultOperatorLoadOuts[0].pricol,
+                    syancol: inventory.AdultOperatorLoadOuts[0].syancol
+                }
+            });
+        }
+        await createMessage(inventory.accountOwnerId, [msg]);
 
         if (emailItem) {
             emailItem.ItemCount += 1;

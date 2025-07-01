@@ -9,6 +9,7 @@ import { IPolarity, ArtifactPolarity, EquipmentFeatures } from "@/src/types/inve
 import { ExportCustoms, ExportFlavour, ExportResources, ExportVirtuals } from "warframe-public-export-plus";
 import { applyCheatsToInfestedFoundry, handleSubsumeCompletion } from "@/src/services/infestedFoundryService";
 import {
+    addEmailItem,
     addMiscItems,
     allDailyAffiliationKeys,
     cleanupInventory,
@@ -110,7 +111,58 @@ export const inventoryController: RequestHandler = async (request, response) => 
         }
 
         if (inventory.CalendarProgress) {
+            const previousYearIteration = inventory.CalendarProgress.Iteration;
             getCalendarProgress(inventory); // handle year rollover; the client expects to receive an inventory with an up-to-date CalendarProgress
+
+            // also handle sending of kiss cinematic at year rollover
+            if (
+                inventory.CalendarProgress.Iteration != previousYearIteration &&
+                inventory.DialogueHistory &&
+                inventory.DialogueHistory.Dialogues
+            ) {
+                let kalymos = false;
+                for (const { dialogueName, kissEmail } of [
+                    {
+                        dialogueName: "/Lotus/Types/Gameplay/1999Wf/Dialogue/ArthurDialogue_rom.dialogue",
+                        kissEmail: "/Lotus/Types/Items/EmailItems/ArthurKissEmailItem"
+                    },
+                    {
+                        dialogueName: "/Lotus/Types/Gameplay/1999Wf/Dialogue/EleanorDialogue_rom.dialogue",
+                        kissEmail: "/Lotus/Types/Items/EmailItems/EleanorKissEmailItem"
+                    },
+                    {
+                        dialogueName: "/Lotus/Types/Gameplay/1999Wf/Dialogue/LettieDialogue_rom.dialogue",
+                        kissEmail: "/Lotus/Types/Items/EmailItems/LettieKissEmailItem"
+                    },
+                    {
+                        dialogueName: "/Lotus/Types/Gameplay/1999Wf/Dialogue/JabirDialogue_rom.dialogue",
+                        kissEmail: "/Lotus/Types/Items/EmailItems/AmirKissEmailItem"
+                    },
+                    {
+                        dialogueName: "/Lotus/Types/Gameplay/1999Wf/Dialogue/AoiDialogue_rom.dialogue",
+                        kissEmail: "/Lotus/Types/Items/EmailItems/AoiKissEmailItem"
+                    },
+                    {
+                        dialogueName: "/Lotus/Types/Gameplay/1999Wf/Dialogue/QuincyDialogue_rom.dialogue",
+                        kissEmail: "/Lotus/Types/Items/EmailItems/QuincyKissEmailItem"
+                    }
+                ]) {
+                    const dialogue = inventory.DialogueHistory.Dialogues.find(x => x.DialogueName == dialogueName);
+                    if (dialogue) {
+                        if (dialogue.Rank == 7) {
+                            await addEmailItem(inventory, kissEmail);
+                            kalymos = false;
+                            break;
+                        }
+                        if (dialogue.Rank == 6) {
+                            kalymos = true;
+                        }
+                    }
+                }
+                if (kalymos) {
+                    await addEmailItem(inventory, "/Lotus/Types/Items/EmailItems/KalymosKissEmailItem");
+                }
+            }
         }
 
         cleanupInventory(inventory);

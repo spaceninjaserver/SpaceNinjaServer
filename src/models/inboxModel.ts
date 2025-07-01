@@ -23,7 +23,9 @@ export interface IMessageDatabase extends IMessage {
 export interface IMessage {
     sndr: string;
     msg: string;
+    cinematic?: string;
     sub: string;
+    customData?: string;
     icon?: string;
     highPriority?: boolean;
     lowPrioNewPlayers?: boolean;
@@ -102,7 +104,9 @@ const messageSchema = new Schema<IMessageDatabase>(
         ownerId: Schema.Types.ObjectId,
         sndr: String,
         msg: String,
+        cinematic: String,
         sub: String,
+        customData: String,
         icon: String,
         highPriority: Boolean,
         lowPrioNewPlayers: Boolean,

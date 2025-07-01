@@ -251,7 +251,9 @@ export const convertInboxMessage = (message: IInboxMessage): IMessage => {
     return {
         sndr: message.sender,
         msg: message.body,
+        cinematic: message.cinematic,
         sub: message.title,
+        customData: message.customData,
         att: message.attachments.length > 0 ? message.attachments : undefined,
         countedAtt: message.countedAttachments.length > 0 ? message.countedAttachments : undefined,
         icon: message.icon ?? "",
