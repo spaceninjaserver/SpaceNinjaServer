@@ -92,5 +92,13 @@
   "/Lotus/Levels/ClanDojo/ComponentPropRecipes/ThumperTrophySilverRecipe",
   "/Lotus/Levels/ClanDojo/ComponentPropRecipes/CorpusPlaceables/GasTurbineConeRecipe",
   "/Lotus/Levels/ClanDojo/ComponentPropRecipes/NaturalPlaceables/CoralChunkARecipe",
-  "/Lotus/Levels/ClanDojo/ComponentPropRecipes/TennoPlaceables/TnoBeaconEmitterRecipe"
+  "/Lotus/Levels/ClanDojo/ComponentPropRecipes/TennoPlaceables/TnoBeaconEmitterRecipe",
+  "/Lotus/Levels/ClanDojo/ComponentPropRecipes/NpcPlaceables/OstronFemaleSitting",
+  "/Lotus/Levels/ClanDojo/ComponentPropRecipes/NpcPlaceables/OstronFemaleStanding",
+  "/Lotus/Levels/ClanDojo/ComponentPropRecipes/NpcPlaceables/OstronMaleStanding",
+  "/Lotus/Levels/ClanDojo/ComponentPropRecipes/NpcPlaceables/OstronMaleStandingTwo",
+  "/Lotus/Levels/ClanDojo/ComponentPropRecipes/NpcPlaceables/SolarisForeman",
+  "/Lotus/Levels/ClanDojo/ComponentPropRecipes/NpcPlaceables/SolarisHazard",
+  "/Lotus/Levels/ClanDojo/ComponentPropRecipes/NpcPlaceables/SolarisStrikerOne",
+  "/Lotus/Levels/ClanDojo/ComponentPropRecipes/NpcPlaceables/SolarisStrikerThree"
 ]

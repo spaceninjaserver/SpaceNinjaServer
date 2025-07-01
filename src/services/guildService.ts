@@ -550,6 +550,19 @@ export const processFundedGuildTechProject = (
         guild.XP += recipe.guildXpValue;
     }
     setGuildTechLogState(guild, techProject.ItemType, config.noDojoResearchTime ? 4 : 3, techProject.CompletionDate);
+    if (config.noDojoResearchTime) {
+        processCompletedGuildTechProject(guild, techProject.ItemType);
+    }
+};
+
+export const processCompletedGuildTechProject = (guild: TGuildDatabaseDocument, type: string): void => {
+    if (type.startsWith("/Lotus/Levels/ClanDojo/ComponentPropRecipes/NpcPlaceables/")) {
+        guild.VaultDecoRecipes ??= [];
+        guild.VaultDecoRecipes.push({
+            ItemType: type,
+            ItemCount: 1
+        });
+    }
 };
 
 export const setGuildTechLogState = (

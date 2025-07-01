@@ -64,8 +64,12 @@ export const handleSetShipDecorations = async (
         throw new Error(`unknown room: ${placedDecoration.Room}`);
     }
 
-    const [itemType, meta] = Object.entries(ExportResources).find(arr => arr[1].deco == placedDecoration.Type)!;
-    if (!itemType || meta.capacityCost === undefined) {
+    const entry = Object.entries(ExportResources).find(arr => arr[1].deco == placedDecoration.Type);
+    if (!entry) {
+        throw new Error(`unknown deco type: ${placedDecoration.Type}`);
+    }
+    const [itemType, meta] = entry;
+    if (meta.capacityCost === undefined) {
         throw new Error(`unknown deco type: ${placedDecoration.Type}`);
     }
 

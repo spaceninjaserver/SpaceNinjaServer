@@ -5,6 +5,7 @@ import {
     getGuildVault,
     hasAccessToDojo,
     hasGuildPermission,
+    processCompletedGuildTechProject,
     processFundedGuildTechProject,
     processGuildTechProjectContributionsUpdate,
     removePigmentsFromGuildMembers,
@@ -51,8 +52,12 @@ export const guildTechController: RequestHandler = async (req, res) => {
                 };
                 if (project.CompletionDate) {
                     techProject.CompletionDate = toMongoDate(project.CompletionDate);
-                    if (Date.now() >= project.CompletionDate.getTime()) {
-                        needSave ||= setGuildTechLogState(guild, project.ItemType, 4, project.CompletionDate);
+                    if (
+                        Date.now() >= project.CompletionDate.getTime() &&
+                        setGuildTechLogState(guild, project.ItemType, 4, project.CompletionDate)
+                    ) {
+                        processCompletedGuildTechProject(guild, project.ItemType);
+                        needSave = true;
                     }
                 }
                 techProjects.push(techProject);

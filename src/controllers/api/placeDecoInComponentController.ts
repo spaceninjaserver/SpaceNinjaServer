@@ -57,8 +57,12 @@ export const placeDecoInComponentController: RequestHandler = async (req, res) =
                 component.DecoCapacity -= meta.capacityCost;
             }
         } else {
-            const [itemType, meta] = Object.entries(ExportResources).find(arr => arr[1].deco == deco.Type)!;
-            if (!itemType || meta.dojoCapacityCost === undefined) {
+            const entry = Object.entries(ExportResources).find(arr => arr[1].deco == deco.Type);
+            if (!entry) {
+                throw new Error(`unknown deco type: ${deco.Type}`);
+            }
+            const [itemType, meta] = entry;
+            if (meta.dojoCapacityCost === undefined) {
                 throw new Error(`unknown deco type: ${deco.Type}`);
             }
             component.DecoCapacity -= meta.dojoCapacityCost;
@@ -75,7 +79,13 @@ export const placeDecoInComponentController: RequestHandler = async (req, res) =
                 if (meta) {
                     processDojoBuildMaterialsGathered(guild, meta);
                 }
-            } else if (guild.AutoContributeFromVault && guild.VaultRegularCredits && guild.VaultMiscItems) {
+            } else if (
+                deco.Type.startsWith("/Lotus/Objects/Tenno/Dojo/NpcPlaceables/") ||
+                (guild.AutoContributeFromVault && guild.VaultRegularCredits && guild.VaultMiscItems)
+            ) {
+                if (!guild.VaultRegularCredits || !guild.VaultMiscItems) {
+                    throw new Error(`dojo visitor placed without anything in vault?!`);
+                }
                 if (guild.VaultRegularCredits >= scaleRequiredCount(guild.Tier, meta.price)) {
                     let enoughMiscItems = true;
                     for (const ingredient of meta.ingredients) {
