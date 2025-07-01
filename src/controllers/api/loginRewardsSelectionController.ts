@@ -35,10 +35,8 @@ export const loginRewardsSelectionController: RequestHandler = async (req, res) 
         chosenReward = randomRewards.find(x => x.StoreItemType == body.ChosenReward)!;
         inventoryChanges = await claimLoginReward(inventory, chosenReward);
     }
-    await inventory.save();
-
     setAccountGotLoginRewardToday(account);
-    await account.save();
+    await Promise.all([inventory.save(), account.save()]);
 
     sendWsBroadcastTo(account._id.toString(), { update_inventory: true });
     res.json({
