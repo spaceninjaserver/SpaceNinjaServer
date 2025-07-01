@@ -2,8 +2,8 @@
 dict = {
     general_inventoryUpdateNote: `注意：要在游戏中查看更改，您需要重新同步库存，例如使用引导程序的 /sync 命令、访问道场 / 中继站或重新登录`,
     general_addButton: `添加`,
-    general_setButton: `[UNTRANSLATED] Set`,
-    general_removeButton: `[UNTRANSLATED] Remove`,
+    general_setButton: `设置`,
+    general_removeButton: `移除`,
     general_bulkActions: `批量操作`,
 
     code_loginFail: `登录失败。请检查邮箱和密码。`,
@@ -120,7 +120,7 @@ dict = {
     detailedView_archonShardsDescription: `您可以使用这些无限插槽应用各种强化效果`,
     detailedView_archonShardsDescription2: `请注意, 在加载时, 每个执政官源力石都需要一定的时间来生效。`,
     detailedView_valenceBonusLabel: `效价加成`,
-    detailedView_valenceBonusDescription: `[UNTRANSLATED] You can set or remove the Valence Bonus from your weapon.`,
+    detailedView_valenceBonusDescription: `您可以设置或移除武器上的效价加成。`,
 
     mods_addRiven: `添加裂罅MOD`,
     mods_fingerprint: `印记`,
@@ -136,17 +136,17 @@ dict = {
     cheats_skipAllDialogue: `跳过所有对话`,
     cheats_unlockAllScans: `解锁所有扫描`,
     cheats_unlockAllMissions: `解锁所有任务`,
-    cheats_unlockAllMissions_ok: `[UNTRANSLATED] Success. Please note that you'll need to enter a dojo/relay or relog for the client to refresh the star chart.`,
+    cheats_unlockAllMissions_ok: `操作成功。请注意，您需要进入道场 / 中继站或重新登录客户端以刷新星图数据。`,
     cheats_infiniteCredits: `无限现金`,
     cheats_infinitePlatinum: `无限白金`,
     cheats_infiniteEndo: `无限内融核心`,
     cheats_infiniteRegalAya: `无限御品阿耶`,
     cheats_infiniteHelminthMaterials: `无限Helminth材料`,
     cheats_claimingBlueprintRefundsIngredients: `取消蓝图制造时返还材料`,
-    cheats_dontSubtractPurchaseCreditCost: `不减少现金花费`,
-    cheats_dontSubtractPurchasePlatinumCost: `不减少白金花费`,
-    cheats_dontSubtractPurchaseItemCost: `不减少物品花费`,
-    cheats_dontSubtractPurchaseStandingCost: `不减少声望花费`,
+    cheats_dontSubtractPurchaseCreditCost: `购物时不减少现金花费`,
+    cheats_dontSubtractPurchasePlatinumCost: `购物时不减少白金花费`,
+    cheats_dontSubtractPurchaseItemCost: `购物时不减少物品花费`,
+    cheats_dontSubtractPurchaseStandingCost: `购物时不减少声望花费`,
     cheats_dontSubtractVoidTraces: `虚空光体无消耗`,
     cheats_dontSubtractConsumables: `消耗物品使用时无损耗`,
     cheats_unlockAllShipFeatures: `解锁所有飞船功能`,
@@ -185,7 +185,7 @@ dict = {
     cheats_unlockAllSimarisResearchEntries: `解锁所有Simaris研究条目`,
     cheats_disableDailyTribute: `禁用每日登录奖励`,
     cheats_spoofMasteryRank: `伪造精通段位(-1为禁用)`,
-    cheats_relicRewardItemCountMultiplier: `[UNTRANSLATED] Relic Reward Item Count Multiplier`,
+    cheats_relicRewardItemCountMultiplier: `虚空遗物奖励物品数量倍率`,
     cheats_nightwaveStandingMultiplier: `午夜电波声望倍率`,
     cheats_save: `保存`,
     cheats_account: `账户`,
@@ -307,8 +307,8 @@ dict = {
     damageType_Poison: `毒素`,
     damageType_Radiation: `辐射`,
 
-    theme_dark: `[UNTRANSLATED] Dark Theme`,
-    theme_light: `[UNTRANSLATED] Light Theme`,
+    theme_dark: `暗色主题`,
+    theme_light: `亮色主题`,
 
     prettier_sucks_ass: ``
 };
