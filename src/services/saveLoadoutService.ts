@@ -167,8 +167,13 @@ export const handleInventoryItemConfigChange = async (
                 inventory.LotusCustomization = equipmentChanges.LotusCustomization;
                 break;
             }
+            case "ValidNewLoadoutId": {
+                logger.debug(`ignoring ValidNewLoadoutId (${equipmentChanges.ValidNewLoadoutId})`);
+                // seems always equal to the id of loadout config NORMAL[0], likely has no purpose and we're free to ignore it
+                break;
+            }
             default: {
-                if (equipmentKeys.includes(equipmentName as TEquipmentKey) && equipmentName != "ValidNewLoadoutId") {
+                if (equipmentKeys.includes(equipmentName as TEquipmentKey)) {
                     logger.debug(`general Item config saved of type ${equipmentName}`, {
                         config: equipment
                     });
@@ -216,7 +221,7 @@ export const handleInventoryItemConfigChange = async (
                     }
                     break;
                 } else {
-                    logger.warn(`loadout category not implemented, changes may be lost: ${equipmentName}`, {
+                    logger.error(`loadout category not implemented, changes will be lost: ${equipmentName}`, {
                         config: equipment
                     });
                 }
