@@ -64,6 +64,9 @@ export interface IConfig {
     noDojoResearchTime?: boolean;
     fastClanAscension?: boolean;
     missionsCanGiveAllRelics?: boolean;
+    exceptionalRelicsAlwaysGiveBronzeReward?: boolean;
+    flawlessRelicsAlwaysGiveSilverReward?: boolean;
+    radiantRelicsAlwaysGiveGoldReward?: boolean;
     unlockAllSimarisResearchEntries?: boolean;
     disableDailyTribute?: boolean;
     spoofMasteryRank?: number;
