@@ -13,6 +13,7 @@ import { getRecipeByResult } from "@/src/services/itemDataService";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { addInfestedFoundryXP, applyCheatsToInfestedFoundry } from "@/src/services/infestedFoundryService";
 import { config } from "@/src/services/configService";
+import { sendWsBroadcastTo } from "@/src/services/webService";
 
 export const upgradesController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -120,6 +121,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
                     setSlotPolarity(item, operation.PolarizeSlot, operation.PolarizeValue);
                     item.Polarized ??= 0;
                     item.Polarized += 1;
+                    sendWsBroadcastTo(accountId, { update_inventory: true }); // webui may need to to re-add "max rank" button
                     break;
                 }
                 case "/Lotus/Types/Items/MiscItems/ModSlotUnlocker": {
