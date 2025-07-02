@@ -285,7 +285,7 @@ dict = {
     upgrade_OnExecutionAmmo: `100% de rechargement des armes primaires et secondaires sur une une miséricorde`,
     upgrade_OnExecutionHealthDrop: `100% de chance de drop une orbe de santé sur une miséricorde`,
     upgrade_OnExecutionEnergyDrop: `50% de chance de drop une orbe d'énergie sur une miséricorde`,
-    upgrade_OnFailHackReset: `[UNTRANSLATED] +50% to retry on Hacking failure`,
+    upgrade_OnFailHackReset: `[UNTRANSLATED] +50% Hacking Retry Chance`,
     upgrade_DamageReductionOnHack: `75% de réduction de dégâts pendant un piratage`,
     upgrade_OnExecutionReviveCompanion: `Les miséricordes réduisent le temps de récupération du compagnon de 15s`,
     upgrade_OnExecutionParkourSpeed: `+60% de vitesse de parkour pendant 15s après une miséricorde`,
