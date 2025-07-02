@@ -127,6 +127,7 @@ dict = {
     mods_fingerprintHelp: `Нужна помощь с отпечатком?`,
     mods_rivens: `Моды Разлома`,
     mods_mods: `Моды`,
+    mods_addMax: `[UNTRANSLATED] Add Maxed`,
     mods_addMissingUnrankedMods: `Добавить недостающие моды без ранга`,
     mods_removeUnranked: `Удалить моды без ранга`,
     mods_addMissingMaxRankMods: `Добавить недостающие моды максимального ранга`,

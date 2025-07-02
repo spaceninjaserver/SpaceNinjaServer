@@ -127,6 +127,7 @@ dict = {
     mods_fingerprintHelp: `¿Necesitas ayuda con la huella digital?`,
     mods_rivens: `Agrietados`,
     mods_mods: `Mods`,
+    mods_addMax: `[UNTRANSLATED] Add Maxed`,
     mods_addMissingUnrankedMods: `Agregar mods sin rango faltantes`,
     mods_removeUnranked: `Quitar mods sin rango`,
     mods_addMissingMaxRankMods: `Agregar mods de rango máximo faltantes`,

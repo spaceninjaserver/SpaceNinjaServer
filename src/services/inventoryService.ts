@@ -483,6 +483,16 @@ export const addItem = async (
         return addCustomization(inventory, typeName);
     }
     if (typeName in ExportUpgrades || typeName in ExportArcanes) {
+        if (targetFingerprint) {
+            if (quantity != 1) {
+                logger.warn(`adding 1 of ${typeName} ${targetFingerprint} even tho quantity ${quantity} was requested`);
+            }
+            inventory.Upgrades.push({
+                ItemType: typeName,
+                UpgradeFingerprint: targetFingerprint
+            });
+            return {}; // there's not exactly a common "InventoryChanges" format for these
+        }
         const changes = [
             {
                 ItemType: typeName,

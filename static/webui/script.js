@@ -1873,6 +1873,8 @@ function setFingerprint(ItemType, ItemId, fingerprint) {
 }
 
 function doAcquireMod() {
+    const maxed = !!window.maxed;
+    window.maxed = false;
     const uniqueName = getKey(document.getElementById("mod-to-acquire"));
     if (!uniqueName) {
         $("#mod-to-acquire").addClass("is-invalid").focus();
@@ -1880,14 +1882,15 @@ function doAcquireMod() {
     }
     const count = parseInt($("#mod-count").val());
     if (count != 0) {
-        revalidateAuthz().then(() => {
+        Promise.all([window.itemListPromise, revalidateAuthz()]).then(([itemList]) => {
             $.post({
                 url: "/custom/addItems?" + window.authz,
                 contentType: "application/json",
                 data: JSON.stringify([
                     {
                         ItemType: uniqueName,
-                        ItemCount: count
+                        ItemCount: count,
+                        Fingerprint: maxed ? JSON.stringify({ lvl: itemList[uniqueName].fusionLimit ?? 5 }) : undefined
                     }
                 ])
             }).done(function () {
@@ -1900,6 +1903,11 @@ function doAcquireMod() {
             });
         });
     }
+}
+
+function doAcquireModMax() {
+    const uniqueName = getKey(document.getElementById("mod-to-acquire"));
+    alert("doAcquireModMax: " + uniqueName);
 }
 
 const uiConfigs = [...$(".config-form input[id], .config-form select[id]")].map(x => x.id);

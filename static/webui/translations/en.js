@@ -126,6 +126,7 @@ dict = {
     mods_fingerprintHelp: `Need help with the fingerprint?`,
     mods_rivens: `Rivens`,
     mods_mods: `Mods`,
+    mods_addMax: `Add Maxed`,
     mods_addMissingUnrankedMods: `Add Missing Unranked Mods`,
     mods_removeUnranked: `Remove Unranked Mods`,
     mods_addMissingMaxRankMods: `Add Missing Max Rank Mods`,
