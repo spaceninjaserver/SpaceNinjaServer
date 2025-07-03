@@ -127,7 +127,7 @@ dict = {
     mods_fingerprintHelp: `需要印记相关的帮助？`,
     mods_rivens: `裂罅MOD`,
     mods_mods: `Mods`,
-    mods_addMax: `设为满级`,
+    mods_addMax: `添加（满级）`,
     mods_addMissingUnrankedMods: `添加所有缺失的Mods`,
     mods_removeUnranked: `删除所有未升级的Mods`,
     mods_addMissingMaxRankMods: `添加所有缺失的满级Mods`,
