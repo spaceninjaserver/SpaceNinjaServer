@@ -1266,8 +1266,8 @@ export const addStanding = (
     const max = getMaxStanding(syndicateMeta, syndicate.Title ?? 0);
     if (syndicate.Standing + gainedStanding > max) gainedStanding = max - syndicate.Standing;
 
-    if (syndicate.Title == -2 && syndicate.Standing + gainedStanding < -71000) {
-        gainedStanding = -71000 + syndicate.Standing;
+    if (syndicate.Standing + gainedStanding < -71000) {
+        gainedStanding = -71000 - syndicate.Standing;
     }
 
     if (!isMedallion || syndicateMeta.medallionsCappedByDailyLimit) {
