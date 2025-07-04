@@ -1,7 +1,6 @@
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getInventory, updateCurrency } from "@/src/services/inventoryService";
+import { getInventory, updateCurrency, updateSlots } from "@/src/services/inventoryService";
 import { RequestHandler } from "express";
-import { updateSlots } from "@/src/services/inventoryService";
 import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
 import { logger } from "@/src/utils/logger";
 
