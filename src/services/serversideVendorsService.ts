@@ -299,9 +299,12 @@ const generateVendorManifest = (
                 ? numUncountedOffers + numCountedOffers
                 : manifest.numItems
                   ? numUncountedOffers +
-                    (useRng
-                        ? rng.randomInt(manifest.numItems.minValue, manifest.numItems.maxValue)
-                        : manifest.numItems.minValue)
+                    Math.min(
+                        Object.values(remainingItemCapacity).reduce((a, b) => a + b, 0),
+                        useRng
+                            ? rng.randomInt(manifest.numItems.minValue, manifest.numItems.maxValue)
+                            : manifest.numItems.minValue
+                    )
                   : manifest.items.length;
             let i = 0;
             const rollableOffers = manifest.items.filter(x => x.probability !== undefined) as (Omit<
@@ -494,5 +497,14 @@ if (args.dev) {
         // The remaining offers should be computed by weighted RNG.
     ) {
         logger.warn(`self test failed for /Lotus/Types/Game/VendorManifests/Ostron/MaskSalesmanManifest`);
+    }
+
+    // strange case where numItems is 5 even tho only 3 offers can possibly be generated
+    const loid = getVendorManifestByTypeName(
+        "/Lotus/Types/Game/VendorManifests/EntratiLabs/EntratiLabsCommisionsManifest",
+        false
+    )!.VendorInfo.ItemManifest;
+    if (loid.length != 3) {
+        logger.warn(`self test failed for /Lotus/Types/Game/VendorManifests/EntratiLabs/EntratiLabsCommisionsManifest`);
     }
 }
