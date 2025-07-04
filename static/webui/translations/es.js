@@ -246,6 +246,8 @@ dict = {
     worldState_allAtOnceSteelPath: `Todo a la vez, Camino de Acero`,
     worldState_theCircuitOverride: `Cambio del Circuito`,
     worldState_darvoStockMultiplier: `Multiplicador de stock de Darvo`,
+    worldState_varziaFullyStocked: `[UNTRANSLATED] Varzia Fully Stocked`,
+    worldState_varziaOverride: `[UNTRANSLATED] Varzia Rotation Override`,
 
     import_importNote: `Puedes proporcionar una respuesta de inventario completa o parcial (representación del cliente) aquí. Todos los campos compatibles con el importador <b>serán sobrescritos</b> en tu cuenta.`,
     import_submit: `Enviar`,

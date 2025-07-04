@@ -89,6 +89,8 @@ export interface IConfig {
         allTheFissures?: string;
         circuitGameModes?: string[];
         darvoStockMultiplier?: number;
+        varziaOverride?: string;
+        varziaFullyStocked?: boolean;
     };
     dev?: {
         keepVendorsExpired?: boolean;

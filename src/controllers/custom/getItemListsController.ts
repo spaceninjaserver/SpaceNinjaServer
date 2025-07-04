@@ -21,6 +21,7 @@ import {
     TRelicQuality
 } from "warframe-public-export-plus";
 import allIncarnons from "@/static/fixed_responses/allIncarnonList.json";
+import varzia from "@/static/fixed_responses/worldState/varzia.json";
 
 interface ListedItem {
     uniqueName: string;
@@ -55,6 +56,7 @@ interface ItemLists {
     EvolutionProgress: ListedItem[];
     mods: ListedItem[];
     Boosters: ListedItem[];
+    VarziaOffers: ListedItem[];
     //circuitGameModes: ListedItem[];
 }
 
@@ -91,7 +93,8 @@ const getItemListsController: RequestHandler = (req, response) => {
         KubrowPets: [],
         EvolutionProgress: [],
         mods: [],
-        Boosters: []
+        Boosters: [],
+        VarziaOffers: []
         /*circuitGameModes: [
             {
                 uniqueName: "Survival",
@@ -335,6 +338,13 @@ const getItemListsController: RequestHandler = (req, response) => {
         res.Boosters.push({
             uniqueName: item.typeName,
             name: getString(item.name, lang)
+        });
+    }
+
+    for (const item of Object.values(varzia.primeDualPacks)) {
+        res.VarziaOffers.push({
+            uniqueName: item.ItemType,
+            name: getString(getItemName(item.ItemType) || "", lang)
         });
     }
 

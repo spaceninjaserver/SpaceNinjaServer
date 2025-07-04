@@ -14,6 +14,7 @@ export interface IWorldState {
     GlobalUpgrades: IGlobalUpgrade[];
     NodeOverrides: INodeOverride[];
     VoidTraders: IVoidTrader[];
+    PrimeVaultTraders: IPrimeVaultTrader[];
     VoidStorms: IVoidStorm[];
     DailyDeals: IDailyDeal[];
     PVPChallengeInstances: IPVPChallengeInstance[];
@@ -169,6 +170,31 @@ export interface IVoidStorm {
     Activation: IMongoDate;
     Expiry: IMongoDate;
     ActiveMissionTier: string;
+}
+
+export interface IPrimeVaultTrader {
+    _id: IOid;
+    Activation: IMongoDate;
+    Expiry: IMongoDate;
+    InitialStartDate?: IMongoDate;
+    Node: string;
+    Manifest: IPrimeVaultTraderOffer[];
+    EvergreenManifest: IPrimeVaultTraderOffer[];
+    ScheduleInfo: IScheduleInfo[];
+}
+
+export interface IPrimeVaultTraderOffer {
+    ItemType: string;
+    PrimePrice?: number;
+    RegularPrice?: number;
+    StartDate?: IMongoDate;
+    EndDate?: IMongoDate;
+}
+
+export interface IScheduleInfo {
+    Expiry: IMongoDate;
+    PreviewHiddenUntil?: IMongoDate;
+    FeaturedItem?: string;
 }
 
 export interface IDailyDeal {

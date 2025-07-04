@@ -1,5 +1,6 @@
 import staticWorldState from "@/static/fixed_responses/worldState/worldState.json";
 import baro from "@/static/fixed_responses/worldState/baro.json";
+import varzia from "@/static/fixed_responses/worldState/varzia.json";
 import fissureMissions from "@/static/fixed_responses/worldState/fissureMissions.json";
 import sortieTilesets from "@/static/fixed_responses/worldState/sortieTilesets.json";
 import sortieTilesetMissions from "@/static/fixed_responses/worldState/sortieTilesetMissions.json";
@@ -15,6 +16,8 @@ import {
     ICalendarEvent,
     ICalendarSeason,
     ILiteSortie,
+    IPrimeVaultTrader,
+    IPrimeVaultTraderOffer,
     ISeasonChallenge,
     ISortie,
     ISortieMission,
@@ -1101,6 +1104,80 @@ const doesTimeSatsifyConstraints = (timeSecs: number): boolean => {
     return true;
 };
 
+const getVarziaRotation = (week: number): string => {
+    const seed = new SRng(week).randomInt(0, 100_000);
+    const rng = new SRng(seed);
+    return rng.randomElement(varzia.primeDualPacks)!.ItemType;
+};
+
+const getVarziaManifest = (dualPack: string): IPrimeVaultTraderOffer[] => {
+    const rotrationManifest = varzia.primeDualPacks.find(pack => pack.ItemType === dualPack);
+    if (!rotrationManifest) return [];
+
+    const mainPack = [{ ItemType: rotrationManifest.ItemType, PrimePrice: 10 }];
+    const singlePacks: IPrimeVaultTraderOffer[] = [];
+    const items: IPrimeVaultTraderOffer[] = [];
+    const bobbleHeads: IPrimeVaultTraderOffer[] = [];
+
+    for (const singlePackType of rotrationManifest.SinglePacks) {
+        singlePacks.push({ ItemType: singlePackType, PrimePrice: 6 });
+
+        const sp = varzia.primeSinglePacks.find(pack => pack.ItemType === singlePackType);
+        if (sp) {
+            items.push(...sp.Items);
+            sp.BobbleHeads.forEach(bobbleHead => {
+                bobbleHeads.push({ ItemType: bobbleHead, PrimePrice: 1 });
+            });
+        }
+    }
+
+    const relics = rotrationManifest.Relics.map(relic => ({ ItemType: relic, RegularPrice: 1 }));
+
+    return [singlePacks[0], ...mainPack, singlePacks[1], ...items, ...bobbleHeads, ...relics];
+};
+
+const getAllVarziaManifests = (): IPrimeVaultTraderOffer[] => {
+    const dualPacks: IPrimeVaultTraderOffer[] = [];
+    const singlePacks: IPrimeVaultTraderOffer[] = [];
+    const items: IPrimeVaultTraderOffer[] = [];
+    const bobbleHeads: IPrimeVaultTraderOffer[] = [];
+    const relics: IPrimeVaultTraderOffer[] = [];
+
+    const singlePackSet = new Set<string>();
+    const itemsSet = new Set<string>();
+    const bobbleHeadsSet = new Set<string>();
+
+    varzia.primeDualPacks.forEach(dualPack => {
+        dualPacks.push({ ItemType: dualPack.ItemType, PrimePrice: 10 });
+
+        dualPack.SinglePacks.forEach(singlePackType => {
+            if (!singlePackSet.has(singlePackType)) {
+                singlePackSet.add(singlePackType);
+                singlePacks.push({ ItemType: singlePackType, PrimePrice: 6 });
+            }
+
+            const sp = varzia.primeSinglePacks.find(pack => pack.ItemType === singlePackType)!;
+            sp.Items.forEach(item => {
+                if (!itemsSet.has(item.ItemType)) {
+                    itemsSet.add(item.ItemType);
+                    items.push(item);
+                }
+            });
+
+            sp.BobbleHeads.forEach(bobbleHead => {
+                if (!bobbleHeadsSet.has(bobbleHead)) {
+                    bobbleHeadsSet.add(bobbleHead);
+                    bobbleHeads.push({ ItemType: bobbleHead, PrimePrice: 1 });
+                }
+            });
+        });
+
+        relics.push(...dualPack.Relics.map(relic => ({ ItemType: relic, RegularPrice: 1 })));
+    });
+
+    return [...dualPacks, ...singlePacks, ...items, ...bobbleHeads, ...relics];
+};
+
 export const getWorldState = (buildLabel?: string): IWorldState => {
     let timeSecs = Math.round(Date.now() / 1000);
     while (!doesTimeSatsifyConstraints(timeSecs)) {
@@ -1122,6 +1199,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         ActiveMissions: [],
         GlobalUpgrades: [],
         VoidTraders: [],
+        PrimeVaultTraders: [],
         VoidStorms: [],
         DailyDeals: [],
         EndlessXpChoices: [],
@@ -1390,6 +1468,30 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             for (const item of baro.evergreen) {
                 vt.Manifest.push(item);
             }
+        }
+    }
+
+    // Varzia
+    {
+        const pt: IPrimeVaultTrader = {
+            _id: { $oid: ((weekStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "c36af423770eaa97" },
+            Activation: { $date: { $numberLong: weekStart.toString() } },
+            Expiry: { $date: { $numberLong: weekEnd.toString() } },
+            Node: "TradeHUB1",
+            Manifest: [],
+            EvergreenManifest: varzia.evergreen,
+            ScheduleInfo: []
+        };
+        worldState.PrimeVaultTraders.push(pt);
+        const rotation = config.worldState?.varziaOverride || getVarziaRotation(week);
+        pt.Manifest = config.worldState?.varziaFullyStocked ? getAllVarziaManifests() : getVarziaManifest(rotation);
+        if (config.worldState?.varziaOverride || config.worldState?.varziaFullyStocked) {
+            pt.Expiry = { $date: { $numberLong: "2000000000000" } };
+        } else {
+            pt.ScheduleInfo.push({
+                Expiry: { $date: { $numberLong: (weekEnd + unixTimesInMs.week).toString() } },
+                FeaturedItem: getVarziaRotation(week + 1)
+            });
         }
     }
 

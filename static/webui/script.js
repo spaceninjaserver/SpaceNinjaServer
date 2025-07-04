@@ -285,6 +285,7 @@ function fetchItemList() {
             document.getElementById("changeSyndicate").appendChild(syndicateNone);
 
             document.getElementById("valenceBonus-innateDamage").innerHTML = "";
+            document.getElementById("worldState.varziaOverride").innerHTML = "";
 
             // prettier-ignore
             data.archonCrystalUpgrades = {
@@ -420,6 +421,11 @@ function fetchItemList() {
                 name: loc("code_pigment")
             });
 
+            data.VarziaOffers.unshift({
+                uniqueName: "",
+                name: loc("disabled")
+            });
+
             const itemMap = {
                 // Generics for rivens
                 "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun": { name: loc("code_archgun") },
@@ -468,6 +474,13 @@ function fetchItemList() {
                         option.value = uniqueName;
                         option.textContent = name;
                         document.getElementById("valenceBonus-innateDamage").appendChild(option);
+                    });
+                } else if (type == "VarziaOffers") {
+                    items.forEach(item => {
+                        const option = document.createElement("option");
+                        option.value = item.uniqueName;
+                        option.textContent = item.name;
+                        document.getElementById("worldState.varziaOverride").appendChild(option);
                     });
                 } else if (type == "uniqueLevelCaps") {
                     uniqueLevelCaps = items;

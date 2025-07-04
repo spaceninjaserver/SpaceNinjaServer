@@ -864,9 +864,13 @@
                                     <input class="form-check-input" type="checkbox" id="worldState.starDays" />
                                     <label class="form-check-label" for="worldState.starDays" data-loc="worldState_starDays"></label>
                                 </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="worldState.varziaFullyStocked" />
+                                    <label class="form-check-label" for="worldState.varziaFullyStocked" data-loc="worldState_varziaFullyStocked"></label>
+                                </div>
                                 <div class="form-group mt-2">
                                     <label class="form-label" for="worldState.galleonOfGhouls" data-loc="worldState_galleonOfGhouls"></label>
-                                    <select class="form-control" id="worldState.galleonOfGhouls">
+                                    <select class="form-control" id="worldState.galleonOfGhouls" data-default="">
                                         <option value="0" data-loc="disabled"></option>
                                         <option value="1" data-loc="worldState_we1"></option>
                                         <option value="2" data-loc="worldState_we2"></option>
@@ -875,7 +879,7 @@
                                 </div>
                                 <div class="form-group mt-2">
                                     <label class="form-label" for="worldState.eidolonOverride" data-loc="worldState_eidolonOverride"></label>
-                                    <select class="form-control" id="worldState.eidolonOverride">
+                                    <select class="form-control" id="worldState.eidolonOverride" data-default="">
                                         <option value="" data-loc="disabled"></option>
                                         <option value="day" data-loc="worldState_day"></option>
                                         <option value="night" data-loc="worldState_night"></option>
@@ -883,7 +887,7 @@
                                 </div>
                                 <div class="form-group mt-2">
                                     <label class="form-label" for="worldState.vallisOverride" data-loc="worldState_vallisOverride"></label>
-                                    <select class="form-control" id="worldState.vallisOverride">
+                                    <select class="form-control" id="worldState.vallisOverride" data-default="">
                                         <option value="" data-loc="disabled"></option>
                                         <option value="warm" data-loc="worldState_warm"></option>
                                         <option value="cold" data-loc="worldState_cold"></option>
@@ -891,7 +895,7 @@
                                 </div>
                                 <div class="form-group mt-2">
                                     <label class="form-label" for="worldState.duviriOverride" data-loc="worldState_duviriOverride"></label>
-                                    <select class="form-control" id="worldState.duviriOverride">
+                                    <select class="form-control" id="worldState.duviriOverride" data-default="">
                                         <option value="" data-loc="disabled"></option>
                                         <option value="joy" data-loc="worldState_joy"></option>
                                         <option value="anger" data-loc="worldState_anger"></option>
@@ -902,7 +906,7 @@
                                 </div>
                                 <div class="form-group mt-2">
                                     <label class="form-label" for="worldState.nightwaveOverride" data-loc="worldState_nightwaveOverride"></label>
-                                    <select class="form-control" id="worldState.nightwaveOverride">
+                                    <select class="form-control" id="worldState.nightwaveOverride" data-default="">
                                         <option value="" data-loc="disabled"></option>
                                         <option value="RadioLegionIntermission13Syndicate" data-loc="worldState_RadioLegionIntermission13Syndicate"></option>
                                         <option value="RadioLegionIntermission12Syndicate" data-loc="worldState_RadioLegionIntermission12Syndicate"></option>
@@ -924,11 +928,15 @@
                                 </div>
                                 <div class="form-group mt-2">
                                     <label class="form-label" for="worldState.allTheFissures" data-loc="worldState_fissures"></label>
-                                    <select class="form-control" id="worldState.allTheFissures">
+                                    <select class="form-control" id="worldState.allTheFissures" data-default="">
                                         <option value="" data-loc="normal"></option>
                                         <option value="normal" data-loc="worldState_allAtOnceNormal"></option>
                                         <option value="hard" data-loc="worldState_allAtOnceSteelPath"></option>
                                     </select>
+                                </div>
+                                <div class="form-group mt-2">
+                                    <label class="form-label" for="worldState.varziaOverride" data-loc="worldState_varziaOverride"></label>
+                                    <select class="form-control" id="worldState.varziaOverride" data-default=""></select>
                                 </div>
                                 <form class="form-group mt-2" onsubmit="doSaveConfigStringArray('worldState.circuitGameModes'); return false;">
                                     <label class="form-label" for="worldState.circuitGameModes" data-loc="worldState_theCircuitOverride"></label>

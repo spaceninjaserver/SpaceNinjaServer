@@ -78,7 +78,9 @@
     "nightwaveOverride": "",
     "allTheFissures": "",
     "circuitGameModes": null,
-    "darvoStockMultiplier": 1
+    "darvoStockMultiplier": 1,
+    "varziaOverride": "",
+    "varziaFullyStocked": false
   },
   "dev": {
     "keepVendorsExpired": false

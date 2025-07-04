@@ -4,6 +4,7 @@ import { logger } from "../utils/logger";
 import { config, configPath, loadConfig } from "./configService";
 import { getWebPorts, sendWsBroadcast, startWebServer, stopWebServer } from "./webService";
 import { Inbox } from "../models/inboxModel";
+import varzia from "@/static/fixed_responses/worldState/varzia.json";
 
 let amnesia = false;
 chokidar.watch(configPath).on("change", () => {
@@ -55,6 +56,13 @@ export const validateConfig = (): void => {
         config.worldState.galleonOfGhouls != 3
     ) {
         config.worldState.galleonOfGhouls = 0;
+        modified = true;
+    }
+    if (
+        config.worldState?.varziaOverride &&
+        !varzia.primeDualPacks.some(p => p.ItemType === config.worldState?.varziaOverride)
+    ) {
+        config.worldState.varziaOverride = "";
         modified = true;
     }
     if (modified) {

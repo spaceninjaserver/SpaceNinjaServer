@@ -246,6 +246,8 @@ dict = {
     worldState_allAtOnceSteelPath: `[UNTRANSLATED] All At Once, Steel Path`,
     worldState_theCircuitOverride: `[UNTRANSLATED] The Circuit Override`,
     worldState_darvoStockMultiplier: `[UNTRANSLATED] Darvo Stock Multiplier`,
+    worldState_varziaFullyStocked: `[UNTRANSLATED] Varzia Fully Stocked`,
+    worldState_varziaOverride: `[UNTRANSLATED] Varzia Rotation Override`,
 
     import_importNote: `Du kannst hier eine vollständige oder teilweise Inventarantwort (Client-Darstellung) einfügen. Alle Felder, die vom Importer unterstützt werden, <b>werden in deinem Account überschrieben</b>.`,
     import_submit: `Absenden`,
