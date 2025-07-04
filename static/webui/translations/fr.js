@@ -301,7 +301,7 @@ dict = {
     upgrade_OnExecutionDrainPower: `100% pour le prochain pouvoir de gagner +50% de puissance de pouvoir sur miséricorde`,
     upgrade_OnHackSprintSpeed: `+75% de vitesse de course pendant 15s après un piratage`,
     upgrade_SwiftExecute: `[UNTRANSLATED] +50% Mercy Kill Speed`,
-    upgrade_OnHackInvis: `Invisible pendant 15 secondes après un piratage`,
+    upgrade_OnHackInvis: `[UNTRANSLATED] Invisible for 15 seconds after Hacking`,
 
     damageType_Electricity: `Électrique`,
     damageType_Fire: `Feu`,

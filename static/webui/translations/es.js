@@ -301,7 +301,7 @@ dict = {
     upgrade_OnExecutionDrainPower: `100% de probabilidad de que la siguiente habilidad tenga +50% de fuerza tras una ejecución`,
     upgrade_OnHackSprintSpeed: `+75% de velocidad de carrera durante 15s después de hackear`,
     upgrade_SwiftExecute: `[UNTRANSLATED] +50% Mercy Kill Speed`,
-    upgrade_OnHackInvis: `Invisible durante 15 segundos después de hackear`,
+    upgrade_OnHackInvis: `[UNTRANSLATED] Invisible for 15 seconds after Hacking`,
 
     damageType_Electricity: `Eletricidade`,
     damageType_Fire: `Ígneo`,

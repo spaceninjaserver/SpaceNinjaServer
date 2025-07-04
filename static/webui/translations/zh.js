@@ -301,7 +301,7 @@ dict = {
     upgrade_OnExecutionDrainPower: `怜悯之击会使下一个技能有100%的机会获得+50%的技能强度`,
     upgrade_OnHackSprintSpeed: `入侵后+75%冲刺速度，持续15秒`,
     upgrade_SwiftExecute: `[UNTRANSLATED] +50% Mercy Kill Speed`,
-    upgrade_OnHackInvis: `入侵后隐身15秒`,
+    upgrade_OnHackInvis: `[UNTRANSLATED] Invisible for 15 seconds after Hacking`,
 
     damageType_Electricity: `电击`,
     damageType_Fire: `火焰`,
