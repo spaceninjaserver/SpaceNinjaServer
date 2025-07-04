@@ -1,12 +1,15 @@
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { Guild } from "@/src/models/guildModel";
-import { getAccountForRequest } from "@/src/services/loginService";
+import { hasAccessToDojo, hasGuildPermission } from "@/src/services/guildService";
+import { getInventory } from "@/src/services/inventoryService";
+import { getAccountForRequest, getAccountIdForRequest } from "@/src/services/loginService";
+import { GuildPermission } from "@/src/types/guildTypes";
 import { logger } from "@/src/utils/logger";
 import { RequestHandler } from "express";
 
 export const customObstacleCourseLeaderboardController: RequestHandler = async (req, res) => {
     const data = getJSONfromString<ICustomObstacleCourseLeaderboardRequest>(String(req.body));
-    const guild = (await Guild.findById(data.g, "DojoComponents"))!;
+    const guild = (await Guild.findById(data.g, "DojoComponents Ranks"))!;
     const component = guild.DojoComponents.id(data.c)!;
     if (req.query.act == "f") {
         res.json({
@@ -34,6 +37,19 @@ export const customObstacleCourseLeaderboardController: RequestHandler = async (
             entry.r = ++r;
         }
         await guild.save();
+        res.status(200).end();
+    } else if (req.query.act == "c") {
+        // TOVERIFY: What clan permission is actually needed for this?
+        const accountId = await getAccountIdForRequest(req);
+        const inventory = await getInventory(accountId, "GuildId LevelKeys");
+        if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Decorator))) {
+            res.status(400).end();
+            return;
+        }
+
+        component.Leaderboard = undefined;
+        await guild.save();
+
         res.status(200).end();
     } else {
         logger.debug(`data provided to ${req.path}: ${String(req.body)}`);
