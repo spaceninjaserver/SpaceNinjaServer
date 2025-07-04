@@ -4,7 +4,6 @@ import { getInventory, addMiscItems, addEquipment, occupySlot } from "@/src/serv
 import { IMiscItem, TFocusPolarity, TEquipmentKey, InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
 import { logger } from "@/src/utils/logger";
 import { ExportFocusUpgrades } from "warframe-public-export-plus";
-import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 
 export const focusController: RequestHandler = async (req, res) => {
@@ -116,7 +115,7 @@ export const focusController: RequestHandler = async (req, res) => {
             });
             occupySlot(inventory, InventorySlot.AMPS, false);
             await inventory.save();
-            res.json((inventoryChanges.OperatorAmps as IEquipmentClient[])[0]);
+            res.json(inventoryChanges.OperatorAmps![0]);
             break;
         }
         case FocusOperation.UnbindUpgrade: {

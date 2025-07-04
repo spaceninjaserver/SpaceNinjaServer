@@ -1,5 +1,5 @@
 import { IOid } from "@/src/types/commonTypes";
-import { IEquipmentSelection } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { IEquipmentSelection } from "@/src/types/equipmentTypes";
 import { ILoadoutConfigDatabase, ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
 import { Document, Model, Schema, Types, model } from "mongoose";
 

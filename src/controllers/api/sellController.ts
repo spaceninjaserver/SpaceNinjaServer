@@ -15,7 +15,7 @@ import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
 import { ExportDojoRecipes } from "warframe-public-export-plus";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
-import { sendWsBroadcastTo } from "@/src/services/webService";
+import { sendWsBroadcastTo } from "@/src/services/wsService";
 
 export const sellController: RequestHandler = async (req, res) => {
     const payload = JSON.parse(String(req.body)) as ISellRequest;

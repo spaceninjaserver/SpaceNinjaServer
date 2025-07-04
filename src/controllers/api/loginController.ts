@@ -8,7 +8,7 @@ import { createAccount, createNonce, getUsernameFromEmail, isCorrectPassword } f
 import { IDatabaseAccountJson, ILoginRequest, ILoginResponse } from "@/src/types/loginTypes";
 import { logger } from "@/src/utils/logger";
 import { version_compare } from "@/src/helpers/inventoryHelpers";
-import { sendWsBroadcastTo } from "@/src/services/webService";
+import { sendWsBroadcastTo } from "@/src/services/wsService";
 
 export const loginController: RequestHandler = async (request, response) => {
     const loginRequest = JSON.parse(String(request.body)) as ILoginRequest; // parse octet stream of json data to json object

@@ -21,7 +21,8 @@ import {
     updateCurrency
 } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { IFusionTreasure, IMiscItem, ITypeCount } from "@/src/types/inventoryTypes/inventoryTypes";
+import { ITypeCount } from "@/src/types/commonTypes";
+import { IFusionTreasure, IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { RequestHandler } from "express";
 
 export const contributeToVaultController: RequestHandler = async (req, res) => {

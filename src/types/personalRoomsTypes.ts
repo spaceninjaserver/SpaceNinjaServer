@@ -1,4 +1,4 @@
-import { IColor } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { IColor, IShipAttachments, IShipCustomization } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { Document, Model, Types } from "mongoose";
 import { ILoadoutClient } from "./saveLoadoutTypes";
 import { IMongoDate, IOid } from "./commonTypes";
@@ -9,16 +9,6 @@ export interface IGetShipResponse {
     Apartment: IApartmentClient;
     TailorShop: ITailorShop;
     LoadOutInventory: { LoadOutPresets: ILoadoutClient };
-}
-
-export interface IShipAttachments {
-    HOOD_ORNAMENT?: string;
-}
-
-export interface IShipCustomization {
-    SkinFlavourItem?: string;
-    Colors?: IColor;
-    ShipAttachments?: IShipAttachments;
 }
 
 export type TBootLocation = "LISET" | "DRIFTER_CAMP" | "APARTMENT" | "SHOP";

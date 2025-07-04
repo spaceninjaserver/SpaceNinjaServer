@@ -2,7 +2,7 @@ import { RequestHandler } from "express";
 import { config } from "@/src/services/configService";
 import { getAccountForRequest, isAdministrator } from "@/src/services/loginService";
 import { saveConfig } from "@/src/services/configWatcherService";
-import { sendWsBroadcastExcept } from "@/src/services/webService";
+import { sendWsBroadcastExcept } from "@/src/services/wsService";
 
 export const getConfigController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);

@@ -18,6 +18,17 @@ export const getRandomInt = (min: number, max: number): number => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
+export const generateRewardSeed = (): bigint => {
+    const hiDword = getRandomInt(0, 0x7fffffff);
+    const loDword = getRandomInt(0, 0xffffffff);
+    let seed = (BigInt(hiDword) << 32n) | BigInt(loDword);
+    if (Math.random() < 0.5) {
+        seed *= -1n;
+        seed -= 1n;
+    }
+    return seed;
+};
+
 export const getRewardAtPercentage = <T extends { probability: number }>(
     pool: T[],
     percentage: number

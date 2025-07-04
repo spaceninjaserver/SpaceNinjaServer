@@ -1,11 +1,8 @@
 import { ExportRegions, ExportWarframes } from "warframe-public-export-plus";
 import { IInfNode, TNemesisFaction } from "@/src/types/inventoryTypes/inventoryTypes";
-import { getRewardAtPercentage, SRng } from "@/src/services/rngService";
+import { generateRewardSeed, getRewardAtPercentage, SRng } from "@/src/services/rngService";
 import { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel";
-import { logger } from "../utils/logger";
 import { IOid } from "../types/commonTypes";
-import { Types } from "mongoose";
-import { addMods, generateRewardSeed } from "../services/inventoryService";
 import { isArchwingMission } from "../services/worldStateService";
 
 type TInnateDamageTag =
@@ -361,57 +358,6 @@ export const parseUpgrade = (
             ItemId: { $oid: "000000000000000000000000" },
             ItemType: str
         };
-    }
-};
-
-export const consumeModCharge = (
-    response: IKnifeResponse,
-    inventory: TInventoryDatabaseDocument,
-    upgrade: { ItemId: IOid; ItemType: string },
-    dataknifeUpgrades: string[]
-): void => {
-    response.UpgradeIds ??= [];
-    response.UpgradeTypes ??= [];
-    response.UpgradeFingerprints ??= [];
-    response.UpgradeNew ??= [];
-    response.HasKnife = true;
-
-    if (upgrade.ItemId.$oid != "000000000000000000000000") {
-        const dbUpgrade = inventory.Upgrades.id(upgrade.ItemId.$oid)!;
-        const fingerprint = JSON.parse(dbUpgrade.UpgradeFingerprint!) as { lvl: number };
-        fingerprint.lvl += 1;
-        dbUpgrade.UpgradeFingerprint = JSON.stringify(fingerprint);
-
-        response.UpgradeIds.push(upgrade.ItemId.$oid);
-        response.UpgradeTypes.push(upgrade.ItemType);
-        response.UpgradeFingerprints.push(fingerprint);
-        response.UpgradeNew.push(false);
-    } else {
-        const id = new Types.ObjectId();
-        inventory.Upgrades.push({
-            _id: id,
-            ItemType: upgrade.ItemType,
-            UpgradeFingerprint: `{"lvl":1}`
-        });
-
-        addMods(inventory, [
-            {
-                ItemType: upgrade.ItemType,
-                ItemCount: -1
-            }
-        ]);
-
-        const dataknifeRawUpgradeIndex = dataknifeUpgrades.indexOf(upgrade.ItemType);
-        if (dataknifeRawUpgradeIndex != -1) {
-            dataknifeUpgrades[dataknifeRawUpgradeIndex] = id.toString();
-        } else {
-            logger.warn(`${upgrade.ItemType} not found in dataknife config`);
-        }
-
-        response.UpgradeIds.push(id.toString());
-        response.UpgradeTypes.push(upgrade.ItemType);
-        response.UpgradeFingerprints.push({ lvl: 1 });
-        response.UpgradeNew.push(true);
     }
 };
 

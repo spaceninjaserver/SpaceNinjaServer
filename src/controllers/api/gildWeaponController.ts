@@ -3,9 +3,10 @@ import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { addMiscItems, getInventory } from "@/src/services/inventoryService";
 import { TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
-import { ArtifactPolarity, EquipmentFeatures, IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { ArtifactPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { ExportRecipes } from "warframe-public-export-plus";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
+import { EquipmentFeatures, IEquipmentClient } from "@/src/types/equipmentTypes";
 
 interface IGildWeaponRequest {
     ItemName: string;

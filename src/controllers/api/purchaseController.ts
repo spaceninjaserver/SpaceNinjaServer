@@ -3,7 +3,7 @@ import { getAccountIdForRequest } from "@/src/services/loginService";
 import { IPurchaseRequest } from "@/src/types/purchaseTypes";
 import { handlePurchase } from "@/src/services/purchaseService";
 import { getInventory } from "@/src/services/inventoryService";
-import { sendWsBroadcastTo } from "@/src/services/webService";
+import { sendWsBroadcastTo } from "@/src/services/wsService";
 
 export const purchaseController: RequestHandler = async (req, res) => {
     const purchaseRequest = JSON.parse(String(req.body)) as IPurchaseRequest;

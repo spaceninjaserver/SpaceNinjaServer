@@ -1,11 +1,6 @@
 import { RequestHandler } from "express";
 import { IUpgradesRequest } from "@/src/types/requestTypes";
-import {
-    ArtifactPolarity,
-    IEquipmentDatabase,
-    EquipmentFeatures,
-    IAbilityOverride
-} from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { ArtifactPolarity, IAbilityOverride } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { IInventoryClient, IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addMiscItems, addRecipes, getInventory, updateCurrency } from "@/src/services/inventoryService";
@@ -13,7 +8,8 @@ import { getRecipeByResult } from "@/src/services/itemDataService";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { addInfestedFoundryXP, applyCheatsToInfestedFoundry } from "@/src/services/infestedFoundryService";
 import { config } from "@/src/services/configService";
-import { sendWsBroadcastTo } from "@/src/services/webService";
+import { sendWsBroadcastTo } from "@/src/services/wsService";
+import { EquipmentFeatures, IEquipmentDatabase } from "@/src/types/equipmentTypes";
 
 export const upgradesController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

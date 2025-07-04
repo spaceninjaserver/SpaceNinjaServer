@@ -17,12 +17,12 @@ import {
     addKubrowPetPrint
 } from "@/src/services/inventoryService";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
-import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
-import { InventorySlot, IPendingRecipeDatabase, Status } from "@/src/types/inventoryTypes/inventoryTypes";
+import { InventorySlot, IPendingRecipeDatabase } from "@/src/types/inventoryTypes/inventoryTypes";
 import { toOid2 } from "@/src/helpers/inventoryHelpers";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { IRecipe } from "warframe-public-export-plus";
 import { config } from "@/src/services/configService";
+import { IEquipmentClient, Status } from "@/src/types/equipmentTypes";
 
 interface IClaimCompletedRecipeRequest {
     RecipeIds: IOid[];

@@ -15,10 +15,9 @@ import {
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { getDefaultUpgrades } from "@/src/services/itemDataService";
 import { modularWeaponTypes } from "@/src/helpers/modularWeaponHelper";
-import { IEquipmentDatabase } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { getRandomInt } from "@/src/services/rngService";
 import { ExportSentinels, ExportWeapons, IDefaultUpgrade } from "warframe-public-export-plus";
-import { Status } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IEquipmentDatabase, Status } from "@/src/types/equipmentTypes";
 
 interface IModularCraftRequest {
     WeaponType: string;

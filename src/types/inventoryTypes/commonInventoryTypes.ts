@@ -1,14 +1,5 @@
-import { IMongoDate, IOid, IOidWithLegacySupport } from "@/src/types/commonTypes";
+import { IOid } from "@/src/types/commonTypes";
 import { Types } from "mongoose";
-import {
-    ICrewShipCustomization,
-    ICrewShipMembersClient,
-    ICrewShipMembersDatabase,
-    ICrewShipWeapon,
-    IFlavourItem,
-    IKubrowPetDetailsClient,
-    IKubrowPetDetailsDatabase
-} from "@/src/types/inventoryTypes/inventoryTypes";
 
 export interface IPolarity {
     Slot: number;
@@ -79,75 +70,24 @@ export interface IOperatorConfigClient extends Omit<IOperatorConfigDatabase, "_i
     ItemId: IOid;
 }
 
-export interface IEquipmentSelection {
-    ItemId: IOid;
-    mod?: number;
-    cus?: number;
-    ItemType?: string;
-    hide?: boolean;
+export interface ILotusCustomization extends IItemConfig {
+    Persona: string;
 }
 
-export interface IEquipmentClient
-    extends Omit<
-        IEquipmentDatabase,
-        "_id" | "InfestationDate" | "Expiry" | "UpgradesExpiry" | "UmbraDate" | "CrewMembers" | "Details"
-    > {
-    ItemId: IOidWithLegacySupport;
-    InfestationDate?: IMongoDate;
-    Expiry?: IMongoDate;
-    UpgradesExpiry?: IMongoDate;
-    UmbraDate?: IMongoDate;
-    CrewMembers?: ICrewShipMembersClient;
-    Details?: IKubrowPetDetailsClient;
-}
-
-export enum EquipmentFeatures {
-    DOUBLE_CAPACITY = 1,
-    UTILITY_SLOT = 2,
-    GRAVIMAG_INSTALLED = 4,
-    GILDED = 8,
-    ARCANE_SLOT = 32,
-    INCARNON_GENESIS = 512,
-    VALENCE_SWAP = 1024
-}
-
-export interface IEquipmentDatabase {
+export interface IFlavourItem {
     ItemType: string;
-    ItemName?: string;
-    Configs: IItemConfig[];
-    UpgradeVer?: number;
-    XP?: number;
-    Features?: number;
-    Polarized?: number;
-    Polarity?: IPolarity[];
-    FocusLens?: string;
-    ModSlotPurchases?: number;
-    CustomizationSlotPurchases?: number;
-    UpgradeType?: string;
-    UpgradeFingerprint?: string;
-    InfestationDate?: Date;
-    InfestationDays?: number;
-    InfestationType?: string;
-    ModularParts?: string[];
-    UnlockLevel?: number;
-    Expiry?: Date;
-    SkillTree?: string;
-    OffensiveUpgrade?: string;
-    DefensiveUpgrade?: string;
-    UpgradesExpiry?: Date;
-    UmbraDate?: Date; // related to scrapped "echoes of umbra" feature
-    ArchonCrystalUpgrades?: IArchonCrystalUpgrade[];
-    Weapon?: ICrewShipWeapon;
-    Customization?: ICrewShipCustomization;
-    RailjackImage?: IFlavourItem;
-    CrewMembers?: ICrewShipMembersDatabase;
-    Details?: IKubrowPetDetailsDatabase;
-    Favorite?: boolean;
-    IsNew?: boolean;
-    _id: Types.ObjectId;
 }
 
-export interface IArchonCrystalUpgrade {
-    UpgradeType?: string;
-    Color?: string;
+export interface IShipAttachments {
+    HOOD_ORNAMENT?: string;
+}
+
+export interface IShipCustomization {
+    SkinFlavourItem?: string;
+    Colors?: IColor;
+    ShipAttachments?: IShipAttachments;
+}
+
+export interface ICrewShipCustomization {
+    CrewshipInterior: IShipCustomization;
 }

@@ -5,7 +5,7 @@ import { config } from "@/src/services/configService";
 import allDialogue from "@/static/fixed_responses/allDialogue.json";
 import { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
 import { IInventoryClient, IShipInventory, equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
-import { IPolarity, ArtifactPolarity, EquipmentFeatures } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { IPolarity, ArtifactPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { ExportCustoms, ExportFlavour, ExportResources, ExportVirtuals } from "warframe-public-export-plus";
 import { applyCheatsToInfestedFoundry, handleSubsumeCompletion } from "@/src/services/infestedFoundryService";
 import {
@@ -14,7 +14,6 @@ import {
     allDailyAffiliationKeys,
     cleanupInventory,
     createLibraryDailyTask,
-    generateRewardSeed,
     getCalendarProgress
 } from "@/src/services/inventoryService";
 import { logger } from "@/src/utils/logger";
@@ -28,6 +27,8 @@ import { toLegacyOid, toOid, version_compare } from "@/src/helpers/inventoryHelp
 import { Inbox } from "@/src/models/inboxModel";
 import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { DailyDeal } from "@/src/models/worldStateModel";
+import { EquipmentFeatures } from "@/src/types/equipmentTypes";
+import { generateRewardSeed } from "@/src/services/rngService";
 
 export const inventoryController: RequestHandler = async (request, response) => {
     const account = await getAccountForRequest(request);

@@ -1,7 +1,6 @@
 import { version_compare } from "@/src/helpers/inventoryHelpers";
 import {
     antivirusMods,
-    consumeModCharge,
     decodeNemesisGuess,
     encodeNemesisGuess,
     getInfNodes,
@@ -17,12 +16,13 @@ import {
     parseUpgrade
 } from "@/src/helpers/nemesisHelpers";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
+import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
-import { freeUpSlot, getInventory } from "@/src/services/inventoryService";
+import { addMods, freeUpSlot, getInventory } from "@/src/services/inventoryService";
 import { getAccountForRequest } from "@/src/services/loginService";
 import { SRng } from "@/src/services/rngService";
 import { IMongoDate, IOid } from "@/src/types/commonTypes";
-import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { IEquipmentClient } from "@/src/types/equipmentTypes";
 import {
     IInnateDamageFingerprint,
     IInventoryClient,
@@ -36,6 +36,7 @@ import {
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { logger } from "@/src/utils/logger";
 import { RequestHandler } from "express";
+import { Types } from "mongoose";
 
 export const nemesisController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -391,3 +392,54 @@ interface IKnife {
     AttachedUpgrades: IUpgradeClient[];
     HiddenWhenHolstered: boolean;
 }
+
+const consumeModCharge = (
+    response: IKnifeResponse,
+    inventory: TInventoryDatabaseDocument,
+    upgrade: { ItemId: IOid; ItemType: string },
+    dataknifeUpgrades: string[]
+): void => {
+    response.UpgradeIds ??= [];
+    response.UpgradeTypes ??= [];
+    response.UpgradeFingerprints ??= [];
+    response.UpgradeNew ??= [];
+    response.HasKnife = true;
+
+    if (upgrade.ItemId.$oid != "000000000000000000000000") {
+        const dbUpgrade = inventory.Upgrades.id(upgrade.ItemId.$oid)!;
+        const fingerprint = JSON.parse(dbUpgrade.UpgradeFingerprint!) as { lvl: number };
+        fingerprint.lvl += 1;
+        dbUpgrade.UpgradeFingerprint = JSON.stringify(fingerprint);
+
+        response.UpgradeIds.push(upgrade.ItemId.$oid);
+        response.UpgradeTypes.push(upgrade.ItemType);
+        response.UpgradeFingerprints.push(fingerprint);
+        response.UpgradeNew.push(false);
+    } else {
+        const id = new Types.ObjectId();
+        inventory.Upgrades.push({
+            _id: id,
+            ItemType: upgrade.ItemType,
+            UpgradeFingerprint: `{"lvl":1}`
+        });
+
+        addMods(inventory, [
+            {
+                ItemType: upgrade.ItemType,
+                ItemCount: -1
+            }
+        ]);
+
+        const dataknifeRawUpgradeIndex = dataknifeUpgrades.indexOf(upgrade.ItemType);
+        if (dataknifeRawUpgradeIndex != -1) {
+            dataknifeUpgrades[dataknifeRawUpgradeIndex] = id.toString();
+        } else {
+            logger.warn(`${upgrade.ItemType} not found in dataknife config`);
+        }
+
+        response.UpgradeIds.push(id.toString());
+        response.UpgradeTypes.push(upgrade.ItemType);
+        response.UpgradeFingerprints.push({ lvl: 1 });
+        response.UpgradeNew.push(true);
+    }
+};

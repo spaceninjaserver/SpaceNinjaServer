@@ -6,7 +6,7 @@ import {
 } from "@/src/services/loginRewardService";
 import { getAccountForRequest } from "@/src/services/loginService";
 import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
-import { sendWsBroadcastTo } from "@/src/services/webService";
+import { sendWsBroadcastTo } from "@/src/services/wsService";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { logger } from "@/src/utils/logger";
 import { RequestHandler } from "express";

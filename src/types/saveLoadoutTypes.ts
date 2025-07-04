@@ -1,14 +1,13 @@
 import { IOid } from "@/src/types/commonTypes";
-import { IItemConfig, IOperatorConfigClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
-import { Types } from "mongoose";
 import {
     ICrewShipCustomization,
-    ICrewShipMembersClient,
-    ICrewShipWeapon,
     IFlavourItem,
-    ILoadoutConfigClient,
-    ILotusCustomization
-} from "./inventoryTypes/inventoryTypes";
+    IItemConfig,
+    ILotusCustomization,
+    IOperatorConfigClient
+} from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { Types } from "mongoose";
+import { ICrewShipMembersClient, ICrewShipWeapon, IEquipmentSelection } from "./equipmentTypes";
 
 export interface ISaveLoadoutRequest {
     LoadOuts: ILoadoutClient;
@@ -73,7 +72,6 @@ export type IConfigEntry = {
 
 export type ILoadoutClient = Omit<ILoadoutDatabase, "_id" | "loadoutOwnerId">;
 
-// keep in sync with ILoadOutPresets
 export interface ILoadoutDatabase {
     NORMAL: ILoadoutConfigDatabase[];
     SENTINEL: ILoadoutConfigDatabase[];
@@ -90,9 +88,48 @@ export interface ILoadoutDatabase {
     loadoutOwnerId: Types.ObjectId;
 }
 
+export interface ILoadOutPresets {
+    NORMAL: ILoadoutConfigClient[];
+    NORMAL_PVP: ILoadoutConfigClient[];
+    LUNARO: ILoadoutConfigClient[];
+    ARCHWING: ILoadoutConfigClient[];
+    SENTINEL: ILoadoutConfigClient[];
+    OPERATOR: ILoadoutConfigClient[];
+    GEAR: ILoadoutConfigClient[];
+    KDRIVE: ILoadoutConfigClient[];
+    DATAKNIFE: ILoadoutConfigClient[];
+    MECH: ILoadoutConfigClient[];
+    OPERATOR_ADULT: ILoadoutConfigClient[];
+    DRIFTER: ILoadoutConfigClient[];
+}
+
 export interface ILoadoutEntry {
     [key: string]: ILoadoutConfigClient;
 }
+
 export interface ILoadoutConfigDatabase extends Omit<ILoadoutConfigClient, "ItemId"> {
     _id: Types.ObjectId;
+}
+
+export enum FocusSchool {
+    Attack = "AP_ATTACK",
+    Defense = "AP_DEFENSE",
+    Power = "AP_POWER",
+    Tactic = "AP_TACTIC",
+    Ward = "AP_WARD"
+}
+
+export interface ILoadoutConfigClient {
+    FocusSchool?: FocusSchool;
+    PresetIcon?: string;
+    Favorite?: boolean;
+    n?: string; // Loadout name
+    s?: IEquipmentSelection; // Suit
+    p?: IEquipmentSelection; // Secondary weapon
+    l?: IEquipmentSelection; // Primary weapon
+    m?: IEquipmentSelection; // Melee weapon
+    h?: IEquipmentSelection; // Gravimag weapon
+    a?: IEquipmentSelection; // Necromech exalted weapon
+    ItemId: IOid;
+    Remove?: boolean; // when client wants to remove a config, it only includes ItemId & Remove.
 }

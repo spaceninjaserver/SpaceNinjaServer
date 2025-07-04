@@ -26,12 +26,13 @@ import { logger } from "../utils/logger";
 import { config } from "./configService";
 import { getRandomInt } from "./rngService";
 import { Inbox } from "../models/inboxModel";
-import { IFusionTreasure, ITypeCount } from "../types/inventoryTypes/inventoryTypes";
+import { IFusionTreasure } from "../types/inventoryTypes/inventoryTypes";
 import { IInventoryChanges } from "../types/purchaseTypes";
 import { parallelForeach } from "../utils/async-utils";
 import allDecoRecipes from "@/static/fixed_responses/allDecoRecipes.json";
 import { createMessage } from "./inboxService";
 import { addAccountDataToFriendInfo, addInventoryDataToFriendInfo } from "./friendService";
+import { ITypeCount } from "../types/commonTypes";
 
 export const getGuildForRequest = async (req: Request): Promise<TGuildDatabaseDocument> => {
     const accountId = await getAccountIdForRequest(req);

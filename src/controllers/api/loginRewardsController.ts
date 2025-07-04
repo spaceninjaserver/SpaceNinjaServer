@@ -9,7 +9,7 @@ import {
 } from "@/src/services/loginRewardService";
 import { getInventory } from "@/src/services/inventoryService";
 import { config } from "@/src/services/configService";
-import { sendWsBroadcastTo } from "@/src/services/webService";
+import { sendWsBroadcastTo } from "@/src/services/wsService";
 
 export const loginRewardsController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);

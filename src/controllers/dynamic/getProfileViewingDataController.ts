@@ -6,13 +6,11 @@ import { Account } from "@/src/models/loginModel";
 import { Stats, TStatsDatabaseDocument } from "@/src/models/statsModel";
 import { allDailyAffiliationKeys } from "@/src/services/inventoryService";
 import { IMongoDate, IOid } from "@/src/types/commonTypes";
-import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import {
     IAffiliation,
     IAlignment,
     IChallengeProgress,
     IDailyAffiliations,
-    ILoadoutConfigClient,
     IMission,
     IPlayerSkills,
     ITypeXPItem
@@ -23,6 +21,8 @@ import { ExportCustoms, ExportDojoRecipes } from "warframe-public-export-plus";
 import { IStatsClient } from "@/src/types/statTypes";
 import { toStoreItem } from "@/src/services/itemDataService";
 import { FlattenMaps } from "mongoose";
+import { IEquipmentClient } from "@/src/types/equipmentTypes";
+import { ILoadoutConfigClient } from "@/src/types/saveLoadoutTypes";
 
 const getProfileViewingDataByPlayerIdImpl = async (playerId: string): Promise<IProfileViewingData | undefined> => {
     const account = await Account.findById(playerId, "DisplayName");

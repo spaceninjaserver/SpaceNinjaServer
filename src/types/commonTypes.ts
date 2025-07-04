@@ -1,5 +1,3 @@
-import { ITypeCount } from "@/src/types/inventoryTypes/inventoryTypes";
-
 export interface IOid {
     $oid: string;
 }
@@ -13,6 +11,11 @@ export interface IMongoDate {
     $date: {
         $numberLong: string;
     };
+}
+
+export interface ITypeCount {
+    ItemType: string;
+    ItemCount: number;
 }
 
 export interface IReward {

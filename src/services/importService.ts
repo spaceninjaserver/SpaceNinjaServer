@@ -1,7 +1,5 @@
 import { Types } from "mongoose";
 import {
-    IEquipmentClient,
-    IEquipmentDatabase,
     IItemConfig,
     IOperatorConfigClient,
     IOperatorConfigDatabase
@@ -9,10 +7,6 @@ import {
 import { IMongoDate } from "../types/commonTypes";
 import {
     equipmentKeys,
-    ICrewShipMemberClient,
-    ICrewShipMemberDatabase,
-    ICrewShipMembersClient,
-    ICrewShipMembersDatabase,
     IDialogueClient,
     IDialogueDatabase,
     IDialogueHistoryClient,
@@ -20,10 +14,6 @@ import {
     IInfestedFoundryClient,
     IInfestedFoundryDatabase,
     IInventoryClient,
-    IKubrowPetDetailsClient,
-    IKubrowPetDetailsDatabase,
-    ILoadoutConfigClient,
-    ILoadOutPresets,
     INemesisClient,
     INemesisDatabase,
     IPendingRecipeClient,
@@ -37,8 +27,23 @@ import {
     IWeaponSkinDatabase
 } from "../types/inventoryTypes/inventoryTypes";
 import { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel";
-import { ILoadoutConfigDatabase, ILoadoutDatabase } from "../types/saveLoadoutTypes";
+import {
+    ILoadoutConfigClient,
+    ILoadoutConfigDatabase,
+    ILoadoutDatabase,
+    ILoadOutPresets
+} from "../types/saveLoadoutTypes";
 import { slotNames } from "../types/purchaseTypes";
+import {
+    ICrewShipMemberClient,
+    ICrewShipMemberDatabase,
+    ICrewShipMembersClient,
+    ICrewShipMembersDatabase,
+    IEquipmentClient,
+    IEquipmentDatabase,
+    IKubrowPetDetailsClient,
+    IKubrowPetDetailsDatabase
+} from "../types/equipmentTypes";
 
 const convertDate = (value: IMongoDate): Date => {
     return new Date(parseInt(value.$date.$numberLong));

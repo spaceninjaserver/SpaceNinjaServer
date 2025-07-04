@@ -4,12 +4,10 @@ import { Types } from "mongoose";
 import { SlotNames, IInventoryChanges, IBinChanges, slotNames, IAffiliationMods } from "@/src/types/purchaseTypes";
 import {
     IChallengeProgress,
-    IFlavourItem,
     IMiscItem,
     IMission,
     IRawUpgrade,
     ISeasonChallenge,
-    ITypeCount,
     InventorySlot,
     IWeaponSkinClient,
     TEquipmentKey,
@@ -23,9 +21,6 @@ import {
     TPartialStartingGear,
     ILoreFragmentScan,
     ICrewMemberClient,
-    Status,
-    IKubrowPetDetailsDatabase,
-    ITraits,
     ICalendarProgress,
     INemesisWeaponTargetFingerprint,
     INemesisPetTargetFingerprint,
@@ -36,12 +31,7 @@ import { IGenericUpdate, IUpdateNodeIntrosResponse } from "../types/genericUpdat
 import { IKeyChainRequest, IMissionInventoryUpdateRequest } from "../types/requestTypes";
 import { logger } from "@/src/utils/logger";
 import { convertInboxMessage, fromStoreItem, getKeyChainItems } from "@/src/services/itemDataService";
-import {
-    EquipmentFeatures,
-    IEquipmentClient,
-    IEquipmentDatabase,
-    IItemConfig
-} from "../types/inventoryTypes/commonInventoryTypes";
+import { IFlavourItem, IItemConfig } from "../types/inventoryTypes/commonInventoryTypes";
 import {
     ExportArcanes,
     ExportBoosters,
@@ -82,7 +72,7 @@ import {
 import { addQuestKey, completeQuest } from "@/src/services/questService";
 import { handleBundleAcqusition } from "./purchaseService";
 import libraryDailyTasks from "@/static/fixed_responses/libraryDailyTasks.json";
-import { getRandomElement, getRandomInt, getRandomWeightedReward, SRng } from "./rngService";
+import { generateRewardSeed, getRandomElement, getRandomInt, getRandomWeightedReward, SRng } from "./rngService";
 import { createMessage, IMessageCreationTemplate } from "./inboxService";
 import { getMaxStanding, getMinStanding } from "@/src/helpers/syndicateStandingHelper";
 import { getNightwaveSyndicateTag, getWorldState } from "./worldStateService";
@@ -91,6 +81,15 @@ import { generateNemesisProfile, INemesisProfile } from "../helpers/nemesisHelpe
 import { TAccountDocument } from "./loginService";
 import { unixTimesInMs } from "../constants/timeConstants";
 import { addString } from "../helpers/stringHelpers";
+import {
+    EquipmentFeatures,
+    IEquipmentClient,
+    IEquipmentDatabase,
+    IKubrowPetDetailsDatabase,
+    ITraits,
+    Status
+} from "../types/equipmentTypes";
+import { ITypeCount } from "../types/commonTypes";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
@@ -130,17 +129,6 @@ export const createInventory = async (
     } catch (error) {
         throw new Error(`Error creating inventory: ${error instanceof Error ? error.message : "Unknown error type"}`);
     }
-};
-
-export const generateRewardSeed = (): bigint => {
-    const hiDword = getRandomInt(0, 0x7fffffff);
-    const loDword = getRandomInt(0, 0xffffffff);
-    let seed = (BigInt(hiDword) << 32n) | BigInt(loDword);
-    if (Math.random() < 0.5) {
-        seed *= -1n;
-        seed -= 1n;
-    }
-    return seed;
 };
 
 //TODO: RawUpgrades might need to return a LastAdded

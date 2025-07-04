@@ -12,7 +12,7 @@ import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { getRandomInt } from "@/src/services/rngService";
 import { IFingerprintStat } from "@/src/helpers/rivenHelper";
-import { IEquipmentDatabase } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { IEquipmentDatabase } from "@/src/types/equipmentTypes";
 
 export const crewShipIdentifySalvageController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

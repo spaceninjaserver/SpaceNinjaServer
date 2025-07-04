@@ -4,13 +4,14 @@ import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/invento
 import { createMessage } from "@/src/services/inboxService";
 import { addItem, addItems, addKeyChainItems, setupKahlSyndicate } from "@/src/services/inventoryService";
 import { fromStoreItem, getKeyChainMessage, getLevelKeyRewards } from "@/src/services/itemDataService";
-import { IQuestKeyClient, IQuestKeyDatabase, IQuestStage, ITypeCount } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IQuestKeyClient, IQuestKeyDatabase, IQuestStage } from "@/src/types/inventoryTypes/inventoryTypes";
 import { logger } from "@/src/utils/logger";
 import { Types } from "mongoose";
 import { ExportKeys } from "warframe-public-export-plus";
 import { addFixedLevelRewards } from "./missionInventoryUpdateService";
 import { IInventoryChanges } from "../types/purchaseTypes";
 import questCompletionItems from "@/static/fixed_responses/questCompletionRewards.json";
+import { ITypeCount } from "../types/commonTypes";
 
 export interface IUpdateQuestRequest {
     QuestKeys: Omit<IQuestKeyDatabase, "CompletionDate">[];

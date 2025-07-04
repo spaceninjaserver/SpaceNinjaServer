@@ -3,11 +3,12 @@ import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getAccountForRequest } from "@/src/services/loginService";
 import { IMissionInventoryUpdateRequest } from "@/src/types/requestTypes";
 import { addMissionInventoryUpdates, addMissionRewards } from "@/src/services/missionInventoryUpdateService";
-import { generateRewardSeed, getInventory } from "@/src/services/inventoryService";
+import { getInventory } from "@/src/services/inventoryService";
 import { getInventoryResponse } from "./inventoryController";
 import { logger } from "@/src/utils/logger";
 import { IMissionInventoryUpdateResponse } from "@/src/types/missionTypes";
-import { sendWsBroadcastTo } from "@/src/services/webService";
+import { sendWsBroadcastTo } from "@/src/services/wsService";
+import { generateRewardSeed } from "@/src/services/rngService";
 
 /*
 **** INPUT ****

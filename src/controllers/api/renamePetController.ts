@@ -1,7 +1,7 @@
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { sendWsBroadcastTo } from "@/src/services/webService";
+import { sendWsBroadcastTo } from "@/src/services/wsService";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { RequestHandler } from "express";
 

@@ -1,6 +1,5 @@
 import { Schema } from "mongoose";
-import { IColor } from "@/src/types/inventoryTypes/commonInventoryTypes";
-import { IShipCustomization } from "@/src/types/personalRoomsTypes";
+import { IColor, IShipCustomization } from "@/src/types/inventoryTypes/commonInventoryTypes";
 
 export const colorSchema = new Schema<IColor>(
     {

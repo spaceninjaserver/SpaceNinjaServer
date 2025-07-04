@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import { Account } from "@/src/models/loginModel";
-import { sendWsBroadcastTo } from "@/src/services/webService";
+import { sendWsBroadcastTo } from "@/src/services/wsService";
 
 export const logoutController: RequestHandler = async (req, res) => {
     if (!req.query.accountId) {

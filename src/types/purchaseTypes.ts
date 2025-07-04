@@ -1,10 +1,10 @@
-import { IEquipmentClient } from "./inventoryTypes/commonInventoryTypes";
+import { ITypeCount } from "./commonTypes";
+import { IEquipmentClient } from "./equipmentTypes";
 import {
     IDroneClient,
     IInfestedFoundryClient,
     IMiscItem,
     INemesisClient,
-    ITypeCount,
     IRecentVendorPurchaseClient,
     TEquipmentKey,
     ICrewMemberClient,

@@ -1,5 +1,5 @@
 import { args } from "@/src/helpers/commandLineArguments";
-import { sendWsBroadcast } from "@/src/services/webService";
+import { sendWsBroadcast } from "@/src/services/wsService";
 import { RequestHandler } from "express";
 
 export const webuiFileChangeDetectedController: RequestHandler = (req, res) => {

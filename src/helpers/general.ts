@@ -9,11 +9,11 @@ export const isEmptyObject = (obj: object): boolean => {
 };
 */
 
-const isString = (text: unknown): text is string => {
+export const isString = (text: unknown): text is string => {
     return typeof text === "string" || text instanceof String;
 };
 
-const parseString = (data: unknown): string => {
+export const parseString = (data: unknown): string => {
     if (!isString(data)) {
         throw new Error("data is not a string");
     }
@@ -21,11 +21,11 @@ const parseString = (data: unknown): string => {
     return data;
 };
 
-const isNumber = (number: unknown): number is number => {
+export const isNumber = (number: unknown): number is number => {
     return typeof number === "number" && !isNaN(number);
 };
 
-const parseNumber = (data: unknown): number => {
+export const parseNumber = (data: unknown): number => {
     if (!isNumber(data)) {
         throw new Error("data is not a number");
     }
@@ -33,11 +33,11 @@ const parseNumber = (data: unknown): number => {
     return Number(data);
 };
 
-const isDate = (date: string): boolean => {
+export const isDate = (date: string): boolean => {
     return Date.parse(date) != 0;
 };
 
-const parseDateNumber = (date: unknown): string => {
+export const parseDateNumber = (date: unknown): string => {
     if (!isString(date) || !isDate(date)) {
         throw new Error("date could not be parsed");
     }
@@ -45,18 +45,18 @@ const parseDateNumber = (date: unknown): string => {
     return date;
 };
 
-const parseEmail = (email: unknown): string => {
+export const parseEmail = (email: unknown): string => {
     if (!isString(email)) {
         throw new Error("incorrect email");
     }
     return email;
 };
 
-const isBoolean = (booleanCandidate: unknown): booleanCandidate is boolean => {
+export const isBoolean = (booleanCandidate: unknown): booleanCandidate is boolean => {
     return typeof booleanCandidate === "boolean";
 };
 
-const parseBoolean = (booleanCandidate: unknown): boolean => {
+export const parseBoolean = (booleanCandidate: unknown): boolean => {
     if (!isBoolean(booleanCandidate)) {
         throw new Error("argument was not a boolean");
     }
@@ -70,5 +70,3 @@ export const isObject = (objectCandidate: unknown): objectCandidate is Record<st
         !Array.isArray(objectCandidate)
     );
 };
-
-export { isString, isNumber, parseString, parseNumber, parseDateNumber, parseBoolean, parseEmail };

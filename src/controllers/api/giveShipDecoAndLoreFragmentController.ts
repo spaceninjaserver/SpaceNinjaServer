@@ -1,7 +1,8 @@
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { addLoreFragmentScans, addShipDecorations, getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { ILoreFragmentScan, ITypeCount } from "@/src/types/inventoryTypes/inventoryTypes";
+import { ITypeCount } from "@/src/types/commonTypes";
+import { ILoreFragmentScan } from "@/src/types/inventoryTypes/inventoryTypes";
 import { RequestHandler } from "express";
 
 export const giveShipDecoAndLoreFragmentController: RequestHandler = async (req, res) => {

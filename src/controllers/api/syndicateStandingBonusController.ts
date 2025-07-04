@@ -6,7 +6,7 @@ import { IOid } from "@/src/types/commonTypes";
 import { ExportSyndicates, ExportWeapons } from "warframe-public-export-plus";
 import { logger } from "@/src/utils/logger";
 import { IAffiliationMods, IInventoryChanges } from "@/src/types/purchaseTypes";
-import { EquipmentFeatures } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { EquipmentFeatures } from "@/src/types/equipmentTypes";
 
 export const syndicateStandingBonusController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

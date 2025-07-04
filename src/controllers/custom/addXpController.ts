@@ -1,7 +1,7 @@
 import { applyClientEquipmentUpdates, getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { IOid } from "@/src/types/commonTypes";
-import { IEquipmentClient } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { IEquipmentClient } from "@/src/types/equipmentTypes";
 import { TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
 import { RequestHandler } from "express";
 import { ExportMisc } from "warframe-public-export-plus";

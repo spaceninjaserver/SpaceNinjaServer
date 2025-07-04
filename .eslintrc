@@ -1,10 +1,12 @@
 {
+    "plugins": ["@typescript-eslint", "prettier", "import"],
     "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
-        "plugin:@typescript-eslint/recommended-requiring-type-checking"
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "plugin:import/recommended",
+        "plugin:import/typescript"
     ],
-    "plugins": ["@typescript-eslint", "prettier"],
     "env": {
         "browser": true,
         "es6": true,
@@ -26,11 +28,19 @@
         "no-case-declarations": "error",
         "prettier/prettier": "error",
         "no-mixed-spaces-and-tabs": "error",
-        "require-await": "off",
-        "@typescript-eslint/require-await": "error"
+        "@typescript-eslint/require-await": "error",
+        "import/no-named-as-default-member": "off",
+        "import/no-cycle": "warn"
     },
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "project": "./tsconfig.json"
+    },
+    "settings": {
+        "import/extensions": [ ".ts" ],
+        "import/resolver": {
+            "typescript": true,
+            "node": true
+        }
     }
 }

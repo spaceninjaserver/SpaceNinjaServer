@@ -1,8 +1,7 @@
 import { model, Schema, Types } from "mongoose";
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
 import { typeCountSchema } from "@/src/models/inventoryModels/inventoryModel";
-import { IMongoDate, IOid } from "@/src/types/commonTypes";
-import { ITypeCount } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IMongoDate, IOid, ITypeCount } from "@/src/types/commonTypes";
 
 export interface IMessageClient
     extends Omit<IMessageDatabase, "_id" | "date" | "startDate" | "endDate" | "ownerId" | "attVisualOnly" | "expiry"> {

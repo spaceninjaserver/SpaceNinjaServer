@@ -1,6 +1,5 @@
 import { Document, Model, Schema, Types, model } from "mongoose";
 import {
-    IFlavourItem,
     IRawUpgrade,
     IMiscItem,
     IInventoryDatabase,
@@ -10,7 +9,6 @@ import {
     IDuviriInfo,
     IPendingRecipeDatabase,
     IPendingRecipeClient,
-    ITypeCount,
     IFocusXP,
     IFocusUpgrade,
     ITypeXPItem,
@@ -39,24 +37,15 @@ import {
     IEvolutionProgress,
     IEndlessXpProgressDatabase,
     IEndlessXpProgressClient,
-    ICrewShipCustomization,
-    ICrewShipWeapon,
-    ICrewShipWeaponEmplacements,
     IHelminthFoodRecord,
-    ICrewShipMembersDatabase,
     IDialogueHistoryDatabase,
     IDialogueDatabase,
     IDialogueGift,
     ICompletedDialogue,
     IDialogueClient,
     IUpgradeDatabase,
-    ICrewShipMemberDatabase,
-    ICrewShipMemberClient,
     TEquipmentKey,
     equipmentKeys,
-    IKubrowPetDetailsDatabase,
-    ITraits,
-    IKubrowPetDetailsClient,
     IKubrowPetEggDatabase,
     IKubrowPetEggClient,
     ICustomMarkers,
@@ -95,27 +84,39 @@ import {
     IInvasionProgressClient,
     IAccolades,
     IHubNpcCustomization,
-    ILotusCustomization,
     IEndlessXpReward,
     IPersonalGoalProgressDatabase,
     IPersonalGoalProgressClient,
     IKubrowPetPrintClient,
     IKubrowPetPrintDatabase
 } from "../../types/inventoryTypes/inventoryTypes";
-import { IOid } from "../../types/commonTypes";
+import { IOid, ITypeCount } from "../../types/commonTypes";
 import {
     IAbilityOverride,
+    ICrewShipCustomization,
+    IFlavourItem,
     IItemConfig,
+    ILotusCustomization,
     IOperatorConfigDatabase,
-    IPolarity,
-    IEquipmentDatabase,
-    IArchonCrystalUpgrade,
-    IEquipmentClient
+    IPolarity
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
 import { EquipmentSelectionSchema, oidSchema } from "./loadoutModel";
 import { ICountedStoreItem } from "warframe-public-export-plus";
 import { colorSchema, shipCustomizationSchema } from "../commonModel";
+import {
+    IArchonCrystalUpgrade,
+    ICrewShipMemberClient,
+    ICrewShipMemberDatabase,
+    ICrewShipMembersDatabase,
+    ICrewShipWeapon,
+    ICrewShipWeaponEmplacements,
+    IEquipmentClient,
+    IEquipmentDatabase,
+    IKubrowPetDetailsClient,
+    IKubrowPetDetailsDatabase,
+    ITraits
+} from "@/src/types/equipmentTypes";
 
 export const typeCountSchema = new Schema<ITypeCount>({ ItemType: String, ItemCount: Number }, { _id: false });
 
