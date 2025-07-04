@@ -24,7 +24,6 @@ export const artifactsController: RequestHandler = async (req, res) => {
 
     if (itemIndex !== -1) {
         Upgrades[itemIndex].UpgradeFingerprint = stringifiedUpgradeFingerprint;
-        inventory.markModified(`Upgrades.${itemIndex}.UpgradeFingerprint`);
     } else {
         itemIndex =
             Upgrades.push({
