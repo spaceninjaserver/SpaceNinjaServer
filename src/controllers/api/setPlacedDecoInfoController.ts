@@ -1,5 +1,5 @@
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { IPictureFrameInfo, ISetPlacedDecoInfoRequest } from "@/src/types/shipTypes";
+import { IPictureFrameInfo, ISetPlacedDecoInfoRequest } from "@/src/types/personalRoomsTypes";
 import { RequestHandler } from "express";
 import { handleSetPlacedDecoInfo } from "@/src/services/shipCustomizationsService";
 

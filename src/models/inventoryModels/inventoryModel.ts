@@ -42,7 +42,6 @@ import {
     ICrewShipCustomization,
     ICrewShipWeapon,
     ICrewShipWeaponEmplacements,
-    IShipExterior,
     IHelminthFoodRecord,
     ICrewShipMembersDatabase,
     IDialogueHistoryDatabase,
@@ -106,7 +105,6 @@ import {
 import { IOid } from "../../types/commonTypes";
 import {
     IAbilityOverride,
-    IColor,
     IItemConfig,
     IOperatorConfigDatabase,
     IPolarity,
@@ -117,6 +115,7 @@ import {
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
 import { EquipmentSelectionSchema, oidSchema } from "./loadoutModel";
 import { ICountedStoreItem } from "warframe-public-export-plus";
+import { colorSchema, shipCustomizationSchema } from "../commonModel";
 
 export const typeCountSchema = new Schema<ITypeCount>({ ItemType: String, ItemCount: Number }, { _id: false });
 
@@ -162,20 +161,6 @@ const abilityOverrideSchema = new Schema<IAbilityOverride>(
     {
         Ability: String,
         Index: Number
-    },
-    { _id: false }
-);
-
-export const colorSchema = new Schema<IColor>(
-    {
-        t0: Number,
-        t1: Number,
-        t2: Number,
-        t3: Number,
-        en: Number,
-        e1: Number,
-        m0: Number,
-        m1: Number
     },
     { _id: false }
 );
@@ -896,18 +881,9 @@ const crewShipWeaponSchema = new Schema<ICrewShipWeapon>(
     { _id: false }
 );
 
-const shipExteriorSchema = new Schema<IShipExterior>(
-    {
-        SkinFlavourItem: String,
-        Colors: colorSchema,
-        ShipAttachments: { HOOD_ORNAMENT: String }
-    },
-    { _id: false }
-);
-
 const crewShipCustomizationSchema = new Schema<ICrewShipCustomization>(
     {
-        CrewshipInterior: shipExteriorSchema
+        CrewshipInterior: shipCustomizationSchema
     },
     { _id: false }
 );

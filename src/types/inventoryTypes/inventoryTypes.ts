@@ -11,7 +11,7 @@ import {
     IOperatorConfigDatabase
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { IFingerprintStat, RivenFingerprint } from "@/src/helpers/rivenHelper";
-import { IOrbiter } from "../personalRoomsTypes";
+import { IOrbiterClient, IShipCustomization } from "../personalRoomsTypes";
 import { ICountedStoreItem } from "warframe-public-export-plus";
 
 export type InventoryDatabaseEquipment = {
@@ -381,7 +381,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     BrandedSuits?: IOidWithLegacySupport[];
     LockedWeaponGroup?: ILockedWeaponGroupClient;
     HubNpcCustomizations?: IHubNpcCustomization[];
-    Ship?: IOrbiter; // U22 and below, response only
+    Ship?: IOrbiterClient; // U22 and below, response only
     ClaimedJunctionChallengeRewards?: string[]; // U39
     SpecialItemRewardAttenuation?: IRewardAttenuation[]; // Baro's Void Surplus
 }
@@ -575,17 +575,7 @@ export interface ICrewShipMemberDatabase {
 }
 
 export interface ICrewShipCustomization {
-    CrewshipInterior: IShipExterior;
-}
-
-export interface IShipExterior {
-    SkinFlavourItem?: string;
-    Colors?: IColor;
-    ShipAttachments?: IShipAttachments;
-}
-
-export interface IShipAttachments {
-    HOOD_ORNAMENT: string;
+    CrewshipInterior: IShipCustomization;
 }
 
 export interface IFlavourItem {
@@ -1104,7 +1094,7 @@ export interface ISettings {
 
 export interface IShipInventory {
     ItemType: string;
-    ShipExterior: IShipExterior;
+    ShipExterior: IShipCustomization;
     AirSupportPower: string;
     ItemId: IOid;
 }

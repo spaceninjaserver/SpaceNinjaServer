@@ -1,19 +1,22 @@
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
-import { colorSchema } from "@/src/models/inventoryModels/inventoryModel";
-import { IOrbiter, IPersonalRoomsDatabase, PersonalRoomsModelType } from "@/src/types/personalRoomsTypes";
 import {
+    IApartmentDatabase,
     IFavouriteLoadoutDatabase,
     IGardeningDatabase,
-    IPlacedDecosDatabase,
+    IOrbiterClient,
+    IOrbiterDatabase,
+    IPersonalRoomsDatabase,
     IPictureFrameInfo,
+    IPlacedDecosDatabase,
+    IPlantClient,
+    IPlantDatabase,
+    IPlanterDatabase,
     IRoom,
     ITailorShopDatabase,
-    IApartmentDatabase,
-    IPlanterDatabase,
-    IPlantDatabase,
-    IPlantClient
-} from "@/src/types/shipTypes";
+    PersonalRoomsModelType
+} from "@/src/types/personalRoomsTypes";
 import { Schema, Types, model } from "mongoose";
+import { colorSchema, shipCustomizationSchema } from "./commonModel";
 
 export const pictureFrameInfoSchema = new Schema<IPictureFrameInfo>(
     {
@@ -137,10 +140,11 @@ const apartmentDefault: IApartmentDatabase = {
     }
 };
 
-const orbiterSchema = new Schema<IOrbiter>(
+const orbiterSchema = new Schema<IOrbiterDatabase>(
     {
         Features: [String],
         Rooms: [roomSchema],
+        ShipInterior: shipCustomizationSchema,
         VignetteFish: { type: [String], default: undefined },
         FavouriteLoadoutId: Schema.Types.ObjectId,
         Wallpaper: String,
@@ -150,7 +154,18 @@ const orbiterSchema = new Schema<IOrbiter>(
     },
     { _id: false }
 );
-const orbiterDefault: IOrbiter = {
+orbiterSchema.set("toJSON", {
+    virtuals: true,
+    transform(_doc, obj) {
+        const db = obj as IOrbiterDatabase;
+        const client = obj as IOrbiterClient;
+
+        if (db.FavouriteLoadoutId) {
+            client.FavouriteLoadoutId = toOid(db.FavouriteLoadoutId);
+        }
+    }
+});
+const orbiterDefault: IOrbiterDatabase = {
     Features: ["/Lotus/Types/Items/ShipFeatureItems/EarthNavigationFeatureItem"], //TODO: potentially remove after missionstarting gear
     Rooms: [
         { Name: "AlchemyRoom", MaxCapacity: 1600 },
@@ -197,7 +212,6 @@ const tailorShopDefault: ITailorShopDatabase = {
 export const personalRoomsSchema = new Schema<IPersonalRoomsDatabase>({
     personalRoomsOwnerId: Schema.Types.ObjectId,
     activeShipId: Schema.Types.ObjectId,
-    ShipInteriorColors: colorSchema,
     Ship: { type: orbiterSchema, default: orbiterDefault },
     Apartment: { type: apartmentSchema, default: apartmentDefault },
     TailorShop: { type: tailorShopSchema, default: tailorShopDefault }

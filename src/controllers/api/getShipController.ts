@@ -3,10 +3,9 @@ import { config } from "@/src/services/configService";
 import allShipFeatures from "@/static/fixed_responses/allShipFeatures.json";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { createGarden, getPersonalRooms } from "@/src/services/personalRoomsService";
-import { toOid } from "@/src/helpers/inventoryHelpers";
-import { IGetShipResponse } from "@/src/types/shipTypes";
-import { IPersonalRoomsClient } from "@/src/types/personalRoomsTypes";
+import { IGetShipResponse, IPersonalRoomsClient } from "@/src/types/personalRoomsTypes";
 import { getLoadout } from "@/src/services/loadoutService";
+import { toOid } from "@/src/helpers/inventoryHelpers";
 
 export const getShipController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -26,15 +25,7 @@ export const getShipController: RequestHandler = async (req, res) => {
         LoadOutInventory: { LoadOutPresets: loadout.toJSON() },
         Ship: {
             ...personalRooms.Ship,
-            ShipId: toOid(personalRoomsDb.activeShipId),
-            ShipInterior: {
-                Colors: personalRooms.ShipInteriorColors,
-                ShipAttachments: { HOOD_ORNAMENT: "" },
-                SkinFlavourItem: ""
-            },
-            FavouriteLoadoutId: personalRooms.Ship.FavouriteLoadoutId
-                ? toOid(personalRooms.Ship.FavouriteLoadoutId)
-                : undefined
+            ShipId: toOid(personalRoomsDb.activeShipId)
         },
         Apartment: personalRooms.Apartment,
         TailorShop: personalRooms.TailorShop

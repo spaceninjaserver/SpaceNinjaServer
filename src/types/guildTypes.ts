@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 import { IOid, IMongoDate, IOidWithLegacySupport } from "@/src/types/commonTypes";
 import { IFusionTreasure, IMiscItem, ITypeCount } from "@/src/types/inventoryTypes/inventoryTypes";
-import { IPictureFrameInfo } from "./shipTypes";
+import { IPictureFrameInfo } from "./personalRoomsTypes";
 import { IFriendInfo } from "./friendTypes";
 
 export interface IGuildClient {

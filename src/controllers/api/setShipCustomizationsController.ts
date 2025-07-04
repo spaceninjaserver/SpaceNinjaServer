@@ -1,6 +1,6 @@
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { setShipCustomizations } from "@/src/services/shipCustomizationsService";
-import { ISetShipCustomizationsRequest } from "@/src/types/shipTypes";
+import { ISetShipCustomizationsRequest } from "@/src/types/personalRoomsTypes";
 import { logger } from "@/src/utils/logger";
 import { RequestHandler } from "express";
 

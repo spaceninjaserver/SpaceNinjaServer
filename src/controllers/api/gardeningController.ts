@@ -6,9 +6,8 @@ import { getAccountIdForRequest } from "@/src/services/loginService";
 import { createGarden, getPersonalRooms } from "@/src/services/personalRoomsService";
 import { IMongoDate } from "@/src/types/commonTypes";
 import { IMissionReward } from "@/src/types/missionTypes";
-import { IPersonalRoomsClient } from "@/src/types/personalRoomsTypes";
+import { IGardeningClient, IPersonalRoomsClient } from "@/src/types/personalRoomsTypes";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
-import { IGardeningClient } from "@/src/types/shipTypes";
 import { RequestHandler } from "express";
 import { dict_en, ExportResources } from "warframe-public-export-plus";
 

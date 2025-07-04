@@ -3,7 +3,7 @@ import { RequestHandler } from "express";
 import { getPersonalRooms } from "@/src/services/personalRoomsService";
 import { IOid } from "@/src/types/commonTypes";
 import { Types } from "mongoose";
-import { IFavouriteLoadoutDatabase, TBootLocation } from "@/src/types/shipTypes";
+import { IFavouriteLoadoutDatabase, TBootLocation } from "@/src/types/personalRoomsTypes";
 
 export const setShipFavouriteLoadoutController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

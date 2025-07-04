@@ -1,5 +1,5 @@
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { IShipDecorationsRequest } from "@/src/types/shipTypes";
+import { IShipDecorationsRequest } from "@/src/types/personalRoomsTypes";
 import { logger } from "@/src/utils/logger";
 import { RequestHandler } from "express";
 import { handleSetShipDecorations } from "@/src/services/shipCustomizationsService";
