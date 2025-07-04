@@ -1395,7 +1395,11 @@ export const addSkin = (
     if (inventory.WeaponSkins.some(x => x.ItemType == typeName)) {
         logger.debug(`refusing to add WeaponSkin ${typeName} because account already owns it`);
     } else {
-        const index = inventory.WeaponSkins.push({ ItemType: typeName, IsNew: true }) - 1;
+        const index =
+            inventory.WeaponSkins.push({
+                ItemType: typeName,
+                IsNew: typeName.startsWith("/Lotus/Upgrades/Skins/RailJack/") ? undefined : true // railjack skins are incompatible with this flag
+            }) - 1;
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         inventoryChanges.WeaponSkins ??= [];
         (inventoryChanges.WeaponSkins as IWeaponSkinClient[]).push(

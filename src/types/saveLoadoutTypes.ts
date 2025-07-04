@@ -40,6 +40,7 @@ export interface ISaveLoadoutRequest {
     CrewShips: IItemEntry;
     CurrentLoadOutIds: IOid[];
     ValidNewLoadoutId: string;
+    ActiveCrewShip: IOid;
     EquippedGear: string[];
     EquippedEmotes: string[];
     UseAdultOperatorLoadout: boolean;
