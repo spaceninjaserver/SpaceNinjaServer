@@ -300,7 +300,7 @@ dict = {
     upgrade_OnExecutionBlind: `Les ennemis sont aveuglés dans un rayon de 18 après une miséricorde`,
     upgrade_OnExecutionDrainPower: `100% pour le prochain pouvoir de gagner +50% de puissance de pouvoir sur miséricorde`,
     upgrade_OnHackSprintSpeed: `+75% de vitesse de course pendant 15s après un piratage`,
-    upgrade_SwiftExecute: `Vitesse des miséricordes augmentée de 50%`,
+    upgrade_SwiftExecute: `[UNTRANSLATED] +50% Mercy Kill Speed`,
     upgrade_OnHackInvis: `Invisible pendant 15 secondes après un piratage`,
 
     damageType_Electricity: `Électrique`,

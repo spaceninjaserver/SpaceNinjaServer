@@ -300,7 +300,7 @@ dict = {
     upgrade_OnExecutionBlind: `Ciega a los enemigos en un radio de 18m tras una ejecución`,
     upgrade_OnExecutionDrainPower: `100% de probabilidad de que la siguiente habilidad tenga +50% de fuerza tras una ejecución`,
     upgrade_OnHackSprintSpeed: `+75% de velocidad de carrera durante 15s después de hackear`,
-    upgrade_SwiftExecute: `Velocidad de ejecuciones aumentada en un 50%`,
+    upgrade_SwiftExecute: `[UNTRANSLATED] +50% Mercy Kill Speed`,
     upgrade_OnHackInvis: `Invisible durante 15 segundos después de hackear`,
 
     damageType_Electricity: `Eletricidade`,
