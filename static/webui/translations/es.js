@@ -300,7 +300,7 @@ dict = {
     upgrade_OnExecutionTerrify: `50% de probabilidad de que enemigos en un radio de 15m entren en pánico por 8s tras una ejecución`,
     upgrade_OnHackLockers: `Desbloquea 5 casilleros en un radio de 20m tras hackear`,
     upgrade_OnExecutionBlind: `Ciega a los enemigos en un radio de 18m tras una ejecución`,
-    upgrade_OnExecutionDrainPower: `100% de probabilidad de que la siguiente habilidad tenga +50% de fuerza tras una ejecución`,
+    upgrade_OnExecutionDrainPower: `[UNTRANSLATED] Next ability cast gains +50% Ability Strength on Mercy`,
     upgrade_OnHackSprintSpeed: `+75% de velocidad de carrera durante 15s después de hackear`,
     upgrade_SwiftExecute: `[UNTRANSLATED] +50% Mercy Kill Speed`,
     upgrade_OnHackInvis: `[UNTRANSLATED] Invisible for 15 seconds after Hacking`,

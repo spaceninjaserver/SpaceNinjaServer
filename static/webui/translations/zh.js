@@ -300,7 +300,7 @@ dict = {
     upgrade_OnExecutionTerrify: `怜悯之击有50%几率让15米以内的敌人进入恐惧状态8秒`,
     upgrade_OnHackLockers: `入侵后解锁20米内的5个储物柜`,
     upgrade_OnExecutionBlind: `怜悯之击致盲18米范围内的敌人`,
-    upgrade_OnExecutionDrainPower: `怜悯之击会使下一个技能有100%的机会获得+50%的技能强度`,
+    upgrade_OnExecutionDrainPower: `[UNTRANSLATED] Next ability cast gains +50% Ability Strength on Mercy`,
     upgrade_OnHackSprintSpeed: `入侵后+75%冲刺速度,持续15秒`,
     upgrade_SwiftExecute: `怜悯之击释放速度+50%`,
     upgrade_OnHackInvis: `入侵后隐身15秒`,

@@ -299,7 +299,7 @@ dict = {
     upgrade_OnExecutionTerrify: `+50% chance for enemies within 15m to cower in fear for 8 seconds on Mercy`,
     upgrade_OnHackLockers: `Unlock 5 lockers within 20m after Hacking`,
     upgrade_OnExecutionBlind: `Blind enemies within 18m on Mercy`,
-    upgrade_OnExecutionDrainPower: `+100% chance for next ability cast to gain +50% Ability Strength on Mercy`,
+    upgrade_OnExecutionDrainPower: `Next ability cast gains +50% Ability Strength on Mercy`,
     upgrade_OnHackSprintSpeed: `+75% Sprint Speed for 15s after Hacking`,
     upgrade_SwiftExecute: `+50% Mercy Kill Speed`,
     upgrade_OnHackInvis: `Invisible for 15 seconds after Hacking`,
