@@ -6,7 +6,7 @@ import { mixSeeds, SRng } from "@/src/services/rngService";
 import { IItemManifest, IVendorInfo, IVendorManifest } from "@/src/types/vendorTypes";
 import { logger } from "@/src/utils/logger";
 import { ExportVendors, IRange, IVendor, IVendorOffer } from "warframe-public-export-plus";
-import { config } from "./configService";
+import { config } from "@/src/services/configService";
 
 interface IGeneratableVendorInfo extends Omit<IVendorInfo, "ItemManifest" | "Expiry"> {
     cycleOffset?: number;

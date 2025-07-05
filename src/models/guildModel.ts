@@ -17,8 +17,8 @@ import {
     GuildPermission
 } from "@/src/types/guildTypes";
 import { Document, Model, model, Schema, Types } from "mongoose";
-import { fusionTreasuresSchema, typeCountSchema } from "./inventoryModels/inventoryModel";
-import { pictureFrameInfoSchema } from "./personalRoomsModel";
+import { fusionTreasuresSchema, typeCountSchema } from "@/src/models/inventoryModels/inventoryModel";
+import { pictureFrameInfoSchema } from "@/src/models/personalRoomsModel";
 
 const dojoDecoSchema = new Schema<IDojoDecoDatabase>({
     Type: String,

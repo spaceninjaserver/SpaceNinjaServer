@@ -1,7 +1,7 @@
 import { IColor, IShipAttachments, IShipCustomization } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { Document, Model, Types } from "mongoose";
-import { ILoadoutClient } from "./saveLoadoutTypes";
-import { IMongoDate, IOid } from "./commonTypes";
+import { ILoadoutClient } from "@/src/types/saveLoadoutTypes";
+import { IMongoDate, IOid } from "@/src/types/commonTypes";
 
 export interface IGetShipResponse {
     ShipOwnerId: string;

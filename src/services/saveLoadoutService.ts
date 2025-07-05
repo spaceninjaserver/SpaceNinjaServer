@@ -13,8 +13,8 @@ import { Types } from "mongoose";
 import { isEmptyObject } from "@/src/helpers/general";
 import { logger } from "@/src/utils/logger";
 import { equipmentKeys, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
-import { IItemConfig } from "../types/inventoryTypes/commonInventoryTypes";
-import { importCrewMemberId } from "./importService";
+import { IItemConfig } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { importCrewMemberId } from "@/src/services/importService";
 
 //TODO: setup default items on account creation or like originally in giveStartingItems.php
 

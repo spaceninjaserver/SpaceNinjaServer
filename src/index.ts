@@ -19,10 +19,10 @@ logger.info("Starting up...");
 // Proceed with normal startup: bring up config watcher service, validate config, connect to MongoDB, and finally start listening for HTTP.
 import mongoose from "mongoose";
 import { JSONStringify } from "json-with-bigint";
-import { startWebServer } from "./services/webService";
+import { startWebServer } from "@/src/services/webService";
 
 import { syncConfigWithDatabase, validateConfig } from "@/src/services/configWatcherService";
-import { updateWorldStateCollections } from "./services/worldStateService";
+import { updateWorldStateCollections } from "@/src/services/worldStateService";
 
 // Patch JSON.stringify to work flawlessly with Bigints.
 JSON.stringify = JSONStringify;

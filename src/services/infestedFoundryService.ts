@@ -1,9 +1,9 @@
 import { ExportRecipes } from "warframe-public-export-plus";
-import { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel";
-import { IInfestedFoundryClient, IInfestedFoundryDatabase } from "../types/inventoryTypes/inventoryTypes";
-import { addRecipes } from "./inventoryService";
-import { config } from "./configService";
-import { ITypeCount } from "../types/commonTypes";
+import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+import { IInfestedFoundryClient, IInfestedFoundryDatabase } from "@/src/types/inventoryTypes/inventoryTypes";
+import { addRecipes } from "@/src/services/inventoryService";
+import { config } from "@/src/services/configService";
+import { ITypeCount } from "@/src/types/commonTypes";
 
 export const addInfestedFoundryXP = (infestedFoundry: IInfestedFoundryDatabase, delta: number): ITypeCount[] => {
     const recipeChanges: ITypeCount[] = [];

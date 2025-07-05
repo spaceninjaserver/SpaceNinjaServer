@@ -19,7 +19,9 @@
     "lint:ci": "eslint --ext .ts --rule \"prettier/prettier: off\" .",
     "lint:fix": "eslint --fix --ext .ts .",
     "prettier": "prettier --write .",
-    "update-translations": "cd scripts && node update-translations.js"
+    "update-translations": "cd scripts && node update-translations.js",
+    "fix-imports": "cd scripts && node fix-imports.js",
+    "fix": "npm run update-translations && npm run fix-imports && npm run prettier"
   },
   "license": "GNU",
   "dependencies": {

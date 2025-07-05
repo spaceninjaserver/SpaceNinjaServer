@@ -5,8 +5,8 @@ import { getRandomWeightedReward, IRngResult } from "@/src/services/rngService";
 import { logger } from "@/src/utils/logger";
 import { addMiscItems, combineInventoryChanges } from "@/src/services/inventoryService";
 import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
-import { IInventoryChanges } from "../types/purchaseTypes";
-import { config } from "../services/configService";
+import { IInventoryChanges } from "@/src/types/purchaseTypes";
+import { config } from "@/src/services/configService";
 
 export const crackRelic = async (
     inventory: TInventoryDatabaseDocument,

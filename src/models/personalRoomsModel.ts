@@ -16,7 +16,7 @@ import {
     PersonalRoomsModelType
 } from "@/src/types/personalRoomsTypes";
 import { Schema, Types, model } from "mongoose";
-import { colorSchema, shipCustomizationSchema } from "./commonModel";
+import { colorSchema, shipCustomizationSchema } from "@/src/models/commonModel";
 
 export const pictureFrameInfoSchema = new Schema<IPictureFrameInfo>(
     {

@@ -1,4 +1,4 @@
-import { TEquipmentKey } from "../types/inventoryTypes/inventoryTypes";
+import { TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
 
 export const modularWeaponTypes: Record<string, TEquipmentKey> = {
     "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary": "LongGuns",

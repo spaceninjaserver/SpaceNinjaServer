@@ -1,6 +1,11 @@
 import { Types } from "mongoose";
-import { IMongoDate, IOid, IOidWithLegacySupport } from "./commonTypes";
-import { ICrewShipCustomization, IFlavourItem, IItemConfig, IPolarity } from "./inventoryTypes/commonInventoryTypes";
+import { IMongoDate, IOid, IOidWithLegacySupport } from "@/src/types/commonTypes";
+import {
+    ICrewShipCustomization,
+    IFlavourItem,
+    IItemConfig,
+    IPolarity
+} from "@/src/types/inventoryTypes/commonInventoryTypes";
 
 export interface IEquipmentSelection {
     ItemId: IOid;

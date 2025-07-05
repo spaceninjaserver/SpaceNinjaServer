@@ -1,7 +1,7 @@
 import { PersonalRooms } from "@/src/models/personalRoomsModel";
 import { addItem, getInventory } from "@/src/services/inventoryService";
-import { IGardeningDatabase, TPersonalRoomsDatabaseDocument } from "../types/personalRoomsTypes";
-import { getRandomElement } from "./rngService";
+import { IGardeningDatabase, TPersonalRoomsDatabaseDocument } from "@/src/types/personalRoomsTypes";
+import { getRandomElement } from "@/src/services/rngService";
 
 export const getPersonalRooms = async (
     accountId: string,

@@ -33,7 +33,7 @@ import {
     IRecipe,
     TReward
 } from "warframe-public-export-plus";
-import { IMessage } from "../models/inboxModel";
+import { IMessage } from "@/src/models/inboxModel";
 
 export type WeaponTypeInternal =
     | "LongGuns"

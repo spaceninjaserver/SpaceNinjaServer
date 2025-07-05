@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Types } from "mongoose";
-import { IOid, IMongoDate, IOidWithLegacySupport, ITypeCount } from "../commonTypes";
+import { IOid, IMongoDate, IOidWithLegacySupport, ITypeCount } from "@/src/types/commonTypes";
 import {
     IColor,
     IItemConfig,
@@ -11,10 +11,10 @@ import {
     IShipCustomization
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { IFingerprintStat, RivenFingerprint } from "@/src/helpers/rivenHelper";
-import { IOrbiterClient } from "../personalRoomsTypes";
+import { IOrbiterClient } from "@/src/types/personalRoomsTypes";
 import { ICountedStoreItem } from "warframe-public-export-plus";
-import { IEquipmentClient, IEquipmentDatabase, ITraits } from "../equipmentTypes";
-import { ILoadOutPresets } from "../saveLoadoutTypes";
+import { IEquipmentClient, IEquipmentDatabase, ITraits } from "@/src/types/equipmentTypes";
+import { ILoadOutPresets } from "@/src/types/saveLoadoutTypes";
 
 export type InventoryDatabaseEquipment = {
     [_ in TEquipmentKey]: IEquipmentDatabase[];

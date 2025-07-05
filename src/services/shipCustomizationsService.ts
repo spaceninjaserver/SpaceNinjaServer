@@ -8,14 +8,14 @@ import {
     RoomsType,
     TBootLocation,
     TPersonalRoomsDatabaseDocument
-} from "../types/personalRoomsTypes";
+} from "@/src/types/personalRoomsTypes";
 import { logger } from "@/src/utils/logger";
 import { Types } from "mongoose";
-import { addFusionTreasures, addShipDecorations, getInventory } from "./inventoryService";
-import { config } from "./configService";
-import { Guild } from "../models/guildModel";
-import { hasGuildPermission } from "./guildService";
-import { GuildPermission } from "../types/guildTypes";
+import { addFusionTreasures, addShipDecorations, getInventory } from "@/src/services/inventoryService";
+import { config } from "@/src/services/configService";
+import { Guild } from "@/src/models/guildModel";
+import { hasGuildPermission } from "@/src/services/guildService";
+import { GuildPermission } from "@/src/types/guildTypes";
 import { ExportResources } from "warframe-public-export-plus";
 
 export const setShipCustomizations = async (

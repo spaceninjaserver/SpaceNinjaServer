@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { logger } from "../utils/logger";
+import { logger } from "@/src/utils/logger";
 
 export const errorHandler = (err: Error, req: Request, res: Response, _next: NextFunction): void => {
     if (err.message == "Invalid accountId-nonce pair") {

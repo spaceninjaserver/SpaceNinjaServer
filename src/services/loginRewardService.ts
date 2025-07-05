@@ -1,10 +1,10 @@
 import randomRewards from "@/static/fixed_responses/loginRewards/randomRewards.json";
-import { IInventoryChanges } from "../types/purchaseTypes";
-import { TAccountDocument } from "./loginService";
-import { mixSeeds, SRng } from "./rngService";
-import { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel";
-import { addBooster, updateCurrency } from "./inventoryService";
-import { handleStoreItemAcquisition } from "./purchaseService";
+import { IInventoryChanges } from "@/src/types/purchaseTypes";
+import { TAccountDocument } from "@/src/services/loginService";
+import { mixSeeds, SRng } from "@/src/services/rngService";
+import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+import { addBooster, updateCurrency } from "@/src/services/inventoryService";
+import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
 import {
     ExportBoosterPacks,
     ExportBoosters,
@@ -12,7 +12,7 @@ import {
     ExportWarframes,
     ExportWeapons
 } from "warframe-public-export-plus";
-import { toStoreItem } from "./itemDataService";
+import { toStoreItem } from "@/src/services/itemDataService";
 
 export interface ILoginRewardsReponse {
     DailyTributeInfo: {

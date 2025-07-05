@@ -89,8 +89,8 @@ import {
     IPersonalGoalProgressClient,
     IKubrowPetPrintClient,
     IKubrowPetPrintDatabase
-} from "../../types/inventoryTypes/inventoryTypes";
-import { IOid, ITypeCount } from "../../types/commonTypes";
+} from "@/src/types/inventoryTypes/inventoryTypes";
+import { IOid, ITypeCount } from "@/src/types/commonTypes";
 import {
     IAbilityOverride,
     ICrewShipCustomization,
@@ -101,9 +101,9 @@ import {
     IPolarity
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
-import { EquipmentSelectionSchema, oidSchema } from "./loadoutModel";
+import { EquipmentSelectionSchema, oidSchema } from "@/src/models/inventoryModels/loadoutModel";
 import { ICountedStoreItem } from "warframe-public-export-plus";
-import { colorSchema, shipCustomizationSchema } from "../commonModel";
+import { colorSchema, shipCustomizationSchema } from "@/src/models/commonModel";
 import {
     IArchonCrystalUpgrade,
     ICrewShipMemberClient,

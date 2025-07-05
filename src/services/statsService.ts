@@ -10,7 +10,7 @@ import {
 } from "@/src/types/statTypes";
 import { logger } from "@/src/utils/logger";
 import { addEmailItem, getInventory } from "@/src/services/inventoryService";
-import { submitLeaderboardScore } from "./leaderboardService";
+import { submitLeaderboardScore } from "@/src/services/leaderboardService";
 
 export const createStats = async (accountId: string): Promise<TStatsDatabaseDocument> => {
     const stats = new Stats({ accountOwnerId: accountId });

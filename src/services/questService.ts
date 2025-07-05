@@ -8,10 +8,10 @@ import { IQuestKeyClient, IQuestKeyDatabase, IQuestStage } from "@/src/types/inv
 import { logger } from "@/src/utils/logger";
 import { Types } from "mongoose";
 import { ExportKeys } from "warframe-public-export-plus";
-import { addFixedLevelRewards } from "./missionInventoryUpdateService";
-import { IInventoryChanges } from "../types/purchaseTypes";
+import { addFixedLevelRewards } from "@/src/services/missionInventoryUpdateService";
+import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import questCompletionItems from "@/static/fixed_responses/questCompletionRewards.json";
-import { ITypeCount } from "../types/commonTypes";
+import { ITypeCount } from "@/src/types/commonTypes";
 
 export interface IUpdateQuestRequest {
     QuestKeys: Omit<IQuestKeyDatabase, "CompletionDate">[];

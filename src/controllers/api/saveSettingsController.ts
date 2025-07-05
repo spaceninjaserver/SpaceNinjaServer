@@ -2,7 +2,7 @@ import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getInventory } from "@/src/services/inventoryService";
 import { RequestHandler } from "express";
-import { ISettings } from "../../types/inventoryTypes/inventoryTypes";
+import { ISettings } from "@/src/types/inventoryTypes/inventoryTypes";
 
 interface ISaveSettingsRequest {
     Settings: ISettings;

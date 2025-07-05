@@ -19,6 +19,7 @@ jobs:
             - run: npm run lint:ci
             - run: npm run prettier
             - run: npm run update-translations
+            - run: npm run fix-imports
             - name: Fail if there are uncommitted changes
               run: |
                   if [[ -n "$(git status --porcelain)" ]]; then

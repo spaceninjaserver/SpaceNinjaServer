@@ -1,6 +1,6 @@
-import { Guild } from "../models/guildModel";
-import { Leaderboard, TLeaderboardEntryDocument } from "../models/leaderboardModel";
-import { ILeaderboardEntryClient } from "../types/leaderboardTypes";
+import { Guild } from "@/src/models/guildModel";
+import { Leaderboard, TLeaderboardEntryDocument } from "@/src/models/leaderboardModel";
+import { ILeaderboardEntryClient } from "@/src/types/leaderboardTypes";
 
 export const submitLeaderboardScore = async (
     schedule: "weekly" | "daily",

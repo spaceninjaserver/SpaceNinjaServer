@@ -1,7 +1,7 @@
 import { Account } from "@/src/models/loginModel";
 import { createInventory } from "@/src/services/inventoryService";
 import { IDatabaseAccountJson, IDatabaseAccountRequiredFields } from "@/src/types/loginTypes";
-import { createShip } from "./shipService";
+import { createShip } from "@/src/services/shipService";
 import { Document, Types } from "mongoose";
 import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
 import { PersonalRooms } from "@/src/models/personalRoomsModel";

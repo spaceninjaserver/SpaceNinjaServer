@@ -27,11 +27,11 @@ import {
     IDialogueDatabase,
     IKubrowPetPrintClient
 } from "@/src/types/inventoryTypes/inventoryTypes";
-import { IGenericUpdate, IUpdateNodeIntrosResponse } from "../types/genericUpdate";
-import { IKeyChainRequest, IMissionInventoryUpdateRequest } from "../types/requestTypes";
+import { IGenericUpdate, IUpdateNodeIntrosResponse } from "@/src/types/genericUpdate";
+import { IKeyChainRequest, IMissionInventoryUpdateRequest } from "@/src/types/requestTypes";
 import { logger } from "@/src/utils/logger";
 import { convertInboxMessage, fromStoreItem, getKeyChainItems } from "@/src/services/itemDataService";
-import { IFlavourItem, IItemConfig } from "../types/inventoryTypes/commonInventoryTypes";
+import { IFlavourItem, IItemConfig } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import {
     ExportArcanes,
     ExportBoosters,
@@ -59,7 +59,7 @@ import {
     ISentinel,
     TStandingLimitBin
 } from "warframe-public-export-plus";
-import { createShip } from "./shipService";
+import { createShip } from "@/src/services/shipService";
 import {
     catbrowDetails,
     fromMongoDate,
@@ -68,19 +68,25 @@ import {
     kubrowFurPatternsWeights,
     kubrowWeights,
     toOid
-} from "../helpers/inventoryHelpers";
+} from "@/src/helpers/inventoryHelpers";
 import { addQuestKey, completeQuest } from "@/src/services/questService";
-import { handleBundleAcqusition } from "./purchaseService";
+import { handleBundleAcqusition } from "@/src/services/purchaseService";
 import libraryDailyTasks from "@/static/fixed_responses/libraryDailyTasks.json";
-import { generateRewardSeed, getRandomElement, getRandomInt, getRandomWeightedReward, SRng } from "./rngService";
-import { createMessage, IMessageCreationTemplate } from "./inboxService";
+import {
+    generateRewardSeed,
+    getRandomElement,
+    getRandomInt,
+    getRandomWeightedReward,
+    SRng
+} from "@/src/services/rngService";
+import { createMessage, IMessageCreationTemplate } from "@/src/services/inboxService";
 import { getMaxStanding, getMinStanding } from "@/src/helpers/syndicateStandingHelper";
-import { getNightwaveSyndicateTag, getWorldState } from "./worldStateService";
+import { getNightwaveSyndicateTag, getWorldState } from "@/src/services/worldStateService";
 import { ICalendarSeason } from "@/src/types/worldStateTypes";
-import { generateNemesisProfile, INemesisProfile } from "../helpers/nemesisHelpers";
-import { TAccountDocument } from "./loginService";
-import { unixTimesInMs } from "../constants/timeConstants";
-import { addString } from "../helpers/stringHelpers";
+import { generateNemesisProfile, INemesisProfile } from "@/src/helpers/nemesisHelpers";
+import { TAccountDocument } from "@/src/services/loginService";
+import { unixTimesInMs } from "@/src/constants/timeConstants";
+import { addString } from "@/src/helpers/stringHelpers";
 import {
     EquipmentFeatures,
     IEquipmentClient,
@@ -88,8 +94,8 @@ import {
     IKubrowPetDetailsDatabase,
     ITraits,
     Status
-} from "../types/equipmentTypes";
-import { ITypeCount } from "../types/commonTypes";
+} from "@/src/types/equipmentTypes";
+import { ITypeCount } from "@/src/types/commonTypes";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,

@@ -1,5 +1,5 @@
 import { Document, Schema, Types, model } from "mongoose";
-import { IShipDatabase } from "../types/shipTypes";
+import { IShipDatabase } from "@/src/types/shipTypes";
 import { toOid } from "@/src/helpers/inventoryHelpers";
 import { colorSchema } from "@/src/models/commonModel";
 import { IShipInventory } from "@/src/types/inventoryTypes/inventoryTypes";

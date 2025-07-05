@@ -3,8 +3,8 @@ import {
     IItemConfig,
     IOperatorConfigClient,
     IOperatorConfigDatabase
-} from "../types/inventoryTypes/commonInventoryTypes";
-import { IMongoDate } from "../types/commonTypes";
+} from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { IMongoDate } from "@/src/types/commonTypes";
 import {
     equipmentKeys,
     IDialogueClient,
@@ -25,15 +25,15 @@ import {
     IUpgradeDatabase,
     IWeaponSkinClient,
     IWeaponSkinDatabase
-} from "../types/inventoryTypes/inventoryTypes";
-import { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel";
+} from "@/src/types/inventoryTypes/inventoryTypes";
+import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import {
     ILoadoutConfigClient,
     ILoadoutConfigDatabase,
     ILoadoutDatabase,
     ILoadOutPresets
-} from "../types/saveLoadoutTypes";
-import { slotNames } from "../types/purchaseTypes";
+} from "@/src/types/saveLoadoutTypes";
+import { slotNames } from "@/src/types/purchaseTypes";
 import {
     ICrewShipMemberClient,
     ICrewShipMemberDatabase,
@@ -43,7 +43,7 @@ import {
     IEquipmentDatabase,
     IKubrowPetDetailsClient,
     IKubrowPetDetailsDatabase
-} from "../types/equipmentTypes";
+} from "@/src/types/equipmentTypes";
 
 const convertDate = (value: IMongoDate): Date => {
     return new Date(parseInt(value.$date.$numberLong));

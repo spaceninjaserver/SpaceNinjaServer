@@ -2,8 +2,8 @@ import { IMessageDatabase, Inbox } from "@/src/models/inboxModel";
 import { getAccountForRequest } from "@/src/services/loginService";
 import { HydratedDocument, Types } from "mongoose";
 import { Request } from "express";
-import { unixTimesInMs } from "../constants/timeConstants";
-import { config } from "./configService";
+import { unixTimesInMs } from "@/src/constants/timeConstants";
+import { config } from "@/src/services/configService";
 
 export const getAllMessagesSorted = async (accountId: string): Promise<HydratedDocument<IMessageDatabase>[]> => {
     const inbox = await Inbox.find({ ownerId: accountId }).sort({ date: -1 });

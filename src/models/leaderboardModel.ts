@@ -1,5 +1,5 @@
 import { Document, model, Schema, Types } from "mongoose";
-import { ILeaderboardEntryDatabase } from "../types/leaderboardTypes";
+import { ILeaderboardEntryDatabase } from "@/src/types/leaderboardTypes";
 
 const leaderboardEntrySchema = new Schema<ILeaderboardEntryDatabase>(
     {

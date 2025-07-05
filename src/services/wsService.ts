@@ -1,9 +1,9 @@
 import http from "http";
 import https from "https";
 import ws from "ws";
-import { Account } from "../models/loginModel";
-import { createAccount, createNonce, getUsernameFromEmail, isCorrectPassword } from "./loginService";
-import { IDatabaseAccountJson } from "../types/loginTypes";
+import { Account } from "@/src/models/loginModel";
+import { createAccount, createNonce, getUsernameFromEmail, isCorrectPassword } from "@/src/services/loginService";
+import { IDatabaseAccountJson } from "@/src/types/loginTypes";
 import { HydratedDocument } from "mongoose";
 
 let wsServer: ws.Server | undefined;

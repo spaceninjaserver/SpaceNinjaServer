@@ -7,7 +7,7 @@ import {
     IOperatorConfigClient
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { Types } from "mongoose";
-import { ICrewShipMembersClient, ICrewShipWeapon, IEquipmentSelection } from "./equipmentTypes";
+import { ICrewShipMembersClient, ICrewShipWeapon, IEquipmentSelection } from "@/src/types/equipmentTypes";
 
 export interface ISaveLoadoutRequest {
     LoadOuts: ILoadoutClient;

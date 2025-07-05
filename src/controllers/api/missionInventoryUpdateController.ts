@@ -4,7 +4,7 @@ import { getAccountForRequest } from "@/src/services/loginService";
 import { IMissionInventoryUpdateRequest } from "@/src/types/requestTypes";
 import { addMissionInventoryUpdates, addMissionRewards } from "@/src/services/missionInventoryUpdateService";
 import { getInventory } from "@/src/services/inventoryService";
-import { getInventoryResponse } from "./inventoryController";
+import { getInventoryResponse } from "@/src/controllers/api/inventoryController";
 import { logger } from "@/src/utils/logger";
 import { IMissionInventoryUpdateResponse } from "@/src/types/missionTypes";
 import { sendWsBroadcastTo } from "@/src/services/wsService";

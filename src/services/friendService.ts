@@ -1,10 +1,10 @@
-import { IFriendInfo } from "../types/friendTypes";
-import { getInventory } from "./inventoryService";
-import { config } from "./configService";
-import { Account } from "../models/loginModel";
+import { IFriendInfo } from "@/src/types/friendTypes";
+import { getInventory } from "@/src/services/inventoryService";
+import { config } from "@/src/services/configService";
+import { Account } from "@/src/models/loginModel";
 import { Types } from "mongoose";
-import { Friendship } from "../models/friendModel";
-import { fromOid, toMongoDate } from "../helpers/inventoryHelpers";
+import { Friendship } from "@/src/models/friendModel";
+import { fromOid, toMongoDate } from "@/src/helpers/inventoryHelpers";
 
 export const addAccountDataToFriendInfo = async (info: IFriendInfo): Promise<void> => {
     const account = (await Account.findById(fromOid(info._id), "DisplayName LastLogin"))!;
