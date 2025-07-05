@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import { config } from "@/src/services/configService";
 import { getAccountForRequest, isAdministrator } from "@/src/services/loginService";
-import { saveConfig } from "@/src/services/configWatcherService";
+import { saveConfig } from "@/src/services/configWriterService";
 import { sendWsBroadcastExcept } from "@/src/services/wsService";
 
 export const getConfigController: RequestHandler = async (req, res) => {

@@ -1,17 +1,14 @@
 import chokidar from "chokidar";
-import fsPromises from "fs/promises";
 import { logger } from "@/src/utils/logger";
 import { config, configPath, loadConfig } from "@/src/services/configService";
+import { saveConfig, shouldReloadConfig } from "@/src/services/configWriterService";
 import { getWebPorts, startWebServer, stopWebServer } from "@/src/services/webService";
 import { sendWsBroadcast } from "@/src/services/wsService";
 import { Inbox } from "@/src/models/inboxModel";
 import varzia from "@/static/fixed_responses/worldState/varzia.json";
 
-let amnesia = false;
 chokidar.watch(configPath).on("change", () => {
-    if (amnesia) {
-        amnesia = false;
-    } else {
+    if (shouldReloadConfig()) {
         logger.info("Detected a change to config file, reloading its contents.");
         try {
             loadConfig();
@@ -70,11 +67,6 @@ export const validateConfig = (): void => {
         logger.info(`Updating config file to fix some issues with it.`);
         void saveConfig();
     }
-};
-
-export const saveConfig = async (): Promise<void> => {
-    amnesia = true;
-    await fsPromises.writeFile(configPath, JSON.stringify(config, null, 2));
 };
 
 export const syncConfigWithDatabase = (): void => {
