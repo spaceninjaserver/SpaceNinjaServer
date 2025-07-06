@@ -1476,9 +1476,10 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         const pt: IPrimeVaultTrader = {
             _id: { $oid: ((weekStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "c36af423770eaa97" },
             Activation: { $date: { $numberLong: weekStart.toString() } },
-            Expiry: { $date: { $numberLong: weekEnd.toString() } },
+            InitialStartDate: { $date: { $numberLong: "1662738144266" } },
             Node: "TradeHUB1",
             Manifest: [],
+            Expiry: { $date: { $numberLong: weekEnd.toString() } },
             EvergreenManifest: varzia.evergreen,
             ScheduleInfo: []
         };
