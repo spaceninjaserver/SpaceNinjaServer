@@ -2,7 +2,6 @@ dict = {
     general_inventoryUpdateNote: `Note: To see changes in-game, you need to resync your inventory, e.g. using the bootstrapper's /sync command, visiting a dojo/relay, or relogging.`,
     general_addButton: `Add`,
     general_setButton: `Set`,
-    general_removeButton: `Remove`,
     general_bulkActions: `Bulk Actions`,
 
     code_loginFail: `Login failed. Double-check the email and password.`,

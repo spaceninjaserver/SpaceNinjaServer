@@ -3,7 +3,6 @@ dict = {
     general_inventoryUpdateNote: `Para ver los cambios en el juego, necesitas volver a sincronizar tu inventario, por ejemplo, usando el comando /sync del bootstrapper, visitando un dojo o repetidor, o volviendo a iniciar sesión.`,
     general_addButton: `Agregar`,
     general_setButton: `Establecer`,
-    general_removeButton: `Quitar`,
     general_bulkActions: `Acciones masivas`,
 
     code_loginFail: `Error al iniciar sesión. Verifica el correo electrónico y la contraseña.`,
