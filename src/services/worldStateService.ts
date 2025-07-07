@@ -9,7 +9,7 @@ import darvoDeals from "@/static/fixed_responses/worldState/darvoDeals.json";
 import { buildConfig } from "@/src/services/buildConfigService";
 import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { config } from "@/src/services/configService";
-import { getRandomElement, getRandomInt, SRng } from "@/src/services/rngService";
+import { getRandomElement, getRandomInt, sequentiallyUniqueRandomElement, SRng } from "@/src/services/rngService";
 import { eMissionType, ExportRegions, ExportSyndicates, IRegion } from "warframe-public-export-plus";
 import {
     ICalendarDay,
@@ -385,13 +385,12 @@ const getSeasonChallengePools = (syndicateTag: string): IRotatingSeasonChallenge
 const getSeasonDailyChallenge = (pools: IRotatingSeasonChallengePools, day: number): ISeasonChallenge => {
     const dayStart = EPOCH + day * 86400000;
     const dayEnd = EPOCH + (day + 3) * 86400000;
-    const rng = new SRng(new SRng(day).randomInt(0, 100_000));
     return {
         _id: { $oid: "67e1b5ca9d00cb47" + day.toString().padStart(8, "0") },
         Daily: true,
         Activation: { $date: { $numberLong: dayStart.toString() } },
         Expiry: { $date: { $numberLong: dayEnd.toString() } },
-        Challenge: rng.randomElement(pools.daily)!
+        Challenge: sequentiallyUniqueRandomElement(pools.daily, day, 2, 605732938)!
     };
 };
 

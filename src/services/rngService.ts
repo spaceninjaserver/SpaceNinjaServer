@@ -151,4 +151,57 @@ export class SRng {
             arr[lastIdx] = tmp;
         }
     }
+
+    shuffledArray<T>(inarr: readonly T[]): T[] {
+        const arr = [...inarr];
+        this.shuffleArray(arr);
+        return arr;
+    }
 }
+
+export const sequentiallyUniqueRandomElement = <T>(
+    deck: readonly T[],
+    idx: number,
+    lookbehind: number,
+    seed: number = 0
+): T | undefined => {
+    // This algorithm may modify a shuffle up to index `lookbehind + 1`. It assumes that the last `lookbehind` cards are not adjusted.
+    if (lookbehind + 1 >= deck.length - lookbehind) {
+        throw new Error(
+            `this algorithm cannot guarantee ${lookbehind} unique cards in a row with a deck of size ${deck.length}`
+        );
+    }
+
+    const iteration = Math.trunc(idx / deck.length);
+    const card = idx % deck.length;
+    const currentShuffle = new SRng(mixSeeds(new SRng(iteration).randomInt(0, 100_000), seed)).shuffledArray(deck);
+    if (card < currentShuffle.length - lookbehind) {
+        // We are indexing before the end of the deck, so adjustments may be needed to achieve uniqueness.
+        const window: T[] = [];
+        {
+            const previousShuffle = new SRng(
+                mixSeeds(new SRng(iteration - 1).randomInt(0, 100_000), seed)
+            ).shuffledArray(deck);
+            for (let i = previousShuffle.length - lookbehind; i != previousShuffle.length; ++i) {
+                window.push(previousShuffle[i]);
+            }
+        }
+        // From this point on, `window.length == lookbehind` should hold.
+        for (let i = 0; i != lookbehind; ++i) {
+            if (window.indexOf(currentShuffle[i]) != -1) {
+                for (let j = i; ; ++j) {
+                    // `j < currentShuffle.length - lookbehind` should hold.
+                    if (window.indexOf(currentShuffle[j]) == -1) {
+                        const tmp = currentShuffle[j];
+                        currentShuffle[j] = currentShuffle[i];
+                        currentShuffle[i] = tmp;
+                        break;
+                    }
+                }
+            }
+            window.splice(0, 1);
+            window.push(currentShuffle[i]);
+        }
+    }
+    return currentShuffle[card];
+};
