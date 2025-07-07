@@ -349,7 +349,7 @@
   ],
   "PrimeAccessAvailability": { "State": "PRIME1" },
   "PrimeVaultAvailabilities": [false, false, false, false, false],
-  "PrimeTokenAvailability": false,
+  "PrimeTokenAvailability": true,
   "LibraryInfo": { "LastCompletedTargetType": "/Lotus/Types/Game/Library/Targets/Research7Target" },
   "PVPChallengeInstances": [
     {
