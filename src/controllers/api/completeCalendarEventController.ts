@@ -1,4 +1,4 @@
-import { checkCalendarChallengeCompletion, getCalendarProgress, getInventory } from "@/src/services/inventoryService";
+import { checkCalendarAutoAdvance, getCalendarProgress, getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
 import { getWorldState } from "@/src/services/worldStateService";
@@ -28,7 +28,7 @@ export const completeCalendarEventController: RequestHandler = async (req, res) 
         }
     }
     calendarProgress.SeasonProgress.LastCompletedDayIdx = dayIndex;
-    checkCalendarChallengeCompletion(calendarProgress, currentSeason);
+    checkCalendarAutoAdvance(inventory, currentSeason);
     await inventory.save();
     res.json({
         InventoryChanges: inventoryChanges,

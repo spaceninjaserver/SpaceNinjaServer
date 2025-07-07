@@ -12,6 +12,7 @@ import {
     addEmailItem,
     addMiscItems,
     allDailyAffiliationKeys,
+    checkCalendarAutoAdvance,
     cleanupInventory,
     createLibraryDailyTask,
     getCalendarProgress
@@ -29,6 +30,7 @@ import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { DailyDeal } from "@/src/models/worldStateModel";
 import { EquipmentFeatures } from "@/src/types/equipmentTypes";
 import { generateRewardSeed } from "@/src/services/rngService";
+import { getWorldState } from "@/src/services/worldStateService";
 
 export const inventoryController: RequestHandler = async (request, response) => {
     const account = await getAccountForRequest(request);
@@ -111,58 +113,61 @@ export const inventoryController: RequestHandler = async (request, response) => 
             }
         }
 
-        if (inventory.CalendarProgress) {
-            const previousYearIteration = inventory.CalendarProgress.Iteration;
-            getCalendarProgress(inventory); // handle year rollover; the client expects to receive an inventory with an up-to-date CalendarProgress
+        // TODO: Setup CalendarProgress as part of 1999 mission completion?
 
-            // also handle sending of kiss cinematic at year rollover
-            if (
-                inventory.CalendarProgress.Iteration != previousYearIteration &&
-                inventory.DialogueHistory &&
-                inventory.DialogueHistory.Dialogues
-            ) {
-                let kalymos = false;
-                for (const { dialogueName, kissEmail } of [
-                    {
-                        dialogueName: "/Lotus/Types/Gameplay/1999Wf/Dialogue/ArthurDialogue_rom.dialogue",
-                        kissEmail: "/Lotus/Types/Items/EmailItems/ArthurKissEmailItem"
-                    },
-                    {
-                        dialogueName: "/Lotus/Types/Gameplay/1999Wf/Dialogue/EleanorDialogue_rom.dialogue",
-                        kissEmail: "/Lotus/Types/Items/EmailItems/EleanorKissEmailItem"
-                    },
-                    {
-                        dialogueName: "/Lotus/Types/Gameplay/1999Wf/Dialogue/LettieDialogue_rom.dialogue",
-                        kissEmail: "/Lotus/Types/Items/EmailItems/LettieKissEmailItem"
-                    },
-                    {
-                        dialogueName: "/Lotus/Types/Gameplay/1999Wf/Dialogue/JabirDialogue_rom.dialogue",
-                        kissEmail: "/Lotus/Types/Items/EmailItems/AmirKissEmailItem"
-                    },
-                    {
-                        dialogueName: "/Lotus/Types/Gameplay/1999Wf/Dialogue/AoiDialogue_rom.dialogue",
-                        kissEmail: "/Lotus/Types/Items/EmailItems/AoiKissEmailItem"
-                    },
-                    {
-                        dialogueName: "/Lotus/Types/Gameplay/1999Wf/Dialogue/QuincyDialogue_rom.dialogue",
-                        kissEmail: "/Lotus/Types/Items/EmailItems/QuincyKissEmailItem"
+        const previousYearIteration = inventory.CalendarProgress?.Iteration;
+
+        // We need to do the following to ensure the in-game calendar does not break:
+        getCalendarProgress(inventory); // Keep the CalendarProgress up-to-date (at least for the current year iteration) (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2364)
+        checkCalendarAutoAdvance(inventory, getWorldState().KnownCalendarSeasons[0]); // Skip birthday events for characters if we do not have them unlocked yet (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2424)
+
+        // also handle sending of kiss cinematic at year rollover
+        if (
+            inventory.CalendarProgress!.Iteration != previousYearIteration &&
+            inventory.DialogueHistory &&
+            inventory.DialogueHistory.Dialogues
+        ) {
+            let kalymos = false;
+            for (const { dialogueName, kissEmail } of [
+                {
+                    dialogueName: "/Lotus/Types/Gameplay/1999Wf/Dialogue/ArthurDialogue_rom.dialogue",
+                    kissEmail: "/Lotus/Types/Items/EmailItems/ArthurKissEmailItem"
+                },
+                {
+                    dialogueName: "/Lotus/Types/Gameplay/1999Wf/Dialogue/EleanorDialogue_rom.dialogue",
+                    kissEmail: "/Lotus/Types/Items/EmailItems/EleanorKissEmailItem"
+                },
+                {
+                    dialogueName: "/Lotus/Types/Gameplay/1999Wf/Dialogue/LettieDialogue_rom.dialogue",
+                    kissEmail: "/Lotus/Types/Items/EmailItems/LettieKissEmailItem"
+                },
+                {
+                    dialogueName: "/Lotus/Types/Gameplay/1999Wf/Dialogue/JabirDialogue_rom.dialogue",
+                    kissEmail: "/Lotus/Types/Items/EmailItems/AmirKissEmailItem"
+                },
+                {
+                    dialogueName: "/Lotus/Types/Gameplay/1999Wf/Dialogue/AoiDialogue_rom.dialogue",
+                    kissEmail: "/Lotus/Types/Items/EmailItems/AoiKissEmailItem"
+                },
+                {
+                    dialogueName: "/Lotus/Types/Gameplay/1999Wf/Dialogue/QuincyDialogue_rom.dialogue",
+                    kissEmail: "/Lotus/Types/Items/EmailItems/QuincyKissEmailItem"
+                }
+            ]) {
+                const dialogue = inventory.DialogueHistory.Dialogues.find(x => x.DialogueName == dialogueName);
+                if (dialogue) {
+                    if (dialogue.Rank == 7) {
+                        await addEmailItem(inventory, kissEmail);
+                        kalymos = false;
+                        break;
                     }
-                ]) {
-                    const dialogue = inventory.DialogueHistory.Dialogues.find(x => x.DialogueName == dialogueName);
-                    if (dialogue) {
-                        if (dialogue.Rank == 7) {
-                            await addEmailItem(inventory, kissEmail);
-                            kalymos = false;
-                            break;
-                        }
-                        if (dialogue.Rank == 6) {
-                            kalymos = true;
-                        }
+                    if (dialogue.Rank == 6) {
+                        kalymos = true;
                     }
                 }
-                if (kalymos) {
-                    await addEmailItem(inventory, "/Lotus/Types/Items/EmailItems/KalymosKissEmailItem");
-                }
+            }
+            if (kalymos) {
+                await addEmailItem(inventory, "/Lotus/Types/Items/EmailItems/KalymosKissEmailItem");
             }
         }
 

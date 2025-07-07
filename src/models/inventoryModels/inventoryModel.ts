@@ -1216,8 +1216,8 @@ const calenderProgressSchema = new Schema<ICalendarProgress>(
         },
         SeasonProgress: {
             SeasonType: { type: String, required: true },
-            LastCompletedDayIdx: { type: Number, default: 0 },
-            LastCompletedChallengeDayIdx: { type: Number, default: 0 },
+            LastCompletedDayIdx: { type: Number, default: -1 },
+            LastCompletedChallengeDayIdx: { type: Number, default: -1 },
             ActivatedChallenges: { type: [String], default: [] }
         }
     },
