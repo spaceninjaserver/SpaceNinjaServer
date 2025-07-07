@@ -51,6 +51,11 @@ export const fromMongoDate = (date: IMongoDate): Date => {
     return new Date(parseInt(date.$date.$numberLong));
 };
 
+export type TTraitsPool = Record<
+    "Colors" | "EyeColors" | "FurPatterns" | "BodyTypes" | "Heads" | "Tails",
+    { type: string; rarity: TRarity }[]
+>;
+
 export const kubrowWeights: Record<TRarity, number> = {
     COMMON: 6,
     UNCOMMON: 4,
@@ -65,126 +70,126 @@ export const kubrowFurPatternsWeights: Record<TRarity, number> = {
     LEGENDARY: 1
 };
 
-export const catbrowDetails = {
+export const catbrowDetails: TTraitsPool = {
     Colors: [
-        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorBaseA", rarity: "COMMON" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorBaseB", rarity: "COMMON" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorBaseC", rarity: "COMMON" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorBaseD", rarity: "COMMON" as TRarity },
+        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorBaseA", rarity: "COMMON" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorBaseB", rarity: "COMMON" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorBaseC", rarity: "COMMON" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorBaseD", rarity: "COMMON" },
 
-        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorSecondaryA", rarity: "UNCOMMON" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorSecondaryB", rarity: "UNCOMMON" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorSecondaryC", rarity: "UNCOMMON" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorSecondaryD", rarity: "UNCOMMON" as TRarity },
+        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorSecondaryA", rarity: "UNCOMMON" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorSecondaryB", rarity: "UNCOMMON" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorSecondaryC", rarity: "UNCOMMON" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorSecondaryD", rarity: "UNCOMMON" },
 
-        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorTertiaryA", rarity: "RARE" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorTertiaryB", rarity: "RARE" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorTertiaryC", rarity: "RARE" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorTertiaryD", rarity: "RARE" as TRarity },
+        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorTertiaryA", rarity: "RARE" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorTertiaryB", rarity: "RARE" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorTertiaryC", rarity: "RARE" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorTertiaryD", rarity: "RARE" },
 
-        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorAccentsA", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorAccentsB", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorAccentsC", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorAccentsD", rarity: "LEGENDARY" as TRarity }
+        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorAccentsA", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorAccentsB", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorAccentsC", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorAccentsD", rarity: "LEGENDARY" }
     ],
 
     EyeColors: [
-        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorEyesA", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorEyesB", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorEyesC", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorEyesD", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorEyesE", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorEyesF", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorEyesG", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorEyesH", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorEyesI", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorEyesJ", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorEyesK", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorEyesL", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorEyesM", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorEyesN", rarity: "LEGENDARY" as TRarity }
+        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorEyesA", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorEyesB", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorEyesC", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorEyesD", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorEyesE", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorEyesF", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorEyesG", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorEyesH", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorEyesI", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorEyesJ", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorEyesK", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorEyesL", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorEyesM", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorEyesN", rarity: "LEGENDARY" }
     ],
 
-    FurPatterns: [{ type: "/Lotus/Types/Game/CatbrowPet/Patterns/CatbrowPetPatternA", rarity: "COMMON" as TRarity }],
+    FurPatterns: [{ type: "/Lotus/Types/Game/CatbrowPet/Patterns/CatbrowPetPatternA", rarity: "COMMON" }],
 
     BodyTypes: [
-        { type: "/Lotus/Types/Game/CatbrowPet/BodyTypes/CatbrowPetRegularBodyType", rarity: "UNCOMMON" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/BodyTypes/CatbrowPetRegularBodyType", rarity: "LEGENDARY" as TRarity }
+        { type: "/Lotus/Types/Game/CatbrowPet/BodyTypes/CatbrowPetRegularBodyType", rarity: "UNCOMMON" },
+        { type: "/Lotus/Types/Game/CatbrowPet/BodyTypes/CatbrowPetRegularBodyType", rarity: "LEGENDARY" }
     ],
 
     Heads: [
-        { type: "/Lotus/Types/Game/CatbrowPet/Heads/CatbrowHeadA", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Heads/CatbrowHeadB", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Heads/CatbrowHeadC", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Heads/CatbrowHeadD", rarity: "LEGENDARY" as TRarity }
+        { type: "/Lotus/Types/Game/CatbrowPet/Heads/CatbrowHeadA", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Heads/CatbrowHeadB", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Heads/CatbrowHeadC", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Heads/CatbrowHeadD", rarity: "LEGENDARY" }
     ],
 
     Tails: [
-        { type: "/Lotus/Types/Game/CatbrowPet/Tails/CatbrowTailA", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Tails/CatbrowTailB", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Tails/CatbrowTailC", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Tails/CatbrowTailD", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/CatbrowPet/Tails/CatbrowTailE", rarity: "LEGENDARY" as TRarity }
+        { type: "/Lotus/Types/Game/CatbrowPet/Tails/CatbrowTailA", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Tails/CatbrowTailB", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Tails/CatbrowTailC", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Tails/CatbrowTailD", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/CatbrowPet/Tails/CatbrowTailE", rarity: "LEGENDARY" }
     ]
 };
 
-export const kubrowDetails = {
+export const kubrowDetails: TTraitsPool = {
     Colors: [
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMundaneA", rarity: "UNCOMMON" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMundaneB", rarity: "UNCOMMON" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMundaneC", rarity: "UNCOMMON" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMundaneD", rarity: "UNCOMMON" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMundaneE", rarity: "UNCOMMON" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMundaneF", rarity: "UNCOMMON" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMundaneG", rarity: "UNCOMMON" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMundaneH", rarity: "UNCOMMON" as TRarity },
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMundaneA", rarity: "UNCOMMON" },
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMundaneB", rarity: "UNCOMMON" },
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMundaneC", rarity: "UNCOMMON" },
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMundaneD", rarity: "UNCOMMON" },
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMundaneE", rarity: "UNCOMMON" },
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMundaneF", rarity: "UNCOMMON" },
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMundaneG", rarity: "UNCOMMON" },
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMundaneH", rarity: "UNCOMMON" },
 
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMidA", rarity: "RARE" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMidB", rarity: "RARE" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMidC", rarity: "RARE" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMidD", rarity: "RARE" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMidE", rarity: "RARE" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMidF", rarity: "RARE" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMidG", rarity: "RARE" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMidH", rarity: "RARE" as TRarity },
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMidA", rarity: "RARE" },
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMidB", rarity: "RARE" },
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMidC", rarity: "RARE" },
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMidD", rarity: "RARE" },
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMidE", rarity: "RARE" },
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMidF", rarity: "RARE" },
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMidG", rarity: "RARE" },
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorMidH", rarity: "RARE" },
 
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorVibrantA", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorVibrantB", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorVibrantC", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorVibrantD", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorVibrantE", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorVibrantF", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorVibrantG", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorVibrantH", rarity: "LEGENDARY" as TRarity }
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorVibrantA", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorVibrantB", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorVibrantC", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorVibrantD", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorVibrantE", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorVibrantF", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorVibrantG", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorVibrantH", rarity: "LEGENDARY" }
     ],
 
     EyeColors: [
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorEyesA", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorEyesB", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorEyesC", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorEyesD", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorEyesE", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorEyesF", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorEyesG", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorEyesH", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorEyesI", rarity: "LEGENDARY" as TRarity }
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorEyesA", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorEyesB", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorEyesC", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorEyesD", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorEyesE", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorEyesF", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorEyesG", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorEyesH", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/KubrowPet/Colors/KubrowPetColorEyesI", rarity: "LEGENDARY" }
     ],
 
     FurPatterns: [
-        { type: "/Lotus/Types/Game/KubrowPet/Patterns/KubrowPetPatternB", rarity: "UNCOMMON" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Patterns/KubrowPetPatternA", rarity: "UNCOMMON" as TRarity },
+        { type: "/Lotus/Types/Game/KubrowPet/Patterns/KubrowPetPatternB", rarity: "UNCOMMON" },
+        { type: "/Lotus/Types/Game/KubrowPet/Patterns/KubrowPetPatternA", rarity: "UNCOMMON" },
 
-        { type: "/Lotus/Types/Game/KubrowPet/Patterns/KubrowPetPatternC", rarity: "RARE" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Patterns/KubrowPetPatternD", rarity: "RARE" as TRarity },
+        { type: "/Lotus/Types/Game/KubrowPet/Patterns/KubrowPetPatternC", rarity: "RARE" },
+        { type: "/Lotus/Types/Game/KubrowPet/Patterns/KubrowPetPatternD", rarity: "RARE" },
 
-        { type: "/Lotus/Types/Game/KubrowPet/Patterns/KubrowPetPatternE", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/Patterns/KubrowPetPatternF", rarity: "LEGENDARY" as TRarity }
+        { type: "/Lotus/Types/Game/KubrowPet/Patterns/KubrowPetPatternE", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/KubrowPet/Patterns/KubrowPetPatternF", rarity: "LEGENDARY" }
     ],
 
     BodyTypes: [
-        { type: "/Lotus/Types/Game/KubrowPet/BodyTypes/KubrowPetRegularBodyType", rarity: "UNCOMMON" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/BodyTypes/KubrowPetHeavyBodyType", rarity: "LEGENDARY" as TRarity },
-        { type: "/Lotus/Types/Game/KubrowPet/BodyTypes/KubrowPetThinBodyType", rarity: "LEGENDARY" as TRarity }
+        { type: "/Lotus/Types/Game/KubrowPet/BodyTypes/KubrowPetRegularBodyType", rarity: "UNCOMMON" },
+        { type: "/Lotus/Types/Game/KubrowPet/BodyTypes/KubrowPetHeavyBodyType", rarity: "LEGENDARY" },
+        { type: "/Lotus/Types/Game/KubrowPet/BodyTypes/KubrowPetThinBodyType", rarity: "LEGENDARY" }
     ],
 
     Heads: [],
