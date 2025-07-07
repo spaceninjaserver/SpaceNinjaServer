@@ -2010,7 +2010,7 @@ single.getRoute("/webui/cheats").on("beforeload", function () {
                         if (elm.type == "checkbox") {
                             elm.checked = value;
                         } else if (elm.classList.contains("tags-input")) {
-                            elm.value = value.join(", ");
+                            elm.value = (value ?? []).join(", ");
                             elm.oninput();
                         } else {
                             elm.value = value ?? elm.getAttribute("data-default");

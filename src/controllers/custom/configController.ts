@@ -37,6 +37,8 @@ const configIdToIndexable = (id: string): [Record<string, boolean | string | num
     let obj = config as unknown as Record<string, never>;
     const arr = id.split(".");
     while (arr.length > 1) {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        obj[arr[0]] ??= {} as never;
         obj = obj[arr[0]];
         arr.splice(0, 1);
     }
