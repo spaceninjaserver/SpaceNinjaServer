@@ -394,34 +394,26 @@ const getSeasonDailyChallenge = (pools: IRotatingSeasonChallengePools, day: numb
     };
 };
 
-const getSeasonWeeklyChallenge = (pools: IRotatingSeasonChallengePools, week: number, id: number): ISeasonChallenge => {
-    const weekStart = EPOCH + week * 604800000;
-    const weekEnd = weekStart + 604800000;
-    const challengeId = week * 7 + id;
-    const rng = new SRng(new SRng(challengeId).randomInt(0, 100_000));
-    return {
-        _id: { $oid: "67e1bb2d9d00cb47" + challengeId.toString().padStart(8, "0") },
-        Activation: { $date: { $numberLong: weekStart.toString() } },
-        Expiry: { $date: { $numberLong: weekEnd.toString() } },
-        Challenge: rng.randomElement(pools.weekly)!
-    };
-};
-
-const getSeasonWeeklyHardChallenge = (
-    pools: IRotatingSeasonChallengePools,
+const pushSeasonWeeklyChallenge = (
+    activeChallenges: ISeasonChallenge[],
+    pool: string[],
     week: number,
     id: number
-): ISeasonChallenge => {
+): void => {
     const weekStart = EPOCH + week * 604800000;
     const weekEnd = weekStart + 604800000;
     const challengeId = week * 7 + id;
     const rng = new SRng(new SRng(challengeId).randomInt(0, 100_000));
-    return {
+    let challenge: string;
+    do {
+        challenge = rng.randomElement(pool)!;
+    } while (activeChallenges.some(x => x.Challenge == challenge));
+    activeChallenges.push({
         _id: { $oid: "67e1bb2d9d00cb47" + challengeId.toString().padStart(8, "0") },
         Activation: { $date: { $numberLong: weekStart.toString() } },
         Expiry: { $date: { $numberLong: weekEnd.toString() } },
-        Challenge: rng.randomElement(pools.hardWeekly)!
-    };
+        Challenge: challenge
+    });
 };
 
 const pushWeeklyActs = (
@@ -432,8 +424,8 @@ const pushWeeklyActs = (
     const weekStart = EPOCH + week * 604800000;
     const weekEnd = weekStart + 604800000;
 
-    activeChallenges.push(getSeasonWeeklyChallenge(pools, week, 0));
-    activeChallenges.push(getSeasonWeeklyChallenge(pools, week, 1));
+    pushSeasonWeeklyChallenge(activeChallenges, pools.weekly, week, 0);
+    pushSeasonWeeklyChallenge(activeChallenges, pools.weekly, week, 1);
     if (pools.hasWeeklyPermanent) {
         activeChallenges.push({
             _id: { $oid: "67e1b96e9d00cb47" + (week * 7 + 0).toString().padStart(8, "0") },
@@ -453,14 +445,14 @@ const pushWeeklyActs = (
             Expiry: { $date: { $numberLong: weekEnd.toString() } },
             Challenge: "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentKillEnemies"
         });
-        activeChallenges.push(getSeasonWeeklyHardChallenge(pools, week, 2));
-        activeChallenges.push(getSeasonWeeklyHardChallenge(pools, week, 3));
+        pushSeasonWeeklyChallenge(activeChallenges, pools.hardWeekly, week, 2);
+        pushSeasonWeeklyChallenge(activeChallenges, pools.hardWeekly, week, 3);
     } else {
-        activeChallenges.push(getSeasonWeeklyChallenge(pools, week, 2));
-        activeChallenges.push(getSeasonWeeklyChallenge(pools, week, 3));
-        activeChallenges.push(getSeasonWeeklyChallenge(pools, week, 4));
-        activeChallenges.push(getSeasonWeeklyHardChallenge(pools, week, 5));
-        activeChallenges.push(getSeasonWeeklyHardChallenge(pools, week, 6));
+        pushSeasonWeeklyChallenge(activeChallenges, pools.weekly, week, 2);
+        pushSeasonWeeklyChallenge(activeChallenges, pools.weekly, week, 3);
+        pushSeasonWeeklyChallenge(activeChallenges, pools.weekly, week, 4);
+        pushSeasonWeeklyChallenge(activeChallenges, pools.hardWeekly, week, 5);
+        pushSeasonWeeklyChallenge(activeChallenges, pools.hardWeekly, week, 6);
     }
 };
 
