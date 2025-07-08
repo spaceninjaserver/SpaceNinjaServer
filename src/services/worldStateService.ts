@@ -971,25 +971,26 @@ const getCalendarSeason = (week: number): ICalendarSeason => {
 
 // Not very faithful, but to avoid the same node coming up back-to-back (which is not valid), I've split these into 2 arrays which we're alternating between.
 
-const voidStormMissionsA = {
-    VoidT1: ["CrewBattleNode519", "CrewBattleNode518", "CrewBattleNode515", "CrewBattleNode503"],
-    VoidT2: ["CrewBattleNode501", "CrewBattleNode534", "CrewBattleNode530"],
-    VoidT3: ["CrewBattleNode521", "CrewBattleNode516"],
+const voidStormMissions = {
+    VoidT1: [
+        "CrewBattleNode519",
+        "CrewBattleNode518",
+        "CrewBattleNode515",
+        "CrewBattleNode503",
+        "CrewBattleNode509",
+        "CrewBattleNode522",
+        "CrewBattleNode511",
+        "CrewBattleNode512"
+    ],
+    VoidT2: ["CrewBattleNode501", "CrewBattleNode534", "CrewBattleNode530", "CrewBattleNode535", "CrewBattleNode533"],
+    VoidT3: ["CrewBattleNode521", "CrewBattleNode516", "CrewBattleNode524", "CrewBattleNode525"],
     VoidT4: [
         "CrewBattleNode555",
         "CrewBattleNode553",
         "CrewBattleNode554",
         "CrewBattleNode539",
         "CrewBattleNode531",
-        "CrewBattleNode527"
-    ]
-};
-
-const voidStormMissionsB = {
-    VoidT1: ["CrewBattleNode509", "CrewBattleNode522", "CrewBattleNode511", "CrewBattleNode512"],
-    VoidT2: ["CrewBattleNode535", "CrewBattleNode533"],
-    VoidT3: ["CrewBattleNode524", "CrewBattleNode525"],
-    VoidT4: [
+        "CrewBattleNode527",
         "CrewBattleNode542",
         "CrewBattleNode538",
         "CrewBattleNode543",
@@ -997,18 +998,21 @@ const voidStormMissionsB = {
         "CrewBattleNode550",
         "CrewBattleNode529"
     ]
-};
+} as const;
+
+const voidStormLookbehind = {
+    VoidT1: 3,
+    VoidT2: 1,
+    VoidT3: 1,
+    VoidT4: 3
+} as const;
 
 const pushVoidStorms = (arr: IVoidStorm[], hour: number): void => {
     const activation = hour * unixTimesInMs.hour + 40 * unixTimesInMs.minute;
     const expiry = activation + 90 * unixTimesInMs.minute;
     let accum = 0;
-    const rng = new SRng(new SRng(hour).randomInt(0, 100_000));
-    const voidStormMissions = structuredClone(hour & 1 ? voidStormMissionsA : voidStormMissionsB);
+    const tierIdx = { VoidT1: hour * 2, VoidT2: hour, VoidT3: hour, VoidT4: hour * 2 };
     for (const tier of ["VoidT1", "VoidT1", "VoidT2", "VoidT3", "VoidT4", "VoidT4"] as const) {
-        const idx = rng.randomInt(0, voidStormMissions[tier].length - 1);
-        const node = voidStormMissions[tier][idx];
-        voidStormMissions[tier].splice(idx, 1);
         arr.push({
             _id: {
                 $oid:
@@ -1016,7 +1020,12 @@ const pushVoidStorms = (arr: IVoidStorm[], hour: number): void => {
                     "0321e89b" +
                     (accum++).toString().padStart(8, "0")
             },
-            Node: node,
+            Node: sequentiallyUniqueRandomElement(
+                voidStormMissions[tier],
+                tierIdx[tier]++,
+                voidStormLookbehind[tier],
+                2051969264
+            )!,
             Activation: { $date: { $numberLong: activation.toString() } },
             Expiry: { $date: { $numberLong: expiry.toString() } },
             ActiveMissionTier: tier
