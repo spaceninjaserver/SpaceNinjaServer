@@ -1106,6 +1106,10 @@ export const addKubrowPet = (
             };
         } else {
             dominantTraits = createRandomTraits(kubrowPetName, traitsPool);
+            if (kubrowPetName == "/Lotus/Types/Game/KubrowPet/ChargerKubrowPetPowerSuit") {
+                dominantTraits.BodyType = "/Lotus/Types/Game/KubrowPet/BodyTypes/ChargerKubrowPetBodyType";
+                dominantTraits.FurPattern = "/Lotus/Types/Game/KubrowPet/Patterns/KubrowPetPatternInfested";
+            }
         }
 
         const recessiveTraits: ITraits = createRandomTraits(
