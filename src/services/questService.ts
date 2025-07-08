@@ -236,7 +236,7 @@ const handleQuestCompletion = async (
         setupKahlSyndicate(inventory);
     }
 
-    // Whispers in the Walls is unlocked once The New + Heart of Deimos are completed.
+    // Whispers in the Walls is unlocked once The New War + Heart of Deimos are completed.
     if (
         doesQuestCompletionFinishSet(inventory, questKey, [
             "/Lotus/Types/Keys/NewWarQuest/NewWarQuestKeyChain",

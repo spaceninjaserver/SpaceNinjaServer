@@ -16,6 +16,10 @@
     {
       "ItemType": "/Lotus/Types/Keys/1999PrologueQuest/1999PrologueQuestKeyChain",
       "ItemCount": 1
+    },
+    {
+      "ItemType": "/Lotus/Types/Items/EmailItems/TennokaiEmailItem",
+      "ItemCount": 1
     }
   ]
 }
