@@ -1033,75 +1033,124 @@ const pushVoidStorms = (arr: IVoidStorm[], hour: number): void => {
     }
 };
 
-const doesTimeSatsifyConstraints = (timeSecs: number): boolean => {
-    if (config.worldState?.eidolonOverride) {
+interface ITimeConstraint {
+    //name: string;
+    isValidTime: (timeSecs: number) => boolean;
+    getIdealTimeBefore: (timeSecs: number) => number;
+}
+
+const eidolonDayConstraint: ITimeConstraint = {
+    //name: "eidolon day",
+    isValidTime: (timeSecs: number): boolean => {
         const eidolonEpoch = 1391992660;
         const eidolonCycle = Math.trunc((timeSecs - eidolonEpoch) / 9000);
         const eidolonCycleStart = eidolonEpoch + eidolonCycle * 9000;
         const eidolonCycleEnd = eidolonCycleStart + 9000;
         const eidolonCycleNightStart = eidolonCycleEnd - 3000;
-        if (config.worldState.eidolonOverride == "day") {
-            if (
-                //timeSecs < eidolonCycleStart ||
-                isBeforeNextExpectedWorldStateRefresh(timeSecs * 1000, eidolonCycleNightStart * 1000)
-            ) {
-                return false;
-            }
-        } else {
-            if (
-                timeSecs < eidolonCycleNightStart ||
-                isBeforeNextExpectedWorldStateRefresh(timeSecs * 1000, eidolonCycleEnd * 1000)
-            ) {
-                return false;
-            }
-        }
+        return !isBeforeNextExpectedWorldStateRefresh(timeSecs * 1000, eidolonCycleNightStart * 1000);
+    },
+    getIdealTimeBefore: (timeSecs: number): number => {
+        const eidolonEpoch = 1391992660;
+        const eidolonCycle = Math.trunc((timeSecs - eidolonEpoch) / 9000);
+        const eidolonCycleStart = eidolonEpoch + eidolonCycle * 9000;
+        return eidolonCycleStart;
     }
+};
 
-    if (config.worldState?.vallisOverride) {
+const eidolonNightConstraint: ITimeConstraint = {
+    //name: "eidolon night",
+    isValidTime: (timeSecs: number): boolean => {
+        const eidolonEpoch = 1391992660;
+        const eidolonCycle = Math.trunc((timeSecs - eidolonEpoch) / 9000);
+        const eidolonCycleStart = eidolonEpoch + eidolonCycle * 9000;
+        const eidolonCycleEnd = eidolonCycleStart + 9000;
+        const eidolonCycleNightStart = eidolonCycleEnd - 3000;
+        return (
+            timeSecs >= eidolonCycleNightStart &&
+            !isBeforeNextExpectedWorldStateRefresh(timeSecs * 1000, eidolonCycleEnd * 1000)
+        );
+    },
+    getIdealTimeBefore: (timeSecs: number): number => {
+        const eidolonEpoch = 1391992660;
+        const eidolonCycle = Math.trunc((timeSecs - eidolonEpoch) / 9000);
+        const eidolonCycleStart = eidolonEpoch + eidolonCycle * 9000;
+        const eidolonCycleEnd = eidolonCycleStart + 9000;
+        const eidolonCycleNightStart = eidolonCycleEnd - 3000;
+        if (eidolonCycleNightStart > timeSecs) {
+            // Night hasn't started yet, but we need to return a time in the past.
+            return eidolonCycleNightStart - 9000;
+        }
+        return eidolonCycleNightStart;
+    }
+};
+
+const venusColdConstraint: ITimeConstraint = {
+    //name: "venus cold",
+    isValidTime: (timeSecs: number): boolean => {
         const vallisEpoch = 1541837628;
         const vallisCycle = Math.trunc((timeSecs - vallisEpoch) / 1600);
         const vallisCycleStart = vallisEpoch + vallisCycle * 1600;
         const vallisCycleEnd = vallisCycleStart + 1600;
         const vallisCycleColdStart = vallisCycleStart + 400;
-        if (config.worldState.vallisOverride == "cold") {
-            if (
-                timeSecs < vallisCycleColdStart ||
-                isBeforeNextExpectedWorldStateRefresh(timeSecs * 1000, vallisCycleEnd * 1000)
-            ) {
-                return false;
-            }
-        } else {
-            if (
-                //timeSecs < vallisCycleStart ||
-                isBeforeNextExpectedWorldStateRefresh(timeSecs * 1000, vallisCycleColdStart * 1000)
-            ) {
-                return false;
+        return (
+            timeSecs >= vallisCycleColdStart &&
+            !isBeforeNextExpectedWorldStateRefresh(timeSecs * 1000, vallisCycleEnd * 1000)
+        );
+    },
+    getIdealTimeBefore: (timeSecs: number): number => {
+        const vallisEpoch = 1541837628;
+        const vallisCycle = Math.trunc((timeSecs - vallisEpoch) / 1600);
+        const vallisCycleStart = vallisEpoch + vallisCycle * 1600;
+        const vallisCycleColdStart = vallisCycleStart + 400;
+        if (vallisCycleColdStart > timeSecs) {
+            // Cold hasn't started yet, but we need to return a time in the past.
+            return vallisCycleColdStart - 1600;
+        }
+        return vallisCycleColdStart;
+    }
+};
+
+const venusWarmConstraint: ITimeConstraint = {
+    //name: "venus warm",
+    isValidTime: (timeSecs: number): boolean => {
+        const vallisEpoch = 1541837628;
+        const vallisCycle = Math.trunc((timeSecs - vallisEpoch) / 1600);
+        const vallisCycleStart = vallisEpoch + vallisCycle * 1600;
+        const vallisCycleColdStart = vallisCycleStart + 400;
+        return !isBeforeNextExpectedWorldStateRefresh(timeSecs * 1000, vallisCycleColdStart * 1000);
+    },
+    getIdealTimeBefore: (timeSecs: number): number => {
+        const vallisEpoch = 1541837628;
+        const vallisCycle = Math.trunc((timeSecs - vallisEpoch) / 1600);
+        const vallisCycleStart = vallisEpoch + vallisCycle * 1600;
+        return vallisCycleStart;
+    }
+};
+
+const getIdealTimeSatsifyingConstraints = (constraints: ITimeConstraint[]): number => {
+    let timeSecs = Math.trunc(Date.now() / 1000);
+    let allGood;
+    do {
+        allGood = true;
+        for (const constraint of constraints) {
+            if (!constraint.isValidTime(timeSecs)) {
+                //logger.debug(`${constraint.name} is not happy with ${timeSecs}`);
+                const prevTimeSecs = timeSecs;
+                const suggestion = constraint.getIdealTimeBefore(timeSecs);
+                timeSecs = suggestion;
+                do {
+                    timeSecs += 60;
+                    if (timeSecs >= prevTimeSecs || !constraint.isValidTime(timeSecs)) {
+                        timeSecs = suggestion; // Can't find a compromise; just take the suggestion and try to compromise on another constraint.
+                        break;
+                    }
+                } while (!constraints.every(constraint => constraint.isValidTime(timeSecs)));
+                allGood = false;
+                break;
             }
         }
-    }
-
-    if (config.worldState?.duviriOverride) {
-        const duviriMoods = ["sorrow", "fear", "joy", "anger", "envy"];
-        const desiredMood = duviriMoods.indexOf(config.worldState.duviriOverride);
-        if (desiredMood == -1) {
-            logger.warn(`ignoring invalid config value for worldState.duviriOverride`, {
-                value: config.worldState.duviriOverride,
-                valid_values: duviriMoods
-            });
-        } else {
-            const moodIndex = Math.trunc(timeSecs / 7200);
-            const moodStart = moodIndex * 7200;
-            const moodEnd = moodStart + 7200;
-            if (
-                moodIndex % 5 != desiredMood ||
-                isBeforeNextExpectedWorldStateRefresh(timeSecs * 1000, moodEnd * 1000)
-            ) {
-                return false;
-            }
-        }
-    }
-
-    return true;
+    } while (!allGood);
+    return timeSecs;
 };
 
 const getVarziaRotation = (week: number): string => {
@@ -1179,10 +1228,38 @@ const getAllVarziaManifests = (): IPrimeVaultTraderOffer[] => {
 };
 
 export const getWorldState = (buildLabel?: string): IWorldState => {
-    let timeSecs = Math.round(Date.now() / 1000);
-    while (!doesTimeSatsifyConstraints(timeSecs)) {
-        timeSecs -= 60;
+    const constraints: ITimeConstraint[] = [];
+    if (config.worldState?.eidolonOverride) {
+        constraints.push(config.worldState.eidolonOverride == "day" ? eidolonDayConstraint : eidolonNightConstraint);
     }
+    if (config.worldState?.vallisOverride) {
+        constraints.push(config.worldState.vallisOverride == "cold" ? venusColdConstraint : venusWarmConstraint);
+    }
+    if (config.worldState?.duviriOverride) {
+        const duviriMoods = ["sorrow", "fear", "joy", "anger", "envy"];
+        const desiredMood = duviriMoods.indexOf(config.worldState.duviriOverride);
+        if (desiredMood == -1) {
+            logger.warn(`ignoring invalid config value for worldState.duviriOverride`, {
+                value: config.worldState.duviriOverride,
+                valid_values: duviriMoods
+            });
+        } else {
+            constraints.push({
+                //name: `duviri ${config.worldState.duviriOverride}`,
+                isValidTime: (timeSecs: number): boolean => {
+                    const moodIndex = Math.trunc(timeSecs / 7200);
+                    return moodIndex % 5 == desiredMood;
+                },
+                getIdealTimeBefore: (timeSecs: number): number => {
+                    let moodIndex = Math.trunc(timeSecs / 7200);
+                    moodIndex -= ((moodIndex % 5) - desiredMood + 5) % 5; // while (moodIndex % 5 != desiredMood) --moodIndex;
+                    const moodStart = moodIndex * 7200;
+                    return moodStart;
+                }
+            });
+        }
+    }
+    const timeSecs = getIdealTimeSatsifyingConstraints(constraints);
     const timeMs = timeSecs * 1000;
     const day = Math.trunc((timeMs - EPOCH) / 86400000);
     const week = Math.trunc(day / 7);
