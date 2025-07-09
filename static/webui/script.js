@@ -1954,6 +1954,19 @@ for (const id of uiConfigs) {
     }
 }
 
+document.querySelectorAll(".config-form .input-group").forEach(grp => {
+    const input = grp.querySelector("input");
+    const btn = grp.querySelector("button");
+    input.oninput = input.onchange = function () {
+        btn.classList.remove("btn-secondary");
+        btn.classList.add("btn-primary");
+    };
+    btn.onclick = function () {
+        btn.classList.remove("btn-primary");
+        btn.classList.add("btn-secondary");
+    };
+});
+
 function doSaveConfigInt(id) {
     $.post({
         url: "/custom/setConfig?" + window.authz + "&wsid=" + wsid,
