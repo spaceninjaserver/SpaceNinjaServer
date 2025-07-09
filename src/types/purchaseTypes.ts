@@ -8,7 +8,8 @@ import {
     IRecentVendorPurchaseClient,
     TEquipmentKey,
     ICrewMemberClient,
-    IKubrowPetPrintClient
+    IKubrowPetPrintClient,
+    IUpgradeClient
 } from "@/src/types/inventoryTypes/inventoryTypes";
 
 export enum PurchaseSource {
@@ -80,6 +81,7 @@ export type IInventoryChanges = {
     RecentVendorPurchases?: IRecentVendorPurchaseClient; // < 38.5.0
     CrewMembers?: ICrewMemberClient[];
     KubrowPetPrints?: IKubrowPetPrintClient[];
+    Upgrades?: IUpgradeClient[]; // TOVERIFY
 } & Record<
         Exclude<
             string,

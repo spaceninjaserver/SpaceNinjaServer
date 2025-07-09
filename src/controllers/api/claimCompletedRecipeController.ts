@@ -14,7 +14,9 @@ import {
     addRecipes,
     occupySlot,
     combineInventoryChanges,
-    addKubrowPetPrint
+    addKubrowPetPrint,
+    addPowerSuit,
+    addEquipment
 } from "@/src/services/inventoryService";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { InventorySlot, IPendingRecipeDatabase } from "@/src/types/inventoryTypes/inventoryTypes";
@@ -22,7 +24,7 @@ import { toOid2 } from "@/src/helpers/inventoryHelpers";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { IRecipe } from "warframe-public-export-plus";
 import { config } from "@/src/services/configService";
-import { IEquipmentClient, Status } from "@/src/types/equipmentTypes";
+import { EquipmentFeatures, IEquipmentClient, Status } from "@/src/types/equipmentTypes";
 
 interface IClaimCompletedRecipeRequest {
     RecipeIds: IOid[];
@@ -124,17 +126,122 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
             const pet = inventory.KubrowPets.id(pendingRecipe.KubrowPet!)!;
             addKubrowPetPrint(inventory, pet, InventoryChanges);
         } else if (recipe.secretIngredientAction != "SIA_UNBRAND") {
-            InventoryChanges = {
-                ...InventoryChanges,
-                ...(await addItem(
+            if (recipe.resultType == "/Lotus/Powersuits/Excalibur/ExcaliburUmbra") {
+                // Quite the special case here...
+                // We don't just get Umbra, but also Skiajati and Umbra Mods. Both items are max rank, potatoed, and with the mods are pre-installed.
+                // Source: https://wiki.warframe.com/w/The_Sacrifice, https://wiki.warframe.com/w/Excalibur/Umbra, https://wiki.warframe.com/w/Skiajati
+
+                const umbraModA = (
+                    await addItem(
+                        inventory,
+                        "/Lotus/Upgrades/Mods/Sets/Umbra/WarframeUmbraModA",
+                        1,
+                        false,
+                        undefined,
+                        `{"lvl":5}`
+                    )
+                ).Upgrades![0];
+                const umbraModB = (
+                    await addItem(
+                        inventory,
+                        "/Lotus/Upgrades/Mods/Sets/Umbra/WarframeUmbraModB",
+                        1,
+                        false,
+                        undefined,
+                        `{"lvl":5}`
+                    )
+                ).Upgrades![0];
+                const umbraModC = (
+                    await addItem(
+                        inventory,
+                        "/Lotus/Upgrades/Mods/Sets/Umbra/WarframeUmbraModC",
+                        1,
+                        false,
+                        undefined,
+                        `{"lvl":5}`
+                    )
+                ).Upgrades![0];
+                const sacrificeModA = (
+                    await addItem(
+                        inventory,
+                        "/Lotus/Upgrades/Mods/Sets/Sacrifice/MeleeSacrificeModA",
+                        1,
+                        false,
+                        undefined,
+                        `{"lvl":5}`
+                    )
+                ).Upgrades![0];
+                const sacrificeModB = (
+                    await addItem(
+                        inventory,
+                        "/Lotus/Upgrades/Mods/Sets/Sacrifice/MeleeSacrificeModB",
+                        1,
+                        false,
+                        undefined,
+                        `{"lvl":5}`
+                    )
+                ).Upgrades![0];
+                InventoryChanges.Upgrades ??= [];
+                InventoryChanges.Upgrades.push(umbraModA, umbraModB, umbraModC, sacrificeModA, sacrificeModB);
+
+                await addPowerSuit(
                     inventory,
-                    recipe.resultType,
-                    recipe.num,
-                    false,
-                    undefined,
-                    pendingRecipe.TargetFingerprint
-                ))
-            };
+                    "/Lotus/Powersuits/Excalibur/ExcaliburUmbra",
+                    {
+                        Configs: [
+                            {
+                                Upgrades: [
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    umbraModA.ItemId.$oid,
+                                    umbraModB.ItemId.$oid,
+                                    umbraModC.ItemId.$oid
+                                ]
+                            }
+                        ],
+                        XP: 900_000,
+                        Features: EquipmentFeatures.DOUBLE_CAPACITY
+                    },
+                    InventoryChanges
+                );
+                inventory.XPInfo.push({
+                    ItemType: "/Lotus/Powersuits/Excalibur/ExcaliburUmbra",
+                    XP: 900_000
+                });
+
+                addEquipment(
+                    inventory,
+                    "Melee",
+                    "/Lotus/Weapons/Tenno/Melee/Swords/UmbraKatana/UmbraKatana",
+                    {
+                        Configs: [
+                            { Upgrades: ["", "", "", "", "", "", sacrificeModA.ItemId.$oid, sacrificeModB.ItemId.$oid] }
+                        ],
+                        XP: 450_000,
+                        Features: EquipmentFeatures.DOUBLE_CAPACITY
+                    },
+                    InventoryChanges
+                );
+                inventory.XPInfo.push({
+                    ItemType: "/Lotus/Weapons/Tenno/Melee/Swords/UmbraKatana/UmbraKatana",
+                    XP: 450_000
+                });
+            } else {
+                InventoryChanges = {
+                    ...InventoryChanges,
+                    ...(await addItem(
+                        inventory,
+                        recipe.resultType,
+                        recipe.num,
+                        false,
+                        undefined,
+                        pendingRecipe.TargetFingerprint
+                    ))
+                };
+            }
         }
         if (
             config.claimingBlueprintRefundsIngredients &&

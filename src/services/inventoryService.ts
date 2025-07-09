@@ -482,11 +482,14 @@ export const addItem = async (
             if (quantity != 1) {
                 logger.warn(`adding 1 of ${typeName} ${targetFingerprint} even tho quantity ${quantity} was requested`);
             }
-            inventory.Upgrades.push({
-                ItemType: typeName,
-                UpgradeFingerprint: targetFingerprint
-            });
-            return {}; // there's not exactly a common "InventoryChanges" format for these
+            const upgrade =
+                inventory.Upgrades[
+                    inventory.Upgrades.push({
+                        ItemType: typeName,
+                        UpgradeFingerprint: targetFingerprint
+                    }) - 1
+                ];
+            return { Upgrades: [upgrade.toJSON<IUpgradeClient>()] };
         }
         const changes = [
             {
