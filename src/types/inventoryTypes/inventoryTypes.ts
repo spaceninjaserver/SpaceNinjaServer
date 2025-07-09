@@ -520,7 +520,8 @@ export enum InventorySlot {
     SENTINELS = "SentinelBin",
     AMPS = "OperatorAmpBin",
     RJ_COMPONENT_AND_ARMAMENTS = "CrewShipSalvageBin",
-    CREWMEMBERS = "CrewMemberBin"
+    CREWMEMBERS = "CrewMemberBin",
+    RIVENS = "RandomModBin"
 }
 
 export interface ISlots {

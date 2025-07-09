@@ -2,7 +2,7 @@ import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getInventory, updateCurrency, updateSlots } from "@/src/services/inventoryService";
 import { RequestHandler } from "express";
 import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
-import { logger } from "@/src/utils/logger";
+import { exhaustive } from "@/src/utils/ts-utils";
 
 /*
     loadout slots are additionally purchased slots only
@@ -22,13 +22,44 @@ export const inventorySlotsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const body = JSON.parse(req.body as string) as IInventorySlotsRequest;
 
-    if (body.Bin != InventorySlot.SUITS && body.Bin != InventorySlot.PVE_LOADOUTS) {
-        logger.warn(`unexpected slot purchase of type ${body.Bin}, account may be overcharged`);
+    let price;
+    let amount;
+    switch (body.Bin) {
+        case InventorySlot.SUITS:
+        case InventorySlot.MECHSUITS:
+        case InventorySlot.PVE_LOADOUTS:
+        case InventorySlot.CREWMEMBERS:
+            price = 20;
+            amount = 1;
+            break;
+
+        case InventorySlot.SPACESUITS:
+            price = 12;
+            amount = 1;
+            break;
+
+        case InventorySlot.WEAPONS:
+        case InventorySlot.SPACEWEAPONS:
+        case InventorySlot.SENTINELS:
+        case InventorySlot.RJ_COMPONENT_AND_ARMAMENTS:
+        case InventorySlot.AMPS:
+            price = 12;
+            amount = 2;
+            break;
+
+        case InventorySlot.RIVENS:
+            price = 60;
+            amount = 3;
+            break;
+
+        default:
+            exhaustive(body.Bin);
+            throw new Error(`unexpected slot purchase of type ${body.Bin as string}`);
     }
 
     const inventory = await getInventory(accountId);
-    const currencyChanges = updateCurrency(inventory, 20, true);
-    updateSlots(inventory, body.Bin, 1, 1);
+    const currencyChanges = updateCurrency(inventory, price, true);
+    updateSlots(inventory, body.Bin, amount, amount);
     await inventory.save();
 
     res.json({ InventoryChanges: currencyChanges });
