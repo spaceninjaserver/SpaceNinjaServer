@@ -815,7 +815,7 @@ export const addItem = async (
                         if (!seed) {
                             throw new Error(`Expected crew member to have a seed`);
                         }
-                        seed |= 0x33b81en << 32n;
+                        seed |= BigInt(Math.trunc(inventory.Created.getTime() / 1000) & 0xffffff) << 32n;
                         return {
                             ...addCrewMember(inventory, typeName, seed),
                             ...occupySlot(inventory, InventorySlot.CREWMEMBERS, premiumPurchase)
