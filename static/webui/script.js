@@ -273,6 +273,8 @@ function fetchItemList() {
     window.itemListPromise = new Promise(resolve => {
         const req = $.get("/custom/getItemLists?lang=" + window.lang);
         req.done(async data => {
+            window.allQuestKeys = data.QuestKeys;
+
             await dictPromise;
 
             document.querySelectorAll('[id^="datalist-"]').forEach(datalist => {
@@ -879,6 +881,14 @@ function updateInventory() {
 
             // Populate quests route
             document.getElementById("QuestKeys-list").innerHTML = "";
+            window.allQuestKeys.forEach(questKey => {
+                if (!data.QuestKeys.some(x => x.ItemType == questKey.uniqueName)) {
+                    const datalist = document.getElementById("datalist-QuestKeys");
+                    if (!datalist.querySelector(`option[data-key="${questKey.uniqueName}"]`)) {
+                        readdQuestKey(itemMap, questKey.uniqueName);
+                    }
+                }
+            });
             data.QuestKeys.forEach(item => {
                 const tr = document.createElement("tr");
                 tr.setAttribute("data-item-type", item.ItemType);
@@ -972,10 +982,7 @@ function updateInventory() {
                         a.href = "#";
                         a.onclick = function (event) {
                             event.preventDefault();
-                            const option = document.createElement("option");
-                            option.setAttribute("data-key", item.ItemType);
-                            option.value = itemMap[item.ItemType]?.name ?? item.ItemType;
-                            document.getElementById("datalist-QuestKeys").appendChild(option);
+                            readdQuestKey(itemMap, item.ItemType);
                             doQuestUpdate("deleteKey", item.ItemType);
                         };
                         a.title = loc("code_remove");
@@ -2268,6 +2275,13 @@ function doAddCurrency(currency) {
             updateInventory();
         });
     });
+}
+
+function readdQuestKey(itemMap, itemType) {
+    const option = document.createElement("option");
+    option.setAttribute("data-key", itemType);
+    option.value = itemMap[itemType]?.name ?? itemType;
+    document.getElementById("datalist-QuestKeys").appendChild(option);
 }
 
 function doQuestUpdate(operation, itemType) {
