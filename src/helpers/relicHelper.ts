@@ -23,10 +23,16 @@ export const crackRelic = async (
         weights = { COMMON: 0, UNCOMMON: 0, RARE: 1, LEGENDARY: 0 };
     }
     logger.debug(`opening a relic of quality ${relic.quality}; rarity weights are`, weights);
-    const reward = getRandomWeightedReward(
+    let reward = getRandomWeightedReward(
         ExportRewards[relic.rewardManifest][0] as { type: string; itemCount: number; rarity: TRarity }[], // rarity is nullable in PE+ typings, but always present for relics
         weights
     )!;
+    if (config.relicRewardItemCountMultiplier !== undefined && (config.relicRewardItemCountMultiplier ?? 1) != 1) {
+        reward = {
+            ...reward,
+            itemCount: reward.itemCount * config.relicRewardItemCountMultiplier
+        };
+    }
     logger.debug(`relic rolled`, reward);
     participant.Reward = reward.type;
 
@@ -43,13 +49,7 @@ export const crackRelic = async (
     // Give reward
     combineInventoryChanges(
         inventoryChanges,
-        (
-            await handleStoreItemAcquisition(
-                reward.type,
-                inventory,
-                reward.itemCount * (config.relicRewardItemCountMultiplier ?? 1)
-            )
-        ).InventoryChanges
+        (await handleStoreItemAcquisition(reward.type, inventory, reward.itemCount)).InventoryChanges
     );
 
     return reward;
