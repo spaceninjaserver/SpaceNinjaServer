@@ -4,6 +4,7 @@ dict = {
     general_addButton: `添加`,
     general_setButton: `设置`,
     general_bulkActions: `批量操作`,
+    general_loading: `[UNTRANSLATED] Loading...`,
 
     code_loginFail: `登录失败.请检查邮箱和密码.`,
     code_regFail: `注册失败.账号已存在.`,

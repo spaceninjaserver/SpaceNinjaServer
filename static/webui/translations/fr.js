@@ -4,6 +4,7 @@ dict = {
     general_addButton: `Ajouter`,
     general_setButton: `[UNTRANSLATED] Set`,
     general_bulkActions: `Action groupée`,
+    general_loading: `[UNTRANSLATED] Loading...`,
 
     code_loginFail: `Connexion échouée. Vérifiez le mot de passe.`,
     code_regFail: `Enregistrement impossible. Compte existant?`,

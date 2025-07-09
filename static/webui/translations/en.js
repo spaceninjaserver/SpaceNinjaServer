@@ -3,6 +3,7 @@ dict = {
     general_addButton: `Add`,
     general_setButton: `Set`,
     general_bulkActions: `Bulk Actions`,
+    general_loading: `Loading...`,
 
     code_loginFail: `Login failed. Double-check the email and password.`,
     code_regFail: `Registration failed. Account already exists?`,

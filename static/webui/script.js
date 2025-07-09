@@ -1166,14 +1166,15 @@ function updateInventory() {
                 const item = data[category].find(x => x.ItemId.$oid == oid);
 
                 if (item) {
+                    document.getElementById("detailedView-loading").classList.add("d-none");
+
                     if (item.ItemName) {
-                        $("#detailedView-route h3").text(item.ItemName);
+                        $("#detailedView-title").text(item.ItemName);
                         $("#detailedView-route .text-body-secondary").text(
                             itemMap[item.ItemType]?.name ?? item.ItemType
                         );
                     } else {
-                        $("#detailedView-route h3").text(itemMap[item.ItemType]?.name ?? item.ItemType);
-                        $("#detailedView-route .text-body-secondary").text("");
+                        $("#detailedView-title").text(itemMap[item.ItemType]?.name ?? item.ItemType);
                     }
 
                     if (category == "Suits") {
@@ -2184,7 +2185,9 @@ function doAddMissingMaxRankMods() {
 // DetailedView Route
 
 single.getRoute("#detailedView-route").on("beforeload", function () {
-    this.element.querySelector("h3").textContent = "Loading...";
+    document.getElementById("detailedView-loading").classList.remove("d-none");
+    document.getElementById("detailedView-title").textContent = "";
+    document.querySelector("#detailedView-route .text-body-secondary").textContent = "";
     document.getElementById("archonShards-card").classList.add("d-none");
     document.getElementById("valenceBonus-card").classList.add("d-none");
     if (window.didInitialInventoryUpdate) {

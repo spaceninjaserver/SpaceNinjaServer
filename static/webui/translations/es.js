@@ -4,6 +4,7 @@ dict = {
     general_addButton: `Agregar`,
     general_setButton: `Establecer`,
     general_bulkActions: `Acciones masivas`,
+    general_loading: `[UNTRANSLATED] Loading...`,
 
     code_loginFail: `Error al iniciar sesión. Verifica el correo electrónico y la contraseña.`,
     code_regFail: `Error al registrar la cuenta. ¿Ya existe una cuenta con este correo?`,
