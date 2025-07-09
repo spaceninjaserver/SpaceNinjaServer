@@ -45,6 +45,8 @@ dict = {
     code_focusUnlocked: `|COUNT| écoles de Focus déverrouillées ! Synchronisation de l'inventaire nécessaire.`,
     code_addModsConfirm: `Ajouter |COUNT| mods à l'inventaire ?`,
     code_succImport: `Importé.`,
+    code_succRelog: `[UNTRANSLATED] Done. Please note that you'll need to relog to see a difference in-game.`,
+    code_nothingToDo: `[UNTRANSLATED] Done. There was nothing to do.`,
     code_gild: `Polir`,
     code_moa: `Moa`,
     code_zanuka: `Molosse`,
@@ -200,6 +202,7 @@ dict = {
     cheats_changeSupportedSyndicate: `Allégeance`,
     cheats_changeButton: `Changer`,
     cheats_none: `Aucun`,
+    cheats_markAllAsRead: `[UNTRANSLATED] Mark Inbox As Read`,
 
     worldState: `[UNTRANSLATED] World State`,
     worldState_creditBoost: `[UNTRANSLATED] Credit Boost`,

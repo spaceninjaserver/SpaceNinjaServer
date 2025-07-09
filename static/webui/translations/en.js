@@ -44,6 +44,8 @@ dict = {
     code_focusUnlocked: `Unlocked |COUNT| new focus schools! An inventory update will be needed for the changes to be reflected in-game. Visiting the navigation should be the easiest way to trigger that.`,
     code_addModsConfirm: `Are you sure you want to add |COUNT| mods to your account?`,
     code_succImport: `Successfully imported.`,
+    code_succRelog: `Done. Please note that you'll need to relog to see a difference in-game.`,
+    code_nothingToDo: `Done. There was nothing to do.`,
     code_gild: `Gild`,
     code_moa: `Moa`,
     code_zanuka: `Hound`,
@@ -199,6 +201,7 @@ dict = {
     cheats_changeSupportedSyndicate: `Supported syndicate`,
     cheats_changeButton: `Change`,
     cheats_none: `None`,
+    cheats_markAllAsRead: `Mark Inbox As Read`,
 
     worldState: `World State`,
     worldState_creditBoost: `Credit Boost`,

@@ -45,6 +45,8 @@ dict = {
     code_focusUnlocked: `¡Desbloqueadas |COUNT| nuevas escuelas de enfoque! Se necesita una actualización del inventario para reflejar los cambios en el juego. Visitar la navegación debería ser la forma más sencilla de activarlo.`,
     code_addModsConfirm: `¿Estás seguro de que deseas agregar |COUNT| modificadores a tu cuenta?`,
     code_succImport: `Importación exitosa.`,
+    code_succRelog: `[UNTRANSLATED] Done. Please note that you'll need to relog to see a difference in-game.`,
+    code_nothingToDo: `[UNTRANSLATED] Done. There was nothing to do.`,
     code_gild: `Refinar`,
     code_moa: `Moa`,
     code_zanuka: `Sabueso`,
@@ -200,6 +202,7 @@ dict = {
     cheats_changeSupportedSyndicate: `Sindicatos disponibles`,
     cheats_changeButton: `Cambiar`,
     cheats_none: `Ninguno`,
+    cheats_markAllAsRead: `[UNTRANSLATED] Mark Inbox As Read`,
 
     worldState: `Estado del mundo`,
     worldState_creditBoost: `Potenciador de Créditos`,

@@ -2780,3 +2780,16 @@ document.querySelectorAll("#sidebar .nav-link").forEach(function (elm) {
         window.scrollTo(0, 0);
     });
 });
+
+async function markAllAsRead() {
+    await revalidateAuthz();
+    const { Inbox } = await fetch("/api/inbox.php?" + window.authz).then(x => x.json());
+    let any = false;
+    for (const msg of Inbox) {
+        if (!msg.r) {
+            await fetch("/api/inbox.php?" + window.authz + "&messageId=" + msg.messageId.$oid);
+            any = true;
+        }
+    }
+    toast(loc(any ? "code_succRelog" : "code_nothingToDo"));
+}

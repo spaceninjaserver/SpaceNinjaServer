@@ -45,6 +45,8 @@ dict = {
     code_focusUnlocked: `|COUNT| neue Fokus-Schulen freigeschaltet! Ein Inventar-Update wird benötigt, damit die Änderungen im Spiel sichtbar werden. Die Sternenkarte zu besuchen, sollte der einfachste Weg sein, dies auszulösen.`,
     code_addModsConfirm: `Bist du sicher, dass du |COUNT| Mods zu deinem Account hinzufügen möchtest?`,
     code_succImport: `Erfolgreich importiert.`,
+    code_succRelog: `[UNTRANSLATED] Done. Please note that you'll need to relog to see a difference in-game.`,
+    code_nothingToDo: `[UNTRANSLATED] Done. There was nothing to do.`,
     code_gild: `Veredeln`,
     code_moa: `Moa`,
     code_zanuka: `Jagdhund`,
@@ -200,6 +202,7 @@ dict = {
     cheats_changeSupportedSyndicate: `Unterstütztes Syndikat`,
     cheats_changeButton: `Ändern`,
     cheats_none: `Keines`,
+    cheats_markAllAsRead: `[UNTRANSLATED] Mark Inbox As Read`,
 
     worldState: `[UNTRANSLATED] World State`,
     worldState_creditBoost: `[UNTRANSLATED] Credit Boost`,

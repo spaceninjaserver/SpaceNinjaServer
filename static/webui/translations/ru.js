@@ -45,6 +45,8 @@ dict = {
     code_focusUnlocked: `Разблокировано |COUNT| новых школ фокуса! Для отображения изменений в игре потребуется обновление инвентаря. Посещение навигации — самый простой способ этого добиться.`,
     code_addModsConfirm: `Вы уверены, что хотите добавить |COUNT| модов на ваш аккаунт?`,
     code_succImport: `Успешно импортировано.`,
+    code_succRelog: `[UNTRANSLATED] Done. Please note that you'll need to relog to see a difference in-game.`,
+    code_nothingToDo: `[UNTRANSLATED] Done. There was nothing to do.`,
     code_gild: `Улучшить`,
     code_moa: `МОА`,
     code_zanuka: `Гончая`,
@@ -200,6 +202,7 @@ dict = {
     cheats_changeSupportedSyndicate: `Поддерживаемый синдикат`,
     cheats_changeButton: `Изменить`,
     cheats_none: `Отсутствует`,
+    cheats_markAllAsRead: `[UNTRANSLATED] Mark Inbox As Read`,
 
     worldState: `[UNTRANSLATED] World State`,
     worldState_creditBoost: `[UNTRANSLATED] Credit Boost`,

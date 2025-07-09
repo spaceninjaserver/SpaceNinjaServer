@@ -45,6 +45,8 @@ dict = {
     code_focusUnlocked: `已解锁|COUNT|个新专精学派!需要游戏内仓库更新才能生效,您可以通过访问星图来触发仓库更新.`,
     code_addModsConfirm: `确定要向账户添加|COUNT|张MOD吗?`,
     code_succImport: `导入成功。`,
+    code_succRelog: `[UNTRANSLATED] Done. Please note that you'll need to relog to see a difference in-game.`,
+    code_nothingToDo: `[UNTRANSLATED] Done. There was nothing to do.`,
     code_gild: `镀金`,
     code_moa: `恐鸟`,
     code_zanuka: `猎犬`,
@@ -200,6 +202,7 @@ dict = {
     cheats_changeSupportedSyndicate: `支持的集团`,
     cheats_changeButton: `更改`,
     cheats_none: `无`,
+    cheats_markAllAsRead: `[UNTRANSLATED] Mark Inbox As Read`,
 
     worldState: `世界状态配置`,
     worldState_creditBoost: `现金加成`,
