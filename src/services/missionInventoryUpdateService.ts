@@ -558,6 +558,7 @@ export const addMissionInventoryUpdates = async (
                         }
                     ]);
                 }
+                inventory.DeathSquadable = false;
                 break;
             }
             case "LockedWeaponGroup": {
@@ -576,7 +577,7 @@ export const addMissionInventoryUpdates = async (
                 break;
             }
             case "IncHarvester": {
-                inventory.Harvestable = true;
+                // Unsure what to do with this
                 break;
             }
             case "CurrentLoadOutIds": {

@@ -6,15 +6,18 @@ import sortieTilesets from "@/static/fixed_responses/worldState/sortieTilesets.j
 import sortieTilesetMissions from "@/static/fixed_responses/worldState/sortieTilesetMissions.json";
 import syndicateMissions from "@/static/fixed_responses/worldState/syndicateMissions.json";
 import darvoDeals from "@/static/fixed_responses/worldState/darvoDeals.json";
+import invasionNodes from "@/static/fixed_responses/worldState/invasionNodes.json";
+import invasionRewards from "@/static/fixed_responses/worldState/invasionRewards.json";
 import { buildConfig } from "@/src/services/buildConfigService";
 import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { config } from "@/src/services/configService";
 import { getRandomElement, getRandomInt, sequentiallyUniqueRandomElement, SRng } from "@/src/services/rngService";
-import { eMissionType, ExportRegions, ExportSyndicates, IRegion } from "warframe-public-export-plus";
+import { eMissionType, ExportRegions, ExportSyndicates, IMissionReward, IRegion } from "warframe-public-export-plus";
 import {
     ICalendarDay,
     ICalendarEvent,
     ICalendarSeason,
+    IInvasion,
     ILiteSortie,
     IPrimeVaultTrader,
     IPrimeVaultTraderOffer,
@@ -1227,6 +1230,78 @@ const getAllVarziaManifests = (): IPrimeVaultTraderOffer[] => {
     return [...dualPacks, ...singlePacks, ...items, ...bobbleHeads, ...relics];
 };
 
+const createInvasion = (day: number, idx: number): IInvasion => {
+    const id = day * 3 + idx;
+    const defender = (["FC_GRINEER", "FC_CORPUS", day % 2 ? "FC_GRINEER" : "FC_CORPUS"] as const)[idx];
+    const rng = new SRng(new SRng(id).randomInt(0, 1_000_000));
+    const isInfestationOutbreak = rng.randomInt(0, 1) == 0;
+    const attacker = isInfestationOutbreak ? "FC_INFESTATION" : defender == "FC_GRINEER" ? "FC_CORPUS" : "FC_GRINEER";
+    const startMs = EPOCH + day * 86400_000;
+    const oid =
+        ((startMs / 1000) & 0xffffffff).toString(16).padStart(8, "0") +
+        "fd148cb8" +
+        (idx & 0xffffffff).toString(16).padStart(8, "0");
+    const node = sequentiallyUniqueRandomElement(invasionNodes[defender], id, 5, 690175)!; // Can't repeat the other 2 on this day nor the last 3
+    const progress = (Date.now() - startMs) / 86400_000;
+    const countMultiplier = isInfestationOutbreak || rng.randomInt(0, 1) ? -1 : 1; // if defender is winning, count is negative
+    const fiftyPercent = rng.randomInt(1000, 29000); // introduce some 'yitter' for the percentages
+    const rewardFloat = rng.randomFloat();
+    const rewardTier = rewardFloat < 0.201 ? "RARE" : rewardFloat < 0.7788 ? "COMMON" : "UNCOMMON";
+    const attackerReward: IMissionReward = {};
+    const defenderReward: IMissionReward = {};
+    if (isInfestationOutbreak) {
+        defenderReward.countedItems = [
+            rng.randomElement(invasionRewards[rng.randomInt(0, 1) ? "FC_INFESTATION" : defender][rewardTier])!
+        ];
+    } else {
+        attackerReward.countedItems = [rng.randomElement(invasionRewards[attacker][rewardTier])!];
+        defenderReward.countedItems = [rng.randomElement(invasionRewards[defender][rewardTier])!];
+    }
+    return {
+        _id: { $oid: oid },
+        Faction: attacker,
+        DefenderFaction: defender,
+        Node: node,
+        Count: Math.round(
+            (progress < 0.5 ? progress * 2 * fiftyPercent : fiftyPercent + (30_000 - fiftyPercent) * (progress - 0.5)) *
+                countMultiplier
+        ),
+        Goal: 30000, // Value seems to range from 30000 to 98000 in intervals of 1000. Higher values are increasingly rare. I don't think this is relevant for the frontend besides dividing count by it.
+        LocTag: isInfestationOutbreak
+            ? ExportRegions[node].missionIndex == 0
+                ? "/Lotus/Language/Menu/InfestedInvasionBoss"
+                : "/Lotus/Language/Menu/InfestedInvasionGeneric"
+            : attacker == "FC_CORPUS"
+              ? "/Lotus/Language/Menu/CorpusInvasionGeneric"
+              : "/Lotus/Language/Menu/GrineerInvasionGeneric",
+        Completed: startMs + 86400_000 < Date.now(), // Sorta unfaithful. Invasions on live are (at least in part) in fluenced by people completing them. And otherwise also probably not hardcoded to last 24 hours.
+        ChainID: { $oid: oid },
+        AttackerReward: attackerReward,
+        AttackerMissionInfo: {
+            seed: rng.randomInt(0, 1_000_000),
+            faction: defender
+        },
+        DefenderReward: defenderReward,
+        DefenderMissionInfo: {
+            seed: rng.randomInt(0, 1_000_000),
+            faction: attacker
+        },
+        Activation: {
+            $date: {
+                $numberLong: startMs.toString()
+            }
+        }
+    };
+};
+
+export const getInvasionByOid = (oid: string): IInvasion | undefined => {
+    const arr = oid.split("fd148cb8");
+    if (arr.length == 2 && arr[0].length == 8 && arr[1].length == 8) {
+        return createInvasion(idToDay(oid), parseInt(arr[1], 16));
+    }
+    return undefined;
+};
+
 export const getWorldState = (buildLabel?: string): IWorldState => {
     const constraints: ITimeConstraint[] = [];
     if (config.worldState?.eidolonOverride) {
@@ -1275,6 +1350,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         LiteSorties: [],
         ActiveMissions: [],
         GlobalUpgrades: [],
+        Invasions: [],
         VoidTraders: [],
         PrimeVaultTraders: [],
         VoidStorms: [],
@@ -1475,6 +1551,20 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             LocalizeTag: "",
             LocalizeDescTag: ""
         });
+    }
+
+    // Rough outline of dynamic invasions.
+    // TODO: Invasions chains, e.g. an infestation mission would soon lead to other nodes on that planet also having an infestation invasion.
+    // TODO: Grineer/Corpus to fund their death stars with each invasion win.
+    {
+        worldState.Invasions.push(createInvasion(day, 0));
+        worldState.Invasions.push(createInvasion(day, 1));
+        worldState.Invasions.push(createInvasion(day, 2));
+
+        // Completed invasions stay for up to 24 hours as the winner 'occupies' that node
+        worldState.Invasions.push(createInvasion(day - 1, 0));
+        worldState.Invasions.push(createInvasion(day - 1, 1));
+        worldState.Invasions.push(createInvasion(day - 1, 2));
     }
 
     // Baro

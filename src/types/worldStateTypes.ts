@@ -12,6 +12,7 @@ export interface IWorldState {
     SyndicateMissions: ISyndicateMissionInfo[];
     ActiveMissions: IFissure[];
     GlobalUpgrades: IGlobalUpgrade[];
+    Invasions: IInvasion[];
     NodeOverrides: INodeOverride[];
     VoidTraders: IVoidTrader[];
     PrimeVaultTraders: IPrimeVaultTrader[];
@@ -80,6 +81,28 @@ export interface IGlobalUpgrade {
     Value: number;
     LocalizeTag: string;
     LocalizeDescTag: string;
+}
+
+export interface IInvasion {
+    _id: IOid;
+    Faction: string;
+    DefenderFaction: string;
+    Node: string;
+    Count: number;
+    Goal: number;
+    LocTag: string;
+    Completed: boolean;
+    ChainID: IOid;
+    AttackerReward: IMissionReward;
+    AttackerMissionInfo: IInvasionMissionInfo;
+    DefenderReward: IMissionReward;
+    DefenderMissionInfo: IInvasionMissionInfo;
+    Activation: IMongoDate;
+}
+
+export interface IInvasionMissionInfo {
+    seed: number;
+    faction: string;
 }
 
 export interface IFissure {

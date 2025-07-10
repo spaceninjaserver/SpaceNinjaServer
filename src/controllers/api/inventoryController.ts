@@ -6,10 +6,18 @@ import allDialogue from "@/static/fixed_responses/allDialogue.json";
 import { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
 import { IInventoryClient, IShipInventory, equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IPolarity, ArtifactPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
-import { ExportCustoms, ExportFlavour, ExportResources, ExportVirtuals } from "warframe-public-export-plus";
+import {
+    eFaction,
+    ExportCustoms,
+    ExportFlavour,
+    ExportResources,
+    ExportVirtuals,
+    ICountedItem
+} from "warframe-public-export-plus";
 import { applyCheatsToInfestedFoundry, handleSubsumeCompletion } from "@/src/services/infestedFoundryService";
 import {
     addEmailItem,
+    addItem,
     addMiscItems,
     allDailyAffiliationKeys,
     checkCalendarAutoAdvance,
@@ -30,7 +38,8 @@ import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { DailyDeal } from "@/src/models/worldStateModel";
 import { EquipmentFeatures } from "@/src/types/equipmentTypes";
 import { generateRewardSeed } from "@/src/services/rngService";
-import { getWorldState } from "@/src/services/worldStateService";
+import { getInvasionByOid, getWorldState } from "@/src/services/worldStateService";
+import { createMessage } from "@/src/services/inboxService";
 
 export const inventoryController: RequestHandler = async (request, response) => {
     const account = await getAccountForRequest(request);
@@ -184,6 +193,63 @@ export const inventoryController: RequestHandler = async (request, response) => 
     ) {
         handleSubsumeCompletion(inventory);
         //await inventory.save();
+    }
+
+    for (let i = 0; i != inventory.QualifyingInvasions.length; ) {
+        const qi = inventory.QualifyingInvasions[i];
+        const invasion = getInvasionByOid(qi.invasionId.toString());
+        if (!invasion) {
+            logger.debug(`removing QualifyingInvasions entry for unknown invasion: ${qi.invasionId.toString()}`);
+            inventory.QualifyingInvasions.splice(i, 1);
+            continue;
+        }
+        if (invasion.Completed) {
+            let factionSidedWith: string | undefined;
+            let battlePay: ICountedItem[] | undefined;
+            if (qi.AttackerScore >= 3) {
+                factionSidedWith = invasion.Faction;
+                battlePay = invasion.AttackerReward.countedItems;
+                logger.debug(`invasion pay from ${factionSidedWith}`, { battlePay });
+            } else if (qi.DefenderScore >= 3) {
+                factionSidedWith = invasion.DefenderFaction;
+                battlePay = invasion.DefenderReward.countedItems;
+                logger.debug(`invasion pay from ${factionSidedWith}`, { battlePay });
+            }
+            if (factionSidedWith) {
+                if (battlePay) {
+                    // Decoupling rewards from the inbox message because it may delete itself without being read
+                    for (const item of battlePay) {
+                        await addItem(inventory, item.ItemType, item.ItemCount);
+                    }
+                    await createMessage(account._id, [
+                        {
+                            sndr: eFaction.find(x => x.tag == factionSidedWith)?.name ?? factionSidedWith, // TOVERIFY
+                            msg: `/Lotus/Language/G1Quests/${factionSidedWith}_InvasionThankyouMessageBody`,
+                            sub: `/Lotus/Language/G1Quests/${factionSidedWith}_InvasionThankyouMessageSubject`,
+                            countedAtt: battlePay,
+                            attVisualOnly: true,
+                            icon:
+                                factionSidedWith == "FC_GRINEER"
+                                    ? "/Lotus/Interface/Icons/Npcs/EliteRifleLancerAvatar.png" // Source: https://www.reddit.com/r/Warframe/comments/1aj4usx/battle_pay_worth_10_plat/, https://www.youtube.com/watch?v=XhNZ6ai6BOY
+                                    : "/Lotus/Interface/Icons/Npcs/CrewmanNormal.png", // My best source for this is https://www.youtube.com/watch?v=rxrCCFm73XE around 1:37
+                            // TOVERIFY: highPriority?
+                            endDate: new Date(Date.now() + 86400_000) // TOVERIFY: This type of inbox message seems to automatically delete itself. We'll just delete it after 24 hours, but it's not clear if this is correct.
+                        }
+                    ]);
+                }
+                if (invasion.Faction != "FC_INFESTATION") {
+                    // Sided with grineer -> opposed corpus -> send zanuka (harvester)
+                    // Sided with corpus -> opposed grineer -> send g3 (death squad)
+                    inventory[factionSidedWith != "FC_GRINEER" ? "DeathSquadable" : "Harvestable"] = true;
+                    // TOVERIFY: Should this happen earlier?
+                    // TOVERIFY: Should this send an (ephemeral) email?
+                }
+            }
+            logger.debug(`removing QualifyingInvasions entry for completed invasion: ${qi.invasionId.toString()}`);
+            inventory.QualifyingInvasions.splice(i, 1);
+            continue;
+        }
+        ++i;
     }
 
     if (inventory.LastInventorySync) {

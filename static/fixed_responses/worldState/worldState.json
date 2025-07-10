@@ -117,46 +117,6 @@
       ]
     }
   },
-  "Invasions": [
-    {
-      "_id": {
-        "$oid": "67c8ec8b3d0d86b236c1c18f"
-      },
-      "Faction": "FC_INFESTATION",
-      "DefenderFaction": "FC_CORPUS",
-      "Node": "SolNode53",
-      "Count": -28558,
-      "Goal": 30000,
-      "LocTag": "/Lotus/Language/Menu/InfestedInvasionBoss",
-      "Completed": false,
-      "ChainID": {
-        "$oid": "67c8b6a2bde0dfd0f7c1c18d"
-      },
-      "AttackerReward": [],
-      "AttackerMissionInfo": {
-        "seed": 488863,
-        "faction": "FC_CORPUS"
-      },
-      "DefenderReward": {
-        "countedItems": [
-          {
-            "ItemType": "/Lotus/Types/Items/Research/EnergyComponent",
-            "ItemCount": 3
-          }
-        ]
-      },
-      "DefenderMissionInfo": {
-        "seed": 127653,
-        "faction": "FC_INFESTATION",
-        "missionReward": []
-      },
-      "Activation": {
-        "$date": {
-          "$numberLong": "1741221003031"
-        }
-      }
-    }
-  ],
   "SyndicateMissions": [
     {
       "_id": { "$oid": "663a4fc5ba6f84724fa4804c" },

@@ -1,0 +1,190 @@
+{
+  "FC_GRINEER": {
+    "COMMON": [
+      {
+        "ItemType": "/Lotus/Types/Items/Research/ChemComponent",
+        "ItemCount": 3
+      }
+    ],
+    "UNCOMMON": [
+      {
+        "ItemType": "/Lotus/Types/Recipes/Weapons/KarakWraithBlueprint",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Weapons/WeaponParts/KarakWraithBarrel",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Weapons/WeaponParts/KarakWraithReceiver",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Weapons/WeaponParts/KarakWraithStock",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Weapons/StrunWraithBlueprint",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Weapons/WeaponParts/StrunWraithBarrel",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Weapons/WeaponParts/StrunWraithReceiver",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Weapons/WeaponParts/StrunWraithStock",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Weapons/LatronWraithBlueprint",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Weapons/WeaponParts/LatronWraithBarrel",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Weapons/WeaponParts/LatronWraithReceiver",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Weapons/WeaponParts/LatronWraithStock",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Weapons/TwinVipersWraithBlueprint",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Weapons/WeaponParts/TwinVipersWraithBarrel",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Weapons/WeaponParts/TwinVipersWraithLink",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Weapons/WeaponParts/TwinVipersWraithReceiver",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Weapons/GrineerCombatKnifeSortieBlueprint",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Weapons/WeaponParts/GrineerCombatKnifeHilt",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Weapons/WeaponParts/GrineerCombatKnifeBlade",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Weapons/WeaponParts/GrineerCombatKnifeHeatsink",
+        "ItemCount": 1
+      }
+    ],
+    "RARE": [
+      {
+        "ItemType": "/Lotus/Types/Recipes/Components/OrokinCatalystBlueprint",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Components/OrokinReactorBlueprint",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Components/FormaBlueprint",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Components/UtilityUnlockerBlueprint",
+        "ItemCount": 1
+      }
+    ]
+  },
+  "FC_CORPUS": {
+    "COMMON": [
+      {
+        "ItemType": "/Lotus/Types/Items/Research/EnergyComponent",
+        "ItemCount": 3
+      }
+    ],
+    "UNCOMMON": [
+      {
+        "ItemType": "/Lotus/Types/Recipes/Weapons/DeraVandalBlueprint",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Weapons/WeaponParts/DeraVandalBarrel",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Weapons/WeaponParts/DeraVandalReceiver",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Weapons/WeaponParts/DeraVandalStock",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Weapons/SnipetronVandalBlueprint",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Weapons/WeaponParts/SnipetronVandalStock",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Weapons/WeaponParts/SnipetronVandalReceiver",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Weapons/WeaponParts/SnipetronVandalBarrel",
+        "ItemCount": 1
+      }
+    ],
+    "RARE": [
+      {
+        "ItemType": "/Lotus/Types/Recipes/Components/OrokinCatalystBlueprint",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Components/OrokinReactorBlueprint",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Components/FormaBlueprint",
+        "ItemCount": 1
+      },
+      {
+        "ItemType": "/Lotus/Types/Recipes/Components/UtilityUnlockerBlueprint",
+        "ItemCount": 1
+      }
+    ]
+  },
+  "FC_INFESTATION": {
+    "COMMON": [
+      {
+        "ItemType": "/Lotus/Types/Items/Research/BioComponent",
+        "ItemCount": 1
+      }
+    ],
+    "UNCOMMON": [
+      {
+        "ItemType": "/Lotus/Types/Items/Research/BioComponent",
+        "ItemCount": 2
+      }
+    ],
+    "RARE": [
+      {
+        "ItemType": "/Lotus/Types/Items/MiscItems/InfestedAladCoordinate",
+        "ItemCount": 1
+      }
+    ]
+  }
+}
