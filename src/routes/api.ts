@@ -112,6 +112,7 @@ import { removeFromGuildController } from "@/src/controllers/api/removeFromGuild
 import { removeIgnoredUserController } from "@/src/controllers/api/removeIgnoredUserController";
 import { renamePetController } from "@/src/controllers/api/renamePetController";
 import { rerollRandomModController } from "@/src/controllers/api/rerollRandomModController";
+import { resetQuestProgressController } from "@/src/controllers/api/resetQuestProgressController";
 import { retrievePetFromStasisController } from "@/src/controllers/api/retrievePetFromStasisController";
 import { saveDialogueController } from "@/src/controllers/api/saveDialogueController";
 import { saveLoadoutController } from "@/src/controllers/api/saveLoadoutController";
@@ -209,6 +210,7 @@ apiRouter.get("/questControl.php", questControlController);
 apiRouter.get("/queueDojoComponentDestruction.php", queueDojoComponentDestructionController);
 apiRouter.get("/removeFriend.php", removeFriendGetController);
 apiRouter.get("/removeFromAlliance.php", removeFromAllianceController);
+apiRouter.get("/resetQuestProgress.php", resetQuestProgressController);
 apiRouter.get("/setActiveQuest.php", setActiveQuestController);
 apiRouter.get("/setActiveShip.php", setActiveShipController);
 apiRouter.get("/setAllianceGuildPermissions.php", setAllianceGuildPermissionsController);
