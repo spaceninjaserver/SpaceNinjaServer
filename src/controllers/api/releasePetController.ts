@@ -1,6 +1,7 @@
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
+import { sendWsBroadcastTo } from "@/src/services/wsService";
 import { RequestHandler } from "express";
 
 export const releasePetController: RequestHandler = async (req, res) => {
@@ -19,6 +20,7 @@ export const releasePetController: RequestHandler = async (req, res) => {
 
     await inventory.save();
     res.json({ inventoryChanges }); // Not a mistake; it's "inventoryChanges" here.
+    sendWsBroadcastTo(accountId, { update_inventory: true });
 };
 
 interface IReleasePetRequest {
