@@ -1635,6 +1635,15 @@ export const addEmailItem = async (
     return inventoryChanges;
 };
 
+const xpEarningParts: readonly string[] = [
+    "LWPT_BLADE",
+    "LWPT_GUN_BARREL",
+    "LWPT_AMP_OCULUS",
+    "LWPT_MOA_HEAD",
+    "LWPT_ZANUKA_HEAD",
+    "LWPT_HB_DECK"
+];
+
 export const applyClientEquipmentUpdates = (
     inventory: TInventoryDatabaseDocument,
     gearArray: IEquipmentClient[],
@@ -1653,13 +1662,26 @@ export const applyClientEquipmentUpdates = (
             item.XP ??= 0;
             item.XP += XP;
 
-            const xpinfoIndex = inventory.XPInfo.findIndex(x => x.ItemType == item.ItemType);
+            let xpItemType = item.ItemType;
+            if (item.ModularParts) {
+                for (const part of item.ModularParts) {
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                    const partType = ExportWeapons[part]?.partType;
+                    if (partType !== undefined && xpEarningParts.indexOf(partType) != -1) {
+                        xpItemType = part;
+                        break;
+                    }
+                }
+                logger.debug(`adding xp to ${xpItemType} for modular item ${fromOid(ItemId)} (${item.ItemType})`);
+            }
+
+            const xpinfoIndex = inventory.XPInfo.findIndex(x => x.ItemType == xpItemType);
             if (xpinfoIndex !== -1) {
                 const xpinfo = inventory.XPInfo[xpinfoIndex];
                 xpinfo.XP += XP;
             } else {
                 inventory.XPInfo.push({
-                    ItemType: item.ItemType,
+                    ItemType: xpItemType,
                     XP: XP
                 });
             }
