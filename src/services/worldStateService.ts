@@ -261,7 +261,8 @@ export const getSortie = (day: number): ISortie => {
         if (
             sortieFactionToSystemIndexes[sortieBossToFaction[boss]].includes(value.systemIndex) &&
             sortieFactionToFactionIndexes[sortieBossToFaction[boss]].includes(value.factionIndex!) &&
-            key in sortieTilesets
+            key in sortieTilesets &&
+            (key != "SolNode228" || sortieBossToFaction[boss] == "FC_GRINEER") // PoE does not work for non-infested enemies
         ) {
             nodes.push(key);
         }
