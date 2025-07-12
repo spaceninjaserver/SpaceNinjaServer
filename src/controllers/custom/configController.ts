@@ -3,6 +3,7 @@ import { config } from "@/src/services/configService";
 import { getAccountForRequest, isAdministrator } from "@/src/services/loginService";
 import { saveConfig } from "@/src/services/configWriterService";
 import { sendWsBroadcastExcept } from "@/src/services/wsService";
+import { syncConfigWithDatabase } from "@/src/services/configWatcherService";
 
 export const getConfigController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -26,6 +27,7 @@ export const setConfigController: RequestHandler = async (req, res) => {
             obj[idx] = value;
         }
         sendWsBroadcastExcept(parseInt(String(req.query.wsid)), { config_reloaded: true });
+        syncConfigWithDatabase();
         await saveConfig();
         res.end();
     } else {
