@@ -282,6 +282,7 @@ function fetchItemList() {
             });
 
             const syndicateNone = document.createElement("option");
+            syndicateNone.value = "";
             syndicateNone.textContent = loc("cheats_none");
             document.getElementById("changeSyndicate").innerHTML = "";
             document.getElementById("changeSyndicate").appendChild(syndicateNone);
