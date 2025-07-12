@@ -61,7 +61,7 @@ dict = {
     code_pigment: `颜料`,
     code_mature: `成长并战备`,
     code_unmature: `逆转衰老基因`,
-    code_succChange: `[UNTRANSLATED] Successfully changed.`,
+    code_succChange: `更改成功.`,
     login_description: `使用您的 OpenWF 账户凭证登录(与游戏内连接本服务器时使用的昵称相同).`,
     login_emailLabel: `电子邮箱`,
     login_passwordLabel: `密码`,
@@ -124,7 +124,7 @@ dict = {
     detailedView_archonShardsDescription2: `请注意,在加载时,每个执政官源力石都需要一定的时间来生效。`,
     detailedView_valenceBonusLabel: `效价加成`,
     detailedView_valenceBonusDescription: `您可以设置或移除武器上的效价加成.`,
-    detailedView_modularPartsLabel: `[UNTRANSLATED] Change Modular Parts`,
+    detailedView_modularPartsLabel: `更换部件`,
 
     mods_addRiven: `添加裂罅MOD`,
     mods_fingerprint: `印记`,
