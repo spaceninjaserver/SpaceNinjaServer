@@ -61,6 +61,7 @@ dict = {
     code_pigment: `Pigmento`,
     code_mature: `Listo para el combate`,
     code_unmature: `Regresar el envejecimiento genético`,
+    code_succChange: `[UNTRANSLATED] Successfully changed.`,
     login_description: `Inicia sesión con las credenciales de tu cuenta OpenWF (las mismas que usas en el juego al conectarte a este servidor).`,
     login_emailLabel: `Dirección de correo electrónico`,
     login_passwordLabel: `Contraseña`,
@@ -123,6 +124,7 @@ dict = {
     detailedView_archonShardsDescription2: `Ten en cuenta que cada fragmento de archón tarda un poco en aplicarse al cargar`,
     detailedView_valenceBonusLabel: `Bônus de Valência`,
     detailedView_valenceBonusDescription: `Puedes establecer o quitar el bono de valencia de tu arma.`,
+    detailedView_modularPartsLabel: `[UNTRANSLATED] Change Modular Parts`,
 
     mods_addRiven: `Agregar Agrietado`,
     mods_fingerprint: `Huella digital`,

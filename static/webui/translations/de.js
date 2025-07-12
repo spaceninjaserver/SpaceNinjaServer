@@ -61,6 +61,7 @@ dict = {
     code_pigment: `Pigment`,
     code_mature: `Für den Kampf auswachsen lassen`,
     code_unmature: `Genetisches Altern zurücksetzen`,
+    code_succChange: `[UNTRANSLATED] Successfully changed.`,
     login_description: `Melde dich mit deinem OpenWF-Account an (denselben Angaben wie im Spiel, wenn du dich mit diesem Server verbindest).`,
     login_emailLabel: `E-Mail-Adresse`,
     login_passwordLabel: `Passwort`,
@@ -123,6 +124,7 @@ dict = {
     detailedView_archonShardsDescription2: `Hinweis: Jede Archon-Scherbe benötigt beim Laden etwas Zeit, um angewendet zu werden.`,
     detailedView_valenceBonusLabel: `Valenz-Bonus`,
     detailedView_valenceBonusDescription: `[UNTRANSLATED] You can set or remove the Valence Bonus from your weapon.`,
+    detailedView_modularPartsLabel: `[UNTRANSLATED] Change Modular Parts`,
 
     mods_addRiven: `Riven hinzufügen`,
     mods_fingerprint: `Fingerabdruck`,

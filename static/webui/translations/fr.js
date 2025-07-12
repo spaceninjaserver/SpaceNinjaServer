@@ -61,6 +61,7 @@ dict = {
     code_pigment: `Pigment`,
     code_mature: `Maturer pour le combat`,
     code_unmature: `Régrésser l'âge génétique`,
+    code_succChange: `[UNTRANSLATED] Successfully changed.`,
     login_description: `Connexion avec les informations de connexion OpenWF.`,
     login_emailLabel: `Email`,
     login_passwordLabel: `Mot de passe`,
@@ -123,6 +124,7 @@ dict = {
     detailedView_archonShardsDescription2: `Un délai sera présent entre l'application des éclats et le chargement en jeu.`,
     detailedView_valenceBonusLabel: `Bonus de Valence`,
     detailedView_valenceBonusDescription: `[UNTRANSLATED] You can set or remove the Valence Bonus from your weapon.`,
+    detailedView_modularPartsLabel: `[UNTRANSLATED] Change Modular Parts`,
 
     mods_addRiven: `Ajouter un riven`,
     mods_fingerprint: `Empreinte`,

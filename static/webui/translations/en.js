@@ -60,6 +60,7 @@ dict = {
     code_pigment: `Pigment`,
     code_mature: `Mature for combat`,
     code_unmature: `Regress genetic aging`,
+    code_succChange: `Successfully changed.`,
     login_description: `Login using your OpenWF account credentials (same as in-game when connecting to this server).`,
     login_emailLabel: `Email address`,
     login_passwordLabel: `Password`,
@@ -122,6 +123,7 @@ dict = {
     detailedView_archonShardsDescription2: `Note that each archon shard takes some time to be applied when loading in.`,
     detailedView_valenceBonusLabel: `Valence Bonus`,
     detailedView_valenceBonusDescription: `You can set or remove the Valence Bonus from your weapon.`,
+    detailedView_modularPartsLabel: `Change Modular Parts`,
 
     mods_addRiven: `Add Riven`,
     mods_fingerprint: `Fingerprint`,

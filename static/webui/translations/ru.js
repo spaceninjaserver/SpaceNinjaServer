@@ -61,6 +61,7 @@ dict = {
     code_pigment: `Пигмент`,
     code_mature: `Подготовить к сражениям`,
     code_unmature: `Регрессия генетического старения`,
+    code_succChange: `Успешно изменено.`,
     login_description: `Войдите, используя учетные данные OpenWF (те же, что и в игре при подключении к этому серверу).`,
     login_emailLabel: `Адрес электронной почты`,
     login_passwordLabel: `Пароль`,
@@ -123,6 +124,7 @@ dict = {
     detailedView_archonShardsDescription2: `Обратите внимание: каждый фрагмент архонта применяется с задержкой при загрузке.`,
     detailedView_valenceBonusLabel: `Бонус Валентности`,
     detailedView_valenceBonusDescription: `Вы можете установить или убрать бонус валентности с вашего оружия.`,
+    detailedView_modularPartsLabel: `Изменить Модульные Части`,
 
     mods_addRiven: `Добавить Мод Разлома`,
     mods_fingerprint: `Отпечаток`,
