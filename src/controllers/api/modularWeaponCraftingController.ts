@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
+import { sendWsBroadcastTo } from "@/src/services/wsService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import {
     getInventory,
@@ -194,4 +195,5 @@ export const modularWeaponCraftingController: RequestHandler = async (req, res) 
             MiscItems: miscItemChanges
         }
     });
+    sendWsBroadcastTo(accountId, { update_inventory: true });
 };

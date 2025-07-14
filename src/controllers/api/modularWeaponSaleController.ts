@@ -15,6 +15,7 @@ import {
 } from "@/src/services/inventoryService";
 import { getDefaultUpgrades } from "@/src/services/itemDataService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
+import { sendWsBroadcastTo } from "@/src/services/wsService";
 import { modularWeaponTypes } from "@/src/helpers/modularWeaponHelper";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { EquipmentFeatures } from "@/src/types/equipmentTypes";
@@ -68,6 +69,7 @@ export const modularWeaponSaleController: RequestHandler = async (req, res) => {
         res.json({
             InventoryChanges: inventoryChanges
         });
+        sendWsBroadcastTo(accountId, { update_inventory: true });
     } else {
         throw new Error(`unknown modularWeaponSale op: ${String(req.query.op)}`);
     }

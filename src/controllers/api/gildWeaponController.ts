@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
+import { sendWsBroadcastTo } from "@/src/services/wsService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { addMiscItems, getInventory } from "@/src/services/inventoryService";
 import { TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
@@ -73,4 +74,5 @@ export const gildWeaponController: RequestHandler = async (req, res) => {
         InventoryChanges: inventoryChanges,
         AffiliationMods: affiliationMods
     });
+    sendWsBroadcastTo(accountId, { update_inventory: true });
 };
