@@ -1662,28 +1662,34 @@ export const applyClientEquipmentUpdates = (
             item.XP ??= 0;
             item.XP += XP;
 
-            let xpItemType = item.ItemType;
-            if (item.ModularParts) {
-                for (const part of item.ModularParts) {
-                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-                    const partType = ExportWeapons[part]?.partType;
-                    if (partType !== undefined && xpEarningParts.indexOf(partType) != -1) {
-                        xpItemType = part;
-                        break;
+            if (
+                categoryName != "SpecialItems" ||
+                item.ItemType == "/Lotus/Powersuits/Khora/Kavat/KhoraKavatPowerSuit" ||
+                item.ItemType == "/Lotus/Powersuits/Khora/Kavat/KhoraPrimeKavatPowerSuit"
+            ) {
+                let xpItemType = item.ItemType;
+                if (item.ModularParts) {
+                    for (const part of item.ModularParts) {
+                        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                        const partType = ExportWeapons[part]?.partType;
+                        if (partType !== undefined && xpEarningParts.indexOf(partType) != -1) {
+                            xpItemType = part;
+                            break;
+                        }
                     }
+                    logger.debug(`adding xp to ${xpItemType} for modular item ${fromOid(ItemId)} (${item.ItemType})`);
                 }
-                logger.debug(`adding xp to ${xpItemType} for modular item ${fromOid(ItemId)} (${item.ItemType})`);
-            }
 
-            const xpinfoIndex = inventory.XPInfo.findIndex(x => x.ItemType == xpItemType);
-            if (xpinfoIndex !== -1) {
-                const xpinfo = inventory.XPInfo[xpinfoIndex];
-                xpinfo.XP += XP;
-            } else {
-                inventory.XPInfo.push({
-                    ItemType: xpItemType,
-                    XP: XP
-                });
+                const xpinfoIndex = inventory.XPInfo.findIndex(x => x.ItemType == xpItemType);
+                if (xpinfoIndex !== -1) {
+                    const xpinfo = inventory.XPInfo[xpinfoIndex];
+                    xpinfo.XP += XP;
+                } else {
+                    inventory.XPInfo.push({
+                        ItemType: xpItemType,
+                        XP: XP
+                    });
+                }
             }
         }
 
