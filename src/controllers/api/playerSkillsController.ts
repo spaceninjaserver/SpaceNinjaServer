@@ -16,15 +16,28 @@ export const playerSkillsController: RequestHandler = async (req, res) => {
     inventory.PlayerSkills[request.Skill as keyof IPlayerSkills]++;
 
     const inventoryChanges: IInventoryChanges = {};
-    if (request.Skill == "LPS_COMMAND" && inventory.PlayerSkills.LPS_COMMAND == 9) {
-        const consumablesChanges = [
-            {
-                ItemType: "/Lotus/Types/Restoratives/Consumable/CrewmateBall",
-                ItemCount: 1
-            }
-        ];
-        addConsumables(inventory, consumablesChanges);
-        inventoryChanges.Consumables = consumablesChanges;
+    if (request.Skill == "LPS_COMMAND") {
+        if (inventory.PlayerSkills.LPS_COMMAND == 9) {
+            const consumablesChanges = [
+                {
+                    ItemType: "/Lotus/Types/Restoratives/Consumable/CrewmateBall",
+                    ItemCount: 1
+                }
+            ];
+            addConsumables(inventory, consumablesChanges);
+            inventoryChanges.Consumables = consumablesChanges;
+        }
+    } else if (request.Skill == "LPS_DRIFT_RIDING") {
+        if (inventory.PlayerSkills.LPS_DRIFT_RIDING == 9) {
+            const consumablesChanges = [
+                {
+                    ItemType: "/Lotus/Types/Restoratives/ErsatzSummon",
+                    ItemCount: 1
+                }
+            ];
+            addConsumables(inventory, consumablesChanges);
+            inventoryChanges.Consumables = consumablesChanges;
+        }
     }
 
     await inventory.save();
