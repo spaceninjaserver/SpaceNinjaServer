@@ -26,6 +26,7 @@ import { setEvolutionProgressController } from "@/src/controllers/custom/setEvol
 import { setBoosterController } from "@/src/controllers/custom/setBoosterController";
 import { updateFingerprintController } from "@/src/controllers/custom/updateFingerprintController";
 import { changeModularPartsController } from "@/src/controllers/custom/changeModularPartsController";
+import { editSuitInvigorationUpgradeController } from "@/src/controllers/custom/editSuitInvigorationUpgradeController";
 
 import { getConfigController, setConfigController } from "@/src/controllers/custom/configController";
 
@@ -57,6 +58,7 @@ customRouter.post("/setEvolutionProgress", setEvolutionProgressController);
 customRouter.post("/setBooster", setBoosterController);
 customRouter.post("/updateFingerprint", updateFingerprintController);
 customRouter.post("/changeModularParts", changeModularPartsController);
+customRouter.post("/editSuitInvigorationUpgrade", editSuitInvigorationUpgradeController);
 
 customRouter.post("/getConfig", getConfigController);
 customRouter.post("/setConfig", setConfigController);

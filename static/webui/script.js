@@ -1231,6 +1231,13 @@ function updateInventory() {
                             }
                             document.getElementById("crystals-list").appendChild(tr);
                         });
+
+                        document.getElementById("edit-suit-invigorations-card").classList.remove("d-none");
+                        const { OffensiveUpgrade, DefensiveUpgrade, UpgradesExpiry } =
+                            suitInvigorationUpgradeData(item);
+                        document.getElementById("dv-invigoration-offensive").value = OffensiveUpgrade;
+                        document.getElementById("dv-invigoration-defensive").value = DefensiveUpgrade;
+                        document.getElementById("dv-invigoration-expiry").value = UpgradesExpiry;
                     } else if (["LongGuns", "Pistols", "Melee", "SpaceGuns", "SpaceMelee"].includes(category)) {
                         document.getElementById("valenceBonus-card").classList.remove("d-none");
                         document.getElementById("valenceBonus-innateDamage").value = "";
@@ -2862,4 +2869,75 @@ function handleModularPartsChange(event) {
             });
         });
     }
+}
+function suitInvigorationUpgradeData(suitData) {
+    let expiryDate = "";
+    if (suitData.UpgradesExpiry) {
+        if (suitData.UpgradesExpiry.$date) {
+            expiryDate = new Date(parseInt(suitData.UpgradesExpiry.$date.$numberLong));
+        } else if (typeof suitData.UpgradesExpiry === "number") {
+            expiryDate = new Date(suitData.UpgradesExpiry);
+        } else if (suitData.UpgradesExpiry instanceof Date) {
+            expiryDate = suitData.UpgradesExpiry;
+        }
+        if (expiryDate && !isNaN(expiryDate.getTime())) {
+            const year = expiryDate.getFullYear();
+            const month = String(expiryDate.getMonth() + 1).padStart(2, "0");
+            const day = String(expiryDate.getDate()).padStart(2, "0");
+            const hours = String(expiryDate.getHours()).padStart(2, "0");
+            const minutes = String(expiryDate.getMinutes()).padStart(2, "0");
+            expiryDate = `${year}-${month}-${day}T${hours}:${minutes}`;
+        } else {
+            expiryDate = "";
+        }
+    }
+    return {
+        oid: suitData.ItemId.$oid,
+        OffensiveUpgrade: suitData.OffensiveUpgrade || "",
+        DefensiveUpgrade: suitData.DefensiveUpgrade || "",
+        UpgradesExpiry: expiryDate
+    };
+}
+
+function submitSuitInvigorationUpgrade(event) {
+    event.preventDefault();
+    const oid = new URLSearchParams(window.location.search).get("itemId");
+    const offensiveUpgrade = document.getElementById("dv-invigoration-offensive").value;
+    const defensiveUpgrade = document.getElementById("dv-invigoration-defensive").value;
+    const expiry = document.getElementById("dv-invigoration-expiry").value;
+
+    if (!offensiveUpgrade || !defensiveUpgrade) {
+        alert(loc("code_requiredInvigorationUpgrade"));
+        return;
+    }
+
+    const data = {
+        OffensiveUpgrade: offensiveUpgrade,
+        DefensiveUpgrade: defensiveUpgrade
+    };
+
+    if (expiry) {
+        data.UpgradesExpiry = new Date(expiry).getTime();
+    }
+
+    editSuitInvigorationUpgrade(oid, data);
+}
+
+function clearSuitInvigorationUpgrades() {
+    editSuitInvigorationUpgrade(new URLSearchParams(window.location.search).get("itemId"), null);
+}
+
+async function editSuitInvigorationUpgrade(oid, data) {
+    /* data?: {
+            DefensiveUpgrade: string;
+            OffensiveUpgrade: string;
+            UpgradesExpiry?: number;
+    }*/
+    $.post({
+        url: "/custom/editSuitInvigorationUpgrade?" + window.authz,
+        contentType: "application/json",
+        data: JSON.stringify({ oid, data })
+    }).done(function () {
+        updateInventory();
+    });
 }
