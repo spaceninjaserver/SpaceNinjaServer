@@ -4,8 +4,12 @@ import { typeCountSchema } from "@/src/models/inventoryModels/inventoryModel";
 import { IMongoDate, IOid, ITypeCount } from "@/src/types/commonTypes";
 
 export interface IMessageClient
-    extends Omit<IMessageDatabase, "_id" | "date" | "startDate" | "endDate" | "ownerId" | "attVisualOnly" | "expiry"> {
+    extends Omit<
+        IMessageDatabase,
+        "_id" | "globaUpgradeId" | "date" | "startDate" | "endDate" | "ownerId" | "attVisualOnly" | "expiry"
+    > {
     _id?: IOid;
+    globaUpgradeId?: IOid; // [sic]
     date: IMongoDate;
     startDate?: IMongoDate;
     endDate?: IMongoDate;
@@ -14,6 +18,7 @@ export interface IMessageClient
 
 export interface IMessageDatabase extends IMessage {
     ownerId: Types.ObjectId;
+    globaUpgradeId?: Types.ObjectId; // [sic]
     date: Date; //created at
     attVisualOnly?: boolean;
     _id: Types.ObjectId;
@@ -101,6 +106,7 @@ const giftSchema = new Schema<IGift>(
 const messageSchema = new Schema<IMessageDatabase>(
     {
         ownerId: Schema.Types.ObjectId,
+        globaUpgradeId: Schema.Types.ObjectId,
         sndr: String,
         msg: String,
         cinematic: String,
@@ -153,6 +159,10 @@ messageSchema.set("toJSON", {
         delete returnedObject.ownerId;
         delete returnedObject.attVisualOnly;
         delete returnedObject.expiry;
+
+        if (messageDatabase.globaUpgradeId) {
+            messageClient.globaUpgradeId = toOid(messageDatabase.globaUpgradeId);
+        }
 
         messageClient.date = toMongoDate(messageDatabase.date);
 
