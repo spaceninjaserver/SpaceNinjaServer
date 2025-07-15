@@ -1,4 +1,4 @@
-// Chinese translation by meb154, bishan178 & Corvus
+// Chinese translation by meb154, bishan178, nyaoouo, qianlishun, CrazyZhang & Corvus
 dict = {
     general_inventoryUpdateNote: `注意:要在游戏中查看更改,您需要重新同步库存,例如使用引导程序的 /sync 命令、访问道场/中继站或重新登录客户端.`,
     general_addButton: `添加`,
