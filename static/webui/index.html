@@ -479,16 +479,16 @@
                     </div>
                 </div>
                 <div id="edit-suit-invigorations-card" class="card mb-3 d-none">
-                    <h5 class="card-header" data-loc="detailedView_editSuitInvigoration"></h5>
+                    <h5 class="card-header" data-loc="detailedView_suitInvigorationLabel"></h5>
                     <div class="card-body">
                         <form onsubmit="submitSuitInvigorationUpgrade(event)">
                             <div class="mb-3">
                                 <label for="invigoration-offensive" class="form-label" data-loc="invigorations_offensiveLabel"></label>
                                 <select class="form-select" id="dv-invigoration-offensive">
-                                    <option value="" data-loc="invigorations_noneOption"></option>
-                                    <option value="/Lotus/Upgrades/Invigorations/Offensive/OffensiveInvigorationPowerStrength" data-loc="invigorations_offensive_PowerStrength"></option>
-                                    <option value="/Lotus/Upgrades/Invigorations/Offensive/OffensiveInvigorationPowerRange" data-loc="invigorations_offensive_PowerRange"></option>
-                                    <option value="/Lotus/Upgrades/Invigorations/Offensive/OffensiveInvigorationPowerDuration" data-loc="invigorations_offensive_PowerDuration"></option>
+                                    <option value="" data-loc="general_none"></option>
+                                    <option value="/Lotus/Upgrades/Invigorations/Offensive/OffensiveInvigorationPowerStrength" data-loc="invigorations_offensive_AbilityStrength"></option>
+                                    <option value="/Lotus/Upgrades/Invigorations/Offensive/OffensiveInvigorationPowerRange" data-loc="invigorations_offensive_AbilityRange"></option>
+                                    <option value="/Lotus/Upgrades/Invigorations/Offensive/OffensiveInvigorationPowerDuration" data-loc="invigorations_offensive_AbilityDuration"></option>
                                     <option value="/Lotus/Upgrades/Invigorations/Offensive/OffensiveInvigorationMeleeDamage" data-loc="invigorations_offensive_MeleeDamage"></option>
                                     <option value="/Lotus/Upgrades/Invigorations/Offensive/OffensiveInvigorationPrimaryDamage" data-loc="invigorations_offensive_PrimaryDamage"></option>
                                     <option value="/Lotus/Upgrades/Invigorations/Offensive/OffensiveInvigorationSecondaryDamage" data-loc="invigorations_offensive_SecondaryDamage"></option>
@@ -501,16 +501,16 @@
                             <div class="mb-3">
                                 <label for="invigoration-defensive" class="form-label" data-loc="invigorations_defensiveLabel"></label>
                                 <select class="form-select" id="dv-invigoration-defensive">
-                                    <option value="" data-loc="invigorations_noneOption"></option>
-                                    <option value="/Lotus/Upgrades/Invigorations/Utility/UtilityInvigorationPowerEfficiency" data-loc="invigorations_utility_PowerEfficiency"></option>
-                                    <option value="/Lotus/Upgrades/Invigorations/Utility/UtilityInvigorationMovementSpeed" data-loc="invigorations_utility_MovementSpeed"></option>
-                                    <option value="/Lotus/Upgrades/Invigorations/Utility/UtilityInvigorationParkourSpeed" data-loc="invigorations_utility_ParkourSpeed"></option>
-                                    <option value="/Lotus/Upgrades/Invigorations/Utility/UtilityInvigorationHealth" data-loc="invigorations_utility_Health"></option>
-                                    <option value="/Lotus/Upgrades/Invigorations/Utility/UtilityInvigorationEnergy" data-loc="invigorations_utility_Energy"></option>
-                                    <option value="/Lotus/Upgrades/Invigorations/Utility/UtilityInvigorationStatusResistance" data-loc="invigorations_utility_StatusResistance"></option>
+                                    <option value="" data-loc="general_none"></option>
+                                    <option value="/Lotus/Upgrades/Invigorations/Utility/UtilityInvigorationPowerEfficiency" data-loc="invigorations_utility_AbilityEfficiency"></option>
+                                    <option value="/Lotus/Upgrades/Invigorations/Utility/UtilityInvigorationMovementSpeed" data-loc="invigorations_utility_SprintSpeed"></option>
+                                    <option value="/Lotus/Upgrades/Invigorations/Utility/UtilityInvigorationParkourSpeed" data-loc="invigorations_utility_ParkourVelocity"></option>
+                                    <option value="/Lotus/Upgrades/Invigorations/Utility/UtilityInvigorationHealth" data-loc="invigorations_utility_HealthMax"></option>
+                                    <option value="/Lotus/Upgrades/Invigorations/Utility/UtilityInvigorationEnergy" data-loc="invigorations_utility_EnergyMax"></option>
+                                    <option value="/Lotus/Upgrades/Invigorations/Utility/UtilityInvigorationStatusResistance" data-loc="invigorations_utility_StatusImmune"></option>
                                     <option value="/Lotus/Upgrades/Invigorations/Utility/UtilityInvigorationReloadSpeed" data-loc="invigorations_utility_ReloadSpeed"></option>
                                     <option value="/Lotus/Upgrades/Invigorations/Utility/UtilityInvigorationHealthRegen" data-loc="invigorations_utility_HealthRegen"></option>
-                                    <option value="/Lotus/Upgrades/Invigorations/Utility/UtilityInvigorationArmor" data-loc="invigorations_utility_Armor"></option>
+                                    <option value="/Lotus/Upgrades/Invigorations/Utility/UtilityInvigorationArmor" data-loc="invigorations_utility_ArmorMax"></option>
                                     <option value="/Lotus/Upgrades/Invigorations/Utility/UtilityInvigorationJumps" data-loc="invigorations_utility_Jumps"></option>
                                     <option value="/Lotus/Upgrades/Invigorations/Utility/UtilityInvigorationEnergyRegen" data-loc="invigorations_utility_EnergyRegen"></option>
                                 </select>
@@ -522,8 +522,8 @@
                             </div>
                             
                             <div class="d-flex gap-2">
-                                <button type="submit" class="btn btn-primary" data-loc="invigorations_applyButton"></button>
-                                <button type="button" class="btn btn-danger" onclick="clearSuitInvigorationUpgrades()" data-loc="invigorations_clearButton"></button>
+                                <button type="submit" class="btn btn-primary" data-loc="general_setButton"></button>
+                                <button type="button" class="btn btn-danger" onclick="clearSuitInvigorationUpgrades()" data-loc="code_remove"></button>
                             </div>
                         </form>
                     </div>

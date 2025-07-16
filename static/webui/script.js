@@ -283,7 +283,7 @@ function fetchItemList() {
 
             const syndicateNone = document.createElement("option");
             syndicateNone.value = "";
-            syndicateNone.textContent = loc("cheats_none");
+            syndicateNone.textContent = loc("general_none");
             document.getElementById("changeSyndicate").innerHTML = "";
             document.getElementById("changeSyndicate").appendChild(syndicateNone);
 
@@ -304,8 +304,8 @@ function fetchItemList() {
                 "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeAbilityDurationMythic": loc("upgrade_WarframeAbilityDuration").split("|VAL|").join("15"),
                 "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeAbilityStrength": loc("upgrade_WarframeAbilityStrength").split("|VAL|").join("10"),
                 "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeAbilityStrengthMythic": loc("upgrade_WarframeAbilityStrength").split("|VAL|").join("15"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeArmourMax": loc("upgrade_WarframeArmourMax").split("|VAL|").join("150"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeArmourMaxMythic": loc("upgrade_WarframeArmourMax").split("|VAL|").join("225"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeArmourMax": loc("upgrade_WarframeArmorMax").split("|VAL|").join("150"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeArmourMaxMythic": loc("upgrade_WarframeArmorMax").split("|VAL|").join("225"),
                 "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeBlastProc": loc("upgrade_WarframeBlastProc").split("|VAL|").join("5"),
                 "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeBlastProcMythic": loc("upgrade_WarframeBlastProc").split("|VAL|").join("7.5"),
                 "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCastingSpeed": loc("upgrade_WarframeCastingSpeed").split("|VAL|").join("25"),
@@ -334,8 +334,8 @@ function fetchItemList() {
                 "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeParkourVelocityMythic": loc("upgrade_WarframeParkourVelocity").split("|VAL|").join("22.5"),
                 "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeRadiationDamageBoost": loc("upgrade_WarframeRadiationDamageBoost").split("|VAL|").join("10"),
                 "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeRadiationDamageBoostMythic": loc("upgrade_WarframeRadiationDamageBoost").split("|VAL|").join("15"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeRegen": loc("upgrade_WarframeRegen").split("|VAL|").join("5"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeRegenMythic": loc("upgrade_WarframeRegen").split("|VAL|").join("7.5"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeRegen": loc("upgrade_WarframeHealthRegen").split("|VAL|").join("5"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeRegenMythic": loc("upgrade_WarframeHealthRegen").split("|VAL|").join("7.5"),
                 "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeShieldMax": loc("upgrade_WarframeShieldMax").split("|VAL|").join("150"),
                 "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeShieldMaxMythic": loc("upgrade_WarframeShieldMax").split("|VAL|").join("225"),
                 "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeStartingEnergy": loc("upgrade_WarframeStartingEnergy").split("|VAL|").join("30"),
