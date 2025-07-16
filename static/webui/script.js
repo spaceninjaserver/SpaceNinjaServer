@@ -2236,6 +2236,7 @@ single.getRoute("#detailedView-route").on("beforeload", function () {
     document.getElementById("detailedView-title").textContent = "";
     document.querySelector("#detailedView-route .text-body-secondary").textContent = "";
     document.getElementById("archonShards-card").classList.add("d-none");
+    document.getElementById("edit-suit-invigorations-card").classList.add("d-none");
     document.getElementById("modularParts-card").classList.add("d-none");
     document.getElementById("modularParts-form").innerHTML = "";
     document.getElementById("valenceBonus-card").classList.add("d-none");
