@@ -11,7 +11,7 @@ export const projectionManagerController: RequestHandler = async (req, res) => {
     const [era, category, currentQuality] = parseProjection(request.projectionType);
     const upgradeCost = config.dontSubtractVoidTraces
         ? 0
-        : (request.qualityTag - qualityKeywordToNumber[currentQuality]) * 25;
+        : qualityNumberToCost[request.qualityTag] - qualityNumberToCost[qualityKeywordToNumber[currentQuality]];
     const newProjectionType = findProjection(era, category, qualityNumberToKeyword[request.qualityTag]);
     addMiscItems(inventory, [
         {
@@ -49,6 +49,7 @@ const qualityKeywordToNumber: Record<VoidProjectionQuality, number> = {
     VPQ_GOLD: 2,
     VPQ_PLATINUM: 3
 };
+const qualityNumberToCost = [0, 25, 50, 100];
 
 // e.g. "/Lotus/Types/Game/Projections/T2VoidProjectionProteaPrimeDBronze" -> ["Lith", "W5", "VPQ_BRONZE"]
 const parseProjection = (typeName: string): [string, string, VoidProjectionQuality] => {
