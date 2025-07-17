@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import { repoDir } from "@/src/helpers/pathHelper";
 import { args } from "@/src/helpers/commandLineArguments";
+import { Inbox } from "@/src/models/inboxModel";
 
 export interface IConfig {
     mongodbUrl: string;
@@ -118,4 +119,21 @@ export const loadConfig = (): void => {
     }
 
     Object.assign(config, newConfig);
+};
+
+export const syncConfigWithDatabase = (): void => {
+    // Event messages are deleted after endDate. Since we don't use beginDate/endDate and instead have config toggles, we need to delete the messages once those bools are false.
+    // Also, for some reason, I can't just do `Inbox.deleteMany(...)`; - it needs this whole circus.
+    if (!config.worldState?.creditBoost) {
+        void Inbox.deleteMany({ globaUpgradeId: "5b23106f283a555109666672" }).then(() => {});
+    }
+    if (!config.worldState?.affinityBoost) {
+        void Inbox.deleteMany({ globaUpgradeId: "5b23106f283a555109666673" }).then(() => {});
+    }
+    if (!config.worldState?.resourceBoost) {
+        void Inbox.deleteMany({ globaUpgradeId: "5b23106f283a555109666674" }).then(() => {});
+    }
+    if (!config.worldState?.galleonOfGhouls) {
+        void Inbox.deleteMany({ goalTag: "GalleonRobbery" }).then(() => {});
+    }
 };

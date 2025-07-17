@@ -1,5 +1,5 @@
 // First, init config.
-import { config, configPath, loadConfig } from "@/src/services/configService";
+import { config, configPath, loadConfig, syncConfigWithDatabase } from "@/src/services/configService";
 import fs from "fs";
 try {
     loadConfig();
@@ -21,7 +21,7 @@ import mongoose from "mongoose";
 import { JSONStringify } from "json-with-bigint";
 import { startWebServer } from "@/src/services/webService";
 
-import { syncConfigWithDatabase, validateConfig } from "@/src/services/configWatcherService";
+import { validateConfig } from "@/src/services/configWatcherService";
 import { updateWorldStateCollections } from "@/src/services/worldStateService";
 
 // Patch JSON.stringify to work flawlessly with Bigints.
