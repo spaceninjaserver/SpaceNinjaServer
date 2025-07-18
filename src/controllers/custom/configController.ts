@@ -2,7 +2,7 @@ import { RequestHandler } from "express";
 import { config, syncConfigWithDatabase } from "@/src/services/configService";
 import { getAccountForRequest, isAdministrator } from "@/src/services/loginService";
 import { saveConfig } from "@/src/services/configWriterService";
-import { sendWsBroadcastExcept } from "@/src/services/wsService";
+import { sendWsBroadcastEx } from "@/src/services/wsService";
 
 export const getConfigController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -25,7 +25,7 @@ export const setConfigController: RequestHandler = async (req, res) => {
             const [obj, idx] = configIdToIndexable(id);
             obj[idx] = value;
         }
-        sendWsBroadcastExcept(parseInt(String(req.query.wsid)), { config_reloaded: true });
+        sendWsBroadcastEx({ config_reloaded: true }, undefined, parseInt(String(req.query.wsid)));
         syncConfigWithDatabase();
         await saveConfig();
         res.end();

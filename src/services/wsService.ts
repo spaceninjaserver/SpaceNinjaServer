@@ -43,7 +43,7 @@ export const stopWsServers = (promises: Promise<void>[]): void => {
 let lastWsid: number = 0;
 
 interface IWsCustomData extends ws {
-    id?: number;
+    id: number;
     accountId?: string;
 }
 
@@ -181,18 +181,24 @@ export const sendWsBroadcastTo = (accountId: string, data: IWsMsgToClient): void
     }
 };
 
-export const sendWsBroadcastExcept = (wsid: number | undefined, data: IWsMsgToClient): void => {
+export const sendWsBroadcastEx = (data: IWsMsgToClient, accountId?: string, excludeWsid?: number): void => {
     const msg = JSON.stringify(data);
     if (wsServer) {
         for (const client of wsServer.clients) {
-            if ((client as IWsCustomData).id != wsid) {
+            if (
+                (!accountId || (client as IWsCustomData).accountId == accountId) &&
+                (client as IWsCustomData).id != excludeWsid
+            ) {
                 client.send(msg);
             }
         }
     }
     if (wssServer) {
         for (const client of wssServer.clients) {
-            if ((client as IWsCustomData).id != wsid) {
+            if (
+                (!accountId || (client as IWsCustomData).accountId == accountId) &&
+                (client as IWsCustomData).id != excludeWsid
+            ) {
                 client.send(msg);
             }
         }

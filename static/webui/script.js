@@ -1746,7 +1746,7 @@ function disposeOfGear(category, oid) {
         ];
         revalidateAuthz().then(() => {
             $.post({
-                url: "/api/sell.php?" + window.authz,
+                url: "/api/sell.php?" + window.authz + "&wsid=" + wsid,
                 contentType: "text/plain",
                 data: JSON.stringify(data)
             });
@@ -1768,7 +1768,7 @@ function disposeOfItems(category, type, count) {
     ];
     revalidateAuthz().then(() => {
         $.post({
-            url: "/api/sell.php?" + window.authz,
+            url: "/api/sell.php?" + window.authz + "&wsid=" + wsid,
             contentType: "text/plain",
             data: JSON.stringify(data)
         });
@@ -2202,7 +2202,7 @@ function doRemoveUnrankedMods() {
         req.done(inventory => {
             window.itemListPromise.then(itemMap => {
                 $.post({
-                    url: "/api/sell.php?" + window.authz,
+                    url: "/api/sell.php?" + window.authz + "&wsid=" + wsid,
                     contentType: "text/plain",
                     data: JSON.stringify({
                         SellCurrency: "SC_RegularCredits",
