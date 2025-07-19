@@ -2,3 +2,4 @@ src/routes/api.ts
 static/webui/libs/
 *.html
 *.md
+config.json.example
