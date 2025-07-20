@@ -13,6 +13,7 @@ import {
     IDojoComponentDatabase,
     IDojoContributable,
     IDojoDecoClient,
+    IDojoDecoDatabase,
     IGuildClient,
     IGuildMemberClient,
     IGuildMemberDatabase,
@@ -309,7 +310,7 @@ export const removeDojoRoom = async (
         guild.DojoEnergy -= meta.energy;
     }
     moveResourcesToVault(guild, component);
-    component.Decos?.forEach(deco => moveResourcesToVault(guild, deco));
+    component.Decos?.forEach(deco => refundDojoDeco(guild, component, deco));
 
     if (guild.RoomChanges) {
         const index = guild.RoomChanges.findIndex(x => x.componentId.equals(component._id));
@@ -344,6 +345,14 @@ export const removeDojoDeco = (
         component.Decos!.findIndex(x => x._id.equals(decoId)),
         1
     )[0];
+    refundDojoDeco(guild, component, deco);
+};
+
+export const refundDojoDeco = (
+    guild: TGuildDatabaseDocument,
+    component: IDojoComponentDatabase,
+    deco: IDojoDecoDatabase
+): void => {
     const meta = Object.values(ExportDojoRecipes.decos).find(x => x.resultType == deco.Type);
     if (meta) {
         if (meta.capacityCost) {
@@ -369,7 +378,7 @@ export const removeDojoDeco = (
             ]);
         }
     }
-    moveResourcesToVault(guild, deco);
+    moveResourcesToVault(guild, deco); // Refund resources spent on construction
 };
 
 const moveResourcesToVault = (guild: TGuildDatabaseDocument, component: IDojoContributable): void => {
