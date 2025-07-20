@@ -52,12 +52,7 @@ export const handleSetShipDecorations = async (
 ): Promise<IShipDecorationsResponse> => {
     const personalRooms = await getPersonalRooms(accountId);
 
-    const rooms =
-        placedDecoration.BootLocation == "SHOP"
-            ? personalRooms.TailorShop.Rooms
-            : placedDecoration.IsApartment
-              ? personalRooms.Apartment.Rooms
-              : personalRooms.Ship.Rooms;
+    const rooms = getRoomsForBootLocation(personalRooms, placedDecoration);
 
     const roomToPlaceIn = rooms.find(room => room.Name === placedDecoration.Room);
 
@@ -192,12 +187,12 @@ export const handleSetShipDecorations = async (
 
 const getRoomsForBootLocation = (
     personalRooms: TPersonalRoomsDatabaseDocument,
-    bootLocation: TBootLocation | undefined
+    request: { BootLocation?: TBootLocation; IsApartment?: boolean }
 ): RoomsType[] => {
-    if (bootLocation == "SHOP") {
+    if (request.BootLocation == "SHOP") {
         return personalRooms.TailorShop.Rooms;
     }
-    if (bootLocation == "APARTMENT") {
+    if (request.BootLocation == "APARTMENT" || request.IsApartment) {
         return personalRooms.Apartment.Rooms;
     }
     return personalRooms.Ship.Rooms;
@@ -217,7 +212,7 @@ export const handleSetPlacedDecoInfo = async (accountId: string, req: ISetPlaced
 
     const personalRooms = await getPersonalRooms(accountId);
 
-    const room = getRoomsForBootLocation(personalRooms, req.BootLocation).find(room => room.Name === req.Room);
+    const room = getRoomsForBootLocation(personalRooms, req).find(room => room.Name === req.Room);
     if (!room) {
         throw new Error(`unknown room: ${req.Room}`);
     }
