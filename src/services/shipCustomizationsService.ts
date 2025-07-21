@@ -1,6 +1,8 @@
 import { getPersonalRooms } from "@/src/services/personalRoomsService";
 import { getShip } from "@/src/services/shipService";
 import {
+    IResetShipDecorationsRequest,
+    IResetShipDecorationsResponse,
     ISetPlacedDecoInfoRequest,
     ISetShipCustomizationsRequest,
     IShipDecorationsRequest,
@@ -154,7 +156,6 @@ export const handleSetShipDecorations = async (
 
     if (!config.unlockAllShipDecorations) {
         const inventory = await getInventory(accountId);
-        const itemType = Object.entries(ExportResources).find(arr => arr[1].deco == placedDecoration.Type)![0];
         if (placedDecoration.Sockets !== undefined) {
             addFusionTreasures(inventory, [{ ItemType: itemType, Sockets: placedDecoration.Sockets, ItemCount: -1 }]);
         } else {
@@ -196,6 +197,51 @@ const getRoomsForBootLocation = (
         return personalRooms.Apartment.Rooms;
     }
     return personalRooms.Ship.Rooms;
+};
+
+export const handleResetShipDecorations = async (
+    accountId: string,
+    request: IResetShipDecorationsRequest
+): Promise<IResetShipDecorationsResponse> => {
+    const [personalRooms, inventory] = await Promise.all([getPersonalRooms(accountId), getInventory(accountId)]);
+    const room = getRoomsForBootLocation(personalRooms, request).find(room => room.Name === request.Room);
+    if (!room) {
+        throw new Error(`unknown room: ${request.Room}`);
+    }
+
+    for (const deco of room.PlacedDecos) {
+        const entry = Object.entries(ExportResources).find(arr => arr[1].deco == deco.Type);
+        if (!entry) {
+            throw new Error(`unknown deco type: ${deco.Type}`);
+        }
+        const [itemType, meta] = entry;
+        if (meta.capacityCost === undefined) {
+            throw new Error(`unknown deco type: ${deco.Type}`);
+        }
+
+        // refund item
+        if (!config.unlockAllShipDecorations) {
+            if (deco.Sockets !== undefined) {
+                addFusionTreasures(inventory, [{ ItemType: itemType, Sockets: deco.Sockets, ItemCount: 1 }]);
+            } else {
+                addShipDecorations(inventory, [{ ItemType: itemType, ItemCount: 1 }]);
+            }
+        }
+
+        // refund capacity
+        room.MaxCapacity += meta.capacityCost;
+    }
+
+    // empty room
+    room.PlacedDecos.splice(0, room.PlacedDecos.length);
+
+    await Promise.all([personalRooms.save(), inventory.save()]);
+
+    return {
+        ResetRoom: request.Room,
+        ClaimedDecos: [], // Not sure what this is for; the client already implies that the decos were returned to inventory.
+        NewCapacity: room.MaxCapacity
+    };
 };
 
 export const handleSetPlacedDecoInfo = async (accountId: string, req: ISetPlacedDecoInfoRequest): Promise<void> => {

@@ -150,6 +150,17 @@ export interface IShipDecorationsResponse {
     NewRoom?: string;
 }
 
+export interface IResetShipDecorationsRequest {
+    Room: string;
+    BootLocation?: TBootLocation;
+}
+
+export interface IResetShipDecorationsResponse {
+    ResetRoom: string;
+    ClaimedDecos: [];
+    NewCapacity: number;
+}
+
 export interface ISetPlacedDecoInfoRequest {
     DecoType: string;
     DecoId: string;

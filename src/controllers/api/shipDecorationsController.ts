@@ -1,20 +1,17 @@
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { IShipDecorationsRequest } from "@/src/types/personalRoomsTypes";
-import { logger } from "@/src/utils/logger";
+import { IShipDecorationsRequest, IResetShipDecorationsRequest } from "@/src/types/personalRoomsTypes";
 import { RequestHandler } from "express";
-import { handleSetShipDecorations } from "@/src/services/shipCustomizationsService";
+import { handleResetShipDecorations, handleSetShipDecorations } from "@/src/services/shipCustomizationsService";
 
 export const shipDecorationsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const shipDecorationsRequest = JSON.parse(req.body as string) as IShipDecorationsRequest;
-
-    try {
+    if (req.query.reset == "1") {
+        const request = JSON.parse(req.body as string) as IResetShipDecorationsRequest;
+        const response = await handleResetShipDecorations(accountId, request);
+        res.send(response);
+    } else {
+        const shipDecorationsRequest = JSON.parse(req.body as string) as IShipDecorationsRequest;
         const placedDecoration = await handleSetShipDecorations(accountId, shipDecorationsRequest);
         res.send(placedDecoration);
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            logger.error(`error in shipDecorationsController: ${error.message}`);
-            res.status(400).json({ error: error.message });
-        }
     }
 };
