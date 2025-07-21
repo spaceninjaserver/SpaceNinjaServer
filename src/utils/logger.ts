@@ -108,3 +108,13 @@ errorLog.on("new", filename => logger.info(`Using error log file: ${filename}`))
 combinedLog.on("new", filename => logger.info(`Using combined log file: ${filename}`));
 errorLog.on("rotate", filename => logger.info(`Rotated error log file: ${filename}`));
 combinedLog.on("rotate", filename => logger.info(`Rotated combined log file: ${filename}`));
+
+export const logError = (err: Error, context: string): void => {
+    if (err.stack) {
+        const stackArr = err.stack.split("\n");
+        stackArr[0] += ` while ${context}`;
+        logger.error(stackArr.join("\n"));
+    } else {
+        logger.error(`uncaught error while ${context}: ${err.message}`);
+    }
+};

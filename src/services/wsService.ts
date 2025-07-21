@@ -5,6 +5,7 @@ import { Account } from "@/src/models/loginModel";
 import { createAccount, createNonce, getUsernameFromEmail, isCorrectPassword } from "@/src/services/loginService";
 import { IDatabaseAccountJson } from "@/src/types/loginTypes";
 import { HydratedDocument } from "mongoose";
+import { logError } from "@/src/utils/logger";
 
 let wsServer: ws.Server | undefined;
 let wssServer: ws.Server | undefined;
@@ -88,63 +89,67 @@ const wsOnConnect = (ws: ws, req: http.IncomingMessage): void => {
 
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     ws.on("message", async msg => {
-        const data = JSON.parse(String(msg)) as IWsMsgFromClient;
-        if (data.auth) {
-            let account: IDatabaseAccountJson | null = await Account.findOne({ email: data.auth.email });
-            if (account) {
-                if (isCorrectPassword(data.auth.password, account.password)) {
-                    if (!account.Nonce) {
-                        account.ClientType = "webui";
-                        account.Nonce = createNonce();
-                        await (account as HydratedDocument<IDatabaseAccountJson>).save();
+        try {
+            const data = JSON.parse(String(msg)) as IWsMsgFromClient;
+            if (data.auth) {
+                let account: IDatabaseAccountJson | null = await Account.findOne({ email: data.auth.email });
+                if (account) {
+                    if (isCorrectPassword(data.auth.password, account.password)) {
+                        if (!account.Nonce) {
+                            account.ClientType = "webui";
+                            account.Nonce = createNonce();
+                            await (account as HydratedDocument<IDatabaseAccountJson>).save();
+                        }
+                    } else {
+                        account = null;
                     }
+                } else if (data.auth.isRegister) {
+                    const name = await getUsernameFromEmail(data.auth.email);
+                    account = await createAccount({
+                        email: data.auth.email,
+                        password: data.auth.password,
+                        ClientType: "webui",
+                        LastLogin: new Date(),
+                        DisplayName: name,
+                        Nonce: createNonce()
+                    });
+                }
+                if (account) {
+                    (ws as IWsCustomData).accountId = account.id;
+                    ws.send(
+                        JSON.stringify({
+                            auth_succ: {
+                                id: account.id,
+                                DisplayName: account.DisplayName,
+                                Nonce: account.Nonce
+                            }
+                        } satisfies IWsMsgToClient)
+                    );
                 } else {
-                    account = null;
+                    ws.send(
+                        JSON.stringify({
+                            auth_fail: {
+                                isRegister: data.auth.isRegister
+                            }
+                        } satisfies IWsMsgToClient)
+                    );
                 }
-            } else if (data.auth.isRegister) {
-                const name = await getUsernameFromEmail(data.auth.email);
-                account = await createAccount({
-                    email: data.auth.email,
-                    password: data.auth.password,
-                    ClientType: "webui",
-                    LastLogin: new Date(),
-                    DisplayName: name,
-                    Nonce: createNonce()
-                });
             }
-            if (account) {
-                (ws as IWsCustomData).accountId = account.id;
-                ws.send(
-                    JSON.stringify({
-                        auth_succ: {
-                            id: account.id,
-                            DisplayName: account.DisplayName,
-                            Nonce: account.Nonce
-                        }
-                    } satisfies IWsMsgToClient)
-                );
-            } else {
-                ws.send(
-                    JSON.stringify({
-                        auth_fail: {
-                            isRegister: data.auth.isRegister
-                        }
-                    } satisfies IWsMsgToClient)
+            if (data.logout) {
+                const accountId = (ws as IWsCustomData).accountId;
+                (ws as IWsCustomData).accountId = undefined;
+                await Account.updateOne(
+                    {
+                        _id: accountId,
+                        ClientType: "webui"
+                    },
+                    {
+                        Nonce: 0
+                    }
                 );
             }
-        }
-        if (data.logout) {
-            const accountId = (ws as IWsCustomData).accountId;
-            (ws as IWsCustomData).accountId = undefined;
-            await Account.updateOne(
-                {
-                    _id: accountId,
-                    ClientType: "webui"
-                },
-                {
-                    Nonce: 0
-                }
-            );
+        } catch (e) {
+            logError(e as Error, `processing websocket message`);
         }
     });
 };
