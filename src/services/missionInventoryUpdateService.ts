@@ -1283,9 +1283,7 @@ export const addMissionRewards = async (
                         }
                     }
                 }
-                let medallionAmount = Math.floor(
-                    Math.min(rewardInfo.JobStage, currentJob.xpAmounts.length - 1) / (rewardInfo.Q ? 0.8 : 1)
-                );
+                let medallionAmount = Math.floor(currentJob.xpAmounts[rewardInfo.JobStage] / (rewardInfo.Q ? 0.8 : 1));
                 if (
                     ["DeimosEndlessAreaDefenseBounty", "DeimosEndlessExcavateBounty", "DeimosEndlessPurifyBounty"].some(
                         ending => jobType.endsWith(ending)
