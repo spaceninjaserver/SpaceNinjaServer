@@ -118,9 +118,16 @@ function doLogin() {
     window.registerSubmit = false;
 }
 
-async function revalidateAuthz() {
-    await getWebSocket();
-    // We have a websocket connection, so authz should be good.
+function revalidateAuthz() {
+    return new Promise(resolve => {
+        let interval;
+        interval = setInterval(() => {
+            if (ws_is_open && !auth_pending) {
+                clearInterval(interval);
+                resolve();
+            }
+        }, 10);
+    });
 }
 
 function logout() {
@@ -2080,6 +2087,10 @@ single.getRoute("/webui/cheats").on("beforeload", function () {
                 })
                 .fail(res => {
                     if (res.responseText == "Log-in expired") {
+                        if (ws_is_open && !auth_pending) {
+                            console.warn("Credentials invalidated but the server didn't let us know");
+                            sendAuth();
+                        }
                         revalidateAuthz().then(() => {
                             if (single.getCurrentPath() == "/webui/cheats") {
                                 single.loadRoute("/webui/cheats");

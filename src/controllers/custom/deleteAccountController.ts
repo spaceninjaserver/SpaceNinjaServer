@@ -11,6 +11,7 @@ import { GuildMember } from "@/src/models/guildModel";
 import { Leaderboard } from "@/src/models/leaderboardModel";
 import { deleteGuild } from "@/src/services/guildService";
 import { Friendship } from "@/src/models/friendModel";
+import { sendWsBroadcastTo } from "@/src/services/wsService";
 
 export const deleteAccountController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -36,5 +37,8 @@ export const deleteAccountController: RequestHandler = async (req, res) => {
         Ship.deleteMany({ ShipOwnerId: accountId }),
         Stats.deleteOne({ accountOwnerId: accountId })
     ]);
+
+    sendWsBroadcastTo(accountId, { logged_out: true });
+
     res.end();
 };
