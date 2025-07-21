@@ -18,16 +18,22 @@ logger.info("Starting up...");
 
 // Proceed with normal startup: bring up config watcher service, validate config, connect to MongoDB, and finally start listening for HTTP.
 import mongoose from "mongoose";
+import path from "path";
 import { JSONStringify } from "json-with-bigint";
 import { startWebServer } from "@/src/services/webService";
-
 import { validateConfig } from "@/src/services/configWatcherService";
 import { updateWorldStateCollections } from "@/src/services/worldStateService";
+import { repoDir } from "@/src/helpers/pathHelper";
 
-// Patch JSON.stringify to work flawlessly with Bigints.
-JSON.stringify = JSONStringify;
+JSON.stringify = JSONStringify; // Patch JSON.stringify to work flawlessly with Bigints.
 
 validateConfig();
+
+fs.readFile(path.join(repoDir, "BUILD_DATE"), "utf-8", (err, data) => {
+    if (!err) {
+        logger.info(`Docker image was built on ${data.trim()}`);
+    }
+});
 
 mongoose
     .connect(config.mongodbUrl)
