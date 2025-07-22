@@ -872,15 +872,11 @@ function updateInventory() {
 
             const datalistEvolutionProgress = document.querySelectorAll("#datalist-EvolutionProgress option");
             const formEvolutionProgress = document.querySelector('form[onsubmit*="doAcquireEvolution()"]');
-            const giveAllQEvolutionProgress = document.querySelector(
-                'button[onclick*="addMissingEvolutionProgress()"]'
-            );
 
             if (datalistEvolutionProgress.length === 0) {
                 formEvolutionProgress.classList.add("disabled");
                 formEvolutionProgress.querySelector("input").disabled = true;
                 formEvolutionProgress.querySelector("button").disabled = true;
-                giveAllQEvolutionProgress.disabled = true;
             }
 
             if (data.CrewShipHarnesses?.length) {
@@ -1541,14 +1537,17 @@ $(document).on("input", "input[list]", function () {
 });
 
 function dispatchAddItemsRequestsBatch(requests) {
-    revalidateAuthz().then(() => {
-        const req = $.post({
-            url: "/custom/addItems?" + window.authz,
-            contentType: "application/json",
-            data: JSON.stringify(requests)
-        });
-        req.done(() => {
-            updateInventory();
+    return new Promise(resolve => {
+        revalidateAuthz().then(() => {
+            const req = $.post({
+                url: "/custom/addItems?" + window.authz,
+                contentType: "application/json",
+                data: JSON.stringify(requests)
+            });
+            req.done(() => {
+                updateInventory();
+                resolve();
+            });
         });
     });
 }
@@ -1569,7 +1568,7 @@ function addMissingEquipment(categories) {
         });
     });
     if (requests.length != 0 && window.confirm(loc("code_addItemsConfirm").split("|COUNT|").join(requests.length))) {
-        dispatchAddItemsRequestsBatch(requests);
+        return dispatchAddItemsRequestsBatch(requests);
     }
 }
 
@@ -1585,7 +1584,7 @@ function addMissingEvolutionProgress() {
         requests.push({ ItemType: uniqueName, Rank: permanentEvolutionWeapons.has(uniqueName) ? 0 : 1 });
     });
     if (requests.length != 0 && window.confirm(loc("code_addItemsConfirm").split("|COUNT|").join(requests.length))) {
-        setEvolutionProgress(requests);
+        return setEvolutionProgress(requests);
     }
 }
 
@@ -1812,14 +1811,17 @@ function maturePet(oid, revert) {
 }
 
 function setEvolutionProgress(requests) {
-    revalidateAuthz().then(() => {
-        const req = $.post({
-            url: "/custom/setEvolutionProgress?" + window.authz,
-            contentType: "application/json",
-            data: JSON.stringify(requests)
-        });
-        req.done(() => {
-            updateInventory();
+    return new Promise(resolve => {
+        revalidateAuthz().then(() => {
+            const req = $.post({
+                url: "/custom/setEvolutionProgress?" + window.authz,
+                contentType: "application/json",
+                data: JSON.stringify(requests)
+            });
+            req.done(() => {
+                updateInventory();
+                resolve();
+            });
         });
     });
 }
@@ -2511,9 +2513,17 @@ function formatDatetime(fmt, date) {
 const calls_in_flight = new Set();
 
 async function debounce(func, ...args) {
-    calls_in_flight.add(func);
-    await func(...args);
-    calls_in_flight.delete(func);
+    if (!func.name) {
+        throw new Error(`cannot debounce anonymous functions`);
+    }
+    const callid = JSON.stringify({ func: func.name, args });
+    if (!calls_in_flight.has(callid)) {
+        calls_in_flight.add(callid);
+        await func(...args);
+        calls_in_flight.delete(callid);
+    } else {
+        console.log("debouncing", callid);
+    }
 }
 
 async function doMaxPlexus() {

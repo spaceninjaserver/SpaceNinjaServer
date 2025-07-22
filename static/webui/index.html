@@ -436,22 +436,22 @@
                     <h5 class="card-header" data-loc="general_bulkActions"></h5>
                     <div class="card-body">
                         <div class="mb-2 d-flex flex-wrap gap-2">
-                            <button class="btn btn-primary" onclick="addMissingEquipment(['Suits']);" data-loc="inventory_bulkAddSuits"></button>
-                            <button class="btn btn-primary" onclick="addMissingEquipment(['Melee', 'LongGuns', 'Pistols']);" data-loc="inventory_bulkAddWeapons"></button>
-                            <button class="btn btn-primary" onclick="addMissingEquipment(['SpaceSuits']);" data-loc="inventory_bulkAddSpaceSuits"></button>
-                            <button class="btn btn-primary" onclick="addMissingEquipment(['SpaceGuns', 'SpaceMelee']);" data-loc="inventory_bulkAddSpaceWeapons"></button>
-                            <button class="btn btn-primary" onclick="addMissingEquipment(['Sentinels']);" data-loc="inventory_bulkAddSentinels"></button>
-                            <button class="btn btn-primary" onclick="addMissingEquipment(['SentinelWeapons']);" data-loc="inventory_bulkAddSentinelWeapons"></button>
-                            <button class="btn btn-primary" onclick="addMissingEvolutionProgress();" data-loc="inventory_bulkAddEvolutionProgress"></button>
+                            <button class="btn btn-primary" onclick="debounce(addMissingEquipment, ['Suits']);" data-loc="inventory_bulkAddSuits"></button>
+                            <button class="btn btn-primary" onclick="debounce(addMissingEquipment, ['Melee', 'LongGuns', 'Pistols']);" data-loc="inventory_bulkAddWeapons"></button>
+                            <button class="btn btn-primary" onclick="debounce(addMissingEquipment, ['SpaceSuits']);" data-loc="inventory_bulkAddSpaceSuits"></button>
+                            <button class="btn btn-primary" onclick="debounce(addMissingEquipment, ['SpaceGuns', 'SpaceMelee']);" data-loc="inventory_bulkAddSpaceWeapons"></button>
+                            <button class="btn btn-primary" onclick="debounce(addMissingEquipment, ['Sentinels']);" data-loc="inventory_bulkAddSentinels"></button>
+                            <button class="btn btn-primary" onclick="debounce(addMissingEquipment, ['SentinelWeapons']);" data-loc="inventory_bulkAddSentinelWeapons"></button>
+                            <button class="btn btn-primary" onclick="debounce(addMissingEvolutionProgress);" data-loc="inventory_bulkAddEvolutionProgress"></button>
                         </div>
                         <div class="mb-2 d-flex flex-wrap gap-2">
-                            <button class="btn btn-success" onclick="maxRankAllEquipment(['Suits']);" data-loc="inventory_bulkRankUpSuits"></button>
-                            <button class="btn btn-success" onclick="maxRankAllEquipment(['Melee', 'LongGuns', 'Pistols']);" data-loc="inventory_bulkRankUpWeapons"></button>
-                            <button class="btn btn-success" onclick="maxRankAllEquipment(['SpaceSuits']);" data-loc="inventory_bulkRankUpSpaceSuits"></button>
-                            <button class="btn btn-success" onclick="maxRankAllEquipment(['SpaceGuns', 'SpaceMelee']);" data-loc="inventory_bulkRankUpSpaceWeapons"></button>
-                            <button class="btn btn-success" onclick="maxRankAllEquipment(['Sentinels']);" data-loc="inventory_bulkRankUpSentinels"></button>
-                            <button class="btn btn-success" onclick="maxRankAllEquipment(['SentinelWeapons']);" data-loc="inventory_bulkRankUpSentinelWeapons"></button>
-                            <button class="btn btn-success" onclick="maxRankAllEvolutions();" data-loc="inventory_bulkRankUpEvolutionProgress"></button>
+                            <button class="btn btn-success" onclick="debounce(maxRankAllEquipment, ['Suits']);" data-loc="inventory_bulkRankUpSuits"></button>
+                            <button class="btn btn-success" onclick="debounce(maxRankAllEquipment, ['Melee', 'LongGuns', 'Pistols']);" data-loc="inventory_bulkRankUpWeapons"></button>
+                            <button class="btn btn-success" onclick="debounce(maxRankAllEquipment, ['SpaceSuits']);" data-loc="inventory_bulkRankUpSpaceSuits"></button>
+                            <button class="btn btn-success" onclick="debounce(maxRankAllEquipment, ['SpaceGuns', 'SpaceMelee']);" data-loc="inventory_bulkRankUpSpaceWeapons"></button>
+                            <button class="btn btn-success" onclick="debounce(maxRankAllEquipment, ['Sentinels']);" data-loc="inventory_bulkRankUpSentinels"></button>
+                            <button class="btn btn-success" onclick="debounce(maxRankAllEquipment, ['SentinelWeapons']);" data-loc="inventory_bulkRankUpSentinelWeapons"></button>
+                            <button class="btn btn-success" onclick="debounce(maxRankAllEvolutions);" data-loc="inventory_bulkRankUpEvolutionProgress"></button>
                         </div>
                     </div>
                 </div>
