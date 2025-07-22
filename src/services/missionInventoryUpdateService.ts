@@ -1635,7 +1635,10 @@ function getRandomMissionDrops(
             rewardManifests = [
                 "/Lotus/Types/Game/MissionDecks/DuviriEncounterRewards/DuviriMurmurFinalSteelChestRewards"
             ];
-        } else if (RewardInfo.T == 70) {
+        } else if (
+            RewardInfo.T == 70 ||
+            RewardInfo.T == 6 // https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2526
+        ) {
             // Orowyrm chest, gives 10 Pathos Clamps, or 15 on Steel Path.
             drops.push({
                 StoreItem: "/Lotus/StoreItems/Types/Gameplay/Duviri/Resource/DuviriDragonDropItem",
