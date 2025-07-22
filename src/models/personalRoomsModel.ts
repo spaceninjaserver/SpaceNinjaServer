@@ -122,7 +122,9 @@ const apartmentSchema = new Schema<IApartmentDatabase>(
     {
         Rooms: [roomSchema],
         FavouriteLoadouts: [favouriteLoadoutSchema],
-        Gardening: gardeningSchema
+        Gardening: gardeningSchema,
+        VideoWallBackdrop: String,
+        Soundscape: String
     },
     { _id: false }
 );

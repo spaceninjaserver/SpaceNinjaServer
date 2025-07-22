@@ -10,6 +10,7 @@ import { addPendingFriendController } from "@/src/controllers/api/addPendingFrie
 import { addToAllianceController } from "@/src/controllers/api/addToAllianceController";
 import { addToGuildController } from "@/src/controllers/api/addToGuildController";
 import { adoptPetController } from "@/src/controllers/api/adoptPetController";
+import { apartmentController } from "@/src/controllers/api/apartmentController";
 import { arcaneCommonController } from "@/src/controllers/api/arcaneCommonController";
 import { archonFusionController } from "@/src/controllers/api/archonFusionController";
 import { artifactsController } from "@/src/controllers/api/artifactsController";
@@ -168,6 +169,7 @@ const apiRouter = express.Router();
 // get
 apiRouter.get("/abandonLibraryDailyTask.php", abandonLibraryDailyTaskController);
 apiRouter.get("/abortDojoComponentDestruction.php", abortDojoComponentDestructionController);
+apiRouter.get("/apartment.php", apartmentController);
 apiRouter.get("/cancelGuildAdvertisement.php", cancelGuildAdvertisementController);
 apiRouter.get("/changeDojoRoot.php", changeDojoRootController);
 apiRouter.get("/changeGuildRank.php", changeGuildRankController);

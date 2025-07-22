@@ -91,12 +91,16 @@ export interface IApartmentClient {
     Gardening: IGardeningClient;
     Rooms: IRoom[];
     FavouriteLoadouts: IFavouriteLoadout[];
+    VideoWallBackdrop?: string;
+    Soundscape?: string;
 }
 
 export interface IApartmentDatabase {
     Gardening: IGardeningDatabase;
     Rooms: IRoom[];
     FavouriteLoadouts: IFavouriteLoadoutDatabase[];
+    VideoWallBackdrop?: string;
+    Soundscape?: string;
 }
 
 export interface IPlacedDecosDatabase {
