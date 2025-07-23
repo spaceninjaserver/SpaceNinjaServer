@@ -55,7 +55,7 @@ placedDecosSchema.virtual("id").get(function (this: IPlacedDecosDatabase) {
 
 placedDecosSchema.set("toJSON", {
     virtuals: true,
-    transform(_document, returnedObject) {
+    transform(_document, returnedObject: Record<string, any>) {
         delete returnedObject._id;
     }
 });
@@ -78,7 +78,7 @@ const favouriteLoadoutSchema = new Schema<IFavouriteLoadoutDatabase>(
 );
 favouriteLoadoutSchema.set("toJSON", {
     virtuals: true,
-    transform(_document, returnedObject) {
+    transform(_document, returnedObject: Record<string, any>) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         returnedObject.LoadoutId = toOid(returnedObject.LoadoutId);
     }
@@ -95,7 +95,7 @@ const plantSchema = new Schema<IPlantDatabase>(
 
 plantSchema.set("toJSON", {
     virtuals: true,
-    transform(_doc, obj) {
+    transform(_doc, obj: Record<string, any>) {
         const client = obj as IPlantClient;
         const db = obj as IPlantDatabase;
 
@@ -158,7 +158,7 @@ const orbiterSchema = new Schema<IOrbiterDatabase>(
 );
 orbiterSchema.set("toJSON", {
     virtuals: true,
-    transform(_doc, obj) {
+    transform(_doc, obj: Record<string, any>) {
         const db = obj as IOrbiterDatabase;
         const client = obj as IOrbiterClient;
 

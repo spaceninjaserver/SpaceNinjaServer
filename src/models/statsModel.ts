@@ -101,7 +101,7 @@ const statsSchema = new Schema<IStatsDatabase>({
 });
 
 statsSchema.set("toJSON", {
-    transform(_document, returnedObject) {
+    transform(_document, returnedObject: Record<string, any>) {
         delete returnedObject._id;
         delete returnedObject.__v;
         delete returnedObject.accountOwnerId;

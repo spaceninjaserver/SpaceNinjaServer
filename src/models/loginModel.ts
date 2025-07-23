@@ -32,7 +32,7 @@ const databaseAccountSchema = new Schema<IDatabaseAccountJson>(
 );
 
 databaseAccountSchema.set("toJSON", {
-    transform(_document, returnedObject) {
+    transform(_document, returnedObject: Record<string, any>) {
         delete returnedObject._id;
         delete returnedObject.__v;
     },

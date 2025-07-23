@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Types } from "mongoose";
 import { IOid, IMongoDate, IOidWithLegacySupport, ITypeCount } from "@/src/types/commonTypes";
 import {

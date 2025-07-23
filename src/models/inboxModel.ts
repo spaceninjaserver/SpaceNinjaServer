@@ -150,7 +150,7 @@ messageSchema.virtual("messageId").get(function (this: IMessageDatabase) {
 
 messageSchema.set("toJSON", {
     virtuals: true,
-    transform(_document, returnedObject) {
+    transform(_document, returnedObject: Record<string, any>) {
         const messageDatabase = returnedObject as IMessageDatabase;
         const messageClient = returnedObject as IMessageClient;
 

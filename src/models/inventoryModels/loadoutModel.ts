@@ -49,7 +49,7 @@ loadoutConfigSchema.virtual("ItemId").get(function () {
 
 loadoutConfigSchema.set("toJSON", {
     virtuals: true,
-    transform(_doc, ret, _options) {
+    transform(_doc, ret: Record<string, any>) {
         delete ret._id;
         delete ret.__v;
     }
@@ -71,7 +71,7 @@ export const loadoutSchema = new Schema<ILoadoutDatabase, loadoutModelType>({
 });
 
 loadoutSchema.set("toJSON", {
-    transform(_doc, ret, _options) {
+    transform(_doc, ret: Record<string, any>) {
         delete ret._id;
         delete ret.__v;
         delete ret.loadoutOwnerId;

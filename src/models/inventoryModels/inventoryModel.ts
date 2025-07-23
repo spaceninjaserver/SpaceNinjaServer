@@ -121,7 +121,7 @@ import {
 export const typeCountSchema = new Schema<ITypeCount>({ ItemType: String, ItemCount: Number }, { _id: false });
 
 typeCountSchema.set("toJSON", {
-    transform(_doc, obj) {
+    transform(_doc, obj: Record<string, any>) {
         if (obj.ItemCount > 2147483647) {
             obj.ItemCount = 2147483647;
         } else if (obj.ItemCount < -2147483648) {
@@ -189,7 +189,7 @@ operatorConfigSchema.virtual("ItemId").get(function () {
 
 operatorConfigSchema.set("toJSON", {
     virtuals: true,
-    transform(_document, returnedObject) {
+    transform(_document, returnedObject: Record<string, any>) {
         delete returnedObject._id;
         delete returnedObject.__v;
     }
@@ -226,7 +226,7 @@ const ItemConfigSchema = new Schema<IItemConfig>(
 );
 
 ItemConfigSchema.set("toJSON", {
-    transform(_document, returnedObject) {
+    transform(_document, returnedObject: Record<string, any>) {
         delete returnedObject.__v;
     }
 });
@@ -261,7 +261,7 @@ RawUpgrades.virtual("LastAdded").get(function () {
 
 RawUpgrades.set("toJSON", {
     virtuals: true,
-    transform(_document, returnedObject) {
+    transform(_document, returnedObject: Record<string, any>) {
         delete returnedObject._id;
         delete returnedObject.__v;
     }
@@ -282,7 +282,7 @@ upgradeSchema.virtual("ItemId").get(function () {
 
 upgradeSchema.set("toJSON", {
     virtuals: true,
-    transform(_document, returnedObject) {
+    transform(_document, returnedObject: Record<string, any>) {
         delete returnedObject._id;
         delete returnedObject.__v;
     }
@@ -325,7 +325,7 @@ const crewMemberSchema = new Schema<ICrewMemberDatabase>(
 
 crewMemberSchema.set("toJSON", {
     virtuals: true,
-    transform(_doc, obj) {
+    transform(_doc, obj: Record<string, any>) {
         const db = obj as ICrewMemberDatabase;
         const client = obj as ICrewMemberClient;
 
@@ -353,7 +353,7 @@ const FlavourItemSchema = new Schema(
 );
 
 FlavourItemSchema.set("toJSON", {
-    transform(_document, returnedObject) {
+    transform(_document, returnedObject: Record<string, any>) {
         delete returnedObject._id;
         delete returnedObject.__v;
     }
@@ -367,7 +367,7 @@ FlavourItemSchema.set("toJSON", {
 );
 
 MailboxSchema.set("toJSON", {
-    transform(_document, returnedObject) {
+    transform(_document, returnedObject: Record<string, any>) {
         const mailboxDatabase = returnedObject as HydratedDocument<IMailboxDatabase, { __v?: number }>;
         delete mailboxDatabase.__v;
         (returnedObject as IMailboxClient).LastInboxId = toOid(mailboxDatabase.LastInboxId);
@@ -386,7 +386,7 @@ const DuviriInfoSchema = new Schema<IDuviriInfo>(
 );
 
 DuviriInfoSchema.set("toJSON", {
-    transform(_document, returnedObject) {
+    transform(_document, returnedObject: Record<string, any>) {
         delete returnedObject.__v;
     }
 });
@@ -416,7 +416,7 @@ const droneSchema = new Schema<IDroneDatabase>(
 );
 droneSchema.set("toJSON", {
     virtuals: true,
-    transform(_document, obj) {
+    transform(_document, obj: Record<string, any>) {
         const client = obj as IDroneClient;
         const db = obj as IDroneDatabase;
 
@@ -457,7 +457,7 @@ const personalGoalProgressSchema = new Schema<IPersonalGoalProgressDatabase>(
 
 personalGoalProgressSchema.set("toJSON", {
     virtuals: true,
-    transform(_doc, obj) {
+    transform(_doc, obj: Record<string, any>) {
         const db = obj as IPersonalGoalProgressDatabase;
         const client = obj as IPersonalGoalProgressClient;
 
@@ -502,7 +502,7 @@ StepSequencersSchema.virtual("ItemId").get(function () {
 
 StepSequencersSchema.set("toJSON", {
     virtuals: true,
-    transform(_document, returnedObject) {
+    transform(_document, returnedObject: Record<string, any>) {
         delete returnedObject._id;
         delete returnedObject.__v;
     }
@@ -516,7 +516,7 @@ const kubrowPetEggSchema = new Schema<IKubrowPetEggDatabase>(
 );
 kubrowPetEggSchema.set("toJSON", {
     virtuals: true,
-    transform(_document, obj) {
+    transform(_document, obj: Record<string, any>) {
         const client = obj as IKubrowPetEggClient;
         const db = obj as IKubrowPetEggDatabase;
 
@@ -586,7 +586,7 @@ personalTechProjectSchema.virtual("ItemId").get(function () {
 
 personalTechProjectSchema.set("toJSON", {
     virtuals: true,
-    transform(_doc, ret, _options) {
+    transform(_doc, ret: Record<string, any>) {
         delete ret._id;
         delete ret.__v;
 
@@ -687,7 +687,7 @@ const questKeysSchema = new Schema<IQuestKeyDatabase>(
 );
 
 questKeysSchema.set("toJSON", {
-    transform(_doc, ret, _options) {
+    transform(_doc, ret: Record<string, any>) {
         const questKeysDatabase = ret as IQuestKeyDatabase;
 
         if (questKeysDatabase.CompletionDate) {
@@ -709,7 +709,7 @@ const invasionProgressSchema = new Schema<IInvasionProgressDatabase>(
 );
 
 invasionProgressSchema.set("toJSON", {
-    transform(_doc, obj) {
+    transform(_doc, obj: Record<string, any>) {
         const db = obj as IInvasionProgressDatabase;
         const client = obj as IInvasionProgressClient;
 
@@ -748,7 +748,7 @@ weaponSkinsSchema.virtual("ItemId").get(function () {
 
 weaponSkinsSchema.set("toJSON", {
     virtuals: true,
-    transform(_doc, ret, _options) {
+    transform(_doc, ret: Record<string, any>) {
         delete ret._id;
         delete ret.__v;
     }
@@ -772,7 +772,7 @@ const periodicMissionCompletionsSchema = new Schema<IPeriodicMissionCompletionDa
 );
 
 periodicMissionCompletionsSchema.set("toJSON", {
-    transform(_doc, ret, _options) {
+    transform(_doc, ret: Record<string, any>) {
         const periodicMissionCompletionDatabase = ret as IPeriodicMissionCompletionDatabase;
 
         (periodicMissionCompletionDatabase as unknown as IPeriodicMissionCompletionResponse).date = toMongoDate(
@@ -849,7 +849,7 @@ const endlessXpProgressSchema = new Schema<IEndlessXpProgressDatabase>(
 );
 
 endlessXpProgressSchema.set("toJSON", {
-    transform(_doc, ret) {
+    transform(_doc, ret: Record<string, any>) {
         const db = ret as IEndlessXpProgressDatabase;
         const client = ret as IEndlessXpProgressClient;
 
@@ -898,7 +898,7 @@ const crewShipMemberSchema = new Schema<ICrewShipMemberDatabase>(
 );
 crewShipMemberSchema.set("toJSON", {
     virtuals: true,
-    transform(_doc, obj) {
+    transform(_doc, obj: Record<string, any>) {
         const db = obj as ICrewShipMemberDatabase;
         const client = obj as ICrewShipMemberClient;
         if (db.ItemId) {
@@ -951,7 +951,7 @@ const dialogueSchema = new Schema<IDialogueDatabase>(
 );
 dialogueSchema.set("toJSON", {
     virtuals: true,
-    transform(_doc, ret) {
+    transform(_doc, ret: Record<string, any>) {
         const db = ret as IDialogueDatabase;
         const client = ret as IDialogueClient;
 
@@ -997,7 +997,7 @@ const kubrowPetPrintSchema = new Schema<IKubrowPetPrintDatabase>({
 });
 kubrowPetPrintSchema.set("toJSON", {
     virtuals: true,
-    transform(_doc, obj) {
+    transform(_doc, obj: Record<string, any>) {
         const db = obj as IKubrowPetPrintDatabase;
         const client = obj as IKubrowPetPrintClient;
 
@@ -1025,7 +1025,7 @@ const detailsSchema = new Schema<IKubrowPetDetailsDatabase>(
 );
 
 detailsSchema.set("toJSON", {
-    transform(_doc, returnedObject) {
+    transform(_doc, returnedObject: Record<string, any>) {
         delete returnedObject.__v;
 
         const db = returnedObject as IKubrowPetDetailsDatabase;
@@ -1081,7 +1081,7 @@ EquipmentSchema.virtual("ItemId").get(function () {
 
 EquipmentSchema.set("toJSON", {
     virtuals: true,
-    transform(_document, returnedObject) {
+    transform(_document, returnedObject: Record<string, any>) {
         delete returnedObject._id;
         delete returnedObject.__v;
 
@@ -1132,7 +1132,7 @@ pendingRecipeSchema.virtual("ItemId").get(function () {
 
 pendingRecipeSchema.set("toJSON", {
     virtuals: true,
-    transform(_document, returnedObject) {
+    transform(_document, returnedObject: Record<string, any>) {
         delete returnedObject._id;
         delete returnedObject.__v;
         delete returnedObject.LongGuns;
@@ -1170,7 +1170,7 @@ const infestedFoundrySchema = new Schema<IInfestedFoundryDatabase>(
 );
 
 infestedFoundrySchema.set("toJSON", {
-    transform(_doc, ret, _options) {
+    transform(_doc, ret: Record<string, any>) {
         if (ret.AbilityOverrideUnlockCooldown) {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             ret.AbilityOverrideUnlockCooldown = toMongoDate(ret.AbilityOverrideUnlockCooldown);
@@ -1243,7 +1243,7 @@ const vendorPurchaseHistoryEntrySchema = new Schema<IVendorPurchaseHistoryEntryD
 );
 
 vendorPurchaseHistoryEntrySchema.set("toJSON", {
-    transform(_doc, obj) {
+    transform(_doc, obj: Record<string, any>) {
         const db = obj as IVendorPurchaseHistoryEntryDatabase;
         const client = obj as IVendorPurchaseHistoryEntryClient;
         client.Expiry = toMongoDate(db.Expiry);
@@ -1286,7 +1286,7 @@ const pendingCouponSchema = new Schema<IPendingCouponDatabase>(
 );
 
 pendingCouponSchema.set("toJSON", {
-    transform(_doc, ret, _options) {
+    transform(_doc, ret: Record<string, any>) {
         (ret as IPendingCouponClient).Expiry = toMongoDate((ret as IPendingCouponDatabase).Expiry);
     }
 });
@@ -1353,7 +1353,7 @@ const nemesisSchema = new Schema<INemesisDatabase>(
 
 nemesisSchema.set("toJSON", {
     virtuals: true,
-    transform(_doc, obj) {
+    transform(_doc, obj: Record<string, any>) {
         const db = obj as INemesisDatabase;
         const client = obj as INemesisClient;
 
@@ -1383,7 +1383,7 @@ const lastSortieRewardSchema = new Schema<ILastSortieRewardDatabase>(
 
 lastSortieRewardSchema.set("toJSON", {
     virtuals: true,
-    transform(_doc, obj) {
+    transform(_doc, obj: Record<string, any>) {
         const db = obj as ILastSortieRewardDatabase;
         const client = obj as ILastSortieRewardClient;
 
@@ -1790,7 +1790,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 );
 
 inventorySchema.set("toJSON", {
-    transform(_document, returnedObject) {
+    transform(_document, returnedObject: Record<string, any>) {
         delete returnedObject._id;
         delete returnedObject.__v;
         delete returnedObject.accountOwnerId;

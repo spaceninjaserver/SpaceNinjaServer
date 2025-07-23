@@ -141,7 +141,7 @@ export const getProfileViewingDataGetController: RequestHandler = async (req, re
                                 }
                             }
                         } else {
-                            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+                            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                             combinedStats[arrayName].push(entry as any);
                         }
                     }

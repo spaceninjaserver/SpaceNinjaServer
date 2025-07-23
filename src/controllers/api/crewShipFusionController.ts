@@ -88,7 +88,6 @@ export const crewShipFusionController: RequestHandler = async (req, res) => {
         }
     }
     superiorItem.UpgradeFingerprint = JSON.stringify(fingerprint);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     inventoryChanges[category] = [superiorItem.toJSON() as any];
 
     await inventory.save();

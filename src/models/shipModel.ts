@@ -22,7 +22,7 @@ shipSchema.virtual("ItemId").get(function () {
 
 shipSchema.set("toJSON", {
     virtuals: true,
-    transform(_document, returnedObject) {
+    transform(_document, returnedObject: Record<string, any>) {
         const shipResponse = returnedObject as IShipInventory;
         const shipDatabase = returnedObject as IShipDatabase;
         delete returnedObject._id;

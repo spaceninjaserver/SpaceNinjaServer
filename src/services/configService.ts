@@ -114,7 +114,7 @@ export const loadConfig = (): void => {
 
     // Set all values to undefined now so if the new config.json omits some fields that were previously present, it's correct in-memory.
     for (const key of Object.keys(config)) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         (config as any)[key] = undefined;
     }
 
