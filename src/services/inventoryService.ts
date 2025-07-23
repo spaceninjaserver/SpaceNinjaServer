@@ -1241,6 +1241,15 @@ export const addFusionPoints = (inventory: TInventoryDatabaseDocument, add: numb
     return add;
 };
 
+export const addCrewShipFusionPoints = (inventory: TInventoryDatabaseDocument, add: number): number => {
+    if (inventory.CrewShipFusionPoints + add > 2147483647) {
+        logger.warn(`capping CrewShipFusionPoints balance at 2147483647`);
+        add = 2147483647 - inventory.CrewShipFusionPoints;
+    }
+    inventory.CrewShipFusionPoints += add;
+    return add;
+};
+
 const standingLimitBinToInventoryKey: Record<
     Exclude<TStandingLimitBin, "STANDING_LIMIT_BIN_NONE">,
     keyof IDailyAffiliations

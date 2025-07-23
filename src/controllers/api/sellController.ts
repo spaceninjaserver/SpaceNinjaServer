@@ -9,7 +9,8 @@ import {
     freeUpSlot,
     combineInventoryChanges,
     addCrewShipRawSalvage,
-    addFusionPoints
+    addFusionPoints,
+    addCrewShipFusionPoints
 } from "@/src/services/inventoryService";
 import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
 import { ExportDojoRecipes } from "warframe-public-export-plus";
@@ -26,6 +27,8 @@ export const sellController: RequestHandler = async (req, res) => {
         requiredFields.add("RegularCredits");
     } else if (payload.SellCurrency == "SC_FusionPoints") {
         requiredFields.add("FusionPoints");
+    } else if (payload.SellCurrency == "SC_CrewShipFusionPoints") {
+        requiredFields.add("CrewShipFusionPoints");
     } else {
         requiredFields.add("MiscItems");
     }
@@ -79,6 +82,8 @@ export const sellController: RequestHandler = async (req, res) => {
         inventory.RegularCredits += payload.SellPrice;
     } else if (payload.SellCurrency == "SC_FusionPoints") {
         addFusionPoints(inventory, payload.SellPrice);
+    } else if (payload.SellCurrency == "SC_CrewShipFusionPoints") {
+        addCrewShipFusionPoints(inventory, payload.SellPrice);
     } else if (payload.SellCurrency == "SC_PrimeBucks") {
         addMiscItems(inventory, [
             {
@@ -330,7 +335,8 @@ interface ISellRequest {
         | "SC_FusionPoints"
         | "SC_DistillPoints"
         | "SC_CrewShipFusionPoints"
-        | "SC_Resources";
+        | "SC_Resources"
+        | "somethingelsewemightnotknowabout";
     buildLabel: string;
 }
 

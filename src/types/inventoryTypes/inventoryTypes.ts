@@ -215,6 +215,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     PremiumCredits: number;
     PremiumCreditsFree: number;
     FusionPoints: number;
+    CrewShipFusionPoints: number; //Dirac (pre-rework Railjack)
     PrimeTokens: number;
     SuitBin: ISlots;
     WeaponBin: ISlots;

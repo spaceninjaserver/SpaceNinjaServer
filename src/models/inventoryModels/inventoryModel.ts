@@ -1437,6 +1437,8 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         PremiumCreditsFree: { type: Number, default: 0 },
         //Endo
         FusionPoints: { type: Number, default: 0 },
+        //Dirac
+        CrewShipFusionPoints: { type: Number, default: 0 },
         //Regal Aya
         PrimeTokens: { type: Number, default: 0 },
 
