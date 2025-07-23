@@ -32,7 +32,7 @@ export const getUsernameFromEmail = async (email: string): Promise<string> => {
             name = nameFromEmail + suffix;
         } while (await isNameTaken(name));
     }
-    return nameFromEmail;
+    return name;
 };
 
 export const createAccount = async (accountData: IDatabaseAccountRequiredFields): Promise<IDatabaseAccountJson> => {

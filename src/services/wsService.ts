@@ -2,13 +2,7 @@ import http from "http";
 import https from "https";
 import ws from "ws";
 import { Account } from "@/src/models/loginModel";
-import {
-    createAccount,
-    createNonce,
-    getUsernameFromEmail,
-    isCorrectPassword,
-    isNameTaken
-} from "@/src/services/loginService";
+import { createAccount, createNonce, getUsernameFromEmail, isCorrectPassword } from "@/src/services/loginService";
 import { IDatabaseAccountJson } from "@/src/types/loginTypes";
 import { HydratedDocument } from "mongoose";
 import { logError } from "@/src/utils/logger";
@@ -111,16 +105,14 @@ const wsOnConnect = (ws: ws, req: http.IncomingMessage): void => {
                     }
                 } else if (data.auth.isRegister) {
                     const name = await getUsernameFromEmail(data.auth.email);
-                    if (!(await isNameTaken(name))) {
-                        account = await createAccount({
-                            email: data.auth.email,
-                            password: data.auth.password,
-                            ClientType: "webui",
-                            LastLogin: new Date(),
-                            DisplayName: name,
-                            Nonce: createNonce()
-                        });
-                    }
+                    account = await createAccount({
+                        email: data.auth.email,
+                        password: data.auth.password,
+                        ClientType: "webui",
+                        LastLogin: new Date(),
+                        DisplayName: name,
+                        Nonce: createNonce()
+                    });
                 }
                 if (account) {
                     (ws as IWsCustomData).accountId = account.id;
