@@ -2,21 +2,13 @@ import { RequestHandler } from "express";
 import { ExportResources } from "warframe-public-export-plus";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addFusionTreasures, addMiscItems, getInventory } from "@/src/services/inventoryService";
-import { IFusionTreasure, IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
+import { parseFusionTreasure } from "@/src/helpers/inventoryHelpers";
 
 interface IFusionTreasureRequest {
     oldTreasureName: string;
     newTreasureName: string;
 }
-
-const parseFusionTreasure = (name: string, count: number): IFusionTreasure => {
-    const arr = name.split("_");
-    return {
-        ItemType: arr[0],
-        Sockets: parseInt(arr[1], 16),
-        ItemCount: count
-    };
-};
 
 export const fusionTreasuresController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

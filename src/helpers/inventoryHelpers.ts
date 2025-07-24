@@ -1,6 +1,7 @@
 import { IMongoDate, IOid, IOidWithLegacySupport } from "@/src/types/commonTypes";
 import { Types } from "mongoose";
 import { TRarity } from "warframe-public-export-plus";
+import { IFusionTreasure } from "@/src/types/inventoryTypes/inventoryTypes";
 
 export const version_compare = (a: string, b: string): number => {
     const a_digits = a
@@ -49,6 +50,15 @@ export const toMongoDate = (date: Date): IMongoDate => {
 
 export const fromMongoDate = (date: IMongoDate): Date => {
     return new Date(parseInt(date.$date.$numberLong));
+};
+
+export const parseFusionTreasure = (name: string, count: number): IFusionTreasure => {
+    const arr = name.split("_");
+    return {
+        ItemType: arr[0],
+        Sockets: parseInt(arr[1], 16),
+        ItemCount: count
+    };
 };
 
 export type TTraitsPool = Record<

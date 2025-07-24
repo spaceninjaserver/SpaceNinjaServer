@@ -10,13 +10,15 @@ import {
     combineInventoryChanges,
     addCrewShipRawSalvage,
     addFusionPoints,
-    addCrewShipFusionPoints
+    addCrewShipFusionPoints,
+    addFusionTreasures
 } from "@/src/services/inventoryService";
 import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
 import { ExportDojoRecipes } from "warframe-public-export-plus";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { sendWsBroadcastEx } from "@/src/services/wsService";
+import { parseFusionTreasure } from "@/src/helpers/inventoryHelpers";
 
 export const sellController: RequestHandler = async (req, res) => {
     const payload = JSON.parse(String(req.body)) as ISellRequest;
@@ -295,6 +297,11 @@ export const sellController: RequestHandler = async (req, res) => {
             ]);
         });
     }
+    if (payload.Items.FusionTreasures) {
+        payload.Items.FusionTreasures.forEach(sellItem => {
+            addFusionTreasures(inventory, [parseFusionTreasure(sellItem.String, sellItem.Count * -1)]);
+        });
+    }
 
     await inventory.save();
     res.json({
@@ -327,6 +334,7 @@ interface ISellRequest {
         CrewMembers?: ISellItem[];
         CrewShipWeapons?: ISellItem[];
         CrewShipWeaponSkins?: ISellItem[];
+        FusionTreasures?: ISellItem[];
     };
     SellPrice: number;
     SellCurrency:
