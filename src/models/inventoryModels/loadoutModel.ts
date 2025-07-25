@@ -62,6 +62,7 @@ export const loadoutSchema = new Schema<ILoadoutDatabase, loadoutModelType>({
     NORMAL_PVP: [loadoutConfigSchema],
     LUNARO: [loadoutConfigSchema],
     OPERATOR: [loadoutConfigSchema],
+    GEAR: [loadoutConfigSchema],
     KDRIVE: [loadoutConfigSchema],
     DATAKNIFE: [loadoutConfigSchema],
     MECH: [loadoutConfigSchema],
@@ -88,6 +89,7 @@ type loadoutDocumentProps = {
     NORMAL_PVP: Types.DocumentArray<ILoadoutConfigDatabase>;
     LUNARO: Types.DocumentArray<ILoadoutConfigDatabase>;
     OPERATOR: Types.DocumentArray<ILoadoutConfigDatabase>;
+    GEAR: Types.DocumentArray<ILoadoutConfigDatabase>;
     KDRIVE: Types.DocumentArray<ILoadoutConfigDatabase>;
     DATAKNIFE: Types.DocumentArray<ILoadoutConfigDatabase>;
     MECH: Types.DocumentArray<ILoadoutConfigDatabase>;

@@ -79,6 +79,7 @@ export interface ILoadoutDatabase {
     NORMAL_PVP: ILoadoutConfigDatabase[];
     LUNARO: ILoadoutConfigDatabase[];
     OPERATOR: ILoadoutConfigDatabase[];
+    GEAR: ILoadoutConfigDatabase[];
     KDRIVE: ILoadoutConfigDatabase[];
     DATAKNIFE: ILoadoutConfigDatabase[];
     MECH: ILoadoutConfigDatabase[];
