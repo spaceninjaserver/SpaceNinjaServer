@@ -581,7 +581,7 @@ const handleBoosterPackPurchase = async (
                         purchaseResponse.InventoryChanges,
                         await addItem(inventory, specialItemReward.Item)
                     );
-                    // TOVERIFY: Is the SpecialItemRewardAttenuation entry removed now?
+                    atten.Atten = 0;
                 } else {
                     atten.Atten += specialItemReward.PityIncreaseRate!;
                 }
