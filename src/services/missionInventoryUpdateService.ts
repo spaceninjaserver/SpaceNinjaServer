@@ -1302,6 +1302,9 @@ export const addMissionRewards = async (
                     ItemCount: medallionAmount
                 });
                 SyndicateXPItemReward = medallionAmount;
+                logger.debug(
+                    `Giving ${medallionAmount} medallions for the ${rewardInfo.JobStage} stage of the ${rewardInfo.JobTier} tier bounty`
+                );
             } else {
                 if (rewardInfo.JobTier! >= 0) {
                     addStanding(
@@ -1347,6 +1350,7 @@ export const addMissionRewards = async (
                 ItemCount: medallionAmount
             });
             SyndicateXPItemReward = medallionAmount;
+            logger.debug(`Giving ${medallionAmount} medallions for the ${tier} tier bounty`);
         } else {
             let standingAmount = (tier + 1) * 1000;
             if (tier > 5) standingAmount = 7500; // InfestedLichBounty
