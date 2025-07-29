@@ -156,8 +156,8 @@ dict = {
     invigorations_defensiveLabel: `Defensives Upgrade`,
     invigorations_expiryLabel: `Upgrades Ablaufdatum (optional)`,
 
-    abilityOverride_label: `[UNTRANSLATED] Ability Override`,
-    abilityOverride_onSlot: `[UNTRANSLATED] on slot`,
+    abilityOverride_label: `Fähigkeitsüberschreibung`,
+    abilityOverride_onSlot: `auf Slot`,
 
     mods_addRiven: `Riven hinzufügen`,
     mods_fingerprint: `Fingerabdruck`,
