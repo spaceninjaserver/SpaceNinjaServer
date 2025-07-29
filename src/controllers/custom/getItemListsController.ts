@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import { getDict, getItemName, getString } from "@/src/services/itemDataService";
 import {
+    ExportAbilities,
     ExportArcanes,
     ExportAvionics,
     ExportBoosters,
@@ -57,6 +58,7 @@ interface ItemLists {
     mods: ListedItem[];
     Boosters: ListedItem[];
     VarziaOffers: ListedItem[];
+    Abilities: ListedItem[];
     //circuitGameModes: ListedItem[];
 }
 
@@ -94,7 +96,8 @@ const getItemListsController: RequestHandler = (req, response) => {
         EvolutionProgress: [],
         mods: [],
         Boosters: [],
-        VarziaOffers: []
+        VarziaOffers: [],
+        Abilities: []
         /*circuitGameModes: [
             {
                 uniqueName: "Survival",
@@ -131,6 +134,12 @@ const getItemListsController: RequestHandler = (req, response) => {
             uniqueName,
             name: getString(item.name, lang),
             exalted: item.exalted
+        });
+        item.abilities.forEach(ability => {
+            res.Abilities.push({
+                uniqueName: ability.uniqueName,
+                name: getString(ability.name || uniqueName, lang)
+            });
         });
     }
     for (const [uniqueName, item] of Object.entries(ExportSentinels)) {
@@ -345,6 +354,13 @@ const getItemListsController: RequestHandler = (req, response) => {
         res.VarziaOffers.push({
             uniqueName: item.ItemType,
             name: getString(getItemName(item.ItemType) || "", lang)
+        });
+    }
+
+    for (const [uniqueName, ability] of Object.entries(ExportAbilities)) {
+        res.Abilities.push({
+            uniqueName,
+            name: getString(ability.name || uniqueName, lang)
         });
     }
 

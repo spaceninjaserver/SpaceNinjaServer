@@ -128,6 +128,7 @@ dict = {
     detailedView_valenceBonusDescription: `Puedes establecer o quitar el bono de valencia de tu arma.`,
     detailedView_modularPartsLabel: `Cambiar partes modulares`,
     detailedView_suitInvigorationLabel: `Vigorización de Warframe`,
+    detailedView_loadoutLabel: `Equipamientos`,
 
     invigorations_offensive_AbilityStrength: `+200% Fuerza de Habilidad`,
     invigorations_offensive_AbilityRange: `+100% Alcance de Habilidad`,
@@ -154,6 +155,9 @@ dict = {
     invigorations_offensiveLabel: `Mejora Ofensiva`,
     invigorations_defensiveLabel: `Mejora Defensiva`,
     invigorations_expiryLabel: `Caducidad de Mejoras (opcional)`,
+
+    abilityOverride_label: `[UNTRANSLATED] Ability Override`,
+    abilityOverride_onSlot: `[UNTRANSLATED] on slot`,
 
     mods_addRiven: `Agregar Agrietado`,
     mods_fingerprint: `Huella digital`,

@@ -127,6 +127,7 @@ dict = {
     detailedView_valenceBonusDescription: `You can set or remove the Valence Bonus from your weapon.`,
     detailedView_modularPartsLabel: `Change Modular Parts`,
     detailedView_suitInvigorationLabel: `Warframe Invigoration`,
+    detailedView_loadoutLabel: `Loadouts`,
 
     invigorations_offensive_AbilityStrength: `+200% Ability Strength`,
     invigorations_offensive_AbilityRange: `+100% Ability Range`,
@@ -153,6 +154,9 @@ dict = {
     invigorations_offensiveLabel: `Offensive Upgrade`,
     invigorations_defensiveLabel: `Defensive Upgrade`,
     invigorations_expiryLabel: `Upgrades Expiry (optional)`,
+
+    abilityOverride_label: `Ability Override`,
+    abilityOverride_onSlot: `on slot`,
 
     mods_addRiven: `Add Riven`,
     mods_fingerprint: `Fingerprint`,

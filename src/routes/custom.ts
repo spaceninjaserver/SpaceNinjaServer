@@ -15,6 +15,7 @@ import { webuiFileChangeDetectedController } from "@/src/controllers/custom/webu
 import { completeAllMissionsController } from "@/src/controllers/custom/completeAllMissionsController";
 import { addMissingHelminthBlueprintsController } from "@/src/controllers/custom/addMissingHelminthBlueprintsController";
 
+import { abilityOverrideController } from "@/src/controllers/custom/abilityOverrideController";
 import { createAccountController } from "@/src/controllers/custom/createAccountController";
 import { createMessageController } from "@/src/controllers/custom/createMessageController";
 import { addCurrencyController } from "@/src/controllers/custom/addCurrencyController";
@@ -47,6 +48,7 @@ customRouter.get("/webuiFileChangeDetected", webuiFileChangeDetectedController);
 customRouter.get("/completeAllMissions", completeAllMissionsController);
 customRouter.get("/addMissingHelminthBlueprints", addMissingHelminthBlueprintsController);
 
+customRouter.post("/abilityOverride", abilityOverrideController);
 customRouter.post("/createAccount", createAccountController);
 customRouter.post("/createMessage", createMessageController);
 customRouter.post("/addCurrency", addCurrencyController);

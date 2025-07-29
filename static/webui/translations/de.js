@@ -128,6 +128,7 @@ dict = {
     detailedView_valenceBonusDescription: `Du kannst den Valenz-Bonus deiner Waffe festlegen oder entfernen.`,
     detailedView_modularPartsLabel: `Modulare Teile ändern`,
     detailedView_suitInvigorationLabel: `Warframe-Kräftigung`,
+    detailedView_loadoutLabel: `Loadouts`,
 
     invigorations_offensive_AbilityStrength: `+200% Fähigkeitsstärke`,
     invigorations_offensive_AbilityRange: `+100% Fähigkeitsreichweite`,
@@ -154,6 +155,9 @@ dict = {
     invigorations_offensiveLabel: `Offensives Upgrade`,
     invigorations_defensiveLabel: `Defensives Upgrade`,
     invigorations_expiryLabel: `Upgrades Ablaufdatum (optional)`,
+
+    abilityOverride_label: `[UNTRANSLATED] Ability Override`,
+    abilityOverride_onSlot: `[UNTRANSLATED] on slot`,
 
     mods_addRiven: `Riven hinzufügen`,
     mods_fingerprint: `Fingerabdruck`,

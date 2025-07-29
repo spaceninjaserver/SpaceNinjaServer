@@ -128,6 +128,7 @@ dict = {
     detailedView_valenceBonusDescription: `Вы можете установить или убрать бонус валентности с вашего оружия.`,
     detailedView_modularPartsLabel: `Изменить Модульные Части`,
     detailedView_suitInvigorationLabel: `[UNTRANSLATED] Warframe Invigoration`,
+    detailedView_loadoutLabel: `Конфигурации`,
 
     invigorations_offensive_AbilityStrength: `[UNTRANSLATED] +200% Ability Strength`,
     invigorations_offensive_AbilityRange: `[UNTRANSLATED] +100% Ability Range`,
@@ -154,6 +155,9 @@ dict = {
     invigorations_offensiveLabel: `[UNTRANSLATED] Offensive Upgrade`,
     invigorations_defensiveLabel: `[UNTRANSLATED] Defensive Upgrade`,
     invigorations_expiryLabel: `[UNTRANSLATED] Upgrades Expiry (optional)`,
+
+    abilityOverride_label: `Переопределение способности`,
+    abilityOverride_onSlot: `в ячейке`,
 
     mods_addRiven: `Добавить Мод Разлома`,
     mods_fingerprint: `Отпечаток`,

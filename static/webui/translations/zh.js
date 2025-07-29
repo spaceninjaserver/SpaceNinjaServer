@@ -128,6 +128,7 @@ dict = {
     detailedView_valenceBonusDescription: `您可以设置或移除武器上的效价加成.`,
     detailedView_modularPartsLabel: `更换部件`,
     detailedView_suitInvigorationLabel: `编辑战甲活化属性`,
+    detailedView_loadoutLabel: `配置`,
 
     invigorations_offensive_AbilityStrength: `+200%技能强度`,
     invigorations_offensive_AbilityRange: `+100%技能范围`,
@@ -154,6 +155,9 @@ dict = {
     invigorations_offensiveLabel: `进攻型属性`,
     invigorations_defensiveLabel: `功能型属性`,
     invigorations_expiryLabel: `活化时效(可选)`,
+
+    abilityOverride_label: `[UNTRANSLATED] Ability Override`,
+    abilityOverride_onSlot: `[UNTRANSLATED] on slot`,
 
     mods_addRiven: `添加裂罅MOD`,
     mods_fingerprint: `印记`,

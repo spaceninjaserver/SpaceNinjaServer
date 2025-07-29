@@ -128,6 +128,7 @@ dict = {
     detailedView_valenceBonusDescription: `Définir le Bonus Valence de l'arme.`,
     detailedView_modularPartsLabel: `Changer l'équipement modulaire`,
     detailedView_suitInvigorationLabel: `Invigoration de Warframe`,
+    detailedView_loadoutLabel: `Équipements`,
 
     invigorations_offensive_AbilityStrength: `+200% de puissance de pouvoir`,
     invigorations_offensive_AbilityRange: `+100% de portée de pouvoir`,
@@ -154,6 +155,9 @@ dict = {
     invigorations_offensiveLabel: `Amélioration offensive`,
     invigorations_defensiveLabel: `Amélioration défensive`,
     invigorations_expiryLabel: `Expiration de l'invigoration (optionnel)`,
+
+    abilityOverride_label: `[UNTRANSLATED] Ability Override`,
+    abilityOverride_onSlot: `[UNTRANSLATED] on slot`,
 
     mods_addRiven: `Ajouter un riven`,
     mods_fingerprint: `Empreinte`,

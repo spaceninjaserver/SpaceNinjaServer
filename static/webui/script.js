@@ -1241,6 +1241,117 @@ function updateInventory() {
                         document.getElementById("dv-invigoration-offensive").value = OffensiveUpgrade;
                         document.getElementById("dv-invigoration-defensive").value = DefensiveUpgrade;
                         document.getElementById("dv-invigoration-expiry").value = UpgradesExpiry;
+
+                        {
+                            document.getElementById("loadout-card").classList.remove("d-none");
+                            const maxModConfigNum = Math.min(2 + (item.ModSlotPurchases ?? 0), 5);
+
+                            const configs = item.Configs ?? [];
+
+                            const loadoutTabs = document.getElementById("loadoutTabs");
+                            const loadoutTabsContent = document.getElementById("loadoutTabsContent");
+                            loadoutTabs.innerHTML = "";
+                            loadoutTabsContent.innerHTML = "";
+                            for (let i = 0; i <= maxModConfigNum; i++) {
+                                const config = configs[i] ?? {};
+
+                                {
+                                    const li = document.createElement("li");
+                                    li.classList.add("nav-item");
+
+                                    const button = document.createElement("button");
+                                    button.classList.add("nav-link");
+                                    if (i === 0) button.classList.add("active");
+                                    button.id = `config${i}-tab`;
+                                    button.setAttribute("data-bs-toggle", "tab");
+                                    button.setAttribute("data-bs-target", `#config${i}`);
+                                    button.innerHTML = config.Name?.trim() || String.fromCharCode(65 + i);
+
+                                    li.appendChild(button);
+                                    loadoutTabs.appendChild(li);
+                                }
+
+                                {
+                                    const tabDiv = document.createElement("div");
+                                    tabDiv.classList = "tab-pane";
+                                    if (i === 0) tabDiv.classList.add("show", "active");
+
+                                    tabDiv.id = `config${i}`;
+
+                                    {
+                                        const abilityOverrideForm = document.createElement("form");
+                                        abilityOverrideForm.classList = "form-group mt-2";
+                                        abilityOverrideForm.setAttribute(
+                                            "onsubmit",
+                                            `handleAbilityOverride(event, ${i});return false;`
+                                        );
+
+                                        const abilityOverrideFormLabel = document.createElement("label");
+                                        abilityOverrideFormLabel.setAttribute("data-loc", "abilityOverride_label");
+                                        abilityOverrideFormLabel.innerHTML = loc("abilityOverride_label");
+                                        abilityOverrideFormLabel.classList = "form-label";
+                                        abilityOverrideFormLabel.setAttribute("for", "abilityOverride-ability");
+                                        abilityOverrideForm.appendChild(abilityOverrideFormLabel);
+
+                                        const abilityOverrideInputGroup = document.createElement("div");
+                                        abilityOverrideInputGroup.classList = "input-group";
+                                        abilityOverrideForm.appendChild(abilityOverrideInputGroup);
+
+                                        const abilityOverrideInput = document.createElement("input");
+                                        abilityOverrideInput.id = "abilityOverride-ability";
+                                        abilityOverrideInput.classList = "form-control";
+                                        abilityOverrideInput.setAttribute("list", "datalist-Abilities");
+                                        if (config.AbilityOverride) {
+                                            const datalist = document.getElementById("datalist-Abilities");
+                                            const options = Array.from(datalist.options);
+                                            abilityOverrideInput.value = options.find(
+                                                option =>
+                                                    config.AbilityOverride.Ability == option.getAttribute("data-key")
+                                            ).value;
+                                        }
+                                        abilityOverrideInputGroup.appendChild(abilityOverrideInput);
+
+                                        const abilityOverrideOnSlot = document.createElement("span");
+                                        abilityOverrideOnSlot.classList = "input-group-text";
+                                        abilityOverrideOnSlot.setAttribute("data-loc", "abilityOverride_onSlot");
+                                        abilityOverrideOnSlot.innerHTML = loc("abilityOverride_onSlot");
+                                        abilityOverrideInputGroup.appendChild(abilityOverrideOnSlot);
+
+                                        const abilityOverrideSecondInput = document.createElement("input");
+                                        abilityOverrideSecondInput.id = "abilityOverride-ability-index";
+                                        abilityOverrideSecondInput.classList = "form-control";
+                                        abilityOverrideSecondInput.setAttribute("type", "number");
+                                        abilityOverrideSecondInput.setAttribute("min", "0");
+                                        abilityOverrideSecondInput.setAttribute("max", "3");
+                                        if (config.AbilityOverride)
+                                            abilityOverrideSecondInput.value = config.AbilityOverride.Index;
+                                        abilityOverrideInputGroup.appendChild(abilityOverrideSecondInput);
+
+                                        const abilityOverrideSetButton = document.createElement("button");
+                                        abilityOverrideSetButton.classList = "btn btn-primary";
+                                        abilityOverrideSetButton.setAttribute("type", "submit");
+                                        abilityOverrideSetButton.setAttribute("value", "set");
+                                        abilityOverrideSetButton.setAttribute("data-loc", "general_setButton");
+                                        abilityOverrideSetButton.innerHTML = loc("general_setButton");
+                                        abilityOverrideInputGroup.appendChild(abilityOverrideSetButton);
+
+                                        const abilityOverrideRemoveButton = document.createElement("button");
+                                        abilityOverrideRemoveButton.classList = "btn btn-danger";
+                                        abilityOverrideRemoveButton.setAttribute("type", "submit");
+                                        abilityOverrideRemoveButton.setAttribute("value", "remove");
+                                        abilityOverrideRemoveButton.setAttribute("data-loc", "code_remove");
+                                        abilityOverrideRemoveButton.innerHTML = loc("code_remove");
+                                        abilityOverrideInputGroup.appendChild(abilityOverrideRemoveButton);
+
+                                        abilityOverrideForm.appendChild(abilityOverrideInputGroup);
+
+                                        tabDiv.appendChild(abilityOverrideForm);
+                                    }
+
+                                    loadoutTabsContent.appendChild(tabDiv);
+                                }
+                            }
+                        }
                     } else if (["LongGuns", "Pistols", "Melee", "SpaceGuns", "SpaceMelee"].includes(category)) {
                         document.getElementById("valenceBonus-card").classList.remove("d-none");
                         document.getElementById("valenceBonus-innateDamage").value = "";
@@ -2248,6 +2359,7 @@ single.getRoute("#detailedView-route").on("beforeload", function () {
     document.getElementById("detailedView-loading").classList.remove("d-none");
     document.getElementById("detailedView-title").textContent = "";
     document.querySelector("#detailedView-route .text-body-secondary").textContent = "";
+    document.getElementById("loadout-card").classList.add("d-none");
     document.getElementById("archonShards-card").classList.add("d-none");
     document.getElementById("edit-suit-invigorations-card").classList.add("d-none");
     document.getElementById("modularParts-card").classList.add("d-none");
@@ -2961,5 +3073,31 @@ async function editSuitInvigorationUpgrade(oid, data) {
         data: JSON.stringify({ oid, data })
     }).done(function () {
         updateInventory();
+    });
+}
+
+function handleAbilityOverride(event, configIndex) {
+    event.preventDefault();
+    const urlParams = new URLSearchParams(window.location.search);
+    const action = event.submitter.value;
+    const Ability = getKey(document.getElementById("abilityOverride-ability"));
+    const Index = document.getElementById("abilityOverride-ability-index").value;
+    revalidateAuthz().then(() => {
+        $.post({
+            url: "/custom/abilityOverride?" + window.authz,
+            contentType: "application/json",
+            data: JSON.stringify({
+                category: urlParams.get("productCategory"),
+                oid: urlParams.get("itemId"),
+                configIndex,
+                action,
+                AbilityOverride: {
+                    Ability,
+                    Index
+                }
+            })
+        }).done(function () {
+            updateInventory();
+        });
     });
 }
