@@ -1334,6 +1334,9 @@ export const addMissionRewards = async (
                 }
             }
         }
+        if (jobType == "/Lotus/Types/Gameplay/Eidolon/Jobs/NewbieJob") {
+            addStanding(inventory, "CetusSyndicate", Math.floor(200 / (rewardInfo.Q ? 0.8 : 1)), AffiliationMods);
+        }
     }
 
     if (rewardInfo.challengeMissionId) {
@@ -1775,6 +1778,11 @@ function getRandomMissionDrops(
                             rotations.push(ExportRewards[job.rewards].length - 1);
                         }
                     }
+                }
+                if (jobType == "/Lotus/Types/Gameplay/Eidolon/Jobs/NewbieJob") {
+                    rewardManifests = ["/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierATableARewards"];
+                    rotations = [3];
+                    if (RewardInfo.Q) rotations.push(3);
                 }
             }
         } else if (RewardInfo.challengeMissionId) {
