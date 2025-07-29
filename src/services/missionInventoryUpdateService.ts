@@ -972,7 +972,8 @@ export const addMissionRewards = async (
         Missions: missions,
         RegularCredits: creditDrops,
         VoidTearParticipantsCurrWave: voidTearWave,
-        StrippedItems: strippedItems
+        StrippedItems: strippedItems,
+        AffiliationChanges: AffiliationMods
     }: IMissionInventoryUpdateRequest,
     firstCompletion: boolean
 ): Promise<AddMissionRewardsReturnType> => {
@@ -992,7 +993,6 @@ export const addMissionRewards = async (
     );
     logger.debug("random mission drops:", MissionRewards);
     const inventoryChanges: IInventoryChanges = {};
-    const AffiliationMods: IAffiliationMods[] = [];
     let SyndicateXPItemReward;
     let ConquestCompletedMissionsCount;
 
