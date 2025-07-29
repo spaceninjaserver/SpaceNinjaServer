@@ -156,8 +156,8 @@ dict = {
     invigorations_defensiveLabel: `功能型属性`,
     invigorations_expiryLabel: `活化时效(可选)`,
 
-    abilityOverride_label: `[UNTRANSLATED] Ability Override`,
-    abilityOverride_onSlot: `[UNTRANSLATED] on slot`,
+    abilityOverride_label: `技能替换`,
+    abilityOverride_onSlot: `槽位`,
 
     mods_addRiven: `添加裂罅MOD`,
     mods_fingerprint: `印记`,
