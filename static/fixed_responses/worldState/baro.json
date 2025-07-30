@@ -431,7 +431,7 @@
     { "ItemType": "/Lotus/StoreItems/Types/Items/SongItems/KuvaLichLoginSongItem", "PrimePrice": 140, "RegularPrice": 170000 },
     { "ItemType": "/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/PlushyBaro", "PrimePrice": 100, "RegularPrice": 125000 },
     { "ItemType": "/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/PlushyInaros", "PrimePrice": 120, "RegularPrice": 90000 },
-    { "ItemType": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponPistolFactionDamageMurmursExpert", "PrimePrice": 375, "RegularPrice": 130000 }
+    { "ItemType": "/Lotus/StoreItems/Upgrades/Mods/Pistol/Expert/WeaponPistolFactionDamageMurmursExpert", "PrimePrice": 375, "RegularPrice": 130000 }
   ],
   "allIfAny": [
     [
