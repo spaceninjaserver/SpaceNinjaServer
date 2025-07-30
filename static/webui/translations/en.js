@@ -244,6 +244,7 @@ dict = {
     worldState_tennoLiveRelay: `TennoLive Relay`,
     worldState_starDays: `Star Days`,
     worldState_galleonOfGhouls: `Galleon of Ghouls`,
+    enabled: `Enabled`,
     disabled: `Disabled`,
     worldState_we1: `Weekend 1`,
     worldState_we2: `Weekend 2`,

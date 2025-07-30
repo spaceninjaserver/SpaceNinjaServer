@@ -245,6 +245,7 @@ dict = {
     worldState_tennoLiveRelay: `[UNTRANSLATED] TennoLive Relay`,
     worldState_starDays: `[UNTRANSLATED] Star Days`,
     worldState_galleonOfGhouls: `[UNTRANSLATED] Galleon of Ghouls`,
+    enabled: `[UNTRANSLATED] Enabled`,
     disabled: `[UNTRANSLATED] Disabled`,
     worldState_we1: `[UNTRANSLATED] Weekend 1`,
     worldState_we2: `[UNTRANSLATED] Weekend 2`,

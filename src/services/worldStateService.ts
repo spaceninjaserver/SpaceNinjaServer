@@ -1349,6 +1349,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     const week = Math.trunc(day / 7);
     const weekStart = EPOCH + week * 604800000;
     const weekEnd = weekStart + 604800000;
+    const date = new Date(timeMs);
 
     const worldState: IWorldState = {
         BuildLabel: typeof buildLabel == "string" ? buildLabel.split(" ").join("+") : buildConfig.buildLabel,
@@ -1401,11 +1402,24 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             Node: "TennoConBHUB6"
         });
     }
-    if (config.worldState?.starDays) {
+    const isFebruary = date.getUTCMonth() == 1;
+    if (config.worldState?.starDaysOverride ?? isFebruary) {
         worldState.Goals.push({
             _id: { $oid: "67a4dcce2a198564d62e1647" },
-            Activation: { $date: { $numberLong: "1738868400000" } },
-            Expiry: { $date: { $numberLong: "2000000000000" } },
+            Activation: {
+                $date: {
+                    $numberLong: config.worldState?.starDaysOverride
+                        ? "1738868400000"
+                        : Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1).toString()
+                }
+            },
+            Expiry: {
+                $date: {
+                    $numberLong: config.worldState?.starDaysOverride
+                        ? "2000000000000"
+                        : Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 1).toString()
+                }
+            },
             Count: 0,
             Goal: 0,
             Success: 0,

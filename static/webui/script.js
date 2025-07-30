@@ -2098,7 +2098,13 @@ for (const id of uiConfigs) {
     if (elm.tagName == "SELECT") {
         elm.onchange = function () {
             let value = this.value;
-            if (!isNaN(parseInt(value))) {
+            if (value == "true") {
+                value = true;
+            } else if (value == "false") {
+                value = false;
+            } else if (value == "null") {
+                value = null;
+            } else if (!isNaN(parseInt(value))) {
                 value = parseInt(value);
             }
             $.post({

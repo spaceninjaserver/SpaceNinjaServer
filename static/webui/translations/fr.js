@@ -245,6 +245,7 @@ dict = {
     worldState_tennoLiveRelay: `[UNTRANSLATED] TennoLive Relay`,
     worldState_starDays: `Jours Stellaires`,
     worldState_galleonOfGhouls: `Galion des Goules`,
+    enabled: `[UNTRANSLATED] Enabled`,
     disabled: `Désactivé`,
     worldState_we1: `Weekend 1`,
     worldState_we2: `Weekend 2`,
