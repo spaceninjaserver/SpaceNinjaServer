@@ -14,7 +14,7 @@ jobs:
               with:
                   node-version: ">=20.6.0"
             - run: npm ci
-            - run: cp config.json.example config.json
+            - run: cp config-vanilla.json config.json
             - run: npm run verify
             - run: npm run lint:ci
             - run: npm run prettier

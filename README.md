@@ -10,7 +10,7 @@ To get an idea of what functionality you can expect to be missing [have a look t
 
 ## config.json
 
-SpaceNinjaServer requires a `config.json`. To set it up, you can copy the [config.json.example](config.json.example), which has most cheats disabled.
+SpaceNinjaServer requires a `config.json`. To set it up, you can copy the [config-vanilla.json](config-vanilla.json), which has most cheats disabled.
 
 - `logger.level` can be `fatal`, `error`, `warn`, `info`, `http`, `debug`, or `trace`.
 - `myIrcAddresses` can be used to point to an IRC server. If not provided, defaults to `[ myAddress ]`.

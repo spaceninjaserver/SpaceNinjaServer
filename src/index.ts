@@ -7,7 +7,7 @@ try {
     if (fs.existsSync("config.json")) {
         console.log("Failed to load " + configPath + ": " + (e as Error).message);
     } else {
-        console.log("Failed to load " + configPath + ". You can copy config.json.example to create your config file.");
+        console.log("Failed to load " + configPath + ". You can copy config-vanilla.json to create your config file.");
     }
     process.exit(1);
 }
