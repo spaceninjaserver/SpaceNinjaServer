@@ -292,7 +292,7 @@ export const addMissionInventoryUpdates = async (
                 addRecipes(inventory, value);
                 break;
             case "ChallengeProgress":
-                addChallenges(account, inventory, value, inventoryUpdates.SeasonChallengeCompletions);
+                await addChallenges(account, inventory, value, inventoryUpdates.SeasonChallengeCompletions);
                 break;
             case "FusionTreasures":
                 addFusionTreasures(inventory, value);

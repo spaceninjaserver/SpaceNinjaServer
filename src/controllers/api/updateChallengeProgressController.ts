@@ -10,6 +10,7 @@ import { logger } from "@/src/utils/logger";
 export const updateChallengeProgressController: RequestHandler = async (req, res) => {
     const challenges = getJSONfromString<IUpdateChallengeProgressRequest>(String(req.body));
     const account = await getAccountForRequest(req);
+    logger.debug(`challenge report:`, challenges);
 
     const inventory = await getInventory(
         account._id.toString(),
@@ -17,7 +18,7 @@ export const updateChallengeProgressController: RequestHandler = async (req, res
     );
     let affiliationMods: IAffiliationMods[] = [];
     if (challenges.ChallengeProgress) {
-        affiliationMods = addChallenges(
+        affiliationMods = await addChallenges(
             account,
             inventory,
             challenges.ChallengeProgress,

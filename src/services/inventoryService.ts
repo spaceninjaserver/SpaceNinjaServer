@@ -1904,25 +1904,87 @@ export const addLoreFragmentScans = (inventory: TInventoryDatabaseDocument, arr:
     });
 };
 
-export const addChallenges = (
+const challengeRewardsInboxMessages: Record<string, IMessageCreationTemplate> = {
+    SentEvoEphemeraRankOne: {
+        sub: "/Lotus/Language/Inbox/EvolvingEphemeraUnlockAName",
+        sndr: "/Lotus/Language/Bosses/Ordis",
+        msg: "/Lotus/Language/Inbox/EvolvingEphemeraUnlockADesc",
+        icon: "/Lotus/Interface/Icons/Npcs/Ordis.png",
+        att: ["/Lotus/Upgrades/Skins/Effects/NarmerEvolvingEphemeraB"]
+    },
+    SentEvoEphemeraRankTwo: {
+        sub: "/Lotus/Language/Inbox/EvolvingEphemeraUnlockBName",
+        sndr: "/Lotus/Language/Bosses/Ordis",
+        msg: "/Lotus/Language/Inbox/EvolvingEphemeraUnlockBDesc",
+        icon: "/Lotus/Interface/Icons/Npcs/Ordis.png",
+        att: ["/Lotus/Upgrades/Skins/Effects/NarmerEvolvingEphemeraC"]
+    },
+    SentEvoSyandanaRankOne: {
+        sub: "/Lotus/Language/Inbox/EvolvingSyandanaUnlockAName",
+        sndr: "/Lotus/Language/Bosses/Ordis",
+        msg: "/Lotus/Language/Inbox/EvolvingSyandanaUnlockADesc",
+        icon: "/Lotus/Interface/Icons/Npcs/Ordis.png",
+        att: ["/Lotus/Upgrades/Skins/Scarves/NarmerEvolvingSyandanaBCape"]
+    },
+    SentEvoSyandanaRankTwo: {
+        sub: "/Lotus/Language/Inbox/EvolvingSyandanaUnlockBName",
+        sndr: "/Lotus/Language/Bosses/Ordis",
+        msg: "/Lotus/Language/Inbox/EvolvingSyandanaUnlockBDesc",
+        icon: "/Lotus/Interface/Icons/Npcs/Ordis.png",
+        att: ["/Lotus/Upgrades/Skins/Scarves/NarmerEvolvingSyandanaCCape"]
+    },
+    SentEvoSekharaRankOne: {
+        sub: "/Lotus/Language/Inbox/EvolvingSekharaUnlockAName",
+        sndr: "/Lotus/Language/Bosses/Ordis",
+        msg: "/Lotus/Language/Inbox/EvolvingSekharaUnlockADesc",
+        icon: "/Lotus/Interface/Icons/Npcs/Ordis.png",
+        att: ["/Lotus/Upgrades/Skins/Clan/ZarimanEvolvingSekharaBadgeItemB"]
+    },
+    SentEvoSekharaRankTwo: {
+        sub: "/Lotus/Language/Inbox/EvolvingSekharaUnlockBName",
+        sndr: "/Lotus/Language/Bosses/Ordis",
+        msg: "/Lotus/Language/Inbox/EvolvingSekharaUnlockBDesc",
+        icon: "/Lotus/Interface/Icons/Npcs/Ordis.png",
+        att: ["/Lotus/Upgrades/Skins/Clan/ZarimanEvolvingSekharaBadgeItemC"]
+    }
+};
+
+export const addChallenges = async (
     account: TAccountDocument,
     inventory: TInventoryDatabaseDocument,
     ChallengeProgress: IChallengeProgress[],
     SeasonChallengeCompletions: ISeasonChallenge[] | undefined
-): IAffiliationMods[] => {
-    ChallengeProgress.forEach(({ Name, Progress }) => {
-        const itemIndex = inventory.ChallengeProgress.findIndex(i => i.Name === Name);
-
-        if (itemIndex !== -1) {
-            inventory.ChallengeProgress[itemIndex].Progress = Progress;
+): Promise<IAffiliationMods[]> => {
+    for (const { Name, Progress, Completed } of ChallengeProgress) {
+        let dbChallenge = inventory.ChallengeProgress.find(x => x.Name == Name);
+        if (dbChallenge) {
+            dbChallenge.Progress = Progress;
         } else {
-            inventory.ChallengeProgress.push({ Name, Progress });
+            dbChallenge = { Name, Progress };
+            inventory.ChallengeProgress.push(dbChallenge);
         }
 
         if (Name.startsWith("Calendar")) {
             addString(getCalendarProgress(inventory).SeasonProgress.ActivatedChallenges, Name);
         }
-    });
+
+        if ((Completed?.length ?? 0) > (dbChallenge.Completed?.length ?? 0)) {
+            dbChallenge.Completed ??= [];
+            for (const completion of Completed!) {
+                if (dbChallenge.Completed.indexOf(completion) == -1) {
+                    if (completion == "challengeRewards") {
+                        if (Name in challengeRewardsInboxMessages) {
+                            await createMessage(account._id, [challengeRewardsInboxMessages[Name]]);
+                            dbChallenge.Completed.push(completion);
+                            // Would love to somehow let the client know about inbox or inventory changes, but there doesn't seem to anything for updateChallengeProgress.
+                            continue;
+                        }
+                    }
+                    logger.warn(`ignoring unknown challenge completion`, { challenge: Name, completion });
+                }
+            }
+        }
+    }
 
     const affiliationMods: IAffiliationMods[] = [];
     if (SeasonChallengeCompletions) {
