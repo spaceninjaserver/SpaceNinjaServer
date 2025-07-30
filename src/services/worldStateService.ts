@@ -1375,6 +1375,32 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         worldState.PVPChallengeInstances = [];
     }
 
+    if (config.worldState?.tennoLiveRelay) {
+        worldState.Goals.push({
+            _id: {
+                $oid: "687bf9400000000000000000"
+            },
+            Activation: {
+                $date: {
+                    $numberLong: "1752955200000"
+                }
+            },
+            Expiry: {
+                $date: {
+                    $numberLong: "2000000000000"
+                }
+            },
+            Count: 0,
+            Goal: 0,
+            Success: 0,
+            Personal: true,
+            Desc: "/Lotus/Language/Locations/RelayStationTennoConB",
+            ToolTip: "/Lotus/Language/Locations/RelayStationTennoConDescB",
+            Icon: "/Lotus/Interface/Icons/Categories/IconTennoLive.png",
+            Tag: "TennoConRelayB",
+            Node: "TennoConBHUB6"
+        });
+    }
     if (config.worldState?.starDays) {
         worldState.Goals.push({
             _id: { $oid: "67a4dcce2a198564d62e1647" },

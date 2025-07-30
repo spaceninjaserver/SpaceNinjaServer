@@ -81,6 +81,7 @@ export interface IConfig {
         creditBoost?: boolean;
         affinityBoost?: boolean;
         resourceBoost?: boolean;
+        tennoLiveRelay?: boolean;
         starDays?: boolean;
         galleonOfGhouls?: number;
         eidolonOverride?: string;

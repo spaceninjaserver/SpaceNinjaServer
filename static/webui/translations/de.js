@@ -242,6 +242,7 @@ dict = {
     worldState_creditBoost: `Event Booster: Credit`,
     worldState_affinityBoost: `Event Booster: Erfahrung`,
     worldState_resourceBoost: `Event Booster: Ressourcen`,
+    worldState_tennoLiveRelay: `[UNTRANSLATED] TennoLive Relay`,
     worldState_starDays: `Sternen-Tage`,
     worldState_galleonOfGhouls: `Galeone der Ghule`,
     disabled: `Deaktiviert`,

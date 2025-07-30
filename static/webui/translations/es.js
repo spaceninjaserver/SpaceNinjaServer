@@ -242,6 +242,7 @@ dict = {
     worldState_creditBoost: `Potenciador de Créditos`,
     worldState_affinityBoost: `Potenciador de Afinidad`,
     worldState_resourceBoost: `Potenciador de Recursos`,
+    worldState_tennoLiveRelay: `[UNTRANSLATED] TennoLive Relay`,
     worldState_starDays: `Días estelares`,
     worldState_galleonOfGhouls: `Galeón de Gules`,
     disabled: `Desactivado`,

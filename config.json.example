@@ -70,6 +70,7 @@
     "creditBoost": false,
     "affinityBoost": false,
     "resourceBoost": false,
+    "tennoLiveRelay": false,
     "starDays": true,
     "galleonOfGhouls": 0,
     "eidolonOverride": "",

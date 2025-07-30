@@ -241,6 +241,7 @@ dict = {
     worldState_creditBoost: `Credit Boost`,
     worldState_affinityBoost: `Affinity Boost`,
     worldState_resourceBoost: `Resource Boost`,
+    worldState_tennoLiveRelay: `TennoLive Relay`,
     worldState_starDays: `Star Days`,
     worldState_galleonOfGhouls: `Galleon of Ghouls`,
     disabled: `Disabled`,
