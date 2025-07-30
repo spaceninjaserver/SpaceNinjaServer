@@ -1038,13 +1038,13 @@ const pushVoidStorms = (arr: IVoidStorm[], hour: number): void => {
 };
 
 interface ITimeConstraint {
-    //name: string;
+    name: string;
     isValidTime: (timeSecs: number) => boolean;
     getIdealTimeBefore: (timeSecs: number) => number;
 }
 
 const eidolonDayConstraint: ITimeConstraint = {
-    //name: "eidolon day",
+    name: "eidolon day",
     isValidTime: (timeSecs: number): boolean => {
         const eidolonEpoch = 1391992660;
         const eidolonCycle = Math.trunc((timeSecs - eidolonEpoch) / 9000);
@@ -1062,7 +1062,7 @@ const eidolonDayConstraint: ITimeConstraint = {
 };
 
 const eidolonNightConstraint: ITimeConstraint = {
-    //name: "eidolon night",
+    name: "eidolon night",
     isValidTime: (timeSecs: number): boolean => {
         const eidolonEpoch = 1391992660;
         const eidolonCycle = Math.trunc((timeSecs - eidolonEpoch) / 9000);
@@ -1089,7 +1089,7 @@ const eidolonNightConstraint: ITimeConstraint = {
 };
 
 const venusColdConstraint: ITimeConstraint = {
-    //name: "venus cold",
+    name: "venus cold",
     isValidTime: (timeSecs: number): boolean => {
         const vallisEpoch = 1541837628;
         const vallisCycle = Math.trunc((timeSecs - vallisEpoch) / 1600);
@@ -1115,7 +1115,7 @@ const venusColdConstraint: ITimeConstraint = {
 };
 
 const venusWarmConstraint: ITimeConstraint = {
-    //name: "venus warm",
+    name: "venus warm",
     isValidTime: (timeSecs: number): boolean => {
         const vallisEpoch = 1541837628;
         const vallisCycle = Math.trunc((timeSecs - vallisEpoch) / 1600);
@@ -1321,7 +1321,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             });
         } else {
             constraints.push({
-                //name: `duviri ${config.worldState.duviriOverride}`,
+                name: `duviri ${config.worldState.duviriOverride}`,
                 isValidTime: (timeSecs: number): boolean => {
                     const moodIndex = Math.trunc(timeSecs / 7200);
                     return moodIndex % 5 == desiredMood;
@@ -1336,6 +1336,14 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         }
     }
     const timeSecs = getIdealTimeSatsifyingConstraints(constraints);
+    if (constraints.length != 0) {
+        const delta = Math.trunc(Date.now() / 1000) - timeSecs;
+        if (delta > 1) {
+            logger.debug(
+                `reported time is ${delta} seconds behind real time to satisfy selected constraints (${constraints.map(x => x.name).join(", ")})`
+            );
+        }
+    }
     const timeMs = timeSecs * 1000;
     const day = Math.trunc((timeMs - EPOCH) / 86400000);
     const week = Math.trunc(day / 7);
@@ -1823,7 +1831,10 @@ export const populateFissures = async (worldState: IWorldState): Promise<void> =
                 _id: toOid(fissure._id),
                 Region: meta.systemIndex + 1,
                 Seed: 1337,
-                Activation: toMongoDate(fissure.Activation),
+                Activation:
+                    fissure.Activation.getTime() < Date.now() // Activation is in the past?
+                        ? { $date: { $numberLong: "1000000000000" } } // Let the client know 'explicitly' to avoid interference from time constraints.
+                        : toMongoDate(fissure.Activation),
                 Expiry: toMongoDate(fissure.Expiry),
                 Node: fissure.Node,
                 MissionType: eMissionType[meta.missionIndex].tag,
