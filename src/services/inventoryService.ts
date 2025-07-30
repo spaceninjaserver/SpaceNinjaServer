@@ -25,7 +25,8 @@ import {
     INemesisWeaponTargetFingerprint,
     INemesisPetTargetFingerprint,
     IDialogueDatabase,
-    IKubrowPetPrintClient
+    IKubrowPetPrintClient,
+    equipmentKeys
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IGenericUpdate, IUpdateNodeIntrosResponse } from "@/src/types/genericUpdate";
 import { IKeyChainRequest, IMissionInventoryUpdateRequest } from "@/src/types/requestTypes";
@@ -2115,6 +2116,21 @@ export const cleanupInventory = (inventory: TInventoryDatabaseDocument): void =>
             inventory.LotusCustomization.facial = {};
             inventory.LotusCustomization.cloth = {};
             inventory.LotusCustomization.syancol = {};
+        }
+    }
+
+    {
+        let numFixed = 0;
+        for (const equipmentKey of equipmentKeys) {
+            for (const item of inventory[equipmentKey]) {
+                if (item.ModularParts?.length === 0) {
+                    item.ModularParts = undefined;
+                    ++numFixed;
+                }
+            }
+        }
+        if (numFixed != 0) {
+            logger.debug(`removed ModularParts from ${numFixed} non-modular items`);
         }
     }
 };
