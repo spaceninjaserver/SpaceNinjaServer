@@ -242,7 +242,7 @@ dict = {
     worldState_creditBoost: `现金加成`,
     worldState_affinityBoost: `经验加成`,
     worldState_resourceBoost: `资源加成`,
-    worldState_tennoLiveRelay: `[UNTRANSLATED] TennoLive Relay`,
+    worldState_tennoLiveRelay: `TennoLive 中继站`,
     worldState_starDays: `活动：星日`,
     worldState_galleonOfGhouls: `战术警报：尸鬼的帆船战舰`,
     disabled: `关闭/取消配置`,
