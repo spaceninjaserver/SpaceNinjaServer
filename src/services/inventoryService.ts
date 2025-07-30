@@ -1342,7 +1342,7 @@ export const addStanding = (
 
 // TODO: AffiliationMods support (Nightwave).
 export const updateGeneric = async (data: IGenericUpdate, accountId: string): Promise<IUpdateNodeIntrosResponse> => {
-    const inventory = await getInventory(accountId, "NodeIntrosCompleted MiscItems");
+    const inventory = await getInventory(accountId, "NodeIntrosCompleted MiscItems ShipDecorations");
 
     // Make it an array for easier parsing.
     if (typeof data.NodeIntrosCompleted === "string") {
@@ -1351,7 +1351,15 @@ export const updateGeneric = async (data: IGenericUpdate, accountId: string): Pr
 
     const inventoryChanges: IInventoryChanges = {};
     for (const node of data.NodeIntrosCompleted) {
-        if (node == "KayaFirstVisitPack") {
+        if (node == "TC2025") {
+            inventoryChanges.ShipDecorations = [
+                {
+                    ItemType: "/Lotus/Types/Items/ShipDecos/TauGrineerLancerBobbleHead",
+                    ItemCount: 1
+                }
+            ];
+            addShipDecorations(inventory, inventoryChanges.ShipDecorations);
+        } else if (node == "KayaFirstVisitPack") {
             inventoryChanges.MiscItems = [
                 {
                     ItemType: "/Lotus/Types/Items/MiscItems/1999FixedStickersPack",

@@ -74,6 +74,7 @@ export type IInventoryChanges = {
     InfestedFoundry?: IInfestedFoundryClient;
     Drones?: IDroneClient[];
     MiscItems?: IMiscItem[];
+    ShipDecorations?: ITypeCount[];
     EmailItems?: ITypeCount[];
     CrewShipRawSalvage?: ITypeCount[];
     Nemesis?: Partial<INemesisClient>;
