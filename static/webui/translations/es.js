@@ -243,6 +243,7 @@ dict = {
     worldState_affinityBoost: `Potenciador de Afinidad`,
     worldState_resourceBoost: `Potenciador de Recursos`,
     worldState_tennoLiveRelay: `[UNTRANSLATED] TennoLive Relay`,
+    worldState_baroTennoConRelay: `[UNTRANSLATED] Baro's TennoCon Relay`,
     worldState_starDays: `Días estelares`,
     worldState_galleonOfGhouls: `Galeón de Gules`,
     enabled: `[UNTRANSLATED] Enabled`,

@@ -335,6 +335,17 @@ export const getInventoryResponse = async (
         for (const uniqueName in ExportFlavour) {
             inventoryResponse.FlavourItems.push({ ItemType: uniqueName });
         }
+    } else if (config.worldState?.baroTennoConRelay) {
+        [
+            "/Lotus/Types/Items/Events/TennoConRelay2022EarlyAccess",
+            "/Lotus/Types/Items/Events/TennoConRelay2023EarlyAccess",
+            "/Lotus/Types/Items/Events/TennoConRelay2024EarlyAccess",
+            "/Lotus/Types/Items/Events/TennoConRelay2025EarlyAccess"
+        ].forEach(uniqueName => {
+            if (!inventoryResponse.FlavourItems.some(x => x.ItemType == uniqueName)) {
+                inventoryResponse.FlavourItems.push({ ItemType: uniqueName });
+            }
+        });
     }
 
     if (config.unlockAllSkins) {

@@ -243,6 +243,7 @@ dict = {
     worldState_affinityBoost: `经验加成`,
     worldState_resourceBoost: `资源加成`,
     worldState_tennoLiveRelay: `TennoLive 中继站`,
+    worldState_baroTennoConRelay: `[UNTRANSLATED] Baro's TennoCon Relay`,
     worldState_starDays: `活动：星日`,
     worldState_galleonOfGhouls: `战术警报：尸鬼的帆船战舰`,
     enabled: `启用`,

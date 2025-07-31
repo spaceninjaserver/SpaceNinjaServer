@@ -242,6 +242,7 @@ dict = {
     worldState_affinityBoost: `Affinity Boost`,
     worldState_resourceBoost: `Resource Boost`,
     worldState_tennoLiveRelay: `TennoLive Relay`,
+    worldState_baroTennoConRelay: `Baro's TennoCon Relay`,
     worldState_starDays: `Star Days`,
     worldState_galleonOfGhouls: `Galleon of Ghouls`,
     enabled: `Enabled`,

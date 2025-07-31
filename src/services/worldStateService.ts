@@ -1157,6 +1157,25 @@ const getIdealTimeSatsifyingConstraints = (constraints: ITimeConstraint[]): numb
     return timeSecs;
 };
 
+const fullyStockBaro = (vt: IVoidTrader): void => {
+    for (const armorSet of baro.armorSets) {
+        if (Array.isArray(armorSet[0])) {
+            for (const set of armorSet as IVoidTraderOffer[][]) {
+                for (const item of set) {
+                    vt.Manifest.push(item);
+                }
+            }
+        } else {
+            for (const item of armorSet as IVoidTraderOffer[]) {
+                vt.Manifest.push(item);
+            }
+        }
+    }
+    for (const item of baro.rest) {
+        vt.Manifest.push(item);
+    }
+};
+
 const getVarziaRotation = (week: number): string => {
     const seed = new SRng(week).randomInt(0, 100_000);
     const rng = new SRng(seed);
@@ -1402,6 +1421,33 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             Node: "TennoConBHUB6"
         });
     }
+    if (config.worldState?.baroTennoConRelay) {
+        worldState.Goals.push({
+            _id: { $oid: "687bb2f00000000000000000" },
+            Activation: { $date: { $numberLong: "1752937200000" } },
+            Expiry: { $date: { $numberLong: "2000000000000" } },
+            Count: 0,
+            Goal: 0,
+            Success: 0,
+            Personal: true,
+            //"Faction": "FC_GRINEER",
+            Desc: "/Lotus/Language/Locations/RelayStationTennoCon",
+            ToolTip: "/Lotus/Language/Locations/RelayStationTennoConDesc",
+            Icon: "/Lotus/Interface/Icons/Categories/IconTennoConSigil.png",
+            Tag: "TennoConRelay",
+            Node: "TennoConHUB2"
+        });
+        const vt: IVoidTrader = {
+            _id: { $oid: "687809030379266d790495c6" },
+            Activation: { $date: { $numberLong: "1752937200000" } },
+            Expiry: { $date: { $numberLong: "2000000000000" } },
+            Character: "Baro'Ki Teel",
+            Node: "TennoConHUB2",
+            Manifest: []
+        };
+        worldState.VoidTraders.push(vt);
+        fullyStockBaro(vt);
+    }
     const isFebruary = date.getUTCMonth() == 1;
     if (config.worldState?.starDaysOverride ?? isFebruary) {
         worldState.Goals.push({
@@ -1633,24 +1679,8 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         };
         worldState.VoidTraders.push(vt);
         if (isBeforeNextExpectedWorldStateRefresh(timeMs, baroActualStart)) {
-            vt.Manifest = [];
             if (config.baroFullyStocked) {
-                for (const armorSet of baro.armorSets) {
-                    if (Array.isArray(armorSet[0])) {
-                        for (const set of armorSet as IVoidTraderOffer[][]) {
-                            for (const item of set) {
-                                vt.Manifest.push(item);
-                            }
-                        }
-                    } else {
-                        for (const item of armorSet as IVoidTraderOffer[]) {
-                            vt.Manifest.push(item);
-                        }
-                    }
-                }
-                for (const item of baro.rest) {
-                    vt.Manifest.push(item);
-                }
+                fullyStockBaro(vt);
             } else {
                 const rng = new SRng(new SRng(baroIndex).randomInt(0, 100_000));
                 // TOVERIFY: Constraint for upgrades amount?
