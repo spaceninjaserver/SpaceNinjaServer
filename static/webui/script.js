@@ -28,7 +28,8 @@ const sendAuth = isRegister => {
 };
 
 function openWebSocket() {
-    window.ws = new WebSocket("/custom/ws");
+    const wsProto = location.protocol === "https:" ? "wss://" : "ws://";
+    window.ws = new WebSocket(wsProto + location.host + "/custom/ws");
     window.ws.onopen = () => {
         ws_is_open = true;
         sendAuth(false);
