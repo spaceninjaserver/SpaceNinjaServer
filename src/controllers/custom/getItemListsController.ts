@@ -153,18 +153,21 @@ const getItemListsController: RequestHandler = (req, response) => {
     }
     for (const [uniqueName, item] of Object.entries(ExportWeapons)) {
         if (item.partType) {
-            if (!uniqueName.startsWith("/Lotus/Types/Items/Deimos/")) {
-                res.ModularParts.push({
-                    uniqueName,
-                    name: getString(item.name, lang),
-                    partType: item.partType
-                });
-            }
-            if (uniqueName.split("/")[5] != "SentTrainingAmplifier") {
-                res.miscitems.push({
-                    uniqueName: uniqueName,
-                    name: getString(item.name, lang)
-                });
+            if (!item.excludeFromCodex) {
+                // not a pvp variant
+                if (!uniqueName.startsWith("/Lotus/Types/Items/Deimos/")) {
+                    res.ModularParts.push({
+                        uniqueName,
+                        name: getString(item.name, lang),
+                        partType: item.partType
+                    });
+                }
+                if (uniqueName.split("/")[5] != "SentTrainingAmplifier") {
+                    res.miscitems.push({
+                        uniqueName: uniqueName,
+                        name: getString(item.name, lang)
+                    });
+                }
             }
         } else if (item.totalDamage !== 0) {
             if (
