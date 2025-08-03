@@ -40,7 +40,7 @@
     "ncp": "^2.0.0",
     "typescript": "^5.5",
     "undici": "^7.10.0",
-    "warframe-public-export-plus": "^0.5.78",
+    "warframe-public-export-plus": "^0.5.79",
     "warframe-riven-info": "^0.1.2",
     "winston": "^3.17.0",
     "winston-daily-rotate-file": "^5.0.0",
