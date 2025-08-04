@@ -153,7 +153,7 @@ const getItemListsController: RequestHandler = (req, response) => {
     }
     for (const [uniqueName, item] of Object.entries(ExportWeapons)) {
         if (item.partType) {
-            if (!item.excludeFromCodex) {
+            if (!uniqueName.split("/")[7]?.startsWith("PvPVariant")) {
                 // not a pvp variant
                 if (!uniqueName.startsWith("/Lotus/Types/Items/Deimos/")) {
                     res.ModularParts.push({
