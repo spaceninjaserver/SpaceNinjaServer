@@ -100,6 +100,11 @@ const getRotations = (rewardInfo: IRewardInfo, tierOverride?: number): number[] 
         return [rewardInfo.rewardTier];
     }
 
+    // 'rewardQualifications' is unreliable for mission types that only have rotation A (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2586)
+    if (missionIndex == 0 || missionIndex == 1 || missionIndex == 5) {
+        return [0];
+    }
+
     const rotationCount = rewardInfo.rewardQualifications?.length || 0;
 
     // Empty or absent rewardQualifications should not give rewards when:
