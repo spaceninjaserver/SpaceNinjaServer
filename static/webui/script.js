@@ -18,7 +18,7 @@ const sendAuth = isRegister => {
         window.ws.send(
             JSON.stringify({
                 auth: {
-                    email: localStorage.getItem("email"),
+                    email: localStorage.getItem("email").toLowerCase(),
                     password: wp.encSync(localStorage.getItem("password")),
                     isRegister
                 }
