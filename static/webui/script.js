@@ -212,7 +212,7 @@ function setActiveLanguage(lang) {
     document.querySelector("[data-lang=" + lang + "]").classList.add("active");
 
     window.dictPromise = new Promise(resolve => {
-        const webui_lang = ["en", "ru", "fr", "de", "zh", "es"].indexOf(lang) == -1 ? "en" : lang;
+        const webui_lang = ["en", "ru", "fr", "de", "zh", "es", "uk"].indexOf(lang) == -1 ? "en" : lang;
         let script = document.getElementById("translations");
         if (script) document.documentElement.removeChild(script);
 
