@@ -1291,7 +1291,10 @@ function updateInventory() {
                                         abilityOverrideFormLabel.setAttribute("data-loc", "abilityOverride_label");
                                         abilityOverrideFormLabel.innerHTML = loc("abilityOverride_label");
                                         abilityOverrideFormLabel.classList = "form-label";
-                                        abilityOverrideFormLabel.setAttribute("for", "abilityOverride-ability");
+                                        abilityOverrideFormLabel.setAttribute(
+                                            "for",
+                                            `abilityOverride-ability-config-${i}`
+                                        );
                                         abilityOverrideForm.appendChild(abilityOverrideFormLabel);
 
                                         const abilityOverrideInputGroup = document.createElement("div");
@@ -1299,7 +1302,7 @@ function updateInventory() {
                                         abilityOverrideForm.appendChild(abilityOverrideInputGroup);
 
                                         const abilityOverrideInput = document.createElement("input");
-                                        abilityOverrideInput.id = "abilityOverride-ability";
+                                        abilityOverrideInput.id = `abilityOverride-ability-config-${i}`;
                                         abilityOverrideInput.classList = "form-control";
                                         abilityOverrideInput.setAttribute("list", "datalist-Abilities");
                                         if (config.AbilityOverride) {
@@ -1319,7 +1322,7 @@ function updateInventory() {
                                         abilityOverrideInputGroup.appendChild(abilityOverrideOnSlot);
 
                                         const abilityOverrideSecondInput = document.createElement("input");
-                                        abilityOverrideSecondInput.id = "abilityOverride-ability-index";
+                                        abilityOverrideSecondInput.id = `abilityOverride-ability-index-config-${i}`;
                                         abilityOverrideSecondInput.classList = "form-control";
                                         abilityOverrideSecondInput.setAttribute("type", "number");
                                         abilityOverrideSecondInput.setAttribute("min", "0");
@@ -3087,8 +3090,8 @@ function handleAbilityOverride(event, configIndex) {
     event.preventDefault();
     const urlParams = new URLSearchParams(window.location.search);
     const action = event.submitter.value;
-    const Ability = getKey(document.getElementById("abilityOverride-ability"));
-    const Index = document.getElementById("abilityOverride-ability-index").value;
+    const Ability = getKey(document.getElementById(`abilityOverride-ability-config-${configIndex}`));
+    const Index = document.getElementById(`abilityOverride-ability-index-config-${configIndex}`).value;
     revalidateAuthz().then(() => {
         $.post({
             url: "/custom/abilityOverride?" + window.authz,
