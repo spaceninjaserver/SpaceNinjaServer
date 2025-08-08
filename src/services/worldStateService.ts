@@ -180,7 +180,7 @@ const microplanetEndlessJobs: readonly string[] = [
     "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosEndlessPurifyBounty"
 ];
 
-const EPOCH = 1734307200 * 1000; // Monday, Dec 16, 2024 @ 00:00 UTC+0; should logically be winter in 1999 iteration 0
+export const EPOCH = 1734307200 * 1000; // Monday, Dec 16, 2024 @ 00:00 UTC+0; should logically be winter in 1999 iteration 0
 
 const isBeforeNextExpectedWorldStateRefresh = (nowMs: number, thenMs: number): boolean => {
     return nowMs + 300_000 > thenMs;
@@ -365,10 +365,10 @@ interface IRotatingSeasonChallengePools {
     daily: string[];
     weekly: string[];
     hardWeekly: string[];
-    hasWeeklyPermanent: boolean;
+    weeklyPermanent: string[];
 }
 
-const getSeasonChallengePools = (syndicateTag: string): IRotatingSeasonChallengePools => {
+export const getSeasonChallengePools = (syndicateTag: string): IRotatingSeasonChallengePools => {
     const syndicate = ExportSyndicates[syndicateTag];
     return {
         daily: syndicate.dailyChallenges!,
@@ -380,7 +380,7 @@ const getSeasonChallengePools = (syndicateTag: string): IRotatingSeasonChallenge
         hardWeekly: syndicate.weeklyChallenges!.filter(x =>
             x.startsWith("/Lotus/Types/Challenges/Seasons/WeeklyHard/")
         ),
-        hasWeeklyPermanent: syndicate.weeklyChallenges!.some(x =>
+        weeklyPermanent: syndicate.weeklyChallenges!.filter(x =>
             x.startsWith("/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanent")
         )
     };
@@ -401,6 +401,7 @@ const getSeasonDailyChallenge = (pools: IRotatingSeasonChallengePools, day: numb
 const pushSeasonWeeklyChallenge = (
     activeChallenges: ISeasonChallenge[],
     pool: string[],
+    nightwaveSeason: number,
     week: number,
     id: number
 ): void => {
@@ -413,51 +414,57 @@ const pushSeasonWeeklyChallenge = (
         challenge = rng.randomElement(pool)!;
     } while (activeChallenges.some(x => x.Challenge == challenge));
     activeChallenges.push({
-        _id: { $oid: "67e1bb2d9d00cb47" + challengeId.toString().padStart(8, "0") },
+        _id: {
+            $oid:
+                (nightwaveSeason + 1).toString().padStart(4, "0") +
+                "bb2d9d00cb47" +
+                challengeId.toString().padStart(8, "0")
+        },
         Activation: { $date: { $numberLong: weekStart.toString() } },
         Expiry: { $date: { $numberLong: weekEnd.toString() } },
         Challenge: challenge
     });
 };
 
-const pushWeeklyActs = (
+export const pushWeeklyActs = (
     activeChallenges: ISeasonChallenge[],
     pools: IRotatingSeasonChallengePools,
-    week: number
+    week: number,
+    nightwaveStartTimestamp: number,
+    nightwaveSeason: number
 ): void => {
-    const weekStart = EPOCH + week * 604800000;
-    const weekEnd = weekStart + 604800000;
-
-    pushSeasonWeeklyChallenge(activeChallenges, pools.weekly, week, 0);
-    pushSeasonWeeklyChallenge(activeChallenges, pools.weekly, week, 1);
-    if (pools.hasWeeklyPermanent) {
-        activeChallenges.push({
-            _id: { $oid: "67e1b96e9d00cb47" + (week * 7 + 0).toString().padStart(8, "0") },
-            Activation: { $date: { $numberLong: weekStart.toString() } },
-            Expiry: { $date: { $numberLong: weekEnd.toString() } },
-            Challenge: "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentCompleteMissions"
-        });
-        activeChallenges.push({
-            _id: { $oid: "67e1b96e9d00cb47" + (week * 7 + 1).toString().padStart(8, "0") },
-            Activation: { $date: { $numberLong: weekStart.toString() } },
-            Expiry: { $date: { $numberLong: weekEnd.toString() } },
-            Challenge: "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentKillEximus"
-        });
-        activeChallenges.push({
-            _id: { $oid: "67e1b96e9d00cb47" + (week * 7 + 2).toString().padStart(8, "0") },
-            Activation: { $date: { $numberLong: weekStart.toString() } },
-            Expiry: { $date: { $numberLong: weekEnd.toString() } },
-            Challenge: "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanentKillEnemies"
-        });
-        pushSeasonWeeklyChallenge(activeChallenges, pools.hardWeekly, week, 2);
-        pushSeasonWeeklyChallenge(activeChallenges, pools.hardWeekly, week, 3);
+    pushSeasonWeeklyChallenge(activeChallenges, pools.weekly, nightwaveSeason, week, 0);
+    pushSeasonWeeklyChallenge(activeChallenges, pools.weekly, nightwaveSeason, week, 1);
+    if (pools.weeklyPermanent.length > 0) {
+        const weekStart = EPOCH + week * unixTimesInMs.week;
+        const weekEnd = weekStart + unixTimesInMs.week;
+        const nightwaveWeekStart = ((): number => {
+            let ts = nightwaveStartTimestamp - EPOCH;
+            ts -= ts % unixTimesInMs.week;
+            return EPOCH + ts;
+        })();
+        const nightwaveWeek = Math.trunc((weekStart - nightwaveWeekStart) / unixTimesInMs.week);
+        const weeklyPermanentIndex = (nightwaveWeek * 3) % pools.weeklyPermanent.length;
+        for (let i = 0; i < 3; i++) {
+            activeChallenges.push({
+                _id: {
+                    $oid:
+                        (nightwaveSeason + 1).toString().padStart(4, "0") +
+                        "b96e9d00cb47" +
+                        (week * 7 + 2 + i).toString().padStart(8, "0")
+                },
+                Activation: { $date: { $numberLong: weekStart.toString() } },
+                Expiry: { $date: { $numberLong: weekEnd.toString() } },
+                Challenge: pools.weeklyPermanent[weeklyPermanentIndex + i]
+            });
+        }
     } else {
-        pushSeasonWeeklyChallenge(activeChallenges, pools.weekly, week, 2);
-        pushSeasonWeeklyChallenge(activeChallenges, pools.weekly, week, 3);
-        pushSeasonWeeklyChallenge(activeChallenges, pools.weekly, week, 4);
-        pushSeasonWeeklyChallenge(activeChallenges, pools.hardWeekly, week, 5);
-        pushSeasonWeeklyChallenge(activeChallenges, pools.hardWeekly, week, 6);
+        pushSeasonWeeklyChallenge(activeChallenges, pools.weekly, nightwaveSeason, week, 2);
+        pushSeasonWeeklyChallenge(activeChallenges, pools.weekly, nightwaveSeason, week, 3);
+        pushSeasonWeeklyChallenge(activeChallenges, pools.weekly, nightwaveSeason, week, 4);
     }
+    pushSeasonWeeklyChallenge(activeChallenges, pools.hardWeekly, nightwaveSeason, week, 5);
+    pushSeasonWeeklyChallenge(activeChallenges, pools.hardWeekly, nightwaveSeason, week, 6);
 };
 
 const generateXpAmounts = (rng: SRng, stageCount: number, minXp: number, maxXp: number): number[] => {
@@ -1552,11 +1559,13 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     // Nightwave Challenges
     const nightwaveSyndicateTag = getNightwaveSyndicateTag(buildLabel);
     if (nightwaveSyndicateTag) {
+        const nightwaveStartTimestamp = 1747851300000;
+        const nightwaveSeason = nightwaveTagToSeason[nightwaveSyndicateTag];
         worldState.SeasonInfo = {
-            Activation: { $date: { $numberLong: "1715796000000" } },
+            Activation: { $date: { $numberLong: nightwaveStartTimestamp.toString() } },
             Expiry: { $date: { $numberLong: "2000000000000" } },
             AffiliationTag: nightwaveSyndicateTag,
-            Season: nightwaveTagToSeason[nightwaveSyndicateTag],
+            Season: nightwaveSeason,
             Phase: 0,
             Params: "",
             ActiveChallenges: []
@@ -1568,9 +1577,15 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         if (isBeforeNextExpectedWorldStateRefresh(timeMs, EPOCH + (day + 1) * 86400000)) {
             worldState.SeasonInfo.ActiveChallenges.push(getSeasonDailyChallenge(pools, day + 1));
         }
-        pushWeeklyActs(worldState.SeasonInfo.ActiveChallenges, pools, week);
+        pushWeeklyActs(worldState.SeasonInfo.ActiveChallenges, pools, week, nightwaveStartTimestamp, nightwaveSeason);
         if (isBeforeNextExpectedWorldStateRefresh(timeMs, weekEnd)) {
-            pushWeeklyActs(worldState.SeasonInfo.ActiveChallenges, pools, week + 1);
+            pushWeeklyActs(
+                worldState.SeasonInfo.ActiveChallenges,
+                pools,
+                week + 1,
+                nightwaveStartTimestamp,
+                nightwaveSeason
+            );
         }
     }
 

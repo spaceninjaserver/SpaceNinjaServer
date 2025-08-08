@@ -66,6 +66,7 @@ import { getGuildLogController } from "@/src/controllers/api/getGuildLogControll
 import { getIgnoredUsersController } from "@/src/controllers/api/getIgnoredUsersController";
 import { getNewRewardSeedController } from "@/src/controllers/api/getNewRewardSeedController";
 import { getProfileViewingDataPostController } from "@/src/controllers/dynamic/getProfileViewingDataController";
+import { getPastWeeklyChallengesController } from "@/src/controllers/api/getPastWeeklyChallengesController";
 import { getShipController } from "@/src/controllers/api/getShipController";
 import { getVendorInfoController } from "@/src/controllers/api/getVendorInfoController";
 import { getVoidProjectionRewardsController } from "@/src/controllers/api/getVoidProjectionRewardsController";
@@ -195,6 +196,7 @@ apiRouter.get("/getGuildLog.php", getGuildLogController);
 apiRouter.get("/getIgnoredUsers.php", getIgnoredUsersController);
 apiRouter.get("/getMessages.php", inboxController); // unsure if this is correct, but needed for U17
 apiRouter.get("/getNewRewardSeed.php", getNewRewardSeedController);
+apiRouter.get("/getPastWeeklyChallenges.php", getPastWeeklyChallengesController)
 apiRouter.get("/getShip.php", getShipController);
 apiRouter.get("/getShipDecos.php", (_req, res) => { res.end(); }); // needed to log in on U22.8
 apiRouter.get("/getVendorInfo.php", getVendorInfoController);

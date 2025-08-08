@@ -265,6 +265,7 @@ export interface IEndlessXpChoice {
 export interface ISeasonChallenge {
     _id: IOid;
     Daily?: boolean;
+    Permanent?: boolean; // only for getPastWeeklyChallenges response
     Activation: IMongoDate;
     Expiry: IMongoDate;
     Challenge: string;
