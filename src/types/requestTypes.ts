@@ -148,6 +148,7 @@ export type IMissionInventoryUpdateRequest = {
         MultiProgress: unknown[];
     }[];
     InvasionProgress?: IInvasionProgressClient[];
+    RJ?: boolean;
     ConquestMissionsCompleted?: number;
     duviriSuitSelection?: string;
     duviriPistolSelection?: string;

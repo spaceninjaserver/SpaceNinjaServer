@@ -98,8 +98,14 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
     const inventoryResponse = await getInventoryResponse(inventory, true, account.BuildLabel);
 
     //TODO: figure out when to send inventory. it is needed for many cases.
+    if (missionReport.RJ) {
+        logger.debug(`railjack interstitial request, sending only deltas`, {
+            InventoryChanges: inventoryChanges,
+            AffiliationMods
+        });
+    }
     res.json({
-        InventoryJson: JSON.stringify(inventoryResponse),
+        InventoryJson: missionReport.RJ ? undefined : JSON.stringify(inventoryResponse),
         InventoryChanges: inventoryChanges,
         MissionRewards,
         ...credits,
