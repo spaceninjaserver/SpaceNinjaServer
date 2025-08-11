@@ -1980,17 +1980,20 @@ export const addChallenges = async (
             dbChallenge.Completed ??= [];
             for (const completion of Completed!) {
                 if (dbChallenge.Completed.indexOf(completion) == -1) {
+                    dbChallenge.Completed.push(completion);
                     if (completion == "challengeRewards") {
                         if (Name in challengeRewardsInboxMessages) {
                             await createMessage(account._id, [challengeRewardsInboxMessages[Name]]);
-                            dbChallenge.Completed.push(completion);
                             // Would love to somehow let the client know about inbox or inventory changes, but there doesn't seem to anything for updateChallengeProgress.
                             continue;
                         }
+                        logger.warn(`ignoring unknown challenge completion`, { challenge: Name, completion });
+                        dbChallenge.Completed = [];
                     }
-                    logger.warn(`ignoring unknown challenge completion`, { challenge: Name, completion });
                 }
             }
+        } else {
+            dbChallenge.Completed = Completed;
         }
     }
 
