@@ -6,7 +6,11 @@ import { addMissionInventoryUpdates, addMissionRewards } from "@/src/services/mi
 import { getInventory } from "@/src/services/inventoryService";
 import { getInventoryResponse } from "@/src/controllers/api/inventoryController";
 import { logger } from "@/src/utils/logger";
-import { IMissionInventoryUpdateResponse } from "@/src/types/missionTypes";
+import {
+    IMissionInventoryUpdateResponse,
+    IMissionInventoryUpdateResponseBackToDryDock,
+    IMissionInventoryUpdateResponseRailjackInterstitial
+} from "@/src/types/missionTypes";
 import { sendWsBroadcastTo } from "@/src/services/wsService";
 import { generateRewardSeed } from "@/src/services/rngService";
 
@@ -95,17 +99,9 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         inventory.RewardSeed = generateRewardSeed();
     }
     await inventory.save();
-    const inventoryResponse = await getInventoryResponse(inventory, true, account.BuildLabel);
 
     //TODO: figure out when to send inventory. it is needed for many cases.
-    if (missionReport.RJ) {
-        logger.debug(`railjack interstitial request, sending only deltas`, {
-            InventoryChanges: inventoryChanges,
-            AffiliationMods
-        });
-    }
-    res.json({
-        InventoryJson: missionReport.RJ ? undefined : JSON.stringify(inventoryResponse),
+    const deltas: IMissionInventoryUpdateResponseRailjackInterstitial = {
         InventoryChanges: inventoryChanges,
         MissionRewards,
         ...credits,
@@ -114,7 +110,25 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         SyndicateXPItemReward,
         AffiliationMods,
         ConquestCompletedMissionsCount
-    } satisfies IMissionInventoryUpdateResponse);
+    };
+    if (missionReport.RJ) {
+        logger.debug(`railjack interstitial request, sending only deltas`, deltas);
+        res.json(deltas);
+    } else if (missionReport.RewardInfo) {
+        logger.debug(`classic mission completion, sending everything`);
+        const inventoryResponse = await getInventoryResponse(inventory, true, account.BuildLabel);
+        res.json({
+            InventoryJson: JSON.stringify(inventoryResponse),
+            ...deltas
+        } satisfies IMissionInventoryUpdateResponse);
+    } else {
+        logger.debug(`no reward info, assuming this wasn't a mission completion and we should just sync inventory`);
+        const inventoryResponse = await getInventoryResponse(inventory, true, account.BuildLabel);
+        res.json({
+            InventoryJson: JSON.stringify(inventoryResponse)
+        } satisfies IMissionInventoryUpdateResponseBackToDryDock);
+    }
+
     sendWsBroadcastTo(account._id.toString(), { update_inventory: true });
 };
 

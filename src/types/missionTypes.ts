@@ -23,12 +23,19 @@ export interface IMissionCredits {
     DailyMissionBonus?: boolean;
 }
 
-export interface IMissionInventoryUpdateResponse extends Partial<IMissionCredits> {
+export interface IMissionInventoryUpdateResponseRailjackInterstitial extends Partial<IMissionCredits> {
     ConquestCompletedMissionsCount?: number;
-    InventoryJson?: string;
     MissionRewards?: IMissionReward[];
     InventoryChanges?: IInventoryChanges;
     FusionPoints?: number;
     SyndicateXPItemReward?: number;
     AffiliationMods?: IAffiliationMods[];
+}
+
+export interface IMissionInventoryUpdateResponse extends IMissionInventoryUpdateResponseRailjackInterstitial {
+    InventoryJson?: string;
+}
+
+export interface IMissionInventoryUpdateResponseBackToDryDock {
+    InventoryJson: string;
 }
