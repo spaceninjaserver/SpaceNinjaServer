@@ -246,6 +246,8 @@ dict = {
     worldState_baroTennoConRelay: `[UNTRANSLATED] Baro's TennoCon Relay`,
     worldState_starDays: `Jours Stellaires`,
     worldState_galleonOfGhouls: `Galion des Goules`,
+    worldState_ghoulEmergence: `Purge des Goules`,
+    worldState_plagueStar: `Fléau Céleste`,
     enabled: `[UNTRANSLATED] Enabled`,
     disabled: `Désactivé`,
     worldState_we1: `Weekend 1`,

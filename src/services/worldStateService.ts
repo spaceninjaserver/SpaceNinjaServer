@@ -131,6 +131,13 @@ const eidolonNarmerJobs: readonly string[] = [
     "/Lotus/Types/Gameplay/Eidolon/Jobs/Narmer/AttritionBountyLib"
 ];
 
+const eidolonGhoulJobs: readonly string[] = [
+    "/Lotus/Types/Gameplay/Eidolon/Jobs/Events/GhoulAlertBountyAss",
+    "/Lotus/Types/Gameplay/Eidolon/Jobs/Events/GhoulAlertBountyExt",
+    "/Lotus/Types/Gameplay/Eidolon/Jobs/Events/GhoulAlertBountyHunt",
+    "/Lotus/Types/Gameplay/Eidolon/Jobs/Events/GhoulAlertBountyRes"
+];
+
 const venusJobs: readonly string[] = [
     "/Lotus/Types/Gameplay/Venus/Jobs/VenusArtifactJobAmbush",
     "/Lotus/Types/Gameplay/Venus/Jobs/VenusArtifactJobExcavation",
@@ -1556,6 +1563,72 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         });
     }
 
+    const firstNovemberWeekday = new Date(Date.UTC(date.getUTCFullYear(), 10, 1)).getUTCDay();
+    const firstNovemberMondayOffset = (8 - firstNovemberWeekday) % 7;
+
+    const plagueStarStart = Date.UTC(date.getUTCFullYear(), 10, firstNovemberMondayOffset + 1, 16);
+    const plagueStarEnd = Date.UTC(date.getUTCFullYear(), 10, firstNovemberMondayOffset + 15, 16);
+
+    const isPlagueStarActive = timeMs >= plagueStarStart && timeMs < plagueStarEnd;
+    if (config.worldState?.plagueStarOverride ?? isPlagueStarActive) {
+        worldState.Goals.push({
+            _id: { $oid: "654a5058c757487cdb11824f" },
+            Activation: {
+                $date: {
+                    $numberLong: config.worldState?.plagueStarOverride ? "1699372800000" : plagueStarStart.toString()
+                }
+            },
+            Expiry: {
+                $date: {
+                    $numberLong: config.worldState?.plagueStarOverride ? "2000000000000" : plagueStarEnd.toString()
+                }
+            },
+            Tag: "InfestedPlains",
+            RegionIdx: 2,
+            Faction: "FC_INFESTATION",
+            Desc: "/Lotus/Language/InfestedPlainsEvent/InfestedPlainsBountyName",
+            ToolTip: "/Lotus/Language/InfestedPlainsEvent/InfestedPlainsBountyDesc",
+            Icon: "/Lotus/Materials/Emblems/PlagueStarEventBadge_e.png",
+            JobAffiliationTag: "EventSyndicate",
+            Jobs: [
+                {
+                    jobType: "/Lotus/Types/Gameplay/Eidolon/Jobs/Events/InfestedPlainsBounty",
+                    rewards: "/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/PlagueStarTableRewards",
+                    minEnemyLevel: 15,
+                    maxEnemyLevel: 25,
+                    xpAmounts: [50, 300, 100, 575]
+                },
+                {
+                    jobType: "/Lotus/Types/Gameplay/Eidolon/Jobs/Events/InfestedPlainsBountyAdvanced",
+                    rewards: "/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/PlagueStarTableRewards",
+                    minEnemyLevel: 55,
+                    maxEnemyLevel: 65,
+                    xpAmounts: [200, 1000, 300, 1700],
+                    requiredItems: [
+                        "/Lotus/StoreItems/Types/Items/Eidolon/InfestedEventIngredient",
+                        "/Lotus/StoreItems/Types/Items/Eidolon/InfestedEventClanIngredient"
+                    ],
+                    useRequiredItemsAsMiscItemFee: true
+                },
+                {
+                    jobType: "/Lotus/Types/Gameplay/Eidolon/Jobs/Events/InfestedPlainsBountySteelPath",
+                    rewards: "/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/PlagueStarTableSteelPathRewards",
+                    minEnemyLevel: 100,
+                    maxEnemyLevel: 110,
+                    xpAmounts: [200, 1100, 400, 2100],
+                    masteryReq: 10,
+                    requiredItems: [
+                        "/Lotus/StoreItems/Types/Items/Eidolon/InfestedEventIngredient",
+                        "/Lotus/StoreItems/Types/Items/Eidolon/InfestedEventClanIngredient"
+                    ],
+                    useRequiredItemsAsMiscItemFee: true
+                }
+            ],
+            Transmission: "/Lotus/Sounds/Dialog/PlainsMeteorLeadUp/LeadUp/DLeadUp0021Lotus",
+            InstructionalItem: "/Lotus/Types/StoreItems/Packages/PlagueStarEventStoreItem"
+        });
+    }
+
     // Nightwave Challenges
     const nightwaveSyndicateTag = getNightwaveSyndicateTag(buildLabel);
     if (nightwaveSyndicateTag) {
@@ -1625,6 +1698,103 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
 
         pushClassicBounties(worldState.SyndicateMissions, bountyCycle);
     } while (isBeforeNextExpectedWorldStateRefresh(timeMs, bountyCycleEnd) && ++bountyCycle);
+
+    const ghoulsCycleDay = day % 21;
+    const isGhoulEmergenceActive = ghoulsCycleDay >= 17 && ghoulsCycleDay <= 20; // 4 days for event and 17 days for break
+    if (config.worldState?.ghoulEmergenceOverride ?? isGhoulEmergenceActive) {
+        const ghoulPool = [...eidolonGhoulJobs];
+        const pastGhoulPool = [...eidolonGhoulJobs];
+
+        const seed = new SRng(bountyCycle).randomInt(0, 100_000);
+        const pastSeed = new SRng(bountyCycle - 1).randomInt(0, 100_000);
+
+        const rng = new SRng(seed);
+        const pastRng = new SRng(pastSeed);
+
+        const activeStartDay = day - ghoulsCycleDay + 17;
+        const activeEndDay = activeStartDay + 5;
+        const dayWithFraction = (timeMs - EPOCH) / 86400000;
+
+        const progress = (dayWithFraction - activeStartDay) / (activeEndDay - activeStartDay);
+        const healthPct = 1 - Math.min(Math.max(progress, 0), 1);
+
+        worldState.Goals.push({
+            _id: { $oid: "687ebbe6d1d17841c9c59f38" },
+            Activation: {
+                $date: {
+                    $numberLong: config.worldState?.ghoulEmergenceOverride
+                        ? "1753204900185"
+                        : Date.UTC(
+                              date.getUTCFullYear(),
+                              date.getUTCMonth(),
+                              date.getUTCDate() + (day - ghoulsCycleDay + 17)
+                          ).toString()
+                }
+            },
+            Expiry: {
+                $date: {
+                    $numberLong: config.worldState?.ghoulEmergenceOverride
+                        ? "2000000000000"
+                        : Date.UTC(
+                              date.getUTCFullYear(),
+                              date.getUTCMonth(),
+                              date.getUTCDate() + (day - ghoulsCycleDay + 21)
+                          ).toString()
+                }
+            },
+            HealthPct: config.worldState?.ghoulEmergenceOverride ? 1 : healthPct,
+            VictimNode: "SolNode228",
+            Regions: [2],
+            Success: 0,
+            Desc: "/Lotus/Language/GameModes/RecurringGhoulAlert",
+            ToolTip: "/Lotus/Language/GameModes/RecurringGhoulAlertDesc",
+            Icon: "/Lotus/Interface/Icons/Categories/IconGhouls256.png",
+            Tag: "GhoulEmergence",
+            JobAffiliationTag: "CetusSyndicate",
+            JobCurrentVersion: {
+                $oid: ((bountyCycle * 9000) & 0xffffffff).toString(16).padStart(8, "0") + "0000000000000008"
+            },
+            Jobs: [
+                {
+                    jobType: rng.randomElementPop(ghoulPool),
+                    rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/GhoulBountyTableARewards`,
+                    masteryReq: 1,
+                    minEnemyLevel: 15,
+                    maxEnemyLevel: 25,
+                    xpAmounts: [270, 270, 270, 400] // not faithful
+                },
+                {
+                    jobType: rng.randomElementPop(ghoulPool),
+                    rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/GhoulBountyTableBRewards`,
+                    masteryReq: 3,
+                    minEnemyLevel: 40,
+                    maxEnemyLevel: 50,
+                    xpAmounts: [480, 480, 480, 710] // not faithful
+                }
+            ],
+            JobPreviousVersion: {
+                $oid: (((bountyCycle - 1) * 9000) & 0xffffffff).toString(16).padStart(8, "0") + "0000000000000008"
+            },
+            PreviousJobs: [
+                {
+                    jobType: pastRng.randomElementPop(pastGhoulPool),
+                    rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/GhoulBountyTableARewards`,
+                    masteryReq: 1,
+                    minEnemyLevel: 15,
+                    maxEnemyLevel: 25,
+                    xpAmounts: [270, 270, 270, 400] // not faithful
+                },
+                {
+                    jobType: pastRng.randomElementPop(pastGhoulPool),
+                    rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/GhoulBountyTableBRewards`,
+                    masteryReq: 3,
+                    minEnemyLevel: 40,
+                    maxEnemyLevel: 50,
+                    xpAmounts: [480, 480, 480, 710] // not faithful
+                }
+            ]
+        });
+    }
 
     if (config.worldState?.creditBoost) {
         worldState.GlobalUpgrades.push({

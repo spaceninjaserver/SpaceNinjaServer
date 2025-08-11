@@ -246,6 +246,8 @@ dict = {
     worldState_baroTennoConRelay: `Repetidor de Baro de la TennoCon`,
     worldState_starDays: `Días estelares`,
     worldState_galleonOfGhouls: `Galeón de Gules`,
+    worldState_ghoulEmergence: `Purga de Gules`,
+    worldState_plagueStar: `Estrella Infestada`,
     enabled: `Activado`,
     disabled: `Desactivado`,
     worldState_we1: `Semana 1`,

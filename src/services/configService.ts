@@ -84,6 +84,8 @@ export interface IConfig {
         tennoLiveRelay?: boolean;
         baroTennoConRelay?: boolean;
         galleonOfGhouls?: number;
+        ghoulEmergenceOverride?: boolean;
+        plagueStarOverride?: boolean;
         starDaysOverride?: boolean;
         eidolonOverride?: string;
         vallisOverride?: string;

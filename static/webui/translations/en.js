@@ -245,6 +245,8 @@ dict = {
     worldState_baroTennoConRelay: `Baro's TennoCon Relay`,
     worldState_starDays: `Star Days`,
     worldState_galleonOfGhouls: `Galleon of Ghouls`,
+    worldState_ghoulEmergence: `Ghoul Purge`,
+    worldState_plagueStar: `Plague Star`,
     enabled: `Enabled`,
     disabled: `Disabled`,
     worldState_we1: `Weekend 1`,

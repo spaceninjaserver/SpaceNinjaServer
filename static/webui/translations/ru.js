@@ -246,6 +246,8 @@ dict = {
     worldState_baroTennoConRelay: `Реле Баро TennoCon`,
     worldState_starDays: `Звёздные дни`,
     worldState_galleonOfGhouls: `Галеон Гулей`,
+    worldState_ghoulEmergence: `Избавление от гулей`,
+    worldState_plagueStar: `Чумная звезда`,
     enabled: `Включено`,
     disabled: `Отключено`,
     worldState_we1: `Выходные 1`,

@@ -72,6 +72,8 @@
     "resourceBoost": false,
     "tennoLiveRelay": false,
     "galleonOfGhouls": 0,
+    "ghoulEmergenceOverride": null,
+    "plagueStarOverride": null,
     "starDaysOverride": null,
     "eidolonOverride": "",
     "vallisOverride": "",

@@ -76,7 +76,7 @@ import {
 } from "@/src/services/worldStateService";
 import { config } from "@/src/services/configService";
 import libraryDailyTasks from "@/static/fixed_responses/libraryDailyTasks.json";
-import { ISyndicateMissionInfo } from "@/src/types/worldStateTypes";
+import { IGoal, ISyndicateMissionInfo } from "@/src/types/worldStateTypes";
 import { fromOid } from "@/src/helpers/inventoryHelpers";
 import { TAccountDocument } from "@/src/services/loginService";
 import { ITypeCount } from "@/src/types/commonTypes";
@@ -1259,6 +1259,8 @@ export const addMissionRewards = async (
         }
     }
 
+    AffiliationMods ??= [];
+
     if (rewardInfo.JobStage != undefined && rewardInfo.jobId) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const [jobType, unkIndex, hubNode, syndicateMissionId] = rewardInfo.jobId.split("_");
@@ -1266,9 +1268,29 @@ export const addMissionRewards = async (
         if (syndicateMissionId) {
             pushClassicBounties(syndicateMissions, idToBountyCycle(syndicateMissionId));
         }
-        const syndicateEntry = syndicateMissions.find(m => m._id.$oid === syndicateMissionId);
+        let syndicateEntry: ISyndicateMissionInfo | IGoal | undefined = syndicateMissions.find(
+            m => m._id.$oid === syndicateMissionId
+        );
+        if (
+            [
+                "/Lotus/Types/Gameplay/Eidolon/Jobs/Events/InfestedPlainsBounty",
+                "/Lotus/Types/Gameplay/Eidolon/Jobs/Events/GhoulAlertBounty"
+            ].some(prefix => jobType.startsWith(prefix))
+        ) {
+            const { Goals } = getWorldState(undefined);
+            syndicateEntry = Goals.find(m => m._id.$oid === syndicateMissionId);
+            if (syndicateEntry) syndicateEntry.Tag = syndicateEntry.JobAffiliationTag!;
+        }
         if (syndicateEntry && syndicateEntry.Jobs) {
             let currentJob = syndicateEntry.Jobs[rewardInfo.JobTier!];
+            if (
+                [
+                    "/Lotus/Types/Gameplay/Eidolon/Jobs/Events/InfestedPlainsBounty",
+                    "/Lotus/Types/Gameplay/Eidolon/Jobs/Events/GhoulAlertBounty"
+                ].some(prefix => jobType.startsWith(prefix))
+            ) {
+                currentJob = syndicateEntry.Jobs.find(j => j.jobType === jobType)!;
+            }
             if (syndicateEntry.Tag === "EntratiSyndicate") {
                 if (
                     [
@@ -1311,31 +1333,35 @@ export const addMissionRewards = async (
                     `Giving ${medallionAmount} medallions for the ${rewardInfo.JobStage} stage of the ${rewardInfo.JobTier} tier bounty`
                 );
             } else {
-                if (rewardInfo.JobTier! >= 0) {
+                const specialCase = [
+                    { endings: ["Heists/HeistProfitTakerBountyOne"], stage: 2, amount: 1000 },
+                    { endings: ["Hunts/AllTeralystsHunt"], stage: 2, amount: 5000 },
+                    {
+                        endings: [
+                            "Hunts/TeralystHunt",
+                            "Heists/HeistProfitTakerBountyTwo",
+                            "Heists/HeistProfitTakerBountyThree",
+                            "Heists/HeistProfitTakerBountyFour",
+                            "Heists/HeistExploiterBountyOne"
+                        ],
+                        amount: 1000
+                    }
+                ];
+                const specialCaseReward = specialCase.find(
+                    rule =>
+                        rule.endings.some(e => jobType.endsWith(e)) &&
+                        (rule.stage === undefined || rewardInfo.JobStage === rule.stage)
+                );
+
+                if (specialCaseReward) {
+                    addStanding(inventory, syndicateEntry.Tag, specialCaseReward.amount, AffiliationMods);
+                } else {
                     addStanding(
                         inventory,
                         syndicateEntry.Tag,
                         Math.floor(currentJob.xpAmounts[rewardInfo.JobStage] / (rewardInfo.Q ? 0.8 : 1)),
                         AffiliationMods
                     );
-                } else {
-                    if (jobType.endsWith("Heists/HeistProfitTakerBountyOne") && rewardInfo.JobStage === 2) {
-                        addStanding(inventory, syndicateEntry.Tag, 1000, AffiliationMods);
-                    }
-                    if (jobType.endsWith("Hunts/AllTeralystsHunt") && rewardInfo.JobStage === 2) {
-                        addStanding(inventory, syndicateEntry.Tag, 5000, AffiliationMods);
-                    }
-                    if (
-                        [
-                            "Hunts/TeralystHunt",
-                            "Heists/HeistProfitTakerBountyTwo",
-                            "Heists/HeistProfitTakerBountyThree",
-                            "Heists/HeistProfitTakerBountyFour",
-                            "Heists/HeistExploiterBountyOne"
-                        ].some(ending => jobType.endsWith(ending))
-                    ) {
-                        addStanding(inventory, syndicateEntry.Tag, 1000, AffiliationMods);
-                    }
                 }
             }
         }
@@ -1672,7 +1698,19 @@ function getRandomMissionDrops(
                     if (syndicateMissionId) {
                         pushClassicBounties(syndicateMissions, idToBountyCycle(syndicateMissionId));
                     }
-                    const syndicateEntry = syndicateMissions.find(m => m._id.$oid === syndicateMissionId);
+                    let syndicateEntry: ISyndicateMissionInfo | IGoal | undefined = syndicateMissions.find(
+                        m => m._id.$oid === syndicateMissionId
+                    );
+                    if (
+                        [
+                            "/Lotus/Types/Gameplay/Eidolon/Jobs/Events/InfestedPlainsBounty",
+                            "/Lotus/Types/Gameplay/Eidolon/Jobs/Events/GhoulAlertBounty"
+                        ].some(prefix => jobType.startsWith(prefix))
+                    ) {
+                        const { Goals } = getWorldState(undefined);
+                        syndicateEntry = Goals.find(m => m._id.$oid === syndicateMissionId);
+                        if (syndicateEntry) syndicateEntry.Tag = syndicateEntry.JobAffiliationTag!;
+                    }
                     if (syndicateEntry && syndicateEntry.Jobs) {
                         let job = syndicateEntry.Jobs[RewardInfo.JobTier!];
 
@@ -1756,6 +1794,14 @@ function getRandomMissionDrops(
                                     }
                                 }
                             }
+                        }
+                        if (
+                            [
+                                "/Lotus/Types/Gameplay/Eidolon/Jobs/Events/InfestedPlainsBounty",
+                                "/Lotus/Types/Gameplay/Eidolon/Jobs/Events/GhoulAlertBounty"
+                            ].some(prefix => jobType.startsWith(prefix))
+                        ) {
+                            job = syndicateEntry.Jobs.find(j => j.jobType === jobType)!;
                         }
                         rewardManifests = [job.rewards];
                         if (job.xpAmounts.length > 1) {

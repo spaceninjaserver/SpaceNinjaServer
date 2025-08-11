@@ -246,6 +246,8 @@ dict = {
     worldState_baroTennoConRelay: `Baro的TennoCon中继站`,
     worldState_starDays: `活动：星日`,
     worldState_galleonOfGhouls: `战术警报：尸鬼的帆船战舰`,
+    worldState_ghoulEmergence: `尸鬼净化`,
+    worldState_plagueStar: `瘟疫之星`,
     enabled: `启用`,
     disabled: `关闭/取消配置`,
     worldState_we1: `活动阶段：第一周`,

@@ -37,19 +37,46 @@ export interface IGoal {
     _id: IOid;
     Activation: IMongoDate;
     Expiry: IMongoDate;
-    Count: number;
-    Goal: number;
-    Success: number;
-    Personal: boolean;
+    Count?: number;
+    Goal?: number;
+    HealthPct?: number;
+    Success?: number;
+    Personal?: boolean;
     Bounty?: boolean;
+    Faction?: string;
     ClampNodeScores?: boolean;
     Desc: string;
     ToolTip?: string;
+    Transmission?: string;
+    InstructionalItem?: string;
     Icon: string;
     Tag: string;
-    Node: string;
+    Node?: string;
+    VictimNode?: string;
+    RegionIdx?: number;
+    Regions?: number[];
     MissionKeyName?: string;
     Reward?: IMissionReward;
+
+    JobAffiliationTag?: string;
+    Jobs?: ISyndicateJob[];
+    PreviousJobs?: ISyndicateJob[];
+    JobCurrentVersion?: IOid;
+    JobPreviousVersion?: IOid;
+}
+
+export interface ISyndicateJob {
+    jobType?: string;
+    rewards: string;
+    masteryReq?: number;
+    minEnemyLevel: number;
+    maxEnemyLevel: number;
+    xpAmounts: number[];
+    endless?: boolean;
+    locationTag?: string;
+    isVault?: boolean;
+    requiredItems?: string[];
+    useRequiredItemsAsMiscItemFee?: boolean;
 }
 
 export interface ISyndicateMissionInfo {
@@ -59,17 +86,7 @@ export interface ISyndicateMissionInfo {
     Tag: string;
     Seed: number;
     Nodes: string[];
-    Jobs?: {
-        jobType?: string;
-        rewards: string;
-        masteryReq: number;
-        minEnemyLevel: number;
-        maxEnemyLevel: number;
-        xpAmounts: number[];
-        endless?: boolean;
-        locationTag?: string;
-        isVault?: boolean;
-    }[];
+    Jobs?: ISyndicateJob[];
 }
 
 export interface IGlobalUpgrade {
