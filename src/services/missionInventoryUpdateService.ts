@@ -83,6 +83,11 @@ import { ITypeCount } from "@/src/types/commonTypes";
 import { IEquipmentClient } from "@/src/types/equipmentTypes";
 
 const getRotations = (rewardInfo: IRewardInfo, tierOverride?: number): number[] => {
+    // Disruption missions just tell us (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2599)
+    if (rewardInfo.rewardTierOverrides) {
+        return rewardInfo.rewardTierOverrides;
+    }
+
     // For Spy missions, e.g. 3 vaults cracked = A, B, C
     if (rewardInfo.VaultsCracked) {
         const rotations: number[] = [];
