@@ -497,6 +497,9 @@ function fetchItemList() {
                     uniqueLevelCaps = items;
                 } else if (type == "Syndicates") {
                     items.forEach(item => {
+                        if (item.uniqueName === "ConclaveSyndicate") {
+                            return;
+                        }
                         if (item.uniqueName.startsWith("RadioLegion")) {
                             item.name += " (" + item.uniqueName + ")";
                         }
