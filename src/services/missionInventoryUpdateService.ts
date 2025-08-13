@@ -2000,6 +2000,36 @@ function getRandomMissionDrops(
             }
         });
 
+        // Railjack Abandoned Cache Rewards, Rotation A (Mandatory Objectives)
+        if (RewardInfo.POICompletions) {
+            if (region.cacheRewardManifest) {
+                const deck = ExportRewards[region.cacheRewardManifest];
+                for (let cache = 0; cache != RewardInfo.POICompletions; ++cache) {
+                    const drop = getRandomRewardByChance(deck[0]);
+                    if (drop) {
+                        drops.push({ StoreItem: drop.type, ItemCount: drop.itemCount, FromEnemyCache: true });
+                    }
+                }
+            } else {
+                logger.error(`POI completed, but there was no cache reward manifest at ${RewardInfo.node}`);
+            }
+        }
+
+        // Railjack Abandoned Cache Rewards, Rotation B (Optional Objectives)
+        if (RewardInfo.LootDungeonCompletions) {
+            if (region.cacheRewardManifest) {
+                const deck = ExportRewards[region.cacheRewardManifest];
+                for (let cache = 0; cache != RewardInfo.LootDungeonCompletions; ++cache) {
+                    const drop = getRandomRewardByChance(deck[1]);
+                    if (drop) {
+                        drops.push({ StoreItem: drop.type, ItemCount: drop.itemCount, FromEnemyCache: true });
+                    }
+                }
+            } else {
+                logger.error(`Loot dungeon completed, but there was no cache reward manifest at ${RewardInfo.node}`);
+            }
+        }
+
         if (region.cacheRewardManifest && RewardInfo.EnemyCachesFound) {
             const deck = ExportRewards[region.cacheRewardManifest];
             for (let rotation = 0; rotation != RewardInfo.EnemyCachesFound; ++rotation) {

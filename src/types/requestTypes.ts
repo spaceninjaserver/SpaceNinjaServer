@@ -187,6 +187,8 @@ export interface IRewardInfo {
     rewardQualifications?: string; // did a Survival for 5 minutes and this was "1"
     rewardTierOverrides?: number[]; // Disruption
     PurgatoryRewardQualifications?: string;
+    POICompletions?: number;
+    LootDungeonCompletions?: number;
     rewardSeed?: number | bigint;
     periodicMissionTag?: string;
     T?: number; // Duviri
