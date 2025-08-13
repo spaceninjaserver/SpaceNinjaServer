@@ -97,17 +97,21 @@ const getRotations = (rewardInfo: IRewardInfo, tierOverride?: number): number[] 
         return rotations;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    const missionIndex: number | undefined = ExportRegions[rewardInfo.node]?.missionIndex;
+    const region = ExportRegions[rewardInfo.node] as IRegion | undefined;
+    const missionIndex: number | undefined = region?.missionIndex;
 
     // For Rescue missions
     if (missionIndex == 3 && rewardInfo.rewardTier) {
         return [rewardInfo.rewardTier];
     }
 
-    // 'rewardQualifications' is unreliable for mission types that only have rotation A (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2586)
-    if (missionIndex == 0 || missionIndex == 1 || missionIndex == 5) {
-        return [0];
+    // 'rewardQualifications' is unreliable for non-endless railjack missions (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2586, https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2612)
+    switch (region?.missionName) {
+        case "/Lotus/Language/Missions/MissionName_Railjack":
+        case "/Lotus/Language/Missions/MissionName_RailjackVolatile":
+        case "/Lotus/Language/Missions/MissionName_RailjackExterminate":
+        case "/Lotus/Language/Missions/MissionName_RailjackAssassinate":
+            return [0];
     }
 
     const rotationCount = rewardInfo.rewardQualifications?.length || 0;
