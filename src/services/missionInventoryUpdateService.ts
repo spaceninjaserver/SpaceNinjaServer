@@ -50,7 +50,7 @@ import { getEntriesUnsafe } from "@/src/utils/ts-utils";
 import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
 import { IMissionCredits, IMissionReward } from "@/src/types/missionTypes";
 import { crackRelic } from "@/src/helpers/relicHelper";
-import { createMessage } from "@/src/services/inboxService";
+import { createMessage, IMessageCreationTemplate } from "@/src/services/inboxService";
 import kuriaMessage50 from "@/static/fixed_responses/kuriaMessages/fiftyPercent.json";
 import kuriaMessage75 from "@/static/fixed_responses/kuriaMessages/seventyFivePercent.json";
 import kuriaMessage100 from "@/static/fixed_responses/kuriaMessages/oneHundredPercent.json";
@@ -624,36 +624,92 @@ export const addMissionInventoryUpdates = async (
                     if (goal && goal.Personal) {
                         inventory.PersonalGoalProgress ??= [];
                         const goalProgress = inventory.PersonalGoalProgress.find(x => x.goalId.equals(goal._id.$oid));
-                        if (goalProgress) {
-                            goalProgress.Best = Math.max(goalProgress.Best, uploadProgress.Best);
-                            goalProgress.Count += uploadProgress.Count;
-                        } else {
+                        if (!goalProgress) {
                             inventory.PersonalGoalProgress.push({
                                 Best: uploadProgress.Best,
                                 Count: uploadProgress.Count,
                                 Tag: goal.Tag,
                                 goalId: new Types.ObjectId(goal._id.$oid)
                             });
+                        }
 
+                        const currentNode = inventoryUpdates.RewardInfo!.node;
+                        let currentMissionKey;
+                        if (currentNode == goal.Node) {
+                            currentMissionKey = goal.MissionKeyName;
+                        } else if (goal.ConcurrentNodes && goal.ConcurrentMissionKeyNames) {
+                            for (let i = 0; i < goal.ConcurrentNodes.length; i++) {
+                                if (currentNode == goal.ConcurrentNodes[i]) {
+                                    currentMissionKey = goal.ConcurrentMissionKeyNames[i];
+                                    break;
+                                }
+                            }
+                        }
+                        if (currentMissionKey && currentMissionKey in goalMessagesByKey) {
+                            const totalCount = (goalProgress?.Count ?? 0) + uploadProgress.Count;
+                            let reward;
+
+                            if (goal.InterimGoals && goal.InterimRewards) {
+                                for (let i = 0; i < goal.InterimGoals.length; i++) {
+                                    if (
+                                        goal.InterimGoals[i] &&
+                                        goal.InterimGoals[i] <= totalCount &&
+                                        (!goalProgress || goalProgress.Count < goal.InterimGoals[i]) &&
+                                        goal.InterimRewards[i]
+                                    ) {
+                                        reward = goal.InterimRewards[i];
+                                        break;
+                                    }
+                                }
+                            }
                             if (
-                                goal.Reward &&
-                                goal.Reward.items &&
-                                goal.MissionKeyName &&
-                                goal.MissionKeyName in goalMessagesByKey
+                                !reward &&
+                                goal.Goal &&
+                                goal.Goal <= totalCount &&
+                                (!goalProgress || goalProgress.Count < goal.Goal) &&
+                                goal.Reward
                             ) {
-                                // Send reward via inbox
-                                const info = goalMessagesByKey[goal.MissionKeyName];
-                                await createMessage(inventory.accountOwnerId, [
-                                    {
+                                reward = goal.Reward;
+                            }
+                            if (
+                                !reward &&
+                                goal.BonusGoal &&
+                                goal.BonusGoal <= totalCount &&
+                                (!goalProgress || goalProgress.Count < goal.BonusGoal) &&
+                                goal.BonusReward
+                            ) {
+                                reward = goal.BonusReward;
+                            }
+                            if (reward) {
+                                if (currentMissionKey in goalMessagesByKey) {
+                                    // Send reward via inbox
+                                    const info = goalMessagesByKey[currentMissionKey];
+                                    const message: IMessageCreationTemplate = {
                                         sndr: info.sndr,
                                         msg: info.msg,
-                                        att: goal.Reward.items.map(x => (isStoreItem(x) ? fromStoreItem(x) : x)),
                                         sub: info.sub,
                                         icon: info.icon,
                                         highPriority: true
+                                    };
+
+                                    if (reward.items) {
+                                        message.att = reward.items.map(x => (isStoreItem(x) ? fromStoreItem(x) : x));
                                     }
-                                ]);
+                                    if (reward.countedItems) {
+                                        message.countedAtt = reward.countedItems;
+                                    }
+                                    if (reward.credits) {
+                                        message.RegularCredits = reward.credits;
+                                    }
+
+                                    await createMessage(inventory.accountOwnerId, [message]);
+                                }
                             }
+                        }
+
+                        if (goalProgress) {
+                            goalProgress.Best = Math.max(goalProgress.Best, uploadProgress.Best);
+                            goalProgress.Count += uploadProgress.Count;
                         }
                     }
                 }
@@ -1011,8 +1067,16 @@ export const addMissionRewards = async (
 
     if (rewardInfo.goalId) {
         const goal = getWorldState().Goals.find(x => x._id.$oid == rewardInfo.goalId);
-        if (goal?.MissionKeyName) {
-            levelKeyName = goal.MissionKeyName;
+        if (goal) {
+            if (rewardInfo.node == goal.Node && goal.MissionKeyName) levelKeyName = goal.MissionKeyName;
+            if (goal.ConcurrentNodes && goal.ConcurrentMissionKeyNames) {
+                for (let i = 0; i < goal.ConcurrentNodes.length && i < goal.ConcurrentMissionKeyNames.length; i++) {
+                    if (rewardInfo.node == goal.ConcurrentNodes[i]) {
+                        levelKeyName = goal.ConcurrentMissionKeyNames[i];
+                        break;
+                    }
+                }
+            }
         }
     }
 
@@ -2149,5 +2213,143 @@ const goalMessagesByKey: Record<string, { sndr: string; msg: string; sub: string
         msg: "/Lotus/Language/Messages/GalleonRobbery2025RewardMsgC",
         sub: "/Lotus/Language/Messages/GalleonRobbery2025MissionTitleC",
         icon: "/Lotus/Interface/Icons/Npcs/VayHekPortrait.png"
+    },
+    "/Lotus/Types/Keys/TacAlertKeyWaterFightA": {
+        sndr: "/Lotus/Language/Bosses/BossKelaDeThaym",
+        msg: "/Lotus/Language/Inbox/WaterFightRewardMsgA",
+        sub: "/Lotus/Language/Inbox/WaterFightRewardSubjectA",
+        icon: "/Lotus/Interface/Icons/Npcs/Grineer/KelaDeThaym.png"
+    },
+    "/Lotus/Types/Keys/TacAlertKeyWaterFightB": {
+        sndr: "/Lotus/Language/Bosses/BossKelaDeThaym",
+        msg: "/Lotus/Language/Inbox/WaterFightRewardMsgB",
+        sub: "/Lotus/Language/Inbox/WaterFightRewardSubjectB",
+        icon: "/Lotus/Interface/Icons/Npcs/Grineer/KelaDeThaym.png"
+    },
+    "/Lotus/Types/Keys/TacAlertKeyWaterFightC": {
+        sndr: "/Lotus/Language/Bosses/BossKelaDeThaym",
+        msg: "/Lotus/Language/Inbox/WaterFightRewardMsgC",
+        sub: "/Lotus/Language/Inbox/WaterFightRewardSubjectC",
+        icon: "/Lotus/Interface/Icons/Npcs/Grineer/KelaDeThaym.png"
+    },
+    "/Lotus/Types/Keys/TacAlertKeyWaterFightD": {
+        sndr: "/Lotus/Language/Bosses/BossKelaDeThaym",
+        msg: "/Lotus/Language/Inbox/WaterFightRewardMsgD",
+        sub: "/Lotus/Language/Inbox/WaterFightRewardSubjectD",
+        icon: "/Lotus/Interface/Icons/Npcs/Grineer/KelaDeThaym.png"
+    },
+    "/Lotus/Types/Keys/WolfTacAlertReduxA": {
+        sndr: "/Lotus/Language/Bosses/NoraNight",
+        msg: "/Lotus/Language/Inbox/WolfTacAlertBody",
+        sub: "/Lotus/Language/Inbox/WolfTacAlertTitle",
+        icon: "/Lotus/Interface/Icons/Npcs/Seasonal/NoraNight.png"
+    },
+    "/Lotus/Types/Keys/WolfTacAlertReduxB": {
+        sndr: "/Lotus/Language/Bosses/NoraNight",
+        msg: "/Lotus/Language/Inbox/WolfTacAlertBody",
+        sub: "/Lotus/Language/Inbox/WolfTacAlertTitle",
+        icon: "/Lotus/Interface/Icons/Npcs/Seasonal/NoraNight.png"
+    },
+    "/Lotus/Types/Keys/WolfTacAlertReduxD": {
+        sndr: "/Lotus/Language/Bosses/NoraNight",
+        msg: "/Lotus/Language/Inbox/WolfTacAlertBody",
+        sub: "/Lotus/Language/Inbox/WolfTacAlertTitle",
+        icon: "/Lotus/Interface/Icons/Npcs/Seasonal/NoraNight.png"
+    },
+    "/Lotus/Types/Keys/WolfTacAlertReduxC": {
+        sndr: "/Lotus/Language/Bosses/NoraNight",
+        msg: "/Lotus/Language/Inbox/WolfTacAlertBody",
+        sub: "/Lotus/Language/Inbox/WolfTacAlertTitle",
+        icon: "/Lotus/Interface/Icons/Npcs/Seasonal/NoraNight.png"
+    },
+    "/Lotus/Types/Keys/LanternEndlessEventKeyA": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/G1Quests/GenericEventRewardMsgDesc",
+        sub: "/Lotus/Language/G1Quests/GenericTacAlertRewardMsgTitle",
+        icon: "/Lotus/Interface/Icons/Npcs/LotusVamp_d.png"
+    },
+    "/Lotus/Types/Keys/LanternEndlessEventKeyB": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/G1Quests/GenericEventRewardMsgDesc",
+        sub: "/Lotus/Language/G1Quests/GenericTacAlertRewardMsgTitle",
+        icon: "/Lotus/Interface/Icons/Npcs/LotusVamp_d.png"
+    },
+    "/Lotus/Types/Keys/LanternEndlessEventKeyD": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/G1Quests/GenericEventRewardMsgDesc",
+        sub: "/Lotus/Language/G1Quests/GenericTacAlertRewardMsgTitle",
+        icon: "/Lotus/Interface/Icons/Npcs/LotusVamp_d.png"
+    },
+    "/Lotus/Types/Keys/LanternEndlessEventKeyC": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/G1Quests/GenericEventRewardMsgDesc",
+        sub: "/Lotus/Language/G1Quests/GenericTacAlertRewardMsgTitle",
+        icon: "/Lotus/Interface/Icons/Npcs/LotusVamp_d.png"
+    },
+    "/Lotus/Types/Keys/TacAlertKeyHalloween": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/G1Quests/TacAlertHalloweenRewardsBonusBody",
+        sub: "/Lotus/Language/G1Quests/TacAlertHalloweenRewardsBonusTitle",
+        icon: "/Lotus/Interface/Icons/Npcs/LotusVamp_d.png"
+    },
+    "/Lotus/Types/Keys/TacAlertKeyHalloweenBonus": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/G1Quests/TacAlertHalloweenRewardsBody",
+        sub: "/Lotus/Language/G1Quests/TacAlertHalloweenRewardsTitle",
+        icon: "/Lotus/Interface/Icons/Npcs/LotusVamp_d.png"
+    },
+    "/Lotus/Types/Keys/TacAlertKeyHalloweenTimeAttack": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/G1Quests/TacAlertHalloweenRewardsBody",
+        sub: "/Lotus/Language/G1Quests/TacAlertHalloweenRewardsTitle",
+        icon: "/Lotus/Interface/Icons/Npcs/LotusVamp_d.png"
+    },
+    "/Lotus/Types/Keys/TacAlertKeyProxyRebellionOne": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/G1Quests/RazorbackArmadaRewardBody",
+        sub: "/Lotus/Language/G1Quests/GenericTacAlertSmallRewardMsgTitle",
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png"
+    },
+    "/Lotus/Types/Keys/TacAlertKeyProxyRebellionTwo": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/G1Quests/RazorbackArmadaRewardBody",
+        sub: "/Lotus/Language/G1Quests/GenericTacAlertSmallRewardMsgTitle",
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png"
+    },
+    "/Lotus/Types/Keys/TacAlertKeyProxyRebellionThree": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/G1Quests/RazorbackArmadaRewardBody",
+        sub: "/Lotus/Language/G1Quests/GenericTacAlertSmallRewardMsgTitle",
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png"
+    },
+    "/Lotus/Types/Keys/TacAlertKeyProxyRebellionFour": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/G1Quests/GenericTacAlertBadgeRewardMsgDesc",
+        sub: "/Lotus/Language/G1Quests/GenericTacAlertBadgeRewardMsgTitle",
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png"
+    },
+    "/Lotus/Types/Keys/TacAlertKeyProjectNightwatchEasy": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/G1Quests/ProjectNightwatchRewardMsgA",
+        sub: "/Lotus/Language/G1Quests/ProjectNightwatchTacAlertMissionOneTitle",
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png"
+    },
+    "/Lotus/Types/Keys/TacAlertKeyProjectNightwatch": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/G1Quests/ProjectNightwatchTacAlertMissionRewardBody",
+        sub: "/Lotus/Language/G1Quests/ProjectNightwatchTacAlertMissionTwoTitle",
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png"
+    },
+    "/Lotus/Types/Keys/TacAlertKeyProjectNightwatchHard": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/G1Quests/ProjectNightwatchTacAlertMissionRewardBody",
+        sub: "/Lotus/Language/G1Quests/ProjectNightwatchTacAlertMissionThreeTitle",
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png"
+    },
+    "/Lotus/Types/Keys/TacAlertKeyProjectNightwatchBonus": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/G1Quests/ProjectNightwatchTacAlertMissionRewardBody",
+        sub: "/Lotus/Language/G1Quests/ProjectNightwatchTacAlertMissionFourTitle",
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png"
     }
 };

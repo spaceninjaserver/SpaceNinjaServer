@@ -5,12 +5,14 @@ export interface IWorldState {
     Version: number; // for goals
     BuildLabel: string;
     Time: number;
+    InGameMarket: IInGameMarket;
     Goals: IGoal[];
     Alerts: [];
     Sorties: ISortie[];
     LiteSorties: ILiteSortie[];
     SyndicateMissions: ISyndicateMissionInfo[];
     ActiveMissions: IFissure[];
+    FlashSales: IFlashSale[];
     GlobalUpgrades: IGlobalUpgrade[];
     Invasions: IInvasion[];
     NodeOverrides: INodeOverride[];
@@ -39,10 +41,13 @@ export interface IGoal {
     Expiry: IMongoDate;
     Count?: number;
     Goal?: number;
+    InterimGoals?: number[];
+    BonusGoal?: number;
     HealthPct?: number;
     Success?: number;
     Personal?: boolean;
-    Bounty?: boolean;
+    Best?: boolean;
+    Bounty?: boolean; // Tactical Alert
     Faction?: string;
     ClampNodeScores?: boolean;
     Desc: string;
@@ -51,18 +56,28 @@ export interface IGoal {
     InstructionalItem?: string;
     Icon: string;
     Tag: string;
+    PrereqGoalTags?: string[];
     Node?: string;
     VictimNode?: string;
+    ConcurrentMissionKeyNames?: string[];
+    ConcurrentNodeReqs?: number[];
+    ConcurrentNodes?: string[];
     RegionIdx?: number;
     Regions?: number[];
     MissionKeyName?: string;
     Reward?: IMissionReward;
+    InterimRewards?: IMissionReward[];
+    BonusReward?: IMissionReward;
 
     JobAffiliationTag?: string;
     Jobs?: ISyndicateJob[];
     PreviousJobs?: ISyndicateJob[];
     JobCurrentVersion?: IOid;
     JobPreviousVersion?: IOid;
+
+    ScoreVar?: string;
+    ScoreMaxTag?: string;
+    NightLevel?: string;
 }
 
 export interface ISyndicateJob {
@@ -320,6 +335,37 @@ export type TCircuitGameMode =
     | "Exterminate"
     | "Assassination"
     | "Alchemy";
+
+export interface IFlashSale {
+    TypeName: string;
+    ShowInMarket: boolean;
+    HideFromMarket: boolean;
+    SupporterPack: boolean;
+    Discount: number;
+    BogoBuy: number;
+    BogoGet: number;
+    PremiumOverride: number;
+    RegularOverride: number;
+    ProductExpiryOverride?: IMongoDate;
+    StartDate: IMongoDate;
+    EndDate: IMongoDate;
+}
+
+export interface IInGameMarket {
+    LandingPage: ILandingPage;
+}
+
+export interface ILandingPage {
+    Categories: IGameMarketCategory[];
+}
+
+export interface IGameMarketCategory {
+    CategoryName: string;
+    Name: string;
+    Icon: string;
+    AddToMenu?: boolean;
+    Items?: string[];
+}
 
 export interface ITmp {
     cavabegin: string;

@@ -937,8 +937,57 @@
                                     <input class="form-check-input" type="checkbox" id="worldState.varziaFullyStocked" />
                                     <label class="form-check-label" for="worldState.varziaFullyStocked" data-loc="worldState_varziaFullyStocked"></label>
                                 </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="worldState.wolfHunt" />
+                                    <label class="form-check-label" for="worldState.wolfHunt" data-loc="worldState_wolfHunt"></label>
+                                    <abbr data-loc-inc="worldState_galleonOfGhouls"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M320 576C461.4 576 576 461.4 576 320C576 178.6 461.4 64 320 64C178.6 64 64 178.6 64 320C64 461.4 178.6 576 320 576zM320 200C333.3 200 344 210.7 344 224L344 336C344 349.3 333.3 360 320 360C306.7 360 296 349.3 296 336L296 224C296 210.7 306.7 200 320 200zM293.3 416C292.7 406.1 297.6 396.7 306.1 391.5C314.6 386.4 325.3 386.4 333.8 391.5C342.3 396.7 347.2 406.1 346.6 416C347.2 425.9 342.3 435.3 333.8 440.5C325.3 445.6 314.6 445.6 306.1 440.5C297.6 435.3 292.7 425.9 293.3 416z"/></svg></abbr>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="worldState.longShadow" />
+                                    <label class="form-check-label" for="worldState.longShadow" data-loc="worldState_longShadow"></label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="worldState.hallowedFlame" />
+                                    <label class="form-check-label" for="worldState.hallowedFlame" data-loc="worldState_hallowedFlame"></label>
+                                    <abbr data-loc-inc="worldState_hallowedNightmares|worldState_dogDays"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M320 576C461.4 576 576 461.4 576 320C576 178.6 461.4 64 320 64C178.6 64 64 178.6 64 320C64 461.4 178.6 576 320 576zM320 200C333.3 200 344 210.7 344 224L344 336C344 349.3 333.3 360 320 360C306.7 360 296 349.3 296 336L296 224C296 210.7 306.7 200 320 200zM293.3 416C292.7 406.1 297.6 396.7 306.1 391.5C314.6 386.4 325.3 386.4 333.8 391.5C342.3 396.7 347.2 406.1 346.6 416C347.2 425.9 342.3 435.3 333.8 440.5C325.3 445.6 314.6 445.6 306.1 440.5C297.6 435.3 292.7 425.9 293.3 416z"/></svg></abbr>
+                                </div>
+                                <div class="form-group mt-2 d-flex gap-2">
+                                    <div class="flex-fill">
+                                        <label class="form-label" for="worldState.hallowedNightmares" data-loc="worldState_hallowedNightmares"></label>
+                                        <abbr data-loc-inc="worldState_hallowedFlame|worldState_dogDays"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M320 576C461.4 576 576 461.4 576 320C576 178.6 461.4 64 320 64C178.6 64 64 178.6 64 320C64 461.4 178.6 576 320 576zM320 200C333.3 200 344 210.7 344 224L344 336C344 349.3 333.3 360 320 360C306.7 360 296 349.3 296 336L296 224C296 210.7 306.7 200 320 200zM293.3 416C292.7 406.1 297.6 396.7 306.1 391.5C314.6 386.4 325.3 386.4 333.8 391.5C342.3 396.7 347.2 406.1 346.6 416C347.2 425.9 342.3 435.3 333.8 440.5C325.3 445.6 314.6 445.6 306.1 440.5C297.6 435.3 292.7 425.9 293.3 416z"/></svg></abbr>
+                                        <select class="form-control" id="worldState.hallowedNightmares" data-default="false">
+                                            <option value="true" data-loc="enabled"></option>
+                                            <option value="false" data-loc="disabled"></option>
+                                        </select>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <label class="form-label" for="worldState.hallowedNightmaresRewardsOverride" data-loc="worldState_hallowedNightmaresRewards"></label>
+                                        <select class="form-control" id="worldState.hallowedNightmaresRewardsOverride" data-default="0">
+                                                <option value="0" data-loc="worldState_from_year" data-loc-year="2018"></option>
+                                                <option value="1" data-loc="worldState_from_year" data-loc-year="2016"></option>
+                                                <option value="2" data-loc="worldState_from_year" data-loc-year="2015"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group mt-2 d-flex gap-2">
+                                    <div class="flex-fill">
+                                        <label class="form-label" for="worldState.proxyRebellion" data-loc="worldState_proxyRebellion"></label>
+                                        <select class="form-control" id="worldState.proxyRebellion" data-default="false">
+                                            <option value="true" data-loc="enabled"></option>
+                                            <option value="false" data-loc="disabled"></option>
+                                        </select>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <label class="form-label" for="worldState.proxyRebellionRewardsOverride" data-loc="worldState_proxyRebellionRewards"></label>
+                                        <select class="form-control" id="worldState.proxyRebellionRewardsOverride" data-default="0">
+                                            <option value="0" data-loc="worldState_from_year" data-loc-year="2019"></option>
+                                            <option value="1" data-loc="worldState_from_year" data-loc-year="2018"></option>
+                                        </select>
+                                    </div>
+                                </div>
                                 <div class="form-group mt-2">
                                     <label class="form-label" for="worldState.galleonOfGhouls" data-loc="worldState_galleonOfGhouls"></label>
+                                    <abbr data-loc-inc="worldState_wolfHunt"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M320 576C461.4 576 576 461.4 576 320C576 178.6 461.4 64 320 64C178.6 64 64 178.6 64 320C64 461.4 178.6 576 320 576zM320 200C333.3 200 344 210.7 344 224L344 336C344 349.3 333.3 360 320 360C306.7 360 296 349.3 296 336L296 224C296 210.7 306.7 200 320 200zM293.3 416C292.7 406.1 297.6 396.7 306.1 391.5C314.6 386.4 325.3 386.4 333.8 391.5C342.3 396.7 347.2 406.1 346.6 416C347.2 425.9 342.3 435.3 333.8 440.5C325.3 445.6 314.6 445.6 306.1 440.5C297.6 435.3 292.7 425.9 293.3 416z"/></svg></abbr>
                                     <select class="form-control" id="worldState.galleonOfGhouls" data-default="0">
                                         <option value="0" data-loc="disabled"></option>
                                         <option value="1" data-loc="worldState_we1"></option>
@@ -969,6 +1018,27 @@
                                         <option value="true" data-loc="enabled"></option>
                                         <option value="false" data-loc="disabled"></option>
                                     </select>
+                                </div>
+                                <div class="form-group mt-2 d-flex gap-2">
+                                    <div class="flex-fill">
+                                        <label class="form-label" for="worldState.dogDaysOverride" data-loc="worldState_dogDays"></label>
+                                        <abbr data-loc-inc="worldState_hallowedFlame|worldState_hallowedNightmares"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M320 576C461.4 576 576 461.4 576 320C576 178.6 461.4 64 320 64C178.6 64 64 178.6 64 320C64 461.4 178.6 576 320 576zM320 200C333.3 200 344 210.7 344 224L344 336C344 349.3 333.3 360 320 360C306.7 360 296 349.3 296 336L296 224C296 210.7 306.7 200 320 200zM293.3 416C292.7 406.1 297.6 396.7 306.1 391.5C314.6 386.4 325.3 386.4 333.8 391.5C342.3 396.7 347.2 406.1 346.6 416C347.2 425.9 342.3 435.3 333.8 440.5C325.3 445.6 314.6 445.6 306.1 440.5C297.6 435.3 292.7 425.9 293.3 416z"/></svg></abbr>
+                                        <select class="form-control" id="worldState.dogDaysOverride" data-default="null">
+                                            <option value="null" data-loc="normal"></option>
+                                            <option value="true" data-loc="enabled"></option>
+                                            <option value="false" data-loc="disabled"></option>
+                                        </select>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <label class="form-label" for="worldState.dogDaysRewardsOverride" data-loc="worldState_dogDaysRewards"></label>
+                                        <select class="form-control" id="worldState.dogDaysRewardsOverride" data-default="null">
+                                            <option value="null" data-loc="normal"></option>
+                                            <option value="3" data-loc="worldState_from_year" data-loc-year="2025"></option>
+                                            <option value="2" data-loc="worldState_from_year" data-loc-year="2024"></option>
+                                            <option value="1" data-loc="worldState_from_year" data-loc-year="2023"></option>
+                                            <option value="0" data-loc="worldState_pre_year" data-loc-year="2023"></option>
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="form-group mt-2">
                                     <label class="form-label" for="worldState.eidolonOverride" data-loc="worldState_eidolonOverride"></label>

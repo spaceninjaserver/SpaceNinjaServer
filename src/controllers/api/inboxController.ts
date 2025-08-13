@@ -13,7 +13,8 @@ import {
     addItems,
     combineInventoryChanges,
     getEffectiveAvatarImageType,
-    getInventory
+    getInventory,
+    updateCurrency
 } from "@/src/services/inventoryService";
 import { logger } from "@/src/utils/logger";
 import { ExportFlavour } from "warframe-public-export-plus";
@@ -99,6 +100,9 @@ export const inboxController: RequestHandler = async (req, res) => {
                     ]);
                 }
             }
+        }
+        if (message.RegularCredits) {
+            updateCurrency(inventory, -message.RegularCredits, false, inventoryChanges);
         }
         await inventory.save();
         res.json({ InventoryChanges: inventoryChanges });

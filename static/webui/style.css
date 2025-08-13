@@ -29,9 +29,12 @@ body:not(.logged-in) .user-dropdown {
     display: none;
 }
 
-td.text-end > a > svg {
+/* font awesome icons */
+svg {
     fill: currentColor;
     height: 1em;
+}
+td.text-end > a > svg {
     margin-left: 0.5em;
     margin-bottom: 4px; /* to centre the icon */
 }

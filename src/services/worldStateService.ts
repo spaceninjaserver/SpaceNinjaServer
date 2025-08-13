@@ -1392,6 +1392,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         Sorties: [],
         LiteSorties: [],
         ActiveMissions: [],
+        FlashSales: [],
         GlobalUpgrades: [],
         Invasions: [],
         VoidTraders: [],
@@ -1401,7 +1402,15 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         EndlessXpChoices: [],
         KnownCalendarSeasons: [],
         ...staticWorldState,
-        SyndicateMissions: [...staticWorldState.SyndicateMissions]
+        SyndicateMissions: [...staticWorldState.SyndicateMissions],
+        InGameMarket: {
+            LandingPage: {
+                Categories: staticWorldState.InGameMarket.LandingPage.Categories.map(c => ({
+                    ...c,
+                    Items: [...c.Items]
+                }))
+            }
+        }
     };
 
     // Old versions seem to really get hung up on not being able to load these.
@@ -1526,7 +1535,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             Personal: true,
             Bounty: true,
             ClampNodeScores: true,
-            Node: "EventNode28",
+            Node: "EventNode28", // Incompatible with Wolf Hunt (2025)
             MissionKeyName: "/Lotus/Types/Keys/GalleonRobberyAlertB",
             Desc: "/Lotus/Language/Events/GalleonRobberyEventMissionTitle",
             Icon: "/Lotus/Interface/Icons/Player/GalleonRobberiesEvent.png",
@@ -1626,6 +1635,634 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             ],
             Transmission: "/Lotus/Sounds/Dialog/PlainsMeteorLeadUp/LeadUp/DLeadUp0021Lotus",
             InstructionalItem: "/Lotus/Types/StoreItems/Packages/PlagueStarEventStoreItem"
+        });
+    }
+
+    const firstAugustWeekday = new Date(Date.UTC(date.getUTCFullYear(), 7, 1)).getUTCDay();
+    const firstAugustWednesdayOffset = (3 - firstAugustWeekday + 7) % 7;
+    const dogDaysStart = Date.UTC(date.getUTCFullYear(), 7, 1 + firstAugustWednesdayOffset, 15);
+
+    const firstSeptemberWeekday = new Date(Date.UTC(date.getUTCFullYear(), 8, 1)).getUTCDay();
+    const firstSeptemberWednesdayOffset = (3 - firstSeptemberWeekday + 7) % 7;
+    const dogDaysEnd = Date.UTC(date.getUTCFullYear(), 8, 1 + firstSeptemberWednesdayOffset, 15);
+
+    const isDogDaysActive = timeMs >= dogDaysStart && timeMs < dogDaysEnd;
+    if (config.worldState?.dogDaysOverride ?? isDogDaysActive) {
+        const activationTimeStamp = config.worldState?.dogDaysOverride ? "1699372800000" : dogDaysStart.toString();
+        const expiryTimeStamp = config.worldState?.dogDaysOverride ? "2000000000000" : dogDaysEnd.toString();
+        const rewards = [
+            [
+                {
+                    credits: 50000,
+                    items: ["/Lotus/StoreItems/Upgrades/Skins/Weapons/Redeemer/RedeemerRelayWaterSkin"]
+                },
+                {
+                    credits: 50000,
+                    items: ["/Lotus/StoreItems/Types/Items/MiscItems/PhotoboothTileHydroidRelay"]
+                },
+                {
+                    credits: 50000,
+                    items: ["/Lotus/StoreItems/Types/Items/ShipDecos/RelayHydroidBobbleHead"]
+                },
+                {
+                    items: [
+                        "/Lotus/StoreItems/Types/Items/MiscItems/OrokinReactor",
+                        "/Lotus/StoreItems/Upgrades/Skins/Clan/BountyHunterBadgeItem"
+                    ]
+                }
+            ],
+            [
+                {
+                    credits: 50000,
+                    items: ["/Lotus/StoreItems/Upgrades/Skins/Sigils/DogDays2023ASigil"],
+                    countedItems: [
+                        {
+                            ItemType: "/Lotus/Types/Items/MiscItems/WaterFightBucks",
+                            ItemCount: 25
+                        }
+                    ]
+                },
+                {
+                    credits: 50000,
+                    items: ["/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/PlushyBeachKavat"],
+                    countedItems: [
+                        {
+                            ItemType: "/Lotus/Types/Items/MiscItems/WaterFightBucks",
+                            ItemCount: 50
+                        }
+                    ]
+                },
+                {
+                    credits: 50000,
+                    items: ["/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/PlushyRucksackKubrow"],
+                    countedItems: [
+                        {
+                            ItemType: "/Lotus/Types/Items/MiscItems/WaterFightBucks",
+                            ItemCount: 75
+                        }
+                    ]
+                },
+                {
+                    items: ["/Lotus/StoreItems/Types/Items/ShipDecos/LisetPropCleaningDroneBeachcomber"],
+                    countedItems: [
+                        {
+                            ItemType: "/Lotus/Types/Items/MiscItems/WaterFightBucks",
+                            ItemCount: 100
+                        }
+                    ]
+                }
+            ],
+            [
+                {
+                    credits: 50000,
+                    items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/Seasonal/AvatarImageDogDays2024Glyph"],
+                    countedItems: [
+                        {
+                            ItemType: "/Lotus/Types/Items/MiscItems/WaterFightBucks",
+                            ItemCount: 25
+                        }
+                    ]
+                },
+                {
+                    credits: 50000,
+                    items: ["/Lotus/StoreItems/Types/Items/ShipDecos/DogDays2024Poster"],
+                    countedItems: [
+                        {
+                            ItemType: "/Lotus/Types/Items/MiscItems/WaterFightBucks",
+                            ItemCount: 50
+                        }
+                    ]
+                },
+                {
+                    credits: 50000,
+                    items: ["/Lotus/StoreItems/Upgrades/Skins/Clan/DogDaysKubrowBadgeItem"],
+                    countedItems: [
+                        {
+                            ItemType: "/Lotus/Types/Items/MiscItems/WaterFightBucks",
+                            ItemCount: 75
+                        }
+                    ]
+                },
+                {
+                    items: ["/Lotus/StoreItems/Types/Items/ShipDecos/DogDays2024LisetPropCleaningDroneBeachcomber"],
+                    countedItems: [
+                        {
+                            ItemType: "/Lotus/Types/Items/MiscItems/WaterFightBucks",
+                            ItemCount: 100
+                        }
+                    ]
+                }
+            ],
+            [
+                {
+                    credits: 50000,
+                    items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/AvatarImageDogDaysHydroidGlyph"],
+                    countedItems: [
+                        {
+                            ItemType: "/Lotus/Types/Items/MiscItems/WaterFightBucks",
+                            ItemCount: 25
+                        }
+                    ]
+                },
+                {
+                    credits: 50000,
+                    items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/AvatarImageDogDaysLokiGlyph"],
+                    countedItems: [
+                        {
+                            ItemType: "/Lotus/Types/Items/MiscItems/WaterFightBucks",
+                            ItemCount: 50
+                        }
+                    ]
+                },
+                {
+                    credits: 50000,
+                    items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/AvatarImageDogDaysNovaGlyph"],
+                    countedItems: [
+                        {
+                            ItemType: "/Lotus/Types/Items/MiscItems/WaterFightBucks",
+                            ItemCount: 75
+                        }
+                    ]
+                },
+                {
+                    credits: 50000,
+                    items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/AvatarImageDogDaysValkyrGlyph"],
+                    countedItems: [
+                        {
+                            ItemType: "/Lotus/Types/Items/MiscItems/WaterFightBucks",
+                            ItemCount: 100
+                        }
+                    ]
+                }
+            ]
+        ];
+
+        const year = config.worldState?.dogDaysRewardsOverride ?? 3;
+
+        worldState.Goals.push({
+            _id: {
+                $oid: ((dogDaysStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "c57487c3768936df"
+            },
+            Activation: { $date: { $numberLong: activationTimeStamp } },
+            Expiry: { $date: { $numberLong: expiryTimeStamp } },
+            Count: 0,
+            Goal: 100,
+            InterimGoals: [25, 50],
+            BonusGoal: 200,
+            Success: 0,
+            Personal: true,
+            Bounty: true,
+            ClampNodeScores: true,
+            Node: "EventNode25", // Incompatible with Hallowed Flame, Hallowed Nightmares
+            ConcurrentMissionKeyNames: [
+                "/Lotus/Types/Keys/TacAlertKeyWaterFightB",
+                "/Lotus/Types/Keys/TacAlertKeyWaterFightC",
+                "/Lotus/Types/Keys/TacAlertKeyWaterFightD"
+            ],
+            ConcurrentNodeReqs: [25, 50, 100],
+            ConcurrentNodes: ["EventNode24", "EventNode34", "EventNode35"], // Incompatible with Hallowed Flame, Hallowed Nightmares
+            MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyWaterFightA",
+            Faction: "FC_CORPUS",
+            Desc: "/Lotus/Language/Alerts/TacAlertWaterFight",
+            Icon: "/Lotus/Interface/Icons/StoreIcons/Emblems/SplashEventIcon.png",
+            Tag: "WaterFight",
+            InterimRewards: rewards[year].slice(0, 2),
+            Reward: rewards[year][2],
+            BonusReward: rewards[year][3],
+            ScoreVar: "Team1Score",
+            NightLevel: "/Lotus/Levels/GrineerBeach/GrineerBeachEventNight.level"
+        });
+
+        const baseStoreItem = {
+            ShowInMarket: true,
+            HideFromMarket: false,
+            SupporterPack: false,
+            Discount: 0,
+            BogoBuy: 0,
+            BogoGet: 0,
+            StartDate: { $date: { $numberLong: activationTimeStamp } },
+            EndDate: { $date: { $numberLong: expiryTimeStamp } },
+            ProductExpiryOverride: { $date: { $numberLong: expiryTimeStamp } }
+        };
+
+        const storeItems = [
+            {
+                TypeName: "/Lotus/Types/StoreItems/Packages/WaterFightNoggleBundle",
+                PremiumOverride: 240,
+                RegularOverride: 0
+            },
+            {
+                TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFBeastMasterBobbleHead",
+                PremiumOverride: 35,
+                RegularOverride: 0
+            },
+            {
+                TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFChargerBobbleHead",
+                PremiumOverride: 35,
+                RegularOverride: 0
+            },
+            {
+                TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFEngineerBobbleHead",
+                PremiumOverride: 35,
+                RegularOverride: 0
+            },
+            {
+                TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFGruntBobbleHead",
+                PremiumOverride: 35,
+                RegularOverride: 0
+            },
+            {
+                TypeName: "/Lotus/Types/StoreItems/AvatarImages/ImagePopsicleGrineerPurple",
+                PremiumOverride: 0,
+                RegularOverride: 1
+            },
+            {
+                TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFHealerBobbleHead",
+                PremiumOverride: 35,
+                RegularOverride: 0
+            },
+            {
+                TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFHeavyBobbleHead",
+                PremiumOverride: 35,
+                RegularOverride: 0
+            },
+            {
+                TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFHellionBobbleHead",
+                PremiumOverride: 35,
+                RegularOverride: 0
+            },
+            {
+                TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFSniperBobbleHead",
+                PremiumOverride: 35,
+                RegularOverride: 0
+            },
+            {
+                TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFTankBobbleHead",
+                PremiumOverride: 35,
+                RegularOverride: 0
+            },
+            {
+                TypeName: "/Lotus/Types/StoreItems/SuitCustomizations/ColourPickerRollers",
+                PremiumOverride: 75,
+                RegularOverride: 0
+            }
+        ];
+
+        worldState.FlashSales.push(...storeItems.map(item => ({ ...baseStoreItem, ...item })));
+
+        const seasonalItems = storeItems.map(item => item.TypeName);
+
+        const seasonalCategory = worldState.InGameMarket.LandingPage.Categories.find(c => c.CategoryName == "SEASONAL");
+
+        if (seasonalCategory) {
+            seasonalCategory.Items ??= [];
+            seasonalCategory.Items.push(...seasonalItems);
+        } else {
+            worldState.InGameMarket.LandingPage.Categories.push({
+                CategoryName: "SEASONAL",
+                Name: "/Lotus/Language/Store/SeasonalCategoryTitle",
+                Icon: "seasonal",
+                AddToMenu: true,
+                Items: seasonalItems
+            });
+        }
+    }
+
+    if (config.worldState?.wolfHunt) {
+        worldState.Goals.push({
+            _id: {
+                $oid: "67ed7672798d6466172e3b9d"
+            },
+            Activation: {
+                $date: {
+                    $numberLong: "1743616800000"
+                }
+            },
+            Expiry: {
+                $date: {
+                    $numberLong: "2000000000000"
+                }
+            },
+            Count: 0,
+            Goal: 3,
+            InterimGoals: [1, 2],
+            BonusGoal: 4,
+            Success: 0,
+            Personal: true,
+            Bounty: true,
+            ClampNodeScores: true,
+            Node: "EventNode29",
+            ConcurrentMissionKeyNames: [
+                "/Lotus/Types/Keys/WolfTacAlertReduxB",
+                "/Lotus/Types/Keys/WolfTacAlertReduxC",
+                "/Lotus/Types/Keys/WolfTacAlertReduxD"
+            ],
+            ConcurrentNodeReqs: [1, 2, 3],
+            ConcurrentNodes: ["EventNode28", "EventNode39", "EventNode40"], // Incompatible with Galleon Of Ghouls
+            MissionKeyName: "/Lotus/Types/Keys/WolfTacAlertReduxA",
+            Faction: "FC_GRINEER",
+            Desc: "/Lotus/Language/Alerts/WolfAlert",
+            Icon: "/Lotus/Interface/Icons/Npcs/Seasonal/WolfStalker.png",
+            Tag: "WolfHuntRedux",
+            InterimRewards: [
+                {
+                    credits: 50000,
+                    items: ["/Lotus/StoreItems/Types/Recipes/Weapons/WeaponParts/ThrowingHammerHandle"]
+                },
+                {
+                    credits: 50000,
+                    items: ["/Lotus/StoreItems/Types/Recipes/Weapons/WeaponParts/ThrowingHammerHead"]
+                }
+            ],
+            Reward: {
+                credits: 50000,
+                items: ["/Lotus/StoreItems/Types/Recipes/Weapons/WeaponParts/ThrowingHammerMotor"]
+            },
+            BonusReward: {
+                credits: 50000,
+                items: [
+                    "/Lotus/StoreItems/Types/Recipes/Weapons/ThrowingHammerBlueprint",
+                    "/Lotus/StoreItems/Types/Items/MiscItems/OrokinCatalyst",
+                    "/Lotus/StoreItems/Upgrades/Skins/Clan/BountyHunterBadgeItem"
+                ]
+            }
+        });
+    }
+
+    if (config.worldState?.hallowedFlame) {
+        worldState.Goals.push(
+            {
+                _id: { $oid: "5db305403d34b5158873519a" },
+                Activation: { $date: { $numberLong: "1699372800000" } },
+                Expiry: { $date: { $numberLong: "2000000000000" } },
+                Count: 0,
+                Goal: 3,
+                InterimGoals: [1, 2],
+                Success: 0,
+                Personal: true,
+                Bounty: true,
+                ClampNodeScores: true,
+                Node: "EventNode24", // Incompatible with Hallowed Nightmares, Dog Days
+                ConcurrentMissionKeyNames: [
+                    "/Lotus/Types/Keys/LanternEndlessEventKeyB",
+                    "/Lotus/Types/Keys/LanternEndlessEventKeyC"
+                ],
+                ConcurrentNodeReqs: [1, 2],
+                ConcurrentNodes: ["EventNode25", "EventNode34"], // Incompatible with Hallowed Nightmares, Dog Days
+                MissionKeyName: "/Lotus/Types/Keys/LanternEndlessEventKeyA",
+                Faction: "FC_INFESTATION",
+                Desc: "/Lotus/Language/Events/TacAlertHalloweenLantern",
+                Icon: "/Lotus/Interface/Icons/JackOLanternColour.png",
+                Tag: "Halloween19",
+                InterimRewards: [
+                    { items: ["/Lotus/StoreItems/Types/Items/MiscItems/OrokinCatalyst"] },
+                    { items: ["/Lotus/StoreItems/Types/Items/MiscItems/Forma"] }
+                ],
+                Reward: {
+                    items: ["/Lotus/StoreItems/Types/Items/MiscItems/FormaAura"]
+                }
+            },
+            {
+                _id: { $oid: "5db3054a3d34b5158873519c" },
+                Activation: { $date: { $numberLong: "1699372800000" } },
+                Expiry: { $date: { $numberLong: "2000000000000" } },
+                Count: 0,
+                Goal: 900,
+                Success: 0,
+                Personal: true,
+                Bounty: true,
+                Best: true,
+                ClampNodeScores: true,
+                Node: "EventNode35",
+                MissionKeyName: "/Lotus/Types/Keys/LanternEndlessEventKeyD",
+                Faction: "FC_INFESTATION",
+                Desc: "/Lotus/Language/Events/TacAlertHalloweenLanternEndless",
+                Icon: "/Lotus/Interface/Icons/JackOLanternColour.png",
+                Tag: "Halloween19Endless",
+                PrereqGoalTags: ["Halloween19"],
+                Reward: {
+                    items: [
+                        "/Lotus/StoreItems/Upgrades/Skins/Effects/BatsEphemera",
+                        "/Lotus/StoreItems/Upgrades/Skins/Clan/BountyHunterBadgeItem"
+                    ]
+                },
+                ScoreVar: "EndlessMissionTimeElapsed",
+                ScoreMaxTag: "Halloween19ScoreMax"
+            }
+        );
+    }
+
+    if (config.worldState?.hallowedNightmares) {
+        const rewards = [
+            // 2018
+            [
+                {
+                    items: ["/Lotus/StoreItems/Upgrades/Skins/Sigils/DotD2016Sigil"]
+                },
+                {
+                    items: ["/Lotus/StoreItems/Upgrades/Skins/Halloween/HalloweenDread"]
+                },
+                {
+                    items: ["/Lotus/StoreItems/Types/Items/MiscItems/OrokinReactor"]
+                }
+            ],
+            // 2016
+            [
+                {
+                    items: ["/Lotus/StoreItems/Upgrades/Skins/Sigils/OrokinCatalyst"]
+                },
+                {
+                    items: ["/Lotus/StoreItems/Upgrades/Skins/Sigils/DotD2016Sigil"]
+                },
+                {
+                    items: [
+                        "/Lotus/StoreItems/Types/Items/MiscItems/OrokinReactor",
+                        "/Lotus/StoreItems/Upgrades/Skins/Clan/BountyHunterBadgeItem"
+                    ]
+                }
+            ],
+            // 2015
+            [
+                {
+                    items: ["/Lotus/StoreItems/Upgrades/Skins/Sigils/OrokinCatalyst"]
+                },
+                {
+                    items: ["/Lotus/StoreItems/Upgrades/Skins/Clan/BountyHunterBadgeItem"]
+                }
+            ]
+        ];
+        const year = config.worldState.hallowedNightmaresRewardsOverride ?? 0;
+
+        worldState.Goals.push({
+            _id: { $oid: "5bc9e8f7972d7d184c8398c9" },
+            Activation: { $date: { $numberLong: "1539972000000" } },
+            Expiry: { $date: { $numberLong: "2000000000000" } },
+            Count: 0,
+            InterimGoals: [1],
+            Goal: 2,
+            Success: 0,
+            Personal: true,
+            Bounty: true,
+            Tag: "Halloween",
+            Faction: "FC_INFESTATION",
+            Desc: "/Lotus/Language/G1Quests/TacAlertHalloweenTitle",
+            ToolTip: "/Lotus/Language/G1Quests/TacAlertHalloweenToolTip",
+            Icon: "/Lotus/Interface/Icons/JackOLanternColour.png",
+            ClampNodeScores: true,
+            Node: "EventNode2",
+            MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyHalloween",
+            ConcurrentMissionKeyNames: ["/Lotus/Types/Keys/TacAlertKeyHalloweenBonus"],
+            ConcurrentNodeReqs: [1],
+            ConcurrentNodes: ["EventNode24"], // Incompatible with Hallowed Flame, Dog Days
+            InterimRewards: [rewards[year][0]],
+            Reward: rewards[year][1]
+        });
+        if (year != 2) {
+            worldState.Goals.push({
+                _id: { $oid: "5bca18b1e12d9e14a0b6ad27" },
+                Activation: { $date: { $numberLong: "1539972000000" } },
+                Expiry: { $date: { $numberLong: "2000000000000" } },
+                Count: 0,
+                Goal: 666,
+                Success: 0,
+                Personal: true,
+                Bounty: true,
+                Best: true,
+                Tag: "Halloween",
+                PrereqGoalTags: ["Halloween"],
+                Faction: "FC_INFESTATION",
+                Desc: "Hallowed Nightmares - Time Attack",
+                ToolTip: "/Lotus/Language/G1Quests/TacAlertHalloweenToolTip",
+                Icon: "/Lotus/Interface/Icons/JackOLanternColour.png",
+                ClampNodeScores: true,
+                Node: "EventNode25", // Incompatible with Hallowed Flame, Dog Days
+                MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyHalloweenTimeAttack",
+                ScoreVar: "TimeAttackScore",
+                ScoreMaxTag: "Halloween16",
+                Reward: rewards[year][2]
+            });
+        }
+    }
+
+    if (config.worldState?.proxyRebellion) {
+        const rewards = [
+            // 2019
+            [
+                {
+                    credits: 50000,
+                    items: ["/Lotus/StoreItems/Types/Items/MiscItems/UtilityUnlocker"]
+                },
+                {
+                    credits: 50000,
+                    items: ["/Lotus/StoreItems/Upgrades/Mods/Randomized/RawPistolRandomMod"]
+                },
+                {
+                    credits: 50000,
+                    items: ["/Lotus/Types/StoreItems/Packages/EventCatalystReactorBundle"]
+                },
+                {
+                    items: [
+                        "/Lotus/StoreItems/Upgrades/Skins/Scarves/HornSkullScarf",
+                        "/Lotus/StoreItems/Upgrades/Skins/Clan/BountyHunterBadgeItem"
+                    ]
+                }
+            ],
+            // 2018
+            [
+                {
+                    credits: 50000,
+                    items: ["/Lotus/StoreItems/Upgrades/Mods/FusionBundles/NightwatchFusionBundle"]
+                },
+                {
+                    credits: 50000,
+                    items: ["/Lotus/StoreItems/Types/Items/MiscItems/UtilityUnlocker"]
+                },
+                {
+                    credits: 50000,
+                    items: ["/Lotus/Types/StoreItems/Packages/EventCatalystReactorBundle"]
+                },
+                {
+                    items: [
+                        "/Lotus/StoreItems/Upgrades/Skins/Sigils/EnergySigilA",
+                        "/Lotus/StoreItems/Upgrades/Skins/Clan/BountyHunterBadgeItem"
+                    ]
+                }
+            ]
+        ];
+        const year = config.worldState.proxyRebellionRewardsOverride ?? 0;
+
+        worldState.Goals.push({
+            _id: { $oid: "5b5743ac972d7d3ed0517b0d" },
+            Activation: { $date: { $numberLong: "1532714400000" } },
+            Expiry: { $date: { $numberLong: "2000000000000" } },
+            Count: 0,
+            Goal: 3,
+            InterimGoals: [1, 2],
+            BonusGoal: 4,
+            Success: 0,
+            Personal: true,
+            Bounty: true,
+            ClampNodeScores: true,
+            Node: "EventNode18",
+            ConcurrentMissionKeyNames: [
+                "/Lotus/Types/Keys/TacAlertKeyProxyRebellionTwo",
+                "/Lotus/Types/Keys/TacAlertKeyProxyRebellionThree",
+                "/Lotus/Types/Keys/TacAlertKeyProxyRebellionFour"
+            ],
+            ConcurrentNodeReqs: [1, 2, 3],
+            ConcurrentNodes: ["EventNode7", "EventNode4", "EventNode17"],
+            MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyProxyRebellionOne",
+            Faction: "FC_CORPUS",
+            Desc: "/Lotus/Language/Alerts/TacAlertProxyRebellion",
+            Icon: "/Lotus/Materials/Emblems/BountyBadge_e.png",
+            Tag: "ProxyRebellion",
+            InterimRewards: rewards[year].slice(0, 2),
+            Reward: rewards[year][2],
+            BonusReward: rewards[year][3]
+        });
+    }
+
+    if (config.worldState?.longShadow) {
+        worldState.Goals.push({
+            _id: { $oid: "5bc9e8f7272d5d184c8398c9" },
+            Activation: { $date: { $numberLong: "1539972000000" } },
+            Expiry: { $date: { $numberLong: "2000000000000" } },
+            Count: 0,
+            InterimGoals: [1, 2],
+            Goal: 3,
+            BonusGoal: 4,
+            Success: 0,
+            Personal: true,
+            Bounty: true,
+            Tag: "NightwatchTacAlert",
+            Faction: "FC_GRINEER",
+            Desc: "/Lotus/Language/G1Quests/ProjectNightwatchTacAlertTitle",
+            Icon: "/Lotus/Materials/Emblems/BountyBadge_e.png",
+            ClampNodeScores: true,
+            Node: "EventNode9",
+            MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyProjectNightwatchEasy",
+            ConcurrentMissionKeyNames: [
+                "/Lotus/Types/Keys/TacAlertKeyProjectNightwatch",
+                "/Lotus/Types/Keys/TacAlertKeyProjectNightwatchHard",
+                "/Lotus/Types/Keys/TacAlertKeyProjectNightwatchBonus"
+            ],
+            ConcurrentNodeReqs: [1, 2, 3],
+            ConcurrentNodes: ["SolNode136", "EventNode3", "EventNode0"],
+            InterimRewards: [
+                {
+                    credits: 50000,
+                    countedItems: [
+                        { ItemType: "/Lotus/Upgrades/Mods/FusionBundles/RareFusionBundle", ItemCount: 10 } // Not sure about that
+                    ]
+                },
+                {
+                    items: ["/Lotus/StoreItems/Types/Items/MiscItems/UtilityUnlocker"]
+                }
+            ],
+            Reward: {
+                items: ["/Lotus/Types/StoreItems/Packages/EventCatalystReactorBundle"]
+            },
+            BonusReward: { items: ["/Lotus/StoreItems/Upgrades/Skins/Clan/BountyHunterBadgeItem"] }
         });
     }
 

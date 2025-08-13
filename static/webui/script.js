@@ -202,6 +202,17 @@ function updateLocElements() {
     document.querySelectorAll("[data-loc-placeholder]").forEach(elm => {
         elm.placeholder = loc(elm.getAttribute("data-loc-placeholder"));
     });
+    document.querySelectorAll("[data-loc-inc]").forEach(elm => {
+        const incWith = elm
+            .getAttribute("data-loc-inc")
+            .split("|")
+            .map(key => loc(key))
+            .join(", ");
+        elm.title = `${loc("worldState_incompatibleWith")} ${incWith}`;
+    });
+    document.querySelectorAll("[data-loc-year]").forEach(elm => {
+        elm.innerHTML = elm.innerHTML.replace("|YEAR|", elm.getAttribute("data-loc-year"));
+    });
 }
 
 function setActiveLanguage(lang) {

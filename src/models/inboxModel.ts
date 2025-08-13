@@ -47,6 +47,7 @@ export interface IMessage {
     acceptAction?: string;
     declineAction?: string;
     hasAccountAction?: boolean;
+    RegularCredits?: number;
 }
 
 export interface Arg {
@@ -139,7 +140,8 @@ const messageSchema = new Schema<IMessageDatabase>(
         contextInfo: String,
         acceptAction: String,
         declineAction: String,
-        hasAccountAction: Boolean
+        hasAccountAction: Boolean,
+        RegularCredits: Number
     },
     { id: false }
 );
