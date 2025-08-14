@@ -22,8 +22,11 @@ export interface INemesisManifest {
     ephemeraTypes?: Record<TInnateDamageTag, string>;
     firstKillReward: string;
     firstConvertReward: string;
-    messageTitle: string;
-    messageBody: string;
+    killMessageSubject: string;
+    killMessageBody: string;
+    convertMessageSubject: string;
+    convertMessageBody: string;
+    convertMessageIcon: string;
     minBuild: string;
 }
 
@@ -57,8 +60,11 @@ class KuvaLichManifest implements INemesisManifest {
     };
     firstKillReward = "/Lotus/StoreItems/Upgrades/Skins/Clan/LichKillerBadgeItem";
     firstConvertReward = "/Lotus/StoreItems/Upgrades/Skins/Sigils/KuvaLichSigil";
-    messageTitle = "/Lotus/Language/Inbox/VanquishKuvaMsgTitle";
-    messageBody = "/Lotus/Language/Inbox/VanquishLichMsgBody";
+    killMessageSubject = "/Lotus/Language/Inbox/VanquishKuvaMsgTitle";
+    killMessageBody = "/Lotus/Language/Inbox/VanquishLichMsgBody";
+    convertMessageSubject = "/Lotus/Language/Kingpins/InboxKuvaConvertedSubject";
+    convertMessageBody = "/Lotus/Language/Kingpins/InboxKuvaConvertedBody";
+    convertMessageIcon = "/Lotus/Interface/Graphics/WorldStatePanel/Grineer.png";
     minBuild = "2019.10.31.22.42"; // 26.0.0
 }
 
@@ -131,8 +137,11 @@ class LawyerManifest implements INemesisManifest {
     };
     firstKillReward = "/Lotus/StoreItems/Upgrades/Skins/Clan/CorpusLichBadgeItem";
     firstConvertReward = "/Lotus/StoreItems/Upgrades/Skins/Sigils/CorpusLichSigil";
-    messageTitle = "/Lotus/Language/Inbox/VanquishLawyerMsgTitle";
-    messageBody = "/Lotus/Language/Inbox/VanquishLichMsgBody";
+    killMessageSubject = "/Lotus/Language/Inbox/VanquishLawyerMsgTitle";
+    killMessageBody = "/Lotus/Language/Inbox/VanquishLichMsgBody";
+    convertMessageSubject = "/Lotus/Language/Kingpins/InboxSisterConvertedSubject";
+    convertMessageBody = "/Lotus/Language/Kingpins/InboxSisterConvertedBody";
+    convertMessageIcon = "/Lotus/Interface/Graphics/WorldStatePanel/Corpus.png";
     minBuild = "2021.07.05.17.03"; // 30.5.0
 }
 
@@ -166,8 +175,11 @@ class InfestedLichManfest implements INemesisManifest {
     ephemeraChance = 0;
     firstKillReward = "/Lotus/StoreItems/Upgrades/Skins/Sigils/InfLichVanquishedSigil";
     firstConvertReward = "/Lotus/StoreItems/Upgrades/Skins/Sigils/InfLichConvertedSigil";
-    messageTitle = "/Lotus/Language/Inbox/VanquishBandMsgTitle";
-    messageBody = "/Lotus/Language/Inbox/VanquishBandMsgBody";
+    killMessageSubject = "/Lotus/Language/Inbox/VanquishBandMsgTitle";
+    killMessageBody = "/Lotus/Language/Inbox/VanquishBandMsgBody";
+    convertMessageSubject = "/Lotus/Language/Kingpins/InboxBandConvertedSubject";
+    convertMessageBody = "/Lotus/Language/Kingpins/InboxBandConvertedBody";
+    convertMessageIcon = "/Lotus/Interface/Graphics/WorldStatePanel/Infested.png";
     minBuild = "2025.03.18.09.51"; // 38.5.0
 }
 

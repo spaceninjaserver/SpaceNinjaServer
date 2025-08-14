@@ -841,26 +841,24 @@ export const addMissionInventoryUpdates = async (
                         }
                     }
 
-                    if (value.killed) {
-                        await createMessage(inventory.accountOwnerId, [
-                            {
-                                sndr: "/Lotus/Language/Bosses/Ordis",
-                                msg: manifest.messageBody,
-                                arg: [
-                                    {
-                                        Key: "LICH_NAME",
-                                        Tag: value.nemesisName
-                                    }
-                                ],
-                                att: att,
-                                countedAtt: countedAtt,
-                                attVisualOnly: true,
-                                sub: manifest.messageTitle,
-                                icon: "/Lotus/Interface/Icons/Npcs/Ordis.png",
-                                highPriority: true
-                            }
-                        ]);
-                    }
+                    await createMessage(inventory.accountOwnerId, [
+                        {
+                            sndr: value.killed ? "/Lotus/Language/Bosses/Ordis" : value.nemesisName,
+                            msg: value.killed ? manifest.killMessageBody : manifest.convertMessageBody,
+                            arg: [
+                                {
+                                    Key: "LICH_NAME",
+                                    Tag: value.nemesisName
+                                }
+                            ],
+                            att: att,
+                            countedAtt: countedAtt,
+                            attVisualOnly: true,
+                            sub: value.killed ? manifest.killMessageSubject : manifest.convertMessageSubject,
+                            icon: value.killed ? "/Lotus/Interface/Icons/Npcs/Ordis.png" : manifest.convertMessageIcon,
+                            highPriority: true
+                        }
+                    ]);
 
                     inventory.Nemesis = undefined;
                 }
