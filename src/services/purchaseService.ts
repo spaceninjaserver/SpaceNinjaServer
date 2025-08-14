@@ -1,4 +1,4 @@
-import { parseSlotPurchaseName } from "@/src/helpers/purchaseHelpers";
+import { parseSlotPurchaseName, slotPurchaseNameToSlotName } from "@/src/helpers/purchaseHelpers";
 import { getSubstringFromKeyword } from "@/src/helpers/stringHelpers";
 import {
     addBooster,
@@ -14,7 +14,6 @@ import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import {
     IPurchaseRequest,
     IPurchaseResponse,
-    SlotPurchase,
     IInventoryChanges,
     PurchaseSource,
     IPurchaseParams
@@ -470,19 +469,6 @@ export const handleStoreItemAcquisition = async (
         }
     }
     return purchaseResponse;
-};
-
-export const slotPurchaseNameToSlotName: SlotPurchase = {
-    SuitSlotItem: { name: "SuitBin", purchaseQuantity: 1 },
-    TwoSentinelSlotItem: { name: "SentinelBin", purchaseQuantity: 2 },
-    TwoWeaponSlotItem: { name: "WeaponBin", purchaseQuantity: 2 },
-    SpaceSuitSlotItem: { name: "SpaceSuitBin", purchaseQuantity: 1 },
-    TwoSpaceWeaponSlotItem: { name: "SpaceWeaponBin", purchaseQuantity: 2 },
-    MechSlotItem: { name: "MechBin", purchaseQuantity: 1 },
-    TwoOperatorWeaponSlotItem: { name: "OperatorAmpBin", purchaseQuantity: 2 },
-    RandomModSlotItem: { name: "RandomModBin", purchaseQuantity: 3 },
-    TwoCrewShipSalvageSlotItem: { name: "CrewShipSalvageBin", purchaseQuantity: 2 },
-    CrewMemberSlotItem: { name: "CrewMemberBin", purchaseQuantity: 1 }
 };
 
 // // extra = everything above the base +2 slots (depending on slot type)
