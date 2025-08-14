@@ -19,6 +19,15 @@ export type InventoryDatabaseEquipment = {
     [_ in TEquipmentKey]: IEquipmentDatabase[];
 };
 
+// Fields specific to SNS
+export interface IAccountCheats {
+    infiniteCredits?: boolean;
+    infinitePlatinum?: boolean;
+    infiniteEndo?: boolean;
+    infiniteRegalAya?: boolean;
+    infiniteHelminthMaterials?: boolean;
+}
+
 export interface IInventoryDatabase
     extends Omit<
             IInventoryClient,
@@ -61,7 +70,8 @@ export interface IInventoryDatabase
             | "PersonalGoalProgress"
             | TEquipmentKey
         >,
-        InventoryDatabaseEquipment {
+        InventoryDatabaseEquipment,
+        IAccountCheats {
     accountOwnerId: Types.ObjectId;
     Created: Date;
     TrainingDate: Date;

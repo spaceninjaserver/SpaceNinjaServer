@@ -3,7 +3,6 @@ import { getAccountIdForRequest } from "@/src/services/loginService";
 import { RequestHandler } from "express";
 import { IInventoryClient, IUpgradeClient } from "@/src/types/inventoryTypes/inventoryTypes";
 import { addMods, getInventory } from "@/src/services/inventoryService";
-import { config } from "@/src/services/configService";
 
 export const artifactsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -34,10 +33,10 @@ export const artifactsController: RequestHandler = async (req, res) => {
         addMods(inventory, [{ ItemType, ItemCount: -1 }]);
     }
 
-    if (!config.infiniteCredits) {
+    if (!inventory.infiniteCredits) {
         inventory.RegularCredits -= Cost;
     }
-    if (!config.infiniteEndo) {
+    if (!inventory.infiniteEndo) {
         inventory.FusionPoints -= FusionPointCost;
     }
 

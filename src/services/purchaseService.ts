@@ -327,7 +327,7 @@ export const handlePurchase = async (
                         purchaseResponse.InventoryChanges.MiscItems ??= [];
                         purchaseResponse.InventoryChanges.MiscItems.push(invItem);
                     }
-                } else if (!config.infiniteRegalAya) {
+                } else if (!inventory.infiniteRegalAya) {
                     inventory.PrimeTokens -= offer.PrimePrice! * purchaseRequest.PurchaseParams.Quantity;
 
                     purchaseResponse.InventoryChanges.PrimeTokens ??= 0;

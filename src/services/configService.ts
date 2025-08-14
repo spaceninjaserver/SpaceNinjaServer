@@ -20,11 +20,6 @@ export interface IConfig {
     skipTutorial?: boolean;
     skipAllDialogue?: boolean;
     unlockAllScans?: boolean;
-    infiniteCredits?: boolean;
-    infinitePlatinum?: boolean;
-    infiniteEndo?: boolean;
-    infiniteRegalAya?: boolean;
-    infiniteHelminthMaterials?: boolean;
     claimingBlueprintRefundsIngredients?: boolean;
     dontSubtractPurchaseCreditCost?: boolean;
     dontSubtractPurchasePlatinumCost?: boolean;

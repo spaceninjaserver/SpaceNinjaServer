@@ -1,5 +1,4 @@
 import { RequestHandler } from "express";
-import { config } from "@/src/services/configService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getInventory } from "@/src/services/inventoryService";
 
@@ -9,7 +8,7 @@ export const creditsController: RequestHandler = async (req, res) => {
             getAccountIdForRequest(req),
             getInventory(
                 req.query.accountId as string,
-                "RegularCredits TradesRemaining PremiumCreditsFree PremiumCredits"
+                "RegularCredits TradesRemaining PremiumCreditsFree PremiumCredits infiniteCredits infinitePlatinum"
             )
         ])
     )[1];
@@ -21,10 +20,10 @@ export const creditsController: RequestHandler = async (req, res) => {
         PremiumCredits: inventory.PremiumCredits
     };
 
-    if (config.infiniteCredits) {
+    if (inventory.infiniteCredits) {
         response.RegularCredits = 999999999;
     }
-    if (config.infinitePlatinum) {
+    if (inventory.infinitePlatinum) {
         response.PremiumCreditsFree = 0;
         response.PremiumCredits = 999999999;
     }

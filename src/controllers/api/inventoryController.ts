@@ -295,17 +295,17 @@ export const getInventoryResponse = async (
         };
     }
 
-    if (config.infiniteCredits) {
+    if (inventory.infiniteCredits) {
         inventoryResponse.RegularCredits = 999999999;
     }
-    if (config.infinitePlatinum) {
+    if (inventory.infinitePlatinum) {
         inventoryResponse.PremiumCreditsFree = 0;
         inventoryResponse.PremiumCredits = 999999999;
     }
-    if (config.infiniteEndo) {
+    if (inventory.infiniteEndo) {
         inventoryResponse.FusionPoints = 999999999;
     }
-    if (config.infiniteRegalAya) {
+    if (inventory.infiniteRegalAya) {
         inventoryResponse.PrimeTokens = 999999999;
     }
 
@@ -450,7 +450,7 @@ export const getInventoryResponse = async (
     }
 
     if (inventoryResponse.InfestedFoundry) {
-        applyCheatsToInfestedFoundry(inventoryResponse.InfestedFoundry);
+        applyCheatsToInfestedFoundry(inventory, inventoryResponse.InfestedFoundry);
     }
 
     // Set 2FA enabled so trading post can be used

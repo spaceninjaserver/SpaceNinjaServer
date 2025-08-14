@@ -28,6 +28,7 @@ import { setBoosterController } from "@/src/controllers/custom/setBoosterControl
 import { updateFingerprintController } from "@/src/controllers/custom/updateFingerprintController";
 import { changeModularPartsController } from "@/src/controllers/custom/changeModularPartsController";
 import { editSuitInvigorationUpgradeController } from "@/src/controllers/custom/editSuitInvigorationUpgradeController";
+import { setAccountCheatController } from "@/src/controllers/custom/setAccountCheatController";
 
 import { getConfigController, setConfigController } from "@/src/controllers/custom/configController";
 
@@ -61,6 +62,7 @@ customRouter.post("/setBooster", setBoosterController);
 customRouter.post("/updateFingerprint", updateFingerprintController);
 customRouter.post("/changeModularParts", changeModularPartsController);
 customRouter.post("/editSuitInvigorationUpgrade", editSuitInvigorationUpgradeController);
+customRouter.post("/setAccountCheat", setAccountCheatController);
 
 customRouter.post("/getConfig", getConfigController);
 customRouter.post("/setConfig", setConfigController);

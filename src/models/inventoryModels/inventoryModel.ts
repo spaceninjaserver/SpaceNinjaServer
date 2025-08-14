@@ -1425,6 +1425,14 @@ const hubNpcCustomizationSchema = new Schema<IHubNpcCustomization>(
 const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
     {
         accountOwnerId: Schema.Types.ObjectId,
+
+        // SNS account cheats
+        infiniteCredits: Boolean,
+        infinitePlatinum: Boolean,
+        infiniteEndo: Boolean,
+        infiniteRegalAya: Boolean,
+        infiniteHelminthMaterials: Boolean,
+
         SubscribedToEmails: { type: Number, default: 0 },
         SubscribedToEmailsPersonalized: { type: Number, default: 0 },
         RewardSeed: BigInt,

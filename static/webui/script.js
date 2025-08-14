@@ -605,6 +605,8 @@ function fetchItemList() {
 }
 fetchItemList();
 
+const accountCheats = document.querySelectorAll("#account-cheats input[id]");
+
 // Assumes that caller revalidates authz
 function updateInventory() {
     const req = $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1");
@@ -1473,6 +1475,10 @@ function updateInventory() {
                 }
                 document.getElementById("Boosters-list").appendChild(tr);
             });
+
+            for (const elm of accountCheats) {
+                elm.checked = !!data[elm.id];
+            }
         });
     });
 }
@@ -2109,6 +2115,8 @@ function doAcquireModMax() {
     alert("doAcquireModMax: " + uniqueName);
 }
 
+// Cheats route
+
 const uiConfigs = [...$(".config-form input[id], .config-form select[id]")].map(x => x.id);
 
 for (const id of uiConfigs) {
@@ -2192,8 +2200,6 @@ function doSaveConfigStringArray(id) {
         })
     });
 }
-
-// Cheats route
 
 single.getRoute("/webui/cheats").on("beforeload", function () {
     let interval;
@@ -2305,6 +2311,23 @@ function doIntrinsicsUnlockAll() {
         $.get("/custom/unlockAllIntrinsics?" + window.authz);
     });
 }
+
+document.querySelectorAll("#account-cheats input[type=checkbox]").forEach(elm => {
+    elm.onchange = function () {
+        revalidateAuthz().then(() => {
+            $.post({
+                url: "/custom/setAccountCheat?" + window.authz /*+ "&wsid=" + wsid*/,
+                contentType: "application/json",
+                data: JSON.stringify({
+                    key: elm.id,
+                    value: elm.checked
+                })
+            });
+        });
+    };
+});
+
+// Mods route
 
 function doAddAllMods() {
     let modsAll = new Set();

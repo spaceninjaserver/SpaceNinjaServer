@@ -7,7 +7,6 @@ import { addMiscItems, addRecipes, getInventory, updateCurrency } from "@/src/se
 import { getRecipeByResult } from "@/src/services/itemDataService";
 import { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { addInfestedFoundryXP, applyCheatsToInfestedFoundry } from "@/src/services/infestedFoundryService";
-import { config } from "@/src/services/configService";
 import { sendWsBroadcastTo } from "@/src/services/wsService";
 import { EquipmentFeatures, IEquipmentDatabase } from "@/src/types/equipmentTypes";
 
@@ -52,7 +51,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
                 const recipe = getRecipeByResult(operation.UpgradeRequirement)!;
                 for (const ingredient of recipe.ingredients) {
                     totalPercentagePointsConsumed += ingredient.ItemCount / 10;
-                    if (!config.infiniteHelminthMaterials) {
+                    if (!inventory.infiniteHelminthMaterials) {
                         inventory.InfestedFoundry!.Resources!.find(x => x.ItemType == ingredient.ItemType)!.Count -=
                             ingredient.ItemCount;
                     }
@@ -69,7 +68,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
 
             inventoryChanges.Recipes = recipeChanges;
             inventoryChanges.InfestedFoundry = inventory.toJSON<IInventoryClient>().InfestedFoundry;
-            applyCheatsToInfestedFoundry(inventoryChanges.InfestedFoundry!);
+            applyCheatsToInfestedFoundry(inventory, inventoryChanges.InfestedFoundry!);
         } else
             switch (operation.UpgradeRequirement) {
                 case "/Lotus/Types/Items/MiscItems/OrokinReactor":

@@ -664,26 +664,6 @@
                                         <label class="form-check-label" for="unlockAllScans" data-loc="cheats_unlockAllScans"></label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="infiniteCredits" />
-                                        <label class="form-check-label" for="infiniteCredits" data-loc="cheats_infiniteCredits"></label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="infinitePlatinum" />
-                                        <label class="form-check-label" for="infinitePlatinum" data-loc="cheats_infinitePlatinum"></label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="infiniteEndo" />
-                                        <label class="form-check-label" for="infiniteEndo" data-loc="cheats_infiniteEndo"></label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="infiniteRegalAya" />
-                                        <label class="form-check-label" for="infiniteRegalAya" data-loc="cheats_infiniteRegalAya"></label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="infiniteHelminthMaterials" />
-                                        <label class="form-check-label" for="infiniteHelminthMaterials" data-loc="cheats_infiniteHelminthMaterials"></label>
-                                    </div>
-                                    <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="claimingBlueprintRefundsIngredients" />
                                         <label class="form-check-label" for="claimingBlueprintRefundsIngredients" data-loc="cheats_claimingBlueprintRefundsIngredients"></label>
                                     </div>
@@ -891,8 +871,28 @@
                     <div class="col-md-6">
                         <div class="card mb-3">
                             <h5 class="card-header" data-loc="cheats_account"></h5>
-                            <div class="card-body">
-                                <div class="mb-2 d-flex flex-wrap gap-2">
+                            <div class="card-body" id="account-cheats">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="infiniteCredits" />
+                                    <label class="form-check-label" for="infiniteCredits" data-loc="cheats_infiniteCredits"></label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="infinitePlatinum" />
+                                    <label class="form-check-label" for="infinitePlatinum" data-loc="cheats_infinitePlatinum"></label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="infiniteEndo" />
+                                    <label class="form-check-label" for="infiniteEndo" data-loc="cheats_infiniteEndo"></label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="infiniteRegalAya" />
+                                    <label class="form-check-label" for="infiniteRegalAya" data-loc="cheats_infiniteRegalAya"></label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="infiniteHelminthMaterials" />
+                                    <label class="form-check-label" for="infiniteHelminthMaterials" data-loc="cheats_infiniteHelminthMaterials"></label>
+                                </div>
+                                <div class="mt-2 mb-2 d-flex flex-wrap gap-2">
                                     <button class="btn btn-primary" onclick="debounce(doUnlockAllMissions);" data-loc="cheats_unlockAllMissions"></button>
                                     <button class="btn btn-primary" onclick="debounce(markAllAsRead);" data-loc="cheats_markAllAsRead"></button>
                                     <button class="btn btn-primary" onclick="doUnlockAllFocusSchools();" data-loc="cheats_unlockAllFocusSchools"></button>

@@ -1201,8 +1201,8 @@ export const updateSlots = (
     }
 };
 
-const isCurrencyTracked = (usePremium: boolean): boolean => {
-    return usePremium ? !config.infinitePlatinum : !config.infiniteCredits;
+const isCurrencyTracked = (inventory: TInventoryDatabaseDocument, usePremium: boolean): boolean => {
+    return usePremium ? !inventory.infinitePlatinum : !inventory.infiniteCredits;
 };
 
 export const updateCurrency = (
@@ -1211,7 +1211,7 @@ export const updateCurrency = (
     usePremium: boolean,
     inventoryChanges: IInventoryChanges = {}
 ): IInventoryChanges => {
-    if (price != 0 && isCurrencyTracked(usePremium)) {
+    if (price != 0 && isCurrencyTracked(inventory, usePremium)) {
         if (usePremium) {
             if (inventory.PremiumCreditsFree > 0) {
                 const premiumCreditsFreeDelta = Math.min(price, inventory.PremiumCreditsFree) * -1;
