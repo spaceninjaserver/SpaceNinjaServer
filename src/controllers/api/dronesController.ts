@@ -72,7 +72,7 @@ export const dronesController: RequestHandler = async (req, res) => {
                 );
             }
         } else {
-            drone.ResourceCount = 1;
+            drone.ResourceCount = droneMeta.binCapacity * droneMeta.capacityMultipliers[resource.Rarity];
         }
         await inventory.save();
         res.json({});
