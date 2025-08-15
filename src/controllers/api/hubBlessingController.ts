@@ -12,7 +12,7 @@ export const hubBlessingController: RequestHandler = async (req, res) => {
     if (req.query.mode == "send") {
         const inventory = await getInventory(accountId, "BlessingCooldown Boosters");
         inventory.BlessingCooldown = new Date(Date.now() + 86400000);
-        addBooster(boosterType, 3 * 3600, inventory);
+        addBooster(boosterType, 3 * 3600, inventory); // unfaithful, but current HUB server does not handle broadcasting, so this way users can bless themselves.
         await inventory.save();
 
         let token = "";
