@@ -19,6 +19,8 @@ import {
 import { Document, Model, model, Schema, Types } from "mongoose";
 import { fusionTreasuresSchema, typeCountSchema } from "@/src/models/inventoryModels/inventoryModel";
 import { pictureFrameInfoSchema } from "@/src/models/personalRoomsModel";
+import { IGoalProgressClient, IGoalProgressDatabase } from "@/src/types/inventoryTypes/inventoryTypes";
+import { toOid } from "@/src/helpers/inventoryHelpers";
 
 const dojoDecoSchema = new Schema<IDojoDecoDatabase>({
     Type: String,
@@ -174,6 +176,28 @@ const guildLogEntryNumberSchema = new Schema<IGuildLogEntryNumber>(
     { _id: false }
 );
 
+const goalProgressSchema = new Schema<IGoalProgressDatabase>(
+    {
+        Count: Number,
+        Tag: String,
+        goalId: Types.ObjectId
+    },
+    { _id: false }
+);
+
+goalProgressSchema.set("toJSON", {
+    virtuals: true,
+    transform(_doc, obj: Record<string, any>) {
+        const db = obj as IGoalProgressDatabase;
+        const client = obj as IGoalProgressClient;
+
+        client._id = toOid(db.goalId);
+
+        delete obj.goalId;
+        delete obj.__v;
+    }
+});
+
 const guildSchema = new Schema<IGuildDatabase>(
     {
         Name: { type: String, required: true, unique: true },
@@ -206,7 +230,8 @@ const guildSchema = new Schema<IGuildDatabase>(
         RoomChanges: { type: [guildLogRoomChangeSchema], default: undefined },
         TechChanges: { type: [guildLogEntryContributableSchema], default: undefined },
         RosterActivity: { type: [guildLogEntryRosterSchema], default: undefined },
-        ClassChanges: { type: [guildLogEntryNumberSchema], default: undefined }
+        ClassChanges: { type: [guildLogEntryNumberSchema], default: undefined },
+        GoalProgress: { type: [goalProgressSchema], default: undefined }
     },
     { id: false }
 );

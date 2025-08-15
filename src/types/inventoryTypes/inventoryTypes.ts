@@ -109,7 +109,7 @@ export interface IInventoryDatabase
     QualifyingInvasions: IInvasionProgressDatabase[];
     LastInventorySync?: Types.ObjectId;
     EndlessXP?: IEndlessXpProgressDatabase[];
-    PersonalGoalProgress?: IPersonalGoalProgressDatabase[];
+    PersonalGoalProgress?: IGoalProgressDatabase[];
 }
 
 export interface IQuestKeyDatabase {
@@ -318,7 +318,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     HWIDProtectEnabled?: boolean;
     KubrowPetPrints: IKubrowPetPrintClient[];
     AlignmentReplay?: IAlignment;
-    PersonalGoalProgress?: IPersonalGoalProgressClient[];
+    PersonalGoalProgress?: IGoalProgressClient[];
     ThemeStyle: string;
     ThemeBackground: string;
     ThemeSounds: string;
@@ -895,8 +895,8 @@ export interface IPeriodicMissionCompletionResponse extends Omit<IPeriodicMissio
     date: IMongoDate;
 }
 
-export interface IPersonalGoalProgressClient {
-    Best: number;
+export interface IGoalProgressClient {
+    Best?: number;
     Count: number;
     Tag: string;
     _id: IOid;
@@ -904,7 +904,7 @@ export interface IPersonalGoalProgressClient {
     //ReceivedClanReward1?: boolean;
 }
 
-export interface IPersonalGoalProgressDatabase extends Omit<IPersonalGoalProgressClient, "_id"> {
+export interface IGoalProgressDatabase extends Omit<IGoalProgressClient, "_id"> {
     goalId: Types.ObjectId;
 }
 

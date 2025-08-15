@@ -91,6 +91,10 @@ export interface IConfig {
         starDaysOverride?: boolean;
         dogDaysOverride?: boolean;
         dogDaysRewardsOverride?: number;
+        bellyOfTheBeast?: boolean;
+        bellyOfTheBeastProgressOverride?: number;
+        eightClaw?: boolean;
+        eightClawProgressOverride?: number;
         eidolonOverride?: string;
         vallisOverride?: string;
         duviriOverride?: string;

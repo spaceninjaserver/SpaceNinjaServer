@@ -81,6 +81,8 @@ import { fromOid } from "@/src/helpers/inventoryHelpers";
 import { TAccountDocument } from "@/src/services/loginService";
 import { ITypeCount } from "@/src/types/commonTypes";
 import { IEquipmentClient } from "@/src/types/equipmentTypes";
+import { Guild } from "@/src/models/guildModel";
+import { handleGuildGoalProgress } from "@/src/services/guildService";
 
 const getRotations = (rewardInfo: IRewardInfo, tierOverride?: number): number[] => {
     // Disruption missions just tell us (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2599)
@@ -712,8 +714,18 @@ export const addMissionInventoryUpdates = async (
                         }
 
                         if (goalProgress) {
-                            goalProgress.Best = Math.max(goalProgress.Best, uploadProgress.Best);
+                            goalProgress.Best = Math.max(goalProgress.Best!, uploadProgress.Best);
                             goalProgress.Count += uploadProgress.Count;
+                        }
+                    }
+                    if (goal && goal.ClanGoal && inventory.GuildId) {
+                        const guild = await Guild.findById(inventory.GuildId, "GoalProgress Tier VaultDecoRecipes");
+                        if (guild) {
+                            await handleGuildGoalProgress(guild, {
+                                Count: uploadProgress.Count,
+                                Tag: goal.Tag,
+                                goalId: new Types.ObjectId(goal._id.$oid)
+                            });
                         }
                     }
                 }

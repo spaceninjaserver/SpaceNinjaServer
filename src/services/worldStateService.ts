@@ -2265,6 +2265,49 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             BonusReward: { items: ["/Lotus/StoreItems/Upgrades/Skins/Clan/BountyHunterBadgeItem"] }
         });
     }
+    if (config.worldState?.bellyOfTheBeast) {
+        worldState.Goals.push({
+            _id: { $oid: "67a5035c2a198564d62e165e" },
+            Activation: { $date: { $numberLong: "1738868400000" } },
+            Expiry: { $date: { $numberLong: "2000000000000" } },
+            Count: config.worldState.bellyOfTheBeastProgressOverride ?? 0,
+            HealthPct: (config.worldState.bellyOfTheBeastProgressOverride ?? 0) / 100,
+            Goal: 0,
+            Personal: true,
+            Community: true,
+            ClanGoal: [72, 216, 648, 1944, 5832],
+            Tag: "JadeShadowsEvent",
+            Faction: "FC_MITW",
+            Desc: "/Lotus/Language/JadeShadows/JadeShadowsEventName",
+            ToolTip: "/Lotus/Language/JadeShadows/JadeShadowsShortEventDesc",
+            Icon: "/Lotus/Interface/Icons/WorldStatePanel/JadeShadowsEventBadge.png",
+            ScoreLocTag: "/Lotus/Language/JadeShadows/JadeShadowsEventScore",
+            Node: "SolNode723",
+            MissionKeyName: "/Lotus/Types/Keys/JadeShadowsEventMission",
+            ItemType: "/Lotus/Types/Gameplay/JadeShadows/Resources/AscensionEventResourceItem"
+        });
+    }
+    if (config.worldState?.eightClaw) {
+        worldState.Goals.push({
+            _id: { $oid: "685c15f80000000000000000" },
+            Activation: { $date: { $numberLong: "1750865400000" } },
+            Expiry: { $date: { $numberLong: "2000000000000" } },
+            Count: config.worldState.eightClawProgressOverride ?? 0,
+            HealthPct: (config.worldState.eightClawProgressOverride ?? 0) / 100,
+            Goal: 0,
+            Personal: true,
+            Community: true,
+            ClanGoal: [72, 216, 648, 1944, 5832],
+            Tag: "DuviriMurmurEvent",
+            Faction: "FC_MITW",
+            Desc: "/Lotus/Language/Isleweaver/DuviriMurmurEventTitle",
+            ToolTip: "/Lotus/Language/Isleweaver/DuviriMurmurEventDescription",
+            Icon: "/Lotus/Interface/Icons/WorldStatePanel/EightClawEventBadge.png",
+            ScoreLocTag: "/Lotus/Language/Isleweaver/DuviriMurmurEventScore",
+            Node: "SolNode236",
+            MissionKeyName: "/Lotus/Types/Keys/DuviriMITW/DuviriMITWEventKey"
+        });
+    }
 
     // Nightwave Challenges
     const nightwaveSyndicateTag = getNightwaveSyndicateTag(buildLabel);

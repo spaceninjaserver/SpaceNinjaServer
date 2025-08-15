@@ -62,6 +62,7 @@ import { getFriendsController } from "@/src/controllers/api/getFriendsController
 import { getGuildContributionsController } from "@/src/controllers/api/getGuildContributionsController";
 import { getGuildController } from "@/src/controllers/api/getGuildController";
 import { getGuildDojoController } from "@/src/controllers/api/getGuildDojoController";
+import { getGuildEventScoreController } from "@/src/controllers/api/getGuildEventScore";
 import { getGuildLogController } from "@/src/controllers/api/getGuildLogController";
 import { getIgnoredUsersController } from "@/src/controllers/api/getIgnoredUsersController";
 import { getNewRewardSeedController } from "@/src/controllers/api/getNewRewardSeedController";
@@ -192,6 +193,7 @@ apiRouter.get("/getFriends.php", getFriendsController);
 apiRouter.get("/getGuild.php", getGuildController);
 apiRouter.get("/getGuildContributions.php", getGuildContributionsController);
 apiRouter.get("/getGuildDojo.php", getGuildDojoController);
+apiRouter.get("/getGuildEventScore.php", getGuildEventScoreController);
 apiRouter.get("/getGuildLog.php", getGuildLogController);
 apiRouter.get("/getIgnoredUsers.php", getIgnoredUsersController);
 apiRouter.get("/getMessages.php", inboxController); // unsure if this is correct, but needed for U17

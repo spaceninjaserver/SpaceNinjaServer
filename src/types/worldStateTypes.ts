@@ -39,32 +39,44 @@ export interface IGoal {
     _id: IOid;
     Activation: IMongoDate;
     Expiry: IMongoDate;
+
     Count?: number;
+    HealthPct?: number;
+
+    Icon: string;
+    Desc: string;
+    ToolTip?: string;
+    Faction?: string;
+
     Goal?: number;
     InterimGoals?: number[];
     BonusGoal?: number;
-    HealthPct?: number;
+    ClanGoal?: number[];
+
     Success?: number;
     Personal?: boolean;
-    Best?: boolean;
+    Community?: boolean;
+    Best?: boolean; // Fist one on Event Tab
     Bounty?: boolean; // Tactical Alert
-    Faction?: string;
     ClampNodeScores?: boolean;
-    Desc: string;
-    ToolTip?: string;
+
     Transmission?: string;
     InstructionalItem?: string;
-    Icon: string;
+    ItemType?: string;
+
     Tag: string;
     PrereqGoalTags?: string[];
+
     Node?: string;
     VictimNode?: string;
+
     ConcurrentMissionKeyNames?: string[];
     ConcurrentNodeReqs?: number[];
     ConcurrentNodes?: string[];
     RegionIdx?: number;
     Regions?: number[];
     MissionKeyName?: string;
+
     Reward?: IMissionReward;
     InterimRewards?: IMissionReward[];
     BonusReward?: IMissionReward;
@@ -77,6 +89,8 @@ export interface IGoal {
 
     ScoreVar?: string;
     ScoreMaxTag?: string;
+    ScoreLocTag?: string;
+
     NightLevel?: string;
 }
 

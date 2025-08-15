@@ -36,6 +36,9 @@ import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/invento
 import { fromStoreItem, toStoreItem } from "@/src/services/itemDataService";
 import { DailyDeal } from "@/src/models/worldStateModel";
 import { fromMongoDate, toMongoDate } from "@/src/helpers/inventoryHelpers";
+import { Guild } from "@/src/models/guildModel";
+import { handleGuildGoalProgress } from "@/src/services/guildService";
+import { Types } from "mongoose";
 
 export const getStoreItemCategory = (storeItem: string): string => {
     const storeItemString = getSubstringFromKeyword(storeItem, "StoreItems/");
@@ -135,6 +138,22 @@ export const handlePurchase = async (
             if (!config.dontSubtractPurchasePlatinumCost) {
                 if (offer.PremiumPrice) {
                     updateCurrency(inventory, offer.PremiumPrice[0], true, prePurchaseInventoryChanges);
+                }
+            }
+            if (
+                inventory.GuildId &&
+                offer.ItemPrices &&
+                manifest.VendorInfo.TypeName ==
+                    "/Lotus/Types/Game/VendorManifests/Events/DuviriMurmurInvasionVendorManifest"
+            ) {
+                const guild = await Guild.findById(inventory.GuildId, "GoalProgress Tier VaultDecoRecipes");
+                const goal = getWorldState().Goals.find(x => x.Tag == "DuviriMurmurEvent");
+                if (guild && goal) {
+                    await handleGuildGoalProgress(guild, {
+                        Count: offer.ItemPrices[0].ItemCount * purchaseRequest.PurchaseParams.Quantity,
+                        Tag: goal.Tag,
+                        goalId: new Types.ObjectId(goal._id.$oid)
+                    });
                 }
             }
             if (!config.dontSubtractPurchaseItemCost) {

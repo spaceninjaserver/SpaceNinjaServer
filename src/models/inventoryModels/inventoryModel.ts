@@ -85,8 +85,8 @@ import {
     IAccolades,
     IHubNpcCustomization,
     IEndlessXpReward,
-    IPersonalGoalProgressDatabase,
-    IPersonalGoalProgressClient,
+    IGoalProgressDatabase,
+    IGoalProgressClient,
     IKubrowPetPrintClient,
     IKubrowPetPrintDatabase
 } from "@/src/types/inventoryTypes/inventoryTypes";
@@ -445,7 +445,7 @@ const discoveredMarkerSchema = new Schema<IDiscoveredMarker>(
     { _id: false }
 );
 
-const personalGoalProgressSchema = new Schema<IPersonalGoalProgressDatabase>(
+const personalGoalProgressSchema = new Schema<IGoalProgressDatabase>(
     {
         Best: Number,
         Count: Number,
@@ -458,8 +458,8 @@ const personalGoalProgressSchema = new Schema<IPersonalGoalProgressDatabase>(
 personalGoalProgressSchema.set("toJSON", {
     virtuals: true,
     transform(_doc, obj: Record<string, any>) {
-        const db = obj as IPersonalGoalProgressDatabase;
-        const client = obj as IPersonalGoalProgressClient;
+        const db = obj as IGoalProgressDatabase;
+        const client = obj as IGoalProgressClient;
 
         client._id = toOid(db.goalId);
 

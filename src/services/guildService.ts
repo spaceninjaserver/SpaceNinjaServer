@@ -115,7 +115,14 @@ export const getGuildClient = async (
         NumContributors: guild.CeremonyContributors?.length ?? 0,
         CeremonyResetDate: guild.CeremonyResetDate ? toMongoDate(guild.CeremonyResetDate) : undefined,
         AutoContributeFromVault: guild.AutoContributeFromVault,
-        AllianceId: guild.AllianceId ? toOid2(guild.AllianceId, account.BuildLabel) : undefined
+        AllianceId: guild.AllianceId ? toOid2(guild.AllianceId, account.BuildLabel) : undefined,
+        GoalProgress: guild.GoalProgress
+            ? guild.GoalProgress.map(gp => ({
+                  Count: gp.Count,
+                  Tag: gp.Tag,
+                  _id: { $oid: gp.goalId.toString() }
+              }))
+            : undefined
     };
 };
 
@@ -808,4 +815,86 @@ export const getAllianceClient = async (
             DojoRefundRegularCredits: alliance.VaultRegularCredits
         }
     };
+};
+
+export const handleGuildGoalProgress = async (
+    guild: TGuildDatabaseDocument,
+    upload: { Count: number; Tag: string; goalId: Types.ObjectId }
+): Promise<void> => {
+    guild.GoalProgress ??= [];
+    const goalProgress = guild.GoalProgress.find(x => x.goalId.equals(upload.goalId));
+    if (!goalProgress) {
+        guild.GoalProgress.push({
+            Count: upload.Count,
+            Tag: upload.Tag,
+            goalId: upload.goalId
+        });
+    }
+    const totalCount = (goalProgress?.Count ?? 0) + upload.Count;
+    const guildRewards = goalGuildRewardByTag[upload.Tag].rewards;
+    const tierGoals = goalGuildRewardByTag[upload.Tag].guildGoals[guild.Tier - 1];
+    const rewards = [];
+    if (tierGoals.length && guildRewards.length) {
+        for (let i = 0; i < tierGoals.length; i++) {
+            if (
+                tierGoals[i] &&
+                tierGoals[i] <= totalCount &&
+                (!goalProgress || goalProgress.Count < tierGoals[i]) &&
+                guildRewards[i]
+            ) {
+                rewards.push(guildRewards[i]);
+            }
+        }
+
+        if (rewards.length) {
+            logger.debug(`guild goal rewards`, rewards);
+            guild.VaultDecoRecipes ??= [];
+            rewards.forEach(type => {
+                guild.VaultDecoRecipes!.push({
+                    ItemType: type,
+                    ItemCount: 1
+                });
+            });
+        }
+    }
+
+    if (goalProgress) {
+        goalProgress.Count += upload.Count;
+    }
+    await guild.save();
+};
+
+export const goalGuildRewardByTag: Record<string, { guildGoals: number[][]; rewards: string[] }> = {
+    JadeShadowsEvent: {
+        guildGoals: [
+            // I don't know what ClanGoal means
+            [15, 30, 45, 60],
+            [45, 90, 135, 180],
+            [150, 300, 450, 600],
+            [450, 900, 1350, 1800],
+            [1500, 3000, 4500, 6000]
+        ],
+        rewards: [
+            "/Lotus/Levels/ClanDojo/ComponentPropRecipes/JadeShadowsEventPewterTrophyRecipe",
+            "/Lotus/Levels/ClanDojo/ComponentPropRecipes/JadeShadowsEventBronzeTrophyRecipe",
+            "/Lotus/Levels/ClanDojo/ComponentPropRecipes/JadeShadowsEventSilverTrophyRecipe",
+            "/Lotus/Levels/ClanDojo/ComponentPropRecipes/JadeShadowsEventGoldTrophyRecipe"
+        ]
+    },
+    DuviriMurmurEvent: {
+        guildGoals: [
+            // I don't know what ClanGoal means
+            [260, 519, 779, 1038],
+            [779, 1557, 2336, 3114],
+            [2595, 5190, 7785, 10380],
+            [7785, 15570, 23355, 31140],
+            [29950, 51900, 77850, 103800]
+        ],
+        rewards: [
+            "/Lotus/Levels/ClanDojo/ComponentPropRecipes/DuviriMurmurEventClayTrophyRecipe",
+            "/Lotus/Levels/ClanDojo/ComponentPropRecipes/DuviriMurmurEventBronzeTrophyRecipe",
+            "/Lotus/Levels/ClanDojo/ComponentPropRecipes/DuviriMurmurEventSilverTrophyRecipe",
+            "/Lotus/Levels/ClanDojo/ComponentPropRecipes/DuviriMurmurEventGoldTrophyRecipe"
+        ]
+    }
 };

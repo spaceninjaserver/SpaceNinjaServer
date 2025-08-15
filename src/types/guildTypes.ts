@@ -1,6 +1,11 @@
 import { Types } from "mongoose";
 import { IOid, IMongoDate, IOidWithLegacySupport, ITypeCount } from "@/src/types/commonTypes";
-import { IFusionTreasure, IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
+import {
+    IFusionTreasure,
+    IMiscItem,
+    IGoalProgressDatabase,
+    IGoalProgressClient
+} from "@/src/types/inventoryTypes/inventoryTypes";
 import { IPictureFrameInfo } from "@/src/types/personalRoomsTypes";
 import { IFriendInfo } from "@/src/types/friendTypes";
 
@@ -23,6 +28,8 @@ export interface IGuildClient {
     CrossPlatformEnabled?: boolean;
     AutoContributeFromVault?: boolean;
     AllianceId?: IOidWithLegacySupport;
+
+    GoalProgress?: IGoalProgressClient[];
 }
 
 export interface IGuildDatabase {
@@ -63,6 +70,8 @@ export interface IGuildDatabase {
     TechChanges?: IGuildLogEntryContributable[];
     RosterActivity?: IGuildLogEntryRoster[];
     ClassChanges?: IGuildLogEntryNumber[];
+
+    GoalProgress?: IGoalProgressDatabase[];
 }
 
 export interface ILongMOTD {
