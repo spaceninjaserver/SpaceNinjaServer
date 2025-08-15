@@ -307,7 +307,8 @@ dict = {
     worldState_varziaFullyStocked: `Varzia hat volles Inventar`,
     worldState_varziaOverride: `Varzia-Angebotsüberschreibung`,
 
-    import_importNote: `Du kannst hier eine vollständige oder teilweise Inventarantwort (Client-Darstellung) einfügen. Alle Felder, die vom Importer unterstützt werden, <b>werden in deinem Account überschrieben</b>.`,
+    import_importNote: `[UNTRANSLATED] You can provide a full or partial <code>inventory.php</code> or <code>getShip.php</code> response (client representation) here.`,
+    import_importNote2: `Alle Felder, die vom Importer unterstützt werden, <b>werden in deinem Account überschrieben</b>.`,
     import_submit: `Absenden`,
     import_samples: `Beispiele:`,
     import_samples_maxFocus: `Alle Fokus-Schulen maximiert`,

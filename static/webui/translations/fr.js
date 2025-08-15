@@ -307,7 +307,8 @@ dict = {
     worldState_varziaFullyStocked: `Stock de Varzia au max`,
     worldState_varziaOverride: `Rotation de Varzia`,
 
-    import_importNote: `Import manuel. Toutes les modifcations supportées par l'inventaire <b>écraseront celles présentes dans la base de données</b>.`,
+    import_importNote: `[UNTRANSLATED] You can provide a full or partial <code>inventory.php</code> or <code>getShip.php</code> response (client representation) here.`,
+    import_importNote2: `[UNTRANSLATED] All fields that are supported by the importer <b>will be overwritten</b> in your account.`,
     import_submit: `Soumettre`,
     import_samples: `Échantillons :`,
     import_samples_maxFocus: `Toutes les écoles de focus au rang max`,

@@ -90,7 +90,7 @@ export interface IGardeningDatabase {
 export interface IApartmentClient {
     Gardening: IGardeningClient;
     Rooms: IRoom[];
-    FavouriteLoadouts: IFavouriteLoadout[];
+    FavouriteLoadouts?: IFavouriteLoadout[];
     VideoWallBackdrop?: string;
     Soundscape?: string;
 }
@@ -210,7 +210,7 @@ export interface ITailorShopDatabase {
 }
 
 export interface ITailorShop extends Omit<ITailorShopDatabase, "FavouriteLoadouts"> {
-    FavouriteLoadouts: IFavouriteLoadout[];
+    FavouriteLoadouts?: IFavouriteLoadout[];
 }
 
 export type RoomsType = { Name: string; MaxCapacity: number; PlacedDecos: Types.DocumentArray<IPlacedDecosDatabase> };

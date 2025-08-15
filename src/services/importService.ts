@@ -44,6 +44,22 @@ import {
     IKubrowPetDetailsClient,
     IKubrowPetDetailsDatabase
 } from "@/src/types/equipmentTypes";
+import {
+    IApartmentClient,
+    IApartmentDatabase,
+    IFavouriteLoadout,
+    IFavouriteLoadoutDatabase,
+    IGetShipResponse,
+    IOrbiterClient,
+    IOrbiterDatabase,
+    IPersonalRoomsDatabase,
+    IPlantClient,
+    IPlantDatabase,
+    IPlanterClient,
+    IPlanterDatabase,
+    ITailorShop,
+    ITailorShopDatabase
+} from "@/src/types/personalRoomsTypes";
 
 const convertDate = (value: IMongoDate): Date => {
     return new Date(parseInt(value.$date.$numberLong));
@@ -428,4 +444,58 @@ export const importLoadOutPresets = (db: ILoadoutDatabase, client: ILoadOutPrese
     db.MECH = client.MECH.map(convertLoadOutConfig);
     db.OPERATOR_ADULT = client.OPERATOR_ADULT.map(convertLoadOutConfig);
     db.DRIFTER = client.DRIFTER.map(convertLoadOutConfig);
+};
+
+const convertShip = (client: IOrbiterClient): IOrbiterDatabase => {
+    return {
+        ...client,
+        ShipInterior: {
+            ...client.ShipInterior,
+            Colors: Array.isArray(client.ShipInterior.Colors) ? {} : client.ShipInterior.Colors
+        },
+        FavouriteLoadoutId: client.FavouriteLoadoutId ? new Types.ObjectId(client.FavouriteLoadoutId.$oid) : undefined
+    };
+};
+
+const convertPlant = (client: IPlantClient): IPlantDatabase => {
+    return {
+        ...client,
+        EndTime: convertDate(client.EndTime)
+    };
+};
+
+const convertPlanter = (client: IPlanterClient): IPlanterDatabase => {
+    return {
+        ...client,
+        Plants: client.Plants.map(convertPlant)
+    };
+};
+
+const convertFavouriteLoadout = (client: IFavouriteLoadout): IFavouriteLoadoutDatabase => {
+    return {
+        ...client,
+        LoadoutId: new Types.ObjectId(client.LoadoutId.$oid)
+    };
+};
+
+const convertApartment = (client: IApartmentClient): IApartmentDatabase => {
+    return {
+        ...client,
+        Gardening: { Planters: client.Gardening.Planters.map(convertPlanter) },
+        FavouriteLoadouts: client.FavouriteLoadouts ? client.FavouriteLoadouts.map(convertFavouriteLoadout) : []
+    };
+};
+
+const convertTailorShop = (client: ITailorShop): ITailorShopDatabase => {
+    return {
+        ...client,
+        Colors: Array.isArray(client.Colors) ? {} : client.Colors,
+        FavouriteLoadouts: client.FavouriteLoadouts ? client.FavouriteLoadouts.map(convertFavouriteLoadout) : []
+    };
+};
+
+export const importPersonalRooms = (db: IPersonalRoomsDatabase, client: Partial<IGetShipResponse>): void => {
+    if (client.Ship !== undefined) db.Ship = convertShip(client.Ship);
+    if (client.Apartment !== undefined) db.Apartment = convertApartment(client.Apartment);
+    if (client.TailorShop !== undefined) db.TailorShop = convertTailorShop(client.TailorShop);
 };

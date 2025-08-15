@@ -307,7 +307,8 @@ dict = {
     worldState_varziaFullyStocked: `瓦奇娅开启全部库存商品`,
     worldState_varziaOverride: `瓦奇娅(Prime重生)轮换状态`,
 
-    import_importNote: `您可以在此处提供完整或部分库存响应(客户端表示)。支持的所有字段<b>将被覆盖</b>到您的账户中。`,
+    import_importNote: `[UNTRANSLATED] You can provide a full or partial <code>inventory.php</code> or <code>getShip.php</code> response (client representation) here.`,
+    import_importNote2: `支持的所有字段<b>将被覆盖</b>到您的账户中。`,
     import_submit: `提交`,
     import_samples: `示例:`,
     import_samples_maxFocus: `所有专精学派完全精通`,

@@ -1,8 +1,10 @@
-import { importInventory, importLoadOutPresets } from "@/src/services/importService";
+import { importInventory, importLoadOutPresets, importPersonalRooms } from "@/src/services/importService";
 import { getInventory } from "@/src/services/inventoryService";
 import { getLoadout } from "@/src/services/loadoutService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
+import { getPersonalRooms } from "@/src/services/personalRoomsService";
 import { IInventoryClient } from "@/src/types/inventoryTypes/inventoryTypes";
+import { IGetShipResponse } from "@/src/types/personalRoomsTypes";
 import { RequestHandler } from "express";
 
 export const importController: RequestHandler = async (req, res) => {
@@ -13,15 +15,21 @@ export const importController: RequestHandler = async (req, res) => {
     importInventory(inventory, request.inventory);
     await inventory.save();
 
-    if (request.inventory.LoadOutPresets) {
+    if ("LoadOutPresets" in request.inventory && request.inventory.LoadOutPresets) {
         const loadout = await getLoadout(accountId);
         importLoadOutPresets(loadout, request.inventory.LoadOutPresets);
         await loadout.save();
+    }
+
+    if ("Ship" in request.inventory || "Apartment" in request.inventory || "TailorShop" in request.inventory) {
+        const personalRooms = await getPersonalRooms(accountId);
+        importPersonalRooms(personalRooms, request.inventory);
+        await personalRooms.save();
     }
 
     res.end();
 };
 
 interface IImportRequest {
-    inventory: Partial<IInventoryClient>;
+    inventory: Partial<IInventoryClient> | Partial<IGetShipResponse>;
 }

@@ -306,7 +306,8 @@ dict = {
     worldState_varziaFullyStocked: `Varzia Fully Stocked`,
     worldState_varziaOverride: `Varzia Rotation Override`,
 
-    import_importNote: `You can provide a full or partial inventory response (client respresentation) here. All fields that are supported by the importer <b>will be overwritten</b> in your account.`,
+    import_importNote: `You can provide a full or partial <code>inventory.php</code> or <code>getShip.php</code> response (client representation) here.`,
+    import_importNote2: `All fields that are supported by the importer <b>will be overwritten</b> in your account.`,
     import_submit: `Submit`,
     import_samples: `Samples:`,
     import_samples_maxFocus: `All Focus Schools Maxed Out`,
