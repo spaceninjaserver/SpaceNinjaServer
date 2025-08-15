@@ -730,7 +730,7 @@ export enum UpgradeType {
 
 export interface ILoreFragmentScan {
     Progress: number;
-    Region?: string;
+    Region: string;
     ItemType: string;
 }
 

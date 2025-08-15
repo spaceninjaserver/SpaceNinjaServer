@@ -847,6 +847,32 @@ export const addItem = async (
                         return addMotorcycle(inventory, typeName);
                     }
                     break;
+                case "Lore":
+                    if (typeName == "/Lotus/Types/Lore/Fragments/GrineerGhoulFragments/GhoulFragmentRewards") {
+                        const fragmentType = getRandomElement([
+                            "/Lotus/Types/Lore/Fragments/GrineerGhoulFragments/GhoulFragmentA",
+                            "/Lotus/Types/Lore/Fragments/GrineerGhoulFragments/GhoulFragmentB",
+                            "/Lotus/Types/Lore/Fragments/GrineerGhoulFragments/GhoulFragmentC",
+                            "/Lotus/Types/Lore/Fragments/GrineerGhoulFragments/GhoulFragmentD",
+                            "/Lotus/Types/Lore/Fragments/GrineerGhoulFragments/GhoulFragmentE",
+                            "/Lotus/Types/Lore/Fragments/GrineerGhoulFragments/GhoulFragmentF",
+                            "/Lotus/Types/Lore/Fragments/GrineerGhoulFragments/GhoulFragmentG",
+                            "/Lotus/Types/Lore/Fragments/GrineerGhoulFragments/GhoulFragmentH",
+                            "/Lotus/Types/Lore/Fragments/GrineerGhoulFragments/GhoulFragmentI",
+                            "/Lotus/Types/Lore/Fragments/GrineerGhoulFragments/GhoulFragmentJ",
+                            "/Lotus/Types/Lore/Fragments/GrineerGhoulFragments/GhoulFragmentK",
+                            "/Lotus/Types/Lore/Fragments/GrineerGhoulFragments/GhoulFragmentL",
+                            "/Lotus/Types/Lore/Fragments/GrineerGhoulFragments/GhoulFragmentM"
+                        ])!;
+                        addLoreFragmentScans(inventory, [
+                            {
+                                Progress: 1,
+                                Region: "",
+                                ItemType: fragmentType
+                            }
+                        ]);
+                    }
+                    break;
             }
             break;
     }
