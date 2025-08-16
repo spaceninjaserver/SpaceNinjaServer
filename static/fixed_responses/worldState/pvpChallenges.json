@@ -1,0 +1,290 @@
+{
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeFlagCaptureEASY": {
+    "ScriptParamValue": 1,
+    "PVPModeAllowed": ["PVPMODE_CAPTURETHEFLAG"],
+    "SyndicateXP": 500
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeFlagCaptureMEDIUM": {
+    "ScriptParamValue": 4,
+    "PVPModeAllowed": ["PVPMODE_CAPTURETHEFLAG"],
+    "SyndicateXP": 1500
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeFlagReturnEASY": {
+    "ScriptParamValue": 1,
+    "PVPModeAllowed": ["PVPMODE_CAPTURETHEFLAG"],
+    "SyndicateXP": 500
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsComboEASY": {
+    "ScriptParamValue": 1,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 500
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsComboMEDIUM": {
+    "ScriptParamValue": 4,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 1500
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsHeadShotsEASY": {
+    "ScriptParamValue": 1,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 500
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsHeadShotsMEDIUM": {
+    "ScriptParamValue": 4,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 1500
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsMeleeEASY": {
+    "ScriptParamValue": 1,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 500
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsMeleeMEDIUM": {
+    "ScriptParamValue": 4,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 1500
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsMeleeHARD": {
+    "ScriptParamValue": 3,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 3000,
+    "DuringSingleMatch": true
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsMultiMEDIUM": {
+    "ScriptParamValue": 4,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 1500
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsPaybackEASY": {
+    "ScriptParamValue": 1,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 500
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsPayback_MEDIUM": {
+    "ScriptParamValue": 3,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 1500
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsPowerEASY": {
+    "ScriptParamValue": 1,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 500
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsPowerMEDIUM": {
+    "ScriptParamValue": 4,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 1500
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsPowerHARD": {
+    "ScriptParamValue": 3,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 3000,
+    "DuringSingleMatch": true
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsPrimaryEASY": {
+    "ScriptParamValue": 1,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 500
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsPrimaryMEDIUM": {
+    "ScriptParamValue": 4,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 1500
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsPrimaryHARD": {
+    "ScriptParamValue": 3,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 3000,
+    "DuringSingleMatch": true
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsSecondaryEASY": {
+    "ScriptParamValue": 1,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 500
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsSecondaryMEDIUM": {
+    "ScriptParamValue": 4,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 1500
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsSecondaryHARD": {
+    "ScriptParamValue": 3,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 3000,
+    "DuringSingleMatch": true
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsStreak_MEDIUM": {
+    "ScriptParamValue": 3,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 1500
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsStreakDominationEASY": {
+    "ScriptParamValue": 1,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 500
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsStreakDomination_MEDIUM": {
+    "ScriptParamValue": 3,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 1500
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsStreakDominationHARD": {
+    "ScriptParamValue": 3,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 3000,
+    "DuringSingleMatch": true
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsStreakStoppedEASY": {
+    "ScriptParamValue": 1,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 500
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsStreakStopped_MEDIUM": {
+    "ScriptParamValue": 3,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 1500
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsStreakHARD": {
+    "ScriptParamValue": 2,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 3000,
+    "DuringSingleMatch": true
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsTargetInAirEASY": {
+    "ScriptParamValue": 1,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 500
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsTargetInAirMEDIUM": {
+    "ScriptParamValue": 4,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 1500
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsTargetInAirHARD": {
+    "ScriptParamValue": 3,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 3000,
+    "DuringSingleMatch": true
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsWhileSlidingEASY": {
+    "ScriptParamValue": 1,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 500
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsWhileSlidingMEDIUM": {
+    "ScriptParamValue": 4,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 1500
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeKillsWhileSlidingHARD": {
+    "ScriptParamValue": 3,
+    "PVPModeAllowed": ["PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 3000,
+    "DuringSingleMatch": true
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeMatchCompleteEASY": {
+    "ScriptParamValue": 1,
+    "PVPModeAllowed": ["PVPMODE_CAPTURETHEFLAG", "PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 500
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeMatchCompleteMEDIUM": {
+    "ScriptParamValue": 4,
+    "PVPModeAllowed": ["PVPMODE_CAPTURETHEFLAG", "PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"],
+    "SyndicateXP": 1500
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeSpeedballCatchesEASY": {
+    "ScriptParamValue": 3,
+    "PVPModeAllowed": ["PVPMODE_SPEEDBALL"],
+    "SyndicateXP": 1000
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeSpeedballCatchesMEDIUM": {
+    "ScriptParamValue": 10,
+    "PVPModeAllowed": ["PVPMODE_SPEEDBALL"],
+    "SyndicateXP": 3000
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeSpeedballCatchesHARD": {
+    "ScriptParamValue": 6,
+    "PVPModeAllowed": ["PVPMODE_SPEEDBALL"],
+    "SyndicateXP": 6000,
+    "DuringSingleMatch": true
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeSpeedballChecksEASY": {
+    "ScriptParamValue": 3,
+    "PVPModeAllowed": ["PVPMODE_SPEEDBALL"],
+    "SyndicateXP": 1000
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeSpeedballChecksMEDIUM": {
+    "ScriptParamValue": 10,
+    "PVPModeAllowed": ["PVPMODE_SPEEDBALL"],
+    "SyndicateXP": 3000
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeSpeedballChecksHARD": {
+    "ScriptParamValue": 6,
+    "PVPModeAllowed": ["PVPMODE_SPEEDBALL"],
+    "SyndicateXP": 6000,
+    "DuringSingleMatch": true
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeSpeedballGoalsEASY": {
+    "ScriptParamValue": 2,
+    "PVPModeAllowed": ["PVPMODE_SPEEDBALL"],
+    "SyndicateXP": 1000
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeSpeedballGoalsMEDIUM": {
+    "ScriptParamValue": 6,
+    "PVPModeAllowed": ["PVPMODE_SPEEDBALL"],
+    "SyndicateXP": 3000
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeSpeedballGoalsHARD": {
+    "ScriptParamValue": 4,
+    "PVPModeAllowed": ["PVPMODE_SPEEDBALL"],
+    "SyndicateXP": 6000,
+    "DuringSingleMatch": true
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeSpeedballInterceptionsEASY": {
+    "ScriptParamValue": 3,
+    "PVPModeAllowed": ["PVPMODE_SPEEDBALL"],
+    "SyndicateXP": 1000
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeSpeedballInterceptionsMEDIUM": {
+    "ScriptParamValue": 6,
+    "PVPModeAllowed": ["PVPMODE_SPEEDBALL"],
+    "SyndicateXP": 3000
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeSpeedballInterceptionsHARD": {
+    "ScriptParamValue": 6,
+    "PVPModeAllowed": ["PVPMODE_SPEEDBALL"],
+    "SyndicateXP": 6000,
+    "DuringSingleMatch": true
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeSpeedballPassesEASY": {
+    "ScriptParamValue": 3,
+    "PVPModeAllowed": ["PVPMODE_SPEEDBALL"],
+    "SyndicateXP": 1000
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeSpeedballPassesMEDIUM": {
+    "ScriptParamValue": 6,
+    "PVPModeAllowed": ["PVPMODE_SPEEDBALL"],
+    "SyndicateXP": 3000
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeSpeedballPassesHARD": {
+    "ScriptParamValue": 3,
+    "PVPModeAllowed": ["PVPMODE_SPEEDBALL"],
+    "SyndicateXP": 6000,
+    "DuringSingleMatch": true
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeSpeedballStealsEASY": {
+    "ScriptParamValue": 3,
+    "PVPModeAllowed": ["PVPMODE_SPEEDBALL"],
+    "SyndicateXP": 1000
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeSpeedballStealsMEDIUM": {
+    "ScriptParamValue": 6,
+    "PVPModeAllowed": ["PVPMODE_SPEEDBALL"],
+    "SyndicateXP": 3000
+  },
+  "/Lotus/PVPChallengeTypes/PVPTimedChallengeSpeedballStealsHARD": {
+    "ScriptParamValue": 3,
+    "PVPModeAllowed": ["PVPMODE_SPEEDBALL"],
+    "SyndicateXP": 6000
+  }
+}
