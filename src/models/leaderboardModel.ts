@@ -8,7 +8,7 @@ const leaderboardEntrySchema = new Schema<ILeaderboardEntryDatabase>(
         displayName: { type: String, required: true },
         score: { type: Number, required: true },
         guildId: Schema.Types.ObjectId,
-        expiry: { type: Date, required: true },
+        expiry: Date,
         guildTier: Number
     },
     { id: false }

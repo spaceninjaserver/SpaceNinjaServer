@@ -250,6 +250,7 @@ dict = {
     worldState_dogDays: `Dog Days`,
     worldState_dogDaysRewards: `Dog Days Rewards`,
     worldState_wolfHunt: `Wolf Hunt (2025)`,
+    worldState_orphixVenom: `Orphix Venom`,
     worldState_longShadow: `Long Shadow`,
     worldState_hallowedFlame: `Hallowed Flame`,
     worldState_hallowedNightmares: `Hallowed Nightmares`,

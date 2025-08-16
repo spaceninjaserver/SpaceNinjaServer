@@ -251,6 +251,7 @@ dict = {
     worldState_dogDays: `三伏天`,
     worldState_dogDaysRewards: `[UNTRANSLATED] Dog Days Rewards`,
     worldState_wolfHunt: `恶狼狩猎 (2025)`,
+    worldState_orphixVenom: `奥影之毒`,
     worldState_longShadow: `暗夜长影`,
     worldState_hallowedFlame: `万圣之焰`,
     worldState_hallowedNightmares: `万圣噩梦`,

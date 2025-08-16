@@ -56,7 +56,7 @@ export interface IGoal {
     Success?: number;
     Personal?: boolean;
     Community?: boolean;
-    Best?: boolean; // Fist one on Event Tab
+    Best?: boolean; // Use Best instead of Count to check for reward
     Bounty?: boolean; // Tactical Alert
     ClampNodeScores?: boolean;
 
@@ -88,8 +88,11 @@ export interface IGoal {
     JobPreviousVersion?: IOid;
 
     ScoreVar?: string;
-    ScoreMaxTag?: string;
+    ScoreMaxTag?: string; // Field in leaderboard
     ScoreLocTag?: string;
+
+    MissionKeyRotation?: string[];
+    MissionKeyRotationInterval?: number;
 
     NightLevel?: string;
 }

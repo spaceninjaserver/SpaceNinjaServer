@@ -79,6 +79,7 @@ export interface IConfig {
         tennoLiveRelay?: boolean;
         baroTennoConRelay?: boolean;
         wolfHunt?: boolean;
+        orphixVenom?: boolean;
         longShadow?: boolean;
         hallowedFlame?: boolean;
         hallowedNightmares?: boolean;

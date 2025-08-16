@@ -896,5 +896,20 @@ export const goalGuildRewardByTag: Record<string, { guildGoals: number[][]; rewa
             "/Lotus/Levels/ClanDojo/ComponentPropRecipes/DuviriMurmurEventSilverTrophyRecipe",
             "/Lotus/Levels/ClanDojo/ComponentPropRecipes/DuviriMurmurEventGoldTrophyRecipe"
         ]
+    },
+    MechSurvival: {
+        guildGoals: [
+            [1390, 5860, 13920, 18850],
+            [3510, 22275, 69120, 137250],
+            [11700, 75250, 230400, 457500],
+            [35100, 222750, 691200, 1372500],
+            [117000, 742500, 2304000, 4575000]
+        ],
+        rewards: [
+            "/Lotus/Levels/ClanDojo/ComponentPropRecipes/MechEventTrophyTerracottaRecipe",
+            "/Lotus/Levels/ClanDojo/ComponentPropRecipes/MechEventTrophyBronzeRecipe",
+            "/Lotus/Levels/ClanDojo/ComponentPropRecipes/MechEventTrophySilverRecipe",
+            "/Lotus/Levels/ClanDojo/ComponentPropRecipes/MechEventTrophyGoldRecipe"
+        ]
     }
 };

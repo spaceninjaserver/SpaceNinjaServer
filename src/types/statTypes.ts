@@ -32,6 +32,19 @@ export interface IStatsClient {
     OlliesCrashCourseScore?: number;
     DojoObstacleScore?: number;
 
+    // event scores
+    Halloween16?: number;
+    AmalgamEventScoreMax?: number;
+    Halloween19ScoreMax?: number;
+    FlotillaEventScore?: number;
+    FlotillaSpaceBadgesTier1?: number;
+    FlotillaSpaceBadgesTier2?: number;
+    FlotillaSpaceBadgesTier3?: number;
+    FlotillaGroundBadgesTier1?: number;
+    FlotillaGroundBadgesTier2?: number;
+    FlotillaGroundBadgesTier3?: number;
+    MechSurvivalScoreMax?: number;
+
     // not in schema
     PVP?: {
         suitDeaths?: number;

@@ -251,6 +251,7 @@ dict = {
     worldState_dogDays: `Спекотні дні`,
     worldState_dogDaysRewards: `Нагороди Спекотних днів`,
     worldState_wolfHunt: `Полювання на Вовка (2025)`,
+    worldState_orphixVenom: `Орфіксова отрута`,
     worldState_longShadow: `Довга тінь`,
     worldState_hallowedFlame: `Священне полум'я`,
     worldState_hallowedNightmares: `Священні жахіття`,

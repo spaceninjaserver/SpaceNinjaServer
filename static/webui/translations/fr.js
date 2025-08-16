@@ -251,6 +251,7 @@ dict = {
     worldState_dogDays: `Bataille d'Eau`,
     worldState_dogDaysRewards: `[UNTRANSLATED] Dog Days Rewards`,
     worldState_wolfHunt: `Chasse au Loup (2025)`,
+    worldState_orphixVenom: `Venin Orphix`,
     worldState_longShadow: `La Propagation des Ombres`,
     worldState_hallowedFlame: `Flamme Hantée`,
     worldState_hallowedNightmares: `Cauchemars Hantés`,

@@ -1538,7 +1538,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             Personal: true,
             Bounty: true,
             ClampNodeScores: true,
-            Node: "EventNode28", // Incompatible with Wolf Hunt (2025)
+            Node: "EventNode28", // Incompatible with Wolf Hunt (2025), Orphix Venom
             MissionKeyName: "/Lotus/Types/Keys/GalleonRobberyAlertB",
             Desc: "/Lotus/Language/Events/GalleonRobberyEventMissionTitle",
             Icon: "/Lotus/Interface/Icons/Player/GalleonRobberiesEvent.png",
@@ -1964,7 +1964,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                 "/Lotus/Types/Keys/WolfTacAlertReduxD"
             ],
             ConcurrentNodeReqs: [1, 2, 3],
-            ConcurrentNodes: ["EventNode28", "EventNode39", "EventNode40"], // Incompatible with Galleon Of Ghouls
+            ConcurrentNodes: ["EventNode28", "EventNode39", "EventNode40"], // Incompatible with Galleon Of Ghouls, Orphix Venom
             MissionKeyName: "/Lotus/Types/Keys/WolfTacAlertReduxA",
             Faction: "FC_GRINEER",
             Desc: "/Lotus/Language/Alerts/WolfAlert",
@@ -2216,7 +2216,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                 "/Lotus/Types/Keys/TacAlertKeyProxyRebellionFour"
             ],
             ConcurrentNodeReqs: [1, 2, 3],
-            ConcurrentNodes: ["EventNode7", "EventNode4", "EventNode17"],
+            ConcurrentNodes: ["EventNode7", "EventNode4", "EventNode17"], // Incompatible with Orphix venom
             MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyProxyRebellionOne",
             Faction: "FC_CORPUS",
             Desc: "/Lotus/Language/Alerts/TacAlertProxyRebellion",
@@ -2313,6 +2313,83 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             Node: "SolNode236",
             MissionKeyName: "/Lotus/Types/Keys/DuviriMITW/DuviriMITWEventKey"
         });
+    }
+
+    if (config.worldState?.orphixVenom) {
+        worldState.Goals.push(
+            {
+                _id: { $oid: "5fdcccb875d5ad500dc477d0" },
+                Activation: { $date: { $numberLong: "1608320400000" } },
+                Expiry: { $date: { $numberLong: "2000000000000" } },
+                Count: 0,
+                Goal: 500,
+                Success: 0,
+                Personal: true,
+                Best: true,
+                Node: "EventNode17", // Incompatible with Proxy Rebellion
+                MissionKeyName: "/Lotus/Types/Keys/MechSurvivalCorpusShip",
+                Faction: "FC_SENTIENT",
+                Desc: "/Lotus/Language/Events/MechEventMissionTier1",
+                Icon: "/Lotus/Interface/Icons/Categories/IconMech256.png",
+                Tag: "MechSurvivalA",
+                ScoreVar: "MechSurvivalScore",
+                Reward: {
+                    items: ["/Lotus/StoreItems/Upgrades/Skins/Clan/MechEventEmblemItem"]
+                }
+            },
+            {
+                _id: { $oid: "5fdcccb875d5ad500dc477d1" },
+                Activation: { $date: { $numberLong: "1608320400000" } },
+                Expiry: { $date: { $numberLong: "2000000000000" } },
+                Count: 0,
+                Goal: 1000,
+                Success: 0,
+                Personal: true,
+                Best: true,
+                Node: "EventNode28", // Incompatible with Galleon Of Ghouls, Wolf Hunt (2025)
+                MissionKeyName: "/Lotus/Types/Keys/MechSurvivalGrineerGalleon",
+                Faction: "FC_SENTIENT",
+                Desc: "/Lotus/Language/Events/MechEventMissionTier2",
+                Icon: "/Lotus/Interface/Icons/Categories/IconMech256.png",
+                Tag: "MechSurvivalB",
+                PrereqGoalTags: ["MechSurvivalA"],
+                ScoreVar: "MechSurvivalScore",
+                Reward: {
+                    items: ["/Lotus/StoreItems/Types/Items/FusionTreasures/OroFusexJ"]
+                }
+            },
+            {
+                _id: { $oid: "5fdcccb875d5ad500dc477d2" },
+                Activation: { $date: { $numberLong: "1608320400000" } },
+                Expiry: { $date: { $numberLong: "2000000000000" } },
+                Count: 0,
+                Goal: 2000,
+                Success: 0,
+                Personal: true,
+                Best: true,
+                Node: "EventNode32",
+                MissionKeyName: "/Lotus/Types/Keys/MechSurvivalGasCity",
+                MissionKeyRotation: [
+                    "/Lotus/Types/Keys/MechSurvivalGasCity",
+                    "/Lotus/Types/Keys/MechSurvivalCorpusShipEndurance",
+                    "/Lotus/Types/Keys/MechSurvivalGrineerGalleonEndurance"
+                ],
+                MissionKeyRotationInterval: 3600, // 1 hour
+                Faction: "FC_SENTIENT",
+                Desc: "/Lotus/Language/Events/MechEventMissionTier3",
+                Icon: "/Lotus/Interface/Icons/Categories/IconMech256.png",
+                Tag: "MechSurvival",
+                PrereqGoalTags: ["MechSurvivalA", "MechSurvivalB"],
+                ScoreVar: "MechSurvivalScore",
+                ScoreMaxTag: "MechSurvivalScoreMax",
+                Reward: {
+                    items: [
+                        "/Lotus/StoreItems/Types/Items/MiscItems/FormaAura",
+                        "/Lotus/StoreItems/Upgrades/Skins/Necramech/MechWeapon/MechEventMausolonSkin"
+                    ]
+                }
+            }
+        );
     }
 
     // Nightwave Challenges

@@ -97,7 +97,19 @@ const statsSchema = new Schema<IStatsDatabase>({
     SentinelGameScore: Number,
     CaliberChicksScore: Number,
     OlliesCrashCourseScore: Number,
-    DojoObstacleScore: Number
+    DojoObstacleScore: Number,
+
+    Halloween16: Number,
+    AmalgamEventScoreMax: Number,
+    Halloween19ScoreMax: Number,
+    FlotillaEventScore: Number,
+    FlotillaSpaceBadgesTier1: Number,
+    FlotillaSpaceBadgesTier2: Number,
+    FlotillaSpaceBadgesTier3: Number,
+    FlotillaGroundBadgesTier1: Number,
+    FlotillaGroundBadgesTier2: Number,
+    FlotillaGroundBadgesTier3: Number,
+    MechSurvivalScoreMax: Number
 });
 
 statsSchema.set("toJSON", {

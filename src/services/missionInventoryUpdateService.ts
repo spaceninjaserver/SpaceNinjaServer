@@ -652,7 +652,12 @@ export const addMissionInventoryUpdates = async (
                             }
                         }
                         if (currentMissionKey && currentMissionKey in goalMessagesByKey) {
-                            const totalCount = (goalProgress?.Count ?? 0) + uploadProgress.Count;
+                            let countBeforeUpload = goalProgress?.Count ?? 0;
+                            let totalCount = countBeforeUpload + uploadProgress.Count;
+                            if (goal.Best) {
+                                countBeforeUpload = goalProgress?.Best ?? 0;
+                                totalCount = uploadProgress.Best;
+                            }
                             let reward;
 
                             if (goal.InterimGoals && goal.InterimRewards) {
@@ -660,7 +665,7 @@ export const addMissionInventoryUpdates = async (
                                     if (
                                         goal.InterimGoals[i] &&
                                         goal.InterimGoals[i] <= totalCount &&
-                                        (!goalProgress || goalProgress.Count < goal.InterimGoals[i]) &&
+                                        (!goalProgress || countBeforeUpload < goal.InterimGoals[i]) &&
                                         goal.InterimRewards[i]
                                     ) {
                                         reward = goal.InterimRewards[i];
@@ -672,7 +677,7 @@ export const addMissionInventoryUpdates = async (
                                 !reward &&
                                 goal.Goal &&
                                 goal.Goal <= totalCount &&
-                                (!goalProgress || goalProgress.Count < goal.Goal) &&
+                                (!goalProgress || countBeforeUpload < goal.Goal) &&
                                 goal.Reward
                             ) {
                                 reward = goal.Reward;
@@ -681,7 +686,7 @@ export const addMissionInventoryUpdates = async (
                                 !reward &&
                                 goal.BonusGoal &&
                                 goal.BonusGoal <= totalCount &&
-                                (!goalProgress || goalProgress.Count < goal.BonusGoal) &&
+                                (!goalProgress || countBeforeUpload < goal.BonusGoal) &&
                                 goal.BonusReward
                             ) {
                                 reward = goal.BonusReward;
@@ -1090,6 +1095,12 @@ export const addMissionRewards = async (
                         break;
                     }
                 }
+            }
+            if (rewardInfo.GoalProgressAmount && goal.Tag.startsWith("MechSurvival")) {
+                MissionRewards.push({
+                    StoreItem: "/Lotus/StoreItems/Types/Items/MiscItems/MechSurvivalEventCreds",
+                    ItemCount: Math.trunc(rewardInfo.GoalProgressAmount / 10)
+                });
             }
         }
     }
@@ -2416,5 +2427,35 @@ const goalMessagesByKey: Record<string, { sndr: string; msg: string; sub: string
         msg: "/Lotus/Language/G1Quests/ProjectNightwatchTacAlertMissionRewardBody",
         sub: "/Lotus/Language/G1Quests/ProjectNightwatchTacAlertMissionFourTitle",
         icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png"
+    },
+    "/Lotus/Types/Keys/MechSurvivalCorpusShip": {
+        sndr: "/Lotus/Language/Bosses/DeimosFather",
+        msg: "/Lotus/Language/Inbox/MechEvent2020Tier1CompleteDesc",
+        sub: "/Lotus/Language/Inbox/MechEvent2020Tier1CompleteTitle",
+        icon: "/Lotus/Interface/Icons/Npcs/Entrati/Father.png"
+    },
+    "/Lotus/Types/Keys/MechSurvivalGrineerGalleon": {
+        sndr: "/Lotus/Language/Bosses/DeimosFather",
+        msg: "/Lotus/Language/Inbox/MechEvent2020Tier2CompleteDesc",
+        sub: "/Lotus/Language/Inbox/MechEvent2020Tier2CompleteTitle",
+        icon: "/Lotus/Interface/Icons/Npcs/Entrati/Father.png"
+    },
+    "/Lotus/Types/Keys/MechSurvivalGasCity": {
+        sndr: "/Lotus/Language/Bosses/DeimosFather",
+        msg: "/Lotus/Language/Inbox/MechEvent2020Tier3CompleteDesc",
+        sub: "/Lotus/Language/Inbox/MechEvent2020Tier3CompleteTitle",
+        icon: "/Lotus/Interface/Icons/Npcs/Entrati/Father.png"
+    },
+    "/Lotus/Types/Keys/MechSurvivalCorpusShipEndurance": {
+        sndr: "/Lotus/Language/Bosses/DeimosFather",
+        msg: "/Lotus/Language/Inbox/MechEvent2020Tier3CompleteDesc",
+        sub: "/Lotus/Language/Inbox/MechEvent2020Tier3CompleteTitle",
+        icon: "/Lotus/Interface/Icons/Npcs/Entrati/Father.png"
+    },
+    "/Lotus/Types/Keys/MechSurvivalGrineerGalleonEndurance": {
+        sndr: "/Lotus/Language/Bosses/DeimosFather",
+        msg: "/Lotus/Language/Inbox/MechEvent2020Tier3CompleteDesc",
+        sub: "/Lotus/Language/Inbox/MechEvent2020Tier3CompleteTitle",
+        icon: "/Lotus/Interface/Icons/Npcs/Entrati/Father.png"
     }
 };

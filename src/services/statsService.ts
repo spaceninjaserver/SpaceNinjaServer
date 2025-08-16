@@ -382,6 +382,29 @@ export const updateStats = async (accountOwnerId: string, payload: IStatsUpdate)
                             );
                             break;
 
+                        case "Halloween16":
+                        case "AmalgamEventScoreMax":
+                        case "Halloween19ScoreMax":
+                        case "FlotillaEventScore":
+                        case "FlotillaSpaceBadgesTier1":
+                        case "FlotillaSpaceBadgesTier2":
+                        case "FlotillaSpaceBadgesTier3":
+                        case "FlotillaGroundBadgesTier1":
+                        case "FlotillaGroundBadgesTier2":
+                        case "FlotillaGroundBadgesTier3":
+                        case "MechSurvivalScoreMax":
+                            playerStats[category] ??= 0;
+                            if (data > playerStats[category]) playerStats[category] = data as number;
+                            await submitLeaderboardScore(
+                                "events",
+                                category,
+                                accountOwnerId,
+                                payload.displayName,
+                                data as number,
+                                payload.guildId
+                            );
+                            break;
+
                         default:
                             if (!ignoredCategories.includes(category)) {
                                 unknownCategories[action] ??= [];
