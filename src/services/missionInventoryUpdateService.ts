@@ -1309,6 +1309,27 @@ export const addMissionRewards = async (
                     logger.error(`unknown droptable ${si.DropTable} for DROP_BLUEPRINT`);
                 }
             }
+            // e.g. H-09 Apex Turret Sumdali
+            if (si.DROP_MISC_ITEM) {
+                const resourceDroptable = droptables.find(x => x.type == "resource");
+                if (resourceDroptable) {
+                    for (let i = 0; i != si.DROP_MISC_ITEM.length; ++i) {
+                        const reward = getRandomReward(resourceDroptable.items)!;
+                        logger.debug(`stripped droptable (resources pool) rolled`, reward);
+                        if (Object.keys(await addItem(inventory, reward.type)).length == 0) {
+                            logger.debug(`item already owned, skipping`);
+                        } else {
+                            MissionRewards.push({
+                                StoreItem: toStoreItem(reward.type),
+                                ItemCount: 1,
+                                FromEnemyCache: true // to show "identified"
+                            });
+                        }
+                    }
+                } else {
+                    logger.error(`unknown droptable ${si.DropTable} for DROP_BLUEPRINT`);
+                }
+            }
         }
     }
 

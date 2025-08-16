@@ -117,6 +117,7 @@ export type IMissionInventoryUpdateRequest = {
         DropTable: string;
         DROP_MOD?: number[];
         DROP_BLUEPRINT?: number[];
+        DROP_MISC_ITEM?: number[];
     }[];
     DeathMarks?: string[];
     Nemesis?: number;
