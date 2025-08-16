@@ -102,7 +102,10 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
             const secondsElapsed = Math.trunc(Date.now() / 1000) - start;
             const progress = secondsElapsed / recipe.buildTime;
             logger.debug(`rushing recipe at ${Math.trunc(progress * 100)}% completion`);
-            const cost = Math.round(recipe.skipBuildTimePrice * (1 - (progress - 0.5)));
+            const cost =
+                progress > 0.5
+                    ? Math.round(recipe.skipBuildTimePrice * (1 - (progress - 0.5)))
+                    : recipe.skipBuildTimePrice;
             InventoryChanges = {
                 ...InventoryChanges,
                 ...updateCurrency(inventory, cost, true)
