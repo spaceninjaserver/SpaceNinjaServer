@@ -1801,7 +1801,10 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
 
         worldState.Goals.push({
             _id: {
-                $oid: ((dogDaysStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "c57487c3768936df"
+                $oid:
+                    ((dogDaysStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") +
+                    "c57487c3768936d" +
+                    year.toString(16)
             },
             Activation: { $date: { $numberLong: activationTimeStamp } },
             Expiry: { $date: { $numberLong: expiryTimeStamp } },
@@ -2094,7 +2097,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         const year = config.worldState.hallowedNightmaresRewardsOverride ?? 0;
 
         worldState.Goals.push({
-            _id: { $oid: "5bc9e8f7972d7d184c8398c9" },
+            _id: { $oid: "5bc98f00000000000000000" + year.toString(16) },
             Activation: { $date: { $numberLong: "1539972000000" } },
             Expiry: { $date: { $numberLong: "2000000000000" } },
             Count: 0,
@@ -2119,7 +2122,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         });
         if (year != 2) {
             worldState.Goals.push({
-                _id: { $oid: "5bca18b1e12d9e14a0b6ad27" },
+                _id: { $oid: "5bc98f01000000000000000" + year.toString(16) },
                 Activation: { $date: { $numberLong: "1539972000000" } },
                 Expiry: { $date: { $numberLong: "2000000000000" } },
                 Count: 0,
@@ -2192,7 +2195,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         const year = config.worldState.proxyRebellionRewardsOverride ?? 0;
 
         worldState.Goals.push({
-            _id: { $oid: "5b5743ac972d7d3ed0517b0d" },
+            _id: { $oid: "5b5b5da0000000000000000" + year.toString(16) },
             Activation: { $date: { $numberLong: "1532714400000" } },
             Expiry: { $date: { $numberLong: "2000000000000" } },
             Count: 0,
