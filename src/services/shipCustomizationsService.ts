@@ -19,6 +19,7 @@ import { Guild } from "@/src/models/guildModel";
 import { hasGuildPermission } from "@/src/services/guildService";
 import { GuildPermission } from "@/src/types/guildTypes";
 import { ExportResources } from "warframe-public-export-plus";
+import { convertCustomizationInfo } from "@/src/services/importService";
 
 export const setShipCustomizations = async (
     accountId: string,
@@ -269,6 +270,8 @@ export const handleSetPlacedDecoInfo = async (accountId: string, req: ISetPlaced
     }
 
     placedDeco.PictureFrameInfo = req.PictureFrameInfo;
+    placedDeco.CustomizationInfo = req.CustomizationInfo ? convertCustomizationInfo(req.CustomizationInfo) : undefined;
+    placedDeco.AnimPoseItem = req.AnimPoseItem;
 
     await personalRooms.save();
 };

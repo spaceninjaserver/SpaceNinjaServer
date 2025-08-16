@@ -47,16 +47,22 @@ import {
 import {
     IApartmentClient,
     IApartmentDatabase,
+    ICustomizationInfoClient,
+    ICustomizationInfoDatabase,
     IFavouriteLoadout,
     IFavouriteLoadoutDatabase,
     IGetShipResponse,
     IOrbiterClient,
     IOrbiterDatabase,
     IPersonalRoomsDatabase,
+    IPlacedDecosClient,
+    IPlacedDecosDatabase,
     IPlantClient,
     IPlantDatabase,
     IPlanterClient,
     IPlanterDatabase,
+    IRoomClient,
+    IRoomDatabase,
     ITailorShop,
     ITailorShopDatabase
 } from "@/src/types/personalRoomsTypes";
@@ -446,6 +452,30 @@ export const importLoadOutPresets = (db: ILoadoutDatabase, client: ILoadOutPrese
     db.DRIFTER = client.DRIFTER.map(convertLoadOutConfig);
 };
 
+export const convertCustomizationInfo = (client: ICustomizationInfoClient): ICustomizationInfoDatabase => {
+    return {
+        ...client,
+        LoadOutPreset: client.LoadOutPreset ? convertLoadOutConfig(client.LoadOutPreset) : undefined,
+        VehiclePreset: client.VehiclePreset ? convertLoadOutConfig(client.VehiclePreset) : undefined
+    };
+};
+
+const convertDeco = (client: IPlacedDecosClient): IPlacedDecosDatabase => {
+    const { id, ...rest } = client;
+    return {
+        ...rest,
+        CustomizationInfo: client.CustomizationInfo ? convertCustomizationInfo(client.CustomizationInfo) : undefined,
+        _id: new Types.ObjectId(id.$oid)
+    };
+};
+
+const convertRoom = (client: IRoomClient): IRoomDatabase => {
+    return {
+        ...client,
+        PlacedDecos: client.PlacedDecos ? client.PlacedDecos.map(convertDeco) : []
+    };
+};
+
 const convertShip = (client: IOrbiterClient): IOrbiterDatabase => {
     return {
         ...client,
@@ -453,6 +483,7 @@ const convertShip = (client: IOrbiterClient): IOrbiterDatabase => {
             ...client.ShipInterior,
             Colors: Array.isArray(client.ShipInterior.Colors) ? {} : client.ShipInterior.Colors
         },
+        Rooms: client.Rooms.map(convertRoom),
         FavouriteLoadoutId: client.FavouriteLoadoutId ? new Types.ObjectId(client.FavouriteLoadoutId.$oid) : undefined
     };
 };
@@ -481,6 +512,7 @@ const convertFavouriteLoadout = (client: IFavouriteLoadout): IFavouriteLoadoutDa
 const convertApartment = (client: IApartmentClient): IApartmentDatabase => {
     return {
         ...client,
+        Rooms: client.Rooms.map(convertRoom),
         Gardening: { Planters: client.Gardening.Planters.map(convertPlanter) },
         FavouriteLoadouts: client.FavouriteLoadouts ? client.FavouriteLoadouts.map(convertFavouriteLoadout) : []
     };
@@ -489,6 +521,7 @@ const convertApartment = (client: IApartmentClient): IApartmentDatabase => {
 const convertTailorShop = (client: ITailorShop): ITailorShopDatabase => {
     return {
         ...client,
+        Rooms: client.Rooms.map(convertRoom),
         Colors: Array.isArray(client.Colors) ? {} : client.Colors,
         FavouriteLoadouts: client.FavouriteLoadouts ? client.FavouriteLoadouts.map(convertFavouriteLoadout) : []
     };

@@ -1,6 +1,7 @@
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
 import {
     IApartmentDatabase,
+    ICustomizationInfoDatabase,
     IFavouriteLoadoutDatabase,
     IGardeningDatabase,
     IOrbiterClient,
@@ -11,12 +12,13 @@ import {
     IPlantClient,
     IPlantDatabase,
     IPlanterDatabase,
-    IRoom,
+    IRoomDatabase,
     ITailorShopDatabase,
     PersonalRoomsModelType
 } from "@/src/types/personalRoomsTypes";
 import { Schema, Types, model } from "mongoose";
 import { colorSchema, shipCustomizationSchema } from "@/src/models/commonModel";
+import { loadoutConfigSchema } from "@/src/models/inventoryModels/loadoutModel";
 
 export const pictureFrameInfoSchema = new Schema<IPictureFrameInfo>(
     {
@@ -34,7 +36,20 @@ export const pictureFrameInfoSchema = new Schema<IPictureFrameInfo>(
         TextColorB: Number,
         TextOrientation: Number
     },
-    { id: false, _id: false }
+    { _id: false }
+);
+
+export const customizationInfoSchema = new Schema<ICustomizationInfoDatabase>(
+    {
+        Anim: String,
+        AnimPose: Number,
+        LoadOutPreset: loadoutConfigSchema,
+        VehiclePreset: loadoutConfigSchema,
+        EquippedWeapon: String,
+        AvatarType: String,
+        LoadOutType: String
+    },
+    { _id: false }
 );
 
 const placedDecosSchema = new Schema<IPlacedDecosDatabase>(
@@ -44,7 +59,9 @@ const placedDecosSchema = new Schema<IPlacedDecosDatabase>(
         Rot: [Number],
         Scale: Number,
         Sockets: Number,
-        PictureFrameInfo: { type: pictureFrameInfoSchema, default: undefined }
+        PictureFrameInfo: { type: pictureFrameInfoSchema, default: undefined },
+        CustomizationInfo: { type: customizationInfoSchema, default: undefined },
+        AnimPoseItem: String
     },
     { id: false }
 );
@@ -60,7 +77,7 @@ placedDecosSchema.set("toJSON", {
     }
 });
 
-const roomSchema = new Schema<IRoom>(
+const roomSchema = new Schema<IRoomDatabase>(
     {
         Name: String,
         MaxCapacity: Number,

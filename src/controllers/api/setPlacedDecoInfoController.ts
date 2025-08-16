@@ -1,23 +1,19 @@
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { IPictureFrameInfo, ISetPlacedDecoInfoRequest } from "@/src/types/personalRoomsTypes";
+import { ISetPlacedDecoInfoRequest } from "@/src/types/personalRoomsTypes";
 import { RequestHandler } from "express";
 import { handleSetPlacedDecoInfo } from "@/src/services/shipCustomizationsService";
 
 export const setPlacedDecoInfoController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const payload = JSON.parse(req.body as string) as ISetPlacedDecoInfoRequest;
+    //console.log(JSON.stringify(payload, null, 2));
     await handleSetPlacedDecoInfo(accountId, payload);
     res.json({
-        DecoId: payload.DecoId,
-        IsPicture: true,
-        PictureFrameInfo: payload.PictureFrameInfo,
-        BootLocation: payload.BootLocation
+        ...payload,
+        IsPicture: !!payload.PictureFrameInfo
     } satisfies ISetPlacedDecoInfoResponse);
 };
 
-interface ISetPlacedDecoInfoResponse {
-    DecoId: string;
+interface ISetPlacedDecoInfoResponse extends ISetPlacedDecoInfoRequest {
     IsPicture: boolean;
-    PictureFrameInfo?: IPictureFrameInfo;
-    BootLocation?: string;
 }

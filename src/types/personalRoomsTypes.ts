@@ -1,6 +1,6 @@
 import { IColor, IShipAttachments, IShipCustomization } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { Document, Model, Types } from "mongoose";
-import { ILoadoutClient } from "@/src/types/saveLoadoutTypes";
+import { ILoadoutClient, ILoadoutConfigClient, ILoadoutConfigDatabase } from "@/src/types/saveLoadoutTypes";
 import { IMongoDate, IOid } from "@/src/types/commonTypes";
 
 export interface IGetShipResponse {
@@ -17,7 +17,7 @@ export interface IOrbiterClient {
     Features: string[];
     ShipId: IOid;
     ShipInterior: IShipCustomization;
-    Rooms: IRoom[];
+    Rooms: IRoomClient[];
     VignetteFish?: string[];
     FavouriteLoadoutId?: IOid;
     Wallpaper?: string;
@@ -28,7 +28,7 @@ export interface IOrbiterClient {
 
 export interface IOrbiterDatabase {
     Features: string[];
-    Rooms: IRoom[];
+    Rooms: IRoomDatabase[];
     ShipInterior?: IShipCustomization;
     VignetteFish?: string[];
     FavouriteLoadoutId?: Types.ObjectId;
@@ -53,10 +53,16 @@ export interface IPersonalRoomsDatabase {
     TailorShop: ITailorShopDatabase;
 }
 
-export interface IRoom {
+export interface IRoomDatabase {
     Name: string;
     MaxCapacity: number;
     PlacedDecos?: IPlacedDecosDatabase[];
+}
+
+export interface IRoomClient {
+    Name: string;
+    MaxCapacity: number;
+    PlacedDecos?: IPlacedDecosClient[];
 }
 
 export interface IPlantClient {
@@ -89,7 +95,7 @@ export interface IGardeningDatabase {
 
 export interface IApartmentClient {
     Gardening: IGardeningClient;
-    Rooms: IRoom[];
+    Rooms: IRoomClient[];
     FavouriteLoadouts?: IFavouriteLoadout[];
     VideoWallBackdrop?: string;
     Soundscape?: string;
@@ -97,7 +103,7 @@ export interface IApartmentClient {
 
 export interface IApartmentDatabase {
     Gardening: IGardeningDatabase;
-    Rooms: IRoom[];
+    Rooms: IRoomDatabase[];
     FavouriteLoadouts: IFavouriteLoadoutDatabase[];
     VideoWallBackdrop?: string;
     Soundscape?: string;
@@ -110,11 +116,14 @@ export interface IPlacedDecosDatabase {
     Scale?: number;
     Sockets?: number;
     PictureFrameInfo?: IPictureFrameInfo;
+    CustomizationInfo?: ICustomizationInfoDatabase;
+    AnimPoseItem?: string;
     _id: Types.ObjectId;
 }
 
-export interface IPlacedDecosClient extends Omit<IPlacedDecosDatabase, "_id"> {
+export interface IPlacedDecosClient extends Omit<IPlacedDecosDatabase, "_id" | "CustomizationInfo"> {
     id: IOid;
+    CustomizationInfo?: ICustomizationInfoClient;
 }
 
 export interface ISetShipCustomizationsRequest {
@@ -166,11 +175,13 @@ export interface IResetShipDecorationsResponse {
 }
 
 export interface ISetPlacedDecoInfoRequest {
-    DecoType: string;
+    DecoType?: string;
     DecoId: string;
     Room: string;
-    PictureFrameInfo: IPictureFrameInfo;
+    PictureFrameInfo: IPictureFrameInfo; // IsPicture
+    CustomizationInfo?: ICustomizationInfoClient; // !IsPicture
     BootLocation?: TBootLocation;
+    AnimPoseItem?: string; // !IsPicture
     ComponentId?: string;
     GuildId?: string;
 }
@@ -191,6 +202,21 @@ export interface IPictureFrameInfo {
     TextOrientation: number;
 }
 
+export interface ICustomizationInfoClient {
+    Anim?: string;
+    AnimPose?: number;
+    LoadOutPreset?: ILoadoutConfigClient;
+    VehiclePreset?: ILoadoutConfigClient;
+    EquippedWeapon?: "SUIT_SLOT" | "LONG_GUN_SLOT" | "PISTOL_SLOT";
+    AvatarType?: string;
+    LoadOutType?: string; // "LOT_NORMAL"
+}
+
+export interface ICustomizationInfoDatabase extends Omit<ICustomizationInfoClient, "LoadOutPreset" | "VehiclePreset"> {
+    LoadOutPreset?: ILoadoutConfigDatabase;
+    VehiclePreset?: ILoadoutConfigDatabase;
+}
+
 export interface IFavouriteLoadout {
     Tag: string;
     LoadoutId: IOid;
@@ -206,10 +232,11 @@ export interface ITailorShopDatabase {
     Colors?: IColor;
     CustomJson?: string;
     LevelDecosVisible?: boolean;
-    Rooms: IRoom[];
+    Rooms: IRoomDatabase[];
 }
 
-export interface ITailorShop extends Omit<ITailorShopDatabase, "FavouriteLoadouts"> {
+export interface ITailorShop extends Omit<ITailorShopDatabase, "Rooms" | "FavouriteLoadouts"> {
+    Rooms: IRoomClient[];
     FavouriteLoadouts?: IFavouriteLoadout[];
 }
 

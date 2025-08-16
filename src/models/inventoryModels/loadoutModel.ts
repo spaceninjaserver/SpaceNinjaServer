@@ -25,7 +25,7 @@ export const EquipmentSelectionSchema = new Schema<IEquipmentSelection>(
     }
 );
 
-const loadoutConfigSchema = new Schema<ILoadoutConfigDatabase>(
+export const loadoutConfigSchema = new Schema<ILoadoutConfigDatabase>(
     {
         FocusSchool: String,
         PresetIcon: String,
