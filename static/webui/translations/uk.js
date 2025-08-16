@@ -307,7 +307,7 @@ dict = {
     worldState_varziaFullyStocked: `Повний асортимент Варзії`,
     worldState_varziaOverride: `Зміна ротації Варзії`,
 
-    import_importNote: `[UNTRANSLATED] You can provide a full or partial <code>inventory.php</code> or <code>getShip.php</code> response (client representation) here.`,
+    import_importNote: `Ви можете завантажити повну або часткову відповідь <code>inventory.php</code> або <code>getShip.php</code> (клієнтське представлення) тут.`,
     import_importNote2: `Всі підтримувані поля <b>будуть перезаписані</b> у вашому акаунті.`,
     import_submit: `Відправити`,
     import_samples: `Приклад:`,
