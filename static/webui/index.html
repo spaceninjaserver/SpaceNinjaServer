@@ -1049,8 +1049,13 @@
                                         </select>
                                     </div>
                                     <div class="flex-fill">
-                                        <label class="form-label" for="worldState.bellyOfTheBeastProgressOverride" data-loc="worldState_bellyOfTheBeastProgressOverride"></label>
-                                        <input id="worldState.bellyOfTheBeastProgressOverride" class="form-control" type="number" min="0" max="100" data-default="0" />
+                                        <form class="form-group" onsubmit="doSaveConfigInt('worldState.bellyOfTheBeastProgressOverride'); return false;">
+                                            <label class="form-label" for="worldState.bellyOfTheBeastProgressOverride" data-loc="worldState_bellyOfTheBeastProgressOverride"></label>
+                                            <div class="input-group">
+                                                <input id="worldState.bellyOfTheBeastProgressOverride" class="form-control" type="number" min="0" max="100" data-default="0" />
+                                                <button class="btn btn-secondary" type="submit" data-loc="cheats_save"></button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                                 <div class="form-group mt-2 d-flex gap-2">
@@ -1062,8 +1067,13 @@
                                         </select>
                                     </div>
                                     <div class="flex-fill">
-                                        <label class="form-label" for="worldState.eightClawProgressOverride" data-loc="worldState_eightClawProgressOverride"></label>
-                                        <input id="worldState.eightClawProgressOverride" class="form-control" type="number" min="0" max="100" data-default="0" />
+                                        <form class="form-group" onsubmit="doSaveConfigInt('worldState.eightClawProgressOverride'); return false;">
+                                            <label class="form-label" for="worldState.eightClawProgressOverride" data-loc="worldState_eightClawProgressOverride"></label>
+                                            <div class="input-group">
+                                                <input id="worldState.eightClawProgressOverride" class="form-control" type="number" min="0" max="100" data-default="0" />
+                                                <button class="btn btn-secondary" type="submit" data-loc="cheats_save"></button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                                 <div class="form-group mt-2">
