@@ -11,7 +11,7 @@ export const getGuildEventScoreController: RequestHandler = async (req, res) => 
     if (guild && guild.GoalProgress && goalId) {
         const goal = guild.GoalProgress.find(x => x.goalId.toString() == goalId);
         if (goal) {
-            return res.json({
+            res.json({
                 Tier: guild.Tier,
                 GoalProgress: {
                     Count: goal.Count,
@@ -19,7 +19,8 @@ export const getGuildEventScoreController: RequestHandler = async (req, res) => 
                     _id: { $oid: goal.goalId }
                 }
             });
+            return;
         }
     }
-    return res.json({});
+    res.json({});
 };

@@ -62,7 +62,7 @@ import { getFriendsController } from "@/src/controllers/api/getFriendsController
 import { getGuildContributionsController } from "@/src/controllers/api/getGuildContributionsController";
 import { getGuildController } from "@/src/controllers/api/getGuildController";
 import { getGuildDojoController } from "@/src/controllers/api/getGuildDojoController";
-import { getGuildEventScoreController } from "@/src/controllers/api/getGuildEventScore";
+import { getGuildEventScoreController } from "@/src/controllers/api/getGuildEventScoreController";
 import { getGuildLogController } from "@/src/controllers/api/getGuildLogController";
 import { getIgnoredUsersController } from "@/src/controllers/api/getIgnoredUsersController";
 import { getNewRewardSeedController } from "@/src/controllers/api/getNewRewardSeedController";
