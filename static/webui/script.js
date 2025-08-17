@@ -148,13 +148,20 @@ function doLogout() {
     }
 }
 
-function renameAccount() {
-    const newname = window.prompt(loc("code_changeNameConfirm"));
+function renameAccount(taken_name) {
+    const newname = window.prompt(
+        (taken_name ? loc("code_changeNameRetry").split("|NAME|").join(taken_name) + " " : "") +
+            loc("code_changeNameConfirm")
+    );
     if (newname) {
         revalidateAuthz().then(() => {
-            fetch("/custom/renameAccount?" + window.authz + "&newname=" + newname).then(() => {
-                $(".displayname").text(newname);
-                updateLocElements();
+            fetch("/custom/renameAccount?" + window.authz + "&newname=" + newname).then(res => {
+                if (res.status == 409) {
+                    renameAccount(newname);
+                } else {
+                    $(".displayname").text(newname);
+                    updateLocElements();
+                }
             });
         });
     }

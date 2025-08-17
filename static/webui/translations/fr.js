@@ -10,6 +10,7 @@ dict = {
     code_loginFail: `Connexion échouée. Vérifiez le mot de passe.`,
     code_regFail: `Enregistrement impossible. Compte existant?`,
     code_changeNameConfirm: `Nouveau nom du compte :`,
+    code_changeNameRetry: `[UNTRANSLATED] |NAME| is already taken.`,
     code_deleteAccountConfirm: `Supprimer |DISPLAYNAME| (|EMAIL|) ? Cette action est irreversible.`,
     code_archgun: `Archgun`,
     code_melee: `Melee`,

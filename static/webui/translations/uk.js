@@ -10,6 +10,7 @@ dict = {
     code_loginFail: `Не вдалося увійти. Перевірте адресу електронної пошти та пароль.`,
     code_regFail: `Не вдалося зареєструватися. Обліковий запис вже існує?`,
     code_changeNameConfirm: `Яке ім'я ви хочете встановити для свого облікового запису?`,
+    code_changeNameRetry: `[UNTRANSLATED] |NAME| is already taken.`,
     code_deleteAccountConfirm: `Ви впевнені, що хочете видалити обліковий запис |DISPLAYNAME| (|EMAIL|)? Цю дію не можна скасувати.`,
     code_archgun: `Арк-гармата`,
     code_melee: `Холодна зброя`,

@@ -10,6 +10,7 @@ dict = {
     code_loginFail: `Anmeldung fehlgeschlagen. Bitte überprüfe deine Angaben.`,
     code_regFail: `Registrierung fehlgeschlagen. Account existiert bereits?`,
     code_changeNameConfirm: `In welchen Namen möchtest du deinen Account umbenennen?`,
+    code_changeNameRetry: `[UNTRANSLATED] |NAME| is already taken.`,
     code_deleteAccountConfirm: `Bist du sicher, dass du deinen Account |DISPLAYNAME| (|EMAIL|) löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.`,
     code_archgun: `Arch-Gewehr`,
     code_melee: `Nahkampf`,

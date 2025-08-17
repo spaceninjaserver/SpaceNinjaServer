@@ -10,6 +10,7 @@ dict = {
     code_loginFail: `登录失败。请检查邮箱和密码。`,
     code_regFail: `注册失败。账号是否已存在？`,
     code_changeNameConfirm: `您想将账户名称更改为?`,
+    code_changeNameRetry: `[UNTRANSLATED] |NAME| is already taken.`,
     code_deleteAccountConfirm: `确定要删除您的账户 |DISPLAYNAME|(|EMAIL|) 吗？此操作不可撤销。`,
     code_archgun: `空战`,
     code_melee: `近战`,

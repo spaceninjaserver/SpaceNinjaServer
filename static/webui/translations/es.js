@@ -10,6 +10,7 @@ dict = {
     code_loginFail: `Error al iniciar sesión. Verifica el correo electrónico y la contraseña.`,
     code_regFail: `Error al registrar la cuenta. ¿Ya existe una cuenta con este correo?`,
     code_changeNameConfirm: `¿Qué nombre te gustaría ponerle a tu cuenta?`,
+    code_changeNameRetry: `[UNTRANSLATED] |NAME| is already taken.`,
     code_deleteAccountConfirm: `¿Estás seguro de que deseas eliminar tu cuenta |DISPLAYNAME| (|EMAIL|)? Esta acción es permanente.`,
     code_archgun: `Archcañón`,
     code_melee: `Cuerpo a cuerpo`,
