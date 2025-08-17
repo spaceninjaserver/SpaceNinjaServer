@@ -662,166 +662,174 @@ function updateInventory() {
                 "KubrowPets"
             ].forEach(category => {
                 document.getElementById(category + "-list").innerHTML = "";
-                data[category].forEach(item => {
-                    const tr = document.createElement("tr");
-                    tr.setAttribute("data-item-type", item.ItemType);
-                    {
-                        const td = document.createElement("td");
-                        td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
-                        if (item.ItemName) {
-                            const pipeIndex = item.ItemName.indexOf("|");
-                            if (pipeIndex != -1) {
-                                td.textContent = item.ItemName.substr(1 + pipeIndex) + " " + td.textContent;
-                            } else {
-                                td.textContent = item.ItemName + " (" + td.textContent + ")";
+                data[category]
+                    .sort((a, b) => (b.Favorite ? 1 : 0) - (a.Favorite ? 1 : 0))
+                    .forEach(item => {
+                        const tr = document.createElement("tr");
+                        tr.setAttribute("data-item-type", item.ItemType);
+                        {
+                            const td = document.createElement("td");
+                            td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
+                            if (item.ItemName) {
+                                const pipeIndex = item.ItemName.indexOf("|");
+                                if (pipeIndex != -1) {
+                                    td.textContent = item.ItemName.substr(1 + pipeIndex) + " " + td.textContent;
+                                } else {
+                                    td.textContent = item.ItemName + " (" + td.textContent + ")";
+                                }
                             }
+                            if (item.Details?.Name) {
+                                td.textContent = item.Details.Name + " (" + td.textContent + ")";
+                            }
+                            if (item.ModularParts && item.ModularParts.length) {
+                                td.textContent += " [";
+                                item.ModularParts.forEach(part => {
+                                    td.textContent += " " + (itemMap[part]?.name ?? part) + ",";
+                                });
+                                td.textContent = td.textContent.slice(0, -1) + " ]";
+                            }
+                            tr.appendChild(td);
                         }
-                        if (item.Details?.Name) {
-                            td.textContent = item.Details.Name + " (" + td.textContent + ")";
-                        }
-                        if (item.ModularParts && item.ModularParts.length) {
-                            td.textContent += " [";
-                            item.ModularParts.forEach(part => {
-                                td.textContent += " " + (itemMap[part]?.name ?? part) + ",";
-                            });
-                            td.textContent = td.textContent.slice(0, -1) + " ]";
-                        }
-                        tr.appendChild(td);
-                    }
-                    {
-                        const td = document.createElement("td");
-                        td.classList = "text-end text-nowrap";
+                        {
+                            const td = document.createElement("td");
+                            td.classList = "text-end text-nowrap";
 
-                        let maxXP = Math.pow(uniqueLevelCaps[item.ItemType] ?? 30, 2) * 1000;
-                        if (
-                            category != "Suits" &&
-                            category != "SpaceSuits" &&
-                            category != "Sentinels" &&
-                            category != "Hoverboards" &&
-                            category != "MechSuits" &&
-                            category != "MoaPets" &&
-                            category != "KubrowPets"
-                        ) {
-                            maxXP /= 2;
-                        }
-                        let anyExaltedMissingXP = false;
-                        if (item.XP >= maxXP && item.ItemType in itemMap && "exalted" in itemMap[item.ItemType]) {
-                            for (const exaltedType of itemMap[item.ItemType].exalted) {
-                                const exaltedItem = data.SpecialItems.find(x => x.ItemType == exaltedType);
-                                if (exaltedItem) {
-                                    const exaltedCap = itemMap[exaltedType]?.type == "weapons" ? 800_000 : 1_600_000;
-                                    if (exaltedItem.XP < exaltedCap) {
-                                        anyExaltedMissingXP = true;
-                                        break;
+                            let maxXP = Math.pow(uniqueLevelCaps[item.ItemType] ?? 30, 2) * 1000;
+                            if (
+                                category != "Suits" &&
+                                category != "SpaceSuits" &&
+                                category != "Sentinels" &&
+                                category != "Hoverboards" &&
+                                category != "MechSuits" &&
+                                category != "MoaPets" &&
+                                category != "KubrowPets"
+                            ) {
+                                maxXP /= 2;
+                            }
+                            let anyExaltedMissingXP = false;
+                            if (item.XP >= maxXP && item.ItemType in itemMap && "exalted" in itemMap[item.ItemType]) {
+                                for (const exaltedType of itemMap[item.ItemType].exalted) {
+                                    const exaltedItem = data.SpecialItems.find(x => x.ItemType == exaltedType);
+                                    if (exaltedItem) {
+                                        const exaltedCap =
+                                            itemMap[exaltedType]?.type == "weapons" ? 800_000 : 1_600_000;
+                                        if (exaltedItem.XP < exaltedCap) {
+                                            anyExaltedMissingXP = true;
+                                            break;
+                                        }
                                     }
                                 }
                             }
-                        }
-                        if (item.XP < maxXP || anyExaltedMissingXP) {
-                            const a = document.createElement("a");
-                            a.href = "#";
-                            a.onclick = function (event) {
-                                event.preventDefault();
-                                revalidateAuthz().then(() => {
-                                    const promises = [];
-                                    if (item.XP < maxXP) {
-                                        promises.push(addGearExp(category, item.ItemId.$oid, maxXP - item.XP));
-                                    }
-                                    if ("exalted" in itemMap[item.ItemType]) {
-                                        for (const exaltedType of itemMap[item.ItemType].exalted) {
-                                            const exaltedItem = data.SpecialItems.find(x => x.ItemType == exaltedType);
-                                            if (exaltedItem) {
-                                                const exaltedCap =
-                                                    itemMap[exaltedType]?.type == "weapons" ? 800_000 : 1_600_000;
-                                                if (exaltedItem.XP < exaltedCap) {
-                                                    promises.push(
-                                                        addGearExp(
-                                                            "SpecialItems",
-                                                            exaltedItem.ItemId.$oid,
-                                                            exaltedCap - exaltedItem.XP
-                                                        )
-                                                    );
+                            if (item.XP < maxXP || anyExaltedMissingXP) {
+                                const a = document.createElement("a");
+                                a.href = "#";
+                                a.onclick = function (event) {
+                                    event.preventDefault();
+                                    revalidateAuthz().then(() => {
+                                        const promises = [];
+                                        if (item.XP < maxXP) {
+                                            promises.push(addGearExp(category, item.ItemId.$oid, maxXP - item.XP));
+                                        }
+                                        if ("exalted" in itemMap[item.ItemType]) {
+                                            for (const exaltedType of itemMap[item.ItemType].exalted) {
+                                                const exaltedItem = data.SpecialItems.find(
+                                                    x => x.ItemType == exaltedType
+                                                );
+                                                if (exaltedItem) {
+                                                    const exaltedCap =
+                                                        itemMap[exaltedType]?.type == "weapons" ? 800_000 : 1_600_000;
+                                                    if (exaltedItem.XP < exaltedCap) {
+                                                        promises.push(
+                                                            addGearExp(
+                                                                "SpecialItems",
+                                                                exaltedItem.ItemId.$oid,
+                                                                exaltedCap - exaltedItem.XP
+                                                            )
+                                                        );
+                                                    }
                                                 }
                                             }
                                         }
-                                    }
-                                    Promise.all(promises).then(() => {
-                                        updateInventory();
+                                        Promise.all(promises).then(() => {
+                                            updateInventory();
+                                        });
                                     });
-                                });
-                            };
-                            a.title = loc("code_maxRank");
-                            a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"/></svg>`;
-                            td.appendChild(a);
-                        }
-
-                        if (
-                            ["Suits", "LongGuns", "Pistols", "Melee", "SpaceGuns", "SpaceMelee"].includes(category) ||
-                            modularWeapons.includes(item.ItemType)
-                        ) {
-                            const a = document.createElement("a");
-                            a.href = "/webui/detailedView?productCategory=" + category + "&itemId=" + item.ItemId.$oid;
-                            a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M278.5 215.6L23 471c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l57-57h68c49.7 0 97.9-14.4 139-41c11.1-7.2 5.5-23-7.8-23c-5.1 0-9.2-4.1-9.2-9.2c0-4.1 2.7-7.6 6.5-8.8l81-24.3c2.5-.8 4.8-2.1 6.7-4l22.4-22.4c10.1-10.1 2.9-27.3-11.3-27.3l-32.2 0c-5.1 0-9.2-4.1-9.2-9.2c0-4.1 2.7-7.6 6.5-8.8l112-33.6c4-1.2 7.4-3.9 9.3-7.7C506.4 207.6 512 184.1 512 160c0-41-16.3-80.3-45.3-109.3l-5.5-5.5C432.3 16.3 393 0 352 0s-80.3 16.3-109.3 45.3L139 149C91 197 64 262.1 64 330v55.3L253.6 195.8c6.2-6.2 16.4-6.2 22.6 0c5.4 5.4 6.1 13.6 2.2 19.8z"/></svg>`;
-                            td.appendChild(a);
-                        }
-
-                        if (!(item.Features & 8) && modularWeapons.includes(item.ItemType)) {
-                            const a = document.createElement("a");
-                            a.href = "#";
-                            a.onclick = function (event) {
-                                event.preventDefault();
-                                gildEquipment(category, item.ItemId.$oid);
-                            };
-                            a.title = loc("code_gild");
-                            a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"/></svg>`;
-                            td.appendChild(a);
-                        }
-                        if (category == "KubrowPets") {
-                            const a = document.createElement("a");
-                            a.href = "#";
-                            a.onclick = function (event) {
-                                event.preventDefault();
-                                maturePet(item.ItemId.$oid, !item.Details.IsPuppy);
-                            };
-                            if (item.Details.IsPuppy) {
-                                a.title = loc("code_mature");
-                                a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M112 48a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm40 304l0 128c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-223.1L59.4 304.5c-9.1 15.1-28.8 20-43.9 10.9s-20-28.8-10.9-43.9l58.3-97c17.4-28.9 48.6-46.6 82.3-46.6l29.7 0c33.7 0 64.9 17.7 82.3 46.6l58.3 97c9.1 15.1 4.2 34.8-10.9 43.9s-34.8 4.2-43.9-10.9L232 256.9 232 480c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-128-16 0z"/></svg>`;
-                            } else {
-                                a.title = loc("code_unmature");
-                                a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M256 64A64 64 0 1 0 128 64a64 64 0 1 0 128 0zM152.9 169.3c-23.7-8.4-44.5-24.3-58.8-45.8L74.6 94.2C64.8 79.5 45 75.6 30.2 85.4s-18.7 29.7-8.9 44.4L40.9 159c18.1 27.1 42.8 48.4 71.1 62.4L112 480c0 17.7 14.3 32 32 32s32-14.3 32-32l0-96 32 0 0 96c0 17.7 14.3 32 32 32s32-14.3 32-32l0-258.4c29.1-14.2 54.4-36.2 72.7-64.2l18.2-27.9c9.6-14.8 5.4-34.6-9.4-44.3s-34.6-5.5-44.3 9.4L291 122.4c-21.8 33.4-58.9 53.6-98.8 53.6c-12.6 0-24.9-2-36.6-5.8c-.9-.3-1.8-.7-2.7-.9z"/></svg>`;
+                                };
+                                a.title = loc("code_maxRank");
+                                a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"/></svg>`;
+                                td.appendChild(a);
                             }
-                            td.appendChild(a);
-                        }
-                        {
-                            const a = document.createElement("a");
-                            a.href = "#";
-                            a.onclick = function (event) {
-                                event.preventDefault();
-                                const name = prompt(loc("code_renamePrompt"));
-                                if (name !== null) {
-                                    renameGear(category, item.ItemId.$oid, name);
+
+                            if (
+                                ["Suits", "LongGuns", "Pistols", "Melee", "SpaceGuns", "SpaceMelee"].includes(
+                                    category
+                                ) ||
+                                modularWeapons.includes(item.ItemType)
+                            ) {
+                                const a = document.createElement("a");
+                                a.href =
+                                    "/webui/detailedView?productCategory=" + category + "&itemId=" + item.ItemId.$oid;
+                                a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M278.5 215.6L23 471c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l57-57h68c49.7 0 97.9-14.4 139-41c11.1-7.2 5.5-23-7.8-23c-5.1 0-9.2-4.1-9.2-9.2c0-4.1 2.7-7.6 6.5-8.8l81-24.3c2.5-.8 4.8-2.1 6.7-4l22.4-22.4c10.1-10.1 2.9-27.3-11.3-27.3l-32.2 0c-5.1 0-9.2-4.1-9.2-9.2c0-4.1 2.7-7.6 6.5-8.8l112-33.6c4-1.2 7.4-3.9 9.3-7.7C506.4 207.6 512 184.1 512 160c0-41-16.3-80.3-45.3-109.3l-5.5-5.5C432.3 16.3 393 0 352 0s-80.3 16.3-109.3 45.3L139 149C91 197 64 262.1 64 330v55.3L253.6 195.8c6.2-6.2 16.4-6.2 22.6 0c5.4 5.4 6.1 13.6 2.2 19.8z"/></svg>`;
+                                td.appendChild(a);
+                            }
+
+                            if (!(item.Features & 8) && modularWeapons.includes(item.ItemType)) {
+                                const a = document.createElement("a");
+                                a.href = "#";
+                                a.onclick = function (event) {
+                                    event.preventDefault();
+                                    gildEquipment(category, item.ItemId.$oid);
+                                };
+                                a.title = loc("code_gild");
+                                a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"/></svg>`;
+                                td.appendChild(a);
+                            }
+                            if (category == "KubrowPets") {
+                                const a = document.createElement("a");
+                                a.href = "#";
+                                a.onclick = function (event) {
+                                    event.preventDefault();
+                                    maturePet(item.ItemId.$oid, !item.Details.IsPuppy);
+                                };
+                                if (item.Details.IsPuppy) {
+                                    a.title = loc("code_mature");
+                                    a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M112 48a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm40 304l0 128c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-223.1L59.4 304.5c-9.1 15.1-28.8 20-43.9 10.9s-20-28.8-10.9-43.9l58.3-97c17.4-28.9 48.6-46.6 82.3-46.6l29.7 0c33.7 0 64.9 17.7 82.3 46.6l58.3 97c9.1 15.1 4.2 34.8-10.9 43.9s-34.8 4.2-43.9-10.9L232 256.9 232 480c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-128-16 0z"/></svg>`;
+                                } else {
+                                    a.title = loc("code_unmature");
+                                    a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M256 64A64 64 0 1 0 128 64a64 64 0 1 0 128 0zM152.9 169.3c-23.7-8.4-44.5-24.3-58.8-45.8L74.6 94.2C64.8 79.5 45 75.6 30.2 85.4s-18.7 29.7-8.9 44.4L40.9 159c18.1 27.1 42.8 48.4 71.1 62.4L112 480c0 17.7 14.3 32 32 32s32-14.3 32-32l0-96 32 0 0 96c0 17.7 14.3 32 32 32s32-14.3 32-32l0-258.4c29.1-14.2 54.4-36.2 72.7-64.2l18.2-27.9c9.6-14.8 5.4-34.6-9.4-44.3s-34.6-5.5-44.3 9.4L291 122.4c-21.8 33.4-58.9 53.6-98.8 53.6c-12.6 0-24.9-2-36.6-5.8c-.9-.3-1.8-.7-2.7-.9z"/></svg>`;
                                 }
-                            };
-                            a.title = loc("code_rename");
-                            a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M0 80V229.5c0 17 6.7 33.3 18.7 45.3l176 176c25 25 65.5 25 90.5 0L418.7 317.3c25-25 25-65.5 0-90.5l-176-176c-12-12-28.3-18.7-45.3-18.7H48C21.5 32 0 53.5 0 80zm112 32a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/></svg>`;
-                            td.appendChild(a);
+                                td.appendChild(a);
+                            }
+                            {
+                                const a = document.createElement("a");
+                                a.href = "#";
+                                a.onclick = function (event) {
+                                    event.preventDefault();
+                                    const name = prompt(loc("code_renamePrompt"));
+                                    if (name !== null) {
+                                        renameGear(category, item.ItemId.$oid, name);
+                                    }
+                                };
+                                a.title = loc("code_rename");
+                                a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M0 80V229.5c0 17 6.7 33.3 18.7 45.3l176 176c25 25 65.5 25 90.5 0L418.7 317.3c25-25 25-65.5 0-90.5l-176-176c-12-12-28.3-18.7-45.3-18.7H48C21.5 32 0 53.5 0 80zm112 32a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/></svg>`;
+                                td.appendChild(a);
+                            }
+                            {
+                                const a = document.createElement("a");
+                                a.href = "#";
+                                a.onclick = function (event) {
+                                    event.preventDefault();
+                                    document.getElementById(category + "-list").removeChild(tr);
+                                    disposeOfGear(category, item.ItemId.$oid);
+                                };
+                                a.title = loc("code_remove");
+                                a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
+                                td.appendChild(a);
+                            }
+                            tr.appendChild(td);
                         }
-                        {
-                            const a = document.createElement("a");
-                            a.href = "#";
-                            a.onclick = function (event) {
-                                event.preventDefault();
-                                document.getElementById(category + "-list").removeChild(tr);
-                                disposeOfGear(category, item.ItemId.$oid);
-                            };
-                            a.title = loc("code_remove");
-                            a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
-                            td.appendChild(a);
-                        }
-                        tr.appendChild(td);
-                    }
-                    document.getElementById(category + "-list").appendChild(tr);
-                });
+                        document.getElementById(category + "-list").appendChild(tr);
+                    });
             });
 
             document.getElementById("EvolutionProgress-list").innerHTML = "";
