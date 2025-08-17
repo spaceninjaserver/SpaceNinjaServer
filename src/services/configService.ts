@@ -71,6 +71,7 @@ export interface IConfig {
     unfaithfulBugFixes?: {
         ignore1999LastRegionPlayed?: boolean;
         fixXtraCheeseTimer?: boolean;
+        useAnniversaryTagForOldGoals?: boolean;
     };
     worldState?: {
         creditBoost?: boolean;
@@ -82,6 +83,7 @@ export interface IConfig {
         orphixVenom?: boolean;
         longShadow?: boolean;
         hallowedFlame?: boolean;
+        anniversary?: number;
         hallowedNightmares?: boolean;
         hallowedNightmaresRewardsOverride?: number;
         proxyRebellion?: boolean;

@@ -59,7 +59,8 @@
   "nightwaveStandingMultiplier": 1,
   "unfaithfulBugFixes": {
     "ignore1999LastRegionPlayed": false,
-    "fixXtraCheeseTimer": false
+    "fixXtraCheeseTimer": false,
+    "useAnniversaryTagForOldGoals": true
   },
   "worldState": {
     "creditBoost": false,
@@ -70,6 +71,7 @@
     "orphixVenom": false,
     "longShadow": false,
     "hallowedFlame": false,
+    "anniversary": null,
     "hallowedNightmares": false,
     "hallowedNightmaresRewardsOverride": 0,
     "proxyRebellion": false,

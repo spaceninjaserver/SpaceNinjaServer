@@ -206,12 +206,12 @@ function updateLocElements() {
         const incWith = elm
             .getAttribute("data-loc-inc")
             .split("|")
-            .map(key => loc(key))
+            .map(key => loc(key).replace(/<[^>]+>/g, ""))
             .join(", ");
         elm.title = `${loc("worldState_incompatibleWith")} ${incWith}`;
     });
-    document.querySelectorAll("[data-loc-year]").forEach(elm => {
-        elm.innerHTML = elm.innerHTML.replace("|YEAR|", elm.getAttribute("data-loc-year"));
+    document.querySelectorAll("[data-loc-replace]").forEach(elm => {
+        elm.innerHTML = elm.innerHTML.replace("|VAL|", elm.getAttribute("data-loc-replace"));
     });
 }
 

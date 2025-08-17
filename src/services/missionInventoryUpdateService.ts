@@ -712,6 +712,20 @@ export const addMissionInventoryUpdates = async (
                                     if (reward.credits) {
                                         message.RegularCredits = reward.credits;
                                     }
+                                    if (info.arg) {
+                                        const args: Record<string, string | number> = {
+                                            PLAYER_NAME: account.DisplayName,
+                                            CREDIT_REWARD: reward.credits ?? 0
+                                        };
+
+                                        info.arg.forEach(key => {
+                                            const value = args[key];
+                                            if (value) {
+                                                message.arg ??= [];
+                                                message.arg.push({ Key: key, Tag: value });
+                                            }
+                                        });
+                                    }
 
                                     await createMessage(inventory.accountOwnerId, [message]);
                                 }
@@ -2271,7 +2285,7 @@ const getHexBounties = (seed: number): { nodes: string[]; buddies: string[] } =>
     return { nodes, buddies };
 };*/
 
-const goalMessagesByKey: Record<string, { sndr: string; msg: string; sub: string; icon: string }> = {
+const goalMessagesByKey: Record<string, { sndr: string; msg: string; sub: string; icon: string; arg?: string[] }> = {
     "/Lotus/Types/Keys/GalleonRobberyAlert": {
         sndr: "/Lotus/Language/Bosses/BossCouncilorVayHek",
         msg: "/Lotus/Language/Messages/GalleonRobbery2025RewardMsgA",
@@ -2384,19 +2398,22 @@ const goalMessagesByKey: Record<string, { sndr: string; msg: string; sub: string
         sndr: "/Lotus/Language/Bosses/Lotus",
         msg: "/Lotus/Language/G1Quests/RazorbackArmadaRewardBody",
         sub: "/Lotus/Language/G1Quests/GenericTacAlertSmallRewardMsgTitle",
-        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png"
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+        arg: ["CREDIT_REWARD"]
     },
     "/Lotus/Types/Keys/TacAlertKeyProxyRebellionTwo": {
         sndr: "/Lotus/Language/Bosses/Lotus",
         msg: "/Lotus/Language/G1Quests/RazorbackArmadaRewardBody",
         sub: "/Lotus/Language/G1Quests/GenericTacAlertSmallRewardMsgTitle",
-        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png"
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+        arg: ["CREDIT_REWARD"]
     },
     "/Lotus/Types/Keys/TacAlertKeyProxyRebellionThree": {
         sndr: "/Lotus/Language/Bosses/Lotus",
         msg: "/Lotus/Language/G1Quests/RazorbackArmadaRewardBody",
         sub: "/Lotus/Language/G1Quests/GenericTacAlertSmallRewardMsgTitle",
-        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png"
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+        arg: ["CREDIT_REWARD"]
     },
     "/Lotus/Types/Keys/TacAlertKeyProxyRebellionFour": {
         sndr: "/Lotus/Language/Bosses/Lotus",
@@ -2408,7 +2425,8 @@ const goalMessagesByKey: Record<string, { sndr: string; msg: string; sub: string
         sndr: "/Lotus/Language/Bosses/Lotus",
         msg: "/Lotus/Language/G1Quests/ProjectNightwatchRewardMsgA",
         sub: "/Lotus/Language/G1Quests/ProjectNightwatchTacAlertMissionOneTitle",
-        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png"
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+        arg: ["CREDIT_REWARD"]
     },
     "/Lotus/Types/Keys/TacAlertKeyProjectNightwatch": {
         sndr: "/Lotus/Language/Bosses/Lotus",
@@ -2457,5 +2475,145 @@ const goalMessagesByKey: Record<string, { sndr: string; msg: string; sub: string
         msg: "/Lotus/Language/Inbox/MechEvent2020Tier3CompleteDesc",
         sub: "/Lotus/Language/Inbox/MechEvent2020Tier3CompleteTitle",
         icon: "/Lotus/Interface/Icons/Npcs/Entrati/Father.png"
+    },
+    "/Lotus/Types/Keys/TacAlertKeyAnniversary2019E": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/Messages/Anniversary2024RewardMsgB",
+        sub: "/Lotus/Language/Messages/Anniversary2024MissionTitleB",
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+        arg: ["PLAYER_NAME"]
+    },
+    "/Lotus/Types/Keys/TacAlertKeyAnniversary2020F": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/Messages/Anniversary2024RewardMsgC",
+        sub: "/Lotus/Language/Messages/Anniversary2024MissionTitleB",
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+        arg: ["PLAYER_NAME"]
+    },
+    "/Lotus/Types/Keys/TacAlertKeyAnniversary2024ChallengeModeA": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/Messages/Anniversary2024RewardMsgD",
+        sub: "/Lotus/Language/Messages/Anniversary2024MissionTitleD",
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+        arg: ["PLAYER_NAME"]
+    },
+    "/Lotus/Types/Keys/TacAlertKeyAnniversary2017C": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/Messages/Anniversary2019RewardMsgC",
+        sub: "/Lotus/Language/Messages/Anniversary2019MissionTitleC",
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+        arg: ["PLAYER_NAME"]
+    },
+    "/Lotus/Types/Keys/TacAlertKeyAnniversary2020H": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/Messages/Anniversary2020RewardMsgH",
+        sub: "/Lotus/Language/Messages/Anniversary2020MissionTitleH",
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+        arg: ["PLAYER_NAME"]
+    },
+    "/Lotus/Types/Keys/TacAlertKeyAnniversary2022J": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/Messages/Anniversary2022RewardMsgJ",
+        sub: "/Lotus/Language/Messages/Anniversary2022MissionTitleJ",
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+        arg: ["PLAYER_NAME"]
+    },
+    "/Lotus/Types/Keys/TacAlertKeyAnniversary2025D": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/Messages/Anniversary2025RewardMsgB",
+        sub: "/Lotus/Language/Messages/Anniversary2025MissionTitleB",
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+        arg: ["PLAYER_NAME"]
+    },
+    "/Lotus/Types/Keys/TacAlertKeyAnniversary2025ChallengeModeA": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/Messages/Anniversary2025RewardMsgC",
+        sub: "/Lotus/Language/Messages/Anniversary2025MissionTitleC",
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+        arg: ["PLAYER_NAME"]
+    },
+    "/Lotus/Types/Keys/TacAlertKeyAnniversary2020G": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/Messages/Anniversary2020RewardMsgG",
+        sub: "/Lotus/Language/Messages/Anniversary2020MissionTitleG",
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+        arg: ["PLAYER_NAME"]
+    },
+    "/Lotus/Types/Keys/TacAlertKeyAnniversary2017B": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/Messages/Anniversary2019RewardMsgB",
+        sub: "/Lotus/Language/Messages/Anniversary2019MissionTitleB",
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+        arg: ["PLAYER_NAME"]
+    },
+    "/Lotus/Types/Keys/TacAlertKeyAnniversary2017A": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/Messages/Anniversary2019RewardMsgA",
+        sub: "/Lotus/Language/Messages/Anniversary2019MissionTitleA",
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+        arg: ["PLAYER_NAME"]
+    },
+    "/Lotus/Types/Keys/TacAlertKeyAnniversary2023K": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/Messages/Anniversary2025RewardMsgG",
+        sub: "/Lotus/Language/Messages/Anniversary2025MissionTitleG",
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+        arg: ["PLAYER_NAME"]
+    },
+    "/Lotus/Types/Keys/TacAlertKeyAnniversary2025ChallengeModeB": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/Messages/Anniversary2025RewardMsgD",
+        sub: "/Lotus/Language/Messages/Anniversary2025MissionTitleD",
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+        arg: ["PLAYER_NAME"]
+    },
+    "/Lotus/Types/Keys/TacAlertKeyAnniversary2025A": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/Messages/Anniversary2025RewardMsgA",
+        sub: "/Lotus/Language/Messages/Anniversary2025MissionTitleA",
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+        arg: ["PLAYER_NAME"]
+    },
+    "/Lotus/Types/Keys/TacAlertKeyAnniversary2018D": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/Messages/Anniversary2024RewardMsgG",
+        sub: "/Lotus/Language/Messages/Anniversary2024MissionTitleG",
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+        arg: ["PLAYER_NAME"]
+    },
+    "/Lotus/Types/Keys/TacAlertKeyAnniversary2025C": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/Messages/Anniversary2024RewardMsgF",
+        sub: "/Lotus/Language/Messages/Anniversary2024MissionTitleF",
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+        arg: ["PLAYER_NAME"]
+    },
+    "/Lotus/Types/Keys/TacAlertKeyAnniversary2024L": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/Messages/Anniversary2024RewardMsgA",
+        sub: "/Lotus/Language/Messages/Anniversary2024MissionTitleA",
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+        arg: ["PLAYER_NAME"]
+    },
+    "/Lotus/Types/Keys/TacAlertKeyAnniversary2024ChallengeModeB": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/Messages/Anniversary2024RewardMsgE",
+        sub: "/Lotus/Language/Messages/Anniversary2024MissionTitleE",
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+        arg: ["PLAYER_NAME"]
+    },
+    "/Lotus/Types/Keys/TacAlertKeyAnniversary2021I": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/Messages/Anniversary2024RewardMsgH",
+        sub: "/Lotus/Language/Messages/Anniversary2024MissionTitleH",
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+        arg: ["PLAYER_NAME"]
+    },
+    "/Lotus/Types/Keys/TacAlertKeyAnniversary2025B": {
+        sndr: "/Lotus/Language/Bosses/Lotus",
+        msg: "/Lotus/Language/Messages/Anniversary2025RewardMsgE",
+        sub: "/Lotus/Language/Messages/Anniversary2025MissionTitleE",
+        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+        arg: ["PLAYER_NAME"]
     }
 };

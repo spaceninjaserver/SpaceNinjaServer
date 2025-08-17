@@ -18,6 +18,7 @@ import {
     ICalendarDay,
     ICalendarEvent,
     ICalendarSeason,
+    IGoal,
     IInvasion,
     ILiteSortie,
     IPrimeVaultTrader,
@@ -1538,7 +1539,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             Personal: true,
             Bounty: true,
             ClampNodeScores: true,
-            Node: "EventNode28", // Incompatible with Wolf Hunt (2025), Orphix Venom
+            Node: "EventNode28", // Incompatible with Wolf Hunt (2025), Orphix Venom, Warframe Anniversary
             MissionKeyName: "/Lotus/Types/Keys/GalleonRobberyAlertB",
             Desc: "/Lotus/Language/Events/GalleonRobberyEventMissionTitle",
             Icon: "/Lotus/Interface/Icons/Player/GalleonRobberiesEvent.png",
@@ -1819,14 +1820,14 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             Personal: true,
             Bounty: true,
             ClampNodeScores: true,
-            Node: "EventNode25", // Incompatible with Hallowed Flame, Hallowed Nightmares
+            Node: "EventNode25", // Incompatible with Hallowed Flame, Hallowed Nightmares, Warframe Anniversary
             ConcurrentMissionKeyNames: [
                 "/Lotus/Types/Keys/TacAlertKeyWaterFightB",
                 "/Lotus/Types/Keys/TacAlertKeyWaterFightC",
                 "/Lotus/Types/Keys/TacAlertKeyWaterFightD"
             ],
             ConcurrentNodeReqs: [25, 50, 100],
-            ConcurrentNodes: ["EventNode24", "EventNode34", "EventNode35"], // Incompatible with Hallowed Flame, Hallowed Nightmares
+            ConcurrentNodes: ["EventNode24", "EventNode34", "EventNode35"], // Incompatible with Hallowed Flame, Hallowed Nightmares, Warframe Anniversary
             MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyWaterFightA",
             Faction: "FC_CORPUS",
             Desc: "/Lotus/Language/Alerts/TacAlertWaterFight",
@@ -1934,6 +1935,226 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         }
     }
 
+    if (config.worldState?.anniversary != undefined) {
+        // Incompatible with: Use Tag from Warframe Anniversary for old Events, Wolf Hunt (2025), Galleon Of Ghouls, Hallowed Flame, Hallowed Nightmares, Dog Days, Proxy Rebellion, Long Shadow
+        const goalsByWeek: Partial<IGoal>[][] = [
+            [
+                {
+                    Node: "EventNode28",
+                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2019E",
+                    Tag: "Anniversary2019TacAlert",
+                    Reward: {
+                        items: ["/Lotus/StoreItems/Upgrades/Skins/Excalibur/ExcaliburDexSkin"]
+                    }
+                },
+                {
+                    Node: "EventNode26",
+                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2020F",
+                    Tag: "Anniversary2020TacAlert",
+                    Reward: {
+                        items: ["/Lotus/StoreItems/Types/Items/ShipDecos/ExcaliburDexBobbleHead"]
+                    }
+                },
+                {
+                    Node: "EventNode19",
+                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2024ChallengeModeA",
+                    Tag: "Anniversary2024TacAlertCMA",
+                    Reward: {
+                        items: ["/Lotus/StoreItems/Types/Items/MiscItems/WeaponUtilityUnlocker"]
+                    }
+                }
+            ],
+            [
+                {
+                    Node: "EventNode24",
+                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2017C",
+                    Tag: "Anniversary2018TacAlert",
+                    Reward: {
+                        items: ["/Lotus/StoreItems/Weapons/Tenno/LongGuns/DexTheThird/DexTheThird"]
+                    }
+                },
+                {
+                    Node: "EventNode18",
+                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2020H",
+                    Tag: "Anniversary2020TacAlert",
+                    Reward: {
+                        items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/ImageDexAnniversary"]
+                    }
+                }
+            ],
+            [
+                {
+                    Node: "EventNode18",
+                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2022J",
+                    Tag: "Anniversary2022TacAlert",
+                    Reward: {
+                        items: ["/Lotus/StoreItems/Upgrades/Skins/Rhino/RhinoDexSkin"]
+                    }
+                },
+                {
+                    Node: "EventNode38",
+                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2025D",
+                    Tag: "Anniversary2020TacAlert",
+                    Reward: {
+                        items: ["/Lotus/StoreItems/Types/Items/ShipDecos/RhinoDexBobbleHead"]
+                    }
+                },
+                {
+                    Node: "EventNode27",
+                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2025ChallengeModeA",
+                    Tag: "Anniversary2024TacAlertCMA",
+                    Reward: {
+                        items: ["/Lotus/StoreItems/Types/Items/MiscItems/OrokinCatalyst"]
+                    }
+                }
+            ],
+            [
+                {
+                    Node: "EventNode2",
+                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2020G",
+                    Tag: "Anniversary2020TacAlert",
+                    Reward: {
+                        items: ["/Lotus/StoreItems/Upgrades/Skins/Liset/DexLisetSkin"]
+                    }
+                },
+                {
+                    Node: "EventNode17",
+                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2017B",
+                    Tag: "Anniversary2018TacAlert",
+                    Reward: {
+                        items: ["/Lotus/StoreItems/Weapons/Tenno/Melee/Swords/DexTheSecond/DexTheSecond"]
+                    }
+                }
+            ],
+            [
+                {
+                    Node: "EventNode18",
+                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2017A",
+                    Tag: "Anniversary2018TacAlert",
+                    Reward: {
+                        items: ["/Lotus/StoreItems/Weapons/Tenno/Pistols/DexFuris/DexFuris"]
+                    }
+                },
+                {
+                    Node: "EventNode26",
+                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2023K",
+                    Tag: "Anniversary2025TacAlert",
+                    Reward: {
+                        items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/AvatarImageCommunityClemComic"]
+                    }
+                },
+                {
+                    Node: "EventNode12",
+                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2025ChallengeModeB",
+                    Tag: "Anniversary2025TacAlertCMB",
+                    Reward: {
+                        items: ["/Lotus/StoreItems/Types/Items/MiscItems/WeaponPrimaryArcaneUnlocker"]
+                    }
+                }
+            ],
+            [
+                {
+                    Node: "EventNode17",
+                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2025A",
+                    Tag: "Anniversary2025TacAlert",
+                    Reward: {
+                        items: [
+                            "/Lotus/StoreItems/Weapons/Tenno/Melee/Swords/KatanaAndWakizashi/Dex2023Nikana/Dex2023Nikana"
+                        ]
+                    }
+                },
+                {
+                    Node: "EventNode27",
+                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2018D",
+                    Tag: "Anniversary2018TacAlert",
+                    Reward: {
+                        items: ["/Lotus/StoreItems/Upgrades/Skins/Scarves/DexScarf"]
+                    }
+                }
+            ],
+            [
+                {
+                    Node: "EventNode38",
+                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2025C",
+                    Tag: "Anniversary2018TacAlert",
+                    Reward: {
+                        items: ["/Lotus/StoreItems/Upgrades/Skins/Wisp/DexWispSkin"]
+                    }
+                },
+                {
+                    Node: "EventNode12",
+                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2024L",
+                    Tag: "Anniversary2024TacAlert",
+                    Reward: {
+                        items: ["/Lotus/Types/StoreItems/Packages/OperatorDrifterDexBundle"]
+                    }
+                },
+                {
+                    Node: "EventNode26",
+                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2024ChallengeModeB",
+                    Tag: "Anniversary2024TacAlertCMB",
+                    Reward: {
+                        items: ["/Lotus/StoreItems/Types/Recipes/Components/UmbraFormaBlueprint"]
+                    }
+                }
+            ],
+            [
+                {
+                    Node: "EventNode37",
+                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2021I",
+                    Tag: "Anniversary2021TacAlert",
+                    Reward: {
+                        items: [
+                            "/Lotus/StoreItems/Upgrades/Skins/Armor/Dex2020Armor/Dex2020ArmorAArmor",
+                            "/Lotus/StoreItems/Upgrades/Skins/Armor/Dex2020Armor/Dex2020ArmorCArmor",
+                            "/Lotus/StoreItems/Upgrades/Skins/Armor/Dex2020Armor/Dex2020ArmorLArmor",
+                            "/Lotus/StoreItems/Types/Game/CatbrowPet/CatbrowGeneticSignature"
+                        ],
+                        countedItems: [
+                            {
+                                ItemType: "/Lotus/Types/Game/CatbrowPet/CatbrowGeneticSignature",
+                                ItemCount: 10
+                            }
+                        ]
+                    }
+                },
+                {
+                    Node: "EventNode9",
+                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2025B",
+                    Tag: "Anniversary2025TacAlert",
+                    Reward: {
+                        items: ["/Lotus/StoreItems/Types/StoreItems/SuitCustomizations/ColourPickerAnniversaryEleven"]
+                    }
+                }
+            ]
+        ];
+        goalsByWeek[config.worldState.anniversary].forEach((goal, i) => {
+            worldState.Goals.push({
+                _id: {
+                    $oid:
+                        "67c6d8e725b23feb" +
+                        config.worldState?.anniversary!.toString(16).padStart(4, "0") +
+                        i.toString(16).padStart(4, "0")
+                },
+                Activation: { $date: { $numberLong: "1745593200000" } },
+                Expiry: { $date: { $numberLong: "2000000000000" } },
+                Count: 0,
+                Goal: 1,
+                Success: 0,
+                Personal: true,
+                ClampNodeScores: true,
+                Node: goal.Node,
+                MissionKeyName: goal.MissionKeyName,
+                Desc: goal.Tag!.endsWith("CMB")
+                    ? "/Lotus/Language/Events/Anniversary2024ChallengeMode"
+                    : "/Lotus/Language/G1Quests/Anniversary2017MissionTitle",
+                Icon: "/Lotus/Interface/Icons/Player/GlyphLotus12Anniversary.png",
+                Tag: goal.Tag!,
+                Reward: goal.Reward
+            });
+        });
+    }
+
     if (config.worldState?.wolfHunt) {
         worldState.Goals.push({
             _id: {
@@ -1964,7 +2185,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                 "/Lotus/Types/Keys/WolfTacAlertReduxD"
             ],
             ConcurrentNodeReqs: [1, 2, 3],
-            ConcurrentNodes: ["EventNode28", "EventNode39", "EventNode40"], // Incompatible with Galleon Of Ghouls, Orphix Venom
+            ConcurrentNodes: ["EventNode28", "EventNode39", "EventNode40"], // Incompatible with Galleon Of Ghouls, Orphix Venom, Warframe Anniversary
             MissionKeyName: "/Lotus/Types/Keys/WolfTacAlertReduxA",
             Faction: "FC_GRINEER",
             Desc: "/Lotus/Language/Alerts/WolfAlert",
@@ -1995,6 +2216,18 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         });
     }
 
+    const tagsForOlderGoals: string[] = [
+        "Anniversary2018TacAlert",
+        "Anniversary2019TacAlert",
+        "Anniversary2020TacAlert",
+        "Anniversary2021TacAlert",
+        "Anniversary2022TacAlert",
+        "Anniversary2024TacAlert",
+        "Anniversary2024TacAlertCMA",
+        "Anniversary2025TacAlert",
+        "Anniversary2025TacAlertCMB"
+    ];
+
     if (config.worldState?.hallowedFlame) {
         worldState.Goals.push(
             {
@@ -2019,7 +2252,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                 Faction: "FC_INFESTATION",
                 Desc: "/Lotus/Language/Events/TacAlertHalloweenLantern",
                 Icon: "/Lotus/Interface/Icons/JackOLanternColour.png",
-                Tag: "Halloween19",
+                Tag: config.unfaithfulBugFixes?.useAnniversaryTagForOldGoals ? tagsForOlderGoals[0] : "Halloween19",
                 InterimRewards: [
                     { items: ["/Lotus/StoreItems/Types/Items/MiscItems/OrokinCatalyst"] },
                     { items: ["/Lotus/StoreItems/Types/Items/MiscItems/Forma"] }
@@ -2045,7 +2278,9 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                 Desc: "/Lotus/Language/Events/TacAlertHalloweenLanternEndless",
                 Icon: "/Lotus/Interface/Icons/JackOLanternColour.png",
                 Tag: "Halloween19Endless",
-                PrereqGoalTags: ["Halloween19"],
+                PrereqGoalTags: [
+                    config.unfaithfulBugFixes?.useAnniversaryTagForOldGoals ? tagsForOlderGoals[0] : "Halloween19"
+                ],
                 Reward: {
                     items: [
                         "/Lotus/StoreItems/Upgrades/Skins/Effects/BatsEphemera",
@@ -2109,17 +2344,17 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             Success: 0,
             Personal: true,
             Bounty: true,
-            Tag: "Halloween",
+            Tag: config.unfaithfulBugFixes?.useAnniversaryTagForOldGoals ? tagsForOlderGoals[0] : "Halloween",
             Faction: "FC_INFESTATION",
             Desc: "/Lotus/Language/G1Quests/TacAlertHalloweenTitle",
             ToolTip: "/Lotus/Language/G1Quests/TacAlertHalloweenToolTip",
             Icon: "/Lotus/Interface/Icons/JackOLanternColour.png",
             ClampNodeScores: true,
-            Node: "EventNode2",
+            Node: "EventNode2", // Incompatible with Warframe Anniversary
             MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyHalloween",
             ConcurrentMissionKeyNames: ["/Lotus/Types/Keys/TacAlertKeyHalloweenBonus"],
             ConcurrentNodeReqs: [1],
-            ConcurrentNodes: ["EventNode24"], // Incompatible with Hallowed Flame, Dog Days
+            ConcurrentNodes: ["EventNode24"], // Incompatible with Hallowed Flame, Dog Days, Warframe Anniversary
             InterimRewards: [rewards[year][0]],
             Reward: rewards[year][1]
         });
@@ -2135,7 +2370,9 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                 Bounty: true,
                 Best: true,
                 Tag: "Halloween",
-                PrereqGoalTags: ["Halloween"],
+                PrereqGoalTags: [
+                    config.unfaithfulBugFixes?.useAnniversaryTagForOldGoals ? tagsForOlderGoals[0] : "Halloween"
+                ],
                 Faction: "FC_INFESTATION",
                 Desc: "Hallowed Nightmares - Time Attack",
                 ToolTip: "/Lotus/Language/G1Quests/TacAlertHalloweenToolTip",
@@ -2209,19 +2446,19 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             Personal: true,
             Bounty: true,
             ClampNodeScores: true,
-            Node: "EventNode18",
+            Node: "EventNode18", // Incompatible with Warframe Anniversary
             ConcurrentMissionKeyNames: [
                 "/Lotus/Types/Keys/TacAlertKeyProxyRebellionTwo",
                 "/Lotus/Types/Keys/TacAlertKeyProxyRebellionThree",
                 "/Lotus/Types/Keys/TacAlertKeyProxyRebellionFour"
             ],
             ConcurrentNodeReqs: [1, 2, 3],
-            ConcurrentNodes: ["EventNode7", "EventNode4", "EventNode17"], // Incompatible with Orphix venom
+            ConcurrentNodes: ["EventNode7", "EventNode4", "EventNode17"], // Incompatible with Orphix venom, Warframe Anniversary
             MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyProxyRebellionOne",
             Faction: "FC_CORPUS",
             Desc: "/Lotus/Language/Alerts/TacAlertProxyRebellion",
             Icon: "/Lotus/Materials/Emblems/BountyBadge_e.png",
-            Tag: "ProxyRebellion",
+            Tag: config.unfaithfulBugFixes?.useAnniversaryTagForOldGoals ? tagsForOlderGoals[1] : "ProxyRebellion",
             InterimRewards: rewards[year].slice(0, 2),
             Reward: rewards[year][2],
             BonusReward: rewards[year][3]
@@ -2240,12 +2477,12 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             Success: 0,
             Personal: true,
             Bounty: true,
-            Tag: "NightwatchTacAlert",
+            Tag: config.unfaithfulBugFixes?.useAnniversaryTagForOldGoals ? tagsForOlderGoals[2] : "NightwatchTacAlert",
             Faction: "FC_GRINEER",
             Desc: "/Lotus/Language/G1Quests/ProjectNightwatchTacAlertTitle",
             Icon: "/Lotus/Materials/Emblems/BountyBadge_e.png",
             ClampNodeScores: true,
-            Node: "EventNode9",
+            Node: "EventNode9", // Incompatible with Warframe Anniversary
             MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyProjectNightwatchEasy",
             ConcurrentMissionKeyNames: [
                 "/Lotus/Types/Keys/TacAlertKeyProjectNightwatch",
