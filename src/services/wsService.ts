@@ -73,8 +73,9 @@ interface IWsMsgToClient {
     auth_fail?: {
         isRegister: boolean;
     };
-    logged_out?: boolean;
+    nonce_updated?: boolean;
     update_inventory?: boolean;
+    logged_out?: boolean;
 }
 
 const wsOnConnect = (ws: ws, req: http.IncomingMessage): void => {

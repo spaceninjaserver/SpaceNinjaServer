@@ -21,8 +21,7 @@ export const logoutController: RequestHandler = async (req, res) => {
         }
     );
     if (stat.modifiedCount) {
-        // Tell WebUI its nonce has been invalidated
-        sendWsBroadcastTo(req.query.accountId as string, { logged_out: true });
+        sendWsBroadcastTo(req.query.accountId as string, { nonce_updated: true });
     }
 
     res.writeHead(200, {

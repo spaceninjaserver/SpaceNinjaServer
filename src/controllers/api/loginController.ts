@@ -88,8 +88,7 @@ export const loginController: RequestHandler = async (request, response) => {
     account.LastLogin = new Date();
     await account.save();
 
-    // Tell WebUI its nonce has been invalidated
-    sendWsBroadcastTo(account._id.toString(), { logged_out: true });
+    sendWsBroadcastTo(account._id.toString(), { nonce_updated: true });
 
     response.json(createLoginResponse(myAddress, myUrlBase, account.toJSON(), buildLabel));
 };

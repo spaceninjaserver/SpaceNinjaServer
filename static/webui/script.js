@@ -81,11 +81,14 @@ function openWebSocket() {
                 single.loadRoute("/webui/");
             }
         }
-        if ("logged_out" in msg) {
+        if ("nonce_updated" in msg) {
             sendAuth();
         }
         if ("update_inventory" in msg) {
             updateInventory();
+        }
+        if ("logged_out" in msg) {
+            logout();
         }
     };
     window.ws.onclose = function () {
