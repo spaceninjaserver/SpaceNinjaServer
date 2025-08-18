@@ -1785,20 +1785,20 @@ function getRandomMissionDrops(
             if (mission?.Tier == 1) {
                 logger.warn(`non-steel path duviri murmur tier used on steel path?!`);
             }
-            /*if (operation eight claw is active) {
+            if (config.worldState?.eightClaw) {
                 drops.push({
                     StoreItem: "/Lotus/StoreItems/Types/Gameplay/DuviriMITW/Resources/DuviriMurmurItemEvent",
                     ItemCount: 10
                 });
-            }*/
+            }
             rewardManifests = ["/Lotus/Types/Game/MissionDecks/DuviriEncounterRewards/DuviriMurmurFinalChestRewards"];
         } else if (RewardInfo.T == 19) {
-            /*if (operation eight claw is active) {
+            if (config.worldState?.eightClaw) {
                 drops.push({
                     StoreItem: "/Lotus/StoreItems/Types/Gameplay/DuviriMITW/Resources/DuviriMurmurItemEvent",
                     ItemCount: 15
                 });
-            }*/
+            }
             rewardManifests = [
                 "/Lotus/Types/Game/MissionDecks/DuviriEncounterRewards/DuviriMurmurFinalSteelChestRewards"
             ];
