@@ -1980,8 +1980,58 @@ const challengeRewardsInboxMessages: Record<string, IMessageCreationTemplate> = 
         msg: "/Lotus/Language/Inbox/EvolvingSekharaUnlockBDesc",
         icon: "/Lotus/Interface/Icons/Npcs/Ordis.png",
         att: ["/Lotus/Upgrades/Skins/Clan/ZarimanEvolvingSekharaBadgeItemC"]
+    },
+    // In theory, the following should only give what is owned, but based on the limited information I can find, DE may have simply taken the easy way: https://www.reddit.com/r/Warframe/comments/rzlnku/receiving_all_protovyre_armor_evolution_but_only/
+    SentEvoArmorRankOne: {
+        sub: "/Lotus/Language/Inbox/EvolvingArmorUnlockAName",
+        sndr: "/Lotus/Language/Bosses/Ordis",
+        msg: "/Lotus/Language/Inbox/EvolvingArmorUnlockADesc",
+        icon: "/Lotus/Interface/Icons/Npcs/Ordis.png",
+        att: [
+            "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor2A",
+            "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor2C",
+            "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor2L"
+        ]
+    },
+    SentEvoArmorRankTwo: {
+        sub: "/Lotus/Language/Inbox/EvolvingArmorUnlockBName",
+        sndr: "/Lotus/Language/Bosses/Ordis",
+        msg: "/Lotus/Language/Inbox/EvolvingArmorUnlockBDesc",
+        icon: "/Lotus/Interface/Icons/Npcs/Ordis.png",
+        att: [
+            "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor3A",
+            "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor3C",
+            "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor3L"
+        ]
     }
 };
+
+/*const evolvingWeaponSkins: Record<string, { challenge: keyof typeof challengeRewardsInboxMessages; reward: string }> = {
+    "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor1A": {
+        challenge: "SentEvoArmorRankOne",
+        reward: "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor2A"
+    },
+    "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor1C": {
+        challenge: "SentEvoArmorRankOne",
+        reward: "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor2C"
+    },
+    "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor1L": {
+        challenge: "SentEvoArmorRankOne",
+        reward: "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor2L"
+    },
+    "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor2A": {
+        challenge: "SentEvoArmorRankTwo",
+        reward: "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor3A"
+    },
+    "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor2C": {
+        challenge: "SentEvoArmorRankTwo",
+        reward: "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor3C"
+    },
+    "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor2L": {
+        challenge: "SentEvoArmorRankTwo",
+        reward: "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor3L"
+    }
+};*/
 
 export const addChallenges = async (
     account: TAccountDocument,
@@ -2014,6 +2064,7 @@ export const addChallenges = async (
                             continue;
                         }
                         logger.warn(`ignoring unknown challenge completion`, { challenge: Name, completion });
+                        dbChallenge.Progress = 0;
                         dbChallenge.Completed = [];
                     }
                 }
