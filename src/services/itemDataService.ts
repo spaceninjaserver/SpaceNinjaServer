@@ -29,11 +29,13 @@ import {
     ExportWeapons,
     IDefaultUpgrade,
     IInboxMessage,
+    IKey,
     IMissionReward,
     IRecipe,
     TReward
 } from "warframe-public-export-plus";
 import { IMessage } from "@/src/models/inboxModel";
+import { logger } from "@/src/utils/logger";
 
 export type WeaponTypeInternal =
     | "LongGuns"
@@ -210,15 +212,15 @@ export const getKeyChainItems = ({ KeyChain, ChainStage }: IKeyChainRequest): st
 export const getLevelKeyRewards = (
     levelKey: string
 ): { levelKeyRewards?: IMissionReward; levelKeyRewards2?: TReward[] } => {
-    if (!(levelKey in ExportKeys)) {
-        throw new Error(`LevelKey ${levelKey} not found`);
-    }
+    const key = ExportKeys[levelKey] as IKey | undefined;
 
-    const levelKeyRewards = ExportKeys[levelKey].missionReward;
-    const levelKeyRewards2 = ExportKeys[levelKey].rewards;
+    const levelKeyRewards = key?.missionReward;
+    const levelKeyRewards2 = key?.rewards;
 
     if (!levelKeyRewards && !levelKeyRewards2) {
-        throw new Error(`LevelKey ${levelKey} does not contain either rewards1 or rewards2`);
+        logger.warn(
+            `Could not find any reward information for ${levelKey}, gonna have to potentially short-change you`
+        );
     }
 
     return {
