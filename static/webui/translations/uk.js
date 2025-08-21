@@ -266,7 +266,7 @@ dict = {
     worldState_eightClaw: `Вісім кігтів`,
     worldState_eightClawProgressOverride: `Прогрес Восьми кігтів`,
     worldState_thermiaFractures: `Розломи термії`,
-    worldState_thermiaFracturesProgressOverride: `[UNTRANSLATED] Thermia Fractures Progress`,
+    worldState_thermiaFracturesProgressOverride: `Прогрес Розломів термії`,
     worldState_from_year: `з |VAL|`,
     worldState_pre_year: `до |VAL|`,
     worldState_week: `Тиждень |VAL|`,
