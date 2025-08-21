@@ -79,7 +79,7 @@ export interface ILoadoutDatabase {
     NORMAL_PVP: ILoadoutConfigDatabase[];
     LUNARO: ILoadoutConfigDatabase[];
     OPERATOR: ILoadoutConfigDatabase[];
-    GEAR: ILoadoutConfigDatabase[];
+    GEAR?: ILoadoutConfigDatabase[];
     KDRIVE: ILoadoutConfigDatabase[];
     DATAKNIFE: ILoadoutConfigDatabase[];
     MECH: ILoadoutConfigDatabase[];
@@ -96,7 +96,7 @@ export interface ILoadOutPresets {
     ARCHWING: ILoadoutConfigClient[];
     SENTINEL: ILoadoutConfigClient[];
     OPERATOR: ILoadoutConfigClient[];
-    GEAR: ILoadoutConfigClient[];
+    GEAR?: ILoadoutConfigClient[];
     KDRIVE: ILoadoutConfigClient[];
     DATAKNIFE: ILoadoutConfigClient[];
     MECH: ILoadoutConfigClient[];
