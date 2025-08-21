@@ -1377,7 +1377,7 @@ export const addMissionRewards = async (
                         }
                     }
                 } else {
-                    logger.error(`unknown droptable ${si.DropTable} for DROP_BLUEPRINT`);
+                    logger.error(`unknown droptable ${si.DropTable} for DROP_MISC_ITEM`);
                 }
             }
         }
