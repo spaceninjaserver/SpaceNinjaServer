@@ -3068,7 +3068,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             ["Hydroid", "Mirage", "Limbo"],
             ["Mesa", "Chroma", "Atlas"],
             ["Ivara", "Inaros", "Titania"]
-        ][week % 12]
+        ][week % 11]
     });
     worldState.EndlessXpChoices.push({
         Category: "EXC_HARD",
