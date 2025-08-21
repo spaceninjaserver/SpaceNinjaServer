@@ -640,7 +640,7 @@ export const addMissionInventoryUpdates = async (
                         }
 
                         const currentNode = inventoryUpdates.RewardInfo!.node;
-                        let currentMissionKey;
+                        let currentMissionKey: string | undefined;
                         if (currentNode == goal.Node) {
                             currentMissionKey = goal.MissionKeyName;
                         } else if (goal.ConcurrentNodes && goal.ConcurrentMissionKeyNames) {
@@ -651,15 +651,15 @@ export const addMissionInventoryUpdates = async (
                                 }
                             }
                         }
-                        if (currentMissionKey && currentMissionKey in goalMessagesByKey) {
-                            let countBeforeUpload = goalProgress?.Count ?? 0;
-                            let totalCount = countBeforeUpload + uploadProgress.Count;
-                            if (goal.Best) {
-                                countBeforeUpload = goalProgress?.Best ?? 0;
-                                totalCount = uploadProgress.Best;
-                            }
-                            let reward;
+                        const rewards = [];
+                        let countBeforeUpload = goalProgress?.Count ?? 0;
+                        let totalCount = countBeforeUpload + uploadProgress.Count;
+                        if (goal.Best) {
+                            countBeforeUpload = goalProgress?.Best ?? 0;
+                            totalCount = uploadProgress.Best;
+                        }
 
+                        {
                             if (goal.InterimGoals && goal.InterimRewards) {
                                 for (let i = 0; i < goal.InterimGoals.length; i++) {
                                     if (
@@ -668,69 +668,94 @@ export const addMissionInventoryUpdates = async (
                                         (!goalProgress || countBeforeUpload < goal.InterimGoals[i]) &&
                                         goal.InterimRewards[i]
                                     ) {
-                                        reward = goal.InterimRewards[i];
+                                        rewards.push(goal.InterimRewards[i]);
                                         break;
                                     }
                                 }
                             }
                             if (
-                                !reward &&
                                 goal.Goal &&
                                 goal.Goal <= totalCount &&
                                 (!goalProgress || countBeforeUpload < goal.Goal) &&
                                 goal.Reward
                             ) {
-                                reward = goal.Reward;
+                                rewards.push(goal.Reward);
                             }
                             if (
-                                !reward &&
                                 goal.BonusGoal &&
                                 goal.BonusGoal <= totalCount &&
                                 (!goalProgress || countBeforeUpload < goal.BonusGoal) &&
                                 goal.BonusReward
                             ) {
-                                reward = goal.BonusReward;
-                            }
-                            if (reward) {
-                                if (currentMissionKey in goalMessagesByKey) {
-                                    // Send reward via inbox
-                                    const info = goalMessagesByKey[currentMissionKey];
-                                    const message: IMessageCreationTemplate = {
-                                        sndr: info.sndr,
-                                        msg: info.msg,
-                                        sub: info.sub,
-                                        icon: info.icon,
-                                        highPriority: true
-                                    };
-
-                                    if (reward.items) {
-                                        message.att = reward.items.map(x => (isStoreItem(x) ? fromStoreItem(x) : x));
-                                    }
-                                    if (reward.countedItems) {
-                                        message.countedAtt = reward.countedItems;
-                                    }
-                                    if (reward.credits) {
-                                        message.RegularCredits = reward.credits;
-                                    }
-                                    if (info.arg) {
-                                        const args: Record<string, string | number> = {
-                                            PLAYER_NAME: account.DisplayName,
-                                            CREDIT_REWARD: reward.credits ?? 0
-                                        };
-
-                                        info.arg.forEach(key => {
-                                            const value = args[key];
-                                            if (value) {
-                                                message.arg ??= [];
-                                                message.arg.push({ Key: key, Tag: value });
-                                            }
-                                        });
-                                    }
-
-                                    await createMessage(inventory.accountOwnerId, [message]);
-                                }
+                                rewards.push(goal.BonusReward);
                             }
                         }
+
+                        const messages: IMessageCreationTemplate[] = [];
+                        const infos: {
+                            sndr: string;
+                            msg: string;
+                            sub: string;
+                            icon: string;
+                            arg?: string[];
+                        }[] = [];
+
+                        {
+                            if (currentMissionKey && currentMissionKey in goalMessagesByKey) {
+                                infos.push(goalMessagesByKey[currentMissionKey]);
+                            } else if (goal.Tag in goalMessagesByTag) {
+                                const combinedGoals = [...(goal.InterimGoals || []), goal.Goal, goal.BonusGoal];
+                                combinedGoals.forEach((n, i) => {
+                                    if (n !== undefined && n > countBeforeUpload && n <= totalCount) {
+                                        infos.push(goalMessagesByTag[goal.Tag][i]);
+                                    }
+                                });
+                            }
+                        }
+
+                        for (let i = 0; i < rewards.length; i++) {
+                            if (infos[i]) {
+                                const info = infos[i];
+                                const reward = rewards[i];
+                                const message: IMessageCreationTemplate = {
+                                    sndr: info.sndr,
+                                    msg: info.msg,
+                                    sub: info.sub,
+                                    icon: info.icon,
+                                    highPriority: true
+                                };
+                                if (reward.items) {
+                                    message.att = reward.items.map(x => (isStoreItem(x) ? fromStoreItem(x) : x));
+                                }
+                                if (reward.countedItems) {
+                                    message.countedAtt = reward.countedItems;
+                                }
+                                if (reward.credits) {
+                                    message.RegularCredits = reward.credits;
+                                }
+                                if (info.arg) {
+                                    const args: Record<string, string | number> = {
+                                        PLAYER_NAME: account.DisplayName,
+                                        CREDIT_REWARD: reward.credits ?? 0
+                                    };
+
+                                    for (let j = 0; j < info.arg.length; j++) {
+                                        const key = info.arg[j];
+                                        const value = args[key];
+                                        if (value) {
+                                            message.arg ??= [];
+                                            message.arg.push({
+                                                Key: key,
+                                                Tag: value
+                                            });
+                                        }
+                                    }
+                                }
+                                messages.push(message);
+                            }
+                        }
+
+                        if (messages.length > 0) await createMessage(inventory.accountOwnerId, messages);
 
                         if (goalProgress) {
                             goalProgress.Best = Math.max(goalProgress.Best!, uploadProgress.Best);
@@ -2616,4 +2641,39 @@ const goalMessagesByKey: Record<string, { sndr: string; msg: string; sub: string
         icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
         arg: ["PLAYER_NAME"]
     }
+};
+
+const goalMessagesByTag: Record<string, { sndr: string; msg: string; sub: string; icon: string; arg?: string[] }[]> = {
+    HeatFissure: [
+        {
+            sndr: "/Lotus/Language/Npcs/Eudico",
+            msg: "/Lotus/Language/Messages/OrbHeistEventRewardAInboxMessageBody",
+            sub: "/Lotus/Language/Messages/OrbHeistEventRewardAInboxMessageTitle",
+            icon: "/Lotus/Interface/Icons/Npcs/Eudico.png"
+        },
+        {
+            sndr: "/Lotus/Language/Npcs/Eudico",
+            msg: "/Lotus/Language/Messages/OrbHeistEventRewardBInboxMessageBody",
+            sub: "/Lotus/Language/Messages/OrbHeistEventRewardBInboxMessageTitle",
+            icon: "/Lotus/Interface/Icons/Npcs/Eudico.png"
+        },
+        {
+            sndr: "/Lotus/Language/Npcs/Eudico",
+            msg: "/Lotus/Language/Messages/OrbHeistEventRewardCInboxMessageBody",
+            sub: "/Lotus/Language/Messages/OrbHeistEventRewardCInboxMessageTitle",
+            icon: "/Lotus/Interface/Icons/Npcs/Eudico.png"
+        },
+        {
+            sndr: "/Lotus/Language/Npcs/Eudico",
+            msg: "/Lotus/Language/Messages/OrbHeistEventRewardDInboxMessageBody",
+            sub: "/Lotus/Language/Messages/OrbHeistEventRewardDInboxMessageTitle",
+            icon: "/Lotus/Interface/Icons/Npcs/Eudico.png"
+        },
+        {
+            sndr: "/Lotus/Language/Npcs/Eudico",
+            msg: "/Lotus/Language/Messages/OrbHeistEventRewardEInboxMessageBody",
+            sub: "/Lotus/Language/Messages/OrbHeistEventRewardEInboxMessageTitle",
+            icon: "/Lotus/Interface/Icons/Npcs/Eudico.png"
+        }
+    ]
 };

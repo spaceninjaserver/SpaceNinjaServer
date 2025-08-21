@@ -98,6 +98,8 @@ export interface IConfig {
         bellyOfTheBeastProgressOverride?: number;
         eightClaw?: boolean;
         eightClawProgressOverride?: number;
+        thermiaFracturesOverride?: boolean;
+        thermiaFracturesProgressOverride?: number;
         eidolonOverride?: string;
         vallisOverride?: string;
         duviriOverride?: string;

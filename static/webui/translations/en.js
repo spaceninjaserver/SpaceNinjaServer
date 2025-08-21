@@ -264,6 +264,8 @@ dict = {
     worldState_bellyOfTheBeastProgressOverride: `Belly of the Beast Progress`,
     worldState_eightClaw: `Eight Claw`,
     worldState_eightClawProgressOverride: `Eight Claw Progress`,
+    worldState_thermiaFractures: `Thermia Fractures`,
+    worldState_thermiaFracturesProgressOverride: `Thermia Fractures Progress`,
     worldState_from_year: `from |VAL|`,
     worldState_pre_year: `pre |VAL|`,
     worldState_week: `Week |VAL|`,

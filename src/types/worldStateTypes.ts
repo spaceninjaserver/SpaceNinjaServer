@@ -43,7 +43,7 @@ export interface IGoal {
     Count?: number;
     HealthPct?: number;
 
-    Icon: string;
+    Icon?: string;
     Desc: string;
     ToolTip?: string;
     Faction?: string;
@@ -94,6 +94,9 @@ export interface IGoal {
     MissionKeyRotation?: string[];
     MissionKeyRotationInterval?: number;
 
+    OptionalInMission?: boolean;
+    UpgradeIds?: IOid[];
+
     NightLevel?: string;
 }
 
@@ -128,8 +131,9 @@ export interface IGlobalUpgrade {
     UpgradeType: string;
     OperationType: string;
     Value: number;
-    LocalizeTag: string;
-    LocalizeDescTag: string;
+    LocalizeTag?: string;
+    LocalizeDescTag?: string;
+    Nodes?: string[];
 }
 
 export interface IInvasion {
@@ -183,7 +187,7 @@ export interface INodeOverride {
     Seed?: number;
     LevelOverride?: string;
     Faction?: string;
-    CustomNpcEncounters?: string;
+    CustomNpcEncounters?: string[];
 }
 
 export interface ISortie {

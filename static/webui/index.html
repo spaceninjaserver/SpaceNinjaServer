@@ -1103,6 +1103,25 @@
                                         </form>
                                     </div>
                                 </div>
+                                <div class="form-group mt-2 d-flex gap-2">
+                                    <div class="flex-fill">
+                                        <label class="form-label" for="worldState.thermiaFracturesOverride" data-loc="worldState_thermiaFractures"></label>
+                                        <select class="form-control" id="worldState.thermiaFracturesOverride" data-default="null">
+                                            <option value="null" data-loc="normal"></option>
+                                            <option value="true" data-loc="enabled"></option>
+                                            <option value="false" data-loc="disabled"></option>
+                                        </select>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <form class="form-group" onsubmit="doSaveConfigInt('worldState.thermiaFracturesProgressOverride'); return false;">
+                                            <label class="form-label" for="worldState.thermiaFracturesProgressOverride" data-loc="worldState_thermiaFracturesProgressOverride"></label>
+                                            <div class="input-group">
+                                                <input id="worldState.thermiaFracturesProgressOverride" class="form-control" type="number" min="0" max="100" data-default="0" />
+                                                <button class="btn btn-secondary" type="submit" data-loc="cheats_save"></button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
                                 <div class="form-group mt-2">
                                     <label class="form-label" for="worldState.eidolonOverride" data-loc="worldState_eidolonOverride"></label>
                                     <select class="form-control" id="worldState.eidolonOverride" data-default="">

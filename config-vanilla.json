@@ -86,6 +86,8 @@
     "bellyOfTheBeastProgressOverride": 0,
     "eightClaw": false,
     "eightClawProgressOverride": 0,
+    "thermiaFracturesOverride": null,
+    "thermiaFracturesProgressOverride": 0,
     "eidolonOverride": "",
     "vallisOverride": "",
     "duviriOverride": "",

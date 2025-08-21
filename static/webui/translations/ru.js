@@ -265,6 +265,8 @@ dict = {
     worldState_bellyOfTheBeastProgressOverride: `Прогресс Чрева зверя`,
     worldState_eightClaw: `Восемь когтей`,
     worldState_eightClawProgressOverride: `Прогресс Восьми когтей`,
+    worldState_thermiaFractures: `Разломы Термии`,
+    worldState_thermiaFracturesProgressOverride: `Прогресс Разломов Термии`,
     worldState_from_year: `из |VAL|`,
     worldState_pre_year: `до |VAL|`,
     worldState_week: `Неделя |VAL|`,

@@ -265,6 +265,8 @@ dict = {
     worldState_bellyOfTheBeastProgressOverride: `不稳定微粒收集进度(%)`,
     worldState_eightClaw: `八爪`,
     worldState_eightClawProgressOverride: `大帝金币收集进度(%)`,
+    worldState_thermiaFractures: `热美亚裂缝`,
+    worldState_thermiaFracturesProgressOverride: `[UNTRANSLATED] Thermia Fractures Progress`,
     worldState_from_year: `|VAL|`,
     worldState_pre_year: `|VAL|之前`,
     worldState_week: `第|VAL|周`,
