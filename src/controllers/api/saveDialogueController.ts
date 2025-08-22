@@ -20,8 +20,6 @@ export const saveDialogueController: RequestHandler = async (req, res) => {
         const tomorrowAt0Utc = config.noKimCooldowns
             ? Date.now()
             : (Math.trunc(Date.now() / 86400_000) + 1) * 86400_000;
-        inventory.DialogueHistory ??= {};
-        inventory.DialogueHistory.Dialogues ??= [];
         const dialogue = getDialogue(inventory, request.DialogueName);
         dialogue.Rank = request.Rank;
         dialogue.Chemistry += request.Chemistry;

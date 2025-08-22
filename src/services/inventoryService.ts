@@ -2286,11 +2286,13 @@ export const cleanupInventory = (inventory: TInventoryDatabaseDocument): void =>
 };
 
 export const getDialogue = (inventory: TInventoryDatabaseDocument, dialogueName: string): IDialogueDatabase => {
-    let dialogue = inventory.DialogueHistory!.Dialogues!.find(x => x.DialogueName == dialogueName);
+    inventory.DialogueHistory ??= {};
+    inventory.DialogueHistory.Dialogues ??= [];
+    let dialogue = inventory.DialogueHistory.Dialogues.find(x => x.DialogueName == dialogueName);
     if (!dialogue) {
         dialogue =
-            inventory.DialogueHistory!.Dialogues![
-                inventory.DialogueHistory!.Dialogues!.push({
+            inventory.DialogueHistory.Dialogues[
+                inventory.DialogueHistory.Dialogues.push({
                     Rank: 0,
                     Chemistry: 0,
                     AvailableDate: new Date(0),
