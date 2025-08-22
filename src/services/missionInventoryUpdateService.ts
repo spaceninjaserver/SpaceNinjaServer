@@ -39,6 +39,7 @@ import {
     giveNemesisPetRecipe,
     giveNemesisWeaponRecipe,
     updateCurrency,
+    updateEntratiVault,
     updateSyndicate
 } from "@/src/services/inventoryService";
 import { updateQuestKey } from "@/src/services/questService";
@@ -1084,6 +1085,22 @@ const droptableAliases: Record<string, string> = {
         "/Lotus/Types/DropTables/WF1999DropTables/LasrianTankHardModeDropTable"
 };
 
+const isEligibleForCreditReward = (rewardInfo: IRewardInfo, missions: IMission, node: IRegion): boolean => {
+    // (E)SO should not give credits for only completing zone 1, in which case it has no rewardQualifications (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1823)
+    if (getRotations(rewardInfo).length == 0) {
+        return missions.Tag == "SolNode720"; // Netracells don't use rewardQualifications but probably should give credits anyway
+    }
+    // The rest here might not be needed anymore, but just to be sure we don't give undue credits...
+    return (
+        node.missionIndex != 23 && // junction
+        node.missionIndex != 28 && // open world
+        missions.Tag != "SolNode761" && // the index
+        missions.Tag != "SolNode762" && // the index
+        missions.Tag != "SolNode763" && // the index
+        missions.Tag != "CrewBattleNode556" // free flight
+    );
+};
+
 //TODO: return type of partial missioninventoryupdate response
 export const addMissionRewards = async (
     account: TAccountDocument,
@@ -1176,15 +1193,7 @@ export const addMissionRewards = async (
         const node = ExportRegions[missions.Tag];
 
         //node based credit rewards for mission completion
-        if (
-            node.missionIndex != 23 && // junction
-            node.missionIndex != 28 && // open world
-            missions.Tag != "SolNode761" && // the index
-            missions.Tag != "SolNode762" && // the index
-            missions.Tag != "SolNode763" && // the index
-            missions.Tag != "CrewBattleNode556" && // free flight
-            getRotations(rewardInfo).length > 0 // (E)SO should not give credits for only completing zone 1, in which case it has no rewardQualifications (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1823)
-        ) {
+        if (isEligibleForCreditReward(rewardInfo, missions, node)) {
             const levelCreditReward = getLevelCreditRewards(node);
             missionCompletionCredits += levelCreditReward;
             logger.debug(`levelCreditReward ${levelCreditReward}`);
@@ -1213,6 +1222,12 @@ export const addMissionRewards = async (
                     highPriority: true
                 }
             ]);
+        }
+
+        // Consume netracells search pulse. Moved here to only cover successful completions. Discussed in https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2673
+        if (missions.Tag == "SolNode720") {
+            updateEntratiVault(inventory);
+            inventory.EntratiVaultCountLastPeriod! += 1;
         }
     }
 

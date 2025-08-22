@@ -2449,3 +2449,26 @@ export const giveNemesisPetRecipe = (
 export const getEffectiveAvatarImageType = (inventory: TInventoryDatabaseDocument): string => {
     return inventory.ActiveAvatarImageType ?? "/Lotus/Types/StoreItems/AvatarImages/AvatarImageDefault";
 };
+
+export const updateEntratiVault = (inventory: TInventoryDatabaseDocument): void => {
+    if (!inventory.EntratiVaultCountResetDate || Date.now() >= inventory.EntratiVaultCountResetDate.getTime()) {
+        const EPOCH = 1734307200 * 1000; // Mondays, amirite?
+        const day = Math.trunc((Date.now() - EPOCH) / 86400000);
+        const week = Math.trunc(day / 7);
+        const weekStart = EPOCH + week * 604800000;
+        const weekEnd = weekStart + 604800000;
+        inventory.EntratiVaultCountLastPeriod = 0;
+        inventory.EntratiVaultCountResetDate = new Date(weekEnd);
+        if (inventory.EntratiLabConquestUnlocked) {
+            inventory.EntratiLabConquestUnlocked = 0;
+            inventory.EntratiLabConquestCacheScoreMission = 0;
+            inventory.EntratiLabConquestActiveFrameVariants = [];
+        }
+        if (inventory.EchoesHexConquestUnlocked) {
+            inventory.EchoesHexConquestUnlocked = 0;
+            inventory.EchoesHexConquestCacheScoreMission = 0;
+            inventory.EchoesHexConquestActiveFrameVariants = [];
+            inventory.EchoesHexConquestActiveStickers = [];
+        }
+    }
+};
