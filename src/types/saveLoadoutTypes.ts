@@ -7,7 +7,12 @@ import {
     IOperatorConfigClient
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { Types } from "mongoose";
-import { ICrewShipMembersClient, ICrewShipWeapon, IEquipmentSelection } from "@/src/types/equipmentTypes";
+import {
+    ICrewShipMembersClient,
+    ICrewShipWeaponClient,
+    IEquipmentSelectionClient,
+    IEquipmentSelectionDatabase
+} from "@/src/types/equipmentTypes";
 
 export interface ISaveLoadoutRequest {
     LoadOuts: ILoadoutClient;
@@ -53,10 +58,12 @@ export interface IOperatorConfigEntry {
     [configId: string]: IOperatorConfigClient;
 }
 
+// client
 export interface IItemEntry {
     [itemId: string]: IConfigEntry;
 }
 
+// client
 export type IConfigEntry = {
     [configId in "0" | "1" | "2" | "3" | "4" | "5"]: IItemConfig;
 } & {
@@ -66,7 +73,7 @@ export type IConfigEntry = {
     ItemName?: string;
     RailjackImage?: IFlavourItem;
     Customization?: ICrewShipCustomization;
-    Weapon?: ICrewShipWeapon;
+    Weapon?: ICrewShipWeaponClient;
     CrewMembers?: ICrewShipMembersClient;
 };
 
@@ -108,10 +115,6 @@ export interface ILoadoutEntry {
     [key: string]: ILoadoutConfigClient;
 }
 
-export interface ILoadoutConfigDatabase extends Omit<ILoadoutConfigClient, "ItemId"> {
-    _id: Types.ObjectId;
-}
-
 export enum FocusSchool {
     Attack = "AP_ATTACK",
     Defense = "AP_DEFENSE",
@@ -125,12 +128,23 @@ export interface ILoadoutConfigClient {
     PresetIcon?: string;
     Favorite?: boolean;
     n?: string; // Loadout name
-    s?: IEquipmentSelection; // Suit
-    p?: IEquipmentSelection; // Secondary weapon
-    l?: IEquipmentSelection; // Primary weapon
-    m?: IEquipmentSelection; // Melee weapon
-    h?: IEquipmentSelection; // Gravimag weapon
-    a?: IEquipmentSelection; // Necromech exalted weapon
+    s?: IEquipmentSelectionClient; // Suit
+    p?: IEquipmentSelectionClient; // Secondary weapon
+    l?: IEquipmentSelectionClient; // Primary weapon
+    m?: IEquipmentSelectionClient; // Melee weapon
+    h?: IEquipmentSelectionClient; // Gravimag weapon
+    a?: IEquipmentSelectionClient; // Necromech exalted weapon
     ItemId: IOid;
     Remove?: boolean; // when client wants to remove a config, it only includes ItemId & Remove.
+}
+
+export interface ILoadoutConfigDatabase
+    extends Omit<ILoadoutConfigClient, "ItemId" | "s" | "p" | "l" | "m" | "h" | "a"> {
+    _id: Types.ObjectId;
+    s?: IEquipmentSelectionDatabase;
+    p?: IEquipmentSelectionDatabase;
+    l?: IEquipmentSelectionDatabase;
+    m?: IEquipmentSelectionDatabase;
+    h?: IEquipmentSelectionDatabase;
+    a?: IEquipmentSelectionDatabase;
 }

@@ -1,4 +1,4 @@
-import { version_compare } from "@/src/helpers/inventoryHelpers";
+import { fromDbOid, version_compare } from "@/src/helpers/inventoryHelpers";
 import {
     antivirusMods,
     decodeNemesisGuess,
@@ -130,7 +130,9 @@ export const nemesisController: RequestHandler = async (req, res) => {
             if (result1 == GUESS_CORRECT || result2 == GUESS_CORRECT || result3 == GUESS_CORRECT) {
                 let antivirusGain = 5;
                 const loadout = (await Loadout.findById(inventory.LoadOutPresets, "DATAKNIFE"))!;
-                const dataknifeLoadout = loadout.DATAKNIFE.id(inventory.CurrentLoadOutIds[LoadoutIndex.DATAKNIFE].$oid);
+                const dataknifeLoadout = loadout.DATAKNIFE.id(
+                    fromDbOid(inventory.CurrentLoadOutIds[LoadoutIndex.DATAKNIFE])
+                );
                 const dataknifeConfigIndex = dataknifeLoadout?.s?.mod ?? 0;
                 const dataknifeUpgrades = inventory.DataKnives[0].Configs[dataknifeConfigIndex].Upgrades!;
                 for (const upgrade of body.knife!.AttachedUpgrades) {
@@ -219,7 +221,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
                     // Subtract a charge from all requiem mods installed on parazon
                     const loadout = (await Loadout.findById(inventory.LoadOutPresets, "DATAKNIFE"))!;
                     const dataknifeLoadout = loadout.DATAKNIFE.id(
-                        inventory.CurrentLoadOutIds[LoadoutIndex.DATAKNIFE].$oid
+                        fromDbOid(inventory.CurrentLoadOutIds[LoadoutIndex.DATAKNIFE])
                     );
                     const dataknifeConfigIndex = dataknifeLoadout?.s?.mod ?? 0;
                     const dataknifeUpgrades = inventory.DataKnives[0].Configs[dataknifeConfigIndex].Upgrades!;

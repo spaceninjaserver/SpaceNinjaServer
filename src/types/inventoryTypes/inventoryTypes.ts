@@ -68,12 +68,14 @@ export interface IInventoryDatabase
             | "LastInventorySync"
             | "EndlessXP"
             | "PersonalGoalProgress"
+            | "CurrentLoadOutIds"
             | TEquipmentKey
         >,
         InventoryDatabaseEquipment,
         IAccountCheats {
     accountOwnerId: Types.ObjectId;
     Created: Date;
+    CurrentLoadOutIds: Types.ObjectId[] | IOid[]; // should be Types.ObjectId[] but might be IOid[] because of old commits
     TrainingDate: Date;
     LoadOutPresets: Types.ObjectId; // LoadOutPresets changed from ILoadOutPresets to Types.ObjectId for population
     //Mailbox?: IMailboxDatabase;
@@ -254,7 +256,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     ActiveQuest: string;
     FlavourItems: IFlavourItem[];
     LoadOutPresets: ILoadOutPresets;
-    CurrentLoadOutIds: IOid[]; // we store it in the database using this representation as well :/
+    CurrentLoadOutIds: IOid[];
     Missions: IMission[];
     RandomUpgradesIdentified?: number;
     LastRegionPlayed: TSolarMapRegion;

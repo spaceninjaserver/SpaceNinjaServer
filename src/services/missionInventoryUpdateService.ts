@@ -65,7 +65,6 @@ import {
     getNemesisPasscode
 } from "@/src/helpers/nemesisHelpers";
 import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
-import { ILoadoutConfigDatabase } from "@/src/types/saveLoadoutTypes";
 import {
     getLiteSortie,
     getSortie,
@@ -84,6 +83,7 @@ import { ITypeCount } from "@/src/types/commonTypes";
 import { IEquipmentClient } from "@/src/types/equipmentTypes";
 import { Guild } from "@/src/models/guildModel";
 import { handleGuildGoalProgress } from "@/src/services/guildService";
+import { importLoadOutConfig } from "@/src/services/importService";
 
 const getRotations = (rewardInfo: IRewardInfo, tierOverride?: number): number[] => {
     // Disruption missions just tell us (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2599)
@@ -602,11 +602,7 @@ export const addMissionInventoryUpdates = async (
                     const loadout = await Loadout.findOne({ loadoutOwnerId: inventory.accountOwnerId });
                     if (loadout) {
                         for (const [loadoutId, loadoutConfig] of Object.entries(value.LoadOuts.NORMAL)) {
-                            const { ItemId, ...loadoutConfigItemIdRemoved } = loadoutConfig;
-                            const loadoutConfigDatabase: ILoadoutConfigDatabase = {
-                                _id: new Types.ObjectId(ItemId.$oid),
-                                ...loadoutConfigItemIdRemoved
-                            };
+                            const loadoutConfigDatabase = importLoadOutConfig(loadoutConfig);
                             const dbConfig = loadout.NORMAL.id(loadoutId);
                             if (dbConfig) {
                                 dbConfig.overwrite(loadoutConfigDatabase);

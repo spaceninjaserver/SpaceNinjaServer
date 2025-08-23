@@ -100,8 +100,8 @@ import {
     IOperatorConfigDatabase,
     IPolarity
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
-import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
-import { EquipmentSelectionSchema, oidSchema } from "@/src/models/inventoryModels/loadoutModel";
+import { fromDbOid, toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
+import { EquipmentSelectionSchema } from "@/src/models/inventoryModels/loadoutModel";
 import { ICountedStoreItem } from "warframe-public-export-plus";
 import { colorSchema, shipCustomizationSchema } from "@/src/models/commonModel";
 import {
@@ -109,8 +109,8 @@ import {
     ICrewShipMemberClient,
     ICrewShipMemberDatabase,
     ICrewShipMembersDatabase,
-    ICrewShipWeapon,
-    ICrewShipWeaponEmplacements,
+    ICrewShipWeaponDatabase,
+    ICrewShipWeaponEmplacementsDatabase,
     IEquipmentClient,
     IEquipmentDatabase,
     IKubrowPetDetailsClient,
@@ -847,7 +847,6 @@ const endlessXpProgressSchema = new Schema<IEndlessXpProgressDatabase>(
     },
     { _id: false }
 );
-
 endlessXpProgressSchema.set("toJSON", {
     transform(_doc, ret: Record<string, any>) {
         const db = ret as IEndlessXpProgressDatabase;
@@ -861,7 +860,8 @@ endlessXpProgressSchema.set("toJSON", {
         }
     }
 });
-const crewShipWeaponEmplacementsSchema = new Schema<ICrewShipWeaponEmplacements>(
+
+const crewShipWeaponEmplacementsSchema = new Schema<ICrewShipWeaponEmplacementsDatabase>(
     {
         PRIMARY_A: EquipmentSelectionSchema,
         PRIMARY_B: EquipmentSelectionSchema,
@@ -871,7 +871,7 @@ const crewShipWeaponEmplacementsSchema = new Schema<ICrewShipWeaponEmplacements>
     { _id: false }
 );
 
-const crewShipWeaponSchema = new Schema<ICrewShipWeapon>(
+const crewShipWeaponSchema = new Schema<ICrewShipWeaponDatabase>(
     {
         PILOT: crewShipWeaponEmplacementsSchema,
         PORT_GUNS: crewShipWeaponEmplacementsSchema,
@@ -1748,7 +1748,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         HasContributedToDojo: Boolean,
         HWIDProtectEnabled: Boolean,
         LoadOutPresets: { type: Schema.Types.ObjectId, ref: "Loadout" },
-        CurrentLoadOutIds: [oidSchema],
+        CurrentLoadOutIds: [Schema.Types.Mixed], // should be Types.ObjectId[] but might be IOid[] because of old commits
         RandomUpgradesIdentified: Number,
         BountyScore: Number,
         //ChallengeInstanceStates: [Schema.Types.Mixed],
@@ -1808,11 +1808,14 @@ inventorySchema.set("toJSON", {
         const inventoryDatabase = returnedObject as Partial<IInventoryDatabase>;
         const inventoryResponse = returnedObject as IInventoryClient;
 
-        if (inventoryDatabase.TrainingDate) {
-            inventoryResponse.TrainingDate = toMongoDate(inventoryDatabase.TrainingDate);
-        }
         if (inventoryDatabase.Created) {
             inventoryResponse.Created = toMongoDate(inventoryDatabase.Created);
+        }
+        if (inventoryDatabase.CurrentLoadOutIds) {
+            inventoryResponse.CurrentLoadOutIds = inventoryDatabase.CurrentLoadOutIds.map(x => toOid(fromDbOid(x)));
+        }
+        if (inventoryDatabase.TrainingDate) {
+            inventoryResponse.TrainingDate = toMongoDate(inventoryDatabase.TrainingDate);
         }
         if (inventoryDatabase.GuildId) {
             inventoryResponse.GuildId = toOid(inventoryDatabase.GuildId);

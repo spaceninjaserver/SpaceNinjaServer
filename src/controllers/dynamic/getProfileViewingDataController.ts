@@ -1,4 +1,4 @@
-import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
+import { fromDbOid, toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
 import { Guild, GuildMember, TGuildDatabaseDocument } from "@/src/models/guildModel";
 import { Inventory, TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
@@ -13,7 +13,8 @@ import {
     IDailyAffiliations,
     IMission,
     IPlayerSkills,
-    ITypeXPItem
+    ITypeXPItem,
+    LoadoutIndex
 } from "@/src/types/inventoryTypes/inventoryTypes";
 import { RequestHandler } from "express";
 import { catBreadHash, getJSONfromString } from "@/src/helpers/stringHelpers";
@@ -298,30 +299,32 @@ const populateLoadout = async (
 ): Promise<void> => {
     if (inventory.CurrentLoadOutIds.length) {
         const loadout = (await Loadout.findById(inventory.LoadOutPresets, "NORMAL"))!;
-        result.LoadOutPreset = loadout.NORMAL.id(inventory.CurrentLoadOutIds[0].$oid)!.toJSON<ILoadoutConfigClient>();
+        result.LoadOutPreset = loadout.NORMAL.id(
+            fromDbOid(inventory.CurrentLoadOutIds[LoadoutIndex.NORMAL])
+        )!.toJSON<ILoadoutConfigClient>();
         result.LoadOutPreset.ItemId = undefined;
         const skins = new Set<string>();
-        if (result.LoadOutPreset.s) {
+        if (result.LoadOutPreset.s?.ItemId) {
             result.LoadOutInventory.Suits = [
-                inventory.Suits.id(result.LoadOutPreset.s.ItemId.$oid)!.toJSON<IEquipmentClient>()
+                inventory.Suits.id(fromDbOid(result.LoadOutPreset.s.ItemId))!.toJSON<IEquipmentClient>()
             ];
             resolveAndCollectSkins(inventory, skins, result.LoadOutInventory.Suits[0]);
         }
-        if (result.LoadOutPreset.p) {
+        if (result.LoadOutPreset.p?.ItemId) {
             result.LoadOutInventory.Pistols = [
-                inventory.Pistols.id(result.LoadOutPreset.p.ItemId.$oid)!.toJSON<IEquipmentClient>()
+                inventory.Pistols.id(fromDbOid(result.LoadOutPreset.p.ItemId))!.toJSON<IEquipmentClient>()
             ];
             resolveAndCollectSkins(inventory, skins, result.LoadOutInventory.Pistols[0]);
         }
-        if (result.LoadOutPreset.l) {
+        if (result.LoadOutPreset.l?.ItemId) {
             result.LoadOutInventory.LongGuns = [
-                inventory.LongGuns.id(result.LoadOutPreset.l.ItemId.$oid)!.toJSON<IEquipmentClient>()
+                inventory.LongGuns.id(fromDbOid(result.LoadOutPreset.l.ItemId))!.toJSON<IEquipmentClient>()
             ];
             resolveAndCollectSkins(inventory, skins, result.LoadOutInventory.LongGuns[0]);
         }
-        if (result.LoadOutPreset.m) {
+        if (result.LoadOutPreset.m?.ItemId) {
             result.LoadOutInventory.Melee = [
-                inventory.Melee.id(result.LoadOutPreset.m.ItemId.$oid)!.toJSON<IEquipmentClient>()
+                inventory.Melee.id(fromDbOid(result.LoadOutPreset.m.ItemId))!.toJSON<IEquipmentClient>()
             ];
             resolveAndCollectSkins(inventory, skins, result.LoadOutInventory.Melee[0]);
         }

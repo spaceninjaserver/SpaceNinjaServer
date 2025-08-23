@@ -63,6 +63,7 @@ import {
 import { createShip } from "@/src/services/shipService";
 import {
     catbrowDetails,
+    fromDbOid,
     fromMongoDate,
     fromOid,
     kubrowDetails,
@@ -2232,6 +2233,8 @@ export const setupKahlSyndicate = (inventory: TInventoryDatabaseDocument): void 
 };
 
 export const cleanupInventory = (inventory: TInventoryDatabaseDocument): void => {
+    inventory.CurrentLoadOutIds = inventory.CurrentLoadOutIds.map(fromDbOid);
+
     let index = inventory.MiscItems.findIndex(x => x.ItemType == "");
     if (index != -1) {
         inventory.MiscItems.splice(index, 1);

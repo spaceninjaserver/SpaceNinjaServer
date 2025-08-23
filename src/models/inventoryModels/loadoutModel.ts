@@ -1,21 +1,13 @@
+import { fromDbOid, toOid } from "@/src/helpers/inventoryHelpers";
 import { IOid } from "@/src/types/commonTypes";
-import { IEquipmentSelection } from "@/src/types/equipmentTypes";
+import { IEquipmentSelectionClient, IEquipmentSelectionDatabase } from "@/src/types/equipmentTypes";
 import { ILoadoutConfigDatabase, ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
 import { Document, Model, Schema, Types, model } from "mongoose";
 
-export const oidSchema = new Schema<IOid>(
-    {
-        $oid: String
-    },
-    {
-        _id: false
-    }
-);
-
 //create a mongoose schema based on interface M
-export const EquipmentSelectionSchema = new Schema<IEquipmentSelection>(
+export const EquipmentSelectionSchema = new Schema<IEquipmentSelectionDatabase>(
     {
-        ItemId: oidSchema,
+        ItemId: Schema.Types.Mixed, // should be Types.ObjectId but might be IOid because of old commits
         mod: Number,
         cus: Number,
         hide: Boolean
@@ -24,6 +16,17 @@ export const EquipmentSelectionSchema = new Schema<IEquipmentSelection>(
         _id: false
     }
 );
+EquipmentSelectionSchema.set("toJSON", {
+    virtuals: true,
+    transform(_doc, ret: Record<string, any>) {
+        const db = ret as IEquipmentSelectionDatabase;
+        const client = ret as IEquipmentSelectionClient;
+
+        if (db.ItemId) {
+            client.ItemId = toOid(fromDbOid(db.ItemId));
+        }
+    }
+});
 
 export const loadoutConfigSchema = new Schema<ILoadoutConfigDatabase>(
     {

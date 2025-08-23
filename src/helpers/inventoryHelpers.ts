@@ -44,6 +44,11 @@ export const fromOid = (oid: IOidWithLegacySupport): string => {
     return (oid.$oid ?? oid.$id)!;
 };
 
+// For oids that may have been stored incorrectly
+export const fromDbOid = (x: Types.ObjectId | IOid): Types.ObjectId => {
+    return "$oid" in x ? new Types.ObjectId(x.$oid) : x;
+};
+
 export const toMongoDate = (date: Date): IMongoDate => {
     return { $date: { $numberLong: date.getTime().toString() } };
 };

@@ -2,7 +2,6 @@ import {
     IItemEntry,
     ILoadoutClient,
     ILoadoutEntry,
-    ILoadoutConfigDatabase,
     IOperatorConfigEntry,
     ISaveLoadoutRequestNoUpgradeVer
 } from "@/src/types/saveLoadoutTypes";
@@ -14,7 +13,7 @@ import { isEmptyObject } from "@/src/helpers/general";
 import { logger } from "@/src/utils/logger";
 import { equipmentKeys, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
 import { IItemConfig } from "@/src/types/inventoryTypes/commonInventoryTypes";
-import { importCrewMemberId } from "@/src/services/importService";
+import { importCrewShipMembers, importCrewShipWeapon, importLoadOutConfig } from "@/src/services/importService";
 
 //TODO: setup default items on account creation or like originally in giveStartingItems.php
 
@@ -88,20 +87,17 @@ export const handleInventoryItemConfigChange = async (
 
                         const oldLoadoutConfig = loadout[loadoutSlot].id(loadoutId);
 
-                        const { ItemId, ...loadoutConfigItemIdRemoved } = loadoutConfig;
-                        const loadoutConfigDatabase: ILoadoutConfigDatabase = {
-                            _id: new Types.ObjectId(ItemId.$oid),
-                            ...loadoutConfigItemIdRemoved
-                        };
+                        const loadoutConfigDatabase = importLoadOutConfig(loadoutConfig);
 
                         // if no config with this id exists, create a new one
                         if (!oldLoadoutConfig) {
                             //save the new object id and assign it for every ffff return at the end
-                            if (ItemId.$oid === "ffffffffffffffffffffffff") {
+                            if (loadoutConfigDatabase._id.toString() === "ffffffffffffffffffffffff") {
                                 if (!newLoadoutId) {
                                     newLoadoutId = new Types.ObjectId();
                                 }
-                                loadout[loadoutSlot].push({ _id: newLoadoutId, ...loadoutConfigItemIdRemoved });
+                                loadoutConfigDatabase._id = newLoadoutId;
+                                loadout[loadoutSlot].push(loadoutConfigDatabase);
                                 continue;
                             }
 
@@ -218,15 +214,11 @@ export const handleInventoryItemConfigChange = async (
                         if ("Customization" in itemConfigEntries) {
                             inventoryItem.Customization = itemConfigEntries.Customization;
                         }
-                        if ("Weapon" in itemConfigEntries) {
-                            inventoryItem.Weapon = itemConfigEntries.Weapon;
+                        if (itemConfigEntries.Weapon) {
+                            inventoryItem.Weapon = importCrewShipWeapon(itemConfigEntries.Weapon);
                         }
                         if (itemConfigEntries.CrewMembers) {
-                            inventoryItem.CrewMembers = {
-                                SLOT_A: importCrewMemberId(itemConfigEntries.CrewMembers.SLOT_A ?? {}),
-                                SLOT_B: importCrewMemberId(itemConfigEntries.CrewMembers.SLOT_B ?? {}),
-                                SLOT_C: importCrewMemberId(itemConfigEntries.CrewMembers.SLOT_C ?? {})
-                            };
+                            inventoryItem.CrewMembers = importCrewShipMembers(itemConfigEntries.CrewMembers);
                         }
                     }
                     break;

@@ -39,8 +39,14 @@ import {
     ICrewShipMemberDatabase,
     ICrewShipMembersClient,
     ICrewShipMembersDatabase,
+    ICrewShipWeaponClient,
+    ICrewShipWeaponDatabase,
+    ICrewShipWeaponEmplacementsClient,
+    ICrewShipWeaponEmplacementsDatabase,
     IEquipmentClient,
     IEquipmentDatabase,
+    IEquipmentSelectionClient,
+    IEquipmentSelectionDatabase,
     IKubrowPetDetailsClient,
     IKubrowPetDetailsDatabase
 } from "@/src/types/equipmentTypes";
@@ -84,7 +90,8 @@ const convertEquipment = (client: IEquipmentClient): IEquipmentDatabase => {
         Expiry: convertOptionalDate(client.Expiry),
         UpgradesExpiry: convertOptionalDate(client.UpgradesExpiry),
         UmbraDate: convertOptionalDate(client.UmbraDate),
-        CrewMembers: client.CrewMembers ? convertCrewShipMembers(client.CrewMembers) : undefined,
+        Weapon: client.Weapon ? importCrewShipWeapon(client.Weapon) : undefined,
+        CrewMembers: client.CrewMembers ? importCrewShipMembers(client.CrewMembers) : undefined,
         Details: client.Details ? convertKubrowDetails(client.Details) : undefined,
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         Configs: client.Configs
@@ -133,14 +140,43 @@ const replaceSlots = (db: ISlots, client: ISlots): void => {
     db.Slots = client.Slots;
 };
 
-export const importCrewMemberId = (crewMemberId: ICrewShipMemberClient): ICrewShipMemberDatabase => {
+const convertEquipmentSelection = (es: IEquipmentSelectionClient): IEquipmentSelectionDatabase => {
+    const { ItemId, ...rest } = es;
+    return {
+        ...rest,
+        ItemId: ItemId ? new Types.ObjectId(ItemId.$oid) : undefined
+    };
+};
+
+const convertCrewShipWeaponEmplacements = (
+    obj: ICrewShipWeaponEmplacementsClient
+): ICrewShipWeaponEmplacementsDatabase => {
+    return {
+        PRIMARY_A: obj.PRIMARY_A ? convertEquipmentSelection(obj.PRIMARY_A) : undefined,
+        PRIMARY_B: obj.PRIMARY_B ? convertEquipmentSelection(obj.PRIMARY_B) : undefined,
+        SECONDARY_A: obj.SECONDARY_A ? convertEquipmentSelection(obj.SECONDARY_A) : undefined,
+        SECONDARY_B: obj.SECONDARY_B ? convertEquipmentSelection(obj.SECONDARY_B) : undefined
+    };
+};
+
+export const importCrewShipWeapon = (weapon: ICrewShipWeaponClient): ICrewShipWeaponDatabase => {
+    return {
+        PILOT: weapon.PILOT ? convertCrewShipWeaponEmplacements(weapon.PILOT) : undefined,
+        PORT_GUNS: weapon.PORT_GUNS ? convertCrewShipWeaponEmplacements(weapon.PORT_GUNS) : undefined,
+        STARBOARD_GUNS: weapon.STARBOARD_GUNS ? convertCrewShipWeaponEmplacements(weapon.STARBOARD_GUNS) : undefined,
+        ARTILLERY: weapon.ARTILLERY ? convertCrewShipWeaponEmplacements(weapon.ARTILLERY) : undefined,
+        SCANNER: weapon.SCANNER ? convertCrewShipWeaponEmplacements(weapon.SCANNER) : undefined
+    };
+};
+
+const importCrewMemberId = (crewMemberId: ICrewShipMemberClient): ICrewShipMemberDatabase => {
     if (crewMemberId.ItemId) {
         return { ItemId: new Types.ObjectId(crewMemberId.ItemId.$oid) };
     }
     return { NemesisFingerprint: BigInt(crewMemberId.NemesisFingerprint ?? 0) };
 };
 
-const convertCrewShipMembers = (client: ICrewShipMembersClient): ICrewShipMembersDatabase => {
+export const importCrewShipMembers = (client: ICrewShipMembersClient): ICrewShipMembersDatabase => {
     return {
         SLOT_A: client.SLOT_A ? importCrewMemberId(client.SLOT_A) : undefined,
         SLOT_B: client.SLOT_B ? importCrewMemberId(client.SLOT_B) : undefined,
@@ -429,34 +465,40 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     }
 };
 
-const convertLoadOutConfig = (client: ILoadoutConfigClient): ILoadoutConfigDatabase => {
+export const importLoadOutConfig = (client: ILoadoutConfigClient): ILoadoutConfigDatabase => {
     const { ItemId, ...rest } = client;
     return {
         ...rest,
-        _id: new Types.ObjectId(ItemId.$oid)
+        _id: new Types.ObjectId(ItemId.$oid),
+        s: client.s ? convertEquipmentSelection(client.s) : undefined,
+        p: client.p ? convertEquipmentSelection(client.p) : undefined,
+        l: client.l ? convertEquipmentSelection(client.l) : undefined,
+        m: client.m ? convertEquipmentSelection(client.m) : undefined,
+        h: client.h ? convertEquipmentSelection(client.h) : undefined,
+        a: client.a ? convertEquipmentSelection(client.a) : undefined
     };
 };
 
 export const importLoadOutPresets = (db: ILoadoutDatabase, client: ILoadOutPresets): void => {
-    db.NORMAL = client.NORMAL.map(convertLoadOutConfig);
-    db.SENTINEL = client.SENTINEL.map(convertLoadOutConfig);
-    db.ARCHWING = client.ARCHWING.map(convertLoadOutConfig);
-    db.NORMAL_PVP = client.NORMAL_PVP.map(convertLoadOutConfig);
-    db.LUNARO = client.LUNARO.map(convertLoadOutConfig);
-    db.OPERATOR = client.OPERATOR.map(convertLoadOutConfig);
-    db.GEAR = client.GEAR?.map(convertLoadOutConfig);
-    db.KDRIVE = client.KDRIVE.map(convertLoadOutConfig);
-    db.DATAKNIFE = client.DATAKNIFE.map(convertLoadOutConfig);
-    db.MECH = client.MECH.map(convertLoadOutConfig);
-    db.OPERATOR_ADULT = client.OPERATOR_ADULT.map(convertLoadOutConfig);
-    db.DRIFTER = client.DRIFTER.map(convertLoadOutConfig);
+    db.NORMAL = client.NORMAL.map(importLoadOutConfig);
+    db.SENTINEL = client.SENTINEL.map(importLoadOutConfig);
+    db.ARCHWING = client.ARCHWING.map(importLoadOutConfig);
+    db.NORMAL_PVP = client.NORMAL_PVP.map(importLoadOutConfig);
+    db.LUNARO = client.LUNARO.map(importLoadOutConfig);
+    db.OPERATOR = client.OPERATOR.map(importLoadOutConfig);
+    db.GEAR = client.GEAR?.map(importLoadOutConfig);
+    db.KDRIVE = client.KDRIVE.map(importLoadOutConfig);
+    db.DATAKNIFE = client.DATAKNIFE.map(importLoadOutConfig);
+    db.MECH = client.MECH.map(importLoadOutConfig);
+    db.OPERATOR_ADULT = client.OPERATOR_ADULT.map(importLoadOutConfig);
+    db.DRIFTER = client.DRIFTER.map(importLoadOutConfig);
 };
 
 export const convertCustomizationInfo = (client: ICustomizationInfoClient): ICustomizationInfoDatabase => {
     return {
         ...client,
-        LoadOutPreset: client.LoadOutPreset ? convertLoadOutConfig(client.LoadOutPreset) : undefined,
-        VehiclePreset: client.VehiclePreset ? convertLoadOutConfig(client.VehiclePreset) : undefined
+        LoadOutPreset: client.LoadOutPreset ? importLoadOutConfig(client.LoadOutPreset) : undefined,
+        VehiclePreset: client.VehiclePreset ? importLoadOutConfig(client.VehiclePreset) : undefined
     };
 };
 

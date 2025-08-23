@@ -7,12 +7,16 @@ import {
     IPolarity
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
 
-export interface IEquipmentSelection {
-    ItemId: IOid;
+export interface IEquipmentSelectionClient {
+    ItemId?: IOid;
     mod?: number;
     cus?: number;
     ItemType?: string;
     hide?: boolean;
+}
+
+export interface IEquipmentSelectionDatabase extends Omit<IEquipmentSelectionClient, "ItemId"> {
+    ItemId?: Types.ObjectId | IOid; // should be Types.ObjectId but might be IOid because of old commits
 }
 
 export enum EquipmentFeatures {
@@ -51,7 +55,7 @@ export interface IEquipmentDatabase {
     UpgradesExpiry?: Date;
     UmbraDate?: Date; // related to scrapped "echoes of umbra" feature
     ArchonCrystalUpgrades?: IArchonCrystalUpgrade[];
-    Weapon?: ICrewShipWeapon;
+    Weapon?: ICrewShipWeaponDatabase;
     Customization?: ICrewShipCustomization;
     RailjackImage?: IFlavourItem;
     CrewMembers?: ICrewShipMembersDatabase;
@@ -64,13 +68,14 @@ export interface IEquipmentDatabase {
 export interface IEquipmentClient
     extends Omit<
         IEquipmentDatabase,
-        "_id" | "InfestationDate" | "Expiry" | "UpgradesExpiry" | "UmbraDate" | "CrewMembers" | "Details"
+        "_id" | "InfestationDate" | "Expiry" | "UpgradesExpiry" | "UmbraDate" | "Weapon" | "CrewMembers" | "Details"
     > {
     ItemId: IOidWithLegacySupport;
     InfestationDate?: IMongoDate;
     Expiry?: IMongoDate;
     UpgradesExpiry?: IMongoDate;
     UmbraDate?: IMongoDate;
+    Weapon?: ICrewShipWeaponClient;
     CrewMembers?: ICrewShipMembersClient;
     Details?: IKubrowPetDetailsClient;
 }
@@ -117,19 +122,34 @@ export enum Status {
 }
 
 // inventory.CrewShips[0].Weapon
-export interface ICrewShipWeapon {
-    PILOT?: ICrewShipWeaponEmplacements;
-    PORT_GUNS?: ICrewShipWeaponEmplacements;
-    STARBOARD_GUNS?: ICrewShipWeaponEmplacements;
-    ARTILLERY?: ICrewShipWeaponEmplacements;
-    SCANNER?: ICrewShipWeaponEmplacements;
+export interface ICrewShipWeaponClient {
+    PILOT?: ICrewShipWeaponEmplacementsClient;
+    PORT_GUNS?: ICrewShipWeaponEmplacementsClient;
+    STARBOARD_GUNS?: ICrewShipWeaponEmplacementsClient;
+    ARTILLERY?: ICrewShipWeaponEmplacementsClient;
+    SCANNER?: ICrewShipWeaponEmplacementsClient;
 }
 
-export interface ICrewShipWeaponEmplacements {
-    PRIMARY_A?: IEquipmentSelection;
-    PRIMARY_B?: IEquipmentSelection;
-    SECONDARY_A?: IEquipmentSelection;
-    SECONDARY_B?: IEquipmentSelection;
+export interface ICrewShipWeaponDatabase {
+    PILOT?: ICrewShipWeaponEmplacementsDatabase;
+    PORT_GUNS?: ICrewShipWeaponEmplacementsDatabase;
+    STARBOARD_GUNS?: ICrewShipWeaponEmplacementsDatabase;
+    ARTILLERY?: ICrewShipWeaponEmplacementsDatabase;
+    SCANNER?: ICrewShipWeaponEmplacementsDatabase;
+}
+
+export interface ICrewShipWeaponEmplacementsClient {
+    PRIMARY_A?: IEquipmentSelectionClient;
+    PRIMARY_B?: IEquipmentSelectionClient;
+    SECONDARY_A?: IEquipmentSelectionClient;
+    SECONDARY_B?: IEquipmentSelectionClient;
+}
+
+export interface ICrewShipWeaponEmplacementsDatabase {
+    PRIMARY_A?: IEquipmentSelectionDatabase;
+    PRIMARY_B?: IEquipmentSelectionDatabase;
+    SECONDARY_A?: IEquipmentSelectionDatabase;
+    SECONDARY_B?: IEquipmentSelectionDatabase;
 }
 
 export interface ICrewShipMembersClient {
