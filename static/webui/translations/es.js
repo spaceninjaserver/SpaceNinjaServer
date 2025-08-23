@@ -266,7 +266,7 @@ dict = {
     worldState_eightClaw: `Octava Garra`,
     worldState_eightClawProgressOverride: `Progreso de Octava Garra`,
     worldState_thermiaFractures: `Fracturas Thermia`,
-    worldState_thermiaFracturesProgressOverride: `[UNTRANSLATED] Thermia Fractures Progress`,
+    worldState_thermiaFracturesProgressOverride: `Progreso de Fracturas Thermia`,
     worldState_from_year: `de |VAL|`,
     worldState_pre_year: `antes de |VAL|`,
     worldState_week: `Semana |VAL|`,
