@@ -481,7 +481,7 @@ const convertShip = (client: IOrbiterClient): IOrbiterDatabase => {
         ...client,
         ShipInterior: {
             ...client.ShipInterior,
-            Colors: Array.isArray(client.ShipInterior.Colors) ? {} : client.ShipInterior.Colors
+            Colors: typeof client.ShipInterior == "object" ? client.ShipInterior.Colors : undefined
         },
         Rooms: client.Rooms.map(convertRoom),
         FavouriteLoadoutId: client.FavouriteLoadoutId ? new Types.ObjectId(client.FavouriteLoadoutId.$oid) : undefined

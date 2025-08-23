@@ -16,8 +16,8 @@ export type TBootLocation = "LISET" | "DRIFTER_CAMP" | "APARTMENT" | "SHOP";
 export interface IOrbiterClient {
     Features: string[];
     ShipId: IOid;
-    ShipInterior: IShipCustomization;
     Rooms: IRoomClient[];
+    ShipInterior?: IShipCustomization;
     VignetteFish?: string[];
     FavouriteLoadoutId?: IOid;
     Wallpaper?: string;
