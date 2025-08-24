@@ -4,7 +4,7 @@ import { repoDir } from "@/src/helpers/pathHelper";
 import { args } from "@/src/helpers/commandLineArguments";
 import { Inbox } from "@/src/models/inboxModel";
 
-export interface IConfig {
+export interface IConfig extends IConfigRemovedOptions {
     mongodbUrl: string;
     logger: {
         files: boolean;
@@ -91,6 +91,41 @@ export interface IConfig {
         keepVendorsExpired?: boolean;
     };
 }
+
+export const configRemovedOptionsKeys = [
+    "infiniteCredits",
+    "infinitePlatinum",
+    "infiniteEndo",
+    "infiniteRegalAya",
+    "infiniteHelminthMaterials",
+    "claimingBlueprintRefundsIngredients",
+    "dontSubtractPurchaseCreditCost",
+    "dontSubtractPurchasePlatinumCost",
+    "dontSubtractPurchaseItemCost",
+    "dontSubtractPurchaseStandingCost",
+    "dontSubtractVoidTraces",
+    "dontSubtractConsumables",
+    "universalPolarityEverywhere",
+    "unlockDoubleCapacityPotatoesEverywhere",
+    "unlockExilusEverywhere",
+    "unlockArcanesEverywhere",
+    "noDailyStandingLimits",
+    "noDailyFocusLimit",
+    "noArgonCrystalDecay",
+    "noMasteryRankUpCooldown",
+    "noVendorPurchaseLimits",
+    "noDeathMarks",
+    "noKimCooldowns",
+    "syndicateMissionsRepeatable",
+    "instantFinishRivenChallenge",
+    "instantResourceExtractorDrones",
+    "noResourceExtractorDronesDamage",
+    "skipClanKeyCrafting"
+] as const;
+
+type IConfigRemovedOptions = {
+    [K in (typeof configRemovedOptionsKeys)[number]]?: boolean;
+};
 
 export const configPath = path.join(repoDir, args.configPath ?? "config.json");
 
