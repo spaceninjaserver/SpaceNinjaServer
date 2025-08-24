@@ -1219,12 +1219,6 @@ export const addMissionRewards = async (
                 }
             ]);
         }
-
-        // Consume netracells search pulse. Moved here to only cover successful completions. Discussed in https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2673
-        if (missions.Tag == "SolNode720") {
-            updateEntratiVault(inventory);
-            inventory.EntratiVaultCountLastPeriod! += 1;
-        }
     }
 
     if (rewardInfo.useVaultManifest) {
@@ -1390,6 +1384,12 @@ export const addMissionRewards = async (
                 } else {
                     logger.error(`unknown droptable ${si.DropTable} for DROP_MISC_ITEM`);
                 }
+            }
+
+            if (si.DropTable == "/Lotus/Types/DropTables/ContainerDropTables/VoidVaultMissionRewardsDropTable") {
+                // Consume netracells search pulse; only when the container reward was picked up. Discussed in https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2673
+                updateEntratiVault(inventory);
+                inventory.EntratiVaultCountLastPeriod! += 1;
             }
         }
     }
