@@ -31,7 +31,6 @@ import {
     ExportVendors,
     TRarity
 } from "warframe-public-export-plus";
-import { config } from "@/src/services/configService";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { fromStoreItem, toStoreItem } from "@/src/services/itemDataService";
 import { DailyDeal } from "@/src/models/worldStateModel";
@@ -63,7 +62,7 @@ const tallyVendorPurchase = (
     numPurchased: number,
     Expiry: Date
 ): void => {
-    if (!config.noVendorPurchaseLimits) {
+    if (!inventory.noVendorPurchaseLimits) {
         inventory.RecentVendorPurchases ??= [];
         let vendorPurchases = inventory.RecentVendorPurchases.find(x => x.VendorType == VendorType);
         if (!vendorPurchases) {
@@ -130,12 +129,12 @@ export const handlePurchase = async (
             if (!offer) {
                 throw new Error(`unknown vendor offer: ${ItemId ? ItemId : purchaseRequest.PurchaseParams.StoreItem}`);
             }
-            if (!config.dontSubtractPurchaseCreditCost) {
+            if (!inventory.dontSubtractPurchaseCreditCost) {
                 if (offer.RegularPrice) {
                     updateCurrency(inventory, offer.RegularPrice[0], false, prePurchaseInventoryChanges);
                 }
             }
-            if (!config.dontSubtractPurchasePlatinumCost) {
+            if (!inventory.dontSubtractPurchasePlatinumCost) {
                 if (offer.PremiumPrice) {
                     updateCurrency(inventory, offer.PremiumPrice[0], true, prePurchaseInventoryChanges);
                 }
@@ -156,7 +155,7 @@ export const handlePurchase = async (
                     });
                 }
             }
-            if (!config.dontSubtractPurchaseItemCost) {
+            if (!inventory.dontSubtractPurchaseItemCost) {
                 if (offer.ItemPrices) {
                     handleItemPrices(
                         inventory,
@@ -223,14 +222,14 @@ export const handlePurchase = async (
                 x => x.ItemType == purchaseRequest.PurchaseParams.StoreItem
             );
             if (offer) {
-                if (!config.dontSubtractPurchaseCreditCost) {
+                if (!inventory.dontSubtractPurchaseCreditCost) {
                     updateCurrency(inventory, offer.RegularPrice, false, purchaseResponse.InventoryChanges);
                 }
                 if (purchaseRequest.PurchaseParams.ExpectedPrice) {
                     throw new Error(`vendor purchase should not have an expected price`);
                 }
 
-                if (offer.PrimePrice && !config.dontSubtractPurchaseItemCost) {
+                if (offer.PrimePrice && !inventory.dontSubtractPurchaseItemCost) {
                     const invItem: IMiscItem = {
                         ItemType: "/Lotus/Types/Items/MiscItems/PrimeBucks",
                         ItemCount: offer.PrimePrice * purchaseRequest.PurchaseParams.Quantity * -1
@@ -267,7 +266,7 @@ export const handlePurchase = async (
                             Title: lastTitle
                         }
                     ];
-                } else if (!config.dontSubtractPurchaseStandingCost) {
+                } else if (!inventory.dontSubtractPurchaseStandingCost) {
                     const syndicate = ExportSyndicates[syndicateTag];
                     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                     if (syndicate) {
@@ -301,13 +300,13 @@ export const handlePurchase = async (
                 const vendor = ExportVendors[purchaseRequest.PurchaseParams.SourceId!];
                 const offer = vendor.items.find(x => x.storeItem == purchaseRequest.PurchaseParams.StoreItem);
                 if (offer) {
-                    if (typeof offer.credits == "number" && !config.dontSubtractPurchaseCreditCost) {
+                    if (typeof offer.credits == "number" && !inventory.dontSubtractPurchaseCreditCost) {
                         updateCurrency(inventory, offer.credits, false, purchaseResponse.InventoryChanges);
                     }
-                    if (typeof offer.platinum == "number" && !config.dontSubtractPurchasePlatinumCost) {
+                    if (typeof offer.platinum == "number" && !inventory.dontSubtractPurchasePlatinumCost) {
                         updateCurrency(inventory, offer.platinum, true, purchaseResponse.InventoryChanges);
                     }
-                    if (offer.itemPrices && !config.dontSubtractPurchaseItemCost) {
+                    if (offer.itemPrices && !inventory.dontSubtractPurchaseItemCost) {
                         handleItemPrices(
                             inventory,
                             offer.itemPrices,
@@ -335,7 +334,7 @@ export const handlePurchase = async (
                 );
             if (offer) {
                 if (offer.RegularPrice) {
-                    if (!config.dontSubtractPurchaseItemCost) {
+                    if (!inventory.dontSubtractPurchaseItemCost) {
                         const invItem: IMiscItem = {
                             ItemType: "/Lotus/Types/Items/MiscItems/SchismKey",
                             ItemCount: offer.RegularPrice * purchaseRequest.PurchaseParams.Quantity * -1
@@ -394,11 +393,11 @@ export const handleDailyDealPurchase = async (
     dailyDeal.AmountSold += 1;
     await dailyDeal.save();
 
-    if (!config.dontSubtractPurchasePlatinumCost) {
+    if (!inventory.dontSubtractPurchasePlatinumCost) {
         updateCurrency(inventory, dailyDeal.SalePrice, true, purchaseResponse.InventoryChanges);
     }
 
-    if (!config.noVendorPurchaseLimits) {
+    if (!inventory.noVendorPurchaseLimits) {
         inventory.UsedDailyDeals.push(purchaseParams.StoreItem);
         purchaseResponse.DailyDealUsed = purchaseParams.StoreItem;
     }

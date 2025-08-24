@@ -95,7 +95,10 @@ export const confirmGuildInvitationPostController: RequestHandler = async (req, 
         await GuildMember.deleteMany({ accountId: guildMember.accountId, status: 1 });
 
         // Update inventory of new member
-        const inventory = await getInventory(guildMember.accountId.toString(), "GuildId LevelKeys Recipes");
+        const inventory = await getInventory(
+            guildMember.accountId.toString(),
+            "GuildId LevelKeys Recipes skipClanKeyCrafting"
+        );
         inventory.GuildId = new Types.ObjectId(req.query.clanId as string);
         giveClanKey(inventory);
         await inventory.save();

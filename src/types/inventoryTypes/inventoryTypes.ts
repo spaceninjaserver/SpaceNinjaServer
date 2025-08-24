@@ -21,11 +21,34 @@ export type InventoryDatabaseEquipment = {
 
 // Fields specific to SNS
 export interface IAccountCheats {
+    dontSubtractPurchaseCreditCost?: boolean;
+    dontSubtractPurchasePlatinumCost?: boolean;
+    dontSubtractPurchaseItemCost?: boolean;
+    dontSubtractPurchaseStandingCost?: boolean;
+    dontSubtractVoidTraces?: boolean;
+    dontSubtractConsumables?: boolean;
     infiniteCredits?: boolean;
     infinitePlatinum?: boolean;
     infiniteEndo?: boolean;
     infiniteRegalAya?: boolean;
     infiniteHelminthMaterials?: boolean;
+    universalPolarityEverywhere?: boolean;
+    unlockDoubleCapacityPotatoesEverywhere?: boolean;
+    unlockExilusEverywhere?: boolean;
+    unlockArcanesEverywhere?: boolean;
+    syndicateMissionsRepeatable?: boolean;
+    instantFinishRivenChallenge?: boolean;
+    noDailyStandingLimits?: boolean;
+    noDailyFocusLimit?: boolean;
+    noArgonCrystalDecay?: boolean;
+    noMasteryRankUpCooldown?: boolean;
+    noVendorPurchaseLimits?: boolean;
+    noDeathMarks?: boolean;
+    noKimCooldowns?: boolean;
+    skipClanKeyCrafting?: boolean;
+    claimingBlueprintRefundsIngredients?: boolean;
+    instantResourceExtractorDrones?: boolean;
+    noResourceExtractorDronesDamage?: boolean;
 }
 
 export interface IInventoryDatabase

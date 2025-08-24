@@ -296,7 +296,7 @@ export const addMissionInventoryUpdates = async (
                 addMiscItems(inventory, value);
                 break;
             case "Consumables":
-                if (config.dontSubtractConsumables) {
+                if (inventory.dontSubtractConsumables) {
                     addConsumables(
                         inventory,
                         value.filter(x => x.ItemCount > 0)
@@ -467,7 +467,7 @@ export const addMissionInventoryUpdates = async (
                 });
                 break;
             case "SyndicateId": {
-                if (!config.syndicateMissionsRepeatable) {
+                if (!inventory.syndicateMissionsRepeatable) {
                     inventory.CompletedSyndicates.push(value);
                 }
                 break;
@@ -487,7 +487,7 @@ export const addMissionInventoryUpdates = async (
                 break;
             }
             case "DeathMarks": {
-                if (!config.noDeathMarks) {
+                if (!inventory.noDeathMarks) {
                     for (const bossName of value) {
                         if (inventory.DeathMarks.indexOf(bossName) == -1) {
                             // It's a new death mark; we have to say the line.
@@ -1561,7 +1561,7 @@ export const addMissionRewards = async (
             const dialogue = getDialogue(inventory, buddy);
             if (Date.now() >= dialogue.BountyChemExpiry.getTime()) {
                 logger.debug(`Giving 20 chemistry for ${buddy}`);
-                const tomorrowAt0Utc = config.noKimCooldowns
+                const tomorrowAt0Utc = inventory.noKimCooldowns
                     ? Date.now()
                     : (Math.trunc(Date.now() / 86400_000) + 1) * 86400_000;
                 dialogue.Chemistry += 20;

@@ -1300,15 +1300,19 @@ const standingLimitBinToInventoryKey: Record<
 
 export const allDailyAffiliationKeys: (keyof IDailyAffiliations)[] = Object.values(standingLimitBinToInventoryKey);
 
-const getStandingLimit = (inventory: IDailyAffiliations, bin: TStandingLimitBin): number => {
-    if (bin == "STANDING_LIMIT_BIN_NONE" || config.noDailyStandingLimits) {
+const getStandingLimit = (inventory: TInventoryDatabaseDocument, bin: TStandingLimitBin): number => {
+    if (bin == "STANDING_LIMIT_BIN_NONE" || inventory.noDailyStandingLimits) {
         return Number.MAX_SAFE_INTEGER;
     }
     return inventory[standingLimitBinToInventoryKey[bin]];
 };
 
-const updateStandingLimit = (inventory: IDailyAffiliations, bin: TStandingLimitBin, subtrahend: number): void => {
-    if (bin != "STANDING_LIMIT_BIN_NONE" && !config.noDailyStandingLimits) {
+const updateStandingLimit = (
+    inventory: TInventoryDatabaseDocument,
+    bin: TStandingLimitBin,
+    subtrahend: number
+): void => {
+    if (bin != "STANDING_LIMIT_BIN_NONE" && !inventory.noDailyStandingLimits) {
         inventory[standingLimitBinToInventoryKey[bin]] -= subtrahend;
     }
 };
@@ -1923,7 +1927,7 @@ export const addFocusXpIncreases = (inventory: TInventoryDatabaseDocument, focus
         inventory.FocusXP.AP_WARD += focusXpPlus[FocusType.AP_WARD];
     }
 
-    if (!config.noDailyFocusLimit) {
+    if (!inventory.noDailyFocusLimit) {
         inventory.DailyFocus -= focusXpPlus.reduce((a, b) => a + b, 0);
     }
 };

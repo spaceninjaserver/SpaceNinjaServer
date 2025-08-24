@@ -68,7 +68,7 @@ export const inventoryController: RequestHandler = async (request, response) => 
             const lastLoginDay = Math.trunc(inventory.NextRefill.getTime() / 86400000) - 1;
             const daysPassed = today - lastLoginDay;
 
-            if (config.noArgonCrystalDecay) {
+            if (inventory.noArgonCrystalDecay) {
                 inventory.FoundToday = undefined;
             } else {
                 for (let i = 0; i != daysPassed; ++i) {
@@ -387,7 +387,7 @@ export const getInventoryResponse = async (
         }
     }
 
-    if (config.universalPolarityEverywhere) {
+    if (inventory.universalPolarityEverywhere) {
         const Polarity: IPolarity[] = [];
         // 12 is needed for necramechs. 15 is needed for plexus/crewshipharness.
         for (let i = 0; i != 15; ++i) {
@@ -405,7 +405,7 @@ export const getInventoryResponse = async (
         }
     }
 
-    if (config.unlockDoubleCapacityPotatoesEverywhere) {
+    if (inventory.unlockDoubleCapacityPotatoesEverywhere) {
         for (const key of equipmentKeys) {
             if (key in inventoryResponse) {
                 for (const equipment of inventoryResponse[key]) {
@@ -416,7 +416,7 @@ export const getInventoryResponse = async (
         }
     }
 
-    if (config.unlockExilusEverywhere) {
+    if (inventory.unlockExilusEverywhere) {
         for (const key of equipmentKeys) {
             if (key in inventoryResponse) {
                 for (const equipment of inventoryResponse[key]) {
@@ -427,7 +427,7 @@ export const getInventoryResponse = async (
         }
     }
 
-    if (config.unlockArcanesEverywhere) {
+    if (inventory.unlockArcanesEverywhere) {
         for (const key of equipmentKeys) {
             if (key in inventoryResponse) {
                 for (const equipment of inventoryResponse[key]) {
@@ -438,14 +438,14 @@ export const getInventoryResponse = async (
         }
     }
 
-    if (config.noDailyStandingLimits) {
+    if (inventory.noDailyStandingLimits) {
         const spoofedDailyAffiliation = Math.max(999_999, 16000 + inventoryResponse.PlayerLevel * 500);
         for (const key of allDailyAffiliationKeys) {
             inventoryResponse[key] = spoofedDailyAffiliation;
         }
     }
 
-    if (config.noDailyFocusLimit) {
+    if (inventory.noDailyFocusLimit) {
         inventoryResponse.DailyFocus = Math.max(999_999, 250000 + inventoryResponse.PlayerLevel * 5000);
     }
 

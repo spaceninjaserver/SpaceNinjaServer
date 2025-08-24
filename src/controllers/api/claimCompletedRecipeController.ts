@@ -23,7 +23,6 @@ import { InventorySlot, IPendingRecipeDatabase } from "@/src/types/inventoryType
 import { toOid2 } from "@/src/helpers/inventoryHelpers";
 import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { IRecipe } from "warframe-public-export-plus";
-import { config } from "@/src/services/configService";
 import { EquipmentFeatures, IEquipmentClient, Status } from "@/src/types/equipmentTypes";
 
 interface IClaimCompletedRecipeRequest {
@@ -247,7 +246,7 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
             }
         }
         if (
-            config.claimingBlueprintRefundsIngredients &&
+            inventory.claimingBlueprintRefundsIngredients &&
             recipe.secretIngredientAction != "SIA_CREATE_KUBROW" // Can't refund the egg
         ) {
             await refundRecipeIngredients(inventory, InventoryChanges, recipe, pendingRecipe);

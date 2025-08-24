@@ -1,4 +1,3 @@
-import { config } from "@/src/services/configService";
 import { addEmailItem, getDialogue, getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { ICompletedDialogue } from "@/src/types/inventoryTypes/inventoryTypes";
@@ -9,7 +8,7 @@ export const saveDialogueController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const request = JSON.parse(String(req.body)) as SaveDialogueRequest;
     if ("YearIteration" in request) {
-        const inventory = await getInventory(accountId, "DialogueHistory");
+        const inventory = await getInventory(accountId, "DialogueHistory noKimCooldowns");
         inventory.DialogueHistory ??= {};
         inventory.DialogueHistory.YearIteration = request.YearIteration;
         await inventory.save();
@@ -17,7 +16,7 @@ export const saveDialogueController: RequestHandler = async (req, res) => {
     } else {
         const inventory = await getInventory(accountId);
         const inventoryChanges: IInventoryChanges = {};
-        const tomorrowAt0Utc = config.noKimCooldowns
+        const tomorrowAt0Utc = inventory.noKimCooldowns
             ? Date.now()
             : (Math.trunc(Date.now() / 86400_000) + 1) * 86400_000;
         const dialogue = getDialogue(inventory, request.DialogueName);

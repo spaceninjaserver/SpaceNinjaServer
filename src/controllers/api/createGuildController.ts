@@ -27,7 +27,7 @@ export const createGuildController: RequestHandler = async (req, res) => {
         rank: 0
     });
 
-    const inventory = await getInventory(account._id.toString(), "GuildId LevelKeys Recipes");
+    const inventory = await getInventory(account._id.toString(), "GuildId LevelKeys Recipes skipClanKeyCrafting");
     inventory.GuildId = guild._id;
     const inventoryChanges: IInventoryChanges = {};
     giveClanKey(inventory, inventoryChanges);

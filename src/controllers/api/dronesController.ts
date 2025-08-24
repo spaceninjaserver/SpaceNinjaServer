@@ -1,5 +1,4 @@
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
-import { config } from "@/src/services/configService";
 import { addMiscItems, getInventory } from "@/src/services/inventoryService";
 import { fromStoreItem } from "@/src/services/itemDataService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
@@ -39,10 +38,13 @@ export const dronesController: RequestHandler = async (req, res) => {
             ActiveDrones: activeDrones
         });
     } else if ("droneId" in req.query && "systemIndex" in req.query) {
-        const inventory = await getInventory(accountId, "Drones");
+        const inventory = await getInventory(
+            accountId,
+            "Drones instantResourceExtractorDrones noResourceExtractorDronesDamage"
+        );
         const drone = inventory.Drones.id(req.query.droneId as string)!;
         const droneMeta = ExportDrones[drone.ItemType];
-        drone.DeployTime = config.instantResourceExtractorDrones ? new Date(0) : new Date();
+        drone.DeployTime = inventory.instantResourceExtractorDrones ? new Date(0) : new Date();
         if (drone.RepairStart) {
             const repairMinutes = (Date.now() - drone.RepairStart.getTime()) / 60_000;
             const hpPerMinute = droneMeta.repairRate / 60;
@@ -51,11 +53,11 @@ export const dronesController: RequestHandler = async (req, res) => {
         }
         drone.System = parseInt(req.query.systemIndex as string);
         const system = ExportSystems[drone.System - 1];
-        drone.DamageTime = config.instantResourceExtractorDrones
+        drone.DamageTime = inventory.instantResourceExtractorDrones
             ? new Date()
             : new Date(Date.now() + getRandomInt(3 * 3600 * 1000, 4 * 3600 * 1000));
         drone.PendingDamage =
-            !config.noResourceExtractorDronesDamage && Math.random() < system.damageChance
+            !inventory.noResourceExtractorDronesDamage && Math.random() < system.damageChance
                 ? getRandomInt(system.droneDamage.minValue, system.droneDamage.maxValue)
                 : 0;
         const resource = getRandomWeightedRewardUc(system.resources, droneMeta.probabilities)!;

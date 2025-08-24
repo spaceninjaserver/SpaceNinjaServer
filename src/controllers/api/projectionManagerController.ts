@@ -2,14 +2,13 @@ import { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addMiscItems, getInventory } from "@/src/services/inventoryService";
 import { ExportRelics, IRelic } from "warframe-public-export-plus";
-import { config } from "@/src/services/configService";
 
 export const projectionManagerController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory(accountId, "MiscItems dontSubtractVoidTraces");
     const request = JSON.parse(String(req.body)) as IProjectionUpgradeRequest;
     const [era, category, currentQuality] = parseProjection(request.projectionType);
-    const upgradeCost = config.dontSubtractVoidTraces
+    const upgradeCost = inventory.dontSubtractVoidTraces
         ? 0
         : qualityNumberToCost[request.qualityTag] - qualityNumberToCost[qualityKeywordToNumber[currentQuality]];
     const newProjectionType = findProjection(era, category, qualityNumberToKeyword[request.qualityTag]);

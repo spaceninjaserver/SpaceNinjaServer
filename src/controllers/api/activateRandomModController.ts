@@ -10,11 +10,10 @@ import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getRandomElement } from "@/src/services/rngService";
 import { RequestHandler } from "express";
 import { ExportUpgrades } from "warframe-public-export-plus";
-import { config } from "@/src/services/configService";
 
 export const activateRandomModController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory(accountId, "RawUpgrades Upgrades instantFinishRivenChallenge");
     const request = getJSONfromString<IActiveRandomModRequest>(String(req.body));
     addMods(inventory, [
         {
@@ -23,7 +22,7 @@ export const activateRandomModController: RequestHandler = async (req, res) => {
         }
     ]);
     const rivenType = getRandomElement(rivenRawToRealWeighted[request.ItemType])!;
-    const fingerprint = config.instantFinishRivenChallenge
+    const fingerprint = inventory.instantFinishRivenChallenge
         ? createUnveiledRivenFingerprint(ExportUpgrades[rivenType])
         : createVeiledRivenFingerprint(ExportUpgrades[rivenType]);
     const upgradeIndex =
