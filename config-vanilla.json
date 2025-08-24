@@ -22,6 +22,7 @@
   "baroAlwaysAvailable": false,
   "baroFullyStocked": false,
   "unlockAllProfitTakerStages": false,
+  "skipClanKeyCrafting": false,
   "noDojoRoomBuildStage": false,
   "noDecoBuildStage": false,
   "fastDojoRoomDestruction": false,

@@ -690,7 +690,7 @@ export const checkClanAscensionHasRequiredContributors = async (guild: TGuildDat
 };
 
 export const giveClanKey = (inventory: TInventoryDatabaseDocument, inventoryChanges?: IInventoryChanges): void => {
-    if (inventory.skipClanKeyCrafting) {
+    if (config.skipClanKeyCrafting) {
         const levelKeyChanges = [
             {
                 ItemType: "/Lotus/Types/Keys/DojoKey",

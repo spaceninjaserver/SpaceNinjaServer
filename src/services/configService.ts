@@ -30,6 +30,7 @@ export interface IConfig extends IConfigRemovedOptions {
     baroAlwaysAvailable?: boolean;
     baroFullyStocked?: boolean;
     unlockAllProfitTakerStages?: boolean;
+    skipClanKeyCrafting?: boolean;
     noDojoRoomBuildStage?: boolean;
     noDojoDecoBuildStage?: boolean;
     fastDojoRoomDestruction?: boolean;
@@ -119,8 +120,7 @@ export const configRemovedOptionsKeys = [
     "syndicateMissionsRepeatable",
     "instantFinishRivenChallenge",
     "instantResourceExtractorDrones",
-    "noResourceExtractorDronesDamage",
-    "skipClanKeyCrafting"
+    "noResourceExtractorDronesDamage"
 ] as const;
 
 type IConfigRemovedOptions = {

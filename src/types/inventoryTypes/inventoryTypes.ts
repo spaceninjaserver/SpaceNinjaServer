@@ -45,7 +45,6 @@ export interface IAccountCheats {
     noVendorPurchaseLimits?: boolean;
     noDeathMarks?: boolean;
     noKimCooldowns?: boolean;
-    skipClanKeyCrafting?: boolean;
     claimingBlueprintRefundsIngredients?: boolean;
     instantResourceExtractorDrones?: boolean;
     noResourceExtractorDronesDamage?: boolean;
