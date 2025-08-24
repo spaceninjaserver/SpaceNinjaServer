@@ -570,7 +570,7 @@ const convertTailorShop = (client: ITailorShop): ITailorShopDatabase => {
 };
 
 export const importPersonalRooms = (db: IPersonalRoomsDatabase, client: Partial<IGetShipResponse>): void => {
-    if (client.Ship !== undefined) db.Ship = convertShip(client.Ship);
+    if (client.Ship?.Rooms) db.Ship = convertShip(client.Ship);
     if (client.Apartment !== undefined) db.Apartment = convertApartment(client.Apartment);
     if (client.TailorShop !== undefined) db.TailorShop = convertTailorShop(client.TailorShop);
 };

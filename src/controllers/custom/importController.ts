@@ -21,7 +21,11 @@ export const importController: RequestHandler = async (req, res) => {
         await loadout.save();
     }
 
-    if ("Ship" in request.inventory || "Apartment" in request.inventory || "TailorShop" in request.inventory) {
+    if (
+        request.inventory.Ship?.Rooms || // very old accounts may have Ship with { Features: [ ... ] }
+        "Apartment" in request.inventory ||
+        "TailorShop" in request.inventory
+    ) {
         const personalRooms = await getPersonalRooms(accountId);
         importPersonalRooms(personalRooms, request.inventory);
         await personalRooms.save();
