@@ -28,15 +28,44 @@ for (const file of files) {
         continue;
     }
     const dir = path.dirname(file);
-    const fixedContent = content.replaceAll(/} from "([^"]+)";/g, (sub, importPath) => {
-        if (!importPath.startsWith("@/")) {
-            const fullImportPath = path.resolve(dir, importPath);
-            if (fs.existsSync(fullImportPath + ".ts")) {
-                const relative = path.relative(root, fullImportPath).replace(/\\/g, "/");
-                const fixedPath = "@/" + relative;
-                console.log(`${importPath} -> ${fixedPath}`);
-                return sub.split(importPath).join(fixedPath);
+    const fixedContent = content.replaceAll(/from "([^"]+)";/g, (sub, importPath) => {
+        if (importPath.startsWith("@/") || importPath.startsWith(".")) {
+            const base = importPath.startsWith("@/")
+                ? path.join(root, importPath.slice(2))
+                : path.resolve(dir, importPath);
+            let target = base;
+
+            if (fs.existsSync(target)) {
+                const stat = fs.statSync(target);
+                if (stat.isDirectory()) {
+                    if (fs.existsSync(path.join(target, "index.ts"))) {
+                        target = path.join(target, "index.ts");
+                    } else {
+                        return sub;
+                    }
+                } else {
+                    const ext = path.extname(target);
+                    if (!ext) {
+                        target += ".ts";
+                    }
+                }
+            } else if (fs.existsSync(target + ".ts")) {
+                target += ".ts";
+            } else if (fs.existsSync(path.join(target, "index.ts"))) {
+                target = path.join(target, "index.ts");
+            } else {
+                return sub;
             }
+
+            let relative = path.relative(dir, target).replace(/\\/g, "/");
+            if (!path.extname(relative)) {
+                relative += ".ts";
+            }
+            if (!relative.startsWith(".")) {
+                relative = "./" + relative;
+            }
+            console.log(`${importPath} -> ${relative}`);
+            return sub.split(importPath).join(relative);
         }
         return sub;
     });
