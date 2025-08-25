@@ -1,5 +1,5 @@
-import type { IOid, ITypeCount } from "@/src/types/commonTypes";
-import type { ArtifactPolarity, IPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import type { IOid, ITypeCount } from "./commonTypes.ts";
+import type { ArtifactPolarity, IPolarity } from "./inventoryTypes/commonInventoryTypes.ts";
 import type {
     IBooster,
     IChallengeProgress,
@@ -22,10 +22,10 @@ import type {
     IWeaponSkinClient,
     IKubrowPetEggClient,
     INemesisClient
-} from "@/src/types/inventoryTypes/inventoryTypes";
-import type { IGroup } from "@/src/types/loginTypes";
-import type { ILoadOutPresets } from "@/src/types/saveLoadoutTypes";
-import type { IEquipmentClient } from "@/src/types/equipmentTypes";
+} from "./inventoryTypes/inventoryTypes.ts";
+import type { IGroup } from "./loginTypes.ts";
+import type { ILoadOutPresets } from "./saveLoadoutTypes.ts";
+import type { IEquipmentClient } from "./equipmentTypes.ts";
 
 export interface IAffiliationChange {
     Tag: string;

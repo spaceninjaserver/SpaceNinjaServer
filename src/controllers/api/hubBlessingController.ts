@@ -1,7 +1,7 @@
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { addBooster, getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getRandomInt } from "@/src/services/rngService";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { addBooster, getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getRandomInt } from "../../services/rngService.ts";
 import type { RequestHandler } from "express";
 import { ExportBoosters } from "warframe-public-export-plus";
 

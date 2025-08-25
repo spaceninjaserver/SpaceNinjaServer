@@ -1,8 +1,8 @@
 import type { RequestHandler } from "express";
-import type { ISaveLoadoutRequest } from "@/src/types/saveLoadoutTypes";
-import { handleInventoryItemConfigChange } from "@/src/services/saveLoadoutService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
+import type { ISaveLoadoutRequest } from "../../types/saveLoadoutTypes.ts";
+import { handleInventoryItemConfigChange } from "../../services/saveLoadoutService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 
 export const saveLoadoutController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

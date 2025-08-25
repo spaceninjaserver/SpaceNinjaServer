@@ -1,5 +1,5 @@
-import { addFusionPoints, getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
+import { addFusionPoints, getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
 
 export const claimLibraryDailyTaskRewardController: RequestHandler = async (req, res) => {

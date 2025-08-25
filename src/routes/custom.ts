@@ -1,36 +1,36 @@
 import express from "express";
 
-import { tunablesController } from "@/src/controllers/custom/tunablesController";
-import { getItemListsController } from "@/src/controllers/custom/getItemListsController";
-import { pushArchonCrystalUpgradeController } from "@/src/controllers/custom/pushArchonCrystalUpgradeController";
-import { popArchonCrystalUpgradeController } from "@/src/controllers/custom/popArchonCrystalUpgradeController";
-import { deleteAccountController } from "@/src/controllers/custom/deleteAccountController";
-import { getNameController } from "@/src/controllers/custom/getNameController";
-import { getAccountInfoController } from "@/src/controllers/custom/getAccountInfoController";
-import { renameAccountController } from "@/src/controllers/custom/renameAccountController";
-import { ircDroppedController } from "@/src/controllers/custom/ircDroppedController";
-import { unlockAllIntrinsicsController } from "@/src/controllers/custom/unlockAllIntrinsicsController";
-import { addMissingMaxRankModsController } from "@/src/controllers/custom/addMissingMaxRankModsController";
-import { webuiFileChangeDetectedController } from "@/src/controllers/custom/webuiFileChangeDetectedController";
-import { completeAllMissionsController } from "@/src/controllers/custom/completeAllMissionsController";
-import { addMissingHelminthBlueprintsController } from "@/src/controllers/custom/addMissingHelminthBlueprintsController";
+import { tunablesController } from "../controllers/custom/tunablesController.ts";
+import { getItemListsController } from "../controllers/custom/getItemListsController.ts";
+import { pushArchonCrystalUpgradeController } from "../controllers/custom/pushArchonCrystalUpgradeController.ts";
+import { popArchonCrystalUpgradeController } from "../controllers/custom/popArchonCrystalUpgradeController.ts";
+import { deleteAccountController } from "../controllers/custom/deleteAccountController.ts";
+import { getNameController } from "../controllers/custom/getNameController.ts";
+import { getAccountInfoController } from "../controllers/custom/getAccountInfoController.ts";
+import { renameAccountController } from "../controllers/custom/renameAccountController.ts";
+import { ircDroppedController } from "../controllers/custom/ircDroppedController.ts";
+import { unlockAllIntrinsicsController } from "../controllers/custom/unlockAllIntrinsicsController.ts";
+import { addMissingMaxRankModsController } from "../controllers/custom/addMissingMaxRankModsController.ts";
+import { webuiFileChangeDetectedController } from "../controllers/custom/webuiFileChangeDetectedController.ts";
+import { completeAllMissionsController } from "../controllers/custom/completeAllMissionsController.ts";
+import { addMissingHelminthBlueprintsController } from "../controllers/custom/addMissingHelminthBlueprintsController.ts";
 
-import { abilityOverrideController } from "@/src/controllers/custom/abilityOverrideController";
-import { createAccountController } from "@/src/controllers/custom/createAccountController";
-import { createMessageController } from "@/src/controllers/custom/createMessageController";
-import { addCurrencyController } from "@/src/controllers/custom/addCurrencyController";
-import { addItemsController } from "@/src/controllers/custom/addItemsController";
-import { addXpController } from "@/src/controllers/custom/addXpController";
-import { importController } from "@/src/controllers/custom/importController";
-import { manageQuestsController } from "@/src/controllers/custom/manageQuestsController";
-import { setEvolutionProgressController } from "@/src/controllers/custom/setEvolutionProgressController";
-import { setBoosterController } from "@/src/controllers/custom/setBoosterController";
-import { updateFingerprintController } from "@/src/controllers/custom/updateFingerprintController";
-import { changeModularPartsController } from "@/src/controllers/custom/changeModularPartsController";
-import { editSuitInvigorationUpgradeController } from "@/src/controllers/custom/editSuitInvigorationUpgradeController";
-import { setAccountCheatController } from "@/src/controllers/custom/setAccountCheatController";
+import { abilityOverrideController } from "../controllers/custom/abilityOverrideController.ts";
+import { createAccountController } from "../controllers/custom/createAccountController.ts";
+import { createMessageController } from "../controllers/custom/createMessageController.ts";
+import { addCurrencyController } from "../controllers/custom/addCurrencyController.ts";
+import { addItemsController } from "../controllers/custom/addItemsController.ts";
+import { addXpController } from "../controllers/custom/addXpController.ts";
+import { importController } from "../controllers/custom/importController.ts";
+import { manageQuestsController } from "../controllers/custom/manageQuestsController.ts";
+import { setEvolutionProgressController } from "../controllers/custom/setEvolutionProgressController.ts";
+import { setBoosterController } from "../controllers/custom/setBoosterController.ts";
+import { updateFingerprintController } from "../controllers/custom/updateFingerprintController.ts";
+import { changeModularPartsController } from "../controllers/custom/changeModularPartsController.ts";
+import { editSuitInvigorationUpgradeController } from "../controllers/custom/editSuitInvigorationUpgradeController.ts";
+import { setAccountCheatController } from "../controllers/custom/setAccountCheatController.ts";
 
-import { getConfigController, setConfigController } from "@/src/controllers/custom/configController";
+import { getConfigController, setConfigController } from "../controllers/custom/configController.ts";
 
 const customRouter = express.Router();
 

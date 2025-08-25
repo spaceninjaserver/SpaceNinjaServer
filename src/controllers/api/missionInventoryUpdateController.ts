@@ -1,18 +1,18 @@
 import type { RequestHandler } from "express";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { getAccountForRequest } from "@/src/services/loginService";
-import type { IMissionInventoryUpdateRequest } from "@/src/types/requestTypes";
-import { addMissionInventoryUpdates, addMissionRewards } from "@/src/services/missionInventoryUpdateService";
-import { getInventory } from "@/src/services/inventoryService";
-import { getInventoryResponse } from "@/src/controllers/api/inventoryController";
-import { logger } from "@/src/utils/logger";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { getAccountForRequest } from "../../services/loginService.ts";
+import type { IMissionInventoryUpdateRequest } from "../../types/requestTypes.ts";
+import { addMissionInventoryUpdates, addMissionRewards } from "../../services/missionInventoryUpdateService.ts";
+import { getInventory } from "../../services/inventoryService.ts";
+import { getInventoryResponse } from "./inventoryController.ts";
+import { logger } from "../../utils/logger.ts";
 import type {
     IMissionInventoryUpdateResponse,
     IMissionInventoryUpdateResponseBackToDryDock,
     IMissionInventoryUpdateResponseRailjackInterstitial
-} from "@/src/types/missionTypes";
-import { sendWsBroadcastTo } from "@/src/services/wsService";
-import { generateRewardSeed } from "@/src/services/rngService";
+} from "../../types/missionTypes.ts";
+import { sendWsBroadcastTo } from "../../services/wsService.ts";
+import { generateRewardSeed } from "../../services/rngService.ts";
 
 /*
 **** INPUT ****

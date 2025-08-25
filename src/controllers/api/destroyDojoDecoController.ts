@@ -5,11 +5,11 @@ import {
     hasGuildPermission,
     refundDojoDeco,
     removeDojoDeco
-} from "@/src/services/guildService";
-import { getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { GuildPermission } from "@/src/types/guildTypes";
-import { logger } from "@/src/utils/logger";
+} from "../../services/guildService.ts";
+import { getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { GuildPermission } from "../../types/guildTypes.ts";
+import { logger } from "../../utils/logger.ts";
 import type { RequestHandler } from "express";
 
 export const destroyDojoDecoController: RequestHandler = async (req, res) => {

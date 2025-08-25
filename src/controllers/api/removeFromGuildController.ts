@@ -1,11 +1,16 @@
-import { GuildMember } from "@/src/models/guildModel";
-import { Inbox } from "@/src/models/inboxModel";
-import { Account } from "@/src/models/loginModel";
-import { deleteGuild, getGuildForRequest, hasGuildPermission, removeDojoKeyItems } from "@/src/services/guildService";
-import { createMessage } from "@/src/services/inboxService";
-import { getInventory } from "@/src/services/inventoryService";
-import { getAccountForRequest, getSuffixedName } from "@/src/services/loginService";
-import { GuildPermission } from "@/src/types/guildTypes";
+import { GuildMember } from "../../models/guildModel.ts";
+import { Inbox } from "../../models/inboxModel.ts";
+import { Account } from "../../models/loginModel.ts";
+import {
+    deleteGuild,
+    getGuildForRequest,
+    hasGuildPermission,
+    removeDojoKeyItems
+} from "../../services/guildService.ts";
+import { createMessage } from "../../services/inboxService.ts";
+import { getInventory } from "../../services/inventoryService.ts";
+import { getAccountForRequest, getSuffixedName } from "../../services/loginService.ts";
+import { GuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 
 export const removeFromGuildController: RequestHandler = async (req, res) => {

@@ -1,8 +1,8 @@
 import type { RequestHandler } from "express";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getPersonalRooms } from "@/src/services/personalRoomsService";
-import type { TBootLocation } from "@/src/types/personalRoomsTypes";
-import { getInventory } from "@/src/services/inventoryService";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getPersonalRooms } from "../../services/personalRoomsService.ts";
+import type { TBootLocation } from "../../types/personalRoomsTypes.ts";
+import { getInventory } from "../../services/inventoryService.ts";
 
 export const setBootLocationController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

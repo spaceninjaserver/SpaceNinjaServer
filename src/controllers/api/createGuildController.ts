@@ -1,10 +1,10 @@
 import type { RequestHandler } from "express";
-import { getAccountForRequest } from "@/src/services/loginService";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { Guild, GuildMember } from "@/src/models/guildModel";
-import { createUniqueClanName, getGuildClient, giveClanKey } from "@/src/services/guildService";
-import { getInventory } from "@/src/services/inventoryService";
-import type { IInventoryChanges } from "@/src/types/purchaseTypes";
+import { getAccountForRequest } from "../../services/loginService.ts";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { Guild, GuildMember } from "../../models/guildModel.ts";
+import { createUniqueClanName, getGuildClient, giveClanKey } from "../../services/guildService.ts";
+import { getInventory } from "../../services/inventoryService.ts";
+import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 
 export const createGuildController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);

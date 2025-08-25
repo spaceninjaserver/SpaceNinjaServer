@@ -1,6 +1,6 @@
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { Friendship } from "@/src/models/friendModel";
-import { getAccountIdForRequest } from "@/src/services/loginService";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { Friendship } from "../../models/friendModel.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
 
 export const setFriendNoteController: RequestHandler = async (req, res) => {

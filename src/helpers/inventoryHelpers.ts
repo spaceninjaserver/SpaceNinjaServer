@@ -1,7 +1,7 @@
-import type { IMongoDate, IOid, IOidWithLegacySupport } from "@/src/types/commonTypes";
+import type { IMongoDate, IOid, IOidWithLegacySupport } from "../types/commonTypes.ts";
 import { Types } from "mongoose";
 import type { TRarity } from "warframe-public-export-plus";
-import type { IFusionTreasure } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { IFusionTreasure } from "../types/inventoryTypes/inventoryTypes.ts";
 
 export const version_compare = (a: string, b: string): number => {
     const a_digits = a

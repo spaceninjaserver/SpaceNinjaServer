@@ -1,8 +1,8 @@
 import type { RequestHandler } from "express";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getInventory } from "@/src/services/inventoryService";
-import type { ITaunt } from "@/src/types/inventoryTypes/inventoryTypes";
-import { logger } from "@/src/utils/logger";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getInventory } from "../../services/inventoryService.ts";
+import type { ITaunt } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { logger } from "../../utils/logger.ts";
 
 export const tauntHistoryController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

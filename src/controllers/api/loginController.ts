@@ -1,14 +1,14 @@
 import type { RequestHandler } from "express";
 
-import { config } from "@/src/services/configService";
-import { buildConfig } from "@/src/services/buildConfigService";
+import { config } from "../../services/configService.ts";
+import { buildConfig } from "../../services/buildConfigService.ts";
 
-import { Account } from "@/src/models/loginModel";
-import { createAccount, createNonce, getUsernameFromEmail, isCorrectPassword } from "@/src/services/loginService";
-import type { IDatabaseAccountJson, ILoginRequest, ILoginResponse } from "@/src/types/loginTypes";
-import { logger } from "@/src/utils/logger";
-import { version_compare } from "@/src/helpers/inventoryHelpers";
-import { sendWsBroadcastTo } from "@/src/services/wsService";
+import { Account } from "../../models/loginModel.ts";
+import { createAccount, createNonce, getUsernameFromEmail, isCorrectPassword } from "../../services/loginService.ts";
+import type { IDatabaseAccountJson, ILoginRequest, ILoginResponse } from "../../types/loginTypes.ts";
+import { logger } from "../../utils/logger.ts";
+import { version_compare } from "../../helpers/inventoryHelpers.ts";
+import { sendWsBroadcastTo } from "../../services/wsService.ts";
 
 export const loginController: RequestHandler = async (request, response) => {
     const loginRequest = JSON.parse(String(request.body)) as ILoginRequest; // parse octet stream of json data to json object

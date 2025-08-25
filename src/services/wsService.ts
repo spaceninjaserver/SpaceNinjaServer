@@ -1,11 +1,11 @@
 import type http from "http";
 import type https from "https";
 import ws from "ws";
-import { Account } from "@/src/models/loginModel";
-import { createAccount, createNonce, getUsernameFromEmail, isCorrectPassword } from "@/src/services/loginService";
-import type { IDatabaseAccountJson } from "@/src/types/loginTypes";
+import { Account } from "../models/loginModel.ts";
+import { createAccount, createNonce, getUsernameFromEmail, isCorrectPassword } from "./loginService.ts";
+import type { IDatabaseAccountJson } from "../types/loginTypes.ts";
 import type { HydratedDocument } from "mongoose";
-import { logError } from "@/src/utils/logger";
+import { logError } from "../utils/logger.ts";
 
 let wsServer: ws.Server | undefined;
 let wssServer: ws.Server | undefined;

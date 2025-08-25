@@ -1,5 +1,5 @@
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getPersonalRooms } from "@/src/services/personalRoomsService";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getPersonalRooms } from "../../services/personalRoomsService.ts";
 import type { RequestHandler } from "express";
 
 export const apartmentController: RequestHandler = async (req, res) => {

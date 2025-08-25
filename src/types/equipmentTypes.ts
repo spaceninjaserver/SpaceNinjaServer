@@ -1,11 +1,11 @@
 import type { Types } from "mongoose";
-import type { IMongoDate, IOid, IOidWithLegacySupport } from "@/src/types/commonTypes";
+import type { IMongoDate, IOid, IOidWithLegacySupport } from "./commonTypes.ts";
 import type {
     ICrewShipCustomization,
     IFlavourItem,
     IItemConfig,
     IPolarity
-} from "@/src/types/inventoryTypes/commonInventoryTypes";
+} from "./inventoryTypes/commonInventoryTypes.ts";
 
 export interface IEquipmentSelectionClient {
     ItemId?: IOid;

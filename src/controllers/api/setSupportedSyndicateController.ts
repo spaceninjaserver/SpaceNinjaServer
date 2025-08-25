@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { Inventory } from "../../models/inventoryModels/inventoryModel.ts";
 
 export const setSupportedSyndicateController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

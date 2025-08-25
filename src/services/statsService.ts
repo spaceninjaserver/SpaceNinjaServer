@@ -1,5 +1,5 @@
-import type { TStatsDatabaseDocument } from "@/src/models/statsModel";
-import { Stats } from "@/src/models/statsModel";
+import type { TStatsDatabaseDocument } from "../models/statsModel.ts";
+import { Stats } from "../models/statsModel.ts";
 import type {
     IStatsAdd,
     IStatsMax,
@@ -8,10 +8,10 @@ import type {
     IStatsUpdate,
     IUploadEntry,
     IWeapon
-} from "@/src/types/statTypes";
-import { logger } from "@/src/utils/logger";
-import { addEmailItem, getInventory } from "@/src/services/inventoryService";
-import { submitLeaderboardScore } from "@/src/services/leaderboardService";
+} from "../types/statTypes.ts";
+import { logger } from "../utils/logger.ts";
+import { addEmailItem, getInventory } from "./inventoryService.ts";
+import { submitLeaderboardScore } from "./leaderboardService.ts";
 
 export const createStats = async (accountId: string): Promise<TStatsDatabaseDocument> => {
     const stats = new Stats({ accountOwnerId: accountId });

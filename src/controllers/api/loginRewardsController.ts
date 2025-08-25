@@ -1,15 +1,15 @@
 import type { RequestHandler } from "express";
-import { getAccountForRequest } from "@/src/services/loginService";
-import type { ILoginRewardsReponse } from "@/src/services/loginRewardService";
+import { getAccountForRequest } from "../../services/loginService.ts";
+import type { ILoginRewardsReponse } from "../../services/loginRewardService.ts";
 import {
     claimLoginReward,
     getRandomLoginRewards,
     isLoginRewardAChoice,
     setAccountGotLoginRewardToday
-} from "@/src/services/loginRewardService";
-import { getInventory } from "@/src/services/inventoryService";
-import { config } from "@/src/services/configService";
-import { sendWsBroadcastTo } from "@/src/services/wsService";
+} from "../../services/loginRewardService.ts";
+import { getInventory } from "../../services/inventoryService.ts";
+import { config } from "../../services/configService.ts";
+import { sendWsBroadcastTo } from "../../services/wsService.ts";
 
 export const loginRewardsController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);

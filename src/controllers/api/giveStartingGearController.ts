@@ -1,7 +1,7 @@
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { addStartingGear, getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import type { TPartialStartingGear } from "@/src/types/inventoryTypes/inventoryTypes";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { addStartingGear, getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import type { TPartialStartingGear } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { RequestHandler } from "express";
 
 export const giveStartingGearController: RequestHandler = async (req, res) => {

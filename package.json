@@ -4,7 +4,7 @@
   "description": "WF Emulator",
   "main": "index.ts",
   "scripts": {
-    "start": "node --enable-source-maps --import ./build/src/pathman.js build/src/index.js",
+    "start": "node --enable-source-maps build/src/index.js",
     "build": "tsgo --sourceMap && ncp static/webui build/static/webui",
     "build:tsc": "tsc --incremental --sourceMap && ncp static/webui build/static/webui",
     "build:dev": "tsgo --sourceMap",
@@ -38,7 +38,7 @@
     "mongoose": "^8.11.0",
     "morgan": "^1.10.0",
     "ncp": "^2.0.0",
-    "typescript": "^5.5",
+    "typescript": "^5.7",
     "undici": "^7.10.0",
     "warframe-public-export-plus": "^0.5.82",
     "warframe-riven-info": "^0.1.2",

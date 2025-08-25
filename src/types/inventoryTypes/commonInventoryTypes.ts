@@ -1,4 +1,4 @@
-import type { IOid } from "@/src/types/commonTypes";
+import type { IOid } from "../commonTypes.ts";
 import type { Types } from "mongoose";
 
 export interface IPolarity {

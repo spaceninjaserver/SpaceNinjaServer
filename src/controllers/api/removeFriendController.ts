@@ -1,11 +1,11 @@
-import { toOid } from "@/src/helpers/inventoryHelpers";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { Friendship } from "@/src/models/friendModel";
-import { Account } from "@/src/models/loginModel";
-import { getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import type { IOid } from "@/src/types/commonTypes";
-import { parallelForeach } from "@/src/utils/async-utils";
+import { toOid } from "../../helpers/inventoryHelpers.ts";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { Friendship } from "../../models/friendModel.ts";
+import { Account } from "../../models/loginModel.ts";
+import { getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import type { IOid } from "../../types/commonTypes.ts";
+import { parallelForeach } from "../../utils/async-utils.ts";
 import type { RequestHandler } from "express";
 import type { Types } from "mongoose";
 

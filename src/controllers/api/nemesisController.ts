@@ -1,5 +1,5 @@
-import { fromDbOid, version_compare } from "@/src/helpers/inventoryHelpers";
-import type { IKnifeResponse } from "@/src/helpers/nemesisHelpers";
+import { fromDbOid, version_compare } from "../../helpers/inventoryHelpers.ts";
+import type { IKnifeResponse } from "../../helpers/nemesisHelpers.ts";
 import {
     antivirusMods,
     decodeNemesisGuess,
@@ -14,15 +14,15 @@ import {
     GUESS_NONE,
     GUESS_WILDCARD,
     parseUpgrade
-} from "@/src/helpers/nemesisHelpers";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import type { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
-import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
-import { addMods, freeUpSlot, getInventory } from "@/src/services/inventoryService";
-import { getAccountForRequest } from "@/src/services/loginService";
-import { SRng } from "@/src/services/rngService";
-import type { IMongoDate, IOid } from "@/src/types/commonTypes";
-import type { IEquipmentClient } from "@/src/types/equipmentTypes";
+} from "../../helpers/nemesisHelpers.ts";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/inventoryModel.ts";
+import { Loadout } from "../../models/inventoryModels/loadoutModel.ts";
+import { addMods, freeUpSlot, getInventory } from "../../services/inventoryService.ts";
+import { getAccountForRequest } from "../../services/loginService.ts";
+import { SRng } from "../../services/rngService.ts";
+import type { IMongoDate, IOid } from "../../types/commonTypes.ts";
+import type { IEquipmentClient } from "../../types/equipmentTypes.ts";
 import type {
     IInnateDamageFingerprint,
     IInventoryClient,
@@ -31,9 +31,9 @@ import type {
     IWeaponSkinClient,
     TEquipmentKey,
     TNemesisFaction
-} from "@/src/types/inventoryTypes/inventoryTypes";
-import { InventorySlot, LoadoutIndex } from "@/src/types/inventoryTypes/inventoryTypes";
-import { logger } from "@/src/utils/logger";
+} from "../../types/inventoryTypes/inventoryTypes.ts";
+import { InventorySlot, LoadoutIndex } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { logger } from "../../utils/logger.ts";
 import type { RequestHandler } from "express";
 import { Types } from "mongoose";
 

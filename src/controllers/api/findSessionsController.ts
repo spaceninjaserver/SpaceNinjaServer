@@ -1,7 +1,7 @@
 import type { RequestHandler } from "express";
-import { getSession } from "@/src/managers/sessionManager";
-import { logger } from "@/src/utils/logger";
-import type { IFindSessionRequest } from "@/src/types/session";
+import { getSession } from "../../managers/sessionManager.ts";
+import { logger } from "../../utils/logger.ts";
+import type { IFindSessionRequest } from "../../types/session.ts";
 
 export const findSessionsController: RequestHandler = (_req, res) => {
     const req = JSON.parse(String(_req.body)) as IFindSessionRequest;

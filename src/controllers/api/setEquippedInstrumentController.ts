@@ -1,7 +1,7 @@
 import type { RequestHandler } from "express";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { Inventory } from "../../models/inventoryModels/inventoryModel.ts";
 
 export const setEquippedInstrumentController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

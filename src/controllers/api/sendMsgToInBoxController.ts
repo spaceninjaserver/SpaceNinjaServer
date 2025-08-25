@@ -1,6 +1,6 @@
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { createMessage } from "@/src/services/inboxService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { createMessage } from "../../services/inboxService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
 
 export const sendMsgToInBoxController: RequestHandler = async (req, res) => {

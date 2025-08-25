@@ -1,7 +1,7 @@
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import type { IShipDecorationsRequest, IResetShipDecorationsRequest } from "@/src/types/personalRoomsTypes";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import type { IShipDecorationsRequest, IResetShipDecorationsRequest } from "../../types/personalRoomsTypes.ts";
 import type { RequestHandler } from "express";
-import { handleResetShipDecorations, handleSetShipDecorations } from "@/src/services/shipCustomizationsService";
+import { handleResetShipDecorations, handleSetShipDecorations } from "../../services/shipCustomizationsService.ts";
 
 export const shipDecorationsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

@@ -1,7 +1,7 @@
 import type { RequestHandler } from "express";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { Inventory } from "../../models/inventoryModels/inventoryModel.ts";
 
 export const addFriendImageController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

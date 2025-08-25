@@ -14,14 +14,14 @@ import type {
     IGuildAdDatabase,
     IAllianceDatabase,
     IAllianceMemberDatabase
-} from "@/src/types/guildTypes";
-import { GuildPermission } from "@/src/types/guildTypes";
+} from "../types/guildTypes.ts";
+import { GuildPermission } from "../types/guildTypes.ts";
 import type { Document, Model } from "mongoose";
 import { model, Schema, Types } from "mongoose";
-import { fusionTreasuresSchema, typeCountSchema } from "@/src/models/inventoryModels/inventoryModel";
-import { pictureFrameInfoSchema } from "@/src/models/personalRoomsModel";
-import type { IGoalProgressClient, IGoalProgressDatabase } from "@/src/types/inventoryTypes/inventoryTypes";
-import { toOid } from "@/src/helpers/inventoryHelpers";
+import { fusionTreasuresSchema, typeCountSchema } from "./inventoryModels/inventoryModel.ts";
+import { pictureFrameInfoSchema } from "./personalRoomsModel.ts";
+import type { IGoalProgressClient, IGoalProgressDatabase } from "../types/inventoryTypes/inventoryTypes.ts";
+import { toOid } from "../helpers/inventoryHelpers.ts";
 
 const dojoDecoSchema = new Schema<IDojoDecoDatabase>({
     Type: String,

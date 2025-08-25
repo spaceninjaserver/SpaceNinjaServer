@@ -1,7 +1,7 @@
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { setShipCustomizations } from "@/src/services/shipCustomizationsService";
-import type { ISetShipCustomizationsRequest } from "@/src/types/personalRoomsTypes";
-import { logger } from "@/src/utils/logger";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { setShipCustomizations } from "../../services/shipCustomizationsService.ts";
+import type { ISetShipCustomizationsRequest } from "../../types/personalRoomsTypes.ts";
+import { logger } from "../../utils/logger.ts";
 import type { RequestHandler } from "express";
 
 export const setShipCustomizationsController: RequestHandler = async (req, res) => {

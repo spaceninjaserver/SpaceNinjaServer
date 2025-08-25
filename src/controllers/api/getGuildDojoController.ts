@@ -1,8 +1,8 @@
 import type { RequestHandler } from "express";
 import { Types } from "mongoose";
-import { Guild } from "@/src/models/guildModel";
-import { getDojoClient } from "@/src/services/guildService";
-import { Account } from "@/src/models/loginModel";
+import { Guild } from "../../models/guildModel.ts";
+import { getDojoClient } from "../../services/guildService.ts";
+import { Account } from "../../models/loginModel.ts";
 
 export const getGuildDojoController: RequestHandler = async (req, res) => {
     const guildId = req.query.guildId as string;

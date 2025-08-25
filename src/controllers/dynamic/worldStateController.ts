@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
-import { getWorldState, populateDailyDeal, populateFissures } from "@/src/services/worldStateService";
-import { version_compare } from "@/src/helpers/inventoryHelpers";
+import { getWorldState, populateDailyDeal, populateFissures } from "../../services/worldStateService.ts";
+import { version_compare } from "../../helpers/inventoryHelpers.ts";
 
 export const worldStateController: RequestHandler = async (req, res) => {
     const buildLabel = req.query.buildLabel as string | undefined;

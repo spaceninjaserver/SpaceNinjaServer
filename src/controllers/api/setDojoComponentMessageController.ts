@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { getDojoClient, getGuildForRequest } from "@/src/services/guildService";
+import { getDojoClient, getGuildForRequest } from "../../services/guildService.ts";
 
 export const setDojoComponentMessageController: RequestHandler = async (req, res) => {
     const guild = await getGuildForRequest(req);

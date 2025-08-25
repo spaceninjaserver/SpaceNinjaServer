@@ -1,8 +1,8 @@
-import { toOid } from "@/src/helpers/inventoryHelpers";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { Account, Ignore } from "@/src/models/loginModel";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import type { IFriendInfo } from "@/src/types/friendTypes";
+import { toOid } from "../../helpers/inventoryHelpers.ts";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { Account, Ignore } from "../../models/loginModel.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import type { IFriendInfo } from "../../types/friendTypes.ts";
 import type { RequestHandler } from "express";
 
 export const addIgnoredUserController: RequestHandler = async (req, res) => {

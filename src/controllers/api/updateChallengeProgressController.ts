@@ -1,11 +1,11 @@
 import type { RequestHandler } from "express";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { getAccountForRequest } from "@/src/services/loginService";
-import { addCalendarProgress, addChallenges, getInventory } from "@/src/services/inventoryService";
-import type { IChallengeProgress, ISeasonChallenge } from "@/src/types/inventoryTypes/inventoryTypes";
-import type { IAffiliationMods } from "@/src/types/purchaseTypes";
-import { getEntriesUnsafe } from "@/src/utils/ts-utils";
-import { logger } from "@/src/utils/logger";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { getAccountForRequest } from "../../services/loginService.ts";
+import { addCalendarProgress, addChallenges, getInventory } from "../../services/inventoryService.ts";
+import type { IChallengeProgress, ISeasonChallenge } from "../../types/inventoryTypes/inventoryTypes.ts";
+import type { IAffiliationMods } from "../../types/purchaseTypes.ts";
+import { getEntriesUnsafe } from "../../utils/ts-utils.ts";
+import { logger } from "../../utils/logger.ts";
 
 export const updateChallengeProgressController: RequestHandler = async (req, res) => {
     const challenges = getJSONfromString<IUpdateChallengeProgressRequest>(String(req.body));

@@ -1,17 +1,17 @@
 import type { RequestHandler } from "express";
-import { getAccountForRequest } from "@/src/services/loginService";
-import type { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
-import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
-import { config } from "@/src/services/configService";
-import allDialogue from "@/static/fixed_responses/allDialogue.json";
-import type { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
-import type { IInventoryClient, IShipInventory } from "@/src/types/inventoryTypes/inventoryTypes";
-import { equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
-import type { IPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
-import { ArtifactPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { getAccountForRequest } from "../../services/loginService.ts";
+import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/inventoryModel.ts";
+import { Inventory } from "../../models/inventoryModels/inventoryModel.ts";
+import { config } from "../../services/configService.ts";
+import allDialogue from "../../../static/fixed_responses/allDialogue.json";
+import type { ILoadoutDatabase } from "../../types/saveLoadoutTypes.ts";
+import type { IInventoryClient, IShipInventory } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { equipmentKeys } from "../../types/inventoryTypes/inventoryTypes.ts";
+import type { IPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
+import { ArtifactPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import type { ICountedItem } from "warframe-public-export-plus";
 import { eFaction, ExportCustoms, ExportFlavour, ExportResources, ExportVirtuals } from "warframe-public-export-plus";
-import { applyCheatsToInfestedFoundry, handleSubsumeCompletion } from "@/src/services/infestedFoundryService";
+import { applyCheatsToInfestedFoundry, handleSubsumeCompletion } from "../../services/infestedFoundryService.ts";
 import {
     addEmailItem,
     addItem,
@@ -21,22 +21,22 @@ import {
     cleanupInventory,
     createLibraryDailyTask,
     getCalendarProgress
-} from "@/src/services/inventoryService";
-import { logger } from "@/src/utils/logger";
-import { addString, catBreadHash } from "@/src/helpers/stringHelpers";
+} from "../../services/inventoryService.ts";
+import { logger } from "../../utils/logger.ts";
+import { addString, catBreadHash } from "../../helpers/stringHelpers.ts";
 import { Types } from "mongoose";
-import { getNemesisManifest } from "@/src/helpers/nemesisHelpers";
-import { getPersonalRooms } from "@/src/services/personalRoomsService";
-import type { IPersonalRoomsClient } from "@/src/types/personalRoomsTypes";
-import { Ship } from "@/src/models/shipModel";
-import { toLegacyOid, toOid, version_compare } from "@/src/helpers/inventoryHelpers";
-import { Inbox } from "@/src/models/inboxModel";
-import { unixTimesInMs } from "@/src/constants/timeConstants";
-import { DailyDeal } from "@/src/models/worldStateModel";
-import { EquipmentFeatures } from "@/src/types/equipmentTypes";
-import { generateRewardSeed } from "@/src/services/rngService";
-import { getInvasionByOid, getWorldState } from "@/src/services/worldStateService";
-import { createMessage } from "@/src/services/inboxService";
+import { getNemesisManifest } from "../../helpers/nemesisHelpers.ts";
+import { getPersonalRooms } from "../../services/personalRoomsService.ts";
+import type { IPersonalRoomsClient } from "../../types/personalRoomsTypes.ts";
+import { Ship } from "../../models/shipModel.ts";
+import { toLegacyOid, toOid, version_compare } from "../../helpers/inventoryHelpers.ts";
+import { Inbox } from "../../models/inboxModel.ts";
+import { unixTimesInMs } from "../../constants/timeConstants.ts";
+import { DailyDeal } from "../../models/worldStateModel.ts";
+import { EquipmentFeatures } from "../../types/equipmentTypes.ts";
+import { generateRewardSeed } from "../../services/rngService.ts";
+import { getInvasionByOid, getWorldState } from "../../services/worldStateService.ts";
+import { createMessage } from "../../services/inboxService.ts";
 
 export const inventoryController: RequestHandler = async (request, response) => {
     const account = await getAccountForRequest(request);

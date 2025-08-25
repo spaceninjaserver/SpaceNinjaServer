@@ -1,9 +1,9 @@
-import { getAccountIdForRequest } from "@/src/services/loginService";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
-import { getPersonalRooms } from "@/src/services/personalRoomsService";
-import type { IOid } from "@/src/types/commonTypes";
+import { getPersonalRooms } from "../../services/personalRoomsService.ts";
+import type { IOid } from "../../types/commonTypes.ts";
 import { Types } from "mongoose";
-import type { IFavouriteLoadoutDatabase, TBootLocation } from "@/src/types/personalRoomsTypes";
+import type { IFavouriteLoadoutDatabase, TBootLocation } from "../../types/personalRoomsTypes.ts";
 
 export const setShipFavouriteLoadoutController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

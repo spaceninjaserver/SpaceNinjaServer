@@ -1,13 +1,13 @@
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import type { RequestHandler } from "express";
-import { getAccountIdForRequest } from "@/src/services/loginService";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { ISyndicateSacrifice } from "warframe-public-export-plus";
 import { ExportSyndicates } from "warframe-public-export-plus";
-import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
-import { addMiscItem, combineInventoryChanges, getInventory, updateCurrency } from "@/src/services/inventoryService";
-import type { IInventoryChanges } from "@/src/types/purchaseTypes";
-import { toStoreItem } from "@/src/services/itemDataService";
-import { logger } from "@/src/utils/logger";
+import { handleStoreItemAcquisition } from "../../services/purchaseService.ts";
+import { addMiscItem, combineInventoryChanges, getInventory, updateCurrency } from "../../services/inventoryService.ts";
+import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
+import { toStoreItem } from "../../services/itemDataService.ts";
+import { logger } from "../../utils/logger.ts";
 
 export const syndicateSacrificeController: RequestHandler = async (request, response) => {
     const accountId = await getAccountIdForRequest(request);

@@ -1,9 +1,9 @@
-import { Guild } from "@/src/models/guildModel";
-import type { TLeaderboardEntryDocument } from "@/src/models/leaderboardModel";
-import { Leaderboard } from "@/src/models/leaderboardModel";
-import type { ILeaderboardEntryClient } from "@/src/types/leaderboardTypes";
-import { handleGuildGoalProgress } from "@/src/services/guildService";
-import { getWorldState } from "@/src/services/worldStateService";
+import { Guild } from "../models/guildModel.ts";
+import type { TLeaderboardEntryDocument } from "../models/leaderboardModel.ts";
+import { Leaderboard } from "../models/leaderboardModel.ts";
+import type { ILeaderboardEntryClient } from "../types/leaderboardTypes.ts";
+import { handleGuildGoalProgress } from "./guildService.ts";
+import { getWorldState } from "./worldStateService.ts";
 import { Types } from "mongoose";
 
 export const submitLeaderboardScore = async (

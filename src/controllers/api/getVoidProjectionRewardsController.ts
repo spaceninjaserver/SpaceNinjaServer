@@ -1,8 +1,8 @@
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { crackRelic } from "@/src/helpers/relicHelper";
-import { getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import type { IVoidTearParticipantInfo } from "@/src/types/requestTypes";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { crackRelic } from "../../helpers/relicHelper.ts";
+import { getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import type { IVoidTearParticipantInfo } from "../../types/requestTypes.ts";
 import type { RequestHandler } from "express";
 
 export const getVoidProjectionRewardsController: RequestHandler = async (req, res) => {

@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { getDict, getItemName, getString } from "@/src/services/itemDataService";
+import { getDict, getItemName, getString } from "../../services/itemDataService.ts";
 import type { TRelicQuality } from "warframe-public-export-plus";
 import {
     ExportAbilities,
@@ -21,8 +21,8 @@ import {
     ExportWarframes,
     ExportWeapons
 } from "warframe-public-export-plus";
-import allIncarnons from "@/static/fixed_responses/allIncarnonList.json";
-import varzia from "@/static/fixed_responses/worldState/varzia.json";
+import allIncarnons from "../../../static/fixed_responses/allIncarnonList.json";
+import varzia from "../../../static/fixed_responses/worldState/varzia.json";
 
 interface ListedItem {
     uniqueName: string;

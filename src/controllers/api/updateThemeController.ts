@@ -1,7 +1,7 @@
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import type { RequestHandler } from "express";
-import { getInventory } from "@/src/services/inventoryService";
+import { getInventory } from "../../services/inventoryService.ts";
 
 export const updateThemeController: RequestHandler = async (request, response) => {
     const accountId = await getAccountIdForRequest(request);

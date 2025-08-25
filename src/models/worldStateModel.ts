@@ -1,4 +1,4 @@
-import type { IDailyDealDatabase, IFissureDatabase } from "@/src/types/worldStateTypes";
+import type { IDailyDealDatabase, IFissureDatabase } from "../types/worldStateTypes.ts";
 import { model, Schema } from "mongoose";
 
 const fissureSchema = new Schema<IFissureDatabase>({

@@ -1,7 +1,7 @@
-import { addEmailItem, getDialogue, getInventory, updateCurrency } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import type { ICompletedDialogue } from "@/src/types/inventoryTypes/inventoryTypes";
-import type { IInventoryChanges } from "@/src/types/purchaseTypes";
+import { addEmailItem, getDialogue, getInventory, updateCurrency } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import type { ICompletedDialogue } from "../../types/inventoryTypes/inventoryTypes.ts";
+import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import type { RequestHandler } from "express";
 
 export const saveDialogueController: RequestHandler = async (req, res) => {

@@ -1,5 +1,5 @@
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getInventory } from "@/src/services/inventoryService";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getInventory } from "../../services/inventoryService.ts";
 import type { RequestHandler } from "express";
 import { ExportBoosters } from "warframe-public-export-plus";
 

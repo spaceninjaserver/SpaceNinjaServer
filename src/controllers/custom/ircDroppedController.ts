@@ -1,4 +1,4 @@
-import { Account } from "@/src/models/loginModel";
+import { Account } from "../../models/loginModel.ts";
 import type { RequestHandler } from "express";
 
 export const ircDroppedController: RequestHandler = async (req, res) => {

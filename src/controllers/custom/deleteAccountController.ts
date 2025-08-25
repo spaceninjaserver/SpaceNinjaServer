@@ -1,17 +1,17 @@
 import type { RequestHandler } from "express";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { Account, Ignore } from "@/src/models/loginModel";
-import { Inbox } from "@/src/models/inboxModel";
-import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
-import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
-import { PersonalRooms } from "@/src/models/personalRoomsModel";
-import { Ship } from "@/src/models/shipModel";
-import { Stats } from "@/src/models/statsModel";
-import { GuildMember } from "@/src/models/guildModel";
-import { Leaderboard } from "@/src/models/leaderboardModel";
-import { deleteGuild } from "@/src/services/guildService";
-import { Friendship } from "@/src/models/friendModel";
-import { sendWsBroadcastTo } from "@/src/services/wsService";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { Account, Ignore } from "../../models/loginModel.ts";
+import { Inbox } from "../../models/inboxModel.ts";
+import { Inventory } from "../../models/inventoryModels/inventoryModel.ts";
+import { Loadout } from "../../models/inventoryModels/loadoutModel.ts";
+import { PersonalRooms } from "../../models/personalRoomsModel.ts";
+import { Ship } from "../../models/shipModel.ts";
+import { Stats } from "../../models/statsModel.ts";
+import { GuildMember } from "../../models/guildModel.ts";
+import { Leaderboard } from "../../models/leaderboardModel.ts";
+import { deleteGuild } from "../../services/guildService.ts";
+import { Friendship } from "../../models/friendModel.ts";
+import { sendWsBroadcastTo } from "../../services/wsService.ts";
 
 export const deleteAccountController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

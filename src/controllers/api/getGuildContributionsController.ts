@@ -1,7 +1,7 @@
-import { GuildMember } from "@/src/models/guildModel";
-import { getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import type { IGuildMemberClient } from "@/src/types/guildTypes";
+import { GuildMember } from "../../models/guildModel.ts";
+import { getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import type { IGuildMemberClient } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 
 export const getGuildContributionsController: RequestHandler = async (req, res) => {

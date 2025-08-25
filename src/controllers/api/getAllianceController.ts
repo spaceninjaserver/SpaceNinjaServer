@@ -1,7 +1,7 @@
-import { Alliance, Guild } from "@/src/models/guildModel";
-import { getAllianceClient } from "@/src/services/guildService";
-import { getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
+import { Alliance, Guild } from "../../models/guildModel.ts";
+import { getAllianceClient } from "../../services/guildService.ts";
+import { getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
 
 export const getAllianceController: RequestHandler = async (req, res) => {

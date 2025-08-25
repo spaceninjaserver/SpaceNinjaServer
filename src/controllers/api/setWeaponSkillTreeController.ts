@@ -1,9 +1,9 @@
 import type { RequestHandler } from "express";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
-import type { TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
-import { equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { Inventory } from "../../models/inventoryModels/inventoryModel.ts";
+import type { TEquipmentKey } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { equipmentKeys } from "../../types/inventoryTypes/inventoryTypes.ts";
 
 export const setWeaponSkillTreeController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

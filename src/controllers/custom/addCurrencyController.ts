@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { addFusionPoints, getInventory } from "@/src/services/inventoryService";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { addFusionPoints, getInventory } from "../../services/inventoryService.ts";
 
 export const addCurrencyController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

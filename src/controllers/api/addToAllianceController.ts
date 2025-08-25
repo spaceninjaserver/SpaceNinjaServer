@@ -1,10 +1,10 @@
-import { getJSONfromString, regexEscape } from "@/src/helpers/stringHelpers";
-import { Alliance, AllianceMember, Guild, GuildMember } from "@/src/models/guildModel";
-import { createMessage } from "@/src/services/inboxService";
-import { getEffectiveAvatarImageType, getInventory } from "@/src/services/inventoryService";
-import { getAccountForRequest, getSuffixedName } from "@/src/services/loginService";
-import { GuildPermission } from "@/src/types/guildTypes";
-import { logger } from "@/src/utils/logger";
+import { getJSONfromString, regexEscape } from "../../helpers/stringHelpers.ts";
+import { Alliance, AllianceMember, Guild, GuildMember } from "../../models/guildModel.ts";
+import { createMessage } from "../../services/inboxService.ts";
+import { getEffectiveAvatarImageType, getInventory } from "../../services/inventoryService.ts";
+import { getAccountForRequest, getSuffixedName } from "../../services/loginService.ts";
+import { GuildPermission } from "../../types/guildTypes.ts";
+import { logger } from "../../utils/logger.ts";
 import type { RequestHandler } from "express";
 import { ExportFlavour } from "warframe-public-export-plus";
 

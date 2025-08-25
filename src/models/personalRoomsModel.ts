@@ -1,4 +1,4 @@
-import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
+import { toMongoDate, toOid } from "../helpers/inventoryHelpers.ts";
 import type {
     IApartmentDatabase,
     ICustomizationInfoDatabase,
@@ -15,11 +15,11 @@ import type {
     IRoomDatabase,
     ITailorShopDatabase,
     PersonalRoomsModelType
-} from "@/src/types/personalRoomsTypes";
+} from "../types/personalRoomsTypes.ts";
 import type { Types } from "mongoose";
 import { Schema, model } from "mongoose";
-import { colorSchema, shipCustomizationSchema } from "@/src/models/commonModel";
-import { loadoutConfigSchema } from "@/src/models/inventoryModels/loadoutModel";
+import { colorSchema, shipCustomizationSchema } from "./commonModel.ts";
+import { loadoutConfigSchema } from "./inventoryModels/loadoutModel.ts";
 
 export const pictureFrameInfoSchema = new Schema<IPictureFrameInfo>(
     {

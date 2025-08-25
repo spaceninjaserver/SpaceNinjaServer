@@ -1,8 +1,8 @@
-import { checkCalendarAutoAdvance, getCalendarProgress, getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
-import { getWorldState } from "@/src/services/worldStateService";
-import type { IInventoryChanges } from "@/src/types/purchaseTypes";
+import { checkCalendarAutoAdvance, getCalendarProgress, getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { handleStoreItemAcquisition } from "../../services/purchaseService.ts";
+import { getWorldState } from "../../services/worldStateService.ts";
+import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import type { RequestHandler } from "express";
 
 // GET request; query parameters: CompletedEventIdx=0&Iteration=4&Version=19&Season=CST_SUMMER

@@ -1,8 +1,8 @@
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { getInventory, updateCurrency } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { sendWsBroadcastTo } from "@/src/services/wsService";
-import type { IInventoryChanges } from "@/src/types/purchaseTypes";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { getInventory, updateCurrency } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { sendWsBroadcastTo } from "../../services/wsService.ts";
+import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import type { RequestHandler } from "express";
 
 export const renamePetController: RequestHandler = async (req, res) => {

@@ -1,5 +1,5 @@
-import { getPersonalRooms } from "@/src/services/personalRoomsService";
-import { getShip } from "@/src/services/shipService";
+import { getPersonalRooms } from "./personalRoomsService.ts";
+import { getShip } from "./shipService.ts";
 import type {
     IResetShipDecorationsRequest,
     IResetShipDecorationsResponse,
@@ -10,16 +10,16 @@ import type {
     RoomsType,
     TBootLocation,
     TPersonalRoomsDatabaseDocument
-} from "@/src/types/personalRoomsTypes";
-import { logger } from "@/src/utils/logger";
+} from "../types/personalRoomsTypes.ts";
+import { logger } from "../utils/logger.ts";
 import { Types } from "mongoose";
-import { addFusionTreasures, addShipDecorations, getInventory } from "@/src/services/inventoryService";
-import { config } from "@/src/services/configService";
-import { Guild } from "@/src/models/guildModel";
-import { hasGuildPermission } from "@/src/services/guildService";
-import { GuildPermission } from "@/src/types/guildTypes";
+import { addFusionTreasures, addShipDecorations, getInventory } from "./inventoryService.ts";
+import { config } from "./configService.ts";
+import { Guild } from "../models/guildModel.ts";
+import { hasGuildPermission } from "./guildService.ts";
+import { GuildPermission } from "../types/guildTypes.ts";
 import { ExportResources } from "warframe-public-export-plus";
-import { convertCustomizationInfo } from "@/src/services/importService";
+import { convertCustomizationInfo } from "./importService.ts";
 
 export const setShipCustomizations = async (
     accountId: string,

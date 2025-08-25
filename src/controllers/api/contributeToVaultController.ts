@@ -1,5 +1,5 @@
-import type { TGuildDatabaseDocument, TGuildMemberDatabaseDocument } from "@/src/models/guildModel";
-import { Alliance, Guild, GuildMember } from "@/src/models/guildModel";
+import type { TGuildDatabaseDocument, TGuildMemberDatabaseDocument } from "../../models/guildModel.ts";
+import { Alliance, Guild, GuildMember } from "../../models/guildModel.ts";
 import {
     addGuildMemberMiscItemContribution,
     addGuildMemberShipDecoContribution,
@@ -7,17 +7,17 @@ import {
     addVaultMiscItems,
     addVaultShipDecos,
     getGuildForRequestEx
-} from "@/src/services/guildService";
+} from "../../services/guildService.ts";
 import {
     addFusionTreasures,
     addMiscItems,
     addShipDecorations,
     getInventory,
     updateCurrency
-} from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import type { ITypeCount } from "@/src/types/commonTypes";
-import type { IFusionTreasure, IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
+} from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import type { ITypeCount } from "../../types/commonTypes.ts";
+import type { IFusionTreasure, IMiscItem } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { RequestHandler } from "express";
 
 export const contributeToVaultController: RequestHandler = async (req, res) => {

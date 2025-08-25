@@ -1,5 +1,5 @@
 import fsPromises from "fs/promises";
-import { config, configPath } from "@/src/services/configService";
+import { config, configPath } from "./configService.ts";
 
 let amnesia = false;
 

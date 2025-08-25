@@ -1,7 +1,7 @@
-import { getGuildForRequest, hasGuildPermission } from "@/src/services/guildService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import type { IGuildRank } from "@/src/types/guildTypes";
-import { GuildPermission } from "@/src/types/guildTypes";
+import { getGuildForRequest, hasGuildPermission } from "../../services/guildService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import type { IGuildRank } from "../../types/guildTypes.ts";
+import { GuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 
 export const customizeGuildRanksController: RequestHandler = async (req, res) => {

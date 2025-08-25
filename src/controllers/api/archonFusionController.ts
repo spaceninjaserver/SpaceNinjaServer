@@ -1,8 +1,8 @@
 import type { RequestHandler } from "express";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { addMiscItems, getInventory } from "@/src/services/inventoryService";
-import type { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
-import { colorToShard, combineColors, shardToColor } from "@/src/helpers/shardHelper";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { addMiscItems, getInventory } from "../../services/inventoryService.ts";
+import type { IMiscItem } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { colorToShard, combineColors, shardToColor } from "../../helpers/shardHelper.ts";
 
 export const archonFusionController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

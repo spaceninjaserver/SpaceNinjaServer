@@ -1,5 +1,5 @@
 import type { IMissionReward } from "warframe-public-export-plus";
-import type { IMongoDate, IOid } from "@/src/types/commonTypes";
+import type { IMongoDate, IOid } from "./commonTypes.ts";
 
 export interface IWorldState {
     Version: number; // for goals

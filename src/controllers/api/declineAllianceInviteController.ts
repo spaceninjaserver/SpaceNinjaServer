@@ -1,5 +1,5 @@
-import { AllianceMember, GuildMember } from "@/src/models/guildModel";
-import { getAccountIdForRequest } from "@/src/services/loginService";
+import { AllianceMember, GuildMember } from "../../models/guildModel.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
 
 export const declineAllianceInviteController: RequestHandler = async (req, res) => {

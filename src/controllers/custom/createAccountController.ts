@@ -1,5 +1,5 @@
-import { toCreateAccount, toDatabaseAccount } from "@/src/helpers/customHelpers/customHelpers";
-import { createAccount, isNameTaken } from "@/src/services/loginService";
+import { toCreateAccount, toDatabaseAccount } from "../../helpers/customHelpers/customHelpers.ts";
+import { createAccount, isNameTaken } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
 
 const createAccountController: RequestHandler = async (req, res) => {

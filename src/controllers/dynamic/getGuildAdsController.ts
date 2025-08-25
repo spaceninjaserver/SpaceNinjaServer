@@ -1,6 +1,6 @@
-import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
-import { GuildAd } from "@/src/models/guildModel";
-import type { IGuildAdInfoClient } from "@/src/types/guildTypes";
+import { toMongoDate, toOid } from "../../helpers/inventoryHelpers.ts";
+import { GuildAd } from "../../models/guildModel.ts";
+import type { IGuildAdInfoClient } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 
 export const getGuildAdsController: RequestHandler = async (req, res) => {

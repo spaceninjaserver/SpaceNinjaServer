@@ -1,6 +1,6 @@
-import { Alliance, AllianceMember, Guild, GuildMember } from "@/src/models/guildModel";
-import { getAllianceClient } from "@/src/services/guildService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
+import { Alliance, AllianceMember, Guild, GuildMember } from "../../models/guildModel.ts";
+import { getAllianceClient } from "../../services/guildService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
 
 export const confirmAllianceInvitationController: RequestHandler = async (req, res) => {

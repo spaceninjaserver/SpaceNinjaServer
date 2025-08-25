@@ -1,7 +1,7 @@
 import type { RequestHandler } from "express";
-import { getAccountForRequest } from "@/src/services/loginService";
-import { getInventory } from "@/src/services/inventoryService";
-import { Guild } from "@/src/models/guildModel";
+import { getAccountForRequest } from "../../services/loginService.ts";
+import { getInventory } from "../../services/inventoryService.ts";
+import { Guild } from "../../models/guildModel.ts";
 
 export const getGuildEventScoreController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);

@@ -1,8 +1,8 @@
 import express from "express";
-import { aggregateSessionsController } from "@/src/controllers/dynamic/aggregateSessionsController";
-import { getGuildAdsController } from "@/src/controllers/dynamic/getGuildAdsController";
-import { getProfileViewingDataGetController } from "@/src/controllers/dynamic/getProfileViewingDataController";
-import { worldStateController } from "@/src/controllers/dynamic/worldStateController";
+import { aggregateSessionsController } from "../controllers/dynamic/aggregateSessionsController.ts";
+import { getGuildAdsController } from "../controllers/dynamic/getGuildAdsController.ts";
+import { getProfileViewingDataGetController } from "../controllers/dynamic/getProfileViewingDataController.ts";
+import { worldStateController } from "../controllers/dynamic/worldStateController.ts";
 
 const dynamicController = express.Router();
 

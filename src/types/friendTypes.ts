@@ -1,5 +1,5 @@
 import type { Types } from "mongoose";
-import type { IMongoDate, IOidWithLegacySupport } from "@/src/types/commonTypes";
+import type { IMongoDate, IOidWithLegacySupport } from "./commonTypes.ts";
 
 export interface IFriendInfo {
     _id: IOidWithLegacySupport;

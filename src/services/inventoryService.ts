@@ -1,9 +1,9 @@
-import type { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
-import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
-import { config } from "@/src/services/configService";
+import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
+import { Inventory } from "../models/inventoryModels/inventoryModel.ts";
+import { config } from "./configService.ts";
 import { Types } from "mongoose";
-import type { SlotNames, IInventoryChanges, IBinChanges, IAffiliationMods } from "@/src/types/purchaseTypes";
-import { slotNames } from "@/src/types/purchaseTypes";
+import type { SlotNames, IInventoryChanges, IBinChanges, IAffiliationMods } from "../types/purchaseTypes.ts";
+import { slotNames } from "../types/purchaseTypes.ts";
 import type {
     IChallengeProgress,
     IMiscItem,
@@ -27,13 +27,13 @@ import type {
     INemesisPetTargetFingerprint,
     IDialogueDatabase,
     IKubrowPetPrintClient
-} from "@/src/types/inventoryTypes/inventoryTypes";
-import { InventorySlot, equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
-import type { IGenericUpdate, IUpdateNodeIntrosResponse } from "@/src/types/genericUpdate";
-import type { IKeyChainRequest, IMissionInventoryUpdateRequest } from "@/src/types/requestTypes";
-import { logger } from "@/src/utils/logger";
-import { convertInboxMessage, fromStoreItem, getKeyChainItems } from "@/src/services/itemDataService";
-import type { IFlavourItem, IItemConfig } from "@/src/types/inventoryTypes/commonInventoryTypes";
+} from "../types/inventoryTypes/inventoryTypes.ts";
+import { InventorySlot, equipmentKeys } from "../types/inventoryTypes/inventoryTypes.ts";
+import type { IGenericUpdate, IUpdateNodeIntrosResponse } from "../types/genericUpdate.ts";
+import type { IKeyChainRequest, IMissionInventoryUpdateRequest } from "../types/requestTypes.ts";
+import { logger } from "../utils/logger.ts";
+import { convertInboxMessage, fromStoreItem, getKeyChainItems } from "./itemDataService.ts";
+import type { IFlavourItem, IItemConfig } from "../types/inventoryTypes/commonInventoryTypes.ts";
 import type { IDefaultUpgrade, IPowersuit, ISentinel, TStandingLimitBin } from "warframe-public-export-plus";
 import {
     ExportArcanes,
@@ -58,8 +58,8 @@ import {
     ExportWarframes,
     ExportWeapons
 } from "warframe-public-export-plus";
-import { createShip } from "@/src/services/shipService";
-import type { TTraitsPool } from "@/src/helpers/inventoryHelpers";
+import { createShip } from "./shipService.ts";
+import type { TTraitsPool } from "../helpers/inventoryHelpers.ts";
 import {
     catbrowDetails,
     fromDbOid,
@@ -69,35 +69,29 @@ import {
     kubrowFurPatternsWeights,
     kubrowWeights,
     toOid
-} from "@/src/helpers/inventoryHelpers";
-import { addQuestKey, completeQuest } from "@/src/services/questService";
-import { handleBundleAcqusition } from "@/src/services/purchaseService";
-import libraryDailyTasks from "@/static/fixed_responses/libraryDailyTasks.json";
-import {
-    generateRewardSeed,
-    getRandomElement,
-    getRandomInt,
-    getRandomWeightedReward,
-    SRng
-} from "@/src/services/rngService";
-import type { IMessageCreationTemplate } from "@/src/services/inboxService";
-import { createMessage } from "@/src/services/inboxService";
-import { getMaxStanding, getMinStanding } from "@/src/helpers/syndicateStandingHelper";
-import { getNightwaveSyndicateTag, getWorldState } from "@/src/services/worldStateService";
-import type { ICalendarSeason } from "@/src/types/worldStateTypes";
-import type { INemesisProfile } from "@/src/helpers/nemesisHelpers";
-import { generateNemesisProfile } from "@/src/helpers/nemesisHelpers";
-import type { TAccountDocument } from "@/src/services/loginService";
-import { unixTimesInMs } from "@/src/constants/timeConstants";
-import { addString } from "@/src/helpers/stringHelpers";
+} from "../helpers/inventoryHelpers.ts";
+import { addQuestKey, completeQuest } from "./questService.ts";
+import { handleBundleAcqusition } from "./purchaseService.ts";
+import libraryDailyTasks from "../../static/fixed_responses/libraryDailyTasks.json";
+import { generateRewardSeed, getRandomElement, getRandomInt, getRandomWeightedReward, SRng } from "./rngService.ts";
+import type { IMessageCreationTemplate } from "./inboxService.ts";
+import { createMessage } from "./inboxService.ts";
+import { getMaxStanding, getMinStanding } from "../helpers/syndicateStandingHelper.ts";
+import { getNightwaveSyndicateTag, getWorldState } from "./worldStateService.ts";
+import type { ICalendarSeason } from "../types/worldStateTypes.ts";
+import type { INemesisProfile } from "../helpers/nemesisHelpers.ts";
+import { generateNemesisProfile } from "../helpers/nemesisHelpers.ts";
+import type { TAccountDocument } from "./loginService.ts";
+import { unixTimesInMs } from "../constants/timeConstants.ts";
+import { addString } from "../helpers/stringHelpers.ts";
 import type {
     IEquipmentClient,
     IEquipmentDatabase,
     IKubrowPetDetailsDatabase,
     ITraits
-} from "@/src/types/equipmentTypes";
-import { EquipmentFeatures, Status } from "@/src/types/equipmentTypes";
-import type { ITypeCount } from "@/src/types/commonTypes";
+} from "../types/equipmentTypes.ts";
+import { EquipmentFeatures, Status } from "../types/equipmentTypes.ts";
+import type { ITypeCount } from "../types/commonTypes.ts";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,

@@ -1,7 +1,7 @@
-import type { IAccountCreation } from "@/src/types/customTypes";
-import type { IDatabaseAccountRequiredFields } from "@/src/types/loginTypes";
+import type { IAccountCreation } from "../../types/customTypes.ts";
+import type { IDatabaseAccountRequiredFields } from "../../types/loginTypes.ts";
 import crypto from "crypto";
-import { isString, parseEmail, parseString } from "@/src/helpers/general";
+import { isString, parseEmail, parseString } from "../general.ts";
 
 const getWhirlpoolHash = (rawPassword: string): string => {
     const whirlpool = crypto.createHash("whirlpool");

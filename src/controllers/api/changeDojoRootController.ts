@@ -1,11 +1,16 @@
 import type { RequestHandler } from "express";
-import { getDojoClient, getGuildForRequestEx, hasAccessToDojo, hasGuildPermission } from "@/src/services/guildService";
-import { logger } from "@/src/utils/logger";
-import type { IDojoComponentDatabase } from "@/src/types/guildTypes";
-import { GuildPermission } from "@/src/types/guildTypes";
+import {
+    getDojoClient,
+    getGuildForRequestEx,
+    hasAccessToDojo,
+    hasGuildPermission
+} from "../../services/guildService.ts";
+import { logger } from "../../utils/logger.ts";
+import type { IDojoComponentDatabase } from "../../types/guildTypes.ts";
+import { GuildPermission } from "../../types/guildTypes.ts";
 import { Types } from "mongoose";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getInventory } from "@/src/services/inventoryService";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getInventory } from "../../services/inventoryService.ts";
 
 export const changeDojoRootController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

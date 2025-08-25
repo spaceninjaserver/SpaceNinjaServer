@@ -1,8 +1,8 @@
 import type { RequestHandler } from "express";
-import { applyStandingToVendorManifest, getVendorManifestByTypeName } from "@/src/services/serversideVendorsService";
-import { getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { config } from "@/src/services/configService";
+import { applyStandingToVendorManifest, getVendorManifestByTypeName } from "../../services/serversideVendorsService.ts";
+import { getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { config } from "../../services/configService.ts";
 
 export const getVendorInfoController: RequestHandler = async (req, res) => {
     let manifest = getVendorManifestByTypeName(req.query.vendor as string);

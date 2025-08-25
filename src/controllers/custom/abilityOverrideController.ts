@@ -1,6 +1,6 @@
-import { getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import type { TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
+import { getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import type { TEquipmentKey } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { RequestHandler } from "express";
 
 export const abilityOverrideController: RequestHandler = async (req, res) => {

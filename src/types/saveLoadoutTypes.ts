@@ -1,18 +1,18 @@
-import type { IOid } from "@/src/types/commonTypes";
+import type { IOid } from "./commonTypes.ts";
 import type {
     ICrewShipCustomization,
     IFlavourItem,
     IItemConfig,
     ILotusCustomization,
     IOperatorConfigClient
-} from "@/src/types/inventoryTypes/commonInventoryTypes";
+} from "./inventoryTypes/commonInventoryTypes.ts";
 import type { Types } from "mongoose";
 import type {
     ICrewShipMembersClient,
     ICrewShipWeaponClient,
     IEquipmentSelectionClient,
     IEquipmentSelectionDatabase
-} from "@/src/types/equipmentTypes";
+} from "./equipmentTypes.ts";
 
 export interface ISaveLoadoutRequest {
     LoadOuts: ILoadoutClient;

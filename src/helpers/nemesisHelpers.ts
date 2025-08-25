@@ -1,9 +1,9 @@
 import { ExportRegions, ExportWarframes } from "warframe-public-export-plus";
-import type { IInfNode, TNemesisFaction } from "@/src/types/inventoryTypes/inventoryTypes";
-import { generateRewardSeed, getRewardAtPercentage, SRng } from "@/src/services/rngService";
-import type { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
-import type { IOid } from "@/src/types/commonTypes";
-import { isArchwingMission } from "@/src/services/worldStateService";
+import type { IInfNode, TNemesisFaction } from "../types/inventoryTypes/inventoryTypes.ts";
+import { generateRewardSeed, getRewardAtPercentage, SRng } from "../services/rngService.ts";
+import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
+import type { IOid } from "../types/commonTypes.ts";
+import { isArchwingMission } from "../services/worldStateService.ts";
 
 type TInnateDamageTag =
     | "InnateElectricityDamage"

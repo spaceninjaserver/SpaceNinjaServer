@@ -1,10 +1,10 @@
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { Guild } from "@/src/models/guildModel";
-import { hasAccessToDojo, hasGuildPermission } from "@/src/services/guildService";
-import { getInventory } from "@/src/services/inventoryService";
-import { getAccountForRequest, getAccountIdForRequest } from "@/src/services/loginService";
-import { GuildPermission } from "@/src/types/guildTypes";
-import { logger } from "@/src/utils/logger";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { Guild } from "../../models/guildModel.ts";
+import { hasAccessToDojo, hasGuildPermission } from "../../services/guildService.ts";
+import { getInventory } from "../../services/inventoryService.ts";
+import { getAccountForRequest, getAccountIdForRequest } from "../../services/loginService.ts";
+import { GuildPermission } from "../../types/guildTypes.ts";
+import { logger } from "../../utils/logger.ts";
 import type { RequestHandler } from "express";
 
 export const customObstacleCourseLeaderboardController: RequestHandler = async (req, res) => {

@@ -1,17 +1,17 @@
 import express from "express";
 
 import bodyParser from "body-parser";
-import { unknownEndpointHandler } from "@/src/middleware/middleware";
-import { requestLogger } from "@/src/middleware/morgenMiddleware";
-import { errorHandler } from "@/src/middleware/errorHandler";
+import { unknownEndpointHandler } from "./middleware/middleware.ts";
+import { requestLogger } from "./middleware/morgenMiddleware.ts";
+import { errorHandler } from "./middleware/errorHandler.ts";
 
-import { apiRouter } from "@/src/routes/api";
-import { cacheRouter } from "@/src/routes/cache";
-import { customRouter } from "@/src/routes/custom";
-import { dynamicController } from "@/src/routes/dynamic";
-import { payRouter } from "@/src/routes/pay";
-import { statsRouter } from "@/src/routes/stats";
-import { webuiRouter } from "@/src/routes/webui";
+import { apiRouter } from "./routes/api.ts";
+import { cacheRouter } from "./routes/cache.ts";
+import { customRouter } from "./routes/custom.ts";
+import { dynamicController } from "./routes/dynamic.ts";
+import { payRouter } from "./routes/pay.ts";
+import { statsRouter } from "./routes/stats.ts";
+import { webuiRouter } from "./routes/webui.ts";
 
 const app = express();
 

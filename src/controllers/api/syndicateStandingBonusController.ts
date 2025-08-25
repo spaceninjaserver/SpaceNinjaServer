@@ -1,13 +1,13 @@
 import type { RequestHandler } from "express";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { addMiscItems, addStanding, freeUpSlot, getInventory } from "@/src/services/inventoryService";
-import type { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
-import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
-import type { IOid } from "@/src/types/commonTypes";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { addMiscItems, addStanding, freeUpSlot, getInventory } from "../../services/inventoryService.ts";
+import type { IMiscItem } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { InventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
+import type { IOid } from "../../types/commonTypes.ts";
 import { ExportSyndicates, ExportWeapons } from "warframe-public-export-plus";
-import { logger } from "@/src/utils/logger";
-import type { IAffiliationMods, IInventoryChanges } from "@/src/types/purchaseTypes";
-import { EquipmentFeatures } from "@/src/types/equipmentTypes";
+import { logger } from "../../utils/logger.ts";
+import type { IAffiliationMods, IInventoryChanges } from "../../types/purchaseTypes.ts";
+import { EquipmentFeatures } from "../../types/equipmentTypes.ts";
 
 export const syndicateStandingBonusController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

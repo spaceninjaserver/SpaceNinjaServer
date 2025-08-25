@@ -1,7 +1,7 @@
-import { fromDbOid, toOid } from "@/src/helpers/inventoryHelpers";
-import type { IOid } from "@/src/types/commonTypes";
-import type { IEquipmentSelectionClient, IEquipmentSelectionDatabase } from "@/src/types/equipmentTypes";
-import type { ILoadoutConfigDatabase, ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
+import { fromDbOid, toOid } from "../../helpers/inventoryHelpers.ts";
+import type { IOid } from "../../types/commonTypes.ts";
+import type { IEquipmentSelectionClient, IEquipmentSelectionDatabase } from "../../types/equipmentTypes.ts";
+import type { ILoadoutConfigDatabase, ILoadoutDatabase } from "../../types/saveLoadoutTypes.ts";
 import type { Document, Model, Types } from "mongoose";
 import { Schema, model } from "mongoose";
 

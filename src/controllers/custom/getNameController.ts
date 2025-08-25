@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { getAccountForRequest } from "@/src/services/loginService";
+import { getAccountForRequest } from "../../services/loginService.ts";
 
 export const getNameController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);

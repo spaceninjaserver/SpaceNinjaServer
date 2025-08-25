@@ -1,7 +1,7 @@
 import type { RequestHandler } from "express";
-import { updateShipFeature } from "@/src/services/personalRoomsService";
-import type { IUnlockShipFeatureRequest } from "@/src/types/requestTypes";
-import { parseString } from "@/src/helpers/general";
+import { updateShipFeature } from "../../services/personalRoomsService.ts";
+import type { IUnlockShipFeatureRequest } from "../../types/requestTypes.ts";
+import { parseString } from "../../helpers/general.ts";
 
 export const unlockShipFeatureController: RequestHandler = async (req, res) => {
     const accountId = parseString(req.query.accountId);

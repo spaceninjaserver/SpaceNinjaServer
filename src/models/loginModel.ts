@@ -1,4 +1,4 @@
-import type { IDatabaseAccountJson, IIgnore } from "@/src/types/loginTypes";
+import type { IDatabaseAccountJson, IIgnore } from "../types/loginTypes.ts";
 import type { SchemaOptions } from "mongoose";
 import { model, Schema } from "mongoose";
 

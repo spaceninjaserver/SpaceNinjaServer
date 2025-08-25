@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
-import type { IDojoComponentClient } from "@/src/types/guildTypes";
-import { GuildPermission } from "@/src/types/guildTypes";
+import type { IDojoComponentClient } from "../../types/guildTypes.ts";
+import { GuildPermission } from "../../types/guildTypes.ts";
 import {
     getDojoClient,
     getGuildForRequestEx,
@@ -8,12 +8,12 @@ import {
     hasGuildPermission,
     processDojoBuildMaterialsGathered,
     setDojoRoomLogFunded
-} from "@/src/services/guildService";
+} from "../../services/guildService.ts";
 import { Types } from "mongoose";
 import { ExportDojoRecipes } from "warframe-public-export-plus";
-import { config } from "@/src/services/configService";
-import { getAccountForRequest } from "@/src/services/loginService";
-import { getInventory } from "@/src/services/inventoryService";
+import { config } from "../../services/configService.ts";
+import { getAccountForRequest } from "../../services/loginService.ts";
+import { getInventory } from "../../services/inventoryService.ts";
 
 interface IStartDojoRecipeRequest {
     PlacedComponent: IDojoComponentClient;

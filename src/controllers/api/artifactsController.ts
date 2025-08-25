@@ -1,8 +1,8 @@
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { getAccountIdForRequest } from "@/src/services/loginService";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
-import type { IInventoryClient, IUpgradeClient } from "@/src/types/inventoryTypes/inventoryTypes";
-import { addMods, getInventory } from "@/src/services/inventoryService";
+import type { IInventoryClient, IUpgradeClient } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { addMods, getInventory } from "../../services/inventoryService.ts";
 
 export const artifactsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

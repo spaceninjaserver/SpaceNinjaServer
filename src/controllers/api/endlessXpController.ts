@@ -1,14 +1,18 @@
 import type { RequestHandler } from "express";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { combineInventoryChanges, getInventory } from "@/src/services/inventoryService";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import type { IEndlessXpReward, IInventoryClient, TEndlessXpCategory } from "@/src/types/inventoryTypes/inventoryTypes";
-import { logger } from "@/src/utils/logger";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { combineInventoryChanges, getInventory } from "../../services/inventoryService.ts";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import type {
+    IEndlessXpReward,
+    IInventoryClient,
+    TEndlessXpCategory
+} from "../../types/inventoryTypes/inventoryTypes.ts";
+import { logger } from "../../utils/logger.ts";
 import type { ICountedStoreItem } from "warframe-public-export-plus";
 import { ExportRewards } from "warframe-public-export-plus";
-import { getRandomElement } from "@/src/services/rngService";
-import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
-import type { IInventoryChanges } from "@/src/types/purchaseTypes";
+import { getRandomElement } from "../../services/rngService.ts";
+import { handleStoreItemAcquisition } from "../../services/purchaseService.ts";
+import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 
 export const endlessXpController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

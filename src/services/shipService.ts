@@ -1,5 +1,5 @@
-import type { TShipDatabaseDocument } from "@/src/models/shipModel";
-import { Ship } from "@/src/models/shipModel";
+import type { TShipDatabaseDocument } from "../models/shipModel.ts";
+import { Ship } from "../models/shipModel.ts";
 import type { Types } from "mongoose";
 
 export const createShip = async (

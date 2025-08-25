@@ -1,12 +1,12 @@
-import { getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
+import { getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
 import {
     addQuestKey,
     completeQuest,
     giveKeyChainMissionReward,
     giveKeyChainStageTriggered
-} from "@/src/services/questService";
-import { logger } from "@/src/utils/logger";
+} from "../../services/questService.ts";
+import { logger } from "../../utils/logger.ts";
 import type { RequestHandler } from "express";
 import { ExportKeys } from "warframe-public-export-plus";
 

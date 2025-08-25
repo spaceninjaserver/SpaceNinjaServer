@@ -11,9 +11,9 @@ import {
     removePigmentsFromGuildMembers,
     scaleRequiredCount,
     setGuildTechLogState
-} from "@/src/services/guildService";
+} from "../../services/guildService.ts";
 import { ExportDojoRecipes, ExportRailjackWeapons } from "warframe-public-export-plus";
-import { getAccountIdForRequest } from "@/src/services/loginService";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
 import {
     addCrewShipWeaponSkin,
     addEquipment,
@@ -24,17 +24,17 @@ import {
     getInventory,
     occupySlot,
     updateCurrency
-} from "@/src/services/inventoryService";
-import type { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
-import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
-import type { IInventoryChanges } from "@/src/types/purchaseTypes";
-import { config } from "@/src/services/configService";
-import type { ITechProjectClient } from "@/src/types/guildTypes";
-import { GuildPermission } from "@/src/types/guildTypes";
-import { GuildMember } from "@/src/models/guildModel";
-import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
-import { logger } from "@/src/utils/logger";
-import type { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+} from "../../services/inventoryService.ts";
+import type { IMiscItem } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { InventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
+import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
+import { config } from "../../services/configService.ts";
+import type { ITechProjectClient } from "../../types/guildTypes.ts";
+import { GuildPermission } from "../../types/guildTypes.ts";
+import { GuildMember } from "../../models/guildModel.ts";
+import { toMongoDate, toOid } from "../../helpers/inventoryHelpers.ts";
+import { logger } from "../../utils/logger.ts";
+import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/inventoryModel.ts";
 
 export const guildTechController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

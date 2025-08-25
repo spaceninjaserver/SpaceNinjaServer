@@ -1,13 +1,13 @@
-import { Account } from "@/src/models/loginModel";
-import { createInventory } from "@/src/services/inventoryService";
-import type { IDatabaseAccountJson, IDatabaseAccountRequiredFields } from "@/src/types/loginTypes";
-import { createShip } from "@/src/services/shipService";
+import { Account } from "../models/loginModel.ts";
+import { createInventory } from "./inventoryService.ts";
+import type { IDatabaseAccountJson, IDatabaseAccountRequiredFields } from "../types/loginTypes.ts";
+import { createShip } from "./shipService.ts";
 import type { Document, Types } from "mongoose";
-import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
-import { PersonalRooms } from "@/src/models/personalRoomsModel";
+import { Loadout } from "../models/inventoryModels/loadoutModel.ts";
+import { PersonalRooms } from "../models/personalRoomsModel.ts";
 import type { Request } from "express";
-import { config } from "@/src/services/configService";
-import { createStats } from "@/src/services/statsService";
+import { config } from "./configService.ts";
+import { createStats } from "./statsService.ts";
 import crc32 from "crc-32";
 
 export const isCorrectPassword = (requestPassword: string, databasePassword: string): boolean => {

@@ -1,17 +1,17 @@
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { Guild, GuildMember } from "@/src/models/guildModel";
-import { Account } from "@/src/models/loginModel";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { Guild, GuildMember } from "../../models/guildModel.ts";
+import { Account } from "../../models/loginModel.ts";
 import {
     deleteGuild,
     getGuildClient,
     giveClanKey,
     hasGuildPermission,
     removeDojoKeyItems
-} from "@/src/services/guildService";
-import { getInventory } from "@/src/services/inventoryService";
-import { getAccountForRequest, getAccountIdForRequest, getSuffixedName } from "@/src/services/loginService";
-import { GuildPermission } from "@/src/types/guildTypes";
-import type { IInventoryChanges } from "@/src/types/purchaseTypes";
+} from "../../services/guildService.ts";
+import { getInventory } from "../../services/inventoryService.ts";
+import { getAccountForRequest, getAccountIdForRequest, getSuffixedName } from "../../services/loginService.ts";
+import { GuildPermission } from "../../types/guildTypes.ts";
+import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import type { RequestHandler } from "express";
 import { Types } from "mongoose";
 

@@ -4,17 +4,17 @@ import type {
     ILoadoutEntry,
     IOperatorConfigEntry,
     ISaveLoadoutRequestNoUpgradeVer
-} from "@/src/types/saveLoadoutTypes";
-import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
-import { getInventory } from "@/src/services/inventoryService";
-import type { IOid } from "@/src/types/commonTypes";
+} from "../types/saveLoadoutTypes.ts";
+import { Loadout } from "../models/inventoryModels/loadoutModel.ts";
+import { getInventory } from "./inventoryService.ts";
+import type { IOid } from "../types/commonTypes.ts";
 import { Types } from "mongoose";
-import { isEmptyObject } from "@/src/helpers/general";
-import { logger } from "@/src/utils/logger";
-import type { TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
-import { equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
-import type { IItemConfig } from "@/src/types/inventoryTypes/commonInventoryTypes";
-import { importCrewShipMembers, importCrewShipWeapon, importLoadOutConfig } from "@/src/services/importService";
+import { isEmptyObject } from "../helpers/general.ts";
+import { logger } from "../utils/logger.ts";
+import type { TEquipmentKey } from "../types/inventoryTypes/inventoryTypes.ts";
+import { equipmentKeys } from "../types/inventoryTypes/inventoryTypes.ts";
+import type { IItemConfig } from "../types/inventoryTypes/commonInventoryTypes.ts";
+import { importCrewShipMembers, importCrewShipWeapon, importLoadOutConfig } from "./importService.ts";
 
 //TODO: setup default items on account creation or like originally in giveStartingItems.php
 
