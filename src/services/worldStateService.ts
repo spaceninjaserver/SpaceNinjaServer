@@ -13,8 +13,9 @@ import { buildConfig } from "@/src/services/buildConfigService";
 import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { config } from "@/src/services/configService";
 import { getRandomElement, getRandomInt, sequentiallyUniqueRandomElement, SRng } from "@/src/services/rngService";
-import { eMissionType, ExportRegions, ExportSyndicates, IMissionReward, IRegion } from "warframe-public-export-plus";
-import {
+import type { IMissionReward, IRegion } from "warframe-public-export-plus";
+import { eMissionType, ExportRegions, ExportSyndicates } from "warframe-public-export-plus";
+import type {
     ICalendarDay,
     ICalendarEvent,
     ICalendarSeason,

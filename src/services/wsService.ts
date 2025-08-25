@@ -1,10 +1,10 @@
-import http from "http";
-import https from "https";
+import type http from "http";
+import type https from "https";
 import ws from "ws";
 import { Account } from "@/src/models/loginModel";
 import { createAccount, createNonce, getUsernameFromEmail, isCorrectPassword } from "@/src/services/loginService";
-import { IDatabaseAccountJson } from "@/src/types/loginTypes";
-import { HydratedDocument } from "mongoose";
+import type { IDatabaseAccountJson } from "@/src/types/loginTypes";
+import type { HydratedDocument } from "mongoose";
 import { logError } from "@/src/utils/logger";
 
 let wsServer: ws.Server | undefined;

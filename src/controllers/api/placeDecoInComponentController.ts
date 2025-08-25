@@ -10,7 +10,7 @@ import {
 import { getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { GuildPermission } from "@/src/types/guildTypes";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { Types } from "mongoose";
 import { ExportDojoRecipes, ExportResources } from "warframe-public-export-plus";
 import { config } from "@/src/services/configService";

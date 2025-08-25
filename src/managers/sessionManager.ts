@@ -1,4 +1,4 @@
-import { ISession, IFindSessionRequest } from "@/src/types/session";
+import type { ISession, IFindSessionRequest } from "@/src/types/session";
 import { logger } from "@/src/utils/logger";
 import { JSONParse } from "json-with-bigint";
 import { Types } from "mongoose";

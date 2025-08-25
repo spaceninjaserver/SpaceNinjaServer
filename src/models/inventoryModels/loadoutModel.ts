@@ -1,8 +1,9 @@
 import { fromDbOid, toOid } from "@/src/helpers/inventoryHelpers";
-import { IOid } from "@/src/types/commonTypes";
-import { IEquipmentSelectionClient, IEquipmentSelectionDatabase } from "@/src/types/equipmentTypes";
-import { ILoadoutConfigDatabase, ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
-import { Document, Model, Schema, Types, model } from "mongoose";
+import type { IOid } from "@/src/types/commonTypes";
+import type { IEquipmentSelectionClient, IEquipmentSelectionDatabase } from "@/src/types/equipmentTypes";
+import type { ILoadoutConfigDatabase, ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
+import type { Document, Model, Types } from "mongoose";
+import { Schema, model } from "mongoose";
 
 //create a mongoose schema based on interface M
 export const EquipmentSelectionSchema = new Schema<IEquipmentSelectionDatabase>(

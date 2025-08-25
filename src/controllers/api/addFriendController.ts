@@ -3,8 +3,8 @@ import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { Friendship } from "@/src/models/friendModel";
 import { addAccountDataToFriendInfo, addInventoryDataToFriendInfo } from "@/src/services/friendService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { IFriendInfo } from "@/src/types/friendTypes";
-import { RequestHandler } from "express";
+import type { IFriendInfo } from "@/src/types/friendTypes";
+import type { RequestHandler } from "express";
 
 export const addFriendController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

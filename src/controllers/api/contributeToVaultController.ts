@@ -1,10 +1,5 @@
-import {
-    Alliance,
-    Guild,
-    GuildMember,
-    TGuildDatabaseDocument,
-    TGuildMemberDatabaseDocument
-} from "@/src/models/guildModel";
+import type { TGuildDatabaseDocument, TGuildMemberDatabaseDocument } from "@/src/models/guildModel";
+import { Alliance, Guild, GuildMember } from "@/src/models/guildModel";
 import {
     addGuildMemberMiscItemContribution,
     addGuildMemberShipDecoContribution,
@@ -21,9 +16,9 @@ import {
     updateCurrency
 } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { ITypeCount } from "@/src/types/commonTypes";
-import { IFusionTreasure, IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
-import { RequestHandler } from "express";
+import type { ITypeCount } from "@/src/types/commonTypes";
+import type { IFusionTreasure, IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { RequestHandler } from "express";
 
 export const contributeToVaultController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

@@ -1,5 +1,15 @@
-import { Document, Schema, Types, model } from "mongoose";
-import { IEnemy, IMission, IScan, ITutorial, IAbility, IWeapon, IStatsDatabase, IRace } from "@/src/types/statTypes";
+import type { Document, Types } from "mongoose";
+import { Schema, model } from "mongoose";
+import type {
+    IEnemy,
+    IMission,
+    IScan,
+    ITutorial,
+    IAbility,
+    IWeapon,
+    IStatsDatabase,
+    IRace
+} from "@/src/types/statTypes";
 
 const abilitySchema = new Schema<IAbility>(
     {

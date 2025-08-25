@@ -1,10 +1,10 @@
 //this is a controller for the claimCompletedRecipe route
 //it will claim a recipe for the user
 
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { logger } from "@/src/utils/logger";
 import { getRecipe } from "@/src/services/itemDataService";
-import { IOid, IOidWithLegacySupport } from "@/src/types/commonTypes";
+import type { IOid, IOidWithLegacySupport } from "@/src/types/commonTypes";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getAccountForRequest } from "@/src/services/loginService";
 import {
@@ -18,12 +18,14 @@ import {
     addPowerSuit,
     addEquipment
 } from "@/src/services/inventoryService";
-import { IInventoryChanges } from "@/src/types/purchaseTypes";
-import { InventorySlot, IPendingRecipeDatabase } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { IInventoryChanges } from "@/src/types/purchaseTypes";
+import type { IPendingRecipeDatabase } from "@/src/types/inventoryTypes/inventoryTypes";
+import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
 import { toOid2 } from "@/src/helpers/inventoryHelpers";
-import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
-import { IRecipe } from "warframe-public-export-plus";
-import { EquipmentFeatures, IEquipmentClient, Status } from "@/src/types/equipmentTypes";
+import type { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+import type { IRecipe } from "warframe-public-export-plus";
+import type { IEquipmentClient } from "@/src/types/equipmentTypes";
+import { EquipmentFeatures, Status } from "@/src/types/equipmentTypes";
 
 interface IClaimCompletedRecipeRequest {
     RecipeIds: IOid[];

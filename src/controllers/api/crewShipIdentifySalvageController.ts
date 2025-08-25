@@ -5,14 +5,17 @@ import {
     addEquipment
 } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { RequestHandler } from "express";
-import { ICrewShipComponentFingerprint, IInnateDamageFingerprint } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { RequestHandler } from "express";
+import type {
+    ICrewShipComponentFingerprint,
+    IInnateDamageFingerprint
+} from "@/src/types/inventoryTypes/inventoryTypes";
 import { ExportCustoms, ExportRailjackWeapons, ExportUpgrades } from "warframe-public-export-plus";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { IInventoryChanges } from "@/src/types/purchaseTypes";
+import type { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { getRandomInt } from "@/src/services/rngService";
-import { IFingerprintStat } from "@/src/helpers/rivenHelper";
-import { IEquipmentDatabase } from "@/src/types/equipmentTypes";
+import type { IFingerprintStat } from "@/src/helpers/rivenHelper";
+import type { IEquipmentDatabase } from "@/src/types/equipmentTypes";
 
 export const crewShipIdentifySalvageController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

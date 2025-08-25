@@ -1,4 +1,4 @@
-import {
+import type {
     IGuildDatabase,
     IDojoComponentDatabase,
     ITechProjectDatabase,
@@ -13,13 +13,14 @@ import {
     IDojoLeaderboardEntry,
     IGuildAdDatabase,
     IAllianceDatabase,
-    IAllianceMemberDatabase,
-    GuildPermission
+    IAllianceMemberDatabase
 } from "@/src/types/guildTypes";
-import { Document, Model, model, Schema, Types } from "mongoose";
+import { GuildPermission } from "@/src/types/guildTypes";
+import type { Document, Model } from "mongoose";
+import { model, Schema, Types } from "mongoose";
 import { fusionTreasuresSchema, typeCountSchema } from "@/src/models/inventoryModels/inventoryModel";
 import { pictureFrameInfoSchema } from "@/src/models/personalRoomsModel";
-import { IGoalProgressClient, IGoalProgressDatabase } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { IGoalProgressClient, IGoalProgressDatabase } from "@/src/types/inventoryTypes/inventoryTypes";
 import { toOid } from "@/src/helpers/inventoryHelpers";
 
 const dojoDecoSchema = new Schema<IDojoDecoDatabase>({

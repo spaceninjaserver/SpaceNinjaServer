@@ -1,11 +1,11 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 import { config } from "@/src/services/configService";
 import { buildConfig } from "@/src/services/buildConfigService";
 
 import { Account } from "@/src/models/loginModel";
 import { createAccount, createNonce, getUsernameFromEmail, isCorrectPassword } from "@/src/services/loginService";
-import { IDatabaseAccountJson, ILoginRequest, ILoginResponse } from "@/src/types/loginTypes";
+import type { IDatabaseAccountJson, ILoginRequest, ILoginResponse } from "@/src/types/loginTypes";
 import { logger } from "@/src/utils/logger";
 import { version_compare } from "@/src/helpers/inventoryHelpers";
 import { sendWsBroadcastTo } from "@/src/services/wsService";

@@ -1,9 +1,9 @@
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+import type { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { ICrewMemberClient } from "@/src/types/inventoryTypes/inventoryTypes";
-import { RequestHandler } from "express";
+import type { ICrewMemberClient } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { RequestHandler } from "express";
 import { Types } from "mongoose";
 
 export const crewMembersController: RequestHandler = async (req, res) => {

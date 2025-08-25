@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { Types } from "mongoose";
 import { Guild } from "@/src/models/guildModel";
 import { getDojoClient } from "@/src/services/guildService";

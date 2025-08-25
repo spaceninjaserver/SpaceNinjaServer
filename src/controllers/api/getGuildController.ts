@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { Guild } from "@/src/models/guildModel";
 import { getAccountForRequest } from "@/src/services/loginService";
 import { logger } from "@/src/utils/logger";

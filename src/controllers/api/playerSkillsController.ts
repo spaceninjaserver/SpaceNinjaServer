@@ -1,9 +1,9 @@
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { addConsumables, getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { IPlayerSkills } from "@/src/types/inventoryTypes/inventoryTypes";
-import { IInventoryChanges } from "@/src/types/purchaseTypes";
-import { RequestHandler } from "express";
+import type { IPlayerSkills } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { IInventoryChanges } from "@/src/types/purchaseTypes";
+import type { RequestHandler } from "express";
 
 export const playerSkillsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

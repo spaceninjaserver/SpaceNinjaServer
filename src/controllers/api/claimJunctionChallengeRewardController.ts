@@ -2,7 +2,7 @@ import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { combineInventoryChanges, getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { ExportChallenges } from "warframe-public-export-plus";
 
 export const claimJunctionChallengeRewardController: RequestHandler = async (req, res) => {

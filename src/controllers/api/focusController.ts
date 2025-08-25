@@ -1,7 +1,8 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getInventory, addMiscItems, addEquipment, occupySlot } from "@/src/services/inventoryService";
-import { IMiscItem, TFocusPolarity, TEquipmentKey, InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { IMiscItem, TFocusPolarity, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
+import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
 import { logger } from "@/src/utils/logger";
 import { ExportFocusUpgrades } from "warframe-public-export-plus";
 import { Inventory } from "@/src/models/inventoryModels/inventoryModel";

@@ -1,4 +1,4 @@
-import { IInventoryChanges } from "@/src/types/purchaseTypes";
+import type { IInventoryChanges } from "@/src/types/purchaseTypes";
 
 export interface IGenericUpdate {
     NodeIntrosCompleted: string | string[];

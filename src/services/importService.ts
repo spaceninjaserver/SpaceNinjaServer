@@ -1,12 +1,11 @@
 import { Types } from "mongoose";
-import {
+import type {
     IItemConfig,
     IOperatorConfigClient,
     IOperatorConfigDatabase
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
-import { IMongoDate } from "@/src/types/commonTypes";
-import {
-    equipmentKeys,
+import type { IMongoDate } from "@/src/types/commonTypes";
+import type {
     IDialogueClient,
     IDialogueDatabase,
     IDialogueHistoryClient,
@@ -26,15 +25,16 @@ import {
     IWeaponSkinClient,
     IWeaponSkinDatabase
 } from "@/src/types/inventoryTypes/inventoryTypes";
-import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
-import {
+import { equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+import type {
     ILoadoutConfigClient,
     ILoadoutConfigDatabase,
     ILoadoutDatabase,
     ILoadOutPresets
 } from "@/src/types/saveLoadoutTypes";
 import { slotNames } from "@/src/types/purchaseTypes";
-import {
+import type {
     ICrewShipMemberClient,
     ICrewShipMemberDatabase,
     ICrewShipMembersClient,
@@ -50,7 +50,7 @@ import {
     IKubrowPetDetailsClient,
     IKubrowPetDetailsDatabase
 } from "@/src/types/equipmentTypes";
-import {
+import type {
     IApartmentClient,
     IApartmentDatabase,
     ICustomizationInfoClient,

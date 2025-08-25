@@ -1,6 +1,6 @@
 import { toCreateAccount, toDatabaseAccount } from "@/src/helpers/customHelpers/customHelpers";
 import { createAccount, isNameTaken } from "@/src/services/loginService";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 const createAccountController: RequestHandler = async (req, res) => {
     const createAccountData = toCreateAccount(req.body);

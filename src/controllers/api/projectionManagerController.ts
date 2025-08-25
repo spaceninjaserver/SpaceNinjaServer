@@ -1,7 +1,8 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addMiscItems, getInventory } from "@/src/services/inventoryService";
-import { ExportRelics, IRelic } from "warframe-public-export-plus";
+import type { IRelic } from "warframe-public-export-plus";
+import { ExportRelics } from "warframe-public-export-plus";
 
 export const projectionManagerController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

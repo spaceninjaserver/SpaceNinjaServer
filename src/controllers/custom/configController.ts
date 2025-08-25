@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { config, syncConfigWithDatabase } from "@/src/services/configService";
 import { getAccountForRequest, isAdministrator } from "@/src/services/loginService";
 import { saveConfig } from "@/src/services/configWriterService";

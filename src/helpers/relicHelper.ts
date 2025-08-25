@@ -1,11 +1,13 @@
-import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
-import { IVoidTearParticipantInfo } from "@/src/types/requestTypes";
-import { ExportRelics, ExportRewards, TRarity } from "warframe-public-export-plus";
-import { getRandomWeightedReward, IRngResult } from "@/src/services/rngService";
+import type { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+import type { IVoidTearParticipantInfo } from "@/src/types/requestTypes";
+import type { TRarity } from "warframe-public-export-plus";
+import { ExportRelics, ExportRewards } from "warframe-public-export-plus";
+import type { IRngResult } from "@/src/services/rngService";
+import { getRandomWeightedReward } from "@/src/services/rngService";
 import { logger } from "@/src/utils/logger";
 import { addMiscItems, combineInventoryChanges } from "@/src/services/inventoryService";
 import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
-import { IInventoryChanges } from "@/src/types/purchaseTypes";
+import type { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { config } from "@/src/services/configService";
 
 export const crackRelic = async (

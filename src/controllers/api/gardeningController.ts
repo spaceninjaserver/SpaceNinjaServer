@@ -4,11 +4,11 @@ import { addMiscItem, getInventory } from "@/src/services/inventoryService";
 import { toStoreItem } from "@/src/services/itemDataService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { createGarden, getPersonalRooms } from "@/src/services/personalRoomsService";
-import { IMongoDate } from "@/src/types/commonTypes";
-import { IMissionReward } from "@/src/types/missionTypes";
-import { IGardeningClient, IPersonalRoomsClient } from "@/src/types/personalRoomsTypes";
-import { IInventoryChanges } from "@/src/types/purchaseTypes";
-import { RequestHandler } from "express";
+import type { IMongoDate } from "@/src/types/commonTypes";
+import type { IMissionReward } from "@/src/types/missionTypes";
+import type { IGardeningClient, IPersonalRoomsClient } from "@/src/types/personalRoomsTypes";
+import type { IInventoryChanges } from "@/src/types/purchaseTypes";
+import type { RequestHandler } from "express";
 import { dict_en, ExportResources } from "warframe-public-export-plus";
 
 export const gardeningController: RequestHandler = async (req, res) => {

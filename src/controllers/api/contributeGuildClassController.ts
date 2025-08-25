@@ -4,7 +4,7 @@ import { Guild } from "@/src/models/guildModel";
 import { checkClanAscensionHasRequiredContributors } from "@/src/services/guildService";
 import { addFusionPoints, getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { Types } from "mongoose";
 
 export const contributeGuildClassController: RequestHandler = async (req, res) => {

@@ -1,7 +1,7 @@
 import { AllianceMember, GuildMember } from "@/src/models/guildModel";
 import { getAccountForRequest } from "@/src/services/loginService";
 import { GuildPermission } from "@/src/types/guildTypes";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 export const setAllianceGuildPermissionsController: RequestHandler = async (req, res) => {
     // Check requester is a warlord in their guild

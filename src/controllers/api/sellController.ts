@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import {
     getInventory,
@@ -15,8 +15,8 @@ import {
 } from "@/src/services/inventoryService";
 import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
 import { ExportDojoRecipes } from "warframe-public-export-plus";
-import { IInventoryChanges } from "@/src/types/purchaseTypes";
-import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+import type { IInventoryChanges } from "@/src/types/purchaseTypes";
+import type { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { sendWsBroadcastEx } from "@/src/services/wsService";
 import { parseFusionTreasure } from "@/src/helpers/inventoryHelpers";
 

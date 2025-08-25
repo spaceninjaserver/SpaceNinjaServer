@@ -1,4 +1,4 @@
-import { SlotPurchase, SlotPurchaseName } from "@/src/types/purchaseTypes";
+import type { SlotPurchase, SlotPurchaseName } from "@/src/types/purchaseTypes";
 
 export const slotPurchaseNameToSlotName: SlotPurchase = {
     SuitSlotItem: { name: "SuitBin", purchaseQuantity: 1 },

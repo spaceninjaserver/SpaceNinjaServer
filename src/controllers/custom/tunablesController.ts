@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 // This endpoint is specific to the OpenWF Bootstrapper: https://openwf.io/bootstrapper-manual
 

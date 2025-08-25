@@ -1,29 +1,32 @@
 import { fromDbOid, toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
-import { Guild, GuildMember, TGuildDatabaseDocument } from "@/src/models/guildModel";
-import { Inventory, TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+import type { TGuildDatabaseDocument } from "@/src/models/guildModel";
+import { Guild, GuildMember } from "@/src/models/guildModel";
+import type { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
 import { Account } from "@/src/models/loginModel";
-import { Stats, TStatsDatabaseDocument } from "@/src/models/statsModel";
+import type { TStatsDatabaseDocument } from "@/src/models/statsModel";
+import { Stats } from "@/src/models/statsModel";
 import { allDailyAffiliationKeys } from "@/src/services/inventoryService";
-import { IMongoDate, IOid } from "@/src/types/commonTypes";
-import {
+import type { IMongoDate, IOid } from "@/src/types/commonTypes";
+import type {
     IAffiliation,
     IAlignment,
     IChallengeProgress,
     IDailyAffiliations,
     IMission,
     IPlayerSkills,
-    ITypeXPItem,
-    LoadoutIndex
+    ITypeXPItem
 } from "@/src/types/inventoryTypes/inventoryTypes";
-import { RequestHandler } from "express";
+import { LoadoutIndex } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { RequestHandler } from "express";
 import { catBreadHash, getJSONfromString } from "@/src/helpers/stringHelpers";
 import { ExportCustoms, ExportDojoRecipes } from "warframe-public-export-plus";
-import { IStatsClient } from "@/src/types/statTypes";
+import type { IStatsClient } from "@/src/types/statTypes";
 import { toStoreItem } from "@/src/services/itemDataService";
-import { FlattenMaps } from "mongoose";
-import { IEquipmentClient } from "@/src/types/equipmentTypes";
-import { ILoadoutConfigClient } from "@/src/types/saveLoadoutTypes";
+import type { FlattenMaps } from "mongoose";
+import type { IEquipmentClient } from "@/src/types/equipmentTypes";
+import type { ILoadoutConfigClient } from "@/src/types/saveLoadoutTypes";
 
 const getProfileViewingDataByPlayerIdImpl = async (playerId: string): Promise<IProfileViewingData | undefined> => {
     const account = await Account.findById(playerId, "DisplayName");

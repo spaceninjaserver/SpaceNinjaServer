@@ -1,4 +1,5 @@
-import { Loadout, TLoadoutDatabaseDocument } from "@/src/models/inventoryModels/loadoutModel";
+import type { TLoadoutDatabaseDocument } from "@/src/models/inventoryModels/loadoutModel";
+import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
 
 export const getLoadout = async (accountId: string): Promise<TLoadoutDatabaseDocument> => {
     const loadout = await Loadout.findOne({ loadoutOwnerId: accountId });

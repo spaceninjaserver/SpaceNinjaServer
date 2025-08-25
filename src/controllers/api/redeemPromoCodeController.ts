@@ -1,5 +1,5 @@
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import glyphCodes from "@/static/fixed_responses/glyphsCodes.json";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addItem, getInventory } from "@/src/services/inventoryService";

@@ -1,8 +1,8 @@
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { setShipCustomizations } from "@/src/services/shipCustomizationsService";
-import { ISetShipCustomizationsRequest } from "@/src/types/personalRoomsTypes";
+import type { ISetShipCustomizationsRequest } from "@/src/types/personalRoomsTypes";
 import { logger } from "@/src/utils/logger";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 export const setShipCustomizationsController: RequestHandler = async (req, res) => {
     try {

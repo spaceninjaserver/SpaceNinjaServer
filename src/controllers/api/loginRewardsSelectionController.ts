@@ -7,9 +7,9 @@ import {
 import { getAccountForRequest } from "@/src/services/loginService";
 import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
 import { sendWsBroadcastTo } from "@/src/services/wsService";
-import { IInventoryChanges } from "@/src/types/purchaseTypes";
+import type { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { logger } from "@/src/utils/logger";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 export const loginRewardsSelectionController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);

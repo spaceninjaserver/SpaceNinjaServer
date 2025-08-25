@@ -1,5 +1,5 @@
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
-import {
+import type {
     IApartmentDatabase,
     ICustomizationInfoDatabase,
     IFavouriteLoadoutDatabase,
@@ -16,7 +16,8 @@ import {
     ITailorShopDatabase,
     PersonalRoomsModelType
 } from "@/src/types/personalRoomsTypes";
-import { Schema, Types, model } from "mongoose";
+import type { Types } from "mongoose";
+import { Schema, model } from "mongoose";
 import { colorSchema, shipCustomizationSchema } from "@/src/models/commonModel";
 import { loadoutConfigSchema } from "@/src/models/inventoryModels/loadoutModel";
 

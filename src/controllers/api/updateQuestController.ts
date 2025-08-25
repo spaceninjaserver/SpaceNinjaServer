@@ -1,9 +1,10 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { parseString } from "@/src/helpers/general";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { updateQuestKey, IUpdateQuestRequest } from "@/src/services/questService";
+import type { IUpdateQuestRequest } from "@/src/services/questService";
+import { updateQuestKey } from "@/src/services/questService";
 import { getInventory } from "@/src/services/inventoryService";
-import { IInventoryChanges } from "@/src/types/purchaseTypes";
+import type { IInventoryChanges } from "@/src/types/purchaseTypes";
 
 export const updateQuestController: RequestHandler = async (req, res) => {
     const accountId = parseString(req.query.accountId);

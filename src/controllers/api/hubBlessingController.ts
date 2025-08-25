@@ -2,7 +2,7 @@ import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { addBooster, getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getRandomInt } from "@/src/services/rngService";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { ExportBoosters } from "warframe-public-export-plus";
 
 export const hubBlessingController: RequestHandler = async (req, res) => {

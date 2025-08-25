@@ -1,15 +1,15 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { getAccountForRequest } from "@/src/services/loginService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getInventory, addMiscItems, updateCurrency, addRecipes, freeUpSlot } from "@/src/services/inventoryService";
-import { IOid } from "@/src/types/commonTypes";
-import {
+import type { IOid } from "@/src/types/commonTypes";
+import type {
     IConsumedSuit,
     IHelminthFoodRecord,
     IInventoryClient,
-    IMiscItem,
-    InventorySlot
+    IMiscItem
 } from "@/src/types/inventoryTypes/inventoryTypes";
+import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
 import { ExportMisc } from "warframe-public-export-plus";
 import { getRecipe } from "@/src/services/itemDataService";
 import { toMongoDate, version_compare } from "@/src/helpers/inventoryHelpers";

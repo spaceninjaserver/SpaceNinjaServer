@@ -1,13 +1,13 @@
-import { IOid } from "@/src/types/commonTypes";
-import {
+import type { IOid } from "@/src/types/commonTypes";
+import type {
     ICrewShipCustomization,
     IFlavourItem,
     IItemConfig,
     ILotusCustomization,
     IOperatorConfigClient
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
-import { Types } from "mongoose";
-import {
+import type { Types } from "mongoose";
+import type {
     ICrewShipMembersClient,
     ICrewShipWeaponClient,
     IEquipmentSelectionClient,

@@ -1,5 +1,6 @@
-import { createMessage, IMessageCreationTemplate } from "@/src/services/inboxService";
-import { RequestHandler } from "express";
+import type { IMessageCreationTemplate } from "@/src/services/inboxService";
+import { createMessage } from "@/src/services/inboxService";
+import type { RequestHandler } from "express";
 
 export const createMessageController: RequestHandler = async (req, res) => {
     const message = req.body as (IMessageCreationTemplate & { ownerId: string })[] | undefined;

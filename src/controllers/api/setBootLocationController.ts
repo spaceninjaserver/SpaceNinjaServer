@@ -1,7 +1,7 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getPersonalRooms } from "@/src/services/personalRoomsService";
-import { TBootLocation } from "@/src/types/personalRoomsTypes";
+import type { TBootLocation } from "@/src/types/personalRoomsTypes";
 import { getInventory } from "@/src/services/inventoryService";
 
 export const setBootLocationController: RequestHandler = async (req, res) => {

@@ -2,7 +2,7 @@ import { Alliance, Guild } from "@/src/models/guildModel";
 import { getAllianceClient } from "@/src/services/guildService";
 import { getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 export const getAllianceController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

@@ -1,8 +1,8 @@
 import { GuildMember } from "@/src/models/guildModel";
 import { getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { IGuildMemberClient } from "@/src/types/guildTypes";
-import { RequestHandler } from "express";
+import type { IGuildMemberClient } from "@/src/types/guildTypes";
+import type { RequestHandler } from "express";
 
 export const getGuildContributionsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

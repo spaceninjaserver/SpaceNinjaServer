@@ -11,8 +11,8 @@ import { getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getVendorManifestByTypeName } from "@/src/services/serversideVendorsService";
 import { GuildPermission } from "@/src/types/guildTypes";
-import { IPurchaseParams } from "@/src/types/purchaseTypes";
-import { RequestHandler } from "express";
+import type { IPurchaseParams } from "@/src/types/purchaseTypes";
+import type { RequestHandler } from "express";
 
 export const postGuildAdvertisementController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

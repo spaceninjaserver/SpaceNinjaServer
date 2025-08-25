@@ -1,10 +1,10 @@
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getInventory } from "@/src/services/inventoryService";
-import { IMongoDate } from "@/src/types/commonTypes";
-import { RequestHandler } from "express";
+import type { IMongoDate } from "@/src/types/commonTypes";
+import type { RequestHandler } from "express";
 import { unixTimesInMs } from "@/src/constants/timeConstants";
-import { IInventoryChanges } from "@/src/types/purchaseTypes";
+import type { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { createMessage } from "@/src/services/inboxService";
 
 interface ITrainingResultsRequest {

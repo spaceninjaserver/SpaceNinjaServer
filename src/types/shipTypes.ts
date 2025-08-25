@@ -1,5 +1,5 @@
-import { Types } from "mongoose";
-import { IColor, IShipAttachments } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import type { Types } from "mongoose";
+import type { IColor, IShipAttachments } from "@/src/types/inventoryTypes/commonInventoryTypes";
 
 export interface IShipDatabase {
     ItemType: string;

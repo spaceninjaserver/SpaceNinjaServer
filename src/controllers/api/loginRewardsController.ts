@@ -1,9 +1,9 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { getAccountForRequest } from "@/src/services/loginService";
+import type { ILoginRewardsReponse } from "@/src/services/loginRewardService";
 import {
     claimLoginReward,
     getRandomLoginRewards,
-    ILoginRewardsReponse,
     isLoginRewardAChoice,
     setAccountGotLoginRewardToday
 } from "@/src/services/loginRewardService";

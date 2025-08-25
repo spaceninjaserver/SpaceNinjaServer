@@ -1,6 +1,6 @@
-import { Types } from "mongoose";
-import { IMongoDate, IOid, IOidWithLegacySupport } from "@/src/types/commonTypes";
-import {
+import type { Types } from "mongoose";
+import type { IMongoDate, IOid, IOidWithLegacySupport } from "@/src/types/commonTypes";
+import type {
     ICrewShipCustomization,
     IFlavourItem,
     IItemConfig,

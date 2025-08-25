@@ -5,7 +5,7 @@ import { getEffectiveAvatarImageType, getInventory } from "@/src/services/invent
 import { getAccountForRequest, getSuffixedName } from "@/src/services/loginService";
 import { GuildPermission } from "@/src/types/guildTypes";
 import { logger } from "@/src/utils/logger";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { ExportFlavour } from "warframe-public-export-plus";
 
 export const addToAllianceController: RequestHandler = async (req, res) => {

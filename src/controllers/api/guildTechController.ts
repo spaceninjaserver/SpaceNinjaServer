@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import {
     addGuildMemberMiscItemContribution,
     getGuildForRequestEx,
@@ -25,14 +25,16 @@ import {
     occupySlot,
     updateCurrency
 } from "@/src/services/inventoryService";
-import { IMiscItem, InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
-import { IInventoryChanges } from "@/src/types/purchaseTypes";
+import type { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
+import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { config } from "@/src/services/configService";
-import { GuildPermission, ITechProjectClient } from "@/src/types/guildTypes";
+import type { ITechProjectClient } from "@/src/types/guildTypes";
+import { GuildPermission } from "@/src/types/guildTypes";
 import { GuildMember } from "@/src/models/guildModel";
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
 import { logger } from "@/src/utils/logger";
-import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+import type { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 
 export const guildTechController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

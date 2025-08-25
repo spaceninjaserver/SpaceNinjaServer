@@ -1,9 +1,9 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { config } from "@/src/services/configService";
 import allShipFeatures from "@/static/fixed_responses/allShipFeatures.json";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { createGarden, getPersonalRooms } from "@/src/services/personalRoomsService";
-import { IGetShipResponse, IPersonalRoomsClient } from "@/src/types/personalRoomsTypes";
+import type { IGetShipResponse, IPersonalRoomsClient } from "@/src/types/personalRoomsTypes";
 import { getLoadout } from "@/src/services/loadoutService";
 import { toOid } from "@/src/helpers/inventoryHelpers";
 

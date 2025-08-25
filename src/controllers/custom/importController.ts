@@ -3,9 +3,9 @@ import { getInventory } from "@/src/services/inventoryService";
 import { getLoadout } from "@/src/services/loadoutService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getPersonalRooms } from "@/src/services/personalRoomsService";
-import { IInventoryClient } from "@/src/types/inventoryTypes/inventoryTypes";
-import { IGetShipResponse } from "@/src/types/personalRoomsTypes";
-import { RequestHandler } from "express";
+import type { IInventoryClient } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { IGetShipResponse } from "@/src/types/personalRoomsTypes";
+import type { RequestHandler } from "express";
 
 export const importController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

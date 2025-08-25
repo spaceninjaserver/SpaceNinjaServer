@@ -1,6 +1,6 @@
-import { IOid, ITypeCount } from "@/src/types/commonTypes";
-import { ArtifactPolarity, IPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
-import {
+import type { IOid, ITypeCount } from "@/src/types/commonTypes";
+import type { ArtifactPolarity, IPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import type {
     IBooster,
     IChallengeProgress,
     IEvolutionProgress,
@@ -23,9 +23,9 @@ import {
     IKubrowPetEggClient,
     INemesisClient
 } from "@/src/types/inventoryTypes/inventoryTypes";
-import { IGroup } from "@/src/types/loginTypes";
-import { ILoadOutPresets } from "@/src/types/saveLoadoutTypes";
-import { IEquipmentClient } from "@/src/types/equipmentTypes";
+import type { IGroup } from "@/src/types/loginTypes";
+import type { ILoadOutPresets } from "@/src/types/saveLoadoutTypes";
+import type { IEquipmentClient } from "@/src/types/equipmentTypes";
 
 export interface IAffiliationChange {
     Tag: string;

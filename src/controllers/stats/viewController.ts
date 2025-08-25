@@ -1,11 +1,11 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { config } from "@/src/services/configService";
 import allScans from "@/static/fixed_responses/allScans.json";
 import { ExportEnemies } from "warframe-public-export-plus";
 import { getInventory } from "@/src/services/inventoryService";
 import { getStats } from "@/src/services/statsService";
-import { IStatsClient } from "@/src/types/statTypes";
+import type { IStatsClient } from "@/src/types/statTypes";
 
 const viewController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

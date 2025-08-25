@@ -1,5 +1,5 @@
 import { getAccountForRequest } from "@/src/services/loginService";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 export const checkDailyMissionBonusController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);

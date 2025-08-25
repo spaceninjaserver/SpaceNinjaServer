@@ -1,6 +1,6 @@
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { ISetPlacedDecoInfoRequest } from "@/src/types/personalRoomsTypes";
-import { RequestHandler } from "express";
+import type { ISetPlacedDecoInfoRequest } from "@/src/types/personalRoomsTypes";
+import type { RequestHandler } from "express";
 import { handleSetPlacedDecoInfo } from "@/src/services/shipCustomizationsService";
 
 export const setPlacedDecoInfoController: RequestHandler = async (req, res) => {

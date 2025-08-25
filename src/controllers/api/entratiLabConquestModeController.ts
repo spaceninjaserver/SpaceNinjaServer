@@ -2,7 +2,7 @@ import { toMongoDate } from "@/src/helpers/inventoryHelpers";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getInventory, updateEntratiVault } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 export const entratiLabConquestModeController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

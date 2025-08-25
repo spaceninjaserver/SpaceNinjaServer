@@ -1,6 +1,6 @@
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { IShipDecorationsRequest, IResetShipDecorationsRequest } from "@/src/types/personalRoomsTypes";
-import { RequestHandler } from "express";
+import type { IShipDecorationsRequest, IResetShipDecorationsRequest } from "@/src/types/personalRoomsTypes";
+import type { RequestHandler } from "express";
 import { handleResetShipDecorations, handleSetShipDecorations } from "@/src/services/shipCustomizationsService";
 
 export const shipDecorationsController: RequestHandler = async (req, res) => {

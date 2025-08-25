@@ -1,4 +1,4 @@
-import {
+import type {
     IItemEntry,
     ILoadoutClient,
     ILoadoutEntry,
@@ -7,12 +7,13 @@ import {
 } from "@/src/types/saveLoadoutTypes";
 import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
 import { getInventory } from "@/src/services/inventoryService";
-import { IOid } from "@/src/types/commonTypes";
+import type { IOid } from "@/src/types/commonTypes";
 import { Types } from "mongoose";
 import { isEmptyObject } from "@/src/helpers/general";
 import { logger } from "@/src/utils/logger";
-import { equipmentKeys, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
-import { IItemConfig } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import type { TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
+import { equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { IItemConfig } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { importCrewShipMembers, importCrewShipWeapon, importLoadOutConfig } from "@/src/services/importService";
 
 //TODO: setup default items on account creation or like originally in giveStartingItems.php

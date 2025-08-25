@@ -1,6 +1,6 @@
 import { getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 // Basic shim handling action=sync to login on U21
 export const questControlController: RequestHandler = async (req, res) => {

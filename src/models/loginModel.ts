@@ -1,5 +1,6 @@
-import { IDatabaseAccountJson, IIgnore } from "@/src/types/loginTypes";
-import { model, Schema, SchemaOptions } from "mongoose";
+import type { IDatabaseAccountJson, IIgnore } from "@/src/types/loginTypes";
+import type { SchemaOptions } from "mongoose";
+import { model, Schema } from "mongoose";
 
 const opts = {
     toJSON: { virtuals: true },

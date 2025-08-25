@@ -4,10 +4,10 @@ import { Friendship } from "@/src/models/friendModel";
 import { Account } from "@/src/models/loginModel";
 import { getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { IOid } from "@/src/types/commonTypes";
+import type { IOid } from "@/src/types/commonTypes";
 import { parallelForeach } from "@/src/utils/async-utils";
-import { RequestHandler } from "express";
-import { Types } from "mongoose";
+import type { RequestHandler } from "express";
+import type { Types } from "mongoose";
 
 export const removeFriendGetController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

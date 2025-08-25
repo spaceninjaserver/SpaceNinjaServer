@@ -1,9 +1,9 @@
 import { addMiscItems, combineInventoryChanges, getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getPersonalRooms } from "@/src/services/personalRoomsService";
-import { IInventoryChanges } from "@/src/types/purchaseTypes";
+import type { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { logger } from "@/src/utils/logger";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 export const setShipVignetteController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

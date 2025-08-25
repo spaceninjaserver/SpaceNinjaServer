@@ -1,8 +1,8 @@
 import randomRewards from "@/static/fixed_responses/loginRewards/randomRewards.json";
-import { IInventoryChanges } from "@/src/types/purchaseTypes";
-import { TAccountDocument } from "@/src/services/loginService";
+import type { IInventoryChanges } from "@/src/types/purchaseTypes";
+import type { TAccountDocument } from "@/src/services/loginService";
 import { mixSeeds, SRng } from "@/src/services/rngService";
-import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+import type { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { addBooster, updateCurrency } from "@/src/services/inventoryService";
 import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
 import {

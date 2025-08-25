@@ -1,8 +1,8 @@
 import { addEmailItem, getDialogue, getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { ICompletedDialogue } from "@/src/types/inventoryTypes/inventoryTypes";
-import { IInventoryChanges } from "@/src/types/purchaseTypes";
-import { RequestHandler } from "express";
+import type { ICompletedDialogue } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { IInventoryChanges } from "@/src/types/purchaseTypes";
+import type { RequestHandler } from "express";
 
 export const saveDialogueController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

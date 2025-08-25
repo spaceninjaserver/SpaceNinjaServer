@@ -1,8 +1,8 @@
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { IIncentiveState } from "@/src/types/inventoryTypes/inventoryTypes";
-import { RequestHandler } from "express";
+import type { IIncentiveState } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { RequestHandler } from "express";
 
 export const startCollectibleEntryController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

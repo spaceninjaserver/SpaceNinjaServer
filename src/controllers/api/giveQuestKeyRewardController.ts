@@ -1,8 +1,8 @@
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { addItem, getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { IOid } from "@/src/types/commonTypes";
-import { RequestHandler } from "express";
+import type { IOid } from "@/src/types/commonTypes";
+import type { RequestHandler } from "express";
 
 export const giveQuestKeyRewardController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

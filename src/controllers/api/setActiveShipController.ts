@@ -1,7 +1,7 @@
 import { getPersonalRooms } from "@/src/services/personalRoomsService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { parseString } from "@/src/helpers/general";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { Types } from "mongoose";
 
 export const setActiveShipController: RequestHandler = async (req, res) => {

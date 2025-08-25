@@ -1,6 +1,6 @@
 import { getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 export const setActiveQuestController: RequestHandler<
     Record<string, never>,

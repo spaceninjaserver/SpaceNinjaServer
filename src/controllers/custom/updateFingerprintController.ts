@@ -1,7 +1,7 @@
 import { getInventory } from "@/src/services/inventoryService";
-import { WeaponTypeInternal } from "@/src/services/itemDataService";
+import type { WeaponTypeInternal } from "@/src/services/itemDataService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 export const updateFingerprintController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

@@ -1,6 +1,6 @@
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getInventory, addRecipes } from "@/src/services/inventoryService";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { ExportRecipes } from "warframe-public-export-plus";
 
 export const addMissingHelminthBlueprintsController: RequestHandler = async (req, res) => {

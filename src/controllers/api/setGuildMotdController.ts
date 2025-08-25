@@ -3,8 +3,9 @@ import { Alliance, Guild, GuildMember } from "@/src/models/guildModel";
 import { hasGuildPermissionEx } from "@/src/services/guildService";
 import { getInventory } from "@/src/services/inventoryService";
 import { getAccountForRequest, getSuffixedName } from "@/src/services/loginService";
-import { GuildPermission, ILongMOTD } from "@/src/types/guildTypes";
-import { RequestHandler } from "express";
+import type { ILongMOTD } from "@/src/types/guildTypes";
+import { GuildPermission } from "@/src/types/guildTypes";
+import type { RequestHandler } from "express";
 
 export const setGuildMotdController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);

@@ -1,13 +1,14 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { combineInventoryChanges, getInventory } from "@/src/services/inventoryService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { IEndlessXpReward, IInventoryClient, TEndlessXpCategory } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { IEndlessXpReward, IInventoryClient, TEndlessXpCategory } from "@/src/types/inventoryTypes/inventoryTypes";
 import { logger } from "@/src/utils/logger";
-import { ExportRewards, ICountedStoreItem } from "warframe-public-export-plus";
+import type { ICountedStoreItem } from "warframe-public-export-plus";
+import { ExportRewards } from "warframe-public-export-plus";
 import { getRandomElement } from "@/src/services/rngService";
 import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
-import { IInventoryChanges } from "@/src/types/purchaseTypes";
+import type { IInventoryChanges } from "@/src/types/purchaseTypes";
 
 export const endlessXpController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { deleteSession } from "@/src/managers/sessionManager";
 
 const deleteSessionController: RequestHandler = (_req, res) => {

@@ -1,8 +1,8 @@
 import { getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { giveKeyChainMessage } from "@/src/services/questService";
-import { IKeyChainRequest } from "@/src/types/requestTypes";
-import { RequestHandler } from "express";
+import type { IKeyChainRequest } from "@/src/types/requestTypes";
+import type { RequestHandler } from "express";
 
 export const giveKeyChainTriggeredMessageController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

@@ -1,6 +1,6 @@
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getInventory, addItem } from "@/src/services/inventoryService";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 export const addItemsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

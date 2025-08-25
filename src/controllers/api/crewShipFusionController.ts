@@ -1,10 +1,11 @@
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { addMiscItems, freeUpSlot, getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { IOid } from "@/src/types/commonTypes";
-import { ICrewShipComponentFingerprint, InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
-import { IInventoryChanges } from "@/src/types/purchaseTypes";
-import { RequestHandler } from "express";
+import type { IOid } from "@/src/types/commonTypes";
+import type { ICrewShipComponentFingerprint } from "@/src/types/inventoryTypes/inventoryTypes";
+import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { IInventoryChanges } from "@/src/types/purchaseTypes";
+import type { RequestHandler } from "express";
 import { ExportCustoms, ExportDojoRecipes } from "warframe-public-export-plus";
 
 export const crewShipFusionController: RequestHandler = async (req, res) => {

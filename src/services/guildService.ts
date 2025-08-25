@@ -1,10 +1,11 @@
-import { Request } from "express";
-import { getAccountIdForRequest, TAccountDocument } from "@/src/services/loginService";
+import type { Request } from "express";
+import type { TAccountDocument } from "@/src/services/loginService";
+import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addLevelKeys, addRecipes, combineInventoryChanges, getInventory } from "@/src/services/inventoryService";
-import { Alliance, AllianceMember, Guild, GuildAd, GuildMember, TGuildDatabaseDocument } from "@/src/models/guildModel";
-import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
-import {
-    GuildPermission,
+import type { TGuildDatabaseDocument } from "@/src/models/guildModel";
+import { Alliance, AllianceMember, Guild, GuildAd, GuildMember } from "@/src/models/guildModel";
+import type { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+import type {
     IAllianceClient,
     IAllianceDatabase,
     IAllianceMemberClient,
@@ -20,20 +21,22 @@ import {
     IGuildVault,
     ITechProjectDatabase
 } from "@/src/types/guildTypes";
+import { GuildPermission } from "@/src/types/guildTypes";
 import { toMongoDate, toOid, toOid2 } from "@/src/helpers/inventoryHelpers";
-import { Types } from "mongoose";
-import { ExportDojoRecipes, ExportResources, IDojoBuild, IDojoResearch } from "warframe-public-export-plus";
+import type { Types } from "mongoose";
+import type { IDojoBuild, IDojoResearch } from "warframe-public-export-plus";
+import { ExportDojoRecipes, ExportResources } from "warframe-public-export-plus";
 import { logger } from "@/src/utils/logger";
 import { config } from "@/src/services/configService";
 import { getRandomInt } from "@/src/services/rngService";
 import { Inbox } from "@/src/models/inboxModel";
-import { IFusionTreasure } from "@/src/types/inventoryTypes/inventoryTypes";
-import { IInventoryChanges } from "@/src/types/purchaseTypes";
+import type { IFusionTreasure } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { parallelForeach } from "@/src/utils/async-utils";
 import allDecoRecipes from "@/static/fixed_responses/allDecoRecipes.json";
 import { createMessage } from "@/src/services/inboxService";
 import { addAccountDataToFriendInfo, addInventoryDataToFriendInfo } from "@/src/services/friendService";
-import { ITypeCount } from "@/src/types/commonTypes";
+import type { ITypeCount } from "@/src/types/commonTypes";
 
 export const getGuildForRequest = async (req: Request): Promise<TGuildDatabaseDocument> => {
     const accountId = await getAccountIdForRequest(req);

@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { getAccountForRequest } from "@/src/services/loginService";
 
 export const getNameController: RequestHandler = async (req, res) => {

@@ -1,7 +1,7 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addMiscItems, getInventory } from "@/src/services/inventoryService";
-import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { colorToShard, combineColors, shardToColor } from "@/src/helpers/shardHelper";
 
 export const archonFusionController: RequestHandler = async (req, res) => {

@@ -1,5 +1,6 @@
-import { Stats, TStatsDatabaseDocument } from "@/src/models/statsModel";
-import {
+import type { TStatsDatabaseDocument } from "@/src/models/statsModel";
+import { Stats } from "@/src/models/statsModel";
+import type {
     IStatsAdd,
     IStatsMax,
     IStatsSet,

@@ -1,8 +1,8 @@
 import { getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { IOid } from "@/src/types/commonTypes";
-import { IInnateDamageFingerprint, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
-import { RequestHandler } from "express";
+import type { IOid } from "@/src/types/commonTypes";
+import type { IInnateDamageFingerprint, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { RequestHandler } from "express";
 
 export const valenceSwapController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

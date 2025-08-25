@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { getDojoClient, getGuildForRequest } from "@/src/services/guildService";
 
 export const setDojoComponentMessageController: RequestHandler = async (req, res) => {

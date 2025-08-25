@@ -1,7 +1,7 @@
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { Account, Ignore } from "@/src/models/loginModel";
 import { getAccountForRequest } from "@/src/services/loginService";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 export const removeIgnoredUserController: RequestHandler = async (req, res) => {
     const accountId = await getAccountForRequest(req);

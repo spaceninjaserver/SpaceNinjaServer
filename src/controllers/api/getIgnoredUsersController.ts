@@ -1,9 +1,9 @@
 import { toOid } from "@/src/helpers/inventoryHelpers";
 import { Account, Ignore } from "@/src/models/loginModel";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { IFriendInfo } from "@/src/types/friendTypes";
+import type { IFriendInfo } from "@/src/types/friendTypes";
 import { parallelForeach } from "@/src/utils/async-utils";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 export const getIgnoredUsersController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

@@ -3,10 +3,10 @@ import { addMiscItems, getInventory } from "@/src/services/inventoryService";
 import { fromStoreItem } from "@/src/services/itemDataService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getRandomInt, getRandomWeightedRewardUc } from "@/src/services/rngService";
-import { IMongoDate, IOid } from "@/src/types/commonTypes";
-import { IDroneClient } from "@/src/types/inventoryTypes/inventoryTypes";
-import { IInventoryChanges } from "@/src/types/purchaseTypes";
-import { RequestHandler } from "express";
+import type { IMongoDate, IOid } from "@/src/types/commonTypes";
+import type { IDroneClient } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { IInventoryChanges } from "@/src/types/purchaseTypes";
+import type { RequestHandler } from "express";
 import { ExportDrones, ExportResources, ExportSystems } from "warframe-public-export-plus";
 
 export const dronesController: RequestHandler = async (req, res) => {

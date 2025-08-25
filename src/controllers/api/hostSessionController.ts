@@ -1,8 +1,8 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { getAccountForRequest } from "@/src/services/loginService";
 import { createNewSession } from "@/src/managers/sessionManager";
 import { logger } from "@/src/utils/logger";
-import { ISession } from "@/src/types/session";
+import type { ISession } from "@/src/types/session";
 import { JSONParse } from "json-with-bigint";
 import { toOid2, version_compare } from "@/src/helpers/inventoryHelpers";
 

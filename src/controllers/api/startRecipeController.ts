@@ -1,16 +1,17 @@
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { logger } from "@/src/utils/logger";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { getRecipe } from "@/src/services/itemDataService";
 import { addItem, addKubrowPet, freeUpSlot, getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { Types } from "mongoose";
-import { InventorySlot, ISpectreLoadout } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { ISpectreLoadout } from "@/src/types/inventoryTypes/inventoryTypes";
+import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
 import { fromOid, toOid } from "@/src/helpers/inventoryHelpers";
 import { ExportWeapons } from "warframe-public-export-plus";
 import { getRandomElement } from "@/src/services/rngService";
-import { IInventoryChanges } from "@/src/types/purchaseTypes";
+import type { IInventoryChanges } from "@/src/types/purchaseTypes";
 
 interface IStartRecipeRequest {
     RecipeName: string;

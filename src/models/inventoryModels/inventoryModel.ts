@@ -1,5 +1,6 @@
-import { Document, Model, Schema, Types, model } from "mongoose";
-import {
+import type { Document, Model } from "mongoose";
+import { Schema, Types, model } from "mongoose";
+import type {
     IRawUpgrade,
     IMiscItem,
     IInventoryDatabase,
@@ -45,7 +46,6 @@ import {
     IDialogueClient,
     IUpgradeDatabase,
     TEquipmentKey,
-    equipmentKeys,
     IKubrowPetEggDatabase,
     IKubrowPetEggClient,
     ICustomMarkers,
@@ -90,8 +90,9 @@ import {
     IKubrowPetPrintClient,
     IKubrowPetPrintDatabase
 } from "@/src/types/inventoryTypes/inventoryTypes";
-import { IOid, ITypeCount } from "@/src/types/commonTypes";
-import {
+import { equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { IOid, ITypeCount } from "@/src/types/commonTypes";
+import type {
     IAbilityOverride,
     ICrewShipCustomization,
     IFlavourItem,
@@ -102,9 +103,9 @@ import {
 } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { fromDbOid, toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
 import { EquipmentSelectionSchema } from "@/src/models/inventoryModels/loadoutModel";
-import { ICountedStoreItem } from "warframe-public-export-plus";
+import type { ICountedStoreItem } from "warframe-public-export-plus";
 import { colorSchema, shipCustomizationSchema } from "@/src/models/commonModel";
-import {
+import type {
     IArchonCrystalUpgrade,
     ICrewShipMemberClient,
     ICrewShipMemberDatabase,

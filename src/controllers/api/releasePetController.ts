@@ -2,7 +2,7 @@ import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { sendWsBroadcastTo } from "@/src/services/wsService";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 export const releasePetController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

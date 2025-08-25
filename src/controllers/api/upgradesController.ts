@@ -1,14 +1,15 @@
-import { RequestHandler } from "express";
-import { IUpgradesRequest } from "@/src/types/requestTypes";
-import { ArtifactPolarity, IAbilityOverride } from "@/src/types/inventoryTypes/commonInventoryTypes";
-import { IInventoryClient, IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { RequestHandler } from "express";
+import type { IUpgradesRequest } from "@/src/types/requestTypes";
+import type { ArtifactPolarity, IAbilityOverride } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import type { IInventoryClient, IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addMiscItems, addRecipes, getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { getRecipeByResult } from "@/src/services/itemDataService";
-import { IInventoryChanges } from "@/src/types/purchaseTypes";
+import type { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { addInfestedFoundryXP, applyCheatsToInfestedFoundry } from "@/src/services/infestedFoundryService";
 import { sendWsBroadcastTo } from "@/src/services/wsService";
-import { EquipmentFeatures, IEquipmentDatabase } from "@/src/types/equipmentTypes";
+import type { IEquipmentDatabase } from "@/src/types/equipmentTypes";
+import { EquipmentFeatures } from "@/src/types/equipmentTypes";
 
 export const upgradesController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

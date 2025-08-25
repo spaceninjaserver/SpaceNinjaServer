@@ -1,11 +1,12 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addMiscItems, addStanding, freeUpSlot, getInventory } from "@/src/services/inventoryService";
-import { IMiscItem, InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
-import { IOid } from "@/src/types/commonTypes";
+import type { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
+import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { IOid } from "@/src/types/commonTypes";
 import { ExportSyndicates, ExportWeapons } from "warframe-public-export-plus";
 import { logger } from "@/src/utils/logger";
-import { IAffiliationMods, IInventoryChanges } from "@/src/types/purchaseTypes";
+import type { IAffiliationMods, IInventoryChanges } from "@/src/types/purchaseTypes";
 import { EquipmentFeatures } from "@/src/types/equipmentTypes";
 
 export const syndicateStandingBonusController: RequestHandler = async (req, res) => {

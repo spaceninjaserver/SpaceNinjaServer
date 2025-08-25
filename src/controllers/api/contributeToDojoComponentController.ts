@@ -1,5 +1,6 @@
-import { GuildMember, TGuildDatabaseDocument } from "@/src/models/guildModel";
-import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+import type { TGuildDatabaseDocument } from "@/src/models/guildModel";
+import { GuildMember } from "@/src/models/guildModel";
+import type { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import {
     addGuildMemberMiscItemContribution,
     getDojoClient,
@@ -11,11 +12,12 @@ import {
 } from "@/src/services/guildService";
 import { addMiscItems, getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { IDojoContributable, IGuildMemberDatabase } from "@/src/types/guildTypes";
-import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
-import { IInventoryChanges } from "@/src/types/purchaseTypes";
-import { RequestHandler } from "express";
-import { ExportDojoRecipes, IDojoBuild } from "warframe-public-export-plus";
+import type { IDojoContributable, IGuildMemberDatabase } from "@/src/types/guildTypes";
+import type { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { IInventoryChanges } from "@/src/types/purchaseTypes";
+import type { RequestHandler } from "express";
+import type { IDojoBuild } from "warframe-public-export-plus";
+import { ExportDojoRecipes } from "warframe-public-export-plus";
 
 interface IContributeToDojoComponentRequest {
     ComponentId: string;

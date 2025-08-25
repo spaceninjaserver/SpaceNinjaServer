@@ -1,5 +1,5 @@
-import { RequestHandler } from "express";
-import { ISaveLoadoutRequest } from "@/src/types/saveLoadoutTypes";
+import type { RequestHandler } from "express";
+import type { ISaveLoadoutRequest } from "@/src/types/saveLoadoutTypes";
 import { handleInventoryItemConfigChange } from "@/src/services/saveLoadoutService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";

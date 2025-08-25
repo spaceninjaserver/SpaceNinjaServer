@@ -1,4 +1,4 @@
-import { TRarity } from "warframe-public-export-plus";
+import type { TRarity } from "warframe-public-export-plus";
 
 export interface IRngResult {
     type: string;

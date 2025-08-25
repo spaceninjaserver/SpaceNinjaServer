@@ -1,4 +1,5 @@
-import { createLogger, format, transports, Logger, LeveledLogMethod, addColors } from "winston";
+import type { Logger, LeveledLogMethod } from "winston";
+import { createLogger, format, transports, addColors } from "winston";
 import "winston-daily-rotate-file";
 import { config } from "@/src/services/configService";
 import * as util from "util";

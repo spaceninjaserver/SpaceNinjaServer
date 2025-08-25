@@ -1,7 +1,7 @@
 import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
 import { GuildAd } from "@/src/models/guildModel";
-import { IGuildAdInfoClient } from "@/src/types/guildTypes";
-import { RequestHandler } from "express";
+import type { IGuildAdInfoClient } from "@/src/types/guildTypes";
+import type { RequestHandler } from "express";
 
 export const getGuildAdsController: RequestHandler = async (req, res) => {
     const ads = await GuildAd.find(req.query.tier ? { Tier: req.query.tier } : {});

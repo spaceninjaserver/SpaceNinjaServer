@@ -1,4 +1,4 @@
-import { IUpgrade } from "warframe-public-export-plus";
+import type { IUpgrade } from "warframe-public-export-plus";
 import { getRandomElement, getRandomInt, getRandomReward } from "@/src/services/rngService";
 
 export type RivenFingerprint = IVeiledRivenFingerprint | IUnveiledRivenFingerprint;

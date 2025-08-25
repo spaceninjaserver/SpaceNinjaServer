@@ -1,9 +1,9 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { ExportWeapons } from "warframe-public-export-plus";
-import { IMongoDate } from "@/src/types/commonTypes";
+import type { IMongoDate } from "@/src/types/commonTypes";
 import { toMongoDate } from "@/src/helpers/inventoryHelpers";
 import { SRng } from "@/src/services/rngService";
-import { ArtifactPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import type { ArtifactPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import {
     addEquipment,
@@ -17,7 +17,7 @@ import { getDefaultUpgrades } from "@/src/services/itemDataService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { sendWsBroadcastTo } from "@/src/services/wsService";
 import { modularWeaponTypes } from "@/src/helpers/modularWeaponHelper";
-import { IInventoryChanges } from "@/src/types/purchaseTypes";
+import type { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { EquipmentFeatures } from "@/src/types/equipmentTypes";
 
 export const modularWeaponSaleController: RequestHandler = async (req, res) => {

@@ -2,8 +2,8 @@ import { toOid } from "@/src/helpers/inventoryHelpers";
 import { Friendship } from "@/src/models/friendModel";
 import { addAccountDataToFriendInfo, addInventoryDataToFriendInfo } from "@/src/services/friendService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { IFriendInfo } from "@/src/types/friendTypes";
-import { Request, RequestHandler, Response } from "express";
+import type { IFriendInfo } from "@/src/types/friendTypes";
+import type { Request, RequestHandler, Response } from "express";
 
 // POST with {} instead of GET as of 38.5.0
 export const getFriendsController: RequestHandler = async (req: Request, res: Response) => {

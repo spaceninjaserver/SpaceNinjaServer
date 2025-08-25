@@ -1,9 +1,9 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getAccountForRequest } from "@/src/services/loginService";
 import { addCalendarProgress, addChallenges, getInventory } from "@/src/services/inventoryService";
-import { IChallengeProgress, ISeasonChallenge } from "@/src/types/inventoryTypes/inventoryTypes";
-import { IAffiliationMods } from "@/src/types/purchaseTypes";
+import type { IChallengeProgress, ISeasonChallenge } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { IAffiliationMods } from "@/src/types/purchaseTypes";
 import { getEntriesUnsafe } from "@/src/utils/ts-utils";
 import { logger } from "@/src/utils/logger";
 

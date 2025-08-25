@@ -1,8 +1,8 @@
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { addMiscItems, addStanding, getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
-import { RequestHandler } from "express";
+import type { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { RequestHandler } from "express";
 import { ExportResources } from "warframe-public-export-plus";
 
 export const fishmongerController: RequestHandler = async (req, res) => {

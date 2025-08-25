@@ -10,9 +10,10 @@ import {
 } from "@/src/services/inventoryService";
 import { getAccountForRequest, getSuffixedName } from "@/src/services/loginService";
 import { handleDailyDealPurchase, handleStoreItemAcquisition } from "@/src/services/purchaseService";
-import { IOid } from "@/src/types/commonTypes";
-import { IPurchaseParams, IPurchaseResponse, PurchaseSource } from "@/src/types/purchaseTypes";
-import { RequestHandler } from "express";
+import type { IOid } from "@/src/types/commonTypes";
+import type { IPurchaseParams, IPurchaseResponse } from "@/src/types/purchaseTypes";
+import { PurchaseSource } from "@/src/types/purchaseTypes";
+import type { RequestHandler } from "express";
 import { ExportBundles, ExportFlavour } from "warframe-public-export-plus";
 
 const checkPurchaseParams = (params: IPurchaseParams): boolean => {

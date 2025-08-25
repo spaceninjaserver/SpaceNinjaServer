@@ -1,5 +1,5 @@
 import { getLeaderboard } from "@/src/services/leaderboardService";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 export const leaderboardController: RequestHandler = async (req, res) => {
     const payload = JSON.parse(String(req.body)) as ILeaderboardRequest;

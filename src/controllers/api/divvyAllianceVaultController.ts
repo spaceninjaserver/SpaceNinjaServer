@@ -3,7 +3,7 @@ import { getAccountForRequest } from "@/src/services/loginService";
 import { GuildPermission } from "@/src/types/guildTypes";
 import { parallelForeach } from "@/src/utils/async-utils";
 import { logger } from "@/src/utils/logger";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 export const divvyAllianceVaultController: RequestHandler = async (req, res) => {
     // Afaict, there's no way to put anything other than credits in the alliance vault (anymore?), so just no-op if this is not a request to divvy credits.

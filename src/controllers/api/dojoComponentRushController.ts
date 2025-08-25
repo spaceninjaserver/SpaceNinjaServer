@@ -1,10 +1,12 @@
-import { GuildMember, TGuildDatabaseDocument } from "@/src/models/guildModel";
+import type { TGuildDatabaseDocument } from "@/src/models/guildModel";
+import { GuildMember } from "@/src/models/guildModel";
 import { getDojoClient, getGuildForRequestEx, hasAccessToDojo, scaleRequiredCount } from "@/src/services/guildService";
 import { getInventory, updateCurrency } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { IDojoContributable } from "@/src/types/guildTypes";
-import { RequestHandler } from "express";
-import { ExportDojoRecipes, IDojoBuild } from "warframe-public-export-plus";
+import type { IDojoContributable } from "@/src/types/guildTypes";
+import type { RequestHandler } from "express";
+import type { IDojoBuild } from "warframe-public-export-plus";
+import { ExportDojoRecipes } from "warframe-public-export-plus";
 
 interface IDojoComponentRushRequest {
     DecoType?: string;

@@ -1,6 +1,6 @@
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { getInventory } from "@/src/services/inventoryService";
 
 export const updateThemeController: RequestHandler = async (request, response) => {

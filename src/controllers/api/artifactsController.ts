@@ -1,7 +1,7 @@
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { RequestHandler } from "express";
-import { IInventoryClient, IUpgradeClient } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { RequestHandler } from "express";
+import type { IInventoryClient, IUpgradeClient } from "@/src/types/inventoryTypes/inventoryTypes";
 import { addMods, getInventory } from "@/src/services/inventoryService";
 
 export const artifactsController: RequestHandler = async (req, res) => {

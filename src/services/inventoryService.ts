@@ -1,14 +1,15 @@
-import { Inventory, TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+import type { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { config } from "@/src/services/configService";
 import { Types } from "mongoose";
-import { SlotNames, IInventoryChanges, IBinChanges, slotNames, IAffiliationMods } from "@/src/types/purchaseTypes";
-import {
+import type { SlotNames, IInventoryChanges, IBinChanges, IAffiliationMods } from "@/src/types/purchaseTypes";
+import { slotNames } from "@/src/types/purchaseTypes";
+import type {
     IChallengeProgress,
     IMiscItem,
     IMission,
     IRawUpgrade,
     ISeasonChallenge,
-    InventorySlot,
     IWeaponSkinClient,
     TEquipmentKey,
     IFusionTreasure,
@@ -25,14 +26,15 @@ import {
     INemesisWeaponTargetFingerprint,
     INemesisPetTargetFingerprint,
     IDialogueDatabase,
-    IKubrowPetPrintClient,
-    equipmentKeys
+    IKubrowPetPrintClient
 } from "@/src/types/inventoryTypes/inventoryTypes";
-import { IGenericUpdate, IUpdateNodeIntrosResponse } from "@/src/types/genericUpdate";
-import { IKeyChainRequest, IMissionInventoryUpdateRequest } from "@/src/types/requestTypes";
+import { InventorySlot, equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { IGenericUpdate, IUpdateNodeIntrosResponse } from "@/src/types/genericUpdate";
+import type { IKeyChainRequest, IMissionInventoryUpdateRequest } from "@/src/types/requestTypes";
 import { logger } from "@/src/utils/logger";
 import { convertInboxMessage, fromStoreItem, getKeyChainItems } from "@/src/services/itemDataService";
-import { IFlavourItem, IItemConfig } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import type { IFlavourItem, IItemConfig } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import type { IDefaultUpgrade, IPowersuit, ISentinel, TStandingLimitBin } from "warframe-public-export-plus";
 import {
     ExportArcanes,
     ExportBoosters,
@@ -54,13 +56,10 @@ import {
     ExportSyndicates,
     ExportUpgrades,
     ExportWarframes,
-    ExportWeapons,
-    IDefaultUpgrade,
-    IPowersuit,
-    ISentinel,
-    TStandingLimitBin
+    ExportWeapons
 } from "warframe-public-export-plus";
 import { createShip } from "@/src/services/shipService";
+import type { TTraitsPool } from "@/src/helpers/inventoryHelpers";
 import {
     catbrowDetails,
     fromDbOid,
@@ -69,8 +68,7 @@ import {
     kubrowDetails,
     kubrowFurPatternsWeights,
     kubrowWeights,
-    toOid,
-    TTraitsPool
+    toOid
 } from "@/src/helpers/inventoryHelpers";
 import { addQuestKey, completeQuest } from "@/src/services/questService";
 import { handleBundleAcqusition } from "@/src/services/purchaseService";
@@ -82,23 +80,24 @@ import {
     getRandomWeightedReward,
     SRng
 } from "@/src/services/rngService";
-import { createMessage, IMessageCreationTemplate } from "@/src/services/inboxService";
+import type { IMessageCreationTemplate } from "@/src/services/inboxService";
+import { createMessage } from "@/src/services/inboxService";
 import { getMaxStanding, getMinStanding } from "@/src/helpers/syndicateStandingHelper";
 import { getNightwaveSyndicateTag, getWorldState } from "@/src/services/worldStateService";
-import { ICalendarSeason } from "@/src/types/worldStateTypes";
-import { generateNemesisProfile, INemesisProfile } from "@/src/helpers/nemesisHelpers";
-import { TAccountDocument } from "@/src/services/loginService";
+import type { ICalendarSeason } from "@/src/types/worldStateTypes";
+import type { INemesisProfile } from "@/src/helpers/nemesisHelpers";
+import { generateNemesisProfile } from "@/src/helpers/nemesisHelpers";
+import type { TAccountDocument } from "@/src/services/loginService";
 import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { addString } from "@/src/helpers/stringHelpers";
-import {
-    EquipmentFeatures,
+import type {
     IEquipmentClient,
     IEquipmentDatabase,
     IKubrowPetDetailsDatabase,
-    ITraits,
-    Status
+    ITraits
 } from "@/src/types/equipmentTypes";
-import { ITypeCount } from "@/src/types/commonTypes";
+import { EquipmentFeatures, Status } from "@/src/types/equipmentTypes";
+import type { ITypeCount } from "@/src/types/commonTypes";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,

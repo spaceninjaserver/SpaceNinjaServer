@@ -1,8 +1,9 @@
-import { Document, Schema, Types, model } from "mongoose";
-import { IShipDatabase } from "@/src/types/shipTypes";
+import type { Document, Types } from "mongoose";
+import { Schema, model } from "mongoose";
+import type { IShipDatabase } from "@/src/types/shipTypes";
 import { toOid } from "@/src/helpers/inventoryHelpers";
 import { colorSchema } from "@/src/models/commonModel";
-import { IShipInventory } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { IShipInventory } from "@/src/types/inventoryTypes/inventoryTypes";
 
 const shipSchema = new Schema<IShipDatabase>(
     {

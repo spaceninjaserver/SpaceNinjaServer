@@ -1,6 +1,7 @@
 import { Guild } from "@/src/models/guildModel";
-import { Leaderboard, TLeaderboardEntryDocument } from "@/src/models/leaderboardModel";
-import { ILeaderboardEntryClient } from "@/src/types/leaderboardTypes";
+import type { TLeaderboardEntryDocument } from "@/src/models/leaderboardModel";
+import { Leaderboard } from "@/src/models/leaderboardModel";
+import type { ILeaderboardEntryClient } from "@/src/types/leaderboardTypes";
 import { handleGuildGoalProgress } from "@/src/services/guildService";
 import { getWorldState } from "@/src/services/worldStateService";
 import { Types } from "mongoose";

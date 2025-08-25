@@ -1,6 +1,6 @@
 import { getPersonalRooms } from "@/src/services/personalRoomsService";
 import { getShip } from "@/src/services/shipService";
-import {
+import type {
     IResetShipDecorationsRequest,
     IResetShipDecorationsResponse,
     ISetPlacedDecoInfoRequest,

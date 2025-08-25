@@ -1,6 +1,6 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { IPurchaseRequest } from "@/src/types/purchaseTypes";
+import type { IPurchaseRequest } from "@/src/types/purchaseTypes";
 import { handlePurchase } from "@/src/services/purchaseService";
 import { getInventory } from "@/src/services/inventoryService";
 import { sendWsBroadcastTo } from "@/src/services/wsService";

@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 const marketSearchRecommendationsController: RequestHandler = (_req, res) => {
     res.sendStatus(200);

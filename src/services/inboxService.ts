@@ -1,7 +1,9 @@
-import { IMessageDatabase, Inbox } from "@/src/models/inboxModel";
+import type { IMessageDatabase } from "@/src/models/inboxModel";
+import { Inbox } from "@/src/models/inboxModel";
 import { getAccountForRequest } from "@/src/services/loginService";
-import { HydratedDocument, Types } from "mongoose";
-import { Request } from "express";
+import type { HydratedDocument } from "mongoose";
+import { Types } from "mongoose";
+import type { Request } from "express";
 import { unixTimesInMs } from "@/src/constants/timeConstants";
 import { config } from "@/src/services/configService";
 

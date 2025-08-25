@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 // Arbiter Dojo endpoints, not really used by us as we don't provide a ContentURL.
 

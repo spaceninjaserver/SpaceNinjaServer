@@ -1,6 +1,6 @@
 import { args } from "@/src/helpers/commandLineArguments";
 import { sendWsBroadcast } from "@/src/services/wsService";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 export const webuiFileChangeDetectedController: RequestHandler = (req, res) => {
     if (args.dev && args.secret && req.query.secret == args.secret) {

@@ -2,8 +2,8 @@ import { toMongoDate } from "@/src/helpers/inventoryHelpers";
 import { Guild } from "@/src/models/guildModel";
 import { getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { IMongoDate } from "@/src/types/commonTypes";
-import { RequestHandler } from "express";
+import type { IMongoDate } from "@/src/types/commonTypes";
+import type { RequestHandler } from "express";
 
 export const getGuildLogController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

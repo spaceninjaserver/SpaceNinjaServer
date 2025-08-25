@@ -1,4 +1,4 @@
-import { Types } from "mongoose";
+import type { Types } from "mongoose";
 
 export interface IStatsClient {
     CiphersSolved?: number;

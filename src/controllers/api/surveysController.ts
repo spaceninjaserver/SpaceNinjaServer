@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 const surveysController: RequestHandler = (_req, res) => {
     const data = Buffer.from([

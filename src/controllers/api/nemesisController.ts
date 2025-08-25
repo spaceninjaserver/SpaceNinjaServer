@@ -1,4 +1,5 @@
 import { fromDbOid, version_compare } from "@/src/helpers/inventoryHelpers";
+import type { IKnifeResponse } from "@/src/helpers/nemesisHelpers";
 import {
     antivirusMods,
     decodeNemesisGuess,
@@ -12,30 +13,28 @@ import {
     GUESS_NEUTRAL,
     GUESS_NONE,
     GUESS_WILDCARD,
-    IKnifeResponse,
     parseUpgrade
 } from "@/src/helpers/nemesisHelpers";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+import type { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
 import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
 import { addMods, freeUpSlot, getInventory } from "@/src/services/inventoryService";
 import { getAccountForRequest } from "@/src/services/loginService";
 import { SRng } from "@/src/services/rngService";
-import { IMongoDate, IOid } from "@/src/types/commonTypes";
-import { IEquipmentClient } from "@/src/types/equipmentTypes";
-import {
+import type { IMongoDate, IOid } from "@/src/types/commonTypes";
+import type { IEquipmentClient } from "@/src/types/equipmentTypes";
+import type {
     IInnateDamageFingerprint,
     IInventoryClient,
     INemesisClient,
-    InventorySlot,
     IUpgradeClient,
     IWeaponSkinClient,
-    LoadoutIndex,
     TEquipmentKey,
     TNemesisFaction
 } from "@/src/types/inventoryTypes/inventoryTypes";
+import { InventorySlot, LoadoutIndex } from "@/src/types/inventoryTypes/inventoryTypes";
 import { logger } from "@/src/utils/logger";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { Types } from "mongoose";
 
 export const nemesisController: RequestHandler = async (req, res) => {

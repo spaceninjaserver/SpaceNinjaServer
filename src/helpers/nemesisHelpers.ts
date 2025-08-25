@@ -1,8 +1,8 @@
 import { ExportRegions, ExportWarframes } from "warframe-public-export-plus";
-import { IInfNode, TNemesisFaction } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { IInfNode, TNemesisFaction } from "@/src/types/inventoryTypes/inventoryTypes";
 import { generateRewardSeed, getRewardAtPercentage, SRng } from "@/src/services/rngService";
-import { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
-import { IOid } from "@/src/types/commonTypes";
+import type { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+import type { IOid } from "@/src/types/commonTypes";
 import { isArchwingMission } from "@/src/services/worldStateService";
 
 type TInnateDamageTag =

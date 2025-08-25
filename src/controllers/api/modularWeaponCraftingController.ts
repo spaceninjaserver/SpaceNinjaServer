@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { sendWsBroadcastTo } from "@/src/services/wsService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
@@ -13,12 +13,14 @@ import {
     combineInventoryChanges,
     addSpecialItem
 } from "@/src/services/inventoryService";
-import { IInventoryChanges } from "@/src/types/purchaseTypes";
+import type { IInventoryChanges } from "@/src/types/purchaseTypes";
 import { getDefaultUpgrades } from "@/src/services/itemDataService";
 import { modularWeaponTypes } from "@/src/helpers/modularWeaponHelper";
 import { getRandomInt } from "@/src/services/rngService";
-import { ExportSentinels, ExportWeapons, IDefaultUpgrade } from "warframe-public-export-plus";
-import { IEquipmentDatabase, Status } from "@/src/types/equipmentTypes";
+import type { IDefaultUpgrade } from "warframe-public-export-plus";
+import { ExportSentinels, ExportWeapons } from "warframe-public-export-plus";
+import type { IEquipmentDatabase } from "@/src/types/equipmentTypes";
+import { Status } from "@/src/types/equipmentTypes";
 
 interface IModularCraftRequest {
     WeaponType: string;

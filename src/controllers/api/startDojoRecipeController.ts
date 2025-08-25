@@ -1,5 +1,6 @@
-import { RequestHandler } from "express";
-import { GuildPermission, IDojoComponentClient } from "@/src/types/guildTypes";
+import type { RequestHandler } from "express";
+import type { IDojoComponentClient } from "@/src/types/guildTypes";
+import { GuildPermission } from "@/src/types/guildTypes";
 import {
     getDojoClient,
     getGuildForRequestEx,

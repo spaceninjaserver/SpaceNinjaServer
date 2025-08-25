@@ -1,8 +1,9 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addMiscItems, getInventory } from "@/src/services/inventoryService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { getRecipe, WeaponTypeInternal } from "@/src/services/itemDataService";
+import type { WeaponTypeInternal } from "@/src/services/itemDataService";
+import { getRecipe } from "@/src/services/itemDataService";
 import { EquipmentFeatures } from "@/src/types/equipmentTypes";
 
 export const evolveWeaponController: RequestHandler = async (req, res) => {

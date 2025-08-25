@@ -1,6 +1,6 @@
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getInventory, updateCurrency, updateSlots } from "@/src/services/inventoryService";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
 import { exhaustive } from "@/src/utils/ts-utils";
 

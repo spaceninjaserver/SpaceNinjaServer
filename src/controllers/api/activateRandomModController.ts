@@ -8,7 +8,7 @@ import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { addMods, getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getRandomElement } from "@/src/services/rngService";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { ExportUpgrades } from "warframe-public-export-plus";
 
 export const activateRandomModController: RequestHandler = async (req, res) => {

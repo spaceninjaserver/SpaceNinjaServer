@@ -1,6 +1,6 @@
 import { getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { ExportArcanes, ExportUpgrades } from "warframe-public-export-plus";
 
 export const addMissingMaxRankModsController: RequestHandler = async (req, res) => {

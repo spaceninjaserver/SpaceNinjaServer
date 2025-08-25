@@ -11,8 +11,8 @@ import {
 import { getInventory } from "@/src/services/inventoryService";
 import { getAccountForRequest, getAccountIdForRequest, getSuffixedName } from "@/src/services/loginService";
 import { GuildPermission } from "@/src/types/guildTypes";
-import { IInventoryChanges } from "@/src/types/purchaseTypes";
-import { RequestHandler } from "express";
+import type { IInventoryChanges } from "@/src/types/purchaseTypes";
+import type { RequestHandler } from "express";
 import { Types } from "mongoose";
 
 // GET request: A player accepting an invite they got in their inbox.

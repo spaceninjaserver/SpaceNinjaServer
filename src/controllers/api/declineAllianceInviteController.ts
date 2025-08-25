@@ -1,6 +1,6 @@
 import { AllianceMember, GuildMember } from "@/src/models/guildModel";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 export const declineAllianceInviteController: RequestHandler = async (req, res) => {
     // Check requester is a warlord in their guild

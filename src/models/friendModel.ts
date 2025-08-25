@@ -1,4 +1,4 @@
-import { IFriendship } from "@/src/types/friendTypes";
+import type { IFriendship } from "@/src/types/friendTypes";
 import { model, Schema } from "mongoose";
 
 const friendshipSchema = new Schema<IFriendship>({

@@ -1,12 +1,12 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getAccountForRequest } from "@/src/services/loginService";
-import { IMissionInventoryUpdateRequest } from "@/src/types/requestTypes";
+import type { IMissionInventoryUpdateRequest } from "@/src/types/requestTypes";
 import { addMissionInventoryUpdates, addMissionRewards } from "@/src/services/missionInventoryUpdateService";
 import { getInventory } from "@/src/services/inventoryService";
 import { getInventoryResponse } from "@/src/controllers/api/inventoryController";
 import { logger } from "@/src/utils/logger";
-import {
+import type {
     IMissionInventoryUpdateResponse,
     IMissionInventoryUpdateResponseBackToDryDock,
     IMissionInventoryUpdateResponseRailjackInterstitial

@@ -1,8 +1,8 @@
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { updateStats } from "@/src/services/statsService";
-import { IStatsUpdate } from "@/src/types/statTypes";
-import { RequestHandler } from "express";
+import type { IStatsUpdate } from "@/src/types/statTypes";
+import type { RequestHandler } from "express";
 
 const uploadController: RequestHandler = async (req, res) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

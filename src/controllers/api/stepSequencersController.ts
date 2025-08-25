@@ -1,7 +1,7 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getInventory } from "@/src/services/inventoryService";
-import { IStepSequencer } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { IStepSequencer } from "@/src/types/inventoryTypes/inventoryTypes";
 
 export const stepSequencersController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

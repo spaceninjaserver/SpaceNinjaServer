@@ -1,4 +1,12 @@
-import { IKeyChainRequest } from "@/src/types/requestTypes";
+import type { IKeyChainRequest } from "@/src/types/requestTypes";
+import type {
+    IDefaultUpgrade,
+    IInboxMessage,
+    IKey,
+    IMissionReward,
+    IRecipe,
+    TReward
+} from "warframe-public-export-plus";
 import {
     dict_de,
     dict_en,
@@ -26,15 +34,9 @@ import {
     ExportResources,
     ExportSentinels,
     ExportWarframes,
-    ExportWeapons,
-    IDefaultUpgrade,
-    IInboxMessage,
-    IKey,
-    IMissionReward,
-    IRecipe,
-    TReward
+    ExportWeapons
 } from "warframe-public-export-plus";
-import { IMessage } from "@/src/models/inboxModel";
+import type { IMessage } from "@/src/models/inboxModel";
 import { logger } from "@/src/utils/logger";
 
 export type WeaponTypeInternal =

@@ -1,8 +1,8 @@
-import { IFriendInfo } from "@/src/types/friendTypes";
+import type { IFriendInfo } from "@/src/types/friendTypes";
 import { getInventory } from "@/src/services/inventoryService";
 import { config } from "@/src/services/configService";
 import { Account } from "@/src/models/loginModel";
-import { Types } from "mongoose";
+import type { Types } from "mongoose";
 import { Friendship } from "@/src/models/friendModel";
 import { fromOid, toMongoDate } from "@/src/helpers/inventoryHelpers";
 

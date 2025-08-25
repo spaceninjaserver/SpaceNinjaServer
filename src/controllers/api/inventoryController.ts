@@ -1,19 +1,16 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { getAccountForRequest } from "@/src/services/loginService";
-import { Inventory, TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+import type { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
 import { config } from "@/src/services/configService";
 import allDialogue from "@/static/fixed_responses/allDialogue.json";
-import { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
-import { IInventoryClient, IShipInventory, equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
-import { IPolarity, ArtifactPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
-import {
-    eFaction,
-    ExportCustoms,
-    ExportFlavour,
-    ExportResources,
-    ExportVirtuals,
-    ICountedItem
-} from "warframe-public-export-plus";
+import type { ILoadoutDatabase } from "@/src/types/saveLoadoutTypes";
+import type { IInventoryClient, IShipInventory } from "@/src/types/inventoryTypes/inventoryTypes";
+import { equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { IPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { ArtifactPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import type { ICountedItem } from "warframe-public-export-plus";
+import { eFaction, ExportCustoms, ExportFlavour, ExportResources, ExportVirtuals } from "warframe-public-export-plus";
 import { applyCheatsToInfestedFoundry, handleSubsumeCompletion } from "@/src/services/infestedFoundryService";
 import {
     addEmailItem,
@@ -30,7 +27,7 @@ import { addString, catBreadHash } from "@/src/helpers/stringHelpers";
 import { Types } from "mongoose";
 import { getNemesisManifest } from "@/src/helpers/nemesisHelpers";
 import { getPersonalRooms } from "@/src/services/personalRoomsService";
-import { IPersonalRoomsClient } from "@/src/types/personalRoomsTypes";
+import type { IPersonalRoomsClient } from "@/src/types/personalRoomsTypes";
 import { Ship } from "@/src/models/shipModel";
 import { toLegacyOid, toOid, version_compare } from "@/src/helpers/inventoryHelpers";
 import { Inbox } from "@/src/models/inboxModel";

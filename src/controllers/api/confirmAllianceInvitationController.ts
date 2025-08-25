@@ -1,7 +1,7 @@
 import { Alliance, AllianceMember, Guild, GuildMember } from "@/src/models/guildModel";
 import { getAllianceClient } from "@/src/services/guildService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 export const confirmAllianceInvitationController: RequestHandler = async (req, res) => {
     // Check requester is a warlord in their guild

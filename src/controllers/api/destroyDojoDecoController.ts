@@ -10,7 +10,7 @@ import { getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { GuildPermission } from "@/src/types/guildTypes";
 import { logger } from "@/src/utils/logger";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 export const destroyDojoDecoController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

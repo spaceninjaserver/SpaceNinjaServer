@@ -7,7 +7,7 @@ import {
     giveKeyChainStageTriggered
 } from "@/src/services/questService";
 import { logger } from "@/src/utils/logger";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { ExportKeys } from "warframe-public-export-plus";
 
 export const manageQuestsController: RequestHandler = async (req, res) => {

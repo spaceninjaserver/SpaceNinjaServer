@@ -1,10 +1,11 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addMiscItems, getInventory } from "@/src/services/inventoryService";
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { createUnveiledRivenFingerprint, randomiseRivenStats, RivenFingerprint } from "@/src/helpers/rivenHelper";
+import type { RivenFingerprint } from "@/src/helpers/rivenHelper";
+import { createUnveiledRivenFingerprint, randomiseRivenStats } from "@/src/helpers/rivenHelper";
 import { ExportUpgrades } from "warframe-public-export-plus";
-import { IOid } from "@/src/types/commonTypes";
+import type { IOid } from "@/src/types/commonTypes";
 
 export const rerollRandomModController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

@@ -1,6 +1,6 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { updateShipFeature } from "@/src/services/personalRoomsService";
-import { IUnlockShipFeatureRequest } from "@/src/types/requestTypes";
+import type { IUnlockShipFeatureRequest } from "@/src/types/requestTypes";
 import { parseString } from "@/src/helpers/general";
 
 export const unlockShipFeatureController: RequestHandler = async (req, res) => {

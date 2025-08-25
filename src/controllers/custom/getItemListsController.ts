@@ -1,5 +1,6 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { getDict, getItemName, getString } from "@/src/services/itemDataService";
+import type { TRelicQuality } from "warframe-public-export-plus";
 import {
     ExportAbilities,
     ExportArcanes,
@@ -18,8 +19,7 @@ import {
     ExportSyndicates,
     ExportUpgrades,
     ExportWarframes,
-    ExportWeapons,
-    TRelicQuality
+    ExportWeapons
 } from "warframe-public-export-plus";
 import allIncarnons from "@/static/fixed_responses/allIncarnonList.json";
 import varzia from "@/static/fixed_responses/worldState/varzia.json";

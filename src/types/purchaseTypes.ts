@@ -1,6 +1,6 @@
-import { ITypeCount } from "@/src/types/commonTypes";
-import { IEquipmentClient } from "@/src/types/equipmentTypes";
-import {
+import type { ITypeCount } from "@/src/types/commonTypes";
+import type { IEquipmentClient } from "@/src/types/equipmentTypes";
+import type {
     IDroneClient,
     IInfestedFoundryClient,
     IMiscItem,

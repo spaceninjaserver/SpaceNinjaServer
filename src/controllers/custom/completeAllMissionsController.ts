@@ -3,8 +3,8 @@ import { getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { addFixedLevelRewards } from "@/src/services/missionInventoryUpdateService";
 import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
-import { IMissionReward } from "@/src/types/missionTypes";
-import { RequestHandler } from "express";
+import type { IMissionReward } from "@/src/types/missionTypes";
+import type { RequestHandler } from "express";
 import { ExportRegions } from "warframe-public-export-plus";
 
 export const completeAllMissionsController: RequestHandler = async (req, res) => {

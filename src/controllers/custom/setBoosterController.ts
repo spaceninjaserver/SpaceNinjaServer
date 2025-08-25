@@ -1,6 +1,6 @@
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getInventory } from "@/src/services/inventoryService";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { ExportBoosters } from "warframe-public-export-plus";
 
 const I32_MAX = 0x7fffffff;

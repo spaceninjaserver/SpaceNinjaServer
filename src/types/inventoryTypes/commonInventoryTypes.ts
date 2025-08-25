@@ -1,5 +1,5 @@
-import { IOid } from "@/src/types/commonTypes";
-import { Types } from "mongoose";
+import type { IOid } from "@/src/types/commonTypes";
+import type { Types } from "mongoose";
 
 export interface IPolarity {
     Slot: number;

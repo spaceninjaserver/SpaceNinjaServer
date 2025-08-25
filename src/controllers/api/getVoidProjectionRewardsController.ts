@@ -2,8 +2,8 @@ import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { crackRelic } from "@/src/helpers/relicHelper";
 import { getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { IVoidTearParticipantInfo } from "@/src/types/requestTypes";
-import { RequestHandler } from "express";
+import type { IVoidTearParticipantInfo } from "@/src/types/requestTypes";
+import type { RequestHandler } from "express";
 
 export const getVoidProjectionRewardsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

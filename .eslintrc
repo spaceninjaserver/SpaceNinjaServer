@@ -13,6 +13,7 @@
         "node": true
     },
     "rules": {
+        "@typescript-eslint/consistent-type-imports": "error",
         "@typescript-eslint/explicit-function-return-type": "error",
         "@typescript-eslint/restrict-template-expressions": "error",
         "@typescript-eslint/restrict-plus-operands": "error",

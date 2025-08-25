@@ -3,9 +3,10 @@ import { createVeiledRivenFingerprint, rivenRawToRealWeighted } from "@/src/help
 import { addMiscItems, addMods, getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getRandomElement, getRandomWeightedReward, getRandomWeightedRewardUc } from "@/src/services/rngService";
-import { IUpgradeFromClient } from "@/src/types/inventoryTypes/inventoryTypes";
-import { RequestHandler } from "express";
-import { ExportBoosterPacks, ExportUpgrades, TRarity } from "warframe-public-export-plus";
+import type { IUpgradeFromClient } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { RequestHandler } from "express";
+import type { TRarity } from "warframe-public-export-plus";
+import { ExportBoosterPacks, ExportUpgrades } from "warframe-public-export-plus";
 
 export const artifactTransmutationController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

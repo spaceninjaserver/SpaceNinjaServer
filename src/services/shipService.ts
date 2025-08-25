@@ -1,5 +1,6 @@
-import { Ship, TShipDatabaseDocument } from "@/src/models/shipModel";
-import { Types } from "mongoose";
+import type { TShipDatabaseDocument } from "@/src/models/shipModel";
+import { Ship } from "@/src/models/shipModel";
+import type { Types } from "mongoose";
 
 export const createShip = async (
     accountOwnerId: Types.ObjectId,

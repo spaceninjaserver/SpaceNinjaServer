@@ -1,4 +1,4 @@
-import { ISyndicate } from "warframe-public-export-plus";
+import type { ISyndicate } from "warframe-public-export-plus";
 
 export const getMaxStanding = (syndicate: ISyndicate, title: number): number => {
     if (!syndicate.titles) {

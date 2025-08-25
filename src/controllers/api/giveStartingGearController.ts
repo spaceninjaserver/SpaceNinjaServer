@@ -1,8 +1,8 @@
 import { getJSONfromString } from "@/src/helpers/stringHelpers";
 import { addStartingGear, getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { TPartialStartingGear } from "@/src/types/inventoryTypes/inventoryTypes";
-import { RequestHandler } from "express";
+import type { TPartialStartingGear } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { RequestHandler } from "express";
 
 export const giveStartingGearController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

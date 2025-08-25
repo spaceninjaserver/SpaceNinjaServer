@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 const marketRecommendationsController: RequestHandler = (_req, res) => {
     const data = Buffer.from([

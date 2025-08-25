@@ -4,7 +4,7 @@ import fs from "node:fs";
 import { config } from "@/src/services/configService";
 import { logger } from "@/src/utils/logger";
 import { app } from "@/src/app";
-import { AddressInfo } from "node:net";
+import type { AddressInfo } from "node:net";
 import { Agent, WebSocket as UnidiciWebSocket } from "undici";
 import { startWsServer, startWssServer, stopWsServers } from "@/src/services/wsService";
 

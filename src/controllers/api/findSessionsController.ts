@@ -1,7 +1,7 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { getSession } from "@/src/managers/sessionManager";
 import { logger } from "@/src/utils/logger";
-import { IFindSessionRequest } from "@/src/types/session";
+import type { IFindSessionRequest } from "@/src/types/session";
 
 export const findSessionsController: RequestHandler = (_req, res) => {
     const req = JSON.parse(String(_req.body)) as IFindSessionRequest;

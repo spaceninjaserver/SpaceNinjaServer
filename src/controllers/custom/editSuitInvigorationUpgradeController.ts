@@ -1,6 +1,6 @@
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getInventory } from "@/src/services/inventoryService";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 const DEFAULT_UPGRADE_EXPIRY_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 

@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { Inbox } from "@/src/models/inboxModel";
 import {
     createMessage,
@@ -20,7 +20,7 @@ import { logger } from "@/src/utils/logger";
 import { ExportFlavour } from "warframe-public-export-plus";
 import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
 import { fromStoreItem, isStoreItem } from "@/src/services/itemDataService";
-import { IOid } from "@/src/types/commonTypes";
+import type { IOid } from "@/src/types/commonTypes";
 
 export const inboxController: RequestHandler = async (req, res) => {
     const { deleteId, lastMessage: latestClientMessageId, messageId } = req.query;

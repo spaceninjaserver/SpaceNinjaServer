@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { Account, Ignore } from "@/src/models/loginModel";
 import { Inbox } from "@/src/models/inboxModel";

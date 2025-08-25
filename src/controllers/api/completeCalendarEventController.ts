@@ -2,8 +2,8 @@ import { checkCalendarAutoAdvance, getCalendarProgress, getInventory } from "@/s
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
 import { getWorldState } from "@/src/services/worldStateService";
-import { IInventoryChanges } from "@/src/types/purchaseTypes";
-import { RequestHandler } from "express";
+import type { IInventoryChanges } from "@/src/types/purchaseTypes";
+import type { RequestHandler } from "express";
 
 // GET request; query parameters: CompletedEventIdx=0&Iteration=4&Version=19&Season=CST_SUMMER
 export const completeCalendarEventController: RequestHandler = async (req, res) => {

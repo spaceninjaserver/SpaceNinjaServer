@@ -1,7 +1,8 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { getDojoClient, getGuildForRequestEx, hasAccessToDojo, hasGuildPermission } from "@/src/services/guildService";
 import { logger } from "@/src/utils/logger";
-import { GuildPermission, IDojoComponentDatabase } from "@/src/types/guildTypes";
+import type { IDojoComponentDatabase } from "@/src/types/guildTypes";
+import { GuildPermission } from "@/src/types/guildTypes";
 import { Types } from "mongoose";
 import { getAccountIdForRequest } from "@/src/services/loginService";
 import { getInventory } from "@/src/services/inventoryService";

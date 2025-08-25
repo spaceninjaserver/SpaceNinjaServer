@@ -1,9 +1,9 @@
 import { applyClientEquipmentUpdates, getInventory } from "@/src/services/inventoryService";
 import { getAccountIdForRequest } from "@/src/services/loginService";
-import { IOid } from "@/src/types/commonTypes";
-import { IEquipmentClient } from "@/src/types/equipmentTypes";
-import { TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
-import { RequestHandler } from "express";
+import type { IOid } from "@/src/types/commonTypes";
+import type { IEquipmentClient } from "@/src/types/equipmentTypes";
+import type { TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { RequestHandler } from "express";
 import { ExportMisc } from "warframe-public-export-plus";
 
 export const addXpController: RequestHandler = async (req, res) => {
