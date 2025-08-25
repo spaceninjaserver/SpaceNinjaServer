@@ -1,9 +1,9 @@
-import { fromOid, toOid } from "@/src/helpers/inventoryHelpers";
-import { createVeiledRivenFingerprint, rivenRawToRealWeighted } from "@/src/helpers/rivenHelper";
-import { addMiscItems, addMods, getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getRandomElement, getRandomWeightedReward, getRandomWeightedRewardUc } from "@/src/services/rngService";
-import type { IUpgradeFromClient } from "@/src/types/inventoryTypes/inventoryTypes";
+import { fromOid, toOid } from "../../helpers/inventoryHelpers.ts";
+import { createVeiledRivenFingerprint, rivenRawToRealWeighted } from "../../helpers/rivenHelper.ts";
+import { addMiscItems, addMods, getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getRandomElement, getRandomWeightedReward, getRandomWeightedRewardUc } from "../../services/rngService.ts";
+import type { IUpgradeFromClient } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { RequestHandler } from "express";
 import type { TRarity } from "warframe-public-export-plus";
 import { ExportBoosterPacks, ExportUpgrades } from "warframe-public-export-plus";

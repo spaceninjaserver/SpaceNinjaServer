@@ -2,11 +2,11 @@
 //it will claim a recipe for the user
 
 import type { RequestHandler } from "express";
-import { logger } from "@/src/utils/logger";
-import { getRecipe } from "@/src/services/itemDataService";
-import type { IOid, IOidWithLegacySupport } from "@/src/types/commonTypes";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { getAccountForRequest } from "@/src/services/loginService";
+import { logger } from "../../utils/logger.ts";
+import { getRecipe } from "../../services/itemDataService.ts";
+import type { IOid, IOidWithLegacySupport } from "../../types/commonTypes.ts";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { getAccountForRequest } from "../../services/loginService.ts";
 import {
     getInventory,
     updateCurrency,
@@ -17,15 +17,15 @@ import {
     addKubrowPetPrint,
     addPowerSuit,
     addEquipment
-} from "@/src/services/inventoryService";
-import type { IInventoryChanges } from "@/src/types/purchaseTypes";
-import type { IPendingRecipeDatabase } from "@/src/types/inventoryTypes/inventoryTypes";
-import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
-import { toOid2 } from "@/src/helpers/inventoryHelpers";
-import type { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+} from "../../services/inventoryService.ts";
+import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
+import type { IPendingRecipeDatabase } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { InventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { toOid2 } from "../../helpers/inventoryHelpers.ts";
+import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/inventoryModel.ts";
 import type { IRecipe } from "warframe-public-export-plus";
-import type { IEquipmentClient } from "@/src/types/equipmentTypes";
-import { EquipmentFeatures, Status } from "@/src/types/equipmentTypes";
+import type { IEquipmentClient } from "../../types/equipmentTypes.ts";
+import { EquipmentFeatures, Status } from "../../types/equipmentTypes.ts";
 
 interface IClaimCompletedRecipeRequest {
     RecipeIds: IOid[];

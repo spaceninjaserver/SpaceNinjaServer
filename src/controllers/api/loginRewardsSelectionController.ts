@@ -1,14 +1,14 @@
-import { getInventory } from "@/src/services/inventoryService";
+import { getInventory } from "../../services/inventoryService.ts";
 import {
     claimLoginReward,
     getRandomLoginRewards,
     setAccountGotLoginRewardToday
-} from "@/src/services/loginRewardService";
-import { getAccountForRequest } from "@/src/services/loginService";
-import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
-import { sendWsBroadcastTo } from "@/src/services/wsService";
-import type { IInventoryChanges } from "@/src/types/purchaseTypes";
-import { logger } from "@/src/utils/logger";
+} from "../../services/loginRewardService.ts";
+import { getAccountForRequest } from "../../services/loginService.ts";
+import { handleStoreItemAcquisition } from "../../services/purchaseService.ts";
+import { sendWsBroadcastTo } from "../../services/wsService.ts";
+import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
+import { logger } from "../../utils/logger.ts";
 import type { RequestHandler } from "express";
 
 export const loginRewardsSelectionController: RequestHandler = async (req, res) => {

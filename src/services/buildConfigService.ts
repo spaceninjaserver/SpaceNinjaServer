@@ -1,6 +1,6 @@
 import path from "path";
 import fs from "fs";
-import { repoDir } from "@/src/helpers/pathHelper";
+import { repoDir } from "../helpers/pathHelper.ts";
 
 interface IBuildConfig {
     version: string;

@@ -3,8 +3,8 @@ import type {
     IItemConfig,
     IOperatorConfigClient,
     IOperatorConfigDatabase
-} from "@/src/types/inventoryTypes/commonInventoryTypes";
-import type { IMongoDate } from "@/src/types/commonTypes";
+} from "../types/inventoryTypes/commonInventoryTypes.ts";
+import type { IMongoDate } from "../types/commonTypes.ts";
 import type {
     IDialogueClient,
     IDialogueDatabase,
@@ -24,16 +24,16 @@ import type {
     IUpgradeDatabase,
     IWeaponSkinClient,
     IWeaponSkinDatabase
-} from "@/src/types/inventoryTypes/inventoryTypes";
-import { equipmentKeys } from "@/src/types/inventoryTypes/inventoryTypes";
-import type { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
+} from "../types/inventoryTypes/inventoryTypes.ts";
+import { equipmentKeys } from "../types/inventoryTypes/inventoryTypes.ts";
+import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
 import type {
     ILoadoutConfigClient,
     ILoadoutConfigDatabase,
     ILoadoutDatabase,
     ILoadOutPresets
-} from "@/src/types/saveLoadoutTypes";
-import { slotNames } from "@/src/types/purchaseTypes";
+} from "../types/saveLoadoutTypes.ts";
+import { slotNames } from "../types/purchaseTypes.ts";
 import type {
     ICrewShipMemberClient,
     ICrewShipMemberDatabase,
@@ -49,7 +49,7 @@ import type {
     IEquipmentSelectionDatabase,
     IKubrowPetDetailsClient,
     IKubrowPetDetailsDatabase
-} from "@/src/types/equipmentTypes";
+} from "../types/equipmentTypes.ts";
 import type {
     IApartmentClient,
     IApartmentDatabase,
@@ -71,7 +71,7 @@ import type {
     IRoomDatabase,
     ITailorShop,
     ITailorShopDatabase
-} from "@/src/types/personalRoomsTypes";
+} from "../types/personalRoomsTypes.ts";
 
 const convertDate = (value: IMongoDate): Date => {
     return new Date(parseInt(value.$date.$numberLong));

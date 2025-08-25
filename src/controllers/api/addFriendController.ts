@@ -1,9 +1,9 @@
-import { toOid } from "@/src/helpers/inventoryHelpers";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { Friendship } from "@/src/models/friendModel";
-import { addAccountDataToFriendInfo, addInventoryDataToFriendInfo } from "@/src/services/friendService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import type { IFriendInfo } from "@/src/types/friendTypes";
+import { toOid } from "../../helpers/inventoryHelpers.ts";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { Friendship } from "../../models/friendModel.ts";
+import { addAccountDataToFriendInfo, addInventoryDataToFriendInfo } from "../../services/friendService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import type { IFriendInfo } from "../../types/friendTypes.ts";
 import type { RequestHandler } from "express";
 
 export const addFriendController: RequestHandler = async (req, res) => {

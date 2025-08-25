@@ -1,10 +1,10 @@
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { addMiscItems, freeUpSlot, getInventory, updateCurrency } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import type { IOid } from "@/src/types/commonTypes";
-import type { ICrewShipComponentFingerprint } from "@/src/types/inventoryTypes/inventoryTypes";
-import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
-import type { IInventoryChanges } from "@/src/types/purchaseTypes";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { addMiscItems, freeUpSlot, getInventory, updateCurrency } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import type { IOid } from "../../types/commonTypes.ts";
+import type { ICrewShipComponentFingerprint } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { InventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
+import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import type { RequestHandler } from "express";
 import { ExportCustoms, ExportDojoRecipes } from "warframe-public-export-plus";
 

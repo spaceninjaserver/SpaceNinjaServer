@@ -9,7 +9,7 @@ import type {
     IWeapon,
     IStatsDatabase,
     IRace
-} from "@/src/types/statTypes";
+} from "../types/statTypes.ts";
 
 const abilitySchema = new Schema<IAbility>(
     {

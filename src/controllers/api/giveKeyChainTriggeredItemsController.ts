@@ -1,9 +1,9 @@
 import type { RequestHandler } from "express";
-import { parseString } from "@/src/helpers/general";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { getInventory } from "@/src/services/inventoryService";
-import { giveKeyChainItem } from "@/src/services/questService";
-import type { IKeyChainRequest } from "@/src/types/requestTypes";
+import { parseString } from "../../helpers/general.ts";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { getInventory } from "../../services/inventoryService.ts";
+import { giveKeyChainItem } from "../../services/questService.ts";
+import type { IKeyChainRequest } from "../../types/requestTypes.ts";
 
 export const giveKeyChainTriggeredItemsController: RequestHandler = async (req, res) => {
     const accountId = parseString(req.query.accountId);

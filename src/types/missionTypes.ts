@@ -1,4 +1,4 @@
-import type { IAffiliationMods, IInventoryChanges } from "@/src/types/purchaseTypes";
+import type { IAffiliationMods, IInventoryChanges } from "./purchaseTypes.ts";
 
 export const inventoryFields = ["RawUpgrades", "MiscItems", "Consumables", "Recipes"] as const;
 export type IInventoryFieldType = (typeof inventoryFields)[number];

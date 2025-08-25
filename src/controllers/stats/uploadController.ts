@@ -1,7 +1,7 @@
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { updateStats } from "@/src/services/statsService";
-import type { IStatsUpdate } from "@/src/types/statTypes";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { updateStats } from "../../services/statsService.ts";
+import type { IStatsUpdate } from "../../types/statTypes.ts";
 import type { RequestHandler } from "express";
 
 const uploadController: RequestHandler = async (req, res) => {

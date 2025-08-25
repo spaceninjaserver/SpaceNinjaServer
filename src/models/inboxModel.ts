@@ -1,8 +1,8 @@
 import type { Types } from "mongoose";
 import { model, Schema } from "mongoose";
-import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
-import { typeCountSchema } from "@/src/models/inventoryModels/inventoryModel";
-import type { IMongoDate, IOid, ITypeCount } from "@/src/types/commonTypes";
+import { toMongoDate, toOid } from "../helpers/inventoryHelpers.ts";
+import { typeCountSchema } from "./inventoryModels/inventoryModel.ts";
+import type { IMongoDate, IOid, ITypeCount } from "../types/commonTypes.ts";
 
 export interface IMessageClient
     extends Omit<

@@ -1,8 +1,8 @@
-import { addMiscItems, combineInventoryChanges, getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getPersonalRooms } from "@/src/services/personalRoomsService";
-import type { IInventoryChanges } from "@/src/types/purchaseTypes";
-import { logger } from "@/src/utils/logger";
+import { addMiscItems, combineInventoryChanges, getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getPersonalRooms } from "../../services/personalRoomsService.ts";
+import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
+import { logger } from "../../utils/logger.ts";
 import type { RequestHandler } from "express";
 
 export const setShipVignetteController: RequestHandler = async (req, res) => {

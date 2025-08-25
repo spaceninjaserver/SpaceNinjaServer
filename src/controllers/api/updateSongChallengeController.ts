@@ -1,7 +1,7 @@
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { addShipDecorations, getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import type { IInventoryChanges } from "@/src/types/purchaseTypes";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { addShipDecorations, getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import type { RequestHandler } from "express";
 
 export const updateSongChallengeController: RequestHandler = async (req, res) => {

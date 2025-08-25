@@ -1,9 +1,9 @@
 import type { Logger, LeveledLogMethod } from "winston";
 import { createLogger, format, transports, addColors } from "winston";
 import "winston-daily-rotate-file";
-import { config } from "@/src/services/configService";
+import { config } from "../services/configService.ts";
 import * as util from "util";
-import { isEmptyObject } from "@/src/helpers/general";
+import { isEmptyObject } from "../helpers/general.ts";
 
 // const combineMessageAndSplat = () => {
 //     return {

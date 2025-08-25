@@ -1,5 +1,5 @@
-import type { ISession, IFindSessionRequest } from "@/src/types/session";
-import { logger } from "@/src/utils/logger";
+import type { ISession, IFindSessionRequest } from "../types/session.ts";
+import { logger } from "../utils/logger.ts";
 import { JSONParse } from "json-with-bigint";
 import { Types } from "mongoose";
 

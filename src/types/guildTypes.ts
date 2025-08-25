@@ -1,13 +1,13 @@
 import type { Types } from "mongoose";
-import type { IOid, IMongoDate, IOidWithLegacySupport, ITypeCount } from "@/src/types/commonTypes";
+import type { IOid, IMongoDate, IOidWithLegacySupport, ITypeCount } from "./commonTypes.ts";
 import type {
     IFusionTreasure,
     IMiscItem,
     IGoalProgressDatabase,
     IGoalProgressClient
-} from "@/src/types/inventoryTypes/inventoryTypes";
-import type { IPictureFrameInfo } from "@/src/types/personalRoomsTypes";
-import type { IFriendInfo } from "@/src/types/friendTypes";
+} from "./inventoryTypes/inventoryTypes.ts";
+import type { IPictureFrameInfo } from "./personalRoomsTypes.ts";
+import type { IFriendInfo } from "./friendTypes.ts";
 
 export interface IGuildClient {
     _id: IOidWithLegacySupport;

@@ -1,6 +1,6 @@
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
 
 export const wishlistController: RequestHandler = async (req, res) => {

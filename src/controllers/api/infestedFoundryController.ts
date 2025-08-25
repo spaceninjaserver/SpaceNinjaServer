@@ -1,25 +1,25 @@
 import type { RequestHandler } from "express";
-import { getAccountForRequest } from "@/src/services/loginService";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { getInventory, addMiscItems, updateCurrency, addRecipes, freeUpSlot } from "@/src/services/inventoryService";
-import type { IOid } from "@/src/types/commonTypes";
+import { getAccountForRequest } from "../../services/loginService.ts";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { getInventory, addMiscItems, updateCurrency, addRecipes, freeUpSlot } from "../../services/inventoryService.ts";
+import type { IOid } from "../../types/commonTypes.ts";
 import type {
     IConsumedSuit,
     IHelminthFoodRecord,
     IInventoryClient,
     IMiscItem
-} from "@/src/types/inventoryTypes/inventoryTypes";
-import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
+} from "../../types/inventoryTypes/inventoryTypes.ts";
+import { InventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { ExportMisc } from "warframe-public-export-plus";
-import { getRecipe } from "@/src/services/itemDataService";
-import { toMongoDate, version_compare } from "@/src/helpers/inventoryHelpers";
-import { logger } from "@/src/utils/logger";
-import { colorToShard } from "@/src/helpers/shardHelper";
+import { getRecipe } from "../../services/itemDataService.ts";
+import { toMongoDate, version_compare } from "../../helpers/inventoryHelpers.ts";
+import { logger } from "../../utils/logger.ts";
+import { colorToShard } from "../../helpers/shardHelper.ts";
 import {
     addInfestedFoundryXP,
     applyCheatsToInfestedFoundry,
     handleSubsumeCompletion
-} from "@/src/services/infestedFoundryService";
+} from "../../services/infestedFoundryService.ts";
 
 export const infestedFoundryController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);

@@ -1,4 +1,4 @@
-import { DailyDeal } from "@/src/models/worldStateModel";
+import { DailyDeal } from "../../models/worldStateModel.ts";
 import type { RequestHandler } from "express";
 
 export const getDailyDealStockLevelsController: RequestHandler = async (req, res) => {

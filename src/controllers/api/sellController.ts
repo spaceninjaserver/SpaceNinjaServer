@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { getAccountIdForRequest } from "@/src/services/loginService";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
 import {
     getInventory,
     addMods,
@@ -12,13 +12,13 @@ import {
     addFusionPoints,
     addCrewShipFusionPoints,
     addFusionTreasures
-} from "@/src/services/inventoryService";
-import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
+} from "../../services/inventoryService.ts";
+import { InventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { ExportDojoRecipes } from "warframe-public-export-plus";
-import type { IInventoryChanges } from "@/src/types/purchaseTypes";
-import type { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
-import { sendWsBroadcastEx } from "@/src/services/wsService";
-import { parseFusionTreasure } from "@/src/helpers/inventoryHelpers";
+import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
+import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/inventoryModel.ts";
+import { sendWsBroadcastEx } from "../../services/wsService.ts";
+import { parseFusionTreasure } from "../../helpers/inventoryHelpers.ts";
 
 export const sellController: RequestHandler = async (req, res) => {
     const payload = JSON.parse(String(req.body)) as ISellRequest;

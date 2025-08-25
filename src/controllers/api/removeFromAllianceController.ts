@@ -1,7 +1,7 @@
-import { AllianceMember, Guild, GuildMember } from "@/src/models/guildModel";
-import { deleteAlliance } from "@/src/services/guildService";
-import { getAccountForRequest } from "@/src/services/loginService";
-import { GuildPermission } from "@/src/types/guildTypes";
+import { AllianceMember, Guild, GuildMember } from "../../models/guildModel.ts";
+import { deleteAlliance } from "../../services/guildService.ts";
+import { getAccountForRequest } from "../../services/loginService.ts";
+import { GuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 
 export const removeFromAllianceController: RequestHandler = async (req, res) => {

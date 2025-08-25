@@ -1,4 +1,4 @@
-import type { IMongoDate, IOid } from "@/src/types/commonTypes";
+import type { IMongoDate, IOid } from "./commonTypes.ts";
 
 export interface IItemPrice {
     ItemType: string;

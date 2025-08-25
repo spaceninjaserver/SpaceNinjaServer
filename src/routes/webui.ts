@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
-import { repoDir, rootDir } from "@/src/helpers/pathHelper";
-import { args } from "@/src/helpers/commandLineArguments";
+import { repoDir, rootDir } from "../helpers/pathHelper.ts";
+import { args } from "../helpers/commandLineArguments.ts";
 
 const baseDir = args.dev ? repoDir : rootDir;
 

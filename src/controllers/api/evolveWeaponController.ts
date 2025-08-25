@@ -1,10 +1,10 @@
 import type { RequestHandler } from "express";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { addMiscItems, getInventory } from "@/src/services/inventoryService";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import type { WeaponTypeInternal } from "@/src/services/itemDataService";
-import { getRecipe } from "@/src/services/itemDataService";
-import { EquipmentFeatures } from "@/src/types/equipmentTypes";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { addMiscItems, getInventory } from "../../services/inventoryService.ts";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import type { WeaponTypeInternal } from "../../services/itemDataService.ts";
+import { getRecipe } from "../../services/itemDataService.ts";
+import { EquipmentFeatures } from "../../types/equipmentTypes.ts";
 
 export const evolveWeaponController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

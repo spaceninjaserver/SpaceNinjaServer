@@ -1,12 +1,12 @@
 import http from "http";
 import https from "https";
 import fs from "node:fs";
-import { config } from "@/src/services/configService";
-import { logger } from "@/src/utils/logger";
-import { app } from "@/src/app";
+import { config } from "./configService.ts";
+import { logger } from "../utils/logger.ts";
+import { app } from "../app.ts";
 import type { AddressInfo } from "node:net";
 import { Agent, WebSocket as UnidiciWebSocket } from "undici";
-import { startWsServer, startWssServer, stopWsServers } from "@/src/services/wsService";
+import { startWsServer, startWssServer, stopWsServers } from "./wsService.ts";
 
 let httpServer: http.Server | undefined;
 let httpsServer: https.Server | undefined;

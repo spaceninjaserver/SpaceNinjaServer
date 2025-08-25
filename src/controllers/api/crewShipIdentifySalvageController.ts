@@ -3,19 +3,19 @@ import {
     addCrewShipRawSalvage,
     getInventory,
     addEquipment
-} from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
+} from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
 import type {
     ICrewShipComponentFingerprint,
     IInnateDamageFingerprint
-} from "@/src/types/inventoryTypes/inventoryTypes";
+} from "../../types/inventoryTypes/inventoryTypes.ts";
 import { ExportCustoms, ExportRailjackWeapons, ExportUpgrades } from "warframe-public-export-plus";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import type { IInventoryChanges } from "@/src/types/purchaseTypes";
-import { getRandomInt } from "@/src/services/rngService";
-import type { IFingerprintStat } from "@/src/helpers/rivenHelper";
-import type { IEquipmentDatabase } from "@/src/types/equipmentTypes";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
+import { getRandomInt } from "../../services/rngService.ts";
+import type { IFingerprintStat } from "../../helpers/rivenHelper.ts";
+import type { IEquipmentDatabase } from "../../types/equipmentTypes.ts";
 
 export const crewShipIdentifySalvageController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

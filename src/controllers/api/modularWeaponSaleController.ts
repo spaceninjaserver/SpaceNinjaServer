@@ -1,10 +1,10 @@
 import type { RequestHandler } from "express";
 import { ExportWeapons } from "warframe-public-export-plus";
-import type { IMongoDate } from "@/src/types/commonTypes";
-import { toMongoDate } from "@/src/helpers/inventoryHelpers";
-import { SRng } from "@/src/services/rngService";
-import type { ArtifactPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
+import type { IMongoDate } from "../../types/commonTypes.ts";
+import { toMongoDate } from "../../helpers/inventoryHelpers.ts";
+import { SRng } from "../../services/rngService.ts";
+import type { ArtifactPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import {
     addEquipment,
     applyDefaultUpgrades,
@@ -12,13 +12,13 @@ import {
     occupySlot,
     productCategoryToInventoryBin,
     updateCurrency
-} from "@/src/services/inventoryService";
-import { getDefaultUpgrades } from "@/src/services/itemDataService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { sendWsBroadcastTo } from "@/src/services/wsService";
-import { modularWeaponTypes } from "@/src/helpers/modularWeaponHelper";
-import type { IInventoryChanges } from "@/src/types/purchaseTypes";
-import { EquipmentFeatures } from "@/src/types/equipmentTypes";
+} from "../../services/inventoryService.ts";
+import { getDefaultUpgrades } from "../../services/itemDataService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { sendWsBroadcastTo } from "../../services/wsService.ts";
+import { modularWeaponTypes } from "../../helpers/modularWeaponHelper.ts";
+import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
+import { EquipmentFeatures } from "../../types/equipmentTypes.ts";
 
 export const modularWeaponSaleController: RequestHandler = async (req, res) => {
     const partTypeToParts: Record<string, string[]> = {};

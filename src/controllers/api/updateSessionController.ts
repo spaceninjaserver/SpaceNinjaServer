@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { updateSession } from "@/src/managers/sessionManager";
+import { updateSession } from "../../managers/sessionManager.ts";
 
 const updateSessionGetController: RequestHandler = (_req, res) => {
     res.json({});

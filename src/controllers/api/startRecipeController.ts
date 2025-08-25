@@ -1,17 +1,17 @@
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { logger } from "@/src/utils/logger";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { logger } from "../../utils/logger.ts";
 import type { RequestHandler } from "express";
-import { getRecipe } from "@/src/services/itemDataService";
-import { addItem, addKubrowPet, freeUpSlot, getInventory, updateCurrency } from "@/src/services/inventoryService";
-import { unixTimesInMs } from "@/src/constants/timeConstants";
+import { getRecipe } from "../../services/itemDataService.ts";
+import { addItem, addKubrowPet, freeUpSlot, getInventory, updateCurrency } from "../../services/inventoryService.ts";
+import { unixTimesInMs } from "../../constants/timeConstants.ts";
 import { Types } from "mongoose";
-import type { ISpectreLoadout } from "@/src/types/inventoryTypes/inventoryTypes";
-import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
-import { fromOid, toOid } from "@/src/helpers/inventoryHelpers";
+import type { ISpectreLoadout } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { InventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { fromOid, toOid } from "../../helpers/inventoryHelpers.ts";
 import { ExportWeapons } from "warframe-public-export-plus";
-import { getRandomElement } from "@/src/services/rngService";
-import type { IInventoryChanges } from "@/src/types/purchaseTypes";
+import { getRandomElement } from "../../services/rngService.ts";
+import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 
 interface IStartRecipeRequest {
     RecipeName: string;

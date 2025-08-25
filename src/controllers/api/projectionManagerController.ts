@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { addMiscItems, getInventory } from "@/src/services/inventoryService";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { addMiscItems, getInventory } from "../../services/inventoryService.ts";
 import type { IRelic } from "warframe-public-export-plus";
 import { ExportRelics } from "warframe-public-export-plus";
 

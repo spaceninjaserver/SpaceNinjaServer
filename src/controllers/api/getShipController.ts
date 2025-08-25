@@ -1,11 +1,11 @@
 import type { RequestHandler } from "express";
-import { config } from "@/src/services/configService";
-import allShipFeatures from "@/static/fixed_responses/allShipFeatures.json";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { createGarden, getPersonalRooms } from "@/src/services/personalRoomsService";
-import type { IGetShipResponse, IPersonalRoomsClient } from "@/src/types/personalRoomsTypes";
-import { getLoadout } from "@/src/services/loadoutService";
-import { toOid } from "@/src/helpers/inventoryHelpers";
+import { config } from "../../services/configService.ts";
+import allShipFeatures from "../../../static/fixed_responses/allShipFeatures.json";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { createGarden, getPersonalRooms } from "../../services/personalRoomsService.ts";
+import type { IGetShipResponse, IPersonalRoomsClient } from "../../types/personalRoomsTypes.ts";
+import { getLoadout } from "../../services/loadoutService.ts";
+import { toOid } from "../../helpers/inventoryHelpers.ts";
 
 export const getShipController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

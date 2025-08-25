@@ -1,6 +1,6 @@
-import { getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import type { IAccountCheats } from "@/src/types/inventoryTypes/inventoryTypes";
+import { getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import type { IAccountCheats } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { RequestHandler } from "express";
 
 export const setAccountCheatController: RequestHandler = async (req, res) => {

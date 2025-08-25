@@ -1,8 +1,8 @@
 import type { RequestHandler } from "express";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getInventory, addMods } from "@/src/services/inventoryService";
-import type { IOid } from "@/src/types/commonTypes";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getInventory, addMods } from "../../services/inventoryService.ts";
+import type { IOid } from "../../types/commonTypes.ts";
 
 export const arcaneCommonController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

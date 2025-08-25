@@ -1,9 +1,9 @@
 import type { RequestHandler } from "express";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getInventory, updateCurrency } from "@/src/services/inventoryService";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import type { TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
-import { sendWsBroadcastTo } from "@/src/services/wsService";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getInventory, updateCurrency } from "../../services/inventoryService.ts";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import type { TEquipmentKey } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { sendWsBroadcastTo } from "../../services/wsService.ts";
 
 interface INameWeaponRequest {
     ItemName: string;

@@ -1,8 +1,8 @@
 import type { RequestHandler } from "express";
-import { config, syncConfigWithDatabase } from "@/src/services/configService";
-import { getAccountForRequest, isAdministrator } from "@/src/services/loginService";
-import { saveConfig } from "@/src/services/configWriterService";
-import { sendWsBroadcastEx } from "@/src/services/wsService";
+import { config, syncConfigWithDatabase } from "../../services/configService.ts";
+import { getAccountForRequest, isAdministrator } from "../../services/loginService.ts";
+import { saveConfig } from "../../services/configWriterService.ts";
+import { sendWsBroadcastEx } from "../../services/wsService.ts";
 
 export const getConfigController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);

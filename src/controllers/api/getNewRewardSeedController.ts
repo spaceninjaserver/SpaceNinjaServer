@@ -1,6 +1,6 @@
-import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { generateRewardSeed } from "@/src/services/rngService";
+import { Inventory } from "../../models/inventoryModels/inventoryModel.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { generateRewardSeed } from "../../services/rngService.ts";
 import type { RequestHandler } from "express";
 
 export const getNewRewardSeedController: RequestHandler = async (req, res) => {

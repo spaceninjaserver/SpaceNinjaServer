@@ -1,5 +1,5 @@
 // First, init config.
-import { config, configPath, loadConfig, syncConfigWithDatabase } from "@/src/services/configService";
+import { config, configPath, loadConfig, syncConfigWithDatabase } from "./services/configService.ts";
 import fs from "fs";
 try {
     loadConfig();
@@ -13,17 +13,17 @@ try {
 }
 
 // Now we can init the logger with the settings provided in the config.
-import { logger } from "@/src/utils/logger";
+import { logger } from "./utils/logger.ts";
 logger.info("Starting up...");
 
 // Proceed with normal startup: bring up config watcher service, validate config, connect to MongoDB, and finally start listening for HTTP.
 import mongoose from "mongoose";
 import path from "path";
 import { JSONStringify } from "json-with-bigint";
-import { startWebServer } from "@/src/services/webService";
-import { validateConfig } from "@/src/services/configWatcherService";
-import { updateWorldStateCollections } from "@/src/services/worldStateService";
-import { repoDir } from "@/src/helpers/pathHelper";
+import { startWebServer } from "./services/webService.ts";
+import { validateConfig } from "./services/configWatcherService.ts";
+import { updateWorldStateCollections } from "./services/worldStateService.ts";
+import { repoDir } from "./helpers/pathHelper.ts";
 
 JSON.stringify = JSONStringify; // Patch JSON.stringify to work flawlessly with Bigints.
 

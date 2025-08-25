@@ -1,9 +1,9 @@
-import { addString } from "@/src/helpers/stringHelpers";
-import { getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { addFixedLevelRewards } from "@/src/services/missionInventoryUpdateService";
-import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
-import type { IMissionReward } from "@/src/types/missionTypes";
+import { addString } from "../../helpers/stringHelpers.ts";
+import { getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { addFixedLevelRewards } from "../../services/missionInventoryUpdateService.ts";
+import { handleStoreItemAcquisition } from "../../services/purchaseService.ts";
+import type { IMissionReward } from "../../types/missionTypes.ts";
 import type { RequestHandler } from "express";
 import { ExportRegions } from "warframe-public-export-plus";
 

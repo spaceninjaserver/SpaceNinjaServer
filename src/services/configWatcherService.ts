@@ -1,16 +1,10 @@
 import chokidar from "chokidar";
-import { logger } from "@/src/utils/logger";
-import {
-    config,
-    configPath,
-    configRemovedOptionsKeys,
-    loadConfig,
-    syncConfigWithDatabase
-} from "@/src/services/configService";
-import { saveConfig, shouldReloadConfig } from "@/src/services/configWriterService";
-import { getWebPorts, startWebServer, stopWebServer } from "@/src/services/webService";
-import { sendWsBroadcast } from "@/src/services/wsService";
-import varzia from "@/static/fixed_responses/worldState/varzia.json";
+import { logger } from "../utils/logger.ts";
+import { config, configPath, configRemovedOptionsKeys, loadConfig, syncConfigWithDatabase } from "./configService.ts";
+import { saveConfig, shouldReloadConfig } from "./configWriterService.ts";
+import { getWebPorts, startWebServer, stopWebServer } from "./webService.ts";
+import { sendWsBroadcast } from "./wsService.ts";
+import varzia from "../../static/fixed_responses/worldState/varzia.json";
 
 chokidar.watch(configPath).on("change", () => {
     if (shouldReloadConfig()) {

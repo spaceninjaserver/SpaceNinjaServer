@@ -1,17 +1,17 @@
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { GuildAd, GuildMember } from "@/src/models/guildModel";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { GuildAd, GuildMember } from "../../models/guildModel.ts";
 import {
     addGuildMemberMiscItemContribution,
     addVaultMiscItems,
     getGuildForRequestEx,
     getVaultMiscItemCount,
     hasGuildPermissionEx
-} from "@/src/services/guildService";
-import { getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getVendorManifestByTypeName } from "@/src/services/serversideVendorsService";
-import { GuildPermission } from "@/src/types/guildTypes";
-import type { IPurchaseParams } from "@/src/types/purchaseTypes";
+} from "../../services/guildService.ts";
+import { getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getVendorManifestByTypeName } from "../../services/serversideVendorsService.ts";
+import { GuildPermission } from "../../types/guildTypes.ts";
+import type { IPurchaseParams } from "../../types/purchaseTypes.ts";
 import type { RequestHandler } from "express";
 
 export const postGuildAdvertisementController: RequestHandler = async (req, res) => {

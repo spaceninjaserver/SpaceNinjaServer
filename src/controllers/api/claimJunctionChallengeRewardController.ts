@@ -1,7 +1,7 @@
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { combineInventoryChanges, getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { combineInventoryChanges, getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { handleStoreItemAcquisition } from "../../services/purchaseService.ts";
 import type { RequestHandler } from "express";
 import { ExportChallenges } from "warframe-public-export-plus";
 

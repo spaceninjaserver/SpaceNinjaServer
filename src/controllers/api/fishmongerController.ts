@@ -1,7 +1,7 @@
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { addMiscItems, addStanding, getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import type { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { addMiscItems, addStanding, getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import type { IMiscItem } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { RequestHandler } from "express";
 import { ExportResources } from "warframe-public-export-plus";
 

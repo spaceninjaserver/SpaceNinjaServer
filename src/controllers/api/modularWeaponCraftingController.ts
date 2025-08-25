@@ -1,7 +1,7 @@
 import type { RequestHandler } from "express";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { sendWsBroadcastTo } from "@/src/services/wsService";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { sendWsBroadcastTo } from "../../services/wsService.ts";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import {
     getInventory,
     updateCurrency,
@@ -12,15 +12,15 @@ import {
     productCategoryToInventoryBin,
     combineInventoryChanges,
     addSpecialItem
-} from "@/src/services/inventoryService";
-import type { IInventoryChanges } from "@/src/types/purchaseTypes";
-import { getDefaultUpgrades } from "@/src/services/itemDataService";
-import { modularWeaponTypes } from "@/src/helpers/modularWeaponHelper";
-import { getRandomInt } from "@/src/services/rngService";
+} from "../../services/inventoryService.ts";
+import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
+import { getDefaultUpgrades } from "../../services/itemDataService.ts";
+import { modularWeaponTypes } from "../../helpers/modularWeaponHelper.ts";
+import { getRandomInt } from "../../services/rngService.ts";
 import type { IDefaultUpgrade } from "warframe-public-export-plus";
 import { ExportSentinels, ExportWeapons } from "warframe-public-export-plus";
-import type { IEquipmentDatabase } from "@/src/types/equipmentTypes";
-import { Status } from "@/src/types/equipmentTypes";
+import type { IEquipmentDatabase } from "../../types/equipmentTypes.ts";
+import { Status } from "../../types/equipmentTypes.ts";
 
 interface IModularCraftRequest {
     WeaponType: string;

@@ -1,11 +1,11 @@
-import type { IMessageDatabase } from "@/src/models/inboxModel";
-import { Inbox } from "@/src/models/inboxModel";
-import { getAccountForRequest } from "@/src/services/loginService";
+import type { IMessageDatabase } from "../models/inboxModel.ts";
+import { Inbox } from "../models/inboxModel.ts";
+import { getAccountForRequest } from "./loginService.ts";
 import type { HydratedDocument } from "mongoose";
 import { Types } from "mongoose";
 import type { Request } from "express";
-import { unixTimesInMs } from "@/src/constants/timeConstants";
-import { config } from "@/src/services/configService";
+import { unixTimesInMs } from "../constants/timeConstants.ts";
+import { config } from "./configService.ts";
 
 export const getAllMessagesSorted = async (accountId: string): Promise<HydratedDocument<IMessageDatabase>[]> => {
     const inbox = await Inbox.find({ ownerId: accountId }).sort({ date: -1 });

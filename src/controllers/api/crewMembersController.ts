@@ -1,8 +1,8 @@
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import type { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
-import { getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import type { ICrewMemberClient } from "@/src/types/inventoryTypes/inventoryTypes";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/inventoryModel.ts";
+import { getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import type { ICrewMemberClient } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { RequestHandler } from "express";
 import { Types } from "mongoose";
 

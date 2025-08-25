@@ -1,14 +1,14 @@
 import type { RequestHandler } from "express";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { sendWsBroadcastTo } from "@/src/services/wsService";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { addMiscItems, getInventory } from "@/src/services/inventoryService";
-import type { TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
-import type { ArtifactPolarity } from "@/src/types/inventoryTypes/commonInventoryTypes";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { sendWsBroadcastTo } from "../../services/wsService.ts";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { addMiscItems, getInventory } from "../../services/inventoryService.ts";
+import type { TEquipmentKey } from "../../types/inventoryTypes/inventoryTypes.ts";
+import type { ArtifactPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import { ExportRecipes } from "warframe-public-export-plus";
-import type { IInventoryChanges } from "@/src/types/purchaseTypes";
-import type { IEquipmentClient } from "@/src/types/equipmentTypes";
-import { EquipmentFeatures } from "@/src/types/equipmentTypes";
+import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
+import type { IEquipmentClient } from "../../types/equipmentTypes.ts";
+import { EquipmentFeatures } from "../../types/equipmentTypes.ts";
 
 interface IGildWeaponRequest {
     ItemName: string;

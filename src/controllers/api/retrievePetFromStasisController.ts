@@ -1,7 +1,7 @@
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { Status } from "@/src/types/equipmentTypes";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { Status } from "../../types/equipmentTypes.ts";
 import type { RequestHandler } from "express";
 
 export const retrievePetFromStasisController: RequestHandler = async (req, res) => {

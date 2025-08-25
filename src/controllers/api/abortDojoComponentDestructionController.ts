@@ -1,7 +1,12 @@
-import { getDojoClient, getGuildForRequestEx, hasAccessToDojo, hasGuildPermission } from "@/src/services/guildService";
-import { getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { GuildPermission } from "@/src/types/guildTypes";
+import {
+    getDojoClient,
+    getGuildForRequestEx,
+    hasAccessToDojo,
+    hasGuildPermission
+} from "../../services/guildService.ts";
+import { getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { GuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 
 export const abortDojoComponentDestructionController: RequestHandler = async (req, res) => {

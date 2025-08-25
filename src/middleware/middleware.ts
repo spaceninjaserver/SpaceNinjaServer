@@ -1,4 +1,4 @@
-import { logger } from "@/src/utils/logger";
+import { logger } from "../utils/logger.ts";
 import type { /*NextFunction,*/ Request, Response } from "express";
 
 const unknownEndpointHandler = (request: Request, response: Response): void => {

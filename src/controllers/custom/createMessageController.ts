@@ -1,5 +1,5 @@
-import type { IMessageCreationTemplate } from "@/src/services/inboxService";
-import { createMessage } from "@/src/services/inboxService";
+import type { IMessageCreationTemplate } from "../../services/inboxService.ts";
+import { createMessage } from "../../services/inboxService.ts";
 import type { RequestHandler } from "express";
 
 export const createMessageController: RequestHandler = async (req, res) => {

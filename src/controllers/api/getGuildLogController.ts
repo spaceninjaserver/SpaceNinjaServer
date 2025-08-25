@@ -1,8 +1,8 @@
-import { toMongoDate } from "@/src/helpers/inventoryHelpers";
-import { Guild } from "@/src/models/guildModel";
-import { getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import type { IMongoDate } from "@/src/types/commonTypes";
+import { toMongoDate } from "../../helpers/inventoryHelpers.ts";
+import { Guild } from "../../models/guildModel.ts";
+import { getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import type { IMongoDate } from "../../types/commonTypes.ts";
 import type { RequestHandler } from "express";
 
 export const getGuildLogController: RequestHandler = async (req, res) => {

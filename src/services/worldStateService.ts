@@ -1,18 +1,18 @@
-import staticWorldState from "@/static/fixed_responses/worldState/worldState.json";
-import baro from "@/static/fixed_responses/worldState/baro.json";
-import varzia from "@/static/fixed_responses/worldState/varzia.json";
-import fissureMissions from "@/static/fixed_responses/worldState/fissureMissions.json";
-import sortieTilesets from "@/static/fixed_responses/worldState/sortieTilesets.json";
-import sortieTilesetMissions from "@/static/fixed_responses/worldState/sortieTilesetMissions.json";
-import syndicateMissions from "@/static/fixed_responses/worldState/syndicateMissions.json";
-import darvoDeals from "@/static/fixed_responses/worldState/darvoDeals.json";
-import invasionNodes from "@/static/fixed_responses/worldState/invasionNodes.json";
-import invasionRewards from "@/static/fixed_responses/worldState/invasionRewards.json";
-import pvpChallenges from "@/static/fixed_responses/worldState/pvpChallenges.json";
-import { buildConfig } from "@/src/services/buildConfigService";
-import { unixTimesInMs } from "@/src/constants/timeConstants";
-import { config } from "@/src/services/configService";
-import { getRandomElement, getRandomInt, sequentiallyUniqueRandomElement, SRng } from "@/src/services/rngService";
+import staticWorldState from "../../static/fixed_responses/worldState/worldState.json";
+import baro from "../../static/fixed_responses/worldState/baro.json";
+import varzia from "../../static/fixed_responses/worldState/varzia.json";
+import fissureMissions from "../../static/fixed_responses/worldState/fissureMissions.json";
+import sortieTilesets from "../../static/fixed_responses/worldState/sortieTilesets.json";
+import sortieTilesetMissions from "../../static/fixed_responses/worldState/sortieTilesetMissions.json";
+import syndicateMissions from "../../static/fixed_responses/worldState/syndicateMissions.json";
+import darvoDeals from "../../static/fixed_responses/worldState/darvoDeals.json";
+import invasionNodes from "../../static/fixed_responses/worldState/invasionNodes.json";
+import invasionRewards from "../../static/fixed_responses/worldState/invasionRewards.json";
+import pvpChallenges from "../../static/fixed_responses/worldState/pvpChallenges.json";
+import { buildConfig } from "./buildConfigService.ts";
+import { unixTimesInMs } from "../constants/timeConstants.ts";
+import { config } from "./configService.ts";
+import { getRandomElement, getRandomInt, sequentiallyUniqueRandomElement, SRng } from "./rngService.ts";
 import type { IMissionReward, IRegion } from "warframe-public-export-plus";
 import { eMissionType, ExportRegions, ExportSyndicates } from "warframe-public-export-plus";
 import type {
@@ -35,10 +35,10 @@ import type {
     IVoidTraderOffer,
     IWorldState,
     TCircuitGameMode
-} from "@/src/types/worldStateTypes";
-import { toMongoDate, toOid, version_compare } from "@/src/helpers/inventoryHelpers";
-import { logger } from "@/src/utils/logger";
-import { DailyDeal, Fissure } from "@/src/models/worldStateModel";
+} from "../types/worldStateTypes.ts";
+import { toMongoDate, toOid, version_compare } from "../helpers/inventoryHelpers.ts";
+import { logger } from "../utils/logger.ts";
+import { DailyDeal, Fissure } from "../models/worldStateModel.ts";
 
 const sortieBosses = [
     "SORTIE_BOSS_HYENA",

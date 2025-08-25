@@ -1,14 +1,14 @@
-import { fromDbOid, toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
-import type { TGuildDatabaseDocument } from "@/src/models/guildModel";
-import { Guild, GuildMember } from "@/src/models/guildModel";
-import type { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
-import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
-import { Loadout } from "@/src/models/inventoryModels/loadoutModel";
-import { Account } from "@/src/models/loginModel";
-import type { TStatsDatabaseDocument } from "@/src/models/statsModel";
-import { Stats } from "@/src/models/statsModel";
-import { allDailyAffiliationKeys } from "@/src/services/inventoryService";
-import type { IMongoDate, IOid } from "@/src/types/commonTypes";
+import { fromDbOid, toMongoDate, toOid } from "../../helpers/inventoryHelpers.ts";
+import type { TGuildDatabaseDocument } from "../../models/guildModel.ts";
+import { Guild, GuildMember } from "../../models/guildModel.ts";
+import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/inventoryModel.ts";
+import { Inventory } from "../../models/inventoryModels/inventoryModel.ts";
+import { Loadout } from "../../models/inventoryModels/loadoutModel.ts";
+import { Account } from "../../models/loginModel.ts";
+import type { TStatsDatabaseDocument } from "../../models/statsModel.ts";
+import { Stats } from "../../models/statsModel.ts";
+import { allDailyAffiliationKeys } from "../../services/inventoryService.ts";
+import type { IMongoDate, IOid } from "../../types/commonTypes.ts";
 import type {
     IAffiliation,
     IAlignment,
@@ -17,16 +17,16 @@ import type {
     IMission,
     IPlayerSkills,
     ITypeXPItem
-} from "@/src/types/inventoryTypes/inventoryTypes";
-import { LoadoutIndex } from "@/src/types/inventoryTypes/inventoryTypes";
+} from "../../types/inventoryTypes/inventoryTypes.ts";
+import { LoadoutIndex } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { RequestHandler } from "express";
-import { catBreadHash, getJSONfromString } from "@/src/helpers/stringHelpers";
+import { catBreadHash, getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { ExportCustoms, ExportDojoRecipes } from "warframe-public-export-plus";
-import type { IStatsClient } from "@/src/types/statTypes";
-import { toStoreItem } from "@/src/services/itemDataService";
+import type { IStatsClient } from "../../types/statTypes.ts";
+import { toStoreItem } from "../../services/itemDataService.ts";
 import type { FlattenMaps } from "mongoose";
-import type { IEquipmentClient } from "@/src/types/equipmentTypes";
-import type { ILoadoutConfigClient } from "@/src/types/saveLoadoutTypes";
+import type { IEquipmentClient } from "../../types/equipmentTypes.ts";
+import type { ILoadoutConfigClient } from "../../types/saveLoadoutTypes.ts";
 
 const getProfileViewingDataByPlayerIdImpl = async (playerId: string): Promise<IProfileViewingData | undefined> => {
     const account = await Account.findById(playerId, "DisplayName");

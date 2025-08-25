@@ -1,9 +1,9 @@
 import type { RequestHandler } from "express";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getInventory } from "@/src/services/inventoryService";
-import { EPOCH, getSeasonChallengePools, getWorldState, pushWeeklyActs } from "@/src/services/worldStateService";
-import { unixTimesInMs } from "@/src/constants/timeConstants";
-import type { ISeasonChallenge } from "@/src/types/worldStateTypes";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getInventory } from "../../services/inventoryService.ts";
+import { EPOCH, getSeasonChallengePools, getWorldState, pushWeeklyActs } from "../../services/worldStateService.ts";
+import { unixTimesInMs } from "../../constants/timeConstants.ts";
+import type { ISeasonChallenge } from "../../types/worldStateTypes.ts";
 import { ExportChallenges } from "warframe-public-export-plus";
 
 export const getPastWeeklyChallengesController: RequestHandler = async (req, res) => {

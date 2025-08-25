@@ -1,11 +1,11 @@
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { getInventory } from "@/src/services/inventoryService";
-import type { IMongoDate } from "@/src/types/commonTypes";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { getInventory } from "../../services/inventoryService.ts";
+import type { IMongoDate } from "../../types/commonTypes.ts";
 import type { RequestHandler } from "express";
-import { unixTimesInMs } from "@/src/constants/timeConstants";
-import type { IInventoryChanges } from "@/src/types/purchaseTypes";
-import { createMessage } from "@/src/services/inboxService";
+import { unixTimesInMs } from "../../constants/timeConstants.ts";
+import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
+import { createMessage } from "../../services/inboxService.ts";
 
 interface ITrainingResultsRequest {
     numLevelsGained: number;

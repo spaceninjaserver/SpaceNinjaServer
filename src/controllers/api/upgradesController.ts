@@ -1,15 +1,15 @@
 import type { RequestHandler } from "express";
-import type { IUpgradesRequest } from "@/src/types/requestTypes";
-import type { ArtifactPolarity, IAbilityOverride } from "@/src/types/inventoryTypes/commonInventoryTypes";
-import type { IInventoryClient, IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { addMiscItems, addRecipes, getInventory, updateCurrency } from "@/src/services/inventoryService";
-import { getRecipeByResult } from "@/src/services/itemDataService";
-import type { IInventoryChanges } from "@/src/types/purchaseTypes";
-import { addInfestedFoundryXP, applyCheatsToInfestedFoundry } from "@/src/services/infestedFoundryService";
-import { sendWsBroadcastTo } from "@/src/services/wsService";
-import type { IEquipmentDatabase } from "@/src/types/equipmentTypes";
-import { EquipmentFeatures } from "@/src/types/equipmentTypes";
+import type { IUpgradesRequest } from "../../types/requestTypes.ts";
+import type { ArtifactPolarity, IAbilityOverride } from "../../types/inventoryTypes/commonInventoryTypes.ts";
+import type { IInventoryClient, IMiscItem } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { addMiscItems, addRecipes, getInventory, updateCurrency } from "../../services/inventoryService.ts";
+import { getRecipeByResult } from "../../services/itemDataService.ts";
+import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
+import { addInfestedFoundryXP, applyCheatsToInfestedFoundry } from "../../services/infestedFoundryService.ts";
+import { sendWsBroadcastTo } from "../../services/wsService.ts";
+import type { IEquipmentDatabase } from "../../types/equipmentTypes.ts";
+import { EquipmentFeatures } from "../../types/equipmentTypes.ts";
 
 export const upgradesController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

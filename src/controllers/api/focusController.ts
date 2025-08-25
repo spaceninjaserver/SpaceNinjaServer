@@ -1,11 +1,11 @@
 import type { RequestHandler } from "express";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getInventory, addMiscItems, addEquipment, occupySlot } from "@/src/services/inventoryService";
-import type { IMiscItem, TFocusPolarity, TEquipmentKey } from "@/src/types/inventoryTypes/inventoryTypes";
-import { InventorySlot } from "@/src/types/inventoryTypes/inventoryTypes";
-import { logger } from "@/src/utils/logger";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getInventory, addMiscItems, addEquipment, occupySlot } from "../../services/inventoryService.ts";
+import type { IMiscItem, TFocusPolarity, TEquipmentKey } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { InventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { logger } from "../../utils/logger.ts";
 import { ExportFocusUpgrades } from "warframe-public-export-plus";
-import { Inventory } from "@/src/models/inventoryModels/inventoryModel";
+import { Inventory } from "../../models/inventoryModels/inventoryModel.ts";
 
 export const focusController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);

@@ -1,4 +1,4 @@
-import type { IKeyChainRequest } from "@/src/types/requestTypes";
+import type { IKeyChainRequest } from "../types/requestTypes.ts";
 import type {
     IDefaultUpgrade,
     IInboxMessage,
@@ -36,8 +36,8 @@ import {
     ExportWarframes,
     ExportWeapons
 } from "warframe-public-export-plus";
-import type { IMessage } from "@/src/models/inboxModel";
-import { logger } from "@/src/utils/logger";
+import type { IMessage } from "../models/inboxModel.ts";
+import { logger } from "../utils/logger.ts";
 
 export type WeaponTypeInternal =
     | "LongGuns"

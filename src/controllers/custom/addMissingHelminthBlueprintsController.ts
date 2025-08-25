@@ -1,5 +1,5 @@
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getInventory, addRecipes } from "@/src/services/inventoryService";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getInventory, addRecipes } from "../../services/inventoryService.ts";
 import type { RequestHandler } from "express";
 import { ExportRecipes } from "warframe-public-export-plus";
 

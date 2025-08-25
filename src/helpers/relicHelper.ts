@@ -1,14 +1,14 @@
-import type { TInventoryDatabaseDocument } from "@/src/models/inventoryModels/inventoryModel";
-import type { IVoidTearParticipantInfo } from "@/src/types/requestTypes";
+import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
+import type { IVoidTearParticipantInfo } from "../types/requestTypes.ts";
 import type { TRarity } from "warframe-public-export-plus";
 import { ExportRelics, ExportRewards } from "warframe-public-export-plus";
-import type { IRngResult } from "@/src/services/rngService";
-import { getRandomWeightedReward } from "@/src/services/rngService";
-import { logger } from "@/src/utils/logger";
-import { addMiscItems, combineInventoryChanges } from "@/src/services/inventoryService";
-import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
-import type { IInventoryChanges } from "@/src/types/purchaseTypes";
-import { config } from "@/src/services/configService";
+import type { IRngResult } from "../services/rngService.ts";
+import { getRandomWeightedReward } from "../services/rngService.ts";
+import { logger } from "../utils/logger.ts";
+import { addMiscItems, combineInventoryChanges } from "../services/inventoryService.ts";
+import { handleStoreItemAcquisition } from "../services/purchaseService.ts";
+import type { IInventoryChanges } from "../types/purchaseTypes.ts";
+import { config } from "../services/configService.ts";
 
 export const crackRelic = async (
     inventory: TInventoryDatabaseDocument,

@@ -1,8 +1,8 @@
 import fs from "fs";
 import path from "path";
-import { repoDir } from "@/src/helpers/pathHelper";
-import { args } from "@/src/helpers/commandLineArguments";
-import { Inbox } from "@/src/models/inboxModel";
+import { repoDir } from "../helpers/pathHelper.ts";
+import { args } from "../helpers/commandLineArguments.ts";
+import { Inbox } from "../models/inboxModel.ts";
 
 export interface IConfig extends IConfigRemovedOptions {
     mongodbUrl: string;

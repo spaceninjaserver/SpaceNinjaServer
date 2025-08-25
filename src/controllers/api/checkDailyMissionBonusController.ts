@@ -1,4 +1,4 @@
-import { getAccountForRequest } from "@/src/services/loginService";
+import { getAccountForRequest } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
 
 export const checkDailyMissionBonusController: RequestHandler = async (req, res) => {

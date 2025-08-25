@@ -1,9 +1,9 @@
 import type { RequestHandler } from "express";
 import { ExportResources } from "warframe-public-export-plus";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { addFusionTreasures, addMiscItems, getInventory } from "@/src/services/inventoryService";
-import type { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
-import { parseFusionTreasure } from "@/src/helpers/inventoryHelpers";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { addFusionTreasures, addMiscItems, getInventory } from "../../services/inventoryService.ts";
+import type { IMiscItem } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { parseFusionTreasure } from "../../helpers/inventoryHelpers.ts";
 
 interface IFusionTreasureRequest {
     oldTreasureName: string;

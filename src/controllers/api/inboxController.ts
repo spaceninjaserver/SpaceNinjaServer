@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { Inbox } from "@/src/models/inboxModel";
+import { Inbox } from "../../models/inboxModel.ts";
 import {
     createMessage,
     createNewEventMessages,
@@ -7,20 +7,20 @@ import {
     deleteMessageRead,
     getAllMessagesSorted,
     getMessage
-} from "@/src/services/inboxService";
-import { getAccountForRequest, getAccountFromSuffixedName, getSuffixedName } from "@/src/services/loginService";
+} from "../../services/inboxService.ts";
+import { getAccountForRequest, getAccountFromSuffixedName, getSuffixedName } from "../../services/loginService.ts";
 import {
     addItems,
     combineInventoryChanges,
     getEffectiveAvatarImageType,
     getInventory,
     updateCurrency
-} from "@/src/services/inventoryService";
-import { logger } from "@/src/utils/logger";
+} from "../../services/inventoryService.ts";
+import { logger } from "../../utils/logger.ts";
 import { ExportFlavour } from "warframe-public-export-plus";
-import { handleStoreItemAcquisition } from "@/src/services/purchaseService";
-import { fromStoreItem, isStoreItem } from "@/src/services/itemDataService";
-import type { IOid } from "@/src/types/commonTypes";
+import { handleStoreItemAcquisition } from "../../services/purchaseService.ts";
+import { fromStoreItem, isStoreItem } from "../../services/itemDataService.ts";
+import type { IOid } from "../../types/commonTypes.ts";
 
 export const inboxController: RequestHandler = async (req, res) => {
     const { deleteId, lastMessage: latestClientMessageId, messageId } = req.query;

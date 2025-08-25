@@ -1,13 +1,13 @@
-import { toOid } from "@/src/helpers/inventoryHelpers";
+import { toOid } from "../../helpers/inventoryHelpers.ts";
 import {
     createVeiledRivenFingerprint,
     createUnveiledRivenFingerprint,
     rivenRawToRealWeighted
-} from "@/src/helpers/rivenHelper";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { addMods, getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getRandomElement } from "@/src/services/rngService";
+} from "../../helpers/rivenHelper.ts";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { addMods, getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getRandomElement } from "../../services/rngService.ts";
 import type { RequestHandler } from "express";
 import { ExportUpgrades } from "warframe-public-export-plus";
 

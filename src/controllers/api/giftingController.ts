@@ -1,18 +1,18 @@
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { Account } from "@/src/models/loginModel";
-import { areFriends } from "@/src/services/friendService";
-import { createMessage } from "@/src/services/inboxService";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { Account } from "../../models/loginModel.ts";
+import { areFriends } from "../../services/friendService.ts";
+import { createMessage } from "../../services/inboxService.ts";
 import {
     combineInventoryChanges,
     getEffectiveAvatarImageType,
     getInventory,
     updateCurrency
-} from "@/src/services/inventoryService";
-import { getAccountForRequest, getSuffixedName } from "@/src/services/loginService";
-import { handleDailyDealPurchase, handleStoreItemAcquisition } from "@/src/services/purchaseService";
-import type { IOid } from "@/src/types/commonTypes";
-import type { IPurchaseParams, IPurchaseResponse } from "@/src/types/purchaseTypes";
-import { PurchaseSource } from "@/src/types/purchaseTypes";
+} from "../../services/inventoryService.ts";
+import { getAccountForRequest, getSuffixedName } from "../../services/loginService.ts";
+import { handleDailyDealPurchase, handleStoreItemAcquisition } from "../../services/purchaseService.ts";
+import type { IOid } from "../../types/commonTypes.ts";
+import type { IPurchaseParams, IPurchaseResponse } from "../../types/purchaseTypes.ts";
+import { PurchaseSource } from "../../types/purchaseTypes.ts";
 import type { RequestHandler } from "express";
 import { ExportBundles, ExportFlavour } from "warframe-public-export-plus";
 

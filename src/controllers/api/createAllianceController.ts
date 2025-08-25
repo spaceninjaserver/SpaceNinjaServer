@@ -1,9 +1,9 @@
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { Alliance, AllianceMember, Guild, GuildMember } from "@/src/models/guildModel";
-import { getAllianceClient } from "@/src/services/guildService";
-import { getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { GuildPermission } from "@/src/types/guildTypes";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { Alliance, AllianceMember, Guild, GuildMember } from "../../models/guildModel.ts";
+import { getAllianceClient } from "../../services/guildService.ts";
+import { getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { GuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 
 export const createAllianceController: RequestHandler = async (req, res) => {

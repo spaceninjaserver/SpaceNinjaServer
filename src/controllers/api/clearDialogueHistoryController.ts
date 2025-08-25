@@ -1,5 +1,5 @@
-import { getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
+import { getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
 
 export const clearDialogueHistoryController: RequestHandler = async (req, res) => {

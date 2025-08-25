@@ -1,7 +1,7 @@
-import { toMongoDate } from "@/src/helpers/inventoryHelpers";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { getInventory, updateEntratiVault } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
+import { toMongoDate } from "../../helpers/inventoryHelpers.ts";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { getInventory, updateEntratiVault } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
 
 export const entratiLabConquestModeController: RequestHandler = async (req, res) => {

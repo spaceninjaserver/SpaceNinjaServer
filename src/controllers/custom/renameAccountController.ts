@@ -1,7 +1,7 @@
 import type { RequestHandler } from "express";
-import { getAccountForRequest, isAdministrator, isNameTaken } from "@/src/services/loginService";
-import { config } from "@/src/services/configService";
-import { saveConfig } from "@/src/services/configWriterService";
+import { getAccountForRequest, isAdministrator, isNameTaken } from "../../services/loginService.ts";
+import { config } from "../../services/configService.ts";
+import { saveConfig } from "../../services/configWriterService.ts";
 
 export const renameAccountController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);

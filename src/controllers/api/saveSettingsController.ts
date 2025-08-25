@@ -1,8 +1,8 @@
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { getInventory } from "@/src/services/inventoryService";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { getInventory } from "../../services/inventoryService.ts";
 import type { RequestHandler } from "express";
-import type { ISettings } from "@/src/types/inventoryTypes/inventoryTypes";
+import type { ISettings } from "../../types/inventoryTypes/inventoryTypes.ts";
 
 interface ISaveSettingsRequest {
     Settings: ISettings;

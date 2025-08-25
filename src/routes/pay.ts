@@ -1,7 +1,7 @@
 import express from "express";
 
-import { getSkuCatalogController } from "@/src/controllers/pay/getSkuCatalogController";
-import { steamPacksController } from "@/src/controllers/pay/steamPacksController";
+import { getSkuCatalogController } from "../controllers/pay/getSkuCatalogController.ts";
+import { steamPacksController } from "../controllers/pay/steamPacksController.ts";
 
 const payRouter = express.Router();
 

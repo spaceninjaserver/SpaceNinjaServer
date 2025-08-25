@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
-import { getSessionByID } from "@/src/managers/sessionManager";
-import { logger } from "@/src/utils/logger";
+import { getSessionByID } from "../../managers/sessionManager.ts";
+import { logger } from "../../utils/logger.ts";
 
 export const joinSessionController: RequestHandler = (req, res) => {
     const reqBody = JSON.parse(String(req.body)) as IJoinSessionRequest;

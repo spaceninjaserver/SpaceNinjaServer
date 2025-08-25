@@ -1,10 +1,10 @@
-import { version_compare } from "@/src/helpers/inventoryHelpers";
-import { Alliance, Guild, GuildMember } from "@/src/models/guildModel";
-import { hasGuildPermissionEx } from "@/src/services/guildService";
-import { getInventory } from "@/src/services/inventoryService";
-import { getAccountForRequest, getSuffixedName } from "@/src/services/loginService";
-import type { ILongMOTD } from "@/src/types/guildTypes";
-import { GuildPermission } from "@/src/types/guildTypes";
+import { version_compare } from "../../helpers/inventoryHelpers.ts";
+import { Alliance, Guild, GuildMember } from "../../models/guildModel.ts";
+import { hasGuildPermissionEx } from "../../services/guildService.ts";
+import { getInventory } from "../../services/inventoryService.ts";
+import { getAccountForRequest, getSuffixedName } from "../../services/loginService.ts";
+import type { ILongMOTD } from "../../types/guildTypes.ts";
+import { GuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 
 export const setGuildMotdController: RequestHandler = async (req, res) => {

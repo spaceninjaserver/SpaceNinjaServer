@@ -1,4 +1,4 @@
-import { getLeaderboard } from "@/src/services/leaderboardService";
+import { getLeaderboard } from "../../services/leaderboardService.ts";
 import type { RequestHandler } from "express";
 
 export const leaderboardController: RequestHandler = async (req, res) => {

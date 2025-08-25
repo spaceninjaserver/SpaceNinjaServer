@@ -1,8 +1,8 @@
-import { Alliance, AllianceMember, Guild, GuildMember } from "@/src/models/guildModel";
-import { getAccountForRequest } from "@/src/services/loginService";
-import { GuildPermission } from "@/src/types/guildTypes";
-import { parallelForeach } from "@/src/utils/async-utils";
-import { logger } from "@/src/utils/logger";
+import { Alliance, AllianceMember, Guild, GuildMember } from "../../models/guildModel.ts";
+import { getAccountForRequest } from "../../services/loginService.ts";
+import { GuildPermission } from "../../types/guildTypes.ts";
+import { parallelForeach } from "../../utils/async-utils.ts";
+import { logger } from "../../utils/logger.ts";
 import type { RequestHandler } from "express";
 
 export const divvyAllianceVaultController: RequestHandler = async (req, res) => {

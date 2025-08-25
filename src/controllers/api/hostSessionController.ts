@@ -1,10 +1,10 @@
 import type { RequestHandler } from "express";
-import { getAccountForRequest } from "@/src/services/loginService";
-import { createNewSession } from "@/src/managers/sessionManager";
-import { logger } from "@/src/utils/logger";
-import type { ISession } from "@/src/types/session";
+import { getAccountForRequest } from "../../services/loginService.ts";
+import { createNewSession } from "../../managers/sessionManager.ts";
+import { logger } from "../../utils/logger.ts";
+import type { ISession } from "../../types/session.ts";
 import { JSONParse } from "json-with-bigint";
-import { toOid2, version_compare } from "@/src/helpers/inventoryHelpers";
+import { toOid2, version_compare } from "../../helpers/inventoryHelpers.ts";
 
 const hostSessionController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);

@@ -1,6 +1,6 @@
-import { getPersonalRooms } from "@/src/services/personalRoomsService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { parseString } from "@/src/helpers/general";
+import { getPersonalRooms } from "../../services/personalRoomsService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { parseString } from "../../helpers/general.ts";
 import type { RequestHandler } from "express";
 import { Types } from "mongoose";
 

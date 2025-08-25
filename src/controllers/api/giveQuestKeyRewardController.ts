@@ -1,7 +1,7 @@
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { addItem, getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import type { IOid } from "@/src/types/commonTypes";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { addItem, getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import type { IOid } from "../../types/commonTypes.ts";
 import type { RequestHandler } from "express";
 
 export const giveQuestKeyRewardController: RequestHandler = async (req, res) => {

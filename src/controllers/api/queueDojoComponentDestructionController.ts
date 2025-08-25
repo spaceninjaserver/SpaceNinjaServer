@@ -1,8 +1,13 @@
-import { config } from "@/src/services/configService";
-import { getDojoClient, getGuildForRequestEx, hasAccessToDojo, hasGuildPermission } from "@/src/services/guildService";
-import { getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { GuildPermission } from "@/src/types/guildTypes";
+import { config } from "../../services/configService.ts";
+import {
+    getDojoClient,
+    getGuildForRequestEx,
+    hasAccessToDojo,
+    hasGuildPermission
+} from "../../services/guildService.ts";
+import { getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { GuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 
 export const queueDojoComponentDestructionController: RequestHandler = async (req, res) => {

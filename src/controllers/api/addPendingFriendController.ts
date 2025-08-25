@@ -1,11 +1,11 @@
-import { toMongoDate, toOid } from "@/src/helpers/inventoryHelpers";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { Friendship } from "@/src/models/friendModel";
-import { Account } from "@/src/models/loginModel";
-import { addInventoryDataToFriendInfo, areFriendsOfFriends } from "@/src/services/friendService";
-import { getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import type { IFriendInfo } from "@/src/types/friendTypes";
+import { toMongoDate, toOid } from "../../helpers/inventoryHelpers.ts";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { Friendship } from "../../models/friendModel.ts";
+import { Account } from "../../models/loginModel.ts";
+import { addInventoryDataToFriendInfo, areFriendsOfFriends } from "../../services/friendService.ts";
+import { getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import type { IFriendInfo } from "../../types/friendTypes.ts";
 import type { RequestHandler } from "express";
 
 export const addPendingFriendController: RequestHandler = async (req, res) => {

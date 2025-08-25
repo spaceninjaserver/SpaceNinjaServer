@@ -1,6 +1,6 @@
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { Account, Ignore } from "@/src/models/loginModel";
-import { getAccountForRequest } from "@/src/services/loginService";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { Account, Ignore } from "../../models/loginModel.ts";
+import { getAccountForRequest } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
 
 export const removeIgnoredUserController: RequestHandler = async (req, res) => {

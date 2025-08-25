@@ -1,10 +1,10 @@
-import { importInventory, importLoadOutPresets, importPersonalRooms } from "@/src/services/importService";
-import { getInventory } from "@/src/services/inventoryService";
-import { getLoadout } from "@/src/services/loadoutService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { getPersonalRooms } from "@/src/services/personalRoomsService";
-import type { IInventoryClient } from "@/src/types/inventoryTypes/inventoryTypes";
-import type { IGetShipResponse } from "@/src/types/personalRoomsTypes";
+import { importInventory, importLoadOutPresets, importPersonalRooms } from "../../services/importService.ts";
+import { getInventory } from "../../services/inventoryService.ts";
+import { getLoadout } from "../../services/loadoutService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getPersonalRooms } from "../../services/personalRoomsService.ts";
+import type { IInventoryClient } from "../../types/inventoryTypes/inventoryTypes.ts";
+import type { IGetShipResponse } from "../../types/personalRoomsTypes.ts";
 import type { RequestHandler } from "express";
 
 export const importController: RequestHandler = async (req, res) => {

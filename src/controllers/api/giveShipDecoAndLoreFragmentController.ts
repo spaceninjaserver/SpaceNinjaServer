@@ -1,8 +1,8 @@
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import { addLoreFragmentScans, addShipDecorations, getInventory } from "@/src/services/inventoryService";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import type { ITypeCount } from "@/src/types/commonTypes";
-import type { ILoreFragmentScan } from "@/src/types/inventoryTypes/inventoryTypes";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { addLoreFragmentScans, addShipDecorations, getInventory } from "../../services/inventoryService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import type { ITypeCount } from "../../types/commonTypes.ts";
+import type { ILoreFragmentScan } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { RequestHandler } from "express";
 
 export const giveShipDecoAndLoreFragmentController: RequestHandler = async (req, res) => {

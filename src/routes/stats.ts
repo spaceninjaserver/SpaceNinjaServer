@@ -1,7 +1,7 @@
 import express from "express";
-import { viewController } from "@/src/controllers/stats/viewController";
-import { uploadController } from "@/src/controllers/stats/uploadController";
-import { leaderboardController } from "@/src/controllers/stats/leaderboardController";
+import { viewController } from "../controllers/stats/viewController.ts";
+import { uploadController } from "../controllers/stats/uploadController.ts";
+import { leaderboardController } from "../controllers/stats/leaderboardController.ts";
 
 const statsRouter = express.Router();
 

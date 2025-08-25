@@ -1,10 +1,10 @@
 import type { RequestHandler } from "express";
-import { getAccountIdForRequest } from "@/src/services/loginService";
-import { addMiscItems, getInventory, updateCurrency } from "@/src/services/inventoryService";
-import type { IInventoryChanges } from "@/src/types/purchaseTypes";
-import type { IMiscItem } from "@/src/types/inventoryTypes/inventoryTypes";
-import { getJSONfromString } from "@/src/helpers/stringHelpers";
-import type { IVeiledRivenFingerprint } from "@/src/helpers/rivenHelper";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { addMiscItems, getInventory, updateCurrency } from "../../services/inventoryService.ts";
+import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
+import type { IMiscItem } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import type { IVeiledRivenFingerprint } from "../../helpers/rivenHelper.ts";
 
 export const completeRandomModChallengeController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
