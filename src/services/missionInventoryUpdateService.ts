@@ -801,6 +801,7 @@ export const addMissionInventoryUpdates = async (
                 // Duviri cave offers (generated with the duviri seed) change after completing one of its game modes (not when aborting).
                 if (inventoryUpdates.MissionStatus != "GS_QUIT") {
                     inventory.DuviriInfo!.Seed = generateRewardSeed();
+                    inventory.DuviriInfo!.NumCompletions += 1;
                 }
                 break;
             }
