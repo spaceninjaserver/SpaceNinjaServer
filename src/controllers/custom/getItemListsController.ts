@@ -21,8 +21,8 @@ import {
     ExportWarframes,
     ExportWeapons
 } from "warframe-public-export-plus";
-import allIncarnons from "../../../static/fixed_responses/allIncarnonList.json";
-import varzia from "../../../static/fixed_responses/worldState/varzia.json";
+import allIncarnons from "../../../static/fixed_responses/allIncarnonList.json" with { type: "json" };
+import varzia from "../../../static/fixed_responses/worldState/varzia.json" with { type: "json" };
 
 interface ListedItem {
     uniqueName: string;

@@ -33,7 +33,7 @@ import { Inbox } from "../models/inboxModel.ts";
 import type { IFusionTreasure } from "../types/inventoryTypes/inventoryTypes.ts";
 import type { IInventoryChanges } from "../types/purchaseTypes.ts";
 import { parallelForeach } from "../utils/async-utils.ts";
-import allDecoRecipes from "../../static/fixed_responses/allDecoRecipes.json";
+import allDecoRecipes from "../../static/fixed_responses/allDecoRecipes.json" with { type: "json" };
 import { createMessage } from "./inboxService.ts";
 import { addAccountDataToFriendInfo, addInventoryDataToFriendInfo } from "./friendService.ts";
 import type { ITypeCount } from "../types/commonTypes.ts";

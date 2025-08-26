@@ -1,4 +1,4 @@
-import randomRewards from "../../static/fixed_responses/loginRewards/randomRewards.json";
+import randomRewards from "../../static/fixed_responses/loginRewards/randomRewards.json" with { type: "json" };
 import type { IInventoryChanges } from "../types/purchaseTypes.ts";
 import type { TAccountDocument } from "./loginService.ts";
 import { mixSeeds, SRng } from "./rngService.ts";

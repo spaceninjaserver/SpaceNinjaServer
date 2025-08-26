@@ -1,22 +1,23 @@
 import type http from "http";
 import type https from "https";
-import ws from "ws";
+import type { default as ws } from "ws";
+import { WebSocketServer } from "ws";
 import { Account } from "../models/loginModel.ts";
 import { createAccount, createNonce, getUsernameFromEmail, isCorrectPassword } from "./loginService.ts";
 import type { IDatabaseAccountJson } from "../types/loginTypes.ts";
 import type { HydratedDocument } from "mongoose";
 import { logError } from "../utils/logger.ts";
 
-let wsServer: ws.Server | undefined;
-let wssServer: ws.Server | undefined;
+let wsServer: WebSocketServer | undefined;
+let wssServer: WebSocketServer | undefined;
 
 export const startWsServer = (httpServer: http.Server): void => {
-    wsServer = new ws.Server({ server: httpServer });
+    wsServer = new WebSocketServer({ server: httpServer });
     wsServer.on("connection", wsOnConnect);
 };
 
 export const startWssServer = (httpsServer: https.Server): void => {
-    wssServer = new ws.Server({ server: httpsServer });
+    wssServer = new WebSocketServer({ server: httpsServer });
     wssServer.on("connection", wsOnConnect);
 };
 

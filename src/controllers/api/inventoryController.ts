@@ -3,7 +3,7 @@ import { getAccountForRequest } from "../../services/loginService.ts";
 import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/inventoryModel.ts";
 import { Inventory } from "../../models/inventoryModels/inventoryModel.ts";
 import { config } from "../../services/configService.ts";
-import allDialogue from "../../../static/fixed_responses/allDialogue.json";
+import allDialogue from "../../../static/fixed_responses/allDialogue.json" with { type: "json" };
 import type { ILoadoutDatabase } from "../../types/saveLoadoutTypes.ts";
 import type { IInventoryClient, IShipInventory } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { equipmentKeys } from "../../types/inventoryTypes/inventoryTypes.ts";

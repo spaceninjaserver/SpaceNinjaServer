@@ -72,7 +72,7 @@ import {
 } from "../helpers/inventoryHelpers.ts";
 import { addQuestKey, completeQuest } from "./questService.ts";
 import { handleBundleAcqusition } from "./purchaseService.ts";
-import libraryDailyTasks from "../../static/fixed_responses/libraryDailyTasks.json";
+import libraryDailyTasks from "../../static/fixed_responses/libraryDailyTasks.json" with { type: "json" };
 import { generateRewardSeed, getRandomElement, getRandomInt, getRandomWeightedReward, SRng } from "./rngService.ts";
 import type { IMessageCreationTemplate } from "./inboxService.ts";
 import { createMessage } from "./inboxService.ts";

@@ -10,7 +10,7 @@ import type { Types } from "mongoose";
 import { ExportKeys } from "warframe-public-export-plus";
 import { addFixedLevelRewards } from "./missionInventoryUpdateService.ts";
 import type { IInventoryChanges } from "../types/purchaseTypes.ts";
-import questCompletionItems from "../../static/fixed_responses/questCompletionRewards.json";
+import questCompletionItems from "../../static/fixed_responses/questCompletionRewards.json" with { type: "json" };
 import type { ITypeCount } from "../types/commonTypes.ts";
 
 export interface IUpdateQuestRequest {

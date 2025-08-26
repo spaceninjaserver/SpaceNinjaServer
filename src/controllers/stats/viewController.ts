@@ -1,7 +1,7 @@
 import type { RequestHandler } from "express";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { config } from "../../services/configService.ts";
-import allScans from "../../../static/fixed_responses/allScans.json";
+import allScans from "../../../static/fixed_responses/allScans.json" with { type: "json" };
 import { ExportEnemies } from "warframe-public-export-plus";
 import { getInventory } from "../../services/inventoryService.ts";
 import { getStats } from "../../services/statsService.ts";

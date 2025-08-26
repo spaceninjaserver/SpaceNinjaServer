@@ -39,7 +39,7 @@ function run(changedFile) {
         buildproc = undefined;
         if (code === 0) {
             console.log(`${process.versions.bun ? "Verified" : "Built"} in ${Date.now() - thisbuildstart} ms`);
-            runproc = spawn("npm", ["run", process.versions.bun ? "bun-run" : "start", "--", ...args], spawnopts);
+            runproc = spawn("npm", ["run", process.versions.bun ? "raw:bun" : "start", "--", ...args], spawnopts);
             runproc.on("exit", () => {
                 runproc = undefined;
             });

@@ -4,7 +4,7 @@ import { config, configPath, configRemovedOptionsKeys, loadConfig, syncConfigWit
 import { saveConfig, shouldReloadConfig } from "./configWriterService.ts";
 import { getWebPorts, startWebServer, stopWebServer } from "./webService.ts";
 import { sendWsBroadcast } from "./wsService.ts";
-import varzia from "../../static/fixed_responses/worldState/varzia.json";
+import varzia from "../../static/fixed_responses/worldState/varzia.json" with { type: "json" };
 
 chokidar.watch(configPath).on("change", () => {
     if (shouldReloadConfig()) {

@@ -53,10 +53,10 @@ import type { IMissionCredits, IMissionReward } from "../types/missionTypes.ts";
 import { crackRelic } from "../helpers/relicHelper.ts";
 import type { IMessageCreationTemplate } from "./inboxService.ts";
 import { createMessage } from "./inboxService.ts";
-import kuriaMessage50 from "../../static/fixed_responses/kuriaMessages/fiftyPercent.json";
-import kuriaMessage75 from "../../static/fixed_responses/kuriaMessages/seventyFivePercent.json";
-import kuriaMessage100 from "../../static/fixed_responses/kuriaMessages/oneHundredPercent.json";
-import conservationAnimals from "../../static/fixed_responses/conservationAnimals.json";
+import kuriaMessage50 from "../../static/fixed_responses/kuriaMessages/fiftyPercent.json" with { type: "json" };
+import kuriaMessage75 from "../../static/fixed_responses/kuriaMessages/seventyFivePercent.json" with { type: "json" };
+import kuriaMessage100 from "../../static/fixed_responses/kuriaMessages/oneHundredPercent.json" with { type: "json" };
+import conservationAnimals from "../../static/fixed_responses/conservationAnimals.json" with { type: "json" };
 import {
     generateNemesisProfile,
     getInfestedLichItemRewards,
@@ -76,7 +76,7 @@ import {
     pushClassicBounties
 } from "./worldStateService.ts";
 import { config } from "./configService.ts";
-import libraryDailyTasks from "../../static/fixed_responses/libraryDailyTasks.json";
+import libraryDailyTasks from "../../static/fixed_responses/libraryDailyTasks.json" with { type: "json" };
 import type { IGoal, ISyndicateMissionInfo } from "../types/worldStateTypes.ts";
 import { fromOid } from "../helpers/inventoryHelpers.ts";
 import type { TAccountDocument } from "./loginService.ts";

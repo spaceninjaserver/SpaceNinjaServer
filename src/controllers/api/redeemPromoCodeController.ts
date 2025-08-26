@@ -1,6 +1,6 @@
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import type { RequestHandler } from "express";
-import glyphCodes from "../../../static/fixed_responses/glyphsCodes.json";
+import glyphCodes from "../../../static/fixed_responses/glyphsCodes.json" with { type: "json" };
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { addItem, getInventory } from "../../services/inventoryService.ts";
 
