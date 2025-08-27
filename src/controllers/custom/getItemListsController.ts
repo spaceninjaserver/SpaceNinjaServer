@@ -64,9 +64,9 @@ interface ItemLists {
 
 const relicQualitySuffixes: Record<TRelicQuality, string> = {
     VPQ_BRONZE: "",
-    VPQ_SILVER: " [Flawless]",
-    VPQ_GOLD: " [Radiant]",
-    VPQ_PLATINUM: " [Exceptional]"
+    VPQ_SILVER: " [Exceptional]",
+    VPQ_GOLD: " [Flawless]",
+    VPQ_PLATINUM: " [Radiant]"
 };
 
 /*const toTitleCase = (str: string): string => {
