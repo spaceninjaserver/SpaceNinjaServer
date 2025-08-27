@@ -1417,9 +1417,12 @@ export const addMissionRewards = async (
 
             if (inventory.Nemesis.Faction == "FC_INFESTATION") {
                 inventory.Nemesis.MissionCount += 1;
+                inventory.Nemesis.HenchmenKilled = Math.min(inventory.Nemesis.HenchmenKilled + 5, 95); // 5 progress per mission until 95
 
                 inventoryChanges.Nemesis.MissionCount ??= 0;
                 inventoryChanges.Nemesis.MissionCount += 1;
+                inventoryChanges.Nemesis.HenchmenKilled ??= 0;
+                inventoryChanges.Nemesis.HenchmenKilled = inventory.Nemesis.HenchmenKilled;
             }
 
             inventoryChanges.Nemesis.InfNodes = inventory.Nemesis.InfNodes;
