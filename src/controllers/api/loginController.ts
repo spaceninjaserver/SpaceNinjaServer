@@ -140,7 +140,11 @@ const createLoginResponse = (
         resp.MatchmakingBuildId = buildConfig.matchmakingBuildId;
     }
     if (version_compare(buildLabel, "2023.04.25.23.40") >= 0) {
-        resp.platformCDNs = [`${myUrlBase}/`];
+        if (version_compare(buildLabel, "2025.08.26.09.49") >= 0) {
+            resp.platformCDNs = [`${myUrlBase}/dynamic/`];
+        } else {
+            resp.platformCDNs = [`${myUrlBase}/`];
+        }
     }
     return resp;
 };

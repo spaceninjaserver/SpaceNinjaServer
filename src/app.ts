@@ -13,8 +13,6 @@ import { payRouter } from "./routes/pay.ts";
 import { statsRouter } from "./routes/stats.ts";
 import { webuiRouter } from "./routes/webui.ts";
 
-import { worldStateController } from "./controllers/dynamic/worldStateController.ts";
-
 const app = express();
 
 app.use((req, _res, next) => {
@@ -46,9 +44,6 @@ app.use("/:id/dynamic", dynamicController);
 app.use("/pay", payRouter);
 app.use("/stats", statsRouter);
 app.use("/", webuiRouter);
-
-// U39.1+ gets worldState from that location
-app.get("/worldState.php", worldStateController);
 
 app.use(unknownEndpointHandler);
 app.use(errorHandler);
