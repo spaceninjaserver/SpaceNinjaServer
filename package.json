@@ -28,11 +28,6 @@
   "license": "GNU",
   "type": "module",
   "dependencies": {
-    "@types/express": "^5",
-    "@types/morgan": "^1.9.9",
-    "@types/websocket": "^1.0.10",
-    "@types/ws": "^8.18.1",
-    "@typescript/native-preview": "^7.0.0-dev.20250625.1",
     "chokidar": "^4.0.3",
     "crc-32": "^1.2.2",
     "express": "^5",
@@ -40,13 +35,20 @@
     "mongoose": "^8.11.0",
     "morgan": "^1.10.0",
     "ncp": "^2.0.0",
-    "typescript": "^5.7",
     "undici": "^7.10.0",
     "warframe-public-export-plus": "^0.5.83",
     "warframe-riven-info": "^0.1.2",
     "winston": "^3.17.0",
     "winston-daily-rotate-file": "^5.0.0",
     "ws": "^8.18.2"
+  },
+  "optionalDependencies": {
+    "@types/express": "^5",
+    "@types/morgan": "^1.9.9",
+    "@types/websocket": "^1.0.10",
+    "@types/ws": "^8.18.1",
+    "@typescript/native-preview": "^7.0.0-dev.20250625.1",
+    "typescript": "^5.7"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^8.28.0",
