@@ -23,7 +23,7 @@
     "prettier": "prettier --write .",
     "update-translations": "cd scripts && node update-translations.cjs",
     "fix-imports": "cd scripts && node fix-imports.cjs",
-    "fix": "npm run update-translations && npm run fix-imports && npm run prettier"
+    "fix": "npm run update-translations && npm run fix-imports && npm run lint:fix"
   },
   "license": "GNU",
   "type": "module",
