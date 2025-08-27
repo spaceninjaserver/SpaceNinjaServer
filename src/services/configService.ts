@@ -27,8 +27,6 @@ export interface IConfig extends IConfigRemovedOptions {
     unlockAllCapturaScenes?: boolean;
     unlockAllDecoRecipes?: boolean;
     fullyStockedVendors?: boolean;
-    baroAlwaysAvailable?: boolean;
-    baroFullyStocked?: boolean;
     unlockAllProfitTakerStages?: boolean;
     skipClanKeyCrafting?: boolean;
     noDojoRoomBuildStage?: boolean;
@@ -57,6 +55,9 @@ export interface IConfig extends IConfigRemovedOptions {
         resourceBoost?: boolean;
         tennoLiveRelay?: boolean;
         baroTennoConRelay?: boolean;
+        baroAlwaysAvailable?: boolean;
+        baroFullyStocked?: boolean;
+        varziaFullyStocked?: boolean;
         wolfHunt?: boolean;
         orphixVenom?: boolean;
         longShadow?: boolean;
@@ -83,10 +84,9 @@ export interface IConfig extends IConfigRemovedOptions {
         duviriOverride?: string;
         nightwaveOverride?: string;
         allTheFissures?: string;
+        varziaOverride?: string;
         circuitGameModes?: string[];
         darvoStockMultiplier?: number;
-        varziaOverride?: string;
-        varziaFullyStocked?: boolean;
     };
     dev?: {
         keepVendorsExpired?: boolean;
@@ -120,7 +120,9 @@ export const configRemovedOptionsKeys = [
     "syndicateMissionsRepeatable",
     "instantFinishRivenChallenge",
     "instantResourceExtractorDrones",
-    "noResourceExtractorDronesDamage"
+    "noResourceExtractorDronesDamage",
+    "baroAlwaysAvailable",
+    "baroFullyStocked"
 ] as const;
 
 type IConfigRemovedOptions = {

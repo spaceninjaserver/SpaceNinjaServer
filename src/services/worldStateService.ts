@@ -2933,7 +2933,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     {
         const baroIndex = Math.trunc((Date.now() - 910800000) / (unixTimesInMs.day * 14));
         const baroStart = baroIndex * (unixTimesInMs.day * 14) + 910800000;
-        const baroActualStart = baroStart + unixTimesInMs.day * (config.baroAlwaysAvailable ? 0 : 12);
+        const baroActualStart = baroStart + unixTimesInMs.day * (config.worldState?.baroAlwaysAvailable ? 0 : 12);
         const baroEnd = baroStart + unixTimesInMs.day * 14;
         const baroNode = ["EarthHUB", "MercuryHUB", "SaturnHUB", "PlutoHUB"][baroIndex % 4];
         const vt: IVoidTrader = {
@@ -2946,7 +2946,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         };
         worldState.VoidTraders.push(vt);
         if (isBeforeNextExpectedWorldStateRefresh(timeMs, baroActualStart)) {
-            if (config.baroFullyStocked) {
+            if (config.worldState?.baroFullyStocked) {
                 fullyStockBaro(vt);
             } else {
                 const rng = new SRng(new SRng(baroIndex).randomInt(0, 100_000));

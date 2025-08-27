@@ -36,7 +36,7 @@ export const createNewEventMessages = async (req: Request): Promise<void> => {
     // Baro
     const baroIndex = Math.trunc((Date.now() - 910800000) / (unixTimesInMs.day * 14));
     const baroStart = baroIndex * (unixTimesInMs.day * 14) + 910800000;
-    const baroActualStart = baroStart + unixTimesInMs.day * (config.baroAlwaysAvailable ? 0 : 12);
+    const baroActualStart = baroStart + unixTimesInMs.day * (config.worldState?.baroAlwaysAvailable ? 0 : 12);
     if (Date.now() >= baroActualStart && account.LatestEventMessageDate.getTime() < baroActualStart) {
         newEventMessages.push({
             sndr: "/Lotus/Language/G1Quests/VoidTraderName",

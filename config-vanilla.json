@@ -19,8 +19,6 @@
   "unlockAllSkins": false,
   "unlockAllCapturaScenes": false,
   "fullyStockedVendors": false,
-  "baroAlwaysAvailable": false,
-  "baroFullyStocked": false,
   "unlockAllProfitTakerStages": false,
   "skipClanKeyCrafting": false,
   "noDojoRoomBuildStage": false,
@@ -45,6 +43,10 @@
     "affinityBoost": false,
     "resourceBoost": false,
     "tennoLiveRelay": false,
+    "baroTennoConRelay": false,
+    "baroAlwaysAvailable": false,
+    "baroFullyStocked": false,
+    "varziaFullyStocked": false,
     "wolfHunt": false,
     "orphixVenom": false,
     "longShadow": false,
@@ -71,10 +73,9 @@
     "duviriOverride": "",
     "nightwaveOverride": "",
     "allTheFissures": "",
-    "circuitGameModes": null,
-    "darvoStockMultiplier": 1,
     "varziaOverride": "",
-    "varziaFullyStocked": false
+    "circuitGameModes": null,
+    "darvoStockMultiplier": 1
   },
   "dev": {
     "keepVendorsExpired": false
