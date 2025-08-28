@@ -162,6 +162,7 @@ import { updateQuestController } from "../controllers/api/updateQuestController.
 import { updateSessionGetController, updateSessionPostController } from "../controllers/api/updateSessionController.ts";
 import { updateSongChallengeController } from "../controllers/api/updateSongChallengeController.ts";
 import { updateThemeController } from "../controllers/api/updateThemeController.ts";
+import { upgradeOperatorController } from "../controllers/api/upgradeOperatorController.ts";
 import { upgradesController } from "../controllers/api/upgradesController.ts";
 import { valenceSwapController } from "../controllers/api/valenceSwapController.ts";
 import { wishlistController } from "../controllers/api/wishlistController.ts";
@@ -229,6 +230,7 @@ apiRouter.get("/startLibraryPersonalTarget.php", startLibraryPersonalTargetContr
 apiRouter.get("/surveys.php", surveysController);
 apiRouter.get("/trading.php", tradingController);
 apiRouter.get("/updateSession.php", updateSessionGetController);
+apiRouter.get("/upgradeOperator.php", upgradeOperatorController);
 
 // post
 apiRouter.post("/abortDojoComponent.php", abortDojoComponentController);

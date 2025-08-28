@@ -1564,6 +1564,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         OperatorLoadOuts: [operatorConfigSchema],
         //Drifter
         AdultOperatorLoadOuts: [operatorConfigSchema],
+        OperatorCustomizationSlotPurchases: Number,
         // Kahl
         KahlLoadOuts: [operatorConfigSchema],
 

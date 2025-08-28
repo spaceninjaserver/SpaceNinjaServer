@@ -374,6 +374,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     CrewMembers: ICrewMemberClient[];
     LotusCustomization?: ILotusCustomization;
     UseAdultOperatorLoadout?: boolean;
+    OperatorCustomizationSlotPurchases?: number;
     NemesisAbandonedRewards: string[];
     LastInventorySync?: IOid;
     NextRefill?: IMongoDate;
