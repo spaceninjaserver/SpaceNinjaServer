@@ -81,7 +81,7 @@ export const crewShipFusionController: RequestHandler = async (req, res) => {
             const newFval = (newPerc - rangeA[0]) / (rangeA[1] - rangeA[0]);
             buffA.Value = Math.trunc(newFval * 0x3fffffff);
         }
-        if (inferiorFingerprint.SubroutineIndex) {
+        if (inferiorFingerprint.SubroutineIndex !== undefined) {
             const useSuperiorSubroutine = tierA < tierB ? !payload.UseSubroutineA : payload.UseSubroutineA;
             if (!useSuperiorSubroutine) {
                 fingerprint.SubroutineIndex = inferiorFingerprint.SubroutineIndex;
