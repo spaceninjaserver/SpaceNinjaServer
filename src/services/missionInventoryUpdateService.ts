@@ -2197,7 +2197,7 @@ function getRandomMissionDrops(
         }
     }
 
-    if (config.missionsCanGiveAllRelics) {
+    if (inventory.missionsCanGiveAllRelics) {
         for (const drop of drops) {
             const itemType = fromStoreItem(drop.StoreItem);
             if (itemType in ExportRelics) {

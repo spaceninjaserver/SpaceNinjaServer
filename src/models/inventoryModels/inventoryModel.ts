@@ -1428,6 +1428,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         accountOwnerId: Schema.Types.ObjectId,
 
         // SNS account cheats
+        skipAllDialogue: Boolean,
         dontSubtractPurchaseCreditCost: Boolean,
         dontSubtractPurchasePlatinumCost: Boolean,
         dontSubtractPurchaseItemCost: Boolean,
@@ -1455,6 +1456,11 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         claimingBlueprintRefundsIngredients: Boolean,
         instantResourceExtractorDrones: Boolean,
         noResourceExtractorDronesDamage: Boolean,
+        missionsCanGiveAllRelics: Boolean,
+        exceptionalRelicsAlwaysGiveBronzeReward: Boolean,
+        flawlessRelicsAlwaysGiveSilverReward: Boolean,
+        radiantRelicsAlwaysGiveGoldReward: Boolean,
+        disableDailyTribute: Boolean,
 
         SubscribedToEmails: { type: Number, default: 0 },
         SubscribedToEmailsPersonalized: { type: Number, default: 0 },

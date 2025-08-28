@@ -648,6 +648,10 @@
                             <h5 class="card-header" data-loc="cheats_account"></h5>
                             <div class="card-body" id="account-cheats">
                                 <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="skipAllDialogue" />
+                                    <label class="form-check-label" for="skipAllDialogue" data-loc="cheats_skipAllDialogue"></label>
+                                </div>
+                                <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="dontSubtractPurchaseCreditCost" />
                                     <label class="form-check-label" for="dontSubtractPurchaseCreditCost" data-loc="cheats_dontSubtractPurchaseCreditCost"></label>
                                 </div>
@@ -755,6 +759,30 @@
                                     <input class="form-check-input" type="checkbox" id="claimingBlueprintRefundsIngredients" />
                                     <label class="form-check-label" for="claimingBlueprintRefundsIngredients" data-loc="cheats_claimingBlueprintRefundsIngredients"></label>
                                 </div>
+                                 <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="missionsCanGiveAllRelics" />
+                                    <label class="form-check-label" for="missionsCanGiveAllRelics" data-loc="cheats_missionsCanGiveAllRelics"></label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="exceptionalRelicsAlwaysGiveBronzeReward" />
+                                    <label class="form-check-label" for="exceptionalRelicsAlwaysGiveBronzeReward" data-loc="cheats_exceptionalRelicsAlwaysGiveBronzeReward"></label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="flawlessRelicsAlwaysGiveSilverReward" />
+                                    <label class="form-check-label" for="flawlessRelicsAlwaysGiveSilverReward" data-loc="cheats_flawlessRelicsAlwaysGiveSilverReward"></label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="radiantRelicsAlwaysGiveGoldReward" />
+                                    <label class="form-check-label" for="radiantRelicsAlwaysGiveGoldReward" data-loc="cheats_radiantRelicsAlwaysGiveGoldReward"></label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="unlockAllSimarisResearchEntries" />
+                                    <label class="form-check-label" for="unlockAllSimarisResearchEntries" data-loc="cheats_unlockAllSimarisResearchEntries"></label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="disableDailyTribute" />
+                                    <label class="form-check-label" for="disableDailyTribute" data-loc="cheats_disableDailyTribute"></label>
+                                </div>
                                 <div class="mt-2 mb-2 d-flex flex-wrap gap-2">
                                     <button class="btn btn-primary" onclick="debounce(doUnlockAllMissions);" data-loc="cheats_unlockAllMissions"></button>
                                     <button class="btn btn-primary" onclick="debounce(markAllAsRead);" data-loc="cheats_markAllAsRead"></button>
@@ -785,10 +813,6 @@
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="skipTutorial" />
                                         <label class="form-check-label" for="skipTutorial" data-loc="cheats_skipTutorial"></label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="skipAllDialogue" />
-                                        <label class="form-check-label" for="skipAllDialogue" data-loc="cheats_skipAllDialogue"></label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="unlockAllScans" />
@@ -853,30 +877,6 @@
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="fastClanAscension" />
                                         <label class="form-check-label" for="fastClanAscension" data-loc="cheats_fastClanAscension"></label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="missionsCanGiveAllRelics" />
-                                        <label class="form-check-label" for="missionsCanGiveAllRelics" data-loc="cheats_missionsCanGiveAllRelics"></label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="exceptionalRelicsAlwaysGiveBronzeReward" />
-                                        <label class="form-check-label" for="exceptionalRelicsAlwaysGiveBronzeReward" data-loc="cheats_exceptionalRelicsAlwaysGiveBronzeReward"></label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="flawlessRelicsAlwaysGiveSilverReward" />
-                                        <label class="form-check-label" for="flawlessRelicsAlwaysGiveSilverReward" data-loc="cheats_flawlessRelicsAlwaysGiveSilverReward"></label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="radiantRelicsAlwaysGiveGoldReward" />
-                                        <label class="form-check-label" for="radiantRelicsAlwaysGiveGoldReward" data-loc="cheats_radiantRelicsAlwaysGiveGoldReward"></label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="unlockAllSimarisResearchEntries" />
-                                        <label class="form-check-label" for="unlockAllSimarisResearchEntries" data-loc="cheats_unlockAllSimarisResearchEntries"></label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="disableDailyTribute" />
-                                        <label class="form-check-label" for="disableDailyTribute" data-loc="cheats_disableDailyTribute"></label>
                                     </div>
                                     <form class="form-group mt-2" onsubmit="doSaveConfigInt('spoofMasteryRank'); return false;">
                                         <label class="form-label" for="spoofMasteryRank" data-loc="cheats_spoofMasteryRank"></label>

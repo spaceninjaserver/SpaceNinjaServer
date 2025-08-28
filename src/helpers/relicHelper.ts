@@ -17,11 +17,11 @@ export const crackRelic = async (
 ): Promise<IRngResult> => {
     const relic = ExportRelics[participant.VoidProjection];
     let weights = refinementToWeights[relic.quality];
-    if (relic.quality == "VPQ_SILVER" && config.exceptionalRelicsAlwaysGiveBronzeReward) {
+    if (relic.quality == "VPQ_SILVER" && inventory.exceptionalRelicsAlwaysGiveBronzeReward) {
         weights = { COMMON: 1, UNCOMMON: 0, RARE: 0, LEGENDARY: 0 };
-    } else if (relic.quality == "VPQ_GOLD" && config.flawlessRelicsAlwaysGiveSilverReward) {
+    } else if (relic.quality == "VPQ_GOLD" && inventory.flawlessRelicsAlwaysGiveSilverReward) {
         weights = { COMMON: 0, UNCOMMON: 1, RARE: 0, LEGENDARY: 0 };
-    } else if (relic.quality == "VPQ_PLATINUM" && config.radiantRelicsAlwaysGiveGoldReward) {
+    } else if (relic.quality == "VPQ_PLATINUM" && inventory.radiantRelicsAlwaysGiveGoldReward) {
         weights = { COMMON: 0, UNCOMMON: 0, RARE: 1, LEGENDARY: 0 };
     }
     logger.debug(`opening a relic of quality ${relic.quality}; rarity weights are`, weights);

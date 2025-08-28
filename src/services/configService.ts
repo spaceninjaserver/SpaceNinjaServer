@@ -18,7 +18,6 @@ export interface IConfig extends IConfigRemovedOptions {
     administratorNames?: string[];
     autoCreateAccount?: boolean;
     skipTutorial?: boolean;
-    skipAllDialogue?: boolean;
     unlockAllScans?: boolean;
     unlockAllShipFeatures?: boolean;
     unlockAllShipDecorations?: boolean;
@@ -35,12 +34,7 @@ export interface IConfig extends IConfigRemovedOptions {
     noDojoResearchCosts?: boolean;
     noDojoResearchTime?: boolean;
     fastClanAscension?: boolean;
-    missionsCanGiveAllRelics?: boolean;
-    exceptionalRelicsAlwaysGiveBronzeReward?: boolean;
-    flawlessRelicsAlwaysGiveSilverReward?: boolean;
-    radiantRelicsAlwaysGiveGoldReward?: boolean;
     unlockAllSimarisResearchEntries?: boolean;
-    disableDailyTribute?: boolean;
     spoofMasteryRank?: number;
     relicRewardItemCountMultiplier?: number;
     nightwaveStandingMultiplier?: number;
@@ -94,6 +88,7 @@ export interface IConfig extends IConfigRemovedOptions {
 }
 
 export const configRemovedOptionsKeys = [
+    "skipAllDialogue",
     "infiniteCredits",
     "infinitePlatinum",
     "infiniteEndo",
@@ -122,7 +117,12 @@ export const configRemovedOptionsKeys = [
     "instantResourceExtractorDrones",
     "noResourceExtractorDronesDamage",
     "baroAlwaysAvailable",
-    "baroFullyStocked"
+    "baroFullyStocked",
+    "missionsCanGiveAllRelics",
+    "exceptionalRelicsAlwaysGiveBronzeReward",
+    "flawlessRelicsAlwaysGiveSilverReward",
+    "radiantRelicsAlwaysGiveGoldReward",
+    "disableDailyTribute"
 ] as const;
 
 type IConfigRemovedOptions = {

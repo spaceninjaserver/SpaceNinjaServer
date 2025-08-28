@@ -306,7 +306,7 @@ export const getInventoryResponse = async (
         inventoryResponse.PrimeTokens = 999999999;
     }
 
-    if (config.skipAllDialogue) {
+    if (inventory.skipAllDialogue) {
         inventoryResponse.TauntHistory = [
             {
                 node: "TreasureTutorial",

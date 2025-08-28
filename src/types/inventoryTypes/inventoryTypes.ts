@@ -21,6 +21,7 @@ export type InventoryDatabaseEquipment = {
 
 // Fields specific to SNS
 export interface IAccountCheats {
+    skipAllDialogue?: boolean;
     dontSubtractPurchaseCreditCost?: boolean;
     dontSubtractPurchasePlatinumCost?: boolean;
     dontSubtractPurchaseItemCost?: boolean;
@@ -48,6 +49,11 @@ export interface IAccountCheats {
     claimingBlueprintRefundsIngredients?: boolean;
     instantResourceExtractorDrones?: boolean;
     noResourceExtractorDronesDamage?: boolean;
+    missionsCanGiveAllRelics?: boolean;
+    exceptionalRelicsAlwaysGiveBronzeReward?: boolean;
+    flawlessRelicsAlwaysGiveSilverReward?: boolean;
+    radiantRelicsAlwaysGiveGoldReward?: boolean;
+    disableDailyTribute?: boolean;
 }
 
 export interface IInventoryDatabase
