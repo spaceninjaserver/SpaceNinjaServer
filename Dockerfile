@@ -5,8 +5,7 @@ RUN apk add --no-cache bash jq
 COPY . /app
 WORKDIR /app
 
-RUN npm i --omit=dev
-RUN npm run build
+RUN npm i --omit=dev --omit=optional
 RUN date '+%d %B %Y' > BUILD_DATE
 
 ENTRYPOINT ["/app/docker-entrypoint.sh"]
