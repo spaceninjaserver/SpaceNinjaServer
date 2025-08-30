@@ -33,7 +33,6 @@ export interface IConfig {
     noDojoResearchCosts?: boolean;
     noDojoResearchTime?: boolean;
     fastClanAscension?: boolean;
-    unlockAllSimarisResearchEntries?: boolean;
     spoofMasteryRank?: number;
     relicRewardItemCountMultiplier?: number;
     nightwaveStandingMultiplier?: number;
@@ -105,6 +104,7 @@ export const configRemovedOptionsKeys = [
     "unlockExilusEverywhere",
     "unlockArcanesEverywhere",
     "unlockAllProfitTakerStages",
+    "unlockAllSimarisResearchEntries",
     "noDailyStandingLimits",
     "noDailyFocusLimit",
     "noArgonCrystalDecay",
