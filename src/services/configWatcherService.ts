@@ -1,6 +1,13 @@
 import chokidar from "chokidar";
 import { logger } from "../utils/logger.ts";
-import { config, configPath, configRemovedOptionsKeys, loadConfig, syncConfigWithDatabase } from "./configService.ts";
+import {
+    config,
+    configPath,
+    configRemovedOptionsKeys,
+    loadConfig,
+    syncConfigWithDatabase,
+    type IConfig
+} from "./configService.ts";
 import { saveConfig, shouldReloadConfig } from "./configWriterService.ts";
 import { getWebPorts, startWebServer, stopWebServer } from "./webService.ts";
 import { sendWsBroadcast } from "./wsService.ts";
@@ -35,9 +42,11 @@ chokidar.watch(configPath).on("change", () => {
 export const validateConfig = (): void => {
     let modified = false;
     for (const key of configRemovedOptionsKeys) {
-        if (config[key] !== undefined) {
-            logger.debug(`Spotted removed option ${key} with value ${config[key]} in config.json.`);
-            delete config[key];
+        if (config[key as keyof IConfig] !== undefined) {
+            logger.debug(
+                `Spotted removed option ${key} with value ${String(config[key as keyof IConfig])} in config.json.`
+            );
+            delete config[key as keyof IConfig];
             modified = true;
         }
     }

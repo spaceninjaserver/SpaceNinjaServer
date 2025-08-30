@@ -4,7 +4,7 @@ import { repoDir } from "../helpers/pathHelper.ts";
 import { args } from "../helpers/commandLineArguments.ts";
 import { Inbox } from "../models/inboxModel.ts";
 
-export interface IConfig extends IConfigRemovedOptions {
+export interface IConfig {
     mongodbUrl: string;
     logger: {
         files: boolean;
@@ -123,11 +123,7 @@ export const configRemovedOptionsKeys = [
     "flawlessRelicsAlwaysGiveSilverReward",
     "radiantRelicsAlwaysGiveGoldReward",
     "disableDailyTribute"
-] as const;
-
-type IConfigRemovedOptions = {
-    [K in (typeof configRemovedOptionsKeys)[number]]?: boolean;
-};
+];
 
 export const configPath = path.join(repoDir, args.configPath ?? "config.json");
 
