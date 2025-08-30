@@ -238,6 +238,7 @@ dict = {
     cheats_changeSupportedSyndicate: `Unterstütztes Syndikat`,
     cheats_changeButton: `Ändern`,
     cheats_markAllAsRead: `Posteingang als gelesen markieren`,
+    cheats_finishInvasionsInOneMission: `[UNTRANSLATED] Finish Invasions in One Mission`,
 
     worldState: `Weltstatus`,
     worldState_creditBoost: `Event Booster: Credit`,

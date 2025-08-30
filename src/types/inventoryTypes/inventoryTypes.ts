@@ -28,6 +28,7 @@ export interface IAccountCheats {
     dontSubtractPurchaseStandingCost?: boolean;
     dontSubtractVoidTraces?: boolean;
     dontSubtractConsumables?: boolean;
+    finishInvasionsInOneMission?: boolean;
     infiniteCredits?: boolean;
     infinitePlatinum?: boolean;
     infiniteEndo?: boolean;

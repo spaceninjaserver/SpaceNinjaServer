@@ -238,6 +238,7 @@ dict = {
     cheats_changeSupportedSyndicate: `Поддерживаемый синдикат`,
     cheats_changeButton: `Изменить`,
     cheats_markAllAsRead: `Пометить все входящие как прочитанные`,
+    cheats_finishInvasionsInOneMission: `[UNTRANSLATED] Finish Invasions in One Mission`,
 
     worldState: `Состояние мира`,
     worldState_creditBoost: `Глобальный бустер Кредитов`,

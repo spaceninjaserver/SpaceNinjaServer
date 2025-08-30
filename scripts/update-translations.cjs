@@ -31,7 +31,7 @@ fs.readdirSync("../static/webui/translations").forEach(file => {
             const strings = extractStrings(line);
             if (Object.keys(strings).length > 0) {
                 Object.entries(strings).forEach(([key, value]) => {
-                    if (targetStrings.hasOwnProperty(key) && !targetStrings[key].startsWith("[UNTRANSLATED] ")) {
+                    if (targetStrings.hasOwnProperty(key) && !targetStrings[key].startsWith("[UNTRANSLATED]")) {
                         fs.writeSync(fileHandle, `    ${key}: \`${targetStrings[key]}\`,\n`);
                     } else {
                         fs.writeSync(fileHandle, `    ${key}: \`[UNTRANSLATED] ${value}\`,\n`);

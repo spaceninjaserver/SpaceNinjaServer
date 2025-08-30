@@ -238,6 +238,7 @@ dict = {
     cheats_changeSupportedSyndicate: `Sindicatos disponibles`,
     cheats_changeButton: `Cambiar`,
     cheats_markAllAsRead: `Marcar bandeja de entrada como leída`,
+    cheats_finishInvasionsInOneMission: `[UNTRANSLATED] Finish Invasions in One Mission`,
 
     worldState: `Estado del mundo`,
     worldState_creditBoost: `Potenciador de Créditos`,

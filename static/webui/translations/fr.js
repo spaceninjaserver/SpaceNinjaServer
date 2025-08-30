@@ -238,6 +238,7 @@ dict = {
     cheats_changeSupportedSyndicate: `Allégeance`,
     cheats_changeButton: `Changer`,
     cheats_markAllAsRead: `Marquer la boîte de réception comme lue`,
+    cheats_finishInvasionsInOneMission: `[UNTRANSLATED] Finish Invasions in One Mission`,
 
     worldState: `Carte Solaire`,
     worldState_creditBoost: `Booster de Crédit`,

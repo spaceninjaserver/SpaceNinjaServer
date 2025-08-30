@@ -775,6 +775,11 @@ export const addMissionInventoryUpdates = async (
             }
             case "InvasionProgress": {
                 for (const clientProgress of value) {
+                    if (inventory.finishInvasionsInOneMission) {
+                        clientProgress.Delta *= 3;
+                        clientProgress.AttackerScore *= 3;
+                        clientProgress.DefenderScore *= 3;
+                    }
                     const dbProgress = inventory.QualifyingInvasions.find(x =>
                         x.invasionId.equals(clientProgress._id.$oid)
                     );

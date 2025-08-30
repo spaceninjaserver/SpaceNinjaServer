@@ -238,6 +238,7 @@ dict = {
     cheats_changeSupportedSyndicate: `支持的集团`,
     cheats_changeButton: `更改`,
     cheats_markAllAsRead: `收件箱全部标记为已读`,
+    cheats_finishInvasionsInOneMission: `一场任务完成整场入侵`,
 
     worldState: `世界状态配置`,
     worldState_creditBoost: `现金加成`,

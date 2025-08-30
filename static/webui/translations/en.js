@@ -237,6 +237,7 @@ dict = {
     cheats_changeSupportedSyndicate: `Supported syndicate`,
     cheats_changeButton: `Change`,
     cheats_markAllAsRead: `Mark Inbox As Read`,
+    cheats_finishInvasionsInOneMission: `Finish Invasions in One Mission`,
 
     worldState: `World State`,
     worldState_creditBoost: `Credit Boost`,
