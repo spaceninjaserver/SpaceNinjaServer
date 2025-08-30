@@ -26,7 +26,6 @@ export interface IConfig extends IConfigRemovedOptions {
     unlockAllCapturaScenes?: boolean;
     unlockAllDecoRecipes?: boolean;
     fullyStockedVendors?: boolean;
-    unlockAllProfitTakerStages?: boolean;
     skipClanKeyCrafting?: boolean;
     noDojoRoomBuildStage?: boolean;
     noDojoDecoBuildStage?: boolean;
@@ -105,6 +104,7 @@ export const configRemovedOptionsKeys = [
     "unlockDoubleCapacityPotatoesEverywhere",
     "unlockExilusEverywhere",
     "unlockArcanesEverywhere",
+    "unlockAllProfitTakerStages",
     "noDailyStandingLimits",
     "noDailyFocusLimit",
     "noArgonCrystalDecay",

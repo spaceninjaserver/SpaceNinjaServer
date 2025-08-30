@@ -209,6 +209,7 @@ dict = {
     cheats_baroFullyStocked: `Baro Fully Stocked`,
     cheats_syndicateMissionsRepeatable: `Syndicate Missions Repeatable`,
     cheats_unlockAllProfitTakerStages: `Unlock All Profit Taker Stages`,
+    cheats_unlockSucc: `Successfully unlocked.`,
     cheats_instantFinishRivenChallenge: `Instant Finish Riven Challenge`,
     cheats_instantResourceExtractorDrones: `Instant Resource Extractor Drones`,
     cheats_noResourceExtractorDronesDamage: `No Resource Extractor Drones Damage`,

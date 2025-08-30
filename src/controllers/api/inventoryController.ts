@@ -486,19 +486,6 @@ export const getInventoryResponse = async (
         }
     }
 
-    if (config.unlockAllProfitTakerStages) {
-        inventoryResponse.CompletedJobChains ??= [];
-        const EudicoHeists = inventoryResponse.CompletedJobChains.find(x => x.LocationTag == "EudicoHeists");
-        if (EudicoHeists) {
-            EudicoHeists.Jobs = allEudicoHeistJobs;
-        } else {
-            inventoryResponse.CompletedJobChains.push({
-                LocationTag: "EudicoHeists",
-                Jobs: allEudicoHeistJobs
-            });
-        }
-    }
-
     if (config.unlockAllSimarisResearchEntries) {
         inventoryResponse.LibraryPersonalTarget = undefined;
         inventoryResponse.LibraryPersonalProgress = [
@@ -514,13 +501,6 @@ export const getInventoryResponse = async (
 
     return inventoryResponse;
 };
-
-const allEudicoHeistJobs = [
-    "/Lotus/Types/Gameplay/Venus/Jobs/Heists/HeistProfitTakerBountyOne",
-    "/Lotus/Types/Gameplay/Venus/Jobs/Heists/HeistProfitTakerBountyTwo",
-    "/Lotus/Types/Gameplay/Venus/Jobs/Heists/HeistProfitTakerBountyThree",
-    "/Lotus/Types/Gameplay/Venus/Jobs/Heists/HeistProfitTakerBountyFour"
-];
 
 const getExpRequiredForMr = (rank: number): number => {
     if (rank <= 30) {

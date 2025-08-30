@@ -210,6 +210,7 @@ dict = {
     cheats_baroFullyStocked: `Баро повністю укомплектований`,
     cheats_syndicateMissionsRepeatable: `Повторювати місії синдиката`,
     cheats_unlockAllProfitTakerStages: `Розблокувати всі етапи Привласнювачки`,
+    cheats_unlockSucc: `[UNTRANSLATED] Successfully unlocked.`,
     cheats_instantFinishRivenChallenge: `Миттєве завершення випробування модифікатора Розколу`,
     cheats_instantResourceExtractorDrones: `Миттєво добуваючі Дрони-видобувачі`,
     cheats_noResourceExtractorDronesDamage: `Без шкоди по Дронам-видобувачам`,

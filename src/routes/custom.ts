@@ -14,6 +14,7 @@ import { addMissingMaxRankModsController } from "../controllers/custom/addMissin
 import { webuiFileChangeDetectedController } from "../controllers/custom/webuiFileChangeDetectedController.ts";
 import { completeAllMissionsController } from "../controllers/custom/completeAllMissionsController.ts";
 import { addMissingHelminthBlueprintsController } from "../controllers/custom/addMissingHelminthBlueprintsController.ts";
+import { unlockAllProfitTakerStagesController } from "../controllers/custom/unlockAllProfitTakerStagesController.ts";
 
 import { abilityOverrideController } from "../controllers/custom/abilityOverrideController.ts";
 import { createAccountController } from "../controllers/custom/createAccountController.ts";
@@ -48,6 +49,7 @@ customRouter.get("/addMissingMaxRankMods", addMissingMaxRankModsController);
 customRouter.get("/webuiFileChangeDetected", webuiFileChangeDetectedController);
 customRouter.get("/completeAllMissions", completeAllMissionsController);
 customRouter.get("/addMissingHelminthBlueprints", addMissingHelminthBlueprintsController);
+customRouter.get("/unlockAllProfitTakerStages", unlockAllProfitTakerStagesController);
 
 customRouter.post("/abilityOverride", abilityOverrideController);
 customRouter.post("/createAccount", createAccountController);

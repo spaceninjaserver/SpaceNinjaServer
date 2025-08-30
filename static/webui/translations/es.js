@@ -210,6 +210,7 @@ dict = {
     cheats_baroFullyStocked: `Baro con stock completo`,
     cheats_syndicateMissionsRepeatable: `Misiones de sindicato rejugables`,
     cheats_unlockAllProfitTakerStages: `Desbloquea todas las etapas del Roba-ganancias`,
+    cheats_unlockSucc: `[UNTRANSLATED] Successfully unlocked.`,
     cheats_instantFinishRivenChallenge: `Terminar desafío de agrietado inmediatamente`,
     cheats_instantResourceExtractorDrones: `Drones de extracción de recursos instantáneos`,
     cheats_noResourceExtractorDronesDamage: `Sin daño a los drones extractores de recursos`,

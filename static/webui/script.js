@@ -2719,6 +2719,12 @@ async function doUnlockAllMissions() {
     toast(loc("cheats_unlockAllMissions_ok"));
 }
 
+async function doUnlockAllProfitTakerStages() {
+    await revalidateAuthz();
+    await fetch("/custom/unlockAllProfitTakerStages?" + window.authz);
+    toast(loc("cheats_unlockSucc"));
+}
+
 const importSamples = {
     maxFocus: {
         FocusUpgrades: [
