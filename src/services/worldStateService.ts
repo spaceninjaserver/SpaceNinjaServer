@@ -2630,10 +2630,15 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         );
     }
 
-    const thermiaFracturesCycleDay = day % 32;
-    const isThermiaFracturesActive = thermiaFracturesCycleDay < 14;
+    // Thermia Fractures activates for 14 days, with alternating 4 and 3-day breaks
+    const thermiaFracturesCycleDay = day % 35;
+    const isThermiaFracturesActive =
+        thermiaFracturesCycleDay < 14 || (thermiaFracturesCycleDay >= 18 && thermiaFracturesCycleDay < 32);
+    const activeThermiaFracturesCycleDay =
+        thermiaFracturesCycleDay - (thermiaFracturesCycleDay < 14 ? 0 : thermiaFracturesCycleDay < 18 ? 14 : 32);
+
     if (config.worldState?.thermiaFracturesOverride ?? isThermiaFracturesActive) {
-        const activeStartDay = day - thermiaFracturesCycleDay;
+        const activeStartDay = day - activeThermiaFracturesCycleDay;
 
         const count = config.worldState?.thermiaFracturesProgressOverride ?? 0;
         const activation = config.worldState?.thermiaFracturesOverride ? 1740416400000 : getSortieTime(activeStartDay);
