@@ -2644,75 +2644,78 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         const activation = config.worldState?.thermiaFracturesOverride ? 1740416400000 : getSortieTime(activeStartDay);
         const expiry = config.worldState?.thermiaFracturesOverride ? 2000000000000 : getSortieTime(activeStartDay + 14);
 
-        worldState.Goals.push({
-            _id: { $oid: "5c7cb0d00000000000000000" },
-            Activation: { $date: { $numberLong: activation.toString() } },
-            Expiry: { $date: { $numberLong: expiry.toString() } },
-            Node: "SolNode129",
-            ScoreVar: "FissuresClosed",
-            ScoreLocTag: "/Lotus/Language/G1Quests/HeatFissuresEventScore",
-            Count: count,
-            HealthPct: count / 100,
-            Regions: [1],
-            Desc: "/Lotus/Language/G1Quests/HeatFissuresEventName",
-            ToolTip: "/Lotus/Language/G1Quests/HeatFissuresEventDesc",
-            OptionalInMission: true,
-            Tag: "HeatFissure",
-            UpgradeIds: [{ $oid: "5c81cefa4c4566791728eaa7" }, { $oid: "5c81cefa4c4566791728eaa6" }],
-            Personal: true,
-            Community: true,
-            Goal: 100,
-            Reward: {
-                items: ["/Lotus/StoreItems/Weapons/Corpus/LongGuns/CrpBFG/Vandal/VandalCrpBFG"]
-            },
-            InterimGoals: [5, 25, 50, 75],
-            InterimRewards: [
-                { items: ["/Lotus/StoreItems/Upgrades/Skins/Clan/OrbBadgeItem"] },
-                {
-                    items: [
-                        "/Lotus/StoreItems/Upgrades/Mods/DualSource/Shotgun/ShotgunMedicMod",
-                        "/Lotus/StoreItems/Upgrades/Mods/DualSource/Rifle/SerratedRushMod"
-                    ]
-                },
-                {
-                    items: [
-                        "/Lotus/StoreItems/Upgrades/Mods/DualSource/Pistol/MultishotDodgeMod",
-                        "/Lotus/StoreItems/Upgrades/Mods/DualSource/Melee/CritDamageChargeSpeedMod"
-                    ]
-                },
-                { items: ["/Lotus/StoreItems/Upgrades/Skins/Sigils/OrbSigil"] }
-            ]
-        });
-        worldState.NodeOverrides.push({
-            _id: { $oid: "5c7cb0d00000000000000000" },
-            Activation: { $date: { $numberLong: activation.toString() } },
-            Expiry: { $date: { $numberLong: expiry.toString() } },
-            Node: "SolNode129",
-            Faction: "FC_CORPUS",
-            CustomNpcEncounters: ["/Lotus/Types/Gameplay/Venus/Encounters/Heists/ExploiterHeistFissure"]
-        });
-        if (count >= 35) {
-            worldState.GlobalUpgrades.push({
-                _id: { $oid: "5c81cefa4c4566791728eaa6" },
+        // If we push it, the game may show the event even tho it's not activated yet (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2721)
+        if (timeMs >= activation) {
+            worldState.Goals.push({
+                _id: { $oid: "5c7cb0d00000000000000000" },
                 Activation: { $date: { $numberLong: activation.toString() } },
-                ExpiryDate: { $date: { $numberLong: expiry.toString() } },
-                UpgradeType: "GAMEPLAY_MONEY_REWARD_AMOUNT",
-                OperationType: "MULTIPLY",
-                Value: 2,
-                Nodes: ["SolNode129"]
+                Expiry: { $date: { $numberLong: expiry.toString() } },
+                Node: "SolNode129",
+                ScoreVar: "FissuresClosed",
+                ScoreLocTag: "/Lotus/Language/G1Quests/HeatFissuresEventScore",
+                Count: count,
+                HealthPct: count / 100,
+                Regions: [1],
+                Desc: "/Lotus/Language/G1Quests/HeatFissuresEventName",
+                ToolTip: "/Lotus/Language/G1Quests/HeatFissuresEventDesc",
+                OptionalInMission: true,
+                Tag: "HeatFissure",
+                UpgradeIds: [{ $oid: "5c81cefa4c4566791728eaa7" }, { $oid: "5c81cefa4c4566791728eaa6" }],
+                Personal: true,
+                Community: true,
+                Goal: 100,
+                Reward: {
+                    items: ["/Lotus/StoreItems/Weapons/Corpus/LongGuns/CrpBFG/Vandal/VandalCrpBFG"]
+                },
+                InterimGoals: [5, 25, 50, 75],
+                InterimRewards: [
+                    { items: ["/Lotus/StoreItems/Upgrades/Skins/Clan/OrbBadgeItem"] },
+                    {
+                        items: [
+                            "/Lotus/StoreItems/Upgrades/Mods/DualSource/Shotgun/ShotgunMedicMod",
+                            "/Lotus/StoreItems/Upgrades/Mods/DualSource/Rifle/SerratedRushMod"
+                        ]
+                    },
+                    {
+                        items: [
+                            "/Lotus/StoreItems/Upgrades/Mods/DualSource/Pistol/MultishotDodgeMod",
+                            "/Lotus/StoreItems/Upgrades/Mods/DualSource/Melee/CritDamageChargeSpeedMod"
+                        ]
+                    },
+                    { items: ["/Lotus/StoreItems/Upgrades/Skins/Sigils/OrbSigil"] }
+                ]
             });
-        }
-        // Not sure about that
-        if (count == 100) {
-            worldState.GlobalUpgrades.push({
-                _id: { $oid: "5c81cefa4c4566791728eaa7" },
+            worldState.NodeOverrides.push({
+                _id: { $oid: "5c7cb0d00000000000000000" },
                 Activation: { $date: { $numberLong: activation.toString() } },
-                ExpiryDate: { $date: { $numberLong: expiry.toString() } },
-                UpgradeType: "GAMEPLAY_PICKUP_AMOUNT",
-                OperationType: "MULTIPLY",
-                Value: 2,
-                Nodes: ["SolNode129"]
+                Expiry: { $date: { $numberLong: expiry.toString() } },
+                Node: "SolNode129",
+                Faction: "FC_CORPUS",
+                CustomNpcEncounters: ["/Lotus/Types/Gameplay/Venus/Encounters/Heists/ExploiterHeistFissure"]
             });
+            if (count >= 35) {
+                worldState.GlobalUpgrades.push({
+                    _id: { $oid: "5c81cefa4c4566791728eaa6" },
+                    Activation: { $date: { $numberLong: activation.toString() } },
+                    ExpiryDate: { $date: { $numberLong: expiry.toString() } },
+                    UpgradeType: "GAMEPLAY_MONEY_REWARD_AMOUNT",
+                    OperationType: "MULTIPLY",
+                    Value: 2,
+                    Nodes: ["SolNode129"]
+                });
+            }
+            // Not sure about that
+            if (count == 100) {
+                worldState.GlobalUpgrades.push({
+                    _id: { $oid: "5c81cefa4c4566791728eaa7" },
+                    Activation: { $date: { $numberLong: activation.toString() } },
+                    ExpiryDate: { $date: { $numberLong: expiry.toString() } },
+                    UpgradeType: "GAMEPLAY_PICKUP_AMOUNT",
+                    OperationType: "MULTIPLY",
+                    Value: 2,
+                    Nodes: ["SolNode129"]
+                });
+            }
         }
     }
 
