@@ -1837,6 +1837,10 @@ function getRandomMissionDrops(
                     ItemCount: 10
                 });
             }
+            drops.push({
+                StoreItem: "/Lotus/StoreItems/Types/Gameplay/Duviri/Resource/DuviriDragonDropItem",
+                ItemCount: 10
+            });
             rewardManifests = ["/Lotus/Types/Game/MissionDecks/DuviriEncounterRewards/DuviriMurmurFinalChestRewards"];
         } else if (RewardInfo.T == 19) {
             if (config.worldState?.eightClaw) {
@@ -1845,6 +1849,10 @@ function getRandomMissionDrops(
                     ItemCount: 15
                 });
             }
+            drops.push({
+                StoreItem: "/Lotus/StoreItems/Types/Gameplay/Duviri/Resource/DuviriDragonDropItem",
+                ItemCount: 15
+            });
             rewardManifests = [
                 "/Lotus/Types/Game/MissionDecks/DuviriEncounterRewards/DuviriMurmurFinalSteelChestRewards"
             ];
