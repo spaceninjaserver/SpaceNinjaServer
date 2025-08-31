@@ -689,6 +689,7 @@ export const addItem = async (
     // Path-based duck typing
     switch (typeName.substr(1).split("/")[1]) {
         case "Powersuits":
+            if (typeName.endsWith("AugmentCard")) break;
             switch (typeName.substr(1).split("/")[2]) {
                 default: {
                     return {
@@ -773,6 +774,10 @@ export const addItem = async (
                         }
                     }
                     break;
+
+                case "Skins": {
+                    return addSkin(inventory, typeName);
+                }
             }
             break;
         }
@@ -869,6 +874,26 @@ export const addItem = async (
                     break;
             }
             break;
+        case "Weapons": {
+            if (typeName.substr(1).split("/")[4] == "MeleeTrees") break;
+            const productCategory = typeName.substr(1).split("/")[3];
+            switch (productCategory) {
+                case "Pistols":
+                case "LongGuns":
+                case "Melee": {
+                    const inventoryChanges = addEquipment(inventory, productCategory, typeName);
+                    return {
+                        ...inventoryChanges,
+                        ...occupySlot(
+                            inventory,
+                            productCategoryToInventoryBin(productCategory) ?? InventorySlot.WEAPONS,
+                            premiumPurchase
+                        )
+                    };
+                }
+            }
+            break;
+        }
     }
     throw new Error(`unable to add item: ${typeName}`);
 };

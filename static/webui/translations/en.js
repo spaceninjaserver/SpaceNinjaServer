@@ -78,6 +78,8 @@ dict = {
     navbar_cheats: `Cheats`,
     navbar_import: `Import`,
     inventory_addItems: `Add Items`,
+    inventory_addItemByItemType: `Raw`,
+    inventory_addItemByItemType_warning: `Use this feature at your own risk. It may break your inventory, and you will need to remove items manually if something goes wrong.`,
     inventory_suits: `Warframes`,
     inventory_longGuns: `Primary Weapons`,
     inventory_pistols: `Secondary Weapons`,

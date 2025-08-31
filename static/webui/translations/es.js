@@ -79,6 +79,8 @@ dict = {
     navbar_cheats: `Trucos`,
     navbar_import: `Importar`,
     inventory_addItems: `Agregar objetos`,
+    inventory_addItemByItemType: `[UNTRANSLATED] Raw`,
+    inventory_addItemByItemType_warning: `[UNTRANSLATED] Use this feature at your own risk. It may break your inventory, and you will need to remove items manually if something goes wrong.`,
     inventory_suits: `Warframes`,
     inventory_longGuns: `Armas primarias`,
     inventory_pistols: `Armas secundarias`,

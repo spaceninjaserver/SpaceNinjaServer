@@ -649,6 +649,14 @@ function updateInventory() {
             ];
 
             // Populate inventory route
+
+            document.getElementById("typeName-tab").classList.remove("active");
+            document.getElementById("typeName-tab-content").classList.remove("active", "show");
+            document.getElementById("typeName-type").value = "";
+
+            document.getElementById("miscItems-tab").classList.add("active");
+            document.getElementById("miscItems-tab-content").classList.add("active", "show");
+
             ["RegularCredits", "PremiumCredits", "FusionPoints", "PrimeTokens"].forEach(currency => {
                 document.getElementById(currency + "-owned").textContent = loc("currency_owned")
                     .split("|COUNT|")
@@ -1685,7 +1693,7 @@ function doAcquireEvolution() {
     setEvolutionProgress([{ ItemType: uniqueName, Rank: permanentEvolutionWeapons.has(uniqueName) ? 0 : 1 }]);
 }
 
-$(document).on("input", "input[list]", function () {
+$(document).on("input", "input", function () {
     $(this).removeClass("is-invalid");
 });
 
@@ -2006,6 +2014,35 @@ function doAcquireMiscItems() {
             });
         });
     }
+}
+
+function addItemByItemType() {
+    const ItemType = document.getElementById("typeName-type").value;
+    // Must start with "/Lotus/", contain only A–Z letters, no "//", and not end with "/"
+    if (!ItemType || !/^\/Lotus\/(?:[A-Za-z]+(?:\/[A-Za-z]+)*)$/.test(ItemType)) {
+        $("#typeName-type").addClass("is-invalid").focus();
+        return;
+    }
+    revalidateAuthz().then(() => {
+        $.post({
+            url: "/custom/addItems?" + window.authz,
+            contentType: "application/json",
+            data: JSON.stringify([
+                {
+                    ItemType,
+                    ItemCount: 1
+                }
+            ])
+        })
+            .done(function (_, _, jqXHR) {
+                if (jqXHR.status === 200) {
+                    updateInventory();
+                }
+            })
+            .fail(function () {
+                $("#typeName-type").addClass("is-invalid").focus();
+            });
+    });
 }
 
 function doAcquireRiven() {

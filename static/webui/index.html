@@ -92,12 +92,36 @@
             <div data-route="/webui/inventory" data-title="Inventory | OpenWF WebUI">
                 <p class="mb-3" data-loc="general_inventoryUpdateNote"></p>
                 <div class="card mb-3">
-                    <h5 class="card-header" data-loc="inventory_addItems"></h5>
-                    <form class="card-body input-group" onsubmit="doAcquireMiscItems();return false;">
-                        <input class="form-control" id="miscitem-count" type="number" value="1" />
-                        <input class="form-control w-50" id="miscitem-type" list="datalist-miscitems" />
-                        <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
-                    </form>
+                    <div class="card-header">
+                        <ul class="nav nav-tabs card-header-tabs">
+                            <li class="nav-item">
+                                <button class="nav-link" id="miscItems-tab" data-bs-toggle="tab" data-bs-target="#miscItems-tab-content" data-loc="inventory_addItems"></button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" id="typeName-tab" data-bs-toggle="tab" data-bs-target="#typeName-tab-content" data-loc="inventory_addItemByItemType"></button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane" id="miscItems-tab-content">
+                                <form class="card-body input-group" onsubmit="doAcquireMiscItems();return false;">
+                                    <input class="form-control" id="miscitem-count" type="number" value="1" />
+                                    <input class="form-control w-50" id="miscitem-type" list="datalist-miscitems" />
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                </form>
+                            </div>
+                            <div class="tab-pane" id="typeName-tab-content">
+                                <form class="card-body" onsubmit="addItemByItemType();return false;">
+                                    <p data-loc="inventory_addItemByItemType_warning"></p>
+                                    <div class="input-group">
+                                        <input class="form-control" id="typeName-type" />
+                                        <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="row g-3 mb-3">
                     <div class="col-md-3">

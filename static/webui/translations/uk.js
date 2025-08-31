@@ -79,6 +79,8 @@ dict = {
     navbar_cheats: `Чити`,
     navbar_import: `Імпорт`,
     inventory_addItems: `Додати предмети`,
+    inventory_addItemByItemType: `[UNTRANSLATED] Raw`,
+    inventory_addItemByItemType_warning: `[UNTRANSLATED] Use this feature at your own risk. It may break your inventory, and you will need to remove items manually if something goes wrong.`,
     inventory_suits: `Ворфрейми`,
     inventory_longGuns: `Основна зброя`,
     inventory_pistols: `Допоміжна зброя`,

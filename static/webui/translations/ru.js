@@ -79,6 +79,8 @@ dict = {
     navbar_cheats: `Читы`,
     navbar_import: `Импорт`,
     inventory_addItems: `Добавить предметы`,
+    inventory_addItemByItemType: `[UNTRANSLATED] Raw`,
+    inventory_addItemByItemType_warning: `Используйте эту функцию на свой страх и риск. Она может повредить ваш инвентарь, и в случае проблем вам придётся удалять предметы вручную.`,
     inventory_suits: `Варфреймы`,
     inventory_longGuns: `Основное оружие`,
     inventory_pistols: `Вторичное оружие`,

@@ -79,6 +79,8 @@ dict = {
     navbar_cheats: `作弊选项`,
     navbar_import: `导入`,
     inventory_addItems: `添加物品`,
+    inventory_addItemByItemType: `[UNTRANSLATED] Raw`,
+    inventory_addItemByItemType_warning: `[UNTRANSLATED] Use this feature at your own risk. It may break your inventory, and you will need to remove items manually if something goes wrong.`,
     inventory_suits: `战甲`,
     inventory_longGuns: `主要武器`,
     inventory_pistols: `次要武器`,
