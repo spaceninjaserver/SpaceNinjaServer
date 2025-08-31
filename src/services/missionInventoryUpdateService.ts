@@ -1481,7 +1481,7 @@ export const addMissionRewards = async (
                     if (vault) {
                         currentJob = vault;
                         if (jobType.endsWith("VaultBounty")) {
-                            currentJob.xpAmounts = [currentJob.xpAmounts.reduce((partialSum, a) => partialSum + a, 0)];
+                            currentJob.xpAmounts[rewardInfo.JobTier!] = currentJob.xpAmounts.reduce((s, a) => s + a, 0);
                         }
                     }
                 }
@@ -1498,15 +1498,22 @@ export const addMissionRewards = async (
                         medallionAmount = Math.floor(endlessJob.xpAmounts[index] * (1 + 0.15000001 * excess));
                     }
                 }
-                await addItem(inventory, "/Lotus/Types/Items/Deimos/EntratiFragmentUncommonB", medallionAmount);
-                MissionRewards.push({
-                    StoreItem: "/Lotus/StoreItems/Types/Items/Deimos/EntratiFragmentUncommonB",
-                    ItemCount: medallionAmount
-                });
-                SyndicateXPItemReward = medallionAmount;
-                logger.debug(
-                    `Giving ${medallionAmount} medallions for the ${rewardInfo.JobStage} stage of the ${rewardInfo.JobTier} tier bounty`
-                );
+                if (typeof medallionAmount === "number" && !isNaN(medallionAmount)) {
+                    await addItem(inventory, "/Lotus/Types/Items/Deimos/EntratiFragmentUncommonB", medallionAmount);
+                    MissionRewards.push({
+                        StoreItem: "/Lotus/StoreItems/Types/Items/Deimos/EntratiFragmentUncommonB",
+                        ItemCount: medallionAmount
+                    });
+                    SyndicateXPItemReward = medallionAmount;
+                    logger.debug(
+                        `Giving ${medallionAmount} medallions for the ${rewardInfo.JobStage} stage of the ${rewardInfo.JobTier} tier bounty`
+                    );
+                } else {
+                    logger.warning(
+                        `${jobType} tried to give ${medallionAmount} medallions for the ${rewardInfo.JobStage} stage of the ${rewardInfo.JobTier} tier bounty`
+                    );
+                    logger.warning(`currentJob`, { currentJob: currentJob });
+                }
             } else {
                 const specialCase = [
                     { endings: ["Heists/HeistProfitTakerBountyOne"], stage: 2, amount: 1000 },
