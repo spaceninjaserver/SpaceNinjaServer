@@ -212,7 +212,7 @@ dict = {
     cheats_baroFullyStocked: `Баро полностью укомплектован`,
     cheats_syndicateMissionsRepeatable: `Повторять миссии синдиката`,
     cheats_unlockAllProfitTakerStages: `Разблокировать все этапы Сферы извлечения прибыли`,
-    cheats_unlockSucc: `[UNTRANSLATED] Successfully unlocked.`,
+    cheats_unlockSucc: `Успешно разблокировано.`,
     cheats_instantFinishRivenChallenge: `Мгновенное завершение испытания мода Разлома`,
     cheats_instantResourceExtractorDrones: `Мгновенно добывающие Дроны-сборщики`,
     cheats_noResourceExtractorDronesDamage: `Без урона по Дронам-сборщикам`,
@@ -241,7 +241,7 @@ dict = {
     cheats_changeSupportedSyndicate: `Поддерживаемый синдикат`,
     cheats_changeButton: `Изменить`,
     cheats_markAllAsRead: `Пометить все входящие как прочитанные`,
-    cheats_finishInvasionsInOneMission: `[UNTRANSLATED] Finish Invasions in One Mission`,
+    cheats_finishInvasionsInOneMission: `Завершать вторжение за одну миссию`,
 
     worldState: `Состояние мира`,
     worldState_creditBoost: `Глобальный бустер Кредитов`,
