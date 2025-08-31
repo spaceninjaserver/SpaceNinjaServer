@@ -2750,15 +2750,21 @@ async function doMaxPlexus() {
     }
 }
 
-async function doUnlockAllMissions() {
+async function unlockAllMissions() {
     await revalidateAuthz();
     await fetch("/custom/completeAllMissions?" + window.authz);
     toast(loc("cheats_unlockAllMissions_ok"));
 }
 
-async function doUnlockAllProfitTakerStages() {
+async function unlockAllProfitTakerStages() {
     await revalidateAuthz();
     await fetch("/custom/unlockAllProfitTakerStages?" + window.authz);
+    toast(loc("cheats_unlockSucc"));
+}
+
+async function unlockAllSimarisResearchEntries() {
+    await revalidateAuthz();
+    await fetch("/custom/unlockAllSimarisResearchEntries?" + window.authz);
     toast(loc("cheats_unlockSucc"));
 }
 

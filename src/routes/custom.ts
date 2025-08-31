@@ -15,6 +15,7 @@ import { webuiFileChangeDetectedController } from "../controllers/custom/webuiFi
 import { completeAllMissionsController } from "../controllers/custom/completeAllMissionsController.ts";
 import { addMissingHelminthBlueprintsController } from "../controllers/custom/addMissingHelminthBlueprintsController.ts";
 import { unlockAllProfitTakerStagesController } from "../controllers/custom/unlockAllProfitTakerStagesController.ts";
+import { unlockAllSimarisResearchEntriesController } from "../controllers/custom/unlockAllSimarisResearchEntriesController.ts";
 
 import { abilityOverrideController } from "../controllers/custom/abilityOverrideController.ts";
 import { createAccountController } from "../controllers/custom/createAccountController.ts";
@@ -50,6 +51,7 @@ customRouter.get("/webuiFileChangeDetected", webuiFileChangeDetectedController);
 customRouter.get("/completeAllMissions", completeAllMissionsController);
 customRouter.get("/addMissingHelminthBlueprints", addMissingHelminthBlueprintsController);
 customRouter.get("/unlockAllProfitTakerStages", unlockAllProfitTakerStagesController);
+customRouter.get("/unlockAllSimarisResearchEntries", unlockAllSimarisResearchEntriesController);
 
 customRouter.post("/abilityOverride", abilityOverrideController);
 customRouter.post("/createAccount", createAccountController);
