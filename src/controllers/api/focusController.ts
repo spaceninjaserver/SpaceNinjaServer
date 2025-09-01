@@ -38,12 +38,12 @@ export const focusController: RequestHandler = async (req, res) => {
         case FocusOperation.UnlockWay: {
             const focusType = (JSON.parse(String(req.body)) as IWayRequest).FocusType;
             const focusPolarity = focusTypeToPolarity(focusType);
-            const inventory = await getInventory(accountId);
+            const inventory = await getInventory(accountId, "FocusAbility FocusUpgrades FocusXP");
             const cost = inventory.FocusAbility ? 50_000 : 0;
             inventory.FocusAbility ??= focusType;
             inventory.FocusUpgrades.push({ ItemType: focusType });
-            if (inventory.FocusXP) {
-                inventory.FocusXP[focusPolarity]! -= cost;
+            if (cost) {
+                inventory.FocusXP![focusPolarity]! -= cost;
             }
             await inventory.save();
             res.json({
