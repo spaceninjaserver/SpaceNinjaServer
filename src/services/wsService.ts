@@ -6,7 +6,7 @@ import { Account } from "../models/loginModel.ts";
 import { createAccount, createNonce, getUsernameFromEmail, isCorrectPassword } from "./loginService.ts";
 import type { IDatabaseAccountJson } from "../types/loginTypes.ts";
 import type { HydratedDocument } from "mongoose";
-import { logError } from "../utils/logger.ts";
+import { logError, logger } from "../utils/logger.ts";
 
 let wsServer: WebSocketServer | undefined;
 let wssServer: WebSocketServer | undefined;
@@ -158,6 +158,7 @@ const wsOnConnect = (ws: ws, req: http.IncomingMessage): void => {
                     });
                     if (account) {
                         (ws as IWsCustomData).accountId = account.id;
+                        logger.debug(`got bootstrapper connection for ${account.id}`);
                     }
                 }
             }
@@ -180,6 +181,7 @@ const wsOnConnect = (ws: ws, req: http.IncomingMessage): void => {
     });
     ws.on("close", () => {
         if ((ws as IWsCustomData).isGame && (ws as IWsCustomData).accountId) {
+            logger.debug(`lost bootstrapper connection for ${(ws as IWsCustomData).accountId}`);
             void Account.updateOne(
                 {
                     _id: (ws as IWsCustomData).accountId
