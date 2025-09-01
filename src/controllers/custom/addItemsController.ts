@@ -1,6 +1,7 @@
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { getInventory, addItem } from "../../services/inventoryService.ts";
 import type { RequestHandler } from "express";
+import { sendWsBroadcastTo } from "../../services/wsService.ts";
 
 export const addItemsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -9,6 +10,7 @@ export const addItemsController: RequestHandler = async (req, res) => {
     for (const request of requests) {
         await addItem(inventory, request.ItemType, request.ItemCount, true, undefined, request.Fingerprint, true);
     }
+    sendWsBroadcastTo(accountId, { sync_inventory: true });
     await inventory.save();
     res.end();
 };

@@ -47,6 +47,7 @@ let lastWsid: number = 0;
 interface IWsCustomData extends ws {
     id: number;
     accountId?: string;
+    isGame?: boolean;
 }
 
 interface IWsMsgFromClient {
@@ -55,11 +56,18 @@ interface IWsMsgFromClient {
         password: string;
         isRegister: boolean;
     };
+    auth_game?: {
+        accountId: string;
+        nonce: number;
+    };
     logout?: boolean;
 }
 
 interface IWsMsgToClient {
-    //wsid?: number;
+    // common
+    wsid?: number;
+
+    // to webui
     reload?: boolean;
     ports?: {
         http: number | undefined;
@@ -77,6 +85,9 @@ interface IWsMsgToClient {
     nonce_updated?: boolean;
     update_inventory?: boolean;
     logged_out?: boolean;
+
+    // to game
+    sync_inventory?: boolean;
 }
 
 const wsOnConnect = (ws: ws, req: http.IncomingMessage): void => {
@@ -87,11 +98,12 @@ const wsOnConnect = (ws: ws, req: http.IncomingMessage): void => {
     }
 
     (ws as IWsCustomData).id = ++lastWsid;
-    ws.send(JSON.stringify({ wsid: lastWsid }));
+    ws.send(JSON.stringify({ wsid: lastWsid } satisfies IWsMsgToClient));
 
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     ws.on("message", async msg => {
         try {
+            //console.log(String(msg));
             const data = JSON.parse(String(msg)) as IWsMsgFromClient;
             if (data.auth) {
                 let account: IDatabaseAccountJson | null = await Account.findOne({ email: data.auth.email });
@@ -137,6 +149,18 @@ const wsOnConnect = (ws: ws, req: http.IncomingMessage): void => {
                     );
                 }
             }
+            if (data.auth_game) {
+                (ws as IWsCustomData).isGame = true;
+                if (data.auth_game.nonce) {
+                    const account: IDatabaseAccountJson | null = await Account.findOne({
+                        _id: data.auth_game.accountId,
+                        Nonce: data.auth_game.nonce
+                    });
+                    if (account) {
+                        (ws as IWsCustomData).accountId = account.id;
+                    }
+                }
+            }
             if (data.logout) {
                 const accountId = (ws as IWsCustomData).accountId;
                 (ws as IWsCustomData).accountId = undefined;
@@ -152,6 +176,18 @@ const wsOnConnect = (ws: ws, req: http.IncomingMessage): void => {
             }
         } catch (e) {
             logError(e as Error, `processing websocket message`);
+        }
+    });
+    ws.on("close", () => {
+        if ((ws as IWsCustomData).isGame && (ws as IWsCustomData).accountId) {
+            void Account.updateOne(
+                {
+                    _id: (ws as IWsCustomData).accountId
+                },
+                {
+                    Dropped: true
+                }
+            ).then(() => {});
         }
     });
 };

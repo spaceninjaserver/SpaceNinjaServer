@@ -1,5 +1,6 @@
 import { applyClientEquipmentUpdates, getInventory } from "../../services/inventoryService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { sendWsBroadcastTo } from "../../services/wsService.ts";
 import type { IOid } from "../../types/commonTypes.ts";
 import type { IEquipmentClient } from "../../types/equipmentTypes.ts";
 import type { TEquipmentKey } from "../../types/inventoryTypes/inventoryTypes.ts";
@@ -23,6 +24,7 @@ export const addXpController: RequestHandler = async (req, res) => {
         }
         applyClientEquipmentUpdates(inventory, gear, category as TEquipmentKey);
     }
+    sendWsBroadcastTo(accountId, { sync_inventory: true });
     await inventory.save();
     res.end();
 };
