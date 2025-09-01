@@ -179,17 +179,15 @@ const wsOnConnect = (ws: ws, req: http.IncomingMessage): void => {
             logError(e as Error, `processing websocket message`);
         }
     });
-    ws.on("close", () => {
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    ws.on("close", async () => {
         if ((ws as IWsCustomData).isGame && (ws as IWsCustomData).accountId) {
             logger.debug(`lost bootstrapper connection for ${(ws as IWsCustomData).accountId}`);
-            void Account.updateOne(
-                {
-                    _id: (ws as IWsCustomData).accountId
-                },
-                {
-                    Dropped: true
-                }
-            ).then(() => {});
+            const account = await Account.findOne({ _id: (ws as IWsCustomData).accountId });
+            if (account?.Nonce) {
+                account.Dropped = true;
+                await account.save();
+            }
         }
     });
 };
