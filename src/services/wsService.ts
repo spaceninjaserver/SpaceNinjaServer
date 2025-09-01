@@ -247,3 +247,28 @@ export const sendWsBroadcastEx = (data: IWsMsgToClient, accountId?: string, excl
         }
     }
 };
+
+export const handleNonceInvalidation = (accountId: string): void => {
+    if (wsServer) {
+        for (const client of wsServer.clients) {
+            if ((client as IWsCustomData).accountId == accountId) {
+                if ((client as IWsCustomData).isGame) {
+                    client.close();
+                } else {
+                    client.send(JSON.stringify({ nonce_updated: true } satisfies IWsMsgToClient));
+                }
+            }
+        }
+    }
+    if (wssServer) {
+        for (const client of wssServer.clients) {
+            if ((client as IWsCustomData).accountId == accountId) {
+                if ((client as IWsCustomData).isGame) {
+                    client.close();
+                } else {
+                    client.send(JSON.stringify({ nonce_updated: true } satisfies IWsMsgToClient));
+                }
+            }
+        }
+    }
+};
