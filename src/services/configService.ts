@@ -110,6 +110,7 @@ export const configRemovedOptionsKeys = [
     "noArgonCrystalDecay",
     "noMasteryRankUpCooldown",
     "noVendorPurchaseLimits",
+    "noDecoBuildStage",
     "noDeathMarks",
     "noKimCooldowns",
     "syndicateMissionsRepeatable",

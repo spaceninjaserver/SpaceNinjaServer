@@ -19,7 +19,7 @@
   "fullyStockedVendors": false,
   "skipClanKeyCrafting": false,
   "noDojoRoomBuildStage": false,
-  "noDecoBuildStage": false,
+  "noDojoDecoBuildStage": false,
   "fastDojoRoomDestruction": false,
   "noDojoResearchCosts": false,
   "noDojoResearchTime": false,
