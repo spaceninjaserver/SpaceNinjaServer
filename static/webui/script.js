@@ -190,7 +190,7 @@ single.on("route_load", function (event) {
         $("body").removeClass("logged-in");
     }
 
-    $(".nav-link").removeClass("active");
+    $("#sidebar .nav-link").removeClass("active");
     const navLink = document.querySelector(".nav-link[href='" + event.route.paths[0] + "']");
     if (navLink) {
         navLink.classList.add("active");
