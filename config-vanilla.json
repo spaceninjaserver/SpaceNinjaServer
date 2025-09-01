@@ -7,7 +7,6 @@
   "myAddress": "localhost",
   "httpPort": 80,
   "httpsPort": 443,
-  "NRS": ["localhost"],
   "administratorNames": [],
   "autoCreateAccount": true,
   "skipTutorial": false,

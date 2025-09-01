@@ -109,7 +109,7 @@ const createLoginResponse = (
         BuildLabel: buildLabel
     };
     if (version_compare(buildLabel, "2015.02.13.10.41") >= 0) {
-        resp.NRS = config.NRS;
+        resp.NRS = [myAddress];
     }
     if (version_compare(buildLabel, "2015.05.14.16.29") >= 0) {
         // U17 and up
