@@ -1,7 +1,7 @@
 import type { RequestHandler } from "express";
+import { getReflexiveAddress } from "../../services/configService.ts";
 
-const hubController: RequestHandler = (_req, res) => {
-    res.json("hub 127.0.0.1:6952");
+export const hubController: RequestHandler = (req, res) => {
+    const { myAddress } = getReflexiveAddress(req);
+    res.json(`hub ${myAddress}:6952`);
 };
-
-export { hubController };

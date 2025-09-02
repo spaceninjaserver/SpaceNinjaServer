@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
 
-import { config } from "../../services/configService.ts";
+import { config, getReflexiveAddress } from "../../services/configService.ts";
 import { buildConfig } from "../../services/buildConfigService.ts";
 
 import { Account } from "../../models/loginModel.ts";
@@ -20,21 +20,7 @@ export const loginController: RequestHandler = async (request, response) => {
             ? request.query.buildLabel.split(" ").join("+")
             : buildConfig.buildLabel;
 
-    let myAddress: string;
-    let myUrlBase: string = request.protocol + "://";
-    if (request.host.indexOf("warframe.com") == -1) {
-        // Client request was redirected cleanly, so we know it can reach us how it's reaching us now.
-        myAddress = request.hostname;
-        myUrlBase += request.host;
-    } else {
-        // Don't know how the client reached us, hoping the config does.
-        myAddress = config.myAddress;
-        myUrlBase += myAddress;
-        const port: number = request.protocol == "http" ? config.httpPort || 80 : config.httpsPort || 443;
-        if (port != (request.protocol == "http" ? 80 : 443)) {
-            myUrlBase += ":" + port;
-        }
-    }
+    const { myAddress, myUrlBase } = getReflexiveAddress(request);
 
     if (
         !account &&

@@ -3,6 +3,7 @@ import path from "path";
 import { repoDir } from "../helpers/pathHelper.ts";
 import { args } from "../helpers/commandLineArguments.ts";
 import { Inbox } from "../models/inboxModel.ts";
+import type { Request } from "express";
 
 export interface IConfig {
     mongodbUrl: string;
@@ -164,4 +165,23 @@ export const syncConfigWithDatabase = (): void => {
     if (!config.worldState?.galleonOfGhouls) {
         void Inbox.deleteMany({ goalTag: "GalleonRobbery" }).then(() => {});
     }
+};
+
+export const getReflexiveAddress = (request: Request): { myAddress: string; myUrlBase: string } => {
+    let myAddress: string;
+    let myUrlBase: string = request.protocol + "://";
+    if (request.host.indexOf("warframe.com") == -1) {
+        // Client request was redirected cleanly, so we know it can reach us how it's reaching us now.
+        myAddress = request.hostname;
+        myUrlBase += request.host;
+    } else {
+        // Don't know how the client reached us, hoping the config does.
+        myAddress = config.myAddress;
+        myUrlBase += myAddress;
+        const port: number = request.protocol == "http" ? config.httpPort || 80 : config.httpsPort || 443;
+        if (port != (request.protocol == "http" ? 80 : 443)) {
+            myUrlBase += ":" + port;
+        }
+    }
+    return { myAddress, myUrlBase };
 };
