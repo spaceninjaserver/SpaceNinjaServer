@@ -2339,7 +2339,7 @@ function unlockFocusSchool(upgradeType) {
         $.post({
             url: "/api/focus.php?" + window.authz + "&op=5",
             contentType: "text/plain",
-            data: "{}"
+            data: JSON.stringify({ FocusType: null })
         }).done(function () {
             // Unlock the way now
             $.post({
