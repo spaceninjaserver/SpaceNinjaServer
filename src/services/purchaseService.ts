@@ -209,7 +209,7 @@ export const handlePurchase = async (
         inventory,
         purchaseRequest.PurchaseParams.ExpectedPrice,
         purchaseRequest.PurchaseParams.UsePremium,
-        prePurchaseInventoryChanges
+        purchaseResponse.InventoryChanges
     );
 
     switch (purchaseRequest.PurchaseParams.Source) {
