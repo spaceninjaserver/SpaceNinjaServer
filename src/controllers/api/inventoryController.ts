@@ -10,7 +10,7 @@ import { equipmentKeys } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import { ArtifactPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import type { ICountedItem } from "warframe-public-export-plus";
-import { eFaction, ExportCustoms, ExportFlavour, ExportResources, ExportVirtuals } from "warframe-public-export-plus";
+import { eFaction, ExportCustoms, ExportFlavour, ExportResources } from "warframe-public-export-plus";
 import { applyCheatsToInfestedFoundry, handleSubsumeCompletion } from "../../services/infestedFoundryService.ts";
 import {
     addEmailItem,
@@ -358,17 +358,6 @@ export const getInventoryResponse = async (
         }
     }
 
-    if (config.unlockAllCapturaScenes) {
-        for (const uniqueName of Object.keys(ExportResources)) {
-            if (resourceInheritsFrom(uniqueName, "/Lotus/Types/Items/MiscItems/PhotoboothTile")) {
-                inventoryResponse.MiscItems.push({
-                    ItemType: uniqueName,
-                    ItemCount: 1
-                });
-            }
-        }
-    }
-
     if (typeof config.spoofMasteryRank === "number" && config.spoofMasteryRank >= 0) {
         inventoryResponse.PlayerLevel = config.spoofMasteryRank;
         if (!xpBasedLevelCapDisabled) {
@@ -494,22 +483,4 @@ const getExpRequiredForMr = (rank: number): number => {
         return 2500 * rank * rank;
     }
     return 2_250_000 + 147_500 * (rank - 30);
-};
-
-const resourceInheritsFrom = (resourceName: string, targetName: string): boolean => {
-    let parentName = resourceGetParent(resourceName);
-    for (; parentName != undefined; parentName = resourceGetParent(parentName)) {
-        if (parentName == targetName) {
-            return true;
-        }
-    }
-    return false;
-};
-
-const resourceGetParent = (resourceName: string): string | undefined => {
-    if (resourceName in ExportResources) {
-        return ExportResources[resourceName].parentName;
-    }
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    return ExportVirtuals[resourceName]?.parentName;
 };

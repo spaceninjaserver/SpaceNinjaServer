@@ -18,12 +18,9 @@ export interface IConfig {
     administratorNames?: string[];
     autoCreateAccount?: boolean;
     skipTutorial?: boolean;
-    unlockAllScans?: boolean;
-    unlockAllShipFeatures?: boolean;
     unlockAllShipDecorations?: boolean;
     unlockAllFlavourItems?: boolean;
     unlockAllSkins?: boolean;
-    unlockAllCapturaScenes?: boolean;
     unlockAllDecoRecipes?: boolean;
     fullyStockedVendors?: boolean;
     skipClanKeyCrafting?: boolean;
@@ -106,6 +103,9 @@ export const configRemovedOptionsKeys = [
     "unlockArcanesEverywhere",
     "unlockAllProfitTakerStages",
     "unlockAllSimarisResearchEntries",
+    "unlockAllScans",
+    "unlockAllShipFeatures",
+    "unlockAllCapturaScenes",
     "noDailyStandingLimits",
     "noDailyFocusLimit",
     "noArgonCrystalDecay",

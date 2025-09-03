@@ -808,8 +808,11 @@
                                     <label class="form-check-label" for="finishInvasionsInOneMission" data-loc="cheats_finishInvasionsInOneMission"></label>
                                 </div>
                                 <div class="mt-2 mb-2 d-flex flex-wrap gap-2">
+                                    <button class="btn btn-primary" onclick="debounce(doUnlockAllShipFeatures);" data-loc="cheats_unlockAllShipFeatures"></button>
                                     <button class="btn btn-primary" onclick="debounce(unlockAllMissions);" data-loc="cheats_unlockAllMissions"></button>
                                     <button class="btn btn-primary" onclick="debounce(markAllAsRead);" data-loc="cheats_markAllAsRead"></button>
+                                    <button class="btn btn-primary" onclick="debounce(doUnlockAllScans);" data-loc="cheats_unlockAllScans"></button>
+                                    <button class="btn btn-primary" onclick="debounce(doUnlockAllCapturaScenes);" data-loc="cheats_unlockAllCapturaScenes"></button>
                                     <button class="btn btn-primary" onclick="doUnlockAllFocusSchools();" data-loc="cheats_unlockAllFocusSchools"></button>
                                     <button class="btn btn-primary" onclick="doHelminthUnlockAll();" data-loc="cheats_helminthUnlockAll"></button>
                                     <button class="btn btn-primary" onclick="debounce(addMissingHelminthRecipes);" data-loc="cheats_addMissingSubsumedAbilities"></button>
@@ -841,14 +844,6 @@
                                         <label class="form-check-label" for="skipTutorial" data-loc="cheats_skipTutorial"></label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="unlockAllScans" />
-                                        <label class="form-check-label" for="unlockAllScans" data-loc="cheats_unlockAllScans"></label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="unlockAllShipFeatures" />
-                                        <label class="form-check-label" for="unlockAllShipFeatures" data-loc="cheats_unlockAllShipFeatures"></label>
-                                    </div>
-                                    <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="unlockAllShipDecorations" />
                                         <label class="form-check-label" for="unlockAllShipDecorations" data-loc="cheats_unlockAllShipDecorations"></label>
                                     </div>
@@ -859,10 +854,6 @@
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="unlockAllSkins" />
                                         <label class="form-check-label" for="unlockAllSkins" data-loc="cheats_unlockAllSkins"></label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="unlockAllCapturaScenes" />
-                                        <label class="form-check-label" for="unlockAllCapturaScenes" data-loc="cheats_unlockAllCapturaScenes"></label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="unlockAllDecoRecipes" />

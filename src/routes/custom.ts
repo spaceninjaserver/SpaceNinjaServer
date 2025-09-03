@@ -16,6 +16,9 @@ import { completeAllMissionsController } from "../controllers/custom/completeAll
 import { addMissingHelminthBlueprintsController } from "../controllers/custom/addMissingHelminthBlueprintsController.ts";
 import { unlockAllProfitTakerStagesController } from "../controllers/custom/unlockAllProfitTakerStagesController.ts";
 import { unlockAllSimarisResearchEntriesController } from "../controllers/custom/unlockAllSimarisResearchEntriesController.ts";
+import { unlockAllScansController } from "../controllers/custom/unlockAllScansController.ts";
+import { unlockAllShipFeaturesController } from "../controllers/custom/unlockAllShipFeaturesController.ts";
+import { unlockAllCapturaScenesController } from "../controllers/custom/unlockAllCapturaScenesController.ts";
 
 import { abilityOverrideController } from "../controllers/custom/abilityOverrideController.ts";
 import { createAccountController } from "../controllers/custom/createAccountController.ts";
@@ -52,6 +55,9 @@ customRouter.get("/completeAllMissions", completeAllMissionsController);
 customRouter.get("/addMissingHelminthBlueprints", addMissingHelminthBlueprintsController);
 customRouter.get("/unlockAllProfitTakerStages", unlockAllProfitTakerStagesController);
 customRouter.get("/unlockAllSimarisResearchEntries", unlockAllSimarisResearchEntriesController);
+customRouter.get("/unlockAllScans", unlockAllScansController);
+customRouter.get("/unlockAllShipFeatures", unlockAllShipFeaturesController);
+customRouter.get("/unlockAllCapturaScenes", unlockAllCapturaScenesController);
 
 customRouter.post("/abilityOverride", abilityOverrideController);
 customRouter.post("/createAccount", createAccountController);

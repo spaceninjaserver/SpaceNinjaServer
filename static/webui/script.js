@@ -2750,6 +2750,24 @@ async function doMaxPlexus() {
     }
 }
 
+async function doUnlockAllScans() {
+    await revalidateAuthz();
+    await fetch("/custom/unlockAllScans?" + window.authz);
+    toast(loc("cheats_unlockSucc"));
+}
+
+async function doUnlockAllShipFeatures() {
+    await revalidateAuthz();
+    await fetch("/custom/unlockAllShipFeatures?" + window.authz);
+    toast(loc("cheats_unlockSucc"));
+}
+
+async function doUnlockAllCapturaScenes() {
+    await revalidateAuthz();
+    await fetch("/custom/unlockAllCapturaScenes?" + window.authz);
+    toast(loc("cheats_unlockSucc"));
+}
+
 async function unlockAllMissions() {
     await revalidateAuthz();
     await fetch("/custom/completeAllMissions?" + window.authz);

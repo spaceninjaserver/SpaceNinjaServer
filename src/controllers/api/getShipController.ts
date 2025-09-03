@@ -1,6 +1,4 @@
 import type { RequestHandler } from "express";
-import { config } from "../../services/configService.ts";
-import allShipFeatures from "../../../static/fixed_responses/allShipFeatures.json" with { type: "json" };
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { createGarden, getPersonalRooms } from "../../services/personalRoomsService.ts";
 import type { IGetShipResponse, IPersonalRoomsClient } from "../../types/personalRoomsTypes.ts";
@@ -30,10 +28,6 @@ export const getShipController: RequestHandler = async (req, res) => {
         Apartment: personalRooms.Apartment,
         TailorShop: personalRooms.TailorShop
     };
-
-    if (config.unlockAllShipFeatures) {
-        getShipResponse.Ship.Features = allShipFeatures;
-    }
 
     res.json(getShipResponse);
 };
