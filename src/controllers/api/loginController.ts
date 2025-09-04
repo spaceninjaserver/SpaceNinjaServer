@@ -95,11 +95,11 @@ const createLoginResponse = (
         BuildLabel: buildLabel
     };
     if (version_compare(buildLabel, "2015.02.13.10.41") >= 0) {
-        resp.NRS = [myAddress];
+        resp.NRS = [config.nrsAddress ?? myAddress];
     }
     if (version_compare(buildLabel, "2015.05.14.16.29") >= 0) {
         // U17 and up
-        resp.IRC = config.myIrcAddresses ?? [myAddress];
+        resp.IRC = [config.ircAddress ?? myAddress];
     }
     if (version_compare(buildLabel, "2018.11.08.14.45") >= 0) {
         // U24 and up

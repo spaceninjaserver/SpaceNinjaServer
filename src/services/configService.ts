@@ -14,7 +14,9 @@ export interface IConfig {
     myAddress: string;
     httpPort?: number;
     httpsPort?: number;
-    myIrcAddresses?: string[];
+    ircAddress?: string;
+    hubAddress?: string;
+    nrsAddress?: string;
     administratorNames?: string[];
     autoCreateAccount?: boolean;
     skipTutorial?: boolean;
@@ -84,6 +86,7 @@ export interface IConfig {
 
 export const configRemovedOptionsKeys = [
     "NRS",
+    "myIrcAddresses",
     "skipAllDialogue",
     "infiniteCredits",
     "infinitePlatinum",
