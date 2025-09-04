@@ -13,6 +13,17 @@ args.push("--dev");
 args.push("--secret");
 args.push(secret);
 
+const cangoraw = (() => {
+    if (process.versions.bun) {
+        return true;
+    }
+    const [major, minor] = process.versions.node.split(".").map(x => parseInt(x));
+    if (major > 22 || (major == 22 && minor >= 7)) {
+        return true;
+    }
+    return false;
+})();
+
 let buildproc, runproc;
 const spawnopts = { stdio: "inherit", shell: true };
 function run(changedFile) {
@@ -29,7 +40,7 @@ function run(changedFile) {
         runproc = undefined;
     }
 
-    const thisbuildproc = spawn("npm", ["run", process.versions.bun ? "verify" : "build:dev"], spawnopts);
+    const thisbuildproc = spawn("npm", ["run", cangoraw ? "verify" : "build:dev"], spawnopts);
     const thisbuildstart = Date.now();
     buildproc = thisbuildproc;
     buildproc.on("exit", code => {
@@ -38,8 +49,12 @@ function run(changedFile) {
         }
         buildproc = undefined;
         if (code === 0) {
-            console.log(`${process.versions.bun ? "Verified" : "Built"} in ${Date.now() - thisbuildstart} ms`);
-            runproc = spawn("npm", ["run", process.versions.bun ? "raw:bun" : "start", "--", ...args], spawnopts);
+            console.log(`${cangoraw ? "Verified" : "Built"} in ${Date.now() - thisbuildstart} ms`);
+            runproc = spawn(
+                "npm",
+                ["run", cangoraw ? (process.versions.bun ? "raw:bun" : "raw") : "start", "--", ...args],
+                spawnopts
+            );
             runproc.on("exit", () => {
                 runproc = undefined;
             });
