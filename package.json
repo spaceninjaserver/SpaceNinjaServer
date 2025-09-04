@@ -15,7 +15,7 @@
     "dev:bun": "bun scripts/dev.cjs",
     "verify": "tsgo --noEmit",
     "verify:tsc": "tsc --noEmit",
-    "raw": "node --experimental-transform-types src/index.ts",
+    "raw": "node scripts/raw-precheck.js && node --experimental-transform-types src/index.ts",
     "raw:bun": "bun src/index.ts",
     "lint": "eslint --ext .ts .",
     "lint:ci": "eslint --ext .ts --rule \"prettier/prettier: off\" .",
