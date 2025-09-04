@@ -12,6 +12,7 @@ To get an idea of what functionality you can expect to be missing [have a look t
 
 SpaceNinjaServer requires a `config.json`. To set it up, you can copy the [config-vanilla.json](config-vanilla.json), which has most cheats disabled.
 
+- `skipTutorial` affects only newly created accounts, so you may wish to change it before logging in for the first time.
 - `logger.level` can be `fatal`, `error`, `warn`, `info`, `http`, `debug`, or `trace`.
 - `myIrcAddresses` can be used to point to an IRC server. If not provided, defaults to `[ myAddress ]`.
 - `worldState.eidolonOverride` can be set to `day` or `night` to lock the time to day/fass and night/vome on Plains of Eidolon/Cambion Drift.
