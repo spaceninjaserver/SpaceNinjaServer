@@ -2753,19 +2753,19 @@ async function doMaxPlexus() {
 async function doUnlockAllScans() {
     await revalidateAuthz();
     await fetch("/custom/unlockAllScans?" + window.authz);
-    toast(loc("cheats_unlockSucc"));
+    toast(loc("cheats_unlockSuccRelog"));
 }
 
 async function doUnlockAllShipFeatures() {
     await revalidateAuthz();
     await fetch("/custom/unlockAllShipFeatures?" + window.authz);
-    toast(loc("cheats_unlockSucc"));
+    toast(loc("cheats_unlockSuccInventory"));
 }
 
 async function doUnlockAllCapturaScenes() {
     await revalidateAuthz();
     await fetch("/custom/unlockAllCapturaScenes?" + window.authz);
-    toast(loc("cheats_unlockSucc"));
+    toast(loc("cheats_unlockSuccInventory"));
 }
 
 async function unlockAllMissions() {
@@ -2777,13 +2777,13 @@ async function unlockAllMissions() {
 async function unlockAllProfitTakerStages() {
     await revalidateAuthz();
     await fetch("/custom/unlockAllProfitTakerStages?" + window.authz);
-    toast(loc("cheats_unlockSucc"));
+    toast(loc("cheats_unlockSuccInventory"));
 }
 
 async function unlockAllSimarisResearchEntries() {
     await revalidateAuthz();
     await fetch("/custom/unlockAllSimarisResearchEntries?" + window.authz);
-    toast(loc("cheats_unlockSucc"));
+    toast(loc("cheats_unlockSuccInventory"));
 }
 
 const importSamples = {
