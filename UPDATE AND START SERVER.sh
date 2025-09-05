@@ -14,11 +14,16 @@ if [ $? -eq 0 ]; then
     fi
 
     echo "Updating dependencies..."
-    npm i --omit=dev
-
-    npm run build
+    node scripts/raw-precheck.js > /dev/null
     if [ $? -eq 0 ]; then
-        npm run start
-        echo "SpaceNinjaServer seems to have crashed."
+        npm i --omit=dev --omit=optional
+        npm run raw
+    else
+        npm i --omit=dev
+        npm run build
+        if [ $? -eq 0 ]; then
+            npm run start
+        fi
     fi
+    echo "SpaceNinjaServer seems to have crashed."
 fi

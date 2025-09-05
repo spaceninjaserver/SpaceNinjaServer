@@ -14,13 +14,18 @@ if %errorlevel% == 0 (
 	)
 
 	echo Updating dependencies...
-	call npm i --omit=dev
-
-	call npm run build
+	node scripts/raw-precheck.js > NUL
 	if %errorlevel% == 0 (
-		call npm run start
-		echo SpaceNinjaServer seems to have crashed.
+		call npm i --omit=dev --omit=optional
+		call npm run raw
+	) else (
+		call npm i --omit=dev
+		call npm run build
+		if %errorlevel% == 0 (
+			call npm run start
+		)
 	)
+	echo SpaceNinjaServer seems to have crashed.
 )
 
 :a
