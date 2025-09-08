@@ -171,7 +171,7 @@ dict = {
     mods_addMissingUnrankedMods: `Добавити недостаючі модифікатори без рівня`,
     mods_removeUnranked: `Видалити модифікатори без рівня`,
     mods_addMissingMaxRankMods: `Добавити недостаючі модифікатори макс. рівня`,
-    cheats_administratorRequirement: `Ви повинні бути адміністратором для використання цієї функції. Щоб стати адміністратором, додайте <code>\"|DISPLAYNAME|\"</code> в <code>administratorNames</code> в config.json.`,
+    cheats_administratorRequirement: `Ви повинні бути адміністратором для використання цієї функції. Щоб стати адміністратором, додайте <code>"|DISPLAYNAME|"</code> в <code>administratorNames</code> в config.json.`,
     cheats_server: `Сервер`,
     cheats_skipTutorial: `Пропустити навчання`,
     cheats_skipAllDialogue: `Пропустити всі діалоги`,

@@ -171,7 +171,7 @@ dict = {
     mods_addMissingUnrankedMods: `添加所有缺失的Mods`,
     mods_removeUnranked: `删除所有未升级的Mods`,
     mods_addMissingMaxRankMods: `添加所有缺失的满级Mods`,
-    cheats_administratorRequirement: `您必须是管理员才能使用此功能.要成为管理员,请在 config.json 中将 <code>|DISPLAYNAME|</code> 添加到 <code>administratorNames</code>`,
+    cheats_administratorRequirement: `您必须是管理员才能使用此功能.要成为管理员,请在 config.json 中将 <code>"|DISPLAYNAME|"</code> 添加到 <code>administratorNames</code>`,
     cheats_server: `服务器`,
     cheats_skipTutorial: `跳过教程`,
     cheats_skipAllDialogue: `跳过所有对话`,

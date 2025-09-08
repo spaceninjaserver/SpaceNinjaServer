@@ -171,7 +171,7 @@ dict = {
     mods_addMissingUnrankedMods: `Agregar mods sin rango faltantes`,
     mods_removeUnranked: `Quitar mods sin rango`,
     mods_addMissingMaxRankMods: `Agregar mods de rango máximo faltantes`,
-    cheats_administratorRequirement: `Debes ser administrador para usar esta función. Para convertirte en administrador, agrega <code>|DISPLAYNAME|</code> a <code>administratorNames</code> en el archivo config.json.`,
+    cheats_administratorRequirement: `Debes ser administrador para usar esta función. Para convertirte en administrador, agrega <code>"|DISPLAYNAME|"</code> a <code>administratorNames</code> en el archivo config.json.`,
     cheats_server: `Servidor`,
     cheats_skipTutorial: `Omitir tutorial`,
     cheats_skipAllDialogue: `Omitir todos los diálogos`,
