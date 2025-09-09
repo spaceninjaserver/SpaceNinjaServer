@@ -10,7 +10,7 @@ import { equipmentKeys } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import { ArtifactPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import type { ICountedItem } from "warframe-public-export-plus";
-import { eFaction, ExportCustoms, ExportFlavour, ExportResources } from "warframe-public-export-plus";
+import { ExportCustoms, ExportFlavour, ExportResources } from "warframe-public-export-plus";
 import { applyCheatsToInfestedFoundry, handleSubsumeCompletion } from "../../services/infestedFoundryService.ts";
 import {
     addEmailItem,
@@ -220,7 +220,10 @@ export const inventoryController: RequestHandler = async (request, response) => 
                     }
                     await createMessage(account._id, [
                         {
-                            sndr: eFaction.find(x => x.tag == factionSidedWith)?.name ?? factionSidedWith, // TOVERIFY
+                            sndr:
+                                factionSidedWith == "FC_GRINEER"
+                                    ? "/Lotus/Language/Menu/GrineerInvasionLeader"
+                                    : "/Lotus/Language/Menu/CorpusInvasionLeader",
                             msg: `/Lotus/Language/G1Quests/${factionSidedWith}_InvasionThankyouMessageBody`,
                             sub: `/Lotus/Language/G1Quests/${factionSidedWith}_InvasionThankyouMessageSubject`,
                             countedAtt: battlePay,
