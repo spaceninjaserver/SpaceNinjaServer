@@ -313,7 +313,7 @@ const getItemListsController: RequestHandler = (req, response) => {
                 uniqueName,
                 name: getString(arcane.name, lang)
             };
-            if (arcane.isFrivolous) {
+            if (arcane.excludeFromCodex) {
                 mod.badReason = "frivolous";
             }
             res.mods.push(mod);
