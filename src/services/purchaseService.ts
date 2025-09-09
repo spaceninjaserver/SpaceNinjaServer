@@ -1,4 +1,3 @@
-import { parseSlotPurchaseName, slotPurchaseNameToSlotName } from "../helpers/purchaseHelpers.ts";
 import { getSubstringFromKeyword } from "../helpers/stringHelpers.ts";
 import {
     addBooster,
@@ -15,7 +14,8 @@ import type {
     IPurchaseRequest,
     IPurchaseResponse,
     IInventoryChanges,
-    IPurchaseParams
+    IPurchaseParams,
+    SlotNames
 } from "../types/purchaseTypes.ts";
 import { PurchaseSource } from "../types/purchaseTypes.ts";
 import { logger } from "../utils/logger.ts";
@@ -489,6 +489,20 @@ export const handleStoreItemAcquisition = async (
     return purchaseResponse;
 };
 
+const slotPurchaseNameToSlotName: Record<string, { name: SlotNames; purchaseQuantity: number }> = {
+    SuitSlotItem: { name: "SuitBin", purchaseQuantity: 1 },
+    TwoSentinelSlotItem: { name: "SentinelBin", purchaseQuantity: 2 },
+    TwoWeaponSlotItem: { name: "WeaponBin", purchaseQuantity: 2 },
+    SpaceSuitSlotItem: { name: "SpaceSuitBin", purchaseQuantity: 1 },
+    TwoSpaceWeaponSlotItem: { name: "SpaceWeaponBin", purchaseQuantity: 2 },
+    MechSlotItem: { name: "MechBin", purchaseQuantity: 1 },
+    TwoOperatorWeaponSlotItem: { name: "OperatorAmpBin", purchaseQuantity: 2 },
+    RandomModSlotItem: { name: "RandomModBin", purchaseQuantity: 3 },
+    TwoCrewShipSalvageSlotItem: { name: "CrewShipSalvageBin", purchaseQuantity: 2 },
+    CrewMemberSlotItem: { name: "CrewMemberBin", purchaseQuantity: 1 },
+    PvPLoadoutSlotItem: { name: "PvpBonusLoadoutBin", purchaseQuantity: 1 }
+};
+
 // // extra = everything above the base +2 slots (depending on slot type)
 // // new slot above base = extra + 1 and slots +1
 // // new frame = slots -1
@@ -500,9 +514,8 @@ const handleSlotPurchase = (
     ignorePurchaseQuantity: boolean
 ): IPurchaseResponse => {
     logger.debug(`slot name ${slotPurchaseNameFull}`);
-    const slotPurchaseName = parseSlotPurchaseName(
-        slotPurchaseNameFull.substring(slotPurchaseNameFull.lastIndexOf("/") + 1)
-    );
+    const slotPurchaseName = slotPurchaseNameFull.substring(slotPurchaseNameFull.lastIndexOf("/") + 1);
+    if (!(slotPurchaseName in slotPurchaseNameToSlotName)) throw new Error(`invalid slot name ${slotPurchaseName}`);
     logger.debug(`slot purchase name ${slotPurchaseName}`);
 
     const slotName = slotPurchaseNameToSlotName[slotPurchaseName].name;

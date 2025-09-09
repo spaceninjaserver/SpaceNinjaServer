@@ -120,18 +120,6 @@ export type IBinChanges = {
     Extra?: number;
 };
 
-export type SlotPurchaseName =
-    | "SuitSlotItem"
-    | "TwoSentinelSlotItem"
-    | "TwoWeaponSlotItem"
-    | "SpaceSuitSlotItem"
-    | "TwoSpaceWeaponSlotItem"
-    | "MechSlotItem"
-    | "TwoOperatorWeaponSlotItem"
-    | "RandomModSlotItem"
-    | "TwoCrewShipSalvageSlotItem"
-    | "CrewMemberSlotItem";
-
 export const slotNames = [
     "SuitBin",
     "WeaponBin",
@@ -148,7 +136,3 @@ export const slotNames = [
 ] as const;
 
 export type SlotNames = (typeof slotNames)[number];
-
-export type SlotPurchase = {
-    [P in SlotPurchaseName]: { name: SlotNames; purchaseQuantity: number };
-};
