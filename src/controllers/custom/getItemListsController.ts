@@ -70,7 +70,7 @@ const relicQualitySuffixes: Record<TRelicQuality, string> = {
 };
 
 /*const toTitleCase = (str: string): string => {
-    return str.replace(/[^\s-]+/g, word => word.charAt(0).toUpperCase() + word.substr(1).toLowerCase());
+    return str.replace(/[^\s-]+/g, word => word.charAt(0).toUpperCase() + word.substring(1).toLowerCase());
 };*/
 
 const getItemListsController: RequestHandler = (req, response) => {
@@ -221,7 +221,7 @@ const getItemListsController: RequestHandler = (req, response) => {
         }
         if (
             name &&
-            uniqueName.substr(0, 30) != "/Lotus/Types/Game/Projections/" &&
+            uniqueName.substring(0, 30) != "/Lotus/Types/Game/Projections/" &&
             uniqueName != "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLanthornBundle"
         ) {
             res.miscitems.push({

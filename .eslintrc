@@ -31,7 +31,8 @@
         "no-mixed-spaces-and-tabs": "error",
         "@typescript-eslint/require-await": "error",
         "import/no-named-as-default-member": "off",
-        "import/no-cycle": "warn"
+        "import/no-cycle": "warn",
+        "@typescript-eslint/no-deprecated": "warn"
     },
     "parser": "@typescript-eslint/parser",
     "parserOptions": {

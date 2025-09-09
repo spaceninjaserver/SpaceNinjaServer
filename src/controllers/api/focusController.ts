@@ -231,7 +231,7 @@ interface ILensInstallRequest {
 
 // Works for ways & upgrades
 const focusTypeToPolarity = (type: string): TFocusPolarity => {
-    return ("AP_" + type.substr(1).split("/")[3].toUpperCase()) as TFocusPolarity;
+    return ("AP_" + type.substring(1).split("/")[3].toUpperCase()) as TFocusPolarity;
 };
 
 const shardValues = {

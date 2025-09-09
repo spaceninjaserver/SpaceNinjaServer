@@ -687,10 +687,10 @@ export const addItem = async (
     }
 
     // Path-based duck typing
-    switch (typeName.substr(1).split("/")[1]) {
+    switch (typeName.substring(1).split("/")[1]) {
         case "Powersuits":
             if (typeName.endsWith("AugmentCard")) break;
-            switch (typeName.substr(1).split("/")[2]) {
+            switch (typeName.substring(1).split("/")[2]) {
                 default: {
                     return {
                         ...(await addPowerSuit(inventory, typeName, {
@@ -725,7 +725,7 @@ export const addItem = async (
             }
             break;
         case "Upgrades": {
-            switch (typeName.substr(1).split("/")[2]) {
+            switch (typeName.substring(1).split("/")[2]) {
                 case "Mods": // Legendary Core
                 case "CosmeticEnhancers": // Traumatic Peculiar
                     {
@@ -782,12 +782,12 @@ export const addItem = async (
             break;
         }
         case "Types":
-            switch (typeName.substr(1).split("/")[2]) {
+            switch (typeName.substring(1).split("/")[2]) {
                 case "Sentinels": {
                     return addSentinel(inventory, typeName, premiumPurchase);
                 }
                 case "Game": {
-                    if (typeName.substr(1).split("/")[3] == "Projections") {
+                    if (typeName.substring(1).split("/")[3] == "Projections") {
                         // Void Relics, e.g. /Lotus/Types/Game/Projections/T2VoidProjectionGaussPrimeDBronze
                         const miscItemChanges = [
                             {
@@ -801,8 +801,8 @@ export const addItem = async (
                             MiscItems: miscItemChanges
                         };
                     } else if (
-                        typeName.substr(1).split("/")[3] == "CatbrowPet" ||
-                        typeName.substr(1).split("/")[3] == "KubrowPet"
+                        typeName.substring(1).split("/")[3] == "CatbrowPet" ||
+                        typeName.substring(1).split("/")[3] == "KubrowPet"
                     ) {
                         if (
                             typeName != "/Lotus/Types/Game/KubrowPet/Eggs/KubrowPetEggItem" &&
@@ -826,7 +826,7 @@ export const addItem = async (
                     break;
                 }
                 case "Items": {
-                    if (typeName.substr(1).split("/")[3] == "Emotes") {
+                    if (typeName.substring(1).split("/")[3] == "Emotes") {
                         return addCustomization(inventory, typeName);
                     }
                     break;
@@ -875,8 +875,8 @@ export const addItem = async (
             }
             break;
         case "Weapons": {
-            if (typeName.substr(1).split("/")[4] == "MeleeTrees") break;
-            const productCategory = typeName.substr(1).split("/")[3];
+            if (typeName.substring(1).split("/")[4] == "MeleeTrees") break;
+            const productCategory = typeName.substring(1).split("/")[3];
             switch (productCategory) {
                 case "Pistols":
                 case "LongGuns":
