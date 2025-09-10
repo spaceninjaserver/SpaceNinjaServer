@@ -64,14 +64,14 @@ interface ItemLists {
 
 const relicQualitySuffixes: Record<TRelicQuality, string> = {
     VPQ_BRONZE: "",
-    VPQ_SILVER: " [Exceptional]",
-    VPQ_GOLD: " [Flawless]",
-    VPQ_PLATINUM: " [Radiant]"
+    VPQ_SILVER: "/Lotus/Language/Relics/VoidProjectionQuality_Silver",
+    VPQ_GOLD: "/Lotus/Language/Relics/VoidProjectionQuality_Gold",
+    VPQ_PLATINUM: "/Lotus/Language/Relics/VoidProjectionQuality_Platinum"
 };
 
-/*const toTitleCase = (str: string): string => {
+const toTitleCase = (str: string): string => {
     return str.replace(/[^\s-]+/g, word => word.charAt(0).toUpperCase() + word.substring(1).toLowerCase());
-};*/
+};
 
 const getItemListsController: RequestHandler = (req, response) => {
     const lang = getDict(typeof req.query.lang == "string" ? req.query.lang : "en");
@@ -232,14 +232,19 @@ const getItemListsController: RequestHandler = (req, response) => {
         }
     }
     for (const [uniqueName, item] of Object.entries(ExportRelics)) {
+        const qualitySuffix =
+            item.quality !== "VPQ_BRONZE"
+                ? ` [${toTitleCase(getString(relicQualitySuffixes[item.quality], lang))}]`
+                : "";
+
         res.miscitems.push({
             uniqueName: uniqueName,
             name:
                 getString("/Lotus/Language/Relics/VoidProjectionName", lang)
                     .split("|ERA|")
-                    .join(item.era)
+                    .join(getString(`/Lotus/Language/Relics/Era_${item.era.toUpperCase()}`, lang))
                     .split("|CATEGORY|")
-                    .join(item.category) + relicQualitySuffixes[item.quality]
+                    .join(item.category) + qualitySuffix
         });
     }
     for (const [uniqueName, item] of Object.entries(ExportGear)) {
