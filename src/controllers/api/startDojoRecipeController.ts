@@ -11,7 +11,6 @@ import {
 } from "../../services/guildService.ts";
 import { Types } from "mongoose";
 import { ExportDojoRecipes } from "warframe-public-export-plus";
-import { config } from "../../services/configService.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 
@@ -57,7 +56,7 @@ export const startDojoRecipeController: RequestHandler = async (req, res) => {
                 DecoCapacity: room?.decoCapacity
             }) - 1
         ];
-    if (config.noDojoRoomBuildStage) {
+    if (guild.noDojoRoomBuildStage) {
         component.CompletionTime = new Date(Date.now());
         if (room) {
             processDojoBuildMaterialsGathered(guild, room);

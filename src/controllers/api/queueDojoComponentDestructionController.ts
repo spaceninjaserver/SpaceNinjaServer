@@ -1,4 +1,3 @@
-import { config } from "../../services/configService.ts";
 import {
     getDojoClient,
     getGuildForRequestEx,
@@ -21,7 +20,7 @@ export const queueDojoComponentDestructionController: RequestHandler = async (re
     const componentId = req.query.componentId as string;
 
     guild.DojoComponents.id(componentId)!.DestructionTime = new Date(
-        (Math.trunc(Date.now() / 1000) + (config.fastDojoRoomDestruction ? 5 : 2 * 3600)) * 1000
+        (Math.trunc(Date.now() / 1000) + (guild.fastDojoRoomDestruction ? 5 : 2 * 3600)) * 1000
     );
 
     await guild.save();

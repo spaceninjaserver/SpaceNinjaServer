@@ -42,6 +42,9 @@ webuiRouter.get("/webui/cheats", (_req, res) => {
 webuiRouter.get("/webui/import", (_req, res) => {
     res.sendFile(path.join(baseDir, "static/webui/index.html"));
 });
+webuiRouter.get("/webui/guildView", (_req, res) => {
+    res.sendFile(path.join(baseDir, "static/webui/index.html"));
+});
 
 // Serve static files
 webuiRouter.use("/webui", express.static(path.join(baseDir, "static/webui")));

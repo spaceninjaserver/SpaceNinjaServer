@@ -256,6 +256,9 @@ function setLanguage(lang) {
         // Not in prelogin state?
         fetchItemList();
         updateInventory();
+        if (single.getCurrentPath().startsWith("/webui/guildView")) {
+            updateInventory();
+        }
     }
 }
 
@@ -490,6 +493,33 @@ function fetchItemList() {
                     name: data.ModularParts.find(
                         i => i.uniqueName === "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadC"
                     ).name
+                },
+                "/Lotus/Language/Game/Rank_Creator": {
+                    name: loc("guildView_rank_creator")
+                },
+                "/Lotus/Language/Game/Rank_Warlord": {
+                    name: loc("guildView_rank_warlord")
+                },
+                "/Lotus/Language/Game/Rank_General": {
+                    name: loc("guildView_rank_general")
+                },
+                "/Lotus/Language/Game/Rank_Officer": {
+                    name: loc("guildView_rank_officer")
+                },
+                "/Lotus/Language/Game/Rank_Leader": {
+                    name: loc("guildView_rank_leader")
+                },
+                "/Lotus/Language/Game/Rank_Sage": {
+                    name: loc("guildView_rank_sage")
+                },
+                "/Lotus/Language/Game/Rank_Soldier": {
+                    name: loc("guildView_rank_soldier")
+                },
+                "/Lotus/Language/Game/Rank_Initiate": {
+                    name: loc("guildView_rank_initiate")
+                },
+                "/Lotus/Language/Game/Rank_Utility": {
+                    name: loc("guildView_rank_utility")
                 }
             };
             for (const [type, items] of Object.entries(data)) {
@@ -623,6 +653,12 @@ function updateInventory() {
     req.done(data => {
         window.itemListPromise.then(itemMap => {
             window.didInitialInventoryUpdate = true;
+            if (data.GuildId.$oid) {
+                window.guildId = data.GuildId.$oid;
+                document.getElementById("nav-guildView").classList.remove("d-none");
+            } else {
+                document.getElementById("nav-guildView").classList.add("d-none");
+            }
 
             const modularWeapons = [
                 "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary",
@@ -935,7 +971,7 @@ function updateInventory() {
                 if (!data.QuestKeys.some(x => x.ItemType == questKey.uniqueName)) {
                     const datalist = document.getElementById("datalist-QuestKeys");
                     if (!datalist.querySelector(`option[data-key="${questKey.uniqueName}"]`)) {
-                        readdQuestKey(itemMap, questKey.uniqueName);
+                        reAddToItemList(itemMap, "QuestKeys", questKey.uniqueName);
                     }
                 }
             });
@@ -1032,7 +1068,7 @@ function updateInventory() {
                         a.href = "#";
                         a.onclick = function (event) {
                             event.preventDefault();
-                            readdQuestKey(itemMap, item.ItemType);
+                            reAddToItemList(itemMap, "QuestKeys", item.ItemType);
                             doQuestUpdate("deleteKey", item.ItemType);
                         };
                         a.title = loc("code_remove");
@@ -1502,9 +1538,386 @@ function updateInventory() {
                 document.getElementById("Boosters-list").appendChild(tr);
             });
 
+            if (single.getCurrentPath().startsWith("/webui/guildView")) {
+                const guildReq = $.get("/custom/getGuild?guildId=" + window.guildId);
+                guildReq.done(guildData => {
+                    window.itemListPromise.then(itemMap => {
+                        document.getElementById("guildView-loading").classList.add("d-none");
+
+                        document.getElementById("guildView-title").textContent = guildData.Name;
+                        document.getElementById("guildView-tier").textContent = loc("guildView_tierDisplay")
+                            .split("|TIER|")
+                            .join(loc(`guildView_tier${guildData.Tier}`));
+                        document.getElementById("guildView-class").textContent = loc("guildView_classDisplay")
+                            .split("|CLASS|")
+                            .join(guildData.Class);
+
+                        ["VaultRegularCredits", "VaultPremiumCredits"].forEach(currency => {
+                            document.getElementById(currency + "-owned").textContent = loc("guildView_currency_owned")
+                                .split("|COUNT|")
+                                .join((guildData[currency] ?? 0).toLocaleString());
+                        });
+
+                        const userGuildMember = guildData.Members.find(m => m._id.$oid === window.accountId);
+                        let userGuildPermissions;
+                        if (userGuildMember) {
+                            userGuildPermissions = guildData.Ranks[userGuildMember.Rank].Permissions;
+                            // Ruler = 1, // Clan: Change hierarchy. Alliance (Creator only): Kick clans.
+                            // Advertiser = 8192,
+                            // Recruiter = 2, // Send invites (Clans & Alliances)
+                            // Regulator = 4, // Kick members
+                            // Promoter = 8, // Clan: Promote and demote members. Alliance (Creator only): Change clan permissions.
+                            // Architect = 16, // Create and destroy rooms
+                            // Host = 32, // No longer used in modern versions
+                            // Decorator = 1024, // Create and destroy decos
+                            // Treasurer = 64, // Clan: Contribute from vault and edit tax rate. Alliance: Divvy vault.
+                            // Tech = 128, // Queue research
+                            // ChatModerator = 512, // (Clans & Alliances)
+                            // Herald = 2048, // Change MOTD
+                            // Fabricator = 4096 // Replicate research
+                            if (userGuildPermissions & 128) {
+                                document.getElementById("techProjects-form").classList.remove("d-none");
+                            }
+                            if (userGuildPermissions & 16) {
+                                document.getElementById("vaultDecoRecipes-form").classList.remove("d-none");
+                            }
+                            if (userGuildPermissions & 64) {
+                                document.getElementById("vaultRegularCredits-form").classList.remove("d-none");
+                                document.getElementById("VaultRegularCredits-owned").classList.remove("mb-0");
+                                document.getElementById("vaultPremiumCredits-form").classList.remove("d-none");
+                                document.getElementById("VaultPremiumCredits-owned").classList.remove("mb-0");
+                            }
+                            if (userGuildMember.Rank <= 1) {
+                                document.querySelectorAll("#guild-actions button").forEach(btn => {
+                                    btn.disabled = false;
+                                });
+                            }
+                        }
+
+                        const guildCheats = document.querySelectorAll("#guild-cheats input[id]");
+                        for (const elm of guildCheats) {
+                            elm.checked = !!guildData[elm.id];
+                            if (!userGuildMember || userGuildMember.Rank > 1) {
+                                elm.disabled = true;
+                            } else {
+                                elm.disabled = false;
+                            }
+                        }
+
+                        document.getElementById("TechProjects-list").innerHTML = "";
+                        guildData.TechProjects ??= [];
+                        guildData.TechProjects.forEach(item => {
+                            const datalist = document.getElementById("datalist-TechProjects");
+                            const optionToRemove = datalist.querySelector(`option[data-key="${item.ItemType}"]`);
+                            if (optionToRemove) {
+                                datalist.removeChild(optionToRemove);
+                            }
+                            const tr = document.createElement("tr");
+                            tr.setAttribute("data-item-type", item.ItemType);
+                            {
+                                const td = document.createElement("td");
+                                td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
+                                if (new Date(item.CompletionDate) < new Date()) {
+                                    td.textContent += " | " + loc("code_completed");
+                                } else if (item.State == 1) {
+                                    td.textContent += " | " + loc("code_funded");
+                                }
+                                tr.appendChild(td);
+                            }
+                            {
+                                const td = document.createElement("td");
+                                td.classList = "text-end text-nowrap";
+
+                                if (userGuildPermissions && userGuildPermissions & 128 && item.State != 1) {
+                                    const a = document.createElement("a");
+                                    a.href = "#";
+                                    a.onclick = function (event) {
+                                        event.preventDefault();
+                                        fundGuildTechProject(item.ItemType);
+                                    };
+                                    a.title = loc("code_fund");
+                                    a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M214.6 17.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 117.3 160 488c0 17.7 14.3 32 32 32s32-14.3 32-32l0-370.7 105.4 105.4c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"/></svg>`;
+                                    td.appendChild(a);
+                                }
+
+                                if (
+                                    userGuildPermissions &&
+                                    userGuildPermissions & 128 &&
+                                    item.State == 1 &&
+                                    new Date(item.CompletionDate) > new Date()
+                                ) {
+                                    const a = document.createElement("a");
+                                    a.href = "#";
+                                    a.onclick = function (event) {
+                                        event.preventDefault();
+                                        completeGuildTechProject(item.ItemType);
+                                    };
+                                    a.title = loc("code_complete");
+                                    a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M371.7 43.1C360.1 32 343 28.9 328.3 35.2S304 56 304 72l0 136.3-172.3-165.1C120.1 32 103 28.9 88.3 35.2S64 56 64 72l0 368c0 16 9.6 30.5 24.3 36.8s31.8 3.2 43.4-7.9L304 303.7 304 440c0 16 9.6 30.5 24.3 36.8s31.8 3.2 43.4-7.9l192-184c7.9-7.5 12.3-18 12.3-28.9s-4.5-21.3-12.3-28.9l-192-184z"/></svg>`;
+                                    td.appendChild(a);
+                                }
+
+                                if (userGuildMember && userGuildMember.Rank <= 1) {
+                                    const a = document.createElement("a");
+                                    a.href = "#";
+                                    a.onclick = function (event) {
+                                        event.preventDefault();
+                                        reAddToItemList(itemMap, "TechProjects", item.ItemType);
+                                        removeGuildTechProject(item.ItemType);
+                                    };
+                                    a.title = loc("code_remove");
+                                    a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
+                                    td.appendChild(a);
+                                }
+
+                                tr.appendChild(td);
+                            }
+
+                            document.getElementById("TechProjects-list").appendChild(tr);
+                        });
+
+                        document.getElementById("VaultDecoRecipes-list").innerHTML = "";
+                        guildData.VaultDecoRecipes ??= [];
+                        guildData.VaultDecoRecipes.forEach(item => {
+                            const datalist = document.getElementById("datalist-VaultDecoRecipes");
+                            const optionToRemove = datalist.querySelector(`option[data-key="${item.ItemType}"]`);
+                            if (optionToRemove) {
+                                datalist.removeChild(optionToRemove);
+                            }
+                            const tr = document.createElement("tr");
+                            tr.setAttribute("data-item-type", item.ItemType);
+                            {
+                                const td = document.createElement("td");
+                                td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
+                                tr.appendChild(td);
+                            }
+                            {
+                                const td = document.createElement("td");
+                                td.classList = "text-end text-nowrap";
+
+                                if (userGuildMember && userGuildMember.Rank <= 1) {
+                                    const a = document.createElement("a");
+                                    a.href = "#";
+                                    a.onclick = function (event) {
+                                        event.preventDefault();
+                                        reAddToItemList(itemMap, "VaultDecoRecipes", item.ItemType);
+                                        removeVaultDecoRecipe(item.ItemType);
+                                    };
+                                    a.title = loc("code_remove");
+                                    a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
+                                    td.appendChild(a);
+                                }
+
+                                tr.appendChild(td);
+                            }
+
+                            document.getElementById("VaultDecoRecipes-list").appendChild(tr);
+                        });
+
+                        document.getElementById("Members-list").innerHTML = "";
+                        guildData.Members.forEach(member => {
+                            const tr = document.createElement("tr");
+                            {
+                                const td = document.createElement("td");
+                                const memberRank = guildData.Ranks[member.Rank];
+                                td.textContent = member.DisplayName;
+                                td.textContent += " | " + itemMap[memberRank.Name]?.name ?? memberRank.Name;
+                                if (member.Status != 0) {
+                                    td.textContent += " | " + loc("guildView_pending");
+                                }
+                                tr.appendChild(td);
+                            }
+                            {
+                                const td = document.createElement("td");
+                                td.classList = "text-end text-nowrap";
+
+                                if (
+                                    userGuildMember &&
+                                    member.Rank < 8 &&
+                                    member.Rank > userGuildMember.Rank &&
+                                    userGuildPermissions &&
+                                    userGuildPermissions & 8
+                                ) {
+                                    const a = document.createElement("a");
+                                    a.href = "#";
+                                    a.onclick = function (event) {
+                                        event.preventDefault();
+                                        changeGuildRank(guildId, member._id.$oid, member.Rank + 1);
+                                    };
+                                    a.title = loc("guildView_demote");
+                                    a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg>`;
+                                    td.appendChild(a);
+                                }
+                                if (
+                                    userGuildMember &&
+                                    member.Rank > userGuildMember.Rank &&
+                                    userGuildPermissions &&
+                                    userGuildPermissions & 8
+                                ) {
+                                    const a = document.createElement("a");
+                                    a.href = "#";
+                                    a.onclick = function (event) {
+                                        event.preventDefault();
+                                        changeGuildRank(guildId, member._id.$oid, member.Rank - 1);
+                                    };
+                                    a.title = loc("guildView_promote");
+                                    a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"/></svg>`;
+                                    td.appendChild(a);
+                                }
+
+                                if (
+                                    (userGuildMember &&
+                                        member.Rank > userGuildMember.Rank &&
+                                        userGuildPermissions &&
+                                        userGuildPermissions & 4) ||
+                                    (userGuildMember && userGuildMember.Rank != 0 && userGuildMember._id == member._id)
+                                ) {
+                                    const a = document.createElement("a");
+                                    a.href = "#";
+                                    a.onclick = function (event) {
+                                        event.preventDefault();
+                                        kickFromGuild(member._id.$oid);
+                                    };
+                                    a.title = loc("code_remove");
+                                    a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
+                                    td.appendChild(a);
+                                }
+
+                                tr.appendChild(td);
+                            }
+
+                            document.getElementById("Members-list").appendChild(tr);
+                        });
+
+                        if (guildData.AllianceId) {
+                            const allianceReq = $.get("/custom/getAlliance?guildId=" + guildId);
+                            allianceReq.done(allianceData => {
+                                document.getElementById("guildView-alliance").textContent =
+                                    loc("guildView_alliance") + ": " + allianceData.Name;
+
+                                let userAlliancePermisssions;
+                                if (userGuildMember && userGuildMember.Rank <= 1) {
+                                    userAlliancePermisssions = allianceData.Clans.find(
+                                        c => c._id.$oid === guildId
+                                    ).Permissions;
+                                }
+                                document.getElementById("Alliance-list").innerHTML = "";
+                                allianceData.Clans.forEach(clan => {
+                                    const tr = document.createElement("tr");
+                                    {
+                                        const td = document.createElement("td");
+                                        td.textContent = clan.Name;
+                                        if (clan.Pending) {
+                                            td.textContent += " | " + loc("guildView_pending");
+                                        }
+                                        tr.appendChild(td);
+                                    }
+                                    {
+                                        const td = document.createElement("td");
+                                        td.classList = "text-end text-nowrap";
+
+                                        if (
+                                            !(clan.Permissions & 1) &&
+                                            userAlliancePermisssions &&
+                                            userAlliancePermisssions & 1
+                                        ) {
+                                            const a = document.createElement("a");
+                                            a.href = "#";
+                                            a.onclick = function (event) {
+                                                event.preventDefault();
+                                                kickFromAlliance(clan._id.$oid);
+                                            };
+                                            a.title = loc("code_remove");
+                                            a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
+                                            td.appendChild(a);
+                                        }
+
+                                        tr.appendChild(td);
+                                    }
+
+                                    document.getElementById("Alliance-list").appendChild(tr);
+                                });
+                            });
+                        }
+                    });
+                });
+
+                guildReq.fail(() => {
+                    single.loadRoute("/webui/inventory");
+                });
+            }
+
             for (const elm of accountCheats) {
                 elm.checked = !!data[elm.id];
             }
+        });
+    });
+}
+
+function addVaultDecoRecipe() {
+    const uniqueName = getKey(document.getElementById("acquire-type-VaultDecoRecipes"));
+    if (!guildId) {
+        return;
+    }
+    if (!uniqueName) {
+        $("acquire-type-VaultDecoRecipes").addClass("is-invalid").focus();
+        return;
+    }
+    revalidateAuthz().then(() => {
+        const req = $.post({
+            url: "/custom/addVaultDecoRecipe?" + window.authz + "&guildId=" + window.guildId,
+            contentType: "application/json",
+            data: JSON.stringify([
+                {
+                    ItemType: uniqueName,
+                    ItemCount: 1
+                }
+            ])
+        });
+        req.done(() => {
+            updateInventory();
+        });
+    });
+}
+
+function changeGuildRank(guildId, targetId, rankChange) {
+    revalidateAuthz().then(() => {
+        const req = $.get(
+            "/api/changeGuildRank.php?" +
+                window.authz +
+                "&guildId=" +
+                guildId +
+                "&targetId=" +
+                targetId +
+                "&rankChange=" +
+                rankChange
+        );
+        req.done(() => {
+            updateInventory();
+        });
+    });
+}
+
+function kickFromGuild(accountId) {
+    revalidateAuthz().then(() => {
+        const req = $.post({
+            url: "/api/removeFromGuild.php?" + window.authz + "&guildId=" + window.guildId,
+            contentType: "application/octet-stream",
+            data: JSON.stringify({
+                userId: accountId
+            })
+        });
+        req.done(() => {
+            updateInventory();
+        });
+    });
+}
+
+function kickFromAlliance(guildId) {
+    revalidateAuthz().then(() => {
+        const req = $.get("/api/removeFromAlliance.php?" + window.authz + "&guildId=" + guildId);
+        req.done(() => {
+            updateInventory();
         });
     });
 }
@@ -1731,6 +2144,262 @@ function addMissingEquipment(categories) {
     if (requests.length != 0 && window.confirm(loc("code_addItemsConfirm").split("|COUNT|").join(requests.length))) {
         return dispatchAddItemsRequestsBatch(requests);
     }
+}
+
+function addVaultDecoRecipe() {
+    const uniqueName = getKey(document.getElementById("acquire-type-VaultDecoRecipes"));
+    if (!uniqueName) {
+        $("#acquire-type-VaultDecoRecipes").addClass("is-invalid").focus();
+        return;
+    }
+    revalidateAuthz().then(() => {
+        const req = $.post({
+            url: "/custom/addVaultDecoRecipe?" + window.authz + "&guildId=" + window.guildId,
+            contentType: "application/json",
+            data: JSON.stringify([
+                {
+                    ItemType: uniqueName,
+                    ItemCount: 1
+                }
+            ])
+        });
+        req.done(() => {
+            document.getElementById("acquire-type-VaultDecoRecipes").value = "";
+            updateInventory();
+        });
+    });
+}
+
+function removeVaultDecoRecipe(uniqueName) {
+    revalidateAuthz().then(() => {
+        const req = $.post({
+            url: "/custom/addVaultDecoRecipe?" + window.authz + "&guildId=" + window.guildId,
+            contentType: "application/json",
+            data: JSON.stringify([
+                {
+                    ItemType: uniqueName,
+                    ItemCount: -1
+                }
+            ])
+        });
+        req.done(() => {
+            updateInventory();
+        });
+    });
+}
+
+function addGuildTechProject() {
+    const uniqueName = getKey(document.getElementById("acquire-type-TechProjects"));
+    if (!uniqueName) {
+        $("#acquire-type-TechProjects").addClass("is-invalid").focus();
+        return;
+    }
+    revalidateAuthz().then(() => {
+        const req = $.post({
+            url: "/custom/addTechProject?" + window.authz + "&guildId=" + window.guildId,
+            contentType: "application/json",
+            data: JSON.stringify([
+                {
+                    ItemType: uniqueName
+                }
+            ])
+        });
+        req.done(() => {
+            document.getElementById("acquire-type-TechProjects").value = "";
+            updateInventory();
+        });
+    });
+}
+
+function removeGuildTechProject(uniqueName) {
+    revalidateAuthz().then(() => {
+        const req = $.post({
+            url: "/custom/removeTechProject?" + window.authz + "&guildId=" + window.guildId,
+            contentType: "application/json",
+            data: JSON.stringify([
+                {
+                    ItemType: uniqueName
+                }
+            ])
+        });
+        req.done(() => {
+            updateInventory();
+        });
+    });
+}
+
+function completeGuildTechProject(uniqueName) {
+    revalidateAuthz().then(() => {
+        const req = $.post({
+            url: "/custom/completeTechProject?" + window.authz + "&guildId=" + window.guildId,
+            contentType: "application/json",
+            data: JSON.stringify([
+                {
+                    ItemType: uniqueName
+                }
+            ])
+        });
+        req.done(() => {
+            updateInventory();
+        });
+    });
+}
+
+function fundGuildTechProject(uniqueName) {
+    revalidateAuthz().then(() => {
+        const req = $.post({
+            url: "/custom/fundTechProject?" + window.authz + "&guildId=" + window.guildId,
+            contentType: "application/json",
+            data: JSON.stringify([
+                {
+                    ItemType: uniqueName
+                }
+            ])
+        });
+        req.done(() => {
+            updateInventory();
+        });
+    });
+}
+
+function dispatchAddVaultDecoRecipesBatch(requests) {
+    return new Promise(resolve => {
+        revalidateAuthz().then(() => {
+            const req = $.post({
+                url: "/custom/addVaultDecoRecipe?" + window.authz + "&guildId=" + window.guildId,
+                contentType: "application/json",
+                data: JSON.stringify(requests)
+            });
+            req.done(() => {
+                updateInventory();
+                resolve();
+            });
+        });
+    });
+}
+
+function addMissingVaultDecoRecipes() {
+    const requests = [];
+
+    document.querySelectorAll("#datalist-VaultDecoRecipes" + " option").forEach(elm => {
+        if (!document.querySelector("#VaultDecoRecipes-list [data-item-type='" + elm.getAttribute("data-key") + "']")) {
+            requests.push({ ItemType: elm.getAttribute("data-key"), ItemCount: 1 });
+        }
+    });
+
+    if (
+        requests.length != 0 &&
+        window.confirm(loc("code_addDecoRecipesConfirm").split("|COUNT|").join(requests.length))
+    ) {
+        return dispatchAddVaultDecoRecipesBatch(requests);
+    }
+}
+
+function dispatchAddTechProjectsBatch(requests) {
+    return new Promise(resolve => {
+        revalidateAuthz().then(() => {
+            const req = $.post({
+                url: "/custom/addTechProject?" + window.authz + "&guildId=" + window.guildId,
+                contentType: "application/json",
+                data: JSON.stringify(requests)
+            });
+            req.done(() => {
+                updateInventory();
+                resolve();
+            });
+        });
+    });
+}
+
+function addMissingTechProjects() {
+    const requests = [];
+
+    document.querySelectorAll("#datalist-TechProjects option").forEach(elm => {
+        if (!document.querySelector("#TechProjects-list [data-item-type='" + elm.getAttribute("data-key") + "']")) {
+            requests.push({ ItemType: elm.getAttribute("data-key") });
+        }
+    });
+
+    if (
+        requests.length != 0 &&
+        window.confirm(loc("code_addTechProjectsConfirm").split("|COUNT|").join(requests.length))
+    ) {
+        return dispatchAddTechProjectsBatch(requests);
+    }
+}
+
+function dispatchFundTechProjectsBatch(requests) {
+    return new Promise(resolve => {
+        revalidateAuthz().then(() => {
+            const req = $.post({
+                url: "/custom/fundTechProject?" + window.authz + "&guildId=" + window.guildId,
+                contentType: "application/json",
+                data: JSON.stringify(requests)
+            });
+            req.done(() => {
+                updateInventory();
+                resolve();
+            });
+        });
+    });
+}
+
+function fundAllTechProjects() {
+    revalidateAuthz().then(() => {
+        const req = $.get("/custom/getGuild?guildId=" + window.guildId);
+        req.done(data => {
+            const requests = [];
+            data.TechProjects ??= [];
+            data.TechProjects.forEach(techProject => {
+                if (techProject.State != 1) {
+                    requests.push({
+                        ItemType: techProject.ItemType
+                    });
+                }
+            });
+
+            if (Object.keys(requests).length > 0) {
+                return dispatchFundTechProjectsBatch(requests);
+            }
+        });
+    });
+}
+
+function dispatchCompleteTechProjectsBatch(requests) {
+    return new Promise(resolve => {
+        revalidateAuthz().then(() => {
+            const req = $.post({
+                url: "/custom/completeTechProject?" + window.authz + "&guildId=" + window.guildId,
+                contentType: "application/json",
+                data: JSON.stringify(requests)
+            });
+            req.done(() => {
+                updateInventory();
+                resolve();
+            });
+        });
+    });
+}
+
+function completeAllTechProjects() {
+    revalidateAuthz().then(() => {
+        const req = $.get("/custom/getGuild?guildId=" + window.guildId);
+        req.done(data => {
+            const requests = [];
+            data.TechProjects ??= [];
+            data.TechProjects.forEach(techProject => {
+                if (techProject.State == 1 && new Date(techProject.CompletionDate) > new Date()) {
+                    requests.push({
+                        ItemType: techProject.ItemType
+                    });
+                }
+            });
+
+            if (Object.keys(requests).length > 0) {
+                return dispatchCompleteTechProjectsBatch(requests);
+            }
+        });
+    });
 }
 
 async function addMissingHelminthRecipes() {
@@ -2382,6 +3051,21 @@ document.querySelectorAll("#account-cheats input[type=checkbox]").forEach(elm =>
     };
 });
 
+document.querySelectorAll("#guild-cheats input[type=checkbox]").forEach(elm => {
+    elm.onchange = function () {
+        revalidateAuthz().then(() => {
+            $.post({
+                url: "/custom/setGuildCheat?" + window.authz + "&guildId=" + window.guildId,
+                contentType: "application/json",
+                data: JSON.stringify({
+                    key: elm.id,
+                    value: elm.checked
+                })
+            });
+        });
+    };
+});
+
 // Mods route
 
 function doAddAllMods() {
@@ -2472,6 +3156,32 @@ single.getRoute("#detailedView-route").on("beforeload", function () {
     }
 });
 
+single.getRoute("#guild-route").on("beforeload", function () {
+    document.getElementById("guildView-loading").classList.remove("d-none");
+    document.getElementById("guildView-title").textContent = "";
+    document.getElementById("guildView-tier").textContent = "";
+    document.getElementById("guildView-class").textContent = "";
+    document.getElementById("vaultRegularCredits-form").classList.add("d-none");
+    document.getElementById("vaultPremiumCredits-form").classList.add("d-none");
+    document.getElementById("VaultRegularCredits-owned").classList.add("mb-0");
+    document.getElementById("VaultPremiumCredits-owned").classList.add("mb-0");
+    document.getElementById("TechProjects-list").innerHTML = "";
+    document.getElementById("techProjects-form").classList.add("d-none");
+    document.getElementById("acquire-type-TechProjects").value = "";
+    document.getElementById("VaultDecoRecipes-list").innerHTML = "";
+    document.getElementById("vaultDecoRecipes-form").classList.add("d-none");
+    document.getElementById("acquire-type-VaultDecoRecipes").value = "";
+    document.getElementById("Alliance-list").innerHTML = "";
+    document.getElementById("guildView-alliance").textContent = "";
+    document.getElementById("Members-list").innerHTML = "";
+    document.querySelectorAll("#guild-actions button").forEach(btn => {
+        btn.disabled = true;
+    });
+    if (window.didInitialInventoryUpdate) {
+        updateInventory();
+    }
+});
+
 function doPushArchonCrystalUpgrade() {
     const urlParams = new URLSearchParams(window.location.search);
     const uniqueName = getKey(document.querySelector("[list='datalist-archonCrystalUpgrades']"));
@@ -2535,7 +3245,7 @@ function doChangeSupportedSyndicate() {
 function doAddCurrency(currency) {
     revalidateAuthz().then(() => {
         $.post({
-            url: "/custom/addCurrency?" + window.authz,
+            url: "/custom/addCurrency?" + window.authz + "&guildId=" + window.guildId,
             contentType: "application/json",
             data: JSON.stringify({
                 currency,
@@ -2547,11 +3257,11 @@ function doAddCurrency(currency) {
     });
 }
 
-function readdQuestKey(itemMap, itemType) {
+function reAddToItemList(itemMap, datalist, itemType) {
     const option = document.createElement("option");
     option.setAttribute("data-key", itemType);
     option.value = itemMap[itemType]?.name ?? itemType;
-    document.getElementById("datalist-QuestKeys").appendChild(option);
+    document.getElementById("datalist-" + datalist).appendChild(option);
 }
 
 function doQuestUpdate(operation, itemType) {

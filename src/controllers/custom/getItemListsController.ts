@@ -7,7 +7,9 @@ import {
     ExportAvionics,
     ExportBoosters,
     ExportCustoms,
+    ExportDojoRecipes,
     ExportDrones,
+    ExportFactions,
     ExportGear,
     ExportKeys,
     ExportMisc,
@@ -59,6 +61,8 @@ interface ItemLists {
     Boosters: ListedItem[];
     VarziaOffers: ListedItem[];
     Abilities: ListedItem[];
+    TechProjects: ListedItem[];
+    VaultDecoRecipes: ListedItem[];
     //circuitGameModes: ListedItem[];
 }
 
@@ -97,7 +101,9 @@ const getItemListsController: RequestHandler = (req, response) => {
         mods: [],
         Boosters: [],
         VarziaOffers: [],
-        Abilities: []
+        Abilities: [],
+        TechProjects: [],
+        VaultDecoRecipes: []
         /*circuitGameModes: [
             {
                 uniqueName: "Survival",
@@ -369,6 +375,66 @@ const getItemListsController: RequestHandler = (req, response) => {
         res.Abilities.push({
             uniqueName,
             name: getString(ability.name || uniqueName, lang)
+        });
+    }
+
+    for (const uniqueName of Object.keys(ExportDojoRecipes.research)) {
+        if (
+            !["Zekti", "Vidar", "Lavan"].some(house => uniqueName.includes(house)) &&
+            !uniqueName.startsWith("/Lotus/Types/Items/ShipFeatureItems/Railjack/")
+        ) {
+            let resultType;
+            if (uniqueName in ExportRecipes) {
+                resultType = ExportRecipes[uniqueName].resultType;
+            } else if (uniqueName in ExportDojoRecipes.fabrications) {
+                resultType = ExportDojoRecipes.fabrications[uniqueName].resultType;
+            } else if (uniqueName.startsWith("/Lotus/Types/Game/")) {
+                resultType = uniqueName.replace("Blueprint", "");
+            } else {
+                resultType = uniqueName;
+            }
+
+            let name = getString(getItemName(resultType) || resultType, lang);
+
+            if (uniqueName in ExportRecipes) {
+                const recipeNum = ExportRecipes[uniqueName].num;
+                if (recipeNum > 1) {
+                    name = `${name} X ${recipeNum}`;
+                }
+            }
+
+            res.TechProjects.push({
+                uniqueName,
+                name
+            });
+        }
+    }
+
+    for (const uniqueName of [
+        ...Object.entries(ExportDojoRecipes.decos)
+            .filter(([_, data]) => data.requiredInVault)
+            .map(([uniqueName]) => uniqueName),
+        // not requiredInVault:
+        "/Lotus/Levels/ClanDojo/ComponentPropRecipes/PlagueStarEventTrophyBronzeRecipe",
+        "/Lotus/Levels/ClanDojo/ComponentPropRecipes/PlagueStarEventTrophyGoldRecipe",
+        "/Lotus/Levels/ClanDojo/ComponentPropRecipes/PlagueStarEventTrophySilverRecipe",
+        "/Lotus/Levels/ClanDojo/ComponentPropRecipes/PlagueStarEventTrophyTerracottaRecipe"
+        // removed in 38.6.0:
+        // "/Lotus/Levels/ClanDojo/ComponentPropRecipes/ThumperTrophyBronzeRecipe",
+        // "/Lotus/Levels/ClanDojo/ComponentPropRecipes/ThumperTrophyCrystalRecipe",
+        // "/Lotus/Levels/ClanDojo/ComponentPropRecipes/ThumperTrophyGoldRecipe",
+        // "/Lotus/Levels/ClanDojo/ComponentPropRecipes/ThumperTrophySilverRecipe",
+        // "/Lotus/Levels/ClanDojo/ComponentPropRecipes/NaturalPlaceables/CoralChunkARecipe"
+    ]) {
+        let name = getString(getItemName(uniqueName) || uniqueName, lang);
+        if (uniqueName.startsWith("/Lotus/Levels/ClanDojo/ComponentPropRecipes/GradivusDilemma")) {
+            const factionTag = uniqueName.includes("Corpus") ? "FC_CORPUS" : "FC_GRINEER";
+            const faction = ExportFactions[factionTag].name;
+            name += ` [${getString(faction, lang)}]`;
+        }
+        res.VaultDecoRecipes.push({
+            uniqueName,
+            name
         });
     }
 

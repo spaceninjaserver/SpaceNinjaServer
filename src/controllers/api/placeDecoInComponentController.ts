@@ -13,7 +13,6 @@ import { GuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 import { Types } from "mongoose";
 import { ExportDojoRecipes, ExportResources } from "warframe-public-export-plus";
-import { config } from "../../services/configService.ts";
 
 export const placeDecoInComponentController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -74,7 +73,7 @@ export const placeDecoInComponentController: RequestHandler = async (req, res) =
             }
         }
         if (deco.Type != "/Lotus/Objects/Tenno/Props/TnoPaintBotDojoDeco") {
-            if (!meta || (meta.price == 0 && meta.ingredients.length == 0) || config.noDojoDecoBuildStage) {
+            if (!meta || (meta.price == 0 && meta.ingredients.length == 0) || guild.noDojoDecoBuildStage) {
                 deco.CompletionTime = new Date();
                 if (meta) {
                     processDojoBuildMaterialsGathered(guild, meta);

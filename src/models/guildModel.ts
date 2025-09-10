@@ -201,6 +201,14 @@ goalProgressSchema.set("toJSON", {
 
 const guildSchema = new Schema<IGuildDatabase>(
     {
+        // SNS guild cheats
+        noDojoRoomBuildStage: Boolean,
+        noDojoDecoBuildStage: Boolean,
+        fastDojoRoomDestruction: Boolean,
+        noDojoResearchCosts: Boolean,
+        noDojoResearchTime: Boolean,
+        fastClanAscension: Boolean,
+
         Name: { type: String, required: true, unique: true },
         MOTD: { type: String, default: "" },
         LongMOTD: { type: longMOTDSchema, default: undefined },

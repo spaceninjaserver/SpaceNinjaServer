@@ -24,15 +24,8 @@ export interface IConfig {
     unlockAllShipDecorations?: boolean;
     unlockAllFlavourItems?: boolean;
     unlockAllSkins?: boolean;
-    unlockAllDecoRecipes?: boolean;
     fullyStockedVendors?: boolean;
     skipClanKeyCrafting?: boolean;
-    noDojoRoomBuildStage?: boolean;
-    noDojoDecoBuildStage?: boolean;
-    fastDojoRoomDestruction?: boolean;
-    noDojoResearchCosts?: boolean;
-    noDojoResearchTime?: boolean;
-    fastClanAscension?: boolean;
     spoofMasteryRank?: number;
     relicRewardItemCountMultiplier?: number;
     nightwaveStandingMultiplier?: number;
@@ -128,7 +121,14 @@ export const configRemovedOptionsKeys = [
     "exceptionalRelicsAlwaysGiveBronzeReward",
     "flawlessRelicsAlwaysGiveSilverReward",
     "radiantRelicsAlwaysGiveGoldReward",
-    "disableDailyTribute"
+    "disableDailyTribute",
+    "noDojoRoomBuildStage",
+    "noDojoDecoBuildStage",
+    "fastDojoRoomDestruction",
+    "noDojoResearchCosts",
+    "noDojoResearchTime",
+    "fastClanAscension",
+    "unlockAllDecoRecipes"
 ];
 
 export const configPath = path.join(repoDir, args.configPath ?? "config.json");

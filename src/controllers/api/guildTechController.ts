@@ -28,7 +28,6 @@ import {
 import type { IMiscItem } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { InventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
-import { config } from "../../services/configService.ts";
 import type { ITechProjectClient } from "../../types/guildTypes.ts";
 import { GuildPermission } from "../../types/guildTypes.ts";
 import { GuildMember } from "../../models/guildModel.ts";
@@ -83,16 +82,16 @@ export const guildTechController: RequestHandler = async (req, res) => {
                     guild.TechProjects[
                         guild.TechProjects.push({
                             ItemType: data.RecipeType,
-                            ReqCredits: config.noDojoResearchCosts ? 0 : scaleRequiredCount(guild.Tier, recipe.price),
+                            ReqCredits: guild.noDojoResearchCosts ? 0 : scaleRequiredCount(guild.Tier, recipe.price),
                             ReqItems: recipe.ingredients.map(x => ({
                                 ItemType: x.ItemType,
-                                ItemCount: config.noDojoResearchCosts ? 0 : scaleRequiredCount(guild.Tier, x.ItemCount)
+                                ItemCount: guild.noDojoResearchCosts ? 0 : scaleRequiredCount(guild.Tier, x.ItemCount)
                             })),
                             State: 0
                         }) - 1
                     ];
                 setGuildTechLogState(guild, techProject.ItemType, 5);
-                if (config.noDojoResearchCosts) {
+                if (guild.noDojoResearchCosts) {
                     processFundedGuildTechProject(guild, techProject, recipe);
                 } else {
                     if (data.RecipeType.substring(0, 39) == "/Lotus/Types/Items/Research/DojoColors/") {

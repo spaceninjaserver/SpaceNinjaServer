@@ -7,6 +7,8 @@ import { popArchonCrystalUpgradeController } from "../controllers/custom/popArch
 import { deleteAccountController } from "../controllers/custom/deleteAccountController.ts";
 import { getNameController } from "../controllers/custom/getNameController.ts";
 import { getAccountInfoController } from "../controllers/custom/getAccountInfoController.ts";
+import { getGuildController } from "../controllers/custom/getGuildController.ts";
+import { getAllianceController } from "../controllers/custom/getAllianceController.ts";
 import { renameAccountController } from "../controllers/custom/renameAccountController.ts";
 import { ircDroppedController } from "../controllers/custom/ircDroppedController.ts";
 import { unlockAllIntrinsicsController } from "../controllers/custom/unlockAllIntrinsicsController.ts";
@@ -25,6 +27,13 @@ import { createAccountController } from "../controllers/custom/createAccountCont
 import { createMessageController } from "../controllers/custom/createMessageController.ts";
 import { addCurrencyController } from "../controllers/custom/addCurrencyController.ts";
 import { addItemsController } from "../controllers/custom/addItemsController.ts";
+import {
+    addTechProjectController,
+    completeTechProjectsController,
+    fundTechProjectController,
+    removeTechProjectController
+} from "../controllers/custom/techProjectController.ts";
+import { addVaultDecoRecipeController } from "../controllers/custom/addVaultDecoRecipeController.ts";
 import { addXpController } from "../controllers/custom/addXpController.ts";
 import { importController } from "../controllers/custom/importController.ts";
 import { manageQuestsController } from "../controllers/custom/manageQuestsController.ts";
@@ -34,6 +43,7 @@ import { updateFingerprintController } from "../controllers/custom/updateFingerp
 import { changeModularPartsController } from "../controllers/custom/changeModularPartsController.ts";
 import { editSuitInvigorationUpgradeController } from "../controllers/custom/editSuitInvigorationUpgradeController.ts";
 import { setAccountCheatController } from "../controllers/custom/setAccountCheatController.ts";
+import { setGuildCheatController } from "../controllers/custom/setGuildCheatController.ts";
 
 import { getConfigController, setConfigController } from "../controllers/custom/configController.ts";
 
@@ -46,6 +56,8 @@ customRouter.get("/popArchonCrystalUpgrade", popArchonCrystalUpgradeController);
 customRouter.get("/deleteAccount", deleteAccountController);
 customRouter.get("/getName", getNameController);
 customRouter.get("/getAccountInfo", getAccountInfoController);
+customRouter.get("/getGuild", getGuildController);
+customRouter.get("/getAlliance", getAllianceController);
 customRouter.get("/renameAccount", renameAccountController);
 customRouter.get("/ircDropped", ircDroppedController);
 customRouter.get("/unlockAllIntrinsics", unlockAllIntrinsicsController);
@@ -64,6 +76,11 @@ customRouter.post("/createAccount", createAccountController);
 customRouter.post("/createMessage", createMessageController);
 customRouter.post("/addCurrency", addCurrencyController);
 customRouter.post("/addItems", addItemsController);
+customRouter.post("/addTechProject", addTechProjectController);
+customRouter.post("/removeTechProject", removeTechProjectController);
+customRouter.post("/addVaultDecoRecipe", addVaultDecoRecipeController);
+customRouter.post("/fundTechProject", fundTechProjectController);
+customRouter.post("/completeTechProject", completeTechProjectsController);
 customRouter.post("/addXp", addXpController);
 customRouter.post("/import", importController);
 customRouter.post("/manageQuests", manageQuestsController);
@@ -73,6 +90,7 @@ customRouter.post("/updateFingerprint", updateFingerprintController);
 customRouter.post("/changeModularParts", changeModularPartsController);
 customRouter.post("/editSuitInvigorationUpgrade", editSuitInvigorationUpgradeController);
 customRouter.post("/setAccountCheat", setAccountCheatController);
+customRouter.post("/setGuildCheat", setGuildCheatController);
 
 customRouter.post("/getConfig", getConfigController);
 customRouter.post("/setConfig", setConfigController);

@@ -33,7 +33,6 @@ import { Inbox } from "../models/inboxModel.ts";
 import type { IFusionTreasure } from "../types/inventoryTypes/inventoryTypes.ts";
 import type { IInventoryChanges } from "../types/purchaseTypes.ts";
 import { parallelForeach } from "../utils/async-utils.ts";
-import allDecoRecipes from "../../static/fixed_responses/allDecoRecipes.json" with { type: "json" };
 import { createMessage } from "./inboxService.ts";
 import { addAccountDataToFriendInfo, addInventoryDataToFriendInfo } from "./friendService.ts";
 import type { ITypeCount } from "../types/commonTypes.ts";
@@ -136,9 +135,7 @@ export const getGuildVault = (guild: TGuildDatabaseDocument): IGuildVault => {
         DojoRefundPremiumCredits: guild.VaultPremiumCredits,
         ShipDecorations: guild.VaultShipDecorations,
         FusionTreasures: guild.VaultFusionTreasures,
-        DecoRecipes: config.unlockAllDecoRecipes
-            ? allDecoRecipes.map(recipe => ({ ItemType: recipe, ItemCount: 1 }))
-            : guild.VaultDecoRecipes
+        DecoRecipes: guild.VaultDecoRecipes
     };
 };
 
@@ -565,12 +562,12 @@ export const processFundedGuildTechProject = (
     recipe: IDojoResearch
 ): void => {
     techProject.State = 1;
-    techProject.CompletionDate = new Date(Date.now() + (config.noDojoResearchTime ? 0 : recipe.time) * 1000);
+    techProject.CompletionDate = new Date(Date.now() + (guild.noDojoResearchTime ? 0 : recipe.time) * 1000);
     if (recipe.guildXpValue) {
         guild.XP += recipe.guildXpValue;
     }
-    setGuildTechLogState(guild, techProject.ItemType, config.noDojoResearchTime ? 4 : 3, techProject.CompletionDate);
-    if (config.noDojoResearchTime) {
+    setGuildTechLogState(guild, techProject.ItemType, guild.noDojoResearchTime ? 4 : 3, techProject.CompletionDate);
+    if (guild.noDojoResearchTime) {
         processCompletedGuildTechProject(guild, techProject.ItemType);
     }
 };
@@ -657,8 +654,8 @@ export const checkClanAscensionHasRequiredContributors = async (guild: TGuildDat
     if (guild.CeremonyContributors!.length >= requiredContributors) {
         guild.Class = guild.CeremonyClass!;
         guild.CeremonyClass = undefined;
-        guild.CeremonyResetDate = new Date(Date.now() + (config.fastClanAscension ? 5_000 : 72 * 3600_000));
-        if (!config.fastClanAscension) {
+        guild.CeremonyResetDate = new Date(Date.now() + (guild.fastClanAscension ? 5_000 : 72 * 3600_000));
+        if (!guild.fastClanAscension) {
             // Send message to all active guild members
             const members = await GuildMember.find({ guildId: guild._id, status: 0 }, "accountId");
             await parallelForeach(members, async member => {

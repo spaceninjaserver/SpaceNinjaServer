@@ -27,9 +27,11 @@ import {
     ExportBoosters,
     ExportBundles,
     ExportCustoms,
+    ExportDojoRecipes,
     ExportDrones,
     ExportGear,
     ExportKeys,
+    ExportRailjackWeapons,
     ExportRecipes,
     ExportResources,
     ExportSentinels,
@@ -148,6 +150,18 @@ export const getItemName = (uniqueName: string): string | undefined => {
     }
     if (uniqueName in ExportWeapons) {
         return ExportWeapons[uniqueName].name;
+    }
+    if (uniqueName in ExportRailjackWeapons) {
+        return ExportRailjackWeapons[uniqueName].name;
+    }
+    if (uniqueName in ExportDojoRecipes.colours) {
+        return ExportDojoRecipes.colours[uniqueName].name;
+    }
+    if (uniqueName in ExportDojoRecipes.backdrops) {
+        return ExportDojoRecipes.backdrops[uniqueName].name;
+    }
+    if (uniqueName in ExportDojoRecipes.decos) {
+        return ExportDojoRecipes.decos[uniqueName].name;
     }
     return undefined;
 };

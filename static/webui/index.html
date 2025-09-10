@@ -71,6 +71,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/webui/import" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" data-loc="navbar_import"></a>
                         </li>
+                        <li class="nav-item d-none" id="nav-guildView">
+                            <a class="nav-link" href="/webui/guildView" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" data-loc="navbar_guildView"></a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -480,6 +483,139 @@
                     </div>
                 </div>
             </div>
+            <div id="guild-route" data-route="/webui/guildView" data-title="Guild | OpenWF WebUI">
+                <h3 id="guildView-loading" class="mb-0" data-loc="general_loading"></h3>
+                <h3 id="guildView-title" class="mb-0"></h3>
+                <p id="guildView-tier" class="text-body-secondary mb-0"></p>
+                <p id="guildView-class" class="text-body-secondary mb-0"></p>
+                <p id="guildView-alliance" class="text-body-secondary"></p>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <h5 class="card-header" data-loc="currency_RegularCredits"></h5>
+                            <div class="card-body">
+                                <p class="card-text" id="VaultRegularCredits-owned"></p>
+                                <form id="vaultRegularCredits-form" class="input-group d-none" onsubmit="doAddCurrency('VaultRegularCredits');return false;">
+                                    <input class="form-control" id="VaultRegularCredits-delta" type="number" value="1000000" />
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <h5 class="card-header" data-loc="currency_PremiumCredits"></h5>
+                            <div class="card-body">
+                                <p class="card-text" id="VaultPremiumCredits-owned"></p>
+                                <form id="vaultPremiumCredits-form" class="input-group d-none" onsubmit="doAddCurrency('VaultPremiumCredits');return false;">
+                                    <input class="form-control" id="VaultPremiumCredits-delta" type="number" value="100" />
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-lg-6">
+                        <div class="card" style="height: 400px;">
+                            <h5 class="card-header" data-loc="guildView_techProjects"></h5>
+                            <div class="card-body overflow-auto">
+                                <form id="techProjects-form" class="input-group mb-3 d-none" onsubmit="addGuildTechProject();return false;">
+                                    <input class="form-control" id="acquire-type-TechProjects" list="datalist-TechProjects" />
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                </form>
+                                <table class="table table-hover w-100">
+                                    <tbody id="TechProjects-list"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card" style="height: 400px;">
+                            <h5 class="card-header" data-loc="guildView_vaultDecoRecipes"></h5>
+                            <div class="card-body overflow-auto">
+                                <form id="vaultDecoRecipes-form" class="input-group mb-3 d-none" onsubmit="addVaultDecoRecipe();return false;">
+                                    <input class="form-control" id="acquire-type-VaultDecoRecipes" list="datalist-VaultDecoRecipes" />
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                </form>
+                                <table class="table table-hover w-100">
+                                    <tbody id="VaultDecoRecipes-list"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-lg-6">
+                        <div class="card" style="height: 400px;">
+                            <h5 class="card-header" data-loc="guildView_members"></h5>
+                            <div class="card-body overflow-auto">
+                                <table class="table table-hover w-100">
+                                    <tbody id="Members-list"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card" style="height: 400px;">
+                            <h5 class="card-header" data-loc="guildView_alliance"></h5>
+                            <div class="card-body overflow-auto">
+                                <table class="table table-hover w-100">
+                                    <tbody id="Alliance-list"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <h5 class="card-header" data-loc="general_bulkActions"></h5>
+                            <div class="card-body" id="guild-actions">
+                                <div class="mb-2 d-flex flex-wrap gap-2">
+                                    <button class="btn btn-primary" onclick="debounce(addMissingTechProjects);" data-loc="guildView_bulkAddTechProjects"></button>
+                                    <button class="btn btn-primary" onclick="debounce(addMissingVaultDecoRecipes);" data-loc="guildView_bulkAddVaultDecoRecipes"></button>
+                                </div>
+                                <div class="mb-2 d-flex flex-wrap gap-2">
+                                    <button class="btn btn-success" onclick="debounce(fundAllTechProjects);" data-loc="guildView_bulkFundTechProjects"></button>
+                                    <button class="btn btn-success" onclick="debounce(completeAllTechProjects);" data-loc="guildView_bulkCompleteTechProjects"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card mb-3">
+                        <h5 class="card-header" data-loc="guildView_cheats"></h5>
+                            <div class="card-body" id="guild-cheats">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="noDojoRoomBuildStage" />
+                                    <label class="form-check-label" for="noDojoRoomBuildStage" data-loc="cheats_noDojoRoomBuildStage"></label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="noDojoDecoBuildStage" />
+                                    <label class="form-check-label" for="noDojoDecoBuildStage" data-loc="cheats_noDojoDecoBuildStage"></label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="noDojoResearchCosts" />
+                                    <label class="form-check-label" for="noDojoResearchCosts" data-loc="cheats_noDojoResearchCosts"></label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="noDojoResearchTime" />
+                                    <label class="form-check-label" for="noDojoResearchTime" data-loc="cheats_noDojoResearchTime"></label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="fastDojoRoomDestruction" />
+                                    <label class="form-check-label" for="fastDojoRoomDestruction" data-loc="cheats_fastDojoRoomDestruction"></label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="fastClanAscension" />
+                                    <label class="form-check-label" for="fastClanAscension" data-loc="cheats_fastClanAscension"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div id="detailedView-route" data-route="/webui/detailedView" data-title="Inventory | OpenWF WebUI">
                 <h3 id="detailedView-loading" class="mb-0" data-loc="general_loading"></h3>
                 <h3 id="detailedView-title" class="mb-0"></h3>
@@ -856,40 +992,12 @@
                                         <label class="form-check-label" for="unlockAllSkins" data-loc="cheats_unlockAllSkins"></label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="unlockAllDecoRecipes" />
-                                        <label class="form-check-label" for="unlockAllDecoRecipes" data-loc="cheats_unlockAllDecoRecipes"></label>
-                                    </div>
-                                    <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="fullyStockedVendors" />
                                         <label class="form-check-label" for="fullyStockedVendors" data-loc="cheats_fullyStockedVendors"></label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="skipClanKeyCrafting" />
                                         <label class="form-check-label" for="skipClanKeyCrafting" data-loc="cheats_skipClanKeyCrafting"></label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="noDojoRoomBuildStage" />
-                                        <label class="form-check-label" for="noDojoRoomBuildStage" data-loc="cheats_noDojoRoomBuildStage"></label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="noDojoDecoBuildStage" />
-                                        <label class="form-check-label" for="noDojoDecoBuildStage" data-loc="cheats_noDojoDecoBuildStage"></label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="fastDojoRoomDestruction" />
-                                        <label class="form-check-label" for="fastDojoRoomDestruction" data-loc="cheats_fastDojoRoomDestruction"></label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="noDojoResearchCosts" />
-                                        <label class="form-check-label" for="noDojoResearchCosts" data-loc="cheats_noDojoResearchCosts"></label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="noDojoResearchTime" />
-                                        <label class="form-check-label" for="noDojoResearchTime" data-loc="cheats_noDojoResearchTime"></label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="fastClanAscension" />
-                                        <label class="form-check-label" for="fastClanAscension" data-loc="cheats_fastClanAscension"></label>
                                     </div>
                                     <form class="form-group mt-2" onsubmit="doSaveConfigInt('spoofMasteryRank'); return false;">
                                         <label class="form-label" for="spoofMasteryRank" data-loc="cheats_spoofMasteryRank"></label>
@@ -1277,6 +1385,8 @@
     <datalist id="datalist-ModularParts-KUBROW_MUTAGEN"></datalist>
     <datalist id="datalist-Boosters"></datalist>
     <datalist id="datalist-Abilities"></datalist>
+    <datalist id="datalist-TechProjects"></datalist>
+    <datalist id="datalist-VaultDecoRecipes"></datalist>
     <datalist id="datalist-circuitGameModes">
         <option>Survival</option>
         <option>VoidFlood</option>

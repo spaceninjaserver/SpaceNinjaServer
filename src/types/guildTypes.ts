@@ -31,8 +31,17 @@ export interface IGuildClient {
 
     GoalProgress?: IGoalProgressClient[];
 }
+// Fields specific to SNS
+export interface IGuildCheats {
+    noDojoRoomBuildStage?: boolean;
+    noDojoDecoBuildStage?: boolean;
+    fastDojoRoomDestruction?: boolean;
+    noDojoResearchCosts?: boolean;
+    noDojoResearchTime?: boolean;
+    fastClanAscension?: boolean;
+}
 
-export interface IGuildDatabase {
+export interface IGuildDatabase extends IGuildCheats {
     _id: Types.ObjectId;
     Name: string;
     MOTD: string;
