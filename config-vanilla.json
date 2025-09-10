@@ -5,6 +5,7 @@
     "level": "trace"
   },
   "myAddress": "localhost",
+  "bindAddress": "0.0.0.0",
   "httpPort": 80,
   "httpsPort": 443,
   "administratorNames": [],

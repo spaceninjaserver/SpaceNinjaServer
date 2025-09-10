@@ -12,6 +12,7 @@ export interface IConfig {
         level: string; // "fatal" | "error" | "warn" | "info" | "http" | "debug" | "trace";
     };
     myAddress: string;
+    bindAddress?: string;
     httpPort?: number;
     httpsPort?: number;
     ircAddress?: string;
@@ -187,4 +188,18 @@ export const getReflexiveAddress = (request: Request): { myAddress: string; myUr
         }
     }
     return { myAddress, myUrlBase };
+};
+
+export interface IBindings {
+    address: string;
+    httpPort: number;
+    httpsPort: number;
+}
+
+export const configGetWebBindings = (): IBindings => {
+    return {
+        address: config.bindAddress || "0.0.0.0",
+        httpPort: config.httpPort || 80,
+        httpsPort: config.httpsPort || 443
+    };
 };

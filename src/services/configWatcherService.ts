@@ -2,6 +2,7 @@ import chokidar from "chokidar";
 import { logger } from "../utils/logger.ts";
 import {
     config,
+    configGetWebBindings,
     configPath,
     configRemovedOptionsKeys,
     loadConfig,
@@ -9,7 +10,7 @@ import {
     type IConfig
 } from "./configService.ts";
 import { saveConfig, shouldReloadConfig } from "./configWriterService.ts";
-import { getWebPorts, startWebServer, stopWebServer } from "./webService.ts";
+import { getWebBindings, startWebServer, stopWebServer } from "./webService.ts";
 import { sendWsBroadcast } from "./wsService.ts";
 import varzia from "../../static/fixed_responses/worldState/varzia.json" with { type: "json" };
 
@@ -25,9 +26,14 @@ chokidar.watch(configPath).on("change", () => {
         validateConfig();
         syncConfigWithDatabase();
 
-        const webPorts = getWebPorts();
-        if (config.httpPort != webPorts.http || config.httpsPort != webPorts.https) {
-            logger.info(`Restarting web server to apply port changes.`);
+        const configBindings = configGetWebBindings();
+        const bindings = getWebBindings();
+        if (
+            configBindings.address != bindings.address ||
+            configBindings.httpPort != bindings.httpPort ||
+            configBindings.httpsPort != bindings.httpsPort
+        ) {
+            logger.info(`Restarting web server to apply binding changes.`);
 
             // Tell webui clients to reload with new port
             sendWsBroadcast({ ports: { http: config.httpPort, https: config.httpsPort } });

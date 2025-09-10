@@ -1,7 +1,7 @@
 import http from "http";
 import https from "https";
 import fs from "node:fs";
-import { config } from "./configService.ts";
+import { configGetWebBindings, type IBindings } from "./configService.ts";
 import { logger } from "../utils/logger.ts";
 import { app } from "../app.ts";
 import type { AddressInfo } from "node:net";
@@ -17,33 +17,35 @@ const tlsOptions = {
 };
 
 export const startWebServer = (): void => {
-    const httpPort = config.httpPort || 80;
-    const httpsPort = config.httpsPort || 443;
+    const bindings = configGetWebBindings();
 
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     httpServer = http.createServer(app);
-    httpServer.listen(httpPort, () => {
+    httpServer.listen(bindings.httpPort, bindings.address, () => {
         startWsServer(httpServer!);
 
-        logger.info("HTTP server started on port " + httpPort);
+        logger.info(`HTTP server started on ${bindings.address}:${bindings.httpPort}`);
 
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         httpsServer = https.createServer(tlsOptions, app);
-        httpsServer.listen(httpsPort, () => {
+        httpsServer.listen(bindings.httpsPort, bindings.address, () => {
             startWssServer(httpsServer!);
 
-            logger.info("HTTPS server started on port " + httpsPort);
+            logger.info(`HTTPS server started on ${bindings.address}:${bindings.httpsPort}`);
 
             logger.info(
-                "Access the WebUI in your browser at http://localhost" + (httpPort == 80 ? "" : ":" + httpPort)
+                "Access the WebUI in your browser at http://localhost" +
+                    (bindings.httpPort == 80 ? "" : ":" + bindings.httpPort)
             );
 
-            void runWsSelfTest("wss", httpsPort).then(ok => {
+            void runWsSelfTest("wss", bindings.httpsPort).then(ok => {
                 if (!ok) {
-                    logger.warn(`WSS self-test failed. The server may not actually be reachable at port ${httpsPort}.`);
+                    logger.warn(
+                        `WSS self-test failed. The server may not be reachable locally on port ${bindings.httpsPort}.`
+                    );
                     if (process.platform == "win32") {
                         logger.warn(
-                            `You can check who actually has that port via powershell: Get-Process -Id (Get-NetTCPConnection -LocalPort ${httpsPort}).OwningProcess`
+                            `You can check who has that port via powershell: Get-Process -Id (Get-NetTCPConnection -LocalPort ${bindings.httpsPort}).OwningProcess`
                         );
                     }
                 }
@@ -80,10 +82,11 @@ const runWsSelfTest = (protocol: "ws" | "wss", port: number): Promise<boolean> =
     });
 };
 
-export const getWebPorts = (): Record<"http" | "https", number | undefined> => {
+export const getWebBindings = (): Partial<IBindings> => {
     return {
-        http: (httpServer?.address() as AddressInfo | undefined)?.port,
-        https: (httpsServer?.address() as AddressInfo | undefined)?.port
+        address: (httpServer?.address() as AddressInfo | undefined)?.address,
+        httpPort: (httpServer?.address() as AddressInfo | undefined)?.port,
+        httpsPort: (httpsServer?.address() as AddressInfo | undefined)?.port
     };
 };
 
