@@ -212,12 +212,12 @@ export const getInfNodes = (manifest: INemesisManifest, rank: number): IInfNode[
             value.systemIndex === systemIndex &&
             value.nodeType != 3 && // not hub
             value.nodeType != 7 && // not junction
-            value.missionIndex && // must have a mission type and not assassination
-            value.missionIndex != 28 && // not open world
-            value.missionIndex != 32 && // not railjack
-            value.missionIndex != 41 && // not saya's visions
-            value.missionIndex != 42 && // not face off
-            value.name.indexOf("1999NodeI") == -1 && // not stage defence
+            value.missionType != "MT_ASSASSINATION" &&
+            value.missionType != "MT_LANDSCAPE" &&
+            value.missionType != "MT_RAILJACK" &&
+            value.missionType != "MT_OFFERING" &&
+            value.missionType != "MT_PVPVE" &&
+            value.name.indexOf("1999NodeI") == -1 && // not stage defense
             value.name.indexOf("1999NodeJ") == -1 && // not lich bounty
             !isArchwingMission(value)
         ) {

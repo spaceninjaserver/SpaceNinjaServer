@@ -1,4 +1,9 @@
-import type { IMissionReward as IMissionRewardExternal, IRegion, IReward } from "warframe-public-export-plus";
+import type {
+    IMissionReward as IMissionRewardExternal,
+    IRegion,
+    IReward,
+    TMissionType
+} from "warframe-public-export-plus";
 import {
     ExportEnemies,
     ExportFusionBundles,
@@ -102,10 +107,9 @@ const getRotations = (rewardInfo: IRewardInfo, tierOverride?: number): number[] 
     }
 
     const region = ExportRegions[rewardInfo.node] as IRegion | undefined;
-    const missionIndex: number | undefined = region?.missionIndex;
+    const missionType: TMissionType | undefined = region?.missionType;
 
-    // For Rescue missions
-    if (missionIndex == 3 && rewardInfo.rewardTier) {
+    if (missionType == "MT_RESCUE" && rewardInfo.rewardTier) {
         return [rewardInfo.rewardTier];
     }
 
@@ -123,7 +127,7 @@ const getRotations = (rewardInfo: IRewardInfo, tierOverride?: number): number[] 
     // Empty or absent rewardQualifications should not give rewards when:
     // - Completing only 1 zone of (E)SO (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1823)
     // - Aborting a railjack mission (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1741)
-    if (rotationCount == 0 && missionIndex != 30 && missionIndex != 32) {
+    if (rotationCount == 0 && missionType != "MT_ENDLESS_EXTERMINATION" && missionType != "MT_RAILJACK") {
         return [0];
     }
 
@@ -1095,8 +1099,8 @@ const isEligibleForCreditReward = (rewardInfo: IRewardInfo, missions: IMission, 
     }
     // The rest here might not be needed anymore, but just to be sure we don't give undue credits...
     return (
-        node.missionIndex != 23 && // junction
-        node.missionIndex != 28 && // open world
+        node.missionType != "MT_JUNCTION" &&
+        node.missionType != "MT_LANDSCAPE" &&
         missions.Tag != "SolNode761" && // the index
         missions.Tag != "SolNode762" && // the index
         missions.Tag != "SolNode763" && // the index
@@ -1792,14 +1796,14 @@ function getRandomMissionDrops(
         let rewardManifests: string[];
         if (RewardInfo.periodicMissionTag == "EliteAlert" || RewardInfo.periodicMissionTag == "EliteAlertB") {
             rewardManifests = ["/Lotus/Types/Game/MissionDecks/EliteAlertMissionRewards/EliteAlertMissionRewards"];
-        } else if (RewardInfo.invasionId && region.missionIndex == 0) {
+        } else if (RewardInfo.invasionId && region.missionType == "MT_ASSASSINATION") {
             // Invasion assassination has Phorid has the boss who should drop Nyx parts
             // TODO: Check that the invasion faction is indeed FC_INFESTATION once the Invasions in worldState are more dynamic
             rewardManifests = ["/Lotus/Types/Game/MissionDecks/BossMissionRewards/NyxRewards"];
         } else if (RewardInfo.sortieId) {
             // Sortie mission types differ from the underlying node and hence also don't give rewards from the underlying nodes.
             // Assassinations in non-lite sorties are an exception to this.
-            if (region.missionIndex == 0) {
+            if (region.missionType == "MT_ASSASSINATION") {
                 const arr = RewardInfo.sortieId.split("_");
                 let giveNodeReward = false;
                 if (arr[1] != "Lite") {
@@ -2165,7 +2169,7 @@ function getRandomMissionDrops(
             const deck = ExportRewards["/Lotus/Types/Game/MissionDecks/NightmareModeRewards"];
             let rotation = 0;
 
-            if (region.missionIndex === 3 && RewardInfo.rewardTier) {
+            if (region.missionType == "MT_RESCUE" && RewardInfo.rewardTier) {
                 rotation = RewardInfo.rewardTier;
             } else if ([6, 7, 8, 10, 11].includes(region.systemIndex)) {
                 rotation = 2;

@@ -20,7 +20,6 @@ import type {
 import { PurchaseSource } from "../types/purchaseTypes.ts";
 import { logger } from "../utils/logger.ts";
 import { getWorldState } from "./worldStateService.ts";
-import type { TRarity } from "warframe-public-export-plus";
 import {
     ExportBoosterPacks,
     ExportBoosters,
@@ -419,7 +418,7 @@ export const handleBundleAcqusition = async (
                     component.typeName,
                     inventory,
                     component.purchaseQuantity * quantity,
-                    component.durability,
+                    component.durabilityDays,
                     true
                 )
             ).InventoryChanges
@@ -432,7 +431,7 @@ export const handleStoreItemAcquisition = async (
     storeItemName: string,
     inventory: TInventoryDatabaseDocument,
     quantity: number = 1,
-    durability: TRarity = "COMMON",
+    durabilityDays: number = 3,
     ignorePurchaseQuantity: boolean = false,
     premiumPurchase: boolean = true,
     seed?: bigint
@@ -482,7 +481,7 @@ export const handleStoreItemAcquisition = async (
                 );
                 break;
             case "Boosters":
-                purchaseResponse = handleBoostersPurchase(storeItemName, inventory, durability);
+                purchaseResponse = handleBoostersPurchase(storeItemName, inventory, durabilityDays);
                 break;
         }
     }
@@ -672,7 +671,7 @@ const handleTypesPurchase = async (
 const handleBoostersPurchase = (
     boosterStoreName: string,
     inventory: TInventoryDatabaseDocument,
-    durability: TRarity
+    durabilityDays: number
 ): { InventoryChanges: IInventoryChanges } => {
     if (!(boosterStoreName in ExportBoosters)) {
         logger.error(`unknown booster type: ${boosterStoreName}`);
@@ -680,7 +679,7 @@ const handleBoostersPurchase = (
     }
 
     const ItemType = ExportBoosters[boosterStoreName].typeName;
-    const ExpiryDate = ExportMisc.boosterDurations[durability];
+    const ExpiryDate = durabilityDays * 86400;
 
     addBooster(ItemType, ExpiryDate, inventory);
 

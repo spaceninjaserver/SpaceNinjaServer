@@ -2160,7 +2160,7 @@ export const addMissionComplete = (inventory: TInventoryDatabaseDocument, { Tag,
     }
 };
 
-export const addBooster = (ItemType: string, time: number, inventory: TInventoryDatabaseDocument): void => {
+export const addBooster = (ItemType: string, timeSecs: number, inventory: TInventoryDatabaseDocument): void => {
     const currentTime = Math.floor(Date.now() / 1000);
 
     const { Boosters } = inventory;
@@ -2169,9 +2169,9 @@ export const addBooster = (ItemType: string, time: number, inventory: TInventory
 
     if (itemIndex !== -1) {
         const existingBooster = Boosters[itemIndex];
-        existingBooster.ExpiryDate = Math.max(existingBooster.ExpiryDate, currentTime) + time;
+        existingBooster.ExpiryDate = Math.max(existingBooster.ExpiryDate, currentTime) + timeSecs;
     } else {
-        Boosters.push({ ItemType, ExpiryDate: currentTime + time });
+        Boosters.push({ ItemType, ExpiryDate: currentTime + timeSecs });
     }
 };
 

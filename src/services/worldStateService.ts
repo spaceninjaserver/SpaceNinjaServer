@@ -13,8 +13,8 @@ import { buildConfig } from "./buildConfigService.ts";
 import { unixTimesInMs } from "../constants/timeConstants.ts";
 import { config } from "./configService.ts";
 import { getRandomElement, getRandomInt, sequentiallyUniqueRandomElement, SRng } from "./rngService.ts";
-import type { IMissionReward, IRegion } from "warframe-public-export-plus";
-import { eMissionType, ExportRegions, ExportSyndicates } from "warframe-public-export-plus";
+import type { IMissionReward, IRegion, TFaction } from "warframe-public-export-plus";
+import { ExportRegions, ExportSyndicates } from "warframe-public-export-plus";
 import type {
     ICalendarDay,
     ICalendarEvent,
@@ -87,11 +87,11 @@ const sortieFactionToSystemIndexes: Record<string, number[]> = {
     FC_OROKIN: [14]
 };
 
-const sortieFactionToFactionIndexes: Record<string, number[]> = {
-    FC_GRINEER: [0],
-    FC_CORPUS: [1],
-    FC_INFESTATION: [0, 1, 2],
-    FC_OROKIN: [3]
+const sortieFactionToFactions: Record<string, TFaction[]> = {
+    FC_GRINEER: ["FC_GRINEER"],
+    FC_CORPUS: ["FC_CORPUS"],
+    FC_INFESTATION: ["FC_GRINEER", "FC_CORPUS", "FC_INFESTATION"],
+    FC_OROKIN: ["FC_OROKIN"]
 };
 
 const sortieBossNode: Record<Exclude<TSortieBoss, "SORTIE_BOSS_CORRUPTED_VOR">, string> = {
@@ -271,7 +271,7 @@ export const getSortie = (day: number): ISortie => {
     for (const [key, value] of Object.entries(ExportRegions)) {
         if (
             sortieFactionToSystemIndexes[sortieBossToFaction[boss]].includes(value.systemIndex) &&
-            sortieFactionToFactionIndexes[sortieBossToFaction[boss]].includes(value.factionIndex!) &&
+            sortieFactionToFactions[sortieBossToFaction[boss]].includes(value.faction!) &&
             key in sortieTilesets &&
             (key != "SolNode228" || sortieBossToFaction[boss] == "FC_GRINEER") // PoE does not work for non-infested enemies
         ) {
@@ -339,10 +339,10 @@ export const getSortie = (day: number): ISortie => {
             modifiers.push("SORTIE_MODIFIER_HAZARD_RADIATION");
         }
 
-        if (ExportRegions[node].factionIndex == 0) {
+        if (ExportRegions[node].faction == "FC_GRINEER") {
             // Grineer
             modifiers.push("SORTIE_MODIFIER_ARMOR");
-        } else if (ExportRegions[node].factionIndex == 1) {
+        } else if (ExportRegions[node].faction == "FC_CORPUS") {
             // Corpus
             modifiers.push("SORTIE_MODIFIER_SHIELDS");
         }
@@ -1306,7 +1306,7 @@ const createInvasion = (day: number, idx: number): IInvasion => {
         ),
         Goal: 30000, // Value seems to range from 30000 to 98000 in intervals of 1000. Higher values are increasingly rare. I don't think this is relevant for the frontend besides dividing count by it.
         LocTag: isInfestationOutbreak
-            ? ExportRegions[node].missionIndex == 0
+            ? ExportRegions[node].missionType == "MT_ASSASSINATION"
                 ? "/Lotus/Language/Menu/InfestedInvasionBoss"
                 : "/Lotus/Language/Menu/InfestedInvasionGeneric"
             : attacker == "FC_CORPUS"
@@ -3179,7 +3179,7 @@ export const populateFissures = async (worldState: IWorldState): Promise<void> =
                     Activation: { $date: { $numberLong: "1000000000000" } },
                     Expiry: { $date: { $numberLong: "2000000000000" } },
                     Node: node,
-                    MissionType: eMissionType[meta.missionIndex].tag,
+                    MissionType: meta.missionType,
                     Modifier: tier,
                     Hard: config.worldState.allTheFissures == "hard"
                 });
@@ -3199,7 +3199,7 @@ export const populateFissures = async (worldState: IWorldState): Promise<void> =
                         : toMongoDate(fissure.Activation),
                 Expiry: toMongoDate(fissure.Expiry),
                 Node: fissure.Node,
-                MissionType: eMissionType[meta.missionIndex].tag,
+                MissionType: meta.missionType,
                 Modifier: fissure.Modifier,
                 Hard: fissure.Hard
             });
@@ -3246,13 +3246,12 @@ export const getLiteSortie = (week: number): ILiteSortie => {
     for (const [key, value] of Object.entries(ExportRegions)) {
         if (
             value.systemIndex === systemIndex &&
-            value.factionIndex !== undefined &&
-            value.factionIndex < 2 &&
+            (value.faction == "FC_GRINEER" || value.faction == "FC_CORPUS") &&
             !isArchwingMission(value) &&
-            value.missionIndex != 0 && // Exclude MT_ASSASSINATION
-            value.missionIndex != 23 && // Exclude junctions
-            value.missionIndex != 28 && // Exclude open worlds
-            value.missionIndex != 32 // Exclude railjack
+            value.missionType != "MT_ASSASSINATION" &&
+            value.missionType != "MT_JUNCTION" &&
+            value.missionType != "MT_LANDSCAPE" &&
+            value.missionType != "MT_RAILJACK"
         ) {
             nodes.push(key);
         }
@@ -3309,7 +3308,7 @@ export const isArchwingMission = (node: IRegion): boolean => {
         return true;
     }
     // SettlementNode10
-    if (node.missionIndex == 25) {
+    if (node.missionType == "MT_RACE") {
         return true;
     }
     return false;
