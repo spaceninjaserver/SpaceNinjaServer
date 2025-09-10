@@ -8,7 +8,7 @@ import { createAccount, createNonce, getUsernameFromEmail, isCorrectPassword } f
 import type { IDatabaseAccountJson, ILoginRequest, ILoginResponse } from "../../types/loginTypes.ts";
 import { logger } from "../../utils/logger.ts";
 import { version_compare } from "../../helpers/inventoryHelpers.ts";
-import { sendWsBroadcastTo } from "../../services/wsService.ts";
+import { handleNonceInvalidation } from "../../services/wsService.ts";
 
 export const loginController: RequestHandler = async (request, response) => {
     const loginRequest = JSON.parse(String(request.body)) as ILoginRequest; // parse octet stream of json data to json object
@@ -74,7 +74,7 @@ export const loginController: RequestHandler = async (request, response) => {
     account.LastLogin = new Date();
     await account.save();
 
-    sendWsBroadcastTo(account._id.toString(), { nonce_updated: true });
+    handleNonceInvalidation(account._id.toString());
 
     response.json(createLoginResponse(myAddress, myUrlBase, account.toJSON(), buildLabel));
 };

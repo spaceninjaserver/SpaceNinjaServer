@@ -1,5 +1,6 @@
 import { getInventory } from "../../services/inventoryService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 import type { TEquipmentKey } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { RequestHandler } from "express";
 
@@ -19,6 +20,7 @@ export const abilityOverrideController: RequestHandler = async (req, res) => {
         }
     }
     res.end();
+    broadcastInventoryUpdate(req);
 };
 
 interface IAbilityOverrideRequest {

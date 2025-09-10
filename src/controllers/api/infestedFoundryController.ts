@@ -20,6 +20,7 @@ import {
     applyCheatsToInfestedFoundry,
     handleSubsumeCompletion
 } from "../../services/infestedFoundryService.ts";
+import { sendWsBroadcastToGame } from "../../services/wsService.ts";
 
 export const infestedFoundryController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -363,6 +364,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
                 );
                 addRecipes(inventory, recipeChanges);
                 await inventory.save();
+                sendWsBroadcastToGame(account._id.toString(), { sync_inventory: true });
             }
             res.end();
             break;

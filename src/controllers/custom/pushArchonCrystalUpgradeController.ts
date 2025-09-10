@@ -1,6 +1,7 @@
 import type { RequestHandler } from "express";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
+import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 
 export const pushArchonCrystalUpgradeController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -15,6 +16,7 @@ export const pushArchonCrystalUpgradeController: RequestHandler = async (req, re
             }
             await inventory.save();
             res.end();
+            broadcastInventoryUpdate(req);
             return;
         }
     }

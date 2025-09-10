@@ -1,6 +1,7 @@
 import { getInventory } from "../../services/inventoryService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
+import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 
 export const setEvolutionProgressController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -25,6 +26,7 @@ export const setEvolutionProgressController: RequestHandler = async (req, res) =
 
     await inventory.save();
     res.end();
+    broadcastInventoryUpdate(req);
 };
 
 type ISetEvolutionProgressRequest = {

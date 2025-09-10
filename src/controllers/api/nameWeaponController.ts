@@ -3,7 +3,7 @@ import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { getInventory, updateCurrency } from "../../services/inventoryService.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import type { TEquipmentKey } from "../../types/inventoryTypes/inventoryTypes.ts";
-import { sendWsBroadcastTo } from "../../services/wsService.ts";
+import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 
 interface INameWeaponRequest {
     ItemName: string;
@@ -28,5 +28,5 @@ export const nameWeaponController: RequestHandler = async (req, res) => {
     res.json({
         InventoryChanges: currencyChanges
     });
-    sendWsBroadcastTo(accountId, { update_inventory: true });
+    broadcastInventoryUpdate(req);
 };

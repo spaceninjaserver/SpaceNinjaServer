@@ -3,6 +3,7 @@ import { getInventory } from "../../services/inventoryService.ts";
 import { getLoadout } from "../../services/loadoutService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { getPersonalRooms } from "../../services/personalRoomsService.ts";
+import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 import type { IInventoryClient } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IGetShipResponse } from "../../types/personalRoomsTypes.ts";
 import type { RequestHandler } from "express";
@@ -32,6 +33,7 @@ export const importController: RequestHandler = async (req, res) => {
     }
 
     res.end();
+    broadcastInventoryUpdate(req);
 };
 
 interface IImportRequest {

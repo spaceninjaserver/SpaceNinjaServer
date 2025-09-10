@@ -63,7 +63,7 @@ function openWebSocket() {
             }
             $(".displayname").text(data.DisplayName);
             window.accountId = data.id;
-            window.authz = "accountId=" + data.id + "&nonce=" + data.Nonce;
+            window.authz = "accountId=" + data.id + "&nonce=" + data.Nonce + "&wsid=" + wsid;
             if (window.dict) {
                 updateLocElements();
             }
@@ -89,6 +89,14 @@ function openWebSocket() {
         }
         if ("logged_out" in msg) {
             logout();
+        }
+        if ("have_game_ws" in msg) {
+            window.have_game_ws = msg.have_game_ws;
+            if (window.dict) {
+                $(".inventory-update-note").text(
+                    loc(msg.have_game_ws ? "general_inventoryUpdateNoteGameWs" : "general_inventoryUpdateNote")
+                );
+            }
         }
     };
     window.ws.onclose = function () {
@@ -223,6 +231,9 @@ function updateLocElements() {
     document.querySelectorAll("[data-loc-replace]").forEach(elm => {
         elm.innerHTML = elm.innerHTML.replace("|VAL|", elm.getAttribute("data-loc-replace"));
     });
+    $(".inventory-update-note").text(
+        loc(window.have_game_ws ? "general_inventoryUpdateNoteGameWs" : "general_inventoryUpdateNote")
+    );
 }
 
 function setActiveLanguage(lang) {
@@ -2582,7 +2593,7 @@ function disposeOfGear(category, oid) {
         ];
         revalidateAuthz().then(() => {
             $.post({
-                url: "/api/sell.php?" + window.authz + "&wsid=" + wsid,
+                url: "/api/sell.php?" + window.authz,
                 contentType: "text/plain",
                 data: JSON.stringify(data)
             });
@@ -2604,7 +2615,7 @@ function disposeOfItems(category, type, count) {
     ];
     revalidateAuthz().then(() => {
         $.post({
-            url: "/api/sell.php?" + window.authz + "&wsid=" + wsid,
+            url: "/api/sell.php?" + window.authz,
             contentType: "text/plain",
             data: JSON.stringify(data)
         });
@@ -2858,7 +2869,7 @@ for (const id of uiConfigs) {
                 value = parseInt(value);
             }
             $.post({
-                url: "/custom/setConfig?" + window.authz + "&wsid=" + wsid,
+                url: "/custom/setConfig?" + window.authz,
                 contentType: "application/json",
                 data: JSON.stringify({ [id]: value })
             });
@@ -2866,13 +2877,9 @@ for (const id of uiConfigs) {
     } else if (elm.type == "checkbox") {
         elm.onchange = function () {
             $.post({
-                url: "/custom/setConfig?" + window.authz + "&wsid=" + wsid,
+                url: "/custom/setConfig?" + window.authz,
                 contentType: "application/json",
                 data: JSON.stringify({ [id]: this.checked })
-            }).then(() => {
-                if (["infiniteCredits", "infinitePlatinum", "infiniteEndo", "infiniteRegalAya"].indexOf(id) != -1) {
-                    updateInventory();
-                }
             });
         };
     }
@@ -2893,7 +2900,7 @@ document.querySelectorAll(".config-form .input-group").forEach(grp => {
 
 function doSaveConfigInt(id) {
     $.post({
-        url: "/custom/setConfig?" + window.authz + "&wsid=" + wsid,
+        url: "/custom/setConfig?" + window.authz,
         contentType: "application/json",
         data: JSON.stringify({
             [id]: parseInt(document.getElementById(id).value)
@@ -2903,7 +2910,7 @@ function doSaveConfigInt(id) {
 
 function doSaveConfigFloat(id) {
     $.post({
-        url: "/custom/setConfig?" + window.authz + "&wsid=" + wsid,
+        url: "/custom/setConfig?" + window.authz,
         contentType: "application/json",
         data: JSON.stringify({
             [id]: parseFloat(document.getElementById(id).value)
@@ -2913,7 +2920,7 @@ function doSaveConfigFloat(id) {
 
 function doSaveConfigStringArray(id) {
     $.post({
-        url: "/custom/setConfig?" + window.authz + "&wsid=" + wsid,
+        url: "/custom/setConfig?" + window.authz,
         contentType: "application/json",
         data: JSON.stringify({
             [id]: document
@@ -2997,6 +3004,9 @@ function doUnlockAllFocusSchools() {
                 toast(loc("code_focusAllUnlocked"));
             } else {
                 toast(loc("code_focusUnlocked").split("|COUNT|").join(Object.keys(missingFocusUpgrades).length));
+                if (ws_is_open) {
+                    window.ws.send(JSON.stringify({ sync_inventory: true }));
+                }
             }
         });
     });
@@ -3040,7 +3050,7 @@ document.querySelectorAll("#account-cheats input[type=checkbox]").forEach(elm =>
     elm.onchange = function () {
         revalidateAuthz().then(() => {
             $.post({
-                url: "/custom/setAccountCheat?" + window.authz /*+ "&wsid=" + wsid*/,
+                url: "/custom/setAccountCheat?" + window.authz,
                 contentType: "application/json",
                 data: JSON.stringify({
                     key: elm.id,
@@ -3112,7 +3122,7 @@ function doRemoveUnrankedMods() {
         req.done(inventory => {
             window.itemListPromise.then(itemMap => {
                 $.post({
-                    url: "/api/sell.php?" + window.authz + "&wsid=" + wsid,
+                    url: "/api/sell.php?" + window.authz,
                     contentType: "text/plain",
                     data: JSON.stringify({
                         SellCurrency: "SC_RegularCredits",
@@ -3469,13 +3479,13 @@ async function doUnlockAllScans() {
 async function doUnlockAllShipFeatures() {
     await revalidateAuthz();
     await fetch("/custom/unlockAllShipFeatures?" + window.authz);
-    toast(loc("cheats_unlockSuccInventory"));
+    toast(loc(window.have_game_ws ? "code_succAdded" : "cheats_unlockSuccInventory"));
 }
 
 async function doUnlockAllCapturaScenes() {
     await revalidateAuthz();
     await fetch("/custom/unlockAllCapturaScenes?" + window.authz);
-    toast(loc("cheats_unlockSuccInventory"));
+    toast(loc(window.have_game_ws ? "code_succAdded" : "cheats_unlockSuccInventory"));
 }
 
 async function unlockAllMissions() {
@@ -3487,13 +3497,13 @@ async function unlockAllMissions() {
 async function unlockAllProfitTakerStages() {
     await revalidateAuthz();
     await fetch("/custom/unlockAllProfitTakerStages?" + window.authz);
-    toast(loc("cheats_unlockSuccInventory"));
+    toast(loc(window.have_game_ws ? "code_succAdded" : "cheats_unlockSuccInventory"));
 }
 
 async function unlockAllSimarisResearchEntries() {
     await revalidateAuthz();
     await fetch("/custom/unlockAllSimarisResearchEntries?" + window.authz);
-    toast(loc("cheats_unlockSuccInventory"));
+    toast(loc(window.have_game_ws ? "code_succAdded" : "cheats_unlockSuccInventory"));
 }
 
 const importSamples = {

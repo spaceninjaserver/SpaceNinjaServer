@@ -1,6 +1,7 @@
 // Chinese translation by meb154, bishan178, nyaoouo, qianlishun, CrazyZhang, Corvus, & qingchun
 dict = {
     general_inventoryUpdateNote: `注意: 要在游戏中查看更改,您需要重新同步库存,例如使用客户端的 /sync 命令,访问道场/中继站或重新登录.`,
+    general_inventoryUpdateNoteGameWs: `[UNTRANSLATED] Note: You may need to reopen any menu you are on for changes to be reflected.`,
     general_addButton: `添加`,
     general_setButton: `设置`,
     general_none: `无`,

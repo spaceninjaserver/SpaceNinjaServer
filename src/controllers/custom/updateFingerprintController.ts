@@ -2,6 +2,7 @@ import { getInventory } from "../../services/inventoryService.ts";
 import type { WeaponTypeInternal } from "../../services/itemDataService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
+import { sendWsBroadcastToGame } from "../../services/wsService.ts";
 
 export const updateFingerprintController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -22,6 +23,7 @@ export const updateFingerprintController: RequestHandler = async (req, res) => {
         await inventory.save();
     }
     res.end();
+    sendWsBroadcastToGame(accountId, { sync_inventory: true });
 };
 
 interface IUpdateFingerPrintRequest {

@@ -2,6 +2,7 @@ import { getInventory } from "../../services/inventoryService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
 import { ExportArcanes, ExportUpgrades } from "warframe-public-export-plus";
+import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 
 export const addMissingMaxRankModsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -41,4 +42,5 @@ export const addMissingMaxRankModsController: RequestHandler = async (req, res) 
 
     await inventory.save();
     res.end();
+    broadcastInventoryUpdate(req);
 };

@@ -1,7 +1,7 @@
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { getInventory, updateCurrency } from "../../services/inventoryService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
-import { sendWsBroadcastTo } from "../../services/wsService.ts";
+import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import type { RequestHandler } from "express";
 
@@ -23,7 +23,7 @@ export const renamePetController: RequestHandler = async (req, res) => {
         ...data,
         inventoryChanges: inventoryChanges
     });
-    sendWsBroadcastTo(accountId, { update_inventory: true });
+    broadcastInventoryUpdate(req);
 };
 
 interface IRenamePetRequest {

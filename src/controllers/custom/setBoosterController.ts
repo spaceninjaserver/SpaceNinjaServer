@@ -2,6 +2,7 @@ import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import type { RequestHandler } from "express";
 import { ExportBoosters } from "warframe-public-export-plus";
+import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 
 const I32_MAX = 0x7fffffff;
 
@@ -42,4 +43,5 @@ export const setBoosterController: RequestHandler = async (req, res) => {
     }
     await inventory.save();
     res.end();
+    broadcastInventoryUpdate(req);
 };

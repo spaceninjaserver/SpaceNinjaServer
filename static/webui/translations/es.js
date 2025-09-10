@@ -1,6 +1,7 @@
 // Spanish translation by hxedcl
 dict = {
     general_inventoryUpdateNote: `Para ver los cambios en el juego, necesitas volver a sincronizar tu inventario, por ejemplo, usando el comando /sync del bootstrapper, visitando un dojo o repetidor, o volviendo a iniciar sesión.`,
+    general_inventoryUpdateNoteGameWs: `[UNTRANSLATED] Note: You may need to reopen any menu you are on for changes to be reflected.`,
     general_addButton: `Agregar`,
     general_setButton: `Establecer`,
     general_none: `Ninguno`,

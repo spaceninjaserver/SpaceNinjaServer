@@ -1,6 +1,7 @@
 import { getInventory } from "../../services/inventoryService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
+import { sendWsBroadcastToGame } from "../../services/wsService.ts";
 
 export const unlockAllIntrinsicsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -16,4 +17,5 @@ export const unlockAllIntrinsicsController: RequestHandler = async (req, res) =>
     inventory.PlayerSkills.LPS_DRIFT_ENDURANCE = 10;
     await inventory.save();
     res.end();
+    sendWsBroadcastToGame(accountId, { sync_inventory: true });
 };

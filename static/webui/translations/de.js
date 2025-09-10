@@ -1,6 +1,7 @@
 // German translation by Animan8000
 dict = {
     general_inventoryUpdateNote: `Hinweis: Um Änderungen im Spiel zu sehen, musst du dein Inventar neu synchronisieren, z. B. mit dem /sync Befehl des Bootstrappers, durch Besuch eines Dojo/Relais oder durch erneutes Einloggen.`,
+    general_inventoryUpdateNoteGameWs: `[UNTRANSLATED] Note: You may need to reopen any menu you are on for changes to be reflected.`,
     general_addButton: `Hinzufügen`,
     general_setButton: `Festlegen`,
     general_none: `Keines`,

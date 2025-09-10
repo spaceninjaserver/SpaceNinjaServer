@@ -1,6 +1,7 @@
 import type { RequestHandler } from "express";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
+import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 
 export const popArchonCrystalUpgradeController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -12,6 +13,7 @@ export const popArchonCrystalUpgradeController: RequestHandler = async (req, res
         );
         await inventory.save();
         res.end();
+        broadcastInventoryUpdate(req);
         return;
     }
     res.status(400).end();

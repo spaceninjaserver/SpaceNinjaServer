@@ -1,6 +1,7 @@
 // Russian translation by AMelonInsideLemon, LoseFace
 dict = {
     general_inventoryUpdateNote: `Примечание: Чтобы увидеть изменения в игре, вам нужно повторно синхронизировать свой инвентарь, например, используя команду /sync загрузчика, посетив Додзё/Реле или перезагрузив игру.`,
+    general_inventoryUpdateNoteGameWs: `[UNTRANSLATED] Note: You may need to reopen any menu you are on for changes to be reflected.`,
     general_addButton: `Добавить`,
     general_setButton: `Установить`,
     general_none: `Отсутствует`,

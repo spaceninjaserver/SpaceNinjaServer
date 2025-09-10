@@ -1,6 +1,7 @@
 import type { RequestHandler } from "express";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
+import { sendWsBroadcastToGame } from "../../services/wsService.ts";
 
 export const unlockAllSimarisResearchEntriesController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -17,4 +18,5 @@ export const unlockAllSimarisResearchEntriesController: RequestHandler = async (
     ].map(type => ({ TargetType: type, Scans: 10, Completed: true }));
     await inventory.save();
     res.end();
+    sendWsBroadcastToGame(accountId, { sync_inventory: true });
 };

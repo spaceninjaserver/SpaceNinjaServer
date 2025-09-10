@@ -1,5 +1,6 @@
 import { getInventory } from "../../services/inventoryService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 import type { TEquipmentKey } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { RequestHandler } from "express";
 
@@ -20,6 +21,7 @@ export const changeModularPartsController: RequestHandler = async (req, res) => 
         await inventory.save();
     }
     res.end();
+    broadcastInventoryUpdate(req);
 };
 
 interface IUpdateFingerPrintRequest {

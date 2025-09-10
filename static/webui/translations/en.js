@@ -1,5 +1,6 @@
 dict = {
     general_inventoryUpdateNote: `Note: To see changes in-game, you need to resync your inventory, e.g. using the bootstrapper's /sync command, visiting a dojo/relay, or relogging.`,
+    general_inventoryUpdateNoteGameWs: `Note: You may need to reopen any menu you are on for changes to be reflected.`,
     general_addButton: `Add`,
     general_setButton: `Set`,
     general_none: `None`,

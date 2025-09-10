@@ -1,6 +1,7 @@
 import { getInventory } from "../../services/inventoryService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
+import { sendWsBroadcastToGame } from "../../services/wsService.ts";
 
 const allEudicoHeistJobs = [
     "/Lotus/Types/Gameplay/Venus/Jobs/Heists/HeistProfitTakerBountyOne",
@@ -21,4 +22,5 @@ export const unlockAllProfitTakerStagesController: RequestHandler = async (req, 
     }
     await inventory.save();
     res.end();
+    sendWsBroadcastToGame(accountId, { sync_inventory: true });
 };

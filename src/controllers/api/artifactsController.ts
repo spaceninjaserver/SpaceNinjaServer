@@ -3,6 +3,7 @@ import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
 import type { IInventoryClient, IUpgradeClient } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { addMods, getInventory } from "../../services/inventoryService.ts";
+import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 
 export const artifactsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -57,6 +58,7 @@ export const artifactsController: RequestHandler = async (req, res) => {
     }
 
     res.send(itemId);
+    broadcastInventoryUpdate(req);
 };
 
 interface IArtifactsRequest {

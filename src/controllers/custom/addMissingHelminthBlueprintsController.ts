@@ -2,6 +2,7 @@ import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { getInventory, addRecipes } from "../../services/inventoryService.ts";
 import type { RequestHandler } from "express";
 import { ExportRecipes } from "warframe-public-export-plus";
+import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 
 export const addMissingHelminthBlueprintsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -21,4 +22,5 @@ export const addMissingHelminthBlueprintsController: RequestHandler = async (req
 
     await inventory.save();
     res.end();
+    broadcastInventoryUpdate(req);
 };

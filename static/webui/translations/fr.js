@@ -1,6 +1,7 @@
 // French translation by Vitruvio
 dict = {
     general_inventoryUpdateNote: `Note : Pour voir les changements en jeu, l'inventaire doit être actualisé. Cela se fait en tapant /sync dans le tchat, en visitant un dojo/relais ou en se reconnectant.`,
+    general_inventoryUpdateNoteGameWs: `[UNTRANSLATED] Note: You may need to reopen any menu you are on for changes to be reflected.`,
     general_addButton: `Ajouter`,
     general_setButton: `Définir`,
     general_none: `Aucun`,

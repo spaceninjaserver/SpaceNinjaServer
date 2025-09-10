@@ -1,6 +1,7 @@
 // Ukrainian translation by LoseFace
 dict = {
     general_inventoryUpdateNote: `Пам'ятка: Щоб побачити зміни в грі, вам потрібно повторно синхронізувати своє спорядження, наприклад, використовуючи команду /sync завантажувача, відвідавши Доджьо/Реле або перезавантаживши гру.`,
+    general_inventoryUpdateNoteGameWs: `[UNTRANSLATED] Note: You may need to reopen any menu you are on for changes to be reflected.`,
     general_addButton: `Добавити`,
     general_setButton: `Встановити`,
     general_none: `Відсутній`,

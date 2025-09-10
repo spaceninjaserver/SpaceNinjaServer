@@ -9,6 +9,7 @@ import {
 import { logger } from "../../utils/logger.ts";
 import type { RequestHandler } from "express";
 import { ExportKeys } from "warframe-public-export-plus";
+import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 
 export const manageQuestsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -157,4 +158,5 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
 
     await inventory.save();
     res.status(200).end();
+    broadcastInventoryUpdate(req);
 };

@@ -2,6 +2,7 @@ import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
+import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 
 export const maturePetController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -19,6 +20,7 @@ export const maturePetController: RequestHandler = async (req, res) => {
             : [details.DominantTraits.FurPattern, details.DominantTraits.FurPattern, details.DominantTraits.FurPattern],
         unmature: data.revert
     });
+    broadcastInventoryUpdate(req);
 };
 
 interface IMaturePetRequest {

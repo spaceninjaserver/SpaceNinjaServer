@@ -3,6 +3,7 @@ import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { addFusionPoints, getInventory } from "../../services/inventoryService.ts";
 import { getGuildForRequestEx, hasGuildPermission } from "../../services/guildService.ts";
 import { GuildPermission } from "../../types/guildTypes.ts";
+import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 
 export const addCurrencyController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -24,6 +25,7 @@ export const addCurrencyController: RequestHandler = async (req, res) => {
     }
     if (!request.currency.startsWith("Vault")) {
         await inventory.save();
+        broadcastInventoryUpdate(req);
     }
     res.end();
 };
