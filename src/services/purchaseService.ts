@@ -24,8 +24,8 @@ import {
     ExportBoosterPacks,
     ExportBoosters,
     ExportBundles,
+    ExportCreditBundles,
     ExportGear,
-    ExportMisc,
     ExportResources,
     ExportSyndicates,
     ExportVendors
@@ -631,8 +631,8 @@ const handleCreditBundlePurchase = async (
     typeName: string,
     inventory: TInventoryDatabaseDocument
 ): Promise<IPurchaseResponse> => {
-    if (typeName && typeName in ExportMisc.creditBundles) {
-        const creditsAmount = ExportMisc.creditBundles[typeName];
+    if (typeName && typeName in ExportCreditBundles) {
+        const creditsAmount = ExportCreditBundles[typeName].credits;
 
         inventory.RegularCredits += creditsAmount;
         await inventory.save();

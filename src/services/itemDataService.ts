@@ -323,3 +323,13 @@ export const getDefaultUpgrades = (parts: string[]): IDefaultUpgrade[] | undefin
     }
     return allDefaultUpgrades.length == 0 ? undefined : allDefaultUpgrades;
 };
+
+export const getMaxLevelCap = (type: string): number => {
+    if (type in ExportWarframes) {
+        return ExportWarframes[type].maxLevelCap ?? 30;
+    }
+    if (type in ExportWeapons) {
+        return ExportWeapons[type].maxLevelCap ?? 30;
+    }
+    return 30;
+};

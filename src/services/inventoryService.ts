@@ -40,6 +40,7 @@ import {
     ExportBoosters,
     ExportBundles,
     ExportChallenges,
+    ExportCreditBundles,
     ExportCustoms,
     ExportDrones,
     ExportEmailItems,
@@ -48,7 +49,6 @@ import {
     ExportFusionBundles,
     ExportGear,
     ExportKeys,
-    ExportMisc,
     ExportRailjackWeapons,
     ExportRecipes,
     ExportResources,
@@ -631,8 +631,8 @@ export const addItem = async (
             };
         }
     }
-    if (typeName in ExportMisc.creditBundles) {
-        const creditsTotal = ExportMisc.creditBundles[typeName] * quantity;
+    if (typeName in ExportCreditBundles) {
+        const creditsTotal = ExportCreditBundles[typeName].credits * quantity;
         inventory.RegularCredits += creditsTotal;
         return {
             RegularCredits: creditsTotal

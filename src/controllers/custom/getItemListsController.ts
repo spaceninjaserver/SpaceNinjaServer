@@ -12,7 +12,6 @@ import {
     ExportFactions,
     ExportGear,
     ExportKeys,
-    ExportMisc,
     ExportRailjackWeapons,
     ExportRecipes,
     ExportRelics,
@@ -80,7 +79,7 @@ const toTitleCase = (str: string): string => {
 const getItemListsController: RequestHandler = (req, response) => {
     const lang = getDict(typeof req.query.lang == "string" ? req.query.lang : "en");
     const res: ItemLists = {
-        uniqueLevelCaps: ExportMisc.uniqueLevelCaps,
+        uniqueLevelCaps: {},
         Suits: [],
         LongGuns: [],
         Melee: [],
@@ -147,6 +146,9 @@ const getItemListsController: RequestHandler = (req, response) => {
                 name: getString(ability.name || uniqueName, lang)
             });
         });
+        if (item.maxLevelCap) {
+            res.uniqueLevelCaps[uniqueName] = item.maxLevelCap;
+        }
     }
     for (const [uniqueName, item] of Object.entries(ExportSentinels)) {
         if (item.productCategory == "Sentinels" || item.productCategory == "KubrowPets") {
@@ -195,6 +197,9 @@ const getItemListsController: RequestHandler = (req, response) => {
                 uniqueName: uniqueName,
                 name: getString(item.name, lang)
             });
+        }
+        if (item.maxLevelCap) {
+            res.uniqueLevelCaps[uniqueName] = item.maxLevelCap;
         }
     }
     for (const [uniqueName, item] of Object.entries(ExportResources)) {

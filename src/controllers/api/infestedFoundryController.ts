@@ -10,7 +10,7 @@ import type {
     IMiscItem
 } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { InventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
-import { ExportMisc } from "warframe-public-export-plus";
+import { ExportResources } from "warframe-public-export-plus";
 import { getRecipe } from "../../services/itemDataService.ts";
 import { toMongoDate, version_compare } from "../../helpers/inventoryHelpers.ts";
 import { logger } from "../../utils/logger.ts";
@@ -146,7 +146,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             const currentUnixSeconds = Math.trunc(Date.now() / 1000);
 
             for (const contribution of request.ResourceContributions) {
-                const snack = ExportMisc.helminthSnacks[contribution.ItemType];
+                const snack = ExportResources[contribution.ItemType].helminthSnack!;
 
                 // tally items for removal
                 const change = miscItemChanges.find(x => x.ItemType == contribution.ItemType);
