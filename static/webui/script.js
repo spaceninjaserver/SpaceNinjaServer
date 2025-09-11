@@ -664,7 +664,7 @@ function updateInventory() {
     req.done(data => {
         window.itemListPromise.then(itemMap => {
             window.didInitialInventoryUpdate = true;
-            if (data.GuildId.$oid) {
+            if (data.GuildId) {
                 window.guildId = data.GuildId.$oid;
                 document.getElementById("nav-guildView").classList.remove("d-none");
             } else {
