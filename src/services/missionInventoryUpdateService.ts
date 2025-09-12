@@ -92,11 +92,6 @@ import { handleGuildGoalProgress } from "./guildService.ts";
 import { importLoadOutConfig } from "./importService.ts";
 
 const getRotations = (rewardInfo: IRewardInfo, tierOverride?: number): number[] => {
-    // Disruption missions just tell us (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2599)
-    if (rewardInfo.rewardTierOverrides) {
-        return rewardInfo.rewardTierOverrides;
-    }
-
     // For Spy missions, e.g. 3 vaults cracked = A, B, C
     if (rewardInfo.VaultsCracked) {
         const rotations: number[] = [];
@@ -109,16 +104,26 @@ const getRotations = (rewardInfo: IRewardInfo, tierOverride?: number): number[] 
     const region = ExportRegions[rewardInfo.node] as IRegion | undefined;
     const missionType: TMissionType | undefined = region?.missionType;
 
-    if (missionType == "MT_RESCUE" && rewardInfo.rewardTier) {
+    // Disruption uses 'rewardTierOverrides' to tell us (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2599)
+    // Note that this may stick in lab conquest so we need to filter by mission type (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2768)
+    if (missionType == "MT_ARTIFACT") {
+        return rewardInfo.rewardTierOverrides ?? [];
+    }
+
+    if (missionType == "MT_RESCUE" && rewardInfo.rewardTier !== undefined) {
         return [rewardInfo.rewardTier];
     }
 
-    // 'rewardQualifications' is unreliable for non-endless railjack missions (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2586, https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2612)
+    // 'rewardQualifications' may stick from previous missions for non-endless missions done after them
+    // - via railjack (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2586, https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2612)
+    // - via lab conquest (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2768)
     switch (region?.missionName) {
         case "/Lotus/Language/Missions/MissionName_Railjack":
         case "/Lotus/Language/Missions/MissionName_RailjackVolatile":
         case "/Lotus/Language/Missions/MissionName_RailjackExterminate":
         case "/Lotus/Language/Missions/MissionName_RailjackAssassinate":
+        case "/Lotus/Language/Missions/MissionName_Assassination":
+        case "/Lotus/Language/Missions/MissionName_Exterminate":
             return [0];
     }
 
