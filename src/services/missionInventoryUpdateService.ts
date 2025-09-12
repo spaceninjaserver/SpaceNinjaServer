@@ -5,6 +5,7 @@ import type {
     TMissionType
 } from "warframe-public-export-plus";
 import {
+    ExportAnimals,
     ExportEnemies,
     ExportFusionBundles,
     ExportRegions,
@@ -61,7 +62,6 @@ import { createMessage } from "./inboxService.ts";
 import kuriaMessage50 from "../../static/fixed_responses/kuriaMessages/fiftyPercent.json" with { type: "json" };
 import kuriaMessage75 from "../../static/fixed_responses/kuriaMessages/seventyFivePercent.json" with { type: "json" };
 import kuriaMessage100 from "../../static/fixed_responses/kuriaMessages/oneHundredPercent.json" with { type: "json" };
-import conservationAnimals from "../../static/fixed_responses/conservationAnimals.json" with { type: "json" };
 import {
     generateNemesisProfile,
     getInfestedLichItemRewards,
@@ -519,22 +519,23 @@ export const addMissionInventoryUpdates = async (
             }
             case "CapturedAnimals": {
                 for (const capturedAnimal of value) {
-                    const meta = conservationAnimals[capturedAnimal.AnimalType as keyof typeof conservationAnimals];
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                    const meta = ExportAnimals[capturedAnimal.AnimalType]?.conservation;
                     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                     if (meta) {
                         if (capturedAnimal.NumTags) {
                             addMiscItems(inventory, [
                                 {
-                                    ItemType: meta.tag,
+                                    ItemType: meta.itemReward,
                                     ItemCount: capturedAnimal.NumTags
                                 }
                             ]);
                         }
                         if (capturedAnimal.NumExtraRewards) {
-                            if ("extraReward" in meta) {
+                            if (meta.woundedAnimalReward) {
                                 addMiscItems(inventory, [
                                     {
-                                        ItemType: meta.extraReward,
+                                        ItemType: meta.woundedAnimalReward,
                                         ItemCount: capturedAnimal.NumExtraRewards
                                     }
                                 ]);
@@ -543,6 +544,12 @@ export const addMissionInventoryUpdates = async (
                                     `client attempted to claim unknown extra rewards for conservation of ${capturedAnimal.AnimalType}`
                                 );
                             }
+                        }
+                        if (meta.standingReward) {
+                            const syndicateTag =
+                                inventoryUpdates.Missions!.Tag == "SolNode129" ? "SolarisSyndicate" : "CetusSyndicate";
+                            logger.debug(`adding ${meta.standingReward} standing to ${syndicateTag} for conservation`);
+                            addStanding(inventory, syndicateTag, meta.standingReward);
                         }
                     } else {
                         logger.warn(`ignoring conservation of unknown AnimalType: ${capturedAnimal.AnimalType}`);
