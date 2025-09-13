@@ -527,7 +527,7 @@ export const addMissionInventoryUpdates = async (
                             addMiscItems(inventory, [
                                 {
                                     ItemType: meta.itemReward,
-                                    ItemCount: capturedAnimal.NumTags
+                                    ItemCount: capturedAnimal.NumTags * capturedAnimal.Count
                                 }
                             ]);
                         }
@@ -536,7 +536,7 @@ export const addMissionInventoryUpdates = async (
                                 addMiscItems(inventory, [
                                     {
                                         ItemType: meta.woundedAnimalReward,
-                                        ItemCount: capturedAnimal.NumExtraRewards
+                                        ItemCount: capturedAnimal.NumExtraRewards * capturedAnimal.Count
                                     }
                                 ]);
                             } else {
@@ -548,8 +548,9 @@ export const addMissionInventoryUpdates = async (
                         if (meta.standingReward) {
                             const syndicateTag =
                                 inventoryUpdates.Missions!.Tag == "SolNode129" ? "SolarisSyndicate" : "CetusSyndicate";
-                            logger.debug(`adding ${meta.standingReward} standing to ${syndicateTag} for conservation`);
-                            addStanding(inventory, syndicateTag, meta.standingReward);
+                            const standing = meta.standingReward * capturedAnimal.Count;
+                            logger.debug(`adding ${standing} standing to ${syndicateTag} for conservation`);
+                            addStanding(inventory, syndicateTag, standing);
                         }
                     } else {
                         logger.warn(`ignoring conservation of unknown AnimalType: ${capturedAnimal.AnimalType}`);
