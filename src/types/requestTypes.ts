@@ -47,9 +47,9 @@ export type IMissionInventoryUpdateRequest = {
 
     // flags for interstitial requests
     BMI?: boolean;
-    TNT?: boolean;
-    SSC?: boolean;
-    RJ?: boolean;
+    TNT?: boolean; // Conservation; definitely need to include AffiliationMods in this case, so a normal 'inventory sync' would not work here.
+    SSC?: boolean; // K-Drive race?
+    RJ?: boolean; // Railjack. InventoryJson should only be returned when going back to dojo.
     SS?: boolean;
     CMI?: boolean;
     EJC?: boolean;
