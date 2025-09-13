@@ -45,6 +45,15 @@ export type IMissionInventoryUpdateRequest = {
     EmailItems?: ITypeCount[];
     ShipDecorations?: ITypeCount[];
 
+    // flags for interstitial requests
+    BMI?: boolean;
+    TNT?: boolean;
+    SSC?: boolean;
+    RJ?: boolean;
+    SS?: boolean;
+    CMI?: boolean;
+    EJC?: boolean;
+
     SyndicateId?: string;
     SortieId?: string;
     CalendarProgress?: { challenge: string }[];
@@ -149,7 +158,6 @@ export type IMissionInventoryUpdateRequest = {
         MultiProgress: unknown[];
     }[];
     InvasionProgress?: IInvasionProgressClient[];
-    RJ?: boolean;
     ConquestMissionsCompleted?: number;
     duviriSuitSelection?: string;
     duviriPistolSelection?: string;

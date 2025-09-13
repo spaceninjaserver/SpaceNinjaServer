@@ -111,8 +111,16 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         AffiliationMods,
         ConquestCompletedMissionsCount
     };
-    if (missionReport.RJ) {
-        logger.debug(`railjack interstitial request, sending only deltas`, deltas);
+    if (
+        missionReport.BMI ||
+        missionReport.TNT ||
+        missionReport.SSC ||
+        missionReport.RJ ||
+        missionReport.SS ||
+        missionReport.CMI ||
+        missionReport.EJC
+    ) {
+        logger.debug(`interstitial request, sending only deltas`, deltas);
         res.json(deltas);
     } else if (missionReport.RewardInfo) {
         logger.debug(`classic mission completion, sending everything`);
