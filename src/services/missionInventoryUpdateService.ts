@@ -548,7 +548,8 @@ export const addMissionInventoryUpdates = async (
                         if (meta.standingReward) {
                             const syndicateTag =
                                 inventoryUpdates.Missions!.Tag == "SolNode129" ? "SolarisSyndicate" : "CetusSyndicate";
-                            const standing = meta.standingReward * capturedAnimal.Count;
+                            const standing =
+                                [2, 1.5, 1][capturedAnimal.CaptureRating] * meta.standingReward * capturedAnimal.Count;
                             logger.debug(`adding ${standing} standing to ${syndicateTag} for conservation`);
                             addStanding(inventory, syndicateTag, standing);
                         }
