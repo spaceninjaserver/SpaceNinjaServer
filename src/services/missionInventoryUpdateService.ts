@@ -1097,10 +1097,12 @@ export const addMissionRewards = async (
     }: IMissionInventoryUpdateRequest,
     firstCompletion: boolean
 ): Promise<AddMissionRewardsReturnType> => {
+    AffiliationMods ??= [];
+
     if (!rewardInfo) {
         //TODO: if there is a case where you can have credits collected during a mission but no rewardInfo, add credits needs to be handled earlier
         logger.debug(`Mission ${missions!.Tag} did not have Reward Info `);
-        return { MissionRewards: [], AffiliationMods: [] };
+        return { MissionRewards: [], AffiliationMods };
     }
 
     //TODO: check double reward merging
@@ -1409,8 +1411,6 @@ export const addMissionRewards = async (
             inventoryChanges.Nemesis.InfNodes = inventory.Nemesis.InfNodes;
         }
     }
-
-    AffiliationMods ??= [];
 
     if (rewardInfo.JobStage != undefined && rewardInfo.jobId) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
