@@ -2803,7 +2803,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
 
         const activeStartDay = day - ghoulsCycleDay + 17;
         const activeEndDay = activeStartDay + 5;
-        const dayWithFraction = (timeMs - EPOCH) / 86400000;
+        const dayWithFraction = (timeMs - EPOCH) / unixTimesInMs.day;
 
         const progress = (dayWithFraction - activeStartDay) / (activeEndDay - activeStartDay);
         const healthPct = 1 - Math.min(Math.max(progress, 0), 1);
@@ -2814,22 +2814,14 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                 $date: {
                     $numberLong: config.worldState?.ghoulEmergenceOverride
                         ? "1753204900185"
-                        : Date.UTC(
-                              date.getUTCFullYear(),
-                              date.getUTCMonth(),
-                              date.getUTCDate() + activeStartDay
-                          ).toString()
+                        : (EPOCH + activeStartDay * unixTimesInMs.day).toString()
                 }
             },
             Expiry: {
                 $date: {
                     $numberLong: config.worldState?.ghoulEmergenceOverride
                         ? "2000000000000"
-                        : Date.UTC(
-                              date.getUTCFullYear(),
-                              date.getUTCMonth(),
-                              date.getUTCDate() + activeEndDay
-                          ).toString()
+                        : (EPOCH + activeEndDay * unixTimesInMs.day).toString()
                 }
             },
             HealthPct: config.worldState?.ghoulEmergenceOverride ? 1 : healthPct,
