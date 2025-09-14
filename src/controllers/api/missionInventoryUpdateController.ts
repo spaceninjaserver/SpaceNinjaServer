@@ -2,7 +2,11 @@ import type { RequestHandler } from "express";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
 import type { IMissionInventoryUpdateRequest } from "../../types/requestTypes.ts";
-import { addMissionInventoryUpdates, addMissionRewards } from "../../services/missionInventoryUpdateService.ts";
+import {
+    addMissionInventoryUpdates,
+    addMissionRewards,
+    handleConservation
+} from "../../services/missionInventoryUpdateService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import { getInventoryResponse } from "./inventoryController.ts";
 import { logger } from "../../utils/logger.ts";
@@ -94,6 +98,7 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         SyndicateXPItemReward,
         ConquestCompletedMissionsCount
     } = await addMissionRewards(account, inventory, missionReport, firstCompletion);
+    handleConservation(inventory, missionReport, AffiliationMods); // Conservation reports have GS_SUCCESS
 
     if (missionReport.EndOfMatchUpload) {
         inventory.RewardSeed = generateRewardSeed();
@@ -111,8 +116,16 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         AffiliationMods,
         ConquestCompletedMissionsCount
     };
-    if (missionReport.RJ) {
-        logger.debug(`railjack interstitial request, sending only deltas`, deltas);
+    if (
+        missionReport.BMI ||
+        missionReport.TNT ||
+        missionReport.SSC ||
+        missionReport.RJ ||
+        missionReport.SS ||
+        missionReport.CMI ||
+        missionReport.EJC
+    ) {
+        logger.debug(`interstitial request, sending only deltas`, deltas);
         res.json(deltas);
     } else if (missionReport.RewardInfo) {
         logger.debug(`classic mission completion, sending everything`);

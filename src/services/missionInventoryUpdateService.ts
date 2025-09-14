@@ -517,46 +517,6 @@ export const addMissionInventoryUpdates = async (
                 }
                 break;
             }
-            case "CapturedAnimals": {
-                for (const capturedAnimal of value) {
-                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-                    const meta = ExportAnimals[capturedAnimal.AnimalType]?.conservation;
-                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-                    if (meta) {
-                        if (capturedAnimal.NumTags) {
-                            addMiscItems(inventory, [
-                                {
-                                    ItemType: meta.itemReward,
-                                    ItemCount: capturedAnimal.NumTags
-                                }
-                            ]);
-                        }
-                        if (capturedAnimal.NumExtraRewards) {
-                            if (meta.woundedAnimalReward) {
-                                addMiscItems(inventory, [
-                                    {
-                                        ItemType: meta.woundedAnimalReward,
-                                        ItemCount: capturedAnimal.NumExtraRewards
-                                    }
-                                ]);
-                            } else {
-                                logger.warn(
-                                    `client attempted to claim unknown extra rewards for conservation of ${capturedAnimal.AnimalType}`
-                                );
-                            }
-                        }
-                        if (meta.standingReward) {
-                            const syndicateTag =
-                                inventoryUpdates.Missions!.Tag == "SolNode129" ? "SolarisSyndicate" : "CetusSyndicate";
-                            logger.debug(`adding ${meta.standingReward} standing to ${syndicateTag} for conservation`);
-                            addStanding(inventory, syndicateTag, meta.standingReward);
-                        }
-                    } else {
-                        logger.warn(`ignoring conservation of unknown AnimalType: ${capturedAnimal.AnimalType}`);
-                    }
-                }
-                break;
-            }
             case "KubrowPetEggs": {
                 for (const egg of value) {
                     inventory.KubrowPetEggs.push({
@@ -961,7 +921,7 @@ interface AddMissionRewardsReturnType {
     MissionRewards: IMissionReward[];
     inventoryChanges?: IInventoryChanges;
     credits?: IMissionCredits;
-    AffiliationMods?: IAffiliationMods[];
+    AffiliationMods: IAffiliationMods[];
     SyndicateXPItemReward?: number;
     ConquestCompletedMissionsCount?: number;
 }
@@ -1137,10 +1097,12 @@ export const addMissionRewards = async (
     }: IMissionInventoryUpdateRequest,
     firstCompletion: boolean
 ): Promise<AddMissionRewardsReturnType> => {
+    AffiliationMods ??= [];
+
     if (!rewardInfo) {
         //TODO: if there is a case where you can have credits collected during a mission but no rewardInfo, add credits needs to be handled earlier
         logger.debug(`Mission ${missions!.Tag} did not have Reward Info `);
-        return { MissionRewards: [] };
+        return { MissionRewards: [], AffiliationMods };
     }
 
     //TODO: check double reward merging
@@ -1449,8 +1411,6 @@ export const addMissionRewards = async (
             inventoryChanges.Nemesis.InfNodes = inventory.Nemesis.InfNodes;
         }
     }
-
-    AffiliationMods ??= [];
 
     if (rewardInfo.JobStage != undefined && rewardInfo.jobId) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -2251,6 +2211,54 @@ function getRandomMissionDrops(
 
     return drops;
 }
+
+export const handleConservation = (
+    inventory: TInventoryDatabaseDocument,
+    missionReport: IMissionInventoryUpdateRequest,
+    AffiliationMods: IAffiliationMods[]
+): void => {
+    if (missionReport.CapturedAnimals) {
+        for (const capturedAnimal of missionReport.CapturedAnimals) {
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            const meta = ExportAnimals[capturedAnimal.AnimalType]?.conservation;
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            if (meta) {
+                if (capturedAnimal.NumTags) {
+                    addMiscItems(inventory, [
+                        {
+                            ItemType: meta.itemReward,
+                            ItemCount: capturedAnimal.NumTags * capturedAnimal.Count
+                        }
+                    ]);
+                }
+                if (capturedAnimal.NumExtraRewards) {
+                    if (meta.woundedAnimalReward) {
+                        addMiscItems(inventory, [
+                            {
+                                ItemType: meta.woundedAnimalReward,
+                                ItemCount: capturedAnimal.NumExtraRewards * capturedAnimal.Count
+                            }
+                        ]);
+                    } else {
+                        logger.warn(
+                            `client attempted to claim unknown extra rewards for conservation of ${capturedAnimal.AnimalType}`
+                        );
+                    }
+                }
+                if (meta.standingReward) {
+                    addStanding(
+                        inventory,
+                        missionReport.Missions!.Tag == "SolNode129" ? "SolarisSyndicate" : "CetusSyndicate",
+                        [2, 1.5, 1][capturedAnimal.CaptureRating] * meta.standingReward * capturedAnimal.Count,
+                        AffiliationMods
+                    );
+                }
+            } else {
+                logger.warn(`ignoring conservation of unknown AnimalType: ${capturedAnimal.AnimalType}`);
+            }
+        }
+    }
+};
 
 const corruptedMods = [
     "/Lotus/StoreItems/Upgrades/Mods/Melee/DualStat/CorruptedHeavyDamageChargeSpeedMod", // Corrupt Charge

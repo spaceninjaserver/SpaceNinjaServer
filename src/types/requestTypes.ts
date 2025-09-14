@@ -45,6 +45,15 @@ export type IMissionInventoryUpdateRequest = {
     EmailItems?: ITypeCount[];
     ShipDecorations?: ITypeCount[];
 
+    // flags for interstitial requests
+    BMI?: boolean;
+    TNT?: boolean; // Conservation; definitely need to include AffiliationMods in this case, so a normal 'inventory sync' would not work here.
+    SSC?: boolean; // K-Drive race?
+    RJ?: boolean; // Railjack. InventoryJson should only be returned when going back to dojo.
+    SS?: boolean;
+    CMI?: boolean;
+    EJC?: boolean;
+
     SyndicateId?: string;
     SortieId?: string;
     CalendarProgress?: { challenge: string }[];
@@ -149,7 +158,6 @@ export type IMissionInventoryUpdateRequest = {
         MultiProgress: unknown[];
     }[];
     InvasionProgress?: IInvasionProgressClient[];
-    RJ?: boolean;
     ConquestMissionsCompleted?: number;
     duviriSuitSelection?: string;
     duviriPistolSelection?: string;
