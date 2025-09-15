@@ -73,6 +73,7 @@ dict = {
     code_fund: `Financer`,
     code_funded: `Complété`,
     code_replays: `[UNTRANSLATED] Replays`,
+    code_stalker: `Stalker`,
     code_succChange: `Changement effectué.`,
     code_requiredInvigorationUpgrade: `Augmentation offensive et défensive requises.`,
     login_description: `Connexion avec les informations de connexion OpenWF.`,

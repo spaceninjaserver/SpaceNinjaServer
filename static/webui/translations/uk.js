@@ -73,6 +73,7 @@ dict = {
     code_fund: `[UNTRANSLATED] Fund`,
     code_funded: `[UNTRANSLATED] Funded`,
     code_replays: `[UNTRANSLATED] Replays`,
+    code_stalker: `Сталкер`,
     code_succChange: `Успішно змінено.`,
     code_requiredInvigorationUpgrade: `Ви повинні вибрати як атакуюче, так і допоміжне вдосконалення.`,
     login_description: `Увійдіть, використовуючи облікові дані OpenWF (ті ж, що й у грі при підключенні до цього серверу).`,

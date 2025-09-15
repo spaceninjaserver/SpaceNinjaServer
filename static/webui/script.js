@@ -505,6 +505,9 @@ function fetchItemList() {
                         i => i.uniqueName === "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadC"
                     ).name
                 },
+                "/Lotus/Powersuits/Stalker/Stalker": {
+                    name: loc("code_stalker")
+                },
                 "/Lotus/Language/Game/Rank_Creator": {
                     name: loc("guildView_rank_creator")
                 },

@@ -73,6 +73,7 @@ dict = {
     code_fund: `Профинансировать`,
     code_funded: `Профинансировано`,
     code_replays: `Повторов`,
+    code_stalker: `Сталкер`,
     code_succChange: `Успешно изменено.`,
     code_requiredInvigorationUpgrade: `Вы должны выбрать как атакующее, так и вспомогательное улучшение.`,
     login_description: `Войдите, используя учетные данные OpenWF (те же, что и в игре при подключении к этому серверу).`,
