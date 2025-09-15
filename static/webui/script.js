@@ -989,7 +989,8 @@ function updateInventory() {
             data.QuestKeys.forEach(item => {
                 const tr = document.createElement("tr");
                 tr.setAttribute("data-item-type", item.ItemType);
-                const stage = item.Progress?.length ?? 0;
+                const run = item.Progress[0]?.c ?? 0;
+                const stage = run == 0 ? item.Progress.length : item.Progress.map(p => p.c ?? 0).lastIndexOf(run);
 
                 const datalist = document.getElementById("datalist-QuestKeys");
                 const optionToRemove = datalist.querySelector(`option[data-key="${item.ItemType}"]`);
@@ -1005,6 +1006,10 @@ function updateInventory() {
                             " | " + loc("code_stage") + ": [" + stage + "/" + itemMap[item.ItemType].chainLength + "]";
                     } else {
                         td.textContent += " | " + loc("code_completed");
+                    }
+
+                    if (run > 0) {
+                        td.textContent += " | " + loc("code_replays") + ": " + (run + 1);
                     }
 
                     if (data.ActiveQuest == item.ItemType) td.textContent += " | " + loc("code_active");

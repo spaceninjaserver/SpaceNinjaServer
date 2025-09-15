@@ -68,6 +68,7 @@ dict = {
     code_unmature: `Genetisches Altern zurücksetzen`,
     code_fund: `[UNTRANSLATED] Fund`,
     code_funded: `[UNTRANSLATED] Funded`,
+    code_replays: `[UNTRANSLATED] Replays`,
     code_succChange: `Erfolgreich geändert.`,
     code_requiredInvigorationUpgrade: `Du musst sowohl ein offensives & defensives Upgrade auswählen.`,
     login_description: `Melde dich mit deinem OpenWF-Account an (denselben Angaben wie im Spiel, wenn du dich mit diesem Server verbindest).`,

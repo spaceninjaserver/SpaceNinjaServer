@@ -67,6 +67,7 @@ dict = {
     code_unmature: `Regress genetic aging`,
     code_fund: `Fund`,
     code_funded: `Funded`,
+    code_replays: `Replays`,
     code_succChange: `Successfully changed.`,
     code_requiredInvigorationUpgrade: `You must select both an offensive & defensive upgrade.`,
     login_description: `Login using your OpenWF account credentials (same as in-game when connecting to this server).`,

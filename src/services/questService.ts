@@ -6,7 +6,6 @@ import { addItem, addItems, addKeyChainItems, setupKahlSyndicate } from "./inven
 import { fromStoreItem, getKeyChainMessage, getLevelKeyRewards } from "./itemDataService.ts";
 import type { IQuestKeyClient, IQuestKeyDatabase, IQuestStage } from "../types/inventoryTypes/inventoryTypes.ts";
 import { logger } from "../utils/logger.ts";
-import type { Types } from "mongoose";
 import { ExportKeys } from "warframe-public-export-plus";
 import { addFixedLevelRewards } from "./missionInventoryUpdateService.ts";
 import type { IInventoryChanges } from "../types/purchaseTypes.ts";
@@ -44,7 +43,12 @@ export const updateQuestKey = async (
         inventory.QuestKeys[questKeyIndex].CompletionDate = new Date();
 
         const questKey = questKeyUpdate[0].ItemType;
-        await handleQuestCompletion(inventory, questKey, inventoryChanges);
+        await handleQuestCompletion(
+            inventory,
+            questKey,
+            inventoryChanges,
+            (questKeyUpdate[0].Progress?.[0]?.c ?? 0) > 0
+        );
     }
     return inventoryChanges;
 };
@@ -52,7 +56,7 @@ export const updateQuestKey = async (
 export const updateQuestStage = (
     inventory: TInventoryDatabaseDocument,
     { KeyChain, ChainStage }: IKeyChainRequest,
-    questStageUpdate: IQuestStage
+    questStageUpdate: Partial<IQuestStage>
 ): void => {
     const quest = inventory.QuestKeys.find(quest => quest.ItemType === KeyChain);
 
@@ -68,14 +72,22 @@ export const updateQuestStage = (
 
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!questStage) {
-        const questStageIndex = quest.Progress.push(questStageUpdate) - 1;
+        const questStageIndex =
+            quest.Progress.push({
+                c: questStageUpdate.c ?? 0,
+                i: questStageUpdate.i ?? false,
+                m: questStageUpdate.m ?? false,
+                b: questStageUpdate.b ?? []
+            }) - 1;
         if (questStageIndex !== ChainStage) {
             throw new Error(`Quest stage index mismatch: ${questStageIndex} !== ${ChainStage}`);
         }
         return;
     }
 
-    Object.assign(questStage, questStageUpdate);
+    for (const [key, value] of Object.entries(questStageUpdate) as [keyof IQuestStage, number | boolean | any[]][]) {
+        (questStage[key] as any) = value;
+    }
 };
 
 export const addQuestKey = (
@@ -112,58 +124,53 @@ export const completeQuest = async (inventory: TInventoryDatabaseDocument, quest
     }
 
     const chainStageTotal = chainStages.length;
+    let existingQuestKey = inventory.QuestKeys.find(qk => qk.ItemType === questKey);
 
-    const existingQuestKey = inventory.QuestKeys.find(qk => qk.ItemType === questKey);
-
-    const startingStage = Math.max((existingQuestKey?.Progress?.length ?? 0) - 1, 0);
-
-    if (existingQuestKey?.Completed) {
-        return;
-    }
-    if (existingQuestKey) {
-        existingQuestKey.Progress = existingQuestKey.Progress ?? [];
-
-        const existingProgressLength = existingQuestKey.Progress.length;
-
-        if (existingProgressLength < chainStageTotal) {
-            const missingProgress: IQuestStage[] = Array.from(
-                { length: chainStageTotal - existingProgressLength },
-                () =>
-                    ({
-                        c: 0,
-                        i: false,
-                        m: false,
-                        b: []
-                    }) as IQuestStage
-            );
-
-            existingQuestKey.Progress.push(...missingProgress);
-            existingQuestKey.CompletionDate = new Date();
-            existingQuestKey.Completed = true;
-        }
-    } else {
+    if (!existingQuestKey) {
         const completedQuestKey: IQuestKeyDatabase = {
             ItemType: questKey,
-            Completed: true,
+            Completed: false,
             unlock: true,
-            Progress: Array(chainStageTotal).fill({
+            Progress: Array.from({ length: chainStageTotal }, () => ({
                 c: 0,
                 i: false,
                 m: false,
                 b: []
-            } satisfies IQuestStage),
-            CompletionDate: new Date()
+            }))
         };
         addQuestKey(inventory, completedQuestKey);
+        existingQuestKey = inventory.QuestKeys.find(qk => qk.ItemType === questKey)!;
+    } else if (existingQuestKey.Completed) {
+        return;
     }
 
-    for (let i = startingStage; i < chainStageTotal; i++) {
-        await giveKeyChainStageTriggered(inventory, { KeyChain: questKey, ChainStage: i });
+    existingQuestKey.Progress = existingQuestKey.Progress ?? [];
 
-        await giveKeyChainMissionReward(inventory, { KeyChain: questKey, ChainStage: i });
+    const run = existingQuestKey.Progress[0]?.c ?? 0;
+
+    const existingProgressLength = existingQuestKey.Progress.length;
+    if (existingProgressLength < chainStageTotal) {
+        const missingProgress: IQuestStage[] = Array.from(
+            { length: chainStageTotal - existingProgressLength },
+            () => ({ c: run, i: false, m: false, b: [] }) as IQuestStage
+        );
+        existingQuestKey.Progress.push(...missingProgress);
     }
 
-    await handleQuestCompletion(inventory, questKey);
+    for (let i = 0; i < chainStageTotal; i++) {
+        const stage = existingQuestKey.Progress[i];
+        if (stage.c < run) {
+            stage.c = run;
+            await giveKeyChainStageTriggered(inventory, { KeyChain: questKey, ChainStage: i });
+            await giveKeyChainMissionReward(inventory, { KeyChain: questKey, ChainStage: i });
+        }
+    }
+
+    if (existingQuestKey.Progress.every(p => p.c == run)) {
+        existingQuestKey.Completed = true;
+        existingQuestKey.CompletionDate = new Date();
+        await handleQuestCompletion(inventory, questKey, undefined, run > 0);
+    }
 };
 
 const getQuestCompletionItems = (questKey: string): ITypeCount[] | undefined => {
@@ -214,27 +221,34 @@ const doesQuestCompletionFinishSet = (
 const handleQuestCompletion = async (
     inventory: TInventoryDatabaseDocument,
     questKey: string,
-    inventoryChanges: IInventoryChanges = {}
+    inventoryChanges: IInventoryChanges = {},
+    isRerun: boolean = false
 ): Promise<void> => {
     logger.debug(`completed quest ${questKey}`);
 
+    if (inventory.ActiveQuest == questKey) inventory.ActiveQuest = "";
     if (questKey == "/Lotus/Types/Keys/OrokinMoonQuest/OrokinMoonQuestKeyChain") {
+        const att = isRerun
+            ? []
+            : [
+                  "/Lotus/Weapons/Tenno/Melee/Swords/StalkerTwo/StalkerTwoSmallSword",
+                  "/Lotus/Upgrades/Skins/Sigils/ScarSigil"
+              ];
         await createMessage(inventory.accountOwnerId, [
             {
                 sndr: "/Lotus/Language/Bosses/Ordis",
                 msg: "/Lotus/Language/G1Quests/SecondDreamFinishInboxMessage",
-                att: [
-                    "/Lotus/Weapons/Tenno/Melee/Swords/StalkerTwo/StalkerTwoSmallSword",
-                    "/Lotus/Upgrades/Skins/Sigils/ScarSigil"
-                ],
+                att,
                 sub: "/Lotus/Language/G1Quests/SecondDreamFinishInboxTitle",
                 icon: "/Lotus/Interface/Icons/Npcs/Ordis.png",
                 highPriority: true
             }
         ]);
-    } else if (questKey == "/Lotus/Types/Keys/NewWarQuest/NewWarQuestKeyChain") {
+    } else if (questKey == "/Lotus/Types/Keys/NewWarQuest/NewWarQuestKeyChain" && !isRerun) {
         setupKahlSyndicate(inventory);
     }
+
+    if (isRerun) return;
 
     // Whispers in the Walls is unlocked once The New War + Heart of Deimos are completed.
     if (
@@ -279,21 +293,24 @@ const handleQuestCompletion = async (
     if (questCompletionItems) {
         await addItems(inventory, questCompletionItems, inventoryChanges);
     }
-
-    if (inventory.ActiveQuest == questKey) inventory.ActiveQuest = "";
 };
 
 export const giveKeyChainItem = async (
     inventory: TInventoryDatabaseDocument,
-    keyChainInfo: IKeyChainRequest
+    keyChainInfo: IKeyChainRequest,
+    isRerun: boolean = false
 ): Promise<IInventoryChanges> => {
-    const inventoryChanges = await addKeyChainItems(inventory, keyChainInfo);
+    let inventoryChanges: IInventoryChanges = {};
 
-    if (isEmptyObject(inventoryChanges)) {
-        logger.warn("inventory changes was empty after getting keychain items: should not happen");
+    if (!isRerun) {
+        inventoryChanges = await addKeyChainItems(inventory, keyChainInfo);
+
+        if (isEmptyObject(inventoryChanges)) {
+            logger.warn("inventory changes was empty after getting keychain items: should not happen");
+        }
+        // items were added: update quest stage's i (item was given)
+        updateQuestStage(inventory, keyChainInfo, { i: true });
     }
-    // items were added: update quest stage's i (item was given)
-    updateQuestStage(inventory, keyChainInfo, { i: true });
 
     return inventoryChanges;
 
@@ -309,12 +326,17 @@ export const giveKeyChainItem = async (
 
 export const giveKeyChainMessage = async (
     inventory: TInventoryDatabaseDocument,
-    accountId: string | Types.ObjectId,
-    keyChainInfo: IKeyChainRequest
+    keyChainInfo: IKeyChainRequest,
+    isRerun: boolean = false
 ): Promise<void> => {
     const keyChainMessage = getKeyChainMessage(keyChainInfo);
 
-    await createMessage(accountId, [keyChainMessage]);
+    if (!isRerun) {
+        keyChainMessage.att = [];
+        keyChainMessage.countedAtt = [];
+    }
+
+    await createMessage(inventory.accountOwnerId, [keyChainMessage]);
 
     updateQuestStage(inventory, keyChainInfo, { m: true });
 };
@@ -328,8 +350,10 @@ export const giveKeyChainMissionReward = async (
 
     if (chainStages) {
         const missionName = chainStages[keyChainInfo.ChainStage].key;
-        if (missionName) {
+        const questKey = inventory.QuestKeys.find(q => q.ItemType === keyChainInfo.KeyChain);
+        if (missionName && questKey) {
             const fixedLevelRewards = getLevelKeyRewards(missionName);
+            const run = questKey.Progress?.[0]?.c ?? 0;
             if (fixedLevelRewards.levelKeyRewards) {
                 const missionRewards: { StoreItem: string; ItemCount: number }[] = [];
                 inventory.RegularCredits += addFixedLevelRewards(fixedLevelRewards.levelKeyRewards, missionRewards);
@@ -338,7 +362,7 @@ export const giveKeyChainMissionReward = async (
                     await addItem(inventory, fromStoreItem(reward.StoreItem), reward.ItemCount);
                 }
 
-                updateQuestStage(inventory, keyChainInfo, { c: 0 });
+                updateQuestStage(inventory, keyChainInfo, { c: run });
             } else if (fixedLevelRewards.levelKeyRewards2) {
                 for (const reward of fixedLevelRewards.levelKeyRewards2) {
                     if (reward.rewardType == "RT_CREDITS") {
@@ -352,7 +376,7 @@ export const giveKeyChainMissionReward = async (
                     }
                 }
 
-                updateQuestStage(inventory, keyChainInfo, { c: 0 });
+                updateQuestStage(inventory, keyChainInfo, { c: run });
             }
         }
     }
@@ -364,14 +388,17 @@ export const giveKeyChainStageTriggered = async (
 ): Promise<void> => {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     const chainStages = ExportKeys[keyChainInfo.KeyChain]?.chainStages;
+    const questKey = inventory.QuestKeys.find(qk => qk.ItemType === keyChainInfo.KeyChain);
 
-    if (chainStages) {
+    if (chainStages && questKey) {
+        const run = questKey.Progress?.[0]?.c ?? 0;
+
         if (chainStages[keyChainInfo.ChainStage].itemsToGiveWhenTriggered.length > 0) {
-            await giveKeyChainItem(inventory, keyChainInfo);
+            await giveKeyChainItem(inventory, keyChainInfo, run > 0);
         }
 
         if (chainStages[keyChainInfo.ChainStage].messageToSendWhenTriggered) {
-            await giveKeyChainMessage(inventory, inventory.accountOwnerId, keyChainInfo);
+            await giveKeyChainMessage(inventory, keyChainInfo, run > 0);
         }
     }
 };

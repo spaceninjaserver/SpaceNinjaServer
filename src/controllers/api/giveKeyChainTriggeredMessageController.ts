@@ -8,8 +8,8 @@ export const giveKeyChainTriggeredMessageController: RequestHandler = async (req
     const accountId = await getAccountIdForRequest(req);
     const keyChainInfo = JSON.parse((req.body as Buffer).toString()) as IKeyChainRequest;
 
-    const inventory = await getInventory(accountId, "QuestKeys");
-    await giveKeyChainMessage(inventory, accountId, keyChainInfo);
+    const inventory = await getInventory(accountId, "QuestKeys accountOwnerId");
+    await giveKeyChainMessage(inventory, keyChainInfo);
     await inventory.save();
 
     res.send(1);

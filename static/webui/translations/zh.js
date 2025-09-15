@@ -68,6 +68,7 @@ dict = {
     code_unmature: `逆转衰老基因`,
     code_fund: `[UNTRANSLATED] Fund`,
     code_funded: `[UNTRANSLATED] Funded`,
+    code_replays: `[UNTRANSLATED] Replays`,
     code_succChange: `更改成功`,
     code_requiredInvigorationUpgrade: `您必须同时选择一个进攻型和一个功能型活化属性.`,
     login_description: `使用您的 OpenWF 账户凭证登录(与游戏内连接本服务器时使用的昵称相同)`,

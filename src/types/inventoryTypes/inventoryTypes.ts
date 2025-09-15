@@ -977,10 +977,10 @@ export interface IQuestKeyClient extends Omit<IQuestKeyDatabase, "CompletionDate
 }
 
 export interface IQuestStage {
-    c?: number;
-    i?: boolean;
-    m?: boolean;
-    b?: any[];
+    c: number;
+    i: boolean;
+    m: boolean;
+    b: any[];
 }
 
 export interface IRawUpgrade {

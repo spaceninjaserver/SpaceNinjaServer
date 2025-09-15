@@ -68,6 +68,7 @@ dict = {
     code_unmature: `Regresar el envejecimiento genético`,
     code_fund: `[UNTRANSLATED] Fund`,
     code_funded: `[UNTRANSLATED] Funded`,
+    code_replays: `[UNTRANSLATED] Replays`,
     code_succChange: `Cambiado correctamente`,
     code_requiredInvigorationUpgrade: `Debes seleccionar una mejora ofensiva y una defensiva.`,
     login_description: `Inicia sesión con las credenciales de tu cuenta OpenWF (las mismas que usas en el juego al conectarte a este servidor).`,

@@ -102,8 +102,16 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
                     questKey.Completed = false;
                     questKey.CompletionDate = undefined;
                 }
-                questKey.Progress.pop();
-                const stage = questKey.Progress.length - 1;
+
+                const run = questKey.Progress[0]?.c ?? 0;
+                const stage = questKey.Progress.map(p => p.c).lastIndexOf(run);
+
+                if (run > 0) {
+                    questKey.Progress[stage].c = run - 1;
+                } else {
+                    questKey.Progress.pop();
+                }
+
                 if (stage > 0) {
                     await giveKeyChainStageTriggered(inventory, {
                         KeyChain: questKey.ItemType,
@@ -123,28 +131,28 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
                 }
                 if (!questKey.Progress) break;
 
-                const currentStage = questKey.Progress.length;
+                const run = questKey.Progress[0]?.c ?? 0;
+                const currentStage = questKey.Progress.map(p => p.c).lastIndexOf(run);
+
                 if (currentStage + 1 == questManifest.chainStages?.length) {
                     logger.debug(`Trying to complete last stage with nextStage, calling completeQuest instead`);
                     await completeQuest(inventory, questKey.ItemType);
                 } else {
-                    const progress = {
-                        c: 0,
-                        i: false,
-                        m: false,
-                        b: []
-                    };
-                    questKey.Progress.push(progress);
+                    if (run > 0) {
+                        questKey.Progress[currentStage + 1].c = run;
+                    } else {
+                        questKey.Progress.push({ c: run, i: false, m: false, b: [] });
+                    }
 
                     await giveKeyChainStageTriggered(inventory, {
                         KeyChain: questKey.ItemType,
-                        ChainStage: currentStage
+                        ChainStage: currentStage + 1
                     });
 
                     if (currentStage > 0) {
                         await giveKeyChainMissionReward(inventory, {
                             KeyChain: questKey.ItemType,
-                            ChainStage: currentStage - 1
+                            ChainStage: currentStage
                         });
                     }
                 }
