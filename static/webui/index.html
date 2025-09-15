@@ -459,6 +459,22 @@
                         </div>
                     </div>
                 </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-lg-6">
+                        <div class="card" style="height: 400px;">
+                            <h5 class="card-header" data-loc="inventory_flavourItems"></h5>
+                            <div class="card-body overflow-auto">
+                                <form class="input-group mb-3" onsubmit="doAcquireEquipment('FlavourItems');return false;">
+                                    <input class="form-control" id="acquire-type-FlavourItems" list="datalist-FlavourItems" />
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                </form>
+                                <table class="table table-hover w-100">
+                                    <tbody id="FlavourItems-list"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="card">
                     <h5 class="card-header" data-loc="general_bulkActions"></h5>
                     <div class="card-body">
@@ -469,6 +485,7 @@
                             <button class="btn btn-primary" onclick="debounce(addMissingEquipment, ['SpaceGuns', 'SpaceMelee']);" data-loc="inventory_bulkAddSpaceWeapons"></button>
                             <button class="btn btn-primary" onclick="debounce(addMissingEquipment, ['Sentinels']);" data-loc="inventory_bulkAddSentinels"></button>
                             <button class="btn btn-primary" onclick="debounce(addMissingEquipment, ['SentinelWeapons']);" data-loc="inventory_bulkAddSentinelWeapons"></button>
+                            <button class="btn btn-primary" onclick="debounce(addMissingEquipment, ['FlavourItems']);" data-loc="inventory_bulkAddFlavourItems"></button>
                             <button class="btn btn-primary" onclick="debounce(addMissingEvolutionProgress);" data-loc="inventory_bulkAddEvolutionProgress"></button>
                         </div>
                         <div class="mb-2 d-flex flex-wrap gap-2">
@@ -984,10 +1001,6 @@
                                         <label class="form-check-label" for="unlockAllShipDecorations" data-loc="cheats_unlockAllShipDecorations"></label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="unlockAllFlavourItems" />
-                                        <label class="form-check-label" for="unlockAllFlavourItems" data-loc="cheats_unlockAllFlavourItems"></label>
-                                    </div>
-                                    <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="unlockAllSkins" />
                                         <label class="form-check-label" for="unlockAllSkins" data-loc="cheats_unlockAllSkins"></label>
                                     </div>
@@ -1387,6 +1400,7 @@
     <datalist id="datalist-Abilities"></datalist>
     <datalist id="datalist-TechProjects"></datalist>
     <datalist id="datalist-VaultDecoRecipes"></datalist>
+    <datalist id="datalist-FlavourItems"></datalist>
     <datalist id="datalist-circuitGameModes">
         <option>Survival</option>
         <option>VoidFlood</option>

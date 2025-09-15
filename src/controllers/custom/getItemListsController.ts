@@ -10,6 +10,7 @@ import {
     ExportDojoRecipes,
     ExportDrones,
     ExportFactions,
+    ExportFlavour,
     ExportGear,
     ExportKeys,
     ExportRailjackWeapons,
@@ -62,6 +63,7 @@ interface ItemLists {
     Abilities: ListedItem[];
     TechProjects: ListedItem[];
     VaultDecoRecipes: ListedItem[];
+    FlavourItems: ListedItem[];
     //circuitGameModes: ListedItem[];
 }
 
@@ -102,7 +104,8 @@ const getItemListsController: RequestHandler = (req, response) => {
         VarziaOffers: [],
         Abilities: [],
         TechProjects: [],
-        VaultDecoRecipes: []
+        VaultDecoRecipes: [],
+        FlavourItems: []
         /*circuitGameModes: [
             {
                 uniqueName: "Survival",
@@ -440,6 +443,13 @@ const getItemListsController: RequestHandler = (req, response) => {
         res.VaultDecoRecipes.push({
             uniqueName,
             name
+        });
+    }
+
+    for (const [uniqueName, item] of Object.entries(ExportFlavour)) {
+        res.FlavourItems.push({
+            uniqueName: uniqueName,
+            name: getString(item.name, lang)
         });
     }
 

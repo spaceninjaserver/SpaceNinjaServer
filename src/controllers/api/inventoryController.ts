@@ -10,7 +10,7 @@ import { equipmentKeys } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import { ArtifactPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import type { ICountedItem } from "warframe-public-export-plus";
-import { ExportCustoms, ExportFlavour, ExportResources } from "warframe-public-export-plus";
+import { ExportCustoms, ExportResources } from "warframe-public-export-plus";
 import { applyCheatsToInfestedFoundry, handleSubsumeCompletion } from "../../services/infestedFoundryService.ts";
 import {
     addEmailItem,
@@ -330,12 +330,7 @@ export const getInventoryResponse = async (
         }
     }
 
-    if (config.unlockAllFlavourItems) {
-        inventoryResponse.FlavourItems = [];
-        for (const uniqueName in ExportFlavour) {
-            inventoryResponse.FlavourItems.push({ ItemType: uniqueName });
-        }
-    } else if (config.worldState?.baroTennoConRelay) {
+    if (config.worldState?.baroTennoConRelay) {
         [
             "/Lotus/Types/Items/Events/TennoConRelay2022EarlyAccess",
             "/Lotus/Types/Items/Events/TennoConRelay2023EarlyAccess",
