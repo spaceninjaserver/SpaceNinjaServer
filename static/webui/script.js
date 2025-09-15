@@ -1043,6 +1043,40 @@ function updateInventory() {
                 };
             }
 
+            document.getElementById("ShipDecorations-list").innerHTML = "";
+            data.ShipDecorations.forEach(item => {
+                if (item.ItemCount > 0) {
+                    const tr = document.createElement("tr");
+                    tr.setAttribute("data-item-type", item.ItemType);
+                    {
+                        const td = document.createElement("td");
+                        td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
+                        if (item.ItemCount > 1) {
+                            td.innerHTML +=
+                                " <span title='" + loc("code_count") + "'>🗍 " + parseInt(item.ItemCount) + "</span>";
+                        }
+                        tr.appendChild(td);
+                    }
+                    {
+                        const td = document.createElement("td");
+                        td.classList = "text-end text-nowrap";
+                        {
+                            const a = document.createElement("a");
+                            a.href = "#";
+                            a.onclick = function (event) {
+                                event.preventDefault();
+                                removeCountItems(item.ItemType, item.ItemCount);
+                            };
+                            a.title = loc("code_remove");
+                            a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
+                            td.appendChild(a);
+                        }
+                        tr.appendChild(td);
+                    }
+                    document.getElementById("ShipDecorations-list").appendChild(tr);
+                }
+            });
+
             // Populate quests route
             document.getElementById("QuestKeys-list").innerHTML = "";
             window.allQuestKeys.forEach(questKey => {
@@ -1304,7 +1338,8 @@ function updateInventory() {
                         td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
                         td.innerHTML += " <span title='" + loc("code_rank") + "'>★ 0/" + maxRank + "</span>";
                         if (item.ItemCount > 1) {
-                            td.innerHTML += " <span title='Count'>🗍 " + parseInt(item.ItemCount) + "</span>";
+                            td.innerHTML +=
+                                " <span title='" + loc("code_count") + "'>🗍 " + parseInt(item.ItemCount) + "</span>";
                         }
                         tr.appendChild(td);
                     }
@@ -2228,7 +2263,9 @@ function addMissingEquipment(categories) {
                 )
             ) {
                 if (!webUiModularWeapons.includes(elm.getAttribute("data-key"))) {
-                    requests.push({ ItemType: elm.getAttribute("data-key"), ItemCount: 1 });
+                    let ItemCount = 1;
+                    if (category == "ShipDecorations") ItemCount = 100;
+                    requests.push({ ItemType: elm.getAttribute("data-key"), ItemCount });
                 }
             }
         });
@@ -2748,13 +2785,13 @@ function setEvolutionProgress(requests) {
     });
 }
 
-function doAcquireMiscItems() {
-    const uniqueName = getKey(document.getElementById("miscitem-type"));
+function doAcquireCountItems(category) {
+    const uniqueName = getKey(document.getElementById(category + "-type"));
     if (!uniqueName) {
-        $("#miscitem-type").addClass("is-invalid").focus();
+        $(`#acquire-type-${category}`).addClass("is-invalid").focus();
         return;
     }
-    const count = parseInt($("#miscitem-count").val());
+    const count = parseInt($(`#${category}-count`).val());
     if (count != 0) {
         revalidateAuthz().then(() => {
             $.post({
@@ -2772,9 +2809,28 @@ function doAcquireMiscItems() {
                 } else {
                     toast(loc("code_succRemoved"));
                 }
+                if (category != "miscitem") updateInventory();
             });
         });
     }
+}
+
+function removeCountItems(uniqueName, count) {
+    revalidateAuthz().then(() => {
+        $.post({
+            url: "/custom/addItems?" + window.authz,
+            contentType: "application/json",
+            data: JSON.stringify([
+                {
+                    ItemType: uniqueName,
+                    ItemCount: count * -1
+                }
+            ])
+        }).done(function () {
+            toast(loc("code_succRemoved"));
+            updateInventory();
+        });
+    });
 }
 
 function addItemByItemType() {

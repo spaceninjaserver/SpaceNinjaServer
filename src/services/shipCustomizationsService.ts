@@ -14,7 +14,6 @@ import type {
 import { logger } from "../utils/logger.ts";
 import { Types } from "mongoose";
 import { addFusionTreasures, addShipDecorations, getInventory } from "./inventoryService.ts";
-import { config } from "./configService.ts";
 import { Guild } from "../models/guildModel.ts";
 import { hasGuildPermission } from "./guildService.ts";
 import { GuildPermission } from "../types/guildTypes.ts";
@@ -137,15 +136,13 @@ export const handleSetShipDecorations = async (
         roomToPlaceIn.MaxCapacity += meta.capacityCost;
         await personalRooms.save();
 
-        if (!config.unlockAllShipDecorations) {
-            const inventory = await getInventory(accountId);
-            if (deco.Sockets !== undefined) {
-                addFusionTreasures(inventory, [{ ItemType: itemType, Sockets: deco.Sockets, ItemCount: 1 }]);
-            } else {
-                addShipDecorations(inventory, [{ ItemType: itemType, ItemCount: 1 }]);
-            }
-            await inventory.save();
+        const inventory = await getInventory(accountId);
+        if (deco.Sockets !== undefined) {
+            addFusionTreasures(inventory, [{ ItemType: itemType, Sockets: deco.Sockets, ItemCount: 1 }]);
+        } else {
+            addShipDecorations(inventory, [{ ItemType: itemType, ItemCount: 1 }]);
         }
+        await inventory.save();
 
         return {
             DecoId: placedDecoration.RemoveId,
@@ -155,15 +152,13 @@ export const handleSetShipDecorations = async (
         };
     }
 
-    if (!config.unlockAllShipDecorations) {
-        const inventory = await getInventory(accountId);
-        if (placedDecoration.Sockets !== undefined) {
-            addFusionTreasures(inventory, [{ ItemType: itemType, Sockets: placedDecoration.Sockets, ItemCount: -1 }]);
-        } else {
-            addShipDecorations(inventory, [{ ItemType: itemType, ItemCount: -1 }]);
-        }
-        await inventory.save();
+    const inventory = await getInventory(accountId);
+    if (placedDecoration.Sockets !== undefined) {
+        addFusionTreasures(inventory, [{ ItemType: itemType, Sockets: placedDecoration.Sockets, ItemCount: -1 }]);
+    } else {
+        addShipDecorations(inventory, [{ ItemType: itemType, ItemCount: -1 }]);
     }
+    await inventory.save();
 
     //place decoration
     const decoId = new Types.ObjectId();
@@ -221,12 +216,10 @@ export const handleResetShipDecorations = async (
         }
 
         // refund item
-        if (!config.unlockAllShipDecorations) {
-            if (deco.Sockets !== undefined) {
-                addFusionTreasures(inventory, [{ ItemType: itemType, Sockets: deco.Sockets, ItemCount: 1 }]);
-            } else {
-                addShipDecorations(inventory, [{ ItemType: itemType, ItemCount: 1 }]);
-            }
+        if (deco.Sockets !== undefined) {
+            addFusionTreasures(inventory, [{ ItemType: itemType, Sockets: deco.Sockets, ItemCount: 1 }]);
+        } else {
+            addShipDecorations(inventory, [{ ItemType: itemType, ItemCount: 1 }]);
         }
 
         // refund capacity

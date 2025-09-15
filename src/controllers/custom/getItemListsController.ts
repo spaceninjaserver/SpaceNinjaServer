@@ -64,6 +64,7 @@ interface ItemLists {
     TechProjects: ListedItem[];
     VaultDecoRecipes: ListedItem[];
     FlavourItems: ListedItem[];
+    ShipDecorations: ListedItem[];
     //circuitGameModes: ListedItem[];
 }
 
@@ -105,7 +106,8 @@ const getItemListsController: RequestHandler = (req, response) => {
         Abilities: [],
         TechProjects: [],
         VaultDecoRecipes: [],
-        FlavourItems: []
+        FlavourItems: [],
+        ShipDecorations: []
         /*circuitGameModes: [
             {
                 uniqueName: "Survival",
@@ -233,7 +235,12 @@ const getItemListsController: RequestHandler = (req, response) => {
                 }
             }
         }
-        if (
+        if (item.productCategory == "ShipDecorations") {
+            res.ShipDecorations.push({
+                uniqueName: uniqueName,
+                name: name
+            });
+        } else if (
             name &&
             uniqueName.substring(0, 30) != "/Lotus/Types/Game/Projections/" &&
             uniqueName != "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLanthornBundle"

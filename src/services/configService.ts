@@ -21,7 +21,6 @@ export interface IConfig {
     administratorNames?: string[];
     autoCreateAccount?: boolean;
     skipTutorial?: boolean;
-    unlockAllShipDecorations?: boolean;
     unlockAllSkins?: boolean;
     fullyStockedVendors?: boolean;
     skipClanKeyCrafting?: boolean;
@@ -127,8 +126,9 @@ export const configRemovedOptionsKeys = [
     "noDojoResearchCosts",
     "noDojoResearchTime",
     "fastClanAscension",
-    "unlockAllDecoRecipes",
-    "unlockAllFlavourItems"
+    "unlockAllFlavourItems",
+    "unlockAllShipDecorations",
+    "unlockAllDecoRecipes"
 ];
 
 export const configPath = path.join(repoDir, args.configPath ?? "config.json");

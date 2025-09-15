@@ -10,7 +10,7 @@ import { equipmentKeys } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import { ArtifactPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import type { ICountedItem } from "warframe-public-export-plus";
-import { ExportCustoms, ExportResources } from "warframe-public-export-plus";
+import { ExportCustoms } from "warframe-public-export-plus";
 import { applyCheatsToInfestedFoundry, handleSubsumeCompletion } from "../../services/infestedFoundryService.ts";
 import {
     addEmailItem,
@@ -318,15 +318,6 @@ export const getInventoryResponse = async (
         ];
         for (const str of allDialogue) {
             addString(inventoryResponse.NodeIntrosCompleted, str);
-        }
-    }
-
-    if (config.unlockAllShipDecorations) {
-        inventoryResponse.ShipDecorations = [];
-        for (const [uniqueName, item] of Object.entries(ExportResources)) {
-            if (item.productCategory == "ShipDecorations") {
-                inventoryResponse.ShipDecorations.push({ ItemType: uniqueName, ItemCount: 999_999 });
-            }
         }
     }
 
