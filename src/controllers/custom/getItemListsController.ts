@@ -36,6 +36,7 @@ interface ListedItem {
     partType?: string;
     chainLength?: number;
     parazon?: boolean;
+    alwaysAvailable?: boolean;
 }
 
 interface ItemLists {
@@ -455,8 +456,9 @@ const getItemListsController: RequestHandler = (req, response) => {
 
     for (const [uniqueName, item] of Object.entries(ExportFlavour)) {
         res.FlavourItems.push({
-            uniqueName: uniqueName,
-            name: getString(item.name, lang)
+            uniqueName,
+            name: getString(item.name, lang),
+            alwaysAvailable: item.alwaysAvailable
         });
     }
 

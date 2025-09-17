@@ -594,10 +594,12 @@ function fetchItemList() {
                         } else if (item.uniqueName.includes("ColourPicker")) {
                             item.name = loc("code_itemColorPalette").split("|ITEM|").join(item.name);
                         }
-                        const option = document.createElement("option");
-                        option.setAttribute("data-key", item.uniqueName);
-                        option.value = item.name;
-                        document.getElementById("datalist-" + type).appendChild(option);
+                        if (!item.alwaysAvailable) {
+                            const option = document.createElement("option");
+                            option.setAttribute("data-key", item.uniqueName);
+                            option.value = item.name;
+                            document.getElementById("datalist-" + type).appendChild(option);
+                        }
                         itemMap[item.uniqueName] = { ...item, type };
                     });
                 } else {
@@ -993,12 +995,12 @@ function updateInventory() {
             document.getElementById("FlavourItems-list").innerHTML = "";
             data.FlavourItems.forEach(item => {
                 const datalist = document.getElementById("datalist-FlavourItems");
-                if (!data.FlavourItems.some(x => x.ItemType == item.uniqueName)) {
-                    if (!datalist.querySelector(`option[value="${item.uniqueName}"]`)) {
+                if (!data.FlavourItems.some(x => x.ItemType == item.ItemType)) {
+                    if (!datalist.querySelector(`option[data-key="${item.ItemType}"]`)) {
                         reAddToItemList(itemMap, "FlavourItems", item.ItemType);
                     }
                 }
-                const optionToRemove = datalist.querySelector(`option[value="${item.ItemType}"]`);
+                const optionToRemove = datalist.querySelector(`option[data-key="${item.ItemType}"]`);
                 optionToRemove?.remove();
 
                 const tr = document.createElement("tr");
@@ -3408,10 +3410,13 @@ function doAddCurrency(currency) {
 }
 
 function reAddToItemList(itemMap, datalist, itemType) {
-    const option = document.createElement("option");
-    option.setAttribute("data-key", itemType);
-    option.value = itemMap[itemType]?.name ?? itemType;
-    document.getElementById("datalist-" + datalist).appendChild(option);
+    const item = itemMap[itemType];
+    if (!item?.alwaysAvailable) {
+        const option = document.createElement("option");
+        option.setAttribute("data-key", itemType);
+        option.value = item?.name ?? itemType;
+        document.getElementById("datalist-" + datalist).appendChild(option);
+    }
 }
 
 function doQuestUpdate(operation, itemType) {
