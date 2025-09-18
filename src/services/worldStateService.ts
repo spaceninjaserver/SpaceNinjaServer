@@ -266,14 +266,15 @@ export const getSortie = (day: number): ISortie => {
     const rng = new SRng(seed);
 
     const boss = rng.randomElement(sortieBosses)!;
+    const enemyFaction = sortieBossToFaction[boss];
 
     const nodes: string[] = [];
     for (const [key, value] of Object.entries(ExportRegions)) {
         if (
-            sortieFactionToSystemIndexes[sortieBossToFaction[boss]].includes(value.systemIndex) &&
-            sortieFactionToFactions[sortieBossToFaction[boss]].includes(value.faction!) &&
+            sortieFactionToSystemIndexes[enemyFaction].includes(value.systemIndex) &&
+            sortieFactionToFactions[enemyFaction].includes(value.faction!) &&
             key in sortieTilesets &&
-            (key != "SolNode228" || sortieBossToFaction[boss] == "FC_GRINEER") // PoE does not work for non-infested enemies
+            (key != "SolNode228" || enemyFaction == "FC_GRINEER") // PoE only works for grineer enemies
         ) {
             nodes.push(key);
         }
@@ -339,13 +340,7 @@ export const getSortie = (day: number): ISortie => {
             modifiers.push("SORTIE_MODIFIER_HAZARD_RADIATION");
         }
 
-        if (ExportRegions[node].faction == "FC_GRINEER") {
-            // Grineer
-            modifiers.push("SORTIE_MODIFIER_ARMOR");
-        } else if (ExportRegions[node].faction == "FC_CORPUS") {
-            // Corpus
-            modifiers.push("SORTIE_MODIFIER_SHIELDS");
-        }
+        modifiers.push(enemyFaction == "FC_CORPUS" ? "SORTIE_MODIFIER_SHIELDS" : "SORTIE_MODIFIER_ARMOR");
 
         const modifierType = rng.randomElement(modifiers)!;
 
