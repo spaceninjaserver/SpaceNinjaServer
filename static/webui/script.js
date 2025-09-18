@@ -2269,7 +2269,7 @@ function addMissingEquipment(categories) {
             ) {
                 if (!webUiModularWeapons.includes(elm.getAttribute("data-key"))) {
                     let ItemCount = 1;
-                    if (category == "ShipDecorations") ItemCount = 100;
+                    if (category == "ShipDecorations") ItemCount = 999999;
                     requests.push({ ItemType: elm.getAttribute("data-key"), ItemCount });
                 }
             }
