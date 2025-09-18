@@ -104,11 +104,11 @@ const guildRankSchema = new Schema<IGuildRank>(
 const defaultRanks: IGuildRank[] = [
     {
         Name: "/Lotus/Language/Game/Rank_Creator",
-        Permissions: 16351
+        Permissions: GuildPermission.Host | 16351
     },
     {
         Name: "/Lotus/Language/Game/Rank_Warlord",
-        Permissions: 16351
+        Permissions: GuildPermission.Host | 16351
     },
     {
         Name: "/Lotus/Language/Game/Rank_General",
