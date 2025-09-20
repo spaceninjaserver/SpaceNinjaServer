@@ -17,7 +17,7 @@ export const startCollectibleEntryController: RequestHandler = async (req, res) 
         IncentiveStates: request.other
     });
     await inventory.save();
-    res.status(200).end();
+    res.send(`target = ${request.target}key = 0key = 1{"Target":"${request.target}"}`);
 };
 
 interface IStartCollectibleEntryRequest {
