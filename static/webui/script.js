@@ -2791,7 +2791,7 @@ function setEvolutionProgress(requests) {
 }
 
 function doAcquireCountItems(category) {
-    const uniqueName = getKey(document.getElementById(category + "-type"));
+    const uniqueName = getKey(document.getElementById("acquire-type-" + category));
     if (!uniqueName) {
         $(`#acquire-type-${category}`).addClass("is-invalid").focus();
         return;
@@ -2814,7 +2814,7 @@ function doAcquireCountItems(category) {
                 } else {
                     toast(loc("code_succRemoved"));
                 }
-                if (category != "miscitem") updateInventory();
+                if (category != "miscitems") updateInventory();
             });
         });
     }
