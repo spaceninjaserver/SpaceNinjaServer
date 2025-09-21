@@ -10,7 +10,8 @@ export const giveKeyChainTriggeredItemsController: RequestHandler = async (req, 
     const keyChainInfo = getJSONfromString<IKeyChainRequest>((req.body as string).toString());
 
     const inventory = await getInventory(accountId);
-    const inventoryChanges = await giveKeyChainItem(inventory, keyChainInfo);
+    const questKey = inventory.QuestKeys.find(qk => qk.ItemType === keyChainInfo.KeyChain)!;
+    const inventoryChanges = await giveKeyChainItem(inventory, keyChainInfo, questKey);
     await inventory.save();
 
     res.send(inventoryChanges);

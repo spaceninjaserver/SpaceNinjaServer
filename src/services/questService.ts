@@ -159,7 +159,7 @@ export const completeQuest = async (inventory: TInventoryDatabaseDocument, quest
 
     for (let i = 0; i < chainStageTotal; i++) {
         const stage = existingQuestKey.Progress[i];
-        if (stage.c < run) {
+        if (stage.c <= run) {
             stage.c = run;
             await giveKeyChainStageTriggered(inventory, { KeyChain: questKey, ChainStage: i });
             await giveKeyChainMissionReward(inventory, { KeyChain: questKey, ChainStage: i });
@@ -298,11 +298,11 @@ const handleQuestCompletion = async (
 export const giveKeyChainItem = async (
     inventory: TInventoryDatabaseDocument,
     keyChainInfo: IKeyChainRequest,
-    isRerun: boolean = false
+    questKey: IQuestKeyDatabase
 ): Promise<IInventoryChanges> => {
     let inventoryChanges: IInventoryChanges = {};
 
-    if (!isRerun) {
+    if (questKey.Progress![keyChainInfo.ChainStage].i) {
         inventoryChanges = await addKeyChainItems(inventory, keyChainInfo);
 
         if (isEmptyObject(inventoryChanges)) {
@@ -327,11 +327,11 @@ export const giveKeyChainItem = async (
 export const giveKeyChainMessage = async (
     inventory: TInventoryDatabaseDocument,
     keyChainInfo: IKeyChainRequest,
-    isRerun: boolean = false
+    questKey: IQuestKeyDatabase
 ): Promise<void> => {
     const keyChainMessage = getKeyChainMessage(keyChainInfo);
 
-    if (!isRerun) {
+    if (questKey.Progress![0].c > 0) {
         keyChainMessage.att = [];
         keyChainMessage.countedAtt = [];
     }
@@ -391,14 +391,12 @@ export const giveKeyChainStageTriggered = async (
     const questKey = inventory.QuestKeys.find(qk => qk.ItemType === keyChainInfo.KeyChain);
 
     if (chainStages && questKey) {
-        const run = questKey.Progress?.[0]?.c ?? 0;
-
         if (chainStages[keyChainInfo.ChainStage].itemsToGiveWhenTriggered.length > 0) {
-            await giveKeyChainItem(inventory, keyChainInfo, run > 0);
+            await giveKeyChainItem(inventory, keyChainInfo, questKey);
         }
 
         if (chainStages[keyChainInfo.ChainStage].messageToSendWhenTriggered) {
-            await giveKeyChainMessage(inventory, keyChainInfo, run > 0);
+            await giveKeyChainMessage(inventory, keyChainInfo, questKey);
         }
     }
 };
