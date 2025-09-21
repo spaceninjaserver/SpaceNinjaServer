@@ -45,6 +45,7 @@ dict = {
     code_rank: `Rango`,
     code_rankUp: `Subir de rango`,
     code_rankDown: `Bajar de rango`,
+    code_unlockLevelCap: `[UNTRANSLATED] Unlock level cap`,
     code_count: `Cantidad`,
     code_focusAllUnlocked: `Todas las escuelas de enfoque ya están desbloqueadas.`,
     code_focusUnlocked: `¡Desbloqueadas |COUNT| nuevas escuelas de enfoque! Se necesita una actualización del inventario para reflejar los cambios en el juego. Visitar la navegación debería ser la forma más sencilla de activarlo.`,

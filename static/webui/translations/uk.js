@@ -45,6 +45,7 @@ dict = {
     code_rank: `Рівень`,
     code_rankUp: `Підвищити рівень`,
     code_rankDown: `Понизити рівень`,
+    code_unlockLevelCap: `[UNTRANSLATED] Unlock level cap`,
     code_count: `Кількість`,
     code_focusAllUnlocked: `Всі школи Фокусу вже розблоковані.`,
     code_focusUnlocked: `Розблоковано |COUNT| нових шкіл Фокусу! Для відображення змін в грі знадобиться оновлення спорядження. Відвідування навігації — найпростіший спосіб цього досягти.`,

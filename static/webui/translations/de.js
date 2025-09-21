@@ -45,6 +45,7 @@ dict = {
     code_rank: `Rang`,
     code_rankUp: `Rang erhöhen`,
     code_rankDown: `Rang verringern`,
+    code_unlockLevelCap: `[UNTRANSLATED] Unlock level cap`,
     code_count: `Anzahl`,
     code_focusAllUnlocked: `Alle Fokus-Schulen sind bereits freigeschaltet.`,
     code_focusUnlocked: `|COUNT| neue Fokus-Schulen freigeschaltet! Ein Inventar-Update wird benötigt, damit die Änderungen im Spiel sichtbar werden. Die Sternenkarte zu besuchen, sollte der einfachste Weg sein, dies auszulösen.`,

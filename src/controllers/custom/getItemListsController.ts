@@ -37,10 +37,10 @@ interface ListedItem {
     chainLength?: number;
     parazon?: boolean;
     alwaysAvailable?: boolean;
+    maxLevelCap?: number;
 }
 
 interface ItemLists {
-    uniqueLevelCaps: Record<string, number>;
     Suits: ListedItem[];
     LongGuns: ListedItem[];
     Melee: ListedItem[];
@@ -83,7 +83,6 @@ const toTitleCase = (str: string): string => {
 const getItemListsController: RequestHandler = (req, response) => {
     const lang = getDict(typeof req.query.lang == "string" ? req.query.lang : "en");
     const res: ItemLists = {
-        uniqueLevelCaps: {},
         Suits: [],
         LongGuns: [],
         Melee: [],
@@ -144,7 +143,8 @@ const getItemListsController: RequestHandler = (req, response) => {
         res[item.productCategory].push({
             uniqueName,
             name: getString(item.name, lang),
-            exalted: item.exalted
+            exalted: item.exalted,
+            maxLevelCap: item.maxLevelCap
         });
         item.abilities.forEach(ability => {
             res.Abilities.push({
@@ -152,9 +152,6 @@ const getItemListsController: RequestHandler = (req, response) => {
                 name: getString(ability.name || uniqueName, lang)
             });
         });
-        if (item.maxLevelCap) {
-            res.uniqueLevelCaps[uniqueName] = item.maxLevelCap;
-        }
     }
     for (const [uniqueName, item] of Object.entries(ExportSentinels)) {
         if (item.productCategory == "Sentinels" || item.productCategory == "KubrowPets") {
@@ -195,7 +192,8 @@ const getItemListsController: RequestHandler = (req, response) => {
             ) {
                 res[item.productCategory].push({
                     uniqueName,
-                    name: getString(item.name, lang)
+                    name: getString(item.name, lang),
+                    maxLevelCap: item.maxLevelCap
                 });
             }
         } else if (!item.excludeFromCodex) {
@@ -203,9 +201,6 @@ const getItemListsController: RequestHandler = (req, response) => {
                 uniqueName: uniqueName,
                 name: getString(item.name, lang)
             });
-        }
-        if (item.maxLevelCap) {
-            res.uniqueLevelCaps[uniqueName] = item.maxLevelCap;
         }
     }
     for (const [uniqueName, item] of Object.entries(ExportResources)) {

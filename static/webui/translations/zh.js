@@ -45,6 +45,7 @@ dict = {
     code_rank: `等级`,
     code_rankUp: `等级提升`,
     code_rankDown: `等级下降`,
+    code_unlockLevelCap: `[UNTRANSLATED] Unlock level cap`,
     code_count: `数量`,
     code_focusAllUnlocked: `所有专精学派均已解锁`,
     code_focusUnlocked: `已解锁 |COUNT| 个新专精学派!需要游戏内仓库更新才能生效,您可以通过访问星图来触发仓库更新.`,

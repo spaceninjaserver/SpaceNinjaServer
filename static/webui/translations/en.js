@@ -44,6 +44,7 @@ dict = {
     code_rank: `Rank`,
     code_rankUp: `Rank up`,
     code_rankDown: `Rank down`,
+    code_unlockLevelCap: `Unlock level cap`,
     code_count: `Count`,
     code_focusAllUnlocked: `All focus schools are already unlocked.`,
     code_focusUnlocked: `Unlocked |COUNT| new focus schools! An inventory update will be needed for the changes to be reflected in-game. Visiting the navigation should be the easiest way to trigger that.`,

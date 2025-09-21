@@ -41,6 +41,7 @@ import { manageQuestsController } from "../controllers/custom/manageQuestsContro
 import { setEvolutionProgressController } from "../controllers/custom/setEvolutionProgressController.ts";
 import { setBoosterController } from "../controllers/custom/setBoosterController.ts";
 import { updateFingerprintController } from "../controllers/custom/updateFingerprintController.ts";
+import { unlockLevelCapController } from "../controllers/custom/unlockLevelCapController.ts";
 import { changeModularPartsController } from "../controllers/custom/changeModularPartsController.ts";
 import { editSuitInvigorationUpgradeController } from "../controllers/custom/editSuitInvigorationUpgradeController.ts";
 import { setAccountCheatController } from "../controllers/custom/setAccountCheatController.ts";
@@ -89,6 +90,7 @@ customRouter.post("/manageQuests", manageQuestsController);
 customRouter.post("/setEvolutionProgress", setEvolutionProgressController);
 customRouter.post("/setBooster", setBoosterController);
 customRouter.post("/updateFingerprint", updateFingerprintController);
+customRouter.post("/unlockLevelCap", unlockLevelCapController);
 customRouter.post("/changeModularParts", changeModularPartsController);
 customRouter.post("/editSuitInvigorationUpgrade", editSuitInvigorationUpgradeController);
 customRouter.post("/setAccountCheat", setAccountCheatController);

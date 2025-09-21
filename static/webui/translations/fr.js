@@ -45,6 +45,7 @@ dict = {
     code_rank: `Rang`,
     code_rankUp: `Monter de rang`,
     code_rankDown: `Baisser de rang`,
+    code_unlockLevelCap: `[UNTRANSLATED] Unlock level cap`,
     code_count: `Quantité`,
     code_focusAllUnlocked: `Les écoles de Focus sont déjà déverrouillées.`,
     code_focusUnlocked: `|COUNT| écoles de Focus déverrouillées ! Synchronisation de l'inventaire nécessaire.`,
