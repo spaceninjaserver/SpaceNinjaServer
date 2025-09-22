@@ -302,7 +302,7 @@ export const giveKeyChainItem = async (
 ): Promise<IInventoryChanges> => {
     let inventoryChanges: IInventoryChanges = {};
 
-    if (questKey.Progress![keyChainInfo.ChainStage].i) {
+    if (!questKey.Progress?.[keyChainInfo.ChainStage]?.i) {
         inventoryChanges = await addKeyChainItems(inventory, keyChainInfo);
 
         if (isEmptyObject(inventoryChanges)) {
