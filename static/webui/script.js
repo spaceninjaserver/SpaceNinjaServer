@@ -2220,18 +2220,13 @@ function doAcquireModularEquipment(category, WeaponType) {
                 if (mainInput) {
                     mainInput.value = "";
                     if (category === "MoaPets") {
-                        const modularFieldsMoa = document.getElementById("modular-MoaPets-Moa");
-                        const modularFieldsZanuka = document.getElementById("modular-MoaPets-Zanuka");
-                        modularFieldsZanuka.style.display = "none";
-                        modularFieldsMoa.style.display = "none";
+                        document.getElementById("modular-MoaPets-Zanuka").classList.add("d-none");
+                        document.getElementById("modular-MoaPets-Moa").classList.add("d-none");
                     } else if (category === "KubrowPets") {
-                        const modularFieldsCatbrow = document.getElementById("modular-KubrowPets-Catbrow");
-                        const modularFieldsKubrow = document.getElementById("modular-KubrowPets-Kubrow");
-                        modularFieldsCatbrow.style.display = "none";
-                        modularFieldsKubrow.style.display = "none";
+                        document.getElementById("modular-KubrowPets-Catbrow").classList.add("d-none");
+                        document.getElementById("modular-KubrowPets-Kubrow").classList.add("d-none");
                     } else {
-                        const modularFields = document.getElementById("modular-" + category);
-                        modularFields.style.display = "none";
+                        document.getElementById("modular-" + category).classList.add("d-none");
                     }
                 }
                 requiredParts.forEach(part => {
@@ -3512,35 +3507,35 @@ function handleModularSelection(category) {
             if (webUiModularWeapons.includes(key)) {
                 if (inventoryCategory === "MoaPets") {
                     if (key === "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetPowerSuit") {
-                        modularFieldsMoa.style.display = "none";
-                        modularFieldsZanuka.style.display = "";
+                        modularFieldsMoa.classList.add("d-none");
+                        modularFieldsZanuka.classList.remove("d-none");
                     } else if (key === "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetPowerSuit") {
-                        modularFieldsMoa.style.display = "";
-                        modularFieldsZanuka.style.display = "none";
+                        modularFieldsMoa.classList.remove("d-none");
+                        modularFieldsZanuka.classList.add("d-none");
                     }
                 } else if (inventoryCategory === "KubrowPets") {
                     if (key.endsWith("InfestedCatbrowPetPowerSuit")) {
-                        modularFieldsCatbrow.style.display = "";
-                        modularFieldsKubrow.style.display = "none";
+                        modularFieldsCatbrow.classList.remove("d-none");
+                        modularFieldsKubrow.classList.add("d-none");
                     } else if (key.endsWith("PredatorKubrowPetPowerSuit")) {
-                        modularFieldsCatbrow.style.display = "none";
-                        modularFieldsKubrow.style.display = "";
+                        modularFieldsCatbrow.classList.add("d-none");
+                        modularFieldsKubrow.classList.remove("d-none");
                     } else {
-                        modularFieldsCatbrow.style.display = "none";
-                        modularFieldsKubrow.style.display = "none";
+                        modularFieldsCatbrow.classList.add("d-none");
+                        modularFieldsKubrow.classList.add("d-none");
                     }
                 } else {
-                    modularFields.style.display = "";
+                    modularFields.classList.remove("d-none");
                 }
             } else {
                 if (inventoryCategory === "MoaPets") {
-                    modularFieldsZanuka.style.display = "none";
-                    modularFieldsMoa.style.display = "none";
+                    modularFieldsMoa.classList.add("d-none");
+                    modularFieldsZanuka.classList.add("d-none");
                 } else if (inventoryCategory === "KubrowPets") {
-                    modularFieldsCatbrow.style.display = "none";
-                    modularFieldsKubrow.style.display = "none";
+                    modularFieldsCatbrow.classList.add("d-none");
+                    modularFieldsKubrow.classList.add("d-none");
                 } else {
-                    modularFields.style.display = "none";
+                    modularFields.classList.add("d-none");
                 }
             }
         });

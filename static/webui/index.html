@@ -180,33 +180,37 @@
                     <div class="col-lg-6">
                         <div class="card" style="height: 400px;">
                             <h5 class="card-header" data-loc="inventory_suits"></h5>
-                            <div class="card-body overflow-auto">
+                            <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="doAcquireEquipment('Suits');return false;">
                                     <input class="form-control" id="acquire-type-Suits" list="datalist-Suits" />
                                     <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
-                                <table class="table table-hover w-100">
-                                    <tbody id="Suits-list"></tbody>
-                                </table>
+                                <div class="overflow-auto">
+                                    <table class="table table-hover w-100">
+                                        <tbody id="Suits-list"></tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="card" style="height: 400px;">
                             <h5 class="card-header" data-loc="inventory_longGuns"></h5>
-                            <div class="card-body overflow-auto">
+                            <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="handleModularSelection('LongGuns');return false;">
                                     <input class="form-control" id="acquire-type-LongGuns" list="datalist-LongGuns" />
                                     <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
-                                <form class="input-group mb-3" id="modular-LongGuns" style="display: none;">
+                                <form class="input-group mb-3 d-none" id="modular-LongGuns">
                                     <input class="form-control" id="acquire-type-LongGuns-GUN_BARREL" list="datalist-ModularParts-GUN_BARREL" />
                                     <input class="form-control" id="acquire-type-LongGuns-GUN_PRIMARY_HANDLE" list="datalist-ModularParts-GUN_PRIMARY_HANDLE" />
                                     <input class="form-control" id="acquire-type-LongGuns-GUN_CLIP" list="datalist-ModularParts-GUN_CLIP" />
                                 </form>
-                                <table class="table table-hover w-100">
-                                    <tbody id="LongGuns-list"></tbody>
-                                </table>
+                                <div class="overflow-auto">
+                                    <table class="table table-hover w-100">
+                                        <tbody id="LongGuns-list"></tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -215,38 +219,42 @@
                     <div class="col-lg-6">
                         <div class="card" style="height: 400px;">
                             <h5 class="card-header" data-loc="inventory_pistols"></h5>
-                            <div class="card-body overflow-auto">
+                            <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="handleModularSelection('Pistols');return false;">
                                     <input class="form-control" id="acquire-type-Pistols" list="datalist-Pistols" />
                                     <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
-                                <form class="input-group mb-3" id="modular-Pistols" style="display: none;">
+                                <form class="input-group mb-3 d-none" id="modular-Pistols">
                                     <input class="form-control" id="acquire-type-Pistols-GUN_BARREL" list="datalist-ModularParts-GUN_BARREL" />
                                     <input class="form-control" id="acquire-type-Pistols-GUN_SECONDARY_HANDLE" list="datalist-ModularParts-GUN_SECONDARY_HANDLE" />
                                     <input class="form-control" id="acquire-type-Pistols-GUN_CLIP" list="datalist-ModularParts-GUN_CLIP" />
                                 </form>
-                                <table class="table table-hover w-100">
-                                    <tbody id="Pistols-list"></tbody>
-                                </table>
+                                <div class="overflow-auto">
+                                    <table class="table table-hover w-100">
+                                        <tbody id="Pistols-list"></tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="card" style="height: 400px;">
                             <h5 class="card-header" data-loc="inventory_melee"></h5>
-                            <div class="card-body overflow-auto">
+                            <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="handleModularSelection('Melee');return false;">
                                     <input class="form-control" id="acquire-type-Melee" list="datalist-Melee" />
                                     <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
-                                <form class="input-group mb-3" id="modular-Melee" style="display: none;">
+                                <form class="input-group mb-3 d-none" id="modular-Melee">
                                     <input class="form-control" id="acquire-type-Melee-BLADE" list="datalist-ModularParts-BLADE" />
                                     <input class="form-control" id="acquire-type-Melee-HILT" list="datalist-ModularParts-HILT" />
                                     <input class="form-control" id="acquire-type-Melee-HILT_WEIGHT" list="datalist-ModularParts-HILT_WEIGHT" />
                                 </form>
-                                <table class="table table-hover w-100">
-                                    <tbody id="Melee-list"></tbody>
-                                </table>
+                                <div class="overflow-auto">
+                                    <table class="table table-hover w-100">
+                                        <tbody id="Melee-list"></tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -255,28 +263,32 @@
                     <div class="col-lg-6">
                         <div class="card" style="height: 400px;">
                             <h5 class="card-header" data-loc="inventory_spaceSuits"></h5>
-                            <div class="card-body overflow-auto">
+                            <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="doAcquireEquipment('SpaceSuits');return false;">
                                     <input class="form-control" id="acquire-type-SpaceSuits" list="datalist-SpaceSuits" />
                                     <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
-                                <table class="table table-hover w-100">
-                                    <tbody id="SpaceSuits-list"></tbody>
-                                </table>
+                                <div class="overflow-auto">
+                                    <table class="table table-hover w-100">
+                                        <tbody id="SpaceSuits-list"></tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="card" style="height: 400px;">
                             <h5 class="card-header" data-loc="inventory_spaceGuns"></h5>
-                            <div class="card-body overflow-auto">
+                            <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="doAcquireEquipment('SpaceGuns');return false;">
                                     <input class="form-control" id="acquire-type-SpaceGuns" list="datalist-SpaceGuns" />
                                     <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
-                                <table class="table table-hover w-100">
-                                    <tbody id="SpaceGuns-list"></tbody>
-                                </table>
+                                <div class="overflow-auto">
+                                    <table class="table table-hover w-100">
+                                        <tbody id="SpaceGuns-list"></tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -285,28 +297,32 @@
                     <div class="col-lg-6">
                         <div class="card" style="height: 400px;">
                             <h5 class="card-header" data-loc="inventory_spaceMelee"></h5>
-                            <div class="card-body overflow-auto">
+                            <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="doAcquireEquipment('SpaceMelee');return false;">
                                     <input class="form-control" id="acquire-type-SpaceMelee" list="datalist-SpaceMelee" />
                                     <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
-                                <table class="table table-hover w-100">
-                                    <tbody id="SpaceMelee-list"></tbody>
-                                </table>
+                                <div class="overflow-auto">
+                                    <table class="table table-hover w-100">
+                                        <tbody id="SpaceMelee-list"></tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="card" style="height: 400px;">
                             <h5 class="card-header" data-loc="inventory_mechSuits"></h5>
-                            <div class="card-body overflow-auto">
+                            <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="doAcquireEquipment('MechSuits');return false;">
                                     <input class="form-control" id="acquire-type-MechSuits" list="datalist-MechSuits" />
                                     <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
-                                <table class="table table-hover w-100">
-                                    <tbody id="MechSuits-list"></tbody>
-                                </table>
+                                <div class="overflow-auto">
+                                    <table class="table table-hover w-100">
+                                        <tbody id="MechSuits-list"></tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -315,40 +331,44 @@
                     <div class="col-lg-6">
                         <div class="card" style="height: 400px;">
                             <h5 class="card-header" data-loc="inventory_sentinels"></h5>
-                            <div class="card-body overflow-auto">
+                            <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="doAcquireEquipment('Sentinels');return false;">
                                     <input class="form-control" id="acquire-type-Sentinels" list="datalist-Sentinels" />
                                     <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
-                                <table class="table table-hover w-100">
-                                    <tbody id="Sentinels-list"></tbody>
-                                </table>
+                                <div class="overflow-auto">
+                                    <table class="table table-hover w-100">
+                                        <tbody id="Sentinels-list"></tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="card" style="height: 400px;">
                             <h5 class="card-header" data-loc="inventory_moaPets"></h5>
-                            <div class="card-body overflow-auto">
+                            <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="handleModularSelection('MoaPets');return false;">
                                     <input class="form-control" id="acquire-type-MoaPets" list="datalist-MoaPets" />
                                     <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
-                                <form class="input-group mb-3" id="modular-MoaPets-Moa" style="display: none;">
+                                <form class="input-group mb-3 d-none" id="modular-MoaPets-Moa">
                                     <input class="form-control" id="acquire-type-MoaPets-MOA_ENGINE" list="datalist-ModularParts-MOA_ENGINE" />
                                     <input class="form-control" id="acquire-type-MoaPets-MOA_PAYLOAD" list="datalist-ModularParts-MOA_PAYLOAD" />
                                     <input class="form-control" id="acquire-type-MoaPets-MOA_HEAD" list="datalist-ModularParts-MOA_HEAD" />
                                     <input class="form-control" id="acquire-type-MoaPets-MOA_LEG" list="datalist-ModularParts-MOA_LEG" />
                                 </form>
-                                <form class="input-group mb-3" id="modular-MoaPets-Zanuka" style="display: none;">
+                                <form class="input-group mb-3 d-none" id="modular-MoaPets-Zanuka">
                                     <input class="form-control" id="acquire-type-MoaPets-ZANUKA_HEAD" list="datalist-ModularParts-ZANUKA_HEAD" />
                                     <input class="form-control" id="acquire-type-MoaPets-ZANUKA_BODY" list="datalist-ModularParts-ZANUKA_BODY" />
                                     <input class="form-control" id="acquire-type-MoaPets-ZANUKA_LEG" list="datalist-ModularParts-ZANUKA_LEG" />
                                     <input class="form-control" id="acquire-type-MoaPets-ZANUKA_TAIL" list="datalist-ModularParts-ZANUKA_TAIL" />
                                 </form>
-                                <table class="table table-hover w-100">
-                                    <tbody id="MoaPets-list"></tbody>
-                                </table>
+                                <div class="overflow-auto">
+                                    <table class="table table-hover w-100">
+                                        <tbody id="MoaPets-list"></tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -357,36 +377,40 @@
                     <div class="col-lg-6">
                         <div class="card" style="height: 400px;">
                             <h5 class="card-header" data-loc="inventory_kubrowPets"></h5>
-                            <div class="card-body overflow-auto">
+                            <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="handleModularSelection('KubrowPets');return false;">
                                     <input class="form-control" id="acquire-type-KubrowPets" list="datalist-KubrowPets" />
                                     <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
-                                <form class="input-group mb-3" id="modular-KubrowPets-Catbrow" style="display: none;">
+                                <form class="input-group mb-3 d-none" id="modular-KubrowPets-Catbrow">
                                     <input class="form-control" id="acquire-type-KubrowPets-CATBROW_ANTIGEN" list="datalist-ModularParts-CATBROW_ANTIGEN" />
                                     <input class="form-control" id="acquire-type-KubrowPets-CATBROW_MUTAGEN" list="datalist-ModularParts-CATBROW_MUTAGEN" />
                                 </form>
-                                <form class="input-group mb-3" id="modular-KubrowPets-Kubrow" style="display: none;">
+                                <form class="input-group mb-3 d-none" id="modular-KubrowPets-Kubrow">
                                     <input class="form-control" id="acquire-type-KubrowPets-KUBROW_ANTIGEN" list="datalist-ModularParts-KUBROW_ANTIGEN" />
                                     <input class="form-control" id="acquire-type-KubrowPets-KUBROW_MUTAGEN" list="datalist-ModularParts-KUBROW_MUTAGEN" />
                                 </form>
-                                <table class="table table-hover w-100">
-                                    <tbody id="KubrowPets-list"></tbody>
-                                </table>
+                                <div class="overflow-auto">
+                                    <table class="table table-hover w-100">
+                                        <tbody id="KubrowPets-list"></tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="card" style="height: 400px;">
                             <h5 class="card-header" data-loc="inventory_sentinelWeapons"></h5>
-                            <div class="card-body overflow-auto">
+                            <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="doAcquireEquipment('SentinelWeapons');return false;">
                                     <input class="form-control" id="acquire-type-SentinelWeapons" list="datalist-SentinelWeapons" />
                                     <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
-                                <table class="table table-hover w-100">
-                                    <tbody id="SentinelWeapons-list"></tbody>
-                                </table>
+                                <div class="overflow-auto">
+                                    <table class="table table-hover w-100">
+                                        <tbody id="SentinelWeapons-list"></tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -395,26 +419,28 @@
                     <div class="col-lg-6">
                         <div class="card" style="height: 400px;">
                             <h5 class="card-header" data-loc="inventory_operatorAmps"></h5>
-                            <div class="card-body overflow-auto">
+                            <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="handleModularSelection('OperatorAmps');return false;">
                                     <input class="form-control" id="acquire-type-OperatorAmps" list="datalist-OperatorAmps" />
                                     <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
-                                <form class="input-group mb-3" id="modular-OperatorAmps" style="display: none;">
+                                <form class="input-group mb-3 d-none" id="modular-OperatorAmps">
                                     <input class="form-control" id="acquire-type-OperatorAmps-AMP_OCULUS" list="datalist-ModularParts-AMP_OCULUS" />
                                     <input class="form-control" id="acquire-type-OperatorAmps-AMP_CORE" list="datalist-ModularParts-AMP_CORE" />
                                     <input class="form-control" id="acquire-type-OperatorAmps-AMP_BRACE" list="datalist-ModularParts-AMP_BRACE" />
                                 </form>
-                                <table class="table table-hover w-100">
-                                    <tbody id="OperatorAmps-list"></tbody>
-                                </table>
+                                <div class="overflow-auto">
+                                    <table class="table table-hover w-100">
+                                        <tbody id="OperatorAmps-list"></tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="card" style="height: 400px;">
                             <h5 class="card-header" data-loc="inventory_hoverboards"></h5>
-                            <div class="card-body overflow-auto">
+                            <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="doAcquireModularEquipment('Hoverboards');return false;">
                                     <input class="form-control" id="acquire-type-Hoverboards-HB_DECK" list="datalist-ModularParts-HB_DECK" />
                                     <input class="form-control" id="acquire-type-Hoverboards-HB_ENGINE" list="datalist-ModularParts-HB_ENGINE" />
@@ -422,9 +448,11 @@
                                     <input class="form-control" id="acquire-type-Hoverboards-HB_JET" list="datalist-ModularParts-HB_JET" />
                                     <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
-                                <table class="table table-hover w-100">
-                                    <tbody id="Hoverboards-list"></tbody>
-                                </table>
+                                <div class="overflow-auto">
+                                    <table class="table table-hover w-100">
+                                        <tbody id="Hoverboards-list"></tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -433,28 +461,32 @@
                     <div class="col-lg-6">
                         <div class="card" style="height: 400px;">
                             <h5 class="card-header" data-loc="inventory_evolutionProgress"></h5>
-                            <div class="card-body overflow-auto">
+                            <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="doAcquireEvolution();return false;">
                                     <input class="form-control" id="acquire-type-EvolutionProgress" list="datalist-EvolutionProgress" />
                                     <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
-                                <table class="table table-hover w-100">
-                                    <tbody id="EvolutionProgress-list"></tbody>
-                                </table>
+                                <div class="overflow-auto">
+                                    <table class="table table-hover w-100">
+                                        <tbody id="EvolutionProgress-list"></tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="card" style="height: 400px;">
                             <h5 class="card-header" data-loc="inventory_Boosters"></h5>
-                            <div class="card-body overflow-auto">
+                            <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="doAcquireBoosters();return false;">
                                     <input class="form-control" id="acquire-type-Boosters" list="datalist-Boosters" />
                                     <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
-                                <table class="table table-hover w-100">
-                                    <tbody id="Boosters-list"></tbody>
-                                </table>
+                                <div class="overflow-auto">
+                                    <table class="table table-hover w-100">
+                                        <tbody id="Boosters-list"></tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -463,29 +495,33 @@
                     <div class="col-lg-6">
                         <div class="card" style="height: 400px;">
                             <h5 class="card-header" data-loc="inventory_flavourItems"></h5>
-                            <div class="card-body overflow-auto">
+                            <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="doAcquireEquipment('FlavourItems');return false;">
                                     <input class="form-control" id="acquire-type-FlavourItems" list="datalist-FlavourItems" />
                                     <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
-                                <table class="table table-hover w-100">
-                                    <tbody id="FlavourItems-list"></tbody>
-                                </table>
+                                <div class="overflow-auto">
+                                    <table class="table table-hover w-100">
+                                        <tbody id="FlavourItems-list"></tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="card" style="height: 400px;">
                             <h5 class="card-header" data-loc="inventory_shipDecorations"></h5>
-                            <div class="card-body overflow-auto">
-                                <form class="card-body input-group" onsubmit="doAcquireCountItems('ShipDecorations');return false;">
+                            <div class="card-body d-flex flex-column">
+                                <form class="input-group mb-3" onsubmit="doAcquireCountItems('ShipDecorations');return false;">
                                     <input class="form-control" id="ShipDecorations-count" type="number" value="1" />
                                     <input class="form-control w-50" id="acquire-type-ShipDecorations" list="datalist-ShipDecorations" />
                                     <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
-                                <table class="table table-hover w-100">
-                                    <tbody id="ShipDecorations-list"></tbody>
-                                </table>
+                                <div class="overflow-auto">
+                                    <table class="table table-hover w-100">
+                                        <tbody id="ShipDecorations-list"></tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -552,28 +588,32 @@
                     <div class="col-lg-6">
                         <div class="card" style="height: 400px;">
                             <h5 class="card-header" data-loc="guildView_techProjects"></h5>
-                            <div class="card-body overflow-auto">
+                            <div class="card-body d-flex flex-column">
                                 <form id="techProjects-form" class="input-group mb-3 d-none" onsubmit="addGuildTechProject();return false;">
                                     <input class="form-control" id="acquire-type-TechProjects" list="datalist-TechProjects" />
                                     <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
-                                <table class="table table-hover w-100">
-                                    <tbody id="TechProjects-list"></tbody>
-                                </table>
+                                <div class="overflow-auto">
+                                    <table class="table table-hover w-100">
+                                        <tbody id="TechProjects-list"></tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="card" style="height: 400px;">
                             <h5 class="card-header" data-loc="guildView_vaultDecoRecipes"></h5>
-                            <div class="card-body overflow-auto">
+                            <div class="card-body d-flex flex-column">
                                 <form id="vaultDecoRecipes-form" class="input-group mb-3 d-none" onsubmit="addVaultDecoRecipe();return false;">
                                     <input class="form-control" id="acquire-type-VaultDecoRecipes" list="datalist-VaultDecoRecipes" />
                                     <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
-                                <table class="table table-hover w-100">
-                                    <tbody id="VaultDecoRecipes-list"></tbody>
-                                </table>
+                                <div class="overflow-auto">
+                                    <table class="table table-hover w-100">
+                                        <tbody id="VaultDecoRecipes-list"></tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -807,16 +847,18 @@
                 <p class="mb-3 inventory-update-note"></p>
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <div class="card">
+                        <div class="card" style="height: 800px;">
                             <h5 class="card-header" data-loc="quests_list"></h5>
-                            <div class="card-body">
+                            <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="doAcquireEquipment('QuestKeys');return false;">
                                     <input class="form-control" id="acquire-type-QuestKeys" list="datalist-QuestKeys" />
                                     <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
                                 </form>
-                                <table class="table table-hover w-100">
-                                    <tbody id="QuestKeys-list"></tbody>
-                                </table>
+                                <div class="overflow-auto">
+                                    <table class="table table-hover w-100">
+                                        <tbody id="QuestKeys-list"></tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
