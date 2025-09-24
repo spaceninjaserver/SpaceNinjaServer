@@ -1992,32 +1992,6 @@ function updateInventory() {
     });
 }
 
-function addVaultDecoRecipe() {
-    const uniqueName = getKey(document.getElementById("acquire-type-VaultDecoRecipes"));
-    if (!guildId) {
-        return;
-    }
-    if (!uniqueName) {
-        $("acquire-type-VaultDecoRecipes").addClass("is-invalid").focus();
-        return;
-    }
-    revalidateAuthz().then(() => {
-        const req = $.post({
-            url: "/custom/addVaultDecoRecipe?" + window.authz + "&guildId=" + window.guildId,
-            contentType: "application/json",
-            data: JSON.stringify([
-                {
-                    ItemType: uniqueName,
-                    ItemCount: 1
-                }
-            ])
-        });
-        req.done(() => {
-            updateInventory();
-        });
-    });
-}
-
 function changeGuildRank(guildId, targetId, rankChange) {
     revalidateAuthz().then(() => {
         const req = $.get(

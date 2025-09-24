@@ -1,5 +1,5 @@
 import { GuildMember } from "../../models/guildModel.ts";
-import { getGuildForRequestEx, hasAccessToDojo } from "../../services/guildService.ts";
+import { getGuildForRequestEx } from "../../services/guildService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { IGuildCheats } from "../../types/guildTypes.ts";
@@ -8,12 +8,12 @@ import type { RequestHandler } from "express";
 export const setGuildCheatController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const payload = req.body as ISetGuildCheatRequest;
-    const inventory = await getInventory(accountId, `${payload.key} GuildId LevelKeys`);
+    const inventory = await getInventory(accountId, `GuildId`);
     const guild = await getGuildForRequestEx(req, inventory);
     const member = await GuildMember.findOne({ accountId: accountId, guildId: guild._id });
 
     if (member) {
-        if (!hasAccessToDojo(inventory) || member.rank > 1) {
+        if (member.rank > 1) {
             res.end();
             return;
         }
