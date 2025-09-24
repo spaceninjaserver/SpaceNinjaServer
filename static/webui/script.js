@@ -1007,6 +1007,67 @@ function updateInventory() {
                 document.getElementById("EvolutionProgress-list").appendChild(tr);
             });
 
+            document.getElementById("Boosters-list").innerHTML = "";
+            data.Boosters.forEach(item => {
+                if (item.ExpiryDate < Math.floor(Date.now() / 1000)) {
+                    // Booster has expired, skip it
+                    return;
+                }
+                const tr = document.createElement("tr");
+                {
+                    const td = document.createElement("td");
+                    td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
+                    tr.appendChild(td);
+                }
+                {
+                    const td = document.createElement("td");
+                    td.classList = "text-end text-nowrap";
+                    {
+                        const form = document.createElement("form");
+                        form.style.display = "inline-block";
+                        form.onsubmit = function (event) {
+                            event.preventDefault();
+                            const maxDate = new Date(input.max);
+                            const selectedDate = new Date(input.value);
+                            if (selectedDate > maxDate) {
+                                input.value = maxDate.toISOString().slice(0, 16);
+                            }
+                            doChangeBoosterExpiry(item.ItemType, input);
+                        };
+
+                        const input = document.createElement("input");
+                        input.type = "datetime-local";
+                        input.classList = "form-control form-control-sm";
+                        input.value = formatDatetime("%Y-%m-%d %H:%M:%s", item.ExpiryDate * 1000);
+                        input.max = "2038-01-19T03:14";
+                        input.onblur = function () {
+                            const maxDate = new Date(input.max);
+                            const selectedDate = new Date(input.value);
+                            if (selectedDate > maxDate) {
+                                input.value = maxDate.toISOString().slice(0, 16);
+                            }
+                            doChangeBoosterExpiry(item.ItemType, input);
+                        };
+
+                        form.appendChild(input);
+                        td.appendChild(form);
+                    }
+                    {
+                        const a = document.createElement("a");
+                        a.href = "#";
+                        a.onclick = function (event) {
+                            event.preventDefault();
+                            setBooster(item.ItemType, 0);
+                        };
+                        a.title = loc("code_remove");
+                        a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
+                        td.appendChild(a);
+                    }
+                    tr.appendChild(td);
+                }
+                document.getElementById("Boosters-list").appendChild(tr);
+            });
+
             document.getElementById("FlavourItems-list").innerHTML = "";
             data.FlavourItems.forEach(item => {
                 const datalist = document.getElementById("datalist-FlavourItems");
@@ -1618,63 +1679,6 @@ function updateInventory() {
                 }
             }
             document.getElementById("changeSyndicate").value = data.SupportedSyndicate ?? "";
-
-            document.getElementById("Boosters-list").innerHTML = "";
-            const now = Math.floor(Date.now() / 1000);
-            data.Boosters.forEach(({ ItemType, ExpiryDate }) => {
-                if (ExpiryDate < now) {
-                    // Booster has expired, skip it
-                    return;
-                }
-                const tr = document.createElement("tr");
-                {
-                    const td = document.createElement("td");
-                    td.textContent = itemMap[ItemType]?.name ?? ItemType;
-                    tr.appendChild(td);
-                }
-                {
-                    const td = document.createElement("td");
-                    td.classList = "text-end text-nowrap";
-                    const timeString = formatDatetime("%Y-%m-%d %H:%M:%s", ExpiryDate * 1000);
-                    const inlineForm = document.createElement("form");
-                    const input = document.createElement("input");
-
-                    inlineForm.style.display = "inline-block";
-                    inlineForm.onsubmit = function (event) {
-                        event.preventDefault();
-                        doChangeBoosterExpiry(ItemType, input);
-                    };
-                    input.type = "datetime-local";
-                    input.classList.add("form-control");
-                    input.classList.add("form-control-sm");
-                    input.value = timeString;
-                    let changed = false;
-                    input.onchange = function () {
-                        changed = true;
-                    };
-                    input.onblur = function () {
-                        if (changed) {
-                            doChangeBoosterExpiry(ItemType, input);
-                        }
-                    };
-                    inlineForm.appendChild(input);
-
-                    td.appendChild(inlineForm);
-
-                    const removeButton = document.createElement("a");
-                    removeButton.title = loc("code_remove");
-                    removeButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
-                    removeButton.href = "#";
-                    removeButton.onclick = function (event) {
-                        event.preventDefault();
-                        setBooster(ItemType, 0);
-                    };
-                    td.appendChild(removeButton);
-
-                    tr.appendChild(td);
-                }
-                document.getElementById("Boosters-list").appendChild(tr);
-            });
 
             if (single.getCurrentPath().startsWith("/webui/guildView")) {
                 const guildReq = $.get("/custom/getGuild?guildId=" + window.guildId);
@@ -3516,7 +3520,7 @@ function handleModularSelection(category) {
     });
 }
 
-function setBooster(ItemType, ExpiryDate, callback) {
+function setBooster(ItemType, ExpiryDate) {
     revalidateAuthz().then(() => {
         $.post({
             url: "/custom/setBooster?" + window.authz,
@@ -3529,33 +3533,27 @@ function setBooster(ItemType, ExpiryDate, callback) {
             ])
         }).done(function () {
             updateInventory();
-            if (callback) callback();
         });
     });
 }
 
-function doAcquireBoosters() {
+function doAcquireBooster() {
     const uniqueName = getKey(document.getElementById("acquire-type-Boosters"));
     if (!uniqueName) {
         $("#acquire-type-Boosters").addClass("is-invalid").focus();
         return;
     }
-    const ExpiryDate = Date.now() / 1000 + 3 * 24 * 60 * 60; // default 3 days
-    setBooster(uniqueName, ExpiryDate, () => {
-        $("#acquire-type-Boosters").val("");
-    });
+    setBooster(uniqueName, Math.floor(Date.now() / 1000 + 3 * 24 * 60 * 60));
+    document.getElementById("acquire-type-Boosters").value = "";
 }
 
 function doChangeBoosterExpiry(ItemType, ExpiryDateInput) {
-    console.log("Changing booster expiry for", ItemType, "to", ExpiryDateInput.value);
-    // cast local datetime string to unix timestamp
-    const ExpiryDate = Math.trunc(new Date(ExpiryDateInput.value).getTime() / 1000);
+    const ExpiryDate = Math.floor(new Date(ExpiryDateInput.value).getTime() / 1000);
     if (isNaN(ExpiryDate)) {
         ExpiryDateInput.addClass("is-invalid").focus();
-        return false;
+        return;
     }
     setBooster(ItemType, ExpiryDate);
-    return true;
 }
 
 function formatDatetime(fmt, date) {

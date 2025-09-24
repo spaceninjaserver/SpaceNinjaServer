@@ -109,7 +109,7 @@ dict = {
     inventory_moaPets: `МОА`,
     inventory_kubrowPets: `Звери`,
     inventory_evolutionProgress: `Прогресс эволюции Инкарнонов`,
-    inventory_Boosters: `Бустеры`,
+    inventory_boosters: `Бустеры`,
     inventory_flavourItems: `<abbr title="Наборы анимаций, глифы, палитры и т. д.">Уникальные предметы</abbr>`,
     inventory_shipDecorations: `Украшения корабля`,
     inventory_bulkAddSuits: `Добавить отсутствующие Варфреймы`,

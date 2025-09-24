@@ -109,7 +109,7 @@ dict = {
     inventory_moaPets: `Moas`,
     inventory_kubrowPets: `Bestien`,
     inventory_evolutionProgress: `Incarnon-Entwicklungsfortschritte`,
-    inventory_Boosters: `Booster`,
+    inventory_boosters: `Booster`,
     inventory_flavourItems: `<abbr title="Animationssets, Glyphen, Farbpaletten usw.">Sammlerstücke</abbr>`,
     inventory_shipDecorations: `Schiffsdekorationen`,
     inventory_bulkAddSuits: `Fehlende Warframes hinzufügen`,

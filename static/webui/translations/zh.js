@@ -109,7 +109,7 @@ dict = {
     inventory_moaPets: `恐鸟`,
     inventory_kubrowPets: `动物同伴`,
     inventory_evolutionProgress: `灵化之源进度`,
-    inventory_Boosters: `加成器`,
+    inventory_boosters: `加成器`,
     inventory_flavourItems: `<abbr title="动作表情、浮印、调色板等">装饰物品</abbr>`,
     inventory_shipDecorations: `飞船装饰`,
     inventory_bulkAddSuits: `添加缺失战甲`,
