@@ -76,7 +76,7 @@ dict = {
     code_replays: `[UNTRANSLATED] Replays`,
     code_stalker: `Stalker`,
     code_succChange: `Changement effectué.`,
-    code_requiredInvigorationUpgrade: `Augmentation offensive et défensive requises.`,
+    code_requiredInvigorationUpgrade: `[UNTRANSLATED] You must select both an offensive & utility upgrade.`,
     login_description: `Connexion avec les informations de connexion OpenWF.`,
     login_emailLabel: `Email`,
     login_passwordLabel: `Mot de passe`,
@@ -147,7 +147,7 @@ dict = {
     detailedView_valenceBonusLabel: `Bonus de Valence`,
     detailedView_valenceBonusDescription: `Définir le Bonus Valence de l'arme.`,
     detailedView_modularPartsLabel: `Changer l'équipement modulaire`,
-    detailedView_suitInvigorationLabel: `Invigoration de Warframe`,
+    detailedView_invigorationLabel: `Dynamisation`,
     detailedView_loadoutLabel: `Équipements`,
 
     invigorations_offensive_AbilityStrength: `+200% de puissance de pouvoir`,
@@ -172,9 +172,9 @@ dict = {
     invigorations_utility_Jumps: `+5 réinitialisations de saut`,
     invigorations_utility_EnergyRegen: `+2 d'énergie régénérés/s`,
 
-    invigorations_offensiveLabel: `Amélioration offensive`,
-    invigorations_defensiveLabel: `Amélioration défensive`,
-    invigorations_expiryLabel: `Expiration de l'invigoration (optionnel)`,
+    detailedView_invigorationOffensiveLabel: `Amélioration offensive`,
+    detailedView_invigorationUtilityLabel: `[UNTRANSLATED] Utility Upgrade`,
+    detailedView_invigorationExpiryLabel: `[UNTRANSLATED] Invigoration Expiry (optional)`,
 
     abilityOverride_label: `Remplacement de pouvoir`,
     abilityOverride_onSlot: `Sur l'emplacement`,

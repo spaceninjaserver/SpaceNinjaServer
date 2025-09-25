@@ -147,7 +147,7 @@ dict = {
     detailedView_valenceBonusLabel: `Бонус Валентности`,
     detailedView_valenceBonusDescription: `Вы можете установить или убрать бонус Валентности с вашего оружия.`,
     detailedView_modularPartsLabel: `Изменить модульные части`,
-    detailedView_suitInvigorationLabel: `Воодушевление Варфрейма`,
+    detailedView_invigorationLabel: `Воодушевление`,
     detailedView_loadoutLabel: `Конфигурации`,
 
     invigorations_offensive_AbilityStrength: `+200% к силе способностей.`,
@@ -172,9 +172,9 @@ dict = {
     invigorations_utility_Jumps: `+5 сбросов прыжка.`,
     invigorations_utility_EnergyRegen: `+2 к регенерации энергии в секунду.`,
 
-    invigorations_offensiveLabel: `Атакующее улучшение`,
-    invigorations_defensiveLabel: `Вспомогательное улучшение`,
-    invigorations_expiryLabel: `Срок действия Воодушевления (необязательно)`,
+    detailedView_invigorationOffensiveLabel: `Атакующее улучшение`,
+    detailedView_invigorationUtilityLabel: `Вспомогательное улучшение`,
+    detailedView_invigorationExpiryLabel: `Срок действия Воодушевления (необязательно)`,
 
     abilityOverride_label: `Переопределение способности`,
     abilityOverride_onSlot: `в ячейке`,

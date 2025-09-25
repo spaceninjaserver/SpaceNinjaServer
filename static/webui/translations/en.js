@@ -75,7 +75,7 @@ dict = {
     code_replays: `Replays`,
     code_stalker: `Stalker`,
     code_succChange: `Successfully changed.`,
-    code_requiredInvigorationUpgrade: `You must select both an offensive & defensive upgrade.`,
+    code_requiredInvigorationUpgrade: `You must select both an offensive & utility upgrade.`,
     login_description: `Login using your OpenWF account credentials (same as in-game when connecting to this server).`,
     login_emailLabel: `Email address`,
     login_passwordLabel: `Password`,
@@ -146,7 +146,7 @@ dict = {
     detailedView_valenceBonusLabel: `Valence Bonus`,
     detailedView_valenceBonusDescription: `You can set or remove the Valence Bonus from your weapon.`,
     detailedView_modularPartsLabel: `Change Modular Parts`,
-    detailedView_suitInvigorationLabel: `Warframe Invigoration`,
+    detailedView_invigorationLabel: `Invigoration`,
     detailedView_loadoutLabel: `Loadouts`,
 
     invigorations_offensive_AbilityStrength: `+200% Ability Strength`,
@@ -171,9 +171,9 @@ dict = {
     invigorations_utility_Jumps: `+5 Jump Resets`,
     invigorations_utility_EnergyRegen: `+2 Energy Regen/s`,
 
-    invigorations_offensiveLabel: `Offensive Upgrade`,
-    invigorations_defensiveLabel: `Defensive Upgrade`,
-    invigorations_expiryLabel: `Upgrades Expiry (optional)`,
+    detailedView_invigorationOffensiveLabel: `Offensive Upgrade`,
+    detailedView_invigorationUtilityLabel: `Utility Upgrade`,
+    detailedView_invigorationExpiryLabel: `Invigoration Expiry (optional)`,
 
     abilityOverride_label: `Ability Override`,
     abilityOverride_onSlot: `on slot`,

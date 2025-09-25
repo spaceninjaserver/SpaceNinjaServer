@@ -76,7 +76,7 @@ dict = {
     code_replays: `[UNTRANSLATED] Replays`,
     code_stalker: `Stalker`,
     code_succChange: `Erfolgreich geändert.`,
-    code_requiredInvigorationUpgrade: `Du musst sowohl ein offensives & defensives Upgrade auswählen.`,
+    code_requiredInvigorationUpgrade: `[UNTRANSLATED] You must select both an offensive & utility upgrade.`,
     login_description: `Melde dich mit deinem OpenWF-Account an (denselben Angaben wie im Spiel, wenn du dich mit diesem Server verbindest).`,
     login_emailLabel: `E-Mail-Adresse`,
     login_passwordLabel: `Passwort`,
@@ -147,7 +147,7 @@ dict = {
     detailedView_valenceBonusLabel: `Valenz-Bonus`,
     detailedView_valenceBonusDescription: `Du kannst den Valenz-Bonus deiner Waffe festlegen oder entfernen.`,
     detailedView_modularPartsLabel: `Modulare Teile ändern`,
-    detailedView_suitInvigorationLabel: `Warframe-Kräftigung`,
+    detailedView_invigorationLabel: `Kräftigung`,
     detailedView_loadoutLabel: `Loadouts`,
 
     invigorations_offensive_AbilityStrength: `+200% Fähigkeitsstärke`,
@@ -172,9 +172,9 @@ dict = {
     invigorations_utility_Jumps: `+5 Sprung-Zurücksetzungen`,
     invigorations_utility_EnergyRegen: `+2 Energieregeneration pro Sekunde`,
 
-    invigorations_offensiveLabel: `Offensives Upgrade`,
-    invigorations_defensiveLabel: `Defensives Upgrade`,
-    invigorations_expiryLabel: `Upgrades Ablaufdatum (optional)`,
+    detailedView_invigorationOffensiveLabel: `Offensives Upgrade`,
+    detailedView_invigorationUtilityLabel: `[UNTRANSLATED] Utility Upgrade`,
+    detailedView_invigorationExpiryLabel: `[UNTRANSLATED] Invigoration Expiry (optional)`,
 
     abilityOverride_label: `Fähigkeitsüberschreibung`,
     abilityOverride_onSlot: `auf Slot`,

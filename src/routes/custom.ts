@@ -43,7 +43,7 @@ import { setBoosterController } from "../controllers/custom/setBoosterController
 import { updateFingerprintController } from "../controllers/custom/updateFingerprintController.ts";
 import { unlockLevelCapController } from "../controllers/custom/unlockLevelCapController.ts";
 import { changeModularPartsController } from "../controllers/custom/changeModularPartsController.ts";
-import { editSuitInvigorationUpgradeController } from "../controllers/custom/editSuitInvigorationUpgradeController.ts";
+import { setInvigorationController } from "../controllers/custom/setInvigorationController.ts";
 import { setAccountCheatController } from "../controllers/custom/setAccountCheatController.ts";
 import { setGuildCheatController } from "../controllers/custom/setGuildCheatController.ts";
 
@@ -92,7 +92,7 @@ customRouter.post("/setBooster", setBoosterController);
 customRouter.post("/updateFingerprint", updateFingerprintController);
 customRouter.post("/unlockLevelCap", unlockLevelCapController);
 customRouter.post("/changeModularParts", changeModularPartsController);
-customRouter.post("/editSuitInvigorationUpgrade", editSuitInvigorationUpgradeController);
+customRouter.post("/setInvigoration", setInvigorationController);
 customRouter.post("/setAccountCheat", setAccountCheatController);
 customRouter.post("/setGuildCheat", setGuildCheatController);
 

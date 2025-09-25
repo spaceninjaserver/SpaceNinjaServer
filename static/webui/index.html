@@ -719,12 +719,12 @@
                     </div>
                 </div>
                 <div id="edit-suit-invigorations-card" class="card mb-3 d-none">
-                    <h5 class="card-header" data-loc="detailedView_suitInvigorationLabel"></h5>
+                    <h5 class="card-header" data-loc="detailedView_invigorationLabel"></h5>
                     <div class="card-body">
-                        <form onsubmit="submitSuitInvigorationUpgrade(event)">
+                        <form onsubmit="submitInvigoration(event)">
                             <div class="mb-3">
-                                <label for="invigoration-offensive" class="form-label" data-loc="invigorations_offensiveLabel"></label>
-                                <select class="form-select" id="dv-invigoration-offensive">
+                                <label for="invigoration-offensive" class="form-label" data-loc="detailedView_invigorationOffensiveLabel"></label>
+                                <select class="form-select" id="invigoration-offensive">
                                     <option value="" data-loc="general_none"></option>
                                     <option value="/Lotus/Upgrades/Invigorations/Offensive/OffensiveInvigorationPowerStrength" data-loc="invigorations_offensive_AbilityStrength"></option>
                                     <option value="/Lotus/Upgrades/Invigorations/Offensive/OffensiveInvigorationPowerRange" data-loc="invigorations_offensive_AbilityRange"></option>
@@ -737,10 +737,9 @@
                                     <option value="/Lotus/Upgrades/Invigorations/Offensive/OffensiveInvigorationMeleeCritChance" data-loc="invigorations_offensive_MeleeCritChance"></option>
                                 </select>
                             </div>
-                            
                             <div class="mb-3">
-                                <label for="invigoration-defensive" class="form-label" data-loc="invigorations_defensiveLabel"></label>
-                                <select class="form-select" id="dv-invigoration-defensive">
+                                <label for="invigoration-defensive" class="form-label" data-loc="detailedView_invigorationUtilityLabel"></label>
+                                <select class="form-select" id="invigoration-defensive">
                                     <option value="" data-loc="general_none"></option>
                                     <option value="/Lotus/Upgrades/Invigorations/Utility/UtilityInvigorationPowerEfficiency" data-loc="invigorations_utility_AbilityEfficiency"></option>
                                     <option value="/Lotus/Upgrades/Invigorations/Utility/UtilityInvigorationMovementSpeed" data-loc="invigorations_utility_SprintSpeed"></option>
@@ -755,15 +754,13 @@
                                     <option value="/Lotus/Upgrades/Invigorations/Utility/UtilityInvigorationEnergyRegen" data-loc="invigorations_utility_EnergyRegen"></option>
                                 </select>
                             </div>
-                            
                             <div class="mb-3">
-                                <label for="invigoration-expiry" class="form-label" data-loc="invigorations_expiryLabel"></label>
-                                <input type="datetime-local" class="form-control" id="dv-invigoration-expiry" />
+                                <label for="invigoration-expiry" class="form-label" data-loc="detailedView_invigorationExpiryLabel"></label>
+                                <input type="datetime-local" class="form-control" max="2038-01-19T03:14" id="invigoration-expiry" onblur="this.value=new Date(this.value)>new Date(this.max)?new Date(this.max).toISOString().slice(0,16):this.value"/>
                             </div>
-                            
                             <div class="d-flex gap-2">
                                 <button type="submit" class="btn btn-primary" data-loc="general_setButton"></button>
-                                <button type="button" class="btn btn-danger" onclick="clearSuitInvigorationUpgrades()" data-loc="code_remove"></button>
+                                <button type="button" class="btn btn-danger" onclick="setInvigoration()" data-loc="code_remove"></button>
                             </div>
                         </form>
                     </div>

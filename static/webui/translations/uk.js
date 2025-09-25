@@ -147,7 +147,7 @@ dict = {
     detailedView_valenceBonusLabel: `Ознака Валентності`,
     detailedView_valenceBonusDescription: `Ви можете встановити або прибрати ознаку Валентності з вашої зброї.`,
     detailedView_modularPartsLabel: `Змінити модульні частини`,
-    detailedView_suitInvigorationLabel: `Зміцнення Ворфрейма`,
+    detailedView_invigorationLabel: `Зміцнення`,
     detailedView_loadoutLabel: `Конфігурації`,
 
     invigorations_offensive_AbilityStrength: `+200% до потужності здібностей.`,
@@ -172,9 +172,9 @@ dict = {
     invigorations_utility_Jumps: `+5 Оновлень стрибків.`,
     invigorations_utility_EnergyRegen: `+2 до відновлення енергії на секунду.`,
 
-    invigorations_offensiveLabel: `Атакуюче вдосконалення`,
-    invigorations_defensiveLabel: `Допоміжне вдосконалення`,
-    invigorations_expiryLabel: `Термін дії Зміцнення (необов'язково)`,
+    detailedView_invigorationOffensiveLabel: `Атакуюче вдосконалення`,
+    detailedView_invigorationUtilityLabel: `Допоміжне вдосконалення`,
+    detailedView_invigorationExpiryLabel: `Термін дії Зміцнення (необов'язково)`,
 
     abilityOverride_label: `Перевизначення здібностей`,
     abilityOverride_onSlot: `у комірці`,

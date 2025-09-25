@@ -76,7 +76,7 @@ dict = {
     code_replays: `Repeticiones`,
     code_stalker: `Stalker`,
     code_succChange: `Cambiado correctamente`,
-    code_requiredInvigorationUpgrade: `Debes seleccionar una mejora ofensiva y una defensiva.`,
+    code_requiredInvigorationUpgrade: `[UNTRANSLATED] You must select both an offensive & utility upgrade.`,
     login_description: `Inicia sesión con las credenciales de tu cuenta OpenWF (las mismas que usas en el juego al conectarte a este servidor).`,
     login_emailLabel: `Dirección de correo electrónico`,
     login_passwordLabel: `Contraseña`,
@@ -147,7 +147,7 @@ dict = {
     detailedView_valenceBonusLabel: `Bonus de Valéncia`,
     detailedView_valenceBonusDescription: `Puedes establecer o quitar el bonus de valencia de tu arma.`,
     detailedView_modularPartsLabel: `Cambiar partes modulares`,
-    detailedView_suitInvigorationLabel: `Vigorización de Warframe`,
+    detailedView_invigorationLabel: `Fortalecimiento`,
     detailedView_loadoutLabel: `Equipamientos`,
 
     invigorations_offensive_AbilityStrength: `+200% Fuerza de Habilidad`,
@@ -172,9 +172,9 @@ dict = {
     invigorations_utility_Jumps: `+5 Restablecimientos de Salto`,
     invigorations_utility_EnergyRegen: `+2 Regeneración de Energía/s`,
 
-    invigorations_offensiveLabel: `Mejora Ofensiva`,
-    invigorations_defensiveLabel: `Mejora Defensiva`,
-    invigorations_expiryLabel: `Caducidad de Mejoras (opcional)`,
+    detailedView_invigorationOffensiveLabel: `Mejora Ofensiva`,
+    detailedView_invigorationUtilityLabel: `[UNTRANSLATED] Utility Upgrade`,
+    detailedView_invigorationExpiryLabel: `[UNTRANSLATED] Invigoration Expiry (optional)`,
 
     abilityOverride_label: `Intercambio de Habilidad`,
     abilityOverride_onSlot: `en el espacio`,

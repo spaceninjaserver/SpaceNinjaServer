@@ -76,7 +76,7 @@ dict = {
     code_replays: `[UNTRANSLATED] Replays`,
     code_stalker: `追猎者`,
     code_succChange: `更改成功`,
-    code_requiredInvigorationUpgrade: `您必须同时选择一个进攻型和一个功能型活化属性.`,
+    code_requiredInvigorationUpgrade: `[UNTRANSLATED] You must select both an offensive & utility upgrade.`,
     login_description: `使用您的 OpenWF 账户凭证登录(与游戏内连接本服务器时使用的昵称相同)`,
     login_emailLabel: `电子邮箱`,
     login_passwordLabel: `密码`,
@@ -147,7 +147,7 @@ dict = {
     detailedView_valenceBonusLabel: `效价加成`,
     detailedView_valenceBonusDescription: `您可以设置或移除武器上的效价加成.`,
     detailedView_modularPartsLabel: `更换部件`,
-    detailedView_suitInvigorationLabel: `编辑战甲活化属性`,
+    detailedView_invigorationLabel: `活化`,
     detailedView_loadoutLabel: `配置`,
 
     invigorations_offensive_AbilityStrength: `+200%技能强度`,
@@ -172,9 +172,9 @@ dict = {
     invigorations_utility_Jumps: `+5跳跃次数`,
     invigorations_utility_EnergyRegen: `+2/秒能量恢复`,
 
-    invigorations_offensiveLabel: `进攻型属性`,
-    invigorations_defensiveLabel: `功能型属性`,
-    invigorations_expiryLabel: `活化时效(可选)`,
+    detailedView_invigorationOffensiveLabel: `进攻型属性`,
+    detailedView_invigorationUtilityLabel: `[UNTRANSLATED] Utility Upgrade`,
+    detailedView_invigorationExpiryLabel: `活化时效(可选)`,
 
     abilityOverride_label: `技能替换`,
     abilityOverride_onSlot: `槽位`,
