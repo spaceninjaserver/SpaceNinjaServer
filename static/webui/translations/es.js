@@ -76,7 +76,7 @@ dict = {
     code_replays: `Repeticiones`,
     code_stalker: `Stalker`,
     code_succChange: `Cambiado correctamente`,
-    code_requiredInvigorationUpgrade: `[UNTRANSLATED] You must select both an offensive & utility upgrade.`,
+    code_requiredInvigorationUpgrade: `Debes seleccionar una mejora ofensiva y una mejora de utilidad.`,
     login_description: `Inicia sesión con las credenciales de tu cuenta OpenWF (las mismas que usas en el juego al conectarte a este servidor).`,
     login_emailLabel: `Dirección de correo electrónico`,
     login_passwordLabel: `Contraseña`,
@@ -173,8 +173,8 @@ dict = {
     invigorations_utility_EnergyRegen: `+2 Regeneración de Energía/s`,
 
     detailedView_invigorationOffensiveLabel: `Mejora Ofensiva`,
-    detailedView_invigorationUtilityLabel: `[UNTRANSLATED] Utility Upgrade`,
-    detailedView_invigorationExpiryLabel: `[UNTRANSLATED] Invigoration Expiry (optional)`,
+    detailedView_invigorationUtilityLabel: `Mejora de Utilidad`,
+    detailedView_invigorationExpiryLabel: `Caducidad del Fortalecimiento (opcional)`,
 
     abilityOverride_label: `Intercambio de Habilidad`,
     abilityOverride_onSlot: `en el espacio`,
