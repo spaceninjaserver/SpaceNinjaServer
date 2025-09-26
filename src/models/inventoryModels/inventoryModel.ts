@@ -1462,6 +1462,12 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         flawlessRelicsAlwaysGiveSilverReward: Boolean,
         radiantRelicsAlwaysGiveGoldReward: Boolean,
         disableDailyTribute: Boolean,
+        nemesisHenchmenKillsMultiplierGrineer: Number,
+        nemesisHenchmenKillsMultiplierCorpus: Number,
+        nemesisAntivirusGainMultiplier: Number,
+        nemesisHintProgressMultiplierGrineer: Number,
+        nemesisHintProgressMultiplierCorpus: Number,
+        nemesisExtraWeapon: Number,
 
         SubscribedToEmails: { type: Number, default: 0 },
         SubscribedToEmailsPersonalized: { type: Number, default: 0 },

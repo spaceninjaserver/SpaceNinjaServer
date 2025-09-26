@@ -210,10 +210,29 @@ export const addMissionInventoryUpdates = async (
             inventory.NemesisAbandonedRewards = inventoryUpdates.RewardInfo.NemesisAbandonedRewards;
         }
         if (inventoryUpdates.RewardInfo.NemesisHenchmenKills && inventory.Nemesis) {
-            inventory.Nemesis.HenchmenKilled += inventoryUpdates.RewardInfo.NemesisHenchmenKills;
+            let HenchmenKilledMultiplier = 1;
+            switch (inventory.Nemesis.Faction) {
+                case "FC_GRINEER":
+                    HenchmenKilledMultiplier = inventory.nemesisHenchmenKillsMultiplierGrineer ?? 1;
+                    break;
+                case "FC_CORPUS":
+                    HenchmenKilledMultiplier = inventory.nemesisHenchmenKillsMultiplierCorpus ?? 1;
+                    break;
+            }
+            inventory.Nemesis.HenchmenKilled +=
+                inventoryUpdates.RewardInfo.NemesisHenchmenKills * HenchmenKilledMultiplier;
         }
         if (inventoryUpdates.RewardInfo.NemesisHintProgress && inventory.Nemesis) {
-            inventory.Nemesis.HintProgress += inventoryUpdates.RewardInfo.NemesisHintProgress;
+            let HintProgressMultiplier = 1;
+            switch (inventory.Nemesis.Faction) {
+                case "FC_GRINEER":
+                    HintProgressMultiplier = inventory.nemesisHintProgressMultiplierGrineer ?? 1;
+                    break;
+                case "FC_CORPUS":
+                    HintProgressMultiplier = inventory.nemesisHintProgressMultiplierCorpus ?? 1;
+                    break;
+            }
+            inventory.Nemesis.HintProgress += inventoryUpdates.RewardInfo.NemesisHintProgress * HintProgressMultiplier;
             if (inventory.Nemesis.Faction != "FC_INFESTATION" && inventory.Nemesis.Hints.length != 3) {
                 const progressNeeded = [35, 60, 100][inventory.Nemesis.Hints.length];
                 if (inventory.Nemesis.HintProgress >= progressNeeded) {
@@ -819,6 +838,8 @@ export const addMissionInventoryUpdates = async (
                     const att: string[] = [];
                     let countedAtt: ITypeCount[] | undefined;
 
+                    const extraWeaponCheat = inventory.nemesisExtraWeapon ?? 0; // 0 means no extra weapon and token
+
                     if (value.killed) {
                         if (
                             value.weaponLoc &&
@@ -827,6 +848,20 @@ export const addMissionInventoryUpdates = async (
                             const weaponType = manifest.weapons[inventory.Nemesis.WeaponIdx];
                             giveNemesisWeaponRecipe(inventory, weaponType, value.nemesisName, value.weaponLoc, profile);
                             att.push(weaponType);
+                            if (extraWeaponCheat >= 1) {
+                                for (let i = 0; i < extraWeaponCheat; i++) {
+                                    const randomIndex = Math.floor(Math.random() * manifest.weapons.length);
+                                    const randomWeapon = manifest.weapons[randomIndex];
+                                    giveNemesisWeaponRecipe(
+                                        inventory,
+                                        randomWeapon,
+                                        value.nemesisName,
+                                        undefined,
+                                        profile
+                                    );
+                                    att.push(randomWeapon);
+                                }
+                            }
                         }
                         //if (value.petLoc) {
                         if (profile.petHead) {
@@ -870,7 +905,7 @@ export const addMissionInventoryUpdates = async (
                             countedAtt = [
                                 {
                                     ItemType: "/Lotus/Types/Items/MiscItems/CodaWeaponBucks",
-                                    ItemCount: getKillTokenRewardCount(inventory.Nemesis.fp)
+                                    ItemCount: getKillTokenRewardCount(inventory.Nemesis.fp) * (extraWeaponCheat + 1)
                                 }
                             ];
                             addMiscItems(inventory, countedAtt);
@@ -1400,7 +1435,9 @@ export const addMissionRewards = async (
 
             if (inventory.Nemesis.Faction == "FC_INFESTATION") {
                 inventory.Nemesis.MissionCount += 1;
-                inventory.Nemesis.HenchmenKilled = Math.min(inventory.Nemesis.HenchmenKilled + 5, 95); // 5 progress per mission until 95
+                let antivirusGain = 5;
+                antivirusGain *= inventory.nemesisAntivirusGainMultiplier ?? 1;
+                inventory.Nemesis.HenchmenKilled = Math.min(inventory.Nemesis.HenchmenKilled + antivirusGain, 95); // 5 progress per mission until 95
 
                 inventoryChanges.Nemesis.MissionCount ??= 0;
                 inventoryChanges.Nemesis.MissionCount += 1;

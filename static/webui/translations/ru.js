@@ -257,6 +257,12 @@ dict = {
     cheats_changeButton: `Изменить`,
     cheats_markAllAsRead: `Пометить все входящие как прочитанные`,
     cheats_finishInvasionsInOneMission: `Завершать вторжение за одну миссию`,
+    cheats_nemesisHenchmenKillsMultiplierGrineer: `[UNTRANSLATED] Rage Progess Multiplier (Grineer)`,
+    cheats_nemesisHenchmenKillsMultiplierCorpus: `[UNTRANSLATED] Rage Progess Multiplier (Corpus)`,
+    cheats_nemesisAntivirusGainMultiplier: `[UNTRANSLATED] Antivirus Progress Multiplier`,
+    cheats_nemesisHintProgressMultiplierGrineer: `[UNTRANSLATED] Hint Progress Multiplier (Grineer)`,
+    cheats_nemesisHintProgressMultiplierCorpus: `[UNTRANSLATED] Hint Progress Multiplier (Corpus)`,
+    cheats_nemesisExtraWeapon: `[UNTRANSLATED] Extra Nemesis Weapon / Token On Vanquish (0 to disable)`,
 
     worldState: `Состояние мира`,
     worldState_creditBoost: `Глобальный бустер Кредитов`,

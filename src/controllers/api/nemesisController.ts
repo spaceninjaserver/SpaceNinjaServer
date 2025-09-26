@@ -149,7 +149,10 @@ export const nemesisController: RequestHandler = async (req, res) => {
                             break;
                     }
                 }
-                inventory.Nemesis!.HenchmenKilled += antivirusGain;
+                const antivirusGainMultiplier = (
+                    await getInventory(account._id.toString(), "nemesisAntivirusGainMultiplier")
+                ).nemesisAntivirusGainMultiplier;
+                inventory.Nemesis!.HenchmenKilled += antivirusGain * (antivirusGainMultiplier ?? 1);
                 if (inventory.Nemesis!.HenchmenKilled >= 100) {
                     inventory.Nemesis!.HenchmenKilled = 100;
 

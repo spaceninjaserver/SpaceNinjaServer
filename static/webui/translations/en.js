@@ -256,6 +256,12 @@ dict = {
     cheats_changeButton: `Change`,
     cheats_markAllAsRead: `Mark Inbox As Read`,
     cheats_finishInvasionsInOneMission: `Finish Invasions in One Mission`,
+    cheats_nemesisHenchmenKillsMultiplierGrineer: `Rage Progess Multiplier (Grineer)`,
+    cheats_nemesisHenchmenKillsMultiplierCorpus: `Rage Progess Multiplier (Corpus)`,
+    cheats_nemesisAntivirusGainMultiplier: `Antivirus Progress Multiplier`,
+    cheats_nemesisHintProgressMultiplierGrineer: `Hint Progress Multiplier (Grineer)`,
+    cheats_nemesisHintProgressMultiplierCorpus: `Hint Progress Multiplier (Corpus)`,
+    cheats_nemesisExtraWeapon: `Extra Nemesis Weapon / Token On Vanquish (0 to disable)`,
 
     worldState: `World State`,
     worldState_creditBoost: `Credit Boost`,

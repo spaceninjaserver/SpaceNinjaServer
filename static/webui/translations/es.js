@@ -257,6 +257,12 @@ dict = {
     cheats_changeButton: `Cambiar`,
     cheats_markAllAsRead: `Marcar bandeja de entrada como leída`,
     cheats_finishInvasionsInOneMission: `Finaliza Invasión en una mision`,
+    cheats_nemesisHenchmenKillsMultiplierGrineer: `[UNTRANSLATED] Rage Progess Multiplier (Grineer)`,
+    cheats_nemesisHenchmenKillsMultiplierCorpus: `[UNTRANSLATED] Rage Progess Multiplier (Corpus)`,
+    cheats_nemesisAntivirusGainMultiplier: `[UNTRANSLATED] Antivirus Progress Multiplier`,
+    cheats_nemesisHintProgressMultiplierGrineer: `[UNTRANSLATED] Hint Progress Multiplier (Grineer)`,
+    cheats_nemesisHintProgressMultiplierCorpus: `[UNTRANSLATED] Hint Progress Multiplier (Corpus)`,
+    cheats_nemesisExtraWeapon: `[UNTRANSLATED] Extra Nemesis Weapon / Token On Vanquish (0 to disable)`,
 
     worldState: `Estado del mundo`,
     worldState_creditBoost: `Potenciador de Créditos`,

@@ -55,6 +55,12 @@ export interface IAccountCheats {
     flawlessRelicsAlwaysGiveSilverReward?: boolean;
     radiantRelicsAlwaysGiveGoldReward?: boolean;
     disableDailyTribute?: boolean;
+    nemesisHenchmenKillsMultiplierGrineer?: number;
+    nemesisHenchmenKillsMultiplierCorpus?: number;
+    nemesisAntivirusGainMultiplier?: number;
+    nemesisHintProgressMultiplierGrineer?: number;
+    nemesisHintProgressMultiplierCorpus?: number;
+    nemesisExtraWeapon?: number;
 }
 
 export interface IInventoryDatabase

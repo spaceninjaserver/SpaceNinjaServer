@@ -1991,7 +1991,11 @@ function updateInventory() {
             }
 
             for (const elm of accountCheats) {
-                elm.checked = !!data[elm.id];
+                if (elm.type === "checkbox") {
+                    elm.checked = !!data[elm.id];
+                } else if (elm.type === "number") {
+                    elm.value = data[elm.id] !== undefined ? data[elm.id] : elm.getAttribute("data-default") || "";
+                }
             }
         });
     });
@@ -3202,6 +3206,41 @@ document.querySelectorAll("#account-cheats input[type=checkbox]").forEach(elm =>
                 data: JSON.stringify({
                     key: elm.id,
                     value: elm.checked
+                })
+            });
+        });
+    };
+});
+
+document.querySelectorAll("#account-cheats .input-group").forEach(grp => {
+    const input = grp.querySelector("input");
+    const select = grp.querySelector("select");
+    const btn = grp.querySelector("button");
+    if (input) {
+        input.oninput = input.onchange = function () {
+            btn.classList.remove("btn-secondary");
+            btn.classList.add("btn-primary");
+        };
+    }
+    if (select) {
+        select.oninput = select.onchange = function () {
+            btn.classList.remove("btn-secondary");
+            btn.classList.add("btn-primary");
+        };
+    }
+    btn.onclick = function () {
+        btn.classList.remove("btn-primary");
+        btn.classList.add("btn-secondary");
+        const input = btn.closest(".input-group").querySelector('input[type="number"]');
+        if (!input) return;
+        revalidateAuthz().then(() => {
+            const value = input.value;
+            $.post({
+                url: "/custom/setAccountCheat?" + window.authz,
+                contentType: "application/json",
+                data: JSON.stringify({
+                    key: input.id,
+                    value: parseInt(value)
                 })
             });
         });

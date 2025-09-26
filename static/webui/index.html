@@ -1015,6 +1015,48 @@
                                     <input class="form-check-input" type="checkbox" id="finishInvasionsInOneMission" />
                                     <label class="form-check-label" for="finishInvasionsInOneMission" data-loc="cheats_finishInvasionsInOneMission"></label>
                                 </div>
+                                <form class="form-group mt-2">
+                                    <label class="form-label" for="nemesisHenchmenKillsMultiplierGrineer" data-loc="cheats_nemesisHenchmenKillsMultiplierGrineer"></label>
+                                    <div class="input-group">
+                                        <input class="form-control" id="nemesisHenchmenKillsMultiplierGrineer" type="number" min="0" max="65535" data-default="1" />
+                                        <button class="btn btn-secondary" type="button" data-loc="cheats_save"></button>
+                                    </div>
+                                </form>
+                                <form class="form-group mt-2">
+                                    <label class="form-label" for="nemesisHenchmenKillsMultiplierCorpus" data-loc="cheats_nemesisHenchmenKillsMultiplierCorpus"></label>
+                                    <div class="input-group">
+                                        <input class="form-control" id="nemesisHenchmenKillsMultiplierCorpus" type="number" min="0" max="65535" data-default="1" />
+                                        <button class="btn btn-secondary" type="button" data-loc="cheats_save"></button>
+                                    </div>
+                                </form>
+                                <form class="form-group mt-2">
+                                    <label class="form-label" for="nemesisAntivirusGainMultiplier" data-loc="cheats_nemesisAntivirusGainMultiplier"></label>
+                                    <div class="input-group">
+                                        <input class="form-control" id="nemesisAntivirusGainMultiplier" type="number" min="0" max="65535" data-default="1" />
+                                        <button class="btn btn-secondary" type="button" data-loc="cheats_save"></button>
+                                    </div>
+                                </form>
+                                <form class="form-group mt-2">
+                                    <label class="form-label" for="nemesisHintProgressMultiplierGrineer" data-loc="cheats_nemesisHintProgressMultiplierGrineer"></label>
+                                    <div class="input-group">
+                                        <input class="form-control" id="nemesisHintProgressMultiplierGrineer" type="number" min="0" max="65535" data-default="1" />
+                                        <button class="btn btn-secondary" type="button" data-loc="cheats_save"></button>
+                                    </div>
+                                </form>
+                                <form class="form-group mt-2">
+                                    <label class="form-label" for="nemesisHintProgressMultiplierCorpus" data-loc="cheats_nemesisHintProgressMultiplierCorpus"></label>
+                                    <div class="input-group">
+                                        <input class="form-control" id="nemesisHintProgressMultiplierCorpus" type="number" min="0" max="65535" data-default="1" />
+                                        <button class="btn btn-secondary" type="button" data-loc="cheats_save"></button>
+                                    </div>
+                                </form>
+                                <form class="form-group mt-2">
+                                    <label class="form-label" for="nemesisExtraWeapon" data-loc="cheats_nemesisExtraWeapon"></label>
+                                    <div class="input-group">
+                                        <input class="form-control" id="nemesisExtraWeapon" type="number" min="0" max="65535" data-default="0" />
+                                        <button class="btn btn-secondary" type="button" data-loc="cheats_save"></button>
+                                    </div>
+                                </form>
                                 <div class="mt-2 mb-2 d-flex flex-wrap gap-2">
                                     <button class="btn btn-primary" onclick="debounce(doUnlockAllShipFeatures);" data-loc="cheats_unlockAllShipFeatures"></button>
                                     <button class="btn btn-primary" onclick="debounce(unlockAllMissions);" data-loc="cheats_unlockAllMissions"></button>
@@ -1033,7 +1075,7 @@
                                     <label class="form-label" for="changeSyndicate" data-loc="cheats_changeSupportedSyndicate"></label>
                                     <div class="input-group">
                                         <select class="form-control" id="changeSyndicate"></select>
-                                        <button class="btn btn-primary" type="submit" data-loc="cheats_changeButton"></button>
+                                        <button class="btn btn-secondary" type="submit" data-loc="cheats_changeButton"></button>
                                     </div>
                                 </form>
                             </div>

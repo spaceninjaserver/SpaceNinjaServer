@@ -257,6 +257,12 @@ dict = {
     cheats_changeButton: `更改`,
     cheats_markAllAsRead: `收件箱全部标记为已读`,
     cheats_finishInvasionsInOneMission: `一场任务完成整场入侵`,
+    cheats_nemesisHenchmenKillsMultiplierGrineer: `玄骸怒气倍率 (Grineer)`,
+    cheats_nemesisHenchmenKillsMultiplierCorpus: `玄骸怒气倍率 (Corpus)`,
+    cheats_nemesisAntivirusGainMultiplier: `杀毒进度倍率 (科腐者)`,
+    cheats_nemesisHintProgressMultiplierGrineer: `解密进度倍率 (Grineer)`,
+    cheats_nemesisHintProgressMultiplierCorpus: `解密进度倍率 (Corpus)`,
+    cheats_nemesisExtraWeapon: `额外玄骸武器/代币 (0为禁用)`,
 
     worldState: `世界状态配置`,
     worldState_creditBoost: `现金加成`,
