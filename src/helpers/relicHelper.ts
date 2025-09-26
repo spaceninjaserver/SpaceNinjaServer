@@ -54,6 +54,9 @@ export const crackRelic = async (
         (await handleStoreItemAcquisition(reward.type, inventory, reward.itemCount)).InventoryChanges
     );
 
+    // Client has picked its own reward (for lack of choice)
+    participant.ChosenRewardOwner = participant.AccountId;
+
     return reward;
 };
 

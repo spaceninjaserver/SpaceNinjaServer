@@ -147,6 +147,7 @@ export interface IInventoryDatabase
     LastInventorySync?: Types.ObjectId;
     EndlessXP?: IEndlessXpProgressDatabase[];
     PersonalGoalProgress?: IGoalProgressDatabase[];
+    MissionRelicRewards?: ITypeCount[];
 }
 
 export interface IQuestKeyDatabase {

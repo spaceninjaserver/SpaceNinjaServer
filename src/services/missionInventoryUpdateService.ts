@@ -1334,13 +1334,21 @@ export const addMissionRewards = async (
         rngRewardCredits: inventoryChanges.RegularCredits ?? 0
     });
 
-    if (
-        voidTearWave &&
-        voidTearWave.Participants[0].QualifiesForReward &&
-        !voidTearWave.Participants[0].HaveRewardResponse
-    ) {
-        const reward = await crackRelic(inventory, voidTearWave.Participants[0], inventoryChanges);
-        MissionRewards.push({ StoreItem: reward.type, ItemCount: reward.itemCount });
+    if (voidTearWave && voidTearWave.Participants[0].QualifiesForReward) {
+        if (!voidTearWave.Participants[0].HaveRewardResponse) {
+            // non-endless fissure; giving reward now
+            const reward = await crackRelic(inventory, voidTearWave.Participants[0], inventoryChanges);
+            MissionRewards.push({ StoreItem: reward.type, ItemCount: reward.itemCount });
+        } else if (inventory.MissionRelicRewards) {
+            // endless fissure; already gave reward(s) but should still show in EOM screen
+            for (const reward of inventory.MissionRelicRewards) {
+                MissionRewards.push({
+                    StoreItem: reward.ItemType,
+                    ItemCount: reward.ItemCount
+                });
+            }
+            inventory.MissionRelicRewards = undefined;
+        }
     }
 
     if (strippedItems) {

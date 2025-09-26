@@ -1473,6 +1473,9 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         SubscribedToEmailsPersonalized: { type: Number, default: 0 },
         RewardSeed: BigInt,
 
+        // Temporary data so we can show all relic rewards from an endless mission at EOM
+        MissionRelicRewards: { type: [typeCountSchema], default: undefined },
+
         //Credit
         RegularCredits: { type: Number, default: 0 },
         //Platinum
@@ -1841,6 +1844,7 @@ inventorySchema.set("toJSON", {
         delete returnedObject._id;
         delete returnedObject.__v;
         delete returnedObject.accountOwnerId;
+        delete returnedObject.MissionRelicRewards;
 
         const inventoryDatabase = returnedObject as Partial<IInventoryDatabase>;
         const inventoryResponse = returnedObject as IInventoryClient;
