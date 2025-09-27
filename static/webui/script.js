@@ -837,10 +837,9 @@ function updateInventory() {
                                 a.href = "#";
                                 a.onclick = function (event) {
                                     event.preventDefault();
-                                    revalidateAuthz().then(() => {
-                                        const promises = [];
+                                    revalidateAuthz().then(async () => {
                                         if (item.XP < maxXP) {
-                                            promises.push(addGearExp(category, item.ItemId.$oid, maxXP - item.XP));
+                                            await addGearExp(category, item.ItemId.$oid, maxXP - item.XP);
                                         }
                                         if ("exalted" in itemMap[item.ItemType]) {
                                             for (const exaltedType of itemMap[item.ItemType].exalted) {
@@ -851,20 +850,16 @@ function updateInventory() {
                                                     const exaltedCap =
                                                         itemMap[exaltedType]?.type == "weapons" ? 800_000 : 1_600_000;
                                                     if (exaltedItem.XP < exaltedCap) {
-                                                        promises.push(
-                                                            addGearExp(
-                                                                "SpecialItems",
-                                                                exaltedItem.ItemId.$oid,
-                                                                exaltedCap - exaltedItem.XP
-                                                            )
+                                                        await addGearExp(
+                                                            "SpecialItems",
+                                                            exaltedItem.ItemId.$oid,
+                                                            exaltedCap - exaltedItem.XP
                                                         );
                                                     }
                                                 }
                                             }
                                         }
-                                        Promise.all(promises).then(() => {
-                                            updateInventory();
-                                        });
+                                        updateInventory();
                                     });
                                 };
                                 a.title = loc("code_maxRank");
