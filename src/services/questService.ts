@@ -331,7 +331,7 @@ export const giveKeyChainMessage = async (
 ): Promise<void> => {
     const keyChainMessage = getKeyChainMessage(keyChainInfo);
 
-    if (questKey.Progress![0].c > 0) {
+    if ((questKey.Progress?.[0]?.c ?? 0) > 0) {
         keyChainMessage.att = [];
         keyChainMessage.countedAtt = [];
     }
