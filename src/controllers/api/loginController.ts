@@ -9,6 +9,9 @@ import type { IDatabaseAccountJson, ILoginRequest, ILoginResponse } from "../../
 import { logger } from "../../utils/logger.ts";
 import { version_compare } from "../../helpers/inventoryHelpers.ts";
 import { handleNonceInvalidation } from "../../services/wsService.ts";
+import { getInventory } from "../../services/inventoryService.ts";
+import { createMessage } from "../../services/inboxService.ts";
+import { fromStoreItem } from "../../services/itemDataService.ts";
 
 export const loginController: RequestHandler = async (request, response) => {
     const loginRequest = JSON.parse(String(request.body)) as ILoginRequest; // parse octet stream of json data to json object
@@ -75,6 +78,24 @@ export const loginController: RequestHandler = async (request, response) => {
     await account.save();
 
     handleNonceInvalidation(account._id.toString());
+
+    // If the client crashed during an endless fissure mission, discharge rewards to an inbox message. (https://www.reddit.com/r/Warframe/comments/5uwwjm/til_if_you_crash_during_a_fissure_you_keep_any/)
+    const inventory = await getInventory(account._id.toString(), "MissionRelicRewards");
+    if (inventory.MissionRelicRewards) {
+        await createMessage(account._id, [
+            {
+                sndr: "/Lotus/Language/Bosses/Ordis",
+                msg: "/Lotus/Language/Menu/VoidProjectionItemsMessage",
+                sub: "/Lotus/Language/Menu/VoidProjectionItemsSubject",
+                icon: "/Lotus/Interface/Icons/Npcs/Ordis.png",
+                countedAtt: inventory.MissionRelicRewards.map(x => ({ ...x, ItemType: fromStoreItem(x.ItemType) })),
+                attVisualOnly: true,
+                highPriority: true // TOVERIFY
+            }
+        ]);
+        inventory.MissionRelicRewards = undefined;
+        await inventory.save();
+    }
 
     response.json(createLoginResponse(myAddress, myUrlBase, account.toJSON(), buildLabel));
 };
