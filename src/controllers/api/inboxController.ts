@@ -4,6 +4,7 @@ import {
     createMessage,
     createNewEventMessages,
     deleteAllMessagesRead,
+    deleteAllMessagesReadNonCin,
     deleteMessageRead,
     getAllMessagesSorted,
     getMessage
@@ -31,11 +32,11 @@ export const inboxController: RequestHandler = async (req, res) => {
     if (deleteId) {
         if (deleteId === "DeleteAllRead") {
             await deleteAllMessagesRead(accountId);
-            res.status(200).end();
-            return;
+        } else if (deleteId === "DeleteAllReadNonCin") {
+            await deleteAllMessagesReadNonCin(accountId);
+        } else {
+            await deleteMessageRead(parseOid(deleteId as string));
         }
-
-        await deleteMessageRead(parseOid(deleteId as string));
         res.status(200).end();
     } else if (messageId) {
         const message = await getMessage(parseOid(messageId as string));

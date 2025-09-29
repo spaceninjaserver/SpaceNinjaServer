@@ -29,6 +29,10 @@ export const deleteAllMessagesRead = async (accountId: string): Promise<void> =>
     await Inbox.deleteMany({ ownerId: accountId, r: true });
 };
 
+export const deleteAllMessagesReadNonCin = async (accountId: string): Promise<void> => {
+    await Inbox.deleteMany({ ownerId: accountId, r: true, cinematic: null });
+};
+
 export const createNewEventMessages = async (req: Request): Promise<void> => {
     const account = await getAccountForRequest(req);
     const newEventMessages: IMessageCreationTemplate[] = [];
