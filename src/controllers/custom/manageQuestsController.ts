@@ -115,7 +115,7 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
                 if (stage > 0) {
                     await giveKeyChainStageTriggered(inventory, {
                         KeyChain: questKey.ItemType,
-                        ChainStage: stage
+                        ChainStage: stage - 1
                     });
                 }
             }
