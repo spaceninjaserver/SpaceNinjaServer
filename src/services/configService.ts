@@ -48,6 +48,7 @@ export interface IConfig {
         anniversary?: number;
         hallowedNightmares?: boolean;
         hallowedNightmaresRewardsOverride?: number;
+        naberusNightsOverride?: boolean;
         proxyRebellion?: boolean;
         proxyRebellionRewardsOverride?: number;
         galleonOfGhouls?: number;

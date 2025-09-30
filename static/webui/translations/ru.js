@@ -284,6 +284,7 @@ dict = {
     worldState_hallowedFlame: `Священное пламя`,
     worldState_hallowedNightmares: `Священные кошмары`,
     worldState_hallowedNightmaresRewards: `Награды Священных кошмаров`,
+    worldState_naberusNights: `[UNTRANSLATED] Nights of Naberus`,
     worldState_proxyRebellion: `Восстание роботов`,
     worldState_proxyRebellionRewards: `Награды Восстания роботов`,
     worldState_bellyOfTheBeast: `Чрево зверя`,

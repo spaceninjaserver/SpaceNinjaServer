@@ -284,6 +284,7 @@ dict = {
     worldState_hallowedFlame: `Flamme Hantée`,
     worldState_hallowedNightmares: `Cauchemars Hantés`,
     worldState_hallowedNightmaresRewards: `Récompenses Flamme Hantée Cauchemar`,
+    worldState_naberusNights: `[UNTRANSLATED] Nights of Naberus`,
     worldState_proxyRebellion: `Rébellion Proxy`,
     worldState_proxyRebellionRewards: `Récompenses Rébellion Proxy`,
     worldState_bellyOfTheBeast: `Ventre de la Bête`,

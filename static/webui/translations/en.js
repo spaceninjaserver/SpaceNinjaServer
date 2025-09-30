@@ -283,6 +283,7 @@ dict = {
     worldState_hallowedFlame: `Hallowed Flame`,
     worldState_hallowedNightmares: `Hallowed Nightmares`,
     worldState_hallowedNightmaresRewards: `Hallowed Nightmares Rewards`,
+    worldState_naberusNights: `Nights of Naberus`,
     worldState_proxyRebellion: `Proxy Rebellion`,
     worldState_proxyRebellionRewards: `Proxy Rebellion Rewards`,
     worldState_bellyOfTheBeast: `Belly of the Beast`,

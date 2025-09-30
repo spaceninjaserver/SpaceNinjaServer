@@ -2504,6 +2504,37 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             BonusReward: { items: ["/Lotus/StoreItems/Upgrades/Skins/Clan/BountyHunterBadgeItem"] }
         });
     }
+
+    const isOctober = date.getUTCMonth() == 9; // October = month index 9
+    if (config.worldState?.naberusNightsOverride ?? isOctober) {
+        worldState.Goals.push({
+            _id: { $oid: "66fd602de1778d583419e8e7" },
+            Activation: {
+                $date: {
+                    $numberLong: config.worldState?.naberusNightsOverride
+                        ? "1727881200000"
+                        : Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1).toString()
+                }
+            },
+            Expiry: {
+                $date: {
+                    $numberLong: config.worldState?.naberusNightsOverride
+                        ? "2000000000000"
+                        : Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 1).toString()
+                }
+            },
+            Count: 0,
+            Goal: 0,
+            Success: 0,
+            Personal: true,
+            Desc: "/Lotus/Language/Events/HalloweenNaberusName",
+            ToolTip: "/Lotus/Language/Events/HalloweenNaberusDesc",
+            Icon: "/Lotus/Interface/Icons/JackOLanternColour.png",
+            Tag: "DeimosHalloween",
+            Node: "DeimosHub"
+        });
+    }
+
     if (config.worldState?.bellyOfTheBeast) {
         worldState.Goals.push({
             _id: { $oid: "67a5035c2a198564d62e165e" },

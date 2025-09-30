@@ -284,6 +284,7 @@ dict = {
     worldState_hallowedFlame: `万圣之焰`,
     worldState_hallowedNightmares: `万圣噩梦`,
     worldState_hallowedNightmaresRewards: `万圣噩梦奖励设置`,
+    worldState_naberusNights: `[UNTRANSLATED] Nights of Naberus`,
     worldState_proxyRebellion: `机械叛乱`,
     worldState_proxyRebellionRewards: `机械叛乱奖励设置`,
     worldState_bellyOfTheBeast: `兽之腹`,
