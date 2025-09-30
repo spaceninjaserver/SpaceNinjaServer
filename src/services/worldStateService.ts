@@ -361,7 +361,7 @@ export const getSortie = (day: number): ISortie => {
         Activation: { $date: { $numberLong: dayStart.toString() } },
         Expiry: { $date: { $numberLong: dayEnd.toString() } },
         Reward: "/Lotus/Types/Game/MissionDecks/SortieRewards",
-        Seed: seed,
+        Seed: 2081, // this seed produces 12 zeroes in a row if asked to pick (0, 1); this way the CorpusIcePlanetTileset image is always index 0, the 'correct' choice.
         Boss: boss,
         Variants: selectedNodes
     };
