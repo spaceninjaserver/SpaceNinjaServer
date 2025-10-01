@@ -1,4 +1,4 @@
-// Spanish translation by hxedcl
+// Spanish translation by hxedcl, Slayer55555
 dict = {
     general_inventoryUpdateNote: `Para ver los cambios en el juego, necesitas volver a sincronizar tu inventario, por ejemplo, usando el comando /sync del bootstrapper, visitando un dojo o repetidor, o volviendo a iniciar sesión.`,
     general_inventoryUpdateNoteGameWs: `Nota: Puede que necesites reabrir cualquier menú en el que te encuentres para que los cambios se reflejen.`,
