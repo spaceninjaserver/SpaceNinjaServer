@@ -6,6 +6,7 @@ import type {
 } from "../types/inventoryTypes/commonInventoryTypes.ts";
 import type { IMongoDate } from "../types/commonTypes.ts";
 import type {
+    IBooster,
     IDialogueClient,
     IDialogueDatabase,
     IDialogueHistoryClient,
@@ -462,6 +463,9 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     }
     if (client.Accolades !== undefined) {
         db.Accolades = client.Accolades;
+    }
+    if (client.Boosters !== undefined) {
+        replaceArray<IBooster>(db.Boosters, client.Boosters);
     }
 };
 
