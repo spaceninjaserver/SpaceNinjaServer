@@ -227,7 +227,7 @@ dict = {
     cheats_baroFullyStocked: `Baro hat volles Inventar`,
     cheats_syndicateMissionsRepeatable: `Syndikat-Missionen wiederholbar`,
     cheats_unlockAllProfitTakerStages: `Alle Profiteintreiber-Phasen freischalten`,
-    cheats_unlockSuccInventory: `[UNTRANSLATED] Success. Please note that you'll need to resync your inventory, e.g. using the bootstrapper's /sync command, visiting a dojo/relay, or relogging.`,
+    cheats_unlockSuccInventory: `[UNTRANSLATED] Success. Please note that you'll need to resync your inventory, e.g. using the bootstrapper's /sync command in game chat, visiting a dojo/relay, or relogging.`,
     cheats_instantFinishRivenChallenge: `Riven-Mod Herausforderung sofort abschließen`,
     cheats_instantResourceExtractorDrones: `Sofortige Ressourcen-Extraktor-Drohnen`,
     cheats_noResourceExtractorDronesDamage: `Kein Schaden für Ressourcen-Extraktor-Drohnen`,
