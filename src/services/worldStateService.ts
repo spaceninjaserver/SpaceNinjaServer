@@ -280,6 +280,14 @@ export const getSortie = (day: number): ISortie => {
         }
     }
 
+    const willHaveAssassination = boss != "SORTIE_BOSS_CORRUPTED_VOR" && rng.randomInt(0, 2) == 2;
+    if (willHaveAssassination) {
+        const index = nodes.indexOf(sortieBossNode[boss]);
+        if (index != -1) {
+            nodes.splice(index, 1);
+        }
+    }
+
     const selectedNodes: ISortieMission[] = [];
     const missionTypes = new Set();
 
@@ -309,7 +317,7 @@ export const getSortie = (day: number): ISortie => {
             "SORTIE_MODIFIER_BOW_ONLY"
         ];
 
-        if (i == 2 && boss != "SORTIE_BOSS_CORRUPTED_VOR" && rng.randomInt(0, 2) == 2) {
+        if (i == 2 && willHaveAssassination) {
             const tileset = sortieTilesets[sortieBossNode[boss] as keyof typeof sortieTilesets] as TSortieTileset;
             pushTilesetModifiers(modifiers, tileset);
 
