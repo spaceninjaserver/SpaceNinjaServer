@@ -335,15 +335,16 @@ export const getInventoryResponse = async (
     }
 
     if (config.unlockAllSkins) {
-        const missingWeaponSkins = new Set(Object.keys(ExportCustoms));
-        inventoryResponse.WeaponSkins.forEach(x => missingWeaponSkins.delete(x.ItemType));
-        for (const uniqueName of missingWeaponSkins) {
-            inventoryResponse.WeaponSkins.push({
-                ItemId: {
-                    $oid: "ca70ca70ca70ca70" + catBreadHash(uniqueName).toString(16).padStart(8, "0")
-                },
-                ItemType: uniqueName
-            });
+        const ownedWeaponSkins = new Set<string>(inventoryResponse.WeaponSkins.map(x => x.ItemType));
+        for (const [uniqueName, meta] of Object.entries(ExportCustoms)) {
+            if (!meta.alwaysAvailable && !ownedWeaponSkins.has(uniqueName)) {
+                inventoryResponse.WeaponSkins.push({
+                    ItemId: {
+                        $oid: "ca70ca70ca70ca70" + catBreadHash(uniqueName).toString(16).padStart(8, "0")
+                    },
+                    ItemType: uniqueName
+                });
+            }
         }
     }
 
