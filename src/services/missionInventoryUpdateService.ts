@@ -2483,95 +2483,95 @@ const goalMessagesByKey: Record<string, { sndr: string; msg: string; sub: string
         icon: "/Lotus/Interface/Icons/Npcs/Seasonal/NoraNight.png"
     },
     "/Lotus/Types/Keys/LanternEndlessEventKeyA": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/G1Quests/GenericEventRewardMsgDesc",
         sub: "/Lotus/Language/G1Quests/GenericTacAlertRewardMsgTitle",
         icon: "/Lotus/Interface/Icons/Npcs/LotusVamp_d.png"
     },
     "/Lotus/Types/Keys/LanternEndlessEventKeyB": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/G1Quests/GenericEventRewardMsgDesc",
         sub: "/Lotus/Language/G1Quests/GenericTacAlertRewardMsgTitle",
         icon: "/Lotus/Interface/Icons/Npcs/LotusVamp_d.png"
     },
     "/Lotus/Types/Keys/LanternEndlessEventKeyD": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/G1Quests/GenericEventRewardMsgDesc",
         sub: "/Lotus/Language/G1Quests/GenericTacAlertRewardMsgTitle",
         icon: "/Lotus/Interface/Icons/Npcs/LotusVamp_d.png"
     },
     "/Lotus/Types/Keys/LanternEndlessEventKeyC": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/G1Quests/GenericEventRewardMsgDesc",
         sub: "/Lotus/Language/G1Quests/GenericTacAlertRewardMsgTitle",
         icon: "/Lotus/Interface/Icons/Npcs/LotusVamp_d.png"
     },
     "/Lotus/Types/Keys/TacAlertKeyHalloween": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/G1Quests/TacAlertHalloweenRewardsBonusBody",
         sub: "/Lotus/Language/G1Quests/TacAlertHalloweenRewardsBonusTitle",
         icon: "/Lotus/Interface/Icons/Npcs/LotusVamp_d.png"
     },
     "/Lotus/Types/Keys/TacAlertKeyHalloweenBonus": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/G1Quests/TacAlertHalloweenRewardsBody",
         sub: "/Lotus/Language/G1Quests/TacAlertHalloweenRewardsTitle",
         icon: "/Lotus/Interface/Icons/Npcs/LotusVamp_d.png"
     },
     "/Lotus/Types/Keys/TacAlertKeyHalloweenTimeAttack": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/G1Quests/TacAlertHalloweenRewardsBody",
         sub: "/Lotus/Language/G1Quests/TacAlertHalloweenRewardsTitle",
         icon: "/Lotus/Interface/Icons/Npcs/LotusVamp_d.png"
     },
     "/Lotus/Types/Keys/TacAlertKeyProxyRebellionOne": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/G1Quests/RazorbackArmadaRewardBody",
         sub: "/Lotus/Language/G1Quests/GenericTacAlertSmallRewardMsgTitle",
         icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
         arg: ["CREDIT_REWARD"]
     },
     "/Lotus/Types/Keys/TacAlertKeyProxyRebellionTwo": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/G1Quests/RazorbackArmadaRewardBody",
         sub: "/Lotus/Language/G1Quests/GenericTacAlertSmallRewardMsgTitle",
         icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
         arg: ["CREDIT_REWARD"]
     },
     "/Lotus/Types/Keys/TacAlertKeyProxyRebellionThree": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/G1Quests/RazorbackArmadaRewardBody",
         sub: "/Lotus/Language/G1Quests/GenericTacAlertSmallRewardMsgTitle",
         icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
         arg: ["CREDIT_REWARD"]
     },
     "/Lotus/Types/Keys/TacAlertKeyProxyRebellionFour": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/G1Quests/GenericTacAlertBadgeRewardMsgDesc",
         sub: "/Lotus/Language/G1Quests/GenericTacAlertBadgeRewardMsgTitle",
         icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png"
     },
     "/Lotus/Types/Keys/TacAlertKeyProjectNightwatchEasy": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/G1Quests/ProjectNightwatchRewardMsgA",
         sub: "/Lotus/Language/G1Quests/ProjectNightwatchTacAlertMissionOneTitle",
         icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
         arg: ["CREDIT_REWARD"]
     },
     "/Lotus/Types/Keys/TacAlertKeyProjectNightwatch": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/G1Quests/ProjectNightwatchTacAlertMissionRewardBody",
         sub: "/Lotus/Language/G1Quests/ProjectNightwatchTacAlertMissionTwoTitle",
         icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png"
     },
     "/Lotus/Types/Keys/TacAlertKeyProjectNightwatchHard": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/G1Quests/ProjectNightwatchTacAlertMissionRewardBody",
         sub: "/Lotus/Language/G1Quests/ProjectNightwatchTacAlertMissionThreeTitle",
         icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png"
     },
     "/Lotus/Types/Keys/TacAlertKeyProjectNightwatchBonus": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/G1Quests/ProjectNightwatchTacAlertMissionRewardBody",
         sub: "/Lotus/Language/G1Quests/ProjectNightwatchTacAlertMissionFourTitle",
         icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png"
@@ -2607,140 +2607,140 @@ const goalMessagesByKey: Record<string, { sndr: string; msg: string; sub: string
         icon: "/Lotus/Interface/Icons/Npcs/Entrati/Father.png"
     },
     "/Lotus/Types/Keys/TacAlertKeyAnniversary2019E": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/Messages/Anniversary2024RewardMsgB",
         sub: "/Lotus/Language/Messages/Anniversary2024MissionTitleB",
         icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
         arg: ["PLAYER_NAME"]
     },
     "/Lotus/Types/Keys/TacAlertKeyAnniversary2020F": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/Messages/Anniversary2024RewardMsgC",
         sub: "/Lotus/Language/Messages/Anniversary2024MissionTitleB",
         icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
         arg: ["PLAYER_NAME"]
     },
     "/Lotus/Types/Keys/TacAlertKeyAnniversary2024ChallengeModeA": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/Messages/Anniversary2024RewardMsgD",
         sub: "/Lotus/Language/Messages/Anniversary2024MissionTitleD",
         icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
         arg: ["PLAYER_NAME"]
     },
     "/Lotus/Types/Keys/TacAlertKeyAnniversary2017C": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/Messages/Anniversary2019RewardMsgC",
         sub: "/Lotus/Language/Messages/Anniversary2019MissionTitleC",
         icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
         arg: ["PLAYER_NAME"]
     },
     "/Lotus/Types/Keys/TacAlertKeyAnniversary2020H": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/Messages/Anniversary2020RewardMsgH",
         sub: "/Lotus/Language/Messages/Anniversary2020MissionTitleH",
         icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
         arg: ["PLAYER_NAME"]
     },
     "/Lotus/Types/Keys/TacAlertKeyAnniversary2022J": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/Messages/Anniversary2022RewardMsgJ",
         sub: "/Lotus/Language/Messages/Anniversary2022MissionTitleJ",
         icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
         arg: ["PLAYER_NAME"]
     },
     "/Lotus/Types/Keys/TacAlertKeyAnniversary2025D": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/Messages/Anniversary2025RewardMsgB",
         sub: "/Lotus/Language/Messages/Anniversary2025MissionTitleB",
         icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
         arg: ["PLAYER_NAME"]
     },
     "/Lotus/Types/Keys/TacAlertKeyAnniversary2025ChallengeModeA": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/Messages/Anniversary2025RewardMsgC",
         sub: "/Lotus/Language/Messages/Anniversary2025MissionTitleC",
         icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
         arg: ["PLAYER_NAME"]
     },
     "/Lotus/Types/Keys/TacAlertKeyAnniversary2020G": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/Messages/Anniversary2020RewardMsgG",
         sub: "/Lotus/Language/Messages/Anniversary2020MissionTitleG",
         icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
         arg: ["PLAYER_NAME"]
     },
     "/Lotus/Types/Keys/TacAlertKeyAnniversary2017B": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/Messages/Anniversary2019RewardMsgB",
         sub: "/Lotus/Language/Messages/Anniversary2019MissionTitleB",
         icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
         arg: ["PLAYER_NAME"]
     },
     "/Lotus/Types/Keys/TacAlertKeyAnniversary2017A": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/Messages/Anniversary2019RewardMsgA",
         sub: "/Lotus/Language/Messages/Anniversary2019MissionTitleA",
         icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
         arg: ["PLAYER_NAME"]
     },
     "/Lotus/Types/Keys/TacAlertKeyAnniversary2023K": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/Messages/Anniversary2025RewardMsgG",
         sub: "/Lotus/Language/Messages/Anniversary2025MissionTitleG",
         icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
         arg: ["PLAYER_NAME"]
     },
     "/Lotus/Types/Keys/TacAlertKeyAnniversary2025ChallengeModeB": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/Messages/Anniversary2025RewardMsgD",
         sub: "/Lotus/Language/Messages/Anniversary2025MissionTitleD",
         icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
         arg: ["PLAYER_NAME"]
     },
     "/Lotus/Types/Keys/TacAlertKeyAnniversary2025A": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/Messages/Anniversary2025RewardMsgA",
         sub: "/Lotus/Language/Messages/Anniversary2025MissionTitleA",
         icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
         arg: ["PLAYER_NAME"]
     },
     "/Lotus/Types/Keys/TacAlertKeyAnniversary2018D": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/Messages/Anniversary2024RewardMsgG",
         sub: "/Lotus/Language/Messages/Anniversary2024MissionTitleG",
         icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
         arg: ["PLAYER_NAME"]
     },
     "/Lotus/Types/Keys/TacAlertKeyAnniversary2025C": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/Messages/Anniversary2024RewardMsgF",
         sub: "/Lotus/Language/Messages/Anniversary2024MissionTitleF",
         icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
         arg: ["PLAYER_NAME"]
     },
     "/Lotus/Types/Keys/TacAlertKeyAnniversary2024L": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/Messages/Anniversary2024RewardMsgA",
         sub: "/Lotus/Language/Messages/Anniversary2024MissionTitleA",
         icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
         arg: ["PLAYER_NAME"]
     },
     "/Lotus/Types/Keys/TacAlertKeyAnniversary2024ChallengeModeB": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/Messages/Anniversary2024RewardMsgE",
         sub: "/Lotus/Language/Messages/Anniversary2024MissionTitleE",
         icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
         arg: ["PLAYER_NAME"]
     },
     "/Lotus/Types/Keys/TacAlertKeyAnniversary2021I": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/Messages/Anniversary2024RewardMsgH",
         sub: "/Lotus/Language/Messages/Anniversary2024MissionTitleH",
         icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
         arg: ["PLAYER_NAME"]
     },
     "/Lotus/Types/Keys/TacAlertKeyAnniversary2025B": {
-        sndr: "/Lotus/Language/Bosses/Lotus",
+        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
         msg: "/Lotus/Language/Messages/Anniversary2025RewardMsgE",
         sub: "/Lotus/Language/Messages/Anniversary2025MissionTitleE",
         icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
