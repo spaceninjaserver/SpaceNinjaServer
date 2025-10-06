@@ -35,5 +35,5 @@ SpaceNinjaServer requires a `config.json`. To set it up, you can copy the [confi
   - `RadioLegion2Syndicate` for The Emissary
   - `RadioLegionIntermissionSyndicate` for Intermission I
   - `RadioLegionSyndicate` for The Wolf of Saturn Six
-- `allTheFissures` can be set to `normal` or `hard` to enable all fissures either in normal or steel path, respectively.
+- `worldState.allTheFissures` can be set to `normal` or `hard` to enable all fissures either in normal or steel path, respectively.
 - `worldState.circuitGameModes` can be set to an array of game modes which will override the otherwise-random pattern in The Circuit. Valid element values are `Survival`, `VoidFlood`, `Excavation`, `Defense`, `Exterminate`, `Assassination`, and `Alchemy`.
