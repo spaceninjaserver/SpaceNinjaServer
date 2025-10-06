@@ -57,7 +57,7 @@ export const setGuildMotdController: RequestHandler = async (req, res) => {
         await guild.save();
     }
 
-    if (!account.BuildLabel || version_compare(account.BuildLabel, "2020.03.24.20.24") > 0) {
+    if (!account.BuildLabel || version_compare(account.BuildLabel, "2020.11.04.18.58") > 0) {
         res.json({ IsLongMOTD, MOTD });
     } else {
         res.send(MOTD).end();
