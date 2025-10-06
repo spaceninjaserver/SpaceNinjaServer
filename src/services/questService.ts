@@ -74,7 +74,7 @@ export const updateQuestStage = (
     if (!questStage) {
         const questStageIndex =
             quest.Progress.push({
-                c: questStageUpdate.c ?? 0,
+                c: questStageUpdate.c ?? -1,
                 i: questStageUpdate.i ?? false,
                 m: questStageUpdate.m ?? false,
                 b: questStageUpdate.b ?? []
