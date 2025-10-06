@@ -5,6 +5,7 @@ import type { IUpdateQuestRequest } from "../../services/questService.ts";
 import { updateQuestKey } from "../../services/questService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
+import { sendWsBroadcastTo } from "../../services/wsService.ts";
 
 export const updateQuestController: RequestHandler = async (req, res) => {
     const accountId = parseString(req.query.accountId);
@@ -29,4 +30,5 @@ export const updateQuestController: RequestHandler = async (req, res) => {
 
     await inventory.save();
     res.send(updateQuestResponse);
+    sendWsBroadcastTo(accountId, { update_inventory: true });
 };
