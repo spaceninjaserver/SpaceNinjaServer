@@ -129,14 +129,22 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         res.json(deltas);
     } else if (missionReport.RewardInfo) {
         logger.debug(`classic mission completion, sending everything`);
-        const inventoryResponse = await getInventoryResponse(inventory, true, account.BuildLabel);
+        const inventoryResponse = await getInventoryResponse(
+            inventory,
+            "xpBasedLevelCapDisabled" in req.query,
+            account.BuildLabel
+        );
         res.json({
             InventoryJson: JSON.stringify(inventoryResponse),
             ...deltas
         } satisfies IMissionInventoryUpdateResponse);
     } else {
         logger.debug(`no reward info, assuming this wasn't a mission completion and we should just sync inventory`);
-        const inventoryResponse = await getInventoryResponse(inventory, true, account.BuildLabel);
+        const inventoryResponse = await getInventoryResponse(
+            inventory,
+            "xpBasedLevelCapDisabled" in req.query,
+            account.BuildLabel
+        );
         res.json({
             InventoryJson: JSON.stringify(inventoryResponse)
         } satisfies IMissionInventoryUpdateResponseBackToDryDock);
