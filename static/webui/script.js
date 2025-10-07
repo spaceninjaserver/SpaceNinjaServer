@@ -3195,13 +3195,16 @@ function doIntrinsicsUnlockAll() {
 document.querySelectorAll("#account-cheats input[type=checkbox]").forEach(elm => {
     elm.onchange = function () {
         revalidateAuthz().then(() => {
+            const value = elm.checked;
             $.post({
                 url: "/custom/setAccountCheat?" + window.authz,
                 contentType: "application/json",
                 data: JSON.stringify({
                     key: elm.id,
-                    value: elm.checked
+                    value: value
                 })
+            }).done(() => {
+                elm.checked = value;
             });
         });
     };
@@ -3237,6 +3240,8 @@ document.querySelectorAll("#account-cheats .input-group").forEach(grp => {
                     key: input.id,
                     value: parseInt(value)
                 })
+            }).done(() => {
+                btn.value = value;
             });
         });
     };
