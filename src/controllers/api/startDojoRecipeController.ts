@@ -13,6 +13,7 @@ import { Types } from "mongoose";
 import { ExportDojoRecipes } from "warframe-public-export-plus";
 import { getAccountForRequest } from "../../services/loginService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
+import { fromOid } from "../../helpers/inventoryHelpers.ts";
 
 interface IStartDojoRecipeRequest {
     PlacedComponent: IDojoComponentClient;
@@ -50,7 +51,7 @@ export const startDojoRecipeController: RequestHandler = async (req, res) => {
                 _id: componentId,
                 pf: request.PlacedComponent.pf,
                 ppf: request.PlacedComponent.ppf,
-                pi: new Types.ObjectId(request.PlacedComponent.pi!.$oid),
+                pi: new Types.ObjectId(fromOid(request.PlacedComponent.pi!)),
                 op: request.PlacedComponent.op,
                 pp: request.PlacedComponent.pp,
                 DecoCapacity: room?.decoCapacity
