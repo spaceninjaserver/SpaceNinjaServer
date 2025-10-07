@@ -461,6 +461,9 @@ export const getInventoryResponse = async (
                         toLegacyOid(id);
                     }
                 }
+                if (inventoryResponse.GuildId) {
+                    toLegacyOid(inventoryResponse.GuildId);
+                }
             }
         }
     }
