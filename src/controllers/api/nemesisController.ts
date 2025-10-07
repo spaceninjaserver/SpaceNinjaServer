@@ -310,6 +310,17 @@ export const nemesisController: RequestHandler = async (req, res) => {
         res.json({
             target: inventory.toJSON().Nemesis
         });
+    } else if ((req.query.mode as string) == "d") {
+        const inventory = await getInventory(account._id.toString(), "NemesisHistory");
+        const body = getJSONfromString<IRelinquishAdversariesRequest>(String(req.body));
+        for (const fp of body.nemesisFingerprints) {
+            const index = inventory.NemesisHistory!.findIndex(x => x.fp == fp);
+            if (index != -1) {
+                inventory.NemesisHistory!.splice(index, 1);
+            }
+        }
+        await inventory.save();
+        res.json(body);
     } else if ((req.query.mode as string) == "w") {
         const inventory = await getInventory(account._id.toString(), "Nemesis");
         //const body = getJSONfromString<INemesisWeakenRequest>(String(req.body));
@@ -447,3 +458,7 @@ const consumeModCharge = (
         response.UpgradeNew.push(true);
     }
 };
+
+interface IRelinquishAdversariesRequest {
+    nemesisFingerprints: (bigint | number)[];
+}
