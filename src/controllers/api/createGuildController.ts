@@ -10,6 +10,17 @@ export const createGuildController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
     const payload = getJSONfromString<ICreateGuildRequest>(String(req.body));
 
+    const inventory = await getInventory(account._id.toString(), "GuildId LevelKeys Recipes");
+    if (inventory.GuildId) {
+        const guild = await Guild.findById(inventory.GuildId);
+        if (guild) {
+            res.json({
+                ...(await getGuildClient(guild, account))
+            });
+            return;
+        }
+    }
+
     // Remove pending applications for this account
     await GuildMember.deleteMany({ accountId: account._id, status: 1 });
 
@@ -27,7 +38,6 @@ export const createGuildController: RequestHandler = async (req, res) => {
         rank: 0
     });
 
-    const inventory = await getInventory(account._id.toString(), "GuildId LevelKeys Recipes");
     inventory.GuildId = guild._id;
     const inventoryChanges: IInventoryChanges = {};
     giveClanKey(inventory, inventoryChanges);
