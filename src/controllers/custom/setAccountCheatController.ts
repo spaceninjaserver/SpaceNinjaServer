@@ -1,6 +1,6 @@
 import { getInventory } from "../../services/inventoryService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
-import { sendWsBroadcastTo } from "../../services/wsService.ts";
+import { sendWsBroadcastEx, sendWsBroadcastTo } from "../../services/wsService.ts";
 import type { IAccountCheats } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { RequestHandler } from "express";
 import { logger } from "../../utils/logger.ts";
@@ -20,6 +20,8 @@ export const setAccountCheatController: RequestHandler = async (req, res) => {
     res.end();
     if (["infiniteCredits", "infinitePlatinum", "infiniteEndo", "infiniteRegalAya"].indexOf(payload.key) != -1) {
         sendWsBroadcastTo(accountId, { update_inventory: true, sync_inventory: true });
+    } else {
+        sendWsBroadcastEx({ update_inventory: true }, accountId, parseInt(String(req.query.wsid)));
     }
 };
 
