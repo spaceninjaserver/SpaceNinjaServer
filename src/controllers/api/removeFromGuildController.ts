@@ -10,6 +10,7 @@ import {
 import { createMessage } from "../../services/inboxService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import { getAccountForRequest, getSuffixedName } from "../../services/loginService.ts";
+import { sendWsBroadcastTo } from "../../services/wsService.ts";
 import { GuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 
@@ -85,6 +86,7 @@ export const removeFromGuildController: RequestHandler = async (req, res) => {
         ItemToRemove: "/Lotus/Types/Keys/DojoKey",
         RecipeToRemove: "/Lotus/Types/Keys/DojoKeyBlueprint"
     });
+    sendWsBroadcastTo(payload.userId, { update_inventory: true });
 };
 
 interface IRemoveFromGuildRequest {

@@ -5,6 +5,7 @@ import { Guild, GuildMember } from "../../models/guildModel.ts";
 import { createUniqueClanName, getGuildClient, giveClanKey } from "../../services/guildService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
+import { sendWsBroadcastTo } from "../../services/wsService.ts";
 
 export const createGuildController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -47,6 +48,7 @@ export const createGuildController: RequestHandler = async (req, res) => {
         ...(await getGuildClient(guild, account)),
         InventoryChanges: inventoryChanges
     });
+    sendWsBroadcastTo(account._id.toString(), { update_inventory: true });
 };
 
 interface ICreateGuildRequest {
