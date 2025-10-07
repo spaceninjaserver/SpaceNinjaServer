@@ -22,7 +22,7 @@ import type {
     ITechProjectDatabase
 } from "../types/guildTypes.ts";
 import { GuildPermission } from "../types/guildTypes.ts";
-import { toMongoDate, toOid, toOid2 } from "../helpers/inventoryHelpers.ts";
+import { toMongoDate, toOid, toOid2, version_compare } from "../helpers/inventoryHelpers.ts";
 import type { Types } from "mongoose";
 import type { IDojoBuild, IDojoResearch } from "warframe-public-export-plus";
 import { ExportDojoRecipes, ExportResources } from "warframe-public-export-plus";
@@ -68,9 +68,15 @@ export const getGuildClient = async (
     let missingEntry = true;
     const dataFillInPromises: Promise<void>[] = [];
     for (const guildMember of guildMembers) {
+        // Use 1-based indexing for clan ranks for versions before U24. In my testing, 2018.06.14.23.21 and below used 1-based indexing and 2019.04.04.21.31 and above used 0-based indexing. I didn't narrow it down further, but I think U24 is a good spot for them to have changed it.
+        let rankBase = 0;
+        if (account.BuildLabel && version_compare(account.BuildLabel, "2018.11.08.14.45") < 0) {
+            rankBase += 1;
+        }
+
         const member: IGuildMemberClient = {
             _id: toOid2(guildMember.accountId, account.BuildLabel),
-            Rank: guildMember.rank,
+            Rank: guildMember.rank + rankBase,
             Status: guildMember.status,
             Note: guildMember.RequestMsg,
             RequestExpiry: guildMember.RequestExpiry ? toMongoDate(guildMember.RequestExpiry) : undefined
