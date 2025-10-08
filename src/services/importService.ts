@@ -328,6 +328,7 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         "ChallengesFixVersion",
         "Founder",
         "Guide",
+        "BountyScore",
         "EntratiVaultCountLastPeriod",
         "EntratiLabConquestUnlocked",
         "EntratiLabConquestHardModeStatus",

@@ -362,7 +362,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     ThemeStyle: string;
     ThemeBackground: string;
     ThemeSounds: string;
-    BountyScore: number;
+    BountyScore?: number;
     //ChallengeInstanceStates: IChallengeInstanceState[];
     LoginMilestoneRewards: string[];
     RecentVendorPurchases?: IRecentVendorPurchaseClient[];
