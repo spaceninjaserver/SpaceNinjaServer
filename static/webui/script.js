@@ -2844,8 +2844,8 @@ function removeCountItems(uniqueName, count) {
 
 function addItemByItemType() {
     const ItemType = document.getElementById("typeName-type").value;
-    // Must start with "/Lotus/", contain only A–Z letters, no "//", and not end with "/"
-    if (!ItemType || !/^\/Lotus\/(?:[A-Za-z]+(?:\/[A-Za-z]+)*)$/.test(ItemType)) {
+    // Must start with "/Lotus/", contain only letters A–Z, digits 0–9, no "//", and not end with "/"
+    if (!ItemType || !/^\/Lotus\/(?:[A-Za-z0-9]+(?:\/[A-Za-z0-9]+)*)$/.test(ItemType)) {
         $("#typeName-type").addClass("is-invalid").focus();
         return;
     }
