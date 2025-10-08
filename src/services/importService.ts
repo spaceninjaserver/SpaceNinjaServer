@@ -73,6 +73,7 @@ import type {
     ITailorShop,
     ITailorShopDatabase
 } from "../types/personalRoomsTypes.ts";
+import { fromMongoDate } from "../helpers/inventoryHelpers.ts";
 
 const convertDate = (value: IMongoDate): Date => {
     return new Date(parseInt(value.$date.$numberLong));
@@ -326,7 +327,14 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         "GiftsRemaining",
         "ChallengesFixVersion",
         "Founder",
-        "Guide"
+        "Guide",
+        "EntratiVaultCountLastPeriod",
+        "EntratiLabConquestUnlocked",
+        "EntratiLabConquestHardModeStatus",
+        "EntratiLabConquestCacheScoreMission",
+        "EchoesHexConquestUnlocked",
+        "EchoesHexConquestHardModeStatus",
+        "EchoesHexConquestCacheScoreMission"
     ] as const) {
         if (client[key] !== undefined) {
             db[key] = client[key];
@@ -354,10 +362,26 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         "NodeIntrosCompleted",
         "DeathMarks",
         "Wishlist",
-        "NemesisAbandonedRewards"
+        "NemesisAbandonedRewards",
+        "EntratiLabConquestActiveFrameVariants",
+        "EchoesHexConquestActiveFrameVariants",
+        "EchoesHexConquestActiveStickers"
     ] as const) {
         if (client[key] !== undefined) {
             db[key] = client[key];
+        }
+    }
+    // IMongoDate
+    for (const key of [
+        "Created",
+        "TrainingDate",
+        "BlessingCooldown",
+        "LastNemesisAllySpawnTime",
+        "NextRefill",
+        "EntratiVaultCountResetDate"
+    ] as const) {
+        if (client[key] !== undefined) {
+            db[key] = fromMongoDate(client[key]);
         }
     }
     // IRewardAtten[]

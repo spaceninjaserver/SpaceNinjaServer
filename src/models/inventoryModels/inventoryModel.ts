@@ -1743,7 +1743,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         NemesisAbandonedRewards: { type: [String], default: [] },
         Nemesis: nemesisSchema,
         NemesisHistory: { type: [nemesisSchema], default: undefined },
-        //LastNemesisAllySpawnTime: Schema.Types.Mixed,
+        LastNemesisAllySpawnTime: { type: Date, default: undefined },
 
         //TradingRulesConfirmed,ShowFriendInvNotifications(Option->Social)
         Settings: settingsSchema,
@@ -1863,6 +1863,9 @@ inventorySchema.set("toJSON", {
         }
         if (inventoryDatabase.BlessingCooldown) {
             inventoryResponse.BlessingCooldown = toMongoDate(inventoryDatabase.BlessingCooldown);
+        }
+        if (inventoryDatabase.LastNemesisAllySpawnTime) {
+            inventoryResponse.LastNemesisAllySpawnTime = toMongoDate(inventoryDatabase.LastNemesisAllySpawnTime);
         }
         if (inventoryDatabase.NextRefill) {
             inventoryResponse.NextRefill = toMongoDate(inventoryDatabase.NextRefill);

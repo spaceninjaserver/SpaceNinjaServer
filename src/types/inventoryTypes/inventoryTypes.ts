@@ -92,6 +92,7 @@ export interface IInventoryDatabase
             | "NextRefill"
             | "Nemesis"
             | "NemesisHistory"
+            | "LastNemesisAllySpawnTime"
             | "EntratiVaultCountResetDate"
             | "BrandedSuits"
             | "LockedWeaponGroup"
@@ -136,6 +137,7 @@ export interface IInventoryDatabase
     NextRefill?: Date;
     Nemesis?: INemesisDatabase;
     NemesisHistory?: INemesisBaseDatabase[];
+    LastNemesisAllySpawnTime?: Date;
     EntratiVaultCountResetDate?: Date;
     BrandedSuits?: Types.ObjectId[];
     LockedWeaponGroup?: ILockedWeaponGroupDatabase;
@@ -372,7 +374,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     //InvasionChainProgress: IInvasionChainProgress[];
     Nemesis?: INemesisClient;
     NemesisHistory?: INemesisBaseClient[];
-    //LastNemesisAllySpawnTime?: IMongoDate;
+    LastNemesisAllySpawnTime?: IMongoDate;
     Settings?: ISettings;
     PersonalTechProjects: IPersonalTechProjectClient[];
     PlayerSkills: IPlayerSkills;

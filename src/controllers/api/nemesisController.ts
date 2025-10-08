@@ -1,4 +1,4 @@
-import { fromDbOid, version_compare } from "../../helpers/inventoryHelpers.ts";
+import { fromDbOid, toMongoDate, version_compare } from "../../helpers/inventoryHelpers.ts";
 import type { IKnifeResponse } from "../../helpers/nemesisHelpers.ts";
 import {
     antivirusMods,
@@ -310,6 +310,15 @@ export const nemesisController: RequestHandler = async (req, res) => {
         res.json({
             target: inventory.toJSON().Nemesis
         });
+    } else if ((req.query.mode as string) == "t") {
+        const inventory = await getInventory(account._id.toString(), "LastNemesisAllySpawnTime");
+        //const body = getJSONfromString<IUpdateAllySpawnTimeRequest>(String(req.body));
+        const now = new Date(Math.trunc(Date.now() / 1000) * 1000);
+        inventory.LastNemesisAllySpawnTime = now;
+        await inventory.save();
+        res.json({
+            NewTime: toMongoDate(now)
+        } satisfies IUpdateAllySpawnTimeResponse);
     } else if ((req.query.mode as string) == "d") {
         const inventory = await getInventory(account._id.toString(), "NemesisHistory");
         const body = getJSONfromString<IRelinquishAdversariesRequest>(String(req.body));
@@ -461,4 +470,12 @@ const consumeModCharge = (
 
 interface IRelinquishAdversariesRequest {
     nemesisFingerprints: (bigint | number)[];
+}
+
+// interface IUpdateAllySpawnTimeRequest {
+//     LastSpawnTime: IMongoDate;
+// }
+
+interface IUpdateAllySpawnTimeResponse {
+    NewTime: IMongoDate;
 }
