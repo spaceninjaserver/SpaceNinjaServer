@@ -27,6 +27,7 @@
   "license": "GNU",
   "type": "module",
   "dependencies": {
+    "body-parser": "^2.2.0",
     "chokidar": "^4.0.3",
     "crc-32": "^1.2.2",
     "express": "^5",
@@ -42,6 +43,7 @@
     "ws": "^8.18.2"
   },
   "optionalDependencies": {
+    "@types/body-parser": "^1.19.6",
     "@types/express": "^5",
     "@types/morgan": "^1.9.9",
     "@types/websocket": "^1.0.10",
