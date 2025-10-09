@@ -19,6 +19,7 @@ import type {
     ICalendarDay,
     ICalendarEvent,
     ICalendarSeason,
+    IAlert,
     IGoal,
     IInvasion,
     ILiteSortie,
@@ -110,6 +111,89 @@ const sortieBossNode: Record<Exclude<TSortieBoss, "SORTIE_BOSS_CORRUPTED_VOR">, 
     SORTIE_BOSS_RUK: "SolNode32",
     SORTIE_BOSS_TYL: "SolNode105",
     SORTIE_BOSS_VOR: "SolNode108"
+};
+
+const configAlerts: Record<string, IAlert> = {
+    voidCorruption2025Week1: {
+        _id: { $oid: "677d452e2f324ee7b90f8ccf" },
+        Activation: { $date: { $numberLong: "1736524800000" } },
+        Expiry: { $date: { $numberLong: "2000000000000" } },
+        MissionInfo: {
+            location: "SolNode61",
+            missionType: "MT_SABOTAGE",
+            faction: "FC_CORPUS",
+            difficulty: 1,
+            missionReward: {
+                credits: 30000,
+                items: ["/Lotus/StoreItems/Upgrades/Mods/Pistol/DualStat/CorruptedFireRateDamagePistol"]
+            },
+            levelOverride: "/Lotus/Levels/Proc/Corpus/CorpusShipCoreSabotage",
+            enemySpec: "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipSquadA",
+            extraEnemySpec: "/Lotus/Types/Game/EnemySpecs/GamemodeExtraEnemySpecs/CorpusSabotageTiersA",
+            minEnemyLevel: 10,
+            maxEnemyLevel: 15
+        }
+    },
+    voidCorruption2025Week2: {
+        _id: { $oid: "677d45811daeae9de40e8c0f" },
+        Activation: { $date: { $numberLong: "1737129600000" } },
+        Expiry: { $date: { $numberLong: "2000000000000" } },
+        MissionInfo: {
+            location: "SettlementNode11",
+            missionType: "MT_DEFENSE",
+            faction: "FC_CORPUS",
+            difficulty: 1,
+            missionReward: {
+                credits: 30000,
+                items: ["/Lotus/StoreItems/Upgrades/Mods/Pistol/DualStat/CorruptedCritChanceFireRatePistol"]
+            },
+            levelOverride: "/Lotus/Levels/Proc/Corpus/CorpusShipDefense",
+            enemySpec: "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipSquadDefenseB",
+            minEnemyLevel: 20,
+            maxEnemyLevel: 25,
+            maxWaveNum: 6
+        }
+    },
+    voidCorruption2025Week3: {
+        _id: { $oid: "677d45a494ad716c90006b9a" },
+        Activation: { $date: { $numberLong: "1737734400000" } },
+        Expiry: { $date: { $numberLong: "2000000000000" } },
+        MissionInfo: {
+            location: "SolNode118",
+            missionType: "MT_ARTIFACT",
+            faction: "FC_CORPUS",
+            difficulty: 1,
+            missionReward: {
+                credits: 30000,
+                items: ["/Lotus/StoreItems/Upgrades/Mods/Pistol/DualStat/CorruptedCritDamagePistol"]
+            },
+            levelOverride: "/Lotus/Levels/Proc/Corpus/CorpusShipDisruption",
+            enemySpec: "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipSurvivalA",
+            extraEnemySpec: "/Lotus/Types/Game/EnemySpecs/SpecialMissionSpecs/DisruptionCorpusShip",
+            customAdvancedSpawners: ["/Lotus/Types/Enemies/AdvancedSpawners/ErrantSpecterInvasion"],
+            minEnemyLevel: 30,
+            maxEnemyLevel: 35
+        }
+    },
+    voidCorruption2025Week4: {
+        _id: { $oid: "677d4700682d173abb0e19fe" },
+        Activation: { $date: { $numberLong: "1738339200000" } },
+        Expiry: { $date: { $numberLong: "2000000000000" } },
+        MissionInfo: {
+            location: "SolNode4",
+            missionType: "MT_EXTERMINATION",
+            faction: "FC_CORPUS",
+            difficulty: 1,
+            missionReward: {
+                credits: 30000,
+                items: ["/Lotus/StoreItems/Upgrades/Mods/Pistol/DualStat/CorruptedDamageRecoilPistol"]
+            },
+            levelOverride: "/Lotus/Levels/Proc/Corpus/CorpusShipExterminate",
+            enemySpec: "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipExterminateMixed",
+            minEnemyLevel: 40,
+            maxEnemyLevel: 45
+        }
+    }
 };
 
 const eidolonJobs: readonly string[] = [
@@ -1481,6 +1565,15 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         worldState.VoidTraders.push(vt);
         fullyStockBaro(vt);
     }
+
+    if (config.worldState) {
+        for (const [key, alert] of Object.entries(configAlerts)) {
+            if (config.worldState[key as keyof typeof config.worldState]) {
+                worldState.Alerts.push(alert);
+            }
+        }
+    }
+
     const isFebruary = date.getUTCMonth() == 1;
     if (config.worldState?.starDaysOverride ?? isFebruary) {
         worldState.Goals.push({

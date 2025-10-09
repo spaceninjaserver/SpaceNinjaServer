@@ -178,6 +178,7 @@ export interface IRewardInfo {
     goalManifest?: string;
     invasionId?: string;
     invasionAllyFaction?: "FC_GRINEER" | "FC_CORPUS";
+    alertId?: string;
     sortieId?: string;
     sortieTag?: "Mission1" | "Mission2" | "Final";
     sortiePrereqs?: string[];

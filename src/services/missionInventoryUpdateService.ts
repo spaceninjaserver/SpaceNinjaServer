@@ -1151,6 +1151,27 @@ export const addMissionRewards = async (
     let ConquestCompletedMissionsCount;
 
     let missionCompletionCredits = 0;
+
+    if (rewardInfo.alertId) {
+        const alert = getWorldState().Alerts.find(x => x._id.$oid == rewardInfo.alertId);
+        if (!alert) {
+            logger.warn(`mission completed unknown alert`, { alertId: rewardInfo.alertId });
+        } else {
+            if (inventory.CompletedAlerts.includes(alert._id.$oid)) {
+                logger.debug(`alert ${alert._id.$oid} already completed, skipping alert reward`);
+            } else {
+                inventory.CompletedAlerts.push(alert._id.$oid);
+                if (alert.MissionInfo.missionReward) {
+                    missionCompletionCredits += addFixedLevelRewards(
+                        alert.MissionInfo.missionReward,
+                        MissionRewards,
+                        rewardInfo
+                    );
+                }
+            }
+        }
+    }
+
     //inventory change is what the client has not rewarded itself, also the client needs to know the credit changes for display
 
     if (rewardInfo.goalId) {

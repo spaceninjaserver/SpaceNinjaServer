@@ -1,4 +1,4 @@
-import type { IMissionReward } from "warframe-public-export-plus";
+import type { IMissionReward, TFaction } from "warframe-public-export-plus";
 import type { IMongoDate, IOid } from "./commonTypes.ts";
 
 export interface IWorldState {
@@ -7,7 +7,7 @@ export interface IWorldState {
     Time: number;
     InGameMarket: IInGameMarket;
     Goals: IGoal[];
-    Alerts: [];
+    Alerts: IAlert[];
     Sorties: ISortie[];
     LiteSorties: ILiteSortie[];
     SyndicateMissions: ISyndicateMissionInfo[];
@@ -33,6 +33,28 @@ export interface IWorldState {
     };
     KnownCalendarSeasons: ICalendarSeason[];
     Tmp?: string;
+}
+
+export interface IAlert {
+    _id: IOid;
+    Activation: IMongoDate;
+    Expiry: IMongoDate;
+    MissionInfo: IAlertMissionInfo;
+}
+
+export interface IAlertMissionInfo {
+    location: string;
+    missionType: string;
+    faction: TFaction;
+    difficulty: number;
+    missionReward?: IMissionReward;
+    levelOverride?: string;
+    enemySpec?: string;
+    extraEnemySpec?: string;
+    customAdvancedSpawners?: string[];
+    minEnemyLevel?: number;
+    maxEnemyLevel?: number;
+    maxWaveNum?: number;
 }
 
 export interface IGoal {

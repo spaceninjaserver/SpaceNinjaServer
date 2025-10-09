@@ -279,6 +279,7 @@ dict = {
     worldState_dogDays: `Canícula`,
     worldState_dogDaysRewards: `Recompensas de Canícula`,
     worldState_wolfHunt: `Cacería del Lobo (2025)`,
+    worldState_voidCorruption: `Corrupción del Vacío (|VAL|)`,
     worldState_orphixVenom: `Veneno de Orphix`,
     worldState_longShadow: `Sombra Prolongada`,
     worldState_hallowedFlame: `Llama Sagrada`,

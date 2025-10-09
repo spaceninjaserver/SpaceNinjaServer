@@ -51,6 +51,10 @@ export interface IConfig {
         naberusNightsOverride?: boolean;
         proxyRebellion?: boolean;
         proxyRebellionRewardsOverride?: number;
+        voidCorruption2025Week1?: boolean;
+        voidCorruption2025Week2?: boolean;
+        voidCorruption2025Week3?: boolean;
+        voidCorruption2025Week4?: boolean;
         galleonOfGhouls?: number;
         ghoulEmergenceOverride?: boolean;
         plagueStarOverride?: boolean;
