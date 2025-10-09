@@ -1771,7 +1771,7 @@ function updateInventory() {
                                     a.href = "#";
                                     a.onclick = function (event) {
                                         event.preventDefault();
-                                        fundGuildTechProject(item.ItemType);
+                                        debounce(fundGuildTechProject, item.ItemType);
                                     };
                                     a.title = loc("code_fund");
                                     a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M214.6 17.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 117.3 160 488c0 17.7 14.3 32 32 32s32-14.3 32-32l0-370.7 105.4 105.4c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"/></svg>`;
@@ -1788,7 +1788,7 @@ function updateInventory() {
                                     a.href = "#";
                                     a.onclick = function (event) {
                                         event.preventDefault();
-                                        completeGuildTechProject(item.ItemType);
+                                        debounce(completeGuildTechProject, item.ItemType);
                                     };
                                     a.title = loc("code_complete");
                                     a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M371.7 43.1C360.1 32 343 28.9 328.3 35.2S304 56 304 72l0 136.3-172.3-165.1C120.1 32 103 28.9 88.3 35.2S64 56 64 72l0 368c0 16 9.6 30.5 24.3 36.8s31.8 3.2 43.4-7.9L304 303.7 304 440c0 16 9.6 30.5 24.3 36.8s31.8 3.2 43.4-7.9l192-184c7.9-7.5 12.3-18 12.3-28.9s-4.5-21.3-12.3-28.9l-192-184z"/></svg>`;
@@ -1801,7 +1801,7 @@ function updateInventory() {
                                     a.onclick = function (event) {
                                         event.preventDefault();
                                         reAddToItemList(itemMap, "TechProjects", item.ItemType);
-                                        removeGuildTechProject(item.ItemType);
+                                        debounce(removeGuildTechProject, item.ItemType);
                                     };
                                     a.title = loc("code_remove");
                                     a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
