@@ -279,7 +279,7 @@ dict = {
     worldState_dogDays: `Bataille d'Eau`,
     worldState_dogDaysRewards: `Récompenses de la Bataille d'Eau`,
     worldState_wolfHunt: `Chasse au Loup (2025)`,
-    worldState_voidCorruption: `[UNTRANSLATED] Void Corruption (|VAL|)`,
+    worldState_voidCorruption: `Corruption du Néant (|VAL|)`,
     worldState_orphixVenom: `Venin Orphix`,
     worldState_longShadow: `La Propagation des Ombres`,
     worldState_hallowedFlame: `Flamme Hantée`,

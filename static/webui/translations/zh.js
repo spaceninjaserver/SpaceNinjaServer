@@ -279,7 +279,7 @@ dict = {
     worldState_dogDays: `三伏天`,
     worldState_dogDaysRewards: `三伏天奖励设置`,
     worldState_wolfHunt: `恶狼狩猎 (2025)`,
-    worldState_voidCorruption: `[UNTRANSLATED] Void Corruption (|VAL|)`,
+    worldState_voidCorruption: `虚空堕落 (|VAL|)`,
     worldState_orphixVenom: `奥影之毒`,
     worldState_longShadow: `暗夜长影`,
     worldState_hallowedFlame: `万圣之焰`,
