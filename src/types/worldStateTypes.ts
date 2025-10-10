@@ -1,4 +1,4 @@
-import type { IMissionReward, TFaction } from "warframe-public-export-plus";
+import type { IMissionReward, TFaction, TMissionType } from "warframe-public-export-plus";
 import type { IMongoDate, IOid } from "./commonTypes.ts";
 
 export interface IWorldState {
@@ -40,11 +40,13 @@ export interface IAlert {
     Activation: IMongoDate;
     Expiry: IMongoDate;
     MissionInfo: IAlertMissionInfo;
+    Tag?: string;
+    ForceUnlock?: true;
 }
 
 export interface IAlertMissionInfo {
     location: string;
-    missionType: string;
+    missionType: TMissionType;
     faction: TFaction;
     difficulty: number;
     missionReward?: IMissionReward;
@@ -55,6 +57,9 @@ export interface IAlertMissionInfo {
     minEnemyLevel?: number;
     maxEnemyLevel?: number;
     maxWaveNum?: number;
+    descText?: string;
+
+    maxRotations?: number; // SNS specific field
 }
 
 export interface IGoal {

@@ -294,6 +294,7 @@ dict = {
     worldState_eightClawProgressOverride: `Progrès de la Huitième Griffe`,
     worldState_thermiaFractures: `Crevasses Thermia`,
     worldState_thermiaFracturesProgressOverride: `Progrès des Fractures Thermia`,
+    worldState_qtccAlerts: `[UNTRANSLATED] Quest to Conquer Cancer Alerts`,
     worldState_from_year: `de |VAL|`,
     worldState_pre_year: `pre-|VAL|`,
     worldState_week: `Semaine |VAL|`,

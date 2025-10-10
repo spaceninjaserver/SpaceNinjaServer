@@ -45,6 +45,7 @@
     "voidCorruption2025Week2": false,
     "voidCorruption2025Week3": false,
     "voidCorruption2025Week4": false,
+    "qtccAlerts": false,
     "galleonOfGhouls": 0,
     "ghoulEmergenceOverride": null,
     "plagueStarOverride": null,

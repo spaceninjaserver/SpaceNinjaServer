@@ -55,6 +55,7 @@ export interface IConfig {
         voidCorruption2025Week2?: boolean;
         voidCorruption2025Week3?: boolean;
         voidCorruption2025Week4?: boolean;
+        qtccAlerts?: boolean;
         galleonOfGhouls?: number;
         ghoulEmergenceOverride?: boolean;
         plagueStarOverride?: boolean;

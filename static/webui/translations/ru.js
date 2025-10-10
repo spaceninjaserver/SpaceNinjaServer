@@ -294,6 +294,7 @@ dict = {
     worldState_eightClawProgressOverride: `Прогресс Восьми когтей`,
     worldState_thermiaFractures: `Разломы Термии`,
     worldState_thermiaFracturesProgressOverride: `Прогресс Разломов Термии`,
+    worldState_qtccAlerts: `Тревоги Quest to Conquer Cancer`,
     worldState_from_year: `из |VAL|`,
     worldState_pre_year: `до |VAL|`,
     worldState_week: `Неделя |VAL|`,

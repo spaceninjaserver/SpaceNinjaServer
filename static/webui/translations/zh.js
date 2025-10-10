@@ -294,6 +294,7 @@ dict = {
     worldState_eightClawProgressOverride: `大帝金币收集进度(%)`,
     worldState_thermiaFractures: `热美亚裂缝`,
     worldState_thermiaFracturesProgressOverride: `[UNTRANSLATED] Thermia Fractures Progress`,
+    worldState_qtccAlerts: `[UNTRANSLATED] Quest to Conquer Cancer Alerts`,
     worldState_from_year: `|VAL|`,
     worldState_pre_year: `|VAL|之前`,
     worldState_week: `第|VAL|周`,

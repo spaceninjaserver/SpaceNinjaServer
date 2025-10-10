@@ -151,7 +151,7 @@ const configAlerts: Record<string, IAlert> = {
             enemySpec: "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipSquadDefenseB",
             minEnemyLevel: 20,
             maxEnemyLevel: 25,
-            maxWaveNum: 6
+            maxRotations: 2
         }
     },
     voidCorruption2025Week3: {
@@ -1476,6 +1476,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     const weekStart = EPOCH + week * 604800000;
     const weekEnd = weekStart + 604800000;
     const date = new Date(timeMs);
+    const defenseWavesPerRotation = buildLabel && version_compare(buildLabel, "2025.03.18.16.07") < 0 ? 5 : 3;
 
     const worldState: IWorldState = {
         BuildLabel: typeof buildLabel == "string" ? buildLabel.split(" ").join("+") : buildConfig.buildLabel,
@@ -1569,9 +1570,117 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     if (config.worldState) {
         for (const [key, alert] of Object.entries(configAlerts)) {
             if (config.worldState[key as keyof typeof config.worldState]) {
+                if (alert.MissionInfo.missionType == "MT_DEFENSE") {
+                    alert.MissionInfo.maxWaveNum = defenseWavesPerRotation * (alert.MissionInfo.maxRotations ?? 1);
+                    alert.MissionInfo.maxRotations = undefined;
+                }
                 worldState.Alerts.push(alert);
             }
         }
+    }
+
+    if (config.worldState?.qtccAlerts) {
+        worldState.Alerts.push(
+            {
+                _id: {
+                    $oid: "68dc23c42e9d3acfa708ff3b"
+                },
+                Activation: {
+                    $date: {
+                        $numberLong: "1759327200000"
+                    }
+                },
+                Expiry: {
+                    $date: {
+                        $numberLong: "2000000000000"
+                    }
+                },
+                MissionInfo: {
+                    location: "SolNode123",
+                    missionType: "MT_SURVIVAL",
+                    faction: "FC_CORPUS",
+                    difficulty: 1,
+                    missionReward: {
+                        credits: 10000,
+                        items: ["/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/Plushy2021QTCC"]
+                    },
+                    levelOverride: "/Lotus/Levels/Proc/Corpus/CorpusShipSurvivalRaid",
+                    enemySpec: "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipSurvivalA",
+                    minEnemyLevel: 20,
+                    maxEnemyLevel: 30,
+                    descText: "/Lotus/Language/Alerts/TennoUnitedAlert",
+                    maxWaveNum: 5
+                },
+                Tag: "LotusGift",
+                ForceUnlock: true
+            },
+            {
+                _id: {
+                    $oid: "68dc2466e298b4f04206687a"
+                },
+                Activation: {
+                    $date: {
+                        $numberLong: "1759327200000"
+                    }
+                },
+                Expiry: {
+                    $date: {
+                        $numberLong: "2000000000000"
+                    }
+                },
+                MissionInfo: {
+                    location: "SolNode149",
+                    missionType: "MT_DEFENSE",
+                    faction: "FC_GRINEER",
+                    difficulty: 1,
+                    missionReward: {
+                        credits: 10000,
+                        items: ["/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/Plushy2022QTCC"]
+                    },
+                    levelOverride: "/Lotus/Levels/Proc/Grineer/GrineerShipyardsDefense",
+                    enemySpec: "/Lotus/Types/Game/EnemySpecs/GrineerShipyardsDefenseA",
+                    minEnemyLevel: 20,
+                    maxEnemyLevel: 30,
+                    descText: "/Lotus/Language/Alerts/TennoUnitedAlert",
+                    maxWaveNum: defenseWavesPerRotation * 1
+                },
+                Tag: "LotusGift",
+                ForceUnlock: true
+            },
+            {
+                _id: {
+                    $oid: "68dc26865e7cb56b820b4252"
+                },
+                Activation: {
+                    $date: {
+                        $numberLong: "1759327200000"
+                    }
+                },
+                Expiry: {
+                    $date: {
+                        $numberLong: "2000000000000"
+                    }
+                },
+                MissionInfo: {
+                    location: "SolNode39",
+                    missionType: "MT_EXCAVATE",
+                    faction: "FC_GRINEER",
+                    difficulty: 1,
+                    missionReward: {
+                        credits: 10000,
+                        items: ["/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/PlushyVirminkQTCC"]
+                    },
+                    levelOverride: "/Lotus/Levels/Proc/Grineer/GrineerForestExcavation",
+                    enemySpec: "/Lotus/Types/Game/EnemySpecs/ForestGrineerExcavationA",
+                    minEnemyLevel: 20,
+                    maxEnemyLevel: 30,
+                    descText: "/Lotus/Language/Alerts/TennoUnitedAlert",
+                    maxWaveNum: 5
+                },
+                Tag: "LotusGift",
+                ForceUnlock: true
+            }
+        );
     }
 
     const isFebruary = date.getUTCMonth() == 1;
