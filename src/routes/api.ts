@@ -53,6 +53,7 @@ import { evolveWeaponController } from "../controllers/api/evolveWeaponControlle
 import { findSessionsController } from "../controllers/api/findSessionsController.ts";
 import { fishmongerController } from "../controllers/api/fishmongerController.ts";
 import { focusController } from "../controllers/api/focusController.ts";
+import { forceRemoveItemController } from "../controllers/api/forceRemoveItemController.ts";
 import { fusionTreasuresController } from "../controllers/api/fusionTreasuresController.ts";
 import { gardeningController } from "../controllers/api/gardeningController.ts";
 import { genericUpdateController } from "../controllers/api/genericUpdateController.ts";
@@ -66,8 +67,8 @@ import { getGuildEventScoreController } from "../controllers/api/getGuildEventSc
 import { getGuildLogController } from "../controllers/api/getGuildLogController.ts";
 import { getIgnoredUsersController } from "../controllers/api/getIgnoredUsersController.ts";
 import { getNewRewardSeedController } from "../controllers/api/getNewRewardSeedController.ts";
-import { getProfileViewingDataPostController } from "../controllers/dynamic/getProfileViewingDataController.ts";
 import { getPastWeeklyChallengesController } from "../controllers/api/getPastWeeklyChallengesController.ts";
+import { getProfileViewingDataPostController } from "../controllers/dynamic/getProfileViewingDataController.ts";
 import { getShipController } from "../controllers/api/getShipController.ts";
 import { getVendorInfoController } from "../controllers/api/getVendorInfoController.ts";
 import { getVoidProjectionRewardsController } from "../controllers/api/getVoidProjectionRewardsController.ts";
@@ -273,6 +274,7 @@ apiRouter.post("/evolveWeapon.php", evolveWeaponController);
 apiRouter.post("/findSessions.php", findSessionsController);
 apiRouter.post("/fishmonger.php", fishmongerController);
 apiRouter.post("/focus.php", focusController);
+apiRouter.post("/forceRemoveItem.php", forceRemoveItemController);
 apiRouter.post("/fusionTreasures.php", fusionTreasuresController);
 apiRouter.post("/gardening.php", gardeningController);
 apiRouter.post("/genericUpdate.php", genericUpdateController);
