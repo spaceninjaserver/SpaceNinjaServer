@@ -2518,22 +2518,22 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             // 2016
             [
                 {
-                    items: ["/Lotus/StoreItems/Upgrades/Skins/Sigils/OrokinCatalyst"]
-                },
-                {
-                    items: ["/Lotus/StoreItems/Upgrades/Skins/Sigils/DotD2016Sigil"]
+                    items: ["/Lotus/StoreItems/Types/Items/MiscItems/OrokinCatalyst"]
                 },
                 {
                     items: [
-                        "/Lotus/StoreItems/Types/Items/MiscItems/OrokinReactor",
+                        "/Lotus/StoreItems/Upgrades/Skins/Sigils/DotD2016Sigil",
                         "/Lotus/StoreItems/Upgrades/Skins/Clan/BountyHunterBadgeItem"
                     ]
+                },
+                {
+                    items: ["/Lotus/StoreItems/Types/Items/MiscItems/OrokinReactor"]
                 }
             ],
             // 2015
             [
                 {
-                    items: ["/Lotus/StoreItems/Upgrades/Skins/Sigils/OrokinCatalyst"]
+                    items: ["/Lotus/StoreItems/Types/Items/MiscItems/OrokinCatalyst"]
                 },
                 {
                     items: ["/Lotus/StoreItems/Upgrades/Skins/Clan/BountyHunterBadgeItem"]
