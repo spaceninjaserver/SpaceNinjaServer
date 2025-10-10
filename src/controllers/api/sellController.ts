@@ -77,6 +77,9 @@ export const sellController: RequestHandler = async (req, res) => {
             requiredFields.add("CrewShipSalvagedWeaponSkins");
         }
     }
+    if (payload.Items.WeaponSkins) {
+        requiredFields.add("WeaponSkins");
+    }
     const inventory = await getInventory(accountId, Array.from(requiredFields).join(" "));
 
     // Give currency
@@ -302,6 +305,11 @@ export const sellController: RequestHandler = async (req, res) => {
             addFusionTreasures(inventory, [parseFusionTreasure(sellItem.String, sellItem.Count * -1)]);
         });
     }
+    if (payload.Items.WeaponSkins) {
+        payload.Items.WeaponSkins.forEach(sellItem => {
+            inventory.WeaponSkins.pull({ _id: sellItem.String });
+        });
+    }
 
     await inventory.save();
     res.json({
@@ -335,6 +343,7 @@ interface ISellRequest {
         CrewShipWeapons?: ISellItem[];
         CrewShipWeaponSkins?: ISellItem[];
         FusionTreasures?: ISellItem[];
+        WeaponSkins?: ISellItem[]; // SNS specific field
     };
     SellPrice: number;
     SellCurrency:

@@ -66,6 +66,7 @@ interface ItemLists {
     VaultDecoRecipes: ListedItem[];
     FlavourItems: ListedItem[];
     ShipDecorations: ListedItem[];
+    WeaponSkins: ListedItem[];
     //circuitGameModes: ListedItem[];
 }
 
@@ -107,7 +108,8 @@ const getItemListsController: RequestHandler = (req, response) => {
         TechProjects: [],
         VaultDecoRecipes: [],
         FlavourItems: [],
-        ShipDecorations: []
+        ShipDecorations: [],
+        WeaponSkins: []
         /*circuitGameModes: [
             {
                 uniqueName: "Survival",
@@ -298,10 +300,18 @@ const getItemListsController: RequestHandler = (req, response) => {
         });
     }
     for (const [uniqueName, item] of Object.entries(ExportCustoms)) {
-        res.miscitems.push({
-            uniqueName: uniqueName,
-            name: getString(item.name, lang)
-        });
+        if (
+            item.productCategory == "WeaponSkins" &&
+            !uniqueName.startsWith("/Lotus/Types/Game/Lotus") && // Base Items
+            !uniqueName.endsWith("ProjectileSkin") && // UnrealTournament ProjectileSkins
+            !uniqueName.endsWith("Coat") // Frost Prime stuff
+        ) {
+            res.WeaponSkins.push({
+                uniqueName: uniqueName,
+                name: getString(item.name, lang),
+                alwaysAvailable: item.alwaysAvailable
+            });
+        }
     }
 
     for (const [uniqueName, upgrade] of Object.entries(ExportUpgrades)) {

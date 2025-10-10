@@ -92,6 +92,7 @@ import type {
 } from "../types/equipmentTypes.ts";
 import { EquipmentFeatures, Status } from "../types/equipmentTypes.ts";
 import type { ITypeCount } from "../types/commonTypes.ts";
+import { skinLookupTable } from "../helpers/skinLookupTable.ts";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
@@ -2260,7 +2261,7 @@ export const setupKahlSyndicate = (inventory: TInventoryDatabaseDocument): void 
     });
 };
 
-export const cleanupInventory = (inventory: TInventoryDatabaseDocument): void => {
+export const cleanupInventory = async (inventory: TInventoryDatabaseDocument): Promise<void> => {
     inventory.CurrentLoadOutIds = inventory.CurrentLoadOutIds.map(fromDbOid);
 
     let index = inventory.MiscItems.findIndex(x => x.ItemType == "");
@@ -2312,6 +2313,99 @@ export const cleanupInventory = (inventory: TInventoryDatabaseDocument): void =>
         }
         if (numFixed != 0) {
             logger.debug(`removed ModularParts from ${numFixed} non-modular items`);
+        }
+    }
+
+    {
+        const weaponMap = new Map<string, string>();
+        for (const skin of inventory.WeaponSkins) {
+            weaponMap.set(skin.ItemType, skin._id.toString());
+        }
+
+        const itemsToAdd = new Set<string>();
+
+        for (const key of equipmentKeys) {
+            if (key in inventory) {
+                for (const equipment of inventory[key]) {
+                    for (const config of equipment.Configs) {
+                        if (config.Skins) collectSkins(config.Skins, weaponMap, itemsToAdd);
+                    }
+                }
+            }
+        }
+
+        for (const key of ["AdultOperatorLoadOuts", "OperatorLoadOuts", "KahlLoadOuts"] as const) {
+            if (key in inventory) {
+                for (const loadOut of inventory[key]) {
+                    if (loadOut.Skins) collectSkins(loadOut.Skins, weaponMap, itemsToAdd);
+                }
+            }
+        }
+
+        if (inventory.LotusCustomization?.Skins)
+            collectSkins(inventory.LotusCustomization.Skins, weaponMap, itemsToAdd);
+
+        if (itemsToAdd.size > 0) {
+            logger.debug(`Adding ${itemsToAdd.size} items due to migration from unlockAllSkins cheat`);
+            const inventoryChanges = await addItems(inventory, Array.from(itemsToAdd));
+
+            if (inventoryChanges.WeaponSkins) {
+                for (const skin of inventoryChanges.WeaponSkins as IWeaponSkinClient[]) {
+                    weaponMap.set(skin.ItemType, skin.ItemId.toString());
+                }
+            }
+
+            for (const key of equipmentKeys) {
+                if (key in inventory) {
+                    for (const equipment of inventory[key]) {
+                        for (const config of equipment.Configs) {
+                            if (config.Skins) replaceSkinIds(config.Skins, weaponMap);
+                        }
+                    }
+                }
+            }
+
+            for (const key of ["AdultOperatorLoadOuts", "OperatorLoadOuts", "KahlLoadOuts"] as const) {
+                if (key in inventory) {
+                    for (const loadOut of inventory[key]) {
+                        if (loadOut.Skins) replaceSkinIds(loadOut.Skins, weaponMap);
+                    }
+                }
+            }
+
+            if (inventory.LotusCustomization?.Skins) replaceSkinIds(inventory.LotusCustomization.Skins, weaponMap);
+        }
+    }
+};
+
+const collectSkins = (skins: string[], weaponMap: Map<string, string>, itemsToAdd: Set<string>): void => {
+    for (const skinId of skins) {
+        if (skinId.startsWith("ca70ca70ca70ca70")) {
+            const typeName = skinLookupTable[parseInt(skinId.slice(16), 16)];
+            if (!weaponMap.has(typeName)) {
+                const { requirement } = ExportCustoms[typeName];
+                if (typeof requirement == "string") {
+                    itemsToAdd.add(requirement);
+                } else {
+                    itemsToAdd.add(typeName);
+                }
+            }
+        }
+    }
+};
+
+const replaceSkinIds = (skins: string[], weaponMap: Map<string, string>): void => {
+    for (let i = 0; i < skins.length; i++) {
+        const skinId = skins[i];
+        if (skinId.startsWith("ca70ca70ca70ca70")) {
+            const typeName = skinLookupTable[parseInt(skinId.slice(16), 16)];
+            const inventoryId = weaponMap.get(typeName);
+            if (inventoryId) {
+                skins[i] = inventoryId;
+            } else if (typeName in ExportCustoms) {
+                const { requirement } = ExportCustoms[typeName];
+                skins[i] = typeof requirement == "string" ? typeName : "";
+            }
         }
     }
 };

@@ -599,6 +599,46 @@ function fetchItemList() {
                         }
                         itemMap[item.uniqueName] = { ...item, type };
                     });
+                } else if (type == "WeaponSkins") {
+                    let beardNumber = 1;
+                    let cutNumber = 13;
+                    let adultHeadNumber = 1;
+                    let headNumber = 1;
+                    items.forEach(item => {
+                        if (item.name == "") {
+                            if (item.uniqueName.includes("/Beards/")) {
+                                item.name = loc("code_drifterBeardName")
+                                    .split("|INDEX|")
+                                    .join(beardNumber.toString().padStart(3, "0"));
+                                beardNumber++;
+                            } else if (item.uniqueName.includes("/Hair/")) {
+                                item.name = loc("code_cutName")
+                                    .split("|INDEX|")
+                                    .join(cutNumber.toString().padStart(3, "0"));
+                                cutNumber++;
+                                if (cutNumber == 19) cutNumber = 21;
+                            } else if (item.uniqueName.includes("/Heads/Adult")) {
+                                item.name = loc("code_drifterFaceName")
+                                    .split("|INDEX|")
+                                    .join(adultHeadNumber.toString().padStart(3, "0"));
+                                adultHeadNumber++;
+                            } else if (item.uniqueName.includes("/Heads/")) {
+                                item.name = loc("code_operatorFaceName")
+                                    .split("|INDEX|")
+                                    .join(headNumber.toString().padStart(3, "0"));
+                                headNumber++;
+                            } else {
+                                item.name = item.uniqueName;
+                            }
+                        }
+                        if (!item.alwaysAvailable) {
+                            const option = document.createElement("option");
+                            option.setAttribute("data-key", item.uniqueName);
+                            option.value = item.name;
+                            document.getElementById("datalist-" + type).appendChild(option);
+                        }
+                        itemMap[item.uniqueName] = { ...item, type };
+                    });
                 } else {
                     const nameToItems = {};
                     items.forEach(item => {
@@ -1101,6 +1141,44 @@ function updateInventory() {
                 }
 
                 document.getElementById("FlavourItems-list").appendChild(tr);
+            });
+
+            document.getElementById("WeaponSkins-list").innerHTML = "";
+            data.WeaponSkins.forEach(item => {
+                if (item.ItemId.$oid.startsWith("ca70ca70ca70ca70")) return;
+                const datalist = document.getElementById("datalist-WeaponSkins");
+                const optionToRemove = datalist.querySelector(`option[data-key="${item.ItemType}"]`);
+                if (optionToRemove) {
+                    datalist.removeChild(optionToRemove);
+                }
+                const tr = document.createElement("tr");
+                {
+                    const td = document.createElement("td");
+                    const name = itemMap[item.ItemType]?.name?.trim();
+                    td.textContent = name || item.ItemType;
+                    tr.appendChild(td);
+                }
+                {
+                    const td = document.createElement("td");
+                    td.classList = "text-end text-nowrap";
+                    {
+                        const a = document.createElement("a");
+                        a.href = "#";
+                        a.onclick = function (event) {
+                            event.preventDefault();
+                            document.getElementById("WeaponSkins-list").removeChild(tr);
+                            reAddToItemList(itemMap, "WeaponSkins", item.ItemType);
+                            disposeOfGear("WeaponSkins", item.ItemId.$oid);
+                        };
+                        a.title = loc("code_remove");
+                        a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
+                        td.appendChild(a);
+                    }
+
+                    tr.appendChild(td);
+                }
+
+                document.getElementById("WeaponSkins-list").appendChild(tr);
             });
 
             const datalistEvolutionProgress = document.querySelectorAll("#datalist-EvolutionProgress option");

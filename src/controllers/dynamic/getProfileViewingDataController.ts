@@ -20,13 +20,14 @@ import type {
 } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { LoadoutIndex } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { RequestHandler } from "express";
-import { catBreadHash, getJSONfromString } from "../../helpers/stringHelpers.ts";
-import { ExportCustoms, ExportDojoRecipes } from "warframe-public-export-plus";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { ExportDojoRecipes } from "warframe-public-export-plus";
 import type { IStatsClient } from "../../types/statTypes.ts";
 import { toStoreItem } from "../../services/itemDataService.ts";
 import type { FlattenMaps } from "mongoose";
 import type { IEquipmentClient } from "../../types/equipmentTypes.ts";
 import type { ILoadoutConfigClient } from "../../types/saveLoadoutTypes.ts";
+import { skinLookupTable } from "../../helpers/skinLookupTable.ts";
 
 const getProfileViewingDataByPlayerIdImpl = async (playerId: string): Promise<IProfileViewingData | undefined> => {
     const account = await Account.findById(playerId, "DisplayName");
@@ -261,8 +262,6 @@ interface IXPComponentClient {
     locTags?: Record<string, string>;
 }
 
-let skinLookupTable: Record<number, string> | undefined;
-
 const resolveAndCollectSkins = (
     inventory: TInventoryDatabaseDocument,
     skins: Set<string>,
@@ -274,12 +273,6 @@ const resolveAndCollectSkins = (
                 // Resolve oids to type names
                 if (config.Skins[i].length == 24) {
                     if (config.Skins[i].substring(0, 16) == "ca70ca70ca70ca70") {
-                        if (!skinLookupTable) {
-                            skinLookupTable = {};
-                            for (const key of Object.keys(ExportCustoms)) {
-                                skinLookupTable[catBreadHash(key)] = key;
-                            }
-                        }
                         config.Skins[i] = skinLookupTable[parseInt(config.Skins[i].substring(16), 16)];
                     } else {
                         const skinItem = inventory.WeaponSkins.id(config.Skins[i]);

@@ -526,6 +526,24 @@
                         </div>
                     </div>
                 </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-lg-6">
+                        <div class="card" style="height: 400px;">
+                            <h5 class="card-header" data-loc="inventory_weaponSkins"></h5>
+                            <div class="card-body d-flex flex-column">
+                                <form class="input-group mb-3" onsubmit="doAcquireEquipment('WeaponSkins');return false;">
+                                    <input class="form-control" id="acquire-type-WeaponSkins" list="datalist-WeaponSkins" />
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                </form>
+                                <div class="overflow-auto">
+                                    <table class="table table-hover w-100">
+                                        <tbody id="WeaponSkins-list"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="card">
                     <h5 class="card-header" data-loc="general_bulkActions"></h5>
                     <div class="card-body">
@@ -538,6 +556,7 @@
                             <button class="btn btn-primary" onclick="debounce(addMissingEquipment, ['SentinelWeapons']);" data-loc="inventory_bulkAddSentinelWeapons"></button>
                             <button class="btn btn-primary" onclick="debounce(addMissingEquipment, ['FlavourItems']);" data-loc="inventory_bulkAddFlavourItems"></button>
                             <button class="btn btn-primary" onclick="debounce(addMissingEquipment, ['ShipDecorations']);" data-loc="inventory_bulkAddShipDecorations"></button>
+                            <button class="btn btn-primary" onclick="debounce(addMissingEquipment, ['WeaponSkins']);" data-loc="inventory_bulkAddWeaponSkins"></button>
                             <button class="btn btn-primary" onclick="debounce(addMissingEvolutionProgress);" data-loc="inventory_bulkAddEvolutionProgress"></button>
                         </div>
                         <div class="mb-2 d-flex flex-wrap gap-2">
@@ -1528,6 +1547,7 @@
     <datalist id="datalist-VaultDecoRecipes"></datalist>
     <datalist id="datalist-FlavourItems"></datalist>
     <datalist id="datalist-ShipDecorations"></datalist>
+    <datalist id="datalist-WeaponSkins"></datalist>
     <datalist id="datalist-circuitGameModes">
         <option>Survival</option>
         <option>VoidFlood</option>
