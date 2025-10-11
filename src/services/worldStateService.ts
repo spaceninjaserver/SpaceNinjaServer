@@ -1747,7 +1747,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             Personal: true,
             Bounty: true,
             ClampNodeScores: true,
-            Node: "EventNode28", // Incompatible with Wolf Hunt (2025), Orphix Venom, Warframe Anniversary
+            Node: "EventNode28", // Incompatible with Wolf Hunt, Orphix Venom, Warframe Anniversary
             MissionKeyName: "/Lotus/Types/Keys/GalleonRobberyAlertB",
             Desc: "/Lotus/Language/Events/GalleonRobberyEventMissionTitle",
             Icon: "/Lotus/Interface/Icons/Player/GalleonRobberiesEvent.png",
@@ -2144,7 +2144,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     }
 
     if (config.worldState?.anniversary != undefined) {
-        // Incompatible with: Use Tag from Warframe Anniversary for old Events, Wolf Hunt (2025), Galleon Of Ghouls, Hallowed Flame, Hallowed Nightmares, Dog Days, Proxy Rebellion, Long Shadow
+        // Incompatible with: Use Tag from Warframe Anniversary for old Events, Wolf Hunt, Galleon Of Ghouls, Hallowed Flame, Hallowed Nightmares, Dog Days, Proxy Rebellion, Long Shadow
         const goalsByWeek: Partial<IGoal>[][] = [
             [
                 {
@@ -2363,65 +2363,108 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         });
     }
 
-    if (config.worldState?.wolfHunt) {
-        worldState.Goals.push({
-            _id: {
-                $oid: "67ed7672798d6466172e3b9d"
-            },
-            Activation: {
-                $date: {
-                    $numberLong: "1743616800000"
-                }
-            },
-            Expiry: {
-                $date: {
-                    $numberLong: "2000000000000"
-                }
-            },
-            Count: 0,
-            Goal: 3,
-            InterimGoals: [1, 2],
-            BonusGoal: 4,
-            Success: 0,
-            Personal: true,
-            Bounty: true,
-            ClampNodeScores: true,
-            Node: "EventNode29",
-            ConcurrentMissionKeyNames: [
-                "/Lotus/Types/Keys/WolfTacAlertReduxB",
-                "/Lotus/Types/Keys/WolfTacAlertReduxC",
-                "/Lotus/Types/Keys/WolfTacAlertReduxD"
-            ],
-            ConcurrentNodeReqs: [1, 2, 3],
-            ConcurrentNodes: ["EventNode28", "EventNode39", "EventNode40"], // Incompatible with Galleon Of Ghouls, Orphix Venom, Warframe Anniversary
-            MissionKeyName: "/Lotus/Types/Keys/WolfTacAlertReduxA",
-            Faction: "FC_GRINEER",
-            Desc: "/Lotus/Language/Alerts/WolfAlert",
-            Icon: "/Lotus/Interface/Icons/Npcs/Seasonal/WolfStalker.png",
-            Tag: "WolfHuntRedux",
-            InterimRewards: [
-                {
-                    credits: 50000,
-                    items: ["/Lotus/StoreItems/Types/Recipes/Weapons/WeaponParts/ThrowingHammerHandle"]
+    if (config.worldState?.wolfHunt != undefined) {
+        if (config.worldState.wolfHunt == 0) {
+            worldState.Goals.push({
+                _id: {
+                    $oid: "67ed7672798d6466172e3b9c"
                 },
-                {
-                    credits: 50000,
-                    items: ["/Lotus/StoreItems/Types/Recipes/Weapons/WeaponParts/ThrowingHammerHead"]
+                Activation: {
+                    $date: {
+                        $numberLong: "1743616800000"
+                    }
+                },
+                Expiry: {
+                    $date: {
+                        $numberLong: "2000000000000"
+                    }
+                },
+                Count: 0,
+                Goal: 1,
+                BonusGoal: 2,
+                Success: 0,
+                Personal: true,
+                Bounty: true,
+                ClampNodeScores: true,
+                Node: "EventNode29",
+                ConcurrentMissionKeyNames: ["/Lotus/Types/Keys/WolfTacAlertB"],
+                ConcurrentNodeReqs: [1],
+                ConcurrentNodes: ["EventNode28"], // Incompatible with Galleon Of Ghouls, Orphix Venom, Warframe Anniversary
+                MissionKeyName: "/Lotus/Types/Keys/WolfTacAlertA",
+                Faction: "FC_GRINEER",
+                Desc: "/Lotus/Language/Alerts/WolfAlert",
+                Icon: "/Lotus/Interface/Icons/Npcs/Seasonal/WolfStalker.png",
+                Tag: "WolfHuntRedux", // unfaithful
+                Reward: {
+                    countedItems: [{ ItemType: "/Lotus/Types/Items/MiscItems/Alertium", ItemCount: 10 }]
+                },
+                BonusReward: {
+                    items: [
+                        "/Lotus/StoreItems/Upgrades/Mods/Randomized/RawRifleRandomMod",
+                        "/Lotus/StoreItems/Upgrades/Skins/Clan/BountyHunterBadgeItem"
+                    ]
                 }
-            ],
-            Reward: {
-                credits: 50000,
-                items: ["/Lotus/StoreItems/Types/Recipes/Weapons/WeaponParts/ThrowingHammerMotor"]
-            },
-            BonusReward: {
-                credits: 50000,
-                items: [
-                    "/Lotus/StoreItems/Types/Recipes/Weapons/ThrowingHammerBlueprint",
-                    "/Lotus/StoreItems/Types/Items/MiscItems/OrokinCatalyst",
-                    "/Lotus/StoreItems/Upgrades/Skins/Clan/BountyHunterBadgeItem"
-                ]
-            }
-        });
+            });
+        } else if (config.worldState.wolfHunt == 1) {
+            worldState.Goals.push({
+                _id: {
+                    $oid: "67ed7672798d6466172e3b9d"
+                },
+                Activation: {
+                    $date: {
+                        $numberLong: "1743616800000"
+                    }
+                },
+                Expiry: {
+                    $date: {
+                        $numberLong: "2000000000000"
+                    }
+                },
+                Count: 0,
+                Goal: 3,
+                InterimGoals: [1, 2],
+                BonusGoal: 4,
+                Success: 0,
+                Personal: true,
+                Bounty: true,
+                ClampNodeScores: true,
+                Node: "EventNode29",
+                ConcurrentMissionKeyNames: [
+                    "/Lotus/Types/Keys/WolfTacAlertReduxB",
+                    "/Lotus/Types/Keys/WolfTacAlertReduxC",
+                    "/Lotus/Types/Keys/WolfTacAlertReduxD"
+                ],
+                ConcurrentNodeReqs: [1, 2, 3],
+                ConcurrentNodes: ["EventNode28", "EventNode39", "EventNode40"], // Incompatible with Galleon Of Ghouls, Orphix Venom, Warframe Anniversary
+                MissionKeyName: "/Lotus/Types/Keys/WolfTacAlertReduxA",
+                Faction: "FC_GRINEER",
+                Desc: "/Lotus/Language/Alerts/WolfAlert",
+                Icon: "/Lotus/Interface/Icons/Npcs/Seasonal/WolfStalker.png",
+                Tag: "WolfHuntRedux",
+                InterimRewards: [
+                    {
+                        credits: 50000,
+                        items: ["/Lotus/StoreItems/Types/Recipes/Weapons/WeaponParts/ThrowingHammerHandle"]
+                    },
+                    {
+                        credits: 50000,
+                        items: ["/Lotus/StoreItems/Types/Recipes/Weapons/WeaponParts/ThrowingHammerHead"]
+                    }
+                ],
+                Reward: {
+                    credits: 50000,
+                    items: ["/Lotus/StoreItems/Types/Recipes/Weapons/WeaponParts/ThrowingHammerMotor"]
+                },
+                BonusReward: {
+                    credits: 50000,
+                    items: [
+                        "/Lotus/StoreItems/Types/Recipes/Weapons/ThrowingHammerBlueprint",
+                        "/Lotus/StoreItems/Types/Items/MiscItems/OrokinCatalyst",
+                        "/Lotus/StoreItems/Upgrades/Skins/Clan/BountyHunterBadgeItem"
+                    ]
+                }
+            });
+        }
     }
 
     const tagsForOlderGoals: string[] = [
@@ -2822,7 +2865,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                 Success: 0,
                 Personal: true,
                 Best: true,
-                Node: "EventNode28", // Incompatible with Galleon Of Ghouls, Wolf Hunt (2025)
+                Node: "EventNode28", // Incompatible with Galleon Of Ghouls, Wolf Hunt
                 MissionKeyName: "/Lotus/Types/Keys/MechSurvivalGrineerGalleon",
                 Faction: "FC_SENTIENT",
                 Desc: "/Lotus/Language/Events/MechEventMissionTier2",

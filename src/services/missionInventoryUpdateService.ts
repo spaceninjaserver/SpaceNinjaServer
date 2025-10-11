@@ -2479,6 +2479,18 @@ const goalMessagesByKey: Record<string, { sndr: string; msg: string; sub: string
         sub: "/Lotus/Language/Inbox/WaterFightRewardSubjectD",
         icon: "/Lotus/Interface/Icons/Npcs/Grineer/KelaDeThaym.png"
     },
+    "/Lotus/Types/Keys/WolfTacAlertA": {
+        sndr: "/Lotus/Language/Bosses/NoraNight",
+        msg: "/Lotus/Language/Inbox/WolfTacAlertBody",
+        sub: "/Lotus/Language/Inbox/WolfTacAlertTitle",
+        icon: "/Lotus/Interface/Icons/Npcs/Seasonal/NoraNight.png"
+    },
+    "/Lotus/Types/Keys/WolfTacAlertxB": {
+        sndr: "/Lotus/Language/Bosses/NoraNight",
+        msg: "/Lotus/Language/Inbox/WolfTacAlertHardBody",
+        sub: "/Lotus/Language/Inbox/WolfTacAlertHardTitle",
+        icon: "/Lotus/Interface/Icons/Npcs/Seasonal/NoraNight.png"
+    },
     "/Lotus/Types/Keys/WolfTacAlertReduxA": {
         sndr: "/Lotus/Language/Bosses/NoraNight",
         msg: "/Lotus/Language/Inbox/WolfTacAlertBody",

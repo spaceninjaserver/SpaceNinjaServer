@@ -41,7 +41,7 @@ export interface IConfig {
         baroAlwaysAvailable?: boolean;
         baroFullyStocked?: boolean;
         varziaFullyStocked?: boolean;
-        wolfHunt?: boolean;
+        wolfHunt?: number;
         orphixVenom?: boolean;
         longShadow?: boolean;
         hallowedFlame?: boolean;

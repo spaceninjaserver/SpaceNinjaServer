@@ -284,7 +284,7 @@ dict = {
     worldState_plagueStar: `Plagenstern`,
     worldState_dogDays: `Hitzefrei`,
     worldState_dogDaysRewards: `[UNTRANSLATED] Dog Days Rewards`,
-    worldState_wolfHunt: `Wolfsjagd (2025)`,
+    worldState_wolfHunt: `Wolfsjagd`,
     worldState_voidCorruption: `Void-Korruption (|VAL|)`,
     worldState_orphixVenom: `Orphix Gift`,
     worldState_longShadow: `Lange Schatten`,

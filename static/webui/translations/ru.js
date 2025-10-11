@@ -284,7 +284,7 @@ dict = {
     worldState_plagueStar: `Чумная звезда`,
     worldState_dogDays: `Знойные дни`,
     worldState_dogDaysRewards: `Награды Знойных дней`,
-    worldState_wolfHunt: `Волчья Охота (2025)`,
+    worldState_wolfHunt: `Волчья Охота`,
     worldState_voidCorruption: `Искажение Бездны (|VAL|)`,
     worldState_orphixVenom: `Яд Орфикса`,
     worldState_longShadow: `Длинная Тень`,

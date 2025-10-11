@@ -284,7 +284,7 @@ dict = {
     worldState_plagueStar: `Морова зірка`,
     worldState_dogDays: `Спекотні дні`,
     worldState_dogDaysRewards: `Нагороди Спекотних днів`,
-    worldState_wolfHunt: `Полювання на Вовка (2025)`,
+    worldState_wolfHunt: `Полювання на Вовка`,
     worldState_voidCorruption: `Викривлення Порожнечі (|VAL|)`,
     worldState_orphixVenom: `Орфіксова отрута`,
     worldState_longShadow: `Довга тінь`,
