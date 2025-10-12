@@ -711,6 +711,10 @@ function fetchItemList() {
                                     option.value += " (" + item.subtype + ")";
                                 }
                                 document.getElementById("datalist-" + type).appendChild(option);
+                                if (item.eligibleForVault) {
+                                    const vaultOption = option.cloneNode(true);
+                                    document.getElementById("datalist-VaultMiscItems").appendChild(vaultOption);
+                                }
                             } else {
                                 //console.log(`Not adding ${item.uniqueName} to datalist for ${type} due to duplicate display name: ${item.name}`);
                             }
@@ -1802,6 +1806,8 @@ function updateInventory() {
                                 document.getElementById("VaultRegularCredits-owned").classList.remove("mb-0");
                                 document.getElementById("vaultPremiumCredits-form").classList.remove("d-none");
                                 document.getElementById("VaultPremiumCredits-owned").classList.remove("mb-0");
+                                document.getElementById("vaultMiscItems-form").classList.remove("d-none");
+                                document.getElementById("vaultShipDecorations-form").classList.remove("d-none");
                             }
                             if (userGuildMember.Rank <= 1) {
                                 document.querySelectorAll("#guild-actions button").forEach(btn => {
@@ -1892,42 +1898,55 @@ function updateInventory() {
                             document.getElementById("TechProjects-list").appendChild(tr);
                         });
 
-                        document.getElementById("VaultDecoRecipes-list").innerHTML = "";
-                        guildData.VaultDecoRecipes ??= [];
-                        guildData.VaultDecoRecipes.forEach(item => {
-                            const datalist = document.getElementById("datalist-VaultDecoRecipes");
-                            const optionToRemove = datalist.querySelector(`option[data-key="${item.ItemType}"]`);
-                            if (optionToRemove) {
-                                datalist.removeChild(optionToRemove);
-                            }
-                            const tr = document.createElement("tr");
-                            tr.setAttribute("data-item-type", item.ItemType);
-                            {
-                                const td = document.createElement("td");
-                                td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
-                                tr.appendChild(td);
-                            }
-                            {
-                                const td = document.createElement("td");
-                                td.classList = "text-end text-nowrap";
-
-                                if (userGuildMember && userGuildMember.Rank <= 1) {
-                                    const a = document.createElement("a");
-                                    a.href = "#";
-                                    a.onclick = function (event) {
-                                        event.preventDefault();
-                                        reAddToItemList(itemMap, "VaultDecoRecipes", item.ItemType);
-                                        removeVaultDecoRecipe(item.ItemType);
-                                    };
-                                    a.title = loc("code_remove");
-                                    a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
-                                    td.appendChild(a);
+                        ["VaultDecoRecipes", "VaultMiscItems", "VaultShipDecorations"].forEach(vaultKey => {
+                            document.getElementById(vaultKey + "-list").innerHTML = "";
+                            (guildData[vaultKey] ??= []).forEach(item => {
+                                if (vaultKey == "VaultDecoRecipes") {
+                                    const datalist = document.getElementById("datalist-VaultDecoRecipes");
+                                    const optionToRemove = datalist.querySelector(
+                                        `option[data-key="${item.ItemType}"]`
+                                    );
+                                    if (optionToRemove) {
+                                        datalist.removeChild(optionToRemove);
+                                    }
                                 }
 
-                                tr.appendChild(td);
-                            }
+                                const tr = document.createElement("tr");
+                                tr.setAttribute("data-item-type", item.ItemType);
+                                {
+                                    const td = document.createElement("td");
+                                    td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
+                                    if (item.ItemCount > 1) {
+                                        td.innerHTML += ` <span title='${loc("code_count")}'>🗍 ${parseInt(item.ItemCount)}</span>`;
+                                    }
+                                    tr.appendChild(td);
+                                }
+                                {
+                                    const td = document.createElement("td");
+                                    td.classList = "text-end text-nowrap";
+                                    const canRemove =
+                                        vaultKey === "VaultDecoRecipes"
+                                            ? userGuildMember && userGuildMember.Rank <= 1
+                                            : userGuildPermissions && userGuildPermissions & 64;
+                                    if (canRemove) {
+                                        const a = document.createElement("a");
+                                        a.href = "#";
+                                        a.title = loc("code_remove");
+                                        a.onclick = e => {
+                                            e.preventDefault();
+                                            if (vaultKey == "VaultDecoRecipes") {
+                                                reAddToItemList(itemMap, vaultKey, item.ItemType);
+                                            }
+                                            removeVaultItem(vaultKey, item.ItemType, item.ItemCount * -1);
+                                        };
+                                        a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
+                                        td.appendChild(a);
+                                    }
+                                    tr.appendChild(td);
+                                }
 
-                            document.getElementById("VaultDecoRecipes-list").appendChild(tr);
+                                document.getElementById(vaultKey + "-list").appendChild(tr);
+                            });
                         });
 
                         document.getElementById("Members-list").innerHTML = "";
@@ -2346,41 +2365,52 @@ function addMissingEquipment(categories) {
     }
 }
 
-function addVaultDecoRecipe() {
-    const uniqueName = getKey(document.getElementById("acquire-type-VaultDecoRecipes"));
-    if (!uniqueName) {
-        $("#acquire-type-VaultDecoRecipes").addClass("is-invalid").focus();
+function addVaultItem(vaultType) {
+    const ItemType = getKey(document.getElementById(`acquire-type-${vaultType}`));
+    if (!ItemType) {
+        $(`#acquire-type-${vaultType}`).addClass("is-invalid").focus();
         return;
     }
-    revalidateAuthz().then(() => {
-        const req = $.post({
-            url: "/custom/addVaultDecoRecipe?" + window.authz + "&guildId=" + window.guildId,
-            contentType: "application/json",
-            data: JSON.stringify([
-                {
-                    ItemType: uniqueName,
-                    ItemCount: 1
-                }
-            ])
+    const ItemCount = ["VaultMiscItems", "VaultShipDecorations"].includes(vaultType)
+        ? parseInt($(`#${vaultType}-count`).val())
+        : 1;
+    if (ItemCount != 0) {
+        revalidateAuthz().then(() => {
+            const req = $.post({
+                url: "/custom/addVaultTypeCount?" + window.authz + "&guildId=" + window.guildId,
+                contentType: "application/json",
+                data: JSON.stringify({
+                    vaultType,
+                    items: [
+                        {
+                            ItemType,
+                            ItemCount
+                        }
+                    ]
+                })
+            });
+            req.done(() => {
+                document.getElementById(`acquire-type-${vaultType}`).value = "";
+                updateInventory();
+            });
         });
-        req.done(() => {
-            document.getElementById("acquire-type-VaultDecoRecipes").value = "";
-            updateInventory();
-        });
-    });
+    }
 }
 
-function removeVaultDecoRecipe(uniqueName) {
+function removeVaultItem(vaultType, ItemType, ItemCount) {
     revalidateAuthz().then(() => {
         const req = $.post({
-            url: "/custom/addVaultDecoRecipe?" + window.authz + "&guildId=" + window.guildId,
+            url: "/custom/addVaultTypeCount?" + window.authz + "&guildId=" + window.guildId,
             contentType: "application/json",
-            data: JSON.stringify([
-                {
-                    ItemType: uniqueName,
-                    ItemCount: -1
-                }
-            ])
+            data: JSON.stringify({
+                vaultType,
+                items: [
+                    {
+                        ItemType,
+                        ItemCount
+                    }
+                ]
+            })
         });
         req.done(() => {
             updateInventory();
@@ -2462,13 +2492,16 @@ function fundGuildTechProject(uniqueName) {
     });
 }
 
-function dispatchAddVaultDecoRecipesBatch(requests) {
+function dispatchAddVaultItemsBatch(requests, vaultType) {
     return new Promise(resolve => {
         revalidateAuthz().then(() => {
             const req = $.post({
-                url: "/custom/addVaultDecoRecipe?" + window.authz + "&guildId=" + window.guildId,
+                url: "/custom/addVaultItems?" + window.authz + "&guildId=" + window.guildId,
                 contentType: "application/json",
-                data: JSON.stringify(requests)
+                data: JSON.stringify({
+                    vaultType,
+                    items: requests
+                })
             });
             req.done(() => {
                 updateInventory();
@@ -2478,20 +2511,23 @@ function dispatchAddVaultDecoRecipesBatch(requests) {
     });
 }
 
-function addMissingVaultDecoRecipes() {
+function addMissingVaultItems(vaultType) {
     const requests = [];
 
-    document.querySelectorAll("#datalist-VaultDecoRecipes" + " option").forEach(elm => {
-        if (!document.querySelector("#VaultDecoRecipes-list [data-item-type='" + elm.getAttribute("data-key") + "']")) {
-            requests.push({ ItemType: elm.getAttribute("data-key"), ItemCount: 1 });
+    document.querySelectorAll(`#datalist-${vaultType} option`).forEach(elm => {
+        const datalist = vaultType === "VaultShipDecorations" ? "ShipDecorations" : vaultType;
+        if (!document.querySelector(`#${datalist}-list [data-item-type='${elm.getAttribute("data-key")}']`)) {
+            let ItemCount = 1;
+            if (category == "VaultShipDecorations") ItemCount = 999999;
+            requests.push({ ItemType: elm.getAttribute("data-key"), ItemCount });
         }
     });
 
     if (
         requests.length != 0 &&
-        window.confirm(loc("code_addDecoRecipesConfirm").split("|COUNT|").join(requests.length))
+        window.confirm(loc("code_addVaultItemsConfirm").split("|COUNT|").join(requests.length))
     ) {
-        return dispatchAddVaultDecoRecipesBatch(requests);
+        return dispatchAddVaultItemsBatch(requests, vaultType);
     }
 }
 
@@ -3445,6 +3481,12 @@ single.getRoute("#guild-route").on("beforeload", function () {
     document.getElementById("VaultDecoRecipes-list").innerHTML = "";
     document.getElementById("vaultDecoRecipes-form").classList.add("d-none");
     document.getElementById("acquire-type-VaultDecoRecipes").value = "";
+    document.getElementById("VaultMiscItems-list").innerHTML = "";
+    document.getElementById("vaultMiscItems-form").classList.add("d-none");
+    document.getElementById("acquire-type-VaultMiscItems").value = "";
+    document.getElementById("VaultShipDecorations-list").innerHTML = "";
+    document.getElementById("vaultShipDecorations-form").classList.add("d-none");
+    document.getElementById("acquire-type-VaultShipDecorations").value = "";
     document.getElementById("Alliance-list").innerHTML = "";
     document.getElementById("guildView-alliance").textContent = "";
     document.getElementById("Members-list").innerHTML = "";

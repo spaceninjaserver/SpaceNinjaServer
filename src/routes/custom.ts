@@ -34,7 +34,7 @@ import {
     fundTechProjectController,
     removeTechProjectController
 } from "../controllers/custom/techProjectController.ts";
-import { addVaultDecoRecipeController } from "../controllers/custom/addVaultDecoRecipeController.ts";
+import { addVaultTypeCountController } from "../controllers/custom/addVaultTypeCountController.ts";
 import { addXpController } from "../controllers/custom/addXpController.ts";
 import { importController } from "../controllers/custom/importController.ts";
 import { manageQuestsController } from "../controllers/custom/manageQuestsController.ts";
@@ -81,7 +81,7 @@ customRouter.post("/addCurrency", addCurrencyController);
 customRouter.post("/addItems", addItemsController);
 customRouter.post("/addTechProject", addTechProjectController);
 customRouter.post("/removeTechProject", removeTechProjectController);
-customRouter.post("/addVaultDecoRecipe", addVaultDecoRecipeController);
+customRouter.post("/addVaultTypeCount", addVaultTypeCountController);
 customRouter.post("/fundTechProject", fundTechProjectController);
 customRouter.post("/completeTechProject", completeTechProjectsController);
 customRouter.post("/addXp", addXpController);

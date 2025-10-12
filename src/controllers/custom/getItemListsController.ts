@@ -38,6 +38,7 @@ interface ListedItem {
     parazon?: boolean;
     alwaysAvailable?: boolean;
     maxLevelCap?: number;
+    eligibleForVault?: boolean;
 }
 
 interface ItemLists {
@@ -141,6 +142,12 @@ const getItemListsController: RequestHandler = (req, response) => {
             }
         ]*/
     };
+    const eligibleForVault = new Set<string>([
+        ...Object.values(ExportDojoRecipes.research).flatMap(r => r.ingredients.map(i => i.ItemType)),
+        ...Object.values(ExportDojoRecipes.fabrications).flatMap(f => f.ingredients.map(i => i.ItemType)),
+        ...Object.values(ExportDojoRecipes.rooms).flatMap(r => r.ingredients.map(i => i.ItemType)),
+        ...Object.values(ExportDojoRecipes.decos).flatMap(d => d.ingredients.map(i => i.ItemType))
+    ]);
     for (const [uniqueName, item] of Object.entries(ExportWarframes)) {
         res[item.productCategory].push({
             uniqueName,
@@ -246,7 +253,8 @@ const getItemListsController: RequestHandler = (req, response) => {
             res.miscitems.push({
                 uniqueName: uniqueName,
                 name: name,
-                subtype: "Resource"
+                subtype: "Resource",
+                ...(eligibleForVault.has(uniqueName) && { eligibleForVault: true })
             });
         }
     }
