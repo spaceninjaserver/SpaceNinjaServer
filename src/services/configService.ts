@@ -83,6 +83,20 @@ export interface IConfig {
 }
 
 export const configRemovedOptionsKeys = [
+    "testQuestKey",
+    "lockTime",
+    "starDays",
+    "platformCDNs",
+    "completeAllQuests",
+    "worldSeed",
+    "unlockAllQuests",
+    "unlockAllMissions",
+    "version",
+    "matchmakingBuildId",
+    "buildLabel",
+    "infiniteResources",
+    "testMission",
+    "skipStoryModeChoice",
     "NRS",
     "myIrcAddresses",
     "skipAllDialogue",
