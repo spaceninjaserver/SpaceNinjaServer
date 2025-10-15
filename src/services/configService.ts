@@ -83,6 +83,7 @@ export interface IConfig {
 }
 
 export const configRemovedOptionsKeys = [
+    "unlockallShipFeatures",
     "testQuestKey",
     "lockTime",
     "starDays",
