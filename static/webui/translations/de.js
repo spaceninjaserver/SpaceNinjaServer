@@ -48,7 +48,7 @@ dict = {
     code_unlockLevelCap: `[UNTRANSLATED] Unlock level cap`,
     code_count: `Anzahl`,
     code_focusAllUnlocked: `Alle Fokus-Schulen sind bereits freigeschaltet.`,
-    code_focusUnlocked: `|COUNT| neue Fokus-Schulen freigeschaltet! Ein Inventar-Update wird benötigt, damit die Änderungen im Spiel sichtbar werden. Die Sternenkarte zu besuchen, sollte der einfachste Weg sein, dies auszulösen.`,
+    code_focusUnlocked: `|COUNT| neue Fokus-Schulen freigeschaltet! Ein Inventar-Update wird benötigt, damit die Änderungen im Spiel sichtbar werden.`,
     code_addModsConfirm: `Bist du sicher, dass du |COUNT| Mods zu deinem Account hinzufügen möchtest?`,
     code_succImport: `Erfolgreich importiert.`,
     code_succRelog: `Fertig. Bitte beachte, dass du dich neu einloggen musst, um Änderungen im Spiel zu sehen.`,

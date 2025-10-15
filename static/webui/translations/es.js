@@ -48,7 +48,7 @@ dict = {
     code_unlockLevelCap: `Desbloquear level cap`,
     code_count: `Cantidad`,
     code_focusAllUnlocked: `Todas las escuelas de enfoque ya están desbloqueadas.`,
-    code_focusUnlocked: `¡Desbloqueadas |COUNT| nuevas escuelas de enfoque! Se necesita una actualización del inventario para reflejar los cambios en el juego. Visitar la navegación debería ser la forma más sencilla de activarlo.`,
+    code_focusUnlocked: `¡Desbloqueadas |COUNT| nuevas escuelas de enfoque! Se necesita una actualización del inventario para reflejar los cambios en el juego.`,
     code_addModsConfirm: `¿Estás seguro de que deseas agregar |COUNT| modificadores a tu cuenta?`,
     code_succImport: `Importación exitosa.`,
     code_succRelog: `Hecho. Ten en cuenta que deberás volver a iniciar sesión para ver los cambios en el juego.`,

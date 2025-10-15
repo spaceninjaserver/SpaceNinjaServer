@@ -48,7 +48,7 @@ dict = {
     code_unlockLevelCap: `[UNTRANSLATED] Unlock level cap`,
     code_count: `数量`,
     code_focusAllUnlocked: `所有专精学派均已解锁`,
-    code_focusUnlocked: `已解锁 |COUNT| 个新专精学派!需要游戏内仓库更新才能生效,您可以通过访问星图来触发仓库更新.`,
+    code_focusUnlocked: `已解锁 |COUNT| 个新专精学派!需要游戏内仓库更新才能生效.`,
     code_addModsConfirm: `确定要向您的账户添加 |COUNT| 张MOD吗?`,
     code_succImport: `导入成功`,
     code_succRelog: `完成.需要重新登录游戏才能看到变化.`,

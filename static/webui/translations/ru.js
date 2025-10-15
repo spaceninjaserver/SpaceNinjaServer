@@ -48,7 +48,7 @@ dict = {
     code_unlockLevelCap: `Разблокировать ограничение уровня`,
     code_count: `Количество`,
     code_focusAllUnlocked: `Все школы Фокуса уже разблокированы.`,
-    code_focusUnlocked: `Разблокировано |COUNT| новых школ Фокуса! Для отображения изменений в игре потребуется обновление инвентаря. Посещение навигации — самый простой способ этого добиться.`,
+    code_focusUnlocked: `[UNTRANSLATED] Unlocked |COUNT| new focus schools! An inventory update will be needed for the changes to be reflected in-game.`,
     code_addModsConfirm: `Вы уверены, что хотите добавить |COUNT| модов на ваш аккаунт?`,
     code_succImport: `Успешно импортировано.`,
     code_succRelog: `Готово. Обратите внимание, что вам нужно будет перезайти, чтобы увидеть изменения в игре.`,
