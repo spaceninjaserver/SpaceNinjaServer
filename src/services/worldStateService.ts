@@ -35,7 +35,8 @@ import type {
     IVoidTrader,
     IVoidTraderOffer,
     IWorldState,
-    TCircuitGameMode
+    TCircuitGameMode,
+    IFlashSale
 } from "../types/worldStateTypes.ts";
 import { toMongoDate, toOid, version_compare } from "../helpers/inventoryHelpers.ts";
 import { logger } from "../utils/logger.ts";
@@ -1580,21 +1581,16 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     }
 
     if (config.worldState?.qtccAlerts) {
+        const activationTimeStamp = "1759327200000";
+        const expiryTimeStamp = "2000000000000";
+
         worldState.Alerts.push(
             {
                 _id: {
                     $oid: "68dc23c42e9d3acfa708ff3b"
                 },
-                Activation: {
-                    $date: {
-                        $numberLong: "1759327200000"
-                    }
-                },
-                Expiry: {
-                    $date: {
-                        $numberLong: "2000000000000"
-                    }
-                },
+                Activation: { $date: { $numberLong: activationTimeStamp } },
+                Expiry: { $date: { $numberLong: expiryTimeStamp } },
                 MissionInfo: {
                     location: "SolNode123",
                     missionType: "MT_SURVIVAL",
@@ -1618,16 +1614,8 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                 _id: {
                     $oid: "68dc2466e298b4f04206687a"
                 },
-                Activation: {
-                    $date: {
-                        $numberLong: "1759327200000"
-                    }
-                },
-                Expiry: {
-                    $date: {
-                        $numberLong: "2000000000000"
-                    }
-                },
+                Activation: { $date: { $numberLong: activationTimeStamp } },
+                Expiry: { $date: { $numberLong: expiryTimeStamp } },
                 MissionInfo: {
                     location: "SolNode149",
                     missionType: "MT_DEFENSE",
@@ -1651,16 +1639,8 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                 _id: {
                     $oid: "68dc26865e7cb56b820b4252"
                 },
-                Activation: {
-                    $date: {
-                        $numberLong: "1759327200000"
-                    }
-                },
-                Expiry: {
-                    $date: {
-                        $numberLong: "2000000000000"
-                    }
-                },
+                Activation: { $date: { $numberLong: activationTimeStamp } },
+                Expiry: { $date: { $numberLong: expiryTimeStamp } },
                 MissionInfo: {
                     location: "SolNode39",
                     missionType: "MT_EXCAVATE",
@@ -1681,6 +1661,72 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                 ForceUnlock: true
             }
         );
+
+        const storeItems: (Partial<IFlashSale> & { TypeName: string })[] = [
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/ImageConquera2021D", RegularOverride: 1 },
+            { TypeName: "/Lotus/Upgrades/Skins/Operator/Tattoos/TattooTennoI", RegularOverride: 1 },
+            { TypeName: "/Lotus/Upgrades/Skins/Operator/Tattoos/TattooTennoH", RegularOverride: 1 },
+            { TypeName: "/Lotus/Upgrades/Skins/Clan/QTCC2024EmblemItem", RegularOverride: 1 },
+            { TypeName: "/Lotus/Types/Items/ShipDecos/Conquera2024Display", RegularOverride: 1 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageConqueraGlyphVII", RegularOverride: 1 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageConqueraGlyphVI", RegularOverride: 1 },
+            { TypeName: "/Lotus/Interface/Graphics/CustomUI/ConqueraStyle", RegularOverride: 1 },
+            { TypeName: "/Lotus/Interface/Graphics/CustomUI/Backgrounds/ConqueraBackground", RegularOverride: 1 },
+            { TypeName: "/Lotus/Types/Items/ShipDecos/Conquera2021Deco", RegularOverride: 1 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/ImageConquera2022A", RegularOverride: 1 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/ImageConquera2021B", RegularOverride: 1 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/ImageConquera2021A", RegularOverride: 1 },
+            { TypeName: "/Lotus/Upgrades/Skins/Scarves/TnCharityRibbonSyandana", RegularOverride: 1 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/ImageConquera2021C", RegularOverride: 1 },
+            { TypeName: "/Lotus/Types/Items/ShipDecos/Venus/Conquera2023CommunityDisplay", RegularOverride: 1 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageConqueraGlyphUpdated", RegularOverride: 1 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/ImageConquera", RegularOverride: 1 },
+            { TypeName: "/Lotus/Upgrades/Skins/Sigils/QTCC2023ConqueraSigil", RegularOverride: 1 },
+            { TypeName: "/Lotus/Upgrades/Skins/Sigils/ConqueraSigil", RegularOverride: 1 },
+            { TypeName: "/Lotus/Upgrades/Skins/Effects/Conquera2022Ephemera", RegularOverride: 1 },
+            { TypeName: "/Lotus/Upgrades/Skins/Effects/ConqueraEphemera", RegularOverride: 1 },
+            { TypeName: "/Lotus/Upgrades/Skins/Armor/TnCharityRibbonArmor/ConqueraArmorL", RegularOverride: 1 },
+            { TypeName: "/Lotus/Upgrades/Skins/Armor/TnCharityRibbonArmor/ConqueraArmorA", RegularOverride: 1 },
+            { TypeName: "/Lotus/Upgrades/Skins/Armor/TnCharityRibbonArmor/ConqueraChestRibbon", RegularOverride: 1 },
+            { TypeName: "/Lotus/Types/Items/ShipDecos/Plushies/PlushyProtectorStalker", PremiumOverride: 35 }
+        ];
+
+        worldState.FlashSales.push(
+            ...storeItems.map(item => ({
+                ...{
+                    StartDate: { $date: { $numberLong: activationTimeStamp } },
+                    EndDate: { $date: { $numberLong: expiryTimeStamp } },
+                    ProductExpiryOverride: { $date: { $numberLong: expiryTimeStamp } },
+                    ShowInMarket: item.ShowInMarket ?? true,
+                    HideFromMarket: item.HideFromMarket ?? false,
+                    SupporterPack: item.SupporterPack ?? false,
+                    Discount: item.Discount ?? 0,
+                    BogoBuy: item.BogoBuy ?? 0,
+                    BogoGet: item.BogoGet ?? 0,
+                    RegularOverride: item.RegularOverride ?? 0,
+                    PremiumOverride: item.PremiumOverride ?? 0
+                },
+                ...item
+            }))
+        );
+
+        const seasonalItems = storeItems.map(item => item.TypeName);
+
+        const seasonalCategory = worldState.InGameMarket.LandingPage.Categories.find(
+            c => c.CategoryName == "COMMUNITY"
+        );
+        if (seasonalCategory) {
+            seasonalCategory.Items ??= [];
+            seasonalCategory.Items.push(...seasonalItems);
+        } else {
+            worldState.InGameMarket.LandingPage.Categories.push({
+                CategoryName: "COMMUNITY",
+                Name: "/Lotus/Language/Store/CommunityCategoryTitle",
+                Icon: "community",
+                AddToMenu: true,
+                Items: seasonalItems
+            });
+        }
     }
 
     const isFebruary = date.getUTCMonth() == 1;
@@ -2048,82 +2094,39 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             NightLevel: "/Lotus/Levels/GrineerBeach/GrineerBeachEventNight.level"
         });
 
-        const baseStoreItem = {
-            ShowInMarket: true,
-            HideFromMarket: false,
-            SupporterPack: false,
-            Discount: 0,
-            BogoBuy: 0,
-            BogoGet: 0,
-            StartDate: { $date: { $numberLong: activationTimeStamp } },
-            EndDate: { $date: { $numberLong: expiryTimeStamp } },
-            ProductExpiryOverride: { $date: { $numberLong: expiryTimeStamp } }
-        };
-
-        const storeItems = [
-            {
-                TypeName: "/Lotus/Types/StoreItems/Packages/WaterFightNoggleBundle",
-                PremiumOverride: 240,
-                RegularOverride: 0
-            },
-            {
-                TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFBeastMasterBobbleHead",
-                PremiumOverride: 35,
-                RegularOverride: 0
-            },
-            {
-                TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFChargerBobbleHead",
-                PremiumOverride: 35,
-                RegularOverride: 0
-            },
-            {
-                TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFEngineerBobbleHead",
-                PremiumOverride: 35,
-                RegularOverride: 0
-            },
-            {
-                TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFGruntBobbleHead",
-                PremiumOverride: 35,
-                RegularOverride: 0
-            },
-            {
-                TypeName: "/Lotus/Types/StoreItems/AvatarImages/ImagePopsicleGrineerPurple",
-                PremiumOverride: 0,
-                RegularOverride: 1
-            },
-            {
-                TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFHealerBobbleHead",
-                PremiumOverride: 35,
-                RegularOverride: 0
-            },
-            {
-                TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFHeavyBobbleHead",
-                PremiumOverride: 35,
-                RegularOverride: 0
-            },
-            {
-                TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFHellionBobbleHead",
-                PremiumOverride: 35,
-                RegularOverride: 0
-            },
-            {
-                TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFSniperBobbleHead",
-                PremiumOverride: 35,
-                RegularOverride: 0
-            },
-            {
-                TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFTankBobbleHead",
-                PremiumOverride: 35,
-                RegularOverride: 0
-            },
-            {
-                TypeName: "/Lotus/Types/StoreItems/SuitCustomizations/ColourPickerRollers",
-                PremiumOverride: 75,
-                RegularOverride: 0
-            }
+        const storeItems: (Partial<IFlashSale> & { TypeName: string })[] = [
+            { TypeName: "/Lotus/Types/StoreItems/Packages/WaterFightNoggleBundle", PremiumOverride: 240 },
+            { TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFBeastMasterBobbleHead", PremiumOverride: 35 },
+            { TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFChargerBobbleHead", PremiumOverride: 35 },
+            { TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFEngineerBobbleHead", PremiumOverride: 35 },
+            { TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFGruntBobbleHead", PremiumOverride: 35 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/ImagePopsicleGrineerPurple", RegularOverride: 1 },
+            { TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFHealerBobbleHead", PremiumOverride: 35 },
+            { TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFHeavyBobbleHead", PremiumOverride: 35 },
+            { TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFHellionBobbleHead", PremiumOverride: 35 },
+            { TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFSniperBobbleHead", PremiumOverride: 35 },
+            { TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFTankBobbleHead", PremiumOverride: 35 },
+            { TypeName: "/Lotus/Types/StoreItems/SuitCustomizations/ColourPickerRollers", PremiumOverride: 75 }
         ];
 
-        worldState.FlashSales.push(...storeItems.map(item => ({ ...baseStoreItem, ...item })));
+        worldState.FlashSales.push(
+            ...storeItems.map(item => ({
+                ...{
+                    StartDate: { $date: { $numberLong: activationTimeStamp } },
+                    EndDate: { $date: { $numberLong: expiryTimeStamp } },
+                    ProductExpiryOverride: { $date: { $numberLong: expiryTimeStamp } },
+                    ShowInMarket: item.ShowInMarket ?? true,
+                    HideFromMarket: item.HideFromMarket ?? false,
+                    SupporterPack: item.SupporterPack ?? false,
+                    Discount: item.Discount ?? 0,
+                    BogoBuy: item.BogoBuy ?? 0,
+                    BogoGet: item.BogoGet ?? 0,
+                    RegularOverride: item.RegularOverride ?? 0,
+                    PremiumOverride: item.PremiumOverride ?? 0
+                },
+                ...item
+            }))
+        );
 
         const seasonalItems = storeItems.map(item => item.TypeName);
 
@@ -2762,22 +2765,18 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
 
     const isOctober = date.getUTCMonth() == 9; // October = month index 9
     if (config.worldState?.naberusNightsOverride ?? isOctober) {
+        const activationTimeStamp = config.worldState?.naberusNightsOverride
+            ? "1727881200000"
+            : Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1).toString();
+
+        const expiryTimeStamp = config.worldState?.naberusNightsOverride
+            ? "2000000000000"
+            : Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 1).toString();
+
         worldState.Goals.push({
             _id: { $oid: "66fd602de1778d583419e8e7" },
-            Activation: {
-                $date: {
-                    $numberLong: config.worldState?.naberusNightsOverride
-                        ? "1727881200000"
-                        : Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1).toString()
-                }
-            },
-            Expiry: {
-                $date: {
-                    $numberLong: config.worldState?.naberusNightsOverride
-                        ? "2000000000000"
-                        : Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 1).toString()
-                }
-            },
+            Activation: { $date: { $numberLong: activationTimeStamp } },
+            Expiry: { $date: { $numberLong: expiryTimeStamp } },
             Count: 0,
             Goal: 0,
             Success: 0,
@@ -2788,6 +2787,181 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             Tag: "DeimosHalloween",
             Node: "DeimosHub"
         });
+
+        const storeItems: (Partial<IFlashSale> & { TypeName: string })[] = [
+            { TypeName: "/Lotus/Types/StoreItems/Packages/Halloween2023GlyphBundleA", PremiumOverride: 65 },
+            { TypeName: "/Lotus/Types/StoreItems/Packages/Halloween2021GlyphBundle", PremiumOverride: 65 },
+            { TypeName: "/Lotus/Types/StoreItems/Packages/Halloween2019GlyphBundleA", PremiumOverride: 65 },
+            { TypeName: "/Lotus/Types/StoreItems/Packages/Halloween2019GlyphBundleB", PremiumOverride: 65 },
+            { TypeName: "/Lotus/Types/StoreItems/Packages/HalloweenGlyphBundle", PremiumOverride: 65 },
+            { TypeName: "/Lotus/Types/StoreItems/Packages/Halloween2023ArmorBundle", PremiumOverride: 125 },
+            { TypeName: "/Lotus/Types/StoreItems/Packages/HalloweenCrpCircArmorPack", PremiumOverride: 100 },
+            { TypeName: "/Lotus/Types/StoreItems/Packages/HalloweenScarfBundleB", PremiumOverride: 80 },
+            { TypeName: "/Lotus/Types/StoreItems/Packages/HalloweenSkinPack", PremiumOverride: 175 },
+            { TypeName: "/Lotus/Types/StoreItems/Packages/HalloweenShipSkinBundle", PremiumOverride: 80 },
+            { TypeName: "/Lotus/Types/StoreItems/Packages/HalloweenSkinPackC", PremiumOverride: 175 },
+            { TypeName: "/Lotus/Types/StoreItems/Packages/HalloweenSkinPackII", PremiumOverride: 145 },
+            { TypeName: "/Lotus/Types/StoreItems/Packages/HalloweenScarfBundle", PremiumOverride: 130 },
+            { TypeName: "/Lotus/Types/StoreItems/Packages/AcolyteNoggleBundle", PremiumOverride: 160 },
+            { TypeName: "/Lotus/Types/Items/ShipDecos/AcolyteAreaCasterBobbleHead", PremiumOverride: 35 },
+            { TypeName: "/Lotus/Types/Items/ShipDecos/AcolyteDuellistBobbleHead", PremiumOverride: 35 },
+            { TypeName: "/Lotus/Types/Items/ShipDecos/AcolyteControlBobbleHead", PremiumOverride: 35 },
+            { TypeName: "/Lotus/Types/Items/ShipDecos/AcolyteHeavyBobbleHead", PremiumOverride: 35 },
+            { TypeName: "/Lotus/Types/Items/ShipDecos/AcolyteRogueBobbleHead", PremiumOverride: 35 },
+            { TypeName: "/Lotus/Types/Items/ShipDecos/AcolyteStrikerBobbleHead", PremiumOverride: 35 },
+            { TypeName: "/Lotus/Types/StoreItems/SuitCustomizations/ColourPickerHalloweenItemA", RegularOverride: 1 },
+            { TypeName: "/Lotus/Upgrades/Skins/Armor/Halloween2014Wings/Halloween2014ArmArmor", PremiumOverride: 50 },
+            { TypeName: "/Lotus/Upgrades/Skins/Festivities/PumpkinHead", RegularOverride: 1 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenRegorAxeShield", PremiumOverride: 20 },
+            {
+                TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/Halloween2019CheshireKavat",
+                PremiumOverride: 20
+            },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenAkvasto", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenAngstrum", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenBoltor", PremiumOverride: 20 },
+            {
+                TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/Halloween2019GhostChibiWisp",
+                PremiumOverride: 20
+            },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenBraton", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageHalloween2016A", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageHalloween2016C", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageHalloween2016B", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenBuzlok", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageHalloween2016D", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/Halloween2019CreepyClem", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenDaikyu", PremiumOverride: 20 },
+            {
+                TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/AvatarImageHalloween2021Dethcube",
+                PremiumOverride: 20
+            },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenDragonNikana", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenDualZoren", PremiumOverride: 20 },
+            {
+                TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/Halloween2019FrankenCorpus",
+                PremiumOverride: 20
+            },
+            {
+                TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/AvatarImageHalloween2021Grineer",
+                PremiumOverride: 20
+            },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenGlaive", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenGalatine", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenGrakata", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenGorgon", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenGlaxion", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenTwinGremlins", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenGrinlok", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Scarves/HalloweenFireFlyScarf", PremiumOverride: 90 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenImperator", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenKronen", PremiumOverride: 20 },
+            {
+                TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/AvatarImageHalloween2021Lotus",
+                PremiumOverride: 20
+            },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenJatKittag", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Scarves/HalloweenKyropteraScarf", PremiumOverride: 50 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenKunai", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Liset/LisetSkinHalloween", PremiumOverride: 50 },
+            { TypeName: "/Lotus/Upgrades/Skins/Liset/LisetInsectSkinHalloween", PremiumOverride: 50 },
+            {
+                TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/AvatarImageChillingGlyphFour",
+                PremiumOverride: 20
+            },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenMarelok", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenNikana", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenNukor", PremiumOverride: 20 },
+            {
+                TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/AvatarImageHalloween2021Loid",
+                PremiumOverride: 20
+            },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenOpticor", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenOrthos", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenParis", PremiumOverride: 20 },
+            {
+                TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/AvatarImageChillingGlyphTwo",
+                PremiumOverride: 20
+            },
+            { TypeName: "/Lotus/Upgrades/Skins/Armor/CrpCircleArmour/HalloweenCrpCircC", PremiumOverride: 45 },
+            { TypeName: "/Lotus/Upgrades/Skins/Armor/CrpCircleArmour/HalloweenCrpCircA", PremiumOverride: 50 },
+            { TypeName: "/Lotus/Upgrades/Skins/Armor/CrpCircleArmour/HalloweenCrpCircL", PremiumOverride: 35 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenScindo", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/Halloween2019GhoulGrave", PremiumOverride: 20 },
+            {
+                TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/AvatarImageHalloween2021Pumpkin",
+                PremiumOverride: 20
+            },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenSarpa", PremiumOverride: 20 },
+            {
+                TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/AvatarImageChillingGlyphThree",
+                PremiumOverride: 20
+            },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenSilvaAndAegis", PremiumOverride: 20 },
+            {
+                TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/AvatarImageChillingGlyphOne",
+                PremiumOverride: 20
+            },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenSoma", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenSkana", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/Halloween2019SlimeLoki", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenSobek", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenSonicor", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenSimulor", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenTonkor", PremiumOverride: 20 },
+            {
+                TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/Halloween2019TrickOrBalas",
+                PremiumOverride: 20
+            },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenSpira", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenStradavar", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenTwinGrakatas", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenArchSword", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenLato", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/Halloween2019Werefested", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Scarves/HalloweenErosionCape", PremiumOverride: 50 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenVasto", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenDarkSplitSword", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenDarkDagger", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Scarves/HalloweenGrnBannerScarf", PremiumOverride: 75 },
+            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenAmprex", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/Packages/HalloweenSkinPackD", PremiumOverride: 180 }
+        ];
+
+        worldState.FlashSales.push(
+            ...storeItems.map(item => ({
+                ...{
+                    StartDate: { $date: { $numberLong: activationTimeStamp } },
+                    EndDate: { $date: { $numberLong: expiryTimeStamp } },
+                    ProductExpiryOverride: { $date: { $numberLong: expiryTimeStamp } },
+                    ShowInMarket: item.ShowInMarket ?? true,
+                    HideFromMarket: item.HideFromMarket ?? false,
+                    SupporterPack: item.SupporterPack ?? false,
+                    Discount: item.Discount ?? 0,
+                    BogoBuy: item.BogoBuy ?? 0,
+                    BogoGet: item.BogoGet ?? 0,
+                    RegularOverride: item.RegularOverride ?? 0,
+                    PremiumOverride: item.PremiumOverride ?? 0
+                },
+                ...item
+            }))
+        );
+
+        const seasonalItems = storeItems.map(item => item.TypeName);
+        const seasonalCategory = worldState.InGameMarket.LandingPage.Categories.find(c => c.CategoryName == "SEASONAL");
+
+        if (seasonalCategory) {
+            seasonalCategory.Items ??= [];
+            seasonalCategory.Items.push(...seasonalItems);
+        } else {
+            worldState.InGameMarket.LandingPage.Categories.push({
+                CategoryName: "SEASONAL",
+                Name: "/Lotus/Language/Store/SeasonalCategoryTitle",
+                Icon: "seasonal",
+                AddToMenu: true,
+                Items: seasonalItems
+            });
+        }
     }
 
     if (config.worldState?.bellyOfTheBeast) {
