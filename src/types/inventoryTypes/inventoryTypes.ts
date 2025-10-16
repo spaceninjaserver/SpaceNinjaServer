@@ -340,6 +340,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     EmailItems: ITypeCount[];
     CompletedSyndicates: string[];
     FocusXP?: IFocusXP;
+    FocusCapacity?: number;
     Wishlist: string[];
     Alignment?: IAlignment;
     CompletedSorties: string[];
@@ -638,6 +639,7 @@ export interface IFocusUpgrade {
     ItemType: string;
     Level?: number;
     IsUniversal?: boolean;
+    IsActive?: number; // Focus 2.0
 }
 
 export interface IFocusXP {

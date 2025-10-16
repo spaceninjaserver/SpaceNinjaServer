@@ -3276,13 +3276,13 @@ function unlockFocusSchool(upgradeType) {
     return new Promise(resolve => {
         // Deselect current FocusAbility so we will be able to unlock the way for free
         $.post({
-            url: "/api/focus.php?" + window.authz + "&op=5",
+            url: "/api/focus.php?" + window.authz + "&op=ActivateWay",
             contentType: "text/plain",
             data: JSON.stringify({ FocusType: null })
         }).done(function () {
             // Unlock the way now
             $.post({
-                url: "/api/focus.php?" + window.authz + "&op=2",
+                url: "/api/focus.php?" + window.authz + "&op=UnlockWay",
                 contentType: "text/plain",
                 data: JSON.stringify({
                     FocusType: upgradeType

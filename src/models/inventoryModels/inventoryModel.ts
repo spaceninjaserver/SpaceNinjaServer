@@ -146,7 +146,8 @@ const focusUpgradeSchema = new Schema<IFocusUpgrade>(
     {
         ItemType: String,
         Level: Number,
-        IsUniversal: Boolean
+        IsUniversal: Boolean,
+        IsActive: Number
     },
     { _id: false }
 );
@@ -1542,6 +1543,8 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         FocusAbility: String,
         //The treeways of the Focus school.(Active and passive Ability)
         FocusUpgrades: [focusUpgradeSchema],
+        //Focus 2.0 Pool
+        FocusCapacity: Number,
 
         //Achievement
         ChallengeProgress: [challengeProgressSchema],
