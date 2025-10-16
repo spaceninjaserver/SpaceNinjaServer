@@ -8,6 +8,7 @@ import type { IDatabaseAccountJson } from "../types/loginTypes.ts";
 import type { HydratedDocument } from "mongoose";
 import { logError, logger } from "../utils/logger.ts";
 import type { Request } from "express";
+import type { ITunables } from "../types/bootstrapperTypes.ts";
 
 let wsServer: WebSocketServer | undefined;
 let wssServer: WebSocketServer | undefined;
@@ -89,8 +90,9 @@ interface IWsMsgToClient {
     logged_out?: boolean;
     have_game_ws?: boolean;
 
-    // to game
+    // to game/bootstrapper (https://openwf.io/bootstrapper-manual)
     sync_inventory?: boolean;
+    tunables?: ITunables;
 }
 
 const wsOnConnect = (ws: WebSocket, req: http.IncomingMessage): void => {
