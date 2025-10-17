@@ -81,7 +81,8 @@ export const getRecipe = (uniqueName: string): IRecipe | undefined => {
                     ItemCount: 600
                 }
             ],
-            excludeFromMarket: true
+            excludeFromMarket: true,
+            tradable: false
         };
     }
 
