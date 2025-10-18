@@ -1,0 +1,409 @@
+{
+  "Skus": [
+    {
+      "productId": 17,
+      "listPrice": {
+        "formatted": "4.99 USD",
+        "raw": "4.99",
+        "value": 4.99
+      },
+      "basePrice": {
+        "formatted": "4.99 USD",
+        "raw": "4.99",
+        "value": 4.99
+      },
+      "currencyCode": "USD",
+      "owned": false
+    },
+    {
+      "productId": 18,
+      "listPrice": {
+        "formatted": "9.99 USD",
+        "raw": "9.99",
+        "value": 9.99
+      },
+      "basePrice": {
+        "formatted": "9.99 USD",
+        "raw": "9.99",
+        "value": 9.99
+      },
+      "currencyCode": "USD",
+      "owned": false
+    },
+    {
+      "productId": 160,
+      "listPrice": {
+        "formatted": "19.99 USD",
+        "raw": "19.99",
+        "value": 19.99
+      },
+      "basePrice": {
+        "formatted": "19.99 USD",
+        "raw": "19.99",
+        "value": 19.99
+      },
+      "currencyCode": "USD",
+      "owned": false
+    },
+    {
+      "productId": 257,
+      "listPrice": {
+        "formatted": "199.99 USD",
+        "raw": "199.99",
+        "value": 199.99
+      },
+      "basePrice": {
+        "formatted": "199.99 USD",
+        "raw": "199.99",
+        "value": 199.99
+      },
+      "currencyCode": "USD",
+      "owned": false
+    },
+    {
+      "productId": 258,
+      "listPrice": {
+        "formatted": "99.99 USD",
+        "raw": "99.99",
+        "value": 99.99
+      },
+      "basePrice": {
+        "formatted": "99.99 USD",
+        "raw": "99.99",
+        "value": 99.99
+      },
+      "currencyCode": "USD",
+      "owned": false
+    },
+    {
+      "productId": 259,
+      "listPrice": {
+        "formatted": "49.99 USD",
+        "raw": "49.99",
+        "value": 49.99
+      },
+      "basePrice": {
+        "formatted": "49.99 USD",
+        "raw": "49.99",
+        "value": 49.99
+      },
+      "currencyCode": "USD",
+      "owned": false
+    },
+    {
+      "productId": 785,
+      "listPrice": {
+        "formatted": "19.99 USD",
+        "raw": "19.99",
+        "value": 19.99
+      },
+      "basePrice": {
+        "formatted": "19.99 USD",
+        "raw": "19.99",
+        "value": 19.99
+      },
+      "currencyCode": "USD",
+      "owned": false
+    },
+    {
+      "productId": 786,
+      "listPrice": {
+        "formatted": "39.99 USD",
+        "raw": "39.99",
+        "value": 39.99
+      },
+      "basePrice": {
+        "formatted": "39.99 USD",
+        "raw": "39.99",
+        "value": 39.99
+      },
+      "currencyCode": "USD",
+      "owned": false
+    },
+    {
+      "productId": 787,
+      "listPrice": {
+        "formatted": "79.99 USD",
+        "raw": "79.99",
+        "value": 79.99
+      },
+      "basePrice": {
+        "formatted": "79.99 USD",
+        "raw": "79.99",
+        "value": 79.99
+      },
+      "currencyCode": "USD",
+      "owned": false
+    },
+    {
+      "productId": 979,
+      "listPrice": {
+        "formatted": "4.99 USD",
+        "raw": "4.99",
+        "value": 4.99
+      },
+      "basePrice": {
+        "formatted": "4.99 USD",
+        "raw": "4.99",
+        "value": 4.99
+      },
+      "currencyCode": "USD",
+      "owned": false
+    },
+    {
+      "productId": 10037,
+      "listPrice": {
+        "formatted": "54.99 USD",
+        "raw": "54.99",
+        "value": 54.99
+      },
+      "basePrice": {
+        "formatted": "54.99 USD",
+        "raw": "54.99",
+        "value": 54.99
+      },
+      "currencyCode": "USD",
+      "owned": false
+    },
+    {
+      "productId": 10054,
+      "listPrice": {
+        "formatted": "49.99 USD",
+        "raw": "49.99",
+        "value": 49.99
+      },
+      "basePrice": {
+        "formatted": "49.99 USD",
+        "raw": "49.99",
+        "value": 49.99
+      },
+      "currencyCode": "USD",
+      "owned": false
+    },
+    {
+      "productId": 10061,
+      "listPrice": {
+        "formatted": "0.99 USD",
+        "raw": "0.99",
+        "value": 0.99
+      },
+      "basePrice": {
+        "formatted": "0.99 USD",
+        "raw": "0.99",
+        "value": 0.99
+      },
+      "currencyCode": "USD",
+      "owned": false
+    },
+    {
+      "productId": 10076,
+      "listPrice": {
+        "formatted": "29.99 USD",
+        "raw": "29.99",
+        "value": 29.99
+      },
+      "basePrice": {
+        "formatted": "29.99 USD",
+        "raw": "29.99",
+        "value": 29.99
+      },
+      "currencyCode": "USD",
+      "owned": false
+    },
+    {
+      "productId": 10078,
+      "listPrice": {
+        "formatted": "24.99 USD",
+        "raw": "24.99",
+        "value": 24.99
+      },
+      "basePrice": {
+        "formatted": "24.99 USD",
+        "raw": "24.99",
+        "value": 24.99
+      },
+      "currencyCode": "USD",
+      "owned": false
+    },
+    {
+      "productId": 10080,
+      "listPrice": {
+        "formatted": "49.99 USD",
+        "raw": "49.99",
+        "value": 49.99
+      },
+      "basePrice": {
+        "formatted": "49.99 USD",
+        "raw": "49.99",
+        "value": 49.99
+      },
+      "currencyCode": "USD",
+      "owned": false
+    },
+    {
+      "productId": 10081,
+      "listPrice": {
+        "formatted": "79.99 USD",
+        "raw": "79.99",
+        "value": 79.99
+      },
+      "basePrice": {
+        "formatted": "79.99 USD",
+        "raw": "79.99",
+        "value": 79.99
+      },
+      "currencyCode": "USD",
+      "owned": false
+    },
+    {
+      "productId": 10082,
+      "listPrice": {
+        "formatted": "139.99 USD",
+        "raw": "139.99",
+        "value": 139.99
+      },
+      "basePrice": {
+        "formatted": "139.99 USD",
+        "raw": "139.99",
+        "value": 139.99
+      },
+      "currencyCode": "USD",
+      "owned": false
+    },
+    {
+      "productId": 10084,
+      "listPrice": {
+        "formatted": "49.99 USD",
+        "raw": "49.99",
+        "value": 49.99
+      },
+      "basePrice": {
+        "formatted": "49.99 USD",
+        "raw": "49.99",
+        "value": 49.99
+      },
+      "currencyCode": "USD",
+      "owned": false
+    },
+    {
+      "productId": 10085,
+      "listPrice": {
+        "formatted": "30.00 USD",
+        "raw": "30.00",
+        "value": 30
+      },
+      "basePrice": {
+        "formatted": "30.00 USD",
+        "raw": "30.00",
+        "value": 30
+      },
+      "currencyCode": "USD",
+      "owned": false
+    },
+    {
+      "productId": 10086,
+      "listPrice": {
+        "formatted": "60.00 USD",
+        "raw": "60.00",
+        "value": 60
+      },
+      "basePrice": {
+        "formatted": "60.00 USD",
+        "raw": "60.00",
+        "value": 60
+      },
+      "currencyCode": "USD",
+      "owned": false
+    },
+    {
+      "productId": 10087,
+      "listPrice": {
+        "formatted": "90.00 USD",
+        "raw": "90.00",
+        "value": 90
+      },
+      "basePrice": {
+        "formatted": "90.00 USD",
+        "raw": "90.00",
+        "value": 90
+      },
+      "currencyCode": "USD",
+      "owned": false
+    },
+    {
+      "productId": 10088,
+      "listPrice": {
+        "formatted": "90.00 USD",
+        "raw": "90.00",
+        "value": 90
+      },
+      "basePrice": {
+        "formatted": "90.00 USD",
+        "raw": "90.00",
+        "value": 90
+      },
+      "currencyCode": "USD",
+      "owned": false
+    },
+    {
+      "productId": 10089,
+      "listPrice": {
+        "formatted": "40.01 USD",
+        "raw": "40.01",
+        "value": 40.01
+      },
+      "basePrice": {
+        "formatted": "40.01 USD",
+        "raw": "40.01",
+        "value": 40.01
+      },
+      "currencyCode": "USD",
+      "owned": false
+    },
+    {
+      "productId": 10090,
+      "listPrice": {
+        "formatted": "10.01 USD",
+        "raw": "10.01",
+        "value": 10.01
+      },
+      "basePrice": {
+        "formatted": "10.01 USD",
+        "raw": "10.01",
+        "value": 10.01
+      },
+      "currencyCode": "USD",
+      "owned": false
+    },
+    {
+      "productId": 10094,
+      "listPrice": {
+        "formatted": "24.99 USD",
+        "raw": "24.99",
+        "value": 24.99
+      },
+      "basePrice": {
+        "formatted": "24.99 USD",
+        "raw": "24.99",
+        "value": 24.99
+      },
+      "currencyCode": "USD",
+      "owned": false
+    },
+    {
+      "productId": 10095,
+      "listPrice": {
+        "formatted": "14.99 USD",
+        "raw": "14.99",
+        "value": 14.99
+      },
+      "basePrice": {
+        "formatted": "14.99 USD",
+        "raw": "14.99",
+        "value": 14.99
+      },
+      "currencyCode": "USD",
+      "owned": false
+    }
+  ]
+}
