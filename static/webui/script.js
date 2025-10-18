@@ -832,7 +832,7 @@ function updateInventory() {
                             const td = document.createElement("td");
                             td.classList = "text-end text-nowrap";
 
-                            let maxXP = Math.pow(itemMap[item.ItemType].maxLevelCap ?? 30, 2) * 1000;
+                            let maxXP = Math.pow(itemMap[item.ItemType]?.maxLevelCap ?? 30, 2) * 1000;
                             if (
                                 category != "Suits" &&
                                 category != "SpaceSuits" &&
@@ -859,7 +859,7 @@ function updateInventory() {
                                 }
                             }
                             if (
-                                itemMap[item.ItemType].maxLevelCap > 30 &&
+                                itemMap[item.ItemType]?.maxLevelCap > 30 &&
                                 (item.Polarized ?? 0) < (itemMap[item.ItemType].maxLevelCap - 30) / 2
                             ) {
                                 const a = document.createElement("a");
