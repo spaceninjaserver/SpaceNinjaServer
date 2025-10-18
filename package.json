@@ -22,7 +22,7 @@
     "lint:fix": "eslint --fix --ext .ts .",
     "prettier": "prettier --write .",
     "update-translations": "cd scripts && node update-translations.cjs",
-    "fix": "npm run update-translations && npm run lint:fix"
+    "fix": "npm run update-translations && npm run prettier"
   },
   "license": "GNU",
   "type": "module",
