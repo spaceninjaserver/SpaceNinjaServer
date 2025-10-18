@@ -63,7 +63,7 @@ const sortieBosses = [
 
 type TSortieBoss = (typeof sortieBosses)[number];
 
-const sortieBossToFaction: Record<TSortieBoss, string> = {
+const sortieBossToFaction: Record<TSortieBoss, TFaction> = {
     SORTIE_BOSS_HYENA: "FC_CORPUS",
     SORTIE_BOSS_KELA: "FC_GRINEER",
     SORTIE_BOSS_VOR: "FC_GRINEER",
@@ -375,6 +375,11 @@ export const getSortie = (day: number): ISortie => {
 
     const selectedNodes: ISortieMission[] = [];
     const missionTypes = new Set();
+
+    if (enemyFaction == "FC_INFESTATION") {
+        // MT_RETRIEVAL may not be chosen for infested enemies (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2907)
+        missionTypes.add("MT_RETRIEVAL");
+    }
 
     for (let i = 0; i < 3; i++) {
         const randomIndex = rng.randomInt(0, nodes.length - 1);
