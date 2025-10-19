@@ -13,7 +13,7 @@ import questCompletionItems from "../../static/fixed_responses/questCompletionRe
 import type { ITypeCount } from "../types/commonTypes.ts";
 
 export interface IUpdateQuestRequest {
-    QuestKeys: Omit<IQuestKeyDatabase, "CompletionDate">[];
+    QuestKeys: IQuestKeyClient[];
     PS: string;
     questCompletion: boolean;
     PlayerShipEvents: unknown[];
@@ -36,6 +36,7 @@ export const updateQuestKey = async (
         throw new Error(`quest key ${questKeyUpdate[0].ItemType} not found`);
     }
 
+    delete questKeyUpdate[0].CompletionDate;
     inventory.QuestKeys[questKeyIndex].overwrite(questKeyUpdate[0]);
 
     const inventoryChanges: IInventoryChanges = {};
