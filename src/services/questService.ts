@@ -116,7 +116,11 @@ export const addQuestKey = (
     return inventory.QuestKeys[index - 1].toJSON<IQuestKeyClient>();
 };
 
-export const completeQuest = async (inventory: TInventoryDatabaseDocument, questKey: string): Promise<void> => {
+export const completeQuest = async (
+    inventory: TInventoryDatabaseDocument,
+    questKey: string,
+    sendMessages: boolean = false
+): Promise<void> => {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     const chainStages = ExportKeys[questKey]?.chainStages;
 
@@ -134,8 +138,8 @@ export const completeQuest = async (inventory: TInventoryDatabaseDocument, quest
             unlock: true,
             Progress: Array.from({ length: chainStageTotal }, () => ({
                 c: 0,
-                i: false,
-                m: false,
+                i: true,
+                m: true,
                 b: []
             }))
         };
@@ -162,7 +166,7 @@ export const completeQuest = async (inventory: TInventoryDatabaseDocument, quest
         const stage = existingQuestKey.Progress[i];
         if (stage.c <= run) {
             stage.c = run;
-            await giveKeyChainStageTriggered(inventory, { KeyChain: questKey, ChainStage: i });
+            await giveKeyChainStageTriggered(inventory, { KeyChain: questKey, ChainStage: i }, sendMessages);
             await giveKeyChainMissionReward(inventory, { KeyChain: questKey, ChainStage: i });
         }
     }
@@ -328,7 +332,8 @@ export const giveKeyChainItem = async (
 export const giveKeyChainMessage = async (
     inventory: TInventoryDatabaseDocument,
     keyChainInfo: IKeyChainRequest,
-    questKey: IQuestKeyDatabase
+    questKey: IQuestKeyDatabase,
+    sendMessage: boolean = true
 ): Promise<void> => {
     const keyChainMessage = getKeyChainMessage(keyChainInfo);
 
@@ -337,7 +342,12 @@ export const giveKeyChainMessage = async (
         keyChainMessage.countedAtt = [];
     }
 
-    await createMessage(inventory.accountOwnerId, [keyChainMessage]);
+    if (sendMessage) {
+        await createMessage(inventory.accountOwnerId, [keyChainMessage]);
+    } else {
+        if (keyChainMessage.countedAtt?.length) await addItems(inventory, keyChainMessage.countedAtt);
+        if (keyChainMessage.att?.length) await addItems(inventory, keyChainMessage.att);
+    }
 
     updateQuestStage(inventory, keyChainInfo, { m: true });
 };
@@ -385,7 +395,8 @@ export const giveKeyChainMissionReward = async (
 
 export const giveKeyChainStageTriggered = async (
     inventory: TInventoryDatabaseDocument,
-    keyChainInfo: IKeyChainRequest
+    keyChainInfo: IKeyChainRequest,
+    sendMessage: boolean = true
 ): Promise<void> => {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     const chainStages = ExportKeys[keyChainInfo.KeyChain]?.chainStages;
@@ -397,7 +408,7 @@ export const giveKeyChainStageTriggered = async (
         }
 
         if (chainStages[keyChainInfo.ChainStage].messageToSendWhenTriggered) {
-            await giveKeyChainMessage(inventory, keyChainInfo, questKey);
+            await giveKeyChainMessage(inventory, keyChainInfo, questKey, sendMessage);
         }
     }
 };

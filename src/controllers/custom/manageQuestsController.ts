@@ -136,7 +136,7 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
 
                 if (currentStage + 1 == questManifest.chainStages?.length) {
                     logger.debug(`Trying to complete last stage with nextStage, calling completeQuest instead`);
-                    await completeQuest(inventory, questKey.ItemType);
+                    await completeQuest(inventory, questKey.ItemType, true);
                 } else {
                     if (run > 0) {
                         questKey.Progress[currentStage + 1].c = run;
