@@ -1690,8 +1690,8 @@ export const addCredits = async (
         finalCredits.TotalCredits[1] += finalCredits.TotalCredits[1];
     }
     if ((inventory.Boosters.find(x => x.ItemType == "/Lotus/Types/Boosters/CreditBlessing")?.ExpiryDate ?? 0) > now) {
-        inventory.RegularCredits += finalCredits.TotalCredits[1];
-        finalCredits.TotalCredits[1] += finalCredits.TotalCredits[1];
+        inventory.RegularCredits += finalCredits.TotalCredits[1] * 0.25;
+        finalCredits.TotalCredits[1] += finalCredits.TotalCredits[1] * 0.25;
     }
 
     return finalCredits;
