@@ -58,6 +58,7 @@ export interface IAlertMissionInfo {
     maxEnemyLevel?: number;
     maxWaveNum?: number;
     descText?: string;
+    enemyCacheOverride?: string;
 
     maxRotations?: number; // SNS specific field
 }

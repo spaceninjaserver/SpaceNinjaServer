@@ -65,7 +65,7 @@ export const createPersonalRooms = async (accountId: Types.ObjectId, shipId: Typ
         activeShipId: shipId
     });
     if (config.skipTutorial) {
-        // unlocked during Vor's Prize
+        // unlocked during Vor's Prize and The Teacher quests
         const defaultFeatures = [
             "/Lotus/Types/Items/ShipFeatureItems/MercuryNavigationFeatureItem",
             "/Lotus/Types/Items/ShipFeatureItems/ArsenalFeatureItem",

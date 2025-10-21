@@ -8,6 +8,7 @@ import {
     ExportAnimals,
     ExportEnemies,
     ExportFusionBundles,
+    ExportKeys,
     ExportRegions,
     ExportRelics,
     ExportRewards
@@ -1141,6 +1142,7 @@ export const addMissionRewards = async (
     const MissionRewards: IMissionReward[] = getRandomMissionDrops(
         inventory,
         rewardInfo,
+        levelKeyName,
         missions,
         wagerTier,
         firstCompletion
@@ -1756,6 +1758,7 @@ function getLevelCreditRewards(node: IRegion): number {
 function getRandomMissionDrops(
     inventory: TInventoryDatabaseDocument,
     RewardInfo: IRewardInfo,
+    levelKeyName: string | undefined,
     mission: IMission | undefined,
     tierOverride: number | undefined,
     firstCompletion: boolean
@@ -2193,7 +2196,7 @@ function getRandomMissionDrops(
             }
         }
 
-        if (region.cacheRewardManifest && RewardInfo.EnemyCachesFound) {
+        if (region.cacheRewardManifest && RewardInfo.EnemyCachesFound && !RewardInfo.goalId) {
             const deck = ExportRewards[region.cacheRewardManifest];
             for (let rotation = 0; rotation != RewardInfo.EnemyCachesFound; ++rotation) {
                 const drop = getRandomRewardByChance(deck[rotation]);
@@ -2256,6 +2259,71 @@ function getRandomMissionDrops(
                 ][0]
             )!;
             drops.push({ StoreItem: drop.type, ItemCount: drop.itemCount });
+        }
+    }
+
+    if (RewardInfo.EnemyCachesFound) {
+        if (RewardInfo.goalId) {
+            const goal = getWorldState().Goals.find(x => x._id.$oid == RewardInfo.goalId);
+            if (goal) {
+                let currentMissionKey: string | undefined;
+                if (RewardInfo.node == goal.Node) {
+                    currentMissionKey = goal.MissionKeyName;
+                } else if (goal.ConcurrentNodes && goal.ConcurrentMissionKeyNames) {
+                    for (let i = 0; i < goal.ConcurrentNodes.length; i++) {
+                        if (RewardInfo.node == goal.ConcurrentNodes[i]) {
+                            currentMissionKey = goal.ConcurrentMissionKeyNames[i];
+                            break;
+                        }
+                    }
+                }
+                if (currentMissionKey) {
+                    const keyMeta = ExportKeys[currentMissionKey];
+                    if (keyMeta.cacheRewardManifest) {
+                        const deck = ExportRewards[keyMeta.cacheRewardManifest];
+                        for (let rotation = 0; rotation != RewardInfo.EnemyCachesFound; ++rotation) {
+                            const drop = getRandomRewardByChance(deck[rotation]);
+                            if (drop) {
+                                drops.push({
+                                    StoreItem: drop.type,
+                                    ItemCount: drop.itemCount,
+                                    FromEnemyCache: true
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+        } else if (RewardInfo.alertId) {
+            const alert = getWorldState().Alerts.find(x => x._id.$oid == RewardInfo.alertId);
+            if (alert && alert.MissionInfo.enemyCacheOverride) {
+                const deck = ExportRewards[alert.MissionInfo.enemyCacheOverride];
+                for (let rotation = 0; rotation != RewardInfo.EnemyCachesFound; ++rotation) {
+                    const drop = getRandomRewardByChance(deck[rotation]);
+                    if (drop) {
+                        drops.push({
+                            StoreItem: drop.type,
+                            ItemCount: drop.itemCount,
+                            FromEnemyCache: true
+                        });
+                    }
+                }
+            }
+        } else if (levelKeyName) {
+            const keyMeta = ExportKeys[levelKeyName];
+            if (keyMeta.cacheRewardManifest) {
+                const deck = ExportRewards[keyMeta.cacheRewardManifest];
+                for (let rotation = 0; rotation != RewardInfo.EnemyCachesFound; ++rotation) {
+                    const drop = getRandomRewardByChance(deck[rotation]);
+                    if (drop) {
+                        drops.push({
+                            StoreItem: drop.type,
+                            ItemCount: drop.itemCount,
+                            FromEnemyCache: true
+                        });
+                    }
+                }
+            }
         }
     }
 

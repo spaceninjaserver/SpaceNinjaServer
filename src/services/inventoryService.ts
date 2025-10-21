@@ -117,6 +117,7 @@ export const createInventory = async (
             inventory.PlayedParkourTutorial = true;
             await addStartingGear(inventory);
             await completeQuest(inventory, "/Lotus/Types/Keys/VorsPrize/VorsPrizeQuestKeyChain");
+            await completeQuest(inventory, "/Lotus/Types/Keys/ModQuest/ModQuestKeyChain");
 
             const completedMissions = ["SolNode27", "SolNode89", "SolNode63", "SolNode85", "SolNode15", "SolNode79"];
 
@@ -133,16 +134,6 @@ export const createInventory = async (
         throw new Error(`Error creating inventory: ${error instanceof Error ? error.message : "Unknown error type"}`);
     }
 };
-
-//TODO: RawUpgrades might need to return a LastAdded
-const awakeningRewards = [
-    "/Lotus/Types/StoreItems/AvatarImages/AvatarImageItem1",
-    "/Lotus/Types/StoreItems/AvatarImages/AvatarImageItem2",
-    "/Lotus/Types/StoreItems/AvatarImages/AvatarImageItem3",
-    "/Lotus/Types/StoreItems/AvatarImages/AvatarImageItem4",
-    "/Lotus/Types/Restoratives/LisetAutoHack",
-    "/Lotus/Upgrades/Mods/Warframe/AvatarShieldMaxMod"
-];
 
 export const addStartingGear = async (
     inventory: TInventoryDatabaseDocument,
@@ -195,6 +186,14 @@ export const addStartingGear = async (
     inventoryChanges.PremiumCreditsFree = 50;
     inventory.RegularCredits = 3000;
     inventoryChanges.RegularCredits = 3000;
+
+    const awakeningRewards = [
+        "/Lotus/Types/StoreItems/AvatarImages/AvatarImageItem1",
+        "/Lotus/Types/StoreItems/AvatarImages/AvatarImageItem2",
+        "/Lotus/Types/StoreItems/AvatarImages/AvatarImageItem3",
+        "/Lotus/Types/StoreItems/AvatarImages/AvatarImageItem4",
+        "/Lotus/Types/Restoratives/LisetAutoHack"
+    ];
 
     for (const item of awakeningRewards) {
         const inventoryDelta = await addItem(inventory, item);
