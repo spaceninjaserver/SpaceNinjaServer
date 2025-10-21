@@ -24,9 +24,6 @@ export interface IConfig {
     unlockAllSkins?: boolean;
     fullyStockedVendors?: boolean;
     skipClanKeyCrafting?: boolean;
-    spoofMasteryRank?: number;
-    relicRewardItemCountMultiplier?: number;
-    nightwaveStandingMultiplier?: number;
     unfaithfulBugFixes?: {
         ignore1999LastRegionPlayed?: boolean;
         fixXtraCheeseTimer?: boolean;
@@ -149,7 +146,10 @@ export const configRemovedOptionsKeys = [
     "fastClanAscension",
     "unlockAllFlavourItems",
     "unlockAllShipDecorations",
-    "unlockAllDecoRecipes"
+    "unlockAllDecoRecipes",
+    "spoofMasteryRank",
+    "relicRewardItemCountMultiplier",
+    "nightwaveStandingMultiplier"
 ];
 
 export const configPath = path.join(repoDir, args.configPath ?? "config.json");

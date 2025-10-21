@@ -14,7 +14,7 @@ export const updateChallengeProgressController: RequestHandler = async (req, res
 
     const inventory = await getInventory(
         account._id.toString(),
-        "ChallengesFixVersion ChallengeProgress SeasonChallengeHistory Affiliations CalendarProgress"
+        "ChallengesFixVersion ChallengeProgress SeasonChallengeHistory Affiliations CalendarProgress nightwaveStandingMultiplier"
     );
     let affiliationMods: IAffiliationMods[] = [];
     if (challenges.ChallengeProgress) {

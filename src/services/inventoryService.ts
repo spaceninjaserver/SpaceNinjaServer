@@ -2131,7 +2131,7 @@ export const addChallenges = async (
                         ];
                 }
 
-                const standingToAdd = meta.standing! * (config.nightwaveStandingMultiplier ?? 1);
+                const standingToAdd = meta.standing! * (inventory.nightwaveStandingMultiplier ?? 1);
                 affiliation.Standing += standingToAdd;
                 if (affiliationMods.length == 0) {
                     affiliationMods.push({ Tag: nightwaveSyndicateTag });

@@ -8,7 +8,6 @@ import { logger } from "../utils/logger.ts";
 import { addMiscItems, combineInventoryChanges } from "../services/inventoryService.ts";
 import { handleStoreItemAcquisition } from "../services/purchaseService.ts";
 import type { IInventoryChanges } from "../types/purchaseTypes.ts";
-import { config } from "../services/configService.ts";
 
 export const crackRelic = async (
     inventory: TInventoryDatabaseDocument,
@@ -29,10 +28,10 @@ export const crackRelic = async (
         ExportRewards[relic.rewardManifest][0] as { type: string; itemCount: number; rarity: TRarity }[], // rarity is nullable in PE+ typings, but always present for relics
         weights
     )!;
-    if (config.relicRewardItemCountMultiplier !== undefined && (config.relicRewardItemCountMultiplier ?? 1) != 1) {
+    if (inventory.relicRewardItemCountMultiplier && inventory.relicRewardItemCountMultiplier != 1) {
         reward = {
             ...reward,
-            itemCount: reward.itemCount * config.relicRewardItemCountMultiplier
+            itemCount: reward.itemCount * inventory.relicRewardItemCountMultiplier
         };
     }
     logger.debug(`relic rolled`, reward);

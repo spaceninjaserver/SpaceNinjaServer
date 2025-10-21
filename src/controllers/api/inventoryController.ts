@@ -348,12 +348,12 @@ export const getInventoryResponse = async (
         }
     }
 
-    if (typeof config.spoofMasteryRank === "number" && config.spoofMasteryRank >= 0) {
-        inventoryResponse.PlayerLevel = config.spoofMasteryRank;
+    if (inventory.spoofMasteryRank && inventory.spoofMasteryRank >= 0) {
+        inventoryResponse.PlayerLevel = inventory.spoofMasteryRank;
         if (!xpBasedLevelCapDisabled) {
             // This client has not been patched to accept any mastery rank, need to fake the XP.
             inventoryResponse.XPInfo = [];
-            let numFrames = getExpRequiredForMr(Math.min(config.spoofMasteryRank, 5030)) / 6000;
+            let numFrames = getExpRequiredForMr(Math.min(inventory.spoofMasteryRank, 5030)) / 6000;
             while (numFrames-- > 0) {
                 inventoryResponse.XPInfo.push({
                     ItemType: "/Lotus/Powersuits/Mag/Mag",

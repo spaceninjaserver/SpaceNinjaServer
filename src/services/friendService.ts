@@ -1,6 +1,5 @@
 import type { IFriendInfo } from "../types/friendTypes.ts";
 import { getInventory } from "./inventoryService.ts";
-import { config } from "./configService.ts";
 import { Account } from "../models/loginModel.ts";
 import type { Types } from "mongoose";
 import { Friendship } from "../models/friendModel.ts";
@@ -13,8 +12,8 @@ export const addAccountDataToFriendInfo = async (info: IFriendInfo): Promise<voi
 };
 
 export const addInventoryDataToFriendInfo = async (info: IFriendInfo): Promise<void> => {
-    const inventory = await getInventory(fromOid(info._id), "PlayerLevel ActiveAvatarImageType");
-    info.PlayerLevel = config.spoofMasteryRank == -1 ? inventory.PlayerLevel : config.spoofMasteryRank;
+    const inventory = await getInventory(fromOid(info._id), "PlayerLevel ActiveAvatarImageType spoofMasteryRank");
+    info.PlayerLevel = inventory.spoofMasteryRank == -1 ? inventory.PlayerLevel : inventory.spoofMasteryRank;
     info.ActiveAvatarImageType = inventory.ActiveAvatarImageType;
 };
 

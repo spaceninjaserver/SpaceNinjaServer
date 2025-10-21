@@ -14,9 +14,6 @@
   "unlockAllSkins": false,
   "fullyStockedVendors": false,
   "skipClanKeyCrafting": false,
-  "spoofMasteryRank": -1,
-  "relicRewardItemCountMultiplier": 1,
-  "nightwaveStandingMultiplier": 1,
   "unfaithfulBugFixes": {
     "ignore1999LastRegionPlayed": false,
     "fixXtraCheeseTimer": false,

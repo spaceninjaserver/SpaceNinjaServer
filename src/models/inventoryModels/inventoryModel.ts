@@ -1469,6 +1469,9 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         nemesisHintProgressMultiplierGrineer: Number,
         nemesisHintProgressMultiplierCorpus: Number,
         nemesisExtraWeapon: Number,
+        spoofMasteryRank: { type: Number, default: -1 },
+        relicRewardItemCountMultiplier: { type: Number, default: 1 },
+        nightwaveStandingMultiplier: { type: Number, default: 1 },
 
         SubscribedToEmails: { type: Number, default: 0 },
         SubscribedToEmailsPersonalized: { type: Number, default: 0 },

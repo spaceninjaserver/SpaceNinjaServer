@@ -1071,6 +1071,20 @@
                                     <input class="form-check-input" type="checkbox" id="finishInvasionsInOneMission" />
                                     <label class="form-check-label" for="finishInvasionsInOneMission" data-loc="cheats_finishInvasionsInOneMission"></label>
                                 </div>
+                                <form class="form-group mt-2" onsubmit="doChangeSupportedSyndicate(); return false;">
+                                    <label class="form-label" for="changeSyndicate" data-loc="cheats_changeSupportedSyndicate"></label>
+                                    <div class="input-group">
+                                        <select class="form-control" id="changeSyndicate"></select>
+                                        <button class="btn btn-secondary" type="submit" data-loc="cheats_changeButton"></button>
+                                    </div>
+                                </form>
+                                <form class="form-group mt-2">
+                                    <label class="form-label" for="spoofMasteryRank" data-loc="cheats_spoofMasteryRank"></label>
+                                    <div class="input-group">
+                                        <input class="form-control" id="spoofMasteryRank" type="number" min="-1" max="65535" data-default="-1" />
+                                        <button class="btn btn-secondary" type="button" data-loc="cheats_save"></button>
+                                    </div>
+                                </form>
                                 <form class="form-group mt-2">
                                     <label class="form-label" for="nemesisHenchmenKillsMultiplierGrineer" data-loc="cheats_nemesisHenchmenKillsMultiplierGrineer"></label>
                                     <div class="input-group">
@@ -1113,6 +1127,20 @@
                                         <button class="btn btn-secondary" type="button" data-loc="cheats_save"></button>
                                     </div>
                                 </form>
+                                <form class="form-group mt-2">
+                                    <label class="form-label" for="relicRewardItemCountMultiplier" data-loc="cheats_relicRewardItemCountMultiplier"></label>
+                                    <div class="input-group">
+                                        <input class="form-control" id="relicRewardItemCountMultiplier" type="number" min="1" max="1000000" data-default="1" />
+                                        <button class="btn btn-secondary" type="button" data-loc="cheats_save"></button>
+                                    </div>
+                                </form>
+                                <form class="form-group mt-2">
+                                    <label class="form-label" for="nightwaveStandingMultiplier" data-loc="cheats_nightwaveStandingMultiplier"></label>
+                                    <div class="input-group">
+                                        <input class="form-control" id="nightwaveStandingMultiplier" type="number" min="1" max="1000000" data-default="1" />
+                                        <button class="btn btn-secondary" type="button" data-loc="cheats_save"></button>
+                                    </div>
+                                </form>
                                 <div class="mt-2 mb-2 d-flex flex-wrap gap-2">
                                     <button class="btn btn-primary" onclick="debounce(doUnlockAllShipFeatures);" data-loc="cheats_unlockAllShipFeatures"></button>
                                     <button class="btn btn-primary" onclick="debounce(unlockAllMissions);" data-loc="cheats_unlockAllMissions"></button>
@@ -1127,13 +1155,6 @@
                                     <button class="btn btn-primary" onclick="debounce(unlockAllProfitTakerStages);" data-loc="cheats_unlockAllProfitTakerStages"></button>
                                     <button class="btn btn-primary" onclick="debounce(unlockAllSimarisResearchEntries);" data-loc="cheats_unlockAllSimarisResearchEntries"></button>
                                 </div>
-                                <form class="mt-2" onsubmit="doChangeSupportedSyndicate(); return false;">
-                                    <label class="form-label" for="changeSyndicate" data-loc="cheats_changeSupportedSyndicate"></label>
-                                    <div class="input-group">
-                                        <select class="form-control" id="changeSyndicate"></select>
-                                        <button class="btn btn-secondary" type="submit" data-loc="cheats_changeButton"></button>
-                                    </div>
-                                </form>
                             </div>
                         </div>
                     </div>
@@ -1161,27 +1182,6 @@
                                         <input class="form-check-input" type="checkbox" id="skipClanKeyCrafting" />
                                         <label class="form-check-label" for="skipClanKeyCrafting" data-loc="cheats_skipClanKeyCrafting"></label>
                                     </div>
-                                    <form class="form-group mt-2" onsubmit="doSaveConfigInt('spoofMasteryRank'); return false;">
-                                        <label class="form-label" for="spoofMasteryRank" data-loc="cheats_spoofMasteryRank"></label>
-                                        <div class="input-group">
-                                            <input class="form-control" id="spoofMasteryRank" type="number" min="-1" max="65535" data-default="-1" />
-                                            <button class="btn btn-secondary" type="submit" data-loc="cheats_save"></button>
-                                        </div>
-                                    </form>
-                                    <form class="form-group mt-2" onsubmit="doSaveConfigInt('relicRewardItemCountMultiplier'); return false;">
-                                        <label class="form-label" for="relicRewardItemCountMultiplier" data-loc="cheats_relicRewardItemCountMultiplier"></label>
-                                        <div class="input-group">
-                                            <input class="form-control" id="relicRewardItemCountMultiplier" type="number" min="1" max="1000000" data-default="1" />
-                                            <button class="btn btn-secondary" type="submit" data-loc="cheats_save"></button>
-                                        </div>
-                                    </form>
-                                    <form class="form-group mt-2" onsubmit="doSaveConfigInt('nightwaveStandingMultiplier'); return false;">
-                                        <label class="form-label" for="nightwaveStandingMultiplier" data-loc="cheats_nightwaveStandingMultiplier"></label>
-                                        <div class="input-group">
-                                            <input class="form-control" id="nightwaveStandingMultiplier" type="number" min="1" max="1000000" data-default="1" />
-                                            <button class="btn btn-secondary" type="submit" data-loc="cheats_save"></button>
-                                        </div>
-                                    </form>
                                 </div>
                             </div>
                         </div>

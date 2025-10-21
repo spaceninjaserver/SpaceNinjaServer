@@ -61,6 +61,9 @@ export interface IAccountCheats {
     nemesisHintProgressMultiplierGrineer?: number;
     nemesisHintProgressMultiplierCorpus?: number;
     nemesisExtraWeapon?: number;
+    spoofMasteryRank?: number;
+    relicRewardItemCountMultiplier?: number;
+    nightwaveStandingMultiplier?: number;
 }
 
 export interface IInventoryDatabase
