@@ -3703,7 +3703,8 @@ export const getLiteSortie = (week: number): ILiteSortie => {
             value.missionType != "MT_ASSASSINATION" &&
             value.missionType != "MT_JUNCTION" &&
             value.missionType != "MT_LANDSCAPE" &&
-            value.missionType != "MT_RAILJACK"
+            value.missionType != "MT_RAILJACK" &&
+            key != "SolNode63" // This node uses GrineerForestTilesetCaves which only supports MT_CAPTURE, which is not valid for LiteSorties.
         ) {
             nodes.push(key);
         }
