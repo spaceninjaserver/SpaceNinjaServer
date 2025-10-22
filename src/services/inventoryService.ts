@@ -388,7 +388,7 @@ export const addItem = async (
             };
         } else if (ExportResources[typeName].productCategory == "CrewShips") {
             return {
-                ...addCrewShip(inventory, typeName),
+                ...(await addCrewShip(inventory, typeName)),
                 // fix to unlock railjack modding, item bellow supposed to be obtained from archwing quest
                 // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                 ...(!inventory.CrewShipHarnesses?.length
@@ -1543,17 +1543,31 @@ export const addCrewShipSalvagedWeaponSkin = (
     return inventoryChanges;
 };
 
-const addCrewShip = (
+const addCrewShip = async (
     inventory: TInventoryDatabaseDocument,
     typeName: string,
     inventoryChanges: IInventoryChanges = {}
-): IInventoryChanges => {
+): Promise<IInventoryChanges> => {
     if (inventory.CrewShips.length != 0) {
         logger.warn("refusing to add CrewShip because account already has one");
     } else {
         const index = inventory.CrewShips.push({ ItemType: typeName }) - 1;
         inventoryChanges.CrewShips ??= [];
         inventoryChanges.CrewShips.push(inventory.CrewShips[index].toJSON<IEquipmentClient>());
+        const railjackQuest = inventory.QuestKeys.find(
+            qk => qk.ItemType === "/Lotus/Types/Keys/RailJackBuildQuest/RailjackBuildQuestKeyChain"
+        );
+        if (!railjackQuest || !railjackQuest.Completed) {
+            const questChanges = await completeQuest(
+                inventory,
+                "/Lotus/Types/Keys/RailJackBuildQuest/RailjackBuildQuestKeyChain",
+                false
+            );
+            if (questChanges) {
+                inventoryChanges.QuestKeys ??= [];
+                inventoryChanges.QuestKeys.push(questChanges);
+            }
+        }
     }
     return inventoryChanges;
 };

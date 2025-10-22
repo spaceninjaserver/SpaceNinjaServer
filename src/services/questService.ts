@@ -120,7 +120,7 @@ export const completeQuest = async (
     inventory: TInventoryDatabaseDocument,
     questKey: string,
     sendMessages: boolean = false
-): Promise<void> => {
+): Promise<void | IQuestKeyClient> => {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     const chainStages = ExportKeys[questKey]?.chainStages;
 
@@ -176,6 +176,8 @@ export const completeQuest = async (
         existingQuestKey.CompletionDate = new Date();
         await handleQuestCompletion(inventory, questKey, undefined, run > 0);
     }
+
+    return existingQuestKey.toJSON<IQuestKeyClient>();
 };
 
 const getQuestCompletionItems = (questKey: string): ITypeCount[] | undefined => {

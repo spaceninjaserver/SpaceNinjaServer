@@ -234,11 +234,6 @@ export interface IUpgradeOperation {
     PolarizeValue: ArtifactPolarity;
     PolarityRemap: IPolarity[];
 }
-export interface IUnlockShipFeatureRequest {
-    Feature: string;
-    KeyChain: string;
-    ChainStage: number;
-}
 
 export interface IVoidTearParticipantInfo {
     AccountId: string;

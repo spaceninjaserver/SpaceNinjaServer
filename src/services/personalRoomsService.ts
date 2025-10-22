@@ -1,7 +1,9 @@
 import { PersonalRooms } from "../models/personalRoomsModel.ts";
-import { addItem, getInventory } from "./inventoryService.ts";
+import { addItem } from "./inventoryService.ts";
 import type { IGardeningDatabase, TPersonalRoomsDatabaseDocument } from "../types/personalRoomsTypes.ts";
 import { getRandomElement } from "./rngService.ts";
+import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
+import { logger } from "../utils/logger.ts";
 
 export const getPersonalRooms = async (
     accountId: string,
@@ -15,19 +17,17 @@ export const getPersonalRooms = async (
     return personalRooms;
 };
 
-export const updateShipFeature = async (accountId: string, shipFeature: string): Promise<void> => {
-    const personalRooms = await getPersonalRooms(accountId);
+export const unlockShipFeature = async (inventory: TInventoryDatabaseDocument, shipFeature: string): Promise<void> => {
+    const personalRooms = await getPersonalRooms(inventory.accountOwnerId.toString());
 
     if (personalRooms.Ship.Features.includes(shipFeature)) {
-        throw new Error(`ship feature ${shipFeature} already unlocked`);
+        logger.warn(`ship feature ${shipFeature} already unlocked`);
+    } else {
+        personalRooms.Ship.Features.push(shipFeature);
+        await personalRooms.save();
     }
-
-    personalRooms.Ship.Features.push(shipFeature);
-    await personalRooms.save();
-
-    const inventory = await getInventory(accountId);
-    await addItem(inventory, shipFeature, -1);
-    await inventory.save();
+    const miscItem = inventory.MiscItems.find(x => x.ItemType === shipFeature);
+    if (miscItem && miscItem.ItemCount > 0) await addItem(inventory, shipFeature, miscItem.ItemCount * -1);
 };
 
 export const createGarden = (): IGardeningDatabase => {
