@@ -1126,7 +1126,8 @@ export const addMissionRewards = async (
         RegularCredits: creditDrops,
         VoidTearParticipantsCurrWave: voidTearWave,
         StrippedItems: strippedItems,
-        AffiliationChanges: AffiliationMods
+        AffiliationChanges: AffiliationMods,
+        InvasionProgress: invasionProgress
     }: IMissionInventoryUpdateRequest,
     firstCompletion: boolean
 ): Promise<AddMissionRewardsReturnType> => {
@@ -1175,6 +1176,19 @@ export const addMissionRewards = async (
     }
 
     //inventory change is what the client has not rewarded itself, also the client needs to know the credit changes for display
+
+    if (invasionProgress) {
+        for (const clientProgress of invasionProgress) {
+            const dbProgress = inventory.QualifyingInvasions.find(x => x.invasionId.equals(clientProgress._id.$oid));
+            if (dbProgress) {
+                const run =
+                    (clientProgress.AttackerScore > clientProgress.DefenderScore
+                        ? dbProgress.AttackerScore
+                        : dbProgress.DefenderScore) - 1;
+                missionCompletionCredits += 1000 * Math.min(run, 10);
+            }
+        }
+    }
 
     if (rewardInfo.goalId) {
         const goal = getWorldState().Goals.find(x => x._id.$oid == rewardInfo.goalId);
