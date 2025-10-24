@@ -136,5 +136,7 @@
   "ConquestSetupIntro",
   "EntratiLabConquestHardModeUnlocked",
   "/Lotus/Language/Npcs/KonzuPostNewWar",
-  "/Lotus/Language/SolarisVenus/EudicoPostNewWar"
+  "/Lotus/Language/SolarisVenus/EudicoPostNewWar",
+  "/Lotus/Language/NokkoColony/NokkoVendorName",
+  "/Lotus/Language/NokkoColony/NokkoVendorName_JournalFirstVisit"
 ]
