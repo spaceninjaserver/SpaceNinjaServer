@@ -135,6 +135,7 @@ dict = {
     inventory_bulkRankUpSentinelWeapons: `所有守护武器升满级`,
     inventory_bulkRankUpEvolutionProgress: `所有灵化之源进度最大等级`,
     inventory_maxPlexus: `最大深控等级`,
+    inventory_removeIsNew: `[UNTRANSLATED] Remove New Equipment Exclamation Icon`,
 
     quests_list: `系列任务`,
     quests_completeAll: `完成所有任务`,

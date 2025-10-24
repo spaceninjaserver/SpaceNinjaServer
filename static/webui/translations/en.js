@@ -134,6 +134,7 @@ dict = {
     inventory_bulkRankUpSentinelWeapons: `Max Rank All Sentinel Weapons`,
     inventory_bulkRankUpEvolutionProgress: `Max Rank All Incarnon Evolution Progress`,
     inventory_maxPlexus: `Max Rank Plexus`,
+    inventory_removeIsNew: `Remove New Equipment Exclamation Icon`,
 
     quests_list: `Quests`,
     quests_completeAll: `Complete All Quests`,

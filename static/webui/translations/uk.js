@@ -135,6 +135,7 @@ dict = {
     inventory_bulkRankUpSentinelWeapons: `Макс. рівень всієї зброї Вартових`,
     inventory_bulkRankUpEvolutionProgress: `Макс. рівень всіх еволюцій Інкарнонів`,
     inventory_maxPlexus: `Макс. рівень Плексу`,
+    inventory_removeIsNew: `[UNTRANSLATED] Remove New Equipment Exclamation Icon`,
 
     quests_list: `Пригоди`,
     quests_completeAll: `Закінчити всі пригоди`,

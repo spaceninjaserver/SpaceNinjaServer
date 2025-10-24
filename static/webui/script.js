@@ -2177,6 +2177,15 @@ function removeCustomization(uniqueName) {
     });
 }
 
+function removeIsNew() {
+    revalidateAuthz().then(() => {
+        const req = $.get("/custom/removeIsNew?" + window.authz);
+        req.done(() => {
+            updateInventory();
+        });
+    });
+}
+
 function getRequiredParts(category, WeaponType) {
     switch (category) {
         case "Hoverboards":

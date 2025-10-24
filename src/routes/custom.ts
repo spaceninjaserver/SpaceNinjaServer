@@ -22,6 +22,7 @@ import { unlockAllScansController } from "../controllers/custom/unlockAllScansCo
 import { unlockAllShipFeaturesController } from "../controllers/custom/unlockAllShipFeaturesController.ts";
 import { unlockAllCapturaScenesController } from "../controllers/custom/unlockAllCapturaScenesController.ts";
 import { removeCustomizationController } from "../controllers/custom/removeCustomizationController.ts";
+import { removeIsNewController } from "../controllers/custom/removeIsNewController.ts";
 
 import { abilityOverrideController } from "../controllers/custom/abilityOverrideController.ts";
 import { createAccountController } from "../controllers/custom/createAccountController.ts";
@@ -73,6 +74,7 @@ customRouter.get("/unlockAllScans", unlockAllScansController);
 customRouter.get("/unlockAllShipFeatures", unlockAllShipFeaturesController);
 customRouter.get("/unlockAllCapturaScenes", unlockAllCapturaScenesController);
 customRouter.get("/removeCustomization", removeCustomizationController);
+customRouter.get("/removeIsNew", removeIsNewController);
 
 customRouter.post("/abilityOverride", abilityOverrideController);
 customRouter.post("/createAccount", createAccountController);

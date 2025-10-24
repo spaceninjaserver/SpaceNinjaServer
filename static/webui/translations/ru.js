@@ -135,6 +135,7 @@ dict = {
     inventory_bulkRankUpSentinelWeapons: `Макс. ранг всего оружия Стражей`,
     inventory_bulkRankUpEvolutionProgress: `Макс. ранг всех эволюций Инкарнонов`,
     inventory_maxPlexus: `Макс. ранг Плексуса`,
+    inventory_removeIsNew: `Удалить значок восклицательного знака нового снаряжения`,
 
     quests_list: `Квесты`,
     quests_completeAll: `Завершить все квесты`,
