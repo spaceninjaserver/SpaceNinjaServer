@@ -88,7 +88,9 @@ import type {
     IGoalProgressDatabase,
     IGoalProgressClient,
     IKubrowPetPrintClient,
-    IKubrowPetPrintDatabase
+    IKubrowPetPrintDatabase,
+    INokkoColony,
+    IJournalEntry
 } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { equipmentKeys } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IOid, ITypeCount } from "../../types/commonTypes.ts";
@@ -1424,6 +1426,22 @@ const hubNpcCustomizationSchema = new Schema<IHubNpcCustomization>(
     { _id: false }
 );
 
+const journalEntrySchema = new Schema<IJournalEntry>(
+    {
+        EntryType: String,
+        Progress: Number
+    },
+    { _id: false }
+);
+
+const nokkoColonySchema = new Schema<INokkoColony>(
+    {
+        FeedLevel: Number,
+        JournalEntries: [journalEntrySchema]
+    },
+    { _id: false }
+);
+
 const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
     {
         accountOwnerId: Schema.Types.ObjectId,
@@ -1840,7 +1858,9 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         ClaimedJunctionChallengeRewards: { type: [String], default: undefined },
 
-        SpecialItemRewardAttenuation: { type: [rewardAttenutationSchema], default: undefined }
+        SpecialItemRewardAttenuation: { type: [rewardAttenutationSchema], default: undefined },
+
+        NokkoColony: { type: nokkoColonySchema, default: undefined }
     },
     { timestamps: { createdAt: "Created", updatedAt: false } }
 );

@@ -1391,7 +1391,10 @@ export const addStanding = (
 
 // TODO: AffiliationMods support (Nightwave).
 export const updateGeneric = async (data: IGenericUpdate, accountId: string): Promise<IUpdateNodeIntrosResponse> => {
-    const inventory = await getInventory(accountId, "NodeIntrosCompleted MiscItems ShipDecorations");
+    const inventory = await getInventory(
+        accountId,
+        "NodeIntrosCompleted MiscItems ShipDecorations FlavourItems WeaponSkins"
+    );
 
     // Make it an array for easier parsing.
     if (typeof data.NodeIntrosCompleted === "string") {
@@ -1400,6 +1403,12 @@ export const updateGeneric = async (data: IGenericUpdate, accountId: string): Pr
 
     const inventoryChanges: IInventoryChanges = {};
     for (const node of data.NodeIntrosCompleted) {
+        if (inventory.NodeIntrosCompleted.indexOf(node) != -1) {
+            continue;
+        }
+        inventory.NodeIntrosCompleted.push(node);
+        logger.debug(`completed dialogue/cutscene for ${node}`);
+
         if (node == "TC2025") {
             inventoryChanges.ShipDecorations = [
                 {
@@ -1420,16 +1429,15 @@ export const updateGeneric = async (data: IGenericUpdate, accountId: string): Pr
             await addEmailItem(inventory, "/Lotus/Types/Items/EmailItems/BeatCaliberChicksEmailItem", inventoryChanges);
         } else if (node == "ClearedFiveLoops") {
             await addEmailItem(inventory, "/Lotus/Types/Items/EmailItems/ClearedFiveLoopsEmailItem", inventoryChanges);
+        } else if (node == "NokkoVisions_AllCompleted") {
+            addCustomization(
+                inventory,
+                "/Lotus/Types/StoreItems/AvatarImages/Warframes/NokkoBabySecretGlyph",
+                inventoryChanges
+            );
+            addSkin(inventory, "/Lotus/Upgrades/Skins/Clan/NokkoBabySecretEmblemItem", inventoryChanges);
         }
     }
-
-    // Combine the two arrays into one.
-    data.NodeIntrosCompleted = inventory.NodeIntrosCompleted.concat(data.NodeIntrosCompleted);
-
-    // Remove duplicate entries.
-    const nodes = [...new Set(data.NodeIntrosCompleted)];
-
-    inventory.NodeIntrosCompleted = nodes;
     await inventory.save();
 
     return {

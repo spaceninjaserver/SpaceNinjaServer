@@ -559,7 +559,7 @@ function fetchItemList() {
                     });
                 } else if (type == "Syndicates") {
                     items.forEach(item => {
-                        if (item.uniqueName === "ConclaveSyndicate") {
+                        if (["ConclaveSyndicate", "NightcapJournalSyndicate"].includes(item.uniqueName)) {
                             return;
                         }
                         if (item.uniqueName.startsWith("RadioLegion")) {

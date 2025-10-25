@@ -436,6 +436,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     Ship?: IOrbiterClient; // U22 and below, response only
     ClaimedJunctionChallengeRewards?: string[]; // U39
     SpecialItemRewardAttenuation?: IRewardAttenuation[]; // Baro's Void Surplus
+    NokkoColony?: INokkoColony; // Field Guide
 }
 
 export interface IAffiliation {
@@ -1219,4 +1220,14 @@ export interface IHubNpcCustomization {
     Colors?: IColor;
     Pattern: string;
     Tag: string;
+}
+
+export interface IJournalEntry {
+    EntryType: string;
+    Progress: number;
+}
+
+export interface INokkoColony {
+    FeedLevel: number;
+    JournalEntries: IJournalEntry[];
 }
