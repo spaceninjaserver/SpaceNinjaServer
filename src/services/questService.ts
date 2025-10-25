@@ -11,6 +11,7 @@ import { addFixedLevelRewards } from "./missionInventoryUpdateService.ts";
 import type { IInventoryChanges } from "../types/purchaseTypes.ts";
 import questCompletionItems from "../../static/fixed_responses/questCompletionRewards.json" with { type: "json" };
 import type { ITypeCount } from "../types/commonTypes.ts";
+import { addString } from "../helpers/stringHelpers.ts";
 
 export interface IUpdateQuestRequest {
     QuestKeys: IQuestKeyClient[];
@@ -175,6 +176,11 @@ export const completeQuest = async (
         existingQuestKey.Completed = true;
         existingQuestKey.CompletionDate = new Date();
         await handleQuestCompletion(inventory, questKey, undefined, run > 0);
+
+        if (questKey == "/Lotus/Types/Keys/ModQuest/ModQuestKeyChain") {
+            // This would be set by the client during the equilogue, but since we're cheating through, we have to do it ourselves.
+            addString(inventory.NodeIntrosCompleted, "ModQuestTeshinAccess");
+        }
     }
 
     return existingQuestKey.toJSON<IQuestKeyClient>();
