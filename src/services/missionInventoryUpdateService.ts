@@ -310,6 +310,9 @@ export const addMissionInventoryUpdates = async (
                 }
                 break;
             }
+            case "Missions":
+                addMissionComplete(inventory, value);
+                break;
             case "LastRegionPlayed":
                 if (!(config.unfaithfulBugFixes?.ignore1999LastRegionPlayed && value === "1999MapName")) {
                     inventory.LastRegionPlayed = value;
@@ -1241,9 +1244,6 @@ export const addMissionRewards = async (
     // - https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1365
     if (missions && missions.Tag in ExportRegions) {
         const node = ExportRegions[missions.Tag];
-
-        // cannot add this with normal updates because { Tier: 1 } would mark the SP node as completed even on a failure
-        addMissionComplete(inventory, missions);
 
         //node based credit rewards for mission completion
         if (isEligibleForCreditReward(rewardInfo, missions, node)) {

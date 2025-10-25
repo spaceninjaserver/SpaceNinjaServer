@@ -2180,7 +2180,7 @@ export const addMissionComplete = (inventory: TInventoryDatabaseDocument, { Tag,
 
     if (itemIndex !== -1) {
         Missions[itemIndex].Completes += Completes;
-        if (Tier) {
+        if (Completes && Tier) {
             Missions[itemIndex].Tier = Tier;
         }
     } else {
