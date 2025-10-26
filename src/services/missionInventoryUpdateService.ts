@@ -243,7 +243,7 @@ export const addMissionInventoryUpdates = async (
                 }
             }
         }
-        if (inventoryUpdates.MissionStatus == "GS_SUCCESS" && inventoryUpdates.RewardInfo.jobId) {
+        if (inventoryUpdates.RewardInfo.jobId) {
             // e.g. for Profit-Taker Phase 1:
             // JobTier: -6,
             // jobId: '/Lotus/Types/Gameplay/Venus/Jobs/Heists/HeistProfitTakerBountyOne_-6_SolarisUnitedHub1_663a71c80000000000000025_EudicoHeists',
@@ -251,7 +251,10 @@ export const addMissionInventoryUpdates = async (
 
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const [bounty, tier, hub, id, tag] = inventoryUpdates.RewardInfo.jobId.split("_");
-            if (tag == "EudicoHeists") {
+            if (
+                (tag == "EudicoHeists" && inventoryUpdates.MissionStatus == "GS_SUCCESS") ||
+                (tag == "NokkoColony" && inventoryUpdates.RewardInfo.JobStage == 4)
+            ) {
                 inventory.CompletedJobChains ??= [];
                 let chain = inventory.CompletedJobChains.find(x => x.LocationTag == tag);
                 if (!chain) {
@@ -1514,7 +1517,7 @@ export const addMissionRewards = async (
             syndicateEntry = Goals.find(m => m._id.$oid === syndicateMissionId);
             if (syndicateEntry) syndicateEntry.Tag = syndicateEntry.JobAffiliationTag!;
         }
-        if (syndicateEntry && syndicateEntry.Jobs) {
+        if (syndicateEntry && syndicateEntry.Jobs && !jobType.startsWith("/Lotus/Types/Gameplay/NokkoColony/Jobs")) {
             let currentJob = syndicateEntry.Jobs[rewardInfo.JobTier!];
             if (
                 [
@@ -2022,6 +2025,19 @@ function getRandomMissionDrops(
                                     xpAmounts: [1000]
                                 };
                                 RewardInfo.Q = false; // Just in case
+                            } else if (jobType.startsWith("/Lotus/Types/Gameplay/NokkoColony/Jobs/NokkoJob")) {
+                                job = {
+                                    rewards: jobType
+                                        .replace("SteelPath", "Steel")
+                                        .replace(
+                                            "/Lotus/Types/Gameplay/NokkoColony/Jobs/NokkoJob",
+                                            "Lotus/Types/Game/MissionDecks/NokkoColonyRewards/NokkoColonyRewards"
+                                        ),
+                                    masteryReq: 0,
+                                    minEnemyLevel: 30,
+                                    maxEnemyLevel: 40,
+                                    xpAmounts: [0, 0, 0, 0, 0]
+                                };
                             } else {
                                 const tierMap = {
                                     Two: "B",
@@ -2065,14 +2081,22 @@ function getRandomMissionDrops(
                             } else if (totalStage == 5 && curentStage == 4) {
                                 tableIndex = 2;
                             }
-
-                            rotations = [tableIndex];
+                            if (jobType.startsWith("/Lotus/Types/Gameplay/NokkoColony/Jobs/NokkoJob")) {
+                                if (RewardInfo.JobStage === job.xpAmounts.length - 1) {
+                                    rotations = [0, 1, 2];
+                                } else {
+                                    rewardManifests = [];
+                                }
+                            } else {
+                                rotations = [tableIndex];
+                            }
                         } else {
                             rotations = [0];
                         }
                         if (
                             RewardInfo.Q &&
                             (RewardInfo.JobStage === job.xpAmounts.length - 1 || jobType.endsWith("VaultBounty")) &&
+                            !jobType.startsWith("/Lotus/Types/Gameplay/NokkoColony/Jobs/NokkoJob") &&
                             !isEndlessJob
                         ) {
                             rotations.push(ExportRewards[job.rewards].length - 1);
