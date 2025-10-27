@@ -96,10 +96,15 @@ export const upgradesController: RequestHandler = async (req, res) => {
                 case "/Lotus/Types/Items/MiscItems/WeaponPrimaryArcaneUnlocker":
                 case "/Lotus/Types/Items/MiscItems/WeaponSecondaryArcaneUnlocker":
                 case "/Lotus/Types/Items/MiscItems/WeaponMeleeArcaneUnlocker":
-                case "/Lotus/Types/Items/MiscItems/WeaponAmpArcaneUnlocker": {
+                case "/Lotus/Types/Items/MiscItems/WeaponAmpArcaneUnlocker":
+                case "/Lotus/Types/Items/MiscItems/WeaponArchGunArcaneUnlocker": {
                     const item = inventory[payload.ItemCategory].id(payload.ItemId.$oid)!;
                     item.Features ??= 0;
-                    item.Features |= EquipmentFeatures.ARCANE_SLOT;
+                    if (operation.OperationType == "UOT_ARCANE_UNLOCK_1") {
+                        item.Features |= EquipmentFeatures.SECOND_ARCANE_SLOT;
+                    } else {
+                        item.Features |= EquipmentFeatures.ARCANE_SLOT;
+                    }
                     break;
                 }
                 case "/Lotus/Types/Items/MiscItems/ValenceAdapter": {
