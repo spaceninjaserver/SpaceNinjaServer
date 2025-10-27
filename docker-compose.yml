@@ -1,6 +1,5 @@
 services:
     spaceninjaserver:
-        # The image to use. If you have an ARM CPU, replace 'latest' with 'latest-arm64'.
         image: openwf/spaceninjaserver:latest
 
         volumes:
