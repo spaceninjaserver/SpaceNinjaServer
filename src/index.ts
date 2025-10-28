@@ -19,6 +19,7 @@ logger.info("Starting up...");
 // Proceed with normal startup: bring up config watcher service, validate config, connect to MongoDB, and finally start listening for HTTP.
 import mongoose from "mongoose";
 import path from "path";
+import child_process from "child_process";
 import { JSONStringify } from "json-with-bigint";
 import { startWebServer } from "./services/webService.ts";
 import { validateConfig } from "./services/configWatcherService.ts";
@@ -42,6 +43,17 @@ mongoose
         syncConfigWithDatabase();
 
         startWebServer();
+
+        if (config.ircExecutable) {
+            logger.info(`Starting IRC server: ${config.ircExecutable}`);
+            child_process.execFile(config.ircExecutable, (error, _stdout, _stderr) => {
+                if (error) {
+                    logger.warn(`Failed to start IRC server`, error);
+                } else {
+                    logger.warn(`IRC server terminated unexpectedly`);
+                }
+            });
+        }
 
         void updateWorldStateCollections();
         setInterval(() => {

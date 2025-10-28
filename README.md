@@ -14,7 +14,8 @@ SpaceNinjaServer requires a `config.json`. To set it up, you can copy the [confi
 
 - `skipTutorial` affects only newly created accounts, so you may wish to change it before logging in for the first time.
 - `logger.level` can be `fatal`, `error`, `warn`, `info`, `http`, `debug`, or `trace`.
-- `ircAddress`, `hubAddress`, and `nrsAddress` are not present by default but can be provided if these secondary servers are on a different machine.
+- `ircExecutable` can be provided with a relative path to an EXE which will be ran as a child process of SpaceNinjaServer.
+- `ircAddress`, `hubAddress`, and `nrsAddress` can be provided if these secondary servers are on a different machine.
 - `worldState.eidolonOverride` can be set to `day` or `night` to lock the time to day/fass and night/vome on Plains of Eidolon/Cambion Drift.
 - `worldState.vallisOverride` can be set to `warm` or `cold` to lock the temperature on Orb Vallis.
 - `worldState.duviriOverride` can be set to `joy`, `anger`, `envy`, `sorrow`, or `fear` to lock the Duviri spiral.

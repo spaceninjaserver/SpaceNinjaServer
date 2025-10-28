@@ -15,6 +15,7 @@ export interface IConfig {
     bindAddress?: string;
     httpPort?: number;
     httpsPort?: number;
+    ircExecutable?: string;
     ircAddress?: string;
     hubAddress?: string;
     nrsAddress?: string;
