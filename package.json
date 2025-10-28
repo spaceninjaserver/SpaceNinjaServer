@@ -10,7 +10,6 @@
     "build:dev": "tsgo --inlineSourceMap",
     "build:dev:tsc": "tsc --incremental --inlineSourceMap",
     "build-and-start": "npm run build && npm run start",
-    "build-and-start:bun": "npm run verify && npm run bun-run",
     "dev": "node scripts/dev.cjs",
     "dev:bun": "bun scripts/dev.cjs",
     "verify": "tsgo --noEmit",
