@@ -18,9 +18,6 @@ services:
             - mongodb
     mongodb:
         image: docker.io/library/mongo:8.0.0-noble
-        environment:
-            MONGO_INITDB_ROOT_USERNAME: openwfagent
-            MONGO_INITDB_ROOT_PASSWORD: spaceninjaserver
         volumes:
             - ./docker-data/database:/data/db
         command: mongod --quiet --logpath /dev/null
