@@ -2031,7 +2031,7 @@ function getRandomMissionDrops(
                                         .replace("SteelPath", "Steel")
                                         .replace(
                                             "/Lotus/Types/Gameplay/NokkoColony/Jobs/NokkoJob",
-                                            "Lotus/Types/Game/MissionDecks/NokkoColonyRewards/NokkoColonyRewards"
+                                            "/Lotus/Types/Game/MissionDecks/NokkoColonyRewards/NokkoColonyRewards"
                                         ),
                                     masteryReq: 0,
                                     minEnemyLevel: 30,
