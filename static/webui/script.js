@@ -1542,14 +1542,17 @@ function updateInventory() {
 
                 if (item) {
                     document.getElementById("detailedView-loading").classList.add("d-none");
-
+                    const itemName = itemMap[item.ItemType]?.name ?? item.ItemType;
                     if (item.ItemName) {
-                        $("#detailedView-title").text(item.ItemName);
-                        $("#detailedView-route .text-body-secondary").text(
-                            itemMap[item.ItemType]?.name ?? item.ItemType
-                        );
+                        const pipeIndex = item.ItemName.indexOf("|");
+                        if (pipeIndex != -1) {
+                            $("#detailedView-title").text(item.ItemName.substr(1 + pipeIndex) + " " + itemName);
+                        } else {
+                            $("#detailedView-title").text(item.ItemName);
+                            $("#detailedView-route .text-body-secondary").text(itemName);
+                        }
                     } else {
-                        $("#detailedView-title").text(itemMap[item.ItemType]?.name ?? item.ItemType);
+                        $("#detailedView-title").text(itemName);
                     }
 
                     if (category == "Suits") {
