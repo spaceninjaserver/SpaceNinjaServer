@@ -1,6 +1,6 @@
 // Spanish translation by hxedcl, Slayer55555
 dict = {
-    general_inventoryUpdateNote: `Para ver los cambios en el juego, necesitas volver a sincronizar tu inventario, por ejemplo, usando el comando /sync del bootstrapper, visitando un dojo o repetidor, o volviendo a iniciar sesión.`,
+    general_inventoryUpdateNote: `[UNTRANSLATED] Note: To see changes in-game, you need to resync your inventory, e.g. by visiting a dojo/relay or relogging.`,
     general_inventoryUpdateNoteGameWs: `Nota: Puede que necesites reabrir cualquier menú en el que te encuentres para que los cambios se reflejen.`,
     general_addButton: `Agregar`,
     general_setButton: `Establecer`,
@@ -234,7 +234,7 @@ dict = {
     cheats_baroFullyStocked: `Baro con stock completo`,
     cheats_syndicateMissionsRepeatable: `Misiones de sindicato rejugables`,
     cheats_unlockAllProfitTakerStages: `Desbloquea todas las etapas del Roba-ganancias`,
-    cheats_unlockSuccInventory: `Éxito. Ten en cuenta que deberás volver a sincronizar tu inventario. Para hacerlo, puedes usar el comando /sync en el Bootstrapper, visitar un dojo o repetidor, o volver a iniciar sesión.`,
+    cheats_unlockSuccInventory: `[UNTRANSLATED] Success. Please note that you'll need to resync your inventory, e.g. by visiting a dojo/relay or relogging.`,
     cheats_instantFinishRivenChallenge: `Terminar desafío de agrietado inmediatamente`,
     cheats_instantResourceExtractorDrones: `Drones de extracción de recursos instantáneos`,
     cheats_noResourceExtractorDronesDamage: `Sin daño a los drones extractores de recursos`,

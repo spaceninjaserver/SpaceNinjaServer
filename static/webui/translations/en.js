@@ -1,5 +1,5 @@
 dict = {
-    general_inventoryUpdateNote: `Note: To see changes in-game, you need to resync your inventory, e.g. using the bootstrapper's /sync command in game chat, visiting a dojo/relay, or relogging.`,
+    general_inventoryUpdateNote: `Note: To see changes in-game, you need to resync your inventory, e.g. by visiting a dojo/relay or relogging.`,
     general_inventoryUpdateNoteGameWs: `Note: You may need to reopen any menu you are on for changes to be reflected.`,
     general_addButton: `Add`,
     general_setButton: `Set`,
@@ -233,7 +233,7 @@ dict = {
     cheats_baroFullyStocked: `Baro Fully Stocked`,
     cheats_syndicateMissionsRepeatable: `Syndicate Missions Repeatable`,
     cheats_unlockAllProfitTakerStages: `Unlock All Profit Taker Stages`,
-    cheats_unlockSuccInventory: `Success. Please note that you'll need to resync your inventory, e.g. using the bootstrapper's /sync command in game chat, visiting a dojo/relay, or relogging.`,
+    cheats_unlockSuccInventory: `Success. Please note that you'll need to resync your inventory, e.g. by visiting a dojo/relay or relogging.`,
     cheats_instantFinishRivenChallenge: `Instant Finish Riven Challenge`,
     cheats_instantResourceExtractorDrones: `Instant Resource Extractor Drones`,
     cheats_noResourceExtractorDronesDamage: `No Resource Extractor Drones Damage`,

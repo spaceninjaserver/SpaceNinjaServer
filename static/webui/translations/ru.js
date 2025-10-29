@@ -1,6 +1,6 @@
 // Russian translation by AMelonInsideLemon, LoseFace
 dict = {
-    general_inventoryUpdateNote: `Примечание: Чтобы увидеть изменения в игре, вам нужно повторно синхронизировать свой инвентарь, например, используя команду загрузчика /sync в чате игры, посетив Додзё/Реле или перезагрузив игру.`,
+    general_inventoryUpdateNote: `[UNTRANSLATED] Note: To see changes in-game, you need to resync your inventory, e.g. by visiting a dojo/relay or relogging.`,
     general_inventoryUpdateNoteGameWs: `Примечание: для того, чтобы изменения вступили в силу, может потребоваться повторно открыть меню, в котором вы находитесь.`,
     general_addButton: `Добавить`,
     general_setButton: `Установить`,
@@ -234,7 +234,7 @@ dict = {
     cheats_baroFullyStocked: `Баро полностью укомплектован`,
     cheats_syndicateMissionsRepeatable: `Повторять миссии синдиката`,
     cheats_unlockAllProfitTakerStages: `Разблокировать все этапы Сферы извлечения прибыли`,
-    cheats_unlockSuccInventory: `Успех. Обратите внимание, что вам необходимо будет повторно синхронизировать свой инвентарь, например, с помощью команды загрузчика /sync в чате игры, посетив Додзё/Реле или повторно войдя в игру.`,
+    cheats_unlockSuccInventory: `[UNTRANSLATED] Success. Please note that you'll need to resync your inventory, e.g. by visiting a dojo/relay or relogging.`,
     cheats_instantFinishRivenChallenge: `Мгновенное завершение испытания мода Разлома`,
     cheats_instantResourceExtractorDrones: `Мгновенно добывающие Дроны-сборщики`,
     cheats_noResourceExtractorDronesDamage: `Без урона по Дронам-сборщикам`,

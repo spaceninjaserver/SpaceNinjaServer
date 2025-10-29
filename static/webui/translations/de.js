@@ -1,6 +1,6 @@
 // German translation by Animan8000
 dict = {
-    general_inventoryUpdateNote: `Hinweis: Um Änderungen im Spiel zu sehen, musst du dein Inventar neu synchronisieren, z. B. mit dem /sync Befehl des Bootstrappers im Spielchat, durch Besuch eines Dojo/Relais oder durch erneutes Einloggen.`,
+    general_inventoryUpdateNote: `[UNTRANSLATED] Note: To see changes in-game, you need to resync your inventory, e.g. by visiting a dojo/relay or relogging.`,
     general_inventoryUpdateNoteGameWs: `Hinweis: Möglicherweise musst du ein Menü neu öffnen, damit die Änderungen sichtbar werden.`,
     general_addButton: `Hinzufügen`,
     general_setButton: `Festlegen`,
@@ -234,7 +234,7 @@ dict = {
     cheats_baroFullyStocked: `Baro hat volles Inventar`,
     cheats_syndicateMissionsRepeatable: `Syndikat-Missionen wiederholbar`,
     cheats_unlockAllProfitTakerStages: `Alle Profiteintreiber-Phasen freischalten`,
-    cheats_unlockSuccInventory: `Erfolgreich. Bitte beachte, dass du dein Inventar neu synchronisieren musst, z. B. mit dem /sync Befehl des Bootstrappers im Spielchat, durch Besuch eines Dojo/Relais oder durch erneutes Einloggen.`,
+    cheats_unlockSuccInventory: `[UNTRANSLATED] Success. Please note that you'll need to resync your inventory, e.g. by visiting a dojo/relay or relogging.`,
     cheats_instantFinishRivenChallenge: `Riven-Mod Herausforderung sofort abschließen`,
     cheats_instantResourceExtractorDrones: `Sofortige Ressourcen-Extraktor-Drohnen`,
     cheats_noResourceExtractorDronesDamage: `Kein Schaden für Ressourcen-Extraktor-Drohnen`,

@@ -1,6 +1,6 @@
 // Chinese translation by meb154, bishan178, nyaoouo, qianlishun, CrazyZhang, Corvus, qingchun
 dict = {
-    general_inventoryUpdateNote: `注意: 要在游戏中查看更改,您需要重新同步库存,例如使用客户端的 /sync 命令,访问道场/中继站或重新登录.`,
+    general_inventoryUpdateNote: `[UNTRANSLATED] Note: To see changes in-game, you need to resync your inventory, e.g. by visiting a dojo/relay or relogging.`,
     general_inventoryUpdateNoteGameWs: `[UNTRANSLATED] Note: You may need to reopen any menu you are on for changes to be reflected.`,
     general_addButton: `添加`,
     general_setButton: `设置`,
@@ -234,7 +234,7 @@ dict = {
     cheats_baroFullyStocked: `虚空商人贩卖所有商品`,
     cheats_syndicateMissionsRepeatable: `集团任务可重复完成`,
     cheats_unlockAllProfitTakerStages: `解锁利润收割者圆蛛所有阶段`,
-    cheats_unlockSuccInventory: `[UNTRANSLATED] Success. Please note that you'll need to resync your inventory, e.g. using the bootstrapper's /sync command in game chat, visiting a dojo/relay, or relogging.`,
+    cheats_unlockSuccInventory: `[UNTRANSLATED] Success. Please note that you'll need to resync your inventory, e.g. by visiting a dojo/relay or relogging.`,
     cheats_instantFinishRivenChallenge: `立即完成裂罅挑战`,
     cheats_instantResourceExtractorDrones: `资源无人机即时完成`,
     cheats_noResourceExtractorDronesDamage: `资源无人机不会损毁`,

@@ -1,6 +1,6 @@
 // French translation by Vitruvio
 dict = {
-    general_inventoryUpdateNote: `Note : Pour voir les changements en jeu, l'inventaire doit être actualisé. Cela se fait en tapant /sync dans le tchat, en visitant un dojo/relais ou en se reconnectant.`,
+    general_inventoryUpdateNote: `[UNTRANSLATED] Note: To see changes in-game, you need to resync your inventory, e.g. by visiting a dojo/relay or relogging.`,
     general_inventoryUpdateNoteGameWs: `Note : Rouvrir un menu est nécessaire pour voir les changements.`,
     general_addButton: `Ajouter`,
     general_setButton: `Définir`,
@@ -234,7 +234,7 @@ dict = {
     cheats_baroFullyStocked: `Stock de Baro au max`,
     cheats_syndicateMissionsRepeatable: `Mission syndicat répétables`,
     cheats_unlockAllProfitTakerStages: `Débloquer toutes les étapes du Preneur de Profit`,
-    cheats_unlockSuccInventory: `Succès. Une resynchronisation est nécessaire en tapant "/sync" dans le tchat, en visitant un relais ou en se reconnectant.`,
+    cheats_unlockSuccInventory: `[UNTRANSLATED] Success. Please note that you'll need to resync your inventory, e.g. by visiting a dojo/relay or relogging.`,
     cheats_instantFinishRivenChallenge: `Débloquer le challenge Riven instantanément`,
     cheats_instantResourceExtractorDrones: `Ressources de drones d'extraction instantannées`,
     cheats_noResourceExtractorDronesDamage: `Aucun dégâts aux drones d'extraction de resources`,
