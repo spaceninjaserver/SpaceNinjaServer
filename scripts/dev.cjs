@@ -41,8 +41,7 @@ function run(changedFile) {
     }
 
     const thisbuildproc = spawn(
-        process.versions.bun ? "bun" : "npm",
-        ["run", cangoraw ? "verify" : "build:dev"],
+        [process.versions.bun ? "bun" : "npm", "run", cangoraw ? "verify" : "build:dev"].join(" "),
         spawnopts
     );
     const thisbuildstart = Date.now();
@@ -55,8 +54,13 @@ function run(changedFile) {
         if (code === 0) {
             console.log(`${cangoraw ? "Verified" : "Built"} in ${Date.now() - thisbuildstart} ms`);
             runproc = spawn(
-                process.versions.bun ? "bun" : "npm",
-                ["run", cangoraw ? (process.versions.bun ? "raw:bun" : "raw") : "start", "--", ...args],
+                [
+                    process.versions.bun ? "bun" : "npm",
+                    "run",
+                    cangoraw ? (process.versions.bun ? "raw:bun" : "raw") : "start",
+                    "--",
+                    ...args
+                ].join(" "),
                 spawnopts
             );
             runproc.on("exit", () => {
