@@ -92,6 +92,30 @@ export const updateQuestStage = (
     }
 };
 
+export const resetQuestKeyToStage = (
+    inventory: TInventoryDatabaseDocument,
+    { KeyChain, ChainStage }: IKeyChainRequest
+): void => {
+    const quest = inventory.QuestKeys.find(quest => quest.ItemType === KeyChain);
+
+    if (!quest) {
+        throw new Error(`Quest ${KeyChain} not found in QuestKeys`);
+    }
+
+    quest.Progress ??= [];
+
+    quest.Progress.splice(1 + ChainStage); // remove stages past the target
+
+    const questStage = quest.Progress[ChainStage];
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (questStage) {
+        const run = quest.Progress[0].c;
+        if (run >= 0) {
+            questStage.c = run - 1;
+        }
+    }
+};
+
 export const addQuestKey = (
     inventory: TInventoryDatabaseDocument,
     questKey: IQuestKeyDatabase

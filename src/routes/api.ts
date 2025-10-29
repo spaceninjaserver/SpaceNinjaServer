@@ -120,6 +120,7 @@ import { rerollRandomModController } from "../controllers/api/rerollRandomModCon
 import { researchMushroomController } from "../controllers/api/researchMushroomController.ts";
 import { resetQuestProgressController } from "../controllers/api/resetQuestProgressController.ts";
 import { retrievePetFromStasisController } from "../controllers/api/retrievePetFromStasisController.ts";
+import { reverseQuestProgressController } from "../controllers/api/reverseQuestProgressController.ts";
 import { saveDialogueController } from "../controllers/api/saveDialogueController.ts";
 import { saveLoadoutController } from "../controllers/api/saveLoadoutController.ts";
 import { saveSettingsController } from "../controllers/api/saveSettingsController.ts";
@@ -323,6 +324,7 @@ apiRouter.post("/renamePet.php", renamePetController);
 apiRouter.post("/rerollRandomMod.php", rerollRandomModController);
 apiRouter.post("/researchMushroom.php", researchMushroomController);
 apiRouter.post("/retrievePetFromStasis.php", retrievePetFromStasisController);
+apiRouter.post("/reverseQuestProgress.php", reverseQuestProgressController);
 apiRouter.post("/saveDialogue.php", saveDialogueController);
 apiRouter.post("/saveLoadout.php", saveLoadoutController);
 apiRouter.post("/saveSettings.php", saveSettingsController);
