@@ -3777,7 +3777,10 @@ export const getNightwaveSyndicateTag = (buildLabel: string | undefined): string
             valid_values: Object.keys(nightwaveTagToSeason)
         });
     }
-    if (!buildLabel || version_compare(buildLabel, "2025.05.20.10.18") >= 0) {
+    if (!buildLabel || version_compare(buildLabel, "2025.10.14.16.10") >= 0) {
+        return "RadioLegionIntermission14Syndicate";
+    }
+    if (version_compare(buildLabel, "2025.05.20.10.18") >= 0) {
         return "RadioLegionIntermission13Syndicate";
     }
     if (version_compare(buildLabel, "2025.02.05.11.19") >= 0) {
@@ -3787,6 +3790,7 @@ export const getNightwaveSyndicateTag = (buildLabel: string | undefined): string
 };
 
 const nightwaveTagToSeason: Record<string, number> = {
+    RadioLegionIntermission14Syndicate: 16, // Nora's Mix: Dreams of the Dead
     RadioLegionIntermission13Syndicate: 15, // Nora's Mix Vol. 9
     RadioLegionIntermission12Syndicate: 14, // Nora's Mix Vol. 8
     RadioLegionIntermission11Syndicate: 13, // Nora's Mix Vol. 7

@@ -324,6 +324,7 @@ dict = {
     worldState_sorrow: `Печаль`,
     worldState_fear: `Страх`,
     worldState_nightwaveOverride: `Сезон Ночной волны`,
+    worldState_RadioLegionIntermission14Syndicate: `[UNTRANSLATED] Nora's Mix: Dreams of the Dead`,
     worldState_RadioLegionIntermission13Syndicate: `Микс Норы, Диск 9`,
     worldState_RadioLegionIntermission12Syndicate: `Микс Норы, Диск 8`,
     worldState_RadioLegionIntermission11Syndicate: `Микс Норы, Диск 7`,
