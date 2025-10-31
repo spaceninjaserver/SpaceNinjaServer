@@ -134,7 +134,6 @@ dict = {
     inventory_bulkRankUpSentinels: `Toutes les Sentinelles au rang max`,
     inventory_bulkRankUpSentinelWeapons: `Toutes les armes de Sentinelles au rang max`,
     inventory_bulkRankUpEvolutionProgress: `Toutes les évolutions Incarnon au rang max`,
-    inventory_maxPlexus: `Plexus au rang max`,
     inventory_removeIsNew: `[UNTRANSLATED] Remove New Equipment Exclamation Icon`,
 
     quests_list: `Quêtes`,
@@ -260,6 +259,7 @@ dict = {
     cheats_helminthUnlockAll: `Helminth niveau max`,
     cheats_addMissingSubsumedAbilities: `Ajouter les capacités subsumées manquantes`,
     cheats_intrinsicsUnlockAll: `Inhérences niveau max`,
+    cheats_maxPlexus: `Plexus au rang max`,
     cheats_changeSupportedSyndicate: `Allégeance`,
     cheats_changeButton: `Changer`,
     cheats_markAllAsRead: `Marquer la boîte de réception comme lue`,

@@ -134,7 +134,6 @@ dict = {
     inventory_bulkRankUpSentinels: `Maximizar rango de todos los centinelas`,
     inventory_bulkRankUpSentinelWeapons: `Maximizar rango de todas las armas de centinela`,
     inventory_bulkRankUpEvolutionProgress: `Maximizar todo el progreso de evolución Incarnon`,
-    inventory_maxPlexus: `Rango máximo de Plexus`,
     inventory_removeIsNew: `[UNTRANSLATED] Remove New Equipment Exclamation Icon`,
 
     quests_list: `Misiones`,
@@ -260,6 +259,7 @@ dict = {
     cheats_helminthUnlockAll: `Subir al máximo el Helminto`,
     cheats_addMissingSubsumedAbilities: `Agregar habilidades subsumidas faltantes`,
     cheats_intrinsicsUnlockAll: `Maximizar todos los intrínsecos`,
+    cheats_maxPlexus: `Rango máximo de Plexus`,
     cheats_changeSupportedSyndicate: `Sindicatos disponibles`,
     cheats_changeButton: `Cambiar`,
     cheats_markAllAsRead: `Marcar bandeja de entrada como leída`,

@@ -134,7 +134,6 @@ dict = {
     inventory_bulkRankUpSentinels: `Макс. ранг всех Стражей`,
     inventory_bulkRankUpSentinelWeapons: `Макс. ранг всего оружия Стражей`,
     inventory_bulkRankUpEvolutionProgress: `Макс. ранг всех эволюций Инкарнонов`,
-    inventory_maxPlexus: `Макс. ранг Плексуса`,
     inventory_removeIsNew: `Удалить значок восклицательного знака нового снаряжения`,
 
     quests_list: `Квесты`,
@@ -260,6 +259,7 @@ dict = {
     cheats_helminthUnlockAll: `Полностью улучшить Гельминта`,
     cheats_addMissingSubsumedAbilities: `Добавить отсутствующие поглощённые способности`,
     cheats_intrinsicsUnlockAll: `Полностью улучшить Модуляры`,
+    cheats_maxPlexus: `Макс. ранг Плексуса`,
     cheats_changeSupportedSyndicate: `Поддерживаемый синдикат`,
     cheats_changeButton: `Изменить`,
     cheats_markAllAsRead: `Пометить все входящие как прочитанные`,

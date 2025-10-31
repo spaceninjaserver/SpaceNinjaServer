@@ -134,7 +134,6 @@ dict = {
     inventory_bulkRankUpSentinels: `所有守护升满级`,
     inventory_bulkRankUpSentinelWeapons: `所有守护武器升满级`,
     inventory_bulkRankUpEvolutionProgress: `所有灵化之源进度最大等级`,
-    inventory_maxPlexus: `最大深控等级`,
     inventory_removeIsNew: `[UNTRANSLATED] Remove New Equipment Exclamation Icon`,
 
     quests_list: `系列任务`,
@@ -260,6 +259,7 @@ dict = {
     cheats_helminthUnlockAll: `完全升级Helminth`,
     cheats_addMissingSubsumedAbilities: `添加Helminth未汲取的战甲技能`,
     cheats_intrinsicsUnlockAll: `所有内源之力最大等级`,
+    cheats_maxPlexus: `最大深控等级`,
     cheats_changeSupportedSyndicate: `支持的集团`,
     cheats_changeButton: `更改`,
     cheats_markAllAsRead: `收件箱全部标记为已读`,

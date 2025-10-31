@@ -134,7 +134,6 @@ dict = {
     inventory_bulkRankUpSentinels: `Макс. рівень всіх Вартових`,
     inventory_bulkRankUpSentinelWeapons: `Макс. рівень всієї зброї Вартових`,
     inventory_bulkRankUpEvolutionProgress: `Макс. рівень всіх еволюцій Інкарнонів`,
-    inventory_maxPlexus: `Макс. рівень Плексу`,
     inventory_removeIsNew: `[UNTRANSLATED] Remove New Equipment Exclamation Icon`,
 
     quests_list: `Пригоди`,
@@ -260,6 +259,7 @@ dict = {
     cheats_helminthUnlockAll: `Повністю покращити Гельмінта`,
     cheats_addMissingSubsumedAbilities: `Додати відсутні поглинуті здібності`,
     cheats_intrinsicsUnlockAll: `Повністю покращити Кваліфікації`,
+    cheats_maxPlexus: `Макс. рівень Плексу`,
     cheats_changeSupportedSyndicate: `Підтримуваний синдикат`,
     cheats_changeButton: `Змінити`,
     cheats_markAllAsRead: `Помітити всі вхідні як прочитані`,

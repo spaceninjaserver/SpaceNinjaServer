@@ -133,7 +133,6 @@ dict = {
     inventory_bulkRankUpSentinels: `Max Rank All Sentinels`,
     inventory_bulkRankUpSentinelWeapons: `Max Rank All Sentinel Weapons`,
     inventory_bulkRankUpEvolutionProgress: `Max Rank All Incarnon Evolution Progress`,
-    inventory_maxPlexus: `Max Rank Plexus`,
     inventory_removeIsNew: `Remove New Equipment Exclamation Icon`,
 
     quests_list: `Quests`,
@@ -259,6 +258,7 @@ dict = {
     cheats_helminthUnlockAll: `Fully Level Up Helminth`,
     cheats_addMissingSubsumedAbilities: `Add Missing Subsumed Abilities`,
     cheats_intrinsicsUnlockAll: `Max Rank All Intrinsics`,
+    cheats_maxPlexus: `Max Rank Plexus`,
     cheats_changeSupportedSyndicate: `Supported syndicate`,
     cheats_changeButton: `Change`,
     cheats_markAllAsRead: `Mark Inbox As Read`,

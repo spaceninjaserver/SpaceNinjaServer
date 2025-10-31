@@ -134,7 +134,6 @@ dict = {
     inventory_bulkRankUpSentinels: `Alle Wächter auf Max. Rang`,
     inventory_bulkRankUpSentinelWeapons: `Alle Wächter-Waffen auf Max. Rang`,
     inventory_bulkRankUpEvolutionProgress: `Alle Incarnon-Entwicklungsfortschritte auf Max. Rang`,
-    inventory_maxPlexus: `Plexus auf Max. Rang`,
     inventory_removeIsNew: `Entferne Ausrufezeichen bei neuem Equipment`,
 
     quests_list: `Quests`,
@@ -260,6 +259,7 @@ dict = {
     cheats_helminthUnlockAll: `Helminth vollständig aufleveln`,
     cheats_addMissingSubsumedAbilities: `Fehlende konsumierte Fähigkeiten hinzufügen`,
     cheats_intrinsicsUnlockAll: `Alle Inhärenzen auf Max. Rang`,
+    cheats_maxPlexus: `Plexus auf Max. Rang`,
     cheats_changeSupportedSyndicate: `Unterstütztes Syndikat`,
     cheats_changeButton: `Ändern`,
     cheats_markAllAsRead: `Posteingang als gelesen markieren`,
