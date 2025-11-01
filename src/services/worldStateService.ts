@@ -10,7 +10,7 @@ import invasionNodes from "../../static/fixed_responses/worldState/invasionNodes
 import invasionRewards from "../../static/fixed_responses/worldState/invasionRewards.json" with { type: "json" };
 import pvpChallenges from "../../static/fixed_responses/worldState/pvpChallenges.json" with { type: "json" };
 import { buildConfig } from "./buildConfigService.ts";
-import { unixTimesInMs } from "../constants/timeConstants.ts";
+import { EPOCH, unixTimesInMs } from "../constants/timeConstants.ts";
 import { config } from "./configService.ts";
 import { getRandomElement, getRandomInt, sequentiallyUniqueRandomElement, SRng } from "./rngService.ts";
 import type { IMissionReward, IRegion, TFaction } from "warframe-public-export-plus";
@@ -41,6 +41,7 @@ import type {
 import { toMongoDate, toOid, version_compare } from "../helpers/inventoryHelpers.ts";
 import { logger } from "../utils/logger.ts";
 import { DailyDeal, Fissure } from "../models/worldStateModel.ts";
+import { getConquest } from "./conquestService.ts";
 
 const sortieBosses = [
     "SORTIE_BOSS_HYENA",
@@ -275,8 +276,6 @@ const microplanetEndlessJobs: readonly string[] = [
     "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosEndlessExcavateBounty",
     "/Lotus/Types/Gameplay/InfestedMicroplanet/Jobs/DeimosEndlessPurifyBounty"
 ];
-
-export const EPOCH = 1734307200 * 1000; // Monday, Dec 16, 2024 @ 00:00 UTC+0; should logically be winter in 1999 iteration 0
 
 const isBeforeNextExpectedWorldStateRefresh = (nowMs: number, thenMs: number): boolean => {
     return nowMs + 300_000 > thenMs;
@@ -3469,6 +3468,18 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         }
     }
 
+    // Void Storms
+    const hour = Math.trunc(timeMs / unixTimesInMs.hour);
+    const overLastHourStormExpiry = hour * unixTimesInMs.hour + 10 * unixTimesInMs.minute;
+    const thisHourStormActivation = hour * unixTimesInMs.hour + 40 * unixTimesInMs.minute;
+    if (overLastHourStormExpiry > timeMs) {
+        pushVoidStorms(worldState.VoidStorms, hour - 2);
+    }
+    pushVoidStorms(worldState.VoidStorms, hour - 1);
+    if (isBeforeNextExpectedWorldStateRefresh(timeMs, thisHourStormActivation)) {
+        pushVoidStorms(worldState.VoidStorms, hour);
+    }
+
     // Sortie & syndicate missions cycling every day (at 16:00 or 17:00 UTC depending on if London, OT is observing DST)
     {
         const rollover = getSortieTime(day);
@@ -3551,16 +3562,18 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         worldState.KnownCalendarSeasons.push(getCalendarSeason(week + 1));
     }
 
-    // Void Storms
-    const hour = Math.trunc(timeMs / unixTimesInMs.hour);
-    const overLastHourStormExpiry = hour * unixTimesInMs.hour + 10 * unixTimesInMs.minute;
-    const thisHourStormActivation = hour * unixTimesInMs.hour + 40 * unixTimesInMs.minute;
-    if (overLastHourStormExpiry > timeMs) {
-        pushVoidStorms(worldState.VoidStorms, hour - 2);
-    }
-    pushVoidStorms(worldState.VoidStorms, hour - 1);
-    if (isBeforeNextExpectedWorldStateRefresh(timeMs, thisHourStormActivation)) {
-        pushVoidStorms(worldState.VoidStorms, hour);
+    if (!buildLabel || version_compare(buildLabel, "2025.10.14.16.10") >= 0) {
+        worldState.Conquests = [];
+        {
+            const season = (["CST_WINTER", "CST_SPRING", "CST_SUMMER", "CST_FALL"] as const)[week % 4];
+            worldState.Conquests.push(getConquest("CT_LAB", week, null));
+            worldState.Conquests.push(getConquest("CT_HEX", week, season));
+        }
+        if (isBeforeNextExpectedWorldStateRefresh(timeMs, weekEnd)) {
+            const season = (["CST_WINTER", "CST_SPRING", "CST_SUMMER", "CST_FALL"] as const)[(week + 1) % 4];
+            worldState.Conquests.push(getConquest("CT_LAB", week, null));
+            worldState.Conquests.push(getConquest("CT_HEX", week, season));
+        }
     }
 
     // Sentient Anomaly + Xtra Cheese cycles

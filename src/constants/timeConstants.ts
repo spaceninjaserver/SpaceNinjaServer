@@ -1,3 +1,5 @@
+export const EPOCH = 1734307200_000; // Monday, Dec 16, 2024 @ 00:00 UTC+0; should logically be the start of winter in 1999 iteration 0
+
 const millisecondsPerSecond = 1000;
 const secondsPerMinute = 60;
 const minutesPerHour = 60;

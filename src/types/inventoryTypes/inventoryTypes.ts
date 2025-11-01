@@ -14,6 +14,7 @@ import type { IOrbiterClient } from "../personalRoomsTypes.ts";
 import type { ICountedStoreItem } from "warframe-public-export-plus";
 import type { IEquipmentClient, IEquipmentDatabase, ITraits } from "../equipmentTypes.ts";
 import type { ILoadOutPresets } from "../saveLoadoutTypes.ts";
+import type { CalendarSeasonType } from "../worldStateTypes.ts";
 
 export type InventoryDatabaseEquipment = {
     [_ in TEquipmentKey]: IEquipmentDatabase[];
@@ -1180,7 +1181,7 @@ export interface IMarker {
 }
 
 export interface ISeasonProgress {
-    SeasonType: "CST_WINTER" | "CST_SPRING" | "CST_SUMMER" | "CST_FALL";
+    SeasonType: CalendarSeasonType;
     LastCompletedDayIdx: number;
     LastCompletedChallengeDayIdx: number;
     ActivatedChallenges: string[];

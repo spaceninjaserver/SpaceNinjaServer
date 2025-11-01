@@ -32,6 +32,7 @@ export interface IWorldState {
         ActiveChallenges: ISeasonChallenge[];
     };
     KnownCalendarSeasons: ICalendarSeason[];
+    Conquests?: IConquest[];
     Tmp?: string;
 }
 
@@ -352,10 +353,11 @@ export interface ISeasonChallenge {
     Challenge: string;
 }
 
+export type CalendarSeasonType = "CST_WINTER" | "CST_SPRING" | "CST_SUMMER" | "CST_FALL";
 export interface ICalendarSeason {
     Activation: IMongoDate;
     Expiry: IMongoDate;
-    Season: "CST_WINTER" | "CST_SPRING" | "CST_SUMMER" | "CST_FALL";
+    Season: CalendarSeasonType;
     Days: ICalendarDay[];
     YearIteration: number;
     Version: number;
@@ -416,6 +418,33 @@ export interface IGameMarketCategory {
     Items?: string[];
 }
 
+// >= 40.0.0
+export type TConquestType = "CT_LAB" | "CT_HEX";
+export interface IConquest {
+    Activation: IMongoDate;
+    Expiry: IMongoDate;
+    Type: TConquestType;
+    Missions: IConquestMission[];
+    Variables: [string, string, string, string];
+    RandomSeed: number;
+}
+export interface IConquestMission {
+    faction: TFaction;
+    missionType: TMissionType;
+    difficulties: [
+        {
+            type: "CD_NORMAL";
+            deviation: string;
+            risks: [string];
+        },
+        {
+            type: "CD_HARD";
+            deviation: string;
+            risks: [string, string];
+        }
+    ];
+}
+
 export interface ITmp {
     cavabegin: string;
     PurchasePlatformLockEnabled: boolean; // Seems unused
@@ -423,6 +452,8 @@ export interface ITmp {
     ennnd?: boolean; // True if 1999 demo is available (no effect for >=38.6.0)
     mbrt?: boolean; // Related to mobile app rating request
     fbst: IFbst;
+    lqo?: IConquestOverride;
+    hqo?: IConquestOverride;
     sfn: number;
     edg?: TCircuitGameMode[]; // The Circuit game modes overwrite
 }
@@ -450,4 +481,13 @@ interface IFbst {
     a: number;
     e: number;
     n: number;
+}
+
+// < 40.0.0
+interface IConquestOverride {
+    mt?: string[]; // mission types but "Exterminate" instead of "MT_EXTERMINATION", etc. and "DualDefense" instead of "Defense" for hex conquest
+    mv?: string[];
+    mf?: number[]; // hex conquest only
+    c?: [string, string][];
+    fv?: string[];
 }
