@@ -36,6 +36,11 @@ export const completeAllMissionsController: RequestHandler = async (req, res) =>
     }
     addString(inventory.NodeIntrosCompleted, "TeshinHardModeUnlocked");
     addString(inventory.NodeIntrosCompleted, "CetusSyndicate_IntroJob");
+    let syndicate = inventory.Affiliations.find(x => x.Tag == "CetusSyndicate");
+    if (!syndicate) {
+        syndicate =
+            inventory.Affiliations[inventory.Affiliations.push({ Tag: "CetusSyndicate", Standing: 250, Title: 0 })]; // Non-zero standing avoids Konzu's "prove yourself" text. 250 is identical to newbie bounty + bonus
+    }
     await inventory.save();
     res.end();
 };
