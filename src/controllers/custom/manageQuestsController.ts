@@ -61,6 +61,7 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
                 break;
             }
             inventory.QuestKeys.pull({ ItemType: questItemType });
+            if (inventory.ActiveQuest == questItemType) inventory.ActiveQuest = "";
             break;
         }
         case "completeKey": {
