@@ -113,14 +113,10 @@ export const resetQuestKeyToStage = (
 
     quest.Progress ??= [];
 
-    quest.Progress.splice(1 + ChainStage); // remove stages past the target
-
-    const questStage = quest.Progress[ChainStage];
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    if (questStage) {
-        const run = quest.Progress[0].c;
-        if (run >= 0) {
-            questStage.c = run - 1;
+    const run = quest.Progress[0]?.c ?? 0;
+    if (run >= 0) {
+        for (let i = ChainStage; i < quest.Progress.length; ++i) {
+            quest.Progress[i].c = run - 1;
         }
     }
 };
