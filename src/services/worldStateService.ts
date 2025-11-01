@@ -3182,7 +3182,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     // Nightwave Challenges
     const nightwaveSyndicateTag = getNightwaveSyndicateTag(buildLabel);
     if (nightwaveSyndicateTag) {
-        const nightwaveStartTimestamp = 1747851300000;
+        const nightwaveStartTimestamp = nightwaveTagToActivation[nightwaveSyndicateTag] ?? 1747851300000;
         const nightwaveSeason = nightwaveTagToSeason[nightwaveSyndicateTag];
         worldState.SeasonInfo = {
             Activation: { $date: { $numberLong: nightwaveStartTimestamp.toString() } },
@@ -3807,6 +3807,10 @@ const nightwaveTagToSeason: Record<string, number> = {
     RadioLegion2Syndicate: 2, // The Emissary
     RadioLegionIntermissionSyndicate: 1, // Intermission I
     RadioLegionSyndicate: 0 // The Wolf of Saturn Six
+};
+
+const nightwaveTagToActivation: Record<string, number> = {
+    RadioLegionIntermission14Syndicate: 1761589199000
 };
 
 const updateFissures = async (): Promise<void> => {
