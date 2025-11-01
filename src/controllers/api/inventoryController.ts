@@ -353,11 +353,11 @@ export const getInventoryResponse = async (
         if (!xpBasedLevelCapDisabled) {
             // This client has not been patched to accept any mastery rank, need to fake the XP.
             inventoryResponse.XPInfo = [];
-            let numFrames = getExpRequiredForMr(Math.min(inventory.spoofMasteryRank, 5030)) / 6000;
+            let numFrames = getExpRequiredForMr(Math.min(inventory.spoofMasteryRank, 5030)) / (30 * 200);
             while (numFrames-- > 0) {
                 inventoryResponse.XPInfo.push({
                     ItemType: "/Lotus/Powersuits/Mag/Mag",
-                    XP: 1_600_000
+                    XP: 900_000 // Enough for rank 30 as per https://wiki.warframe.com/w/Affinity
                 });
             }
         }
