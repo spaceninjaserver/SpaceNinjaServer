@@ -646,7 +646,7 @@ function fetchItemList() {
                         if ("badReason" in item) {
                             if (item.badReason == "starter") {
                                 item.name = loc("code_starter").split("|MOD|").join(item.name);
-                            } else {
+                            } else if (item.badReason != "notraw") {
                                 item.name += " " + loc("code_badItem");
                             }
                         }
@@ -1454,7 +1454,11 @@ function updateInventory() {
                 {
                     const td = document.createElement("td");
                     td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
-                    td.innerHTML += " <span title='" + loc("code_rank") + "'>★ " + rank + "/" + maxRank + "</span>";
+                    if (itemMap[item.ItemType]?.badReason == "notraw") {
+                        // Assuming this is a riven with a pending challenge, so rank would be N/A, but otherwise it's fine.
+                    } else {
+                        td.innerHTML += " <span title='" + loc("code_rank") + "'>★ " + rank + "/" + maxRank + "</span>";
+                    }
                     tr.appendChild(td);
                 }
                 {
