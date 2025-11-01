@@ -2,16 +2,25 @@ import type { IKeyChainRequest } from "../types/requestTypes.ts";
 import { isEmptyObject } from "../helpers/general.ts";
 import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
 import { createMessage } from "./inboxService.ts";
-import { addItem, addItems, addKeyChainItems, setupKahlSyndicate } from "./inventoryService.ts";
+import {
+    addEquipment,
+    addItem,
+    addItems,
+    addKeyChainItems,
+    addPowerSuit,
+    setupKahlSyndicate
+} from "./inventoryService.ts";
 import { fromStoreItem, getKeyChainMessage, getLevelKeyRewards } from "./itemDataService.ts";
 import type { IQuestKeyClient, IQuestKeyDatabase, IQuestStage } from "../types/inventoryTypes/inventoryTypes.ts";
 import { logger } from "../utils/logger.ts";
-import { ExportKeys } from "warframe-public-export-plus";
+import { ExportKeys, ExportRecipes } from "warframe-public-export-plus";
 import { addFixedLevelRewards } from "./missionInventoryUpdateService.ts";
 import type { IInventoryChanges } from "../types/purchaseTypes.ts";
 import questCompletionItems from "../../static/fixed_responses/questCompletionRewards.json" with { type: "json" };
 import type { ITypeCount } from "../types/commonTypes.ts";
 import { addString } from "../helpers/stringHelpers.ts";
+import { unlockShipFeature } from "./personalRoomsService.ts";
+import { EquipmentFeatures } from "../types/equipmentTypes.ts";
 
 export interface IUpdateQuestRequest {
     QuestKeys: IQuestKeyClient[];
@@ -193,6 +202,7 @@ export const completeQuest = async (
             stage.c = run;
             await giveKeyChainStageTriggered(inventory, { KeyChain: questKey, ChainStage: i }, sendMessages);
             await giveKeyChainMissionReward(inventory, { KeyChain: questKey, ChainStage: i });
+            await installShipFeatures(inventory, { KeyChain: questKey, ChainStage: i });
         }
     }
 
@@ -329,6 +339,9 @@ const handleQuestCompletion = async (
     logger.debug(`quest completion items`, questCompletionItems);
     if (questCompletionItems) {
         await addItems(inventory, questCompletionItems, inventoryChanges);
+        for (const item of questCompletionItems) {
+            await removeRequiredItems(inventory, item.ItemType);
+        }
     }
 };
 
@@ -378,7 +391,12 @@ export const giveKeyChainMessage = async (
         await createMessage(inventory.accountOwnerId, [keyChainMessage]);
     } else {
         if (keyChainMessage.countedAtt?.length) await addItems(inventory, keyChainMessage.countedAtt);
-        if (keyChainMessage.att?.length) await addItems(inventory, keyChainMessage.att);
+        if (keyChainMessage.att?.length) {
+            await addItems(inventory, keyChainMessage.att);
+            for (const reward of keyChainMessage.att) {
+                await removeRequiredItems(inventory, reward);
+            }
+        }
     }
 
     updateQuestStage(inventory, keyChainInfo, { m: true });
@@ -403,6 +421,7 @@ export const giveKeyChainMissionReward = async (
 
                 for (const reward of missionRewards) {
                     await addItem(inventory, fromStoreItem(reward.StoreItem), reward.ItemCount);
+                    await removeRequiredItems(inventory, fromStoreItem(reward.StoreItem));
                 }
 
                 updateQuestStage(inventory, keyChainInfo, { c: run });
@@ -416,6 +435,7 @@ export const giveKeyChainMissionReward = async (
                         await addItem(inventory, fromStoreItem(reward.itemType), reward.amount);
                     } else {
                         await addItem(inventory, fromStoreItem(reward.itemType));
+                        await removeRequiredItems(inventory, fromStoreItem(reward.itemType));
                     }
                 }
 
@@ -442,5 +462,339 @@ export const giveKeyChainStageTriggered = async (
         if (chainStages[keyChainInfo.ChainStage].messageToSendWhenTriggered) {
             await giveKeyChainMessage(inventory, keyChainInfo, questKey, sendMessage);
         }
+    }
+};
+
+export const installShipFeatures = async (
+    inventory: TInventoryDatabaseDocument,
+    keyChainInfo: IKeyChainRequest
+): Promise<void> => {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    const chainStages = ExportKeys[keyChainInfo.KeyChain]?.chainStages;
+    const questKey = inventory.QuestKeys.find(qk => qk.ItemType === keyChainInfo.KeyChain);
+    if (chainStages && questKey) {
+        if (keyChainInfo.ChainStage - 1 >= 0) {
+            const prevStage = chainStages[keyChainInfo.ChainStage - 1];
+            for (const item of prevStage.itemsToGiveWhenTriggered) {
+                if (item.startsWith("/Lotus/StoreItems/Types/Items/ShipFeatureItems/")) {
+                    logger.debug(`installing ship feature ${fromStoreItem(item)}`);
+                    await unlockShipFeature(inventory, fromStoreItem(item));
+                }
+            }
+            if (prevStage.key) {
+                const fixedLevelRewards = getLevelKeyRewards(prevStage.key);
+                if (fixedLevelRewards.levelKeyRewards?.items) {
+                    for (const item of fixedLevelRewards.levelKeyRewards.items) {
+                        if (item.startsWith("/Lotus/StoreItems/Types/Items/ShipFeatureItems/")) {
+                            logger.debug(`installing ship feature ${fromStoreItem(item)}`);
+                            await unlockShipFeature(inventory, fromStoreItem(item));
+                        }
+                    }
+                }
+                if (fixedLevelRewards.levelKeyRewards2) {
+                    for (const item of fixedLevelRewards.levelKeyRewards2) {
+                        if (
+                            item.rewardType == "RT_STORE_ITEM" &&
+                            item.itemType.startsWith("/Lotus/StoreItems/Types/Items/ShipFeatureItems/")
+                        ) {
+                            logger.debug(`installing ship feature ${fromStoreItem(item.itemType)}`);
+                            await unlockShipFeature(inventory, fromStoreItem(item.itemType));
+                        }
+                    }
+                }
+            }
+        }
+    }
+};
+
+export const removeRequiredItems = async (inventory: TInventoryDatabaseDocument, typeName: string): Promise<void> => {
+    switch (typeName) {
+        case "/Lotus/Types/Recipes/WarframeRecipes/MagicianHelmetBlueprint": {
+            const recipeItem = inventory.Recipes.find(
+                i => i.ItemType == "/Lotus/Types/Keys/LimboQuest/LimboHelmetKeyBlueprint"
+            );
+            if (recipeItem && recipeItem.ItemCount > 0) {
+                const recipe = ExportRecipes[recipeItem.ItemType];
+                if (!inventory.MiscItems.find(i => i.ItemType == recipe.resultType)) {
+                    await addItem(inventory, recipe.resultType);
+                    if (recipe.consumeOnUse) await addItem(inventory, recipeItem.ItemType, -1);
+                }
+            }
+            break;
+        }
+        case "/Lotus/Types/Recipes/WarframeRecipes/MagicianSystemsBlueprint": {
+            const recipeItem = inventory.Recipes.find(
+                i => i.ItemType == "/Lotus/Types/Keys/LimboQuest/LimboSystemsKeyBlueprint"
+            );
+            if (recipeItem && recipeItem.ItemCount > 0) {
+                const recipe = ExportRecipes[recipeItem.ItemType];
+                if (!inventory.MiscItems.find(i => i.ItemType == recipe.resultType)) {
+                    await addItem(inventory, recipe.resultType);
+                    if (recipe.consumeOnUse) await addItem(inventory, recipeItem.ItemType, -1);
+                }
+            }
+            break;
+        }
+        case "/Lotus/Types/Recipes/WarframeRecipes/MagicianChassisBlueprint": {
+            const recipeItem = inventory.Recipes.find(
+                i => i.ItemType == "/Lotus/Types/Keys/LimboQuest/LimboChassisKeyBlueprint"
+            );
+            if (recipeItem && recipeItem.ItemCount > 0) {
+                const recipe = ExportRecipes[recipeItem.ItemType];
+                if (!inventory.MiscItems.find(i => i.ItemType == recipe.resultType)) {
+                    await addItem(inventory, recipe.resultType);
+                    if (recipe.consumeOnUse) await addItem(inventory, recipeItem.ItemType, -1);
+                }
+            }
+            break;
+        }
+
+        case "/Lotus/Types/Recipes/WarframeRecipes/BrawlerBlueprint": {
+            const recipeItem = inventory.Recipes.find(
+                i => i.ItemType == "/Lotus/Types/Recipes/Components/InfestedIrradiatedBaitBallBlueprint"
+            );
+            if (recipeItem && recipeItem.ItemCount > 0) {
+                const recipe = ExportRecipes[recipeItem.ItemType];
+                if (!inventory.MiscItems.find(i => i.ItemType == recipe.resultType)) {
+                    await addItem(inventory, recipe.resultType);
+                    await addItem(inventory, recipe.resultType, -1, false, undefined, undefined, true);
+                    if (recipe.consumeOnUse) await addItem(inventory, recipeItem.ItemType, -1);
+                }
+            }
+            break;
+        }
+
+        case "/Lotus/Types/Game/CrewShip/RailJack/DefaultHarness": {
+            const recipeItem = inventory.Recipes.find(
+                i => i.ItemType == "/Lotus/Types/Recipes/ArchwingRecipes/StandardArchwing/StandardArchwingBlueprint"
+            );
+            if (recipeItem && recipeItem.ItemCount > 0) {
+                const recipe = ExportRecipes[recipeItem.ItemType];
+                if (!inventory.MiscItems.find(i => i.ItemType == recipe.resultType)) {
+                    await addItem(inventory, recipe.resultType);
+                    if (recipe.consumeOnUse) await addItem(inventory, recipeItem.ItemType, recipeItem.ItemCount * -1);
+                    await addItems(inventory, [
+                        {
+                            ItemType:
+                                "/Lotus/Types/Recipes/ArchwingRecipes/StandardArchwing/StandardArchwingWingsBlueprint",
+                            ItemCount: -1
+                        },
+                        {
+                            ItemType:
+                                "/Lotus/Types/Recipes/ArchwingRecipes/StandardArchwing/StandardArchwingChassisBlueprint",
+                            ItemCount: -1
+                        },
+                        {
+                            ItemType:
+                                "/Lotus/Types/Recipes/ArchwingRecipes/StandardArchwing/StandardArchwingSystemsBlueprint",
+                            ItemCount: -1
+                        }
+                    ]);
+                }
+            }
+            break;
+        }
+
+        case "/Lotus/Types/Keys/ModQuest/ModQuestKeyChain": {
+            const recipeItem = inventory.Recipes.find(
+                i => i.ItemType == "/Lotus/Types/Recipes/Components/VorBoltRemoverBlueprint"
+            );
+            if (recipeItem && recipeItem.ItemCount > 0) {
+                const recipe = ExportRecipes[recipeItem.ItemType];
+                if (!inventory.MiscItems.find(i => i.ItemType == recipe.resultType)) {
+                    await addItem(inventory, recipe.resultType);
+                    if (recipe.consumeOnUse) await addItem(inventory, recipeItem.ItemType, -1);
+                }
+            }
+            break;
+        }
+
+        case "/Lotus/Types/Recipes/WarframeRecipes/ChromaBlueprint": {
+            await addItems(inventory, [
+                {
+                    ItemType: "/Lotus/Types/Recipes/WarframeRecipes/ChromaBeaconABlueprint",
+                    ItemCount: -1
+                },
+                {
+                    ItemType: "/Lotus/Types/Recipes/WarframeRecipes/ChromaBeaconBBlueprint",
+                    ItemCount: -1
+                },
+                {
+                    ItemType: "/Lotus/Types/Recipes/WarframeRecipes/ChromaBeaconCBlueprint",
+                    ItemCount: -1
+                }
+            ]);
+
+            break;
+        }
+
+        case "/Lotus/Types/Recipes/WarframeRecipes/OctaviaBlueprint": {
+            const recipeItem = inventory.Recipes.find(
+                i => i.ItemType == "/Lotus/Types/Keys/BardQuest/BardQuestSequencerBlueprint"
+            );
+            if (recipeItem && recipeItem.ItemCount > 0) {
+                const recipe = ExportRecipes[recipeItem.ItemType];
+                if (!inventory.MiscItems.find(i => i.ItemType == recipe.resultType)) {
+                    await addItem(inventory, recipe.resultType);
+                    if (recipe.consumeOnUse) await addItem(inventory, recipeItem.ItemType, -1);
+                    await addItems(inventory, [
+                        {
+                            ItemType: "/Lotus/Types/Keys/BardQuest/BardQuestSequencerPartA",
+                            ItemCount: -1
+                        },
+                        {
+                            ItemType: "/Lotus/Types/Keys/BardQuest/BardQuestSequencerPartB",
+                            ItemCount: -1
+                        },
+                        {
+                            ItemType: "/Lotus/Types/Keys/BardQuest/BardQuestSequencerPartC",
+                            ItemCount: -1
+                        }
+                    ]);
+                }
+            }
+            break;
+        }
+
+        case "/Lotus/Types/Game/CrewShip/Ships/RailJack": {
+            const recipeItem = inventory.Recipes.find(
+                i => i.ItemType == "/Lotus/Types/Recipes/Railjack/RailjackCephalonBlueprint"
+            );
+            if (recipeItem && recipeItem.ItemCount > 0) {
+                const recipe = ExportRecipes[recipeItem.ItemType];
+                if (!inventory.MiscItems.find(i => i.ItemType == recipe.resultType)) {
+                    await addItem(inventory, recipe.resultType);
+                    if (recipe.consumeOnUse) await addItem(inventory, recipeItem.ItemType, recipeItem.ItemCount * -1);
+                    await unlockShipFeature(inventory, recipe.resultType);
+                }
+            }
+            break;
+        }
+
+        case "/Lotus/Types/Items/ShipDecos/MummyQuestVessel": {
+            const gearItem = inventory.Consumables.find(
+                i => i.ItemType == "/Lotus/Types/Keys/MummyQuest/MummyArtifact01GearItem"
+            );
+            if (gearItem && gearItem.ItemCount > 0) {
+                await addItem(inventory, gearItem.ItemType, gearItem.ItemCount * -1);
+            }
+            break;
+        }
+
+        case "/Lotus/Types/Recipes/WarframeRecipes/ConcreteFrameBlueprint": {
+            const recipeItem = inventory.Recipes.find(
+                i => i.ItemType == "/Lotus/Types/Gameplay/EntratiLab/Quest/GargoyleRecipeItem"
+            );
+            if (recipeItem && recipeItem.ItemCount > 0) {
+                const recipe = ExportRecipes[recipeItem.ItemType];
+                if (!inventory.MiscItems.find(i => i.ItemType == recipe.resultType)) {
+                    await addItem(inventory, recipe.resultType);
+                    if (recipe.consumeOnUse) await addItem(inventory, recipeItem.ItemType, recipeItem.ItemCount * -1);
+                }
+            }
+            break;
+        }
+
+        case "/Lotus/Upgrades/Skins/Umbra/UmbraAltHelmet": {
+            const recipeItem = inventory.Recipes.find(
+                i => i.ItemType == "/Lotus/Types/Recipes/WarframeRecipes/ExcaliburUmbraBlueprint"
+            );
+            if (recipeItem && recipeItem.ItemCount > 0) {
+                const recipe = ExportRecipes[recipeItem.ItemType];
+                if (!inventory.MiscItems.find(i => i.ItemType == recipe.resultType)) {
+                    const umbraModA = (
+                        await addItem(
+                            inventory,
+                            "/Lotus/Upgrades/Mods/Sets/Umbra/WarframeUmbraModA",
+                            1,
+                            false,
+                            undefined,
+                            `{"lvl":5}`
+                        )
+                    ).Upgrades![0];
+                    const umbraModB = (
+                        await addItem(
+                            inventory,
+                            "/Lotus/Upgrades/Mods/Sets/Umbra/WarframeUmbraModB",
+                            1,
+                            false,
+                            undefined,
+                            `{"lvl":5}`
+                        )
+                    ).Upgrades![0];
+                    const umbraModC = (
+                        await addItem(
+                            inventory,
+                            "/Lotus/Upgrades/Mods/Sets/Umbra/WarframeUmbraModC",
+                            1,
+                            false,
+                            undefined,
+                            `{"lvl":5}`
+                        )
+                    ).Upgrades![0];
+                    const sacrificeModA = (
+                        await addItem(
+                            inventory,
+                            "/Lotus/Upgrades/Mods/Sets/Sacrifice/MeleeSacrificeModA",
+                            1,
+                            false,
+                            undefined,
+                            `{"lvl":5}`
+                        )
+                    ).Upgrades![0];
+                    const sacrificeModB = (
+                        await addItem(
+                            inventory,
+                            "/Lotus/Upgrades/Mods/Sets/Sacrifice/MeleeSacrificeModB",
+                            1,
+                            false,
+                            undefined,
+                            `{"lvl":5}`
+                        )
+                    ).Upgrades![0];
+
+                    await addPowerSuit(inventory, "/Lotus/Powersuits/Excalibur/ExcaliburUmbra", {
+                        Configs: [
+                            {
+                                Upgrades: [
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    umbraModA.ItemId.$oid,
+                                    umbraModB.ItemId.$oid,
+                                    umbraModC.ItemId.$oid
+                                ]
+                            }
+                        ],
+                        XP: 900_000,
+                        Features: EquipmentFeatures.DOUBLE_CAPACITY
+                    });
+                    inventory.XPInfo.push({
+                        ItemType: "/Lotus/Powersuits/Excalibur/ExcaliburUmbra",
+                        XP: 900_000
+                    });
+
+                    addEquipment(inventory, "Melee", "/Lotus/Weapons/Tenno/Melee/Swords/UmbraKatana/UmbraKatana", {
+                        Configs: [
+                            {
+                                Upgrades: ["", "", "", "", "", "", sacrificeModA.ItemId.$oid, sacrificeModB.ItemId.$oid]
+                            }
+                        ],
+                        XP: 450_000,
+                        Features: EquipmentFeatures.DOUBLE_CAPACITY
+                    });
+                    inventory.XPInfo.push({
+                        ItemType: "/Lotus/Weapons/Tenno/Melee/Swords/UmbraKatana/UmbraKatana",
+                        XP: 450_000
+                    });
+                    if (recipe.consumeOnUse) await addItem(inventory, recipeItem.ItemType, recipeItem.ItemCount * -1);
+                }
+            }
+            break;
+        }
+        default:
+            break;
     }
 };

@@ -41,8 +41,8 @@ export const createAccount = async (accountData: IDatabaseAccountRequiredFields)
         await account.save();
         const loadoutId = await createLoadout(account._id);
         const shipId = await createShip(account._id);
-        await createInventory(account._id, { loadOutPresetId: loadoutId, ship: shipId });
         await createPersonalRooms(account._id, shipId);
+        await createInventory(account._id, { loadOutPresetId: loadoutId, ship: shipId });
         await createStats(account._id.toString());
         return account.toJSON();
     } catch (error) {
@@ -64,17 +64,6 @@ export const createPersonalRooms = async (accountId: Types.ObjectId, shipId: Typ
         personalRoomsOwnerId: accountId,
         activeShipId: shipId
     });
-    if (config.skipTutorial) {
-        // unlocked during Vor's Prize and The Teacher quests
-        const defaultFeatures = [
-            "/Lotus/Types/Items/ShipFeatureItems/MercuryNavigationFeatureItem",
-            "/Lotus/Types/Items/ShipFeatureItems/ArsenalFeatureItem",
-            "/Lotus/Types/Items/ShipFeatureItems/SocialMenuFeatureItem",
-            "/Lotus/Types/Items/ShipFeatureItems/FoundryFeatureItem",
-            "/Lotus/Types/Items/ShipFeatureItems/ModsFeatureItem"
-        ];
-        personalRooms.Ship.Features.push(...defaultFeatures);
-    }
     await personalRooms.save();
 };
 
