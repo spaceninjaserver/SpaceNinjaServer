@@ -12,8 +12,8 @@ let httpServer: http.Server | undefined;
 let httpsServer: https.Server | undefined;
 
 const tlsOptions = {
-    key: fs.readFileSync("static/certs/key.pem"),
-    cert: fs.readFileSync("static/certs/cert.pem")
+    key: fs.readFileSync("static/cert/key.pem"),
+    cert: fs.readFileSync("static/cert/cert.pem")
 };
 
 export const startWebServer = (): void => {
