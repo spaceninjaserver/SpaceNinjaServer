@@ -1219,7 +1219,7 @@ export const addMissionRewards = async (
     }
 
     if (levelKeyName) {
-        const fixedLevelRewards = getLevelKeyRewards(levelKeyName);
+        const fixedLevelRewards = getLevelKeyRewards(levelKeyName, account.BuildLabel);
         //logger.debug(`fixedLevelRewards ${fixedLevelRewards}`);
         if (fixedLevelRewards.levelKeyRewards) {
             missionCompletionCredits += addFixedLevelRewards(

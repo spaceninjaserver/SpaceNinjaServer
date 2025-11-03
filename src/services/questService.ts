@@ -149,6 +149,7 @@ export const addQuestKey = (
 export const completeQuest = async (
     inventory: TInventoryDatabaseDocument,
     questKey: string,
+    buildLabel: string | undefined,
     sendMessages: boolean = false
 ): Promise<void | IQuestKeyClient> => {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -197,8 +198,8 @@ export const completeQuest = async (
         if (stage.c <= run) {
             stage.c = run;
             await giveKeyChainStageTriggered(inventory, { KeyChain: questKey, ChainStage: i }, sendMessages);
-            await giveKeyChainMissionReward(inventory, { KeyChain: questKey, ChainStage: i });
-            await installShipFeatures(inventory, { KeyChain: questKey, ChainStage: i });
+            await giveKeyChainMissionReward(inventory, { KeyChain: questKey, ChainStage: i }, buildLabel);
+            await installShipFeatures(inventory, { KeyChain: questKey, ChainStage: i }, buildLabel);
         }
     }
 
@@ -400,7 +401,8 @@ export const giveKeyChainMessage = async (
 
 export const giveKeyChainMissionReward = async (
     inventory: TInventoryDatabaseDocument,
-    keyChainInfo: IKeyChainRequest
+    keyChainInfo: IKeyChainRequest,
+    buildLabel: string | undefined
 ): Promise<void> => {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     const chainStages = ExportKeys[keyChainInfo.KeyChain]?.chainStages;
@@ -409,7 +411,7 @@ export const giveKeyChainMissionReward = async (
         const missionName = chainStages[keyChainInfo.ChainStage].key;
         const questKey = inventory.QuestKeys.find(q => q.ItemType === keyChainInfo.KeyChain);
         if (missionName && questKey) {
-            const fixedLevelRewards = getLevelKeyRewards(missionName);
+            const fixedLevelRewards = getLevelKeyRewards(missionName, buildLabel);
             const run = questKey.Progress?.[0]?.c ?? 0;
             if (fixedLevelRewards.levelKeyRewards) {
                 const missionRewards: { StoreItem: string; ItemCount: number }[] = [];
@@ -463,7 +465,8 @@ export const giveKeyChainStageTriggered = async (
 
 export const installShipFeatures = async (
     inventory: TInventoryDatabaseDocument,
-    keyChainInfo: IKeyChainRequest
+    keyChainInfo: IKeyChainRequest,
+    buildLabel: string | undefined
 ): Promise<void> => {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     const chainStages = ExportKeys[keyChainInfo.KeyChain]?.chainStages;
@@ -478,7 +481,7 @@ export const installShipFeatures = async (
                 }
             }
             if (prevStage.key) {
-                const fixedLevelRewards = getLevelKeyRewards(prevStage.key);
+                const fixedLevelRewards = getLevelKeyRewards(prevStage.key, buildLabel);
                 if (fixedLevelRewards.levelKeyRewards?.items) {
                     for (const item of fixedLevelRewards.levelKeyRewards.items) {
                         if (item.startsWith("/Lotus/StoreItems/Types/Items/ShipFeatureItems/")) {

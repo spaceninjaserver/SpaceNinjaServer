@@ -1,0 +1,165 @@
+{
+  "/Lotus/Types/Keys/VorsPrize/MissionOne": [
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Types/Items/ShipFeatureItems/SocialMenuFeatureItem"
+    },
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Upgrades/Mods/Melee/WeaponMeleeDamageMod"
+    },
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Upgrades/Mods/Rifle/WeaponDamageAmountMod"
+    },
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Upgrades/Mods/Pistol/WeaponDamageAmountMod"
+    },
+    {
+      "rewardType": "RT_CREDITS",
+      "amount": 2500
+    }
+  ],
+  "/Lotus/Types/Keys/VorsPrize/MissionTwo": [
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Types/Items/ShipFeatureItems/ModsFeatureItem"
+    },
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Upgrades/Mods/Warframe/AvatarHealthMaxMod"
+    },
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Upgrades/Mods/Warframe/AvatarShieldMaxMod"
+    },
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Upgrades/Mods/Warframe/AvatarAbilityRangeMod"
+    },
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Upgrades/Mods/Warframe/AvatarAbilityStrengthMod"
+    },
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Upgrades/Mods/Warframe/AvatarAbilityDurationMod"
+    },
+    {
+      "rewardType": "RT_CREDITS",
+      "amount": 2500
+    }
+  ],
+  "/Lotus/Types/Keys/VorsPrize/MissionThree": {
+    "name": "/Lotus/Language/G1Quests/VorsPrize3",
+    "parentName": "/Lotus/Types/Keys/TestKeyA",
+    "codexSecret": true,
+    "rewards": [
+      {
+        "rewardType": "RT_STORE_ITEM",
+        "itemType": "/Lotus/StoreItems/Types/Items/ShipFeatureItems/FoundryFeatureItem"
+      },
+      {
+        "rewardType": "RT_STORE_ITEM",
+        "itemType": "/Lotus/StoreItems/Upgrades/Mods/Melee/WeaponFireRateMod"
+      },
+      {
+        "rewardType": "RT_STORE_ITEM",
+        "itemType": "/Lotus/StoreItems/Upgrades/Mods/Rifle/WeaponFactionDamageCorpus"
+      },
+      {
+        "rewardType": "RT_STORE_ITEM",
+        "itemType": "/Lotus/StoreItems/Upgrades/Mods/Rifle/WeaponFactionDamageGrineer"
+      },
+      {
+        "rewardType": "RT_STORE_ITEM",
+        "itemType": "/Lotus/StoreItems/Upgrades/Mods/Pistol/WeaponFireDamageMod"
+      },
+      {
+        "rewardType": "RT_STORE_ITEM",
+        "itemType": "/Lotus/StoreItems/Upgrades/Mods/Pistol/WeaponElectricityDamageMod"
+      },
+      {
+        "rewardType": "RT_CREDITS",
+        "amount": 2500
+      }
+    ]
+  },
+  "/Lotus/Types/Keys/VorsPrize/MissionFour": [
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Upgrades/Mods/Warframe/AvatarPickupBonusMod"
+    },
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Upgrades/Mods/Warframe/AvatarPowerMaxMod"
+    },
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Upgrades/Mods/Warframe/AvatarEnemyRadarMod"
+    },
+    {
+      "rewardType": "RT_CREDITS",
+      "amount": 2500
+    }
+  ],
+  "/Lotus/Types/Keys/VorsPrize/MissionFive": [
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Types/Items/ShipFeatureItems/MercuryNavigationFeatureItem"
+    },
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/CommonFusionBundle"
+    },
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/CommonFusionBundle"
+    },
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/CommonFusionBundle"
+    },
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/CommonFusionBundle"
+    },
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/CommonFusionBundle"
+    },
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/CommonFusionBundle"
+    },
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/CommonFusionBundle"
+    },
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/CommonFusionBundle"
+    },
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/CommonFusionBundle"
+    },
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/CommonFusionBundle"
+    },
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/CommonFusionBundle"
+    },
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/CommonFusionBundle"
+    },
+    {
+      "rewardType": "RT_CREDITS",
+      "amount": 5000
+    }
+  ]
+}

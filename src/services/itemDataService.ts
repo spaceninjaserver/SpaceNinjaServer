@@ -40,6 +40,8 @@ import {
 } from "warframe-public-export-plus";
 import type { IMessage } from "../models/inboxModel.ts";
 import { logger } from "../utils/logger.ts";
+import { version_compare } from "../helpers/inventoryHelpers.ts";
+import vorsPrizePreU40Rewards from "../../static/fixed_responses/vorsPrizePreU40Rewards.json" with { type: "json" };
 
 export type WeaponTypeInternal =
     | "LongGuns"
@@ -227,17 +229,24 @@ export const getKeyChainItems = ({ KeyChain, ChainStage }: IKeyChainRequest): st
 };
 
 export const getLevelKeyRewards = (
-    levelKey: string
+    levelKey: string,
+    buildLabel: string | undefined
 ): { levelKeyRewards?: IMissionReward; levelKeyRewards2?: TReward[] } => {
     const key = ExportKeys[levelKey] as IKey | undefined;
 
     const levelKeyRewards = key?.missionReward;
-    const levelKeyRewards2 = key?.rewards;
+    let levelKeyRewards2 = key?.rewards;
 
     if (!levelKeyRewards && !levelKeyRewards2) {
         logger.warn(
             `Could not find any reward information for ${levelKey}, gonna have to potentially short-change you`
         );
+    }
+
+    if (buildLabel && version_compare(buildLabel, "2025.10.14.16.10") < 0) {
+        if (levelKey in vorsPrizePreU40Rewards) {
+            levelKeyRewards2 = vorsPrizePreU40Rewards[levelKey as keyof typeof vorsPrizePreU40Rewards] as TReward[];
+        }
     }
 
     return {

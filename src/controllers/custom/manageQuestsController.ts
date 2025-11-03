@@ -37,7 +37,7 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
     switch (operation) {
         case "completeAll": {
             for (const questKey of inventory.QuestKeys) {
-                await completeQuest(inventory, questKey.ItemType);
+                await completeQuest(inventory, questKey.ItemType, undefined);
             }
             break;
         }
@@ -72,7 +72,7 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
                     break;
                 }
 
-                await completeQuest(inventory, questItemType);
+                await completeQuest(inventory, questItemType, undefined);
             }
             break;
         }
@@ -137,7 +137,7 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
 
                 if (currentStage + 1 == questManifest.chainStages?.length) {
                     logger.debug(`Trying to complete last stage with nextStage, calling completeQuest instead`);
-                    await completeQuest(inventory, questKey.ItemType, true);
+                    await completeQuest(inventory, questKey.ItemType, undefined, true);
                 } else {
                     if (run > 0) {
                         questKey.Progress[currentStage + 1].c = run;
@@ -151,10 +151,14 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
                     });
 
                     if (currentStage > 0) {
-                        await giveKeyChainMissionReward(inventory, {
-                            KeyChain: questKey.ItemType,
-                            ChainStage: currentStage
-                        });
+                        await giveKeyChainMissionReward(
+                            inventory,
+                            {
+                                KeyChain: questKey.ItemType,
+                                ChainStage: currentStage
+                            },
+                            undefined
+                        );
                     }
                 }
             }

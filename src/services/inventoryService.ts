@@ -116,8 +116,8 @@ export const createInventory = async (
         if (config.skipTutorial) {
             inventory.PlayedParkourTutorial = true;
             await addStartingGear(inventory);
-            await completeQuest(inventory, "/Lotus/Types/Keys/VorsPrize/VorsPrizeQuestKeyChain");
-            await completeQuest(inventory, "/Lotus/Types/Keys/ModQuest/ModQuestKeyChain");
+            await completeQuest(inventory, "/Lotus/Types/Keys/VorsPrize/VorsPrizeQuestKeyChain", undefined);
+            await completeQuest(inventory, "/Lotus/Types/Keys/ModQuest/ModQuestKeyChain", undefined);
 
             const completedMissions = ["SolNode27", "SolNode89", "SolNode63", "SolNode85", "SolNode15", "SolNode79"];
 
@@ -1569,6 +1569,7 @@ const addCrewShip = async (
             const questChanges = await completeQuest(
                 inventory,
                 "/Lotus/Types/Keys/RailJackBuildQuest/RailjackBuildQuestKeyChain",
+                undefined,
                 false
             );
             if (questChanges) {
