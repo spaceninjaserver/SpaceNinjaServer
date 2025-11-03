@@ -170,6 +170,7 @@ import { upgradeOperatorController } from "../controllers/api/upgradeOperatorCon
 import { upgradesController } from "../controllers/api/upgradesController.ts";
 import { valenceSwapController } from "../controllers/api/valenceSwapController.ts";
 import { wishlistController } from "../controllers/api/wishlistController.ts";
+import { worldStateController } from "../controllers/dynamic/worldStateController.ts";
 
 const apiRouter = express.Router();
 
@@ -235,6 +236,7 @@ apiRouter.get("/surveys.php", surveysController);
 apiRouter.get("/trading.php", tradingController);
 apiRouter.get("/updateSession.php", updateSessionGetController);
 apiRouter.get("/upgradeOperator.php", upgradeOperatorController);
+apiRouter.get("/worldState.php", worldStateController); // U8
 
 // post
 apiRouter.post("/abortDojoComponent.php", abortDojoComponentController);

@@ -109,12 +109,19 @@ const createLoginResponse = (
     const resp: ILoginResponse = {
         id: account.id,
         DisplayName: account.DisplayName,
-        CountryCode: account.CountryCode,
         AmazonAuthToken: account.AmazonAuthToken,
         AmazonRefreshToken: account.AmazonRefreshToken,
         Nonce: account.Nonce,
         BuildLabel: buildLabel
     };
+    if (version_compare(buildLabel, "2014.10.24.08.24") >= 0) {
+        // U15 and up
+        resp.CountryCode = account.CountryCode;
+    } else {
+        // U8
+        resp.NatHash = "0";
+        resp.SteamId = "0";
+    }
     if (version_compare(buildLabel, "2015.02.13.10.41") >= 0) {
         resp.NRS = [config.nrsAddress ?? myAddress];
     }

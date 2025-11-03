@@ -55,6 +55,8 @@ export interface ILoginResponse extends IAccountAndLoginResponseCommons {
     DTLS?: number;
     IRC?: string[];
     HUB?: string;
+    NatHash?: string;
+    SteamId?: string;
 }
 
 export interface IGroup {
