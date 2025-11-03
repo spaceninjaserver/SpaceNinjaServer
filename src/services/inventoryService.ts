@@ -473,7 +473,9 @@ export const addItem = async (
         return addCustomization(inventory, typeName);
     }
     if (typeName in ExportUpgrades || typeName in ExportArcanes) {
-        if (targetFingerprint) {
+        if (targetFingerprint && typeName.startsWith("/Lotus/Upgrades/Mods/Randomized/Raw")) {
+            logger.debug(`ignoring fingerprint for raw riven mod`);
+        } else if (targetFingerprint) {
             if (quantity != 1) {
                 logger.warn(`adding 1 of ${typeName} ${targetFingerprint} even tho quantity ${quantity} was requested`);
             }
