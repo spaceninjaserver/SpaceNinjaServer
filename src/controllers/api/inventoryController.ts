@@ -310,12 +310,13 @@ export const getInventoryResponse = async (
     }
 
     if (inventory.skipAllDialogue) {
-        inventoryResponse.TauntHistory = [
-            {
+        inventoryResponse.TauntHistory ??= [];
+        if (!inventoryResponse.TauntHistory.find(x => x.node == "TreasureTutorial")) {
+            inventoryResponse.TauntHistory.push({
                 node: "TreasureTutorial",
                 state: "TS_COMPLETED"
-            }
-        ];
+            });
+        }
         for (const str of allDialogue) {
             addString(inventoryResponse.NodeIntrosCompleted, str);
         }
