@@ -10,6 +10,7 @@ import { addPendingFriendController } from "../controllers/api/addPendingFriendC
 import { addToAllianceController } from "../controllers/api/addToAllianceController.ts";
 import { addToGuildController } from "../controllers/api/addToGuildController.ts";
 import { adoptPetController } from "../controllers/api/adoptPetController.ts";
+import { aggregateSessionsController } from "../controllers/dynamic/aggregateSessionsController.ts";
 import { apartmentController } from "../controllers/api/apartmentController.ts";
 import { arcaneCommonController } from "../controllers/api/arcaneCommonController.ts";
 import { archonFusionController } from "../controllers/api/archonFusionController.ts";
@@ -248,6 +249,7 @@ apiRouter.post("/addPendingFriend.php", addPendingFriendController);
 apiRouter.post("/addToAlliance.php", addToAllianceController);
 apiRouter.post("/addToGuild.php", addToGuildController);
 apiRouter.post("/adoptPet.php", adoptPetController);
+apiRouter.post("/aggregateSessions.php", aggregateSessionsController); // Pre-Specters of the Rail builds
 apiRouter.post("/arcaneCommon.php", arcaneCommonController);
 apiRouter.post("/archonFusion.php", archonFusionController);
 apiRouter.post("/artifacts.php", artifactsController);

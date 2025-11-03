@@ -13,8 +13,8 @@ const hostSessionController: RequestHandler = async (req, res) => {
     const session = createNewSession(hostSessionRequest, account._id);
     logger.debug(`New Session Created`, { session });
 
-    if (account.BuildLabel && version_compare(account.BuildLabel, "2015.03.21.08.17") < 0) {
-        // U15 or below
+    if (account.BuildLabel && version_compare(account.BuildLabel, "2016.07.08.16.56") < 0) {
+        // Pre-Specters of the Rail
         res.send(session.sessionId.toString());
     } else {
         res.json({ sessionId: toOid2(session.sessionId, account.BuildLabel), rewardSeed: 99999999 });
