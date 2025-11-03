@@ -51,41 +51,36 @@
       "amount": 2500
     }
   ],
-  "/Lotus/Types/Keys/VorsPrize/MissionThree": {
-    "name": "/Lotus/Language/G1Quests/VorsPrize3",
-    "parentName": "/Lotus/Types/Keys/TestKeyA",
-    "codexSecret": true,
-    "rewards": [
-      {
-        "rewardType": "RT_STORE_ITEM",
-        "itemType": "/Lotus/StoreItems/Types/Items/ShipFeatureItems/FoundryFeatureItem"
-      },
-      {
-        "rewardType": "RT_STORE_ITEM",
-        "itemType": "/Lotus/StoreItems/Upgrades/Mods/Melee/WeaponFireRateMod"
-      },
-      {
-        "rewardType": "RT_STORE_ITEM",
-        "itemType": "/Lotus/StoreItems/Upgrades/Mods/Rifle/WeaponFactionDamageCorpus"
-      },
-      {
-        "rewardType": "RT_STORE_ITEM",
-        "itemType": "/Lotus/StoreItems/Upgrades/Mods/Rifle/WeaponFactionDamageGrineer"
-      },
-      {
-        "rewardType": "RT_STORE_ITEM",
-        "itemType": "/Lotus/StoreItems/Upgrades/Mods/Pistol/WeaponFireDamageMod"
-      },
-      {
-        "rewardType": "RT_STORE_ITEM",
-        "itemType": "/Lotus/StoreItems/Upgrades/Mods/Pistol/WeaponElectricityDamageMod"
-      },
-      {
-        "rewardType": "RT_CREDITS",
-        "amount": 2500
-      }
-    ]
-  },
+  "/Lotus/Types/Keys/VorsPrize/MissionThree": [
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Types/Items/ShipFeatureItems/FoundryFeatureItem"
+    },
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Upgrades/Mods/Melee/WeaponFireRateMod"
+    },
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Upgrades/Mods/Rifle/WeaponFactionDamageCorpus"
+    },
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Upgrades/Mods/Rifle/WeaponFactionDamageGrineer"
+    },
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Upgrades/Mods/Pistol/WeaponFireDamageMod"
+    },
+    {
+      "rewardType": "RT_STORE_ITEM",
+      "itemType": "/Lotus/StoreItems/Upgrades/Mods/Pistol/WeaponElectricityDamageMod"
+    },
+    {
+      "rewardType": "RT_CREDITS",
+      "amount": 2500
+    }
+  ],
   "/Lotus/Types/Keys/VorsPrize/MissionFour": [
     {
       "rewardType": "RT_STORE_ITEM",
