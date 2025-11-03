@@ -51,7 +51,7 @@ dict = {
     code_focusUnlocked: `|COUNT| neue Fokus-Schulen freigeschaltet! Ein Inventar-Update wird benötigt, damit die Änderungen im Spiel sichtbar werden.`,
     code_addModsConfirm: `Bist du sicher, dass du |COUNT| Mods zu deinem Account hinzufügen möchtest?`,
     code_succImport: `Erfolgreich importiert.`,
-    code_succRelog: `Fertig. Bitte beachte, dass du dich neu anmelden musst, um Änderungen im Spiel zu sehen.`,
+    code_succRelog: `Fertig. Bitte beachte, dass du dich neu anmelden musst, damit die Änderung im Spiel sichtbar wird.`,
     code_nothingToDo: `Fertig. Es gab nichts zu tun.`,
     code_gild: `Veredeln`,
     code_moa: `Moa`,

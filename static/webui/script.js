@@ -169,6 +169,7 @@ function renameAccount(taken_name) {
                 } else {
                     $(".displayname").text(newname);
                     updateLocElements();
+                    toast(loc("code_succRelog"));
                 }
             });
         });
