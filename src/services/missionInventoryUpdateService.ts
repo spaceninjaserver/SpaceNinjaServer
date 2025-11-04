@@ -1522,7 +1522,38 @@ export const addMissionRewards = async (
             syndicateEntry = Goals.find(m => m._id.$oid === syndicateMissionId);
             if (syndicateEntry) syndicateEntry.Tag = syndicateEntry.JobAffiliationTag!;
         }
-        if (syndicateEntry && syndicateEntry.Jobs && !jobType.startsWith("/Lotus/Types/Gameplay/NokkoColony/Jobs")) {
+        const specialCase = [
+            {
+                endings: ["Heists/HeistProfitTakerBountyOne"],
+                stage: 2,
+                amount: 1000,
+                tag: "SolarisSyndicate"
+            },
+            {
+                endings: [
+                    "Heists/HeistProfitTakerBountyTwo",
+                    "Heists/HeistProfitTakerBountyThree",
+                    "Heists/HeistProfitTakerBountyFour",
+                    "Heists/HeistExploiterBountyOne"
+                ],
+                amount: 1000,
+                tag: "SolarisSyndicate"
+            },
+            { endings: ["Hunts/AllTeralystsHunt"], stage: 2, amount: 5000, tag: "CetusSyndicate" },
+            {
+                endings: ["Hunts/TeralystHunt"],
+                amount: 1000,
+                tag: "CetusSyndicate"
+            },
+            { endings: ["Jobs/NewbieJob"], amount: 200, tag: "CetusSyndicate" }
+        ];
+        const match = specialCase.find(rule => rule.endings.some(e => jobType.endsWith(e)));
+        if (match) {
+            const specialCaseReward = match.stage === undefined || rewardInfo.JobStage === match.stage ? match : null;
+            if (specialCaseReward) {
+                addStanding(inventory, match.tag, Math.floor(match.amount / (rewardInfo.Q ? 0.8 : 1)), AffiliationMods);
+            }
+        } else if (syndicateEntry && syndicateEntry.Jobs) {
             let currentJob = syndicateEntry.Jobs[rewardInfo.JobTier!];
             if (
                 [
@@ -1580,41 +1611,14 @@ export const addMissionRewards = async (
                     );
                     logger.warning(`currentJob`, { currentJob: currentJob });
                 }
-            } else {
-                const specialCase = [
-                    { endings: ["Heists/HeistProfitTakerBountyOne"], stage: 2, amount: 1000 },
-                    { endings: ["Hunts/AllTeralystsHunt"], stage: 2, amount: 5000 },
-                    {
-                        endings: [
-                            "Hunts/TeralystHunt",
-                            "Heists/HeistProfitTakerBountyTwo",
-                            "Heists/HeistProfitTakerBountyThree",
-                            "Heists/HeistProfitTakerBountyFour",
-                            "Heists/HeistExploiterBountyOne"
-                        ],
-                        amount: 1000
-                    }
-                ];
-                const specialCaseReward = specialCase.find(
-                    rule =>
-                        rule.endings.some(e => jobType.endsWith(e)) &&
-                        (rule.stage === undefined || rewardInfo.JobStage === rule.stage)
+            } else if (!jobType.startsWith("/Lotus/Types/Gameplay/NokkoColony/Jobs")) {
+                addStanding(
+                    inventory,
+                    syndicateEntry.Tag,
+                    Math.floor(currentJob.xpAmounts[rewardInfo.JobStage] / (rewardInfo.Q ? 0.8 : 1)),
+                    AffiliationMods
                 );
-
-                if (specialCaseReward) {
-                    addStanding(inventory, syndicateEntry.Tag, specialCaseReward.amount, AffiliationMods);
-                } else {
-                    addStanding(
-                        inventory,
-                        syndicateEntry.Tag,
-                        Math.floor(currentJob.xpAmounts[rewardInfo.JobStage] / (rewardInfo.Q ? 0.8 : 1)),
-                        AffiliationMods
-                    );
-                }
             }
-        }
-        if (jobType == "/Lotus/Types/Gameplay/Eidolon/Jobs/NewbieJob") {
-            addStanding(inventory, "CetusSyndicate", Math.floor(200 / (rewardInfo.Q ? 0.8 : 1)), AffiliationMods);
         }
     }
 
@@ -1969,7 +1973,8 @@ function getRandomMissionDrops(
                         if (syndicateEntry) syndicateEntry.Tag = syndicateEntry.JobAffiliationTag!;
                     }
                     if (syndicateEntry && syndicateEntry.Jobs) {
-                        let job = syndicateEntry.Jobs[RewardInfo.JobTier!];
+                        let job;
+                        if (RewardInfo.JobTier && RewardInfo.JobTier > 0) job = syndicateEntry.Jobs[RewardInfo.JobTier];
 
                         if (syndicateEntry.Tag === "EntratiSyndicate") {
                             if (
@@ -2073,38 +2078,40 @@ function getRandomMissionDrops(
                         ) {
                             job = syndicateEntry.Jobs.find(j => j.jobType === jobType)!;
                         }
-                        rewardManifests = [job.rewards];
-                        if (job.xpAmounts.length > 1) {
-                            const curentStage = RewardInfo.JobStage! + 1;
-                            const totalStage = job.xpAmounts.length;
-                            let tableIndex = 1; // Stage 2, Stage 3 of 4, and Stage 3 of 5
+                        if (job) {
+                            rewardManifests = [job.rewards];
+                            if (job.xpAmounts.length > 1) {
+                                const curentStage = RewardInfo.JobStage! + 1;
+                                const totalStage = job.xpAmounts.length;
+                                let tableIndex = 1; // Stage 2, Stage 3 of 4, and Stage 3 of 5
 
-                            if (curentStage == 1) {
-                                tableIndex = 0;
-                            } else if (curentStage == totalStage) {
-                                tableIndex = 3;
-                            } else if (totalStage == 5 && curentStage == 4) {
-                                tableIndex = 2;
-                            }
-                            if (jobType.startsWith("/Lotus/Types/Gameplay/NokkoColony/Jobs/NokkoJob")) {
-                                if (RewardInfo.JobStage === job.xpAmounts.length - 1) {
-                                    rotations = [0, 1, 2];
+                                if (curentStage == 1) {
+                                    tableIndex = 0;
+                                } else if (curentStage == totalStage) {
+                                    tableIndex = 3;
+                                } else if (totalStage == 5 && curentStage == 4) {
+                                    tableIndex = 2;
+                                }
+                                if (jobType.startsWith("/Lotus/Types/Gameplay/NokkoColony/Jobs/NokkoJob")) {
+                                    if (RewardInfo.JobStage === job.xpAmounts.length - 1) {
+                                        rotations = [0, 1, 2];
+                                    } else {
+                                        rewardManifests = [];
+                                    }
                                 } else {
-                                    rewardManifests = [];
+                                    rotations = [tableIndex];
                                 }
                             } else {
-                                rotations = [tableIndex];
+                                rotations = [0];
                             }
-                        } else {
-                            rotations = [0];
-                        }
-                        if (
-                            RewardInfo.Q &&
-                            (RewardInfo.JobStage === job.xpAmounts.length - 1 || jobType.endsWith("VaultBounty")) &&
-                            !jobType.startsWith("/Lotus/Types/Gameplay/NokkoColony/Jobs/NokkoJob") &&
-                            !isEndlessJob
-                        ) {
-                            rotations.push(ExportRewards[job.rewards].length - 1);
+                            if (
+                                RewardInfo.Q &&
+                                (RewardInfo.JobStage === job.xpAmounts.length - 1 || jobType.endsWith("VaultBounty")) &&
+                                !jobType.startsWith("/Lotus/Types/Gameplay/NokkoColony/Jobs/NokkoJob") &&
+                                !isEndlessJob
+                            ) {
+                                rotations.push(ExportRewards[job.rewards].length - 1);
+                            }
                         }
                     }
                 }
