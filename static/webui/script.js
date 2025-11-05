@@ -3552,16 +3552,21 @@ function doPopArchonCrystalUpgrade(type) {
 
 function doImport() {
     revalidateAuthz().then(() => {
-        $.post({
-            url: "/custom/import?" + window.authz,
-            contentType: "application/json",
-            data: JSON.stringify({
-                inventory: JSON.parse($("#import-inventory").val())
-            })
-        }).then(function () {
-            toast(loc("code_succImport"));
-            updateInventory();
-        });
+        try {
+            $.post({
+                url: "/custom/import?" + window.authz,
+                contentType: "application/json",
+                data: JSON.stringify({
+                    inventory: JSON.parse($("#import-inventory").val())
+                })
+            }).then(function () {
+                toast(loc("code_succImport"));
+                updateInventory();
+            });
+        } catch (e) {
+            toast(e);
+            console.error(e);
+        }
     });
 }
 
