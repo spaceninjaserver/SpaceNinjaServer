@@ -92,6 +92,7 @@ interface IWsMsgToClient {
 
     // to game/bootstrapper (https://openwf.io/bootstrapper-manual)
     sync_inventory?: boolean;
+    sync_world_state?: boolean;
     tunables?: ITunables;
 }
 
