@@ -423,3 +423,20 @@ export const getConquest = (
         RandomSeed: rng.randomInt(0, 1_000_000)
     };
 };
+
+export const getMissionTypeForLegacyOverride = (missionType: TMissionType, conquestType: TConquestType): string => {
+    if (missionType == "MT_ENDLESS_CAPTURE") {
+        return "EndlessCapture";
+    }
+    let str = missionType.substring(3, 4).toUpperCase() + missionType.substring(4).toLowerCase();
+    if (str == "Extermination") {
+        str = "Exterminate";
+    }
+    if (str == "Artifact") {
+        str = "Disruption";
+    }
+    if (str == "Defense" && conquestType == "CT_LAB") {
+        str = "DualDefense";
+    }
+    return str;
+};

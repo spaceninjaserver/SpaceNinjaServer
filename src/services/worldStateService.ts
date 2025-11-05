@@ -41,7 +41,7 @@ import type {
 import { toMongoDate, toOid, version_compare } from "../helpers/inventoryHelpers.ts";
 import { logger } from "../utils/logger.ts";
 import { DailyDeal, Fissure } from "../models/worldStateModel.ts";
-import { getConquest } from "./conquestService.ts";
+import { getConquest, getMissionTypeForLegacyOverride } from "./conquestService.ts";
 
 const sortieBosses = [
     "SORTIE_BOSS_HYENA",
@@ -3562,13 +3562,11 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         worldState.KnownCalendarSeasons.push(getCalendarSeason(week + 1));
     }
 
+    const season = (["CST_WINTER", "CST_SPRING", "CST_SUMMER", "CST_FALL"] as const)[week % 4];
+    const labConquest = getConquest("CT_LAB", week, null);
+    const hexConquest = getConquest("CT_HEX", week, season);
     if (!buildLabel || version_compare(buildLabel, "2025.10.14.16.10") >= 0) {
-        worldState.Conquests = [];
-        {
-            const season = (["CST_WINTER", "CST_SPRING", "CST_SUMMER", "CST_FALL"] as const)[week % 4];
-            worldState.Conquests.push(getConquest("CT_LAB", week, null));
-            worldState.Conquests.push(getConquest("CT_HEX", week, season));
-        }
+        worldState.Conquests = [labConquest, hexConquest];
         if (isBeforeNextExpectedWorldStateRefresh(timeMs, weekEnd)) {
             const season = (["CST_WINTER", "CST_SPRING", "CST_SUMMER", "CST_FALL"] as const)[(week + 1) % 4];
             worldState.Conquests.push(getConquest("CT_LAB", week, null));
@@ -3620,6 +3618,18 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             a: cheeseStart,
             e: cheeseEnd,
             n: cheeseNext
+        },
+        lqo: {
+            mt: labConquest.Missions.map(x => getMissionTypeForLegacyOverride(x.missionType, "CT_LAB")),
+            mv: labConquest.Missions.map(x => x.difficulties[1].deviation),
+            c: labConquest.Missions.map(x => x.difficulties[1].risks),
+            fv: labConquest.Variables
+        },
+        hqo: {
+            mt: hexConquest.Missions.map(x => getMissionTypeForLegacyOverride(x.missionType, "CT_HEX")),
+            mv: hexConquest.Missions.map(x => x.difficulties[1].deviation),
+            c: hexConquest.Missions.map(x => x.difficulties[1].risks),
+            fv: hexConquest.Variables
         },
         sfn: [550, 553, 554, 555][halfHour % 4]
     };

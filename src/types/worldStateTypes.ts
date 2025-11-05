@@ -485,9 +485,9 @@ interface IFbst {
 
 // < 40.0.0
 interface IConquestOverride {
-    mt?: string[]; // mission types but "Exterminate" instead of "MT_EXTERMINATION", etc. and "DualDefense" instead of "Defense" for hex conquest
+    mt?: string[];
     mv?: string[];
-    mf?: number[]; // hex conquest only
+    mf?: number[]; // hex conquest only. unknown purpose.
     c?: [string, string][];
     fv?: string[];
 }
