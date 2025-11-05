@@ -487,7 +487,7 @@ interface IFbst {
 interface IConquestOverride {
     mt?: string[];
     mv?: string[];
-    mf?: number[]; // hex conquest only. unknown purpose.
+    mf?: number[];
     c?: [string, string][];
     fv?: string[];
 }

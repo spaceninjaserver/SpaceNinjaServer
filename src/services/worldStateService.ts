@@ -41,7 +41,7 @@ import type {
 import { toMongoDate, toOid, version_compare } from "../helpers/inventoryHelpers.ts";
 import { logger } from "../utils/logger.ts";
 import { DailyDeal, Fissure } from "../models/worldStateModel.ts";
-import { getConquest, getMissionTypeForLegacyOverride } from "./conquestService.ts";
+import { factionToInt, getConquest, getMissionTypeForLegacyOverride } from "./conquestService.ts";
 
 const sortieBosses = [
     "SORTIE_BOSS_HYENA",
@@ -3628,6 +3628,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         hqo: {
             mt: hexConquest.Missions.map(x => getMissionTypeForLegacyOverride(x.missionType, "CT_HEX")),
             mv: hexConquest.Missions.map(x => x.difficulties[1].deviation),
+            mf: hexConquest.Missions.map(x => factionToInt(x.faction)),
             c: hexConquest.Missions.map(x => x.difficulties[1].risks),
             fv: hexConquest.Variables
         },

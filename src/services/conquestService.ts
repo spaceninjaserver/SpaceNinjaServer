@@ -429,9 +429,6 @@ export const getMissionTypeForLegacyOverride = (missionType: TMissionType, conqu
         return "EndlessCapture";
     }
     let str = missionType.substring(3, 4).toUpperCase() + missionType.substring(4).toLowerCase();
-    if (str == "Extermination") {
-        str = "Exterminate";
-    }
     if (str == "Artifact") {
         str = "Disruption";
     }
@@ -439,4 +436,32 @@ export const getMissionTypeForLegacyOverride = (missionType: TMissionType, conqu
         str = "DualDefense";
     }
     return str;
+};
+
+export const factionToInt = (faction: TFaction | "FC_TENNO"): number => {
+    switch (faction) {
+        case "FC_GRINEER":
+            return 0;
+        case "FC_CORPUS":
+            return 1;
+        case "FC_INFESTATION":
+            return 2;
+        case "FC_OROKIN":
+            return 3;
+        case "FC_RED_VEIL":
+            return 4;
+        case "FC_SENTIENT":
+            return 5;
+        case "FC_NARMER":
+            return 6;
+        case "FC_MITW":
+            return 7;
+        case "FC_SCALDRA":
+            return 8;
+        case "FC_TECHROT":
+            return 9;
+        case "FC_DUVIRI":
+            return 10;
+    }
+    throw new Error(`unexpected faction ${faction}`);
 };
