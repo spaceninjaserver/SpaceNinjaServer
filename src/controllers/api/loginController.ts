@@ -119,7 +119,8 @@ const createLoginResponse = (
         resp.CountryCode = account.CountryCode;
     } else {
         // U8
-        resp.NatHash = "0";
+        resp.NatHash =
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         resp.SteamId = "0";
     }
     if (version_compare(buildLabel, "2015.02.13.10.41") >= 0) {
