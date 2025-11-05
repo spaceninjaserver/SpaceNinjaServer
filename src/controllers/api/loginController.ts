@@ -114,11 +114,11 @@ const createLoginResponse = (
         Nonce: account.Nonce,
         BuildLabel: buildLabel
     };
-    if (version_compare(buildLabel, "2014.10.24.08.24") >= 0) {
-        // U15 and up
+    if (version_compare(buildLabel, "2014.04.10.17.47") >= 0) {
+        // U13 and up
         resp.CountryCode = account.CountryCode;
     } else {
-        // U8
+        // U12 and down
         resp.NatHash =
             "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         resp.SteamId = "0";
