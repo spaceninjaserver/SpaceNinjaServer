@@ -491,6 +491,7 @@ export const handleStoreItemAcquisition = async (
 const slotPurchaseNameToSlotName: Record<string, { name: SlotNames; purchaseQuantity: number }> = {
     SuitSlotItem: { name: "SuitBin", purchaseQuantity: 1 },
     TwoSentinelSlotItem: { name: "SentinelBin", purchaseQuantity: 2 },
+    WeaponSlotItem: { name: "WeaponBin", purchaseQuantity: 1 },
     TwoWeaponSlotItem: { name: "WeaponBin", purchaseQuantity: 2 },
     SpaceSuitSlotItem: { name: "SpaceSuitBin", purchaseQuantity: 1 },
     TwoSpaceWeaponSlotItem: { name: "SpaceWeaponBin", purchaseQuantity: 2 },
@@ -514,7 +515,9 @@ const handleSlotPurchase = (
 ): IPurchaseResponse => {
     logger.debug(`slot name ${slotPurchaseNameFull}`);
     const slotPurchaseName = slotPurchaseNameFull.substring(slotPurchaseNameFull.lastIndexOf("/") + 1);
-    if (!(slotPurchaseName in slotPurchaseNameToSlotName)) throw new Error(`invalid slot name ${slotPurchaseName}`);
+    if (!(slotPurchaseName in slotPurchaseNameToSlotName)) {
+        throw new Error(`invalid slot purchase name ${slotPurchaseName}`);
+    }
     logger.debug(`slot purchase name ${slotPurchaseName}`);
 
     const slotName = slotPurchaseNameToSlotName[slotPurchaseName].name;
