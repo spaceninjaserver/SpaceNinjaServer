@@ -34,10 +34,9 @@ export const gildWeaponController: RequestHandler = async (req, res) => {
     const weapon = inventory[data.Category][weaponIndex];
     weapon.Features ??= 0;
     weapon.Features |= EquipmentFeatures.GILDED;
-    if (data.Recipe != "webui") {
-        weapon.ItemName = data.ItemName;
-        weapon.XP = 0;
-    }
+    weapon.ItemName = data.ItemName;
+    weapon.XP = 0;
+
     if (data.Category != "OperatorAmps" && data.PolarizeSlot && data.PolarizeValue) {
         weapon.Polarity = [
             {
@@ -52,22 +51,20 @@ export const gildWeaponController: RequestHandler = async (req, res) => {
 
     const affiliationMods = [];
 
-    if (data.Recipe != "webui") {
-        const recipe = ExportRecipes[data.Recipe];
-        inventoryChanges.MiscItems = recipe.secretIngredients!.map(ingredient => ({
-            ItemType: ingredient.ItemType,
-            ItemCount: ingredient.ItemCount * -1
-        }));
-        addMiscItems(inventory, inventoryChanges.MiscItems);
+    const recipe = ExportRecipes[data.Recipe];
+    inventoryChanges.MiscItems = recipe.secretIngredients!.map(ingredient => ({
+        ItemType: ingredient.ItemType,
+        ItemCount: ingredient.ItemCount * -1
+    }));
+    addMiscItems(inventory, inventoryChanges.MiscItems);
 
-        if (recipe.syndicateStandingChange) {
-            const affiliation = inventory.Affiliations.find(x => x.Tag == recipe.syndicateStandingChange!.tag)!;
-            affiliation.Standing += recipe.syndicateStandingChange.value;
-            affiliationMods.push({
-                Tag: recipe.syndicateStandingChange.tag,
-                Standing: recipe.syndicateStandingChange.value
-            });
-        }
+    if (recipe.syndicateStandingChange) {
+        const affiliation = inventory.Affiliations.find(x => x.Tag == recipe.syndicateStandingChange!.tag)!;
+        affiliation.Standing += recipe.syndicateStandingChange.value;
+        affiliationMods.push({
+            Tag: recipe.syndicateStandingChange.tag,
+            Standing: recipe.syndicateStandingChange.value
+        });
     }
 
     await inventory.save();

@@ -1,6 +1,7 @@
 import express from "express";
 
 import { tunablesController } from "../controllers/custom/tunablesController.ts";
+import { equipmentFeaturesController } from "../controllers/custom/equipmentFeaturesController.ts";
 import { getItemListsController } from "../controllers/custom/getItemListsController.ts";
 import { pushArchonCrystalUpgradeController } from "../controllers/custom/pushArchonCrystalUpgradeController.ts";
 import { popArchonCrystalUpgradeController } from "../controllers/custom/popArchonCrystalUpgradeController.ts";
@@ -53,6 +54,7 @@ import { getConfigController, setConfigController } from "../controllers/custom/
 const customRouter = express.Router();
 
 customRouter.get("/tunables.json", tunablesController);
+customRouter.get("/equipmentFeatures", equipmentFeaturesController);
 customRouter.get("/getItemLists", getItemListsController);
 customRouter.get("/pushArchonCrystalUpgrade", pushArchonCrystalUpgradeController);
 customRouter.get("/popArchonCrystalUpgrade", popArchonCrystalUpgradeController);

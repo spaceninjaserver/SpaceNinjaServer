@@ -410,6 +410,7 @@ export const getInventoryResponse = async (
                 for (const equipment of inventoryResponse[key]) {
                     equipment.Features ??= 0;
                     equipment.Features |= EquipmentFeatures.ARCANE_SLOT;
+                    equipment.Features |= EquipmentFeatures.SECOND_ARCANE_SLOT;
                 }
             }
         }

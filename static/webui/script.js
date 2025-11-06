@@ -912,12 +912,7 @@ function updateInventory() {
                                 td.appendChild(a);
                             }
 
-                            if (
-                                ["Suits", "LongGuns", "Pistols", "Melee", "SpaceGuns", "SpaceMelee"].includes(
-                                    category
-                                ) ||
-                                modularWeapons.includes(item.ItemType)
-                            ) {
+                            {
                                 const a = document.createElement("a");
                                 a.href =
                                     "/webui/detailedView?productCategory=" + category + "&itemId=" + item.ItemId.$oid;
@@ -930,7 +925,7 @@ function updateInventory() {
                                 a.href = "#";
                                 a.onclick = function (event) {
                                     event.preventDefault();
-                                    gildEquipment(category, item.ItemId.$oid);
+                                    equipmentFeatures(category, item.ItemId.$oid, 8);
                                 };
                                 a.title = loc("code_gild");
                                 a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"/></svg>`;
@@ -1558,6 +1553,57 @@ function updateInventory() {
                         }
                     } else {
                         $("#detailedView-title").text(itemName);
+                    }
+
+                    {
+                        document.getElementById("equipmentFeatures-card").classList.remove("d-none");
+                        const buttonsCard = document.getElementById("equipmentFeaturesButtons-card");
+                        buttonsCard.innerHTML = "";
+                        item.Features ??= 0;
+                        const bits = [];
+                        if (category != "OperatorAmps") bits.push(1);
+                        if (["Suits", "LongGuns", "Pistols", "Melee"].includes(category)) bits.push(2);
+                        if (modularWeapons.includes(item.ItemType)) bits.push(8);
+                        if (["LongGuns", "Pistols", "Melee", "SpaceGuns", "OperatorAmps"].includes(category))
+                            bits.push(32);
+                        if (category == "SpaceGuns") bits.push(4, 64);
+                        if (
+                            ["LongGuns", "Pistols", "Melee", "SpaceGuns", "SpaceMelee"].includes(category) &&
+                            item.UpgradeFingerprint
+                        )
+                            bits.push(1024);
+                        for (const bit of bits.sort((a, b) => a - b)) {
+                            const wrapper = document.createElement("div");
+                            wrapper.classList = "form-check";
+
+                            const input = document.createElement("input");
+                            input.classList = "form-check-input";
+                            input.type = "checkbox";
+                            input.id = `detailedView-feature-${bit}`;
+                            input.checked = item.Features & bit;
+
+                            const label = document.createElement("label");
+                            label.classList = "form-check-label";
+                            label.htmlFor = input.id;
+                            label.innerHTML = loc(`code_feature_${bit}`);
+                            label.setAttribute("data-loc", `code_feature_${bit}`);
+
+                            input.onchange = function (event) {
+                                event.preventDefault();
+                                equipmentFeatures(category, oid, bit);
+                            };
+                            if (
+                                (data.unlockDoubleCapacityPotatoesEverywhere && bit === 1) ||
+                                (data.unlockExilusEverywhere && bit === 2) ||
+                                (data.unlockArcanesEverywhere && (bit === 32 || bit === 64))
+                            ) {
+                                input.disabled = true;
+                            }
+
+                            wrapper.appendChild(input);
+                            wrapper.appendChild(label);
+                            buttonsCard.appendChild(wrapper);
+                        }
                     }
 
                     if (category == "Suits") {
@@ -2864,15 +2910,11 @@ function disposeOfItems(category, type, count) {
     });
 }
 
-function gildEquipment(category, oid) {
+function equipmentFeatures(category, oid, bit) {
     revalidateAuthz().then(() => {
-        $.post({
-            url: "/api/gildWeapon.php?" + window.authz + "&ItemId=" + oid + "&Category=" + category,
-            contentType: "application/octet-stream",
-            data: JSON.stringify({
-                Recipe: "webui"
-            })
-        }).done(function () {
+        $.get(
+            "/custom/equipmentFeatures?" + window.authz + "&ItemId=" + oid + "&Category=" + category + "&bit=" + bit
+        ).done(function () {
             updateInventory();
         });
     });
@@ -3478,6 +3520,8 @@ single.getRoute("#detailedView-route").on("beforeload", function () {
     document.getElementById("modularParts-card").classList.add("d-none");
     document.getElementById("modularParts-form").innerHTML = "";
     document.getElementById("valenceBonus-card").classList.add("d-none");
+    document.getElementById("equipmentFeatures-card").classList.add("d-none");
+    document.getElementById("equipmentFeaturesButtons-card").innerHTML = "";
     if (window.didInitialInventoryUpdate) {
         updateInventory();
     }
