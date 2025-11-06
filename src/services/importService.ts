@@ -254,17 +254,21 @@ const convertItemConfig = <T extends IItemConfig>(client: T): T => {
     };
 };
 
-export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<IInventoryClient>): void => {
+export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<IInventoryClient>): boolean => {
+    let anyKnownKey = false;
     for (const key of equipmentKeys) {
         if (client[key] !== undefined) {
+            anyKnownKey = true;
             replaceArray<IEquipmentDatabase>(db[key], client[key].map(convertEquipment));
         }
     }
     if (client.WeaponSkins !== undefined) {
+        anyKnownKey = true;
         replaceArray<IWeaponSkinDatabase>(db.WeaponSkins, client.WeaponSkins.map(convertWeaponSkin));
     }
     for (const key of ["Upgrades", "CrewShipSalvagedWeaponSkins", "CrewShipWeaponSkins"] as const) {
         if (client[key] !== undefined) {
+            anyKnownKey = true;
             replaceArray<IUpgradeDatabase>(db[key], client[key].map(convertUpgrade));
         }
     }
@@ -280,6 +284,7 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         "CrewShipRawSalvage"
     ] as const) {
         if (client[key] !== undefined) {
+            anyKnownKey = true;
             db[key].splice(0, db[key].length);
             client[key].forEach(x => {
                 db[key].push({
@@ -291,11 +296,13 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     }
     for (const key of ["AdultOperatorLoadOuts", "OperatorLoadOuts", "KahlLoadOuts"] as const) {
         if (client[key] !== undefined) {
+            anyKnownKey = true;
             replaceArray<IOperatorConfigDatabase>(db[key], client[key].map(convertOperatorConfig));
         }
     }
     for (const key of slotNames) {
         if (client[key] !== undefined) {
+            anyKnownKey = true;
             replaceSlots(db[key], client[key]);
         }
     }
@@ -312,6 +319,7 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         "Counselor"
     ] as const) {
         if (client[key] !== undefined) {
+            anyKnownKey = true;
             db[key] = client[key];
         }
     }
@@ -338,6 +346,7 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         "EchoesHexConquestCacheScoreMission"
     ] as const) {
         if (client[key] !== undefined) {
+            anyKnownKey = true;
             db[key] = client[key];
         }
     }
@@ -353,6 +362,7 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         "ActiveAvatarImageType"
     ] as const) {
         if (client[key] !== undefined) {
+            anyKnownKey = true;
             db[key] = client[key];
         }
     }
@@ -369,6 +379,7 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         "EchoesHexConquestActiveStickers"
     ] as const) {
         if (client[key] !== undefined) {
+            anyKnownKey = true;
             db[key] = client[key];
         }
     }
@@ -382,103 +393,133 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         "EntratiVaultCountResetDate"
     ] as const) {
         if (client[key] !== undefined) {
+            anyKnownKey = true;
             db[key] = fromMongoDate(client[key]);
         }
     }
     // IRewardAtten[]
     for (const key of ["SortieRewardAttenuation", "SpecialItemRewardAttenuation"] as const) {
         if (client[key] !== undefined) {
+            anyKnownKey = true;
             db[key] = client[key];
         }
     }
     if (client.XPInfo !== undefined) {
+        anyKnownKey = true;
         db.XPInfo = client.XPInfo;
     }
     if (client.CurrentLoadOutIds !== undefined) {
+        anyKnownKey = true;
         db.CurrentLoadOutIds = client.CurrentLoadOutIds;
     }
     if (client.Affiliations !== undefined) {
+        anyKnownKey = true;
         db.Affiliations = client.Affiliations;
     }
     if (client.FusionTreasures !== undefined) {
+        anyKnownKey = true;
         db.FusionTreasures = client.FusionTreasures;
     }
     if (client.FocusUpgrades !== undefined) {
+        anyKnownKey = true;
         db.FocusUpgrades = client.FocusUpgrades;
     }
     if (client.EvolutionProgress !== undefined) {
+        anyKnownKey = true;
         db.EvolutionProgress = client.EvolutionProgress;
     }
     if (client.InfestedFoundry !== undefined) {
+        anyKnownKey = true;
         db.InfestedFoundry = convertInfestedFoundry(client.InfestedFoundry);
     }
     if (client.DialogueHistory !== undefined) {
+        anyKnownKey = true;
         db.DialogueHistory = convertDialogueHistory(client.DialogueHistory);
     }
     if (client.CustomMarkers !== undefined) {
+        anyKnownKey = true;
         db.CustomMarkers = client.CustomMarkers;
     }
     if (client.ChallengeProgress !== undefined) {
+        anyKnownKey = true;
         db.ChallengeProgress = client.ChallengeProgress;
     }
     if (client.QuestKeys !== undefined) {
+        anyKnownKey = true;
         replaceArray<IQuestKeyDatabase>(db.QuestKeys, client.QuestKeys.map(convertQuestKey));
     }
     if (client.LastRegionPlayed !== undefined) {
+        anyKnownKey = true;
         db.LastRegionPlayed = client.LastRegionPlayed;
     }
     if (client.PendingRecipes !== undefined) {
+        anyKnownKey = true;
         replaceArray<IPendingRecipeDatabase>(db.PendingRecipes, client.PendingRecipes.map(convertPendingRecipe));
     }
     if (client.TauntHistory !== undefined) {
+        anyKnownKey = true;
         db.TauntHistory = client.TauntHistory;
     }
     if (client.LoreFragmentScans !== undefined) {
+        anyKnownKey = true;
         db.LoreFragmentScans = client.LoreFragmentScans;
     }
     for (const key of ["PendingSpectreLoadouts", "SpectreLoadouts"] as const) {
         if (client[key] !== undefined) {
+            anyKnownKey = true;
             db[key] = client[key];
         }
     }
     if (client.FocusXP !== undefined) {
+        anyKnownKey = true;
         db.FocusXP = client.FocusXP;
     }
     for (const key of ["Alignment", "AlignmentReplay"] as const) {
         if (client[key] !== undefined) {
+            anyKnownKey = true;
             db[key] = client[key];
         }
     }
     if (client.StepSequencers !== undefined) {
+        anyKnownKey = true;
         db.StepSequencers = client.StepSequencers;
     }
     if (client.CompletedJobChains !== undefined) {
+        anyKnownKey = true;
         db.CompletedJobChains = client.CompletedJobChains;
     }
     if (client.Nemesis !== undefined) {
+        anyKnownKey = true;
         db.Nemesis = convertNemesis(client.Nemesis);
     }
     if (client.PlayerSkills !== undefined) {
+        anyKnownKey = true;
         db.PlayerSkills = client.PlayerSkills;
     }
     if (client.LotusCustomization !== undefined) {
+        anyKnownKey = true;
         db.LotusCustomization = convertItemConfig(client.LotusCustomization);
     }
     if (client.CollectibleSeries !== undefined) {
+        anyKnownKey = true;
         db.CollectibleSeries = client.CollectibleSeries;
     }
     for (const key of ["LibraryAvailableDailyTaskInfo", "LibraryActiveDailyTaskInfo"] as const) {
         if (client[key] !== undefined) {
+            anyKnownKey = true;
             db[key] = client[key];
         }
     }
     if (client.SongChallenges !== undefined) {
+        anyKnownKey = true;
         db.SongChallenges = client.SongChallenges;
     }
     if (client.Missions !== undefined) {
+        anyKnownKey = true;
         db.Missions = client.Missions;
     }
     if (client.FlavourItems !== undefined) {
+        anyKnownKey = true;
         db.FlavourItems.splice(0, db.FlavourItems.length);
         client.FlavourItems.forEach(x => {
             db.FlavourItems.push({
@@ -487,11 +528,14 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         });
     }
     if (client.Accolades !== undefined) {
+        anyKnownKey = true;
         db.Accolades = client.Accolades;
     }
     if (client.Boosters !== undefined) {
+        anyKnownKey = true;
         replaceArray<IBooster>(db.Boosters, client.Boosters);
     }
+    return anyKnownKey;
 };
 
 export const importLoadOutConfig = (client: ILoadoutConfigClient): ILoadoutConfigDatabase => {

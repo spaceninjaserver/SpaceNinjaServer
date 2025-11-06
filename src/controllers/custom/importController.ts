@@ -12,11 +12,16 @@ export const importController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const request = req.body as IImportRequest;
 
+    let anyKnownKey = false;
+
     const inventory = await getInventory(accountId);
-    importInventory(inventory, request.inventory);
-    await inventory.save();
+    if (importInventory(inventory, request.inventory)) {
+        anyKnownKey = true;
+        await inventory.save();
+    }
 
     if ("LoadOutPresets" in request.inventory && request.inventory.LoadOutPresets) {
+        anyKnownKey = true;
         const loadout = await getLoadout(accountId);
         importLoadOutPresets(loadout, request.inventory.LoadOutPresets);
         await loadout.save();
@@ -27,12 +32,13 @@ export const importController: RequestHandler = async (req, res) => {
         "Apartment" in request.inventory ||
         "TailorShop" in request.inventory
     ) {
+        anyKnownKey = true;
         const personalRooms = await getPersonalRooms(accountId);
         importPersonalRooms(personalRooms, request.inventory);
         await personalRooms.save();
     }
 
-    res.end();
+    res.json(anyKnownKey);
     broadcastInventoryUpdate(req);
 };
 

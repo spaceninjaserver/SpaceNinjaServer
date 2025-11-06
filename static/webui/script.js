@@ -3603,8 +3603,8 @@ function doImport() {
                 data: JSON.stringify({
                     inventory: JSON.parse($("#import-inventory").val())
                 })
-            }).then(function () {
-                toast(loc("code_succImport"));
+            }).then(function (anyKnownKey) {
+                toast(loc(anyKnownKey ? "code_succImport" : "code_nothingToDo"));
                 updateInventory();
             });
         } catch (e) {
