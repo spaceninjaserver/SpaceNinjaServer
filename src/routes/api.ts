@@ -80,7 +80,7 @@ import { giveKeyChainTriggeredItemsController } from "../controllers/api/giveKey
 import { giveKeyChainTriggeredMessageController } from "../controllers/api/giveKeyChainTriggeredMessageController.ts";
 import { giveQuestKeyRewardController } from "../controllers/api/giveQuestKeyRewardController.ts";
 import { giveShipDecoAndLoreFragmentController } from "../controllers/api/giveShipDecoAndLoreFragmentController.ts";
-import { giveStartingGearController } from "../controllers/api/giveStartingGearController.ts";
+import { giveStartingGearGetController, giveStartingGearPostController } from "../controllers/api/giveStartingGearController.ts";
 import { guildTechController } from "../controllers/api/guildTechController.ts";
 import { hostSessionController } from "../controllers/api/hostSessionController.ts";
 import { hubBlessingController } from "../controllers/api/hubBlessingController.ts";
@@ -208,6 +208,7 @@ apiRouter.get("/getNewRewardSeed.php", getNewRewardSeedController);
 apiRouter.get("/getPastWeeklyChallenges.php", getPastWeeklyChallengesController)
 apiRouter.get("/getShip.php", getShipController);
 apiRouter.get("/getShipDecos.php", (_req, res) => { res.end(); }); // needed to log in on U22.8
+apiRouter.get("/giveStartingGear.php", giveStartingGearGetController);
 apiRouter.get("/getVendorInfo.php", getVendorInfoController);
 apiRouter.get("/hub", hubController);
 apiRouter.get("/hubInstances", hubInstancesController);
@@ -297,7 +298,7 @@ apiRouter.post("/giveKeyChainTriggeredItems.php", giveKeyChainTriggeredItemsCont
 apiRouter.post("/giveKeyChainTriggeredMessage.php", giveKeyChainTriggeredMessageController);
 apiRouter.post("/giveQuestKeyReward.php", giveQuestKeyRewardController);
 apiRouter.post("/giveShipDecoAndLoreFragment.php", giveShipDecoAndLoreFragmentController);
-apiRouter.post("/giveStartingGear.php", giveStartingGearController);
+apiRouter.post("/giveStartingGear.php", giveStartingGearPostController);
 apiRouter.post("/guildTech.php", guildTechController);
 apiRouter.post("/hostSession.php", hostSessionController);
 apiRouter.post("/hubBlessing.php", hubBlessingController);

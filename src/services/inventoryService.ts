@@ -137,18 +137,19 @@ export const createInventory = async (
 
 export const addStartingGear = async (
     inventory: TInventoryDatabaseDocument,
-    startingGear?: TPartialStartingGear
+    startingGear?: Partial<TPartialStartingGear>
 ): Promise<IInventoryChanges> => {
     if (inventory.ReceivedStartingGear) {
         throw new Error(`account has already received starting gear`);
     }
     inventory.ReceivedStartingGear = true;
 
-    const { LongGuns, Pistols, Suits, Melee } = startingGear || {
+    const { LongGuns, Pistols, Suits, Melee } = {
         LongGuns: [{ ItemType: "/Lotus/Weapons/Tenno/Rifle/Rifle" }],
         Pistols: [{ ItemType: "/Lotus/Weapons/Tenno/Pistol/Pistol" }],
         Suits: [{ ItemType: "/Lotus/Powersuits/Excalibur/Excalibur" }],
-        Melee: [{ ItemType: "/Lotus/Weapons/Tenno/Melee/LongSword/LongSword" }]
+        Melee: [{ ItemType: "/Lotus/Weapons/Tenno/Melee/LongSword/LongSword" }],
+        ...startingGear
     };
 
     //TODO: properly merge weapon bin changes it is currently static here
