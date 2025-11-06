@@ -6,6 +6,7 @@ import { leaderboardController } from "../controllers/stats/leaderboardControlle
 const statsRouter = express.Router();
 
 statsRouter.get("/view.php", viewController);
+statsRouter.get("/profileStats.php", viewController);
 statsRouter.post("/upload.php", uploadController);
 statsRouter.post("/leaderboardWeekly.php", leaderboardController);
 statsRouter.post("/leaderboardArchived.php", leaderboardController);

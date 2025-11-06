@@ -1,13 +1,14 @@
-import { toOid } from "../../helpers/inventoryHelpers.ts";
+import { toOid2 } from "../../helpers/inventoryHelpers.ts";
 import { Friendship } from "../../models/friendModel.ts";
 import { addAccountDataToFriendInfo, addInventoryDataToFriendInfo } from "../../services/friendService.ts";
-import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest } from "../../services/loginService.ts";
 import type { IFriendInfo } from "../../types/friendTypes.ts";
 import type { Request, RequestHandler, Response } from "express";
 
 // POST with {} instead of GET as of 38.5.0
 export const getFriendsController: RequestHandler = async (req: Request, res: Response) => {
-    const accountId = await getAccountIdForRequest(req);
+    const account = await getAccountForRequest(req);
+    const accountId = account._id.toString();
     const response: IGetFriendsResponse = {
         Current: [],
         IncomingFriendRequests: [],
@@ -20,14 +21,14 @@ export const getFriendsController: RequestHandler = async (req: Request, res: Re
     for (const externalFriendship of externalFriendships) {
         if (!internalFriendships.find(x => x.friend.equals(externalFriendship.owner))) {
             response.IncomingFriendRequests.push({
-                _id: toOid(externalFriendship.owner),
+                _id: toOid2(externalFriendship.owner, account.BuildLabel),
                 Note: externalFriendship.Note
             });
         }
     }
     for (const internalFriendship of internalFriendships) {
         const friendInfo: IFriendInfo = {
-            _id: toOid(internalFriendship.friend)
+            _id: toOid2(internalFriendship.friend, account.BuildLabel)
         };
         if (externalFriendships.find(x => x.owner.equals(internalFriendship.friend))) {
             response.Current.push(friendInfo);

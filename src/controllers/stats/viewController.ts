@@ -1,11 +1,10 @@
 import type { RequestHandler } from "express";
-import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import { getStats } from "../../services/statsService.ts";
 import type { IStatsClient } from "../../types/statTypes.ts";
 
 const viewController: RequestHandler = async (req, res) => {
-    const accountId = await getAccountIdForRequest(req);
+    const accountId = String(req.query.id ?? req.query.lookupId);
     const inventory = await getInventory(accountId, "XPInfo");
     const playerStats = await getStats(accountId);
 
