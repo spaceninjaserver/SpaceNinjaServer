@@ -17,14 +17,13 @@ interface ITrainingResultsResponse {
     InventoryChanges: IInventoryChanges;
 }
 
-const trainingResultController: RequestHandler = async (req, res): Promise<void> => {
-    const accountId = await getAccountIdForRequest(req);
-
-    const trainingResults = getJSONfromString<ITrainingResultsRequest>(String(req.body));
-
+const handleTrainingProgress = async (
+    accountId: string,
+    numLevelsGained: number
+): Promise<ITrainingResultsResponse> => {
     const inventory = await getInventory(accountId, "TrainingDate PlayerLevel TradesRemaining noMasteryRankUpCooldown");
 
-    if (trainingResults.numLevelsGained == 1) {
+    if (numLevelsGained === 1) {
         let time = Date.now();
         if (!inventory.noMasteryRankUpCooldown) {
             time += unixTimesInMs.hour * 23;
@@ -67,13 +66,27 @@ const trainingResultController: RequestHandler = async (req, res): Promise<void>
 
     const changedinventory = await inventory.save();
 
-    res.json({
+    return {
         NewTrainingDate: {
             $date: { $numberLong: changedinventory.TrainingDate.getTime().toString() }
         },
-        NewLevel: trainingResults.numLevelsGained == 1 ? changedinventory.PlayerLevel : inventory.PlayerLevel,
+        NewLevel: numLevelsGained == 1 ? changedinventory.PlayerLevel : inventory.PlayerLevel,
         InventoryChanges: {}
-    } satisfies ITrainingResultsResponse);
+    };
 };
 
-export { trainingResultController };
+export const trainingResultPostController: RequestHandler = async (req, res): Promise<void> => {
+    const accountId = await getAccountIdForRequest(req);
+    const { numLevelsGained } = getJSONfromString<ITrainingResultsRequest>(String(req.body));
+
+    const response = await handleTrainingProgress(accountId, numLevelsGained);
+    res.json(response satisfies ITrainingResultsResponse);
+};
+
+export const trainingResultGetController: RequestHandler = async (req, res): Promise<void> => {
+    const accountId = await getAccountIdForRequest(req);
+    const numLevelsGained = Number(req.query.numLevelsGained ?? 0);
+
+    const response = await handleTrainingProgress(accountId, numLevelsGained);
+    res.json(response satisfies ITrainingResultsResponse);
+};

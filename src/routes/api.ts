@@ -158,7 +158,7 @@ import { syndicateSacrificeController } from "../controllers/api/syndicateSacrif
 import { syndicateStandingBonusController } from "../controllers/api/syndicateStandingBonusController.ts";
 import { tauntHistoryController } from "../controllers/api/tauntHistoryController.ts";
 import { tradingController } from "../controllers/api/tradingController.ts";
-import { trainingResultController } from "../controllers/api/trainingResultController.ts";
+import { trainingResultGetController, trainingResultPostController } from "../controllers/api/trainingResultController.ts";
 import { umbraController } from "../controllers/api/umbraController.ts";
 import { unlockShipFeatureController } from "../controllers/api/unlockShipFeatureController.ts";
 import { updateAlignmentController } from "../controllers/api/updateAlignmentController.ts";
@@ -236,6 +236,7 @@ apiRouter.get("/startLibraryDailyTask.php", startLibraryDailyTaskController);
 apiRouter.get("/startLibraryPersonalTarget.php", startLibraryPersonalTargetController);
 apiRouter.get("/surveys.php", surveysController);
 apiRouter.get("/trading.php", tradingController);
+apiRouter.get("/trainingResult.php", trainingResultGetController);
 apiRouter.get("/updateSession.php", updateSessionGetController);
 apiRouter.get("/upgradeOperator.php", upgradeOperatorController);
 apiRouter.get("/worldState.php", worldStateController); // U8
@@ -357,7 +358,7 @@ apiRouter.post("/stepSequencers.php", stepSequencersController);
 apiRouter.post("/syndicateSacrifice.php", syndicateSacrificeController);
 apiRouter.post("/syndicateStandingBonus.php", syndicateStandingBonusController);
 apiRouter.post("/tauntHistory.php", tauntHistoryController);
-apiRouter.post("/trainingResult.php", trainingResultController);
+apiRouter.post("/trainingResult.php", trainingResultPostController);
 apiRouter.post("/umbra.php", umbraController);
 apiRouter.post("/unlockShipFeature.php", unlockShipFeatureController);
 apiRouter.post("/updateAlignment.php", updateAlignmentController);
