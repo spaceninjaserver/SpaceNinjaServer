@@ -26,6 +26,13 @@ export const giveStartingGearGetController: RequestHandler = async (req, res) =>
                 ItemId: { $oid: "0" },
                 Configs: []
             }
+        ],
+        LongGuns: [
+            {
+                ItemType: "/Lotus/Weapons/Tenno/Rifle/StartingRifle",
+                ItemId: { $oid: "0" },
+                Configs: []
+            }
         ]
     });
     await inventory.save();
