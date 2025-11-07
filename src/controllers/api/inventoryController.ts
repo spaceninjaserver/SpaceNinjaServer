@@ -271,7 +271,11 @@ export const inventoryController: RequestHandler = async (request, response) => 
     await inventory.save();
 
     response.json(
-        await getInventoryResponse(inventory, "xpBasedLevelCapDisabled" in request.query, account.BuildLabel)
+        await getInventoryResponse(
+            inventory,
+            "xpBasedLevelCapDisabled" in request.query,
+            "ignoreBuildLabel" in request.query ? undefined : account.BuildLabel
+        )
     );
 };
 
