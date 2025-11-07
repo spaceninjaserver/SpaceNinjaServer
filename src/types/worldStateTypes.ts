@@ -2,6 +2,7 @@ import type { IMissionReward, TFaction, TMissionType } from "warframe-public-exp
 import type { IMongoDate, IOid } from "./commonTypes.ts";
 
 export interface IWorldState {
+    WorldSeed?: string;
     Version: number; // for goals
     BuildLabel: string;
     Time: number;

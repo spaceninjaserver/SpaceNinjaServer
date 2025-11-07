@@ -3639,6 +3639,15 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     }
     worldState.Tmp = JSON.stringify(tmp);
 
+    // This must be the last field in these versions.
+    if (
+        buildLabel &&
+        version_compare(buildLabel, "2016.08.19.17.12") >= 0 &&
+        version_compare(buildLabel, "2017.05.05.15.41") <= 0
+    ) {
+        worldState.WorldSeed = "4763605";
+    }
+
     return worldState;
 };
 
