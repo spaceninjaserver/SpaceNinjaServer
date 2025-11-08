@@ -4,7 +4,7 @@ import { abortDojoComponentController } from "../controllers/api/abortDojoCompon
 import { abortDojoComponentDestructionController } from "../controllers/api/abortDojoComponentDestructionController.ts";
 import { activateRandomModController } from "../controllers/api/activateRandomModController.ts";
 import { addFriendController } from "../controllers/api/addFriendController.ts";
-import { addFriendImageController } from "../controllers/api/addFriendImageController.ts";
+import { addFriendImageGetController, addFriendImagePostController } from "../controllers/api/addFriendImageController.ts";
 import { addIgnoredUserController } from "../controllers/api/addIgnoredUserController.ts";
 import { addPendingFriendController } from "../controllers/api/addPendingFriendController.ts";
 import { addToAllianceController } from "../controllers/api/addToAllianceController.ts";
@@ -178,6 +178,7 @@ const apiRouter = express.Router();
 // get
 apiRouter.get("/abandonLibraryDailyTask.php", abandonLibraryDailyTaskController);
 apiRouter.get("/abortDojoComponentDestruction.php", abortDojoComponentDestructionController);
+apiRouter.get("/addFriendImage.php", addFriendImageGetController) // U17 and below
 apiRouter.get("/apartment.php", apartmentController);
 apiRouter.get("/cancelGuildAdvertisement.php", cancelGuildAdvertisementController);
 apiRouter.get("/changeDojoRoot.php", changeDojoRootController);
@@ -245,7 +246,7 @@ apiRouter.get("/worldState.php", worldStateController); // U8
 apiRouter.post("/abortDojoComponent.php", abortDojoComponentController);
 apiRouter.post("/activateRandomMod.php", activateRandomModController);
 apiRouter.post("/addFriend.php", addFriendController);
-apiRouter.post("/addFriendImage.php", addFriendImageController);
+apiRouter.post("/addFriendImage.php", addFriendImagePostController);
 apiRouter.post("/addIgnoredUser.php", addIgnoredUserController);
 apiRouter.post("/addPendingFriend.php", addPendingFriendController);
 apiRouter.post("/addToAlliance.php", addToAllianceController);
