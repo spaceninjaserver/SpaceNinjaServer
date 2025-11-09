@@ -12,9 +12,18 @@ import { handleNonceInvalidation } from "../../services/wsService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import { createMessage } from "../../services/inboxService.ts";
 import { fromStoreItem } from "../../services/itemDataService.ts";
+import { getTokenForClient } from "../../services/tunablesService.ts";
+import type { AddressInfo } from "node:net";
 
 export const loginController: RequestHandler = async (request, response) => {
     const loginRequest = JSON.parse(String(request.body)) as ILoginRequest; // parse octet stream of json data to json object
+
+    if (config.tunables?.useLoginToken) {
+        if (request.query.token !== getTokenForClient((request.socket.address() as AddressInfo).address)) {
+            response.status(400).json({ error: "missing or incorrect token" });
+            return;
+        }
+    }
 
     const account = await Account.findOne({ email: loginRequest.email });
 

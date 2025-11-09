@@ -1,14 +1,11 @@
 import type { RequestHandler } from "express";
 import type { ITunables } from "../../types/bootstrapperTypes.ts";
+import { getTunablesForClient } from "../../services/tunablesService.ts";
+import type { AddressInfo } from "node:net";
 
 // This endpoint is specific to the OpenWF Bootstrapper: https://openwf.io/bootstrapper-manual
 
-export const tunablesController: RequestHandler = (_req, res) => {
-    const tunables: ITunables = {};
-    //tunables.prohibit_skip_mission_start_timer = true;
-    //tunables.prohibit_fov_override = true;
-    //tunables.prohibit_freecam = true;
-    //tunables.prohibit_teleport = true;
-    //tunables.prohibit_scripts = true;
+export const tunablesController: RequestHandler = (req, res) => {
+    const tunables: ITunables = getTunablesForClient((req.socket.address() as AddressInfo).address);
     res.json(tunables);
 };

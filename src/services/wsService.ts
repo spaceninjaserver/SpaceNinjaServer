@@ -9,6 +9,7 @@ import type { HydratedDocument } from "mongoose";
 import { logError, logger } from "../utils/logger.ts";
 import type { Request } from "express";
 import type { ITunables } from "../types/bootstrapperTypes.ts";
+import type { AddressInfo } from "node:net";
 
 let wsServer: WebSocketServer | undefined;
 let wssServer: WebSocketServer | undefined;
@@ -48,6 +49,7 @@ let lastWsid: number = 0;
 
 interface IWsCustomData extends WebSocket {
     id: number;
+    address: string;
     accountId?: string;
     isGame?: boolean;
 }
@@ -66,7 +68,7 @@ interface IWsMsgFromClient {
     sync_inventory?: boolean;
 }
 
-interface IWsMsgToClient {
+export interface IWsMsgToClient {
     // common
     wsid?: number;
 
@@ -104,6 +106,7 @@ const wsOnConnect = (ws: WebSocket, req: http.IncomingMessage): void => {
     }
 
     (ws as IWsCustomData).id = ++lastWsid;
+    (ws as IWsCustomData).address = (req.socket.address() as AddressInfo).address;
     ws.send(JSON.stringify({ wsid: lastWsid } satisfies IWsMsgToClient));
 
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -212,7 +215,7 @@ const wsOnConnect = (ws: WebSocket, req: http.IncomingMessage): void => {
     });
 };
 
-const forEachClient = (cb: (client: IWsCustomData) => void): void => {
+export const forEachWsClient = (cb: (client: IWsCustomData) => void): void => {
     if (wsServer) {
         for (const client of wsServer.clients) {
             cb(client as IWsCustomData);
@@ -227,7 +230,7 @@ const forEachClient = (cb: (client: IWsCustomData) => void): void => {
 
 export const haveGameWs = (accountId: string): boolean => {
     let ret = false;
-    forEachClient(client => {
+    forEachWsClient(client => {
         if (client.isGame && client.accountId == accountId) {
             ret = true;
         }
@@ -237,14 +240,14 @@ export const haveGameWs = (accountId: string): boolean => {
 
 export const sendWsBroadcast = (data: IWsMsgToClient): void => {
     const msg = JSON.stringify(data);
-    forEachClient(client => {
+    forEachWsClient(client => {
         client.send(msg);
     });
 };
 
 export const sendWsBroadcastTo = (accountId: string, data: IWsMsgToClient): void => {
     const msg = JSON.stringify(data);
-    forEachClient(client => {
+    forEachWsClient(client => {
         if (client.accountId == accountId) {
             client.send(msg);
         }
@@ -253,7 +256,7 @@ export const sendWsBroadcastTo = (accountId: string, data: IWsMsgToClient): void
 
 export const sendWsBroadcastToGame = (accountId: string, data: IWsMsgToClient): void => {
     const msg = JSON.stringify(data);
-    forEachClient(client => {
+    forEachWsClient(client => {
         if (client.isGame && client.accountId == accountId) {
             client.send(msg);
         }
@@ -262,7 +265,7 @@ export const sendWsBroadcastToGame = (accountId: string, data: IWsMsgToClient): 
 
 export const sendWsBroadcastEx = (data: IWsMsgToClient, accountId?: string, excludeWsid?: number): void => {
     const msg = JSON.stringify(data);
-    forEachClient(client => {
+    forEachWsClient(client => {
         if ((!accountId || client.accountId == accountId) && client.id != excludeWsid) {
             client.send(msg);
         }
@@ -271,7 +274,7 @@ export const sendWsBroadcastEx = (data: IWsMsgToClient, accountId?: string, excl
 
 export const sendWsBroadcastToWebui = (data: IWsMsgToClient, accountId?: string, excludeWsid?: number): void => {
     const msg = JSON.stringify(data);
-    forEachClient(client => {
+    forEachWsClient(client => {
         if (!client.isGame && (!accountId || client.accountId == accountId) && client.id != excludeWsid) {
             client.send(msg);
         }
@@ -294,7 +297,7 @@ export const broadcastInventoryUpdate = (req: Request): void => {
 };
 
 export const handleNonceInvalidation = (accountId: string): void => {
-    forEachClient(client => {
+    forEachWsClient(client => {
         if (client.accountId == accountId) {
             if (client.isGame) {
                 client.accountId = undefined; // prevent processing of the close event

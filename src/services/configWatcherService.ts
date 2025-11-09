@@ -11,11 +11,14 @@ import {
 } from "./configService.ts";
 import { saveConfig, shouldReloadConfig } from "./configWriterService.ts";
 import { getWebBindings, startWebServer, stopWebServer } from "./webService.ts";
-import { sendWsBroadcast } from "./wsService.ts";
+import { forEachWsClient, sendWsBroadcast, type IWsMsgToClient } from "./wsService.ts";
 import varzia from "../../static/fixed_responses/worldState/varzia.json" with { type: "json" };
+import { getTunablesForClient } from "./tunablesService.ts";
 
 chokidar.watch(configPath).on("change", () => {
     if (shouldReloadConfig()) {
+        const prevTunables = JSON.stringify(config.tunables);
+
         logger.info("Detected a change to config file, reloading its contents.");
         try {
             loadConfig();
@@ -25,6 +28,17 @@ chokidar.watch(configPath).on("change", () => {
         }
         validateConfig();
         syncConfigWithDatabase();
+
+        if (JSON.stringify(config.tunables) != prevTunables) {
+            logger.debug(`tunables changed, informing clients`);
+            forEachWsClient(client => {
+                if (client.isGame) {
+                    client.send(
+                        JSON.stringify({ tunables: getTunablesForClient(client.address) } satisfies IWsMsgToClient)
+                    );
+                }
+            });
+        }
 
         const configBindings = configGetWebBindings();
         const bindings = getWebBindings();

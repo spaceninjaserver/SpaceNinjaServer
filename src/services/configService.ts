@@ -75,6 +75,14 @@ export interface IConfig {
         circuitGameModes?: string[];
         darvoStockMultiplier?: number;
     };
+    tunables?: {
+        useLoginToken?: boolean;
+        prohibitSkipMissionStartTimer?: boolean;
+        prohibitFovOverride?: boolean;
+        prohibitFreecam?: boolean;
+        prohibitTeleport?: boolean;
+        prohibitScripts?: boolean;
+    };
     dev?: {
         keepVendorsExpired?: boolean;
     };
