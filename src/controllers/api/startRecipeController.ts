@@ -45,7 +45,10 @@ export const startRecipeController: RequestHandler = async (req, res) => {
 
     for (let i = 0; i != recipe.ingredients.length; ++i) {
         if (startRecipeRequest.Ids[i] && startRecipeRequest.Ids[i][0] != "/") {
-            if (recipe.ingredients[i].ItemType == "/Lotus/Types/Game/KubrowPet/Eggs/KubrowPetEggItem") {
+            if (
+                recipe.ingredients[i].ItemType == "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg" ||
+                recipe.ingredients[i].ItemType == "/Lotus/Types/Game/KubrowPet/Eggs/KubrowPetEggItem"
+            ) {
                 const index = inventory.KubrowPetEggs.findIndex(x => x._id.equals(startRecipeRequest.Ids[i]));
                 if (index != -1) {
                     inventory.KubrowPetEggs.splice(index, 1);
