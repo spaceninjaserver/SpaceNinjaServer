@@ -239,6 +239,7 @@ dict = {
     cheats_fullyStockedVendors: `商人贩卖所有商品`,
     cheats_baroAlwaysAvailable: `虚空商人可永久访问`,
     cheats_baroFullyStocked: `虚空商人贩卖所有商品`,
+    cheats_alertsRepeatable: `[UNTRANSLATED] Alerts Repeatable`,
     cheats_syndicateMissionsRepeatable: `集团任务可重复完成`,
     cheats_unlockAllProfitTakerStages: `解锁利润收割者圆蛛所有阶段`,
     cheats_unlockSuccInventory: `[UNTRANSLATED] Success. Please note that you'll need to resync your inventory, e.g. by visiting a dojo/relay or relogging.`,

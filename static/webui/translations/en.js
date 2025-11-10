@@ -238,6 +238,7 @@ dict = {
     cheats_fullyStockedVendors: `Fully Stocked Vendors`,
     cheats_baroAlwaysAvailable: `Baro Always Available`,
     cheats_baroFullyStocked: `Baro Fully Stocked`,
+    cheats_alertsRepeatable: `Alerts Repeatable`,
     cheats_syndicateMissionsRepeatable: `Syndicate Missions Repeatable`,
     cheats_unlockAllProfitTakerStages: `Unlock All Profit Taker Stages`,
     cheats_unlockSuccInventory: `Success. Please note that you'll need to resync your inventory, e.g. by visiting a dojo/relay or relogging.`,

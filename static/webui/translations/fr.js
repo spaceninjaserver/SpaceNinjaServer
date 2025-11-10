@@ -1,4 +1,4 @@
-// French translation by Vitruvio
+// French translation by Vitruvio (zexal.)
 dict = {
     general_inventoryUpdateNote: `[UNTRANSLATED] Note: To see changes in-game, you need to resync your inventory, e.g. by visiting a dojo/relay or relogging.`,
     general_inventoryUpdateNoteGameWs: `Note : Rouvrir un menu est nécessaire pour voir les changements.`,
@@ -239,6 +239,7 @@ dict = {
     cheats_fullyStockedVendors: `Les vendeurs ont un stock à 100%`,
     cheats_baroAlwaysAvailable: `Baro toujours présent`,
     cheats_baroFullyStocked: `Stock de Baro au max`,
+    cheats_alertsRepeatable: `[UNTRANSLATED] Alerts Repeatable`,
     cheats_syndicateMissionsRepeatable: `Mission syndicat répétables`,
     cheats_unlockAllProfitTakerStages: `Débloquer toutes les étapes du Preneur de Profit`,
     cheats_unlockSuccInventory: `[UNTRANSLATED] Success. Please note that you'll need to resync your inventory, e.g. by visiting a dojo/relay or relogging.`,

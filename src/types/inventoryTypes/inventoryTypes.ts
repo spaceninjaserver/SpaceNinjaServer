@@ -39,6 +39,7 @@ export interface IAccountCheats {
     unlockDoubleCapacityPotatoesEverywhere?: boolean;
     unlockExilusEverywhere?: boolean;
     unlockArcanesEverywhere?: boolean;
+    alertsRepeatable?: boolean;
     syndicateMissionsRepeatable?: boolean;
     instantFinishRivenChallenge?: boolean;
     noDailyStandingLimits?: boolean;

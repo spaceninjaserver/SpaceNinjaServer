@@ -239,6 +239,7 @@ dict = {
     cheats_fullyStockedVendors: `Vendedores con stock completo`,
     cheats_baroAlwaysAvailable: `Baro siempre disponible`,
     cheats_baroFullyStocked: `Baro con stock completo`,
+    cheats_alertsRepeatable: `[UNTRANSLATED] Alerts Repeatable`,
     cheats_syndicateMissionsRepeatable: `Misiones de sindicato rejugables`,
     cheats_unlockAllProfitTakerStages: `Desbloquea todas las etapas del Roba-ganancias`,
     cheats_unlockSuccInventory: `[UNTRANSLATED] Success. Please note that you'll need to resync your inventory, e.g. by visiting a dojo/relay or relogging.`,

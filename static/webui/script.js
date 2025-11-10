@@ -425,7 +425,7 @@ function fetchItemList() {
                 InnateToxinDamage: loc("damageType_Poison")
             };
 
-            // Add mods mising in data sources
+            // Add mods missing in data sources
             data.mods.push({
                 uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser",
                 name: loc("code_legendaryCore")

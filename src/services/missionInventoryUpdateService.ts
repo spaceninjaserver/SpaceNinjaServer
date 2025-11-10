@@ -194,7 +194,7 @@ export const addMissionInventoryUpdates = async (
         }
     }
     if (inventoryUpdates.RewardInfo) {
-        if (inventoryUpdates.RewardInfo.periodicMissionTag) {
+        if (inventoryUpdates.RewardInfo.periodicMissionTag && !inventory.alertsRepeatable) {
             const tag = inventoryUpdates.RewardInfo.periodicMissionTag;
             const existingCompletion = inventory.PeriodicMissionCompletions.find(completion => completion.tag === tag);
 
@@ -1170,7 +1170,9 @@ export const addMissionRewards = async (
             if (inventory.CompletedAlerts.includes(alert._id.$oid)) {
                 logger.debug(`alert ${alert._id.$oid} already completed, skipping alert reward`);
             } else {
-                inventory.CompletedAlerts.push(alert._id.$oid);
+                if (!inventory.alertsRepeatable) {
+                    inventory.CompletedAlerts.push(alert._id.$oid);
+                }
                 if (alert.MissionInfo.missionReward) {
                     missionCompletionCredits += addFixedLevelRewards(
                         alert.MissionInfo.missionReward,

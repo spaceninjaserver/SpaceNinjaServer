@@ -239,6 +239,7 @@ dict = {
     cheats_fullyStockedVendors: `Händler haben volles Inventar`,
     cheats_baroAlwaysAvailable: `Baro immer im Relais verfügbar`,
     cheats_baroFullyStocked: `Baro hat volles Inventar`,
+    cheats_alertsRepeatable: `Alarmierungen wiederholbar`,
     cheats_syndicateMissionsRepeatable: `Syndikat-Missionen wiederholbar`,
     cheats_unlockAllProfitTakerStages: `Alle Profiteintreiber-Phasen freischalten`,
     cheats_unlockSuccInventory: `Erfolgreich. Bitte beachte, dass du dein Inventar neu synchronisieren musst, z. B. durch Besuch eines Dojo/Relais oder durch erneutes Anmelden.`,

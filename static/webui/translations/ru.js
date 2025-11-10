@@ -239,6 +239,7 @@ dict = {
     cheats_fullyStockedVendors: `Полностью укомплектованные торговцы`,
     cheats_baroAlwaysAvailable: `Баро всегда доступен`,
     cheats_baroFullyStocked: `Баро полностью укомплектован`,
+    cheats_alertsRepeatable: `[UNTRANSLATED] Alerts Repeatable`,
     cheats_syndicateMissionsRepeatable: `Повторять миссии синдиката`,
     cheats_unlockAllProfitTakerStages: `Разблокировать все этапы Сферы извлечения прибыли`,
     cheats_unlockSuccInventory: `[UNTRANSLATED] Success. Please note that you'll need to resync your inventory, e.g. by visiting a dojo/relay or relogging.`,

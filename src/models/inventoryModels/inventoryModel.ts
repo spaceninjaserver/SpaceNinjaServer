@@ -1464,6 +1464,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         unlockDoubleCapacityPotatoesEverywhere: Boolean,
         unlockExilusEverywhere: Boolean,
         unlockArcanesEverywhere: Boolean,
+        alertsRepeatable: Boolean,
         syndicateMissionsRepeatable: Boolean,
         instantFinishRivenChallenge: Boolean,
         noDailyStandingLimits: Boolean,
