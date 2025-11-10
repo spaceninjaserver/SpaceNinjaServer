@@ -4,7 +4,7 @@
 
 Use `npm i` or `npm ci` to install all dependencies, including dev dependencies.
 
-## Development Process
+### Development Process
 
 Auto reloading is supported for server and WebUI development. Simply use `npm run dev` or `npm run dev:bun` to start the server and edit away.
 
