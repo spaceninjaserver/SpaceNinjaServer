@@ -808,6 +808,7 @@ export const addItem = async (
                         typeName.substring(1).split("/")[3] == "KubrowPet"
                     ) {
                         if (
+                            typeName != "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg" &&
                             typeName != "/Lotus/Types/Game/KubrowPet/Eggs/KubrowPetEggItem" &&
                             typeName != "/Lotus/Types/Game/KubrowPet/BlankTraitPrint" &&
                             typeName != "/Lotus/Types/Game/KubrowPet/ImprintedTraitPrint"
