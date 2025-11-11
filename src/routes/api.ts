@@ -20,6 +20,7 @@ import { cancelGuildAdvertisementController } from "../controllers/api/cancelGui
 import { changeDojoRootController } from "../controllers/api/changeDojoRootController.ts";
 import { changeGuildRankController } from "../controllers/api/changeGuildRankController.ts";
 import { checkDailyMissionBonusController } from "../controllers/api/checkDailyMissionBonusController.ts";
+import { checkPendingRecipesController } from "../controllers/api/checkPendingRecipesController.ts";
 import { claimCompletedRecipeController } from "../controllers/api/claimCompletedRecipeController.ts";
 import { claimJunctionChallengeRewardController } from "../controllers/api/claimJunctionChallengeRewardController.ts";
 import { claimLibraryDailyTaskRewardController } from "../controllers/api/claimLibraryDailyTaskRewardController.ts";
@@ -184,6 +185,7 @@ apiRouter.get("/cancelGuildAdvertisement.php", cancelGuildAdvertisementControlle
 apiRouter.get("/changeDojoRoot.php", changeDojoRootController);
 apiRouter.get("/changeGuildRank.php", changeGuildRankController);
 apiRouter.get("/checkDailyMissionBonus.php", checkDailyMissionBonusController);
+apiRouter.get("/checkPendingRecipes.php", checkPendingRecipesController); // U8
 apiRouter.get("/claimLibraryDailyTaskReward.php", claimLibraryDailyTaskRewardController);
 apiRouter.get("/completeCalendarEvent.php", completeCalendarEventController);
 apiRouter.get("/confirmAllianceInvitation.php", confirmAllianceInvitationController);
@@ -305,6 +307,7 @@ apiRouter.post("/guildTech.php", guildTechController);
 apiRouter.post("/hostSession.php", hostSessionController);
 apiRouter.post("/hubBlessing.php", hubBlessingController);
 apiRouter.post("/infestedFoundry.php", infestedFoundryController);
+apiRouter.post("/instantCompleteRecipe.php", claimCompletedRecipeController); // U8
 apiRouter.post("/inventorySlots.php", inventorySlotsController);
 apiRouter.post("/joinSession.php", joinSessionController);
 apiRouter.post("/login.php", loginController);

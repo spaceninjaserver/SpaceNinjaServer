@@ -38,22 +38,47 @@ interface IClaimCompletedRecipeResponse {
 }
 
 export const claimCompletedRecipeController: RequestHandler = async (req, res) => {
-    const claimCompletedRecipeRequest = getJSONfromString<IClaimCompletedRecipeRequest>(String(req.body));
     const account = await getAccountForRequest(req);
     const inventory = await getInventory(account._id.toString());
     const resp: IClaimCompletedRecipeResponse = {
         InventoryChanges: {}
     };
-    for (const recipeId of claimCompletedRecipeRequest.RecipeIds) {
-        const pendingRecipe = inventory.PendingRecipes.id(fromOid(recipeId));
-        if (!pendingRecipe) {
-            throw new Error(`no pending recipe found with id ${fromOid(recipeId)}`);
-        }
+    if (!req.query.recipeName) {
+        const claimCompletedRecipeRequest = getJSONfromString<IClaimCompletedRecipeRequest>(String(req.body));
+        for (const recipeId of claimCompletedRecipeRequest.RecipeIds) {
+            const pendingRecipe = inventory.PendingRecipes.id(fromOid(recipeId));
+            if (!pendingRecipe) {
+                throw new Error(`no pending recipe found with id ${fromOid(recipeId)}`);
+            }
 
-        //check recipe is indeed ready to be completed
-        // if (pendingRecipe.CompletionDate > new Date()) {
-        //     throw new Error(`recipe ${pendingRecipe._id} is not ready to be completed`);
-        // }
+            //check recipe is indeed ready to be completed
+            // if (pendingRecipe.CompletionDate > new Date()) {
+            //     throw new Error(`recipe ${pendingRecipe._id} is not ready to be completed`);
+            // }
+
+            inventory.PendingRecipes.pull(pendingRecipe._id);
+
+            const recipe = getRecipe(pendingRecipe.ItemType);
+            if (!recipe) {
+                throw new Error(`no completed item found for recipe ${pendingRecipe._id.toString()}`);
+            }
+
+            if (req.query.cancel) {
+                const inventoryChanges: IInventoryChanges = {};
+                await refundRecipeIngredients(inventory, inventoryChanges, recipe, pendingRecipe);
+                await inventory.save();
+                res.json(inventoryChanges); // Not a bug: In the specific case of cancelling a recipe, InventoryChanges are expected to be the root.
+                return;
+            }
+
+            await claimCompletedRecipe(account, inventory, recipe, pendingRecipe, resp, req.query.rush);
+        }
+    } else {
+        const recipeName = String(req.query.recipeName); // U8
+        const pendingRecipe = inventory.PendingRecipes.find(r => r.ItemType == recipeName);
+        if (!pendingRecipe) {
+            throw new Error(`no pending recipe found with ItemType ${recipeName}`);
+        }
 
         inventory.PendingRecipes.pull(pendingRecipe._id);
 
@@ -61,16 +86,14 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
         if (!recipe) {
             throw new Error(`no completed item found for recipe ${pendingRecipe._id.toString()}`);
         }
-
-        if (req.query.cancel) {
-            const inventoryChanges: IInventoryChanges = {};
-            await refundRecipeIngredients(inventory, inventoryChanges, recipe, pendingRecipe);
-            await inventory.save();
-            res.json(inventoryChanges); // Not a bug: In the specific case of cancelling a recipe, InventoryChanges are expected to be the root.
-            return;
-        }
-
-        await claimCompletedRecipe(account, inventory, recipe, pendingRecipe, resp, req.query.rush);
+        await claimCompletedRecipe(
+            account,
+            inventory,
+            recipe,
+            pendingRecipe,
+            resp,
+            req.path.includes("instantCompleteRecipe.php")
+        );
     }
     await inventory.save();
     res.json(resp);

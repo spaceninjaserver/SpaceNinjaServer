@@ -24,7 +24,8 @@ export const startRecipeController: RequestHandler = async (req, res) => {
 
     const accountId = await getAccountIdForRequest(req);
 
-    const recipeName = startRecipeRequest.RecipeName;
+    let recipeName = startRecipeRequest.RecipeName;
+    if (req.query.recipeName) recipeName = String(req.query.recipeName); // U8
     const recipe = getRecipe(recipeName);
 
     if (!recipe) {
@@ -68,7 +69,16 @@ export const startRecipeController: RequestHandler = async (req, res) => {
                 freeUpSlot(inventory, InventorySlot.WEAPONS);
             }
         } else {
-            await addItem(inventory, recipe.ingredients[i].ItemType, recipe.ingredients[i].ItemCount * -1);
+            const itemType = recipe.ingredients[i].ItemType;
+            const itemCount = recipe.ingredients[i].ItemCount;
+            const inventoryItem = inventory.MiscItems.find(i => i.ItemType === itemType);
+            if (inventoryItem && inventoryItem.ItemCount >= itemCount) {
+                await addItem(inventory, itemType, itemCount * -1);
+            } else {
+                throw new Error(
+                    `insufficient ${itemType} (in inventory ${inventoryItem?.ItemCount} - needed ${itemCount}) for recipe ${recipeName}`
+                );
+            }
         }
     }
 
