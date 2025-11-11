@@ -3819,6 +3819,12 @@ export const getNightwaveSyndicateTag = (buildLabel: string | undefined): string
     if (version_compare(buildLabel, "2025.02.05.11.19") >= 0) {
         return "RadioLegionIntermission12Syndicate";
     }
+    if (version_compare(buildLabel, "2024.08.21.20.02") >= 0) {
+        return "RadioLegionIntermission11Syndicate";
+    }
+    if (version_compare(buildLabel, "2024.04.29.11.14") >= 0) {
+        return "RadioLegionIntermission10Syndicate";
+    }
     return undefined;
 };
 
