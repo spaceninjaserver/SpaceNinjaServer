@@ -822,6 +822,22 @@
                         </form>
                     </div>
                 </div>
+                <div id="umbraEchoes-card" class="card mb-3 d-none">
+                    <h5 class="card-header" data-loc="detailedView_umbraEchoesLabel"></h5>
+                    <div class="card-body">
+                        <p data-loc="detailedView_umbraEchoesDescription"></p>
+                        <form onsubmit="submitUmbraEchoes(event)">
+                            <div class="mb-3">
+                                <label for="umbraEchoes-expiry" class="form-label" data-loc="detailedView_umbraEchoesExpiryLabel"></label>
+                                <input type="datetime-local" class="form-control" max="2038-01-19T03:14" id="umbraEchoes-expiry" onblur="this.value=new Date(this.value)>new Date(this.max)?new Date(this.max).toISOString().slice(0,16):this.value"/>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary" data-loc="general_setButton"></button>
+                                <button type="button" class="btn btn-danger" onclick="setUmbraEchoes()" data-loc="code_remove"></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
                 <div id="modularParts-card" class="card mb-3 d-none">
                     <h5 class="card-header" data-loc="detailedView_modularPartsLabel"></h5>
                     <div class="card-body">

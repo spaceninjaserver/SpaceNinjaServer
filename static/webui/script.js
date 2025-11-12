@@ -1652,6 +1652,12 @@ function updateInventory() {
                                 formatDatetime("%Y-%m-%d %H:%M", Number(item.UpgradesExpiry?.$date.$numberLong)) || "";
                         }
 
+                        if (item.ItemType != "/Lotus/Powersuits/Excalibur/ExcaliburUmbra") {
+                            document.getElementById("umbraEchoes-card").classList.remove("d-none");
+                            document.getElementById("umbraEchoes-expiry").value =
+                                formatDatetime("%Y-%m-%d %H:%M", Number(item.UmbraDate?.$date.$numberLong)) || "";
+                        }
+
                         {
                             document.getElementById("loadout-card").classList.remove("d-none");
                             const maxModConfigNum = Math.min(2 + (item.ModSlotPurchases ?? 0), 5);
@@ -3519,6 +3525,7 @@ single.getRoute("#detailedView-route").on("beforeload", function () {
     document.getElementById("loadout-card").classList.add("d-none");
     document.getElementById("archonShards-card").classList.add("d-none");
     document.getElementById("edit-suit-invigorations-card").classList.add("d-none");
+    document.getElementById("umbraEchoes-card").classList.add("d-none");
     document.getElementById("modularParts-card").classList.add("d-none");
     document.getElementById("modularParts-form").innerHTML = "";
     document.getElementById("valenceBonus-card").classList.add("d-none");
@@ -4250,6 +4257,25 @@ function setInvigoration(data) {
     const oid = new URLSearchParams(window.location.search).get("itemId");
     $.post({
         url: "/custom/setInvigoration?" + window.authz,
+        contentType: "application/json",
+        data: JSON.stringify({ oid, ...data })
+    }).done(function () {
+        updateInventory();
+    });
+}
+
+function submitUmbraEchoes(event) {
+    event.preventDefault();
+    const expiry = document.getElementById("umbraEchoes-expiry").value;
+    setUmbraEchoes({
+        UmbraDate: expiry ? new Date(expiry).getTime() : Date.now() + 1 * 24 * 60 * 60 * 1000
+    });
+}
+
+function setUmbraEchoes(data) {
+    const oid = new URLSearchParams(window.location.search).get("itemId");
+    $.post({
+        url: "/custom/setUmbraEchoes?" + window.authz,
         contentType: "application/json",
         data: JSON.stringify({ oid, ...data })
     }).done(function () {

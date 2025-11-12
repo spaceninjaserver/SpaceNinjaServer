@@ -163,6 +163,7 @@ dict = {
     detailedView_invigorationLabel: `Воодушевление`,
     detailedView_loadoutLabel: `Конфигурации`,
     detailedView_equipmentFeaturesLabel: `Модификаторы снаряжения`,
+    detailedView_umbraEchoesLabel: `Эхо Умбры`,
 
     invigorations_offensive_AbilityStrength: `+200% к силе способностей.`,
     invigorations_offensive_AbilityRange: `+100% к зоне поражения способностей.`,
@@ -192,6 +193,9 @@ dict = {
 
     abilityOverride_label: `Переопределение способности`,
     abilityOverride_onSlot: `в ячейке`,
+
+    detailedView_umbraEchoesDescription: `Введение этой жидкости в варфрейм позволит ему автономно сражаться бок о бок с оператором.`,
+    detailedView_umbraEchoesExpiryLabel: `Срок действия Эха (необязательно)`,
 
     mods_addRiven: `Добавить мод Разлома`,
     mods_fingerprint: `Отпечаток`,

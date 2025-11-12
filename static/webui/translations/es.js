@@ -163,6 +163,7 @@ dict = {
     detailedView_invigorationLabel: `Fortalecimiento`,
     detailedView_loadoutLabel: `Equipamientos`,
     detailedView_equipmentFeaturesLabel: `[UNTRANSLATED] Equipment Features`,
+    detailedView_umbraEchoesLabel: `[UNTRANSLATED] Echoes Of Umbra`,
 
     invigorations_offensive_AbilityStrength: `+200% Fuerza de Habilidad`,
     invigorations_offensive_AbilityRange: `+100% Alcance de Habilidad`,
@@ -192,6 +193,9 @@ dict = {
 
     abilityOverride_label: `Intercambio de Habilidad`,
     abilityOverride_onSlot: `en el espacio`,
+
+    detailedView_umbraEchoesDescription: `Inyectar este fluido en un warframe lo imbuirá con la capacidad para luchar autónomamente junto a su operador.`,
+    detailedView_umbraEchoesExpiryLabel: `[UNTRANSLATED] Echo Expiry (optional)`,
 
     mods_addRiven: `Agregar Agrietado`,
     mods_fingerprint: `Huella digital`,

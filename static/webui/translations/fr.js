@@ -163,6 +163,7 @@ dict = {
     detailedView_invigorationLabel: `Dynamisation`,
     detailedView_loadoutLabel: `Équipements`,
     detailedView_equipmentFeaturesLabel: `[UNTRANSLATED] Equipment Features`,
+    detailedView_umbraEchoesLabel: `[UNTRANSLATED] Echoes Of Umbra`,
 
     invigorations_offensive_AbilityStrength: `+200% de puissance de pouvoir`,
     invigorations_offensive_AbilityRange: `+100% de portée de pouvoir`,
@@ -192,6 +193,9 @@ dict = {
 
     abilityOverride_label: `Remplacement de pouvoir`,
     abilityOverride_onSlot: `Sur l'emplacement`,
+
+    detailedView_umbraEchoesDescription: `L'injection de ce fluide dans une Warframe lui donnera la possibilité de se battre de manière autonome aux côtés de l'Opérateur.`,
+    detailedView_umbraEchoesExpiryLabel: `[UNTRANSLATED] Echo Expiry (optional)`,
 
     mods_addRiven: `Ajouter un riven`,
     mods_fingerprint: `Empreinte`,

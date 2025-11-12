@@ -163,6 +163,7 @@ dict = {
     detailedView_invigorationLabel: `Зміцнення`,
     detailedView_loadoutLabel: `Конфігурації`,
     detailedView_equipmentFeaturesLabel: `[UNTRANSLATED] Equipment Features`,
+    detailedView_umbraEchoesLabel: `[UNTRANSLATED] Echoes Of Umbra`,
 
     invigorations_offensive_AbilityStrength: `+200% до потужності здібностей.`,
     invigorations_offensive_AbilityRange: `+100% до досяжності здібностей.`,
@@ -192,6 +193,9 @@ dict = {
 
     abilityOverride_label: `Перевизначення здібностей`,
     abilityOverride_onSlot: `у комірці`,
+
+    detailedView_umbraEchoesDescription: `Рідина, яка після введення дозволяє ворфрейму використовувати єдність і битися самостійно пліч-о-пліч з оператором.`,
+    detailedView_umbraEchoesExpiryLabel: `[UNTRANSLATED] Echo Expiry (optional)`,
 
     mods_addRiven: `Добавити модифікатор Розколу`,
     mods_fingerprint: `Відбиток`,

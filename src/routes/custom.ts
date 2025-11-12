@@ -46,6 +46,7 @@ import { updateFingerprintController } from "../controllers/custom/updateFingerp
 import { unlockLevelCapController } from "../controllers/custom/unlockLevelCapController.ts";
 import { changeModularPartsController } from "../controllers/custom/changeModularPartsController.ts";
 import { setInvigorationController } from "../controllers/custom/setInvigorationController.ts";
+import { setUmbraEchoesController } from "../controllers/custom/setUmbraEchoesController.ts";
 import { setAccountCheatController } from "../controllers/custom/setAccountCheatController.ts";
 import { setGuildCheatController } from "../controllers/custom/setGuildCheatController.ts";
 
@@ -97,6 +98,7 @@ customRouter.post("/updateFingerprint", updateFingerprintController);
 customRouter.post("/unlockLevelCap", unlockLevelCapController);
 customRouter.post("/changeModularParts", changeModularPartsController);
 customRouter.post("/setInvigoration", setInvigorationController);
+customRouter.post("/setUmbraEchoes", setUmbraEchoesController);
 customRouter.post("/setAccountCheat", setAccountCheatController);
 customRouter.post("/setGuildCheat", setGuildCheatController);
 

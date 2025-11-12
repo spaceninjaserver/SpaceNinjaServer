@@ -163,6 +163,7 @@ dict = {
     detailedView_invigorationLabel: `Kräftigung`,
     detailedView_loadoutLabel: `Loadouts`,
     detailedView_equipmentFeaturesLabel: `[UNTRANSLATED] Equipment Features`,
+    detailedView_umbraEchoesLabel: `[UNTRANSLATED] Echoes Of Umbra`,
 
     invigorations_offensive_AbilityStrength: `+200% Fähigkeitsstärke`,
     invigorations_offensive_AbilityRange: `+100% Fähigkeitsreichweite`,
@@ -192,6 +193,9 @@ dict = {
 
     abilityOverride_label: `Fähigkeitsüberschreibung`,
     abilityOverride_onSlot: `auf Slot`,
+
+    detailedView_umbraEchoesDescription: `Wird ein Warframe mit dieser Flüssigkeit injiziert, kann er selbstständig an der Seite des Operators kämpfen.`,
+    detailedView_umbraEchoesExpiryLabel: `[UNTRANSLATED] Echo Expiry (optional)`,
 
     mods_addRiven: `Riven hinzufügen`,
     mods_fingerprint: `Fingerabdruck`,

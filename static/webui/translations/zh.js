@@ -163,6 +163,7 @@ dict = {
     detailedView_invigorationLabel: `活化`,
     detailedView_loadoutLabel: `配置`,
     detailedView_equipmentFeaturesLabel: `[UNTRANSLATED] Equipment Features`,
+    detailedView_umbraEchoesLabel: `[UNTRANSLATED] Echoes Of Umbra`,
 
     invigorations_offensive_AbilityStrength: `+200%技能强度`,
     invigorations_offensive_AbilityRange: `+100%技能范围`,
@@ -192,6 +193,9 @@ dict = {
 
     abilityOverride_label: `技能替换`,
     abilityOverride_onSlot: `槽位`,
+
+    detailedView_umbraEchoesDescription: `将这种液体注入战甲内，使其具有与指挥官并肩作战的能力。`,
+    detailedView_umbraEchoesExpiryLabel: `[UNTRANSLATED] Echo Expiry (optional)`,
 
     mods_addRiven: `添加裂罅MOD`,
     mods_fingerprint: `印记`,

@@ -162,6 +162,7 @@ dict = {
     detailedView_invigorationLabel: `Invigoration`,
     detailedView_loadoutLabel: `Loadouts`,
     detailedView_equipmentFeaturesLabel: `Equipment Features`,
+    detailedView_umbraEchoesLabel: `Echoes Of Umbra`,
 
     invigorations_offensive_AbilityStrength: `+200% Ability Strength`,
     invigorations_offensive_AbilityRange: `+100% Ability Range`,
@@ -191,6 +192,9 @@ dict = {
 
     abilityOverride_label: `Ability Override`,
     abilityOverride_onSlot: `on slot`,
+
+    detailedView_umbraEchoesDescription: `Injecting this fluid into a Warframe will imbue it with the ability to fight autonomously alongside the Operator.`,
+    detailedView_umbraEchoesExpiryLabel: `Echo Expiry (optional)`,
 
     mods_addRiven: `Add Riven`,
     mods_fingerprint: `Fingerprint`,
