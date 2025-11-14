@@ -22,14 +22,15 @@ import {
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import type { IPendingRecipeDatabase } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { InventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
-import { fromOid, toOid2 } from "../../helpers/inventoryHelpers.ts";
+import { fromOid, toOid2, version_compare } from "../../helpers/inventoryHelpers.ts";
 import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/inventoryModel.ts";
 import type { IRecipe } from "warframe-public-export-plus";
 import type { IEquipmentClient } from "../../types/equipmentTypes.ts";
 import { EquipmentFeatures, Status } from "../../types/equipmentTypes.ts";
 
 interface IClaimCompletedRecipeRequest {
-    RecipeIds: IOidWithLegacySupport[];
+    RecipeIds?: IOidWithLegacySupport[]; // U24.4 and beyond
+    recipeNames?: string[]; // Builds before U24.4 down to U22.20
 }
 
 interface IClaimCompletedRecipeResponse {
@@ -45,33 +46,46 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
     };
     if (!req.query.recipeName) {
         const claimCompletedRecipeRequest = getJSONfromString<IClaimCompletedRecipeRequest>(String(req.body));
-        for (const recipeId of claimCompletedRecipeRequest.RecipeIds) {
-            const pendingRecipe = inventory.PendingRecipes.id(fromOid(recipeId));
-            if (!pendingRecipe) {
-                throw new Error(`no pending recipe found with id ${fromOid(recipeId)}`);
+        const recipes = claimCompletedRecipeRequest.recipeNames ?? claimCompletedRecipeRequest.RecipeIds;
+        if (recipes) {
+            for (const recipeId of recipes) {
+                let pendingRecipe;
+                if (typeof recipeId === "string") {
+                    pendingRecipe = inventory.PendingRecipes.find(r => r.ItemType == recipeId);
+                    if (!pendingRecipe) {
+                        throw new Error(`no pending recipe found of type ${recipeId}`);
+                    }
+                } else {
+                    pendingRecipe = inventory.PendingRecipes.id(fromOid(recipeId));
+                    if (!pendingRecipe) {
+                        throw new Error(`no pending recipe found with id ${fromOid(recipeId)}`);
+                    }
+                }
+
+                //check recipe is indeed ready to be completed
+                // if (pendingRecipe.CompletionDate > new Date()) {
+                //     throw new Error(`recipe ${pendingRecipe._id} is not ready to be completed`);
+                // }
+
+                inventory.PendingRecipes.pull(pendingRecipe._id);
+
+                const recipe = getRecipe(pendingRecipe.ItemType);
+                if (!recipe) {
+                    throw new Error(`no completed item found for recipe ${pendingRecipe._id.toString()}`);
+                }
+
+                if (req.query.cancel) {
+                    const inventoryChanges: IInventoryChanges = {};
+                    await refundRecipeIngredients(inventory, inventoryChanges, recipe, pendingRecipe);
+                    await inventory.save();
+                    res.json(inventoryChanges); // Not a bug: In the specific case of cancelling a recipe, InventoryChanges are expected to be the root.
+                    return;
+                }
+
+                await claimCompletedRecipe(account, inventory, recipe, pendingRecipe, resp, req.query.rush);
             }
-
-            //check recipe is indeed ready to be completed
-            // if (pendingRecipe.CompletionDate > new Date()) {
-            //     throw new Error(`recipe ${pendingRecipe._id} is not ready to be completed`);
-            // }
-
-            inventory.PendingRecipes.pull(pendingRecipe._id);
-
-            const recipe = getRecipe(pendingRecipe.ItemType);
-            if (!recipe) {
-                throw new Error(`no completed item found for recipe ${pendingRecipe._id.toString()}`);
-            }
-
-            if (req.query.cancel) {
-                const inventoryChanges: IInventoryChanges = {};
-                await refundRecipeIngredients(inventory, inventoryChanges, recipe, pendingRecipe);
-                await inventory.save();
-                res.json(inventoryChanges); // Not a bug: In the specific case of cancelling a recipe, InventoryChanges are expected to be the root.
-                return;
-            }
-
-            await claimCompletedRecipe(account, inventory, recipe, pendingRecipe, resp, req.query.rush);
+        } else {
+            throw new Error(`recipe list from request was undefined?`);
         }
     } else {
         const recipeName = String(req.query.recipeName); // U8
@@ -92,7 +106,7 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
             recipe,
             pendingRecipe,
             resp,
-            req.path.includes("instantCompleteRecipe.php")
+            req.path.includes("instantCompleteRecipe.php") || req.query.rush
         );
     }
     await inventory.save();
@@ -144,13 +158,20 @@ const claimCompletedRecipe = async (
     }
 
     if (rush) {
+        let cost = recipe.skipBuildTimePrice;
         const end = Math.trunc(pendingRecipe.CompletionDate.getTime() / 1000);
         const start = end - recipe.buildTime;
         const secondsElapsed = Math.trunc(Date.now() / 1000) - start;
         const progress = secondsElapsed / recipe.buildTime;
         logger.debug(`rushing recipe at ${Math.trunc(progress * 100)}% completion`);
-        const cost =
-            progress > 0.5 ? Math.round(recipe.skipBuildTimePrice * (1 - (progress - 0.5))) : recipe.skipBuildTimePrice;
+        // U18 introduced rush cost scaling, don't use it for older versions.
+        if (account.BuildLabel && version_compare(account.BuildLabel, "2015.12.03.00.00") >= 0) {
+            // Haven't found the real build label for U18.0.0 yet, but this works
+            cost =
+                progress > 0.5
+                    ? Math.round(recipe.skipBuildTimePrice * (1 - (progress - 0.5)))
+                    : recipe.skipBuildTimePrice;
+        }
         combineInventoryChanges(resp.InventoryChanges, updateCurrency(inventory, cost, true));
     }
 
