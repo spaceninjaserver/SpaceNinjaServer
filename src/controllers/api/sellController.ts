@@ -25,11 +25,24 @@ export const sellController: RequestHandler = async (req, res) => {
     //console.log(JSON.stringify(payload, null, 2));
     const accountId = await getAccountIdForRequest(req);
     const requiredFields = new Set<keyof TInventoryDatabaseDocument>();
-    if (payload.SellCurrency == "SC_RegularCredits") {
+    let sellCurrency = "SC_RegularCredits";
+    if (payload.SellCurrency) {
+        sellCurrency = payload.SellCurrency;
+    } else {
+        if (payload.SellForFusionPoints || payload.SellForPrimeBucks) {
+            if (payload.SellForFusionPoints) {
+                sellCurrency = "SC_FusionPoints";
+            }
+            if (payload.SellForPrimeBucks) {
+                sellCurrency = "SC_PrimeBucks";
+            }
+        }
+    }
+    if (sellCurrency == "SC_RegularCredits") {
         requiredFields.add("RegularCredits");
-    } else if (payload.SellCurrency == "SC_FusionPoints") {
+    } else if (sellCurrency == "SC_FusionPoints") {
         requiredFields.add("FusionPoints");
-    } else if (payload.SellCurrency == "SC_CrewShipFusionPoints") {
+    } else if (sellCurrency == "SC_CrewShipFusionPoints") {
         requiredFields.add("CrewShipFusionPoints");
     } else {
         requiredFields.add("MiscItems");
@@ -83,27 +96,27 @@ export const sellController: RequestHandler = async (req, res) => {
     const inventory = await getInventory(accountId, Array.from(requiredFields).join(" "));
 
     // Give currency
-    if (payload.SellCurrency == "SC_RegularCredits") {
+    if (sellCurrency == "SC_RegularCredits") {
         inventory.RegularCredits += payload.SellPrice;
-    } else if (payload.SellCurrency == "SC_FusionPoints") {
+    } else if (sellCurrency == "SC_FusionPoints") {
         addFusionPoints(inventory, payload.SellPrice);
-    } else if (payload.SellCurrency == "SC_CrewShipFusionPoints") {
+    } else if (sellCurrency == "SC_CrewShipFusionPoints") {
         addCrewShipFusionPoints(inventory, payload.SellPrice);
-    } else if (payload.SellCurrency == "SC_PrimeBucks") {
+    } else if (sellCurrency == "SC_PrimeBucks") {
         addMiscItems(inventory, [
             {
                 ItemType: "/Lotus/Types/Items/MiscItems/PrimeBucks",
                 ItemCount: payload.SellPrice
             }
         ]);
-    } else if (payload.SellCurrency == "SC_DistillPoints") {
+    } else if (sellCurrency == "SC_DistillPoints") {
         addMiscItems(inventory, [
             {
                 ItemType: "/Lotus/Types/Items/MiscItems/DistillPoints",
                 ItemCount: payload.SellPrice
             }
         ]);
-    } else if (payload.SellCurrency == "SC_Resources") {
+    } else if (sellCurrency == "SC_Resources") {
         // Will add appropriate MiscItems from CrewShipWeapons or CrewShipWeaponSkins
     } else {
         throw new Error("Unknown SellCurrency: " + payload.SellCurrency);
@@ -218,7 +231,7 @@ export const sellController: RequestHandler = async (req, res) => {
             } else {
                 const index = inventory.CrewShipWeapons.findIndex(x => x._id.equals(sellItem.String));
                 if (index != -1) {
-                    if (payload.SellCurrency == "SC_Resources") {
+                    if (sellCurrency == "SC_Resources") {
                         refundPartialBuildCosts(inventory, inventory.CrewShipWeapons[index].ItemType, inventoryChanges);
                     }
                     inventory.CrewShipWeapons.splice(index, 1);
@@ -241,7 +254,7 @@ export const sellController: RequestHandler = async (req, res) => {
             } else {
                 const index = inventory.CrewShipWeaponSkins.findIndex(x => x._id.equals(sellItem.String));
                 if (index != -1) {
-                    if (payload.SellCurrency == "SC_Resources") {
+                    if (sellCurrency == "SC_Resources") {
                         refundPartialBuildCosts(
                             inventory,
                             inventory.CrewShipWeaponSkins[index].ItemType,
@@ -346,7 +359,7 @@ interface ISellRequest {
         WeaponSkins?: ISellItem[]; // SNS specific field
     };
     SellPrice: number;
-    SellCurrency:
+    SellCurrency?:
         | "SC_RegularCredits"
         | "SC_PrimeBucks"
         | "SC_FusionPoints"
@@ -355,6 +368,9 @@ interface ISellRequest {
         | "SC_Resources"
         | "somethingelsewemightnotknowabout";
     buildLabel: string;
+    // These are used in old builds (undetermined where it changed) instead of SellCurrency
+    SellForPrimeBucks?: boolean;
+    SellForFusionPoints?: boolean;
 }
 
 interface ISellItem {
