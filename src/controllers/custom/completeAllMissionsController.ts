@@ -35,6 +35,7 @@ export const completeAllMissionsController: RequestHandler = async (req, res) =>
         await handleStoreItemAcquisition(reward.StoreItem, inventory, reward.ItemCount, undefined, true);
     }
     addString(inventory.NodeIntrosCompleted, "TeshinHardModeUnlocked");
+    addString(inventory.NodeIntrosCompleted, "CetusInvasionNodeIntro");
     addString(inventory.NodeIntrosCompleted, "CetusSyndicate_IntroJob");
     let syndicate = inventory.Affiliations.find(x => x.Tag == "CetusSyndicate");
     if (!syndicate) {
