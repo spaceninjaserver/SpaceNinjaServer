@@ -68,6 +68,14 @@
     "circuitGameModes": null,
     "darvoStockMultiplier": 1
   },
+  "tunables": {
+    "useLoginToken": false,
+    "prohibitSkipMissionStartTimer": false,
+    "prohibitFovOverride": false,
+    "prohibitFreecam": false,
+    "prohibitTeleport": false,
+    "prohibitScripts": false
+  },
   "dev": {
     "keepVendorsExpired": false
   }
