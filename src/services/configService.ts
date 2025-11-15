@@ -160,6 +160,11 @@ export const configRemovedOptionsKeys = [
     "relicRewardItemCountMultiplier",
     "nightwaveStandingMultiplier"
 ];
+if (args.docker) {
+    configRemovedOptionsKeys.push("bindAddress");
+    configRemovedOptionsKeys.push("httpPort");
+    configRemovedOptionsKeys.push("httpsPort");
+}
 
 export const configPath = path.join(repoDir, args.configPath ?? "config.json");
 

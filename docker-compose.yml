@@ -7,12 +7,13 @@ services:
             - ./docker-data/static-data:/app/static/data
             - ./docker-data/logs:/app/logs
         ports:
+            # The lefthand value determines the port you actually connect to. Within the container, SpaceNinjaServer will always use 80 and 443 (righthand values).
             - 80:80
             - 443:443
 
         # Normally, the image is fetched from Docker Hub, but you can use the local Dockerfile by removing "image" above and adding this:
         #build: .
-        # Works best when using `docker-compose up --force-recreate --build`.
+        # Works best when using `docker compose up --force-recreate --build`.
 
         depends_on:
             - mongodb
