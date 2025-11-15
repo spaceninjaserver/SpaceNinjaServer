@@ -71,14 +71,7 @@ export const startRecipeController: RequestHandler = async (req, res) => {
         } else {
             const itemType = recipe.ingredients[i].ItemType;
             const itemCount = recipe.ingredients[i].ItemCount;
-            const inventoryItem = inventory.MiscItems.find(i => i.ItemType === itemType);
-            if (inventoryItem && inventoryItem.ItemCount >= itemCount) {
-                await addItem(inventory, itemType, itemCount * -1);
-            } else {
-                throw new Error(
-                    `insufficient ${itemType} (in inventory ${inventoryItem?.ItemCount} - needed ${itemCount}) for recipe ${recipeName}`
-                );
-            }
+            await addItem(inventory, itemType, itemCount * -1);
         }
     }
 

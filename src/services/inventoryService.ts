@@ -1849,8 +1849,8 @@ export const addMiscItems = (inventory: TInventoryDatabaseDocument, itemsArray: 
 
         if (MiscItems[itemIndex].ItemCount == 0) {
             MiscItems.splice(itemIndex, 1);
-        } else if (MiscItems[itemIndex].ItemCount <= 0) {
-            logger.warn(`inventory.MiscItems has a negative count for ${ItemType}`);
+        } else if (MiscItems[itemIndex].ItemCount < 0) {
+            throw new Error(`inventory.MiscItems has a negative count for ${ItemType} after subtracting ${ItemCount}`);
         }
     });
 };
@@ -1871,8 +1871,10 @@ const applyArrayChanges = (
             arr[itemIndex].ItemCount += change.ItemCount;
             if (arr[itemIndex].ItemCount == 0) {
                 arr.splice(itemIndex, 1);
-            } else if (arr[itemIndex].ItemCount <= 0) {
-                logger.warn(`inventory.${key} has a negative count for ${change.ItemType}`);
+            } else if (arr[itemIndex].ItemCount < 0) {
+                throw new Error(
+                    `inventory.${key} has a negative count for ${change.ItemType} after subtracting ${change.ItemCount}`
+                );
             }
         }
     }
@@ -1918,8 +1920,10 @@ export const addMods = (inventory: TInventoryDatabaseDocument, itemsArray: IRawU
         RawUpgrades[itemIndex].ItemCount += ItemCount;
         if (RawUpgrades[itemIndex].ItemCount == 0) {
             RawUpgrades.splice(itemIndex, 1);
-        } else if (RawUpgrades[itemIndex].ItemCount <= 0) {
-            logger.warn(`inventory.RawUpgrades has a negative count for ${ItemType}`);
+        } else if (RawUpgrades[itemIndex].ItemCount < 0) {
+            throw new Error(
+                `inventory.RawUpgrades has a negative count for ${ItemType} after subtracting ${ItemCount}`
+            );
         }
     });
 };
@@ -1934,7 +1938,9 @@ export const addFusionTreasures = (inventory: TInventoryDatabaseDocument, itemsA
             if (FusionTreasures[itemIndex].ItemCount == 0) {
                 FusionTreasures.splice(itemIndex, 1);
             } else if (FusionTreasures[itemIndex].ItemCount <= 0) {
-                logger.warn(`inventory.FusionTreasures has a negative count for ${ItemType}`);
+                throw new Error(
+                    `inventory.FusionTreasures has a negative count for ${ItemType} after subtracting ${ItemCount}`
+                );
             }
         } else {
             FusionTreasures.push({ ItemCount, ItemType, Sockets });
