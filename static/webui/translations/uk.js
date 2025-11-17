@@ -79,6 +79,8 @@ dict = {
     code_drifterBeardName: `Борода мандрівника: |INDEX|`,
     code_drifterFaceName: `Зовнішність мандрівника: |INDEX|`,
     code_operatorFaceName: `Зовнішність оператора: |INDEX|`,
+    code_reviveBooster: `Збільшувач зцілення`,
+    code_reviveBoosterDesc: `[UNTRANSLATED] Sets revive count to 4, which allows self-revive in Archon Hunts.`,
     code_succChange: `Успішно змінено.`,
     code_requiredInvigorationUpgrade: `Ви повинні вибрати як атакуюче, так і допоміжне вдосконалення.`,
     code_feature_1: `[UNTRANSLATED] Orokin Reactor`,

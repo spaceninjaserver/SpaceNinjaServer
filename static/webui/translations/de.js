@@ -79,6 +79,8 @@ dict = {
     code_drifterBeardName: `Drifter-Bart: |INDEX|`,
     code_drifterFaceName: `Drifter-Gesicht: |INDEX|`,
     code_operatorFaceName: `Operator-Gesicht: |INDEX|`,
+    code_reviveBooster: `Wiederbelebungsbooster`,
+    code_reviveBoosterDesc: `[UNTRANSLATED] Sets revive count to 4, which allows self-revive in Archon Hunts.`,
     code_succChange: `Erfolgreich geändert.`,
     code_requiredInvigorationUpgrade: `Du musst sowohl ein Offensiv- als auch ein Support-Upgrade auswählen.`,
     code_feature_1: `[UNTRANSLATED] Orokin Reactor`,

@@ -79,6 +79,8 @@ dict = {
     code_drifterBeardName: `Борода скитальца: |INDEX|`,
     code_drifterFaceName: `Внешность скитальца: |INDEX|`,
     code_operatorFaceName: `Внешность оператора: |INDEX|`,
+    code_reviveBooster: `Усилитель возрождения`,
+    code_reviveBoosterDesc: `Устанавливает количество возрождений на 4. Снимает ограничение на самовоскрешение на миссиях Охоты на архонтов.`,
     code_succChange: `Успешно изменено.`,
     code_requiredInvigorationUpgrade: `Вы должны выбрать как атакующее, так и вспомогательное улучшение.`,
     code_feature_1: `Реактор Орокин`,

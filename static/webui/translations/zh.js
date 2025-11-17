@@ -79,6 +79,8 @@ dict = {
     code_drifterBeardName: `漂泊者胡须 |INDEX|`,
     code_drifterFaceName: `漂泊者面部 |INDEX|`,
     code_operatorFaceName: `指挥官面部 |INDEX|`,
+    code_reviveBooster: `复活加速器`,
+    code_reviveBoosterDesc: `[UNTRANSLATED] Sets revive count to 4, which allows self-revive in Archon Hunts.`,
     code_succChange: `更改成功`,
     code_requiredInvigorationUpgrade: `[UNTRANSLATED] You must select both an offensive & utility upgrade.`,
     code_feature_1: `[UNTRANSLATED] Orokin Reactor`,
