@@ -212,6 +212,7 @@ dict = {
     cheats_server: `服务器`,
     cheats_skipTutorial: `跳过教程`,
     cheats_skipAllDialogue: `跳过所有对话`,
+    cheats_skipAllPopups: `[UNTRANSLATED] Skip All Popups`,
     cheats_unlockAllScans: `解锁所有扫描`,
     cheats_unlockSuccRelog: `[UNTRANSLATED] Success. Please note that you'll need to relog for the client to refresh this.`,
     cheats_unlockAllMissions: `解锁所有星图`,

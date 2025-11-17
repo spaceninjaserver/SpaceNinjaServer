@@ -1448,6 +1448,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         // SNS account cheats
         skipAllDialogue: Boolean,
+        skipAllPopups: Boolean,
         dontSubtractPurchaseCreditCost: Boolean,
         dontSubtractPurchasePlatinumCost: Boolean,
         dontSubtractPurchaseItemCost: Boolean,

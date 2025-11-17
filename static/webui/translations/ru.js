@@ -212,6 +212,7 @@ dict = {
     cheats_server: `Сервер`,
     cheats_skipTutorial: `Пропустить обучение`,
     cheats_skipAllDialogue: `Пропустить все диалоги`,
+    cheats_skipAllPopups: `[UNTRANSLATED] Skip All Popups`,
     cheats_unlockAllScans: `Разблокировать все сканирования`,
     cheats_unlockSuccRelog: `Успех. Вам необходимо повторно войти в игру, чтобы клиент обновил эту информацию.`,
     cheats_unlockAllMissions: `Разблокировать все миссии`,

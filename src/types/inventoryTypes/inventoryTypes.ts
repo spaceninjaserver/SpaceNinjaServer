@@ -23,6 +23,7 @@ export type InventoryDatabaseEquipment = {
 // Fields specific to SNS
 export interface IAccountCheats {
     skipAllDialogue?: boolean;
+    skipAllPopups?: boolean;
     dontSubtractPurchaseCreditCost?: boolean;
     dontSubtractPurchasePlatinumCost?: boolean;
     dontSubtractPurchaseItemCost?: boolean;

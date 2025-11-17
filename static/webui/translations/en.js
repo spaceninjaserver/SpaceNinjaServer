@@ -211,6 +211,7 @@ dict = {
     cheats_server: `Server`,
     cheats_skipTutorial: `Skip Tutorial`,
     cheats_skipAllDialogue: `Skip All Dialogue`,
+    cheats_skipAllPopups: `Skip All Popups`,
     cheats_unlockAllScans: `Unlock All Scans`,
     cheats_unlockSuccRelog: `Success. Please note that you'll need to relog for the client to refresh this.`,
     cheats_unlockAllMissions: `Unlock All Missions`,

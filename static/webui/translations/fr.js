@@ -212,6 +212,7 @@ dict = {
     cheats_server: `Serveur`,
     cheats_skipTutorial: `Passer le tutoriel`,
     cheats_skipAllDialogue: `Passer les dialogues`,
+    cheats_skipAllPopups: `[UNTRANSLATED] Skip All Popups`,
     cheats_unlockAllScans: `Débloquer tous les scans`,
     cheats_unlockSuccRelog: `Succès. Une reconnexion est requise pour appliquer les changements.`,
     cheats_unlockAllMissions: `Débloquer toutes les missions`,

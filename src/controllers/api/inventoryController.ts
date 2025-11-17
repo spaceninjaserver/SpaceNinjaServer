@@ -4,6 +4,7 @@ import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/in
 import { Inventory } from "../../models/inventoryModels/inventoryModel.ts";
 import { config } from "../../services/configService.ts";
 import allDialogue from "../../../static/fixed_responses/allDialogue.json" with { type: "json" };
+import allPopups from "../../../static/fixed_responses/allPopups.json" with { type: "json" };
 import type { ILoadoutDatabase } from "../../types/saveLoadoutTypes.ts";
 import type { IInventoryClient, IShipInventory } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { equipmentKeys } from "../../types/inventoryTypes/inventoryTypes.ts";
@@ -322,6 +323,12 @@ export const getInventoryResponse = async (
             });
         }
         for (const str of allDialogue) {
+            addString(inventoryResponse.NodeIntrosCompleted, str);
+        }
+    }
+
+    if (inventory.skipAllPopups) {
+        for (const str of allPopups) {
             addString(inventoryResponse.NodeIntrosCompleted, str);
         }
     }

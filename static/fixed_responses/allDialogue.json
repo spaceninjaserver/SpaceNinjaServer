@@ -1,4 +1,6 @@
 [
+  "ArcaneWallConsole",
+  "CetusHub4",
   "SolarisUnitedHub1",
   "/Lotus/Language/SolarisVenus/FishmongerName",
   "/Lotus/Language/SolarisVenus/ProspectorName",
@@ -12,6 +14,7 @@
   "SaturnWolf3",
   "SaturnWolf4",
   "SaturnWolf5",
+  "SyndicateFirstPledge",
   "ConclaveSyndicate",
   "ArbitersSyndicate",
   "LibrarySyndicate",
@@ -117,6 +120,7 @@
   "/Lotus/Language/EntratiLab/EntratiGeneral/Fibonacci",
   "/Lotus/Language/EntratiLab/EntratiGeneral/BirdThree",
   "/Lotus/Language/Zariman/Quinn",
+  "/Lotus/Language/EntratiLab/EntratiGeneral/Tagfer",
   "/Lotus/Language/EntratiLab/EntratiGeneral/TagferFirstRank1",
   "VoidVaultIntro",
   "PurchasePlatformLockedNotificationSeen",
@@ -137,6 +141,7 @@
   "EntratiLabConquestHardModeUnlocked",
   "/Lotus/Language/Npcs/KonzuPostNewWar",
   "/Lotus/Language/SolarisVenus/EudicoPostNewWar",
+  "/Lotus/Language/FiveFates/KoumeiStatueHubName",
   "/Lotus/Language/NokkoColony/NokkoVendorName",
   "NokkoVisions_FirstVisit"
 ]
