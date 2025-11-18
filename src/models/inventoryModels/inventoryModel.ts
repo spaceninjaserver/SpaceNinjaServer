@@ -1492,6 +1492,8 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         relicRewardItemCountMultiplier: { type: Number, default: 1 },
         nightwaveStandingMultiplier: { type: Number, default: 1 },
 
+        Created: Date,
+
         SubscribedToEmails: { type: Number, default: 0 },
         SubscribedToEmailsPersonalized: { type: Number, default: 0 },
         RewardSeed: BigInt,
