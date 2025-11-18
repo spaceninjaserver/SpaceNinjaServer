@@ -262,9 +262,9 @@ const claimCompletedRecipe = async (
                                 "",
                                 "",
                                 "",
-                                umbraModA.ItemId.$oid,
-                                umbraModB.ItemId.$oid,
-                                umbraModC.ItemId.$oid
+                                fromOid(umbraModA.ItemId),
+                                fromOid(umbraModB.ItemId),
+                                fromOid(umbraModC.ItemId)
                             ]
                         }
                     ],
@@ -284,7 +284,18 @@ const claimCompletedRecipe = async (
                 "/Lotus/Weapons/Tenno/Melee/Swords/UmbraKatana/UmbraKatana",
                 {
                     Configs: [
-                        { Upgrades: ["", "", "", "", "", "", sacrificeModA.ItemId.$oid, sacrificeModB.ItemId.$oid] }
+                        {
+                            Upgrades: [
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                fromOid(sacrificeModA.ItemId),
+                                fromOid(sacrificeModB.ItemId)
+                            ]
+                        }
                     ],
                     XP: 450_000,
                     Features: EquipmentFeatures.DOUBLE_CAPACITY

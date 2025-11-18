@@ -20,6 +20,10 @@ export const version_compare = (a: string, b: string): number => {
     return 0;
 };
 
+export const toObjectId = (s: string): Types.ObjectId => {
+    return new Types.ObjectId(s);
+};
+
 export const toOid = (objectId: Types.ObjectId): IOid => {
     return { $oid: objectId.toString() };
 };

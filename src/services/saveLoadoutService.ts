@@ -6,14 +6,15 @@ import type {
     ISaveLoadoutRequestNoUpgradeVer
 } from "../types/saveLoadoutTypes.ts";
 import { Loadout } from "../models/inventoryModels/loadoutModel.ts";
-import { getInventory } from "./inventoryService.ts";
+import { addMods, getInventory } from "./inventoryService.ts";
 import type { IOid } from "../types/commonTypes.ts";
 import { Types } from "mongoose";
 import { isEmptyObject } from "../helpers/general.ts";
+import { version_compare } from "../helpers/inventoryHelpers.ts";
 import { logger } from "../utils/logger.ts";
 import type { TEquipmentKey } from "../types/inventoryTypes/inventoryTypes.ts";
 import { equipmentKeys } from "../types/inventoryTypes/inventoryTypes.ts";
-import type { IItemConfig } from "../types/inventoryTypes/commonInventoryTypes.ts";
+import type { IItemConfig, IItemConfigDatabase } from "../types/inventoryTypes/commonInventoryTypes.ts";
 import { importCrewShipMembers, importCrewShipWeapon, importLoadOutConfig } from "./importService.ts";
 
 //TODO: setup default items on account creation or like originally in giveStartingItems.php
@@ -26,7 +27,8 @@ itemconfig has multiple config ids
 */
 export const handleInventoryItemConfigChange = async (
     equipmentChanges: ISaveLoadoutRequestNoUpgradeVer,
-    accountId: string
+    accountId: string,
+    buildLabel: string | undefined
 ): Promise<string | void> => {
     const inventory = await getInventory(accountId);
 
@@ -196,7 +198,36 @@ export const handleInventoryItemConfigChange = async (
 
                         for (const [configId, config] of Object.entries(itemConfigEntries)) {
                             if (/^[0-9]+$/.test(configId)) {
-                                inventoryItem.Configs[parseInt(configId)] = config as IItemConfig;
+                                const c = config as IItemConfig;
+                                if (buildLabel && version_compare(buildLabel, "2014.04.10.17.47") < 0) {
+                                    if (c.Upgrades) {
+                                        // U10-U11 store mods in the item config as $id instead of a string, need to convert that here
+                                        const convertedUpgrades: string[] = [];
+                                        c.Upgrades.forEach(upgrade => {
+                                            const upgradeId = upgrade as { $id: string };
+                                            const rawUpgrade = inventory.RawUpgrades.id(upgradeId.$id);
+                                            if (rawUpgrade) {
+                                                const newId = new Types.ObjectId();
+                                                convertedUpgrades.push(newId.toString());
+                                                addMods(inventory, [
+                                                    {
+                                                        ItemType: rawUpgrade.ItemType,
+                                                        ItemCount: -1
+                                                    }
+                                                ]);
+                                                inventory.Upgrades.push({
+                                                    UpgradeFingerprint: `{"lvl":0}`,
+                                                    ItemType: rawUpgrade.ItemType,
+                                                    _id: newId
+                                                });
+                                            } else {
+                                                convertedUpgrades.push(upgradeId.$id);
+                                            }
+                                        });
+                                        c.Upgrades = convertedUpgrades;
+                                    }
+                                }
+                                inventoryItem.Configs[parseInt(configId)] = c as IItemConfigDatabase;
                             }
                         }
                         if ("Favorite" in itemConfigEntries) {

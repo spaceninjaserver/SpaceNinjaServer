@@ -1,4 +1,4 @@
-import type { IOid, ITypeCount } from "./commonTypes.ts";
+import type { IOid, IOidWithLegacySupport, ITypeCount } from "./commonTypes.ts";
 import type { ArtifactPolarity, IPolarity } from "./inventoryTypes/commonInventoryTypes.ts";
 import type {
     IBooster,
@@ -21,7 +21,8 @@ import type {
     IInvasionProgressClient,
     IWeaponSkinClient,
     IKubrowPetEggClient,
-    INemesisClient
+    INemesisClient,
+    IUpgradeClient
 } from "./inventoryTypes/inventoryTypes.ts";
 import type { IGroup } from "./loginTypes.ts";
 import type { ILoadOutPresets } from "./saveLoadoutTypes.ts";
@@ -226,6 +227,24 @@ export interface IUpgradesRequest {
     ItemFeatures: number;
     UpgradeVersion: number;
     Operations: IUpgradeOperation[];
+}
+export interface IUpgradesRequestLegacy {
+    Category: TEquipmentKey;
+    Weapon: { ItemType: string; ItemId: IOidWithLegacySupport };
+    UpgradeVer: number;
+    UnlockLevel: number;
+    Polarized: number;
+    UtilityUnlocked: number;
+    FocusLens?: string;
+    UpgradeReq?: string;
+    UtilityReq?: string;
+    IsSwappingOperation: boolean;
+    PolarizeReq?: string;
+    PolarizeSlot: number;
+    PolarizeValue: ArtifactPolarity;
+    PolarityRemap: IPolarity[];
+    UpgradesToAttach?: IUpgradeClient[];
+    UpgradesToDetach?: IUpgradeClient[];
 }
 export interface IUpgradeOperation {
     OperationType: string;

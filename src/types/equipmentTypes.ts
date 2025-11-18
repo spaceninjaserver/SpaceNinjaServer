@@ -4,6 +4,7 @@ import type {
     ICrewShipCustomization,
     IFlavourItem,
     IItemConfig,
+    IItemConfigDatabase,
     IPolarity
 } from "./inventoryTypes/commonInventoryTypes.ts";
 
@@ -33,7 +34,7 @@ export enum EquipmentFeatures {
 export interface IEquipmentDatabase {
     ItemType: string;
     ItemName?: string;
-    Configs: IItemConfig[];
+    Configs: IItemConfigDatabase[];
     UpgradeVer?: number;
     XP?: number;
     Features?: number;
@@ -48,7 +49,6 @@ export interface IEquipmentDatabase {
     InfestationDays?: number;
     InfestationType?: string;
     ModularParts?: string[];
-    UnlockLevel?: number;
     Expiry?: Date;
     SkillTree?: string;
     OffensiveUpgrade?: string;
@@ -69,9 +69,18 @@ export interface IEquipmentDatabase {
 export interface IEquipmentClient
     extends Omit<
         IEquipmentDatabase,
-        "_id" | "InfestationDate" | "Expiry" | "UpgradesExpiry" | "UmbraDate" | "Weapon" | "CrewMembers" | "Details"
+        | "_id"
+        | "Configs"
+        | "InfestationDate"
+        | "Expiry"
+        | "UpgradesExpiry"
+        | "UmbraDate"
+        | "Weapon"
+        | "CrewMembers"
+        | "Details"
     > {
     ItemId: IOidWithLegacySupport;
+    Configs: IItemConfig[];
     InfestationDate?: IMongoDate;
     Expiry?: IMongoDate;
     UpgradesExpiry?: IMongoDate;
@@ -79,6 +88,10 @@ export interface IEquipmentClient
     Weapon?: ICrewShipWeaponClient;
     CrewMembers?: ICrewShipMembersClient;
     Details?: IKubrowPetDetailsClient;
+    // For Pre-U24.4.0 builds
+    UnlockLevel?: number;
+    UtilityUnlocked?: number;
+    Gild?: boolean;
 }
 
 export interface IArchonCrystalUpgrade {

@@ -427,6 +427,21 @@ function fetchItemList() {
 
             // Add mods missing in data sources
             data.mods.push({
+                uniqueName: "/Lotus/Upgrades/Mods/Fusers/CommonModFuser",
+                name: loc("code_fusionCoreCommon"),
+                fusionLimit: 3
+            });
+            data.mods.push({
+                uniqueName: "/Lotus/Upgrades/Mods/Fusers/UncommonModFuser",
+                name: loc("code_fusionCoreUncommon"),
+                fusionLimit: 5
+            });
+            data.mods.push({
+                uniqueName: "/Lotus/Upgrades/Mods/Fusers/RareModFuser",
+                name: loc("code_fusionCoreRare"),
+                fusionLimit: 5
+            });
+            data.mods.push({
                 uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser",
                 name: loc("code_legendaryCore"),
                 fusionLimit: 0
@@ -3466,6 +3481,9 @@ function doAddAllMods() {
     for (const child of document.getElementById("datalist-mods").children) {
         modsAll.add(child.getAttribute("data-key"));
     }
+    modsAll.delete("/Lotus/Upgrades/Mods/Fusers/CommonModFuser");
+    modsAll.delete("/Lotus/Upgrades/Mods/Fusers/UncommonModFuser");
+    modsAll.delete("/Lotus/Upgrades/Mods/Fusers/RareModFuser");
     modsAll.delete("/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser");
 
     revalidateAuthz().then(() => {

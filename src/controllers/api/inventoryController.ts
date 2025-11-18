@@ -6,7 +6,7 @@ import { config } from "../../services/configService.ts";
 import allDialogue from "../../../static/fixed_responses/allDialogue.json" with { type: "json" };
 import allPopups from "../../../static/fixed_responses/allPopups.json" with { type: "json" };
 import type { ILoadoutDatabase } from "../../types/saveLoadoutTypes.ts";
-import type { IInventoryClient, IShipInventory } from "../../types/inventoryTypes/inventoryTypes.ts";
+import type { IInventoryClient, IShipInventory, IUpgradeClient } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { equipmentKeys } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import { ArtifactPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
@@ -30,7 +30,7 @@ import { getNemesisManifest } from "../../helpers/nemesisHelpers.ts";
 import { getPersonalRooms } from "../../services/personalRoomsService.ts";
 import type { IPersonalRoomsClient } from "../../types/personalRoomsTypes.ts";
 import { Ship } from "../../models/shipModel.ts";
-import { toLegacyOid, toOid, version_compare } from "../../helpers/inventoryHelpers.ts";
+import { toLegacyOid, toOid, toOid2, version_compare } from "../../helpers/inventoryHelpers.ts";
 import { Inbox } from "../../models/inboxModel.ts";
 import { unixTimesInMs } from "../../constants/timeConstants.ts";
 import { DailyDeal } from "../../models/worldStateModel.ts";
@@ -454,28 +454,140 @@ export const getInventoryResponse = async (
             inventoryResponse.Nemesis = undefined;
         }
 
-        if (version_compare(buildLabel, "2018.02.22.14.34") < 0) {
-            const personalRoomsDb = await getPersonalRooms(inventory.accountOwnerId.toString());
-            const personalRooms = personalRoomsDb.toJSON<IPersonalRoomsClient>();
-            inventoryResponse.Ship = personalRooms.Ship;
+        if (version_compare(buildLabel, "2019.03.07.20.21") < 0) {
+            // Builds before U24.4.0 handle equipment features differently
+            for (const category of equipmentKeys) {
+                for (const item of inventoryResponse[category]) {
+                    if (item.Features && item.Features & EquipmentFeatures.DOUBLE_CAPACITY) {
+                        item.UnlockLevel = 1;
+                    }
+                    if (item.Features && item.Features & EquipmentFeatures.UTILITY_SLOT) {
+                        item.UtilityUnlocked = 1;
+                    }
+                    if (item.Features && item.Features & EquipmentFeatures.GILDED) {
+                        item.Gild = true;
+                    }
+                }
+            }
 
-            if (version_compare(buildLabel, "2016.12.21.19.13") <= 0) {
-                // U19.5 and below use $id instead of $oid
-                for (const category of equipmentKeys) {
-                    for (const item of inventoryResponse[category]) {
-                        toLegacyOid(item.ItemId);
+            if (version_compare(buildLabel, "2018.02.22.14.34") < 0) {
+                const personalRoomsDb = await getPersonalRooms(inventory.accountOwnerId.toString());
+                const personalRooms = personalRoomsDb.toJSON<IPersonalRoomsClient>();
+                inventoryResponse.Ship = personalRooms.Ship;
+
+                if (version_compare(buildLabel, "2016.12.21.19.13") <= 0) {
+                    // U19.5 and below use $id instead of $oid
+                    for (const category of equipmentKeys) {
+                        for (const item of inventoryResponse[category]) {
+                            toLegacyOid(item.ItemId);
+                        }
                     }
-                }
-                for (const upgrade of inventoryResponse.Upgrades) {
-                    toLegacyOid(upgrade.ItemId);
-                }
-                if (inventoryResponse.BrandedSuits) {
-                    for (const id of inventoryResponse.BrandedSuits) {
-                        toLegacyOid(id);
+
+                    if (version_compare(buildLabel, "2014.02.05.00.00") < 0) {
+                        // Pre-U12 builds store mods in an array called Cards, and have no concept of RawUpgrades
+                        inventoryResponse.Cards = [];
+                        for (const rawUpgrade of inventoryResponse.RawUpgrades) {
+                            const id = inventory.RawUpgrades.find(x => x.ItemType == rawUpgrade.ItemType)?._id;
+                            if (id) {
+                                for (let i = 0; i < rawUpgrade.ItemCount; i++) {
+                                    const card = {
+                                        ItemType: rawUpgrade.ItemType,
+                                        ItemId: toOid2(id, buildLabel),
+                                        Rank: 0,
+                                        AmountRemaining: rawUpgrade.ItemCount
+                                    } as IUpgradeClient;
+                                    // Client doesn't see the mods unless they are in both Cards and Upgrades
+                                    inventoryResponse.Cards.push(card);
+                                    inventoryResponse.Upgrades.push(card);
+                                }
+                            }
+                        }
+
+                        inventoryResponse.RawUpgrades = [];
+
+                        for (const category of equipmentKeys) {
+                            for (const item of inventoryResponse[category]) {
+                                for (const config of item.Configs) {
+                                    if (config.Upgrades) {
+                                        // Convert installed upgrades for U10-U11
+                                        const convertedUpgrades: { $id: string }[] = [];
+                                        config.Upgrades.forEach(upgrade => {
+                                            const upgradeId = upgrade as string;
+                                            convertedUpgrades.push({ $id: upgradeId });
+                                        });
+                                        config.Upgrades = convertedUpgrades;
+                                    }
+                                }
+                            }
+                        }
                     }
-                }
-                if (inventoryResponse.GuildId) {
-                    toLegacyOid(inventoryResponse.GuildId);
+
+                    for (const upgrade of inventoryResponse.Upgrades) {
+                        toLegacyOid(upgrade.ItemId);
+                        if (version_compare(buildLabel, "2016.08.19.17.12") < 0) {
+                            // Pre-U18.18 builds use a different UpgradeFingerprint format
+                            let rank: number = 0;
+                            if (upgrade.UpgradeFingerprint) {
+                                rank = Number.parseFloat(
+                                    upgrade.UpgradeFingerprint.substring(
+                                        upgrade.UpgradeFingerprint.indexOf(":") + 1,
+                                        upgrade.UpgradeFingerprint.lastIndexOf("}")
+                                    )
+                                );
+                            }
+                            upgrade.UpgradeFingerprint = `lvl=${rank}|`;
+                            if (version_compare(buildLabel, "2014.04.10.17.47") < 0) {
+                                // Pre-U10 builds
+                                if (
+                                    !upgrade.AmountRemaining ||
+                                    (upgrade.AmountRemaining && upgrade.AmountRemaining <= 0)
+                                ) {
+                                    upgrade.AmountRemaining = 1;
+                                }
+                                upgrade.Rank = rank;
+                                if (inventoryResponse.Cards) {
+                                    inventoryResponse.Cards.push(upgrade);
+                                }
+                            }
+                        }
+                    }
+
+                    if (version_compare(buildLabel, "2014.02.05.00.00") < 0) {
+                        // Convert installed mods for pre-U12 builds
+                        for (const category of equipmentKeys) {
+                            for (const item of inventoryResponse[category]) {
+                                for (const config of item.Configs) {
+                                    if (config.Upgrades) {
+                                        for (let i = 0; i < config.Upgrades.length; i++) {
+                                            const id = config.Upgrades[i] as { $id: string | undefined };
+                                            const invUpgrade = inventoryResponse.Upgrades.find(
+                                                x => x.ItemId.$id == id.$id
+                                            );
+                                            if (invUpgrade) {
+                                                if (id.$id?.startsWith("/Lotus")) {
+                                                    // Pre-U12 builds have no concept of RawUpgrades, have to convert the db entry to the closest id of an unranked copy
+                                                    id.$id = inventoryResponse.Upgrades.find(
+                                                        x => x.ItemType == id.$id
+                                                    )?.ItemId.$id;
+                                                }
+                                                // Pre-U10
+                                                invUpgrade.ParentId = item.ItemId;
+                                                invUpgrade.Slot = i + 1;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (inventoryResponse.BrandedSuits) {
+                        for (const id of inventoryResponse.BrandedSuits) {
+                            toLegacyOid(id);
+                        }
+                    }
+                    if (inventoryResponse.GuildId) {
+                        toLegacyOid(inventoryResponse.GuildId);
+                    }
                 }
             }
         }

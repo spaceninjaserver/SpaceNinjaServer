@@ -1060,7 +1060,6 @@ const EquipmentSchema = new Schema<IEquipmentDatabase>(
         InfestationDays: Number,
         InfestationType: String,
         ModularParts: { type: [String], default: undefined },
-        UnlockLevel: Number,
         Expiry: Date,
         SkillTree: String,
         OffensiveUpgrade: String,

@@ -33,7 +33,7 @@ import type { IGenericUpdate, IUpdateNodeIntrosResponse } from "../types/generic
 import type { IKeyChainRequest, IMissionInventoryUpdateRequest } from "../types/requestTypes.ts";
 import { logger } from "../utils/logger.ts";
 import { convertInboxMessage, fromStoreItem, getKeyChainItems } from "./itemDataService.ts";
-import type { IFlavourItem, IItemConfig } from "../types/inventoryTypes/commonInventoryTypes.ts";
+import type { IFlavourItem, IItemConfig, IItemConfigDatabase } from "../types/inventoryTypes/commonInventoryTypes.ts";
 import type { IDefaultUpgrade, IPowersuit, ISentinel, TStandingLimitBin } from "warframe-public-export-plus";
 import {
     ExportArcanes,
@@ -922,9 +922,9 @@ export const addItems = async (
 export const applyDefaultUpgrades = (
     inventory: TInventoryDatabaseDocument,
     defaultUpgrades: IDefaultUpgrade[] | undefined
-): IItemConfig[] => {
+): IItemConfigDatabase[] => {
     const modsToGive: IRawUpgrade[] = [];
-    const configs: IItemConfig[] = [];
+    const configs: IItemConfigDatabase[] = [];
     if (defaultUpgrades) {
         const upgrades = [];
         for (const defaultUpgrade of defaultUpgrades) {

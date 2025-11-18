@@ -1,4 +1,4 @@
-import { toOid } from "../../helpers/inventoryHelpers.ts";
+import { toOid2 } from "../../helpers/inventoryHelpers.ts";
 import {
     createVeiledRivenFingerprint,
     createUnveiledRivenFingerprint,
@@ -6,13 +6,14 @@ import {
 } from "../../helpers/rivenHelper.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { addMods, getInventory } from "../../services/inventoryService.ts";
-import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest } from "../../services/loginService.ts";
 import { getRandomElement } from "../../services/rngService.ts";
 import type { RequestHandler } from "express";
 import { ExportUpgrades } from "warframe-public-export-plus";
 
 export const activateRandomModController: RequestHandler = async (req, res) => {
-    const accountId = await getAccountIdForRequest(req);
+    const account = await getAccountForRequest(req);
+    const accountId = account._id.toString();
     const inventory = await getInventory(accountId, "RawUpgrades Upgrades instantFinishRivenChallenge");
     const request = getJSONfromString<IActiveRandomModRequest>(String(req.body));
     addMods(inventory, [
@@ -36,7 +37,7 @@ export const activateRandomModController: RequestHandler = async (req, res) => {
         NewMod: {
             UpgradeFingerprint: fingerprint,
             ItemType: rivenType,
-            ItemId: toOid(inventory.Upgrades[upgradeIndex]._id)
+            ItemId: toOid2(inventory.Upgrades[upgradeIndex]._id, account.BuildLabel)
         }
     });
 };

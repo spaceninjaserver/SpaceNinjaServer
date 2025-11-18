@@ -318,6 +318,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     Accolades?: IAccolades;
     Counselor?: boolean;
     Upgrades: IUpgradeClient[];
+    Cards?: IUpgradeClient[]; // U8
     EquippedGear: string[];
     DeathMarks: string[];
     FusionTreasures: IFusionTreasure[];
@@ -592,10 +593,16 @@ export interface IUpgradeClient {
     ItemType: string;
     UpgradeFingerprint?: string;
     PendingRerollFingerprint?: string;
-    ItemId: IOid;
+    ItemId: IOidWithLegacySupport;
+    // Stuff for U7-U8
+    ParentId?: IOidWithLegacySupport;
+    Slot?: number;
+    AmountRemaining?: number;
+    Rank?: number;
 }
 
-export interface IUpgradeDatabase extends Omit<IUpgradeClient, "ItemId"> {
+export interface IUpgradeDatabase
+    extends Omit<IUpgradeClient, "ItemId" | "ParentId" | "Slot" | "AmountRemaining" | "Rank"> {
     _id: Types.ObjectId;
 }
 
@@ -603,9 +610,9 @@ export interface IUpgradeFromClient {
     ItemType: string;
     ItemId: IOidWithLegacySupport;
     FromSKU?: boolean;
-    UpgradeFingerprint: string;
+    UpgradeFingerprint?: string;
     PendingRerollFingerprint: string;
-    ItemCount: number;
+    ItemCount?: number;
     LastAdded: IOidWithLegacySupport;
 }
 

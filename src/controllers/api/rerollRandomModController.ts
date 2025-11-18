@@ -1,14 +1,16 @@
 import type { RequestHandler } from "express";
-import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest } from "../../services/loginService.ts";
 import { addMiscItems, getInventory } from "../../services/inventoryService.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import type { RivenFingerprint } from "../../helpers/rivenHelper.ts";
 import { createUnveiledRivenFingerprint, randomiseRivenStats } from "../../helpers/rivenHelper.ts";
 import { ExportUpgrades } from "warframe-public-export-plus";
-import type { IOid } from "../../types/commonTypes.ts";
+import type { IOidWithLegacySupport } from "../../types/commonTypes.ts";
+import { toObjectId, toOid2 } from "../../helpers/inventoryHelpers.ts";
 
 export const rerollRandomModController: RequestHandler = async (req, res) => {
-    const accountId = await getAccountIdForRequest(req);
+    const account = await getAccountForRequest(req);
+    const accountId = account._id.toString();
     const request = getJSONfromString<RerollRandomModRequest>(String(req.body));
     if ("ItemIds" in request) {
         const inventory = await getInventory(accountId, "Upgrades MiscItems");
@@ -40,7 +42,7 @@ export const rerollRandomModController: RequestHandler = async (req, res) => {
             }
 
             changes.push({
-                ItemId: { $oid: request.ItemIds[0] },
+                ItemId: toOid2(toObjectId(request.ItemIds[0]), account.BuildLabel),
                 UpgradeFingerprint: upgrade.UpgradeFingerprint,
                 PendingRerollFingerprint: upgrade.PendingRerollFingerprint
             });
@@ -76,7 +78,7 @@ interface AwDangitRequest {
 }
 
 interface IChange {
-    ItemId: IOid;
+    ItemId: IOidWithLegacySupport;
     UpgradeFingerprint?: string;
     PendingRerollFingerprint?: string;
 }

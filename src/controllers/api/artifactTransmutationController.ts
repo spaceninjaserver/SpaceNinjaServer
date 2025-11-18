@@ -1,7 +1,7 @@
-import { fromOid, toOid } from "../../helpers/inventoryHelpers.ts";
+import { fromOid, toOid2 } from "../../helpers/inventoryHelpers.ts";
 import { createVeiledRivenFingerprint, rivenRawToRealWeighted } from "../../helpers/rivenHelper.ts";
 import { addMiscItems, addMods, getInventory } from "../../services/inventoryService.ts";
-import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest } from "../../services/loginService.ts";
 import { getRandomElement, getRandomWeightedReward, getRandomWeightedRewardUc } from "../../services/rngService.ts";
 import type { IUpgradeFromClient } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { RequestHandler } from "express";
@@ -9,12 +9,15 @@ import type { TRarity } from "warframe-public-export-plus";
 import { ExportBoosterPacks, ExportUpgrades } from "warframe-public-export-plus";
 
 export const artifactTransmutationController: RequestHandler = async (req, res) => {
-    const accountId = await getAccountIdForRequest(req);
+    const account = await getAccountForRequest(req);
+    const accountId = account._id.toString();
     const inventory = await getInventory(accountId);
     const payload = JSON.parse(String(req.body)) as IArtifactTransmutationRequest;
 
     inventory.RegularCredits -= payload.Cost;
-    inventory.FusionPoints -= payload.FusionPointCost;
+    if (payload.FusionPointCost) {
+        inventory.FusionPoints -= payload.FusionPointCost;
+    }
 
     if (payload.RivenTransmute) {
         addMiscItems(inventory, [
@@ -41,7 +44,7 @@ export const artifactTransmutationController: RequestHandler = async (req, res) 
         res.json({
             NewMods: [
                 {
-                    ItemId: toOid(inventory.Upgrades[upgradeIndex]._id),
+                    ItemId: toOid2(inventory.Upgrades[upgradeIndex]._id, account.BuildLabel),
                     ItemType: rivenType,
                     UpgradeFingerprint: fingerprint
                 }
@@ -56,9 +59,10 @@ export const artifactTransmutationController: RequestHandler = async (req, res) 
         };
         let forcedPolarity: string | undefined;
         payload.Consumed.forEach(upgrade => {
+            upgrade.ItemCount ??= 1;
             const meta = ExportUpgrades[upgrade.ItemType];
             counts[meta.rarity] += upgrade.ItemCount;
-            if (fromOid(upgrade.ItemId) != "000000000000000000000000") {
+            if (fromOid(upgrade.ItemId) != "" && fromOid(upgrade.ItemId) != "000000000000000000000000") {
                 inventory.Upgrades.pull({ _id: fromOid(upgrade.ItemId) });
             } else {
                 addMods(inventory, [
@@ -133,7 +137,7 @@ interface IArtifactTransmutationRequest {
     LevelDiff: number;
     Consumed: IUpgradeFromClient[];
     Cost: number;
-    FusionPointCost: number;
+    FusionPointCost?: number;
     RivenTransmute?: boolean;
 }
 

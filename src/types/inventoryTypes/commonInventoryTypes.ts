@@ -47,7 +47,7 @@ export interface IItemConfig {
     facial?: IColor;
     syancol?: IColor;
     cloth?: IColor;
-    Upgrades?: string[];
+    Upgrades?: string[] | { $id: string }[];
     Name?: string;
     OperatorAmp?: IOid;
     Songs?: ISong[];
@@ -56,13 +56,17 @@ export interface IItemConfig {
     ugly?: boolean;
 }
 
+export interface IItemConfigDatabase extends Omit<IItemConfig, "Upgrades"> {
+    Upgrades?: string[];
+}
+
 export interface ISong {
     m?: string;
     b?: string;
     p?: string;
     s: string;
 }
-export interface IOperatorConfigDatabase extends IItemConfig {
+export interface IOperatorConfigDatabase extends IItemConfigDatabase {
     _id: Types.ObjectId;
 }
 

@@ -15,6 +15,7 @@ import type { IQuestKeyClient, IQuestKeyDatabase, IQuestStage } from "../types/i
 import { logger } from "../utils/logger.ts";
 import { ExportKeys, ExportRecipes } from "warframe-public-export-plus";
 import { addFixedLevelRewards } from "./missionInventoryUpdateService.ts";
+import { fromOid } from "../helpers/inventoryHelpers.ts";
 import type { IInventoryChanges } from "../types/purchaseTypes.ts";
 import questCompletionItems from "../../static/fixed_responses/questCompletionRewards.json" with { type: "json" };
 import type { ITypeCount } from "../types/commonTypes.ts";
@@ -761,9 +762,9 @@ export const removeRequiredItems = async (inventory: TInventoryDatabaseDocument,
                                     "",
                                     "",
                                     "",
-                                    umbraModA.ItemId.$oid,
-                                    umbraModB.ItemId.$oid,
-                                    umbraModC.ItemId.$oid
+                                    fromOid(umbraModA.ItemId),
+                                    fromOid(umbraModB.ItemId),
+                                    fromOid(umbraModC.ItemId)
                                 ]
                             }
                         ],
@@ -778,7 +779,16 @@ export const removeRequiredItems = async (inventory: TInventoryDatabaseDocument,
                     addEquipment(inventory, "Melee", "/Lotus/Weapons/Tenno/Melee/Swords/UmbraKatana/UmbraKatana", {
                         Configs: [
                             {
-                                Upgrades: ["", "", "", "", "", "", sacrificeModA.ItemId.$oid, sacrificeModB.ItemId.$oid]
+                                Upgrades: [
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    fromOid(sacrificeModA.ItemId),
+                                    fromOid(sacrificeModB.ItemId)
+                                ]
                             }
                         ],
                         XP: 450_000,

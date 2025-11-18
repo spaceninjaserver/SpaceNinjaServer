@@ -1,4 +1,4 @@
-import { fromDbOid, toMongoDate, version_compare } from "../../helpers/inventoryHelpers.ts";
+import { fromDbOid, fromOid, toMongoDate, version_compare } from "../../helpers/inventoryHelpers.ts";
 import type { IKnifeResponse } from "../../helpers/nemesisHelpers.ts";
 import {
     antivirusMods,
@@ -21,7 +21,7 @@ import { Loadout } from "../../models/inventoryModels/loadoutModel.ts";
 import { addMods, freeUpSlot, getInventory } from "../../services/inventoryService.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
 import { SRng } from "../../services/rngService.ts";
-import type { IMongoDate, IOid } from "../../types/commonTypes.ts";
+import type { IMongoDate, IOid, IOidWithLegacySupport } from "../../types/commonTypes.ts";
 import type { IEquipmentClient } from "../../types/equipmentTypes.ts";
 import type {
     IInnateDamageFingerprint,
@@ -420,7 +420,7 @@ interface IKnife {
 const consumeModCharge = (
     response: IKnifeResponse,
     inventory: TInventoryDatabaseDocument,
-    upgrade: { ItemId: IOid; ItemType: string },
+    upgrade: { ItemId: IOidWithLegacySupport; ItemType: string },
     dataknifeUpgrades: string[]
 ): void => {
     response.UpgradeIds ??= [];
@@ -429,13 +429,13 @@ const consumeModCharge = (
     response.UpgradeNew ??= [];
     response.HasKnife = true;
 
-    if (upgrade.ItemId.$oid != "000000000000000000000000") {
-        const dbUpgrade = inventory.Upgrades.id(upgrade.ItemId.$oid)!;
+    if (fromOid(upgrade.ItemId) != "000000000000000000000000") {
+        const dbUpgrade = inventory.Upgrades.id(fromOid(upgrade.ItemId))!;
         const fingerprint = JSON.parse(dbUpgrade.UpgradeFingerprint!) as { lvl: number };
         fingerprint.lvl += 1;
         dbUpgrade.UpgradeFingerprint = JSON.stringify(fingerprint);
 
-        response.UpgradeIds.push(upgrade.ItemId.$oid);
+        response.UpgradeIds.push(fromOid(upgrade.ItemId));
         response.UpgradeTypes.push(upgrade.ItemType);
         response.UpgradeFingerprints.push(fingerprint);
         response.UpgradeNew.push(false);
