@@ -9,6 +9,7 @@ statsRouter.get("/view.php", viewController);
 statsRouter.get("/profileStats.php", viewController);
 statsRouter.get("/leaderboard.php", leaderboardGetController);
 statsRouter.post("/upload.php", uploadController);
+statsRouter.post("/view.php", viewController);
 statsRouter.post("/leaderboardWeekly.php", leaderboardPostController);
 statsRouter.post("/leaderboardArchived.php", leaderboardPostController);
 
