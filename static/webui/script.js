@@ -3646,8 +3646,12 @@ function doImport() {
                 data: JSON.stringify({
                     inventory: JSON.parse($("#import-inventory").val())
                 })
-            }).then(function (anyKnownKey) {
-                toast(loc(anyKnownKey ? "code_succImport" : "code_nothingToDo"));
+            }).then(function (err) {
+                if (err) {
+                    toast(err == "noKnownKey" ? loc("code_nothingToDo") : err);
+                } else {
+                    toast(loc("code_succImport"));
+                }
                 updateInventory();
             });
         } catch (e) {
