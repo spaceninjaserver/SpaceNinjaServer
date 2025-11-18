@@ -428,7 +428,8 @@ function fetchItemList() {
             // Add mods missing in data sources
             data.mods.push({
                 uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser",
-                name: loc("code_legendaryCore")
+                name: loc("code_legendaryCore"),
+                fusionLimit: 0
             });
             data.mods.push({
                 uniqueName: "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/CyoteMod",
@@ -1507,7 +1508,9 @@ function updateInventory() {
                     {
                         const td = document.createElement("td");
                         td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
-                        td.innerHTML += " <span title='" + loc("code_rank") + "'>★ 0/" + maxRank + "</span>";
+                        if (maxRank > 0) {
+                            td.innerHTML += " <span title='" + loc("code_rank") + "'>★ 0/" + maxRank + "</span>";
+                        }
                         if (item.ItemCount > 1) {
                             td.innerHTML +=
                                 " <span title='" + loc("code_count") + "'>🗍 " + parseInt(item.ItemCount) + "</span>";
