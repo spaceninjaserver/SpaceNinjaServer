@@ -31,7 +31,7 @@ export interface ISession {
 export interface IFindSessionRequest {
     id?: string;
     originalSessionId?: string;
-    buildId?: number;
+    buildId?: number | bigint;
     gameModeId?: number;
     regionId?: number;
     maxEloDifference?: number;

@@ -5,13 +5,11 @@ import { repoDir } from "../helpers/pathHelper.ts";
 interface IBuildConfig {
     version: string;
     buildLabel: string;
-    matchmakingBuildId: string;
 }
 
 export const buildConfig: IBuildConfig = {
     version: "",
-    buildLabel: "",
-    matchmakingBuildId: ""
+    buildLabel: ""
 };
 
 const buildConfigPath = path.join(repoDir, "static/data/buildConfig.json");

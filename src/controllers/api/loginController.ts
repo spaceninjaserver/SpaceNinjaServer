@@ -161,7 +161,16 @@ const createLoginResponse = (
     if (version_compare(buildLabel, "2022.09.06.19.24") >= 0) {
         resp.CrossPlatformAllowed = account.CrossPlatformAllowed;
         resp.HUB = `${myUrlBase}/api/`;
-        resp.MatchmakingBuildId = buildConfig.matchmakingBuildId;
+
+        // The MatchmakingBuildId is a 64-bit integer represented as a decimal string. On live, the value is seemingly random per build, but really any value that is different across builds should work.
+        const [year, month, day, hour, minute] = buildLabel.split(".").map(x => parseInt(x));
+        resp.MatchmakingBuildId = (
+            year * 1_00_00_00_00 +
+            month * 1_00_00_00 +
+            day * 1_00_00 +
+            hour * 1_00 +
+            minute
+        ).toString();
     }
     if (version_compare(buildLabel, "2023.04.25.23.40") >= 0) {
         if (version_compare(buildLabel, "2025.08.26.09.49") >= 0) {
