@@ -373,6 +373,7 @@ dict = {
     import_submit: `Submit`,
     import_samples: `Samples:`,
     import_samples_maxFocus: `All Focus Schools Maxed Out`,
+    import_samples_accolades: `Accolades & Council Chat Access`,
 
     upgrade_Equilibrium: `+|VAL|% Energy from Health pickups, +|VAL|% Health from Energy pickups`,
     upgrade_MeleeCritDamage: `+|VAL|% Melee Critical Damage`,

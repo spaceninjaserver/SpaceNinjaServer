@@ -374,6 +374,7 @@ dict = {
     import_submit: `Enviar`,
     import_samples: `Muestras:`,
     import_samples_maxFocus: `Todas las escuelas de enfoque al máximo`,
+    import_samples_accolades: `[UNTRANSLATED] Accolades & Council Chat Access`,
 
     upgrade_Equilibrium: `+|VAL|% de Energía al recoger salud, +|VAL|% de Salud al recoger energía`,
     upgrade_MeleeCritDamage: `+|VAL|% de daño crítico cuerpo a cuerpo`,

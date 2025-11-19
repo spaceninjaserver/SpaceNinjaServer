@@ -4151,6 +4151,22 @@ const importSamples = {
                 Level: 3
             }
         ]
+    },
+    accolades: {
+        Staff: false,
+        Founder: 4,
+        Guide: 2,
+        Moderator: true,
+        Partner: true,
+        Created: {
+            $date: {
+                $numberLong: "1356998400000"
+            }
+        },
+        Accolades: {
+            Heirloom: true
+        },
+        Counselor: true
     }
 };
 function setImportSample(key) {

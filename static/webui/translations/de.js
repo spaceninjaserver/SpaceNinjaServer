@@ -374,6 +374,7 @@ dict = {
     import_submit: `Absenden`,
     import_samples: `Beispiele:`,
     import_samples_maxFocus: `Alle Fokus-Schulen maximiert`,
+    import_samples_accolades: `Auszeichnungen & Council Chat Zugang`,
 
     upgrade_Equilibrium: `+|VAL|% Energie bei Gesundheitskugeln, +|VAL|% Gesundheit bei Energiekugeln`,
     upgrade_MeleeCritDamage: `+|VAL|% Krit. Nahkampfschaden`,

@@ -374,6 +374,7 @@ dict = {
     import_submit: `Відправити`,
     import_samples: `Приклад:`,
     import_samples_maxFocus: `Всі школи Фокусу макс. рівня`,
+    import_samples_accolades: `[UNTRANSLATED] Accolades & Council Chat Access`,
 
     upgrade_Equilibrium: `Згустки здоров'я дають +|VAL|% енергії, згустки енергії дають +|VAL|% здоров'я.`,
     upgrade_MeleeCritDamage: `+|VAL|% до критичної шкоди від холодної зброї.`,

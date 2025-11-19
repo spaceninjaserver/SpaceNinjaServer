@@ -374,6 +374,7 @@ dict = {
     import_submit: `Soumettre`,
     import_samples: `Échantillons :`,
     import_samples_maxFocus: `Toutes les écoles de focus au rang max`,
+    import_samples_accolades: `[UNTRANSLATED] Accolades & Council Chat Access`,
 
     upgrade_Equilibrium: `Ramasser de la santé donne +|VAL|% d'énergie supplémentaire. Ramasser de l'énergie donne +|VAL|% de santé supplémentaire.`,
     upgrade_MeleeCritDamage: `+|VAL|% de dégâts critique en mêlée`,

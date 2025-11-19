@@ -374,6 +374,7 @@ dict = {
     import_submit: `提交`,
     import_samples: `示例:`,
     import_samples_maxFocus: `所有专精学派完全精通`,
+    import_samples_accolades: `[UNTRANSLATED] Accolades & Council Chat Access`,
 
     upgrade_Equilibrium: `拾取生命球+|VAL|%能量,拾取能量球+|VAL|%生命`,
     upgrade_MeleeCritDamage: `+|VAL|%近战暴击伤害`,
