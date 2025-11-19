@@ -15,16 +15,19 @@ export const importController: RequestHandler = async (req, res) => {
     let anyKnownKey = false;
     try {
         const inventory = await getInventory(accountId);
-        if (importInventory(inventory, request.inventory)) {
+        importInventory(inventory, request.inventory);
+        if (inventory.isModified()) {
             anyKnownKey = true;
             await inventory.save();
         }
 
         if ("LoadOutPresets" in request.inventory && request.inventory.LoadOutPresets) {
-            anyKnownKey = true;
             const loadout = await getLoadout(accountId);
             importLoadOutPresets(loadout, request.inventory.LoadOutPresets);
-            await loadout.save();
+            if (loadout.isModified()) {
+                anyKnownKey = true;
+                await loadout.save();
+            }
         }
 
         if (
@@ -32,10 +35,12 @@ export const importController: RequestHandler = async (req, res) => {
             "Apartment" in request.inventory ||
             "TailorShop" in request.inventory
         ) {
-            anyKnownKey = true;
             const personalRooms = await getPersonalRooms(accountId);
             importPersonalRooms(personalRooms, request.inventory);
-            await personalRooms.save();
+            if (personalRooms.isModified()) {
+                anyKnownKey = true;
+                await personalRooms.save();
+            }
         }
 
         if (!anyKnownKey) {
