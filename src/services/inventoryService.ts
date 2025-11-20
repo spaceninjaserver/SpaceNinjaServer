@@ -377,6 +377,9 @@ export const addItem = async (
                 FusionTreasures: fusionTreasureChanges
             };
         } else if (ExportResources[typeName].productCategory == "Ships") {
+            if (quantity != 1) {
+                throw new Error(`unexpected acquisition quantity of Ships: got ${quantity}, expected 1`);
+            }
             const oid = await createShip(inventory.accountOwnerId, typeName);
             inventory.Ships.push(oid);
             return {
@@ -388,6 +391,9 @@ export const addItem = async (
                 ]
             };
         } else if (ExportResources[typeName].productCategory == "CrewShips") {
+            if (quantity != 1) {
+                throw new Error(`unexpected acquisition quantity of CrewShips: got ${quantity}, expected 1`);
+            }
             return {
                 ...(await addCrewShip(inventory, typeName)),
                 // fix to unlock railjack modding, item bellow supposed to be obtained from archwing quest
@@ -522,6 +528,11 @@ export const addItem = async (
     if (typeName in ExportWeapons) {
         const weapon = ExportWeapons[typeName];
         if (weapon.totalDamage != 0) {
+            if (quantity != 1) {
+                throw new Error(
+                    `unexpected acquisition quantity of ${weapon.productCategory}: got ${quantity}, expected 1`
+                );
+            }
             const defaultOverwrites: Partial<IEquipmentDatabase> = {};
             if (premiumPurchase) {
                 defaultOverwrites.Features = EquipmentFeatures.DOUBLE_CAPACITY;
@@ -578,6 +589,9 @@ export const addItem = async (
             };
         } else if (targetFingerprint) {
             // Sister's Hound
+            if (quantity != 1) {
+                throw new Error(`unexpected acquisition quantity of MoaPets: got ${quantity}, expected 1`);
+            }
             const targetFingerprintObj = JSON.parse(targetFingerprint) as INemesisPetTargetFingerprint;
             const head = targetFingerprintObj.Parts[0];
             const defaultOverwrites: Partial<IEquipmentDatabase> = {
@@ -653,6 +667,9 @@ export const addItem = async (
         const key = ExportKeys[typeName];
 
         if (key.chainStages) {
+            if (quantity != 1) {
+                throw new Error(`unexpected acquisition quantity of QuestKeys: got ${quantity}, expected 1`);
+            }
             const key = addQuestKey(inventory, { ItemType: typeName });
             if (!key) return {};
             return { QuestKeys: [key] };
@@ -695,6 +712,9 @@ export const addItem = async (
             if (typeName.endsWith("AugmentCard")) break;
             switch (typeName.substring(1).split("/")[2]) {
                 default: {
+                    if (quantity != 1) {
+                        throw new Error(`unexpected acquisition quantity of Suits: got ${quantity}, expected 1`);
+                    }
                     return {
                         ...(await addPowerSuit(inventory, typeName, {
                             Features: premiumPurchase ? EquipmentFeatures.DOUBLE_CAPACITY : undefined
@@ -703,6 +723,9 @@ export const addItem = async (
                     };
                 }
                 case "Archwing": {
+                    if (quantity != 1) {
+                        throw new Error(`unexpected acquisition quantity of SpaceSuits: got ${quantity}, expected 1`);
+                    }
                     inventory.ArchwingEnabled = true;
                     return {
                         ...addSpaceSuit(
@@ -715,6 +738,9 @@ export const addItem = async (
                     };
                 }
                 case "EntratiMech": {
+                    if (quantity != 1) {
+                        throw new Error(`unexpected acquisition quantity of MechSuits: got ${quantity}, expected 1`);
+                    }
                     return {
                         ...(await addMechSuit(
                             inventory,
@@ -747,16 +773,18 @@ export const addItem = async (
 
                 case "Boons":
                     // Can purchase /Lotus/Upgrades/Boons/DuviriVendorBoonItem from Acrithis, doesn't need to be added to inventory.
+                    logger.debug(`acquisition of ${typeName} is not committed to inventory`);
                     return {};
 
                 case "Stickers":
                     {
                         const entry = inventory.RawUpgrades.find(x => x.ItemType == typeName);
                         if (entry && entry.ItemCount >= 10) {
+                            logger.debug(`adding ${quantity} pix chip(s) instead of ${typeName}`);
                             const miscItemChanges = [
                                 {
                                     ItemType: "/Lotus/Types/Items/MiscItems/1999ConquestBucks",
-                                    ItemCount: 1
+                                    ItemCount: quantity
                                 }
                             ];
                             addMiscItems(inventory, miscItemChanges);
@@ -779,6 +807,9 @@ export const addItem = async (
                     break;
 
                 case "Skins": {
+                    if (quantity != 1) {
+                        throw new Error(`unexpected acquisition quantity of Skins: got ${quantity}, expected 1`);
+                    }
                     return addSkin(inventory, typeName);
                 }
             }
@@ -787,6 +818,9 @@ export const addItem = async (
         case "Types":
             switch (typeName.substring(1).split("/")[2]) {
                 case "Sentinels": {
+                    if (quantity != 1) {
+                        throw new Error(`unexpected acquisition quantity of Sentinels: got ${quantity}, expected 1`);
+                    }
                     return addSentinel(inventory, typeName, premiumPurchase);
                 }
                 case "Game": {
@@ -813,9 +847,19 @@ export const addItem = async (
                             typeName != "/Lotus/Types/Game/KubrowPet/BlankTraitPrint" &&
                             typeName != "/Lotus/Types/Game/KubrowPet/ImprintedTraitPrint"
                         ) {
+                            if (quantity != 1) {
+                                throw new Error(
+                                    `unexpected acquisition quantity of KubrowPet: got ${quantity}, expected 1`
+                                );
+                            }
                             return addKubrowPet(inventory, typeName, undefined, premiumPurchase);
                         }
                     } else if (typeName.startsWith("/Lotus/Types/Game/CrewShip/CrewMember/")) {
+                        if (quantity != 1) {
+                            throw new Error(
+                                `unexpected acquisition quantity of CrewMember: got ${quantity}, expected 1`
+                            );
+                        }
                         if (!seed) {
                             throw new Error(`Expected crew member to have a seed`);
                         }
@@ -825,12 +869,22 @@ export const addItem = async (
                             ...occupySlot(inventory, InventorySlot.CREWMEMBERS, premiumPurchase)
                         };
                     } else if (typeName == "/Lotus/Types/Game/CrewShip/RailJack/DefaultHarness") {
+                        if (quantity != 1) {
+                            throw new Error(
+                                `unexpected acquisition quantity of CrewShipHarness: got ${quantity}, expected 1`
+                            );
+                        }
                         return addCrewShipHarness(inventory, typeName);
                     }
                     break;
                 }
                 case "Items": {
                     if (typeName.substring(1).split("/")[3] == "Emotes") {
+                        if (quantity != 1) {
+                            throw new Error(
+                                `unexpected acquisition quantity of FlavourItems: got ${quantity}, expected 1`
+                            );
+                        }
                         return addCustomization(inventory, typeName);
                     }
                     break;
@@ -840,6 +894,9 @@ export const addItem = async (
                         logger.warn("refusing to add Horse because account already has one");
                         return {};
                     }
+                    if (quantity != 1) {
+                        throw new Error(`unexpected acquisition quantity of Horses: got ${quantity}, expected 1`);
+                    }
                     const horseIndex = inventory.Horses.push({ ItemType: typeName });
                     return {
                         Horses: [inventory.Horses[horseIndex - 1].toJSON<IEquipmentClient>()]
@@ -847,11 +904,19 @@ export const addItem = async (
                 }
                 case "Vehicles":
                     if (typeName == "/Lotus/Types/Vehicles/Motorcycle/MotorcyclePowerSuit") {
+                        if (quantity != 1) {
+                            throw new Error(`unexpected acquisition quantity of Vehicles: got ${quantity}, expected 1`);
+                        }
                         return addMotorcycle(inventory, typeName);
                     }
                     break;
                 case "Lore":
                     if (typeName == "/Lotus/Types/Lore/Fragments/GrineerGhoulFragments/GhoulFragmentRewards") {
+                        if (quantity != 1) {
+                            throw new Error(
+                                `unexpected acquisition quantity of LoreFragmentScans: got ${quantity}, expected 1`
+                            );
+                        }
                         const fragmentType = getRandomElement([
                             "/Lotus/Types/Lore/Fragments/GrineerGhoulFragments/GhoulFragmentA",
                             "/Lotus/Types/Lore/Fragments/GrineerGhoulFragments/GhoulFragmentB",
@@ -885,6 +950,11 @@ export const addItem = async (
                 case "Pistols":
                 case "LongGuns":
                 case "Melee": {
+                    if (quantity != 1) {
+                        throw new Error(
+                            `unexpected acquisition quantity of ${productCategory}: got ${quantity}, expected 1`
+                        );
+                    }
                     const inventoryChanges = addEquipment(inventory, productCategory, typeName);
                     return {
                         ...inventoryChanges,

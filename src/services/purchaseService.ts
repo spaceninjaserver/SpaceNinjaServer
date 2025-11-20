@@ -554,6 +554,9 @@ const handleBoosterPackPurchase = async (
         BoosterPackItems: "",
         InventoryChanges: {}
     };
+    if (quantity < 1) {
+        throw new Error(`invalid quantity for booster pack purchase: ${quantity}`);
+    }
     if (quantity > 100) {
         throw new Error(
             "attempt to roll over 100 booster packs in a single go. possible but unlikely to be desirable for the user or the server."
