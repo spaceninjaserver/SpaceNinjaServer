@@ -1920,7 +1920,9 @@ export const addMiscItems = (inventory: TInventoryDatabaseDocument, itemsArray: 
         if (MiscItems[itemIndex].ItemCount == 0) {
             MiscItems.splice(itemIndex, 1);
         } else if (MiscItems[itemIndex].ItemCount < 0) {
-            throw new Error(`inventory.MiscItems has a negative count for ${ItemType} after subtracting ${ItemCount}`);
+            throw new Error(
+                `Cannot remove ${ItemCount * -1}x ${ItemType} from MiscItems, would be left with ${MiscItems[itemIndex].ItemCount}`
+            );
         }
     });
 };
@@ -1943,7 +1945,7 @@ const applyArrayChanges = (
                 arr.splice(itemIndex, 1);
             } else if (arr[itemIndex].ItemCount < 0) {
                 throw new Error(
-                    `inventory.${key} has a negative count for ${change.ItemType} after subtracting ${change.ItemCount}`
+                    `Cannot remove ${change.ItemCount * -1}x ${change.ItemType} from ${key}, would be left with ${arr[itemIndex].ItemCount}`
                 );
             }
         }
@@ -1992,7 +1994,7 @@ export const addMods = (inventory: TInventoryDatabaseDocument, itemsArray: IRawU
             RawUpgrades.splice(itemIndex, 1);
         } else if (RawUpgrades[itemIndex].ItemCount < 0) {
             throw new Error(
-                `inventory.RawUpgrades has a negative count for ${ItemType} after subtracting ${ItemCount}`
+                `Cannot remove ${ItemCount * -1}x ${ItemType} from RawUpgrades, would be left with ${RawUpgrades[itemIndex].ItemCount}`
             );
         }
     });
@@ -2009,7 +2011,7 @@ export const addFusionTreasures = (inventory: TInventoryDatabaseDocument, itemsA
                 FusionTreasures.splice(itemIndex, 1);
             } else if (FusionTreasures[itemIndex].ItemCount <= 0) {
                 throw new Error(
-                    `inventory.FusionTreasures has a negative count for ${ItemType} after subtracting ${ItemCount}`
+                    `Cannot remove ${ItemCount * -1}x ${ItemType} from FusionTreasures, would be left with ${FusionTreasures[itemIndex].ItemCount}`
                 );
             }
         } else {
