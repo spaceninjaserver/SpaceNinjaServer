@@ -23,7 +23,6 @@
     "update-translations": "cd scripts && node update-translations.cjs",
     "fix": "npm run update-translations && npm run prettier"
   },
-  "license": "GNU",
   "type": "module",
   "dependencies": {
     "body-parser": "^2.2.0",
