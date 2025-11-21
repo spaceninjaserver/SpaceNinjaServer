@@ -610,21 +610,18 @@ export const removeRequiredItems = async (inventory: TInventoryDatabaseDocument,
         }
 
         case "/Lotus/Types/Recipes/WarframeRecipes/ChromaBlueprint": {
-            await addItems(inventory, [
-                {
-                    ItemType: "/Lotus/Types/Recipes/WarframeRecipes/ChromaBeaconABlueprint",
-                    ItemCount: -1
-                },
-                {
-                    ItemType: "/Lotus/Types/Recipes/WarframeRecipes/ChromaBeaconBBlueprint",
-                    ItemCount: -1
-                },
-                {
-                    ItemType: "/Lotus/Types/Recipes/WarframeRecipes/ChromaBeaconCBlueprint",
-                    ItemCount: -1
+            const itemsToRemove = [
+                "/Lotus/Types/Recipes/WarframeRecipes/ChromaBeaconABlueprint",
+                "/Lotus/Types/Recipes/WarframeRecipes/ChromaBeaconBBlueprint",
+                "/Lotus/Types/Recipes/WarframeRecipes/ChromaBeaconCBlueprint"
+            ];
+            for (const itemToRemove of itemsToRemove) {
+                try {
+                    await addItem(inventory, itemToRemove, -1, undefined, undefined, undefined, true);
+                } catch (e) {
+                    logger.debug(`removeRequiredItems: Couldn't remove ${itemToRemove}: ${(e as Error).message}`);
                 }
-            ]);
-
+            }
             break;
         }
 
@@ -637,20 +634,20 @@ export const removeRequiredItems = async (inventory: TInventoryDatabaseDocument,
                 if (!inventory.MiscItems.find(i => i.ItemType == recipe.resultType)) {
                     await addItem(inventory, recipe.resultType);
                     if (recipe.consumeOnUse) await addItem(inventory, recipeItem.ItemType, -1);
-                    await addItems(inventory, [
-                        {
-                            ItemType: "/Lotus/Types/Keys/BardQuest/BardQuestSequencerPartA",
-                            ItemCount: -1
-                        },
-                        {
-                            ItemType: "/Lotus/Types/Keys/BardQuest/BardQuestSequencerPartB",
-                            ItemCount: -1
-                        },
-                        {
-                            ItemType: "/Lotus/Types/Keys/BardQuest/BardQuestSequencerPartC",
-                            ItemCount: -1
+                    const itemsToRemove = [
+                        "/Lotus/Types/Keys/BardQuest/BardQuestSequencerPartA",
+                        "/Lotus/Types/Keys/BardQuest/BardQuestSequencerPartB",
+                        "/Lotus/Types/Keys/BardQuest/BardQuestSequencerPartC"
+                    ];
+                    for (const itemToRemove of itemsToRemove) {
+                        try {
+                            await addItem(inventory, itemToRemove, -1, undefined, undefined, undefined, true);
+                        } catch (e) {
+                            logger.debug(
+                                `removeRequiredItems: Couldn't remove ${itemToRemove}: ${(e as Error).message}`
+                            );
                         }
-                    ]);
+                    }
                 }
             }
             break;
