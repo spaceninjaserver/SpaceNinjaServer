@@ -93,9 +93,11 @@ import type {
 import { EquipmentFeatures, Status } from "../types/equipmentTypes.ts";
 import type { ITypeCount } from "../types/commonTypes.ts";
 import { skinLookupTable } from "../helpers/skinLookupTable.ts";
+import type { TLoadoutDatabaseDocument } from "../models/inventoryModels/loadoutModel.ts";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
+    loadout: TLoadoutDatabaseDocument,
     defaultItemReferences: { loadOutPresetId: Types.ObjectId; ship: Types.ObjectId }
 ): Promise<void> => {
     try {
@@ -115,9 +117,28 @@ export const createInventory = async (
 
         if (config.skipTutorial) {
             inventory.PlayedParkourTutorial = true;
-            await addStartingGear(inventory);
+            const startingGear = await addStartingGear(inventory);
             await completeQuest(inventory, "/Lotus/Types/Keys/VorsPrize/VorsPrizeQuestKeyChain", undefined);
             await completeQuest(inventory, "/Lotus/Types/Keys/ModQuest/ModQuestKeyChain", undefined);
+
+            loadout.NORMAL.push({
+                s: {
+                    ItemId: new Types.ObjectId(fromOid(startingGear.Suits![0].ItemId))
+                },
+                l: {
+                    ItemId: new Types.ObjectId(fromOid(startingGear.LongGuns![0].ItemId))
+                },
+                p: {
+                    ItemId: new Types.ObjectId(fromOid(startingGear.Pistols![0].ItemId))
+                },
+                m: {
+                    ItemId: new Types.ObjectId(fromOid(startingGear.Melee![0].ItemId))
+                },
+                a: {
+                    ItemId: new Types.ObjectId(fromOid(startingGear.SpecialItems![0].ItemId))
+                }
+            });
+            await loadout.save();
 
             const completedMissions = ["SolNode27", "SolNode89", "SolNode63", "SolNode85", "SolNode15", "SolNode79"];
 

@@ -3,7 +3,7 @@ import { createInventory } from "./inventoryService.ts";
 import type { IDatabaseAccountJson, IDatabaseAccountRequiredFields } from "../types/loginTypes.ts";
 import { createShip } from "./shipService.ts";
 import type { Document, Types } from "mongoose";
-import { Loadout } from "../models/inventoryModels/loadoutModel.ts";
+import { Loadout, type TLoadoutDatabaseDocument } from "../models/inventoryModels/loadoutModel.ts";
 import { PersonalRooms } from "../models/personalRoomsModel.ts";
 import type { Request } from "express";
 import { config } from "./configService.ts";
@@ -39,10 +39,10 @@ export const createAccount = async (accountData: IDatabaseAccountRequiredFields)
     const account = new Account(accountData);
     try {
         await account.save();
-        const loadoutId = await createLoadout(account._id);
+        const loadout = await createLoadout(account._id);
         const shipId = await createShip(account._id);
         await createPersonalRooms(account._id, shipId);
-        await createInventory(account._id, { loadOutPresetId: loadoutId, ship: shipId });
+        await createInventory(account._id, loadout, { loadOutPresetId: loadout._id, ship: shipId });
         await createStats(account._id.toString());
         return account.toJSON();
     } catch (error) {
@@ -53,10 +53,10 @@ export const createAccount = async (accountData: IDatabaseAccountRequiredFields)
     }
 };
 
-export const createLoadout = async (accountId: Types.ObjectId): Promise<Types.ObjectId> => {
+export const createLoadout = async (accountId: Types.ObjectId): Promise<TLoadoutDatabaseDocument> => {
     const loadout = new Loadout({ loadoutOwnerId: accountId });
     const savedLoadout = await loadout.save();
-    return savedLoadout._id;
+    return savedLoadout;
 };
 
 export const createPersonalRooms = async (accountId: Types.ObjectId, shipId: Types.ObjectId): Promise<void> => {
