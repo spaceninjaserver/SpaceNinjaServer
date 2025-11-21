@@ -1,7 +1,7 @@
 {
-  "name": "wf-emulator",
+  "name": "spaceninjaserver",
   "version": "0.1.0",
-  "description": "WF Emulator",
+  "description": "SpaceNinjaServer",
   "main": "index.ts",
   "scripts": {
     "start": "node --enable-source-maps build/src/index.js",
