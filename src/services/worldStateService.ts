@@ -115,6 +115,8 @@ const sortieBossNode: Record<Exclude<TSortieBoss, "SORTIE_BOSS_CORRUPTED_VOR">, 
     SORTIE_BOSS_VOR: "SolNode108"
 };
 
+const sortieAssassinationOnlyNodes: string[] = ["SolNode193", "SolNode105", "SolNode108"];
+
 const configAlerts: Record<string, IAlert> = {
     voidCorruption2025Week1: {
         _id: { $oid: "677d452e2f324ee7b90f8ccf" },
@@ -381,8 +383,11 @@ export const getSortie = (day: number): ISortie => {
     }
 
     for (let i = 0; i < 3; i++) {
-        const randomIndex = rng.randomInt(0, nodes.length - 1);
-        const node = nodes[randomIndex];
+        let randomIndex, node;
+        do {
+            randomIndex = rng.randomInt(0, nodes.length - 1);
+            node = nodes[randomIndex];
+        } while (sortieAssassinationOnlyNodes.indexOf(node) != -1);
 
         const modifiers = [
             "SORTIE_MODIFIER_LOW_ENERGY",
