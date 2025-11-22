@@ -1591,14 +1591,13 @@ export const addSkin = (
     typeName: string,
     inventoryChanges: IInventoryChanges = {}
 ): IInventoryChanges => {
+    if (typeName == "/Lotus/Upgrades/Skins/Clan/BountyHunterBadgeItem") {
+        logger.debug(`stratos emblem, increasing bounty score`);
+        inventory.BountyScore ??= 0;
+        inventory.BountyScore += 1;
+    }
     if (inventory.WeaponSkins.some(x => x.ItemType == typeName)) {
-        if (typeName == "/Lotus/Upgrades/Skins/Clan/BountyHunterBadgeItem") {
-            logger.debug(`account already owns stratos emblem, increasing bounty score instead`);
-            inventory.BountyScore ??= 0;
-            inventory.BountyScore += 1;
-        } else {
-            logger.debug(`refusing to add WeaponSkin ${typeName} because account already owns it`);
-        }
+        logger.debug(`refusing to add WeaponSkin ${typeName} because account already owns it`);
     } else {
         const index =
             inventory.WeaponSkins.push({
