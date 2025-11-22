@@ -31,6 +31,7 @@
     "baroTennoConRelay": false,
     "baroAlwaysAvailable": false,
     "baroFullyStocked": false,
+    "evilBaroStage": 0,
     "varziaFullyStocked": false,
     "wolfHunt": null,
     "orphixVenom": false,

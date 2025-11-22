@@ -38,6 +38,7 @@ export interface IConfig {
         baroTennoConRelay?: boolean;
         baroAlwaysAvailable?: boolean;
         baroFullyStocked?: boolean;
+        evilBaroStage?: number;
         varziaFullyStocked?: boolean;
         wolfHunt?: number;
         orphixVenom?: boolean;

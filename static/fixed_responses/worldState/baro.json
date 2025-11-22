@@ -1,4 +1,15 @@
 {
+  "evilBaro": [
+    { "ItemType": "/Lotus/StoreItems/Upgrades/Skins/Armor/CrpHighArmor/EvilBaroArcaArmorC", "PrimePrice": 196, "RegularPrice": 294000 },
+    { "ItemType": "/Lotus/StoreItems/Upgrades/Skins/Armor/CrpHighArmor/EvilBaroArcaArmorA", "PrimePrice": 109, "RegularPrice": 278000 },
+    { "ItemType": "/Lotus/StoreItems/Upgrades/Skins/Armor/CrpHighArmor/EvilBaroArcaArmorL", "PrimePrice": 184, "RegularPrice": 251000 },
+    { "ItemType": "/Lotus/StoreItems/Upgrades/Skins/Effects/BaroEvilEphemera", "PrimePrice": 69, "RegularPrice": 109000 },
+    { "ItemType": "/Lotus/StoreItems/Upgrades/Skins/Weapons/Grimoire/GrimoireEvilBaroSkin", "PrimePrice": 227, "RegularPrice": 302000 },
+    { "ItemType": "/Lotus/StoreItems/Upgrades/Skins/VoidTrader/EvilBaroSilvaAndAegis", "PrimePrice": 132, "RegularPrice": 298000 },
+    { "ItemType": "/Lotus/StoreItems/Upgrades/Skins/Sigils/EvilBaroNecraloidSigil", "PrimePrice": 34, "RegularPrice": 61000 },
+    { "ItemType": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Peculiars/DissolveEnemyMod", "PrimePrice": 228, "RegularPrice": 1000001 },
+    { "ItemType": "/Lotus/StoreItems/Types/Items/ShipDecos/Props/EvilBaroFloatingCandlesShipDeco", "PrimePrice": 21, "RegularPrice": 88000 }
+  ],
   "evergreen": [
     { "ItemType": "/Lotus/StoreItems/Types/Keys/MummyQuestKeyBlueprint", "PrimePrice": 100, "RegularPrice": 25000 },
     { "ItemType": "/Lotus/StoreItems/Upgrades/Skins/Effects/FootstepsMaple", "PrimePrice": 15, "RegularPrice": 1000 },

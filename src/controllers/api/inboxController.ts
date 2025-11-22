@@ -25,6 +25,7 @@ import type { IOid } from "../../types/commonTypes.ts";
 import { unixTimesInMs } from "../../constants/timeConstants.ts";
 import { config } from "../../services/configService.ts";
 import { Types } from "mongoose";
+import { version_compare } from "../../helpers/inventoryHelpers.ts";
 
 export const inboxController: RequestHandler = async (req, res) => {
     const { deleteId, lastMessage: latestClientMessageId, messageId } = req.query;
@@ -145,15 +146,38 @@ const createNewEventMessages = async (req: Request): Promise<void> => {
     // Baro
     const baroIndex = Math.trunc((Date.now() - 910800000) / (unixTimesInMs.day * 14));
     const baroStart = baroIndex * (unixTimesInMs.day * 14) + 910800000;
+    const prevBaroEnd = (baroIndex - 1) * (unixTimesInMs.day * 14) + 910800000;
+    const baroEnd = baroStart + unixTimesInMs.day * 14;
     const baroActualStart = baroStart + unixTimesInMs.day * (config.worldState?.baroAlwaysAvailable ? 0 : 12);
+    const evilBaroStage =
+        account.BuildLabel && version_compare(account.BuildLabel, "2025.10.14.16.10") < 0
+            ? 0
+            : (config.worldState?.evilBaroStage ?? 0);
+    const evilBaroTransmission = [
+        "",
+        "/Lotus/Sounds/Dialog/BaroHalloween/Week1InboxMessage/DWeek1InboxMessage01290Baro",
+        "/Lotus/Sounds/Dialog/BaroHalloween/Week2InboxMessage/DWeek2InboxMessage0060Baro",
+        "/Lotus/Sounds/Dialog/BaroHalloween/Week3InboxMessage/DWeek3InboxMessage0120Baro",
+        "/Lotus/Sounds/Dialog/BaroHalloween/Week4InboxMessage/DWeek4InboxMessage0170Baro"
+    ][evilBaroStage];
     if (Date.now() >= baroActualStart && account.LatestEventMessageDate.getTime() < baroActualStart) {
         newEventMessages.push({
             sndr: "/Lotus/Language/G1Quests/VoidTraderName",
-            sub: "/Lotus/Language/CommunityMessages/VoidTraderAppearanceTitle",
-            msg: "/Lotus/Language/CommunityMessages/VoidTraderAppearanceMessage",
-            icon: "/Lotus/Interface/Icons/Npcs/BaroKiTeerPortrait.png",
+            sub:
+                evilBaroStage > 0
+                    ? "/Lotus/Language/BaroHalloween/HalloweenInboxTitle"
+                    : "/Lotus/Language/CommunityMessages/VoidTraderAppearanceTitle",
+            msg:
+                evilBaroStage > 0
+                    ? `/Lotus/Language/BaroHalloween/HalloweenInboxWeek${evilBaroStage}Body`
+                    : "/Lotus/Language/CommunityMessages/VoidTraderAppearanceMessage",
+            icon:
+                evilBaroStage > 0
+                    ? "/Lotus/Interface/Icons/Npcs/EvilBaro.png"
+                    : "/Lotus/Interface/Icons/Npcs/BaroKiTeerPortrait.png",
+            transmission: evilBaroTransmission,
             startDate: new Date(baroActualStart),
-            endDate: new Date(baroStart + unixTimesInMs.day * 14),
+            endDate: new Date(baroEnd),
             CrossPlatform: true,
             arg: [
                 {
@@ -162,6 +186,20 @@ const createNewEventMessages = async (req: Request): Promise<void> => {
                 }
             ],
             date: new Date(baroActualStart)
+        });
+    }
+    if (Date.now() >= prevBaroEnd && account.LatestEventMessageDate.getTime() < prevBaroEnd && evilBaroStage == 4) {
+        newEventMessages.push({
+            sndr: "/Lotus/Language/G1Quests/VoidTraderName",
+            sub: "/Lotus/Language/BaroHalloween/HalloweenInboxEndingTitle",
+            msg: "/Lotus/Language/BaroHalloween/HalloweenInboxEndingBody",
+            icon: "/Lotus/Interface/Icons/Npcs/BaroKiTeerPortrait.png",
+            transmission: "/Lotus/Sounds/Dialog/BaroHalloween/EndingInboxMessage/DEndingInboxMessage0230Baro",
+            startDate: new Date(prevBaroEnd),
+            endDate: new Date(baroActualStart),
+            att: ["/Lotus/Types/StoreItems/AvatarImages/ImageBaroKiteerEvil"],
+            CrossPlatform: true,
+            date: new Date(prevBaroEnd)
         });
     }
 

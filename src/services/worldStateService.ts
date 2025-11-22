@@ -1269,7 +1269,12 @@ const getIdealTimeSatsifyingConstraints = (constraints: ITimeConstraint[]): numb
     return timeSecs;
 };
 
-const fullyStockBaro = (vt: IVoidTrader): void => {
+const fullyStockBaro = (vt: IVoidTrader, buildLabel?: string): void => {
+    if (buildLabel && version_compare(buildLabel, "2025.10.14.16.10") >= 0) {
+        for (const item of baro.evilBaro as IVoidTraderOffer[]) {
+            vt.Manifest.push(item);
+        }
+    }
     for (const armorSet of baro.armorSets) {
         if (Array.isArray(armorSet[0])) {
             for (const set of armorSet as IVoidTraderOffer[][]) {
@@ -1569,7 +1574,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             Manifest: []
         };
         worldState.VoidTraders.push(vt);
-        fullyStockBaro(vt);
+        fullyStockBaro(vt, buildLabel);
     }
 
     if (config.worldState) {
@@ -3395,18 +3400,25 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         const baroActualStart = baroStart + unixTimesInMs.day * (config.worldState?.baroAlwaysAvailable ? 0 : 12);
         const baroEnd = baroStart + unixTimesInMs.day * 14;
         const baroNode = ["EarthHUB", "MercuryHUB", "SaturnHUB", "PlutoHUB"][baroIndex % 4];
+        const evilBaroStage =
+            buildLabel && version_compare(buildLabel, "2025.10.14.16.10") < 0
+                ? 0
+                : (config.worldState?.evilBaroStage ?? 0);
+        const baroCharacter = ["Baro'Ki Teel", "EvilBaroWeek1", "EvilBaroWeek2", "EvilBaroWeek3", "EvilBaroWeek4"][
+            evilBaroStage
+        ];
         const vt: IVoidTrader = {
             _id: { $oid: ((baroStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "493c96d6067610bc" },
             Activation: { $date: { $numberLong: baroActualStart.toString() } },
             Expiry: { $date: { $numberLong: baroEnd.toString() } },
-            Character: "Baro'Ki Teel",
+            Character: baroCharacter,
             Node: baroNode,
             Manifest: []
         };
         worldState.VoidTraders.push(vt);
         if (isBeforeNextExpectedWorldStateRefresh(timeMs, baroActualStart)) {
             if (config.worldState?.baroFullyStocked) {
-                fullyStockBaro(vt);
+                fullyStockBaro(vt, buildLabel);
             } else {
                 const rng = new SRng(new SRng(baroIndex).randomInt(0, 100_000));
                 // TOVERIFY: Constraint for upgrades amount?
@@ -3435,6 +3447,26 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                 }
                 for (const armor of armorSet) {
                     vt.Manifest.push(armor as IVoidTraderOffer);
+                }
+
+                {
+                    const evilBaroStock: string[] = [];
+                    if (evilBaroStage >= 1) evilBaroStock.push("EvilBaroArcaArmorA", "BaroEvilEphemera");
+                    if (evilBaroStage >= 2) evilBaroStock.push("GrimoireEvilBaroSkin", "EvilBaroArcaArmorC");
+                    if (evilBaroStage >= 3) evilBaroStock.push("EvilBaroArcaArmorL", "EvilBaroSilvaAndAegis");
+                    if (evilBaroStage >= 4) {
+                        evilBaroStock.push(
+                            "EvilBaroNecraloidSigil",
+                            "DissolveEnemyMod",
+                            "EvilBaroFloatingCandlesShipDeco"
+                        );
+                    }
+
+                    vt.Manifest.unshift(
+                        ...(baro.evilBaro as IVoidTraderOffer[]).filter(item =>
+                            evilBaroStock.some(end => item.ItemType.endsWith(end))
+                        )
+                    );
                 }
             }
             for (const item of baro.evergreen) {

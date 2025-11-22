@@ -321,6 +321,7 @@ dict = {
     worldState_thermiaFractures: `Crevasses Thermia`,
     worldState_thermiaFracturesProgressOverride: `Progrès des Fractures Thermia`,
     worldState_qtccAlerts: `Alertes Quête pour Vaincre le Cancer`,
+    worldState_evilBaroStage: `[UNTRANSLATED] Evil Baro`,
     worldState_from_year: `De |VAL|`,
     worldState_pre_year: `Pre-|VAL|`,
     worldState_week: `Semaine |VAL|`,

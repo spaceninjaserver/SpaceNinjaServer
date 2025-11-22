@@ -321,6 +321,7 @@ dict = {
     worldState_thermiaFractures: `Разломы Термии`,
     worldState_thermiaFracturesProgressOverride: `Прогресс Разломов Термии`,
     worldState_qtccAlerts: `Тревоги Quest to Conquer Cancer`,
+    worldState_evilBaroStage: `Злой Баро`,
     worldState_from_year: `Из |VAL|`,
     worldState_pre_year: `До |VAL|`,
     worldState_week: `Неделя |VAL|`,
