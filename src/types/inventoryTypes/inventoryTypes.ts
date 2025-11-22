@@ -13,7 +13,7 @@ import type { IFingerprintStat, RivenFingerprint } from "../../helpers/rivenHelp
 import type { IOrbiterClient } from "../personalRoomsTypes.ts";
 import type { ICountedStoreItem } from "warframe-public-export-plus";
 import type { IEquipmentClient, IEquipmentDatabase, ITraits } from "../equipmentTypes.ts";
-import type { ILoadOutPresets } from "../saveLoadoutTypes.ts";
+import type { ILoadoutConfigClientLegacy, ILoadOutPresets } from "../saveLoadoutTypes.ts";
 import type { CalendarSeasonType } from "../worldStateTypes.ts";
 
 export type InventoryDatabaseEquipment = {
@@ -195,6 +195,8 @@ export const equipmentKeys = [
     "CrewShipSalvagedWeapons"
 ] as const;
 
+export const loadoutKeysLegacy = ["NORMAL", "NORMAL_PVP", "LUNARO", "ARCHWING", "SENTINEL", "OPERATOR"] as const;
+
 export type TEquipmentKey = (typeof equipmentKeys)[number];
 
 export interface IDuviriInfo {
@@ -301,6 +303,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     FlavourItems: IFlavourItem[];
     LoadOutPresets: ILoadOutPresets;
     CurrentLoadOutIds: IOid[];
+    CurrentLoadout?: ILoadoutConfigClientLegacy; // U8-13
     Missions: IMission[];
     RandomUpgradesIdentified?: number;
     LastRegionPlayed: TSolarMapRegion;

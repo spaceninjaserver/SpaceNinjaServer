@@ -1,8 +1,9 @@
-import type { IOid } from "./commonTypes.ts";
+import type { IOid, IOidWithLegacySupport } from "./commonTypes.ts";
 import type {
     ICrewShipCustomization,
     IFlavourItem,
     IItemConfig,
+    IItemConfigCustomizationsLegacy,
     ILotusCustomization,
     IOperatorConfigClient
 } from "./inventoryTypes/commonInventoryTypes.ts";
@@ -15,7 +16,9 @@ import type {
 } from "./equipmentTypes.ts";
 
 export interface ISaveLoadoutRequest {
-    LoadOuts: ILoadoutClient;
+    LoadOuts: ILoadoutClient | ILoadoutConfigClientLegacy;
+    LoadOut?: ILoadoutPresetClientLegacy[]; // U10-U13
+    Presets?: ILoadoutPresetClientLegacy[]; // U8
     LongGuns: IItemEntry;
     OperatorAmps: IItemEntry;
     Pistols: IItemEntry;
@@ -42,6 +45,7 @@ export interface ISaveLoadoutRequest {
     OperatorLoadOuts: IOperatorConfigEntry;
     KahlLoadOuts: IOperatorConfigEntry;
     CrewShips: IItemEntry;
+    CurrentLoadout: string; // U14-U15
     CurrentLoadOutIds: IOid[];
     ValidNewLoadoutId: string;
     ActiveCrewShip: IOid;
@@ -147,4 +151,16 @@ export interface ILoadoutConfigDatabase
     m?: IEquipmentSelectionDatabase;
     h?: IEquipmentSelectionDatabase;
     a?: IEquipmentSelectionDatabase;
+}
+
+export interface ILoadoutConfigClientLegacy {
+    ItemId: IOidWithLegacySupport;
+    Name: string;
+    Presets: ILoadoutPresetClientLegacy[];
+}
+export interface ILoadoutPresetClientLegacy {
+    ItemId: IOidWithLegacySupport;
+    ModSlot?: number;
+    CustSlot?: number;
+    Customization?: IItemConfigCustomizationsLegacy;
 }

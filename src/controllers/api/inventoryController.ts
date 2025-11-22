@@ -5,9 +5,9 @@ import { Inventory } from "../../models/inventoryModels/inventoryModel.ts";
 import { config } from "../../services/configService.ts";
 import allDialogue from "../../../static/fixed_responses/allDialogue.json" with { type: "json" };
 import allPopups from "../../../static/fixed_responses/allPopups.json" with { type: "json" };
-import type { ILoadoutDatabase } from "../../types/saveLoadoutTypes.ts";
+import type { ILoadoutConfigClientLegacy, ILoadoutDatabase, ILoadOutPresets } from "../../types/saveLoadoutTypes.ts";
 import type { IInventoryClient, IShipInventory, IUpgradeClient } from "../../types/inventoryTypes/inventoryTypes.ts";
-import { equipmentKeys } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { equipmentKeys, loadoutKeysLegacy } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import { ArtifactPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import type { ICountedItem } from "warframe-public-export-plus";
@@ -30,7 +30,14 @@ import { getNemesisManifest } from "../../helpers/nemesisHelpers.ts";
 import { getPersonalRooms } from "../../services/personalRoomsService.ts";
 import type { IPersonalRoomsClient } from "../../types/personalRoomsTypes.ts";
 import { Ship } from "../../models/shipModel.ts";
-import { toLegacyOid, toOid, toOid2, version_compare } from "../../helpers/inventoryHelpers.ts";
+import {
+    convertIColorToLegacyColors,
+    convertIColorToLegacyColorsWithAtt,
+    toLegacyOid,
+    toOid,
+    toOid2,
+    version_compare
+} from "../../helpers/inventoryHelpers.ts";
 import { Inbox } from "../../models/inboxModel.ts";
 import { unixTimesInMs } from "../../constants/timeConstants.ts";
 import { DailyDeal } from "../../models/worldStateModel.ts";
@@ -480,6 +487,22 @@ export const getInventoryResponse = async (
                     for (const category of equipmentKeys) {
                         for (const item of inventoryResponse[category]) {
                             toLegacyOid(item.ItemId);
+                            if (version_compare(buildLabel, "2015.05.14.16.29") < 0) {
+                                // Appearance config format is different for versions before U16.5
+                                for (const config of item.Configs) {
+                                    if (version_compare(buildLabel, "2015.03.21.08.17") < 0) {
+                                        config.Customization = {
+                                            Colors: convertIColorToLegacyColorsWithAtt(config.pricol, config.attcol),
+                                            Skins: config.Skins ?? []
+                                        };
+                                    } else if (version_compare(buildLabel, "2015.03.21.08.17") >= 0) {
+                                        config.Colors = convertIColorToLegacyColorsWithAtt(
+                                            config.pricol,
+                                            config.attcol
+                                        );
+                                    }
+                                }
+                            }
                         }
                     }
 
@@ -588,12 +611,272 @@ export const getInventoryResponse = async (
                     if (inventoryResponse.GuildId) {
                         toLegacyOid(inventoryResponse.GuildId);
                     }
+                    for (const item of inventoryResponse.CurrentLoadOutIds) {
+                        toLegacyOid(item);
+                    }
+                    if (
+                        version_compare(buildLabel, "2015.03.19.00.00") <= 0 &&
+                        inventoryResponse.CurrentLoadOutIds.length > 0 &&
+                        inventoryResponse.LoadOutPresets.NORMAL.length > 0
+                    ) {
+                        if (version_compare(buildLabel, "2014.07.21.18.38") >= 0) {
+                            // U14-U15 expect a different response than any other version, where the client is pulling loadout data from has not been found yet
+                            // As such, loading loadouts is currently unsupported for these versions
+                            logger.warn("Loadouts are currently unsupported in U14-U15, loadouts will be undefined");
+                        } else {
+                            // U13 and below
+                            inventoryResponse.CurrentLoadout = mapLegacyLoadoutConfig(
+                                inventory,
+                                inventoryResponse.LoadOutPresets,
+                                buildLabel
+                            );
+                        }
+                    }
+                    for (const category of loadoutKeysLegacy) {
+                        for (const item of inventoryResponse.LoadOutPresets[category]) {
+                            toLegacyOid(item.ItemId);
+                            if (item.s) {
+                                if (item.s.ItemId) {
+                                    toLegacyOid(item.s.ItemId);
+                                }
+                            }
+                            if (item.l) {
+                                if (item.l.ItemId) {
+                                    toLegacyOid(item.l.ItemId);
+                                }
+                            }
+                            if (item.p) {
+                                if (item.p.ItemId) {
+                                    toLegacyOid(item.p.ItemId);
+                                }
+                            }
+                            if (item.m) {
+                                if (item.m.ItemId) {
+                                    toLegacyOid(item.m.ItemId);
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
     }
 
     return inventoryResponse;
+};
+
+const mapLegacyLoadoutConfig = (
+    inventory: TInventoryDatabaseDocument,
+    loadoutPresets: ILoadOutPresets,
+    buildLabel: string
+): ILoadoutConfigClientLegacy | undefined => {
+    // Loadout config mapping for U15 and below
+    const normPreset = loadoutPresets.NORMAL.find(x => x.ItemId.$oid == inventory.CurrentLoadOutIds[0].toString());
+    if (normPreset) {
+        const s = normPreset.s?.ItemId?.$oid ? inventory.Suits.id(normPreset.s.ItemId.$oid) : null;
+        const p = normPreset.p?.ItemId?.$oid ? inventory.Pistols.id(normPreset.p.ItemId.$oid) : null;
+        const l = normPreset.l?.ItemId?.$oid ? inventory.LongGuns.id(normPreset.l.ItemId.$oid) : null;
+        const m = normPreset.m?.ItemId?.$oid ? inventory.Melee.id(normPreset.m.ItemId.$oid) : null;
+        const loadoutConfig = {
+            ItemId: { $id: version_compare(buildLabel, "2014.07.21.18.38") < 0 ? "Current" : normPreset.ItemId.$oid },
+            Name: normPreset.n ?? "Default Loadout",
+            Presets: [
+                {
+                    ItemId: { $id: s?._id.toString() ?? "ffffffffffffffffffffffff" },
+                    ModSlot: version_compare(buildLabel, "2013.09.13.00.00") < 0 ? 0 : (normPreset.s?.mod ?? 0),
+                    CustSlot: normPreset.s?.cus ?? 0,
+                    Customization: {
+                        Emblem: "",
+                        Colors: convertIColorToLegacyColors(s?.Configs[normPreset.s?.cus ?? 0].pricol),
+                        Skins: s?.Configs[normPreset.s?.cus ?? 0].Skins ?? []
+                    }
+                },
+                {
+                    ItemId: { $id: p?._id.toString() ?? "ffffffffffffffffffffffff" },
+                    ModSlot: version_compare(buildLabel, "2013.09.13.00.00") < 0 ? 0 : (normPreset.p?.mod ?? 0),
+                    CustSlot: normPreset.p?.cus ?? 0,
+                    Customization: {
+                        Emblem: "",
+                        Colors: convertIColorToLegacyColors(p?.Configs[normPreset.p?.cus ?? 0].pricol),
+                        Skins: p?.Configs[normPreset.p?.cus ?? 0].Skins ?? []
+                    }
+                },
+                {
+                    ItemId: { $id: l?._id.toString() ?? "ffffffffffffffffffffffff" },
+                    ModSlot: version_compare(buildLabel, "2013.09.13.00.00") < 0 ? 0 : (normPreset.l?.mod ?? 0),
+                    CustSlot: normPreset.l?.cus ?? 0,
+                    Customization: {
+                        Emblem: "",
+                        Colors: convertIColorToLegacyColors(l?.Configs[normPreset.l?.cus ?? 0].pricol),
+                        Skins: l?.Configs[normPreset.l?.cus ?? 0].Skins ?? []
+                    }
+                },
+                {
+                    ItemId: { $id: m?._id.toString() ?? "ffffffffffffffffffffffff" },
+                    ModSlot: version_compare(buildLabel, "2013.09.13.00.00") < 0 ? 0 : (normPreset.m?.mod ?? 0),
+                    CustSlot: normPreset.m?.cus ?? 0,
+                    Customization: {
+                        Emblem: "",
+                        Colors: convertIColorToLegacyColors(m?.Configs[normPreset.m?.cus ?? 0].pricol),
+                        Skins: m?.Configs[normPreset.m?.cus ?? 0].Skins ?? []
+                    }
+                }
+            ]
+        };
+
+        if (version_compare(buildLabel, "2013.03.18.00.00") >= 0) {
+            if (inventory.CurrentLoadOutIds.length > 1 && loadoutPresets.SENTINEL.length > 0) {
+                const compPreset = loadoutPresets.SENTINEL.find(
+                    x => x.ItemId.$oid == inventory.CurrentLoadOutIds[1].toString()
+                );
+                if (compPreset) {
+                    const s = compPreset.s?.ItemId?.$oid ? inventory.Sentinels.id(compPreset.s.ItemId.$oid) : null;
+                    const l = compPreset.l?.ItemId?.$oid
+                        ? inventory.SentinelWeapons.id(compPreset.l.ItemId.$oid)
+                        : null;
+                    loadoutConfig.Presets.push(
+                        {
+                            ItemId: { $id: s?._id.toString() ?? "ffffffffffffffffffffffff" },
+                            ModSlot: version_compare(buildLabel, "2013.09.13.00.00") < 0 ? 0 : (compPreset.s?.mod ?? 0),
+                            CustSlot: compPreset.s?.cus ?? 0,
+                            Customization: {
+                                Emblem: "",
+                                Colors: convertIColorToLegacyColors(s?.Configs[compPreset.s?.cus ?? 0].pricol),
+                                Skins: s?.Configs[compPreset.s?.cus ?? 0].Skins ?? []
+                            }
+                        },
+                        {
+                            ItemId: { $id: l?._id.toString() ?? "ffffffffffffffffffffffff" },
+                            ModSlot: version_compare(buildLabel, "2013.09.13.00.00") < 0 ? 0 : (compPreset.l?.mod ?? 0),
+                            CustSlot: compPreset.l?.cus ?? 0,
+                            Customization: {
+                                Emblem: "",
+                                Colors: convertIColorToLegacyColors(l?.Configs[compPreset.l?.cus ?? 0].pricol),
+                                Skins: l?.Configs[compPreset.l?.cus ?? 0].Skins ?? []
+                            }
+                        }
+                    );
+                }
+            } else {
+                logger.warn(
+                    `Could not find SENTINEL loadout with id ${inventory.CurrentLoadOutIds[1].toString()}, this part of the loadout will be empty`
+                );
+
+                loadoutConfig.Presets.push(
+                    {
+                        ItemId: { $id: "ffffffffffffffffffffffff" },
+                        ModSlot: 0,
+                        CustSlot: 0,
+                        Customization: {
+                            Emblem: "",
+                            Colors: [],
+                            Skins: []
+                        }
+                    },
+                    {
+                        ItemId: { $id: "ffffffffffffffffffffffff" },
+                        ModSlot: 0,
+                        CustSlot: 0,
+                        Customization: {
+                            Emblem: "",
+                            Colors: [],
+                            Skins: []
+                        }
+                    }
+                );
+            }
+        }
+
+        if (version_compare(buildLabel, "2014.10.24.08.24") >= 0) {
+            if (inventory.CurrentLoadOutIds.length > 2 && loadoutPresets.ARCHWING.length > 0) {
+                const archPreset = loadoutPresets.ARCHWING.find(
+                    x => x.ItemId.$oid == inventory.CurrentLoadOutIds[2].toString()
+                );
+                if (archPreset) {
+                    const s = archPreset.s?.ItemId?.$oid ? inventory.SpaceSuits.id(archPreset.s.ItemId.$oid) : null;
+                    const l = archPreset.l?.ItemId?.$oid ? inventory.SpaceGuns.id(archPreset.l.ItemId.$oid) : null;
+                    const m = archPreset.m?.ItemId?.$oid ? inventory.SpaceMelee.id(archPreset.m.ItemId.$oid) : null;
+                    loadoutConfig.Presets.push(
+                        {
+                            ItemId: { $id: s?._id.toString() ?? "ffffffffffffffffffffffff" },
+                            ModSlot: archPreset.s?.mod ?? 0,
+                            CustSlot: archPreset.s?.cus ?? 0,
+                            Customization: {
+                                Emblem: "",
+                                Colors: convertIColorToLegacyColors(s?.Configs[archPreset.s?.cus ?? 0].pricol),
+                                Skins: s?.Configs[0].Skins ?? []
+                            }
+                        },
+                        {
+                            ItemId: { $id: l?._id.toString() ?? "ffffffffffffffffffffffff" },
+                            ModSlot: archPreset.l?.mod ?? 0,
+                            CustSlot: archPreset.l?.cus ?? 0,
+                            Customization: {
+                                Emblem: "",
+                                Colors: convertIColorToLegacyColors(l?.Configs[archPreset.l?.cus ?? 0].pricol),
+                                Skins: l?.Configs[0].Skins ?? []
+                            }
+                        },
+                        {
+                            ItemId: { $id: m?._id.toString() ?? "ffffffffffffffffffffffff" },
+                            ModSlot: archPreset.m?.mod ?? 0,
+                            CustSlot: archPreset.m?.cus ?? 0,
+                            Customization: {
+                                Emblem: "",
+                                Colors: convertIColorToLegacyColors(m?.Configs[archPreset.m?.cus ?? 0].pricol),
+                                Skins: m?.Configs[0].Skins ?? []
+                            }
+                        }
+                    );
+                }
+            } else {
+                logger.warn(
+                    `Could not find ARCHWING loadout with id ${inventory.CurrentLoadOutIds[2].toString()}, this part of the loadout will be empty`
+                );
+
+                loadoutConfig.Presets.push(
+                    {
+                        ItemId: { $id: "ffffffffffffffffffffffff" },
+                        ModSlot: 0,
+                        CustSlot: 0,
+                        Customization: {
+                            Emblem: "",
+                            Colors: [],
+                            Skins: []
+                        }
+                    },
+                    {
+                        ItemId: { $id: "ffffffffffffffffffffffff" },
+                        ModSlot: 0,
+                        CustSlot: 0,
+                        Customization: {
+                            Emblem: "",
+                            Colors: [],
+                            Skins: []
+                        }
+                    },
+                    {
+                        ItemId: { $id: "ffffffffffffffffffffffff" },
+                        ModSlot: 0,
+                        CustSlot: 0,
+                        Customization: {
+                            Emblem: "",
+                            Colors: [],
+                            Skins: []
+                        }
+                    }
+                );
+            }
+        }
+
+        return loadoutConfig;
+    }
+
+    logger.error(
+        `Could not find NORMAL loadout with id ${inventory.CurrentLoadOutIds[0].toString()}, entire loadout will be undefined`
+    );
+
+    return undefined;
 };
 
 const getExpRequiredForMr = (rank: number): number => {

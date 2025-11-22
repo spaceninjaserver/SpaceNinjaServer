@@ -2,6 +2,7 @@ import type { IMongoDate, IOid, IOidWithLegacySupport } from "../types/commonTyp
 import { Types } from "mongoose";
 import type { TRarity } from "warframe-public-export-plus";
 import type { IFusionTreasure } from "../types/inventoryTypes/inventoryTypes.ts";
+import type { IColor } from "../types/inventoryTypes/commonInventoryTypes.ts";
 
 export const version_compare = (a: string, b: string): number => {
     const a_digits = a
@@ -68,6 +69,38 @@ export const parseFusionTreasure = (name: string, count: number): IFusionTreasur
         Sockets: parseInt(arr[1], 16),
         ItemCount: count
     };
+};
+
+export const convertIColorToLegacyColors = (colors: IColor | undefined): number[] => {
+    const convertedColors = [colors?.t0 ?? -1, colors?.t1 ?? -1, colors?.t2 ?? -1, colors?.t3 ?? -1, colors?.en ?? -1];
+    return convertedColors;
+};
+
+export const convertIColorToLegacyColorsWithAtt = (
+    pricol: IColor | undefined,
+    attcol: IColor | undefined
+): number[] => {
+    const convertedColors = [
+        pricol?.t0 ?? -1,
+        pricol?.t1 ?? -1,
+        pricol?.t2 ?? -1,
+        pricol?.t3 ?? -1,
+        pricol?.en ?? -1,
+        attcol?.t0 ?? -1,
+        attcol?.t1 ?? -1,
+        attcol?.t2 ?? -1,
+        attcol?.t3 ?? -1,
+        attcol?.en ?? -1
+    ];
+    return convertedColors;
+};
+
+export const convertLegacyColorsToIColor = (colors: number[] | undefined): IColor => {
+    if (colors) {
+        return { t0: colors[0], t1: colors[1], t2: colors[2], t3: colors[3], en: colors[4] };
+    } else {
+        return {};
+    }
 };
 
 export type TTraitsPool = Record<

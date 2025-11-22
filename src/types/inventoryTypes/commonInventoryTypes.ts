@@ -54,6 +54,15 @@ export interface IItemConfig {
     AbilityOverride?: IAbilityOverride;
     PvpUpgrades?: string[];
     ugly?: boolean;
+    Colors?: number[]; // U16.0
+    Customization?: IItemConfigCustomizationsLegacy; // U10-U15
+}
+
+export interface IItemConfigCustomizationsLegacy {
+    CustomEmblems?: { EmblemId: string }[];
+    Emblem?: string;
+    Colors: number[];
+    Skins: string[];
 }
 
 export interface IItemConfigDatabase extends Omit<IItemConfig, "Upgrades"> {

@@ -1,21 +1,31 @@
 import type {
     IItemEntry,
     ILoadoutClient,
+    ILoadoutConfigClientLegacy,
     ILoadoutEntry,
+    ILoadoutPresetClientLegacy,
     IOperatorConfigEntry,
     ISaveLoadoutRequestNoUpgradeVer
 } from "../types/saveLoadoutTypes.ts";
 import { Loadout } from "../models/inventoryModels/loadoutModel.ts";
 import { addMods, getInventory } from "./inventoryService.ts";
-import type { IOid } from "../types/commonTypes.ts";
+import type { IOidWithLegacySupport } from "../types/commonTypes.ts";
 import { Types } from "mongoose";
 import { isEmptyObject } from "../helpers/general.ts";
-import { version_compare } from "../helpers/inventoryHelpers.ts";
+import {
+    convertLegacyColorsToIColor,
+    fromDbOid,
+    fromOid,
+    toObjectId,
+    version_compare
+} from "../helpers/inventoryHelpers.ts";
 import { logger } from "../utils/logger.ts";
 import type { TEquipmentKey } from "../types/inventoryTypes/inventoryTypes.ts";
 import { equipmentKeys } from "../types/inventoryTypes/inventoryTypes.ts";
 import type { IItemConfig, IItemConfigDatabase } from "../types/inventoryTypes/commonInventoryTypes.ts";
 import { importCrewShipMembers, importCrewShipWeapon, importLoadOutConfig } from "./importService.ts";
+import type { IEquipmentDatabase, IEquipmentSelectionDatabase } from "../types/equipmentTypes.ts";
+import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
 
 //TODO: setup default items on account creation or like originally in giveStartingItems.php
 
@@ -65,68 +75,125 @@ export const handleInventoryItemConfigChange = async (
                 break;
             }
             case "LoadOuts": {
-                logger.debug("loadout received");
-                const loadout = await Loadout.findOne({ loadoutOwnerId: accountId });
-                if (!loadout) {
-                    throw new Error("loadout not found");
-                }
+                if (
+                    buildLabel &&
+                    version_compare(buildLabel, "2014.04.10.17.47") >= 0 &&
+                    version_compare(buildLabel, "2015.03.19.00.00") < 0
+                ) {
+                    // U14-U15
+                    // const configs = equipment as {
+                    //     [key: string]: ILoadoutConfigClientLegacy;
+                    // };
 
-                let newLoadoutId: Types.ObjectId | undefined;
-                for (const [_loadoutSlot, _loadout] of Object.entries(equipment)) {
-                    const loadoutSlot = _loadoutSlot as keyof ILoadoutClient;
-                    const newLoadout = _loadout as ILoadoutEntry;
+                    // logger.debug("legacy loadout received (U14-U15 format)", configs);
 
-                    // empty loadout slot like: "NORMAL": {}
-                    if (isEmptyObject(newLoadout)) {
-                        continue;
+                    // for (const key in configs) {
+                    //     const x = configs[key];
+                    //     await saveLegacyLoadoutPreset(inventory, x.Presets, x.Name, buildLabel);
+                    // }
+
+                    logger.warn("Loadouts are currently unsupported in U14-U15, only saving mod/appearance configs");
+
+                    break;
+                } else {
+                    logger.debug("loadout received");
+                    const loadout = await Loadout.findOne({ loadoutOwnerId: accountId });
+                    if (!loadout) {
+                        throw new Error("loadout not found");
                     }
 
-                    // all non-empty entries are one loadout slot
-                    for (const [loadoutId, loadoutConfig] of Object.entries(newLoadout)) {
-                        if (loadoutConfig.Remove) {
-                            loadout[loadoutSlot].pull({ _id: loadoutId });
+                    let newLoadoutId: Types.ObjectId | undefined;
+                    for (const [_loadoutSlot, _loadout] of Object.entries(equipment)) {
+                        const loadoutSlot = _loadoutSlot as keyof ILoadoutClient;
+                        const newLoadout = _loadout as ILoadoutEntry;
+
+                        // empty loadout slot like: "NORMAL": {}
+                        if (isEmptyObject(newLoadout)) {
                             continue;
                         }
 
-                        const oldLoadoutConfig = loadout[loadoutSlot].id(loadoutId);
+                        // all non-empty entries are one loadout slot
+                        for (const [loadoutId, loadoutConfig] of Object.entries(newLoadout)) {
+                            if (loadoutConfig.Remove) {
+                                loadout[loadoutSlot].pull({ _id: loadoutId });
+                                continue;
+                            }
 
-                        const loadoutConfigDatabase = importLoadOutConfig(loadoutConfig);
+                            const oldLoadoutConfig = loadout[loadoutSlot].id(loadoutId);
 
-                        // if no config with this id exists, create a new one
-                        if (!oldLoadoutConfig) {
-                            //save the new object id and assign it for every ffff return at the end
-                            if (loadoutConfigDatabase._id.toString() === "ffffffffffffffffffffffff") {
-                                if (!newLoadoutId) {
-                                    newLoadoutId = new Types.ObjectId();
+                            const loadoutConfigDatabase = importLoadOutConfig(loadoutConfig);
+
+                            // if no config with this id exists, create a new one
+                            if (!oldLoadoutConfig) {
+                                //save the new object id and assign it for every ffff return at the end
+                                if (loadoutConfigDatabase._id.toString() === "ffffffffffffffffffffffff") {
+                                    if (!newLoadoutId) {
+                                        newLoadoutId = new Types.ObjectId();
+                                    }
+                                    loadoutConfigDatabase._id = newLoadoutId;
+                                    loadout[loadoutSlot].push(loadoutConfigDatabase);
+                                    continue;
                                 }
-                                loadoutConfigDatabase._id = newLoadoutId;
+
                                 loadout[loadoutSlot].push(loadoutConfigDatabase);
                                 continue;
                             }
 
-                            loadout[loadoutSlot].push(loadoutConfigDatabase);
-                            continue;
-                        }
+                            const loadoutIndex = loadout[loadoutSlot].indexOf(oldLoadoutConfig);
+                            if (loadoutIndex === -1) {
+                                throw new Error("loadout index not found");
+                            }
 
-                        const loadoutIndex = loadout[loadoutSlot].indexOf(oldLoadoutConfig);
-                        if (loadoutIndex === -1) {
-                            throw new Error("loadout index not found");
+                            loadout[loadoutSlot][loadoutIndex].overwrite(loadoutConfigDatabase);
                         }
+                    }
+                    await loadout.save();
 
-                        loadout[loadoutSlot][loadoutIndex].overwrite(loadoutConfigDatabase);
+                    //only return an id if a new loadout was added
+                    if (newLoadoutId) {
+                        return newLoadoutId.toString();
                     }
                 }
-                await loadout.save();
 
-                //only return an id if a new loadout was added
-                if (newLoadoutId) {
-                    return newLoadoutId.toString();
+                break;
+            }
+            case "LoadOut": {
+                // U10-U13
+                const config = equipment as ILoadoutConfigClientLegacy;
+                logger.debug("legacy loadout received (U10-U13 format)", config);
+
+                await saveLegacyLoadoutPreset(inventory, config.Presets, config.Name, buildLabel);
+                break;
+            }
+            case "Presets": {
+                // U8 and below
+                const presets = equipment as ILoadoutPresetClientLegacy[];
+                logger.debug("legacy loadout received (U8 format)", presets);
+
+                await saveLegacyLoadoutPreset(inventory, presets, undefined, buildLabel);
+                break;
+            }
+            case "CurrentLoadout": {
+                // U14-U15
+                const id = equipment as string;
+                if (inventory.CurrentLoadOutIds[0]) {
+                    inventory.CurrentLoadOutIds[0] = toObjectId(id);
+                }
+                if (inventory.CurrentLoadOutIds[1]) {
+                    inventory.CurrentLoadOutIds[1] = toObjectId(id);
+                }
+                if (inventory.CurrentLoadOutIds[2]) {
+                    inventory.CurrentLoadOutIds[2] = toObjectId(id);
                 }
                 break;
             }
             case "CurrentLoadOutIds": {
-                const loadoutIds = equipment as IOid[]; // TODO: Check for more than just an array of oids, I think i remember one instance
-                inventory.CurrentLoadOutIds = loadoutIds;
+                const loadoutIds = equipment as IOidWithLegacySupport[]; // TODO: Check for more than just an array of oids, I think i remember one instance
+                const ids: Types.ObjectId[] = [];
+                loadoutIds.forEach(x => {
+                    ids.push(toObjectId(fromOid(x)));
+                });
+                inventory.CurrentLoadOutIds = ids;
                 break;
             }
             case "EquippedGear":
@@ -199,32 +266,47 @@ export const handleInventoryItemConfigChange = async (
                         for (const [configId, config] of Object.entries(itemConfigEntries)) {
                             if (/^[0-9]+$/.test(configId)) {
                                 const c = config as IItemConfig;
-                                if (buildLabel && version_compare(buildLabel, "2014.04.10.17.47") < 0) {
-                                    if (c.Upgrades) {
-                                        // U10-U11 store mods in the item config as $id instead of a string, need to convert that here
-                                        const convertedUpgrades: string[] = [];
-                                        c.Upgrades.forEach(upgrade => {
-                                            const upgradeId = upgrade as { $id: string };
-                                            const rawUpgrade = inventory.RawUpgrades.id(upgradeId.$id);
-                                            if (rawUpgrade) {
-                                                const newId = new Types.ObjectId();
-                                                convertedUpgrades.push(newId.toString());
-                                                addMods(inventory, [
-                                                    {
+                                if (buildLabel && version_compare(buildLabel, "2015.03.21.08.17") <= 0) {
+                                    const legacyColors = c.Customization?.Colors ?? c.Colors;
+                                    if (legacyColors) {
+                                        if (legacyColors.length == 10) {
+                                            c.pricol = convertLegacyColorsToIColor(legacyColors.splice(0, 5));
+                                            c.attcol = convertLegacyColorsToIColor(legacyColors);
+                                        } else {
+                                            c.pricol = convertLegacyColorsToIColor(legacyColors);
+                                        }
+                                    }
+                                    const legacySkins = c.Customization?.Skins;
+                                    if (legacySkins) {
+                                        c.Skins = legacySkins;
+                                    }
+                                    if (version_compare(buildLabel, "2014.04.10.17.47") < 0) {
+                                        if (c.Upgrades) {
+                                            // U10-U11 store mods in the item config as $id instead of a string, need to convert that here
+                                            const convertedUpgrades: string[] = [];
+                                            c.Upgrades.forEach(upgrade => {
+                                                const upgradeId = upgrade as { $id: string };
+                                                const rawUpgrade = inventory.RawUpgrades.id(upgradeId.$id);
+                                                if (rawUpgrade) {
+                                                    const newId = new Types.ObjectId();
+                                                    convertedUpgrades.push(newId.toString());
+                                                    addMods(inventory, [
+                                                        {
+                                                            ItemType: rawUpgrade.ItemType,
+                                                            ItemCount: -1
+                                                        }
+                                                    ]);
+                                                    inventory.Upgrades.push({
+                                                        UpgradeFingerprint: `{"lvl":0}`,
                                                         ItemType: rawUpgrade.ItemType,
-                                                        ItemCount: -1
-                                                    }
-                                                ]);
-                                                inventory.Upgrades.push({
-                                                    UpgradeFingerprint: `{"lvl":0}`,
-                                                    ItemType: rawUpgrade.ItemType,
-                                                    _id: newId
-                                                });
-                                            } else {
-                                                convertedUpgrades.push(upgradeId.$id);
-                                            }
-                                        });
-                                        c.Upgrades = convertedUpgrades;
+                                                        _id: newId
+                                                    });
+                                                } else {
+                                                    convertedUpgrades.push(upgradeId.$id);
+                                                }
+                                            });
+                                            c.Upgrades = convertedUpgrades;
+                                        }
                                     }
                                 }
                                 inventoryItem.Configs[parseInt(configId)] = c as IItemConfigDatabase;
@@ -263,4 +345,208 @@ export const handleInventoryItemConfigChange = async (
         }
     }
     await inventory.save();
+};
+
+const saveLegacyLoadoutPreset = async (
+    inventory: TInventoryDatabaseDocument,
+    presets: ILoadoutPresetClientLegacy[],
+    name: string | undefined,
+    buildLabel: string | undefined
+): Promise<void> => {
+    const loadout = await Loadout.findOne({ loadoutOwnerId: inventory.accountOwnerId });
+    if (!loadout) {
+        throw new Error("loadout not found");
+    }
+
+    const currentLoadouts = inventory.CurrentLoadOutIds as Types.ObjectId[];
+
+    const s =
+        fromOid(presets[0].ItemId) != "ffffffffffffffffffffffff"
+            ? configureLegacyEquipmentSelection(
+                  presets[0],
+                  buildLabel,
+                  inventory.Suits.id(fromOid(presets[0].ItemId)),
+                  loadout.NORMAL.id(currentLoadouts[0])?.s?.cus
+              )
+            : undefined;
+    const p =
+        fromOid(presets[1].ItemId) != "ffffffffffffffffffffffff"
+            ? configureLegacyEquipmentSelection(
+                  presets[1],
+                  buildLabel,
+                  inventory.Pistols.id(fromOid(presets[1].ItemId)),
+                  loadout.NORMAL.id(currentLoadouts[0])?.p?.cus
+              )
+            : undefined;
+    const l =
+        fromOid(presets[2].ItemId) != "ffffffffffffffffffffffff"
+            ? configureLegacyEquipmentSelection(
+                  presets[2],
+                  buildLabel,
+                  inventory.LongGuns.id(fromOid(presets[2].ItemId)),
+                  loadout.NORMAL.id(currentLoadouts[0])?.l?.cus
+              )
+            : undefined;
+    const m =
+        fromOid(presets[3].ItemId) != "ffffffffffffffffffffffff"
+            ? configureLegacyEquipmentSelection(
+                  presets[3],
+                  buildLabel,
+                  inventory.Melee.id(fromOid(presets[3].ItemId)),
+                  loadout.NORMAL.id(currentLoadouts[0])?.m?.cus
+              )
+            : undefined;
+
+    if (loadout.NORMAL.length == 0) {
+        const loadoutId = new Types.ObjectId("000000000000000000000000");
+        loadout.NORMAL.push({
+            n: "Default Loadout",
+            s: s,
+            l: l,
+            p: p,
+            m: m,
+            _id: loadoutId
+        });
+        if (currentLoadouts.length == 0) {
+            currentLoadouts.push(loadoutId);
+        } else {
+            currentLoadouts[0] = loadoutId;
+        }
+    } else {
+        const loadoutId = fromDbOid(currentLoadouts[0]);
+        const preset = loadout.NORMAL.id(loadoutId);
+        if (preset) {
+            preset.n = name ?? preset.n;
+            preset.s = s;
+            preset.p = p;
+            preset.l = l;
+            preset.m = m;
+        } else {
+            logger.warn(
+                `Could not find NORMAL loadout with id ${loadoutId.toString()}, equipment selection will not be saved`
+            );
+        }
+    }
+
+    if (presets.length >= 6) {
+        const s =
+            fromOid(presets[4].ItemId) != "ffffffffffffffffffffffff"
+                ? configureLegacyEquipmentSelection(
+                      presets[4],
+                      buildLabel,
+                      inventory.Sentinels.id(fromOid(presets[4].ItemId)),
+                      loadout.SENTINEL.id(currentLoadouts[1])?.s?.cus
+                  )
+                : undefined;
+        const l =
+            fromOid(presets[5].ItemId) != "ffffffffffffffffffffffff"
+                ? configureLegacyEquipmentSelection(
+                      presets[5],
+                      buildLabel,
+                      inventory.SentinelWeapons.id(fromOid(presets[5].ItemId)),
+                      loadout.SENTINEL.id(currentLoadouts[1])?.l?.cus
+                  )
+                : undefined;
+
+        if (loadout.SENTINEL.length == 0) {
+            const loadoutId = new Types.ObjectId("000000000000000000000000");
+            loadout.SENTINEL.push({
+                n: "Default Loadout",
+                s: s,
+                l: l,
+                _id: loadoutId
+            });
+            if (currentLoadouts.length < 2) {
+                currentLoadouts.push(loadoutId);
+            } else {
+                currentLoadouts[1] = loadoutId;
+            }
+        } else {
+            const loadoutId = fromDbOid(currentLoadouts[1]);
+            const preset = loadout.SENTINEL.id(loadoutId);
+            if (preset) {
+                preset.n = name ?? preset.n;
+                preset.s = s;
+                preset.l = l;
+            } else {
+                logger.warn(
+                    `Could not find SENTINEL loadout with id ${loadoutId.toString()}, equipment selection will not be saved`
+                );
+            }
+        }
+    }
+
+    if (presets.length == 9) {
+        const s =
+            fromOid(presets[6].ItemId) != "ffffffffffffffffffffffff"
+                ? configureLegacyEquipmentSelection(presets[6], buildLabel, null, 0)
+                : undefined;
+        const l =
+            fromOid(presets[7].ItemId) != "ffffffffffffffffffffffff"
+                ? configureLegacyEquipmentSelection(presets[7], buildLabel, null, 0)
+                : undefined;
+        const m =
+            fromOid(presets[8].ItemId) != "ffffffffffffffffffffffff"
+                ? configureLegacyEquipmentSelection(presets[8], buildLabel, null, 0)
+                : undefined;
+
+        if (loadout.ARCHWING.length == 0) {
+            const loadoutId = new Types.ObjectId("000000000000000000000000");
+            loadout.ARCHWING.push({
+                n: "Default Loadout",
+                s: s,
+                l: l,
+                m: m,
+                _id: loadoutId
+            });
+            if (currentLoadouts.length < 3) {
+                currentLoadouts.push(loadoutId);
+            } else {
+                currentLoadouts[2] = loadoutId;
+            }
+        } else {
+            const loadoutId = fromDbOid(currentLoadouts[2]);
+            const preset = loadout.ARCHWING.id(loadoutId);
+            if (preset) {
+                preset.n = name ?? preset.n;
+                preset.s = s;
+                preset.l = l;
+                preset.m = m;
+            } else {
+                logger.warn(
+                    `Could not find ARCHWING loadout with id ${loadoutId.toString()}, equipment selection will not be saved`
+                );
+            }
+        }
+    }
+
+    await loadout.save();
+};
+
+const configureLegacyEquipmentSelection = (
+    preset: ILoadoutPresetClientLegacy,
+    buildLabel: string | undefined,
+    item: IEquipmentDatabase | null,
+    appearanceConfig: number | undefined
+): IEquipmentSelectionDatabase | undefined => {
+    if (preset.ItemId.$id) {
+        const slotEntry = {
+            ItemId: toObjectId(preset.ItemId.$id),
+            mod: preset.ModSlot ?? 0,
+            cus: preset.CustSlot ?? 0
+        };
+
+        if (item && buildLabel && version_compare(buildLabel, "2013.09.13.00.00") < 0) {
+            // Specific code path for U8 and below for applying cosmetics
+            const config = item.Configs[appearanceConfig ?? 0];
+            if (item.Configs[appearanceConfig ?? 0]) {
+                config.pricol = convertLegacyColorsToIColor(preset.Customization?.Colors);
+                config.Skins = preset.Customization?.Skins;
+            }
+        }
+
+        return slotEntry;
+    } else {
+        return undefined;
+    }
 };
