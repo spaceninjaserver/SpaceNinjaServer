@@ -2659,43 +2659,43 @@ const goalMessagesByKey: Record<string, { sndr: string; msg: string; sub: string
         icon: "/Lotus/Interface/Icons/Npcs/Seasonal/NoraNight.png"
     },
     "/Lotus/Types/Keys/LanternEndlessEventKeyA": {
-        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
+        sndr: "/Lotus/Language/Bosses/Lotus",
         msg: "/Lotus/Language/G1Quests/GenericEventRewardMsgDesc",
         sub: "/Lotus/Language/G1Quests/GenericTacAlertRewardMsgTitle",
         icon: "/Lotus/Interface/Icons/Npcs/LotusVamp_d.png"
     },
     "/Lotus/Types/Keys/LanternEndlessEventKeyB": {
-        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
+        sndr: "/Lotus/Language/Bosses/Lotus",
         msg: "/Lotus/Language/G1Quests/GenericEventRewardMsgDesc",
         sub: "/Lotus/Language/G1Quests/GenericTacAlertRewardMsgTitle",
         icon: "/Lotus/Interface/Icons/Npcs/LotusVamp_d.png"
     },
     "/Lotus/Types/Keys/LanternEndlessEventKeyD": {
-        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
+        sndr: "/Lotus/Language/Bosses/Lotus",
         msg: "/Lotus/Language/G1Quests/GenericEventRewardMsgDesc",
         sub: "/Lotus/Language/G1Quests/GenericTacAlertRewardMsgTitle",
         icon: "/Lotus/Interface/Icons/Npcs/LotusVamp_d.png"
     },
     "/Lotus/Types/Keys/LanternEndlessEventKeyC": {
-        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
+        sndr: "/Lotus/Language/Bosses/Lotus",
         msg: "/Lotus/Language/G1Quests/GenericEventRewardMsgDesc",
         sub: "/Lotus/Language/G1Quests/GenericTacAlertRewardMsgTitle",
         icon: "/Lotus/Interface/Icons/Npcs/LotusVamp_d.png"
     },
     "/Lotus/Types/Keys/TacAlertKeyHalloween": {
-        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
+        sndr: "/Lotus/Language/Bosses/Lotus",
         msg: "/Lotus/Language/G1Quests/TacAlertHalloweenRewardsBonusBody",
         sub: "/Lotus/Language/G1Quests/TacAlertHalloweenRewardsBonusTitle",
         icon: "/Lotus/Interface/Icons/Npcs/LotusVamp_d.png"
     },
     "/Lotus/Types/Keys/TacAlertKeyHalloweenBonus": {
-        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
+        sndr: "/Lotus/Language/Bosses/Lotus",
         msg: "/Lotus/Language/G1Quests/TacAlertHalloweenRewardsBody",
         sub: "/Lotus/Language/G1Quests/TacAlertHalloweenRewardsTitle",
         icon: "/Lotus/Interface/Icons/Npcs/LotusVamp_d.png"
     },
     "/Lotus/Types/Keys/TacAlertKeyHalloweenTimeAttack": {
-        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
+        sndr: "/Lotus/Language/Bosses/Lotus",
         msg: "/Lotus/Language/G1Quests/TacAlertHalloweenRewardsBody",
         sub: "/Lotus/Language/G1Quests/TacAlertHalloweenRewardsTitle",
         icon: "/Lotus/Interface/Icons/Npcs/LotusVamp_d.png"
