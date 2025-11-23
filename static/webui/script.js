@@ -4094,6 +4094,9 @@ const importSamples = {
             Heirloom: true
         },
         Counselor: true
+    },
+    maxStratos: {
+        BountyScore: 39
     }
 };
 function setImportSample(key) {

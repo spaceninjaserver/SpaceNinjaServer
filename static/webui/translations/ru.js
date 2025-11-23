@@ -376,6 +376,7 @@ dict = {
     import_samples: `Пример:`,
     import_samples_maxFocus: `Все школы Фокуса макс. уровня`,
     import_samples_accolades: `[UNTRANSLATED] Accolades & Council Chat Access`,
+    import_samples_maxStratos: `[UNTRANSLATED] Max Rank Stratos Emblem Icon`,
 
     upgrade_Equilibrium: `Подбор сфер здоровья даёт +|VAL|% энергии. Подбор сфер энергии даёт +|VAL|% здоровья.`,
     upgrade_MeleeCritDamage: `+|VAL|% к крит. урону в ближнем бою.`,
