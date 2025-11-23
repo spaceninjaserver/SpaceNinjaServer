@@ -492,8 +492,8 @@ export const addMissionInventoryUpdates = async (
                         )}}`;
                     }
                     // Handle Fusion Core drops
-                    const parsedFingerprint = JSON.parse(clientUpgrade.UpgradeFingerprint) as { lvl: number };
-                    if (parsedFingerprint.lvl != 0) {
+                    const parsedFingerprint = JSON.parse(clientUpgrade.UpgradeFingerprint) as { lvl?: number };
+                    if (parsedFingerprint.lvl) {
                         inventory.Upgrades.push({
                             ItemType: clientUpgrade.ItemType,
                             UpgradeFingerprint: clientUpgrade.UpgradeFingerprint
