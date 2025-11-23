@@ -51,7 +51,7 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
             break;
         }
         case "giveAll": {
-            allQuestKeys.forEach(questKey => addQuestKey(inventory, { ItemType: questKey }));
+            allQuestKeys.forEach(questKey => addQuestKey(inventory, { ItemType: questKey }, true));
             break;
         }
         case "deleteKey": {
@@ -169,7 +169,11 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
             break;
     }
 
-    await inventory.save();
-    res.status(200).end();
-    broadcastInventoryUpdate(req);
+    if (inventory.isModified()) {
+        await inventory.save();
+        res.json(true);
+        broadcastInventoryUpdate(req);
+    } else {
+        res.json(false);
+    }
 };

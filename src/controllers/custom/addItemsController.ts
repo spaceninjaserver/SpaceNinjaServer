@@ -10,9 +10,13 @@ export const addItemsController: RequestHandler = async (req, res) => {
     for (const request of requests) {
         await addItem(inventory, request.ItemType, request.ItemCount, true, undefined, request.Fingerprint, true);
     }
-    await inventory.save();
-    res.end();
-    broadcastInventoryUpdate(req);
+    if (inventory.isModified()) {
+        await inventory.save();
+        res.json(true);
+        broadcastInventoryUpdate(req);
+    } else {
+        res.json(false);
+    }
 };
 
 interface IAddItemRequest {

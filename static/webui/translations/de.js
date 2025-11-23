@@ -439,6 +439,7 @@ dict = {
     theme_dark: `Dunkles Design`,
     theme_light: `Helles Design`,
 
+    guildView_na: `[UNTRANSLATED] You're not in a clan.`,
     guildView_cheats: `Clan-Cheats`,
     guildView_techProjects: `Forschung`,
     guildView_vaultDecoRecipes: `Dojo-Deko-Baupläne`,

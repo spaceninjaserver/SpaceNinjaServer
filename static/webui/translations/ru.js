@@ -439,6 +439,7 @@ dict = {
     theme_dark: `Темная тема`,
     theme_light: `Светлая тема`,
 
+    guildView_na: `[UNTRANSLATED] You're not in a clan.`,
     guildView_cheats: `Читы Клана`,
     guildView_techProjects: `Исследовения`,
     guildView_vaultDecoRecipes: `Рецепты декораций Додзё`,

@@ -124,10 +124,13 @@ export const resetQuestKeyToStage = (
 
 export const addQuestKey = (
     inventory: TInventoryDatabaseDocument,
-    questKey: IQuestKeyDatabase
+    questKey: IQuestKeyDatabase,
+    silentFailure?: boolean
 ): IQuestKeyClient | undefined => {
     if (inventory.QuestKeys.some(q => q.ItemType === questKey.ItemType)) {
-        logger.warn(`Quest key ${questKey.ItemType} already exists. It will not be added`);
+        if (!silentFailure) {
+            logger.warn(`Quest key ${questKey.ItemType} already exists. It will not be added`);
+        }
         return;
     }
 

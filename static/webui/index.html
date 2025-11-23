@@ -71,7 +71,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/webui/import" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" data-loc="navbar_import"></a>
                         </li>
-                        <li class="nav-item d-none" id="nav-guildView">
+                        <li class="nav-item" id="nav-guildView">
                             <a class="nav-link" href="/webui/guildView" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" data-loc="navbar_guildView"></a>
                         </li>
                     </ul>
@@ -573,7 +573,8 @@
                 </div>
             </div>
             <div id="guild-route" data-route="/webui/guildView" data-title="Guild | OpenWF WebUI">
-                <h3 id="guildView-loading" class="mb-0" data-loc="general_loading"></h3>
+                <h3 id="guildView-loading" data-loc="general_loading"></h3>
+                <h3 id="guildView-na" class="d-none" data-loc="guildView_na"></h3>
                 <h3 id="guildView-title" class="mb-0"></h3>
                 <p id="guildView-tier" class="text-body-secondary mb-0"></p>
                 <p id="guildView-class" class="text-body-secondary mb-0"></p>

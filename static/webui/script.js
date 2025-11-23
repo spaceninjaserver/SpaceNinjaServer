@@ -61,6 +61,8 @@ function openWebSocket() {
             if (single.getCurrentPath() == "/webui/") {
                 single.loadRoute("/webui/inventory");
             }
+            $("#email").val("");
+            $("#password").val("");
             $(".displayname").text(data.DisplayName);
             window.accountId = data.id;
             window.authz = "accountId=" + data.id + "&nonce=" + data.Nonce + "&wsid=" + wsid;
@@ -268,9 +270,6 @@ function setLanguage(lang) {
         // Not in prelogin state?
         fetchItemList();
         updateInventory();
-        if (single.getCurrentPath().startsWith("/webui/guildView")) {
-            updateInventory();
-        }
     }
 }
 
@@ -316,8 +315,6 @@ function fetchItemList() {
     window.itemListPromise = new Promise(resolve => {
         const req = $.get("/custom/getItemLists?lang=" + window.lang);
         req.done(async data => {
-            window.allQuestKeys = data.QuestKeys;
-
             await dictPromise;
 
             document.querySelectorAll('[id^="datalist-"]').forEach(datalist => {
@@ -760,12 +757,7 @@ function updateInventory() {
     req.done(data => {
         window.itemListPromise.then(itemMap => {
             window.didInitialInventoryUpdate = true;
-            if (data.GuildId) {
-                window.guildId = data.GuildId.$oid;
-                document.getElementById("nav-guildView").classList.remove("d-none");
-            } else {
-                document.getElementById("nav-guildView").classList.add("d-none");
-            }
+            window.guildId = data?.GuildId?.$oid;
 
             const modularWeapons = [
                 "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary",
@@ -1003,11 +995,6 @@ function updateInventory() {
 
             document.getElementById("EvolutionProgress-list").innerHTML = "";
             data.EvolutionProgress?.forEach(item => {
-                const datalist = document.getElementById("datalist-EvolutionProgress");
-                const optionToRemove = datalist.querySelector(`option[data-key="${item.ItemType}"]`);
-                if (optionToRemove) {
-                    datalist.removeChild(optionToRemove);
-                }
                 const tr = document.createElement("tr");
                 tr.setAttribute("data-item-type", item.ItemType);
                 {
@@ -1134,15 +1121,6 @@ function updateInventory() {
 
             document.getElementById("FlavourItems-list").innerHTML = "";
             data.FlavourItems.forEach(item => {
-                const datalist = document.getElementById("datalist-FlavourItems");
-                if (!data.FlavourItems.some(x => x.ItemType == item.ItemType)) {
-                    if (!datalist.querySelector(`option[data-key="${item.ItemType}"]`)) {
-                        reAddToItemList(itemMap, "FlavourItems", item.ItemType);
-                    }
-                }
-                const optionToRemove = datalist.querySelector(`option[data-key="${item.ItemType}"]`);
-                optionToRemove?.remove();
-
                 const tr = document.createElement("tr");
                 tr.setAttribute("data-item-type", item.ItemType);
                 {
@@ -1159,7 +1137,6 @@ function updateInventory() {
                         a.href = "#";
                         a.onclick = function (event) {
                             event.preventDefault();
-                            reAddToItemList(itemMap, "FlavourItems", item.ItemType);
                             removeCustomization(item.ItemType);
                         };
                         a.title = loc("code_remove");
@@ -1175,11 +1152,6 @@ function updateInventory() {
             document.getElementById("WeaponSkins-list").innerHTML = "";
             data.WeaponSkins.forEach(item => {
                 if (item.ItemId.$oid.startsWith("ca70ca70ca70ca70")) return;
-                const datalist = document.getElementById("datalist-WeaponSkins");
-                const optionToRemove = datalist.querySelector(`option[data-key="${item.ItemType}"]`);
-                if (optionToRemove) {
-                    datalist.removeChild(optionToRemove);
-                }
                 const tr = document.createElement("tr");
                 {
                     const td = document.createElement("td");
@@ -1196,7 +1168,6 @@ function updateInventory() {
                         a.onclick = function (event) {
                             event.preventDefault();
                             document.getElementById("WeaponSkins-list").removeChild(tr);
-                            reAddToItemList(itemMap, "WeaponSkins", item.ItemType);
                             disposeOfGear("WeaponSkins", item.ItemId.$oid);
                         };
                         a.title = loc("code_remove");
@@ -1209,15 +1180,6 @@ function updateInventory() {
 
                 document.getElementById("WeaponSkins-list").appendChild(tr);
             });
-
-            const datalistEvolutionProgress = document.querySelectorAll("#datalist-EvolutionProgress option");
-            const formEvolutionProgress = document.querySelector('form[onsubmit*="doAcquireEvolution()"]');
-
-            if (datalistEvolutionProgress.length === 0) {
-                formEvolutionProgress.classList.add("disabled");
-                formEvolutionProgress.querySelector("input").disabled = true;
-                formEvolutionProgress.querySelector("button").disabled = true;
-            }
 
             if (data.CrewShipHarnesses?.length) {
                 window.plexus = {
@@ -1262,25 +1224,11 @@ function updateInventory() {
 
             // Populate quests route
             document.getElementById("QuestKeys-list").innerHTML = "";
-            window.allQuestKeys.forEach(questKey => {
-                if (!data.QuestKeys.some(x => x.ItemType == questKey.uniqueName)) {
-                    const datalist = document.getElementById("datalist-QuestKeys");
-                    if (!datalist.querySelector(`option[data-key="${questKey.uniqueName}"]`)) {
-                        reAddToItemList(itemMap, "QuestKeys", questKey.uniqueName);
-                    }
-                }
-            });
             data.QuestKeys.forEach(item => {
                 const tr = document.createElement("tr");
                 tr.setAttribute("data-item-type", item.ItemType);
                 const run = item.Progress[0]?.c ?? 0;
                 const stage = run == 0 ? item.Progress.length : item.Progress.map(p => p.c ?? 0).lastIndexOf(run);
-
-                const datalist = document.getElementById("datalist-QuestKeys");
-                const optionToRemove = datalist.querySelector(`option[data-key="${item.ItemType}"]`);
-                if (optionToRemove) {
-                    datalist.removeChild(optionToRemove);
-                }
 
                 {
                     const td = document.createElement("td");
@@ -1368,7 +1316,6 @@ function updateInventory() {
                         a.href = "#";
                         a.onclick = function (event) {
                             event.preventDefault();
-                            reAddToItemList(itemMap, "QuestKeys", item.ItemType);
                             debounce(doQuestUpdate, "deleteKey", item.ItemType);
                         };
                         a.title = loc("code_remove");
@@ -1379,22 +1326,6 @@ function updateInventory() {
                 }
                 document.getElementById("QuestKeys-list").appendChild(tr);
             });
-
-            const datalistQuestKeys = document.querySelectorAll("#datalist-QuestKeys option");
-            const formQuestKeys = document.querySelector("form[onsubmit*=\"doAcquireEquipment('QuestKeys')\"]");
-            const giveAllQuestButton = document.querySelector("button[onclick*=\"doBulkQuestUpdate('giveAll')\"]");
-
-            if (datalistQuestKeys.length === 0) {
-                formQuestKeys.classList.add("disabled");
-                formQuestKeys.querySelector("input").disabled = true;
-                formQuestKeys.querySelector("button").disabled = true;
-                giveAllQuestButton.disabled = true;
-            } else {
-                formQuestKeys.classList.remove("disabled");
-                formQuestKeys.querySelector("input").disabled = false;
-                formQuestKeys.querySelector("button").disabled = false;
-                giveAllQuestButton.disabled = false;
-            }
 
             // Populate mods route
             document.getElementById("riven-list").innerHTML = "";
@@ -1854,6 +1785,7 @@ function updateInventory() {
                 guildReq.done(guildData => {
                     window.itemListPromise.then(itemMap => {
                         document.getElementById("guildView-loading").classList.add("d-none");
+                        $("#guild-route > .row").removeClass("d-none");
 
                         document.getElementById("guildView-title").textContent = guildData.Name;
                         document.getElementById("guildView-tier").textContent = loc("guildView_tierDisplay")
@@ -1920,11 +1852,6 @@ function updateInventory() {
                         document.getElementById("TechProjects-list").innerHTML = "";
                         guildData.TechProjects ??= [];
                         guildData.TechProjects.forEach(item => {
-                            const datalist = document.getElementById("datalist-TechProjects");
-                            const optionToRemove = datalist.querySelector(`option[data-key="${item.ItemType}"]`);
-                            if (optionToRemove) {
-                                datalist.removeChild(optionToRemove);
-                            }
                             const tr = document.createElement("tr");
                             tr.setAttribute("data-item-type", item.ItemType);
                             {
@@ -1975,7 +1902,6 @@ function updateInventory() {
                                     a.href = "#";
                                     a.onclick = function (event) {
                                         event.preventDefault();
-                                        reAddToItemList(itemMap, "TechProjects", item.ItemType);
                                         debounce(removeGuildTechProject, item.ItemType);
                                     };
                                     a.title = loc("code_remove");
@@ -1992,16 +1918,6 @@ function updateInventory() {
                         ["VaultDecoRecipes", "VaultMiscItems", "VaultShipDecorations"].forEach(vaultKey => {
                             document.getElementById(vaultKey + "-list").innerHTML = "";
                             (guildData[vaultKey] ??= []).forEach(item => {
-                                if (vaultKey == "VaultDecoRecipes") {
-                                    const datalist = document.getElementById("datalist-VaultDecoRecipes");
-                                    const optionToRemove = datalist.querySelector(
-                                        `option[data-key="${item.ItemType}"]`
-                                    );
-                                    if (optionToRemove) {
-                                        datalist.removeChild(optionToRemove);
-                                    }
-                                }
-
                                 const tr = document.createElement("tr");
                                 tr.setAttribute("data-item-type", item.ItemType);
                                 {
@@ -2025,9 +1941,6 @@ function updateInventory() {
                                         a.title = loc("code_remove");
                                         a.onclick = e => {
                                             e.preventDefault();
-                                            if (vaultKey == "VaultDecoRecipes") {
-                                                reAddToItemList(itemMap, vaultKey, item.ItemType);
-                                            }
                                             removeVaultItem(vaultKey, item.ItemType, item.ItemCount * -1);
                                         };
                                         a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`;
@@ -2169,7 +2082,8 @@ function updateInventory() {
                 });
 
                 guildReq.fail(() => {
-                    single.loadRoute("/webui/inventory");
+                    document.getElementById("guildView-loading").classList.add("d-none");
+                    document.getElementById("guildView-na").classList.remove("d-none");
                 });
             }
 
@@ -2252,9 +2166,13 @@ function doAcquireEquipment(category) {
                 }
             ])
         });
-        req.done(() => {
+        req.done(didAnything => {
             document.getElementById("acquire-type-" + category).value = "";
-            updateInventory();
+            if (didAnything) {
+                updateInventory();
+            } else {
+                toast(loc("code_nothingToDo"));
+            }
         });
     });
 }
@@ -2419,8 +2337,11 @@ function doAcquireEvolution() {
         $("#acquire-type-EvolutionProgress").addClass("is-invalid").focus();
         return;
     }
-
-    setEvolutionProgress([{ ItemType: uniqueName, Rank: permanentEvolutionWeapons.has(uniqueName) ? 0 : 1 }]);
+    if (!document.querySelector("#EvolutionProgress-list [data-item-type='" + uniqueName + "']")) {
+        setEvolutionProgress([{ ItemType: uniqueName, Rank: permanentEvolutionWeapons.has(uniqueName) ? 0 : 1 }]);
+    } else {
+        toast(loc("code_nothingToDo"));
+    }
 }
 
 $(document).on("input", "input", function () {
@@ -2747,10 +2668,14 @@ function addMissingEvolutionProgress() {
     const requests = [];
     document.querySelectorAll("#datalist-EvolutionProgress option").forEach(elm => {
         const uniqueName = elm.getAttribute("data-key");
-        requests.push({ ItemType: uniqueName, Rank: permanentEvolutionWeapons.has(uniqueName) ? 0 : 1 });
+        if (!document.querySelector("#EvolutionProgress-list [data-item-type='" + uniqueName + "']")) {
+            requests.push({ ItemType: uniqueName, Rank: permanentEvolutionWeapons.has(uniqueName) ? 0 : 1 });
+        }
     });
-    if (requests.length != 0 && window.confirm(loc("code_addItemsConfirm").split("|COUNT|").join(requests.length))) {
-        return setEvolutionProgress(requests);
+    if (requests.length == 0) {
+        toast(loc("code_nothingToDo"));
+    } else if (window.confirm(loc("code_addItemsConfirm").split("|COUNT|").join(requests.length))) {
+        setEvolutionProgress(requests);
     }
 }
 
@@ -2770,7 +2695,9 @@ function maxRankAllEvolutions() {
             });
 
             if (Object.keys(requests).length > 0) {
-                return setEvolutionProgress(requests);
+                return setEvolutionProgress(requests).then(() => {
+                    toast(loc("code_succRankUp"));
+                });
             }
 
             toast(loc("code_noEquipmentToRankUp"));
@@ -3572,6 +3499,7 @@ single.getRoute("#detailedView-route").on("beforeload", function () {
 
 single.getRoute("#guild-route").on("beforeload", function () {
     document.getElementById("guildView-loading").classList.remove("d-none");
+    document.getElementById("guildView-na").classList.add("d-none");
     document.getElementById("guildView-title").textContent = "";
     document.getElementById("guildView-tier").textContent = "";
     document.getElementById("guildView-class").textContent = "";
@@ -3597,6 +3525,7 @@ single.getRoute("#guild-route").on("beforeload", function () {
     document.querySelectorAll("#guild-actions button").forEach(btn => {
         btn.disabled = true;
     });
+    $("#guild-route > .row").addClass("d-none");
     if (window.didInitialInventoryUpdate) {
         updateInventory();
     }
@@ -3686,23 +3615,17 @@ function doAddCurrency(currency) {
     });
 }
 
-function reAddToItemList(itemMap, datalist, itemType) {
-    const item = itemMap[itemType];
-    if (!item?.alwaysAvailable) {
-        const option = document.createElement("option");
-        option.setAttribute("data-key", itemType);
-        option.value = item?.name ?? itemType;
-        document.getElementById("datalist-" + datalist).appendChild(option);
-    }
-}
-
 function doQuestUpdate(operation, itemType) {
     revalidateAuthz().then(() => {
         $.post({
             url: "/custom/manageQuests?" + window.authz + "&operation=" + operation + "&itemType=" + itemType,
             contentType: "application/json"
-        }).then(function () {
-            updateInventory();
+        }).then(function (didAnything) {
+            if (didAnything) {
+                updateInventory();
+            } else {
+                toast(loc("code_nothingToDo"));
+            }
         });
     });
 }
@@ -3712,8 +3635,12 @@ function doBulkQuestUpdate(operation) {
         $.post({
             url: "/custom/manageQuests?" + window.authz + "&operation=" + operation,
             contentType: "application/json"
-        }).then(function () {
-            updateInventory();
+        }).then(function (didAnything) {
+            if (didAnything) {
+                updateInventory();
+            } else {
+                toast(loc("code_nothingToDo"));
+            }
         });
     });
 }
