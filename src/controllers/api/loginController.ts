@@ -153,7 +153,7 @@ const createLoginResponse = (
         resp.Groups = [];
     }
     if (version_compare(buildLabel, "2021.04.13.19.58") >= 0) {
-        resp.DTLS = 0; // bit 0 enables DTLS. if enabled, additional bits can be set, e.g. bit 2 to enable logging. on live, the value is 99.
+        resp.DTLS = config.dtls ?? 0; // bit 0 enables DTLS. if enabled, additional bits can be set, e.g. bit 2 to enable logging. on live, the value is 99.
     }
     if (version_compare(buildLabel, "2022.04.29.12.53") >= 0) {
         resp.ClientType = account.ClientType;

@@ -12,6 +12,7 @@
   "ircAddress": null,
   "hubAddress": null,
   "nrsAddress": null,
+  "dtls": null,
   "administratorNames": [],
   "autoCreateAccount": true,
   "skipTutorial": false,

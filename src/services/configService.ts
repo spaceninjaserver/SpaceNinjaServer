@@ -19,6 +19,7 @@ export interface IConfig {
     ircAddress?: string;
     hubAddress?: string;
     nrsAddress?: string;
+    dtls?: number;
     administratorNames?: string[];
     autoCreateAccount?: boolean;
     skipTutorial?: boolean;
