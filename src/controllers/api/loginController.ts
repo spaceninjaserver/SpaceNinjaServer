@@ -182,8 +182,11 @@ const createLoginResponse = (request: Request, account: IDatabaseAccountJson, bu
         clientMod.startsWith("OpenWF Bootstrapper v") &&
         version_compare(clientMod.substring(21), "0.12.0") >= 0
     ) {
-        raw += "\t";
-        raw += JSON.stringify(getTunablesForClient((request.socket.address() as AddressInfo).address));
+        const tunables = getTunablesForClient((request.socket.address() as AddressInfo).address);
+        if (version_compare(buildLabel, "2015.05.14.16.29") < 0) {
+            tunables.irc = config.ircAddress ?? myAddress;
+        }
+        raw += "\t" + JSON.stringify(tunables);
     }
     return raw;
 };
