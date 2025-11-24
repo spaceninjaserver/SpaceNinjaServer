@@ -6,6 +6,7 @@ export interface ITunables {
     prohibit_teleport?: boolean;
     prohibit_scripts?: boolean;
     disable_websocket?: boolean;
+    motd?: string;
     token?: string;
     irc?: string;
 }

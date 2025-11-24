@@ -84,6 +84,7 @@ export interface IConfig {
         prohibitFreecam?: boolean;
         prohibitTeleport?: boolean;
         prohibitScripts?: boolean;
+        motd?: string;
     };
     dev?: {
         keepVendorsExpired?: boolean;

@@ -76,7 +76,8 @@
     "prohibitFovOverride": false,
     "prohibitFreecam": false,
     "prohibitTeleport": false,
-    "prohibitScripts": false
+    "prohibitScripts": false,
+    "motd": null
   },
   "dev": {
     "keepVendorsExpired": false
