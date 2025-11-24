@@ -14,8 +14,9 @@ export const version_compare = (a: string, b: string): number => {
         .split(".")
         .map(x => parseInt(x));
     for (let i = 0; i != a_digits.length; ++i) {
-        if (a_digits[i] != b_digits[i]) {
-            return a_digits[i] > b_digits[i] ? 1 : -1;
+        const b_digit = b_digits[i] ?? 0;
+        if (a_digits[i] != b_digit) {
+            return a_digits[i] > b_digit ? 1 : -1;
         }
     }
     return 0;
