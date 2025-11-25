@@ -24,7 +24,9 @@ const sendAuth = isRegister => {
                 }
             })
         );
+        return true;
     }
+    return false;
 };
 
 function openWebSocket() {
@@ -84,13 +86,16 @@ function openWebSocket() {
             }
         }
         if ("nonce_updated" in msg) {
-            sendAuth();
+            if (!sendAuth()) {
+                single.loadRoute("/webui/"); // Show login screen
+            }
         }
         if ("update_inventory" in msg) {
             updateInventory();
         }
         if ("logged_out" in msg) {
             logout();
+            single.loadRoute("/webui/"); // Show login screen
         }
         if ("have_game_ws" in msg) {
             window.have_game_ws = msg.have_game_ws;

@@ -177,7 +177,8 @@ const wsOnConnect = (ws: WebSocket, req: http.IncomingMessage): void => {
                 const accountId = (ws as IWsCustomData).accountId;
                 if (accountId) {
                     (ws as IWsCustomData).accountId = undefined;
-                    await Account.updateOne(
+
+                    const stat = await Account.updateOne(
                         {
                             _id: accountId,
                             ClientType: "webui"
@@ -186,6 +187,9 @@ const wsOnConnect = (ws: WebSocket, req: http.IncomingMessage): void => {
                             Nonce: 0
                         }
                     );
+                    if (stat.modifiedCount) {
+                        handleNonceInvalidation(accountId);
+                    }
                 }
             }
             if (data.sync_inventory) {
