@@ -309,7 +309,9 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         "Staff",
         "Moderator",
         "Partner",
-        "Counselor"
+        "Counselor",
+        "Harvestable",
+        "DeathSquadable"
     ] as const) {
         if (client[key] !== undefined) {
             db[key] = client[key];
