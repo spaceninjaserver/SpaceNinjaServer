@@ -1,4 +1,4 @@
-import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest } from "../../services/loginService.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { logger } from "../../utils/logger.ts";
 import type { RequestHandler } from "express";
@@ -22,7 +22,8 @@ export const startRecipeController: RequestHandler = async (req, res) => {
     const startRecipeRequest = getJSONfromString<IStartRecipeRequest>(String(req.body));
     logger.debug("StartRecipe Request", { startRecipeRequest });
 
-    const accountId = await getAccountIdForRequest(req);
+    const account = await getAccountForRequest(req);
+    const accountId = account._id.toString();
 
     let recipeName = startRecipeRequest.RecipeName;
     if (req.query.recipeName) recipeName = String(req.query.recipeName); // U8
@@ -77,7 +78,14 @@ export const startRecipeController: RequestHandler = async (req, res) => {
 
     let inventoryChanges: IInventoryChanges | undefined;
     if (recipe.secretIngredientAction == "SIA_CREATE_KUBROW") {
-        inventoryChanges = addKubrowPet(inventory, getRandomElement(recipe.secretIngredients!)!.ItemType);
+        inventoryChanges = addKubrowPet(
+            inventory,
+            getRandomElement(recipe.secretIngredients!)!.ItemType,
+            undefined,
+            false,
+            {},
+            account.BuildLabel
+        );
         pr.KubrowPet = new Types.ObjectId(fromOid(inventoryChanges.KubrowPets![0].ItemId));
     } else if (recipe.secretIngredientAction == "SIA_DISTILL_PRINT") {
         pr.KubrowPet = new Types.ObjectId(startRecipeRequest.Ids[recipe.ingredients.length]);

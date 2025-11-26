@@ -15,6 +15,7 @@ import type { ICountedStoreItem } from "warframe-public-export-plus";
 import type { IEquipmentClient, IEquipmentDatabase, ITraits } from "../equipmentTypes.ts";
 import type { ILoadoutConfigClientLegacy, ILoadOutPresets } from "../saveLoadoutTypes.ts";
 import type { CalendarSeasonType } from "../worldStateTypes.ts";
+import type { SlotNames } from "../purchaseTypes.ts";
 
 export type InventoryDatabaseEquipment = {
     [_ in TEquipmentKey]: IEquipmentDatabase[];
@@ -259,7 +260,11 @@ export type InventoryClientEquipment = {
     [_ in TEquipmentKey]: IEquipmentClient[];
 };
 
-export interface IInventoryClient extends IDailyAffiliations, InventoryClientEquipment {
+export type InventorySlots = {
+    [_ in SlotNames]: ISlots;
+};
+
+export interface IInventoryClient extends IDailyAffiliations, InventoryClientEquipment, InventorySlots {
     AdultOperatorLoadOuts: IOperatorConfigClient[];
     OperatorLoadOuts: IOperatorConfigClient[];
     KahlLoadOuts: IOperatorConfigClient[];
@@ -275,18 +280,6 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     FusionPoints: number;
     CrewShipFusionPoints: number; //Dirac (pre-rework Railjack)
     PrimeTokens: number;
-    SuitBin: ISlots;
-    WeaponBin: ISlots;
-    SentinelBin: ISlots;
-    SpaceSuitBin: ISlots;
-    SpaceWeaponBin: ISlots;
-    PvpBonusLoadoutBin: ISlots;
-    PveBonusLoadoutBin: ISlots;
-    RandomModBin: ISlots;
-    MechBin: ISlots;
-    CrewMemberBin: ISlots;
-    OperatorAmpBin: ISlots;
-    CrewShipSalvageBin: ISlots;
     TradesRemaining: number;
     DailyFocus: number;
     GiftsRemaining: number;
@@ -584,7 +577,8 @@ export enum InventorySlot {
     AMPS = "OperatorAmpBin",
     RJ_COMPONENT_AND_ARMAMENTS = "CrewShipSalvageBin",
     CREWMEMBERS = "CrewMemberBin",
-    RIVENS = "RandomModBin"
+    RIVENS = "RandomModBin",
+    PETS = "PetBin"
 }
 
 export interface ISlots {

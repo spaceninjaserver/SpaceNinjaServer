@@ -500,7 +500,8 @@ const slotPurchaseNameToSlotName: Record<string, { name: SlotNames; purchaseQuan
     RandomModSlotItem: { name: "RandomModBin", purchaseQuantity: 3 },
     TwoCrewShipSalvageSlotItem: { name: "CrewShipSalvageBin", purchaseQuantity: 2 },
     CrewMemberSlotItem: { name: "CrewMemberBin", purchaseQuantity: 1 },
-    PvPLoadoutSlotItem: { name: "PvpBonusLoadoutBin", purchaseQuantity: 1 }
+    PvPLoadoutSlotItem: { name: "PvpBonusLoadoutBin", purchaseQuantity: 1 },
+    KubrowSlotItem: { name: "PetBin", purchaseQuantity: 1 }
 };
 
 // // extra = everything above the base +2 slots (depending on slot type)

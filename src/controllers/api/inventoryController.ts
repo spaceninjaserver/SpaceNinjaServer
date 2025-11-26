@@ -276,6 +276,10 @@ export const inventoryController: RequestHandler = async (request, response) => 
         }
     }
     inventory.LastInventorySync = new Types.ObjectId();
+
+    if (inventory.QuestKeys.some(x => x.ItemType.endsWith("KubrowQuestKeyChain") && x.Completed)) {
+        inventory.KubrowPets.forEach(item => item.Details && (item.Details.HasCollar = true));
+    }
     await inventory.save();
 
     response.json(

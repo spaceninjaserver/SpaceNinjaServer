@@ -1527,6 +1527,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         CrewShipSalvageBin: { type: slotsBinSchema, default: { Slots: 8 } },
         MechBin: { type: slotsBinSchema, default: { Slots: 4 } },
         CrewMemberBin: { type: slotsBinSchema, default: { Slots: 3 } },
+        PetBin: { type: slotsBinSchema, default: { Slots: 2 } },
 
         ...equipmentFields,
 

@@ -52,6 +52,11 @@ export const inventorySlotsController: RequestHandler = async (req, res) => {
             amount = 3;
             break;
 
+        case InventorySlot.PETS:
+            price = 10;
+            amount = 1;
+            break;
+
         default:
             exhaustive(body.Bin);
             throw new Error(`unexpected slot purchase of type ${body.Bin as string}`);

@@ -341,6 +341,7 @@ apiRouter.post("/saveSettings.php", saveSettingsController);
 apiRouter.post("/saveVaultAutoContribute.php", saveVaultAutoContributeController);
 apiRouter.post("/sell.php", sellController);
 apiRouter.post("/sendMsgToInBox.php", sendMsgToInBoxController);
+apiRouter.post("/sendPetToStasis.php", retrievePetFromStasisController);
 apiRouter.post("/setDojoComponentColors.php", setDojoComponentColorsController);
 apiRouter.post("/setDojoComponentMessage.php", setDojoComponentMessageController);
 apiRouter.post("/setDojoComponentSettings.php", setDojoComponentSettingsController);

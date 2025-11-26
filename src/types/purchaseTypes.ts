@@ -134,7 +134,8 @@ export const slotNames = [
     "OperatorAmpBin",
     "RandomModBin",
     "CrewShipSalvageBin",
-    "CrewMemberBin"
+    "CrewMemberBin",
+    "PetBin"
 ] as const;
 
 export type SlotNames = (typeof slotNames)[number];

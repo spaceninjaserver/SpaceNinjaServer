@@ -68,7 +68,8 @@ import {
     kubrowDetails,
     kubrowFurPatternsWeights,
     kubrowWeights,
-    toOid
+    toOid,
+    version_compare
 } from "../helpers/inventoryHelpers.ts";
 import { addQuestKey, completeQuest } from "./questService.ts";
 import { handleBundleAcqusition } from "./purchaseService.ts";
@@ -353,7 +354,8 @@ export const addItem = async (
     premiumPurchase: boolean = false,
     seed?: bigint,
     targetFingerprint?: string,
-    exactQuantity: boolean = false
+    exactQuantity: boolean = false,
+    buildLabel?: string
 ): Promise<IInventoryChanges> => {
     // Bundles are technically StoreItems but a) they don't have a normal counterpart, and b) they are used in non-StoreItem contexts, e.g. email attachments.
     if (typeName in ExportBundles) {
@@ -873,7 +875,7 @@ export const addItem = async (
                                     `unexpected acquisition quantity of KubrowPet: got ${quantity}, expected 1`
                                 );
                             }
-                            return addKubrowPet(inventory, typeName, undefined, premiumPurchase);
+                            return addKubrowPet(inventory, typeName, undefined, premiumPurchase, {}, buildLabel);
                         }
                     } else if (typeName.startsWith("/Lotus/Types/Game/CrewShip/CrewMember/")) {
                         if (quantity != 1) {
@@ -1213,9 +1215,17 @@ export const addKubrowPet = (
     kubrowPetName: string,
     details?: IKubrowPetDetailsDatabase,
     premiumPurchase: boolean = false,
-    inventoryChanges: IInventoryChanges = {}
+    inventoryChanges: IInventoryChanges = {},
+    buildLabel?: string
 ): IInventoryChanges => {
-    combineInventoryChanges(inventoryChanges, occupySlot(inventory, InventorySlot.SENTINELS, premiumPurchase));
+    const isPreU28 = buildLabel && version_compare(buildLabel, "2020.06.12.16.46") < 0;
+    const isPreU26 = buildLabel && version_compare(buildLabel, "2019.10.31.22.42") < 0;
+    const questCompleted = inventory.QuestKeys.some(x => x.ItemType.endsWith("KubrowQuestKeyChain") && x.Completed);
+
+    combineInventoryChanges(
+        inventoryChanges,
+        occupySlot(inventory, isPreU28 ? InventorySlot.PETS : InventorySlot.SENTINELS, premiumPurchase)
+    );
 
     // TODO: When incubating, this should only be given when claiming the recipe.
     const kubrowPet = ExportSentinels[kubrowPetName] as ISentinel | undefined;
@@ -1283,8 +1293,8 @@ export const addKubrowPet = (
         details = {
             Name: "",
             IsPuppy: !premiumPurchase,
-            HasCollar: true,
-            PrintsRemaining: isCatbrow ? 3 : 2,
+            HasCollar: isCatbrow || questCompleted,
+            PrintsRemaining: !isPreU26 && isCatbrow ? 3 : 2,
             Status: premiumPurchase ? Status.StatusStasis : Status.StatusIncubating,
             HatchDate: premiumPurchase ? new Date() : new Date(Date.now() + 10 * unixTimesInMs.hour), // On live, this seems to be somewhat randomised so that the pet hatches 9~11 hours after start.
             IsMale: !!getRandomInt(0, 1),
