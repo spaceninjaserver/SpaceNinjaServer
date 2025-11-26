@@ -4,7 +4,13 @@ import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { ISyndicateSacrifice } from "warframe-public-export-plus";
 import { ExportSyndicates } from "warframe-public-export-plus";
 import { handleStoreItemAcquisition } from "../../services/purchaseService.ts";
-import { addMiscItem, combineInventoryChanges, getInventory, updateCurrency } from "../../services/inventoryService.ts";
+import {
+    addItem,
+    addMiscItem,
+    combineInventoryChanges,
+    getInventory,
+    updateCurrency
+} from "../../services/inventoryService.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import { toStoreItem } from "../../services/itemDataService.ts";
 import { logger } from "../../utils/logger.ts";
@@ -57,7 +63,10 @@ export const syndicateSacrificeController: RequestHandler = async (request, resp
             updateCurrency(inventory, sacrifice.credits, false, res.InventoryChanges);
 
             for (const item of sacrifice.items) {
-                addMiscItem(inventory, item.ItemType, item.ItemCount * -1, res.InventoryChanges);
+                combineInventoryChanges(
+                    res.InventoryChanges,
+                    await addItem(inventory, item.ItemType, item.ItemCount * -1)
+                );
             }
         }
 
