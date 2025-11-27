@@ -170,7 +170,7 @@ function renameAccount(taken_name) {
     );
     if (newname) {
         revalidateAuthz().then(() => {
-            fetch("/custom/renameAccount?" + window.authz + "&newname=" + newname).then(res => {
+            fetch("/custom/renameAccount?" + window.authz + "&newname=" + encodeURIComponent(newname)).then(res => {
                 if (res.status == 409) {
                     renameAccount(newname);
                 } else {
