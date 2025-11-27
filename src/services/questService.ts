@@ -223,9 +223,10 @@ export const completeQuest = async (
 
 const getQuestCompletionItems = (questKey: string): ITypeCount[] | undefined => {
     if (questKey in questCompletionItems) {
+        logger.debug(`using questCompletionItems for ${questKey}`);
         return questCompletionItems[questKey as keyof typeof questCompletionItems];
     }
-    logger.warn(`Quest ${questKey} not found in questCompletionItems`);
+    logger.debug(`using PE+ reward data for ${questKey}`);
 
     const items: ITypeCount[] = [];
     const meta = ExportKeys[questKey];
