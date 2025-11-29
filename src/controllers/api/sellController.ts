@@ -19,6 +19,7 @@ import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/inventoryModel.ts";
 import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 import { parseFusionTreasure } from "../../helpers/inventoryHelpers.ts";
+import { logger } from "../../utils/logger.ts";
 
 export const sellController: RequestHandler = async (req, res) => {
     const payload = JSON.parse(String(req.body)) as ISellRequest;
@@ -53,44 +54,44 @@ export const sellController: RequestHandler = async (req, res) => {
     if (requiredFields.has("Upgrades")) {
         requiredFields.add("RawUpgrades");
     }
-    if (payload.Items.Suits) {
+    if ("Suits" in payload.Items) {
         requiredFields.add(InventorySlot.SUITS);
     }
-    if (payload.Items.LongGuns || payload.Items.Pistols || payload.Items.Melee) {
+    if ("LongGuns" in payload.Items || "Pistols" in payload.Items || "Melee" in payload.Items) {
         requiredFields.add(InventorySlot.WEAPONS);
     }
-    if (payload.Items.SpaceSuits) {
+    if ("SpaceSuits" in payload.Items) {
         requiredFields.add(InventorySlot.SPACESUITS);
     }
-    if (payload.Items.SpaceGuns || payload.Items.SpaceMelee) {
+    if ("SpaceGuns" in payload.Items || "SpaceMelee" in payload.Items) {
         requiredFields.add(InventorySlot.SPACEWEAPONS);
     }
-    if (payload.Items.MechSuits) {
+    if ("MechSuits" in payload.Items) {
         requiredFields.add(InventorySlot.MECHSUITS);
     }
-    if (payload.Items.Sentinels || payload.Items.SentinelWeapons || payload.Items.MoaPets) {
+    if ("Sentinels" in payload.Items || "SentinelWeapons" in payload.Items || "MoaPets" in payload.Items) {
         requiredFields.add(InventorySlot.SENTINELS);
     }
-    if (payload.Items.OperatorAmps) {
+    if ("OperatorAmps" in payload.Items) {
         requiredFields.add(InventorySlot.AMPS);
     }
-    if (payload.Items.Hoverboards) {
+    if ("Hoverboards" in payload.Items) {
         requiredFields.add(InventorySlot.SPACESUITS);
     }
-    if (payload.Items.CrewMembers) {
+    if ("CrewMembers" in payload.Items) {
         requiredFields.add(InventorySlot.CREWMEMBERS);
     }
-    if (payload.Items.CrewShipWeapons || payload.Items.CrewShipWeaponSkins) {
+    if ("CrewShipWeapons" in payload.Items || "CrewShipWeaponSkins" in payload.Items) {
         requiredFields.add(InventorySlot.RJ_COMPONENT_AND_ARMAMENTS);
         requiredFields.add("CrewShipRawSalvage");
-        if (payload.Items.CrewShipWeapons) {
+        if ("CrewShipWeapons" in payload.Items) {
             requiredFields.add("CrewShipSalvagedWeapons");
         }
-        if (payload.Items.CrewShipWeaponSkins) {
+        if ("CrewShipWeaponSkins" in payload.Items) {
             requiredFields.add("CrewShipSalvagedWeaponSkins");
         }
     }
-    if (payload.Items.WeaponSkins) {
+    if ("WeaponSkins" in payload.Items) {
         requiredFields.add("WeaponSkins");
     }
     const inventory = await getInventory(accountId, Array.from(requiredFields).join(" "));
@@ -125,203 +126,217 @@ export const sellController: RequestHandler = async (req, res) => {
     const inventoryChanges: IInventoryChanges = {};
 
     // Remove item(s)
-    if (payload.Items.Suits) {
-        payload.Items.Suits.forEach(sellItem => {
-            inventory.Suits.pull({ _id: sellItem.String });
-            freeUpSlot(inventory, InventorySlot.SUITS);
-        });
-    }
-    if (payload.Items.LongGuns) {
-        payload.Items.LongGuns.forEach(sellItem => {
-            inventory.LongGuns.pull({ _id: sellItem.String });
-            freeUpSlot(inventory, InventorySlot.WEAPONS);
-        });
-    }
-    if (payload.Items.Pistols) {
-        payload.Items.Pistols.forEach(sellItem => {
-            inventory.Pistols.pull({ _id: sellItem.String });
-            freeUpSlot(inventory, InventorySlot.WEAPONS);
-        });
-    }
-    if (payload.Items.Melee) {
-        payload.Items.Melee.forEach(sellItem => {
-            inventory.Melee.pull({ _id: sellItem.String });
-            freeUpSlot(inventory, InventorySlot.WEAPONS);
-        });
-    }
-    if (payload.Items.SpaceSuits) {
-        payload.Items.SpaceSuits.forEach(sellItem => {
-            inventory.SpaceSuits.pull({ _id: sellItem.String });
-            freeUpSlot(inventory, InventorySlot.SPACESUITS);
-        });
-    }
-    if (payload.Items.SpaceGuns) {
-        payload.Items.SpaceGuns.forEach(sellItem => {
-            inventory.SpaceGuns.pull({ _id: sellItem.String });
-            freeUpSlot(inventory, InventorySlot.SPACEWEAPONS);
-        });
-    }
-    if (payload.Items.SpaceMelee) {
-        payload.Items.SpaceMelee.forEach(sellItem => {
-            inventory.SpaceMelee.pull({ _id: sellItem.String });
-            freeUpSlot(inventory, InventorySlot.SPACEWEAPONS);
-        });
-    }
-    if (payload.Items.MechSuits) {
-        payload.Items.MechSuits.forEach(sellItem => {
-            inventory.MechSuits.pull({ _id: sellItem.String });
-            freeUpSlot(inventory, InventorySlot.MECHSUITS);
-        });
-    }
-    if (payload.Items.Sentinels) {
-        payload.Items.Sentinels.forEach(sellItem => {
-            inventory.Sentinels.pull({ _id: sellItem.String });
-            freeUpSlot(inventory, InventorySlot.SENTINELS);
-        });
-    }
-    if (payload.Items.SentinelWeapons) {
-        payload.Items.SentinelWeapons.forEach(sellItem => {
-            inventory.SentinelWeapons.pull({ _id: sellItem.String });
-            freeUpSlot(inventory, InventorySlot.SENTINELS);
-        });
-    }
-    if (payload.Items.MoaPets) {
-        payload.Items.MoaPets.forEach(sellItem => {
-            inventory.MoaPets.pull({ _id: sellItem.String });
-            freeUpSlot(inventory, InventorySlot.SENTINELS);
-        });
-    }
-    if (payload.Items.OperatorAmps) {
-        payload.Items.OperatorAmps.forEach(sellItem => {
-            inventory.OperatorAmps.pull({ _id: sellItem.String });
-            freeUpSlot(inventory, InventorySlot.AMPS);
-        });
-    }
-    if (payload.Items.Hoverboards) {
-        payload.Items.Hoverboards.forEach(sellItem => {
-            inventory.Hoverboards.pull({ _id: sellItem.String });
-            freeUpSlot(inventory, InventorySlot.SPACESUITS);
-        });
-    }
-    if (payload.Items.Drones) {
-        payload.Items.Drones.forEach(sellItem => {
-            inventory.Drones.pull({ _id: sellItem.String });
-        });
-    }
-    if (payload.Items.KubrowPetPrints) {
-        payload.Items.KubrowPetPrints.forEach(sellItem => {
-            inventory.KubrowPetPrints.pull({ _id: sellItem.String });
-        });
-    }
-    if (payload.Items.CrewMembers) {
-        payload.Items.CrewMembers.forEach(sellItem => {
-            inventory.CrewMembers.pull({ _id: sellItem.String });
-            freeUpSlot(inventory, InventorySlot.CREWMEMBERS);
-        });
-    }
-    if (payload.Items.CrewShipWeapons) {
-        payload.Items.CrewShipWeapons.forEach(sellItem => {
-            if (sellItem.String[0] == "/") {
-                addCrewShipRawSalvage(inventory, [
-                    {
-                        ItemType: sellItem.String,
-                        ItemCount: sellItem.Count * -1
+    for (const key in payload.Items) {
+        switch (key) {
+            case "Suits":
+                payload.Items.Suits.forEach(sellItem => {
+                    inventory.Suits.pull({ _id: sellItem.String });
+                    freeUpSlot(inventory, InventorySlot.SUITS);
+                });
+                break;
+            case "LongGuns":
+                payload.Items.LongGuns.forEach(sellItem => {
+                    inventory.LongGuns.pull({ _id: sellItem.String });
+                    freeUpSlot(inventory, InventorySlot.WEAPONS);
+                });
+                break;
+            case "Pistols":
+                payload.Items.Pistols.forEach(sellItem => {
+                    inventory.Pistols.pull({ _id: sellItem.String });
+                    freeUpSlot(inventory, InventorySlot.WEAPONS);
+                });
+                break;
+            case "Melee":
+                payload.Items.Melee.forEach(sellItem => {
+                    inventory.Melee.pull({ _id: sellItem.String });
+                    freeUpSlot(inventory, InventorySlot.WEAPONS);
+                });
+                break;
+            case "SpaceSuits":
+                payload.Items.SpaceSuits.forEach(sellItem => {
+                    inventory.SpaceSuits.pull({ _id: sellItem.String });
+                    freeUpSlot(inventory, InventorySlot.SPACESUITS);
+                });
+                break;
+            case "SpaceGuns":
+                payload.Items.SpaceGuns.forEach(sellItem => {
+                    inventory.SpaceGuns.pull({ _id: sellItem.String });
+                    freeUpSlot(inventory, InventorySlot.SPACEWEAPONS);
+                });
+                break;
+            case "SpaceMelee":
+                payload.Items.SpaceMelee.forEach(sellItem => {
+                    inventory.SpaceMelee.pull({ _id: sellItem.String });
+                    freeUpSlot(inventory, InventorySlot.SPACEWEAPONS);
+                });
+                break;
+            case "MechSuits":
+                payload.Items.MechSuits.forEach(sellItem => {
+                    inventory.MechSuits.pull({ _id: sellItem.String });
+                    freeUpSlot(inventory, InventorySlot.MECHSUITS);
+                });
+                break;
+            case "Sentinels":
+                payload.Items.Sentinels.forEach(sellItem => {
+                    inventory.Sentinels.pull({ _id: sellItem.String });
+                    freeUpSlot(inventory, InventorySlot.SENTINELS);
+                });
+                break;
+            case "SentinelWeapons":
+                payload.Items.SentinelWeapons.forEach(sellItem => {
+                    inventory.SentinelWeapons.pull({ _id: sellItem.String });
+                    freeUpSlot(inventory, InventorySlot.SENTINELS);
+                });
+                break;
+            case "MoaPets":
+                payload.Items.MoaPets.forEach(sellItem => {
+                    inventory.MoaPets.pull({ _id: sellItem.String });
+                    freeUpSlot(inventory, InventorySlot.SENTINELS);
+                });
+                break;
+            case "OperatorAmps":
+                payload.Items.OperatorAmps.forEach(sellItem => {
+                    inventory.OperatorAmps.pull({ _id: sellItem.String });
+                    freeUpSlot(inventory, InventorySlot.AMPS);
+                });
+                break;
+            case "Hoverboards":
+                payload.Items.Hoverboards.forEach(sellItem => {
+                    inventory.Hoverboards.pull({ _id: sellItem.String });
+                    freeUpSlot(inventory, InventorySlot.SPACESUITS);
+                });
+                break;
+            case "Drones":
+                payload.Items.Drones.forEach(sellItem => {
+                    inventory.Drones.pull({ _id: sellItem.String });
+                });
+                break;
+            case "KubrowPetPrints":
+                payload.Items.KubrowPetPrints.forEach(sellItem => {
+                    inventory.KubrowPetPrints.pull({ _id: sellItem.String });
+                });
+                break;
+            case "CrewMembers":
+                payload.Items.CrewMembers.forEach(sellItem => {
+                    inventory.CrewMembers.pull({ _id: sellItem.String });
+                    freeUpSlot(inventory, InventorySlot.CREWMEMBERS);
+                });
+                break;
+            case "CrewShipWeapons":
+                payload.Items.CrewShipWeapons.forEach(sellItem => {
+                    if (sellItem.String[0] == "/") {
+                        addCrewShipRawSalvage(inventory, [
+                            {
+                                ItemType: sellItem.String,
+                                ItemCount: sellItem.Count * -1
+                            }
+                        ]);
+                    } else {
+                        const index = inventory.CrewShipWeapons.findIndex(x => x._id.equals(sellItem.String));
+                        if (index != -1) {
+                            if (sellCurrency == "SC_Resources") {
+                                refundPartialBuildCosts(
+                                    inventory,
+                                    inventory.CrewShipWeapons[index].ItemType,
+                                    inventoryChanges
+                                );
+                            }
+                            inventory.CrewShipWeapons.splice(index, 1);
+                            freeUpSlot(inventory, InventorySlot.RJ_COMPONENT_AND_ARMAMENTS);
+                        } else {
+                            inventory.CrewShipSalvagedWeapons.pull({ _id: sellItem.String });
+                        }
                     }
-                ]);
-            } else {
-                const index = inventory.CrewShipWeapons.findIndex(x => x._id.equals(sellItem.String));
-                if (index != -1) {
-                    if (sellCurrency == "SC_Resources") {
-                        refundPartialBuildCosts(inventory, inventory.CrewShipWeapons[index].ItemType, inventoryChanges);
+                });
+                break;
+            case "CrewShipWeaponSkins":
+                payload.Items.CrewShipWeaponSkins.forEach(sellItem => {
+                    if (sellItem.String[0] == "/") {
+                        addCrewShipRawSalvage(inventory, [
+                            {
+                                ItemType: sellItem.String,
+                                ItemCount: sellItem.Count * -1
+                            }
+                        ]);
+                    } else {
+                        const index = inventory.CrewShipWeaponSkins.findIndex(x => x._id.equals(sellItem.String));
+                        if (index != -1) {
+                            if (sellCurrency == "SC_Resources") {
+                                refundPartialBuildCosts(
+                                    inventory,
+                                    inventory.CrewShipWeaponSkins[index].ItemType,
+                                    inventoryChanges
+                                );
+                            }
+                            inventory.CrewShipWeaponSkins.splice(index, 1);
+                            freeUpSlot(inventory, InventorySlot.RJ_COMPONENT_AND_ARMAMENTS);
+                        } else {
+                            inventory.CrewShipSalvagedWeaponSkins.pull({ _id: sellItem.String });
+                        }
                     }
-                    inventory.CrewShipWeapons.splice(index, 1);
-                    freeUpSlot(inventory, InventorySlot.RJ_COMPONENT_AND_ARMAMENTS);
-                } else {
-                    inventory.CrewShipSalvagedWeapons.pull({ _id: sellItem.String });
-                }
-            }
-        });
-    }
-    if (payload.Items.CrewShipWeaponSkins) {
-        payload.Items.CrewShipWeaponSkins.forEach(sellItem => {
-            if (sellItem.String[0] == "/") {
-                addCrewShipRawSalvage(inventory, [
-                    {
-                        ItemType: sellItem.String,
-                        ItemCount: sellItem.Count * -1
-                    }
-                ]);
-            } else {
-                const index = inventory.CrewShipWeaponSkins.findIndex(x => x._id.equals(sellItem.String));
-                if (index != -1) {
-                    if (sellCurrency == "SC_Resources") {
-                        refundPartialBuildCosts(
-                            inventory,
-                            inventory.CrewShipWeaponSkins[index].ItemType,
-                            inventoryChanges
-                        );
-                    }
-                    inventory.CrewShipWeaponSkins.splice(index, 1);
-                    freeUpSlot(inventory, InventorySlot.RJ_COMPONENT_AND_ARMAMENTS);
-                } else {
-                    inventory.CrewShipSalvagedWeaponSkins.pull({ _id: sellItem.String });
-                }
-            }
-        });
-    }
-    if (payload.Items.Consumables) {
-        const consumablesChanges = [];
-        for (const sellItem of payload.Items.Consumables) {
-            consumablesChanges.push({
-                ItemType: sellItem.String,
-                ItemCount: sellItem.Count * -1
-            });
-        }
-        addConsumables(inventory, consumablesChanges);
-    }
-    if (payload.Items.Recipes) {
-        const recipeChanges = [];
-        for (const sellItem of payload.Items.Recipes) {
-            recipeChanges.push({
-                ItemType: sellItem.String,
-                ItemCount: sellItem.Count * -1
-            });
-        }
-        addRecipes(inventory, recipeChanges);
-    }
-    if (payload.Items.Upgrades) {
-        payload.Items.Upgrades.forEach(sellItem => {
-            if (sellItem.Count == 0) {
-                inventory.Upgrades.pull({ _id: sellItem.String });
-            } else {
-                addMods(inventory, [
-                    {
-                        ItemType: sellItem.String,
-                        ItemCount: sellItem.Count * -1
-                    }
-                ]);
-            }
-        });
-    }
-    if (payload.Items.MiscItems) {
-        payload.Items.MiscItems.forEach(sellItem => {
-            addMiscItems(inventory, [
+                });
+                break;
+            case "Consumables":
                 {
-                    ItemType: sellItem.String,
-                    ItemCount: sellItem.Count * -1
+                    const consumablesChanges = [];
+                    for (const sellItem of payload.Items.Consumables) {
+                        consumablesChanges.push({
+                            ItemType: sellItem.String,
+                            ItemCount: sellItem.Count * -1
+                        });
+                    }
+                    addConsumables(inventory, consumablesChanges);
                 }
-            ]);
-        });
-    }
-    if (payload.Items.FusionTreasures) {
-        payload.Items.FusionTreasures.forEach(sellItem => {
-            addFusionTreasures(inventory, [parseFusionTreasure(sellItem.String, sellItem.Count * -1)]);
-        });
-    }
-    if (payload.Items.WeaponSkins) {
-        payload.Items.WeaponSkins.forEach(sellItem => {
-            inventory.WeaponSkins.pull({ _id: sellItem.String });
-        });
+                break;
+            case "Recipes":
+                {
+                    const recipeChanges = [];
+                    for (const sellItem of payload.Items.Recipes) {
+                        recipeChanges.push({
+                            ItemType: sellItem.String,
+                            ItemCount: sellItem.Count * -1
+                        });
+                    }
+                    addRecipes(inventory, recipeChanges);
+                }
+                break;
+            case "Upgrades":
+                payload.Items.Upgrades.forEach(sellItem => {
+                    if (sellItem.Count == 0) {
+                        inventory.Upgrades.pull({ _id: sellItem.String });
+                    } else {
+                        addMods(inventory, [
+                            {
+                                ItemType: sellItem.String,
+                                ItemCount: sellItem.Count * -1
+                            }
+                        ]);
+                    }
+                });
+                break;
+            case "MiscItems":
+                payload.Items.MiscItems.forEach(sellItem => {
+                    addMiscItems(inventory, [
+                        {
+                            ItemType: sellItem.String,
+                            ItemCount: sellItem.Count * -1
+                        }
+                    ]);
+                });
+                break;
+            case "FusionTreasures":
+                payload.Items.FusionTreasures.forEach(sellItem => {
+                    addFusionTreasures(inventory, [parseFusionTreasure(sellItem.String, sellItem.Count * -1)]);
+                });
+                break;
+            case "WeaponSkins": // SNS specific field, only used by webui
+                payload.Items.WeaponSkins.forEach(sellItem => {
+                    inventory.WeaponSkins.pull({ _id: sellItem.String });
+                });
+                break;
+            default:
+                logger.warn(`unhandled sell category: ${key}`);
+        }
     }
 
     await inventory.save();
@@ -332,32 +347,7 @@ export const sellController: RequestHandler = async (req, res) => {
 };
 
 interface ISellRequest {
-    Items: {
-        Suits?: ISellItem[];
-        LongGuns?: ISellItem[];
-        Pistols?: ISellItem[];
-        Melee?: ISellItem[];
-        Consumables?: ISellItem[];
-        Recipes?: ISellItem[];
-        Upgrades?: ISellItem[];
-        MiscItems?: ISellItem[];
-        SpaceSuits?: ISellItem[];
-        SpaceGuns?: ISellItem[];
-        SpaceMelee?: ISellItem[];
-        MechSuits?: ISellItem[];
-        Sentinels?: ISellItem[];
-        SentinelWeapons?: ISellItem[];
-        MoaPets?: ISellItem[];
-        OperatorAmps?: ISellItem[];
-        Hoverboards?: ISellItem[];
-        Drones?: ISellItem[];
-        KubrowPetPrints?: ISellItem[];
-        CrewMembers?: ISellItem[];
-        CrewShipWeapons?: ISellItem[];
-        CrewShipWeaponSkins?: ISellItem[];
-        FusionTreasures?: ISellItem[];
-        WeaponSkins?: ISellItem[]; // SNS specific field
-    };
+    Items: Record<string, ISellItem[]>;
     SellPrice: number;
     SellCurrency?:
         | "SC_RegularCredits"
