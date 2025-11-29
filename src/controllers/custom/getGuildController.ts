@@ -6,7 +6,7 @@ import type { IGuildMemberClient } from "../../types/guildTypes.ts";
 
 export const getGuildController: RequestHandler = async (req, res) => {
     const guildId = req.query.guildId;
-    if (guildId) {
+    if (guildId && guildId.length == 24) {
         const guild = await Guild.findById(guildId);
         if (guild) {
             const guildMembers = await GuildMember.find({ guildId: guild._id });
@@ -33,8 +33,8 @@ export const getGuildController: RequestHandler = async (req, res) => {
                 ...guild.toObject(),
                 Members: members
             });
-        } else {
-            res.status(400).end();
+            return;
         }
     }
+    res.status(400).end();
 };
