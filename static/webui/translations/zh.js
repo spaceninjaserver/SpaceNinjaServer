@@ -10,6 +10,7 @@ dict = {
 
     code_loginFail: `登录失败.请检查邮箱和密码.`,
     code_regFail: `注册失败.账号是否已存在？`,
+    code_genFail: `[UNTRANSLATED] I'm sorry Dave, I'm afraid I can't do that.`,
     code_changeNameConfirm: `您想将账户名称更改为?`,
     code_changeNameRetry: `|NAME| 已存在相同昵称.`,
     code_deleteAccountConfirm: `确定要删除您的账户 |DISPLAYNAME|(|EMAIL|) 吗？此操作不可撤销.`,

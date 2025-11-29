@@ -7,11 +7,13 @@ const opts = {
     toObject: { virtuals: true }
 } satisfies SchemaOptions;
 
+export const MAX_NAME_LENGTH = 24;
+
 const databaseAccountSchema = new Schema<IDatabaseAccountJson>(
     {
         email: { type: String, required: true, unique: true },
         password: { type: String, required: true },
-        DisplayName: { type: String, required: true, unique: true },
+        DisplayName: { type: String, required: true, unique: true, maxLength: MAX_NAME_LENGTH },
         CountryCode: { type: String, default: "" },
         ClientType: { type: String },
         CrossPlatformAllowed: { type: Boolean, default: true },
