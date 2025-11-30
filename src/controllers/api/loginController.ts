@@ -1,4 +1,4 @@
-import type { RequestHandler } from "express";
+import type { Request, RequestHandler } from "express";
 
 import { config, getReflexiveAddress } from "../../services/configService.ts";
 import { buildConfig } from "../../services/buildConfigService.ts";
@@ -12,7 +12,7 @@ import { handleNonceInvalidation } from "../../services/wsService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import { createMessage } from "../../services/inboxService.ts";
 import { fromStoreItem } from "../../services/itemDataService.ts";
-import { getTokenForClient } from "../../services/tunablesService.ts";
+import { getTokenForClient, getTunablesForClient } from "../../services/tunablesService.ts";
 import type { AddressInfo } from "node:net";
 
 export const loginController: RequestHandler = async (request, response) => {
@@ -32,8 +32,6 @@ export const loginController: RequestHandler = async (request, response) => {
             ? request.query.buildLabel.split(" ").join("+")
             : buildConfig.buildLabel;
 
-    const { myAddress, myUrlBase } = getReflexiveAddress(request);
-
     if (
         !account &&
         ((config.autoCreateAccount && loginRequest.ClientType != "webui") ||
@@ -52,7 +50,7 @@ export const loginController: RequestHandler = async (request, response) => {
                 LastLogin: new Date()
             });
             logger.debug("created new account");
-            response.json(createLoginResponse(myAddress, myUrlBase, newAccount, buildLabel));
+            response.send(createLoginResponse(request, newAccount, buildLabel)).end();
             return;
         } catch (error: unknown) {
             if (error instanceof Error) {
@@ -106,15 +104,13 @@ export const loginController: RequestHandler = async (request, response) => {
         await inventory.save();
     }
 
-    response.json(createLoginResponse(myAddress, myUrlBase, account.toJSON(), buildLabel));
+    response.send(createLoginResponse(request, account.toJSON(), buildLabel)).end();
 };
 
-const createLoginResponse = (
-    myAddress: string,
-    myUrlBase: string,
-    account: IDatabaseAccountJson,
-    buildLabel: string
-): ILoginResponse => {
+const createLoginResponse = (request: Request, account: IDatabaseAccountJson, buildLabel: string): string => {
+    const { myAddress, myUrlBase } = getReflexiveAddress(request);
+    const clientMod = request.query.clientMod as string | undefined;
+
     const resp: ILoginResponse = {
         id: account.id,
         DisplayName: account.DisplayName,
@@ -179,5 +175,18 @@ const createLoginResponse = (
             resp.platformCDNs = [`${myUrlBase}/`];
         }
     }
-    return resp;
+
+    let raw = JSON.stringify(resp);
+    if (
+        clientMod &&
+        clientMod.startsWith("OpenWF Bootstrapper v") &&
+        version_compare(clientMod.substring(21), "0.12.0") >= 0
+    ) {
+        const tunables = getTunablesForClient((request.socket.address() as AddressInfo).address);
+        if (version_compare(buildLabel, "2015.05.14.16.29") < 0) {
+            tunables.irc = config.ircAddress ?? myAddress;
+        }
+        raw += "\t" + JSON.stringify(tunables);
+    }
+    return raw;
 };

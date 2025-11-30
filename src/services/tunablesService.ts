@@ -37,5 +37,8 @@ export const getTunablesForClient = (clientAddress: string): ITunables => {
     if (config.tunables?.prohibitScripts) {
         tunables.prohibit_scripts = true;
     }
+    if (config.tunables?.motd) {
+        tunables.motd = config.tunables.motd;
+    }
     return tunables;
 };
