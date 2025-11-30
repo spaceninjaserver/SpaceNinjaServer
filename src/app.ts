@@ -10,6 +10,7 @@ import { cacheRouter } from "./routes/cache.ts";
 import { customRouter } from "./routes/custom.ts";
 import { dynamicController } from "./routes/dynamic.ts";
 import { payRouter } from "./routes/pay.ts";
+import { publicExportRouter } from "./routes/publicExport.ts";
 import { statsRouter } from "./routes/stats.ts";
 import { webuiRouter } from "./routes/webui.ts";
 
@@ -39,9 +40,11 @@ app.use(requestLogger);
 app.use("/api", apiRouter);
 app.use("/", cacheRouter);
 app.use("/custom", customRouter);
+app.use("/cdn", dynamicController);
 app.use("/dynamic", dynamicController);
 app.use("/:id/dynamic", dynamicController);
 app.use("/pay", payRouter);
+app.use("/PublicExport/", publicExportRouter);
 app.use("/stats", statsRouter);
 app.use("/", webuiRouter);
 

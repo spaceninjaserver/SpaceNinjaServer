@@ -343,3 +343,19 @@ export const getMaxLevelCap = (type: string): number => {
     }
     return 30;
 };
+
+export const getProductCategory = (uniqueName: string): string => {
+    if (uniqueName in ExportCustoms) {
+        return ExportCustoms[uniqueName].productCategory;
+    }
+    if (uniqueName in ExportGear) {
+        return "Consumables";
+    }
+    if (uniqueName in ExportResources) {
+        return ExportResources[uniqueName].productCategory;
+    }
+    if (uniqueName in ExportWeapons) {
+        return ExportWeapons[uniqueName].productCategory;
+    }
+    throw new Error(`don't know product category of ${uniqueName}`);
+};

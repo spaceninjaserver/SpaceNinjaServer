@@ -377,5 +377,6 @@ apiRouter.post("/updateTheme.php", updateThemeController);
 apiRouter.post("/upgrades.php", upgradesController);
 apiRouter.post("/valenceSwap.php", valenceSwapController);
 apiRouter.post("/wishlist.php", wishlistController);
+apiRouter.post("/inventory.php", inventoryController); // used by companion app
 
 export { apiRouter };

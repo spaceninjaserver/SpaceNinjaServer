@@ -10,5 +10,6 @@ dynamicController.get("/aggregateSessions.php", aggregateSessionsController);
 dynamicController.get("/getGuildAds.php", getGuildAdsController);
 dynamicController.get("/getProfileViewingData.php", getProfileViewingDataGetController);
 dynamicController.get("/worldState.php", worldStateController);
+dynamicController.post("/worldState.php", worldStateController); // used by companion app
 
 export { dynamicController };

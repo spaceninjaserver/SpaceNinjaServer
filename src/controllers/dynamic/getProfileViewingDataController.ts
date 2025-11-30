@@ -193,7 +193,8 @@ interface IGetProfileViewingDataRequest {
 }
 export const getProfileViewingDataPostController: RequestHandler = async (req, res) => {
     const payload = getJSONfromString<IGetProfileViewingDataRequest>(String(req.body));
-    const data = await getProfileViewingDataByPlayerIdImpl(payload.AccountId);
+    const playerId = req.query.playerId as string; // companion app sends a POST request should be handled like a GET request
+    const data = await getProfileViewingDataByPlayerIdImpl(playerId ? playerId : payload.AccountId);
     if (data) {
         res.json(data);
     } else {
