@@ -376,6 +376,7 @@ dict = {
     import_samples: `Échantillons :`,
     import_samples_maxFocus: `Toutes les écoles de focus au rang max`,
     import_samples_accolades: `[UNTRANSLATED] Accolades & Council Chat Access`,
+    import_samples_removeDeathMarks: `[UNTRANSLATED] Remove All Death Marks`,
     import_samples_maxStratos: `[UNTRANSLATED] Max Rank Stratos Emblem Icon`,
 
     upgrade_Equilibrium: `Ramasser de la santé donne +|VAL|% d'énergie supplémentaire. Ramasser de l'énergie donne +|VAL|% de santé supplémentaire.`,

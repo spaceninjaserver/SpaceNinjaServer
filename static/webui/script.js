@@ -4100,6 +4100,11 @@ const importSamples = {
         },
         Counselor: true
     },
+    removeDeathMarks: {
+        DeathMarks: [],
+        Harvestable: false,
+        DeathSquadable: false
+    },
     maxStratos: {
         BountyScore: 39
     }
