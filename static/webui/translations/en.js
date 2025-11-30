@@ -9,6 +9,7 @@ dict = {
 
     code_loginFail: `Login failed. Double-check the email and password.`,
     code_regFail: `Registration failed. Account already exists?`,
+    code_genFail: `I'm sorry Dave, I'm afraid I can't do that.`,
     code_changeNameConfirm: `What would you like to change your account name to?`,
     code_changeNameRetry: `|NAME| is already taken.`,
     code_deleteAccountConfirm: `Are you sure you want to delete your account |DISPLAYNAME| (|EMAIL|)? This action cannot be undone.`,

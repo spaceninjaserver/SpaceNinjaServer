@@ -171,12 +171,14 @@ function renameAccount(taken_name) {
     if (newname) {
         revalidateAuthz().then(() => {
             fetch("/custom/renameAccount?" + window.authz + "&newname=" + encodeURIComponent(newname)).then(res => {
-                if (res.status == 409) {
-                    renameAccount(newname);
-                } else {
+                if (res.status == 200) {
                     $(".displayname").text(newname);
                     updateLocElements();
                     toast(loc("code_succRelog"));
+                } else if (res.status == 409) {
+                    renameAccount(newname);
+                } else {
+                    toast(loc("code_genFail"));
                 }
             });
         });
