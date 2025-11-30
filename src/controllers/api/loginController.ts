@@ -169,9 +169,14 @@ const createLoginResponse = (request: Request, account: IDatabaseAccountJson, bu
         ).toString();
     }
     if (version_compare(buildLabel, "2023.04.25.23.40") >= 0) {
-        if (version_compare(buildLabel, "2025.08.26.09.49") >= 0) {
+        if (version_compare(buildLabel, "2025.10.14.16.10") >= 0) {
+            // U40 is when they changed this from content.warframe.com/dynamic/ to api.warframe.com/cdn/
+            resp.platformCDNs = [`${myUrlBase}/cdn/`];
+        } else if (version_compare(buildLabel, "2025.08.26.09.49") >= 0) {
+            // U39.1 is when they made dynamic/ explicit
             resp.platformCDNs = [`${myUrlBase}/dynamic/`];
         } else {
+            // Pre-39.1 implied dynamic/ for all content requests
             resp.platformCDNs = [`${myUrlBase}/`];
         }
     }

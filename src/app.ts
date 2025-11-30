@@ -40,8 +40,8 @@ app.use(requestLogger);
 app.use("/api", apiRouter);
 app.use("/", cacheRouter);
 app.use("/custom", customRouter);
-app.use("/cdn", dynamicController);
-app.use("/dynamic", dynamicController);
+app.use("/cdn", dynamicController); // Post-U40
+app.use("/dynamic", dynamicController); // Pre-U40
 app.use("/:id/dynamic", dynamicController);
 app.use("/pay", payRouter);
 app.use("/PublicExport/", publicExportRouter);
