@@ -3053,7 +3053,7 @@ function doAcquireRiven() {
                     if (rawUpgrade.ItemType === uniqueName) {
                         // Add fingerprint to riven
                         $.post({
-                            url: "/api/artifacts.php?" + window.authz,
+                            url: "/api/artifacts.php?" + window.authz + "&ignoreBuildLabel=1",
                             contentType: "text/plain",
                             data: JSON.stringify({
                                 Upgrade: {
@@ -3084,7 +3084,7 @@ $("#addriven-fingerprint").on("input", () => {
 function setFingerprint(ItemType, ItemId, fingerprint) {
     revalidateAuthz().then(() => {
         $.post({
-            url: "/api/artifacts.php?" + window.authz,
+            url: "/api/artifacts.php?" + window.authz + "&ignoreBuildLabel=1",
             contentType: "text/plain",
             data: JSON.stringify({
                 Upgrade: {
@@ -3120,7 +3120,10 @@ function doAcquireMod() {
                     {
                         ItemType: uniqueName,
                         ItemCount: count,
-                        Fingerprint: maxed ? JSON.stringify({ lvl: itemList[uniqueName].fusionLimit ?? 5 }) : undefined
+                        Fingerprint:
+                            maxed && (itemList[uniqueName].fusionLimit ?? 5) > 0
+                                ? JSON.stringify({ lvl: itemList[uniqueName].fusionLimit ?? 5 })
+                                : undefined
                     }
                 ])
             }).done(function () {

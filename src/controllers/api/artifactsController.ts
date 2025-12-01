@@ -21,7 +21,11 @@ export const artifactsController: RequestHandler = async (req, res) => {
     const { Upgrades } = inventory;
     const { ItemType, UpgradeFingerprint, ItemId } = Upgrade;
 
-    if (!account.BuildLabel || version_compare(account.BuildLabel, "2016.08.19.17.12") >= 0) {
+    if (
+        "ignoreBuildLabel" in req.query ||
+        !account.BuildLabel ||
+        version_compare(account.BuildLabel, "2016.08.19.17.12") >= 0
+    ) {
         const safeUpgradeFingerprint = UpgradeFingerprint || '{"lvl":0}';
         const parsedUpgradeFingerprint = JSON.parse(safeUpgradeFingerprint) as { lvl: number };
         parsedUpgradeFingerprint.lvl += LevelDiff;

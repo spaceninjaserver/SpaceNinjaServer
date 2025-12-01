@@ -502,7 +502,11 @@ export const addItem = async (
     if (typeName in ExportFlavour) {
         return addCustomization(inventory, typeName);
     }
-    if (typeName in ExportUpgrades || typeName in ExportArcanes) {
+    if (
+        typeName in ExportUpgrades ||
+        typeName in ExportArcanes ||
+        typeName.startsWith("/Lotus/Upgrades/Mods/Fusers/")
+    ) {
         if (targetFingerprint && typeName.startsWith("/Lotus/Upgrades/Mods/Randomized/Raw")) {
             logger.debug(`ignoring fingerprint for raw riven mod`);
         } else if (targetFingerprint) {
