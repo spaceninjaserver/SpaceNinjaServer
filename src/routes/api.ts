@@ -26,6 +26,7 @@ import { claimJunctionChallengeRewardController } from "../controllers/api/claim
 import { claimLibraryDailyTaskRewardController } from "../controllers/api/claimLibraryDailyTaskRewardController.ts";
 import { clearDialogueHistoryController } from "../controllers/api/clearDialogueHistoryController.ts";
 import { clearNewEpisodeRewardController } from "../controllers/api/clearNewEpisodeRewardController.ts";
+import { commitStoryModeDecisionController } from "../controllers/api/commitStoryModeDecisionController.ts";
 import { completeCalendarEventController } from "../controllers/api/completeCalendarEventController.ts";
 import { completeRandomModChallengeController } from "../controllers/api/completeRandomModChallengeController.ts";
 import { confirmAllianceInvitationController } from "../controllers/api/confirmAllianceInvitationController.ts";
@@ -264,7 +265,7 @@ apiRouter.post("/claimCompletedRecipe.php", claimCompletedRecipeController);
 apiRouter.post("/claimJunctionChallengeReward.php", claimJunctionChallengeRewardController);
 apiRouter.post("/clearDialogueHistory.php", clearDialogueHistoryController);
 apiRouter.post("/clearNewEpisodeReward.php", clearNewEpisodeRewardController);
-apiRouter.post("/commitStoryModeDecision.php", (_req, res) => { res.end(); }); // U14 (maybe wanna actually unlock the ship features?)
+apiRouter.post("/commitStoryModeDecision.php", commitStoryModeDecisionController); // U14~U15
 apiRouter.post("/completeRandomModChallenge.php", completeRandomModChallengeController);
 apiRouter.post("/confirmGuildInvitation.php", confirmGuildInvitationPostController);
 apiRouter.post("/contributeGuildClass.php", contributeGuildClassController);

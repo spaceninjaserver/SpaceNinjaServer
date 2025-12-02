@@ -1660,6 +1660,9 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //you saw last played Region when you opened the star map
         LastRegionPlayed: String,
 
+        // U14~U15
+        MadeStoryModeDecision: Boolean,
+
         //Blueprints for Foundry
         Recipes: [typeCountSchema],
         //Crafting Blueprint(Item Name + CompletionDate)

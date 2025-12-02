@@ -300,6 +300,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     Missions: IMission[];
     RandomUpgradesIdentified?: number;
     LastRegionPlayed: TSolarMapRegion;
+    MadeStoryModeDecision?: boolean;
     XPInfo: ITypeXPItem[];
     Recipes: ITypeCount[];
     WeaponSkins: IWeaponSkinClient[];
