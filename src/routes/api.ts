@@ -306,6 +306,7 @@ apiRouter.post("/giveStartingGear.php", giveStartingGearPostController);
 apiRouter.post("/guildTech.php", guildTechController);
 apiRouter.post("/hostSession.php", hostSessionController);
 apiRouter.post("/hubBlessing.php", hubBlessingController);
+apiRouter.post("/inbox.php", inboxController); // from ~U15, don't know when they changed it to GET 
 apiRouter.post("/infestedFoundry.php", infestedFoundryController);
 apiRouter.post("/instantCompleteRecipe.php", claimCompletedRecipeController); // U8
 apiRouter.post("/inventorySlots.php", inventorySlotsController);
