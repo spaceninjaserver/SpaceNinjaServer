@@ -42,6 +42,7 @@ import type { IMessage } from "../models/inboxModel.ts";
 import { logger } from "../utils/logger.ts";
 import { version_compare } from "../helpers/inventoryHelpers.ts";
 import vorsPrizePreU40Rewards from "../../static/fixed_responses/vorsPrizePreU40Rewards.json" with { type: "json" };
+import gameToBuildVersion from "../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
 
 export type WeaponTypeInternal =
     | "LongGuns"
@@ -243,7 +244,7 @@ export const getLevelKeyRewards = (
         );
     }
 
-    if (buildLabel && version_compare(buildLabel, "2025.10.14.16.10") < 0) {
+    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["40.0.0"]) < 0) {
         if (levelKey in vorsPrizePreU40Rewards) {
             levelKeyRewards2 = vorsPrizePreU40Rewards[levelKey as keyof typeof vorsPrizePreU40Rewards] as TReward[];
         }

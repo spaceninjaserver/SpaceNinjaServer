@@ -12,6 +12,7 @@ import { sendWsBroadcastTo } from "../../services/wsService.ts";
 import type { IEquipmentDatabase } from "../../types/equipmentTypes.ts";
 import { EquipmentFeatures } from "../../types/equipmentTypes.ts";
 import { Types } from "mongoose";
+import gameToBuildVersion from "../../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
 
 export const upgradesController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -19,7 +20,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
     const inventory = await getInventory(accountId);
     const inventoryChanges: IInventoryChanges = {};
 
-    if (account.BuildLabel && version_compare(account.BuildLabel, "2019.03.07.20.21") < 0) {
+    if (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["24.4.0"]) < 0) {
         // Builds before U24.4.0 have a different request format
         const payload = JSON.parse(String(req.body)) as IUpgradesRequestLegacy;
         const itemId = fromOid(payload.Weapon.ItemId);

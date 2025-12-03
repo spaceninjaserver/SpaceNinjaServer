@@ -4,6 +4,7 @@ import { generateRewardSeed, getRewardAtPercentage, SRng } from "../services/rng
 import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
 import type { IOid } from "../types/commonTypes.ts";
 import { isArchwingMission } from "../services/worldStateService.ts";
+import gameToBuildVersion from "../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
 
 type TInnateDamageTag =
     | "InnateElectricityDamage"
@@ -65,14 +66,14 @@ class KuvaLichManifest implements INemesisManifest {
     convertMessageSubject = "/Lotus/Language/Kingpins/InboxKuvaConvertedSubject";
     convertMessageBody = "/Lotus/Language/Kingpins/InboxKuvaConvertedBody";
     convertMessageIcon = "/Lotus/Interface/Graphics/WorldStatePanel/Grineer.png";
-    minBuild = "2019.10.31.22.42"; // 26.0.0
+    minBuild = gameToBuildVersion["26.0.0"];
 }
 
 class KuvaLichManifestVersionTwo extends KuvaLichManifest {
     constructor() {
         super();
         this.ephemeraChance = 0.1;
-        this.minBuild = "2020.03.05.16.06"; // Unsure about this one, so using the same value as in version three.
+        this.minBuild = gameToBuildVersion["27.2.0"]; // Unsure about this one, so using the same value as in version three.
     }
 }
 
@@ -83,14 +84,14 @@ class KuvaLichManifestVersionThree extends KuvaLichManifestVersionTwo {
         this.weapons.push("/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Hind/KuvaHind");
         this.weapons.push("/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Nukor/KuvaNukor");
         this.ephemeraChance = 0.2;
-        this.minBuild = "2020.03.05.16.06"; // This is 27.2.0, tho 27.1.0 should also recognise this.
+        this.minBuild = gameToBuildVersion["27.2.0"]; // Technically, 27.1.0 should also recognise this.
     }
 }
 
 class KuvaLichManifestVersionFour extends KuvaLichManifestVersionThree {
     constructor() {
         super();
-        this.minBuild = "2021.07.05.17.03"; // Unsure about this one, so using the same value as in version five.
+        this.minBuild = gameToBuildVersion["30.5.0"]; // Unsure about this one, so using the same value as in version five.
     }
 }
 
@@ -100,7 +101,7 @@ class KuvaLichManifestVersionFive extends KuvaLichManifestVersionFour {
         this.weapons.push("/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Hek/KuvaHekWeapon");
         this.weapons.push("/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Zarr/KuvaZarr");
         this.weapons.push("/Lotus/Weapons/Grineer/KuvaLich/HeavyWeapons/Grattler/KuvaGrattler");
-        this.minBuild = "2021.07.05.17.03"; // 30.5.0
+        this.minBuild = gameToBuildVersion["30.5.0"];
     }
 }
 
@@ -108,7 +109,7 @@ class KuvaLichManifestVersionSix extends KuvaLichManifestVersionFive {
     constructor() {
         super();
         this.weapons.push("/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Sobek/KuvaSobek");
-        this.minBuild = "2024.05.15.11.07"; // 35.6.0
+        this.minBuild = gameToBuildVersion["35.6.0"];
     }
 }
 
@@ -142,14 +143,14 @@ class LawyerManifest implements INemesisManifest {
     convertMessageSubject = "/Lotus/Language/Kingpins/InboxSisterConvertedSubject";
     convertMessageBody = "/Lotus/Language/Kingpins/InboxSisterConvertedBody";
     convertMessageIcon = "/Lotus/Interface/Graphics/WorldStatePanel/Corpus.png";
-    minBuild = "2021.07.05.17.03"; // 30.5.0
+    minBuild = gameToBuildVersion["30.5.0"];
 }
 
 class LawyerManifestVersionTwo extends LawyerManifest {
     constructor() {
         super();
         this.weapons.push("/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxWeapon");
-        this.minBuild = "2022.11.30.08.13"; // 32.2.0
+        this.minBuild = gameToBuildVersion["32.2.0"];
     }
 }
 
@@ -157,14 +158,14 @@ class LawyerManifestVersionThree extends LawyerManifestVersionTwo {
     constructor() {
         super();
         this.weapons.push("/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEGlaxion/CrpBEGlaxion");
-        this.minBuild = "2024.05.15.11.07"; // 35.6.0
+        this.minBuild = gameToBuildVersion["35.6.0"];
     }
 }
 
 class LawyerManifestVersionFour extends LawyerManifestVersionThree {
     constructor() {
         super();
-        this.minBuild = "2024.10.01.11.03"; // 37.0.0
+        this.minBuild = gameToBuildVersion["37.0.0"];
     }
 }
 
@@ -180,7 +181,7 @@ class InfestedLichManfest implements INemesisManifest {
     convertMessageSubject = "/Lotus/Language/Kingpins/InboxBandConvertedSubject";
     convertMessageBody = "/Lotus/Language/Kingpins/InboxBandConvertedBody";
     convertMessageIcon = "/Lotus/Interface/Graphics/WorldStatePanel/Infested.png";
-    minBuild = "2025.03.18.09.51"; // 38.5.0
+    minBuild = gameToBuildVersion["38.5.0"];
 }
 
 const nemesisManifests: Record<string, INemesisManifest> = {

@@ -26,6 +26,7 @@ import { unixTimesInMs } from "../../constants/timeConstants.ts";
 import { config } from "../../services/configService.ts";
 import { Types } from "mongoose";
 import { version_compare } from "../../helpers/inventoryHelpers.ts";
+import gameToBuildVersion from "../../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
 
 export const inboxController: RequestHandler = async (req, res) => {
     const { deleteId, lastMessage: latestClientMessageId, messageId } = req.query;
@@ -150,7 +151,7 @@ const createNewEventMessages = async (req: Request): Promise<void> => {
     const baroEnd = baroStart + unixTimesInMs.day * 14;
     const baroActualStart = baroStart + unixTimesInMs.day * (config.worldState?.baroAlwaysAvailable ? 0 : 12);
     const evilBaroStage =
-        account.BuildLabel && version_compare(account.BuildLabel, "2025.10.14.16.10") < 0
+        account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["40.0.0"]) < 0
             ? 0
             : (config.worldState?.evilBaroStage ?? 0);
     const evilBaroTransmission = [

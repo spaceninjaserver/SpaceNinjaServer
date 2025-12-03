@@ -6,6 +6,7 @@ import { getAccountForRequest, getSuffixedName } from "../../services/loginServi
 import type { ILongMOTD } from "../../types/guildTypes.ts";
 import { GuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
+import gameToBuildVersion from "../../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
 
 export const setGuildMotdController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -57,7 +58,7 @@ export const setGuildMotdController: RequestHandler = async (req, res) => {
         await guild.save();
     }
 
-    if (!account.BuildLabel || version_compare(account.BuildLabel, "2020.11.04.18.58") > 0) {
+    if (!account.BuildLabel || version_compare(account.BuildLabel, gameToBuildVersion["29.3.1"]) > 0) {
         res.json({ IsLongMOTD, MOTD });
     } else {
         res.send(MOTD).end();

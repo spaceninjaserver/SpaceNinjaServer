@@ -7,12 +7,13 @@ import { logger } from "../../utils/logger.ts";
 import { ExportFocusUpgrades } from "warframe-public-export-plus";
 import { Inventory } from "../../models/inventoryModels/inventoryModel.ts";
 import { version_compare } from "../../helpers/inventoryHelpers.ts";
+import gameToBuildVersion from "../../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
 
 export const focusController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
 
     let op = req.query.op as string;
-    const focus2 = account.BuildLabel && version_compare(account.BuildLabel, "2022.04.29.12.53") < 0;
+    const focus2 = account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["31.5.0"]) < 0;
     if (focus2) {
         // Focus 2.0
         switch (req.query.op) {

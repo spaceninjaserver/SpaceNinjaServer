@@ -3,6 +3,7 @@ import { Types } from "mongoose";
 import type { TRarity } from "warframe-public-export-plus";
 import type { IFusionTreasure } from "../types/inventoryTypes/inventoryTypes.ts";
 import type { IColor } from "../types/inventoryTypes/commonInventoryTypes.ts";
+import gameToBuildVersion from "../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
 
 export const version_compare = (a: string, b: string): number => {
     const a_digits = a
@@ -33,7 +34,7 @@ export const toOid = (objectId: Types.ObjectId): IOid => {
 export function toOid2(objectId: Types.ObjectId, buildLabel: undefined): IOid;
 export function toOid2(objectId: Types.ObjectId, buildLabel: string | undefined): IOidWithLegacySupport;
 export function toOid2(objectId: Types.ObjectId, buildLabel: string | undefined): IOidWithLegacySupport {
-    if (buildLabel && version_compare(buildLabel, "2016.12.21.19.13") <= 0) {
+    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["19.5.0"]) <= 0) {
         return { $id: objectId.toString() };
     }
     return { $oid: objectId.toString() };

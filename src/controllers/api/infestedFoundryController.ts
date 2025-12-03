@@ -21,6 +21,7 @@ import {
     handleSubsumeCompletion
 } from "../../services/infestedFoundryService.ts";
 import { sendWsBroadcastToGame } from "../../services/wsService.ts";
+import gameToBuildVersion from "../../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
 
 export const infestedFoundryController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -76,12 +77,10 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
                 if (!inventory.infiniteHelminthMaterials) {
                     let type: string;
                     let count: number;
-                    if (account.BuildLabel && version_compare(account.BuildLabel, "2025.05.20.10.18") < 0) {
-                        // < 38.6.0
+                    if (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["38.6.0"]) < 0) {
                         type = "/Lotus/Types/Items/InfestedFoundry/HelminthBile";
                         count = 300;
                     } else {
-                        // >= 38.6.0
                         type =
                             archonCrystalRemovalResource[
                                 suit.ArchonCrystalUpgrades![request.Slot].Color!.replace("_MYTHIC", "")

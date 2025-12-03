@@ -45,6 +45,7 @@ import { EquipmentFeatures } from "../../types/equipmentTypes.ts";
 import { generateRewardSeed } from "../../services/rngService.ts";
 import { getInvasionByOid, getWorldState } from "../../services/worldStateService.ts";
 import { createMessage } from "../../services/inboxService.ts";
+import gameToBuildVersion from "../../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
 
 export const inventoryController: RequestHandler = async (request, response) => {
     const account = await getAccountForRequest(request);
@@ -465,7 +466,7 @@ export const getInventoryResponse = async (
             inventoryResponse.Nemesis = undefined;
         }
 
-        if (version_compare(buildLabel, "2019.03.07.20.21") < 0) {
+        if (version_compare(buildLabel, gameToBuildVersion["24.4.0"]) < 0) {
             // Builds before U24.4.0 handle equipment features differently
             for (const category of equipmentKeys) {
                 for (const item of inventoryResponse[category]) {
@@ -481,25 +482,25 @@ export const getInventoryResponse = async (
                 }
             }
 
-            if (version_compare(buildLabel, "2018.02.22.14.34") < 0) {
+            if (version_compare(buildLabel, gameToBuildVersion["22.13.4"]) < 0) {
                 const personalRoomsDb = await getPersonalRooms(inventory.accountOwnerId.toString());
                 const personalRooms = personalRoomsDb.toJSON<IPersonalRoomsClient>();
                 inventoryResponse.Ship = personalRooms.Ship;
 
-                if (version_compare(buildLabel, "2016.12.21.19.13") <= 0) {
+                if (version_compare(buildLabel, gameToBuildVersion["19.5.0"]) <= 0) {
                     // U19.5 and below use $id instead of $oid
                     for (const category of equipmentKeys) {
                         for (const item of inventoryResponse[category]) {
                             toLegacyOid(item.ItemId);
-                            if (version_compare(buildLabel, "2015.05.14.16.29") < 0) {
+                            if (version_compare(buildLabel, gameToBuildVersion["16.5.5"]) < 0) {
                                 // Appearance config format is different for versions before U16.5
                                 for (const config of item.Configs) {
-                                    if (version_compare(buildLabel, "2015.03.21.08.17") < 0) {
+                                    if (version_compare(buildLabel, gameToBuildVersion["16.0.2"]) < 0) {
                                         config.Customization = {
                                             Colors: convertIColorToLegacyColorsWithAtt(config.pricol, config.attcol),
                                             Skins: config.Skins ?? []
                                         };
-                                    } else if (version_compare(buildLabel, "2015.03.21.08.17") >= 0) {
+                                    } else if (version_compare(buildLabel, gameToBuildVersion["16.0.2"]) >= 0) {
                                         config.Colors = convertIColorToLegacyColorsWithAtt(
                                             config.pricol,
                                             config.attcol
@@ -551,7 +552,7 @@ export const getInventoryResponse = async (
 
                     for (const upgrade of inventoryResponse.Upgrades) {
                         toLegacyOid(upgrade.ItemId);
-                        if (version_compare(buildLabel, "2016.08.19.17.12") < 0) {
+                        if (version_compare(buildLabel, gameToBuildVersion["18.18.0"]) < 0) {
                             // Pre-U18.18 builds use a different UpgradeFingerprint format
                             let rank: number = 0;
                             if (upgrade.UpgradeFingerprint) {
@@ -563,7 +564,7 @@ export const getInventoryResponse = async (
                                 );
                             }
                             upgrade.UpgradeFingerprint = `lvl=${rank}|`;
-                            if (version_compare(buildLabel, "2014.04.10.17.47") < 0) {
+                            if (version_compare(buildLabel, gameToBuildVersion["13.0.0"]) < 0) {
                                 // Pre-U10 builds
                                 if (
                                     !upgrade.AmountRemaining ||
@@ -623,7 +624,7 @@ export const getInventoryResponse = async (
                         inventoryResponse.CurrentLoadOutIds.length > 0 &&
                         inventoryResponse.LoadOutPresets.NORMAL.length > 0
                     ) {
-                        if (version_compare(buildLabel, "2014.07.21.18.38") >= 0) {
+                        if (version_compare(buildLabel, gameToBuildVersion["14.0.0"]) >= 0) {
                             // U14-U15 expect a different response than any other version, where the client is pulling loadout data from has not been found yet
                             // As such, loading loadouts is currently unsupported for these versions
                             logger.warn("Loadouts are currently unsupported in U14-U15, loadouts will be undefined");
@@ -682,7 +683,9 @@ const mapLegacyLoadoutConfig = (
         const l = normPreset.l?.ItemId?.$oid ? inventory.LongGuns.id(normPreset.l.ItemId.$oid) : null;
         const m = normPreset.m?.ItemId?.$oid ? inventory.Melee.id(normPreset.m.ItemId.$oid) : null;
         const loadoutConfig = {
-            ItemId: { $id: version_compare(buildLabel, "2014.07.21.18.38") < 0 ? "Current" : normPreset.ItemId.$oid },
+            ItemId: {
+                $id: version_compare(buildLabel, gameToBuildVersion["14.0.0"]) < 0 ? "Current" : normPreset.ItemId.$oid
+            },
             Name: normPreset.n ?? "Default Loadout",
             Presets: [
                 {
@@ -791,7 +794,7 @@ const mapLegacyLoadoutConfig = (
             }
         }
 
-        if (version_compare(buildLabel, "2014.10.24.08.24") >= 0) {
+        if (version_compare(buildLabel, gameToBuildVersion["15.0.0"]) >= 0) {
             if (inventory.CurrentLoadOutIds.length > 2 && loadoutPresets.ARCHWING.length > 0) {
                 const archPreset = loadoutPresets.ARCHWING.find(
                     x => x.ItemId.$oid == inventory.CurrentLoadOutIds[2].toString()

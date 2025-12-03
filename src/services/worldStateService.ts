@@ -42,6 +42,7 @@ import { toMongoDate, toOid, version_compare } from "../helpers/inventoryHelpers
 import { logger } from "../utils/logger.ts";
 import { DailyDeal, Fissure } from "../models/worldStateModel.ts";
 import { factionToInt, getConquest, getMissionTypeForLegacyOverride } from "./conquestService.ts";
+import gameToBuildVersion from "../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
 
 const sortieBosses = [
     "SORTIE_BOSS_HYENA",
@@ -1275,7 +1276,7 @@ const getIdealTimeSatsifyingConstraints = (constraints: ITimeConstraint[]): numb
 };
 
 const fullyStockBaro = (vt: IVoidTrader, buildLabel?: string): void => {
-    if (buildLabel && version_compare(buildLabel, "2025.10.14.16.10") >= 0) {
+    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["40.0.0"]) >= 0) {
         for (const item of baro.evilBaro as IVoidTraderOffer[]) {
             vt.Manifest.push(item);
         }
@@ -1491,7 +1492,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     const weekStart = EPOCH + week * 604800000;
     const weekEnd = weekStart + 604800000;
     const date = new Date(timeMs);
-    const defenseWavesPerRotation = buildLabel && version_compare(buildLabel, "2025.03.18.16.07") < 0 ? 5 : 3;
+    const defenseWavesPerRotation = buildLabel && version_compare(buildLabel, gameToBuildVersion["38.5.0"]) < 0 ? 5 : 3;
 
     const worldState: IWorldState = {
         BuildLabel: typeof buildLabel == "string" ? buildLabel.split(" ").join("+") : buildConfig.buildLabel,
@@ -1524,7 +1525,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     };
 
     // Old versions seem to really get hung up on not being able to load these.
-    if (buildLabel && version_compare(buildLabel, "2017.10.12.17.04") < 0) {
+    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["22.0.0"]) < 0) {
         worldState.PVPChallengeInstances = [];
     }
 
@@ -3406,7 +3407,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         const baroEnd = baroStart + unixTimesInMs.day * 14;
         const baroNode = ["EarthHUB", "MercuryHUB", "SaturnHUB", "PlutoHUB"][baroIndex % 4];
         const evilBaroStage =
-            buildLabel && version_compare(buildLabel, "2025.10.14.16.10") < 0
+            buildLabel && version_compare(buildLabel, gameToBuildVersion["40.0.0"]) < 0
                 ? 0
                 : (config.worldState?.evilBaroStage ?? 0);
         const baroCharacter = ["Baro'Ki Teel", "EvilBaroWeek1", "EvilBaroWeek2", "EvilBaroWeek3", "EvilBaroWeek4"][
@@ -3602,7 +3603,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     const season = (["CST_WINTER", "CST_SPRING", "CST_SUMMER", "CST_FALL"] as const)[week % 4];
     const labConquest = getConquest("CT_LAB", week, null);
     const hexConquest = getConquest("CT_HEX", week, season);
-    if (!buildLabel || version_compare(buildLabel, "2025.10.14.16.10") >= 0) {
+    if (!buildLabel || version_compare(buildLabel, gameToBuildVersion["40.0.0"]) >= 0) {
         worldState.Conquests = [labConquest, hexConquest];
         if (isBeforeNextExpectedWorldStateRefresh(timeMs, weekEnd)) {
             const season = (["CST_WINTER", "CST_SPRING", "CST_SUMMER", "CST_FALL"] as const)[(week + 1) % 4];
@@ -3679,8 +3680,8 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     // This must be the last field in these versions.
     if (
         buildLabel &&
-        version_compare(buildLabel, "2016.08.19.17.12") >= 0 &&
-        version_compare(buildLabel, "2017.05.05.15.41") <= 0
+        version_compare(buildLabel, gameToBuildVersion["18.18.0"]) >= 0 &&
+        version_compare(buildLabel, gameToBuildVersion["20.4.0"]) <= 0
     ) {
         worldState.WorldSeed = "4763605";
     }
@@ -3847,19 +3848,19 @@ export const getNightwaveSyndicateTag = (buildLabel: string | undefined): string
             valid_values: Object.keys(nightwaveTagToSeason)
         });
     }
-    if (!buildLabel || version_compare(buildLabel, "2025.10.14.16.10") >= 0) {
+    if (!buildLabel || version_compare(buildLabel, gameToBuildVersion["40.0.0"]) >= 0) {
         return "RadioLegionIntermission14Syndicate";
     }
-    if (version_compare(buildLabel, "2025.05.20.10.18") >= 0) {
+    if (version_compare(buildLabel, gameToBuildVersion["38.6.0"]) >= 0) {
         return "RadioLegionIntermission13Syndicate";
     }
-    if (version_compare(buildLabel, "2025.02.05.11.19") >= 0) {
+    if (version_compare(buildLabel, gameToBuildVersion["38.0.8"]) >= 0) {
         return "RadioLegionIntermission12Syndicate";
     }
-    if (version_compare(buildLabel, "2024.08.21.20.02") >= 0) {
+    if (version_compare(buildLabel, gameToBuildVersion["36.1.2"]) >= 0) {
         return "RadioLegionIntermission11Syndicate";
     }
-    if (version_compare(buildLabel, "2024.04.29.11.14") >= 0) {
+    if (version_compare(buildLabel, gameToBuildVersion["35.5.9"]) >= 0) {
         return "RadioLegionIntermission10Syndicate";
     }
     return undefined;

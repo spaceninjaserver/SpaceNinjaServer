@@ -26,6 +26,7 @@ import type { IItemConfig, IItemConfigDatabase } from "../types/inventoryTypes/c
 import { importCrewShipMembers, importCrewShipWeapon, importLoadOutConfig } from "./importService.ts";
 import type { IEquipmentDatabase, IEquipmentSelectionDatabase } from "../types/equipmentTypes.ts";
 import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
+import gameToBuildVersion from "../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
 
 //TODO: setup default items on account creation or like originally in giveStartingItems.php
 
@@ -77,7 +78,7 @@ export const handleInventoryItemConfigChange = async (
             case "LoadOuts": {
                 if (
                     buildLabel &&
-                    version_compare(buildLabel, "2014.04.10.17.47") >= 0 &&
+                    version_compare(buildLabel, gameToBuildVersion["13.0.0"]) >= 0 &&
                     version_compare(buildLabel, "2015.03.19.00.00") < 0
                 ) {
                     // U14-U15
@@ -266,7 +267,7 @@ export const handleInventoryItemConfigChange = async (
                         for (const [configId, config] of Object.entries(itemConfigEntries)) {
                             if (/^[0-9]+$/.test(configId)) {
                                 const c = config as IItemConfig;
-                                if (buildLabel && version_compare(buildLabel, "2015.03.21.08.17") <= 0) {
+                                if (buildLabel && version_compare(buildLabel, gameToBuildVersion["16.0.2"]) <= 0) {
                                     const legacyColors = c.Customization?.Colors ?? c.Colors;
                                     if (legacyColors) {
                                         if (legacyColors.length == 10) {
@@ -280,7 +281,7 @@ export const handleInventoryItemConfigChange = async (
                                     if (legacySkins) {
                                         c.Skins = legacySkins;
                                     }
-                                    if (version_compare(buildLabel, "2014.04.10.17.47") < 0) {
+                                    if (version_compare(buildLabel, gameToBuildVersion["13.0.0"]) < 0) {
                                         if (c.Upgrades) {
                                             // U10-U11 store mods in the item config as $id instead of a string, need to convert that here
                                             const convertedUpgrades: string[] = [];

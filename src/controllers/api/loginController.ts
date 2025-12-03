@@ -14,6 +14,7 @@ import { createMessage } from "../../services/inboxService.ts";
 import { fromStoreItem } from "../../services/itemDataService.ts";
 import { getTokenForClient, getTunablesForClient } from "../../services/tunablesService.ts";
 import type { AddressInfo } from "node:net";
+import gameToBuildVersion from "../../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
 
 export const loginController: RequestHandler = async (request, response) => {
     const loginRequest = JSON.parse(String(request.body)) as ILoginRequest; // parse octet stream of json data to json object
@@ -71,7 +72,7 @@ export const loginController: RequestHandler = async (request, response) => {
 
     if (account.Nonce && account.ClientType != "webui" && !account.Dropped && !loginRequest.kick) {
         // U17 seems to handle "nonce still set" like a login failure.
-        if (version_compare(buildLabel, "2015.12.05.18.07") >= 0) {
+        if (version_compare(buildLabel, gameToBuildVersion["18.0.2"]) >= 0) {
             response.status(400).send({ error: "nonce still set" });
             return;
         }
@@ -119,7 +120,7 @@ const createLoginResponse = (request: Request, account: IDatabaseAccountJson, bu
         Nonce: account.Nonce,
         BuildLabel: buildLabel
     };
-    if (version_compare(buildLabel, "2014.04.10.17.47") >= 0) {
+    if (version_compare(buildLabel, gameToBuildVersion["13.0.0"]) >= 0) {
         // U13 and up
         resp.CountryCode = account.CountryCode;
     } else {
@@ -128,33 +129,29 @@ const createLoginResponse = (request: Request, account: IDatabaseAccountJson, bu
             "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         resp.SteamId = "0";
     }
-    if (version_compare(buildLabel, "2015.02.13.10.41") >= 0) {
+    if (version_compare(buildLabel, gameToBuildVersion["15.14.1"]) >= 0) {
         resp.NRS = [config.nrsAddress ?? myAddress];
     }
-    if (version_compare(buildLabel, "2015.05.14.16.29") >= 0) {
-        // U17 and up
+    if (version_compare(buildLabel, gameToBuildVersion["16.5.5"]) >= 0) {
         resp.IRC = [config.ircAddress ?? myAddress];
     }
-    if (version_compare(buildLabel, "2018.11.08.14.45") >= 0) {
-        // U24 and up
+    if (version_compare(buildLabel, gameToBuildVersion["24.0.0"]) >= 0) {
         resp.ConsentNeeded = account.ConsentNeeded;
         resp.TrackedSettings = account.TrackedSettings;
     }
-    if (version_compare(buildLabel, "2019.08.29.20.01") >= 0) {
-        // U25.7 and up
+    if (version_compare(buildLabel, gameToBuildVersion["25.7.0"]) >= 0) {
         resp.ForceLogoutVersion = account.ForceLogoutVersion;
     }
-    if (version_compare(buildLabel, "2019.10.31.22.42") >= 0) {
-        // U26 and up
+    if (version_compare(buildLabel, gameToBuildVersion["26.0.0"]) >= 0) {
         resp.Groups = [];
     }
-    if (version_compare(buildLabel, "2021.04.13.19.58") >= 0) {
+    if (version_compare(buildLabel, gameToBuildVersion["30.0.0"]) >= 0) {
         resp.DTLS = config.dtls ?? 0; // bit 0 enables DTLS. if enabled, additional bits can be set, e.g. bit 2 to enable logging. on live, the value is 99.
     }
-    if (version_compare(buildLabel, "2022.04.29.12.53") >= 0) {
+    if (version_compare(buildLabel, gameToBuildVersion["31.5.0"]) >= 0) {
         resp.ClientType = account.ClientType;
     }
-    if (version_compare(buildLabel, "2022.09.06.19.24") >= 0) {
+    if (version_compare(buildLabel, gameToBuildVersion["32.0.0"]) >= 0) {
         resp.CrossPlatformAllowed = account.CrossPlatformAllowed;
         resp.HUB = `${myUrlBase}/api/`;
 
@@ -168,11 +165,11 @@ const createLoginResponse = (request: Request, account: IDatabaseAccountJson, bu
             minute
         ).toString();
     }
-    if (version_compare(buildLabel, "2023.04.25.23.40") >= 0) {
-        if (version_compare(buildLabel, "2025.10.14.16.10") >= 0) {
+    if (version_compare(buildLabel, gameToBuildVersion["33.0.0"]) >= 0) {
+        if (version_compare(buildLabel, gameToBuildVersion["40.0.0"]) >= 0) {
             // U40 is when they changed this from content.warframe.com/dynamic/ to api.warframe.com/cdn/
             resp.platformCDNs = [`${myUrlBase}/cdn/`];
-        } else if (version_compare(buildLabel, "2025.08.26.09.49") >= 0) {
+        } else if (version_compare(buildLabel, gameToBuildVersion["39.1.0"]) >= 0) {
             // U39.1 is when they made dynamic/ explicit
             resp.platformCDNs = [`${myUrlBase}/dynamic/`];
         } else {
@@ -188,7 +185,7 @@ const createLoginResponse = (request: Request, account: IDatabaseAccountJson, bu
         version_compare(clientMod.substring(21), "0.12.0") >= 0
     ) {
         const tunables = getTunablesForClient((request.socket.address() as AddressInfo).address);
-        if (version_compare(buildLabel, "2015.05.14.16.29") < 0) {
+        if (version_compare(buildLabel, gameToBuildVersion["16.5.5"]) < 0) {
             tunables.irc = config.ircAddress ?? myAddress;
         }
         raw += "\t" + JSON.stringify(tunables);

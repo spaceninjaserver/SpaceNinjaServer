@@ -9,6 +9,7 @@ import type {
 import { addMods, getInventory } from "../../services/inventoryService.ts";
 import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 import { fromOid, version_compare } from "../../helpers/inventoryHelpers.ts";
+import gameToBuildVersion from "../../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
 
 export const artifactsController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -24,7 +25,7 @@ export const artifactsController: RequestHandler = async (req, res) => {
     if (
         "ignoreBuildLabel" in req.query ||
         !account.BuildLabel ||
-        version_compare(account.BuildLabel, "2016.08.19.17.12") >= 0
+        version_compare(account.BuildLabel, gameToBuildVersion["18.18.0"]) >= 0
     ) {
         const safeUpgradeFingerprint = UpgradeFingerprint || '{"lvl":0}';
         const parsedUpgradeFingerprint = JSON.parse(safeUpgradeFingerprint) as { lvl: number };

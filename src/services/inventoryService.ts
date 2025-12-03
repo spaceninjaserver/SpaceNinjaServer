@@ -95,6 +95,7 @@ import { EquipmentFeatures, Status } from "../types/equipmentTypes.ts";
 import type { ITypeCount } from "../types/commonTypes.ts";
 import { skinLookupTable } from "../helpers/skinLookupTable.ts";
 import type { TLoadoutDatabaseDocument } from "../models/inventoryModels/loadoutModel.ts";
+import gameToBuildVersion from "../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
@@ -1222,8 +1223,8 @@ export const addKubrowPet = (
     inventoryChanges: IInventoryChanges = {},
     buildLabel?: string
 ): IInventoryChanges => {
-    const isPreU28 = buildLabel && version_compare(buildLabel, "2020.06.12.16.46") < 0;
-    const isPreU26 = buildLabel && version_compare(buildLabel, "2019.10.31.22.42") < 0;
+    const isPreU28 = buildLabel && version_compare(buildLabel, gameToBuildVersion["28.0.0"]) < 0;
+    const isPreU26 = buildLabel && version_compare(buildLabel, gameToBuildVersion["26.0.0"]) < 0;
     const questCompleted = inventory.QuestKeys.some(x => x.ItemType.endsWith("KubrowQuestKeyChain") && x.Completed);
 
     combineInventoryChanges(

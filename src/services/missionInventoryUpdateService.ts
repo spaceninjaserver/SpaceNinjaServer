@@ -91,6 +91,7 @@ import type { IEquipmentClient } from "../types/equipmentTypes.ts";
 import { Guild } from "../models/guildModel.ts";
 import { handleGuildGoalProgress } from "./guildService.ts";
 import { importLoadOutConfig } from "./importService.ts";
+import gameToBuildVersion from "../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
 
 const getRotations = (rewardInfo: IRewardInfo, tierOverride?: number): number[] => {
     // For Spy missions, e.g. 3 vaults cracked = A, B, C
@@ -484,7 +485,7 @@ export const addMissionInventoryUpdates = async (
                     clientUpgrade.UpgradeFingerprint ??= "lvl=0|";
                     // U11 and below also don't initialize ItemCount since RawUpgrade doesn't exist in them
                     clientUpgrade.ItemCount ??= 1;
-                    if (account.BuildLabel && version_compare(account.BuildLabel, "2016.08.19.17.12") < 0) {
+                    if (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["18.18.0"]) < 0) {
                         // Acquired Mods have a different UpgradeFingerprint format in pre-U18.18.0 builds, this converts them to the format the database expects
                         clientUpgrade.UpgradeFingerprint = `{"lvl":${clientUpgrade.UpgradeFingerprint.substring(
                             clientUpgrade.UpgradeFingerprint.indexOf("=") + 1,

@@ -36,6 +36,7 @@ import { parallelForeach } from "../utils/async-utils.ts";
 import { createMessage } from "./inboxService.ts";
 import { addAccountDataToFriendInfo, addInventoryDataToFriendInfo } from "./friendService.ts";
 import type { ITypeCount } from "../types/commonTypes.ts";
+import gameToBuildVersion from "../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
 
 export const getGuildForRequest = async (req: Request): Promise<TGuildDatabaseDocument> => {
     const accountId = await getAccountIdForRequest(req);
@@ -70,7 +71,7 @@ export const getGuildClient = async (
     for (const guildMember of guildMembers) {
         // Use 1-based indexing for clan ranks for versions before U24. In my testing, 2018.06.14.23.21 and below used 1-based indexing and 2019.04.04.21.31 and above used 0-based indexing. I didn't narrow it down further, but I think U24 is a good spot for them to have changed it.
         let rankBase = 0;
-        if (account.BuildLabel && version_compare(account.BuildLabel, "2018.11.08.14.45") < 0) {
+        if (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["24.0.0"]) < 0) {
             rankBase += 1;
         }
 
