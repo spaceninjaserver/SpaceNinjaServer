@@ -6,7 +6,7 @@ import { getInventory } from "../../services/inventoryService.ts";
 
 export const setBootLocationController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const personalRooms = await getPersonalRooms(accountId);
+    const personalRooms = await getPersonalRooms(accountId, "Ship");
     personalRooms.Ship.BootLocation = req.query.bootLocation as string as TBootLocation;
     await personalRooms.save();
 
