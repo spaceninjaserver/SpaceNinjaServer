@@ -2220,11 +2220,12 @@ function getRandomMissionDrops(
         if (rewardManifests.length != 0) {
             logger.debug(`generating random mission rewards`, { rewardManifests, rotations });
         }
-        if (RewardInfo.rewardSeed) {
+        // Disabling this warning because the inventory reward seed is only what is used when matchmaking is set to solo.
+        /*if (RewardInfo.rewardSeed) {
             if (RewardInfo.rewardSeed != inventory.RewardSeed) {
                 logger.warn(`RewardSeed mismatch:`, { client: RewardInfo.rewardSeed, database: inventory.RewardSeed });
             }
-        }
+        }*/
         const rng = new SRng(BigInt(RewardInfo.rewardSeed ?? generateRewardSeed()) ^ 0xffffffffffffffffn);
         rewardManifests.forEach(name => {
             const table = ExportRewards[name];

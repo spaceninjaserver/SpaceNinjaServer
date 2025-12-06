@@ -18,7 +18,7 @@ const hostSessionController: RequestHandler = async (req, res) => {
         // Pre-Specters of the Rail
         res.send(session.sessionId.toString());
     } else {
-        res.json({ sessionId: toOid2(session.sessionId, account.BuildLabel), rewardSeed: 99999999 });
+        res.json({ sessionId: toOid2(session.sessionId, account.BuildLabel), rewardSeed: session.rewardSeed });
     }
 };
 

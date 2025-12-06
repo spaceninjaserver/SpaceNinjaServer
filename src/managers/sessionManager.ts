@@ -1,3 +1,4 @@
+import { generateRewardSeed } from "../services/rngService.ts";
 import type { ISession, IFindSessionRequest, IFindSessionResponseSession } from "../types/session.ts";
 import { logger } from "../utils/logger.ts";
 import { JSONParse } from "json-with-bigint";
@@ -34,6 +35,9 @@ function createNewSession(sessionData: ISession, Creator: Types.ObjectId): ISess
         freePrivate: sessionData.freePrivate || 0,
         fullReset: 0
     };
+    if (newSession.rewardSeed == -1) {
+        newSession.rewardSeed = generateRewardSeed();
+    }
     sessions.push(newSession);
     return newSession;
 }
@@ -86,6 +90,7 @@ function getSessionByCreatorID(creatorId: string | Types.ObjectId): ISession | u
 }
 
 function updateSession(sessionId: string | Types.ObjectId, sessionData: string): boolean {
+    logger.debug(`session update:`, sessionData);
     const session = sessions.find(session => session.sessionId.equals(sessionId));
     if (!session) return false;
     try {

@@ -18,7 +18,7 @@ export interface ISession {
     maps?: string[];
     originalSessionId?: string;
     customSettings?: string;
-    rewardSeed?: number;
+    rewardSeed?: number | bigint;
     guildId?: string;
     buildId?: number | bigint;
     platform?: number;
