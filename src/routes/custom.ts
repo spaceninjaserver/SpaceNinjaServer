@@ -17,7 +17,7 @@ import { addMissingMaxRankModsController } from "../controllers/custom/addMissin
 import { webuiFileChangeDetectedController } from "../controllers/custom/webuiFileChangeDetectedController.ts";
 import { completeAllMissionsController } from "../controllers/custom/completeAllMissionsController.ts";
 import { addMissingHelminthBlueprintsController } from "../controllers/custom/addMissingHelminthBlueprintsController.ts";
-import { unlockAllProfitTakerStagesController } from "../controllers/custom/unlockAllProfitTakerStagesController.ts";
+import { unlockAllJobChainBountiesController } from "../controllers/custom/unlockAllJobChainBountiesController.ts";
 import { unlockAllSimarisResearchEntriesController } from "../controllers/custom/unlockAllSimarisResearchEntriesController.ts";
 import { unlockAllScansController } from "../controllers/custom/unlockAllScansController.ts";
 import { unlockAllShipFeaturesController } from "../controllers/custom/unlockAllShipFeaturesController.ts";
@@ -71,7 +71,7 @@ customRouter.get("/addMissingMaxRankMods", addMissingMaxRankModsController);
 customRouter.get("/webuiFileChangeDetected", webuiFileChangeDetectedController);
 customRouter.get("/completeAllMissions", completeAllMissionsController);
 customRouter.get("/addMissingHelminthBlueprints", addMissingHelminthBlueprintsController);
-customRouter.get("/unlockAllProfitTakerStages", unlockAllProfitTakerStagesController);
+customRouter.get("/unlockAllJobChainBounties", unlockAllJobChainBountiesController);
 customRouter.get("/unlockAllSimarisResearchEntries", unlockAllSimarisResearchEntriesController);
 customRouter.get("/unlockAllScans", unlockAllScansController);
 customRouter.get("/unlockAllShipFeatures", unlockAllShipFeaturesController);

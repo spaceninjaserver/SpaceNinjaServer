@@ -251,7 +251,7 @@ dict = {
     cheats_baroFullyStocked: `Baro Fully Stocked`,
     cheats_alertsRepeatable: `Alerts Repeatable`,
     cheats_syndicateMissionsRepeatable: `Syndicate Missions Repeatable`,
-    cheats_unlockAllProfitTakerStages: `Unlock All Profit Taker Stages`,
+    cheats_unlockAllJobChainBounties: `Unlock All Job Chain Bounties`,
     cheats_unlockSuccInventory: `Success. Please note that you'll need to resync your inventory, e.g. by visiting a dojo/relay or relogging.`,
     cheats_instantFinishRivenChallenge: `Instant Finish Riven Challenge`,
     cheats_instantResourceExtractorDrones: `Instant Resource Extractor Drones`,

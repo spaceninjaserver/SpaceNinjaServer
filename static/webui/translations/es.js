@@ -252,7 +252,7 @@ dict = {
     cheats_baroFullyStocked: `Baro con stock completo`,
     cheats_alertsRepeatable: `[UNTRANSLATED] Alerts Repeatable`,
     cheats_syndicateMissionsRepeatable: `Misiones de sindicato rejugables`,
-    cheats_unlockAllProfitTakerStages: `Desbloquea todas las etapas del Roba-ganancias`,
+    cheats_unlockAllJobChainBounties: `[UNTRANSLATED] Unlock All Job Chain Bounties`,
     cheats_unlockSuccInventory: `[UNTRANSLATED] Success. Please note that you'll need to resync your inventory, e.g. by visiting a dojo/relay or relogging.`,
     cheats_instantFinishRivenChallenge: `Terminar desafío de agrietado inmediatamente`,
     cheats_instantResourceExtractorDrones: `Drones de extracción de recursos instantáneos`,

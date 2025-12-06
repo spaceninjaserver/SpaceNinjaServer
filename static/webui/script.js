@@ -3847,9 +3847,9 @@ async function unlockAllMissions() {
     toast(loc("cheats_unlockAllMissions_ok"));
 }
 
-async function unlockAllProfitTakerStages() {
+async function unlockAllJobChainBounties() {
     await revalidateAuthz();
-    await fetch("/custom/unlockAllProfitTakerStages?" + window.authz);
+    await fetch("/custom/unlockAllJobChainBounties?" + window.authz);
     toast(loc(window.have_game_ws ? "code_succAdded" : "cheats_unlockSuccInventory"));
 }
 

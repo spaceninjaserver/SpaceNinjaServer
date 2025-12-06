@@ -252,7 +252,7 @@ dict = {
     cheats_baroFullyStocked: `Баро повністю укомплектований`,
     cheats_alertsRepeatable: `[UNTRANSLATED] Alerts Repeatable`,
     cheats_syndicateMissionsRepeatable: `Повторювати місії синдиката`,
-    cheats_unlockAllProfitTakerStages: `Розблокувати всі етапи Привласнювачки`,
+    cheats_unlockAllJobChainBounties: `[UNTRANSLATED] Unlock All Job Chain Bounties`,
     cheats_unlockSuccInventory: `[UNTRANSLATED] Success. Please note that you'll need to resync your inventory, e.g. by visiting a dojo/relay or relogging.`,
     cheats_instantFinishRivenChallenge: `Миттєве завершення випробування модифікатора Розколу`,
     cheats_instantResourceExtractorDrones: `Миттєво добуваючі Дрони-видобувачі`,

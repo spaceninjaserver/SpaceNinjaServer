@@ -252,7 +252,7 @@ dict = {
     cheats_baroFullyStocked: `Stock de Baro au max`,
     cheats_alertsRepeatable: `[UNTRANSLATED] Alerts Repeatable`,
     cheats_syndicateMissionsRepeatable: `Mission syndicat répétables`,
-    cheats_unlockAllProfitTakerStages: `Débloquer toutes les étapes du Preneur de Profit`,
+    cheats_unlockAllJobChainBounties: `[UNTRANSLATED] Unlock All Job Chain Bounties`,
     cheats_unlockSuccInventory: `[UNTRANSLATED] Success. Please note that you'll need to resync your inventory, e.g. by visiting a dojo/relay or relogging.`,
     cheats_instantFinishRivenChallenge: `Débloquer le challenge Riven instantanément`,
     cheats_instantResourceExtractorDrones: `Ressources de drones d'extraction instantannées`,

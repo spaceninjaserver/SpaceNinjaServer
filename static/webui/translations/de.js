@@ -252,7 +252,7 @@ dict = {
     cheats_baroFullyStocked: `Baro hat volles Inventar`,
     cheats_alertsRepeatable: `Alarmierungen wiederholbar`,
     cheats_syndicateMissionsRepeatable: `Syndikat-Missionen wiederholbar`,
-    cheats_unlockAllProfitTakerStages: `Alle Profiteintreiber-Phasen freischalten`,
+    cheats_unlockAllJobChainBounties: `[UNTRANSLATED] Unlock All Job Chain Bounties`,
     cheats_unlockSuccInventory: `Erfolgreich. Bitte beachte, dass du dein Inventar neu synchronisieren musst, z. B. durch Besuch eines Dojo/Relais oder durch erneutes Anmelden.`,
     cheats_instantFinishRivenChallenge: `Riven-Mod Herausforderung sofort abschließen`,
     cheats_instantResourceExtractorDrones: `Sofortige Ressourcen-Extraktor-Drohnen`,

@@ -252,7 +252,7 @@ dict = {
     cheats_baroFullyStocked: `虚空商人贩卖所有商品`,
     cheats_alertsRepeatable: `[UNTRANSLATED] Alerts Repeatable`,
     cheats_syndicateMissionsRepeatable: `集团任务可重复完成`,
-    cheats_unlockAllProfitTakerStages: `解锁利润收割者圆蛛所有阶段`,
+    cheats_unlockAllJobChainBounties: `[UNTRANSLATED] Unlock All Job Chain Bounties`,
     cheats_unlockSuccInventory: `[UNTRANSLATED] Success. Please note that you'll need to resync your inventory, e.g. by visiting a dojo/relay or relogging.`,
     cheats_instantFinishRivenChallenge: `立即完成裂罅挑战`,
     cheats_instantResourceExtractorDrones: `资源无人机即时完成`,
