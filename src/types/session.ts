@@ -40,3 +40,13 @@ export interface IFindSessionRequest {
     xplatform?: boolean;
     queryId?: number;
 }
+
+export interface IFindSessionResponse {
+    queryId: number;
+    Sesions: IFindSessionResponseSession[];
+}
+
+export interface IFindSessionResponseSession {
+    createdBy: string;
+    id: string;
+}

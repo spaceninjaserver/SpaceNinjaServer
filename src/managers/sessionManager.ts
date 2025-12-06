@@ -1,4 +1,4 @@
-import type { ISession, IFindSessionRequest } from "../types/session.ts";
+import type { ISession, IFindSessionRequest, IFindSessionResponseSession } from "../types/session.ts";
 import { logger } from "../utils/logger.ts";
 import { JSONParse } from "json-with-bigint";
 import { Types } from "mongoose";
@@ -46,17 +46,15 @@ function getSessionByID(sessionId: string | Types.ObjectId): ISession | undefine
     return sessions.find(session => session.sessionId.equals(sessionId));
 }
 
-function getSession(
-    sessionIdOrRequest: string | Types.ObjectId | IFindSessionRequest
-): { createdBy: Types.ObjectId; id: Types.ObjectId }[] {
+function getSession(sessionIdOrRequest: string | Types.ObjectId | IFindSessionRequest): IFindSessionResponseSession[] {
     if (typeof sessionIdOrRequest === "string" || sessionIdOrRequest instanceof Types.ObjectId) {
         const session = sessions.find(session => session.sessionId.equals(sessionIdOrRequest));
         if (session) {
             logger.debug("Found Sessions:", { session });
             return [
                 {
-                    createdBy: session.creatorId,
-                    id: session.sessionId
+                    createdBy: session.creatorId.toString(),
+                    id: session.sessionId.toString()
                 }
             ];
         }
@@ -78,8 +76,8 @@ function getSession(
         return true;
     });
     return matchingSessions.map(session => ({
-        createdBy: session.creatorId,
-        id: session.sessionId
+        createdBy: session.creatorId.toString(),
+        id: session.sessionId.toString()
     }));
 }
 

@@ -8,9 +8,9 @@ export const findSessionsController: RequestHandler = (_req, res) => {
     logger.debug("FindSession Request ", req);
     if (req.id != undefined) {
         logger.debug("Found ID");
-        const session = getSession(req.id);
+        const sessions = getSession(req.id);
 
-        if (session.length) res.json({ queryId: req.queryId, Sessions: session });
+        if (sessions.length) res.json({ queryId: req.queryId, Sessions: sessions });
         else res.json({});
     } else if (req.originalSessionId != undefined) {
         logger.debug("Found OriginalSessionID");
