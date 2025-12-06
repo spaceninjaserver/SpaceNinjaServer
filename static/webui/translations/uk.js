@@ -37,7 +37,7 @@ dict = {
     code_remove: `Видалити`,
     code_addItemsConfirm: `Ви впевнені, що хочете додати |COUNT| предметів на ваш обліковий запис?`,
     code_addTechProjectsConfirm: `Ви впевнені, що хочете додати |COUNT| досліджень до свого клану?`,
-    code_addVaultItemsConfirm: `[UNTRANSLATED] Are you sure you want to add |COUNT| items to your clan vault?`,
+    code_addVaultItemsConfirm: `[UNTRANSLATED] Are you sure you want to add |COUNT| item(s) to your clan vault?`,
     code_succRankUp: `Рівень успішно підвищено`,
     code_noEquipmentToRankUp: `Немає спорядження для підвищення рівня.`,
     code_succAdded: `Успішно додано.`,

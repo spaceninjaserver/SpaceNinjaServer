@@ -37,7 +37,7 @@ dict = {
     code_remove: `移除`,
     code_addItemsConfirm: `确定要向您的账户添加 |COUNT| 件物品吗?`,
     code_addTechProjectsConfirm: `[UNTRANSLATED] Are you sure you want to add |COUNT| research to your clan?`,
-    code_addVaultItemsConfirm: `[UNTRANSLATED] Are you sure you want to add |COUNT| items to your clan vault?`,
+    code_addVaultItemsConfirm: `[UNTRANSLATED] Are you sure you want to add |COUNT| item(s) to your clan vault?`,
     code_succRankUp: `等级已提升`,
     code_noEquipmentToRankUp: `没有可升级的装备`,
     code_succAdded: `添加成功`,

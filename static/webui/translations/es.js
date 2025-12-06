@@ -37,7 +37,7 @@ dict = {
     code_remove: `Quitar`,
     code_addItemsConfirm: `¿Estás seguro de que deseas agregar |COUNT| objetos a tu cuenta?`,
     code_addTechProjectsConfirm: `¿Estás seguro de que quieres añadir |COUNT| proyectos de investigación a tu clan?`,
-    code_addVaultItemsConfirm: `[UNTRANSLATED] Are you sure you want to add |COUNT| items to your clan vault?`,
+    code_addVaultItemsConfirm: `[UNTRANSLATED] Are you sure you want to add |COUNT| item(s) to your clan vault?`,
     code_succRankUp: `Ascenso exitoso.`,
     code_noEquipmentToRankUp: `No hay equipo para ascender.`,
     code_succAdded: `Agregado exitosamente.`,
