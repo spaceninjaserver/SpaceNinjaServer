@@ -85,9 +85,9 @@ const sortieBossToFaction: Record<TSortieBoss, TFaction> = {
 };
 
 const sortieFactionToSystemIndexes: Record<string, number[]> = {
-    FC_GRINEER: [0, 2, 3, 5, 6, 9, 11, 18],
-    FC_CORPUS: [1, 4, 7, 8, 12, 15],
-    FC_INFESTATION: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15],
+    FC_GRINEER: [0, 2, 3, 5, 6, 9, 11, 17, 18],
+    FC_CORPUS: [1, 4, 7, 8, 12, 15, 17],
+    FC_INFESTATION: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 16],
     FC_OROKIN: [14]
 };
 
