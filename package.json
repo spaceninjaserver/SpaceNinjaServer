@@ -6,9 +6,9 @@
   "scripts": {
     "start": "node --enable-source-maps build/src/index.js",
     "build": "tsgo --inlineSourceMap && ncp static/webui build/static/webui",
-    "build:tsc": "tsc --incremental --inlineSourceMap && ncp static/webui build/static/webui",
+    "build:tsc": "tsc --inlineSourceMap && ncp static/webui build/static/webui",
     "build:dev": "tsgo --inlineSourceMap",
-    "build:dev:tsc": "tsc --incremental --inlineSourceMap",
+    "build:dev:tsc": "tsc --inlineSourceMap",
     "build-and-start": "npm run build && npm run start",
     "dev": "node scripts/dev.cjs",
     "dev:bun": "bun scripts/dev.cjs",
