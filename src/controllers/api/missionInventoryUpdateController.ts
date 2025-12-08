@@ -70,13 +70,14 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
     const inventoryUpdates = await addMissionInventoryUpdates(account, inventory, missionReport);
 
     if (
-        missionReport.MissionStatus !== "GS_SUCCESS" &&
+        (missionReport.MissionStatus ? missionReport.MissionStatus !== "GS_SUCCESS" : missionReport.MissionFailed) &&
         !(
             missionReport.RewardInfo?.jobId ||
             missionReport.RewardInfo?.challengeMissionId ||
             missionReport.RewardInfo?.T
         )
     ) {
+        logger.debug(`aborted or failed mission, just syncing inventory`);
         if (missionReport.EndOfMatchUpload) {
             inventory.RewardSeed = generateRewardSeed();
         }

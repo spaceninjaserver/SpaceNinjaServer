@@ -73,7 +73,7 @@ export type IMissionInventoryUpdateRequest = {
     QuestKeys?: Omit<IQuestKeyDatabase, "CompletionDate">[];
     RegularCredits?: number;
     MissionFailed: boolean;
-    MissionStatus: IMissionStatus;
+    MissionStatus?: IMissionStatus;
     AliveTime: number;
     MissionTime: number;
     Missions?: IMission;
