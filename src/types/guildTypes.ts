@@ -192,11 +192,10 @@ export interface IDojoComponentClient {
     Settings?: string;
 }
 
-export interface IDojoComponentDatabase
-    extends Omit<
-        IDojoComponentClient,
-        "id" | "SortId" | "pi" | "CompletionTime" | "DestructionTime" | "Decos" | "PaintBot"
-    > {
+export interface IDojoComponentDatabase extends Omit<
+    IDojoComponentClient,
+    "id" | "SortId" | "pi" | "CompletionTime" | "DestructionTime" | "Decos" | "PaintBot"
+> {
     _id: Types.ObjectId;
     SortId?: Types.ObjectId;
     pi?: Types.ObjectId;

@@ -25,7 +25,7 @@ export const modularWeaponSaleController: RequestHandler = async (req, res) => {
     for (const [uniqueName, data] of Object.entries(ExportWeapons)) {
         if (
             data.partType &&
-            data.premiumPrice &&
+            data.platinumCost &&
             !data.excludeFromCodex // exclude pvp variants
         ) {
             partTypeToParts[data.partType] ??= [];
@@ -147,7 +147,7 @@ const getModularWeaponSale = (
     const parts = partTypes.map(partType => rng.randomElement(partTypeToParts[partType])!);
     let partsCost = 0;
     for (const part of parts) {
-        partsCost += ExportWeapons[part].premiumPrice!;
+        partsCost += ExportWeapons[part].platinumCost!;
     }
     return {
         Name: name,

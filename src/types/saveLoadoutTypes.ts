@@ -142,8 +142,10 @@ export interface ILoadoutConfigClient {
     Remove?: boolean; // when client wants to remove a config, it only includes ItemId & Remove.
 }
 
-export interface ILoadoutConfigDatabase
-    extends Omit<ILoadoutConfigClient, "ItemId" | "s" | "p" | "l" | "m" | "h" | "a"> {
+export interface ILoadoutConfigDatabase extends Omit<
+    ILoadoutConfigClient,
+    "ItemId" | "s" | "p" | "l" | "m" | "h" | "a"
+> {
     _id: Types.ObjectId;
     s?: IEquipmentSelectionDatabase;
     p?: IEquipmentSelectionDatabase;

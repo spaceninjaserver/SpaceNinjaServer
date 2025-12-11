@@ -4,11 +4,10 @@ import { toMongoDate, toOid } from "../helpers/inventoryHelpers.ts";
 import { typeCountSchema } from "./inventoryModels/inventoryModel.ts";
 import type { IMongoDate, IOid, ITypeCount } from "../types/commonTypes.ts";
 
-export interface IMessageClient
-    extends Omit<
-        IMessageDatabase,
-        "_id" | "globaUpgradeId" | "date" | "startDate" | "endDate" | "ownerId" | "attVisualOnly" | "expiry"
-    > {
+export interface IMessageClient extends Omit<
+    IMessageDatabase,
+    "_id" | "globaUpgradeId" | "date" | "startDate" | "endDate" | "ownerId" | "attVisualOnly" | "expiry"
+> {
     _id?: IOid;
     globaUpgradeId?: IOid; // [sic]
     date: IMongoDate;

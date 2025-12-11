@@ -29,8 +29,8 @@ export const removeFromAllianceController: RequestHandler = async (req, res) => 
         await deleteAlliance(allianceMember.allianceId);
     } else {
         await Promise.all([
-            await Guild.updateOne({ _id: allianceMember.guildId }, { $unset: { AllianceId: "" } }),
-            await AllianceMember.deleteOne({ _id: allianceMember._id })
+            Guild.updateOne({ _id: allianceMember.guildId }, { $unset: { AllianceId: "" } }),
+            AllianceMember.deleteOne({ _id: allianceMember._id })
         ]);
     }
 

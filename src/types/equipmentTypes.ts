@@ -66,19 +66,18 @@ export interface IEquipmentDatabase {
     _id: Types.ObjectId;
 }
 
-export interface IEquipmentClient
-    extends Omit<
-        IEquipmentDatabase,
-        | "_id"
-        | "Configs"
-        | "InfestationDate"
-        | "Expiry"
-        | "UpgradesExpiry"
-        | "UmbraDate"
-        | "Weapon"
-        | "CrewMembers"
-        | "Details"
-    > {
+export interface IEquipmentClient extends Omit<
+    IEquipmentDatabase,
+    | "_id"
+    | "Configs"
+    | "InfestationDate"
+    | "Expiry"
+    | "UpgradesExpiry"
+    | "UmbraDate"
+    | "Weapon"
+    | "CrewMembers"
+    | "Details"
+> {
     ItemId: IOidWithLegacySupport;
     Configs: IItemConfig[];
     InfestationDate?: IMongoDate;

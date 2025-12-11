@@ -71,7 +71,8 @@ export interface IAccountCheats {
 }
 
 export interface IInventoryDatabase
-    extends Omit<
+    extends
+        Omit<
             IInventoryClient,
             | "TrainingDate"
             | "LoadOutPresets"
@@ -599,8 +600,10 @@ export interface IUpgradeClient {
     Rank?: number;
 }
 
-export interface IUpgradeDatabase
-    extends Omit<IUpgradeClient, "ItemId" | "ParentId" | "Slot" | "AmountRemaining" | "Rank"> {
+export interface IUpgradeDatabase extends Omit<
+    IUpgradeClient,
+    "ItemId" | "ParentId" | "Slot" | "AmountRemaining" | "Rank"
+> {
     _id: Types.ObjectId;
 }
 
@@ -694,8 +697,10 @@ export interface IInfestedFoundryClient {
     AbilityOverrideUnlockCooldown?: IMongoDate;
 }
 
-export interface IInfestedFoundryDatabase
-    extends Omit<IInfestedFoundryClient, "LastConsumedSuit" | "AbilityOverrideUnlockCooldown"> {
+export interface IInfestedFoundryDatabase extends Omit<
+    IInfestedFoundryClient,
+    "LastConsumedSuit" | "AbilityOverrideUnlockCooldown"
+> {
     LastConsumedSuit?: IEquipmentDatabase;
     AbilityOverrideUnlockCooldown?: Date;
 }
@@ -868,11 +873,10 @@ export interface IPendingRecipeDatabase {
     KubrowPet?: Types.ObjectId;
 }
 
-export interface IPendingRecipeClient
-    extends Omit<
-        IPendingRecipeDatabase,
-        "CompletionDate" | "LongGuns" | "Pistols" | "Melee" | "SuitToUnbrand" | "KubrowPet"
-    > {
+export interface IPendingRecipeClient extends Omit<
+    IPendingRecipeDatabase,
+    "CompletionDate" | "LongGuns" | "Pistols" | "Melee" | "SuitToUnbrand" | "KubrowPet"
+> {
     CompletionDate: IMongoDate;
 }
 
@@ -974,8 +978,10 @@ export interface IPersonalTechProjectDatabase {
     CompletionDate?: Date;
 }
 
-export interface IPersonalTechProjectClient
-    extends Omit<IPersonalTechProjectDatabase, "CategoryItemId" | "CompletionDate"> {
+export interface IPersonalTechProjectClient extends Omit<
+    IPersonalTechProjectDatabase,
+    "CategoryItemId" | "CompletionDate"
+> {
     CategoryItemId?: IOid;
     CompletionDate?: IMongoDate;
     ItemId: IOid;
@@ -1148,8 +1154,10 @@ export interface IDialogueClient {
     DialogueName: string;
 }
 
-export interface IDialogueDatabase
-    extends Omit<IDialogueClient, "AvailableDate" | "AvailableGiftDate" | "RankUpExpiry" | "BountyChemExpiry"> {
+export interface IDialogueDatabase extends Omit<
+    IDialogueClient,
+    "AvailableDate" | "AvailableGiftDate" | "RankUpExpiry" | "BountyChemExpiry"
+> {
     AvailableDate: Date;
     AvailableGiftDate: Date;
     RankUpExpiry: Date;
