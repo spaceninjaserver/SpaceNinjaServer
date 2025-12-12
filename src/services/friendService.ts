@@ -15,6 +15,7 @@ export const addInventoryDataToFriendInfo = async (info: IFriendInfo): Promise<v
     const inventory = await getInventory(fromOid(info._id), "PlayerLevel ActiveAvatarImageType spoofMasteryRank");
     info.PlayerLevel = inventory.spoofMasteryRank == -1 ? inventory.PlayerLevel : inventory.spoofMasteryRank;
     info.ActiveAvatarImageType = inventory.ActiveAvatarImageType;
+    info.TitleType = inventory.TitleType;
 };
 
 export const areFriends = async (a: Types.ObjectId | string, b: Types.ObjectId | string): Promise<boolean> => {

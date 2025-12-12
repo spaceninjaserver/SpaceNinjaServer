@@ -8,6 +8,7 @@ export interface IFriendInfo {
     PlatformAccountId?: string;
     Status?: number;
     ActiveAvatarImageType?: string;
+    TitleType?: string;
     LastLogin?: IMongoDate;
     PlayerLevel?: number;
     Suffix?: number;

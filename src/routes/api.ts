@@ -5,6 +5,7 @@ import { abortDojoComponentDestructionController } from "../controllers/api/abor
 import { activateRandomModController } from "../controllers/api/activateRandomModController.ts";
 import { addFriendController } from "../controllers/api/addFriendController.ts";
 import { addFriendImageGetController, addFriendImagePostController } from "../controllers/api/addFriendImageController.ts";
+import { addFriendTitleController } from "../controllers/api/addFriendTitleController.ts";
 import { addIgnoredUserController } from "../controllers/api/addIgnoredUserController.ts";
 import { addPendingFriendController } from "../controllers/api/addPendingFriendController.ts";
 import { addToAllianceController } from "../controllers/api/addToAllianceController.ts";
@@ -250,6 +251,7 @@ apiRouter.post("/abortDojoComponent.php", abortDojoComponentController);
 apiRouter.post("/activateRandomMod.php", activateRandomModController);
 apiRouter.post("/addFriend.php", addFriendController);
 apiRouter.post("/addFriendImage.php", addFriendImagePostController);
+apiRouter.post("/addFriendTitle.php", addFriendTitleController);
 apiRouter.post("/addIgnoredUser.php", addIgnoredUserController);
 apiRouter.post("/addPendingFriend.php", addPendingFriendController);
 apiRouter.post("/addToAlliance.php", addToAllianceController);

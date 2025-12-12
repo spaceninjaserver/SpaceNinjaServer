@@ -1729,8 +1729,10 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         // Resource Extractor Drones
         Drones: [droneSchema],
 
-        //Active profile ico
+        //Active profile icon
         ActiveAvatarImageType: String,
+        // Active profile title
+        TitleType: String,
 
         // open location store like EidolonPlainsDiscoverable or OrbVallisCaveDiscoverable
         DiscoveredMarkers: [discoveredMarkerSchema],

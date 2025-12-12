@@ -50,6 +50,7 @@ const getProfileViewingDataByPlayerIdImpl = async (playerId: string): Promise<IP
         Harvestable: inventory.Harvestable,
         DeathSquadable: inventory.DeathSquadable,
         Created: toMongoDate(inventory.Created),
+        TitleType: inventory.TitleType,
         MigratedToConsole: false,
         Missions: inventory.Missions,
         Affiliations: inventory.Affiliations,
@@ -235,6 +236,7 @@ interface IPlayerProfileViewingDataResult extends Partial<IDailyAffiliations> {
     Harvestable?: boolean;
     DeathSquadable?: boolean;
     Created?: IMongoDate;
+    TitleType?: string;
     MigratedToConsole?: boolean;
     Missions?: IMission[];
     Affiliations?: IAffiliation[];

@@ -352,7 +352,8 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         "FocusAbility",
         "ActiveQuest",
         "SupportedSyndicate",
-        "ActiveAvatarImageType"
+        "ActiveAvatarImageType",
+        "TitleType"
     ] as const) {
         if (client[key] !== undefined) {
             db[key] = client[key];
