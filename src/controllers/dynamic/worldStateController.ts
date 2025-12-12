@@ -16,5 +16,14 @@ export const worldStateController: RequestHandler = async (req, res) => {
 
     await Promise.all(populatePromises);
 
+    if (req.query.l && worldState.Events) {
+        for (const event of worldState.Events) {
+            const msg = event.Messages.find(x => x.LanguageCode == req.query.l)?.Message ?? event.Msg;
+            if (msg) {
+                event.Messages = [{ Message: msg }];
+            }
+        }
+    }
+
     res.json(worldState);
 };

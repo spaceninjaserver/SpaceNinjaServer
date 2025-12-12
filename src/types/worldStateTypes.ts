@@ -4,9 +4,10 @@ import type { IMongoDate, IOid } from "./commonTypes.ts";
 export interface IWorldState {
     WorldSeed?: string;
     Version: number; // for goals
+    MobileVersion?: string; // if present, the companion app may show a warning about being out of dateworldState.Events
     BuildLabel: string;
     Time: number;
-    InGameMarket: IInGameMarket;
+    Events?: IEvent[];
     Goals: IGoal[];
     Alerts: IAlert[];
     Sorties: ISortie[];
@@ -15,6 +16,7 @@ export interface IWorldState {
     ActiveMissions: IFissure[];
     FlashSales: IFlashSale[];
     GlobalUpgrades: IGlobalUpgrade[];
+    InGameMarket: IInGameMarket;
     Invasions: IInvasion[];
     NodeOverrides: INodeOverride[];
     VoidTraders: IVoidTrader[];
@@ -35,6 +37,26 @@ export interface IWorldState {
     KnownCalendarSeasons: ICalendarSeason[];
     Conquests?: IConquest[];
     Tmp?: string;
+}
+
+export interface IEvent {
+    _id?: IOid;
+    Msg?: string;
+    Messages: {
+        LanguageCode?: string;
+        Message: string;
+    }[];
+    Prop: string;
+    Icon?: string;
+    Priority?: boolean;
+    MobileOnly?: boolean;
+    Community?: boolean;
+    Date?: IMongoDate;
+    ImageUrl?: string;
+    EventEndDate?: IMongoDate;
+    HideEndDateModifier?: boolean;
+    EventStartDate?: IMongoDate;
+    EventLiveUrl?: string;
 }
 
 export interface IAlert {
