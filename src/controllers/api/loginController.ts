@@ -33,6 +33,11 @@ export const loginController: RequestHandler = async (request, response) => {
             ? request.query.buildLabel.split(" ").join("+")
             : buildConfig.buildLabel;
 
+    if (version_compare(buildLabel, "2025.10.29.12.05") > 0) {
+        response.status(400).json({ error: "do you want me to change your diapers, too?" });
+        return;
+    }
+
     if (
         !account &&
         ((config.autoCreateAccount && loginRequest.ClientType != "webui") ||

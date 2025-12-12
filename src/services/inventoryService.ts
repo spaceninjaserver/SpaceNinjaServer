@@ -2206,7 +2206,8 @@ export const addChallenges = async (
     account: TAccountDocument,
     inventory: TInventoryDatabaseDocument,
     ChallengeProgress: IChallengeProgress[],
-    SeasonChallengeCompletions: ISeasonChallenge[] | undefined
+    SeasonChallengeCompletions: ISeasonChallenge[] | undefined,
+    inventoryChanges: IInventoryChanges
 ): Promise<IAffiliationMods[]> => {
     for (const { Name, Progress, Completed } of ChallengeProgress) {
         let dbChallenge = inventory.ChallengeProgress.find(x => x.Name == Name);
@@ -2228,9 +2229,20 @@ export const addChallenges = async (
                     dbChallenge.Completed.push(completion);
                     if (completion == "challengeRewards") {
                         if (Name in challengeRewardsInboxMessages) {
+                            logger.debug(`did a challenge for evolving armour, sending inbox message`);
                             await createMessage(account._id, [challengeRewardsInboxMessages[Name]]);
-                            // Would love to somehow let the client know about inbox or inventory changes, but there doesn't seem to anything for updateChallengeProgress.
                             continue;
+                        }
+                        if (`/Lotus/Types/Challenges/Titles/${Name}` in ExportChallenges) {
+                            if (ExportChallenges[`/Lotus/Types/Challenges/Titles/${Name}`].countedRewards) {
+                                const titleType = fromStoreItem(
+                                    ExportChallenges[`/Lotus/Types/Challenges/Titles/${Name}`].countedRewards![0]
+                                        .StoreItem
+                                );
+                                logger.debug(`${Name} completed, giving ${titleType}`);
+                                addCustomization(inventory, titleType, inventoryChanges);
+                                continue;
+                            }
                         }
                         logger.warn(`ignoring unknown challenge completion`, { challenge: Name, completion });
                         dbChallenge.Progress = 0;

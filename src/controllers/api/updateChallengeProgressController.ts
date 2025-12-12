@@ -3,7 +3,7 @@ import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
 import { addCalendarProgress, addChallenges, getInventory } from "../../services/inventoryService.ts";
 import type { IChallengeProgress, ISeasonChallenge } from "../../types/inventoryTypes/inventoryTypes.ts";
-import type { IAffiliationMods } from "../../types/purchaseTypes.ts";
+import type { IAffiliationMods, IInventoryChanges } from "../../types/purchaseTypes.ts";
 import { getEntriesUnsafe } from "../../utils/ts-utils.ts";
 import { logger } from "../../utils/logger.ts";
 
@@ -14,15 +14,17 @@ export const updateChallengeProgressController: RequestHandler = async (req, res
 
     const inventory = await getInventory(
         account._id.toString(),
-        "ChallengesFixVersion ChallengeProgress SeasonChallengeHistory Affiliations CalendarProgress nightwaveStandingMultiplier"
+        "ChallengesFixVersion ChallengeProgress SeasonChallengeHistory Affiliations CalendarProgress nightwaveStandingMultiplier FlavourItems"
     );
     let affiliationMods: IAffiliationMods[] = [];
+    const inventoryChanges: IInventoryChanges = {};
     if (challenges.ChallengeProgress) {
         affiliationMods = await addChallenges(
             account,
             inventory,
             challenges.ChallengeProgress,
-            challenges.SeasonChallengeCompletions
+            challenges.SeasonChallengeCompletions,
+            inventoryChanges
         );
     }
     for (const [key, value] of getEntriesUnsafe(challenges)) {
@@ -62,7 +64,8 @@ export const updateChallengeProgressController: RequestHandler = async (req, res
     await inventory.save();
 
     res.json({
-        AffiliationMods: affiliationMods
+        AffiliationMods: affiliationMods,
+        InventoryChanges: inventoryChanges // U41+
     });
 };
 
