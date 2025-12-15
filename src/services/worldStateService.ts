@@ -43,6 +43,7 @@ import { logger } from "../utils/logger.ts";
 import { DailyDeal, Fissure } from "../models/worldStateModel.ts";
 import { factionToInt, getConquest, getMissionTypeForLegacyOverride } from "./conquestService.ts";
 import gameToBuildVersion from "../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
+import { getDescent } from "./descentService.ts";
 
 const sortieBosses = [
     "SORTIE_BOSS_HYENA",
@@ -3609,6 +3610,13 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             const season = (["CST_WINTER", "CST_SPRING", "CST_SUMMER", "CST_FALL"] as const)[(week + 1) % 4];
             worldState.Conquests.push(getConquest("CT_LAB", week, null));
             worldState.Conquests.push(getConquest("CT_HEX", week, season));
+        }
+    }
+
+    if (!buildLabel || version_compare(buildLabel, gameToBuildVersion["41.0.0"]) >= 0) {
+        worldState.Descents = [getDescent(week)];
+        if (isBeforeNextExpectedWorldStateRefresh(timeMs, weekEnd)) {
+            worldState.Descents.push(getDescent(week + 1));
         }
     }
 

@@ -36,6 +36,7 @@ export interface IWorldState {
     };
     KnownCalendarSeasons: ICalendarSeason[];
     Conquests?: IConquest[];
+    Descents?: IDescent[];
     Tmp?: string;
 }
 
@@ -466,6 +467,22 @@ export interface IConquestMission {
             risks: [string, string];
         }
     ];
+}
+
+export interface IDescent {
+    Activation: IMongoDate;
+    Expiry: IMongoDate;
+    RandSeed: number;
+    Challenges: IDescentFloor[];
+}
+
+export interface IDescentFloor {
+    Index: number; // 1..21
+    Type: string;
+    Challenge: string;
+    Level: string;
+    Specs: string[];
+    Auras: string[];
 }
 
 export interface ITmp {

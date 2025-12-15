@@ -92,7 +92,10 @@ import type {
     INokkoColony,
     IJournalEntry,
     IDialogueResetDateClient,
-    IDialogueResetDateDatabase
+    IDialogueResetDateDatabase,
+    IDescentLevelReward,
+    IDescentCategoryRewardClient,
+    IDescentCategoryRewardDatabase
 } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { equipmentKeys } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IOid, ITypeCount } from "../../types/commonTypes.ts";
@@ -864,6 +867,34 @@ endlessXpProgressSchema.set("toJSON", {
         if (db.Expiry) {
             client.Expiry = toMongoDate(db.Expiry);
         }
+    }
+});
+
+const descentLevelRewardSchema = new Schema<IDescentLevelReward>(
+    {
+        FloorCheckpoint: Number,
+        Rewards: [countedStoreItemSchema]
+    },
+    { _id: false }
+);
+
+const descentCategoryRewardSchema = new Schema<IDescentCategoryRewardDatabase>(
+    {
+        Category: { type: String, required: true },
+        Expiry: Date,
+        FloorsClaimed: { type: Number, default: 0 },
+        PendingRewards: { type: [descentLevelRewardSchema], default: [] },
+        Seed: Number,
+        SelectedUpgrades: { type: [String], default: [] }
+    },
+    { _id: false }
+);
+descentCategoryRewardSchema.set("toJSON", {
+    transform(_doc, ret: Record<string, any>) {
+        const db = ret as IDescentCategoryRewardDatabase;
+        const client = ret as IDescentCategoryRewardClient;
+
+        client.Expiry = toMongoDate(db.Expiry);
     }
 });
 
@@ -1861,6 +1892,8 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         DeathSquadable: Boolean,
 
         EndlessXP: { type: [endlessXpProgressSchema], default: undefined },
+
+        DescentRewards: { type: [descentCategoryRewardSchema], default: undefined },
 
         DialogueHistory: dialogueHistorySchema,
         CalendarProgress: calenderProgressSchema,

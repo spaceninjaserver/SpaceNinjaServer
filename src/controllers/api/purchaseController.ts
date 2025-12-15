@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest } from "../../services/loginService.ts";
 import type { IPurchaseRequest } from "../../types/purchaseTypes.ts";
 import { handlePurchase } from "../../services/purchaseService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
@@ -7,7 +7,13 @@ import { sendWsBroadcastTo } from "../../services/wsService.ts";
 
 export const purchaseController: RequestHandler = async (req, res) => {
     const purchaseRequest = JSON.parse(String(req.body)) as IPurchaseRequest;
-    const accountId = await getAccountIdForRequest(req);
+    const account = await getAccountForRequest(req);
+    if (purchaseRequest.buildLabel && account.BuildLabel && purchaseRequest.buildLabel != account.BuildLabel) {
+        throw new Error(
+            `account logged into ${account.BuildLabel} but is now attempting a purchase in ${purchaseRequest.buildLabel} ?!`
+        );
+    }
+    const accountId = account._id.toString();
     const inventory = await getInventory(accountId);
     const response = await handlePurchase(purchaseRequest, inventory);
     await inventory.save();

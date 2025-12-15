@@ -46,6 +46,7 @@ import { customObstacleCourseLeaderboardController } from "../controllers/api/cu
 import { declineAllianceInviteController } from "../controllers/api/declineAllianceInviteController.ts";
 import { declineGuildInviteController } from "../controllers/api/declineGuildInviteController.ts";
 import { deleteSessionController } from "../controllers/api/deleteSessionController.ts";
+import { descentRewardsController } from "../controllers/api/descentRewardsController.ts";
 import { destroyDojoDecoController } from "../controllers/api/destroyDojoDecoController.ts";
 import { divvyAllianceVaultController } from "../controllers/api/divvyAllianceVaultController.ts";
 import { dojoComponentRushController } from "../controllers/api/dojoComponentRushController.ts";
@@ -280,6 +281,7 @@ apiRouter.post("/crewShipFusion.php", crewShipFusionController);
 apiRouter.post("/crewShipIdentifySalvage.php", crewShipIdentifySalvageController);
 apiRouter.post("/customizeGuildRanks.php", customizeGuildRanksController);
 apiRouter.post("/customObstacleCourseLeaderboard.php", customObstacleCourseLeaderboardController);
+apiRouter.post("/descentRewards.php", descentRewardsController);
 apiRouter.post("/destroyDojoDeco.php", destroyDojoDecoController);
 apiRouter.post("/dojoComponentRush.php", dojoComponentRushController);
 apiRouter.post("/drones.php", dronesController);
@@ -312,6 +314,7 @@ apiRouter.post("/hubBlessing.php", hubBlessingController);
 apiRouter.post("/inbox.php", inboxController); // from ~U15, don't know when they changed it to GET 
 apiRouter.post("/infestedFoundry.php", infestedFoundryController);
 apiRouter.post("/instantCompleteRecipe.php", claimCompletedRecipeController); // U8
+apiRouter.post("/inventory.php", inventoryController); // used by companion app
 apiRouter.post("/inventorySlots.php", inventorySlotsController);
 apiRouter.post("/joinSession.php", joinSessionController);
 apiRouter.post("/login.php", loginController);
@@ -381,6 +384,5 @@ apiRouter.post("/updateTheme.php", updateThemeController);
 apiRouter.post("/upgrades.php", upgradesController);
 apiRouter.post("/valenceSwap.php", valenceSwapController);
 apiRouter.post("/wishlist.php", wishlistController);
-apiRouter.post("/inventory.php", inventoryController); // used by companion app
 
 export { apiRouter };

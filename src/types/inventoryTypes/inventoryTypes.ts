@@ -111,6 +111,7 @@ export interface IInventoryDatabase
             | "QualifyingInvasions"
             | "LastInventorySync"
             | "EndlessXP"
+            | "DescentRewards"
             | "PersonalGoalProgress"
             | "CurrentLoadOutIds"
             | TEquipmentKey
@@ -156,6 +157,7 @@ export interface IInventoryDatabase
     QualifyingInvasions: IInvasionProgressDatabase[];
     LastInventorySync?: Types.ObjectId;
     EndlessXP?: IEndlessXpProgressDatabase[];
+    DescentRewards?: IDescentCategoryRewardDatabase[];
     PersonalGoalProgress?: IGoalProgressDatabase[];
     MissionRelicRewards?: ITypeCount[];
 }
@@ -419,6 +421,7 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     Harvestable: boolean;
     DeathSquadable: boolean;
     EndlessXP?: IEndlessXpProgressClient[];
+    DescentRewards?: IDescentCategoryRewardClient[];
     DialogueHistory?: IDialogueHistoryClient;
     CalendarProgress?: ICalendarProgress;
     SongChallenges?: ISongChallenge[];
@@ -1126,6 +1129,26 @@ export interface IEndlessXpProgressClient extends Omit<IEndlessXpProgressDatabas
 
 export interface IEndlessXpReward {
     RequiredTotalXp: number;
+    Rewards: ICountedStoreItem[];
+}
+
+export type TDescentCategory = "DM_COH_NORMAL" | "DM_COH_HARD";
+
+export interface IDescentCategoryRewardClient {
+    Category: TDescentCategory;
+    Expiry: IMongoDate;
+    FloorsClaimed: number;
+    PendingRewards: IDescentLevelReward[];
+    Seed: number;
+    SelectedUpgrades: string[];
+}
+
+export interface IDescentCategoryRewardDatabase extends Omit<IDescentCategoryRewardClient, "Expiry"> {
+    Expiry: Date;
+}
+
+export interface IDescentLevelReward {
+    FloorCheckpoint: number;
     Rewards: ICountedStoreItem[];
 }
 
