@@ -1131,14 +1131,26 @@ export interface IEndlessXpReward {
 
 export interface IDialogueHistoryClient {
     YearIteration?: number;
-    Resets?: number; // added in 38.5.0
+    Resets?: number; // added in 38.5.0, removed in 41.0.0
+    ResetDates?: IDialogueResetDateClient[]; // added in 41.0.0
     Dialogues?: IDialogueClient[];
 }
 
 export interface IDialogueHistoryDatabase {
     YearIteration?: number;
     Resets?: number;
+    ResetDates?: IDialogueResetDateDatabase[];
     Dialogues?: IDialogueDatabase[];
+}
+
+export interface IDialogueResetDateClient {
+    Date: IMongoDate;
+    Pack: "Hex" | "Roundtable" | "Triad";
+    Resets: number;
+}
+
+export interface IDialogueResetDateDatabase extends Omit<IDialogueResetDateClient, "Date"> {
+    Date: Date;
 }
 
 export interface IDialogueClient {

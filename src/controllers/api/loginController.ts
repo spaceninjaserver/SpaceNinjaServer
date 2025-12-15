@@ -33,7 +33,7 @@ export const loginController: RequestHandler = async (request, response) => {
             ? request.query.buildLabel.split(" ").join("+")
             : buildConfig.buildLabel;
 
-    if (version_compare(buildLabel, "2025.10.29.12.05") > 0) {
+    if (version_compare(buildLabel, "2025.12.10.16.35") > 0) {
         response.status(400).json({ error: "do you want me to change your diapers, too?" });
         return;
     }

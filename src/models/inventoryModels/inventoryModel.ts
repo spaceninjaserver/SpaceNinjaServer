@@ -90,7 +90,9 @@ import type {
     IKubrowPetPrintClient,
     IKubrowPetPrintDatabase,
     INokkoColony,
-    IJournalEntry
+    IJournalEntry,
+    IDialogueResetDateClient,
+    IDialogueResetDateDatabase
 } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { equipmentKeys } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IOid, ITypeCount } from "../../types/commonTypes.ts";
@@ -966,10 +968,29 @@ dialogueSchema.set("toJSON", {
     }
 });
 
+const dialogueResetDateSchema = new Schema<IDialogueResetDateDatabase>(
+    {
+        Date: Date,
+        Pack: String,
+        Resets: Number
+    },
+    { _id: false }
+);
+dialogueResetDateSchema.set("toJSON", {
+    virtuals: true,
+    transform(_doc, ret: Record<string, any>) {
+        const db = ret as IDialogueResetDateDatabase;
+        const client = ret as IDialogueResetDateClient;
+
+        client.Date = toMongoDate(db.Date);
+    }
+});
+
 const dialogueHistorySchema = new Schema<IDialogueHistoryDatabase>(
     {
         YearIteration: Number,
         Resets: Number,
+        ResetDates: { type: [dialogueResetDateSchema], required: false },
         Dialogues: { type: [dialogueSchema], required: false }
     },
     { _id: false }

@@ -95,6 +95,7 @@ interface SaveCompletedDialogueRequest {
     Booleans: string[];
     ResetBooleans: string[];
     Data?: ICompletedDialogue;
+    EventTriggered?: boolean; // U41
     OtherDialogueInfos: IOtherDialogueInfo[];
 }
 
