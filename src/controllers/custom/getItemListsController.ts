@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { getDict, getItemName, getString } from "../../services/itemDataService.ts";
+import { getDict, getItemName, getNormalizedString, getString } from "../../services/itemDataService.ts";
 import type { TRelicQuality } from "warframe-public-export-plus";
 import {
     ExportAbilities,
@@ -213,7 +213,7 @@ const getItemListsController: RequestHandler = (req, response) => {
         }
     }
     for (const [uniqueName, item] of Object.entries(ExportResources)) {
-        let name = getString(item.name, lang);
+        let name = getNormalizedString(item.name, lang);
         if ("dissectionParts" in item) {
             name = getString("/Lotus/Language/Fish/FishDisplayName", lang).split("|FISH_NAME|").join(name);
             if (item.syndicateTag == "CetusSyndicate") {

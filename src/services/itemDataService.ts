@@ -208,6 +208,10 @@ export const getString = (key: string, dict: Record<string, string>): string => 
     return dict[key] ?? key;
 };
 
+export const getNormalizedString = (key: string, dict: Record<string, string>): string => {
+    return getString(key, dict).split("‘").join("'").split("’").join("'").split("\r\n").join(" ");
+};
+
 export const getKeyChainItems = ({ KeyChain, ChainStage }: IKeyChainRequest): string[] => {
     const chainStages = ExportKeys[KeyChain].chainStages;
     if (!chainStages) {
