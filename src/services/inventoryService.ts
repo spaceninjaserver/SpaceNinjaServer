@@ -179,7 +179,7 @@ export const addStartingGear = async (
     const inventoryChanges: IInventoryChanges = {};
     addEquipment(inventory, "LongGuns", LongGuns[0].ItemType, { IsNew: false }, inventoryChanges);
     addEquipment(inventory, "Pistols", Pistols[0].ItemType, { IsNew: false }, inventoryChanges);
-    addEquipment(inventory, "Melee", Melee[0].ItemType, { IsNew: false }, inventoryChanges);
+    combineInventoryChanges(inventoryChanges, await addItem(inventory, Melee[0].ItemType)); // defaultUpgrades need to respected because as of U38.5, Skana & Bo come with stances by default.
     await addPowerSuit(inventory, Suits[0].ItemType, { IsNew: false }, inventoryChanges);
     addEquipment(
         inventory,
@@ -601,7 +601,9 @@ export const addItem = async (
                 defaultOverwrites.UpgradeFingerprint = JSON.stringify(targetFingerprintObj.UpgradeFingerprint);
                 defaultOverwrites.ItemName = targetFingerprintObj.Name;
             }
-            const inventoryChanges = addEquipment(inventory, weapon.productCategory, typeName, defaultOverwrites);
+            const inventoryChanges: IInventoryChanges = {};
+            defaultOverwrites.Configs = applyDefaultUpgrades(inventory, weapon.defaultUpgrades, inventoryChanges);
+            addEquipment(inventory, weapon.productCategory, typeName, defaultOverwrites, inventoryChanges);
             if (weapon.additionalItems) {
                 for (const item of weapon.additionalItems) {
                     combineInventoryChanges(inventoryChanges, await addItem(inventory, item, 1));
@@ -622,10 +624,11 @@ export const addItem = async (
             }
             const targetFingerprintObj = JSON.parse(targetFingerprint) as INemesisPetTargetFingerprint;
             const head = targetFingerprintObj.Parts[0];
+            const inventoryChanges: IInventoryChanges = {};
             const defaultOverwrites: Partial<IEquipmentDatabase> = {
                 ModularParts: targetFingerprintObj.Parts,
                 ItemName: targetFingerprintObj.Name,
-                Configs: applyDefaultUpgrades(inventory, ExportWeapons[head].defaultUpgrades)
+                Configs: applyDefaultUpgrades(inventory, ExportWeapons[head].defaultUpgrades, inventoryChanges)
             };
             const itemType = {
                 "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadA":
@@ -636,6 +639,7 @@ export const addItem = async (
                     "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetCPowerSuit"
             }[head] as string;
             return {
+                ...inventoryChanges,
                 ...addEquipment(inventory, "MoaPets", itemType, defaultOverwrites),
                 ...occupySlot(inventory, InventorySlot.SENTINELS, premiumPurchase)
             };
@@ -1019,7 +1023,8 @@ export const addItems = async (
 
 export const applyDefaultUpgrades = (
     inventory: TInventoryDatabaseDocument,
-    defaultUpgrades: IDefaultUpgrade[] | undefined
+    defaultUpgrades: IDefaultUpgrade[] | undefined,
+    inventoryChanges: IInventoryChanges
 ): IItemConfigDatabase[] => {
     const modsToGive: IRawUpgrade[] = [];
     const configs: IItemConfigDatabase[] = [];
@@ -1038,7 +1043,13 @@ export const applyDefaultUpgrades = (
             configs.push({ Upgrades: upgrades });
         }
     }
-    addMods(inventory, modsToGive);
+    if (modsToGive.length != 0) {
+        addMods(inventory, modsToGive);
+        inventoryChanges.RawUpgrades ??= [];
+        for (const mod of modsToGive) {
+            inventoryChanges.RawUpgrades.push(mod);
+        }
+    }
     return configs;
 };
 
@@ -1057,8 +1068,12 @@ const addSentinel = (
         addSentinelWeapon(inventory, ExportSentinels[sentinelName].defaultWeapon, premiumPurchase, inventoryChanges);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    const configs: IItemConfig[] = applyDefaultUpgrades(inventory, ExportSentinels[sentinelName]?.defaultUpgrades);
+    const configs: IItemConfig[] = applyDefaultUpgrades(
+        inventory,
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        ExportSentinels[sentinelName]?.defaultUpgrades,
+        inventoryChanges
+    );
 
     const sentinelIndex =
         inventory.Sentinels.push({
@@ -1239,7 +1254,7 @@ export const addKubrowPet = (
         addSpecialItem(inventory, specialItem, inventoryChanges);
     }
 
-    const configs: IItemConfig[] = applyDefaultUpgrades(inventory, kubrowPet?.defaultUpgrades);
+    const configs: IItemConfig[] = applyDefaultUpgrades(inventory, kubrowPet?.defaultUpgrades, inventoryChanges);
 
     if (!details) {
         const isCatbrow = [

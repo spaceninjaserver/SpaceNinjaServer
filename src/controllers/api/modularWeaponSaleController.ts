@@ -45,8 +45,10 @@ export const modularWeaponSaleController: RequestHandler = async (req, res) => {
             .Weapons[payload.ItemIndex];
         const category = modularWeaponTypes[weaponInfo.ItemType];
         const defaultUpgrades = getDefaultUpgrades(weaponInfo.ModularParts);
-        const configs = applyDefaultUpgrades(inventory, defaultUpgrades);
-        const inventoryChanges: IInventoryChanges = {
+        let inventoryChanges: IInventoryChanges = {};
+        const configs = applyDefaultUpgrades(inventory, defaultUpgrades, inventoryChanges);
+        inventoryChanges = {
+            ...inventoryChanges,
             ...addEquipment(inventory, category, weaponInfo.ItemType, {
                 Features: EquipmentFeatures.DOUBLE_CAPACITY | EquipmentFeatures.GILDED,
                 ItemName: payload.ItemName,

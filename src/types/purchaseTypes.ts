@@ -10,7 +10,8 @@ import type {
     ICrewMemberClient,
     IKubrowPetPrintClient,
     IUpgradeClient,
-    IQuestKeyClient
+    IQuestKeyClient,
+    IRawUpgrade
 } from "./inventoryTypes/inventoryTypes.ts";
 
 export enum PurchaseSource {
@@ -83,6 +84,7 @@ export type IInventoryChanges = {
     RecentVendorPurchases?: IRecentVendorPurchaseClient; // < 38.5.0
     CrewMembers?: ICrewMemberClient[];
     KubrowPetPrints?: IKubrowPetPrintClient[];
+    RawUpgrades?: IRawUpgrade[];
     Upgrades?: IUpgradeClient[]; // TOVERIFY
     QuestKeys?: IQuestKeyClient[];
 } & Record<

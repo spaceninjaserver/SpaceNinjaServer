@@ -154,7 +154,7 @@ export const modularWeaponCraftingController: RequestHandler = async (req, res) 
             );
         }
     }
-    defaultOverwrites.Configs = applyDefaultUpgrades(inventory, defaultUpgrades);
+    defaultOverwrites.Configs = applyDefaultUpgrades(inventory, defaultUpgrades, inventoryChanges);
     addEquipment(inventory, category, data.WeaponType, defaultOverwrites, inventoryChanges);
     combineInventoryChanges(
         inventoryChanges,
