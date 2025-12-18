@@ -13,6 +13,13 @@ export interface IMongoDate {
     };
 }
 
+export type IMongoDateWithLegacySupport =
+    | IMongoDate
+    | {
+          sec: number;
+          usec: number;
+      };
+
 export interface ITypeCount {
     ItemType: string;
     ItemCount: number;

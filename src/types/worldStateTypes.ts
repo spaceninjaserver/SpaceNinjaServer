@@ -1,5 +1,5 @@
 import type { IMissionReward, TFaction, TMissionType } from "warframe-public-export-plus";
-import type { IMongoDate, IOid } from "./commonTypes.ts";
+import type { IMongoDateWithLegacySupport, IMongoDate, IOid, IOidWithLegacySupport } from "./commonTypes.ts";
 
 export interface IWorldState {
     WorldSeed?: string;
@@ -350,17 +350,17 @@ export interface IDailyDealDatabase {
 }
 
 export interface IPVPChallengeInstance {
-    _id: IOid;
+    _id: IOidWithLegacySupport;
     challengeTypeRefID: string;
-    startDate: IMongoDate;
-    endDate: IMongoDate;
+    startDate: IMongoDateWithLegacySupport;
+    endDate: IMongoDateWithLegacySupport;
     params: {
         n: string; // "ScriptParamValue";
         v: number;
     }[];
     isGenerated: boolean;
     PVPMode: string;
-    subChallenges: IOid[];
+    subChallenges: IOidWithLegacySupport[];
     Category: string; // "PVPChallengeTypeCategory_WEEKLY" | "PVPChallengeTypeCategory_WEEKLY_ROOT" | "PVPChallengeTypeCategory_DAILY";
 }
 

@@ -38,7 +38,7 @@ import type {
     TCircuitGameMode,
     IFlashSale
 } from "../types/worldStateTypes.ts";
-import { toMongoDate, toOid, version_compare } from "../helpers/inventoryHelpers.ts";
+import { toMongoDate, toMongoDate2, toOid, toOid2, version_compare } from "../helpers/inventoryHelpers.ts";
 import { logger } from "../utils/logger.ts";
 import { DailyDeal, Fissure } from "../models/worldStateModel.ts";
 import { factionToInt, getConquest, getMissionTypeForLegacyOverride } from "./conquestService.ts";
@@ -3561,20 +3561,27 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         pushSyndicateMissions(worldState, sdy, rng.randomInt(0, 100_000), "ba6f84724fa48061", "SteelMeridianSyndicate");
     }
 
-    {
-        const conclaveDayStart = EPOCH + day * unixTimesInMs.day + 5 * unixTimesInMs.hour + 30 * unixTimesInMs.minute;
-        const conclaveDayEnd = conclaveDayStart + unixTimesInMs.day;
-        const conclaveWeekStart = weekStart + 40 * unixTimesInMs.minute - 2 * unixTimesInMs.day;
-        const conclaveWeekEnd = conclaveWeekStart + unixTimesInMs.week;
+    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["17.7.1"]) >= 0) {
+        if (version_compare(buildLabel, gameToBuildVersion["18.0.2"]) >= 0) {
+            const conclaveWeekStart = weekStart + 40 * unixTimesInMs.minute - 2 * unixTimesInMs.day;
+            const conclaveWeekEnd = conclaveWeekStart + unixTimesInMs.week;
 
-        pushConclaveWeakly(worldState.PVPChallengeInstances, week);
-        pushConclaveDailys(worldState.PVPChallengeInstances, day);
+            pushConclaveWeakly(worldState.PVPChallengeInstances, week, buildLabel);
 
-        if (isBeforeNextExpectedWorldStateRefresh(timeMs, conclaveDayEnd)) {
-            pushConclaveDailys(worldState.PVPChallengeInstances, day + 1);
+            if (isBeforeNextExpectedWorldStateRefresh(timeMs, conclaveWeekEnd)) {
+                pushConclaveWeakly(worldState.PVPChallengeInstances, week + 1, buildLabel);
+            }
         }
-        if (isBeforeNextExpectedWorldStateRefresh(timeMs, conclaveWeekEnd)) {
-            pushConclaveWeakly(worldState.PVPChallengeInstances, week + 1);
+
+        {
+            const conclaveDayStart =
+                EPOCH + day * unixTimesInMs.day + 5 * unixTimesInMs.hour + 30 * unixTimesInMs.minute;
+            const conclaveDayEnd = conclaveDayStart + unixTimesInMs.day;
+            pushConclaveDailys(worldState.PVPChallengeInstances, day, buildLabel);
+
+            if (isBeforeNextExpectedWorldStateRefresh(timeMs, conclaveDayEnd)) {
+                pushConclaveDailys(worldState.PVPChallengeInstances, day + 1, buildLabel);
+            }
         }
     }
 
@@ -4018,8 +4025,10 @@ const pushConclaveDaily = (
         DuringSingleMatch?: boolean;
     }[],
     day: number,
-    id: number
+    id: number,
+    buildLabel: string
 ): void => {
+    if (version_compare(buildLabel, gameToBuildVersion["18.0.2"]) < 0) PVPMode = PVPMode.replace("PVPMODE_", "");
     const conclaveDayStart = EPOCH + day * unixTimesInMs.day + 5 * unixTimesInMs.hour + 30 * unixTimesInMs.minute;
     const conclaveDayEnd = conclaveDayStart + unixTimesInMs.day;
     const challengeId = day * 8 + id;
@@ -4038,12 +4047,10 @@ const pushConclaveDaily = (
         activeChallenges.some(x => x.PVPMode == PVPMode)
     );
     activeChallenges.push({
-        _id: {
-            $oid: "689ec5d985b55902" + challengeId.toString().padStart(8, "0")
-        },
+        _id: toOid2("689ec5d985b55902" + challengeId.toString().padStart(8, "0"), buildLabel),
         challengeTypeRefID: challenge.key,
-        startDate: { $date: { $numberLong: conclaveDayStart.toString() } },
-        endDate: { $date: { $numberLong: conclaveDayEnd.toString() } },
+        startDate: toMongoDate2(conclaveDayStart, buildLabel),
+        endDate: toMongoDate2(conclaveDayEnd, buildLabel),
         params: [{ n: "ScriptParamValue", v: challenge.ScriptParamValue }],
         isGenerated: true,
         PVPMode,
@@ -4052,14 +4059,10 @@ const pushConclaveDaily = (
     });
 };
 
-const pushConclaveDailys = (activeChallenges: IPVPChallengeInstance[], day: number): void => {
-    const modes = [
-        "PVPMODE_SPEEDBALL",
-        "PVPMODE_CAPTURETHEFLAG",
-        "PVPMODE_DEATHMATCH",
-        "PVPMODE_TEAMDEATHMATCH"
-    ] as const;
-
+const pushConclaveDailys = (activeChallenges: IPVPChallengeInstance[], day: number, buildLabel: string): void => {
+    const modes = ["PVPMODE_CAPTURETHEFLAG", "PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"];
+    // closest known version to Update: Lunaro
+    if (version_compare(buildLabel, gameToBuildVersion["18.13.3"]) > 0) modes.push("PVPMODE_SPEEDBALL");
     const challengesMap: Record<
         string,
         {
@@ -4078,22 +4081,22 @@ const pushConclaveDailys = (activeChallenges: IPVPChallengeInstance[], day: numb
     }
 
     modes.forEach((mode, index) => {
-        pushConclaveDaily(activeChallenges, mode, challengesMap[mode], day, index * 2);
-        pushConclaveDaily(activeChallenges, mode, challengesMap[mode], day, index * 2 + 1);
+        pushConclaveDaily(activeChallenges, mode, challengesMap[mode], day, index * 2, buildLabel);
+        pushConclaveDaily(activeChallenges, mode, challengesMap[mode], day, index * 2 + 1, buildLabel);
     });
 };
 
-const pushConclaveWeakly = (activeChallenges: IPVPChallengeInstance[], week: number): void => {
+const pushConclaveWeakly = (activeChallenges: IPVPChallengeInstance[], week: number, buildLabel: string): void => {
     const weekStart = EPOCH + week * unixTimesInMs.week;
     const conclaveWeekStart = weekStart + 40 * unixTimesInMs.minute - 2 * unixTimesInMs.day;
     const conclaveWeekEnd = conclaveWeekStart + unixTimesInMs.week;
     const conclaveIdStart = ((conclaveWeekStart / 1000) & 0xffffffff).toString(16).padStart(8, "0").padEnd(23, "0");
     activeChallenges.push(
         {
-            _id: { $oid: conclaveIdStart + "1" },
+            _id: toOid2(conclaveIdStart + "1", buildLabel),
             challengeTypeRefID: "/Lotus/PVPChallengeTypes/PVPTimedChallengeGameModeWins",
-            startDate: { $date: { $numberLong: conclaveWeekStart.toString() } },
-            endDate: { $date: { $numberLong: conclaveWeekEnd.toString() } },
+            startDate: toMongoDate2(conclaveWeekStart, buildLabel),
+            endDate: toMongoDate2(conclaveWeekEnd, buildLabel),
             params: [{ n: "ScriptParamValue", v: 6 }],
             isGenerated: true,
             PVPMode: "PVPMODE_ALL",
@@ -4101,10 +4104,10 @@ const pushConclaveWeakly = (activeChallenges: IPVPChallengeInstance[], week: num
             Category: "PVPChallengeTypeCategory_WEEKLY"
         },
         {
-            _id: { $oid: conclaveIdStart + "2" },
+            _id: toOid2(conclaveIdStart + "2", buildLabel),
             challengeTypeRefID: "/Lotus/PVPChallengeTypes/PVPTimedChallengeGameModeComplete",
-            startDate: { $date: { $numberLong: conclaveWeekStart.toString() } },
-            endDate: { $date: { $numberLong: conclaveWeekEnd.toString() } },
+            startDate: toMongoDate2(conclaveWeekStart, buildLabel),
+            endDate: toMongoDate2(conclaveWeekEnd, buildLabel),
             params: [{ n: "ScriptParamValue", v: 20 }],
             isGenerated: true,
             PVPMode: "PVPMODE_ALL",
@@ -4112,10 +4115,10 @@ const pushConclaveWeakly = (activeChallenges: IPVPChallengeInstance[], week: num
             Category: "PVPChallengeTypeCategory_WEEKLY"
         },
         {
-            _id: { $oid: conclaveIdStart + "3" },
+            _id: toOid2(conclaveIdStart + "3", buildLabel),
             challengeTypeRefID: "/Lotus/PVPChallengeTypes/PVPTimedChallengeOtherChallengeCompleteANY",
-            startDate: { $date: { $numberLong: conclaveWeekStart.toString() } },
-            endDate: { $date: { $numberLong: conclaveWeekEnd.toString() } },
+            startDate: toMongoDate2(conclaveWeekStart, buildLabel),
+            endDate: toMongoDate2(conclaveWeekEnd, buildLabel),
             params: [{ n: "ScriptParamValue", v: 10 }],
             isGenerated: true,
             PVPMode: "PVPMODE_ALL",
@@ -4123,17 +4126,17 @@ const pushConclaveWeakly = (activeChallenges: IPVPChallengeInstance[], week: num
             Category: "PVPChallengeTypeCategory_WEEKLY"
         },
         {
-            _id: { $oid: conclaveIdStart + "4" },
+            _id: toOid2(conclaveIdStart + "4", buildLabel),
             challengeTypeRefID: "/Lotus/PVPChallengeTypes/PVPTimedChallengeWeeklyStandardSet",
-            startDate: { $date: { $numberLong: conclaveWeekStart.toString() } },
-            endDate: { $date: { $numberLong: conclaveWeekEnd.toString() } },
+            startDate: toMongoDate2(conclaveWeekStart, buildLabel),
+            endDate: toMongoDate2(conclaveWeekEnd, buildLabel),
             params: [{ n: "ScriptParamValue", v: 0 }],
             isGenerated: true,
             PVPMode: "PVPMODE_NONE",
             subChallenges: [
-                { $oid: conclaveIdStart + "1" },
-                { $oid: conclaveIdStart + "2" },
-                { $oid: conclaveIdStart + "3" }
+                toOid2(conclaveIdStart + "1", buildLabel),
+                toOid2(conclaveIdStart + "2", buildLabel),
+                toOid2(conclaveIdStart + "3", buildLabel)
             ],
             Category: "PVPChallengeTypeCategory_WEEKLY_ROOT"
         }

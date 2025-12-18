@@ -1,4 +1,4 @@
-import type { IMongoDate, IOid, IOidWithLegacySupport } from "../types/commonTypes.ts";
+import type { IMongoDateWithLegacySupport, IMongoDate, IOid, IOidWithLegacySupport } from "../types/commonTypes.ts";
 import { Types } from "mongoose";
 import type { TRarity } from "warframe-public-export-plus";
 import type { IFusionTreasure } from "../types/inventoryTypes/inventoryTypes.ts";
@@ -31,13 +31,25 @@ export const toOid = (objectId: Types.ObjectId): IOid => {
     return { $oid: objectId.toString() };
 };
 
-export function toOid2(objectId: Types.ObjectId, buildLabel: undefined): IOid;
-export function toOid2(objectId: Types.ObjectId, buildLabel: string | undefined): IOidWithLegacySupport;
-export function toOid2(objectId: Types.ObjectId, buildLabel: string | undefined): IOidWithLegacySupport {
+export function toOid2(objectId: Types.ObjectId | string, buildLabel: undefined): IOid;
+export function toOid2(objectId: Types.ObjectId | string, buildLabel: string | undefined): IOidWithLegacySupport;
+export function toOid2(objectId: Types.ObjectId | string, buildLabel: string | undefined): IOidWithLegacySupport {
+    const oid = typeof objectId == "string" ? objectId : objectId.toString();
     if (buildLabel && version_compare(buildLabel, gameToBuildVersion["19.5.0"]) <= 0) {
-        return { $id: objectId.toString() };
+        return { $id: oid };
     }
-    return { $oid: objectId.toString() };
+    return { $oid: oid };
+}
+
+export function toMongoDate2(value: Date | number, buildLabel: undefined): IMongoDate;
+export function toMongoDate2(value: Date | number, buildLabel: string | undefined): IMongoDateWithLegacySupport;
+export function toMongoDate2(value: Date | number, buildLabel: string | undefined): IMongoDateWithLegacySupport {
+    const ms = value instanceof Date ? value.getTime() : value;
+    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["19.5.0"]) <= 0) {
+        return { sec: Math.floor(ms / 1000), usec: (ms % 1000) * 1000 };
+    }
+
+    return { $date: { $numberLong: ms.toString() } };
 }
 
 export const toLegacyOid = (oid: IOidWithLegacySupport): void => {
@@ -60,8 +72,9 @@ export const toMongoDate = (date: Date): IMongoDate => {
     return { $date: { $numberLong: date.getTime().toString() } };
 };
 
-export const fromMongoDate = (date: IMongoDate): Date => {
-    return new Date(parseInt(date.$date.$numberLong));
+export const fromMongoDate = (date: IMongoDateWithLegacySupport): Date => {
+    if ("$date" in date) return new Date(parseInt(date.$date.$numberLong));
+    return new Date(date.sec * 1000 + Math.floor(date.usec / 1000));
 };
 
 export const parseFusionTreasure = (name: string, count: number): IFusionTreasure => {
