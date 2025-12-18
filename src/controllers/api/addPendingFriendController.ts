@@ -6,18 +6,36 @@ import { addInventoryDataToFriendInfo, areFriendsOfFriends } from "../../service
 import { getInventory } from "../../services/inventoryService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { IFriendInfo } from "../../types/friendTypes.ts";
-import type { RequestHandler } from "express";
+import type { RequestHandler, Response } from "express";
 
-export const addPendingFriendController: RequestHandler = async (req, res) => {
+export const addPendingFriendPostController: RequestHandler = async (req, res) => {
+    const accountId = await getAccountIdForRequest(req);
     const payload = getJSONfromString<IAddPendingFriendRequest>(String(req.body));
+    await sendFriendRequest(accountId, payload.friend, payload.message, res);
+};
 
-    const account = await Account.findOne({ DisplayName: payload.friend });
+interface IAddPendingFriendRequest {
+    friend: string;
+    message: string;
+}
+
+export const addPendingFriendGetController: RequestHandler = async (req, res) => {
+    const accountId = await getAccountIdForRequest(req);
+    await sendFriendRequest(accountId, req.query.friend as string, undefined, res);
+};
+
+const sendFriendRequest = async (
+    accountId: string,
+    name: string,
+    message: string | undefined,
+    res: Response
+): Promise<void> => {
+    const account = await Account.findOne({ DisplayName: name });
     if (!account) {
         res.status(400).end();
         return;
     }
 
-    const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(account._id.toString(), "Settings");
     if (
         inventory.Settings?.FriendInvRestriction == "GIFT_MODE_NONE" ||
@@ -31,22 +49,17 @@ export const addPendingFriendController: RequestHandler = async (req, res) => {
     await Friendship.insertOne({
         owner: accountId,
         friend: account._id,
-        Note: payload.message
+        Note: message
     });
 
     const friendInfo: IFriendInfo = {
         _id: toOid(account._id),
         DisplayName: account.DisplayName,
         LastLogin: toMongoDate(account.LastLogin),
-        Note: payload.message
+        Note: message
     };
     await addInventoryDataToFriendInfo(friendInfo);
     res.json({
         Friend: friendInfo
     });
 };
-
-interface IAddPendingFriendRequest {
-    friend: string;
-    message: string;
-}

@@ -3,11 +3,11 @@ import { abandonLibraryDailyTaskController } from "../controllers/api/abandonLib
 import { abortDojoComponentController } from "../controllers/api/abortDojoComponentController.ts";
 import { abortDojoComponentDestructionController } from "../controllers/api/abortDojoComponentDestructionController.ts";
 import { activateRandomModController } from "../controllers/api/activateRandomModController.ts";
-import { addFriendController } from "../controllers/api/addFriendController.ts";
+import { addFriendGetController, addFriendPostController } from "../controllers/api/addFriendController.ts";
 import { addFriendImageGetController, addFriendImagePostController } from "../controllers/api/addFriendImageController.ts";
 import { addFriendTitleController } from "../controllers/api/addFriendTitleController.ts";
 import { addIgnoredUserController } from "../controllers/api/addIgnoredUserController.ts";
-import { addPendingFriendController } from "../controllers/api/addPendingFriendController.ts";
+import { addPendingFriendGetController, addPendingFriendPostController } from "../controllers/api/addPendingFriendController.ts";
 import { addToAllianceController } from "../controllers/api/addToAllianceController.ts";
 import { addToGuildController } from "../controllers/api/addToGuildController.ts";
 import { adoptPetController } from "../controllers/api/adoptPetController.ts";
@@ -182,7 +182,9 @@ const apiRouter = express.Router();
 // get
 apiRouter.get("/abandonLibraryDailyTask.php", abandonLibraryDailyTaskController);
 apiRouter.get("/abortDojoComponentDestruction.php", abortDojoComponentDestructionController);
+apiRouter.get("/addFriend.php", addFriendGetController); // ~U16 and below
 apiRouter.get("/addFriendImage.php", addFriendImageGetController) // U17 and below
+apiRouter.get("/addPendingFriend.php", addPendingFriendGetController); // ~U10 and below
 apiRouter.get("/apartment.php", apartmentController);
 apiRouter.get("/cancelGuildAdvertisement.php", cancelGuildAdvertisementController);
 apiRouter.get("/changeDojoRoot.php", changeDojoRootController);
@@ -214,8 +216,8 @@ apiRouter.get("/getNewRewardSeed.php", getNewRewardSeedController);
 apiRouter.get("/getPastWeeklyChallenges.php", getPastWeeklyChallengesController)
 apiRouter.get("/getShip.php", getShipController);
 apiRouter.get("/getShipDecos.php", (_req, res) => { res.end(); }); // needed to log in on U22.8
-apiRouter.get("/giveStartingGear.php", giveStartingGearGetController);
 apiRouter.get("/getVendorInfo.php", getVendorInfoController);
+apiRouter.get("/giveStartingGear.php", giveStartingGearGetController);
 apiRouter.get("/hub", hubController);
 apiRouter.get("/hubInstances", hubInstancesController);
 apiRouter.get("/inbox.php", inboxController);
@@ -250,11 +252,11 @@ apiRouter.get("/worldState.php", worldStateController); // U8
 // post
 apiRouter.post("/abortDojoComponent.php", abortDojoComponentController);
 apiRouter.post("/activateRandomMod.php", activateRandomModController);
-apiRouter.post("/addFriend.php", addFriendController);
+apiRouter.post("/addFriend.php", addFriendPostController);
 apiRouter.post("/addFriendImage.php", addFriendImagePostController);
 apiRouter.post("/addFriendTitle.php", addFriendTitleController);
 apiRouter.post("/addIgnoredUser.php", addIgnoredUserController);
-apiRouter.post("/addPendingFriend.php", addPendingFriendController);
+apiRouter.post("/addPendingFriend.php", addPendingFriendPostController);
 apiRouter.post("/addToAlliance.php", addToAllianceController);
 apiRouter.post("/addToGuild.php", addToGuildController);
 apiRouter.post("/adoptPet.php", adoptPetController);

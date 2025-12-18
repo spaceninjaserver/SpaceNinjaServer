@@ -6,7 +6,7 @@ import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { IFriendInfo } from "../../types/friendTypes.ts";
 import type { RequestHandler } from "express";
 
-export const addFriendController: RequestHandler = async (req, res) => {
+export const addFriendPostController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const payload = getJSONfromString<IAddFriendRequest>(String(req.body));
     const promises: Promise<void>[] = [];
@@ -31,19 +31,7 @@ export const addFriendController: RequestHandler = async (req, res) => {
             }
         }
     } else {
-        const externalFriendship = await Friendship.findOne({ owner: payload.friend, friend: accountId }, "Note");
-        if (externalFriendship) {
-            promises.push(
-                Friendship.insertOne({
-                    owner: accountId,
-                    friend: payload.friend,
-                    Note: externalFriendship.Note
-                }) as unknown as Promise<void>
-            );
-            newFriends.push({
-                _id: { $oid: payload.friend }
-            });
-        }
+        await acceptFriendRequest(accountId, payload.friend, newFriends);
     }
     for (const newFriend of newFriends) {
         promises.push(addAccountDataToFriendInfo(newFriend));
@@ -58,3 +46,29 @@ export const addFriendController: RequestHandler = async (req, res) => {
 interface IAddFriendRequest {
     friend: string; // oid or "all" in which case all=1 is also a query parameter
 }
+
+export const addFriendGetController: RequestHandler = async (req, res) => {
+    const accountId = await getAccountIdForRequest(req);
+    await acceptFriendRequest(accountId, req.query.friend as string, undefined);
+    res.end();
+};
+
+const acceptFriendRequest = async (
+    accountId: string,
+    otherAccountId: string,
+    newFriends: IFriendInfo[] | undefined
+): Promise<void> => {
+    const externalFriendship = await Friendship.findOne({ owner: otherAccountId, friend: accountId }, "Note");
+    if (externalFriendship) {
+        await Friendship.insertOne({
+            owner: accountId,
+            friend: otherAccountId,
+            Note: externalFriendship.Note
+        });
+        if (newFriends) {
+            newFriends.push({
+                _id: { $oid: otherAccountId }
+            });
+        }
+    }
+};
