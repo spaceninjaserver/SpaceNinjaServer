@@ -308,6 +308,7 @@ dict = {
     worldState_wolfHunt: `Wolfsjagd`,
     worldState_voidCorruption: `Void-Korruption (|VAL|)`,
     worldState_orphixVenom: `Orphix Gift`,
+    worldState_bloodOfPerita: `Blut von Perita`,
     worldState_longShadow: `Lange Schatten`,
     worldState_hallowedFlame: `Geweihte Flamme`,
     worldState_hallowedNightmares: `Geweihte Albträume`,

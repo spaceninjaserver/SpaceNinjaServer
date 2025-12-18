@@ -3101,6 +3101,26 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         );
     }
 
+    if (config.worldState?.bloodOfPerita) {
+        if (buildLabel && version_compare(buildLabel, gameToBuildVersion["41.0.0"]) >= 0) {
+            worldState.Goals.push({
+                _id: { $oid: "694189080000000000000000" },
+                Activation: { $date: { $numberLong: "1765902600000" } },
+                Expiry: { $date: { $numberLong: "2000000000000" } },
+                GracePeriod: { $date: { $numberLong: "2000000000000" } },
+                Count: 0,
+                Goal: 0,
+                Success: 0,
+                Personal: true,
+                Desc: "/Lotus/Language/TauPrequel/TauPrequelFinal/TauPrequelEventName",
+                ToolTip: "/Lotus/Language/TauPrequel/TauPrequelFinal/BloodOfPeritaDetails",
+                Icon: "/Lotus/Interface/Icons/WorldStatePanel/BloodOfPeritaEventBadgeSmall.png",
+                Tag: "12MinWarEvent",
+                Node: "SolNode251"
+            });
+        }
+    }
+
     // Thermia Fractures activates for 14 days, with alternating 4 and 3-day breaks
     const thermiaFracturesCycleDay = day % 35;
     const isThermiaFracturesActive =

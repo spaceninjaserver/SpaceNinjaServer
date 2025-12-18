@@ -308,6 +308,7 @@ dict = {
     worldState_wolfHunt: `Полювання на Вовка`,
     worldState_voidCorruption: `Викривлення Порожнечі (|VAL|)`,
     worldState_orphixVenom: `Орфіксова отрута`,
+    worldState_bloodOfPerita: `Кров Періти`,
     worldState_longShadow: `Довга тінь`,
     worldState_hallowedFlame: `Священне полум'я`,
     worldState_hallowedNightmares: `Священні жахіття`,

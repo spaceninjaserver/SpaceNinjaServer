@@ -16,7 +16,7 @@ import {
 import type { IMissionInventoryUpdateRequest, IRewardInfo } from "../types/requestTypes.ts";
 import { logger } from "../utils/logger.ts";
 import type { IRngResult } from "./rngService.ts";
-import { SRng, generateRewardSeed, getRandomElement, getRandomReward } from "./rngService.ts";
+import { SRng, generateRewardSeed, getRandomElement, getRandomInt, getRandomReward } from "./rngService.ts";
 import type { IMission, TEquipmentKey } from "../types/inventoryTypes/inventoryTypes.ts";
 import { equipmentKeys } from "../types/inventoryTypes/inventoryTypes.ts";
 import {
@@ -1164,7 +1164,8 @@ export const addMissionRewards = async (
         StrippedItems: strippedItems,
         AffiliationChanges: AffiliationMods,
         InvasionProgress: invasionProgress,
-        EndOfMatchUpload: endOfMatchUpload
+        EndOfMatchUpload: endOfMatchUpload,
+        GoalTag: goalTag
     }: IMissionInventoryUpdateRequest,
     firstCompletion: boolean
 ): Promise<AddMissionRewardsReturnType> => {
@@ -1245,6 +1246,23 @@ export const addMissionRewards = async (
                 MissionRewards.push({
                     StoreItem: "/Lotus/StoreItems/Types/Items/MiscItems/MechSurvivalEventCreds",
                     ItemCount: Math.trunc(rewardInfo.GoalProgressAmount / 10)
+                });
+            }
+        }
+    }
+
+    if (goalTag && goalTag == "12MinWarEvent") {
+        if (["SolNode250", "SolNode251", "SolNode252"].includes(rewardInfo.node)) {
+            if (account.BuildLabel) {
+                if (version_compare(account.BuildLabel, gameToBuildVersion["41.0.0"]) < 0) {
+                    throw new Error(
+                        `account logged into ${account.BuildLabel} (< 41.0.0) but now completes >= 41.0.0 goal ?!`
+                    );
+                }
+
+                MissionRewards.push({
+                    StoreItem: "/Lotus/StoreItems/Types/Gameplay/Tau/Resources/TwelveResourceCurrencyItem",
+                    ItemCount: getRandomInt(8, 15) + (missions?.Tier ? 2 : 0)
                 });
             }
         }

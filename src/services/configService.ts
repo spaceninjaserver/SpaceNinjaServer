@@ -43,6 +43,7 @@ export interface IConfig {
         varziaFullyStocked?: boolean;
         wolfHunt?: number;
         orphixVenom?: boolean;
+        bloodOfPerita?: boolean;
         longShadow?: boolean;
         hallowedFlame?: boolean;
         anniversary?: number;

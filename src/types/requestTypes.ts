@@ -62,7 +62,7 @@ export type IMissionInventoryUpdateRequest = {
     AffiliationChanges?: IAffiliationChange[];
     crossPlaySetting?: string;
     rewardsMultiplier?: number;
-    GoalTag: string;
+    GoalTag?: string;
     LevelKeyName: string;
     KeyOwner?: string;
     KeyRemovalHash?: string;

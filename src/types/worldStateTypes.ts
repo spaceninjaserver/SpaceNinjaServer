@@ -92,6 +92,7 @@ export interface IGoal {
     _id: IOid;
     Activation: IMongoDate;
     Expiry: IMongoDate;
+    GracePeriod?: IMongoDate; // U41+
 
     Count?: number;
     HealthPct?: number;

@@ -308,6 +308,7 @@ dict = {
     worldState_wolfHunt: `Cacería del Lobo`,
     worldState_voidCorruption: `Corrupción del Vacío (|VAL|)`,
     worldState_orphixVenom: `Veneno de Orphix`,
+    worldState_bloodOfPerita: `Sangre de Perita`,
     worldState_longShadow: `Sombra Prolongada`,
     worldState_hallowedFlame: `Llama Sagrada`,
     worldState_hallowedNightmares: `Pesadillas Sagradas`,
