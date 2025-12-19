@@ -23,7 +23,6 @@ export interface IConfig {
     administratorNames?: string[];
     autoCreateAccount?: boolean;
     skipTutorial?: boolean;
-    unlockAllSkins?: boolean;
     fullyStockedVendors?: boolean;
     skipClanKeyCrafting?: boolean;
     unfaithfulBugFixes?: {
@@ -157,6 +156,7 @@ export const configRemovedOptionsKeys = [
     "noDojoResearchCosts",
     "noDojoResearchTime",
     "fastClanAscension",
+    "unlockAllSkins",
     "unlockAllFlavourItems",
     "unlockAllShipDecorations",
     "unlockAllDecoRecipes",

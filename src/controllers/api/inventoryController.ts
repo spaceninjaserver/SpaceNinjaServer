@@ -11,7 +11,6 @@ import { equipmentKeys, loadoutKeysLegacy } from "../../types/inventoryTypes/inv
 import type { IPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import { ArtifactPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import type { ICountedItem } from "warframe-public-export-plus";
-import { ExportCustoms } from "warframe-public-export-plus";
 import { applyCheatsToInfestedFoundry, handleSubsumeCompletion } from "../../services/infestedFoundryService.ts";
 import {
     addEmailItem,
@@ -24,7 +23,7 @@ import {
     getCalendarProgress
 } from "../../services/inventoryService.ts";
 import { logger } from "../../utils/logger.ts";
-import { addString, catBreadHash } from "../../helpers/stringHelpers.ts";
+import { addString } from "../../helpers/stringHelpers.ts";
 import { Types } from "mongoose";
 import { getNemesisManifest } from "../../helpers/nemesisHelpers.ts";
 import { getPersonalRooms } from "../../services/personalRoomsService.ts";
@@ -356,20 +355,6 @@ export const getInventoryResponse = async (
                 inventoryResponse.FlavourItems.push({ ItemType: uniqueName });
             }
         });
-    }
-
-    if (config.unlockAllSkins) {
-        const ownedWeaponSkins = new Set<string>(inventoryResponse.WeaponSkins.map(x => x.ItemType));
-        for (const [uniqueName, meta] of Object.entries(ExportCustoms)) {
-            if (!meta.alwaysAvailable && !ownedWeaponSkins.has(uniqueName)) {
-                inventoryResponse.WeaponSkins.push({
-                    ItemId: {
-                        $oid: "ca70ca70ca70ca70" + catBreadHash(uniqueName).toString(16).padStart(8, "0")
-                    },
-                    ItemType: uniqueName
-                });
-            }
-        }
     }
 
     if (inventory.spoofMasteryRank && inventory.spoofMasteryRank >= 0) {
