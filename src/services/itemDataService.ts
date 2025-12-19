@@ -5,6 +5,7 @@ import type {
     IKey,
     IMissionReward,
     IRecipe,
+    ISyndicate,
     TReward
 } from "warframe-public-export-plus";
 import {
@@ -35,6 +36,7 @@ import {
     ExportRecipes,
     ExportResources,
     ExportSentinels,
+    ExportSyndicates,
     ExportWarframes,
     ExportWeapons
 } from "warframe-public-export-plus";
@@ -43,6 +45,7 @@ import { logger } from "../utils/logger.ts";
 import { version_compare } from "../helpers/inventoryHelpers.ts";
 import vorsPrizePreU40Rewards from "../../static/fixed_responses/vorsPrizePreU40Rewards.json" with { type: "json" };
 import gameToBuildVersion from "../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
+import EntratiSyndicate_pre_U41 from "../../static/fixed_responses/data/EntratiSyndicate_pre_U41.json" with { type: "json" };
 
 export type WeaponTypeInternal =
     | "LongGuns"
@@ -90,6 +93,13 @@ export const getRecipe = (uniqueName: string): IRecipe | undefined => {
     }
 
     return ExportRecipes[uniqueName];
+};
+
+export const getSyndicate = (tag: string, buildLabel: string | undefined): ISyndicate | undefined => {
+    if (tag == "EntratiSyndicate" && buildLabel && version_compare(buildLabel, gameToBuildVersion["41.0.0"]) < 0) {
+        return EntratiSyndicate_pre_U41 as ISyndicate;
+    }
+    return ExportSyndicates[tag];
 };
 
 export const getRecipeByResult = (resultType: string): IRecipe | undefined => {
