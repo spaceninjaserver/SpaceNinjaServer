@@ -603,6 +603,21 @@ export const addItem = async (
             }
             const inventoryChanges: IInventoryChanges = {};
             defaultOverwrites.Configs = applyDefaultUpgrades(inventory, weapon.defaultUpgrades, inventoryChanges);
+            if (typeName == "/Lotus/Weapons/Tenno/Bayonet/TnBayonetRifleWeapon") {
+                defaultOverwrites._id = new Types.ObjectId();
+                defaultOverwrites.AltWeaponModeId = new Types.ObjectId();
+                addEquipment(
+                    inventory,
+                    "Melee",
+                    "/Lotus/Weapons/Tenno/Bayonet/TnBayonetMeleeWeapon",
+                    {
+                        _id: defaultOverwrites.AltWeaponModeId,
+                        AltWeaponModeId: defaultOverwrites._id,
+                        IsNew: false // Not 100% sure if this is faithful, but the client seems to act a bit weird when it's set on the melee weapon.
+                    },
+                    inventoryChanges
+                );
+            }
             addEquipment(inventory, weapon.productCategory, typeName, defaultOverwrites, inventoryChanges);
             if (weapon.additionalItems) {
                 for (const item of weapon.additionalItems) {

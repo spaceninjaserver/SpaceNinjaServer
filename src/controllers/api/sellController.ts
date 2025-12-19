@@ -18,7 +18,7 @@ import { ExportDojoRecipes } from "warframe-public-export-plus";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/inventoryModel.ts";
 import { broadcastInventoryUpdate } from "../../services/wsService.ts";
-import { parseFusionTreasure } from "../../helpers/inventoryHelpers.ts";
+import { parseFusionTreasure, toOid } from "../../helpers/inventoryHelpers.ts";
 import { logger } from "../../utils/logger.ts";
 
 export const sellController: RequestHandler = async (req, res) => {
@@ -50,6 +50,9 @@ export const sellController: RequestHandler = async (req, res) => {
     }
     for (const key of Object.keys(payload.Items)) {
         requiredFields.add(key as keyof TInventoryDatabaseDocument);
+        if (key == "LongGuns") {
+            requiredFields.add("Melee");
+        }
     }
     if (requiredFields.has("Upgrades")) {
         requiredFields.add("RawUpgrades");
@@ -136,6 +139,13 @@ export const sellController: RequestHandler = async (req, res) => {
                 break;
             case "LongGuns":
                 payload.Items.LongGuns.forEach(sellItem => {
+                    const item = inventory.LongGuns.id(sellItem.String)!;
+                    if (item.AltWeaponModeId) {
+                        inventory.Melee.pull({ _id: item.AltWeaponModeId });
+                        freeUpSlot(inventory, InventorySlot.WEAPONS);
+                        inventoryChanges.RemovedIdItems ??= [];
+                        inventoryChanges.RemovedIdItems.push({ ItemId: toOid(item.AltWeaponModeId) });
+                    }
                     inventory.LongGuns.pull({ _id: sellItem.String });
                     freeUpSlot(inventory, InventorySlot.WEAPONS);
                 });

@@ -1,4 +1,4 @@
-import type { ITypeCount } from "./commonTypes.ts";
+import type { IOid, ITypeCount } from "./commonTypes.ts";
 import type { IEquipmentClient } from "./equipmentTypes.ts";
 import type {
     IDroneClient,
@@ -68,6 +68,7 @@ export type IInventoryChanges = {
 } & {
     [_ in TEquipmentKey]?: IEquipmentClient[];
 } & {
+    RemovedIdItems?: { ItemId: IOid }[];
     RegularCredits?: number;
     PremiumCredits?: number;
     PremiumCreditsFree?: number;

@@ -94,7 +94,7 @@ export const dronesController: RequestHandler = async (req, res) => {
             inventory.Drones.pull({ _id: req.query.collectDroneId as string });
             inventoryChanges.RemovedIdItems = [
                 {
-                    ItemId: { $oid: req.query.collectDroneId }
+                    ItemId: { $oid: req.query.collectDroneId as string }
                 }
             ];
         } else {

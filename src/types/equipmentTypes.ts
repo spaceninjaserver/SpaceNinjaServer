@@ -37,7 +37,7 @@ export interface IEquipmentDatabase {
     Configs: IItemConfigDatabase[];
     UpgradeVer?: number;
     XP?: number;
-    Features?: number;
+    Features?: number; // >= 24.4.0
     Polarized?: number;
     Polarity?: IPolarity[];
     FocusLens?: string;
@@ -63,6 +63,7 @@ export interface IEquipmentDatabase {
     Details?: IKubrowPetDetailsDatabase;
     Favorite?: boolean;
     IsNew?: boolean;
+    AltWeaponModeId?: Types.ObjectId;
     _id: Types.ObjectId;
 }
 
@@ -77,6 +78,7 @@ export interface IEquipmentClient extends Omit<
     | "Weapon"
     | "CrewMembers"
     | "Details"
+    | "AltWeaponModeId"
 > {
     ItemId: IOidWithLegacySupport;
     Configs: IItemConfig[];
@@ -87,10 +89,10 @@ export interface IEquipmentClient extends Omit<
     Weapon?: ICrewShipWeaponClient;
     CrewMembers?: ICrewShipMembersClient;
     Details?: IKubrowPetDetailsClient;
-    // For Pre-U24.4.0 builds
-    UnlockLevel?: number;
-    UtilityUnlocked?: number;
-    Gild?: boolean;
+    UnlockLevel?: number; // < 24.4.0
+    UtilityUnlocked?: number; // < 24.4.0
+    Gild?: boolean; // < 24.4.0
+    AltWeaponModeId?: IOid; // for bayonets (> U41)
 }
 
 export interface IArchonCrystalUpgrade {

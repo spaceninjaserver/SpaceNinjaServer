@@ -102,7 +102,8 @@ const convertEquipment = (client: IEquipmentClient): IEquipmentDatabase => {
                       Object.entries(obj).filter(([_, value]) => !Array.isArray(value) || value.length > 0)
                   )
               )
-            : []
+            : [],
+        AltWeaponModeId: client.AltWeaponModeId ? new Types.ObjectId(client.AltWeaponModeId.$oid) : undefined
     };
 };
 

@@ -1125,7 +1125,8 @@ const EquipmentSchema = new Schema<IEquipmentDatabase>(
         CrewMembers: crewShipMembersSchema,
         Details: detailsSchema,
         Favorite: Boolean,
-        IsNew: Boolean
+        IsNew: Boolean,
+        AltWeaponModeId: Types.ObjectId
     },
     { id: false }
 );
@@ -1151,6 +1152,9 @@ EquipmentSchema.set("toJSON", {
         }
         if (db.UmbraDate) {
             client.UmbraDate = toMongoDate(db.UmbraDate);
+        }
+        if (db.AltWeaponModeId) {
+            client.AltWeaponModeId = toOid(db.AltWeaponModeId);
         }
 
         if (client.ArchonCrystalUpgrades) {
