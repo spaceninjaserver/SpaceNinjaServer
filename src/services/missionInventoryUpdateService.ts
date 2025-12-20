@@ -2021,7 +2021,9 @@ function getRandomMissionDrops(
                     }
                     if (syndicateEntry && syndicateEntry.Jobs) {
                         let job;
-                        if (RewardInfo.JobTier && RewardInfo.JobTier > 0) job = syndicateEntry.Jobs[RewardInfo.JobTier];
+                        if (RewardInfo.JobTier !== undefined && RewardInfo.JobTier >= 0) {
+                            job = syndicateEntry.Jobs[RewardInfo.JobTier];
+                        }
 
                         if (syndicateEntry.Tag === "EntratiSyndicate") {
                             if (
