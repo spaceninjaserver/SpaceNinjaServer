@@ -44,7 +44,7 @@ import type { IMessage } from "../models/inboxModel.ts";
 import { logger } from "../utils/logger.ts";
 import { version_compare } from "../helpers/inventoryHelpers.ts";
 import vorsPrizePreU40Rewards from "../../static/fixed_responses/vorsPrizePreU40Rewards.json" with { type: "json" };
-import gameToBuildVersion from "../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
+import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 import EntratiSyndicate_pre_U41 from "../../static/fixed_responses/data/EntratiSyndicate_pre_U41.json" with { type: "json" };
 
 export type WeaponTypeInternal =

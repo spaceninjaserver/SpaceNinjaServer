@@ -5,7 +5,7 @@ import { logger } from "../../utils/logger.ts";
 import type { ISession } from "../../types/session.ts";
 import { JSONParse } from "json-with-bigint";
 import { toOid2, version_compare } from "../../helpers/inventoryHelpers.ts";
-import gameToBuildVersion from "../../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
+import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 
 const hostSessionController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);

@@ -44,7 +44,7 @@ import { EquipmentFeatures } from "../../types/equipmentTypes.ts";
 import { generateRewardSeed } from "../../services/rngService.ts";
 import { getInvasionByOid, getWorldState } from "../../services/worldStateService.ts";
 import { createMessage } from "../../services/inboxService.ts";
-import gameToBuildVersion from "../../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
+import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 
 export const inventoryController: RequestHandler = async (request, response) => {
     const account = await getAccountForRequest(request);

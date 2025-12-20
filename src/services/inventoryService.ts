@@ -95,7 +95,7 @@ import { EquipmentFeatures, Status } from "../types/equipmentTypes.ts";
 import type { ITypeCount } from "../types/commonTypes.ts";
 import { skinLookupTable } from "../helpers/skinLookupTable.ts";
 import type { TLoadoutDatabaseDocument } from "../models/inventoryModels/loadoutModel.ts";
-import gameToBuildVersion from "../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
+import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,

@@ -12,7 +12,7 @@ import { sendWsBroadcastTo } from "../../services/wsService.ts";
 import type { IEquipmentDatabase } from "../../types/equipmentTypes.ts";
 import { EquipmentFeatures } from "../../types/equipmentTypes.ts";
 import { Types } from "mongoose";
-import gameToBuildVersion from "../../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
+import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 
 export const upgradesController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);

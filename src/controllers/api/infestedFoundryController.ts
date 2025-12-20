@@ -21,7 +21,7 @@ import {
     handleSubsumeCompletion
 } from "../../services/infestedFoundryService.ts";
 import { sendWsBroadcastToGame } from "../../services/wsService.ts";
-import gameToBuildVersion from "../../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
+import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 
 export const infestedFoundryController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);

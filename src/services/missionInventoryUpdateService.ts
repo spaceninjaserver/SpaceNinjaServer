@@ -91,7 +91,7 @@ import type { IEquipmentClient } from "../types/equipmentTypes.ts";
 import { Guild } from "../models/guildModel.ts";
 import { handleGuildGoalProgress } from "./guildService.ts";
 import { importLoadOutConfig } from "./importService.ts";
-import gameToBuildVersion from "../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
+import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 
 const getRotations = (rewardInfo: IRewardInfo, tierOverride?: number): number[] => {
     // For Spy missions, e.g. 3 vaults cracked = A, B, C

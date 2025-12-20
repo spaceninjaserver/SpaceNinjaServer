@@ -2,7 +2,7 @@ import type { RequestHandler } from "express";
 import { deleteSession } from "../../managers/sessionManager.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
 import { version_compare } from "../../helpers/inventoryHelpers.ts";
-import gameToBuildVersion from "../../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
+import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 
 const deleteSessionController: RequestHandler = async (_req, res) => {
     const account = await getAccountForRequest(_req);

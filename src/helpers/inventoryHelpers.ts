@@ -3,7 +3,7 @@ import { Types } from "mongoose";
 import type { TRarity } from "warframe-public-export-plus";
 import type { IFusionTreasure } from "../types/inventoryTypes/inventoryTypes.ts";
 import type { IColor } from "../types/inventoryTypes/commonInventoryTypes.ts";
-import gameToBuildVersion from "../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
+import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 
 export const version_compare = (a: string, b: string): number => {
     const a_digits = a

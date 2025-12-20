@@ -4,7 +4,7 @@ import { generateRewardSeed, getRewardAtPercentage, SRng } from "../services/rng
 import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
 import type { IOid } from "../types/commonTypes.ts";
 import { isArchwingMission } from "../services/worldStateService.ts";
-import gameToBuildVersion from "../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
+import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 
 type TInnateDamageTag =
     | "InnateElectricityDamage"

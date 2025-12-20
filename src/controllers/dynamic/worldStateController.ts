@@ -1,7 +1,7 @@
 import type { RequestHandler } from "express";
 import { getWorldState, populateDailyDeal, populateFissures } from "../../services/worldStateService.ts";
 import { version_compare } from "../../helpers/inventoryHelpers.ts";
-import gameToBuildVersion from "../../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
+import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 
 export const worldStateController: RequestHandler = async (req, res) => {
     const buildLabel = req.query.buildLabel as string | undefined;

@@ -36,7 +36,7 @@ import { parallelForeach } from "../utils/async-utils.ts";
 import { createMessage } from "./inboxService.ts";
 import { addAccountDataToFriendInfo, addInventoryDataToFriendInfo } from "./friendService.ts";
 import type { ITypeCount } from "../types/commonTypes.ts";
-import gameToBuildVersion from "../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
+import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 
 export const getGuildForRequest = async (req: Request): Promise<TGuildDatabaseDocument> => {
     const accountId = await getAccountIdForRequest(req);

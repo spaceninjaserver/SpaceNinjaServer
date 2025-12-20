@@ -7,7 +7,7 @@ import type { ICountedStoreItem } from "warframe-public-export-plus";
 import { getRandomElement, getRandomInt } from "../../services/rngService.ts";
 import { logger } from "../../utils/logger.ts";
 import { version_compare } from "../../helpers/inventoryHelpers.ts";
-import gameToBuildVersion from "../../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
+import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 
 export const descentRewardsController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);

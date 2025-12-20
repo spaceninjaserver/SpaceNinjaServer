@@ -9,7 +9,7 @@ import type {
 import { addMods, getInventory } from "../../services/inventoryService.ts";
 import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 import { fromOid, version_compare } from "../../helpers/inventoryHelpers.ts";
-import gameToBuildVersion from "../../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
+import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 
 export const artifactsController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);

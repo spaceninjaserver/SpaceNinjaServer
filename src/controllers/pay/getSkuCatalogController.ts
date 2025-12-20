@@ -1,7 +1,7 @@
 import type { RequestHandler } from "express";
 import { getAccountForRequest } from "../../services/loginService.ts";
 import { version_compare } from "../../helpers/inventoryHelpers.ts";
-import gameToBuildVersion from "../../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
+import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 
 export const getSkuCatalogController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);

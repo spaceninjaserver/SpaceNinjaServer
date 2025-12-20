@@ -7,7 +7,7 @@ import { logger } from "../../utils/logger.ts";
 import { ExportFocusUpgrades } from "warframe-public-export-plus";
 import { Inventory } from "../../models/inventoryModels/inventoryModel.ts";
 import { version_compare } from "../../helpers/inventoryHelpers.ts";
-import gameToBuildVersion from "../../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
+import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 
 export const focusController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);

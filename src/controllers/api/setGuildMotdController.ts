@@ -6,7 +6,7 @@ import { getAccountForRequest, getSuffixedName } from "../../services/loginServi
 import type { ILongMOTD } from "../../types/guildTypes.ts";
 import { GuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
-import gameToBuildVersion from "../../../static/fixed_responses/gameToBuildVersion.json" with { type: "json" };
+import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 
 export const setGuildMotdController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
