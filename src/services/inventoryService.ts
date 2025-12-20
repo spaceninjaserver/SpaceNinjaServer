@@ -2557,6 +2557,27 @@ export const cleanupInventory = async (inventory: TInventoryDatabaseDocument): P
             if (inventory.LotusCustomization?.Skins) replaceSkinIds(inventory.LotusCustomization.Skins, weaponMap);
         }
     }
+
+    {
+        let fixed = 0;
+        for (const key of equipmentKeys) {
+            for (const item of inventory[key]) {
+                for (const config of item.Configs) {
+                    if (config.Skins) {
+                        for (let i = 0; i != config.Skins.length; ++i) {
+                            if (config.Skins[i] == "[object Object]") {
+                                config.Skins[i] = "";
+                                ++fixed;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (fixed) {
+            logger.debug(`fixed ${fixed} invalid skin upgrade ids`);
+        }
+    }
 };
 
 const collectSkins = (skins: string[], weaponMap: Map<string, string>, itemsToAdd: Set<string>): void => {
