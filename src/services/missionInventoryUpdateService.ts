@@ -1403,28 +1403,6 @@ export const addMissionRewards = async (
         ConquestCompletedMissionsCount = rewardInfo.ConquestCompleted == 2 ? 0 : rewardInfo.ConquestCompleted + 1;
     }
 
-    for (const reward of MissionRewards) {
-        const inventoryChange = await handleStoreItemAcquisition(
-            reward.StoreItem,
-            inventory,
-            reward.ItemCount,
-            undefined,
-            true
-        );
-        //TODO: combineInventoryChanges improve type safety, merging 2 of the same item?
-        //TODO: check for the case when two of the same item are added, combineInventoryChanges should merge them, but the client also merges them
-        //TODO: some conditional types to rule out binchanges?
-        combineInventoryChanges(inventoryChanges, inventoryChange.InventoryChanges);
-    }
-
-    inventory.RegularCredits += missionCompletionCredits;
-
-    const credits = await addCredits(account, inventory, {
-        missionCompletionCredits,
-        missionDropCredits: creditDrops ?? 0,
-        rngRewardCredits: inventoryChanges.RegularCredits ?? 0
-    });
-
     if (voidTearWave && voidTearWave.Participants[0].QualifiesForReward) {
         if (!voidTearWave.Participants[0].HaveRewardResponse) {
             // non-endless fissure; giving reward now
@@ -1439,81 +1417,6 @@ export const addMissionRewards = async (
                 });
             }
             inventory.MissionRelicRewards = undefined;
-        }
-    }
-
-    if (strippedItems) {
-        if (endOfMatchUpload) {
-            for (const si of strippedItems) {
-                if (si.DropTable in droptableAliases) {
-                    logger.debug(`rewriting ${si.DropTable} to ${droptableAliases[si.DropTable]}`);
-                    si.DropTable = droptableAliases[si.DropTable];
-                }
-                const droptables = ExportEnemies.droptables[si.DropTable] ?? [];
-                if (si.DROP_MOD) {
-                    const modDroptable = droptables.find(x => x.type == "mod");
-                    if (modDroptable) {
-                        for (let i = 0; i != si.DROP_MOD.length; ++i) {
-                            const reward = getRandomReward(modDroptable.items)!;
-                            logger.debug(`stripped droptable (mods pool) rolled`, reward);
-                            await addItem(inventory, reward.type);
-                            MissionRewards.push({
-                                StoreItem: toStoreItem(reward.type),
-                                ItemCount: 1,
-                                FromEnemyCache: true // to show "identified"
-                            });
-                        }
-                    } else {
-                        logger.error(`unknown droptable ${si.DropTable} for DROP_MOD`);
-                    }
-                }
-                if (si.DROP_BLUEPRINT) {
-                    const blueprintDroptable = droptables.find(x => x.type == "blueprint");
-                    if (blueprintDroptable) {
-                        for (let i = 0; i != si.DROP_BLUEPRINT.length; ++i) {
-                            const reward = getRandomReward(blueprintDroptable.items)!;
-                            logger.debug(`stripped droptable (blueprints pool) rolled`, reward);
-                            await addItem(inventory, reward.type);
-                            MissionRewards.push({
-                                StoreItem: toStoreItem(reward.type),
-                                ItemCount: 1,
-                                FromEnemyCache: true // to show "identified"
-                            });
-                        }
-                    } else {
-                        logger.error(`unknown droptable ${si.DropTable} for DROP_BLUEPRINT`);
-                    }
-                }
-                // e.g. H-09 Apex Turret Sumdali
-                if (si.DROP_MISC_ITEM) {
-                    const resourceDroptable = droptables.find(x => x.type == "resource");
-                    if (resourceDroptable) {
-                        for (let i = 0; i != si.DROP_MISC_ITEM.length; ++i) {
-                            const reward = getRandomReward(resourceDroptable.items)!;
-                            logger.debug(`stripped droptable (resources pool) rolled`, reward);
-                            if (Object.keys(await addItem(inventory, reward.type)).length == 0) {
-                                logger.debug(`item already owned, skipping`);
-                            } else {
-                                MissionRewards.push({
-                                    StoreItem: toStoreItem(reward.type),
-                                    ItemCount: 1,
-                                    FromEnemyCache: true // to show "identified"
-                                });
-                            }
-                        }
-                    } else {
-                        logger.error(`unknown droptable ${si.DropTable} for DROP_MISC_ITEM`);
-                    }
-                }
-
-                if (si.DropTable == "/Lotus/Types/DropTables/ContainerDropTables/VoidVaultMissionRewardsDropTable") {
-                    // Consume netracells search pulse; only when the container reward was picked up. Discussed in https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2673
-                    updateEntratiVault(inventory);
-                    inventory.EntratiVaultCountLastPeriod! += 1;
-                }
-            }
-        } else {
-            logger.debug(`ignoring StrippedItems in intermediate inventory update, deferring until extraction`);
         }
     }
 
@@ -1646,7 +1549,6 @@ export const addMissionRewards = async (
                     }
                 }
                 if (typeof medallionAmount === "number" && !isNaN(medallionAmount)) {
-                    await addItem(inventory, "/Lotus/Types/Items/Deimos/EntratiFragmentUncommonB", medallionAmount);
                     MissionRewards.push({
                         StoreItem: "/Lotus/StoreItems/Types/Items/Deimos/EntratiFragmentUncommonB",
                         ItemCount: medallionAmount
@@ -1680,7 +1582,6 @@ export const addMissionRewards = async (
         if (syndicateTag === "ZarimanSyndicate") {
             let medallionAmount = tier + 1;
             if (isSteelPath) medallionAmount = Math.round(medallionAmount * 1.5);
-            await addItem(inventory, "/Lotus/Types/Gameplay/Zariman/Resources/ZarimanDogTagBounty", medallionAmount);
             MissionRewards.push({
                 StoreItem: "/Lotus/StoreItems/Types/Gameplay/Zariman/Resources/ZarimanDogTagBounty",
                 ItemCount: medallionAmount
@@ -1708,11 +1609,107 @@ export const addMissionRewards = async (
             }
         }
         if (isSteelPath) {
-            await addItem(inventory, "/Lotus/Types/Items/MiscItems/SteelEssence", 1);
             MissionRewards.push({
                 StoreItem: "/Lotus/StoreItems/Types/Items/MiscItems/SteelEssence",
                 ItemCount: 1
             });
+        }
+    }
+
+    for (const reward of MissionRewards) {
+        const inventoryChange = await handleStoreItemAcquisition(
+            reward.StoreItem,
+            inventory,
+            reward.ItemCount,
+            undefined,
+            true
+        );
+        //TODO: combineInventoryChanges improve type safety, merging 2 of the same item?
+        //TODO: check for the case when two of the same item are added, combineInventoryChanges should merge them, but the client also merges them
+        //TODO: some conditional types to rule out binchanges?
+        combineInventoryChanges(inventoryChanges, inventoryChange.InventoryChanges);
+    }
+
+    inventory.RegularCredits += missionCompletionCredits;
+
+    const credits = await addCredits(account, inventory, {
+        missionCompletionCredits,
+        missionDropCredits: creditDrops ?? 0,
+        rngRewardCredits: inventoryChanges.RegularCredits ?? 0
+    });
+
+    if (strippedItems) {
+        if (endOfMatchUpload) {
+            for (const si of strippedItems) {
+                if (si.DropTable in droptableAliases) {
+                    logger.debug(`rewriting ${si.DropTable} to ${droptableAliases[si.DropTable]}`);
+                    si.DropTable = droptableAliases[si.DropTable];
+                }
+                const droptables = ExportEnemies.droptables[si.DropTable] ?? [];
+                if (si.DROP_MOD) {
+                    const modDroptable = droptables.find(x => x.type == "mod");
+                    if (modDroptable) {
+                        for (let i = 0; i != si.DROP_MOD.length; ++i) {
+                            const reward = getRandomReward(modDroptable.items)!;
+                            logger.debug(`stripped droptable (mods pool) rolled`, reward);
+                            await addItem(inventory, reward.type);
+                            MissionRewards.push({
+                                StoreItem: toStoreItem(reward.type),
+                                ItemCount: 1,
+                                FromEnemyCache: true // to show "identified"
+                            });
+                        }
+                    } else {
+                        logger.error(`unknown droptable ${si.DropTable} for DROP_MOD`);
+                    }
+                }
+                if (si.DROP_BLUEPRINT) {
+                    const blueprintDroptable = droptables.find(x => x.type == "blueprint");
+                    if (blueprintDroptable) {
+                        for (let i = 0; i != si.DROP_BLUEPRINT.length; ++i) {
+                            const reward = getRandomReward(blueprintDroptable.items)!;
+                            logger.debug(`stripped droptable (blueprints pool) rolled`, reward);
+                            await addItem(inventory, reward.type);
+                            MissionRewards.push({
+                                StoreItem: toStoreItem(reward.type),
+                                ItemCount: 1,
+                                FromEnemyCache: true // to show "identified"
+                            });
+                        }
+                    } else {
+                        logger.error(`unknown droptable ${si.DropTable} for DROP_BLUEPRINT`);
+                    }
+                }
+                // e.g. H-09 Apex Turret Sumdali
+                if (si.DROP_MISC_ITEM) {
+                    const resourceDroptable = droptables.find(x => x.type == "resource");
+                    if (resourceDroptable) {
+                        for (let i = 0; i != si.DROP_MISC_ITEM.length; ++i) {
+                            const reward = getRandomReward(resourceDroptable.items)!;
+                            logger.debug(`stripped droptable (resources pool) rolled`, reward);
+                            if (Object.keys(await addItem(inventory, reward.type)).length == 0) {
+                                logger.debug(`item already owned, skipping`);
+                            } else {
+                                MissionRewards.push({
+                                    StoreItem: toStoreItem(reward.type),
+                                    ItemCount: 1,
+                                    FromEnemyCache: true // to show "identified"
+                                });
+                            }
+                        }
+                    } else {
+                        logger.error(`unknown droptable ${si.DropTable} for DROP_MISC_ITEM`);
+                    }
+                }
+
+                if (si.DropTable == "/Lotus/Types/DropTables/ContainerDropTables/VoidVaultMissionRewardsDropTable") {
+                    // Consume netracells search pulse; only when the container reward was picked up. Discussed in https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2673
+                    updateEntratiVault(inventory);
+                    inventory.EntratiVaultCountLastPeriod! += 1;
+                }
+            }
+        } else {
+            logger.debug(`ignoring StrippedItems in intermediate inventory update, deferring until extraction`);
         }
     }
 
