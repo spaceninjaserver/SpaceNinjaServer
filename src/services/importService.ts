@@ -399,7 +399,7 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         db.XPInfo = client.XPInfo;
     }
     if (client.CurrentLoadOutIds !== undefined) {
-        db.CurrentLoadOutIds = client.CurrentLoadOutIds;
+        db.CurrentLoadOutIds = client.CurrentLoadOutIds.map(x => new Types.ObjectId(x.$oid));
     }
     if (client.Affiliations !== undefined) {
         db.Affiliations = client.Affiliations;
