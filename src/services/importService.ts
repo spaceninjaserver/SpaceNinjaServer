@@ -115,7 +115,7 @@ const convertWeaponSkin = (client: IWeaponSkinClient): IWeaponSkinDatabase => {
     };
 };
 
-const convertUpgrade = (client: IUpgradeClient): IUpgradeDatabase => {
+export const importUpgrade = (client: IUpgradeClient): IUpgradeDatabase => {
     const { ItemId, ...rest } = client;
     return {
         ...rest,
@@ -266,7 +266,7 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     }
     for (const key of ["Upgrades", "CrewShipSalvagedWeaponSkins", "CrewShipWeaponSkins"] as const) {
         if (client[key] !== undefined) {
-            replaceArray<IUpgradeDatabase>(db[key], client[key].map(convertUpgrade));
+            replaceArray<IUpgradeDatabase>(db[key], client[key].map(importUpgrade));
         }
     }
     for (const key of [

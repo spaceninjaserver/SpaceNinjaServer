@@ -1398,11 +1398,12 @@ export const updateCurrency = (
 ): IInventoryChanges => {
     if (price != 0 && isCurrencyTracked(inventory, usePremium)) {
         if (usePremium) {
-            if (inventory.PremiumCreditsFree > 0) {
+            if (price > 0 && inventory.PremiumCreditsFree > 0) {
                 const premiumCreditsFreeDelta = Math.min(price, inventory.PremiumCreditsFree) * -1;
                 inventoryChanges.PremiumCreditsFree ??= 0;
                 inventoryChanges.PremiumCreditsFree += premiumCreditsFreeDelta;
                 inventory.PremiumCreditsFree += premiumCreditsFreeDelta;
+                logger.debug(`spending ${-premiumCreditsFreeDelta} starter plat`);
             }
             inventoryChanges.PremiumCredits ??= 0;
             inventoryChanges.PremiumCredits -= price;

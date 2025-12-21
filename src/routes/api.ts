@@ -372,6 +372,7 @@ apiRouter.post("/stepSequencers.php", stepSequencersController);
 apiRouter.post("/syndicateSacrifice.php", syndicateSacrificeController);
 apiRouter.post("/syndicateStandingBonus.php", syndicateStandingBonusController);
 apiRouter.post("/tauntHistory.php", tauntHistoryController);
+apiRouter.post("/trading.php", tradingController);
 apiRouter.post("/trainingResult.php", trainingResultPostController);
 apiRouter.post("/umbra.php", umbraController);
 apiRouter.post("/unlockShipFeature.php", unlockShipFeatureController);

@@ -9,7 +9,7 @@ import type {
     ILotusCustomization,
     IShipCustomization
 } from "./commonInventoryTypes.ts";
-import type { IFingerprintStat, RivenFingerprint } from "../../helpers/rivenHelper.ts";
+import type { IFingerprintStat } from "../../helpers/rivenHelper.ts";
 import type { IOrbiterClient } from "../personalRoomsTypes.ts";
 import type { ICountedStoreItem } from "warframe-public-export-plus";
 import type { IEquipmentClient, IEquipmentDatabase, ITraits } from "../equipmentTypes.ts";
@@ -892,23 +892,22 @@ export interface IPendingTrade {
     State: number;
     SelfReady: boolean;
     BuddyReady: boolean;
-    Giving?: IGiving;
+    Giving?: ITradeOffer;
     Revision: number;
-    Getting: IGetting;
+    Getting: ITradeOffer;
     ItemId: IOid;
     ClanTax?: number;
 }
 
-export interface IGetting {
-    RandomUpgrades?: IRandomUpgrade[];
-    _SlotOrderInfo: GettingSlotOrderInfo[];
+export interface ITradeOffer {
+    RandomUpgrades?: IUpgradeClient[];
+    Upgrades?: IUpgradeClient[];
+    RawUpgrades?: IRawUpgrade[];
+    MiscItems?: IMiscItem[];
+    Recipes?: ITypeCount[];
+    FusionTreasures?: IFusionTreasure[];
     PremiumCredits?: number;
-}
-
-export interface IRandomUpgrade {
-    UpgradeFingerprint: RivenFingerprint;
-    ItemType: string;
-    ItemId: IOid;
+    _SlotOrderInfo: string[];
 }
 
 export interface IInnateDamageFingerprint {
@@ -929,23 +928,6 @@ export interface INemesisWeaponTargetFingerprint {
 export interface INemesisPetTargetFingerprint {
     Parts: string[];
     Name: string;
-}
-
-export enum GettingSlotOrderInfo {
-    Empty = "",
-    LotusUpgradesModsRandomizedPlayerMeleeWeaponRandomModRare0 = "/Lotus/Upgrades/Mods/Randomized/PlayerMeleeWeaponRandomModRare:0",
-    P = "P"
-}
-
-export interface IGiving {
-    RawUpgrades: ITypeCount[];
-    _SlotOrderInfo: GivingSlotOrderInfo[];
-}
-
-export enum GivingSlotOrderInfo {
-    Empty = "",
-    LotusTypesSentinelsSentinelPreceptsItemVacum = "/Lotus/Types/Sentinels/SentinelPrecepts/ItemVacum",
-    LotusUpgradesModsPistolDualStatElectEventPistolMod = "/Lotus/Upgrades/Mods/Pistol/DualStat/ElectEventPistolMod"
 }
 
 export interface IPeriodicMissionCompletionDatabase {
