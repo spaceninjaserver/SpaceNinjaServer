@@ -151,6 +151,7 @@ import { setSuitInfectionController } from "../controllers/api/setSuitInfectionC
 import { setSupportedSyndicateController } from "../controllers/api/setSupportedSyndicateController.ts";
 import { setWeaponSkillTreeController } from "../controllers/api/setWeaponSkillTreeController.ts";
 import { shipDecorationsController } from "../controllers/api/shipDecorationsController.ts";
+import { signupAndroidController } from "../controllers/api/signupAndroidController.ts";
 import { startCollectibleEntryController } from "../controllers/api/startCollectibleEntryController.ts";
 import { startDojoRecipeController } from "../controllers/api/startDojoRecipeController.ts";
 import { startLibraryDailyTaskController } from "../controllers/api/startLibraryDailyTaskController.ts";
@@ -174,6 +175,7 @@ import { updateThemeController } from "../controllers/api/updateThemeController.
 import { upgradeOperatorController } from "../controllers/api/upgradeOperatorController.ts";
 import { upgradesController } from "../controllers/api/upgradesController.ts";
 import { valenceSwapController } from "../controllers/api/valenceSwapController.ts";
+import { versionController } from "../controllers/api/versionController.ts";
 import { wishlistController } from "../controllers/api/wishlistController.ts";
 import { worldStateController } from "../controllers/dynamic/worldStateController.ts";
 
@@ -240,6 +242,7 @@ apiRouter.get("/setBootLocation.php", setBootLocationController);
 apiRouter.get("/setDojoURL", setDojoURLController);
 apiRouter.get("/setGuildMotd.php", setGuildMotdController);
 apiRouter.get("/setSupportedSyndicate.php", setSupportedSyndicateController);
+apiRouter.get("/signupAndroid.php", signupAndroidController);
 apiRouter.get("/startLibraryDailyTask.php", startLibraryDailyTaskController);
 apiRouter.get("/startLibraryPersonalTarget.php", startLibraryPersonalTargetController);
 apiRouter.get("/surveys.php", surveysController);
@@ -247,6 +250,7 @@ apiRouter.get("/trading.php", tradingController);
 apiRouter.get("/trainingResult.php", trainingResultGetController);
 apiRouter.get("/updateSession.php", updateSessionGetController);
 apiRouter.get("/upgradeOperator.php", upgradeOperatorController);
+apiRouter.get("/version.php", versionController);
 apiRouter.get("/worldState.php", worldStateController); // U8
 
 // post
@@ -313,7 +317,7 @@ apiRouter.post("/giveStartingGear.php", giveStartingGearPostController);
 apiRouter.post("/guildTech.php", guildTechController);
 apiRouter.post("/hostSession.php", hostSessionController);
 apiRouter.post("/hubBlessing.php", hubBlessingController);
-apiRouter.post("/inbox.php", inboxController); // from ~U15, don't know when they changed it to GET 
+apiRouter.post("/inbox.php", inboxController); // from ~U15, don't know when they changed it to GET
 apiRouter.post("/infestedFoundry.php", infestedFoundryController);
 apiRouter.post("/instantCompleteRecipe.php", claimCompletedRecipeController); // U8
 apiRouter.post("/inventory.php", inventoryController); // used by companion app

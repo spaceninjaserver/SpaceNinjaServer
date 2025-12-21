@@ -4,3 +4,8 @@ export interface IAccountCreation {
     DisplayName: string;
     CountryCode: string;
 }
+
+export interface IAndroidAccount {
+    email?: string;
+    userId: string;
+}

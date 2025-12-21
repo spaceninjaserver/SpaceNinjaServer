@@ -15,9 +15,27 @@ import { fromStoreItem } from "../../services/itemDataService.ts";
 import { getTokenForClient, getTunablesForClient } from "../../services/tunablesService.ts";
 import type { AddressInfo } from "node:net";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import { getGoogleAccountData } from "../../helpers/customHelpers/customHelpers.ts";
 
 export const loginController: RequestHandler = async (request, response) => {
     const loginRequest = JSON.parse(String(request.body)) as ILoginRequest; // parse octet stream of json data to json object
+
+    const isAndroid = loginRequest.ClientType === "Android";
+    if (isAndroid) {
+        try {
+            const { userId, email } = await getGoogleAccountData(loginRequest.GoogleTokenId);
+            if (email === undefined || email === "") {
+                response.status(400).json({ error: "incorrect login data" });
+                return;
+            }
+            loginRequest.email = email;
+            loginRequest.GoogleTokenId = userId;
+        } catch (error: unknown) {
+            response.status(400).json({ error: "incorrect login data" });
+            return;
+        }
+        loginRequest.password = "android"; // edit in mongodb if you want to access it via webui
+    }
 
     if (config.tunables?.useLoginToken) {
         if (request.query.token !== getTokenForClient((request.socket.address() as AddressInfo).address)) {
@@ -33,7 +51,7 @@ export const loginController: RequestHandler = async (request, response) => {
             ? request.query.buildLabel.split(" ").join("+")
             : buildConfig.buildLabel;
 
-    if (version_compare(buildLabel, "2025.12.10.16.35") > 0) {
+    if (!isAndroid && version_compare(buildLabel, "2025.12.10.16.35") > 0) {
         response.status(400).json({ error: "do you want me to change your diapers, too?" });
         return;
     }
@@ -51,12 +69,17 @@ export const loginController: RequestHandler = async (request, response) => {
                 DisplayName: name,
                 CountryCode: loginRequest.lang?.toUpperCase() ?? "EN",
                 ClientType: loginRequest.ClientType,
+                GoogleTokenId: loginRequest.GoogleTokenId,
                 Nonce: createNonce(),
                 BuildLabel: buildLabel,
                 LastLogin: new Date()
             });
             logger.debug("created new account");
-            response.send(createLoginResponse(request, newAccount, buildLabel)).end();
+            if (isAndroid) {
+                response.status(400).json({ error: `noAndroidAccount;countryCode=US` });
+            } else {
+                response.send(createLoginResponse(request, newAccount, buildLabel)).end();
+            }
             return;
         } catch (error: unknown) {
             if (error instanceof Error) {
@@ -70,9 +93,16 @@ export const loginController: RequestHandler = async (request, response) => {
         return;
     }
 
-    if (!isCorrectPassword(loginRequest.password, account.password)) {
-        response.status(400).json({ error: "incorrect login data" });
-        return;
+    if (isAndroid) {
+        if (loginRequest.GoogleTokenId !== account.GoogleTokenId) {
+            response.status(400).json({ error: "incorrect login data" });
+            return;
+        }
+    } else {
+        if (!isCorrectPassword(loginRequest.password, account.password)) {
+            response.status(400).json({ error: "incorrect login data" });
+            return;
+        }
     }
 
     if (account.Nonce && account.ClientType != "webui" && !account.Dropped && !loginRequest.kick) {

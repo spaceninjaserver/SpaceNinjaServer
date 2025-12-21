@@ -6,6 +6,7 @@ export interface IAccountAndLoginResponseCommons {
     ClientType?: string;
     CrossPlatformAllowed?: boolean;
     ForceLogoutVersion?: number;
+    GoogleTokenId?: string;
     AmazonAuthToken?: string;
     AmazonRefreshToken?: string;
     ConsentNeeded?: boolean;
@@ -42,6 +43,7 @@ export interface ILoginRequest {
     date: number;
     ClientType?: string;
     PS?: string;
+    GoogleTokenId?: string;
     kick?: boolean;
 }
 

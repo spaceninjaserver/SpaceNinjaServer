@@ -1,13 +1,31 @@
-import type { IAccountCreation } from "../../types/customTypes.ts";
+import type { IAccountCreation, IAndroidAccount } from "../../types/customTypes.ts";
 import type { IDatabaseAccountRequiredFields } from "../../types/loginTypes.ts";
 import crypto from "crypto";
 import { isString, parseEmail, parseString } from "../general.ts";
+import { OAuth2Client } from "google-auth-library";
 
 const getWhirlpoolHash = (rawPassword: string): string => {
     const whirlpool = crypto.createHash("whirlpool");
     const data = whirlpool.update(rawPassword, "utf8");
     const hash = data.digest("hex");
     return hash;
+};
+
+const getGoogleAccountData = async (googleTokenId: string | undefined): Promise<IAndroidAccount> => {
+    if (!googleTokenId) {
+        throw new Error("google token is missing");
+    }
+    const client = new OAuth2Client();
+    const ticket = await client.verifyIdToken({
+        idToken: googleTokenId
+    });
+
+    const payload = ticket.getPayload();
+    if (!payload) {
+        throw new Error("payload missing, perhaps invalid google token");
+    }
+
+    return { userId: payload["sub"], email: payload["email"] };
 };
 
 const parsePassword = (passwordCandidate: unknown): string => {
@@ -53,4 +71,4 @@ const toDatabaseAccount = (createAccount: IAccountCreation): IDatabaseAccountReq
     } satisfies IDatabaseAccountRequiredFields;
 };
 
-export { toDatabaseAccount, toAccountCreation as toCreateAccount };
+export { toDatabaseAccount, toAccountCreation as toCreateAccount, getGoogleAccountData };

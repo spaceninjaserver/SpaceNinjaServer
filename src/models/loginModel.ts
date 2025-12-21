@@ -20,6 +20,7 @@ const databaseAccountSchema = new Schema<IDatabaseAccountJson>(
         ForceLogoutVersion: { type: Number, default: 0 },
         AmazonAuthToken: { type: String },
         AmazonRefreshToken: { type: String },
+        GoogleTokenId: { type: String },
         ConsentNeeded: { type: Boolean, default: false },
         TrackedSettings: { type: [String], default: [] },
         Nonce: { type: Number, default: 0 },

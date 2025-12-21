@@ -29,6 +29,7 @@
     "chokidar": "^4.0.3",
     "crc-32": "^1.2.2",
     "express": "^5",
+    "google-auth-library": "^10.5.0",
     "json-with-bigint": "^3.4.4",
     "mongoose": "^8.11.0",
     "morgan": "^1.10.0",
