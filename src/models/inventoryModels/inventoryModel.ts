@@ -95,7 +95,8 @@ import type {
     IDialogueResetDateDatabase,
     IDescentLevelReward,
     IDescentCategoryRewardClient,
-    IDescentCategoryRewardDatabase
+    IDescentCategoryRewardDatabase,
+    IFocusLoadoutDatabase
 } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { equipmentKeys } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IOid, ITypeCount } from "../../types/commonTypes.ts";
@@ -159,6 +160,14 @@ const focusUpgradeSchema = new Schema<IFocusUpgrade>(
     { _id: false }
 );
 
+const focusLoadoutSchema = new Schema<IFocusLoadoutDatabase>(
+    {
+        Preset: EquipmentSelectionSchema,
+        FocusAbility: String
+    },
+    { _id: false }
+);
+
 const polaritySchema = new Schema<IPolarity>(
     {
         Slot: Number,
@@ -214,6 +223,7 @@ const ItemConfigSchema = new Schema<IItemConfig>(
         eyecol: colorSchema,
         facial: colorSchema,
         syancol: colorSchema,
+        cloth: colorSchema,
         Upgrades: [String],
         Songs: {
             type: [
@@ -1624,8 +1634,10 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         FocusAbility: String,
         //The treeways of the Focus school.(Active and passive Ability)
         FocusUpgrades: [focusUpgradeSchema],
+        FocusLoadouts: { type: [focusLoadoutSchema], default: [] },
         //Focus 2.0 Pool
         FocusCapacity: Number,
+        OneTimePurchases: { type: [String], default: [] },
 
         //Achievement
         ChallengeProgress: [challengeProgressSchema],
@@ -1664,6 +1676,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         OperatorLoadOuts: [operatorConfigSchema],
         //Drifter
         AdultOperatorLoadOuts: [operatorConfigSchema],
+        OperatorSuits: { type: [EquipmentSchema], default: [] },
         OperatorCustomizationSlotPurchases: Number,
         // Kahl
         KahlLoadOuts: [operatorConfigSchema],
@@ -1996,6 +2009,7 @@ export type InventoryDocumentProps = {
     OperatorLoadOuts: Types.DocumentArray<IOperatorConfigDatabase>;
     AdultOperatorLoadOuts: Types.DocumentArray<IOperatorConfigDatabase>;
     KahlLoadOuts: Types.DocumentArray<IOperatorConfigDatabase>;
+    OperatorSuits: Types.DocumentArray<IEquipmentDatabase>;
     PendingRecipes: Types.DocumentArray<IPendingRecipeDatabase>;
     WeaponSkins: Types.DocumentArray<IWeaponSkinDatabase>;
     QuestKeys: Types.DocumentArray<IQuestKeyDatabase>;

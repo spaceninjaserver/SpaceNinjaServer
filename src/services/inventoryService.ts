@@ -97,6 +97,131 @@ import { skinLookupTable } from "../helpers/skinLookupTable.ts";
 import type { TLoadoutDatabaseDocument } from "../models/inventoryModels/loadoutModel.ts";
 import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 
+type OperatorAntiqueMeta = {
+    focusAbility: string;
+    ultimateUpgrades: string[];
+};
+
+const operatorAntiqueMeta: Partial<Record<string, OperatorAntiqueMeta>> = {
+    "/Lotus/Weapons/Operator/Antiques/ZenurikGrimoire/ZanurikGrimoireAntique": {
+        focusAbility: "/Lotus/Upgrades/Focus/Power/PowerFocusAbility",
+        ultimateUpgrades: [
+            "/Lotus/Upgrades/Focus/Power/Ultimate/PowerUltimateUpgrade",
+            "/Lotus/Upgrades/Focus/Power/Ultimate/PowerUltimateBlindUpgrade",
+            "/Lotus/Upgrades/Focus/Power/Ultimate/PowerUltimateBuffUpgrade",
+            "/Lotus/Upgrades/Focus/Power/Ultimate/PowerUltimateChainUpgrade",
+            "/Lotus/Upgrades/Focus/Power/Ultimate/PowerUltimateNumberUpgrade"
+        ]
+    },
+    "/Lotus/Weapons/Operator/Antiques/NaramonBlade/NaramonBladeAntique": {
+        focusAbility: "/Lotus/Upgrades/Focus/Tactic/TacticFocusAbility",
+        ultimateUpgrades: [
+            "/Lotus/Upgrades/Focus/Tactic/Active/TacticUltimateUpgrade",
+            "/Lotus/Upgrades/Focus/Tactic/Active/TacticUltimateDoubleUpgrade",
+            "/Lotus/Upgrades/Focus/Tactic/Active/TacticUltimateNumberUpgrade",
+            "/Lotus/Upgrades/Focus/Tactic/Active/TacticUltimateRangeUpgrade",
+            "/Lotus/Upgrades/Focus/Tactic/Active/TacticUltimateSizeUpgrade"
+        ]
+    },
+    "/Lotus/Weapons/Operator/Antiques/MaduraiBow/MaduraiBowAntique": {
+        focusAbility: "/Lotus/Upgrades/Focus/Attack/AttackFocusAbility",
+        ultimateUpgrades: [
+            "/Lotus/Upgrades/Focus/Attack/Ultimate/AttackUltimateUpgrade",
+            "/Lotus/Upgrades/Focus/Attack/Ultimate/AttackUltimateCooldownUpgrade",
+            "/Lotus/Upgrades/Focus/Attack/Ultimate/AttackUltimateDoubleUpgrade",
+            "/Lotus/Upgrades/Focus/Attack/Ultimate/AttackUltimateRadiusUpgrade",
+            "/Lotus/Upgrades/Focus/Attack/Ultimate/AttackUltimateStrengthUpgrade"
+        ]
+    },
+    "/Lotus/Weapons/Operator/Antiques/UnairuHammer/UniaruHammerAntique": {
+        focusAbility: "/Lotus/Upgrades/Focus/Ward/WardFocusAbility",
+        ultimateUpgrades: [
+            "/Lotus/Upgrades/Focus/Ward/Ultimate/WardUltimateUpgrade",
+            "/Lotus/Upgrades/Focus/Ward/Ultimate/WardUltimateArmorUpgrade",
+            "/Lotus/Upgrades/Focus/Ward/Ultimate/WardUltimateChanceUpgrade",
+            "/Lotus/Upgrades/Focus/Ward/Ultimate/WardUltimateRadiusUpgrade",
+            "/Lotus/Upgrades/Focus/Ward/Ultimate/WardUltimateSlamUpgrade"
+        ]
+    },
+    "/Lotus/Weapons/Operator/Antiques/VazarinStaff/VazarinStaffAntique": {
+        focusAbility: "/Lotus/Upgrades/Focus/Defense/DefenseFocusAbility",
+        ultimateUpgrades: [
+            "/Lotus/Upgrades/Focus/Defense/Ultimate/DefenseUltimateUpgrade",
+            "/Lotus/Upgrades/Focus/Defense/Ultimate/DefenseUltimateDurationUpgrade",
+            "/Lotus/Upgrades/Focus/Defense/Ultimate/DefenseUltimateElementalUpgrade",
+            "/Lotus/Upgrades/Focus/Defense/Ultimate/DefenseUltimateHealUpgrade",
+            "/Lotus/Upgrades/Focus/Defense/Ultimate/DefenseUltimateProcVulnUpgrade"
+        ]
+    }
+};
+
+const ensureOperatorSuitsRemasterData = (inventory: TInventoryDatabaseDocument): boolean => {
+    if (inventory.OperatorSuits.length != 0) {
+        return false;
+    }
+    inventory.OperatorSuits.push(
+        { ItemType: "/Lotus/Powersuits/Operator/ChildOperatorSuitRemaster", Configs: [], UpgradeVer: 101 },
+        { ItemType: "/Lotus/Powersuits/Operator/AdultOperatorSuitRemaster", Configs: [], UpgradeVer: 101 }
+    );
+    return true;
+};
+
+const setupAntique = (
+    inventory: TInventoryDatabaseDocument,
+    weaponType: string,
+    weaponId: Types.ObjectId,
+    inventoryChanges?: IInventoryChanges
+): void => {
+    const meta = operatorAntiqueMeta[weaponType];
+    if (!meta) {
+        throw new Error(`unknown antique: ${weaponType}`);
+    }
+
+    const focusUpgradesAdded: object[] = [];
+    const focusLoadoutsAdded: object[] = [];
+
+    inventory.OneTimePurchases ??= [];
+    if (!inventory.OneTimePurchases.includes(weaponType)) {
+        inventory.OneTimePurchases.push(weaponType);
+    }
+
+    if (!inventory.FocusUpgrades.some(x => x.ItemType === meta.focusAbility)) {
+        inventory.FocusUpgrades.push({ ItemType: meta.focusAbility });
+        focusUpgradesAdded.push({ ItemType: meta.focusAbility });
+    }
+    for (const upgradeType of meta.ultimateUpgrades) {
+        if (!inventory.FocusUpgrades.some(x => x.ItemType === upgradeType)) {
+            inventory.FocusUpgrades.push({ ItemType: upgradeType, Level: 0 });
+            focusUpgradesAdded.push({ ItemType: upgradeType, Level: 0 });
+        }
+    }
+
+    inventory.FocusLoadouts ??= [];
+    if (!inventory.FocusLoadouts.some(x => x.FocusAbility === meta.focusAbility)) {
+        inventory.FocusLoadouts.push({
+            FocusAbility: meta.focusAbility,
+            Preset: { ItemId: weaponId, mod: 0, cus: 0 }
+        });
+        focusLoadoutsAdded.push({
+            FocusAbility: meta.focusAbility,
+            Preset: { ItemId: toOid(weaponId), mod: 0, cus: 0 }
+        });
+    }
+
+    if (inventoryChanges) {
+        if (focusUpgradesAdded.length) {
+            const key = "FocusUpgrades";
+            const existing = inventoryChanges[key] as object[] | undefined;
+            inventoryChanges[key] = existing ? existing.concat(focusUpgradesAdded) : focusUpgradesAdded;
+        }
+        if (focusLoadoutsAdded.length) {
+            const key = "FocusLoadouts";
+            const existing = inventoryChanges[key] as object[] | undefined;
+            inventoryChanges[key] = existing ? existing.concat(focusLoadoutsAdded) : focusLoadoutsAdded;
+        }
+    }
+};
+
 export const createInventory = async (
     accountOwnerId: Types.ObjectId,
     loadout: TLoadoutDatabaseDocument,
@@ -115,6 +240,7 @@ export const createInventory = async (
             Seed: generateRewardSeed(),
             NumCompletions: 0
         };
+        ensureOperatorSuitsRemasterData(inventory);
         await addItem(inventory, "/Lotus/Types/Friendly/PlayerControllable/Weapons/DuviriDualSwords");
 
         if (config.skipTutorial) {
@@ -310,6 +436,7 @@ export const productCategoryToInventoryBin = (productCategory: string): Inventor
         case "SpaceMelee":
             return InventorySlot.SPACEWEAPONS;
         case "OperatorAmps":
+        case "Antiques":
             return InventorySlot.AMPS;
         case "CrewShipWeapons":
         case "CrewShipWeaponSkins":
@@ -1008,6 +1135,26 @@ export const addItem = async (
                         ...occupySlot(
                             inventory,
                             productCategoryToInventoryBin(productCategory) ?? InventorySlot.WEAPONS,
+                            premiumPurchase
+                        )
+                    };
+                }
+                case "Antiques": {
+                    if (quantity != 1) {
+                        throw new Error(`unexpected acquisition quantity of Antiques: got ${quantity}, expected 1`);
+                    }
+                    const priorLen = inventory.Antiques.length;
+                    const inventoryChanges = addEquipment(inventory, "Antiques", typeName, {
+                        UpgradeVer: 101,
+                        Configs: [{}, {}, {}]
+                    });
+                    const added = inventory.Antiques[priorLen];
+                    setupAntique(inventory, typeName, added._id, inventoryChanges);
+                    return {
+                        ...inventoryChanges,
+                        ...occupySlot(
+                            inventory,
+                            productCategoryToInventoryBin(productCategory) ?? InventorySlot.AMPS,
                             premiumPurchase
                         )
                     };
@@ -2445,6 +2592,10 @@ export const setupKahlSyndicate = (inventory: TInventoryDatabaseDocument): void 
 
 export const cleanupInventory = async (inventory: TInventoryDatabaseDocument): Promise<void> => {
     inventory.CurrentLoadOutIds = inventory.CurrentLoadOutIds.map(fromDbOid);
+
+    if (ensureOperatorSuitsRemasterData(inventory)) {
+        logger.debug(`added missing Operator suits for Operator remaster`);
+    }
 
     let index = inventory.MiscItems.findIndex(x => x.ItemType == "");
     if (index != -1) {

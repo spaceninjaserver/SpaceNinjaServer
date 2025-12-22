@@ -12,7 +12,13 @@ import type {
 import type { IFingerprintStat } from "../../helpers/rivenHelper.ts";
 import type { IOrbiterClient } from "../personalRoomsTypes.ts";
 import type { ICountedStoreItem } from "warframe-public-export-plus";
-import type { IEquipmentClient, IEquipmentDatabase, ITraits } from "../equipmentTypes.ts";
+import type {
+    IEquipmentClient,
+    IEquipmentDatabase,
+    IEquipmentSelectionClient,
+    IEquipmentSelectionDatabase,
+    ITraits
+} from "../equipmentTypes.ts";
 import type { ILoadoutConfigClientLegacy, ILoadOutPresets } from "../saveLoadoutTypes.ts";
 import type { CalendarSeasonType } from "../worldStateTypes.ts";
 import type { SlotNames } from "../purchaseTypes.ts";
@@ -114,6 +120,7 @@ export interface IInventoryDatabase
             | "DescentRewards"
             | "PersonalGoalProgress"
             | "CurrentLoadOutIds"
+            | "FocusLoadouts"
             | TEquipmentKey
         >,
         InventoryDatabaseEquipment,
@@ -160,6 +167,7 @@ export interface IInventoryDatabase
     DescentRewards?: IDescentCategoryRewardDatabase[];
     PersonalGoalProgress?: IGoalProgressDatabase[];
     MissionRelicRewards?: ITypeCount[];
+    FocusLoadouts?: IFocusLoadoutDatabase[];
 }
 
 export interface IQuestKeyDatabase {
@@ -184,6 +192,7 @@ export const equipmentKeys = [
     "SpaceMelee",
     "Hoverboards",
     "OperatorAmps",
+    "Antiques",
     "MoaPets",
     "Scoops",
     "Horses",
@@ -196,7 +205,8 @@ export const equipmentKeys = [
     "CrewShipHarnesses",
     "KubrowPets",
     "CrewShipWeapons",
-    "CrewShipSalvagedWeapons"
+    "CrewShipSalvagedWeapons",
+    "OperatorSuits"
 ] as const;
 
 export const loadoutKeysLegacy = ["NORMAL", "NORMAL_PVP", "LUNARO", "ARCHWING", "SENTINEL", "OPERATOR"] as const;
@@ -206,6 +216,15 @@ export type TEquipmentKey = (typeof equipmentKeys)[number];
 export interface IDuviriInfo {
     Seed: bigint;
     NumCompletions: number;
+}
+
+export interface IFocusLoadoutClient {
+    Preset: IEquipmentSelectionClient;
+    FocusAbility: string;
+}
+
+export interface IFocusLoadoutDatabase extends Omit<IFocusLoadoutClient, "Preset"> {
+    Preset: IEquipmentSelectionDatabase;
 }
 
 export interface IMailboxClient {
@@ -271,6 +290,8 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     AdultOperatorLoadOuts: IOperatorConfigClient[];
     OperatorLoadOuts: IOperatorConfigClient[];
     KahlLoadOuts: IOperatorConfigClient[];
+    FocusLoadouts?: IFocusLoadoutClient[];
+    OneTimePurchases?: string[];
 
     DuviriInfo?: IDuviriInfo;
     Mailbox?: IMailboxClient;

@@ -13,6 +13,8 @@ import type {
     IDialogueHistoryDatabase,
     IInfestedFoundryClient,
     IInfestedFoundryDatabase,
+    IFocusLoadoutClient,
+    IFocusLoadoutDatabase,
     IInventoryClient,
     INemesisClient,
     INemesisDatabase,
@@ -151,6 +153,13 @@ const convertEquipmentSelection = (es: IEquipmentSelectionClient): IEquipmentSel
     };
 };
 
+const convertFocusLoadout = (client: IFocusLoadoutClient): IFocusLoadoutDatabase => {
+    return {
+        ...client,
+        Preset: convertEquipmentSelection(client.Preset)
+    };
+};
+
 const convertCrewShipWeaponEmplacements = (
     obj: ICrewShipWeaponEmplacementsClient
 ): ICrewShipWeaponEmplacementsDatabase => {
@@ -261,6 +270,9 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
             replaceArray<IEquipmentDatabase>(db[key], client[key].map(convertEquipment));
         }
     }
+    if (client.OperatorSuits !== undefined) {
+        replaceArray<IEquipmentDatabase>(db.OperatorSuits, client.OperatorSuits.map(convertEquipment));
+    }
     if (client.WeaponSkins !== undefined) {
         replaceArray<IWeaponSkinDatabase>(db.WeaponSkins, client.WeaponSkins.map(convertWeaponSkin));
     }
@@ -368,6 +380,7 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         "DeathMarks",
         "Wishlist",
         "NemesisAbandonedRewards",
+        //"OneTimePurchases", // TODO: Import Antiques
         "EntratiLabConquestActiveFrameVariants",
         "EchoesHexConquestActiveFrameVariants",
         "EchoesHexConquestActiveStickers"
@@ -409,6 +422,9 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     }
     if (client.FocusUpgrades !== undefined) {
         db.FocusUpgrades = client.FocusUpgrades;
+    }
+    if (client.FocusLoadouts !== undefined) {
+        db.FocusLoadouts = client.FocusLoadouts.map(convertFocusLoadout);
     }
     if (client.EvolutionProgress !== undefined) {
         db.EvolutionProgress = client.EvolutionProgress;

@@ -14,6 +14,7 @@ import type {
     IEquipmentSelectionClient,
     IEquipmentSelectionDatabase
 } from "./equipmentTypes.ts";
+import type { IFocusLoadoutClient } from "./inventoryTypes/inventoryTypes.ts";
 
 export interface ISaveLoadoutRequest {
     LoadOuts: ILoadoutClient | ILoadoutConfigClientLegacy;
@@ -21,6 +22,8 @@ export interface ISaveLoadoutRequest {
     Presets?: ILoadoutPresetClientLegacy[]; // U8
     LongGuns: IItemEntry;
     OperatorAmps: IItemEntry;
+    Antiques: IItemEntry;
+    OperatorSuits: IItemEntry;
     Pistols: IItemEntry;
     Suits: IItemEntry;
     Melee: IItemEntry;
@@ -54,6 +57,7 @@ export interface ISaveLoadoutRequest {
     UseAdultOperatorLoadout: boolean;
     WeaponSkins: IItemEntry;
     LotusCustomization: ILotusCustomization;
+    FocusLoadouts?: IFocusLoadoutClient[];
 }
 
 export type ISaveLoadoutRequestNoUpgradeVer = Omit<ISaveLoadoutRequest, "UpgradeVer">;

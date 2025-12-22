@@ -27,6 +27,7 @@ import { importCrewShipMembers, importCrewShipWeapon, importLoadOutConfig } from
 import type { IEquipmentDatabase, IEquipmentSelectionDatabase } from "../types/equipmentTypes.ts";
 import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
 import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
+import type { IFocusLoadoutClient } from "../types/inventoryTypes/inventoryTypes.ts";
 
 //TODO: setup default items on account creation or like originally in giveStartingItems.php
 
@@ -204,6 +205,41 @@ export const handleInventoryItemConfigChange = async (
             }
             case "UseAdultOperatorLoadout": {
                 inventory.UseAdultOperatorLoadout = equipment as boolean;
+                break;
+            }
+            case "FocusLoadouts": {
+                const raw = equipment as unknown;
+                const focusLoadouts: unknown[] = Array.isArray(raw)
+                    ? raw
+                    : raw && typeof raw === "object"
+                      ? "Preset" in raw || "FocusAbility" in raw
+                          ? [raw]
+                          : Object.values(raw)
+                      : [];
+                const converted = focusLoadouts
+                    .filter((fl): fl is IFocusLoadoutClient => {
+                        if (!fl || typeof fl !== "object") return false;
+                        const obj = fl as Partial<IFocusLoadoutClient>;
+                        return (
+                            typeof obj.FocusAbility === "string" &&
+                            !!obj.Preset &&
+                            typeof obj.Preset === "object" &&
+                            !Array.isArray(obj.Preset)
+                        );
+                    })
+                    .map(fl => ({
+                        FocusAbility: fl.FocusAbility,
+                        Preset: {
+                            ...fl.Preset,
+                            ItemId:
+                                fl.Preset.ItemId && typeof fl.Preset.ItemId === "object"
+                                    ? toObjectId(fromOid(fl.Preset.ItemId))
+                                    : undefined
+                        } satisfies IEquipmentSelectionDatabase
+                    }));
+                if (converted.length || Array.isArray(raw)) {
+                    inventory.FocusLoadouts = converted;
+                }
                 break;
             }
             case "WeaponSkins": {
