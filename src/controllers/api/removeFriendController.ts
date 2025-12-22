@@ -1,16 +1,18 @@
-import { toOid } from "../../helpers/inventoryHelpers.ts";
+import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import { toOid, version_compare } from "../../helpers/inventoryHelpers.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { Friendship } from "../../models/friendModel.ts";
 import { Account } from "../../models/loginModel.ts";
 import { getInventory } from "../../services/inventoryService.ts";
-import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest } from "../../services/loginService.ts";
 import type { IOid } from "../../types/commonTypes.ts";
 import { parallelForeach } from "../../utils/async-utils.ts";
 import type { RequestHandler } from "express";
 import type { Types } from "mongoose";
 
 export const removeFriendGetController: RequestHandler = async (req, res) => {
-    const accountId = await getAccountIdForRequest(req);
+    const account = await getAccountForRequest(req);
+    const accountId = account._id.toString();
     if (req.query.all) {
         const [internalFriendships, externalFriendships] = await Promise.all([
             Friendship.find({ owner: accountId }, "friend"),
@@ -25,23 +27,20 @@ export const removeFriendGetController: RequestHandler = async (req, res) => {
             }
         }
         await Promise.all(promises);
-        res.json({
-            Friends: friends
-        } satisfies IRemoveFriendsResponse);
+        res.json(await toRemoveFriendsResponse(account.BuildLabel, friends));
     } else {
         const friendId = req.query.friendId as string;
         await Promise.all([
             Friendship.deleteOne({ owner: accountId, friend: friendId }),
             Friendship.deleteOne({ owner: friendId, friend: accountId })
         ]);
-        res.json({
-            Friends: [{ $oid: friendId }]
-        } satisfies IRemoveFriendsResponse);
+        res.json(await toRemoveFriendsResponse(account.BuildLabel, [{ $oid: friendId }]));
     }
 };
 
 export const removeFriendPostController: RequestHandler = async (req, res) => {
-    const accountId = await getAccountIdForRequest(req);
+    const account = await getAccountForRequest(req);
+    const accountId = account._id.toString();
     const data = getJSONfromString<IBatchRemoveFriendsRequest>(String(req.body));
     const friends = new Set((await Friendship.find({ owner: accountId }, "friend")).map(x => x.friend));
     // TOVERIFY: Should pending friendships also be kept?
@@ -69,18 +68,16 @@ export const removeFriendPostController: RequestHandler = async (req, res) => {
 
     // Remove all remaining friends that aren't in SkipFriendIds & give response.
     const promises = [];
-    const response: IOid[] = [];
+    const removeFriendOids: IOid[] = [];
     for (const friend of friends) {
         if (!data.SkipFriendIds.find(skipFriendId => checkFriendId(skipFriendId, friend))) {
             promises.push(Friendship.deleteOne({ owner: accountId, friend: friend }));
             promises.push(Friendship.deleteOne({ owner: friend, friend: accountId }));
-            response.push(toOid(friend));
+            removeFriendOids.push(toOid(friend));
         }
     }
     await Promise.all(promises);
-    res.json({
-        Friends: response
-    } satisfies IRemoveFriendsResponse);
+    res.json(await toRemoveFriendsResponse(account.BuildLabel, removeFriendOids));
 };
 
 // The friend ids format is a bit weird, e.g. when 6633b81e9dba0b714f28ff02 (A) is friends with 67cdac105ef1f4b49741c267 (B), A's friend id for B is 808000105ef1f40560ca079e and B's friend id for A is 8000b81e9dba0b06408a8075.
@@ -94,6 +91,30 @@ interface IBatchRemoveFriendsRequest {
     SkipFriendIds: string[];
 }
 
-interface IRemoveFriendsResponse {
+// >= U40
+interface IRemoveFriendsResponseU40 {
+    FriendNames: string[];
+}
+
+// < U40
+interface IRemoveFriendsResponseU39 {
     Friends: IOid[];
 }
+
+const toRemoveFriendsResponse = async (
+    buildLabel: string | undefined,
+    friends: IOid[]
+): Promise<IRemoveFriendsResponseU39 | IRemoveFriendsResponseU40> => {
+    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["40.0.0"]) < 0) {
+        return { Friends: friends } satisfies IRemoveFriendsResponseU39;
+    } else {
+        const response: IRemoveFriendsResponseU40 = { FriendNames: [] };
+        for (const friend of friends) {
+            const acct = await Account.findById(friend.$oid, "DisplayName");
+            if (acct) {
+                response.FriendNames.push(acct.DisplayName);
+            }
+        }
+        return response;
+    }
+};
