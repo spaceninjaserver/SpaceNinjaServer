@@ -44,15 +44,20 @@ mongoose
 
         startWebServer();
 
-        if (config.ircExecutable) {
-            logger.info(`Starting IRC server: ${config.ircExecutable}`);
-            child_process.execFile(config.ircExecutable, (error, _stdout, _stderr) => {
-                if (error) {
-                    logger.warn(`Failed to start IRC server`, error);
-                } else {
-                    logger.warn(`IRC server terminated unexpectedly`);
-                }
-            });
+        for (const [what, key] of [
+            ["IRC", "ircExecutable"],
+            ["HUB", "hubExecutable"]
+        ] as const) {
+            if (config[key]) {
+                logger.info(`Starting ${what}: ${config[key]}`);
+                child_process.execFile(config[key], (error, _stdout, _stderr) => {
+                    if (error) {
+                        logger.warn(`Failed to start ${what} server`, error);
+                    } else {
+                        logger.warn(`${what} server terminated unexpectedly`);
+                    }
+                });
+            }
         }
 
         void updateWorldStateCollections();

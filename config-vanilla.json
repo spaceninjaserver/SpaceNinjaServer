@@ -10,6 +10,7 @@
   "httpsPort": 443,
   "ircExecutable": null,
   "ircAddress": null,
+  "hubExecutable": null,
   "hubAddress": null,
   "nrsAddress": null,
   "dtls": null,
