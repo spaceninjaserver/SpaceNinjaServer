@@ -6,6 +6,7 @@ import { getRandomInt } from "../../services/rngService.ts";
 import type { RequestHandler } from "express";
 import { ExportBoosters } from "warframe-public-export-plus";
 import type { IOid } from "../../types/commonTypes.ts";
+import { toMongoDate } from "../../helpers/inventoryHelpers.ts";
 
 export const hubBlessingController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -24,7 +25,7 @@ export const hubBlessingController: RequestHandler = async (req, res) => {
         }
 
         res.json({
-            BlessingCooldown: inventory.BlessingCooldown,
+            BlessingCooldown: toMongoDate(inventory.BlessingCooldown),
             SendTime: Math.trunc(Date.now() / 1000).toString(),
             Expiry: Math.trunc(Date.now() / 1000 + 3 * 3600).toString(), // added in 38.6.0
             Token: token
