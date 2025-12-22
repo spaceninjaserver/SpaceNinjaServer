@@ -247,6 +247,7 @@ dict = {
     cheats_noVendorPurchaseLimits: `Aucune limite d'achat chez les PNJ`,
     cheats_noDeathMarks: `Aucune marque d'assassin`,
     cheats_noKimCooldowns: `Aucun cooldown sur le KIM`,
+    cheats_noBlessingCooldown: `[UNTRANSLATED] No Blessing Cooldown`,
     cheats_fullyStockedVendors: `Les vendeurs ont un stock à 100%`,
     cheats_baroAlwaysAvailable: `Baro toujours présent`,
     cheats_baroFullyStocked: `Stock de Baro au max`,

@@ -1540,6 +1540,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         noVendorPurchaseLimits: Boolean,
         noDeathMarks: Boolean,
         noKimCooldowns: Boolean,
+        noBlessingCooldown: Boolean,
         claimingBlueprintRefundsIngredients: Boolean,
         instantResourceExtractorDrones: Boolean,
         noResourceExtractorDronesDamage: Boolean,

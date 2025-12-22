@@ -246,6 +246,7 @@ dict = {
     cheats_noVendorPurchaseLimits: `No Vendor Purchase Limits`,
     cheats_noDeathMarks: `No Death Marks`,
     cheats_noKimCooldowns: `No KIM Cooldowns`,
+    cheats_noBlessingCooldown: `No Blessing Cooldown`,
     cheats_fullyStockedVendors: `Fully Stocked Vendors`,
     cheats_baroAlwaysAvailable: `Baro Always Available`,
     cheats_baroFullyStocked: `Baro Fully Stocked`,

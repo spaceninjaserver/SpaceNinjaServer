@@ -14,8 +14,8 @@ export const hubBlessingController: RequestHandler = async (req, res) => {
     if (req.query.mode == "send") {
         const boosterType = ExportBoosters[data.booster!].typeName;
 
-        const inventory = await getInventory(accountId, "BlessingCooldown Boosters");
-        inventory.BlessingCooldown = new Date(Date.now() + 23 * unixTimesInMs.hour);
+        const inventory = await getInventory(accountId, "noBlessingCooldown BlessingCooldown Boosters");
+        inventory.BlessingCooldown = new Date(inventory.noBlessingCooldown ? 0 : Date.now() + 23 * unixTimesInMs.hour);
         addBooster(boosterType, 3 * 3600, inventory); // unfaithful for < U41 but correct for >= U41 afaict. Either way, needed for blessings to work without a (full) HUB server.
         await inventory.save();
 

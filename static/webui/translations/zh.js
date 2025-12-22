@@ -247,6 +247,7 @@ dict = {
     cheats_noVendorPurchaseLimits: `商城或商人无购买限制`,
     cheats_noDeathMarks: `无死亡标记(不会被 Stalker/Grustrag 三霸/Zanuka 猎人等标记)`,
     cheats_noKimCooldowns: `即时通无冷却时间`,
+    cheats_noBlessingCooldown: `[UNTRANSLATED] No Blessing Cooldown`,
     cheats_fullyStockedVendors: `商人贩卖所有商品`,
     cheats_baroAlwaysAvailable: `虚空商人可永久访问`,
     cheats_baroFullyStocked: `虚空商人贩卖所有商品`,

@@ -247,6 +247,7 @@ dict = {
     cheats_noVendorPurchaseLimits: `Отсутствие лимитов на покупки у торговцев`,
     cheats_noDeathMarks: `Без меток смерти`,
     cheats_noKimCooldowns: `Чаты KIM без кулдауна`,
+    cheats_noBlessingCooldown: `[UNTRANSLATED] No Blessing Cooldown`,
     cheats_fullyStockedVendors: `Полностью укомплектованные торговцы`,
     cheats_baroAlwaysAvailable: `Баро всегда доступен`,
     cheats_baroFullyStocked: `Баро полностью укомплектован`,

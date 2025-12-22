@@ -247,6 +247,7 @@ dict = {
     cheats_noVendorPurchaseLimits: `Sin límite de compras de vendedores`,
     cheats_noDeathMarks: `Sin marcas de muerte`,
     cheats_noKimCooldowns: `Sin tiempo de espera para conversaciones KIM`,
+    cheats_noBlessingCooldown: `[UNTRANSLATED] No Blessing Cooldown`,
     cheats_fullyStockedVendors: `Vendedores con stock completo`,
     cheats_baroAlwaysAvailable: `Baro siempre disponible`,
     cheats_baroFullyStocked: `Baro con stock completo`,
