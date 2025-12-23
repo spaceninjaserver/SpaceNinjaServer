@@ -86,6 +86,7 @@ export interface IConfig {
         prohibitTeleport?: boolean;
         prohibitScripts?: boolean;
         motd?: string;
+        udpProxyUpstream?: string;
     };
     dev?: {
         keepVendorsExpired?: boolean;

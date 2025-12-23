@@ -9,4 +9,5 @@ export interface ITunables {
     motd?: string;
     token?: string;
     irc?: string;
+    udp_proxy_upstream?: string;
 }

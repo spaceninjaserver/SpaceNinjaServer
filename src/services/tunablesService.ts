@@ -40,5 +40,8 @@ export const getTunablesForClient = (clientAddress: string): ITunables => {
     if (config.tunables?.motd) {
         tunables.motd = config.tunables.motd;
     }
+    if (config.tunables?.udpProxyUpstream) {
+        tunables.udp_proxy_upstream = config.tunables.udpProxyUpstream;
+    }
     return tunables;
 };
