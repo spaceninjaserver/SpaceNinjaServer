@@ -2511,6 +2511,19 @@ export const addBooster = (ItemType: string, timeSecs: number, inventory: TInven
     }
 };
 
+export const setBooster = (ItemType: string, expiryTimeSecs: number, inventory: TInventoryDatabaseDocument): void => {
+    const { Boosters } = inventory;
+
+    const itemIndex = Boosters.findIndex(booster => booster.ItemType === ItemType);
+
+    if (itemIndex !== -1) {
+        const existingBooster = Boosters[itemIndex];
+        existingBooster.ExpiryDate = Math.max(existingBooster.ExpiryDate, expiryTimeSecs);
+    } else {
+        Boosters.push({ ItemType, ExpiryDate: expiryTimeSecs });
+    }
+};
+
 export const updateSyndicate = (
     inventory: TInventoryDatabaseDocument,
     syndicateUpdate: IMissionInventoryUpdateRequest["AffiliationChanges"]

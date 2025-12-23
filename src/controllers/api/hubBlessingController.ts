@@ -1,6 +1,6 @@
 import { unixTimesInMs } from "../../constants/timeConstants.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
-import { addBooster, getInventory } from "../../services/inventoryService.ts";
+import { getInventory, setBooster } from "../../services/inventoryService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { getRandomInt } from "../../services/rngService.ts";
 import type { RequestHandler } from "express";
@@ -16,7 +16,7 @@ export const hubBlessingController: RequestHandler = async (req, res) => {
 
         const inventory = await getInventory(accountId, "noBlessingCooldown BlessingCooldown Boosters");
         inventory.BlessingCooldown = new Date(inventory.noBlessingCooldown ? 0 : Date.now() + 23 * unixTimesInMs.hour);
-        addBooster(boosterType, 3 * 3600, inventory); // unfaithful for < U41 but correct for >= U41 afaict. Either way, needed for blessings to work without a (full) HUB server.
+        setBooster(boosterType, Math.trunc(Date.now() / 1000) + 3 * 3600, inventory); // At some point in the past, the blesser requested their own blessings, but now sending it automatically gives it to you.
         await inventory.save();
 
         let token = "";
@@ -32,11 +32,11 @@ export const hubBlessingController: RequestHandler = async (req, res) => {
         });
     } else {
         if (data.booster) {
-            // < U41
+            // < 38.6.0 (unsure about the exact version that changed it)
             const boosterType = ExportBoosters[data.booster].typeName;
 
             const inventory = await getInventory(accountId, "Boosters");
-            addBooster(boosterType, 3 * 3600, inventory);
+            setBooster(boosterType, Math.trunc(Date.now() / 1000) + 3 * 3600, inventory);
             await inventory.save();
 
             res.json({
@@ -44,12 +44,11 @@ export const hubBlessingController: RequestHandler = async (req, res) => {
                 Sender: data.senderId
             });
         } else {
-            // >= U41
+            // >= 38.6.0 (unsure about the exact version that changed it)
             const inventory = await getInventory(accountId, "Boosters");
             for (const blessing of data.PendingHubBlessings!) {
                 const boosterType = ExportBoosters[blessing.booster].typeName;
-                // TODO: Maybe respect sendTime?
-                addBooster(boosterType, 3 * 3600, inventory);
+                setBooster(boosterType, parseInt(blessing.sendTime) + 3 * 3600, inventory);
             }
             await inventory.save();
             res.end();
