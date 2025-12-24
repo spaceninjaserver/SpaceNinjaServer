@@ -108,6 +108,25 @@ export const descentRewardsController: RequestHandler = async (req, res) => {
             Seed: entry.Seed,
             SelectedUpgrades: entry.SelectedUpgrades
         });
+    } else if (payload.Mode == "s") {
+        const inventory = await getInventory(account._id.toString(), "DescentRewards");
+        inventory.DescentRewards ??= [];
+        const entry = inventory.DescentRewards.find(x => x.Category == payload.Category);
+        if (!entry) {
+            logger.debug(`data provided to ${req.path}: ${String(req.body)}`);
+            throw new Error(`missing DescentRewards entry`);
+        }
+
+        entry.SelectedUpgrades = payload.SelectedUpgrades;
+
+        await inventory.save();
+        res.json({
+            Expiry: entry.Expiry,
+            FloorClaimed: entry.FloorsClaimed,
+            PendingRewards: entry.PendingRewards,
+            Seed: entry.Seed,
+            SelectedUpgrades: entry.SelectedUpgrades
+        });
     } else {
         logger.debug(`data provided to ${req.path}: ${String(req.body)}`);
         throw new Error(`unexpected descentRewards mode: ${payload.Mode}`);
@@ -118,6 +137,11 @@ type IDescentRewardsRequest =
     | {
           Mode: "r";
           Category: TDescentCategory;
+      }
+    | {
+          Mode: "s";
+          Category: TDescentCategory;
+          SelectedUpgrades: string[];
       }
     | {
           Mode: "something else";
