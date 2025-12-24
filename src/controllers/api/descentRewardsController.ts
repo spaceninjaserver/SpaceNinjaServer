@@ -122,7 +122,7 @@ export const descentRewardsController: RequestHandler = async (req, res) => {
         await inventory.save();
         res.json({
             Expiry: entry.Expiry,
-            FloorClaimed: entry.FloorsClaimed,
+            FloorClaimed: entry.FloorClaimed,
             PendingRewards: entry.PendingRewards,
             Seed: entry.Seed,
             SelectedUpgrades: entry.SelectedUpgrades
