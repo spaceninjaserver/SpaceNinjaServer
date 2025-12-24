@@ -372,6 +372,7 @@ dict = {
     worldState_darvoStockMultiplier: `Множитель запасов Дарво`,
     worldState_varziaFullyStocked: `Полный ассортимент Варзии`,
     worldState_varziaOverride: `Изменение ротации Варзии`,
+    worldState_vanguardVaultRelics: `Реликвии Авангарда`,
 
     import_importNote: `Вы можете загрузить полный или частичный ответ <code>inventory.php</code> или <code>getShip.php</code> (клиентское представление) здесь. `,
     import_importNote2: `Все поддерживаемые поля <b>будут перезаписаны</b> в вашем аккаунте.`,

@@ -372,6 +372,7 @@ dict = {
     worldState_darvoStockMultiplier: `Darvo特惠库存倍率`,
     worldState_varziaFullyStocked: `瓦奇娅开启全部库存商品`,
     worldState_varziaOverride: `瓦奇娅(Prime重生)轮换状态`,
+    worldState_vanguardVaultRelics: `先锋遗物`,
 
     import_importNote: `您可以在此处提供完整或部分的<code>inventory.php</code>或者<code>getShip.php</code>响应(客户端表示形式).`,
     import_importNote2: `支持的所有字段<b>将被覆盖</b>到您的账户中.`,

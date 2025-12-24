@@ -372,6 +372,7 @@ dict = {
     worldState_darvoStockMultiplier: `Множник запасів Дарво`,
     worldState_varziaFullyStocked: `Повний асортимент Варзії`,
     worldState_varziaOverride: `Зміна ротації Варзії`,
+    worldState_vanguardVaultRelics: `Реліквії передового загону`,
 
     import_importNote: `Ви можете завантажити повну або часткову відповідь <code>inventory.php</code> або <code>getShip.php</code> (клієнтське представлення) тут.`,
     import_importNote2: `Всі підтримувані поля <b>будуть перезаписані</b> у вашому акаунті.`,

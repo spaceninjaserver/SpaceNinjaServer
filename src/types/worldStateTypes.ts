@@ -317,6 +317,7 @@ export interface IPrimeVaultTraderOffer {
     ItemType: string;
     PrimePrice?: number;
     RegularPrice?: number;
+    Limit?: number;
     StartDate?: IMongoDate;
     EndDate?: IMongoDate;
 }

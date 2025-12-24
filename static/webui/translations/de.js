@@ -372,6 +372,7 @@ dict = {
     worldState_darvoStockMultiplier: `Darvo-Vorratsmultiplikator`,
     worldState_varziaFullyStocked: `Varzia hat volles Inventar`,
     worldState_varziaOverride: `Varzia-Angebotsüberschreibung`,
+    worldState_vanguardVaultRelics: `Vanguard-Relikte`,
 
     import_importNote: `Du kannst hier eine vollständige oder teilweise <code>inventory.php</code> oder <code>getShip.php</code> Antwort (Client-Darstellung) einfügen.`,
     import_importNote2: `Alle Felder, die vom Importer unterstützt werden, <b>werden in deinem Account überschrieben</b>.`,

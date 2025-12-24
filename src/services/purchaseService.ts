@@ -145,7 +145,7 @@ export const handlePurchase = async (
                     "/Lotus/Types/Game/VendorManifests/Events/DuviriMurmurInvasionVendorManifest"
             ) {
                 const guild = await Guild.findById(inventory.GuildId, "GoalProgress Tier VaultDecoRecipes");
-                const goal = getWorldState().Goals.find(x => x.Tag == "DuviriMurmurEvent");
+                const goal = getWorldState(purchaseRequest.buildLabel).Goals.find(x => x.Tag == "DuviriMurmurEvent");
                 if (guild && goal) {
                     await handleGuildGoalProgress(guild, {
                         Count: offer.ItemPrices[0].ItemCount * purchaseRequest.PurchaseParams.Quantity,
@@ -213,7 +213,7 @@ export const handlePurchase = async (
 
     switch (purchaseRequest.PurchaseParams.Source) {
         case PurchaseSource.VoidTrader: {
-            const worldState = getWorldState();
+            const worldState = getWorldState(purchaseRequest.buildLabel);
             if (purchaseRequest.PurchaseParams.SourceId! != worldState.VoidTraders[0]._id.$oid) {
                 throw new Error("invalid request source");
             }
@@ -320,7 +320,7 @@ export const handlePurchase = async (
             }
             break;
         case PurchaseSource.PrimeVaultTrader: {
-            const worldState = getWorldState();
+            const worldState = getWorldState(purchaseRequest.buildLabel);
             if (purchaseRequest.PurchaseParams.SourceId! != worldState.PrimeVaultTraders[0]._id.$oid) {
                 throw new Error("invalid request source");
             }

@@ -24,7 +24,7 @@ import {
     ExportWeapons
 } from "warframe-public-export-plus";
 import allIncarnons from "../../../static/fixed_responses/allIncarnonList.json" with { type: "json" };
-import varzia from "../../../static/fixed_responses/worldState/varzia.json" with { type: "json" };
+import varzia from "../../constants/varzia.ts";
 
 interface ListedItem {
     uniqueName: string;
@@ -393,10 +393,10 @@ const getItemListsController: RequestHandler = (req, response) => {
         });
     }
 
-    for (const item of Object.values(varzia.primeDualPacks)) {
+    for (const uniqueName of Object.keys(varzia.primeDualPacks)) {
         res.VarziaOffers.push({
-            uniqueName: item.ItemType,
-            name: getString(getItemName(item.ItemType) || "", lang)
+            uniqueName,
+            name: getString(getItemName(uniqueName) || "", lang)
         });
     }
 

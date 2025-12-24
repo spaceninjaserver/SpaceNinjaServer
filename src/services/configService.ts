@@ -41,6 +41,7 @@ export interface IConfig {
         baroFullyStocked?: boolean;
         evilBaroStage?: number;
         varziaFullyStocked?: boolean;
+        vanguardVaultRelics?: boolean;
         wolfHunt?: number;
         orphixVenom?: boolean;
         bloodOfPerita?: boolean;

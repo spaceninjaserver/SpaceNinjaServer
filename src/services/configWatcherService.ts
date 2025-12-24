@@ -12,7 +12,7 @@ import {
 import { saveConfig, shouldReloadConfig } from "./configWriterService.ts";
 import { getWebBindings, startWebServer, stopWebServer } from "./webService.ts";
 import { forEachWsClient, sendWsBroadcast, type IWsMsgToClient } from "./wsService.ts";
-import varzia from "../../static/fixed_responses/worldState/varzia.json" with { type: "json" };
+import varzia from "../constants/varzia.ts";
 import { getTunablesForClient } from "./tunablesService.ts";
 
 chokidar.watch(configPath).on("change", () => {
@@ -93,7 +93,7 @@ export const validateConfig = (): void => {
     }
     if (
         config.worldState?.varziaOverride &&
-        !varzia.primeDualPacks.some(p => p.ItemType === config.worldState?.varziaOverride)
+        !Object.keys(varzia.primeDualPacks).includes(config.worldState.varziaOverride)
     ) {
         config.worldState.varziaOverride = "";
         modified = true;

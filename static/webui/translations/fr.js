@@ -372,6 +372,7 @@ dict = {
     worldState_darvoStockMultiplier: `Multiplicateur du stock de Darvo`,
     worldState_varziaFullyStocked: `Stock de Varzia au max`,
     worldState_varziaOverride: `Rotation de Varzia`,
+    worldState_vanguardVaultRelics: `Reliques de l'Avant-garde`,
 
     import_importNote: `Une réponse partielle ou complète de <code>inventory.php</code> ou <code>getShip.php</code> peut être incluse ici.`,
     import_importNote2: `Tous les champs sont supportés par l'outil d'import <b>serront écrasés</b> sur le compte.`,
