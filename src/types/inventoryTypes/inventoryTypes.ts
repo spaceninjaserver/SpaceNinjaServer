@@ -1141,7 +1141,7 @@ export type TDescentCategory = "DM_COH_NORMAL" | "DM_COH_HARD";
 export interface IDescentCategoryRewardClient {
     Category: TDescentCategory;
     Expiry: IMongoDate;
-    FloorsClaimed: number;
+    FloorClaimed: number;
     PendingRewards: IDescentLevelReward[];
     Seed: number;
     SelectedUpgrades: string[];

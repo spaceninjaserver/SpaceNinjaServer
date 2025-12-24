@@ -892,7 +892,7 @@ const descentCategoryRewardSchema = new Schema<IDescentCategoryRewardDatabase>(
     {
         Category: { type: String, required: true },
         Expiry: Date,
-        FloorsClaimed: { type: Number, default: 0 },
+        FloorClaimed: { type: Number, default: 0 },
         PendingRewards: { type: [descentLevelRewardSchema], default: [] },
         Seed: Number,
         SelectedUpgrades: { type: [String], default: [] }

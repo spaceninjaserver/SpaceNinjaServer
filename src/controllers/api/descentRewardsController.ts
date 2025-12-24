@@ -25,7 +25,7 @@ export const descentRewardsController: RequestHandler = async (req, res) => {
             entry = {
                 Category: payload.Category,
                 Expiry: new Date(0),
-                FloorsClaimed: 0,
+                FloorClaimed: 0,
                 PendingRewards: [],
                 Seed: 0,
                 SelectedUpgrades: []
@@ -38,7 +38,7 @@ export const descentRewardsController: RequestHandler = async (req, res) => {
 
         if (entry.Expiry.getTime() != weekEnd) {
             entry.Expiry = new Date(weekEnd);
-            entry.FloorsClaimed = 0;
+            entry.FloorClaimed = 0;
             entry.PendingRewards = [
                 {
                     FloorCheckpoint: 2,
@@ -103,7 +103,7 @@ export const descentRewardsController: RequestHandler = async (req, res) => {
         await inventory.save();
         res.json({
             Expiry: { $date: { $numberLong: weekEnd.toString() } },
-            FloorClaimed: entry.FloorsClaimed,
+            FloorClaimed: entry.FloorClaimed,
             PendingRewards: entry.PendingRewards,
             Seed: entry.Seed,
             SelectedUpgrades: entry.SelectedUpgrades

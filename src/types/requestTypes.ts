@@ -27,6 +27,7 @@ import type {
 import type { IGroup } from "./loginTypes.ts";
 import type { ILoadOutPresets } from "./saveLoadoutTypes.ts";
 import type { IEquipmentClient } from "./equipmentTypes.ts";
+import type { TMissionType } from "warframe-public-export-plus";
 
 export interface IAffiliationChange {
     Tag: string;
@@ -173,7 +174,19 @@ export type IMissionInventoryUpdateRequest = {
     [K in TEquipmentKey]?: IEquipmentClient[];
 };
 
-export interface IRewardInfo {
+export interface IBountyRewardInfo {
+    node: string;
+    EOM_AFK?: number;
+    JobTier?: number;
+    jobId?: string;
+    JobStage?: number;
+    Q?: boolean; // likely indicates that the bonus objective for this stage was completed
+    CheckpointCounter?: number; // starts at 1, is incremented with each job stage upload, and does not reset when starting a new job
+    challengeMissionId?: string;
+    GoalProgressAmount?: number;
+}
+
+export interface IRewardInfo extends IBountyRewardInfo {
     node: string;
     goalId?: string;
     goalManifest?: string;
@@ -209,14 +222,7 @@ export interface IRewardInfo {
     ConquestPersonalModifiersActive?: number;
     ConquestStickersActive?: number;
     ConquestHardModeActive?: number;
-    // for bounties, only EOM_AFK and node are given from above, plus:
-    JobTier?: number;
-    jobId?: string;
-    JobStage?: number;
-    Q?: boolean; // likely indicates that the bonus objective for this stage was completed
-    CheckpointCounter?: number; // starts at 1, is incremented with each job stage upload, and does not reset when starting a new job
-    challengeMissionId?: string;
-    GoalProgressAmount?: number;
+    missionType?: TMissionType;
 }
 
 export type IMissionStatus = "GS_SUCCESS" | "GS_FAILURE" | "GS_DUMPED" | "GS_QUIT" | "GS_INTERRUPTED";
