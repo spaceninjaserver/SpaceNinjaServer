@@ -54,7 +54,7 @@ export const descentRewardsController: RequestHandler = async (req, res) => {
                 },
                 {
                     FloorCheckpoint: 6,
-                    Rewards: [getRandomElement(arcaneRewards)!]
+                    Rewards: [{ StoreItem: getRandomElement(arcaneRewards[payload.Category])!, ItemCount: 1 }]
                 },
                 {
                     FloorCheckpoint: 9,
@@ -70,7 +70,7 @@ export const descentRewardsController: RequestHandler = async (req, res) => {
                 },
                 {
                     FloorCheckpoint: 13,
-                    Rewards: [getRandomElement(arcaneRewards)!]
+                    Rewards: [{ StoreItem: getRandomElement(arcaneRewards[payload.Category])!, ItemCount: 1 }]
                 },
                 {
                     FloorCheckpoint: 16,
@@ -89,7 +89,7 @@ export const descentRewardsController: RequestHandler = async (req, res) => {
                 },
                 {
                     FloorCheckpoint: 20,
-                    Rewards: [getRandomElement(tripleArcaneRewards)!]
+                    Rewards: [{ StoreItem: getRandomElement(arcaneRewards[payload.Category])!, ItemCount: 3 }]
                 },
                 {
                     FloorCheckpoint: 21,
@@ -160,83 +160,46 @@ const bronzeRewards: Record<TDescentCategory, ICountedStoreItem[]> = {
     ]
 };
 
-const arcaneRewards: ICountedStoreItem[] = [
-    {
-        StoreItem: "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/DamageForBonusArmour",
-        ItemCount: 1
-    },
-    {
-        StoreItem: "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/SplitStatusProcsOnStackedStatusHit",
-        ItemCount: 1
-    },
-    {
-        StoreItem: "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/MultishotForMaxEnergy",
-        ItemCount: 1
-    },
-    {
-        StoreItem: "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Utility/AbilityDurationOnCast",
-        ItemCount: 1
-    },
-    {
-        StoreItem: "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Defensive/ShieldMaxForAbilityStrength",
-        ItemCount: 1
-    },
-    {
-        StoreItem: "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Defensive/MaxDPSTakenForArmour",
-        ItemCount: 1
-    },
-    {
-        StoreItem: "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Defensive/StealDefensiveStatsOnRoll",
-        ItemCount: 1
-    },
-    {
-        StoreItem: "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/RadialDamageOnMaxRadiationStackHit",
-        ItemCount: 1
-    },
-    {
-        StoreItem: "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Utility/FreezeEnemiesOnRoll",
-        ItemCount: 1
-    }
-];
-
-const tripleArcaneRewards: ICountedStoreItem[] = [
-    {
-        StoreItem: "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/DamageForBonusArmour",
-        ItemCount: 3
-    },
-    {
-        StoreItem: "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/SplitStatusProcsOnStackedStatusHit",
-        ItemCount: 3
-    },
-    {
-        StoreItem: "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/MultishotForMaxEnergy",
-        ItemCount: 3
-    },
-    {
-        StoreItem: "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Utility/AbilityDurationOnCast",
-        ItemCount: 3
-    },
-    {
-        StoreItem: "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Defensive/ShieldMaxForAbilityStrength",
-        ItemCount: 3
-    },
-    {
-        StoreItem: "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Defensive/MaxDPSTakenForArmour",
-        ItemCount: 3
-    },
-    {
-        StoreItem: "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Defensive/StealDefensiveStatsOnRoll",
-        ItemCount: 3
-    },
-    {
-        StoreItem: "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/RadialDamageOnMaxRadiationStackHit",
-        ItemCount: 3
-    },
-    {
-        StoreItem: "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Utility/FreezeEnemiesOnRoll",
-        ItemCount: 3
-    }
-];
+const arcaneRewards: Record<TDescentCategory, string[]> = {
+    DM_COH_NORMAL: [
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Utility/GolemArcaneAimGlideOnHeadshot",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Defensive/FireProcResist",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/GolemArcaneSniperSpeedOnCrit",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Defensive/MagneticProcResist",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/GolemArcaneShotgunSpeedOnCrit",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Defensive/FreezeProcResist",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Defensive/SlashProcResist",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Defensive/RadiationProcResist",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Defensive/ElectricityProcResist",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/HealthRegenOnHeadshot",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/LongGunSpeedOnCrit",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Defensive/SpeedOnDamage",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Utility/PistolDamageOnReload",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Utility/RadialKnockdownOnEnergyPickup",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Defensive/SpeedOnParry",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/MeleeSpeedOnHit",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/GolemArcanePistolDamageOnHeadshot",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Utility/RadialHealOnHealthPickup",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/GolemArcaneArmorOnFinisher",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/InvisibilityOnFinisher",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/GolemArcanePistolSpeedOnCrit",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Utility/GolemArcaneBonusDamageOnWallLatch",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Defensive/CritChanceOnDamage",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/GolemArcaneMeleeDamageOnCrit",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/LongGunDamageOnHeadshot"
+    ],
+    DM_COH_HARD: [
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/DamageForBonusArmour",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/SplitStatusProcsOnStackedStatusHit",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/MultishotForMaxEnergy",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Utility/AbilityDurationOnCast",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Defensive/ShieldMaxForAbilityStrength",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Defensive/MaxDPSTakenForArmour",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Defensive/StealDefensiveStatsOnRoll",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/RadialDamageOnMaxRadiationStackHit",
+        "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Utility/FreezeEnemiesOnRoll"
+    ]
+};
 
 const spSilverRewards: ICountedStoreItem[] = [
     {
@@ -281,6 +244,18 @@ const spSilverRewards: ICountedStoreItem[] = [
     },
     {
         StoreItem: "/Lotus/StoreItems/Types/Items/MiscItems/WeaponAmpArcaneUnlocker",
+        ItemCount: 1
+    },
+    {
+        StoreItem: "/Lotus/Types/StoreItems/Boosters/AffinityBooster3DayStoreItem",
+        ItemCount: 1
+    },
+    {
+        StoreItem: "/Lotus/Types/StoreItems/Boosters/ResourceAmount3DayStoreItem",
+        ItemCount: 1
+    },
+    {
+        StoreItem: "/Lotus/Types/StoreItems/Boosters/ModDropChanceBooster3DayStoreItem",
         ItemCount: 1
     }
 ];
