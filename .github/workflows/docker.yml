@@ -25,3 +25,5 @@ jobs:
                       openwf/spaceninjaserver:latest-arm64
                       openwf/spaceninjaserver:${{ github.sha }}
                       openwf/spaceninjaserver:${{ github.sha }}-arm64
+                  cache-from: type=registry,ref=openwf/spaceninjaserver:latest
+                  cache-to: type=inline
