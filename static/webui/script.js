@@ -628,9 +628,6 @@ function fetchItemList() {
                     });
                 } else if (type == "WeaponSkins") {
                     let beardNumber = 1;
-                    let cutNumber = 13;
-                    let adultHeadNumber = 1;
-                    let headNumber = 1;
                     items.forEach(item => {
                         if (item.name == "") {
                             if (item.uniqueName.includes("/Beards/")) {
@@ -638,22 +635,6 @@ function fetchItemList() {
                                     .split("|INDEX|")
                                     .join(beardNumber.toString().padStart(3, "0"));
                                 beardNumber++;
-                            } else if (item.uniqueName.includes("/Hair/")) {
-                                item.name = loc("code_cutName")
-                                    .split("|INDEX|")
-                                    .join(cutNumber.toString().padStart(3, "0"));
-                                cutNumber++;
-                                if (cutNumber == 19) cutNumber = 21;
-                            } else if (item.uniqueName.includes("/Heads/Adult")) {
-                                item.name = loc("code_drifterFaceName")
-                                    .split("|INDEX|")
-                                    .join(adultHeadNumber.toString().padStart(3, "0"));
-                                adultHeadNumber++;
-                            } else if (item.uniqueName.includes("/Heads/")) {
-                                item.name = loc("code_operatorFaceName")
-                                    .split("|INDEX|")
-                                    .join(headNumber.toString().padStart(3, "0"));
-                                headNumber++;
                             } else {
                                 item.name = item.uniqueName;
                             }
