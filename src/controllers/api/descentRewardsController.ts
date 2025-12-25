@@ -1,24 +1,17 @@
 import type { RequestHandler } from "express";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import type { TDescentCategory } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import type { ICountedStoreItem } from "warframe-public-export-plus";
 import { getRandomElement, getRandomInt } from "../../services/rngService.ts";
 import { logger } from "../../utils/logger.ts";
-import { version_compare } from "../../helpers/inventoryHelpers.ts";
-import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 
 export const descentRewardsController: RequestHandler = async (req, res) => {
-    const account = await getAccountForRequest(req);
-    if (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["41.0.0"]) < 0) {
-        throw new Error(
-            `account logged into ${account.BuildLabel} (< 41.0.0) but is now attempting to call a >= 41.0.0 endpoint ?!`
-        );
-    }
+    const accountId = await getAccountIdForRequest(req);
     const payload = getJSONfromString<IDescentRewardsRequest>(String(req.body));
     if (payload.Mode == "r") {
-        const inventory = await getInventory(account._id.toString(), "DescentRewards");
+        const inventory = await getInventory(accountId, "DescentRewards");
         inventory.DescentRewards ??= [];
         let entry = inventory.DescentRewards.find(x => x.Category == payload.Category);
         if (!entry) {
@@ -109,7 +102,7 @@ export const descentRewardsController: RequestHandler = async (req, res) => {
             SelectedUpgrades: entry.SelectedUpgrades
         });
     } else if (payload.Mode == "s") {
-        const inventory = await getInventory(account._id.toString(), "DescentRewards");
+        const inventory = await getInventory(accountId, "DescentRewards");
         inventory.DescentRewards ??= [];
         const entry = inventory.DescentRewards.find(x => x.Category == payload.Category);
         if (!entry) {

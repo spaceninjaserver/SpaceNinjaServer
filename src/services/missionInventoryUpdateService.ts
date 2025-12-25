@@ -1253,18 +1253,10 @@ export const addMissionRewards = async (
 
     if (goalTag && goalTag == "12MinWarEvent") {
         if (["SolNode250", "SolNode251", "SolNode252"].includes(rewardInfo.node)) {
-            if (account.BuildLabel) {
-                if (version_compare(account.BuildLabel, gameToBuildVersion["41.0.0"]) < 0) {
-                    throw new Error(
-                        `account logged into ${account.BuildLabel} (< 41.0.0) but now completes >= 41.0.0 goal ?!`
-                    );
-                }
-
-                MissionRewards.push({
-                    StoreItem: "/Lotus/StoreItems/Types/Gameplay/Tau/Resources/TwelveResourceCurrencyItem",
-                    ItemCount: getRandomInt(8, 15) + (missions?.Tier ? 2 : 0)
-                });
-            }
+            MissionRewards.push({
+                StoreItem: "/Lotus/StoreItems/Types/Gameplay/Tau/Resources/TwelveResourceCurrencyItem",
+                ItemCount: getRandomInt(8, 15) + (missions?.Tier ? 2 : 0)
+            });
         }
     }
 
@@ -1575,31 +1567,21 @@ export const addMissionRewards = async (
     }
 
     if (rewardInfo.missionType == "MT_DESCENT") {
-        if (account.BuildLabel) {
-            if (version_compare(account.BuildLabel, gameToBuildVersion["41.0.0"]) < 0) {
-                throw new Error(
-                    `account logged into ${account.BuildLabel} (< 41.0.0) but now completes >= 41.0.0 misssion ?!`
-                );
-            }
-
-            const isSteelPath = missions?.Tier;
-            inventory.DescentRewards ??= [];
-            const entry = inventory.DescentRewards.find(
-                x => x.Category == (isSteelPath ? "DM_COH_HARD" : "DM_COH_NORMAL")
-            );
-            if (!entry) {
-                throw new Error(`Missing DescentRewards entry`);
-            }
-            logger.debug(`completed ${rewardInfo.CheckpointCounter} ${entry.Category} floor`);
-            if (rewardInfo.CheckpointCounter && rewardInfo.CheckpointCounter > entry.FloorClaimed) {
-                entry.FloorClaimed = rewardInfo.CheckpointCounter;
-                const reward = entry.PendingRewards.find(x => x.FloorCheckpoint == rewardInfo.CheckpointCounter);
-                if (reward) {
-                    logger.debug(`giving ${entry.Category} floor ${rewardInfo.CheckpointCounter} reward`, {
-                        reward: reward.Rewards
-                    });
-                    MissionRewards.push(...reward.Rewards);
-                }
+        const isSteelPath = missions?.Tier;
+        inventory.DescentRewards ??= [];
+        const entry = inventory.DescentRewards.find(x => x.Category == (isSteelPath ? "DM_COH_HARD" : "DM_COH_NORMAL"));
+        if (!entry) {
+            throw new Error(`Missing DescentRewards entry`);
+        }
+        logger.debug(`completed ${rewardInfo.CheckpointCounter} ${entry.Category} floor`);
+        if (rewardInfo.CheckpointCounter && rewardInfo.CheckpointCounter > entry.FloorClaimed) {
+            entry.FloorClaimed = rewardInfo.CheckpointCounter;
+            const reward = entry.PendingRewards.find(x => x.FloorCheckpoint == rewardInfo.CheckpointCounter);
+            if (reward) {
+                logger.debug(`giving ${entry.Category} floor ${rewardInfo.CheckpointCounter} reward`, {
+                    reward: reward.Rewards
+                });
+                MissionRewards.push(...reward.Rewards);
             }
         }
     }
