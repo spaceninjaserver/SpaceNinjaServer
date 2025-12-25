@@ -116,7 +116,7 @@ export const handlePurchase = async (
     if (purchaseRequest.PurchaseParams.Source == PurchaseSource.Vendor) {
         let manifest = getVendorManifestByOid(purchaseRequest.PurchaseParams.SourceId!);
         if (manifest) {
-            manifest = applyStandingToVendorManifest(inventory, manifest);
+            manifest = applyStandingToVendorManifest(manifest, inventory.Affiliations);
             let ItemId: string | undefined;
             if (purchaseRequest.PurchaseParams.ExtraPurchaseInfoJson) {
                 ItemId = (JSON.parse(purchaseRequest.PurchaseParams.ExtraPurchaseInfoJson) as { ItemId: string })

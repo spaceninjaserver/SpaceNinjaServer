@@ -1,13 +1,13 @@
 import { unixTimesInMs } from "../constants/timeConstants.ts";
 import { args } from "../helpers/commandLineArguments.ts";
 import { catBreadHash } from "../helpers/stringHelpers.ts";
-import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
 import { mixSeeds, SRng } from "./rngService.ts";
 import type { IItemManifest, IVendorInfo, IVendorManifest } from "../types/vendorTypes.ts";
 import { logger } from "../utils/logger.ts";
 import type { IRange, IVendor, IVendorOffer } from "warframe-public-export-plus";
 import { ExportVendors } from "warframe-public-export-plus";
 import { config } from "./configService.ts";
+import type { IAffiliation } from "../types/inventoryTypes/inventoryTypes.ts";
 
 interface IGeneratableVendorInfo extends Omit<IVendorInfo, "ItemManifest" | "Expiry"> {
     cycleOffset?: number;
@@ -106,15 +106,15 @@ export const getVendorManifestByOid = (oid: string): IVendorManifest | undefined
 };
 
 export const applyStandingToVendorManifest = (
-    inventory: TInventoryDatabaseDocument,
-    vendorManifest: IVendorManifest
+    vendorManifest: IVendorManifest,
+    affiliations: IAffiliation[]
 ): IVendorManifest => {
     return {
         VendorInfo: {
             ...vendorManifest.VendorInfo,
             ItemManifest: [...vendorManifest.VendorInfo.ItemManifest].map(offer => {
                 if (offer.Affiliation && offer.ReductionPerPositiveRank && offer.IncreasePerNegativeRank) {
-                    const title: number = inventory.Affiliations.find(x => x.Tag == offer.Affiliation)?.Title ?? 0;
+                    const title: number = affiliations.find(x => x.Tag == offer.Affiliation)?.Title ?? 0;
                     const factor =
                         1 + (title < 0 ? offer.IncreasePerNegativeRank : offer.ReductionPerPositiveRank) * title * -1;
                     //console.log(offer.Affiliation, title, factor);

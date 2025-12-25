@@ -13,8 +13,8 @@ export const getVendorInfoController: RequestHandler = async (req, res) => {
     // For testing purposes, authenticating with this endpoint is optional here, but would be required on live.
     if (req.query.accountId) {
         const accountId = await getAccountIdForRequest(req);
-        const inventory = await getInventory(accountId);
-        manifest = applyStandingToVendorManifest(inventory, manifest);
+        const inventory = await getInventory(accountId, "Affiliations");
+        manifest = applyStandingToVendorManifest(manifest, inventory.Affiliations);
         if (config.dev?.keepVendorsExpired) {
             manifest = {
                 VendorInfo: {
