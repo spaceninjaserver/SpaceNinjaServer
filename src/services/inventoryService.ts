@@ -1990,7 +1990,10 @@ export const addEmailItem = async (
     const emailItem = inventory.EmailItems.find(x => x.ItemType == typeName);
     if (!emailItem || !meta.sendOnlyOnce) {
         const msg: IMessageCreationTemplate = convertInboxMessage(meta.message);
-        if (msg.cinematic == "/Lotus/Levels/1999/PlayerHomeBalconyCinematics.level") {
+        if (
+            msg.cinematic == "/Lotus/Levels/1999/PlayerHomeBalconyCinematics.level" ||
+            msg.cinematic == "/Lotus/Levels/EntratiLab/TriadRomanceCinematics.level"
+        ) {
             msg.customData = JSON.stringify({
                 Tag: msg.customData + "KissCin",
                 CinLoadout: {
