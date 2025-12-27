@@ -11,7 +11,9 @@ import type {
     IKubrowPetPrintClient,
     IUpgradeClient,
     IQuestKeyClient,
-    IRawUpgrade
+    IRawUpgrade,
+    IFocusUpgrade,
+    IFocusLoadoutClient
 } from "./inventoryTypes/inventoryTypes.ts";
 
 export enum PurchaseSource {
@@ -88,6 +90,9 @@ export type IInventoryChanges = {
     RawUpgrades?: IRawUpgrade[];
     Upgrades?: IUpgradeClient[]; // TOVERIFY
     QuestKeys?: IQuestKeyClient[];
+    OneTimePurchases?: string[];
+    FocusUpgrades?: IFocusUpgrade[];
+    FocusLoadouts?: IFocusLoadoutClient[];
 } & Record<
         Exclude<
             string,

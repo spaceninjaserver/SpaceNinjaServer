@@ -170,55 +170,44 @@ const setupAntique = (
     inventory: TInventoryDatabaseDocument,
     weaponType: string,
     weaponId: Types.ObjectId,
-    inventoryChanges?: IInventoryChanges
+    inventoryChanges: IInventoryChanges
 ): void => {
     const meta = operatorAntiqueMeta[weaponType];
     if (!meta) {
         throw new Error(`unknown antique: ${weaponType}`);
     }
 
-    const focusUpgradesAdded: object[] = [];
-    const focusLoadoutsAdded: object[] = [];
-
     inventory.OneTimePurchases ??= [];
     if (!inventory.OneTimePurchases.includes(weaponType)) {
         inventory.OneTimePurchases.push(weaponType);
+        inventoryChanges.OneTimePurchases ??= [];
+        inventoryChanges.OneTimePurchases.push(weaponType);
     }
 
     if (!inventory.FocusUpgrades.some(x => x.ItemType === meta.focusAbility)) {
         inventory.FocusUpgrades.push({ ItemType: meta.focusAbility });
-        focusUpgradesAdded.push({ ItemType: meta.focusAbility });
+        inventoryChanges.FocusUpgrades ??= [];
+        inventoryChanges.FocusUpgrades.push({ ItemType: meta.focusAbility });
     }
     for (const upgradeType of meta.ultimateUpgrades) {
         if (!inventory.FocusUpgrades.some(x => x.ItemType === upgradeType)) {
             inventory.FocusUpgrades.push({ ItemType: upgradeType, Level: 0 });
-            focusUpgradesAdded.push({ ItemType: upgradeType, Level: 0 });
+            inventoryChanges.FocusUpgrades ??= [];
+            inventoryChanges.FocusUpgrades.push({ ItemType: upgradeType, Level: 0 });
         }
     }
 
     inventory.FocusLoadouts ??= [];
+    inventoryChanges.FocusLoadouts ??= [];
     if (!inventory.FocusLoadouts.some(x => x.FocusAbility === meta.focusAbility)) {
         inventory.FocusLoadouts.push({
             FocusAbility: meta.focusAbility,
             Preset: { ItemId: weaponId, mod: 0, cus: 0 }
         });
-        focusLoadoutsAdded.push({
+        inventoryChanges.FocusLoadouts.push({
             FocusAbility: meta.focusAbility,
             Preset: { ItemId: toOid(weaponId), mod: 0, cus: 0 }
         });
-    }
-
-    if (inventoryChanges) {
-        if (focusUpgradesAdded.length) {
-            const key = "FocusUpgrades";
-            const existing = inventoryChanges[key] as object[] | undefined;
-            inventoryChanges[key] = existing ? existing.concat(focusUpgradesAdded) : focusUpgradesAdded;
-        }
-        if (focusLoadoutsAdded.length) {
-            const key = "FocusLoadouts";
-            const existing = inventoryChanges[key] as object[] | undefined;
-            inventoryChanges[key] = existing ? existing.concat(focusLoadoutsAdded) : focusLoadoutsAdded;
-        }
     }
 };
 
