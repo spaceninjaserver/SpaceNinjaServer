@@ -27,10 +27,10 @@ export const setConfigController: RequestHandler = async (req, res) => {
             const [obj, idx] = configIdToIndexable(id);
             obj[idx] = value;
         }
+        await saveConfig();
         sendWsBroadcastEx({ config_reloaded: true }, undefined, parseInt(String(req.query.wsid)));
         if (isWorldStateUpdate) sendWsBroadcast({ sync_world_state: true });
         syncConfigWithDatabase();
-        await saveConfig();
         res.end();
     } else {
         res.status(401).end();
