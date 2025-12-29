@@ -9,7 +9,10 @@ export const claimJunctionChallengeRewardController: RequestHandler = async (req
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId);
     const data = getJSONfromString<IClaimJunctionChallengeRewardRequest>(String(req.body));
-    const challengeProgress = inventory.ChallengeProgress.find(x => x.Name == data.Challenge)!;
+    const challengeProgress = inventory.ChallengeProgress.find(x => x.Name == data.Challenge);
+    if (!challengeProgress) {
+        throw new Error(`attempt to claim challenge with no progress: ${String(req.body)}`);
+    }
     if (challengeProgress.ReceivedJunctionReward) {
         throw new Error(`attempt to double-claim junction reward`);
     }
