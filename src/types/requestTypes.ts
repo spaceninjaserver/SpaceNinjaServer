@@ -78,6 +78,7 @@ export type IMissionInventoryUpdateRequest = {
     AliveTime: number;
     MissionTime: number;
     Missions?: IMission;
+    Alerts?: IMission;
     LastRegionPlayed?: TSolarMapRegion;
     GameModeId: number;
     hosts: string[];

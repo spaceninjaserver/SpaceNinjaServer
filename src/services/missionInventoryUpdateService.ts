@@ -653,7 +653,9 @@ export const addMissionInventoryUpdates = async (
             }
             case "GoalProgress": {
                 for (const uploadProgress of value) {
-                    const goal = getWorldState().Goals.find(x => x._id.$oid == uploadProgress._id.$oid);
+                    const goal = getWorldState(account.BuildLabel).Goals.find(
+                        x => x._id.$oid == uploadProgress._id.$oid
+                    );
                     if (goal && goal.Personal) {
                         inventory.PersonalGoalProgress ??= [];
                         const goalProgress = inventory.PersonalGoalProgress.find(x => x.goalId.equals(goal._id.$oid));
@@ -1159,6 +1161,7 @@ export const addMissionRewards = async (
         RewardInfo: rewardInfo,
         LevelKeyName: levelKeyName,
         Missions: missions,
+        Alerts: alerts,
         RegularCredits: creditDrops,
         VoidTearParticipantsCurrWave: voidTearWave,
         StrippedItems: strippedItems,
@@ -1179,6 +1182,7 @@ export const addMissionRewards = async (
 
     //TODO: check double reward merging
     const MissionRewards: IMissionReward[] = getRandomMissionDrops(
+        account,
         inventory,
         rewardInfo,
         levelKeyName,
@@ -1188,13 +1192,14 @@ export const addMissionRewards = async (
     );
     logger.debug("random mission drops:", MissionRewards);
     const inventoryChanges: IInventoryChanges = {};
+    const isSteelPath = missions?.Tier || alerts?.Tier;
     let SyndicateXPItemReward;
     let ConquestCompletedMissionsCount;
 
     let missionCompletionCredits = 0;
 
     if (rewardInfo.alertId) {
-        const alert = getWorldState().Alerts.find(x => x._id.$oid == rewardInfo.alertId);
+        const alert = getWorldState(account.BuildLabel).Alerts.find(x => x._id.$oid == rewardInfo.alertId);
         if (!alert) {
             logger.warn(`mission completed unknown alert`, { alertId: rewardInfo.alertId });
         } else {
@@ -1205,6 +1210,13 @@ export const addMissionRewards = async (
                     inventory.CompletedAlerts.push(alert._id.$oid);
                 }
                 if (alert.MissionInfo.missionReward) {
+                    if (alert.Tag && ["12MinWarEvent", "JadeShadows"].includes(alert.Tag) && isSteelPath) {
+                        if (alert.MissionInfo.missionReward.countedItems) {
+                            alert.MissionInfo.missionReward.countedItems.forEach(item => {
+                                item.ItemCount *= 1.5;
+                            });
+                        }
+                    }
                     missionCompletionCredits += addFixedLevelRewards(
                         alert.MissionInfo.missionReward,
                         MissionRewards,
@@ -1231,7 +1243,7 @@ export const addMissionRewards = async (
     }
 
     if (rewardInfo.goalId) {
-        const goal = getWorldState().Goals.find(x => x._id.$oid == rewardInfo.goalId);
+        const goal = getWorldState(account.BuildLabel).Goals.find(x => x._id.$oid == rewardInfo.goalId);
         if (goal) {
             if (rewardInfo.node == goal.Node && goal.MissionKeyName) levelKeyName = goal.MissionKeyName;
             if (goal.ConcurrentNodes && goal.ConcurrentMissionKeyNames) {
@@ -1463,7 +1475,7 @@ export const addMissionRewards = async (
                 "/Lotus/Types/Gameplay/Eidolon/Jobs/Events/GhoulAlertBounty"
             ].some(prefix => jobType.startsWith(prefix))
         ) {
-            const { Goals } = getWorldState(undefined);
+            const { Goals } = getWorldState(account.BuildLabel);
             syndicateEntry = Goals.find(m => m._id.$oid === syndicateMissionId);
             if (syndicateEntry) syndicateEntry.Tag = syndicateEntry.JobAffiliationTag!;
         }
@@ -1567,7 +1579,6 @@ export const addMissionRewards = async (
     }
 
     if (rewardInfo.missionType == "MT_DESCENT") {
-        const isSteelPath = missions?.Tier;
         inventory.DescentRewards ??= [];
         const entry = inventory.DescentRewards.find(x => x.Category == (isSteelPath ? "DM_COH_HARD" : "DM_COH_NORMAL"));
         if (!entry) {
@@ -1590,7 +1601,6 @@ export const addMissionRewards = async (
         const [syndicateTag, tierStr, chemistryBuddyStr] = rewardInfo.challengeMissionId.split("_");
         const tier = Number(tierStr);
         const chemistryBuddy = Number(chemistryBuddyStr);
-        const isSteelPath = missions?.Tier;
         if (syndicateTag === "ZarimanSyndicate") {
             let medallionAmount = tier + 1;
             if (isSteelPath) medallionAmount = Math.round(medallionAmount * 1.5);
@@ -1841,6 +1851,7 @@ function getLevelCreditRewards(node: IRegion): number {
 }
 
 function getRandomMissionDrops(
+    account: TAccountDocument,
     inventory: TInventoryDatabaseDocument,
     RewardInfo: IRewardInfo,
     levelKeyName: string | undefined,
@@ -2027,7 +2038,7 @@ function getRandomMissionDrops(
                             "/Lotus/Types/Gameplay/Eidolon/Jobs/Events/GhoulAlertBounty"
                         ].some(prefix => jobType.startsWith(prefix))
                     ) {
-                        const { Goals } = getWorldState(undefined);
+                        const { Goals } = getWorldState(account.BuildLabel);
                         syndicateEntry = Goals.find(m => m._id.$oid === syndicateMissionId);
                         if (syndicateEntry) syndicateEntry.Tag = syndicateEntry.JobAffiliationTag!;
                     }
@@ -2376,7 +2387,7 @@ function getRandomMissionDrops(
 
     if (RewardInfo.EnemyCachesFound) {
         if (RewardInfo.goalId) {
-            const goal = getWorldState().Goals.find(x => x._id.$oid == RewardInfo.goalId);
+            const goal = getWorldState(account.BuildLabel).Goals.find(x => x._id.$oid == RewardInfo.goalId);
             if (goal) {
                 let currentMissionKey: string | undefined;
                 if (RewardInfo.node == goal.Node) {
@@ -2407,7 +2418,7 @@ function getRandomMissionDrops(
                 }
             }
         } else if (RewardInfo.alertId) {
-            const alert = getWorldState().Alerts.find(x => x._id.$oid == RewardInfo.alertId);
+            const alert = getWorldState(account.BuildLabel).Alerts.find(x => x._id.$oid == RewardInfo.alertId);
             if (alert && alert.MissionInfo.enemyCacheOverride) {
                 const deck = ExportRewards[alert.MissionInfo.enemyCacheOverride];
                 for (let rotation = 0; rotation != RewardInfo.EnemyCachesFound; ++rotation) {

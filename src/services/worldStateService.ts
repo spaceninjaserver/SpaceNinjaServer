@@ -13,8 +13,8 @@ import { buildConfig } from "./buildConfigService.ts";
 import { EPOCH, unixTimesInMs } from "../constants/timeConstants.ts";
 import { config } from "./configService.ts";
 import { getRandomElement, getRandomInt, sequentiallyUniqueRandomElement, SRng } from "./rngService.ts";
-import type { IMissionReward, IRegion, TFaction } from "warframe-public-export-plus";
-import { ExportRegions, ExportSyndicates } from "warframe-public-export-plus";
+import type { IMissionReward, IRegion, ITilesetMission, TFaction, TMissionType } from "warframe-public-export-plus";
+import { ExportRegions, ExportSyndicates, ExportTilesets } from "warframe-public-export-plus";
 import type {
     ICalendarDay,
     ICalendarEvent,
@@ -36,7 +36,8 @@ import type {
     IVoidTraderOffer,
     IWorldState,
     TCircuitGameMode,
-    IFlashSale
+    IFlashSale,
+    IAlertMissionInfo
 } from "../types/worldStateTypes.ts";
 import { toMongoDate, toMongoDate2, toOid, toOid2, version_compare } from "../helpers/inventoryHelpers.ts";
 import { logger } from "../utils/logger.ts";
@@ -44,6 +45,7 @@ import { DailyDeal, Fissure } from "../models/worldStateModel.ts";
 import { factionToInt, getConquest, getMissionTypeForLegacyOverride } from "./conquestService.ts";
 import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 import { getDescent } from "./descentService.ts";
+import { catBreadHash } from "../helpers/stringHelpers.ts";
 
 const sortieBosses = [
     "SORTIE_BOSS_HYENA",
@@ -198,6 +200,70 @@ const configAlerts: Record<string, IAlert> = {
             enemySpec: "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipExterminateMixed",
             minEnemyLevel: 40,
             maxEnemyLevel: 45
+        }
+    }
+};
+
+const alertGeneratorConfig: Record<
+    string,
+    {
+        alertInterval: number;
+        alertLength: number;
+        allowedSystemIndexes: number[];
+        baseAlert: Partial<IAlert>;
+        baseMissionInfo: Partial<IAlertMissionInfo>;
+    }
+> = {
+    "12MinWarEvent": {
+        alertInterval: unixTimesInMs.hour / 2,
+        alertLength: unixTimesInMs.hour * 1.5,
+        allowedSystemIndexes: [14],
+        baseAlert: {
+            Tag: "12MinWarEvent",
+            Icon: "/Lotus/Interface/Icons/WorldStatePanel/BloodOfPeritaEventBadge.png"
+        },
+        baseMissionInfo: {
+            minEnemyLevel: 65,
+            maxEnemyLevel: 70,
+            maxRotations: 1,
+            missionReward: {
+                credits: 8900, // should be random
+                countedItems: [
+                    {
+                        ItemType: "/Lotus/Types/Gameplay/Tau/Resources/TwelveResourceCurrencyItem",
+                        ItemCount: 20
+                    }
+                ]
+            },
+            descText: "/Lotus/Language/TauPrequel/TauPrequelFinal/TauPrequelEventAlertTitle",
+            questReq: "/Lotus/Types/Keys/TauPrequel/TauPrequelQuestKeyChain",
+            leadersAlwaysAllowed: true
+        }
+    },
+    JadeShadows: {
+        alertInterval: unixTimesInMs.hour / 2,
+        alertLength: unixTimesInMs.hour * 2,
+        allowedSystemIndexes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18],
+        baseAlert: {
+            Tag: "JadeShadows",
+            Icon: "/Lotus/Interface/Icons/WorldStatePanel/JadeShadowsEventBadge.png"
+        },
+        baseMissionInfo: {
+            minEnemyLevel: 50,
+            maxEnemyLevel: 50,
+            maxRotations: 1,
+            missionReward: {
+                credits: 8900, // should be random
+                countedItems: [
+                    {
+                        ItemType: "/Lotus/Types/Gameplay/JadeShadows/Resources/AscensionEventResourceItem",
+                        ItemCount: 10
+                    }
+                ]
+            },
+            descText: "/Lotus/Language/JadeShadows/EventAlertTitle",
+            questReq: "/Lotus/Types/Keys/JadeShadows/JadeShadowQuestKeyChain",
+            leadersAlwaysAllowed: true
         }
     }
 };
@@ -2999,26 +3065,29 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     }
 
     if (config.worldState?.bellyOfTheBeast) {
-        worldState.Goals.push({
-            _id: { $oid: "67a5035c2a198564d62e165e" },
-            Activation: { $date: { $numberLong: "1738868400000" } },
-            Expiry: { $date: { $numberLong: "2000000000000" } },
-            Count: config.worldState.bellyOfTheBeastProgressOverride ?? 0,
-            HealthPct: (config.worldState.bellyOfTheBeastProgressOverride ?? 0) / 100,
-            Goal: 0,
-            Personal: true,
-            Community: true,
-            ClanGoal: [72, 216, 648, 1944, 5832],
-            Tag: "JadeShadowsEvent",
-            Faction: "FC_MITW",
-            Desc: "/Lotus/Language/JadeShadows/JadeShadowsEventName",
-            ToolTip: "/Lotus/Language/JadeShadows/JadeShadowsShortEventDesc",
-            Icon: "/Lotus/Interface/Icons/WorldStatePanel/JadeShadowsEventBadge.png",
-            ScoreLocTag: "/Lotus/Language/JadeShadows/JadeShadowsEventScore",
-            Node: "SolNode723",
-            MissionKeyName: "/Lotus/Types/Keys/JadeShadowsEventMission",
-            ItemType: "/Lotus/Types/Gameplay/JadeShadows/Resources/AscensionEventResourceItem"
-        });
+        if (buildLabel && version_compare(buildLabel, "2024.06.12.18.42") >= 0) {
+            worldState.Goals.push({
+                _id: { $oid: "67a5035c2a198564d62e165e" },
+                Activation: { $date: { $numberLong: "1738868400000" } },
+                Expiry: { $date: { $numberLong: "2000000000000" } },
+                Count: config.worldState.bellyOfTheBeastProgressOverride ?? 0,
+                HealthPct: (config.worldState.bellyOfTheBeastProgressOverride ?? 0) / 100,
+                Goal: 0,
+                Personal: true,
+                Community: true,
+                ClanGoal: [72, 216, 648, 1944, 5832],
+                Tag: "JadeShadowsEvent",
+                Faction: "FC_MITW",
+                Desc: "/Lotus/Language/JadeShadows/JadeShadowsEventName",
+                ToolTip: "/Lotus/Language/JadeShadows/JadeShadowsShortEventDesc",
+                Icon: "/Lotus/Interface/Icons/WorldStatePanel/JadeShadowsEventBadge.png",
+                ScoreLocTag: "/Lotus/Language/JadeShadows/JadeShadowsEventScore",
+                Node: "SolNode723",
+                MissionKeyName: "/Lotus/Types/Keys/JadeShadowsEventMission",
+                ItemType: "/Lotus/Types/Gameplay/JadeShadows/Resources/AscensionEventResourceItem"
+            });
+            pushGoalAlerts(worldState, "JadeShadows", buildLabel);
+        }
     }
     if (config.worldState?.eightClaw) {
         worldState.Goals.push({
@@ -3136,6 +3205,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                 Tag: "12MinWarEvent",
                 Node: "SolNode251"
             });
+            pushGoalAlerts(worldState, "12MinWarEvent", buildLabel);
         }
     }
 
@@ -4162,4 +4232,84 @@ const pushConclaveWeakly = (activeChallenges: IPVPChallengeInstance[], week: num
             Category: "PVPChallengeTypeCategory_WEEKLY_ROOT"
         }
     );
+};
+
+const pushGoalAlerts = (ws: IWorldState, tag: string, buildLabel: string): void => {
+    const genMeta = alertGeneratorConfig[tag];
+    const neededAlerts = genMeta.alertLength / genMeta.alertInterval;
+    const currentAlertIndex = Math.floor((ws.Time * 1000 - EPOCH) / genMeta.alertInterval);
+    for (let i = 0; i <= neededAlerts; i++) {
+        ws.Alerts.push(generateGoalAlert(tag, currentAlertIndex - i, ws.Alerts, buildLabel));
+    }
+};
+
+const generateGoalAlert = (tag: string, alertIdx: number, wsAlerts: IAlert[], buildLabel?: string): IAlert => {
+    const genMeta = alertGeneratorConfig[tag];
+    const defenseWavesPerRotation = buildLabel && version_compare(buildLabel, gameToBuildVersion["38.5.0"]) < 0 ? 5 : 3;
+    const activation = EPOCH + alertIdx * genMeta.alertInterval;
+    const expiry = activation + genMeta.alertLength;
+    const tagHash = catBreadHash(tag);
+    const rng = new SRng(alertIdx ^ tagHash);
+    const allowedNodes = Object.fromEntries(
+        Object.entries(ExportRegions).filter(
+            ([nodeTag, node]) =>
+                genMeta.allowedSystemIndexes.includes(node.systemIndex) &&
+                node.nodeType != 3 && // not hub
+                node.nodeType != 7 && // not junction
+                !["MT_ASSASSINATION", "MT_LANDSCAPE", "MT_RAILJACK", "MT_PVPVE", "MT_PVP", "MT_ARENA"].includes(
+                    node.missionType
+                ) &&
+                node.name.indexOf("1999NodeI") == -1 && // not stage defense
+                node.name.indexOf("1999NodeJ") == -1 && // not lich bounty
+                node.name.indexOf("SolarMapEntratiNode") == -1 && // not albrecht lab mission
+                !isArchwingMission(node) &&
+                !wsAlerts.map(a => a.MissionInfo.location).includes(nodeTag)
+        )
+    );
+    let nodeTag: string;
+    let node: IRegion;
+    do {
+        [nodeTag, node] = rng.randomElement(Object.entries(allowedNodes))!;
+        if (!node.tileset) logger.debug(`node ${nodeTag} without tileset - reroll it`);
+        else if (!node.faction) logger.debug(`node ${nodeTag} without faction - reroll it`);
+    } while (!node.tileset || !node.faction);
+    let missionType: string;
+    let mission: ITilesetMission;
+    do {
+        [missionType, mission] = rng.randomElement(Object.entries(ExportTilesets[node.tileset].missions))!;
+    } while (
+        ["MT_ASSASSINATION", "MT_LANDSCAPE", "MT_RAILJACK", "MT_PVPVE", "MT_PVP", "MT_ARENA"].includes(missionType)
+    );
+    const oid =
+        ((activation / 1000) & 0xffffffff).toString(16).padStart(8, "0") +
+        tagHash.toString(16).padEnd(8, "0") +
+        (alertIdx & 0xffffffff).toString(16).padStart(8, "0");
+    const alert: IAlert = {
+        _id: { $oid: oid },
+        Activation: { $date: { $numberLong: activation.toString() } },
+        Expiry: { $date: { $numberLong: expiry.toString() } },
+        MissionInfo: {
+            location: nodeTag,
+            missionType: missionType as TMissionType,
+            faction: node.faction,
+            difficulty: 1,
+            seed: alertIdx,
+            levelOverride: mission.procLevel,
+            ...genMeta.baseMissionInfo
+        },
+        ...genMeta.baseAlert
+    };
+    if (mission.enemySpecs) alert.MissionInfo.enemySpec = rng.randomElement(mission.enemySpecs);
+    if (mission.extraEnemySpecs) alert.MissionInfo.extraEnemySpec = rng.randomElement(mission.extraEnemySpecs);
+    if (mission.vipAgent) alert.MissionInfo.vipAgent = mission.vipAgent;
+    if (mission.advancedSpawners) alert.MissionInfo.customAdvancedSpawners = mission.advancedSpawners;
+    if (["MT_INTEL", "MT_TERRITORY", "MT_EXCAVATE"].includes(missionType)) {
+        alert.MissionInfo.maxWaveNum = 2;
+    } else if (missionType == "MT_SURVIVAL") {
+        alert.MissionInfo.maxWaveNum = 5 * genMeta.baseMissionInfo.maxRotations!;
+    } else if (missionType == "MT_DEFENSE") {
+        alert.MissionInfo.maxWaveNum = defenseWavesPerRotation * genMeta.baseMissionInfo.maxRotations!;
+    }
+    delete alert.MissionInfo.maxRotations;
+    return alert;
 };

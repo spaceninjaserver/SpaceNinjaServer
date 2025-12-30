@@ -66,6 +66,7 @@ export interface IAlert {
     Expiry: IMongoDate;
     MissionInfo: IAlertMissionInfo;
     Tag?: string;
+    Icon?: string;
     ForceUnlock?: true;
 }
 
@@ -83,6 +84,10 @@ export interface IAlertMissionInfo {
     maxEnemyLevel?: number;
     maxWaveNum?: number;
     descText?: string;
+    questReq?: string;
+    vipAgent?: string;
+    leadersAlwaysAllowed?: true;
+    seed?: number;
     enemyCacheOverride?: string;
 
     maxRotations?: number; // SNS specific field
