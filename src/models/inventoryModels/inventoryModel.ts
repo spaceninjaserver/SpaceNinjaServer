@@ -1909,6 +1909,10 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //Grustag three
         DeathSquadable: Boolean,
 
+        // Server-only tracking fields for when to give zanuka or G3 death marks
+        HarvesterPoints: Number,
+        DeathSquadPoints: Number,
+
         EndlessXP: { type: [endlessXpProgressSchema], default: undefined },
 
         DescentRewards: { type: [descentCategoryRewardSchema], default: undefined },
@@ -1952,6 +1956,8 @@ inventorySchema.set("toJSON", {
         delete returnedObject.__v;
         delete returnedObject.accountOwnerId;
         delete returnedObject.MissionRelicRewards;
+        delete returnedObject.HarvesterPoints;
+        delete returnedObject.DeathSquadPoints;
 
         const inventoryDatabase = returnedObject as Partial<IInventoryDatabase>;
         const inventoryResponse = returnedObject as IInventoryClient;

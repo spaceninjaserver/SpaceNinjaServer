@@ -219,44 +219,34 @@ export const inventoryController: RequestHandler = async (request, response) => 
             if (qi.AttackerScore >= 3) {
                 factionSidedWith = invasion.Faction;
                 battlePay = invasion.AttackerReward.countedItems;
-                logger.debug(`invasion pay from ${factionSidedWith}`, { battlePay });
             } else if (qi.DefenderScore >= 3) {
                 factionSidedWith = invasion.DefenderFaction;
                 battlePay = invasion.DefenderReward.countedItems;
-                logger.debug(`invasion pay from ${factionSidedWith}`, { battlePay });
             }
-            if (factionSidedWith) {
-                if (battlePay) {
-                    // Decoupling rewards from the inbox message because it may delete itself without being read
-                    for (const item of battlePay) {
-                        await addItem(inventory, item.ItemType, item.ItemCount);
+            if (factionSidedWith && battlePay) {
+                logger.debug(`invasion pay from ${factionSidedWith}`, { battlePay });
+                // Decoupling rewards from the inbox message because it may delete itself without being read
+                for (const item of battlePay) {
+                    await addItem(inventory, item.ItemType, item.ItemCount);
+                }
+                await createMessage(account._id, [
+                    {
+                        sndr:
+                            factionSidedWith == "FC_GRINEER"
+                                ? "/Lotus/Language/Menu/GrineerInvasionLeader"
+                                : "/Lotus/Language/Menu/CorpusInvasionLeader",
+                        msg: `/Lotus/Language/G1Quests/${factionSidedWith}_InvasionThankyouMessageBody`,
+                        sub: `/Lotus/Language/G1Quests/${factionSidedWith}_InvasionThankyouMessageSubject`,
+                        countedAtt: battlePay,
+                        attVisualOnly: true,
+                        icon:
+                            factionSidedWith == "FC_GRINEER"
+                                ? "/Lotus/Interface/Icons/Npcs/EliteRifleLancerAvatar.png" // Source: https://www.reddit.com/r/Warframe/comments/1aj4usx/battle_pay_worth_10_plat/, https://www.youtube.com/watch?v=XhNZ6ai6BOY
+                                : "/Lotus/Interface/Icons/Npcs/CrewmanNormal.png", // My best source for this is https://www.youtube.com/watch?v=rxrCCFm73XE around 1:37
+                        // TOVERIFY: highPriority?
+                        endDate: new Date(Date.now() + 86400_000) // TOVERIFY: This type of inbox message seems to automatically delete itself. We'll just delete it after 24 hours, but it's not clear if this is correct.
                     }
-                    await createMessage(account._id, [
-                        {
-                            sndr:
-                                factionSidedWith == "FC_GRINEER"
-                                    ? "/Lotus/Language/Menu/GrineerInvasionLeader"
-                                    : "/Lotus/Language/Menu/CorpusInvasionLeader",
-                            msg: `/Lotus/Language/G1Quests/${factionSidedWith}_InvasionThankyouMessageBody`,
-                            sub: `/Lotus/Language/G1Quests/${factionSidedWith}_InvasionThankyouMessageSubject`,
-                            countedAtt: battlePay,
-                            attVisualOnly: true,
-                            icon:
-                                factionSidedWith == "FC_GRINEER"
-                                    ? "/Lotus/Interface/Icons/Npcs/EliteRifleLancerAvatar.png" // Source: https://www.reddit.com/r/Warframe/comments/1aj4usx/battle_pay_worth_10_plat/, https://www.youtube.com/watch?v=XhNZ6ai6BOY
-                                    : "/Lotus/Interface/Icons/Npcs/CrewmanNormal.png", // My best source for this is https://www.youtube.com/watch?v=rxrCCFm73XE around 1:37
-                            // TOVERIFY: highPriority?
-                            endDate: new Date(Date.now() + 86400_000) // TOVERIFY: This type of inbox message seems to automatically delete itself. We'll just delete it after 24 hours, but it's not clear if this is correct.
-                        }
-                    ]);
-                }
-                if (invasion.Faction != "FC_INFESTATION") {
-                    // Sided with grineer -> opposed corpus -> send zanuka (harvester)
-                    // Sided with corpus -> opposed grineer -> send g3 (death squad)
-                    inventory[factionSidedWith != "FC_GRINEER" ? "DeathSquadable" : "Harvestable"] = true;
-                    // TOVERIFY: Should this happen earlier?
-                    // TOVERIFY: Should this send an (ephemeral) email?
-                }
+                ]);
             }
             logger.debug(`removing QualifyingInvasions entry for completed invasion: ${qi.invasionId.toString()}`);
             inventory.QualifyingInvasions.splice(i, 1);

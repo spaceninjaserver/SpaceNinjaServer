@@ -73,6 +73,7 @@ import {
 } from "../helpers/nemesisHelpers.ts";
 import { Loadout } from "../models/inventoryModels/loadoutModel.ts";
 import {
+    getInvasionByOid,
     getLiteSortie,
     getSortie,
     getWorldState,
@@ -92,6 +93,7 @@ import { Guild } from "../models/guildModel.ts";
 import { handleGuildGoalProgress } from "./guildService.ts";
 import { importLoadOutConfig } from "./importService.ts";
 import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
+import { corpusDeathSquadInfo, grineerDeathSquadInfo } from "./invasionService.ts";
 
 const getRotations = (rewardInfo: IRewardInfo, tierOverride?: number): number[] => {
     // For Spy missions, e.g. 3 vaults cracked = A, B, C
@@ -825,6 +827,30 @@ export const addMissionInventoryUpdates = async (
                             AttackerScore: clientProgress.AttackerScore,
                             DefenderScore: clientProgress.DefenderScore
                         });
+                    }
+                    const invasion = getInvasionByOid(clientProgress._id.$oid)!;
+                    const factionSidedWith = clientProgress.AttackerScore ? invasion.Faction : invasion.DefenderFaction;
+                    if (invasion.Faction != "FC_INFESTATION") {
+                        const info = factionSidedWith != "FC_GRINEER" ? grineerDeathSquadInfo : corpusDeathSquadInfo;
+                        if (!inventory[info.booleanKey]) {
+                            const numberKey = info.numberKey;
+                            inventory[numberKey] ??= 0;
+                            inventory[numberKey] += clientProgress.AttackerScore + clientProgress.DefenderScore;
+                            if (inventory[numberKey] >= 5) {
+                                inventory[numberKey] = 0;
+                                const isRepeatMark = inventory[info.booleanKey] !== undefined;
+                                inventory[info.booleanKey] = true;
+                                await createMessage(inventory.accountOwnerId, [
+                                    {
+                                        sndr: info.inboxSender,
+                                        msg: isRepeatMark ? info.inboxMessageRepeat : info.inboxMessage,
+                                        sub: info.inboxTitle,
+                                        icon: info.inboxIcon,
+                                        highPriority: true
+                                    }
+                                ]);
+                            }
+                        }
                     }
                 }
                 break;

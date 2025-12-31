@@ -454,8 +454,10 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     LibraryActiveDailyTaskInfo?: ILibraryDailyTaskInfo;
     HasResetAccount: boolean;
     PendingCoupon?: IPendingCouponClient;
-    Harvestable: boolean;
-    DeathSquadable: boolean;
+    Harvestable?: boolean;
+    DeathSquadable?: boolean;
+    HarvesterPoints?: number;
+    DeathSquadPoints?: number;
     EndlessXP?: IEndlessXpProgressClient[];
     DescentRewards?: IDescentCategoryRewardClient[];
     DialogueHistory?: IDialogueHistoryClient;
