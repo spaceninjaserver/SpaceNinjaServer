@@ -28,54 +28,68 @@ export type InventoryDatabaseEquipment = {
 };
 
 // Fields specific to SNS
-export interface IAccountCheats {
-    skipAllDialogue?: boolean;
-    skipAllPopups?: boolean;
-    dontSubtractPurchaseCreditCost?: boolean;
-    dontSubtractPurchasePlatinumCost?: boolean;
-    dontSubtractPurchaseItemCost?: boolean;
-    dontSubtractPurchaseStandingCost?: boolean;
-    dontSubtractVoidTraces?: boolean;
-    dontSubtractConsumables?: boolean;
-    finishInvasionsInOneMission?: boolean;
-    infiniteCredits?: boolean;
-    infinitePlatinum?: boolean;
-    infiniteEndo?: boolean;
-    infiniteRegalAya?: boolean;
-    infiniteHelminthMaterials?: boolean;
-    universalPolarityEverywhere?: boolean;
-    unlockDoubleCapacityPotatoesEverywhere?: boolean;
-    unlockExilusEverywhere?: boolean;
-    unlockArcanesEverywhere?: boolean;
-    alertsRepeatable?: boolean;
-    syndicateMissionsRepeatable?: boolean;
-    instantFinishRivenChallenge?: boolean;
-    noDailyStandingLimits?: boolean;
-    noDailyFocusLimit?: boolean;
-    noArgonCrystalDecay?: boolean;
-    noMasteryRankUpCooldown?: boolean;
-    noVendorPurchaseLimits?: boolean;
-    noDeathMarks?: boolean;
-    noKimCooldowns?: boolean;
-    noBlessingCooldown?: boolean;
-    claimingBlueprintRefundsIngredients?: boolean;
-    instantResourceExtractorDrones?: boolean;
-    noResourceExtractorDronesDamage?: boolean;
-    missionsCanGiveAllRelics?: boolean;
-    exceptionalRelicsAlwaysGiveBronzeReward?: boolean;
-    flawlessRelicsAlwaysGiveSilverReward?: boolean;
-    radiantRelicsAlwaysGiveGoldReward?: boolean;
-    disableDailyTribute?: boolean;
-    nemesisHenchmenKillsMultiplierGrineer?: number;
-    nemesisHenchmenKillsMultiplierCorpus?: number;
-    nemesisAntivirusGainMultiplier?: number;
-    nemesisHintProgressMultiplierGrineer?: number;
-    nemesisHintProgressMultiplierCorpus?: number;
-    nemesisExtraWeapon?: number;
-    spoofMasteryRank?: number;
-    relicRewardItemCountMultiplier?: number;
-    nightwaveStandingMultiplier?: number;
-}
+export const accountCheatBooleans = [
+    "skipAllDialogue",
+    "skipAllPopups",
+    "dontSubtractPurchaseCreditCost",
+    "dontSubtractPurchasePlatinumCost",
+    "dontSubtractPurchaseItemCost",
+    "dontSubtractPurchaseStandingCost",
+    "dontSubtractVoidTraces",
+    "dontSubtractConsumables",
+    "finishInvasionsInOneMission",
+    "infiniteCredits",
+    "infinitePlatinum",
+    "infiniteEndo",
+    "infiniteRegalAya",
+    "infiniteHelminthMaterials",
+    "universalPolarityEverywhere",
+    "unlockDoubleCapacityPotatoesEverywhere",
+    "unlockExilusEverywhere",
+    "unlockArcanesEverywhere",
+    "alertsRepeatable",
+    "syndicateMissionsRepeatable",
+    "instantFinishRivenChallenge",
+    "noDailyStandingLimits",
+    "noDailyFocusLimit",
+    "noArgonCrystalDecay",
+    "noMasteryRankUpCooldown",
+    "noVendorPurchaseLimits",
+    "noDeathMarks",
+    "noKimCooldowns",
+    "noBlessingCooldown",
+    "claimingBlueprintRefundsIngredients",
+    "instantResourceExtractorDrones",
+    "noResourceExtractorDronesDamage",
+    "missionsCanGiveAllRelics",
+    "exceptionalRelicsAlwaysGiveBronzeReward",
+    "flawlessRelicsAlwaysGiveSilverReward",
+    "radiantRelicsAlwaysGiveGoldReward",
+    "disableDailyTribute"
+] as const;
+export const accountCheatNumbers = [
+    "nemesisHenchmenKillsMultiplierGrineer",
+    "nemesisHenchmenKillsMultiplierCorpus",
+    "nemesisAntivirusGainMultiplier",
+    "nemesisHintProgressMultiplierGrineer",
+    "nemesisHintProgressMultiplierCorpus",
+    "nemesisExtraWeapon",
+    "spoofMasteryRank",
+    "relicRewardItemCountMultiplier",
+    "nightwaveStandingMultiplier"
+] as const;
+
+type TAccountCheatBooleanKey = (typeof accountCheatBooleans)[number];
+type TAccountCheatNumberKey = (typeof accountCheatNumbers)[number];
+
+type IAccountCheatBooleans = {
+    [_ in TAccountCheatBooleanKey]: boolean | undefined;
+};
+type IAccountCheatNumbers = {
+    [_ in TAccountCheatNumberKey]: number | undefined;
+};
+
+export interface IAccountCheats extends IAccountCheatBooleans, IAccountCheatNumbers {}
 
 export interface IInventoryDatabase
     extends

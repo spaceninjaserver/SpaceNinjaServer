@@ -7,7 +7,12 @@ import allDialogue from "../../../static/fixed_responses/allDialogue.json" with 
 import allPopups from "../../../static/fixed_responses/allPopups.json" with { type: "json" };
 import type { ILoadoutConfigClientLegacy, ILoadoutDatabase, ILoadOutPresets } from "../../types/saveLoadoutTypes.ts";
 import type { IInventoryClient, IShipInventory, IUpgradeClient } from "../../types/inventoryTypes/inventoryTypes.ts";
-import { equipmentKeys, loadoutKeysLegacy } from "../../types/inventoryTypes/inventoryTypes.ts";
+import {
+    accountCheatBooleans,
+    accountCheatNumbers,
+    equipmentKeys,
+    loadoutKeysLegacy
+} from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import { ArtifactPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import type { ICountedItem } from "warframe-public-export-plus";
@@ -286,7 +291,8 @@ export const inventoryController: RequestHandler = async (request, response) => 
         await getInventoryResponse(
             inventory,
             "xpBasedLevelCapDisabled" in request.query,
-            "ignoreBuildLabel" in request.query ? undefined : account.BuildLabel
+            "ignoreBuildLabel" in request.query ? undefined : account.BuildLabel,
+            "ignoreBuildLabel" in request.query
         )
     );
 };
@@ -294,7 +300,8 @@ export const inventoryController: RequestHandler = async (request, response) => 
 export const getInventoryResponse = async (
     inventory: TInventoryDatabaseDocument,
     xpBasedLevelCapDisabled: boolean,
-    buildLabel: string | undefined
+    buildLabel: string | undefined,
+    forWebui: boolean = false
 ): Promise<IInventoryClient> => {
     const [inventoryWithLoadOutPresets, ships, latestMessage] = await Promise.all([
         inventory.populate<{ LoadOutPresets: ILoadoutDatabase }>("LoadOutPresets"),
@@ -303,6 +310,15 @@ export const getInventoryResponse = async (
     ]);
     const inventoryResponse = inventoryWithLoadOutPresets.toJSON<IInventoryClient>();
     inventoryResponse.Ships = ships.map(x => x.toJSON<IShipInventory>());
+
+    if (!forWebui) {
+        for (const key of accountCheatBooleans) {
+            delete inventoryResponse[key as keyof typeof inventoryResponse];
+        }
+        for (const key of accountCheatNumbers) {
+            delete inventoryResponse[key as keyof typeof inventoryResponse];
+        }
+    }
 
     // In case mission inventory update added an inbox message, we need to send the Mailbox part so the client knows to refresh it.
     if (latestMessage) {
