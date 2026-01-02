@@ -6,6 +6,7 @@ import { requestLogger } from "./middleware/morgenMiddleware.ts";
 import { errorHandler } from "./middleware/errorHandler.ts";
 
 import { apiRouter } from "./routes/api.ts";
+import { arbiterRouter } from "./routes/arbiter.ts";
 import { cacheRouter } from "./routes/cache.ts";
 import { customRouter } from "./routes/custom.ts";
 import { dynamicController } from "./routes/dynamic.ts";
@@ -38,6 +39,7 @@ app.use(bodyParser.text({ limit: "4mb" }));
 app.use(requestLogger);
 
 app.use("/api", apiRouter);
+app.use("/api", arbiterRouter);
 app.use("/", cacheRouter);
 app.use("/custom", customRouter);
 app.use("/cdn", dynamicController); // Post-U40
