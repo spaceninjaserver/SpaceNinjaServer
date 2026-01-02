@@ -2277,100 +2277,10 @@ export const addLoreFragmentScans = (inventory: TInventoryDatabaseDocument, arr:
     });
 };
 
-const challengeRewardsInboxMessages: Record<string, IMessageCreationTemplate> = {
-    SentEvoEphemeraRankOne: {
-        sub: "/Lotus/Language/Inbox/EvolvingEphemeraUnlockAName",
-        sndr: "/Lotus/Language/Bosses/Ordis",
-        msg: "/Lotus/Language/Inbox/EvolvingEphemeraUnlockADesc",
-        icon: "/Lotus/Interface/Icons/Npcs/Ordis.png",
-        att: ["/Lotus/Upgrades/Skins/Effects/NarmerEvolvingEphemeraB"]
-    },
-    SentEvoEphemeraRankTwo: {
-        sub: "/Lotus/Language/Inbox/EvolvingEphemeraUnlockBName",
-        sndr: "/Lotus/Language/Bosses/Ordis",
-        msg: "/Lotus/Language/Inbox/EvolvingEphemeraUnlockBDesc",
-        icon: "/Lotus/Interface/Icons/Npcs/Ordis.png",
-        att: ["/Lotus/Upgrades/Skins/Effects/NarmerEvolvingEphemeraC"]
-    },
-    SentEvoSyandanaRankOne: {
-        sub: "/Lotus/Language/Inbox/EvolvingSyandanaUnlockAName",
-        sndr: "/Lotus/Language/Bosses/Ordis",
-        msg: "/Lotus/Language/Inbox/EvolvingSyandanaUnlockADesc",
-        icon: "/Lotus/Interface/Icons/Npcs/Ordis.png",
-        att: ["/Lotus/Upgrades/Skins/Scarves/NarmerEvolvingSyandanaBCape"]
-    },
-    SentEvoSyandanaRankTwo: {
-        sub: "/Lotus/Language/Inbox/EvolvingSyandanaUnlockBName",
-        sndr: "/Lotus/Language/Bosses/Ordis",
-        msg: "/Lotus/Language/Inbox/EvolvingSyandanaUnlockBDesc",
-        icon: "/Lotus/Interface/Icons/Npcs/Ordis.png",
-        att: ["/Lotus/Upgrades/Skins/Scarves/NarmerEvolvingSyandanaCCape"]
-    },
-    SentEvoSekharaRankOne: {
-        sub: "/Lotus/Language/Inbox/EvolvingSekharaUnlockAName",
-        sndr: "/Lotus/Language/Bosses/Ordis",
-        msg: "/Lotus/Language/Inbox/EvolvingSekharaUnlockADesc",
-        icon: "/Lotus/Interface/Icons/Npcs/Ordis.png",
-        att: ["/Lotus/Upgrades/Skins/Clan/ZarimanEvolvingSekharaBadgeItemB"]
-    },
-    SentEvoSekharaRankTwo: {
-        sub: "/Lotus/Language/Inbox/EvolvingSekharaUnlockBName",
-        sndr: "/Lotus/Language/Bosses/Ordis",
-        msg: "/Lotus/Language/Inbox/EvolvingSekharaUnlockBDesc",
-        icon: "/Lotus/Interface/Icons/Npcs/Ordis.png",
-        att: ["/Lotus/Upgrades/Skins/Clan/ZarimanEvolvingSekharaBadgeItemC"]
-    },
-    // In theory, the following should only give what is owned, but based on the limited information I can find, DE may have simply taken the easy way: https://www.reddit.com/r/Warframe/comments/rzlnku/receiving_all_protovyre_armor_evolution_but_only/
-    SentEvoArmorRankOne: {
-        sub: "/Lotus/Language/Inbox/EvolvingArmorUnlockAName",
-        sndr: "/Lotus/Language/Bosses/Ordis",
-        msg: "/Lotus/Language/Inbox/EvolvingArmorUnlockADesc",
-        icon: "/Lotus/Interface/Icons/Npcs/Ordis.png",
-        att: [
-            "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor2A",
-            "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor2C",
-            "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor2L"
-        ]
-    },
-    SentEvoArmorRankTwo: {
-        sub: "/Lotus/Language/Inbox/EvolvingArmorUnlockBName",
-        sndr: "/Lotus/Language/Bosses/Ordis",
-        msg: "/Lotus/Language/Inbox/EvolvingArmorUnlockBDesc",
-        icon: "/Lotus/Interface/Icons/Npcs/Ordis.png",
-        att: [
-            "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor3A",
-            "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor3C",
-            "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor3L"
-        ]
-    }
-};
-
-/*const evolvingWeaponSkins: Record<string, { challenge: keyof typeof challengeRewardsInboxMessages; reward: string }> = {
-    "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor1A": {
-        challenge: "SentEvoArmorRankOne",
-        reward: "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor2A"
-    },
-    "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor1C": {
-        challenge: "SentEvoArmorRankOne",
-        reward: "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor2C"
-    },
-    "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor1L": {
-        challenge: "SentEvoArmorRankOne",
-        reward: "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor2L"
-    },
-    "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor2A": {
-        challenge: "SentEvoArmorRankTwo",
-        reward: "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor3A"
-    },
-    "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor2C": {
-        challenge: "SentEvoArmorRankTwo",
-        reward: "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor3C"
-    },
-    "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor2L": {
-        challenge: "SentEvoArmorRankTwo",
-        reward: "/Lotus/Upgrades/Skins/Armor/SentEvoArmor/SentEvoArmor3L"
-    }
-};*/
+const challengeNameToPath: Record<string, string> = {};
+for (const path of Object.keys(ExportChallenges)) {
+    challengeNameToPath[path.split("/").pop()!] = path;
+}
 
 export const addChallenges = async (
     account: TAccountDocument,
@@ -2398,23 +2308,24 @@ export const addChallenges = async (
                 if (dbChallenge.Completed.indexOf(completion) == -1) {
                     dbChallenge.Completed.push(completion);
                     if (completion == "challengeRewards") {
-                        if (Name in challengeRewardsInboxMessages) {
-                            logger.debug(`did a challenge for evolving armour, sending inbox message`);
-                            await createMessage(account._id, [challengeRewardsInboxMessages[Name]]);
+                        const path = challengeNameToPath[Name];
+                        const meta = ExportChallenges[path];
+                        if (meta.message) {
+                            logger.debug(`${Name} completed, sending inbox message`);
+                            await createMessage(account._id, [convertInboxMessage(meta.message)]);
                             continue;
                         }
-                        if (`/Lotus/Types/Challenges/Titles/${Name}` in ExportChallenges) {
-                            if (ExportChallenges[`/Lotus/Types/Challenges/Titles/${Name}`].countedRewards) {
-                                const titleType = fromStoreItem(
-                                    ExportChallenges[`/Lotus/Types/Challenges/Titles/${Name}`].countedRewards![0]
-                                        .StoreItem
+                        if (meta.countedRewards) {
+                            logger.debug(`${Name} completed, giving rewards:`, meta.countedRewards);
+                            for (const cr of meta.countedRewards) {
+                                combineInventoryChanges(
+                                    inventoryChanges,
+                                    await addItem(inventory, fromStoreItem(cr.StoreItem), cr.ItemCount)
                                 );
-                                logger.debug(`${Name} completed, giving ${titleType}`);
-                                addCustomization(inventory, titleType, inventoryChanges);
-                                continue;
                             }
+                            continue;
                         }
-                        logger.warn(`ignoring unknown challenge completion`, { challenge: Name, completion });
+                        logger.warn(`ignoring unknown challenge completion`, { name: Name, path, completion, meta });
                         dbChallenge.Progress = 0;
                         dbChallenge.Completed = [];
                     }
