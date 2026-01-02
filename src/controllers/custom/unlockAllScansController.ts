@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
 import allScans from "../../../static/fixed_responses/allScans.json" with { type: "json" };
-import { ExportEnemies } from "warframe-public-export-plus";
+import { ExportCodex, ExportEnemies } from "warframe-public-export-plus";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { getStats } from "../../services/statsService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
@@ -11,6 +11,9 @@ export const unlockAllScansController: RequestHandler = async (req, res) => {
 
     const scanTypes = new Set<string>(allScans);
     for (const type of Object.keys(ExportEnemies.avatars)) {
+        scanTypes.add(type);
+    }
+    for (const type of Object.keys(ExportCodex.objects)) {
         scanTypes.add(type);
     }
 
