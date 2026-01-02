@@ -1,4 +1,5 @@
 [
+  "OperatorRemasterPrompt",
   "RailjackPlexusTutorial",
   "RailjackIntrinsicsTutorial",
   "RailjackDryDockTutorial",
@@ -8,6 +9,7 @@
   "NPE_poponce_transmuteinfo",
   "MarketOpened",
   "PrimeTokensTutorial",
+  "WelcomeScreen_Peace",
   "WelcomeScreen_Undermind",
   "WelcomeScreen_Jade",
   "WelcomeScreen_Isleweaver",

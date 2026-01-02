@@ -1684,7 +1684,7 @@ export const updateGeneric = async (data: IGenericUpdate, accountId: string): Pr
             continue;
         }
         inventory.NodeIntrosCompleted.push(node);
-        logger.debug(`completed dialogue/cutscene for ${node}`);
+        logger.debug(`completed popup/dialogue/cutscene for ${node}`);
 
         if (node == "TC2025") {
             inventoryChanges.ShipDecorations = [
