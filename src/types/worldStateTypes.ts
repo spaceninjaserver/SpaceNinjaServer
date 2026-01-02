@@ -25,6 +25,7 @@ export interface IWorldState {
     DailyDeals: IDailyDeal[];
     PVPChallengeInstances: IPVPChallengeInstance[];
     EndlessXpChoices: IEndlessXpChoice[];
+    FeaturedGuilds: IFeaturedGuild[];
     SeasonInfo?: {
         Activation: IMongoDate;
         Expiry: IMongoDate;
@@ -373,6 +374,27 @@ export interface IPVPChallengeInstance {
 export interface IEndlessXpChoice {
     Category: string;
     Choices: string[];
+}
+
+export interface IFeaturedGuild {
+    _id: IOid;
+    Name: string;
+    Tier: number;
+    AllianceId?: IOid;
+    Emblem?: boolean;
+    HiddenPlatforms?: {
+        PLATFORM_WINDOWS?: true;
+        PLATFORM_XBONE?: true;
+        PLATFORM_XSX?: true;
+        PLATFORM_PS4?: true;
+        PLATFORM_PS5?: true;
+        PLATFORM_SWITCH?: true;
+        PLATFORM_SWITCH2?: true;
+        PLATFORM_IOS?: true;
+        PLATFORM_ANDROID?: true;
+        PLATFORM_CROSS_PLATFORM?: true;
+    };
+    IconOveride?: 0 | 1;
 }
 
 export interface ISeasonChallenge {
