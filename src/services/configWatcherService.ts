@@ -34,7 +34,9 @@ chokidar.watch(configPath).on("change", () => {
             forEachWsClient(client => {
                 if (client.isGame) {
                     client.send(
-                        JSON.stringify({ tunables: getTunablesForClient(client.address) } satisfies IWsMsgToClient)
+                        JSON.stringify({
+                            tunables: getTunablesForClient(client.address, client.reflexiveAddress)
+                        } satisfies IWsMsgToClient)
                     );
                 }
             });

@@ -10,6 +10,7 @@ import { logError, logger } from "../utils/logger.ts";
 import type { Request } from "express";
 import type { ITunables } from "../types/bootstrapperTypes.ts";
 import type { AddressInfo } from "node:net";
+import { config } from "./configService.ts";
 
 let wsServer: WebSocketServer | undefined;
 let wssServer: WebSocketServer | undefined;
@@ -50,6 +51,7 @@ let lastWsid: number = 0;
 interface IWsCustomData extends WebSocket {
     id: number;
     address: string;
+    reflexiveAddress: string;
     accountId?: string;
     isGame?: boolean;
 }
@@ -107,6 +109,7 @@ const wsOnConnect = (ws: WebSocket, req: http.IncomingMessage): void => {
 
     (ws as IWsCustomData).id = ++lastWsid;
     (ws as IWsCustomData).address = (req.socket.address() as AddressInfo).address;
+    (ws as IWsCustomData).reflexiveAddress = req.headers.host?.split(":")[0] ?? config.myAddress;
     ws.send(JSON.stringify({ wsid: lastWsid } satisfies IWsMsgToClient));
 
     // eslint-disable-next-line @typescript-eslint/no-misused-promises

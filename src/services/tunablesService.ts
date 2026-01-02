@@ -17,7 +17,7 @@ export const getTokenForClient = (clientAddress: string): string => {
     return crypto.createHmac("sha256", secret).update(clientAddress).digest("hex");
 };
 
-export const getTunablesForClient = (clientAddress: string): ITunables => {
+export const getTunablesForClient = (clientAddress: string, reflexiveAddress: string): ITunables => {
     const tunables: ITunables = {};
     if (config.tunables?.useLoginToken) {
         tunables.token = getTokenForClient(clientAddress);
@@ -41,7 +41,7 @@ export const getTunablesForClient = (clientAddress: string): ITunables => {
         tunables.motd = config.tunables.motd;
     }
     if (config.tunables?.udpProxyUpstream) {
-        tunables.udp_proxy_upstream = config.tunables.udpProxyUpstream;
+        tunables.udp_proxy_upstream = config.tunables.udpProxyUpstream.split("%THIS_MACHINE%").join(reflexiveAddress);
     }
     return tunables;
 };
