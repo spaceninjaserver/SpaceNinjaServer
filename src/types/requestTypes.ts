@@ -223,6 +223,7 @@ export interface IRewardInfo extends IBountyRewardInfo {
     ConquestPersonalModifiersActive?: number;
     ConquestStickersActive?: number;
     ConquestHardModeActive?: number;
+    EncounterEnemyLevel?: number;
     missionType?: TMissionType;
 }
 

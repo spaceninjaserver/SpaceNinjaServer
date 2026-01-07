@@ -1610,12 +1610,12 @@ export const addMissionRewards = async (
         if (!entry) {
             throw new Error(`Missing DescentRewards entry`);
         }
-        logger.debug(`completed ${rewardInfo.CheckpointCounter} ${entry.Category} floor`);
-        if (rewardInfo.CheckpointCounter && rewardInfo.CheckpointCounter > entry.FloorClaimed) {
-            entry.FloorClaimed = rewardInfo.CheckpointCounter;
-            const reward = entry.PendingRewards.find(x => x.FloorCheckpoint == rewardInfo.CheckpointCounter);
+        logger.debug(`completed ${rewardInfo.EncounterEnemyLevel} ${entry.Category} floor`);
+        if (rewardInfo.EncounterEnemyLevel && rewardInfo.EncounterEnemyLevel > entry.FloorClaimed) {
+            entry.FloorClaimed = rewardInfo.EncounterEnemyLevel;
+            const reward = entry.PendingRewards.find(x => x.FloorCheckpoint == rewardInfo.EncounterEnemyLevel);
             if (reward) {
-                logger.debug(`giving ${entry.Category} floor ${rewardInfo.CheckpointCounter} reward`, {
+                logger.debug(`giving ${entry.Category} floor ${rewardInfo.EncounterEnemyLevel} reward`, {
                     reward: reward.Rewards
                 });
                 MissionRewards.push(...reward.Rewards);
