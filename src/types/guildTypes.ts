@@ -52,6 +52,7 @@ export interface IGuildDatabase extends IGuildCheats {
     Emblem?: boolean;
     AutoContributeFromVault?: boolean;
     AllianceId?: Types.ObjectId;
+    Featured?: boolean;
 
     DojoComponents: IDojoComponentDatabase[];
     DojoCapacity: number;

@@ -46,6 +46,7 @@ import { factionToInt, getConquest, getMissionTypeForLegacyOverride } from "./co
 import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 import { getDescent } from "./descentService.ts";
 import { catBreadHash } from "../helpers/stringHelpers.ts";
+import { Guild } from "../models/guildModel.ts";
 
 const sortieBosses = [
     "SORTIE_BOSS_HYENA",
@@ -1597,6 +1598,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         EndlessXpChoices: [],
         KnownCalendarSeasons: [],
         PVPChallengeInstances: [],
+        FeaturedGuilds: [],
         ...staticWorldState,
         SyndicateMissions: [...staticWorldState.SyndicateMissions],
         InGameMarket: {
@@ -4312,4 +4314,17 @@ const generateGoalAlert = (tag: string, alertIdx: number, wsAlerts: IAlert[], bu
     }
     delete alert.MissionInfo.maxRotations;
     return alert;
+};
+
+export const populateFeaturedGuilds = async (worldState: IWorldState): Promise<void> => {
+    const guilds = await Guild.find({ Featured: true }, "Name Tier AllianceId Emblem");
+    for (const guild of guilds) {
+        worldState.FeaturedGuilds.push({
+            _id: toOid(guild._id),
+            Name: guild.Name,
+            Tier: guild.Tier,
+            AllianceId: guild.AllianceId ? toOid(guild.AllianceId) : undefined,
+            Emblem: guild.Emblem
+        });
+    }
 };
