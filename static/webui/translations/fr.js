@@ -85,6 +85,7 @@ dict = {
     code_succChange: `Changement effectué.`,
     code_requiredInvigorationUpgrade: `Invigoration offensive et défensive requises.`,
     code_feature_1: `[UNTRANSLATED] Orokin Reactor`,
+    code_feature_1_alt: `[UNTRANSLATED] Orokin Catalyst`,
     code_feature_2: `[UNTRANSLATED] Exilus Adapter`,
     code_feature_4: `[UNTRANSLATED] Gravimag`,
     code_feature_8: `[UNTRANSLATED] Gild`,

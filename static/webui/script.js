@@ -1535,8 +1535,23 @@ function updateInventory() {
                             const label = document.createElement("label");
                             label.classList = "form-check-label";
                             label.htmlFor = input.id;
-                            label.innerHTML = loc(`code_feature_${bit}`);
-                            label.setAttribute("data-loc", `code_feature_${bit}`);
+                            let locString = `code_feature_${bit}`;
+                            if (
+                                ![
+                                    "Suits",
+                                    "SpaceSuits",
+                                    "Hoverboards",
+                                    "MechSuits",
+                                    "Sentinels",
+                                    "MoaPets",
+                                    "KubrowPets"
+                                ].includes(category) &&
+                                bit === 1
+                            ) {
+                                locString = `code_feature_${bit}_alt`;
+                            }
+                            label.innerHTML = loc(locString);
+                            label.setAttribute("data-loc", locString);
 
                             input.onchange = function (event) {
                                 event.preventDefault();

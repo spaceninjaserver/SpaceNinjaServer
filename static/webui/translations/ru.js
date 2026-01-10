@@ -85,6 +85,7 @@ dict = {
     code_succChange: `Успешно изменено.`,
     code_requiredInvigorationUpgrade: `Вы должны выбрать как атакующее, так и вспомогательное улучшение.`,
     code_feature_1: `Реактор Орокин`,
+    code_feature_1_alt: `Катализатор Орокин`,
     code_feature_2: `Адаптер Эксилус`,
     code_feature_4: `Гравимаг`,
     code_feature_8: `Улучшение`,

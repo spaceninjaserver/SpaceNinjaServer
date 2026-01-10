@@ -84,6 +84,7 @@ dict = {
     code_succChange: `Successfully changed.`,
     code_requiredInvigorationUpgrade: `You must select both an offensive & utility upgrade.`,
     code_feature_1: `Orokin Reactor`,
+    code_feature_1_alt: `Orokin Catalyst`,
     code_feature_2: `Exilus Adapter`,
     code_feature_4: `Gravimag`,
     code_feature_8: `Gild`,
