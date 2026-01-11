@@ -10,7 +10,7 @@ dict = {
 
     code_loginFail: `Connexion échouée. Vérifiez le mot de passe.`,
     code_regFail: `Enregistrement impossible. Compte existant?`,
-    code_genFail: `[UNTRANSLATED] I'm sorry Dave, I'm afraid I can't do that.`,
+    code_genFail: `[UNTRANSLATED] Name cannot be longer than 24 characters.`,
     code_changeNameConfirm: `Nouveau nom du compte :`,
     code_changeNameRetry: `|NAME| est déjà pris.`,
     code_deleteAccountConfirm: `Supprimer |DISPLAYNAME| (|EMAIL|) ? Cette action est irreversible.`,
@@ -345,7 +345,7 @@ dict = {
     worldState_sorrow: `hagrin`,
     worldState_fear: `Peur`,
     worldState_nightwaveOverride: `Saison d'Ondes Nocturnes`,
-    worldState_RadioLegionIntermission14Syndicate: `[UNTRANSLATED] Nora's Mix: Dreams of the Dead`,
+    worldState_RadioLegionIntermission14Syndicate: `Mix de Nora: Les Rêves des Morts`,
     worldState_RadioLegionIntermission13Syndicate: `Mix de Nora Vol. 9`,
     worldState_RadioLegionIntermission12Syndicate: `Mix de Nora Vol. 8`,
     worldState_RadioLegionIntermission11Syndicate: `Mix de Nora Vol. 7`,
@@ -444,6 +444,7 @@ dict = {
     theme_light: `Thème clair`,
 
     guildView_na: `[UNTRANSLATED] You're not in a clan.`,
+    guildView_naDescription: `[UNTRANSLATED] Join or create one to access clan features.`,
     guildView_cheats: `Clan`,
     guildView_techProjects: `Recherche`,
     guildView_vaultDecoRecipes: `Schémas de décorations de dojo`,

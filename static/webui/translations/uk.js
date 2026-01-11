@@ -10,7 +10,7 @@ dict = {
 
     code_loginFail: `Не вдалося увійти. Перевірте адресу електронної пошти та пароль.`,
     code_regFail: `Не вдалося зареєструватися. Обліковий запис вже існує?`,
-    code_genFail: `[UNTRANSLATED] I'm sorry Dave, I'm afraid I can't do that.`,
+    code_genFail: `[UNTRANSLATED] Name cannot be longer than 24 characters.`,
     code_changeNameConfirm: `Яке ім'я ви хочете встановити для свого облікового запису?`,
     code_changeNameRetry: `|NAME| вже зайнято.`,
     code_deleteAccountConfirm: `Ви впевнені, що хочете видалити обліковий запис |DISPLAYNAME| (|EMAIL|)? Цю дію не можна скасувати.`,
@@ -345,7 +345,7 @@ dict = {
     worldState_sorrow: `Журба`,
     worldState_fear: `Страх`,
     worldState_nightwaveOverride: `Сезон Нічної хвилі`,
-    worldState_RadioLegionIntermission14Syndicate: `[UNTRANSLATED] Nora's Mix: Dreams of the Dead`,
+    worldState_RadioLegionIntermission14Syndicate: `Вибірка Нори: «Сни мерців»`,
     worldState_RadioLegionIntermission13Syndicate: `Вибірка Нори 9`,
     worldState_RadioLegionIntermission12Syndicate: `Вибірка Нори 8`,
     worldState_RadioLegionIntermission11Syndicate: `Вибірка Нори 7`,
@@ -444,6 +444,7 @@ dict = {
     theme_light: `Світла тема`,
 
     guildView_na: `[UNTRANSLATED] You're not in a clan.`,
+    guildView_naDescription: `[UNTRANSLATED] Join or create one to access clan features.`,
     guildView_cheats: `Кланові чити`,
     guildView_techProjects: `Дослідження`,
     guildView_vaultDecoRecipes: `Рецепти оздоблень Доджьо`,

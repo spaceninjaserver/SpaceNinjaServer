@@ -10,7 +10,7 @@ dict = {
 
     code_loginFail: `Не удалось войти. Проверьте адрес электронной почты и пароль.`,
     code_regFail: `Не удалось зарегистрироваться. Учетная запись уже существует?`,
-    code_genFail: `[UNTRANSLATED] I'm sorry Dave, I'm afraid I can't do that.`,
+    code_genFail: `[UNTRANSLATED] Name cannot be longer than 24 characters.`,
     code_changeNameConfirm: `Какое имя вы хотите установить для своей учетной записи?`,
     code_changeNameRetry: `|NAME| уже занято.`,
     code_deleteAccountConfirm: `Вы уверены, что хотите удалить аккаунт |DISPLAYNAME| (|EMAIL|)? Это действие нельзя отменить.`,
@@ -345,7 +345,7 @@ dict = {
     worldState_sorrow: `Печаль`,
     worldState_fear: `Страх`,
     worldState_nightwaveOverride: `Сезон Ночной волны`,
-    worldState_RadioLegionIntermission14Syndicate: `[UNTRANSLATED] Nora's Mix: Dreams of the Dead`,
+    worldState_RadioLegionIntermission14Syndicate: `Микс Норы: Сны мёртвых`,
     worldState_RadioLegionIntermission13Syndicate: `Микс Норы, Диск 9`,
     worldState_RadioLegionIntermission12Syndicate: `Микс Норы, Диск 8`,
     worldState_RadioLegionIntermission11Syndicate: `Микс Норы, Диск 7`,
@@ -444,6 +444,7 @@ dict = {
     theme_light: `Светлая тема`,
 
     guildView_na: `[UNTRANSLATED] You're not in a clan.`,
+    guildView_naDescription: `[UNTRANSLATED] Join or create one to access clan features.`,
     guildView_cheats: `Читы Клана`,
     guildView_techProjects: `Исследовения`,
     guildView_vaultDecoRecipes: `Рецепты декораций Додзё`,

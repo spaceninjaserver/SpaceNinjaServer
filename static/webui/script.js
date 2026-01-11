@@ -2087,6 +2087,7 @@ function updateInventory() {
                 guildReq.fail(() => {
                     document.getElementById("guildView-loading").classList.add("d-none");
                     document.getElementById("guildView-na").classList.remove("d-none");
+                    document.getElementById("guildView-naDescription").classList.remove("d-none");
                 });
             }
 
@@ -3506,6 +3507,7 @@ single.getRoute("#detailedView-route").on("beforeload", function () {
 single.getRoute("#guild-route").on("beforeload", function () {
     document.getElementById("guildView-loading").classList.remove("d-none");
     document.getElementById("guildView-na").classList.add("d-none");
+    document.getElementById("guildView-naDescription").classList.add("d-none");
     document.getElementById("guildView-title").textContent = "";
     document.getElementById("guildView-tier").textContent = "";
     document.getElementById("guildView-class").textContent = "";

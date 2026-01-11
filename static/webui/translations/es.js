@@ -10,7 +10,7 @@ dict = {
 
     code_loginFail: `Error al iniciar sesión. Verifica el correo electrónico y la contraseña.`,
     code_regFail: `Error al registrar la cuenta. ¿Ya existe una cuenta con este correo?`,
-    code_genFail: `[UNTRANSLATED] I'm sorry Dave, I'm afraid I can't do that.`,
+    code_genFail: `[UNTRANSLATED] Name cannot be longer than 24 characters.`,
     code_changeNameConfirm: `¿Qué nombre te gustaría ponerle a tu cuenta?`,
     code_changeNameRetry: `|NAME| Ya está en uso.`,
     code_deleteAccountConfirm: `¿Estás seguro de que deseas eliminar tu cuenta |DISPLAYNAME| (|EMAIL|)? Esta acción es permanente.`,
@@ -345,7 +345,7 @@ dict = {
     worldState_sorrow: `Tristeza`,
     worldState_fear: `Miedo`,
     worldState_nightwaveOverride: `Volúmen de Onda Nocturna`,
-    worldState_RadioLegionIntermission14Syndicate: `[UNTRANSLATED] Nora's Mix: Dreams of the Dead`,
+    worldState_RadioLegionIntermission14Syndicate: `Mix de Nora: Sueños de los Muertos`,
     worldState_RadioLegionIntermission13Syndicate: `Mix de Nora Vol. 9`,
     worldState_RadioLegionIntermission12Syndicate: `Mix de Nora Vol. 8`,
     worldState_RadioLegionIntermission11Syndicate: `Mix de Nora Vol. 7`,
@@ -444,6 +444,7 @@ dict = {
     theme_light: `Tema Claro`,
 
     guildView_na: `[UNTRANSLATED] You're not in a clan.`,
+    guildView_naDescription: `[UNTRANSLATED] Join or create one to access clan features.`,
     guildView_cheats: `Trucos de Clan`,
     guildView_techProjects: `Investigación`,
     guildView_vaultDecoRecipes: `Planos de Decoración de Dojo`,
