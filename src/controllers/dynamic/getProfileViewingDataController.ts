@@ -14,6 +14,7 @@ import type {
     IAlignment,
     IChallengeProgress,
     IDailyAffiliations,
+    IInventoryAccolades,
     IMission,
     IPlayerSkills,
     ITypeXPItem
@@ -39,7 +40,10 @@ const getProfileViewingDataByPlayerIdImpl = async (playerId: string): Promise<IP
     const result: IPlayerProfileViewingDataResult = {
         AccountId: toOid(account._id),
         DisplayName: account.DisplayName,
-        PlayerLevel: inventory.PlayerLevel,
+        PlayerLevel:
+            inventory.spoofMasteryRank !== undefined && inventory.spoofMasteryRank !== -1
+                ? inventory.spoofMasteryRank
+                : inventory.PlayerLevel,
         LoadOutInventory: {
             WeaponSkins: [],
             XPInfo: inventory.XPInfo
@@ -56,7 +60,13 @@ const getProfileViewingDataByPlayerIdImpl = async (playerId: string): Promise<IP
         Affiliations: inventory.Affiliations,
         DailyFocus: inventory.DailyFocus,
         Wishlist: inventory.Wishlist,
-        Alignment: inventory.Alignment
+        Alignment: inventory.Alignment,
+        Staff: inventory.Staff,
+        Founder: inventory.Founder,
+        Guide: inventory.Guide,
+        Moderator: inventory.Moderator,
+        Partner: inventory.Partner,
+        Accolades: inventory.Accolades
     };
     await populateLoadout(inventory, result);
     if (inventory.GuildId) {
@@ -211,7 +221,7 @@ interface IProfileViewingData {
     Stats: FlattenMaps<Partial<TStatsDatabaseDocument>>;
 }
 
-interface IPlayerProfileViewingDataResult extends Partial<IDailyAffiliations> {
+interface IPlayerProfileViewingDataResult extends Partial<IDailyAffiliations>, IInventoryAccolades {
     AccountId: IOid;
     DisplayName: string;
     PlayerLevel: number;

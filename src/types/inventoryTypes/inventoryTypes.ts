@@ -301,7 +301,17 @@ export type InventorySlots = {
     [_ in SlotNames]: ISlots;
 };
 
-export interface IInventoryClient extends IDailyAffiliations, InventoryClientEquipment, InventorySlots {
+export interface IInventoryAccolades {
+    Staff?: boolean;
+    Founder?: number;
+    Guide?: number;
+    Moderator?: boolean;
+    Partner?: boolean;
+    Accolades?: IAccolades;
+}
+
+export interface IInventoryClient
+    extends IDailyAffiliations, IInventoryAccolades, InventoryClientEquipment, InventorySlots {
     AdultOperatorLoadOuts: IOperatorConfigClient[];
     OperatorLoadOuts: IOperatorConfigClient[];
     KahlLoadOuts: IOperatorConfigClient[];
@@ -346,12 +356,6 @@ export interface IInventoryClient extends IDailyAffiliations, InventoryClientEqu
     PendingRecipes: IPendingRecipeClient[];
     TrainingDate: IMongoDate;
     PlayerLevel: number;
-    Staff?: boolean;
-    Founder?: number;
-    Guide?: number;
-    Moderator?: boolean;
-    Partner?: boolean;
-    Accolades?: IAccolades;
     Counselor?: boolean;
     Upgrades: IUpgradeClient[];
     Cards?: IUpgradeClient[]; // U8
