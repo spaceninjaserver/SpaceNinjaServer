@@ -1611,11 +1611,6 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         }
     };
 
-    // Old versions seem to really get hung up on not being able to load these.
-    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["22.0.0"]) < 0) {
-        worldState.PVPChallengeInstances = [];
-    }
-
     if (config.worldState?.tennoLiveRelay) {
         worldState.Goals.push({
             _id: {
@@ -1832,7 +1827,11 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     }
 
     const isFebruary = date.getUTCMonth() == 1;
-    if (config.worldState?.starDaysOverride ?? isFebruary) {
+    if (
+        (config.worldState?.starDaysOverride ?? isFebruary) &&
+        buildLabel &&
+        version_compare(buildLabel, gameToBuildVersion["29.10.0"]) >= 0
+    ) {
         worldState.Goals.push({
             _id: { $oid: "67a4dcce2a198564d62e1647" },
             Activation: {
@@ -1860,76 +1859,80 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             Node: "SolarisUnitedHub1"
         });
     }
-    // The client gets kinda confused when multiple goals have the same tag, so considering these mutually exclusive.
-    if (config.worldState?.galleonOfGhouls == 1) {
-        worldState.Goals.push({
-            _id: { $oid: "6814ddf00000000000000000" },
-            Activation: { $date: { $numberLong: "1746198000000" } },
-            Expiry: { $date: { $numberLong: "2000000000000" } },
-            Count: 0,
-            Goal: 1,
-            Success: 0,
-            Personal: true,
-            Bounty: true,
-            ClampNodeScores: true,
-            Node: "EventNode19",
-            MissionKeyName: "/Lotus/Types/Keys/GalleonRobberyAlert",
-            Desc: "/Lotus/Language/Events/GalleonRobberyEventMissionTitle",
-            Icon: "/Lotus/Interface/Icons/Player/GalleonRobberiesEvent.png",
-            Tag: "GalleonRobbery",
-            Reward: {
-                items: [
-                    "/Lotus/StoreItems/Types/Recipes/Weapons/GrnChainSawTonfaBlueprint",
-                    "/Lotus/StoreItems/Upgrades/Skins/Clan/BountyHunterBadgeItem"
-                ]
-            }
-        });
-    } else if (config.worldState?.galleonOfGhouls == 2) {
-        worldState.Goals.push({
-            _id: { $oid: "681e18700000000000000000" },
-            Activation: { $date: { $numberLong: "1746802800000" } },
-            Expiry: { $date: { $numberLong: "2000000000000" } },
-            Count: 0,
-            Goal: 1,
-            Success: 0,
-            Personal: true,
-            Bounty: true,
-            ClampNodeScores: true,
-            Node: "EventNode28", // Incompatible with Wolf Hunt, Orphix Venom, Warframe Anniversary
-            MissionKeyName: "/Lotus/Types/Keys/GalleonRobberyAlertB",
-            Desc: "/Lotus/Language/Events/GalleonRobberyEventMissionTitle",
-            Icon: "/Lotus/Interface/Icons/Player/GalleonRobberiesEvent.png",
-            Tag: "GalleonRobbery",
-            Reward: {
-                items: [
-                    "/Lotus/StoreItems/Types/Recipes/Weapons/MortiforShieldAndSwordBlueprint",
-                    "/Lotus/StoreItems/Upgrades/Skins/Clan/BountyHunterBadgeItem"
-                ]
-            }
-        });
-    } else if (config.worldState?.galleonOfGhouls == 3) {
-        worldState.Goals.push({
-            _id: { $oid: "682752f00000000000000000" },
-            Activation: { $date: { $numberLong: "1747407600000" } },
-            Expiry: { $date: { $numberLong: "2000000000000" } },
-            Count: 0,
-            Goal: 1,
-            Success: 0,
-            Personal: true,
-            Bounty: true,
-            ClampNodeScores: true,
-            Node: "EventNode19",
-            MissionKeyName: "/Lotus/Types/Keys/GalleonRobberyAlertC",
-            Desc: "/Lotus/Language/Events/GalleonRobberyEventMissionTitle",
-            Icon: "/Lotus/Interface/Icons/Player/GalleonRobberiesEvent.png",
-            Tag: "GalleonRobbery",
-            Reward: {
-                items: [
-                    "/Lotus/Types/StoreItems/Packages/EventCatalystReactorBundle",
-                    "/Lotus/StoreItems/Upgrades/Skins/Clan/BountyHunterBadgeItem"
-                ]
-            }
-        });
+
+    // < U38.6.0
+    if (buildLabel && version_compare(buildLabel, "2025.05.20.10.18") >= 0) {
+        // The client gets kinda confused when multiple goals have the same tag, so considering these mutually exclusive.
+        if (config.worldState?.galleonOfGhouls == 1) {
+            worldState.Goals.push({
+                _id: { $oid: "6814ddf00000000000000000" },
+                Activation: { $date: { $numberLong: "1746198000000" } },
+                Expiry: { $date: { $numberLong: "2000000000000" } },
+                Count: 0,
+                Goal: 1,
+                Success: 0,
+                Personal: true,
+                Bounty: true,
+                ClampNodeScores: true,
+                Node: "EventNode19",
+                MissionKeyName: "/Lotus/Types/Keys/GalleonRobberyAlert",
+                Desc: "/Lotus/Language/Events/GalleonRobberyEventMissionTitle",
+                Icon: "/Lotus/Interface/Icons/Player/GalleonRobberiesEvent.png",
+                Tag: "GalleonRobbery",
+                Reward: {
+                    items: [
+                        "/Lotus/StoreItems/Types/Recipes/Weapons/GrnChainSawTonfaBlueprint",
+                        "/Lotus/StoreItems/Upgrades/Skins/Clan/BountyHunterBadgeItem"
+                    ]
+                }
+            });
+        } else if (config.worldState?.galleonOfGhouls == 2) {
+            worldState.Goals.push({
+                _id: { $oid: "681e18700000000000000000" },
+                Activation: { $date: { $numberLong: "1746802800000" } },
+                Expiry: { $date: { $numberLong: "2000000000000" } },
+                Count: 0,
+                Goal: 1,
+                Success: 0,
+                Personal: true,
+                Bounty: true,
+                ClampNodeScores: true,
+                Node: "EventNode28", // Incompatible with Wolf Hunt, Orphix Venom, Warframe Anniversary
+                MissionKeyName: "/Lotus/Types/Keys/GalleonRobberyAlertB",
+                Desc: "/Lotus/Language/Events/GalleonRobberyEventMissionTitle",
+                Icon: "/Lotus/Interface/Icons/Player/GalleonRobberiesEvent.png",
+                Tag: "GalleonRobbery",
+                Reward: {
+                    items: [
+                        "/Lotus/StoreItems/Types/Recipes/Weapons/MortiforShieldAndSwordBlueprint",
+                        "/Lotus/StoreItems/Upgrades/Skins/Clan/BountyHunterBadgeItem"
+                    ]
+                }
+            });
+        } else if (config.worldState?.galleonOfGhouls == 3) {
+            worldState.Goals.push({
+                _id: { $oid: "682752f00000000000000000" },
+                Activation: { $date: { $numberLong: "1747407600000" } },
+                Expiry: { $date: { $numberLong: "2000000000000" } },
+                Count: 0,
+                Goal: 1,
+                Success: 0,
+                Personal: true,
+                Bounty: true,
+                ClampNodeScores: true,
+                Node: "EventNode19",
+                MissionKeyName: "/Lotus/Types/Keys/GalleonRobberyAlertC",
+                Desc: "/Lotus/Language/Events/GalleonRobberyEventMissionTitle",
+                Icon: "/Lotus/Interface/Icons/Player/GalleonRobberiesEvent.png",
+                Tag: "GalleonRobbery",
+                Reward: {
+                    items: [
+                        "/Lotus/Types/StoreItems/Packages/EventCatalystReactorBundle",
+                        "/Lotus/StoreItems/Upgrades/Skins/Clan/BountyHunterBadgeItem"
+                    ]
+                }
+            });
+        }
     }
 
     const firstNovemberWeekday = new Date(Date.UTC(date.getUTCFullYear(), 10, 1)).getUTCDay();
@@ -1939,7 +1942,11 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     const plagueStarEnd = Date.UTC(date.getUTCFullYear(), 10, firstNovemberMondayOffset + 15, 16);
 
     const isPlagueStarActive = timeMs >= plagueStarStart && timeMs < plagueStarEnd;
-    if (config.worldState?.plagueStarOverride ?? isPlagueStarActive) {
+    if (
+        (config.worldState?.plagueStarOverride ?? isPlagueStarActive) &&
+        buildLabel &&
+        version_compare(buildLabel, gameToBuildVersion["22.7.0"]) >= 0
+    ) {
         worldState.Goals.push({
             _id: { $oid: "654a5058c757487cdb11824f" },
             Activation: {
@@ -2007,7 +2014,11 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     const dogDaysEnd = Date.UTC(date.getUTCFullYear(), 8, 1 + firstSeptemberWednesdayOffset, 15);
 
     const isDogDaysActive = timeMs >= dogDaysStart && timeMs < dogDaysEnd;
-    if (config.worldState?.dogDaysOverride ?? isDogDaysActive) {
+    if (
+        (config.worldState?.dogDaysOverride ?? isDogDaysActive) &&
+        buildLabel &&
+        version_compare(buildLabel, gameToBuildVersion["25.7.0"]) >= 0
+    ) {
         const activationTimeStamp = config.worldState?.dogDaysOverride ? "1699372800000" : dogDaysStart.toString();
         const expiryTimeStamp = config.worldState?.dogDaysOverride ? "2000000000000" : dogDaysEnd.toString();
         const rewards = [
@@ -2468,7 +2479,11 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         });
     }
 
-    if (config.worldState?.wolfHunt != undefined) {
+    if (
+        config.worldState?.wolfHunt != undefined &&
+        buildLabel &&
+        version_compare(buildLabel, gameToBuildVersion["25.0.0"]) >= 0
+    ) {
         if (config.worldState.wolfHunt == 0) {
             worldState.Goals.push({
                 _id: {
@@ -2584,7 +2599,11 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         "Anniversary2025TacAlertCMB"
     ];
 
-    if (config.worldState?.hallowedFlame) {
+    if (
+        config.worldState?.hallowedFlame &&
+        buildLabel &&
+        version_compare(buildLabel, gameToBuildVersion["26.0.0"]) >= 0
+    ) {
         worldState.Goals.push(
             {
                 _id: { $oid: "5db305403d34b5158873519a" },
@@ -2649,7 +2668,11 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         );
     }
 
-    if (config.worldState?.hallowedNightmares) {
+    if (
+        config.worldState?.hallowedNightmares &&
+        buildLabel &&
+        version_compare(buildLabel, gameToBuildVersion["18.0.2"]) >= 0
+    ) {
         const rewards = [
             // 2018
             [
@@ -2743,7 +2766,11 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         }
     }
 
-    if (config.worldState?.proxyRebellion) {
+    if (
+        config.worldState?.proxyRebellion &&
+        buildLabel &&
+        version_compare(buildLabel, gameToBuildVersion["23.2.0"]) >= 0
+    ) {
         const rewards = [
             // 2019
             [
@@ -2821,7 +2848,11 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         });
     }
 
-    if (config.worldState?.longShadow) {
+    if (
+        config.worldState?.longShadow &&
+        buildLabel &&
+        version_compare(buildLabel, gameToBuildVersion["18.22.1"]) >= 0
+    ) {
         worldState.Goals.push({
             _id: { $oid: "5bc9e8f7272d5d184c8398c9" },
             Activation: { $date: { $numberLong: "1539972000000" } },
@@ -2866,7 +2897,11 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     }
 
     const isOctober = date.getUTCMonth() == 9; // October = month index 9
-    if (config.worldState?.naberusNightsOverride ?? isOctober) {
+    if (
+        (config.worldState?.naberusNightsOverride ?? isOctober) &&
+        buildLabel &&
+        version_compare(buildLabel, gameToBuildVersion["29.3.1"]) >= 0
+    ) {
         const activationTimeStamp = config.worldState?.naberusNightsOverride
             ? "1727881200000"
             : Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1).toString();
@@ -3066,32 +3101,32 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         }
     }
 
-    if (config.worldState?.bellyOfTheBeast) {
-        if (buildLabel && version_compare(buildLabel, "2024.06.12.18.42") >= 0) {
-            worldState.Goals.push({
-                _id: { $oid: "67a5035c2a198564d62e165e" },
-                Activation: { $date: { $numberLong: "1738868400000" } },
-                Expiry: { $date: { $numberLong: "2000000000000" } },
-                Count: config.worldState.bellyOfTheBeastProgressOverride ?? 0,
-                HealthPct: (config.worldState.bellyOfTheBeastProgressOverride ?? 0) / 100,
-                Goal: 0,
-                Personal: true,
-                Community: true,
-                ClanGoal: [72, 216, 648, 1944, 5832],
-                Tag: "JadeShadowsEvent",
-                Faction: "FC_MITW",
-                Desc: "/Lotus/Language/JadeShadows/JadeShadowsEventName",
-                ToolTip: "/Lotus/Language/JadeShadows/JadeShadowsShortEventDesc",
-                Icon: "/Lotus/Interface/Icons/WorldStatePanel/JadeShadowsEventBadge.png",
-                ScoreLocTag: "/Lotus/Language/JadeShadows/JadeShadowsEventScore",
-                Node: "SolNode723",
-                MissionKeyName: "/Lotus/Types/Keys/JadeShadowsEventMission",
-                ItemType: "/Lotus/Types/Gameplay/JadeShadows/Resources/AscensionEventResourceItem"
-            });
-            pushGoalAlerts(worldState, "JadeShadows", buildLabel);
-        }
+    if (config.worldState?.bellyOfTheBeast && buildLabel && version_compare(buildLabel, "2024.06.12.18.42") >= 0) {
+        worldState.Goals.push({
+            _id: { $oid: "67a5035c2a198564d62e165e" },
+            Activation: { $date: { $numberLong: "1738868400000" } },
+            Expiry: { $date: { $numberLong: "2000000000000" } },
+            Count: config.worldState.bellyOfTheBeastProgressOverride ?? 0,
+            HealthPct: (config.worldState.bellyOfTheBeastProgressOverride ?? 0) / 100,
+            Goal: 0,
+            Personal: true,
+            Community: true,
+            ClanGoal: [72, 216, 648, 1944, 5832],
+            Tag: "JadeShadowsEvent",
+            Faction: "FC_MITW",
+            Desc: "/Lotus/Language/JadeShadows/JadeShadowsEventName",
+            ToolTip: "/Lotus/Language/JadeShadows/JadeShadowsShortEventDesc",
+            Icon: "/Lotus/Interface/Icons/WorldStatePanel/JadeShadowsEventBadge.png",
+            ScoreLocTag: "/Lotus/Language/JadeShadows/JadeShadowsEventScore",
+            Node: "SolNode723",
+            MissionKeyName: "/Lotus/Types/Keys/JadeShadowsEventMission",
+            ItemType: "/Lotus/Types/Gameplay/JadeShadows/Resources/AscensionEventResourceItem"
+        });
+        pushGoalAlerts(worldState, "JadeShadows", buildLabel);
     }
-    if (config.worldState?.eightClaw) {
+
+    // <U39
+    if (config.worldState?.eightClaw && buildLabel && version_compare(buildLabel, "2025.06.23.11.39") >= 0) {
         worldState.Goals.push({
             _id: { $oid: "685c15f80000000000000000" },
             Activation: { $date: { $numberLong: "1750865400000" } },
@@ -3113,7 +3148,11 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         });
     }
 
-    if (config.worldState?.orphixVenom) {
+    if (
+        config.worldState?.orphixVenom &&
+        buildLabel &&
+        version_compare(buildLabel, gameToBuildVersion["29.6.8"]) >= 0
+    ) {
         worldState.Goals.push(
             {
                 _id: { $oid: "5fdcccb875d5ad500dc477d0" },
@@ -3190,25 +3229,27 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         );
     }
 
-    if (config.worldState?.bloodOfPerita) {
-        if (buildLabel && version_compare(buildLabel, gameToBuildVersion["41.0.0"]) >= 0) {
-            worldState.Goals.push({
-                _id: { $oid: "694189080000000000000000" },
-                Activation: { $date: { $numberLong: "1765902600000" } },
-                Expiry: { $date: { $numberLong: "2000000000000" } },
-                GracePeriod: { $date: { $numberLong: "2000000000000" } },
-                Count: 0,
-                Goal: 0,
-                Success: 0,
-                Personal: true,
-                Desc: "/Lotus/Language/TauPrequel/TauPrequelFinal/TauPrequelEventName",
-                ToolTip: "/Lotus/Language/TauPrequel/TauPrequelFinal/BloodOfPeritaDetails",
-                Icon: "/Lotus/Interface/Icons/WorldStatePanel/BloodOfPeritaEventBadgeSmall.png",
-                Tag: "12MinWarEvent",
-                Node: "SolNode251"
-            });
-            pushGoalAlerts(worldState, "12MinWarEvent", buildLabel);
-        }
+    if (
+        config.worldState?.bloodOfPerita &&
+        buildLabel &&
+        version_compare(buildLabel, gameToBuildVersion["41.0.0"]) >= 0
+    ) {
+        worldState.Goals.push({
+            _id: { $oid: "694189080000000000000000" },
+            Activation: { $date: { $numberLong: "1765902600000" } },
+            Expiry: { $date: { $numberLong: "2000000000000" } },
+            GracePeriod: { $date: { $numberLong: "2000000000000" } },
+            Count: 0,
+            Goal: 0,
+            Success: 0,
+            Personal: true,
+            Desc: "/Lotus/Language/TauPrequel/TauPrequelFinal/TauPrequelEventName",
+            ToolTip: "/Lotus/Language/TauPrequel/TauPrequelFinal/BloodOfPeritaDetails",
+            Icon: "/Lotus/Interface/Icons/WorldStatePanel/BloodOfPeritaEventBadgeSmall.png",
+            Tag: "12MinWarEvent",
+            Node: "SolNode251"
+        });
+        pushGoalAlerts(worldState, "12MinWarEvent", buildLabel);
     }
 
     // Thermia Fractures activates for 14 days, with alternating 4 and 3-day breaks
@@ -3218,7 +3259,11 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     const activeThermiaFracturesCycleDay =
         thermiaFracturesCycleDay - (thermiaFracturesCycleDay < 14 ? 0 : thermiaFracturesCycleDay < 18 ? 14 : 32);
 
-    if (config.worldState?.thermiaFracturesOverride ?? isThermiaFracturesActive) {
+    if (
+        (config.worldState?.thermiaFracturesOverride ?? isThermiaFracturesActive) &&
+        buildLabel &&
+        version_compare(buildLabel, gameToBuildVersion["24.5.1"]) >= 0
+    ) {
         const activeStartDay = day - activeThermiaFracturesCycleDay;
 
         const count = config.worldState?.thermiaFracturesProgressOverride ?? 0;
@@ -3372,7 +3417,11 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
 
     const ghoulsCycleDay = day % 21;
     const isGhoulEmergenceActive = ghoulsCycleDay >= 17 && ghoulsCycleDay <= 20; // 4 days for event and 17 days for break
-    if (config.worldState?.ghoulEmergenceOverride ?? isGhoulEmergenceActive) {
+    if (
+        (config.worldState?.ghoulEmergenceOverride ?? isGhoulEmergenceActive) &&
+        buildLabel &&
+        version_compare(buildLabel, gameToBuildVersion["22.8.2"])
+    ) {
         const ghoulPool = [...eidolonGhoulJobs];
         const pastGhoulPool = [...eidolonGhoulJobs];
 
