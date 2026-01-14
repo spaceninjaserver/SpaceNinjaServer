@@ -1490,7 +1490,7 @@ export const addMissionRewards = async (
         const [jobType, unkIndex, hubNode, syndicateMissionId] = rewardInfo.jobId.split("_");
         const syndicateMissions: ISyndicateMissionInfo[] = [];
         if (syndicateMissionId) {
-            pushClassicBounties(syndicateMissions, idToBountyCycle(syndicateMissionId));
+            pushClassicBounties(syndicateMissions, idToBountyCycle(syndicateMissionId), account.BuildLabel);
         }
         let syndicateEntry: ISyndicateMissionInfo | IGoal | undefined = syndicateMissions.find(
             m => m._id.$oid === syndicateMissionId
@@ -2053,7 +2053,7 @@ function getRandomMissionDrops(
                 if (syndicateMissionId) {
                     const syndicateMissions: ISyndicateMissionInfo[] = [];
                     if (syndicateMissionId) {
-                        pushClassicBounties(syndicateMissions, idToBountyCycle(syndicateMissionId));
+                        pushClassicBounties(syndicateMissions, idToBountyCycle(syndicateMissionId), account.BuildLabel);
                     }
                     let syndicateEntry: ISyndicateMissionInfo | IGoal | undefined = syndicateMissions.find(
                         m => m._id.$oid === syndicateMissionId

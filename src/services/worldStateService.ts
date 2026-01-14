@@ -672,7 +672,11 @@ const generateXpAmounts = (rng: SRng, stageCount: number, minXp: number, maxXp: 
 //console.log(generateXpAmounts(new SRng(1337n), 4, 15, 15)); // [4, 4, 4, 5]
 //console.log(generateXpAmounts(new SRng(1337n), 4, 20, 20)); // [5, 5, 5, 7]
 
-export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], bountyCycle: number): void => {
+export const pushClassicBounties = (
+    syndicateMissions: ISyndicateMissionInfo[],
+    bountyCycle: number,
+    buildLabel?: string
+): void => {
     const table = String.fromCharCode(65 + (bountyCycle % 3));
     const vaultTable = String.fromCharCode(65 + ((bountyCycle + 1) % 3));
     const deimosDTable = String.fromCharCode(65 + (bountyCycle % 2));
@@ -681,7 +685,7 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
     const bountyCycleStart = bountyCycle * 9000000;
     const bountyCycleEnd = bountyCycleStart + 9000000;
 
-    {
+    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["22.0.0"]) >= 0) {
         const rng = new SRng(seed);
         const pool = [...eidolonJobs];
         syndicateMissions.push({
@@ -697,7 +701,10 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                 {
                     jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierATable${table}Rewards`,
-                    masteryReq: 0,
+                    // Should be U22.10
+                    ...(version_compare(buildLabel, gameToBuildVersion["22.13.4"]) >= 0 && {
+                        masteryReq: 0
+                    }),
                     minEnemyLevel: 5,
                     maxEnemyLevel: 15,
                     xpAmounts: generateXpAmounts(rng, 3, 1000, 1500)
@@ -705,7 +712,9 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                 {
                     jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierBTable${table}Rewards`,
-                    masteryReq: 1,
+                    ...(version_compare(buildLabel, gameToBuildVersion["22.13.4"]) >= 0 && {
+                        masteryReq: 1
+                    }),
                     minEnemyLevel: 10,
                     maxEnemyLevel: 30,
                     xpAmounts: generateXpAmounts(rng, 3, 1750, 2250)
@@ -713,7 +722,9 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                 {
                     jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierCTable${table}Rewards`,
-                    masteryReq: 2,
+                    ...(version_compare(buildLabel, gameToBuildVersion["22.13.4"]) >= 0 && {
+                        masteryReq: 2
+                    }),
                     minEnemyLevel: 20,
                     maxEnemyLevel: 40,
                     xpAmounts: generateXpAmounts(rng, 4, 2500, 3000)
@@ -721,7 +732,9 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                 {
                     jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierDTable${table}Rewards`,
-                    masteryReq: 3,
+                    ...(version_compare(buildLabel, gameToBuildVersion["22.13.4"]) >= 0 && {
+                        masteryReq: 3
+                    }),
                     minEnemyLevel: 30,
                     maxEnemyLevel: 50,
                     xpAmounts: generateXpAmounts(rng, 5, 3250, 3750)
@@ -729,32 +742,43 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                 {
                     jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierETable${table}Rewards`,
-                    masteryReq: 5,
+                    ...(version_compare(buildLabel, gameToBuildVersion["22.13.4"]) >= 0 && {
+                        masteryReq: 4
+                    }),
                     minEnemyLevel: 40,
                     maxEnemyLevel: 60,
                     xpAmounts: generateXpAmounts(rng, 5, 4000, 4500)
                 },
-                {
-                    jobType: rng.randomElementPop(pool),
-                    rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierETable${table}Rewards`,
-                    masteryReq: 10,
-                    minEnemyLevel: 100,
-                    maxEnemyLevel: 100,
-                    xpAmounts: [840, 840, 840, 840, 1660]
-                },
-                {
-                    jobType: rng.randomElement(eidolonNarmerJobs),
-                    rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/NarmerTable${table}Rewards`,
-                    masteryReq: 0,
-                    minEnemyLevel: 50,
-                    maxEnemyLevel: 70,
-                    xpAmounts: generateXpAmounts(rng, 5, 4500, 5000)
-                }
+                // U28.1
+                ...(version_compare(buildLabel, gameToBuildVersion["28.3.0"]) >= 0
+                    ? [
+                          {
+                              jobType: rng.randomElementPop(pool),
+                              rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierETable${table}Rewards`,
+                              masteryReq: 10,
+                              minEnemyLevel: 100,
+                              maxEnemyLevel: 100,
+                              xpAmounts: [840, 840, 840, 840, 1660]
+                          }
+                      ]
+                    : []),
+                ...(version_compare(buildLabel, gameToBuildVersion["31.0.0"]) >= 0
+                    ? [
+                          {
+                              jobType: rng.randomElement(eidolonNarmerJobs),
+                              rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/NarmerTable${table}Rewards`,
+                              masteryReq: 0,
+                              minEnemyLevel: 50,
+                              maxEnemyLevel: 70,
+                              xpAmounts: generateXpAmounts(rng, 5, 4500, 5000)
+                          }
+                      ]
+                    : [])
             ]
         });
     }
 
-    {
+    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["24.0.0"]) >= 0) {
         const rng = new SRng(seed);
         const pool = [...venusJobs];
         syndicateMissions.push({
@@ -807,27 +831,36 @@ export const pushClassicBounties = (syndicateMissions: ISyndicateMissionInfo[], 
                     maxEnemyLevel: 60,
                     xpAmounts: generateXpAmounts(rng, 5, 4000, 4500)
                 },
-                {
-                    jobType: rng.randomElementPop(pool),
-                    rewards: `/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierETable${table}Rewards`,
-                    masteryReq: 10,
-                    minEnemyLevel: 100,
-                    maxEnemyLevel: 100,
-                    xpAmounts: [840, 840, 840, 840, 1660]
-                },
-                {
-                    jobType: rng.randomElement(venusNarmerJobs),
-                    rewards: "/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/NarmerTableBRewards",
-                    masteryReq: 0,
-                    minEnemyLevel: 50,
-                    maxEnemyLevel: 70,
-                    xpAmounts: generateXpAmounts(rng, 5, 4500, 5000)
-                }
+                // U28.1
+                ...(version_compare(buildLabel, gameToBuildVersion["28.3.0"]) >= 0
+                    ? [
+                          {
+                              jobType: rng.randomElementPop(pool),
+                              rewards: `/Lotus/Types/Game/MissionDecks/VenusJobMissionRewards/VenusTierETable${table}Rewards`,
+                              masteryReq: 10,
+                              minEnemyLevel: 100,
+                              maxEnemyLevel: 100,
+                              xpAmounts: [840, 840, 840, 840, 1660]
+                          }
+                      ]
+                    : []),
+                ...(version_compare(buildLabel, gameToBuildVersion["31.0.0"]) >= 0
+                    ? [
+                          {
+                              jobType: rng.randomElement(venusNarmerJobs),
+                              rewards: "/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/NarmerTableBRewards",
+                              masteryReq: 0,
+                              minEnemyLevel: 50,
+                              maxEnemyLevel: 70,
+                              xpAmounts: generateXpAmounts(rng, 5, 4500, 5000)
+                          }
+                      ]
+                    : [])
             ]
         });
     }
 
-    {
+    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["29.0.0"]) >= 0) {
         const rng = new SRng(seed);
         const pool = [...microplanetJobs];
         syndicateMissions.push({
@@ -3412,7 +3445,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             Nodes: []
         });
 
-        pushClassicBounties(worldState.SyndicateMissions, bountyCycle);
+        pushClassicBounties(worldState.SyndicateMissions, bountyCycle, buildLabel);
     } while (isBeforeNextExpectedWorldStateRefresh(timeMs, bountyCycleEnd) && ++bountyCycle);
 
     const ghoulsCycleDay = day % 21;
