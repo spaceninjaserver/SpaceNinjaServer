@@ -1202,7 +1202,9 @@ export const addMissionRewards = async (
 
     if (!rewardInfo) {
         //TODO: if there is a case where you can have credits collected during a mission but no rewardInfo, add credits needs to be handled earlier
-        logger.debug(`Mission ${missions!.Tag} did not have Reward Info `);
+        if (missions?.Tag) {
+            logger.debug(`Mission ${missions.Tag} did not have Reward Info `);
+        }
         return { MissionRewards: [], AffiliationMods };
     }
 
