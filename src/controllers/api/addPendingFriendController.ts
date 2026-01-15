@@ -7,6 +7,7 @@ import { getInventory } from "../../services/inventoryService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { IFriendInfo } from "../../types/friendTypes.ts";
 import type { RequestHandler, Response } from "express";
+import { logger } from "../../utils/logger.ts";
 
 export const addPendingFriendPostController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -46,11 +47,17 @@ const sendFriendRequest = async (
         return;
     }
 
-    await Friendship.insertOne({
-        owner: accountId,
-        friend: account._id,
-        Note: message
-    });
+    try {
+        await Friendship.insertOne({
+            owner: accountId,
+            friend: account._id,
+            Note: message
+        });
+    } catch (e) {
+        logger.debug(`friend request failed due to ${String(e)}`);
+        res.status(400).send(`user ${name} already in friend list`);
+        return;
+    }
 
     const friendInfo: IFriendInfo = {
         _id: toOid(account._id),
