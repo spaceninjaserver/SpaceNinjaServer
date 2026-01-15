@@ -1,4 +1,4 @@
-import type { Request, RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { Inbox } from "../../models/inboxModel.ts";
 import {
     createMessage,
@@ -9,7 +9,12 @@ import {
     getMessage,
     type IMessageCreationTemplate
 } from "../../services/inboxService.ts";
-import { getAccountForRequest, getAccountFromSuffixedName, getSuffixedName } from "../../services/loginService.ts";
+import {
+    getAccountForRequest,
+    getAccountFromSuffixedName,
+    getSuffixedName,
+    type TAccountDocument
+} from "../../services/loginService.ts";
 import {
     addItems,
     combineInventoryChanges,
@@ -113,7 +118,7 @@ export const inboxController: RequestHandler = async (req, res) => {
         await inventory.save();
         res.json({ InventoryChanges: inventoryChanges });
     } else if (latestClientMessageId) {
-        await createNewEventMessages(req);
+        await createNewEventMessages(account);
         const messages = await Inbox.find({ ownerId: accountId }).sort({ date: 1 });
 
         const latestClientMessage = messages.find(m => m._id.toString() === parseOid(latestClientMessageId as string));
@@ -133,15 +138,14 @@ export const inboxController: RequestHandler = async (req, res) => {
         res.json({ Inbox: newMessages });
     } else {
         //newly created event messages must be newer than account.LatestEventMessageDate
-        await createNewEventMessages(req);
+        await createNewEventMessages(account);
         const messages = await getAllMessagesSorted(accountId);
         const inbox = messages.map(m => m.toJSON());
         res.json({ Inbox: inbox });
     }
 };
 
-const createNewEventMessages = async (req: Request): Promise<void> => {
-    const account = await getAccountForRequest(req);
+const createNewEventMessages = async (account: TAccountDocument): Promise<void> => {
     const newEventMessages: IMessageCreationTemplate[] = [];
 
     // Baro
