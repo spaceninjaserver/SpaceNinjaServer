@@ -27,6 +27,10 @@ export interface IDatabaseAccount extends IDatabaseAccountRequiredFields {
     LastLoginRewardDate: number;
     LoginDays: number;
     DailyFirstWinDate: number;
+    receivedEventMessage_creditBoost?: boolean;
+    receivedEventMessage_affinityBoost?: boolean;
+    receivedEventMessage_resourceBoost?: boolean;
+    receivedEventMessage_galleonOfGhouls?: boolean;
 }
 
 // Includes virtual ID

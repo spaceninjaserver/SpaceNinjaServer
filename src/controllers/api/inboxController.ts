@@ -208,78 +208,55 @@ const createNewEventMessages = async (account: TAccountDocument): Promise<void> 
         });
     }
 
-    // BUG: Deleting the inbox message manually means it'll just be automatically re-created. This is because we don't use startDate/endDate for these config-toggled events.
-    const promises = [];
-    if (config.worldState?.creditBoost) {
-        promises.push(
-            (async (): Promise<void> => {
-                if (!(await Inbox.exists({ ownerId: account._id, globaUpgradeId: "5b23106f283a555109666672" }))) {
-                    newEventMessages.push({
-                        globaUpgradeId: new Types.ObjectId("5b23106f283a555109666672"),
-                        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
-                        sub: "/Lotus/Language/Items/EventDoubleCreditsName",
-                        msg: "/Lotus/Language/Items/EventDoubleCreditsDesc",
-                        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
-                        startDate: new Date(),
-                        CrossPlatform: true
-                    });
-                }
-            })()
-        );
+    if (config.worldState?.creditBoost && !account.receivedEventMessage_creditBoost) {
+        account.receivedEventMessage_creditBoost = true;
+        newEventMessages.push({
+            globaUpgradeId: new Types.ObjectId("5b23106f283a555109666672"),
+            sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
+            sub: "/Lotus/Language/Items/EventDoubleCreditsName",
+            msg: "/Lotus/Language/Items/EventDoubleCreditsDesc",
+            icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+            startDate: new Date(),
+            CrossPlatform: true
+        });
     }
-    if (config.worldState?.affinityBoost) {
-        promises.push(
-            (async (): Promise<void> => {
-                if (!(await Inbox.exists({ ownerId: account._id, globaUpgradeId: "5b23106f283a555109666673" }))) {
-                    newEventMessages.push({
-                        globaUpgradeId: new Types.ObjectId("5b23106f283a555109666673"),
-                        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
-                        sub: "/Lotus/Language/Items/EventDoubleAffinityName",
-                        msg: "/Lotus/Language/Items/EventDoubleAffinityDesc",
-                        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
-                        startDate: new Date(),
-                        CrossPlatform: true
-                    });
-                }
-            })()
-        );
+    if (config.worldState?.affinityBoost && !account.receivedEventMessage_affinityBoost) {
+        account.receivedEventMessage_affinityBoost = true;
+        newEventMessages.push({
+            globaUpgradeId: new Types.ObjectId("5b23106f283a555109666673"),
+            sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
+            sub: "/Lotus/Language/Items/EventDoubleAffinityName",
+            msg: "/Lotus/Language/Items/EventDoubleAffinityDesc",
+            icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+            startDate: new Date(),
+            CrossPlatform: true
+        });
     }
-    if (config.worldState?.resourceBoost) {
-        promises.push(
-            (async (): Promise<void> => {
-                if (!(await Inbox.exists({ ownerId: account._id, globaUpgradeId: "5b23106f283a555109666674" }))) {
-                    newEventMessages.push({
-                        globaUpgradeId: new Types.ObjectId("5b23106f283a555109666674"),
-                        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
-                        sub: "/Lotus/Language/Items/EventDoubleResourceName",
-                        msg: "/Lotus/Language/Items/EventDoubleResourceDesc",
-                        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
-                        startDate: new Date(),
-                        CrossPlatform: true
-                    });
-                }
-            })()
-        );
+    if (config.worldState?.resourceBoost && !account.receivedEventMessage_resourceBoost) {
+        account.receivedEventMessage_resourceBoost = true;
+        newEventMessages.push({
+            globaUpgradeId: new Types.ObjectId("5b23106f283a555109666674"),
+            sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
+            sub: "/Lotus/Language/Items/EventDoubleResourceName",
+            msg: "/Lotus/Language/Items/EventDoubleResourceDesc",
+            icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+            startDate: new Date(),
+            CrossPlatform: true
+        });
     }
-    if (config.worldState?.galleonOfGhouls) {
-        promises.push(
-            (async (): Promise<void> => {
-                if (!(await Inbox.exists({ ownerId: account._id, goalTag: "GalleonRobbery" }))) {
-                    newEventMessages.push({
-                        sndr: "/Lotus/Language/Bosses/BossCouncilorVayHek",
-                        sub: "/Lotus/Language/Events/GalleonRobberyIntroMsgTitle",
-                        msg: "/Lotus/Language/Events/GalleonRobberyIntroMsgDesc",
-                        icon: "/Lotus/Interface/Icons/Npcs/VayHekPortrait.png",
-                        transmission: "/Lotus/Sounds/Dialog/GalleonOfGhouls/DGhoulsWeekOneInbox0010VayHek",
-                        att: ["/Lotus/Upgrades/Skins/Events/OgrisOldSchool"],
-                        startDate: new Date(),
-                        goalTag: "GalleonRobbery"
-                    });
-                }
-            })()
-        );
+    if (config.worldState?.galleonOfGhouls && !account.receivedEventMessage_galleonOfGhouls) {
+        account.receivedEventMessage_galleonOfGhouls = true;
+        newEventMessages.push({
+            sndr: "/Lotus/Language/Bosses/BossCouncilorVayHek",
+            sub: "/Lotus/Language/Events/GalleonRobberyIntroMsgTitle",
+            msg: "/Lotus/Language/Events/GalleonRobberyIntroMsgDesc",
+            icon: "/Lotus/Interface/Icons/Npcs/VayHekPortrait.png",
+            transmission: "/Lotus/Sounds/Dialog/GalleonOfGhouls/DGhoulsWeekOneInbox0010VayHek",
+            att: ["/Lotus/Upgrades/Skins/Events/OgrisOldSchool"],
+            startDate: new Date(),
+            goalTag: "GalleonRobbery"
+        });
     }
-    await Promise.all(promises);
 
     if (newEventMessages.length === 0) {
         return;

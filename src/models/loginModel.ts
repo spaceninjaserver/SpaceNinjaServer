@@ -30,7 +30,11 @@ const databaseAccountSchema = new Schema<IDatabaseAccountJson>(
         LatestEventMessageDate: { type: Date, default: 0 },
         LastLoginRewardDate: { type: Number, default: 0 },
         LoginDays: { type: Number, default: 1 },
-        DailyFirstWinDate: { type: Number, default: 0 }
+        DailyFirstWinDate: { type: Number, default: 0 },
+        receivedEventMessage_creditBoost: Boolean,
+        receivedEventMessage_affinityBoost: Boolean,
+        receivedEventMessage_resourceBoost: Boolean,
+        receivedEventMessage_galleonOfGhouls: Boolean
     },
     opts
 );

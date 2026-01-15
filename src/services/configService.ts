@@ -4,6 +4,7 @@ import { repoDir } from "../helpers/pathHelper.ts";
 import { args } from "../helpers/commandLineArguments.ts";
 import { Inbox } from "../models/inboxModel.ts";
 import type { Request } from "express";
+import { Account } from "../models/loginModel.ts";
 
 export interface IConfig {
     mongodbUrl: string;
@@ -200,15 +201,19 @@ export const syncConfigWithDatabase = (): void => {
     // Event messages are deleted after endDate. Since we don't use beginDate/endDate and instead have config toggles, we need to delete the messages once those bools are false.
     // Also, for some reason, I can't just do `Inbox.deleteMany(...)`; - it needs this whole circus.
     if (!config.worldState?.creditBoost) {
+        void Account.updateMany({}, { $unset: { receivedEventMessage_creditBoost: 1 } }).then(() => {});
         void Inbox.deleteMany({ globaUpgradeId: "5b23106f283a555109666672" }).then(() => {});
     }
     if (!config.worldState?.affinityBoost) {
+        void Account.updateMany({}, { $unset: { receivedEventMessage_affinityBoost: 1 } }).then(() => {});
         void Inbox.deleteMany({ globaUpgradeId: "5b23106f283a555109666673" }).then(() => {});
     }
     if (!config.worldState?.resourceBoost) {
+        void Account.updateMany({}, { $unset: { receivedEventMessage_resourceBoost: 1 } }).then(() => {});
         void Inbox.deleteMany({ globaUpgradeId: "5b23106f283a555109666674" }).then(() => {});
     }
     if (!config.worldState?.galleonOfGhouls) {
+        void Account.updateMany({}, { $unset: { receivedEventMessage_galleonOfGhouls: 1 } }).then(() => {});
         void Inbox.deleteMany({ goalTag: "GalleonRobbery" }).then(() => {});
     }
 };
