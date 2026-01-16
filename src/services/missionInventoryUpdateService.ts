@@ -84,7 +84,7 @@ import {
 } from "./worldStateService.ts";
 import { config } from "./configService.ts";
 import libraryDailyTasks from "../../static/fixed_responses/libraryDailyTasks.json" with { type: "json" };
-import type { IGoal, ISyndicateMissionInfo } from "../types/worldStateTypes.ts";
+import type { IGoal, ISyndicateJob, ISyndicateMissionInfo } from "../types/worldStateTypes.ts";
 import { fromOid, version_compare } from "../helpers/inventoryHelpers.ts";
 import type { TAccountDocument } from "./loginService.ts";
 import type { ITypeCount } from "../types/commonTypes.ts";
@@ -1488,99 +1488,18 @@ export const addMissionRewards = async (
     }
 
     if (rewardInfo.JobStage != undefined && rewardInfo.jobId) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const [jobType, unkIndex, hubNode, syndicateMissionId] = rewardInfo.jobId.split("_");
-        const syndicateMissions: ISyndicateMissionInfo[] = [];
-        if (syndicateMissionId) {
-            pushClassicBounties(syndicateMissions, idToBountyCycle(syndicateMissionId), account.BuildLabel);
-        }
-        let syndicateEntry: ISyndicateMissionInfo | IGoal | undefined = syndicateMissions.find(
-            m => m._id.$oid === syndicateMissionId
-        );
-        if (
-            [
-                "/Lotus/Types/Gameplay/Eidolon/Jobs/Events/InfestedPlainsBounty",
-                "/Lotus/Types/Gameplay/Eidolon/Jobs/Events/GhoulAlertBounty"
-            ].some(prefix => jobType.startsWith(prefix))
-        ) {
-            const { Goals } = getWorldState(account.BuildLabel);
-            syndicateEntry = Goals.find(m => m._id.$oid === syndicateMissionId);
-            if (syndicateEntry) syndicateEntry.Tag = syndicateEntry.JobAffiliationTag!;
-        }
-        const specialCase = [
-            {
-                endings: ["Heists/HeistProfitTakerBountyOne"],
-                stage: 2,
-                amount: 1000,
-                tag: "SolarisSyndicate"
-            },
-            {
-                endings: [
-                    "Heists/HeistProfitTakerBountyTwo",
-                    "Heists/HeistProfitTakerBountyThree",
-                    "Heists/HeistProfitTakerBountyFour",
-                    "Heists/HeistExploiterBountyOne"
-                ],
-                amount: 1000,
-                tag: "SolarisSyndicate"
-            },
-            { endings: ["Hunts/AllTeralystsHunt"], stage: 2, amount: 5000, tag: "CetusSyndicate" },
-            {
-                endings: ["Hunts/TeralystHunt"],
-                amount: 1000,
-                tag: "CetusSyndicate"
-            },
-            { endings: ["Jobs/NewbieJob"], amount: 200, tag: "CetusSyndicate" }
-        ];
-        const match = specialCase.find(rule => rule.endings.some(e => jobType.endsWith(e)));
-        if (match) {
-            const specialCaseReward = match.stage === undefined || rewardInfo.JobStage === match.stage ? match : null;
-            if (specialCaseReward) {
-                addStanding(inventory, match.tag, Math.floor(match.amount / (rewardInfo.Q ? 0.8 : 1)), AffiliationMods);
-            }
-        } else if (syndicateEntry && syndicateEntry.Jobs) {
-            let currentJob = syndicateEntry.Jobs[rewardInfo.JobTier!];
-            if (
-                [
-                    "/Lotus/Types/Gameplay/Eidolon/Jobs/Events/InfestedPlainsBounty",
-                    "/Lotus/Types/Gameplay/Eidolon/Jobs/Events/GhoulAlertBounty"
-                ].some(prefix => jobType.startsWith(prefix))
-            ) {
-                currentJob = syndicateEntry.Jobs.find(j => j.jobType === jobType)!;
-            }
-            if (syndicateEntry.Tag === "EntratiSyndicate") {
-                if (
-                    [
-                        "DeimosRuinsExterminateBounty",
-                        "DeimosRuinsEscortBounty",
-                        "DeimosRuinsMistBounty",
-                        "DeimosRuinsPurifyBounty",
-                        "DeimosRuinsSacBounty",
-                        "VaultBounty"
-                    ].some(ending => jobType.endsWith(ending))
-                ) {
-                    const vault = syndicateEntry.Jobs.find(j => j.locationTag == rewardInfo.jobId!.split("_").at(-1));
-                    if (vault) {
-                        currentJob = vault;
-                        if (jobType.endsWith("VaultBounty")) {
-                            currentJob.xpAmounts[rewardInfo.JobTier!] = currentJob.xpAmounts.reduce((s, a) => s + a, 0);
-                        }
-                    }
-                }
+        const result = getSyndicateJob(rewardInfo, account.BuildLabel);
+        if (result) {
+            const currentJob = result.currentJob;
+            const syndicateTag = result.syndicateTag;
+            if (syndicateTag === "EntratiSyndicate") {
                 let medallionAmount = Math.floor(currentJob.xpAmounts[rewardInfo.JobStage] / (rewardInfo.Q ? 0.8 : 1));
-                if (
-                    ["DeimosEndlessAreaDefenseBounty", "DeimosEndlessExcavateBounty", "DeimosEndlessPurifyBounty"].some(
-                        ending => jobType.endsWith(ending)
-                    )
-                ) {
-                    const endlessJob = syndicateEntry.Jobs.find(j => j.endless);
-                    if (endlessJob) {
-                        const index = rewardInfo.JobStage % endlessJob.xpAmounts.length;
-                        const excess = Math.floor(rewardInfo.JobStage / (endlessJob.xpAmounts.length - 1));
-                        medallionAmount = Math.floor(endlessJob.xpAmounts[index] * (1 + 0.15000001 * excess));
-                    }
+                if (currentJob.endless) {
+                    const index = rewardInfo.JobStage % currentJob.xpAmounts.length;
+                    const excess = Math.floor(rewardInfo.JobStage / (currentJob.xpAmounts.length - 1));
+                    medallionAmount = Math.floor(currentJob.xpAmounts[index] * (1 + 0.15000001 * excess));
                 }
-                if (typeof medallionAmount === "number" && !isNaN(medallionAmount)) {
+                if (!isNaN(medallionAmount)) {
                     MissionRewards.push({
                         StoreItem: "/Lotus/StoreItems/Types/Items/Deimos/EntratiFragmentUncommonB",
                         ItemCount: medallionAmount
@@ -1591,17 +1510,19 @@ export const addMissionRewards = async (
                     );
                 } else {
                     logger.warning(
-                        `${jobType} tried to give ${medallionAmount} medallions for the ${rewardInfo.JobStage} stage of the ${rewardInfo.JobTier} tier bounty`
+                        `${currentJob.jobType} tried to give ${medallionAmount} medallions for the ${rewardInfo.JobStage} stage of the ${rewardInfo.JobTier} tier bounty`
                     );
                     logger.warning(`currentJob`, { currentJob: currentJob });
                 }
-            } else if (!jobType.startsWith("/Lotus/Types/Gameplay/NokkoColony/Jobs")) {
-                addStanding(
-                    inventory,
-                    syndicateEntry.Tag,
-                    Math.floor(currentJob.xpAmounts[rewardInfo.JobStage] / (rewardInfo.Q ? 0.8 : 1)),
-                    AffiliationMods
-                );
+            } else if (!currentJob.jobType!.startsWith("/Lotus/Types/Gameplay/NokkoColony/Jobs")) {
+                const xpAmount =
+                    rewardInfo.JobStage < currentJob.xpAmounts.length
+                        ? currentJob.xpAmounts[rewardInfo.JobStage]
+                        : currentJob.xpAmounts[0];
+                if (rewardInfo.JobStage >= currentJob.xpAmounts.length) {
+                    logger.debug(`xpAmount for stage ${rewardInfo.JobStage} is out of bounds, fallback to ${xpAmount}`);
+                }
+                addStanding(inventory, syndicateTag, Math.floor(xpAmount / (rewardInfo.Q ? 0.8 : 1)), AffiliationMods);
             }
         }
     }
@@ -2047,178 +1968,49 @@ function getRandomMissionDrops(
         }
 
         let rotations: number[] = [];
-        if (RewardInfo.jobId) {
-            if (RewardInfo.JobStage! >= 0) {
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                const [jobType, unkIndex, hubNode, syndicateMissionId] = RewardInfo.jobId.split("_");
-                let isEndlessJob = false;
-                if (syndicateMissionId) {
-                    const syndicateMissions: ISyndicateMissionInfo[] = [];
-                    if (syndicateMissionId) {
-                        pushClassicBounties(syndicateMissions, idToBountyCycle(syndicateMissionId), account.BuildLabel);
+        if (RewardInfo.jobId && RewardInfo.JobStage! >= 0) {
+            const result = getSyndicateJob(RewardInfo, account.BuildLabel);
+
+            if (result) {
+                const currentJob = result.currentJob;
+                const jobType = currentJob.jobType!;
+                if (currentJob.rewards != "") rewardManifests = [currentJob.rewards];
+                if (currentJob.xpAmounts.length > 1) {
+                    const curentStage = RewardInfo.JobStage! + 1;
+                    const totalStage = currentJob.xpAmounts.length;
+                    let tableIndex = 1; // Stage 2, Stage 3 of 4, and Stage 3 of 5
+
+                    if (curentStage == 1) {
+                        tableIndex = 0;
+                    } else if (curentStage == totalStage) {
+                        tableIndex = 3;
+                    } else if (totalStage == 5 && curentStage == 4) {
+                        tableIndex = 2;
                     }
-                    let syndicateEntry: ISyndicateMissionInfo | IGoal | undefined = syndicateMissions.find(
-                        m => m._id.$oid === syndicateMissionId
-                    );
-                    if (
-                        [
-                            "/Lotus/Types/Gameplay/Eidolon/Jobs/Events/InfestedPlainsBounty",
-                            "/Lotus/Types/Gameplay/Eidolon/Jobs/Events/GhoulAlertBounty"
-                        ].some(prefix => jobType.startsWith(prefix))
-                    ) {
-                        const { Goals } = getWorldState(account.BuildLabel);
-                        syndicateEntry = Goals.find(m => m._id.$oid === syndicateMissionId);
-                        if (syndicateEntry) syndicateEntry.Tag = syndicateEntry.JobAffiliationTag!;
+
+                    if (jobType.startsWith("/Lotus/Types/Gameplay/NokkoColony/Jobs/NokkoJob")) {
+                        if (RewardInfo.JobStage === currentJob.xpAmounts.length - 1) {
+                            rotations = [0, 1, 2];
+                        } else {
+                            rewardManifests = [];
+                        }
+                    } else {
+                        rotations = [tableIndex];
                     }
-                    if (syndicateEntry && syndicateEntry.Jobs) {
-                        let job;
-                        if (RewardInfo.JobTier !== undefined && RewardInfo.JobTier >= 0) {
-                            job = syndicateEntry.Jobs[RewardInfo.JobTier];
-                        }
-
-                        if (syndicateEntry.Tag === "EntratiSyndicate") {
-                            if (
-                                [
-                                    "DeimosRuinsExterminateBounty",
-                                    "DeimosRuinsEscortBounty",
-                                    "DeimosRuinsMistBounty",
-                                    "DeimosRuinsPurifyBounty",
-                                    "DeimosRuinsSacBounty",
-                                    "VaultBounty"
-                                ].some(ending => jobType.endsWith(ending))
-                            ) {
-                                const vault = syndicateEntry.Jobs.find(
-                                    j => j.locationTag === RewardInfo.jobId!.split("_").at(-1)
-                                );
-                                if (vault) {
-                                    job = vault;
-                                    if (jobType.endsWith("VaultBounty")) {
-                                        job.rewards = job.rewards.replace(
-                                            "/Lotus/Types/Game/MissionDecks/",
-                                            "/Supplementals/"
-                                        );
-                                        job.xpAmounts = [job.xpAmounts.reduce((partialSum, a) => partialSum + a, 0)];
-                                    }
-                                }
-                            }
-                            if (
-                                [
-                                    "DeimosEndlessAreaDefenseBounty",
-                                    "DeimosEndlessExcavateBounty",
-                                    "DeimosEndlessPurifyBounty"
-                                ].some(ending => jobType.endsWith(ending))
-                            ) {
-                                const endlessJob = syndicateEntry.Jobs.find(j => j.endless);
-                                if (endlessJob) {
-                                    isEndlessJob = true;
-                                    job = endlessJob;
-                                    const excess = Math.floor(RewardInfo.JobStage! / (job.xpAmounts.length - 1));
-
-                                    const rotationIndexes = [0, 0, 1, 2];
-                                    const rotationIndex = rotationIndexes[excess % rotationIndexes.length];
-                                    const dropTable = [
-                                        "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierBTableARewards",
-                                        "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierBTableBRewards",
-                                        "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierBTableCRewards"
-                                    ];
-                                    job.rewards = dropTable[rotationIndex];
-                                }
-                            }
-                        } else if (syndicateEntry.Tag === "SolarisSyndicate") {
-                            if (jobType.endsWith("Heists/HeistProfitTakerBountyOne") && RewardInfo.JobStage == 2) {
-                                job = {
-                                    rewards:
-                                        "/Lotus/Types/Game/MissionDecks/HeistJobMissionRewards/HeistTierATableARewards",
-                                    masteryReq: 0,
-                                    minEnemyLevel: 40,
-                                    maxEnemyLevel: 60,
-                                    xpAmounts: [1000]
-                                };
-                                RewardInfo.Q = false; // Just in case
-                            } else if (jobType.startsWith("/Lotus/Types/Gameplay/NokkoColony/Jobs/NokkoJob")) {
-                                job = {
-                                    rewards: jobType
-                                        .replace("SteelPath", "Steel")
-                                        .replace(
-                                            "/Lotus/Types/Gameplay/NokkoColony/Jobs/NokkoJob",
-                                            "/Lotus/Types/Game/MissionDecks/NokkoColonyRewards/NokkoColonyRewards"
-                                        ),
-                                    masteryReq: 0,
-                                    minEnemyLevel: 30,
-                                    maxEnemyLevel: 40,
-                                    xpAmounts: [0, 0, 0, 0, 0]
-                                };
-                            } else {
-                                const tierMap = {
-                                    Two: "B",
-                                    Three: "C",
-                                    Four: "D"
-                                };
-
-                                for (const [key, tier] of Object.entries(tierMap)) {
-                                    if (jobType.endsWith(`Heists/HeistProfitTakerBounty${key}`)) {
-                                        job = {
-                                            rewards: `/Lotus/Types/Game/MissionDecks/HeistJobMissionRewards/HeistTier${tier}TableARewards`,
-                                            masteryReq: 0,
-                                            minEnemyLevel: 40,
-                                            maxEnemyLevel: 60,
-                                            xpAmounts: [1000]
-                                        };
-                                        RewardInfo.Q = false; // Just in case
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                        if (
-                            [
-                                "/Lotus/Types/Gameplay/Eidolon/Jobs/Events/InfestedPlainsBounty",
-                                "/Lotus/Types/Gameplay/Eidolon/Jobs/Events/GhoulAlertBounty"
-                            ].some(prefix => jobType.startsWith(prefix))
-                        ) {
-                            job = syndicateEntry.Jobs.find(j => j.jobType === jobType)!;
-                        }
-                        if (job) {
-                            rewardManifests = [job.rewards];
-                            if (job.xpAmounts.length > 1) {
-                                const curentStage = RewardInfo.JobStage! + 1;
-                                const totalStage = job.xpAmounts.length;
-                                let tableIndex = 1; // Stage 2, Stage 3 of 4, and Stage 3 of 5
-
-                                if (curentStage == 1) {
-                                    tableIndex = 0;
-                                } else if (curentStage == totalStage) {
-                                    tableIndex = 3;
-                                } else if (totalStage == 5 && curentStage == 4) {
-                                    tableIndex = 2;
-                                }
-                                if (jobType.startsWith("/Lotus/Types/Gameplay/NokkoColony/Jobs/NokkoJob")) {
-                                    if (RewardInfo.JobStage === job.xpAmounts.length - 1) {
-                                        rotations = [0, 1, 2];
-                                    } else {
-                                        rewardManifests = [];
-                                    }
-                                } else {
-                                    rotations = [tableIndex];
-                                }
-                            } else {
-                                rotations = [0];
-                            }
-                            if (
-                                RewardInfo.Q &&
-                                (RewardInfo.JobStage === job.xpAmounts.length - 1 || jobType.endsWith("VaultBounty")) &&
-                                !jobType.startsWith("/Lotus/Types/Gameplay/NokkoColony/Jobs/NokkoJob") &&
-                                !isEndlessJob
-                            ) {
-                                rotations.push(ExportRewards[job.rewards].length - 1);
-                            }
-                        }
-                    }
+                } else {
+                    rotations = [0];
                 }
                 if (jobType == "/Lotus/Types/Gameplay/Eidolon/Jobs/NewbieJob") {
-                    rewardManifests = ["/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierATableARewards"];
                     rotations = [3];
                     if (RewardInfo.Q) rotations.push(3);
+                } else if (
+                    RewardInfo.Q &&
+                    (RewardInfo.JobStage === currentJob.xpAmounts.length - 1 || jobType.endsWith("VaultBounty")) &&
+                    !jobType.startsWith("/Lotus/Types/Gameplay/NokkoColony/Jobs/NokkoJob") &&
+                    !jobType.startsWith("/Lotus/Types/Gameplay/Venus/Jobs/Heists/") &&
+                    !currentJob.endless
+                ) {
+                    rotations.push(ExportRewards[currentJob.rewards].length - 1);
                 }
             }
         } else if (RewardInfo.challengeMissionId) {
@@ -2543,6 +2335,159 @@ export const handleConservation = (
             }
         }
     }
+};
+
+const getSyndicateJob = (
+    rewardInfo: IRewardInfo,
+    buildLabel?: string
+): { currentJob: ISyndicateJob; syndicateTag: string } | undefined => {
+    if (!rewardInfo.jobId) return;
+
+    const parts = rewardInfo.jobId.split("_");
+    const jobType = parts[0];
+    const syndicateMissionId = parts.find(p => p.length === 24);
+    let syndicateTag = parts.find(p => p.endsWith("Syndicate"));
+
+    const isGoalJob = [
+        "/Lotus/Types/Gameplay/Eidolon/Jobs/Events/InfestedPlainsBounty",
+        "/Lotus/Types/Gameplay/Eidolon/Jobs/Events/GhoulAlertBounty"
+    ].some(prefix => jobType.startsWith(prefix));
+
+    let syndicateEntry: ISyndicateMissionInfo | IGoal | undefined;
+    if (isGoalJob) {
+        syndicateEntry = getWorldState(buildLabel).Goals.find(g => g._id.$oid === syndicateMissionId);
+        if (syndicateEntry) syndicateTag = syndicateEntry.JobAffiliationTag!;
+    } else if (syndicateMissionId) {
+        const syndicateMissions: ISyndicateMissionInfo[] = [];
+        pushClassicBounties(syndicateMissions, idToBountyCycle(syndicateMissionId), buildLabel);
+        syndicateEntry = syndicateMissions.find(m => m._id.$oid == syndicateMissionId);
+        if (syndicateEntry) syndicateTag = syndicateEntry.Tag;
+    }
+
+    if (jobType.endsWith("Hunts/AllTeralystsHunt") && rewardInfo.JobStage == 2) {
+        return {
+            currentJob: {
+                jobType,
+                rewards: "",
+                minEnemyLevel: 20,
+                maxEnemyLevel: 40,
+                xpAmounts: [5000]
+            },
+            syndicateTag: "CetusSyndicate"
+        };
+    } else if (jobType.endsWith("Hunts/TeralystHunt")) {
+        return {
+            currentJob: {
+                jobType,
+                rewards: "",
+                minEnemyLevel: 20,
+                maxEnemyLevel: 40,
+                xpAmounts: [1000]
+            },
+            syndicateTag: "CetusSyndicate"
+        };
+    } else if (jobType.endsWith("Jobs/NewbieJob")) {
+        return {
+            currentJob: {
+                jobType,
+                rewards: "/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierATableARewards",
+                minEnemyLevel: 3,
+                maxEnemyLevel: 5,
+                xpAmounts: [200]
+            },
+            syndicateTag: "CetusSyndicate"
+        };
+    }
+
+    if (!syndicateTag) return;
+
+    if (syndicateTag == "SolarisSyndicate") {
+        if (jobType.startsWith("/Lotus/Types/Gameplay/NokkoColony/Jobs/NokkoJob")) {
+            return {
+                currentJob: {
+                    jobType,
+                    rewards: jobType
+                        .replace("SteelPath", "Steel")
+                        .replace(
+                            "/Lotus/Types/Gameplay/NokkoColony/Jobs/NokkoJob",
+                            "/Lotus/Types/Game/MissionDecks/NokkoColonyRewards/NokkoColonyRewards"
+                        ),
+                    masteryReq: 0,
+                    minEnemyLevel: 30,
+                    maxEnemyLevel: 40,
+                    xpAmounts: [0, 0, 0, 0, 0]
+                },
+                syndicateTag
+            };
+        } else if (jobType == "/Lotus/Types/Gameplay/Venus/Jobs/Heists/ExploiterHunt") {
+            return {
+                currentJob: {
+                    jobType,
+                    rewards: "",
+                    masteryReq: 0,
+                    minEnemyLevel: 40,
+                    maxEnemyLevel: 60,
+                    xpAmounts: [1000]
+                },
+                syndicateTag
+            };
+        }
+
+        const tierMap: Record<string, string> = { One: "A", Two: "B", Three: "C", Four: "D" };
+        for (const [key, tier] of Object.entries(tierMap)) {
+            if (key == "One" && rewardInfo.JobStage != 2) continue;
+            if (!jobType.endsWith(`Heists/HeistProfitTakerBounty${key}`)) continue;
+
+            return {
+                currentJob: {
+                    jobType,
+                    rewards: `/Lotus/Types/Game/MissionDecks/HeistJobMissionRewards/HeistTier${tier}TableARewards`,
+                    masteryReq: 0,
+                    minEnemyLevel: 40,
+                    maxEnemyLevel: 60,
+                    xpAmounts: [1000]
+                },
+                syndicateTag
+            };
+        }
+    }
+
+    if (!syndicateEntry?.Jobs) return;
+
+    let currentJob: ISyndicateJob | undefined =
+        rewardInfo.JobTier !== undefined && !isGoalJob
+            ? syndicateEntry.Jobs[rewardInfo.JobTier]
+            : syndicateEntry.Jobs.find(j => j.jobType == jobType);
+
+    if (syndicateTag == "EntratiSyndicate") {
+        if (jobType.includes("DeimosEndless")) {
+            const endlessJob = syndicateEntry.Jobs.find(j => j.endless);
+            if (endlessJob) {
+                currentJob = endlessJob;
+                const excess = Math.floor(rewardInfo.JobStage! / (currentJob.xpAmounts.length - 1));
+                const rotationIndex = [0, 0, 1, 2][excess % 4];
+                const dropTable = [
+                    "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierBTableARewards",
+                    "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierBTableBRewards",
+                    "/Lotus/Types/Game/MissionDecks/DeimosMissionRewards/TierBTableCRewards"
+                ];
+                currentJob.rewards = dropTable[rotationIndex];
+            }
+        } else if (jobType.endsWith("VaultBounty")) {
+            const chamberTag = [...parts].reverse().find(p => p.startsWith("Chamber"));
+            const vault = syndicateEntry.Jobs.find(j => j.locationTag == chamberTag);
+            if (vault) {
+                currentJob = vault;
+                currentJob.jobType = jobType;
+                currentJob.rewards = currentJob.rewards.replace("/Lotus/Types/Game/MissionDecks/", "/Supplementals/");
+                currentJob.xpAmounts = [currentJob.xpAmounts.reduce((sum, a) => sum + a, 0)];
+            }
+        }
+    }
+
+    if (!currentJob) return;
+
+    return { currentJob, syndicateTag };
 };
 
 const corruptedMods = [
