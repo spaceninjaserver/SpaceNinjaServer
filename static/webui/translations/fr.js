@@ -362,6 +362,7 @@ dict = {
     worldState_RadioLegion2Syndicate: `L'Émissaire`,
     worldState_RadioLegionIntermissionSyndicate: `Intermission I`,
     worldState_RadioLegionSyndicate: `Le Loup de Saturne Six`,
+    worldState_nightwavePhaseOverride: `[UNTRANSLATED] Nightwave Phase Override`,
     worldState_fissures: `Fissures`,
     normal: `Normal`,
     worldState_allAtOnceNormal: `Toutes, Normal`,

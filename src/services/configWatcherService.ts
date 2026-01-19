@@ -100,6 +100,13 @@ export const validateConfig = (): void => {
         config.worldState.varziaOverride = "";
         modified = true;
     }
+    if (
+        config.worldState?.nightwavePhaseOverride &&
+        (config.worldState.nightwavePhaseOverride > 4 || config.worldState.nightwavePhaseOverride < 0)
+    ) {
+        config.worldState.nightwavePhaseOverride = 0;
+        modified = true;
+    }
     if (modified) {
         logger.info(`Updating config file to fix some issues with it.`);
         void saveConfig();

@@ -66,6 +66,7 @@
     "vallisOverride": "",
     "duviriOverride": "",
     "nightwaveOverride": "",
+    "nightwavePhaseOverride": 0,
     "allTheFissures": "",
     "varziaOverride": "",
     "circuitGameModes": null,

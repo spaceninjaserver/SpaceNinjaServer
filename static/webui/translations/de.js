@@ -362,6 +362,7 @@ dict = {
     worldState_RadioLegion2Syndicate: `Der Botschafter`,
     worldState_RadioLegionIntermissionSyndicate: `Sendepause I`,
     worldState_RadioLegionSyndicate: `Der Wolf von Saturn Six`,
+    worldState_nightwavePhaseOverride: `[UNTRANSLATED] Nightwave Phase Override`,
     worldState_fissures: `Void-Risse`,
     normal: `Normal`,
     worldState_allAtOnceNormal: `Alle gleichzeitig, Normal`,

@@ -362,6 +362,7 @@ dict = {
     worldState_RadioLegion2Syndicate: `Эмиссар`,
     worldState_RadioLegionIntermissionSyndicate: `Антракт I`,
     worldState_RadioLegionSyndicate: `Волк Сатурна Шесть`,
+    worldState_nightwavePhaseOverride: `Фаза Ночной волны`,
     worldState_fissures: `Разрывы бездны`,
     normal: `Стандартные`,
     worldState_allAtOnceNormal: `Все сразу, в обычном режиме`,

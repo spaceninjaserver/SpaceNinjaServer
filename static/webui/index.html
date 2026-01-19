@@ -1495,6 +1495,40 @@
                                         </form>
                                     </div>
                                 </div>
+                                <div class="form-group mt-2 d-flex gap-2">
+                                    <div class="flex-fill">
+                                        <label class="form-label" for="worldState.nightwaveOverride" data-loc="worldState_nightwaveOverride"></label>
+                                        <select class="form-control" id="worldState.nightwaveOverride" data-default="">
+                                            <option value="" data-loc="disabled"></option>
+                                            <option value="RadioLegionIntermission14Syndicate" data-loc="worldState_RadioLegionIntermission14Syndicate"></option>
+                                            <option value="RadioLegionIntermission13Syndicate" data-loc="worldState_RadioLegionIntermission13Syndicate"></option>
+                                            <option value="RadioLegionIntermission12Syndicate" data-loc="worldState_RadioLegionIntermission12Syndicate"></option>
+                                            <option value="RadioLegionIntermission11Syndicate" data-loc="worldState_RadioLegionIntermission11Syndicate"></option>
+                                            <option value="RadioLegionIntermission10Syndicate" data-loc="worldState_RadioLegionIntermission10Syndicate"></option>
+                                            <option value="RadioLegionIntermission9Syndicate" data-loc="worldState_RadioLegionIntermission9Syndicate"></option>
+                                            <option value="RadioLegionIntermission8Syndicate" data-loc="worldState_RadioLegionIntermission8Syndicate"></option>
+                                            <option value="RadioLegionIntermission7Syndicate" data-loc="worldState_RadioLegionIntermission7Syndicate"></option>
+                                            <option value="RadioLegionIntermission6Syndicate" data-loc="worldState_RadioLegionIntermission6Syndicate"></option>
+                                            <option value="RadioLegionIntermission5Syndicate" data-loc="worldState_RadioLegionIntermission5Syndicate"></option>
+                                            <option value="RadioLegionIntermission4Syndicate" data-loc="worldState_RadioLegionIntermission4Syndicate"></option>
+                                            <option value="RadioLegionIntermission3Syndicate" data-loc="worldState_RadioLegionIntermission3Syndicate"></option>
+                                            <option value="RadioLegion3Syndicate" data-loc="worldState_RadioLegion3Syndicate"></option>
+                                            <option value="RadioLegionIntermission2Syndicate" data-loc="worldState_RadioLegionIntermission2Syndicate"></option>
+                                            <option value="RadioLegion2Syndicate" data-loc="worldState_RadioLegion2Syndicate"></option>
+                                            <option value="RadioLegionIntermissionSyndicate" data-loc="worldState_RadioLegionIntermissionSyndicate"></option>
+                                            <option value="RadioLegionSyndicate" data-loc="worldState_RadioLegionSyndicate"></option>
+                                        </select>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <form class="form-group" onsubmit="doSaveConfigInt('worldState.nightwavePhaseOverride'); return false;">
+                                            <label class="form-label" for="worldState.nightwavePhaseOverride" data-loc="worldState_nightwavePhaseOverride"></label>
+                                            <div class="input-group">
+                                                <input id="worldState.nightwavePhaseOverride" class="form-control" type="number" min="0" max="4" data-default="0" />
+                                                <button class="btn btn-secondary" type="submit" data-loc="cheats_save"></button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
                                 <div class="form-group mt-2">
                                     <label class="form-label" for="worldState.eidolonOverride" data-loc="worldState_eidolonOverride"></label>
                                     <select class="form-control" id="worldState.eidolonOverride" data-default="">
@@ -1520,29 +1554,6 @@
                                         <option value="envy" data-loc="worldState_envy"></option>
                                         <option value="sorrow" data-loc="worldState_sorrow"></option>
                                         <option value="fear" data-loc="worldState_fear"></option>
-                                    </select>
-                                </div>
-                                <div class="form-group mt-2">
-                                    <label class="form-label" for="worldState.nightwaveOverride" data-loc="worldState_nightwaveOverride"></label>
-                                    <select class="form-control" id="worldState.nightwaveOverride" data-default="">
-                                        <option value="" data-loc="disabled"></option>
-                                        <option value="RadioLegionIntermission14Syndicate" data-loc="worldState_RadioLegionIntermission14Syndicate"></option>
-                                        <option value="RadioLegionIntermission13Syndicate" data-loc="worldState_RadioLegionIntermission13Syndicate"></option>
-                                        <option value="RadioLegionIntermission12Syndicate" data-loc="worldState_RadioLegionIntermission12Syndicate"></option>
-                                        <option value="RadioLegionIntermission11Syndicate" data-loc="worldState_RadioLegionIntermission11Syndicate"></option>
-                                        <option value="RadioLegionIntermission10Syndicate" data-loc="worldState_RadioLegionIntermission10Syndicate"></option>
-                                        <option value="RadioLegionIntermission9Syndicate" data-loc="worldState_RadioLegionIntermission9Syndicate"></option>
-                                        <option value="RadioLegionIntermission8Syndicate" data-loc="worldState_RadioLegionIntermission8Syndicate"></option>
-                                        <option value="RadioLegionIntermission7Syndicate" data-loc="worldState_RadioLegionIntermission7Syndicate"></option>
-                                        <option value="RadioLegionIntermission6Syndicate" data-loc="worldState_RadioLegionIntermission6Syndicate"></option>
-                                        <option value="RadioLegionIntermission5Syndicate" data-loc="worldState_RadioLegionIntermission5Syndicate"></option>
-                                        <option value="RadioLegionIntermission4Syndicate" data-loc="worldState_RadioLegionIntermission4Syndicate"></option>
-                                        <option value="RadioLegionIntermission3Syndicate" data-loc="worldState_RadioLegionIntermission3Syndicate"></option>
-                                        <option value="RadioLegion3Syndicate" data-loc="worldState_RadioLegion3Syndicate"></option>
-                                        <option value="RadioLegionIntermission2Syndicate" data-loc="worldState_RadioLegionIntermission2Syndicate"></option>
-                                        <option value="RadioLegion2Syndicate" data-loc="worldState_RadioLegion2Syndicate"></option>
-                                        <option value="RadioLegionIntermissionSyndicate" data-loc="worldState_RadioLegionIntermissionSyndicate"></option>
-                                        <option value="RadioLegionSyndicate" data-loc="worldState_RadioLegionSyndicate"></option>
                                     </select>
                                 </div>
                                 <div class="form-group mt-2">
