@@ -4103,10 +4103,35 @@ const importSamples = {
         },
         Counselor: true
     },
+    removeAlertCompletions: {
+        CompletedAlerts: [],
+        PeriodicMissionCompletions: []
+    },
+    removeSyndicateMissionCompletions: {
+        CompletedSyndicates: []
+    },
+    removeMasteryRankUpCooldown: {
+        TrainingDate: {
+            $date: {
+                $numberLong: "0"
+            }
+        }
+    },
+    removeVendorPurchaseLimits: {
+        RecentVendorPurchases: [],
+        UsedDailyDeals: []
+    },
     removeDeathMarks: {
         DeathMarks: [],
         Harvestable: false,
         DeathSquadable: false
+    },
+    removeBlessingCooldown: {
+        BlessingCooldown: {
+            $date: {
+                $numberLong: "0"
+            }
+        }
     },
     maxStratos: {
         BountyScore: 39

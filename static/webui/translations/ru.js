@@ -379,7 +379,12 @@ dict = {
     import_samples: `Пример:`,
     import_samples_maxFocus: `Все школы Фокуса макс. уровня`,
     import_samples_accolades: `[UNTRANSLATED] Accolades & Council Chat Access`,
-    import_samples_removeDeathMarks: `[UNTRANSLATED] Remove All Death Marks`,
+    import_samples_removeAlertCompletions: `[UNTRANSLATED] Remove Alert Completions`,
+    import_samples_removeSyndicateMissionCompletions: `[UNTRANSLATED] Remove Syndicate Mission Completions`,
+    import_samples_removeMasteryRankUpCooldown: `[UNTRANSLATED] Remove Mastery Rank Up Cooldown`,
+    import_samples_removeVendorPurchaseLimits: `[UNTRANSLATED] Remove Vendor Purchase Limits`,
+    import_samples_removeDeathMarks: `[UNTRANSLATED] Remove Death Marks`,
+    import_samples_removeBlessingCooldown: `[UNTRANSLATED] Remove Blessing Cooldown`,
     import_samples_maxStratos: `[UNTRANSLATED] Max Rank Stratos Emblem Icon`,
 
     upgrade_Equilibrium: `Подбор сфер здоровья даёт +|VAL|% энергии. Подбор сфер энергии даёт +|VAL|% здоровья.`,

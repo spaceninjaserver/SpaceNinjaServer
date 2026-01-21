@@ -379,7 +379,12 @@ dict = {
     import_samples: `Beispiele:`,
     import_samples_maxFocus: `Alle Fokus-Schulen maximiert`,
     import_samples_accolades: `Auszeichnungen & Council Chat Zugang`,
-    import_samples_removeDeathMarks: `Entferne alle Todesmarkierungen`,
+    import_samples_removeAlertCompletions: `Entferne abgeschlossene Alarmierungen`,
+    import_samples_removeSyndicateMissionCompletions: `Entferne abgeschlossene Syndikat-Missionen`,
+    import_samples_removeMasteryRankUpCooldown: `Entferne Wartezeit für Meisterschaftsrangaufstieg`,
+    import_samples_removeVendorPurchaseLimits: `Entferne Händler-Kaufbeschränkungen`,
+    import_samples_removeDeathMarks: `Entferne Todesmarkierungen`,
+    import_samples_removeBlessingCooldown: `Entferne Wartezeit für Gaben`,
     import_samples_maxStratos: `Max. Rang-Symbol für Stratos Emblem`,
 
     upgrade_Equilibrium: `+|VAL|% Energie bei Gesundheitskugeln, +|VAL|% Gesundheit bei Energiekugeln`,

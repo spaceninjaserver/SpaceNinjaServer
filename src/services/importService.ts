@@ -18,6 +18,10 @@ import type {
     IInventoryClient,
     INemesisClient,
     INemesisDatabase,
+    IRecentVendorPurchaseClient,
+    IRecentVendorPurchaseDatabase,
+    IVendorPurchaseHistoryEntryClient,
+    IVendorPurchaseHistoryEntryDatabase,
     IPendingRecipeClient,
     IPendingRecipeDatabase,
     IQuestKeyClient,
@@ -235,6 +239,20 @@ const convertQuestKey = (client: IQuestKeyClient): IQuestKeyDatabase => {
     };
 };
 
+const convertRecentVendorPurchases = (client: IRecentVendorPurchaseClient): IRecentVendorPurchaseDatabase => {
+    return {
+        ...client,
+        PurchaseHistory: client.PurchaseHistory.map(convertPurchaseHistory)
+    };
+};
+
+const convertPurchaseHistory = (client: IVendorPurchaseHistoryEntryClient): IVendorPurchaseHistoryEntryDatabase => {
+    return {
+        ...client,
+        Expiry: convertDate(client.Expiry)
+    };
+};
+
 const convertPendingRecipe = (client: IPendingRecipeClient): IPendingRecipeDatabase => {
     return {
         ...client,
@@ -377,6 +395,8 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         "EquippedGear",
         "EquippedEmotes",
         "NodeIntrosCompleted",
+        "CompletedAlerts",
+        "CompletedSyndicates",
         "DeathMarks",
         "Wishlist",
         "NemesisAbandonedRewards",
@@ -447,6 +467,12 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     if (client.LastRegionPlayed !== undefined) {
         db.LastRegionPlayed = client.LastRegionPlayed;
     }
+    if (client.UsedDailyDeals !== undefined) {
+        db.UsedDailyDeals = client.UsedDailyDeals;
+    }
+    if (client.RecentVendorPurchases !== undefined) {
+        db.RecentVendorPurchases = client.RecentVendorPurchases.map(convertRecentVendorPurchases);
+    }
     if (client.PendingRecipes !== undefined) {
         replaceArray<IPendingRecipeDatabase>(db.PendingRecipes, client.PendingRecipes.map(convertPendingRecipe));
     }
@@ -497,6 +523,9 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     }
     if (client.Missions !== undefined) {
         db.Missions = client.Missions;
+    }
+    if (client.PeriodicMissionCompletions !== undefined) {
+        db.PeriodicMissionCompletions = client.PeriodicMissionCompletions;
     }
     if (client.FlavourItems !== undefined) {
         db.FlavourItems.splice(0, db.FlavourItems.length);

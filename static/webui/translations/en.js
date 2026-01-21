@@ -378,7 +378,12 @@ dict = {
     import_samples: `Samples:`,
     import_samples_maxFocus: `All Focus Schools Maxed Out`,
     import_samples_accolades: `Accolades & Council Chat Access`,
-    import_samples_removeDeathMarks: `Remove All Death Marks`,
+    import_samples_removeAlertCompletions: `Remove Alert Completions`,
+    import_samples_removeSyndicateMissionCompletions: `Remove Syndicate Mission Completions`,
+    import_samples_removeMasteryRankUpCooldown: `Remove Mastery Rank Up Cooldown`,
+    import_samples_removeVendorPurchaseLimits: `Remove Vendor Purchase Limits`,
+    import_samples_removeDeathMarks: `Remove Death Marks`,
+    import_samples_removeBlessingCooldown: `Remove Blessing Cooldown`,
     import_samples_maxStratos: `Max Rank Stratos Emblem Icon`,
 
     upgrade_Equilibrium: `+|VAL|% Energy from Health pickups, +|VAL|% Health from Energy pickups`,
