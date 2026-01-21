@@ -7,15 +7,6 @@ export const getAllMessagesSorted = async (accountId: string): Promise<HydratedD
     return inbox;
 };
 
-export const getMessage = async (messageId: string): Promise<HydratedDocument<IMessageDatabase>> => {
-    const message = await Inbox.findById(messageId);
-
-    if (!message) {
-        throw new Error(`Message not found ${messageId}`);
-    }
-    return message;
-};
-
 export const deleteMessageRead = async (messageId: string): Promise<void> => {
     await Inbox.findOneAndDelete({ _id: messageId, r: true });
 };

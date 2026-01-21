@@ -6,7 +6,6 @@ import {
     deleteAllMessagesReadNonCin,
     deleteMessageRead,
     getAllMessagesSorted,
-    getMessage,
     type IMessageCreationTemplate
 } from "../../services/inboxService.ts";
 import {
@@ -49,7 +48,13 @@ export const inboxController: RequestHandler = async (req, res) => {
         }
         res.status(200).end();
     } else if (messageId) {
-        const message = await getMessage(parseOid(messageId as string));
+        const message = await Inbox.findById(parseOid(messageId as string));
+        if (!message) {
+            // in this case, we must send a 200 response to avoid softlocking the client
+            logger.warn(`client just read a message we don't know (anymore), attachments will not be received`);
+            res.end();
+            return;
+        }
         message.r = true;
         await message.save();
 
