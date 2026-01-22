@@ -217,6 +217,10 @@ export const syncConfigWithDatabase = (): void => {
         void Account.updateMany({}, { $unset: { receivedEventMessage_galleonOfGhouls: 1 } }).then(() => {});
         void Inbox.deleteMany({ goalTag: "GalleonRobbery" }).then(() => {});
     }
+    if (!config.worldState?.longShadow) {
+        void Account.updateMany({}, { $unset: { receivedEventMessage_longShadow: 1 } }).then(() => {});
+        void Inbox.deleteMany({ goalTag: "NightwatchTacAlert" }).then(() => {});
+    }
 };
 
 export const getReflexiveAddress = (request: Request): { myAddress: string; myUrlBase: string } => {

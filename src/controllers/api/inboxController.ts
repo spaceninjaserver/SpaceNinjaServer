@@ -262,6 +262,17 @@ const createNewEventMessages = async (account: TAccountDocument): Promise<void> 
             goalTag: "GalleonRobbery"
         });
     }
+    if (config.worldState?.longShadow && !account.receivedEventMessage_longShadow) {
+        account.receivedEventMessage_longShadow = true;
+        newEventMessages.push({
+            sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
+            sub: "/Lotus/Language/G1Quests/ProjectNightwatchTacAlertCommunityMsgTitle",
+            msg: "/Lotus/Language/G1Quests/ProjectNightwatchTacAlertCommunityMsgDesc",
+            icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+            startDate: new Date(),
+            goalTag: "NightwatchTacAlert"
+        });
+    }
 
     if (newEventMessages.length === 0) {
         return;

@@ -31,6 +31,7 @@ export interface IDatabaseAccount extends IDatabaseAccountRequiredFields {
     receivedEventMessage_affinityBoost?: boolean;
     receivedEventMessage_resourceBoost?: boolean;
     receivedEventMessage_galleonOfGhouls?: boolean;
+    receivedEventMessage_longShadow?: boolean;
 }
 
 // Includes virtual ID
