@@ -948,6 +948,7 @@ export interface ITradeOffer {
     MiscItems?: IMiscItem[];
     Recipes?: ITypeCount[];
     FusionTreasures?: IFusionTreasure[];
+    NemesisHistory?: INemesisClient;
     PremiumCredits?: number;
     _SlotOrderInfo: string[];
 }

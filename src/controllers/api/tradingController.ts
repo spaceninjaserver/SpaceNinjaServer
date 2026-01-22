@@ -13,12 +13,13 @@ import type { RequestHandler } from "express";
 import type { IPendingTrade, ITradeOffer } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { logger } from "../../utils/logger.ts";
-import { version_compare } from "../../helpers/inventoryHelpers.ts";
+import { fromMongoDate, version_compare } from "../../helpers/inventoryHelpers.ts";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/inventoryModel.ts";
 import { importUpgrade } from "../../services/importService.ts";
 import { Guild } from "../../models/guildModel.ts";
 import { ExportArcanes, ExportResources, ExportUpgrades, type TRarity } from "warframe-public-export-plus";
+import { getInfNodes, getNemesisManifest } from "../../helpers/nemesisHelpers.ts";
 
 export const tradingController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -251,6 +252,45 @@ const applyOfferToInventory = (inventory: TInventoryDatabaseDocument, offer: ITr
             }
         }
     }
+    if (offer.NemesisHistory) {
+        inventory.NemesisHistory ??= [];
+        if (factor == 1) {
+            if (inventory.Nemesis) {
+                logger.warn(`overwriting an existing nemesis as a new one is being requested`);
+            }
+            const manifest = getNemesisManifest(offer.NemesisHistory.manifest);
+            inventory.Nemesis = {
+                fp: BigInt(offer.NemesisHistory.fp),
+                manifest: offer.NemesisHistory.manifest,
+                KillingSuit: offer.NemesisHistory.KillingSuit,
+                killingDamageType: offer.NemesisHistory.killingDamageType,
+                ShoulderHelmet: offer.NemesisHistory.ShoulderHelmet,
+                WeaponIdx: offer.NemesisHistory.WeaponIdx,
+                AgentIdx: offer.NemesisHistory.AgentIdx,
+                BirthNode: offer.NemesisHistory.BirthNode,
+                Faction: offer.NemesisHistory.Faction,
+                Rank: 0,
+                k: false,
+                Traded: true,
+                d: fromMongoDate(offer.NemesisHistory.d),
+                InfNodes: getInfNodes(manifest, 0),
+                GuessHistory: [],
+                Hints: [],
+                HintProgress: 0,
+                Weakened: false,
+                PrevOwners: offer.NemesisHistory.PrevOwners + 1,
+                HenchmenKilled: 0,
+                SecondInCommand: false,
+                MissionCount: 0,
+                LastEnc: 0
+            };
+        } else {
+            const i = inventory.NemesisHistory.findIndex(x => x.fp == BigInt(offer.NemesisHistory!.fp));
+            if (i != -1) {
+                inventory.NemesisHistory.splice(i, 1);
+            }
+        }
+    }
     if (offer.PremiumCredits) {
         if (offer.PremiumCredits < 0) {
             throw new Error(`negative quantity in trade offer`);
@@ -308,6 +348,9 @@ const calcuateTax = (offer: ITradeOffer): number => {
         for (const item of offer.FusionTreasures) {
             tax += item.ItemCount * (item.Sockets ? 12000 : 4000);
         }
+    }
+    if (offer.NemesisHistory) {
+        tax += 8000;
     }
     tax += (offer.PremiumCredits ?? 0) * 500;
     return tax;
