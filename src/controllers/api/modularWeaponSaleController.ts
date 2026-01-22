@@ -19,6 +19,7 @@ import { sendWsBroadcastTo } from "../../services/wsService.ts";
 import { modularWeaponTypes } from "../../helpers/modularWeaponHelper.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import { EquipmentFeatures } from "../../types/equipmentTypes.ts";
+import { logger } from "../../utils/logger.ts";
 
 export const modularWeaponSaleController: RequestHandler = async (req, res) => {
     const partTypeToParts: Record<string, string[]> = {};
@@ -36,6 +37,12 @@ export const modularWeaponSaleController: RequestHandler = async (req, res) => {
     if (req.query.op == "SyncAll") {
         res.json({
             SaleInfos: getSaleInfos(partTypeToParts, Math.trunc(Date.now() / 86400000))
+        });
+    } else if (req.query.op == "Sync") {
+        const payload = getJSONfromString<IModularWeaponSyncRequest>(String(req.body));
+        const saleInfos = getSaleInfos(partTypeToParts, Math.trunc(Date.now() / 86400000));
+        res.json({
+            SaleInfo: saleInfos.find(x => x.Name == payload.SaleName)
         });
     } else if (req.query.op == "Purchase") {
         const accountId = await getAccountIdForRequest(req);
@@ -73,6 +80,9 @@ export const modularWeaponSaleController: RequestHandler = async (req, res) => {
         });
         sendWsBroadcastTo(accountId, { update_inventory: true });
     } else {
+        if (req.body) {
+            logger.debug(`data provided to ${req.path}: ${String(req.body)}`);
+        }
         throw new Error(`unknown modularWeaponSale op: ${String(req.query.op)}`);
     }
 };
@@ -164,6 +174,10 @@ const getModularWeaponSale = (
         ]
     };
 };
+
+interface IModularWeaponSyncRequest {
+    SaleName: string;
+}
 
 interface IModularWeaponSaleInfo {
     Name: string;
