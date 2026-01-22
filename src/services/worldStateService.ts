@@ -4078,7 +4078,7 @@ export const getNightwaveSyndicateTag = (buildLabel: string | undefined): string
     return undefined;
 };
 
-const nightwaveTagToSeason: Record<string, number> = {
+export const nightwaveTagToSeason: Record<string, number> = {
     RadioLegionIntermission14Syndicate: 16, // Nora's Mix: Dreams of the Dead
     RadioLegionIntermission13Syndicate: 15, // Nora's Mix Vol. 9
     RadioLegionIntermission12Syndicate: 14, // Nora's Mix Vol. 8

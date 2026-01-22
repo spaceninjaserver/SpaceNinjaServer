@@ -114,7 +114,7 @@ export const handlePurchase = async (
     const prePurchaseInventoryChanges: IInventoryChanges = {};
     let seed: bigint | undefined;
     if (purchaseRequest.PurchaseParams.Source == PurchaseSource.Vendor) {
-        let manifest = getVendorManifestByOid(purchaseRequest.PurchaseParams.SourceId!);
+        let manifest = getVendorManifestByOid(purchaseRequest.PurchaseParams.SourceId!, purchaseRequest.buildLabel);
         if (manifest) {
             manifest = applyStandingToVendorManifest(manifest, inventory.Affiliations);
             let ItemId: string | undefined;

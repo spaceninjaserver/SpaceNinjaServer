@@ -8,6 +8,8 @@ import type { IRange, IVendor, IVendorOffer } from "warframe-public-export-plus"
 import { ExportVendors } from "warframe-public-export-plus";
 import { config } from "./configService.ts";
 import type { IAffiliation } from "../types/inventoryTypes/inventoryTypes.ts";
+import { getNightwaveSyndicateTag, nightwaveTagToSeason } from "./worldStateService.ts";
+import { legacyNightwaveVendorManifest } from "../constants/legacyNightwaveVendorManifest.ts";
 
 interface IGeneratableVendorInfo extends Omit<IVendorInfo, "ItemManifest" | "Expiry"> {
     cycleOffset?: number;
@@ -61,10 +63,33 @@ const getCycleDuration = (manifest: IVendor): number => {
     return dur * unixTimesInMs.hour;
 };
 
-export const getVendorManifestByTypeName = (typeName: string, fullStock?: boolean): IVendorManifest | undefined => {
+export const getVendorManifestByTypeName = (
+    typeName: string,
+    fullStock?: boolean,
+    buildLabel?: string
+): IVendorManifest | undefined => {
     for (const vendorInfo of generatableVendors) {
         if (vendorInfo.TypeName == typeName) {
             return generateVendorManifest(vendorInfo, fullStock ?? config.fullyStockedVendors);
+        }
+    }
+    if (typeName.startsWith("/Lotus/Types/Game/VendorManifests/Events/RadioLegion")) {
+        const manifestType = getLegacyNightwaveManifestType(buildLabel);
+        if (manifestType) {
+            const manifest = legacyNightwaveVendorManifest[manifestType];
+            if (typeName != manifestType) {
+                logger.debug(`swapping ${typeName} to ${manifestType} for proper nightwave shop`);
+            }
+            return generateVendorManifest(
+                {
+                    _id: { $oid: getVendorOid(manifestType) },
+                    TypeName: typeName,
+                    RandomSeedType: manifest.randomSeedType,
+                    cycleDuration: getCycleDuration(manifest)
+                },
+                fullStock ?? config.fullyStockedVendors,
+                manifest
+            );
         }
     }
     if (typeName in ExportVendors) {
@@ -82,7 +107,7 @@ export const getVendorManifestByTypeName = (typeName: string, fullStock?: boolea
     return undefined;
 };
 
-export const getVendorManifestByOid = (oid: string): IVendorManifest | undefined => {
+export const getVendorManifestByOid = (oid: string, buildLabel?: string): IVendorManifest | undefined => {
     for (const vendorInfo of generatableVendors) {
         if (vendorInfo._id.$oid == oid) {
             return generateVendorManifest(vendorInfo, config.fullyStockedVendors);
@@ -100,6 +125,25 @@ export const getVendorManifestByOid = (oid: string): IVendorManifest | undefined
                 },
                 config.fullyStockedVendors
             );
+        }
+    }
+    {
+        const manifestType = getLegacyNightwaveManifestType(buildLabel);
+        if (manifestType) {
+            const nightwaveOid = getVendorOid(manifestType);
+            if (nightwaveOid == oid) {
+                const manifest = legacyNightwaveVendorManifest[manifestType];
+                return generateVendorManifest(
+                    {
+                        _id: { $oid: nightwaveOid },
+                        TypeName: manifestType,
+                        RandomSeedType: manifest.randomSeedType,
+                        cycleDuration: getCycleDuration(manifest)
+                    },
+                    config.fullyStockedVendors,
+                    manifest
+                );
+            }
         }
     }
     return undefined;
@@ -188,13 +232,21 @@ const clearVendorCache = (): void => {
 
 const generateVendorManifest = (
     vendorInfo: IGeneratableVendorInfo,
-    fullStock: boolean | undefined
+    fullStock: boolean | undefined,
+    manifest?: IVendor
 ): IVendorManifest => {
     fullStock ??= config.fullyStockedVendors;
     fullStock ??= false;
     if (vendorManifestsUsingFullStock != fullStock) {
         vendorManifestsUsingFullStock = fullStock;
         clearVendorCache();
+    }
+
+    if (
+        vendorInfo.TypeName in vendorManifestCache &&
+        vendorManifestCache[vendorInfo.TypeName].VendorInfo._id != vendorInfo._id
+    ) {
+        delete vendorManifestCache[vendorInfo.TypeName];
     }
 
     if (!(vendorInfo.TypeName in vendorManifestCache)) {
@@ -210,7 +262,7 @@ const generateVendorManifest = (
     }
     const cacheEntry = vendorManifestCache[vendorInfo.TypeName];
     const info = cacheEntry.VendorInfo;
-    const manifest = ExportVendors[vendorInfo.TypeName];
+    if (!manifest) manifest = ExportVendors[vendorInfo.TypeName];
     const cycleDurationRange = getCycleDurationRange(manifest);
     let now = Date.now();
     if (cycleDurationRange && cycleDurationRange.minValue != cycleDurationRange.maxValue) {
@@ -417,6 +469,14 @@ const generateVendorManifest = (
         now += unixTimesInMs.hour;
     }
     return cacheEntry;
+};
+
+const getLegacyNightwaveManifestType = (buildLabel?: string): string | undefined => {
+    const affiliationTag = getNightwaveSyndicateTag(buildLabel);
+    const manifests = Object.keys(legacyNightwaveVendorManifest);
+    if (!affiliationTag) return undefined;
+    const season = nightwaveTagToSeason[affiliationTag];
+    return season >= 0 && season < manifests.length ? manifests[season] : undefined;
 };
 
 if (args.dev) {
