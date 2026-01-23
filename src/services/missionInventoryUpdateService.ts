@@ -85,7 +85,7 @@ import {
 import { config } from "./configService.ts";
 import libraryDailyTasks from "../../static/fixed_responses/libraryDailyTasks.json" with { type: "json" };
 import type { IGoal, ISyndicateJob, ISyndicateMissionInfo } from "../types/worldStateTypes.ts";
-import { fromOid, version_compare } from "../helpers/inventoryHelpers.ts";
+import { fromOid, toObjectId, toOid2, version_compare } from "../helpers/inventoryHelpers.ts";
 import type { TAccountDocument } from "./loginService.ts";
 import type { ITypeCount } from "../types/commonTypes.ts";
 import type { IEquipmentClient } from "../types/equipmentTypes.ts";
@@ -1194,7 +1194,8 @@ export const addMissionRewards = async (
         AffiliationChanges: AffiliationMods,
         InvasionProgress: invasionProgress,
         EndOfMatchUpload: endOfMatchUpload,
-        GoalTag: goalTag
+        GoalTag: goalTag,
+        ChallengeInstanceStates: challengeInstanceStates
     }: IMissionInventoryUpdateRequest,
     firstCompletion: boolean
 ): Promise<AddMissionRewardsReturnType> => {
@@ -1690,6 +1691,26 @@ export const addMissionRewards = async (
             }
         } else {
             logger.debug(`ignoring StrippedItems in intermediate inventory update, deferring until extraction`);
+        }
+    }
+
+    if (challengeInstanceStates) {
+        inventory.ChallengeInstanceStates ??= [];
+        for (const challenge of challengeInstanceStates) {
+            const inventoryState = inventory.ChallengeInstanceStates.find(
+                c => toOid2(c._id, account.BuildLabel) == challenge.id
+            );
+            if (inventoryState) {
+                inventoryState.Progress = challenge.Progress;
+                inventoryState.IsRewardCollected = challenge.IsRewardCollected;
+            } else {
+                inventory.ChallengeInstanceStates.push({
+                    params: challenge.params,
+                    Progress: challenge.Progress,
+                    IsRewardCollected: challenge.IsRewardCollected,
+                    _id: toObjectId(fromOid(challenge.id))
+                });
+            }
         }
     }
 

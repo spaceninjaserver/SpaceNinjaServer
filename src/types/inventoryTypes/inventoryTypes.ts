@@ -137,6 +137,7 @@ export interface IInventoryDatabase
             | "PersonalGoalProgress"
             | "CurrentLoadOutIds"
             | "FocusLoadouts"
+            | "ChallengeInstanceStates"
             | TEquipmentKey
         >,
         InventoryDatabaseEquipment,
@@ -184,6 +185,7 @@ export interface IInventoryDatabase
     PersonalGoalProgress?: IGoalProgressDatabase[];
     MissionRelicRewards?: ITypeCount[];
     FocusLoadouts?: IFocusLoadoutDatabase[];
+    ChallengeInstanceStates?: IChallengeInstanceStateDatabase[];
 }
 
 export interface IQuestKeyDatabase {
@@ -413,7 +415,7 @@ export interface IInventoryClient
     ThemeBackground: string;
     ThemeSounds: string;
     BountyScore?: number;
-    //ChallengeInstanceStates: IChallengeInstanceState[];
+    ChallengeInstanceStates?: IChallengeInstanceStateClient[];
     LoginMilestoneRewards: string[];
     RecentVendorPurchases?: IRecentVendorPurchaseClient[];
     NodeIntrosCompleted: string[];
@@ -518,11 +520,15 @@ export interface IBooster {
     UsesRemaining?: number;
 }
 
-export interface IChallengeInstanceState {
-    id: IOid;
+export interface IChallengeInstanceStateDatabase {
     Progress: number;
     params: IParam[];
     IsRewardCollected: boolean;
+    _id: Types.ObjectId;
+}
+
+export interface IChallengeInstanceStateClient extends Omit<IChallengeInstanceStateDatabase, "_id"> {
+    id: IOidWithLegacySupport;
 }
 
 export interface IParam {

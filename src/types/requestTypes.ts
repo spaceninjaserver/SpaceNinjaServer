@@ -22,7 +22,8 @@ import type {
     IWeaponSkinClient,
     IKubrowPetEggClient,
     INemesisClient,
-    IUpgradeClient
+    IUpgradeClient,
+    IChallengeInstanceStateClient
 } from "./inventoryTypes/inventoryTypes.ts";
 import type { IGroup } from "./loginTypes.ts";
 import type { ILoadOutPresets } from "./saveLoadoutTypes.ts";
@@ -171,6 +172,7 @@ export type IMissionInventoryUpdateRequest = {
         Warframes: string[];
         Weapons: string[];
     };
+    ChallengeInstanceStates?: IChallengeInstanceStateClient[];
 } & {
     [K in TEquipmentKey]?: IEquipmentClient[];
 };
@@ -225,6 +227,13 @@ export interface IRewardInfo extends IBountyRewardInfo {
     ConquestHardModeActive?: number;
     EncounterEnemyLevel?: number;
     missionType?: TMissionType;
+    PvpGame?: boolean;
+    PvpWinner?: boolean;
+    PvpVariantPrize?: boolean;
+    PvpChallengeHadAffector?: boolean;
+    PVPChallengeInstancesCompleted?: {
+        ChallengeInstanceIDs: IOidWithLegacySupport[];
+    };
 }
 
 export type IMissionStatus = "GS_SUCCESS" | "GS_FAILURE" | "GS_DUMPED" | "GS_QUIT" | "GS_INTERRUPTED";

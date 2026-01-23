@@ -96,7 +96,10 @@ import type {
     IDescentLevelReward,
     IDescentCategoryRewardClient,
     IDescentCategoryRewardDatabase,
-    IFocusLoadoutDatabase
+    IFocusLoadoutDatabase,
+    IChallengeInstanceStateDatabase,
+    IChallengeInstanceStateClient,
+    IParam
 } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { equipmentKeys } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IOid, ITypeCount } from "../../types/commonTypes.ts";
@@ -1507,6 +1510,33 @@ const nokkoColonySchema = new Schema<INokkoColony>(
     { _id: false }
 );
 
+const challengeInstanceStateParamSchema = new Schema<IParam>(
+    {
+        n: String,
+        v: String
+    },
+    { _id: false }
+);
+
+const challengeInstanceStateSchema = new Schema<IChallengeInstanceStateDatabase>({
+    Progress: Number,
+    params: [challengeInstanceStateParamSchema],
+    IsRewardCollected: Boolean
+});
+
+challengeInstanceStateSchema.set("toJSON", {
+    virtuals: true,
+    transform(_doc, obj: Record<string, any>) {
+        const db = obj as IChallengeInstanceStateDatabase;
+        const client = obj as IChallengeInstanceStateClient;
+
+        client.id = toOid(db._id);
+
+        delete obj._id;
+        delete obj.__v;
+    }
+});
+
 const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
     {
         accountOwnerId: Schema.Types.ObjectId,
@@ -1896,7 +1926,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         CurrentLoadOutIds: [Schema.Types.Mixed], // should be Types.ObjectId[] but might be IOid[] because of old commits
         RandomUpgradesIdentified: Number,
         BountyScore: Number,
-        //ChallengeInstanceStates: [Schema.Types.Mixed],
+        ChallengeInstanceStates: { type: [challengeInstanceStateSchema], default: undefined },
         RecentVendorPurchases: { type: [recentVendorPurchaseSchema], default: undefined },
         //Robotics: [Schema.Types.Mixed],
         CollectibleSeries: { type: [collectibleEntrySchema], default: undefined },
