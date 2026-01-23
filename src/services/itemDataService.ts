@@ -7,6 +7,7 @@ import type {
     IKey,
     IMissionReward,
     IRecipe,
+    IRegion,
     ISyndicate,
     TReward
 } from "warframe-public-export-plus";
@@ -251,11 +252,12 @@ export const getKeyChainItems = ({ KeyChain, ChainStage }: IKeyChainRequest): st
 export const getLevelKeyRewards = (
     levelKey: string,
     buildLabel: string | undefined
-): { levelKeyRewards?: IMissionReward; levelKeyRewards2?: TReward[] } => {
+): { levelKeyRewards?: IMissionReward; levelKeyRewards2?: TReward[]; levelMission?: Partial<IRegion> } => {
     const key = ExportKeys[levelKey] as IKey | undefined;
 
     const levelKeyRewards = key?.missionReward;
     let levelKeyRewards2 = key?.rewards;
+    const levelMission = key?.mission;
 
     if (!levelKeyRewards && !levelKeyRewards2) {
         logger.warn(
@@ -271,7 +273,8 @@ export const getLevelKeyRewards = (
 
     return {
         levelKeyRewards,
-        levelKeyRewards2
+        levelKeyRewards2,
+        levelMission
     };
 };
 

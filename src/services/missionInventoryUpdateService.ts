@@ -1323,6 +1323,13 @@ export const addMissionRewards = async (
                 });
             }
         }
+        if (fixedLevelRewards.levelMission) {
+            const levelCreditReward = getLevelCreditRewards(fixedLevelRewards.levelMission);
+            if (levelCreditReward) {
+                missionCompletionCredits += levelCreditReward;
+                logger.debug(`levelCreditReward ${levelCreditReward}`);
+            }
+        }
     }
 
     // ignoring tags not in ExportRegions, because it can just be garbage:
@@ -1334,8 +1341,10 @@ export const addMissionRewards = async (
         //node based credit rewards for mission completion
         if (isEligibleForCreditReward(rewardInfo, missions, node)) {
             const levelCreditReward = getLevelCreditRewards(node);
-            missionCompletionCredits += levelCreditReward;
-            logger.debug(`levelCreditReward ${levelCreditReward}`);
+            if (levelCreditReward) {
+                missionCompletionCredits += levelCreditReward;
+                logger.debug(`levelCreditReward ${levelCreditReward}`);
+            }
         }
 
         if (node.missionReward) {
@@ -1791,10 +1800,9 @@ export const addFixedLevelRewards = (
     return missionBonusCredits;
 };
 
-function getLevelCreditRewards(node: IRegion): number {
-    const minEnemyLevel = node.minEnemyLevel;
-
-    return 1000 + (minEnemyLevel - 1) * 100;
+function getLevelCreditRewards(node: Partial<IRegion>): number | undefined {
+    if (node.minEnemyLevel) return 1000 + (node.minEnemyLevel - 1) * 100;
+    return undefined;
 
     //TODO: get dark sektor fixed credit rewards and railjack bonus
 }
