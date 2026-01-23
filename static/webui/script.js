@@ -2964,14 +2964,22 @@ function doAcquireCountItems(category) {
                         ItemCount: count
                     }
                 ])
-            }).done(function () {
-                if (count > 0) {
-                    toast(loc("code_succAdded"));
-                } else {
-                    toast(loc("code_succRemoved"));
-                }
-                if (category != "miscitems") updateInventory();
-            });
+            })
+                .done(function (didAnything) {
+                    if (didAnything) {
+                        if (count > 0) {
+                            toast(loc("code_succAdded"));
+                        } else {
+                            toast(loc("code_succRemoved"));
+                        }
+                    } else {
+                        toast(loc("code_nothingToDo"));
+                    }
+                    if (category != "miscitems") updateInventory();
+                })
+                .fail(r => {
+                    toast(r.responseText);
+                });
         });
     }
 }
