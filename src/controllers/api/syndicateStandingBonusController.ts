@@ -68,7 +68,7 @@ export const syndicateStandingBonusController: RequestHandler = async (req, res)
 
     res.json({
         AffiliationTag: affiliationTag, // Older versions
-        StandingChange: gainedStanding, // Older versions
+        StandingChange: affiliationMods[0].Standing, // Older versions
         InventoryChanges: inventoryChanges, // Newer versions
         AffiliationMods: affiliationMods // Newer versions
     });

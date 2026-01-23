@@ -4,6 +4,7 @@ import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { IMiscItem } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { RequestHandler } from "express";
 import { ExportResources } from "warframe-public-export-plus";
+import type { IAffiliationMods } from "../../types/purchaseTypes.ts";
 
 export const fishmongerController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -30,14 +31,15 @@ export const fishmongerController: RequestHandler = async (req, res) => {
         miscItemChanges.push({ ItemType: fish.ItemType, ItemCount: fish.ItemCount * -1 });
     }
     addMiscItems(inventory, miscItemChanges);
-    if (gainedStanding && syndicateTag) addStanding(inventory, syndicateTag, gainedStanding);
+    const affiliationMods: IAffiliationMods[] = [];
+    if (gainedStanding && syndicateTag) addStanding(inventory, syndicateTag, gainedStanding, affiliationMods);
     await inventory.save();
     res.json({
         InventoryChanges: {
             MiscItems: miscItemChanges
         },
         SyndicateTag: syndicateTag,
-        StandingChange: gainedStanding
+        StandingChange: affiliationMods[0].Standing
     });
 };
 
