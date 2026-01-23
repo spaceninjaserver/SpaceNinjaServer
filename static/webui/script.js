@@ -11,7 +11,8 @@
 let auth_pending = false,
     did_initial_auth = false,
     ws_is_open = false,
-    wsid = 0;
+    wsid = 0,
+    ws_reconnect = false;
 const sendAuth = isRegister => {
     if (ws_is_open && localStorage.getItem("email") && localStorage.getItem("password")) {
         auth_pending = true;
@@ -52,10 +53,7 @@ function openWebSocket() {
             location.port = location.protocol == "https:" ? msg.ports.https : msg.ports.http;
         }
         if ("config_reloaded" in msg) {
-            //window.is_admin = undefined;
-            if (single.getCurrentPath() == "/webui/cheats") {
-                single.loadRoute("/webui/cheats");
-            }
+            refreshServerConfig();
         }
         if ("auth_succ" in msg) {
             auth_pending = false;
@@ -74,6 +72,11 @@ function openWebSocket() {
             if (!did_initial_auth) {
                 did_initial_auth = true;
                 updateInventory();
+            }
+            if (ws_reconnect) {
+                ws_reconnect = false;
+                // Config may have changed during the time we were disconnected.
+                refreshServerConfig();
             }
         }
         if ("auth_fail" in msg) {
@@ -108,10 +111,18 @@ function openWebSocket() {
     };
     window.ws.onclose = function () {
         ws_is_open = false;
+        ws_reconnect = true;
         setTimeout(openWebSocket, 3000);
     };
 }
 openWebSocket();
+
+function refreshServerConfig() {
+    //window.is_admin = undefined;
+    if (single.getCurrentPath() == "/webui/cheats") {
+        single.loadRoute("/webui/cheats");
+    }
+}
 
 function getWebSocket() {
     return new Promise(resolve => {
