@@ -65,7 +65,8 @@ export const accountCheatBooleans = [
     "exceptionalRelicsAlwaysGiveBronzeReward",
     "flawlessRelicsAlwaysGiveSilverReward",
     "radiantRelicsAlwaysGiveGoldReward",
-    "disableDailyTribute"
+    "disableDailyTribute",
+    "tradesDontTouchInventory" // API-only cheat for bot developers
 ] as const;
 export const accountCheatNumbers = [
     "nemesisHenchmenKillsMultiplierGrineer",

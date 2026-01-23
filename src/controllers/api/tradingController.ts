@@ -73,27 +73,30 @@ export const tradingController: RequestHandler = async (req, res) => {
                 getInventory(pendingTrades[tradeId].tradee)
             ]);
 
-            applyOfferToInventory(traderInventory, pendingTrades[tradeId].traderOffer, -1); // Traders gives up their items
-            applyOfferToInventory(traderInventory, pendingTrades[tradeId].tradeeOffer, +1); // to get what tradee offered
-            // and pays tax for it
-            await chargeTax(
-                traderInventory,
-                pendingTrades[tradeId].tradeeOffer,
-                pendingTrades[tradeId].clanTax,
-                req.query.guildId as string | undefined
-            );
-            applyOfferToInventory(tradeeInventory, pendingTrades[tradeId].tradeeOffer, -1); // Conversely, tradee gives up their items
-            applyOfferToInventory(tradeeInventory, pendingTrades[tradeId].traderOffer, +1); // to get what trader offered
-            // and pays tax for it
-            await chargeTax(
-                tradeeInventory,
-                pendingTrades[tradeId].traderOffer,
-                pendingTrades[tradeId].clanTax,
-                req.query.guildId as string | undefined
-            );
-
-            traderInventory.TradesRemaining -= 1;
-            tradeeInventory.TradesRemaining -= 1;
+            if (!traderInventory.tradesDontTouchInventory) {
+                applyOfferToInventory(traderInventory, pendingTrades[tradeId].traderOffer, -1); // Traders gives up their items
+                applyOfferToInventory(traderInventory, pendingTrades[tradeId].tradeeOffer, +1); // to get what tradee offered
+                // and pays tax for it
+                await chargeTax(
+                    traderInventory,
+                    pendingTrades[tradeId].tradeeOffer,
+                    pendingTrades[tradeId].clanTax,
+                    req.query.guildId as string | undefined
+                );
+                traderInventory.TradesRemaining -= 1;
+            }
+            if (!tradeeInventory.tradesDontTouchInventory) {
+                applyOfferToInventory(tradeeInventory, pendingTrades[tradeId].tradeeOffer, -1); // Conversely, tradee gives up their items
+                applyOfferToInventory(tradeeInventory, pendingTrades[tradeId].traderOffer, +1); // to get what trader offered
+                // and pays tax for it
+                await chargeTax(
+                    tradeeInventory,
+                    pendingTrades[tradeId].traderOffer,
+                    pendingTrades[tradeId].clanTax,
+                    req.query.guildId as string | undefined
+                );
+                tradeeInventory.TradesRemaining -= 1;
+            }
 
             await Promise.all([traderInventory.save(), tradeeInventory.save()]);
             delete pendingTrades[tradeId];

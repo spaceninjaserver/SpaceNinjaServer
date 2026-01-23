@@ -1549,15 +1549,17 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         flawlessRelicsAlwaysGiveSilverReward: Boolean,
         radiantRelicsAlwaysGiveGoldReward: Boolean,
         disableDailyTribute: Boolean,
+        tradesDontTouchInventory: Boolean, // API-only cheat for bot developers
+
         nemesisHenchmenKillsMultiplierGrineer: Number,
         nemesisHenchmenKillsMultiplierCorpus: Number,
         nemesisAntivirusGainMultiplier: Number,
         nemesisHintProgressMultiplierGrineer: Number,
         nemesisHintProgressMultiplierCorpus: Number,
         nemesisExtraWeapon: Number,
-        spoofMasteryRank: { type: Number, default: -1 },
-        relicRewardItemCountMultiplier: { type: Number, default: 1 },
-        nightwaveStandingMultiplier: { type: Number, default: 1 },
+        spoofMasteryRank: Number,
+        relicRewardItemCountMultiplier: Number,
+        nightwaveStandingMultiplier: Number,
 
         Created: Date,
 
