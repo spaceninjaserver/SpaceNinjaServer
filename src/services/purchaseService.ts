@@ -21,7 +21,6 @@ import { PurchaseSource } from "../types/purchaseTypes.ts";
 import { logger } from "../utils/logger.ts";
 import { getWorldState } from "./worldStateService.ts";
 import {
-    ExportBoosterPacks,
     ExportBoosters,
     ExportBundles,
     ExportCreditBundles,
@@ -31,7 +30,7 @@ import {
     ExportVendors
 } from "warframe-public-export-plus";
 import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
-import { fromStoreItem, toStoreItem } from "./itemDataService.ts";
+import { fromStoreItem, getBoosterPack, getBundle, getPrice, toStoreItem } from "./itemDataService.ts";
 import { DailyDeal } from "../models/worldStateModel.ts";
 import { fromMongoDate, toMongoDate } from "../helpers/inventoryHelpers.ts";
 import { Guild } from "../models/guildModel.ts";
@@ -200,9 +199,21 @@ export const handlePurchase = async (
         undefined,
         false,
         purchaseRequest.PurchaseParams.UsePremium,
-        seed
+        seed,
+        purchaseRequest.buildLabel
     );
     combineInventoryChanges(purchaseResponse.InventoryChanges, prePurchaseInventoryChanges);
+
+    if (!purchaseRequest.PurchaseParams.ExpectedPrice) {
+        logger.debug(`client didn't provide ExpectedPrice, attempt to get it from PE+`);
+        purchaseRequest.PurchaseParams.ExpectedPrice = getPrice(
+            purchaseRequest.PurchaseParams.StoreItem,
+            purchaseRequest.PurchaseParams.Quantity,
+            purchaseRequest.PurchaseParams.Durability,
+            purchaseRequest.PurchaseParams.UsePremium,
+            purchaseRequest.buildLabel
+        );
+    }
 
     updateCurrency(
         inventory,
@@ -402,13 +413,14 @@ export const handleDailyDealPurchase = async (
     }
 };
 
-export const handleBundleAcqusition = async (
+export const handleBundleAcquisition = async (
     storeItemName: string,
     inventory: TInventoryDatabaseDocument,
     quantity: number = 1,
-    inventoryChanges: IInventoryChanges = {}
+    inventoryChanges: IInventoryChanges = {},
+    buildLabel?: string
 ): Promise<IInventoryChanges> => {
-    const bundle = ExportBundles[storeItemName];
+    const bundle = getBundle(storeItemName, buildLabel)!;
     logger.debug("acquiring bundle", bundle);
     for (const component of bundle.components) {
         combineInventoryChanges(
@@ -419,7 +431,10 @@ export const handleBundleAcqusition = async (
                     inventory,
                     component.purchaseQuantity * quantity,
                     component.durabilityDays,
-                    true
+                    true,
+                    true,
+                    undefined,
+                    buildLabel
                 )
             ).InventoryChanges
         );
@@ -434,14 +449,21 @@ export const handleStoreItemAcquisition = async (
     durabilityDays: number = 3,
     ignorePurchaseQuantity: boolean = false,
     premiumPurchase: boolean = true,
-    seed?: bigint
+    seed?: bigint,
+    buildLabel?: string
 ): Promise<IPurchaseResponse> => {
     let purchaseResponse = {
         InventoryChanges: {}
     };
-    logger.debug(`handling acquision of ${storeItemName}`);
+    logger.debug(`handling acquisition of ${storeItemName}`);
     if (storeItemName in ExportBundles) {
-        await handleBundleAcqusition(storeItemName, inventory, quantity, purchaseResponse.InventoryChanges);
+        await handleBundleAcquisition(
+            storeItemName,
+            inventory,
+            quantity,
+            purchaseResponse.InventoryChanges,
+            buildLabel
+        );
     } else {
         const storeCategory = getStoreItemCategory(storeItemName);
         const internalName = fromStoreItem(storeItemName);
@@ -477,7 +499,8 @@ export const handleStoreItemAcquisition = async (
                     quantity,
                     ignorePurchaseQuantity,
                     premiumPurchase,
-                    seed
+                    seed,
+                    buildLabel
                 );
                 break;
             case "Boosters":
@@ -544,15 +567,17 @@ const handleSlotPurchase = (
 const handleBoosterPackPurchase = async (
     typeName: string,
     inventory: TInventoryDatabaseDocument,
-    quantity: number
+    quantity: number,
+    buildLabel?: string
 ): Promise<IPurchaseResponse> => {
-    const pack = ExportBoosterPacks[typeName];
+    const pack = getBoosterPack(typeName, buildLabel);
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!pack) {
         throw new Error(`unknown booster pack: ${typeName}`);
     }
     const purchaseResponse: IPurchaseResponse = {
         BoosterPackItems: "",
+        Body: "",
         InventoryChanges: {}
     };
     if (quantity < 1) {
@@ -622,15 +647,26 @@ const handleBoosterPackPurchase = async (
                 if (!pack.canGiveDuplicates) {
                     disallowedItems.add(result.Item);
                 }
-                purchaseResponse.BoosterPackItems += toStoreItem(result.Item) + ',{"lvl":0};';
+                const fingerprint = { lvl: 0 };
+                if (result.Item.startsWith("/Lotus/Upgrades/Mods/Fusers/")) {
+                    if (result.Item.endsWith("RareModFuser")) {
+                        fingerprint.lvl = Math.floor(Math.random() * 4) + 2;
+                    } else if (result.Item.endsWith("CommonModFuser") || result.Item.endsWith("UncommonModFuser")) {
+                        fingerprint.lvl = Math.floor(Math.random() * 3) + 1;
+                    }
+                }
+                const stringifiedFingerprint = JSON.stringify(fingerprint);
+                purchaseResponse.BoosterPackItems += toStoreItem(result.Item) + `,${stringifiedFingerprint};`;
                 combineInventoryChanges(
                     purchaseResponse.InventoryChanges,
-                    await addItem(inventory, result.Item, result.Amount)
+                    await addItem(inventory, result.Item, result.Amount, false, undefined, stringifiedFingerprint)
                 );
                 ++roll;
             }
         }
     }
+    if (purchaseResponse.BoosterPackItems)
+        purchaseResponse.Body = purchaseResponse.BoosterPackItems.replace(/[{}"]/g, "").replace(/:/g, "=");
     return purchaseResponse;
 };
 
@@ -657,7 +693,8 @@ const handleTypesPurchase = async (
     quantity: number,
     ignorePurchaseQuantity: boolean,
     premiumPurchase: boolean = true,
-    seed?: bigint
+    seed?: bigint,
+    buildLabel?: string
 ): Promise<IPurchaseResponse> => {
     const typeCategory = getStoreItemTypesCategory(typesName);
     logger.debug(`type category ${typeCategory}`);
@@ -667,7 +704,7 @@ const handleTypesPurchase = async (
                 InventoryChanges: await addItem(inventory, typesName, quantity, premiumPurchase, seed, undefined, true)
             };
         case "BoosterPacks":
-            return handleBoosterPackPurchase(typesName, inventory, quantity);
+            return handleBoosterPackPurchase(typesName, inventory, quantity, buildLabel);
         case "SlotItems":
             return handleSlotPurchase(typesName, inventory, quantity, ignorePurchaseQuantity);
         case "CreditBundles":

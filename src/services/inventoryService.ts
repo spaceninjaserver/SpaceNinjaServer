@@ -72,7 +72,7 @@ import {
     version_compare
 } from "../helpers/inventoryHelpers.ts";
 import { addQuestKey, completeQuest } from "./questService.ts";
-import { handleBundleAcqusition } from "./purchaseService.ts";
+import { handleBundleAcquisition } from "./purchaseService.ts";
 import libraryDailyTasks from "../../static/fixed_responses/libraryDailyTasks.json" with { type: "json" };
 import { generateRewardSeed, getRandomElement, getRandomInt, getRandomWeightedReward, SRng } from "./rngService.ts";
 import type { IMessageCreationTemplate } from "./inboxService.ts";
@@ -476,7 +476,7 @@ export const addItem = async (
 ): Promise<IInventoryChanges> => {
     // Bundles are technically StoreItems but a) they don't have a normal counterpart, and b) they are used in non-StoreItem contexts, e.g. email attachments.
     if (typeName in ExportBundles) {
-        return await handleBundleAcqusition(typeName, inventory, quantity);
+        return await handleBundleAcquisition(typeName, inventory, quantity, {}, buildLabel);
     }
 
     // Strict typing

@@ -16,7 +16,7 @@ import { logger } from "../utils/logger.ts";
 import { ExportKeys, ExportRecipes } from "warframe-public-export-plus";
 import { addFixedLevelRewards } from "./missionInventoryUpdateService.ts";
 import { fromOid } from "../helpers/inventoryHelpers.ts";
-import { handleBundleAcqusition } from "./purchaseService.ts";
+import { handleBundleAcquisition } from "./purchaseService.ts";
 import type { IInventoryChanges } from "../types/purchaseTypes.ts";
 import questCompletionItems from "../../static/fixed_responses/questCompletionRewards.json" with { type: "json" };
 import type { ITypeCount } from "../types/commonTypes.ts";
@@ -304,7 +304,7 @@ const handleQuestCompletion = async (
         }
         if (!syndicate.Initiated) {
             syndicate.Initiated = true;
-            await handleBundleAcqusition("/Lotus/Types/StoreItems/Packages/SanctuaryInitiationKit", inventory);
+            await handleBundleAcquisition("/Lotus/Types/StoreItems/Packages/SanctuaryInitiationKit", inventory);
         }
     } else if (questKey == "/Lotus/Types/Keys/NewWarQuest/NewWarQuestKeyChain" && !isRerun) {
         setupKahlSyndicate(inventory);

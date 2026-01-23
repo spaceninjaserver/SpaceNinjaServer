@@ -108,7 +108,7 @@ import { playedParkourTutorialController } from "../controllers/api/playedParkou
 import { playerSkillsController } from "../controllers/api/playerSkillsController.ts";
 import { postGuildAdvertisementController } from "../controllers/api/postGuildAdvertisementController.ts";
 import { projectionManagerController } from "../controllers/api/projectionManagerController.ts";
-import { purchaseController } from "../controllers/api/purchaseController.ts";
+import { purchaseGetController, purchasePostController } from "../controllers/api/purchaseController.ts";
 import { questControlController } from "../controllers/api/questControlController.ts";
 import { queueDojoComponentDestructionController } from "../controllers/api/queueDojoComponentDestructionController.ts";
 import { redeemPromoCodeController } from "../controllers/api/redeemPromoCodeController.ts";
@@ -224,6 +224,7 @@ apiRouter.get("/marketRecommendations.php", marketRecommendationsController);
 apiRouter.get("/marketSearchRecommendations.php", marketRecommendationsController);
 apiRouter.get("/modularWeaponSale.php", modularWeaponSaleController);
 apiRouter.get("/playedParkourTutorial.php", playedParkourTutorialController);
+apiRouter.get("/purchase.php", purchaseGetController); // U8
 apiRouter.get("/questControl.php", questControlController);
 apiRouter.get("/queueDojoComponentDestruction.php", queueDojoComponentDestructionController);
 apiRouter.get("/removeFriend.php", removeFriendGetController);
@@ -329,7 +330,7 @@ apiRouter.post("/placeDecoInComponent.php", placeDecoInComponentController);
 apiRouter.post("/playerSkills.php", playerSkillsController);
 apiRouter.post("/postGuildAdvertisement.php", postGuildAdvertisementController);
 apiRouter.post("/projectionManager.php", projectionManagerController);
-apiRouter.post("/purchase.php", purchaseController);
+apiRouter.post("/purchase.php", purchasePostController);
 apiRouter.post("/questControl.php", questControlController); // U17
 apiRouter.post("/redeemPromoCode.php", redeemPromoCodeController);
 apiRouter.post("/releasePet.php", releasePetController);

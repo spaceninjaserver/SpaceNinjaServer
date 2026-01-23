@@ -1,5 +1,7 @@
 import type { IKeyChainRequest } from "../types/requestTypes.ts";
 import type {
+    IBoosterPack,
+    IBundle,
     IDefaultUpgrade,
     IInboxMessage,
     IKey,
@@ -25,11 +27,14 @@ import {
     dict_uk,
     dict_zh,
     ExportArcanes,
+    ExportBoosterPacks,
     ExportBoosters,
     ExportBundles,
+    ExportCreditBundles,
     ExportCustoms,
     ExportDojoRecipes,
     ExportDrones,
+    ExportFlavour,
     ExportGear,
     ExportKeys,
     ExportRailjackWeapons,
@@ -373,4 +378,280 @@ export const getProductCategory = (uniqueName: string): string => {
         return ExportWeapons[uniqueName].productCategory;
     }
     throw new Error(`don't know product category of ${uniqueName}`);
+};
+
+export const getBundle = (uniqueName: string, buildLabel: string = ""): IBundle | undefined => {
+    if (buildLabel) {
+        if (
+            uniqueName == "/Lotus/Types/StoreItems/Packages/StalkerPack" &&
+            version_compare(buildLabel, "2024.06.12.18.42") < 0 // < 36.0.0
+        ) {
+            return {
+                name: "/Lotus/Language/Items/StalkerPackName",
+                description: "/Lotus/Language/Items/StalkerPackDesc",
+                icon: "/Lotus/Interface/Icons/StoreIcons/MarketBundles/Weapons/StalkerPack.png",
+                components: [
+                    { typeName: "/Lotus/StoreItems/Weapons/Tenno/Bows/StalkerBow", purchaseQuantity: 1 },
+                    { typeName: "/Lotus/StoreItems/Weapons/Tenno/ThrowingWeapons/StalkerKunai", purchaseQuantity: 1 },
+                    {
+                        typeName: "/Lotus/StoreItems/Weapons/Tenno/Melee/Scythe/StalkerScytheWeapon",
+                        purchaseQuantity: 1
+                    },
+                    {
+                        typeName: "/Lotus/StoreItems/Types/StoreItems/SuitCustomizations/NinjaColourPickerItem",
+                        purchaseQuantity: 1
+                    }
+                ],
+                packageDiscount: 0.059
+            };
+        }
+    }
+
+    return ExportBundles[uniqueName];
+};
+
+export const getBoosterPack = (uniqueName: string, buildLabel: string = ""): IBoosterPack | undefined => {
+    if (
+        version_compare(buildLabel, gameToBuildVersion["18.16.0"]) < 0 &&
+        uniqueName == "/Lotus/Types/BoosterPacks/RandomKey"
+    ) {
+        const boosterPack: IBoosterPack = {
+            name: "/Lotus/Language/Items/RandomKey",
+            description: "/Lotus/Language/Items/RandomKeyDesc",
+            icon: "/Lotus/Interface/Icons/Store/OrokinKey.png",
+            components: [
+                { Item: "/Lotus/Types/Keys/OrokinKeyA", Rarity: "COMMON", Amount: 1 },
+                { Item: "/Lotus/Types/Keys/OrokinKeyB", Rarity: "COMMON", Amount: 1 },
+                { Item: "/Lotus/Types/Keys/OrokinKeyC", Rarity: "UNCOMMON", Amount: 1 },
+                { Item: "/Lotus/Types/Keys/OrokinKeyD", Rarity: "UNCOMMON", Amount: 1 },
+                { Item: "/Lotus/Types/Keys/OrokinKeyE", Rarity: "RARE", Amount: 1 }
+            ],
+            rarityWeightsPerRoll: [
+                { COMMON: 1, UNCOMMON: 0.050000001, RARE: 0.0099999998, LEGENDARY: 0 },
+                { COMMON: 1, UNCOMMON: 0.25, RARE: 0.050000001, LEGENDARY: 0 },
+                { COMMON: 1, UNCOMMON: 0.25, RARE: 0.050000001, LEGENDARY: 0 },
+                { COMMON: 1, UNCOMMON: 0.25, RARE: 0.050000001, LEGENDARY: 0 },
+                { COMMON: 1, UNCOMMON: 0.25, RARE: 0.1, LEGENDARY: 0 }
+            ],
+            canGiveDuplicates: true,
+            platinumCost: 75
+        };
+        if (buildLabel) {
+            if (version_compare(buildLabel, "2013.06.07.23.44") >= 0) {
+                boosterPack.rarityWeightsPerRoll[4] = { COMMON: 0, UNCOMMON: 0, RARE: 1, LEGENDARY: 0 };
+            }
+            if (version_compare(buildLabel, gameToBuildVersion["9.1.2"]) >= 0) {
+                boosterPack.components.push(
+                    { Item: "/Lotus/Types/Keys/OrokinCaptureKeyA", Rarity: "COMMON", Amount: 1 },
+                    { Item: "/Lotus/Types/Keys/OrokinCaptureKeyB", Rarity: "COMMON", Amount: 1 },
+                    { Item: "/Lotus/Types/Keys/OrokinCaptureKeyC", Rarity: "RARE", Amount: 1 },
+                    { Item: "/Lotus/Types/Keys/OrokinMobileDefenseKeyA", Rarity: "COMMON", Amount: 1 },
+                    { Item: "/Lotus/Types/Keys/OrokinMobileDefenseKeyB", Rarity: "UNCOMMON", Amount: 1 },
+                    { Item: "/Lotus/Types/Keys/OrokinMobileDefenseKeyC", Rarity: "RARE", Amount: 1 },
+                    { Item: "/Lotus/Types/Keys/OrokinDefenseKeyA", Rarity: "COMMON", Amount: 1 },
+                    { Item: "/Lotus/Types/Keys/OrokinDefenseKeyB", Rarity: "UNCOMMON", Amount: 1 },
+                    { Item: "/Lotus/Types/Keys/OrokinDefenseKeyC", Rarity: "RARE", Amount: 1 }
+                );
+            }
+            if (version_compare(buildLabel, gameToBuildVersion["10.3.3"]) >= 0) {
+                boosterPack.components.push({
+                    Item: "/Lotus/Types/Keys/OrokinTowerSurvivalT3Key",
+                    Rarity: "UNCOMMON",
+                    Amount: 1
+                });
+            }
+            if (version_compare(buildLabel, gameToBuildVersion["14.0.0"]) >= 0) {
+                boosterPack.components.find(c => c.Item === "/Lotus/Types/Keys/OrokinTowerSurvivalT3Key")!.Rarity =
+                    "RARE";
+                boosterPack.components.push(
+                    { Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerCaptureTier4Key", Rarity: "RARE", Amount: 1 },
+                    { Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerDefenseTier4Key", Rarity: "RARE", Amount: 1 },
+                    {
+                        Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerExterminateTier4Key",
+                        Rarity: "RARE",
+                        Amount: 1
+                    },
+                    {
+                        Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerInterceptionTier4Key",
+                        Rarity: "RARE",
+                        Amount: 1
+                    },
+                    {
+                        Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerMobileDefenseTier4Key",
+                        Rarity: "RARE",
+                        Amount: 1
+                    },
+                    { Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerSurvivalTier4Key", Rarity: "RARE", Amount: 1 }
+                );
+            }
+            if (version_compare(buildLabel, gameToBuildVersion["15.0.6"]) >= 0) {
+                boosterPack.components.push(
+                    {
+                        Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerSabotageTier1Key",
+                        Rarity: "COMMON",
+                        Amount: 1
+                    },
+                    {
+                        Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerSabotageTier2Key",
+                        Rarity: "UNCOMMON",
+                        Amount: 1
+                    },
+                    {
+                        Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerSabotageTier3Key",
+                        Rarity: "RARE",
+                        Amount: 1
+                    },
+                    { Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerSabotageTier4Key", Rarity: "RARE", Amount: 1 }
+                );
+            }
+        }
+        return boosterPack;
+    }
+    if (version_compare(buildLabel, gameToBuildVersion["18.18.0"]) < 0) {
+        if (uniqueName == "/Lotus/Types/BoosterPacks/CommonFusionPack") {
+            return {
+                name: "/Lotus/Language/Items/CommonFusionPack",
+                description: "/Lotus/Language/Items/CommonFusionPackDesc",
+                icon: "/Lotus/Interface/Icons/Store/FusionCorePackBronze.png",
+                components: [
+                    { Item: "/Lotus/Upgrades/Mods/Fusers/RareModFuser", Rarity: "RARE", Amount: 1 },
+                    { Item: "/Lotus/Upgrades/Mods/Fusers/UncommonModFuser", Rarity: "UNCOMMON", Amount: 1 },
+                    { Item: "/Lotus/Upgrades/Mods/Fusers/CommonModFuser", Rarity: "COMMON", Amount: 1 }
+                ],
+                rarityWeightsPerRoll: [
+                    { COMMON: 0.60000002, UNCOMMON: 0.40000001, RARE: 0, LEGENDARY: 0 },
+                    { COMMON: 0.60000002, UNCOMMON: 0.40000001, RARE: 0, LEGENDARY: 0 },
+                    { COMMON: 0.5, UNCOMMON: 0.30000001, RARE: 0.2, LEGENDARY: 0 }
+                ],
+                canGiveDuplicates: true,
+                platinumCost: 55
+            };
+        }
+        if (uniqueName == "/Lotus/Types/BoosterPacks/PremiumUncommonFusionPack") {
+            return {
+                name: "/Lotus/Language/Items/PremiumUncommonFusionPack",
+                description: "/Lotus/Language/Items/PremiumUncommonFusionPackDesc",
+                icon: "/Lotus/Interface/Icons/Store/FusionCorePackSilver.png",
+                components: [
+                    { Item: "/Lotus/Upgrades/Mods/Fusers/RareModFuser", Rarity: "RARE", Amount: 1 },
+                    { Item: "/Lotus/Upgrades/Mods/Fusers/UncommonModFuser", Rarity: "UNCOMMON", Amount: 1 },
+                    { Item: "/Lotus/Upgrades/Mods/Fusers/CommonModFuser", Rarity: "COMMON", Amount: 1 }
+                ],
+                rarityWeightsPerRoll: [
+                    { COMMON: 0, UNCOMMON: 1, RARE: 0, LEGENDARY: 0 },
+                    { COMMON: 0.5, UNCOMMON: 0.30000001, RARE: 0.2, LEGENDARY: 0 },
+                    { COMMON: 0.5, UNCOMMON: 0.30000001, RARE: 0.2, LEGENDARY: 0 }
+                ],
+                canGiveDuplicates: true,
+                platinumCost: 70
+            };
+        }
+        if (uniqueName == "/Lotus/Types/BoosterPacks/PremiumRareFusionPack") {
+            return {
+                name: "/Lotus/Language/Items/PremiumRareFusionPack",
+                description: "/Lotus/Language/Items/PremiumRareFusionPackDesc",
+                icon: "/Lotus/Interface/Icons/Store/FusionCorePackGold.png",
+                components: [
+                    { Item: "/Lotus/Upgrades/Mods/Fusers/CommonModFuser", Rarity: "COMMON", Amount: 1 },
+                    { Item: "/Lotus/Upgrades/Mods/Fusers/UncommonModFuser", Rarity: "UNCOMMON", Amount: 1 },
+                    { Item: "/Lotus/Upgrades/Mods/Fusers/RareModFuser", Rarity: "RARE", Amount: 1 }
+                ],
+                rarityWeightsPerRoll: [
+                    { COMMON: 0.5, UNCOMMON: 0.30000001, RARE: 0.2, LEGENDARY: 0 },
+                    { COMMON: 0.5, UNCOMMON: 0.30000001, RARE: 0.2, LEGENDARY: 0 },
+                    { COMMON: 0, UNCOMMON: 0, RARE: 1, LEGENDARY: 0 }
+                ],
+                canGiveDuplicates: true,
+                platinumCost: 80
+            };
+        }
+    }
+
+    return ExportBoosterPacks[uniqueName];
+};
+
+export const getPrice = (
+    storeItemName: string,
+    quantity: number = 1,
+    durability: number = 0,
+    usePremium: boolean,
+    buildLabel: string
+): number => {
+    let price: number | undefined;
+    const isBundle = storeItemName in ExportBundles;
+    const isBooster = storeItemName in ExportBoosters;
+    if (isBooster) {
+        price = 40 * (durability + 1);
+    } else if (isBundle) {
+        const bundle = getBundle(storeItemName, buildLabel)!;
+        if (usePremium && bundle.platinumCost) {
+            price = ExportBundles[storeItemName].platinumCost;
+        } else if (!usePremium && bundle.creditsCost) {
+            price = ExportBundles[storeItemName].creditsCost;
+        } else {
+            let sum = 0;
+            for (const component of bundle.components) {
+                sum += getPrice(
+                    component.typeName,
+                    component.purchaseQuantity,
+                    [3, 7, 30, 90].indexOf(component.durabilityDays ?? 3),
+                    usePremium,
+                    buildLabel
+                );
+            }
+            const discount = typeof bundle.packageDiscount === "number" ? bundle.packageDiscount : 0.25;
+            price = Math.round(sum * (1 - discount));
+        }
+    } else {
+        const internalName = fromStoreItem(storeItemName);
+        const boosterPack = getBoosterPack(fromStoreItem(storeItemName), buildLabel);
+        const isBoosterPack = boosterPack !== undefined;
+        if (isBoosterPack) {
+            if (usePremium) price = boosterPack.platinumCost;
+        } else {
+            const categories = [
+                ExportBundles,
+                ExportCreditBundles,
+                ExportCustoms,
+                ExportFlavour,
+                ExportGear,
+                ExportRecipes,
+                ExportResources,
+                ExportSentinels,
+                ExportWarframes,
+                ExportWeapons
+            ];
+            const category = categories.find(c => internalName in c);
+            if (category) {
+                const item = category[internalName];
+                if (usePremium && "platinumCost" in item) {
+                    price = item.platinumCost;
+                } else if (!usePremium && "creditsCost" in item) {
+                    price = item.creditsCost;
+                }
+            }
+
+            if (usePremium) {
+                if (version_compare(buildLabel, gameToBuildVersion["18.16.0"]) < 0) {
+                    if (internalName == "/Lotus/Powersuits/Mag/Mag") {
+                        price = ExportWarframes["/Lotus/Powersuits/Loki/Loki"].platinumCost;
+                    } else if (internalName == "/Lotus/Powersuits/Loki/Loki") {
+                        price = ExportWarframes["/Lotus/Powersuits/Mag/Mag"].platinumCost;
+                    }
+                }
+                if (version_compare(buildLabel, gameToBuildVersion["18.0.2"]) < 0) {
+                    if (internalName == "/Lotus/Upgrades/Skins/Dragon/DragonAltHelmet") price = 40;
+                }
+            } else {
+                // I'm not sure when they stopped selling it
+                if (storeItemName == "/Lotus/StoreItems/Types/Restoratives/Cipher") price = 250;
+            }
+        }
+    }
+
+    if (price == undefined) {
+        throw new Error(`no price found for ${storeItemName}`);
+    }
+
+    return price * quantity;
 };

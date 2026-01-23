@@ -53,12 +53,13 @@ export interface IPurchaseParams {
     Source: PurchaseSource;
     SourceId?: string; // VoidTrader, Vendor, PrimeVaultTrader
     StoreItem: string;
-    StorePage: string;
-    SearchTerm: string;
-    CurrentLocation: string;
+    StorePage?: string;
+    SearchTerm?: string;
+    CurrentLocation?: string;
     Quantity: number;
     UsePremium: boolean;
-    ExpectedPrice: number;
+    ExpectedPrice?: number;
+    Durability?: number;
     SyndicateTag?: string; // SyndicateFavor
     UseFreeFavor?: boolean; // SyndicateFavor
     ExtraPurchaseInfoJson?: string; // Vendor
@@ -120,6 +121,7 @@ export interface IPurchaseResponse {
     Standing?: IAffiliationMods[];
     FreeFavorsUsed?: IAffiliationMods[];
     BoosterPackItems?: string;
+    Body?: string;
     DailyDealUsed?: string;
 }
 
