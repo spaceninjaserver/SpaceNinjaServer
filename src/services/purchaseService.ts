@@ -129,12 +129,22 @@ export const handlePurchase = async (
             }
             if (!inventory.dontSubtractPurchaseCreditCost) {
                 if (offer.RegularPrice) {
-                    updateCurrency(inventory, offer.RegularPrice[0], false, prePurchaseInventoryChanges);
+                    updateCurrency(
+                        inventory,
+                        offer.RegularPrice[0] * purchaseRequest.PurchaseParams.Quantity,
+                        false,
+                        prePurchaseInventoryChanges
+                    );
                 }
             }
             if (!inventory.dontSubtractPurchasePlatinumCost) {
                 if (offer.PremiumPrice) {
-                    updateCurrency(inventory, offer.PremiumPrice[0], true, prePurchaseInventoryChanges);
+                    updateCurrency(
+                        inventory,
+                        offer.PremiumPrice[0] * purchaseRequest.PurchaseParams.Quantity,
+                        true,
+                        prePurchaseInventoryChanges
+                    );
                 }
             }
             if (
