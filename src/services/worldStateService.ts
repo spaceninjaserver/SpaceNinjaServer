@@ -4055,6 +4055,9 @@ export const getNightwaveSyndicateTag = (buildLabel: string | undefined): string
         if (config.worldState.nightwaveOverride in nightwaveTagToSeason) {
             return config.worldState.nightwaveOverride;
         }
+        if (config.worldState.nightwaveOverride == "disable") {
+            return undefined;
+        }
         logger.warn(`ignoring invalid config value for worldState.nightwaveOverride`, {
             value: config.worldState.nightwaveOverride,
             valid_values: Object.keys(nightwaveTagToSeason)

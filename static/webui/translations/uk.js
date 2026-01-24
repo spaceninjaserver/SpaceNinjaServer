@@ -363,6 +363,7 @@ dict = {
     worldState_RadioLegion2Syndicate: `Емісар`,
     worldState_RadioLegionIntermissionSyndicate: `Антракт I`,
     worldState_RadioLegionSyndicate: `Вовк із Сатурна-6`,
+    worldState_nightwaveOff: `[UNTRANSLATED] Disable Nightwave`,
     worldState_nightwavePhaseOverride: `[UNTRANSLATED] Nightwave Phase Override`,
     worldState_fissures: `Прориви порожнечі`,
     normal: `Стандартні`,
