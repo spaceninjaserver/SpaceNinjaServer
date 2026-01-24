@@ -1,10 +1,12 @@
 import { ExportRegions, ExportWarframes } from "warframe-public-export-plus";
-import type { IInfNode, TNemesisFaction } from "../types/inventoryTypes/inventoryTypes.ts";
+import type { IInfNode, INemesisDatabase, TNemesisFaction } from "../types/inventoryTypes/inventoryTypes.ts";
 import { generateRewardSeed, getRewardAtPercentage, SRng } from "../services/rngService.ts";
 import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
 import type { IOid } from "../types/commonTypes.ts";
 import { isArchwingMission } from "../services/worldStateService.ts";
 import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
+import type { INemesisTaxInfo } from "../types/missionTypes.ts";
+import { lerp } from "./general.ts";
 
 type TInnateDamageTag =
     | "InnateElectricityDamage"
@@ -490,4 +492,20 @@ export const getInfestedLichItemRewards = (fp: bigint): string[] => {
     rng.randomFloat(); // unused afaict
     const rotBReward = getRewardAtPercentage(infestedLichRotB, rng.randomFloat())!.type;
     return [rotAReward, rotBReward];
+};
+
+export const getNemesisTaxInfo = (nemesis: INemesisDatabase): INemesisTaxInfo | undefined => {
+    if (nemesis.Faction == "FC_GRINEER") {
+        return {
+            TaxRate: nemesis.InfNodes.length * 0.007,
+            TaxCreditsOnly: false
+        };
+    }
+    if (nemesis.Faction == "FC_CORPUS") {
+        return {
+            TaxRate: lerp(0.5, 0.95, Math.min(nemesis.InfNodes.length / 10, 1)),
+            TaxCreditsOnly: true
+        };
+    }
+    return undefined;
 };

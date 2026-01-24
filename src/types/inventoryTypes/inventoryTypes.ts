@@ -142,7 +142,13 @@ export interface IInventoryDatabase
         >,
         InventoryDatabaseEquipment,
         IAccountCheats {
+    // SNS-specific fields for server-side tracking
     accountOwnerId: Types.ObjectId;
+    MissionRelicRewards?: ITypeCount[];
+    HarvesterPoints?: number;
+    DeathSquadPoints?: number;
+    NemesisTaxedCredits?: number;
+
     Created: Date;
     CurrentLoadOutIds: Types.ObjectId[] | IOid[]; // should be Types.ObjectId[] but might be IOid[] because of old commits
     TrainingDate: Date;
@@ -183,7 +189,6 @@ export interface IInventoryDatabase
     EndlessXP?: IEndlessXpProgressDatabase[];
     DescentRewards?: IDescentCategoryRewardDatabase[];
     PersonalGoalProgress?: IGoalProgressDatabase[];
-    MissionRelicRewards?: ITypeCount[];
     FocusLoadouts?: IFocusLoadoutDatabase[];
     ChallengeInstanceStates?: IChallengeInstanceStateDatabase[];
 }
@@ -463,8 +468,6 @@ export interface IInventoryClient
     PendingCoupon?: IPendingCouponClient;
     Harvestable?: boolean;
     DeathSquadable?: boolean;
-    HarvesterPoints?: number;
-    DeathSquadPoints?: number;
     EndlessXP?: IEndlessXpProgressClient[];
     DescentRewards?: IDescentCategoryRewardClient[];
     DialogueHistory?: IDialogueHistoryClient;

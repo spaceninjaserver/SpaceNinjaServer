@@ -70,3 +70,7 @@ export const isObject = (objectCandidate: unknown): objectCandidate is Record<st
         !Array.isArray(objectCandidate)
     );
 };
+
+export const lerp = (v0: number, v1: number, t: number): number => {
+    return v0 + t * (v1 - v0);
+};

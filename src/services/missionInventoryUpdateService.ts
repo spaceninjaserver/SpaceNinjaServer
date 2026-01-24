@@ -56,7 +56,7 @@ import { fromStoreItem, getLevelKeyRewards, isStoreItem, toStoreItem } from "./i
 import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
 import { getEntriesUnsafe } from "../utils/ts-utils.ts";
 import { handleStoreItemAcquisition } from "./purchaseService.ts";
-import type { IMissionCredits, IMissionReward } from "../types/missionTypes.ts";
+import type { IMissionCredits, IMissionReward, INemesisTaxInfo, IRecoveredItemInfo } from "../types/missionTypes.ts";
 import { crackRelic } from "../helpers/relicHelper.ts";
 import type { IMessageCreationTemplate } from "./inboxService.ts";
 import { createMessage } from "./inboxService.ts";
@@ -69,7 +69,8 @@ import {
     getInfNodes,
     getKillTokenRewardCount,
     getNemesisManifest,
-    getNemesisPasscode
+    getNemesisPasscode,
+    getNemesisTaxInfo
 } from "../helpers/nemesisHelpers.ts";
 import { Loadout } from "../models/inventoryModels/loadoutModel.ts";
 import {
@@ -1026,6 +1027,8 @@ interface AddMissionRewardsReturnType {
     AffiliationMods: IAffiliationMods[];
     SyndicateXPItemReward?: number;
     ConquestCompletedMissionsCount?: number;
+    NemesisTaxInfo?: INemesisTaxInfo;
+    RecoveredItemInfo?: IRecoveredItemInfo;
 }
 
 interface IConquestReward {
@@ -1189,6 +1192,7 @@ export const addMissionRewards = async (
     {
         wagerTier: wagerTier,
         Nemesis: nemesis,
+        NemesisKillConvert: NemesisKillConvert,
         RewardInfo: rewardInfo,
         LevelKeyName: levelKeyName,
         Missions: missions,
@@ -1467,12 +1471,11 @@ export const addMissionRewards = async (
         }
     }
 
+    let nodeControlledByNemesis = false;
     if (inventory.Nemesis) {
-        if (
-            nemesis ||
-            (inventory.Nemesis.Faction == "FC_INFESTATION" &&
-                inventory.Nemesis.InfNodes.find(obj => obj.Node == rewardInfo.node))
-        ) {
+        nodeControlledByNemesis = inventory.Nemesis.InfNodes.some(obj => obj.Node == rewardInfo.node);
+
+        if (nemesis || (inventory.Nemesis.Faction == "FC_INFESTATION" && nodeControlledByNemesis)) {
             inventoryChanges.Nemesis ??= {};
             const nodeIndex = inventory.Nemesis.InfNodes.findIndex(obj => obj.Node === rewardInfo.node);
             if (nodeIndex !== -1) inventory.Nemesis.InfNodes.splice(nodeIndex, 1);
@@ -1624,6 +1627,37 @@ export const addMissionRewards = async (
         rngRewardCredits: inventoryChanges.RegularCredits ?? 0
     });
 
+    const NemesisTaxInfo: INemesisTaxInfo | undefined = nodeControlledByNemesis
+        ? getNemesisTaxInfo(inventory.Nemesis!)
+        : undefined;
+    if (NemesisTaxInfo) {
+        const taxedCredits = Math.round(credits.TotalCredits[0] * NemesisTaxInfo.TaxRate);
+        NemesisTaxInfo.TaxedCredits = taxedCredits;
+        inventory.RegularCredits -= taxedCredits;
+        inventoryChanges.RegularCredits ??= 0;
+        inventoryChanges.RegularCredits -= taxedCredits;
+        credits.TotalCredits[1] -= taxedCredits;
+        inventory.NemesisTaxedCredits ??= 0;
+        inventory.NemesisTaxedCredits += taxedCredits;
+    }
+
+    const RecoveredItemInfo: IRecoveredItemInfo | undefined = NemesisKillConvert
+        ? { RecoveredMiscItems: [] }
+        : undefined;
+    if (RecoveredItemInfo) {
+        if (inventory.NemesisTaxedCredits) {
+            RecoveredItemInfo.RecoveredCredits = inventory.NemesisTaxedCredits;
+            inventory.RegularCredits += inventory.NemesisTaxedCredits;
+            inventoryChanges.RegularCredits ??= 0;
+            inventoryChanges.RegularCredits += inventory.NemesisTaxedCredits;
+            credits.TotalCredits[0] += inventory.NemesisTaxedCredits;
+            credits.TotalCredits[1] += inventory.NemesisTaxedCredits;
+            credits.CreditsBonus[0] += inventory.NemesisTaxedCredits;
+            credits.CreditsBonus[1] += inventory.NemesisTaxedCredits;
+            inventory.NemesisTaxedCredits = undefined;
+        }
+    }
+
     if (strippedItems) {
         if (endOfMatchUpload) {
             for (const si of strippedItems) {
@@ -1725,7 +1759,9 @@ export const addMissionRewards = async (
         credits,
         AffiliationMods,
         SyndicateXPItemReward,
-        ConquestCompletedMissionsCount
+        ConquestCompletedMissionsCount,
+        NemesisTaxInfo,
+        RecoveredItemInfo
     };
 };
 

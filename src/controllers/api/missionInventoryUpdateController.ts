@@ -97,7 +97,9 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         credits,
         AffiliationMods,
         SyndicateXPItemReward,
-        ConquestCompletedMissionsCount
+        ConquestCompletedMissionsCount,
+        NemesisTaxInfo,
+        RecoveredItemInfo
     } = await addMissionRewards(account, inventory, missionReport, firstCompletion);
     handleConservation(inventory, missionReport, AffiliationMods); // Conservation reports have GS_SUCCESS
 
@@ -115,7 +117,9 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         //FusionPoints: inventoryChanges?.FusionPoints, // This in combination with InventoryJson or InventoryChanges seems to just double the number of endo shown, so unsure when this is needed.
         SyndicateXPItemReward,
         AffiliationMods,
-        ConquestCompletedMissionsCount
+        ConquestCompletedMissionsCount,
+        NemesisTaxInfo,
+        RecoveredItemInfo
     };
     if (
         missionReport.BMI ||

@@ -1879,6 +1879,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         Nemesis: nemesisSchema,
         NemesisHistory: { type: [nemesisSchema], default: undefined },
         LastNemesisAllySpawnTime: { type: Date, default: undefined },
+        NemesisTaxedCredits: Number,
 
         //TradingRulesConfirmed,ShowFriendInvNotifications(Option->Social)
         Settings: settingsSchema,
@@ -1990,6 +1991,7 @@ inventorySchema.set("toJSON", {
         delete returnedObject.MissionRelicRewards;
         delete returnedObject.HarvesterPoints;
         delete returnedObject.DeathSquadPoints;
+        delete returnedObject.NemesisTaxedCredits;
 
         const inventoryDatabase = returnedObject as Partial<IInventoryDatabase>;
         const inventoryResponse = returnedObject as IInventoryClient;
