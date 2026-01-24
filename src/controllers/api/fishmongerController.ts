@@ -39,7 +39,7 @@ export const fishmongerController: RequestHandler = async (req, res) => {
             MiscItems: miscItemChanges
         },
         SyndicateTag: syndicateTag,
-        StandingChange: affiliationMods[0].Standing
+        StandingChange: affiliationMods[0]?.Standing ?? 0
     });
 };
 
