@@ -750,10 +750,31 @@ fetchItemList();
 
 const accountCheats = document.querySelectorAll("#account-cheats input[id]");
 
+let inventory_data;
+// Assumes that caller revalidates authz
+function getInventoryData() {
+    return new Promise((resolve, reject) => {
+        if (inventory_data) {
+            resolve(inventory_data);
+        } else {
+            $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1&ignoreBuildLabel=1")
+                .done(data => {
+                    inventory_data = data;
+                    resolve(inventory_data);
+                })
+                .fail(reject);
+        }
+    });
+}
+
 // Assumes that caller revalidates authz
 function updateInventory() {
-    const req = $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1&ignoreBuildLabel=1");
-    req.done(data => {
+    inventory_data = undefined;
+    translateInventoryDataToDom();
+}
+
+function translateInventoryDataToDom() {
+    getInventoryData().then(data => {
         window.itemListPromise.then(itemMap => {
             window.didInitialInventoryUpdate = true;
             window.guildId = data?.GuildId?.$oid;
@@ -2696,8 +2717,7 @@ function addMissingEvolutionProgress() {
 
 function maxRankAllEvolutions() {
     revalidateAuthz().then(() => {
-        const req = $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1&ignoreBuildLabel=1");
-        req.done(data => {
+        getInventoryData().then(data => {
             const requests = [];
 
             data.EvolutionProgress.forEach(item => {
@@ -2722,8 +2742,7 @@ function maxRankAllEvolutions() {
 
 function maxRankAllEquipment(categories) {
     revalidateAuthz().then(() => {
-        const req = $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1&ignoreBuildLabel=1");
-        req.done(data => {
+        getInventoryData().then(data => {
             window.itemListPromise.then(itemMap => {
                 const batchData = {};
 
@@ -3291,35 +3310,33 @@ single.getRoute("/webui/cheats").on("beforeload", function () {
 
 function doUnlockAllFocusSchools() {
     revalidateAuthz().then(() => {
-        $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1&ignoreBuildLabel=1").done(
-            async data => {
-                const missingFocusUpgrades = {
-                    "/Lotus/Upgrades/Focus/Attack/AttackFocusAbility": true,
-                    "/Lotus/Upgrades/Focus/Tactic/TacticFocusAbility": true,
-                    "/Lotus/Upgrades/Focus/Ward/WardFocusAbility": true,
-                    "/Lotus/Upgrades/Focus/Defense/DefenseFocusAbility": true,
-                    "/Lotus/Upgrades/Focus/Power/PowerFocusAbility": true
-                };
-                if (data.FocusUpgrades) {
-                    for (const focusUpgrade of data.FocusUpgrades) {
-                        if (focusUpgrade.ItemType in missingFocusUpgrades) {
-                            delete missingFocusUpgrades[focusUpgrade.ItemType];
-                        }
-                    }
-                }
-                for (const upgradeType of Object.keys(missingFocusUpgrades)) {
-                    await unlockFocusSchool(upgradeType);
-                }
-                if (Object.keys(missingFocusUpgrades).length == 0) {
-                    toast(loc("code_focusAllUnlocked"));
-                } else {
-                    toast(loc("code_focusUnlocked").split("|COUNT|").join(Object.keys(missingFocusUpgrades).length));
-                    if (ws_is_open) {
-                        window.ws.send(JSON.stringify({ sync_inventory: true }));
+        getInventoryData().then(async data => {
+            const missingFocusUpgrades = {
+                "/Lotus/Upgrades/Focus/Attack/AttackFocusAbility": true,
+                "/Lotus/Upgrades/Focus/Tactic/TacticFocusAbility": true,
+                "/Lotus/Upgrades/Focus/Ward/WardFocusAbility": true,
+                "/Lotus/Upgrades/Focus/Defense/DefenseFocusAbility": true,
+                "/Lotus/Upgrades/Focus/Power/PowerFocusAbility": true
+            };
+            if (data.FocusUpgrades) {
+                for (const focusUpgrade of data.FocusUpgrades) {
+                    if (focusUpgrade.ItemType in missingFocusUpgrades) {
+                        delete missingFocusUpgrades[focusUpgrade.ItemType];
                     }
                 }
             }
-        );
+            for (const upgradeType of Object.keys(missingFocusUpgrades)) {
+                await unlockFocusSchool(upgradeType);
+            }
+            if (Object.keys(missingFocusUpgrades).length == 0) {
+                toast(loc("code_focusAllUnlocked"));
+            } else {
+                toast(loc("code_focusUnlocked").split("|COUNT|").join(Object.keys(missingFocusUpgrades).length));
+                if (ws_is_open) {
+                    window.ws.send(JSON.stringify({ sync_inventory: true }));
+                }
+            }
+        });
     });
 }
 
@@ -3445,8 +3462,7 @@ function doAddAllMods() {
     modsAll.delete("/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser");
 
     revalidateAuthz().then(() => {
-        const req = $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1&ignoreBuildLabel=1");
-        req.done(data => {
+        getInventoryData().then(data => {
             for (const modOwned of data.RawUpgrades) {
                 if ((modOwned.ItemCount ?? 1) > 0) {
                     modsAll.delete(modOwned.ItemType);
@@ -3477,8 +3493,7 @@ function doAddAllMods() {
 
 function doRemoveUnrankedMods() {
     revalidateAuthz().then(() => {
-        const req = $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1&ignoreBuildLabel=1");
-        req.done(inventory => {
+        getInventoryData().then(data => {
             window.itemListPromise.then(itemMap => {
                 $.post({
                     url: "/api/sell.php?" + window.authz,
@@ -3559,7 +3574,7 @@ single.getRoute("#guild-route").on("beforeload", function () {
     });
     $("#guild-route > .row").addClass("d-none");
     if (window.didInitialInventoryUpdate) {
-        updateInventory();
+        translateInventoryDataToDom();
     }
 });
 
