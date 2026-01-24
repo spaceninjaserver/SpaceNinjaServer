@@ -105,6 +105,11 @@ const getRotations = (rewardInfo: IRewardInfo, tierOverride?: number): number[] 
         return rotations;
     }
 
+    // For isleweaver, simply roll A & B. (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/3182)
+    if (rewardInfo.T == 17 || rewardInfo.T == 19) {
+        return [0, 1];
+    }
+
     const region = ExportRegions[rewardInfo.node] as IRegion | undefined;
     const missionType: TMissionType | undefined = region?.missionType;
 
