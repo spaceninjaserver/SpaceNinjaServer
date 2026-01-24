@@ -70,11 +70,11 @@ interface IWsMsgFromClient {
     sync_inventory?: boolean;
 }
 
-export interface IWsMsgToClient {
-    // common
+export interface IWsMsgToClientCommon {
     wsid?: number;
+}
 
-    // to webui
+export interface IWsMsgToClientWebui {
     reload?: boolean;
     ports?: {
         http: number | undefined;
@@ -93,12 +93,16 @@ export interface IWsMsgToClient {
     update_inventory?: boolean;
     logged_out?: boolean;
     have_game_ws?: boolean;
+}
 
-    // to game/bootstrapper (https://openwf.io/bootstrapper-manual)
+// specific to the bootstrapper (https://openwf.io/bootstrapper-manual)
+export interface IWsMsgToClientGame {
     sync_inventory?: boolean;
     sync_world_state?: boolean;
     tunables?: ITunables;
 }
+
+export type IWsMsgToClient = IWsMsgToClientCommon | IWsMsgToClientWebui | IWsMsgToClientGame;
 
 const wsOnConnect = (ws: WebSocket, req: http.IncomingMessage): void => {
     if (req.url == "/custom/selftest") {
@@ -261,7 +265,7 @@ export const sendWsBroadcastTo = (accountId: string, data: IWsMsgToClient): void
     });
 };
 
-export const sendWsBroadcastToGame = (accountId: string, data: IWsMsgToClient): void => {
+export const sendWsBroadcastToGame = (accountId: string, data: IWsMsgToClientGame): void => {
     const msg = JSON.stringify(data);
     forEachWsClient(client => {
         if (client.isGame && client.accountId == accountId) {
@@ -279,7 +283,7 @@ export const sendWsBroadcastEx = (data: IWsMsgToClient, accountId?: string, excl
     });
 };
 
-export const sendWsBroadcastToWebui = (data: IWsMsgToClient, accountId?: string, excludeWsid?: number): void => {
+export const sendWsBroadcastToWebui = (data: IWsMsgToClientWebui, accountId?: string, excludeWsid?: number): void => {
     const msg = JSON.stringify(data);
     forEachWsClient(client => {
         if (!client.isGame && (!accountId || client.accountId == accountId) && client.id != excludeWsid) {

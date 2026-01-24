@@ -3368,8 +3368,13 @@ document.querySelectorAll("#account-cheats input[type=checkbox]").forEach(elm =>
                     key: elm.id,
                     value: value
                 })
-            }).done(() => {
+            }).done(res => {
                 elm.checked = value;
+                if (res == "retroactivable") {
+                    if (window.confirm(loc("cheats_retroactivePrompt"))) {
+                        $.get("/custom/retroactivelyApplyCheat?" + window.authz + "&cheat=" + elm.id);
+                    }
+                }
             });
         });
     };
@@ -4121,36 +4126,6 @@ const importSamples = {
             Heirloom: true
         },
         Counselor: true
-    },
-    removeAlertCompletions: {
-        CompletedAlerts: [],
-        PeriodicMissionCompletions: []
-    },
-    removeSyndicateMissionCompletions: {
-        CompletedSyndicates: []
-    },
-    removeMasteryRankUpCooldown: {
-        TrainingDate: {
-            $date: {
-                $numberLong: "0"
-            }
-        }
-    },
-    removeVendorPurchaseLimits: {
-        RecentVendorPurchases: [],
-        UsedDailyDeals: []
-    },
-    removeDeathMarks: {
-        DeathMarks: [],
-        Harvestable: false,
-        DeathSquadable: false
-    },
-    removeBlessingCooldown: {
-        BlessingCooldown: {
-            $date: {
-                $numberLong: "0"
-            }
-        }
     },
     maxStratos: {
         BountyScore: 39

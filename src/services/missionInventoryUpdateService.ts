@@ -832,7 +832,7 @@ export const addMissionInventoryUpdates = async (
                     const factionSidedWith = clientProgress.AttackerScore ? invasion.Faction : invasion.DefenderFaction;
                     if (invasion.Faction != "FC_INFESTATION") {
                         const info = factionSidedWith != "FC_GRINEER" ? grineerDeathSquadInfo : corpusDeathSquadInfo;
-                        if (!inventory[info.booleanKey]) {
+                        if (!inventory[info.booleanKey] && !inventory.noDeathMarks) {
                             const numberKey = info.numberKey;
                             inventory[numberKey] ??= 0;
                             inventory[numberKey] += clientProgress.AttackerScore + clientProgress.DefenderScore;
