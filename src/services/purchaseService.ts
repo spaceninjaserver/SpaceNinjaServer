@@ -214,25 +214,19 @@ export const handlePurchase = async (
     );
     combineInventoryChanges(purchaseResponse.InventoryChanges, prePurchaseInventoryChanges);
 
-    if (!purchaseRequest.PurchaseParams.ExpectedPrice) {
-        logger.debug(`client didn't provide ExpectedPrice, attempt to get it from PE+`);
-        purchaseRequest.PurchaseParams.ExpectedPrice = getPrice(
-            purchaseRequest.PurchaseParams.StoreItem,
-            purchaseRequest.PurchaseParams.Quantity,
-            purchaseRequest.PurchaseParams.Durability,
-            purchaseRequest.PurchaseParams.UsePremium,
-            purchaseRequest.buildLabel
-        );
-    }
-
-    updateCurrency(
-        inventory,
-        purchaseRequest.PurchaseParams.ExpectedPrice,
-        purchaseRequest.PurchaseParams.UsePremium,
-        purchaseResponse.InventoryChanges
-    );
-
     switch (purchaseRequest.PurchaseParams.Source) {
+        case PurchaseSource.Market:
+            if (!purchaseRequest.PurchaseParams.ExpectedPrice) {
+                logger.debug(`client didn't provide ExpectedPrice, attempt to get it from PE+`);
+                purchaseRequest.PurchaseParams.ExpectedPrice = getPrice(
+                    purchaseRequest.PurchaseParams.StoreItem,
+                    purchaseRequest.PurchaseParams.Quantity,
+                    purchaseRequest.PurchaseParams.Durability,
+                    purchaseRequest.PurchaseParams.UsePremium,
+                    purchaseRequest.buildLabel
+                );
+            }
+            break;
         case PurchaseSource.VoidTrader: {
             const worldState = getWorldState(purchaseRequest.buildLabel);
             if (purchaseRequest.PurchaseParams.SourceId! != worldState.VoidTraders[0]._id.$oid) {
@@ -375,6 +369,15 @@ export const handlePurchase = async (
             }
             break;
         }
+    }
+
+    if (purchaseRequest.PurchaseParams.ExpectedPrice) {
+        updateCurrency(
+            inventory,
+            purchaseRequest.PurchaseParams.ExpectedPrice,
+            purchaseRequest.PurchaseParams.UsePremium,
+            purchaseResponse.InventoryChanges
+        );
     }
 
     return purchaseResponse;
