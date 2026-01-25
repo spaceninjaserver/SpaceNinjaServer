@@ -1026,7 +1026,7 @@ export const addItem = async (
                         if (!seed) {
                             throw new Error(`Expected crew member to have a seed`);
                         }
-                        seed |= BigInt(Math.trunc(inventory.Created.getTime() / 1000) & 0xffffff) << 32n;
+                        seed |= BigInt(getAccountRandSeed(inventory)) << 32n;
                         return {
                             ...addCrewMember(inventory, typeName, seed),
                             ...occupySlot(inventory, InventorySlot.CREWMEMBERS, premiumPurchase)
@@ -1898,7 +1898,11 @@ const addDrone = (
     return inventoryChanges;
 };
 
-/*const getCrewMemberSkills = (seed: bigint, skillPointsToAssign: number): Record<string, number> => {
+export const getAccountRandSeed = (inventory: TInventoryDatabaseDocument): number => {
+    return parseInt(inventory.accountOwnerId.toString().substring(2, 8), 16);
+};
+
+export const getCrewMemberSkills = (seed: bigint, skillPointsToAssign: number): Record<string, number> => {
     const rng = new SRng(seed);
 
     const skills = ["PILOTING", "GUNNERY", "ENGINEERING", "COMBAT", "SURVIVABILITY"];
@@ -1928,7 +1932,7 @@ const addDrone = (
         combined[skills[i]] = skillAssignments[i];
     }
     return combined;
-};*/
+};
 
 const addCrewMember = (
     inventory: TInventoryDatabaseDocument,
