@@ -7,6 +7,8 @@ import { getInventory } from "../../services/inventoryService.ts";
 import { sendWsBroadcastTo } from "../../services/wsService.ts";
 import { toStoreItem } from "../../services/itemDataService.ts";
 import { ExportBundles } from "warframe-public-export-plus";
+import { version_compare } from "../../helpers/inventoryHelpers.ts";
+import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 
 export const purchasePostController: RequestHandler = async (req, res) => {
     const purchaseRequest = JSON.parse(String(req.body)) as IPurchaseRequest;
@@ -45,9 +47,17 @@ export const purchaseGetController: RequestHandler = async (req, res) => {
     const response = await handlePurchase(purchaseRequest, inventory);
     await inventory.save();
     if (response.Body) {
-        res.send(response.Body.replace(/\/StoreItems/g, "").replace(/lvl=\d+;/g, ""));
+        let body = response.Body.replace(/\/StoreItems/g, "");
+        if (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["8.3.0"]) <= 0) {
+            body = body.replace(/lvl=\d+;/g, "");
+        }
+        res.send(body);
     } else {
-        res.json(1);
+        if (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["8.0.0"]) > 0) {
+            res.send(String(req.query.productName));
+        } else {
+            res.json(1);
+        }
     }
     sendWsBroadcastTo(accountId, { update_inventory: true });
 };
