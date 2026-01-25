@@ -30,7 +30,9 @@ import type {
     IUpgradeClient,
     IUpgradeDatabase,
     IWeaponSkinClient,
-    IWeaponSkinDatabase
+    IWeaponSkinDatabase,
+    IPeriodicMissionCompletionResponse,
+    IPeriodicMissionCompletionDatabase
 } from "../types/inventoryTypes/inventoryTypes.ts";
 import { equipmentKeys } from "../types/inventoryTypes/inventoryTypes.ts";
 import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
@@ -282,6 +284,15 @@ const convertItemConfig = <T extends IItemConfig>(client: T): T => {
     };
 };
 
+const convertPeriodicMissionCompletion = (
+    client: IPeriodicMissionCompletionResponse
+): IPeriodicMissionCompletionDatabase => {
+    return {
+        ...client,
+        date: convertDate(client.date)
+    };
+};
+
 export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<IInventoryClient>): void => {
     for (const key of equipmentKeys) {
         if (client[key] !== undefined) {
@@ -525,7 +536,7 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         db.Missions = client.Missions;
     }
     if (client.PeriodicMissionCompletions !== undefined) {
-        db.PeriodicMissionCompletions = client.PeriodicMissionCompletions;
+        db.PeriodicMissionCompletions = client.PeriodicMissionCompletions.map(convertPeriodicMissionCompletion);
     }
     if (client.FlavourItems !== undefined) {
         db.FlavourItems.splice(0, db.FlavourItems.length);

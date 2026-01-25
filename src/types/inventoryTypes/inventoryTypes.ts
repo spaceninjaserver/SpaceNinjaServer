@@ -138,6 +138,7 @@ export interface IInventoryDatabase
             | "CurrentLoadOutIds"
             | "FocusLoadouts"
             | "ChallengeInstanceStates"
+            | "PeriodicMissionCompletions"
             | TEquipmentKey
         >,
         InventoryDatabaseEquipment,
@@ -191,6 +192,7 @@ export interface IInventoryDatabase
     PersonalGoalProgress?: IGoalProgressDatabase[];
     FocusLoadouts?: IFocusLoadoutDatabase[];
     ChallengeInstanceStates?: IChallengeInstanceStateDatabase[];
+    PeriodicMissionCompletions: IPeriodicMissionCompletionDatabase[];
 }
 
 export interface IQuestKeyDatabase {
@@ -376,7 +378,7 @@ export interface IInventoryClient
     LevelKeys: ITypeCount[];
     TauntHistory?: ITaunt[];
     StoryModeChoice: string;
-    PeriodicMissionCompletions: IPeriodicMissionCompletionDatabase[];
+    PeriodicMissionCompletions: IPeriodicMissionCompletionResponse[];
     KubrowPetEggs?: IKubrowPetEggClient[];
     LoreFragmentScans: ILoreFragmentScan[];
     EquippedEmotes: string[];
