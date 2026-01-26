@@ -4078,6 +4078,9 @@ export const getNightwaveSyndicateTag = (buildLabel: string | undefined): string
     if (version_compare(buildLabel, gameToBuildVersion["35.5.9"]) >= 0) {
         return "RadioLegionIntermission10Syndicate";
     }
+    if (version_compare(buildLabel, gameToBuildVersion["34.0.8"]) >= 0) {
+        return "RadioLegionIntermission9Syndicate";
+    }
     return undefined;
 };
 
