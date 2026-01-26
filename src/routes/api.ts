@@ -190,6 +190,7 @@ apiRouter.get("/changeDojoRoot.php", changeDojoRootController);
 apiRouter.get("/changeGuildRank.php", changeGuildRankController);
 apiRouter.get("/checkDailyMissionBonus.php", checkDailyMissionBonusController);
 apiRouter.get("/checkPendingRecipes.php", checkPendingRecipesController); // U8
+apiRouter.get("/claimCompletedRecipe.php", claimCompletedRecipeController); // U15
 apiRouter.get("/claimLibraryDailyTaskReward.php", claimLibraryDailyTaskRewardController);
 apiRouter.get("/completeCalendarEvent.php", completeCalendarEventController);
 apiRouter.get("/confirmAllianceInvitation.php", confirmAllianceInvitationController);
