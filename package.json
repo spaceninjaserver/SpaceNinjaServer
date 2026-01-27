@@ -35,7 +35,7 @@
     "morgan": "^1.10.0",
     "ncp": "^2.0.0",
     "undici": "^7.10.0",
-    "warframe-public-export-plus": "^0.5.98",
+    "warframe-public-export-plus": "^0.5.99",
     "warframe-riven-info": "^0.1.2",
     "winston": "^3.17.0",
     "winston-daily-rotate-file": "^5.0.0",
@@ -54,8 +54,6 @@
     "@typescript-eslint/eslint-plugin": "^8.28.0",
     "@typescript-eslint/parser": "^8.28.0",
     "eslint": "^8",
-    "eslint-import-resolver-typescript": "^4.4.4",
-    "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-prettier": "^5.2.5",
     "prettier": "^3.5.3",
     "tree-kill": "^1.2.2"
