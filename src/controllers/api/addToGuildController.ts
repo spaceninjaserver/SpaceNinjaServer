@@ -16,10 +16,10 @@ import { ExportFlavour } from "warframe-public-export-plus";
 export const addToGuildController: RequestHandler = async (req, res) => {
     const payload = JSON.parse(String(req.body)) as IAddToGuildRequest;
 
-    if ("UserName" in payload) {
+    if ("UserName" in payload || "userName" in payload) {
         // Clan recruiter sending an invite
 
-        const account = await Account.findOne({ DisplayName: payload.UserName });
+        const account = await Account.findOne({ DisplayName: payload.UserName ?? payload.userName });
         if (!account) {
             res.status(400).json("Username does not exist");
             return;
@@ -36,7 +36,8 @@ export const addToGuildController: RequestHandler = async (req, res) => {
             return;
         }
 
-        const guild = (await Guild.findById(payload.GuildId.$oid, "Name Ranks"))!;
+        const senderInventory = await getInventory(senderAccount._id.toString(), "GuildId ActiveAvatarImageType");
+        const guild = (await Guild.findById(senderInventory.GuildId!, "Name Ranks"))!;
         if (!(await hasGuildPermission(guild, senderAccount._id.toString(), GuildPermission.Recruiter))) {
             res.status(400).json("Invalid permission");
         }
@@ -44,7 +45,7 @@ export const addToGuildController: RequestHandler = async (req, res) => {
         try {
             await GuildMember.insertOne({
                 accountId: account._id,
-                guildId: payload.GuildId.$oid,
+                guildId: senderInventory.GuildId!,
                 status: 2 // outgoing invite
             });
         } catch (e) {
@@ -53,7 +54,6 @@ export const addToGuildController: RequestHandler = async (req, res) => {
             return;
         }
 
-        const senderInventory = await getInventory(senderAccount._id.toString(), "ActiveAvatarImageType");
         await createMessage(account._id, [
             {
                 sndr: getSuffixedName(senderAccount),
@@ -66,7 +66,7 @@ export const addToGuildController: RequestHandler = async (req, res) => {
                 ],
                 sub: "/Lotus/Language/Menu/Mailbox_ClanInvite_Title",
                 icon: ExportFlavour[getEffectiveAvatarImageType(senderInventory)].icon,
-                contextInfo: payload.GuildId.$oid,
+                contextInfo: senderInventory.GuildId!.toString(),
                 highPriority: true,
                 acceptAction: "GUILD_INVITE",
                 declineAction: "GUILD_INVITE",
@@ -89,7 +89,7 @@ export const addToGuildController: RequestHandler = async (req, res) => {
         try {
             await GuildMember.insertOne({
                 accountId,
-                guildId: payload.GuildId.$oid,
+                guildId: payload.GuildId!.$oid,
                 status: 1, // incoming invite
                 RequestMsg: payload.RequestMsg,
                 RequestExpiry: new Date(Date.now() + 14 * 86400 * 1000) // TOVERIFY: I can't find any good information about this with regards to live, but 2 weeks seem reasonable.
@@ -107,6 +107,7 @@ export const addToGuildController: RequestHandler = async (req, res) => {
 
 interface IAddToGuildRequest {
     UserName?: string;
-    GuildId: IOid;
+    userName?: string; // U22.13.4 provides this instead of UserName
+    GuildId?: IOid; // // U22.13.4 does not provide this
     RequestMsg?: string;
 }
