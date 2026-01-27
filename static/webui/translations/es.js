@@ -364,7 +364,7 @@ dict = {
     worldState_RadioLegionIntermissionSyndicate: `Intermedio I`,
     worldState_RadioLegionSyndicate: `El lobo de Saturno Seis`,
     worldState_nightwaveOff: `[UNTRANSLATED] Disable Nightwave`,
-    worldState_nightwavePhaseOverride: `[UNTRANSLATED] Nightwave Phase Override`,
+    worldState_nightwaveEpisode: `[UNTRANSLATED] Nightwave Episode`,
     worldState_fissures: `Fisuras`,
     normal: `Normal`,
     worldState_allAtOnceNormal: `Todo a la vez, normal`,

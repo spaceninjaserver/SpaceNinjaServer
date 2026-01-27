@@ -101,10 +101,10 @@ export const validateConfig = (): void => {
         modified = true;
     }
     if (
-        config.worldState?.nightwavePhaseOverride &&
-        (config.worldState.nightwavePhaseOverride > 4 || config.worldState.nightwavePhaseOverride < 0)
+        config.worldState?.nightwaveEpisode &&
+        (config.worldState.nightwaveEpisode > 5 || config.worldState.nightwaveEpisode < 1)
     ) {
-        config.worldState.nightwavePhaseOverride = 0;
+        config.worldState.nightwaveEpisode = 1;
         modified = true;
     }
     if (modified) {

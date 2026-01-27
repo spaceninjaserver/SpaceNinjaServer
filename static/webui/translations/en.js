@@ -363,7 +363,7 @@ dict = {
     worldState_RadioLegionIntermissionSyndicate: `Intermission I`,
     worldState_RadioLegionSyndicate: `The Wolf of Saturn Six`,
     worldState_nightwaveOff: `Disable Nightwave`,
-    worldState_nightwavePhaseOverride: `Nightwave Phase Override`,
+    worldState_nightwaveEpisode: `Nightwave Episode`,
     worldState_fissures: `Fissures`,
     normal: `Normal`,
     worldState_allAtOnceNormal: `All At Once, Normal`,

@@ -364,7 +364,7 @@ dict = {
     worldState_RadioLegionIntermissionSyndicate: `间歇I`,
     worldState_RadioLegionSyndicate: `系列1 — 土星六号之狼`,
     worldState_nightwaveOff: `[UNTRANSLATED] Disable Nightwave`,
-    worldState_nightwavePhaseOverride: `[UNTRANSLATED] Nightwave Phase Override`,
+    worldState_nightwaveEpisode: `[UNTRANSLATED] Nightwave Episode`,
     worldState_fissures: `虚空裂缝难度设定`,
     normal: `正常`,
     worldState_allAtOnceNormal: `全部开启(普通)`,

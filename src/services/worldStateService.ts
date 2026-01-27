@@ -3383,13 +3383,13 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     if (nightwaveSyndicateTag) {
         const nightwaveStartTimestamp = nightwaveTagToActivation[nightwaveSyndicateTag] ?? 1747851300000;
         const nightwaveSeason = nightwaveTagToSeason[nightwaveSyndicateTag];
-        const nightwavePhase = ([0, 2, 4].includes(nightwaveSeason) && config.worldState?.nightwavePhaseOverride) || 0;
+        const nightwaveEpisode = ([0, 2, 4].includes(nightwaveSeason) && config.worldState?.nightwaveEpisode) || 1;
         worldState.SeasonInfo = {
             Activation: { $date: { $numberLong: nightwaveStartTimestamp.toString() } },
             Expiry: { $date: { $numberLong: "2000000000000" } },
             AffiliationTag: nightwaveSyndicateTag,
             Season: nightwaveSeason,
-            Phase: nightwavePhase,
+            Phase: nightwaveEpisode - 1,
             Params: "",
             ActiveChallenges: []
         };
