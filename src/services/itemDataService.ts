@@ -96,6 +96,346 @@ export const getRecipe = (uniqueName: string): IRecipe | undefined => {
             excludeFromMarket: true,
             tradable: false
         };
+    } else if (uniqueName == "/Lotus/Types/Keys/GrineerRaidKeyBlueprint") {
+        // The Law of Retribution raid bp. Removed in 22.14.0
+        return {
+            resultType: "/Lotus/Types/Keys/RaidKeys/Raid01Stage01KeyItem",
+            buildPrice: 5000,
+            buildTime: 21600,
+            skipBuildTimePrice: 15,
+            consumeOnUse: false,
+            num: 1,
+            codexSecret: false,
+            alwaysAvailable: true,
+            ingredients: [
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Rubedo",
+                    ItemCount: 500
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Nanospores",
+                    ItemCount: 9000
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Gallium",
+                    ItemCount: 1
+                }
+            ],
+            excludeFromMarket: true,
+            tradable: false
+        };
+    } else if (uniqueName == "/Lotus/Types/Keys/NightmareGrineerRaidKeyBlueprint") {
+        // The Law of Retribution (Nightmare) raid bp. Removed in 22.14.0
+        return {
+            resultType: "/Lotus/Types/Keys/RaidKeys/Raid01Stage01NightmareKeyItem",
+            buildPrice: 5000,
+            buildTime: 21600,
+            skipBuildTimePrice: 15,
+            consumeOnUse: false,
+            num: 1,
+            codexSecret: false,
+            alwaysAvailable: true,
+            ingredients: [
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Rubedo",
+                    ItemCount: 1000
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Nanospores",
+                    ItemCount: 18000
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Gallium",
+                    ItemCount: 2
+                }
+            ],
+            excludeFromMarket: true,
+            tradable: false
+        };
+    } else if (uniqueName == "/Lotus/Types/Keys/GolemRaidKeyBlueprint") {
+        // The Jordas Verdict raid bp. Removed in 22.14.0
+        return {
+            resultType: "/Lotus/Types/Keys/RaidKeys/RaidGolemStage01KeyItem",
+            buildPrice: 5000,
+            buildTime: 21600,
+            skipBuildTimePrice: 15,
+            consumeOnUse: false,
+            num: 1,
+            codexSecret: false,
+            alwaysAvailable: true,
+            ingredients: [
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Plastids",
+                    ItemCount: 2000
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Nanospores",
+                    ItemCount: 12000
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Neurode",
+                    ItemCount: 2
+                }
+            ],
+            excludeFromMarket: true,
+            tradable: false
+        };
+    } else if (uniqueName == "/Lotus/Types/Keys/GolemKeyBlueprint") {
+        // Orokin Derelict Assassination bp for Lephantis. Removed in 28.3.0
+        return {
+            resultType: "/Lotus/Types/Keys/DerelictGolemKey",
+            buildPrice: 7500,
+            buildTime: 3600,
+            skipBuildTimePrice: 10,
+            consumeOnUse: false,
+            num: 1,
+            codexSecret: false,
+            alwaysAvailable: true,
+            ingredients: [
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/BossNavCode",
+                    ItemCount: 5
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Nanospores",
+                    ItemCount: 4000
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Salvage",
+                    ItemCount: 1000
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Circuits",
+                    ItemCount: 100
+                }
+            ],
+            excludeFromMarket: true,
+            tradable: false
+        };
+    } else if (uniqueName == "/Lotus/Types/Keys/DerelictCaptureKeyBlueprint") {
+        // Orokin Derelict Capture bp. Removed in 28.3.0
+        return {
+            resultType: "/Lotus/Types/Keys/DerelictCaptureKey",
+            buildPrice: 6500,
+            buildTime: 60,
+            skipBuildTimePrice: 5,
+            consumeOnUse: false,
+            num: 1,
+            codexSecret: false,
+            alwaysAvailable: true,
+            ingredients: [
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/NavCode",
+                    ItemCount: 5
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Nanospores",
+                    ItemCount: 2500
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Ferrite",
+                    ItemCount: 750
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Circuits",
+                    ItemCount: 80
+                }
+            ],
+            excludeFromMarket: true,
+            tradable: false
+        };
+    } else if (uniqueName == "/Lotus/Types/Keys/DerelictDefenseKeyBlueprint") {
+        // Orokin Derelict Defense bp. Removed in 28.3.0
+        return {
+            resultType: "/Lotus/Types/Keys/DerelictDefenseKey",
+            buildPrice: 6500,
+            buildTime: 60,
+            skipBuildTimePrice: 5,
+            consumeOnUse: false,
+            num: 1,
+            codexSecret: false,
+            alwaysAvailable: true,
+            ingredients: [
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/NavCode",
+                    ItemCount: 5
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Nanospores",
+                    ItemCount: 2500
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Salvage",
+                    ItemCount: 750
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/PolymerBundle",
+                    ItemCount: 80
+                }
+            ],
+            excludeFromMarket: true,
+            tradable: false
+        };
+    } else if (uniqueName == "/Lotus/Types/Keys/DerelictExterminateKeyBlueprint") {
+        // Orokin Derelict Exterminate bp. Removed in 28.3.0
+        return {
+            resultType: "/Lotus/Types/Keys/DerelictExterminateKey",
+            buildPrice: 6500,
+            buildTime: 60,
+            skipBuildTimePrice: 5,
+            consumeOnUse: false,
+            num: 1,
+            codexSecret: false,
+            alwaysAvailable: true,
+            ingredients: [
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/NavCode",
+                    ItemCount: 5
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Nanospores",
+                    ItemCount: 2500
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Salvage",
+                    ItemCount: 750
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Circuits",
+                    ItemCount: 80
+                }
+            ],
+            excludeFromMarket: true,
+            tradable: false
+        };
+    } else if (uniqueName == "/Lotus/Types/Keys/DerelictMobileDefenseKeyBlueprint") {
+        // Orokin Derelict Mobile Defense bp. Removed in 28.3.0
+        return {
+            resultType: "/Lotus/Types/Keys/DerelictMobileDefenseKey",
+            buildPrice: 6500,
+            buildTime: 60,
+            skipBuildTimePrice: 5,
+            consumeOnUse: false,
+            num: 1,
+            codexSecret: false,
+            alwaysAvailable: true,
+            ingredients: [
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/NavCode",
+                    ItemCount: 5
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Nanospores",
+                    ItemCount: 2500
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Ferrite",
+                    ItemCount: 750
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/PolymerBundle",
+                    ItemCount: 80
+                }
+            ],
+            excludeFromMarket: true,
+            tradable: false
+        };
+    } else if (uniqueName == "/Lotus/Types/Keys/DerelictSabotageKeyBlueprint") {
+        // Orokin Derelict Sabotage bp. Removed in 28.3.0
+        return {
+            resultType: "/Lotus/Types/Keys/DerelictSabotageKey",
+            buildPrice: 6500,
+            buildTime: 60,
+            skipBuildTimePrice: 5,
+            consumeOnUse: false,
+            num: 1,
+            codexSecret: false,
+            alwaysAvailable: true,
+            ingredients: [
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/NavCode",
+                    ItemCount: 5
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Nanospores",
+                    ItemCount: 2500
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Ferrite",
+                    ItemCount: 750
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/PolymerBundle",
+                    ItemCount: 80
+                }
+            ],
+            excludeFromMarket: true,
+            tradable: false
+        };
+    } else if (uniqueName == "/Lotus/Types/Keys/DerelictSurvivalKeyBlueprint") {
+        // Orokin Derelict Survival bp. Removed in 28.3.0
+        return {
+            resultType: "/Lotus/Types/Keys/DerelictSurvivalKey",
+            buildPrice: 6500,
+            buildTime: 60,
+            skipBuildTimePrice: 5,
+            consumeOnUse: false,
+            num: 1,
+            codexSecret: false,
+            alwaysAvailable: true,
+            ingredients: [
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/NavCode",
+                    ItemCount: 5
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Nanospores",
+                    ItemCount: 2500
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Salvage",
+                    ItemCount: 750
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Circuits",
+                    ItemCount: 80
+                }
+            ],
+            excludeFromMarket: true,
+            tradable: false
+        };
+    } else if (uniqueName == "/Lotus/Types/Keys/VeyHekKeyBlueprint") {
+        // Vay Hek Frequency Triangulator (Assassination key) bp. Removed in 15.13.0
+        return {
+            resultType: "/Lotus/Types/Keys/VeyHekKey",
+            buildPrice: 20000,
+            buildTime: 3600,
+            skipBuildTimePrice: 10,
+            consumeOnUse: false,
+            num: 1,
+            codexSecret: false,
+            alwaysAvailable: true,
+            ingredients: [
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/VayHekCoordinateFragmentA",
+                    ItemCount: 2
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/VayHekCoordinateFragmentB",
+                    ItemCount: 4
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/VayHekCoordinateFragmentC",
+                    ItemCount: 8
+                },
+                {
+                    ItemType: "/Lotus/Types/Items/MiscItems/VayHekCoordinateFragmentD",
+                    ItemCount: 12
+                }
+            ],
+            excludeFromMarket: true,
+            tradable: false
+        };
     }
 
     return ExportRecipes[uniqueName];
