@@ -1522,19 +1522,27 @@ export const updateSlots = (
     }
 };
 
-const isCurrencyTracked = (inventory: TInventoryDatabaseDocument, usePremium: boolean): boolean => {
+export const CurrencyType = {
+    CREDITS: false,
+    PLATINUM: true,
+    PAID_PLATINUM: 2
+} as const;
+
+type TCurrencyType = (typeof CurrencyType)[keyof typeof CurrencyType];
+
+const isCurrencyTracked = (inventory: TInventoryDatabaseDocument, usePremium: TCurrencyType): boolean => {
     return usePremium ? !inventory.infinitePlatinum : !inventory.infiniteCredits;
 };
 
 export const updateCurrency = (
     inventory: TInventoryDatabaseDocument,
     price: number,
-    usePremium: boolean,
+    currencyType: TCurrencyType,
     inventoryChanges: IInventoryChanges = {}
 ): IInventoryChanges => {
-    if (price != 0 && isCurrencyTracked(inventory, usePremium)) {
-        if (usePremium) {
-            if (price > 0 && inventory.PremiumCreditsFree > 0) {
+    if (price != 0 && isCurrencyTracked(inventory, currencyType)) {
+        if (currencyType != CurrencyType.CREDITS) {
+            if (price > 0 && inventory.PremiumCreditsFree > 0 && currencyType != CurrencyType.PAID_PLATINUM) {
                 const premiumCreditsFreeDelta = Math.min(price, inventory.PremiumCreditsFree) * -1;
                 inventoryChanges.PremiumCreditsFree ??= 0;
                 inventoryChanges.PremiumCreditsFree += premiumCreditsFreeDelta;

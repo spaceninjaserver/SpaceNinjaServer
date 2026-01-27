@@ -4,6 +4,7 @@ import { areFriends } from "../../services/friendService.ts";
 import { createMessage } from "../../services/inboxService.ts";
 import {
     combineInventoryChanges,
+    CurrencyType,
     getEffectiveAvatarImageType,
     getInventory,
     updateCurrency
@@ -98,7 +99,12 @@ export const giftingController: RequestHandler = async (req, res) => {
                 data.buildLabel
             );
         }
-        updateCurrency(senderInventory, data.PurchaseParams.ExpectedPrice, true, response.InventoryChanges);
+        updateCurrency(
+            senderInventory,
+            data.PurchaseParams.ExpectedPrice,
+            CurrencyType.PAID_PLATINUM,
+            response.InventoryChanges
+        );
     }
     if (data.PurchaseParams.StoreItem in ExportBundles) {
         const bundle = getBundle(data.PurchaseParams.StoreItem, data.buildLabel)!;

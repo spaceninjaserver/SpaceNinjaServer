@@ -4,6 +4,7 @@ import {
     addMiscItem,
     addMods,
     addRecipes,
+    CurrencyType,
     getInventory,
     updateCurrency
 } from "../../services/inventoryService.ts";
@@ -298,7 +299,7 @@ const applyOfferToInventory = (inventory: TInventoryDatabaseDocument, offer: ITr
         if (offer.PremiumCredits < 0) {
             throw new Error(`negative quantity in trade offer`);
         }
-        updateCurrency(inventory, offer.PremiumCredits * factor * -1, true);
+        updateCurrency(inventory, offer.PremiumCredits * factor * -1, CurrencyType.PAID_PLATINUM);
     }
 };
 
