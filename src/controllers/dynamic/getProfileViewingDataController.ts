@@ -5,7 +5,6 @@ import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/in
 import { Inventory } from "../../models/inventoryModels/inventoryModel.ts";
 import { Loadout } from "../../models/inventoryModels/loadoutModel.ts";
 import { Account } from "../../models/loginModel.ts";
-import type { TStatsDatabaseDocument } from "../../models/statsModel.ts";
 import { Stats } from "../../models/statsModel.ts";
 import { allDailyAffiliationKeys } from "../../services/inventoryService.ts";
 import type { IMongoDate, IOid } from "../../types/commonTypes.ts";
@@ -25,12 +24,54 @@ import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { ExportDojoRecipes } from "warframe-public-export-plus";
 import type { IStatsClient } from "../../types/statTypes.ts";
 import { toStoreItem } from "../../services/itemDataService.ts";
-import type { FlattenMaps } from "mongoose";
 import type { IEquipmentClient } from "../../types/equipmentTypes.ts";
 import type { ILoadoutConfigClient } from "../../types/saveLoadoutTypes.ts";
 import { skinLookupTable } from "../../helpers/skinLookupTable.ts";
+import type { ITechProjectClient } from "../../types/guildTypes.ts";
 
-const getProfileViewingDataByPlayerIdImpl = async (playerId: string): Promise<IProfileViewingData | undefined> => {
+export const getProfileViewingDataGetController: RequestHandler = async (req, res) => {
+    if (req.query.playerId) {
+        const data = await getProfileViewingDataByPlayerId(req.query.playerId as string);
+        if (data) {
+            res.json(data);
+        } else {
+            res.status(409).send("Could not find requested account");
+        }
+    } else if (req.query.guildId) {
+        const data = await getProfileViewingDataByGuildId(req.query.guildId as string);
+        if (data) {
+            res.json(data);
+        } else {
+            res.status(409).send("Could not find guild");
+        }
+    } else {
+        res.sendStatus(400);
+    }
+};
+
+// For old versions, this was an authenticated POST request.
+type IGetProfileViewingDataRequest = { AccountId: string } | { GuildId: string };
+export const getProfileViewingDataPostController: RequestHandler = async (req, res) => {
+    const payload = getJSONfromString<IGetProfileViewingDataRequest>(String(req.body));
+    if ("GuildId" in payload) {
+        const data = await getProfileViewingDataByGuildId(payload.GuildId);
+        if (data) {
+            res.json(data);
+        } else {
+            res.status(409).send("Could not find guild");
+        }
+    } else {
+        const playerId = req.query.playerId as string; // companion app sends a POST request should be handled like a GET request
+        const data = await getProfileViewingDataByPlayerId(playerId ? playerId : payload.AccountId);
+        if (data) {
+            res.json(data);
+        } else {
+            res.status(409).send("Could not find requested account");
+        }
+    }
+};
+
+export const getProfileViewingDataByPlayerId = async (playerId: string): Promise<IProfileViewingData | undefined> => {
     const account = await Account.findById(playerId, "DisplayName");
     if (!account) {
         return;
@@ -77,148 +118,116 @@ const getProfileViewingDataByPlayerIdImpl = async (playerId: string): Promise<IP
         result[key] = inventory[key];
     }
 
-    const stats = (await Stats.findOne({ accountOwnerId: account._id }))!.toJSON<Partial<TStatsDatabaseDocument>>();
-    delete stats._id;
-    delete stats.__v;
-    delete stats.accountOwnerId;
-
     return {
         Results: [result],
         TechProjects: [],
         XpComponents: [],
         //XpCacheExpiryDate, some IMongoDate in the future, no clue what it's for
-        Stats: stats
+        Stats: (await Stats.findOne({ accountOwnerId: account._id }))!.toJSON() as IStatsClient
     };
 };
 
-export const getProfileViewingDataGetController: RequestHandler = async (req, res) => {
-    if (req.query.playerId) {
-        const data = await getProfileViewingDataByPlayerIdImpl(req.query.playerId as string);
-        if (data) {
-            res.json(data);
-        } else {
-            res.status(409).send("Could not find requested account");
-        }
-    } else if (req.query.guildId) {
-        const guild = await Guild.findById(
-            req.query.guildId as string,
-            "Name Tier XP Class Emblem TechProjects ClaimedXP"
-        );
-        if (!guild) {
-            res.status(409).send("Could not find guild");
-            return;
-        }
-        const members = await GuildMember.find({ guildId: guild._id, status: 0 });
-        const results: IPlayerProfileViewingDataResult[] = [];
-        for (let i = 0; i != Math.min(4, members.length); ++i) {
-            const member = members[i];
-            const [account, inventory] = await Promise.all([
-                Account.findById(member.accountId, "DisplayName"),
-                Inventory.findOne(
-                    { accountOwnerId: member.accountId },
-                    "DisplayName PlayerLevel XPInfo LoadOutPresets CurrentLoadOutIds WeaponSkins Suits Pistols LongGuns Melee"
-                )
-            ]);
-            const result: IPlayerProfileViewingDataResult = {
-                AccountId: toOid(account!._id),
-                DisplayName: account!.DisplayName,
-                PlayerLevel: inventory!.PlayerLevel,
-                LoadOutInventory: {
-                    WeaponSkins: [],
-                    XPInfo: inventory!.XPInfo
-                }
-            };
-            await populateLoadout(inventory!, result);
-            results.push(result);
-        }
-        populateGuild(guild, results[0]);
-
-        const combinedStats: IStatsClient = {};
-        const statsArr = await Stats.find({ accountOwnerId: { $in: members.map(x => x.accountId) } }).lean(); // need this as POJO so Object.entries works as expected
-        for (const stats of statsArr) {
-            for (const [key, value] of Object.entries(stats)) {
-                if (typeof value == "number" && key != "__v") {
-                    (combinedStats[key as keyof IStatsClient] as number | undefined) ??= 0;
-                    (combinedStats[key as keyof IStatsClient] as number) += value;
-                }
+export const getProfileViewingDataByGuildId = async (guildId: string): Promise<IProfileViewingData | undefined> => {
+    const guild = await Guild.findById(guildId, "Name Tier XP Class Emblem TechProjects ClaimedXP");
+    if (!guild) {
+        return;
+    }
+    const members = await GuildMember.find({ guildId: guild._id, status: 0 });
+    const results: IPlayerProfileViewingDataResult[] = [];
+    for (let i = 0; i != Math.min(4, members.length); ++i) {
+        const member = members[i];
+        const [account, inventory] = await Promise.all([
+            Account.findById(member.accountId, "DisplayName"),
+            Inventory.findOne(
+                { accountOwnerId: member.accountId },
+                "DisplayName PlayerLevel XPInfo LoadOutPresets CurrentLoadOutIds WeaponSkins Suits Pistols LongGuns Melee"
+            )
+        ]);
+        const result: IPlayerProfileViewingDataResult = {
+            AccountId: toOid(account!._id),
+            DisplayName: account!.DisplayName,
+            PlayerLevel: inventory!.PlayerLevel,
+            LoadOutInventory: {
+                WeaponSkins: [],
+                XPInfo: inventory!.XPInfo
             }
-            for (const arrayName of ["Weapons", "Enemies", "Scans", "Missions", "PVP"] as const) {
-                if (stats[arrayName]) {
-                    combinedStats[arrayName] ??= [];
-                    for (const entry of stats[arrayName]) {
-                        const combinedEntry = combinedStats[arrayName].find(x => x.type == entry.type);
-                        if (combinedEntry) {
-                            for (const [key, value] of Object.entries(entry)) {
-                                if (typeof value == "number") {
-                                    (combinedEntry[key as keyof typeof combinedEntry] as unknown as
-                                        | number
-                                        | undefined) ??= 0;
-                                    (combinedEntry[key as keyof typeof combinedEntry] as unknown as number) += value;
-                                }
+        };
+        await populateLoadout(inventory!, result);
+        results.push(result);
+    }
+    populateGuild(guild, results[0]);
+
+    const combinedStats: IStatsClient = {};
+    const statsArr = await Stats.find({ accountOwnerId: { $in: members.map(x => x.accountId) } }).lean(); // need this as POJO so Object.entries works as expected
+    for (const stats of statsArr) {
+        for (const [key, value] of Object.entries(stats)) {
+            if (typeof value == "number" && key != "__v") {
+                (combinedStats[key as keyof IStatsClient] as number | undefined) ??= 0;
+                (combinedStats[key as keyof IStatsClient] as number) += value;
+            }
+        }
+        for (const arrayName of ["Weapons", "Enemies", "Scans", "Missions", "PVP"] as const) {
+            if (stats[arrayName]) {
+                combinedStats[arrayName] ??= [];
+                for (const entry of stats[arrayName]) {
+                    const combinedEntry = combinedStats[arrayName].find(x => x.type == entry.type);
+                    if (combinedEntry) {
+                        for (const [key, value] of Object.entries(entry)) {
+                            if (typeof value == "number") {
+                                (combinedEntry[key as keyof typeof combinedEntry] as unknown as number | undefined) ??=
+                                    0;
+                                (combinedEntry[key as keyof typeof combinedEntry] as unknown as number) += value;
                             }
-                        } else {
-                            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                            combinedStats[arrayName].push(entry as any);
                         }
+                    } else {
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                        combinedStats[arrayName].push(entry as any);
                     }
                 }
             }
         }
+    }
 
-        const xpComponents: IXPComponentClient[] = [];
-        if (guild.ClaimedXP) {
-            for (const componentName of guild.ClaimedXP) {
-                if (componentName.endsWith(".level")) {
-                    const [key] = Object.entries(ExportDojoRecipes.rooms).find(
-                        ([_key, value]) => value.resultType == componentName
-                    )!;
-                    xpComponents.push({
-                        StoreTypeName: toStoreItem(key)
-                    });
-                } else {
-                    const [key] = Object.entries(ExportDojoRecipes.decos).find(
-                        ([_key, value]) => value.resultType == componentName
-                    )!;
-                    xpComponents.push({
-                        StoreTypeName: toStoreItem(key)
-                    });
-                }
+    const xpComponents: IXPComponentClient[] = [];
+    if (guild.ClaimedXP) {
+        for (const componentName of guild.ClaimedXP) {
+            if (componentName.endsWith(".level")) {
+                const [key] = Object.entries(ExportDojoRecipes.rooms).find(
+                    ([_key, value]) => value.resultType == componentName
+                )!;
+                xpComponents.push({
+                    StoreTypeName: toStoreItem(key)
+                });
+            } else {
+                const [key] = Object.entries(ExportDojoRecipes.decos).find(
+                    ([_key, value]) => value.resultType == componentName
+                )!;
+                xpComponents.push({
+                    StoreTypeName: toStoreItem(key)
+                });
             }
         }
-
-        res.json({
-            Results: results,
-            TechProjects: guild.TechProjects,
-            XpComponents: xpComponents,
-            //XpCacheExpiryDate, some IMongoDate in the future, no clue what it's for
-            Stats: combinedStats
-        });
-    } else {
-        res.sendStatus(400);
     }
-};
 
-// For old versions, this was an authenticated POST request.
-interface IGetProfileViewingDataRequest {
-    AccountId: string;
-}
-export const getProfileViewingDataPostController: RequestHandler = async (req, res) => {
-    const payload = getJSONfromString<IGetProfileViewingDataRequest>(String(req.body));
-    const playerId = req.query.playerId as string; // companion app sends a POST request should be handled like a GET request
-    const data = await getProfileViewingDataByPlayerIdImpl(playerId ? playerId : payload.AccountId);
-    if (data) {
-        res.json(data);
-    } else {
-        res.status(409).send("Could not find requested account");
-    }
+    return {
+        Results: results,
+        TechProjects:
+            guild.TechProjects?.map(x => ({
+                ...x,
+                CompletionDate: x.CompletionDate ? toMongoDate(x.CompletionDate) : undefined
+            })) ?? [],
+        XpComponents: xpComponents,
+        //XpCacheExpiryDate, some IMongoDate in the future, no clue what it's for
+        Stats: combinedStats
+    };
 };
 
 interface IProfileViewingData {
     Results: IPlayerProfileViewingDataResult[];
-    TechProjects: [];
-    XpComponents: [];
+    TechProjects: ITechProjectClient[];
+    XpComponents: IXPComponentClient[];
     //XpCacheExpiryDate, some IMongoDate in the future, no clue what it's for
-    Stats: FlattenMaps<Partial<TStatsDatabaseDocument>>;
+    Stats: IStatsClient;
 }
 
 interface IPlayerProfileViewingDataResult extends Partial<IDailyAffiliations>, IInventoryAccolades {

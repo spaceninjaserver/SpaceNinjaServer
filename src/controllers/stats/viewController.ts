@@ -2,11 +2,23 @@ import type { RequestHandler } from "express";
 import { getInventory } from "../../services/inventoryService.ts";
 import { getStats } from "../../services/statsService.ts";
 import type { IStatsClient } from "../../types/statTypes.ts";
+import { getProfileViewingDataByGuildId } from "../dynamic/getProfileViewingDataController.ts";
 
 const viewController: RequestHandler = async (req, res) => {
-    const accountId = String(req.query.id ?? req.query.lookupId);
-    const inventory = await getInventory(accountId, "XPInfo");
-    const playerStats = await getStats(accountId);
+    const lookupId = String(req.query.id ?? req.query.lookupId);
+
+    if (req.query.guild == "1") {
+        const data = await getProfileViewingDataByGuildId(lookupId);
+        if (data) {
+            res.json(data.Stats);
+        } else {
+            res.status(409).send("Could not find guild");
+        }
+        return;
+    }
+
+    const inventory = await getInventory(lookupId, "XPInfo");
+    const playerStats = await getStats(lookupId);
 
     const responseJson = playerStats.toJSON<IStatsClient>();
     responseJson.Weapons ??= [];
