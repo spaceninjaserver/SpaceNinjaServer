@@ -18,6 +18,13 @@ export const removeFromGuildController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
     const guild = await getGuildForRequest(req);
     const payload = JSON.parse(String(req.body)) as IRemoveFromGuildRequest;
+    if (!payload.userId) {
+        const oid = (await Account.findOne({ DisplayName: payload.userName }, "_id"))?._id;
+        payload.userId = oid?.toString();
+        if (!payload.userId) {
+            throw new Error(`invalid removeFromGuild request: ${String(req.body)}`);
+        }
+    }
     const isKick = !account._id.equals(payload.userId);
     if (isKick && !(await hasGuildPermission(guild, account._id, GuildPermission.Regulator))) {
         res.status(400).json("Invalid permission");
@@ -90,6 +97,7 @@ export const removeFromGuildController: RequestHandler = async (req, res) => {
 };
 
 interface IRemoveFromGuildRequest {
-    userId: string;
+    userId?: string;
+    userName?: string; // U22.13.4 provides this instead of userId
     kicker?: string;
 }
