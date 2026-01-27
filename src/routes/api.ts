@@ -271,6 +271,7 @@ apiRouter.post("/claimJunctionChallengeReward.php", claimJunctionChallengeReward
 apiRouter.post("/clearDialogueHistory.php", clearDialogueHistoryController);
 apiRouter.post("/clearNewEpisodeReward.php", clearNewEpisodeRewardController);
 apiRouter.post("/commitStoryModeDecision.php", commitStoryModeDecisionController); // U14~U15
+apiRouter.post("/completePetStasisRecovery.php", retrievePetFromStasisController); // ~U22
 apiRouter.post("/completeRandomModChallenge.php", completeRandomModChallengeController);
 apiRouter.post("/confirmGuildInvitation.php", confirmGuildInvitationPostController);
 apiRouter.post("/contributeGuildClass.php", contributeGuildClassController);
