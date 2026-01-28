@@ -9,6 +9,7 @@ import type { Request } from "express";
 import { config } from "./configService.ts";
 import { createStats } from "./statsService.ts";
 import crc32 from "crc-32";
+import crypto from "node:crypto";
 
 export const isCorrectPassword = (requestPassword: string, databasePassword: string): boolean => {
     return requestPassword === databasePassword;
@@ -71,15 +72,32 @@ export const createPersonalRooms = async (accountId: Types.ObjectId, shipId: Typ
 export type TAccountDocument = Document<unknown, {}, IDatabaseAccountJson> &
     IDatabaseAccountJson & { _id: Types.ObjectId; __v: number };
 
-export const getAccountForRequest = async (req: Request): Promise<TAccountDocument> => {
+export const getAccountForRequest = async (req: Request, acceptToken?: true): Promise<TAccountDocument> => {
     if (!req.query.accountId) {
         throw new Error("Request is missing accountId parameter");
     }
+
+    // Tokens are specific to OpenWF to avoid sending the nonce (which gives full account access) over insecure transports.
+    if (acceptToken && req.query.token) {
+        const account = await Account.findById(req.query.accountId as string);
+        if (!account || !account.Nonce) {
+            throw new Error("Invalid accountId-token pair");
+        }
+        const token = crypto
+            .createHmac("sha256", account.Nonce.toString())
+            .update(`accountId=${req.query.accountId as string}&ct=${(req.query.ct as string | undefined) ?? ""}`)
+            .digest("hex");
+        //console.log(`expected token: ${token}`);
+        if ((req.query.token as string).toLowerCase() != token) {
+            throw new Error("Invalid accountId-token pair");
+        }
+        return account;
+    }
+
     const nonce: number = parseInt(req.query.nonce as string);
     if (!nonce) {
         throw new Error("Request is missing nonce parameter");
     }
-
     const account = await Account.findById(req.query.accountId as string);
     if (!account || account.Nonce != nonce) {
         throw new Error("Invalid accountId-nonce pair");

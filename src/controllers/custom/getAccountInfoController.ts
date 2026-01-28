@@ -4,7 +4,7 @@ import { getAccountForRequest, isAdministrator } from "../../services/loginServi
 import type { RequestHandler } from "express";
 
 export const getAccountInfoController: RequestHandler = async (req, res) => {
-    const account = await getAccountForRequest(req);
+    const account = await getAccountForRequest(req, true);
     const inventory = await getInventory(account._id.toString(), "QuestKeys");
     const info: IAccountInfo = {
         DisplayName: account.DisplayName,
