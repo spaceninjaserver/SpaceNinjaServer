@@ -191,9 +191,8 @@ export const getDojoClient = async (
             }
             if (dojoComponent.CompletionTime) {
                 clientComponent.CompletionTime = toMongoDate(dojoComponent.CompletionTime);
-                clientComponent.TimeRemaining = Math.trunc(
-                    (dojoComponent.CompletionTime.getTime() - Date.now()) / 1000
-                );
+                clientComponent.TimeRemaining =
+                    1 + Math.trunc((dojoComponent.CompletionTime.getTime() - Date.now()) / 1000);
                 if (dojoComponent.CompletionLogPending && Date.now() >= dojoComponent.CompletionTime.getTime()) {
                     const entry = guild.RoomChanges?.find(x => x.componentId.equals(dojoComponent._id));
                     if (entry) {
@@ -229,9 +228,8 @@ export const getDojoClient = async (
                         continue;
                     }
                     clientComponent.DestructionTime = toMongoDate(dojoComponent.DestructionTime);
-                    clientComponent.DestructionTimeRemaining = Math.trunc(
-                        (dojoComponent.DestructionTime.getTime() - Date.now()) / 1000
-                    );
+                    clientComponent.DestructionTimeRemaining =
+                        1 + Math.trunc((dojoComponent.DestructionTime.getTime() - Date.now()) / 1000);
                 }
             } else {
                 clientComponent.RegularCredits = dojoComponent.RegularCredits;
