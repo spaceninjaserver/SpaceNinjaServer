@@ -2658,6 +2658,13 @@ export const cleanupInventory = async (inventory: TInventoryDatabaseDocument): P
             logger.debug(`fixed ${fixed} invalid skin upgrade ids`);
         }
     }
+
+    for (const pet of inventory.KubrowPets) {
+        if (!pet.Details) {
+            logger.debug(`removing invalid pet ${pet.ItemType} (${pet._id.toString()})`);
+            inventory.KubrowPets.pull({ _id: pet._id });
+        }
+    }
 };
 
 const collectSkins = (skins: string[], weaponMap: Map<string, string>, itemsToAdd: Set<string>): void => {
