@@ -409,6 +409,7 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         "CompletedAlerts",
         "CompletedSyndicates",
         "DeathMarks",
+        "UsedDailyDeals",
         "Wishlist",
         "NemesisAbandonedRewards",
         //"OneTimePurchases", // TODO: Import Antiques
@@ -477,9 +478,6 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     }
     if (client.LastRegionPlayed !== undefined) {
         db.LastRegionPlayed = client.LastRegionPlayed;
-    }
-    if (client.UsedDailyDeals !== undefined) {
-        db.UsedDailyDeals = client.UsedDailyDeals;
     }
     if (client.RecentVendorPurchases !== undefined) {
         db.RecentVendorPurchases = client.RecentVendorPurchases.map(convertRecentVendorPurchases);
