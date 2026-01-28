@@ -626,7 +626,7 @@ export const addItem = async (
     ) {
         if (targetFingerprint && typeName.startsWith("/Lotus/Upgrades/Mods/Randomized/Raw")) {
             logger.debug(`ignoring fingerprint for raw riven mod`);
-        } else if (targetFingerprint) {
+        } else if (targetFingerprint && targetFingerprint != `{"lvl":0}`) {
             if (quantity != 1) {
                 logger.warn(`adding 1 of ${typeName} ${targetFingerprint} even tho quantity ${quantity} was requested`);
             }
