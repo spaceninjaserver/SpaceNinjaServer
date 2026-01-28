@@ -12,6 +12,7 @@
   "ircAddress": null,
   "hubExecutable": null,
   "hubAddress": null,
+  "noHubDiscrimination": false,
   "nrsAddress": null,
   "dtls": null,
   "administratorNames": [],

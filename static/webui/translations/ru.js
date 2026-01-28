@@ -232,7 +232,6 @@ dict = {
     cheats_dontSubtractVoidTraces: `Не вычитать количество Отголосков Бездны`,
     cheats_dontSubtractConsumables: `Не вычитать количество расходников`,
     cheats_unlockAllShipFeatures: `Разблокировать все функции корабля`,
-    cheats_unlockAllSkins: `Разблокировать все скины`,
     cheats_unlockAllCapturaScenes: `Разблокировать все сцены Каптуры`,
     cheats_universalPolarityEverywhere: `Универсальная полярность везде`,
     cheats_unlockDoubleCapacityPotatoesEverywhere: `Реакторы/Катализаторы орокин везде`,
@@ -290,6 +289,7 @@ dict = {
     cheats_nemesisHintProgressMultiplierGrineer: `Мультипликатор прогресса подсказки (Гринир)`,
     cheats_nemesisHintProgressMultiplierCorpus: `Мультипликатор прогресса подсказки (Корпус)`,
     cheats_nemesisExtraWeapon: `Дополнительное оружие/активный Кардиомиоцит за победу над Противником (0 для отключения)`,
+    cheats_noHubDiscrimination: `[UNTRANSLATED] No Hub Discrimination`,
 
     worldState: `Состояние мира`,
     worldState_creditBoost: `Глобальный бустер Кредитов`,

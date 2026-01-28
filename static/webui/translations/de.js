@@ -232,7 +232,6 @@ dict = {
     cheats_dontSubtractVoidTraces: `Void-Spuren nicht verbrauchen`,
     cheats_dontSubtractConsumables: `Verbrauchsgüter (Ausrüstung) nicht verbrauchen`,
     cheats_unlockAllShipFeatures: `Alle Schiffs-Funktionen freischalten`,
-    cheats_unlockAllSkins: `Alle Skins freischalten`,
     cheats_unlockAllCapturaScenes: `Alle Photora-Szenen freischalten`,
     cheats_universalPolarityEverywhere: `Universelle Polarität überall`,
     cheats_unlockDoubleCapacityPotatoesEverywhere: `Orokin Reaktor & Beschleuniger überall`,
@@ -290,6 +289,7 @@ dict = {
     cheats_nemesisHintProgressMultiplierGrineer: `Hinweis-Fortschrittsmultiplikator (Grineer)`,
     cheats_nemesisHintProgressMultiplierCorpus: `Hinweis-Fortschrittsmultiplikator (Corpus)`,
     cheats_nemesisExtraWeapon: `Zusätzliche Nemesis-Waffe/-Symbol bei Besiegung (0 zum deaktivieren)`,
+    cheats_noHubDiscrimination: `[UNTRANSLATED] No Hub Discrimination`,
 
     worldState: `Weltstatus`,
     worldState_creditBoost: `Event Booster: Credit`,

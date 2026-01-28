@@ -232,7 +232,6 @@ dict = {
     cheats_dontSubtractVoidTraces: `No descontar vestigios del Vacío`,
     cheats_dontSubtractConsumables: `No restar consumibles`,
     cheats_unlockAllShipFeatures: `Desbloquear todas las funciones de nave`,
-    cheats_unlockAllSkins: `Desbloquear todas las skins`,
     cheats_unlockAllCapturaScenes: `Desbloquear todas las escenas de Captura`,
     cheats_universalPolarityEverywhere: `Polaridad universal en todas partes`,
     cheats_unlockDoubleCapacityPotatoesEverywhere: `Patatas en todas partes`,
@@ -290,6 +289,7 @@ dict = {
     cheats_nemesisHintProgressMultiplierGrineer: `[UNTRANSLATED] Hint Progress Multiplier (Grineer)`,
     cheats_nemesisHintProgressMultiplierCorpus: `[UNTRANSLATED] Hint Progress Multiplier (Corpus)`,
     cheats_nemesisExtraWeapon: `[UNTRANSLATED] Extra Nemesis Weapon / Token On Vanquish (0 to disable)`,
+    cheats_noHubDiscrimination: `[UNTRANSLATED] No Hub Discrimination`,
 
     worldState: `Estado del mundo`,
     worldState_creditBoost: `Potenciador de Créditos`,

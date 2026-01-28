@@ -232,7 +232,6 @@ dict = {
     cheats_dontSubtractVoidTraces: `Не вираховувати кількість Відлуння`,
     cheats_dontSubtractConsumables: `Не вираховувати кількість витратних матеріалів`,
     cheats_unlockAllShipFeatures: `Розблокувати всі функції судна`,
-    cheats_unlockAllSkins: `Розблокувати всі скіни`,
     cheats_unlockAllCapturaScenes: `Розблокувати всі сцени Світлописця`,
     cheats_universalPolarityEverywhere: `Будь-яка полярність скрізь`,
     cheats_unlockDoubleCapacityPotatoesEverywhere: `Орокінські Реактори/Каталізатори скрізь`,
@@ -290,6 +289,7 @@ dict = {
     cheats_nemesisHintProgressMultiplierGrineer: `Множник прогресу підсказки (Ґрінери)`,
     cheats_nemesisHintProgressMultiplierCorpus: `Множник прогресу підсказки (Корпус)`,
     cheats_nemesisExtraWeapon: `Додаткова зброя/Жива сердцевина за перемогу над Недругом (0 для вимкнення)`,
+    cheats_noHubDiscrimination: `[UNTRANSLATED] No Hub Discrimination`,
 
     worldState: `Стан світу`,
     worldState_creditBoost: `Глобальне посилення Кредитів`,

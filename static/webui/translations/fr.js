@@ -232,7 +232,6 @@ dict = {
     cheats_dontSubtractVoidTraces: `Ne pas consommer de Void Traces`,
     cheats_dontSubtractConsumables: `Ne pas retirer de consommables`,
     cheats_unlockAllShipFeatures: `Débloquer tous les segments du vaisseau`,
-    cheats_unlockAllSkins: `Débloquer tous les skins`,
     cheats_unlockAllCapturaScenes: `Débloquer toutes les scènes captura`,
     cheats_universalPolarityEverywhere: `Polarités universelles partout`,
     cheats_unlockDoubleCapacityPotatoesEverywhere: `Réacteurs et Catalyseurs partout`,
@@ -290,6 +289,7 @@ dict = {
     cheats_nemesisHintProgressMultiplierGrineer: `Multiplicateur d'indices (Grineer)`,
     cheats_nemesisHintProgressMultiplierCorpus: `Multiplicateur d'indices (Corpus)`,
     cheats_nemesisExtraWeapon: `Arme de Nemesis/jeton supplémentaire sur exécution (0 pour désactiver)`,
+    cheats_noHubDiscrimination: `[UNTRANSLATED] No Hub Discrimination`,
 
     worldState: `Carte Solaire`,
     worldState_creditBoost: `Booster de Crédit`,

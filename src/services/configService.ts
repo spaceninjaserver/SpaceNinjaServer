@@ -20,6 +20,7 @@ export interface IConfig {
     ircAddress?: string;
     hubExecutable?: string;
     hubAddress?: string;
+    noHubDiscrimination?: boolean;
     nrsAddress?: string;
     dtls?: number;
     administratorNames?: string[];

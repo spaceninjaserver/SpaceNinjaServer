@@ -232,7 +232,6 @@ dict = {
     cheats_dontSubtractVoidTraces: `虚空光体无消耗`,
     cheats_dontSubtractConsumables: `消耗物品使用时无损耗`,
     cheats_unlockAllShipFeatures: `解锁所有飞船功能`,
-    cheats_unlockAllSkins: `解锁所有外观`,
     cheats_unlockAllCapturaScenes: `解锁所有Captura场景`,
     cheats_universalPolarityEverywhere: `全局万用极性`,
     cheats_unlockDoubleCapacityPotatoesEverywhere: `全物品自带Orokin反应堆`,
@@ -290,6 +289,7 @@ dict = {
     cheats_nemesisHintProgressMultiplierGrineer: `解密进度倍率 (Grineer)`,
     cheats_nemesisHintProgressMultiplierCorpus: `解密进度倍率 (Corpus)`,
     cheats_nemesisExtraWeapon: `额外玄骸武器/代币 (0为禁用)`,
+    cheats_noHubDiscrimination: `[UNTRANSLATED] No Hub Discrimination`,
 
     worldState: `世界状态配置`,
     worldState_creditBoost: `现金加成`,
