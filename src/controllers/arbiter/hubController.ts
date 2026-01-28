@@ -1,13 +1,30 @@
 import type { RequestHandler } from "express";
 import { config, getReflexiveAddress } from "../../services/configService.ts";
+import { hubInstances, pickHubServer, type TRegionId } from "../../services/arbiterService.ts";
 
 export const hubController: RequestHandler = (req, res) => {
-    if (config.noHubDiscrimination) {
-        const arr = (req.query.level as string).split("_");
-        const instanceId = arr.pop();
-        const level = arr[0];
-        res.json(`hub ${config.hubAddress ?? getReflexiveAddress(req).myAddress}:6952 ${instanceId} ${level}`);
+    const arr = (req.query.level as string).split("_");
+    const instanceId = arr.pop();
+    const level = config.noHubDiscrimination ? arr[0] : arr.join("_");
+
+    let hubServer: string;
+    if (`${level}_${instanceId}` in hubInstances) {
+        hubInstances[`${level}_${instanceId}`].Players += 1;
+        hubServer = hubInstances[`${level}_${instanceId}`].Hub;
     } else {
-        res.json(`hub ${config.hubAddress ?? getReflexiveAddress(req).myAddress}:6952`);
+        hubServer = pickHubServer(req.query.regionId as TRegionId);
+        hubInstances[`${level}_${instanceId}`] = {
+            Players: 1,
+            Hub: hubServer
+        };
+    }
+    const needToUseUdpProxy =
+        (config.dtls ?? 0) & 1 && config.hubServers?.find(x => x.address == hubServer)?.dtlsUnsupported;
+    hubServer = hubServer.split("%THIS_MACHINE%").join(getReflexiveAddress(req).myAddress);
+
+    if (`${level}_${instanceId}` == req.query.level) {
+        res.json(`${needToUseUdpProxy ? "udp_proxy_upstream" : "hub"} ${hubServer}`);
+    } else {
+        res.json(`${needToUseUdpProxy ? "udp_proxy_upstream" : "hub"} ${hubServer} ${instanceId} ${level}`);
     }
 };

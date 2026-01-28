@@ -5,6 +5,7 @@ import { args } from "../helpers/commandLineArguments.ts";
 import { Inbox } from "../models/inboxModel.ts";
 import type { Request } from "express";
 import { Account } from "../models/loginModel.ts";
+import type { TRegionId } from "./arbiterService.ts";
 
 export interface IConfig {
     mongodbUrl: string;
@@ -20,6 +21,11 @@ export interface IConfig {
     ircAddress?: string;
     hubExecutable?: string;
     hubAddress?: string;
+    hubServers?: {
+        address: string;
+        regions?: TRegionId[];
+        dtlsUnsupported?: boolean;
+    }[];
     noHubDiscrimination?: boolean;
     nrsAddress?: string;
     dtls?: number;
