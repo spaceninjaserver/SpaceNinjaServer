@@ -8,6 +8,8 @@
   "bindAddress": "0.0.0.0",
   "httpPort": 80,
   "httpsPort": 443,
+  "httpsCertFile": "static/cert/cert.pem",
+  "httpsKeyFile": "static/cert/key.pem",
   "ircExecutable": null,
   "ircAddress": null,
   "hubExecutable": null,
