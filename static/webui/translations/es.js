@@ -307,6 +307,7 @@ dict = {
     worldState_dogDaysRewards: `Recompensas de Canícula`,
     worldState_wolfHunt: `Cacería del Lobo`,
     worldState_voidCorruption: `Corrupción del Vacío (|VAL|)`,
+    worldState_scarletSpear: `[UNTRANSLATED] Scarlet Spear`,
     worldState_orphixVenom: `Veneno de Orphix`,
     worldState_bloodOfPerita: `Sangre de Perita`,
     worldState_longShadow: `Sombra Prolongada`,
