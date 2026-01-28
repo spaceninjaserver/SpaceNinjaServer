@@ -9,17 +9,18 @@ export const releasePetController: RequestHandler = async (req, res) => {
     const inventory = await getInventory(accountId, "RegularCredits KubrowPets");
     const payload = getJSONfromString<IReleasePetRequest>(String(req.body));
 
-    const inventoryChanges = updateCurrency(
-        inventory,
-        payload.recipeName == "/Lotus/Types/Game/KubrowPet/ReleasePetRecipe" ? 25000 : 0,
-        false
-    );
+    const cost = payload.recipeName == "/Lotus/Types/Game/KubrowPet/ReleasePetRecipe" ? 25000 : 0;
+    const inventoryChanges = updateCurrency(inventory, cost, false);
 
     inventoryChanges.RemovedIdItems = [{ ItemId: { $oid: payload.petId } }];
     inventory.KubrowPets.pull({ _id: payload.petId });
 
     await inventory.save();
-    res.json({ inventoryChanges }); // Not a mistake; it's "inventoryChanges" here.
+    res.json({
+        petId: payload.petId, // 2018.02.22.14.34
+        cost, // 2018.02.22.14.34
+        inventoryChanges // Not a mistake; it's "inventoryChanges" here.
+    });
     broadcastInventoryUpdate(req);
 };
 
