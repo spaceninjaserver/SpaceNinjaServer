@@ -45,6 +45,7 @@ export interface IConfig {
         varziaFullyStocked?: boolean;
         vanguardVaultRelics?: boolean;
         wolfHunt?: number;
+        scarletSpear?: boolean;
         orphixVenom?: boolean;
         bloodOfPerita?: boolean;
         longShadow?: boolean;

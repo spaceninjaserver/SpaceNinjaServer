@@ -3181,6 +3181,68 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         });
     }
 
+    if (config.worldState?.scarletSpear) {
+        worldState.Goals.push({
+            _id: {
+                $oid: "5e7a3e2389e3090b0c6a998b"
+            },
+            Activation: {
+                $date: {
+                    $numberLong: "1585070400000"
+                }
+            },
+            Expiry: {
+                $date: {
+                    $numberLong: "2000000000000"
+                }
+            },
+            Node: "ScenarioEventHub5",
+            Desc: "/Lotus/Language/G1Quests/FlotillaOperation",
+            Icon: "/Lotus/Interface/Graphics/ScarletSpear/ScarletSpearIcon.png",
+            Tag: "SquadLinkEvent",
+            ScoreVar: "ScenarioScore",
+            Personal: true,
+            Metadata:
+                '{"progressReq":100,"duration":180,"cooldown":10,"groundTiers":[1000,3000,5000],"spaceTiers":[1000,3000,5000]}',
+            CompletionBonus: [0, 2000, 6000, 10000],
+            InterimGoals: [10000, 30000],
+            InterimRewards: [
+                {
+                    items: ["/Lotus/StoreItems/Upgrades/Skins/Clan/ScarletSpear/ScarletSpearOperationIEmblem"]
+                },
+                {
+                    items: ["/Lotus/StoreItems/Upgrades/Skins/Clan/ScarletSpear/ScarletSpearOperationIIEmblem"]
+                }
+            ],
+            Goal: 50000,
+            Reward: {
+                items: ["/Lotus/StoreItems/Upgrades/Skins/Clan/ScarletSpear/ScarletSpearOperationIIIEmblem"]
+            },
+            AltExpiry: {
+                $date: {
+                    $numberLong: "2000000000000"
+                }
+            },
+            AltActivation: {
+                $date: {
+                    $numberLong: "2000000000000"
+                }
+            },
+            EpochNum: 114,
+            NextAltActivation: {
+                $date: {
+                    $numberLong: "2000000000000"
+                }
+            },
+            NextAltExpiry: {
+                $date: {
+                    $numberLong: "2000000000000"
+                }
+            },
+            PauseAutoScheduling: true
+        });
+    }
+
     if (
         config.worldState?.orphixVenom &&
         buildLabel &&

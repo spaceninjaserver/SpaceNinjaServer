@@ -158,6 +158,15 @@ export interface IGoal {
     UpgradeIds?: IOid[];
 
     NightLevel?: string;
+
+    Metadata?: string;
+    CompletionBonus?: number[];
+    AltExpiry?: IMongoDate;
+    AltActivation?: IMongoDate;
+    EpochNum?: number;
+    NextAltActivation?: IMongoDate;
+    NextAltExpiry?: IMongoDate;
+    PauseAutoScheduling?: boolean;
 }
 
 export interface ISyndicateJob {
