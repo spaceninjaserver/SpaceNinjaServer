@@ -1,6 +1,6 @@
-// French translation by Vitruvio (zexal.) and Nilo
+// French translation by Vitruvio and Nilo
 dict = {
-    general_inventoryUpdateNote: `Note : Pour voir les changements en jeu, vous devez synchroniser votre inventaire, par exemple en vous rendant dans un relais/dojo ou en vous reconnectant à votre compte.`,
+    general_inventoryUpdateNote: `Note : Pour voir les changements en jeu, vous devez synchroniser votre inventaire en vous rendant dans un relais/dojo ou en vous reconnectant au compte.`,
     general_inventoryUpdateNoteGameWs: `Note : Rouvrir un menu est nécessaire pour voir les changements.`,
     general_addButton: `Ajouter`,
     general_setButton: `Définir`,
@@ -81,7 +81,7 @@ dict = {
     code_stalker: `Stalker`,
     code_drifterBeardName: `Barbe du Voyageur |INDEX|`,
     code_reviveBooster: `Booster de Réanimation`,
-    code_reviveBoosterDesc: `Ajuster le nombre de réanimations à 4, permettant de s'auto-réanimer lors des Chasses Archontes.`,
+    code_reviveBoosterDesc: `Définir le nombre de réanimations à 4, permet de s'auto-réanimer lors de la Chasse aux Archontes.`,
     code_succChange: `Changement effectué.`,
     code_requiredInvigorationUpgrade: `Invigoration offensive et défensive requises.`,
     code_feature_1: `Réacteur Orokin`,
@@ -145,7 +145,7 @@ dict = {
     inventory_bulkRankUpSentinels: `Toutes les Sentinelles au rang max`,
     inventory_bulkRankUpSentinelWeapons: `Toutes les armes de Sentinelles au rang max`,
     inventory_bulkRankUpEvolutionProgress: `Toutes les évolutions Incarnon au rang max`,
-    inventory_removeIsNew: `Supprimer l'icône d'exclamation des nouveaux équipements`,
+    inventory_removeIsNew: `Supprimer "!" sur les nouveaux équipements`,
 
     quests_list: `Quêtes`,
     quests_completeAll: `Compléter toutes les quêtes`,
@@ -199,7 +199,7 @@ dict = {
     abilityOverride_onSlot: `Sur l'emplacement`,
 
     detailedView_umbraEchoesDescription: `L'injection de ce fluide dans une Warframe lui donnera la possibilité de se battre de manière autonome aux côtés de l'Opérateur.`,
-    detailedView_umbraEchoesExpiryLabel: `Expiration de l'écho (optionnel)`,
+    detailedView_umbraEchoesExpiryLabel: `Expiration de l'Écho (optionnel)`,
 
     mods_addRiven: `Ajouter un riven`,
     mods_fingerprint: `Empreinte`,
@@ -250,8 +250,8 @@ dict = {
     cheats_baroFullyStocked: `Stock de Baro au max`,
     cheats_alertsRepeatable: `Alertes répétables`,
     cheats_syndicateMissionsRepeatable: `Mission syndicat répétables`,
-    cheats_unlockAllJobChainBounties: `[UNTRANSLATED] Unlock All Job Chain Bounties`,
-    cheats_unlockSuccInventory: `Succès. Veuillez noter que vous devez synchroniser votre inventaire, par exemple en vous rendant dans un relais/dojo ou en vous reconnectant à votre compte.`,
+    cheats_unlockAllJobChainBounties: `Débloquer toutes les mises à prix des Braquages & Souterrains`,
+    cheats_unlockSuccInventory: `Succès. Une synchronisation est nécessaire pour synchroniser l'inventaire (visiter un relais/dojo ou reconnexion).`,
     cheats_instantFinishRivenChallenge: `Débloquer le challenge Riven instantanément`,
     cheats_instantResourceExtractorDrones: `Ressources de drones d'extraction instantannées`,
     cheats_noResourceExtractorDronesDamage: `Aucun dégâts aux drones d'extraction de resources`,
@@ -270,7 +270,7 @@ dict = {
     cheats_disableDailyTribute: `Désactiver la récompense quotidienne de connexion`,
     cheats_spoofMasteryRank: `Rang de maîtrise personnalisé (-1 pour désactiver)`,
     cheats_relicRewardItemCountMultiplier: `Multiplicateur de récompenses de relique`,
-    cheats_nightwaveStandingMultiplier: `Multiplicateur de réputation d'Ondes Nocturnes`,
+    cheats_nightwaveStandingMultiplier: `Multiplicateur de réputation des Ondes Nocturnes`,
     cheats_save: `Sauvegarder`,
     cheats_account: `Compte`,
     cheats_retroactivePrompt: `Souhaitez-vous appliquer cette triche rétroactivement ?`,
@@ -289,7 +289,7 @@ dict = {
     cheats_nemesisHintProgressMultiplierGrineer: `Multiplicateur d'indices (Grineer)`,
     cheats_nemesisHintProgressMultiplierCorpus: `Multiplicateur d'indices (Corpus)`,
     cheats_nemesisExtraWeapon: `Arme de Nemesis/jeton supplémentaire sur exécution (0 pour désactiver)`,
-    cheats_noHubDiscrimination: `[UNTRANSLATED] No Hub Discrimination`,
+    cheats_noHubDiscrimination: `Hubs unifiés`,
 
     worldState: `Carte Solaire`,
     worldState_creditBoost: `Booster de Crédit`,
@@ -346,7 +346,7 @@ dict = {
     worldState_envy: `Envie `,
     worldState_sorrow: `hagrin`,
     worldState_fear: `Peur`,
-    worldState_nightwaveOverride: `Saison d'Ondes Nocturnes`,
+    worldState_nightwaveOverride: `Saison des Ondes Nocturnes`,
     worldState_RadioLegionIntermission14Syndicate: `Mix de Nora: Les Rêves des Morts`,
     worldState_RadioLegionIntermission13Syndicate: `Mix de Nora Vol. 9`,
     worldState_RadioLegionIntermission12Syndicate: `Mix de Nora Vol. 8`,
@@ -365,7 +365,7 @@ dict = {
     worldState_RadioLegionIntermissionSyndicate: `Intermission I`,
     worldState_RadioLegionSyndicate: `Le Loup de Saturne Six`,
     worldState_nightwaveOff: `Désactiver les Nightwaves`,
-    worldState_nightwaveEpisode: `[UNTRANSLATED] Nightwave Episode`,
+    worldState_nightwaveEpisode: `Episode des Ondes Nocturnes`,
     worldState_fissures: `Fissures`,
     normal: `Normal`,
     worldState_allAtOnceNormal: `Toutes, Normal`,
@@ -381,8 +381,8 @@ dict = {
     import_submit: `Soumettre`,
     import_samples: `Échantillons :`,
     import_samples_maxFocus: `Toutes les écoles de focus au rang max`,
-    import_samples_accolades: `Accolades & accès au Tchat Conseil`,
-    import_samples_maxStratos: `Icône du Badge Stratos rang maximum`,
+    import_samples_accolades: `Accolades et accès au tchat Design Council`,
+    import_samples_maxStratos: `Badge Stratos rang max`,
 
     upgrade_Equilibrium: `Ramasser de la santé donne +|VAL|% d'énergie supplémentaire. Ramasser de l'énergie donne +|VAL|% de santé supplémentaire.`,
     upgrade_MeleeCritDamage: `+|VAL|% de dégâts critique en mêlée`,
