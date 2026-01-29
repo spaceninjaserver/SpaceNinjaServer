@@ -229,9 +229,8 @@ export const getDojoClient = async (
                         continue;
                     }
                     clientComponent.DestructionTime = toMongoDate(dojoComponent.DestructionTime);
-                    clientComponent.DestructionTimeRemaining = Math.trunc(
-                        (dojoComponent.DestructionTime.getTime() - Date.now()) / 1000
-                    );
+                    clientComponent.DestructionTimeRemaining =
+                        1 + Math.trunc((dojoComponent.DestructionTime.getTime() - Date.now()) / 1000);
                 }
             } else {
                 clientComponent.RegularCredits = dojoComponent.RegularCredits;
@@ -661,7 +660,9 @@ export const checkClanAscensionHasRequiredContributors = async (guild: TGuildDat
     if (guild.CeremonyContributors!.length >= requiredContributors) {
         guild.Class = guild.CeremonyClass!;
         guild.CeremonyClass = undefined;
-        guild.CeremonyResetDate = new Date(Date.now() + (guild.fastClanAscension ? 5_000 : 72 * 3600_000));
+        guild.CeremonyResetDate = new Date(
+            Math.trunc(Date.now() / 1000) * 1000 + (guild.fastClanAscension ? 5_000 : 72 * 3600_000)
+        );
         if (!guild.fastClanAscension) {
             // Send message to all active guild members
             const members = await GuildMember.find({ guildId: guild._id, status: 0 }, "accountId");
