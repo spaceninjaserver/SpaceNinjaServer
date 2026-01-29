@@ -1,51 +1,48 @@
 import http from "http";
 import https from "https";
 import fs from "node:fs";
-import { configGetWebBindings, type IBindings } from "./configService.ts";
+import { getWebServerParams } from "./configService.ts";
 import { logger } from "../utils/logger.ts";
 import { app } from "../app.ts";
-import type { AddressInfo } from "node:net";
 import { Agent, WebSocket as UnidiciWebSocket } from "undici";
 import { startWsServer, startWssServer, stopWsServers } from "./wsService.ts";
 
 let httpServer: http.Server | undefined;
 let httpsServer: https.Server | undefined;
 
-const tlsOptions = {
-    key: fs.readFileSync("static/cert/key.pem"),
-    cert: fs.readFileSync("static/cert/cert.pem")
-};
-
 export const startWebServer = (): void => {
-    const bindings = configGetWebBindings();
+    const params = getWebServerParams();
 
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    const tlsOptions = {
+        cert: fs.readFileSync(params.certFile),
+        key: fs.readFileSync(params.keyFile)
+    };
+
     httpServer = http.createServer(app);
-    httpServer.listen(bindings.httpPort, bindings.address, () => {
+    httpServer.listen(params.httpPort, params.address, () => {
         startWsServer(httpServer!);
 
-        logger.info(`HTTP server started on ${bindings.address}:${bindings.httpPort}`);
+        logger.info(`HTTP server started on ${params.address}:${params.httpPort}`);
 
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         httpsServer = https.createServer(tlsOptions, app);
-        httpsServer.listen(bindings.httpsPort, bindings.address, () => {
+        httpsServer.listen(params.httpsPort, params.address, () => {
             startWssServer(httpsServer!);
 
-            logger.info(`HTTPS server started on ${bindings.address}:${bindings.httpsPort}`);
+            logger.info(`HTTPS server started on ${params.address}:${params.httpsPort}`);
 
             logger.info(
                 "Access the WebUI in your browser at http://localhost" +
-                    (bindings.httpPort == 80 ? "" : ":" + bindings.httpPort)
+                    (params.httpPort == 80 ? "" : ":" + params.httpPort)
             );
 
-            void runWsSelfTest("wss", bindings.httpsPort).then(ok => {
+            void runWsSelfTest("wss", params.httpsPort).then(ok => {
                 if (!ok) {
                     logger.warn(
-                        `WSS self-test failed. The server may not be reachable locally on port ${bindings.httpsPort}.`
+                        `WSS self-test failed. The server may not be reachable locally on port ${params.httpsPort}.`
                     );
                     if (process.platform == "win32") {
                         logger.warn(
-                            `You can check who has that port via powershell: Get-Process -Id (Get-NetTCPConnection -LocalPort ${bindings.httpsPort}).OwningProcess`
+                            `You can check who has that port via powershell: Get-Process -Id (Get-NetTCPConnection -LocalPort ${params.httpsPort}).OwningProcess`
                         );
                     }
                 }
@@ -80,14 +77,6 @@ const runWsSelfTest = (protocol: "ws" | "wss", port: number): Promise<boolean> =
             };
         }
     });
-};
-
-export const getWebBindings = (): Partial<IBindings> => {
-    return {
-        address: (httpServer?.address() as AddressInfo | undefined)?.address,
-        httpPort: (httpServer?.address() as AddressInfo | undefined)?.port,
-        httpsPort: (httpsServer?.address() as AddressInfo | undefined)?.port
-    };
 };
 
 export const stopWebServer = async (): Promise<void> => {

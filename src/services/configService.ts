@@ -16,6 +16,8 @@ export interface IConfig {
     bindAddress?: string;
     httpPort?: number;
     httpsPort?: number;
+    httpsCertFile?: string;
+    httpsKeyFile?: string;
     ircExecutable?: string;
     ircAddress?: string;
     hubExecutable?: string;
@@ -244,16 +246,20 @@ export const getReflexiveAddress = (request: Request): { myAddress: string; myUr
     return { myAddress, myUrlBase };
 };
 
-export interface IBindings {
+export interface IWebServerParams {
     address: string;
     httpPort: number;
     httpsPort: number;
+    certFile: string;
+    keyFile: string;
 }
 
-export const configGetWebBindings = (): IBindings => {
+export const getWebServerParams = (): IWebServerParams => {
     return {
         address: config.bindAddress || "0.0.0.0",
         httpPort: config.httpPort || 80,
-        httpsPort: config.httpsPort || 443
+        httpsPort: config.httpsPort || 443,
+        certFile: config.httpsCertFile || "static/cert/cert.pem",
+        keyFile: config.httpsKeyFile || "static/cert/key.pem"
     };
 };

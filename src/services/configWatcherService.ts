@@ -2,15 +2,15 @@ import chokidar from "chokidar";
 import { logger } from "../utils/logger.ts";
 import {
     config,
-    configGetWebBindings,
     configPath,
     configRemovedOptionsKeys,
+    getWebServerParams,
     loadConfig,
     syncConfigWithDatabase,
     type IConfig
 } from "./configService.ts";
 import { saveConfig, shouldReloadConfig } from "./configWriterService.ts";
-import { getWebBindings, startWebServer, stopWebServer } from "./webService.ts";
+import { startWebServer, stopWebServer } from "./webService.ts";
 import { forEachWsClient, sendWsBroadcast, type IWsMsgToClient } from "./wsService.ts";
 import varzia from "../constants/varzia.ts";
 import { getTunablesForClient } from "./tunablesService.ts";
@@ -18,6 +18,7 @@ import { getTunablesForClient } from "./tunablesService.ts";
 chokidar.watch(configPath).on("change", () => {
     if (shouldReloadConfig()) {
         const prevTunables = JSON.stringify(config.tunables);
+        const prevWebParams = JSON.stringify(getWebServerParams());
 
         logger.info("Detected a change to config file, reloading its contents.");
         try {
@@ -42,19 +43,19 @@ chokidar.watch(configPath).on("change", () => {
             });
         }
 
-        const configBindings = configGetWebBindings();
-        const bindings = getWebBindings();
-        if (
-            configBindings.address != bindings.address ||
-            configBindings.httpPort != bindings.httpPort ||
-            configBindings.httpsPort != bindings.httpsPort
-        ) {
-            logger.info(`Restarting web server to apply binding changes.`);
+        if (JSON.stringify(getWebServerParams()) != prevWebParams) {
+            logger.info(`Restarting web server to apply changes.`);
 
             // Tell webui clients to reload with new port
             sendWsBroadcast({ ports: { http: config.httpPort, https: config.httpsPort } });
 
-            void stopWebServer().then(startWebServer);
+            void stopWebServer().then(() => {
+                try {
+                    startWebServer();
+                } catch (e) {
+                    logger.error(`Could not start up web server again: ${(e as Error).message}`);
+                }
+            });
         } else {
             sendWsBroadcast({ config_reloaded: true });
         }
