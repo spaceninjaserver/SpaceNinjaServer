@@ -9,7 +9,7 @@ import { apiRouter } from "./routes/api.ts";
 import { arbiterRouter } from "./routes/arbiter.ts";
 import { cacheRouter } from "./routes/cache.ts";
 import { customRouter } from "./routes/custom.ts";
-import { dynamicController } from "./routes/dynamic.ts";
+import { dynamicRouter } from "./routes/dynamic.ts";
 import { payRouter } from "./routes/pay.ts";
 import { publicExportRouter } from "./routes/publicExport.ts";
 import { statsRouter } from "./routes/stats.ts";
@@ -42,9 +42,9 @@ app.use("/api", apiRouter);
 app.use("/api", arbiterRouter);
 app.use("/", cacheRouter);
 app.use("/custom", customRouter);
-app.use("/cdn", dynamicController); // Post-U40
-app.use("/dynamic", dynamicController); // Pre-U40
-app.use("/:id/dynamic", dynamicController);
+app.use("/cdn", dynamicRouter); // >= U40
+app.use("/dynamic", dynamicRouter); // < U40
+app.use("/:id/dynamic", dynamicRouter);
 app.use("/pay", payRouter);
 app.use("/PublicExport/", publicExportRouter);
 app.use("/stats", statsRouter);

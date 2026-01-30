@@ -4,12 +4,12 @@ import { getGuildAdsController } from "../controllers/dynamic/getGuildAdsControl
 import { getProfileViewingDataGetController } from "../controllers/dynamic/getProfileViewingDataController.ts";
 import { worldStateController } from "../controllers/dynamic/worldStateController.ts";
 
-const dynamicController = express.Router();
+const dynamicRouter = express.Router();
 
-dynamicController.get("/aggregateSessions.php", aggregateSessionsController);
-dynamicController.get("/getGuildAds.php", getGuildAdsController);
-dynamicController.get("/getProfileViewingData.php", getProfileViewingDataGetController);
-dynamicController.get("/worldState.php", worldStateController);
-dynamicController.post("/worldState.php", worldStateController); // used by companion app
+dynamicRouter.get("/aggregateSessions.php", aggregateSessionsController);
+dynamicRouter.get("/getGuildAds.php", getGuildAdsController);
+dynamicRouter.get("/getProfileViewingData.php", getProfileViewingDataGetController);
+dynamicRouter.get("/worldState.php", worldStateController);
+dynamicRouter.post("/worldState.php", worldStateController); // used by companion app
 
-export { dynamicController };
+export { dynamicRouter };
