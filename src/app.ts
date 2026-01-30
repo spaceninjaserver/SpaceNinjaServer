@@ -49,6 +49,7 @@ app.use("/pay", payRouter);
 app.use("/PublicExport/", publicExportRouter);
 app.use("/stats", statsRouter);
 app.use("/", webuiRouter);
+app.use("/.well-known", express.static(".well-known"));
 
 app.use(unknownEndpointHandler);
 app.use(errorHandler);

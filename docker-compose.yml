@@ -6,6 +6,7 @@ services:
             - ./docker-data/conf:/app/conf
             - ./docker-data/static-data:/app/static/data
             - ./docker-data/logs:/app/logs
+            - ./.well-known:/app/.well-known
         ports:
             # The lefthand value determines the port you actually connect to. Within the container, SpaceNinjaServer will always use 80 and 443 (righthand values).
             - 80:80
