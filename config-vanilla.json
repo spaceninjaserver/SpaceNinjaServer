@@ -13,7 +13,13 @@
   "ircExecutable": null,
   "ircAddress": null,
   "hubExecutable": null,
-  "hubAddress": null,
+  "hubServers": [
+    {
+      "address": "%THIS_MACHINE%:6952",
+      "regions": ["ASIA", "OCEANIA", "EUROPE", "RUSSIA", "NORTH_AMERICA", "SOUTH_AMERICA"],
+      "dtlsUnsupported": true
+    }
+  ],
   "noHubDiscrimination": false,
   "nrsAddress": null,
   "dtls": null,

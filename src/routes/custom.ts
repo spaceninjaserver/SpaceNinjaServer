@@ -12,6 +12,7 @@ import { getGuildController } from "../controllers/custom/getGuildController.ts"
 import { getAllianceController } from "../controllers/custom/getAllianceController.ts";
 import { renameAccountController } from "../controllers/custom/renameAccountController.ts";
 import { ircDroppedController } from "../controllers/custom/ircDroppedController.ts";
+import { hubDroppedController } from "../controllers/custom/hubDroppedController.ts";
 import { unlockAllIntrinsicsController } from "../controllers/custom/unlockAllIntrinsicsController.ts";
 import { addMissingMaxRankModsController } from "../controllers/custom/addMissingMaxRankModsController.ts";
 import { webuiFileChangeDetectedController } from "../controllers/custom/webuiFileChangeDetectedController.ts";
@@ -67,6 +68,7 @@ customRouter.get("/getGuild", getGuildController);
 customRouter.get("/getAlliance", getAllianceController);
 customRouter.get("/renameAccount", renameAccountController);
 customRouter.get("/ircDropped", ircDroppedController);
+customRouter.get("/hubDropped", hubDroppedController);
 customRouter.get("/unlockAllIntrinsics", unlockAllIntrinsicsController);
 customRouter.get("/addMissingMaxRankMods", addMissingMaxRankModsController);
 customRouter.get("/webuiFileChangeDetected", webuiFileChangeDetectedController);

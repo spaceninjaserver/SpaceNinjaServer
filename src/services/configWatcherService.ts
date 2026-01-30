@@ -73,6 +73,22 @@ export const validateConfig = (): void => {
             modified = true;
         }
     }
+    if (!config.hubServers) {
+        config.hubServers = [
+            {
+                address:
+                    (config.hubAddress == "127.0.0.1:6951" ? config.tunables?.udpProxyUpstream : config.hubAddress) ??
+                    "%THIS_MACHINE%:6952",
+                regions: ["ASIA", "OCEANIA", "EUROPE", "RUSSIA", "NORTH_AMERICA", "SOUTH_AMERICA"],
+                dtlsUnsupported: true
+            }
+        ];
+        delete config.hubAddress;
+        if (config.tunables) {
+            delete config.tunables.udpProxyUpstream;
+        }
+        modified = true;
+    }
     if (config.administratorNames) {
         if (!Array.isArray(config.administratorNames)) {
             config.administratorNames = [config.administratorNames];
