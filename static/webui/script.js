@@ -4144,6 +4144,9 @@ const importSamples = {
     },
     maxStratos: {
         BountyScore: 39
+    },
+    clearWishlist: {
+        Wishlist: []
     }
 };
 function setImportSample(key) {

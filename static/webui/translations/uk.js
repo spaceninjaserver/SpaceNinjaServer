@@ -383,6 +383,7 @@ dict = {
     import_samples_maxFocus: `Всі школи Фокусу макс. рівня`,
     import_samples_accolades: `[UNTRANSLATED] Accolades & Council Chat Access`,
     import_samples_maxStratos: `[UNTRANSLATED] Max Rank Stratos Emblem Icon`,
+    import_samples_clearWishlist: `[UNTRANSLATED] Clear Wishlist`,
 
     upgrade_Equilibrium: `Згустки здоров'я дають +|VAL|% енергії, згустки енергії дають +|VAL|% здоров'я.`,
     upgrade_MeleeCritDamage: `+|VAL|% до критичної шкоди від холодної зброї.`,

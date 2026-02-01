@@ -1,4 +1,4 @@
-// French translation by Vitruvio and Nilo
+// French translation by Vitruvio, Nilo
 dict = {
     general_inventoryUpdateNote: `Note : Pour voir les changements en jeu, vous devez synchroniser votre inventaire en vous rendant dans un relais/dojo ou en vous reconnectant au compte.`,
     general_inventoryUpdateNoteGameWs: `Note : Rouvrir un menu est nécessaire pour voir les changements.`,
@@ -383,6 +383,7 @@ dict = {
     import_samples_maxFocus: `Toutes les écoles de focus au rang max`,
     import_samples_accolades: `Accolades et accès au tchat Design Council`,
     import_samples_maxStratos: `Badge Stratos rang max`,
+    import_samples_clearWishlist: `[UNTRANSLATED] Clear Wishlist`,
 
     upgrade_Equilibrium: `Ramasser de la santé donne +|VAL|% d'énergie supplémentaire. Ramasser de l'énergie donne +|VAL|% de santé supplémentaire.`,
     upgrade_MeleeCritDamage: `+|VAL|% de dégâts critique en mêlée`,

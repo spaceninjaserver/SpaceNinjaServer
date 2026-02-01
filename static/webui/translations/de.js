@@ -383,6 +383,7 @@ dict = {
     import_samples_maxFocus: `Alle Fokus-Schulen maximiert`,
     import_samples_accolades: `Auszeichnungen & Council Chat Zugang`,
     import_samples_maxStratos: `Max. Rang-Symbol für Stratos Emblem`,
+    import_samples_clearWishlist: `Wunschliste leeren`,
 
     upgrade_Equilibrium: `+|VAL|% Energie bei Gesundheitskugeln, +|VAL|% Gesundheit bei Energiekugeln`,
     upgrade_MeleeCritDamage: `+|VAL|% Krit. Nahkampfschaden`,

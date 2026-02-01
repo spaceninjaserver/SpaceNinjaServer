@@ -382,6 +382,7 @@ dict = {
     import_samples_maxFocus: `All Focus Schools Maxed Out`,
     import_samples_accolades: `Accolades & Council Chat Access`,
     import_samples_maxStratos: `Max Rank Stratos Emblem Icon`,
+    import_samples_clearWishlist: `Clear Wishlist`,
 
     upgrade_Equilibrium: `+|VAL|% Energy from Health pickups, +|VAL|% Health from Energy pickups`,
     upgrade_MeleeCritDamage: `+|VAL|% Melee Critical Damage`,
