@@ -4,7 +4,7 @@ import type { IMongoDateWithLegacySupport, IMongoDate, IOid, IOidWithLegacySuppo
 export interface IWorldState {
     WorldSeed?: string;
     Version: number; // for goals
-    MobileVersion?: string; // if present, the companion app may show a warning about being out of dateworldState.Events
+    MobileVersion?: string; // if present, the companion app may show a warning about being out of date
     BuildLabel: string;
     Time: number;
     Events?: IEvent[];
