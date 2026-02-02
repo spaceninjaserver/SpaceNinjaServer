@@ -4147,6 +4147,9 @@ const importSamples = {
     },
     clearWishlist: {
         Wishlist: []
+    },
+    clearLocPins: {
+        CustomMarkers: []
     }
 };
 function setImportSample(key) {

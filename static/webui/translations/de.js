@@ -307,7 +307,7 @@ dict = {
     worldState_dogDaysRewards: `Hitzefrei-Belohnungen`,
     worldState_wolfHunt: `Wolfsjagd`,
     worldState_voidCorruption: `Void-Korruption (|VAL|)`,
-    worldState_scarletSpear: `[UNTRANSLATED] Scarlet Spear`,
+    worldState_scarletSpear: `Scharlachroter Speer`,
     worldState_orphixVenom: `Orphix Gift`,
     worldState_bloodOfPerita: `Blut von Perita`,
     worldState_longShadow: `Lange Schatten`,
@@ -384,6 +384,7 @@ dict = {
     import_samples_accolades: `Auszeichnungen & Council Chat Zugang`,
     import_samples_maxStratos: `Max. Rang-Symbol für Stratos Emblem`,
     import_samples_clearWishlist: `Wunschliste leeren`,
+    import_samples_clearLocPins: `Lok-Pins leeren`,
 
     upgrade_Equilibrium: `+|VAL|% Energie bei Gesundheitskugeln, +|VAL|% Gesundheit bei Energiekugeln`,
     upgrade_MeleeCritDamage: `+|VAL|% Krit. Nahkampfschaden`,

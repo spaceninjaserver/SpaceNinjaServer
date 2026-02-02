@@ -307,7 +307,7 @@ dict = {
     worldState_dogDaysRewards: `三伏天奖励设置`,
     worldState_wolfHunt: `恶狼狩猎`,
     worldState_voidCorruption: `虚空堕落 (|VAL|)`,
-    worldState_scarletSpear: `[UNTRANSLATED] Scarlet Spear`,
+    worldState_scarletSpear: `猩红之矛`,
     worldState_orphixVenom: `奥影之毒`,
     worldState_bloodOfPerita: `佩里塔之血`,
     worldState_longShadow: `暗夜长影`,
@@ -384,6 +384,7 @@ dict = {
     import_samples_accolades: `[UNTRANSLATED] Accolades & Council Chat Access`,
     import_samples_maxStratos: `[UNTRANSLATED] Max Rank Stratos Emblem Icon`,
     import_samples_clearWishlist: `[UNTRANSLATED] Clear Wishlist`,
+    import_samples_clearLocPins: `[UNTRANSLATED] Clear Loc-Pins`,
 
     upgrade_Equilibrium: `拾取生命球+|VAL|%能量,拾取能量球+|VAL|%生命`,
     upgrade_MeleeCritDamage: `+|VAL|%近战暴击伤害`,

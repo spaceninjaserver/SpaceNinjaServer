@@ -307,7 +307,7 @@ dict = {
     worldState_dogDaysRewards: `Récompenses de la Bataille d'Eau`,
     worldState_wolfHunt: `Chasse au Loup`,
     worldState_voidCorruption: `Corruption du Néant (|VAL|)`,
-    worldState_scarletSpear: `[UNTRANSLATED] Scarlet Spear`,
+    worldState_scarletSpear: `Incursion Écarlate`,
     worldState_orphixVenom: `Venin Orphix`,
     worldState_bloodOfPerita: `Sang de Perita`,
     worldState_longShadow: `La Propagation des Ombres`,
@@ -384,6 +384,7 @@ dict = {
     import_samples_accolades: `Accolades et accès au tchat Design Council`,
     import_samples_maxStratos: `Badge Stratos rang max`,
     import_samples_clearWishlist: `[UNTRANSLATED] Clear Wishlist`,
+    import_samples_clearLocPins: `[UNTRANSLATED] Clear Loc-Pins`,
 
     upgrade_Equilibrium: `Ramasser de la santé donne +|VAL|% d'énergie supplémentaire. Ramasser de l'énergie donne +|VAL|% de santé supplémentaire.`,
     upgrade_MeleeCritDamage: `+|VAL|% de dégâts critique en mêlée`,
