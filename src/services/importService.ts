@@ -43,21 +43,22 @@ import type {
     ILoadOutPresets
 } from "../types/saveLoadoutTypes.ts";
 import { slotNames } from "../types/purchaseTypes.ts";
-import type {
-    ICrewShipMemberClient,
-    ICrewShipMemberDatabase,
-    ICrewShipMembersClient,
-    ICrewShipMembersDatabase,
-    ICrewShipWeaponClient,
-    ICrewShipWeaponDatabase,
-    ICrewShipWeaponEmplacementsClient,
-    ICrewShipWeaponEmplacementsDatabase,
-    IEquipmentClient,
-    IEquipmentDatabase,
-    IEquipmentSelectionClient,
-    IEquipmentSelectionDatabase,
-    IKubrowPetDetailsClient,
-    IKubrowPetDetailsDatabase
+import {
+    Status,
+    type ICrewShipMemberClient,
+    type ICrewShipMemberDatabase,
+    type ICrewShipMembersClient,
+    type ICrewShipMembersDatabase,
+    type ICrewShipWeaponClient,
+    type ICrewShipWeaponDatabase,
+    type ICrewShipWeaponEmplacementsClient,
+    type ICrewShipWeaponEmplacementsDatabase,
+    type IEquipmentClient,
+    type IEquipmentDatabase,
+    type IEquipmentSelectionClient,
+    type IEquipmentSelectionDatabase,
+    type IKubrowPetDetailsClient,
+    type IKubrowPetDetailsDatabase
 } from "../types/equipmentTypes.ts";
 import type {
     IApartmentClient,
@@ -82,6 +83,8 @@ import type {
     ITailorShopDatabase
 } from "../types/personalRoomsTypes.ts";
 import { fromMongoDate } from "../helpers/inventoryHelpers.ts";
+import { getRecipe } from "./itemDataService.ts";
+import { logger } from "../utils/logger.ts";
 
 const convertDate = (value: IMongoDate): Date => {
     return new Date(parseInt(value.$date.$numberLong));
@@ -550,6 +553,17 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     }
     if (client.Boosters !== undefined) {
         replaceArray<IBooster>(db.Boosters, client.Boosters);
+    }
+
+    // Final sanity check over data
+    for (const pr of db.PendingRecipes) {
+        const recipe = getRecipe(pr.ItemType);
+        if (recipe?.secretIngredientAction == "SIA_CREATE_KUBROW" && !pr.KubrowPet) {
+            pr.KubrowPet = db.KubrowPets.find(x => x.Details!.Status == Status.StatusIncubating)?._id;
+            logger.debug(
+                `importing an incubating pet; associating pet ${pr.KubrowPet?.toString()} with recipe ${pr._id.toString()} (${pr.ItemType})`
+            );
+        }
     }
 };
 

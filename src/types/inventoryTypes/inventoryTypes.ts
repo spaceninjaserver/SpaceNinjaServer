@@ -921,7 +921,6 @@ export interface IPendingCouponClient {
 export interface IPendingRecipeDatabase {
     ItemType: string;
     CompletionDate: Date;
-    ItemId: IOid;
     TargetItemId?: string; // unsure what this is for
     TargetFingerprint?: string;
     LongGuns?: IEquipmentDatabase[];
@@ -935,6 +934,7 @@ export interface IPendingRecipeClient extends Omit<
     IPendingRecipeDatabase,
     "CompletionDate" | "LongGuns" | "Pistols" | "Melee" | "SuitToUnbrand" | "KubrowPet"
 > {
+    ItemId: IOid;
     CompletionDate: IMongoDate;
 }
 
