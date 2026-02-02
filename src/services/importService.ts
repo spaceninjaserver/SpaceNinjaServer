@@ -415,7 +415,8 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         //"OneTimePurchases", // TODO: Import Antiques
         "EntratiLabConquestActiveFrameVariants",
         "EchoesHexConquestActiveFrameVariants",
-        "EchoesHexConquestActiveStickers"
+        "EchoesHexConquestActiveStickers",
+        "ClaimedJunctionChallengeRewards"
     ] as const) {
         if (client[key] !== undefined) {
             db[key] = client[key];
