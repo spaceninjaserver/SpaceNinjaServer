@@ -2,6 +2,7 @@ import { getSubstringFromKeyword } from "../helpers/stringHelpers.ts";
 import {
     addBooster,
     addItem,
+    addItems,
     addMiscItems,
     combineInventoryChanges,
     updateCurrency,
@@ -165,7 +166,7 @@ export const handlePurchase = async (
             }
             if (!inventory.dontSubtractPurchaseItemCost) {
                 if (offer.ItemPrices) {
-                    handleItemPrices(
+                    await handleItemPrices(
                         inventory,
                         offer.ItemPrices,
                         purchaseRequest.PurchaseParams.Quantity,
@@ -321,7 +322,7 @@ export const handlePurchase = async (
                         updateCurrency(inventory, offer.platinum, true, purchaseResponse.InventoryChanges);
                     }
                     if (offer.itemPrices && !inventory.dontSubtractPurchaseItemCost) {
-                        handleItemPrices(
+                        await handleItemPrices(
                             inventory,
                             offer.itemPrices,
                             purchaseRequest.PurchaseParams.Quantity,
@@ -383,28 +384,17 @@ export const handlePurchase = async (
     return purchaseResponse;
 };
 
-const handleItemPrices = (
+const handleItemPrices = async (
     inventory: TInventoryDatabaseDocument,
     itemPrices: IMiscItem[],
     purchaseQuantity: number,
     inventoryChanges: IInventoryChanges
-): void => {
-    for (const item of itemPrices) {
-        const invItem: IMiscItem = {
-            ItemType: item.ItemType,
-            ItemCount: item.ItemCount * purchaseQuantity * -1
-        };
-
-        addMiscItems(inventory, [invItem]);
-
-        inventoryChanges.MiscItems ??= [];
-        const change = inventoryChanges.MiscItems.find(x => x.ItemType == item.ItemType);
-        if (change) {
-            change.ItemCount += invItem.ItemCount;
-        } else {
-            inventoryChanges.MiscItems.push(invItem);
-        }
-    }
+): Promise<void> => {
+    const items: IMiscItem[] = itemPrices.map(({ ItemType, ItemCount }) => ({
+        ItemType,
+        ItemCount: ItemCount * purchaseQuantity * -1
+    }));
+    await addItems(inventory, items, inventoryChanges);
 };
 
 export const handleDailyDealPurchase = async (
