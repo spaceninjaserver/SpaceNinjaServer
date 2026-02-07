@@ -8,7 +8,6 @@ import {
     ExportAnimals,
     ExportEnemies,
     ExportFusionBundles,
-    ExportKeys,
     ExportRegions,
     ExportRelics,
     ExportRewards
@@ -52,7 +51,14 @@ import {
 import { updateQuestKey } from "./questService.ts";
 import { Types } from "mongoose";
 import type { IAffiliationMods, IInventoryChanges } from "../types/purchaseTypes.ts";
-import { fromStoreItem, getLevelKeyRewards, isStoreItem, toStoreItem } from "./itemDataService.ts";
+import {
+    fromStoreItem,
+    getKey,
+    getLevelKeyRewards,
+    getMissionDeck,
+    isStoreItem,
+    toStoreItem
+} from "./itemDataService.ts";
 import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
 import { getEntriesUnsafe } from "../utils/ts-utils.ts";
 import { handleStoreItemAcquisition } from "./purchaseService.ts";
@@ -1843,11 +1849,12 @@ export const addFixedLevelRewards = (
         }
     }
     if (rewards.droptable) {
-        if (rewards.droptable in ExportRewards) {
+        const metaDroptable = getMissionDeck(rewards.droptable);
+        if (metaDroptable) {
             const rotations: number[] = rewardInfo ? getRotations(rewardInfo) : [0];
             logger.debug(`rolling ${rewards.droptable} for level key rewards`, { rotations });
             for (const tier of rotations) {
-                const reward = getRandomRewardByChance(ExportRewards[rewards.droptable][tier]);
+                const reward = getRandomRewardByChance(metaDroptable[tier]);
                 if (reward) {
                     MissionRewards.push({
                         StoreItem: reward.type,
@@ -2291,17 +2298,25 @@ function getRandomMissionDrops(
                     }
                 }
                 if (currentMissionKey) {
-                    const keyMeta = ExportKeys[currentMissionKey];
-                    if (keyMeta.cacheRewardManifest) {
-                        const deck = ExportRewards[keyMeta.cacheRewardManifest];
-                        for (let rotation = 0; rotation != RewardInfo.EnemyCachesFound; ++rotation) {
-                            const drop = getRandomRewardByChance(deck[rotation]);
-                            if (drop) {
-                                drops.push({
-                                    StoreItem: drop.type,
-                                    ItemCount: drop.itemCount,
-                                    FromEnemyCache: true
-                                });
+                    const keyMeta = getKey(currentMissionKey);
+                    if (!keyMeta) {
+                        logger.error(`unknown levelKey ${currentMissionKey} while proccesing EnemyCachesFound`);
+                    } else if (keyMeta.cacheRewardManifest) {
+                        const deck = getMissionDeck(keyMeta.cacheRewardManifest);
+                        if (!deck) {
+                            logger.error(
+                                `unknown droptable ${keyMeta.cacheRewardManifest} while proccesing EnemyCachesFound`
+                            );
+                        } else {
+                            for (let rotation = 0; rotation != RewardInfo.EnemyCachesFound; ++rotation) {
+                                const drop = getRandomRewardByChance(deck[rotation]);
+                                if (drop) {
+                                    drops.push({
+                                        StoreItem: drop.type,
+                                        ItemCount: drop.itemCount,
+                                        FromEnemyCache: true
+                                    });
+                                }
                             }
                         }
                     }
@@ -2323,17 +2338,23 @@ function getRandomMissionDrops(
                 }
             }
         } else if (levelKeyName) {
-            const keyMeta = ExportKeys[levelKeyName];
-            if (keyMeta.cacheRewardManifest) {
-                const deck = ExportRewards[keyMeta.cacheRewardManifest];
-                for (let rotation = 0; rotation != RewardInfo.EnemyCachesFound; ++rotation) {
-                    const drop = getRandomRewardByChance(deck[rotation]);
-                    if (drop) {
-                        drops.push({
-                            StoreItem: drop.type,
-                            ItemCount: drop.itemCount,
-                            FromEnemyCache: true
-                        });
+            const keyMeta = getKey(levelKeyName);
+            if (!keyMeta) {
+                logger.error(`unknown levelKey ${levelKeyName} while proccesing EnemyCachesFound`);
+            } else if (keyMeta.cacheRewardManifest) {
+                const deck = getMissionDeck(keyMeta.cacheRewardManifest);
+                if (!deck) {
+                    logger.error(`unknown droptable ${keyMeta.cacheRewardManifest} while proccesing EnemyCachesFound`);
+                } else {
+                    for (let rotation = 0; rotation != RewardInfo.EnemyCachesFound; ++rotation) {
+                        const drop = getRandomRewardByChance(deck[rotation]);
+                        if (drop) {
+                            drops.push({
+                                StoreItem: drop.type,
+                                ItemCount: drop.itemCount,
+                                FromEnemyCache: true
+                            });
+                        }
                     }
                 }
             }

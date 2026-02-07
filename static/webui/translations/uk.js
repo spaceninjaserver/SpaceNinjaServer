@@ -69,6 +69,7 @@ dict = {
     code_completed: `Завершено`,
     code_active: `Активний`,
     code_pigment: `Барвник`,
+    code_bossNavCode: `Навкоордината Лефантиса`,
     code_controller: `Курсор контролера`,
     code_mouseLine: `Лінійний курсор`,
     code_mouse: `Курсор`,

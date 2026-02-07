@@ -498,6 +498,11 @@ function fetchItemList() {
                 name: loc("code_pigment")
             });
 
+            data.miscitems.push({
+                uniqueName: "/Lotus/Types/Items/MiscItems/BossNavCode",
+                name: loc("code_bossNavCode")
+            });
+
             data.VarziaOffers.unshift({
                 uniqueName: "",
                 name: loc("disabled")

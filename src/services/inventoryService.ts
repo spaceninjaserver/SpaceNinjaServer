@@ -1049,6 +1049,15 @@ export const addItem = async (
                             );
                         }
                         return addCustomization(inventory, typeName);
+                    } else if (typeName.substring(1).split("/")[3] == "MiscItems") {
+                        const miscItemChanges = [
+                            {
+                                ItemType: typeName,
+                                ItemCount: quantity
+                            } satisfies IMiscItem
+                        ];
+                        addMiscItems(inventory, miscItemChanges);
+                        return { MiscItems: miscItemChanges };
                     }
                     break;
                 }
@@ -1102,6 +1111,22 @@ export const addItem = async (
                                 ItemType: fragmentType
                             }
                         ]);
+                    }
+                    break;
+                case "Keys":
+                    if (typeName.endsWith("Blueprint")) {
+                        const recipeChanges = [
+                            {
+                                ItemType: typeName,
+                                ItemCount: quantity
+                            } satisfies ITypeCount
+                        ];
+                        addRecipes(inventory, recipeChanges);
+                        return { Recipes: recipeChanges };
+                    } else if (typeName.endsWith("Key") || typeName.substring(1).split("/")[3] == "RaidKeys") {
+                        const levelKeyChanges = [{ ItemType: typeName, ItemCount: quantity }];
+                        addLevelKeys(inventory, levelKeyChanges);
+                        return { LevelKeys: levelKeyChanges };
                     }
                     break;
             }

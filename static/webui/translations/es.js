@@ -69,6 +69,7 @@ dict = {
     code_completed: `Completada`,
     code_active: `Activa`,
     code_pigment: `Pigmento`,
+    code_bossNavCode: `Coordenadas de Navegación de Lephantis`,
     code_controller: `Cursor de Mando`,
     code_mouseLine: `Cursor de línea`,
     code_mouse: `Cursor`,

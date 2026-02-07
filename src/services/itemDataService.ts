@@ -9,6 +9,7 @@ import type {
     IRecipe,
     IRegion,
     ISyndicate,
+    TMissionDeck,
     TReward
 } from "warframe-public-export-plus";
 import {
@@ -41,6 +42,7 @@ import {
     ExportRailjackWeapons,
     ExportRecipes,
     ExportResources,
+    ExportRewards,
     ExportSentinels,
     ExportSyndicates,
     ExportWarframes,
@@ -106,7 +108,6 @@ export const getRecipe = (uniqueName: string): IRecipe | undefined => {
             consumeOnUse: false,
             num: 1,
             codexSecret: false,
-            alwaysAvailable: true,
             ingredients: [
                 {
                     ItemType: "/Lotus/Types/Items/MiscItems/Rubedo",
@@ -122,7 +123,8 @@ export const getRecipe = (uniqueName: string): IRecipe | undefined => {
                 }
             ],
             excludeFromMarket: true,
-            tradable: false
+            tradable: false,
+            creditsCost: 100000
         };
     } else if (uniqueName == "/Lotus/Types/Keys/NightmareGrineerRaidKeyBlueprint") {
         // The Law of Retribution (Nightmare) raid bp. Removed in 22.14.0
@@ -134,7 +136,6 @@ export const getRecipe = (uniqueName: string): IRecipe | undefined => {
             consumeOnUse: false,
             num: 1,
             codexSecret: false,
-            alwaysAvailable: true,
             ingredients: [
                 {
                     ItemType: "/Lotus/Types/Items/MiscItems/Rubedo",
@@ -150,7 +151,8 @@ export const getRecipe = (uniqueName: string): IRecipe | undefined => {
                 }
             ],
             excludeFromMarket: true,
-            tradable: false
+            tradable: false,
+            creditsCost: 100000
         };
     } else if (uniqueName == "/Lotus/Types/Keys/GolemRaidKeyBlueprint") {
         // The Jordas Verdict raid bp. Removed in 22.14.0
@@ -162,7 +164,6 @@ export const getRecipe = (uniqueName: string): IRecipe | undefined => {
             consumeOnUse: false,
             num: 1,
             codexSecret: false,
-            alwaysAvailable: true,
             ingredients: [
                 {
                     ItemType: "/Lotus/Types/Items/MiscItems/Plastids",
@@ -178,7 +179,8 @@ export const getRecipe = (uniqueName: string): IRecipe | undefined => {
                 }
             ],
             excludeFromMarket: true,
-            tradable: false
+            tradable: false,
+            creditsCost: 100000
         };
     } else if (uniqueName == "/Lotus/Types/Keys/GolemKeyBlueprint") {
         // Orokin Derelict Assassination bp for Lephantis. Removed in 28.3.0
@@ -190,7 +192,6 @@ export const getRecipe = (uniqueName: string): IRecipe | undefined => {
             consumeOnUse: false,
             num: 1,
             codexSecret: false,
-            alwaysAvailable: true,
             ingredients: [
                 {
                     ItemType: "/Lotus/Types/Items/MiscItems/BossNavCode",
@@ -210,7 +211,8 @@ export const getRecipe = (uniqueName: string): IRecipe | undefined => {
                 }
             ],
             excludeFromMarket: true,
-            tradable: false
+            tradable: false,
+            creditsCost: 2500
         };
     } else if (uniqueName == "/Lotus/Types/Keys/DerelictCaptureKeyBlueprint") {
         // Orokin Derelict Capture bp. Removed in 28.3.0
@@ -222,7 +224,6 @@ export const getRecipe = (uniqueName: string): IRecipe | undefined => {
             consumeOnUse: false,
             num: 1,
             codexSecret: false,
-            alwaysAvailable: true,
             ingredients: [
                 {
                     ItemType: "/Lotus/Types/Items/MiscItems/NavCode",
@@ -242,7 +243,8 @@ export const getRecipe = (uniqueName: string): IRecipe | undefined => {
                 }
             ],
             excludeFromMarket: true,
-            tradable: false
+            tradable: false,
+            creditsCost: 1500
         };
     } else if (uniqueName == "/Lotus/Types/Keys/DerelictDefenseKeyBlueprint") {
         // Orokin Derelict Defense bp. Removed in 28.3.0
@@ -254,7 +256,6 @@ export const getRecipe = (uniqueName: string): IRecipe | undefined => {
             consumeOnUse: false,
             num: 1,
             codexSecret: false,
-            alwaysAvailable: true,
             ingredients: [
                 {
                     ItemType: "/Lotus/Types/Items/MiscItems/NavCode",
@@ -274,7 +275,8 @@ export const getRecipe = (uniqueName: string): IRecipe | undefined => {
                 }
             ],
             excludeFromMarket: true,
-            tradable: false
+            tradable: false,
+            creditsCost: 1500
         };
     } else if (uniqueName == "/Lotus/Types/Keys/DerelictExterminateKeyBlueprint") {
         // Orokin Derelict Exterminate bp. Removed in 28.3.0
@@ -286,7 +288,6 @@ export const getRecipe = (uniqueName: string): IRecipe | undefined => {
             consumeOnUse: false,
             num: 1,
             codexSecret: false,
-            alwaysAvailable: true,
             ingredients: [
                 {
                     ItemType: "/Lotus/Types/Items/MiscItems/NavCode",
@@ -306,7 +307,8 @@ export const getRecipe = (uniqueName: string): IRecipe | undefined => {
                 }
             ],
             excludeFromMarket: true,
-            tradable: false
+            tradable: false,
+            creditsCost: 1500
         };
     } else if (uniqueName == "/Lotus/Types/Keys/DerelictMobileDefenseKeyBlueprint") {
         // Orokin Derelict Mobile Defense bp. Removed in 28.3.0
@@ -318,7 +320,6 @@ export const getRecipe = (uniqueName: string): IRecipe | undefined => {
             consumeOnUse: false,
             num: 1,
             codexSecret: false,
-            alwaysAvailable: true,
             ingredients: [
                 {
                     ItemType: "/Lotus/Types/Items/MiscItems/NavCode",
@@ -338,7 +339,8 @@ export const getRecipe = (uniqueName: string): IRecipe | undefined => {
                 }
             ],
             excludeFromMarket: true,
-            tradable: false
+            tradable: false,
+            creditsCost: 1500
         };
     } else if (uniqueName == "/Lotus/Types/Keys/DerelictSabotageKeyBlueprint") {
         // Orokin Derelict Sabotage bp. Removed in 28.3.0
@@ -350,7 +352,6 @@ export const getRecipe = (uniqueName: string): IRecipe | undefined => {
             consumeOnUse: false,
             num: 1,
             codexSecret: false,
-            alwaysAvailable: true,
             ingredients: [
                 {
                     ItemType: "/Lotus/Types/Items/MiscItems/NavCode",
@@ -370,7 +371,8 @@ export const getRecipe = (uniqueName: string): IRecipe | undefined => {
                 }
             ],
             excludeFromMarket: true,
-            tradable: false
+            tradable: false,
+            creditsCost: 1500
         };
     } else if (uniqueName == "/Lotus/Types/Keys/DerelictSurvivalKeyBlueprint") {
         // Orokin Derelict Survival bp. Removed in 28.3.0
@@ -382,7 +384,6 @@ export const getRecipe = (uniqueName: string): IRecipe | undefined => {
             consumeOnUse: false,
             num: 1,
             codexSecret: false,
-            alwaysAvailable: true,
             ingredients: [
                 {
                     ItemType: "/Lotus/Types/Items/MiscItems/NavCode",
@@ -402,7 +403,8 @@ export const getRecipe = (uniqueName: string): IRecipe | undefined => {
                 }
             ],
             excludeFromMarket: true,
-            tradable: false
+            tradable: false,
+            creditsCost: 1500
         };
     } else if (uniqueName == "/Lotus/Types/Keys/VeyHekKeyBlueprint") {
         // Vay Hek Frequency Triangulator (Assassination key) bp. Removed in 15.13.0
@@ -414,7 +416,6 @@ export const getRecipe = (uniqueName: string): IRecipe | undefined => {
             consumeOnUse: false,
             num: 1,
             codexSecret: false,
-            alwaysAvailable: true,
             ingredients: [
                 {
                     ItemType: "/Lotus/Types/Items/MiscItems/VayHekCoordinateFragmentA",
@@ -434,7 +435,8 @@ export const getRecipe = (uniqueName: string): IRecipe | undefined => {
                 }
             ],
             excludeFromMarket: true,
-            tradable: false
+            tradable: false,
+            creditsCost: 10000
         };
     }
 
@@ -593,13 +595,13 @@ export const getLevelKeyRewards = (
     levelKey: string,
     buildLabel: string | undefined
 ): { levelKeyRewards?: IMissionReward; levelKeyRewards2?: TReward[]; levelMission?: Partial<IRegion> } => {
-    const key = ExportKeys[levelKey] as IKey | undefined;
+    const key = getKey(levelKey);
 
     const levelKeyRewards = key?.missionReward;
     let levelKeyRewards2 = key?.rewards;
     const levelMission = key?.mission;
 
-    if (!levelKeyRewards && !levelKeyRewards2) {
+    if (!levelKeyRewards && !levelKeyRewards2 && !levelMission) {
         logger.warn(
             `Could not find any reward information for ${levelKey}, gonna have to potentially short-change you`
         );
@@ -913,6 +915,160 @@ export const getBoosterPack = (uniqueName: string, buildLabel: string = ""): IBo
     return ExportBoosterPacks[uniqueName];
 };
 
+export const getKey = (uniqueName: string): IKey | undefined => {
+    if (
+        uniqueName == "/Lotus/Types/Keys/RaidKeys/Raid01Stage01KeyItem" ||
+        uniqueName == "/Lotus/Types/Keys/RaidKeys/Raid01Stage01NightmareKeyItem"
+    ) {
+        return {
+            name: "/Lotus/Language/Items/GrineerTrialsName",
+            description: "/Lotus/Language/Items/GrineerTrialsDesc",
+            icon: "/Lotus/Interface/Quests/GrineerRaidKeyChain.png",
+            parentName: "/Lotus/Types/Keys/RaidKeys/BaseRaidKey",
+            codexSecret: true,
+            mission: {
+                minEnemyLevel: 70,
+                maxEnemyLevel: 80
+            }
+        };
+    } else if (
+        uniqueName == "/Lotus/Types/Keys/RaidKeys/Raid01Stage02KeyItem" ||
+        uniqueName == "/Lotus/Types/Keys/RaidKeys/Raid01Stage02NightmareKeyItem"
+    ) {
+        return {
+            name: "/Lotus/Language/Items/GrineerTrialsName",
+            description: "/Lotus/Language/Items/GrineerTrialsDesc",
+            icon: "/Lotus/Interface/Quests/GrineerRaidKeyChain.png",
+            parentName: "/Lotus/Types/Keys/RaidKeys/BaseRaidKey",
+            codexSecret: true,
+            mission: {
+                minEnemyLevel: 80,
+                maxEnemyLevel: 90
+            }
+        };
+    } else if (uniqueName == "/Lotus/Types/Keys/RaidKeys/Raid01Stage03KeyItem") {
+        return {
+            name: "/Lotus/Language/Items/GrineerTrialsName",
+            description: "/Lotus/Language/Items/GrineerTrialsDesc",
+            icon: "/Lotus/Interface/Quests/GrineerRaidKeyChain.png",
+            parentName: "/Lotus/Types/Keys/RaidKeys/BaseRaidKey",
+            codexSecret: true,
+            missionReward: {
+                credits: 200000,
+                droptable: "/Lotus/Types/Game/MissionDecks/RaidRewards/HekRaid"
+            },
+            mission: {
+                minEnemyLevel: 80,
+                maxEnemyLevel: 100
+            }
+        };
+    } else if (uniqueName == "/Lotus/Types/Keys/RaidKeys/Raid01Stage03NightmareKeyItem") {
+        return {
+            name: "/Lotus/Language/Items/GrineerNightmareTrialsName",
+            description: "/Lotus/Language/Items/GrineerTrialsDesc",
+            icon: "/Lotus/Interface/Quests/GrineerRaidKeyChain.png",
+            parentName: "/Lotus/Types/Keys/RaidKeys/BaseRaidKey",
+            codexSecret: true,
+            missionReward: {
+                credits: 250000,
+                droptable: "/Lotus/Types/Game/MissionDecks/RaidRewards/NightmareHekRaid"
+            },
+            mission: {
+                minEnemyLevel: 80,
+                maxEnemyLevel: 100
+            }
+        };
+    } else if (uniqueName == "/Lotus/Types/Keys/RaidKeys/RaidGolemStage01KeyItem") {
+        return {
+            name: "/Lotus/Language/Items/GolemTrialsName",
+            description: "/Lotus/Language/Items/GolemTrialsDesc",
+            icon: "/Lotus/Interface/Icons/Store/GolemRaidKey.png",
+            parentName: "/Lotus/Types/Keys/RaidKeys/BaseRaidKey",
+            codexSecret: true,
+            mission: {
+                minEnemyLevel: 86,
+                maxEnemyLevel: 88
+            }
+        };
+    } else if (uniqueName == "/Lotus/Types/Keys/RaidKeys/RaidGolemStage02KeyItem") {
+        return {
+            name: "/Lotus/Language/Items/GolemTrialsName",
+            description: "/Lotus/Language/Items/GolemTrialsDesc",
+            icon: "/Lotus/Interface/Icons/Store/GolemRaidKey.png",
+            parentName: "/Lotus/Types/Keys/RaidKeys/BaseRaidKey",
+            codexSecret: true,
+            mission: {
+                minEnemyLevel: 88,
+                maxEnemyLevel: 92
+            }
+        };
+    } else if (uniqueName == "/Lotus/Types/Keys/RaidKeys/RaidGolemStage03KeyItem") {
+        return {
+            name: "/Lotus/Language/Items/GolemTrialsName",
+            description: "/Lotus/Language/Items/GolemTrialsDesc",
+            icon: "/Lotus/Interface/Icons/Store/GolemRaidKey.png",
+            parentName: "/Lotus/Types/Keys/RaidKeys/BaseRaidKey",
+            codexSecret: true,
+            missionReward: {
+                credits: 300000,
+                items: ["/Lotus/StoreItems/Upgrades/Mods/FusionBundles/RareFusionBundle"],
+                droptable: "/Lotus/Types/Game/MissionDecks/RaidRewards/GolemRaid"
+            },
+            mission: {
+                minEnemyLevel: 92,
+                maxEnemyLevel: 97
+            }
+        };
+    } else if (uniqueName == "/Lotus/Types/Keys/DerelictGolemKey") {
+        return {
+            name: "/Lotus/Language/Items/OrokinDerelictBossKey",
+            description: "/Lotus/Language/Items/OrokinDerelictBossKeyDesc",
+            icon: "/Lotus/Interface/Icons/Store/OrokinDerelictKey.png",
+            parentName: "/Lotus/Types/Game/KeyItems/DerelictKeyItem",
+            codexSecret: false,
+            missionReward: {
+                credits: 7500,
+                droptable: "/Lotus/Types/Game/MissionDecks/GolemMissionRewards"
+            },
+            mission: {
+                minEnemyLevel: 25,
+                maxEnemyLevel: 35
+            }
+        };
+    } else if (uniqueName == "/Lotus/Types/Keys/DerelictSabotageKey") {
+        return {
+            name: "/Lotus/Language/Items/OrokinDerelictSabotageKey",
+            description: "/Lotus/Language/Items/OrokinDerelictSabotageKeyDesc",
+            icon: "/Lotus/Interface/Icons/Store/OrokinDerelictKey.png",
+            parentName: "/Lotus/Types/Game/KeyItems/DerelictKeyItem",
+            codexSecret: false,
+            cacheRewardManifest: "/Lotus/Types/Game/MissionDecks/OrokinDerelictSabotageRewards",
+            mission: {
+                minEnemyLevel: 25,
+                maxEnemyLevel: 35
+            }
+        };
+    } else if (uniqueName.startsWith("/Lotus/Types/Keys/Derelict")) {
+        return {
+            name: "/Lotus/Language/Items/OrokinDerelictCaptureKey",
+            description: "/Lotus/Language/Items/OrokinDerelictCaptureKeyDesc",
+            icon: "/Lotus/Interface/Icons/Store/OrokinDerelictKey.png",
+            parentName: "/Lotus/Types/Game/KeyItems/DerelictKeyItem",
+            codexSecret: false,
+            mission: {
+                minEnemyLevel: 25,
+                maxEnemyLevel: 35
+            }
+        };
+    }
+
+    return ExportKeys[uniqueName];
+};
+
+export const getMissionDeck = (uniqueName: string): TMissionDeck | undefined => {
+    return ExportRewards[uniqueName];
+};
+
 export const getPrice = (
     storeItemName: string,
     quantity: number = 1,
@@ -971,6 +1127,15 @@ export const getPrice = (
                     price = item.platinumCost;
                 } else if (!usePremium && "creditsCost" in item) {
                     price = item.creditsCost;
+                }
+            } else {
+                const recipe = getRecipe(internalName);
+                if (recipe) {
+                    if (usePremium && "platinumCost" in recipe) {
+                        price = recipe.platinumCost;
+                    } else if (!usePremium && "creditsCost" in recipe) {
+                        price = recipe.creditsCost;
+                    }
                 }
             }
 

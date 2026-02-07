@@ -69,6 +69,7 @@ dict = {
     code_completed: `已完成`,
     code_active: `正在执行`,
     code_pigment: `颜料`,
+    code_bossNavCode: `雷凡魔像导航坐标`,
     code_controller: `[UNTRANSLATED] Controller cursor`,
     code_mouseLine: `[UNTRANSLATED] Line cursor`,
     code_mouse: `[UNTRANSLATED] Cursor`,
