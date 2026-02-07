@@ -311,6 +311,9 @@ export const handlePurchase = async (
             await handleDailyDealPurchase(inventory, purchaseRequest.PurchaseParams, purchaseResponse);
             break;
         case PurchaseSource.Vendor:
+            if (purchaseRequest.PurchaseParams.ExpectedPrice) {
+                throw new Error(`vendor purchase should not have an expected price`);
+            }
             if (purchaseRequest.PurchaseParams.SourceId! in ExportVendors) {
                 const vendor = ExportVendors[purchaseRequest.PurchaseParams.SourceId!];
                 const offer = vendor.items.find(x => x.storeItem == purchaseRequest.PurchaseParams.StoreItem);
@@ -330,9 +333,42 @@ export const handlePurchase = async (
                         );
                     }
                 }
-            }
-            if (purchaseRequest.PurchaseParams.ExpectedPrice) {
-                throw new Error(`vendor purchase should not have an expected price`);
+            } else {
+                let manifest = getVendorManifestByOid(
+                    purchaseRequest.PurchaseParams.SourceId!,
+                    purchaseRequest.buildLabel
+                );
+                if (manifest) {
+                    manifest = applyStandingToVendorManifest(manifest, inventory.Affiliations);
+                    let ItemId: string | undefined;
+                    if (purchaseRequest.PurchaseParams.ExtraPurchaseInfoJson) {
+                        ItemId = (
+                            JSON.parse(purchaseRequest.PurchaseParams.ExtraPurchaseInfoJson) as { ItemId: string }
+                        ).ItemId;
+                    }
+                    const offer = ItemId
+                        ? manifest.VendorInfo.ItemManifest.find(x => x.Id.$oid == ItemId)
+                        : manifest.VendorInfo.ItemManifest.find(
+                              x => x.StoreItem == purchaseRequest.PurchaseParams.StoreItem
+                          );
+                    if (!offer) {
+                        throw new Error(
+                            `unknown vendor offer: ${ItemId ? ItemId : purchaseRequest.PurchaseParams.StoreItem}`
+                        );
+                    }
+                    if (offer.StandingCost && !inventory.dontSubtractPurchaseStandingCost) {
+                        const affiliation = inventory.Affiliations.find(x => x.Tag == offer.Affiliation!);
+                        if (affiliation) {
+                            purchaseResponse.Standing = [
+                                {
+                                    Tag: offer.Affiliation!,
+                                    Standing: offer.StandingCost * purchaseRequest.PurchaseParams.Quantity
+                                }
+                            ];
+                            affiliation.Standing -= offer.StandingCost * purchaseRequest.PurchaseParams.Quantity;
+                        }
+                    }
+                }
             }
             break;
         case PurchaseSource.PrimeVaultTrader: {

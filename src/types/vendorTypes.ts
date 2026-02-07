@@ -15,11 +15,12 @@ export interface IItemManifest {
     QuantityMultiplier: number;
     Expiry: IMongoDate; // Either a date in the distant future or a period in milliseconds for preprocessing.
     PurchaseQuantityLimit?: number;
+    RotatedWeekly?: boolean;
     Affiliation?: string;
     MinAffiliationRank?: number;
     ReductionPerPositiveRank?: number;
     IncreasePerNegativeRank?: number;
-    RotatedWeekly?: boolean;
+    StandingCost?: number;
     AllowMultipurchase: boolean;
     LocTagRandSeed?: number | bigint;
     Id: IOid;

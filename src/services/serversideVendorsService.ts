@@ -399,6 +399,11 @@ const generateVendorManifest = (
                 Expiry: { $date: { $numberLong: expiry.toString() } },
                 PurchaseQuantityLimit: rawItem.purchaseLimit,
                 RotatedWeekly: rawItem.rotatedWeekly,
+                Affiliation: rawItem.syndicate?.tag,
+                MinAffiliationRank: rawItem.syndicate?.minRank,
+                ReductionPerPositiveRank: rawItem.syndicate?.reductionPerPositiveRank,
+                IncreasePerNegativeRank: rawItem.syndicate?.increasePerNegativeRank,
+                StandingCost: rawItem.syndicate?.standingCost,
                 AllowMultipurchase: rawItem.purchaseLimit !== 1,
                 Id: {
                     $oid:
