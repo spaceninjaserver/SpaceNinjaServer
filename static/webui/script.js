@@ -3166,14 +3166,18 @@ function doAcquireMod() {
                                 : undefined
                     }
                 ])
-            }).done(function () {
-                if (count > 0) {
-                    toast(loc("code_succAdded"));
-                } else {
-                    toast(loc("code_succRemoved"));
-                }
-                updateInventory();
-            });
+            })
+                .done(function () {
+                    if (count > 0) {
+                        toast(loc("code_succAdded"));
+                    } else {
+                        toast(loc("code_succRemoved"));
+                    }
+                    updateInventory();
+                })
+                .fail(r => {
+                    toast(r.responseText);
+                });
         });
     }
 }
