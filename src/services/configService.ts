@@ -70,6 +70,10 @@ export interface IConfig {
         voidCorruption2025Week2?: boolean;
         voidCorruption2025Week3?: boolean;
         voidCorruption2025Week4?: boolean;
+        dagathAlerts2026Week1?: boolean;
+        dagathAlerts2026Week2?: boolean;
+        dagathAlerts2026Week3?: boolean;
+        dagathAlerts2026Week4?: boolean;
         qtccAlerts?: boolean;
         galleonOfGhouls?: number;
         ghoulEmergenceOverride?: boolean;

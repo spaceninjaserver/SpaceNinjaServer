@@ -202,6 +202,96 @@ const configAlerts: Record<string, IAlert> = {
             minEnemyLevel: 40,
             maxEnemyLevel: 45
         }
+    },
+    dagathAlerts2026Week1: {
+        _id: { $oid: "6949862e3f3f35491e02232c" },
+        Activation: { $date: { $numberLong: "1769022000000" } },
+        Expiry: { $date: { $numberLong: "2000000000000" } },
+        MissionInfo: {
+            location: "SolNode147",
+            missionType: "MT_TERRITORY",
+            faction: "FC_GRINEER",
+            difficulty: 1,
+            missionReward: {
+                credits: 10000,
+                items: ["/Lotus/StoreItems/Types/Recipes/WarframeRecipes/DagathChassisComponent"]
+            },
+            levelOverride: "/Lotus/Levels/Proc/Grineer/GrineerShipyardsInterception",
+            enemySpec: "/Lotus/Types/Game/EnemySpecs/GrineerShipyardsDefenseA",
+            minEnemyLevel: 25,
+            maxEnemyLevel: 35,
+            descText: "/Lotus/Language/Alerts/LotusGiftDesc"
+        },
+        Tag: "LotusGift",
+        ForceUnlock: true
+    },
+    dagathAlerts2026Week2: {
+        _id: { $oid: "6949863a548d83b650011de8" },
+        Activation: { $date: { $numberLong: "1769626800000" } },
+        Expiry: { $date: { $numberLong: "2000000000000" } },
+        MissionInfo: {
+            location: "SolNode404",
+            missionType: "MT_SABOTAGE",
+            faction: "FC_OROKIN",
+            difficulty: 1,
+            missionReward: {
+                credits: 10000,
+                items: ["/Lotus/StoreItems/Types/Recipes/WarframeRecipes/DagathHelmetComponent"]
+            },
+            levelOverride: "/Lotus/Levels/Proc/Orokin/OrokinTowerSabotageForest",
+            enemySpec: "/Lotus/Types/Game/EnemySpecs/OrokinSquadOne",
+            extraEnemySpec: "/Lotus/Types/Game/EnemySpecs/OrokinSabotageGrineerForest",
+            minEnemyLevel: 25,
+            maxEnemyLevel: 35,
+            vipAgent: "/Lotus/Types/Enemies/Grineer/Vip/JetpackSisters/JetpackSisters",
+            descText: "/Lotus/Language/Alerts/LotusGiftDesc"
+        },
+        Tag: "LotusGift",
+        ForceUnlock: true
+    },
+    dagathAlerts2026Week3: {
+        _id: { $oid: "69498642a0836c98e10f5e34" },
+        Activation: { $date: { $numberLong: "1770231600000" } },
+        Expiry: { $date: { $numberLong: "2000000000000" } },
+        MissionInfo: {
+            location: "SolNode100",
+            missionType: "MT_SURVIVAL",
+            faction: "FC_CORPUS",
+            difficulty: 1,
+            missionReward: {
+                credits: 10000,
+                items: ["/Lotus/StoreItems/Types/Recipes/WarframeRecipes/DagathSystemsComponent"]
+            },
+            levelOverride: "/Lotus/Levels/Proc/Corpus/CorpusGasCitySurvival",
+            enemySpec: "/Lotus/Types/Game/EnemySpecs/CorpusGasSurvival",
+            minEnemyLevel: 25,
+            maxEnemyLevel: 35,
+            descText: "/Lotus/Language/Alerts/LotusGiftDesc"
+        },
+        Tag: "LotusGift",
+        ForceUnlock: true
+    },
+    dagathAlerts2026Week4: {
+        _id: { $oid: "69498623a7342ab1500cc99b" },
+        Activation: { $date: { $numberLong: "1768417200000" } },
+        Expiry: { $date: { $numberLong: "2000000000000" } },
+        MissionInfo: {
+            location: "SolNode103",
+            missionType: "MT_EXTERMINATION",
+            faction: "FC_GRINEER",
+            difficulty: 1,
+            missionReward: {
+                credits: 10000,
+                items: ["/Lotus/StoreItems/Types/Recipes/WarframeRecipes/DagathBlueprint"]
+            },
+            levelOverride: "/Lotus/Levels/Proc/Grineer/GrineerAsteroidExterminate",
+            enemySpec: "/Lotus/Types/Game/EnemySpecs/GrineerExterminateBlades",
+            minEnemyLevel: 25,
+            maxEnemyLevel: 35,
+            descText: "/Lotus/Language/Alerts/LotusGiftDesc"
+        },
+        Tag: "LotusGift",
+        ForceUnlock: true
     }
 };
 

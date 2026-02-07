@@ -307,6 +307,7 @@ dict = {
     worldState_dogDaysRewards: `三伏天奖励设置`,
     worldState_wolfHunt: `恶狼狩猎`,
     worldState_voidCorruption: `虚空堕落 (|VAL|)`,
+    worldState_dagathAlerts: `Dagath 警报 (|VAL|)`,
     worldState_scarletSpear: `猩红之矛`,
     worldState_orphixVenom: `奥影之毒`,
     worldState_bloodOfPerita: `佩里塔之血`,
