@@ -113,17 +113,20 @@ export interface ITraits {
     Tail?: string;
 }
 
-export interface IKubrowPetDetailsDatabase {
+export interface IKubrowGenetics {
     Name?: string;
+    IsMale: boolean;
+    Size: number;
+    DominantTraits: ITraits;
+    RecessiveTraits: Partial<ITraits>;
+}
+
+export interface IKubrowPetDetailsDatabase extends IKubrowGenetics {
     IsPuppy?: boolean;
     HasCollar: boolean;
     PrintsRemaining: number;
     Status: Status;
     HatchDate?: Date;
-    DominantTraits: ITraits;
-    RecessiveTraits: ITraits;
-    IsMale: boolean;
-    Size: number;
 }
 
 export interface IKubrowPetDetailsClient extends Omit<IKubrowPetDetailsDatabase, "HatchDate"> {

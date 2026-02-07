@@ -190,7 +190,12 @@ const claimCompletedRecipe = async (
         pet.Details!.Status = canSetActive ? Status.StatusAvailable : Status.StatusStasis;
     } else if (recipe.secretIngredientAction == "SIA_DISTILL_PRINT") {
         const pet = inventory.KubrowPets.id(pendingRecipe.KubrowPet!)!;
-        addKubrowPetPrint(inventory, pet, resp.InventoryChanges);
+        addKubrowPetPrint(
+            inventory,
+            "/Lotus/Types/Game/KubrowPet/ImprintedTraitPrint",
+            pet.Details!,
+            resp.InventoryChanges
+        );
     } else if (recipe.secretIngredientAction != "SIA_UNBRAND") {
         if (recipe.resultType == "/Lotus/Powersuits/Excalibur/ExcaliburUmbra") {
             // Quite the special case here...

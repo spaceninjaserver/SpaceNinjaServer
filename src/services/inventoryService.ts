@@ -88,6 +88,7 @@ import { addString } from "../helpers/stringHelpers.ts";
 import type {
     IEquipmentClient,
     IEquipmentDatabase,
+    IKubrowGenetics,
     IKubrowPetDetailsDatabase,
     ITraits
 } from "../types/equipmentTypes.ts";
@@ -1004,7 +1005,40 @@ export const addItem = async (
                         typeName.substring(1).split("/")[3] == "CatbrowPet" ||
                         typeName.substring(1).split("/")[3] == "KubrowPet"
                     ) {
-                        if (
+                        if (typeName == "/Lotus/Types/Game/CatbrowPet/VampireKavatTraitPrint") {
+                            const inventoryChanges: IInventoryChanges = {};
+                            for (let i = 0; i != quantity; ++i) {
+                                addKubrowPetPrint(
+                                    inventory,
+                                    typeName,
+                                    {
+                                        Name: "",
+                                        IsMale: false,
+                                        Size: 1,
+                                        DominantTraits: {
+                                            BaseColor: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorBaseVampire",
+                                            SecondaryColor:
+                                                "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorSecondaryVampire",
+                                            TertiaryColor:
+                                                "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorTertiaryVampire",
+                                            AccentColor:
+                                                "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorAccentsVampire",
+                                            EyeColor: "/Lotus/Types/Game/CatbrowPet/Colors/CatbrowPetColorEyesVamp",
+                                            FurPattern:
+                                                "/Lotus/Types/Game/CatbrowPet/Patterns/CatbrowPetPatternVampire",
+                                            Personality: "/Lotus/Types/Game/CatbrowPet/VampireCatbrowPetPowerSuit",
+                                            BodyType:
+                                                "/Lotus/Types/Game/CatbrowPet/BodyTypes/CatbrowPetVampireBodyType",
+                                            Head: "/Lotus/Types/Game/CatbrowPet/Heads/CatbrowHeadVampire",
+                                            Tail: "/Lotus/Types/Game/CatbrowPet/Tails/CatbrowTailVampire"
+                                        },
+                                        RecessiveTraits: {}
+                                    },
+                                    inventoryChanges
+                                );
+                            }
+                            return inventoryChanges;
+                        } else if (
                             typeName != "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg" &&
                             typeName != "/Lotus/Types/Game/KubrowPet/Eggs/KubrowPetEggItem" &&
                             typeName != "/Lotus/Types/Game/KubrowPet/BlankTraitPrint" &&
@@ -1516,19 +1550,20 @@ export const addKubrowPet = (
 
 export const addKubrowPetPrint = (
     inventory: TInventoryDatabaseDocument,
-    pet: IEquipmentDatabase,
+    typeName: string,
+    details: IKubrowGenetics,
     inventoryChanges: IInventoryChanges
 ): void => {
     inventoryChanges.KubrowPetPrints ??= [];
     inventoryChanges.KubrowPetPrints.push(
         inventory.KubrowPetPrints[
             inventory.KubrowPetPrints.push({
-                ItemType: "/Lotus/Types/Game/KubrowPet/ImprintedTraitPrint",
-                Name: pet.Details!.Name,
-                IsMale: pet.Details!.IsMale,
-                Size: pet.Details!.Size,
-                DominantTraits: pet.Details!.DominantTraits,
-                RecessiveTraits: pet.Details!.RecessiveTraits
+                ItemType: typeName,
+                Name: details.Name,
+                IsMale: details.IsMale,
+                Size: details.Size,
+                DominantTraits: details.DominantTraits,
+                RecessiveTraits: details.RecessiveTraits
             }) - 1
         ].toJSON<IKubrowPetPrintClient>()
     );
