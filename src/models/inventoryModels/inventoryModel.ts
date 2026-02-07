@@ -134,10 +134,11 @@ export const typeCountSchema = new Schema<ITypeCount>({ ItemType: String, ItemCo
 
 typeCountSchema.set("toJSON", {
     transform(_doc, obj: Record<string, any>) {
-        if (obj.ItemCount > 2147483647) {
-            obj.ItemCount = 2147483647;
-        } else if (obj.ItemCount < -2147483648) {
-            obj.ItemCount = -2147483648;
+        // Ensure numbers comfortably fit in a 32-bit integer so the client's in-memory value doesn't overflow or underflow.
+        if (obj.ItemCount > 999_999_999) {
+            obj.ItemCount = 999_999_999;
+        } else if (obj.ItemCount < -999_999_999) {
+            obj.ItemCount = -999_999_999;
         }
     }
 });

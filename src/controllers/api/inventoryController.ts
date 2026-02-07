@@ -448,6 +448,17 @@ export const getInventoryResponse = async (
     // Set 2FA enabled so trading post can be used
     inventoryResponse.HWIDProtectEnabled = true;
 
+    if (!forWebui) {
+        // Ensure numbers comfortably fit in a 32-bit integer so the client's in-memory value doesn't overflow or underflow.
+        for (const obj of inventory.RawUpgrades) {
+            if (obj.ItemCount > 999_999_999) {
+                obj.ItemCount = 999_999_999;
+            } else if (obj.ItemCount < -999_999_999) {
+                obj.ItemCount = -999_999_999;
+            }
+        }
+    }
+
     if (buildLabel) {
         // Fix nemesis for older versions
         if (
