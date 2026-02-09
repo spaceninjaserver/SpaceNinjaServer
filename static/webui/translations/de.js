@@ -232,6 +232,7 @@ dict = {
     cheats_dontSubtractPurchaseStandingCost: `Ansehen beim Kauf nicht verbrauchen`,
     cheats_dontSubtractVoidTraces: `Void-Spuren nicht verbrauchen`,
     cheats_dontSubtractConsumables: `Verbrauchsgüter (Ausrüstung) nicht verbrauchen`,
+    cheats_dontSubtractKeys: `Schlüssel nicht verbrauchen`,
     cheats_unlockAllShipFeatures: `Alle Schiffs-Funktionen freischalten`,
     cheats_unlockAllCapturaScenes: `Alle Photora-Szenen freischalten`,
     cheats_universalPolarityEverywhere: `Universelle Polarität überall`,

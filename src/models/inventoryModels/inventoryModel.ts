@@ -1551,6 +1551,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         dontSubtractPurchaseStandingCost: Boolean,
         dontSubtractVoidTraces: Boolean,
         dontSubtractConsumables: Boolean,
+        dontSubtractKeys: Boolean,
         finishInvasionsInOneMission: Boolean,
         infiniteCredits: Boolean,
         infinitePlatinum: Boolean,

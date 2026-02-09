@@ -37,6 +37,7 @@ export const accountCheatBooleans = [
     "dontSubtractPurchaseStandingCost",
     "dontSubtractVoidTraces",
     "dontSubtractConsumables",
+    "dontSubtractKeys",
     "finishInvasionsInOneMission",
     "infiniteCredits",
     "infinitePlatinum",

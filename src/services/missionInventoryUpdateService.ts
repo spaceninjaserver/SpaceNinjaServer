@@ -197,7 +197,7 @@ export const addMissionInventoryUpdates = async (
                 ]);
             }
         }
-        if (inventoryUpdates.KeyToRemove) {
+        if (inventoryUpdates.KeyToRemove && !inventory.dontSubtractKeys) {
             if (!inventoryUpdates.KeyOwner || inventory.accountOwnerId.equals(inventoryUpdates.KeyOwner)) {
                 addLevelKeys(inventory, [
                     {

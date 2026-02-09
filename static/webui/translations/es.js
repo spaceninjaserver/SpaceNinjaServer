@@ -232,6 +232,7 @@ dict = {
     cheats_dontSubtractPurchaseStandingCost: `No restar costo en reputación al comprar`,
     cheats_dontSubtractVoidTraces: `No descontar vestigios del Vacío`,
     cheats_dontSubtractConsumables: `No restar consumibles`,
+    cheats_dontSubtractKeys: `[UNTRANSLATED] Don't Subtract Keys`,
     cheats_unlockAllShipFeatures: `Desbloquear todas las funciones de nave`,
     cheats_unlockAllCapturaScenes: `Desbloquear todas las escenas de Captura`,
     cheats_universalPolarityEverywhere: `Polaridad universal en todas partes`,

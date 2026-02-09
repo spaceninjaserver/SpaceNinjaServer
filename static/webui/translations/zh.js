@@ -232,6 +232,7 @@ dict = {
     cheats_dontSubtractPurchaseStandingCost: `购物时不减少声望花费`,
     cheats_dontSubtractVoidTraces: `虚空光体无消耗`,
     cheats_dontSubtractConsumables: `消耗物品使用时无损耗`,
+    cheats_dontSubtractKeys: `[UNTRANSLATED] Don't Subtract Keys`,
     cheats_unlockAllShipFeatures: `解锁所有飞船功能`,
     cheats_unlockAllCapturaScenes: `解锁所有Captura场景`,
     cheats_universalPolarityEverywhere: `全局万用极性`,

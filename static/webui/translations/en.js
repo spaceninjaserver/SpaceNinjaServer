@@ -231,6 +231,7 @@ dict = {
     cheats_dontSubtractPurchaseStandingCost: `Don't Subtract Purchase Standing Cost`,
     cheats_dontSubtractVoidTraces: `Don't Subtract Void Traces`,
     cheats_dontSubtractConsumables: `Don't Subtract Consumables`,
+    cheats_dontSubtractKeys: `Don't Subtract Keys`,
     cheats_unlockAllShipFeatures: `Unlock All Ship Features`,
     cheats_unlockAllCapturaScenes: `Unlock All Captura Scenes`,
     cheats_universalPolarityEverywhere: `Universal Polarity Everywhere`,

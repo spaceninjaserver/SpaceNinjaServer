@@ -232,6 +232,7 @@ dict = {
     cheats_dontSubtractPurchaseStandingCost: `Не вираховувати вартість репутації при купівлі`,
     cheats_dontSubtractVoidTraces: `Не вираховувати кількість Відлуння`,
     cheats_dontSubtractConsumables: `Не вираховувати кількість витратних матеріалів`,
+    cheats_dontSubtractKeys: `[UNTRANSLATED] Don't Subtract Keys`,
     cheats_unlockAllShipFeatures: `Розблокувати всі функції судна`,
     cheats_unlockAllCapturaScenes: `Розблокувати всі сцени Світлописця`,
     cheats_universalPolarityEverywhere: `Будь-яка полярність скрізь`,
