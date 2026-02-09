@@ -193,7 +193,7 @@ export const handleInventoryItemConfigChange = async (
                 const loadoutIds = equipment as IOidWithLegacySupport[]; // TODO: Check for more than just an array of oids, I think i remember one instance
                 const ids: Types.ObjectId[] = [];
                 loadoutIds.forEach(x => {
-                    ids.push(toObjectId(fromOid(x)));
+                    ids.push(toObjectId(fromOid(x) || "000000000000000000000000"));
                 });
                 inventory.CurrentLoadOutIds = ids;
                 break;
