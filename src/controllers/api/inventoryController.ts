@@ -696,8 +696,8 @@ const mapLegacyLoadoutConfig = (
                     CustSlot: normPreset.s?.cus ?? 0,
                     Customization: {
                         Emblem: "",
-                        Colors: convertIColorToLegacyColors(s?.Configs[normPreset.s?.cus ?? 0].pricol),
-                        Skins: s?.Configs[normPreset.s?.cus ?? 0].Skins ?? []
+                        Colors: convertIColorToLegacyColors(s?.Configs[normPreset.s?.cus ?? 0]?.pricol),
+                        Skins: s?.Configs[normPreset.s?.cus ?? 0]?.Skins ?? []
                     }
                 },
                 {
@@ -706,8 +706,8 @@ const mapLegacyLoadoutConfig = (
                     CustSlot: normPreset.p?.cus ?? 0,
                     Customization: {
                         Emblem: "",
-                        Colors: convertIColorToLegacyColors(p?.Configs[normPreset.p?.cus ?? 0].pricol),
-                        Skins: p?.Configs[normPreset.p?.cus ?? 0].Skins ?? []
+                        Colors: convertIColorToLegacyColors(p?.Configs[normPreset.p?.cus ?? 0]?.pricol),
+                        Skins: p?.Configs[normPreset.p?.cus ?? 0]?.Skins ?? []
                     }
                 },
                 {
@@ -716,8 +716,8 @@ const mapLegacyLoadoutConfig = (
                     CustSlot: normPreset.l?.cus ?? 0,
                     Customization: {
                         Emblem: "",
-                        Colors: convertIColorToLegacyColors(l?.Configs[normPreset.l?.cus ?? 0].pricol),
-                        Skins: l?.Configs[normPreset.l?.cus ?? 0].Skins ?? []
+                        Colors: convertIColorToLegacyColors(l?.Configs[normPreset.l?.cus ?? 0]?.pricol),
+                        Skins: l?.Configs[normPreset.l?.cus ?? 0]?.Skins ?? []
                     }
                 },
                 {
@@ -726,8 +726,8 @@ const mapLegacyLoadoutConfig = (
                     CustSlot: normPreset.m?.cus ?? 0,
                     Customization: {
                         Emblem: "",
-                        Colors: convertIColorToLegacyColors(m?.Configs[normPreset.m?.cus ?? 0].pricol),
-                        Skins: m?.Configs[normPreset.m?.cus ?? 0].Skins ?? []
+                        Colors: convertIColorToLegacyColors(m?.Configs[normPreset.m?.cus ?? 0]?.pricol),
+                        Skins: m?.Configs[normPreset.m?.cus ?? 0]?.Skins ?? []
                     }
                 }
             ]
@@ -750,8 +750,8 @@ const mapLegacyLoadoutConfig = (
                             CustSlot: compPreset.s?.cus ?? 0,
                             Customization: {
                                 Emblem: "",
-                                Colors: convertIColorToLegacyColors(s?.Configs[compPreset.s?.cus ?? 0].pricol),
-                                Skins: s?.Configs[compPreset.s?.cus ?? 0].Skins ?? []
+                                Colors: convertIColorToLegacyColors(s?.Configs[compPreset.s?.cus ?? 0]?.pricol),
+                                Skins: s?.Configs[compPreset.s?.cus ?? 0]?.Skins ?? []
                             }
                         },
                         {
@@ -760,8 +760,8 @@ const mapLegacyLoadoutConfig = (
                             CustSlot: compPreset.l?.cus ?? 0,
                             Customization: {
                                 Emblem: "",
-                                Colors: convertIColorToLegacyColors(l?.Configs[compPreset.l?.cus ?? 0].pricol),
-                                Skins: l?.Configs[compPreset.l?.cus ?? 0].Skins ?? []
+                                Colors: convertIColorToLegacyColors(l?.Configs[compPreset.l?.cus ?? 0]?.pricol),
+                                Skins: l?.Configs[compPreset.l?.cus ?? 0]?.Skins ?? []
                             }
                         }
                     );
@@ -812,8 +812,8 @@ const mapLegacyLoadoutConfig = (
                             CustSlot: archPreset.s?.cus ?? 0,
                             Customization: {
                                 Emblem: "",
-                                Colors: convertIColorToLegacyColors(s?.Configs[archPreset.s?.cus ?? 0].pricol),
-                                Skins: s?.Configs[0].Skins ?? []
+                                Colors: convertIColorToLegacyColors(s?.Configs[archPreset.s?.cus ?? 0]?.pricol),
+                                Skins: s?.Configs[0]?.Skins ?? []
                             }
                         },
                         {
@@ -822,8 +822,8 @@ const mapLegacyLoadoutConfig = (
                             CustSlot: archPreset.l?.cus ?? 0,
                             Customization: {
                                 Emblem: "",
-                                Colors: convertIColorToLegacyColors(l?.Configs[archPreset.l?.cus ?? 0].pricol),
-                                Skins: l?.Configs[0].Skins ?? []
+                                Colors: convertIColorToLegacyColors(l?.Configs[archPreset.l?.cus ?? 0]?.pricol),
+                                Skins: l?.Configs[0]?.Skins ?? []
                             }
                         },
                         {
@@ -832,8 +832,8 @@ const mapLegacyLoadoutConfig = (
                             CustSlot: archPreset.m?.cus ?? 0,
                             Customization: {
                                 Emblem: "",
-                                Colors: convertIColorToLegacyColors(m?.Configs[archPreset.m?.cus ?? 0].pricol),
-                                Skins: m?.Configs[0].Skins ?? []
+                                Colors: convertIColorToLegacyColors(m?.Configs[archPreset.m?.cus ?? 0]?.pricol),
+                                Skins: m?.Configs[0]?.Skins ?? []
                             }
                         }
                     );
