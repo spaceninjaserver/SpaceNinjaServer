@@ -2,7 +2,8 @@ import type {
     IMissionReward as IMissionRewardExternal,
     IRegion,
     IReward,
-    TMissionType
+    TMissionType,
+    TRarity
 } from "warframe-public-export-plus";
 import {
     ExportAnimals,
@@ -1849,17 +1850,42 @@ export const addFixedLevelRewards = (
         }
     }
     if (rewards.droptable) {
-        const metaDroptable = getMissionDeck(rewards.droptable);
-        if (metaDroptable) {
+        const droptable = getMissionDeck(rewards.droptable);
+        if (droptable) {
             const rotations: number[] = rewardInfo ? getRotations(rewardInfo) : [0];
-            logger.debug(`rolling ${rewards.droptable} for level key rewards`, { rotations });
-            for (const tier of rotations) {
-                const reward = getRandomRewardByChance(metaDroptable[tier]);
-                if (reward) {
-                    MissionRewards.push({
-                        StoreItem: reward.type,
-                        ItemCount: reward.itemCount
-                    });
+            if (rewards.droptable.startsWith("/Lotus/Types/Game/MissionDecks/VoidKeyMissionRewards/")) {
+                logger.debug(`rolling ${rewards.droptable} for ${rotations.length} void tower rewards`);
+                const RARITY_TO_PROBABILITY: Record<TRarity, number> = {
+                    COMMON: 0.2533,
+                    UNCOMMON: 0.11,
+                    RARE: 0.02,
+                    LEGENDARY: 0
+                };
+                const pool = droptable[0].map(x => ({
+                    type: x.type,
+                    itemCount: x.itemCount,
+                    probability: RARITY_TO_PROBABILITY[x.rarity!]
+                }));
+                const rng = new SRng(BigInt(rewardInfo?.rewardSeed ?? generateRewardSeed()) ^ 0xffffffffffffffffn);
+                for (let i = 0; i != rotations.length; ++i) {
+                    const reward = getRandomRewardByChance(pool, rng);
+                    if (reward) {
+                        MissionRewards.push({
+                            StoreItem: reward.type,
+                            ItemCount: reward.itemCount
+                        });
+                    }
+                }
+            } else {
+                logger.debug(`rolling ${rewards.droptable} for level key rewards`, { rotations });
+                for (const tier of rotations) {
+                    const reward = getRandomRewardByChance(droptable[tier]);
+                    if (reward) {
+                        MissionRewards.push({
+                            StoreItem: reward.type,
+                            ItemCount: reward.itemCount
+                        });
+                    }
                 }
             }
         } else {
