@@ -1,6 +1,3 @@
-//this is a controller for the claimCompletedRecipe route
-//it will claim a recipe for the user
-
 import type { RequestHandler } from "express";
 import { logger } from "../../utils/logger.ts";
 import { getRecipe } from "../../services/itemDataService.ts";
