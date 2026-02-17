@@ -2436,7 +2436,7 @@ function addVaultItem(vaultType) {
     const ItemCount = ["VaultMiscItems", "VaultShipDecorations"].includes(vaultType)
         ? parseInt($(`#${vaultType}-count`).val())
         : 1;
-    if (ItemCount != 0) {
+    if (ItemCount != 0 && !Number.isNaN(ItemCount)) {
         revalidateAuthz().then(() => {
             const req = $.post({
                 url: "/custom/addVaultTypeCount?" + window.authz + "&guildId=" + window.guildId,
@@ -2977,7 +2977,7 @@ function doAcquireCountItems(category) {
         return;
     }
     const count = parseInt($(`#${category}-count`).val());
-    if (count != 0) {
+    if (count != 0 && !Number.isNaN(count)) {
         revalidateAuthz().then(() => {
             $.post({
                 url: "/custom/addItems?" + window.authz,
@@ -3151,7 +3151,7 @@ function doAcquireMod() {
         return;
     }
     const count = parseInt($("#mod-count").val());
-    if (count != 0) {
+    if (count != 0 && !Number.isNaN(count)) {
         Promise.all([window.itemListPromise, revalidateAuthz()]).then(([itemList]) => {
             $.post({
                 url: "/custom/addItems?" + window.authz,
