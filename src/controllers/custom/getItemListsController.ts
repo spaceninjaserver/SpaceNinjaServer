@@ -156,10 +156,12 @@ const getItemListsController: RequestHandler = (req, response) => {
             maxLevelCap: item.maxLevelCap
         });
         item.abilities.forEach(ability => {
-            res.Abilities.push({
-                uniqueName: ability.uniqueName,
-                name: getString(ability.name || uniqueName, lang)
-            });
+            if (!res.Abilities.some(x => x.uniqueName == ability.uniqueName)) {
+                res.Abilities.push({
+                    uniqueName: ability.uniqueName,
+                    name: getString(ability.name || uniqueName, lang)
+                });
+            }
         });
     }
     for (const [uniqueName, item] of Object.entries(ExportSentinels)) {

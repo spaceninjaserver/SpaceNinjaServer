@@ -329,6 +329,22 @@ const permanentEvolutionWeapons = new Set([
     "/Lotus/Weapons/Tenno/Zariman/Melee/HeavyScythe/ZarimanHeavyScythe/ZarimanHeavyScytheWeapon"
 ]);
 
+const itemToString = item => item.name;
+const itemToStringWithSubtype = item => (item.subtype ? item.name + " (" + item.subtype + ")" : item.name);
+const itemToStringWithUniqueName = item => item.name + " [" + item.uniqueName.split("/").pop() + "]";
+
+const areItemsUnambiguous = (items, stringifier) => {
+    const set = new Set();
+    for (const item of items) {
+        const str = stringifier(item);
+        if (set.has(str)) {
+            return false;
+        }
+        set.add(str);
+    }
+    return true;
+};
+
 function fetchItemList() {
     window.itemListPromise = new Promise(resolve => {
         const req = $.get("/custom/getItemLists?lang=" + window.lang);
@@ -717,30 +733,26 @@ function fetchItemList() {
                                     .appendChild(option);
                             }
                         } else if (item.badReason != "notraw") {
-                            const ambiguous = nameToItems[item.name].length > 1;
-                            let canDisambiguate = true;
-                            if (ambiguous) {
-                                for (const i2 of nameToItems[item.name]) {
-                                    if (!i2.subtype) {
-                                        canDisambiguate = false;
-                                        break;
+                            let stringifier = itemToString;
+                            if (nameToItems[item.name].length > 1) {
+                                stringifier = itemToStringWithSubtype;
+                                if (!areItemsUnambiguous(nameToItems[item.name], stringifier)) {
+                                    stringifier = itemToStringWithUniqueName;
+                                    if (!areItemsUnambiguous(nameToItems[item.name], stringifier)) {
+                                        console.log(
+                                            `Not adding ${item.uniqueName} to datalist for ${type} due to ambiguous display name: ${item.name}`
+                                        );
+                                        return;
                                     }
                                 }
                             }
-                            if (!ambiguous || canDisambiguate || nameToItems[item.name][0] == item) {
-                                const option = document.createElement("option");
-                                option.setAttribute("data-key", item.uniqueName);
-                                option.value = item.name;
-                                if (ambiguous && canDisambiguate) {
-                                    option.value += " (" + item.subtype + ")";
-                                }
-                                document.getElementById("datalist-" + type).appendChild(option);
-                                if (item.eligibleForVault) {
-                                    const vaultOption = option.cloneNode(true);
-                                    document.getElementById("datalist-VaultMiscItems").appendChild(vaultOption);
-                                }
-                            } else {
-                                //console.log(`Not adding ${item.uniqueName} to datalist for ${type} due to duplicate display name: ${item.name}`);
+                            const option = document.createElement("option");
+                            option.setAttribute("data-key", item.uniqueName);
+                            option.value = stringifier(item);
+                            document.getElementById("datalist-" + type).appendChild(option);
+                            if (item.eligibleForVault) {
+                                const vaultOption = option.cloneNode(true);
+                                document.getElementById("datalist-VaultMiscItems").appendChild(vaultOption);
                             }
                         }
                         itemMap[item.uniqueName] = { ...item, type };
