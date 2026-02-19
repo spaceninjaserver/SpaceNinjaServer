@@ -2732,9 +2732,9 @@ const collectSkins = (skins: string[], weaponMap: Map<string, string>, itemsToAd
         if (skinId.startsWith("ca70ca70ca70ca70")) {
             const typeName = skinLookupTable[parseInt(skinId.slice(16), 16)];
             if (!weaponMap.has(typeName)) {
-                const { requirement } = ExportCustoms[typeName];
-                if (typeof requirement == "string") {
-                    itemsToAdd.add(requirement);
+                const req = ExportCustoms[typeName].requirement;
+                if (req) {
+                    itemsToAdd.add(req);
                 } else {
                     itemsToAdd.add(typeName);
                 }
