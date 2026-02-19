@@ -6,7 +6,7 @@ import type { RequestHandler } from "express";
 
 export const releasePetController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId, "RegularCredits KubrowPets");
+    const inventory = await getInventory(accountId, "RegularCredits KubrowPets PendingRecipes");
     const payload = getJSONfromString<IReleasePetRequest>(String(req.body));
 
     const cost = payload.recipeName == "/Lotus/Types/Game/KubrowPet/ReleasePetRecipe" ? 25000 : 0;
@@ -14,6 +14,7 @@ export const releasePetController: RequestHandler = async (req, res) => {
 
     inventoryChanges.RemovedIdItems = [{ ItemId: { $oid: payload.petId } }];
     inventory.KubrowPets.pull({ _id: payload.petId });
+    inventory.PendingRecipes.pull({ KubrowPet: payload.petId });
 
     await inventory.save();
     res.json({
