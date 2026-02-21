@@ -160,10 +160,10 @@ const createLoginResponse = (request: Request, account: IDatabaseAccountJson, bu
         resp.SteamId = "0";
     }
     if (version_compare(buildLabel, gameToBuildVersion["15.14.1"]) >= 0) {
-        resp.NRS = [(config.nrsAddress ?? "%THIS_MACHINE%").split("%THIS_MACHINE%").join(myAddress)];
+        resp.NRS = [(config.nrsAddress || "%THIS_MACHINE%").split("%THIS_MACHINE%").join(myAddress)];
     }
     if (version_compare(buildLabel, gameToBuildVersion["16.5.5"]) >= 0) {
-        resp.IRC = [(config.ircAddress ?? "%THIS_MACHINE%").split("%THIS_MACHINE%").join(myAddress)];
+        resp.IRC = [(config.ircAddress || "%THIS_MACHINE%").split("%THIS_MACHINE%").join(myAddress)];
     }
     if (version_compare(buildLabel, gameToBuildVersion["24.0.0"]) >= 0) {
         resp.ConsentNeeded = account.ConsentNeeded;
@@ -216,7 +216,7 @@ const createLoginResponse = (request: Request, account: IDatabaseAccountJson, bu
     ) {
         const tunables = getTunablesForClient((request.socket.address() as AddressInfo).address, myAddress);
         if (version_compare(buildLabel, gameToBuildVersion["16.5.5"]) < 0) {
-            tunables.irc = (config.ircAddress ?? "%THIS_MACHINE%").split("%THIS_MACHINE%").join(myAddress);
+            tunables.irc = (config.ircAddress || "%THIS_MACHINE%").split("%THIS_MACHINE%").join(myAddress);
         }
         raw += "\t" + JSON.stringify(tunables);
     }
