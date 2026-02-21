@@ -13,7 +13,7 @@ jobs:
               uses: actions/setup-node@v4.0.2
               with:
                   node-version: ">=20.18.1"
-            - run: npm ci
+            - run: npm ci --no-audit
             - run: cp config-vanilla.json config.json
             - run: npm run verify
             - run: npm run lint:ci

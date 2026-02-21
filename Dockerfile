@@ -4,7 +4,7 @@ WORKDIR /app
 RUN apk add --no-cache bash jq
 
 COPY package.json package-lock.json /app
-RUN npm i --omit=dev --omit=optional
+RUN npm i --omit=dev --omit=optional --no-audit
 
 COPY . /app
 RUN date '+%d %B %Y' > BUILD_DATE
