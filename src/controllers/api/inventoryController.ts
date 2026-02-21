@@ -339,6 +339,18 @@ export const getInventoryResponse = async (
                 state: "TS_COMPLETED"
             });
         }
+        if (!inventoryResponse.TauntHistory.find(x => x.node == "StarchartTutorial")) {
+            inventoryResponse.TauntHistory.push({
+                node: "StarchartTutorial",
+                state: "TS_COMPLETED"
+            });
+        }
+        if (!inventoryResponse.TauntHistory.find(x => x.node == "CraftingTutorial")) {
+            inventoryResponse.TauntHistory.push({
+                node: "CraftingTutorial",
+                state: "TS_COMPLETED"
+            });
+        }
         for (const str of allDialogue) {
             addString(inventoryResponse.NodeIntrosCompleted, str);
         }
