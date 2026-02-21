@@ -17,7 +17,7 @@ export interface IEquipmentSelectionClient {
 }
 
 export interface IEquipmentSelectionDatabase extends Omit<IEquipmentSelectionClient, "ItemId"> {
-    ItemId?: Types.ObjectId | IOid; // should be Types.ObjectId but might be IOid because of old commits
+    ItemId?: Types.ObjectId | IOid; // should be Types.ObjectId but might be IOid
 }
 
 export enum EquipmentFeatures {

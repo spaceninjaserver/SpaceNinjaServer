@@ -152,7 +152,7 @@ export interface IInventoryDatabase
     NemesisTaxedCredits?: number;
 
     Created: Date;
-    CurrentLoadOutIds: Types.ObjectId[] | IOid[]; // should be Types.ObjectId[] but might be IOid[] because of old commits
+    CurrentLoadOutIds: Types.ObjectId[];
     TrainingDate: Date;
     LoadOutPresets: Types.ObjectId; // LoadOutPresets changed from ILoadOutPresets to Types.ObjectId for population
     //Mailbox?: IMailboxDatabase;

@@ -62,7 +62,6 @@ import { createShip } from "./shipService.ts";
 import type { TTraitsPool } from "../helpers/inventoryHelpers.ts";
 import {
     catbrowDetails,
-    fromDbOid,
     fromMongoDate,
     fromOid,
     kubrowDetails,
@@ -2579,8 +2578,6 @@ export const setupKahlSyndicate = (inventory: TInventoryDatabaseDocument): void 
 };
 
 export const cleanupInventory = async (inventory: TInventoryDatabaseDocument): Promise<void> => {
-    inventory.CurrentLoadOutIds = inventory.CurrentLoadOutIds.map(fromDbOid);
-
     if (ensureOperatorSuitsRemasterData(inventory)) {
         logger.debug(`added missing Operator suits for Operator remaster`);
     }

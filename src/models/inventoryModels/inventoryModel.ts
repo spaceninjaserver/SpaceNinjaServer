@@ -112,7 +112,7 @@ import type {
     IOperatorConfigDatabase,
     IPolarity
 } from "../../types/inventoryTypes/commonInventoryTypes.ts";
-import { fromDbOid, toMongoDate, toOid } from "../../helpers/inventoryHelpers.ts";
+import { toMongoDate, toOid } from "../../helpers/inventoryHelpers.ts";
 import { EquipmentSelectionSchema } from "./loadoutModel.ts";
 import type { ICountedStoreItem } from "warframe-public-export-plus";
 import { colorSchema, shipCustomizationSchema } from "../commonModel.ts";
@@ -1926,7 +1926,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         HasContributedToDojo: Boolean,
         HWIDProtectEnabled: Boolean,
         LoadOutPresets: { type: Schema.Types.ObjectId, ref: "Loadout" },
-        CurrentLoadOutIds: [Schema.Types.Mixed], // should be Types.ObjectId[] but might be IOid[] because of old commits
+        CurrentLoadOutIds: { type: [Schema.Types.ObjectId] },
         RandomUpgradesIdentified: Number,
         BountyScore: Number,
         ChallengeInstanceStates: { type: [challengeInstanceStateSchema], default: undefined },
@@ -2002,7 +2002,7 @@ inventorySchema.set("toJSON", {
             inventoryResponse.Created = toMongoDate(inventoryDatabase.Created);
         }
         if (inventoryDatabase.CurrentLoadOutIds) {
-            inventoryResponse.CurrentLoadOutIds = inventoryDatabase.CurrentLoadOutIds.map(x => toOid(fromDbOid(x)));
+            inventoryResponse.CurrentLoadOutIds = inventoryDatabase.CurrentLoadOutIds.map(x => toOid(x));
         }
         if (inventoryDatabase.TrainingDate) {
             inventoryResponse.TrainingDate = toMongoDate(inventoryDatabase.TrainingDate);

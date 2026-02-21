@@ -12,13 +12,7 @@ import { addMods, getInventory } from "./inventoryService.ts";
 import type { IOidWithLegacySupport } from "../types/commonTypes.ts";
 import { Types } from "mongoose";
 import { isEmptyObject } from "../helpers/general.ts";
-import {
-    convertLegacyColorsToIColor,
-    fromDbOid,
-    fromOid,
-    toObjectId,
-    version_compare
-} from "../helpers/inventoryHelpers.ts";
+import { convertLegacyColorsToIColor, fromOid, toObjectId, version_compare } from "../helpers/inventoryHelpers.ts";
 import { logger } from "../utils/logger.ts";
 import type { TEquipmentKey } from "../types/inventoryTypes/inventoryTypes.ts";
 import { equipmentKeys } from "../types/inventoryTypes/inventoryTypes.ts";
@@ -395,7 +389,7 @@ const saveLegacyLoadoutPreset = async (
         throw new Error("loadout not found");
     }
 
-    const currentLoadouts = inventory.CurrentLoadOutIds as Types.ObjectId[];
+    const currentLoadouts = inventory.CurrentLoadOutIds;
 
     const s =
         fromOid(presets[0].ItemId) != "ffffffffffffffffffffffff"
@@ -450,7 +444,7 @@ const saveLegacyLoadoutPreset = async (
             currentLoadouts[0] = loadoutId;
         }
     } else {
-        const loadoutId = fromDbOid(currentLoadouts[0]);
+        const loadoutId = currentLoadouts[0];
         const preset = loadout.NORMAL.id(loadoutId);
         if (preset) {
             preset.n = name ?? preset.n;
@@ -499,7 +493,7 @@ const saveLegacyLoadoutPreset = async (
                 currentLoadouts[1] = loadoutId;
             }
         } else {
-            const loadoutId = fromDbOid(currentLoadouts[1]);
+            const loadoutId = currentLoadouts[1];
             const preset = loadout.SENTINEL.id(loadoutId);
             if (preset) {
                 preset.n = name ?? preset.n;
@@ -542,7 +536,7 @@ const saveLegacyLoadoutPreset = async (
                 currentLoadouts[2] = loadoutId;
             }
         } else {
-            const loadoutId = fromDbOid(currentLoadouts[2]);
+            const loadoutId = currentLoadouts[2];
             const preset = loadout.ARCHWING.id(loadoutId);
             if (preset) {
                 preset.n = name ?? preset.n;

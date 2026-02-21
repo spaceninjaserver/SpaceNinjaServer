@@ -1,4 +1,4 @@
-import { fromDbOid, toMongoDate, toOid } from "../../helpers/inventoryHelpers.ts";
+import { fromOid, toMongoDate, toOid } from "../../helpers/inventoryHelpers.ts";
 import type { TGuildDatabaseDocument } from "../../models/guildModel.ts";
 import { Guild, GuildMember } from "../../models/guildModel.ts";
 import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/inventoryModel.ts";
@@ -318,31 +318,31 @@ const populateLoadout = async (
     if (inventory.CurrentLoadOutIds.length) {
         const loadout = (await Loadout.findById(inventory.LoadOutPresets, "NORMAL"))!;
         result.LoadOutPreset = loadout.NORMAL.id(
-            fromDbOid(inventory.CurrentLoadOutIds[LoadoutIndex.NORMAL])
+            inventory.CurrentLoadOutIds[LoadoutIndex.NORMAL]
         )!.toJSON<ILoadoutConfigClient>();
         result.LoadOutPreset.ItemId = undefined;
         const skins = new Set<string>();
         if (result.LoadOutPreset.s?.ItemId) {
             result.LoadOutInventory.Suits = [
-                inventory.Suits.id(fromDbOid(result.LoadOutPreset.s.ItemId))!.toJSON<IEquipmentClient>()
+                inventory.Suits.id(fromOid(result.LoadOutPreset.s.ItemId))!.toJSON<IEquipmentClient>()
             ];
             resolveAndCollectSkins(inventory, skins, result.LoadOutInventory.Suits[0]);
         }
         if (result.LoadOutPreset.p?.ItemId) {
             result.LoadOutInventory.Pistols = [
-                inventory.Pistols.id(fromDbOid(result.LoadOutPreset.p.ItemId))!.toJSON<IEquipmentClient>()
+                inventory.Pistols.id(fromOid(result.LoadOutPreset.p.ItemId))!.toJSON<IEquipmentClient>()
             ];
             resolveAndCollectSkins(inventory, skins, result.LoadOutInventory.Pistols[0]);
         }
         if (result.LoadOutPreset.l?.ItemId) {
             result.LoadOutInventory.LongGuns = [
-                inventory.LongGuns.id(fromDbOid(result.LoadOutPreset.l.ItemId))!.toJSON<IEquipmentClient>()
+                inventory.LongGuns.id(fromOid(result.LoadOutPreset.l.ItemId))!.toJSON<IEquipmentClient>()
             ];
             resolveAndCollectSkins(inventory, skins, result.LoadOutInventory.LongGuns[0]);
         }
         if (result.LoadOutPreset.m?.ItemId) {
             result.LoadOutInventory.Melee = [
-                inventory.Melee.id(fromDbOid(result.LoadOutPreset.m.ItemId))!.toJSON<IEquipmentClient>()
+                inventory.Melee.id(fromOid(result.LoadOutPreset.m.ItemId))!.toJSON<IEquipmentClient>()
             ];
             resolveAndCollectSkins(inventory, skins, result.LoadOutInventory.Melee[0]);
         }
