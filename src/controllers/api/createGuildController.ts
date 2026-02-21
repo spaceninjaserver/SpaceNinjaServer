@@ -1,24 +1,38 @@
 import type { RequestHandler } from "express";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, type TAccountDocument } from "../../services/loginService.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { Guild, GuildMember } from "../../models/guildModel.ts";
 import { createUniqueClanName, getGuildClient, giveClanKey } from "../../services/guildService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import { sendWsBroadcastTo } from "../../services/wsService.ts";
+import type { IGuildClient } from "../../types/guildTypes.ts";
 
-export const createGuildController: RequestHandler = async (req, res) => {
+export const createGuildGetController: RequestHandler = async (req, res) => {
+    const account = await getAccountForRequest(req);
+    const guildName = req.query.guildName as string;
+    const response = processCreateGuildRequest(account, { guildName });
+    res.json(response);
+};
+
+export const createGuildPostController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
     const payload = getJSONfromString<ICreateGuildRequest>(String(req.body));
+    const response = processCreateGuildRequest(account, payload);
+    res.json(response);
+};
 
+const processCreateGuildRequest = async (
+    account: TAccountDocument,
+    payload: ICreateGuildRequest
+): Promise<ICreateGuildResponse> => {
     const inventory = await getInventory(account._id.toString(), "GuildId LevelKeys Recipes");
     if (inventory.GuildId) {
         const guild = await Guild.findById(inventory.GuildId);
         if (guild) {
-            res.json({
+            return {
                 ...(await getGuildClient(guild, account))
-            });
-            return;
+            };
         }
     }
 
@@ -44,13 +58,17 @@ export const createGuildController: RequestHandler = async (req, res) => {
     giveClanKey(inventory, inventoryChanges);
     await inventory.save();
 
-    res.json({
+    sendWsBroadcastTo(account._id.toString(), { update_inventory: true });
+    return {
         ...(await getGuildClient(guild, account)),
         InventoryChanges: inventoryChanges
-    });
-    sendWsBroadcastTo(account._id.toString(), { update_inventory: true });
+    };
 };
 
 interface ICreateGuildRequest {
     guildName: string;
+}
+
+interface ICreateGuildResponse extends IGuildClient {
+    InventoryChanges?: IInventoryChanges;
 }

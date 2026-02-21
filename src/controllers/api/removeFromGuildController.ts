@@ -1,4 +1,4 @@
-import { GuildMember } from "../../models/guildModel.ts";
+import { GuildMember, type TGuildDatabaseDocument } from "../../models/guildModel.ts";
 import { Inbox } from "../../models/inboxModel.ts";
 import { Account } from "../../models/loginModel.ts";
 import {
@@ -9,20 +9,36 @@ import {
 } from "../../services/guildService.ts";
 import { createMessage } from "../../services/inboxService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
-import { getAccountForRequest, getSuffixedName } from "../../services/loginService.ts";
+import { getAccountForRequest, getSuffixedName, type TAccountDocument } from "../../services/loginService.ts";
 import { sendWsBroadcastTo } from "../../services/wsService.ts";
 import { GuildPermission } from "../../types/guildTypes.ts";
-import type { RequestHandler } from "express";
+import type { RequestHandler, Response } from "express";
 
-export const removeFromGuildController: RequestHandler = async (req, res) => {
+export const removeFromGuildGetController: RequestHandler = async (req, res) => {
+    const account = await getAccountForRequest(req);
+    const guild = await getGuildForRequest(req);
+    const userName = req.query.userName as string;
+    await processRemoveFromGuildRequest(account, guild, { userName }, res);
+};
+
+export const removeFromGuildPostController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
     const guild = await getGuildForRequest(req);
     const payload = JSON.parse(String(req.body)) as IRemoveFromGuildRequest;
+    await processRemoveFromGuildRequest(account, guild, payload, res);
+};
+
+const processRemoveFromGuildRequest = async (
+    account: TAccountDocument,
+    guild: TGuildDatabaseDocument,
+    payload: IRemoveFromGuildRequest,
+    res: Response
+): Promise<void> => {
     if (!payload.userId) {
         const oid = (await Account.findOne({ DisplayName: payload.userName }, "_id"))?._id;
         payload.userId = oid?.toString();
         if (!payload.userId) {
-            throw new Error(`invalid removeFromGuild request: ${String(req.body)}`);
+            throw new Error(`invalid removeFromGuild request: ${JSON.stringify(payload)}`);
         }
     }
     const isKick = !account._id.equals(payload.userId);
