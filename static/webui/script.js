@@ -683,6 +683,9 @@ function fetchItemList() {
                     const nameToItems = {};
                     items.forEach(item => {
                         item.name = item.name.replace(/<.+>/g, "").trim();
+                        if (item.name == "/Lotus/Language/Suits/RiftWalkAbilityName") {
+                            item.name = loc("code_RiftWalkAbilityName");
+                        }
                         if ("badReason" in item) {
                             if (item.badReason == "starter") {
                                 item.name = loc("code_starter").split("|MOD|").join(item.name);
@@ -3523,7 +3526,7 @@ function doRemoveUnrankedMods() {
                         SellCurrency: "SC_RegularCredits",
                         SellPrice: 0,
                         Items: {
-                            Upgrades: inventory.RawUpgrades.filter(
+                            Upgrades: data.RawUpgrades.filter(
                                 x => !itemMap[x.ItemType]?.parazon && x.ItemCount > 0
                             ).map(x => ({ String: x.ItemType, Count: x.ItemCount }))
                         }

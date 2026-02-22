@@ -273,6 +273,7 @@ const claimCompletedRecipe = async (
                     XP: 900_000,
                     Features: EquipmentFeatures.DOUBLE_CAPACITY
                 },
+                account.BuildLabel,
                 resp.InventoryChanges
             );
             inventory.XPInfo.push({
@@ -317,7 +318,9 @@ const claimCompletedRecipe = async (
                     recipe.num,
                     false,
                     undefined,
-                    pendingRecipe.TargetFingerprint
+                    pendingRecipe.TargetFingerprint,
+                    undefined,
+                    account.BuildLabel
                 )
             );
         }

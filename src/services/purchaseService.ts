@@ -526,7 +526,8 @@ export const handleStoreItemAcquisition = async (
                         premiumPurchase,
                         seed,
                         undefined,
-                        true
+                        true,
+                        buildLabel
                     )
                 };
                 break;

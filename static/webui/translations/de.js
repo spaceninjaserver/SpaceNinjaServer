@@ -31,6 +31,7 @@ dict = {
     code_traumaticPeculiar: `Kuriose Mod: Traumatisch`,
     code_starter: `|MOD| (Defekt)`,
     code_badItem: `(Fälschung)`,
+    code_RiftWalkAbilityName: `Riftlauf`,
     code_maxRank: `Max. Rang`,
     code_rename: `Umbenennen`,
     code_renamePrompt: `Neuen benutzerdefinierten Namen eingeben:`,

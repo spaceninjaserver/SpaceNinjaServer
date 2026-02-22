@@ -31,6 +31,7 @@ dict = {
     code_traumaticPeculiar: `Traumatisme Atypique`,
     code_starter: `|MOD| (Défectueux)`,
     code_badItem: `(Imposteur)`,
+    code_RiftWalkAbilityName: `Transfert Dimensionnel`,
     code_maxRank: `Rang Max`,
     code_rename: `Renommer`,
     code_renamePrompt: `Nouveau nom :`,

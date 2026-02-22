@@ -25,6 +25,7 @@ import {
 } from "warframe-public-export-plus";
 import allIncarnons from "../../../static/fixed_responses/allIncarnonList.json" with { type: "json" };
 import varzia from "../../constants/varzia.ts";
+import suitDefaultUpgrades from "../../constants/suitDefaultUpgrades.ts";
 
 interface ListedItem {
     uniqueName: string;
@@ -341,6 +342,60 @@ const getItemListsController: RequestHandler = (req, response) => {
             mod.parazon = true;
         }
         res.mods.push(mod);
+    }
+    {
+        const uniqueItemTypes = [
+            ...new Set(
+                Object.values(suitDefaultUpgrades)
+                    .flat()
+                    .map(u => u.ItemType)
+            )
+        ];
+        const abilityNameOverrides: Record<string, string> = {
+            "/Lotus/Powersuits/AntiMatter/AntiMatterDropAbilityCard": "/Lotus/Language/Suits/DropAbilityName",
+            "/Lotus/Powersuits/AntiMatter/NullStarAbilityCard": "/Lotus/Language/Suits/NullstarAbilityName",
+            "/Lotus/Powersuits/Banshee/EarthQuakeAbilityCard": "/Lotus/Language/Suits/SoundquakeAbilityName",
+            "/Lotus/Powersuits/Berserker/GrappleAbilityCard": "/Lotus/Language/Suits/GrappleHookAbilityName",
+            "/Lotus/Powersuits/Berserker/IntimidateAbilityCard": "/Lotus/Language/Suits/BerserkerScreamAbilityName",
+            "/Lotus/Powersuits/Berserker/ShieldBlastAbilityCard": "/Lotus/Language/Suits/ShieldBashAbilityName",
+            "/Lotus/Powersuits/Cowgirl/RicochetArmourAbilityCard": "/Lotus/Language/Suits/RicochetArmorAbilityName",
+            "/Lotus/Powersuits/Ember/FireSkinAbilityCard": "/Lotus/Language/Suits/OverheatAbilityName",
+            "/Lotus/Powersuits/Excalibur/SuperJumpAbilityCard": "/Lotus/Language/Items/SuperJumpAbility",
+            "/Lotus/Powersuits/Frost/IceShieldAbilityCard": "/Lotus/Language/Suits/SnowGlobeAbilityName",
+            "/Lotus/Powersuits/Frost/IceSpikeAbilityCard": "/Lotus/Language/Suits/IceWaveAbilityName",
+            "/Lotus/Powersuits/Frost/IcicleAbilityCard": "/Lotus/Language/Suits/FreezeAbilityName",
+            "/Lotus/Powersuits/Harlequin/LightAbilityCard": "/Lotus/Language/Suits/EclipseAbilityName",
+            "/Lotus/Powersuits/Harlequin/ObjectChangeAbilityCard": "/Lotus/Language/Suits/SleightOfHandAbilityName",
+            "/Lotus/Powersuits/Harlequin/PrismAbilityCard": "/Lotus/Language/Suits/GrandFinaleName",
+            "/Lotus/Powersuits/Jade/DaggerAbilityCard": "/Lotus/Language/Suits/PhysicDaggerAbilityName",
+            "/Lotus/Powersuits/Jade/SelfBulletAttractorAbilityCard": "/Lotus/Language/Suits/AbsorbAbilityName",
+            "/Lotus/Powersuits/Loki/DisarmAbilityCard": "/Lotus/Language/Suits/RadialDisarmAbilityName",
+            "/Lotus/Powersuits/Loki/SwitchAbilityCard": "/Lotus/Language/Suits/SwitchTeleportAbilityName",
+            "/Lotus/Powersuits/Ninja/TelelportToAbilityCard": "/Lotus/Language/Suits/TeleportToAbilityName",
+            "/Lotus/Powersuits/Pirate/LiquifyAbilityCard": "/Lotus/Language/Suits/LiquefyAbilityName",
+            "/Lotus/Powersuits/Rhino/RadialBlastAbilityCard": "/Lotus/Language/Suits/RhinoRoarAbilityName",
+            "/Lotus/Powersuits/Tengu/DiveBombAbilityCard": "/Lotus/Language/Suits/ZephyrDiveBombAbilityName",
+            "/Lotus/Powersuits/Tengu/TailWindAbilityCard": "/Lotus/Language/Suits/ZephyrTailWindAbilityName",
+            "/Lotus/Powersuits/Tengu/TornadoAbilityCard": "/Lotus/Language/Suits/ZephyrTornadoAbilityName",
+            "/Lotus/Powersuits/Tengu/TurbulenceAbilityCard": "/Lotus/Language/Suits/ZephyrTurbulenceAbilityName",
+            "/Lotus/Powersuits/Trapper/BounceTrapAbilityCard": "/Lotus/Language/Suits/TrapperMultinadeAbilityName",
+            "/Lotus/Powersuits/Volt/OverloadAbilityCard": "/Lotus/Language/Suits/OverLoadAbilityName"
+        };
+        for (const uniqueName of uniqueItemTypes) {
+            let locStr: string;
+
+            if (abilityNameOverrides[uniqueName]) {
+                locStr = abilityNameOverrides[uniqueName];
+            } else {
+                const abilityBase = uniqueName.split("/").pop()!.replace(/Card$/, "");
+                locStr = `/Lotus/Language/Suits/${abilityBase}Name`;
+            }
+            res.mods.push({
+                uniqueName,
+                name: getString(locStr, lang),
+                fusionLimit: 3
+            });
+        }
     }
     for (const [uniqueName, upgrade] of Object.entries(ExportAvionics)) {
         res.mods.push({

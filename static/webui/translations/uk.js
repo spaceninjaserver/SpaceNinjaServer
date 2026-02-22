@@ -31,6 +31,7 @@ dict = {
     code_traumaticPeculiar: `Особливе травмування`,
     code_starter: `|MOD| (Пошкоджений)`,
     code_badItem: `(Самозванець)`,
+    code_RiftWalkAbilityName: `Крок у розлом`,
     code_maxRank: `Макс. рівень`,
     code_rename: `Перейменувати`,
     code_renamePrompt: `Введіть нове ім'я:`,

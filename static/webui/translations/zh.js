@@ -31,6 +31,7 @@ dict = {
     code_traumaticPeculiar: `创伤怪奇`,
     code_starter: `|MOD| (有瑕疵的)`,
     code_badItem: `(正式服中隐藏)`,
+    code_RiftWalkAbilityName: `裂隙漫游`,
     code_maxRank: `满级`,
     code_rename: `重命名`,
     code_renamePrompt: `输入新的自定义名称:`,

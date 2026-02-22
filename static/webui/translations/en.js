@@ -30,6 +30,7 @@ dict = {
     code_traumaticPeculiar: `Traumatic Peculiar`,
     code_starter: `|MOD| (Flawed)`,
     code_badItem: `(Imposter)`,
+    code_RiftWalkAbilityName: `Rift Walk`,
     code_maxRank: `Max Rank`,
     code_rename: `Rename`,
     code_renamePrompt: `Enter new custom name:`,

@@ -96,6 +96,7 @@ import type { ITypeCount } from "../types/commonTypes.ts";
 import { skinLookupTable } from "../helpers/skinLookupTable.ts";
 import type { TLoadoutDatabaseDocument } from "../models/inventoryModels/loadoutModel.ts";
 import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
+import suitDefaultUpgrades from "../constants/suitDefaultUpgrades.ts";
 
 type OperatorAntiqueMeta = {
     focusAbility: string;
@@ -275,6 +276,7 @@ export const createInventory = async (
 
 export const addStartingGear = async (
     inventory: TInventoryDatabaseDocument,
+    buildLabel?: string,
     startingGear?: Partial<TPartialStartingGear>
 ): Promise<IInventoryChanges> => {
     if (inventory.ReceivedStartingGear) {
@@ -295,7 +297,7 @@ export const addStartingGear = async (
     addEquipment(inventory, "LongGuns", LongGuns[0].ItemType, { IsNew: false }, inventoryChanges);
     addEquipment(inventory, "Pistols", Pistols[0].ItemType, { IsNew: false }, inventoryChanges);
     combineInventoryChanges(inventoryChanges, await addItem(inventory, Melee[0].ItemType)); // defaultUpgrades need to respected because as of U38.5, Skana & Bo come with stances by default.
-    await addPowerSuit(inventory, Suits[0].ItemType, { IsNew: false }, inventoryChanges);
+    await addPowerSuit(inventory, Suits[0].ItemType, { IsNew: false }, buildLabel, inventoryChanges);
     addEquipment(
         inventory,
         "DataKnives",
@@ -622,7 +624,8 @@ export const addItem = async (
     if (
         typeName in ExportUpgrades ||
         typeName in ExportArcanes ||
-        typeName.startsWith("/Lotus/Upgrades/Mods/Fusers/")
+        typeName.startsWith("/Lotus/Upgrades/Mods/Fusers/") ||
+        (typeName.endsWith("AbilityCard") && typeName.startsWith("/Lotus/Powersuits/"))
     ) {
         if (targetFingerprint && typeName.startsWith("/Lotus/Upgrades/Mods/Randomized/Raw")) {
             logger.debug(`ignoring fingerprint for raw riven mod`);
@@ -879,9 +882,14 @@ export const addItem = async (
                         throw new Error(`unexpected acquisition quantity of Suits: got ${quantity}, expected 1`);
                     }
                     return {
-                        ...(await addPowerSuit(inventory, typeName, {
-                            Features: premiumPurchase ? EquipmentFeatures.DOUBLE_CAPACITY : undefined
-                        })),
+                        ...(await addPowerSuit(
+                            inventory,
+                            typeName,
+                            {
+                                Features: premiumPurchase ? EquipmentFeatures.DOUBLE_CAPACITY : undefined
+                            },
+                            buildLabel
+                        )),
                         ...occupySlot(inventory, InventorySlot.SUITS, premiumPurchase)
                     };
                 }
@@ -1316,6 +1324,7 @@ export const addPowerSuit = async (
     inventory: TInventoryDatabaseDocument,
     powersuitName: string,
     defaultOverwrites?: Partial<IEquipmentDatabase>,
+    buildLabel?: string,
     inventoryChanges: IInventoryChanges = {}
 ): Promise<IInventoryChanges> => {
     const powersuit = ExportWarframes[powersuitName] as IPowersuit | undefined;
@@ -1330,10 +1339,16 @@ export const addPowerSuit = async (
             }
         }
     }
+    let configs: IItemConfig[] = [];
+    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["15.0.0"]) < 0) {
+        if (powersuitName in suitDefaultUpgrades) {
+            configs = applyDefaultUpgrades(inventory, suitDefaultUpgrades[powersuitName], inventoryChanges);
+        }
+    }
     const suit: Omit<IEquipmentDatabase, "_id"> = Object.assign(
         {
             ItemType: powersuitName,
-            Configs: [],
+            Configs: configs,
             UpgradeVer: 101,
             XP: 0,
             IsNew: true
