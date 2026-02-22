@@ -622,8 +622,10 @@ export const getSortie = (day: number): ISortie => {
         Activation: { $date: { $numberLong: dayStart.toString() } },
         Expiry: { $date: { $numberLong: dayEnd.toString() } },
         Reward: "/Lotus/Types/Game/MissionDecks/SortieRewards",
-        Seed: selectedNodes.find(x => x.tileset == "CorpusIcePlanetTileset")
-            ? 2081 // this seed produces 12 zeroes in a row if asked to pick (0, 1); this way the CorpusIcePlanetTileset image is always index 0, the 'correct' choice.
+        Seed: selectedNodes.find(
+            x => x.tileset == "CorpusIcePlanetTileset" || x.tileset == "CorpusIcePlanetTilesetCaves"
+        )
+            ? 2081 // this seed produces 12 zeroes in a row if asked to pick (0, 1); this way the CorpusIcePlanetTileset/CorpusIcePlanetTilesetCaves image is always index 0, the 'correct' choice.
             : seed,
         Boss: boss,
         Variants: selectedNodes
