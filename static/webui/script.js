@@ -1563,12 +1563,22 @@ function translateInventoryDataToDom() {
                         buttonsCard.innerHTML = "";
                         item.Features ??= 0;
                         const bits = [];
+                        const evolutionWeapons = Array.from(
+                            document.querySelectorAll("#datalist-EvolutionProgress option")
+                        ).map(option => option.dataset.key);
+
                         if (category != "OperatorAmps") bits.push(1);
                         if (["Suits", "LongGuns", "Pistols", "Melee"].includes(category)) bits.push(2);
                         if (modularWeapons.includes(item.ItemType)) bits.push(8);
                         if (["LongGuns", "Pistols", "Melee", "SpaceGuns", "OperatorAmps"].includes(category))
                             bits.push(32);
                         if (category == "SpaceGuns") bits.push(4, 64);
+                        if (
+                            [item.ItemType, itemMap[item.ItemType]?.parentName].some(
+                                type => type && evolutionWeapons.includes(type) && !permanentEvolutionWeapons.has(type)
+                            )
+                        )
+                            bits.push(512);
                         if (
                             ["LongGuns", "Pistols", "Melee", "SpaceGuns", "SpaceMelee"].includes(category) &&
                             item.UpgradeFingerprint

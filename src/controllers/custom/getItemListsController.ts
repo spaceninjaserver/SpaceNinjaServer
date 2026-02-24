@@ -40,6 +40,7 @@ interface ListedItem {
     alwaysAvailable?: boolean;
     maxLevelCap?: number;
     eligibleForVault?: boolean;
+    parentName?: string;
 }
 
 interface ItemLists {
@@ -205,7 +206,8 @@ const getItemListsController: RequestHandler = (req, response) => {
                 res[item.productCategory].push({
                     uniqueName,
                     name: getString(item.name, lang),
-                    maxLevelCap: item.maxLevelCap
+                    maxLevelCap: item.maxLevelCap,
+                    parentName: item.parentName
                 });
             }
         } else if (!item.excludeFromCodex) {
