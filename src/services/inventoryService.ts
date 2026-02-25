@@ -2576,20 +2576,24 @@ export const createLibraryDailyTask = (): ILibraryDailyTaskInfo => {
 };
 
 export const setupKahlSyndicate = (inventory: TInventoryDatabaseDocument): void => {
-    inventory.Affiliations.push({
-        Title: 1,
-        Standing: 1,
-        WeeklyMissions: [
-            {
-                MissionIndex: 0,
-                CompletedMission: false,
-                JobManifest: "/Lotus/Syndicates/Kahl/KahlJobManifestVersionThree",
-                WeekCount: 0,
-                Challenges: []
-            }
-        ],
-        Tag: "KahlSyndicate"
-    });
+    if (inventory.Affiliations.some(x => x.Tag == "KahlSyndicate")) {
+        logger.debug(`refusing to setup KahlSyndicate. it's already set up.`);
+    } else {
+        inventory.Affiliations.push({
+            Title: 1,
+            Standing: 1,
+            WeeklyMissions: [
+                {
+                    MissionIndex: 0,
+                    CompletedMission: false,
+                    JobManifest: "/Lotus/Syndicates/Kahl/KahlJobManifestVersionThree",
+                    WeekCount: 0,
+                    Challenges: []
+                }
+            ],
+            Tag: "KahlSyndicate"
+        });
+    }
 };
 
 export const cleanupInventory = async (inventory: TInventoryDatabaseDocument): Promise<void> => {
@@ -2607,6 +2611,17 @@ export const cleanupInventory = async (inventory: TInventoryDatabaseDocument): P
         logger.debug(`KahlSyndicate seems broken, removing it and setting up again`);
         inventory.Affiliations.splice(index, 1);
         setupKahlSyndicate(inventory);
+    }
+
+    const set = new Set<string>();
+    for (let i = 0; i != inventory.Affiliations.length; ) {
+        if (set.has(inventory.Affiliations[i].Tag)) {
+            logger.debug(`removing duplicate affiliation for ${inventory.Affiliations[i].Tag}`);
+            inventory.Affiliations.splice(i, 1);
+        } else {
+            set.add(inventory.Affiliations[i].Tag);
+            ++i;
+        }
     }
 
     const LibrarySyndicate = inventory.Affiliations.find(x => x.Tag == "LibrarySyndicate");
