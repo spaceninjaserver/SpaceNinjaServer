@@ -230,12 +230,11 @@ export const handlePurchase = async (
             break;
         case PurchaseSource.VoidTrader: {
             const worldState = getWorldState(purchaseRequest.buildLabel);
-            if (purchaseRequest.PurchaseParams.SourceId! != worldState.VoidTraders[0]._id.$oid) {
+            const voidTrader = worldState.VoidTraders.find(x => x._id.$oid == purchaseRequest.PurchaseParams.SourceId!);
+            if (!voidTrader) {
                 throw new Error("invalid request source");
             }
-            const offer = worldState.VoidTraders[0].Manifest.find(
-                x => x.ItemType == purchaseRequest.PurchaseParams.StoreItem
-            );
+            const offer = voidTrader.Manifest.find(x => x.ItemType == purchaseRequest.PurchaseParams.StoreItem);
             if (offer) {
                 if (!inventory.dontSubtractPurchaseCreditCost) {
                     updateCurrency(inventory, offer.RegularPrice, false, purchaseResponse.InventoryChanges);
@@ -261,7 +260,7 @@ export const handlePurchase = async (
                         "VoidTrader",
                         offer.ItemType,
                         purchaseRequest.PurchaseParams.Quantity,
-                        fromMongoDate(worldState.VoidTraders[0].Expiry)
+                        fromMongoDate(voidTrader.Expiry)
                     );
                 }
             }
