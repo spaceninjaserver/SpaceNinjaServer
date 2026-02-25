@@ -509,15 +509,112 @@ function fetchItemList() {
                 name: loc("code_zanuka")
             });
 
-            data.miscitems.push({
-                uniqueName: "/Lotus/Types/Items/Research/DojoColors/GenericDojoColorPigment",
-                name: loc("code_pigment")
-            });
-
-            data.miscitems.push({
-                uniqueName: "/Lotus/Types/Items/MiscItems/BossNavCode",
-                name: loc("code_bossNavCode")
-            });
+            data.miscitems.push(
+                {
+                    uniqueName: "/Lotus/Types/Items/Research/DojoColors/GenericDojoColorPigment",
+                    name: loc("code_pigment")
+                },
+                {
+                    uniqueName: "/Lotus/Types/Items/MiscItems/BossNavCode",
+                    name: loc("code_bossNavCode")
+                },
+                {
+                    uniqueName: "/Lotus/Types/Keys/RaidKeys/Raid01Stage01KeyItem",
+                    name: loc("code_lawOfRetribution")
+                },
+                {
+                    uniqueName: "/Lotus/Types/Keys/GrineerRaidKeyBlueprint",
+                    name: loc("code_lawOfRetributionBp")
+                },
+                {
+                    uniqueName: "/Lotus/Types/Keys/RaidKeys/Raid01Stage01NightmareKeyItem",
+                    name: loc("code_lawOfRetributionNm")
+                },
+                {
+                    uniqueName: "/Lotus/Types/Keys/RaidKeys/Raid01Stage02NightmareKeyItem",
+                    name: loc("code_lawOfRetributionNm")
+                },
+                {
+                    uniqueName: "/Lotus/Types/Keys/NightmareGrineerRaidKeyBlueprint",
+                    name: loc("code_lawOfRetributionNmBp")
+                },
+                {
+                    uniqueName: "/Lotus/Types/Keys/RaidKeys/RaidGolemStage01KeyItem",
+                    name: loc("code_jordasVerdict")
+                },
+                {
+                    uniqueName: "/Lotus/Types/Keys/RaidKeys/RaidGolemStage02KeyItem",
+                    name: loc("code_jordasVerdict")
+                },
+                {
+                    uniqueName: "/Lotus/Types/Keys/RaidKeys/RaidGolemStage03KeyItem",
+                    name: loc("code_jordasVerdict")
+                },
+                {
+                    uniqueName: "/Lotus/Types/Keys/GolemRaidKeyBlueprint",
+                    name: loc("code_jordasVerdictBp")
+                },
+                {
+                    uniqueName: "/Lotus/Types/Keys/DerelictGolemKey",
+                    name: loc("code_derelictAssassinate")
+                },
+                {
+                    uniqueName: "/Lotus/Types/Keys/GolemKeyBlueprint",
+                    name: loc("code_derelictAssassinateBp")
+                },
+                {
+                    uniqueName: "/Lotus/Types/Keys/DerelictCaptureKey",
+                    name: loc("code_derelictCapture")
+                },
+                {
+                    uniqueName: "/Lotus/Types/Keys/DerelictCaptureKeyBlueprint",
+                    name: loc("code_derelictCaptureBp")
+                },
+                {
+                    uniqueName: "/Lotus/Types/Keys/DerelictDefenseKey",
+                    name: loc("code_derelictDefense")
+                },
+                {
+                    uniqueName: "/Lotus/Types/Keys/DerelictDefenseKeyBlueprint",
+                    name: loc("code_derelictDefenseBp")
+                },
+                {
+                    uniqueName: "/Lotus/Types/Keys/DerelictExterminateKey",
+                    name: loc("code_derelictExterminate")
+                },
+                {
+                    uniqueName: "/Lotus/Types/Keys/DerelictExterminateKeyBlueprint",
+                    name: loc("code_derelictExterminateBp")
+                },
+                {
+                    uniqueName: "/Lotus/Types/Keys/DerelictMobileDefenseKey",
+                    name: loc("code_derelictMobileDefense")
+                },
+                {
+                    uniqueName: "/Lotus/Types/Keys/DerelictMobileDefenseKeyBlueprint",
+                    name: loc("code_derelictMobileDefenseBp")
+                },
+                {
+                    uniqueName: "/Lotus/Types/Keys/DerelictSabotageKey",
+                    name: loc("code_derelictSabotage")
+                },
+                {
+                    uniqueName: "/Lotus/Types/Keys/DerelictSabotageKeyBlueprint",
+                    name: loc("code_derelictSabotageBp")
+                },
+                {
+                    uniqueName: "/Lotus/Types/Keys/DerelictSurvivalKey",
+                    name: loc("code_derelictSurvival")
+                },
+                {
+                    uniqueName: "/Lotus/Types/Keys/DerelictSurvivalKeyBlueprint",
+                    name: loc("code_derelictSurvivalBp")
+                },
+                {
+                    uniqueName: "/Lotus/Types/Keys/VeyHekKeyBlueprint",
+                    name: loc("code_vayHekKeyBp")
+                }
+            );
 
             data.VarziaOffers.unshift({
                 uniqueName: "",
