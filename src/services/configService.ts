@@ -100,6 +100,7 @@ export interface IConfig {
     tunables?: {
         useLoginToken?: boolean;
         prohibitSkipMissionStartTimer?: boolean;
+        prohibitDisableProfanityFilter?: boolean;
         prohibitFovOverride?: boolean;
         prohibitFreecam?: boolean;
         prohibitTeleport?: boolean;

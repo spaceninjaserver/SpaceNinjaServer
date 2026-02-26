@@ -88,6 +88,7 @@
   "tunables": {
     "useLoginToken": false,
     "prohibitSkipMissionStartTimer": false,
+    "prohibitDisableProfanityFilter": false,
     "prohibitFovOverride": false,
     "prohibitFreecam": false,
     "prohibitTeleport": false,

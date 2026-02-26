@@ -25,6 +25,9 @@ export const getTunablesForClient = (clientAddress: string, reflexiveAddress: st
     if (config.tunables?.prohibitSkipMissionStartTimer) {
         tunables.prohibit_skip_mission_start_timer = true;
     }
+    if (config.tunables?.prohibitDisableProfanityFilter) {
+        tunables.prohibit_disable_profanity_filter = true;
+    }
     if (config.tunables?.prohibitFovOverride) {
         tunables.prohibit_fov_override = true;
     }
