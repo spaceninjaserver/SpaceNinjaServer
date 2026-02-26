@@ -480,6 +480,14 @@ export const getInventoryResponse = async (
             inventoryResponse.Nemesis = undefined;
         }
 
+        // U40 changed the path from /Lotus/Types/Game/KubrowPet/Eggs/KubrowPetEggItem to /Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg
+        // so translate it back for older versions
+        if (inventoryResponse.KubrowPetEggs && version_compare(buildLabel, gameToBuildVersion["40.0.0"]) < 0) {
+            for (const ke of inventoryResponse.KubrowPetEggs) {
+                ke.ItemType = "/Lotus/Types/Game/KubrowPet/Eggs/KubrowPetEggItem";
+            }
+        }
+
         if (version_compare(buildLabel, gameToBuildVersion["24.4.0"]) < 0) {
             // Builds before U24.4.0 handle equipment features differently
             for (const category of equipmentKeys) {
