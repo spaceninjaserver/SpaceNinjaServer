@@ -1,8 +1,12 @@
 import type { RequestHandler } from "express";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
-import { addCalendarProgress, addChallenges, getInventory } from "../../services/inventoryService.ts";
-import type { IChallengeProgress, ISeasonChallenge } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { addCalendarProgress, addChallenges, addKahlProgress, getInventory } from "../../services/inventoryService.ts";
+import type {
+    IChallengeProgress,
+    ISeasonChallenge,
+    IWeeklyMissionChallengeInfo
+} from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IAffiliationMods, IInventoryChanges } from "../../types/purchaseTypes.ts";
 import { getEntriesUnsafe } from "../../utils/ts-utils.ts";
 import { logger } from "../../utils/logger.ts";
@@ -52,6 +56,10 @@ export const updateChallengeProgressController: RequestHandler = async (req, res
                 addCalendarProgress(inventory, value);
                 break;
 
+            case "WeeklyMissionChallengeInfo":
+                addKahlProgress(inventory, value, inventoryChanges);
+                break;
+
             case "ChallengeProgress":
             case "SeasonChallengeCompletions":
             case "ChallengePTS":
@@ -76,5 +84,6 @@ interface IUpdateChallengeProgressRequest {
     SeasonChallengeHistory?: ISeasonChallenge[];
     SeasonChallengeCompletions?: ISeasonChallenge[];
     CalendarProgress?: { challenge: string }[];
+    WeeklyMissionChallengeInfo?: IWeeklyMissionChallengeInfo[];
     crossPlaySetting?: string;
 }

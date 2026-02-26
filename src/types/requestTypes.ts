@@ -23,7 +23,8 @@ import type {
     IKubrowPetEggClient,
     INemesisClient,
     IUpgradeClient,
-    IChallengeInstanceStateClient
+    IChallengeInstanceStateClient,
+    IWeeklyMissionChallengeInfo
 } from "./inventoryTypes/inventoryTypes.ts";
 import type { IGroup } from "./loginTypes.ts";
 import type { ILoadOutPresets } from "./saveLoadoutTypes.ts";
@@ -61,6 +62,7 @@ export type IMissionInventoryUpdateRequest = {
     SortieId?: string;
     CalendarProgress?: { challenge: string }[];
     SeasonChallengeCompletions?: ISeasonChallenge[];
+    WeeklyMissionChallengeInfo?: IWeeklyMissionChallengeInfo[];
     AffiliationChanges?: IAffiliationChange[];
     crossPlaySetting?: string;
     rewardsMultiplier?: number;

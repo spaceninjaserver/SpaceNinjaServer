@@ -26,7 +26,8 @@ import type {
     INemesisWeaponTargetFingerprint,
     INemesisPetTargetFingerprint,
     IDialogueDatabase,
-    IKubrowPetPrintClient
+    IKubrowPetPrintClient,
+    IWeeklyMissionChallengeInfo
 } from "../types/inventoryTypes/inventoryTypes.ts";
 import { InventorySlot, equipmentKeys } from "../types/inventoryTypes/inventoryTypes.ts";
 import type { IGenericUpdate, IUpdateNodeIntrosResponse } from "../types/genericUpdate.ts";
@@ -82,7 +83,7 @@ import type { ICalendarSeason } from "../types/worldStateTypes.ts";
 import type { INemesisProfile } from "../helpers/nemesisHelpers.ts";
 import { generateNemesisProfile } from "../helpers/nemesisHelpers.ts";
 import type { TAccountDocument } from "./loginService.ts";
-import { unixTimesInMs } from "../constants/timeConstants.ts";
+import { KAHL_EPOCH, unixTimesInMs } from "../constants/timeConstants.ts";
 import { addString } from "../helpers/stringHelpers.ts";
 import type {
     IEquipmentClient,
@@ -2471,6 +2472,29 @@ export const addCalendarProgress = (inventory: TInventoryDatabaseDocument, value
     checkCalendarAutoAdvance(inventory, currentSeason);
 };
 
+export const addKahlProgress = (
+    inventory: TInventoryDatabaseDocument,
+    value: IWeeklyMissionChallengeInfo[],
+    inventoryChanges: IInventoryChanges
+): void => {
+    for (const info of value) {
+        let stockEarned = 0;
+        const affiliation = inventory.Affiliations.find(x => x.Tag == info.Syndicate);
+        const mission = affiliation!.WeeklyMissions![0];
+        if (info.ResetChallenges) {
+            mission.CompletedMission = true;
+        }
+        for (const challenge of info.CompletedChallenges) {
+            if (mission.Challenges.indexOf(challenge) == -1) {
+                stockEarned += challenge == "/Lotus/Types/Challenges/KahlMissions/NoDeathKahlChallenge" ? 30 : 15;
+                mission.Challenges.push(challenge);
+            }
+        }
+        logger.debug(`adding ${stockEarned} stock for kahl challenges`);
+        addMiscItem(inventory, "/Lotus/Types/Items/MiscItems/KahlCreds", stockEarned, inventoryChanges);
+    }
+};
+
 export const addMissionComplete = (inventory: TInventoryDatabaseDocument, { Tag, Completes, Tier }: IMission): void => {
     const { Missions } = inventory;
     const itemIndex = Missions.findIndex(item => item.Tag === Tag);
@@ -2587,7 +2611,7 @@ export const setupKahlSyndicate = (inventory: TInventoryDatabaseDocument): void 
                     MissionIndex: 0,
                     CompletedMission: false,
                     JobManifest: "/Lotus/Syndicates/Kahl/KahlJobManifestVersionThree",
-                    WeekCount: 0,
+                    WeekCount: Math.trunc((Date.now() - KAHL_EPOCH) / unixTimesInMs.week),
                     Challenges: []
                 }
             ],

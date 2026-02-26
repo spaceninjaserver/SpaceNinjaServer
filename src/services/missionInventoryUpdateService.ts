@@ -31,6 +31,7 @@ import {
     addFusionPoints,
     addFusionTreasures,
     addItem,
+    addKahlProgress,
     addLevelKeys,
     addLoreFragmentScans,
     addMiscItems,
@@ -870,6 +871,10 @@ export const addMissionInventoryUpdates = async (
             }
             case "CalendarProgress": {
                 addCalendarProgress(inventory, value);
+                break;
+            }
+            case "WeeklyMissionChallengeInfo": {
+                addKahlProgress(inventory, value, inventoryChanges);
                 break;
             }
             case "duviriCaveOffers": {

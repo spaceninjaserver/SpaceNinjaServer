@@ -515,6 +515,13 @@ export interface IWeeklyMission {
     WeekCount: number;
 }
 
+export interface IWeeklyMissionChallengeInfo {
+    Syndicate: "KahlSyndicate";
+    WeekCount: number;
+    ResetChallenges?: boolean;
+    CompletedChallenges: string[];
+}
+
 export interface IAlignment {
     Wisdom: number;
     Alignment: number;
