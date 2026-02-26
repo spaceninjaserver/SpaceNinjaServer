@@ -33,7 +33,7 @@ const sendFriendRequest = async (
 ): Promise<void> => {
     const account = await Account.findOne({ DisplayName: name });
     if (!account) {
-        res.status(400).end();
+        res.status(400).send("Given Username does not exist.");
         return;
     }
 
