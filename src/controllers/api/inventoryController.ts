@@ -385,6 +385,7 @@ export const getInventoryResponse = async (
         for (const str of allPopups) {
             addString(inventoryResponse.NodeIntrosCompleted, str);
         }
+        inventoryResponse.PlayedParkourTutorial = true; // Skips PoE update popup in U22
     }
 
     if (config.worldState?.baroTennoConRelay) {
