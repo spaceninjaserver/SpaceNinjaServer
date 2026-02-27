@@ -48,6 +48,7 @@ export interface IMissionInventoryUpdateResponseRailjackInterstitial extends Par
 
 export interface IMissionInventoryUpdateResponse extends IMissionInventoryUpdateResponseRailjackInterstitial {
     InventoryJson?: string;
+    CompletedSortie?: true;
 }
 
 export interface IMissionInventoryUpdateResponseBackToDryDock {

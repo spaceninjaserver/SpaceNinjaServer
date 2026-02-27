@@ -139,10 +139,14 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
             "xpBasedLevelCapDisabled" in req.query,
             account.BuildLabel
         );
-        res.json({
+        const response: IMissionInventoryUpdateResponse = {
             InventoryJson: JSON.stringify(inventoryResponse),
             ...deltas
-        } satisfies IMissionInventoryUpdateResponse);
+        };
+        if (missionReport.RewardInfo.sortieTag == "Final" && firstCompletion) {
+            response.CompletedSortie = true;
+        }
+        res.json(response);
     } else {
         logger.debug(`no reward info, assuming this wasn't a mission completion and we should just sync inventory`);
         const inventoryResponse = await getInventoryResponse(
