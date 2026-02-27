@@ -1153,6 +1153,7 @@ export const addItem = async (
                                 ItemType: fragmentType
                             }
                         ]);
+                        return {};
                     }
                     break;
                 case "Keys":
