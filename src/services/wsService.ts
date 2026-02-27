@@ -3,7 +3,13 @@ import type https from "https";
 import type { WebSocket } from "ws";
 import { WebSocketServer } from "ws";
 import { Account } from "../models/loginModel.ts";
-import { createAccount, createNonce, getUsernameFromEmail, isCorrectPassword } from "./loginService.ts";
+import {
+    createAccount,
+    createNonce,
+    getAccountForQuery,
+    getUsernameFromEmail,
+    isCorrectPassword
+} from "./loginService.ts";
 import type { IDatabaseAccountJson } from "../types/loginTypes.ts";
 import type { HydratedDocument } from "mongoose";
 import { logError, logger } from "../utils/logger.ts";
@@ -62,10 +68,15 @@ interface IWsMsgFromClient {
         password: string;
         isRegister: boolean;
     };
-    auth_game?: {
-        accountId: string;
-        nonce: number;
-    };
+    auth_game?:
+        | {
+              accountId: string;
+              nonce: string;
+          }
+        | {
+              accountId: string;
+              token: string;
+          };
     logout?: boolean;
     sync_inventory?: boolean;
 }
@@ -168,16 +179,14 @@ const wsOnConnect = (ws: WebSocket, req: http.IncomingMessage): void => {
             }
             if (data.auth_game) {
                 (ws as IWsCustomData).isGame = true;
-                if (data.auth_game.nonce) {
-                    const account: IDatabaseAccountJson | null = await Account.findOne({
-                        _id: data.auth_game.accountId,
-                        Nonce: data.auth_game.nonce
-                    });
-                    if (account) {
-                        (ws as IWsCustomData).accountId = account.id;
-                        logger.debug(`got bootstrapper connection for ${account.id}`);
-                        sendWsBroadcastToWebui({ have_game_ws: true }, account.id);
-                    }
+                try {
+                    const account = await getAccountForQuery({ ...data.auth_game, ct: "WS" }, "WS");
+                    const accountId = account._id.toString();
+                    (ws as IWsCustomData).accountId = accountId;
+                    logger.debug(`got bootstrapper connection for ${accountId}`);
+                    sendWsBroadcastToWebui({ have_game_ws: true }, accountId);
+                } catch (e) {
+                    /* empty */
                 }
             }
             if (data.logout) {

@@ -113,6 +113,7 @@ export const loginController: RequestHandler = async (request, response) => {
     account.CountryCode = loginRequest.lang?.toUpperCase() ?? "EN";
     account.BuildLabel = buildLabel;
     account.LastLogin = new Date();
+    account.Dropped = undefined;
     await account.save();
 
     handleNonceInvalidation(account._id.toString());
