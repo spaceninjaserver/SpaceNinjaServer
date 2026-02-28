@@ -8,14 +8,15 @@ import {
     scaleRequiredCount
 } from "../../services/guildService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
-import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest } from "../../services/loginService.ts";
 import { GuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 import { Types } from "mongoose";
 import { ExportDojoRecipes, ExportResources } from "warframe-public-export-plus";
 
 export const placeDecoInComponentController: RequestHandler = async (req, res) => {
-    const accountId = await getAccountIdForRequest(req);
+    const account = await getAccountForRequest(req);
+    const accountId = account._id.toString();
     const inventory = await getInventory(accountId, "GuildId LevelKeys");
     const guild = await getGuildForRequestEx(req, inventory);
     if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Decorator))) {
@@ -23,7 +24,7 @@ export const placeDecoInComponentController: RequestHandler = async (req, res) =
         return;
     }
     const request = JSON.parse(String(req.body)) as IPlaceDecoInComponentRequest;
-    const component = guild.DojoComponents.id(request.ComponentId)!;
+    const component = guild.DojoComponents.id(request.ComponentId ?? (req.query.componentId as string))!;
 
     if (component.DecoCapacity === undefined) {
         component.DecoCapacity = Object.values(ExportDojoRecipes.rooms).find(
@@ -119,11 +120,11 @@ export const placeDecoInComponentController: RequestHandler = async (req, res) =
     }
 
     await guild.save();
-    res.json(await getDojoClient(guild, 0, component._id));
+    res.json(await getDojoClient(guild, 0, component._id, account.BuildLabel));
 };
 
 interface IPlaceDecoInComponentRequest {
-    ComponentId: string;
+    ComponentId?: string; // req.query.componentId in U10
     Revision: number;
     Type: string;
     Pos: number[];
