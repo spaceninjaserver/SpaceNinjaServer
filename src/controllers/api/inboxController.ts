@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { Inbox } from "../../models/inboxModel.ts";
+import { Inbox, type IMessageClient } from "../../models/inboxModel.ts";
 import {
     createMessage,
     deleteAllMessagesRead,
@@ -131,7 +131,9 @@ export const inboxController: RequestHandler = async (req, res) => {
 
         if (!latestClientMessage) {
             logger.debug(`this should only happen after DeleteAllRead `);
-            res.json({ Inbox: messages });
+            res.json({
+                Inbox: messages.map(x => exportInboxMessage(x, account.BuildLabel)) satisfies IMessageClient[]
+            });
             return;
         }
         const newMessages = messages.filter(m => m.date > latestClientMessage.date);
@@ -141,13 +143,13 @@ export const inboxController: RequestHandler = async (req, res) => {
             return;
         }
 
-        res.json({ Inbox: newMessages });
+        res.json({ Inbox: newMessages.map(x => exportInboxMessage(x, account.BuildLabel)) satisfies IMessageClient[] });
     } else {
         //newly created event messages must be newer than account.LatestEventMessageDate
         await createNewEventMessages(account);
         const messages = await getAllMessagesSorted(accountId);
         const inbox = messages.map(x => exportInboxMessage(x, account.BuildLabel));
-        res.json({ Inbox: inbox });
+        res.json({ Inbox: inbox satisfies IMessageClient[] });
     }
 };
 
