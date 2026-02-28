@@ -40,7 +40,7 @@ import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 
 export const getGuildForRequest = async (req: Request): Promise<TGuildDatabaseDocument> => {
     const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory(accountId, "GuildId");
     return await getGuildForRequestEx(req, inventory);
 };
 
