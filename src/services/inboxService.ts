@@ -1,8 +1,9 @@
-import type { IMessageDatabase } from "../models/inboxModel.ts";
+import { toMongoDate2, toOid2 } from "../helpers/inventoryHelpers.ts";
+import type { IMessageClient, IMessageDatabase, TMessageDocument } from "../models/inboxModel.ts";
 import { Inbox } from "../models/inboxModel.ts";
-import type { HydratedDocument, Types } from "mongoose";
+import type { Types } from "mongoose";
 
-export const getAllMessagesSorted = async (accountId: string): Promise<HydratedDocument<IMessageDatabase>[]> => {
+export const getAllMessagesSorted = async (accountId: string): Promise<TMessageDocument[]> => {
     const inbox = await Inbox.find({ ownerId: accountId }).sort({ date: -1 });
     return inbox;
 };
@@ -34,3 +35,23 @@ export const createMessage = async (
 export interface IMessageCreationTemplate extends Omit<IMessageDatabase, "_id" | "date" | "ownerId"> {
     date?: Date;
 }
+
+export const exportInboxMessage = (messageDatabase: TMessageDocument, buildLabel?: string): IMessageClient => {
+    const messageClient = messageDatabase.toJSON<IMessageClient>();
+
+    if (messageDatabase.globaUpgradeId) {
+        messageClient.globaUpgradeId = toOid2(messageDatabase.globaUpgradeId, buildLabel);
+    }
+
+    messageClient.date = toMongoDate2(messageDatabase.date, buildLabel);
+
+    if (messageDatabase.startDate && messageDatabase.endDate) {
+        messageClient.startDate = toMongoDate2(messageDatabase.startDate, buildLabel);
+        messageClient.endDate = toMongoDate2(messageDatabase.endDate, buildLabel);
+    } else {
+        delete messageClient.startDate;
+        delete messageClient.endDate;
+    }
+
+    return messageClient;
+};

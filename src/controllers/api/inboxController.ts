@@ -5,6 +5,7 @@ import {
     deleteAllMessagesRead,
     deleteAllMessagesReadNonCin,
     deleteMessageRead,
+    exportInboxMessage,
     getAllMessagesSorted,
     type IMessageCreationTemplate
 } from "../../services/inboxService.ts";
@@ -145,7 +146,7 @@ export const inboxController: RequestHandler = async (req, res) => {
         //newly created event messages must be newer than account.LatestEventMessageDate
         await createNewEventMessages(account);
         const messages = await getAllMessagesSorted(accountId);
-        const inbox = messages.map(m => m.toJSON());
+        const inbox = messages.map(x => exportInboxMessage(x, account.BuildLabel));
         res.json({ Inbox: inbox });
     }
 };

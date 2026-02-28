@@ -1,18 +1,18 @@
-import type { Types } from "mongoose";
+import type { Document, Types } from "mongoose";
 import { model, Schema } from "mongoose";
-import { toMongoDate, toOid } from "../helpers/inventoryHelpers.ts";
+import { toOid } from "../helpers/inventoryHelpers.ts";
 import { typeCountSchema } from "./inventoryModels/inventoryModel.ts";
-import type { IMongoDate, IOid, ITypeCount } from "../types/commonTypes.ts";
+import type { IMongoDateWithLegacySupport, IOid, IOidWithLegacySupport, ITypeCount } from "../types/commonTypes.ts";
 
 export interface IMessageClient extends Omit<
     IMessageDatabase,
     "_id" | "globaUpgradeId" | "date" | "startDate" | "endDate" | "ownerId" | "attVisualOnly" | "expiry"
 > {
     _id?: IOid;
-    globaUpgradeId?: IOid; // [sic]
-    date: IMongoDate;
-    startDate?: IMongoDate;
-    endDate?: IMongoDate;
+    globaUpgradeId?: IOidWithLegacySupport; // [sic]
+    date: IMongoDateWithLegacySupport;
+    startDate?: IMongoDateWithLegacySupport;
+    endDate?: IMongoDateWithLegacySupport;
     messageId: IOid;
 }
 
@@ -153,28 +153,13 @@ messageSchema.virtual("messageId").get(function (this: IMessageDatabase) {
 messageSchema.set("toJSON", {
     virtuals: true,
     transform(_document, returnedObject: Record<string, any>) {
-        const messageDatabase = returnedObject as IMessageDatabase;
-        const messageClient = returnedObject as IMessageClient;
-
         delete returnedObject._id;
         delete returnedObject.__v;
         delete returnedObject.ownerId;
         delete returnedObject.attVisualOnly;
         delete returnedObject.expiry;
 
-        if (messageDatabase.globaUpgradeId) {
-            messageClient.globaUpgradeId = toOid(messageDatabase.globaUpgradeId);
-        }
-
-        messageClient.date = toMongoDate(messageDatabase.date);
-
-        if (messageDatabase.startDate && messageDatabase.endDate) {
-            messageClient.startDate = toMongoDate(messageDatabase.startDate);
-            messageClient.endDate = toMongoDate(messageDatabase.endDate);
-        } else {
-            delete messageClient.startDate;
-            delete messageClient.endDate;
-        }
+        // oid & date conversions done in inboxService's exportInboxMessage
     }
 });
 
@@ -182,3 +167,7 @@ messageSchema.index({ ownerId: 1 });
 messageSchema.index({ endDate: 1 }, { expireAfterSeconds: 0 });
 
 export const Inbox = model<IMessageDatabase>("Inbox", messageSchema, "inbox");
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export type TMessageDocument = Document<unknown, {}, IMessageDatabase> &
+    IMessageDatabase & { _id: Types.ObjectId; __v: number };
