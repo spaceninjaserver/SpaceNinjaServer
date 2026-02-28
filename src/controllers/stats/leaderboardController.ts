@@ -15,6 +15,23 @@ export const leaderboardPostController: RequestHandler = async (req, res) => {
     });
 };
 
+export const leaderboardU10Controller: RequestHandler = async (req, res) => {
+    let guildTier: number | undefined;
+    if ("guildTier" in req.query) {
+        guildTier = parseInt(req.query.guildTier as string);
+    }
+    res.json({
+        results: await getLeaderboard(
+            req.query.field as string,
+            parseInt(req.query.before as string),
+            parseInt(req.query.after as string),
+            req.query.pivotId as string | undefined,
+            req.query.guildId as string | undefined,
+            guildTier
+        )
+    });
+};
+
 export const leaderboardGetController: RequestHandler = async (req, res) => {
     const payload: ILeaderboardRequest = {
         field: "archived." + String(req.query.field),
