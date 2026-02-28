@@ -2291,21 +2291,26 @@ function getRandomMissionDrops(
                 if (qualification < 0 || qualification > 8) {
                     logger.error(`unexpected purgatory reward qualification: ${qualification}`);
                 } else {
-                    const drop = getRandomRewardByChance(
+                    const purgatoryType = Math.trunc(qualification / 3);
+                    const purgatoryRank = qualification % 3;
+                    const deck =
                         ExportRewards[
                             [
                                 "/Lotus/Types/Game/MissionDecks/PurgatoryMissionRewards/PurgatoryBlueTokenRewards",
                                 "/Lotus/Types/Game/MissionDecks/PurgatoryMissionRewards/PurgatoryGoldTokenRewards",
                                 "/Lotus/Types/Game/MissionDecks/PurgatoryMissionRewards/PurgatoryBlackTokenRewards"
-                            ][Math.trunc(qualification / 3)]
-                        ][qualification % 3]
-                    );
-                    if (drop) {
-                        drops.push({
-                            StoreItem: drop.type,
-                            ItemCount: drop.itemCount,
-                            FromEnemyCache: true // to show "identified"
-                        });
+                            ][purgatoryType]
+                        ];
+                    // "Players are awarded for each Rank they qualify for, so qualifying for Rank 3 will additionally roll rewards from Ranks 1 and 2."
+                    for (let i = 0; i <= purgatoryRank; ++i) {
+                        const drop = getRandomRewardByChance(deck[i]);
+                        if (drop) {
+                            drops.push({
+                                StoreItem: drop.type,
+                                ItemCount: drop.itemCount,
+                                FromEnemyCache: true // to show "identified"
+                            });
+                        }
                     }
                 }
             }
