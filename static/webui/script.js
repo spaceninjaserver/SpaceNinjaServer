@@ -3168,6 +3168,7 @@ function addItemByItemType() {
         })
             .done(function (_, _, jqXHR) {
                 if (jqXHR.status === 200) {
+                    toast(loc("code_succAdded"));
                     updateInventory();
                 }
             })
