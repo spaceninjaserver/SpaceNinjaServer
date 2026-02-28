@@ -221,6 +221,7 @@ apiRouter.get("/getVendorInfo.php", getVendorInfoController);
 apiRouter.get("/giveStartingGear.php", giveStartingGearGetController);
 apiRouter.get("/inbox.php", inboxController);
 apiRouter.get("/inventory.php", inventoryController);
+apiRouter.get("/leaveSession.php", deleteSessionController); // ~U10
 apiRouter.get("/loginRewards.php", loginRewardsController);
 apiRouter.get("/logout.php", logoutController);
 apiRouter.get("/marketRecommendations.php", marketRecommendationsController);
