@@ -51,7 +51,7 @@ export const lockCheats: Partial<Record<keyof IAccountCheats, ILockCheat>> = {
     noMasteryRankUpCooldown: {
         projection: "TrainingDate",
         isInventoryInIdealState: (inventory: TInventoryDatabaseDocument) =>
-            inventory.TrainingDate.getTime() > Date.now(),
+            inventory.TrainingDate.getTime() < Date.now(),
         cleanupInventory: (inventory: TInventoryDatabaseDocument) => {
             inventory.TrainingDate = new Date();
         }
@@ -59,7 +59,7 @@ export const lockCheats: Partial<Record<keyof IAccountCheats, ILockCheat>> = {
     noBlessingCooldown: {
         projection: "BlessingCooldown",
         isInventoryInIdealState: (inventory: TInventoryDatabaseDocument) =>
-            (inventory.BlessingCooldown?.getTime() ?? 0) > Date.now(),
+            (inventory.BlessingCooldown?.getTime() ?? 0) < Date.now(),
         cleanupInventory: (inventory: TInventoryDatabaseDocument) => {
             inventory.BlessingCooldown = new Date();
         }
