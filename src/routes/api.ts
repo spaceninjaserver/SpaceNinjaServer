@@ -9,7 +9,7 @@ import { addFriendTitleController } from "../controllers/api/addFriendTitleContr
 import { addIgnoredUserController } from "../controllers/api/addIgnoredUserController.ts";
 import { addPendingFriendGetController, addPendingFriendPostController } from "../controllers/api/addPendingFriendController.ts";
 import { addToAllianceController } from "../controllers/api/addToAllianceController.ts";
-import { addToGuildController } from "../controllers/api/addToGuildController.ts";
+import { addToGuildGetController, addToGuildPostController } from "../controllers/api/addToGuildController.ts";
 import { adoptPetController } from "../controllers/api/adoptPetController.ts";
 import { aggregateSessionsController } from "../controllers/dynamic/aggregateSessionsController.ts";
 import { apartmentController } from "../controllers/api/apartmentController.ts";
@@ -186,6 +186,7 @@ apiRouter.get("/abortDojoComponentDestruction.php", abortDojoComponentDestructio
 apiRouter.get("/addFriend.php", addFriendGetController); // ~U16 and below
 apiRouter.get("/addFriendImage.php", addFriendImageGetController) // U17 and below
 apiRouter.get("/addPendingFriend.php", addPendingFriendGetController); // ~U10 and below
+apiRouter.get("/addToGuild.php", addToGuildGetController); // ~U10
 apiRouter.get("/apartment.php", apartmentController);
 apiRouter.get("/cancelGuildAdvertisement.php", cancelGuildAdvertisementController);
 apiRouter.get("/changeDojoRoot.php", changeDojoRootController);
@@ -262,7 +263,7 @@ apiRouter.post("/addFriendTitle.php", addFriendTitleController);
 apiRouter.post("/addIgnoredUser.php", addIgnoredUserController);
 apiRouter.post("/addPendingFriend.php", addPendingFriendPostController);
 apiRouter.post("/addToAlliance.php", addToAllianceController);
-apiRouter.post("/addToGuild.php", addToGuildController);
+apiRouter.post("/addToGuild.php", addToGuildPostController);
 apiRouter.post("/adoptPet.php", adoptPetController);
 apiRouter.post("/aggregateSessions.php", aggregateSessionsController); // Pre-Specters of the Rail builds
 apiRouter.post("/arcaneCommon.php", arcaneCommonController);
