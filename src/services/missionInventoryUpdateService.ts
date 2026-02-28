@@ -1677,6 +1677,16 @@ export const addMissionRewards = async (
                     logger.debug(`rewriting ${si.DropTable} to ${droptableAliases[si.DropTable]}`);
                     si.DropTable = droptableAliases[si.DropTable];
                 }
+                if (
+                    si.DropTable == "/Lotus/Types/DropTables/Tau/TwelveMinuteWar/TMWPrimeMinibossSteelPathDropTable" &&
+                    !si.DROP_MOD
+                ) {
+                    logger.debug(
+                        `reinterpreting drops from TMWPrimeMinibossSteelPathDropTable: DROP_MISC_ITEM -> DROP_MOD`
+                    );
+                    si.DROP_MOD = si.DROP_MISC_ITEM;
+                    si.DROP_MISC_ITEM = undefined;
+                }
                 const droptables = ExportEnemies.droptables[si.DropTable] ?? [];
                 if (si.DROP_MOD) {
                     const modDroptable = droptables.find(x => x.type == "mod");
