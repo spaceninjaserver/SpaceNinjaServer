@@ -15,7 +15,11 @@ export const setGuildMotdController: RequestHandler = async (req, res) => {
     const member = (await GuildMember.findOne({ accountId: account._id, guildId: guild._id }))!;
 
     const IsLongMOTD = "longMOTD" in req.query;
-    const MOTD = req.body ? String(req.body) : undefined;
+    let MOTD = req.body ? String(req.body) : undefined;
+    if (MOTD && MOTD.charCodeAt(MOTD.length - 1) === 0) {
+        // U10's request body ends on a zero byte, but that's not intended to be part of the MOTD.
+        MOTD = MOTD.substring(0, MOTD.length - 1);
+    }
 
     if ("alliance" in req.query) {
         if (member.rank > 1) {
