@@ -15,6 +15,7 @@ export interface IFriendInfo {
     Note?: string;
     Favorite?: boolean;
     NewRequest?: boolean;
+    LastPlatform?: number;
 }
 
 export interface IFriendship {

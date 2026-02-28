@@ -24,6 +24,7 @@ export interface IGuildClient {
     XP: number;
     IsContributor: boolean;
     NumContributors: number;
+    FixedContributions?: boolean;
     CeremonyResetDate?: IMongoDate;
     CrossPlatformEnabled?: boolean;
     AutoContributeFromVault?: boolean;
