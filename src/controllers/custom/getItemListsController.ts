@@ -13,6 +13,7 @@ import {
     ExportFlavour,
     ExportGear,
     ExportKeys,
+    ExportMissionTypes,
     ExportRailjackWeapons,
     ExportRecipes,
     ExportRelics,
@@ -70,7 +71,9 @@ interface ItemLists {
     FlavourItems: ListedItem[];
     ShipDecorations: ListedItem[];
     WeaponSkins: ListedItem[];
+    MissionTypes: ListedItem[];
     //circuitGameModes: ListedItem[];
+    blueprintAndItem: string;
 }
 
 const relicQualitySuffixes: Record<TRelicQuality, string> = {
@@ -112,7 +115,8 @@ const getItemListsController: RequestHandler = (req, response) => {
         VaultDecoRecipes: [],
         FlavourItems: [],
         ShipDecorations: [],
-        WeaponSkins: []
+        WeaponSkins: [],
+        MissionTypes: [],
         /*circuitGameModes: [
             {
                 uniqueName: "Survival",
@@ -143,6 +147,7 @@ const getItemListsController: RequestHandler = (req, response) => {
                 name: toTitleCase(getString("/Lotus/Language/Missions/MissionName_Alchemy", lang))
             }
         ]*/
+        blueprintAndItem: getString("/Lotus/Language/Items/BlueprintAndItem", lang)
     };
     const eligibleForVault = new Set<string>([
         ...Object.values(ExportDojoRecipes.research).flatMap(r => r.ingredients.map(i => i.ItemType)),
@@ -531,6 +536,13 @@ const getItemListsController: RequestHandler = (req, response) => {
             uniqueName,
             name: getString(item.name, lang),
             alwaysAvailable: item.alwaysAvailable
+        });
+    }
+
+    for (const [uniqueName, item] of Object.entries(ExportMissionTypes)) {
+        res.MissionTypes.push({
+            uniqueName,
+            name: toTitleCase(getString(item.name || "", lang))
         });
     }
 

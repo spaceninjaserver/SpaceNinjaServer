@@ -524,7 +524,7 @@ function fetchItemList() {
                 },
                 {
                     uniqueName: "/Lotus/Types/Keys/GrineerRaidKeyBlueprint",
-                    name: loc("code_lawOfRetributionBp")
+                    name: data.blueprintAndItem.replace("|ITEM|", loc("code_lawOfRetribution"))
                 },
                 {
                     uniqueName: "/Lotus/Types/Keys/RaidKeys/Raid01Stage01NightmareKeyItem",
@@ -536,7 +536,7 @@ function fetchItemList() {
                 },
                 {
                     uniqueName: "/Lotus/Types/Keys/NightmareGrineerRaidKeyBlueprint",
-                    name: loc("code_lawOfRetributionNmBp")
+                    name: data.blueprintAndItem.replace("|ITEM|", loc("code_lawOfRetributionNm"))
                 },
                 {
                     uniqueName: "/Lotus/Types/Keys/RaidKeys/RaidGolemStage01KeyItem",
@@ -552,67 +552,112 @@ function fetchItemList() {
                 },
                 {
                     uniqueName: "/Lotus/Types/Keys/GolemRaidKeyBlueprint",
-                    name: loc("code_jordasVerdictBp")
+                    name: data.blueprintAndItem.replace("|ITEM|", loc("code_jordasVerdict"))
                 },
                 {
                     uniqueName: "/Lotus/Types/Keys/DerelictGolemKey",
-                    name: loc("code_derelictAssassinate")
-                },
-                {
-                    uniqueName: "/Lotus/Types/Keys/GolemKeyBlueprint",
-                    name: loc("code_derelictAssassinateBp")
+                    name: data.miscitems.find(i => i.uniqueName === "/Lotus/Types/Keys/SortieBossKeyLephantis").name
                 },
                 {
                     uniqueName: "/Lotus/Types/Keys/DerelictCaptureKey",
-                    name: loc("code_derelictCapture")
-                },
-                {
-                    uniqueName: "/Lotus/Types/Keys/DerelictCaptureKeyBlueprint",
-                    name: loc("code_derelictCaptureBp")
+                    name: loc("code_derelictKey").replace(
+                        "|MISSION_TYPE|",
+                        data.MissionTypes.find(i => i.uniqueName === "MT_CAPTURE").name
+                    )
                 },
                 {
                     uniqueName: "/Lotus/Types/Keys/DerelictDefenseKey",
-                    name: loc("code_derelictDefense")
-                },
-                {
-                    uniqueName: "/Lotus/Types/Keys/DerelictDefenseKeyBlueprint",
-                    name: loc("code_derelictDefenseBp")
+                    name: loc("code_derelictKey").replace(
+                        "|MISSION_TYPE|",
+                        data.MissionTypes.find(i => i.uniqueName === "MT_DEFENSE").name
+                    )
                 },
                 {
                     uniqueName: "/Lotus/Types/Keys/DerelictExterminateKey",
-                    name: loc("code_derelictExterminate")
-                },
-                {
-                    uniqueName: "/Lotus/Types/Keys/DerelictExterminateKeyBlueprint",
-                    name: loc("code_derelictExterminateBp")
+                    name: loc("code_derelictKey").replace(
+                        "|MISSION_TYPE|",
+                        data.MissionTypes.find(i => i.uniqueName === "MT_EXTERMINATION").name
+                    )
                 },
                 {
                     uniqueName: "/Lotus/Types/Keys/DerelictMobileDefenseKey",
-                    name: loc("code_derelictMobileDefense")
-                },
-                {
-                    uniqueName: "/Lotus/Types/Keys/DerelictMobileDefenseKeyBlueprint",
-                    name: loc("code_derelictMobileDefenseBp")
+                    name: loc("code_derelictKey").replace(
+                        "|MISSION_TYPE|",
+                        data.MissionTypes.find(i => i.uniqueName === "MT_MOBILE_DEFENSE").name
+                    )
                 },
                 {
                     uniqueName: "/Lotus/Types/Keys/DerelictSabotageKey",
-                    name: loc("code_derelictSabotage")
-                },
-                {
-                    uniqueName: "/Lotus/Types/Keys/DerelictSabotageKeyBlueprint",
-                    name: loc("code_derelictSabotageBp")
+                    name: loc("code_derelictKey").replace(
+                        "|MISSION_TYPE|",
+                        data.MissionTypes.find(i => i.uniqueName === "MT_SABOTAGE").name
+                    )
                 },
                 {
                     uniqueName: "/Lotus/Types/Keys/DerelictSurvivalKey",
-                    name: loc("code_derelictSurvival")
-                },
-                {
-                    uniqueName: "/Lotus/Types/Keys/DerelictSurvivalKeyBlueprint",
-                    name: loc("code_derelictSurvivalBp")
+                    name: loc("code_derelictKey").replace(
+                        "|MISSION_TYPE|",
+                        data.MissionTypes.find(i => i.uniqueName === "MT_SURVIVAL").name
+                    )
                 },
                 {
                     uniqueName: "/Lotus/Types/Keys/VeyHekKeyBlueprint",
-                    name: loc("code_vayHekKeyBp")
+                    name: data.blueprintAndItem.replace(
+                        "|ITEM|",
+                        data.miscitems.find(i => i.uniqueName === "/Lotus/Types/Keys/VeyHekKey").name
+                    )
+                }
+            );
+
+            data.miscitems.push(
+                {
+                    uniqueName: "/Lotus/Types/Keys/GolemKeyBlueprint",
+                    name: data.blueprintAndItem.replace(
+                        "|ITEM|",
+                        data.miscitems.find(i => i.uniqueName === "/Lotus/Types/Keys/DerelictGolemKey").name
+                    )
+                },
+                {
+                    uniqueName: "/Lotus/Types/Keys/DerelictCaptureKeyBlueprint",
+                    name: data.blueprintAndItem.replace(
+                        "|ITEM|",
+                        data.miscitems.find(i => i.uniqueName === "/Lotus/Types/Keys/DerelictCaptureKey").name
+                    )
+                },
+                {
+                    uniqueName: "/Lotus/Types/Keys/DerelictDefenseKeyBlueprint",
+                    name: data.blueprintAndItem.replace(
+                        "|ITEM|",
+                        data.miscitems.find(i => i.uniqueName === "/Lotus/Types/Keys/DerelictDefenseKey").name
+                    )
+                },
+                {
+                    uniqueName: "/Lotus/Types/Keys/DerelictExterminateKeyBlueprint",
+                    name: data.blueprintAndItem.replace(
+                        "|ITEM|",
+                        data.miscitems.find(i => i.uniqueName === "/Lotus/Types/Keys/DerelictExterminateKey").name
+                    )
+                },
+                {
+                    uniqueName: "/Lotus/Types/Keys/DerelictMobileDefenseKeyBlueprint",
+                    name: data.blueprintAndItem.replace(
+                        "|ITEM|",
+                        data.miscitems.find(i => i.uniqueName === "/Lotus/Types/Keys/DerelictMobileDefenseKey").name
+                    )
+                },
+                {
+                    uniqueName: "/Lotus/Types/Keys/DerelictSabotageKeyBlueprint",
+                    name: data.blueprintAndItem.replace(
+                        "|ITEM|",
+                        data.miscitems.find(i => i.uniqueName === "/Lotus/Types/Keys/DerelictSabotageKey").name
+                    )
+                },
+                {
+                    uniqueName: "/Lotus/Types/Keys/DerelictSurvivalKeyBlueprint",
+                    name: data.blueprintAndItem.replace(
+                        "|ITEM|",
+                        data.miscitems.find(i => i.uniqueName === "/Lotus/Types/Keys/DerelictSurvivalKey").name
+                    )
                 }
             );
 
@@ -776,7 +821,11 @@ function fetchItemList() {
                         }
                         itemMap[item.uniqueName] = { ...item, type };
                     });
-                } else {
+                } else if (type == "MissionTypes") {
+                    items.forEach(item => {
+                        itemMap[item.uniqueName] = { ...item, type };
+                    });
+                } else if (type != "blueprintAndItem") {
                     const nameToItems = {};
                     items.forEach(item => {
                         item.name = item.name.replace(/<.+>/g, "").trim();
