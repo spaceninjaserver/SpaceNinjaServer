@@ -1539,10 +1539,10 @@ export const addMissionRewards = async (
                         `Giving ${medallionAmount} medallions for the ${rewardInfo.JobStage} stage of the ${rewardInfo.JobTier} tier bounty`
                     );
                 } else {
-                    logger.warning(
+                    logger.warn(
                         `${currentJob.jobType} tried to give ${medallionAmount} medallions for the ${rewardInfo.JobStage} stage of the ${rewardInfo.JobTier} tier bounty`
                     );
-                    logger.warning(`currentJob`, { currentJob: currentJob });
+                    logger.warn(`currentJob`, { currentJob: currentJob });
                 }
             } else if (!currentJob.jobType!.startsWith("/Lotus/Types/Gameplay/NokkoColony/Jobs")) {
                 const xpAmount =

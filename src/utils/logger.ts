@@ -1,4 +1,4 @@
-import type { Logger, LeveledLogMethod } from "winston";
+import type { LeveledLogMethod } from "winston";
 import { createLogger, format, transports, addColors } from "winston";
 import "winston-daily-rotate-file";
 import { config } from "../services/configService.ts";
@@ -101,7 +101,7 @@ export const logger = createLogger({
     level: config.logger.level,
     defaultMeta: { version: process.env.npm_package_version },
     transports: transportOptions
-}) as Logger & Record<keyof typeof logLevels.levels, LeveledLogMethod>;
+}) as unknown as Record<keyof typeof logLevels.levels, LeveledLogMethod>;
 
 addColors(logLevels.colors);
 
