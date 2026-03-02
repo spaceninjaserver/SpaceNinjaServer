@@ -355,6 +355,9 @@ export const getInventoryResponse = async (
     if (inventory.infiniteRegalAya) {
         inventoryResponse.PrimeTokens = 999999999;
     }
+    if (inventory.infiniteTrades) {
+        inventoryResponse.TradesRemaining = 9999;
+    }
 
     if (inventory.skipAllDialogue) {
         inventoryResponse.TauntHistory ??= [];
@@ -385,6 +388,14 @@ export const getInventoryResponse = async (
         for (const str of allPopups) {
             addString(inventoryResponse.NodeIntrosCompleted, str);
         }
+        inventoryResponse.Settings ??= {
+            FriendInvRestriction: "GIFT_MODE_ALL",
+            GiftMode: "GIFT_MODE_ALL",
+            GuildInvRestriction: "GIFT_MODE_ALL",
+            ShowFriendInvNotifications: true,
+            TradingRulesConfirmed: false
+        };
+        inventoryResponse.Settings.TradingRulesConfirmed = true;
         inventoryResponse.PlayedParkourTutorial = true; // Skips PoE update popup in U22
     }
 

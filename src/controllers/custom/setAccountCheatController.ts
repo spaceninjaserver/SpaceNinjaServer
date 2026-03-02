@@ -23,7 +23,17 @@ export const setAccountCheatController: RequestHandler = async (req, res) => {
     }
     await inventory.save();
     res.end();
-    if (["infiniteCredits", "infinitePlatinum", "infiniteEndo", "infiniteRegalAya"].indexOf(payload.key) != -1) {
+    if (
+        [
+            "infiniteCredits",
+            "infinitePlatinum",
+            "infiniteEndo",
+            "infiniteRegalAya",
+            "infiniteTrades",
+            "skipAllDialogue",
+            "skipAllPopups"
+        ].indexOf(payload.key) != -1
+    ) {
         sendWsBroadcastTo(accountId, { update_inventory: true, sync_inventory: true });
     } else {
         sendWsBroadcastEx({ update_inventory: true }, accountId, parseInt(String(req.query.wsid)));

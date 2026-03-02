@@ -554,6 +554,9 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     if (client.Boosters !== undefined) {
         replaceArray<IBooster>(db.Boosters, client.Boosters);
     }
+    if (client.Settings !== undefined) {
+        db.Settings = client.Settings;
+    }
 
     // Final sanity check over data
     for (const pr of db.PendingRecipes) {

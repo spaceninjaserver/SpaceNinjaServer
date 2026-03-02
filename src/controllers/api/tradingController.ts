@@ -84,7 +84,9 @@ export const tradingController: RequestHandler = async (req, res) => {
                     pendingTrades[tradeId].clanTax,
                     req.query.guildId as string | undefined
                 );
-                traderInventory.TradesRemaining -= 1;
+                if (!traderInventory.infiniteTrades) {
+                    traderInventory.TradesRemaining -= 1;
+                }
             }
             if (!tradeeInventory.tradesDontTouchInventory) {
                 applyOfferToInventory(tradeeInventory, pendingTrades[tradeId].tradeeOffer, -1); // Conversely, tradee gives up their items
@@ -96,7 +98,9 @@ export const tradingController: RequestHandler = async (req, res) => {
                     pendingTrades[tradeId].clanTax,
                     req.query.guildId as string | undefined
                 );
-                tradeeInventory.TradesRemaining -= 1;
+                if (!tradeeInventory.infiniteTrades) {
+                    tradeeInventory.TradesRemaining -= 1;
+                }
             }
 
             await Promise.all([traderInventory.save(), tradeeInventory.save()]);

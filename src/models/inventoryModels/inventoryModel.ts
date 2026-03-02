@@ -1557,6 +1557,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         infinitePlatinum: Boolean,
         infiniteEndo: Boolean,
         infiniteRegalAya: Boolean,
+        infiniteTrades: Boolean,
         infiniteHelminthMaterials: Boolean,
         universalPolarityEverywhere: Boolean,
         unlockDoubleCapacityPotatoesEverywhere: Boolean,

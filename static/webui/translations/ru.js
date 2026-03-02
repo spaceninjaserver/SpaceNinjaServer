@@ -230,6 +230,7 @@ dict = {
     cheats_infinitePlatinum: `Бесконечная Платина`,
     cheats_infiniteEndo: `Бесконечное Эндо`,
     cheats_infiniteRegalAya: `Бесконечная Королевская Айя`,
+    cheats_infiniteTrades: `[UNTRANSLATED] Infinite Trades`,
     cheats_infiniteHelminthMaterials: `Бесконечные секреции Гельминта`,
     cheats_claimingBlueprintRefundsIngredients: `Возврат ингредиентов чертежей`,
     cheats_dontSubtractPurchaseCreditCost: `Не вычитать стоимость Кредитов при покупке`,

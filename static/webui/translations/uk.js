@@ -230,6 +230,7 @@ dict = {
     cheats_infinitePlatinum: `Бескінечна Платина`,
     cheats_infiniteEndo: `Бескінечне Ендо`,
     cheats_infiniteRegalAya: `Бескінечна Королівська Ая`,
+    cheats_infiniteTrades: `[UNTRANSLATED] Infinite Trades`,
     cheats_infiniteHelminthMaterials: `Бескінечні секреції Гельмінта`,
     cheats_claimingBlueprintRefundsIngredients: `Повернення інгредієнтів креслеників`,
     cheats_dontSubtractPurchaseCreditCost: `Не вираховувати вартість Кредитів при купівлі`,

@@ -230,6 +230,7 @@ dict = {
     cheats_infinitePlatinum: `Unendlich Platinum`,
     cheats_infiniteEndo: `Unendlich Endo`,
     cheats_infiniteRegalAya: `Unendlich Reines Aya`,
+    cheats_infiniteTrades: `Unendlich handeln`,
     cheats_infiniteHelminthMaterials: `Unendlich Helminth-Materialien`,
     cheats_claimingBlueprintRefundsIngredients: `Fertige Blaupausen erstatten Ressourcen zurück`,
     cheats_dontSubtractPurchaseCreditCost: `Credits beim Kauf nicht verbrauchen`,

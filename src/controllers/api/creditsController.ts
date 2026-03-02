@@ -8,7 +8,7 @@ export const creditsController: RequestHandler = async (req, res) => {
             getAccountIdForRequest(req),
             getInventory(
                 req.query.accountId as string,
-                "RegularCredits TradesRemaining PremiumCreditsFree PremiumCredits infiniteCredits infinitePlatinum"
+                "RegularCredits TradesRemaining PremiumCreditsFree PremiumCredits infiniteCredits infinitePlatinum infiniteTrades"
             )
         ])
     )[1];
@@ -26,6 +26,9 @@ export const creditsController: RequestHandler = async (req, res) => {
     if (inventory.infinitePlatinum) {
         response.PremiumCreditsFree = 0;
         response.PremiumCredits = 999999999;
+    }
+    if (inventory.infiniteTrades) {
+        response.TradesRemaining = 9999;
     }
 
     res.json(response);
