@@ -335,6 +335,7 @@ dict = {
     worldState_thermiaFracturesProgressOverride: `Thermische Risse-Fortschritt`,
     worldState_qtccAlerts: `Quest zum Kampf gegen Krebs-Alarmierungen`,
     worldState_evilBaroStage: `Böser Baro`,
+    worldState_baroRelayOverride: `[UNTRANSLATED] Baro Relay Override`,
     worldState_from_year: `Von |VAL|`,
     worldState_pre_year: `Vor |VAL|`,
     worldState_week: `Woche |VAL|`,

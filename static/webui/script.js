@@ -255,6 +255,13 @@ function updateLocElements() {
     $(".inventory-update-note").text(
         loc(window.have_game_ws ? "general_inventoryUpdateNoteGameWs" : "general_inventoryUpdateNote")
     );
+    window.itemListPromise.then(itemMap => {
+        document.querySelectorAll("[data-loc-itemMap]").forEach(elm => {
+            const key = elm.getAttribute("data-loc-itemMap");
+            const item = itemMap[key];
+            elm.innerHTML = item && item.name ? item.name : key;
+        });
+    });
 }
 
 function setActiveLanguage(lang) {
@@ -821,7 +828,7 @@ function fetchItemList() {
                         }
                         itemMap[item.uniqueName] = { ...item, type };
                     });
-                } else if (type == "MissionTypes") {
+                } else if (["MissionTypes", "Nodes"].includes(type)) {
                     items.forEach(item => {
                         itemMap[item.uniqueName] = { ...item, type };
                     });

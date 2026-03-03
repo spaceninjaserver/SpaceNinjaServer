@@ -158,6 +158,9 @@ const createNewEventMessages = async (account: TAccountDocument): Promise<void> 
 
     // Baro
     const baroIndex = Math.trunc((Date.now() - 910800000) / (unixTimesInMs.day * 14));
+    const baroRelayOverride = config.worldState?.baroRelayOverride;
+    const baroNodeIndex = baroRelayOverride && baroRelayOverride > 0 ? baroRelayOverride - 1 : baroIndex % 4;
+    const baroNode = ["EarthHUB", "MercuryHUB", "SaturnHUB", "PlutoHUB"][baroNodeIndex];
     const baroStart = baroIndex * (unixTimesInMs.day * 14) + 910800000;
     const prevBaroEnd = (baroIndex - 1) * (unixTimesInMs.day * 14) + 910800000;
     const baroEnd = baroStart + unixTimesInMs.day * 14;
@@ -195,7 +198,7 @@ const createNewEventMessages = async (account: TAccountDocument): Promise<void> 
             arg: [
                 {
                     Key: "NODE_NAME",
-                    Tag: ["EarthHUB", "MercuryHUB", "SaturnHUB", "PlutoHUB"][baroIndex % 4]
+                    Tag: baroNode
                 }
             ],
             date: new Date(baroActualStart)

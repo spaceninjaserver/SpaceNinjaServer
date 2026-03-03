@@ -124,6 +124,13 @@ export const validateConfig = (): void => {
         config.worldState.nightwaveEpisode = 1;
         modified = true;
     }
+    if (
+        config.worldState?.baroRelayOverride &&
+        (config.worldState.baroRelayOverride > 4 || config.worldState.baroRelayOverride < 0)
+    ) {
+        config.worldState.baroRelayOverride = 0;
+        modified = true;
+    }
     if (modified) {
         logger.info(`Updating config file to fix some issues with it.`);
         void saveConfig();

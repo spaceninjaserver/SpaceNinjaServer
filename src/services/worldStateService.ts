@@ -3753,7 +3753,9 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         const baroStart = baroIndex * (unixTimesInMs.day * 14) + 910800000;
         const baroActualStart = baroStart + unixTimesInMs.day * (config.worldState?.baroAlwaysAvailable ? 0 : 12);
         const baroEnd = baroStart + unixTimesInMs.day * 14;
-        const baroNode = ["EarthHUB", "MercuryHUB", "SaturnHUB", "PlutoHUB"][baroIndex % 4];
+        const baroRelayOverride = config.worldState?.baroRelayOverride;
+        const baroNodeIndex = baroRelayOverride && baroRelayOverride > 0 ? baroRelayOverride - 1 : baroIndex % 4;
+        const baroNode = ["EarthHUB", "MercuryHUB", "SaturnHUB", "PlutoHUB"][baroNodeIndex];
         const evilBaroStage =
             buildLabel && version_compare(buildLabel, gameToBuildVersion["40.0.0"]) < 0
                 ? 0

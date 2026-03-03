@@ -41,6 +41,7 @@
     "baroTennoConRelay": false,
     "baroAlwaysAvailable": false,
     "baroFullyStocked": false,
+    "baroRelayOverride": 0,
     "evilBaroStage": 0,
     "varziaFullyStocked": false,
     "vanguardVaultRelics": false,

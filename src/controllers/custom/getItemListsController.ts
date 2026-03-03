@@ -16,6 +16,7 @@ import {
     ExportMissionTypes,
     ExportRailjackWeapons,
     ExportRecipes,
+    ExportRegions,
     ExportRelics,
     ExportResources,
     ExportSentinels,
@@ -72,6 +73,7 @@ interface ItemLists {
     ShipDecorations: ListedItem[];
     WeaponSkins: ListedItem[];
     MissionTypes: ListedItem[];
+    Nodes: ListedItem[];
     //circuitGameModes: ListedItem[];
     blueprintAndItem: string;
 }
@@ -117,6 +119,7 @@ const getItemListsController: RequestHandler = (req, response) => {
         ShipDecorations: [],
         WeaponSkins: [],
         MissionTypes: [],
+        Nodes: [],
         /*circuitGameModes: [
             {
                 uniqueName: "Survival",
@@ -543,6 +546,13 @@ const getItemListsController: RequestHandler = (req, response) => {
         res.MissionTypes.push({
             uniqueName,
             name: toTitleCase(getString(item.name || "", lang))
+        });
+    }
+
+    for (const [uniqueName, node] of Object.entries(ExportRegions)) {
+        res.Nodes.push({
+            uniqueName,
+            name: getString(node.name || uniqueName, lang)
         });
     }
 

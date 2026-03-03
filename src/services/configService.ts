@@ -51,6 +51,7 @@ export interface IConfig {
         baroTennoConRelay?: boolean;
         baroAlwaysAvailable?: boolean;
         baroFullyStocked?: boolean;
+        baroRelayOverride?: number;
         evilBaroStage?: number;
         varziaFullyStocked?: boolean;
         vanguardVaultRelics?: boolean;
