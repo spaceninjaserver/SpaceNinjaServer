@@ -307,6 +307,7 @@ dict = {
     worldState_tennoLiveRelay: `TennoLive中继站`,
     worldState_baroTennoConRelay: `Baro的TennoCon中继站`,
     worldState_starDays: `活动:星日`,
+    worldState_saintPatrick: `圣帕特里克节`,
     worldState_galleonOfGhouls: `战术警报:尸鬼的帆船战舰`,
     worldState_anniversary: `12周年纪念活动`,
     worldState_useAnniversaryTagForOldGoals: `使用纪念活动<code>Tag</code>解决旧活动不显示问题`,

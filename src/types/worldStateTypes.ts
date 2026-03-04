@@ -459,9 +459,14 @@ export interface IFlashSale {
     BogoGet: number;
     PremiumOverride: number;
     RegularOverride: number;
-    ProductExpiryOverride?: IMongoDate;
-    StartDate: IMongoDate;
-    EndDate: IMongoDate;
+    ProductExpiryOverride?: IMongoDateWithLegacySupport;
+    StartDate: IMongoDateWithLegacySupport;
+    EndDate: IMongoDateWithLegacySupport;
+
+    // Pre-U22.9 fields
+    Featured?: boolean;
+    Popular?: boolean;
+    BannerIndex?: number;
 }
 
 export interface IInGameMarket {

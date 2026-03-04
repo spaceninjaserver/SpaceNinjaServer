@@ -306,6 +306,7 @@ dict = {
     worldState_tennoLiveRelay: `TennoLive Relay`,
     worldState_baroTennoConRelay: `Baro's TennoCon Relay`,
     worldState_starDays: `Star Days`,
+    worldState_saintPatrick: `St. Patrick’s Day`,
     worldState_galleonOfGhouls: `Galleon of Ghouls`,
     worldState_anniversary: `Warframe Anniversary`,
     worldState_useAnniversaryTagForOldGoals: `Use <code>Tag</code> from Warframe Anniversary for old Events`,

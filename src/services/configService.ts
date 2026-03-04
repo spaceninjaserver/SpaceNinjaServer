@@ -84,6 +84,7 @@ export interface IConfig {
         ghoulEmergenceOverride?: boolean;
         plagueStarOverride?: boolean;
         starDaysOverride?: boolean;
+        saintPatrickOverride?: boolean;
         dogDaysOverride?: boolean;
         dogDaysRewardsOverride?: number;
         bellyOfTheBeast?: boolean;

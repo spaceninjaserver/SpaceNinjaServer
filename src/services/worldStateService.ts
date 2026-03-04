@@ -1897,16 +1897,16 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     }
 
     if (config.worldState?.qtccAlerts) {
-        const activationTimeStamp = "1759327200000";
-        const expiryTimeStamp = "2000000000000";
+        const activation = 1759327200000;
+        const expiry = 2000000000000;
 
         worldState.Alerts.push(
             {
                 _id: {
                     $oid: "68dc23c42e9d3acfa708ff3b"
                 },
-                Activation: { $date: { $numberLong: activationTimeStamp } },
-                Expiry: { $date: { $numberLong: expiryTimeStamp } },
+                Activation: { $date: { $numberLong: activation.toString() } },
+                Expiry: { $date: { $numberLong: expiry.toString() } },
                 MissionInfo: {
                     location: "SolNode123",
                     missionType: "MT_SURVIVAL",
@@ -1930,8 +1930,8 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                 _id: {
                     $oid: "68dc2466e298b4f04206687a"
                 },
-                Activation: { $date: { $numberLong: activationTimeStamp } },
-                Expiry: { $date: { $numberLong: expiryTimeStamp } },
+                Activation: { $date: { $numberLong: activation.toString() } },
+                Expiry: { $date: { $numberLong: expiry.toString() } },
                 MissionInfo: {
                     location: "SolNode149",
                     missionType: "MT_DEFENSE",
@@ -1955,8 +1955,8 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                 _id: {
                     $oid: "68dc26865e7cb56b820b4252"
                 },
-                Activation: { $date: { $numberLong: activationTimeStamp } },
-                Expiry: { $date: { $numberLong: expiryTimeStamp } },
+                Activation: { $date: { $numberLong: activation.toString() } },
+                Expiry: { $date: { $numberLong: expiry.toString() } },
                 MissionInfo: {
                     location: "SolNode39",
                     missionType: "MT_EXCAVATE",
@@ -2007,42 +2007,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             { TypeName: "/Lotus/Types/Items/ShipDecos/Plushies/PlushyProtectorStalker", PremiumOverride: 35 }
         ];
 
-        worldState.FlashSales.push(
-            ...storeItems.map(item => ({
-                ...{
-                    StartDate: { $date: { $numberLong: activationTimeStamp } },
-                    EndDate: { $date: { $numberLong: expiryTimeStamp } },
-                    ProductExpiryOverride: { $date: { $numberLong: expiryTimeStamp } },
-                    ShowInMarket: item.ShowInMarket ?? true,
-                    HideFromMarket: item.HideFromMarket ?? false,
-                    SupporterPack: item.SupporterPack ?? false,
-                    Discount: item.Discount ?? 0,
-                    BogoBuy: item.BogoBuy ?? 0,
-                    BogoGet: item.BogoGet ?? 0,
-                    RegularOverride: item.RegularOverride ?? 0,
-                    PremiumOverride: item.PremiumOverride ?? 0
-                },
-                ...item
-            }))
-        );
-
-        const seasonalItems = storeItems.map(item => item.TypeName);
-
-        const seasonalCategory = worldState.InGameMarket.LandingPage.Categories.find(
-            c => c.CategoryName == "COMMUNITY"
-        );
-        if (seasonalCategory) {
-            seasonalCategory.Items ??= [];
-            seasonalCategory.Items.push(...seasonalItems);
-        } else {
-            worldState.InGameMarket.LandingPage.Categories.push({
-                CategoryName: "COMMUNITY",
-                Name: "/Lotus/Language/Store/CommunityCategoryTitle",
-                Icon: "community",
-                AddToMenu: true,
-                Items: seasonalItems
-            });
-        }
+        pushFlashSales(worldState, storeItems, activation, expiry, "COMMUNITY", buildLabel);
     }
 
     const isFebruary = date.getUTCMonth() == 1;
@@ -2238,8 +2203,8 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         buildLabel &&
         version_compare(buildLabel, gameToBuildVersion["25.7.0"]) >= 0
     ) {
-        const activationTimeStamp = config.worldState?.dogDaysOverride ? "1699372800000" : dogDaysStart.toString();
-        const expiryTimeStamp = config.worldState?.dogDaysOverride ? "2000000000000" : dogDaysEnd.toString();
+        const activation = config.worldState?.dogDaysOverride ? 1699372800000 : dogDaysStart;
+        const expiry = config.worldState?.dogDaysOverride ? 2000000000000 : dogDaysEnd;
         const rewards = [
             [
                 {
@@ -2396,8 +2361,8 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                     "c57487c3768936d" +
                     year.toString(16)
             },
-            Activation: { $date: { $numberLong: activationTimeStamp } },
-            Expiry: { $date: { $numberLong: expiryTimeStamp } },
+            Activation: { $date: { $numberLong: activation.toString() } },
+            Expiry: { $date: { $numberLong: expiry.toString() } },
             Count: 0,
             Goal: 100,
             InterimGoals: [25, 50],
@@ -2441,43 +2406,30 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             { TypeName: "/Lotus/Types/StoreItems/SuitCustomizations/ColourPickerRollers", PremiumOverride: 75 }
         ];
 
-        worldState.FlashSales.push(
-            ...storeItems.map(item => ({
-                ...{
-                    StartDate: { $date: { $numberLong: activationTimeStamp } },
-                    EndDate: { $date: { $numberLong: expiryTimeStamp } },
-                    ProductExpiryOverride: { $date: { $numberLong: expiryTimeStamp } },
-                    ShowInMarket: item.ShowInMarket ?? true,
-                    HideFromMarket: item.HideFromMarket ?? false,
-                    SupporterPack: item.SupporterPack ?? false,
-                    Discount: item.Discount ?? 0,
-                    BogoBuy: item.BogoBuy ?? 0,
-                    BogoGet: item.BogoGet ?? 0,
-                    RegularOverride: item.RegularOverride ?? 0,
-                    PremiumOverride: item.PremiumOverride ?? 0
-                },
-                ...item
-            }))
-        );
-
-        const seasonalItems = storeItems.map(item => item.TypeName);
-
-        const seasonalCategory = worldState.InGameMarket.LandingPage.Categories.find(c => c.CategoryName == "SEASONAL");
-
-        if (seasonalCategory) {
-            seasonalCategory.Items ??= [];
-            seasonalCategory.Items.push(...seasonalItems);
-        } else {
-            worldState.InGameMarket.LandingPage.Categories.push({
-                CategoryName: "SEASONAL",
-                Name: "/Lotus/Language/Store/SeasonalCategoryTitle",
-                Icon: "seasonal",
-                AddToMenu: true,
-                Items: seasonalItems
-            });
-        }
+        pushFlashSales(worldState, storeItems, activation, expiry, "SEASONAL", buildLabel);
     }
 
+    // there no strict start day so lets pick first march monday
+    const firstMarchWeekday = new Date(Date.UTC(date.getUTCFullYear(), 2, 1)).getUTCDay();
+    const firstMarchMondayOffset = (8 - firstMarchWeekday) % 7;
+
+    const saintPatrickStart = Date.UTC(date.getUTCFullYear(), 2, firstMarchMondayOffset + 1, 16);
+    const saintPatrickEnd = Date.UTC(date.getUTCFullYear(), 2, firstMarchMondayOffset + 22, 16);
+
+    const isSaintPatrickActive = timeMs >= saintPatrickStart && timeMs < saintPatrickEnd;
+    if (
+        (config.worldState?.saintPatrickOverride ?? isSaintPatrickActive) &&
+        buildLabel &&
+        version_compare(buildLabel, gameToBuildVersion["13.0.0"]) >= 0
+    ) {
+        const activation = config.worldState?.saintPatrickOverride ? 1772467200000 : saintPatrickStart;
+        const expiry = config.worldState?.saintPatrickOverride ? 2000000000000 : saintPatrickEnd;
+        const storeItems: (Partial<IFlashSale> & { TypeName: string })[] = [
+            { TypeName: "/Lotus/Types/StoreItems/SuitCustomizations/ColourPickerShamrockItem", RegularOverride: 1 }
+        ];
+
+        pushFlashSales(worldState, storeItems, activation, expiry, "SEASONAL", buildLabel);
+    }
     if (config.worldState?.anniversary != undefined) {
         // Incompatible with: Use Tag from Warframe Anniversary for old Events, Wolf Hunt, Galleon Of Ghouls, Hallowed Flame, Hallowed Nightmares, Dog Days, Proxy Rebellion, Long Shadow
         const goalsByWeek: Partial<IGoal>[][] = [
@@ -3121,18 +3073,18 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         buildLabel &&
         version_compare(buildLabel, gameToBuildVersion["29.3.1"]) >= 0
     ) {
-        const activationTimeStamp = config.worldState?.naberusNightsOverride
-            ? "1727881200000"
-            : Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1).toString();
+        const activation = config.worldState?.naberusNightsOverride
+            ? 1727881200000
+            : Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1);
 
-        const expiryTimeStamp = config.worldState?.naberusNightsOverride
-            ? "2000000000000"
-            : Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 1).toString();
+        const expiry = config.worldState?.naberusNightsOverride
+            ? 2000000000000
+            : Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 1);
 
         worldState.Goals.push({
             _id: { $oid: "66fd602de1778d583419e8e7" },
-            Activation: { $date: { $numberLong: activationTimeStamp } },
-            Expiry: { $date: { $numberLong: expiryTimeStamp } },
+            Activation: { $date: { $numberLong: activation.toString() } },
+            Expiry: { $date: { $numberLong: expiry.toString() } },
             Count: 0,
             Goal: 0,
             Success: 0,
@@ -3284,40 +3236,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             { TypeName: "/Lotus/Types/StoreItems/Packages/HalloweenSkinPackD", PremiumOverride: 180 }
         ];
 
-        worldState.FlashSales.push(
-            ...storeItems.map(item => ({
-                ...{
-                    StartDate: { $date: { $numberLong: activationTimeStamp } },
-                    EndDate: { $date: { $numberLong: expiryTimeStamp } },
-                    ProductExpiryOverride: { $date: { $numberLong: expiryTimeStamp } },
-                    ShowInMarket: item.ShowInMarket ?? true,
-                    HideFromMarket: item.HideFromMarket ?? false,
-                    SupporterPack: item.SupporterPack ?? false,
-                    Discount: item.Discount ?? 0,
-                    BogoBuy: item.BogoBuy ?? 0,
-                    BogoGet: item.BogoGet ?? 0,
-                    RegularOverride: item.RegularOverride ?? 0,
-                    PremiumOverride: item.PremiumOverride ?? 0
-                },
-                ...item
-            }))
-        );
-
-        const seasonalItems = storeItems.map(item => item.TypeName);
-        const seasonalCategory = worldState.InGameMarket.LandingPage.Categories.find(c => c.CategoryName == "SEASONAL");
-
-        if (seasonalCategory) {
-            seasonalCategory.Items ??= [];
-            seasonalCategory.Items.push(...seasonalItems);
-        } else {
-            worldState.InGameMarket.LandingPage.Categories.push({
-                CategoryName: "SEASONAL",
-                Name: "/Lotus/Language/Store/SeasonalCategoryTitle",
-                Icon: "seasonal",
-                AddToMenu: true,
-                Items: seasonalItems
-            });
-        }
+        pushFlashSales(worldState, storeItems, activation, expiry, "SEASONAL", buildLabel);
     }
 
     if (config.worldState?.bellyOfTheBeast && buildLabel && version_compare(buildLabel, "2024.06.12.18.42") >= 0) {
@@ -4666,5 +4585,66 @@ export const populateFeaturedGuilds = async (worldState: IWorldState): Promise<v
             AllianceId: guild.AllianceId ? toOid(guild.AllianceId) : undefined,
             Emblem: guild.Emblem
         });
+    }
+};
+
+const storeCategories: Record<string, { Name: string; Icon: string; AddToMenu?: boolean }> = {
+    NEW_PLAYER: { Name: "/Lotus/Language/Store/NewPlayerCategoryTitle", Icon: "newplayer", AddToMenu: true },
+    POPULAR: { Name: "/Lotus/Language/Menu/StorePopular", Icon: "popular", AddToMenu: true },
+    HEIRLOOM: { Name: "/Lotus/Language/Store/HeirloomCategoryTitle", Icon: "heirloom", AddToMenu: true },
+    SEASONAL: { Name: "/Lotus/Language/Store/SeasonalCategoryTitle", Icon: "seasonal", AddToMenu: true },
+    SALE: { Name: "/Lotus/Language/Menu/Store_Sale", Icon: "sale", AddToMenu: true },
+    WISH_LIST: { Name: "/Lotus/Language/Menu/Store_Wishlist", Icon: "wishlist" },
+    PREMIUM_BUNDLES: { Name: "/Lotus/Language/Store/Store_PremiumBundles", Icon: "premiumbundles" },
+    QUICK_BUY: { Name: "/Lotus/Language/Store/TopSeller_Title", Icon: "quickbuy" }
+};
+
+const pushFlashSales = (
+    ws: IWorldState,
+    storeItems: (Partial<IFlashSale> & { TypeName: string })[],
+    startDate: number | Date,
+    endDate: number | Date,
+    category: string,
+    buildLabel?: string
+): void => {
+    ws.FlashSales.push(
+        ...storeItems.map(item => ({
+            ...{
+                StartDate: toMongoDate2(startDate, buildLabel),
+                EndDate: toMongoDate2(endDate, buildLabel),
+                ProductExpiryOverride: toMongoDate2(endDate, buildLabel),
+                ShowInMarket: item.ShowInMarket ?? true,
+                HideFromMarket: item.HideFromMarket ?? false,
+                SupporterPack: item.SupporterPack ?? false,
+                Discount: item.Discount ?? 0,
+                BogoBuy: item.BogoBuy ?? 0,
+                BogoGet: item.BogoGet ?? 0,
+                RegularOverride: item.RegularOverride ?? 0,
+                PremiumOverride: item.PremiumOverride ?? 0,
+                Featured: item.Featured ?? category != "POPULAR",
+                Popular: item.Popular ?? category == "POPULAR",
+                BannerIndex: item.BannerIndex ?? 10
+            },
+            ...item
+        }))
+    );
+
+    if (category in storeCategories) {
+        const categoryData = storeCategories[category];
+        const seasonalCategory = ws.InGameMarket.LandingPage.Categories.find(c => c.CategoryName == category);
+        const seasonalItems = storeItems.map(item => item.TypeName);
+
+        if (seasonalCategory) {
+            seasonalCategory.Items ??= [];
+            seasonalCategory.Items.push(...seasonalItems);
+        } else {
+            ws.InGameMarket.LandingPage.Categories.push({
+                ...{
+                    CategoryName: category,
+                    Items: seasonalItems
+                },
+                ...categoryData
+            });
+        }
     }
 };
