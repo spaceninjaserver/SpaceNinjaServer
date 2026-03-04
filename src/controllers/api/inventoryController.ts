@@ -525,6 +525,13 @@ export const getInventoryResponse = async (
             }
         }
 
+        // Old versions crash when faced with an unrecognised CollectibleType, so filter this array.
+        if (inventoryResponse.CollectibleSeries && version_compare(buildLabel, gameToBuildVersion["33.0.0"]) < 0) {
+            inventoryResponse.CollectibleSeries = inventoryResponse.CollectibleSeries.filter(
+                x => x.CollectibleType != "/Lotus/Types/Lore/Fragments/DuviriFragments/DuviriCollectibleDeco"
+            );
+        }
+
         if (version_compare(buildLabel, gameToBuildVersion["24.4.0"]) < 0) {
             // Builds before U24.4.0 handle equipment features differently
             for (const category of equipmentKeys) {
