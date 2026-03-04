@@ -132,6 +132,27 @@ const getRotations = (rewardInfo: IRewardInfo, tierOverride?: number): number[] 
         return [rewardInfo.rewardTier];
     }
 
+    // For Oldpeace 12MinWar missions
+    // e.g. "CustomEOMTags":["12MinWarNumObjectives0"] & "CustomEOMTags":["12MinWarObjectiveComplete1","12MinWarObjectiveComplete2","12MinWarObjectiveComplete3","12MinWarNumObjectives9"]
+    if (rewardInfo.CustomEOMTags) {
+        const CustomEOMTags = rewardInfo.CustomEOMTags;
+        if (CustomEOMTags[CustomEOMTags.length - 1].substring(0, 21) == "12MinWarNumObjectives") {
+            // after the task is completed, you will receive 1 C round reward
+            const rotations = [2];
+            for (let a = 1; a < CustomEOMTags.length; ++a) {
+                // For each 3 commands completed, CustomEOMTags + 1, you will receive 1 A round reward
+                // e.g. rotations == [2] & [2, 0, 0, 0]
+                rotations.push(0);
+            }
+            for (let b = 0; b < Number(CustomEOMTags[CustomEOMTags.length - 1].substring(21)); ++b) {
+                // for each 1 command completed, 12MinWarNumObjectives + 1, you will receive 1 B round reward
+                // e.g. rotations == [2] & [2, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+                rotations.push(1);
+            }
+            return rotations;
+        }
+    }
+
     // 'rewardQualifications' may stick from previous missions for non-endless missions done after them
     // - via railjack (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2586, https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2612)
     // - via lab conquest (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2768)

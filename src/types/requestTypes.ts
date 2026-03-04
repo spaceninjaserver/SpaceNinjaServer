@@ -201,6 +201,7 @@ export interface IRewardInfo extends IBountyRewardInfo {
     sortieId?: string;
     sortieTag?: "Mission1" | "Mission2" | "Final";
     sortiePrereqs?: string[];
+    CustomEOMTags?: string[]; // for Old peace 12MinWar reward e.g. "CustomEOMTags":["12MinWarNumObjectives0"] & "CustomEOMTags":["12MinWarObjectiveComplete1","12MinWarObjectiveComplete2","12MinWarObjectiveComplete3","12MinWarNumObjectives9"]
     VaultsCracked?: number; // for Spy missions
     rewardTier?: number;
     nightmareMode?: boolean;
