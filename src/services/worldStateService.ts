@@ -292,6 +292,100 @@ const configAlerts: Record<string, IAlert> = {
         },
         Tag: "LotusGift",
         ForceUnlock: true
+    },
+    starDaysAlerts2026Week1: {
+        _id: { $oid: "696935998429008d89100af9" },
+        Activation: { $date: { $numberLong: "1770393600000" } },
+        Expiry: { $date: { $numberLong: "2000000000000" } },
+        MissionInfo: {
+            location: "SolNode22",
+            missionType: "MT_DEFENSE",
+            faction: "FC_CORPUS",
+            difficulty: 1,
+            missionReward: {
+                credits: 25000,
+                items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/AvatarImageStarDaysStarDaysMarieGlyph"],
+                countedItems: [{ ItemType: "/Lotus/Types/Items/MiscItems/OrokinCatalyst", ItemCount: 1 }]
+            },
+            levelOverride: "/Lotus/Levels/Proc/Corpus/CorpusOutpostDefense",
+            enemySpec: "/Lotus/Types/Game/EnemySpecs/CorpusSquadDefenseB",
+            minEnemyLevel: 25,
+            maxEnemyLevel: 30,
+            descText: "/Lotus/Language/Alerts/LotusGiftDesc",
+            maxRotations: 1
+        },
+        Tag: "LotusGift",
+        ForceUnlock: true
+    },
+    starDaysAlerts2026Week2: {
+        _id: { $oid: "696935b47918af0b1c0c4c2f" },
+        Activation: { $date: { $numberLong: "1770998400000" } },
+        Expiry: { $date: { $numberLong: "2000000000000" } },
+        MissionInfo: {
+            location: "SolNode11",
+            missionType: "MT_MOBILE_DEFENSE",
+            faction: "FC_GRINEER",
+            difficulty: 1,
+            missionReward: {
+                credits: 25000,
+                items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/AvatarImageStarDaysLyonGlyph"],
+                countedItems: [{ ItemType: "/Lotus/Types/Items/MiscItems/OrokinReactor", ItemCount: 1 }]
+            },
+            levelOverride: "/Lotus/Levels/Proc/Grineer/GrineerSettlementMobileDefense",
+            enemySpec: "/Lotus/Types/Game/EnemySpecs/DesertGrineerSquadOne",
+            minEnemyLevel: 25,
+            maxEnemyLevel: 30,
+            descText: "/Lotus/Language/Alerts/LotusGiftDesc"
+        },
+        Tag: "LotusGift",
+        ForceUnlock: true
+    },
+    starDaysAlerts2026Week3: {
+        _id: { $oid: "696935d518288b03bb0224ae" },
+        Activation: { $date: { $numberLong: "1771603200000" } },
+        Expiry: { $date: { $numberLong: "2000000000000" } },
+        MissionInfo: {
+            location: "SolNode121",
+            missionType: "MT_EXTERMINATION",
+            faction: "FC_CORPUS",
+            difficulty: 1,
+            missionReward: {
+                credits: 25000,
+                items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/AvatarImageStarDaysRoatheGlyph"],
+                countedItems: [{ ItemType: "/Lotus/Types/Items/MiscItems/Forma", ItemCount: 1 }]
+            },
+            levelOverride: "/Lotus/Levels/Proc/Corpus/CorpusGasCityExterminate",
+            enemySpec: "/Lotus/Types/Game/EnemySpecs/CorpusGasExterminateMixed",
+            minEnemyLevel: 25,
+            maxEnemyLevel: 30,
+            descText: "/Lotus/Language/Alerts/LotusGiftDesc"
+        },
+        Tag: "LotusGift",
+        ForceUnlock: true
+    },
+    starDaysAlerts2026Week4: {
+        _id: { $oid: "696935ed8429008d89100cea" },
+        Activation: { $date: { $numberLong: "1772208000000" } },
+        Expiry: { $date: { $numberLong: "2000000000000" } },
+        MissionInfo: {
+            location: "SolNode82",
+            missionType: "MT_SABOTAGE",
+            faction: "FC_GRINEER",
+            difficulty: 1,
+            missionReward: {
+                credits: 25000,
+                items: ["/Lotus/StoreItems/Types/Items/ShipDecos/Props/Seasonal/StarDays2026HeartPictureFrame"],
+                countedItems: [{ ItemType: "/Lotus/Types/Items/MiscItems/UtilityUnlocker", ItemCount: 1 }]
+            },
+            levelOverride: "/Lotus/Levels/Proc/Grineer/GrineerGalleonCoreSabotage",
+            enemySpec: "/Lotus/Types/Game/EnemySpecs/GrineerSquadSix",
+            extraEnemySpec: "/Lotus/Types/Game/EnemySpecs/GamemodeExtraEnemySpecs/GrineerSabotageTiersTwo",
+            minEnemyLevel: 25,
+            maxEnemyLevel: 30,
+            descText: "/Lotus/Language/Alerts/LotusGiftDesc"
+        },
+        Tag: "LotusGift",
+        ForceUnlock: true
     }
 };
 

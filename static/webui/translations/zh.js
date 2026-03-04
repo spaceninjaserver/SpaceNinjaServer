@@ -317,6 +317,7 @@ dict = {
     worldState_wolfHunt: `恶狼狩猎`,
     worldState_voidCorruption: `虚空堕落 (|VAL|)`,
     worldState_dagathAlerts: `Dagath 警报 (|VAL|)`,
+    worldState_starDaysAlerts: `[UNTRANSLATED] Star Days Alerts (|VAL|)`,
     worldState_scarletSpear: `猩红之矛`,
     worldState_orphixVenom: `奥影之毒`,
     worldState_bloodOfPerita: `佩里塔之血`,

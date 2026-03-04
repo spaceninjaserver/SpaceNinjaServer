@@ -75,6 +75,10 @@ export interface IConfig {
         dagathAlerts2026Week2?: boolean;
         dagathAlerts2026Week3?: boolean;
         dagathAlerts2026Week4?: boolean;
+        starDaysAlerts2026Week1?: boolean;
+        starDaysAlerts2026Week2?: boolean;
+        starDaysAlerts2026Week3?: boolean;
+        starDaysAlerts2026Week4?: boolean;
         qtccAlerts?: boolean;
         galleonOfGhouls?: number;
         ghoulEmergenceOverride?: boolean;

@@ -316,6 +316,7 @@ dict = {
     worldState_wolfHunt: `Wolf Hunt`,
     worldState_voidCorruption: `Void Corruption (|VAL|)`,
     worldState_dagathAlerts: `Dagath Alerts (|VAL|)`,
+    worldState_starDaysAlerts: `Star Days Alerts (|VAL|)`,
     worldState_scarletSpear: `Scarlet Spear`,
     worldState_orphixVenom: `Orphix Venom`,
     worldState_bloodOfPerita: `Blood of Perita`,

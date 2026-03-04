@@ -317,6 +317,7 @@ dict = {
     worldState_wolfHunt: `Wolfsjagd`,
     worldState_voidCorruption: `Void-Korruption (|VAL|)`,
     worldState_dagathAlerts: `Dagath Alarmierungen (|VAL|)`,
+    worldState_starDaysAlerts: `[UNTRANSLATED] Star Days Alerts (|VAL|)`,
     worldState_scarletSpear: `Scharlachroter Speer`,
     worldState_orphixVenom: `Orphix Gift`,
     worldState_bloodOfPerita: `Blut von Perita`,

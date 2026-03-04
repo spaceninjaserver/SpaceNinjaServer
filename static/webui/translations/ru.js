@@ -317,6 +317,7 @@ dict = {
     worldState_wolfHunt: `Волчья Охота`,
     worldState_voidCorruption: `Искажение Бездны (|VAL|)`,
     worldState_dagathAlerts: `Сигналы Тревоги Дагас (|VAL|)`,
+    worldState_starDaysAlerts: `Сигналы Тревоги Звёздных днёй (|VAL|)`,
     worldState_scarletSpear: `Алое Копьё`,
     worldState_orphixVenom: `Яд Орфикса`,
     worldState_bloodOfPerita: `Кровь Периты`,
