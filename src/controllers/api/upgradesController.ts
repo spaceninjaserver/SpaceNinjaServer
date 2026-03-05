@@ -133,15 +133,17 @@ export const upgradesController: RequestHandler = async (req, res) => {
             }
             if (payload.UpgradesToDetach && payload.UpgradesToDetach.length > 0) {
                 const item = inventory[payload.Category].id(itemId)!;
-                if (item.Configs[0].Upgrades && item.Configs[0].Upgrades.length < 11) {
-                    item.Configs[0].Upgrades.length = 11;
-                }
-                payload.UpgradesToDetach.forEach(upgrade => {
-                    if (item.Configs[0].Upgrades && upgrade.ItemId.$id) {
-                        const arr = item.Configs[0].Upgrades;
-                        arr[arr.indexOf(upgrade.ItemId.$id)] = "";
+                if (item.Configs[0]) {
+                    if (item.Configs[0].Upgrades && item.Configs[0].Upgrades.length < 11) {
+                        item.Configs[0].Upgrades.length = 11;
                     }
-                });
+                    payload.UpgradesToDetach.forEach(upgrade => {
+                        if (item.Configs[0].Upgrades && upgrade.ItemId.$id) {
+                            const arr = item.Configs[0].Upgrades;
+                            arr[arr.indexOf(upgrade.ItemId.$id)] = "";
+                        }
+                    });
+                }
             }
         }
     } else {
