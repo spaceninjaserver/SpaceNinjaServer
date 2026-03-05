@@ -28,6 +28,7 @@ import {
 import allIncarnons from "../../../static/fixed_responses/allIncarnonList.json" with { type: "json" };
 import varzia from "../../constants/varzia.ts";
 import suitDefaultUpgrades from "../../constants/suitDefaultUpgrades.ts";
+import { pseudoRecipeToOwnedRecipeMap } from "../../services/foundryService.ts";
 
 interface ListedItem {
     uniqueName: string;
@@ -301,7 +302,7 @@ const getItemListsController: RequestHandler = (req, response) => {
     }
     const recipeNameTemplate = getString("/Lotus/Language/Items/BlueprintAndItem", lang);
     for (const [uniqueName, item] of Object.entries(ExportRecipes)) {
-        if (!item.hidden) {
+        if (!item.hidden && !(uniqueName in pseudoRecipeToOwnedRecipeMap)) {
             const resultName = getItemName(item.resultType);
             if (resultName) {
                 let itemName = getString(resultName, lang);

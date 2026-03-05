@@ -1,7 +1,7 @@
 import type { RequestHandler } from "express";
 import { logger } from "../../utils/logger.ts";
 import { getRecipe } from "../../services/itemDataService.ts";
-import type { IOidWithLegacySupport } from "../../types/commonTypes.ts";
+import type { IOidWithLegacySupport, ITypeCount } from "../../types/commonTypes.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import type { TAccountDocument } from "../../services/loginService.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
@@ -24,6 +24,7 @@ import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/in
 import type { IRecipe } from "warframe-public-export-plus";
 import type { IEquipmentClient } from "../../types/equipmentTypes.ts";
 import { EquipmentFeatures, Status } from "../../types/equipmentTypes.ts";
+import { pseudoRecipeToOwnedRecipeMap } from "../../services/foundryService.ts";
 
 interface IClaimCompletedRecipeRequest {
     RecipeIds?: IOidWithLegacySupport[]; // U24.4 and beyond
@@ -146,12 +147,16 @@ const claimCompletedRecipe = async (
     }
 
     if (recipe.consumeOnUse) {
-        addRecipes(inventory, [
+        const recipeChanges: ITypeCount[] = [
             {
-                ItemType: pendingRecipe.ItemType,
+                ItemType: pseudoRecipeToOwnedRecipeMap[pendingRecipe.ItemType] ?? pendingRecipe.ItemType,
                 ItemCount: -1
             }
-        ]);
+        ];
+        addRecipes(inventory, recipeChanges);
+        if (recipeChanges[0].ItemType != pendingRecipe.ItemType) {
+            combineInventoryChanges(resp.InventoryChanges, { Recipes: recipeChanges });
+        }
     }
 
     if (rush) {
