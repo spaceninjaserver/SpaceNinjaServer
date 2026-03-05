@@ -148,10 +148,8 @@ export const updateStats = async (accountOwnerId: string, payload: IStatsUpdate)
 
                             for (const [type, count] of Object.entries(data as IUploadEntry)) {
                                 let enemy = playerStats.Enemies.find(element => element.type === type);
-                                if (!enemy) {
-                                    enemy = { type: type };
-                                    playerStats.Enemies.push(enemy);
-                                }
+                                const isNew = !enemy;
+                                if (!enemy) enemy = { type };
                                 if (category === "KILL_ENEMY") {
                                     enemy.kills ??= 0;
                                     const captureCount = (actionData as IStatsAdd)["CAPTURE_ENEMY"]?.[type];
@@ -166,6 +164,7 @@ export const updateStats = async (accountOwnerId: string, payload: IStatsUpdate)
                                     enemy[enemyStatKey] ??= 0;
                                     enemy[enemyStatKey] += count;
                                 }
+                                if (isNew) playerStats.Enemies.push(enemy);
                             }
                             break;
                         }
