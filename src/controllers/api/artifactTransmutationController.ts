@@ -2,7 +2,7 @@ import { fromOid, toOid2 } from "../../helpers/inventoryHelpers.ts";
 import { createVeiledRivenFingerprint, rivenRawToRealWeighted } from "../../helpers/rivenHelper.ts";
 import { addMiscItems, addMods, getInventory } from "../../services/inventoryService.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
-import { getRandomElement, getRandomWeightedReward, getRandomWeightedRewardUc } from "../../services/rngService.ts";
+import { getRandomElement, getRandomWeightedRewardUc } from "../../services/rngService.ts";
 import type { IUpgradeFromClient } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { RequestHandler } from "express";
 import type { TRarity } from "warframe-public-export-plus";
@@ -98,14 +98,11 @@ export const artifactTransmutationController: RequestHandler = async (req, res) 
                 LEGENDARY: 0
             };
 
-            const options: { uniqueName: string; rarity: TRarity }[] = [];
-            Object.entries(ExportUpgrades).forEach(([uniqueName, upgrade]) => {
-                if (upgrade.canBeTransmutation && (!forcedPolarity || upgrade.polarity == forcedPolarity)) {
-                    options.push({ uniqueName, rarity: upgrade.rarity });
-                }
-            });
-
-            newModType = getRandomWeightedReward(options, weights)!.uniqueName;
+            let options = ExportBoosterPacks["/Lotus/Types/BoosterPacks/ModFuserResult"].components;
+            if (forcedPolarity) {
+                options = options.filter(({ Item }) => ExportUpgrades[Item].polarity == forcedPolarity);
+            }
+            newModType = getRandomWeightedRewardUc(options, weights)!.Item;
         }
 
         addMods(inventory, [
