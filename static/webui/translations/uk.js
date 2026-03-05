@@ -276,6 +276,7 @@ dict = {
     cheats_flawlessRelicsAlwaysGiveSilverReward: `Бездоганні реліквії завжди дають срібну нагороду`,
     cheats_radiantRelicsAlwaysGiveGoldReward: `Сяйнисті реліквії завжди дають золоту нагороду`,
     cheats_unlockAllSimarisResearchEntries: `Розблокувати всі записи досліджень Симаріса`,
+    cheats_addMissingDangerRooms: `[UNTRANSLATED] Add Missing Simulacrum Scenes`,
     cheats_disableDailyTribute: `Вимкнути щоденні нагороди`,
     cheats_spoofMasteryRank: `Підроблений ранг майстерності (-1 для вимкнення)`,
     cheats_relicRewardItemCountMultiplier: `Множник кількості предметів нагороди реліквії`,

@@ -275,6 +275,7 @@ dict = {
     cheats_flawlessRelicsAlwaysGiveSilverReward: `Flawless Relics Always Give Silver Reward`,
     cheats_radiantRelicsAlwaysGiveGoldReward: `Radiant Relics Always Give Gold Reward`,
     cheats_unlockAllSimarisResearchEntries: `Unlock All Simaris Research Entries`,
+    cheats_addMissingDangerRooms: `Add Missing Simulacrum Scenes`,
     cheats_disableDailyTribute: `Disable Daily Tribute`,
     cheats_spoofMasteryRank: `Spoofed Mastery Rank (-1 to disable)`,
     cheats_relicRewardItemCountMultiplier: `Relic Reward Item Count Multiplier`,

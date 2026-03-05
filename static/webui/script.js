@@ -2605,6 +2605,32 @@ function addMissingEquipment(categories) {
     }
 }
 
+function addMissingDangerRooms() {
+    revalidateAuthz().then(() => {
+        getInventoryData().then(data => {
+            const requests = [];
+            window.itemListPromise.then(itemMap => {
+                const allItemKeys = Object.entries(itemMap)
+                    .filter(([_key, item]) => item.parentName === "/Lotus/Types/Items/DangerRoom/DangerRoomTile")
+                    .map(([key]) => key);
+                const existingItems = new Set(
+                    data.MiscItems.filter(item => item.ItemCount > 0).map(item => item.ItemType)
+                );
+                allItemKeys.forEach(item => {
+                    if (!existingItems.has(item)) {
+                        requests.push({ ItemType: item, ItemCount: 1 });
+                    }
+                });
+                if (requests.length == 0) {
+                    toast(loc("code_nothingToDo"));
+                } else if (window.confirm(loc("code_addItemsConfirm").split("|COUNT|").join(requests.length))) {
+                    return dispatchAddItemsRequestsBatch(requests);
+                }
+            });
+        });
+    });
+}
+
 function addVaultItem(vaultType) {
     const ItemType = getKey(document.getElementById(`acquire-type-${vaultType}`));
     if (!ItemType) {

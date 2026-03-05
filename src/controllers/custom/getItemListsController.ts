@@ -197,7 +197,8 @@ const getItemListsController: RequestHandler = (req, response) => {
                 if (uniqueName.split("/")[5] != "SentTrainingAmplifier") {
                     res.miscitems.push({
                         uniqueName: uniqueName,
-                        name: getString(item.name, lang)
+                        name: getString(item.name, lang),
+                        parentName: item.parentName
                     });
                 }
             }
@@ -221,7 +222,8 @@ const getItemListsController: RequestHandler = (req, response) => {
         } else if (!item.excludeFromCodex) {
             res.miscitems.push({
                 uniqueName: uniqueName,
-                name: getString(item.name, lang)
+                name: getString(item.name, lang),
+                parentName: item.parentName
             });
         }
     }
@@ -256,7 +258,8 @@ const getItemListsController: RequestHandler = (req, response) => {
         if (item.productCategory == "ShipDecorations") {
             res.ShipDecorations.push({
                 uniqueName: uniqueName,
-                name: name
+                name: name,
+                parentName: item.parentName
             });
         } else if (
             name &&
@@ -267,6 +270,7 @@ const getItemListsController: RequestHandler = (req, response) => {
                 uniqueName: uniqueName,
                 name: name,
                 subtype: "Resource",
+                parentName: item.parentName,
                 ...(eligibleForVault.has(uniqueName) && { eligibleForVault: true })
             });
         }
@@ -291,7 +295,8 @@ const getItemListsController: RequestHandler = (req, response) => {
         res.miscitems.push({
             uniqueName: uniqueName,
             name: getString(item.name, lang),
-            subtype: "Gear"
+            subtype: "Gear",
+            parentName: item.parentName
         });
     }
     const recipeNameTemplate = getString("/Lotus/Language/Items/BlueprintAndItem", lang);
@@ -317,7 +322,8 @@ const getItemListsController: RequestHandler = (req, response) => {
     for (const [uniqueName, item] of Object.entries(ExportRailjackWeapons)) {
         res.miscitems.push({
             uniqueName: uniqueName,
-            name: getString(item.name, lang)
+            name: getString(item.name, lang),
+            parentName: item.parentName
         });
     }
     for (const [uniqueName, item] of Object.entries(ExportCustoms)) {
@@ -442,7 +448,8 @@ const getItemListsController: RequestHandler = (req, response) => {
         } else if (key.name) {
             res.miscitems.push({
                 uniqueName,
-                name: getString(key.name, lang)
+                name: getString(key.name, lang),
+                parentName: key.parentName
             });
         }
     }

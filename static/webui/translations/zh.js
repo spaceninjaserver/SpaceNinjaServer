@@ -276,6 +276,7 @@ dict = {
     cheats_flawlessRelicsAlwaysGiveSilverReward: `无瑕遗物必定掉落白银奖励`,
     cheats_radiantRelicsAlwaysGiveGoldReward: `光辉遗物必定掉落黄金奖励`,
     cheats_unlockAllSimarisResearchEntries: `解锁所有Simaris研究条目`,
+    cheats_addMissingDangerRooms: `[UNTRANSLATED] Add Missing Simulacrum Scenes`,
     cheats_disableDailyTribute: `禁用每日登录奖励`,
     cheats_spoofMasteryRank: `伪造精通段位(-1为禁用)`,
     cheats_relicRewardItemCountMultiplier: `虚空遗物奖励物品数量倍率`,

@@ -276,6 +276,7 @@ dict = {
     cheats_flawlessRelicsAlwaysGiveSilverReward: `Makellose Relikte geben immer Silber-Belohnung`,
     cheats_radiantRelicsAlwaysGiveGoldReward: `Strahlende Relikte geben immer Gold-Belohnung`,
     cheats_unlockAllSimarisResearchEntries: `Alle Simaris-Forschungseinträge freischalten`,
+    cheats_addMissingDangerRooms: `[UNTRANSLATED] Add Missing Simulacrum Scenes`,
     cheats_disableDailyTribute: `Täglicher Tribut deaktivieren`,
     cheats_spoofMasteryRank: `Gefälschter Meisterschaftsrang (-1 zum deaktivieren)`,
     cheats_relicRewardItemCountMultiplier: `Belohnungsmultiplikator für Relikte`,

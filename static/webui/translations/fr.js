@@ -276,6 +276,7 @@ dict = {
     cheats_flawlessRelicsAlwaysGiveSilverReward: `Les reliques parfaites donnent toujours une récompense en argent`,
     cheats_radiantRelicsAlwaysGiveGoldReward: `Les reliques éclatantes donnent toujours une récompense en or`,
     cheats_unlockAllSimarisResearchEntries: `Débloquer toute les recherches chez Simaris`,
+    cheats_addMissingDangerRooms: `[UNTRANSLATED] Add Missing Simulacrum Scenes`,
     cheats_disableDailyTribute: `Désactiver la récompense quotidienne de connexion`,
     cheats_spoofMasteryRank: `Rang de maîtrise personnalisé (-1 pour désactiver)`,
     cheats_relicRewardItemCountMultiplier: `Multiplicateur de récompenses de relique`,
