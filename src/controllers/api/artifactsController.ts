@@ -6,7 +6,13 @@ import type {
     IUpgradeClient,
     IUpgradeFromClient
 } from "../../types/inventoryTypes/inventoryTypes.ts";
-import { addMods, getInventory } from "../../services/inventoryService.ts";
+import {
+    addFusionPoints,
+    addMods,
+    CurrencyType,
+    getInventory,
+    updateCurrency
+} from "../../services/inventoryService.ts";
 import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 import { fromOid, version_compare } from "../../helpers/inventoryHelpers.ts";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
@@ -46,11 +52,9 @@ export const artifactsController: RequestHandler = async (req, res) => {
             addMods(inventory, [{ ItemType, ItemCount: -1 }]);
         }
 
-        if (!inventory.infiniteCredits) {
-            inventory.RegularCredits -= Cost;
-        }
+        updateCurrency(inventory, Cost, CurrencyType.CREDITS);
         if (!inventory.infiniteEndo) {
-            inventory.FusionPoints -= FusionPointCost;
+            addFusionPoints(inventory, -FusionPointCost);
         }
 
         if (artifactsData.LegendaryFusion) {

@@ -1640,11 +1640,15 @@ export const updateCurrency = (
 };
 
 export const addFusionPoints = (inventory: TInventoryDatabaseDocument, add: number): number => {
-    if (inventory.FusionPoints + add > 2147483647) {
-        logger.warn(`capping FusionPoints balance at 2147483647`);
-        add = 2147483647 - inventory.FusionPoints;
+    if (inventory.infiniteEndo) {
+        add = 0;
+    } else {
+        if (inventory.FusionPoints + add > 2147483647) {
+            logger.warn(`capping FusionPoints balance at 2147483647`);
+            add = 2147483647 - inventory.FusionPoints;
+        }
+        inventory.FusionPoints += add;
     }
-    inventory.FusionPoints += add;
     return add;
 };
 

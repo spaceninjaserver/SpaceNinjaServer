@@ -1,6 +1,13 @@
 import { fromOid, toOid2 } from "../../helpers/inventoryHelpers.ts";
 import { createVeiledRivenFingerprint, rivenRawToRealWeighted } from "../../helpers/rivenHelper.ts";
-import { addMiscItems, addMods, getInventory } from "../../services/inventoryService.ts";
+import {
+    addFusionPoints,
+    addMiscItems,
+    addMods,
+    CurrencyType,
+    getInventory,
+    updateCurrency
+} from "../../services/inventoryService.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
 import { getRandomElement, getRandomWeightedRewardUc } from "../../services/rngService.ts";
 import type { IUpgradeFromClient } from "../../types/inventoryTypes/inventoryTypes.ts";
@@ -14,9 +21,9 @@ export const artifactTransmutationController: RequestHandler = async (req, res) 
     const inventory = await getInventory(accountId);
     const payload = JSON.parse(String(req.body)) as IArtifactTransmutationRequest;
 
-    inventory.RegularCredits -= payload.Cost;
+    updateCurrency(inventory, payload.Cost, CurrencyType.CREDITS);
     if (payload.FusionPointCost) {
-        inventory.FusionPoints -= payload.FusionPointCost;
+        addFusionPoints(inventory, -payload.FusionPointCost);
     }
 
     if (payload.RivenTransmute) {

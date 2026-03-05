@@ -43,6 +43,7 @@ import {
     addStanding,
     applyClientEquipmentUpdates,
     combineInventoryChanges,
+    CurrencyType,
     getDialogue,
     giveNemesisPetRecipe,
     giveNemesisWeaponRecipe,
@@ -683,9 +684,7 @@ export const addMissionInventoryUpdates = async (
                 break;
             }
             case "creditsFee": {
-                updateCurrency(inventory, value, false);
-                inventoryChanges.RegularCredits ??= 0;
-                inventoryChanges.RegularCredits -= value;
+                updateCurrency(inventory, value, CurrencyType.CREDITS, inventoryChanges);
                 break;
             }
             case "GoalProgress": {
