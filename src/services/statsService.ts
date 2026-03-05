@@ -12,6 +12,8 @@ import type {
 import { logger } from "../utils/logger.ts";
 import { addEmailItem, getInventory } from "./inventoryService.ts";
 import { submitLeaderboardScore } from "./leaderboardService.ts";
+import { version_compare } from "../helpers/inventoryHelpers.ts";
+import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 
 export const createStats = async (accountId: string): Promise<TStatsDatabaseDocument> => {
     const stats = new Stats({ accountOwnerId: accountId });
@@ -27,7 +29,11 @@ export const getStats = async (accountOwnerId: string): Promise<TStatsDatabaseDo
     return stats;
 };
 
-export const updateStats = async (accountOwnerId: string, payload: IStatsUpdate): Promise<void> => {
+export const updateStats = async (
+    accountOwnerId: string,
+    payload: IStatsUpdate,
+    buildLabel?: string
+): Promise<void> => {
     const unknownCategories: Record<string, string[]> = {};
     const playerStats = await getStats(accountOwnerId);
 
@@ -454,6 +460,23 @@ export const updateStats = async (accountOwnerId: string, payload: IStatsUpdate)
         logger.debug(`Unknown updateStats ${action} action categories: ${categories.join(", ")}`);
     }
 
+    if (
+        playerStats.Enemies &&
+        buildLabel &&
+        version_compare(buildLabel, gameToBuildVersion["10.3.3"]) <= 0 // Should be 11.7.1
+    ) {
+        const totalKills = playerStats.Enemies.reduce((sum, e) => sum + (e.kills ?? 0), 0);
+        if (totalKills > 0) {
+            await submitLeaderboardScore(
+                "events",
+                "Kills",
+                accountOwnerId,
+                payload.displayName,
+                totalKills,
+                payload.guildId
+            );
+        }
+    }
     await playerStats.save();
 };
 
