@@ -25,6 +25,7 @@ import { unlockAllShipFeaturesController } from "../controllers/custom/unlockAll
 import { unlockAllCapturaScenesController } from "../controllers/custom/unlockAllCapturaScenesController.ts";
 import { removeCustomizationController } from "../controllers/custom/removeCustomizationController.ts";
 import { removeIsNewController } from "../controllers/custom/removeIsNewController.ts";
+import { removeItemsController } from "../controllers/custom/removeItemsController.ts";
 import { retroactivelyApplyCheatController } from "../controllers/api/retroactivelyApplyCheatController.ts";
 
 import { abilityOverrideController } from "../controllers/custom/abilityOverrideController.ts";
@@ -81,6 +82,7 @@ customRouter.get("/unlockAllShipFeatures", unlockAllShipFeaturesController);
 customRouter.get("/unlockAllCapturaScenes", unlockAllCapturaScenesController);
 customRouter.get("/removeCustomization", removeCustomizationController);
 customRouter.get("/removeIsNew", removeIsNewController);
+customRouter.get("/removeItems", removeItemsController);
 customRouter.get("/retroactivelyApplyCheat", retroactivelyApplyCheatController);
 
 customRouter.post("/abilityOverride", abilityOverrideController);
