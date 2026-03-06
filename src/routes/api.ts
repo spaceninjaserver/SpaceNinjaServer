@@ -75,6 +75,7 @@ import { getIgnoredUsersController } from "../controllers/api/getIgnoredUsersCon
 import { getNewRewardSeedController } from "../controllers/api/getNewRewardSeedController.ts";
 import { getPastWeeklyChallengesController } from "../controllers/api/getPastWeeklyChallengesController.ts";
 import { getProfileViewingDataPostController } from "../controllers/dynamic/getProfileViewingDataController.ts";
+import { getRecentPlayersController } from "../controllers/api/getRecentPlayersController.ts";
 import { getShipController } from "../controllers/api/getShipController.ts";
 import { getVendorInfoController } from "../controllers/api/getVendorInfoController.ts";
 import { getVoidProjectionRewardsController } from "../controllers/api/getVoidProjectionRewardsController.ts";
@@ -309,6 +310,7 @@ apiRouter.post("/getAlliance.php", getAllianceController);
 apiRouter.post("/getFriends.php", getFriendsController);
 apiRouter.post("/getGuildDojo.php", getGuildDojoController);
 apiRouter.post("/getProfileViewingData.php", getProfileViewingDataPostController);
+apiRouter.post("/getRecentPlayers.php", getRecentPlayersController);
 apiRouter.post("/getVoidProjectionRewards.php", getVoidProjectionRewardsController);
 apiRouter.post("/gifting.php", giftingController);
 apiRouter.post("/gildWeapon.php", gildWeaponController);
