@@ -59,22 +59,22 @@ export const getGuildForRequestEx = async (
     return guild;
 };
 
+export const getGuildRankBase = (buildLabel: string | undefined): number => {
+    // Use 1-based indexing for clan ranks for versions before U24. In my testing, 2018.06.14.23.21 and below used 1-based indexing and 2019.04.04.21.31 and above used 0-based indexing. I didn't narrow it down further, but I think U24 is a good spot for them to have changed it.
+    return buildLabel && version_compare(buildLabel, gameToBuildVersion["24.0.0"]) < 0 ? 1 : 0;
+};
+
 export const getGuildClient = async (
     guild: TGuildDatabaseDocument,
     account: TAccountDocument
 ): Promise<IGuildClient> => {
     const guildMembers = await GuildMember.find({ guildId: guild._id });
 
+    const rankBase = getGuildRankBase(account.BuildLabel);
     const members: IGuildMemberClient[] = [];
     let missingEntry = true;
     const dataFillInPromises: Promise<void>[] = [];
     for (const guildMember of guildMembers) {
-        // Use 1-based indexing for clan ranks for versions before U24. In my testing, 2018.06.14.23.21 and below used 1-based indexing and 2019.04.04.21.31 and above used 0-based indexing. I didn't narrow it down further, but I think U24 is a good spot for them to have changed it.
-        let rankBase = 0;
-        if (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["24.0.0"]) < 0) {
-            rankBase += 1;
-        }
-
         const member: IGuildMemberClient = {
             _id: toOid2(guildMember.accountId, account.BuildLabel),
             Rank: guildMember.rank + rankBase,
