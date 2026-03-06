@@ -11,7 +11,7 @@ import {
     setDojoRoomLogFunded
 } from "../../services/guildService.ts";
 import { addMiscItems, getInventory, updateCurrency } from "../../services/inventoryService.ts";
-import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest } from "../../services/loginService.ts";
 import type { IDojoContributable, IGuildMemberDatabase } from "../../types/guildTypes.ts";
 import type { IMiscItem } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
@@ -20,18 +20,24 @@ import type { IDojoBuild } from "warframe-public-export-plus";
 import { ExportDojoRecipes } from "warframe-public-export-plus";
 
 interface IContributeToDojoComponentRequest {
-    ComponentId: string;
+    ComponentId?: string; // req.query.componentId in U10
     DecoId?: string;
     DecoType?: string;
-    IngredientContributions: IMiscItem[];
+
+    // credit contributions
     RegularCredits: number;
-    VaultIngredientContributions: IMiscItem[];
     VaultCredits: number;
+
+    // 'ingredient' contributions are just MiscItems in U10; unsure when it changed.
+    MiscItems?: IMiscItem[];
+    VaultMiscItems?: IMiscItem[];
+    IngredientContributions?: IMiscItem[];
+    VaultIngredientContributions?: IMiscItem[];
 }
 
 export const contributeToDojoComponentController: RequestHandler = async (req, res) => {
-    const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId);
+    const account = await getAccountForRequest(req);
+    const inventory = await getInventory(account._id.toString());
     // Any clan member should have permission to contribute although notably permission is denied if they have not crafted the dojo key and were simply invited in.
     if (!hasAccessToDojo(inventory)) {
         res.json({ DojoRequestStatus: -1 });
@@ -39,10 +45,16 @@ export const contributeToDojoComponentController: RequestHandler = async (req, r
     }
     const guild = await getGuildForRequestEx(req, inventory);
     const guildMember = (await GuildMember.findOne(
-        { accountId, guildId: guild._id },
+        { accountId: account._id, guildId: guild._id },
         "RegularCreditsContributed MiscItemsContributed"
     ))!;
     const request = JSON.parse(String(req.body)) as IContributeToDojoComponentRequest;
+    if (!request.ComponentId) {
+        request.ComponentId = req.query.componentId as string;
+    }
+    request.DecoId ??= req.query.decoId as string | undefined;
+    request.IngredientContributions ??= request.MiscItems;
+    request.VaultIngredientContributions ??= request.VaultMiscItems;
     const component = guild.DojoComponents.id(request.ComponentId)!;
 
     const inventoryChanges: IInventoryChanges = {};
@@ -68,7 +80,7 @@ export const contributeToDojoComponentController: RequestHandler = async (req, r
 
     await Promise.all([guild.save(), inventory.save(), guildMember.save()]);
     res.json({
-        ...(await getDojoClient(guild, 0, component._id)),
+        ...(await getDojoClient(guild, 0, component._id, account.BuildLabel)),
         InventoryChanges: inventoryChanges
     });
 };
@@ -102,8 +114,8 @@ const processContribution = (
     }
 
     component.MiscItems ??= [];
-    if (request.VaultIngredientContributions.length) {
-        for (const ingredientContribution of request.VaultIngredientContributions) {
+    if (request.VaultIngredientContributions!.length) {
+        for (const ingredientContribution of request.VaultIngredientContributions!) {
             const componentMiscItem = component.MiscItems.find(x => x.ItemType == ingredientContribution.ItemType);
             if (componentMiscItem) {
                 const ingredientMeta = meta.ingredients.find(x => x.ItemType == ingredientContribution.ItemType)!;
@@ -122,9 +134,9 @@ const processContribution = (
             vaultMiscItem.ItemCount -= ingredientContribution.ItemCount;
         }
     }
-    if (request.IngredientContributions.length) {
+    if (request.IngredientContributions!.length) {
         const miscItemChanges: IMiscItem[] = [];
-        for (const ingredientContribution of request.IngredientContributions) {
+        for (const ingredientContribution of request.IngredientContributions!) {
             const componentMiscItem = component.MiscItems.find(x => x.ItemType == ingredientContribution.ItemType);
             if (componentMiscItem) {
                 const ingredientMeta = meta.ingredients.find(x => x.ItemType == ingredientContribution.ItemType)!;
