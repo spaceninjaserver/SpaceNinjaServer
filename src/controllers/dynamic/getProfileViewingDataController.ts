@@ -81,10 +81,7 @@ export const getProfileViewingDataByPlayerId = async (playerId: string): Promise
     const result: IPlayerProfileViewingDataResult = {
         AccountId: toOid(account._id),
         DisplayName: account.DisplayName,
-        PlayerLevel:
-            inventory.spoofMasteryRank !== undefined && inventory.spoofMasteryRank !== -1
-                ? inventory.spoofMasteryRank
-                : inventory.PlayerLevel,
+        PlayerLevel: (inventory.spoofMasteryRank ?? -1) !== -1 ? inventory.spoofMasteryRank! : inventory.PlayerLevel,
         LoadOutInventory: {
             WeaponSkins: [],
             XPInfo: inventory.XPInfo
@@ -146,7 +143,8 @@ export const getProfileViewingDataByGuildId = async (guildId: string): Promise<I
         const result: IPlayerProfileViewingDataResult = {
             AccountId: toOid(account!._id),
             DisplayName: account!.DisplayName,
-            PlayerLevel: inventory!.PlayerLevel,
+            PlayerLevel:
+                (inventory!.spoofMasteryRank ?? -1) !== -1 ? inventory!.spoofMasteryRank! : inventory!.PlayerLevel,
             LoadOutInventory: {
                 WeaponSkins: [],
                 XPInfo: inventory!.XPInfo
