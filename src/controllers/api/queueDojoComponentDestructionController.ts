@@ -5,15 +5,15 @@ import {
     hasGuildPermission
 } from "../../services/guildService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
-import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest } from "../../services/loginService.ts";
 import { GuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 
 export const queueDojoComponentDestructionController: RequestHandler = async (req, res) => {
-    const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId, "GuildId LevelKeys");
+    const account = await getAccountForRequest(req);
+    const inventory = await getInventory(account._id.toString(), "GuildId LevelKeys");
     const guild = await getGuildForRequestEx(req, inventory);
-    if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Architect))) {
+    if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, account._id, GuildPermission.Architect))) {
         res.json({ DojoRequestStatus: -1 });
         return;
     }
@@ -24,5 +24,5 @@ export const queueDojoComponentDestructionController: RequestHandler = async (re
     );
 
     await guild.save();
-    res.json(await getDojoClient(guild, 0, componentId));
+    res.json(await getDojoClient(guild, 0, componentId, account.BuildLabel));
 };
