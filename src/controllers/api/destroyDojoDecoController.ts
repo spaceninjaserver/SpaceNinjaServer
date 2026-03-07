@@ -2,13 +2,12 @@ import {
     getDojoClient,
     getGuildForRequestEx,
     hasAccessToDojo,
-    hasGuildPermission,
+    hasPermissionToDecorateComponent,
     refundDojoDeco,
     removeDojoDeco
 } from "../../services/guildService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
-import { GuildPermission } from "../../types/guildTypes.ts";
 import { logger } from "../../utils/logger.ts";
 import type { RequestHandler } from "express";
 
@@ -16,11 +15,14 @@ export const destroyDojoDecoController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId, "GuildId LevelKeys");
     const guild = await getGuildForRequestEx(req, inventory);
-    if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Decorator))) {
+    const request = JSON.parse(String(req.body)) as IDestroyDojoDecoRequest | IClearObstacleCourseRequest;
+    if (
+        !hasAccessToDojo(inventory) ||
+        !(await hasPermissionToDecorateComponent(guild, accountId, request.ComponentId))
+    ) {
         res.json({ DojoRequestStatus: -1 });
         return;
     }
-    const request = JSON.parse(String(req.body)) as IDestroyDojoDecoRequest | IClearObstacleCourseRequest;
     if ("DecoType" in request) {
         removeDojoDeco(guild, request.ComponentId, request.DecoId);
     } else if (request.Act == "cObst") {

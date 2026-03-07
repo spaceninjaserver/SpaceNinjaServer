@@ -3,13 +3,12 @@ import {
     getGuildForRequestEx,
     getVaultMiscItemCount,
     hasAccessToDojo,
-    hasGuildPermission,
+    hasPermissionToDecorateComponent,
     processDojoBuildMaterialsGathered,
     scaleRequiredCount
 } from "../../services/guildService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
-import { GuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 import { Types } from "mongoose";
 import { ExportDojoRecipes, ExportResources } from "warframe-public-export-plus";
@@ -19,12 +18,13 @@ export const placeDecoInComponentController: RequestHandler = async (req, res) =
     const accountId = account._id.toString();
     const inventory = await getInventory(accountId, "GuildId LevelKeys");
     const guild = await getGuildForRequestEx(req, inventory);
-    if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Decorator))) {
+    const request = JSON.parse(String(req.body)) as IPlaceDecoInComponentRequest;
+    const componentId = request.ComponentId ?? (req.query.componentId as string);
+    if (!hasAccessToDojo(inventory) || !(await hasPermissionToDecorateComponent(guild, accountId, componentId))) {
         res.json({ DojoRequestStatus: -1 });
         return;
     }
-    const request = JSON.parse(String(req.body)) as IPlaceDecoInComponentRequest;
-    const component = guild.DojoComponents.id(request.ComponentId ?? (req.query.componentId as string))!;
+    const component = guild.DojoComponents.id(componentId)!;
 
     if (component.DecoCapacity === undefined) {
         component.DecoCapacity = Object.values(ExportDojoRecipes.rooms).find(

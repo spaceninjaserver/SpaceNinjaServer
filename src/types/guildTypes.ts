@@ -194,6 +194,10 @@ export interface IDojoComponentClient {
     Settings?: string;
 }
 
+export interface IDojoComponentSettings {
+    decorators?: string[];
+}
+
 export interface IDojoComponentDatabase extends Omit<
     IDojoComponentClient,
     "id" | "SortId" | "pi" | "CompletionTime" | "DestructionTime" | "Decos" | "PaintBot"

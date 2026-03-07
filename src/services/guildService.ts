@@ -12,6 +12,7 @@ import type {
     IDojoClient,
     IDojoComponentClient,
     IDojoComponentDatabase,
+    IDojoComponentSettings,
     IDojoContributable,
     IDojoDecoClient,
     IDojoDecoDatabase,
@@ -519,6 +520,24 @@ export const hasGuildPermission = async (
     const member = await GuildMember.findOne({ accountId: accountId, guildId: guild._id });
     if (member) {
         return hasGuildPermissionEx(guild, member, perm);
+    }
+    return false;
+};
+
+export const hasPermissionToDecorateComponent = async (
+    guild: TGuildDatabaseDocument,
+    accountId: string,
+    componentId: string | Types.ObjectId
+): Promise<boolean> => {
+    if (await hasGuildPermission(guild, accountId, GuildPermission.Decorator)) {
+        return true;
+    }
+    const component = guild.DojoComponents.id(componentId);
+    if (component?.Settings) {
+        const settings = JSON.parse(component.Settings) as IDojoComponentSettings;
+        if (settings.decorators && settings.decorators.indexOf(accountId) != -1) {
+            return true;
+        }
     }
     return false;
 };

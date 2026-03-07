@@ -15,8 +15,7 @@ import { logger } from "../utils/logger.ts";
 import { Types } from "mongoose";
 import { addFusionTreasures, addShipDecorations, getInventory } from "./inventoryService.ts";
 import { Guild } from "../models/guildModel.ts";
-import { hasGuildPermission } from "./guildService.ts";
-import { GuildPermission } from "../types/guildTypes.ts";
+import { hasPermissionToDecorateComponent } from "./guildService.ts";
 import { ExportResources } from "warframe-public-export-plus";
 import { convertCustomizationInfo } from "./importService.ts";
 
@@ -241,7 +240,7 @@ export const handleResetShipDecorations = async (
 export const handleSetPlacedDecoInfo = async (accountId: string, req: ISetPlacedDecoInfoRequest): Promise<void> => {
     if (req.GuildId && req.ComponentId) {
         const guild = (await Guild.findById(req.GuildId))!;
-        if (await hasGuildPermission(guild, accountId, GuildPermission.Decorator)) {
+        if (await hasPermissionToDecorateComponent(guild, accountId, req.ComponentId)) {
             const component = guild.DojoComponents.id(req.ComponentId)!;
             const deco = component.Decos!.find(x => x._id.equals(req.DecoId))!;
             deco.PictureFrameInfo = req.PictureFrameInfo;

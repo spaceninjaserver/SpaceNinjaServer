@@ -3,6 +3,7 @@ import {
     getGuildForRequestEx,
     hasAccessToDojo,
     hasGuildPermission,
+    hasPermissionToDecorateComponent,
     removeDojoDeco,
     removeDojoRoom
 } from "../../services/guildService.ts";
@@ -30,18 +31,19 @@ const abortDojoComponent = async (
     const inventory = await getInventory(accountId, "GuildId LevelKeys");
     const guild = await getGuildForRequestEx(req, inventory);
 
-    if (
-        !hasAccessToDojo(inventory) ||
-        !(await hasGuildPermission(guild, accountId, decoId ? GuildPermission.Decorator : GuildPermission.Architect))
-    ) {
-        return { DojoRequestStatus: -1 };
-    }
-
     if (decoId) {
+        if (!hasAccessToDojo(inventory) || !(await hasPermissionToDecorateComponent(guild, accountId, componentId))) {
+            return { DojoRequestStatus: -1 };
+        }
+
         removeDojoDeco(guild, componentId, decoId);
         await guild.save();
         return await getDojoClient(guild, 0, componentId, account.BuildLabel);
     } else {
+        if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Architect))) {
+            return { DojoRequestStatus: -1 };
+        }
+
         await removeDojoRoom(guild, componentId);
         await guild.save();
         return await getDojoClient(guild, 0, undefined, account.BuildLabel);
