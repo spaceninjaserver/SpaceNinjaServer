@@ -143,7 +143,11 @@ export const getGuildVault = (guild: TGuildDatabaseDocument): IGuildVault => {
         DojoRefundPremiumCredits: guild.VaultPremiumCredits,
         ShipDecorations: guild.VaultShipDecorations,
         FusionTreasures: guild.VaultFusionTreasures,
-        DecoRecipes: guild.VaultDecoRecipes
+        DecoRecipes: guild.VaultDecoRecipes,
+
+        MaxBattlePayReserve: guild.MaxBattlePayReserve,
+        MaxMissionBattlePay: guild.MaxMissionBattlePay,
+        MinMissionBattlePay: guild.MinMissionBattlePay
     };
 };
 

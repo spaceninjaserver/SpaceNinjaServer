@@ -136,6 +136,7 @@ import { sendMsgToInBoxController } from "../controllers/api/sendMsgToInBoxContr
 import { setActiveQuestController } from "../controllers/api/setActiveQuestController.ts";
 import { setActiveShipController } from "../controllers/api/setActiveShipController.ts";
 import { setAllianceGuildPermissionsController } from "../controllers/api/setAllianceGuildPermissionsController.ts";
+import { setBadlandBudgetCapsController } from "../controllers/api/setBadlandBudgetCapsController.ts";
 import { setBootLocationController } from "../controllers/api/setBootLocationController.ts";
 import { setDojoComponentColorsController } from "../controllers/api/setDojoComponentColorsController.ts";
 import { setDojoComponentMessageController } from "../controllers/api/setDojoComponentMessageController.ts";
@@ -365,6 +366,7 @@ apiRouter.post("/saveVaultAutoContribute.php", saveVaultAutoContributeController
 apiRouter.post("/sell.php", sellController);
 apiRouter.post("/sendMsgToInBox.php", sendMsgToInBoxController);
 apiRouter.post("/sendPetToStasis.php", retrievePetFromStasisController);
+apiRouter.post("/setBadlandBudgetCaps.php", setBadlandBudgetCapsController);
 apiRouter.post("/setDojoComponentColors.php", setDojoComponentColorsController);
 apiRouter.post("/setDojoComponentMessage.php", setDojoComponentMessageController);
 apiRouter.post("/setDojoComponentSettings.php", setDojoComponentSettingsController);

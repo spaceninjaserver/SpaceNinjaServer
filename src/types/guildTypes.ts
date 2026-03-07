@@ -66,6 +66,10 @@ export interface IGuildDatabase extends IGuildCheats {
     VaultFusionTreasures?: IFusionTreasure[];
     VaultDecoRecipes?: ITypeCount[];
 
+    MaxBattlePayReserve?: number;
+    MaxMissionBattlePay?: number;
+    MinMissionBattlePay?: number;
+
     TechProjects?: ITechProjectDatabase[];
     ActiveDojoColorResearch: string;
 
@@ -144,6 +148,10 @@ export interface IGuildVault {
     ShipDecorations?: ITypeCount[];
     FusionTreasures?: IFusionTreasure[];
     DecoRecipes?: ITypeCount[]; // Event Trophies
+
+    MaxBattlePayReserve?: number;
+    MaxMissionBattlePay?: number;
+    MinMissionBattlePay?: number;
 }
 
 export interface IDojoClient {
