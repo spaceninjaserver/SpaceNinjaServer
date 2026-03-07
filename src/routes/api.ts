@@ -1,7 +1,7 @@
 import express from "express";
 import { abandonLibraryDailyTaskController } from "../controllers/api/abandonLibraryDailyTaskController.ts";
-import { abortDojoComponentGetController, abortDojoComponentPostController } from "../controllers/api/abortDojoComponentController.ts";
 import { abortDojoComponentDestructionController } from "../controllers/api/abortDojoComponentDestructionController.ts";
+import { abortDojoComponentGetController, abortDojoComponentPostController } from "../controllers/api/abortDojoComponentController.ts";
 import { activateRandomModController } from "../controllers/api/activateRandomModController.ts";
 import { addFriendGetController, addFriendPostController } from "../controllers/api/addFriendController.ts";
 import { addFriendImageGetController, addFriendImagePostController } from "../controllers/api/addFriendImageController.ts";
@@ -36,6 +36,7 @@ import { contributeGuildClassController } from "../controllers/api/contributeGui
 import { contributeToDojoComponentController } from "../controllers/api/contributeToDojoComponentController.ts";
 import { contributeToVaultController } from "../controllers/api/contributeToVaultController.ts";
 import { createAllianceController } from "../controllers/api/createAllianceController.ts";
+import { createGuildDojoController } from "../controllers/api/createGuildDojoController.ts";
 import { createGuildGetController, createGuildPostController } from "../controllers/api/createGuildController.ts";
 import { creditsController } from "../controllers/api/creditsController.ts";
 import { crewMembersController } from "../controllers/api/crewMembersController.ts";
@@ -285,6 +286,7 @@ apiRouter.post("/contributeToDojoComponent.php", contributeToDojoComponentContro
 apiRouter.post("/contributeToVault.php", contributeToVaultController);
 apiRouter.post("/createAlliance.php", createAllianceController);
 apiRouter.post("/createGuild.php", createGuildPostController);
+apiRouter.post("/createGuildDojo.php", createGuildDojoController);
 apiRouter.post("/crewMembers.php", crewMembersController);
 apiRouter.post("/crewShipFusion.php", crewShipFusionController);
 apiRouter.post("/crewShipIdentifySalvage.php", crewShipIdentifySalvageController);
