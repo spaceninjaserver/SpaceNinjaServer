@@ -7,41 +7,52 @@ import {
     scaleRequiredCount
 } from "../../services/guildService.ts";
 import { getInventory, updateCurrency } from "../../services/inventoryService.ts";
-import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest } from "../../services/loginService.ts";
 import type { IDojoContributable } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 import type { IDojoBuild } from "warframe-public-export-plus";
 import { ExportDojoRecipes } from "warframe-public-export-plus";
 
-interface IDojoComponentRushRequest {
-    DecoType?: string;
-    DecoId?: string;
-    ComponentId: string;
-    Amount: number;
-    VaultAmount: number;
-    AllianceVaultAmount: number;
-}
+type IDojoComponentRushRequest =
+    | {
+          DecoType?: string;
+          DecoId?: string;
+          ComponentId: string;
+          Amount: number;
+          VaultAmount: number;
+          AllianceVaultAmount: number;
+      }
+    | {
+          decoId?: string;
+          componentId: string;
+          amount: number;
+          vaultAmount: number;
+      };
 
 export const dojoComponentRushController: RequestHandler = async (req, res) => {
-    const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId);
+    const account = await getAccountForRequest(req);
+    const inventory = await getInventory(account._id.toString());
     if (!hasAccessToDojo(inventory)) {
         res.json({ DojoRequestStatus: -1 });
         return;
     }
     const guild = await getGuildForRequestEx(req, inventory);
     const request = JSON.parse(String(req.body)) as IDojoComponentRushRequest;
-    const component = guild.DojoComponents.id(request.ComponentId)!;
+    const component = guild.DojoComponents.id("ComponentId" in request ? request.ComponentId : request.componentId)!;
 
-    let platinumDonated = request.Amount;
-    const inventoryChanges = updateCurrency(inventory, request.Amount, true);
-    if (request.VaultAmount) {
-        platinumDonated += request.VaultAmount;
-        guild.VaultPremiumCredits! -= request.VaultAmount;
+    const amount = "Amount" in request ? request.Amount : request.amount;
+    let platinumDonated = amount;
+    const inventoryChanges = updateCurrency(inventory, amount, true);
+
+    const vaultAmount = "VaultAmount" in request ? request.VaultAmount : request.vaultAmount;
+    if (vaultAmount) {
+        platinumDonated += vaultAmount;
+        guild.VaultPremiumCredits! -= vaultAmount;
     }
 
-    if (request.DecoId) {
-        const deco = component.Decos!.find(x => x._id.equals(request.DecoId))!;
+    const decoId = "DecoId" in request ? request.DecoId : "decoId" in request ? request.decoId : undefined;
+    if (decoId) {
+        const deco = component.Decos!.find(x => x._id.equals(decoId))!;
         const meta = Object.values(ExportDojoRecipes.decos).find(x => x.resultType == deco.Type)!;
         processContribution(guild, deco, meta, platinumDonated);
     } else {
@@ -54,14 +65,17 @@ export const dojoComponentRushController: RequestHandler = async (req, res) => {
         }
     }
 
-    const guildMember = (await GuildMember.findOne({ accountId, guildId: guild._id }, "PremiumCreditsContributed"))!;
+    const guildMember = (await GuildMember.findOne(
+        { accountId: account._id, guildId: guild._id },
+        "PremiumCreditsContributed"
+    ))!;
     guildMember.PremiumCreditsContributed ??= 0;
-    guildMember.PremiumCreditsContributed += request.Amount;
+    guildMember.PremiumCreditsContributed += amount;
 
     await Promise.all([guild.save(), inventory.save(), guildMember.save()]);
 
     res.json({
-        ...(await getDojoClient(guild, 0, component._id)),
+        ...(await getDojoClient(guild, 0, component._id, account.BuildLabel)),
         InventoryChanges: inventoryChanges
     });
 };
