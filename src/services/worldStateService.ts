@@ -3906,15 +3906,15 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         pushSyndicateMissions(worldState, sdy, rng.randomInt(0, 100_000), "ba6f84724fa48061", "SteelMeridianSyndicate");
     }
 
-    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["17.7.1"]) >= 0) {
-        if (version_compare(buildLabel, gameToBuildVersion["18.0.2"]) >= 0) {
+    if (!buildLabel || version_compare(buildLabel, gameToBuildVersion["17.7.1"]) >= 0) {
+        if (!buildLabel || version_compare(buildLabel, gameToBuildVersion["18.0.2"]) >= 0) {
             const conclaveWeekStart = weekStart + 40 * unixTimesInMs.minute - 2 * unixTimesInMs.day;
             const conclaveWeekEnd = conclaveWeekStart + unixTimesInMs.week;
 
-            pushConclaveWeakly(worldState.PVPChallengeInstances, week, buildLabel);
+            pushConclaveWeekly(worldState.PVPChallengeInstances, week, buildLabel);
 
             if (isBeforeNextExpectedWorldStateRefresh(timeMs, conclaveWeekEnd)) {
-                pushConclaveWeakly(worldState.PVPChallengeInstances, week + 1, buildLabel);
+                pushConclaveWeekly(worldState.PVPChallengeInstances, week + 1, buildLabel);
             }
         }
 
@@ -4378,9 +4378,11 @@ const pushConclaveDaily = (
     }[],
     day: number,
     id: number,
-    buildLabel: string
+    buildLabel: string | undefined
 ): void => {
-    if (version_compare(buildLabel, gameToBuildVersion["18.0.2"]) < 0) PVPMode = PVPMode.replace("PVPMODE_", "");
+    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["18.0.2"]) < 0) {
+        PVPMode = PVPMode.replace("PVPMODE_", "");
+    }
     const conclaveDayStart = EPOCH + day * unixTimesInMs.day + 5 * unixTimesInMs.hour + 30 * unixTimesInMs.minute;
     const conclaveDayEnd = conclaveDayStart + unixTimesInMs.day;
     const challengeId = day * 8 + id;
@@ -4411,10 +4413,16 @@ const pushConclaveDaily = (
     });
 };
 
-const pushConclaveDailys = (activeChallenges: IPVPChallengeInstance[], day: number, buildLabel: string): void => {
+const pushConclaveDailys = (
+    activeChallenges: IPVPChallengeInstance[],
+    day: number,
+    buildLabel: string | undefined
+): void => {
     const modes = ["PVPMODE_CAPTURETHEFLAG", "PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"];
     // closest known version to Update: Lunaro
-    if (version_compare(buildLabel, gameToBuildVersion["18.13.3"]) > 0) modes.push("PVPMODE_SPEEDBALL");
+    if (!buildLabel || version_compare(buildLabel, gameToBuildVersion["18.13.3"]) > 0) {
+        modes.push("PVPMODE_SPEEDBALL");
+    }
     const challengesMap: Record<
         string,
         {
@@ -4438,7 +4446,11 @@ const pushConclaveDailys = (activeChallenges: IPVPChallengeInstance[], day: numb
     });
 };
 
-const pushConclaveWeakly = (activeChallenges: IPVPChallengeInstance[], week: number, buildLabel: string): void => {
+const pushConclaveWeekly = (
+    activeChallenges: IPVPChallengeInstance[],
+    week: number,
+    buildLabel: string | undefined
+): void => {
     const weekStart = EPOCH + week * unixTimesInMs.week;
     const conclaveWeekStart = weekStart + 40 * unixTimesInMs.minute - 2 * unixTimesInMs.day;
     const conclaveWeekEnd = conclaveWeekStart + unixTimesInMs.week;
