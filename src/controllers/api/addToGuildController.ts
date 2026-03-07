@@ -53,7 +53,7 @@ const inviteToGuild = async (req: Request, res: Response, userName: string): Pro
     }
 
     const senderAccount = await getAccountForRequest(req);
-    const inventory = await getInventory(account._id.toString(), "Settings");
+    const inventory = await getInventory(account._id, "Settings");
     if (
         inventory.Settings?.GuildInvRestriction == "GIFT_MODE_NONE" ||
         (inventory.Settings?.GuildInvRestriction == "GIFT_MODE_FRIENDS" &&
@@ -63,9 +63,9 @@ const inviteToGuild = async (req: Request, res: Response, userName: string): Pro
         return;
     }
 
-    const senderInventory = await getInventory(senderAccount._id.toString(), "GuildId ActiveAvatarImageType");
+    const senderInventory = await getInventory(senderAccount._id, "GuildId ActiveAvatarImageType");
     const guild = (await Guild.findById(senderInventory.GuildId!, "Name Ranks"))!;
-    if (!(await hasGuildPermission(guild, senderAccount._id.toString(), GuildPermission.Recruiter))) {
+    if (!(await hasGuildPermission(guild, senderAccount._id, GuildPermission.Recruiter))) {
         res.status(400).send("Invalid permission");
     }
 

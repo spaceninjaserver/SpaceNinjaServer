@@ -13,7 +13,7 @@ import type { RequestHandler } from "express";
 
 export const loginRewardsSelectionController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const inventory = await getInventory(account._id.toString());
+    const inventory = await getInventory(account._id);
     const body = JSON.parse(String(req.body)) as ILoginRewardsSelectionRequest;
     const isMilestoneDay = account.LoginDays == 5 || account.LoginDays % 50 == 0;
     if (body.IsMilestoneReward != isMilestoneDay) {

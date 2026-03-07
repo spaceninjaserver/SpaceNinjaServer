@@ -397,13 +397,13 @@ export const combineInventoryChanges = (InventoryChanges: IInventoryChanges, del
 };
 
 export const getInventory = async (
-    accountOwnerId: string,
+    accountOwnerId: string | Types.ObjectId,
     projection?: string
 ): Promise<TInventoryDatabaseDocument> => {
     const inventory = await Inventory.findOne({ accountOwnerId: accountOwnerId }, projection);
 
     if (!inventory) {
-        throw new Error(`Didn't find an inventory for ${accountOwnerId}`);
+        throw new Error(`Didn't find an inventory for ${String(accountOwnerId)}`);
     }
 
     return inventory;
@@ -1756,7 +1756,10 @@ export const addStanding = (
 };
 
 // TODO: AffiliationMods support (Nightwave).
-export const updateGeneric = async (data: IGenericUpdate, accountId: string): Promise<IUpdateNodeIntrosResponse> => {
+export const updateGeneric = async (
+    data: IGenericUpdate,
+    accountId: string | Types.ObjectId
+): Promise<IUpdateNodeIntrosResponse> => {
     const inventory = await getInventory(
         accountId,
         "NodeIntrosCompleted MiscItems ShipDecorations FlavourItems WeaponSkins"

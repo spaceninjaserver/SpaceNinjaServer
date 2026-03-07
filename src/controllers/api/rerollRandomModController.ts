@@ -10,10 +10,9 @@ import { toObjectId, toOid2 } from "../../helpers/inventoryHelpers.ts";
 
 export const rerollRandomModController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const accountId = account._id.toString();
     const request = getJSONfromString<RerollRandomModRequest>(String(req.body));
     if ("ItemIds" in request) {
-        const inventory = await getInventory(accountId, "Upgrades MiscItems");
+        const inventory = await getInventory(account._id, "Upgrades MiscItems");
         const changes: IChange[] = [];
         let totalKuvaCost = 0;
         request.ItemIds.forEach(itemId => {
@@ -55,7 +54,7 @@ export const rerollRandomModController: RequestHandler = async (req, res) => {
             cost: totalKuvaCost
         });
     } else {
-        const inventory = await getInventory(accountId, "Upgrades");
+        const inventory = await getInventory(account._id, "Upgrades");
         const upgrade = inventory.Upgrades.id(request.ItemId)!;
         if (request.CommitReroll && upgrade.PendingRerollFingerprint) {
             upgrade.UpgradeFingerprint = upgrade.PendingRerollFingerprint;

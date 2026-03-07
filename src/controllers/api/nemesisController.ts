@@ -41,7 +41,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
     if ((req.query.mode as string) == "f") {
         const body = getJSONfromString<IValenceFusionRequest>(String(req.body));
-        const inventory = await getInventory(account._id.toString(), body.Category + " WeaponBin");
+        const inventory = await getInventory(account._id, body.Category + " WeaponBin");
         const destWeapon = inventory[body.Category].id(body.DestWeapon.$oid)!;
         const sourceWeapon = inventory[body.Category].id(body.SourceWeapon.$oid)!;
         const destFingerprint = JSON.parse(destWeapon.UpgradeFingerprint!) as IInnateDamageFingerprint;
@@ -76,7 +76,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
             }
         });
     } else if ((req.query.mode as string) == "p") {
-        const inventory = await getInventory(account._id.toString(), "Nemesis");
+        const inventory = await getInventory(account._id, "Nemesis");
         const body = getJSONfromString<INemesisPrespawnCheckRequest>(String(req.body));
         const passcode = getNemesisPasscode(inventory.Nemesis!);
         let guessResult = 0;
@@ -97,7 +97,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
         res.json({ GuessResult: guessResult });
     } else if (req.query.mode == "r") {
         const inventory = await getInventory(
-            account._id.toString(),
+            account._id,
             "Nemesis LoadOutPresets CurrentLoadOutIds DataKnives Upgrades RawUpgrades"
         );
         const body = getJSONfromString<INemesisRequiemRequest>(String(req.body));
@@ -147,9 +147,8 @@ export const nemesisController: RequestHandler = async (req, res) => {
                             break;
                     }
                 }
-                const antivirusGainMultiplier = (
-                    await getInventory(account._id.toString(), "nemesisAntivirusGainMultiplier")
-                ).nemesisAntivirusGainMultiplier;
+                const antivirusGainMultiplier = (await getInventory(account._id, "nemesisAntivirusGainMultiplier"))
+                    .nemesisAntivirusGainMultiplier;
                 inventory.Nemesis!.HenchmenKilled += antivirusGain * (antivirusGainMultiplier ?? 1);
                 if (inventory.Nemesis!.HenchmenKilled >= 100) {
                     inventory.Nemesis!.HenchmenKilled = 100;
@@ -241,12 +240,12 @@ export const nemesisController: RequestHandler = async (req, res) => {
         }
     } else if ((req.query.mode as string) == "rs") {
         // report spawn; POST but no application data in body
-        const inventory = await getInventory(account._id.toString(), "Nemesis");
+        const inventory = await getInventory(account._id, "Nemesis");
         inventory.Nemesis!.LastEnc = inventory.Nemesis!.MissionCount;
         await inventory.save();
         res.json({ LastEnc: inventory.Nemesis!.LastEnc });
     } else if ((req.query.mode as string) == "s") {
-        const inventory = await getInventory(account._id.toString(), "Nemesis");
+        const inventory = await getInventory(account._id, "Nemesis");
         if (inventory.Nemesis) {
             logger.warn(`overwriting an existing nemesis as a new one is being requested`);
         }
@@ -307,7 +306,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
             target: inventory.toJSON().Nemesis
         });
     } else if ((req.query.mode as string) == "t") {
-        const inventory = await getInventory(account._id.toString(), "LastNemesisAllySpawnTime");
+        const inventory = await getInventory(account._id, "LastNemesisAllySpawnTime");
         //const body = getJSONfromString<IUpdateAllySpawnTimeRequest>(String(req.body));
         const now = new Date(Math.trunc(Date.now() / 1000) * 1000);
         inventory.LastNemesisAllySpawnTime = now;
@@ -316,7 +315,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
             NewTime: toMongoDate(now)
         } satisfies IUpdateAllySpawnTimeResponse);
     } else if ((req.query.mode as string) == "d") {
-        const inventory = await getInventory(account._id.toString(), "NemesisHistory");
+        const inventory = await getInventory(account._id, "NemesisHistory");
         const body = getJSONfromString<IRelinquishAdversariesRequest>(String(req.body));
         for (const fp of body.nemesisFingerprints) {
             const index = inventory.NemesisHistory!.findIndex(x => x.fp == fp);
@@ -327,7 +326,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
         await inventory.save();
         res.json(body);
     } else if ((req.query.mode as string) == "w") {
-        const inventory = await getInventory(account._id.toString(), "Nemesis");
+        const inventory = await getInventory(account._id, "Nemesis");
         //const body = getJSONfromString<INemesisWeakenRequest>(String(req.body));
 
         // As of 38.6.0, this request is no longer sent, instead mode=r already weakens the nemesis if appropriate.

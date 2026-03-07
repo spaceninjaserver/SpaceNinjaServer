@@ -554,7 +554,7 @@ export const hasGuildPermissionEx = (
 export const removePigmentsFromGuildMembers = async (guildId: string | Types.ObjectId): Promise<void> => {
     const members = await GuildMember.find({ guildId, status: 0 }, "accountId");
     await parallelForeach(members, async member => {
-        const inventory = await getInventory(member.accountId.toString(), "MiscItems");
+        const inventory = await getInventory(member.accountId, "MiscItems");
         const index = inventory.MiscItems.findIndex(
             x => x.ItemType == "/Lotus/Types/Items/Research/DojoColors/GenericDojoColorPigment"
         );
@@ -779,7 +779,7 @@ export const deleteGuild = async (guildId: Types.ObjectId): Promise<void> => {
 
     const guildMembers = await GuildMember.find({ guildId, status: 0 }, "accountId");
     await parallelForeach(guildMembers, async member => {
-        const inventory = await getInventory(member.accountId.toString(), "GuildId LevelKeys Recipes");
+        const inventory = await getInventory(member.accountId, "GuildId LevelKeys Recipes");
         inventory.GuildId = undefined;
         removeDojoKeyItems(inventory);
         await inventory.save();
@@ -819,7 +819,8 @@ export const deleteAlliance = async (allianceId: Types.ObjectId): Promise<void> 
 
 export const getAllianceClient = async (
     alliance: IAllianceDatabase,
-    guild: TGuildDatabaseDocument
+    guild: TGuildDatabaseDocument,
+    buildLabel?: string
 ): Promise<IAllianceClient> => {
     const allianceMembers = await AllianceMember.find({ allianceId: alliance._id });
     const clans: IAllianceMemberClient[] = [];
@@ -837,7 +838,7 @@ export const getAllianceClient = async (
         });
     }
     return {
-        _id: toOid(alliance._id),
+        _id: toOid2(alliance._id, buildLabel),
         Name: alliance.Name,
         MOTD: alliance.MOTD,
         LongMOTD: alliance.LongMOTD,

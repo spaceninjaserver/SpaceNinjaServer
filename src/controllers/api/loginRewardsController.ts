@@ -17,7 +17,7 @@ export const loginRewardsController: RequestHandler = async (req, res) => {
     const nextMilestoneDay = account.LoginDays < 5 ? 5 : (Math.trunc(account.LoginDays / 50) + 1) * 50;
 
     if (today != account.LastLoginRewardDate) {
-        const inventory = await getInventory(account._id.toString());
+        const inventory = await getInventory(account._id);
         if (!inventory.disableDailyTribute) {
             const randomRewards = getRandomLoginRewards(account, inventory);
             const response: ILoginRewardsReponse = {

@@ -40,9 +40,8 @@ export const removeFriendGetController: RequestHandler = async (req, res) => {
 
 export const removeFriendPostController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const accountId = account._id.toString();
     const data = getJSONfromString<IBatchRemoveFriendsRequest>(String(req.body));
-    const friends = new Set((await Friendship.find({ owner: accountId }, "friend")).map(x => x.friend));
+    const friends = new Set((await Friendship.find({ owner: account._id }, "friend")).map(x => x.friend));
     // TOVERIFY: Should pending friendships also be kept?
 
     // Keep friends that have been online within threshold
@@ -55,7 +54,7 @@ export const removeFriendPostController: RequestHandler = async (req, res) => {
     });
 
     if (data.SkipClanmates) {
-        const inventory = await getInventory(accountId, "GuildId");
+        const inventory = await getInventory(account._id, "GuildId");
         if (inventory.GuildId) {
             await parallelForeach([...friends], async friend => {
                 const friendInventory = await getInventory(friend.toString(), "GuildId");
@@ -71,8 +70,8 @@ export const removeFriendPostController: RequestHandler = async (req, res) => {
     const removeFriendOids: IOid[] = [];
     for (const friend of friends) {
         if (!data.SkipFriendIds.find(skipFriendId => checkFriendId(skipFriendId, friend))) {
-            promises.push(Friendship.deleteOne({ owner: accountId, friend: friend }));
-            promises.push(Friendship.deleteOne({ owner: friend, friend: accountId }));
+            promises.push(Friendship.deleteOne({ owner: account._id, friend: friend }));
+            promises.push(Friendship.deleteOne({ owner: friend, friend: account._id }));
             removeFriendOids.push(toOid(friend));
         }
     }

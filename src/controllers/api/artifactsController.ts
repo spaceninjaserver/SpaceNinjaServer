@@ -19,12 +19,11 @@ import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 
 export const artifactsController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const accountId = account._id.toString();
     const artifactsData = getJSONfromString<IArtifactsRequest>(String(req.body));
 
     const { Upgrade, LevelDiff, Cost, FusionPointCost, Consumed, Fingerprint } = artifactsData;
 
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory(account._id);
     const { Upgrades } = inventory;
     const { ItemType, UpgradeFingerprint, ItemId } = Upgrade;
 

@@ -37,7 +37,7 @@ interface IContributeToDojoComponentRequest {
 
 export const contributeToDojoComponentController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const inventory = await getInventory(account._id.toString());
+    const inventory = await getInventory(account._id);
     // Any clan member should have permission to contribute although notably permission is denied if they have not crafted the dojo key and were simply invited in.
     if (!hasAccessToDojo(inventory)) {
         res.json({ DojoRequestStatus: -1 });

@@ -2,19 +2,19 @@ import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { Alliance, AllianceMember, Guild, GuildMember } from "../../models/guildModel.ts";
 import { getAllianceClient } from "../../services/guildService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
-import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest } from "../../services/loginService.ts";
 import { GuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 
 export const createAllianceController: RequestHandler = async (req, res) => {
-    const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId, "GuildId");
+    const account = await getAccountForRequest(req);
+    const inventory = await getInventory(account._id, "GuildId");
     const guild = (await Guild.findById(inventory.GuildId!, "Name Tier AllianceId"))!;
     if (guild.AllianceId) {
         res.status(400).send("Guild is already in an alliance").end();
         return;
     }
-    const guildMember = (await GuildMember.findOne({ guildId: guild._id, accountId }, "rank"))!;
+    const guildMember = (await GuildMember.findOne({ guildId: guild._id, accountId: account._id }, "rank"))!;
     if (guildMember.rank > 1) {
         res.status(400).send("Invalid permission").end();
         return;
@@ -42,7 +42,7 @@ export const createAllianceController: RequestHandler = async (req, res) => {
                 GuildPermission.ChatModerator
         })
     ]);
-    res.json(await getAllianceClient(alliance, guild));
+    res.json(await getAllianceClient(alliance, guild, account.BuildLabel));
 };
 
 interface ICreateAllianceRequest {

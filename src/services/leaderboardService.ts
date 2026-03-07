@@ -9,7 +9,7 @@ import { Types } from "mongoose";
 export const submitLeaderboardScore = async (
     schedule: "weekly" | "daily" | "events",
     leaderboard: string,
-    ownerId: string,
+    ownerId: string | Types.ObjectId,
     displayName: string,
     score: number,
     guildId: string | undefined

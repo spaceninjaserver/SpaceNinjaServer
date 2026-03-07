@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { parseString } from "../../helpers/general.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import type { IUpdateQuestRequest } from "../../services/questService.ts";
 import { updateQuestKey } from "../../services/questService.ts";
@@ -8,7 +8,7 @@ import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import { sendWsBroadcastTo } from "../../services/wsService.ts";
 
 export const updateQuestController: RequestHandler = async (req, res) => {
-    const accountId = parseString(req.query.accountId);
+    const accountId = await getAccountIdForRequest(req);
     const updateQuestRequest = getJSONfromString<IUpdateQuestRequest>((req.body as string).toString());
 
     // updates should be made only to one quest key per request

@@ -23,7 +23,6 @@ export const startRecipeController: RequestHandler = async (req, res) => {
     logger.debug("StartRecipe Request", { startRecipeRequest });
 
     const account = await getAccountForRequest(req);
-    const accountId = account._id.toString();
 
     let recipeName = startRecipeRequest.RecipeName;
     if (req.query.recipeName) recipeName = String(req.query.recipeName); // U8
@@ -33,7 +32,7 @@ export const startRecipeController: RequestHandler = async (req, res) => {
         throw new Error(`unknown recipe ${recipeName}`);
     }
 
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory(account._id);
     updateCurrency(inventory, recipe.buildPrice, false);
 
     const pr =

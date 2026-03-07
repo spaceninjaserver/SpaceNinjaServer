@@ -17,7 +17,7 @@ export const updateChallengeProgressController: RequestHandler = async (req, res
     logger.debug(`challenge report:`, challenges);
 
     const inventory = await getInventory(
-        account._id.toString(),
+        account._id,
         "ChallengesFixVersion ChallengeProgress SeasonChallengeHistory Affiliations CalendarProgress nightwaveStandingMultiplier FlavourItems"
     );
     let affiliationMods: IAffiliationMods[] = [];

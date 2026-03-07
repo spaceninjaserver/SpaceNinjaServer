@@ -10,7 +10,7 @@ import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 
 export const setGuildMotdController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const inventory = await getInventory(account._id.toString(), "GuildId");
+    const inventory = await getInventory(account._id, "GuildId");
     const guild = (await Guild.findById(inventory.GuildId!))!;
     const member = (await GuildMember.findOne({ accountId: account._id, guildId: guild._id }))!;
 

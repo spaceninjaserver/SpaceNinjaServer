@@ -33,7 +33,7 @@ itemconfig has multiple config ids
 */
 export const handleInventoryItemConfigChange = async (
     equipmentChanges: ISaveLoadoutRequestNoUpgradeVer,
-    accountId: string,
+    accountId: string | Types.ObjectId,
     buildLabel: string | undefined
 ): Promise<string | void> => {
     const inventory = await getInventory(accountId);

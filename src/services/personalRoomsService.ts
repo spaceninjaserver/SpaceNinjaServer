@@ -4,15 +4,16 @@ import type { IGardeningDatabase, TPersonalRoomsDatabaseDocument } from "../type
 import { getRandomElement } from "./rngService.ts";
 import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
 import { logger } from "../utils/logger.ts";
+import type { Types } from "mongoose";
 
 export const getPersonalRooms = async (
-    accountId: string,
+    accountId: string | Types.ObjectId,
     projection?: string
 ): Promise<TPersonalRoomsDatabaseDocument> => {
     const personalRooms = await PersonalRooms.findOne({ personalRoomsOwnerId: accountId }, projection);
 
     if (!personalRooms) {
-        throw new Error(`personal rooms not found for account ${accountId}`);
+        throw new Error(`personal rooms not found for account ${String(accountId)}`);
     }
     return personalRooms;
 };

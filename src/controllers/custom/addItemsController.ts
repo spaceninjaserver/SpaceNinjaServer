@@ -6,9 +6,8 @@ import { logger } from "../../utils/logger.ts";
 
 export const addItemsController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const accountId = account._id.toString();
     const requests = req.body as IAddItemRequest[];
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory(account._id);
     for (const request of requests) {
         try {
             await addItem(

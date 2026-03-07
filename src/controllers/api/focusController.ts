@@ -86,7 +86,7 @@ export const focusController: RequestHandler = async (req, res) => {
             break;
         case "InstallLens": {
             const request = JSON.parse(String(req.body)) as ILensInstallRequest;
-            const inventory = await getInventory(account._id.toString());
+            const inventory = await getInventory(account._id);
             const item = inventory[request.Category].id(request.WeaponId);
             if (item) {
                 item.FocusLens = request.LensType;
@@ -107,7 +107,7 @@ export const focusController: RequestHandler = async (req, res) => {
         case "UnlockWay": {
             const focusType = (JSON.parse(String(req.body)) as IWayRequest).FocusType;
             const focusPolarity = focusTypeToPolarity(focusType);
-            const inventory = await getInventory(account._id.toString(), "FocusAbility FocusUpgrades FocusXP");
+            const inventory = await getInventory(account._id, "FocusAbility FocusUpgrades FocusXP");
             const cost = inventory.FocusAbility ? 50_000 : 0;
             inventory.FocusAbility ??= focusType;
             inventory.FocusUpgrades.push({ ItemType: focusType });
@@ -124,7 +124,7 @@ export const focusController: RequestHandler = async (req, res) => {
         case "IncreasePool": {
             const request = JSON.parse(String(req.body)) as IIncreasePoolRequest;
             const focusPolarity = focusTypeToPolarity(request.FocusType);
-            const inventory = await getInventory(account._id.toString(), "FocusXP FocusCapacity");
+            const inventory = await getInventory(account._id, "FocusXP FocusCapacity");
             let cost = 0;
             for (let capacity = request.CurrentTotalCapacity; capacity != request.NewTotalCapacity; ++capacity) {
                 cost += increasePoolCost[capacity - 5];
@@ -143,7 +143,7 @@ export const focusController: RequestHandler = async (req, res) => {
 
             await Inventory.updateOne(
                 {
-                    accountOwnerId: account._id.toString()
+                    accountOwnerId: account._id
                 },
                 {
                     FocusAbility: focusType
@@ -158,7 +158,7 @@ export const focusController: RequestHandler = async (req, res) => {
         case "UnlockUpgrade": {
             const request = JSON.parse(String(req.body)) as IUnlockUpgradeRequest;
             const focusPolarity = focusTypeToPolarity(request.FocusTypes[0]);
-            const inventory = await getInventory(account._id.toString());
+            const inventory = await getInventory(account._id);
             let cost = 0;
             for (const focusType of request.FocusTypes) {
                 if (focusType in ExportFocusUpgrades) {
@@ -183,7 +183,7 @@ export const focusController: RequestHandler = async (req, res) => {
         case "UpdateUpgrade": {
             const request = JSON.parse(String(req.body)) as ILevelUpUpgradeRequest;
             const focusPolarity = focusTypeToPolarity(request.FocusInfos[0].ItemType);
-            const inventory = await getInventory(account._id.toString());
+            const inventory = await getInventory(account._id);
             let cost = 0;
             for (const focusUpgrade of request.FocusInfos) {
                 cost += focusUpgrade.FocusXpCost;
@@ -204,7 +204,7 @@ export const focusController: RequestHandler = async (req, res) => {
         }
         case "SentTrainingAmplifier": {
             const request = JSON.parse(String(req.body)) as ISentTrainingAmplifierRequest;
-            const inventory = await getInventory(account._id.toString());
+            const inventory = await getInventory(account._id);
             const inventoryChanges = addEquipment(inventory, "OperatorAmps", request.StartingWeaponType, {
                 ModularParts: [
                     "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/SentAmpTrainingGrip",
@@ -220,7 +220,7 @@ export const focusController: RequestHandler = async (req, res) => {
         case "UnbindUpgrade": {
             const request = JSON.parse(String(req.body)) as IUnbindUpgradeRequest;
             const focusPolarity = focusTypeToPolarity(request.FocusTypes[0]);
-            const inventory = await getInventory(account._id.toString());
+            const inventory = await getInventory(account._id);
             inventory.FocusXP![focusPolarity]! -= 750_000 * request.FocusTypes.length;
             addMiscItems(inventory, [
                 {
@@ -265,7 +265,7 @@ export const focusController: RequestHandler = async (req, res) => {
             for (const shard of request.Shards) {
                 shard.ItemCount *= -1;
             }
-            const inventory = await getInventory(account._id.toString());
+            const inventory = await getInventory(account._id);
             const polarity = request.Polarity;
             inventory.FocusXP ??= {};
             inventory.FocusXP[polarity] ??= 0;

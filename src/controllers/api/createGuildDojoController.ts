@@ -8,7 +8,7 @@ import { getInventory } from "../../services/inventoryService.ts";
 
 export const createGuildDojoController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const inventory = await getInventory(account._id.toString(), "GuildId");
+    const inventory = await getInventory(account._id, "GuildId");
     const guild = await getGuildForRequestEx(req, inventory);
 
     if (guild.DojoComponents.length == 0) {

@@ -12,11 +12,7 @@ export const saveLoadoutController: RequestHandler = async (req, res) => {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { UpgradeVer, ...equipmentChanges } = body;
-    const newLoadoutId = await handleInventoryItemConfigChange(
-        equipmentChanges,
-        account._id.toString(),
-        account.BuildLabel
-    );
+    const newLoadoutId = await handleInventoryItemConfigChange(equipmentChanges, account._id, account.BuildLabel);
 
     //send back new loadout id, if new loadout was added
     if (newLoadoutId) {

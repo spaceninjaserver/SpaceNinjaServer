@@ -1,14 +1,13 @@
-import { toMongoDate } from "../../helpers/inventoryHelpers.ts";
+import { toMongoDate2 } from "../../helpers/inventoryHelpers.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { Guild } from "../../models/guildModel.ts";
 import { checkClanAscensionHasRequiredContributors } from "../../services/guildService.ts";
 import { addFusionPoints, getInventory } from "../../services/inventoryService.ts";
-import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
-import { Types } from "mongoose";
 
 export const contributeGuildClassController: RequestHandler = async (req, res) => {
-    const accountId = await getAccountIdForRequest(req);
+    const account = await getAccountForRequest(req);
     const payload = getJSONfromString<IContributeGuildClassRequest>(String(req.body));
     const guild = (await Guild.findById(payload.GuildId))!;
 
@@ -28,14 +27,14 @@ export const contributeGuildClassController: RequestHandler = async (req, res) =
         });
     }
 
-    guild.CeremonyContributors.push(new Types.ObjectId(accountId));
+    guild.CeremonyContributors.push(account._id);
 
     await checkClanAscensionHasRequiredContributors(guild);
 
     await guild.save();
 
     // Either way, endo is given to the contributor.
-    const inventory = await getInventory(accountId, "FusionPoints");
+    const inventory = await getInventory(account._id, "FusionPoints");
     addFusionPoints(inventory, guild.CeremonyEndo!);
     await inventory.save();
 
@@ -43,7 +42,9 @@ export const contributeGuildClassController: RequestHandler = async (req, res) =
         NumContributors: guild.CeremonyContributors.length,
         FusionPointReward: guild.CeremonyEndo,
         Class: guild.Class,
-        CeremonyResetDate: guild.CeremonyResetDate ? toMongoDate(guild.CeremonyResetDate) : undefined
+        CeremonyResetDate: guild.CeremonyResetDate
+            ? toMongoDate2(guild.CeremonyResetDate, account.BuildLabel)
+            : undefined
     });
 };
 
