@@ -397,6 +397,7 @@ export const getInventoryResponse = async (
         };
         inventoryResponse.Settings.TradingRulesConfirmed = true;
         inventoryResponse.PlayedParkourTutorial = true; // Skips PoE update popup in U22
+        inventoryResponse.HasResetAccount = true; // In ~U10, you are asked to confirm dojo contributions 3 times because "you will forfeit your one-time reset"
     }
 
     if (config.worldState?.baroTennoConRelay) {
