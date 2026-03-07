@@ -235,6 +235,7 @@ export const createInventory = async (
         await addItem(inventory, "/Lotus/Types/Friendly/PlayerControllable/Weapons/DuviriDualSwords");
 
         if (config.skipTutorial) {
+            inventory.MadeStoryModeDecision = true;
             inventory.PlayedParkourTutorial = true;
             const startingGear = await addStartingGear(inventory);
             await completeQuest(inventory, "/Lotus/Types/Keys/VorsPrize/VorsPrizeQuestKeyChain", undefined);
