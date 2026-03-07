@@ -201,6 +201,7 @@ apiRouter.get("/claimLibraryDailyTaskReward.php", claimLibraryDailyTaskRewardCon
 apiRouter.get("/completeCalendarEvent.php", completeCalendarEventController);
 apiRouter.get("/confirmAllianceInvitation.php", confirmAllianceInvitationController);
 apiRouter.get("/confirmGuildInvitation.php", confirmGuildInvitationGetController);
+apiRouter.get("/createAlliance.php", createAllianceController); // ~U10
 apiRouter.get("/createGuild.php", createGuildGetController);
 apiRouter.get("/credits.php", creditsController);
 apiRouter.get("/declineAllianceInvite.php", declineAllianceInviteController);

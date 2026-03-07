@@ -19,7 +19,9 @@ export const createAllianceController: RequestHandler = async (req, res) => {
         res.status(400).send("Invalid permission").end();
         return;
     }
-    const data = getJSONfromString<ICreateAllianceRequest>(String(req.body));
+    const data: ICreateAllianceRequest = req.body
+        ? getJSONfromString<ICreateAllianceRequest>(String(req.body))
+        : { allianceName: req.query.allianceName as string };
     const alliance = new Alliance({ Name: data.allianceName });
     try {
         await alliance.save();
