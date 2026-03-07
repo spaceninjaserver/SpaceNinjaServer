@@ -3746,18 +3746,22 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         });
     }
 
-    // Rough outline of dynamic invasions.
-    // TODO: Invasions chains, e.g. an infestation mission would soon lead to other nodes on that planet also having an infestation invasion.
-    // TODO: Grineer/Corpus to fund their death stars with each invasion win.
-    {
-        worldState.Invasions.push(createInvasion(day, 0));
-        worldState.Invasions.push(createInvasion(day, 1));
-        worldState.Invasions.push(createInvasion(day, 2));
+    if (!buildLabel || version_compare(buildLabel, gameToBuildVersion["17.7.1"]) >= 0) {
+        //      (lowest known version that recognises all reward types ^^^^^^)
 
-        // Completed invasions stay for up to 24 hours as the winner 'occupies' that node
-        worldState.Invasions.push(createInvasion(day - 1, 0));
-        worldState.Invasions.push(createInvasion(day - 1, 1));
-        worldState.Invasions.push(createInvasion(day - 1, 2));
+        // Rough outline of dynamic invasions.
+        // TODO: Invasions chains, e.g. an infestation mission would soon lead to other nodes on that planet also having an infestation invasion.
+        // TODO: Grineer/Corpus to fund their death stars with each invasion win.
+        {
+            worldState.Invasions.push(createInvasion(day, 0));
+            worldState.Invasions.push(createInvasion(day, 1));
+            worldState.Invasions.push(createInvasion(day, 2));
+
+            // Completed invasions stay for up to 24 hours as the winner 'occupies' that node
+            worldState.Invasions.push(createInvasion(day - 1, 0));
+            worldState.Invasions.push(createInvasion(day - 1, 1));
+            worldState.Invasions.push(createInvasion(day - 1, 2));
+        }
     }
 
     // Baro
