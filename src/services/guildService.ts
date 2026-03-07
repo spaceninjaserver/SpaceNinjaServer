@@ -177,7 +177,12 @@ export const getDojoClient = async (
             const clientComponent: IDojoComponentClient = {
                 id: toOid2(dojoComponent._id, buildLabel),
                 SortId: toOid2(dojoComponent.SortId ?? dojoComponent._id, buildLabel), // always providing a SortId so decos don't need repositioning to reparent
-                pf: dojoComponent.pf,
+                pf:
+                    dojoComponent.pf == "/Lotus/Levels/ClanDojo/DojoHall.level" &&
+                    buildLabel &&
+                    version_compare(buildLabel, gameToBuildVersion["9.1.2"]) <= 0
+                        ? "/Lotus/Levels/ClanDojo/ClanHallA.level" // Pre-U9.5
+                        : dojoComponent.pf,
                 ppf: dojoComponent.ppf,
                 Name: dojoComponent.Name,
                 Message: dojoComponent.Message,
