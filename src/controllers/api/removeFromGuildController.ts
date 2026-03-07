@@ -47,61 +47,63 @@ const processRemoveFromGuildRequest = async (
         return;
     }
 
-    const guildMember = (await GuildMember.findOne({ accountId: payload.userId, guildId: guild._id }))!;
-    if (guildMember.rank == 0) {
-        await deleteGuild(guild._id);
-    } else {
-        if (guildMember.status == 0) {
-            const inventory = await getInventory(payload.userId, "GuildId LevelKeys Recipes");
-            inventory.GuildId = undefined;
-            removeDojoKeyItems(inventory);
-            await inventory.save();
-        } else if (guildMember.status == 1) {
-            // TOVERIFY: Is this inbox message actually sent on live?
-            await createMessage(guildMember.accountId, [
-                {
-                    sndr: "/Lotus/Language/Bosses/Ordis",
-                    msg: "/Lotus/Language/Clan/RejectedFromClan",
-                    sub: "/Lotus/Language/Clan/RejectedFromClanHeader",
-                    arg: [
-                        {
-                            Key: "PLAYER_NAME",
-                            Tag: (await Account.findOne({ _id: guildMember.accountId }, "DisplayName"))!.DisplayName
-                        },
-                        {
-                            Key: "CLAN_NAME",
-                            Tag: guild.Name
-                        }
-                    ]
-                    // TOVERIFY: If this message is sent on live, is it highPriority?
-                }
-            ]);
-        } else if (guildMember.status == 2) {
-            // Delete the inbox message for the invite
-            await Inbox.deleteOne({
-                ownerId: guildMember.accountId,
-                contextInfo: guild._id.toString(),
-                acceptAction: "GUILD_INVITE"
-            });
-        }
-        await GuildMember.deleteOne({ _id: guildMember._id });
-
-        guild.RosterActivity ??= [];
-        if (isKick) {
-            const kickee = (await Account.findById(payload.userId))!;
-            guild.RosterActivity.push({
-                dateTime: new Date(),
-                entryType: 12,
-                details: getSuffixedName(kickee) + "," + getSuffixedName(account)
-            });
+    const guildMember = await GuildMember.findOne({ accountId: payload.userId, guildId: guild._id });
+    if (guildMember) {
+        if (guildMember.rank == 0) {
+            await deleteGuild(guild._id);
         } else {
-            guild.RosterActivity.push({
-                dateTime: new Date(),
-                entryType: 7,
-                details: getSuffixedName(account)
-            });
+            if (guildMember.status == 0) {
+                const inventory = await getInventory(payload.userId, "GuildId LevelKeys Recipes");
+                inventory.GuildId = undefined;
+                removeDojoKeyItems(inventory);
+                await inventory.save();
+            } else if (guildMember.status == 1) {
+                // TOVERIFY: Is this inbox message actually sent on live?
+                await createMessage(guildMember.accountId, [
+                    {
+                        sndr: "/Lotus/Language/Bosses/Ordis",
+                        msg: "/Lotus/Language/Clan/RejectedFromClan",
+                        sub: "/Lotus/Language/Clan/RejectedFromClanHeader",
+                        arg: [
+                            {
+                                Key: "PLAYER_NAME",
+                                Tag: (await Account.findOne({ _id: guildMember.accountId }, "DisplayName"))!.DisplayName
+                            },
+                            {
+                                Key: "CLAN_NAME",
+                                Tag: guild.Name
+                            }
+                        ]
+                        // TOVERIFY: If this message is sent on live, is it highPriority?
+                    }
+                ]);
+            } else if (guildMember.status == 2) {
+                // Delete the inbox message for the invite
+                await Inbox.deleteOne({
+                    ownerId: guildMember.accountId,
+                    contextInfo: guild._id.toString(),
+                    acceptAction: "GUILD_INVITE"
+                });
+            }
+            await GuildMember.deleteOne({ _id: guildMember._id });
+
+            guild.RosterActivity ??= [];
+            if (isKick) {
+                const kickee = (await Account.findById(payload.userId))!;
+                guild.RosterActivity.push({
+                    dateTime: new Date(),
+                    entryType: 12,
+                    details: getSuffixedName(kickee) + "," + getSuffixedName(account)
+                });
+            } else {
+                guild.RosterActivity.push({
+                    dateTime: new Date(),
+                    entryType: 7,
+                    details: getSuffixedName(account)
+                });
+            }
+            await guild.save();
         }
-        await guild.save();
     }
 
     res.json({
