@@ -20,12 +20,12 @@ import { ExportResources } from "warframe-public-export-plus";
 import { convertCustomizationInfo } from "./importService.ts";
 
 export const setShipCustomizations = async (
-    accountId: string,
+    accountId: string | Types.ObjectId,
     shipCustomization: ISetShipCustomizationsRequest
 ): Promise<void> => {
     if (shipCustomization.IsExterior) {
         const ship = await getShip(new Types.ObjectId(shipCustomization.ShipId));
-        if (ship.ShipOwnerId.toString() == accountId) {
+        if (ship.ShipOwnerId.equals(accountId)) {
             ship.set({
                 ShipExteriorColors: shipCustomization.Customization.Colors,
                 SkinFlavourItem: shipCustomization.Customization.SkinFlavourItem,
@@ -48,7 +48,7 @@ export const setShipCustomizations = async (
 };
 
 export const handleSetShipDecorations = async (
-    accountId: string,
+    accountId: string | Types.ObjectId,
     placedDecoration: IShipDecorationsRequest
 ): Promise<IShipDecorationsResponse> => {
     const personalRooms = await getPersonalRooms(accountId);

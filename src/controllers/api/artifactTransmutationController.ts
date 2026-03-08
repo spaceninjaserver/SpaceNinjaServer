@@ -17,8 +17,7 @@ import { ExportBoosterPacks, ExportUpgrades } from "warframe-public-export-plus"
 
 export const artifactTransmutationController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const accountId = account._id.toString();
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory(account._id);
     const payload = JSON.parse(String(req.body)) as IArtifactTransmutationRequest;
 
     updateCurrency(inventory, payload.Cost, CurrencyType.CREDITS);

@@ -37,7 +37,7 @@ const sendFriendRequest = async (
         return;
     }
 
-    const inventory = await getInventory(account._id.toString(), "Settings");
+    const inventory = await getInventory(account._id, "Settings");
     if (
         inventory.Settings?.FriendInvRestriction == "GIFT_MODE_NONE" ||
         (inventory.Settings?.FriendInvRestriction == "GIFT_MODE_FRIENDS" &&

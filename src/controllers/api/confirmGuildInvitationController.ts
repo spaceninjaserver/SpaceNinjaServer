@@ -28,7 +28,7 @@ export const confirmGuildInvitationGetController: RequestHandler = async (req, r
         // If this account is already in a guild, we need to do cleanup first.
         const guildMember = await GuildMember.findOneAndDelete({ accountId: account._id, status: 0 });
         if (guildMember) {
-            const inventory = await getInventory(account._id.toString(), "LevelKeys Recipes");
+            const inventory = await getInventory(account._id, "LevelKeys Recipes");
             inventoryChanges = removeDojoKeyItems(inventory);
             await inventory.save();
 
@@ -45,7 +45,7 @@ export const confirmGuildInvitationGetController: RequestHandler = async (req, r
         await GuildMember.deleteMany({ accountId: account._id, status: 1 });
 
         // Update inventory of new member
-        const inventory = await getInventory(account._id.toString(), "GuildId LevelKeys Recipes");
+        const inventory = await getInventory(account._id, "GuildId LevelKeys Recipes");
         inventory.GuildId = new Types.ObjectId(req.query.clanId as string);
         giveClanKey(inventory, inventoryChanges);
         await inventory.save();
@@ -95,7 +95,7 @@ export const confirmGuildInvitationPostController: RequestHandler = async (req, 
         await GuildMember.deleteMany({ accountId: guildMember.accountId, status: 1 });
 
         // Update inventory of new member
-        const inventory = await getInventory(guildMember.accountId.toString(), "GuildId LevelKeys Recipes");
+        const inventory = await getInventory(guildMember.accountId, "GuildId LevelKeys Recipes");
         inventory.GuildId = new Types.ObjectId(req.query.clanId as string);
         giveClanKey(inventory);
         await inventory.save();

@@ -73,7 +73,7 @@ export const addToAllianceController: RequestHandler = async (req, res) => {
     // TOVERIFY: Who/what should the sender be?
     // TOVERIFY: Should this message be highPriority?
     const invitedClanOwnerMember = (await GuildMember.findOne({ guildId: guilds[0]._id, rank: 0 }))!;
-    const senderInventory = await getInventory(account._id.toString(), "ActiveAvatarImageType");
+    const senderInventory = await getInventory(account._id, "ActiveAvatarImageType");
     const senderGuild = (await Guild.findById(allianceMember.guildId, "Name"))!;
     const alliance = (await Alliance.findById(req.query.allianceId as string, "Name"))!;
     await createMessage(invitedClanOwnerMember.accountId, [

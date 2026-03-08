@@ -3,20 +3,20 @@ import type { IMessageClient, IMessageDatabase, TMessageDocument } from "../mode
 import { Inbox } from "../models/inboxModel.ts";
 import type { Types } from "mongoose";
 
-export const getAllMessagesSorted = async (accountId: string): Promise<TMessageDocument[]> => {
+export const getAllMessagesSorted = async (accountId: string | Types.ObjectId): Promise<TMessageDocument[]> => {
     const inbox = await Inbox.find({ ownerId: accountId }).sort({ date: -1 });
     return inbox;
 };
 
-export const deleteMessageRead = async (messageId: string): Promise<void> => {
+export const deleteMessageRead = async (messageId: string | Types.ObjectId): Promise<void> => {
     await Inbox.findOneAndDelete({ _id: messageId, r: true });
 };
 
-export const deleteAllMessagesRead = async (accountId: string): Promise<void> => {
+export const deleteAllMessagesRead = async (accountId: string | Types.ObjectId): Promise<void> => {
     await Inbox.deleteMany({ ownerId: accountId, r: true });
 };
 
-export const deleteAllMessagesReadNonCin = async (accountId: string): Promise<void> => {
+export const deleteAllMessagesReadNonCin = async (accountId: string | Types.ObjectId): Promise<void> => {
     await Inbox.deleteMany({ ownerId: accountId, r: true, cinematic: null });
 };
 

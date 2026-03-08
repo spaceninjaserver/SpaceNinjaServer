@@ -11,7 +11,7 @@ import type { RequestHandler } from "express";
 
 export const queueDojoComponentDestructionController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const inventory = await getInventory(account._id.toString(), "GuildId LevelKeys");
+    const inventory = await getInventory(account._id, "GuildId LevelKeys");
     const guild = await getGuildForRequestEx(req, inventory);
     if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, account._id, GuildPermission.Architect))) {
         res.json({ DojoRequestStatus: -1 });

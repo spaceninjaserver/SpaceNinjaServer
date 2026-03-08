@@ -38,7 +38,7 @@ interface IClaimCompletedRecipeResponse {
 
 export const claimCompletedRecipeController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const inventory = await getInventory(account._id.toString());
+    const inventory = await getInventory(account._id);
     const resp: IClaimCompletedRecipeResponse = {
         InventoryChanges: {}
     };

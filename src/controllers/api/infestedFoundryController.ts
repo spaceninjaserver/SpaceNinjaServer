@@ -29,7 +29,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
         case "s": {
             // shard installation
             const request = getJSONfromString<IShardInstallRequest>(String(req.body));
-            const inventory = await getInventory(account._id.toString());
+            const inventory = await getInventory(account._id);
             const suit = inventory.Suits.id(request.SuitId.$oid)!;
             suit.ArchonCrystalUpgrades ??= [];
             while (suit.ArchonCrystalUpgrades.length < request.Slot) {
@@ -58,7 +58,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
         case "x": {
             // shard removal
             const request = getJSONfromString<IShardUninstallRequest>(String(req.body));
-            const inventory = await getInventory(account._id.toString());
+            const inventory = await getInventory(account._id);
             const suit = inventory.Suits.id(request.SuitId.$oid)!;
 
             const miscItemChanges: IMiscItem[] = [];
@@ -111,7 +111,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
         case "n": {
             // name the beast
             const request = getJSONfromString<IHelminthNameRequest>(String(req.body));
-            const inventory = await getInventory(account._id.toString());
+            const inventory = await getInventory(account._id);
             inventory.InfestedFoundry ??= {};
             inventory.InfestedFoundry.Name = request.newName;
             await inventory.save();
@@ -128,7 +128,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
         case "c": {
             // consume items
 
-            const inventory = await getInventory(account._id.toString());
+            const inventory = await getInventory(account._id);
 
             if (inventory.infiniteHelminthMaterials) {
                 res.status(400).end();
@@ -231,7 +231,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
         case "o": {
             // offerings update
             const request = getJSONfromString<IHelminthOfferingsUpdate>(String(req.body));
-            const inventory = await getInventory(account._id.toString());
+            const inventory = await getInventory(account._id);
             inventory.InfestedFoundry ??= {};
             inventory.InfestedFoundry.InvigorationIndex = request.OfferingsIndex;
             inventory.InfestedFoundry.InvigorationSuitOfferings = request.SuitTypes;
@@ -252,7 +252,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
         case "a": {
             // subsume warframe
             const request = getJSONfromString<IHelminthSubsumeRequest>(String(req.body));
-            const inventory = await getInventory(account._id.toString());
+            const inventory = await getInventory(account._id);
             const recipe = getRecipe(request.Recipe)!;
             if (!inventory.infiniteHelminthMaterials) {
                 for (const ingredient of recipe.secretIngredients!) {
@@ -302,7 +302,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
 
         case "r": {
             // rush subsume
-            const inventory = await getInventory(account._id.toString());
+            const inventory = await getInventory(account._id);
             const currencyChanges = updateCurrency(inventory, 50, true);
             const recipeChanges = handleSubsumeCompletion(inventory);
             await inventory.save();
@@ -320,7 +320,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
 
         case "u": {
             const request = getJSONfromString<IHelminthInvigorationRequest>(String(req.body));
-            const inventory = await getInventory(account._id.toString());
+            const inventory = await getInventory(account._id);
             const suit = inventory.Suits.id(request.SuitId.$oid)!;
             const upgradesExpiry = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
             suit.OffensiveUpgrade = request.OffensiveUpgradeType;
@@ -353,7 +353,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
         }
 
         case "custom_unlockall": {
-            const inventory = await getInventory(account._id.toString());
+            const inventory = await getInventory(account._id);
             inventory.InfestedFoundry ??= {};
             inventory.InfestedFoundry.XP ??= 0;
             if (151875_00 > inventory.InfestedFoundry.XP) {

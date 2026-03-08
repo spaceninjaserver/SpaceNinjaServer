@@ -26,7 +26,7 @@ const processCreateGuildRequest = async (
     account: TAccountDocument,
     payload: ICreateGuildRequest
 ): Promise<ICreateGuildResponse> => {
-    const inventory = await getInventory(account._id.toString(), "GuildId LevelKeys Recipes");
+    const inventory = await getInventory(account._id, "GuildId LevelKeys Recipes");
     if (inventory.GuildId) {
         const guild = await Guild.findById(inventory.GuildId);
         if (guild) {

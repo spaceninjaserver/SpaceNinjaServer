@@ -6,6 +6,7 @@ import type { RequestHandler } from "express";
 import { unixTimesInMs } from "../../constants/timeConstants.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import { createMessage } from "../../services/inboxService.ts";
+import type { Types } from "mongoose";
 
 interface ITrainingResultsRequest {
     numLevelsGained: number;
@@ -18,7 +19,7 @@ interface ITrainingResultsResponse {
 }
 
 const handleTrainingProgress = async (
-    accountId: string,
+    accountId: string | Types.ObjectId,
     numLevelsGained: number
 ): Promise<ITrainingResultsResponse> => {
     const inventory = await getInventory(accountId, "TrainingDate PlayerLevel TradesRemaining noMasteryRankUpCooldown");

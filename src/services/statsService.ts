@@ -14,14 +14,15 @@ import { addEmailItem, getInventory } from "./inventoryService.ts";
 import { submitLeaderboardScore } from "./leaderboardService.ts";
 import { version_compare } from "../helpers/inventoryHelpers.ts";
 import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
+import type { Types } from "mongoose";
 
-export const createStats = async (accountId: string): Promise<TStatsDatabaseDocument> => {
+export const createStats = async (accountId: string | Types.ObjectId): Promise<TStatsDatabaseDocument> => {
     const stats = new Stats({ accountOwnerId: accountId });
     await stats.save();
     return stats;
 };
 
-export const getStats = async (accountOwnerId: string): Promise<TStatsDatabaseDocument> => {
+export const getStats = async (accountOwnerId: string | Types.ObjectId): Promise<TStatsDatabaseDocument> => {
     let stats = await Stats.findOne({ accountOwnerId: accountOwnerId });
 
     if (!stats) stats = await createStats(accountOwnerId);
@@ -30,7 +31,7 @@ export const getStats = async (accountOwnerId: string): Promise<TStatsDatabaseDo
 };
 
 export const updateStats = async (
-    accountOwnerId: string,
+    accountOwnerId: string | Types.ObjectId,
     payload: IStatsUpdate,
     buildLabel?: string
 ): Promise<void> => {

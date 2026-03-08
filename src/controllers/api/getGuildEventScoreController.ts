@@ -5,7 +5,7 @@ import { Guild } from "../../models/guildModel.ts";
 
 export const getGuildEventScoreController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const inventory = await getInventory(account._id.toString(), "GuildId");
+    const inventory = await getInventory(account._id, "GuildId");
     const guild = await Guild.findById(inventory.GuildId);
     const goalId = req.query.goalId as string;
     if (guild && guild.GoalProgress && goalId) {

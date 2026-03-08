@@ -119,7 +119,7 @@ export const loginController: RequestHandler = async (request, response) => {
     handleNonceInvalidation(account._id.toString());
 
     // If the client crashed during an endless fissure mission, discharge rewards to an inbox message. (https://www.reddit.com/r/Warframe/comments/5uwwjm/til_if_you_crash_during_a_fissure_you_keep_any/)
-    const inventory = await getInventory(account._id.toString(), "MissionRelicRewards");
+    const inventory = await getInventory(account._id, "MissionRelicRewards");
     if (inventory.MissionRelicRewards) {
         await createMessage(account._id, [
             {

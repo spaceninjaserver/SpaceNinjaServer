@@ -37,13 +37,12 @@ export const inboxController: RequestHandler = async (req, res) => {
     const { deleteId, lastMessage: latestClientMessageId, messageId } = req.query;
 
     const account = await getAccountForRequest(req);
-    const accountId = account._id.toString();
 
     if (deleteId) {
         if (deleteId === "DeleteAllRead") {
-            await deleteAllMessagesRead(accountId);
+            await deleteAllMessagesRead(account._id);
         } else if (deleteId === "DeleteAllReadNonCin") {
-            await deleteAllMessagesReadNonCin(accountId);
+            await deleteAllMessagesReadNonCin(account._id);
         } else {
             await deleteMessageRead(parseOid(deleteId as string));
         }
@@ -67,7 +66,7 @@ export const inboxController: RequestHandler = async (req, res) => {
             return;
         }
 
-        const inventory = await getInventory(accountId);
+        const inventory = await getInventory(account._id);
         const inventoryChanges = {};
         if (attachmentItems) {
             await addItems(
@@ -125,7 +124,7 @@ export const inboxController: RequestHandler = async (req, res) => {
         res.json({ InventoryChanges: inventoryChanges });
     } else if (latestClientMessageId) {
         await createNewEventMessages(account);
-        const messages = await Inbox.find({ ownerId: accountId }).sort({ date: 1 });
+        const messages = await Inbox.find({ ownerId: account._id }).sort({ date: 1 });
 
         const latestClientMessage = messages.find(m => m._id.toString() === parseOid(latestClientMessageId as string));
 
@@ -147,7 +146,7 @@ export const inboxController: RequestHandler = async (req, res) => {
     } else {
         //newly created event messages must be newer than account.LatestEventMessageDate
         await createNewEventMessages(account);
-        const messages = await getAllMessagesSorted(accountId);
+        const messages = await getAllMessagesSorted(account._id);
         const inbox = messages.map(x => exportInboxMessage(x, account.BuildLabel));
         res.json({ Inbox: inbox satisfies IMessageClient[] });
     }
