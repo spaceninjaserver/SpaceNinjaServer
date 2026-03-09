@@ -1034,6 +1034,7 @@ function translateInventoryDataToDom() {
                     .sort((a, b) => (b.Favorite ? 1 : 0) - (a.Favorite ? 1 : 0))
                     .forEach(item => {
                         const tr = document.createElement("tr");
+                        tr.setAttribute("data-item-oid", item.ItemId.$oid);
                         tr.setAttribute("data-item-type", item.ItemType);
                         {
                             const td = document.createElement("td");
@@ -1197,8 +1198,18 @@ function translateInventoryDataToDom() {
                                 a.href = "#";
                                 a.onclick = function (event) {
                                     event.preventDefault();
-                                    document.getElementById(category + "-list").removeChild(tr);
+                                    tr.parentNode.removeChild(tr);
                                     disposeOfGear(category, item.ItemId.$oid);
+                                    if (item.AltWeaponModeId) {
+                                        const otherCategory = category == "Melee" ? "LongGuns" : "Melee";
+                                        const otherTr = document.querySelector(
+                                            `[data-item-oid="${item.AltWeaponModeId.$oid}"]`
+                                        );
+                                        if (otherTr) {
+                                            otherTr.parentNode.removeChild(otherTr);
+                                            disposeOfGear(otherCategory, item.AltWeaponModeId.$oid);
+                                        }
+                                    }
                                 };
                                 a.title = loc("code_remove");
                                 a.innerHTML = icons.trash;

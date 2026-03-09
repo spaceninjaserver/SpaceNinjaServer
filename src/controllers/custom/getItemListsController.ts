@@ -213,12 +213,18 @@ const getItemListsController: RequestHandler = (req, response) => {
                 item.productCategory == "SentinelWeapons" ||
                 item.productCategory == "OperatorAmps"
             ) {
-                res[item.productCategory].push({
+                const listedItem: ListedItem = {
                     uniqueName,
                     name: getString(item.name, lang),
                     maxLevelCap: item.maxLevelCap,
                     parentName: item.parentName
-                });
+                };
+                res[item.productCategory].push(listedItem);
+
+                // Only allow the rifle part of a bayonet to be added via webui.
+                if (item.bayonetOtherWeaponType && item.excludeFromMarket) {
+                    listedItem.badReason = "notraw";
+                }
             }
         } else if (!item.excludeFromCodex) {
             res.miscitems.push({
