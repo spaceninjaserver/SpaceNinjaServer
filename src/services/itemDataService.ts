@@ -54,6 +54,7 @@ import { version_compare } from "../helpers/inventoryHelpers.ts";
 import vorsPrizePreU40Rewards from "../../static/fixed_responses/vorsPrizePreU40Rewards.json" with { type: "json" };
 import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 import EntratiSyndicate_pre_U41 from "../../static/fixed_responses/data/EntratiSyndicate_pre_U41.json" with { type: "json" };
+import { getWorldState } from "./worldStateService.ts";
 
 export type WeaponTypeInternal =
     | "LongGuns"
@@ -1066,6 +1067,17 @@ export const getPrice = (
     buildLabel: string
 ): number => {
     let price: number | undefined;
+    {
+        const { FlashSales } = getWorldState(buildLabel);
+        const flashSale = FlashSales.find(s => s.TypeName == fromStoreItem(storeItemName));
+        if (flashSale) {
+            if (usePremium && flashSale.PremiumOverride > 0) {
+                return flashSale.PremiumOverride * quantity;
+            } else if (!usePremium && flashSale.RegularOverride > 0) {
+                return flashSale.RegularOverride * quantity;
+            }
+        }
+    }
     const isBundle = storeItemName in ExportBundles;
     const isBooster = storeItemName in ExportBoosters;
     if (isBooster) {
