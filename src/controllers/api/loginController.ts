@@ -212,8 +212,8 @@ const createLoginResponse = (request: Request, account: IDatabaseAccountJson, bu
     let raw = JSON.stringify(resp);
     if (
         clientMod &&
-        clientMod.startsWith("OpenWF Bootstrapper v") &&
-        version_compare(clientMod.substring(21), "0.12.0") >= 0
+        decodeURIComponent(clientMod).startsWith("OpenWF Bootstrapper v") &&
+        version_compare(decodeURIComponent(clientMod).substring(21), "0.12.0") >= 0
     ) {
         const tunables = getTunablesForClient((request.socket.address() as AddressInfo).address, myAddress);
         if (version_compare(buildLabel, gameToBuildVersion["16.5.5"]) < 0) {
