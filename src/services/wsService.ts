@@ -191,7 +191,7 @@ const wsOnConnect = (ws: WebSocket, req: http.IncomingMessage): void => {
             }
             if (data.logout) {
                 const accountId = (ws as IWsCustomData).accountId;
-                if (accountId) {
+                if (accountId && !(ws as IWsCustomData).isGame) {
                     (ws as IWsCustomData).accountId = undefined;
 
                     const stat = await Account.updateOne(
@@ -210,7 +210,7 @@ const wsOnConnect = (ws: WebSocket, req: http.IncomingMessage): void => {
             }
             if (data.sync_inventory) {
                 const accountId = (ws as IWsCustomData).accountId;
-                if (accountId) {
+                if (accountId && !(ws as IWsCustomData).isGame) {
                     sendWsBroadcastToGame(accountId, { sync_inventory: true });
                 }
             }
