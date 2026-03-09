@@ -9,6 +9,8 @@ import {
 } from "../../services/loginRewardService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import { sendWsBroadcastTo } from "../../services/wsService.ts";
+import { version_compare } from "../../helpers/inventoryHelpers.ts";
+import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 
 export const loginRewardsController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -32,7 +34,10 @@ export const loginRewardsController: RequestHandler = async (req, res) => {
                 },
                 LastLoginRewardDate: today
             };
-            if (!isMilestoneDay && randomRewards.length == 1) {
+            if (
+                (!isMilestoneDay && randomRewards.length == 1) || // A choice is not needed?
+                (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["23.10.0"]) < 0) // Or client is unable to make a choice?
+            ) {
                 response.DailyTributeInfo.HasChosenReward = true;
                 response.DailyTributeInfo.ChosenReward = randomRewards[0];
                 response.DailyTributeInfo.NewInventory = await claimLoginReward(inventory, randomRewards[0]);
