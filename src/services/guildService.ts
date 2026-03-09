@@ -1,6 +1,5 @@
 import type { Request } from "express";
 import type { TAccountDocument } from "./loginService.ts";
-import { getAccountIdForRequest } from "./loginService.ts";
 import { addLevelKeys, addRecipes, combineInventoryChanges, getInventory } from "./inventoryService.ts";
 import type { TGuildDatabaseDocument } from "../models/guildModel.ts";
 import { Alliance, AllianceMember, Guild, GuildAd, GuildMember } from "../models/guildModel.ts";
@@ -39,8 +38,10 @@ import { addAccountDataToFriendInfo, addInventoryDataToFriendInfo } from "./frie
 import type { ITypeCount } from "../types/commonTypes.ts";
 import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 
-export const getGuildForRequest = async (req: Request): Promise<TGuildDatabaseDocument> => {
-    const accountId = await getAccountIdForRequest(req);
+export const getGuildForRequest = async (
+    req: Request,
+    accountId: string | Types.ObjectId
+): Promise<TGuildDatabaseDocument> => {
     const inventory = await getInventory(accountId, "GuildId");
     return await getGuildForRequestEx(req, inventory);
 };

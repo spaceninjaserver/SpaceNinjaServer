@@ -13,7 +13,7 @@ export const changeGuildRankController: RequestHandler = async (req, res) => {
         accountId: account._id,
         guildId: req.query.guildId as string
     }))!;
-    const guild = await getGuildForRequest(req);
+    const guild = await getGuildForRequest(req, account._id);
     const target = (await GuildMember.findOne({
         guildId: req.query.guildId as string,
         accountId: req.query.targetId as string

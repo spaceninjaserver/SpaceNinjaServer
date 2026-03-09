@@ -1,8 +1,7 @@
 import { getAccountIdForRequest } from "../../services/loginService.ts";
-import { getInventory } from "../../services/inventoryService.ts";
 import type { RequestHandler } from "express";
 import {
-    getGuildForRequestEx,
+    getGuildForRequest,
     setGuildTechLogState,
     processFundedGuildTechProject,
     scaleRequiredCount,
@@ -18,8 +17,7 @@ import { GuildMember } from "../../models/guildModel.ts";
 export const addTechProjectController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const requests = req.body as ITechProjectRequest[];
-    const inventory = await getInventory(accountId, "GuildId");
-    const guild = await getGuildForRequestEx(req, inventory);
+    const guild = await getGuildForRequest(req, accountId);
     if (!(await hasGuildPermission(guild, accountId, GuildPermission.Tech))) {
         res.status(400).send("-1").end();
         return;
@@ -53,8 +51,7 @@ export const addTechProjectController: RequestHandler = async (req, res) => {
 export const removeTechProjectController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const requests = req.body as ITechProjectRequest[];
-    const inventory = await getInventory(accountId, "GuildId");
-    const guild = await getGuildForRequestEx(req, inventory);
+    const guild = await getGuildForRequest(req, accountId);
     if (!(await hasGuildPermission(guild, accountId, GuildPermission.Tech))) {
         res.status(400).send("-1").end();
         return;
@@ -73,8 +70,7 @@ export const removeTechProjectController: RequestHandler = async (req, res) => {
 export const fundTechProjectController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const requests = req.body as ITechProjectRequest[];
-    const inventory = await getInventory(accountId, "GuildId");
-    const guild = await getGuildForRequestEx(req, inventory);
+    const guild = await getGuildForRequest(req, accountId);
     const guildMember = (await GuildMember.findOne(
         { accountId, guildId: guild._id },
         "RegularCreditsContributed MiscItemsContributed"
@@ -104,8 +100,7 @@ export const fundTechProjectController: RequestHandler = async (req, res) => {
 export const completeTechProjectsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const requests = req.body as ITechProjectRequest[];
-    const inventory = await getInventory(accountId, "GuildId");
-    const guild = await getGuildForRequestEx(req, inventory);
+    const guild = await getGuildForRequest(req, accountId);
     if (!(await hasGuildPermission(guild, accountId, GuildPermission.Tech))) {
         res.status(400).send("-1").end();
         return;

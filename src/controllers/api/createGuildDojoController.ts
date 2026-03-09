@@ -1,15 +1,13 @@
 import type { RequestHandler } from "express";
 //import type { IOidWithLegacySupport } from "../../types/commonTypes.ts";
 import { Types } from "mongoose";
-import { getDojoClient, getGuildForRequestEx } from "../../services/guildService.ts";
+import { getDojoClient, getGuildForRequest } from "../../services/guildService.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
-import { getInventory } from "../../services/inventoryService.ts";
 
 export const createGuildDojoController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const inventory = await getInventory(account._id, "GuildId");
-    const guild = await getGuildForRequestEx(req, inventory);
+    const guild = await getGuildForRequest(req, account._id);
 
     if (guild.DojoComponents.length == 0) {
         const payload = getJSONfromString<ICreateGuildDojoRequest>(String(req.body));

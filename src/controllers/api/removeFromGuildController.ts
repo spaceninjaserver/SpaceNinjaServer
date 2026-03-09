@@ -16,14 +16,14 @@ import type { RequestHandler, Response } from "express";
 
 export const removeFromGuildGetController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const guild = await getGuildForRequest(req);
+    const guild = await getGuildForRequest(req, account._id);
     const userName = req.query.userName as string;
     await processRemoveFromGuildRequest(account, guild, { userName }, res);
 };
 
 export const removeFromGuildPostController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const guild = await getGuildForRequest(req);
+    const guild = await getGuildForRequest(req, account._id);
     const payload = JSON.parse(String(req.body)) as IRemoveFromGuildRequest;
     await processRemoveFromGuildRequest(account, guild, payload, res);
 };

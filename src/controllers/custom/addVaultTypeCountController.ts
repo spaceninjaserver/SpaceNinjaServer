@@ -1,7 +1,6 @@
 import { getAccountIdForRequest } from "../../services/loginService.ts";
-import { getInventory } from "../../services/inventoryService.ts";
 import type { RequestHandler } from "express";
-import { getGuildForRequestEx, hasGuildPermission } from "../../services/guildService.ts";
+import { getGuildForRequest, hasGuildPermission } from "../../services/guildService.ts";
 import { GuildPermission } from "../../types/guildTypes.ts";
 import type { ITypeCount } from "../../types/commonTypes.ts";
 
@@ -11,8 +10,7 @@ export const addVaultTypeCountController: RequestHandler = async (req, res) => {
         vaultType: keyof typeof vaultConfig;
         items: ITypeCount[];
     };
-    const inventory = await getInventory(accountId, "GuildId");
-    const guild = await getGuildForRequestEx(req, inventory);
+    const guild = await getGuildForRequest(req, accountId);
     if (!(await hasGuildPermission(guild, accountId, vaultConfig[vaultType]))) {
         res.status(400).send("-1").end();
         return;
