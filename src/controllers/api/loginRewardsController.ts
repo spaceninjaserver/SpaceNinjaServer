@@ -27,6 +27,7 @@ export const loginRewardsController: RequestHandler = async (req, res) => {
                     Rewards: randomRewards,
                     IsMilestoneDay: isMilestoneDay,
                     IsChooseRewardSet: randomRewards.length != 1,
+                    IsHiddenRewardSet: randomRewards.length != 1,
                     LoginDays: account.LoginDays,
                     NextMilestoneReward: "",
                     NextMilestoneDay: nextMilestoneDay,
@@ -34,9 +35,14 @@ export const loginRewardsController: RequestHandler = async (req, res) => {
                 },
                 LastLoginRewardDate: today
             };
+
+            // https://wiki.warframe.com/w/Login_Rewards
+            const is_pre_daily_tribute =
+                account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["18.0.2"]) < 0;
+
             if (
                 (!isMilestoneDay && randomRewards.length == 1) || // A choice is not needed?
-                (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["23.10.0"]) < 0) // Or client is unable to make a choice?
+                is_pre_daily_tribute // Or client is unable to make a choice?
             ) {
                 response.DailyTributeInfo.HasChosenReward = true;
                 response.DailyTributeInfo.ChosenReward = randomRewards[0];
@@ -46,14 +52,20 @@ export const loginRewardsController: RequestHandler = async (req, res) => {
 
                 sendWsBroadcastTo(account._id.toString(), { update_inventory: true });
             }
-            res.json(response);
+            if (is_pre_daily_tribute) {
+                res.json({ Rewards: response.DailyTributeInfo.Rewards });
+            } else {
+                res.json(response);
+            }
             return;
         }
     }
+    const pick_a_door = isLoginRewardAChoice(account);
     res.json({
         DailyTributeInfo: {
             IsMilestoneDay: isMilestoneDay,
-            IsChooseRewardSet: isLoginRewardAChoice(account),
+            IsChooseRewardSet: pick_a_door,
+            IsHiddenRewardSet: pick_a_door,
             LoginDays: account.LoginDays,
             NextMilestoneReward: "",
             NextMilestoneDay: nextMilestoneDay

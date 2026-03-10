@@ -85,6 +85,7 @@ import { giftingController } from "../controllers/api/giftingController.ts";
 import { gildWeaponController } from "../controllers/api/gildWeaponController.ts";
 import { giveKeyChainTriggeredItemsController } from "../controllers/api/giveKeyChainTriggeredItemsController.ts";
 import { giveKeyChainTriggeredMessageController } from "../controllers/api/giveKeyChainTriggeredMessageController.ts";
+import { giveLoginRewardController } from "../controllers/api/giveLoginRewardController.ts";
 import { giveQuestKeyRewardController } from "../controllers/api/giveQuestKeyRewardController.ts";
 import { giveShipDecoAndLoreFragmentController } from "../controllers/api/giveShipDecoAndLoreFragmentController.ts";
 import { giveStartingGearGetController, giveStartingGearPostController } from "../controllers/api/giveStartingGearController.ts";
@@ -322,6 +323,7 @@ apiRouter.post("/gifting.php", giftingController);
 apiRouter.post("/gildWeapon.php", gildWeaponController);
 apiRouter.post("/giveKeyChainTriggeredItems.php", giveKeyChainTriggeredItemsController);
 apiRouter.post("/giveKeyChainTriggeredMessage.php", giveKeyChainTriggeredMessageController);
+apiRouter.post("/giveLoginReward.php", giveLoginRewardController); // ~U18
 apiRouter.post("/giveQuestKeyReward.php", giveQuestKeyRewardController);
 apiRouter.post("/giveShipDecoAndLoreFragment.php", giveShipDecoAndLoreFragmentController);
 apiRouter.post("/giveStartingGear.php", giveStartingGearPostController);

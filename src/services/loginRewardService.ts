@@ -19,6 +19,7 @@ export interface ILoginRewardsReponse {
         Rewards?: ILoginReward[]; // only set on first call of the day
         IsMilestoneDay?: boolean;
         IsChooseRewardSet?: boolean;
+        IsHiddenRewardSet?: boolean; // Seems to be the ~U18 equivalent of IsChooseRewardSet
         LoginDays?: number; // when calling multiple times per day, this is already incremented to represent "tomorrow"
         NextMilestoneReward?: "";
         NextMilestoneDay?: number; // seems to not be used if IsMilestoneDay
