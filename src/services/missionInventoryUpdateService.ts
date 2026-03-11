@@ -1486,23 +1486,6 @@ export const addMissionRewards = async (
         ConquestCompletedMissionsCount = rewardInfo.ConquestCompleted == 2 ? 0 : rewardInfo.ConquestCompleted + 1;
     }
 
-    if (voidTearWave && voidTearWave.Participants[0].QualifiesForReward) {
-        if (!voidTearWave.Participants[0].HaveRewardResponse) {
-            // non-endless fissure; giving reward now
-            const reward = await crackRelic(inventory, voidTearWave.Participants[0], inventoryChanges);
-            MissionRewards.push({ StoreItem: reward.type, ItemCount: reward.itemCount });
-        } else if (inventory.MissionRelicRewards) {
-            // endless fissure; already gave reward(s) but should still show in EOM screen
-            for (const reward of inventory.MissionRelicRewards) {
-                MissionRewards.push({
-                    StoreItem: reward.ItemType,
-                    ItemCount: reward.ItemCount
-                });
-            }
-            inventory.MissionRelicRewards = undefined;
-        }
-    }
-
     let nodeControlledByNemesis = false;
     if (inventory.Nemesis) {
         nodeControlledByNemesis = inventory.Nemesis.InfNodes.some(obj => obj.Node == rewardInfo.node);
@@ -1687,6 +1670,23 @@ export const addMissionRewards = async (
             credits.CreditsBonus[0] += inventory.NemesisTaxedCredits;
             credits.CreditsBonus[1] += inventory.NemesisTaxedCredits;
             inventory.NemesisTaxedCredits = undefined;
+        }
+    }
+
+    if (voidTearWave && voidTearWave.Participants[0].QualifiesForReward) {
+        if (!voidTearWave.Participants[0].HaveRewardResponse) {
+            // non-endless fissure; giving reward now
+            const reward = await crackRelic(inventory, voidTearWave.Participants[0], inventoryChanges);
+            MissionRewards.push({ StoreItem: reward.type, ItemCount: reward.itemCount });
+        } else if (inventory.MissionRelicRewards) {
+            // endless fissure; already gave reward(s) but should still show in EOM screen
+            for (const reward of inventory.MissionRelicRewards) {
+                MissionRewards.push({
+                    StoreItem: reward.ItemType,
+                    ItemCount: reward.ItemCount
+                });
+            }
+            inventory.MissionRelicRewards = undefined;
         }
     }
 
