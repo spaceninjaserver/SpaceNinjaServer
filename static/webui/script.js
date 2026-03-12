@@ -486,30 +486,47 @@ function fetchItemList() {
             };
 
             // Add mods missing in data sources
-            data.mods.push({
-                uniqueName: "/Lotus/Upgrades/Mods/Fusers/CommonModFuser",
-                name: loc("code_fusionCoreCommon"),
-                fusionLimit: 3
-            });
-            data.mods.push({
-                uniqueName: "/Lotus/Upgrades/Mods/Fusers/UncommonModFuser",
-                name: loc("code_fusionCoreUncommon"),
-                fusionLimit: 5
-            });
-            data.mods.push({
-                uniqueName: "/Lotus/Upgrades/Mods/Fusers/RareModFuser",
-                name: loc("code_fusionCoreRare"),
-                fusionLimit: 5
-            });
-            data.mods.push({
-                uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser",
-                name: loc("code_legendaryCore"),
-                fusionLimit: 0
-            });
-            data.mods.push({
-                uniqueName: "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/CyoteMod",
-                name: loc("code_traumaticPeculiar")
-            });
+            data.mods.push(
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/CommonModFuser",
+                    name: loc("code_fusionCoreCommon"),
+                    fusionLimit: 3
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/UncommonModFuser",
+                    name: loc("code_fusionCoreUncommon"),
+                    fusionLimit: 5
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/RareModFuser",
+                    name: loc("code_fusionCoreRare"),
+                    fusionLimit: 5
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyCommonModFuser",
+                    name: loc("code_ancientFusionCoreCommon"),
+                    fusionLimit: 10
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyUncommonModFuser",
+                    name: loc("code_ancientFusionCoreUncommon"),
+                    fusionLimit: 10
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyRareModFuser",
+                    name: loc("code_ancientFusionCoreRare"),
+                    fusionLimit: 10
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser",
+                    name: loc("code_legendaryCore"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/CyoteMod",
+                    name: loc("code_traumaticPeculiar")
+                }
+            );
 
             // Add modular weapons
             data.OperatorAmps.push({
