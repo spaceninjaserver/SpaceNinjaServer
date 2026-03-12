@@ -215,7 +215,7 @@ export const inventoryController: RequestHandler = async (request, response) => 
             }
         }
 
-        await cleanupInventory(inventory);
+        cleanupInventory(inventory);
 
         inventory.NextRefill = new Date((today + 1) * 86400000); // tomorrow at 0 UTC
         //await inventory.save();
