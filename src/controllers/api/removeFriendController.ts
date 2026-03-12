@@ -111,7 +111,8 @@ const toRemoveFriendsResponse = async (
         for (const friend of friends) {
             const acct = await Account.findById(friend.$oid, "DisplayName");
             if (acct) {
-                response.FriendNames.push(acct.DisplayName);
+                const platformId = 0; // TODO
+                response.FriendNames.push(acct.DisplayName + String.fromCharCode(0xe000 + platformId));
             }
         }
         return response;

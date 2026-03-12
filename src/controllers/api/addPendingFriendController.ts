@@ -59,9 +59,10 @@ const sendFriendRequest = async (
         return;
     }
 
+    const platformId = 0; // TODO
     const friendInfo: IFriendInfo = {
         _id: toOid(account._id),
-        DisplayName: account.DisplayName,
+        DisplayName: account.DisplayName + String.fromCharCode(0xe000 + platformId),
         LastLogin: toMongoDate(account.LastLogin),
         Note: message
     };

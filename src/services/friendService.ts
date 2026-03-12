@@ -7,7 +7,8 @@ import { fromOid, toMongoDate } from "../helpers/inventoryHelpers.ts";
 
 export const addAccountDataToFriendInfo = async (info: IFriendInfo): Promise<void> => {
     const account = (await Account.findById(fromOid(info._id), "DisplayName LastLogin"))!;
-    info.DisplayName = account.DisplayName;
+    const platformId = 0; // TODO
+    info.DisplayName = account.DisplayName + String.fromCharCode(0xe000 + platformId);
     info.LastLogin = toMongoDate(account.LastLogin);
 };
 
