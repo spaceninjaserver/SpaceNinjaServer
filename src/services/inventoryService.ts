@@ -855,9 +855,11 @@ export const addItem = async (
         if (quantity < 0 || quantity > 100) {
             throw new Error(`unexpected acquisition quantity of Drones: got ${quantity}, expected 0..100`);
         }
+        const inventoryChanges: IInventoryChanges = {};
         for (let i = 0; i != quantity; ++i) {
-            return addDrone(inventory, typeName);
+            addDrone(inventory, typeName, inventoryChanges);
         }
+        return inventoryChanges;
     }
     if (typeName in ExportEmailItems) {
         if (quantity != 1) {
