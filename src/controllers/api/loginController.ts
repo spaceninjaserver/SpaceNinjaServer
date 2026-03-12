@@ -215,11 +215,8 @@ const createLoginResponse = (request: Request, account: IDatabaseAccountJson, bu
         decodeURIComponent(clientMod).startsWith("OpenWF Bootstrapper v") &&
         version_compare(decodeURIComponent(clientMod).substring(21), "0.12.0") >= 0
     ) {
-        const tunables = getTunablesForClient((request.socket.address() as AddressInfo).address, myAddress);
-        if (version_compare(buildLabel, gameToBuildVersion["16.5.5"]) < 0) {
-            tunables.irc = (config.ircAddress || "%THIS_MACHINE%").split("%THIS_MACHINE%").join(myAddress);
-        }
-        raw += "\t" + JSON.stringify(tunables);
+        raw +=
+            "\t" + JSON.stringify(getTunablesForClient((request.socket.address() as AddressInfo).address, myAddress));
     }
     return raw;
 };
