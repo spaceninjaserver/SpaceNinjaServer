@@ -23,4 +23,5 @@ export interface IFriendship {
     friend: Types.ObjectId;
     Note?: string;
     Favorite?: boolean;
+    NewRequest?: true;
 }

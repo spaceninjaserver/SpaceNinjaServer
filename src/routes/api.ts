@@ -108,6 +108,7 @@ import { modularWeaponCraftingController } from "../controllers/api/modularWeapo
 import { modularWeaponSaleController } from "../controllers/api/modularWeaponSaleController.ts";
 import { nameWeaponController } from "../controllers/api/nameWeaponController.ts";
 import { nemesisController } from "../controllers/api/nemesisController.ts";
+import { pendingFriendsViewedController } from "../controllers/api/pendingFriendsViewedController.ts";
 import { placeDecoInComponentController } from "../controllers/api/placeDecoInComponentController.ts";
 import { playedParkourTutorialController } from "../controllers/api/playedParkourTutorialController.ts";
 import { playerSkillsController } from "../controllers/api/playerSkillsController.ts";
@@ -345,6 +346,7 @@ apiRouter.post("/modularWeaponCrafting.php", modularWeaponCraftingController);
 apiRouter.post("/modularWeaponSale.php", modularWeaponSaleController);
 apiRouter.post("/nameWeapon.php", nameWeaponController);
 apiRouter.post("/nemesis.php", nemesisController);
+apiRouter.post("/pendingFriendsViewed.php", pendingFriendsViewedController);
 apiRouter.post("/placeDecoInComponent.php", placeDecoInComponentController);
 apiRouter.post("/playerSkills.php", playerSkillsController);
 apiRouter.post("/postGuildAdvertisement.php", postGuildAdvertisementController);

@@ -58,8 +58,15 @@ const acceptFriendRequest = async (
     otherAccountId: string,
     newFriends: IFriendInfo[] | undefined
 ): Promise<void> => {
-    const externalFriendship = await Friendship.findOne({ owner: otherAccountId, friend: accountId }, "Note");
+    const externalFriendship = await Friendship.findOne(
+        { owner: otherAccountId, friend: accountId },
+        "Note NewRequest"
+    );
     if (externalFriendship) {
+        if (externalFriendship.NewRequest) {
+            externalFriendship.NewRequest = undefined;
+            await externalFriendship.save();
+        }
         await Friendship.insertOne({
             owner: accountId,
             friend: otherAccountId,

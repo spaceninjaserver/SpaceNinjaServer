@@ -16,13 +16,14 @@ export const getFriendsController: RequestHandler = async (req: Request, res: Re
     };
     const [internalFriendships, externalFriendships] = await Promise.all([
         Friendship.find({ owner: accountId }),
-        Friendship.find({ friend: accountId }, "owner Note")
+        Friendship.find({ friend: accountId }, "owner Note NewRequest")
     ]);
     for (const externalFriendship of externalFriendships) {
         if (!internalFriendships.find(x => x.friend.equals(externalFriendship.owner))) {
             response.IncomingFriendRequests.push({
                 _id: toOid2(externalFriendship.owner, account.BuildLabel),
-                Note: externalFriendship.Note
+                Note: externalFriendship.Note,
+                NewRequest: externalFriendship.NewRequest
             });
         }
     }

@@ -51,7 +51,8 @@ const sendFriendRequest = async (
         await Friendship.insertOne({
             owner: accountId,
             friend: account._id,
-            Note: message
+            Note: message,
+            NewRequest: true
         });
     } catch (e) {
         logger.debug(`friend request failed due to ${String(e)}`);

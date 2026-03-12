@@ -5,7 +5,8 @@ const friendshipSchema = new Schema<IFriendship>({
     owner: { type: Schema.Types.ObjectId, required: true },
     friend: { type: Schema.Types.ObjectId, required: true },
     Note: String,
-    Favorite: Boolean
+    Favorite: Boolean,
+    NewRequest: Boolean
 });
 
 friendshipSchema.index({ owner: 1 });
