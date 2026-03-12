@@ -21,7 +21,7 @@ export const getGuildController: RequestHandler = async (req, res) => {
                     Note: guildMember.RequestMsg,
                     RequestExpiry: guildMember.RequestExpiry ? toMongoDate(guildMember.RequestExpiry) : undefined
                 };
-                dataFillInPromises.push(addAccountDataToFriendInfo(member));
+                dataFillInPromises.push(addAccountDataToFriendInfo(member, undefined));
                 dataFillInPromises.push(addInventoryDataToFriendInfo(member));
 
                 members.push(member);

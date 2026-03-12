@@ -11,6 +11,8 @@ import { createStats } from "./statsService.ts";
 import crc32 from "crc-32";
 import crypto from "node:crypto";
 import { logger } from "../utils/logger.ts";
+import { version_compare } from "../helpers/inventoryHelpers.ts";
+import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 
 export const isCorrectPassword = (requestPassword: string, databasePassword: string): boolean => {
     return requestPassword === databasePassword;
@@ -136,4 +138,12 @@ export const getSuffixedName = (account: TAccountDocument): string => {
 
 export const getAccountFromSuffixedName = (name: string): Promise<TAccountDocument | null> => {
     return Account.findOne({ DisplayName: name.split("#")[0] });
+};
+
+export const getUnicodeName = (DisplayName: string, buildLabel: string | undefined): string => {
+    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["32.0.0"]) < 0) {
+        return DisplayName;
+    }
+    const platformId = 0; // TODO
+    return DisplayName + String.fromCharCode(0xe000 + platformId);
 };

@@ -4,15 +4,15 @@ import { Friendship } from "../../models/friendModel.ts";
 import { Account } from "../../models/loginModel.ts";
 import { addInventoryDataToFriendInfo, areFriendsOfFriends } from "../../services/friendService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
-import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getUnicodeName, type TAccountDocument } from "../../services/loginService.ts";
 import type { IFriendInfo } from "../../types/friendTypes.ts";
 import type { RequestHandler, Response } from "express";
 import { logger } from "../../utils/logger.ts";
 
 export const addPendingFriendPostController: RequestHandler = async (req, res) => {
-    const accountId = await getAccountIdForRequest(req);
+    const account = await getAccountForRequest(req);
     const payload = getJSONfromString<IAddPendingFriendRequest>(String(req.body));
-    await sendFriendRequest(accountId, payload.friend, payload.message, res);
+    await sendFriendRequest(account, payload.friend, payload.message, res);
 };
 
 interface IAddPendingFriendRequest {
@@ -21,27 +21,27 @@ interface IAddPendingFriendRequest {
 }
 
 export const addPendingFriendGetController: RequestHandler = async (req, res) => {
-    const accountId = await getAccountIdForRequest(req);
-    await sendFriendRequest(accountId, req.query.friend as string, undefined, res);
+    const account = await getAccountForRequest(req);
+    await sendFriendRequest(account, req.query.friend as string, undefined, res);
 };
 
 const sendFriendRequest = async (
-    accountId: string,
+    requesterAccount: TAccountDocument,
     name: string,
     message: string | undefined,
     res: Response
 ): Promise<void> => {
-    const account = await Account.findOne({ DisplayName: name });
-    if (!account) {
+    const requesteeAccount = await Account.findOne({ DisplayName: name });
+    if (!requesteeAccount) {
         res.status(400).send("Given Username does not exist.");
         return;
     }
 
-    const inventory = await getInventory(account._id, "Settings");
+    const requesteeInventory = await getInventory(requesteeAccount._id, "Settings");
     if (
-        inventory.Settings?.FriendInvRestriction == "GIFT_MODE_NONE" ||
-        (inventory.Settings?.FriendInvRestriction == "GIFT_MODE_FRIENDS" &&
-            !(await areFriendsOfFriends(account._id, accountId)))
+        requesteeInventory.Settings?.FriendInvRestriction == "GIFT_MODE_NONE" ||
+        (requesteeInventory.Settings?.FriendInvRestriction == "GIFT_MODE_FRIENDS" &&
+            !(await areFriendsOfFriends(requesteeAccount._id, requesterAccount._id)))
     ) {
         res.status(400).send("Friend Invite Restriction");
         return;
@@ -49,8 +49,8 @@ const sendFriendRequest = async (
 
     try {
         await Friendship.insertOne({
-            owner: accountId,
-            friend: account._id,
+            owner: requesterAccount._id,
+            friend: requesteeAccount._id,
             Note: message,
             NewRequest: true
         });
@@ -60,11 +60,10 @@ const sendFriendRequest = async (
         return;
     }
 
-    const platformId = 0; // TODO
     const friendInfo: IFriendInfo = {
-        _id: toOid(account._id),
-        DisplayName: account.DisplayName + String.fromCharCode(0xe000 + platformId),
-        LastLogin: toMongoDate(account.LastLogin),
+        _id: toOid(requesteeAccount._id),
+        DisplayName: getUnicodeName(requesteeAccount.DisplayName, requesterAccount.BuildLabel),
+        LastLogin: toMongoDate(requesteeAccount.LastLogin),
         Note: message
     };
     await addInventoryDataToFriendInfo(friendInfo);

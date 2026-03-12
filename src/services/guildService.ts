@@ -87,7 +87,7 @@ export const getGuildClient = async (
         if (guildMember.accountId.equals(account._id)) {
             missingEntry = false;
         } else {
-            dataFillInPromises.push(addAccountDataToFriendInfo(member));
+            dataFillInPromises.push(addAccountDataToFriendInfo(member, account.BuildLabel));
             dataFillInPromises.push(addInventoryDataToFriendInfo(member));
         }
         members.push(member);

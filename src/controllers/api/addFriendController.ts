@@ -1,26 +1,27 @@
+import type { Types } from "mongoose";
 import { toOid } from "../../helpers/inventoryHelpers.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { Friendship } from "../../models/friendModel.ts";
 import { addAccountDataToFriendInfo, addInventoryDataToFriendInfo } from "../../services/friendService.ts";
-import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getAccountIdForRequest } from "../../services/loginService.ts";
 import type { IFriendInfo } from "../../types/friendTypes.ts";
 import type { RequestHandler } from "express";
 
 export const addFriendPostController: RequestHandler = async (req, res) => {
-    const accountId = await getAccountIdForRequest(req);
+    const account = await getAccountForRequest(req);
     const payload = getJSONfromString<IAddFriendRequest>(String(req.body));
     const promises: Promise<void>[] = [];
     const newFriends: IFriendInfo[] = [];
     if (payload.friend == "all") {
         const [internalFriendships, externalFriendships] = await Promise.all([
-            Friendship.find({ owner: accountId }, "friend"),
-            Friendship.find({ friend: accountId }, "owner")
+            Friendship.find({ owner: account._id }, "friend"),
+            Friendship.find({ friend: account._id }, "owner")
         ]);
         for (const externalFriendship of externalFriendships) {
             if (!internalFriendships.find(x => x.friend.equals(externalFriendship.owner))) {
                 promises.push(
                     Friendship.insertOne({
-                        owner: accountId,
+                        owner: account._id,
                         friend: externalFriendship.owner,
                         Note: externalFriendship.Note // TOVERIFY: Should the note be copied when accepting a friend request?
                     }) as unknown as Promise<void>
@@ -31,10 +32,10 @@ export const addFriendPostController: RequestHandler = async (req, res) => {
             }
         }
     } else {
-        await acceptFriendRequest(accountId, payload.friend, newFriends);
+        await acceptFriendRequest(account._id, payload.friend, newFriends);
     }
     for (const newFriend of newFriends) {
-        promises.push(addAccountDataToFriendInfo(newFriend));
+        promises.push(addAccountDataToFriendInfo(newFriend, account.BuildLabel));
         promises.push(addInventoryDataToFriendInfo(newFriend));
     }
     await Promise.all(promises);
@@ -54,7 +55,7 @@ export const addFriendGetController: RequestHandler = async (req, res) => {
 };
 
 const acceptFriendRequest = async (
-    accountId: string,
+    accountId: Types.ObjectId | string,
     otherAccountId: string,
     newFriends: IFriendInfo[] | undefined
 ): Promise<void> => {

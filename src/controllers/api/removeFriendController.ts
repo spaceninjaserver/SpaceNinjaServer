@@ -4,7 +4,7 @@ import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { Friendship } from "../../models/friendModel.ts";
 import { Account } from "../../models/loginModel.ts";
 import { getInventory } from "../../services/inventoryService.ts";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getUnicodeName } from "../../services/loginService.ts";
 import type { IOid } from "../../types/commonTypes.ts";
 import { parallelForeach } from "../../utils/async-utils.ts";
 import type { RequestHandler } from "express";
@@ -111,8 +111,7 @@ const toRemoveFriendsResponse = async (
         for (const friend of friends) {
             const acct = await Account.findById(friend.$oid, "DisplayName");
             if (acct) {
-                const platformId = 0; // TODO
-                response.FriendNames.push(acct.DisplayName + String.fromCharCode(0xe000 + platformId));
+                response.FriendNames.push(getUnicodeName(acct.DisplayName, buildLabel));
             }
         }
         return response;

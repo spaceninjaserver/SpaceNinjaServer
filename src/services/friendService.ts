@@ -4,11 +4,11 @@ import { Account } from "../models/loginModel.ts";
 import type { Types } from "mongoose";
 import { Friendship } from "../models/friendModel.ts";
 import { fromOid, toMongoDate } from "../helpers/inventoryHelpers.ts";
+import { getUnicodeName } from "./loginService.ts";
 
-export const addAccountDataToFriendInfo = async (info: IFriendInfo): Promise<void> => {
+export const addAccountDataToFriendInfo = async (info: IFriendInfo, buildLabel: string | undefined): Promise<void> => {
     const account = (await Account.findById(fromOid(info._id), "DisplayName LastLogin"))!;
-    const platformId = 0; // TODO
-    info.DisplayName = account.DisplayName + String.fromCharCode(0xe000 + platformId);
+    info.DisplayName = getUnicodeName(account.DisplayName, buildLabel);
     info.LastLogin = toMongoDate(account.LastLogin);
 };
 

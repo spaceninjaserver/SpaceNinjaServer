@@ -40,7 +40,7 @@ export const getFriendsController: RequestHandler = async (req: Request, res: Re
     const promises: Promise<void>[] = [];
     for (const arr of Object.values(response)) {
         for (const friendInfo of arr) {
-            promises.push(addAccountDataToFriendInfo(friendInfo));
+            promises.push(addAccountDataToFriendInfo(friendInfo, account.BuildLabel));
             promises.push(addInventoryDataToFriendInfo(friendInfo));
         }
     }
