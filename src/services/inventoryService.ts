@@ -626,7 +626,8 @@ export const addItem = async (
     if (
         typeName in ExportUpgrades ||
         typeName in ExportArcanes ||
-        typeName.startsWith("/Lotus/Upgrades/Mods/Fusers/") ||
+        typeName.startsWith("/Lotus/Upgrades/Mods/") || // Fusion Core, Legendary Core
+        typeName.startsWith("/Lotus/Upgrades/CosmeticEnhancers/") || // Traumatic Peculiar
         (typeName.endsWith("AbilityCard") && typeName.startsWith("/Lotus/Powersuits/"))
     ) {
         if (targetFingerprint && typeName.startsWith("/Lotus/Upgrades/Mods/Randomized/Raw")) {
@@ -933,22 +934,6 @@ export const addItem = async (
             break;
         case "Upgrades": {
             switch (typeName.substring(1).split("/")[2]) {
-                case "Mods": // Legendary Core
-                case "CosmeticEnhancers": // Traumatic Peculiar
-                    {
-                        const changes = [
-                            {
-                                ItemType: typeName,
-                                ItemCount: quantity
-                            }
-                        ];
-                        addMods(inventory, changes);
-                        return {
-                            RawUpgrades: changes
-                        };
-                    }
-                    break;
-
                 case "Boons":
                     // Can purchase /Lotus/Upgrades/Boons/DuviriVendorBoonItem from Acrithis, doesn't need to be added to inventory.
                     logger.debug(`acquisition of ${typeName} is not committed to inventory`);
