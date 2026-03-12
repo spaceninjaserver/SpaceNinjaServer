@@ -114,11 +114,7 @@ export type IMissionInventoryUpdateRequest = {
     PlayerSkillGains: Partial<IPlayerSkills>;
     CustomMarkers?: ICustomMarkers[];
     LoreFragmentScans?: ILoreFragmentScan[];
-    VoidTearParticipantsCurrWave?: {
-        Wave: number;
-        IsFinalWave: boolean;
-        Participants: IVoidTearParticipantInfo[];
-    };
+    VoidTearParticipantsCurrWave?: IVoidTearWaveInfo;
     LibraryScans?: {
         EnemyType: string;
         Count: number;
@@ -272,6 +268,12 @@ export interface IUpgradeOperation {
     PolarizeSlot: number;
     PolarizeValue: ArtifactPolarity;
     PolarityRemap: IPolarity[];
+}
+
+export interface IVoidTearWaveInfo {
+    Wave: number;
+    IsFinalWave: boolean;
+    Participants: IVoidTearParticipantInfo[];
 }
 
 export interface IVoidTearParticipantInfo {

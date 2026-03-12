@@ -66,7 +66,7 @@ import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inven
 import { getEntriesUnsafe } from "../utils/ts-utils.ts";
 import { handleStoreItemAcquisition } from "./purchaseService.ts";
 import type { IMissionCredits, IMissionReward, INemesisTaxInfo, IRecoveredItemInfo } from "../types/missionTypes.ts";
-import { crackRelic } from "../helpers/relicHelper.ts";
+import { crackRelic, ensureRelicRewardIsCorrect } from "../helpers/relicHelper.ts";
 import type { IMessageCreationTemplate } from "./inboxService.ts";
 import { createMessage } from "./inboxService.ts";
 import kuriaMessage50 from "../../static/fixed_responses/kuriaMessages/fiftyPercent.json" with { type: "json" };
@@ -1675,11 +1675,16 @@ export const addMissionRewards = async (
 
     if (voidTearWave && voidTearWave.Participants[0].QualifiesForReward) {
         if (!voidTearWave.Participants[0].HaveRewardResponse) {
-            // non-endless fissure; giving reward now
+            // non-endless fissure in solo mode; giving reward now
             const reward = await crackRelic(inventory, voidTearWave.Participants[0], inventoryChanges);
             MissionRewards.push({ StoreItem: reward.type, ItemCount: reward.itemCount });
         } else if (inventory.MissionRelicRewards) {
-            // endless fissure; already gave reward(s) but should still show in EOM screen
+            // endless fissure or non-endless fissure in multiplayer
+
+            await ensureRelicRewardIsCorrect(inventory, voidTearWave);
+            await inventory.save(); // needed to avoid conflict on MissionRelicRewards
+
+            // already gave reward(s) but should still show in EOM screen
             for (const reward of inventory.MissionRelicRewards) {
                 MissionRewards.push({
                     StoreItem: reward.ItemType,
