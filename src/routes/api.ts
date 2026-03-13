@@ -96,7 +96,7 @@ import { inboxController } from "../controllers/api/inboxController.ts";
 import { infestedFoundryController } from "../controllers/api/infestedFoundryController.ts";
 import { inventoryController } from "../controllers/api/inventoryController.ts";
 import { inventorySlotsController } from "../controllers/api/inventorySlotsController.ts";
-import { joinSessionController } from "../controllers/api/joinSessionController.ts";
+import { joinSessionGetController, joinSessionPostController } from "../controllers/api/joinSessionController.ts";
 import { loginController } from "../controllers/api/loginController.ts";
 import { loginRewardsController } from "../controllers/api/loginRewardsController.ts";
 import { loginRewardsSelectionController } from "../controllers/api/loginRewardsSelectionController.ts";
@@ -230,6 +230,7 @@ apiRouter.get("/getVendorInfo.php", getVendorInfoController);
 apiRouter.get("/giveStartingGear.php", giveStartingGearGetController);
 apiRouter.get("/inbox.php", inboxController);
 apiRouter.get("/inventory.php", inventoryController);
+apiRouter.get("/joinSession.php", joinSessionGetController); // ~U18
 apiRouter.get("/leaveSession.php", deleteSessionController); // ~U10
 apiRouter.get("/loginRewards.php", loginRewardsController);
 apiRouter.get("/logout.php", logoutController);
@@ -336,7 +337,7 @@ apiRouter.post("/infestedFoundry.php", infestedFoundryController);
 apiRouter.post("/instantCompleteRecipe.php", claimCompletedRecipeController); // U8
 apiRouter.post("/inventory.php", inventoryController); // used by companion app
 apiRouter.post("/inventorySlots.php", inventorySlotsController);
-apiRouter.post("/joinSession.php", joinSessionController);
+apiRouter.post("/joinSession.php", joinSessionPostController);
 apiRouter.post("/login.php", loginController);
 apiRouter.post("/loginRewardsSelection.php", loginRewardsSelectionController);
 apiRouter.post("/logout.php", logoutController); // from ~U16, don't know when they changed it to GET
