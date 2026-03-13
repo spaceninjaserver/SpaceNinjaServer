@@ -5,7 +5,12 @@ import { buildConfig } from "../../services/buildConfigService.ts";
 
 import { Account } from "../../models/loginModel.ts";
 import { createAccount, createNonce, getUsernameFromEmail, isCorrectPassword } from "../../services/loginService.ts";
-import type { IDatabaseAccountJson, ILoginRequest, ILoginResponse } from "../../types/loginTypes.ts";
+import {
+    Platform,
+    type IDatabaseAccountJson,
+    type ILoginRequest,
+    type ILoginResponse
+} from "../../types/loginTypes.ts";
 import { logger } from "../../utils/logger.ts";
 import { version_compare } from "../../helpers/inventoryHelpers.ts";
 import { handleNonceInvalidation } from "../../services/wsService.ts";
@@ -113,6 +118,7 @@ export const loginController: RequestHandler = async (request, response) => {
     account.CountryCode = loginRequest.lang?.toUpperCase() ?? "EN";
     account.BuildLabel = buildLabel;
     account.LastLogin = new Date();
+    account.LastPlatform = isAndroid ? Platform.Android : Platform.Windows;
     account.Dropped = undefined;
     await account.save();
 

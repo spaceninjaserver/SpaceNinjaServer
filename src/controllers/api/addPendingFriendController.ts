@@ -62,7 +62,7 @@ const sendFriendRequest = async (
 
     const friendInfo: IFriendInfo = {
         _id: toOid(requesteeAccount._id),
-        DisplayName: getUnicodeName(requesteeAccount.DisplayName, requesterAccount.BuildLabel),
+        DisplayName: getUnicodeName(requesteeAccount, requesterAccount.BuildLabel),
         LastLogin: toMongoDate(requesteeAccount.LastLogin),
         Note: message
     };

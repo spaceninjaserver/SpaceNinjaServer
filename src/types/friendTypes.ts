@@ -1,5 +1,6 @@
 import type { Types } from "mongoose";
-import type { IMongoDate, IOidWithLegacySupport } from "./commonTypes.ts";
+import type { IMongoDateWithLegacySupport, IOidWithLegacySupport } from "./commonTypes.ts";
+import type { Platform } from "./loginTypes.ts";
 
 export interface IFriendInfo {
     _id: IOidWithLegacySupport;
@@ -9,13 +10,13 @@ export interface IFriendInfo {
     Status?: number;
     ActiveAvatarImageType?: string;
     TitleType?: string;
-    LastLogin?: IMongoDate;
+    LastLogin?: IMongoDateWithLegacySupport;
     PlayerLevel?: number;
     Suffix?: number;
     Note?: string;
     Favorite?: boolean;
     NewRequest?: boolean;
-    LastPlatform?: number;
+    LastPlatform?: Platform;
 }
 
 export interface IFriendship {

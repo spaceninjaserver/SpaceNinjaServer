@@ -1,6 +1,6 @@
 import { Account } from "../models/loginModel.ts";
 import { createInventory } from "./inventoryService.ts";
-import type { IDatabaseAccountJson, IDatabaseAccountRequiredFields } from "../types/loginTypes.ts";
+import { Platform, type IDatabaseAccountJson, type IDatabaseAccountRequiredFields } from "../types/loginTypes.ts";
 import { createShip } from "./shipService.ts";
 import type { Document, Types } from "mongoose";
 import { Loadout, type TLoadoutDatabaseDocument } from "../models/inventoryModels/loadoutModel.ts";
@@ -128,10 +128,14 @@ export const isAdministrator = (account: TAccountDocument): boolean => {
     return config.administratorNames?.indexOf(account.DisplayName) != -1;
 };
 
-const platform_magics = [753, 639, 247, 37, 60];
+export const getOriginalPlatform = (account: TAccountDocument): number => {
+    return account.GoogleTokenId ? Platform.Android : Platform.Windows;
+};
+
+const platform_magics = [753, 639, 247, 37, 60, 161];
 export const getSuffixedName = (account: TAccountDocument): string => {
     const name = account.DisplayName;
-    const platformId = 0;
+    const platformId = getOriginalPlatform(account); // Name suffix is based on the original platform, so cross-save does not change it.
     const suffix = ((crc32.str(name.toLowerCase() + "595") >>> 0) + platform_magics[platformId]) % 1000;
     return name + "#" + suffix.toString().padStart(3, "0");
 };
@@ -140,10 +144,10 @@ export const getAccountFromSuffixedName = (name: string): Promise<TAccountDocume
     return Account.findOne({ DisplayName: name.split("#")[0] });
 };
 
-export const getUnicodeName = (DisplayName: string, buildLabel: string | undefined): string => {
+export const getUnicodeName = (account: TAccountDocument, buildLabel: string | undefined): string => {
     if (buildLabel && version_compare(buildLabel, gameToBuildVersion["32.0.0"]) < 0) {
-        return DisplayName;
+        return account.DisplayName;
     }
-    const platformId = 0; // TODO
-    return DisplayName + String.fromCharCode(0xe000 + platformId);
+    const platformId = getOriginalPlatform(account);
+    return account.DisplayName + String.fromCharCode(0xe000 + platformId);
 };

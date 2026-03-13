@@ -3,13 +3,14 @@ import { getInventory } from "./inventoryService.ts";
 import { Account } from "../models/loginModel.ts";
 import type { Types } from "mongoose";
 import { Friendship } from "../models/friendModel.ts";
-import { fromOid, toMongoDate } from "../helpers/inventoryHelpers.ts";
+import { fromOid, toMongoDate2 } from "../helpers/inventoryHelpers.ts";
 import { getUnicodeName } from "./loginService.ts";
 
 export const addAccountDataToFriendInfo = async (info: IFriendInfo, buildLabel: string | undefined): Promise<void> => {
-    const account = (await Account.findById(fromOid(info._id), "DisplayName LastLogin"))!;
-    info.DisplayName = getUnicodeName(account.DisplayName, buildLabel);
-    info.LastLogin = toMongoDate(account.LastLogin);
+    const account = (await Account.findById(fromOid(info._id)))!;
+    info.DisplayName = getUnicodeName(account, buildLabel);
+    info.LastLogin = toMongoDate2(account.LastLogin, buildLabel);
+    info.LastPlatform = account.LastPlatform;
 };
 
 export const addInventoryDataToFriendInfo = async (info: IFriendInfo): Promise<void> => {

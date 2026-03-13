@@ -1,11 +1,11 @@
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
-import { toOid, version_compare } from "../../helpers/inventoryHelpers.ts";
+import { fromOid, toOid2, version_compare } from "../../helpers/inventoryHelpers.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { Friendship } from "../../models/friendModel.ts";
 import { Account } from "../../models/loginModel.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import { getAccountForRequest, getUnicodeName } from "../../services/loginService.ts";
-import type { IOid } from "../../types/commonTypes.ts";
+import type { IOidWithLegacySupport } from "../../types/commonTypes.ts";
 import { parallelForeach } from "../../utils/async-utils.ts";
 import type { RequestHandler } from "express";
 import type { Types } from "mongoose";
@@ -19,11 +19,11 @@ export const removeFriendGetController: RequestHandler = async (req, res) => {
             Friendship.find({ friend: accountId }, "owner")
         ]);
         const promises: Promise<void>[] = [];
-        const friends: IOid[] = [];
+        const friends: IOidWithLegacySupport[] = [];
         for (const externalFriendship of externalFriendships) {
             if (!internalFriendships.find(x => x.friend.equals(externalFriendship.owner))) {
                 promises.push(Friendship.deleteOne({ _id: externalFriendship._id }) as unknown as Promise<void>);
-                friends.push(toOid(externalFriendship.owner));
+                friends.push(toOid2(externalFriendship.owner, account.BuildLabel));
             }
         }
         await Promise.all(promises);
@@ -67,12 +67,12 @@ export const removeFriendPostController: RequestHandler = async (req, res) => {
 
     // Remove all remaining friends that aren't in SkipFriendIds & give response.
     const promises = [];
-    const removeFriendOids: IOid[] = [];
+    const removeFriendOids: IOidWithLegacySupport[] = [];
     for (const friend of friends) {
         if (!data.SkipFriendIds.find(skipFriendId => checkFriendId(skipFriendId, friend))) {
             promises.push(Friendship.deleteOne({ owner: account._id, friend: friend }));
             promises.push(Friendship.deleteOne({ owner: friend, friend: account._id }));
-            removeFriendOids.push(toOid(friend));
+            removeFriendOids.push(toOid2(friend, account.BuildLabel));
         }
     }
     await Promise.all(promises);
@@ -97,21 +97,21 @@ interface IRemoveFriendsResponseU40 {
 
 // < U40
 interface IRemoveFriendsResponseU39 {
-    Friends: IOid[];
+    Friends: IOidWithLegacySupport[];
 }
 
 const toRemoveFriendsResponse = async (
     buildLabel: string | undefined,
-    friends: IOid[]
+    friends: IOidWithLegacySupport[]
 ): Promise<IRemoveFriendsResponseU39 | IRemoveFriendsResponseU40> => {
     if (buildLabel && version_compare(buildLabel, gameToBuildVersion["40.0.0"]) < 0) {
         return { Friends: friends } satisfies IRemoveFriendsResponseU39;
     } else {
         const response: IRemoveFriendsResponseU40 = { FriendNames: [] };
         for (const friend of friends) {
-            const acct = await Account.findById(friend.$oid, "DisplayName");
+            const acct = await Account.findById(fromOid(friend));
             if (acct) {
-                response.FriendNames.push(getUnicodeName(acct.DisplayName, buildLabel));
+                response.FriendNames.push(getUnicodeName(acct, buildLabel));
             }
         }
         return response;

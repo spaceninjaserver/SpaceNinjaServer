@@ -1,5 +1,14 @@
 import type { Types } from "mongoose";
 
+export enum Platform {
+    Windows = 0,
+    PlayStation = 1,
+    Xbox = 2,
+    Switch = 3,
+    iOS = 4,
+    Android = 5
+}
+
 export interface IAccountAndLoginResponseCommons {
     DisplayName: string;
     CountryCode?: string;
@@ -22,7 +31,8 @@ export interface IDatabaseAccountRequiredFields extends IAccountAndLoginResponse
 }
 
 export interface IDatabaseAccount extends IDatabaseAccountRequiredFields {
-    Dropped?: boolean;
+    LastPlatform?: Platform;
+    Dropped?: true;
     LatestEventMessageDate: Date;
     LastLoginRewardDate: number;
     LoginDays: number;
