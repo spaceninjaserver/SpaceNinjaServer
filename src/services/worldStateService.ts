@@ -3892,11 +3892,14 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     {
         const rollover = getSortieTime(day);
 
-        if (timeMs < rollover) {
-            worldState.Sorties.push(getSortie(day - 1));
-        }
-        if (isBeforeNextExpectedWorldStateRefresh(timeMs, rollover)) {
-            worldState.Sorties.push(getSortie(day));
+        // Omit sorties for pre-Star Chart 3.0 clients to avoid breaking them.
+        if (!buildLabel || version_compare(buildLabel, gameToBuildVersion["18.18.0"]) >= 0) {
+            if (timeMs < rollover) {
+                worldState.Sorties.push(getSortie(day - 1));
+            }
+            if (isBeforeNextExpectedWorldStateRefresh(timeMs, rollover)) {
+                worldState.Sorties.push(getSortie(day));
+            }
         }
 
         // The client does not seem to respect activation for classic syndicate missions, so only pushing current ones.
