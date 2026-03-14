@@ -120,6 +120,13 @@ export const loginController: RequestHandler = async (request, response) => {
     account.LastLogin = new Date();
     account.LastPlatform = isAndroid ? Platform.Android : Platform.Windows;
     account.Dropped = undefined;
+
+    // These fields used to be set by default but are really not needed
+    account.ConsentNeeded = undefined;
+    account.TrackedSettings = undefined;
+    account.ForceLogoutVersion = undefined;
+    account.CrossPlatformAllowed = undefined;
+
     await account.save();
 
     handleNonceInvalidation(account._id.toString());
@@ -152,8 +159,6 @@ const createLoginResponse = (request: Request, account: IDatabaseAccountJson, bu
     const resp: ILoginResponse = {
         id: account.id,
         DisplayName: account.DisplayName,
-        AmazonAuthToken: account.AmazonAuthToken,
-        AmazonRefreshToken: account.AmazonRefreshToken,
         Nonce: account.Nonce,
         BuildLabel: buildLabel
     };
@@ -173,11 +178,11 @@ const createLoginResponse = (request: Request, account: IDatabaseAccountJson, bu
         resp.IRC = [(config.ircAddress || "%THIS_MACHINE%").split("%THIS_MACHINE%").join(myAddress)];
     }
     if (version_compare(buildLabel, gameToBuildVersion["24.0.0"]) >= 0) {
-        resp.ConsentNeeded = account.ConsentNeeded;
-        resp.TrackedSettings = account.TrackedSettings;
+        resp.ConsentNeeded = false;
+        resp.TrackedSettings = [];
     }
     if (version_compare(buildLabel, gameToBuildVersion["25.7.0"]) >= 0) {
-        resp.ForceLogoutVersion = account.ForceLogoutVersion;
+        resp.ForceLogoutVersion = 0;
     }
     if (version_compare(buildLabel, gameToBuildVersion["26.0.0"]) >= 0) {
         resp.Groups = [];
@@ -189,7 +194,7 @@ const createLoginResponse = (request: Request, account: IDatabaseAccountJson, bu
         resp.ClientType = account.ClientType;
     }
     if (version_compare(buildLabel, gameToBuildVersion["32.0.0"]) >= 0) {
-        resp.CrossPlatformAllowed = account.CrossPlatformAllowed;
+        resp.CrossPlatformAllowed = true;
         resp.HUB = `${myUrlBase}/api/`;
 
         // The MatchmakingBuildId is a 64-bit integer represented as a decimal string. On live, the value is seemingly random per build, but really any value that is different across builds should work.

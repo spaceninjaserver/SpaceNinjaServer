@@ -16,8 +16,6 @@ export interface IAccountAndLoginResponseCommons {
     CrossPlatformAllowed?: boolean;
     ForceLogoutVersion?: number;
     GoogleTokenId?: string;
-    AmazonAuthToken?: string;
-    AmazonRefreshToken?: string;
     ConsentNeeded?: boolean;
     TrackedSettings?: string[];
     Nonce: number;
@@ -74,6 +72,8 @@ export interface ILoginResponse extends IAccountAndLoginResponseCommons {
     HUB?: string;
     NatHash?: string;
     SteamId?: string;
+    AmazonAuthToken?: string;
+    AmazonRefreshToken?: string;
 }
 
 export interface IGroup {
