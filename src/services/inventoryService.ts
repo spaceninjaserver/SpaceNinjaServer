@@ -625,7 +625,8 @@ export const addItem = async (
     if (
         typeName in ExportUpgrades ||
         typeName in ExportArcanes ||
-        typeName.startsWith("/Lotus/Upgrades/Mods/") || // Fusion Core, Legendary Core
+        (typeName.startsWith("/Lotus/Upgrades/Mods/") && // Fusion Core, Legendary Core
+            !typeName.startsWith("/Lotus/Upgrades/Mods/FusionBundles/")) ||
         typeName.startsWith("/Lotus/Upgrades/CosmeticEnhancers/") || // Traumatic Peculiar
         (typeName.endsWith("AbilityCard") && typeName.startsWith("/Lotus/Powersuits/"))
     ) {
