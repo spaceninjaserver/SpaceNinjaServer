@@ -73,7 +73,7 @@ export const contributeToVaultController: RequestHandler = async (req, res) => {
             addMiscItems(inventory, [{ ...item, ItemCount: item.ItemCount * -1 }]);
         }
     }
-    if (request.ShipDecorations.length) {
+    if (request.ShipDecorations?.length) {
         addVaultShipDecos(guild, request.ShipDecorations);
         for (const item of request.ShipDecorations) {
             if (guildMember) {
@@ -82,7 +82,7 @@ export const contributeToVaultController: RequestHandler = async (req, res) => {
             addShipDecorations(inventory, [{ ...item, ItemCount: item.ItemCount * -1 }]);
         }
     }
-    if (request.FusionTreasures.length) {
+    if (request.FusionTreasures?.length) {
         addVaultFusionTreasures(guild, request.FusionTreasures);
         for (const item of request.FusionTreasures) {
             addFusionTreasures(inventory, [{ ...item, ItemCount: item.ItemCount * -1 }]);
@@ -101,8 +101,8 @@ export const contributeToVaultController: RequestHandler = async (req, res) => {
 interface IContributeToVaultRequest {
     RegularCredits: number;
     MiscItems: IMiscItem[];
-    ShipDecorations: ITypeCount[];
-    FusionTreasures: IFusionTreasure[];
+    ShipDecorations?: ITypeCount[]; // not set in U18
+    FusionTreasures?: IFusionTreasure[]; // not set in U18
     Alliance?: boolean;
     FromVault?: boolean;
     GuildVault?: string;
