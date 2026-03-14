@@ -3771,7 +3771,11 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         const baroEnd = baroStart + unixTimesInMs.day * 14;
         const baroRelayOverride = config.worldState?.baroRelayOverride;
         const baroNodeIndex = baroRelayOverride && baroRelayOverride > 0 ? baroRelayOverride - 1 : baroIndex % 4;
-        const baroNode = ["EarthHUB", "MercuryHUB", "SaturnHUB", "PlutoHUB"][baroNodeIndex];
+        let baroNode = ["EarthHUB", "MercuryHUB", "SaturnHUB", "PlutoHUB"][baroNodeIndex];
+        if (baroNode == "MercuryHUB" && buildLabel && version_compare(buildLabel, gameToBuildVersion["18.18.0"]) < 0) {
+            // This Pre-Star Chart 3.0 client won't know Larunda Relay, so move Baro elsewhere.
+            baroNode = "EarthHUB";
+        }
         const evilBaroStage =
             buildLabel && version_compare(buildLabel, gameToBuildVersion["40.0.0"]) < 0
                 ? 0
@@ -3780,9 +3784,12 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             evilBaroStage
         ];
         const vt: IVoidTrader = {
-            _id: { $oid: ((baroStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "493c96d6067610bc" },
-            Activation: { $date: { $numberLong: baroActualStart.toString() } },
-            Expiry: { $date: { $numberLong: baroEnd.toString() } },
+            _id: toOid2(
+                ((baroStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "493c96d6067610bc",
+                buildLabel
+            ),
+            Activation: toMongoDate2(baroActualStart, buildLabel),
+            Expiry: toMongoDate2(baroEnd, buildLabel),
             Character: baroCharacter,
             Node: baroNode,
             Manifest: []

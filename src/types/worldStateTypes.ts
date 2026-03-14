@@ -294,9 +294,9 @@ export interface ILiteSortie {
 }
 
 export interface IVoidTrader {
-    _id: IOid;
-    Activation: IMongoDate;
-    Expiry: IMongoDate;
+    _id: IOidWithLegacySupport;
+    Activation: IMongoDateWithLegacySupport;
+    Expiry: IMongoDateWithLegacySupport;
     Character: string;
     Node: string;
     Manifest: IVoidTraderOffer[];
