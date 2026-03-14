@@ -1,4 +1,5 @@
-import { toMongoDate2 } from "../../helpers/inventoryHelpers.ts";
+import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import { toMongoDate2, version_compare } from "../../helpers/inventoryHelpers.ts";
 import { Guild } from "../../models/guildModel.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
@@ -22,28 +23,28 @@ export const getGuildLogController: RequestHandler = async (req, res) => {
                 log.RoomChanges.push({
                     dateTime: toMongoDate2(entry.dateTime ?? new Date(), account.BuildLabel),
                     entryType: entry.entryType,
-                    details: entry.details
+                    details: cleanupDetails(entry.details, account.BuildLabel)
                 });
             });
             guild.TechChanges?.forEach(entry => {
                 log.TechChanges.push({
                     dateTime: toMongoDate2(entry.dateTime ?? new Date(), account.BuildLabel),
                     entryType: entry.entryType,
-                    details: entry.details
+                    details: cleanupDetails(entry.details, account.BuildLabel)
                 });
             });
             guild.RosterActivity?.forEach(entry => {
                 log.RosterActivity.push({
                     dateTime: toMongoDate2(entry.dateTime, account.BuildLabel),
                     entryType: entry.entryType,
-                    details: entry.details
+                    details: cleanupDetails(entry.details, account.BuildLabel)
                 });
             });
             guild.ClassChanges?.forEach(entry => {
                 log.ClassChanges.push({
                     dateTime: toMongoDate2(entry.dateTime, account.BuildLabel),
                     entryType: entry.entryType,
-                    details: entry.details
+                    details: cleanupDetails(entry.details, account.BuildLabel)
                 });
             });
             res.json(log);
@@ -58,3 +59,11 @@ interface IGuildLogEntryClient {
     entryType: number;
     details: number | string;
 }
+
+const cleanupDetails = (details: number | string, buildLabel: string | undefined): number | string => {
+    if (typeof details == "string" && buildLabel && version_compare(buildLabel, gameToBuildVersion["32.0.0"]) < 0) {
+        // Remove the number suffix so pre-U32 clients don't show it. U32+ clients currently don't show it because we don't set CrossPlatformEnabled to true.
+        return details.split("#")[0];
+    }
+    return details;
+};
