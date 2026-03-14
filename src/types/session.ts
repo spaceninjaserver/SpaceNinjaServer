@@ -1,4 +1,5 @@
 import type { Types } from "mongoose";
+import type { Platform } from "./loginTypes.ts";
 
 export interface IHostSessionRequest {
     maxPlayers: number;
@@ -19,7 +20,7 @@ export interface IHostSessionRequest {
     rewardSeed?: number | bigint;
     guildId: string;
     buildId: number | bigint;
-    platform?: number;
+    platform?: Platform;
     xplatform?: boolean;
     freePublic: number;
     freePrivate: number;
@@ -30,7 +31,7 @@ export interface ISession extends Omit<IHostSessionRequest, "rewardSeed" | "plat
     sessionId: Types.ObjectId;
     creatorId: Types.ObjectId;
     rewardSeed: number | bigint;
-    platform: number;
+    platform: Platform;
     xplatform: boolean;
 }
 
@@ -44,11 +45,14 @@ export type IFindSessionRequest = { queryId: number } & (
     | {
           buildId: number | bigint;
           gameModeId: number;
-          maps: string;
+          freePublic?: { $gte: 1 };
+          maps?: string;
           regionId: number;
           maxEloDifference: number;
           eloRating: number;
           enforceElo: boolean;
+          allowLobby?: boolean; // for conclave
+          platform: Platform;
           xplatform: boolean;
       }
 );

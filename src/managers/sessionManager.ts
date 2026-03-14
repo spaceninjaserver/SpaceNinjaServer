@@ -1,4 +1,5 @@
 import { generateRewardSeed } from "../services/rngService.ts";
+import { Platform } from "../types/loginTypes.ts";
 import type {
     ISession,
     IFindSessionRequest,
@@ -34,7 +35,7 @@ function createNewSession(sessionData: IHostSessionRequest, Creator: Types.Objec
         rewardSeed: sessionData.rewardSeed || -1,
         guildId: sessionData.guildId, // || ""
         buildId: sessionData.buildId, // || 4920386201513015989n
-        platform: sessionData.platform ?? 0,
+        platform: sessionData.platform ?? Platform.Windows,
         xplatform: sessionData.xplatform ?? false,
         freePublic: sessionData.freePublic, // || 3
         freePrivate: sessionData.freePrivate, // || 0
@@ -64,10 +65,13 @@ function getSession(request: IFindSessionRequest): IFindSessionResponseSession[]
                 return session.sessionId.equals(request.originalSessionId);
             } else {
                 return (
+                    !session.hasStarted &&
                     request.buildId == session.buildId &&
                     request.gameModeId == session.gameModeId &&
+                    (!request.freePublic || session.freePublic >= 1) &&
+                    session.regionId == request.regionId &&
                     Math.abs(session.eloRating - request.eloRating) <= request.maxEloDifference &&
-                    (request.maps == "" || session.maps.indexOf(request.maps) != -1)
+                    (!request.maps || session.maps.indexOf(request.maps) != -1)
                 );
             }
         })
