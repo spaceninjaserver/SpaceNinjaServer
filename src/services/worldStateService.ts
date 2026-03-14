@@ -3746,9 +3746,8 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         });
     }
 
-    if (!buildLabel || version_compare(buildLabel, gameToBuildVersion["17.7.1"]) >= 0) {
-        //      (lowest known version that recognises all reward types ^^^^^^)
-
+    // Sheev parts were added in 19.6.3, so versions prior to that may take too kindly to seeing invasions.
+    if (!buildLabel || version_compare(buildLabel, gameToBuildVersion["19.5.0"]) > 0) {
         // Rough outline of dynamic invasions.
         // TODO: Invasions chains, e.g. an infestation mission would soon lead to other nodes on that planet also having an infestation invasion.
         // TODO: Grineer/Corpus to fund their death stars with each invasion win.
