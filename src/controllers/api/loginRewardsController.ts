@@ -53,6 +53,12 @@ export const loginRewardsController: RequestHandler = async (req, res) => {
                 sendWsBroadcastTo(account._id.toString(), { update_inventory: true });
             }
             if (is_pre_daily_tribute) {
+                // Ensure icon is something the client can display.
+                for (const reward of response.DailyTributeInfo.Rewards!) {
+                    if (reward.Icon == "/Lotus/Interface/Icons/StoreIcons/Currency/CreditsLarge.png") {
+                        reward.Icon = "/Lotus/Interface/Icons/Store/CreditBooster.png";
+                    }
+                }
                 res.json({ Rewards: response.DailyTributeInfo.Rewards });
             } else {
                 res.json(response);
