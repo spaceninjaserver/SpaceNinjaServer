@@ -249,6 +249,14 @@ export const focusController: RequestHandler = async (req, res) => {
         }
         case "ConvertShard": {
             const request = JSON.parse(String(req.body)) as IConvertShardRequest;
+            if (!request.Shards) {
+                request.Shards = [
+                    {
+                        ItemType: request.ShardType!,
+                        ItemCount: request.NumShards!
+                    }
+                ];
+            }
             // Tally XP
             let xp = 0;
             for (const shard of request.Shards) {
@@ -336,7 +344,9 @@ interface IUnbindUpgradeRequest {
 }
 
 interface IConvertShardRequest {
-    Shards: IMiscItem[];
+    Shards?: IMiscItem[]; // Focus 3.0
+    ShardType?: string; // Focus 2.0
+    NumShards?: number; // Focus 2.0
     Polarity: TFocusPolarity;
 }
 
