@@ -1066,10 +1066,12 @@ export const getPrice = (
     usePremium: boolean,
     buildLabel: string
 ): number => {
+    const isBundle = storeItemName in ExportBundles;
+    const internalName = isBundle ? storeItemName : fromStoreItem(storeItemName);
     let price: number | undefined;
     {
         const { FlashSales } = getWorldState(buildLabel);
-        const flashSale = FlashSales.find(s => s.TypeName == fromStoreItem(storeItemName));
+        const flashSale = FlashSales.find(s => s.TypeName == internalName);
         if (flashSale) {
             if (usePremium && flashSale.PremiumOverride > 0) {
                 return flashSale.PremiumOverride * quantity;
@@ -1078,7 +1080,6 @@ export const getPrice = (
             }
         }
     }
-    const isBundle = storeItemName in ExportBundles;
     const isBooster = storeItemName in ExportBoosters;
     if (isBooster) {
         price = 40 * (durability + 1);
@@ -1103,8 +1104,7 @@ export const getPrice = (
             price = Math.round(sum * (1 - discount));
         }
     } else {
-        const internalName = fromStoreItem(storeItemName);
-        const boosterPack = getBoosterPack(fromStoreItem(storeItemName), buildLabel);
+        const boosterPack = getBoosterPack(internalName, buildLabel);
         const isBoosterPack = boosterPack !== undefined;
         if (isBoosterPack) {
             if (usePremium) price = boosterPack.platinumCost;
