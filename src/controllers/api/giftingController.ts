@@ -96,7 +96,7 @@ export const giftingController: RequestHandler = async (req, res) => {
                 data.PurchaseParams.Quantity,
                 data.PurchaseParams.Durability,
                 data.PurchaseParams.UsePremium,
-                data.buildLabel
+                data.buildLabel ?? senderAccount.BuildLabel!
             );
         }
         updateCurrency(
@@ -150,5 +150,5 @@ interface IGiftingRequest {
     Message?: string;
     Recipient?: string;
     RecipientId?: IOid;
-    buildLabel: string;
+    buildLabel?: string; // not provided in U18
 }
