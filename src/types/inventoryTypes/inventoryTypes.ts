@@ -697,7 +697,7 @@ export interface IDiscoveredMarker {
 export interface IDroneClient {
     ItemType: string;
     CurrentHP: number;
-    ItemId: IOid;
+    ItemId: IOidWithLegacySupport;
     RepairStart?: IMongoDate;
 }
 

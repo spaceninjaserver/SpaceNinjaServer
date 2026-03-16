@@ -1,34 +1,35 @@
-import { toMongoDate, toOid } from "../../helpers/inventoryHelpers.ts";
+import { toMongoDate2, toOid2 } from "../../helpers/inventoryHelpers.ts";
 import { addMiscItems, getInventory } from "../../services/inventoryService.ts";
 import { fromStoreItem } from "../../services/itemDataService.ts";
-import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest } from "../../services/loginService.ts";
 import { getRandomInt, getRandomWeightedRewardUc } from "../../services/rngService.ts";
-import type { IMongoDate, IOid } from "../../types/commonTypes.ts";
+import type { IMongoDateWithLegacySupport, IOidWithLegacySupport } from "../../types/commonTypes.ts";
 import type { IDroneClient } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import type { RequestHandler } from "express";
 import { ExportDrones, ExportResources, ExportSystems } from "warframe-public-export-plus";
 
 export const dronesController: RequestHandler = async (req, res) => {
-    const accountId = await getAccountIdForRequest(req);
+    const account = await getAccountForRequest(req);
+    const accountId = account._id.toString();
     if ("GetActive" in req.query) {
         const inventory = await getInventory(accountId, "Drones");
         const activeDrones: IActiveDrone[] = [];
         for (const drone of inventory.Drones) {
             if (drone.DeployTime) {
                 activeDrones.push({
-                    DeployTime: toMongoDate(drone.DeployTime),
+                    DeployTime: toMongoDate2(drone.DeployTime, account.BuildLabel),
                     System: drone.System!,
-                    ItemId: toOid(drone._id),
+                    ItemId: toOid2(drone._id, account.BuildLabel),
                     ItemType: drone.ItemType,
                     CurrentHP: drone.CurrentHP,
-                    DamageTime: toMongoDate(drone.DamageTime!),
+                    DamageTime: toMongoDate2(drone.DamageTime!, account.BuildLabel),
                     PendingDamage: drone.PendingDamage!,
                     Resources: [
                         {
                             ItemType: drone.ResourceType!,
                             BinTotal: drone.ResourceCount!,
-                            StartTime: toMongoDate(drone.DeployTime)
+                            StartTime: toMongoDate2(drone.DeployTime, account.BuildLabel)
                         }
                     ]
                 });
@@ -130,16 +131,16 @@ export const dronesController: RequestHandler = async (req, res) => {
 };
 
 interface IActiveDrone {
-    DeployTime: IMongoDate;
+    DeployTime: IMongoDateWithLegacySupport;
     System: number;
-    ItemId: IOid;
+    ItemId: IOidWithLegacySupport;
     ItemType: string;
     CurrentHP: number;
-    DamageTime: IMongoDate;
+    DamageTime: IMongoDateWithLegacySupport;
     PendingDamage: number;
     Resources: {
         ItemType: string;
         BinTotal: number;
-        StartTime: IMongoDate;
+        StartTime: IMongoDateWithLegacySupport;
     }[];
 }

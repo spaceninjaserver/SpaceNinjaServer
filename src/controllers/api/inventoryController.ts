@@ -737,6 +737,9 @@ export const getInventoryResponse = async (
                             }
                         }
                     }
+                    for (const item of inventoryResponse.Drones) {
+                        toLegacyOid(item.ItemId);
+                    }
                 }
             }
         }
