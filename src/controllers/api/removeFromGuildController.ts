@@ -9,7 +9,12 @@ import {
 } from "../../services/guildService.ts";
 import { createMessage } from "../../services/inboxService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
-import { getAccountForRequest, getSuffixedName, type TAccountDocument } from "../../services/loginService.ts";
+import {
+    getAccountForRequest,
+    getSuffixedName,
+    getUnicodeName,
+    type TAccountDocument
+} from "../../services/loginService.ts";
 import { sendWsBroadcastTo } from "../../services/wsService.ts";
 import { GuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler, Response } from "express";
@@ -46,6 +51,8 @@ const processRemoveFromGuildRequest = async (
         res.status(400).json("Invalid permission");
         return;
     }
+
+    const accountOfRemovedMember = isKick ? (await Account.findById(payload.userId))! : account;
 
     const guildMember = await GuildMember.findOne({ accountId: payload.userId, guildId: guild._id });
     if (guildMember) {
@@ -89,11 +96,10 @@ const processRemoveFromGuildRequest = async (
 
             guild.RosterActivity ??= [];
             if (isKick) {
-                const kickee = (await Account.findById(payload.userId))!;
                 guild.RosterActivity.push({
                     dateTime: new Date(),
                     entryType: 12,
-                    details: getSuffixedName(kickee) + "," + getSuffixedName(account)
+                    details: getSuffixedName(accountOfRemovedMember) + "," + getSuffixedName(account)
                 });
             } else {
                 guild.RosterActivity.push({
@@ -108,6 +114,7 @@ const processRemoveFromGuildRequest = async (
 
     res.json({
         _id: payload.userId,
+        Name: getUnicodeName(accountOfRemovedMember, account.BuildLabel), // U40+ needs this to send social notify over IRC
         ItemToRemove: "/Lotus/Types/Keys/DojoKey",
         RecipeToRemove: "/Lotus/Types/Keys/DojoKeyBlueprint"
     });

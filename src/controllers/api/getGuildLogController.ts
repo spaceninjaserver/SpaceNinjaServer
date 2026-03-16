@@ -63,7 +63,10 @@ interface IGuildLogEntryClient {
 const cleanupDetails = (details: number | string, buildLabel: string | undefined): number | string => {
     if (typeof details == "string" && buildLabel && version_compare(buildLabel, gameToBuildVersion["32.0.0"]) < 0) {
         // Remove the number suffix so pre-U32 clients don't show it. U32+ clients currently don't show it because we don't set CrossPlatformEnabled to true.
-        return details.split("#")[0];
+        return details
+            .split(",")
+            .map(x => x.split("#")[0])
+            .join(",");
     }
     return details;
 };

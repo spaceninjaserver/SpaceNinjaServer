@@ -90,12 +90,12 @@ interface IBatchRemoveFriendsRequest {
     SkipFriendIds: string[];
 }
 
-// >= U40
+// >= U40 needs unicode-suffixed name to send social notify over IRC
 interface IRemoveFriendsResponseU40 {
     FriendNames: string[];
 }
 
-// < U40
+// < U40 needs oid to send social notify over NRS
 interface IRemoveFriendsResponseU39 {
     Friends: IOidWithLegacySupport[];
 }
