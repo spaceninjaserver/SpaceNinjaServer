@@ -109,13 +109,21 @@ export const getGuildClient = async (
 
     await Promise.all(dataFillInPromises);
 
+    let ranks = guild.Ranks;
+    if (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["24.0.0"]) < 0) {
+        ranks = ranks.map(x => ({
+            ...x,
+            Name: x.Name == "/Lotus/Language/Game/Rank_Creator" ? "Founding Warlord" : x.Name
+        }));
+    }
+
     return {
         _id: toOid2(guild._id, account.BuildLabel),
         Name: guild.Name,
         MOTD: guild.MOTD,
         LongMOTD: guild.LongMOTD,
         Members: members,
-        Ranks: guild.Ranks,
+        Ranks: ranks,
         Tier: guild.Tier,
         Emblem: guild.Emblem,
         Vault: getGuildVault(guild),
