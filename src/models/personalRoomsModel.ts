@@ -169,7 +169,7 @@ const orbiterSchema = new Schema<IOrbiterDatabase>(
         FavouriteLoadoutId: Schema.Types.ObjectId,
         Wallpaper: String,
         Vignette: String,
-        ContentUrlSignature: { type: String, required: false },
+        ContentUrlSignature: String,
         BootLocation: String
     },
     { _id: false }

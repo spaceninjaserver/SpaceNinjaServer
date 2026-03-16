@@ -1,10 +1,17 @@
 import { PersonalRooms } from "../models/personalRoomsModel.ts";
 import { addItem } from "./inventoryService.ts";
-import type { IGardeningDatabase, TPersonalRoomsDatabaseDocument } from "../types/personalRoomsTypes.ts";
+import type {
+    IGardeningDatabase,
+    IGetShipResponse,
+    IPersonalRoomsClient,
+    TPersonalRoomsDatabaseDocument
+} from "../types/personalRoomsTypes.ts";
 import { getRandomElement } from "./rngService.ts";
 import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
 import { logger } from "../utils/logger.ts";
 import type { Types } from "mongoose";
+import { getLoadout } from "./loadoutService.ts";
+import { toOid } from "../helpers/inventoryHelpers.ts";
 
 export const getPersonalRooms = async (
     accountId: string | Types.ObjectId,
@@ -89,5 +96,29 @@ export const createGarden = (): IGardeningDatabase => {
                 ]
             }
         ]
+    };
+};
+
+export const refreshContentUrlSignature = (personalRooms: TPersonalRoomsDatabaseDocument): void => {
+    personalRooms.Ship.ContentUrlSignature = "";
+    for (let i = 0; i != 16; ++i) {
+        personalRooms.Ship.ContentUrlSignature += Math.floor(Math.random() * 256)
+            .toString(16)
+            .padStart(2, "0");
+    }
+};
+
+export const getShip = async (personalRoomsDb: TPersonalRoomsDatabaseDocument): Promise<IGetShipResponse> => {
+    const personalRooms = personalRoomsDb.toJSON<IPersonalRoomsClient>();
+    const loadout = await getLoadout(personalRoomsDb.personalRoomsOwnerId);
+    return {
+        ShipOwnerId: personalRoomsDb.personalRoomsOwnerId.toString(),
+        LoadOutInventory: { LoadOutPresets: loadout.toJSON() },
+        Ship: {
+            ...personalRooms.Ship,
+            ShipId: toOid(personalRoomsDb.activeShipId)
+        },
+        Apartment: personalRooms.Apartment,
+        TailorShop: personalRooms.TailorShop
     };
 };
