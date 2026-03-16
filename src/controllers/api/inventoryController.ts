@@ -29,7 +29,7 @@ import {
 } from "../../services/inventoryService.ts";
 import { logger } from "../../utils/logger.ts";
 import { addString } from "../../helpers/stringHelpers.ts";
-import { Types } from "mongoose";
+import { Types, type FlattenMaps } from "mongoose";
 import { getNemesisManifest } from "../../helpers/nemesisHelpers.ts";
 import { getPersonalRooms } from "../../services/personalRoomsService.ts";
 import type { IPersonalRoomsClient } from "../../types/personalRoomsTypes.ts";
@@ -37,6 +37,7 @@ import { Ship } from "../../models/shipModel.ts";
 import {
     convertIColorToLegacyColors,
     convertIColorToLegacyColorsWithAtt,
+    fromOid,
     toLegacyOid,
     toOid,
     toOid2,
@@ -693,9 +694,13 @@ export const getInventoryResponse = async (
                         inventoryResponse.LoadOutPresets.NORMAL.length > 0
                     ) {
                         if (version_compare(buildLabel, gameToBuildVersion["14.0.0"]) >= 0) {
-                            // U14-U15 expect a different response than any other version, where the client is pulling loadout data from has not been found yet
-                            // As such, loading loadouts is currently unsupported for these versions
-                            logger.warn("Loadouts are currently unsupported in U14-U15, loadouts will be undefined");
+                            // U14-U15
+                            inventoryResponse.CurrentLoadout = {
+                                $id: fromOid(inventoryResponse.CurrentLoadOutIds[0])
+                            };
+                            inventoryResponse.LoadoutPresets = [
+                                mapLegacyLoadoutConfig(inventory, inventoryResponse.LoadOutPresets, buildLabel)
+                            ] as unknown as FlattenMaps<ILoadoutConfigClientLegacy[]>;
                         } else {
                             // U13 and below
                             inventoryResponse.CurrentLoadout = mapLegacyLoadoutConfig(
@@ -706,26 +711,28 @@ export const getInventoryResponse = async (
                         }
                     }
                     for (const category of loadoutKeysLegacy) {
-                        for (const item of inventoryResponse.LoadOutPresets[category]) {
-                            toLegacyOid(item.ItemId);
-                            if (item.s) {
-                                if (item.s.ItemId) {
-                                    toLegacyOid(item.s.ItemId);
+                        if (category in inventoryResponse.LoadOutPresets) {
+                            for (const item of inventoryResponse.LoadOutPresets[category]) {
+                                toLegacyOid(item.ItemId);
+                                if (item.s) {
+                                    if (item.s.ItemId) {
+                                        toLegacyOid(item.s.ItemId);
+                                    }
                                 }
-                            }
-                            if (item.l) {
-                                if (item.l.ItemId) {
-                                    toLegacyOid(item.l.ItemId);
+                                if (item.l) {
+                                    if (item.l.ItemId) {
+                                        toLegacyOid(item.l.ItemId);
+                                    }
                                 }
-                            }
-                            if (item.p) {
-                                if (item.p.ItemId) {
-                                    toLegacyOid(item.p.ItemId);
+                                if (item.p) {
+                                    if (item.p.ItemId) {
+                                        toLegacyOid(item.p.ItemId);
+                                    }
                                 }
-                            }
-                            if (item.m) {
-                                if (item.m.ItemId) {
-                                    toLegacyOid(item.m.ItemId);
+                                if (item.m) {
+                                    if (item.m.ItemId) {
+                                        toLegacyOid(item.m.ItemId);
+                                    }
                                 }
                             }
                         }

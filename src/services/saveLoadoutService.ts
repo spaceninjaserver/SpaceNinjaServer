@@ -77,20 +77,16 @@ export const handleInventoryItemConfigChange = async (
                     version_compare(buildLabel, "2015.03.19.00.00") < 0
                 ) {
                     // U14-U15
-                    // const configs = equipment as {
-                    //     [key: string]: ILoadoutConfigClientLegacy;
-                    // };
+                    const configs = equipment as {
+                        [key: string]: ILoadoutConfigClientLegacy;
+                    };
 
-                    // logger.debug("legacy loadout received (U14-U15 format)", configs);
+                    logger.debug("legacy loadout received (U14-U15 format)", configs);
 
-                    // for (const key in configs) {
-                    //     const x = configs[key];
-                    //     await saveLegacyLoadoutPreset(inventory, x.Presets, x.Name, buildLabel);
-                    // }
-
-                    logger.warn("Loadouts are currently unsupported in U14-U15, only saving mod/appearance configs");
-
-                    break;
+                    for (const key in configs) {
+                        const x = configs[key];
+                        await saveLegacyLoadoutPreset(inventory, x.Presets, x.Name, buildLabel);
+                    }
                 } else {
                     const loadout = await Loadout.findOne({ loadoutOwnerId: accountId });
                     if (!loadout) {
@@ -173,7 +169,8 @@ export const handleInventoryItemConfigChange = async (
             }
             case "CurrentLoadout": {
                 // U14-U15
-                const id = equipment as string;
+                logger.debug(`ignoring CurrentLoadout from U14-U15 for now`);
+                /*const id = equipment as string;
                 if (inventory.CurrentLoadOutIds[0]) {
                     inventory.CurrentLoadOutIds[0] = toObjectId(id);
                 }
@@ -182,7 +179,7 @@ export const handleInventoryItemConfigChange = async (
                 }
                 if (inventory.CurrentLoadOutIds[2]) {
                     inventory.CurrentLoadOutIds[2] = toObjectId(id);
-                }
+                }*/
                 break;
             }
             case "CurrentLoadOutIds": {
@@ -446,6 +443,9 @@ const saveLegacyLoadoutPreset = async (
             currentLoadouts[0] = loadoutId;
         }
     } else {
+        if (currentLoadouts.length <= 0) {
+            currentLoadouts.push(loadout.NORMAL[0]._id);
+        }
         const loadoutId = currentLoadouts[0];
         const preset = loadout.NORMAL.id(loadoutId);
         if (preset) {
@@ -495,6 +495,9 @@ const saveLegacyLoadoutPreset = async (
                 currentLoadouts[1] = loadoutId;
             }
         } else {
+            if (currentLoadouts.length <= 1) {
+                currentLoadouts.push(loadout.SENTINEL[0]._id);
+            }
             const loadoutId = currentLoadouts[1];
             const preset = loadout.SENTINEL.id(loadoutId);
             if (preset) {
@@ -538,6 +541,9 @@ const saveLegacyLoadoutPreset = async (
                 currentLoadouts[2] = loadoutId;
             }
         } else {
+            if (currentLoadouts.length <= 2) {
+                currentLoadouts.push(loadout.ARCHWING[0]._id);
+            }
             const loadoutId = currentLoadouts[2];
             const preset = loadout.ARCHWING.id(loadoutId);
             if (preset) {

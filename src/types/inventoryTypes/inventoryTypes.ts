@@ -356,8 +356,11 @@ export interface IInventoryClient
     ActiveQuest: string;
     FlavourItems: IFlavourItem[];
     LoadOutPresets: ILoadOutPresets;
+    LoadoutPresets?: ILoadoutConfigClientLegacy[]; // U14-U15
     CurrentLoadOutIds: IOid[];
-    CurrentLoadout?: ILoadoutConfigClientLegacy; // U8-13
+    CurrentLoadout?:
+        | ILoadoutConfigClientLegacy // U8-13
+        | { $id: string }; // U14-U15
     Missions: IMission[];
     RandomUpgradesIdentified?: number;
     LastRegionPlayed: TSolarMapRegion;
