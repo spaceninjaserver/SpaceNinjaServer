@@ -53,7 +53,11 @@ const inviteToGuild = async (req: Request, res: Response, userName: string): Pro
     }
 
     const senderAccount = await getAccountForRequest(req);
-    const inventory = await getInventory(account._id, "Settings");
+    const inventory = await getInventory(account._id, "GuildId Settings");
+    if (inventory.GuildId) {
+        res.status(400).send("User is already in a guild");
+        return;
+    }
     if (
         inventory.Settings?.GuildInvRestriction == "GIFT_MODE_NONE" ||
         (inventory.Settings?.GuildInvRestriction == "GIFT_MODE_FRIENDS" &&
