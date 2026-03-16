@@ -1,5 +1,11 @@
 import type { Types } from "mongoose";
-import type { IOid, IMongoDate, IOidWithLegacySupport, ITypeCount } from "./commonTypes.ts";
+import type {
+    IOid,
+    IMongoDate,
+    IOidWithLegacySupport,
+    ITypeCount,
+    IMongoDateWithLegacySupport
+} from "./commonTypes.ts";
 import type {
     IFusionTreasure,
     IMiscItem,
@@ -65,6 +71,7 @@ export interface IGuildDatabase extends IGuildCheats {
     VaultShipDecorations?: ITypeCount[];
     VaultFusionTreasures?: IFusionTreasure[];
     VaultDecoRecipes?: ITypeCount[];
+    VaultRecipes?: ITypeCount[];
 
     MaxBattlePayReserve?: number;
     MaxMissionBattlePay?: number;
@@ -148,10 +155,12 @@ export interface IGuildVault {
     ShipDecorations?: ITypeCount[];
     FusionTreasures?: IFusionTreasure[];
     DecoRecipes?: ITypeCount[]; // Event Trophies
+    Recipes?: ITypeCount[]; // Solar Rail
 
     MaxBattlePayReserve?: number;
     MaxMissionBattlePay?: number;
     MinMissionBattlePay?: number;
+    // InventoryItems?: Record<"SolarRails", ITypeCount[]>;
 }
 
 export interface IDojoClient {
@@ -256,7 +265,7 @@ export interface ITechProjectClient {
     ReqCredits: number;
     ReqItems: IMiscItem[];
     State: number; // 0 = pending, 1 = complete
-    CompletionDate?: IMongoDate;
+    CompletionDate?: IMongoDateWithLegacySupport;
 }
 
 export interface ITechProjectDatabase extends Omit<ITechProjectClient, "CompletionDate"> {

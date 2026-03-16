@@ -153,10 +153,17 @@ export const getGuildVault = (guild: TGuildDatabaseDocument): IGuildVault => {
         ShipDecorations: guild.VaultShipDecorations,
         FusionTreasures: guild.VaultFusionTreasures,
         DecoRecipes: guild.VaultDecoRecipes,
+        Recipes: guild.VaultRecipes, // Solar Rail
 
         MaxBattlePayReserve: guild.MaxBattlePayReserve,
         MaxMissionBattlePay: guild.MaxMissionBattlePay,
         MinMissionBattlePay: guild.MinMissionBattlePay
+    };
+};
+
+export const getAllianceVault = (alliance: IAllianceDatabase): IGuildVault => {
+    return {
+        DojoRefundRegularCredits: alliance.VaultRegularCredits
     };
 };
 
@@ -621,6 +628,12 @@ export const processCompletedGuildTechProject = (guild: TGuildDatabaseDocument, 
             ItemType: type,
             ItemCount: 1
         });
+    } else if (type == "/Lotus/Types/Game/SolarRails/BasicSolarRailBlueprint") {
+        guild.VaultRecipes ??= [];
+        guild.VaultRecipes.push({
+            ItemType: type,
+            ItemCount: 1
+        });
     }
 };
 
@@ -856,9 +869,7 @@ export const getAllianceClient = async (
         MOTD: alliance.MOTD,
         LongMOTD: alliance.LongMOTD,
         Clans: clans,
-        AllianceVault: {
-            DojoRefundRegularCredits: alliance.VaultRegularCredits
-        }
+        AllianceVault: getAllianceVault(alliance)
     };
 };
 

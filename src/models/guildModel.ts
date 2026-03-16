@@ -229,6 +229,7 @@ const guildSchema = new Schema<IGuildDatabase>(
         VaultShipDecorations: { type: [typeCountSchema], default: undefined },
         VaultFusionTreasures: { type: [fusionTreasuresSchema], default: undefined },
         VaultDecoRecipes: { type: [typeCountSchema], default: undefined },
+        VaultRecipes: { type: [typeCountSchema], default: undefined },
         MaxBattlePayReserve: Number,
         MaxMissionBattlePay: Number,
         MinMissionBattlePay: Number,

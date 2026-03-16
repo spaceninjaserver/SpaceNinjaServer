@@ -79,6 +79,7 @@ import { getPastWeeklyChallengesController } from "../controllers/api/getPastWee
 import { getProfileViewingDataPostController } from "../controllers/dynamic/getProfileViewingDataController.ts";
 import { getRecentPlayersController } from "../controllers/api/getRecentPlayersController.ts";
 import { getShipController } from "../controllers/api/getShipController.ts";
+import { getVaultController } from "../controllers/api/getVaultController.ts";
 import { getVendorInfoController } from "../controllers/api/getVendorInfoController.ts";
 import { getVoidProjectionRewardsController } from "../controllers/api/getVoidProjectionRewardsController.ts";
 import { giftingController } from "../controllers/api/giftingController.ts";
@@ -223,9 +224,10 @@ apiRouter.get("/getGuildLog.php", getGuildLogController);
 apiRouter.get("/getIgnoredUsers.php", getIgnoredUsersController);
 apiRouter.get("/getMessages.php", inboxController); // unsure if this is correct, but needed for U17
 apiRouter.get("/getNewRewardSeed.php", getNewRewardSeedController);
-apiRouter.get("/getPastWeeklyChallenges.php", getPastWeeklyChallengesController)
+apiRouter.get("/getPastWeeklyChallenges.php", getPastWeeklyChallengesController);
 apiRouter.get("/getShip.php", getShipController);
 apiRouter.get("/getShipDecos.php", (_req, res) => { res.end(); }); // needed to log in on U22.8
+apiRouter.get("/getVault.php", getVaultController);
 apiRouter.get("/getVendorInfo.php", getVendorInfoController);
 apiRouter.get("/giveStartingGear.php", giveStartingGearGetController);
 apiRouter.get("/inbox.php", inboxController);
