@@ -82,7 +82,7 @@ import type {
     ITailorShop,
     ITailorShopDatabase
 } from "../types/personalRoomsTypes.ts";
-import { fromMongoDate } from "../helpers/inventoryHelpers.ts";
+import { fromMongoDate, fromOid } from "../helpers/inventoryHelpers.ts";
 import { getRecipe } from "./itemDataService.ts";
 import { logger } from "../utils/logger.ts";
 
@@ -98,7 +98,7 @@ const convertEquipment = (client: IEquipmentClient): IEquipmentDatabase => {
     const { ItemId, ...rest } = client;
     return {
         ...rest,
-        _id: new Types.ObjectId(ItemId.$oid),
+        _id: new Types.ObjectId(fromOid(ItemId)),
         InfestationDate: convertOptionalDate(client.InfestationDate),
         Expiry: convertOptionalDate(client.Expiry),
         UpgradesExpiry: convertOptionalDate(client.UpgradesExpiry),
@@ -122,7 +122,7 @@ const convertWeaponSkin = (client: IWeaponSkinClient): IWeaponSkinDatabase => {
     const { ItemId, ...rest } = client;
     return {
         ...rest,
-        _id: new Types.ObjectId(ItemId.$oid)
+        _id: new Types.ObjectId(fromOid(ItemId))
     };
 };
 
@@ -130,7 +130,7 @@ export const importUpgrade = (client: IUpgradeClient): IUpgradeDatabase => {
     const { ItemId, ...rest } = client;
     return {
         ...rest,
-        _id: new Types.ObjectId(ItemId.$oid)
+        _id: new Types.ObjectId(fromOid(ItemId))
     };
 };
 
@@ -138,7 +138,7 @@ const convertOperatorConfig = (client: IOperatorConfigClient): IOperatorConfigDa
     const { ItemId, ...rest } = client;
     return {
         ...rest,
-        _id: new Types.ObjectId(ItemId.$oid)
+        _id: new Types.ObjectId(fromOid(ItemId))
     };
 };
 
@@ -158,7 +158,7 @@ const convertEquipmentSelection = (es: IEquipmentSelectionClient): IEquipmentSel
     const { ItemId, ...rest } = es;
     return {
         ...rest,
-        ItemId: ItemId ? new Types.ObjectId(ItemId.$oid) : undefined
+        ItemId: ItemId ? new Types.ObjectId(fromOid(ItemId)) : undefined
     };
 };
 
@@ -192,7 +192,7 @@ export const importCrewShipWeapon = (weapon: ICrewShipWeaponClient): ICrewShipWe
 
 const importCrewMemberId = (crewMemberId: ICrewShipMemberClient): ICrewShipMemberDatabase => {
     if (crewMemberId.ItemId) {
-        return { ItemId: new Types.ObjectId(crewMemberId.ItemId.$oid) };
+        return { ItemId: new Types.ObjectId(fromOid(crewMemberId.ItemId)) };
     }
     return { NemesisFingerprint: BigInt(crewMemberId.NemesisFingerprint ?? 0) };
 };
@@ -450,7 +450,7 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         db.XPInfo = client.XPInfo;
     }
     if (client.CurrentLoadOutIds !== undefined) {
-        db.CurrentLoadOutIds = client.CurrentLoadOutIds.map(x => new Types.ObjectId(x.$oid));
+        db.CurrentLoadOutIds = client.CurrentLoadOutIds.map(x => new Types.ObjectId(fromOid(x)));
     }
     if (client.Affiliations !== undefined) {
         db.Affiliations = client.Affiliations;
@@ -576,7 +576,7 @@ export const importLoadOutConfig = (client: ILoadoutConfigClient): ILoadoutConfi
     const { ItemId, ...rest } = client;
     return {
         ...rest,
-        _id: new Types.ObjectId(ItemId.$oid),
+        _id: new Types.ObjectId(fromOid(ItemId)),
         s: client.s ? convertEquipmentSelection(client.s) : undefined,
         p: client.p ? convertEquipmentSelection(client.p) : undefined,
         l: client.l ? convertEquipmentSelection(client.l) : undefined,
@@ -614,7 +614,7 @@ const convertDeco = (client: IPlacedDecosClient): IPlacedDecosDatabase => {
     return {
         ...rest,
         CustomizationInfo: client.CustomizationInfo ? convertCustomizationInfo(client.CustomizationInfo) : undefined,
-        _id: new Types.ObjectId(id.$oid)
+        _id: new Types.ObjectId(fromOid(id))
     };
 };
 
@@ -633,7 +633,9 @@ const convertShip = (client: IOrbiterClient): IOrbiterDatabase => {
             Colors: typeof client.ShipInterior == "object" ? client.ShipInterior.Colors : undefined
         },
         Rooms: client.Rooms.map(convertRoom),
-        FavouriteLoadoutId: client.FavouriteLoadoutId ? new Types.ObjectId(client.FavouriteLoadoutId.$oid) : undefined
+        FavouriteLoadoutId: client.FavouriteLoadoutId
+            ? new Types.ObjectId(fromOid(client.FavouriteLoadoutId))
+            : undefined
     };
 };
 
@@ -654,7 +656,7 @@ const convertPlanter = (client: IPlanterClient): IPlanterDatabase => {
 const convertFavouriteLoadout = (client: IFavouriteLoadout): IFavouriteLoadoutDatabase => {
     return {
         ...client,
-        LoadoutId: new Types.ObjectId(client.LoadoutId.$oid)
+        LoadoutId: new Types.ObjectId(fromOid(client.LoadoutId))
     };
 };
 

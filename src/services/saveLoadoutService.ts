@@ -92,7 +92,6 @@ export const handleInventoryItemConfigChange = async (
 
                     break;
                 } else {
-                    logger.debug("loadout received");
                     const loadout = await Loadout.findOne({ loadoutOwnerId: accountId });
                     if (!loadout) {
                         throw new Error("loadout not found");
@@ -108,6 +107,8 @@ export const handleInventoryItemConfigChange = async (
                             continue;
                         }
 
+                        logger.debug(`${loadoutSlot} loadout received`);
+
                         // all non-empty entries are one loadout slot
                         for (const [loadoutId, loadoutConfig] of Object.entries(newLoadout)) {
                             if (loadoutConfig.Remove) {
@@ -118,6 +119,7 @@ export const handleInventoryItemConfigChange = async (
                             const oldLoadoutConfig = loadout[loadoutSlot].id(loadoutId);
 
                             const loadoutConfigDatabase = importLoadOutConfig(loadoutConfig);
+                            //logger.debug(`imported loadout config:`, loadoutConfigDatabase);
 
                             // if no config with this id exists, create a new one
                             if (!oldLoadoutConfig) {

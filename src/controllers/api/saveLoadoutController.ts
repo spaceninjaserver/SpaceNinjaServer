@@ -8,7 +8,7 @@ export const saveLoadoutController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
 
     const body: ISaveLoadoutRequest = getJSONfromString<ISaveLoadoutRequest>(String(req.body));
-    // console.log(util.inspect(body, { showHidden: false, depth: null, colors: true }));
+    //console.log(JSON.stringify(body, null, 2));
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { UpgradeVer, ...equipmentChanges } = body;

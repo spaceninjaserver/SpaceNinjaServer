@@ -9,7 +9,7 @@ import type {
 } from "./inventoryTypes/commonInventoryTypes.ts";
 
 export interface IEquipmentSelectionClient {
-    ItemId?: IOid;
+    ItemId?: IOidWithLegacySupport;
     mod?: number;
     cus?: number;
     ItemType?: string;
@@ -17,7 +17,7 @@ export interface IEquipmentSelectionClient {
 }
 
 export interface IEquipmentSelectionDatabase extends Omit<IEquipmentSelectionClient, "ItemId"> {
-    ItemId?: Types.ObjectId | IOid; // should be Types.ObjectId but might be IOid
+    ItemId?: Types.ObjectId;
 }
 
 export enum EquipmentFeatures {

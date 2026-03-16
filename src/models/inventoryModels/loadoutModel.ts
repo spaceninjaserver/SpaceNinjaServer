@@ -1,4 +1,4 @@
-import { fromDbOid, toOid } from "../../helpers/inventoryHelpers.ts";
+import { toOid } from "../../helpers/inventoryHelpers.ts";
 import type { IOid } from "../../types/commonTypes.ts";
 import type { IEquipmentSelectionClient, IEquipmentSelectionDatabase } from "../../types/equipmentTypes.ts";
 import type { ILoadoutConfigDatabase, ILoadoutDatabase } from "../../types/saveLoadoutTypes.ts";
@@ -8,7 +8,7 @@ import { Schema, model } from "mongoose";
 //create a mongoose schema based on interface M
 export const EquipmentSelectionSchema = new Schema<IEquipmentSelectionDatabase>(
     {
-        ItemId: Schema.Types.Mixed, // should be Types.ObjectId but might be IOid because of old commits
+        ItemId: Schema.Types.Mixed, // should be Types.ObjectId but cannot be schema-validated as such because of old commits + MongoDB does not save updates as expected
         mod: Number,
         cus: Number,
         hide: Boolean
@@ -24,7 +24,7 @@ EquipmentSelectionSchema.set("toJSON", {
         const client = ret as IEquipmentSelectionClient;
 
         if (db.ItemId) {
-            client.ItemId = toOid(fromDbOid(db.ItemId));
+            client.ItemId = toOid(db.ItemId);
         }
     }
 });
