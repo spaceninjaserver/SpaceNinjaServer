@@ -1,4 +1,4 @@
-import { toMongoDate, toOid } from "../../helpers/inventoryHelpers.ts";
+import { toMongoDate2, toOid2, version_compare } from "../../helpers/inventoryHelpers.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { Friendship } from "../../models/friendModel.ts";
 import { Account } from "../../models/loginModel.ts";
@@ -8,6 +8,7 @@ import { getAccountForRequest, getUnicodeName, type TAccountDocument } from "../
 import type { IFriendInfo } from "../../types/friendTypes.ts";
 import type { RequestHandler, Response } from "express";
 import { logger } from "../../utils/logger.ts";
+import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 
 export const addPendingFriendPostController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -60,14 +61,21 @@ const sendFriendRequest = async (
         return;
     }
 
-    const friendInfo: IFriendInfo = {
-        _id: toOid(requesteeAccount._id),
-        DisplayName: getUnicodeName(requesteeAccount, requesterAccount.BuildLabel),
-        LastLogin: toMongoDate(requesteeAccount.LastLogin),
-        Note: message
-    };
-    await addInventoryDataToFriendInfo(friendInfo);
-    res.json({
-        Friend: friendInfo
-    });
+    if (
+        !requesterAccount.BuildLabel ||
+        version_compare(requesterAccount.BuildLabel, gameToBuildVersion["13.0.0"]) >= 0
+    ) {
+        const friendInfo: IFriendInfo = {
+            _id: toOid2(requesteeAccount._id, requesterAccount.BuildLabel),
+            DisplayName: getUnicodeName(requesteeAccount, requesterAccount.BuildLabel),
+            LastLogin: toMongoDate2(requesteeAccount.LastLogin, requesterAccount.BuildLabel),
+            Note: message
+        };
+        await addInventoryDataToFriendInfo(friendInfo);
+        res.json({
+            Friend: friendInfo
+        });
+    } else {
+        res.send(requesteeAccount._id.toString());
+    }
 };
