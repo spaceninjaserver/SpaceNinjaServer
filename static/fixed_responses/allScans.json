@@ -791,5 +791,14 @@
   "/Lotus/Types/LevelObjects/InfestedPumpkinCocoonLamp",
   "/Lotus/Types/LevelObjects/InfestedPumpkinCocoonLampLarge",
   "/Lotus/Types/LevelObjects/InfestedPumpkinCocoonLampSmall",
-  "/Lotus/Types/LevelObjects/InfestedPumpkinExplosiveTotem"
+  "/Lotus/Types/LevelObjects/InfestedPumpkinExplosiveTotem",
+  "/Lotus/Types/Enemies/Infested/Vip/J3Golem/InfestedDevourerSpace",
+  "/Lotus/Types/Enemies/Infested/Vip/J3Golem/InfestedWeakpoint",
+  "/Lotus/Types/Enemies/SpaceBattles/Special/SpaceEscortDebrisAvatar",
+  "/Lotus/Types/Enemies/SpaceBattles/Corpus/Turrets/CorpusInfestedSpaceTurretAvatar",
+  "/Lotus/Types/NeutralCreatures/ForestRodent/ForestRodentAvatar",
+  "/Lotus/Types/NeutralCreatures/ForestRodent/ForestRodentAvatarResourceA",
+  "/Lotus/Types/NeutralCreatures/BirdOfPrey/BirdOfPreyAvatar",
+  "/Lotus/Types/NeutralCreatures/BirdOfPrey/BirdOfPreyAvatarResourceA",
+  "/EE/Types/Engine/Decoration"
 ]
