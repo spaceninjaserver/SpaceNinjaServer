@@ -1129,6 +1129,8 @@ export interface IWeaponSkinDatabase {
     ItemType: string;
     Favorite?: boolean;
     IsNew?: boolean;
+    UpgradeType?: string;
+    UpgradeFingerprint?: string;
     _id: Types.ObjectId;
 }
 

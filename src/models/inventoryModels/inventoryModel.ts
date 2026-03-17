@@ -760,7 +760,9 @@ const weaponSkinsSchema = new Schema<IWeaponSkinDatabase>(
     {
         ItemType: String,
         Favorite: Boolean,
-        IsNew: Boolean
+        IsNew: Boolean,
+        UpgradeType: String,
+        UpgradeFingerprint: String
     },
     { id: false }
 );

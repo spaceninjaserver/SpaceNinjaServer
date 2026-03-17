@@ -3,11 +3,65 @@ import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { getInventory, addMods } from "../../services/inventoryService.ts";
 import type { IOid } from "../../types/commonTypes.ts";
+import { logger } from "../../utils/logger.ts";
+import { JSONParse } from "json-with-bigint";
 
 export const arcaneCommonController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const json = getJSONfromString<IArcaneCommonRequest>(String(req.body));
     const inventory = await getInventory(accountId);
+    const body = String(req.body);
+
+    const parsed: unknown = JSONParse(body.substring(0, body.lastIndexOf("}") + 1));
+    if (typeof parsed === "object" && parsed !== null && !("newRank" in parsed) && "skinId" in parsed) {
+        const json = getJSONfromString<IArcaneLegacyRequest>(body);
+        const item = inventory.WeaponSkins.id(json.skinId);
+        const legacyArcaneLevelCounts = [1, 3, 6, 10];
+        if (item) {
+            if (json.operationType == "Install") {
+                const resp: IArcaneLegacyInstallResp = { newLevel: 0 };
+                let currentLevel = item.UpgradeFingerprint
+                    ? (JSON.parse(item.UpgradeFingerprint) as { lvl: number }).lvl
+                    : -1;
+
+                // Return different arcane
+                if (item.UpgradeType && item.UpgradeType != json.arcaneType && currentLevel >= 0) {
+                    const numToRefund = legacyArcaneLevelCounts[currentLevel];
+                    resp.numToRefund = numToRefund;
+                    resp.typeToRefund = item.UpgradeType;
+                    addMods(inventory, [{ ItemType: item.UpgradeType, ItemCount: numToRefund }]);
+
+                    item.UpgradeFingerprint = undefined;
+                    item.UpgradeType = undefined;
+                    currentLevel = -1;
+                }
+
+                const newLevel = currentLevel + 1;
+                resp.newLevel = newLevel;
+                let numConsumed = legacyArcaneLevelCounts[newLevel];
+                if (currentLevel >= 0) {
+                    numConsumed -= legacyArcaneLevelCounts[currentLevel];
+                }
+                item.UpgradeFingerprint = JSON.stringify({ lvl: newLevel });
+                item.UpgradeType = json.arcaneType!;
+                addMods(inventory, [{ ItemType: json.arcaneType!, ItemCount: numConsumed * -1 }]);
+                res.json(resp);
+            } else if (json.operationType == "Distill") {
+                const currentLevel = (JSON.parse(item.UpgradeFingerprint!) as { lvl: number }).lvl;
+                const arcaneType = item.UpgradeType!;
+                const numToRefund = legacyArcaneLevelCounts[currentLevel];
+                item.UpgradeFingerprint = undefined;
+                item.UpgradeType = undefined;
+                addMods(inventory, [{ ItemType: arcaneType, ItemCount: numToRefund }]);
+                res.json({ arcaneType, numToRefund });
+            } else {
+                logger.debug(`data provided to ${req.path}: ${String(req.body)}`);
+                throw new Error(`unknown legacy arcaneCommon operationType: ${json.operationType}`);
+            }
+        }
+        await inventory.save();
+        return;
+    }
+    const json = getJSONfromString<IArcaneCommonRequest>(body);
     const upgrade = inventory.Upgrades.id(json.arcane.ItemId.$oid);
     if (json.newRank == -1) {
         // Break down request?
@@ -74,3 +128,23 @@ interface IArcaneCommonRequest {
     };
     newRank: number;
 }
+
+interface IArcaneLegacyRequest {
+    arcaneType?: string;
+    skinId: string;
+    operationType: "Install" | "Distill" | "idk";
+    modType: number; // 6
+    giveItem?: boolean;
+}
+
+interface IArcaneLegacyInstallResp {
+    newLevel: number;
+    typeToRefund?: string;
+    numToRefund?: number;
+    AddedSkinId?: string;
+}
+
+// interface IArcaneLegacyDistillResp {
+//     arcaneType: string;
+//     numToRefund: number;
+// }
