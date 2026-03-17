@@ -9,6 +9,7 @@ export interface ITunables {
     disable_websocket?: boolean;
     motd?: string;
     token?: string;
+    nrs?: string;
     irc?: string;
     udp_proxy_upstream?: string;
 }
